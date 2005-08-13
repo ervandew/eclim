@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<project name="docs" default="docs" basedir="../..">
+
+  <import file="../../build.xml"/>
+
+  <!--
+    - Target for generating the javadocs.
+    -->
+  <target name="javadoc" depends="init"
+      description="Generates the javadocs from the src.">
+    <mkdir dir="build/doc/api"/>
+
+    <javadoc packagenames="org.eclim" destdir="build/doc/api">
+      <classpath refid="classpath"/>
+      <fileset dir="src">
+        <include name="**/*.java"/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <!--
+    - Runs forrest to generate the docs.
+    -->
+  <target name="docs" depends="init" description="Builds the documentation.">
+    <!--mkdir dir="build/forrest"/-->
+    <exec executable="${forrest.home}/bin/forrest" failonerror="true" dir=".">
+      <!--arg line="-Dproject.build-dir=build/forrest"/-->
+      <arg line="site"/>
+    </exec>
+  </target>
+
+</project>

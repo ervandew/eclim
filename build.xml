@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<project name="build" default="build" basedir=".">
+
+  <property environment="env"/>
+  <property file="src/ant/build.properties"/>
+
+  <!-- classpath -->
+  <path id="classpath">
+    <fileset dir="lib" includes="**/*.jar"/>
+    <fileset dir="build/dist" includes="**/*.jar"/>
+    <fileset dir="${eclipse.home}" includes="startup.jar"/>
+    <fileset dir="${eclipse.home}/plugins" includes="**/*.jar"/>
+  </path>
+
+  <!--
+    - Initialize the build.
+    -->
+  <target name="init">
+    <mkdir dir="build/classes"/>
+    <mkdir dir="build/dist"/>
+  </target>
+
+  <!--
+    - Main target for building the library.
+    -->
+  <target name="build" depends="init"
+      description="Compiles the src and builds the jar file.">
+
+    <javac destdir="build/classes" debug="on" optimize="false">
+      <src path="src/java"/>
+      <include name="**/*.java"/>
+      <classpath refid="classpath"/>
+    </javac>
+
+    <!-- build jar files -->
+    <jar jarfile="build/dist/eclim-client.jar">
+      <fileset dir="build/classes">
+        <include name="**/*.class"/>
+        <exclude name="org/eclim/server/**/*.class"/>
+      </fileset>
+      <fileset dir="src/java" excludesfile="src/ant/exclude.properties">
+        <include name="**/*"/>
+        <exclude name="org/eclim/server"/>
+        <exclude name="org/eclim/server/**"/>
+        <exclude name="**/package.html"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </jar>
+    <jar jarfile="build/dist/eclim.jar">
+      <fileset dir="build/classes">
+        <include name="org/eclim/server/**/*.class"/>
+      </fileset>
+      <fileset dir="src/java" excludesfile="src/ant/exclude.properties">
+        <include name="org/eclim/server/**/*"/>
+        <exclude name="**/package.html"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </jar>
+
+    <!-- deploy eclipse plugin -->
+    <copy todir="${eclipse.home}">
+      <mapper type="regexp"
+        from="^(.*)org\.eclim(.*)$" to="\1org.eclim_${version}\2"/>
+      <fileset dir="src/eclipse"
+        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+    </copy>
+
+    <copy todir="${eclipse.home}/plugins/org.eclim_${version}">
+      <fileset dir="." includes="LICENSE"/>
+      <fileset dir="." includes="NOTICE"/>
+      <fileset dir="lib" includes="**/*"/>
+      <fileset dir="build/dist" includes="**/*.jar"/>
+    </copy>
+
+    <!-- deploy vim plugin -->
+    <copy todir="${vim.files.home}">
+      <fileset dir="src/vim"
+        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+    </copy>
+
+  </target>
+
+  <!--
+    - Delete any generated artifacts of the build.
+    -->
+  <target name="clean" description="Deletes the build directory.">
+    <delete dir="build"/>
+  </target>
+
+  <!--
+    - Target for generating the javadocs.
+    -->
+  <target name="javadoc" description="Generates the javadocs from the src.">
+    <ant antfile="src/ant/docs.xml" target="javadoc"/>
+  </target>
+
+  <!--
+    - Generate all the docs.
+    -->
+  <target name="docs" description="Generates the documentation.">
+    <ant antfile="src/ant/docs.xml"/>
+  </target>
+
+  <!--
+    - Target for unit testing the code.
+    -->
+  <target name="test" description="Runs the junit tests">
+    <ant antfile="src/ant/test.xml"/>
+  </target>
+
+</project>

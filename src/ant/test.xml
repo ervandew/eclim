@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<project name="test" default="test" basedir="../..">
+
+  <import file="../../build.xml"/>
+
+  <!--
+    - Executes the unit tests.
+    -->
+  <target name="test" depends="build" description="Runs the junit tests">
+    <mkdir dir="build/test/classes"/>
+    <mkdir dir="build/test/results"/>
+
+    <javac destdir="build/test/classes" debug="on" optimize="false">
+      <src path="test/junit"/>
+      <include name="**/*.java"/>
+      <classpath refid="classpath"/>
+    </javac>
+
+    <copy todir="build/test/classes" includeEmptyDirs="false">
+      <fileset dir="src/junit" excludesfile="exclude.properties">
+        <include name="**/*"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+</project>

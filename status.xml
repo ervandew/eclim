@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<status>
+  <developers>
+    <person name="Eric Van Dewoestine" email="ervandew@yahoo.com" id="ervandew"/>
+  </developers>
+
+  <changes>
+
+    <!-- Add new releases here -->
+    <release version="unreleased" date="Aug 09, 2005">
+      <action dev="ervandew" type="add" context="docs">
+        Created eclim documentation site.
+      </action>
+    </release>
+
+  </changes>
+</status>

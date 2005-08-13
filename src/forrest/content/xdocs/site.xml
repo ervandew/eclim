@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--
+Forrest site.xml
+
+This file contains an outline of the site's information content.  It is used to:
+- Generate the website menus (though these can be overridden - see docs)
+- Provide semantic, location-independent aliases for internal 'site:' URIs, eg
+<link href="site:changes"> links to changes.html (or ../changes.html if in
+  subdir).
+- Provide aliases for external URLs in the external-refs section.  Eg, <link
+  href="ext:cocoon"> links to http://cocoon.apache.org/
+
+See http://forrest.apache.org/docs/linking.html for more info
+-->
+
+<site label="Eclim" href=""
+  xmlns="http://apache.org/forrest/linkmap/1.0" tab="">
+
+   <!-- Note: No matter what you configure here, Forrest will always try to load
+       index.html when you request http://yourHost/.
+       'How can I use a start-up-page other than index.html?' in the FAQs has more
+       information tells you how to change that.
+   -->
+  <about label="About" tab="home">
+    <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
+    <roadmap label="Roadmap" href="roadmap.html"
+      description="Roadmap"/>
+    <changes label="Change History" href="changes.html"
+      description="Change History"/>
+  </about>
+
+  <install label="Installation" href="install/" tab="install">
+    <index label="Index" href="index.html" description="Index"/>
+  </install>
+
+  <client label="Command Line Client" href="client/" tab="client">
+    <index label="Index" href="index.html" description="Index"/>
+  </client>
+
+  <vim label="Vim Integration" href="vim/" tab="vim">
+    <index label="Index" href="index.html" description="Index"/>
+  </vim>
+
+  <external-refs>
+    <forrest href="http://forrest.apache.org/"/>
+    <cocoon href="http://cocoon.apache.org/"/>
+    <xml.apache.org href="http://xml.apache.org/"/>
+  </external-refs>
+
+</site>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Welcome to Eclim</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        Eclim is an <a href="http://eclipse.org">Eclipse</a> plug-in that exposes
+        Eclipse functionality through a lightweight xml protocol so that other
+        editors or applications can take advantage of what Eclipse has to offer.
+      </p>
+      <p>
+        While this plug-in is not limited to any particular editor or
+        application, its primary purpose is to bring Eclipse functionality to
+        the <a href="http://vim.org">Vim</a> editor.
+      </p>
+    </section>
+    <section id="news">
+      <title>News</title>
+      <section id="news_2005_08_11">
+        <title>2005-08-11</title>
+        <p>
+          Sourceforge site is up!  Now it's just a matter of getting the ball
+          rolling again.
+        </p>
+        <p>
+          I'm hoping to have source code navigation working by the end of next
+          week.  This includes the ability to simply hit &lt;enter&gt; on a
+          class name, method name, method call, etc. to jump to its declaration.
+          Basically I want to replace my previous
+          <a href="http://www.vim.org/scripts/script.php?script_id=1106">vim plug-in</a>
+          with the new eclipse one.
+        </p>
+        <p>
+          Before I put out any releases though, I want to have a comprehensive
+          set of documentation.  For the first few releases, setup will probably
+          be pretty manual, with most of it occurring through the Eclipse
+          interface.  Going forward, I want to move more of that functionality
+          into vim.
+        </p>
+      </section>
+    </section>
+  </body>
+</document>
