@@ -36,7 +36,13 @@
 "
 " }}}
 
-" Moves the cursor to the character offset specified. {{{
+" Global Variables {{{
+  if !exists("g:EclimDebug")
+    let g:EclimDebug = 0
+  endif
+" }}}
+
+" GoToCharacterOffset(offset) - Moves the cursor to the character offset specified. {{{
 function! GoToCharacterOffset (offset)
   mark '
   call cursor(1,1)
@@ -48,7 +54,7 @@ function! GoToCharacterOffset (offset)
   call cursor(line('.'), offset + 1)
 endfunction " }}}
 
-" Gets the character offset for the current cursor position. {{{
+" GetCharacterOffset() - Gets the character offset for the current cursor position. {{{
 function! GetCharacterOffset ()
   let curline = line('.')
   let curcol = col('.')
@@ -66,7 +72,7 @@ function! GetCharacterOffset ()
   return offset
 endfunction " }}}
 
-" Gets the character offset and length for the element under the cursor. {{{
+" GetCurrentElementPosition() - Gets the character offset and length for the element under the cursor. {{{
 function! GetCurrentElementPosition ()
   let curline = line('.')
   let curcol = col('.')
@@ -88,6 +94,45 @@ function! GetCurrentElementPosition ()
   call cursor(curline, curcol)
 
   return offset . ";" . strlen(word)
+endfunction " }}}
+
+" ExecuteEclim() - Executes eclim using the supplied argument string. {{{
+function! ExecuteEclim (args)
+  if !exists("g:EclimPath")
+    if !exists("$ECLIPSE_HOME")
+      echoe "ECLIPSE_HOME must be set."
+      return
+    endif
+    let g:EclimPath = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*") . "/bin/eclim"
+  endif
+
+  if g:EclimDebug
+    echom "Debug: " . g:EclimPath . " " . a:args
+  endif
+
+  let result = system(g:EclimPath . " " . a:args)
+  let g:EclimLastResult = result
+
+  " check for client side exception
+  if v:shell_error && result =~ 'Exception in thread "main"'
+    echoe substitute(result, '.*"main" \(.\{-\}:\)\(.\{-\}\):.*', '\1\2', '')
+    return
+  endif
+
+  " check for other client side exceptions
+  if v:shell_error
+    echoe substitute(result, '\(.*\)\n$', '\1', '')
+    return
+  endif
+
+  " check for server side exception
+  if result =~ '^<.\{-\}Exception>'
+    echoe substitute(result,
+      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*', '\1: \3', '')
+    return
+  endif
+
+  return result
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
