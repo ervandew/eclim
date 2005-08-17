@@ -74,6 +74,11 @@
       <fileset dir="lib" includes="**/*"/>
       <fileset dir="build/dist" includes="**/*.jar"/>
     </copy>
+    <copy todir="${eclipse.home}/plugins/org.eclim_${version}/bin">
+      <fileset dir="src/shell" includes="**/*"/>
+    </copy>
+    <chmod dir="${eclipse.home}/plugins/org.eclim_${version}/bin"
+      includes="**/*" perm="ugo+x"/>
 
     <!-- deploy vim plugin -->
     <copy todir="${vim.files.home}">
