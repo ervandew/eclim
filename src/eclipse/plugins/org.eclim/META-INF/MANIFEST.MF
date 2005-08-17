@@ -4,6 +4,7 @@ Bundle-Name: Eclim Plug-in
 Bundle-SymbolicName: org.eclim; singleton:=true
 Bundle-Version: 1.0.0
 Bundle-ClassPath: commons-cli-1.0.jar,
+  commons-io-1.1-dev.jar,
   commons-lang-2.1.jar,
   commons-logging-1.0.4.jar,
   eclim.jar,
