@@ -7,6 +7,35 @@
     <person name="Eric Van Dewoestine" email="ervandew@yahoo.com" id="ervandew"/>
   </developers>
 
+  <todo>
+    <actions priority="high">
+      <action context="linux" dev="ervandew">
+        Modify shell scripts to use a substitution var to set the classpath
+        at build time.
+      </action>
+      <action context="linux" dev="ervandew">
+        Create junit test harness for starting eclimd, running tests, and then
+        stopping eclimd.
+      </action>
+    </actions>
+    <actions priority="medium">
+      <action context="windows" dev="ervandew">
+        Create Windows batch files for eclim client and daemon.
+      </action>
+      <action context="windows" dev="ervandew">
+        Use my BatchFileService.exe to create a Windows service for eclimd.
+      </action>
+      <action context="linux" dev="ervandew">
+        Create init.d script for eclimd on linux.
+      </action>
+    </actions>
+    <actions priority="low">
+      <action context="configuration" dev="ervandew">
+        Figure out how to configure projects from vim.
+      </action>
+    </actions>
+  </todo>
+
   <changes>
 
     <!-- Add new releases here -->

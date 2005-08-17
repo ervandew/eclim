@@ -40,10 +40,10 @@ See http://forrest.apache.org/docs/linking.html for more info
    -->
   <about label="About" tab="home">
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
-    <roadmap label="Roadmap" href="roadmap.html"
-      description="Roadmap"/>
+    <roadmap label="Roadmap" href="roadmap.html" description="Roadmap"/>
     <changes label="Change History" href="changes.html"
       description="Change History"/>
+    <todo label="Todo" href="todo.html" description="Todo"/>
   </about>
 
   <install label="Installation" href="install/" tab="install">
