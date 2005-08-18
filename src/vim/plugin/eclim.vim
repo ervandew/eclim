@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: 0.1
+" Version: ${eclim.version}
 "
 " Description: {{{
 "   Plugin that integrates vim with the eclipse plugin eclim (ECLipse
@@ -96,6 +96,21 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
+" ConvertCharacterOffsetToLineColumn (offset) Converts the supplied offset to a line column string. {{{
+function! ConvertCharacterOffsetToLineColumn (offset)
+  let line = line('.')
+  let col = col('.')
+
+  call GoToCharacterOffset(a:offset)
+  let offsetLine = line('.')
+  let offsetCol = col('.')
+
+  call cursor(line, col)
+
+  return offsetLine . ' col ' . offsetCol
+endfunction
+" }}}
+
 " ExecuteEclim() - Executes eclim using the supplied argument string. {{{
 function! ExecuteEclim (args)
   if !exists("g:EclimPath")
@@ -111,6 +126,7 @@ function! ExecuteEclim (args)
   endif
 
   let result = system(g:EclimPath . " " . a:args)
+  let result = substitute(result, '\(.*\)\n$', '\1', '')
   let g:EclimLastResult = result
 
   " check for client side exception
@@ -121,7 +137,7 @@ function! ExecuteEclim (args)
 
   " check for other client side exceptions
   if v:shell_error
-    echoe substitute(result, '\(.*\)\n$', '\1', '')
+    echoe result
     return
   endif
 
@@ -133,6 +149,18 @@ function! ExecuteEclim (args)
   endif
 
   return result
+endfunction " }}}
+
+" PopulateQuickfix(results) Populates the quickfix window with the supplied " results {{{
+function! PopulateQuickfix (results)
+  let efm_saved = &errorformat
+  let &errorformat='%f|%l|%m'
+  let tmpfile = tempname()
+  silent exec '!echo "' . a:results . '" > ' . tmpfile
+  silent exec 'cgetfile ' . tmpfile
+  silent exec '!rm ' . tmpfile
+  silent exec "normal \<c-l>"
+  let &errorformat = efm_saved
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
