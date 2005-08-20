@@ -96,21 +96,6 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" ConvertCharacterOffsetToLineColumn (offset) Converts the supplied offset to a line column string. {{{
-function! ConvertCharacterOffsetToLineColumn (offset)
-  let line = line('.')
-  let col = col('.')
-
-  call GoToCharacterOffset(a:offset)
-  let offsetLine = line('.')
-  let offsetCol = col('.')
-
-  call cursor(line, col)
-
-  return offsetLine . ' col ' . offsetCol
-endfunction
-" }}}
-
 " ExecuteEclim() - Executes eclim using the supplied argument string. {{{
 function! ExecuteEclim (args)
   if !exists("g:EclimPath")
@@ -125,7 +110,7 @@ function! ExecuteEclim (args)
     echom "Debug: " . g:EclimPath . " " . a:args
   endif
 
-  let result = system(g:EclimPath . " " . a:args)
+  let result = system(g:EclimPath . ' ' . substitute(a:args, '*', '#', 'g'))
   let result = substitute(result, '\(.*\)\n$', '\1', '')
   let g:EclimLastResult = result
 
@@ -154,9 +139,9 @@ endfunction " }}}
 " PopulateQuickfix(results) Populates the quickfix window with the supplied " results {{{
 function! PopulateQuickfix (results)
   let efm_saved = &errorformat
-  let &errorformat='%f|%l|%m'
+  let &errorformat='%f|%l col %c|%m'
   let tmpfile = tempname()
-  silent exec '!echo "' . a:results . '" > ' . tmpfile
+  silent exec '!echo -e "' . substitute(a:results, '\n', '\\\\n', 'g') . '" > ' . tmpfile
   silent exec 'cgetfile ' . tmpfile
   silent exec '!rm ' . tmpfile
   silent exec "normal \<c-l>"
