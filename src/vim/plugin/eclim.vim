@@ -42,19 +42,21 @@
   endif
 " }}}
 
-" GoToCharacterOffset(offset) - Moves the cursor to the character offset specified. {{{
-function! GoToCharacterOffset (offset)
-  mark '
-  call cursor(1,1)
-  let offset = a:offset
-  while offset > col('$')
-    let offset = offset - col('$')
-    call cursor(line('.') + 1, 1)
-  endwhile
-  call cursor(line('.'), offset + 1)
-endfunction " }}}
+" GoToCharacterOffset(offset) {{{
+" Moves the cursor to the character offset specified.
+"function! GoToCharacterOffset (offset)
+"  mark '
+"  call cursor(1,1)
+"  let offset = a:offset
+"  while offset > col('$')
+"    let offset = offset - col('$')
+"    call cursor(line('.') + 1, 1)
+"  endwhile
+"  call cursor(line('.'), offset + 1)
+"endfunction " }}}
 
-" GetCharacterOffset() - Gets the character offset for the current cursor position. {{{
+" GetCharacterOffset() {{{
+" Gets the character offset for the current cursor position.
 function! GetCharacterOffset ()
   let curline = line('.')
   let curcol = col('.')
@@ -72,7 +74,8 @@ function! GetCharacterOffset ()
   return offset
 endfunction " }}}
 
-" GetCurrentElementPosition() - Gets the character offset and length for the element under the cursor. {{{
+" GetCurrentElementPosition() {{{
+" Gets the character offset and length for the element under the cursor.
 function! GetCurrentElementPosition ()
   let curline = line('.')
   let curcol = col('.')
@@ -96,7 +99,8 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" ExecuteEclim() - Executes eclim using the supplied argument string. {{{
+" ExecuteEclim() {{{
+" Executes eclim using the supplied argument string.
 function! ExecuteEclim (args)
   if !exists("g:EclimPath")
     if !exists("$ECLIPSE_HOME")
@@ -136,16 +140,53 @@ function! ExecuteEclim (args)
   return result
 endfunction " }}}
 
-" PopulateQuickfix(results) Populates the quickfix window with the supplied " results {{{
-function! PopulateQuickfix (results)
+" PopulateQuickfix(resultsFile) {{{
+" Populates the quickfix window with the supplied resultsFile.
+function! PopulateQuickfix (resultsFile)
   let efm_saved = &errorformat
   let &errorformat='%f|%l col %c|%m'
-  let tmpfile = tempname()
-  silent exec '!echo -e "' . substitute(a:results, '\n', '\\\\n', 'g') . '" > ' . tmpfile
-  silent exec 'cgetfile ' . tmpfile
-  silent exec '!rm ' . tmpfile
+  silent exec 'cgetfile ' . a:resultsFile
+  call delete(a:resultsFile)
   silent exec "normal \<c-l>"
   let &errorformat = efm_saved
 endfunction " }}}
+
+" PromptList(prompt, list, highlight) {{{
+" Creates a prompt for the user using the supplied prompt string and list of
+" items to choose from.  Returns -1 if the list is empty, and 0 if the list
+" contains only one item.
+function! PromptList (prompt, list, highlight)
+  " no elements, no prompt
+  if empty(a:list)
+    return -1
+  endif
+
+  " only one elment, no need to choose.
+  if len(a:list) == 1
+    return 0
+  endif
+
+  let prompt = ""
+  let index = 0
+  for item in a:list
+    let prompt = prompt . index . ") " . item . "\n"
+    let index = index + 1
+  endfor
+  let prompt = prompt . "\n" . a:prompt . ": "
+
+  exec "echohl " . a:highlight
+  try
+    let response = input(prompt)
+    while response!~ '[0-9]\+' || response < 0 || response > (len(a:list) - 1)
+      let response = input("You must choose a value between " .
+        \ 0 . " and " . (len(a:list) - 1) . ". (Ctrl-C to cancel): ")
+    endwhile
+  finally
+    echohl None
+  endtry
+
+  return response
+endfunction
+" }}}
 
 " vim:ft=vim:fdm=marker
