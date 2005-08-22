@@ -42,19 +42,6 @@
   endif
 " }}}
 
-" GoToCharacterOffset(offset) {{{
-" Moves the cursor to the character offset specified.
-"function! GoToCharacterOffset (offset)
-"  mark '
-"  call cursor(1,1)
-"  let offset = a:offset
-"  while offset > col('$')
-"    let offset = offset - col('$')
-"    call cursor(line('.') + 1, 1)
-"  endwhile
-"  call cursor(line('.'), offset + 1)
-"endfunction " }}}
-
 " GetCharacterOffset() {{{
 " Gets the character offset for the current cursor position.
 function! GetCharacterOffset ()
@@ -99,7 +86,7 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" ExecuteEclim() {{{
+" ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
 function! ExecuteEclim (args)
   if !exists("g:EclimPath")
@@ -107,7 +94,8 @@ function! ExecuteEclim (args)
       echoe "ECLIPSE_HOME must be set."
       return
     endif
-    let g:EclimPath = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*") . "/bin/eclim"
+    let g:EclimPath = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*") .
+      \ "/bin/eclim"
   endif
 
   if g:EclimDebug
@@ -133,7 +121,8 @@ function! ExecuteEclim (args)
   " check for server side exception
   if result =~ '^<.\{-\}Exception>'
     echoe substitute(result,
-      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*', '\1: \3', '')
+      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*',
+      \ '\1: \3', '')
     return
   endif
 
