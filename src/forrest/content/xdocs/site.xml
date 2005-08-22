@@ -56,6 +56,12 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <vim label="Vim Integration" href="vim/" tab="vim">
     <index label="Index" href="index.html" description="Index"/>
+    <java label="Java" href="java/">
+      <search label="Searching" href="search.html"
+        description="Source code searching"/>
+      <import label="Imports" href="import.html"
+        description="Automated imports"/>
+    </java>
   </vim>
 
   <external-refs>

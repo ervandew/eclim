@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Automated Imports</title>
+  </header>
+  <body>
+    <p>
+      The automated import functionality is pretty straightforward.  Simply
+      place the cursor over the element to import and issue the command<br/>
+      &nbsp;&nbsp;:JavaImport<br/>
+      and one of the following events will occur:
+    </p>
+    <ul>
+      <li>
+        If only one matching element is found its import statement will be
+        placed in the file.
+      </li>
+      <li>
+        If multiple matching elements are found, you will be prompted to choose
+        the element you wish to import from a list.
+      </li>
+      <li>
+        If an element with the same name is already imported, the element is in
+        java.lang, or the element is in the same package as the current src
+        file, then a simple prompt will alert you that the element does not need
+        to be imported.
+      </li>
+    </ul>
+    <p>
+      In addition to importing elements, the plugin provides two additional
+      commands:
+    </p>
+    <ul>
+      <li>
+        :JavaImportSort
+        <p>
+          Sorts the import statements in alphabetical order with java and javax
+          imports first.
+        </p>
+      </li>
+      <li>
+        :JavaImportClean
+        <p>
+          Removes any un-used import statements.
+        </p>
+      </li>
+    </ul>
+  </body>
+</document>

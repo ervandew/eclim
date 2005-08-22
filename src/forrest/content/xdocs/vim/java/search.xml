@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Searching code in vim</title>
+  </header>
+  <body>
+    <section id="element">
+      <title>Element Search</title>
+      <p>
+        Element searching allows you to place the cursor over just about any
+        element in a source file (method call, class name, field) and search for
+        the declarations or references of that element using the command<br/>
+        &nbsp;&nbsp;:JavaSearch
+      </p>
+      <p>
+        All of the results will be placed into vim's quickfix window so that you
+        can easily navigate the results.  If only one result is found and that
+        result is in the current source file, the cursor will be moved to that
+        element found.
+      </p>
+    </section>
+    <section id="pattern">
+      <title>Pattern Search</title>
+      <p>
+        Pattern searching provides a means to widen a search beyond a single
+        element.  A pattern search can be executed using the command<br/>
+        &nbsp;&nbsp;:JavaSearch -p &lt;pattern&gt; -t &lt;type&gt; -x
+        &lt;context&gt;
+      </p>
+      <ul>
+        <li>
+          pattern: The pattern to search for.<br/>
+          Ex.<br/>
+          &nbsp;&nbsp;MyClass*<br/>
+          &nbsp;&nbsp;MyClass.someMethod*
+        </li>
+        <li>
+          type: The type of element to search for where possible types include
+          <ul>
+            <li>all</li>
+            <li>annotation</li>
+            <li>class</li>
+            <li>classOrEnum</li>
+            <li>classOrInterface</li>
+            <li>constructor</li>
+            <li>enum</li>
+            <li>field</li>
+            <li>interface</li>
+            <li>method</li>
+            <li>package</li>
+            <li>type</li>
+          </ul>
+        </li>
+        <li>
+          context: The context to search under where possible context values
+          include
+          <ul>
+            <li>all</li>
+            <li>declarations</li>
+            <li>implementors</li>
+            <li>references</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+  </body>
+</document>

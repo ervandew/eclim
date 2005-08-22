@@ -26,8 +26,68 @@
     <title>Eclim Vim Integration</title>
   </header>
   <body>
-    <p>
-      To be documented...
-    </p>
+    <section id="global">
+      <title>Shared functions</title>
+      <p>
+        The following set of functions are available to any plug-in that wishes
+        to enhance the vim integration with eclim and Eclipse.  If you don't
+        plan on added any new functionality, then you can safely skip this
+        section.
+      </p>
+      <ul>
+        <li>
+          GetCurrentElementPosition()
+          <p>
+            Gets the current position of the element under the cursor for use
+            with eclim. The result is in the form "offset;length" where the
+            offset is the number of characters from the start of the file and
+            the length is the length of the element.
+          </p>
+        </li>
+        <li>
+          ExecuteEclim(args)
+          <p>
+            Executes the eclim client and returns the results.  The parameter
+            "args" is expected to be a string with all the command line
+            arguments to be passed to eclim.
+          </p>
+        </li>
+        <li>
+          PopulateQuickfix(resultsFile)
+          <p>
+            Populates the quickfix window with the results in the file name
+            supplied.  The results in the file are excepted to be in the form of
+            "%f|%l col %c|%m".
+          </p>
+          <ul>
+            <li>%f: the filename</li>
+            <li>%l: the line number</li>
+            <li>%c: the column number</li>
+            <li>%m: the message</li>
+          </ul>
+        </li>
+        <li>
+          PromptList(prompt, list, highlight)
+          <p>
+            Prompts the user to choose from the supplied list. "prompt" is the
+            text used to explain to the user what they are choosing from.
+            "list" is the list of elements to choose from. "highlight" is the
+            highlight group to use for the prompt.  The result returned is the
+            index in the list that the user chose.
+          </p>
+        </li>
+      </ul>
+    </section>
+    <section id="java">
+      <title>Java Source Editing</title>
+      <p>
+        Currently the vim integration with Eclipse consists of the following
+        functionality.
+      </p>
+      <ul>
+        <li><a href="java/search.html">Source code searching</a></li>
+        <li><a href="java/import.html">Automated imports</a></li>
+      </ul>
+    </section>
   </body>
 </document>
