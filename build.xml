@@ -63,28 +63,33 @@
     <!-- deploy eclipse plugin -->
     <copy todir="${eclipse.home}">
       <mapper type="regexp"
-        from="^(.*)org\.eclim(.*)$" to="\1org.eclim_${version}\2"/>
+        from="^(.*)org\.eclim(.*)$" to="\1org.eclim_${eclim.version}\2"/>
       <fileset dir="src/eclipse"
         includes="**/*" excludesfile="src/ant/exclude.properties"/>
     </copy>
 
-    <copy todir="${eclipse.home}/plugins/org.eclim_${version}">
+    <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
       <fileset dir="lib" includes="**/*"/>
       <fileset dir="build/dist" includes="**/*.jar"/>
     </copy>
-    <copy todir="${eclipse.home}/plugins/org.eclim_${version}/bin">
+    <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
       <fileset dir="src/shell" includes="**/*"/>
     </copy>
-    <chmod dir="${eclipse.home}/plugins/org.eclim_${version}/bin"
+    <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
       includes="**/*" perm="ugo+x"/>
+    <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}"
+      includes="bin/*,META-INF/MANIFEST.MF"
+      token="$${eclim.version}" value="${eclim.version}"/>
 
     <!-- deploy vim plugin -->
     <copy todir="${vim.files.home}">
       <fileset dir="src/vim"
         includes="**/*" excludesfile="src/ant/exclude.properties"/>
     </copy>
+    <replace dir="${vim.files.home}"
+      includes="**/*.vim" token="$${eclim.version}" value="${eclim.version}"/>
 
   </target>
 
