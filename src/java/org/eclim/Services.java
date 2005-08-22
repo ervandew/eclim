@@ -36,6 +36,18 @@ public class Services
           "org/eclim/client/spring-factory.xml"));
 
   /**
+   * Gets a service by type.
+   *
+   * @param _type The service type.
+   *
+   * @return The service implementation.
+   */
+  public static Object getService (Class _type)
+  {
+    return getService(_type.getName(), _type);
+  }
+
+  /**
    * Gets a service by name and type.
    *
    * @param _name The service name.
