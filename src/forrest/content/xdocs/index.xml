@@ -41,6 +41,39 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_2005_08_21">
+        <title>2005-08-21</title>
+        <p>
+          Code navigation / searching is done!  Most of the vim integration for
+          searching is done as well.  The only thing missing is viewing code for
+          results that are found in a jar file that have no corresponding source
+          attachment.  I may end up doing what eclipse appears to do, which is
+          to use javap to display the class and method signatures.  That or I'll
+          use jad to decompile the whole source.  My only issue with jad, is
+          that it is not up to date with the 1.5 byte code.
+        </p>
+        <p>
+          I also have automated importing done as well.  The eclim server
+          request just returns a list of possible results to import for a given
+          request and the editor (vim in this case) handles prompting the user
+          and updating the code.
+        </p>
+        <note>
+          The vim integration now requires vim 7.  Even though vim 7 is still
+          alpha, I haven't had any major issues with it and the new additions to
+          the vim scripting language are just too good to pass up.
+        </note>
+        <p>
+          My next step is to start documenting everything and testing on a
+          Windows environment to ensure there aren't any compatibility issues.
+        </p>
+        <p>
+          After that I should be ready to put out a preliminary release.
+          I'm trying to be very careful about releasing anything too soon.  The
+          last thing I want it to scare anyone off with a broken project that
+          doesn't seem to work properly.
+        </p>
+      </section>
       <section id="news_2005_08_11">
         <title>2005-08-11</title>
         <p>
