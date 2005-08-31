@@ -19,11 +19,11 @@ Bundle-ClassPath: commons-cli-1.0.jar,
   xstream-1.1.2.jar
 Bundle-Activator: org.eclim.server.eclipse.EclimPlugin
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
  org.eclipse.jdt,
  org.eclipse.jdt.core,
- org.eclipse.jdt.launching,
- org.eclipse.jdt.debug
+ org.eclipse.jdt.debug,
+ org.eclipse.jdt.launching
 Eclipse-AutoStart: true
 
