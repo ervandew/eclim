@@ -18,8 +18,7 @@ package org.eclim;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -30,7 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class Services
 {
-  private static ApplicationContext context =
+  private static AbstractApplicationContext context =
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
           "org/eclim/client/spring-factory.xml"));
@@ -94,5 +93,28 @@ public class Services
   public static String getMessage (String _key, Object[] _args)
   {
     return context.getMessage(_key, _args, Locale.getDefault());
+  }
+
+  /**
+   * Closes and disposes of all services.
+   */
+  public static void close ()
+  {
+    context.close();
+  }
+
+  /**
+   * Gets the shutdown thread used to dispose of services.
+   *
+   * @return The shutdown thread.
+   */
+  public static Runnable getShutdownThread ()
+  {
+    return new Runnable(){
+      public void run ()
+      {
+        Services.close();
+      }
+    };
   }
 }
