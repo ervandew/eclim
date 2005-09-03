@@ -107,19 +107,4 @@ public class Services
     context.close();
     log.info(Services.class.getName() + " closed.");
   }
-
-  /**
-   * Gets the shutdown thread used to dispose of services.
-   *
-   * @return The shutdown thread.
-   */
-  public static Runnable getShutdownThread ()
-  {
-    return new Runnable(){
-      public void run ()
-      {
-        Services.close();
-      }
-    };
-  }
 }
