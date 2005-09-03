@@ -22,7 +22,7 @@ if not exist "%ECLIPSE_HOME%\eclipse" goto no_eclipse_executable
 
 cd %ECLIPSE_HOME%
 
-eclipse -debug -consolelog -nosplash -application org.eclim.application -vmargs -Dorg.eclim.spring-factory.xml=org/eclim/server/spring-factory.xml
+eclipse -debug -consolelog -nosplash -application org.eclim.application -vmargs -Dorg.eclim.spring-factory.xml=org/eclim/spring-factory.xml
 goto exit
 
 :no_eclipse_home

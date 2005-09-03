@@ -32,4 +32,8 @@ for i in `find $ECLIM_HOME -name "*.jar"`; do
   JAVA_CP="$JAVA_CP:$i";
 done
 
-java -cp "$JAVA_CP" org.eclim.client.Main $*
+if [ "$JAVA_CMD" == '' ] ; then
+  JAVA_CMD="java -cp $JAVA_CP"
+fi
+
+$JAVA_CMD org.eclim.client.Main $*
