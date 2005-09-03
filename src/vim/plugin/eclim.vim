@@ -40,6 +40,9 @@
   if !exists("g:EclimDebug")
     let g:EclimDebug = 0
   endif
+  if !exists("g:EclimCommand")
+    let g:EclimCommand = "eclim"
+  endif
 " }}}
 
 " GetCharacterOffset() {{{
@@ -116,7 +119,7 @@ function! ExecuteEclim (args)
       return
     endif
     let g:EclimPath = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*") .
-      \ "/bin/eclim"
+      \ "/bin/" . g:EclimCommand
   endif
 
   if g:EclimDebug
