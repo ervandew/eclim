@@ -39,6 +39,28 @@ public class Services
           "org/eclim/client/spring-factory.xml"));
 
   /**
+   * Checks if the service exists.
+   *
+   * @param _type The service type.
+   * @return true if the services exists, false otherwise.
+   */
+  public static boolean containsService (Class _type)
+  {
+    return containsService(_type.getName());
+  }
+
+  /**
+   * Checks if the service exists.
+   *
+   * @param _name The service name.
+   * @return true if the services exists, false otherwise.
+   */
+  public static boolean containsService (String _name)
+  {
+    return context.containsBean(_name);
+  }
+
+  /**
    * Gets a service by type.
    *
    * @param _type The service type.
