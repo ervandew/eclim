@@ -29,7 +29,8 @@
   <target name="build" depends="init"
       description="Compiles the src and builds the jar file.">
 
-    <javac destdir="build/classes" debug="on" optimize="false">
+    <javac destdir="build/classes" debug="on" optimize="false"
+        target="${javac.target}" source="${javac.target}">
       <src path="src/java"/>
       <include name="**/*.java"/>
       <classpath refid="classpath"/>
