@@ -56,6 +56,8 @@
         includes="**/*" excludesfile="src/ant/exclude.properties"/>
     </copy>
 
+    <mkdir dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/log"/>
+    <touch file="${eclipse.home}/plugins/org.eclim_${eclim.version}/log/.keep"/>
     <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
