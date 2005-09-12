@@ -6,6 +6,7 @@
 
   <property environment="env"/>
   <property file="src/ant/build.properties"/>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
   <!-- classpath -->
   <path id="classpath">
@@ -61,12 +62,13 @@
     <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
-      <fileset dir="lib" includes="**/*"/>
+      <fileset dir="lib" includes="**/*" excludesfile="src/ant/exclude.properties"/>
       <fileset dir="build/dist" includes="**/*.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </copy>
     <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
-      <fileset dir="src/shell" includes="**/*"/>
+      <fileset dir="src/shell"
+        includes="**/*" excludesfile="src/ant/exclude.properties"/>
     </copy>
     <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}"
       includes="bin/*,META-INF/MANIFEST.MF"
@@ -89,6 +91,7 @@
     -->
   <target name="clean" description="Deletes the build directory.">
     <delete dir="build"/>
+    <delete dir="dist"/>
   </target>
 
   <!--
@@ -110,6 +113,36 @@
     -->
   <target name="test" description="Runs the junit tests">
     <ant antfile="src/ant/test.xml"/>
+  </target>
+
+  <!--
+    - Target for creating distributable jars.
+    -->
+  <target name="dist" depends="build" description="Creates the distributable jars.">
+    <mkdir dir="dist"/>
+
+    <!-- eclipse plugin jar -->
+    <zip destfile="dist/org.eclim_${eclim.version}.jar">
+      <fileset dir="${eclipse.home}/plugins/" excludesfile="src/ant/exclude.properties">
+        <include name="org.eclim_${eclim.version}/**/*"/>
+        <exclude name="org.eclim_${eclim.version}/bin/ng"/>
+        <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
+      </fileset>
+    </zip>
+
+    <!-- vim plugins jar -->
+    <path id="vim.plugins">
+      <fileset dir="src/vim"
+        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+    </path>
+    <property name="vim.plugins" refid="vim.plugins"/>
+    <propertyregex property="vim.plugins" input="${vim.plugins}" override="true"
+      regexp="[a-zA-Z0-9-/]*?/vim/" replace=""/>
+    <propertyregex property="vim.plugins" input="${vim.plugins}" override="true"
+      regexp=":" replace=","/>
+    <zip destfile="dist/eclim_vim_${eclim.version}.jar">
+      <fileset dir="${vim.files.home}" includes="${vim.plugins}"/>
+    </zip>
   </target>
 
 </project>
