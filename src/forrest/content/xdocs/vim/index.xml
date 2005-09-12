@@ -24,14 +24,45 @@
 <document>
   <header>
     <title>Eclim Vim Integration</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
   </header>
   <body>
+    <section id="requirements">
+      <title>Requirements</title>
+      <p>
+        The Eclim plugins for vim require vim 7.  At the time of this writing,
+        vim 7 is still alpha, but I have yet to encounter any major issues with
+        it.
+      </p>
+    </section>
+    <section id="configuration">
+      <title>Configuration</title>
+      <p>
+        Currently there are only a couple of global configuration settings
+        available.
+      </p>
+      <ul>
+        <li>
+          g:EclimDebug (Default: 0) - Setting this variable to 1 will turn on
+          some simple debugging.
+        </li>
+        <li>
+          g:EclimCommand (Default: "eclim") - This variable is used to configure
+          the command used for the eclim client.  Currently the only other
+          alternative is "eclim-lite" which uses
+          <a href="../install/index.html#nailgun">nailgun</a> to improve
+          performance.
+        </li>
+      </ul>
+    </section>
     <section id="global">
-      <title>Shared functions</title>
+      <title>Global shared functions</title>
       <p>
         The following set of functions are available to any plug-in that wishes
         to enhance the vim integration with eclim and Eclipse.  If you don't
-        plan on added any new functionality, then you can safely skip this
+        plan on adding any new functionality, then you can safely skip this
         section.
       </p>
       <ul>
@@ -85,8 +116,9 @@
         functionality.
       </p>
       <ul>
-        <li><a href="java/search.html">Source code searching</a></li>
-        <li><a href="java/import.html">Automated imports</a></li>
+        <li><a href="java/search.html">Source code searching.</a></li>
+        <li><a href="java/import.html">Automated imports.</a></li>
+        <li><a href="java/complete.html">Code completion.</a></li>
       </ul>
     </section>
   </body>

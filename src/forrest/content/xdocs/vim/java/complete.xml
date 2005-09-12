@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Java Code Completion</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      The java code completion makes use of new "User Defined Completion" added
+      to vim 7.
+    </p>
+    <p>
+      To use the code completion use Ctrl-X Ctrl-U while in insert mode at the
+      position you wish to start the completion from.<br/>
+    </p>
+    <source>
+      System.o&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+      System.out.pri&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+    </source>
+    <p>
+      Once you have started the completion you can use Ctrl-N to procede to the
+      next match and Ctrl-P for the previous match.
+    </p>
+    <p>
+      If you are like me and you find those key strokes a bit cumbersome, then
+      you can use the excellent
+      <a href="http://www.vim.org/scripts/script.php?script_id=182">SuperTab</a>
+      plugin which allows you to use the Tab key for completion.  However at
+      this time SuperTab does not support the latest completion modes for vim 7,
+      so I have patched it to add the necessary support.
+    </p>
+    <fixme author="ervandew">
+      Add link to patched SuperTab.
+    </fixme>
+    <p>
+      To find out more about vim's insert completion use<br/>
+      &nbsp;&nbsp;:h ins-completion<br/>
+      from within vim.
+    </p>
+  </body>
+</document>

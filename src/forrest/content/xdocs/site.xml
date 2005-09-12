@@ -61,6 +61,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Source code searching"/>
       <import label="Imports" href="import.html"
         description="Automated imports"/>
+      <complete label="Code Completion" href="complete.html"
+        description="Code Completion"/>
     </java>
   </vim>
 

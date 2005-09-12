@@ -24,6 +24,9 @@
 <document>
   <header>
     <title>Searching code in vim</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
   </header>
   <body>
     <section id="element">

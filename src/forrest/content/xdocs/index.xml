@@ -24,6 +24,9 @@
 <document>
   <header>
     <title>Welcome to Eclim</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
   </header>
   <body>
     <section id="overview">
@@ -41,6 +44,36 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_2005_09_11">
+        <title>2005-09-11</title>
+        <p>
+          Several new additions over the past couple weeks:
+        </p>
+        <ul>
+          <li>
+            Java code completion: Integrated into vim via vim 7's new "User
+            Defined Completion".
+          </li>
+          <li>
+            Added eclim command line support for creating and updating projects,
+            including vim support for editing eclipse .classpath files and
+            updating eclipse upon writing of those files.
+          </li>
+          <li>
+            Integrated
+            <a href="http://www.martiansoftware.com/nailgun/">nailgun</a>
+            to greatly improve the command line client performance.
+          </li>
+          <li>
+            Started documenting eclim and its features.
+          </li>
+        </ul>
+        <p>
+          With the addition of these features I'm going to stop adding new
+          funtionality for the time being and focus on testing and ensuring that
+          everything works as expected on Windows.
+        </p>
+      </section>
       <section id="news_2005_08_21">
         <title>2005-08-21</title>
         <p>
