@@ -21,10 +21,34 @@
       <action context="linux" dev="ervandew">
         Create init.d script for eclimd on linux.
       </action>
+      <action context="eclipse_compatability" dev="ervandew">
+        Investigate eclipse's compatability feature for java projects.
+      </action>
+      <action context="eclipse_features" dev="ervandew">
+        Read up on other default eclipse features that may be useful within vim.
+      </action>
+      <action context="thrid_party" dev="ervandew">
+        Research third party plugins for additional functionality
+        <ul>
+          <li>Hibernate: JBoss IDE / Hibernate Tools</li>
+          <li>Spring: Spring IDE</li>
+          <li>Tapestry: Spindle</li>
+        </ul>
+      </action>
+      <action context="override" dev="ervandew">
+        Add support for automating stub implementation of interface or abstract
+        super class methods.
+      </action>
+      <action context="debugger" dev="ervandew">
+        Debugger functionality.
+      </action>
+      <action context="javadoc" dev="ervandew">
+        Javadoc functionality.
+      </action>
     </actions>
     <actions priority="low">
       <action context="configuration" dev="ervandew">
-        Figure out how to configure projects from vim.
+        Figure out intuitive way to configure projects from vim.
       </action>
     </actions>
   </todo>
