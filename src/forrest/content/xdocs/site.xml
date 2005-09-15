@@ -44,6 +44,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <changes label="Change History" href="changes.html"
       description="Change History"/>
     <todo label="Todo" href="todo.html" description="Todo"/>
+    <download label="Downloads" description="Downloads"
+      href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
   </about>
 
   <install label="Installation" href="install/" tab="install">
@@ -57,6 +59,8 @@ See http://forrest.apache.org/docs/linking.html for more info
   <vim label="Vim Integration" href="vim/" tab="vim">
     <index label="Index" href="index.html" description="Index"/>
     <java label="Java" href="java/">
+      <classpath label="Classpath" href="classpath.html"
+        description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"
         description="Source code searching"/>
       <import label="Imports" href="import.html"
