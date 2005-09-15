@@ -32,14 +32,28 @@
     <section id="overview">
       <title>Overview</title>
       <p>
-        Eclim is an <a href="http://eclipse.org">Eclipse</a> plug-in that exposes
-        Eclipse functionality through a lightweight xml protocol so that other
-        editors or applications can take advantage of what Eclipse has to offer.
+        The primary goal of eclim is to bring
+        <a href="http://eclipse.org">eclipse</a> functionality to the vim
+        editor.
       </p>
       <p>
-        While this plug-in is not limited to any particular editor or
-        application, its primary purpose is to bring Eclipse functionality to
-        the <a href="http://vim.org">Vim</a> editor.
+        Eclim is less of an application and more of an integration of two great
+        projects.  The first, <a href="http://vim.org">vim</a>, is arguably one of
+        the best text editors in existence.  The second,
+        <a href="http://eclipse.org">eclipse</a>, provides many great tools for
+        development, especially java development.
+      </p>
+      <p>
+        Each provides many features that can increase developer productivity,
+        but both are lacking overall.  Vim lacks native Java support, and
+        eclipse still requires the use of the mouse for many things, and when
+        compared to vim, provides a less than ideal interface for editing text.
+      </p>
+      <p>
+        That is where eclim comes into play.  Instead of trying to write a java
+        ide in vim or a vim editor in eclipse, eclim provides an eclipse plug-in
+        that exposes eclipse features through server interface, and a set of vim
+        plug-ins that communicate with eclipse over that interface.
       </p>
     </section>
     <section id="news">
@@ -70,7 +84,7 @@
         </ul>
         <p>
           With the addition of these features I'm going to stop adding new
-          funtionality for the time being and focus on testing and ensuring that
+          functionality for the time being and focus on testing and ensuring that
           everything works as expected on Windows.
         </p>
       </section>
