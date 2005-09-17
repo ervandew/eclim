@@ -34,7 +34,8 @@
       <p>
         The Eclim plugins for vim require vim 7.  At the time of this writing,
         vim 7 is still alpha, but I have yet to encounter any major issues with
-        it.
+        it.  For information on obtaining and installing vim 7 please see the
+        <a href="../install/index.html#vim_plugin">installation docs</a>.
       </p>
     </section>
     <section id="configuration">
