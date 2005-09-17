@@ -17,9 +17,12 @@ package org.eclim;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.eclim.util.spring.ResourceBundleMessageSource;
 
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -36,7 +39,7 @@ public class Services
   private static AbstractApplicationContext context =
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
-          "org/eclim/client/spring-factory.xml"));
+          "org/eclim/spring-factory-client.xml"));
 
   /**
    * Checks if the service exists.
@@ -119,6 +122,17 @@ public class Services
   public static String getMessage (String _key, Object[] _args)
   {
     return context.getMessage(_key, _args, Locale.getDefault());
+  }
+
+  /**
+   * Gets the underlying resource bundle used for messages.
+   *
+   * @return The ResourceBundle.
+   */
+  public static ResourceBundle getResourceBundle ()
+  {
+    return ((ResourceBundleMessageSource)getService("messageSource",
+          ResourceBundleMessageSource.class)).getResourceBundle();
   }
 
   /**
