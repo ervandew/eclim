@@ -111,8 +111,8 @@ which will be used to configure the chosen Forrest skin.
     directory.
   -->
   <trail>
-    <link1 name="Eclim" href="http://eclim.sourceforge.net/"/>
-    <link2 name="" href=""/>
+    <link1 name="sourceforge" href="http://sourceforge.net"/>
+    <link2 name="eclim" href="http://eclim.sourceforge.net"/>
     <link3 name="" href=""/>
   </trail>
 
