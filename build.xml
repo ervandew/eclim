@@ -11,9 +11,9 @@
   <!-- classpath -->
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
-    <fileset dir="build/dist" includes="**/*.jar"/>
+    <!--fileset dir="build/dist" includes="**/*.jar"/-->
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
-    <fileset dir="${eclipse.home}/plugins" includes="**/*.jar"/>
+    <fileset dir="${eclipse.home}/plugins" includes="**/*.jar" excludes="org.eclim_*/*.jar"/>
   </path>
 
   <!--
