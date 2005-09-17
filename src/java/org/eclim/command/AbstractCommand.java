@@ -17,7 +17,7 @@ package org.eclim.command;
 
 import java.util.Map;
 
-import org.eclim.command.OutputFilter;
+import org.eclim.client.Options;
 
 /**
  * Abstract implmentation of {@link Command}.
@@ -51,5 +51,24 @@ public abstract class AbstractCommand
   public void setFilters (Map _filters)
   {
     this.filters = _filters;
+  }
+
+  /**
+   * If a filter name was provided in the CommandLine, then an attempt will be
+   * made to locate the filter and run the result through it.
+   *
+   * @param _result The pre-filtered result.
+   * @return The post-filtered result.
+   */
+  protected Object filter (CommandLine _commandLine, Object _result)
+  {
+    String filterName = _commandLine.getValue(Options.FILTER_OPTION);
+    if(filterName != null){
+      OutputFilter filter = getFilter(filterName);
+      if(filter != null){
+        return filter.filter(_result);
+      }
+    }
+    return _result;
   }
 }

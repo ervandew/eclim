@@ -25,15 +25,7 @@ import org.eclim.Services;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
-import org.eclim.server.eclipse.EclimPlugin;
-
 import org.eclim.server.mina.Server;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 
 /**
  * Command to shutdown the eclim server.
@@ -58,49 +50,12 @@ public class ShutdownCommand
 
       Services.close();
 
-      closeProjects();
-      closePlugins();
-
       server.exit();
     }catch(IllegalStateException ise){
       // workspace already closed.
     }catch(Exception e){
       log.error("Error shutting down eclim:", e);
     }
-    return Services.getMessage("shutdown");
-  }
-
-  /**
-   * Close all projects.
-   */
-  public void closeProjects ()
-    throws Exception
-  {
-    IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-    for(int ii = 0; ii < projects.length; ii++){
-      IJavaProject javaProject = JavaCore.create(projects[ii]);
-      if(javaProject.exists()){
-        if(javaProject.hasUnsavedChanges()){
-          javaProject.save(null, false);
-        }
-// don't need to close the projects... eclipse doesn't appear to do it and as a
-// result the projects remain open for the next application start.
-        //javaProject.close();
-      }
-      //projects[ii].close(null);
-    }
-  }
-
-  /**
-   * Shutdown core plugins.
-   */
-  public void closePlugins ()
-    throws Exception
-  {
-    EclimPlugin.getDefault().stop(null);
-    JavaCore.getJavaCore().stop(null);
-    ResourcesPlugin.getWorkspace().save(true, null);
-    ResourcesPlugin.getPlugin().shutdown();
-    ResourcesPlugin.getPlugin().stop(null);
+    return null;
   }
 }
