@@ -25,7 +25,10 @@ set JAVA_CP=.
 for %%i in ("%ECLIM_HOME%\*.jar") do set JAVA_CP=!JAVA_CP!;%%i
 endlocal & set JAVA_CP=%JAVA_CP%
 
-echo java -cp "%JAVA_CP%" org.eclim.client.Main %*
+if "%JAVA_CMD%" == "" set JAVA_CMD=java -cp "%JAVA_CP%"
+
+%JAVA_CMD% org.eclim.client.Main %*
+set JAVA_CMD=
 goto exit
 
 :no_eclipse_home
