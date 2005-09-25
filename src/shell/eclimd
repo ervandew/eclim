@@ -28,5 +28,5 @@ fi
 
 ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
 
-$ECLIPSE_HOME/eclipse -debug -consolelog -nosplash -application org.eclim.application \
-  -vmargs -Dorg.eclim.spring-factory.xml=org/eclim/spring-factory-server.xml &> $ECLIM_HOME/log/eclim.log &
+$ECLIPSE_HOME/eclipse -debug -consolelog -nosplash -refresh -application org.eclim.application \
+  -vmargs -Declim.home="$ECLIM_HOME" -Dorg.eclim.spring-factory.xml=org/eclim/spring-factory-server.xml
