@@ -3,20 +3,22 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclim Plug-in
 Bundle-SymbolicName: org.eclim; singleton:=true
 Bundle-Version: ${eclim.version}
-Bundle-ClassPath: commons-cli-1.0.jar,
-  commons-collections-3.1.jar,
-  commons-io-1.1-dev.jar,
-  commons-lang-2.1.jar,
-  commons-logging-1.0.4.jar,
+Bundle-ClassPath: .,
   eclim.jar,
-  mina-0.7.3.jar,
-  nailgun-0.7.1.jar,
-  spring-aop-1.2.3.jar,
-  spring-beans-1.2.3.jar,
-  spring-context-1.2.3.jar,
-  spring-core-1.2.3.jar,
-  xpp3-1.1.3.4d_b4_min.jar,
-  xstream-1.1.2.jar
+  lib/commons-cli-1.0.jar,
+  lib/commons-collections-3.1.jar,
+  lib/commons-io-1.1-dev.jar,
+  lib/commons-lang-2.1.jar,
+  lib/commons-logging-1.0.4.jar,
+  lib/log4j-1.2.12.jar,
+  lib/mina-0.7.3.jar,
+  lib/nailgun-0.7.1.jar,
+  lib/spring-aop-1.2.3.jar,
+  lib/spring-beans-1.2.3.jar,
+  lib/spring-context-1.2.3.jar,
+  lib/spring-core-1.2.3.jar,
+  lib/xpp3-1.1.3.4d_b4_min.jar,
+  lib/xstream-1.1.2.jar
 Bundle-Activator: org.eclim.server.eclipse.EclimPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.resources,
