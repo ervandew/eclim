@@ -45,6 +45,10 @@
   endif
 " }}}
 
+" Script Variables {{{
+  let s:prompted_eclimd_start = 0
+" }}}
+
 " GetCharacterOffset() {{{
 " Gets the character offset for the current cursor position.
 function! GetCharacterOffset ()
@@ -118,8 +122,8 @@ function! ExecuteEclim (args)
       echoe "ECLIPSE_HOME must be set."
       return
     endif
-    let g:EclimPath = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*") .
-      \ "/bin/" . g:EclimCommand
+    let g:EclimHome = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*")
+    let g:EclimPath = g:EclimHome . "/bin/" . g:EclimCommand
   endif
 
   if g:EclimDebug
@@ -129,29 +133,70 @@ function! ExecuteEclim (args)
   let result = system(g:EclimPath . ' ' . substitute(a:args, '*', '#', 'g'))
   let result = substitute(result, '\(.*\)\n$', '\1', '')
   let g:EclimLastResult = result
+  let error = ''
 
   " check for client side exception
   if v:shell_error && result =~ 'Exception in thread "main"'
-    echoe substitute(result, '.*"main" \(.\{-\}:\)\(.\{-\}\):.*', '\1\2', '')
-    return
-  endif
+    let error = substitute(result, '.*"main" \(.\{-\}:\)\(.\{-\}\):.*', '\1\2', '')
 
   " check for other client side exceptions
-  if v:shell_error
-    echoe result
-    return
-  endif
+  elseif v:shell_error
+    let error = result
 
   " check for server side exception
-  if result =~ '^<.\{-\}Exception>'
-    echoe substitute(result,
-      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*',
-      \ '\1: \3', '')
+  elseif result =~ '^<.\{-\}Exception>'
+    let error = substitute(result,
+      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*', '\1: \3', '')
+  endif
+
+  if error != ''
+    "if error =~ 'Connection refused' && !s:prompted_eclimd_start
+    "  if EclimdStartupPrompt()
+    "    return ExecuteEclim(a:args)
+    "  else
+    "    return
+    "  endif
+    "endif
+    echoe error
     return
   endif
 
   return result
 endfunction " }}}
+
+" EclimdStartupPrompt() {{{
+" Prompts the user to choose whether or not to startup eclimd.
+" returns 1 if eclimd is started, 0 otherwise.
+""" FIXME: Not working yet.  Vim kills all processes started from it when
+"""        closed.
+"function! EclimdStartupPrompt ()
+"  echohl Statement
+"  try
+"    let response = input("eclimd not started.\nStart now?\n(y)es (n)o\n: ")
+"    while response !~ '\([yn]\|yes\|no\)\c'
+"      let response = input("Please choose (y)es or (n)o\n: ")
+"    endwhile
+"    let s:prompted_eclimd_start = 1
+"    if response =~ '^y'
+"      let eclimdPath = g:EclimHome . "/bin/eclimd"
+"      let result = system(eclimdPath)
+"      if v:shell_error
+"        echoe result
+"        return 0
+"      endif
+"      echo "Starting eclimd..."
+"      if WaitFor(g:EclimHome . "/log/eclim.log", "Server started", 10, 1)
+"        echo "eclimd started."
+"      else
+"        echom "Timed out waiting for eclimd to start."
+"        return 0
+"      endif
+"    endif
+"  finally
+"    echohl None
+"  endtry
+"  return 1
+"endfunction " }}}
 
 " PopulateQuickfix(resultsFile) {{{
 " Populates the quickfix window with the supplied resultsFile.
@@ -199,7 +244,38 @@ function! PromptList (prompt, list, highlight)
   endtry
 
   return response
-endfunction
-" }}}
+endfunction " }}}
+
+" WaitFor(file, regex, timeout, interval) {{{
+" Waits for a file to be created and an optional regex to exist in the file.
+" Returns 1 if the file was created and the regex found, 0 otherwise.
+""" FIXME: Not working yet.
+"function! WaitFor (file, regex, timeout, interval)
+"  " ensure a valid interval
+"  let interval = a:interval
+"  if interval <= 0
+"    let interval = 1
+"  endif
+"
+"  let time = 0
+"  while time < a:timeout
+"    if filereadable(a:file)
+"      try
+"echom "vimgrep /" . a:regex . "/ " . a:file
+"        exec "vimgrep /" . a:regex . "/ " . a:file
+"        let matches = getqflist()
+"        if len(matches) > 0
+"          return 1
+"        endif
+"      catch
+"        " ignore
+"      endtry
+"    endif
+"    let time = time + interval
+"    exec interval . "sleep"
+"  endwhile
+"
+"  return 0
+"endfunction " }}}
 
 " vim:ft=vim:fdm=marker
