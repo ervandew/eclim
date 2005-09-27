@@ -43,6 +43,18 @@
   if !exists("g:EclimCommand")
     let g:EclimCommand = "eclim"
   endif
+  if !exists("g:EclimIndent")
+    if !&expandtab
+      let g:EclimIndent = "\t"
+    else
+      let g:EclimIndent = ""
+      let index = 0
+      while index < &shiftwidth
+        let g:EclimIndent = g:EclimIndent . " "
+        let index = index + 1
+      endwhile
+    endif
+  endif
 " }}}
 
 " Script Variables {{{
