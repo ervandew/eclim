@@ -85,11 +85,12 @@
           </p>
         </li>
         <li>
-          PopulateQuickfix(resultsFile)
+        </li>
+        <li>
+          ParseQuickfixEntries(entries)
           <p>
-            Populates the quickfix window with the results in the file name
-            supplied.  The results in the file are excepted to be in the form of
-            "%f|%l col %c|%m".
+            Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
+            vim compatable list of dictionaries that can be passed to setqflist().
           </p>
           <ul>
             <li>%f: the filename</li>
@@ -121,6 +122,7 @@
         <li><a href="java/search.html">Source code searching.</a></li>
         <li><a href="java/import.html">Automated imports.</a></li>
         <li><a href="java/complete.html">Code completion.</a></li>
+        <li><a href="java/logging.html">Logging.</a></li>
       </ul>
     </section>
   </body>

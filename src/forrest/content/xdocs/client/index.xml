@@ -29,6 +29,26 @@
     </authors>
   </header>
   <body>
+    <p>
+      Other than <a href="#shutdown">shutting down eclimd</a>, you should seldom
+      need to use the eclim or eclim-lite command line client directly.  However
+      it can be useful when troubleshooting issues or developing your own
+      enhancements.
+    </p>
+    <p>
+      The general format for using the command line clients is
+    </p>
+    <source>
+      <![CDATA[eclim -command <command> <command_options>]]>
+    </source>
+    <p>Ex. To ping the server</p>
+    <source>
+      eclim -command ping
+    </source>
+    <note>
+      If you have configured <a href="../install/index.html#nailgun">nailgun</a>
+      you can use <code>eclim-lite</code> everywhere you see <code>eclim</code>.
+    </note>
     <section id="help">
       <title>Help</title>
       <p>
@@ -110,6 +130,16 @@
                      -n/--name <name>
                        The name of the project to update.
         ]]>
+      </source>
+    </section>
+    <section id="shutdown">
+      <title>Shutting down eclimd</title>
+      <p>
+        To shutdown the eclimd server simply execute the following from the bin
+        directory in ECLIPSE_HOME/plugins/org.eclim_<em>version</em>:
+      </p>
+      <source>
+        eclim -command shutdown
       </source>
     </section>
   </body>

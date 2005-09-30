@@ -52,6 +52,10 @@ See http://forrest.apache.org/docs/linking.html for more info
     <index label="Index" href="index.html" description="Index"/>
   </install>
 
+  <server label="Eclimd Server" href="server/" tab="server">
+    <index label="Index" href="index.html" description="Index"/>
+  </server>
+
   <client label="Command Line Client" href="client/" tab="client">
     <index label="Index" href="index.html" description="Index"/>
   </client>
@@ -67,6 +71,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Automated imports"/>
       <complete label="Code Completion" href="complete.html"
         description="Code Completion"/>
+      <logging label="Logging" href="logging.html"
+        description="Logging"/>
     </java>
   </vim>
 

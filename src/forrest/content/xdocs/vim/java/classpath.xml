@@ -70,7 +70,7 @@
         file is not in a folder under the project root, you must use an absolute
         path (apparent limitation with eclipse).  When adding the template, this
         command also adds the necessary (although commented out) elements and
-        attributes to set the location of the jars source code and javadocs.
+        attributes to set the location of the jar's source code and javadocs.
         <source>
           <![CDATA[
           <classpathentry kind="lib" path="lib/hibernate-3.0.jar">

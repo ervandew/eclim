@@ -37,7 +37,7 @@
     </p>
     <ul>
       <li>
-        If only one matching element is found its import statement will be
+        If only one matching element is found its, import statement will be
         placed in the file.
       </li>
       <li>
@@ -68,6 +68,18 @@
         <p>
           Removes any un-used import statements.
         </p>
+      </li>
+    </ul>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <ul>
+      <li>
+        g:JavaImportExclude
+        <p>
+          List of patterns to exclude from import results.<br/>
+          Ex. let g:JavaImportExclude = [ "^com\.sun\..*", "^sun\..*", "^sunw\..*" ]
+         </p>
       </li>
     </ul>
   </body>

@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: ${eclim.version}
+" Version: 1.0.0
 "
 " Description: {{{
 "   Plugin that integrates vim with the eclipse plugin eclim (ECLipse
@@ -7,16 +7,6 @@
 "
 "   This plugin contains shared functions that can be used regardless of the
 "   current file type being edited.
-"
-" Platform:
-"   All platforms that are support by both eclipse and vim.
-"
-" Dependencies:
-"   Requires eclipse sdk 3.1.0 or above.
-"
-" Usage:
-"
-" Configuration:
 "
 " License:
 "
@@ -210,15 +200,23 @@ endfunction " }}}
 "  return 1
 "endfunction " }}}
 
-" PopulateQuickfix(resultsFile) {{{
-" Populates the quickfix window with the supplied resultsFile.
-function! PopulateQuickfix (resultsFile)
-  let efm_saved = &errorformat
-  let &errorformat='%f|%l col %c|%m'
-  silent exec 'cgetfile ' . a:resultsFile
-  call delete(a:resultsFile)
-  silent exec "normal \<c-l>"
-  let &errorformat = efm_saved
+" ParseQuickfixEntries(resultsFile) {{{
+" Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
+" vim compatable list of dictionaries that can be passed to setqflist().
+function! ParseQuickfixEntries (entries)
+  let entries = []
+
+  for entry in a:entries
+    let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
+    let line = substitute(entry, '.*|\([0-9]*\) col.*', '\1', '')
+    let col = substitute(entry, '.*col \([0-9]*\)|.*', '\1', '')
+    let message = substitute(entry, '.*|\(.*\)', '\1', '')
+
+    let dict = {'filename': file, 'lnum': line, 'col': col, 'text': message}
+    call add(entries, dict)
+  endfor
+
+  return entries
 endfunction " }}}
 
 " PromptList(prompt, list, highlight) {{{
@@ -242,11 +240,13 @@ function! PromptList (prompt, list, highlight)
     let prompt = prompt . index . ") " . item . "\n"
     let index = index + 1
   endfor
-  let prompt = prompt . "\n" . a:prompt . ": "
 
   exec "echohl " . a:highlight
   try
-    let response = input(prompt)
+    " echoing the list prompt vs. using it in the input() avoids apparent vim
+    " bug that causes "Internal error: get_tv_string_buf()".
+    echo prompt . "\n"
+    let response = input(a:prompt . ": ")
     while response!~ '[0-9]\+' || response < 0 || response > (len(a:list) - 1)
       let response = input("You must choose a value between " .
         \ 0 . " and " . (len(a:list) - 1) . ". (Ctrl-C to cancel): ")

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Logging</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      While editing a java source file, if you start to create a logging
+      statement (<code>log.</code>), the logging plugin will attempt to perform
+      the appropriate initialization (imports, static variable) for the
+      configured logging implementation.
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <ul>
+      <li>
+        g:EclimLoggingDisabled
+        <p>
+          If set to a value greater than 0, then this plugin will be disabled.
+        </p>
+      </li>
+      <li>
+        g:EclimLoggingImpl
+        <p>
+          Determines which logging implementation to use.<br/>
+          Possible values include "commons-logging", "slf4j", "log4j", and
+          "jdk".<br/>
+          Defaults to "commons-logging" as both the commons-logging impl and the
+          slf4j replacement can be used.
+        </p>
+      </li>
+    </ul>
+  </body>
+</document>
