@@ -12,7 +12,7 @@
     <param name="maxFileSize" value="2MB"/>
     <param name="maxBackupIndex" value="25"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="conversionPattern" value="%d %-5p [%c] (%t) %m%n"/>
+      <param name="conversionPattern" value="%d %-5p [%c] %m%n"/>
     </layout>
   </appender>
 
@@ -22,7 +22,7 @@
   <appender name="console" class="org.eclim.util.logging.ConsoleAppender">
     <param name="Target" value="System.out"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %-5p [%c] (%t) %m%n"/>
+      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
     </layout>
   </appender>
 
