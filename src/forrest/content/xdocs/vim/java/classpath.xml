@@ -38,54 +38,103 @@
     </p>
     <p>
       Regardless of the state of your project you will at some point need to
-      update the classpath.  To do so, simple edit the .classpath file with vim
-      and make the necessary changes.  When you write the file, vim will issue a
-      command to the eclim server to update the project's classpath.
+      update the classpath.  Eclim provides a couple different ways to keep your
+      eclipse .classpath up to date.
     </p>
-    <p>
-      In addition to allowing you to directly edit the .classpath file, eclim
-      provides a few commands to ease the creation of new classpath entries.
-    </p>
-    <ul>
-      <li>
-        :NewSrcEntry - Adds a new entry for a source code directory relative to
-        the project's root directory.<br/>
-        <source>
-          <![CDATA[
-          <classpathentry kind="src" path="src/java"/>
-          ]]>
-        </source>
-      </li>
-      <li>
-        :NewProjectEntry - Adds a new entry for a dependency on another project.
-        The project path is always /projectname.
-        <source>
-          <![CDATA[
-          <classpathentry exported="true" kind="src" path="/toolkit"/>
-          ]]>
-        </source>
-      </li>
-      <li>
-        :NewJarEntry - Adds a new entry for a jar file dependency.  If the jar
-        file is not in a folder under the project root, you must use an absolute
-        path (apparent limitation with eclipse).  When adding the template, this
-        command also adds the necessary (although commented out) elements and
-        attributes to set the location of the jar's source code and javadocs.
-        <source>
-          <![CDATA[
-          <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
-            <!--
-              sourcepath="<path>">
-            -->
-            <!--
-            <attributes>
-              <attribute value="file:<javadoc>" name="javadoc_location">
-            </attributes>
-            -->
-          </classpath>
-          ]]>
-        </source>
-      </li>
-    </ul>
+    <section id="eclipse.classpath">
+      <title>.classpath</title>
+      <p>
+        The first method is to simply edit the .classpath file with vim and make
+        the necessary changes.  When you write the file, vim will issue a
+        command to the eclim server to update the project's classpath.
+      </p>
+      <p>
+        While editing the .classpath file, eclim also provides a few commands to
+        ease the creation of new classpath entries.
+      </p>
+      <ul>
+        <li>
+          :NewSrcEntry - Adds a new entry for a source code directory relative to
+          the project's root directory.<br/>
+          <source>
+            <![CDATA[
+            <classpathentry kind="src" path="src/java"/>
+            ]]>
+          </source>
+        </li>
+        <li>
+          :NewProjectEntry - Adds a new entry for a dependency on another project.
+          The project path is always /projectname.
+          <source>
+            <![CDATA[
+            <classpathentry exported="true" kind="src" path="/toolkit"/>
+            ]]>
+          </source>
+        </li>
+        <li>
+          :NewJarEntry - Adds a new entry for a jar file dependency.  If the jar
+          file is not in a folder under the project root, you must use an absolute
+          path (apparent limitation with eclipse).  When adding the template, this
+          command also adds the necessary (although commented out) elements and
+          attributes to set the location of the jar's source code and javadocs.
+          <source>
+            <![CDATA[
+            <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
+              <!--
+                sourcepath="<path>">
+              -->
+              <!--
+              <attributes>
+                <attribute value="file:<javadoc>" name="javadoc_location">
+              </attributes>
+              -->
+            </classpath>
+            ]]>
+          </source>
+        </li>
+      </ul>
+    </section>
+    <section id="buildfile">
+      <title>Build Dependency Files</title>
+      <p>
+        The second method of keeping your eclipse .classpath file up to date, is
+        to utilize eclim's plugins for a couple commonly used build tools.  By
+        default, eclim only provides support for two such tools, but feel free to
+        contribute additional implementations or submit a request for another one.
+      </p>
+      <section id="ivy.xml">
+        <title>ivy.xml</title>
+        <p>
+          The first such tool that eclim supports is
+          <a href="http://jayasoft.org/ivy">ivy</a>.
+          Ivy is an extension to ant that provides a very maven like dependency
+          manager, which even supports the maven repositories.
+        </p>
+        <p>
+          Like maven, ivy manages a project's dependencies in a single file,
+          ivy.xml.  Just like the direct .classpath editing that eclim supports,
+          when editing an ivy.xml file from vim, eclim adds an auto command to
+          update eclipse's classpath when you save the ivy.xml.  Any entries
+          found in the ivy.xml that are not in the .classpath will be added, and
+          any entries that differ in version will be updated.
+        </p>
+      </section>
+      <section id="project.xml">
+        <title>maven's project.xml</title>
+        <p>
+          The second tool that eclim supports is
+          <a href="http://maven.apache.org">maven</a>.  Maven is somewhat of an
+          ant alternative that provides a robust yet simple way to manage
+          projects.
+        </p>
+        <p>
+          Just like the ivy.xml and .classpath file plugins, eclim also
+          provides a plugin to notify the server of any changes when editing the
+          maven project.xml file.  Eclim will add any entries from the
+          project.xml not found in the .classpath file or update any that differ
+          in version.
+        </p>
+      </section>
+    </section>
   </body>
 </document>
