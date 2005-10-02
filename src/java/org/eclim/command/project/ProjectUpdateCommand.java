@@ -35,6 +35,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
+import org.eclim.server.eclipse.EclimPreferences;
+
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
@@ -126,6 +128,8 @@ public class ProjectUpdateCommand
     }
 
     // merge the dependencies with the classpath entires.
+    String libraryDir = EclimPreferences.getPreferences(_project.getProject())
+      .get(EclimPreferences.LIBRARY_ROOT, null);
     for(int ii = 0; ii < _dependencies.length; ii ++){
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
@@ -148,9 +152,7 @@ public class ProjectUpdateCommand
       }
 
       if(match == null){
-        // FIXME: how to set this base path?
-        IPath path = new Path("/home/ervandew/CDSTiger/tiger/lib")
-          .append(_dependencies[ii].toString());
+        IPath path = new Path(libraryDir).append(_dependencies[ii].toString());
         results.add(JavaCore.newLibraryEntry(path, null, null, true));
       }
     }
