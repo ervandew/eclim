@@ -70,7 +70,7 @@ public class ProjectInfoCommand
             results.add(info.toString());
           }
         }
-        return results;
+       return filter(_commandLine, results);
       }else{
         IJavaModel model = JavaCore.create(
             ResourcesPlugin.getWorkspace().getRoot());
@@ -87,7 +87,7 @@ public class ProjectInfoCommand
         results.putAll(
             EclimPreferences.getPreferencesAsMap(javaProject.getProject()));
 
-        return results;
+       return filter(_commandLine, results);
       }
     }catch(Throwable t){
       return t;
