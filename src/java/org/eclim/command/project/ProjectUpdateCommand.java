@@ -121,10 +121,12 @@ public class ProjectUpdateCommand
   {
     Collection results = new ArrayList();
 
-    // load the results with all the entries.
+    // load the results with all the non library entries.
     IClasspathEntry[] entries = _project.getRawClasspath();
     for(int ii = 0; ii < entries.length; ii++){
-      results.add(entries[ii]);
+      if(entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY){
+        results.add(entries[ii]);
+      }
     }
 
     // merge the dependencies with the classpath entires.
@@ -141,11 +143,17 @@ public class ProjectUpdateCommand
           // exact match
           if(path.endsWith(_dependencies[ii].toString())){
             match = entries[jj];
+            results.add(entries[jj]);
             break;
 
           // different version match
           }else if(path.indexOf(pattern) != -1){
-            results.remove(entries[jj]);
+            break;
+          }
+        }else if(entries[jj].getEntryKind() == IClasspathEntry.CPE_PROJECT){
+          String path = entries[jj].getPath().toOSString();
+          if(path.endsWith(_dependencies[ii].getName())){
+            match = entries[jj];
             break;
           }
         }
@@ -154,6 +162,8 @@ public class ProjectUpdateCommand
       if(match == null){
         IPath path = new Path(libraryDir).append(_dependencies[ii].toString());
         results.add(JavaCore.newLibraryEntry(path, null, null, true));
+      }else{
+        match = null;
       }
     }
 
