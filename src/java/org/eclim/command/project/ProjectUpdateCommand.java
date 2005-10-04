@@ -15,10 +15,14 @@
  */
 package org.eclim.command.project;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,6 +36,8 @@ import org.eclim.client.Options;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
+import org.eclim.command.java.JavaUtils;
+
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
@@ -41,6 +47,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaModel;
@@ -58,6 +66,8 @@ public class ProjectUpdateCommand
 {
   private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
 
+  private static final String ECLIM_PREFIX = "org.eclim";
+
   /**
    * {@inheritDoc}
    */
@@ -67,7 +77,8 @@ public class ProjectUpdateCommand
     try{
       String projectName = _commandLine.getValue(Options.NAME_OPTION);
       String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
-      return update(projectName, buildfile);
+      String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
+      return update(projectName, buildfile, settings);
     }catch(Throwable t){
       return t;
     }
@@ -78,9 +89,11 @@ public class ProjectUpdateCommand
    *
    * @param _name The project name.
    * @param _buildfile The buildfile saved, if request originated from one.
+   * @param _settings Project settings.
+   *
    * @return The result.
    */
-  protected Object update (String _name, String _buildfile)
+  protected Object update (String _name, String _buildfile, String _settings)
     throws Exception
   {
     IJavaModel model = JavaCore.create(
@@ -91,21 +104,66 @@ public class ProjectUpdateCommand
             "project.not.found", new Object[]{_name}));
     }
 
-    // .classpath updated.
-    if(_buildfile == null){
-      javaProject.setRawClasspath(javaProject.readRawClasspath(), null);
-
     // ivy.xml, project.xml, etc updated.
-    }else{
+    if(_buildfile != null){
       String filename = FilenameUtils.getName(_buildfile);
       Parser parser = (Parser)Services.getService(filename, Parser.class);
       javaProject.setRawClasspath(
           merge(javaProject, parser.parse(_buildfile)), null);
+
+    // project settings update
+    }else if(_settings != null){
+      updateSettings(javaProject, _settings);
+
+    // .classpath updated.
+    }else{
+      javaProject.setRawClasspath(javaProject.readRawClasspath(), null);
     }
 
     javaProject.makeConsistent(null);
 
     return Services.getMessage("project.updated", new Object[]{_name});
+  }
+
+  /**
+   * Updates the projects settings.
+   *
+   * @param _project The project.
+   * @param _settings The settings.
+   */
+  protected void updateSettings (IJavaProject _project, String _settings)
+    throws Exception
+  {
+    String settings = _settings.replace('|', '\n');
+    Properties properties = new Properties();
+    properties.load(new ByteArrayInputStream(settings.getBytes()));
+
+    IEclipsePreferences preferences = EclimPreferences.getPreferences(
+        _project.getProject());
+    Map global = _project.getOptions(true);
+    Map options = _project.getOptions(false);
+    boolean updateOptions = false;
+    for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
+      String name = (String)ii.next();
+      String value = properties.getProperty(name);
+      if(name.startsWith(ECLIM_PREFIX)){
+        preferences.put(name, value);
+      }else{
+        Object current = global.get(name);
+        if(current == null || !current.equals(value)){
+          if(name.equals(JavaCore.COMPILER_SOURCE)){
+            JavaUtils.setCompilerSourceCompliance(_project, (String)value);
+          }else{
+            options.put(name, value);
+            updateOptions = true;
+          }
+        }
+      }
+    }
+    preferences.flush();
+    if(updateOptions){
+      _project.setOptions(options);
+    }
   }
 
   /**
