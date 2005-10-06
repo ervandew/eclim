@@ -118,6 +118,11 @@
         functionality.
       </p>
       <ul>
+        <li>
+          <a href="java/project.html">
+            Create projects and view/edit project settings.
+          </a>
+        </li>
         <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
         <li><a href="java/search.html">Source code searching.</a></li>
         <li><a href="java/import.html">Automated imports.</a></li>
