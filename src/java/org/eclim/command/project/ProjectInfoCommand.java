@@ -71,7 +71,10 @@ public class ProjectInfoCommand
           }
         }
        return filter(_commandLine, results);
+
+      // retrieve project settings.
       }else{
+        String setting = _commandLine.getValue(Options.SETTING_OPTION);
         IJavaModel model = JavaCore.create(
             ResourcesPlugin.getWorkspace().getRoot());
         IJavaProject javaProject = model.getJavaProject(name);
@@ -81,11 +84,24 @@ public class ProjectInfoCommand
         }
         Map results = new HashMap();
         Map options = javaProject.getOptions(true);
-        for(int ii = 0; ii < SETTINGS.length; ii++){
-          results.put(SETTINGS[ii], options.get(SETTINGS[ii]));
+        Map preferences = EclimPreferences.getPreferencesAsMap(
+            javaProject.getProject());
+
+        // only retrieving the requested setting.
+        if(setting != null){
+          if(options.containsKey(setting)){
+            results.put(setting, options.get(setting));
+          }else{
+            results.put(setting, preferences.get(setting));
+          }
+
+        // retrieve all settings.
+        }else{
+          for(int ii = 0; ii < SETTINGS.length; ii++){
+            results.put(SETTINGS[ii], options.get(SETTINGS[ii]));
+          }
+          results.putAll(preferences);
         }
-        results.putAll(
-            EclimPreferences.getPreferencesAsMap(javaProject.getProject()));
 
        return filter(_commandLine, results);
       }
