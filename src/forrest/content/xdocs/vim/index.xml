@@ -46,13 +46,13 @@
       </p>
       <ul>
         <li>
-          g:EclimDebug (Default: 0) - Setting this variable to 1 will turn on
-          some simple debugging.
+          <strong>g:EclimDebug</strong> (Default: 0)<br/>
+          Setting this variable to 1 will turn on some simple debugging.
         </li>
         <li>
-          g:EclimCommand (Default: "eclim") - This variable is used to configure
-          the command used for the eclim client.  Currently the only other
-          alternative is "eclim-lite" which uses
+          <strong>g:EclimCommand</strong> (Default: "eclim")<br/>
+          This variable is used to configure the command used for the eclim
+          client.  Currently the only other alternative is "eclim-lite" which uses
           <a href="../install/index.html#nailgun">nailgun</a> to improve
           performance.
         </li>
@@ -68,30 +68,22 @@
       </p>
       <ul>
         <li>
-          GetCurrentElementPosition()
-          <p>
-            Gets the current position of the element under the cursor for use
-            with eclim. The result is in the form "offset;length" where the
-            offset is the number of characters from the start of the file and
-            the length is the length of the element.
-          </p>
+          <strong>GetCurrentElementPosition()</strong><br/>
+          Gets the current position of the element under the cursor for use
+          with eclim. The result is in the form "offset;length" where the
+          offset is the number of characters from the start of the file and
+          the length is the length of the element.
         </li>
         <li>
-          ExecuteEclim(args)
-          <p>
-            Executes the eclim client and returns the results.  The parameter
-            "args" is expected to be a string with all the command line
-            arguments to be passed to eclim.
-          </p>
+          <strong>ExecuteEclim(args)</strong><br/>
+          Executes the eclim client and returns the results.  The parameter
+          "args" is expected to be a string with all the command line
+          arguments to be passed to eclim.
         </li>
         <li>
-        </li>
-        <li>
-          ParseQuickfixEntries(entries)
-          <p>
-            Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
-            vim compatable list of dictionaries that can be passed to setqflist().
-          </p>
+          <strong>ParseQuickfixEntries(entries)</strong><br/>
+          Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
+          vim compatable list of dictionaries that can be passed to setqflist().
           <ul>
             <li>%f: the filename</li>
             <li>%l: the line number</li>
@@ -100,14 +92,12 @@
           </ul>
         </li>
         <li>
-          PromptList(prompt, list, highlight)
-          <p>
-            Prompts the user to choose from the supplied list. "prompt" is the
-            text used to explain to the user what they are choosing from.
-            "list" is the list of elements to choose from. "highlight" is the
-            highlight group to use for the prompt.  The result returned is the
-            index in the list that the user chose.
-          </p>
+          <strong>PromptList(prompt, list, highlight)</strong><br/>
+          Prompts the user to choose from the supplied list. "prompt" is the
+          text used to explain to the user what they are choosing from.
+          "list" is the list of elements to choose from. "highlight" is the
+          highlight group to use for the prompt.  The result returned is the
+          index in the list that the user chose.
         </li>
       </ul>
     </section>

@@ -30,21 +30,6 @@
       <action context="javadoc" dev="ervandew">
         Javadoc functionality (viewing in a web browser).
       </action>
-      <action context="projects" dev="ervandew">
-        Project functionality.
-        <ul>
-          <li>Creating projects from vim.</li>
-          <li>
-            View/Configure project options from vim (source code
-            compatablity).
-          </li>
-          <li>List all available projects.</li>
-        </ul>
-      </action>
-      <action context="classpath" dev="ervandew">
-        Create functions to update the .classpath file via an ivy.xml or
-        maven.xml.
-      </action>
     </actions>
 
     <actions priority="low">

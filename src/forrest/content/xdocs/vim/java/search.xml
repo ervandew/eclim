@@ -35,7 +35,7 @@
         Element searching allows you to place the cursor over just about any
         element in a source file (method call, class name, field) and search for
         the declarations or references of that element using the command<br/>
-        &nbsp;&nbsp;:JavaSearch
+        &nbsp;&nbsp;<strong>:JavaSearch</strong>
       </p>
       <p>
         All of the results will be placed into vim's quickfix window so that you
@@ -49,7 +49,7 @@
       <p>
         Pattern searching provides a means to widen a search beyond a single
         element.  A pattern search can be executed using the command<br/>
-        &nbsp;&nbsp;:JavaSearch -p &lt;pattern&gt; -t &lt;type&gt; -x
+        &nbsp;&nbsp;<strong>:JavaSearch</strong> -p &lt;pattern&gt; -t &lt;type&gt; -x
         &lt;context&gt;
       </p>
       <ul>

@@ -40,20 +40,8 @@
     </p>
     <ul>
       <li>
-        g:EclimLoggingDisabled
-        <p>
-          If set to a value greater than 0, then this plugin will be disabled.
-        </p>
-      </li>
-      <li>
-        g:EclimLoggingImpl
-        <p>
-          Determines which logging implementation to use.<br/>
-          Possible values include "commons-logging", "slf4j", "log4j", and
-          "jdk".<br/>
-          Defaults to "commons-logging" as both the commons-logging impl and the
-          slf4j replacement can be used.
-        </p>
+        <strong>g:EclimLoggingDisabled</strong><br/>
+        If set to a value greater than 0, then this plugin will be disabled.
       </li>
     </ul>
   </body>

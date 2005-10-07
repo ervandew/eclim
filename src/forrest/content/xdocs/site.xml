@@ -40,7 +40,6 @@ See http://forrest.apache.org/docs/linking.html for more info
    -->
   <about label="About" tab="home">
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
-    <roadmap label="Roadmap" href="roadmap.html" description="Roadmap"/>
     <changes label="Change History" href="changes.html"
       description="Change History"/>
     <todo label="Todo" href="todo.html" description="Todo"/>
@@ -54,6 +53,8 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <server label="Eclimd Server" href="server/" tab="server">
     <index label="Index" href="index.html" description="Index"/>
+    <project label="Settings" href="settings.html"
+      description="Available settings for eclimd."/>
   </server>
 
   <client label="Command Line Client" href="client/" tab="client">
