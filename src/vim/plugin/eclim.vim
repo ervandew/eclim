@@ -95,27 +95,6 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" GetCurrentProjectName() {{{
-" Gets the project name that the current file is in.
-function! GetCurrentProjectName ()
-  let projectName = ""
-  let projectFile = findfile(".project", ".;")
-  if filereadable(projectFile)
-    let cmd = winrestcmd()
-
-    silent exec "sview " . projectFile
-    let line = search('<name\s*>', 'wn')
-    if line != 0
-      let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
-    endif
-    silent close
-
-    silent exec cmd
-  endif
-
-  return projectName
-endfunction " }}}
-
 " ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
 function! ExecuteEclim (args)
