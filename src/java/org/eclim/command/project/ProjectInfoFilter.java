@@ -17,9 +17,10 @@ package org.eclim.command.project;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.eclim.command.OutputFilter;
+
+import org.eclim.server.eclipse.OptionInstance;
 
 /**
  * Output filter for project info.
@@ -37,29 +38,32 @@ public class ProjectInfoFilter
   {
     StringBuffer buffer = new StringBuffer();
 
-    // list of all projects.
-    if(_result instanceof List){
-      for(Iterator ii = ((List)_result).iterator(); ii.hasNext();){
-        if(buffer.length() > 0){
-          buffer.append('\n');
+    List list = (List)_result;
+    if(list.size() > 0){
+      // list of project's current settings.
+      if(list.get(0) instanceof OptionInstance){
+        for(Iterator ii = list.iterator(); ii.hasNext();){
+          OptionInstance option = (OptionInstance)ii.next();
+          if(buffer.length() > 0){
+            buffer.append('\n');
+          }
+          buffer.append("# ").append(option.getDescription()).append('\n');
+          buffer.append(option.getName()).append('=').append(option.getValue());
         }
-        buffer.append(ii.next());
-      }
-      return buffer.toString();
+        return buffer.toString();
 
-    // map of a project's settings.
-    }else if (_result instanceof Map){
-      Map result = (Map)_result;
-      for(Iterator ii = result.keySet().iterator(); ii.hasNext();){
-        Object key = ii.next();
-        if(buffer.length() > 0){
-          buffer.append('\n');
+      // list of all projects.
+      }else{
+        for(Iterator ii = list.iterator(); ii.hasNext();){
+          if(buffer.length() > 0){
+            buffer.append('\n');
+          }
+          buffer.append(ii.next());
         }
-        buffer.append(key).append('=').append(result.get(key));
+        return buffer.toString();
       }
-      return buffer.toString();
     }
 
-    return _result.toString();
+    return buffer.toString();
   }
 }

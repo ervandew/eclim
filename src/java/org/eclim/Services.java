@@ -24,6 +24,8 @@ import org.apache.commons.logging.LogFactory;
 
 import org.eclim.util.spring.ResourceBundleMessageSource;
 
+import org.springframework.context.NoSuchMessageException;
+
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -121,7 +123,11 @@ public class Services
    */
   public static String getMessage (String _key, Object[] _args)
   {
-    return context.getMessage(_key, _args, Locale.getDefault());
+    try{
+      return context.getMessage(_key, _args, Locale.getDefault());
+    }catch(NoSuchMessageException nsme){
+      return _key;
+    }
   }
 
   /**

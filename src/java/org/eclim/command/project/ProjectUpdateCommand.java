@@ -42,13 +42,12 @@ import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
 import org.eclim.server.eclipse.EclimPreferences;
+import org.eclim.server.eclipse.Option;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaModel;
@@ -67,6 +66,10 @@ public class ProjectUpdateCommand
   private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
 
   private static final String ECLIM_PREFIX = "org.eclim";
+
+  private EclimPreferences eclimPreferences;
+  private String libraryRootPreference;
+  private Option[] editableOptions;
 
   /**
    * {@inheritDoc}
@@ -138,8 +141,6 @@ public class ProjectUpdateCommand
     Properties properties = new Properties();
     properties.load(new ByteArrayInputStream(settings.getBytes()));
 
-    IEclipsePreferences preferences = EclimPreferences.getPreferences(
-        _project.getProject());
     Map global = _project.getOptions(true);
     Map options = _project.getOptions(false);
     boolean updateOptions = false;
@@ -147,8 +148,10 @@ public class ProjectUpdateCommand
       String name = (String)ii.next();
       String value = properties.getProperty(name);
       if(name.startsWith(ECLIM_PREFIX)){
-        preferences.put(name, value);
+         eclimPreferences.setPreference(
+             _project.getProject(), name, value);
       }else{
+        validateOption(name, value);
         Object current = global.get(name);
         if(current == null || !current.equals(value)){
           if(name.equals(JavaCore.COMPILER_SOURCE)){
@@ -160,10 +163,33 @@ public class ProjectUpdateCommand
         }
       }
     }
-    preferences.flush();
     if(updateOptions){
       _project.setOptions(options);
     }
+  }
+
+  /**
+   * Validates that the supplied value is valid for the specified option.
+   *
+   * @param _name The name of the option.
+   * @param _value The value of the option.
+   */
+  protected void validateOption (String _name, String _value)
+    throws Exception
+  {
+    for(int ii = 0; ii < editableOptions.length; ii++){
+      if(editableOptions[ii].getName().equals(_name)){
+        if(editableOptions[ii].getPattern().matcher(_value).matches()){
+          return;
+        }else{
+          throw new IllegalArgumentException(
+              Services.getMessage("option.invalid",
+              new Object[]{_name, _value, editableOptions[ii].getRegex()}));
+        }
+      }
+    }
+    throw new IllegalArgumentException(
+        Services.getMessage("option.not.found", new Object[]{_name}));
   }
 
   /**
@@ -188,8 +214,8 @@ public class ProjectUpdateCommand
     }
 
     // merge the dependencies with the classpath entires.
-    String libraryDir = EclimPreferences.getPreferences(_project.getProject())
-      .get(EclimPreferences.LIBRARY_ROOT, null);
+    String libraryDir = eclimPreferences.getPreference(
+        _project.getProject(), libraryRootPreference, null);
     for(int ii = 0; ii < _dependencies.length; ii ++){
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
@@ -227,5 +253,41 @@ public class ProjectUpdateCommand
 
     return (IClasspathEntry[])
       results.toArray(new IClasspathEntry[results.size()]);
+  }
+
+  /**
+   * Set eclimPreferences.
+   * <p/>
+   * Dependency injection.
+   *
+   * @param _eclimPreferences the value to set.
+   */
+  public void setEclimPreferences (EclimPreferences _eclimPreferences)
+  {
+    this.eclimPreferences = _eclimPreferences;
+  }
+
+  /**
+   * Set libraryRootPreference.
+   * <p/>
+   * Dependency injection.
+   *
+   * @param _libraryRootPreference the value to set.
+   */
+  public void setLibraryRootPreference (String _libraryRootPreference)
+  {
+    this.libraryRootPreference = _libraryRootPreference;
+  }
+
+  /**
+   * Set editableOptions.
+   * <p/>
+   * Dependency injection.
+   *
+   * @param _editableOptions the value to set.
+   */
+  public void setEditableOptions (Option[] _editableOptions)
+  {
+    this.editableOptions = _editableOptions;
   }
 }

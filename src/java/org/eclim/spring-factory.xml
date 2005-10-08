@@ -34,11 +34,8 @@
         </property>
       </bean>
     </property>
-    <property name="locations">
-      <list>
-        <value>org/eclim/eclim.properties</value>
-      </list>
-    </property>
+    <property name="location" value="org/eclim/eclim.properties"/>
+    <property name="ignoreUnresolvablePlaceholders" value="true"/>
   </bean>
 
   <bean id="messageSource"
