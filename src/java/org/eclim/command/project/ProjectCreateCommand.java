@@ -89,7 +89,8 @@ public class ProjectCreateCommand
       if(folder.endsWith("/") || folder.endsWith("\\")){
         folder = folder.substring(0, folder.length() - 1);
       }
-      String name = FilenameUtils.getBaseName(folder);
+      String name = FilenameUtils.getBaseName(folder).replace(' ', '_');
+      log.debug("Creating project '" + name + "' at folder '" + folder + "'");
 
       return create(name, folder, depends);
     }catch(Throwable t){
