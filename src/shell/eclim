@@ -40,4 +40,4 @@ if [ "$JAVA_CMD" == '' ] ; then
   fi
 fi
 
-$JAVA_CMD org.eclim.client.Main $*
+$JAVA_CMD org.eclim.client.Main "$@"
