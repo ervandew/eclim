@@ -31,7 +31,7 @@
     let g:EclimDebug = 0
   endif
   if !exists("g:EclimCommand")
-    let g:EclimCommand = "eclim"
+    let g:EclimCommand = 'eclim'
   endif
   if !exists("g:EclimIndent")
     if !&expandtab
@@ -103,15 +103,16 @@ function! ExecuteEclim (args)
       echoe "ECLIPSE_HOME must be set."
       return
     endif
-    let g:EclimHome = glob(expand("$ECLIPSE_HOME") . "/plugins/org.eclim*")
-    let g:EclimPath = g:EclimHome . "/bin/" . g:EclimCommand
+    let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim*')
+    let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
   endif
 
+  let command = g:EclimPath . ' ' . substitute(a:args, '*', '#', 'g')
   if g:EclimDebug
-    echom "Debug: " . g:EclimPath . " " . a:args
+    echom "Debug: " . command
   endif
 
-  let result = system(g:EclimPath . ' ' . substitute(a:args, '*', '#', 'g'))
+  let result = system(command)
   let result = substitute(result, '\(.*\)\n$', '\1', '')
   let g:EclimLastResult = result
   let error = ''
