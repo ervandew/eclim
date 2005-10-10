@@ -54,9 +54,9 @@
       </p>
       <ul>
         <li>
-          <strong>:NewSrcEntry</strong><br/>
-          Adds a new entry for a source code directory relative to the project's
-          root directory.<br/>
+          <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...]<br/>
+          Adds a new entry for one or more source code directories relative to
+          the project's root directory.<br/>
           <source>
             <![CDATA[
             <classpathentry kind="src" path="src/java"/>
@@ -64,22 +64,24 @@
           </source>
         </li>
         <li>
-          <strong>:NewProjectEntry</strong><br/>
-          Adds a new entry for a dependency on another project.  The project
-          path is always /projectname.
+          <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...]<br/>
+          Adds a new entry for one or more dependencies on other projects.
+          Project name command completion supported (:NewProjectEntry
+          a_pro&lt;Tab&gt;).
           <source>
             <![CDATA[
-            <classpathentry exported="true" kind="src" path="/toolkit"/>
+            <classpathentry exported="true" kind="src" path="/a_project"/>
             ]]>
           </source>
         </li>
         <li>
-          <strong>:NewJarEntry</strong><br/>
-          Adds a new entry for a jar file dependency.  If the jar file is not in
-          a folder under the project root, you must use an absolute path
-          (apparent limitation with eclipse).  When adding the template, this
-          command also adds the necessary (although commented out) elements and
-          attributes to set the location of the jar's source code and javadocs.
+          <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...]<br/>
+          Adds a new entry for one or more jar file dependencies.  If the jar
+          file is not in a folder under the project root, you must use an
+          absolute path (apparent limitation with eclipse).  When adding the
+          template, this command also adds the necessary (although commented
+          out) elements and attributes to set the location of the jar's source
+          code and javadocs.
           <source>
             <![CDATA[
             <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
