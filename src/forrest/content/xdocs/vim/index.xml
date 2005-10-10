@@ -41,63 +41,12 @@
     <section id="configuration">
       <title>Configuration</title>
       <p>
-        Currently there are only a couple of global configuration settings
-        available.
+        Currently there is only one global configuration setting available.
       </p>
       <ul>
         <li>
           <strong>g:EclimDebug</strong> (Default: 0)<br/>
           Setting this variable to 1 will turn on some simple debugging.
-        </li>
-        <li>
-          <strong>g:EclimCommand</strong> (Default: "eclim")<br/>
-          This variable is used to configure the command used for the eclim
-          client.  Currently the only other alternative is "eclim-lite" which uses
-          <a href="../install/index.html#nailgun">nailgun</a> to improve
-          performance.
-        </li>
-      </ul>
-    </section>
-    <section id="global">
-      <title>Global shared functions</title>
-      <p>
-        The following set of functions are available to any plug-in that wishes
-        to enhance the vim integration with eclim and Eclipse.  If you don't
-        plan on adding any new functionality, then you can safely skip this
-        section.
-      </p>
-      <ul>
-        <li>
-          <strong>GetCurrentElementPosition()</strong><br/>
-          Gets the current position of the element under the cursor for use
-          with eclim. The result is in the form "offset;length" where the
-          offset is the number of characters from the start of the file and
-          the length is the length of the element.
-        </li>
-        <li>
-          <strong>ExecuteEclim(args)</strong><br/>
-          Executes the eclim client and returns the results.  The parameter
-          "args" is expected to be a string with all the command line
-          arguments to be passed to eclim.
-        </li>
-        <li>
-          <strong>ParseQuickfixEntries(entries)</strong><br/>
-          Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
-          vim compatable list of dictionaries that can be passed to setqflist().
-          <ul>
-            <li>%f: the filename</li>
-            <li>%l: the line number</li>
-            <li>%c: the column number</li>
-            <li>%m: the message</li>
-          </ul>
-        </li>
-        <li>
-          <strong>PromptList(prompt, list, highlight)</strong><br/>
-          Prompts the user to choose from the supplied list. "prompt" is the
-          text used to explain to the user what they are choosing from.
-          "list" is the list of elements to choose from. "highlight" is the
-          highlight group to use for the prompt.  The result returned is the
-          index in the list that the user chose.
         </li>
       </ul>
     </section>
