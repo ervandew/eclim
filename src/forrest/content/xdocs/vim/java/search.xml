@@ -52,6 +52,16 @@
         &nbsp;&nbsp;<strong>:JavaSearch</strong> -p &lt;pattern&gt; -t &lt;type&gt; -x
         &lt;context&gt;
       </p>
+      <note>
+        Vim command completion is supported for through out the command with the
+        excption of the pattern to search for.<br/>
+        <code>:JavaSearch &lt;Tab&gt;</code><br/>
+        <code>:JavaSearch -p MyClass* &lt;Tab&gt;</code><br/>
+        <code>:JavaSearch -p MyClass* -t &lt;Tab&gt;</code><br/>
+        <code>:JavaSearch -p MyClass* -t all &lt;Tab&gt;</code><br/>
+        <code>:JavaSearch -p MyClass* -t all -x &lt;Tab&gt;</code><br/>
+        <code>:JavaSearch -p MyClass* -t all -x declarations</code>
+      </note>
       <ul>
         <li>
           pattern: The pattern to search for.<br/>
@@ -62,7 +72,6 @@
         <li>
           type: The type of element to search for where possible types include
           <ul>
-            <li>all</li>
             <li>annotation</li>
             <li>class</li>
             <li>classOrEnum</li>
