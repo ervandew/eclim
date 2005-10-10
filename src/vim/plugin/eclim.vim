@@ -209,7 +209,9 @@ endfunction " }}}
 " CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for files.
 function! CommandCompleteFile (argLead, cmdLine, cursorPos)
-  let results = split(glob(expand(a:argLead) . '*'), '\n')
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  let results = split(glob(expand(argLead) . '*'), '\n')
   let index = 0
   return results
 endfunction " }}}
@@ -217,7 +219,9 @@ endfunction " }}}
 " CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for directories.
 function! CommandCompleteDir (argLead, cmdLine, cursorPos)
-  let results = split(glob(expand(a:argLead) . '*'), '\n')
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  let results = split(glob(expand(argLead) . '*'), '\n')
   let index = 0
   for result in results
     if !isdirectory(result)
