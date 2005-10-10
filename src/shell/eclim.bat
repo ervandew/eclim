@@ -16,23 +16,7 @@ rem limitations under the License.
 rem
 rem Author: Eric Van Dewoestine
 
-if "%ECLIPSE_HOME%" == "" goto no_eclipse_home
-
-setlocal EnableDelayedExpansion
-set ECLIM_HOME=%ECLIPSE_HOME%\plugins\org.eclim_${eclim.version}
-
-set JAVA_CP=.
-for %%i in ("%ECLIM_HOME%\*.jar") do set JAVA_CP=!JAVA_CP!;%%i
-endlocal & set JAVA_CP=%JAVA_CP%
-
-if "%JAVA_CMD%" == "" set JAVA_CMD=java -cp "%JAVA_CP%"
+set CUR_PATH=%~p0
+set JAVA_CMD=%CUR_PATH%\ng --nailgun-port 9091
 
 %JAVA_CMD% org.eclim.client.Main %*
-set JAVA_CMD=
-goto exit
-
-:no_eclipse_home
-  echo ECLIPSE_HOME not set
-  goto exit
-
-:exit

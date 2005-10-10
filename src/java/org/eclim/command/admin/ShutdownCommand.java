@@ -17,6 +17,8 @@ package org.eclim.command.admin;
 
 import java.io.IOException;
 
+import com.martiansoftware.nailgun.NGServer;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,8 +26,6 @@ import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
-
-import org.eclim.server.mina.Server;
 
 /**
  * Command to shutdown the eclim server.
@@ -45,12 +45,11 @@ public class ShutdownCommand
     throws IOException
   {
     try{
-      Server server = (Server)Services.getService(Server.class);
-      server.stop();
+      NGServer server = (NGServer)Services.getService(NGServer.class);
 
       Services.close();
 
-      server.exit();
+      server.shutdown(false);
     }catch(IllegalStateException ise){
       // workspace already closed.
     }catch(Exception e){

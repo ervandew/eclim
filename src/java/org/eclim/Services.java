@@ -41,7 +41,7 @@ public class Services
   private static AbstractApplicationContext context =
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
-          "org/eclim/spring-factory-client.xml"));
+          "org/eclim/spring-factory.xml"));
 
   /**
    * Checks if the service exists.

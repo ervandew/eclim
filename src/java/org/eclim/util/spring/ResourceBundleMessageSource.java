@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Extension to spring ResourceBundleMessageSource that doesn't use the thread
- * classloader, and in this usage, actually fucking works.
+ * classloader.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$

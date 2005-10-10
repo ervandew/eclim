@@ -16,28 +16,5 @@
 
 # Author: Eric Van Dewoestine
 
-if [ "$ECLIPSE_HOME" == '' ] ; then
-  echo "ECLIPSE_HOME not set";
-  exit 1;
-fi
-
-if [ ! -d "$ECLIPSE_HOME/plugins" ] ; then
-  echo "No eclipse plugins dir found.  ECLIPSE_HOME may be invalid.";
-  exit 1;
-fi
-
-ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
-JAVA_CP="."
-for i in `find $ECLIM_HOME -name "*.jar"`; do
-  JAVA_CP="$JAVA_CP:$i";
-done
-
-if [ "$JAVA_CMD" == '' ] ; then
-  if [ "$JAVA_HOME" == '' ] ; then
-    JAVA_CMD="java -cp $JAVA_CP"
-  else
-    JAVA_CMD="$JAVA_HOME/bin/java -cp $JAVA_CP"
-  fi
-fi
-
+JAVA_CMD="`dirname $0`/ng --nailgun-port 9091"
 $JAVA_CMD org.eclim.client.Main "$@"

@@ -46,4 +46,137 @@
     </property>
   </bean>
 
+  <bean id="com.martiansoftware.nailgun.NGServer"
+      class="com.martiansoftware.nailgun.NGServer">
+    <description>Nailgun server instance.</description>
+    <constructor-arg><null/></constructor-arg>
+    <constructor-arg type="int">
+      <value>${nailgun.server.port}</value>
+    </constructor-arg>
+  </bean>
+
+  <bean name="eclimPreferences"
+      class="org.eclim.server.eclipse.EclimPreferences">
+    <description>
+      Handles retrieval of eclim preferences and options.
+    </description>
+    <property name="nodeName" value="${org.eclim.node}"/>
+    <property name="preferences">
+      <list>
+        <bean class="org.eclim.server.eclipse.Preference">
+          <property name="name" value="org.eclim.java.library.root"/>
+          <property name="defaultValue" value="${org.eclim.java.library.root}"/>
+        </bean>
+        <bean class="org.eclim.server.eclipse.Preference">
+          <property name="name" value="org.eclim.java.logging.impl"/>
+          <property name="defaultValue" value="${org.eclim.java.logging.impl}"/>
+          <property name="regex" value="(commons-logging|log4j|slf4j|jdk)"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean name="ivy.xml" class="org.eclim.command.project.classpath.IvyParser">
+    <description>
+      Parser for ivy files used to merge build dependency file into the eclipse
+      classpath.
+    </description>
+  </bean>
+
+  <bean name="project.xml" class="org.eclim.command.project.classpath.MavenParser">
+    <description>
+      Parser for maven proeject files used to merge build dependency file into
+      the eclipse classpath.
+    </description>
+  </bean>
+
+  <bean name="ping" class="org.eclim.command.admin.PingCommand">
+    <description>Handles client ping request.</description>
+  </bean>
+
+  <bean name="shutdown" class="org.eclim.command.admin.ShutdownCommand">
+    <description>Handles client shutdown request.</description>
+  </bean>
+
+  <bean name="project_create" class="org.eclim.command.project.ProjectCreateCommand">
+    <description>Handles client project creation request.</description>
+  </bean>
+
+  <bean name="project_delete" class="org.eclim.command.project.ProjectDeleteCommand">
+    <description>Handles client project deletion request.</description>
+  </bean>
+
+  <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
+    <description>Handles client project update request.</description>
+    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
+    <property name="editableOptions">
+      <list>
+        <bean class="org.eclim.server.eclipse.Option">
+          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
+          <property name="regex" value="1\.[2-5]"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean name="project_info" class="org.eclim.command.project.ProjectInfoCommand">
+    <description>Handles client project info request.</description>
+    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="editableOptions">
+      <list>
+        <bean class="org.eclim.server.eclipse.Option">
+          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
+          <property name="regex" value="1\.[2-5]"/>
+        </bean>
+      </list>
+    </property>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.project.ProjectInfoFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_src_update"
+      class="org.eclim.command.java.SourceUpdateCommand">
+    <description>Handles client request to update a java src file.</description>
+  </bean>
+
+  <bean name="search" class="org.eclim.command.java.search.SearchCommand">
+    <description>Handles client search requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.search.SearchFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="import" class="org.eclim.command.java.include.ImportCommand">
+    <description>Handles client import request.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.include.ImportFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="complete"
+      class="org.eclim.command.java.complete.CodeCompleteCommand">
+    <description>Handles client code completion requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

@@ -13,14 +13,12 @@ Bundle-ClassPath: .,
   lib/commons-logging-1.0.4.jar,
   lib/jaxen-1.1-beta-8.jar,
   lib/log4j-1.2.12.jar,
-  lib/mina-0.7.3.jar,
   lib/nailgun-0.7.1.jar,
   lib/spring-aop-1.2.3.jar,
   lib/spring-beans-1.2.3.jar,
   lib/spring-context-1.2.3.jar,
   lib/spring-core-1.2.3.jar,
   lib/velocity-1.4.jar,
-  lib/xpp3-1.1.3.4d_b4_min.jar,
   lib/xstream-1.1.2.jar
 Bundle-Activator: org.eclim.server.eclipse.EclimPlugin
 Bundle-Localization: plugin
