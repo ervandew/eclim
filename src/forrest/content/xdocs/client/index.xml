@@ -31,9 +31,8 @@
   <body>
     <p>
       Other than <a href="#shutdown">shutting down eclimd</a>, you should seldom
-      need to use the eclim or eclim-lite command line client directly.  However
-      it can be useful when troubleshooting issues or developing your own
-      enhancements.
+      need to use the eclim command line client directly.  However it can be
+      useful when troubleshooting issues or developing your own enhancements.
     </p>
     <p>
       The general format for using the command line clients is
@@ -45,10 +44,6 @@
     <source>
       eclim -command ping
     </source>
-    <note>
-      If you have configured <a href="../install/index.html#nailgun">nailgun</a>
-      you can use <code>eclim-lite</code> everywhere you see <code>eclim</code>.
-    </note>
     <section id="help">
       <title>Help</title>
       <p>
