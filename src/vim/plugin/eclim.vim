@@ -97,7 +97,7 @@ endfunction " }}}
 
 " ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
-function! ExecuteEclim (args)
+function! ExecuteEclim (args, ...)
   if !exists("g:EclimPath")
     if !exists("$ECLIPSE_HOME")
       echoe "ECLIPSE_HOME must be set."
@@ -107,14 +107,23 @@ function! ExecuteEclim (args)
     let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
   endif
 
-  let command = g:EclimPath . ' ' . substitute(a:args, '*', '#', 'g')
+  let command = g:EclimPath . ' ' . substitute(a:args, '*', '+', 'g')
   if g:EclimDebug
     echom "Debug: " . command
   endif
 
-  let result = system(command)
-  let result = substitute(result, '\(.*\)\n$', '\1', '')
-  let g:EclimLastResult = result
+  " caller requested alternate method of execution to avoid apprent vim issue
+  " that causes system() to hang on large results.
+  if len(a:000) > 0
+    let tempfile = tempname()
+    silent exec "!" . command " > " . tempfile
+    let result = join(readfile(tempfile), "\n")
+    call delete(tempfile)
+    silent exec "normal \<c-l>"
+  else
+    let result = system(command)
+    let result = substitute(result, '\(.*\)\n$', '\1', '')
+  endif
   let error = ''
 
   " check for client side exception
@@ -132,53 +141,12 @@ function! ExecuteEclim (args)
   endif
 
   if error != ''
-    "if error =~ 'Connection refused' && !s:prompted_eclimd_start
-    "  if EclimdStartupPrompt()
-    "    return ExecuteEclim(a:args)
-    "  else
-    "    return
-    "  endif
-    "endif
     echoe error
     return
   endif
 
   return result
 endfunction " }}}
-
-" EclimdStartupPrompt() {{{
-" Prompts the user to choose whether or not to startup eclimd.
-" returns 1 if eclimd is started, 0 otherwise.
-""" FIXME: Not working yet.  Vim kills all processes started from it when
-"""        closed.
-"function! EclimdStartupPrompt ()
-"  echohl Statement
-"  try
-"    let response = input("eclimd not started.\nStart now?\n(y)es (n)o\n: ")
-"    while response !~ '\([yn]\|yes\|no\)\c'
-"      let response = input("Please choose (y)es or (n)o\n: ")
-"    endwhile
-"    let s:prompted_eclimd_start = 1
-"    if response =~ '^y'
-"      let eclimdPath = g:EclimHome . "/bin/eclimd"
-"      let result = system(eclimdPath)
-"      if v:shell_error
-"        echoe result
-"        return 0
-"      endif
-"      echo "Starting eclimd..."
-"      if WaitFor(g:EclimHome . "/log/eclim.log", "Server started", 10, 1)
-"        echo "eclimd started."
-"      else
-"        echom "Timed out waiting for eclimd to start."
-"        return 0
-"      endif
-"    endif
-"  finally
-"    echohl None
-"  endtry
-"  return 1
-"endfunction " }}}
 
 " ParseQuickfixEntries(resultsFile) {{{
 " Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
@@ -238,36 +206,29 @@ function! PromptList (prompt, list, highlight)
   return response
 endfunction " }}}
 
-" WaitFor(file, regex, timeout, interval) {{{
-" Waits for a file to be created and an optional regex to exist in the file.
-" Returns 1 if the file was created and the regex found, 0 otherwise.
-""" FIXME: Not working yet.
-"function! WaitFor (file, regex, timeout, interval)
-"  " ensure a valid interval
-"  let interval = a:interval
-"  if interval <= 0
-"    let interval = 1
-"  endif
-"
-"  let time = 0
-"  while time < a:timeout
-"    if filereadable(a:file)
-"      try
-"echom "vimgrep /" . a:regex . "/ " . a:file
-"        exec "vimgrep /" . a:regex . "/ " . a:file
-"        let matches = getqflist()
-"        if len(matches) > 0
-"          return 1
-"        endif
-"      catch
-"        " ignore
-"      endtry
-"    endif
-"    let time = time + interval
-"    exec interval . "sleep"
-"  endwhile
-"
-"  return 0
-"endfunction " }}}
+" CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for files.
+function! CommandCompleteFile (argLead, cmdLine, cursorPos)
+  let results = split(glob(expand(a:argLead) . '*'), '\n')
+  let index = 0
+  return results
+endfunction " }}}
+
+" CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for directories.
+function! CommandCompleteDir (argLead, cmdLine, cursorPos)
+  let results = split(glob(expand(a:argLead) . '*'), '\n')
+  let index = 0
+  for result in results
+    if !isdirectory(result)
+      call remove(results, index)
+    else
+      let result = substitute(result . "/", ' ', '\\\\ ', 'g')
+      exec "let results[" . index . "] = \"" . result . "\""
+      let index += 1
+    endif
+  endfor
+  return results
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker
