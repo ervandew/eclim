@@ -16,6 +16,7 @@
 package org.eclim.command.project;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ import org.eclim.command.project.classpath.Dependency;
 import org.eclim.server.eclipse.EclimPreferences;
 import org.eclim.server.eclipse.Option;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
@@ -203,6 +206,8 @@ public class ProjectUpdateCommand
       IJavaProject _project, Dependency[] _dependencies)
     throws Exception
   {
+    IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
+
     Collection results = new ArrayList();
 
     // load the results with all the non library entries.
@@ -244,8 +249,36 @@ public class ProjectUpdateCommand
       }
 
       if(match == null){
-        IPath path = new Path(libraryDir).append(_dependencies[ii].toString());
-        results.add(JavaCore.newLibraryEntry(path, null, null, true));
+        IPath dir = new Path(libraryDir);
+        if(!dir.isAbsolute()){
+          IPath path = new Path(_project.getElementName())
+            .append(dir).append(_dependencies[ii].toString());
+          IResource resource = root.findMember(path);
+
+          // if the file doesn't exist, create a temp one, grab the resource and
+          // then delete the file (handle cases where the jar file is downloaded
+          // from a repository).
+          if(resource == null){
+            IPath fullPath = _project.getResource().getRawLocation()
+              .append(libraryDir).append(_dependencies[ii].toString());
+            File file = new File(fullPath.toOSString());
+            if(file.createNewFile()){
+              _project.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+              resource = root.findMember(path);
+              file.delete();
+            }
+          }
+          if(resource == null){
+            throw new IllegalArgumentException(
+                Services.getMessage("resource.unable.resolve",
+                  new Object[]{path.toOSString()}));
+          }
+          path = resource.getFullPath();
+          results.add(JavaCore.newLibraryEntry(path, null, null, true));
+        }else{
+          IPath path = dir.append(_dependencies[ii].toString());
+          results.add(JavaCore.newLibraryEntry(path, null, null, true));
+        }
       }else{
         match = null;
       }
