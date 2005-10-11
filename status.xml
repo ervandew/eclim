@@ -33,7 +33,9 @@
         bundles).
       </action>
       <action context="javadoc" dev="ervandew">
-        Javadoc functionality (viewing in a web browser).
+        Javadoc functionality (viewing in a web browser).<br/>
+        <code>IClasspathEntry.getExtraAttributes()</code><br/>
+        <code>IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME</code>
       </action>
     </actions>
 
