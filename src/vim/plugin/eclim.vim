@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: 1.0.0
+" Version: ${eclim.version}
 "
 " Description: {{{
 "   Plugin that integrates vim with the eclipse plugin eclim (ECLipse
@@ -236,7 +236,7 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
     if !isdirectory(result)
       call remove(results, index)
     else
-      let result = result . '/'    
+      let result = result . '/'
       let result = substitute(result, '\', '/', 'g')
       let result = substitute(result, ' ', '\\\\ ', 'g')
       exec "let results[" . index . "] = \"" . result . "\""
