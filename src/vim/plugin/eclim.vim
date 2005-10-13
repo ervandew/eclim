@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: ${eclim.version}
+" Version: 1.0.0
 "
 " Description: {{{
 "   Plugin that integrates vim with the eclipse plugin eclim (ECLipse
@@ -43,6 +43,12 @@
         let g:EclimIndent = g:EclimIndent . " "
         let index = index + 1
       endwhile
+    endif
+  endif
+  if !exists("g:EclimSeparator")
+    let g:EclimSeparator = '/'
+    if has("win32") || has("win64")
+      let g:EclimSeparator = '\'
     endif
   endif
 " }}}
@@ -127,21 +133,21 @@ function! ExecuteEclim (args, ...)
   let error = ''
 
   " check for client side exception
-  if v:shell_error && result =~ 'Exception in thread "main"'
-    let error = substitute(result, '.*"main" \(.\{-\}:\)\(.\{-\}\):.*', '\1\2', '')
+  if v:shell_error && result =~ 'Exception:'
+    let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
 
   " check for other client side exceptions
   elseif v:shell_error
     let error = result
 
   " check for server side exception
-  elseif result =~ '^<.\{-\}Exception>'
+  elseif result =~ '^<.\{-\}\(Exception\|Error\)>'
     let error = substitute(result,
       \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*', '\1: \3', '')
   endif
 
   if error != ''
-    echoe error
+    echoe error | echoe 'while executing command: ' . command
     return
   endif
 
@@ -212,6 +218,9 @@ function! CommandCompleteFile (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
   let results = split(glob(expand(argLead) . '*'), '\n')
+  call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
+  call map(results, "substitute(v:val, '\\', '/', 'g')")
+  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
   let index = 0
   return results
 endfunction " }}}
@@ -227,7 +236,9 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
     if !isdirectory(result)
       call remove(results, index)
     else
-      let result = substitute(result . "/", ' ', '\\\\ ', 'g')
+      let result = result . '/'    
+      let result = substitute(result, '\', '/', 'g')
+      let result = substitute(result, ' ', '\\\\ ', 'g')
       exec "let results[" . index . "] = \"" . result . "\""
       let index += 1
     endif
