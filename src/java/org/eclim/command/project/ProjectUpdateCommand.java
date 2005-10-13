@@ -256,14 +256,15 @@ public class ProjectUpdateCommand
           IResource resource = root.findMember(path);
 
           // if the file doesn't exist, create a temp one, grab the resource and
-          // then delete the file (handle cases where the jar file is downloaded
+          // then delete the file (handles cases where the jar file is downloaded
           // from a repository).
           if(resource == null){
             IPath fullPath = _project.getResource().getRawLocation()
               .append(libraryDir).append(_dependencies[ii].toString());
             File file = new File(fullPath.toOSString());
             if(file.createNewFile()){
-              _project.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+              root.findMember(new Path(_project.getElementName()).append(dir))
+                .refreshLocal(IResource.DEPTH_ONE, null);
               resource = root.findMember(path);
               file.delete();
             }
