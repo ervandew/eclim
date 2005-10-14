@@ -260,7 +260,14 @@ public class ProjectUpdateCommand
           // from a repository).
           if(resource == null){
             IPath fullPath = _project.getResource().getRawLocation()
-              .append(libraryDir).append(_dependencies[ii].toString());
+              .append(libraryDir);
+            File theDir = new File(fullPath.toOSString());
+            if(!theDir.exists()){
+              throw new IllegalArgumentException(
+                  Services.getMessage("dir.not.found",
+                    new Object[]{fullPath.toOSString()}));
+            }
+            fullPath = fullPath.append(_dependencies[ii].toString());
             File file = new File(fullPath.toOSString());
             if(file.createNewFile()){
               root.findMember(new Path(_project.getElementName()).append(dir))
