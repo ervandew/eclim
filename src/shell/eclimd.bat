@@ -20,7 +20,9 @@ if "%ECLIPSE_HOME%" == "" goto no_eclipse_home
 
 if not exist "%ECLIPSE_HOME%\eclipse.exe" goto no_eclipse_executable
 
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -consolelog -nosplash -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIPSE_HOME%"
+set ECLIM_HOME=%ECLIPSE_HOME%\plugins\org.eclim_${eclim.version}
+
+start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -consolelog -nosplash -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%"
 goto exit
 
 :no_eclipse_home
