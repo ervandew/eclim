@@ -51,6 +51,9 @@
       let g:EclimSeparator = '\'
     endif
   endif
+  if !exists("g:EclimEchoHighlight")
+    let g:EclimEchoHighlight = "Statement"
+  endif
 " }}}
 
 " Script Variables {{{
@@ -132,18 +135,11 @@ function! ExecuteEclim (args, ...)
   endif
   let error = ''
 
-  " check for client side exception
+  " check for errors
   if v:shell_error && result =~ 'Exception:'
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
-
-  " check for other client side exceptions
   elseif v:shell_error
     let error = result
-
-  " check for server side exception
-  elseif result =~ '^<.\{-\}\(Exception\|Error\)>'
-    let error = substitute(result,
-      \ '^<\(.\{-\}\)>.*<\([a-zA-Z]*[Mm]essage\)>\(.\{-\}\)<\/\2.*', '\1: \3', '')
   endif
 
   if error != ''
@@ -152,6 +148,14 @@ function! ExecuteEclim (args, ...)
   endif
 
   return result
+endfunction " }}}
+
+" Echo(message) {{{
+" Echos the supplied message.
+function! Echo (message)
+  exec "echohl " g:EclimEchoHighlight
+  echo a:message
+  echohl None
 endfunction " }}}
 
 " ParseQuickfixEntries(resultsFile) {{{
