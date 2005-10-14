@@ -29,6 +29,14 @@
     </authors>
   </header>
   <body>
+    <note>
+      Currently there are a couple limitations with searching.  Results that
+      don't have an associated source file (class file only) or whose source
+      file is located in an archive (jar, zip) will be omitted from the search
+      results.
+      <p/>
+      Both of these issues will be addressed in next version of eclim.
+    </note>
     <section id="element">
       <title>Element Search</title>
       <p>
