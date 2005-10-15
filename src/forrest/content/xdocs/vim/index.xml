@@ -41,12 +41,18 @@
     <section id="configuration">
       <title>Configuration</title>
       <p>
-        Currently there is only one global configuration setting available.
+        Currently there is only a couple global configuration settings
+        available.
       </p>
       <ul>
         <li>
           <strong>g:EclimDebug</strong> (Default: 0)<br/>
           Setting this variable to 1 will turn on some simple debugging.
+        </li>
+        <li>
+          <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
+          This determines which highlight group will be used for informative
+          messages.
         </li>
       </ul>
     </section>
