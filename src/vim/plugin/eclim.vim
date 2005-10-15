@@ -154,6 +154,7 @@ endfunction " }}}
 " Echos the supplied message.
 function! Echo (message)
   exec "echohl " g:EclimEchoHighlight
+  redraw
   echo a:message
   echohl None
 endfunction " }}}
@@ -175,6 +176,27 @@ function! ParseQuickfixEntries (entries)
   endfor
 
   return entries
+endfunction " }}}
+
+" ParseArgs(args) {{{
+" Parses the supplied argument line into a list of args.
+function! ParseArgs (args)
+  let args = split(a:args, '[^\\]\s\zs')
+  call map(args, 'substitute(v:val, "\\s*$", "", "")')
+
+  return args
+endfunction " }}}
+
+" ParseCommandCompletionResults(args) {{{
+" Parses the supplied argument line into a list of args.
+  " hack for vim's lack of support for escaped spaces in custom completion.
+function! ParseCommandCompletionResults (argLead, results)
+  let results = a:results
+  if stridx(a:argLead, ' ') != -1
+    let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')
+    call map(results, "substitute(v:val, '^" . removePrefix . "', '', '')")
+  endif
+  return results
 endfunction " }}}
 
 " PromptList(prompt, list, highlight) {{{
@@ -225,8 +247,8 @@ function! CommandCompleteFile (argLead, cmdLine, cursorPos)
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
-  let index = 0
-  return results
+
+  return ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
 " CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
@@ -247,7 +269,7 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
       let index += 1
     endif
   endfor
-  return results
+  return ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
