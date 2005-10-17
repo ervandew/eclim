@@ -110,6 +110,11 @@
   </todo>
 
   <changes>
+    <release version="1.0.0" date="Oct 16, 2005">
+      <action dev="ervandew" type="add" context="eclim">
+        Initial release.
+      </action>
+    </release>
     <release version="unreleased" date="Aug 09, 2005">
       <action dev="ervandew" type="add" context="docs">
         Created eclim documentation site.

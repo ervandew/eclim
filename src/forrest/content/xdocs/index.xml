@@ -64,6 +64,18 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_2005_10_16">
+        <title>2005-10-16</title>
+        <p>
+          The first eclim release (1.0.0) is now available.<br/>
+          All questions, issues, suggestions are welcome and encouraged.
+        </p>
+        <p>
+          Be sure to read the docs to see what features are currently available,
+          and take a look at the <a href="todo.html">todo</a> to see what's
+          coming in future releases.
+        </p>
+      </section>
       <section id="news_2005_09_11">
         <title>2005-09-11</title>
         <p>
