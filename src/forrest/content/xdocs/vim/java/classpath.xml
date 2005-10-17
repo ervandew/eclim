@@ -31,15 +31,16 @@
   <body>
     <p>
       Source code completion, searching, auto imports, all rely on a properly
-      configured classpath.  When you first create a project, a .classpath file
-      is created in the project's root directory.  If you created the project on
-      an existing code-base, eclim will attempt to setup the .classpath file with
-      any source code directories or libraries in the project.
+      configured classpath.  When you first create a project, a
+      <code>.classpath</code> file is created in the project's root directory.
+      If you created the project on an existing code-base, eclim will attempt to
+      setup the <code>.classpath</code> file with any source code directories or
+      libraries in the project.
     </p>
     <p>
       Regardless of the state of your project you will at some point need to
       update the classpath.  Eclim provides a couple different ways to keep your
-      eclipse .classpath up to date.
+      eclipse <code>.classpath</code> up to date.
     </p>
     <section id="eclipse.classpath">
       <title>.classpath</title>
@@ -49,8 +50,8 @@
         command to the eclim server to update the project's classpath.
       </p>
       <p>
-        While editing the .classpath file, eclim also provides a few commands to
-        ease the creation of new classpath entries.
+        While editing the <code>.classpath</code> file, eclim also provides a
+        few commands to ease the creation of new classpath entries.
       </p>
       <ul>
         <li>
@@ -102,10 +103,11 @@
     <section id="buildfile">
       <title>Build Dependency Files</title>
       <p>
-        The second method of keeping your eclipse .classpath file up to date, is
-        to utilize eclim's plugins for a couple commonly used build tools.  By
-        default, eclim only provides support for two such tools, but feel free to
-        contribute additional implementations or submit a request for another one.
+        The second method of keeping your eclipse <code>.classpath</code> file
+        up to date, is to utilize eclim's plugins for a couple commonly used
+        build tools.  By default, eclim only provides support for two such
+        tools, but feel free to contribute additional implementations or submit
+        a request for another one.
       </p>
       <section id="ivy.xml">
         <title>ivy.xml</title>
@@ -120,8 +122,8 @@
           ivy.xml.  Just like the direct .classpath editing that eclim supports,
           when editing an ivy.xml file from vim, eclim adds an auto command to
           update eclipse's classpath when you save the ivy.xml.  Any entries
-          found in the ivy.xml that are not in the .classpath will be added, and
-          any entries that differ in version will be updated.
+          found in the ivy.xml that are not in the <code>.classpath</code> will
+          be added, and any entries that differ in version will be updated.
         </p>
       </section>
       <section id="project.xml">
