@@ -57,7 +57,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:prompted_eclimd_start = 0
+  let s:command_ping = "-command ping"
+  let s:command_shutdown = "-command shutdown"
 " }}}
 
 " GetCharacterOffset() {{{
@@ -153,10 +154,13 @@ endfunction " }}}
 " Echo(message) {{{
 " Echos the supplied message.
 function! Echo (message)
-  exec "echohl " g:EclimEchoHighlight
-  redraw
-  echo a:message
-  echohl None
+  " only echo if the result is not 0, which signals that ExecuteEclim failed.
+  if a:message != "0"
+    exec "echohl " g:EclimEchoHighlight
+    redraw
+    echo a:message
+    echohl None
+  endif
 endfunction " }}}
 
 " ParseQuickfixEntries(resultsFile) {{{
@@ -238,6 +242,18 @@ function! PromptList (prompt, list, highlight)
   return response
 endfunction " }}}
 
+" PingEclim() {{{
+" Pings the eclimd server.
+function! s:PingEclim ()
+  call Echo(ExecuteEclim(s:command_ping))
+endfunction " }}}
+
+" ShutdownEclim() {{{
+" Shuts down the eclimd server.
+function! s:ShutdownEclim ()
+  call ExecuteEclim(s:command_shutdown)
+endfunction " }}}
+
 " CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for files.
 function! CommandCompleteFile (argLead, cmdLine, cursorPos)
@@ -271,5 +287,14 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
   endfor
   return ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
+
+" Command Declarations {{{
+if !exists(":PingEclim")
+  command PingEclim :call <SID>PingEclim()
+endif
+if !exists(":ShutdownEclim")
+  command ShutdownEclim :call <SID>ShutdownEclim()
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker
