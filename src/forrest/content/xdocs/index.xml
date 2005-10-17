@@ -38,7 +38,8 @@
       </p>
       <p>
         Eclim is less of an application and more of an integration of two great
-        projects.  The first, <a href="http://vim.org">vim</a>, is arguably one of
+        projects.  The first, <a href="http://vim.org">vim</a>, is
+        <a href="http://en.wikipedia.org/wiki/Editor_wars">arguably</a> one of
         the best text editors in existence.  The second,
         <a href="http://eclipse.org">eclipse</a>, provides many great tools for
         development, especially java development.
