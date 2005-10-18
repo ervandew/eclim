@@ -122,13 +122,32 @@
     <mkdir dir="dist"/>
 
     <!-- eclipse plugin jar -->
-    <zip destfile="dist/org.eclim_${eclim.version}.jar">
+    <zip destfile="dist/org.eclim_${eclim.version}.zip">
       <fileset dir="${eclipse.home}/plugins/" excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
         <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
       </fileset>
     </zip>
+    <tar destfile="dist/org.eclim_${eclim.version}.tar.gz" compression="gzip">
+      <tarfileset dir="${eclipse.home}/plugins/"
+          excludesfile="src/ant/exclude.properties">
+        <include name="org.eclim_${eclim.version}/**/*"/>
+        <exclude name="org.eclim_${eclim.version}/bin/ng"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
+        <exclude name="org.eclim_${eclim.version}/bin/**/*.bat"/>
+        <exclude name="org.eclim_${eclim.version}/bin/**/*.exe"/>
+        <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
+      </tarfileset>
+      <tarfileset dir="${eclipse.home}/plugins/" mode="755"
+          excludesfile="src/ant/exclude.properties">
+        <include name="org.eclim_${eclim.version}/bin/eclim"/>
+        <include name="org.eclim_${eclim.version}/bin/eclimd"/>
+      </tarfileset>
+    </tar>
 
     <!-- vim plugins jar -->
     <path id="vim.plugins">
