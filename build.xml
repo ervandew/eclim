@@ -125,6 +125,7 @@
     <zip destfile="dist/org.eclim_${eclim.version}.zip">
       <fileset dir="${eclipse.home}/plugins/" excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
+        <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
@@ -135,6 +136,7 @@
       <tarfileset dir="${eclipse.home}/plugins/"
           excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
+        <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
