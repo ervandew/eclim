@@ -134,9 +134,9 @@ function! ExecuteEclim (args, ...)
     let result = system(command)
     let result = substitute(result, '\(.*\)\n$', '\1', '')
   endif
-  let error = ''
 
   " check for errors
+  let error = ''
   if v:shell_error && result =~ 'Exception:'
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
   elseif v:shell_error
