@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# jdk home
+JAVA_HOME="/opt/java"
+# eclipse installation dir.
+ECLIPSE_HOME="/usr/local/java/eclipse"
+# eclim plugin dir.
+ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
+# the user to run as.
+ECLIM_USER="ervandew"
+
+case "$1" in
+  start)
+    echo -n "Starting eclimd"
+    su $ECLIM_USER -c "source /etc/profile && $ECLIM_HOME/bin/eclimd > /dev/null &"
+    echo
+    ;;
+
+  stop)
+    echo -n "Stopping eclimd"
+    su $ECLIM_USER -c "source /etc/profile && $ECLIM_HOME/bin/eclim -command shutdown"
+    echo
+    ;;
+
+  restart)
+    $0 stop
+    $0 start
+    ;;
+
+  *)
+    echo "Usage: eclimd {start|stop|restart}"
+    exit 1
+esac
+
+exit $?
