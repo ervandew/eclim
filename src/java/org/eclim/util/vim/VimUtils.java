@@ -16,9 +16,18 @@
 package org.eclim.util.vim;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
+
+import org.eclim.util.file.FileUtils;
 
 /**
  * Utility functions for vim filters.
@@ -28,6 +37,8 @@ import org.apache.commons.io.IOUtils;
  */
 public class VimUtils
 {
+  private static final Log log = LogFactory.getLog(VimUtils.class);
+
   /**
    * Converts the offset into a vim compatible line / column string.
    *
@@ -38,11 +49,23 @@ public class VimUtils
   public static String translateOffset (String _fileName, int _offset)
   {
     if(_offset != -1){
+      log.debug("TraslateOffset for '" + _fileName + "'.");
+
       BufferedReader reader = null;
       try{
         int offset = 0;
         int lines = 0;
-        reader = new BufferedReader(new FileReader(_fileName));
+
+        FileSystemManager fsManager = VFS.getManager();
+        FileObject file = fsManager.resolveFile(_fileName);
+
+        // disable caching (the cache seems to become invalid at some point
+        // causing vfs errors).
+        fsManager.getFilesCache().clear(file.getFileSystem());
+
+        reader = new BufferedReader(
+            new InputStreamReader(file.getContent().getInputStream()));
+
         String line = null;
         while((line = reader.readLine()) != null){
           lines++;
