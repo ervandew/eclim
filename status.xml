@@ -43,6 +43,47 @@
     </actions>
 
     <actions priority="low">
+      <action context="languages" dev="ervandew">
+        Support for other languages.
+        <ul>
+          <li>
+            <strong>c/c++</strong><br/>
+            http://www.eclipse.org/cdt/
+          </li>
+          <li>
+            <strong>cobol</strong><br/>
+            http://www.eclipse.org/cobol/
+          </li>
+          <li>
+            <strong>perl</strong><br/>
+            http://e-p-i-c.sourceforge.net/
+          </li>
+          <li>
+            <strong>php</strong><br/>
+            http://www.phpeclipse.net
+          </li>
+          <li>
+            <strong>python</strong><br/>
+            http://pydev.sourceforge.net/
+          </li>
+          <li>
+            <strong>ruby</strong><br/>
+            http://rubyeclipse.sourceforge.net/
+            http://www.radrails.org/
+          </li>
+        </ul>
+        These will be prioritized by demand... My personal preference would be:
+        <ol>
+          <li>ruby</li>
+          <li>python</li>
+          <li>php</li>
+          <li>
+            perl, c/c++, cobol<br/>
+            I'd only implement these if there was a high enough demand to
+            warrant it, but would welcome contributions.
+          </li>
+        </ol>
+      </action>
       <action context="thrid_party" dev="ervandew">
         Research third party plugins for additional functionality
         <ul>
