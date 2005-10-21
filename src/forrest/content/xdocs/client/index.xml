@@ -68,7 +68,7 @@
 
         ping         No args.
         shutdown     No args.
-        search (-f/--file <file> -o/--offset <offset> -l/--length <length> |
+        java_search (-f/--file <file> -o/--offset <offset> -l/--length <length> |
                 -p/--pattern <pattern> -t/--type <type>) -x/--context <context>
                 [-s/--scope <scope>]
                      -f/-file <file>
@@ -95,7 +95,7 @@
                        The scope of the search, where the possible
                        scopes include:
                          [file|hierarchy|project|workspace]
-        import -p/--pattern <pattern> [-t/--type <type>] [-s/--scope <scope>]
+        java_import -p/--pattern <pattern> [-t/--type <type>] [-s/--scope <scope>]
                      -p/--pattern <pattern>
                        Element to import (typically a class name).
                      -t/--type <type>
@@ -105,7 +105,7 @@
                        The scope of the search, where the possible
                        scopes include:
                          [file|hierarchy|project|workspace]
-        complete -f/--file <file> -o/--offset <offset>
+        java_complete -f/--file <file> -o/--offset <offset>
                      -f/--file <file>
                        The file to request code completion for.
                      -o/--offset <offset>

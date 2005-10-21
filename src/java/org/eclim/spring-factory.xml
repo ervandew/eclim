@@ -145,7 +145,7 @@
     <description>Handles client request to update a java src file.</description>
   </bean>
 
-  <bean name="search" class="org.eclim.command.java.search.SearchCommand">
+  <bean name="java_search" class="org.eclim.command.java.search.SearchCommand">
     <description>Handles client search requests.</description>
     <property name="filters">
       <map>
@@ -156,7 +156,7 @@
     </property>
   </bean>
 
-  <bean name="import" class="org.eclim.command.java.include.ImportCommand">
+  <bean name="java_import" class="org.eclim.command.java.include.ImportCommand">
     <description>Handles client import request.</description>
     <property name="filters">
       <map>
@@ -167,7 +167,7 @@
     </property>
   </bean>
 
-  <bean name="complete"
+  <bean name="java_complete"
       class="org.eclim.command.java.complete.CodeCompleteCommand">
     <description>Handles client code completion requests.</description>
     <property name="filters">
@@ -177,6 +177,11 @@
         </entry>
       </map>
     </property>
+  </bean>
+
+  <bean name="read_file"
+      class="org.eclim.command.util.ReadFileCommand">
+    <description>Reads a file from any commons vfs support path.</description>
   </bean>
 
 </beans>
