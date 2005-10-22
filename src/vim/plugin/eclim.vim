@@ -30,6 +30,9 @@
   if !exists("g:EclimDebug")
     let g:EclimDebug = 0
   endif
+  if !exists("g:EclimEchoHighlight")
+    let g:EclimEchoHighlight = "Statement"
+  endif
   if !exists("g:EclimCommand")
     let g:EclimCommand = 'eclim'
   endif
@@ -50,9 +53,6 @@
     if has("win32") || has("win64")
       let g:EclimSeparator = '\'
     endif
-  endif
-  if !exists("g:EclimEchoHighlight")
-    let g:EclimEchoHighlight = "Statement"
   endif
 " }}}
 
@@ -240,6 +240,30 @@ function! PromptList (prompt, list, highlight)
   endtry
 
   return response
+endfunction " }}}
+
+" ViewInBrowser(url) {{{
+" View the supplied url in a browser.
+function! ViewInBrowser (url)
+  if !exists("g:EclimBrowser")
+    call Echo("Before viewing files in browser, you must first set" .
+      \ " g:EclimBrowser to the proper value for your system.")
+    echo "IE      - let g:EclimBrowser = 'iexplorer \"<url>\"'"
+    echo "Firefox - let g:EclimBrowser = 'firefox \"<url>\"'"
+    echo "Mozilla - let g:EclimBrowser = 'mozilla \"<url>\"'"
+    return
+  endif
+
+  if g:EclimBrowser !~ '&\s*$'
+    let g:EclimBrowser = g:EclimBrowser . ' &'
+  endif
+  if g:EclimBrowser !~ '^\s*!'
+    let g:EclimBrowser = '!' . g:EclimBrowser
+  endif
+
+  let command = escape(substitute(g:EclimBrowser, '<url>', a:url, ''), '#')
+  silent exec command
+  exec "normal \<c-l>"
 endfunction " }}}
 
 " PingEclim() {{{
