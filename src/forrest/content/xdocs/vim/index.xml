@@ -115,6 +115,7 @@
       <ul>
         <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
         <li><a href="java/search.html">Source code searching.</a></li>
+        <li><a href="java/doc.html">Javadoc support.</a></li>
         <li><a href="java/import.html">Automated imports.</a></li>
         <li><a href="java/complete.html">Code completion.</a></li>
         <li><a href="java/logging.html">Logging.</a></li>

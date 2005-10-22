@@ -71,6 +71,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"
         description="Source code searching"/>
+      <doc label="Javadocs" href="doc.html"
+        description="Javadoc support"/>
       <import label="Imports" href="import.html"
         description="Automated imports"/>
       <complete label="Code Completion" href="complete.html"

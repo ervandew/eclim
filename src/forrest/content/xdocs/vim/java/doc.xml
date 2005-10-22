@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Javadoc support</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      The eclim javadoc support currently only supports searching of javadocs
+      just like you would <a href="search.html">search the source code</a>.<br/>
+      The only difference is that you use <strong>:JavaDocSearch</strong> instead
+      of <strong>:JavaSearch</strong>.
+    </p>
+    <p>
+      The results will be displayed in a quickfix window and you can simply hit
+      &lt;enter&gt; on an entry to open it using the browser you configured via
+      <strong><a href="../index.html#configuration">g:EclimBrowser</a></strong>.
+    </p>
+    <p>
+      The locations of the javadocs are determined via your eclipse project's
+      .classpath file.  For each library entry you can define a javadoc attribute
+      that points to the base url of the javadoc (http, file, etc).
+    </p>
+    <source>
+      <![CDATA[
+      <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
+        <attributes>
+          <attribute value="http://hibernate.org/hib_docs/v3/api" name="javadoc_location"/>
+        </attributes>
+      </classpath>
+      ]]>
+    </source>
+    <p>
+      Each result will be tested to make sure it exists before being returned.
+      So if you experience performance issues and you are using an external site
+      for the javadoc base, you may want to consider downloading the javadocs
+      and referencing your local copy instead.
+    </p>
+  </body>
+</document>
