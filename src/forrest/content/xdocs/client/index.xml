@@ -35,6 +35,10 @@
       useful when troubleshooting issues or developing your own enhancements.
     </p>
     <p>
+      You can find the eclim command line client in
+      $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin.
+    </p>
+    <p>
       The general format for using the command line clients is
     </p>
     <source>
