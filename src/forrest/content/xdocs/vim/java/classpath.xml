@@ -91,7 +91,7 @@
               -->
               <!--
               <attributes>
-                <attribute value="file:<javadoc>" name="javadoc_location">
+                <attribute value="file:<javadoc>" name="javadoc_location"/>
               </attributes>
               -->
             </classpath>
