@@ -64,9 +64,9 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <vim label="Vim Integration" href="vim/" tab="vim">
     <index label="Index" href="index.html" description="Index"/>
+    <project label="Projects" href="project.html"
+      description="Create projects and view/edit project settings."/>
     <java label="Java" href="java/">
-      <project label="Project" href="project.html"
-        description="Create projects and view/edit project settings."/>
       <classpath label="Classpath" href="classpath.html"
         description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"

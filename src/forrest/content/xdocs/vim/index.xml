@@ -51,8 +51,58 @@
         </li>
         <li>
           <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
-          This determines which highlight group will be used for informative
+          Determines which highlight group will be used for informative
           messages.
+        </li>
+        <li>
+          <strong>g:EclimBrowser</strong> (No Default)<br/>
+          Configures the external web browser command to use when viewing
+          javadocs, etc.  The &lt;url&gt; in the command will be replaced
+          with the target url.
+          <ul>
+            <li>
+              IE<br/>
+              let g:EclimBrowser = 'iexplorer "&lt;url&gt;"'
+            </li>
+            <li>
+              Firefox<br/>
+              let g:EclimBrowser = 'firefox "&lt;url&gt;"'
+            </li>
+            <li>
+              Mozilla<br/>
+              let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section id="commands">
+      <title>Global Commands</title>
+      <p>
+        The following is a list of commands that can be executed in any vim
+        window, regarless of the current filetype.
+      </p>
+      <ul>
+        <li>
+          <strong>:PingEclim</strong><br/>
+          Pings eclimd to see if it is up and running.
+        </li>
+        <li>
+          <strong>:ShutdownEclim</strong><br/>
+          Shuts down the current running eclimd instance.
+        </li>
+      </ul>
+    </section>
+    <section id="plugin">
+      <title>Global Plugins</title>
+      <p>
+        The following functionality is provided to all file types.
+      </p>
+      <ul>
+        <li>
+          <a href="project.html">
+            Create projects and view/edit project settings.
+          </a>
         </li>
       </ul>
     </section>
@@ -60,14 +110,9 @@
       <title>Java Source Editing</title>
       <p>
         Currently the vim integration with Eclipse consists of the following
-        functionality.
+        functionality for java editing.
       </p>
       <ul>
-        <li>
-          <a href="java/project.html">
-            Create projects and view/edit project settings.
-          </a>
-        </li>
         <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
         <li><a href="java/search.html">Source code searching.</a></li>
         <li><a href="java/import.html">Automated imports.</a></li>
