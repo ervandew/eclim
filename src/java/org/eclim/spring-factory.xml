@@ -156,6 +156,17 @@
     </property>
   </bean>
 
+  <bean name="java_docsearch" class="org.eclim.command.java.doc.DocSearchCommand">
+    <description>Handles client search requests for javadocs.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.doc.DocSearchFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="java_import" class="org.eclim.command.java.include.ImportCommand">
     <description>Handles client import request.</description>
     <property name="filters">
