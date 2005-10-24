@@ -190,6 +190,18 @@
     </property>
   </bean>
 
+  <bean name="java_impl"
+      class="org.eclim.command.java.impl.ImplCommand">
+    <description>Handles client code impl requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.impl.ImplFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="read_file"
       class="org.eclim.command.util.ReadFileCommand">
     <description>Reads a file from any commons vfs support path.</description>
