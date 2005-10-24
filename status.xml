@@ -19,7 +19,10 @@
       <action context=".classpath" dev="ervandew">
         See if eclipse supports a variable to be used in absolute paths for
         .classpath so that the .classpath file can be versioned and shared among
-        developers.
+        developers.<br/>
+        <code>JavaCore.set/getClasspathVariable(name)</code><br/>
+        Extension point:
+        <code>org.eclipse.jdt.core.classpathVariableInitializer</code>
       </action>
       <action context="windows" dev="ervandew">
         Use my BatchFileService.exe to create a Windows service for eclimd.
@@ -32,10 +35,14 @@
         Bean functionality (generate getters/setters, beaninfo, resource
         bundles).
       </action>
+      <action context="src_block" dev="ervandew">
+        Manipulation of a source block... wrap in do,if,for,try,while.
+      </action>
       <action context="javadoc" dev="ervandew">
-        Javadoc functionality (viewing in a web browser).<br/>
-        <code>IClasspathEntry.getExtraAttributes()</code><br/>
-        <code>IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME</code>
+        Javadoc functionality.<br/>
+        Eclipse has setting for a project's own javadocs... where is this
+        stored (not in .project, or any of the .setting/, maybe in the
+        workspace)?
       </action>
       <action context="compile" dev="ervandew">
         Support eclipse continuous compiling and mark errors in the source view.
@@ -95,10 +102,6 @@
       <action context="debugger" dev="ervandew">
         Debugger functionality.
       </action>
-      <action context="linux" dev="ervandew">
-        Create init.d script for eclimd on linux (may require change to eclipse
-        code to prevent loading of gtk library).
-      </action>
       <action context="eclipse_features" dev="ervandew">
         Read up on other default eclipse features that may be useful within vim.
       </action>
@@ -118,7 +121,8 @@
           <li>Safe deletes. Check for references before deleting.</li>
           <li>Convert anonymous class into inner/outer class.</li>
           <li>Convert inner class to outer class.</li>
-          <li>Method / Class/ Field renaming.</li>
+          <li>Method / Class / Field renaming.</li>
+          <li>Extract interface.</li>
         </ul>
       </action>
       <action context="junit" dev="ervandew">
@@ -126,7 +130,7 @@
         <ul>
           <li>Template for test case</li>
           <li>Generate test method stubs.</li>
-          <li>View test results in a browser.</li>
+          <li>Run and view test results in a browser.</li>
         </ul>
       </action>
       <action context="cvs" dev="ervandew">
@@ -151,6 +155,15 @@
   </todo>
 
   <changes>
+    <release version="1.1.0" date="unreleased">
+      <action dev="ervandew" type="add" context="javadoc">
+        Support for viewing javadocs in browser.
+      </action>
+      <action dev="ervandew" type="add" context="searching">
+        Support for viewing source files located in archives (zip, jar) when
+        searching.
+      </action>
+    </release>
     <release version="1.0.0" date="Oct 16, 2005">
       <action dev="ervandew" type="add" context="eclim">
         Initial release.
