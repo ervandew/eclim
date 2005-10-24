@@ -105,52 +105,6 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" ExecuteEclim(args) {{{
-" Executes eclim using the supplied argument string.
-function! ExecuteEclim (args, ...)
-  if !exists("g:EclimPath")
-    if !exists("$ECLIPSE_HOME")
-      echoe "ECLIPSE_HOME must be set."
-      return
-    endif
-    let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim*')
-    let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
-  endif
-
-  let command = g:EclimPath . ' ' . substitute(a:args, '*', '+', 'g')
-  if g:EclimDebug
-    echom "Debug: " . command
-  endif
-
-  " caller requested alternate method of execution to avoid apprent vim issue
-  " that causes system() to hang on large results.
-  if len(a:000) > 0
-    let tempfile = tempname()
-    silent exec "!" . command " > " . tempfile
-    let result = join(readfile(tempfile), "\n")
-    call delete(tempfile)
-    silent exec "normal \<c-l>"
-  else
-    let result = system(command)
-    let result = substitute(result, '\(.*\)\n$', '\1', '')
-  endif
-
-  " check for errors
-  let error = ''
-  if v:shell_error && result =~ 'Exception:'
-    let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
-  elseif v:shell_error
-    let error = result
-  endif
-
-  if error != ''
-    echoe error | echoe 'while executing command: ' . command
-    return
-  endif
-
-  return result
-endfunction " }}}
-
 " Echo(message) {{{
 " Echos the supplied message.
 function! Echo (message)
@@ -189,18 +143,6 @@ function! ParseArgs (args)
   call map(args, 'substitute(v:val, "\\s*$", "", "")')
 
   return args
-endfunction " }}}
-
-" ParseCommandCompletionResults(args) {{{
-" Parses the supplied argument line into a list of args.
-  " hack for vim's lack of support for escaped spaces in custom completion.
-function! ParseCommandCompletionResults (argLead, results)
-  let results = a:results
-  if stridx(a:argLead, ' ') != -1
-    let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')
-    call map(results, "substitute(v:val, '^" . removePrefix . "', '', '')")
-  endif
-  return results
 endfunction " }}}
 
 " PromptList(prompt, list, highlight) {{{
@@ -266,6 +208,52 @@ function! ViewInBrowser (url)
   exec "normal \<c-l>"
 endfunction " }}}
 
+" ExecuteEclim(args) {{{
+" Executes eclim using the supplied argument string.
+function! ExecuteEclim (args, ...)
+  if !exists("g:EclimPath")
+    if !exists("$ECLIPSE_HOME")
+      echoe "ECLIPSE_HOME must be set."
+      return
+    endif
+    let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim*')
+    let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
+  endif
+
+  let command = g:EclimPath . ' ' . substitute(a:args, '*', '+', 'g')
+  if g:EclimDebug
+    echom "Debug: " . command
+  endif
+
+  " caller requested alternate method of execution to avoid apprent vim issue
+  " that causes system() to hang on large results.
+  if len(a:000) > 0
+    let tempfile = tempname()
+    silent exec "!" . command " > " . tempfile
+    let result = join(readfile(tempfile), "\n")
+    call delete(tempfile)
+    silent exec "normal \<c-l>"
+  else
+    let result = system(command)
+    let result = substitute(result, '\(.*\)\n$', '\1', '')
+  endif
+
+  " check for errors
+  let error = ''
+  if v:shell_error && result =~ 'Exception:'
+    let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
+  elseif v:shell_error
+    let error = result
+  endif
+
+  if error != ''
+    echoe error | echoe 'while executing command: ' . command
+    return
+  endif
+
+  return result
+endfunction " }}}
+
 " PingEclim() {{{
 " Pings the eclimd server.
 function! s:PingEclim ()
@@ -310,6 +298,19 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
     endif
   endfor
   return ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+" ParseCommandCompletionResults(args) {{{
+" Parses the supplied argument line into a list of args.
+" Bit of a hack for vim's lack of support for escaped spaces in custom
+" completion.
+function! ParseCommandCompletionResults (argLead, results)
+  let results = a:results
+  if stridx(a:argLead, ' ') != -1
+    let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')
+    call map(results, "substitute(v:val, '^" . removePrefix . "', '', '')")
+  endif
+  return results
 endfunction " }}}
 
 " Command Declarations {{{
