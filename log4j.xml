@@ -30,6 +30,10 @@
     <priority value="debug"/>
   </category>
 
+  <category name="org.eclim.util.spring">
+    <priority value="info"/>
+  </category>
+
   <root>
     <priority value="info"/>
     <appender-ref ref="console"/>
