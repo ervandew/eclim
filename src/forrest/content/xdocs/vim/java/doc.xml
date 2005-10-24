@@ -54,11 +54,5 @@
       </classpath>
       ]]>
     </source>
-    <p>
-      Each result will be tested to make sure it exists before being returned.
-      So if you experience performance issues and you are using an external site
-      for the javadoc base, you may want to consider downloading the javadocs
-      and referencing your local copy instead.
-    </p>
   </body>
 </document>
