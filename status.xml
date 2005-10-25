@@ -16,13 +16,9 @@
     </actions>
 
     <actions priority="medium">
-      <action context=".classpath" dev="ervandew">
-        See if eclipse supports a variable to be used in absolute paths for
-        .classpath so that the .classpath file can be versioned and shared among
-        developers.<br/>
-        <code>JavaCore.set/getClasspathVariable(name)</code><br/>
-        Extension point:
-        <code>org.eclipse.jdt.core.classpathVariableInitializer</code>
+      <action context="classpath_variable" dev="ervandew">
+        Vim custom command completion for .classpath var entries and project
+        relative file completion for jar entries.
       </action>
       <action context="windows" dev="ervandew">
         Use my BatchFileService.exe to create a Windows service for eclimd.
