@@ -85,7 +85,7 @@
           code and javadocs.
           <source>
             <![CDATA[
-            <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
+            <classpathentry exported="true" kind="lib" path="lib/hibernate-3.0.jar">
               <!--
                 sourcepath="<path>">
               -->
@@ -97,6 +97,38 @@
             </classpath>
             ]]>
           </source>
+        </li>
+        <li>
+          <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...]<br/>
+          Just like NewJarEntry except an eclipse "var" entry is created.
+          When a jar entry references an absolute path, you should instead use
+          a var entry.  The var entry allows you to define a base dir as a
+          variable (ex. USER_HOME = /home/username), and then reference files
+          relative to that variable.
+          <source>
+            <![CDATA[
+            <classpathentry exported="true" kind="var" path="USER_HOME/lib/hibernate-3.0.jar">
+              <!--
+                sourcepath="<path>">
+              -->
+              <!--
+              <attributes>
+                <attribute value="http://<javadoc>" name="javadoc_location"/>
+              </attributes>
+              -->
+            </classpath>
+            ]]>
+          </source>
+          This allows you to share .classpath files with other developers
+          without each having a local copy with environment specific paths.
+          <br/>
+          <br/>
+          To add new base classpath variables, you can edit
+          <source>
+            $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/classpath_variables.properties
+          </source>
+          By default, a USER_HOME variable is created that defaults to the java
+          System property "user.home" and you can add more as needed.
         </li>
       </ul>
     </section>
