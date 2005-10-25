@@ -98,6 +98,11 @@
     <description>Handles client shutdown request.</description>
   </bean>
 
+  <bean name="read_file"
+      class="org.eclim.command.util.ReadFileCommand">
+    <description>Reads a file from any commons vfs support path.</description>
+  </bean>
+
   <bean name="project_create" class="org.eclim.command.project.ProjectCreateCommand">
     <description>Handles client project creation request.</description>
   </bean>
@@ -202,9 +207,16 @@
     </property>
   </bean>
 
-  <bean name="read_file"
-      class="org.eclim.command.util.ReadFileCommand">
-    <description>Reads a file from any commons vfs support path.</description>
+  <bean name="java_classpath_variables"
+      class="org.eclim.command.java.classpath.ClasspathVariablesCommand">
+    <description>Handles client request to update a java src file.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.classpath.ClasspathVariablesFilter"/>
+        </entry>
+      </map>
+    </property>
   </bean>
 
 </beans>
