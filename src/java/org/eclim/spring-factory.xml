@@ -146,7 +146,7 @@
   </bean>
 
   <bean name="java_src_update"
-      class="org.eclim.command.java.SourceUpdateCommand">
+      class="org.eclim.command.java.src.SrcUpdateCommand">
     <description>Handles client request to update a java src file.</description>
   </bean>
 
