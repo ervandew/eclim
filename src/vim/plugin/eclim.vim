@@ -61,6 +61,33 @@
   let s:command_shutdown = "-command shutdown"
 " }}}
 
+" Echo(message) {{{
+" Echos the supplied message.
+function! Echo (message)
+  " only echo if the result is not 0, which signals that ExecuteEclim failed.
+  if a:message != "0"
+    exec "echohl " g:EclimEchoHighlight
+    redraw
+    echo a:message
+    echohl None
+  endif
+endfunction " }}}
+
+" FillTemplate(prefix, suffix) {{{
+" Used as part of a vim normal map to allow the user to fill in values for
+" variables in a newly added template of code.
+function! FillTemplate (prefix, suffix)
+  let line = getline('.')
+  let prefixCol = stridx(line, a:prefix)
+  let suffixCol = stridx(line, a:suffix)
+  if prefixCol != -1 && suffixCol != -1
+    let line = strpart(line, 0, prefixCol) . strpart(line, suffixCol + 1)
+    call setline(line('.'), line)
+    call cursor(line('.'), prefixCol + 1)
+    startinsert
+  endif
+endfunction " }}}
+
 " GetCharacterOffset() {{{
 " Gets the character offset for the current cursor position.
 function! GetCharacterOffset ()
@@ -105,16 +132,13 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" Echo(message) {{{
-" Echos the supplied message.
-function! Echo (message)
-  " only echo if the result is not 0, which signals that ExecuteEclim failed.
-  if a:message != "0"
-    exec "echohl " g:EclimEchoHighlight
-    redraw
-    echo a:message
-    echohl None
-  endif
+" ParseArgs(args) {{{
+" Parses the supplied argument line into a list of args.
+function! ParseArgs (args)
+  let args = split(a:args, '[^\\]\s\zs')
+  call map(args, 'substitute(v:val, "\\s*$", "", "")')
+
+  return args
 endfunction " }}}
 
 " ParseQuickfixEntries(resultsFile) {{{
@@ -134,15 +158,6 @@ function! ParseQuickfixEntries (entries)
   endfor
 
   return entries
-endfunction " }}}
-
-" ParseArgs(args) {{{
-" Parses the supplied argument line into a list of args.
-function! ParseArgs (args)
-  let args = split(a:args, '[^\\]\s\zs')
-  call map(args, 'substitute(v:val, "\\s*$", "", "")')
-
-  return args
 endfunction " }}}
 
 " PromptList(prompt, list, highlight) {{{
