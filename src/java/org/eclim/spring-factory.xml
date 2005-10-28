@@ -74,6 +74,14 @@
         </bean>
       </list>
     </property>
+    <property name="options">
+      <list>
+        <bean class="org.eclim.server.eclipse.Option">
+          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
+          <property name="regex" value="1\.[2-5]"/>
+        </bean>
+      </list>
+    </property>
   </bean>
 
   <bean name="ivy.xml" class="org.eclim.command.project.classpath.IvyParser">
@@ -115,27 +123,11 @@
     <description>Handles client project update request.</description>
     <property name="eclimPreferences" ref="eclimPreferences"/>
     <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
-    <property name="editableOptions">
-      <list>
-        <bean class="org.eclim.server.eclipse.Option">
-          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
-          <property name="regex" value="1\.[2-5]"/>
-        </bean>
-      </list>
-    </property>
   </bean>
 
   <bean name="project_info" class="org.eclim.command.project.ProjectInfoCommand">
     <description>Handles client project info request.</description>
     <property name="eclimPreferences" ref="eclimPreferences"/>
-    <property name="editableOptions">
-      <list>
-        <bean class="org.eclim.server.eclipse.Option">
-          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
-          <property name="regex" value="1\.[2-5]"/>
-        </bean>
-      </list>
-    </property>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -148,6 +140,13 @@
   <bean name="java_src_update"
       class="org.eclim.command.java.src.SrcUpdateCommand">
     <description>Handles client request to update a java src file.</description>
+  </bean>
+
+  <bean name="java_src_insert"
+      class="org.eclim.command.java.src.SrcInsertCommand">
+    <description>
+      Handles client request to insert code into a java src file.
+    </description>
   </bean>
 
   <bean name="java_search" class="org.eclim.command.java.search.SearchCommand">
