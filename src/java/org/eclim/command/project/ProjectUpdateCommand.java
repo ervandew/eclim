@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -37,13 +36,10 @@ import org.eclim.client.Options;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
-import org.eclim.command.java.JavaUtils;
-
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
 import org.eclim.server.eclipse.EclimPreferences;
-import org.eclim.server.eclipse.Option;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -68,11 +64,8 @@ public class ProjectUpdateCommand
 {
   private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
 
-  private static final String ECLIM_PREFIX = "org.eclim";
-
   private EclimPreferences eclimPreferences;
   private String libraryRootPreference;
-  private Option[] editableOptions;
 
   /**
    * {@inheritDoc}
@@ -144,55 +137,12 @@ public class ProjectUpdateCommand
     Properties properties = new Properties();
     properties.load(new ByteArrayInputStream(settings.getBytes()));
 
-    Map global = _project.getOptions(true);
-    Map options = _project.getOptions(false);
     boolean updateOptions = false;
     for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
       String name = (String)ii.next();
       String value = properties.getProperty(name);
-      if(name.startsWith(ECLIM_PREFIX)){
-         eclimPreferences.setPreference(
-             _project.getProject(), name, value);
-      }else{
-        validateOption(name, value);
-        Object current = global.get(name);
-        if(current == null || !current.equals(value)){
-          if(name.equals(JavaCore.COMPILER_SOURCE)){
-            JavaUtils.setCompilerSourceCompliance(_project, (String)value);
-          }else{
-            options.put(name, value);
-            updateOptions = true;
-          }
-        }
-      }
+      eclimPreferences.setOption(_project.getProject(), name, value);
     }
-    if(updateOptions){
-      _project.setOptions(options);
-    }
-  }
-
-  /**
-   * Validates that the supplied value is valid for the specified option.
-   *
-   * @param _name The name of the option.
-   * @param _value The value of the option.
-   */
-  protected void validateOption (String _name, String _value)
-    throws Exception
-  {
-    for(int ii = 0; ii < editableOptions.length; ii++){
-      if(editableOptions[ii].getName().equals(_name)){
-        if(editableOptions[ii].getPattern().matcher(_value).matches()){
-          return;
-        }else{
-          throw new IllegalArgumentException(
-              Services.getMessage("option.invalid",
-              new Object[]{_name, _value, editableOptions[ii].getRegex()}));
-        }
-      }
-    }
-    throw new IllegalArgumentException(
-        Services.getMessage("option.not.found", new Object[]{_name}));
   }
 
   /**
@@ -318,17 +268,5 @@ public class ProjectUpdateCommand
   public void setLibraryRootPreference (String _libraryRootPreference)
   {
     this.libraryRootPreference = _libraryRootPreference;
-  }
-
-  /**
-   * Set editableOptions.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _editableOptions the value to set.
-   */
-  public void setEditableOptions (Option[] _editableOptions)
-  {
-    this.editableOptions = _editableOptions;
   }
 }
