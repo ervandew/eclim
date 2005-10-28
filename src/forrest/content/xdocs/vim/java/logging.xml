@@ -31,9 +31,9 @@
   <body>
     <p>
       While editing a java source file, if you start to create a logging
-      statement (<code>log.</code>), the logging plugin will attempt to perform
-      the appropriate initialization (imports, static variable) for the
-      configured logging implementation.
+      statement (<code>log.</code> or <code>logger.</code>), the logging plugin
+      will attempt to perform the appropriate initialization (imports, static
+      variable) for the configured logging implementation.
     </p>
     <p>
       <strong>Configuration</strong>
