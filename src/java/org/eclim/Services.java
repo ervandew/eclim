@@ -114,6 +114,19 @@ public class Services
   }
 
   /**
+   * Retrieves a message for the supplied message key.
+   *
+   * @param _key The message key.
+   * @param _object Optional message arg used to format the message.
+   *
+   * @return The message.
+   */
+  public static String getMessage (String _key, Object _object)
+  {
+    return getMessage(_key, new Object[]{_object});
+  }
+
+  /**
    * Retrieves and optionally formats a message for the supplied message key.
    *
    * @param _key The message key.

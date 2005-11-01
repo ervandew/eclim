@@ -48,9 +48,9 @@ public class ProjectDeleteCommand
         ResourcesPlugin.getWorkspace().getRoot().getProject(name);
       if(project.exists()){
         project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
-        return Services.getMessage("project.deleted", new Object[]{name});
+        return Services.getMessage("project.deleted", name);
       }
-      return Services.getMessage("project.not.found", new Object[]{name});
+      return Services.getMessage("project.not.found", name);
     }catch(Throwable t){
       return t;
     }

@@ -99,8 +99,8 @@ public class ProjectUpdateCommand
         ResourcesPlugin.getWorkspace().getRoot());
     IJavaProject javaProject = model.getJavaProject(_name);
     if(!javaProject.exists()){
-      throw new IllegalArgumentException(Services.getMessage(
-            "project.not.found", new Object[]{_name}));
+      throw new IllegalArgumentException(
+          Services.getMessage("project.not.found", _name));
     }
 
     // ivy.xml, project.xml, etc updated.
@@ -121,7 +121,7 @@ public class ProjectUpdateCommand
 
     javaProject.makeConsistent(null);
 
-    return Services.getMessage("project.updated", new Object[]{_name});
+    return Services.getMessage("project.updated", _name);
   }
 
   /**
@@ -214,8 +214,7 @@ public class ProjectUpdateCommand
             File theDir = new File(fullPath.toOSString());
             if(!theDir.exists()){
               throw new IllegalArgumentException(
-                  Services.getMessage("dir.not.found",
-                    new Object[]{fullPath.toOSString()}));
+                  Services.getMessage("dir.not.found", fullPath.toOSString()));
             }
             fullPath = fullPath.append(_dependencies[ii].toString());
             File file = new File(fullPath.toOSString());
@@ -227,9 +226,8 @@ public class ProjectUpdateCommand
             }
           }
           if(resource == null){
-            throw new IllegalArgumentException(
-                Services.getMessage("resource.unable.resolve",
-                  new Object[]{path.toOSString()}));
+            throw new IllegalArgumentException(Services.getMessage(
+                  "resource.unable.resolve", path.toOSString()));
           }
           path = resource.getFullPath();
           results.add(JavaCore.newLibraryEntry(path, null, null, true));

@@ -132,7 +132,7 @@ public class ProjectCreateCommand
     javaProject.makeConsistent(null);
     javaProject.save(null, false);
 
-    return Services.getMessage("project.created", new Object[]{_name});
+    return Services.getMessage("project.created", _name);
   }
 
   /**
@@ -225,7 +225,7 @@ public class ProjectCreateCommand
           ResourcesPlugin.getWorkspace().getRoot().getProject(dependPaths[ii]);
         if(!theProject.exists()){
           throw new IllegalArgumentException(Services.getMessage(
-              "project.depends.not.found", new Object[]{dependPaths[ii]}));
+              "project.depends.not.found", dependPaths[ii]));
         }
         IJavaProject otherProject = JavaCore.create(theProject);
         entries[ii] = JavaCore.newProjectEntry(otherProject.getPath(), true);
