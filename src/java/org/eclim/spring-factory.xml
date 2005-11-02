@@ -147,6 +147,13 @@
     <description>
       Handles client request to insert code into a java src file.
     </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.java.src.SrcInsertFilter"/>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean name="java_search" class="org.eclim.command.java.search.SearchCommand">
