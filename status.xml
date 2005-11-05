@@ -19,10 +19,6 @@
       <action context="windows" dev="ervandew">
         Use my BatchFileService.exe to create a Windows service for eclimd.
       </action>
-      <action context="override" dev="ervandew">
-        Add support for automating stub implementation of interface or abstract
-        super class methods.
-      </action>
       <action context="bean" dev="ervandew">
         Bean functionality (generate getters/setters, beaninfo, resource
         bundles).
@@ -34,10 +30,16 @@
         Javadoc functionality.<br/>
         Eclipse has setting for a project's own javadocs... where is this
         stored (not in .project, or any of the .setting/, maybe in the
-        workspace)?
+        workspace)?<br/>
+        <code>org.eclipse.jdt.ui.JavaUI.getProjectJavadocLocation(IJavaProject)</code></br>
+        <code>org.eclipse.jdt.ui.JavaUI.setProjectJavadocLocation(IJavaProject, URL)</code>
       </action>
       <action context="compile" dev="ervandew">
         Support eclipse continuous compiling and mark errors in the source view.
+      </action>
+      <action context="searching" dev="ervandew">
+        Alternate searching for non-project files (browsing 3rd party src).
+        Utilize path option and new vim7 find functions.
       </action>
     </actions>
 
@@ -143,13 +145,43 @@
           <li>log4j</li>
         </ul>
       </action>
+      <action context="code analysis" dev="ervandew">
+        additional source code analysis
+        <ul>
+          <li>
+            http://pmd.sourceforge.net/
+          </li>
+          <li>
+            Test coverage (http://java-source.net/open-source/code-coverage)
+          </li>
+          <li>
+            Other code analyizers
+            (http://java-source.net/open-source/code-analyzers)
+          </li>
+        </ul>
+      </action>
+      <action context"todo/fixme" dev="ervandew">
+        Command to add all FIXME/TODO into a grep quickfix.
+      </action>
+      <action context"folding" dev="ervandew">
+        Lots of folding support... comments, code blocks, xml, html.<br/>
+        Utilize matchit.vim.
+      </action>
+      <action context="code format" dev="ervandew">
+        Find a way to configure eclipse code format tab style from within eclim.
+        Eclipse code to do this is in the "internal" package, so the eclim
+        plugin doesn't have access to the api.
+      </action>
     </actions>
   </todo>
 
   <changes>
     <release version="1.1.0" date="unreleased">
       <action dev="ervandew" type="add" context="javadoc">
-        Support for viewing javadocs in browser.
+        <a href="vim/java/doc.html">Javadoc</a> viewing.
+      </action>
+      <action dev="ervandew" type="add" context="impl">
+        <a href="vim/java/impl.html">Override/Impl</a> stub generation.
       </action>
       <action dev="ervandew" type="add" context="searching">
         Support for viewing source files located in archives (zip, jar) when
