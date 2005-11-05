@@ -142,20 +142,6 @@
     <description>Handles client request to update a java src file.</description>
   </bean>
 
-  <bean name="java_src_insert"
-      class="org.eclim.command.java.src.SrcInsertCommand">
-    <description>
-      Handles client request to insert code into a java src file.
-    </description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.src.SrcInsertFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
   <bean name="java_search" class="org.eclim.command.java.search.SearchCommand">
     <description>Handles client search requests.</description>
     <property name="filters">
@@ -204,6 +190,7 @@
   <bean name="java_impl"
       class="org.eclim.command.java.impl.ImplCommand">
     <description>Handles client code impl requests.</description>
+    <property name="eclimPreferences" ref="eclimPreferences"/>
     <property name="filters">
       <map>
         <entry key="vim">
