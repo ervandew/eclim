@@ -23,10 +23,6 @@ import javax.naming.CompositeName;
 
 import org.apache.commons.io.FilenameUtils;
 
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.VFS;
-
 /**
  * Utilities for working w/ files and commons vfs.
  *
@@ -68,8 +64,6 @@ public class FileUtils
     StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(_file));
 
     try{
-      FileSystemManager fsManager = VFS.getManager();
-
       int index = FilenameUtils.getPrefixLength(_file);
       CompositeName fileName = new CompositeName(_file.substring(index));
       Enumeration names = fileName.getAll();
@@ -85,14 +79,8 @@ public class FileUtils
           }
           buffer.append(name);
 
-          FileObject file = fsManager.resolveFile(buffer.toString());
-
-          // disable caching (the cache seems to become invalid at some point
-          // causing vfs errors).
-          fsManager.getFilesCache().clear(file.getFileSystem());
-
-          if(!file.exists()){
-            String path = file.getParent().getName().getPath();
+          if(!new File(buffer.toString()).exists()){
+            String path = FilenameUtils.getFullPath(buffer.toString());
             if(path.endsWith(JAR_EXT)){
               buffer = new StringBuffer(JAR_PREFIX)
                 .append(path).append('!').append(name);

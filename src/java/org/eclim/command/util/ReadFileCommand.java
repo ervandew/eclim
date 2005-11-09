@@ -63,8 +63,8 @@ public class ReadFileCommand
 
       // disable caching (the cache seems to become invalid at some point
       // causing vfs errors).
-      fsManager.getFilesCache().clear(fileObject.getFileSystem());
-      fsManager.getFilesCache().clear(tempFile.getFileSystem());
+      //fsManager.getFilesCache().clear(fileObject.getFileSystem());
+      //fsManager.getFilesCache().clear(tempFile.getFileSystem());
 
       if(!tempFile.exists()){
         tempFile.createFile();
