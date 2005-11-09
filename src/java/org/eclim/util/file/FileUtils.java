@@ -24,6 +24,7 @@ import javax.naming.CompositeName;
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
 /**
@@ -58,10 +59,17 @@ public class FileUtils
       return _file;
     }
 
+    // already an url.
+    if(_file.startsWith(JAR_PREFIX) || _file.startsWith(ZIP_PREFIX)){
+      return _file;
+    }
+
     // otherwise do some convertion.
     StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(_file));
 
     try{
+      FileSystemManager fsManager = VFS.getManager();
+
       int index = FilenameUtils.getPrefixLength(_file);
       CompositeName fileName = new CompositeName(_file.substring(index));
       Enumeration names = fileName.getAll();
@@ -77,8 +85,12 @@ public class FileUtils
           }
           buffer.append(name);
 
-          FileObject file = VFS.getManager()
-            .resolveFile(buffer.toString());
+          FileObject file = fsManager.resolveFile(buffer.toString());
+
+          // disable caching (the cache seems to become invalid at some point
+          // causing vfs errors).
+          fsManager.getFilesCache().clear(file.getFileSystem());
+
           if(!file.exists()){
             String path = file.getParent().getName().getPath();
             if(path.endsWith(JAR_EXT)){
