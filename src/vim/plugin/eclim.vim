@@ -199,6 +199,27 @@ function! PromptList (prompt, list, highlight)
   return response
 endfunction " }}}
 
+" RefreshFile() {{{
+function! RefreshFile ()
+  "FIXME: doing an :edit clears the undo tree, but the code commented out below
+  "       causes a user prompt on the write.  Need to pose this senario on the
+  "       vim mailing lists.
+  edit!
+  "autocmd FileChangedShell nested <buffer> echom " ### file changed ### "
+  "checktime
+  "autocmd! FileChangedShell <buffer>
+
+  "let saved = @"
+
+  "1,$delete
+  "silent exec "read " . expand('%:p')
+  "1delete
+
+  "let @" = saved
+
+  "silent write!
+endfunction " }}}
+
 " ViewInBrowser(url) {{{
 " View the supplied url in a browser.
 function! ViewInBrowser (url)
