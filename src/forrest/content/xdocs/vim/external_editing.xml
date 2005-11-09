@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Issues / Quirks with externally modified files.</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Some portions of eclim make use of the editing APIs provided by eclipse.
+      While this makes for much cleaner code and far fewer chances of errors or
+      other issues trying to accomodate everyone's coding style, it does have
+      its drawbacks:
+    </p>
+    <ul>
+      <li>
+        <strong>Undo:</strong><br/>
+        When changes to the source file are made outside of vim, the plugin must
+        issue a :edit on the file to force vim to re-read the now updated file.
+        The downside is that vim clears the undo tree when the file is re-read.
+        I'll be looking into ways to remedy this situation and also talking with
+        the vim developers to see if perhaps some changes to vim 7 may
+        facilitate a solution as well.
+      </li>
+      <li>
+        <strong>Formatting (tabs vs. spaces):</strong><br/>
+        When inserting new code eclim will always use tabs and the corresponding
+        vim plugin will issue a :retab on the new code so that the user's vim
+        settings will reformat the code to the user's chosen preference.
+        However, eclipse gets in the way a little bit here.  Eclipse defaults to
+        tabs for all indentation, so if that is how your vim options are setup
+        then you probably don't have anything to worry about.<br/>
+        If you instead have vim setup to expand tabs to spaces, then you may
+        encounter times when eclipse will insert the code with no
+        indentation.<br/>
+        To resolve this you will need to edit some settings in eclipse:
+        <ol>
+          <li>Shutdown eclimd.</li>
+          <li>Open eclipse.</li>
+          <li>Under the "Window" menu choose "Preferences"</li>
+          <li>
+            Expand the "Java" node and then the "Code Style" node in the tree on
+            the left.
+          </li>
+          <li>
+            Click on the "Formatter" item under the "Code Style" node.
+          </li>
+          <li>
+            Click the "New" button to create a new formatter profile (I named
+            my "eclim") and then click "OK".
+          </li>
+          <li>
+            When the "Edit Profile" window comes up, you should be on the
+            "Indentation" tab where you can edit the tab policy.  Change it
+            to match your vim settings (note: using Mixed may or may not work
+            all the time).  When using "Spaces only" be sure to set the
+            "Indentation size" and "Tab size" to your preference.
+          </li>
+        </ol>
+        This should fix any known indentation issues, but if you encounter any
+        other problems just send me a sample file along with your vim and
+        eclipse settings so that I can attempt to reproduce and fix the problem.
+      </li>
+    </ul>
+  </body>
+</document>

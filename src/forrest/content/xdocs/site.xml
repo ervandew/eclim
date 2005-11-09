@@ -66,6 +66,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <index label="Index" href="index.html" description="Index"/>
     <project label="Projects" href="project.html"
       description="Create projects and view/edit project settings."/>
+    <external label="Issues / Quirks" href="external_editing.html"
+        description="Issues / Quirks"/>
     <java label="Java" href="java/">
       <classpath label="Classpath" href="classpath.html"
         description="Edit your project's classpath"/>
@@ -77,6 +79,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Automated imports"/>
       <complete label="Code Completion" href="complete.html"
         description="Code Completion"/>
+      <impl label="Implementation / Override Stubbing" href="impl.html"
+        description="Implementation / Override Stubbing"/>
       <logging label="Logging" href="logging.html"
         description="Logging"/>
     </java>
