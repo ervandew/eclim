@@ -157,24 +157,28 @@ public class ProjectUpdateCommand
     throws Exception
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
+    String libraryDir = eclimPreferences.getPreference(
+        _project.getProject(), libraryRootPreference, null);
 
     Collection results = new ArrayList();
 
     // load the results with all the non library entries.
     IClasspathEntry[] entries = _project.getRawClasspath();
     for(int ii = 0; ii < entries.length; ii++){
-      if(entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY){
+      if (entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
+          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE)
+      {
         results.add(entries[ii]);
       }
     }
 
     // merge the dependencies with the classpath entires.
-    String libraryDir = eclimPreferences.getPreference(
-        _project.getProject(), libraryRootPreference, null);
     for(int ii = 0; ii < _dependencies.length; ii ++){
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
-        if(entries[jj].getEntryKind() == IClasspathEntry.CPE_LIBRARY){
+        if (entries[jj].getEntryKind() == IClasspathEntry.CPE_LIBRARY ||
+            entries[jj].getEntryKind() == IClasspathEntry.CPE_VARIABLE)
+        {
           String path = entries[jj].getPath().toOSString();
           String pattern = _dependencies[ii].getName() +
             Dependency.VERSION_SEPARATOR;
@@ -199,42 +203,9 @@ public class ProjectUpdateCommand
       }
 
       if(match == null){
-        IPath dir = new Path(libraryDir);
-        if(!dir.isAbsolute()){
-          IPath path = new Path(_project.getElementName())
-            .append(dir).append(_dependencies[ii].toString());
-          IResource resource = root.findMember(path);
-
-          // if the file doesn't exist, create a temp one, grab the resource and
-          // then delete the file (handles cases where the jar file is downloaded
-          // from a repository).
-          if(resource == null){
-            IPath fullPath = _project.getResource().getRawLocation()
-              .append(libraryDir);
-            File theDir = new File(fullPath.toOSString());
-            if(!theDir.exists()){
-              throw new IllegalArgumentException(
-                  Services.getMessage("dir.not.found", fullPath.toOSString()));
-            }
-            fullPath = fullPath.append(_dependencies[ii].toString());
-            File file = new File(fullPath.toOSString());
-            if(file.createNewFile()){
-              root.findMember(new Path(_project.getElementName()).append(dir))
-                .refreshLocal(IResource.DEPTH_ONE, null);
-              resource = root.findMember(path);
-              file.delete();
-            }
-          }
-          if(resource == null){
-            throw new IllegalArgumentException(Services.getMessage(
-                  "resource.unable.resolve", path.toOSString()));
-          }
-          path = resource.getFullPath();
-          results.add(JavaCore.newLibraryEntry(path, null, null, true));
-        }else{
-          IPath path = dir.append(_dependencies[ii].toString());
-          results.add(JavaCore.newLibraryEntry(path, null, null, true));
-        }
+        boolean variable = startsWithVariable(libraryDir);
+        results.add(createEntry(
+              root, _project, _dependencies[ii], libraryDir, variable));
       }else{
         match = null;
       }
@@ -242,6 +213,86 @@ public class ProjectUpdateCommand
 
     return (IClasspathEntry[])
       results.toArray(new IClasspathEntry[results.size()]);
+  }
+
+  /**
+   * Creates the classpath entry.
+   *
+   * @param _root The workspace root.
+   * @param _project The project to create the dependency in.
+   * @param _dependency The dependency to create the entry for.
+   * @param _libraryDir The root library dir to use.
+   * @param _variable If the library path indicates a variable entry.
+   * @return The classpath entry.
+   */
+  protected IClasspathEntry createEntry (
+      IWorkspaceRoot _root,
+      IJavaProject _project,
+      Dependency _dependency,
+      String _libraryDir,
+      boolean _variable)
+    throws Exception
+  {
+    String dependency = _dependency.toString();
+
+    if(_variable){
+      return JavaCore.newVariableEntry(
+          new Path(_libraryDir).append(dependency), null, null, true);
+    }
+
+    IPath dir = new Path(_libraryDir);
+    if(!dir.isAbsolute()){
+      IPath path = new Path(_project.getElementName())
+        .append(dir).append(dependency);
+      IResource resource = _root.findMember(path);
+
+      // if the file doesn't exist, create a temp one, grab the resource and
+      // then delete the file (handles cases where the jar file is downloaded
+      // from a repository).
+      if(resource == null){
+        IPath fullPath = _project.getResource().getRawLocation()
+          .append(_libraryDir);
+        File theDir = new File(fullPath.toOSString());
+        if(!theDir.exists()){
+          throw new IllegalArgumentException(
+              Services.getMessage("dir.not.found", fullPath.toOSString()));
+        }
+        fullPath = fullPath.append(dependency);
+        File file = new File(fullPath.toOSString());
+        if(file.createNewFile()){
+          _root.findMember(new Path(_project.getElementName()).append(dir))
+            .refreshLocal(IResource.DEPTH_ONE, null);
+          resource = _root.findMember(path);
+          file.delete();
+        }
+      }
+      if(resource == null){
+        throw new IllegalArgumentException(Services.getMessage(
+              "resource.unable.resolve", path.toOSString()));
+      }
+      path = resource.getFullPath();
+      return JavaCore.newLibraryEntry(path, null, null, true);
+    }
+
+    IPath path = dir.append(dependency);
+    return JavaCore.newLibraryEntry(path, null, null, true);
+  }
+
+  /**
+   * Determines if the supplied path starts with a variable name.
+   *
+   * @param _path The path to test.
+   * @return True if the path starts with a variable name, false otherwise.
+   */
+  protected boolean startsWithVariable (String _path)
+  {
+    String[] variables = JavaCore.getClasspathVariableNames();
+    for(int ii = 0; ii < variables.length; ii++){
+      if(_path.startsWith(variables[ii])){
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
