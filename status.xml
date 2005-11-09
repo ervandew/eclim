@@ -31,7 +31,7 @@
         Eclipse has setting for a project's own javadocs... where is this
         stored (not in .project, or any of the .setting/, maybe in the
         workspace)?<br/>
-        <code>org.eclipse.jdt.ui.JavaUI.getProjectJavadocLocation(IJavaProject)</code></br>
+        <code>org.eclipse.jdt.ui.JavaUI.getProjectJavadocLocation(IJavaProject)</code><br/>
         <code>org.eclipse.jdt.ui.JavaUI.setProjectJavadocLocation(IJavaProject, URL)</code>
       </action>
       <action context="compile" dev="ervandew">
@@ -160,10 +160,10 @@
           </li>
         </ul>
       </action>
-      <action context"todo/fixme" dev="ervandew">
+      <action context="todo/fixme" dev="ervandew">
         Command to add all FIXME/TODO into a grep quickfix.
       </action>
-      <action context"folding" dev="ervandew">
+      <action context="folding" dev="ervandew">
         Lots of folding support... comments, code blocks, xml, html.<br/>
         Utilize matchit.vim.
       </action>
@@ -171,6 +171,38 @@
         Find a way to configure eclipse code format tab style from within eclim.
         Eclipse code to do this is in the "internal" package, so the eclim
         plugin doesn't have access to the api.
+      </action>
+    </actions>
+
+    <actions priority="eclipse 3.2">
+      <action context="3.2 enhancements" dev="ervandew">
+        <ul>
+          <li>
+            camel case searching ("NPE" finds "NullPointerException").
+          </li>
+          <li>
+            javadoc context sensitive completion.
+          </li>
+          <li>
+            automatic javadoc attachment (refer to org.eclipse.pde.core.javadoc
+            extension point documentation)
+          </li>
+          <li>
+            Code "Clean Up"
+            <ul>
+              <li>
+                Remove Unused Code (imports, private methods, private constructors,
+                private types).
+              </li>
+              <li>
+                JSE 5.0 (add missing @Override, add missing @Deprecated)
+              </li>
+              <li>
+                more to come with 3.2 release cycle
+              </li>
+            </ul>
+          </li>
+        </ul>
       </action>
     </actions>
   </todo>
@@ -185,7 +217,9 @@
       </action>
       <action dev="ervandew" type="add" context="searching">
         Support for viewing source files located in archives (zip, jar) when
-        searching.
+        searching.<br/>
+        Support for generating a source prototype when viewing search results
+        that do not have a corresponding source file attached.
       </action>
     </release>
     <release version="1.0.0" date="Oct 16, 2005">
