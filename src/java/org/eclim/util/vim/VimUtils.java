@@ -65,6 +65,10 @@ public class VimUtils
         // causing vfs errors).
         fsManager.getFilesCache().clear(file.getFileSystem());
 
+        if(!file.exists()){
+          log.warn("File '" + fileName + "' not found.");
+          return null;
+        }
         reader = new BufferedReader(
             new InputStreamReader(file.getContent().getInputStream()));
 
