@@ -200,6 +200,13 @@
     </property>
   </bean>
 
+  <bean name="java_class_prototype"
+      class="org.eclim.command.java.src.ClassPrototypeCommand">
+    <description>
+      Handles request to generate a prototype of a class file.
+    </description>
+  </bean>
+
   <bean name="java_classpath_variables"
       class="org.eclim.command.java.classpath.ClasspathVariablesCommand">
     <description>Handles client request to update a java src file.</description>
