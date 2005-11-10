@@ -38,8 +38,13 @@
         Support eclipse continuous compiling and mark errors in the source view.
       </action>
       <action context="searching" dev="ervandew">
-        Alternate searching for non-project files (browsing 3rd party src).
-        Utilize path option and new vim7 find functions.
+        <p>
+          Alternate searching for non-project files (browsing 3rd party src).
+          Utilize path option and new vim7 find functions.
+        </p>
+        <p>
+          Searching from non java source files (spring xml, hibernate xml, etc).
+        </p>
       </action>
     </actions>
 
@@ -48,24 +53,22 @@
         Support for other languages.
         <ul>
           <li>
-            <strong>c/c++</strong><br/>
-            http://www.eclipse.org/cdt/
+            <strong>c/c++</strong><br/> http://www.eclipse.org/cdt/
           </li>
           <li>
-            <strong>cobol</strong><br/>
-            http://www.eclipse.org/cobol/
+            <strong>cobol</strong><br/> http://www.eclipse.org/cobol/
           </li>
           <li>
-            <strong>perl</strong><br/>
-            http://e-p-i-c.sourceforge.net/
+            <strong>javascript</strong><br/> http://www.ee.ryerson.ca/~hkataria/
           </li>
           <li>
-            <strong>php</strong><br/>
-            http://www.phpeclipse.net
+            <strong>perl</strong><br/> http://e-p-i-c.sourceforge.net/
           </li>
           <li>
-            <strong>python</strong><br/>
-            http://pydev.sourceforge.net/
+            <strong>php</strong><br/> http://www.phpeclipse.net
+          </li>
+          <li>
+            <strong>python</strong><br/> http://pydev.sourceforge.net/
           </li>
           <li>
             <strong>ruby</strong><br/>
@@ -78,8 +81,10 @@
           <li>ruby</li>
           <li>python</li>
           <li>php</li>
+          <li>javascript</li>
+          <li>perl</li>
           <li>
-            perl, c/c++, cobol<br/>
+            c/c++, cobol<br/>
             I'd only implement these if there was a high enough demand to
             warrant it, but would welcome contributions.
           </li>
@@ -98,17 +103,6 @@
       </action>
       <action context="eclipse_features" dev="ervandew">
         Read up on other default eclipse features that may be useful within vim.
-      </action>
-      <action context="database" dev="ervandew">
-        Database integration
-        <ul>
-          <li>Database metadata</li>
-          <li>Data (paged table data)</li>
-          <li>
-            SQL editor w/ completion support for keywords, table names, column
-            names, etc.
-          </li>
-        </ul>
       </action>
       <action context="refactoring" dev="ervandew">
         <ul>
@@ -171,6 +165,27 @@
         Find a way to configure eclipse code format tab style from within eclim.
         Eclipse code to do this is in the "internal" package, so the eclim
         plugin doesn't have access to the api.
+      </action>
+      <action context="aspectj" dev="ervandew">
+        AspectJ support via AJDT (http://www.eclipse.org/ajdt)
+      </action>
+      <action context="xsd" dev="ervandew">
+        XSD support (http://www.eclipse.org/xsd)
+      </action>
+      <action context="wtp" dev="ervandew">
+        Possible integration w/ eclipse web tools platform
+        (http://eclipse.org/webtools/index.html)
+      </action>
+      <action context="database" dev="ervandew">
+        Database integration
+        <ul>
+          <li>Database metadata</li>
+          <li>Data (paged table data)</li>
+          <li>
+            SQL editor w/ completion support for keywords, table names, column
+            names, etc.
+          </li>
+        </ul>
       </action>
     </actions>
 
