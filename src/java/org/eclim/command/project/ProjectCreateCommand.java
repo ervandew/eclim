@@ -40,7 +40,7 @@ import org.eclim.client.Options;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
-import org.eclim.server.eclipse.ClassPathDetector;
+import org.eclim.command.java.eclipse.ClassPathDetector;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;

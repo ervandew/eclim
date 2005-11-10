@@ -15,8 +15,17 @@
  */
 package org.eclim.util.spring;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+
+import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Properties;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+
+import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,8 +43,12 @@ public class ResourceBundleMessageSource
   private static final Log log =
     LogFactory.getLog(ResourceBundleMessageSource.class);
 
-  private String basename;
+  private String[] basenames;
+  private ResourceBundle bundle;
 
+  /**
+   * {@inheritDoc}
+   */
   protected ResourceBundle getResourceBundle (String basename, Locale locale)
   {
     try{
@@ -47,14 +60,51 @@ public class ResourceBundleMessageSource
     return null;
   }
 
+  /**
+   * Gets an aggragate ResourceBundle containing all bundles for the default
+   * locale.
+   *
+   * @return The ResourceBundle.
+   */
   public ResourceBundle getResourceBundle ()
   {
-    return getResourceBundle(basename, Locale.getDefault());
+    if(bundle == null){
+      try{
+        Properties properties = new Properties();
+        for(int ii = 0; ii < basenames.length; ii++){
+          ResourceBundle rb = getResourceBundle(
+              basenames[ii], Locale.getDefault());
+          Enumeration keys = rb.getKeys();
+          while(keys.hasMoreElements()){
+            String key = (String)keys.nextElement();
+            properties.put(key, rb.getString(key));
+          }
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        properties.store(out, null);
+        bundle = new PropertyResourceBundle(
+            new ByteArrayInputStream(out.toByteArray()));
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
+    }
+    return bundle;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public void setBasename (String _basename)
   {
-    basename = _basename;
-    super.setBasename(_basename);
+    setBasenames(new String[]{_basename});
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setBasenames (String[] _basenames)
+  {
+    basenames = _basenames;
+    super.setBasenames(_basenames);
   }
 }

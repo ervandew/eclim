@@ -23,6 +23,7 @@
  Author: Eric Van Dewoestine
 -->
 <beans>
+  <import resource="command/java/spring-factory.xml"/>
 
   <bean id="propertyConfigurer"
       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -41,8 +42,11 @@
   <bean id="messageSource"
       class="org.eclim.util.spring.ResourceBundleMessageSource">
     <description>Defines the resource bundle used for messages.</description>
-    <property name="basename">
-      <value>org/eclim/messages</value>
+    <property name="basenames">
+      <list>
+        <value>org/eclim/messages</value>
+        <value>org/eclim/command/java/messages</value>
+      </list>
     </property>
   </bean>
 
@@ -132,88 +136,6 @@
       <map>
         <entry key="vim">
           <bean class="org.eclim.command.project.ProjectInfoFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_src_update"
-      class="org.eclim.command.java.src.SrcUpdateCommand">
-    <description>Handles client request to update a java src file.</description>
-  </bean>
-
-  <bean name="java_search" class="org.eclim.command.java.search.SearchCommand">
-    <description>Handles client search requests.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.search.SearchFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_docsearch" class="org.eclim.command.java.doc.DocSearchCommand">
-    <description>Handles client search requests for javadocs.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.doc.DocSearchFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_import" class="org.eclim.command.java.include.ImportCommand">
-    <description>Handles client import request.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.include.ImportFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_complete"
-      class="org.eclim.command.java.complete.CodeCompleteCommand">
-    <description>Handles client code completion requests.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.complete.CodeCompleteFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_impl"
-      class="org.eclim.command.java.impl.ImplCommand">
-    <description>Handles client code impl requests.</description>
-    <property name="eclimPreferences" ref="eclimPreferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.impl.ImplFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_class_prototype"
-      class="org.eclim.command.java.src.ClassPrototypeCommand">
-    <description>
-      Handles request to generate a prototype of a class file.
-    </description>
-  </bean>
-
-  <bean name="java_classpath_variables"
-      class="org.eclim.command.java.classpath.ClasspathVariablesCommand">
-    <description>Handles client request to update a java src file.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.java.classpath.ClasspathVariablesFilter"/>
         </entry>
       </map>
     </property>

@@ -83,6 +83,21 @@
         This should fix any known indentation issues, but if you encounter any
         other problems just send me a sample file along with your vim and
         eclipse settings so that I can attempt to reproduce and fix the problem.
+        <!--
+          // set tab style to mixed, so that user can choose tabs or spaces
+          // Doesn't work... the code to do it the right way is in
+          // org.eclipse.jdt.internal.ui.CodeFormatterConfigurationBlock.
+          // Since it's an internal package, other plugins (such as this one), don't
+          // have access to invoke the api.
+          // The setting gets saved to
+          // workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs
+          // But the code below is saved to
+          // workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs
+          /*Hashtable options = JavaCore.getOptions();
+          options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR,
+            DefaultCodeFormatterConstants.MIXED);
+          JavaCore.setOptions(options);*/
+          -->
       </li>
     </ul>
   </body>
