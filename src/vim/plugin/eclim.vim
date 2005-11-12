@@ -132,6 +132,31 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
+" GetSelectionPosition() {{{
+" Gets the character offset and length for supplied range.
+function! GetSelectionPosition (first, last)
+  let curline = line('.')
+  let curcol = col('.')
+
+  let firstline = a:first
+  let lastline = a:last
+  if lastline < firstline
+    let firstline = a:last
+    let lastline = a:first
+  endif
+
+  call cursor(firstline, 1)
+  let start = GetCharacterOffset()
+
+  call cursor(lastline, 1)
+  let end = GetCharacterOffset() + strlen(getline(lastline))
+
+  " restore the cursor position.
+  call cursor(curline, curcol)
+
+  return start . ";" . (end - start)
+endfunction " }}}
+
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
 function! ParseArgs (args)
@@ -265,7 +290,7 @@ function! ExecuteEclim (args, ...)
   " that causes system() to hang on large results.
   if len(a:000) > 0
     let tempfile = tempname()
-    silent exec "!" . command " > " . tempfile
+    silent exec "!" . command " > " . tempfile . " 2>&1"
     let result = join(readfile(tempfile), "\n")
     call delete(tempfile)
     silent exec "normal \<c-l>"
