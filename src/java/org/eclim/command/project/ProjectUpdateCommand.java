@@ -36,6 +36,8 @@ import org.eclim.client.Options;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
+import org.eclim.command.java.JavaUtils;
+
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
@@ -95,13 +97,7 @@ public class ProjectUpdateCommand
   protected Object update (String _name, String _buildfile, String _settings)
     throws Exception
   {
-    IJavaModel model = JavaCore.create(
-        ResourcesPlugin.getWorkspace().getRoot());
-    IJavaProject javaProject = model.getJavaProject(_name);
-    if(!javaProject.exists()){
-      throw new IllegalArgumentException(
-          Services.getMessage("project.not.found", _name));
-    }
+    IJavaProject javaProject = JavaUtils.getJavaProject(_name);
 
     // ivy.xml, project.xml, etc updated.
     if(_buildfile != null){
