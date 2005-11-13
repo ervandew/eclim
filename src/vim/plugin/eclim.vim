@@ -132,31 +132,6 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
-" GetSelectionPosition() {{{
-" Gets the character offset and length for supplied range.
-function! GetSelectionPosition (first, last)
-  let curline = line('.')
-  let curcol = col('.')
-
-  let firstline = a:first
-  let lastline = a:last
-  if lastline < firstline
-    let firstline = a:last
-    let lastline = a:first
-  endif
-
-  call cursor(firstline, 1)
-  let start = GetCharacterOffset()
-
-  call cursor(lastline, 1)
-  let end = GetCharacterOffset() + strlen(getline(lastline))
-
-  " restore the cursor position.
-  call cursor(curline, curcol)
-
-  return start . ";" . (end - start)
-endfunction " }}}
-
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
 function! ParseArgs (args)
