@@ -51,11 +51,9 @@
       <a href="http://www.vim.org/scripts/script.php?script_id=182">SuperTab</a>
       plugin which allows you to use the Tab key for completion.  However at
       this time SuperTab does not support the latest completion modes for vim 7,
-      so I have patched it to add the necessary support.
+      so I have patched it to add the necessary support.  You can download the
+      updated version in the <a href="ext:downloads">downloads</a> area.
     </p>
-    <fixme author="ervandew">
-      Add link to patched SuperTab.
-    </fixme>
     <p>
       To find out more about vim's insert completion use<br/>
       &nbsp;&nbsp;:h ins-completion<br/>
