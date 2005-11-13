@@ -47,6 +47,8 @@
       java.io.InputStream:
     </p>
     <source>
+      com.test.TestStream
+
       package java.io;
       public class InputStream
         public int read ()
@@ -95,5 +97,11 @@
       The insertion of method stubs is done externally with eclipse and with
       that comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
+    <p>
+      This functionality is currently supported for both outer and inner
+      classes, but not for anonymous inner classes.  To view the list of
+      methods to override for an inner class, simply execute
+      <strong>:JavaImpl</strong> with the cursor somewhere in the inner class.
+    </p>
   </body>
 </document>
