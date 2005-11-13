@@ -37,7 +37,7 @@
     </p>
     <ul>
       <li>
-        If only one matching element is found its, import statement will be
+        If only one matching element is found, its import statement will be
         placed in the file.
       </li>
       <li>
