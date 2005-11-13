@@ -61,16 +61,16 @@
           with the target url.
           <ul>
             <li>
-              IE<br/>
-              let g:EclimBrowser = 'iexplorer "&lt;url&gt;"'
+              Firefox<br/>let g:EclimBrowser = 'firefox "&lt;url&gt;"'
             </li>
             <li>
-              Firefox<br/>
-              let g:EclimBrowser = 'firefox "&lt;url&gt;"'
+              Mozilla<br/>let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
             </li>
             <li>
-              Mozilla<br/>
-              let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
+              Opera<br/>let g:EclimBrowser = 'opera "&lt;url&gt;"'
+            </li>
+            <li>
+              IE<br/>let g:EclimBrowser = 'iexplorer "&lt;url&gt;"'
             </li>
           </ul>
         </li>
@@ -107,7 +107,7 @@
       </ul>
     </section>
     <section id="java">
-      <title>Java Source Editing</title>
+      <title>Java Plugins</title>
       <p>
         Currently the vim integration with Eclipse consists of the following
         functionality for java editing.
