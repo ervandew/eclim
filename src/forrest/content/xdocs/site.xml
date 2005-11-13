@@ -45,7 +45,7 @@ See http://forrest.apache.org/docs/linking.html for more info
       description="Change History"/>
     <todo label="Todo" href="todo.html" description="Todo"/>
     <download label="Downloads" description="Downloads"
-      href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
+      href="ext:downloads"/>
   </about>
 
   <install label="Installation" href="install/" tab="install">
@@ -87,6 +87,7 @@ See http://forrest.apache.org/docs/linking.html for more info
   </vim>
 
   <external-refs>
+    <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>
     <xml.apache.org href="http://xml.apache.org/"/>
