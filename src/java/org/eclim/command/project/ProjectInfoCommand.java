@@ -29,7 +29,6 @@ import org.eclim.client.Options;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
-import org.eclim.server.eclipse.EclimPreferences;
 import org.eclim.server.eclipse.Option;
 
 import org.eclipse.core.resources.IProject;
@@ -45,8 +44,6 @@ public class ProjectInfoCommand
   extends AbstractCommand
 {
   private static final Log log = LogFactory.getLog(ProjectInfoCommand.class);
-
-  private EclimPreferences eclimPreferences;
 
   /**
    * {@inheritDoc}
@@ -75,7 +72,7 @@ public class ProjectInfoCommand
         IProject project = ResourcesPlugin.getWorkspace().getRoot()
           .getProject(name);
         String setting = _commandLine.getValue(Options.SETTING_OPTION);
-        Option[] options = eclimPreferences.getOptions(project);
+        Option[] options = getEclimPreferences().getOptions(project);
 
         // only retrieving the requested setting.
         if(setting != null){
@@ -95,17 +92,5 @@ public class ProjectInfoCommand
     }catch(Throwable t){
       return t;
     }
-  }
-
-  /**
-   * Set eclimPreferences.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _eclimPreferences the value to set.
-   */
-  public void setEclimPreferences (EclimPreferences _eclimPreferences)
-  {
-    this.eclimPreferences = _eclimPreferences;
   }
 }

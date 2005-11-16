@@ -41,8 +41,6 @@ import org.eclim.command.java.JavaUtils;
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
 
-import org.eclim.server.eclipse.EclimPreferences;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -66,7 +64,6 @@ public class ProjectUpdateCommand
 {
   private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
 
-  private EclimPreferences eclimPreferences;
   private String libraryRootPreference;
 
   /**
@@ -137,7 +134,7 @@ public class ProjectUpdateCommand
     for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
       String name = (String)ii.next();
       String value = properties.getProperty(name);
-      eclimPreferences.setOption(_project.getProject(), name, value);
+      getEclimPreferences().setOption(_project.getProject(), name, value);
     }
   }
 
@@ -153,7 +150,7 @@ public class ProjectUpdateCommand
     throws Exception
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
-    String libraryDir = eclimPreferences.getPreference(
+    String libraryDir = getEclimPreferences().getPreference(
         _project.getProject(), libraryRootPreference, null);
 
     Collection results = new ArrayList();
@@ -289,18 +286,6 @@ public class ProjectUpdateCommand
       }
     }
     return false;
-  }
-
-  /**
-   * Set eclimPreferences.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _eclimPreferences the value to set.
-   */
-  public void setEclimPreferences (EclimPreferences _eclimPreferences)
-  {
-    this.eclimPreferences = _eclimPreferences;
   }
 
   /**

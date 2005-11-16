@@ -19,6 +19,8 @@ import java.util.Map;
 
 import org.eclim.client.Options;
 
+import org.eclim.server.eclipse.EclimPreferences;
+
 /**
  * Abstract implmentation of {@link Command}.
  *
@@ -29,6 +31,7 @@ public abstract class AbstractCommand
   implements Command
 {
   private Map filters;
+  private EclimPreferences eclimPreferences;
 
   /**
    * {@inheritDoc}
@@ -70,5 +73,27 @@ public abstract class AbstractCommand
       }
     }
     return _result;
+  }
+
+  /**
+   * Gets the eclimPreferences.
+   *
+   * @return EclimPreferences.
+   */
+  public EclimPreferences getEclimPreferences ()
+  {
+    return this.eclimPreferences;
+  }
+
+  /**
+   * Set eclimPreferences.
+   * <p/>
+   * Dependency injection.
+   *
+   * @param _eclimPreferences the value to set.
+   */
+  public void setEclimPreferences (EclimPreferences _eclimPreferences)
+  {
+    this.eclimPreferences = _eclimPreferences;
   }
 }
