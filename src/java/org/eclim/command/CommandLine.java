@@ -70,6 +70,18 @@ public class CommandLine
   }
 
   /**
+   * Gets a command line argument as an int.
+   *
+   * @param _name The name of the option.
+   * @return The option as an int value, or -1 if option not supplied.
+   */
+  public int getIntValue (String _name)
+  {
+    String arg = (String)options.get(_name);
+    return arg != null ? Integer.parseInt(arg) : -1;
+  }
+
+  /**
    * Gets any unrecognized arguments provided by the user.
    *
    * @return Array of unrecognized args, or null if none.
