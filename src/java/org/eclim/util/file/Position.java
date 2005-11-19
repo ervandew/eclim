@@ -63,6 +63,16 @@ public class Position
   }
 
   /**
+   * Set offset.
+   *
+   * @param _offset offset as int.
+   */
+  public void setOffset (int _offset)
+  {
+    this.offset = _offset;
+  }
+
+  /**
    * Get length.
    *
    * @return length as int.
@@ -70,5 +80,15 @@ public class Position
   public int getLength ()
   {
     return this.length;
+  }
+
+  /**
+   * Set length.
+   *
+   * @param _length length as int.
+   */
+  public void setLength (int _length)
+  {
+    this.length = _length;
   }
 }
