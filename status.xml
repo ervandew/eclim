@@ -20,8 +20,7 @@
         Use my BatchFileService.exe to create a Windows service for eclimd.
       </action>
       <action context="bean" dev="ervandew">
-        Bean functionality (generate getters/setters, beaninfo, resource
-        bundles).
+        Additional bean functionality (beaninfo, resource bundles).
       </action>
       <action context="src_block" dev="ervandew">
         Manipulation of a source block... wrap in do,if,for,try,while.
@@ -229,6 +228,13 @@
       </action>
       <action dev="ervandew" type="add" context="impl">
         <a href="vim/java/impl.html">Override/Impl</a> stub generation.
+      </action>
+      <action dev="ervandew" type="add" context="bean">
+        <a href="vim/java/bean.html">Bean getter/setter</a> generation.
+      </action>
+      <action dev="ervandew" type="add" context=".classpath">
+        Added validation of the .classpath file when saving.  Errors are then
+        reported via vim's quickfix.
       </action>
       <action dev="ervandew" type="add" context="searching">
         Support for viewing source files located in archives (zip, jar) when
