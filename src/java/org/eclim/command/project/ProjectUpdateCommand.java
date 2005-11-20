@@ -17,17 +17,23 @@ package org.eclim.command.project;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import org.eclim.Services;
 
@@ -35,11 +41,16 @@ import org.eclim.client.Options;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Error;
 
 import org.eclim.command.java.JavaUtils;
 
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
+
+import org.eclim.util.XmlUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -50,8 +61,10 @@ import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaModel;
+import org.eclipse.jdt.core.IJavaModelStatus;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaConventions;
 
 /**
  * Command to update a project.
@@ -63,6 +76,8 @@ public class ProjectUpdateCommand
   extends AbstractCommand
 {
   private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
+
+  private static final Pattern STATUS_PATTERN = Pattern.compile(".*/(.*)'.*");
 
   private String libraryRootPreference;
 
@@ -76,45 +91,111 @@ public class ProjectUpdateCommand
       String projectName = _commandLine.getValue(Options.NAME_OPTION);
       String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
       String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
-      return update(projectName, buildfile, settings);
+
+      IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+
+      // project settings update
+      if(settings != null){
+        updateSettings(javaProject, settings);
+        javaProject.makeConsistent(null);
+      }else{
+        // validate that .classpath xml is well formed and valid.
+        String dotclasspath = javaProject.getProject().getFile(".classpath")
+          .getRawLocation().toOSString();
+        Error[] errors = XmlUtils.validateXml(dotclasspath,
+            System.getProperty("eclim.home") + "/schema/eclipse/classpath.xsd");
+        if(errors.length > 0){
+          return filter(_commandLine, errors);
+        }
+
+        // ivy.xml, project.xml, etc updated.
+        if(buildfile != null){
+          String filename = FilenameUtils.getName(buildfile);
+          Parser parser = (Parser)Services.getService(filename, Parser.class);
+          IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+          errors = setClasspath(javaProject, entries, dotclasspath);
+
+        // .classpath updated.
+        }else{
+          IClasspathEntry[] entries = javaProject.readRawClasspath();
+          errors = setClasspath(javaProject, entries, dotclasspath);
+        }
+
+        if(errors.length > 0){
+          return filter(_commandLine, errors);
+        }
+      }
+
+      return Services.getMessage("project.updated", projectName);
     }catch(Throwable t){
       return t;
     }
   }
 
   /**
-   * Updates a project.
+   * Sets the classpath for the supplied project.
    *
-   * @param _name The project name.
-   * @param _buildfile The buildfile saved, if request originated from one.
-   * @param _settings Project settings.
-   *
-   * @return The result.
+   * @param _javaProject The project.
+   * @param _entries The classpath entries.
+   * @param _classpath The file path of the .classpath file.
+   * @return Array of Error or null if no errors reported.
    */
-  protected Object update (String _name, String _buildfile, String _settings)
+  protected Error[] setClasspath (
+      IJavaProject _javaProject, IClasspathEntry[] _entries, String _classpath)
     throws Exception
   {
-    IJavaProject javaProject = JavaUtils.getJavaProject(_name);
-
-    // ivy.xml, project.xml, etc updated.
-    if(_buildfile != null){
-      String filename = FilenameUtils.getName(_buildfile);
-      Parser parser = (Parser)Services.getService(filename, Parser.class);
-      javaProject.setRawClasspath(
-          merge(javaProject, parser.parse(_buildfile)), null);
-
-    // project settings update
-    }else if(_settings != null){
-      updateSettings(javaProject, _settings);
-
-    // .classpath updated.
-    }else{
-      javaProject.setRawClasspath(javaProject.readRawClasspath(), null);
+    String classpath = IOUtils.toString(new FileInputStream(_classpath));
+    List errors = new ArrayList();
+    for(int ii = 0; ii < _entries.length; ii++){
+      IJavaModelStatus status = JavaConventions.validateClasspathEntry(
+          _javaProject, _entries[ii], true);
+      if(!status.isOK()){
+        errors.add(createErrorFromStatus(_classpath, classpath, status));
+      }
     }
 
-    javaProject.makeConsistent(null);
+    IJavaModelStatus status = JavaConventions.validateClasspath(
+        _javaProject, _entries, _javaProject.getOutputLocation());
 
-    return Services.getMessage("project.updated", _name);
+    if(status.isOK() && errors.isEmpty()){
+      _javaProject.setRawClasspath(_entries, null);
+      _javaProject.makeConsistent(null);
+    }
+
+    if(!status.isOK()){
+      errors.add(createErrorFromStatus(_classpath, classpath, status));
+    }
+    return (Error[])errors.toArray(new Error[errors.size()]);
+  }
+
+  /**
+   * Creates an Error from the supplied IJavaModelStatus.
+   *
+   * @param _filename The filename of the error.
+   * @param _contents The contents of the file as a String.
+   * @param _status The IJavaModelStatus.
+   * @return The Error.
+   */
+  protected Error createErrorFromStatus (
+      String _filename, String _contents, IJavaModelStatus _status)
+    throws Exception
+  {
+    int line = 0;
+    int col = 0;
+
+    // get the pattern to search for from the status message.
+    Matcher matcher = STATUS_PATTERN.matcher(_status.getMessage());
+    String pattern = matcher.replaceFirst("$1");
+
+    // find the pattern in the classpath file.
+    matcher = Pattern.compile(pattern).matcher(_contents);
+    if(matcher.find()){
+      int[] position = FileUtils.offsetToLineColumn(_filename, matcher.start());
+      line = position[0];
+      col = position[1];
+    }
+
+    return new Error(_status.getMessage(), _filename, line, col);
   }
 
   /**
