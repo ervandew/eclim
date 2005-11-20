@@ -127,6 +127,13 @@
     <description>Handles client project update request.</description>
     <property name="eclimPreferences" ref="eclimPreferences"/>
     <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.project.ProjectUpdateFilter"/>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean name="project_info" class="org.eclim.command.project.ProjectInfoCommand">
