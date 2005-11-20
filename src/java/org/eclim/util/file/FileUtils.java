@@ -15,13 +15,23 @@
  */
 package org.eclim.util.file;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 import java.util.Enumeration;
 
 import javax.naming.CompositeName;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
 
 /**
  * Utilities for working w/ files and commons vfs.
@@ -31,10 +41,60 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class FileUtils
 {
+  private static final Log log = LogFactory.getLog(FileUtils.class);
+
   public static final String JAR_PREFIX = "jar:";
   public static final String ZIP_PREFIX = "zip:";
   public static final String JAR_EXT = ".jar";
   public static final String ZIP_EXT = ".zip";
+
+  /**
+   * Converts the supplied offset into an int array where the first element is
+   * the line number and the second is the column number.
+   *
+   * @param _filename The file to translate the offset for.
+   * @param _offset The offset.
+   * @return The line and column int array.
+   */
+  public static int[] offsetToLineColumn (String _filename, int _offset)
+    throws Exception
+  {
+    BufferedReader reader = null;
+    try{
+      int offset = 0;
+      int lines = 0;
+
+      FileSystemManager fsManager = VFS.getManager();
+      FileObject file = fsManager.resolveFile(_filename);
+
+      // disable caching (the cache seems to become invalid at some point
+      // causing vfs errors).
+      //fsManager.getFilesCache().clear(file.getFileSystem());
+
+      if(!file.exists()){
+        log.warn("File '" + _filename + "' not found.");
+        return null;
+      }
+      reader = new BufferedReader(
+          new InputStreamReader(file.getContent().getInputStream()));
+
+      String line = null;
+      while((line = reader.readLine()) != null){
+        lines++;
+        int newOffset = offset + line.length() + 1;
+
+        if(newOffset >= _offset){
+          return new int[]{lines, ((_offset - offset) + 1)};
+        }
+        offset = newOffset;
+      }
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }finally{
+      IOUtils.closeQuietly(reader);
+    }
+    return new int[]{0, 0};
+  }
 
   /**
    * Translates a file name that does not conform to the standard url file
