@@ -33,6 +33,9 @@
   if !exists("g:EclimEchoHighlight")
     let g:EclimEchoHighlight = "Statement"
   endif
+  if !exists("g:EclimEchoErrorHighlight")
+    let g:EclimEchoErrorHighlight = "Error"
+  endif
   if !exists("g:EclimCommand")
     let g:EclimCommand = 'eclim'
   endif
@@ -71,6 +74,17 @@ function! Echo (message)
     echo a:message
     echohl None
   endif
+endfunction " }}}
+
+" EchoError(message) {{{
+" Echos the supplied error message.
+function! EchoError (message)
+  let saved = g:EclimEchoHighlight
+  let g:EclimEchoHighlight = g:EclimEchoErrorHighlight
+
+  call Echo(a:message)
+
+  let g:EclimEchoHighlight = saved
 endfunction " }}}
 
 " FillTemplate(prefix, suffix) {{{
@@ -141,7 +155,7 @@ function! ParseArgs (args)
   return args
 endfunction " }}}
 
-" ParseQuickfixEntries(resultsFile) {{{
+" ParseQuickfixEntries(entries) {{{
 " Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
 " vim compatable list of dictionaries that can be passed to setqflist().
 function! ParseQuickfixEntries (entries)
