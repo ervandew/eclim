@@ -47,46 +47,12 @@ public class VimUtils
    * @return The vim compatable string.
    */
   public static String translateLineColumn (Position _position)
+    throws Exception
   {
     if(_position.getOffset() != -1){
-      String fileName = _position.getFilename();
-      int fileOffset = _position.getOffset();
-      log.debug("TraslateLineColumn for '" + fileName + "'.");
-
-      BufferedReader reader = null;
-      try{
-        int offset = 0;
-        int lines = 0;
-
-        FileSystemManager fsManager = VFS.getManager();
-        FileObject file = fsManager.resolveFile(fileName);
-
-        // disable caching (the cache seems to become invalid at some point
-        // causing vfs errors).
-        //fsManager.getFilesCache().clear(file.getFileSystem());
-
-        if(!file.exists()){
-          log.warn("File '" + fileName + "' not found.");
-          return null;
-        }
-        reader = new BufferedReader(
-            new InputStreamReader(file.getContent().getInputStream()));
-
-        String line = null;
-        while((line = reader.readLine()) != null){
-          lines++;
-          int newOffset = offset + line.length() + 1;
-
-          if(newOffset >= fileOffset){
-            return lines + " col " + ((fileOffset - offset) + 1);
-          }
-          offset = newOffset;
-        }
-      }catch(Exception e){
-        throw new RuntimeException(e);
-      }finally{
-        IOUtils.closeQuietly(reader);
-      }
+      int[] position = FileUtils.offsetToLineColumn(
+          _position.getFilename(), _position.getOffset());
+      return position[0] + " col " + position[1];
     }
     return "1 col 1";
   }
