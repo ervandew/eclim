@@ -81,6 +81,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Code Completion"/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
         description="Implementation / Override Stubbing"/>
+      <impl label="Java Bean Getter / Setter Generation" href="bean.html"
+        description="Java Bean Getter / Setter Generation"/>
       <logging label="Logging" href="logging.html"
         description="Logging"/>
     </java>
