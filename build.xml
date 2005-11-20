@@ -57,6 +57,7 @@
       <fileset dir="." includes="lib/**/*" excludesfile="src/ant/exclude.properties"/>
       <fileset dir="build/dist" includes="**/*.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
+      <fileset dir="src" includes="schema/**/*"/>
       <fileset dir="src/velocity" includes="templates/**/*"/>
     </sync>
     <copy todir="${eclipse.home}">
