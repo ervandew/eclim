@@ -121,6 +121,7 @@
         <li><a href="java/impl.html">Implementation / Override Stubbing.</a></li>
         <li><a href="java/bean.html">Java Bean getter / setter generation.</a></li>
         <li><a href="java/logging.html">Logging.</a></li>
+        <li><a href="java/abbreviations.html">Abbreviations.</a></li>
       </ul>
     </section>
   </body>
