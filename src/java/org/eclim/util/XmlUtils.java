@@ -95,7 +95,8 @@ public class XmlUtils
               _ex.getMessage(),
               filename,
               _ex.getLineNumber(),
-              _ex.getColumnNumber()));
+              _ex.getColumnNumber(),
+              false));
       }
       public Error[] getErrors ()
       {

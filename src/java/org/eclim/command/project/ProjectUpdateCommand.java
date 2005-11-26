@@ -195,7 +195,7 @@ public class ProjectUpdateCommand
       col = position[1];
     }
 
-    return new Error(_status.getMessage(), _filename, line, col);
+    return new Error(_status.getMessage(), _filename, line, col, false);
   }
 
   /**
