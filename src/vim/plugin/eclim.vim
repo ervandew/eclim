@@ -146,6 +146,15 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
+" GoToBufferWindow(bufname) {{{
+" Returns the to window containing the supplied buffer name.
+function! GoToBufferWindow (bufname)
+  let winnr = bufwinnr(bufnr(b:filename))
+  if winnr != -1
+    exec winnr . "winc w"
+  endif
+endfunction " }}}
+
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
 function! ParseArgs (args)
