@@ -130,7 +130,7 @@
     <property name="filters">
       <map>
         <entry key="vim">
-          <bean class="org.eclim.command.project.ProjectUpdateFilter"/>
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
         </entry>
       </map>
     </property>
