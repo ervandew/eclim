@@ -30,16 +30,14 @@
         <code>org.eclipse.jdt.ui.JavaUI.getProjectJavadocLocation(IJavaProject)</code><br/>
         <code>org.eclipse.jdt.ui.JavaUI.setProjectJavadocLocation(IJavaProject, URL)</code>
       </action>
-      <action context="compile" dev="ervandew">
-        Support eclipse continuous compiling and mark errors in the source view.
-      </action>
       <action context="searching" dev="ervandew">
         <p>
           Alternate searching for non-project files (browsing 3rd party src).
           Utilize path option and new vim7 find functions.
         </p>
         <p>
-          Searching from non java source files (spring xml, hibernate xml, etc).
+          Expand searching from non java source files (spring xml, hibernate
+          xml, etc).
         </p>
       </action>
       <action context="refactoring" dev="ervandew">
@@ -127,7 +125,7 @@
       </action>
       <action context="run" dev="ervandew">
         Run main class and catch any exceptions into a new window and allow
-        jumping to a stack trace element's references source location.
+        jumping to a stack trace element's referenced source location.
       </action>
       <action context="code_completion" dev="ervandew">
         More code completion
@@ -222,6 +220,9 @@
 
   <changes>
     <release version="1.1.0" date="unreleased">
+      <action dev="ervandew" type="add" context="source validation">
+        <a href="vim/java/source.html">Source validation</a>.
+      </action>
       <action dev="ervandew" type="add" context="javadoc">
         <a href="vim/java/doc.html">Javadoc</a> viewing.
       </action>
