@@ -113,6 +113,7 @@
         functionality for java editing.
       </p>
       <ul>
+        <li><a href="java/source.html">Source code validation.</a></li>
         <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
         <li><a href="java/search.html">Source code searching.</a></li>
         <li><a href="java/doc.html">Javadoc support.</a></li>

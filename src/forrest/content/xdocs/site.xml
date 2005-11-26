@@ -69,6 +69,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
     <java label="Java" href="java/">
+      <source label="Source Code Validation" href="source.html"
+        description="Source Code Validation"/>
       <classpath label="Classpath" href="classpath.html"
         description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"
@@ -94,6 +96,8 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <external-refs>
     <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
+    <supertab href="http://www.vim.org/scripts/script.php?script_id=182"/>
+    <supertab_patch href="http://sourceforge.net/project/showfiles.php?group_id=145869&amp;package_id=160492&amp;release_id=370674"/>
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>
     <xml.apache.org href="http://xml.apache.org/"/>
