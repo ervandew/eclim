@@ -83,6 +83,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Implementation / Override Stubbing"/>
       <bean label="Java Bean Getter / Setter Generation" href="bean.html"
         description="Java Bean Getter / Setter Generation"/>
+      <junit label="JUnit Integration" href="junit.html"
+        description="JUnit Integration"/>
       <logging label="Logging" href="logging.html"
         description="Logging"/>
       <abbreviations label="Abbreviations" href="abbreviations.html"
