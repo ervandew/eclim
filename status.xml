@@ -248,6 +248,26 @@
       <action dev="ervandew" type="add" context="abbreviations">
         Added some handy <a href="vim/java/abbreviations.html">abbreviations</a>.
       </action>
+      <action dev="ervandew" type="update" context="vim scripts">
+        A few vim scripts were renamed, so you will need to delete the old file
+        when upgrading.
+        <warning>
+          <ul>
+            <li>
+              ftplugin/eclipse_classpath/eclipse_classpath.vim moved to<br/>
+              ftplugin/eclipse_classpath/eclim.vim
+            </li>
+            <li>
+              ftplugin/ivy/ivy.vim moved to<br/>
+              ftplugin/ivy/eclim.vim
+            </li>
+            <li>
+              ftplugin/maven_project/maven_project.vim moved to<br/>
+              ftplugin/maven_project/eclim.vim
+            </li>
+          </ul>
+        </warning>
+      </action>
     </release>
     <release version="1.0.0" date="Oct 16, 2005">
       <action dev="ervandew" type="add" context="eclim">
