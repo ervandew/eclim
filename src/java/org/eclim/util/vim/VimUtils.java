@@ -52,7 +52,9 @@ public class VimUtils
     if(_position.getOffset() != -1){
       int[] position = FileUtils.offsetToLineColumn(
           _position.getFilename(), _position.getOffset());
-      return position[0] + " col " + position[1];
+      if(position != null){
+        return position[0] + " col " + position[1];
+      }
     }
     return "1 col 1";
   }
