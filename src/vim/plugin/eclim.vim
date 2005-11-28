@@ -146,6 +146,24 @@ function! GetCurrentElementPosition ()
   return offset . ";" . strlen(word)
 endfunction " }}}
 
+" GetPathEntry(file) {{{
+" Returns the path entry that contains the supplied file (excluding '.' and '').
+" The argument must be an absolute path to the file.
+" &path is expected to be using commas for path delineation.
+" Returns 0 if no path found.
+function! GetPathEntry (file)
+  let paths = split(&path, ',')
+  for path in paths
+    if path != "" && path != "."
+      let path = expand(path)
+      if a:file =~ '^' . path
+        return path
+      endif
+    endif
+  endfor
+  return 0
+endfunction " }}}
+
 " GoToBufferWindow(bufname) {{{
 " Returns the to window containing the supplied buffer name.
 function! GoToBufferWindow (bufname)
@@ -241,6 +259,21 @@ function! RefreshFile ()
   "let @" = saved
 
   "silent write!
+endfunction " }}}
+
+" FindFile(file) {{{
+" Searches for the supplied file in the &path.
+" If exclude_relative supplied is 1, then relative &path entries ('.' and '')
+" are not searched).
+function! FindFile (file, exclude_relative)
+  let path = &path
+  if a:exclude_relative
+    " remove '' path entry
+    let path = substitute(path, '[,]\?[,]\?', '', 'g')
+    " remove '.' path entry
+    let path = substitute(path, '[,]\?\.[,]\?', '', 'g')
+  endif
+  return split(globpath(path, "**/" . a:file), '\n')
 endfunction " }}}
 
 " SignsClear(name) {{{
