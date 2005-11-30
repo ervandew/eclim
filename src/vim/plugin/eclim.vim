@@ -225,6 +225,8 @@ function! PromptList (prompt, list, highlight)
 
   exec "echohl " . a:highlight
   try
+    " clear any previous messages
+    redraw
     " echoing the list prompt vs. using it in the input() avoids apparent vim
     " bug that causes "Internal error: get_tv_string_buf()".
     echo prompt . "\n"
