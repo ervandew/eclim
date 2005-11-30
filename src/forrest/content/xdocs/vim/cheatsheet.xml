@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Eclim Vim Cheatsheet</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Here you will find a comprehensive list of eclim commands that you can
+      use as a reference.
+    </p>
+
+    <p><strong>Global Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:PingEclim</strong> - Pings eclimd server.
+      </li>
+      <li>
+        <strong>:ShutdownEclim</strong> - Shuts down eclimd server.
+      </li>
+    </ul>
+
+    <p><strong>Project Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:ProjectCreate</strong> &lt;folder&gt; [&lt;project_dependencies&gt;] -
+        Create a new project.
+      </li>
+      <li>
+        <strong>:ProjectList</strong> - List current projects.
+      </li>
+      <li>
+        <strong>:ProjectSettings</strong> [&lt;project&gt;] -
+        View / edit project settings.
+      </li>
+      <li>
+        <strong>:ProjectDelete</strong> &lt;project&gt; -
+        Delete a project.
+      </li>
+    </ul>
+
+    <p><strong>Eclipse .classpath Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...] -
+        Add a new source dir entry.
+      </li>
+      <li>
+        <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...] -
+        Add a new project entry.
+      </li>
+      <li>
+        <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...] -
+        Add a jar entry.
+      </li>
+      <li>
+        <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
+        Add a new var entry.
+      </li>
+    </ul>
+
+    <p><strong>Java Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:JavaGet</strong> - Create a java bean getter method.
+      </li>
+      <li>
+        <strong>:JavaSet</strong> - Create a java bean setter method.
+      </li>
+      <li>
+        <strong>:JavaGetSet</strong> -
+        Create both a java bean getter and setter method.
+      </li>
+      <li>
+        <strong>:JavaImpl</strong> -
+        View implementable / overridable methods from super classes and
+        implemented interfaces.
+      </li>
+      <li>
+        <strong>:JUnitImpl</strong> -
+        Similar to <strong>:JavaImpl</strong>, but creates test methods.
+      </li>
+      <li>
+        <strong>:JavaImport</strong> - Import the class under the cursor.
+      </li>
+      <li>
+        <strong>:JavaSearch</strong>
+        [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] -
+        Search for classes, methods, fields, etc.
+        (With no args supplied, searches for the element under the cursor).
+      </li>
+      <li>
+        <strong>:JavaDocSearch</strong> -
+        Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.
+      </li>
+    </ul>
+  </body>
+</document>

@@ -68,6 +68,10 @@ See http://forrest.apache.org/docs/linking.html for more info
       description="Create projects and view/edit project settings."/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
+    <cheatsheet label="Cheatsheet" href="cheatsheet.html"
+        description="List of all eclim vim commands."/>
+    <cheatsheet label="Cheatsheet (PDF)" href="cheatsheet.pdf"
+        description="List of all eclim vim commands (in pdf form)."/>
     <java label="Java" href="java/">
       <source label="Source Code Validation" href="source.html"
         description="Source Code Validation"/>
