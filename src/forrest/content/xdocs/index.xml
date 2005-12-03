@@ -33,15 +33,15 @@
       <title>Overview</title>
       <p>
         The primary goal of eclim is to bring
-        <a href="http://eclipse.org">eclipse</a> functionality to the vim
+        <a href="ext:eclipse">eclipse</a> functionality to the vim
         editor.
       </p>
       <p>
         Eclim is less of an application and more of an integration of two great
-        projects.  The first, <a href="http://vim.org">vim</a>, is
+        projects.  The first, <a href="ext:vim">vim</a>, is
         <a href="http://en.wikipedia.org/wiki/Editor_wars">arguably</a> one of
         the best text editors in existence.  The second,
-        <a href="http://eclipse.org">eclipse</a>, provides many great tools for
+        <a href="ext:eclipse">eclipse</a>, provides many great tools for
         development, especially java development.
       </p>
       <p>
@@ -57,9 +57,7 @@
         vim plug-ins that communicate with eclipse over that interface.
       </p>
       <p>
-        Eclim is released under the
-        <a href="http://apache.org/licenses/LICENSE-2.0.html">apache 2.0</a>
-        license.
+        Eclim is released under the <a href="ext:license">apache 2.0</a> license.
       </p>
     </section>
     <section id="news">
@@ -93,7 +91,7 @@
           </li>
           <li>
             Integrated
-            <a href="http://www.martiansoftware.com/nailgun/">nailgun</a>
+            <a href="ext:nailgun">nailgun</a>
             to greatly improve the command line client performance.
           </li>
           <li>
