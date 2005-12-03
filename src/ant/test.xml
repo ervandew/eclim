@@ -4,8 +4,6 @@
 -->
 <project name="test" default="test" basedir="../..">
 
-  <import file="../../build.xml"/>
-
   <!--
     - Executes the unit tests.
     -->

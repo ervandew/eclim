@@ -4,8 +4,6 @@
 -->
 <project name="docs" default="docs" basedir="../..">
 
-  <import file="../../build.xml"/>
-
   <!--
     - Target for generating the javadocs.
     -->
@@ -25,11 +23,16 @@
     - Runs forrest to generate the docs.
     -->
   <target name="docs" depends="init" description="Builds the documentation.">
-    <!--mkdir dir="build/forrest"/-->
     <exec executable="${forrest.home}/bin/forrest" failonerror="true" dir=".">
-      <!--arg line="-Dproject.build-dir=build/forrest"/-->
       <arg line="site"/>
     </exec>
+  </target>
+
+  <!--
+    - Generates vim docs from forrest xml files.
+    -->
+  <target name="vimdocs" depends="init"
+      description="Builds the vim documentation.">
   </target>
 
 </project>

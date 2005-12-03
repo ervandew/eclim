@@ -8,12 +8,16 @@
   <property file="src/ant/build.properties"/>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
+  <import file="src/ant/docs.xml"/>
+  <import file="src/ant/test.xml"/>
+
   <!-- classpath -->
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
     <!--fileset dir="build/dist" includes="**/*.jar"/-->
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
-    <fileset dir="${eclipse.home}/plugins" includes="**/*.jar" excludes="org.eclim_*/*.jar"/>
+    <fileset dir="${eclipse.home}/plugins"
+        includes="**/*.jar" excludes="org.eclim_*/*.jar"/>
   </path>
 
   <!--
@@ -94,27 +98,6 @@
   <target name="clean" description="Deletes the build directory.">
     <delete dir="build"/>
     <delete dir="dist"/>
-  </target>
-
-  <!--
-    - Target for generating the javadocs.
-    -->
-  <target name="javadoc" description="Generates the javadocs from the src.">
-    <ant antfile="src/ant/docs.xml" target="javadoc"/>
-  </target>
-
-  <!--
-    - Generate all the docs.
-    -->
-  <target name="docs" description="Generates the documentation.">
-    <ant antfile="src/ant/docs.xml"/>
-  </target>
-
-  <!--
-    - Target for unit testing the code.
-    -->
-  <target name="test" description="Runs the junit tests">
-    <ant antfile="src/ant/test.xml"/>
   </target>
 
   <!--
