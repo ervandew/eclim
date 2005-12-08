@@ -28,11 +28,13 @@ Bundle-Activator: org.eclim.server.eclipse.EclimPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
+ org.eclipse.text,
  org.eclipse.ui,
  org.eclipse.jdt,
  org.eclipse.jdt.core,
  org.eclipse.jdt.debug,
  org.eclipse.jdt.launching,
- org.eclipse.jdt.ui
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text
 Eclipse-AutoStart: true
 
