@@ -117,6 +117,10 @@
         <strong>:JavaDocSearch</strong> -
         Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.
       </li>
+      <li>
+        <strong>:JavaCorrect</strong> -
+        Suggest possible corrections for a source error.
+      </li>
     </ul>
   </body>
 </document>

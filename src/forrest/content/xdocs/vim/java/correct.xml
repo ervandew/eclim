@@ -29,5 +29,38 @@
     </authors>
   </header>
   <body>
+    <p>
+      Code correction in eclim is equivalent to the quick fix functionality of
+      eclipse.  When you save a java source file, eclim
+      <a href="source.html">validates</a> the file and notes which lines contain
+      errors.  To have eclim suggest possible corrections for an error, you
+      simply place the cursor on the error line and issue
+      <strong>:JavaCorrect</strong>.
+    </p>
+    <p>
+      The result will be a small window opened at the bottom of vim where any
+      correction proposals will be noted.  To apply a suggested change, simply
+      move the cursor to the line describing the modification and hit
+      &lt;Enter&gt;.  Upon doing so, the change will be applied to the source
+      file.
+    </p>
+    <p>
+      Example output of <strong>:JavaCorrect</strong>.
+    </p>
+    <source>
+      The serializable class Foo does not declare a static final serialVersionUID field of type long
+      0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
+        ...
+        @SuppressWarnings("serial")
+        public class Foo
+        implements Serializable
+      ...
+    </source>
+    <p>
+      To apply the above change you would hit &lt;Enter&gt; on the line:
+    </p>
+    <source>
+      0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
+    </source>
   </body>
 </document>
