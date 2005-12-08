@@ -34,7 +34,7 @@
       update that source file in eclipse and will report any validation errors
       found.  Any errors will be placed in vim's quickfix buffer and the
       corresponding lines in the source file will be marked via vim's :sign
-      functionality.
+      functionality with '>>' markers in the left margin.
     </p>
     <note>
       To prevent overwritting your quickfix buffer after a :make or :grep, eclim
