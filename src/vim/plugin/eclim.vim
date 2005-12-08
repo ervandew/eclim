@@ -87,6 +87,34 @@ function! EchoError (message)
   let g:EclimEchoHighlight = saved
 endfunction " }}}
 
+" ErrorsDisplay(errors) {{{
+" Displays the supplied list of errors and warnings using vim's :sign
+" functionality.  The 'errors' argument is expected to be a list of
+" dictionaries just like that required for 'setqflist', the only difference
+" being that an additional key/value is required in the dictionaries, with the
+" key 'severity' and a value of 'error' or 'warning'.
+function! ErrorsDisplay (errors)
+  " clear any old signs
+  call ErrorsDisplayClear()
+
+  let warnings = copy(a:errors)
+  let errors = filter(copy(a:errors), 'v:val.severity == "error"')
+  let warnings = filter(warnings, 'v:val.severity == "warning"')
+
+  call map(errors, 'v:val.lnum')
+  call map(warnings, 'v:val.lnum')
+
+  call SignsPlace("errors", ">>", "Error", errors)
+  call SignsPlace("warnings", ">>", "WarningMsg", warnings)
+endfunction " }}}
+
+" ErrorsDisplayClear() {{{
+" Clears the display of all errors and warnings.
+function! ErrorsDisplayClear ()
+  call SignsClear("errors")
+  call SignsClear("warnings")
+endfunction " }}}
+
 " FillTemplate(prefix, suffix) {{{
 " Used as part of a vim normal map to allow the user to fill in values for
 " variables in a newly added template of code.
@@ -185,16 +213,26 @@ endfunction " }}}
 " ParseQuickfixEntries(entries) {{{
 " Parses the supplied list of quickfix entry lines (%f|%l col %c|%m) into a
 " vim compatable list of dictionaries that can be passed to setqflist().
+" In addition to the above line format, this function also supports
+" %f|%l col %c|%m|%s, where %s is the severity of the entry.  The value will
+" be placed in the dictionary under the 'severity' key.
 function! ParseQuickfixEntries (entries)
   let entries = []
 
   for entry in a:entries
     let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
-    let line = substitute(entry, '.*|\([0-9]*\) col.*', '\1', '')
-    let col = substitute(entry, '.*col \([0-9]*\)|.*', '\1', '')
-    let message = substitute(entry, '.*|\(.*\)', '\1', '')
+    let line = substitute(entry, '.*|\([0-9]\+\) col.*', '\1', '')
+    let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
+    let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
+    let severity = substitute(entry, '.*|\(error\|warning\)$', '\1', '')
 
-    let dict = {'filename': file, 'lnum': line, 'col': col, 'text': message}
+    let dict = {
+      \ 'filename': file,
+      \ 'lnum': line,
+      \ 'col': col,
+      \ 'text': message,
+      \ 'severity': severity}
+
     call add(entries, dict)
   endfor
 
