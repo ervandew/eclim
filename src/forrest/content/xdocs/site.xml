@@ -93,6 +93,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Automated imports"/>
       <complete label="Code Completion" href="complete.html"
         description="Code Completion"/>
+      <correct label="Code Correction" href="correct.html"
+        description="Code Correction"/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
         description="Implementation / Override Stubbing"/>
       <bean label="Java Bean Getter / Setter Generation" href="bean.html"

@@ -235,6 +235,14 @@
       <action dev="ervandew" type="add" context="bean">
         <a href="vim/java/junit.html">JUnit</a> test method stub generation.
       </action>
+      <action dev="ervandew" type="add" context="search">
+        <a href="vim/java/search.html#alternate">Alternate searching</a>
+        in code bases outside of an eclipse project.
+      </action>
+      <action dev="ervandew" type="add" context="quickfix">
+        <a href="vim/java/correct.html">Code correction</a> via eclipse
+        quickfix functionality.
+      </action>
       <action dev="ervandew" type="add" context=".classpath">
         Added validation of the .classpath file when saving.  Errors are then
         reported via vim's quickfix.
