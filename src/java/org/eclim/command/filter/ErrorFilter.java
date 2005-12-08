@@ -44,7 +44,9 @@ public class ErrorFilter
         .append(" col ")
         .append(errors[ii].getColumnNumber())
         .append('|')
-        .append(errors[ii].getMessage());
+        .append(errors[ii].getMessage())
+        .append('|')
+        .append(errors[ii].isWarning() ? "warning" : "error");
     }
 
     return buffer.toString();
