@@ -310,7 +310,6 @@ function! TempWindow (name, lines)
     setlocal noswapfile
     setlocal buftype=nofile
     setlocal bufhidden=delete
-    setlocal ft=java
   else
     exec bufwinnr(a:name) . "winc w"
   endif
