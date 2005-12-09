@@ -130,6 +130,21 @@ function! FillTemplate (prefix, suffix)
   endif
 endfunction " }}}
 
+" FindFile(file, exclude_relative) {{{
+" Searches for the supplied file in the &path.
+" If exclude_relative supplied is 1, then relative &path entries ('.' and '')
+" are not searched).
+function! FindFile (file, exclude_relative)
+  let path = &path
+  if a:exclude_relative
+    " remove '' path entry
+    let path = substitute(path, '[,]\?[,]\?', '', 'g')
+    " remove '.' path entry
+    let path = substitute(path, '[,]\?\.[,]\?', '', 'g')
+  endif
+  return split(globpath(path, "**/" . a:file), '\n')
+endfunction " }}}
+
 " GetCharacterOffset() {{{
 " Gets the character offset for the current cursor position.
 function! GetCharacterOffset ()
@@ -299,21 +314,6 @@ function! RefreshFile ()
   "let @" = saved
 
   "silent write!
-endfunction " }}}
-
-" FindFile(file) {{{
-" Searches for the supplied file in the &path.
-" If exclude_relative supplied is 1, then relative &path entries ('.' and '')
-" are not searched).
-function! FindFile (file, exclude_relative)
-  let path = &path
-  if a:exclude_relative
-    " remove '' path entry
-    let path = substitute(path, '[,]\?[,]\?', '', 'g')
-    " remove '.' path entry
-    let path = substitute(path, '[,]\?\.[,]\?', '', 'g')
-  endif
-  return split(globpath(path, "**/" . a:file), '\n')
 endfunction " }}}
 
 " SignsClear(name) {{{
