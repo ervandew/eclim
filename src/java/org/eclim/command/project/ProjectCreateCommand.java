@@ -28,8 +28,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -72,7 +71,8 @@ import org.w3c.dom.Text;
 public class ProjectCreateCommand
   extends AbstractCommand
 {
-  private static final Log log = LogFactory.getLog(ProjectCreateCommand.class);
+  private static final Logger logger =
+    Logger.getLogger(ProjectCreateCommand.class);
 
   private static DocumentBuilderFactory factory;
   private static XPath xpath;
@@ -90,7 +90,7 @@ public class ProjectCreateCommand
         folder = folder.substring(0, folder.length() - 1);
       }
       String name = FilenameUtils.getBaseName(folder).replace(' ', '_');
-      log.debug("Creating project '" + name + "' at folder '" + folder + "'");
+      logger.debug("Creating project '{}' at folder '{}'", name, folder);
 
       return create(name, folder, depends);
     }catch(Throwable t){

@@ -20,12 +20,11 @@ import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
+
+import org.apache.log4j.Logger;
 
 import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
@@ -38,7 +37,7 @@ import org.eclim.util.file.Position;
  */
 public class VimUtils
 {
-  private static final Log log = LogFactory.getLog(VimUtils.class);
+  private static final Logger logger = Logger.getLogger(VimUtils.class);
 
   /**
    * Converts the position into a vim compatible line / column string.
@@ -72,7 +71,7 @@ public class VimUtils
       int fileOffset = _position.getOffset();
       int length = _position.getLength();
 
-      log.debug("TraslateStartEnd for '" + fileName + "'.");
+      logger.debug("TraslateStartEnd for '{}'.", fileName);
 
       BufferedReader reader = null;
       try{

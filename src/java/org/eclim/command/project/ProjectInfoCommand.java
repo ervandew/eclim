@@ -21,9 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.eclim.client.Options;
 
 import org.eclim.command.AbstractCommand;
@@ -43,8 +40,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class ProjectInfoCommand
   extends AbstractCommand
 {
-  private static final Log log = LogFactory.getLog(ProjectInfoCommand.class);
-
   /**
    * {@inheritDoc}
    */

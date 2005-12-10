@@ -19,8 +19,7 @@ import java.io.IOException;
 
 import com.martiansoftware.nailgun.NGServer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
@@ -36,7 +35,7 @@ import org.eclim.command.CommandLine;
 public class ShutdownCommand
   extends AbstractCommand
 {
-  private static final Log log = LogFactory.getLog(ShutdownCommand.class);
+  private static final Logger logger = Logger.getLogger(ShutdownCommand.class);
 
   /**
    * {@inheritDoc}
@@ -53,7 +52,7 @@ public class ShutdownCommand
     }catch(IllegalStateException ise){
       // workspace already closed.
     }catch(Exception e){
-      log.error("Error shutting down eclim:", e);
+      logger.error("Error shutting down eclim:", e);
     }
     return null;
   }

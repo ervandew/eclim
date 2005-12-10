@@ -29,9 +29,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -75,8 +72,6 @@ import org.eclipse.jdt.core.JavaConventions;
 public class ProjectUpdateCommand
   extends AbstractCommand
 {
-  private static final Log log = LogFactory.getLog(ProjectUpdateCommand.class);
-
   private static final Pattern STATUS_PATTERN = Pattern.compile(".*/(.*)'.*");
 
   private String libraryRootPreference;

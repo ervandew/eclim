@@ -23,15 +23,14 @@ import java.util.Enumeration;
 
 import javax.naming.CompositeName;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
+
+import org.apache.log4j.Logger;
 
 /**
  * Utilities for working w/ files and commons vfs.
@@ -41,7 +40,7 @@ import org.apache.commons.vfs.VFS;
  */
 public class FileUtils
 {
-  private static final Log log = LogFactory.getLog(FileUtils.class);
+  private static final Logger logger = Logger.getLogger(FileUtils.class);
 
   public static final String JAR_PREFIX = "jar:";
   public static final String ZIP_PREFIX = "zip:";
@@ -72,7 +71,7 @@ public class FileUtils
       //fsManager.getFilesCache().clear(file.getFileSystem());
 
       if(!file.exists()){
-        log.warn("File '" + _filename + "' not found.");
+        logger.warn("File '{}' not found.", _filename);
         return null;
       }
       reader = new BufferedReader(

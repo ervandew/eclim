@@ -19,8 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import org.eclim.util.spring.ResourceBundleMessageSource;
 
@@ -37,7 +36,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class Services
 {
-  private static Log log = LogFactory.getLog(Services.class);
+  private static Logger logger = Logger.getLogger(Services.class);
+
   private static AbstractApplicationContext context =
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
@@ -160,6 +160,6 @@ public class Services
   public static void close ()
   {
     context.close();
-    log.info(Services.class.getName() + " closed.");
+    logger.info("{} closed.", Services.class.getName());
   }
 }

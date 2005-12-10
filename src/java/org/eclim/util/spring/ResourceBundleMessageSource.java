@@ -27,8 +27,7 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.io.IOUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Extension to spring ResourceBundleMessageSource that doesn't use the thread
@@ -40,8 +39,8 @@ import org.apache.commons.logging.LogFactory;
 public class ResourceBundleMessageSource
   extends org.springframework.context.support.ResourceBundleMessageSource
 {
-  private static final Log log =
-    LogFactory.getLog(ResourceBundleMessageSource.class);
+  private static final Logger logger =
+    Logger.getLogger(ResourceBundleMessageSource.class);
 
   private String[] basenames;
   private ResourceBundle bundle;
@@ -54,7 +53,7 @@ public class ResourceBundleMessageSource
     try{
       return ResourceBundle.getBundle(basename, locale);
     }catch(Exception e){
-      log.error(
+      logger.error(
         "Error retrieving bundle '" + basename + "' with locale " + locale, e);
     }
     return null;
