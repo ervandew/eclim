@@ -32,12 +32,9 @@
       </action>
       <action context="searching" dev="ervandew">
         <p>
-          Alternate searching for non-project files (browsing 3rd party src).
-          Utilize path option and new vim7 find functions.
-        </p>
-        <p>
           Expand searching from non java source files (spring xml, hibernate
-          xml, etc).
+          xml, etc).<br/>
+          Third party plugins may provide this functionality.
         </p>
       </action>
       <action context="refactoring" dev="ervandew">
@@ -45,16 +42,39 @@
           <li>Safe deletes. Check for references before deleting.</li>
           <li>Convert anonymous class into inner/outer class.</li>
           <li>Convert inner class to outer class.</li>
-          <li>Method / Class / Field renaming.</li>
           <li>Extract interface.</li>
+          <li>Method / Class / Field renaming.</li>
+          <li>
+            Push methods / fields up to superclass or down to subclass.
+          </li>
+          <li>Move types, methods, fields.</li>
         </ul>
+      </action>
+      <action context="delegate" dev="ervandew">
+        Generate delegate methods for a field when wrapping that type.
+        <br/>
+        <source>
+          public void add (Object _object)
+          {
+            list.add(_object);
+          }
+        </source>
       </action>
       <action context="junit" dev="ervandew">
         Junit integration.
         <ul>
           <li>Template for test case</li>
           <li>Run and view test results in a browser.</li>
+          <li>Functionality from my junit.vim plugin.</li>
         </ul>
+      </action>
+      <action context="eclipse_features" dev="ervandew">
+        Read up on other default eclipse features that may be useful within vim.
+        <br/>
+        http://help.eclipse.org/help31/index.jsp?topic=/org.eclipse.jdt.doc.user/tips/jdt_tips.html
+      </action>
+      <action context="xml" dev="ervandew">
+        Xml validation via xmllint or call to eclimd.
       </action>
     </actions>
 
@@ -111,9 +131,6 @@
       <action context="debugger" dev="ervandew">
         Debugger functionality.
       </action>
-      <action context="eclipse_features" dev="ervandew">
-        Read up on other default eclipse features that may be useful within vim.
-      </action>
       <action context="bean" dev="ervandew">
         Additional bean functionality (beaninfo, resource bundles).
       </action>
@@ -122,6 +139,8 @@
         <ul>
           <li>cvs annotations: see who made what changes in the src.</li>
         </ul>
+        This will be a real challenge to display in vim cleanly (vim signs
+        aren't going to cut it).
       </action>
       <action context="run" dev="ervandew">
         Run main class and catch any exceptions into a new window and allow
@@ -130,7 +149,14 @@
       <action context="code_completion" dev="ervandew">
         More code completion
         <ul>
-          <li>ant</li>
+          <li>
+            ant:<br/>
+            plugin: org.eclipse.ant.ui
+            interface:
+              org.eclipse.jface.text.contentassist.IContentAssistProcessor
+            implementation:
+              org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor
+          </li>
           <li>forrest</li>
           <li>log4j</li>
         </ul>
@@ -138,17 +164,35 @@
       <action context="code analysis" dev="ervandew">
         additional source code analysis
         <ul>
+          <li>PMD - http://pmd.sourceforge.net/</li>
+          <li>Lint4j - http://www.jutils.com/</li>
           <li>
-            http://pmd.sourceforge.net/
+            Coverclipse - http://coverlipse.sourceforge.net<br/>
+            Other code coverage tools -
+            (http://java-source.net/open-source/code-coverage)
           </li>
           <li>
-            Test coverage (http://java-source.net/open-source/code-coverage)
-          </li>
-          <li>
-            Other code analyizers
-            (http://java-source.net/open-source/code-analyzers)
+            Other code analyizers -
+            http://java-source.net/open-source/code-analyzers
           </li>
         </ul>
+      </action>
+      <action context="ant" dev="ervandew">
+        Support :Ant from any file in a project that contains a build.xml file.
+        (use ideas from my ant.vim plugin).
+      </action>
+      <action context="javadoc" dev="ervandew">
+        implement a jcommenter.vim replacement.<br/>
+        Added functionality:
+        <ol>
+          <li>no need to select multiline method declarations to comment.</li>
+          <li>
+            if method overrides / implements parent method, output {@inheritDoc}
+            and @see, or if the method already has comments, prompt the user if
+            inheritDoc should replace existing docs.
+          </li>
+          <li>Others I haven't thought of yet.</li>
+        </ol>
       </action>
       <action context="todo/fixme" dev="ervandew">
         Command to add all FIXME/TODO into a grep quickfix.
@@ -158,9 +202,8 @@
         Utilize matchit.vim.
       </action>
       <action context="code format" dev="ervandew">
-        Find a way to configure eclipse code format tab style from within eclim.
-        Eclipse code to do this is in the "internal" package, so the eclim
-        plugin doesn't have access to the api.
+        Find best way to configure eclipse code format tab style from within
+        eclim.
       </action>
       <action context="aspectj" dev="ervandew">
         AspectJ support via AJDT (http://www.eclipse.org/ajdt)
