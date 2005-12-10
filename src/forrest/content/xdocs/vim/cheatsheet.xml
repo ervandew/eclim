@@ -122,5 +122,13 @@
         Suggest possible corrections for a source error.
       </li>
     </ul>
+
+    <p><strong>Xml Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:Validate</strong> [&lt;file&gt;] -
+        Validates the supplied xml file or the current file if none supplied.
+      </li>
+    </ul>
   </body>
 </document>
