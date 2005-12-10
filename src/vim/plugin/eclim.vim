@@ -62,6 +62,7 @@
 " Script Variables {{{
   let s:command_ping = "-command ping"
   let s:command_shutdown = "-command shutdown"
+  let s:IgnoreConnectionRefused = 0
 " }}}
 
 " Echo(message) {{{
@@ -441,6 +442,9 @@ function! ExecuteEclim (args, ...)
   endif
 
   if error != ''
+    if s:IgnoreConnectionRefused && error == 'connect: Connection refused'
+      return
+    endif
     echoe error | echoe 'while executing command: ' . command
     return
   endif
@@ -448,10 +452,25 @@ function! ExecuteEclim (args, ...)
   return result
 endfunction " }}}
 
-" PingEclim() {{{
+" PingEclim(echo) {{{
 " Pings the eclimd server.
-function! s:PingEclim ()
-  call Echo(ExecuteEclim(s:command_ping))
+" If echo is non 0, then the result is echoed to the user.
+function! PingEclim (echo)
+  try
+    let s:IgnoreConnectionRefused = 1
+    let result = ExecuteEclim(s:command_ping)
+    if a:echo
+      if result == '0'
+        call Echo("Connection Refused")
+      else
+        call Echo(result)
+      endif
+    else
+      return result != '0'
+    endif
+  finally
+    let s:IgnoreConnectionRefused = 0
+  endtry
 endfunction " }}}
 
 " ShutdownEclim() {{{
@@ -509,7 +528,7 @@ endfunction " }}}
 
 " Command Declarations {{{
 if !exists(":PingEclim")
-  command PingEclim :call <SID>PingEclim()
+  command PingEclim :call PingEclim(1)
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call <SID>ShutdownEclim()

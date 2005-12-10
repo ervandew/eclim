@@ -127,5 +127,14 @@
         <li><a href="java/abbreviations.html">Abbreviations.</a></li>
       </ul>
     </section>
+    <section id="xml">
+      <title>Xml Plugins</title>
+      <p>
+        Currently available xml functionality:
+      </p>
+      <ul>
+        <li><a href="xml/validate.html">Validate xml files.</a></li>
+      </ul>
+    </section>
   </body>
 </document>

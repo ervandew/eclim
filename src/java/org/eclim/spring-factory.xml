@@ -115,6 +115,17 @@
     <description>Reads a file from any commons vfs support path.</description>
   </bean>
 
+  <bean name="xml_validate" class="org.eclim.command.xml.validate.ValidateCommand">
+    <description>Handles client request to validate an xml file.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="project_create" class="org.eclim.command.project.ProjectCreateCommand">
     <description>Handles client project creation request.</description>
   </bean>

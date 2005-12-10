@@ -106,6 +106,10 @@ See http://forrest.apache.org/docs/linking.html for more info
       <abbreviations label="Abbreviations" href="abbreviations.html"
         description="Abbreviations"/>
     </java>
+    <xml label="Xml" href="xml/">
+      <validate label="Validation" href="validate.html"
+        description="Validation"/>
+    </xml>
   </vim>
 
   <external-refs>

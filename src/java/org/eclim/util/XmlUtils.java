@@ -40,6 +40,28 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlUtils
 {
+  /**
+   * Validate the supplied xml file.
+   *
+   * @param _filename The file path to the xml file.
+   * @return A possibly empty array of errors.
+   */
+  public static Error[] validateXml (String _filename)
+    throws Exception
+  {
+    SAXParserFactory factory = SAXParserFactory.newInstance();
+    factory.setValidating(true);
+
+    return validate(_filename, factory.newSAXParser());
+  }
+
+  /**
+   * Validate the supplied xml file against the specified xsd.
+   *
+   * @param _filename The file path to the xml file.
+   * @param _schema The file path to the xsd.
+   * @return A possibly empty array of errors.
+   */
   public static Error[] validateXml (String _filename, String _schema)
     throws Exception
   {
@@ -47,7 +69,6 @@ public class XmlUtils
     factory.setNamespaceAware(true);
     factory.setValidating(true);
 
-    ErrorAggregator handler = new ErrorAggregator(_filename);
     SAXParser parser = factory.newSAXParser();
     parser.setProperty(
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
@@ -56,8 +77,22 @@ public class XmlUtils
         "http://java.sun.com/xml/jaxp/properties/schemaSource",
         "file://" + _schema);
 
+    return validate(_filename, parser);
+  }
+
+  /**
+   * Validate the supplied file with the specified parser.
+   *
+   * @param _filename The path to the xml file.
+   * @param _parser The SAXParser.
+   * @return A possibly empty array of errors.
+   */
+  private static Error[] validate (String _filename, SAXParser _parser)
+    throws Exception
+  {
+    ErrorAggregator handler = new ErrorAggregator(_filename);
     try{
-      parser.parse(_filename, handler);
+      _parser.parse(_filename, handler);
     }catch(SAXParseException spe){
       // handler will catch these
     }
@@ -65,42 +100,77 @@ public class XmlUtils
     return handler.getErrors();
   }
 
+  /**
+   * Handler for collecting errors durring parsing and validation of a xml
+   * file.
+   */
   public static class ErrorAggregator
-      extends DefaultHandler
+    extends DefaultHandler
+  {
+    private List errors = new ArrayList();
+    private String filename;
+
+    /**
+     * Creates a new ErrorAggregator for reporting errors for the supplied
+     * filename.
+     *
+     * @param _filename The file being validated.
+     */
+    public ErrorAggregator (String _filename)
     {
-      private List errors = new ArrayList();
-      private String filename;
-      public ErrorAggregator (String _filename)
-      {
-        this.filename = _filename;
-      }
-      public void warning (SAXParseException _ex)
-        throws SAXException
-      {
-        addError(_ex);
-      }
-      public void error (SAXParseException _ex)
-        throws SAXException
-      {
-        addError(_ex);
-      }
-      public void fatalError (SAXParseException _ex)
-        throws SAXException
-      {
-        addError(_ex);
-      }
-      private void addError (SAXParseException _ex)
-      {
-        errors.add(new Error(
-              _ex.getMessage(),
-              filename,
-              _ex.getLineNumber(),
-              _ex.getColumnNumber(),
-              false));
-      }
-      public Error[] getErrors ()
-      {
-        return (Error[])errors.toArray(new Error[errors.size()]);
-      }
+      this.filename = _filename;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void warning (SAXParseException _ex)
+      throws SAXException
+    {
+      addError(_ex, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void error (SAXParseException _ex)
+      throws SAXException
+    {
+      addError(_ex, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fatalError (SAXParseException _ex)
+      throws SAXException
+    {
+      addError(_ex, false);
+    }
+
+    /**
+     * Adds the supplied SAXException as an Error.
+     *
+     * @param _ex The SAXException.
+     */
+    private void addError (SAXParseException _ex, boolean _warning)
+    {
+      errors.add(new Error(
+            _ex.getMessage(),
+            filename,
+            _ex.getLineNumber(),
+            _ex.getColumnNumber(),
+            _warning));
+    }
+
+    /**
+     * Gets the possibly empty array of errors.
+     *
+     * @return Array of Error.
+     */
+    public Error[] getErrors ()
+    {
+      return (Error[])errors.toArray(new Error[errors.size()]);
+    }
+  }
 }
