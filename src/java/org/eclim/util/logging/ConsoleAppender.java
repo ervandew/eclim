@@ -20,8 +20,9 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 /**
- * Extension to log4j's ConsoleAppender that prevents looping when setting
- * System.out or System.err to use log4j.
+ * Extension to log4j's ConsoleAppender that holds onto the configured stream
+ * instead of continuously grabbing it, preventing calls to System.setOut() or
+ * System.setErr() from resulting in undesired behavior.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
@@ -65,6 +66,11 @@ public class ConsoleAppender
   {
     private OutputStream out;
 
+    /**
+     * Wraps the supplied stream, System.out or System.err.
+     *
+     * @param _out The stream to wrap.
+     */
     public SystemStream (OutputStream _out)
     {
       out = _out;
@@ -75,6 +81,7 @@ public class ConsoleAppender
      */
     public void close ()
     {
+      // don't close System.out or System.err
     }
 
     /**
