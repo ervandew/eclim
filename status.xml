@@ -73,9 +73,6 @@
         <br/>
         http://help.eclipse.org/help31/index.jsp?topic=/org.eclipse.jdt.doc.user/tips/jdt_tips.html
       </action>
-      <action context="xml" dev="ervandew">
-        Xml validation via xmllint or call to eclimd.
-      </action>
     </actions>
 
     <actions priority="low">
@@ -285,6 +282,9 @@
       <action dev="ervandew" type="add" context="quickfix">
         <a href="vim/java/correct.html">Code correction</a> via eclipse
         quickfix functionality.
+      </action>
+      <action dev="ervandew" type="add" context="xml validation">
+        <a href="vim/xml/validate.html">Xml validation</a>.
       </action>
       <action dev="ervandew" type="add" context=".classpath">
         Added validation of the .classpath file when saving.  Errors are then
