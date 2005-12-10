@@ -31,9 +31,11 @@
   <body>
     <p>
       When editing an xml file eclim will default to validating the file when it
-      is written.  Any errors will be added to vim's quickfix window.  If you
+      is written.  Any errors will be added to vim's quickfix window and their
+      corresponding line number noted via vim's sign functionality.  If you
       don't want xml files validated when saving them, you can set the
-      g:EclimXmlValidation variable described below.
+      g:EclimXmlValidation variable described in the configuration section
+      below.
     </p>
     <p>
       Regardless of whether you have validation enabled upon saving or not, the
@@ -42,6 +44,10 @@
     <p>
       <strong>:Validation</strong> [&lt;file&gt;]<br/>
       Validate the supplied file or the current file if no file name provided.
+      <br/>
+      If eclimd is not currently running, and the xmllint command is available,
+      eclim will validate the xml file using that.  Eclim will never use xmllint
+      when saving the file with g:EclimXmlValidation enabled.
     </p>
     <p>
       <strong>Configuration</strong>
