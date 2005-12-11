@@ -104,8 +104,8 @@ public class FileUtils
    * to<br/>
    * <code>zip:file:///opt/sun-jdk-1.5.0.05/src.zip!/javax/swing/Spring.java</code>
    *
-   * @param _file
-   * @return
+   * @param _file The file to translate.
+   * @return The translated file.
    */
   public static String toUrl (String _file)
   {
