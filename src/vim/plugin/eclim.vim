@@ -343,7 +343,7 @@ function! TempWindow (name, lines)
   call TempWindowClear(a:name)
 
   if bufwinnr(a:name) == -1
-    exec "botright 10split " . a:name
+    silent! exec "botright 10split " . a:name
     setlocal nowrap
     setlocal winfixheight
     setlocal noswapfile
