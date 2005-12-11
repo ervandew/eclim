@@ -38,6 +38,19 @@
       the window of possible methods to implement.
     </p>
     <p>
+      To determine what class the current test case is for, eclim expects that
+      the standard naming convention for test cases is followed, where the test
+      case has the same fully qualified class name as the target class with a
+      'Test' suffix.<br/>
+      For a class <code>org.foo.bar.Baz</code><br/>
+      The exepected test case would be named <code>org.foo.bar.BazTest</code>.
+      <br/>
+      So when invoking <strong>:JUnitImpl</strong> from within
+      <code>org.foo.bar.BazTest</code>, eclim would look for the class
+      <code>org.foo.bar.Baz</code> and generate a list of methods to test from
+      it.
+    </p>
+    <p>
       When you hit &lt;enter&gt; on the method to add, if that method belongs
       to a type in the hierarchy for the class being tested, then the
       corresponding <code>testMethodName</code> will be inserted, otherwise a
