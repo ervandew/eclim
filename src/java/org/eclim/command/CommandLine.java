@@ -40,8 +40,12 @@ public class CommandLine
   {
     Option[] options = _commandLine.getOptions();
     for (int ii = 0; ii < options.length; ii++){
-      this.options.put(options[ii].getOpt(),
-          _commandLine.getOptionValue(options[ii].getOpt()));
+      String value = _commandLine.getOptionValue(options[ii].getOpt());
+      if(value != null){
+        // strip off surrounding '' or "" that windows doesn't strip off for us.
+        value = value.replaceFirst("^('|\")(.*)('|\")$", "$2");
+      }
+      this.options.put(options[ii].getOpt(), value);
     }
     unrecognized = _commandLine.getArgs();
   }
