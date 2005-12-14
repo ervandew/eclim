@@ -35,7 +35,7 @@ public class PositionFilter
    */
   public String filter (Object _result)
   {
-    Position position = (Position)_result;
-    return VimUtils.translateStartEnd(position);
+    //Position position = (Position)_result;
+    return "";
   }
 }
