@@ -152,10 +152,11 @@ public class ProjectUpdateCommand
     IJavaModelStatus status = JavaConventions.validateClasspath(
         _javaProject, _entries, _javaProject.getOutputLocation());
 
-    if(status.isOK() && errors.isEmpty()){
+    // always set the classpath anyways, so that the user can correct the file.
+    //if(status.isOK() && errors.isEmpty()){
       _javaProject.setRawClasspath(_entries, null);
       _javaProject.makeConsistent(null);
-    }
+    //}
 
     if(!status.isOK()){
       errors.add(createErrorFromStatus(_classpath, classpath, status));
