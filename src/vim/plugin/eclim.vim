@@ -151,12 +151,16 @@ endfunction " }}}
 function! GetCharacterOffset ()
   let curline = line('.')
   let curcol = col('.')
+  let lineend = 0
+  if &fileformat == "dos"
+    let lineend = 1
+  endif
 
   " count back from the current position to the beginning of the file.
   let offset = col('.') - 1
   while line('.') != 1
     call cursor(line('.') - 1, 1)
-    let offset = offset + col('$')
+    let offset = offset + col('$') + lineend
   endwhile
 
   " restore the cursor position.
@@ -199,8 +203,9 @@ function! GetPathEntry (file)
   let paths = split(&path, ',')
   for path in paths
     if path != "" && path != "."
-      let path = expand(path)
-      if a:file =~ '^' . path
+      let path = substitute(expand(path), '\', '/', 'g')
+      let file = substitute(expand(a:file), '\', '/', 'g')
+      if file =~ '^' . path
         return path
       endif
     endif

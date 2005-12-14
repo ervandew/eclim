@@ -60,9 +60,6 @@ public class FileUtils
   {
     BufferedReader reader = null;
     try{
-      int offset = 0;
-      int lines = 0;
-
       FileSystemManager fsManager = VFS.getManager();
       FileObject file = fsManager.resolveFile(_filename);
 
@@ -77,15 +74,32 @@ public class FileUtils
       reader = new BufferedReader(
           new InputStreamReader(file.getContent().getInputStream()));
 
-      String line = null;
-      while((line = reader.readLine()) != null){
-        lines++;
-        int newOffset = offset + line.length() + 1;
+      int offset = 0;
+      int lines = 1;
+      int count = 0;
+      int columns = 1;
+      char[] buffer = new char[1024];
+      while((count = reader.read(buffer, 0, buffer.length)) != -1){
+        for(int ii = 0; ii < count; ii++){
+          if(buffer[ii] == '\n'){
+            offset++;
+            lines++;
+            columns = 1;
+          }else if(buffer[ii] == '\r'){
+            // assume that in vim the user has fileformat set to dos, otherwise
+            // they are staring at ^M everywhere, and i can't imagine someone
+            // coding on a regular basis like that.  Otherwise we would need to
+            // incrment the columns here too.
+            offset++;
+          }else{
+            offset++;
+            columns++;
+          }
 
-        if(newOffset >= _offset){
-          return new int[]{lines, ((_offset - offset) + 1)};
+          if(offset == _offset){
+            return new int[]{lines, columns};
+          }
         }
-        offset = newOffset;
       }
     }catch(Exception e){
       throw new RuntimeException(e);

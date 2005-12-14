@@ -355,6 +355,12 @@
       <action dev="ervandew" type="add" context="Xml Functionality">
         <a href="vim/xml/validate.html">Xml validation</a>.
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Code completion, searching, etc fixed on files with fileformat == 'dos'.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Several other minor fixes and enhancements.
+      </action>
       <action dev="ervandew" type="update" context="Vim Changes">
         A few vim scripts were renamed, so you will need to delete the old file
         when upgrading.
