@@ -217,6 +217,21 @@ function! GoToBufferWindow (bufname)
   endif
 endfunction " }}}
 
+" ListContains(list, element) {{{
+" Returns 1 if the supplied list contains the specified element, 0 otherwise.
+" To determine element equality both '==' and 'is' are tried as well as
+" ^element$ to support a regex supplied element string.
+function! ListContains (list, element)
+  for element in a:list
+    if element == a:element ||
+        \ element is a:element ||
+        \ string(element) =~ '^' . escape(string(a:element), '\') . '$'
+      return 1
+    endif
+  endfor
+  return 0
+endfunction " }}}
+
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
 function! ParseArgs (args)
@@ -314,7 +329,7 @@ function! RefreshFile ()
 
   "let @" = saved
 
-  "silent write!
+  silent write!
 endfunction " }}}
 
 " SignsClear(name) {{{
