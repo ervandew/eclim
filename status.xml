@@ -132,31 +132,63 @@
     </actions>
 
     <actions priority="low">
+      <action context="installer" dev="ervandew">
+        Create installer
+        <ul>
+          <li>Verify jdk, vim, and eclipse versions.</li>
+          <li>
+            Extract vim files according to platform (w/ user override option).
+          </li>
+          <li>Stop eclim.</li>
+          <li>Prompt for optional backup of previous eclim plugin.</li>
+          <li>Extract new eclim plugin to eclipse.</li>
+          <li>
+            Install / update window's service (keep linux init.d script as a
+            manual step, since it shouldn't need to be updated often and will
+            contain user defined values).
+          </li>
+          <li>
+            When eclim has additional eclipse plugins (support for third party
+            provided functionality), allow user to choose which plugins to
+            install.  Validate third party plugin versions and maybe automate
+            installation or upgrading of the dependent third party plugins for
+            the user.
+          </li>
+        </ul>
+        Windows: use <a href="http://nsis.sourceforge.net">nsis</a><br/>
+        Linux:
+        <a href="http://linux.org.mt/article/selfextract#N10093">
+          self installing shell script
+        </a>
+      </action>
+      <action context="ctags" dev="ervandew">
+        Create a java based ctags that allows more robust regex for ctag
+        patterns (replace .ctags).
+      </action>
       <action context="languages" dev="ervandew">
         Support for other languages.
         <ul>
           <li>
-            <strong>c/c++</strong><br/> http://www.eclipse.org/cdt/
+            <a href="http://www.eclipse.org/cdt/">c/c++</a>
           </li>
           <li>
-            <strong>cobol</strong><br/> http://www.eclipse.org/cobol/
+            <a href="http://www.eclipse.org/cobol/">cobol</a>
           </li>
           <li>
-            <strong>javascript</strong><br/> http://www.ee.ryerson.ca/~hkataria/
+            <a href="http://www.ee.ryerson.ca/~hkataria/">javascript</a>
           </li>
           <li>
-            <strong>perl</strong><br/> http://e-p-i-c.sourceforge.net/
+            <a href="http://e-p-i-c.sourceforge.net/">perl</a>
           </li>
           <li>
-            <strong>php</strong><br/> http://www.phpeclipse.net
+            <a href="http://www.phpeclipse.net">php</a>
           </li>
           <li>
-            <strong>python</strong><br/> http://pydev.sourceforge.net/
+            <a href="http://pydev.sourceforge.net/">python</a>
           </li>
           <li>
-            <strong>ruby</strong><br/>
-            http://rubyeclipse.sourceforge.net/
-            http://www.radrails.org/
+            <a href="http://rubyeclipse.sourceforge.net/">ruby</a><br/>
+            <a href="http://www.radrails.org/">rails</a>
           </li>
         </ul>
         These will be prioritized by demand... My personal preference would be:
@@ -217,16 +249,18 @@
       <action context="code analysis" dev="ervandew">
         additional source code analysis
         <ul>
-          <li>PMD - http://pmd.sourceforge.net/</li>
-          <li>Lint4j - http://www.jutils.com/</li>
+          <li><a href="http://pmd.sourceforge.net/">PMD</a></li>
+            <li><a href="http://www.jutils.com/">Lint4j</a></li>
           <li>
-            Coverclipse - http://coverlipse.sourceforge.net<br/>
-            Other code coverage tools -
-            (http://java-source.net/open-source/code-coverage)
+            <a href="http://coverlipse.sourceforge.net">Coverclipse</a><br/>
+            <a href="http://java-source.net/open-source/code-coverage">
+              Other code coverage tools
+            </a>
           </li>
           <li>
-            Other code analyizers -
-            http://java-source.net/open-source/code-analyzers
+            <a href="http://java-source.net/open-source/code-analyzers">
+              Other code analyizers
+            </a>
           </li>
         </ul>
       </action>
@@ -256,17 +290,30 @@
       </action>
       <action context="code format" dev="ervandew">
         Find best way to configure eclipse code format tab style from within
-        eclim.
+        eclim.<br/>
+        <source>
+          import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
+
+          (JavaCore|IJavaProject).setOption(
+            DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR :
+              DefaultCodeFormatterConstants.MIXED, JavaCore.TAB, JavaCore.SPACE
+            DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE
+            DefaultCodeFormatterConstants.FORMATTER_USE_TABS_ONLY_FOR_LEADING_INDENTATIONS :
+              DefaultCodeFormatterConstants.TRUE|FALSE
+          )
+        </source>
       </action>
       <action context="aspectj" dev="ervandew">
-        AspectJ support via AJDT (http://www.eclipse.org/ajdt)
+        AspectJ support via <a href="http://www.eclipse.org/ajdt">AJDT</a>
       </action>
       <action context="xsd" dev="ervandew">
-        XSD support (http://www.eclipse.org/xsd)
+        <a href="http://www.eclipse.org/xsd">XSD</a>
       </action>
       <action context="wtp" dev="ervandew">
-        Possible integration w/ eclipse web tools platform
-        (http://eclipse.org/webtools/index.html)
+        Possible integration w/
+        <a href="http://eclipse.org/webtools/index.html">
+          eclipse web tools platform
+        </a>
       </action>
       <action context="database" dev="ervandew">
         Database integration
