@@ -180,6 +180,13 @@
         it's actually quite simple, and as usual, I'm open to any and all
         comments and suggestions.
       </p>
+      <note>
+        Alternate searching is bound to the performance of the file system and
+        as such, the response time on Windows can be significantly slower than
+        Linux.  The biggest impact is when searching for 'implementors',
+        'references', and 'all'.  The number of and depth of the directories in
+        your vim 'path' option can also impact performance.
+      </note>
     </section>
   </body>
 </document>
