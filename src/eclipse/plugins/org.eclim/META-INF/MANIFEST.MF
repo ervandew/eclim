@@ -6,6 +6,7 @@ Bundle-SymbolicName: org.eclim; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-ClassPath: .,
   eclim.jar,
+  lib/commons-beanutils-1.7.0.jar,
   lib/commons-cli-1.0.jar,
   lib/commons-collections-3.1.jar,
   lib/commons-io-1.1-dev.jar,
