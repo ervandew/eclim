@@ -15,8 +15,12 @@
  */
 package org.eclim.command.project;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanComparator;
 
 import org.eclim.command.OutputFilter;
 
@@ -31,6 +35,9 @@ import org.eclim.server.eclipse.OptionInstance;
 public class ProjectInfoFilter
   implements OutputFilter
 {
+  private static Comparator OPTION_COMPARATOR =
+    new BeanComparator("name");
+
   /**
    * {@inheritDoc}
    */
@@ -42,6 +49,8 @@ public class ProjectInfoFilter
     if(list.size() > 0){
       // list of project's current settings.
       if(list.get(0) instanceof OptionInstance){
+        // sort the list
+        Collections.sort(list, OPTION_COMPARATOR);
         for(Iterator ii = list.iterator(); ii.hasNext();){
           OptionInstance option = (OptionInstance)ii.next();
           if(buffer.length() > 0){
