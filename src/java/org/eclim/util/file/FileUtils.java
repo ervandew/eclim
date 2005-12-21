@@ -21,6 +21,8 @@ import java.io.InputStreamReader;
 
 import java.util.Enumeration;
 
+import java.util.regex.Pattern;
+
 import javax.naming.CompositeName;
 
 import org.apache.commons.io.FilenameUtils;
@@ -42,8 +44,8 @@ public class FileUtils
 {
   private static final Logger logger = Logger.getLogger(FileUtils.class);
 
-  public static final String JAR_PREFIX = "jar:";
-  public static final String ZIP_PREFIX = "zip:";
+  public static final String JAR_PREFIX = "jar://";
+  public static final String ZIP_PREFIX = "zip://";
   public static final String JAR_EXT = ".jar";
   public static final String ZIP_EXT = ".zip";
 
@@ -133,6 +135,9 @@ public class FileUtils
       return _file;
     }
 
+    // convert to unix path separator so CompositeName can parse it.
+    _file = _file.replace('\\', '/');
+
     // otherwise do some convertion.
     StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(_file));
 
@@ -156,10 +161,10 @@ public class FileUtils
             String path = FilenameUtils.getFullPath(buffer.toString());
             if(path.endsWith(JAR_EXT)){
               buffer = new StringBuffer(JAR_PREFIX)
-                .append(path).append('!').append(name);
+                .append(path).append('!').append('/').append(name);
             }else if(path.endsWith(ZIP_EXT)){
               buffer = new StringBuffer(ZIP_PREFIX)
-                .append(path).append('!').append(name);
+                .append(path).append('!').append('/').append(name);
             }
           }
         }
