@@ -63,6 +63,7 @@
   let s:command_ping = "-command ping"
   let s:command_shutdown = "-command shutdown"
   let s:IgnoreConnectionRefused = 0
+  let s:connection_refused = 'connect: Connection refused'
 " }}}
 
 " Echo(message) {{{
@@ -440,6 +441,7 @@ function! ExecuteEclim (args, ...)
     echom "Debug: " . command
   endif
 
+  call Echo("eclim: executing (Ctrl-C to cancel)...")
   " caller requested alternate method of execution to avoid apprent vim issue
   " that causes system() to hang on large results.
   if len(a:000) > 0
@@ -452,6 +454,7 @@ function! ExecuteEclim (args, ...)
     let result = system(command)
     let result = substitute(result, '\(.*\)\n$', '\1', '')
   endif
+  call Echo("")
 
   " check for errors
   let error = ''
@@ -462,7 +465,10 @@ function! ExecuteEclim (args, ...)
   endif
 
   if error != ''
-    if s:IgnoreConnectionRefused && error == 'connect: Connection refused'
+    if s:IgnoreConnectionRefused && error == s:connection_refused
+      return
+    elseif error == s:connection_refused
+      call Echo("eclimd not running.")
       return
     endif
     echoe error | echoe 'while executing command: ' . command
