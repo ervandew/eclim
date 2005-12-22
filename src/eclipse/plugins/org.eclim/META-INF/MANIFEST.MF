@@ -21,6 +21,8 @@ Bundle-ClassPath: .,
   lib/spring-context-1.2.3.jar,
   lib/spring-core-1.2.3.jar,
   lib/velocity-1.4.jar,
+  lib/xerces-2.7.1.jar,
+  lib/xml-apis.jar,
   lib/xstream-1.1.2.jar
 Bundle-Activator: org.eclim.server.eclipse.EclimPlugin
 Bundle-Localization: plugin

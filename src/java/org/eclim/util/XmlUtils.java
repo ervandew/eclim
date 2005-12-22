@@ -65,7 +65,8 @@ public class XmlUtils
   public static Error[] validateXml (String _filename, String _schema)
     throws Exception
   {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
+    // doesn't work on jdk < 1.5
+    /*SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setNamespaceAware(true);
     factory.setValidating(true);
 
@@ -77,7 +78,23 @@ public class XmlUtils
         "http://java.sun.com/xml/jaxp/properties/schemaSource",
         "file://" + _schema);
 
-    return validate(_filename, parser);
+    return validate(_filename, parser);*/
+
+    ErrorAggregator handler = new ErrorAggregator(_filename);
+    org.apache.xerces.parsers.SAXParser parser =
+      new org.apache.xerces.parsers.SAXParser();
+    parser.setFeature("http://xml.org/sax/features/validation", true);
+    parser.setFeature("http://apache.org/xml/features/validation/schema", true);
+    parser.setFeature(
+        "http://apache.org/xml/features/validation/schema-full-checking", true);
+    parser.setProperty(
+        "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
+        _schema.replace('\\', '/'));
+        //"file://" + _schema.replace('\\', '/'));
+    parser.setErrorHandler(handler);
+    parser.parse(_filename);
+
+    return handler.getErrors();
   }
 
   /**
