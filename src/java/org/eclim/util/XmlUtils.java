@@ -25,6 +25,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.command.Error;
 
 import org.xml.sax.SAXException;
@@ -40,6 +42,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlUtils
 {
+  private static final Logger logger = Logger.getLogger(XmlUtils.class);
+
   /**
    * Validate the supplied xml file.
    *
@@ -49,10 +53,31 @@ public class XmlUtils
   public static Error[] validateXml (String _filename)
     throws Exception
   {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
+    // jdk < 1.5 requires a doctype to validate (won't just check well formness
+    // if no doctype specified like 1.5 does)
+    /*SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setValidating(true);
 
-    return validate(_filename, factory.newSAXParser());
+    return validate(_filename, factory.newSAXParser());*/
+
+    ErrorAggregator handler = new ErrorAggregator(_filename);
+    org.apache.xerces.parsers.SAXParser parser =
+      new org.apache.xerces.parsers.SAXParser();
+    parser.setFeature("http://xml.org/sax/features/validation", true);
+    parser.setErrorHandler(handler);
+    try{
+      parser.parse(_filename);
+    }catch(SAXParseException spe){
+      return new Error[]{
+        new Error(
+            spe.getMessage(),
+            _filename,
+            spe.getLineNumber(),
+            spe.getColumnNumber(),
+            false)};
+    }
+
+    return handler.getErrors();
   }
 
   /**
@@ -92,7 +117,17 @@ public class XmlUtils
         _schema.replace('\\', '/'));
         //"file://" + _schema.replace('\\', '/'));
     parser.setErrorHandler(handler);
-    parser.parse(_filename);
+    try{
+      parser.parse(_filename);
+    }catch(SAXParseException spe){
+      return new Error[]{
+        new Error(
+            spe.getMessage(),
+            _filename,
+            spe.getLineNumber(),
+            spe.getColumnNumber(),
+            false)};
+    }
 
     return handler.getErrors();
   }
@@ -111,7 +146,8 @@ public class XmlUtils
     try{
       _parser.parse(_filename, handler);
     }catch(SAXParseException spe){
-      // handler will catch these
+      // handler should catch these
+      logger.debug("Unhandled SAXParseException", spe);
     }
 
     return handler.getErrors();
