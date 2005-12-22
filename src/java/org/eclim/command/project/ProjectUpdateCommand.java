@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.Services;
 
 import org.eclim.client.Options;
@@ -72,7 +74,11 @@ import org.eclipse.jdt.core.JavaConventions;
 public class ProjectUpdateCommand
   extends AbstractCommand
 {
-  private static final Pattern STATUS_PATTERN = Pattern.compile(".*/(.*)'.*");
+  private static final Logger logger =
+    Logger.getLogger(ProjectUpdateCommand.class);
+
+  private static final Pattern STATUS_PATTERN =
+    Pattern.compile(".*[\\\\/](.*)'.*");
 
   private String libraryRootPreference;
 
@@ -184,7 +190,7 @@ public class ProjectUpdateCommand
     String pattern = matcher.replaceFirst("$1");
 
     // find the pattern in the classpath file.
-    matcher = Pattern.compile(pattern).matcher(_contents);
+    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(_contents);
     if(matcher.find()){
       int[] position = FileUtils.offsetToLineColumn(_filename, matcher.start());
       line = position[0];
