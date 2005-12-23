@@ -29,28 +29,17 @@
     </authors>
   </header>
   <body>
-    <section id="element">
-      <title>Element Search</title>
-      <p>
-        Element searching allows you to place the cursor over just about any
-        element in a source file (method call, class name, field) and search for
-        the declarations or references of that element using the command<br/>
-        &nbsp;&nbsp;<strong>:JavaSearch</strong>
-      </p>
-      <p>
-        All of the results will be placed into vim's quickfix window so that you
-        can easily navigate the results.  If only one result is found and that
-        result is in the current source file, the cursor will be moved to that
-        element found.
-      </p>
-    </section>
     <section id="pattern">
       <title>Pattern Search</title>
       <p>
         Pattern searching provides a means to widen a search beyond a single
         element.  A pattern search can be executed using the command<br/>
         &nbsp;&nbsp;<strong>:JavaSearch</strong> -p &lt;pattern&gt; -t &lt;type&gt; -x
-        &lt;context&gt;
+        &lt;context&gt; -s &lt;scope&gt;
+      </p>
+      <p>
+        All of the results will be placed into vim's quickfix window so that you
+        can easily navigate the results.
       </p>
       <note>
         Vim command completion is supported through out the command with the
@@ -89,13 +78,39 @@
           context: The context to search under where possible context values
           include
           <ul>
-            <li>all</li>
-            <li>declarations</li>
-            <li>implementors</li>
-            <li>references</li>
+            <li>all - All occurances.</li>
+            <li>declarations - Declarations matching the pattern or element.</li>
+            <li>implementors - Implementors of the pattern or element.</li>
+            <li>references - References of the pattern or element.</li>
+          </ul>
+        </li>
+        <li>
+          scope: The scope of the search where possible context values include
+          <ul>
+            <li>all - Search the whole workspace.</li>
+            <li>
+              project - Search the current project, dependent projects, and
+              libraries.
+            </li>
+            <li>type - Search only in the current type (source file).</li>
           </ul>
         </li>
       </ul>
+    </section>
+    <section id="element">
+      <title>Element Search</title>
+      <p>
+        Element searching allows you to place the cursor over just about any
+        element in a source file (method call, class name, field) and perform a
+        search for that element.  Performing an element search is the same as
+        performing a pattern search with the exception that you do not specify
+        the -p option since the element under the cursor will be searched for
+        instead.
+      </p>
+      <p>
+        If only one result is found and that result is in the current source
+        file, the cursor will be moved to that element found.
+      </p>
     </section>
     <section id="alternate">
       <title>Alternate Searching</title>
