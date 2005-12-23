@@ -70,9 +70,12 @@
               Opera<br/>let g:EclimBrowser = 'opera "&lt;url&gt;"'
             </li>
             <li>
-              IE<br/>let g:EclimBrowser = 'iexplorer "&lt;url&gt;"'
+              IE<br/>let g:EclimBrowser = 'iexplore &lt;url&gt;'
             </li>
           </ul>
+          Note: The above examples assume that the browser executable is in your
+          path. On windows machines they won't be by default, so you will need
+          to add them.
         </li>
       </ul>
     </section>

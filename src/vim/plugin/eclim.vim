@@ -404,22 +404,32 @@ endfunction " }}}
 " View the supplied url in a browser.
 function! ViewInBrowser (url)
   if !exists("g:EclimBrowser")
-    call Echo("Before viewing files in browser, you must first set" .
+    call Echo("Before viewing files in a browser, you must first set" .
       \ " g:EclimBrowser to the proper value for your system.")
-    echo "IE      - let g:EclimBrowser = 'iexplorer \"<url>\"'"
     echo "Firefox - let g:EclimBrowser = 'firefox \"<url>\"'"
     echo "Mozilla - let g:EclimBrowser = 'mozilla \"<url>\"'"
+    echo "IE      - let g:EclimBrowser = 'iexplore <url>'"
+    echo "Note: The above examples assume that the browser executable " .
+      \ "is in your path."
     return
   endif
 
-  if g:EclimBrowser !~ '&\s*$'
-    let g:EclimBrowser = g:EclimBrowser . ' &'
+  if has("win32") || has("win64")
+    if g:EclimBrowser !~ '^[!]\?start'
+      let g:EclimBrowser = 'start ' . g:EclimBrowser
+    endif
+  else
+    if g:EclimBrowser !~ '&\s*$'
+      let g:EclimBrowser = g:EclimBrowser . ' &'
+    endif
   endif
+
   if g:EclimBrowser !~ '^\s*!'
     let g:EclimBrowser = '!' . g:EclimBrowser
   endif
 
-  let command = escape(substitute(g:EclimBrowser, '<url>', a:url, ''), '#')
+  let url = substitute(a:url, '\', '/', 'g')
+  let command = escape(substitute(g:EclimBrowser, '<url>', url, ''), '#')
   silent! exec command
   exec "normal \<c-l>"
 endfunction " }}}
