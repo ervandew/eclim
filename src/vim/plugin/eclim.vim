@@ -420,7 +420,7 @@ function! ViewInBrowser (url)
   endif
 
   let command = escape(substitute(g:EclimBrowser, '<url>', a:url, ''), '#')
-  silent exec command
+  silent! exec command
   exec "normal \<c-l>"
 endfunction " }}}
 
