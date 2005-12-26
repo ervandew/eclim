@@ -62,6 +62,17 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_2005_12_26">
+        <title>2005-12-26</title>
+        <p>
+          New version of eclim (1.1.0) is now available.<br/>
+          All questions, issues, suggestions are welcome and encouraged.
+        </p>
+        <p>
+          To see a list of what's new / changed, be sure to take a look at the
+          <a href="changes.html#version_1.1.0">release notes</a>.
+        </p>
+      </section>
       <section id="news_2005_10_16">
         <title>2005-10-16</title>
         <p>
@@ -74,7 +85,7 @@
           coming in future releases.
         </p>
       </section>
-      <section id="news_2005_09_11">
+      <!--section id="news_2005_09_11">
         <title>2005-09-11</title>
         <p>
           Several new additions over the past couple weeks:
@@ -158,7 +169,7 @@
           interface.  Going forward, I want to move more of that functionality
           into vim.
         </p>
-      </section>
+      </section-->
     </section>
   </body>
 </document>
