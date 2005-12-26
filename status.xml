@@ -282,7 +282,9 @@
         </ol>
       </action>
       <action context="todo/fixme" dev="ervandew">
-        Command to add all FIXME/TODO into a grep quickfix.
+        Command to add all FIXME/TODO into a grep quickfix.<br/>
+        The eclipse compiler will pick these up as warnings, so may be able to
+        use that.
       </action>
       <action context="folding" dev="ervandew">
         Lots of folding support... comments, code blocks, xml, html.<br/>
@@ -362,7 +364,7 @@
   </todo>
 
   <changes>
-    <release version="1.1.0" date="unreleased">
+    <release version="1.1.0" date="Dec 26, 2005">
       <action dev="ervandew" type="add" context="Java Functionality">
         <a href="vim/java/source.html">Source validation</a>.
       </action>
