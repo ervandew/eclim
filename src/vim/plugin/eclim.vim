@@ -470,7 +470,10 @@ function! ExecuteEclim (args, ...)
   let error = ''
   if v:shell_error && result =~ 'Exception:'
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
-  elseif v:shell_error
+
+  " ignoring code 227 since it appears to be a false error that i can't
+  " reproduce at the command line, only within vim.
+  elseif v:shell_error && v:shell_error != 227
     let error = result
   endif
 
@@ -550,7 +553,6 @@ function! CommandCompleteDir (argLead, cmdLine, cursorPos)
 endfunction " }}}
 
 " ParseCommandCompletionResults(args) {{{
-" Parses the supplied argument line into a list of args.
 " Bit of a hack for vim's lack of support for escaped spaces in custom
 " completion.
 function! ParseCommandCompletionResults (argLead, results)
