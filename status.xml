@@ -364,6 +364,26 @@
   </todo>
 
   <changes>
+    <release version="1.1.1" date="unreleased">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Code completion results now sorted by type and then alphabetically.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Code corrections that cannot be applied in the standard way (those
+        with no previews) are excluded until for now to prevent loss of code.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Simple searching from spring / hiberate / web.xml files is fixed.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Java import command is now restricted to the current project.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Xml validation errors that occur when no dtd is defined are filtered
+        out (limitation of using xerces to support jdk 1.4).
+      </action>
+    </release>
+
     <release version="1.1.0" date="Dec 26, 2005">
       <action dev="ervandew" type="add" context="Java Functionality">
         <a href="vim/java/source.html">Source validation</a>.
