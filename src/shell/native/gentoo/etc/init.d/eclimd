@@ -1,0 +1,17 @@
+#!/sbin/runscript
+
+depend() {
+  need net
+}
+
+start() {
+  ebegin "Starting eclimd"
+  su $ECLIM_USER -c "source /etc/profile && $ECLIM_HOME/bin/eclimd > /dev/null &"
+  eend $?
+}
+
+stop() {
+  ebegin "Stopping eclimd"
+  su $ECLIM_USER -c "source /etc/profile && $ECLIM_HOME/bin/eclim -command shutdown"
+  eend
+}
