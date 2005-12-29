@@ -382,9 +382,22 @@
         Xml validation errors that occur when no dtd is defined are filtered
         out (limitation of using xerces to support jdk 1.4).
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed logging template code for slf4j.
+      </action>
+      <action dev="ervandew" type="add" context="Java Functionality">
+        Added CursorHold autocommand that shows the current error, if any, on
+        the current cursor line.
+      </action>
     </release>
 
     <release version="1.1.0" date="Dec 26, 2005">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Code completion, searching, etc fixed on files with fileformat == 'dos'.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Several other minor fixes and enhancements.
+      </action>
       <action dev="ervandew" type="add" context="Java Functionality">
         <a href="vim/java/source.html">Source validation</a>.
       </action>
@@ -421,15 +434,6 @@
         Added validation of the .classpath file when saving.  Errors are then
         reported via vim's quickfix.
       </action>
-      <action dev="ervandew" type="add" context="Xml Functionality">
-        <a href="vim/xml/validate.html">Xml validation</a>.
-      </action>
-      <action dev="ervandew" type="fix" context="Bug Fixes">
-        Code completion, searching, etc fixed on files with fileformat == 'dos'.
-      </action>
-      <action dev="ervandew" type="fix" context="Bug Fixes">
-        Several other minor fixes and enhancements.
-      </action>
       <action dev="ervandew" type="update" context="Vim Changes">
         A few vim scripts were renamed, so you will need to delete the old file
         when upgrading.
@@ -449,6 +453,9 @@
             </li>
           </ul>
         </warning>
+      </action>
+      <action dev="ervandew" type="add" context="Xml Functionality">
+        <a href="vim/xml/validate.html">Xml validation</a>.
       </action>
     </release>
     <release version="1.0.0" date="Oct 16, 2005">
