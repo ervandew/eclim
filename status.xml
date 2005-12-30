@@ -385,9 +385,15 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed logging template code for slf4j.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on
         the current cursor line.
+      </action>
+      <action dev="ervandew" type="update" context="Vim">
+        Removed global variables g:EclimDebug and g:EclimEchoHighlight in favor
+        of new g:EclimLogLevel and the corresponding highlight varibles.  See
+        the <a href="vim/index.html#configuration">vim configuration</a>
+        page for details.
       </action>
     </release>
 
@@ -398,43 +404,43 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Several other minor fixes and enhancements.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/source.html">Source validation</a>.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/doc.html">Javadoc</a> viewing.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/impl.html">Override/Impl</a> stub generation.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/bean.html">Bean getter/setter</a> generation.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/junit.html">JUnit</a> test method stub generation.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/search.html#alternate">Alternate searching</a>
         in code bases outside of an eclipse project.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/correct.html">Code correction</a> via eclipse
         quickfix functionality.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         Support for viewing source files located in archives (zip, jar) when
         searching.<br/>
         Support for generating a source prototype when viewing search results
         that do not have a corresponding source file attached.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         Added some handy <a href="vim/java/abbreviations.html">abbreviations</a>.
       </action>
-      <action dev="ervandew" type="add" context="Java Functionality">
+      <action dev="ervandew" type="add" context="Java">
         Added validation of the .classpath file when saving.  Errors are then
         reported via vim's quickfix.
       </action>
-      <action dev="ervandew" type="update" context="Vim Changes">
+      <action dev="ervandew" type="update" context="Vim">
         A few vim scripts were renamed, so you will need to delete the old file
         when upgrading.
         <warning>
@@ -454,7 +460,7 @@
           </ul>
         </warning>
       </action>
-      <action dev="ervandew" type="add" context="Xml Functionality">
+      <action dev="ervandew" type="add" context="Xml">
         <a href="vim/xml/validate.html">Xml validation</a>.
       </action>
     </release>

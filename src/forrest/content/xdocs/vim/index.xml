@@ -46,8 +46,28 @@
       </p>
       <ul>
         <li>
-          <strong>g:EclimDebug</strong> (Default: 0)<br/>
-          Setting this variable to 1 will turn on some simple debugging.
+          <strong>g:EclimLogLevel</strong> (Default: 5)<br/>
+          Much like the vim 'verbose' option, this variable allows you to
+          control the level of output from eclim as follows:
+          <ul>
+            <li>&lt;= 0: No output.</li>
+            <li>&gt;= 1: Fatal errors.</li>
+            <li>&gt;= 2: Errors.</li>
+            <li>&gt;= 3: Warning messages.</li>
+            <li>&gt;= 4: Info messages.</li>
+            <li>&gt;= 5: Debug messages.</li>
+            <li>&gt;= 6: Trace messages.</li>
+          </ul>
+          Each level also has a corresponding variable to set the highlighting
+          group used for the text.
+          <ul>
+            <li><strong>g:EclimFatalHighlight</strong> (Default: "Error")</li>
+            <li><strong>g:EclimErrorHighlight</strong> (Default: "Error")</li>
+            <li><strong>g:EclimWarningHighlight</strong> (Default: "WarningMsg")</li>
+            <li><strong>g:EclimInfoHighlight</strong> (Default: "Statement")</li>
+            <li><strong>g:EclimDebugHighlight</strong> (Default: "Normal")</li>
+            <li><strong>g:EclimTraceHighlight</strong> (Default: "Normal")</li>
+          </ul>
         </li>
         <li>
           <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
@@ -76,6 +96,12 @@
           Note: The above examples assume that the browser executable is in your
           path. On windows machines they won't be by default, so you will need
           to add them.
+        </li>
+        <li>
+          <strong>g:EclimShowCurrentError</strong> (Default: 1)<br/>
+          This variable determines whether or not a CursorHold autocommand is
+          created that will echo the error associated with the current line if
+          any error exists.  Setting this variable to 0 disables this feature.
         </li>
       </ul>
     </section>

@@ -27,12 +27,32 @@
 " }}}
 
 " Global Variables {{{
-  if !exists("g:EclimDebug")
-    let g:EclimDebug = 0
+  if !exists("g:EclimShowCurrentError")
+    let g:EclimShowCurrentError = 1
   endif
-  if !exists("g:EclimEchoHighlight")
-    let g:EclimEchoHighlight = "Statement"
+
+  if !exists("g:EclimLogLevel")
+    let g:EclimLogLevel = 5
   endif
+  if !exists("g:EclimTraceHighlight")
+    let g:EclimTraceHighlight = "Normal"
+  endif
+  if !exists("g:EclimDebugHighlight")
+    let g:EclimDebugHighlight = "Normal"
+  endif
+  if !exists("g:EclimInfoHighlight")
+    let g:EclimInfoHighlight = "Statement"
+  endif
+  if !exists("g:EclimWarningHighlight")
+    let g:EclimWarningHighlight = "WarningMsg"
+  endif
+  if !exists("g:EclimErrorHighlight")
+    let g:EclimErrorHighlight = "Error"
+  endif
+  if !exists("g:EclimFatalHighlight")
+    let g:EclimFatalHighlight = "Error"
+  endif
+
   if !exists("g:EclimEchoErrorHighlight")
     let g:EclimEchoErrorHighlight = "Error"
   endif
@@ -66,27 +86,58 @@
   let s:connection_refused = 'connect: Connection refused'
 " }}}
 
-" Echo(message) {{{
-" Echos the supplied message.
-function! Echo (message)
+" EchoTrace(message) {{{
+function! EchoTrace (message)
+  call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
+endfunction " }}}
+
+" EchoDebug(message) {{{
+function! EchoDebug (message)
+  call s:EchoLevel(a:message, 5, g:EclimDebugHighlight)
+endfunction " }}}
+
+" EchoInfo(message) {{{
+function! EchoInfo (message)
+  call s:EchoLevel(a:message, 4, g:EclimInfoHighlight)
+endfunction " }}}
+
+" EchoWarning(message) {{{
+function! EchoWarning (message)
+  call s:EchoLevel(a:message, 3, g:EclimWarningHighlight)
+endfunction " }}}
+
+" EchoError(message) {{{
+function! EchoError (message)
+  call s:EchoLevel(a:message, 2, g:EclimErrorHighlight)
+endfunction " }}}
+
+" EchoFatal(message) {{{
+function! EchoFatal (message)
+  call s:EchoLevel(a:message, 1, g:EclimFatalHighlight)
+endfunction " }}}
+
+" EchoLevel(message) {{{
+" Echos the supplied message at the supplied level with the specified
+" highlight.
+function! s:EchoLevel (message, level, highlight)
   " only echo if the result is not 0, which signals that ExecuteEclim failed.
-  if a:message != "0"
-    exec "echohl " g:EclimEchoHighlight
+  if a:message != "0" && g:EclimLogLevel >= a:level
+    exec "echohl " . a:highlight
     redraw
-    echo a:message
+    echom a:message
     echohl None
   endif
 endfunction " }}}
 
-" EchoError(message) {{{
-" Echos the supplied error message.
-function! EchoError (message)
-  let saved = g:EclimEchoHighlight
-  let g:EclimEchoHighlight = g:EclimEchoErrorHighlight
-
-  call Echo(a:message)
-
-  let g:EclimEchoHighlight = saved
+" Echo(message) {{{
+" Echos a message using the info highlight regarless of what log level is set.
+function! Echo (message)
+  if a:message != "0"
+    exec "echohl " . g:EclimInfoHighlight
+    redraw
+    echom a:message
+    echohl None
+  endif
 endfunction " }}}
 
 " ErrorsDisplay(errors) {{{
@@ -106,8 +157,8 @@ function! ErrorsDisplay (errors)
   call map(errors, 'v:val.lnum')
   call map(warnings, 'v:val.lnum')
 
-  call SignsPlace("errors", ">>", "Error", errors)
-  call SignsPlace("warnings", ">>", "WarningMsg", warnings)
+  call SignsPlace("errors", ">>", g:EclimErrorHighlight, errors)
+  call SignsPlace("warnings", ">>", g:EclimWarningHighlight, warnings)
 endfunction " }}}
 
 " ErrorsDisplayClear() {{{
@@ -115,6 +166,9 @@ endfunction " }}}
 function! ErrorsDisplayClear ()
   call SignsClear("errors")
   call SignsClear("warnings")
+  " sometimes vim doesn't seem to want to redraw and remove the signs from
+  " display.
+  exec "normal \<C-L>"
 endfunction " }}}
 
 " FillTemplate(prefix, suffix) {{{
@@ -338,6 +392,29 @@ function! RefreshFile ()
   silent write!
 endfunction " }}}
 
+" ShowCurrentError() {{{
+" Shows the error on the cursor line if one.
+function! s:ShowCurrentError ()
+  let line = line('.')
+  let col = col('.')
+
+  let errornum = 0
+  let index = 0
+  let errors = getqflist()
+  for error in errors
+    let index += 1
+    if error.lnum == line && error.bufnr == bufnr("%")
+      if errornum == 0 || col >= error.col
+        let errornum = index
+      endif
+    endif
+  endfor
+
+  if errornum > 0
+    echo "(" . errornum . " of " . len(errors) . "): " . errors[errornum - 1].text
+  endif
+endfunction " }}}
+
 " SignsClear(name) {{{
 " Clears all signs in the current buffer for the supplied sign name.
 function! SignsClear (name)
@@ -404,7 +481,7 @@ endfunction " }}}
 " View the supplied url in a browser.
 function! ViewInBrowser (url)
   if !exists("g:EclimBrowser")
-    call Echo("Before viewing files in a browser, you must first set" .
+    call EchoInfo("Before viewing files in a browser, you must first set" .
       \ " g:EclimBrowser to the proper value for your system.")
     echo "Firefox - let g:EclimBrowser = 'firefox \"<url>\"'"
     echo "Mozilla - let g:EclimBrowser = 'mozilla \"<url>\"'"
@@ -447,11 +524,10 @@ function! ExecuteEclim (args, ...)
   endif
 
   let command = g:EclimPath . ' ' . substitute(a:args, '*', '+', 'g')
-  if g:EclimDebug
-    echom "Debug: " . command
-  endif
 
-  call Echo("eclim: executing (Ctrl-C to cancel)...")
+  call EchoDebug("eclim: executing (Ctrl-C to cancel)...")
+  call EchoTrace("command: " . command)
+
   " caller requested alternate method of execution to avoid apprent vim issue
   " that causes system() to hang on large results.
   if len(a:000) > 0
@@ -481,7 +557,7 @@ function! ExecuteEclim (args, ...)
     if s:IgnoreConnectionRefused && error == s:connection_refused
       return
     elseif error == s:connection_refused
-      call Echo("eclimd not running.")
+      call EchoWarning("eclimd not running.")
       return
     endif
     echoe error | echoe 'while executing command: ' . command
@@ -570,6 +646,15 @@ if !exists(":PingEclim")
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call <SID>ShutdownEclim()
+endif
+" }}}
+
+" Auto Commands{{{
+if g:EclimShowCurrentError
+  augroup eclim_show_error
+    autocmd!
+    autocmd CursorHold * call s:ShowCurrentError()
+  augroup END
 endif
 " }}}
 
