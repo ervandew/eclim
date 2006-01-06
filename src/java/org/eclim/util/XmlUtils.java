@@ -25,10 +25,13 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.apache.log4j.Logger;
 
 import org.eclim.command.Error;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -60,11 +63,13 @@ public class XmlUtils
 
     return validate(_filename, factory.newSAXParser());*/
 
-    ErrorAggregator handler = new ErrorAggregator(_filename);
+    ErrorAggregator handler = new ErrorAggregator();
     org.apache.xerces.parsers.SAXParser parser =
       new org.apache.xerces.parsers.SAXParser();
     parser.setFeature("http://xml.org/sax/features/validation", true);
     parser.setErrorHandler(handler);
+    parser.setEntityResolver(
+        new EntityResolver(FilenameUtils.getFullPath(_filename)));
     try{
       parser.parse(_filename);
     }catch(SAXParseException spe){
@@ -75,6 +80,8 @@ public class XmlUtils
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
+    }catch(Exception e){
+      return new Error[]{new Error(e.getMessage(), _filename, 1, 1, false)};
     }
 
     return handler.getErrors();
@@ -105,7 +112,7 @@ public class XmlUtils
 
     return validate(_filename, parser);*/
 
-    ErrorAggregator handler = new ErrorAggregator(_filename);
+    ErrorAggregator handler = new ErrorAggregator();
     org.apache.xerces.parsers.SAXParser parser =
       new org.apache.xerces.parsers.SAXParser();
     parser.setFeature("http://xml.org/sax/features/validation", true);
@@ -117,6 +124,8 @@ public class XmlUtils
         _schema.replace('\\', '/'));
         //"file://" + _schema.replace('\\', '/'));
     parser.setErrorHandler(handler);
+    parser.setEntityResolver(
+        new EntityResolver(FilenameUtils.getFullPath(_filename)));
     try{
       parser.parse(_filename);
     }catch(SAXParseException spe){
@@ -127,6 +136,8 @@ public class XmlUtils
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
+    }catch(Exception e){
+      return new Error[]{new Error(e.getMessage(), _filename, 1, 1, false)};
     }
 
     return handler.getErrors();
@@ -138,11 +149,13 @@ public class XmlUtils
    * @param _filename The path to the xml file.
    * @param _parser The SAXParser.
    * @return A possibly empty array of errors.
+   * FIXME: When start using this again, need to test relative xml entities
+   * (test with ant/cvs.xml).
    */
   private static Error[] validate (String _filename, SAXParser _parser)
     throws Exception
   {
-    ErrorAggregator handler = new ErrorAggregator(_filename);
+    ErrorAggregator handler = new ErrorAggregator();
     try{
       _parser.parse(_filename, handler);
     }catch(SAXParseException spe){
@@ -157,22 +170,10 @@ public class XmlUtils
    * Handler for collecting errors durring parsing and validation of a xml
    * file.
    */
-  public static class ErrorAggregator
+  private static class ErrorAggregator
     extends DefaultHandler
   {
     private List errors = new ArrayList();
-    private String filename;
-
-    /**
-     * Creates a new ErrorAggregator for reporting errors for the supplied
-     * filename.
-     *
-     * @param _filename The file being validated.
-     */
-    public ErrorAggregator (String _filename)
-    {
-      this.filename = _filename;
-    }
 
     /**
      * {@inheritDoc}
@@ -208,9 +209,13 @@ public class XmlUtils
      */
     private void addError (SAXParseException _ex, boolean _warning)
     {
+      String location = _ex.getSystemId();
+      if(location.startsWith("file://")){
+        location = location.substring("file://".length());
+      }
       errors.add(new Error(
             _ex.getMessage(),
-            filename,
+            location,
             _ex.getLineNumber(),
             _ex.getColumnNumber(),
             _warning));
@@ -224,6 +229,46 @@ public class XmlUtils
     public Error[] getErrors ()
     {
       return (Error[])errors.toArray(new Error[errors.size()]);
+    }
+  }
+
+  /**
+   * Extension to apache xerces entity manager.
+   */
+  private static class EntityResolver
+    implements org.xml.sax.EntityResolver
+  {
+    private String path;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param _path The path for all relative entities to be relative to.
+     */
+    public EntityResolver (String _path)
+    {
+      path = _path;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public InputSource resolveEntity (String _publicId, String _systemId)
+      throws SAXException, java.io.IOException
+    {
+      String location = _systemId;
+      if(location.startsWith("file:")){
+        location = location.substring("file:".length());
+        if(location.startsWith("//")){
+          location = location.substring(2);
+        }
+        if(FilenameUtils.getFullPath(location).equals(
+              FilenameUtils.getPath(location)))
+        {
+          location = FilenameUtils.concat(path, location);
+        }
+      }
+      return new InputSource(location);
     }
   }
 }
