@@ -430,8 +430,10 @@ function! SignsPlace (name, text, highlight, lines)
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
   exec "let b:sign_" . a:name . " = 1"
   for line in a:lines
-    exec "sign place " . line . " line=" . line . " name=" . a:name .
-      \ " buffer=" . bufnr('%')
+    if line > 0
+      exec "sign place " . line . " line=" . line . " name=" . a:name .
+        \ " buffer=" . bufnr('%')
+    endif
   endfor
 endfunction " }}}
 
