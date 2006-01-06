@@ -379,11 +379,24 @@
         Java import command is now restricted to the current project.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        Java src file location (for almost all java commands) now uses the full
+        path to find the file in eclipse rather than build the path from the
+        file's package declaration and class name.  Fixes cases where the
+        package name doesn't match up with the folder structure.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Xml validation errors that occur when no dtd is defined are filtered
         out (limitation of using xerces to support jdk 1.4).
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        Relative xml entities are now resolved when validating an xml file.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed logging template code for slf4j.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed possible error when removing signs for marking errors / warnings
+        for the current file.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on
