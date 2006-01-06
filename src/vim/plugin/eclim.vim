@@ -418,17 +418,13 @@ endfunction " }}}
 " SignsClear(name) {{{
 " Clears all signs in the current buffer for the supplied sign name.
 function! SignsClear (name)
-  if exists("b:sign_" . a:name)
-    exec "sign undefine " . a:name
-    exec "unlet b:sign_" . a:name
-  endif
+  silent! exec "sign undefine " . a:name
 endfunction " }}}
 
 " SignsPlace(name) {{{
 " Places signs in the current buffer.
 function! SignsPlace (name, text, highlight, lines)
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
-  exec "let b:sign_" . a:name . " = 1"
   for line in a:lines
     if line > 0
       exec "sign place " . line . " line=" . line . " name=" . a:name .
