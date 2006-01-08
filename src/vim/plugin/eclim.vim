@@ -77,6 +77,8 @@
       let g:EclimSeparator = '\'
     endif
   endif
+
+  let g:EclimQuickfixAvailable = 1
 " }}}
 
 " Script Variables {{{
@@ -392,6 +394,18 @@ function! RefreshFile ()
   silent write!
 endfunction " }}}
 
+" SetQuickfixAvailability() {{{
+" Sets the global variable that tracks whether or not the user has executed a
+" quickfix command containing results.  This allows other various commands to
+" keep from overwriting those results.
+function! s:SetQuickfixAvailability ()
+  if len(getqflist()) > 0
+    let g:EclimQuickfixAvailable = 0
+  else
+    let g:EclimQuickfixAvailable = 1
+  endif
+endfunction " }}}
+
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! s:ShowCurrentError ()
@@ -654,6 +668,11 @@ if g:EclimShowCurrentError
     autocmd CursorHold * call s:ShowCurrentError()
   augroup END
 endif
+
+augroup eclim_quickfix_cmd
+  autocmd!
+  autocmd QuickFixCmdPost * call s:SetQuickfixAvailability()
+augroup END
 " }}}
 
 " vim:ft=vim:fdm=marker
