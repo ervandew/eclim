@@ -32,8 +32,16 @@
     <p>
       When editing an xml file eclim will default to validating the file when it
       is written.  Any errors will be added to vim's quickfix window and their
-      corresponding line number noted via vim's sign functionality.  If you
-      don't want xml files validated when saving them, you can set the
+      corresponding line number noted via vim's sign functionality.
+    </p>
+    <note>
+      To prevent overwritting your quickfix buffer after a :make or :grep, eclim
+      will only place the validation errors in the quickfix buffer if the buffer
+      does not contain results from any user initiated quickfix commands (make,
+      grep, vimgrep, etc.).
+    </note>
+    <p>
+      If you don't want xml files validated when saving them, you can set the
       g:EclimXmlValidation variable described in the configuration section
       below.
     </p>
