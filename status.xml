@@ -398,6 +398,21 @@
         Fixed possible error when removing signs for marking errors / warnings
         for the current file.
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed :JavaImport to not import classes that are in the same package as
+        the current file.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed java source validation to clear out the quickfix results when all
+        errors have been fixed.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed :JavaImpl to get the interfaces of superclass lineage in addition
+        to directly implemented interfaces of the current class.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Other various bug fixes.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on
         the current cursor line.
@@ -480,11 +495,6 @@
     <release version="1.0.0" date="Oct 16, 2005">
       <action dev="ervandew" type="add" context="Eclim">
         Initial release.
-      </action>
-    </release>
-    <release version="unreleased" date="Aug 09, 2005">
-      <action dev="ervandew" type="add" context="Documentation">
-        Created eclim documentation site.
       </action>
     </release>
   </changes>
