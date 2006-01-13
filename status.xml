@@ -411,6 +411,12 @@
         to directly implemented interfaces of the current class.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        When adding methods from the resulting buffer of :JavaImpl or
+        :JUnitImpl, if the target class was an inner class of the src file,
+        then the methods were being added to the outer class instead of the
+        inner class.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
       <action dev="ervandew" type="add" context="Vim">
