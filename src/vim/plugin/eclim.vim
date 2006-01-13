@@ -489,6 +489,37 @@ function! TempWindowClear (name)
   endif
 endfunction " }}}
 
+" TempWindowCommand(command, name) {{{
+" Opens a temp window w/ the given name and contents from the result of the
+" supplied command.
+function! TempWindowCommand (command, name)
+  let filename = expand('%:p')
+
+  let line = 1
+  let col = 1
+  " if the window is open, save the cursor position
+  if bufwinnr(a:name) != -1
+    exec bufwinnr(a:name) . "winc w"
+    let line = line('.')
+    let col = col('.')
+  endif
+
+  call TempWindowClear(a:name)
+
+  let results = split(ExecuteEclim(a:command), '\n')
+  if len(results) == 1 && results[0] == '0'
+    return
+  endif
+
+  call TempWindow(a:name, results)
+
+  call cursor(line, col)
+
+  let b:filename = filename
+  autocmd! BufUnload <buffer>
+  autocmd BufUnload <buffer> call GoToBufferWindow(b:filename)
+endfunction " }}}
+
 " ViewInBrowser(url) {{{
 " View the supplied url in a browser.
 function! ViewInBrowser (url)
