@@ -161,6 +161,8 @@ function! ErrorsDisplay (errors)
 
   call SignsPlace("errors", ">>", g:EclimErrorHighlight, errors)
   call SignsPlace("warnings", ">>", g:EclimWarningHighlight, warnings)
+
+  let b:eclim_errors = a:errors
 endfunction " }}}
 
 " ErrorsDisplayClear() {{{
@@ -171,6 +173,10 @@ function! ErrorsDisplayClear ()
   " sometimes vim doesn't seem to want to redraw and remove the signs from
   " display.
   exec "normal \<C-L>"
+
+  if exists("b:eclim_errors")
+    unlet b:eclim_errors
+  endif
 endfunction " }}}
 
 " FillTemplate(prefix, suffix) {{{
@@ -409,23 +415,25 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! s:ShowCurrentError ()
-  let line = line('.')
-  let col = col('.')
+  if exists("b:eclim_errors")
+    let line = line('.')
+    let col = col('.')
 
-  let errornum = 0
-  let index = 0
-  let errors = getqflist()
-  for error in errors
-    let index += 1
-    if error.lnum == line && error.bufnr == bufnr("%")
-      if errornum == 0 || col >= error.col
-        let errornum = index
+    let errornum = 0
+    let index = 0
+    for error in b:eclim_errors
+      let index += 1
+      if error.filename == expand("%:p") && error.lnum == line
+        if errornum == 0 || col >= error.col
+          let errornum = index
+        endif
       endif
-    endif
-  endfor
+    endfor
 
-  if errornum > 0
-    echo "(" . errornum . " of " . len(errors) . "): " . errors[errornum - 1].text
+    if errornum > 0
+      echo "(" . errornum . " of " . len(b:eclim_errors) . "): "
+        \ . b:eclim_errors[errornum - 1].text
+    endif
   endif
 endfunction " }}}
 
@@ -703,6 +711,8 @@ endif
 augroup eclim_quickfix_cmd
   autocmd!
   autocmd QuickFixCmdPost * call s:SetQuickfixAvailability()
+  autocmd QuickFixCmdPost make
+    \ if exists("b:eclim_errors") | unlet b:eclim_errors | endif
 augroup END
 " }}}
 
