@@ -431,8 +431,12 @@ function! s:ShowCurrentError ()
     endfor
 
     if errornum > 0
-      echo "(" . errornum . " of " . len(b:eclim_errors) . "): "
+      let message = "(" . errornum . " of " . len(b:eclim_errors) . "): "
         \ . b:eclim_errors[errornum - 1].text
+      if &textwidth > 0 && len(message) > &textwidth
+        let message = strpart(message, 0, &textwidth - 3) . '...'
+      endif
+      echo message
     endif
   endif
 endfunction " }}}
@@ -711,8 +715,11 @@ endif
 augroup eclim_quickfix_cmd
   autocmd!
   autocmd QuickFixCmdPost * call s:SetQuickfixAvailability()
-  autocmd QuickFixCmdPost make
-    \ if exists("b:eclim_errors") | unlet b:eclim_errors | endif
+  "autocmd QuickFixCmdPost make
+  "  \ if exists("b:eclim_errors") |
+  "  \   unlet b:eclim_errors |
+  "  \   call ErrorsDisplayClear() |
+  "  \ endif
 augroup END
 " }}}
 
