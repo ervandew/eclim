@@ -82,7 +82,9 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_ping = "-command ping"
+  let s:command_ping = '-command ping'
+  let s:command_settings = '-command settings -filter vim'
+  let s:command_settings_update = '-command settings_update -s "<settings>"'
   let s:command_shutdown = "-command shutdown"
   let s:IgnoreConnectionRefused = 0
   let s:connection_refused = 'connect: Connection refused'
@@ -528,8 +530,10 @@ function! TempWindowCommand (command, name)
   call cursor(line, col)
 
   let b:filename = filename
-  autocmd! BufUnload <buffer>
-  autocmd BufUnload <buffer> call GoToBufferWindow(b:filename)
+  augroup temp_window
+    autocmd!
+    autocmd BufUnload <buffer> call GoToBufferWindow(b:filename)
+  augroup END
 endfunction " }}}
 
 " ViewInBrowser(url) {{{
@@ -643,6 +647,44 @@ function! PingEclim (echo)
   endtry
 endfunction " }}}
 
+" SaveSettings() {{{
+function! s:SaveSettings ()
+  if &modified
+    let settings = getline(1, line('$'))
+    let result = ""
+    for setting in settings
+      if setting !~ '^\s*\($\|#\)'
+        if result != ""
+          let result = result . "|"
+        endif
+        let result = result . setting
+      endif
+    endfor
+
+    let command = substitute(s:command_settings_update, '<settings>', result, '')
+    let result = ExecuteEclim(command)
+    call Echo(result)
+
+    setlocal nomodified
+  endif
+endfunction " }}}
+
+" Settings() {{{
+" Opens a window that can be used to edit the global settings.
+function! s:Settings ()
+  call TempWindowCommand(s:command_settings, "Eclim_Global_Settings")
+
+  setlocal buftype=acwrite
+  setlocal filetype=jproperties
+  setlocal noreadonly
+  setlocal modifiable
+
+  augroup eclim_settings
+    autocmd!
+    autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
+  augroup END
+endfunction " }}}
+
 " ShutdownEclim() {{{
 " Shuts down the eclimd server.
 function! s:ShutdownEclim ()
@@ -701,6 +743,9 @@ if !exists(":PingEclim")
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call <SID>ShutdownEclim()
+endif
+if !exists(":Settings")
+  command -nargs=0 Settings :call <SID>Settings()
 endif
 " }}}
 

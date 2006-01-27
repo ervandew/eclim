@@ -159,4 +159,21 @@
     </property>
   </bean>
 
+  <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">
+    <description>Handles settings update request.</description>
+    <property name="eclimPreferences" ref="eclimPreferences"/>
+  </bean>
+
+  <bean name="settings" class="org.eclim.command.admin.SettingsCommand">
+    <description>Handles retrieval of global settings..</description>
+    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.admin.SettingsFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>
