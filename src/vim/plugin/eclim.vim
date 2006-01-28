@@ -302,6 +302,26 @@ function! ListContains (list, element)
   return 0
 endfunction " }}}
 
+" MarkRestore(markLine) {{{
+" Restores the ' mark with the new line.
+function! MarkRestore (markLine)
+  let line = line('.')
+  let col = col('.')
+  call cursor(a:markLine, s:markCol)
+  mark '
+  call cursor(line, col)
+endfunction " }}}
+
+" MarkSave() {{{
+" Saves the ' mark and returns the line.
+function! MarkSave ()
+  let s:markCol = col("'`")
+echom " markLine = " . line("''")
+echom " s:markCol = " . s:markCol
+
+  return line("''")
+endfunction " }}}
+
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
 function! ParseArgs (args)
