@@ -66,6 +66,7 @@
             When viewing a junit result file allow linking from stack trace
             elements.
           </li>
+          <li>File type support of junit result files w/ search functionality.</li>
           <li>Functionality from my junit.vim plugin.</li>
         </ul>
       </action>
@@ -230,6 +231,14 @@
       <action context="run" dev="ervandew">
         Run main class and catch any exceptions into a new window and allow
         jumping to a stack trace element's referenced source location.
+      </action>
+      <action context="java_code_completion" dev="ervandew">
+        Add mappings to filter completion results by type.
+        <ul>
+          <li>&lt;C-T&gt; - show only types (interfaces, classes, enums)</li>
+          <li>&lt;C-M&gt; - show only methods</li>
+          <li>&lt;C-F&gt; - show only fields</li>
+        </ul>
       </action>
       <action context="code_completion" dev="ervandew">
         More code completion
