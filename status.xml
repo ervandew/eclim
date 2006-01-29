@@ -438,6 +438,19 @@
         the <a href="vim/index.html#configuration">vim configuration</a>
         page for details.
       </action>
+      <action dev="ervandew" type="update" context="Vim">
+        Now utilizing vim's autoload functionality to load functions on demand.
+        <br/>
+        One vim file was moved as a result, so you should delete the old file
+        when upgrading.
+        <warning>
+          <ul>
+            <li>
+              ftplugin/java/eclim_util.vim removed.
+            </li>
+          </ul>
+        </warning>
+      </action>
     </release>
 
     <release version="1.1.0" date="Dec 26, 2005">
