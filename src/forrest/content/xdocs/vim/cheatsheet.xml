@@ -42,6 +42,9 @@
       <li>
         <strong>:ShutdownEclim</strong> - Shuts down eclimd server.
       </li>
+      <li>
+        <strong>:Settings</strong> - View / edit global settings.
+      </li>
     </ul>
 
     <p><strong>Project Commands</strong></p>

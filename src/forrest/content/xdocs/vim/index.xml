@@ -120,6 +120,12 @@
           <strong>:ShutdownEclim</strong><br/>
           Shuts down the current running eclimd instance.
         </li>
+        <li>
+          <strong>:Settings</strong><br/>
+          Allows you to view / edit the global settings.
+          For project level settings see the <strong>:ProjectSettings</strong>
+          command on the <a href="project.html">project documentation page</a>.
+        </li>
       </ul>
     </section>
     <section id="plugin">

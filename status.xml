@@ -428,6 +428,9 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
+      <action dev="ervandew" type="add" context="Eclim">
+        Added support for global settings/preferences.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on
         the current cursor line.
