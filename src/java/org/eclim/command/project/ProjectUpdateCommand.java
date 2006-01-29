@@ -234,7 +234,7 @@ public class ProjectUpdateCommand
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
     String libraryDir = getEclimPreferences().getPreference(
-        _project.getProject(), libraryRootPreference, null);
+        _project.getProject(), libraryRootPreference);
 
     Collection results = new ArrayList();
 
