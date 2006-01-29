@@ -70,11 +70,13 @@
         <bean class="org.eclim.server.eclipse.Preference">
           <property name="name" value="org.eclim.java.library.root"/>
           <property name="defaultValue" value="${org.eclim.java.library.root}"/>
+          <property name="scope" ref="OPTION_ALL"/>
         </bean>
         <bean class="org.eclim.server.eclipse.Preference">
           <property name="name" value="org.eclim.java.logging.impl"/>
           <property name="defaultValue" value="${org.eclim.java.logging.impl}"/>
           <property name="regex" value="(commons-logging|log4j|slf4j|jdk)"/>
+          <property name="scope" ref="OPTION_ALL"/>
         </bean>
       </list>
     </property>
@@ -83,8 +85,30 @@
         <bean class="org.eclim.server.eclipse.Option">
           <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
           <property name="regex" value="1\.[2-5]"/>
+          <property name="scope" ref="OPTION_ALL"/>
         </bean>
       </list>
+    </property>
+  </bean>
+
+  <bean id="OPTION_ALL"
+      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField">
+      <value>org.eclim.server.eclipse.Option.ALL</value>
+    </property>
+  </bean>
+
+  <bean id="OPTION_GLOBAL"
+      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField">
+      <value>org.eclim.server.eclipse.Option.GLOBAL</value>
+    </property>
+  </bean>
+
+  <bean id="OPTION_PROJECT"
+      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField">
+      <value>org.eclim.server.eclipse.Option.PROJECT</value>
     </property>
   </bean>
 
