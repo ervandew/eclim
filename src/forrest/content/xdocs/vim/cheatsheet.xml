@@ -104,6 +104,10 @@
         implemented interfaces.
       </li>
       <li>
+        <strong>:JavaDelegate</strong> -
+        View list of methods that can delegate to the field under the cursor.
+      </li>
+      <li>
         <strong>:JUnitImpl</strong> -
         Similar to <strong>:JavaImpl</strong>, but creates test methods.
       </li>

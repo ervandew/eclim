@@ -47,16 +47,6 @@
           <li>Move types, methods, fields.</li>
         </ul>
       </action>
-      <action context="delegate" dev="ervandew">
-        Generate delegate methods for a field when wrapping that type.
-        <br/>
-        <source>
-          public void add (Object _object)
-          {
-            list.add(_object);
-          }
-        </source>
-      </action>
       <action context="junit" dev="ervandew">
         Junit integration.
         <ul>
@@ -379,7 +369,7 @@
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Code corrections that cannot be applied in the standard way (those
-        with no previews) are excluded until for now to prevent loss of code.
+        with no previews) are excluded.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Simple searching from spring / hiberate / web.xml files is fixed.
@@ -428,8 +418,15 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
+      <action dev="ervandew" type="update" context="Eclipse">
+        Eclim now depends on eclispe version 3.1.2.  The Eclipse team made some
+        improvements to how inner classes are handled that eclim now depends on.
+      </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added support for global settings/preferences.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        <a href="vim/java/delegate.html">Delegate method creation</a>.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on

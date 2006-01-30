@@ -90,8 +90,9 @@
     </p>
     <p>
       If you would like to generate stubs for all methods in an interface or
-      class, in the same window, simply hit &lt;Enter&gt; with the cursor over
-      the class name.
+      class, then simply hit &lt;Enter&gt; with the cursor over the class name
+      and stub methods will be created for each method in that class or
+      interface.
     </p>
     <note>
       The insertion of method stubs is done externally with eclipse and with

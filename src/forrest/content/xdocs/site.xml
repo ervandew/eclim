@@ -97,6 +97,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Code Correction"/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
         description="Implementation / Override Stubbing"/>
+      <delegate label="Delegate Method Creation" href="delegate.html"
+        description="Delegate Method Creation"/>
       <bean label="Java Bean Getter / Setter Generation" href="bean.html"
         description="Java Bean Getter / Setter Generation"/>
       <junit label="JUnit Integration" href="junit.html"
