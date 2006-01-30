@@ -62,6 +62,19 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_">
+        <title></title>
+        <p>
+          New version of eclim (1.1.1) is now available.<br/>
+          This is mostly a bug fix release will a few new additions.<br/>
+          Please note, that this latest version requires eclipse version 3.1.2
+          for some bug fixes and improvements.
+        </p>
+        <p>
+          To see a list of what's new / changed, be sure to take a look at the
+          <a href="changes.html#version_1.1.1">release notes</a>.
+        </p>
+      </section>
       <section id="news_2005_12_26">
         <title>2005-12-26</title>
         <p>
