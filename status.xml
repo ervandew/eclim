@@ -19,14 +19,6 @@
       <action context="windows" dev="ervandew">
         Use my BatchFileService.exe to create a Windows service for eclimd.
       </action>
-      <action context="javadoc" dev="ervandew">
-        Javadoc functionality.<br/>
-        Eclipse has setting for a project's own javadocs... where is this
-        stored (not in .project, or any of the .setting/, maybe in the
-        workspace)?<br/>
-        <code>org.eclipse.jdt.ui.JavaUI.getProjectJavadocLocation(IJavaProject)</code><br/>
-        <code>org.eclipse.jdt.ui.JavaUI.setProjectJavadocLocation(IJavaProject, URL)</code>
-      </action>
       <action context="searching" dev="ervandew">
         <p>
           Expand searching from non java source files (spring xml, hibernate
@@ -196,7 +188,7 @@
           </li>
         </ol>
       </action>
-      <action context="thrid_party" dev="ervandew">
+      <action context="third_party" dev="ervandew">
         Research third party plugins for additional functionality
         <ul>
           <li>Hibernate: JBoss IDE / Hibernate Tools</li>
