@@ -44,6 +44,14 @@
         I'll be looking into ways to remedy this situation and also talking with
         the vim developers to see if perhaps some changes to vim 7 may
         facilitate a solution as well.
+        <note>
+          I had some email correspondence with Bram on this issue and it has
+          made it into the vim todo list (<strong>:h todo</strong>).<br/><br/>
+          <code>
+            "See ":e" as a change operation, find the changes and add them to the
+            undo info.  Needed for when an external tool changes the file."
+          </code>
+        </note>
       </li>
       <li>
         <strong>Formatting (tabs vs. spaces):</strong><br/>
