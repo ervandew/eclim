@@ -78,6 +78,12 @@
           <property name="regex" value="(commons-logging|log4j|slf4j|jdk)"/>
           <property name="scope" ref="OPTION_ALL"/>
         </bean>
+        <bean class="org.eclim.server.eclipse.Preference">
+          <property name="name" value="org.eclim.java.validation.ignore.warnings"/>
+          <property name="defaultValue" value="false"/>
+          <property name="regex" value="(true|false)"/>
+          <property name="scope" ref="OPTION_ALL"/>
+        </bean>
       </list>
     </property>
     <property name="options">
