@@ -69,6 +69,9 @@
     <p>
       <strong>Configuration</strong>
     </p>
+    <p>
+      Vim Variables:
+    </p>
     <ul>
       <li>
         <strong>g:JavaImportExclude</strong><br/>
