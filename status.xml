@@ -420,6 +420,10 @@
       <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/delegate.html">Delegate method creation</a>.
       </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added <a href="server/settings.html">preference</a> to suppress
+        warnings when using java source code validation.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added CursorHold autocommand that shows the current error, if any, on
         the current cursor line.
