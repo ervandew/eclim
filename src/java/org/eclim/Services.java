@@ -15,11 +15,17 @@
  */
 package org.eclim;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
+
+import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.spring.ResourceBundleMessageSource;
 
@@ -43,27 +49,9 @@ public class Services
         System.getProperty("org.eclim.spring-factory.xml",
           "org/eclim/spring-factory.xml"));
 
-  /**
-   * Checks if the service exists.
-   *
-   * @param _type The service type.
-   * @return true if the services exists, false otherwise.
-   */
-  public static boolean containsService (Class _type)
-  {
-    return containsService(_type.getName());
-  }
-
-  /**
-   * Checks if the service exists.
-   *
-   * @param _name The service name.
-   * @return true if the services exists, false otherwise.
-   */
-  public static boolean containsService (String _name)
-  {
-    return context.containsBean(_name);
-  }
+  private static List pluginResources = new ArrayList();
+  private static Map serviceCache = new HashMap();
+  private static Map messageCache = new HashMap();
 
   /**
    * Gets a service by type.
@@ -87,18 +75,26 @@ public class Services
    */
   public static Object getService (String _name, Class _type)
   {
+    Integer index = (Integer)serviceCache.get(_name);
+    if(index == null){
+      Iterator iterator = pluginResources.iterator();
+      for(int ii = 0; iterator.hasNext();){
+        PluginResources resources = (PluginResources)iterator.next();
+        if(resources.containsService(_name)){
+          serviceCache.put(_name, new Integer(ii));
+          return resources.getService(_name, _type);
+        }
+      }
+    }else{
+      if(index.intValue() >= 0){
+        PluginResources resources =
+          (PluginResources)pluginResources.get(index.intValue());
+        return resources.getService(_name, _type);
+      }
+      return context.getBean(_name, _type);
+    }
+    serviceCache.put(_name, new Integer(-1));
     return context.getBean(_name, _type);
-  }
-
-  /**
-   * Gets all registered service names.
-   *
-   * @param _class The service type to get all names of.
-   * @return Array of service names.
-   */
-  public static String[] getAllServiceNames (Class _class)
-  {
-    return context.getBeanNamesForType(_class);
   }
 
   /**
@@ -137,6 +133,28 @@ public class Services
   public static String getMessage (String _key, Object[] _args)
   {
     try{
+      Integer index = (Integer)messageCache.get(_key);
+      if(index == null){
+        Iterator iterator = pluginResources.iterator();
+        for(int ii = 0; iterator.hasNext();){
+          try{
+            PluginResources resources = (PluginResources)iterator.next();
+            String message = resources.getMessage(_key, _args);
+            messageCache.put(_key, new Integer(ii));
+            return message;
+          }catch(NoSuchMessageException nsme){
+            // message not found in this plugin.
+          }
+        }
+      }else{
+        if(index.intValue() >= 0){
+          PluginResources resources = 
+            (PluginResources)pluginResources.get(index.intValue());
+          return resources.getMessage(_key, _args);
+        }
+        return context.getMessage(_key, _args, Locale.getDefault());
+      }
+      messageCache.put(_key, new Integer(-1));
       return context.getMessage(_key, _args, Locale.getDefault());
     }catch(NoSuchMessageException nsme){
       return _key;
@@ -150,6 +168,7 @@ public class Services
    */
   public static ResourceBundle getResourceBundle ()
   {
+    // FIXME: build an aggregate bundle from all the plugin resources.
     return ((ResourceBundleMessageSource)getService("messageSource",
           ResourceBundleMessageSource.class)).getResourceBundle();
   }
@@ -159,7 +178,23 @@ public class Services
    */
   public static void close ()
   {
+    for(Iterator ii = pluginResources.iterator(); ii.hasNext();){
+      PluginResources resources = (PluginResources)ii.next();
+      resources.close();
+      logger.info("{} closed.", resources.getClass().getName());
+    }
     context.close();
     logger.info("{} closed.", Services.class.getName());
+  }
+
+  /**
+   * Adds the supplied PluginResources instance to the list of instances that
+   * are used to locate services, messages, etc.
+   *
+   * @param _resources The PluginResources to add.
+   */
+  public static void addPluginResources (PluginResources _resources)
+  {
+    pluginResources.add(_resources);
   }
 }
