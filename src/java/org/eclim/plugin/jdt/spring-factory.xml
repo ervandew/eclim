@@ -179,4 +179,20 @@
     </property>
   </bean>
 
+  <bean name="ivy.xml"
+      class="org.eclim.plugin.jdt.command.project.classpath.IvyParser">
+    <description>
+      Parser for ivy files used to merge build dependency file into the eclipse
+      classpath.
+    </description>
+  </bean>
+
+  <bean name="project.xml"
+      class="org.eclim.plugin.jdt.command.project.classpath.MavenParser">
+    <description>
+      Parser for maven proeject files used to merge build dependency file into
+      the eclipse classpath.
+    </description>
+  </bean>
+
 </beans>

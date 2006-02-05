@@ -32,23 +32,29 @@ public class ErrorFilter
    */
   public String filter (Object _result)
   {
-    StringBuffer buffer = new StringBuffer();
-    Error[] errors = (Error[])_result;
-    for(int ii = 0; ii < errors.length; ii++){
-      if(ii > 0){
-        buffer.append('\n');
+    if (_result != null &&
+        _result.getClass().isArray() &&
+        Error.class.isAssignableFrom(_result.getClass().getComponentType()))
+    {
+      StringBuffer buffer = new StringBuffer();
+      Error[] errors = (Error[])_result;
+      for(int ii = 0; ii < errors.length; ii++){
+        if(ii > 0){
+          buffer.append('\n');
+        }
+        buffer.append(errors[ii].getFilename())
+          .append('|')
+          .append(errors[ii].getLineNumber())
+          .append(" col ")
+          .append(errors[ii].getColumnNumber())
+          .append('|')
+          .append(errors[ii].getMessage())
+          .append('|')
+          .append(errors[ii].isWarning() ? "warning" : "error");
       }
-      buffer.append(errors[ii].getFilename())
-        .append('|')
-        .append(errors[ii].getLineNumber())
-        .append(" col ")
-        .append(errors[ii].getColumnNumber())
-        .append('|')
-        .append(errors[ii].getMessage())
-        .append('|')
-        .append(errors[ii].isWarning() ? "warning" : "error");
-    }
 
-    return buffer.toString();
+      return buffer.toString();
+    }
+    return _result.toString();
   }
 }

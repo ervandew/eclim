@@ -118,20 +118,6 @@
     </property>
   </bean>
 
-  <bean name="ivy.xml" class="org.eclim.command.project.classpath.IvyParser">
-    <description>
-      Parser for ivy files used to merge build dependency file into the eclipse
-      classpath.
-    </description>
-  </bean>
-
-  <bean name="project.xml" class="org.eclim.command.project.classpath.MavenParser">
-    <description>
-      Parser for maven proeject files used to merge build dependency file into
-      the eclipse classpath.
-    </description>
-  </bean>
-
   <bean name="ping" class="org.eclim.command.admin.PingCommand">
     <description>Handles client ping request.</description>
   </bean>
@@ -158,16 +144,38 @@
 
   <bean name="project_create" class="org.eclim.command.project.ProjectCreateCommand">
     <description>Handles client project creation request.</description>
+    <property name="projectManagers">
+      <map>
+        <entry key="org.eclipse.jdt.core.javanature">
+          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager"/>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean name="project_delete" class="org.eclim.command.project.ProjectDeleteCommand">
     <description>Handles client project deletion request.</description>
+    <property name="projectManagers">
+      <map>
+        <entry key="org.eclipse.jdt.core.javanature">
+          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager"/>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
-    <property name="preferences" ref="preferences"/>
-    <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
+    <property name="projectManagers">
+      <map>
+        <entry key="org.eclipse.jdt.core.javanature">
+          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager">
+            <property name="preferences" ref="preferences"/>
+            <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
     <property name="filters">
       <map>
         <entry key="vim">
