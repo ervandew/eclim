@@ -50,7 +50,7 @@ import org.eclipse.jdt.core.IType;
 public class JUnitImplCommand
   extends ImplCommand
 {
-  private static final String TEMPLATE = "templates/java/method.vm";
+  private static final String TEMPLATE = "java/method.vm";
 
   /**
    * {@inheritDoc}

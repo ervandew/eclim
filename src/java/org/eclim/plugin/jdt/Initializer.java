@@ -49,7 +49,7 @@ public class Initializer
 {
   private static final Logger logger = Logger.getLogger(Initializer.class);
 
-  private String variables = "classpath_variables";
+  private String variables = "resources/classpath_variables";
 
   /**
    * Initialize the java env.

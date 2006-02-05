@@ -57,7 +57,7 @@ import org.eclipse.jdt.core.Signature;
 public class ImplCommand
   extends AbstractCommand
 {
-  private static final String TEMPLATE = "templates/java/method.vm";
+  private static final String TEMPLATE = "java/method.vm";
 
   /**
    * {@inheritDoc}

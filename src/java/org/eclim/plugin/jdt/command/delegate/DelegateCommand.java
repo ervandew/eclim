@@ -52,7 +52,7 @@ import org.eclipse.jdt.core.Signature;
 public class DelegateCommand
   extends ImplCommand
 {
-  private static final String TEMPLATE = "templates/java/method.vm";
+  private static final String TEMPLATE = "java/method.vm";
 
   private IField field;
   private IType delegateType;

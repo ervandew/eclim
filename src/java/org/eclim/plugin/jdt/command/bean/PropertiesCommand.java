@@ -54,7 +54,7 @@ import org.eclipse.jdt.core.Signature;
 public class PropertiesCommand
   extends AbstractCommand
 {
-  private static final String TEMPLATE = "templates/java/method.vm";
+  private static final String TEMPLATE = "java/method.vm";
 
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
