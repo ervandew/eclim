@@ -81,52 +81,6 @@
   let g:EclimQuickfixAvailable = 1
 " }}}
 
-" CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for files.
-function! CommandCompleteFile (argLead, cmdLine, cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(glob(expand(argLead) . '*'), '\n')
-  call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
-  call map(results, "substitute(v:val, '\\', '/', 'g')")
-  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
-
-  return ParseCommandCompletionResults(argLead, results)
-endfunction " }}}
-
-" CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for directories.
-function! CommandCompleteDir (argLead, cmdLine, cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(glob(expand(argLead) . '*'), '\n')
-  let index = 0
-  for result in results
-    if !isdirectory(result)
-      call remove(results, index)
-    else
-      let result = result . '/'
-      let result = substitute(result, '\', '/', 'g')
-      let result = substitute(result, ' ', '\\\\ ', 'g')
-      exec "let results[" . index . "] = \"" . result . "\""
-      let index += 1
-    endif
-  endfor
-  return ParseCommandCompletionResults(argLead, results)
-endfunction " }}}
-
-" ParseCommandCompletionResults(args) {{{
-" Bit of a hack for vim's lack of support for escaped spaces in custom
-" completion.
-function! ParseCommandCompletionResults (argLead, results)
-  let results = a:results
-  if stridx(a:argLead, ' ') != -1
-    let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')
-    call map(results, "substitute(v:val, '^" . removePrefix . "', '', '')")
-  endif
-  return results
-endfunction " }}}
-
 " Command Declarations {{{
 if !exists(":PingEclim")
   command PingEclim :call eclim#PingEclim(1)
