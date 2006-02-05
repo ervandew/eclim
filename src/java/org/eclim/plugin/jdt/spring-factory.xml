@@ -24,6 +24,30 @@
 -->
 <beans>
 
+  <bean id="propertyConfigurer"
+      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <description>Configurer to replace ${..} properties.</description>
+    <property name="systemPropertiesMode">
+      <bean class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField">
+          <value>org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE</value>
+        </property>
+      </bean>
+    </property>
+    <property name="location" value="plugin.properties"/>
+    <property name="ignoreUnresolvablePlaceholders" value="true"/>
+  </bean>
+
+  <bean id="messageSource"
+      class="org.eclim.util.spring.ResourceBundleMessageSource">
+    <description>Defines the resource bundle used for messages.</description>
+    <property name="basenames">
+      <list>
+        <value>org/eclim/plugin/jdt/messages</value>
+      </list>
+    </property>
+  </bean>
+
   <bean name="initializer" class="org.eclim.plugin.jdt.Initializer"
       init-method="initialize" destroy-method="shutdown">
     <description>Initializes java environment.</description>

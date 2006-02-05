@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclim.jdt; singleton:=true
+Bundle-Version: ${eclim.version}
+Bundle-ClassPath: .,
+  eclim.jdt.jar
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclim,
+  org.eclipse.core.resources,
+  org.eclipse.core.runtime,
+  org.eclipse.text,
+  org.eclipse.ui,
+  org.eclipse.jdt,
+  org.eclipse.jdt.core,
+  org.eclipse.jdt.debug,
+  org.eclipse.jdt.launching,
+  org.eclipse.jdt.ui,
+  org.eclipse.jface.text
+Eclipse-AutoStart: true
