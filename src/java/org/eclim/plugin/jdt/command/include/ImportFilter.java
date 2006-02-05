@@ -13,51 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.admin;
+package org.eclim.plugin.jdt.command.include;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.OutputFilter;
 
-import org.eclim.preference.OptionInstance;
-
 /**
- * Output filter for global settings.
+ * Output filter for import results.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class SettingsFilter
+public class ImportFilter
   implements OutputFilter
 {
-  private static Comparator OPTION_COMPARATOR =
-    new BeanComparator("name");
-
   /**
    * {@inheritDoc}
    */
   public String filter (Object _result)
   {
-    StringBuffer buffer = new StringBuffer();
-
-    List list = (List)_result;
-    if(list.size() > 0){
-      // sort the list
-      Collections.sort(list, OPTION_COMPARATOR);
-      for(Iterator ii = list.iterator(); ii.hasNext();){
-        OptionInstance option = (OptionInstance)ii.next();
-        if(buffer.length() > 0){
-          buffer.append('\n');
-        }
-        buffer.append("# ").append(option.getDescription()).append('\n');
-        buffer.append(option.getName()).append('=').append(option.getValue());
+    List results = (List)_result;
+    if(results != null){
+      List elements = new ArrayList(results.size());
+      for(Iterator ii = results.iterator(); ii.hasNext();){
+        ImportResult result = (ImportResult)ii.next();
+        elements.add(result.getElement());
       }
+      Collections.sort(elements);
+      return StringUtils.join(elements.toArray(), '\n');
     }
-    return buffer.toString();
+    return "";
   }
 }

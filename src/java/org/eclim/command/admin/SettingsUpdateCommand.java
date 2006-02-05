@@ -23,10 +23,9 @@ import java.util.Properties;
 
 import org.eclim.Services;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 /**
  * Command to update global settings.
@@ -54,7 +53,7 @@ public class SettingsUpdateCommand
       for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
         String name = (String)ii.next();
         String value = properties.getProperty(name);
-        getEclimPreferences().setOption(name, value);
+        getPreferences().setOption(name, value);
       }
 
       return Services.getMessage("settings.updated");

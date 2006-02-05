@@ -17,4 +17,4 @@
 # Author: Eric Van Dewoestine
 
 JAVA_CMD="`dirname $0`/ng --nailgun-port 9091"
-$JAVA_CMD org.eclim.client.Main "$@"
+$JAVA_CMD org.eclim.command.Main "$@"

@@ -24,7 +24,7 @@ import org.apache.commons.beanutils.BeanComparator;
 
 import org.eclim.command.OutputFilter;
 
-import org.eclim.server.eclipse.OptionInstance;
+import org.eclim.preference.OptionInstance;
 
 /**
  * Output filter for project info.

@@ -23,7 +23,7 @@
  Author: Eric Van Dewoestine
 -->
 <beans>
-  <import resource="command/java/spring-factory.xml"/>
+  <import resource="plugin/jdt/spring-factory.xml"/>
 
   <bean id="propertyConfigurer"
       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -45,7 +45,7 @@
     <property name="basenames">
       <list>
         <value>org/eclim/messages</value>
-        <value>org/eclim/command/java/messages</value>
+        <value>org/eclim/plugin/jdt/messages</value>
       </list>
     </property>
   </bean>
@@ -59,26 +59,26 @@
     </constructor-arg>
   </bean>
 
-  <bean name="eclimPreferences"
-      class="org.eclim.server.eclipse.EclimPreferences">
+  <bean name="preferences"
+      class="org.eclim.preference.Preferences">
     <description>
       Handles retrieval of eclim preferences and options.
     </description>
     <property name="nodeName" value="${org.eclim.node}"/>
     <property name="preferences">
       <list>
-        <bean class="org.eclim.server.eclipse.Preference">
+        <bean class="org.eclim.preference.Preference">
           <property name="name" value="org.eclim.java.library.root"/>
           <property name="defaultValue" value="${org.eclim.java.library.root}"/>
           <property name="scope" ref="OPTION_ALL"/>
         </bean>
-        <bean class="org.eclim.server.eclipse.Preference">
+        <bean class="org.eclim.preference.Preference">
           <property name="name" value="org.eclim.java.logging.impl"/>
           <property name="defaultValue" value="${org.eclim.java.logging.impl}"/>
           <property name="regex" value="(commons-logging|log4j|slf4j|jdk)"/>
           <property name="scope" ref="OPTION_ALL"/>
         </bean>
-        <bean class="org.eclim.server.eclipse.Preference">
+        <bean class="org.eclim.preference.Preference">
           <property name="name" value="org.eclim.java.validation.ignore.warnings"/>
           <property name="defaultValue" value="false"/>
           <property name="regex" value="(true|false)"/>
@@ -88,7 +88,7 @@
     </property>
     <property name="options">
       <list>
-        <bean class="org.eclim.server.eclipse.Option">
+        <bean class="org.eclim.preference.Option">
           <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
           <property name="regex" value="1\.[2-5]"/>
           <property name="scope" ref="OPTION_ALL"/>
@@ -100,21 +100,21 @@
   <bean id="OPTION_ALL"
       class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
-      <value>org.eclim.server.eclipse.Option.ALL</value>
+      <value>org.eclim.preference.Option.ALL</value>
     </property>
   </bean>
 
   <bean id="OPTION_GLOBAL"
       class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
-      <value>org.eclim.server.eclipse.Option.GLOBAL</value>
+      <value>org.eclim.preference.Option.GLOBAL</value>
     </property>
   </bean>
 
   <bean id="OPTION_PROJECT"
       class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
-      <value>org.eclim.server.eclipse.Option.PROJECT</value>
+      <value>org.eclim.preference.Option.PROJECT</value>
     </property>
   </bean>
 
@@ -166,7 +166,7 @@
 
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
-    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="preferences" ref="preferences"/>
     <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
     <property name="filters">
       <map>
@@ -179,7 +179,7 @@
 
   <bean name="project_info" class="org.eclim.command.project.ProjectInfoCommand">
     <description>Handles client project info request.</description>
-    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="preferences" ref="preferences"/>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -191,12 +191,12 @@
 
   <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">
     <description>Handles settings update request.</description>
-    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="preferences" ref="preferences"/>
   </bean>
 
   <bean name="settings" class="org.eclim.command.admin.SettingsCommand">
     <description>Handles retrieval of global settings..</description>
-    <property name="eclimPreferences" ref="eclimPreferences"/>
+    <property name="preferences" ref="preferences"/>
     <property name="filters">
       <map>
         <entry key="vim">

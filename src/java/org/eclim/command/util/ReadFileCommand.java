@@ -28,10 +28,9 @@ import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.util.file.FileUtils;
 

@@ -36,13 +36,12 @@ import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
+import org.eclim.command.Options;
 
-import org.eclim.command.java.JavaUtils;
+import org.eclim.plugin.jdt.JavaUtils;
 
 import org.eclim.command.project.classpath.Parser;
 import org.eclim.command.project.classpath.Dependency;
@@ -217,7 +216,7 @@ public class ProjectUpdateCommand
     for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
       String name = (String)ii.next();
       String value = properties.getProperty(name);
-      getEclimPreferences().setOption(_project.getProject(), name, value);
+      getPreferences().setOption(_project.getProject(), name, value);
     }
   }
 
@@ -233,7 +232,7 @@ public class ProjectUpdateCommand
     throws Exception
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
-    String libraryDir = getEclimPreferences().getPreference(
+    String libraryDir = getPreferences().getPreference(
         _project.getProject(), libraryRootPreference);
 
     Collection results = new ArrayList();

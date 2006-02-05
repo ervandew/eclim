@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.project;
+package org.eclim.plugin.jdt.command.src;
 
 import java.io.IOException;
-
-import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclim.plugin.jdt.JavaUtils;
+
+import org.eclipse.jdt.core.ICompilationUnit;
 
 /**
- * Command to delete a project.
+ * Command to determines if the specified src file exists.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class ProjectDeleteCommand
+public class SrcFileExistsCommand
   extends AbstractCommand
 {
   /**
@@ -41,17 +40,20 @@ public class ProjectDeleteCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+
     try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
-      IProject project =
-        ResourcesPlugin.getWorkspace().getRoot().getProject(name);
-      if(project.exists()){
-        project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
-        return Services.getMessage("project.deleted", name);
+      if(projectName != null){
+        ICompilationUnit src = JavaUtils.findCompilationUnit(projectName, file);
+        return src != null && src.exists() ? Boolean.TRUE : Boolean.FALSE;
       }
-      return Services.getMessage("project.not.found", name);
-    }catch(Throwable t){
-      return t;
+      ICompilationUnit src = JavaUtils.findCompilationUnit(file);
+      return src != null && src.exists() ? Boolean.TRUE : Boolean.FALSE;
+    }catch(IllegalArgumentException iae){
+      return Boolean.FALSE;
+    }catch(Exception e){
+      return e;
     }
   }
 }

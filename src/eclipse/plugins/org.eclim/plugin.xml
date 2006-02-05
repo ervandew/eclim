@@ -3,7 +3,7 @@
 <plugin>
   <extension id="application" point="org.eclipse.core.runtime.applications">
     <application>
-      <run class="org.eclim.server.eclipse.EclimApplication"/>
+      <run class="org.eclim.eclipse.EclimApplication"/>
     </application>
   </extension>
 </plugin>

@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
-import org.eclim.server.eclipse.Option;
+import org.eclim.preference.Option;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -67,7 +66,7 @@ public class ProjectInfoCommand
         IProject project = ResourcesPlugin.getWorkspace().getRoot()
           .getProject(name);
         String setting = _commandLine.getValue(Options.SETTING_OPTION);
-        Option[] options = getEclimPreferences().getOptions(project);
+        Option[] options = getPreferences().getOptions(project);
 
         // only retrieving the requested setting.
         if(setting != null){

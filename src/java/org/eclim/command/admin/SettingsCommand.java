@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
-import org.eclim.server.eclipse.Option;
+import org.eclim.preference.Option;
 
 /**
  * Command to obtain global settings.
@@ -47,7 +46,7 @@ public class SettingsCommand
       List results = new ArrayList();
 
       String setting = _commandLine.getValue(Options.SETTING_OPTION);
-      Option[] options = getEclimPreferences().getOptions();
+      Option[] options = getPreferences().getOptions();
 
       // only retrieving the requested setting.
       if(setting != null){

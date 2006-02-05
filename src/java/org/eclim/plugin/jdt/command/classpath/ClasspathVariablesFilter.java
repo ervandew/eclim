@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.admin;
+package org.eclim.plugin.jdt.command.classpath;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanComparator;
-
 import org.eclim.command.OutputFilter;
 
-import org.eclim.preference.OptionInstance;
-
 /**
- * Output filter for global settings.
+ * Filter for ClasspathVariablesCommand.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class SettingsFilter
+public class ClasspathVariablesFilter
   implements OutputFilter
 {
-  private static Comparator OPTION_COMPARATOR =
-    new BeanComparator("name");
-
   /**
    * {@inheritDoc}
    */
@@ -46,17 +37,14 @@ public class SettingsFilter
     StringBuffer buffer = new StringBuffer();
 
     List list = (List)_result;
-    if(list.size() > 0){
-      // sort the list
-      Collections.sort(list, OPTION_COMPARATOR);
-      for(Iterator ii = list.iterator(); ii.hasNext();){
-        OptionInstance option = (OptionInstance)ii.next();
-        if(buffer.length() > 0){
-          buffer.append('\n');
-        }
-        buffer.append("# ").append(option.getDescription()).append('\n');
-        buffer.append(option.getName()).append('=').append(option.getValue());
+    for(Iterator ii = list.iterator(); ii.hasNext();){
+      ClasspathVariable variable = (ClasspathVariable)ii.next();
+      if(buffer.length() > 0){
+        buffer.append('\n');
       }
+      buffer.append(variable.getName())
+        .append(" - ")
+        .append(variable.getPath());
     }
     return buffer.toString();
   }

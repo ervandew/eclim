@@ -13,49 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.admin;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.beanutils.BeanComparator;
+package org.eclim.plugin.jdt.command.complete;
 
 import org.eclim.command.OutputFilter;
 
-import org.eclim.preference.OptionInstance;
+import org.eclim.util.vim.VimUtils;
 
 /**
- * Output filter for global settings.
+ * Output filter for code completion results.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class SettingsFilter
+public class CodeCompleteFilter
   implements OutputFilter
 {
-  private static Comparator OPTION_COMPARATOR =
-    new BeanComparator("name");
-
   /**
    * {@inheritDoc}
    */
   public String filter (Object _result)
   {
     StringBuffer buffer = new StringBuffer();
-
-    List list = (List)_result;
-    if(list.size() > 0){
-      // sort the list
-      Collections.sort(list, OPTION_COMPARATOR);
-      for(Iterator ii = list.iterator(); ii.hasNext();){
-        OptionInstance option = (OptionInstance)ii.next();
+    CodeCompleteResult[] results = (CodeCompleteResult[])_result;
+    if(results != null){
+      //String offset = null;
+      for(int ii = 0; ii < results.length; ii++){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        buffer.append("# ").append(option.getDescription()).append('\n');
-        buffer.append(option.getName()).append('=').append(option.getValue());
+        buffer.append(results[ii].getCompletion());
+        /*  .append('|');
+        // the offset should be the same for all results, so calculate only once
+        if(offset == null){
+          offset = VimUtils.translateOffset(
+            results[ii].getFilename(), results[ii].getReplaceStart());
+        }
+        buffer.append(offset)
+          .append('|')
+          .append(results[ii].getSignature());*/
       }
     }
     return buffer.toString();

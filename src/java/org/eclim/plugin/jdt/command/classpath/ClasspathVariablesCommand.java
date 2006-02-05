@@ -13,54 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.xml.validate;
+package org.eclim.plugin.jdt.command.classpath;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
-import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.util.XmlUtils;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
- * Command to validate a xml file.
+ * Command to work with classpath variables.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class ValidateCommand
+public class ClasspathVariablesCommand
   extends AbstractCommand
 {
-  private static final String NO_GRAMMER = "no grammar found";
-  private static final String DOCTYPE_ROOT_NULL = "DOCTYPE root \"null\"";
-
   /**
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
+    List results = new ArrayList();
     try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-
-      Error[] errors = XmlUtils.validateXml(file);
-      ArrayList list = new ArrayList();
-      for(int ii = 0; ii < errors.length; ii++){
-        // FIXME: hack to ignore errors regarding no defined dtd.
-        // When 1.4 no longer needs to be supported, this can be scrapped.
-        if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
-            errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
-        {
-          list.add(errors[ii]);
-        }
+      String[] names = JavaCore.getClasspathVariableNames();
+      for(int ii = 0; ii < names.length; ii++){
+        ClasspathVariable variable = new ClasspathVariable();
+        variable.setName(names[ii]);
+        variable.setPath(
+            JavaCore.getClasspathVariable(names[ii]).toOSString());
+        results.add(variable);
       }
-      return super.filter(_commandLine, list.toArray(new Error[list.size()]));
-    }catch(Throwable t){
-      return t;
+    }catch(Exception e){
+      return e;
     }
+    return filter(_commandLine, results);
   }
 }

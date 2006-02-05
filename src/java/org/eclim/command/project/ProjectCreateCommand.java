@@ -34,10 +34,9 @@ import org.apache.commons.io.FilenameUtils;
 
 import org.eclim.Services;
 
-import org.eclim.client.Options;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclipse.jdt.internal.ui.wizards.ClassPathDetector;
 
