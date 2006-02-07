@@ -34,8 +34,10 @@
   <target name="build" depends="init"
       description="Compiles the src and builds the jar file.">
 
+    <property name="deprecation" value="false"/>
     <javac destdir="build/classes" debug="on" optimize="false"
-        target="${javac.target}" source="${javac.target}">
+        target="${javac.target}" source="${javac.target}"
+        deprecation="${deprecation}">
       <src path="src/java"/>
       <include name="**/*.java"/>
       <classpath refid="classpath"/>
