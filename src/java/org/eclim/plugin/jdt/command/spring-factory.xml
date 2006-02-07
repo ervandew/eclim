@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<!DOCTYPE beans PUBLIC
+  "-//SPRING//DTD BEAN//EN"
+  "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <bean name="java_src_update"
+      class="org.eclim.plugin.jdt.command.src.SrcUpdateCommand">
+    <description>Handles client request to update a java src file.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_src_exists"
+      class="org.eclim.plugin.jdt.command.src.SrcFileExistsCommand">
+    <description>
+      Handles client request to determine if the a src file exists.
+    </description>
+  </bean>
+
+  <bean name="java_search" class="org.eclim.plugin.jdt.command.search.SearchCommand">
+    <description>Handles client search requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.search.SearchFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_docsearch" class="org.eclim.plugin.jdt.command.doc.DocSearchCommand">
+    <description>Handles client search requests for javadocs.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.doc.DocSearchFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_import" class="org.eclim.plugin.jdt.command.include.ImportCommand">
+    <description>Handles client import request.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.include.ImportFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_complete"
+      class="org.eclim.plugin.jdt.command.complete.CodeCompleteCommand">
+    <description>Handles client code completion requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_correct"
+      class="org.eclim.plugin.jdt.command.correct.CodeCorrectCommand">
+    <description>Handles client code correct requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.correct.CodeCorrectFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_impl"
+      class="org.eclim.plugin.jdt.command.impl.ImplCommand">
+    <description>Handles client impl requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_junit_impl"
+      class="org.eclim.plugin.jdt.command.junit.JUnitImplCommand">
+    <description>Handles client junit impl requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_delegate"
+      class="org.eclim.plugin.jdt.command.delegate.DelegateCommand">
+    <description>Handles client request to add delegate methods.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_bean_properties"
+      class="org.eclim.plugin.jdt.command.bean.PropertiesCommand">
+    <description>
+      Handles client request to generate java bean properties.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.PositionFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="java_class_prototype"
+      class="org.eclim.plugin.jdt.command.src.ClassPrototypeCommand">
+    <description>
+      Handles request to generate a prototype of a class file.
+    </description>
+  </bean>
+
+  <bean name="java_classpath_variables"
+      class="org.eclim.plugin.jdt.command.classpath.ClasspathVariablesCommand">
+    <description>Handles client request to update a java src file.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.classpath.ClasspathVariablesFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+</beans>

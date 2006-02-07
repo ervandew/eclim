@@ -24,6 +24,8 @@
 -->
 <beans>
 
+  <import resource="command/spring-factory.xml"/>
+
   <bean id="propertyConfigurer"
       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <description>Configurer to replace ${..} properties.</description>
@@ -53,158 +55,51 @@
     <description>Initializes java environment.</description>
   </bean>
 
-  <bean name="java_src_update"
-      class="org.eclim.plugin.jdt.command.src.SrcUpdateCommand">
-    <description>Handles client request to update a java src file.</description>
-    <property name="preferences" ref="preferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.filter.ErrorFilter"/>
-        </entry>
-      </map>
-    </property>
+  <bean class="org.eclim.preference.PreferenceFactory"
+      factory-method="addPreferences">
+    <constructor-arg>
+      <value>
+        org.eclim.java.library.root lib
+        org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
+        org.eclim.java.validation.ignore.warnings false (true|false)
+      </value>
+    </constructor-arg>
   </bean>
 
-  <bean name="java_src_exists"
-      class="org.eclim.plugin.jdt.command.src.SrcFileExistsCommand">
-    <description>
-      Handles client request to determine if the a src file exists.
-    </description>
+  <bean class="org.eclim.preference.PreferenceFactory"
+      factory-method="addOptions">
+    <constructor-arg>
+      <value>
+        org.eclipse.jdt.core.compiler.source 1\.[2-5]
+      </value>
+    </constructor-arg>
   </bean>
 
-  <bean name="java_search" class="org.eclim.plugin.jdt.command.search.SearchCommand">
-    <description>Handles client search requests.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.search.SearchFilter"/>
-        </entry>
-      </map>
-    </property>
+  <bean class="org.eclim.preference.Preferences"
+      factory-method="addOptionHandler">
+    <constructor-arg value="org.eclipse.jdt"/>
+    <constructor-arg ref="jdtOptionHandler"/>
   </bean>
 
-  <bean name="java_docsearch" class="org.eclim.plugin.jdt.command.doc.DocSearchCommand">
-    <description>Handles client search requests for javadocs.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.doc.DocSearchFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
+  <bean name="jdtOptionHandler"
+      class="org.eclim.plugin.jdt.JdtOptionHandler"/>
 
-  <bean name="java_import" class="org.eclim.plugin.jdt.command.include.ImportCommand">
-    <description>Handles client import request.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.include.ImportFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_complete"
-      class="org.eclim.plugin.jdt.command.complete.CodeCompleteCommand">
-    <description>Handles client code completion requests.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.complete.CodeCompleteFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_correct"
-      class="org.eclim.plugin.jdt.command.correct.CodeCorrectCommand">
-    <description>Handles client code correct requests.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.correct.CodeCorrectFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_impl"
-      class="org.eclim.plugin.jdt.command.impl.ImplCommand">
-    <description>Handles client impl requests.</description>
-    <property name="preferences" ref="preferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_junit_impl"
-      class="org.eclim.plugin.jdt.command.junit.JUnitImplCommand">
-    <description>Handles client junit impl requests.</description>
-    <property name="preferences" ref="preferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_delegate"
-      class="org.eclim.plugin.jdt.command.delegate.DelegateCommand">
-    <description>Handles client request to add delegate methods.</description>
-    <property name="preferences" ref="preferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.impl.ImplFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_bean_properties"
-      class="org.eclim.plugin.jdt.command.bean.PropertiesCommand">
-    <description>
-      Handles client request to generate java bean properties.
-    </description>
-    <property name="preferences" ref="preferences"/>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.command.filter.PositionFilter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
-
-  <bean name="java_class_prototype"
-      class="org.eclim.plugin.jdt.command.src.ClassPrototypeCommand">
-    <description>
-      Handles request to generate a prototype of a class file.
-    </description>
-  </bean>
-
-  <bean name="java_classpath_variables"
-      class="org.eclim.plugin.jdt.command.classpath.ClasspathVariablesCommand">
-    <description>Handles client request to update a java src file.</description>
-    <property name="filters">
-      <map>
-        <entry key="vim">
-          <bean class="org.eclim.plugin.jdt.command.classpath.ClasspathVariablesFilter"/>
-        </entry>
-      </map>
-    </property>
+  <bean class="org.eclim.project.ProjectManagement"
+      factory-method="addProjectManager">
+    <constructor-arg value="org.eclipse.jdt.core.javanature"/>
+    <constructor-arg>
+      <bean class="org.eclim.plugin.jdt.project.JavaProjectManager">
+        <property name="preferences">
+          <bean class="org.eclim.preference.Preferences"
+              factory-method="getInstance"/>
+        </property>
+        <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
+      </bean>
+    </constructor-arg>
   </bean>
 
   <bean name="ivy.xml"
-      class="org.eclim.plugin.jdt.command.project.classpath.IvyParser">
+      class="org.eclim.plugin.jdt.project.classpath.IvyParser">
     <description>
       Parser for ivy files used to merge build dependency file into the eclipse
       classpath.
@@ -212,7 +107,7 @@
   </bean>
 
   <bean name="project.xml"
-      class="org.eclim.plugin.jdt.command.project.classpath.MavenParser">
+      class="org.eclim.plugin.jdt.project.classpath.MavenParser">
     <description>
       Parser for maven proeject files used to merge build dependency file into
       the eclipse classpath.

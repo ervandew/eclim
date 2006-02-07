@@ -44,6 +44,17 @@ public class ResourceBundleMessageSource
 
   private String[] basenames;
   private ResourceBundle bundle;
+  private ClassLoader classloader = getClass().getClassLoader();
+
+  /**
+   * Sets the class loader to use to lookup the message resource file.
+   *
+   * @param _classloader The class loader.
+   */
+  public void setClassLoader (ClassLoader _classloader)
+  {
+    classloader = _classloader;
+  }
 
   /**
    * {@inheritDoc}
@@ -51,7 +62,7 @@ public class ResourceBundleMessageSource
   protected ResourceBundle getResourceBundle (String basename, Locale locale)
   {
     try{
-      return ResourceBundle.getBundle(basename, locale);
+      return ResourceBundle.getBundle(basename, locale, classloader);
     }catch(Exception e){
       logger.error(
         "Error retrieving bundle '" + basename + "' with locale " + locale, e);
@@ -60,7 +71,7 @@ public class ResourceBundleMessageSource
   }
 
   /**
-   * Gets an aggragate ResourceBundle containing all bundles for the default
+   * Gets an aggregate ResourceBundle containing all bundles for the default
    * locale.
    *
    * @return The ResourceBundle.

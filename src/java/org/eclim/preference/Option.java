@@ -97,7 +97,9 @@ public class Option
   public void setRegex (String _regex)
   {
     this.regex = _regex;
-    this.pattern = Pattern.compile(_regex);
+    if(regex != null && regex.trim().length() > 0){
+      this.pattern = Pattern.compile(_regex);
+    }
   }
 
   /**

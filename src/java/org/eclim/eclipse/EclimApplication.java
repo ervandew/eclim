@@ -15,9 +15,18 @@
  */
 package org.eclim.eclipse;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+
+import java.net.URL;
+
 import java.util.Hashtable;
+import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
+
+import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -27,13 +36,19 @@ import org.eclim.Services;
 import org.eclim.command.Command;
 import org.eclim.command.admin.ShutdownCommand;
 
+import org.eclim.plugin.AbstractPluginResources;
+import org.eclim.plugin.PluginResources;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPlatformRunnable;
+import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.swt.widgets.EclimDisplay;
+
+import org.osgi.framework.Bundle;
 
 /**
  * This class controls all aspects of the application's execution
@@ -68,6 +83,10 @@ public class EclimApplication
         projects[ii].open(null);
       }
 
+      // load plugins.
+      loadPlugins();
+
+      // start nail gun
       logger.info("Eclim Server Started.");
       server.run();
     }catch(Throwable t){
@@ -95,5 +114,64 @@ public class EclimApplication
     // when shutdown normally, eclipse will handle this.
     /*ResourcesPlugin.getPlugin().shutdown();
       ResourcesPlugin.getPlugin().stop(null);*/
+  }
+
+  /**
+   * Loads any eclim plugins found.
+   */
+  protected void loadPlugins ()
+  {
+    logger.info("Loading eclim plugins...");
+    String pluginsDir =
+      System.getProperty("eclim.home") + File.separator + ".." + File.separator;
+
+    File root = new File(pluginsDir);
+    String[] plugins = root.list(new FilenameFilter(){
+      public boolean accept (File _dir, String _name){
+        if(_name.startsWith("org.eclim.")){
+          return true;
+        }
+        return false;
+      }
+    });
+
+    for(int ii = 0; ii < plugins.length; ii++){
+      Properties properties = new Properties();
+      FileInputStream in = null;
+      try{
+        in = new FileInputStream(
+            pluginsDir + plugins[ii] + File.separator + "plugin.properties");
+        properties.load(in);
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }finally{
+        IOUtils.closeQuietly(in);
+      }
+
+      String resourceClass = properties.getProperty("eclim.plugin.resources");
+      String resourceFile = properties.getProperty("eclim.plugin.resources.file");
+
+      Bundle bundle = Platform.getBundle(
+          plugins[ii].substring(0, plugins[ii].lastIndexOf('_')));
+      if(bundle == null){
+        throw new RuntimeException(
+            "Could not load bundle for plugin '" + plugins[ii] + "'");
+      }
+
+      try{
+        bundle.start();
+
+        PluginResources resources = (PluginResources)
+          bundle.loadClass(resourceClass).newInstance();
+        if(resources instanceof AbstractPluginResources){
+          URL resourceUrl = bundle.getResource(resourceFile);
+          ((AbstractPluginResources)resources).initialize(resourceUrl);
+        }
+        Services.addPluginResources(resources);
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
+      logger.info("Loaded plugin {}.", plugins[ii]);
+    }
   }
 }

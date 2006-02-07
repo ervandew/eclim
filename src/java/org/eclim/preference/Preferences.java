@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclim.Services;
+import org.apache.log4j.Logger;
 
-import org.eclim.plugin.jdt.JavaUtils;
+import org.eclim.Services;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -35,9 +35,6 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
-
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -49,11 +46,28 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public class Preferences
 {
-  private static final String ECLIM_PREFIX = "org.eclim";
+  private static final Logger logger = Logger.getLogger(Preferences.class);
 
-  private Preference[] preferences;
-  private Option[] options;
-  private String nodeName;
+  private static final String ECLIM_PREFIX = "org.eclim";
+  private static final String NODE_NAME = "org.eclim";
+
+  private static Preferences instance = new Preferences();
+  private static Map optionHandlers = new HashMap();
+
+  private List preferences = new ArrayList();
+  private List options = new ArrayList();
+
+  private Preferences () {}
+
+  /**
+   * Gets the Preferences instance.
+   *
+   * @return
+   */
+  public static Preferences getInstance ()
+  {
+    return instance;
+  }
 
   /**
    * Gets the preferences as a Map.
@@ -107,12 +121,16 @@ public class Preferences
   public Map getOptionsAsMap ()
     throws Exception
   {
-    Map allOptions = JavaCore.getOptions();
-    Map preferences = getPreferencesAsMap();
+    Map allOptions = new HashMap();
+    for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
+      OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
+      allOptions.putAll(handler.getOptionsAsMap());
+    }
 
-    for(int ii = 0; ii < options.length; ii++){
-      preferences.put(
-          options[ii].getName(), allOptions.get(options[ii].getName()));
+    Map preferences = getPreferencesAsMap();
+    for (Iterator ii = options.iterator(); ii.hasNext();){
+      Option option = (Option)ii.next();
+      preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
     return preferences;
@@ -127,18 +145,16 @@ public class Preferences
   public Map getOptionsAsMap (IProject _project)
     throws Exception
   {
-    IJavaProject javaProject = JavaCore.create(_project);
-    if(!javaProject.exists()){
-      throw new IllegalArgumentException(Services.getMessage(
-            "project.not.found", _project.getName()));
+    Map allOptions = new HashMap();
+    for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
+      OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
+      allOptions.putAll(handler.getOptionsAsMap(_project));
     }
 
-    Map allOptions = javaProject.getOptions(true);
-    Map preferences = getPreferencesAsMap(javaProject.getProject());
-
-    for(int ii = 0; ii < options.length; ii++){
-      preferences.put(
-          options[ii].getName(), allOptions.get(options[ii].getName()));
+    Map preferences = getPreferencesAsMap(_project);
+    for (Iterator ii = options.iterator(); ii.hasNext();){
+      Option option = (Option)ii.next();
+      preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
     return preferences;
@@ -253,14 +269,21 @@ public class Preferences
     if(_name.startsWith(ECLIM_PREFIX)){
       setPreference(_name, _value);
     }else{
-      Map options = JavaCore.getOptions();
-
       validateOption(_name, _value);
-      if(_name.equals(JavaCore.COMPILER_SOURCE)){
-        JavaUtils.setCompilerSourceCompliance((String)_value);
+
+      OptionHandler handler = null;
+      for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
+        String key = (String)ii.next();
+        if(_name.startsWith(key)){
+          handler = (OptionHandler)optionHandlers.get(key);
+          break;
+        }
+      }
+
+      if(handler != null){
+        handler.setOption(_name, _value);
       }else{
-        options.put(_name, _value);
-        JavaCore.setOptions((Hashtable)options);
+        logger.warn("No handler found for option '{}'", _name);
       }
     }
   }
@@ -278,23 +301,21 @@ public class Preferences
     if(_name.startsWith(ECLIM_PREFIX)){
       setPreference(_project.getProject(), _name, _value);
     }else{
-      IJavaProject javaProject = JavaCore.create(_project);
-      if(!javaProject.exists()){
-        throw new IllegalArgumentException(
-            Services.getMessage("project.not.found", _project.getName()));
-      }
-      Map global = javaProject.getOptions(true);
-      Map options = javaProject.getOptions(false);
-
       validateOption(_name, _value);
-      Object current = global.get(_name);
-      if(current == null || !current.equals(_value)){
-        if(_name.equals(JavaCore.COMPILER_SOURCE)){
-          JavaUtils.setCompilerSourceCompliance(javaProject, (String)_value);
-        }else{
-          options.put(_name, _value);
-          javaProject.setOptions(options);
+
+      OptionHandler handler = null;
+      for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
+        String key = (String)ii.next();
+        if(_name.startsWith(key)){
+          handler = (OptionHandler)optionHandlers.get(key);
+          break;
         }
+      }
+
+      if(handler != null){
+        handler.setOption(_project, _name, _value);
+      }else{
+        logger.warn("No handler found for option '{}'", _name);
       }
     }
   }
@@ -320,7 +341,7 @@ public class Preferences
     throws Exception
   {
     IScopeContext context = new InstanceScope();
-    IEclipsePreferences preferences = context.getNode(nodeName);
+    IEclipsePreferences preferences = context.getNode(NODE_NAME);
 
     initializeDefaultPreferences(preferences);
 
@@ -337,7 +358,7 @@ public class Preferences
     throws Exception
   {
     IScopeContext context = new ProjectScope(_project);
-    IEclipsePreferences preferences = context.getNode(nodeName);
+    IEclipsePreferences preferences = context.getNode(NODE_NAME);
 
     return preferences;
   }
@@ -350,10 +371,10 @@ public class Preferences
   protected void initializeDefaultPreferences (IEclipsePreferences _preferences)
     throws Exception
   {
-    for(int ii = 0; ii < preferences.length; ii++){
-      if(_preferences.get(preferences[ii].getName(), null) == null){
-        _preferences.put(preferences[ii].getName(),
-            preferences[ii].getDefaultValue());
+    for(Iterator ii = preferences.iterator(); ii.hasNext();){
+      Preference preference = (Preference)ii.next();
+      if(_preferences.get(preference.getName(), null) == null){
+        _preferences.put(preference.getName(), preference.getDefaultValue());
       }
     }
     _preferences.flush();
@@ -368,16 +389,17 @@ public class Preferences
   public void validatePreference (String _name, String _value)
     throws Exception
   {
-    for(int ii = 0; ii < preferences.length; ii++){
-      if(preferences[ii].getName().equals(_name)){
-        if(preferences[ii].getPattern() == null ||
-            preferences[ii].getPattern().matcher(_value).matches())
+    for(Iterator ii = preferences.iterator(); ii.hasNext();){
+      Preference preference = (Preference)ii.next();
+      if(preference.getName().equals(_name)){
+        if(preference.getPattern() == null ||
+            preference.getPattern().matcher(_value).matches())
         {
           return;
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("preference.invalid",
-              new Object[]{_name, _value, preferences[ii].getRegex()}));
+              new Object[]{_name, _value, preference.getRegex()}));
         }
       }
     }
@@ -394,14 +416,17 @@ public class Preferences
   public void validateOption (String _name, String _value)
     throws Exception
   {
-    for(int ii = 0; ii < options.length; ii++){
-      if(options[ii].getName().equals(_name)){
-        if(options[ii].getPattern().matcher(_value).matches()){
+    for (Iterator ii = options.iterator(); ii.hasNext();){
+      Option option = (Option)ii.next();
+      if(option.getName().equals(_name)){
+        if (option.getPattern() == null ||
+            option.getPattern().matcher(_value).matches())
+        {
           return;
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("option.invalid",
-              new Object[]{_name, _value, options[ii].getRegex()}));
+              new Object[]{_name, _value, option.getRegex()}));
         }
       }
     }
@@ -410,38 +435,37 @@ public class Preferences
   }
 
   /**
-   * Sets the name of the node to retrieve preferences for.
-   * <p/>
-   * Dependecy injection.
+   * Adds the supplied OptionHandler to manage options with
+   * the specified prefix.
    *
-   * @param _nodeName the value to set.
+   * @param _prefix The prefix.
+   * @param _handler The OptionHandler.
+   * @return The OptionHandler.
    */
-  public void setNodeName (String _nodeName)
+  public static OptionHandler addOptionHandler (
+      String _prefix, OptionHandler _handler)
   {
-    this.nodeName = _nodeName;
+    optionHandlers.put(_prefix, _handler);
+    return _handler;
   }
 
   /**
-   * Set available preferences.
-   * <p/>
-   * Dependecy injection.
+   * Adds a preference to be made available.
    *
-   * @param _preferences The preferences.
+   * @param _preference The preference to add.
    */
-  public void setPreferences (Preference[] _preferences)
+  public void addPreference (Preference _preference)
   {
-    this.preferences = _preferences;
+    preferences.add(_preference);
   }
 
   /**
-   * Set available options.
-   * <p/>
-   * Dependecy injection.
+   * Adds a preference to be made available.
    *
-   * @param _options The options.
+   * @param _option The option.
    */
-  public void setOptions (Option[] _options)
+  public void addOption (Option _option)
   {
-    this.options = _options;
+    options.add(_option);
   }
 }

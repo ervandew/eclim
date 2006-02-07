@@ -17,8 +17,6 @@ package org.eclim.command.project;
 
 import java.io.IOException;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 import org.apache.commons.io.FilenameUtils;
@@ -26,6 +24,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectManager;
 
 /**
  * Command to create a project.
@@ -38,8 +39,6 @@ public class ProjectCreateCommand
 {
   private static final Logger logger =
     Logger.getLogger(ProjectCreateCommand.class);
-
-  private Map projectManagers;
 
   /**
    * {@inheritDoc}
@@ -56,26 +55,14 @@ public class ProjectCreateCommand
       logger.debug("Creating project '{}' at folder '{}'", name, folder);
 
       // FIXME: need to get the proper project manager depending on the project
-      // nature.
-      ProjectManager projectManager =
-        (ProjectManager)projectManagers.get("org.eclipse.jdt.core.javanature");
+      // nature (not necessary until we actually have projects with natures
+      // other than java).
+      ProjectManager manager = ProjectManagement.getProjectManager(
+          "org.eclipse.jdt.core.javanature");
       return filter(_commandLine,
-        projectManager.create(name, folder, _commandLine));
+        manager.create(name, folder, _commandLine));
     }catch(Throwable t){
       return t;
     }
-  }
-
-  /**
-   * Sets the map of project managers.
-   * <p/>
-   * Key   - project nature
-   * Value - project manager instance.
-   *
-   * @param _projectManagers
-   */
-  public void setProjectManagers (Map _projectManagers)
-  {
-    projectManagers = _projectManagers;
   }
 }

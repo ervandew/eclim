@@ -80,18 +80,6 @@ public abstract class AbstractCommand
    */
   public Preferences getPreferences ()
   {
-    return this.preferences;
-  }
-
-  /**
-   * Set preferences.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _preferences the value to set.
-   */
-  public void setPreferences (Preferences _preferences)
-  {
-    this.preferences = _preferences;
+    return Preferences.getInstance();
   }
 }

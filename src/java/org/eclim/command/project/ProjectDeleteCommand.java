@@ -17,13 +17,14 @@ package org.eclim.command.project;
 
 import java.io.IOException;
 
-import java.util.Map;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectManager;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,8 +38,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class ProjectDeleteCommand
   extends AbstractCommand
 {
-  private Map projectManagers;
-
   /**
    * {@inheritDoc}
    */
@@ -47,10 +46,16 @@ public class ProjectDeleteCommand
   {
     try{
       String name = _commandLine.getValue(Options.NAME_OPTION);
-      // FIXME: need to use project managers.
+
+      // FIXME: need to get the proper project manager depending on the project
+      // nature (not necessary until we actually have projects with natures
+      // other than java).
       IProject project =
         ResourcesPlugin.getWorkspace().getRoot().getProject(name);
       if(project.exists()){
+        ProjectManager manager = ProjectManagement.getProjectManager(
+            "org.eclipse.jdt.core.javanature");
+        // FIXME: use the manager to do the delete.
         project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
         return Services.getMessage("project.deleted", name);
       }
@@ -58,18 +63,5 @@ public class ProjectDeleteCommand
     }catch(Throwable t){
       return t;
     }
-  }
-
-  /**
-   * Sets the map of project managers.
-   * <p/>
-   * Key   - project nature
-   * Value - project manager instance.
-   *
-   * @param _projectManagers
-   */
-  public void setProjectManagers (Map _projectManagers)
-  {
-    projectManagers = _projectManagers;
   }
 }

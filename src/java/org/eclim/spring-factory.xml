@@ -56,65 +56,6 @@
     </constructor-arg>
   </bean>
 
-  <bean name="preferences"
-      class="org.eclim.preference.Preferences">
-    <description>
-      Handles retrieval of eclim preferences and options.
-    </description>
-    <property name="nodeName" value="${org.eclim.node}"/>
-    <property name="preferences">
-      <list>
-        <bean class="org.eclim.preference.Preference">
-          <property name="name" value="org.eclim.java.library.root"/>
-          <property name="defaultValue" value="${org.eclim.java.library.root}"/>
-          <property name="scope" ref="OPTION_ALL"/>
-        </bean>
-        <bean class="org.eclim.preference.Preference">
-          <property name="name" value="org.eclim.java.logging.impl"/>
-          <property name="defaultValue" value="${org.eclim.java.logging.impl}"/>
-          <property name="regex" value="(commons-logging|log4j|slf4j|jdk)"/>
-          <property name="scope" ref="OPTION_ALL"/>
-        </bean>
-        <bean class="org.eclim.preference.Preference">
-          <property name="name" value="org.eclim.java.validation.ignore.warnings"/>
-          <property name="defaultValue" value="false"/>
-          <property name="regex" value="(true|false)"/>
-          <property name="scope" ref="OPTION_ALL"/>
-        </bean>
-      </list>
-    </property>
-    <property name="options">
-      <list>
-        <bean class="org.eclim.preference.Option">
-          <property name="name" value="org.eclipse.jdt.core.compiler.source"/>
-          <property name="regex" value="1\.[2-5]"/>
-          <property name="scope" ref="OPTION_ALL"/>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="OPTION_ALL"
-      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>org.eclim.preference.Option.ALL</value>
-    </property>
-  </bean>
-
-  <bean id="OPTION_GLOBAL"
-      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>org.eclim.preference.Option.GLOBAL</value>
-    </property>
-  </bean>
-
-  <bean id="OPTION_PROJECT"
-      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>org.eclim.preference.Option.PROJECT</value>
-    </property>
-  </bean>
-
   <bean name="ping" class="org.eclim.command.admin.PingCommand">
     <description>Handles client ping request.</description>
   </bean>
@@ -141,38 +82,14 @@
 
   <bean name="project_create" class="org.eclim.command.project.ProjectCreateCommand">
     <description>Handles client project creation request.</description>
-    <property name="projectManagers">
-      <map>
-        <entry key="org.eclipse.jdt.core.javanature">
-          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager"/>
-        </entry>
-      </map>
-    </property>
   </bean>
 
   <bean name="project_delete" class="org.eclim.command.project.ProjectDeleteCommand">
     <description>Handles client project deletion request.</description>
-    <property name="projectManagers">
-      <map>
-        <entry key="org.eclipse.jdt.core.javanature">
-          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager"/>
-        </entry>
-      </map>
-    </property>
   </bean>
 
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
-    <property name="projectManagers">
-      <map>
-        <entry key="org.eclipse.jdt.core.javanature">
-          <bean class="org.eclim.plugin.jdt.command.project.JavaProjectManager">
-            <property name="preferences" ref="preferences"/>
-            <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
-          </bean>
-        </entry>
-      </map>
-    </property>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -184,7 +101,6 @@
 
   <bean name="project_info" class="org.eclim.command.project.ProjectInfoCommand">
     <description>Handles client project info request.</description>
-    <property name="preferences" ref="preferences"/>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -196,12 +112,10 @@
 
   <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">
     <description>Handles settings update request.</description>
-    <property name="preferences" ref="preferences"/>
   </bean>
 
   <bean name="settings" class="org.eclim.command.admin.SettingsCommand">
     <description>Handles retrieval of global settings..</description>
-    <property name="preferences" ref="preferences"/>
     <property name="filters">
       <map>
         <entry key="vim">
