@@ -308,6 +308,12 @@
           eclipse web tools platform
         </a>
       </action>
+      <action context="globalization" dev="ervandew">
+        Globalization support via
+        <a href="http://www.alphaworks.ibm.com/tech/igt?open&amp;ca=drs-aw-jav&amp;S_TACT=106AH21W&amp;S_CMP=AWRSSJAV">
+          IBM Globalization Tool
+        </a>.
+      </action>
       <action context="database" dev="ervandew">
         Database integration
         <ul>
