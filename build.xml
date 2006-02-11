@@ -167,6 +167,7 @@
       <fileset dir="${eclipse.home}/plugins/"
           excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
+        <include name="org.eclim.jdt_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
@@ -178,6 +179,7 @@
       <tarfileset dir="${eclipse.home}/plugins/"
           excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
+        <include name="org.eclim.jdt_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/windows/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
