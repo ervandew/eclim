@@ -76,6 +76,8 @@ See http://forrest.apache.org/docs/linking.html for more info
       description="Create projects and view/edit project settings."/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
+    <mappings label="Suggested Vim Mappings" href="mappings.html"
+        description="List of suggested vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
         description="List of all eclim vim commands."/>
     <cheatsheet label="Cheatsheet (PDF)" href="cheatsheet.pdf"

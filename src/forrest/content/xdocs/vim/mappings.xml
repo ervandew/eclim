@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Suggested Vim Mappings</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Since each person has their own preference when it comes to key mappings,
+      eclim deliberately omits any convenience mappings for the provided
+      functionality.<br/>
+      So, instead this page provides some suggested mappings and examples that
+      may or may not suit your tastes, but will at least give you a template
+      that you can use to define your own mappings.
+    </p>
+    <note>
+      In the mappings below you will see &lt;leader&gt; used quite frequently.
+      In vim the &lt;leader&gt; argument is mapped to a character of your choice.
+      Please see ":help mapleader" in vim for more information.
+    </note>
+    <p>
+      <strong>Java Mappings</strong><br/>
+      Here are some mappings for the java funtionality provided by eclim.  To
+      make use of these mappings, simply create a ftplugin file for java and
+      place your mappings there (:help ftplugin-name).
+    </p>
+    <ul>
+      <li>
+        This mapping can be used to allow quick replacement of template
+        variables when utilizing the
+        <a href="java/abbreviations.html">java abbreviations</a>.<br/>
+        <code>
+          <![CDATA[
+          nnoremap <silent> <buffer> <tab> :call eclim#util#FillTemplate("${", "}")<cr>
+          ]]>
+        </code>
+      </li>
+      <li>
+        Import the class under the cursor with <code>&lt;leader&gt;i</code>.<br/>
+        <code>
+          <![CDATA[
+          nnoremap <silent> <buffer> <leader>i :JavaImport<cr>
+          ]]>
+        </code>
+      </li>
+      <li>
+        Search for the javadocs of the element under the cursor with
+        <code>&lt;leader&gt;d</code>.<br/>
+        <code>
+          <![CDATA[
+          nnoremap <silent> <buffer> <leader>d :JavaDocSearch -x declarations<cr>
+          ]]>
+        </code>
+      </li>
+      <li>
+        Search for the source declaration of the element under the cursor with
+        <code>&lt;Enter&gt;</code>.<br/>
+        <code>
+          <![CDATA[
+          nnoremap <silent> <buffer> <cr> :JavaSearch -x declarations<cr>
+          ]]>
+        </code>
+      </li>
+    </ul>
+  </body>
+</document>

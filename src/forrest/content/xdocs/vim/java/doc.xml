@@ -54,5 +54,22 @@
       </classpath>
       ]]>
     </source>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables:
+    </p>
+    <ul>
+      <li>
+        <strong>g:EclimJavaDocSearchSingleResult</strong><br/>
+        Determines what action to take when only a singe result is found.<br/>
+        Possible values include:
+        <ul>
+          <li>'open' - open the result in a browser.</li>
+          <li>'copen' - open the quickfix window to display the result.</li>
+        </ul>
+      </li>
+    </ul>
   </body>
 </document>

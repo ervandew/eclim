@@ -203,5 +203,31 @@
         your vim 'path' option can also impact performance.
       </note>
     </section>
+    <section id="configuration">
+      <title>Configuration</title>
+      <p>
+        Vim Variables:
+      </p>
+      <ul>
+        <li>
+          <strong>g:EclimJavaSearchSingleResult</strong><br/>
+          Determines what action to take when a only a single result is
+          found.<br/>
+          Possible values include:
+          <ul>
+            <li>'split' - open the result in a new window via "split".</li>
+            <li>'edit' - open the result in the current window.</li>
+            <li>'copen' - open the quickfix window to display the result.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>g:EclimJavaSearchMapping</strong><br/>
+          When set to 1, &lt;Enter&gt; will be mapped to the java search
+          functionality for the various java related xml files (spring,
+          hibernate, web.xml, and struts-config.xml).  By default this is
+          enabled.
+        </li>
+      </ul>
+    </section>
   </body>
 </document>

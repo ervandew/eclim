@@ -414,6 +414,11 @@
         inner class.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed javadoc search results to restore &lt;Enter&gt; as mapping to open
+        result in a browser after the quickfix window is closed and then opened
+        again.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
       <action dev="ervandew" type="update" context="Eclipse">
@@ -425,6 +430,18 @@
       </action>
       <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/delegate.html">Delegate method creation</a>.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added g:EclimJavaSearchSingleResult setting to determine action to take
+        when only a singe result is returned using the
+        <a href="vim/java/search.html">java source code searching</a>.<br/>
+        Based on suggested by Ivo Danihelka.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added g:EclimJavaDocSearchSingleResult setting to determine action to take
+        when only a singe result is returned using the
+        <a href="vim/java/doc.html">javadoc searching</a>.<br/>
+        Based on suggested by Ivo Danihelka.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added <a href="server/settings.html">preference</a> to suppress
@@ -439,6 +456,10 @@
         of new g:EclimLogLevel and the corresponding highlight varibles.  See
         the <a href="vim/index.html#configuration">vim configuration</a>
         page for details.
+      </action>
+      <action dev="ervandew" type="update" context="Vim">
+        Removed all default key mappings.  See the
+        <a href="vim/mappings.html">suggested set of mappings</a>.
       </action>
       <action dev="ervandew" type="update" context="Vim">
         Now utilizing vim's autoload functionality to load functions on demand.

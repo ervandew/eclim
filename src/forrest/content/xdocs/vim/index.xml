@@ -41,8 +41,7 @@
     <section id="configuration">
       <title>Configuration</title>
       <p>
-        Currently there are only a couple global configuration settings
-        available.
+        The following is a list of the global configuration settings available.
       </p>
       <ul>
         <li>
@@ -109,7 +108,7 @@
       <title>Global Commands</title>
       <p>
         The following is a list of commands that can be executed in any vim
-        window, regarless of the current filetype.
+        window, regardless of the current filetype.
       </p>
       <ul>
         <li>
