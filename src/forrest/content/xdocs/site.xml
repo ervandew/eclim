@@ -40,6 +40,7 @@ See http://forrest.apache.org/docs/linking.html for more info
    -->
   <about label="About" tab="home">
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
+    <features label="Features" href="features.html" description="Features"/>
     <quickstart label="Quick Start" href="quickstart.html" description="Quick Start"/>
     <changes label="Change History" href="changes.html"
       description="Change History"/>
