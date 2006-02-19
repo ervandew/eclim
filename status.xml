@@ -361,7 +361,7 @@
   </todo>
 
   <changes>
-    <release version="1.1.1" date="unreleased">
+    <release version="1.1.1" date="Feb. 19, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Code completion results now sorted by type and then alphabetically.
       </action>
@@ -426,7 +426,8 @@
         improvements to how inner classes are handled that eclim now depends on.
       </action>
       <action dev="ervandew" type="add" context="Eclim">
-        Added support for global settings/preferences.
+        Added support for global settings/preferences via new
+        <a href="vim/index.html#commands">:Settings</a> command.
       </action>
       <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/delegate.html">Delegate method creation</a>.
