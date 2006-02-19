@@ -147,7 +147,8 @@ public class Initializer
       Map values = new HashMap();
       for(Iterator ii = System.getProperties().keySet().iterator(); ii.hasNext();){
         String key = (String)ii.next();
-        values.put(key.replace('.', '_'), System.getProperty(key));
+        values.put(key.replace('.', '_'),
+            System.getProperty(key).replace('\\', '/'));
       }
       VelocityFormat.evaluate(values, reader, writer);
 
