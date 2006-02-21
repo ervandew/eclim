@@ -118,7 +118,7 @@
         <strong>:JavaSearch</strong>
         [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] -
         Search for classes, methods, fields, etc.
-        (With no args supplied, searches for the element under the cursor).
+        (With pattern supplied, searches for the element under the cursor).
       </li>
       <li>
         <strong>:JavaDocSearch</strong> -
@@ -135,6 +135,24 @@
       <li>
         <strong>:Validate</strong> [&lt;file&gt;] -
         Validates the supplied xml file or the current file if none supplied.
+      </li>
+    </ul>
+
+    <p><strong>Misc. Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:DiffLastSaved</strong> -
+        Performs a diffsplit with the last saved version of the currently
+        modifed file.
+      </li>
+      <li>
+        <strong>:SwapWords</strong> -
+        Swaps two words (with cursor placed on the first word).
+        Supports swapping around non-word characters like commas, periods, etc.
+      </li>
+      <li>
+        <strong>:SwapTypedArguments</strong> -
+        Swaps typed method arguments in a method declaration.
       </li>
     </ul>
   </body>

@@ -171,5 +171,36 @@
         <li><a href="xml/validate.html">Validate xml files.</a></li>
       </ul>
     </section>
+    <section id="misc">
+      <title>Misc Commands</title>
+      <p>
+        Miscellaneous global commands not specific to eclim.  These are general
+        purpose commands that are useful in and outside the scope of eclim.
+      </p>
+      <ul>
+        <li>
+          <strong>:DiffLastSaved</strong> -
+          Performs a diffsplit with the last saved version of the currently
+          modifed file.
+        </li>
+        <li>
+          <strong>:SwapWords</strong> -
+          Swaps two words (with cursor placed on the first word).
+          Supports swapping around non-word characters like commas, periods, etc.
+        </li>
+        <li>
+          <strong>:SwapTypedArguments</strong> -
+          Swaps typed method arguments in a method declaration (with the cursor
+          placed on the type declaration of the first argument to swap).
+          <source>
+            public void test (String _arg1, int arg2)
+          </source>
+          Executing :SwapTypedArguments on "String" would result in.
+          <source>
+            public void test (int arg2, String _arg1)
+          </source>
+        </li>
+      </ul>
+    </section>
   </body>
 </document>
