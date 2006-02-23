@@ -135,6 +135,20 @@
     </property>
   </bean>
 
+  <bean name="java_constructor"
+      class="org.eclim.plugin.jdt.command.constructor.ConstructorCommand">
+    <description>
+      Handles client request to generate class constructors.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.PositionFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="java_class_prototype"
       class="org.eclim.plugin.jdt.command.src.ClassPrototypeCommand">
     <description>

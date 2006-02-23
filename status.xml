@@ -33,9 +33,6 @@
         constructor.  With fields selected, create construtor with args to set
         the values of the selected fields.
       </action>
-      <action context="swap" dev="ervandew">
-        Add word swap and argument swap functionality.
-      </action>
       <action context="authors" dev="ervandew">
         Command to add yourself to list of authors.
       </action>
@@ -352,6 +349,9 @@
 
     <actions priority="eclipse 3.2">
       <action context="3.2 enhancements" dev="ervandew">
+        <a href="http://download.eclipse.org/eclipse/downloads/drops/S-3.2M5-200602171115/eclipse-news-M5.html">
+          Eclipse 3.2 Features
+        </a>
         <ul>
           <li>
             camel case searching ("NPE" finds "NullPointerException").
@@ -385,6 +385,9 @@
 
   <changes>
     <release version="1.1.2" date="unreleased">
+      <action dev="ervandew" type="add" context="Bug Fixes">
+        Fixed eclipse .classpath commands.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added several miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of
