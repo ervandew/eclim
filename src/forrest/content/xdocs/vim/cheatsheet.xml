@@ -99,6 +99,11 @@
         Create both a java bean getter and setter method.
       </li>
       <li>
+        <strong>:JavaConstructor</strong> -
+        Creates class constructor, either empty or based on selected class
+        fields.
+      </li>
+      <li>
         <strong>:JavaImpl</strong> -
         View implementable / overridable methods from super classes and
         implemented interfaces.

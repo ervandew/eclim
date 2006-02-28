@@ -57,6 +57,7 @@
       </li>
       <li>Context sensitive code completion.</li>
       <li>Code correction suggestions with option to apply a suggestion.</li>
+      <li>Class constructor generation.</li>
       <li>Java Bean getter and setter generation.</li>
       <li>Generation of delegate methods.</li>
       <li>Java source and java doc searching capabilities.</li>

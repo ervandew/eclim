@@ -388,6 +388,9 @@
       <action dev="ervandew" type="add" context="Bug Fixes">
         Fixed eclipse .classpath commands.
       </action>
+      <action dev="ervandew" type="add" context="Java">
+        <a href="vim/java/constructor.html">Constructor</a> generation.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added several miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of

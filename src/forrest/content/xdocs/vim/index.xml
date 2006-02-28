@@ -154,6 +154,7 @@
         <li><a href="java/import.html">Automated imports.</a></li>
         <li><a href="java/complete.html">Code completion.</a></li>
         <li><a href="java/correct.html">Code correction.</a></li>
+        <li><a href="java/constructor.html">Create class constructors.</a></li>
         <li><a href="java/impl.html">Implementation / Override Stubbing.</a></li>
         <li><a href="java/delegate.html">Delegate method creation.</a></li>
         <li><a href="java/bean.html">Java Bean getter / setter generation.</a></li>

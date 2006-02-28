@@ -98,6 +98,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Code Completion"/>
       <correct label="Code Correction" href="correct.html"
         description="Code Correction"/>
+      <constructor label="Constructor generation" href="constructor.html"
+        description="Constructor generation."/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
         description="Implementation / Override Stubbing"/>
       <delegate label="Delegate Method Creation" href="delegate.html"

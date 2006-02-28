@@ -79,6 +79,24 @@ public class ConstructorCommand
         }
       }
 
+      // check if constructor already exists.
+      IMethod method = null;
+
+      if(properties.length > 0){
+        method = type.getMethod(type.getElementName(), null);
+      }else{
+        String[] fieldSigs = new String[properties.length];
+        for (int ii = 0; ii < properties.length; ii++){
+          fieldSigs[ii] = type.getField(properties[ii]).getTypeSignature();
+        }
+        method = type.getMethod(type.getElementName(), fieldSigs);
+      }
+      if(method.exists()){
+        throw new RuntimeException(
+            Services.getMessage("constructor.already.exists",
+              type.getElementName() + " (" + buildParams(type, properties) + ")"));
+      }
+
       IJavaElement sibling = null;
       IMethod[] methods = type.getMethods();
       for(int ii = 0; ii < methods.length; ii++){
