@@ -60,6 +60,7 @@ public class ConstructorCommand
     throws IOException
   {
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String propertiesOption = _commandLine.getValue(Options.PROPERTIES_OPTION);
       String[] properties = {};
@@ -68,7 +69,7 @@ public class ConstructorCommand
       }
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(file);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
       IType type = TypeUtils.getType(src, offset);
       for(int ii = 0; ii < properties.length; ii++){
         if(!type.getField(properties[ii]).exists()){

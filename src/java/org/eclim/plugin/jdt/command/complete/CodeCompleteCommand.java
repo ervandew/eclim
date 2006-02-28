@@ -48,10 +48,11 @@ public class CodeCompleteCommand
   {
     List results = new ArrayList();
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(file);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
       String filename = src.getResource().getRawLocation().toOSString();
 

@@ -64,8 +64,9 @@ public class DelegateCommand
     throws IOException
   {
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
-      ICompilationUnit src = JavaUtils.getCompilationUnit(file);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
       if(offset != -1){

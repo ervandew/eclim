@@ -76,7 +76,7 @@ public class Options
   public static final String PATTERN_OPTION = "p";
   public static final String PORT_OPTION = "port";
   public static final String PROJECT_OPTION = "p";
-  public static final String PROPERTIES_OPTION = "p";
+  public static final String PROPERTIES_OPTION = "r";
   public static final String SCOPE_OPTION = "s";
   public static final String SETTINGS_OPTION = "s";
   public static final String SETTING_OPTION = "s";

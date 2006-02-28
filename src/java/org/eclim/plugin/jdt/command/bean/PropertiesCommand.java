@@ -71,13 +71,14 @@ public class PropertiesCommand
     throws IOException
   {
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String methods = _commandLine.getValue(Options.TYPE_OPTION);
       String[] properties = StringUtils.split(
           _commandLine.getValue(Options.PROPERTIES_OPTION), ',');
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(file);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
       IType type = TypeUtils.getType(src, offset);
       List fields = Arrays.asList(type.getFields());
 

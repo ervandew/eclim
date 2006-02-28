@@ -66,10 +66,11 @@ public class ImplCommand
     throws IOException
   {
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String superType = _commandLine.getValue(Options.SUPERTYPE_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(file);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
       IType type = null;
       if(superType != null){
