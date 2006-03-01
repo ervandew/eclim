@@ -69,6 +69,7 @@ public class ConstructorCommand
       }
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
+      // validate supplied fields.
       ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
       IType type = TypeUtils.getType(src, offset);
       for(int ii = 0; ii < properties.length; ii++){
@@ -81,7 +82,6 @@ public class ConstructorCommand
 
       // check if constructor already exists.
       IMethod method = null;
-
       if(properties.length > 0){
         method = type.getMethod(type.getElementName(), null);
       }else{
@@ -97,6 +97,7 @@ public class ConstructorCommand
               type.getElementName() + " (" + buildParams(type, properties) + ")"));
       }
 
+      // find the sibling to insert before.
       IJavaElement sibling = null;
       IMethod[] methods = type.getMethods();
       for(int ii = 0; ii < methods.length; ii++){
@@ -104,10 +105,14 @@ public class ConstructorCommand
           sibling = ii < methods.length - 1 ? methods[ii + 1] : null;
         }
       }
-      // insert before any inner classes if any.
+      // insert before any other methods or inner classes if any.
       if(sibling == null){
-        IType[] types = type.getTypes();
-        sibling = types != null && types.length > 0 ? types[0] : null;
+        if(methods.length > 0){
+          sibling = methods[0];
+        }else{
+          IType[] types = type.getTypes();
+          sibling = types != null && types.length > 0 ? types[0] : null;
+        }
       }
 
       HashMap values = new HashMap();
