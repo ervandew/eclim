@@ -26,6 +26,7 @@ import org.eclim.util.file.Position;
 public class CodeCompleteResult
 {
   private String filename;
+  private int type;
   private String completion;
   private String signature;
   private int replaceStart;
@@ -35,17 +36,29 @@ public class CodeCompleteResult
    * Constructs a new instance.
    */
   public CodeCompleteResult (
+      int _type,
       String _filename,
       String _completion,
       String _signature,
       int _replaceStart,
       int _replaceEnd)
   {
+    type = _type;
     filename = _filename;
     completion = _completion;
     signature = _signature;
     replaceStart = _replaceStart;
     replaceEnd = _replaceEnd;
+  }
+
+  /**
+   * Get completion element type..
+   *
+   * @return The completion element type.
+   */
+  public int getType ()
+  {
+    return this.type;
   }
 
   /**

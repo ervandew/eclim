@@ -19,6 +19,8 @@ import org.eclim.command.OutputFilter;
 
 import org.eclim.util.vim.VimUtils;
 
+import org.eclipse.jdt.core.CompletionProposal;
+
 /**
  * Output filter for code completion results.
  *
@@ -41,16 +43,32 @@ public class CodeCompleteFilter
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        buffer.append(results[ii].getCompletion());
+        switch(results[ii].getType()){
+          case CompletionProposal.TYPE_REF:
+            buffer.append("c|");
+            break;
+          case CompletionProposal.FIELD_REF:
+            buffer.append("v|");
+            break;
+          case CompletionProposal.LOCAL_VARIABLE_REF:
+            buffer.append("v|");
+            break;
+          case CompletionProposal.METHOD_REF:
+            buffer.append("f|");
+            break;
+          default:
+            buffer.append("|");
+        }
+        buffer.append(results[ii].getCompletion())
         /*  .append('|');
         // the offset should be the same for all results, so calculate only once
         if(offset == null){
           offset = VimUtils.translateOffset(
             results[ii].getFilename(), results[ii].getReplaceStart());
         }
-        buffer.append(offset)
+        buffer.append(offset)*/
           .append('|')
-          .append(results[ii].getSignature());*/
+          .append(results[ii].getSignature());
       }
     }
     return buffer.toString();

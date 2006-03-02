@@ -107,8 +107,9 @@ public class CodeCompleteCommand
         break;
     }
 
-    return new CodeCompleteResult(_filename, completion, signature,
-      _proposal.getReplaceStart(), _proposal.getReplaceEnd());
+    return new CodeCompleteResult(
+        _proposal.getKind(), _filename, completion, signature,
+        _proposal.getReplaceStart(), _proposal.getReplaceEnd());
   }
 
   /**
@@ -120,52 +121,50 @@ public class CodeCompleteCommand
   protected String createSignature (CompletionProposal _proposal)
   {
     StringBuffer signature = new StringBuffer();
-    signature.append(_proposal.getCompletion());
     switch(_proposal.getKind()){
       case CompletionProposal.TYPE_REF:
-        signature.append(" - ");
-        signature.append(Signature.getSignatureQualifier(
+        signature.append(_proposal.getCompletion());
+        signature.append(" ");
+        /*signature.append(Signature.getSignatureQualifier(
               _proposal.getSignature()));
-        signature.append('.');
+        signature.append('.');*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getSignature()));
         break;
       case CompletionProposal.FIELD_REF:
-        signature.append(" - ");
-        char[] qualifier = Signature.getSignatureQualifier(
+        signature.append(_proposal.getCompletion());
+        signature.append(" ");
+        /*char[] qualifier = Signature.getSignatureQualifier(
             _proposal.getSignature());
         if(qualifier.length > 0){
           signature.append(qualifier).append('.');
-        }
+        }*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getSignature()));
-        signature.append(": ");
-        signature.append(Signature.getSignatureQualifier(
+        signature.append(" - ");
+        /*signature.append(Signature.getSignatureQualifier(
               _proposal.getDeclarationSignature()));
-        signature.append('.');
+        signature.append('.');*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getDeclarationSignature()));
         break;
       case CompletionProposal.LOCAL_VARIABLE_REF:
-        signature.append(" - ");
-        qualifier = Signature.getSignatureQualifier(_proposal.getSignature());
+        signature.append(_proposal.getCompletion());
+        signature.append(" ");
+        /*qualifier = Signature.getSignatureQualifier(_proposal.getSignature());
         if(qualifier.length > 0){
           signature.append(qualifier).append('.');
-        }
+        }*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getSignature()));
-        signature.append(": ");
-        signature.append(Signature.getSignatureQualifier(
+        signature.append(" - ");
+        /*signature.append(Signature.getSignatureQualifier(
               _proposal.getDeclarationSignature()));
-        signature.append('.');
+        signature.append('.');*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getDeclarationSignature()));
         break;
       case CompletionProposal.METHOD_REF:
-        signature.append(" - ");
-        signature.append(Signature.getSignatureSimpleName(
-              Signature.getReturnType(_proposal.getSignature())));
-        signature.append(' ');
         signature.append(_proposal.getName()).append('(');
         char[][] types = Signature.getParameterTypes(_proposal.getSignature());
         char[][] names = _proposal.findParameterNames(null);
@@ -173,10 +172,10 @@ public class CodeCompleteCommand
           if(ii != 0){
             signature.append(", ");
           }
-          qualifier = Signature.getSignatureQualifier(types[ii]);
+          /*qualifier = Signature.getSignatureQualifier(types[ii]);
           if(qualifier.length > 0){
             signature.append(qualifier).append('.');
-          }
+          }*/
           signature.append(Signature.getSignatureSimpleName(types[ii]));
           if(names != null){
             signature.append(' ');
@@ -184,10 +183,13 @@ public class CodeCompleteCommand
           }
         }
         signature.append(')');
-        signature.append(": ");
-        signature.append(Signature.getSignatureQualifier(
+        signature.append(' ');
+        signature.append(Signature.getSignatureSimpleName(
+              Signature.getReturnType(_proposal.getSignature())));
+        signature.append(" - ");
+        /*signature.append(Signature.getSignatureQualifier(
               _proposal.getDeclarationSignature()));
-        signature.append('.');
+        signature.append('.');*/
         signature.append(Signature.getSignatureSimpleName(
               _proposal.getDeclarationSignature()));
         break;

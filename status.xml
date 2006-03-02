@@ -389,6 +389,12 @@
         Fixed eclipse .classpath commands.
       </action>
       <action dev="ervandew" type="add" context="Java">
+        Utilizing vim's new dictionary based completion results.
+        <warning>
+          Requires a vim build from Febuary 2006 or later.
+        </warning>
+      </action>
+      <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/constructor.html">Constructor</a> generation.
       </action>
       <action dev="ervandew" type="add" context="Vim">
