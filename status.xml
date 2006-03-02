@@ -385,8 +385,11 @@
 
   <changes>
     <release version="1.1.2" date="unreleased">
-      <action dev="ervandew" type="add" context="Bug Fixes">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed eclipse .classpath commands.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        <a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1437025&amp;group_id=145869&amp;atid=763323">Bug 143705</a>
       </action>
       <action dev="ervandew" type="add" context="Java">
         Utilizing vim's new dictionary based completion results.

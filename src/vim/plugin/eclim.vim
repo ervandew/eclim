@@ -26,6 +26,8 @@
 "
 " }}}
 
+if v:version < 700 | finish | endif
+
 " Global Variables {{{
   if !exists("g:EclimShowCurrentError")
     let g:EclimShowCurrentError = 1
