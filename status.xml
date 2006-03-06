@@ -28,11 +28,6 @@
           </li>
         </ul>
       </action>
-      <action context="constructor" dev="ervandew">
-        Creation of constructors.  No visual select, create default, no arg
-        constructor.  With fields selected, create construtor with args to set
-        the values of the selected fields.
-      </action>
       <action context="authors" dev="ervandew">
         Command to add yourself to list of authors.
       </action>
