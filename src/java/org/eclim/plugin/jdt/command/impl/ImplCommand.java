@@ -118,7 +118,7 @@ public class ImplCommand
         implType.setExists(types[ii].exists());
         if(types[ii].exists()){
           implType.setSignature(getTypeSignature(types[ii]));
-          implType.setMethods(getMethods(implementedMethods, types[ii]));
+          implType.setMethods(getMethods(_type, implementedMethods, types[ii]));
         }else{
           implType.setSignature(types[ii].getElementName());
         }
@@ -172,7 +172,7 @@ public class ImplCommand
             Services.getMessage("method.not.found",
               new Object[]{_superTypeName, _methodName}));
       }
-      if(isImplemented(implementedMethods, method)){
+      if(isImplemented(_type, implementedMethods, method)){
         throw new IllegalArgumentException(
             Services.getMessage("method.already.implemented",
               new Object[]{
@@ -192,7 +192,7 @@ public class ImplCommand
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags) &&
           !methods[ii].isConstructor() &&
-          !isImplemented(implementedMethods, methods[ii]))
+          !isImplemented(_type, implementedMethods, methods[ii]))
       {
         Position position =
           insertMethod(_commandLine, _type, superType, methods[ii], sibling);
@@ -238,8 +238,7 @@ public class ImplCommand
       int flags = methods[ii].getFlags();
       if (!Flags.isStatic(flags) &&
           !Flags.isFinal(flags) &&
-          !Flags.isPrivate(flags) &&
-          !methods[ii].isConstructor())
+          !Flags.isPrivate(flags))
       {
         implementedMethods.add(
             TypeUtils.getMinimalMethodSignature(methods[ii]));
@@ -271,11 +270,27 @@ public class ImplCommand
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), values);
 
-    values.put("name", _method.getElementName());
+    if(!_method.isConstructor()){
+      values.put("name", _method.getElementName());
+      values.put("return",
+          Signature.getSignatureSimpleName(_method.getReturnType()));
+    }else{
+      values.put("constructor", Boolean.TRUE);
+      values.put("name", _type.getElementName());
+      StringBuffer buffer = new StringBuffer("super(");
+      String[] paramNames = _method.getParameterNames();
+      for(int ii = 0; ii < paramNames.length; ii++){
+        if(ii != 0){
+          buffer.append(", ");
+        }
+        buffer.append(paramNames[ii]);
+      }
+      buffer.append(");");
+      values.put("methodBody", buffer.toString());
+    }
+
     values.put("modifier",
         Flags.isPublic(_method.getFlags()) ? "public" : "protected");
-    values.put("return",
-        Signature.getSignatureSimpleName(_method.getReturnType()));
     values.put("params", getMethodParameters(_method));
     values.put("superType", _superType.getFullyQualifiedName());
     values.put("overrides",
@@ -300,12 +315,14 @@ public class ImplCommand
   /**
    * Gets the methods from the super type.
    *
+   * @param _type The type to be modified.
    * @param _baseMethods The base methods from the base type.
    * @param _superType The super type.
    *
    * @return Array of methods.
    */
-  protected ImplMethod[] getMethods (List _baseMethods, IType _superType)
+  protected ImplMethod[] getMethods (
+      IType _type, List _baseMethods, IType _superType)
     throws Exception
   {
     List results = new ArrayList();
@@ -316,7 +333,7 @@ public class ImplCommand
         String signature = getMethodSignature(method);
         ImplMethod implMethod = new ImplMethod();
         implMethod.setSignature(signature);
-        implMethod.setImplemented(isImplemented(_baseMethods, method));
+        implMethod.setImplemented(isImplemented(_type, _baseMethods, method));
 
         results.add(implMethod);
       }
@@ -338,8 +355,7 @@ public class ImplCommand
     int flags = _method.getFlags();
     return (!Flags.isStatic(flags) &&
         !Flags.isFinal(flags) &&
-        !Flags.isPrivate(flags) &&
-        !_method.isConstructor());
+        !Flags.isPrivate(flags));
   }
 
   /**
@@ -358,14 +374,22 @@ public class ImplCommand
   /**
    * Determines if the supplied method is implemented.
    *
+   * @param _type The type to be modified.
    * @param _baseMethods The list of methods defined in the base.
    * @param _method The method to test for.
    * @return true if implemented, false otherwise.
    */
-  protected boolean isImplemented (List _baseMethods, IMethod _method)
+  protected boolean isImplemented (
+      IType _type, List _baseMethods, IMethod _method)
     throws Exception
   {
-    return _baseMethods.contains(TypeUtils.getMinimalMethodSignature(_method));
+    String signature = TypeUtils.getMinimalMethodSignature(_method);
+    if(_method.isConstructor()){
+      signature = signature.replaceFirst(
+          _method.getDeclaringType().getElementName(),
+          _type.getElementName());
+    }
+    return _baseMethods.contains(signature);
   }
 
   /**
@@ -384,6 +408,9 @@ public class ImplCommand
     }
 
     buffer.append(_type.isClass() ? "class " : "interface ");
+    if(_type.getParent().getElementType() == IJavaElement.TYPE){
+      buffer.append(_type.getParent().getElementName()).append('.');
+    }
     buffer.append(_type.getElementName());
     return buffer.toString();
   }
@@ -400,10 +427,12 @@ public class ImplCommand
     int flags = _method.getFlags();
     StringBuffer buffer = new StringBuffer();
     buffer.append(Flags.isPublic(flags) ? "public " : "protected ")
-      .append(Flags.isAbstract(flags) ? "abstract " : "")
-      .append(Signature.getSignatureSimpleName(_method.getReturnType()))
-      .append(' ')
-      .append(_method.getElementName())
+      .append(Flags.isAbstract(flags) ? "abstract " : "");
+    if(!_method.isConstructor()){
+      buffer.append(Signature.getSignatureSimpleName(_method.getReturnType()))
+      .append(' ');
+    }
+    buffer.append(_method.getElementName())
       .append(" (")
       .append(getMethodParameters(_method))
       .append(')');
