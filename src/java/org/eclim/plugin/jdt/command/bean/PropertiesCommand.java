@@ -310,8 +310,8 @@ public class PropertiesCommand
       // insert before the next property's bean methods
       int index = _fields.indexOf(_field) + 1;
       if(index < _fields.size()){
-        String nextProperty = StringUtils.capitalize(
-            ((IJavaElement)_fields.get(index)).getElementName());
+        IField field = (IField)_fields.get(index);
+        String nextProperty = StringUtils.capitalize(field.getElementName());
         // regular getter
         IMethod method = _type.getMethod("get" + nextProperty, null);
         // index getter
@@ -320,11 +320,11 @@ public class PropertiesCommand
         // regular setter
         method = !method.exists() ?
           _type.getMethod("set" + nextProperty,
-              new String[]{_field.getTypeSignature()}) : method;
+              new String[]{field.getTypeSignature()}) : method;
         // index setter
         method = !method.exists() ?
           _type.getMethod("set" + nextProperty,
-              new String[]{INT_SIG, _field.getTypeSignature()}) : method;
+              new String[]{INT_SIG, field.getTypeSignature()}) : method;
         if(method.exists()){
           return method;
         }
