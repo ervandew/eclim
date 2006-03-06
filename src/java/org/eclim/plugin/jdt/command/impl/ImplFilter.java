@@ -69,7 +69,7 @@ public class ImplFilter
           }
 
           buffer.append("package ").append(type.getPackage()).append(";\n");
-          buffer.append(type.getSignature()).append('\n');
+          buffer.append(type.getSignature()).append(" {\n");
           ImplMethod[] methods = type.getMethods();
           if(methods != null){
             for(int jj = 0; jj < methods.length; jj++){
@@ -84,6 +84,7 @@ public class ImplFilter
               buffer.append('\t').append(signature);
             }
           }
+          buffer.append("\n}");
         }
 
         // print out those types that were not found.
