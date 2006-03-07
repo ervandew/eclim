@@ -172,6 +172,11 @@ public class DelegateCommand
     methodBody.append(");");
     values.put("methodBody", methodBody.toString());
 
+    values.put("superType", _superType.getFullyQualifiedName());
+    values.put("implements", Boolean.TRUE);
+    values.put("delegate", Boolean.TRUE);
+    values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
+
     StringWriter writer = new StringWriter();
     VelocityFormat.evaluate(
         values, VelocityFormat.getTemplate(TEMPLATE), writer);
