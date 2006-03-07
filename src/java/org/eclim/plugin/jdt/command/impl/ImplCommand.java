@@ -242,7 +242,6 @@ public class ImplCommand
       {
         implementedMethods.add(
             TypeUtils.getMinimalMethodSignature(methods[ii]));
-            TypeUtils.getMinimalMethodSignature(methods[ii]));
       }
     }
     return implementedMethods;
