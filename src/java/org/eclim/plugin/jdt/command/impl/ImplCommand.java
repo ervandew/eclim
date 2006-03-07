@@ -117,7 +117,7 @@ public class ImplCommand
         implType.setPackage(types[ii].getPackageFragment().getElementName());
         implType.setExists(types[ii].exists());
         if(types[ii].exists()){
-          implType.setSignature(getTypeSignature(types[ii]));
+          implType.setSignature(TypeUtils.getTypeSignature(types[ii]));
           implType.setMethods(getMethods(_type, implementedMethods, types[ii]));
         }else{
           implType.setSignature(types[ii].getElementName());
@@ -241,6 +241,7 @@ public class ImplCommand
           !Flags.isPrivate(flags))
       {
         implementedMethods.add(
+            TypeUtils.getMinimalMethodSignature(methods[ii]));
             TypeUtils.getMinimalMethodSignature(methods[ii]));
       }
     }
@@ -390,29 +391,6 @@ public class ImplCommand
           _type.getElementName());
     }
     return _baseMethods.contains(signature);
-  }
-
-  /**
-   * Gets the signature for the supplied type.
-   *
-   * @param _type The type.
-   * @return The signature.
-   */
-  protected String getTypeSignature (IType _type)
-    throws Exception
-  {
-    StringBuffer buffer = new StringBuffer();
-    int flags = _type.getFlags();
-    if(Flags.isPublic(flags)){
-      buffer.append("public ");
-    }
-
-    buffer.append(_type.isClass() ? "class " : "interface ");
-    if(_type.getParent().getElementType() == IJavaElement.TYPE){
-      buffer.append(_type.getParent().getElementName()).append('.');
-    }
-    buffer.append(_type.getElementName());
-    return buffer.toString();
   }
 
   /**
