@@ -56,6 +56,9 @@
         that exposes eclipse features through a server interface, and a set of
         vim plug-ins that communicate with eclipse over that interface.
       </p>
+    </section>
+    <section id="license">
+      <title>License</title>
       <p>
         Eclim is released under the <a href="ext:license">apache 2.0</a> license.
       </p>
