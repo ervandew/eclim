@@ -123,6 +123,7 @@ public class JavaProjectManager
     String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
     IJavaProject javaProject = JavaUtils.getJavaProject(_name);
+    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     // project settings update
     if(settings != null){
