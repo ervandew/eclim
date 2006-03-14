@@ -101,8 +101,10 @@ public class CodeCompleteCommand
 
       // trim off the trailing paren if the method takes any arguments.
       case CompletionProposal.METHOD_REF:
-        if(signature.lastIndexOf(')') > signature.lastIndexOf('(') + 1){
-          completion = completion.substring(0, completion.length() - 1);
+        if(completion.indexOf(')') != -1){
+          if(signature.lastIndexOf(')') > signature.lastIndexOf('(') + 1){
+            completion = completion.substring(0, completion.length() - 1);
+          }
         }
         break;
     }

@@ -388,8 +388,14 @@
         that new jars are recognized when added to the .classpath file.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        <a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1437025&amp;group_id=145869&amp;atid=763323">Bug 143705</a>
+        <a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1437025&amp;group_id=145869&amp;atid=763323">Bug 1437025</a>
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1437005&amp;group_id=145869&amp;atid=763323">Bug 1437005</a>
+        and other irregularities with calculation of the starting position for
+        the completion.
+      </action>
+
       <action dev="ervandew" type="add" context="Java">
         Utilizing vim's new dictionary based completion results.
         <warning>
