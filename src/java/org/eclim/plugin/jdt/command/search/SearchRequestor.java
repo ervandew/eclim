@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.commons.beanutils.BeanComparator;
 
-import org.eclim.plugin.jdt.IJavaElementComparator;
+import org.eclim.plugin.jdt.util.IJavaElementComparator;
 
 import org.eclipse.core.runtime.CoreException;
 

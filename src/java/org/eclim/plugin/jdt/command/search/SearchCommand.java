@@ -30,7 +30,7 @@ import org.eclim.command.Options;
 
 import org.eclim.util.file.Position;
 
-import org.eclim.plugin.jdt.JavaUtils;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.Position;
 

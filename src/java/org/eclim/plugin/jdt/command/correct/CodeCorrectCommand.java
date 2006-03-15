@@ -29,8 +29,7 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.JavaUtils;
-import org.eclim.plugin.jdt.ProblemLocation;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
@@ -41,9 +40,6 @@ import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
-
-import  org.eclipse.jdt.internal.ui.text.correction.LinkedCorrectionProposal;
-import  org.eclipse.jdt.internal.ui.text.correction.LinkedCorrectionProposal.LinkedModeGroup;
 
 /**
  * Handles requests for code correction.

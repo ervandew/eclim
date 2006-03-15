@@ -24,7 +24,7 @@ import java.util.List;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.JavaUtils;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 import org.eclim.plugin.jdt.command.search.SearchResult;

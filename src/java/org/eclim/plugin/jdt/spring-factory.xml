@@ -82,7 +82,7 @@
   </bean>
 
   <bean name="jdtOptionHandler"
-      class="org.eclim.plugin.jdt.JdtOptionHandler"/>
+      class="org.eclim.plugin.jdt.preference.OptionHandler"/>
 
   <bean class="org.eclim.project.ProjectManagement"
       factory-method="addProjectManager">

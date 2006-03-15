@@ -21,11 +21,10 @@ import java.util.ArrayList;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.JavaUtils;
-
-import org.eclim.command.Error;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.FileUtils;
 
