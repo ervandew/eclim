@@ -78,7 +78,7 @@ public class Services
     Integer index = (Integer)serviceCache.get(_name);
     if(index == null){
       Iterator iterator = pluginResources.iterator();
-      for(int ii = 0; iterator.hasNext();){
+      for(int ii = 0; iterator.hasNext(); ii++){
         PluginResources resources = (PluginResources)iterator.next();
         if(resources.containsService(_name)){
           serviceCache.put(_name, new Integer(ii));
@@ -136,7 +136,7 @@ public class Services
       Integer index = (Integer)messageCache.get(_key);
       if(index == null){
         Iterator iterator = pluginResources.iterator();
-        for(int ii = 0; iterator.hasNext();){
+        for(int ii = 0; iterator.hasNext(); ii++){
           try{
             PluginResources resources = (PluginResources)iterator.next();
             String message = resources.getMessage(_key, _args);
