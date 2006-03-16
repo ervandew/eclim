@@ -1,0 +1,78 @@
+/**
+ * Copyright (c) 2004 - 2006
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.eclim.plugin.ant.util;
+
+import java.io.File;
+
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
+import org.eclipse.core.filebuffers.ITextFileBufferManager;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+
+import org.eclipse.jface.text.IDocument;
+
+/**
+ * Utility methods for working with ant files.
+ *
+ * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @version $Revision$
+ */
+public class AntUtils
+{
+  /**
+   * Gets the IDocument instance for the given ant file.
+   * <p/>
+   * Borrowed from org.eclipse.ant.internal.ui.AntUtil
+   *
+   * @param _antFile The ant file.
+   * @return The IDocument.
+   */
+  public static IDocument getDocument (String _antFile)
+    throws Exception
+  {
+    File file = new File(_antFile);
+    if(!file.exists()){
+      return null;
+    }
+
+    ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
+    IPath location= new Path(file.getAbsolutePath());
+    boolean connected= false;
+    try {
+      ITextFileBuffer buffer= manager.getTextFileBuffer(location);
+      if (buffer == null) {
+        //no existing file buffer..create one
+        manager.connect(location, new NullProgressMonitor());
+        connected= true;
+        buffer= manager.getTextFileBuffer(location);
+        if (buffer == null) {
+          return null;
+        }
+      }
+      return buffer.getDocument();
+    } finally {
+      if (connected) {
+        try {
+          manager.disconnect(location, new NullProgressMonitor());
+        } catch (Exception e) {
+        }
+      }
+    }
+  }
+}
