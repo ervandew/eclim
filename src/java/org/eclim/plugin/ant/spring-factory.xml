@@ -24,7 +24,7 @@
 -->
 <beans>
 
-  <!--import resource="command/spring-factory.xml"/-->
+  <import resource="command/spring-factory.xml"/>
 
   <bean id="propertyConfigurer"
       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
