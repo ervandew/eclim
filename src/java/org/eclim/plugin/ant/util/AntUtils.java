@@ -17,9 +17,18 @@ package org.eclim.plugin.ant.util;
 
 import java.io.File;
 
+import org.eclipse.ant.internal.ui.AntUtil;
+
+import org.eclipse.ant.internal.ui.model.AntModel;
+import org.eclipse.ant.internal.ui.model.IAntModel;
+import org.eclipse.ant.internal.ui.model.IProblemRequestor;
+import org.eclipse.ant.internal.ui.model.LocationProvider;
+
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+
+import org.eclipse.core.resources.IFile;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -74,5 +83,52 @@ public class AntUtils
         }
       }
     }
+  }
+
+  /**
+   * Gets an ant model for the given file.
+   *
+   * @param _antFile The ant file.
+   * @return The ant model.
+   */
+  public static IAntModel getAntModel (String _antFile)
+    throws Exception
+  {
+    return getAntModel(_antFile, null);
+  }
+
+  /**
+   * Gets an ant model for the given file.
+   * <p/>
+   * Based on similar method in org.eclipse.ant.internal.ui.AntUtil
+   *
+   * @param _antFile The ant file.
+   * @param _requestor Optional IProblemRequestor to be notified of errors in
+   * the ant file.
+   * @return The ant model.
+   */
+  public static IAntModel getAntModel (
+      final String _antFile, IProblemRequestor _requestor)
+    throws Exception
+  {
+    IDocument doc = getDocument(_antFile);
+    if (doc == null) {
+      return null;
+    }
+
+    final IFile file = AntUtil.getFileForLocation(_antFile, null);
+    LocationProvider provider = new LocationProvider(null) {
+      public IFile getFile() {
+        return file;
+      }
+      public IPath getLocation() {
+        if (file == null) {
+          return new Path(_antFile);
+        }
+        return file.getLocation();
+      }
+    };
+
+    return new AntModel(doc, _requestor, provider, true, true, true);
   }
 }

@@ -15,6 +15,9 @@
  */
 package org.eclim.command;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Represents an error to be reported to the user.
  *
@@ -100,5 +103,45 @@ public class Error
   public boolean isWarning ()
   {
     return warning;
+  }
+
+  /**
+   * Determines if this object is equal to the supplied object.
+   *
+   * @param _other The object to test equality with.
+   * @return true if the objects are equal, false otherwise.
+   */
+  public boolean equals (Object _other)
+  {
+    if (!(_other instanceof Error)) {
+      return false;
+    }
+    if (this == _other) {
+      return true;
+    }
+    Error error = (Error)_other;
+    boolean equal = new EqualsBuilder()
+      .append(getFilename(), error.getFilename())
+      .append(getLineNumber(), error.getLineNumber())
+      .append(getColumnNumber(), error.getColumnNumber())
+      .append(getMessage(), error.getMessage())
+      .isEquals();
+
+    return equal;
+  }
+
+  /**
+   * Gets the hash code for this object.
+   *
+   * @return The hash code for this object.
+   */
+  public int hashCode ()
+  {
+    return new HashCodeBuilder(17, 37)
+      .append(filename)
+      .append(lineNumber)
+      .append(columnNumber)
+      .append(message)
+      .toHashCode();
   }
 }

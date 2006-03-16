@@ -28,8 +28,6 @@ import org.eclim.eclipse.jface.text.DummyTextViewer;
 
 import org.eclim.plugin.ant.util.AntUtils;
 
-import org.eclipse.ant.internal.ui.AntUtil;
-
 import org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
@@ -59,27 +57,25 @@ public class CodeCompleteCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
-      AntModel model = (AntModel)AntUtil.getAntModel(file, true, true, true);
-System.out.println("### ant model = " + model);
+      AntModel model = (AntModel)AntUtils.getAntModel(file);
       AntEditorCompletionProcessor processor =
         new AntEditorCompletionProcessor(model);
-System.out.println("### ant processor = " + processor);
 
       ITextViewer viewer =
         new DummyTextViewer(AntUtils.getDocument(file), offset, 1);
       ICompletionProposal[] proposals =
         processor.computeCompletionProposals(viewer, offset);
 
-System.out.println("### ant proposals = " + proposals);
-System.out.println("### ant proposals.length = " + proposals.length);
       for (int ii = 0; ii < proposals.length; ii++){
-System.out.println("  ### proposal = " + proposals[ii].getDisplayString());
-System.out.println("  ### proposal = " + proposals[ii].getAdditionalProposalInfo());
+        results.add(new CodeCompletionResult(
+              proposals[ii].getDisplayString(),
+              proposals[ii].getAdditionalProposalInfo()));
       }
 
     }catch(Exception e){
       return e;
     }
-    return filter(_commandLine, results);
+    return filter(_commandLine, (CodeCompletionResult[])
+      results.toArray(new CodeCompletionResult[results.size()]));
   }
 }

@@ -18,6 +18,7 @@ package org.eclim.command.xml.validate;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -47,20 +48,34 @@ public class ValidateCommand
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      Error[] errors = XmlUtils.validateXml(file);
-      ArrayList list = new ArrayList();
-      for(int ii = 0; ii < errors.length; ii++){
-        // FIXME: hack to ignore errors regarding no defined dtd.
-        // When 1.4 no longer needs to be supported, this can be scrapped.
-        if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
-            errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
-        {
-          list.add(errors[ii]);
-        }
-      }
-      return super.filter(_commandLine, list.toArray(new Error[list.size()]));
+      List errors = validate(file);
+
+      return filter(_commandLine, errors.toArray(new Error[errors.size()]));
     }catch(Throwable t){
       return t;
     }
+  }
+
+  /**
+   * Validate the given file and return a list of any errors.
+   *
+   * @param _file The file to validate.
+   * @return List of any errors.
+   */
+  protected List validate (String _file)
+    throws Exception
+  {
+    Error[] errors = XmlUtils.validateXml(_file);
+    ArrayList list = new ArrayList();
+    for(int ii = 0; ii < errors.length; ii++){
+      // FIXME: hack to ignore errors regarding no defined dtd.
+      // When 1.4 no longer needs to be supported, this can be scrapped.
+      if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
+          errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
+      {
+        list.add(errors[ii]);
+      }
+    }
+    return list;
   }
 }

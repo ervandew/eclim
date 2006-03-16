@@ -12,13 +12,25 @@
   <bean name="ant_complete"
       class="org.eclim.plugin.ant.command.complete.CodeCompleteCommand">
     <description>Handles client request to perform ant code completion.</description>
-    <!--property name="filters">
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.ant.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="ant_validate"
+      class="org.eclim.plugin.ant.command.validate.ValidateCommand">
+    <description>Handles client request to validate an ant file.</description>
+    <property name="filters">
       <map>
         <entry key="vim">
           <bean class="org.eclim.command.filter.ErrorFilter"/>
         </entry>
       </map>
-    </property-->
+    </property>
   </bean>
 
 </beans>
