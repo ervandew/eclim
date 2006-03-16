@@ -9,5 +9,8 @@ Bundle-ClassPath: .,
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
-  org.eclipse.ant.ui
+  org.eclipse.ant.ui,
+  org.eclipse.core.filebuffers,
+  org.eclipse.core.runtime,
+  org.eclipse.jface.text
 Eclipse-AutoStart: true
