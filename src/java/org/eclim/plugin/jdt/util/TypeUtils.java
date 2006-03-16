@@ -115,8 +115,14 @@ public class TypeUtils
     }
 
     buffer.append(_type.isClass() ? "class " : "interface ");
-    if(_type.getParent().getElementType() == IJavaElement.TYPE){
+    IJavaElement parent = _type.getParent();
+    if(parent.getElementType() == IJavaElement.TYPE){
       buffer.append(_type.getParent().getElementName()).append('.');
+    }else if(parent.getElementType() == IJavaElement.CLASS_FILE){
+      int index = parent.getElementName().indexOf('$');
+      if(index != -1){
+        buffer.append(parent.getElementName().substring(0, index)).append('.');
+      }
     }
     buffer.append(_type.getElementName());
     return buffer.toString();
