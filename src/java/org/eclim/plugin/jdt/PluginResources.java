@@ -26,4 +26,11 @@ import org.eclim.plugin.AbstractPluginResources;
 public class PluginResources
   extends AbstractPluginResources
 {
+  /**
+   * {@inheritDoc}
+   */
+  public String getName ()
+  {
+    return "jdt";
+  }
 }

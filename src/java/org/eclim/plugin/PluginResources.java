@@ -69,4 +69,11 @@ public interface PluginResources
    * Closes this resource instance and releases any held resources.
    */
   public void close ();
+
+  /**
+   * Gets the name of the plugin resources (ant, jdt, etc.).
+   *
+   * @return The name.
+   */
+  public String getName ();
 }
