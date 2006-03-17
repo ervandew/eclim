@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -67,9 +69,23 @@ public class CodeCompleteCommand
         processor.computeCompletionProposals(viewer, offset);
 
       for (int ii = 0; ii < proposals.length; ii++){
-        results.add(new CodeCompletionResult(
-              proposals[ii].getDisplayString(),
-              proposals[ii].getAdditionalProposalInfo()));
+        String description = null;
+        if(proposals[ii].getAdditionalProposalInfo() != null){
+          description = StringUtils.replace(
+            proposals[ii].getAdditionalProposalInfo().trim(), "\n", "<br/>");
+        }
+
+        String completion = proposals[ii].getDisplayString();
+        int index = completion.indexOf(" - ");
+        if(index != -1){
+          completion = completion.substring(0, index);
+        }
+
+        CodeCompletionResult result =
+          new CodeCompletionResult(completion, description);
+        if(!results.contains(result)){
+          results.add(result);
+        }
       }
 
     }catch(Exception e){
