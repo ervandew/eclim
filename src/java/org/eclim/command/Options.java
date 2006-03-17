@@ -95,6 +95,7 @@ public class Options
       new org.apache.commons.cli.Options();
   static {
     coreOptions.addOption(OptionBuilder.withArgName(HELP)
+        .hasArg()
         .withLongOpt(HELP)
         .withDescription(Services.getMessage("help.description"))
         .create(HELP_OPTION));
@@ -132,11 +133,14 @@ public class Options
 
   /**
    * Print usage information.
+   *
+   * @param _plugin The plugin to print the usage for (ant, jdt, etc).
    */
-  public void usage ()
+  public void usage (String _plugin)
   {
+System.out.println("### _plugin = " + _plugin);
     usageSummary();
-    System.out.println(buildFooter());
+    System.out.println(buildFooter(_plugin));
   }
 
   /**
@@ -189,15 +193,16 @@ public class Options
   /**
    * Builds the usage footer.
    *
+   * @param _plugin The plugin to build the footer for (ant, jdt, etc).
    * @return The footer.
    */
-  protected String buildFooter ()
+  protected String buildFooter (String _plugin)
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append(Services.getMessage("command.usage.header"));
 
     TreeSet set = new TreeSet();
-    ResourceBundle resources = Services.getResourceBundle();
+    ResourceBundle resources = Services.getResourceBundle(_plugin);
     for(Enumeration keys = resources.getKeys(); keys.hasMoreElements();){
       String key = (String)keys.nextElement();
       if(key.endsWith(".usage")){

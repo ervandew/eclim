@@ -56,7 +56,7 @@ public class Main
       }
 
       if(commandLine.hasOption(options.HELP_OPTION)){
-        options.usage();
+        options.usage(commandLine.getValue(options.HELP_OPTION));
         System.exit(0);
       }
 
