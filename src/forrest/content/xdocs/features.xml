@@ -48,6 +48,16 @@
     </ul>
 
     <p>
+      <strong>Ant Integration</strong>
+    </p>
+    <ul>
+      <li>Context sensitive code completion.</li>
+      <li>
+        Automatic validation (w/ visual marking of errors and warnings).
+      </li>
+    </ul>
+
+    <p>
       <strong>Java Integration</strong>
     </p>
     <ul>

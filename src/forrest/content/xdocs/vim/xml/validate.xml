@@ -30,7 +30,7 @@
   </header>
   <body>
     <p>
-      When editing an xml file eclim will default to validating the file when it
+      When editing a xml file eclim will default to validating the file when it
       is written.  Any errors will be added to vim's quickfix window and their
       corresponding line number noted via vim's sign functionality.
     </p>
@@ -39,6 +39,9 @@
       will only place the validation errors in the quickfix buffer if the buffer
       does not contain results from any user initiated quickfix commands (make,
       grep, vimgrep, etc.).
+    </note>
+    <note>
+      Xml validation does not require that the file exist in an eclipse project.
     </note>
     <p>
       If you don't want xml files validated when saving them, you can set the

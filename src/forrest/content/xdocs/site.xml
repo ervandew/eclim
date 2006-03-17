@@ -62,7 +62,7 @@ See http://forrest.apache.org/docs/linking.html for more info
   <server label="Eclimd Server" href="server/" tab="server">
     <index label="Index" href="index.html" description="Index"/>
     <project label="Settings" href="settings.html"
-      description="Available settings for eclimd."/>
+        description="Available settings for eclimd."/>
   </server>
 
   <client label="Command Line Client" href="client/" tab="client">
@@ -72,7 +72,7 @@ See http://forrest.apache.org/docs/linking.html for more info
   <vim label="Vim Integration" href="vim/" tab="vim">
     <index label="Index" href="index.html" description="Index"/>
     <project label="Projects" href="project.html"
-      description="Create projects and view/edit project settings."/>
+        description="Create projects and view/edit project settings."/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
@@ -81,39 +81,45 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="List of all eclim vim commands."/>
     <cheatsheet label="Cheatsheet (PDF)" href="cheatsheet.pdf"
         description="List of all eclim vim commands (in pdf form)."/>
+    <ant label="Ant" href="ant/">
+      <complete label="Code Completion" href="complete.html"
+          description="Code Completion"/>
+      <validate label="Validation" href="validate.html"
+          description="Validation"/>
+    </ant>
     <java label="Java" href="java/">
       <source label="Source Code Validation" href="source.html"
-        description="Source Code Validation"/>
+          description="Source Code Validation"/>
       <classpath label="Classpath" href="classpath.html"
-        description="Edit your project's classpath"/>
+          description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"
-        description="Source code searching"/>
+          description="Source code searching"/>
       <doc label="Javadocs" href="doc.html"
-        description="Javadoc support"/>
+          description="Javadoc support"/>
       <import label="Imports" href="import.html"
-        description="Automated imports"/>
+          description="Automated imports"/>
       <complete label="Code Completion" href="complete.html"
-        description="Code Completion"/>
+          description="Code Completion"/>
       <correct label="Code Correction" href="correct.html"
-        description="Code Correction"/>
+          description="Code Correction"/>
       <constructor label="Constructor generation" href="constructor.html"
-        description="Constructor generation."/>
+          description="Constructor generation."/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
-        description="Implementation / Override Stubbing"/>
+          description="Implementation / Override Stubbing"/>
       <delegate label="Delegate Method Creation" href="delegate.html"
-        description="Delegate Method Creation"/>
+          description="Delegate Method Creation"/>
       <bean label="Java Bean Getter / Setter Generation" href="bean.html"
-        description="Java Bean Getter / Setter Generation"/>
+          description="Java Bean Getter / Setter Generation"/>
       <junit label="JUnit Integration" href="junit.html"
-        description="JUnit Integration"/>
+          description="JUnit Integration"/>
       <logging label="Logging" href="logging.html"
-        description="Logging"/>
+          description="Logging"/>
       <abbreviations label="Abbreviations" href="abbreviations.html"
-        description="Abbreviations"/>
+          description="Abbreviations"/>
     </java>
     <xml label="Xml" href="xml/">
       <validate label="Validation" href="validate.html"
-        description="Validation"/>
+          description="Validation"/>
     </xml>
   </vim>
 

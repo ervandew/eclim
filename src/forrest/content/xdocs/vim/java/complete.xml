@@ -30,8 +30,8 @@
   </header>
   <body>
     <p>
-      The java code completion makes use of new "User Defined Completion" added
-      to vim 7.
+      The java code completion makes use of the new "User Defined Completion"
+      added to vim 7.
     </p>
     <p>
       To use the code completion use Ctrl-X Ctrl-U while in insert mode at the
@@ -47,12 +47,11 @@
     </p>
     <p>
       If you are like me and you find those key strokes a bit cumbersome, then
-      you can use the excellent
-      <a href="ext:supertab">SuperTab</a>
-      plugin which allows you to use the Tab key for completion.  However at
-      this time SuperTab does not support the latest completion modes for vim 7,
-      so I have patched it to add the necessary support.  You can download the
-      updated version in the <a href="ext:supertab_patch">downloads</a> area.
+      you can use the excellent <a href="ext:supertab">SuperTab</a> plugin which
+      allows you to use the Tab key for completion.  However at this time
+      SuperTab does not support the latest completion modes for vim 7, so I have
+      patched it to add the necessary support.  You can download the updated
+      version in the <a href="ext:supertab_patch">downloads</a> area.
     </p>
     <p>
       To find out more about vim's insert completion use<br/>

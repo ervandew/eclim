@@ -387,11 +387,14 @@
         and other irregularities with calculation of the starting position for
         the completion.
       </action>
-      <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/complete.xml">ant code completion</a>.
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Other various bug fixes.
       </action>
       <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/validate.xml">ant file validation</a>.
+        Added <a href="vim/ant/complete.html">ant code completion</a>.
+      </action>
+      <action dev="ervandew" type="add" context="Ant">
+        Added <a href="vim/ant/validate.html">ant file validation</a>.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Utilizing vim's new dictionary based completion results.
