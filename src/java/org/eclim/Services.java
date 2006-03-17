@@ -164,12 +164,33 @@ public class Services
   /**
    * Gets the underlying resource bundle used for messages.
    *
+   * @param _plugin The plugin to get the resources for (ant, jdt, etc.).
+   *
+   * @return The ResourceBundle.
+   */
+  public static ResourceBundle getResourceBundle (String _plugin)
+  {
+    if(_plugin != null){
+      for(Iterator ii = pluginResources.iterator(); ii.hasNext();){
+        PluginResources resources = (PluginResources)ii.next();
+        if(_plugin.equals(resources.getName())){
+          return resources.getResourceBundle();
+        }
+      }
+    }
+    return getResourceBundle();
+  }
+
+  /**
+   * Gets the underlying resource bundle used for messages.
+   * <p/>
+   * Gets the resource bundle for the main eclim plugin.
+   *
    * @return The ResourceBundle.
    */
   public static ResourceBundle getResourceBundle ()
   {
-    // FIXME: build an aggregate bundle from all the plugin resources.
-    return ((ResourceBundleMessageSource)getService("messageSource",
+    return ((ResourceBundleMessageSource)context.getBean("messageSource",
           ResourceBundleMessageSource.class)).getResourceBundle();
   }
 
