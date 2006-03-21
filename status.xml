@@ -80,19 +80,7 @@
             Eclipse Equiv: Ctrl+1
           </li>
           <li>
-            Create constructor from first few letters.
-          </li>
-          <li>
             Create new field to hold constructor argument.<br/>
-            Eclipse Equiv: Ctrl+1
-          </li>
-          <li>
-            Override method after typing first few characters.<br/>
-            Eclipse Equiv: Ctrl+Space
-          </li>
-          <li>
-            Add unimplemented methods (cursor on the class that implements an
-            interface).<br/>
             Eclipse Equiv: Ctrl+1
           </li>
           <li>
@@ -102,17 +90,8 @@
             Eclipse Equiv: Ctrl+1
           </li>
           <li>
-            Auto cast object to new var within an if containing an instanceof
-            call.<br/>
-            Eclipse Equiv: Ctrl+1
-          </li>
-          <li>
             Wrap source block (selection) in do,if,for,try,while.<br/>
             Eclipse Equiv: Ctrl+1
-          </li>
-          <li>
-            Guess arguments for a method call (may have to be configured in
-            eclipse.
           </li>
         </ul>
       </action>
