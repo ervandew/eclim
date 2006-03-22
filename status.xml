@@ -183,11 +183,31 @@
         </ol>
       </action>
       <action context="third_party" dev="ervandew">
-        Research third party plugins for additional functionality
+        Research additional plugins for more functionality
         <ul>
           <li>Hibernate: JBoss IDE / Hibernate Tools</li>
           <li>Spring: Spring IDE</li>
           <li>Tapestry: Spindle</li>
+          <li>
+            Forrest:
+            <a href="http://forrest.apache.org/tools/eclipse.html">
+              Forrest plugin
+            </a>.
+          </li>
+          <li>
+            XSLT: <a href="http://eclipsexslt.sourceforge.net/">eclipsexslt</a>
+          </li>
+          <li>
+            <a href="http://eclipse.org/webtools/index.html">
+              Eclipse web tools platform
+            </a>.
+          </li>
+          <li>
+            <a href="http://www.eclipse.org/xsd">Eclipse XSD</a>.
+          </li>
+          <li>
+            <a href="http://www.eclipse.org/ajdt">AJDT</a>.
+          </li>
         </ul>
       </action>
       <action context="debugger" dev="ervandew">
@@ -214,13 +234,6 @@
           <li>&lt;C-T&gt; - show only types (interfaces, classes, enums)</li>
           <li>&lt;C-M&gt; - show only methods</li>
           <li>&lt;C-F&gt; - show only fields</li>
-        </ul>
-      </action>
-      <action context="code_completion" dev="ervandew">
-        More code completion
-        <ul>
-          <li>forrest</li>
-          <li>log4j</li>
         </ul>
       </action>
       <action context="code analysis" dev="ervandew">
@@ -281,18 +294,6 @@
               DefaultCodeFormatterConstants.TRUE|FALSE
           )
         </source>
-      </action>
-      <action context="aspectj" dev="ervandew">
-        AspectJ support via <a href="http://www.eclipse.org/ajdt">AJDT</a>
-      </action>
-      <action context="xsd" dev="ervandew">
-        <a href="http://www.eclipse.org/xsd">XSD</a>
-      </action>
-      <action context="wtp" dev="ervandew">
-        Possible integration w/
-        <a href="http://eclipse.org/webtools/index.html">
-          eclipse web tools platform
-        </a>
       </action>
       <action context="globalization" dev="ervandew">
         Globalization support via
