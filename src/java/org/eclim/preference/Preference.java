@@ -34,7 +34,7 @@ public class Preference
    */
   public String getDefaultValue ()
   {
-    return this.defaultValue;
+    return this.defaultValue != null ? this.defaultValue : "";
   }
 
   /**

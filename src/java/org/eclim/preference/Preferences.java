@@ -31,6 +31,7 @@ import org.eclim.Services;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -47,6 +48,9 @@ import org.osgi.service.prefs.BackingStoreException;
 public class Preferences
 {
   private static final Logger logger = Logger.getLogger(Preferences.class);
+
+  public static final String USERNAME_PREFERENCE = "org.eclim.user.name";
+  public static final String USEREMAIL_PREFERENCE = "org.eclim.user.email";
 
   private static final String ECLIM_PREFIX = "org.eclim";
   private static final String NODE_NAME = "org.eclim";
@@ -318,6 +322,20 @@ public class Preferences
         logger.warn("No handler found for option '{}'", _name);
       }
     }
+  }
+
+  /**
+   * Gets the supplied preference for the specified project.
+   *
+   * @param _project The project.
+   * @param _name The preference name.
+   */
+  public String getPreference (String _project, String _name)
+    throws Exception
+  {
+    IProject project =
+      ResourcesPlugin.getWorkspace().getRoot().getProject(_project);
+    return getPreference(project, _name);
   }
 
   /**

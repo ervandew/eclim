@@ -110,6 +110,16 @@
     </property>
   </bean>
 
+  <bean class="org.eclim.preference.PreferenceFactory"
+      factory-method="addPreferences">
+    <constructor-arg>
+      <value>
+        org.eclim.user.name
+        org.eclim.user.email
+      </value>
+    </constructor-arg>
+  </bean>
+
   <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">
     <description>Handles settings update request.</description>
   </bean>

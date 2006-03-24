@@ -99,16 +99,20 @@ public class PreferenceFactory
     String[] attrs = new String[3];
 
     int index = _attrString.indexOf(' ');
-    attrs[0] = _attrString.substring(0, index);
-
-    _attrString = _attrString.substring(index + 1);
-
-    index = _attrString.indexOf(' ');
-    if(index != -1){
-      attrs[1] = _attrString.substring(0, index);
-      attrs[2] = _attrString.substring(index + 1);
+    if(index == -1){
+      attrs[0] = _attrString;
     }else{
-      attrs[1] = _attrString;
+      attrs[0] = _attrString.substring(0, index);
+
+      _attrString = _attrString.substring(index + 1);
+
+      index = _attrString.indexOf(' ');
+      if(index != -1){
+        attrs[1] = _attrString.substring(0, index);
+        attrs[2] = _attrString.substring(index + 1);
+      }else{
+        attrs[1] = _attrString;
+      }
     }
 
     return attrs;
