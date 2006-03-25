@@ -29,47 +29,95 @@
     </authors>
   </header>
   <body>
-    <p>
-      The eclim javadoc support currently only supports searching of javadocs
-      just like you would <a href="search.html">search the source code</a>.<br/>
-      The only difference is that you use <strong>:JavaDocSearch</strong> instead
-      of <strong>:JavaSearch</strong>.
-    </p>
-    <p>
-      The results will be displayed in a quickfix window and you can simply hit
-      &lt;enter&gt; on an entry to open it using the browser you configured via
-      <strong><a href="../index.html#configuration">g:EclimBrowser</a></strong>.
-    </p>
-    <p>
-      The locations of the javadocs are determined via your eclipse project's
-      .classpath file.  For each library entry you can define a javadoc attribute
-      that points to the base url of the javadoc (http, file, etc).
-    </p>
-    <source>
-      <![CDATA[
-      <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
-        <attributes>
-          <attribute value="http://hibernate.org/hib_docs/v3/api" name="javadoc_location"/>
-        </attributes>
-      </classpath>
-      ]]>
-    </source>
-    <p>
-      <strong>Configuration</strong>
-    </p>
-    <p>
-      Vim Variables:
-    </p>
-    <ul>
-      <li>
-        <strong>g:EclimJavaDocSearchSingleResult</strong><br/>
-        Determines what action to take when only a singe result is found.<br/>
-        Possible values include:
-        <ul>
-          <li>'open' - open the result in a browser.</li>
-          <li>'copen' - open the quickfix window to display the result.</li>
-        </ul>
-      </li>
-    </ul>
+
+    <section id="comment">
+      <title>Commenting</title>
+      <p>
+        Eclim currently provides two commands for automating commenting of java
+        source code.
+      </p>
+      <ul>
+        <li>
+          <strong>:JavaDocAuthor</strong><br/>
+          Adds yourself to the list of authors in the current source file.
+          <note>
+            You should set <strong>org.eclim.user.name</strong> and
+            <strong>org.eclim.user.email</strong> before utilizing this command.
+            See the <a href="../../server/settings.html">settings page</a> for
+            more info.
+          </note>
+        </li>
+        <li>
+          <strong>:JavaDocComment</strong><br/>
+          Adds or updates the comments for the element under the cursor.
+        </li>
+      </ul>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p>
+        Eclim Settings:
+      </p>
+      <ul>
+        <li>
+          <strong>org.eclim.user.name</strong><br/>
+          Used as the name portion of the author tag.
+          Consult the <a href="../../server/settings.html">settings page</a> for
+          more info.
+        </li>
+        <li>
+          <strong>org.eclim.user.email</strong><br/>
+          Used as the email portion of the author tag.
+          Consult the <a href="../../server/settings.html">settings page</a> for
+          more info.
+        </li>
+      </ul>
+    </section>
+
+    <section id="search">
+      <title>Searching</title>
+      <p>
+        Eclim supports searching of javadocs just like you would
+        <a href="search.html">search the source code</a>.<br/>
+        The only difference is that you use <strong>:JavaDocSearch</strong> instead
+        of <strong>:JavaSearch</strong>.
+      </p>
+      <p>
+        The results will be displayed in a quickfix window and you can simply hit
+        &lt;enter&gt; on an entry to open it using the browser you configured via
+        <strong><a href="../index.html#configuration">g:EclimBrowser</a></strong>.
+      </p>
+      <p>
+        The locations of the javadocs are determined via your eclipse project's
+        .classpath file.  For each library entry you can define a javadoc attribute
+        that points to the base url of the javadoc (http, file, etc).
+      </p>
+      <source>
+        <![CDATA[
+        <classpathentry kind="lib" path="lib/hibernate-3.0.jar">
+          <attributes>
+            <attribute value="http://hibernate.org/hib_docs/v3/api" name="javadoc_location"/>
+          </attributes>
+        </classpath>
+        ]]>
+      </source>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p>
+        Vim Variables:
+      </p>
+      <ul>
+        <li>
+          <strong>g:EclimJavaDocSearchSingleResult</strong><br/>
+          Determines what action to take when only a singe result is found.<br/>
+          Possible values include:
+          <ul>
+            <li>'open' - open the result in a browser.</li>
+            <li>'copen' - open the quickfix window to display the result.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
   </body>
 </document>
