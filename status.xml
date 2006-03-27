@@ -264,19 +264,6 @@
         Support :Ant from any file in a project that contains a build.xml file.
         (use ideas from my ant.vim plugin).
       </action>
-      <action context="javadoc" dev="ervandew">
-        implement a jcommenter.vim replacement.<br/>
-        Added functionality:
-        <ol>
-          <li>no need to select multiline method declarations to comment.</li>
-          <li>
-            if method overrides / implements parent method, output {@inheritDoc}
-            and @see, or if the method already has comments, prompt the user if
-            inheritDoc should replace existing docs.
-          </li>
-          <li>Others I haven't thought of yet.</li>
-        </ol>
-      </action>
       <action context="todo/fixme" dev="ervandew">
         Command to add all FIXME/TODO into a grep quickfix.<br/>
         The eclipse compiler will pick these up as warnings, so may be able to
