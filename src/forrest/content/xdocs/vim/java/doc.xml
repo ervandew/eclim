@@ -33,25 +33,9 @@
     <section id="comment">
       <title>Commenting</title>
       <p>
-        Eclim currently provides two commands for automating commenting of java
-        source code.
+        Eclim provides the <strong>:JavaDocComment</strong> command which will
+        add or update the javadoc comments for the element under the cursor.
       </p>
-      <ul>
-        <li>
-          <strong>:JavaDocAuthor</strong><br/>
-          Adds yourself to the list of authors in the current source file.
-          <note>
-            You should set <strong>org.eclim.user.name</strong> and
-            <strong>org.eclim.user.email</strong> before utilizing this command.
-            See the <a href="../../server/settings.html">settings page</a> for
-            more info.
-          </note>
-        </li>
-        <li>
-          <strong>:JavaDocComment</strong><br/>
-          Adds or updates the comments for the element under the cursor.
-        </li>
-      </ul>
       <p>
         <strong>Configuration</strong>
       </p>

@@ -116,6 +116,7 @@
       <value>
         org.eclim.user.name
         org.eclim.user.email
+        org.eclim.project.version 1.0
       </value>
     </constructor-arg>
   </bean>

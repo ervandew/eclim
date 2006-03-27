@@ -395,9 +395,9 @@
         <strong>:JavaImpl</strong> now supports overriding constructors.
       </action>
       <action dev="ervandew" type="add" context="Java">
-        Added <a href="vim/java/doc.html"><strong>:JavaDocAuthor</strong></a>
-        command to add yourself to the list of authors on the current java
-        source file.
+        Added <a href="vim/java/doc.html"><strong>:JavaDocComment</strong></a>
+        command to add or update javadocs comment for the element under the
+        cursor.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added several miscellaneous

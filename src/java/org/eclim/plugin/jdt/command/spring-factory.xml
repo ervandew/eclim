@@ -168,10 +168,10 @@
     </property>
   </bean>
 
-  <bean name="javadoc_author"
-      class="org.eclim.plugin.jdt.command.doc.AddAuthorCommand">
+  <bean name="javadoc_comment"
+      class="org.eclim.plugin.jdt.command.doc.CommentCommand">
     <description>
-      Handles request to add the current user to the list of authors.
+      Handles request to add / update javadoc comments for an element.
     </description>
   </bean>
 

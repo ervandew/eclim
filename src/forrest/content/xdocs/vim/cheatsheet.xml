@@ -134,11 +134,6 @@
         Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.
       </li>
       <li>
-        <strong>:JavaDocAuthor</strong> -
-        Add yourself to the current list of authors in the current java source
-        file.
-      </li>
-      <li>
         <strong>:JavaDocComment</strong> -
         Adds or updates the comments for the element under the cursor.
       </li>
