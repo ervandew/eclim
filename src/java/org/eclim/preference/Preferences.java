@@ -58,8 +58,8 @@ public class Preferences
   private static Preferences instance = new Preferences();
   private static Map optionHandlers = new HashMap();
 
-  private List preferences = new ArrayList();
-  private List options = new ArrayList();
+  private Map preferences = new HashMap();
+  private Map options = new HashMap();
 
   private Preferences () {}
 
@@ -132,8 +132,8 @@ public class Preferences
     }
 
     Map preferences = getPreferencesAsMap();
-    for (Iterator ii = options.iterator(); ii.hasNext();){
-      Option option = (Option)ii.next();
+    for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
+      Option option = (Option)options.get(ii.next());
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
@@ -156,8 +156,8 @@ public class Preferences
     }
 
     Map preferences = getPreferencesAsMap(_project);
-    for (Iterator ii = options.iterator(); ii.hasNext();){
-      Option option = (Option)ii.next();
+    for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
+      Option option = (Option)options.get(ii.next());
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
@@ -172,17 +172,7 @@ public class Preferences
   public Option[] getOptions ()
     throws Exception
   {
-    List results = new ArrayList();
-    Map options = getOptionsAsMap();
-    for(Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      OptionInstance option = new OptionInstance();
-      String key = (String)ii.next();
-      option.setName(key);
-      option.setValue((String)options.get(key));
-      results.add(option);
-    }
-
-    return (Option[])results.toArray(new Option[results.size()]);
+    return getOptions(null);
   }
 
   /**
@@ -195,13 +185,17 @@ public class Preferences
     throws Exception
   {
     List results = new ArrayList();
-    Map options = getOptionsAsMap(_project);
+    Map options = _project == null ?
+      getOptionsAsMap() : getOptionsAsMap(_project);
     for(Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      OptionInstance option = new OptionInstance();
       String key = (String)ii.next();
-      option.setName(key);
-      option.setValue((String)options.get(key));
-      results.add(option);
+      String value = (String)options.get(key);
+      Option option = (Option)this.options.get(key);
+      if(option == null){
+        option = (Option)this.preferences.get(key);
+      }
+      OptionInstance instance = new OptionInstance(option, value);
+      results.add(instance);
     }
 
     return (Option[])results.toArray(new Option[results.size()]);
@@ -389,8 +383,8 @@ public class Preferences
   protected void initializeDefaultPreferences (IEclipsePreferences _preferences)
     throws Exception
   {
-    for(Iterator ii = preferences.iterator(); ii.hasNext();){
-      Preference preference = (Preference)ii.next();
+    for(Iterator ii = preferences.keySet().iterator(); ii.hasNext();){
+      Preference preference = (Preference)preferences.get(ii.next());
       if(_preferences.get(preference.getName(), null) == null){
         _preferences.put(preference.getName(), preference.getDefaultValue());
       }
@@ -407,8 +401,8 @@ public class Preferences
   public void validatePreference (String _name, String _value)
     throws Exception
   {
-    for(Iterator ii = preferences.iterator(); ii.hasNext();){
-      Preference preference = (Preference)ii.next();
+    Preference preference = (Preference)preferences.get(_name);
+    if(preference != null){
       if(preference.getName().equals(_name)){
         if(preference.getPattern() == null ||
             preference.getPattern().matcher(_value).matches())
@@ -434,8 +428,8 @@ public class Preferences
   public void validateOption (String _name, String _value)
     throws Exception
   {
-    for (Iterator ii = options.iterator(); ii.hasNext();){
-      Option option = (Option)ii.next();
+    Option option = (Option)options.get(_name);
+    if(option != null){
       if(option.getName().equals(_name)){
         if (option.getPattern() == null ||
             option.getPattern().matcher(_value).matches())
@@ -474,7 +468,7 @@ public class Preferences
    */
   public void addPreference (Preference _preference)
   {
-    preferences.add(_preference);
+    preferences.put(_preference.getName(), _preference);
   }
 
   /**
@@ -484,6 +478,6 @@ public class Preferences
    */
   public void addOption (Option _option)
   {
-    options.add(_option);
+    options.put(_option.getName(), _option);
   }
 }

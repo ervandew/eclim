@@ -47,6 +47,17 @@
     </property>
   </bean>
 
+  <bean class="org.eclim.preference.PreferenceFactory"
+      factory-method="addPreferences">
+    <constructor-arg>
+      <value>
+        General org.eclim.user.name
+        General org.eclim.user.email
+        General org.eclim.project.version 1.0
+      </value>
+    </constructor-arg>
+  </bean>
+
   <bean id="com.martiansoftware.nailgun.NGServer"
       class="com.martiansoftware.nailgun.NGServer">
     <description>Nailgun server instance.</description>
@@ -108,17 +119,6 @@
         </entry>
       </map>
     </property>
-  </bean>
-
-  <bean class="org.eclim.preference.PreferenceFactory"
-      factory-method="addPreferences">
-    <constructor-arg>
-      <value>
-        org.eclim.user.name
-        org.eclim.user.email
-        org.eclim.project.version 1.0
-      </value>
-    </constructor-arg>
   </bean>
 
   <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">

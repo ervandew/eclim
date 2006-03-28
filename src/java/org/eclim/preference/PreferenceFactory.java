@@ -43,8 +43,9 @@ public class PreferenceFactory
       if(strings[ii].trim().length() > 0){
         String[] attrs = parseOptionAttributes(strings[ii]);
         Option option = new Option();
-        option.setName(attrs[0]);
-        option.setRegex(attrs[1]);
+        option.setPath(attrs[0]);
+        option.setName(attrs[1]);
+        option.setRegex(attrs[2]);
 
         preferences.addOption(option);
       }
@@ -69,9 +70,10 @@ public class PreferenceFactory
       if(strings[ii].trim().length() > 0){
         String[] attrs = parsePreferenceAttributes(strings[ii]);
         Preference preference = new Preference();
-        preference.setName(attrs[0]);
-        preference.setDefaultValue(attrs[1]);
-        preference.setRegex(attrs[2]);
+        preference.setPath(attrs[0]);
+        preference.setName(attrs[1]);
+        preference.setDefaultValue(attrs[2]);
+        preference.setRegex(attrs[3]);
 
         preferences.addPreference(preference);
       }
@@ -96,22 +98,26 @@ public class PreferenceFactory
   {
     _attrString = _attrString.trim();
 
-    String[] attrs = new String[3];
+    String[] attrs = new String[4];
 
     int index = _attrString.indexOf(' ');
+    attrs[0] = _attrString.substring(0, index);
+
+    _attrString = _attrString.substring(index + 1);
+    index = _attrString.indexOf(' ');
     if(index == -1){
-      attrs[0] = _attrString;
+      attrs[1] = _attrString;
     }else{
-      attrs[0] = _attrString.substring(0, index);
+      attrs[1] = _attrString.substring(0, index);
 
       _attrString = _attrString.substring(index + 1);
 
       index = _attrString.indexOf(' ');
       if(index != -1){
-        attrs[1] = _attrString.substring(0, index);
-        attrs[2] = _attrString.substring(index + 1);
+        attrs[2] = _attrString.substring(0, index);
+        attrs[3] = _attrString.substring(index + 1);
       }else{
-        attrs[1] = _attrString;
+        attrs[2] = _attrString;
       }
     }
 
@@ -133,11 +139,16 @@ public class PreferenceFactory
   {
     _attrString = _attrString.trim();
 
-    String[] attrs = new String[2];
+    String[] attrs = new String[3];
 
     int index = _attrString.indexOf(' ');
     attrs[0] = _attrString.substring(0, index);
-    attrs[1] = _attrString.substring(index + 1);
+
+    _attrString = _attrString.substring(index + 1);
+    index = _attrString.indexOf(' ');
+
+    attrs[1] = _attrString.substring(0, index);
+    attrs[2] = _attrString.substring(index + 1);
 
     return attrs;
   }

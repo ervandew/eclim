@@ -28,11 +28,12 @@ import org.eclim.Services;
  */
 public class Option
 {
-  public static final int ALL = 0;
+  /*public static final int ALL = 0;
   public static final int GLOBAL = 1;
-  public static final int PROJECT = 2;
+  public static final int PROJECT = 2;*/
 
-  private int scope;
+  //private int scope;
+  private String path;
   private String name;
   private String regex;
   private String description;
@@ -44,19 +45,39 @@ public class Option
    *
    * @return The scope.
    */
-  public int getScope ()
+  /*public int getScope ()
   {
     return scope;
-  }
+  }*/
 
   /**
    * Sets this option's scope.
    *
    * @param _scope The scope.
    */
-  public void setScope (int _scope)
+  /*public void setScope (int _scope)
   {
     scope = _scope;
+  }*/
+
+  /**
+   * Get path.
+   *
+   * @return path as String.
+   */
+  public String getPath ()
+  {
+    return this.path;
+  }
+
+  /**
+   * Set path.
+   *
+   * @param _path the value to set.
+   */
+  public void setPath (String _path)
+  {
+    this.path = _path;
   }
 
   /**

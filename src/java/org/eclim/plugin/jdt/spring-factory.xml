@@ -59,9 +59,9 @@
       factory-method="addPreferences">
     <constructor-arg>
       <value>
-        org.eclim.java.library.root lib
-        org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
-        org.eclim.java.validation.ignore.warnings false (true|false)
+        JDT org.eclim.java.library.root lib
+        JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
+        JDT org.eclim.java.validation.ignore.warnings false (true|false)
       </value>
     </constructor-arg>
   </bean>
@@ -70,7 +70,7 @@
       factory-method="addOptions">
     <constructor-arg>
       <value>
-        org.eclipse.jdt.core.compiler.source 1\.[2-5]
+        JDT org.eclipse.jdt.core.compiler.source 1\.[2-5]
       </value>
     </constructor-arg>
   </bean>

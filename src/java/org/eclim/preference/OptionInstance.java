@@ -27,13 +27,6 @@ public class OptionInstance
   private String value;
 
   /**
-   * Default constructor;
-   */
-  public OptionInstance ()
-  {
-  }
-
-  /**
    * Constructs a new instance.
    *
    * @param _option The option.
@@ -42,6 +35,7 @@ public class OptionInstance
   public OptionInstance (Option _option, String _value)
   {
     this.value = _value;
+    setPath(_option.getPath());
     setName(_option.getName());
   }
 

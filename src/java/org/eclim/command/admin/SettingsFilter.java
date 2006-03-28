@@ -22,8 +22,11 @@ import java.util.List;
 
 import org.apache.commons.beanutils.BeanComparator;
 
+import org.apache.commons.collections.comparators.ComparatorChain;
+
 import org.eclim.command.OutputFilter;
 
+import org.eclim.preference.Option;
 import org.eclim.preference.OptionInstance;
 
 /**
@@ -35,29 +38,82 @@ import org.eclim.preference.OptionInstance;
 public class SettingsFilter
   implements OutputFilter
 {
-  private static Comparator OPTION_COMPARATOR =
-    new BeanComparator("name");
+  private static ComparatorChain OPTION_COMPARATOR = new ComparatorChain();
+  static{
+    OPTION_COMPARATOR.addComparator(new PathComparator());
+    OPTION_COMPARATOR.addComparator(new BeanComparator("name"));
+  }
 
   /**
    * {@inheritDoc}
    */
   public String filter (Object _result)
   {
-    StringBuffer buffer = new StringBuffer();
-
     List list = (List)_result;
     if(list.size() > 0){
-      // sort the list
-      Collections.sort(list, OPTION_COMPARATOR);
-      for(Iterator ii = list.iterator(); ii.hasNext();){
-        OptionInstance option = (OptionInstance)ii.next();
-        if(buffer.length() > 0){
-          buffer.append('\n');
-        }
-        buffer.append("# ").append(option.getDescription()).append('\n');
-        buffer.append(option.getName()).append('=').append(option.getValue());
+      return printOptions(list);
+    }
+    return "";
+  }
+
+  /**
+   * Print supplied list of options.
+   *
+   * @param _options The option list.
+   * @return The result.
+   */
+  protected String printOptions (List _options)
+  {
+    StringBuffer buffer = new StringBuffer();
+
+    // sort the list
+    Collections.sort(_options, OPTION_COMPARATOR);
+    String lastPath = ((Option)_options.get(0)).getPath();
+    buffer.append("# ").append(lastPath);
+    for(Iterator ii = _options.iterator(); ii.hasNext();){
+      OptionInstance option = (OptionInstance)ii.next();
+      if(!option.getPath().equals(lastPath)){
+        lastPath = option.getPath();
+        buffer.append("\n\n# ").append(lastPath);
       }
+
+      buffer.append("\n\t# ").append(option.getDescription()).append("\n\t");
+      buffer.append(option.getName()).append('=').append(option.getValue());
     }
     return buffer.toString();
+  }
+
+  /**
+   * Comparator to sort options by path.
+   */
+  private static class PathComparator
+    implements Comparator
+  {
+    /**
+     * {@inheritDoc}
+     */
+    public int compare (Object _o1, Object _o2)
+    {
+      Option option1 = (Option)_o1;
+      Option option2 = (Option)_o2;
+
+      if(option1.getPath().equals(option2.getPath())){
+        return 0;
+      }
+
+      if("General".equals(option1.getPath())){
+        return -1;
+      }
+
+      return 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean equals (Object _obj)
+    {
+      return super.equals(_obj);
+    }
   }
 }

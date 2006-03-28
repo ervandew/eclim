@@ -15,14 +15,12 @@
  */
 package org.eclim.command.project;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanComparator;
-
 import org.eclim.command.OutputFilter;
+
+import org.eclim.command.admin.SettingsFilter;
 
 import org.eclim.preference.OptionInstance;
 
@@ -33,46 +31,43 @@ import org.eclim.preference.OptionInstance;
  * @version $Revision$
  */
 public class ProjectInfoFilter
-  implements OutputFilter
+  extends SettingsFilter
 {
-  private static Comparator OPTION_COMPARATOR =
-    new BeanComparator("name");
-
   /**
    * {@inheritDoc}
    */
   public String filter (Object _result)
   {
-    StringBuffer buffer = new StringBuffer();
-
     List list = (List)_result;
     if(list.size() > 0){
       // list of project's current settings.
       if(list.get(0) instanceof OptionInstance){
-        // sort the list
-        Collections.sort(list, OPTION_COMPARATOR);
-        for(Iterator ii = list.iterator(); ii.hasNext();){
-          OptionInstance option = (OptionInstance)ii.next();
-          if(buffer.length() > 0){
-            buffer.append('\n');
-          }
-          buffer.append("# ").append(option.getDescription()).append('\n');
-          buffer.append(option.getName()).append('=').append(option.getValue());
-        }
-        return buffer.toString();
+        return printOptions(list);
 
       // list of all projects.
       }else{
-        for(Iterator ii = list.iterator(); ii.hasNext();){
-          if(buffer.length() > 0){
-            buffer.append('\n');
-          }
-          buffer.append(ii.next());
-        }
-        return buffer.toString();
+        return printProjects(list);
       }
     }
 
+    return "";
+  }
+
+  /**
+   * Print supplied list of projects.
+   *
+   * @param _projects The project list.
+   * @return The result.
+   */
+  protected String printProjects (List _projects)
+  {
+    StringBuffer buffer = new StringBuffer();
+    for(Iterator ii = _projects.iterator(); ii.hasNext();){
+      if(buffer.length() > 0){
+        buffer.append('\n');
+      }
+      buffer.append(ii.next());
+    }
     return buffer.toString();
   }
 }
