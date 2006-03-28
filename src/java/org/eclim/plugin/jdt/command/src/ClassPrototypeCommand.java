@@ -73,35 +73,37 @@ public class ClassPrototypeCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
-    String className = _commandLine.getValue(Options.CLASSNAME_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    try{
+      String className = _commandLine.getValue(Options.CLASSNAME_OPTION);
+      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-    File file = new File(
-      SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
-    if(!file.exists()){
-      new File(FilenameUtils.getFullPath(file.getAbsolutePath())).mkdirs();
-      file.deleteOnExit();
-      FileWriter out = null;
-      try{
-        IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+      File file = new File(
+        SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
+      if(!file.exists()){
+        new File(FilenameUtils.getFullPath(file.getAbsolutePath())).mkdirs();
+        file.deleteOnExit();
+        FileWriter out = null;
+        try{
+          IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
 
-        IType type = javaProject.findType(className);
-        if(type == null){
-          throw new IllegalArgumentException(
-              Services.getMessage("type.not.found",
-                new Object[]{projectName, className}));
+          IType type = javaProject.findType(className);
+          if(type == null){
+            throw new IllegalArgumentException(
+                Services.getMessage("type.not.found",
+                  new Object[]{projectName, className}));
+          }
+
+          String prototype = prototype(type);
+          out = new FileWriter(file);
+          out.write(prototype);
+        }finally{
+          IOUtils.closeQuietly(out);
         }
-
-        String prototype = prototype(type);
-        out = new FileWriter(file);
-        out.write(prototype);
-      }catch(Exception e){
-        return e;
-      }finally{
-        IOUtils.closeQuietly(out);
       }
+      return file.getAbsolutePath();
+    }catch(Exception e){
+      return e;
     }
-    return file.getAbsolutePath();
   }
 
   /**

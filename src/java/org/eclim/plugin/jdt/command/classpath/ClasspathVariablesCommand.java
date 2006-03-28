@@ -52,9 +52,9 @@ public class ClasspathVariablesCommand
             JavaCore.getClasspathVariable(names[ii]).toOSString());
         results.add(variable);
       }
+      return filter(_commandLine, results);
     }catch(Exception e){
       return e;
     }
-    return filter(_commandLine, results);
   }
 }

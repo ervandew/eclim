@@ -88,10 +88,11 @@ public class CodeCompleteCommand
         }
       }
 
+      return filter(_commandLine, (CodeCompletionResult[])
+        results.toArray(new CodeCompletionResult[results.size()]));
+
     }catch(Exception e){
       return e;
     }
-    return filter(_commandLine, (CodeCompletionResult[])
-      results.toArray(new CodeCompletionResult[results.size()]));
   }
 }

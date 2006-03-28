@@ -40,10 +40,10 @@ public class SrcFileExistsCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-
     try{
+      String file = _commandLine.getValue(Options.FILE_OPTION);
+      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+
       if(projectName != null){
         ICompilationUnit src = JavaUtils.findCompilationUnit(projectName, file);
         return src != null && src.exists() ? Boolean.TRUE : Boolean.FALSE;

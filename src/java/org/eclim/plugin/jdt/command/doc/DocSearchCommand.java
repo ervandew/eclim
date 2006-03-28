@@ -61,7 +61,12 @@ public class DocSearchCommand
     if(result instanceof Throwable){
       return result;
     }
-    return filter(_commandLine, result);
+
+    try{
+      return filter(_commandLine, result);
+    }catch(Exception e){
+      return e;
+    }
   }
 
   /**

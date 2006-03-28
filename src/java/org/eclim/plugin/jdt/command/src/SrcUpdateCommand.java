@@ -53,10 +53,10 @@ public class SrcUpdateCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-
     try{
+      String file = _commandLine.getValue(Options.FILE_OPTION);
+      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+
       // JavaUtils refreshes the file when getting it.
       ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 

@@ -69,11 +69,11 @@ public class CodeCompleteCommand
           results.add(result);
         }
       }
+      return filter(_commandLine,
+          results.toArray(new CodeCompleteResult[results.size()]));
     }catch(Exception e){
       return e;
     }
-    return filter(_commandLine,
-        results.toArray(new CodeCompleteResult[results.size()]));
   }
 
   /**

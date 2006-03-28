@@ -55,12 +55,12 @@ public class ImportCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
-    String project = _commandLine.getValue(Options.NAME_OPTION);
-    String pat = _commandLine.getValue(Options.PATTERN_OPTION);
-    int type = IJavaSearchConstants.TYPE;
-
     List results = new ArrayList();
     try{
+      String project = _commandLine.getValue(Options.NAME_OPTION);
+      String pat = _commandLine.getValue(Options.PATTERN_OPTION);
+      int type = IJavaSearchConstants.TYPE;
+
       SearchPattern pattern =
         SearchPattern.createPattern(pat, type,
             IJavaSearchConstants.DECLARATIONS,
@@ -78,9 +78,9 @@ public class ImportCommand
                ((IJavaElement)match.getElement()).getElementType()));
         }
       }
+      return filter(_commandLine, results);
     }catch(Exception e){
       return e;
     }
-    return filter(_commandLine, results);
   }
 }

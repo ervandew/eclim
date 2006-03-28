@@ -91,7 +91,11 @@ public class SearchCommand
     if(result instanceof Throwable){
       return result;
     }
-    return filter(_commandLine, result);
+    try{
+      return filter(_commandLine, result);
+    }catch(Exception e){
+      return e;
+    }
   }
 
   /**
@@ -126,8 +130,6 @@ public class SearchCommand
 
       // pattern search
       }else if(pat != null){
-        // bit of a hack for vim
-        pat = pat.replace('+', '*');
         int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
         int matchType = (pat.indexOf('*') != -1 || pat.indexOf('?') != -1) ?
           SearchPattern.R_PATTERN_MATCH :
