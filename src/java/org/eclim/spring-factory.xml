@@ -53,7 +53,8 @@
       <value>
         General org.eclim.user.name
         General org.eclim.user.email
-        General org.eclim.project.version 1.0
+        General/Project org.eclim.project.version 1.0
+        General/Project org.eclim.project.copyright
       </value>
     </constructor-arg>
   </bean>
