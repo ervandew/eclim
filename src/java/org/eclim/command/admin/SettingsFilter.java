@@ -15,6 +15,8 @@
  */
 package org.eclim.command.admin;
 
+import java.text.Collator;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -89,6 +91,8 @@ public class SettingsFilter
   private static class PathComparator
     implements Comparator
   {
+    private Collator collator = Collator.getInstance();
+
     /**
      * {@inheritDoc}
      */
@@ -101,11 +105,19 @@ public class SettingsFilter
         return 0;
       }
 
-      if("General".equals(option1.getPath())){
+      if (option1.getPath().startsWith("General") &&
+          !option2.getPath().startsWith("General"))
+      {
         return -1;
       }
 
-      return 1;
+      if (option2.getPath().startsWith("General") &&
+          !option1.getPath().startsWith("General"))
+      {
+        return 1;
+      }
+
+      return collator.compare(option1.getPath(), option2.getPath());
     }
 
     /**
