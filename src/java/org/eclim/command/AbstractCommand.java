@@ -62,6 +62,7 @@ public abstract class AbstractCommand
    * @return The post-filtered result.
    */
   protected Object filter (CommandLine _commandLine, Object _result)
+    throws Exception
   {
     String filterName = _commandLine.getValue(Options.FILTER_OPTION);
     if(filterName != null){

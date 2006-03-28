@@ -20,6 +20,10 @@ import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
+import org.apache.commons.codec.net.URLCodec;
+
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Container for the supplied command line options.
  *
@@ -28,6 +32,8 @@ import org.apache.commons.cli.Option;
  */
 public class CommandLine
 {
+  private static final URLCodec CODEC = new URLCodec();
+
   private Map options = new HashMap();
   private String[] unrecognized;
 
@@ -65,8 +71,13 @@ public class CommandLine
    * @return The argument supplied to the option.
    */
   public String getValue (String _name)
+    throws Exception
   {
-    return (String)options.get(_name);
+    String value = (String)options.get(_name);
+    value = CODEC.decode(value);
+    // '*' isn't decode so decode manually
+    value = StringUtils.replace(value, "%2A", "*");
+    return value;
   }
 
   /**
@@ -76,8 +87,9 @@ public class CommandLine
    * @return The option as an int value, or -1 if option not supplied.
    */
   public int getIntValue (String _name)
+    throws Exception
   {
-    String arg = (String)options.get(_name);
+    String arg = getValue(_name);
     return arg != null ? Integer.parseInt(arg) : -1;
   }
 
