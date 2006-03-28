@@ -24,6 +24,8 @@ import java.util.Map;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.log4j.Logger;
 
 import org.eclim.command.AbstractCommand;
@@ -34,6 +36,8 @@ import org.eclim.preference.Preferences;
 
 import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -107,15 +111,18 @@ public class CommentCommand
     throws Exception
   {
     Javadoc javadoc = null;
+    boolean isNew = false;
     if (_node instanceof PackageDeclaration){
       javadoc = ((PackageDeclaration)_node).getJavadoc();
       if(javadoc == null){
+        isNew = true;
         javadoc = _node.getAST().newJavadoc();
         ((PackageDeclaration)_node).setJavadoc(javadoc);
       }
     }else{
       javadoc = ((BodyDeclaration)_node).getJavadoc();
       if(javadoc == null){
+        isNew = true;
         javadoc = _node.getAST().newJavadoc();
         ((BodyDeclaration)_node).setJavadoc(javadoc);
       }
@@ -123,16 +130,16 @@ public class CommentCommand
 
     switch(_node.getNodeType()){
       case ASTNode.PACKAGE_DECLARATION:
-        commentPackage(javadoc, _element);
+        commentPackage(javadoc, _element, isNew);
         break;
       case ASTNode.TYPE_DECLARATION:
-        commentType(javadoc, _element);
+        commentType(javadoc, _element, isNew);
         break;
       case ASTNode.METHOD_DECLARATION:
-        commentMethod(javadoc, _element);
+        commentMethod(javadoc, _element, isNew);
         break;
       default:
-        commentOther(javadoc, _element);
+        commentOther(javadoc, _element, isNew);
     }
   }
 
@@ -141,11 +148,12 @@ public class CommentCommand
    *
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
+   * @param _isNew true if there was no previous javadoc for this element.
    */
-  private void commentPackage (Javadoc _javadoc, IJavaElement _element)
+  private void commentPackage (
+      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
-    System.out.println("#### commentPackage");
     // How to get the copyright / license notice?
   }
 
@@ -154,11 +162,28 @@ public class CommentCommand
    *
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
+   * @param _isNew true if there was no previous javadoc for this element.
    */
-  private void commentType (Javadoc _javadoc, IJavaElement _element)
+  private void commentType (
+      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
-    System.out.println("#### commentType");
+    if(_element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
+      List tags = _javadoc.tags();
+      if(_isNew){
+        IProject project = _element.getJavaProject().getProject();
+        addTag(_javadoc, tags.size(), null, "");
+        addTag(_javadoc, tags.size(), null, "");
+        addTag(_javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
+        String version = getPreferences().getPreference(
+            project, "org.eclim.java.doc.version");
+        version = StringUtils.replace(version, "\\$", "$");
+        addTag(_javadoc, tags.size(), TagElement.TAG_VERSION, version);
+      }else{
+      }
+    }else{
+      commentOther(_javadoc, _element, _isNew);
+    }
   }
 
   /**
@@ -166,15 +191,16 @@ public class CommentCommand
    *
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
+   * @param _isNew true if there was no previous javadoc for this element.
    */
-  private void commentMethod (Javadoc _javadoc, IJavaElement _element)
+  private void commentMethod (
+      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
     IMethod method = (IMethod)_element;
-    boolean isNew = _javadoc.tags().size() == 0;
     List tags = _javadoc.tags();
 
-    if(isNew){
+    if(_isNew){
       boolean inherit = false;
       // see if method is overriding / implementing method from superclass
       // add inheritDoc, and @see
@@ -185,9 +211,9 @@ public class CommentCommand
       }
     }
 
-    addUpdateParamTags(_javadoc, method, isNew);
-    addUpdateReturnTag(_javadoc, method, isNew);
-    addUpdateThrowsTags(_javadoc, method, isNew);
+    addUpdateParamTags(_javadoc, method, _isNew);
+    addUpdateReturnTag(_javadoc, method, _isNew);
+    addUpdateThrowsTags(_javadoc, method, _isNew);
   }
 
   /**
@@ -195,11 +221,15 @@ public class CommentCommand
    *
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
+   * @param _isNew true if there was no previous javadoc for this element.
    */
-  private void commentOther (Javadoc _javadoc, IJavaElement _element)
+  private void commentOther (
+      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
-    // do nothing.
+    if(_isNew){
+      addTag(_javadoc, 0, null, "");
+    }
   }
 
   /**
@@ -397,13 +427,13 @@ public class CommentCommand
    *
    * @return The author.
    */
-  private String getAuthor (String _project)
+  private String getAuthor (IProject _project)
     throws Exception
   {
     String username = getPreferences().getPreference(
-        _project, Preferences.USERNAME_PREFERENCE);
+        _project.getProject(), Preferences.USERNAME_PREFERENCE);
     String email = getPreferences().getPreference(
-        _project, Preferences.USEREMAIL_PREFERENCE);
+        _project.getProject(), Preferences.USEREMAIL_PREFERENCE);
 
     // build the author string.
     StringBuffer author = new StringBuffer();
