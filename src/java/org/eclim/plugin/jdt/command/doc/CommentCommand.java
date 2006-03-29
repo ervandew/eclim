@@ -170,8 +170,8 @@ public class CommentCommand
   {
     if(_element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
       List tags = _javadoc.tags();
+      IProject project = _element.getJavaProject().getProject();
       if(_isNew){
-        IProject project = _element.getJavaProject().getProject();
         addTag(_javadoc, tags.size(), null, "");
         addTag(_javadoc, tags.size(), null, "");
         addTag(_javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
@@ -180,6 +180,51 @@ public class CommentCommand
         version = StringUtils.replace(version, "\\$", "$");
         addTag(_javadoc, tags.size(), TagElement.TAG_VERSION, version);
       }else{
+        // check if author tag exists.
+        int index = -1;
+        String author = getAuthor(project);
+        for (int ii = 0; ii < tags.size(); ii++){
+          TagElement tag = (TagElement)tags.get(ii);
+          if(TagElement.TAG_AUTHOR.equals(tag.getTagName())){
+            String authorText = ((TextElement)tag.fragments().get(0)).getText();
+            // check if author tag is the same.
+            if(authorText != null && author.trim().equals(authorText.trim())){
+              index = -1;
+              break;
+            }
+            index = ii + 1;
+          }else if(tag.getTagName() != null){
+            if(index == -1){
+              index = ii;
+            }
+          }
+        }
+
+        // insert author tag if it doesn't exist.
+        if(index > -1){
+          TagElement authorTag = _javadoc.getAST().newTagElement();
+          TextElement authorText = _javadoc.getAST().newTextElement();
+          authorText.setText(author);
+          authorTag.setTagName(TagElement.TAG_AUTHOR);
+          authorTag.fragments().add(authorText);
+          tags.add(index, authorTag);
+        }
+
+        // add the version tag if it doesn't exist.
+        boolean versionExists = false;
+        for (int ii = 0; ii < tags.size(); ii++){
+          TagElement tag = (TagElement)tags.get(ii);
+          if(TagElement.TAG_VERSION.equals(tag.getTagName())){
+            versionExists = true;
+            break;
+          }
+        }
+        if (!versionExists){
+          String version = getPreferences().getPreference(
+              project, "org.eclim.java.doc.version");
+          version = StringUtils.replace(version, "\\$", "$");
+          addTag(_javadoc, tags.size(), TagElement.TAG_VERSION, version);
+        }
       }
     }else{
       commentOther(_javadoc, _element, _isNew);
@@ -469,32 +514,4 @@ public class CommentCommand
     tag.fragments().add(text);
     _javadoc.tags().add(_index, tag);
   }
-
-  /*    List tags = javadoc.tags();
-      int index = -1;
-      for (int ii = 0; ii < tags.size(); ii++){
-        TagElement tag = (TagElement)tags.get(ii);
-        if(TagElement.TAG_AUTHOR.equals(tag.getTagName())){
-          String author = ((TextElement)tag.fragments().get(0)).getText();
-          // check if author tag is the same.
-          if(author != null && _author.trim().equals(author.trim())){
-            index = -1;
-            break;
-          }
-          index = ii + 1;
-        }else if(tag.getTagName() != null){
-          if(index == -1){
-            index = ii;
-          }
-        }
-      }
-
-      if(index > -1){
-        TagElement authorTag = type.getAST().newTagElement();
-        TextElement author = type.getAST().newTextElement();
-        author.setText(_author);
-        authorTag.setTagName(TagElement.TAG_AUTHOR);
-        authorTag.fragments().add(author);
-        tags.add(index, authorTag);
-      }*/
 }
