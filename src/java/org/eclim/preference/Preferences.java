@@ -52,6 +52,9 @@ public class Preferences
   public static final String USERNAME_PREFERENCE = "org.eclim.user.name";
   public static final String USEREMAIL_PREFERENCE = "org.eclim.user.email";
 
+  public static final String PROJECT_COPYRIGHT_PREFERENCE =
+    "org.eclim.project.copyright";
+
   private static final String ECLIM_PREFIX = "org.eclim";
   private static final String NODE_NAME = "org.eclim";
 
