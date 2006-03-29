@@ -34,6 +34,8 @@ import org.apache.commons.vfs.VFS;
 
 import org.apache.log4j.Logger;
 
+import org.eclipse.core.resources.IProject;
+
 /**
  * Utilities for working w/ files and commons vfs.
  *
@@ -48,6 +50,19 @@ public class FileUtils
   public static final String ZIP_PREFIX = "zip://";
   public static final String JAR_EXT = ".jar";
   public static final String ZIP_EXT = ".zip";
+
+  /**
+   * Gets a project relative file.
+   *
+   * @param _project The project.
+   * @param _file The file.
+   * @return The File.
+   */
+  public static File getProjectRelativeFile (IProject _project, String _file)
+  {
+    return new File(FilenameUtils.concat(
+          _project.getRawLocation().toOSString(), _file));
+  }
 
   /**
    * Converts the supplied offset into an int array where the first element is
