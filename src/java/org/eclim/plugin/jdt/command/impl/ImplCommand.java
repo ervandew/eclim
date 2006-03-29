@@ -109,7 +109,7 @@ public class ImplCommand
   {
     List results = new ArrayList();
     if(isValidType(_type)){
-      List implementedMethods = getImplementedMethods(_type);
+      Map implementedMethods = getImplementedMethods(_type);
 
       IType[] types = getSuperTypes(_commandLine, _type);
       for(int ii = 0; ii < types.length; ii++){
@@ -153,7 +153,7 @@ public class ImplCommand
   {
     IType superType = _type.getJavaProject().findType(_superTypeName);
     IMethod[] methods = superType.getMethods();
-    List implementedMethods = getImplementedMethods(_type);
+    Map implementedMethods = getImplementedMethods(_type);
 
     // insert only one method
     if(_methodName != null){
@@ -170,7 +170,7 @@ public class ImplCommand
             Services.getMessage("method.not.found",
               new Object[]{_superTypeName, _methodName}));
       }
-      if(isImplemented(_type, implementedMethods, method)){
+      if(getImplemented(_type, implementedMethods, method) != null){
         throw new IllegalArgumentException(
             Services.getMessage("method.already.implemented",
               new Object[]{
@@ -186,16 +186,21 @@ public class ImplCommand
     // insert all methods not already implemented.
     int offset = 0;
     int length = 0;
+    IJavaElement sibling = null;
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();
+      IMethod implemented =
+        getImplemented(_type, implementedMethods, methods[ii]);
       if (!Flags.isStatic(flags) &&
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags) &&
           !methods[ii].isConstructor() &&
-          !isImplemented(_type, implementedMethods, methods[ii]))
+          implemented == null)
       {
-        IJavaElement sibling = getSibling(
-            _type, implementedMethods, methods, methods[ii]);
+        if(sibling == null){
+          sibling = getSibling(
+              _type, implementedMethods, methods, methods[ii]);
+        }
         Position position =
           insertMethod(_commandLine, _type, superType, methods[ii], sibling);
         offset = offset == 0 ? position.getOffset() : offset;
@@ -205,6 +210,30 @@ public class ImplCommand
           length += 3;
         }
         length = length + position.getLength();
+      }else if(implemented != null){
+        sibling = null;
+
+        // sibling needs to be method after the implemented method.
+        IMethod[] all = _type.getMethods();
+        for (int jj = 0; jj < all.length; jj++){
+          if(all[jj].equals(implemented) && jj < all.length - 1){
+            sibling = all[jj + 1];
+            break;
+          }
+        }
+
+        // no method after implemented, so find the first non-enum type.
+        if(sibling == null){
+          IType[] types = _type.getTypes();
+          if(types.length > 0){
+            for (int jj = 0; jj < types.length; jj++){
+              if(!types[jj].isEnum()){
+                sibling = types[jj];
+                break;
+              }
+            }
+          }
+        }
       }
     }
     return new Position(
@@ -225,16 +254,16 @@ public class ImplCommand
   }
 
   /**
-   * Gets a list of minimal method signatures for methods implemented by the
+   * Gets a map of minimal method signatures and methods implemented by the
    * supplied type.
    *
    * @param _type The type.
-   * @return List of minial method signatures.
+   * @return Map of minimal method signatures and the corresponding methods.
    */
-  protected List getImplementedMethods (IType _type)
+  protected Map getImplementedMethods (IType _type)
     throws Exception
   {
-    List implementedMethods = new ArrayList();
+    Map implementedMethods = new HashMap();
     IMethod[] methods = _type.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();
@@ -242,8 +271,9 @@ public class ImplCommand
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags))
       {
-        implementedMethods.add(
-            TypeUtils.getMinimalMethodSignature(methods[ii]));
+        implementedMethods.put(
+            TypeUtils.getMinimalMethodSignature(methods[ii]),
+            methods[ii]);
       }
     }
     return implementedMethods;
@@ -324,7 +354,7 @@ public class ImplCommand
    * @return Array of methods.
    */
   protected ImplMethod[] getMethods (
-      IType _type, List _baseMethods, IType _superType)
+      IType _type, Map _baseMethods, IType _superType)
     throws Exception
   {
     List results = new ArrayList();
@@ -335,7 +365,8 @@ public class ImplCommand
         String signature = getMethodSignature(method);
         ImplMethod implMethod = new ImplMethod();
         implMethod.setSignature(signature);
-        implMethod.setImplemented(isImplemented(_type, _baseMethods, method));
+        implMethod.setImplemented(
+            getImplemented(_type, _baseMethods, method) != null);
 
         results.add(implMethod);
       }
@@ -374,15 +405,15 @@ public class ImplCommand
   }
 
   /**
-   * Determines if the supplied method is implemented.
+   * Gets the implemented version of the supplied method.
    *
    * @param _type The type to be modified.
    * @param _baseMethods The list of methods defined in the base.
    * @param _method The method to test for.
-   * @return true if implemented, false otherwise.
+   * @return The implemented method or null if none.
    */
-  protected boolean isImplemented (
-      IType _type, List _baseMethods, IMethod _method)
+  protected IMethod getImplemented (
+      IType _type, Map _baseMethods, IMethod _method)
     throws Exception
   {
     String signature = TypeUtils.getMinimalMethodSignature(_method);
@@ -391,7 +422,7 @@ public class ImplCommand
           _method.getDeclaringType().getElementName(),
           _type.getElementName());
     }
-    return _baseMethods.contains(signature);
+    return (IMethod)_baseMethods.get(signature);
   }
 
   /**
@@ -479,22 +510,53 @@ public class ImplCommand
    * @return The sibling, or null if none.
    */
   protected IJavaElement getSibling (
-      IType _type, List _baseMethods, IMethod[] _methods, IMethod _method)
+      IType _type, Map _baseMethods, IMethod[] _methods, IMethod _method)
     throws Exception
   {
-    // FIXME: find a way to find the closest sibling that matches the closest
-    // sibling in the super type.  When added more than one method, attempt to
-    // preserve some notion of where we are so we don't over search causing
-    // significant performance penalty.
-    IType[] types = _type.getTypes();
-    if(types.length > 0){
-      // find the first non-enum type.
-      for (int ii = 0; ii < types.length; ii++){
-        if(!types[ii].isEnum()){
-          return types[ii];
+    int index = -1;
+    int implementedIndex = -1;
+    IJavaElement sibling = null;
+
+    // find the nearest implemented method
+    for (int ii = 0; ii < _methods.length; ii++){
+      if(_methods[ii].equals(_method)){
+        index = ii;
+      }else{
+        IMethod implemented = getImplemented(_type, _baseMethods, _methods[ii]);
+        if(implemented != null){
+          implementedIndex = ii;
+          sibling = implemented;
+          if(index != -1){
+            break;
+          }
         }
       }
     }
-    return null;
+
+    if(implementedIndex < index && sibling != null){
+      // get the method after the sibling.
+      IMethod[] all = _type.getMethods();
+      IMethod find = (IMethod)sibling;
+      sibling = null;
+      for (int ii = 0; ii < all.length; ii++){
+        if(all[ii].equals(find) && ii < all.length - 1){
+          return sibling = all[ii + 1];
+        }
+      }
+    }
+
+    // no sibling, get first non enum type.
+    if(sibling == null){
+      IType[] types = _type.getTypes();
+      if(types.length > 0){
+        // find the first non-enum type.
+        for (int ii = 0; ii < types.length; ii++){
+          if(!types[ii].isEnum()){
+            return types[ii];
+          }
+        }
+      }
+    }
+    return sibling;
   }
 }
