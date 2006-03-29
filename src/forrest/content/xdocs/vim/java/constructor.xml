@@ -71,5 +71,9 @@
       If you issue the command with no fields selected, then a default empty
       constructor is created.
     </p>
+    <note>
+      The insertion of constructors is done externally with eclipse and with
+      that comes a couple <a href="../external_editing.html">caveats</a>.
+    </note>
   </body>
 </document>

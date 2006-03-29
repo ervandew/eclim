@@ -36,6 +36,10 @@
         Eclim provides the <strong>:JavaDocComment</strong> command which will
         add or update the javadoc comments for the element under the cursor.
       </p>
+      <note>
+        The insertion of javadoc comments is done externally with eclipse and
+        with that comes a couple <a href="../external_editing.html">caveats</a>.
+      </note>
       <p>
         <strong>Configuration</strong>
       </p>

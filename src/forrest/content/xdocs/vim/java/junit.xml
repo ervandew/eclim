@@ -57,6 +57,10 @@
       regular overriding stub will be generated.
     </p>
     <note>
+      The insertion of methods is done externally with eclipse and with that
+      comes a couple <a href="../external_editing.html">caveats</a>.
+    </note>
+    <note>
       The junit.jar file must be in your project's classpath for eclim to
       display possible methods to override in the junit test-case hierarchy.
     </note>

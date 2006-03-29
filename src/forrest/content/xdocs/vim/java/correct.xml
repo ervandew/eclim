@@ -62,5 +62,9 @@
     <source>
       0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
     </source>
+    <note>
+      The code correction is done externally with eclipse and with that comes a
+      couple <a href="../external_editing.html">caveats</a>.
+    </note>
   </body>
 </document>

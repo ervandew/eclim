@@ -67,5 +67,9 @@
       a visual selection or a numbered range to generate methods for a set of
       fields.
     </p>
+    <note>
+      The insertion of these methods is done externally with eclipse and with
+      that comes a couple <a href="../external_editing.html">caveats</a>.
+    </note>
   </body>
 </document>
