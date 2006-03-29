@@ -66,6 +66,27 @@ public interface PluginResources
   public ResourceBundle getResourceBundle ();
 
   /**
+   * Gets a property by name.
+   * <p/>
+   * Properties defined by plugin.properties at the root of the plugin.
+   *
+   * @param _name The property name.
+   * @return The property or null if not found.
+   */
+  public String getProperty (String _name);
+
+  /**
+   * Gets a property by name.
+   * <p/>
+   * Properties defined by plugin.properties at the root of the plugin.
+   *
+   * @param _name The property name.
+   * @param _default The value to return if no value found.
+   * @return The property value or the supplied default value.
+   */
+  public String getProperty (String _name, String _default);
+
+  /**
    * Closes this resource instance and releases any held resources.
    */
   public void close ();

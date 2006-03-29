@@ -18,7 +18,10 @@ package org.eclim.plugin;
 import java.net.URL;
 
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
 
 import org.eclim.util.spring.ResourceBundleMessageSource;
 import org.eclim.util.spring.UrlXmlApplicationContext;
@@ -35,8 +38,13 @@ import org.springframework.context.support.AbstractApplicationContext;
 public abstract class AbstractPluginResources
   implements PluginResources
 {
+  private static final Logger logger =
+    Logger.getLogger(AbstractPluginResources.class);
+
   private static final String MESSAGE_SOURCE = "messageSource";
+  private static final String PLUGIN_PROPERTIES = "/plugin.properties";
   private AbstractApplicationContext context;
+  private Properties properties;
 
   /**
    * Initializes this instance with the resource at the supplied url.
@@ -49,6 +57,14 @@ public abstract class AbstractPluginResources
     ResourceBundleMessageSource messages = ((ResourceBundleMessageSource)getService(
           MESSAGE_SOURCE, ResourceBundleMessageSource.class));
     messages.setClassLoader(getClass().getClassLoader());
+
+    properties = new Properties();
+    try{
+      properties.load(getClass().getResourceAsStream(PLUGIN_PROPERTIES));
+    }catch(Exception e){
+      logger.warn(
+          "Error loading plugin.properties for plugin '" + getName() + "'", e);
+    }
   }
 
   /**
@@ -82,6 +98,22 @@ public abstract class AbstractPluginResources
   {
     return ((ResourceBundleMessageSource)getService(MESSAGE_SOURCE,
           ResourceBundleMessageSource.class)).getResourceBundle();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getProperty (String _name)
+  {
+    return properties.getProperty(_name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getProperty (String _name, String _default)
+  {
+    return properties.getProperty(_name, _default);
   }
 
   /**
