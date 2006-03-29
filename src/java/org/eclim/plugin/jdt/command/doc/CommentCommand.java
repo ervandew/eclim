@@ -15,6 +15,9 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.HashMap;
@@ -24,9 +27,13 @@ import java.util.Map;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.log4j.Logger;
+
+import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -36,6 +43,8 @@ import org.eclim.preference.Preferences;
 
 import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -154,7 +163,32 @@ public class CommentCommand
       Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
-    // How to get the copyright / license notice?
+    IProject project = _element.getJavaProject().getProject();
+    String copyright = getPreferences().getPreference(
+      project, Preferences.PROJECT_COPYRIGHT_PREFERENCE);
+    if(copyright != null && copyright.trim().length() > 0){
+      File file = FileUtils.getProjectRelativeFile(project, copyright);
+      if(!file.exists()){
+        throw new IllegalArgumentException(
+            Services.getMessage("project.copyright.not.found", file));
+      }
+
+      List tags = _javadoc.tags();
+      tags.clear();
+
+      BufferedReader reader = null;
+      try{
+        reader = new BufferedReader(new FileReader(file));
+        String line = null;
+        while ((line = reader.readLine()) != null){
+          addTag(_javadoc, tags.size(), null, line);
+        }
+      }finally{
+        IOUtils.closeQuietly(reader);
+      }
+    }else{
+      commentOther(_javadoc, _element, _isNew);
+    }
   }
 
   /**
