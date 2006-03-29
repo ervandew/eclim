@@ -44,14 +44,17 @@ public class Services
 {
   private static Logger logger = Logger.getLogger(Services.class);
 
+  private static final String MAIN = "main";
+
   private static AbstractApplicationContext context =
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
           "org/eclim/spring-factory.xml"));
 
-  private static List pluginResources = new ArrayList();
+  private static Map pluginResources = new HashMap();
   private static Map serviceCache = new HashMap();
   private static Map messageCache = new HashMap();
+  private static Map propertyCache = new HashMap();
 
   /**
    * Gets a service by type.
@@ -75,25 +78,24 @@ public class Services
    */
   public static Object getService (String _name, Class _type)
   {
-    Integer index = (Integer)serviceCache.get(_name);
-    if(index == null){
-      Iterator iterator = pluginResources.iterator();
+    String name = (String)serviceCache.get(_name);
+    if(name == null){
+      Iterator iterator = pluginResources.values().iterator();
       for(int ii = 0; iterator.hasNext(); ii++){
         PluginResources resources = (PluginResources)iterator.next();
         if(resources.containsService(_name)){
-          serviceCache.put(_name, new Integer(ii));
+          serviceCache.put(_name, resources.getName());
           return resources.getService(_name, _type);
         }
       }
     }else{
-      if(index.intValue() >= 0){
-        PluginResources resources =
-          (PluginResources)pluginResources.get(index.intValue());
+      if(!MAIN.equals(name)){
+        PluginResources resources = (PluginResources)pluginResources.get(name);
         return resources.getService(_name, _type);
       }
       return context.getBean(_name, _type);
     }
-    serviceCache.put(_name, new Integer(-1));
+    serviceCache.put(_name, MAIN);
     return context.getBean(_name, _type);
   }
 
@@ -133,28 +135,28 @@ public class Services
   public static String getMessage (String _key, Object[] _args)
   {
     try{
-      Integer index = (Integer)messageCache.get(_key);
-      if(index == null){
-        Iterator iterator = pluginResources.iterator();
+      String name = (String)messageCache.get(_key);
+      if(name == null){
+        Iterator iterator = pluginResources.values().iterator();
         for(int ii = 0; iterator.hasNext(); ii++){
           try{
             PluginResources resources = (PluginResources)iterator.next();
             String message = resources.getMessage(_key, _args);
-            messageCache.put(_key, new Integer(ii));
+            messageCache.put(_key, resources.getName());
             return message;
           }catch(NoSuchMessageException nsme){
             // message not found in this plugin.
           }
         }
       }else{
-        if(index.intValue() >= 0){
+        if(!MAIN.equals(name)){
           PluginResources resources =
-            (PluginResources)pluginResources.get(index.intValue());
+            (PluginResources)pluginResources.get(name);
           return resources.getMessage(_key, _args);
         }
         return context.getMessage(_key, _args, Locale.getDefault());
       }
-      messageCache.put(_key, new Integer(-1));
+      messageCache.put(_key, MAIN);
       return context.getMessage(_key, _args, Locale.getDefault());
     }catch(NoSuchMessageException nsme){
       return _key;
@@ -171,11 +173,9 @@ public class Services
   public static ResourceBundle getResourceBundle (String _plugin)
   {
     if(_plugin != null){
-      for(Iterator ii = pluginResources.iterator(); ii.hasNext();){
-        PluginResources resources = (PluginResources)ii.next();
-        if(_plugin.equals(resources.getName())){
-          return resources.getResourceBundle();
-        }
+      PluginResources resources = (PluginResources)pluginResources.get(_plugin);
+      if(resources != null){
+        return resources.getResourceBundle();
       }
     }
     return getResourceBundle();
@@ -195,11 +195,22 @@ public class Services
   }
 
   /**
+   * Gets the PluginResources for the plugin with the specified name.
+   *
+   * @param _plugin The plugin name.
+   * @return The PluginResources or null if none found.
+   */
+  public static PluginResources getPluginResources (String _plugin)
+  {
+    return (PluginResources)pluginResources.get(_plugin);
+  }
+
+  /**
    * Closes and disposes of all services.
    */
   public static void close ()
   {
-    for(Iterator ii = pluginResources.iterator(); ii.hasNext();){
+    for(Iterator ii = pluginResources.values().iterator(); ii.hasNext();){
       PluginResources resources = (PluginResources)ii.next();
       resources.close();
       logger.info("{} closed.", resources.getClass().getName());
@@ -216,6 +227,6 @@ public class Services
    */
   public static void addPluginResources (PluginResources _resources)
   {
-    pluginResources.add(_resources);
+    pluginResources.put(_resources.getName(), _resources);
   }
 }
