@@ -82,7 +82,7 @@ public class ConstructorCommand
 
       // check if constructor already exists.
       IMethod method = null;
-      if(properties.length > 0){
+      if(properties.length == 0){
         method = type.getMethod(type.getElementName(), null);
       }else{
         String[] fieldSigs = new String[properties.length];
