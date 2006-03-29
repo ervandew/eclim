@@ -53,37 +53,37 @@
         This mapping can be used to allow quick replacement of template
         variables when utilizing the
         <a href="java/abbreviations.html">java abbreviations</a>.<br/>
-        <code>
+        <source>
           <![CDATA[
           nnoremap <silent> <buffer> <tab> :call eclim#util#FillTemplate("${", "}")<cr>
           ]]>
-        </code>
+        </source>
       </li>
       <li>
         Import the class under the cursor with <code>&lt;leader&gt;i</code>.<br/>
-        <code>
+        <source>
           <![CDATA[
           nnoremap <silent> <buffer> <leader>i :JavaImport<cr>
           ]]>
-        </code>
+        </source>
       </li>
       <li>
         Search for the javadocs of the element under the cursor with
         <code>&lt;leader&gt;d</code>.<br/>
-        <code>
+        <source>
           <![CDATA[
           nnoremap <silent> <buffer> <leader>d :JavaDocSearch -x declarations<cr>
           ]]>
-        </code>
+        </source>
       </li>
       <li>
         Search for the source declaration of the element under the cursor with
         <code>&lt;Enter&gt;</code>.<br/>
-        <code>
+        <source>
           <![CDATA[
           nnoremap <silent> <buffer> <cr> :JavaSearch -x declarations<cr>
           ]]>
-        </code>
+        </source>
       </li>
     </ul>
   </body>
