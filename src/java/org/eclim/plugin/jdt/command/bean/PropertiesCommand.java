@@ -332,8 +332,11 @@ public class PropertiesCommand
 
       // insert before inner classes.
       IType[] types = _type.getTypes();
-      if(types.length > 0){
-        return types[0];
+      // find the first non-enum type.
+      for (int ii = 0; ii < types.length; ii++){
+        if(!types[ii].isEnum()){
+          return types[ii];
+        }
       }
     }
     if(_lastSibling != null && _lastSibling.exists()){

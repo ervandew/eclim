@@ -155,8 +155,6 @@ public class ImplCommand
     IMethod[] methods = superType.getMethods();
     List implementedMethods = getImplementedMethods(_type);
 
-    IJavaElement sibling = getSibling(_type);
-
     // insert only one method
     if(_methodName != null){
       IMethod method = null;
@@ -180,6 +178,8 @@ public class ImplCommand
               }));
       }
 
+      IJavaElement sibling =
+        getSibling(_type, implementedMethods, methods, method);
       return insertMethod(_commandLine, _type, superType, method, sibling);
     }
 
@@ -194,6 +194,8 @@ public class ImplCommand
           !methods[ii].isConstructor() &&
           !isImplemented(_type, implementedMethods, methods[ii]))
       {
+        IJavaElement sibling = getSibling(
+            _type, implementedMethods, methods, methods[ii]);
         Position position =
           insertMethod(_commandLine, _type, superType, methods[ii], sibling);
         offset = offset == 0 ? position.getOffset() : offset;
@@ -471,14 +473,27 @@ public class ImplCommand
    * Gets the sibling to insert before.
    *
    * @param _type The type to insert into.
+   * @param _baseMethods The currently implemented methods.
+   * @param _methods The super types methods.
+   * @param _method The method to be added.
    * @return The sibling, or null if none.
    */
-  protected IJavaElement getSibling (IType _type)
+  protected IJavaElement getSibling (
+      IType _type, List _baseMethods, IMethod[] _methods, IMethod _method)
     throws Exception
   {
+    // FIXME: find a way to find the closest sibling that matches the closest
+    // sibling in the super type.  When added more than one method, attempt to
+    // preserve some notion of where we are so we don't over search causing
+    // significant performance penalty.
     IType[] types = _type.getTypes();
     if(types.length > 0){
-      return types[0];
+      // find the first non-enum type.
+      for (int ii = 0; ii < types.length; ii++){
+        if(!types[ii].isEnum()){
+          return types[ii];
+        }
+      }
     }
     return null;
   }
