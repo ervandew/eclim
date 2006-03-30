@@ -86,6 +86,17 @@
       </li>
     </ul>
 
+    <p><strong>Ant Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:Ant</strong> [&lt;target&gt; ...] -
+        Execute ant from the current project.
+      </li>
+      <li>
+        <strong>:Validate</strong> - Validate the current ant build file.
+      </li>
+    </ul>
+
     <p><strong>Java Commands</strong></p>
     <ul>
       <li>

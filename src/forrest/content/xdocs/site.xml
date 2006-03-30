@@ -82,6 +82,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <cheatsheet label="Cheatsheet (PDF)" href="cheatsheet.pdf"
         description="List of all eclim vim commands (in pdf form)."/>
     <ant label="Ant" href="ant/">
+      <run label="Ant Execution" href="run.html"
+          description="Ant Execution"/>
       <complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <validate label="Validation" href="validate.html"

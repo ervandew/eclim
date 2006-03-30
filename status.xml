@@ -260,10 +260,6 @@
           </li>
         </ul>
       </action>
-      <action context="ant" dev="ervandew">
-        Support :Ant from any file in a project that contains a build.xml file.
-        (use ideas from my ant.vim plugin).
-      </action>
       <action context="todo/fixme" dev="ervandew">
         Command to add all FIXME/TODO into a grep quickfix.<br/>
         The eclipse compiler will pick these up as warnings, so may be able to
@@ -362,6 +358,10 @@
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
+      </action>
+      <action dev="ervandew" type="add" context="Ant">
+        Added <a href="vim/ant/run.html"><strong>:Ant</strong></a> command to
+        allow execution of ant from any file.
       </action>
       <action dev="ervandew" type="add" context="Ant">
         Added <a href="vim/ant/complete.html">ant code completion</a>.

@@ -21,6 +21,18 @@
     </property>
   </bean>
 
+  <bean name="ant_targets"
+      class="org.eclim.plugin.ant.command.run.TargetsCommand">
+    <description>Handles client request to get targets from ant build file.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.ant.command.run.TargetsFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="ant_validate"
       class="org.eclim.plugin.ant.command.validate.ValidateCommand">
     <description>Handles client request to validate an ant file.</description>
