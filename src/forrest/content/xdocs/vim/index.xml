@@ -102,6 +102,23 @@
           created that will echo the error associated with the current line if
           any error exists.  Setting this variable to 0 disables this feature.
         </li>
+        <li>
+          <strong>g:EclimMakeLCD</strong> (Default: 1)<br/>
+          When not set to 0, this enables autocommand which will perform a local
+          change directory (:lcd) for the current window, setting that window's
+          current working directory to the directory of the current file.  After
+          execution of the :make command, that window's current working
+          directory will be restored to the dir it was prior to executing
+          :make.<br/>
+          Enabling this has the benefit of allowing you to run :make or
+          <a href="ant/run.html"><strong>Ant</strong></a> from any file
+          regardless of where it was opened from without having to worry about
+          the directory it is executing from.  For example if you have a file
+          open from project A and split a file from project B, you can execute
+          <strong>Ant</strong> from the project B file and it will utilize
+          project B's build.xml even though your current working directory is in
+          project A.
+        </li>
       </ul>
     </section>
     <section id="commands">

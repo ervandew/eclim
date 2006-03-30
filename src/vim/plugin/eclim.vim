@@ -29,10 +29,6 @@
 if v:version < 700 | finish | endif
 
 " Global Variables {{{
-  if !exists("g:EclimShowCurrentError")
-    let g:EclimShowCurrentError = 1
-  endif
-
   if !exists("g:EclimLogLevel")
     let g:EclimLogLevel = 5
   endif
@@ -80,6 +76,14 @@ if v:version < 700 | finish | endif
     endif
   endif
 
+  if !exists("g:EclimShowCurrentError")
+    let g:EclimShowCurrentError = 1
+  endif
+
+  if !exists("g:EclimMakeLCD")
+    let g:EclimMakeLCD = 1
+  endif
+
   let g:EclimQuickfixAvailable = 1
 " }}}
 
@@ -100,6 +104,16 @@ if g:EclimShowCurrentError
   augroup eclim_show_error
     autocmd!
     autocmd CursorHold * call eclim#util#ShowCurrentError()
+  augroup END
+endif
+
+if g:EclimMakeLCD
+  augroup eclim_make_lcd
+    autocmd!
+    autocmd QuickFixCmdPre make
+      \ let w:quickfix_dir = getcwd() | exec "lcd " . expand('%:p:h')
+    autocmd QuickFixCmdPost make
+      \ exec "lcd " . w:quickfix_dir
   augroup END
 endif
 
