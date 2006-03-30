@@ -51,6 +51,7 @@
       <strong>Ant Integration</strong>
     </p>
     <ul>
+      <li>Ant execution from any file.</li>
       <li>Context sensitive code completion.</li>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
@@ -78,6 +79,7 @@
         Automatic generation of logging initialization code, upon first usage
         of a logger.
       </li>
+      <li>Javadoc generation for package, class, field, method, etc.</li>
     </ul>
 
     <p>
