@@ -182,13 +182,53 @@ public class TypeUtils
   public static boolean containsMethod (IType _type, IMethod _method)
     throws Exception
   {
-    IMethod[] methods = _type.getMethods();
+    /*IMethod[] methods = _type.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
       if(methods[ii].isSimilar(_method)){
         return true;
       }
     }
+    return false;*/
+
+    String signature = getMinimalMethodSignature(_method);
+    if(_method.isConstructor()){
+      signature = signature.replaceFirst(
+          _method.getDeclaringType().getElementName(), _type.getElementName());
+    }
+    IMethod[] methods = _type.getMethods();
+    for (int ii = 0; ii < methods.length; ii++){
+      String methodSig = getMinimalMethodSignature(methods[ii]);
+      if(methodSig.equals(signature)){
+        return true;
+      }
+    }
     return false;
+  }
+
+  /**
+   * Gets the method from the supplied type that matches the signature of the
+   * specified method.
+   *
+   * @param _type The type.
+   * @param _method The method.
+   * @return The method or null if none found.
+   */
+  public static IMethod getMethod (IType _type, IMethod _method)
+    throws Exception
+  {
+    String signature = getMinimalMethodSignature(_method);
+    if(_method.isConstructor()){
+      signature = signature.replaceFirst(
+          _method.getDeclaringType().getElementName(), _type.getElementName());
+    }
+    IMethod[] methods = _type.getMethods();
+    for (int ii = 0; ii < methods.length; ii++){
+      String methodSig = getMinimalMethodSignature(methods[ii]);
+      if(methodSig.equals(signature)){
+        return methods[ii];
+      }
+    }
+    return null;
   }
 
   /**
