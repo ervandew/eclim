@@ -8,7 +8,8 @@ Bundle-ClassPath: .,
   eclim.ant.jar
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
-Require-Bundle: org.eclim,
+Require-Bundle: org.apache.ant,
+  org.eclim,
   org.eclipse.ant.ui,
   org.eclipse.core.filebuffers,
   org.eclipse.core.resources,
