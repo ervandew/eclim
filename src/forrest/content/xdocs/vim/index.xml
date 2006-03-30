@@ -138,7 +138,8 @@
         </li>
         <li>
           <strong>:Settings</strong><br/>
-          Allows you to view / edit the global settings.
+          Allows you to view / edit the global
+          <a href="../server/settings.html">settings</a>.
           For project level settings see the <strong>:ProjectSettings</strong>
           command on the <a href="project.html">project documentation page</a>.
         </li>
@@ -157,12 +158,16 @@
         </li>
       </ul>
     </section>
+    <section id="ant">
+      <title>Ant Plugins</title>
+      <ul>
+        <li><a href="ant/run.html">Ant execution from any file.</a></li>
+        <li><a href="ant/complete.html">Ant code completion.</a></li>
+        <li><a href="ant/validate.html">Build file validation.</a></li>
+      </ul>
+    </section>
     <section id="java">
       <title>Java Plugins</title>
-      <p>
-        Currently the vim integration with Eclipse consists of the following
-        functionality for java editing.
-      </p>
       <ul>
         <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
         <li><a href="java/source.html">Source code validation.</a></li>
@@ -182,9 +187,6 @@
     </section>
     <section id="xml">
       <title>Xml Plugins</title>
-      <p>
-        Currently available xml functionality:
-      </p>
       <ul>
         <li><a href="xml/validate.html">Validate xml files.</a></li>
       </ul>
