@@ -26,6 +26,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -57,6 +59,8 @@ import org.eclipse.jdt.core.Signature;
 public class ImplCommand
   extends AbstractCommand
 {
+  private static final Logger logger = Logger.getLogger(ImplCommand.class);
+
   private static final String TEMPLATE = "java/method.vm";
 
   /**
@@ -155,7 +159,7 @@ public class ImplCommand
     IMethod[] methods = superType.getMethods();
     Map implementedMethods = getImplementedMethods(_type);
 
-    // insert only one method
+    // insert selected methods.
     if(_methodName != null){
       IMethod method = null;
       for(int ii = 0; ii < methods.length; ii++){
@@ -166,16 +170,16 @@ public class ImplCommand
       }
 
       if(method == null){
-        throw new IllegalArgumentException(
-            Services.getMessage("method.not.found",
-              new Object[]{_superTypeName, _methodName}));
+        logger.warn(Services.getMessage("method.not.found",
+            new Object[]{_superTypeName, _methodName}));
+        return null;
       }
       if(getImplemented(_type, implementedMethods, method) != null){
-        throw new IllegalArgumentException(
-            Services.getMessage("method.already.implemented",
-              new Object[]{
-                _type.getFullyQualifiedName(), _superTypeName, _methodName
-              }));
+        logger.warn(Services.getMessage("method.already.implemented",
+            new Object[]{
+              _type.getFullyQualifiedName(), _superTypeName, _methodName
+            }));
+        return null;
       }
 
       IJavaElement sibling =
@@ -214,11 +218,18 @@ public class ImplCommand
         sibling = null;
 
         // sibling needs to be method after the implemented method.
+        // or the nearest implemented method after this one.
         IMethod[] all = _type.getMethods();
-        for (int jj = 0; jj < all.length; jj++){
-          if(all[jj].equals(implemented) && jj < all.length - 1){
-            sibling = all[jj + 1];
+        for (int jj = all.length - 1; jj >= 0; jj--){
+          if(all[jj].equals(implemented)){
+            if(sibling == null && jj < all.length - 1){
+              sibling = all[jj + 1];
+            }
             break;
+          }else{
+            if(TypeUtils.containsMethod(superType, all[jj])){
+              sibling = all[jj];
+            }
           }
         }
 
