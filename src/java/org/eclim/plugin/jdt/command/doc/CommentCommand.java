@@ -43,6 +43,7 @@ import org.eclim.preference.Preferences;
 
 import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -51,6 +52,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -76,6 +78,9 @@ public class CommentCommand
 
   private static final Pattern THROWS_PATTERN =
     Pattern.compile("\\s*[a-zA-Z0-9._]*\\.(\\w*)($|\\s.*)");
+
+  private static final String INHERIT_DOC =
+    "{" + TagElement.TAG_INHERITDOC + "}";
 
   /**
    * {@inheritDoc}
@@ -220,7 +225,8 @@ public class CommentCommand
         for (int ii = 0; ii < tags.size(); ii++){
           TagElement tag = (TagElement)tags.get(ii);
           if(TagElement.TAG_AUTHOR.equals(tag.getTagName())){
-            String authorText = ((TextElement)tag.fragments().get(0)).getText();
+            String authorText = tag.fragments().size() > 0 ?
+              ((TextElement)tag.fragments().get(0)).getText() : null;
             // check if author tag is the same.
             if(authorText != null && author.trim().equals(authorText.trim())){
               index = -1;
@@ -280,19 +286,48 @@ public class CommentCommand
     List tags = _javadoc.tags();
 
     if(_isNew){
-      boolean inherit = false;
       // see if method is overriding / implementing method from superclass
-      // add inheritDoc, and @see
-      if(inherit){
+      IType parentType = null;
+      IType[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
+      for (int ii = 0; ii < types.length; ii++){
+        if(TypeUtils.containsMethod(types[ii], method)){
+          parentType = types[ii];
+          break;
+        }
+      }
+
+      // if an inherited method, add inheritDoc and @see
+      if(parentType != null){
+        addTag(_javadoc, tags.size(), null, INHERIT_DOC);
+
+        String signature = JavaUtils.getFullyQualifiedName(
+            TypeUtils.getMethod(parentType, method));
+        addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature);
+        return;
       }else{
         addTag(_javadoc, tags.size(), null, "");
         addTag(_javadoc, tags.size(), null, "");
       }
     }
 
-    addUpdateParamTags(_javadoc, method, _isNew);
-    addUpdateReturnTag(_javadoc, method, _isNew);
-    addUpdateThrowsTags(_javadoc, method, _isNew);
+    // only add/update tags if javadoc doesn't contain inheritDoc.
+    boolean update = true;
+    for (Iterator ii = tags.iterator(); ii.hasNext();){
+      TagElement tag = (TagElement)ii.next();
+      if(tag.getTagName() == null && tag.fragments().size() > 0){
+        String text = ((TextElement)tag.fragments().get(0)).getText();
+        if(INHERIT_DOC.equals(text)){
+          update = false;
+          break;
+        }
+      }
+    }
+
+    if(update){
+      addUpdateParamTags(_javadoc, method, _isNew);
+      addUpdateReturnTag(_javadoc, method, _isNew);
+      addUpdateThrowsTags(_javadoc, method, _isNew);
+    }
   }
 
   /**
@@ -338,8 +373,14 @@ public class CommentCommand
           if(current.size() == 0){
             index = ii;
           }
-          String name = ((Name)tag.fragments().get(0)).getFullyQualifiedName();
-          current.put(name, tag);
+          Object element = tag.fragments().size() > 0 ?
+            tag.fragments().get(0) : null;
+          if(element != null && element instanceof Name){
+            String name = ((Name)element).getFullyQualifiedName();
+            current.put(name, tag);
+          }else{
+            current.put(String.valueOf(ii), tag);
+          }
         }else{
           if(current.size() > 0){
             break;
@@ -468,11 +509,14 @@ public class CommentCommand
         TagElement tag = (TagElement)tags.get(ii);
         if(TagElement.TAG_THROWS.equals(tag.getTagName())){
           index = index == tags.size() ? ii + 1 : index;
-          Name name = (Name)tag.fragments().get(0);
+          Name name = tag.fragments().size() > 0 ?
+            (Name)tag.fragments().get(0) : null;
           if(name != null){
             String text = name.getFullyQualifiedName();
             String key = THROWS_PATTERN.matcher(text).replaceFirst("$1");
             current.put(key, tag);
+          }else{
+            current.put(String.valueOf(ii), tag);
           }
         }
         // if we hit the return tag, a param tag, or the main text we can stop.
