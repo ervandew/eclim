@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.junit;
 
-import java.io.StringWriter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,15 +22,19 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.Services;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 
@@ -50,7 +52,7 @@ import org.eclipse.jdt.core.IType;
 public class JUnitImplCommand
   extends ImplCommand
 {
-  private static final String TEMPLATE = "java/method.vm";
+  private static final String JUNIT3_TEMPLATE = "junit3_method.vm";
 
   /**
    * {@inheritDoc}
@@ -109,11 +111,16 @@ public class JUnitImplCommand
   /**
    * {@inheritDoc}
    */
-  protected boolean isImplemented (List _baseMethods, IMethod _method)
+  protected IMethod getImplemented (
+      IType _type, Map _baseMethods, IMethod _method)
     throws Exception
   {
-    return _baseMethods.contains(TypeUtils.getMinimalMethodSignature(_method)) ||
-      _baseMethods.contains(getTestMethodSignature(_method));
+    IMethod method = (IMethod)_baseMethods.get(
+        TypeUtils.getMinimalMethodSignature(_method));
+    if(method != null){
+      return method;
+    }
+    return (IMethod)_baseMethods.get(getTestMethodSignature(_method));
   }
 
   /**
@@ -183,20 +190,15 @@ public class JUnitImplCommand
 
     values.put("name",
         "test" + StringUtils.capitalize(_method.getElementName()));
-    values.put("modifier", "public");
-    values.put("methodDoc", "java/test_doc.vm");
     values.put("methodName", _method.getElementName());
-    values.put("return", "void");
     values.put("superType", _superType.getFullyQualifiedName());
-    values.put("implements", Boolean.TRUE);
     values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
-    values.put("throws", "Exception");
 
-    StringWriter writer = new StringWriter();
-    VelocityFormat.evaluate(
-        values, VelocityFormat.getTemplate(TEMPLATE), writer);
+    PluginResources resources = (PluginResources)
+      Services.getPluginResources(PluginResources.NAME);
+    String method = TemplateUtils.evaluate(resources, JUNIT3_TEMPLATE, values);
     Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(writer.toString(), _sibling, false, null));
+        _type.createMethod(method, _sibling, false, null));
 
     return position;
   }
