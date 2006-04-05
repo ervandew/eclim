@@ -43,7 +43,7 @@
     </p>
     <ul>
       <li>
-        <strong>g:EclimLoggingDisabled</strong><br/>
+        <strong>g:EclimLoggingDisabled</strong> (Default: 0)<br/>
         If set to a value greater than 0, then this plugin will be disabled.
       </li>
     </ul>
