@@ -78,10 +78,6 @@
       <fileset dir="build/dist" includes="eclim.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
-    <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}/resources">
-      <fileset dir="src" includes="schema/**/*"/>
-      <fileset dir="src/velocity" includes="templates/**/*"/>
-    </copy>
 
     <copy todir="${eclipse.home}">
       <mapper type="regexp"
