@@ -91,7 +91,7 @@ public class EclimApplication
       server.run();
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
-      return new Integer(1);
+      return Integer.valueOf(1);
     }
 
     logger.info("Shutting down eclim...");
@@ -99,7 +99,7 @@ public class EclimApplication
     closePlugins();
 
     logger.info("Eclim stopped.");
-    return new Integer(0);
+    return Integer.valueOf(0);
   }
 
   /**
@@ -150,9 +150,11 @@ public class EclimApplication
 
       String resourceClass = properties.getProperty("eclim.plugin.resources");
       String resourceFile = properties.getProperty("eclim.plugin.resources.file");
+      String pluginName = plugins[ii].substring(0, plugins[ii].lastIndexOf('_'));
 
-      Bundle bundle = Platform.getBundle(
-          plugins[ii].substring(0, plugins[ii].lastIndexOf('_')));
+      logger.info("Loading plugin " + pluginName);
+
+      Bundle bundle = Platform.getBundle(pluginName);
       if(bundle == null){
         throw new RuntimeException(
             "Could not load bundle for plugin '" + plugins[ii] + "'");
@@ -165,7 +167,8 @@ public class EclimApplication
           bundle.loadClass(resourceClass).newInstance();
         if(resources instanceof AbstractPluginResources){
           URL resourceUrl = bundle.getResource(resourceFile);
-          ((AbstractPluginResources)resources).initialize(resourceUrl);
+          ((AbstractPluginResources)resources)
+            .initialize(pluginName, resourceUrl);
         }
         Services.addPluginResources(resources);
       }catch(Exception e){
