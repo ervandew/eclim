@@ -26,7 +26,7 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.util.file.FileUtils;
+import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -72,9 +72,9 @@ public class SrcUpdateCommand
 
         ArrayList errors = new ArrayList();
         String filename = src.getResource().getRawLocation().toOSString();
+        FileOffsets offsets = FileOffsets.compile(filename);
         for(int ii = 0; ii < problems.length; ii++){
-          int[] lineColumn = FileUtils.offsetToLineColumn(
-              filename, problems[ii].getSourceStart());
+          int[] lineColumn = offsets.offsetToLineColumn(problems[ii].getSourceStart());
           if(ignoreWarnings && problems[ii].isWarning()){
             continue;
           }

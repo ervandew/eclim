@@ -27,7 +27,7 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.ant.util.AntUtils;
 
-import org.eclim.util.file.FileUtils;
+import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.ant.internal.ui.model.IAntModel;
 import org.eclipse.ant.internal.ui.model.IProblem;
@@ -59,10 +59,10 @@ public class ValidateCommand
       model.reconcile();
 
       List problems = requestor.getProblems();
+      FileOffsets offsets = FileOffsets.compile(file);
       for (Iterator ii = problems.iterator(); ii.hasNext();){
         IProblem problem = (IProblem)ii.next();
-        int[] lineColumn =
-          FileUtils.offsetToLineColumn(file, problem.getOffset());
+        int[] lineColumn = offsets.offsetToLineColumn(problem.getOffset());
         Error error = new Error(
           problem.getUnmodifiedMessage(), file,
           lineColumn[0], lineColumn[1],
