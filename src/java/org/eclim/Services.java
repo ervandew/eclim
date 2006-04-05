@@ -202,7 +202,12 @@ public class Services
    */
   public static PluginResources getPluginResources (String _plugin)
   {
-    return (PluginResources)pluginResources.get(_plugin);
+    PluginResources resources = (PluginResources)pluginResources.get(_plugin);
+    if(resources == null){
+      throw new IllegalArgumentException(
+          Services.getMessage("plugin.resources.not.found", _plugin));
+    }
+    return resources;
   }
 
   /**
