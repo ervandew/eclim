@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.ant;
 
+import org.eclim.Services;
+
 import org.eclim.plugin.AbstractPluginResources;
 
 /**
@@ -27,10 +29,8 @@ public class PluginResources
   extends AbstractPluginResources
 {
   /**
-   * {@inheritDoc}
+   * Name that can be used to lookup this PluginResources from
+   * {@link Services#getPluginResource()}.
    */
-  public String getName ()
-  {
-    return "ant";
-  }
+  public static final String NAME = "org.eclim.ant";
 }

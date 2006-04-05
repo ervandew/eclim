@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin;
 
+import java.io.InputStream;
+
 import java.net.URL;
 
 import java.util.Locale;
@@ -43,16 +45,20 @@ public abstract class AbstractPluginResources
 
   private static final String MESSAGE_SOURCE = "messageSource";
   private static final String PLUGIN_PROPERTIES = "/plugin.properties";
+
+  private String name;
   private AbstractApplicationContext context;
   private Properties properties;
 
   /**
    * Initializes this instance with the resource at the supplied url.
    *
+   * @param _name The plugin name.
    * @param _resource The resource url.
    */
-  public void initialize (URL _resource)
+  public void initialize (String _name, URL _resource)
   {
+    name = _name;
     context = new UrlXmlApplicationContext(_resource, getClass().getClassLoader());
     ResourceBundleMessageSource messages = ((ResourceBundleMessageSource)getService(
           MESSAGE_SOURCE, ResourceBundleMessageSource.class));
@@ -65,6 +71,14 @@ public abstract class AbstractPluginResources
       logger.warn(
           "Error loading plugin.properties for plugin '" + getName() + "'", e);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getName ()
+  {
+    return name;
   }
 
   /**
@@ -114,6 +128,22 @@ public abstract class AbstractPluginResources
   public String getProperty (String _name, String _default)
   {
     return properties.getProperty(_name, _default);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public URL getResource (String _resource)
+  {
+    return getClass().getResource(_resource);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public InputStream getResourceAsStream (String _resource)
+  {
+    return getClass().getResourceAsStream(_resource);
   }
 
   /**

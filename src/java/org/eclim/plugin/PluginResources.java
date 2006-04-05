@@ -15,6 +15,10 @@
  */
 package org.eclim.plugin;
 
+import java.io.InputStream;
+
+import java.net.URL;
+
 import java.util.ResourceBundle;
 
 /**
@@ -85,6 +89,22 @@ public interface PluginResources
    * @return The property value or the supplied default value.
    */
   public String getProperty (String _name, String _default);
+
+  /**
+   * Gets the url to a plugin resource.
+   *
+   * @param _resource The plugin resource to get.
+   * @return The url or null if resource not found.
+   */
+  public URL getResource (String _resource);
+
+  /**
+   * Gets an input stream to read a plugin resource.
+   *
+   * @param _resource The plugin resource to get an input stream for.
+   * @return The input stream or null if the resource was not found.
+   */
+  public InputStream getResourceAsStream (String _resource);
 
   /**
    * Closes this resource instance and releases any held resources.
