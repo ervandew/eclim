@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Regular Expression Testing</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Eclim provides a means to test java regular expressions.  Simple execute
+      <strong>:JavaRegex</strong> and a vim window will open allowing you to
+      test your regular expression.
+    </p>
+    <p>
+      By default the content of the regex window will be:
+    </p>
+    <source>
+      test
+
+      Some test content to test
+      a java regex against.
+    </source>
+    <p>
+      The first line of this window is the regular expression to test, and the
+      remaining lines consist of the content to test against.  When you write
+      the file (:w), eclim will evaluate the regular expression and highlight
+      all matched occurrences as well as any groups found within those
+      occurrences.
+    </p>
+    <p>
+      By default eclim uses four different highlighting groups,
+      two which are alternated between for the full matches, and two that are
+      alternated between for the group matches.  Eclim alternates the
+      highlighting so that you can distinguish one match from the next even if
+      they occur one right after the other.  Before utilizing the regex testing,
+      you should first modify the four variables defined below which define what
+      highlighting groups will be used.  Since color schemes can vary greatly,
+      eclim defaults to using some common groups already defined by vim.
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables:
+    </p>
+    <ul>
+      <li>
+        <strong>g:EclimRegexHi{0}</strong> (Default: 'Constant')<br/>
+        The first highlighting group used for full regex matches.
+      </li>
+      <li>
+        <strong>g:EclimRegexHi{1}</strong> (Default: 'MoreMsg')<br/>
+        The second highlighting group used for full regex matches.
+      </li>
+      <li>
+        <strong>g:EclimRegexGroupHi{0}</strong> (Default: 'Statement')<br/>
+        The first highlighting group used for group matches.
+      </li>
+      <li>
+        <strong>g:EclimRegexGroupHi{1}</strong> (Default: 'Todo')<br/>
+        The second highlighting group used for group matches.
+      </li>
+    </ul>
+  </body>
+</document>

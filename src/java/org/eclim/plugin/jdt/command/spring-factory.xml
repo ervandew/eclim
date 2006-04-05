@@ -149,6 +149,20 @@
     </property>
   </bean>
 
+  <bean name="java_regex"
+      class="org.eclim.plugin.jdt.command.regex.RegexCommand">
+    <description>
+      Handles request to evaluate the regex test file.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.regex.RegexFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="java_class_prototype"
       class="org.eclim.plugin.jdt.command.src.ClassPrototypeCommand">
     <description>
