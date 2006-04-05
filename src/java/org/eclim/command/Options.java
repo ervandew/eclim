@@ -87,6 +87,7 @@ public class Options
   public static final String VALIDATE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
 
+  private static final String ANY = "ANY";
   private static final String ARG = "ARG";
   private static final String REQUIRED = "REQUIRED";
   private static final String OPTION_SUFFIX = ".options";
@@ -138,7 +139,6 @@ public class Options
    */
   public void usage (String _plugin)
   {
-System.out.println("### _plugin = " + _plugin);
     usageSummary();
     System.out.println(buildFooter(_plugin));
   }
@@ -187,7 +187,7 @@ System.out.println("### _plugin = " + _plugin);
     }
 
     CommandLineParser parser = new GnuParser();
-    return new CommandLine(parser.parse(options, _args));
+    return new CommandLine(parser.parse(options, _args), _args);
   }
 
   /**
@@ -248,12 +248,18 @@ System.out.println("### _plugin = " + _plugin);
   {
     String[] parts = StringUtils.split(_option);
 
+    // command can have any additional arguments.
+    if(parts.length == 1 && ANY.equals(parts[0])){
+    }
+
     if(REQUIRED.equals(parts[0])){
       OptionBuilder.isRequired();
     }
     if(ARG.equals(parts[3])){
       OptionBuilder.hasArg();
-      OptionBuilder.withArgName(parts[2]);
+      //OptionBuilder.withArgName(parts[2]);
+    }else if(ANY.equals(parts[3])){
+      OptionBuilder.hasOptionalArgs();
     }
     OptionBuilder.withLongOpt(parts[2]);
     return OptionBuilder.create(parts[1]);

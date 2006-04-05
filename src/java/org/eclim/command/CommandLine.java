@@ -35,15 +35,19 @@ public class CommandLine
   private static final URLCodec CODEC = new URLCodec();
 
   private Map options = new HashMap();
+  private String[] args;
   private String[] unrecognized;
 
   /**
    * Constructs a new instance from the supplied command line.
    *
    * @param _commandLine The command line.
+   * @param _args The orginal command line args.
    */
-  public CommandLine (org.apache.commons.cli.CommandLine _commandLine)
+  public CommandLine (
+      org.apache.commons.cli.CommandLine _commandLine, String[] _args)
   {
+    args = _args;
     Option[] options = _commandLine.getOptions();
     for (int ii = 0; ii < options.length; ii++){
       String value = _commandLine.getOptionValue(options[ii].getOpt());
@@ -101,5 +105,15 @@ public class CommandLine
   public String[] getUnrecognizedArgs ()
   {
     return unrecognized;
+  }
+
+  /**
+   * Gets array of all arguments supplied.
+   *
+   * @return The original array of arguments.
+   */
+  public String[] getArgs ()
+  {
+    return args;
   }
 }
