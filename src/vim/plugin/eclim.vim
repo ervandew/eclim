@@ -29,34 +29,14 @@
 if v:version < 700 | finish | endif
 
 " Global Variables {{{
-  if !exists("g:EclimLogLevel")
-    let g:EclimLogLevel = 5
-  endif
-  if !exists("g:EclimTraceHighlight")
-    let g:EclimTraceHighlight = "Normal"
-  endif
-  if !exists("g:EclimDebugHighlight")
-    let g:EclimDebugHighlight = "Normal"
-  endif
-  if !exists("g:EclimInfoHighlight")
-    let g:EclimInfoHighlight = "Statement"
-  endif
-  if !exists("g:EclimWarningHighlight")
-    let g:EclimWarningHighlight = "WarningMsg"
-  endif
-  if !exists("g:EclimErrorHighlight")
-    let g:EclimErrorHighlight = "Error"
-  endif
-  if !exists("g:EclimFatalHighlight")
-    let g:EclimFatalHighlight = "Error"
+  if !exists("g:EclimShowCurrentError")
+    let g:EclimShowCurrentError = 1
   endif
 
-  if !exists("g:EclimEchoErrorHighlight")
-    let g:EclimEchoErrorHighlight = "Error"
+  if !exists("g:EclimMakeLCD")
+    let g:EclimMakeLCD = 1
   endif
-  if !exists("g:EclimCommand")
-    let g:EclimCommand = 'eclim'
-  endif
+
   if !exists("g:EclimIndent")
     if !&expandtab
       let g:EclimIndent = "\t"
@@ -69,6 +49,7 @@ if v:version < 700 | finish | endif
       endwhile
     endif
   endif
+
   if !exists("g:EclimSeparator")
     let g:EclimSeparator = '/'
     if has("win32") || has("win64")
@@ -76,15 +57,18 @@ if v:version < 700 | finish | endif
     endif
   endif
 
-  if !exists("g:EclimShowCurrentError")
-    let g:EclimShowCurrentError = 1
-  endif
+  if !exists("g:EclimTempDir")
+    let g:EclimTempDir = expand('$TMP')
+    if g:EclimTempDir == '$TMP'
+      let g:EclimTempDir = expand('$TEMP')
+    endif
+    if g:EclimTempDir == '$TEMP' && has('unix')
+      let g:EclimTempDir = '/tmp'
+    endif
+    " FIXME: mac?
 
-  if !exists("g:EclimMakeLCD")
-    let g:EclimMakeLCD = 1
+    let g:EclimTempDir = substitute(g:EclimTempDir, '\', '/', 'g')
   endif
-
-  let g:EclimQuickfixAvailable = 1
 " }}}
 
 " Command Declarations {{{
