@@ -42,6 +42,25 @@
       In vim the &lt;leader&gt; argument is mapped to a character of your choice.
       Please see ":help mapleader" in vim for more information.
     </note>
+
+    <p>
+      <strong>Ant Mappings</strong><br/>
+      Here are some mappings for the java funtionality provided by eclim.  To
+      make use of these mappings, simply create a ftplugin file for ant and
+      place your mappings there (:help ftplugin-name).
+    </p>
+    <ul>
+      <li>
+        Lookup and open the documentation for the ant element under the cursor
+        with <code>&lt;Enter&gt;</code>.<br/>
+        <source>
+          <![CDATA[
+            noremap <silent> <buffer> <cr> :AntDoc<cr>
+          ]]>
+        </source>
+      </li>
+    </ul>
+
     <p>
       <strong>Java Mappings</strong><br/>
       Here are some mappings for the java funtionality provided by eclim.  To
