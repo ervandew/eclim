@@ -56,6 +56,7 @@
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
       </li>
+      <li>Quick access to ant documentation.</li>
     </ul>
 
     <p>
@@ -80,6 +81,7 @@
         of a logger.
       </li>
       <li>Javadoc generation for package, class, field, method, etc.</li>
+      <li>Java regular expression testing.</li>
     </ul>
 
     <p>
