@@ -127,7 +127,7 @@
   </bean>
 
   <bean name="settings" class="org.eclim.command.admin.SettingsCommand">
-    <description>Handles retrieval of global settings..</description>
+    <description>Handles retrieval of global settings.</description>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -135,6 +135,17 @@
         </entry>
       </map>
     </property>
+  </bean>
+
+  <bean name="taglist" class="org.eclim.command.taglist.TaglistCommand">
+    <description>Handles generating a taglist for a given file.</description>
+    <!--property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.taglist.TaglistFilter"/>
+        </entry>
+      </map>
+    </property-->
   </bean>
 
 </beans>
