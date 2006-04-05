@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.delegate;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +25,14 @@ import org.eclim.Services;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 
@@ -52,7 +53,7 @@ import org.eclipse.jdt.core.Signature;
 public class DelegateCommand
   extends ImplCommand
 {
-  private static final String TEMPLATE = "java/method.vm";
+  private static final String TEMPLATE = "method.vm";
 
   private IField field;
   private IType delegateType;
@@ -177,11 +178,11 @@ public class DelegateCommand
     values.put("delegate", Boolean.TRUE);
     values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
 
-    StringWriter writer = new StringWriter();
-    VelocityFormat.evaluate(
-        values, VelocityFormat.getTemplate(TEMPLATE), writer);
+    PluginResources resources = (PluginResources)
+      Services.getPluginResources(PluginResources.NAME);
+    String method = TemplateUtils.evaluate(resources, TEMPLATE, values);
     Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(writer.toString(), _sibling, false, null));
+        _type.createMethod(method, _sibling, false, null));
 
     return position;
   }

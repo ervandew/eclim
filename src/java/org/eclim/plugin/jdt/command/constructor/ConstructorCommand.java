@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.constructor;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import java.util.HashMap;
 
@@ -28,10 +27,12 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 
@@ -51,7 +52,7 @@ import org.eclipse.jdt.core.Signature;
 public class ConstructorCommand
   extends AbstractCommand
 {
-  private static final String TEMPLATE = "java/constructor.vm";
+  private static final String TEMPLATE = "constructor.vm";
 
   /**
    * {@inheritDoc}
@@ -122,11 +123,11 @@ public class ConstructorCommand
         values.put("params", buildParams(type, properties));
       }
 
-      StringWriter writer = new StringWriter();
-      VelocityFormat.evaluate(
-          values, VelocityFormat.getTemplate(TEMPLATE), writer);
+      PluginResources resources = (PluginResources)
+        Services.getPluginResources(PluginResources.NAME);
+      String constructor = TemplateUtils.evaluate(resources, TEMPLATE, values);
       Position position = TypeUtils.getPosition(type,
-          type.createMethod(writer.toString(), sibling, false, null));
+          type.createMethod(constructor, sibling, false, null));
 
       return filter(_commandLine, position);
     }catch(Exception e){

@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.impl;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +33,12 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 
@@ -61,7 +62,7 @@ public class ImplCommand
 {
   private static final Logger logger = Logger.getLogger(ImplCommand.class);
 
-  private static final String TEMPLATE = "java/method.vm";
+  private static final String TEMPLATE = "method.vm";
 
   /**
    * {@inheritDoc}
@@ -346,11 +347,11 @@ public class ImplCommand
       values.put("throws", thrown);
     }
 
-    StringWriter writer = new StringWriter();
-    VelocityFormat.evaluate(
-        values, VelocityFormat.getTemplate(TEMPLATE), writer);
+    PluginResources resources = (PluginResources)
+      Services.getPluginResources(PluginResources.NAME);
+    String method = TemplateUtils.evaluate(resources, TEMPLATE, values);
     Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(writer.toString(), _sibling, false, null));
+        _type.createMethod(method, _sibling, false, null));
 
     return position;
   }

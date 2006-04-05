@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.bean;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,10 +30,12 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 
@@ -54,7 +55,8 @@ import org.eclipse.jdt.core.Signature;
 public class PropertiesCommand
   extends AbstractCommand
 {
-  private static final String TEMPLATE = "java/method.vm";
+  private static final String GETTER_TEMPLATE = "getter.vm";
+  private static final String SETTER_TEMPLATE = "setter.vm";
 
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
@@ -139,10 +141,10 @@ public class PropertiesCommand
       boolean _array)
     throws Exception
   {
-    String returnType =
+    String propertyType =
       Signature.getSignatureSimpleName(_field.getTypeSignature());
     String methodName = StringUtils.capitalize(_field.getElementName());
-    if(returnType.equals("boolean")){
+    if(propertyType.equals("boolean")){
       methodName = "is" + methodName;
     }else{
       methodName = "get" + methodName;
@@ -150,24 +152,21 @@ public class PropertiesCommand
 
     String[] args = null;
     if(_array){
+      propertyType = Signature.getSignatureSimpleName(
+          Signature.getElementType(_field.getTypeSignature()));
       args = INT_ARG;
     }
     IMethod method = _type.getMethod(methodName, args);
     Position position = null;
     if(_context.indexOf(GETTER) != -1 && !method.exists()){
       Map values = new HashMap();
-      values.put("modifier", "public");
-      values.put("return", returnType);
+      values.put("propertyType", propertyType);
       values.put("name", methodName);
-      values.put("methodBody", "return this." + _field.getElementName() + ";");
-      if(_array){
-        values.put("params", "int index");
-      }
       values.put("property", _field.getElementName());
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("methodDoc", "java/getter_doc.vm");
 
-      position = insertMethod(_position, _type, _sibling, values);
+      position = insertMethod(
+          _position, _type, method, _sibling, GETTER_TEMPLATE, values);
     }
     if(method.exists()){
       position = TypeUtils.getPosition(_type, method);
@@ -197,35 +196,26 @@ public class PropertiesCommand
     throws Exception
   {
     String methodName = "set" + StringUtils.capitalize(_field.getElementName());
+    String propertyType =
+      Signature.getSignatureSimpleName(_field.getTypeSignature());
     String[] args = new String[]{_field.getTypeSignature()};
     if(_array){
-      args = new String[]{INT_SIG, _field.getTypeSignature()};
+      propertyType = Signature.getSignatureSimpleName(
+          Signature.getElementType(_field.getTypeSignature()));
+      args = new String[]{
+        INT_SIG, Signature.getElementType(_field.getTypeSignature())};
     }
     IMethod method = _type.getMethod(methodName, args);
     Position position = null;
     if(_context.indexOf(SETTER) != -1 && !method.exists()){
-      String params = Signature.getSignatureSimpleName(
-          _field.getTypeSignature()) + ' ' + _field.getElementName();
-      if(_array){
-        params = "int index, " + params;
-      }
-      String methodBody = new StringBuffer("this.")
-        .append(_field.getElementName())
-        .append(" = ")
-        .append(_field.getElementName())
-        .append(";").toString();
-
       Map values = new HashMap();
-      values.put("modifier", "public");
-      values.put("return", "void");
       values.put("name", methodName);
-      values.put("params", params);
-      values.put("methodBody", methodBody);
       values.put("property", _field.getElementName());
+      values.put("propertyType", propertyType);
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("methodDoc", "java/setter_doc.vm");
 
-      position = insertMethod(_position, _type, _sibling, values);
+      position = insertMethod(
+          _position, _type, method, _sibling, SETTER_TEMPLATE, values);
     }
     if(method.exists()){
       position = TypeUtils.getPosition(_type, method);
@@ -239,48 +229,42 @@ public class PropertiesCommand
    *
    * @param _position The position to update.
    * @param _type The type to insert into.
+   * @param _method The method to be created.
    * @param _sibling The element to insert before.
+   * @param _template The template to use.
    * @param _values The values.
    * @return The position the method was insert into.
    */
   protected Position insertMethod (
-      Position _position, IType _type, IJavaElement _sibling, Map _values)
+      Position _position,
+      IType _type,
+      IMethod _method,
+      IJavaElement _sibling,
+      String _template,
+      Map _values)
     throws Exception
   {
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), _values);
 
-    String params = (String)_values.get("params");
-    if(params != null){
-      params = params.replaceAll("\\s\\w+(,|$)", "$1");
-      params = params.replaceAll("\\s", "");
-    }else{
-      params = "";
-    }
-
-    String signature = new StringBuffer()
-      .append(_values.get("name"))
-      .append('(').append(params).append(')').toString();
-    Object result[] = TypeUtils.getSuperTypeContainingMethod(_type, signature);
-    if(result != null){
-      IType superType = (IType)result[0];
+    IType superType = TypeUtils.getSuperTypeContainingMethod(_type, _method);
+    if(superType != null){
       _values.put("superType", superType.getFullyQualifiedName());
       _values.put("overrides",
           superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
       _values.put("implements",
           superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
       _values.put("methodSignature",
-          TypeUtils.getMinimalMethodSignature(((IMethod)result[1])));
-      _values.remove("methodDoc");
+          TypeUtils.getMinimalMethodSignature(_method));
     }
     _values.put("interface",
         _type.isInterface() ? Boolean.TRUE : Boolean.FALSE);
 
-    StringWriter writer = new StringWriter();
-    VelocityFormat.evaluate(
-        _values, VelocityFormat.getTemplate(TEMPLATE), writer);
+    PluginResources resources = (PluginResources)
+      Services.getPluginResources(PluginResources.NAME);
+    String method = TemplateUtils.evaluate(resources, _template, _values);
     Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(writer.toString(), _sibling, false, null));
+        _type.createMethod(method, _sibling, false, null));
 
     _position.setOffset(position.getOffset());
     if(_position.getLength() != 0){
@@ -324,7 +308,8 @@ public class PropertiesCommand
         // index setter
         method = !method.exists() ?
           _type.getMethod("set" + nextProperty,
-              new String[]{INT_SIG, field.getTypeSignature()}) : method;
+              new String[]{INT_SIG,
+                Signature.getElementType(field.getTypeSignature())}) : method;
         if(method.exists()){
           return method;
         }
