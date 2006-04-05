@@ -15,22 +15,25 @@
  */
 package org.eclim.util.file;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.FileInputStream;
+
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
+import java.nio.channels.FileChannel;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
 import java.util.Enumeration;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.naming.CompositeName;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.VFS;
 
 import org.apache.log4j.Logger;
 
@@ -75,55 +78,30 @@ public class FileUtils
   public static int[] offsetToLineColumn (String _filename, int _offset)
     throws Exception
   {
-    BufferedReader reader = null;
-    try{
-      FileSystemManager fsManager = VFS.getManager();
-      FileObject file = fsManager.resolveFile(_filename);
+    FileOffsets offsets = FileOffsets.compile(_filename);
+    return offsets.offsetToLineColumn(_offset);
+  }
 
-      // disable caching (the cache seems to become invalid at some point
-      // causing vfs errors).
-      //fsManager.getFilesCache().clear(file.getFileSystem());
+  /**
+   * Obtains a matcher to run the supplied pattern on the specified file.
+   *
+   * @param _pattern The regex pattern
+   * @param _in The input stream for the file.
+   * @param _charset The file's character set.
+   * @return The Matcher.
+   */
+  public static Matcher matcher (
+      Pattern _pattern, FileInputStream _in, String _charset)
+    throws Exception
+  {
+    FileChannel fc = _in.getChannel();
 
-      if(!file.exists()){
-        logger.warn("File '{}' not found.", _filename);
-        return null;
-      }
-      reader = new BufferedReader(
-          new InputStreamReader(file.getContent().getInputStream()));
+    ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
+    Charset cs = Charset.forName(_charset);
+    CharsetDecoder cd = cs.newDecoder();
+    CharBuffer cb = cd.decode(bb);
 
-      int offset = 0;
-      int lines = 1;
-      int count = 0;
-      int columns = 1;
-      char[] buffer = new char[1024];
-      while((count = reader.read(buffer, 0, buffer.length)) != -1){
-        for(int ii = 0; ii < count; ii++){
-          if(buffer[ii] == '\n'){
-            offset++;
-            lines++;
-            columns = 1;
-          }else if(buffer[ii] == '\r'){
-            // assume that in vim the user has fileformat set to dos, otherwise
-            // they are staring at ^M everywhere, and i can't imagine someone
-            // coding on a regular basis like that.  Otherwise we would need to
-            // incrment the columns here too.
-            offset++;
-          }else{
-            offset++;
-            columns++;
-          }
-
-          if(offset == _offset){
-            return new int[]{lines, columns};
-          }
-        }
-      }
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }finally{
-      IOUtils.closeQuietly(reader);
-    }
-    return new int[]{1, 1};
+    return _pattern.matcher(cb);
   }
 
   /**
