@@ -369,6 +369,10 @@
       <action dev="ervandew" type="add" context="Ant">
         Added <a href="vim/ant/validate.html">ant file validation</a>.
       </action>
+      <action dev="ervandew" type="add" context="Ant">
+        Added <a href="vim/ant/doc.html"><strong>:AntDoc</strong></a> command to
+        quickly find ant type / task documentation.
+      </action>
       <action dev="ervandew" type="add" context="Java">
         Utilizing vim's new dictionary based completion results.
         <warning>
@@ -385,6 +389,18 @@
         Added <a href="vim/java/doc.html"><strong>:JavaDocComment</strong></a>
         command to add or update javadocs comment for the element under the
         cursor.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added <a href="vim/java/regex.html"><strong>:JavaRegex</strong></a>
+        for testing java regular expressions.
+      </action>
+      <action dev="ervandew" type="update" context="Java">
+        JDT classpath_variables.properties no longer requires system property
+        placeholder to use '_' instead of '.'.
+      </action>
+      <action dev="ervandew" type="update" context="Java">
+        Velocity templates broken up into more logical templates to ease
+        customization.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added several miscellaneous
