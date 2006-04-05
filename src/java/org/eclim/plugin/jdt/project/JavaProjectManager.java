@@ -44,6 +44,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.plugin.jdt.project.classpath.Dependency;
@@ -55,7 +57,7 @@ import org.eclim.project.ProjectManager;
 
 import org.eclim.util.XmlUtils;
 
-import org.eclim.util.file.FileUtils;
+import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -99,6 +101,9 @@ public class JavaProjectManager
   private static final Pattern STATUS_PATTERN =
     Pattern.compile(".*[\\\\/](.*)'.*");
 
+  private static final String CLASSPATH_XSD =
+    "/resources/schema/eclipse/classpath.xsd";
+
   private String libraryRootPreference;
   private Preferences preferences;
 
@@ -133,9 +138,10 @@ public class JavaProjectManager
       // validate that .classpath xml is well formed and valid.
       String dotclasspath = javaProject.getProject().getFile(".classpath")
         .getRawLocation().toOSString();
+      PluginResources resources = (PluginResources)
+        Services.getPluginResources(PluginResources.NAME);
       Error[] errors = XmlUtils.validateXml(dotclasspath,
-          System.getProperty("eclim.home") +
-          "/resources/schema/eclipse/classpath.xsd");
+          resources.getResource(CLASSPATH_XSD).toString());
       if(errors.length > 0){
         return errors;
       }
@@ -339,13 +345,14 @@ public class JavaProjectManager
       IJavaProject _javaProject, IClasspathEntry[] _entries, String _classpath)
     throws Exception
   {
+    FileOffsets offsets = FileOffsets.compile(_classpath);
     String classpath = IOUtils.toString(new FileInputStream(_classpath));
     List errors = new ArrayList();
     for(int ii = 0; ii < _entries.length; ii++){
       IJavaModelStatus status = JavaConventions.validateClasspathEntry(
           _javaProject, _entries[ii], true);
       if(!status.isOK()){
-        errors.add(createErrorFromStatus(_classpath, classpath, status));
+        errors.add(createErrorFromStatus(offsets, _classpath, classpath, status));
       }
     }
 
@@ -359,7 +366,7 @@ public class JavaProjectManager
     //}
 
     if(!status.isOK()){
-      errors.add(createErrorFromStatus(_classpath, classpath, status));
+      errors.add(createErrorFromStatus(offsets, _classpath, classpath, status));
     }
     return (Error[])errors.toArray(new Error[errors.size()]);
   }
@@ -367,13 +374,14 @@ public class JavaProjectManager
   /**
    * Creates an Error from the supplied IJavaModelStatus.
    *
+   * @param _offsets File offsets for the classpath file.
    * @param _filename The filename of the error.
    * @param _contents The contents of the file as a String.
    * @param _status The IJavaModelStatus.
    * @return The Error.
    */
   protected Error createErrorFromStatus (
-      String _filename, String _contents, IJavaModelStatus _status)
+      FileOffsets _offsets, String _filename, String _contents, IJavaModelStatus _status)
     throws Exception
   {
     int line = 0;
@@ -386,7 +394,7 @@ public class JavaProjectManager
     // find the pattern in the classpath file.
     matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(_contents);
     if(matcher.find()){
-      int[] position = FileUtils.offsetToLineColumn(_filename, matcher.start());
+      int[] position = _offsets.offsetToLineColumn(matcher.start());
       line = position[0];
       col = position[1];
     }
