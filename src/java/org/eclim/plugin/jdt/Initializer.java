@@ -16,7 +16,7 @@
 package org.eclim.plugin.jdt;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import java.util.Iterator;
@@ -24,9 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
+
 import org.apache.log4j.Logger;
 
-import org.eclim.util.VelocityFormat;
+import org.eclim.util.StringUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -138,22 +140,23 @@ public class Initializer
   {
     String file = "/" + _variable + ".properties";
     logger.info("Loading classpath variables from '{}'.", file);
+    InputStream in = null;
     try{
-      InputStreamReader reader = new InputStreamReader(
-          getClass().getResourceAsStream(file));
-
+      in = getClass().getResourceAsStream(file);
       StringWriter writer = new StringWriter();
+      IOUtils.copy(in, writer);
+      String propertiesString = writer.toString();
 
       Map values = new HashMap();
       for(Iterator ii = System.getProperties().keySet().iterator(); ii.hasNext();){
         String key = (String)ii.next();
-        values.put(key.replace('.', '_'),
-            System.getProperty(key).replace('\\', '/'));
+        values.put(key, System.getProperty(key).replace('\\', '/'));
       }
-      VelocityFormat.evaluate(values, reader, writer);
+      propertiesString =
+        StringUtils.replacePlaceholders(propertiesString, values);
 
       Properties properties = new Properties();
-      properties.load(new ByteArrayInputStream(writer.toString().getBytes()));
+      properties.load(new ByteArrayInputStream(propertiesString.getBytes()));
 
       for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
         String name = (String)ii.next();
@@ -163,6 +166,8 @@ public class Initializer
       }
     }catch(Exception e){
       logger.error("", e);
+    }finally{
+      IOUtils.closeQuietly(in);
     }
   }
 }
