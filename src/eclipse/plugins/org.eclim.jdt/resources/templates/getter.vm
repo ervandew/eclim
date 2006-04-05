@@ -1,0 +1,26 @@
+/**
+#if ($overrides || $implements)
+ * {@inheritDoc}
+ * @see ${superType}#${methodSignature}
+#else
+ * Gets the ${property} for this instance.
+ *
+#if ($array)
+ * @param index The index to get.
+#end
+ * @return The ${property}.
+#end
+ */
+#if ($org_eclipse_jdt_core_compiler_source == "1.5" && $overrides)
+@Override
+#end
+public $propertyType $name (#if($array)int index#end)
+#if(!$interface)
+{
+#if($array)
+	return this.${property}[index];
+#else
+	return this.$property;
+#end
+}
+#end

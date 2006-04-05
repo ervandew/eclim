@@ -1,0 +1,12 @@
+/**
+ * Tests '$methodName'.
+ *
+ * @see ${superType}#${methodSignature}
+ */
+public void $name ()
+	throws Exception
+{
+#if ($methodBody)
+	$methodBody
+#end
+}

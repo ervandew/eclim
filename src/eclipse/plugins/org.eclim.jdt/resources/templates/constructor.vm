@@ -1,0 +1,15 @@
+/**
+ * Constructs a new instance.
+#if($fields)
+ *
+#foreach($field in $fields)
+ * @param $field The $field for this instance.
+#end
+#end
+ */
+public $type ($!params)
+{
+#foreach($field in $fields)
+	this.${field} = $field;
+#end
+}
