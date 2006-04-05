@@ -73,21 +73,23 @@ See http://forrest.apache.org/docs/linking.html for more info
     <index label="Index" href="index.html" description="Index"/>
     <project label="Projects" href="project.html"
         description="Create projects and view/edit project settings."/>
+    <taglist label="TagList Integration" href="taglist.html"
+        description="TagList Integration"/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
         description="List of suggested vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
         description="List of all eclim vim commands."/>
-    <cheatsheet label="Cheatsheet (PDF)" href="cheatsheet.pdf"
-        description="List of all eclim vim commands (in pdf form)."/>
     <ant label="Ant" href="ant/">
-      <run label="Ant Execution" href="run.html"
-          description="Ant Execution"/>
+      <run label="Execution" href="run.html"
+          description="Execute Ant"/>
       <complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <validate label="Validation" href="validate.html"
           description="Validation"/>
+      <doc label="Documentation" href="doc.html"
+          description="Ant Documentation Lookup"/>
     </ant>
     <java label="Java" href="java/">
       <source label="Source Code Validation" href="source.html"
@@ -118,6 +120,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Logging"/>
       <abbreviations label="Abbreviations" href="abbreviations.html"
           description="Abbreviations"/>
+      <regex label="Regex" href="regex.html"
+          description="Regular Expression Testing"/>
     </java>
     <xml label="Xml" href="xml/">
       <validate label="Validation" href="validate.html"
@@ -139,8 +143,12 @@ See http://forrest.apache.org/docs/linking.html for more info
     <supertab href="http://www.vim.org/scripts/script.php?script_id=182"/>
     <supertab_patch href="http://sourceforge.net/project/showfiles.php?group_id=145869&amp;package_id=160492&amp;release_id=370674"/>
 
+    <taglist href="http://www.vim.org/scripts/script.php?script_id=273"/>
+
     <vimplugin href="http://vimplugin.sourceforge.net/"/>
     <viplugin href="http://www.satokar.com/viplugin/index.php"/>
+
+    <antcontrib href="http://ant-contrib.sourceforge.net"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

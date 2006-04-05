@@ -164,6 +164,7 @@
         <li><a href="ant/run.html">Ant execution from any file.</a></li>
         <li><a href="ant/complete.html">Ant code completion.</a></li>
         <li><a href="ant/validate.html">Build file validation.</a></li>
+        <li><a href="ant/doc.html">Ant documentation lookup.</a></li>
       </ul>
     </section>
     <section id="java">
@@ -183,6 +184,7 @@
         <li><a href="java/junit.html">JUnit integration.</a></li>
         <li><a href="java/logging.html">Logging.</a></li>
         <li><a href="java/abbreviations.html">Abbreviations.</a></li>
+        <li><a href="java/regex.html">Regular Expression Testing.</a></li>
       </ul>
     </section>
     <section id="xml">
