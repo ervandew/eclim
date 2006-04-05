@@ -93,6 +93,11 @@
         Execute ant from the current project.
       </li>
       <li>
+        <strong>:AntDoc</strong> [&lt;element&gt;] -
+        Find and open the documentation for the element under the cursor or the
+        element supplied as an argument.
+      </li>
+      <li>
         <strong>:Validate</strong> - Validate the current ant build file.
       </li>
     </ul>
@@ -139,6 +144,10 @@
       <li>
         <strong>:JavaCorrect</strong> -
         Suggest possible corrections for a source error.
+      </li>
+      <li>
+        <strong>:JavaRegex</strong> -
+        Opens a window for testing java regular expressions.
       </li>
       <li>
         <strong>:JavaDocSearch</strong> -
