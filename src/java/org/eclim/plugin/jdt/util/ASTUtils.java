@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -29,7 +30,6 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import org.eclipse.jdt.internal.corext.dom.NodeFinder;
 
@@ -154,7 +154,7 @@ public class ASTUtils
         node = resolveNode(node, ImportDeclaration.class);
         break;
       case IJavaElement.TYPE:
-        node = resolveNode(node, TypeDeclaration.class);
+        node = resolveNode(node, AbstractTypeDeclaration.class);
         break;
       case IJavaElement.INITIALIZER:
         node = resolveNode(node, Initializer.class);
