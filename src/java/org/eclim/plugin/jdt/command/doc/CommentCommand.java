@@ -146,6 +146,7 @@ public class CommentCommand
       case ASTNode.PACKAGE_DECLARATION:
         commentPackage(javadoc, _element, isNew);
         break;
+      case ASTNode.ENUM_DECLARATION:
       case ASTNode.TYPE_DECLARATION:
         commentType(javadoc, _element, isNew);
         break;
