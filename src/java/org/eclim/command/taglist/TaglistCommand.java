@@ -141,6 +141,7 @@ public class TaglistCommand
         error = out.toString();
       }catch(Exception e){
         returnCode = 12;
+        error = e.getMessage();
         logger.error("run()", e);
       }
     }
