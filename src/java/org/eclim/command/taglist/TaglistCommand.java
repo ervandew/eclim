@@ -18,13 +18,20 @@ package org.eclim.command.taglist;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.Services;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.ScriptUtils;
 
 /**
  * Command to generate taglist from a file.
@@ -39,6 +46,8 @@ public class TaglistCommand
 
   private static final String LANGUAGE = "--language-force";
   private static final String CTAGS_OPTION = "c";
+
+  private static final Map scriptCache = new HashMap();
 
   /**
    * {@inheritDoc}
@@ -64,9 +73,25 @@ public class TaglistCommand
           lang = args[ii].substring(args[ii].indexOf('=') + 1);
         }
       }
-      String results = executeCtags(ctagArgs);
 
-      return super.filter(_commandLine, results);
+      TaglistScript script = (TaglistScript)scriptCache.get(lang);
+      if(!scriptCache.containsKey(lang) && script == null){
+        try{
+          Class scriptClass = ScriptUtils.parseClass(
+              Services.getPluginResources(), "taglist/" + lang + ".groovy");
+          script = (TaglistScript)scriptClass.newInstance();
+          scriptCache.put(lang, script);
+        }catch(IllegalArgumentException iae){
+          // script not found.
+          logger.debug("No taglist script found for '" + lang + "'", iae);
+          scriptCache.put(lang, null);
+        }
+      }
+
+      if(script != null){
+        return super.filter(_commandLine, script.execute(file));
+      }
+      return super.filter(_commandLine, executeCtags(ctagArgs));
     }catch(Exception e){
       return e;
     }
