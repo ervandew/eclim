@@ -112,7 +112,7 @@ public interface PluginResources
   public void close ();
 
   /**
-   * Gets the name of the plugin resources (ant, jdt, etc.).
+   * Gets the name of the plugin resources (org.eclim.ant, org.eclim.jdt, etc.).
    *
    * @return The name.
    */
