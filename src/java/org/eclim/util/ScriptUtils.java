@@ -24,8 +24,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 
-import groovy.text.SimpleTemplateEngine;
-import groovy.text.Template;
+import org.apache.commons.io.FilenameUtils;
 
 import org.eclim.Services;
 
@@ -41,11 +40,13 @@ import org.eclim.plugin.PluginResources;
  */
 public class ScriptUtils
 {
+  private static final String SCRIPT_PATH = "/resources/scripts/";
+
   /**
    * Evaluates the specified script and returns the result.
    *
    * @param _resources The plugin resources.
-   * @param _script The script.
+   * @param _script The script path relative to the scripts directory.
    * @param _values Any variable name / value pairs for the script.
    * @return The result of evaluating the supplied script.
    */
@@ -56,11 +57,12 @@ public class ScriptUtils
     Binding binding = new Binding(_values);
     GroovyShell shell = new GroovyShell(binding);
 
+    String script = FilenameUtils.concat(SCRIPT_PATH, _script);
     try{
-      return shell.evaluate(_resources.getResourceAsStream(_script));
+      return shell.evaluate(_resources.getResourceAsStream(script));
     }catch(NullPointerException npe){
       throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", _script), npe);
+          Services.getMessage("script.not.found", script), npe);
     }
   }
 
@@ -69,18 +71,19 @@ public class ScriptUtils
    * Class that can be used to create instances to invoke methods on.
    *
    * @param _resources The plugin resources.
-   * @param _script The script.
-   * @return
+   * @param _script The script path relative to the scripts directory.
+   * @return The resulting class.
    */
   public static Class parseClass (PluginResources _resources, String _script)
     throws Exception
   {
     GroovyClassLoader gcl = new GroovyClassLoader();
+    String script = FilenameUtils.concat(SCRIPT_PATH, _script);
     try{
-      return gcl.parseClass(_resources.getResourceAsStream(_script));
+      return gcl.parseClass(_resources.getResourceAsStream(script));
     }catch(NullPointerException npe){
       throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", _script), npe);
+          Services.getMessage("script.not.found", script), npe);
     }
   }
 }
