@@ -59,18 +59,42 @@ public abstract class AbstractPluginResources
   public void initialize (String _name, URL _resource)
   {
     name = _name;
-    context = new UrlXmlApplicationContext(_resource, getClass().getClassLoader());
-    ResourceBundleMessageSource messages = ((ResourceBundleMessageSource)getService(
-          MESSAGE_SOURCE, ResourceBundleMessageSource.class));
+    context = createContext(_resource);
+    properties = createProperties();
+  }
+
+  /**
+   * Creates the application context for locating services.
+   *
+   * @param _resource The url of the context configuration file.
+   * @return The application context.
+   */
+  protected AbstractApplicationContext createContext (URL _resource)
+  {
+    AbstractApplicationContext context =
+      new UrlXmlApplicationContext(_resource, getClass().getClassLoader());
+    ResourceBundleMessageSource messages = (ResourceBundleMessageSource)
+        context.getBean(MESSAGE_SOURCE, ResourceBundleMessageSource.class);
     messages.setClassLoader(getClass().getClassLoader());
 
-    properties = new Properties();
+    return context;
+  }
+
+  /**
+   * Create the Properties for this instance.
+   *
+   * @return The Properties.
+   */
+  protected Properties createProperties ()
+  {
+    Properties properties = new Properties();
     try{
       properties.load(getClass().getResourceAsStream(PLUGIN_PROPERTIES));
     }catch(Exception e){
       logger.warn(
           "Error loading plugin.properties for plugin '" + getName() + "'", e);
     }
+    return properties;
   }
 
   /**
