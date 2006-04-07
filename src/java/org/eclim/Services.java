@@ -15,6 +15,8 @@
  */
 package org.eclim;
 
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +27,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.spring.ResourceBundleMessageSource;
@@ -50,6 +53,8 @@ public class Services
     new ClassPathXmlApplicationContext(
         System.getProperty("org.eclim.spring-factory.xml",
           "org/eclim/spring-factory.xml"));
+
+  private static PluginResources defaultPluginResources;
 
   private static Map pluginResources = new HashMap();
   private static Map serviceCache = new HashMap();
@@ -195,6 +200,21 @@ public class Services
   }
 
   /**
+   * Gets the PluginResources for the main eclim plugin.
+   *
+   * @return The PluginResources.
+   */
+  public static PluginResources getPluginResources ()
+  {
+    if(defaultPluginResources == null){
+      defaultPluginResources = new DefaultPluginResources();
+      ((DefaultPluginResources)defaultPluginResources)
+        .initialize("org.eclim", null);
+    }
+    return defaultPluginResources;
+  }
+
+  /**
    * Gets the PluginResources for the plugin with the specified name.
    *
    * @param _plugin The plugin name.
@@ -233,5 +253,17 @@ public class Services
   public static void addPluginResources (PluginResources _resources)
   {
     pluginResources.put(_resources.getName(), _resources);
+  }
+
+  /**
+   * Implementation of PluginResources for the main eclim plugin.
+   */
+  private static class DefaultPluginResources
+    extends AbstractPluginResources
+  {
+    protected AbstractApplicationContext createContext (URL _resource)
+    {
+      return context;
+    }
   }
 }
