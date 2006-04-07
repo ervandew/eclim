@@ -14,7 +14,8 @@
 #if ($org_eclipse_jdt_core_compiler_source == "1.5" && $overrides)
 @Override
 #end
-public void $name (#if($array)int index, #end$propertyType $property)
+public void $name (#if($array)int index, #end$propertyType $property)#if($interface);#end
+
 #if(!$interface)
 {
 #if($array)
