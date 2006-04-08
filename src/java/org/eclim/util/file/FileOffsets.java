@@ -132,4 +132,26 @@ public class FileOffsets
     int column = 1 + _offset - offsets[top].intValue();
     return new int[]{line, column};
   }
+
+  /**
+   * Gets the offset where the supplied line starts.
+   *
+   * @param _line The line.
+   * @return The starting offset.
+   */
+  public int getLineStart (int _line)
+  {
+    return offsets[_line - 1].intValue();
+  }
+
+  /**
+   * Gets the offset where the supplied line ends.
+   *
+   * @param _line The line.
+   * @return The ending offset.
+   */
+  public int getLineEnd (int _line)
+  {
+    return offsets[_line].intValue() - 1;
+  }
 }
