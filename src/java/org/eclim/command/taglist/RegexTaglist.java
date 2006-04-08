@@ -77,21 +77,32 @@ public class RegexTaglist
   /**
    * Adds the supplied tag matching pattern.
    *
-   * @param _name The name of the tag.
    * @param _kind Character kind for the tag.
    * @param _pattern Regex pattern for matching this tag.
    * @param _replace The replacement that represents the tag value.
    */
-  public void addPattern (
-      String _name, char _kind, String _pattern, String _replace)
+  public void addPattern (char _kind, String _pattern, String _replace)
     throws Exception
   {
     Pattern pattern = Pattern.compile(_pattern);
+    addPattern(_kind, _pattern, _replace);
+  }
+
+  /**
+   * Adds the supplied tag matching pattern.
+   *
+   * @param _kind Character kind for the tag.
+   * @param _pattern Regex pattern for matching this tag.
+   * @param _replace The replacement that represents the tag value.
+   */
+  public void addPattern (char _kind, Pattern _pattern, String _replace)
+    throws Exception
+  {
     if(matcher == null){
-      matcher = pattern.matcher(fileBuffer);
+      matcher = _pattern.matcher(fileBuffer);
     }else{
       matcher.reset();
-      matcher.usePattern(pattern);
+      matcher.usePattern(_pattern);
     }
 
     while(matcher.find()){
@@ -110,7 +121,7 @@ public class RegexTaglist
 
       TagResult result = new TagResult();
       result.setFile(file);
-      result.setName(pattern.matcher(matched).replaceFirst(_replace));
+      result.setName(_pattern.matcher(matched).replaceFirst(_replace));
       result.setKind(_kind);
       result.setLine(offsets.offsetToLineColumn(start)[0]);
       result.setPattern(lines);
