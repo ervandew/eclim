@@ -139,13 +139,13 @@
 
   <bean name="taglist" class="org.eclim.command.taglist.TaglistCommand">
     <description>Handles generating a taglist for a given file.</description>
-    <!--property name="filters">
+    <property name="filters">
       <map>
         <entry key="vim">
           <bean class="org.eclim.command.taglist.TaglistFilter"/>
         </entry>
       </map>
-    </property-->
+    </property>
   </bean>
 
 </beans>

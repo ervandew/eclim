@@ -89,9 +89,9 @@ public class TaglistCommand
       }
 
       if(script != null){
-        return super.filter(_commandLine, script.execute(file));
+        return getFilter("vim").filter(script.execute(file));
       }
-      return super.filter(_commandLine, executeCtags(ctagArgs));
+      return executeCtags(ctagArgs);
     }catch(Exception e){
       return e;
     }
