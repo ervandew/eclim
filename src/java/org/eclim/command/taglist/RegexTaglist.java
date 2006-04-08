@@ -15,6 +15,30 @@
  */
 package org.eclim.command.taglist;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
+import java.nio.channels.FileChannel;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.eclim.util.file.FileOffsets;
+import org.eclim.util.file.FileUtils;
+
 /**
  * Handles processing tags from a file using a series of regex patterns.
  *
@@ -24,6 +48,11 @@ package org.eclim.command.taglist;
 public class RegexTaglist
 {
   private String file;
+  private FileInputStream fileStream;;
+  private CharBuffer fileBuffer;
+  private FileOffsets offsets;
+  private Matcher matcher;
+  private List results = new ArrayList();
 
   /**
    * Constructs a new instance.
@@ -31,8 +60,18 @@ public class RegexTaglist
    * @param _file The file to be processed.
    */
   public RegexTaglist (String _file)
+    throws Exception
   {
     file = _file;
+    fileStream = new FileInputStream(_file);
+
+    FileChannel fc = fileStream.getChannel();
+    ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
+    Charset cs = Charset.forName(new InputStreamReader(fileStream).getEncoding());
+    CharsetDecoder cd = cs.newDecoder();
+    fileBuffer = cd.decode(bb);
+
+    offsets = FileOffsets.compile(_file);
   }
 
   /**
@@ -45,12 +84,36 @@ public class RegexTaglist
    */
   public void addPattern (
       String _name, char _kind, String _pattern, String _replace)
+    throws Exception
   {
-System.out.println("#### RegexTaglist.addPattern");
-System.out.println("    #### " + _name);
-System.out.println("    #### " + _kind);
-System.out.println("    #### " + _pattern);
-System.out.println("    #### " + _replace);
+    Pattern pattern = Pattern.compile(_pattern);
+    if(matcher == null){
+      matcher = pattern.matcher(fileBuffer);
+    }else{
+      matcher.reset();
+      matcher.usePattern(pattern);
+    }
+
+    while(matcher.find()){
+      int start = matcher.start();
+      int end = matcher.end();
+      String matched = fileBuffer.subSequence(start, end).toString();
+
+      int first = offsets.getLineStart(offsets.offsetToLineColumn(start)[0]);
+      int last = offsets.getLineEnd(offsets.offsetToLineColumn(end)[0]);
+      String lines = fileBuffer.subSequence(first, last).toString();
+      lines = StringUtils.replace(lines, "/", "\\/");
+      lines = StringUtils.replace(lines, "\n", "\\n");
+
+      TagResult result = new TagResult();
+      result.setFile(file);
+      result.setName(pattern.matcher(matched).replaceFirst(_replace));
+      result.setKind(_kind);
+      result.setLine(offsets.offsetToLineColumn(start)[0]);
+      result.setPattern(lines);
+
+      results.add(result);
+    }
   }
 
   /**
@@ -60,7 +123,14 @@ System.out.println("    #### " + _replace);
    */
   public TagResult[] execute ()
   {
-System.out.println("#### RegexTaglist.execute");
-    return null;
+    return (TagResult[])results.toArray(new TagResult[results.size()]);
+  }
+
+  /**
+   * Cleans of this instance by releasing any held resources.
+   */
+  public void close ()
+  {
+    IOUtils.closeQuietly(fileStream);
   }
 }
