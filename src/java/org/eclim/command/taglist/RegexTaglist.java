@@ -102,8 +102,11 @@ public class RegexTaglist
       int first = offsets.getLineStart(offsets.offsetToLineColumn(start)[0]);
       int last = offsets.getLineEnd(offsets.offsetToLineColumn(end)[0]);
       String lines = fileBuffer.subSequence(first, last).toString();
+      // escape newlines and '/'
       lines = StringUtils.replace(lines, "/", "\\/");
       lines = StringUtils.replace(lines, "\n", "\\n");
+      // remove ctrl-Ms
+      lines = StringUtils.replace(lines, "\r", "");
 
       TagResult result = new TagResult();
       result.setFile(file);
