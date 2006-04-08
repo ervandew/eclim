@@ -115,6 +115,10 @@ public class FileOffsets
    */
   public int[] offsetToLineColumn (int _offset)
   {
+    if(_offset <= 0){
+      return new int[]{1,1};
+    }
+
     int bot = -1;
     int top = offsets.length;
     while (top - bot > 1) {
