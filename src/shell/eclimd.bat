@@ -1,6 +1,6 @@
 @echo off
 
-rem Copyright (c) 2004 - 2005
+rem Copyright (c) 2005 - 2006
 rem
 rem Licensed under the Apache License, Version 2.0 (the "License");
 rem you may not use this file except in compliance with the License.
