@@ -18,8 +18,12 @@ package org.eclim.command.taglist;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanComparator;
 
 import org.apache.commons.io.IOUtils;
 
@@ -44,7 +48,9 @@ public class TaglistCommand
 {
   private static final Logger logger = Logger.getLogger(TaglistCommand.class);
 
+  private static final Comparator TAG_COMPARATOR = new BeanComparator("name");
   private static final String LANGUAGE = "--language-force";
+  private static final String SORT = "--sort";
   private static final String CTAGS_OPTION = "c";
 
   private static final Map scriptCache = new HashMap();
@@ -60,6 +66,7 @@ public class TaglistCommand
       String[] args = _commandLine.getArgs();
       String file = args[args.length - 1];
       String lang = null;
+      boolean sort = false;
 
       String[] ctagArgs = new String[args.length - 3];
       ctagArgs[0] = ctags;
@@ -71,6 +78,10 @@ public class TaglistCommand
 
         if(args[ii].startsWith(LANGUAGE)){
           lang = args[ii].substring(args[ii].indexOf('=') + 1);
+        }else if(args[ii].startsWith(SORT)){
+          if("yes".equals(args[ii].substring(args[ii].indexOf('=') + 1))){
+            sort = true;
+          }
         }
       }
 
@@ -89,7 +100,11 @@ public class TaglistCommand
       }
 
       if(script != null){
-        return getFilter("vim").filter(script.execute(file));
+        TagResult[] results = script.execute(file);
+        if(sort){
+          Arrays.sort(results, TAG_COMPARATOR);
+        }
+        return getFilter("vim").filter(results);
       }
       return executeCtags(ctagArgs);
     }catch(Exception e){
