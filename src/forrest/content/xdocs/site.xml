@@ -143,11 +143,17 @@ See http://forrest.apache.org/docs/linking.html for more info
     <supertab_patch href="http://sourceforge.net/project/showfiles.php?group_id=145869&amp;package_id=160492&amp;release_id=370674"/>
 
     <taglist href="http://www.vim.org/scripts/script.php?script_id=273"/>
+    <taglist_extend
+        href="http://www.geocities.com/yegappan/taglist/manual.html#taglist-extend"/>
+    <taglist_ctags
+        href="http://www.geocities.com/yegappan/taglist/manual.html#'Tlist_Ctags_Cmd'"/>
 
     <vimplugin href="http://vimplugin.sourceforge.net/"/>
     <viplugin href="http://www.satokar.com/viplugin/index.php"/>
 
     <antcontrib href="http://ant-contrib.sourceforge.net"/>
+
+    <groovy href="http://groovy.codehaus.org"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

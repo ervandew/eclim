@@ -135,10 +135,6 @@
           self installing shell script
         </a>
       </action>
-      <action context="ctags" dev="ervandew">
-        Create a java based ctags that allows more robust regex for ctag
-        patterns (replace .ctags).
-      </action>
       <action context="languages" dev="ervandew">
         Support for other languages.
         <ul>
@@ -305,7 +301,7 @@
 
     <actions priority="eclipse 3.2">
       <action context="3.2 enhancements" dev="ervandew">
-        <a href="http://download.eclipse.org/eclipse/downloads/drops/S-3.2M5-200602171115/eclipse-news-M5.html">
+        <a href="http://download.eclipse.org/eclipse/downloads/drops/S-3.2M6-200603312000/eclipse-news-M6.html">
           Eclipse 3.2 Features
         </a>
         <ul>
@@ -376,7 +372,8 @@
       <action dev="ervandew" type="add" context="Java">
         Utilizing vim's new dictionary based completion results.
         <warning>
-          Requires a vim build from Febuary 2006 or later.
+          Requires a vim build from Febuary 2006 or later.<br/>
+          Highly recommend upgrading to the Vim 7 beta.
         </warning>
       </action>
       <action dev="ervandew" type="add" context="Java">
@@ -406,6 +403,11 @@
         Added several miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of
         eclim context.
+      </action>
+      <action dev="ervandew" type="add" context="Vim">
+        Added <a href="vim/taglist.html">taglist support</a>, inluding auto
+        command to auto open that taglist window, and a groovy script based
+        ctags alternative.
       </action>
     </release>
 
