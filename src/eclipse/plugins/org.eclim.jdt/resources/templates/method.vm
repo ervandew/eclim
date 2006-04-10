@@ -1,5 +1,5 @@
 /**
-#if (($overrides || $implements) && !${delegate})
+#if (($overrides || $implements) && !$delegate && !$constructor)
  * {@inheritDoc}
 #end
 #if ($overrides || $implements)
