@@ -333,8 +333,12 @@ public class ImplCommand
       values.put("methodBody", buffer.toString());
     }
 
-    values.put("modifier",
-        Flags.isPublic(_method.getFlags()) ? "public" : "protected");
+    if(_superType.isInterface()){
+      values.put("modifier", "public");
+    }else{
+      values.put("modifier",
+          Flags.isPublic(_method.getFlags()) ? "public" : "protected");
+    }
     values.put("params", getMethodParameters(_method));
     values.put("superType", _superType.getFullyQualifiedName());
     values.put("overrides",
@@ -448,8 +452,13 @@ public class ImplCommand
   {
     int flags = _method.getFlags();
     StringBuffer buffer = new StringBuffer();
-    buffer.append(Flags.isPublic(flags) ? "public " : "protected ")
-      .append(Flags.isAbstract(flags) ? "abstract " : "");
+    if(_method.getDeclaringType().isInterface()){
+      buffer.append("public ");
+    }else{
+      buffer.append(
+          Flags.isPublic(_method.getFlags()) ? "public " : "protected ");
+    }
+    buffer.append(Flags.isAbstract(flags) ? "abstract " : "");
     if(!_method.isConstructor()){
       buffer.append(Signature.getSignatureSimpleName(_method.getReturnType()))
       .append(' ');

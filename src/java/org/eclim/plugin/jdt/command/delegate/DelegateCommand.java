@@ -118,7 +118,8 @@ public class DelegateCommand
     throws Exception
   {
     int flags = _method.getFlags();
-    return (Flags.isPublic(flags) && !_method.isConstructor());
+    return (!_method.isConstructor() &&
+        (Flags.isPublic(flags) || _method.getDeclaringType().isInterface()));
   }
 
   /**
@@ -145,9 +146,13 @@ public class DelegateCommand
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), values);
 
+    if(_superType.isInterface()){
+      values.put("modifier", "public");
+    }else{
+      values.put("modifier",
+          Flags.isPublic(_method.getFlags()) ? "public" : "protected");
+    }
     values.put("name", _method.getElementName());
-    values.put("modifier",
-        Flags.isPublic(_method.getFlags()) ? "public" : "protected");
     String returnType = Signature.getSignatureSimpleName(
         _method.getReturnType());
     values.put("return", returnType);
