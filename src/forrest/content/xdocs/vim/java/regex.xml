@@ -60,6 +60,14 @@
       eclim defaults to using some common groups already defined by vim.
     </p>
     <p>
+      The regex window also provides two commands to jump to the next or
+      previous match much like 'n' or 'N' for vim searching:
+    </p>
+    <ul>
+      <li><strong>:NextMatch</strong> - Jump to the next match.</li>
+      <li><strong>:PrevMatch</strong> - Jump to the previous match.</li>
+    </ul>
+    <p>
       <strong>Configuration</strong>
     </p>
     <p>
