@@ -37,8 +37,8 @@
         &lt;context&gt; -s &lt;scope&gt;
       </p>
       <p>
-        All of the results will be placed into vim's quickfix window so that you
-        can easily navigate the results.
+        All of the results will be placed into the current window's location
+        list (:help location-list) so that you can easily navigate the results.
       </p>
       <note>
         Vim command completion is supported through out the command with the
@@ -216,7 +216,7 @@
           <ul>
             <li>'split' - open the result in a new window via "split".</li>
             <li>'edit' - open the result in the current window.</li>
-            <li>'copen' - open the quickfix window to display the result.</li>
+            <li>'lopen' - open the location list to display the result.</li>
           </ul>
         </li>
         <li>

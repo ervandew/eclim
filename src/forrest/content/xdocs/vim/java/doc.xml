@@ -70,7 +70,7 @@
         of <strong>:JavaSearch</strong>.
       </p>
       <p>
-        The results will be displayed in a quickfix window and you can simply hit
+        The results will be displayed in a window and you can simply hit
         &lt;enter&gt; on an entry to open it using the browser you configured via
         <strong><a href="../index.html#configuration">g:EclimBrowser</a></strong>.
       </p>
@@ -101,7 +101,7 @@
           Possible values include:
           <ul>
             <li>'open' - open the result in a browser.</li>
-            <li>'copen' - open the quickfix window to display the result.</li>
+            <li>'lopen' - open the temp window to display the result.</li>
           </ul>
         </li>
       </ul>

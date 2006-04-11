@@ -44,7 +44,7 @@
     <note>
       For all the of the methods below, when saving the file, eclim will attempt
       to validate the <code>.classpath</code> file and will report any errors
-      via vim's quickfix functionality.
+      in the current window's location list (:help location-list).
     </note>
     <section id="eclipse.classpath">
       <title>.classpath</title>

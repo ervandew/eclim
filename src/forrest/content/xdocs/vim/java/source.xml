@@ -31,16 +31,11 @@
     <p>
       When saving a java source file that resides in a project, eclim will
       update that source file in eclipse and will report any validation errors
-      found.  Any errors will be placed in vim's quickfix buffer and the
-      corresponding lines in the source file will be marked via vim's :sign
-      functionality with '>>' markers in the left margin.
+      found.  Any errors will be placed in the current window's location list
+      (:help location-list) and the corresponding lines in the source file will
+      be marked via vim's :sign functionality with '>>' markers in the left
+      margin.
     </p>
-    <note>
-      To prevent overwritting your quickfix buffer after a :make or :grep, eclim
-      will only place the source file's validation errors in the quickfix buffer
-      if the buffer does not contain results from any user initiated quickfix
-      commands (make, grep, vimgrep, etc.).
-    </note>
     <p>
       <strong>Configuration</strong>
     </p>

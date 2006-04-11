@@ -100,16 +100,6 @@ if g:EclimMakeLCD
       \ exec "lcd " . w:quickfix_dir
   augroup END
 endif
-
-augroup eclim_quickfix_cmd
-  autocmd!
-  autocmd QuickFixCmdPost * call eclim#util#SetQuickfixAvailability()
-  "autocmd QuickFixCmdPost make
-  "  \ if exists("b:eclim_errors") |
-  "  \   unlet b:eclim_errors |
-  "  \   call eclim#util#ErrorsDisplayClear() |
-  "  \ endif
-augroup END
 " }}}
 
 " vim:ft=vim:fdm=marker

@@ -409,6 +409,10 @@
         command to auto open that taglist window, and a groovy script based
         ctags alternative.
       </action>
+      <action dev="ervandew" type="add" context="Vim">
+        All of the functionality that previous placed results / errors into the
+        quickfix window, now utilizes vim's new location list functionality.
+      </action>
     </release>
 
     <release version="1.1.1" date="Feb. 19, 2006">
