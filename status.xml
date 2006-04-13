@@ -353,6 +353,17 @@
         the completion.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        <a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1440606&amp;group_id=145869&amp;atid=763323">Bug 1440606</a>.
+        <note>
+          The original implementation of <strong>:JavaImportClean</strong> was
+          written entirely in vim (didn't require eclim server).  To properly
+          handle ignoring comments when determining what imports are unused,
+          this functionality had to be reimplemented with server side help.
+          However, the vim only version is preserved and will be invoked if the
+          current file is not in an eclipse project.
+        </note>
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
       <action dev="ervandew" type="add" context="Ant">

@@ -62,7 +62,10 @@
       </li>
       <li>
         <strong>:JavaImportClean</strong><br/>
-        Removes any un-used import statements.
+        Removes any un-used import statements.  If the current file is not
+        in an eclipse project, then a vim only implementation is invoked, that
+        behaves the same as the server side version, except it does not take
+        into account object names that are commented out.
       </li>
     </ul>
     <p>
