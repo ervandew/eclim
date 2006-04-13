@@ -425,7 +425,20 @@ public class JavaUtils
   public static IProblem[] getProblems (ICompilationUnit _src)
     throws Exception
   {
-    ProblemRequestor requestor = new ProblemRequestor();
+    return getProblems(_src, null);
+  }
+
+  /**
+   * Gets the problems for a given src file.
+   *
+   * @param _src The src file.
+   * @param _ids Array of problem ids to accept.
+   * @return The problems.
+   */
+  public static IProblem[] getProblems (ICompilationUnit _src, int[] _ids)
+    throws Exception
+  {
+    ProblemRequestor requestor = new ProblemRequestor(_ids);
     try{
       _src.becomeWorkingCopy(requestor, null);
     }finally{
@@ -511,6 +524,17 @@ public class JavaUtils
     implements org.eclipse.jdt.core.IProblemRequestor
   {
     private List problems = new ArrayList();
+    private int[] ids;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param _ids Array of problem ids to accept.
+     */
+    public ProblemRequestor (int[] _ids)
+    {
+      ids = _ids;
+    }
 
     /**
      * Gets a list of problems recorded.
@@ -527,7 +551,16 @@ public class JavaUtils
      */
     public void acceptProblem (IProblem _problem)
     {
-      problems.add(_problem);
+      if(ids != null){
+        for (int ii = 0; ii < ids.length; ii++){
+          if(_problem.getID() == ids[ii]){
+            problems.add(_problem);
+            break;
+          }
+        }
+      }else{
+        problems.add(_problem);
+      }
     }
 
     /**
