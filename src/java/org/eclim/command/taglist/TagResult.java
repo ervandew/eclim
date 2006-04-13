@@ -15,6 +15,8 @@
  */
 package org.eclim.command.taglist;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Represents a result from processing a file for tags.
  *
@@ -87,6 +89,15 @@ public class TagResult
   public void setPattern (String _pattern)
   {
     pattern = _pattern;
+
+    if(pattern != null){
+      // escape newlines, '\' and '/'
+      pattern = StringUtils.replace(pattern, "\\", "\\\\");
+      pattern = StringUtils.replace(pattern, "/", "\\/");
+      pattern = StringUtils.replace(pattern, "\n", "\\n");
+      // remove ctrl-Ms
+      pattern = StringUtils.replace(pattern, "\r", "");
+    }
   }
 
   /**
