@@ -61,6 +61,18 @@
     </property>
   </bean>
 
+  <bean name="java_imports_unused"
+      class="org.eclim.plugin.jdt.command.include.UnusedImportsCommand">
+    <description>Handles client request for all unused imports.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.jdt.command.include.UnusedImportsFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <bean name="java_complete"
       class="org.eclim.plugin.jdt.command.complete.CodeCompleteCommand">
     <description>Handles client code completion requests.</description>
