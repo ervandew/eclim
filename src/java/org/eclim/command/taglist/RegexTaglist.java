@@ -34,6 +34,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 
+import org.eclim.Services;
+
 import org.eclim.util.file.FileOffsets;
 import org.eclim.util.file.FileUtils;
 
@@ -79,7 +81,7 @@ public class RegexTaglist
    * @param _pattern Regex pattern for matching this tag.
    * @param _replace The replacement that represents the tag value.
    */
-  public void addPattern (char _kind, String _pattern, String _replace)
+  public void addPattern (String _kind, String _pattern, String _replace)
     throws Exception
   {
     Pattern pattern = Pattern.compile(_pattern);
@@ -93,9 +95,13 @@ public class RegexTaglist
    * @param _pattern Regex pattern for matching this tag.
    * @param _replace The replacement that represents the tag value.
    */
-  public void addPattern (char _kind, Pattern _pattern, String _replace)
+  public void addPattern (String _kind, Pattern _pattern, String _replace)
     throws Exception
   {
+    if(_kind.length() != 1){
+      throw new IllegalArgumentException(
+          Services.getMessage("taglist.kind.invalid", _kind));
+    }
     if(matcher == null){
       matcher = _pattern.matcher(fileBuffer);
     }else{
@@ -115,7 +121,7 @@ public class RegexTaglist
       TagResult result = new TagResult();
       result.setFile(file);
       result.setName(_pattern.matcher(matched).replaceFirst(_replace));
-      result.setKind(_kind);
+      result.setKind(_kind.toCharArray()[0]);
       result.setLine(offsets.offsetToLineColumn(start)[0]);
       result.setPattern(lines);
 
