@@ -29,7 +29,7 @@
   </header>
   <body>
     <p>
-      Eclim provides a means to test java regular expressions.  Simple execute
+      Eclim provides a means to test java regular expressions.  Simply execute
       <strong>:JavaRegex</strong> and a vim window will open allowing you to
       test your regular expression.
     </p>
