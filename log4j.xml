@@ -27,7 +27,7 @@
   </appender>
 
   <category name="org.eclim">
-    <priority value="debug"/>
+    <priority value="info"/>
   </category>
 
   <category name="org.eclim.util.spring">
