@@ -416,9 +416,8 @@
         eclim context.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        Added <a href="vim/taglist.html">taglist support</a>, inluding auto
-        command to auto open that taglist window, and a groovy script based
-        ctags alternative.
+        Added <a href="vim/taglist.html">groovy script based ctags implementation</a>
+        for use with the vim taglist plugin.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         All of the functionality that previous placed results / errors into the
