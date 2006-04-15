@@ -89,7 +89,7 @@ class ForrestDocumentTags implements TaglistScript
 
       return regex.execute();
     }finally{
-      regex.close();
+      if (regex != null) regex.close();
     }
   }
 }
