@@ -96,6 +96,7 @@
     <replace dir="${eclipse.home}/plugins"
         includes="org.eclim*_${eclim.version}/bin/**/*,
                   org.eclim*_${eclim.version}/about.html,
+                  org.eclim*_${eclim.version}/plugin.properties,
                   org.eclim*_${eclim.version}/META-INF/MANIFEST.MF"
         token="$${eclim.version}" value="${eclim.version}"/>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
@@ -164,7 +165,7 @@
       <fileset dir="${eclipse.home}/plugins/"
           excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
-        <include name="org.eclim.jdt_${eclim.version}/**/*"/>
+        <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
@@ -176,7 +177,7 @@
       <tarfileset dir="${eclipse.home}/plugins/"
           excludesfile="src/ant/exclude.properties">
         <include name="org.eclim_${eclim.version}/**/*"/>
-        <include name="org.eclim.jdt_${eclim.version}/**/*"/>
+        <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/windows/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
