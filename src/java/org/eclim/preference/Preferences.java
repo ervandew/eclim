@@ -69,7 +69,7 @@ public class Preferences
   /**
    * Gets the Preferences instance.
    *
-   * @return
+   * @return The Preferences singleton.
    */
   public static Preferences getInstance ()
   {

@@ -30,7 +30,7 @@ public class PluginResources
 {
   /**
    * Name that can be used to lookup this PluginResources from
-   * {@link Services#getPluginResource()}.
+   * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.jdt";
 }
