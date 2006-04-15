@@ -16,6 +16,7 @@
 package org.eclim.command.taglist;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 import java.util.Arrays;
@@ -33,7 +34,6 @@ import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclim.util.ScriptUtils;
 
@@ -52,6 +52,7 @@ public class TaglistCommand
   private static final String LANGUAGE = "--language-force";
   private static final String SORT = "--sort";
   private static final String CTAGS_OPTION = "c";
+  private static final long MAX_FILE_SIZE = 500 * 1024;
 
   private static final Map scriptCache = new HashMap();
 
@@ -62,9 +63,19 @@ public class TaglistCommand
     throws IOException
   {
     try{
-      String ctags = _commandLine.getValue(CTAGS_OPTION);
       String[] args = _commandLine.getArgs();
       String file = args[args.length - 1];
+
+      // check file first
+      File theFile = new File(file);
+      if(!theFile.exists() || theFile.length() > MAX_FILE_SIZE){
+        logger.debug(
+            "File '{}' not processed: exists = {} size = " + theFile.length(),
+            file, Boolean.valueOf(theFile.exists()));
+        return "";
+      }
+
+      String ctags = _commandLine.getValue(CTAGS_OPTION);
       String lang = null;
       boolean sort = false;
 
@@ -132,6 +143,7 @@ public class TaglistCommand
     }
 
     if(process.getReturnCode() == -1){
+      process.destroy();
       throw new RuntimeException("ctags command timed out.");
     }else if(process.getReturnCode() > 0){
       throw new RuntimeException("ctags error: " + process.getErrorMessage());
@@ -150,6 +162,7 @@ public class TaglistCommand
     private String[] args;
     private String result;
     private String error;
+    private Process process;
 
     /**
      * Construct a new instance.
@@ -166,23 +179,49 @@ public class TaglistCommand
     {
       try{
         Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec(args);
+        process = runtime.exec(args);
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        new Thread(){
+          public void run (){
+            try{
+              IOUtils.copy(process.getInputStream(), out);
+            }catch(IOException ioe){
+              ioe.printStackTrace();
+            }
+          }
+        }.start();
+
+        new Thread(){
+          public void run (){
+            try{
+              IOUtils.copy(process.getErrorStream(), err);
+            }catch(IOException ioe){
+              ioe.printStackTrace();
+            }
+          }
+        }.start();
 
         returnCode = process.waitFor();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.copy(process.getInputStream(), out);
-
         result = out.toString();
-
-        out = new ByteArrayOutputStream();
-        IOUtils.copy(process.getErrorStream(), out);
-
-        error = out.toString();
+        error = err.toString();
       }catch(Exception e){
         returnCode = 12;
         error = e.getMessage();
         logger.error("run()", e);
+      }
+    }
+
+    /**
+     * Destroy this process.
+     */
+    public void destroy ()
+    {
+      if(process != null){
+        process.destroy();
       }
     }
 
