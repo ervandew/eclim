@@ -64,6 +64,20 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_">
+        <title></title>
+        <p>
+          Eclim (1.1.2) is now available.<br/>
+          Before upgrading, you should upgrade your vim installation to one of
+          the new beta versions.  Details for obtaining the latest release can
+          be found on the
+          <a href="install/index.html#vim_plugin">installation documentation page</a>.
+        </p>
+        <p>
+          To see a list of what's new / changed, be sure to take a look at the
+          <a href="changes.html#version_1.1.2">release notes</a>.
+        </p>
+      </section>
       <section id="news_2006_02_19">
         <title>2006-02-19</title>
         <p>
