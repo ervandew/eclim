@@ -77,9 +77,7 @@ public class RegexCommand
 
       // read the pattern from the first line of the file.
       String line = new BufferedReader(reader).readLine();
-      Pattern pattern = Pattern.compile(line.trim(), Pattern.MULTILINE);
-
-      // advance the input
+      Pattern pattern = Pattern.compile(line.trim());
 
       FileOffsets offsets = FileOffsets.compile(_file);
       Matcher matcher = FileUtils.matcher(pattern, fis, reader.getEncoding());
