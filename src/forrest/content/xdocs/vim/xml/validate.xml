@@ -39,7 +39,7 @@
     </note>
     <p>
       If you don't want xml files validated when saving them, you can set the
-      g:EclimXmlValidation variable described in the configuration section
+      g:EclimXmlValidate variable described in the configuration section
       below.
     </p>
     <p>
@@ -52,7 +52,7 @@
       <br/>
       If eclimd is not currently running, and the xmllint command is available,
       eclim will validate the xml file using that.  Eclim will never use xmllint
-      when saving the file with g:EclimXmlValidation enabled.
+      when saving the file with g:EclimXmlValidate enabled.
     </p>
     <p>
       <strong>Configuration</strong>
@@ -62,7 +62,7 @@
     </p>
     <ul>
       <li>
-        <strong>g:EclimXmlValidation</strong><br/>
+        <strong>g:EclimXmlValidate</strong><br/>
         If set to 0, disables xml validation when saving the file.
       </li>
     </ul>
