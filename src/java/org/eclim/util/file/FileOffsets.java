@@ -82,7 +82,7 @@ public class FileOffsets
           new InputStreamReader(file.getContent().getInputStream()));
 
       List lines = new ArrayList();
-      lines.add(Integer.valueOf(0));
+      lines.add(new Integer(0));
 
       int offset = 0;
       int count = 0;
@@ -91,7 +91,7 @@ public class FileOffsets
         for(int ii = 0; ii < count; ii++){
           if(buffer[ii] == '\n'){
             offset++;
-            lines.add(Integer.valueOf(offset));
+            lines.add(new Integer(offset));
           }else{
             offset++;
           }

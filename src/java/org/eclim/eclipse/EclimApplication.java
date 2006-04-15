@@ -91,7 +91,7 @@ public class EclimApplication
       server.run();
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
-      return Integer.valueOf(1);
+      return new Integer(1);
     }
 
     logger.info("Shutting down eclim...");
@@ -99,7 +99,7 @@ public class EclimApplication
     closePlugins();
 
     logger.info("Eclim stopped.");
-    return Integer.valueOf(0);
+    return new Integer(0);
   }
 
   /**
