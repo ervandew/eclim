@@ -496,7 +496,7 @@ public class CommentCommand
 
     // get thrown exceptions from element.
     String[] exceptions = _method.getExceptionTypes();
-    if(_isNew){
+    if(_isNew && exceptions.length > 0){
       addTag(_javadoc, tags.size(), null, "");
       for (int ii = 0; ii < exceptions.length; ii++){
         addTag(_javadoc, tags.size(), TagElement.TAG_THROWS,
