@@ -27,18 +27,6 @@ class ForrestDocumentTags implements TaglistScript
 {
   public TagResult[] execute (String file)
   {
-    def g = Character.valueOf('g' as char);
-    def u = Character.valueOf('u' as char);
-    def p = Character.valueOf('p' as char);
-    def s = Character.valueOf('s' as char);
-    def t = Character.valueOf('t' as char);
-    def v = Character.valueOf('v' as char);
-    def q = Character.valueOf('q' as char);
-    def f = Character.valueOf('f' as char);
-    def r = Character.valueOf('r' as char);
-    def m = Character.valueOf('m' as char);
-    def z = Character.valueOf('z' as char);
-
     def regex = null;
     try{
       regex = new RegexTaglist(file);
