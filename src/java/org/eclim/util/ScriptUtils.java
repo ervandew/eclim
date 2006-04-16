@@ -57,12 +57,15 @@ public class ScriptUtils
     Binding binding = new Binding(_values);
     GroovyShell shell = new GroovyShell(binding);
 
-    String script = FilenameUtils.concat(SCRIPT_PATH, _script);
+    String script = FilenameUtils.separatorsToUnix(
+        FilenameUtils.concat(SCRIPT_PATH, _script));
     try{
       return shell.evaluate(_resources.getResourceAsStream(script));
     }catch(NullPointerException npe){
-      throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", script), npe);
+      IllegalArgumentException iae = new IllegalArgumentException(
+          Services.getMessage("script.not.found", script));
+      iae.initCause(npe);
+      throw iae;
     }
   }
 
@@ -78,12 +81,15 @@ public class ScriptUtils
     throws Exception
   {
     GroovyClassLoader gcl = new GroovyClassLoader();
-    String script = FilenameUtils.concat(SCRIPT_PATH, _script);
+    String script = FilenameUtils.separatorsToUnix(
+        FilenameUtils.concat(SCRIPT_PATH, _script));
     try{
       return gcl.parseClass(_resources.getResourceAsStream(script));
     }catch(NullPointerException npe){
-      throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", script), npe);
+      IllegalArgumentException iae = new IllegalArgumentException(
+          Services.getMessage("script.not.found", script));
+      iae.initCause(npe);
+      throw iae;
     }
   }
 }

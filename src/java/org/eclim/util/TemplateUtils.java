@@ -83,8 +83,10 @@ public class TemplateUtils
       reader = new BufferedReader(new InputStreamReader(
             _resources.getResourceAsStream(_template)));
     }catch(NullPointerException npe){
-      throw new IllegalArgumentException(
-          Services.getMessage("template.not.found", _template), npe);
+      IllegalArgumentException iae = new IllegalArgumentException(
+          Services.getMessage("template.not.found", _template));
+      iae.initCause(npe);
+      throw iae;
     }
 
     StringWriter writer = new StringWriter();

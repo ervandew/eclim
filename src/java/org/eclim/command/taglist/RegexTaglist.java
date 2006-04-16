@@ -102,12 +102,12 @@ public class RegexTaglist
       throw new IllegalArgumentException(
           Services.getMessage("taglist.kind.invalid", _kind));
     }
-    if(matcher == null){
+    //if(matcher == null){
       matcher = _pattern.matcher(fileBuffer);
-    }else{
+    /*}else{
       matcher.reset();
-      matcher.usePattern(_pattern);
-    }
+      matcher.usePattern(_pattern); // java 1.5
+    }*/
 
     while(matcher.find()){
       int start = matcher.start();
