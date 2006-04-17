@@ -209,7 +209,7 @@
           Swaps two words (with cursor placed on the first word).
           Supports swapping around non-word characters like commas, periods, etc.
         </li>
-        <li>
+        <!--li>
           <strong>:SwapTypedArguments</strong> -
           Swaps typed method arguments in a method declaration (with the cursor
           placed on the type declaration of the first argument to swap).
@@ -220,7 +220,7 @@
           <source>
             public void test (int arg2, String _arg1)
           </source>
-        </li>
+        </li-->
       </ul>
     </section>
   </body>

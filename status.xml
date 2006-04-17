@@ -407,7 +407,7 @@
         customization.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        Added several miscellaneous
+        Added couple miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of
         eclim context.
       </action>

@@ -178,10 +178,10 @@
         Swaps two words (with cursor placed on the first word).
         Supports swapping around non-word characters like commas, periods, etc.
       </li>
-      <li>
+      <!--li>
         <strong>:SwapTypedArguments</strong> -
         Swaps typed method arguments in a method declaration.
-      </li>
+      </li-->
     </ul>
   </body>
 </document>
