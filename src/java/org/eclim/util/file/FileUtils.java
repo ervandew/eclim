@@ -18,14 +18,6 @@ package org.eclim.util.file;
 import java.io.File;
 import java.io.FileInputStream;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
-import java.nio.channels.FileChannel;
-
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-
 import java.util.Enumeration;
 
 import java.util.regex.Matcher;
@@ -34,6 +26,7 @@ import java.util.regex.Pattern;
 import javax.naming.CompositeName;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
@@ -86,22 +79,20 @@ public class FileUtils
    * Obtains a matcher to run the supplied pattern on the specified file.
    *
    * @param _pattern The regex pattern
-   * @param _in The input stream for the file.
-   * @param _charset The file's character set.
+   * @param _file The path to the file.
    * @return The Matcher.
    */
-  public static Matcher matcher (
-      Pattern _pattern, FileInputStream _in, String _charset)
+  public static Matcher matcher (Pattern _pattern, String _file)
     throws Exception
   {
-    FileChannel fc = _in.getChannel();
-
-    ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
-    Charset cs = Charset.forName(_charset);
-    CharsetDecoder cd = cs.newDecoder();
-    CharBuffer cb = cd.decode(bb);
-
-    return _pattern.matcher(cb);
+    FileInputStream is = null;
+    try{
+      is = new FileInputStream(_file);
+      String contents = IOUtils.toString(is);
+      return _pattern.matcher(contents);
+    }finally{
+      IOUtils.closeQuietly(is);
+    }
   }
 
   /**

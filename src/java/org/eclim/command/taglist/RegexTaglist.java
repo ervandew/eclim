@@ -16,15 +16,6 @@
 package org.eclim.command.taglist;
 
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
-import java.nio.channels.FileChannel;
-
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +28,6 @@ import org.apache.commons.io.IOUtils;
 import org.eclim.Services;
 
 import org.eclim.util.file.FileOffsets;
-import org.eclim.util.file.FileUtils;
 
 /**
  * Handles processing tags from a file using a series of regex patterns.
@@ -48,10 +38,8 @@ import org.eclim.util.file.FileUtils;
 public class RegexTaglist
 {
   private String file;
-  private FileInputStream fileStream;;
-  private CharBuffer fileBuffer;
+  private String contents;
   private FileOffsets offsets;
-  private Matcher matcher;
   private List results = new ArrayList();
 
   /**
@@ -62,16 +50,16 @@ public class RegexTaglist
   public RegexTaglist (String _file)
     throws Exception
   {
-    file = _file;
-    fileStream = new FileInputStream(_file);
+    FileInputStream is = null;
+    try{
+      is = new FileInputStream(_file);
 
-    FileChannel fc = fileStream.getChannel();
-    ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
-    Charset cs = Charset.forName(new InputStreamReader(fileStream).getEncoding());
-    CharsetDecoder cd = cs.newDecoder();
-    fileBuffer = cd.decode(bb);
-
-    offsets = FileOffsets.compile(_file);
+      file = _file;
+      contents = IOUtils.toString(is);
+      offsets = FileOffsets.compile(_file);
+    }finally{
+      IOUtils.closeQuietly(is);
+    }
   }
 
   /**
@@ -102,21 +90,16 @@ public class RegexTaglist
       throw new IllegalArgumentException(
           Services.getMessage("taglist.kind.invalid", _kind));
     }
-    //if(matcher == null){
-      matcher = _pattern.matcher(fileBuffer);
-    /*}else{
-      matcher.reset();
-      matcher.usePattern(_pattern); // java 1.5
-    }*/
 
+    Matcher matcher = _pattern.matcher(contents);
     while(matcher.find()){
       int start = matcher.start();
       int end = matcher.end();
-      String matched = fileBuffer.subSequence(start, end).toString();
+      String matched = contents.substring(start, end);
 
       int first = offsets.getLineStart(offsets.offsetToLineColumn(start)[0]);
       int last = offsets.getLineEnd(offsets.offsetToLineColumn(end)[0]);
-      String lines = fileBuffer.subSequence(first, last).toString();
+      String lines = contents.substring(first, last);
 
       TagResult result = new TagResult();
       result.setFile(file);
@@ -144,6 +127,6 @@ public class RegexTaglist
    */
   public void close ()
   {
-    IOUtils.closeQuietly(fileStream);
+    contents = null;
   }
 }

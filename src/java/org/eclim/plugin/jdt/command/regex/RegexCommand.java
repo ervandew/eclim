@@ -70,27 +70,28 @@ public class RegexCommand
   {
     List results = new ArrayList();
 
+    String regex = null;
     FileInputStream fis = null;
     try{
       fis = new FileInputStream(_file);
-      InputStreamReader reader = new InputStreamReader(fis);
 
       // read the pattern from the first line of the file.
-      String line = new BufferedReader(reader).readLine();
-      Pattern pattern = Pattern.compile(line.trim());
-
-      FileOffsets offsets = FileOffsets.compile(_file);
-      Matcher matcher = FileUtils.matcher(pattern, fis, reader.getEncoding());
-
-      // force matching to start past the first line.
-      if(matcher.find(line.length() + 1)){
-        processFinding(offsets, matcher, results);
-      }
-      while(matcher.find()){
-        processFinding(offsets, matcher, results);
-      }
+      regex = new BufferedReader(new InputStreamReader(fis)).readLine();
     }finally{
       IOUtils.closeQuietly(fis);
+    }
+
+    Pattern pattern = Pattern.compile(regex.trim());
+
+    FileOffsets offsets = FileOffsets.compile(_file);
+    Matcher matcher = FileUtils.matcher(pattern, _file);
+
+    // force matching to start past the first line.
+    if(matcher.find(regex.length() + 1)){
+      processFinding(offsets, matcher, results);
+    }
+    while(matcher.find()){
+      processFinding(offsets, matcher, results);
     }
 
     return results;
