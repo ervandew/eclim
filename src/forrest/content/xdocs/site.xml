@@ -136,7 +136,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
     <vim href="http://www.vim.org"/>
     <vim_win href="ftp://ftp.vim.org/pub/vim/unstable/pc"/>
-    <vim_win_latest href="ftp://ftp.vim.org/pub/vim/unstable/pc/gvim70d.exe"/>
+    <vim_win_latest href="ftp://ftp.vim.org/pub/vim/unstable/pc/gvim70e.exe"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
     <nailgun href="http://www.martiansoftware.com/nailgun/"/>
 
