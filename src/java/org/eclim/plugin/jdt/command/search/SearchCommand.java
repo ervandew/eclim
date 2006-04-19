@@ -22,16 +22,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
+
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.file.Position;
-
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
 
 import org.eclipse.core.runtime.CoreException;
@@ -224,14 +227,20 @@ public class SearchCommand
         parent.getParent().getParent();
       archive = root.getPath().toOSString();
 
-      file = elementName.replace('.', File.separatorChar);
+      String classFile = elementName.replace('.', File.separatorChar);
+      file = "jar:file://" + archive + '!' + classFile + ".class";
 
       // if a source path attachment exists, use it.
       IPath srcPath = root.getSourceAttachmentPath();
       if(srcPath != null){
-        file = srcPath.toOSString() + File.separator + file + ".java";
-      }else{
-        file = "jar:file://" + archive + '!' + file + ".class";
+        String srcFile = FileUtils.toUrl(
+            srcPath.toOSString() + File.separator + classFile + ".java");
+        // see if source file exists at source path.
+        FileSystemManager fsManager = VFS.getManager();
+        FileObject fileObject = fsManager.resolveFile(srcFile);
+        if(fileObject.exists()){
+          file = srcFile;
+        }
       }
     }else{
       IPath location = _match.getResource().getLocation();

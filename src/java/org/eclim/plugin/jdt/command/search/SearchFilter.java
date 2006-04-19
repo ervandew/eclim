@@ -20,9 +20,6 @@ import java.util.List;
 
 import org.eclim.command.OutputFilter;
 
-import org.eclim.util.file.FileUtils;
-import org.eclim.util.file.Position;
-
 import org.eclim.util.vim.VimUtils;
 
 /**
@@ -45,15 +42,13 @@ public class SearchFilter
       if(results != null){
         for(Iterator ii = results.iterator(); ii.hasNext();){
           SearchResult result = (SearchResult)ii.next();
-          String url = FileUtils.toUrl(result.getFilename());
-          Position position = new Position(url, result.getOffset(), 0);
-          String lineColumn = VimUtils.translateLineColumn(position);
+          String lineColumn = VimUtils.translateLineColumn(result);
 
           if(lineColumn != null){
             if(buffer.length() > 0){
               buffer.append('\n');
             }
-            buffer.append(url)
+            buffer.append(result.getFilename())
               .append('|')
               .append(lineColumn)
               .append('|')
