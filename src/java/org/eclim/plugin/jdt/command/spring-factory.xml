@@ -28,6 +28,13 @@
     </description>
   </bean>
 
+  <bean name="java_src_find"
+      class="org.eclim.plugin.jdt.command.src.SrcFindCommand">
+    <description>
+      Handles client request to find a class's source file.
+    </description>
+  </bean>
+
   <bean name="java_search" class="org.eclim.plugin.jdt.command.search.SearchCommand">
     <description>Handles client search requests.</description>
     <property name="filters">
