@@ -18,3 +18,14 @@
 
 JAVA_CMD="`dirname $0`/ng --nailgun-port 9091"
 $JAVA_CMD org.eclim.command.Main "$@"
+
+# Weirdest thing that for the life of me I can't figure out.
+# Sometimes when executed through vim, the exit status will be
+# 227 even though no error occurred.  Trying to reproduce with
+# manual system() or ! call, all work fine.
+# So, here we just swallow the 227 error code.
+EXIT_STATUS=$?
+if [ $EXIT_STATUS -eq 227 ]; then
+  exit 0
+fi
+exit $EXIT_STATUS
