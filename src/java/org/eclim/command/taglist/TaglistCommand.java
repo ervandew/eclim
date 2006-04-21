@@ -102,7 +102,10 @@ public class TaglistCommand
           Class scriptClass = ScriptUtils.parseClass(
               Services.getPluginResources(), "taglist/" + lang + ".groovy");
           script = (TaglistScript)scriptClass.newInstance();
-          scriptCache.put(lang, script);
+// After some extended period of time groovy starts loosing the ability to
+// resolve eclim classes.  Until this is resolved, don't cache groovy scripts.
+// If not a groovy issue, may be an issue with eclipse classloaders.
+//          scriptCache.put(lang, script);
         }catch(IllegalArgumentException iae){
           // script not found.
           logger.debug("No taglist script found for '" + lang + "'", iae);
