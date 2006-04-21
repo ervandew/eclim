@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.util.file.Position;
 
 /**
@@ -28,7 +30,8 @@ public class CodeCompleteResult
   private String filename;
   private int type;
   private String completion;
-  private String signature;
+  private String description;
+  private String shortDescription;
   private int replaceStart;
   private int replaceEnd;
 
@@ -39,14 +42,16 @@ public class CodeCompleteResult
       int _type,
       String _filename,
       String _completion,
-      String _signature,
+      String _shortDescription,
+      String _description,
       int _replaceStart,
       int _replaceEnd)
   {
     type = _type;
     filename = _filename;
     completion = _completion;
-    signature = _signature;
+    shortDescription = _shortDescription;
+    description = StringUtils.replace(_description, "\n", "<br/>");
     replaceStart = _replaceStart;
     replaceEnd = _replaceEnd;
   }
@@ -82,13 +87,23 @@ public class CodeCompleteResult
   }
 
   /**
-   * Get signature.
+   * Get short description.
    *
-   * @return signature as String.
+   * @return short description as String.
    */
-  public String getSignature ()
+  public String getShortDescription ()
   {
-    return this.signature;
+    return this.shortDescription;
+  }
+
+  /**
+   * Get description.
+   *
+   * @return description as String.
+   */
+  public String getDescription ()
+  {
+    return this.description;
   }
 
   /**

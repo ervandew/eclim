@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -70,10 +68,15 @@ public class CodeCompleteCommand
 
       for (int ii = 0; ii < proposals.length; ii++){
         String description = null;
-        if(proposals[ii].getAdditionalProposalInfo() != null){
-          description = StringUtils.replace(
-            proposals[ii].getAdditionalProposalInfo().trim(), "\n", "<br/>");
-        }
+
+        // TODO:
+        // hopefully Bram will take my advice to add lazy retrieval of
+        // completion 'info' so that I can provide this text without the
+        // overhead involved with retrieving it for every completion regardless
+        // of whether the user ever views it.
+        /*if(proposals[ii].getAdditionalProposalInfo() != null){
+          description = proposals[ii].getAdditionalProposalInfo().trim();
+        }*/
 
         String completion = proposals[ii].getDisplayString();
         int index = completion.indexOf(" - ");
@@ -88,9 +91,7 @@ public class CodeCompleteCommand
         }
       }
 
-      return filter(_commandLine, (CodeCompletionResult[])
-        results.toArray(new CodeCompletionResult[results.size()]));
-
+      return filter(_commandLine, results);
     }catch(Exception e){
       return e;
     }

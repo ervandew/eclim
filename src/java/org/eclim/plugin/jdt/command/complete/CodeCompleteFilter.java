@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
+import java.util.List;
+
 import org.eclim.command.OutputFilter;
 
 import org.eclim.util.vim.VimUtils;
@@ -36,14 +38,15 @@ public class CodeCompleteFilter
   public String filter (Object _result)
   {
     StringBuffer buffer = new StringBuffer();
-    CodeCompleteResult[] results = (CodeCompleteResult[])_result;
+    List results = (List)_result;
     if(results != null){
       //String offset = null;
-      for(int ii = 0; ii < results.length; ii++){
+      for(int ii = 0; ii < results.size(); ii++){
+        CodeCompleteResult result = (CodeCompleteResult)results.get(ii);
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        switch(results[ii].getType()){
+        switch(result.getType()){
           case CompletionProposal.TYPE_REF:
             buffer.append("c|");
             break;
@@ -59,16 +62,19 @@ public class CodeCompleteFilter
           default:
             buffer.append("|");
         }
-        buffer.append(results[ii].getCompletion())
-        /*  .append('|');
-        // the offset should be the same for all results, so calculate only once
-        if(offset == null){
-          offset = VimUtils.translateOffset(
-            results[ii].getFilename(), results[ii].getReplaceStart());
+
+        buffer.append(result.getCompletion()).append('|');
+
+        if(result.getShortDescription() != null){
+          buffer.append(result.getShortDescription());
         }
-        buffer.append(offset)*/
-          .append('|')
-          .append(results[ii].getSignature());
+
+        buffer.append('|');
+
+        if(result.getDescription() != null){
+          buffer.append(result.getDescription());
+        }
+
       }
     }
     return buffer.toString();

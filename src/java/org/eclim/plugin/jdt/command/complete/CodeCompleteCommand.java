@@ -18,7 +18,6 @@ package org.eclim.plugin.jdt.command.complete;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.AbstractCommand;
@@ -29,7 +28,13 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
+
+import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
+import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
+import org.eclipse.jdt.internal.ui.text.java.JavaMethodCompletionProposal;
+import org.eclipse.jdt.internal.ui.text.java.JavaTypeCompletionProposal;
 
 /**
  * Command to handle java code completion requests.
@@ -56,21 +61,17 @@ public class CodeCompleteCommand
 
       String filename = src.getResource().getRawLocation().toOSString();
 
-      CompletionRequestor requestor = new CompletionRequestor();
-      src.codeComplete(offset, requestor);
+      CompletionProposalCollector collector =
+        new CompletionProposalCollector(src);
+      src.codeComplete(offset, collector);
 
-      List proposals = requestor.getProposals();
-      for(Iterator ii = proposals.iterator(); ii.hasNext();){
-        CompletionProposal proposal = (CompletionProposal)ii.next();
-        // for classnames, we're removing the package, which may lead to
-        // duplicate results in their unqualified form.
-        CodeCompleteResult result = createCompletionResult(filename, proposal);
-        if(!results.contains(result)){
-          results.add(result);
-        }
+      IJavaCompletionProposal[] proposals =
+        collector.getJavaCompletionProposals();
+      for(int ii = 0; ii < proposals.length; ii++){
+        results.add(
+            createCompletionResult(filename, collector, ii, proposals[ii]));
       }
-      return filter(_commandLine,
-          results.toArray(new CodeCompleteResult[results.size()]));
+      return filter(_commandLine, results);
     }catch(Exception e){
       return e;
     }
@@ -80,123 +81,63 @@ public class CodeCompleteCommand
    * Create a CodeCompleteResult from the supplied CompletionProposal.
    *
    * @param _filename The filename.
+   * @param _collector The completion collector.
    * @param _proposal The proposal.
    *
    * @return The result.
    */
   protected CodeCompleteResult createCompletionResult (
-      String _filename, CompletionProposal _proposal)
+      String _filename,
+      CompletionProposalCollector _collector,
+      int _index,
+      IJavaCompletionProposal _proposal)
   {
-    String completion = new String(_proposal.getCompletion());
-    String signature = createSignature(_proposal);
+    int offset = 0;
+    int length = 0;
+    String completion = null;
+    String displayString = _proposal.getDisplayString();
 
-    switch(_proposal.getKind()){
-      // trim off the package for type references.
-      case CompletionProposal.TYPE_REF:
-        String packge = new String(_proposal.getDeclarationSignature());
-        if(completion.startsWith(packge)){
-          completion = completion.substring(packge.length() + 1);
+    if(_proposal instanceof JavaCompletionProposal){
+      JavaCompletionProposal lazy = (JavaCompletionProposal)_proposal;
+      offset = lazy.getReplacementOffset();
+      length = lazy.getReplacementLength();
+      completion = lazy.getReplacementString();
+    }else if(_proposal instanceof LazyJavaCompletionProposal){
+      LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)_proposal;
+      offset = lazy.getReplacementOffset();
+      length = lazy.getReplacementLength();
+      completion = lazy.getReplacementString();
+    }
+
+    int kind = _collector.getProposal(_index).getKind();
+    // eeww, fragile code.
+    switch(kind){
+      case CompletionProposal.METHOD_REF:
+        // trim off the trailing paren if the method takes any arguments.
+        if(displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1){
+          completion = completion.substring(0, completion.length() - 1);
         }
         break;
-
-      // trim off the trailing paren if the method takes any arguments.
-      case CompletionProposal.METHOD_REF:
-        if(completion.indexOf(')') != -1){
-          if(signature.lastIndexOf(')') > signature.lastIndexOf('(') + 1){
-            completion = completion.substring(0, completion.length() - 1);
-          }
+      case CompletionProposal.TYPE_REF:
+        // trim off package info.
+        int index = completion.lastIndexOf('.');
+        if(index != -1){
+          completion = completion.substring(index + 1);
         }
         break;
     }
 
+    // TODO:
+    // hopefully Bram will take my advice to add lazy retrieval of
+    // completion 'info' so that I can provide this text without the
+    // overhead involved with retrieving it for every completion regardless
+    // of whether the user ever views it.
+    /*return new CodeCompleteResult(
+        kind, _filename, completion, displayString,
+        _proposal.getAdditionalProposalInfo(),
+        offset, offset + length);*/
     return new CodeCompleteResult(
-        _proposal.getKind(), _filename, completion, signature,
-        _proposal.getReplaceStart(), _proposal.getReplaceEnd());
-  }
-
-  /**
-   * Creates a string representation of the proposals signature.
-   *
-   * @param _proposal The CompletionProposal.
-   * @return The signature.
-   */
-  protected String createSignature (CompletionProposal _proposal)
-  {
-    StringBuffer signature = new StringBuffer();
-    switch(_proposal.getKind()){
-      case CompletionProposal.TYPE_REF:
-        signature.append(_proposal.getCompletion());
-        signature.append(" ");
-        /*signature.append(Signature.getSignatureQualifier(
-              _proposal.getSignature()));
-        signature.append('.');*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getSignature()));
-        break;
-      case CompletionProposal.FIELD_REF:
-        signature.append(_proposal.getCompletion());
-        signature.append(" ");
-        /*char[] qualifier = Signature.getSignatureQualifier(
-            _proposal.getSignature());
-        if(qualifier.length > 0){
-          signature.append(qualifier).append('.');
-        }*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getSignature()));
-        signature.append(" - ");
-        /*signature.append(Signature.getSignatureQualifier(
-              _proposal.getDeclarationSignature()));
-        signature.append('.');*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getDeclarationSignature()));
-        break;
-      case CompletionProposal.LOCAL_VARIABLE_REF:
-        signature.append(_proposal.getCompletion());
-        signature.append(" ");
-        /*qualifier = Signature.getSignatureQualifier(_proposal.getSignature());
-        if(qualifier.length > 0){
-          signature.append(qualifier).append('.');
-        }*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getSignature()));
-        signature.append(" - ");
-        /*signature.append(Signature.getSignatureQualifier(
-              _proposal.getDeclarationSignature()));
-        signature.append('.');*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getDeclarationSignature()));
-        break;
-      case CompletionProposal.METHOD_REF:
-        signature.append(_proposal.getName()).append('(');
-        char[][] types = Signature.getParameterTypes(_proposal.getSignature());
-        char[][] names = _proposal.findParameterNames(null);
-        for(int ii = 0; ii < types.length; ii++){
-          if(ii != 0){
-            signature.append(", ");
-          }
-          /*qualifier = Signature.getSignatureQualifier(types[ii]);
-          if(qualifier.length > 0){
-            signature.append(qualifier).append('.');
-          }*/
-          signature.append(Signature.getSignatureSimpleName(types[ii]));
-          if(names != null){
-            signature.append(' ');
-            signature.append(new String(names[ii]));
-          }
-        }
-        signature.append(')');
-        signature.append(' ');
-        signature.append(Signature.getSignatureSimpleName(
-              Signature.getReturnType(_proposal.getSignature())));
-        signature.append(" - ");
-        /*signature.append(Signature.getSignatureQualifier(
-              _proposal.getDeclarationSignature()));
-        signature.append('.');*/
-        signature.append(Signature.getSignatureSimpleName(
-              _proposal.getDeclarationSignature()));
-        break;
-    }
-
-    return signature.toString();
+        kind, _filename, completion, displayString,
+        null, offset, offset + length);
   }
 }
