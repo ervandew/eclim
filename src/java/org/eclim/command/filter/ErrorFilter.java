@@ -15,8 +15,10 @@
  */
 package org.eclim.command.filter;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Filter for generating vim output for an array of Error.
@@ -30,7 +32,7 @@ public class ErrorFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     if (_result != null &&
         _result.getClass().isArray() &&

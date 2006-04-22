@@ -21,7 +21,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 import org.eclim.util.file.Position;
 
@@ -43,7 +45,7 @@ public class ImplFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     if(_result instanceof ImplResult){
       ImplResult result = (ImplResult)_result;

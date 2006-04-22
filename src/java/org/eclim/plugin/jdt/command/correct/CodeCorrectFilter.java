@@ -15,7 +15,9 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
@@ -31,7 +33,7 @@ public class CodeCorrectFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     StringBuffer buffer = new StringBuffer();
     if(_result != null && !(_result instanceof String)){

@@ -22,7 +22,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Output filter for import results.
@@ -36,7 +38,7 @@ public class ImportFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     List results = (List)_result;
     if(results != null){

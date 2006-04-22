@@ -68,7 +68,7 @@ public abstract class AbstractCommand
     if(filterName != null){
       OutputFilter filter = getFilter(filterName);
       if(filter != null){
-        return filter.filter(_result);
+        return filter.filter(_commandLine, _result);
       }
     }
     return _result;

@@ -27,8 +27,9 @@ public interface OutputFilter
   /**
    * Filters the output.
    *
+   * @param _commandLine The command line arguments.
    * @param _result The result from the server.
    * @return The filtered output.
    */
-  public String filter (Object _result);
+  public String filter (CommandLine _commandLine, Object _result);
 }

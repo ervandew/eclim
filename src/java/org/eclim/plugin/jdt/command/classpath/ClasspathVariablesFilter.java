@@ -18,7 +18,9 @@ package org.eclim.plugin.jdt.command.classpath;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Filter for ClasspathVariablesCommand.
@@ -32,7 +34,7 @@ public class ClasspathVariablesFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     StringBuffer buffer = new StringBuffer();
 

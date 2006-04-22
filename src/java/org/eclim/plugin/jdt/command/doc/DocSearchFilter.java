@@ -18,7 +18,9 @@ package org.eclim.plugin.jdt.command.doc;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Filter for javadoc search results.
@@ -32,7 +34,7 @@ public class DocSearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     StringBuffer buffer = new StringBuffer();
     List results = (List)_result;

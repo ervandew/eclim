@@ -17,7 +17,9 @@ package org.eclim.plugin.jdt.command.regex;
 
 import java.util.List;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Filters regex result into a string.
@@ -31,7 +33,7 @@ public class RegexFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     StringBuffer buffer = new StringBuffer();
     List results = (List)_result;

@@ -26,7 +26,9 @@ import org.apache.commons.beanutils.BeanComparator;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 import org.eclim.preference.Option;
 import org.eclim.preference.OptionInstance;
@@ -49,7 +51,7 @@ public class SettingsFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     List list = (List)_result;
     if(list.size() > 0){

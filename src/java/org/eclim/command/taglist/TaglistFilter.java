@@ -15,7 +15,9 @@
  */
 package org.eclim.command.taglist;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 /**
  * Filter for tag list results.
@@ -29,7 +31,7 @@ public class TaglistFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     StringBuffer buffer = new StringBuffer();
 

@@ -18,7 +18,9 @@ package org.eclim.plugin.jdt.command.search;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
+import org.eclim.command.Options;
 
 import org.eclim.util.vim.VimUtils;
 
@@ -34,7 +36,7 @@ public class SearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     try{
       StringBuffer buffer = new StringBuffer();
