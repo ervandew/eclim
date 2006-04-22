@@ -116,7 +116,6 @@ public class CodeCompleteCommand
     }
 
     int kind = _collector.getProposal(_index).getKind();
-    // eeww, fragile code.
     switch(kind){
       case CompletionProposal.METHOD_REF:
         // trim off the trailing paren if the method takes any arguments.
