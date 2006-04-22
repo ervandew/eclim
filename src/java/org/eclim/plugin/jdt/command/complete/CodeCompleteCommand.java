@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.complete;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclim.command.AbstractCommand;
@@ -45,6 +47,9 @@ import org.eclipse.jdt.internal.ui.text.java.JavaTypeCompletionProposal;
 public class CodeCompleteCommand
   extends AbstractCommand
 {
+  private static final Comparator COMPLETION_COMPARATOR =
+    new CompletionComparator();
+
   /**
    * {@inheritDoc}
    */
@@ -71,6 +76,7 @@ public class CodeCompleteCommand
         results.add(
             createCompletionResult(filename, collector, ii, proposals[ii]));
       }
+      Collections.sort(results, COMPLETION_COMPARATOR);
       return filter(_commandLine, results);
     }catch(Exception e){
       return e;
@@ -114,7 +120,9 @@ public class CodeCompleteCommand
     switch(kind){
       case CompletionProposal.METHOD_REF:
         // trim off the trailing paren if the method takes any arguments.
-        if(displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1){
+        if (displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1 &&
+            completion.charAt(completion.length() - 1) == ')')
+        {
           completion = completion.substring(0, completion.length() - 1);
         }
         break;
