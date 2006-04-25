@@ -18,6 +18,7 @@ package org.eclim.command.project;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 
 import org.eclim.command.admin.SettingsFilter;
@@ -36,7 +37,7 @@ public class ProjectInfoFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (Object _result)
+  public String filter (CommandLine _commandLine, Object _result)
   {
     List list = (List)_result;
     if(list.size() > 0){
