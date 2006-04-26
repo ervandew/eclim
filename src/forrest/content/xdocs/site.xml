@@ -76,9 +76,13 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="TagList Integration"/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
+    <web label="Web Lookup Commands" href="web.html"
+        description="Web Lookup Commands."/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
         description="List of suggested vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
+        description="List of all eclim vim commands."/>
+    <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet.pdf"
         description="List of all eclim vim commands."/>
     <ant label="Ant" href="ant/">
       <run label="Execution" href="run.html"

@@ -192,6 +192,12 @@
         <li><a href="xml/validate.html">Validate xml files.</a></li>
       </ul>
     </section>
+    <section id="web">
+      <title>Web Lookup Commands</title>
+      <p>
+        Commands to lookup word or phrases on the <a href="web.html">web</a>.
+      </p>
+    </section>
     <section id="misc">
       <title>Misc Commands</title>
       <p>

@@ -166,6 +166,34 @@
       </li>
     </ul>
 
+    <p><strong>Web Lookup Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:WebBrowser</strong> [url] -
+        Opens a url in your configured web browser.
+      </li>
+      <li>
+        <strong>:Google</strong> [word ...] -
+        Looks up a word or phrase with google.
+      </li>
+      <li>
+        <strong>:Clusty</strong> [word ...] -
+        Looks up a word or phrase with clusty.
+      </li>
+      <li>
+        <strong>:Wikipedia</strong> [word ...] -
+        Looks up a word or phrase on wikipedia.
+      </li>
+      <li>
+        <strong>:Dictionary</strong> [word] -
+        Looks up a word on dictionary.reference.com.
+      </li>
+      <li>
+        <strong>:Thesaurus</strong> [word] -
+        Looks up a word on thesaurus.reference.com.
+      </li>
+    </ul>
+
     <p><strong>Misc. Commands</strong></p>
     <ul>
       <li>
