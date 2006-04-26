@@ -17,7 +17,7 @@
 # Author: Eric Van Dewoestine
 
 JAVA_CMD="`dirname $0`/ng --nailgun-port 9091"
-$JAVA_CMD org.eclim.command.Main "$@"
+$JAVA_CMD org.eclim.command.Main "$@" 2>&1
 
 # Weirdest thing that for the life of me I can't figure out.
 # Sometimes when executed through vim, the exit status will be
