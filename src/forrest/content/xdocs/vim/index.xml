@@ -186,6 +186,12 @@
         <li><a href="java/regex.html">Regular Expression Testing.</a></li>
       </ul>
     </section>
+    <section id="vim">
+      <title>Vim Script Plugins</title>
+      <ul>
+        <li><a href="vim/find.html">Find Vim Function.</a></li>
+      </ul>
+    </section>
     <section id="xml">
       <title>Xml Plugins</title>
       <ul>

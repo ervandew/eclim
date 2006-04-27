@@ -422,6 +422,9 @@
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/web.html">web lookup commands</a>.
       </action>
+      <action dev="ervandew" type="add" context="Vim">
+        Added <a href="vim/vim/find.html">vim script function searching</a>.
+      </action>
     </release>
 
     <release version="1.1.1" date="Feb. 19, 2006">

@@ -158,6 +158,18 @@
       </li>
     </ul>
 
+    <p><strong>Vim Commands</strong></p>
+    <ul>
+      <li>
+        <strong>:FindFunctionDef</strong> [&lt;function&gt;] -
+        Finds a function definition.
+      </li>
+      <li>
+        <strong>:FindFunctionRef</strong> [&lt;function&gt;] -
+        Finds references of a function.
+      </li>
+    </ul>
+
     <p><strong>Xml Commands</strong></p>
     <ul>
       <li>
