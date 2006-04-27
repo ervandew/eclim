@@ -200,9 +200,9 @@
     </path>
     <property name="vim.plugins" refid="vim.plugins"/>
     <propertyregex property="vim.plugins" input="${vim.plugins}" override="true"
-      regexp="[a-zA-Z0-9-/]*?/vim/" replace=""/>
+        regexp="[a-zA-Z0-9-/]*?/src/vim/" replace=""/>
     <propertyregex property="vim.plugins" input="${vim.plugins}" override="true"
-      regexp=":" replace=","/>
+        regexp=":" replace=","/>
     <zip destfile="dist/eclim_vim_${eclim.version}.jar">
       <fileset dir="${vim.files.home}" includes="${vim.plugins}"/>
     </zip>
