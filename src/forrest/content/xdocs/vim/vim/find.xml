@@ -44,6 +44,12 @@
         under the cursor.
       </li>
     </ul>
+    <p>
+      Both of the above commands support ! which can be used to prevent jumping
+      to the first of mulitple results found.  In the case of a single result,
+      you can set the g:EclimVimFindSingleResult variable to determine the
+      action to take, as described below.
+    </p>
 
     <p><strong>Configuration</strong></p>
     <p>
