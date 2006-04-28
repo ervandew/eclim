@@ -55,9 +55,13 @@ public class CompletionComparator
       if(kind != 0){
         return kind;
       }
-    }else if(p1.getType() == CompletionProposal.KEYWORD){
+    }else if(p1.getType() == CompletionProposal.KEYWORD &&
+        p2.getType() != CompletionProposal.KEYWORD)
+    {
       return 1;
-    }else if(p2.getType() == CompletionProposal.KEYWORD){
+    }else if(p2.getType() == CompletionProposal.KEYWORD &&
+        p1.getType() != CompletionProposal.KEYWORD)
+    {
       return -1;
     }
 

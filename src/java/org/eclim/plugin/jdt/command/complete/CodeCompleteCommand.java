@@ -143,6 +143,9 @@ public class CodeCompleteCommand
         kind, _filename, completion, displayString,
         _proposal.getAdditionalProposalInfo(),
         offset, offset + length);*/
+    if("class".equals(completion)){
+      kind = CompletionProposal.KEYWORD;
+    }
     return new CodeCompleteResult(
         kind, _filename, completion, displayString,
         null, offset, offset + length);
