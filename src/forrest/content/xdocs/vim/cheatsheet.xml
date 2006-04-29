@@ -181,7 +181,7 @@
     <p><strong>Web Lookup Commands</strong></p>
     <ul>
       <li>
-        <strong>:WebBrowser</strong> [url] -
+        <strong>:OpenUrl</strong> [url] -
         Opens a url in your configured web browser.
       </li>
       <li>
