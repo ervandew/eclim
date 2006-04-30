@@ -168,6 +168,18 @@
         <strong>:FindFunctionRef</strong> [&lt;function&gt;] -
         Finds references of a function.
       </li>
+      <li>
+        <strong>:FindVariableDef</strong> [&lt;variable&gt;] -
+        Finds the definition of a global variable.
+      </li>
+      <li>
+        <strong>:FindVariableRef</strong> [&lt;variable&gt;] -
+        Finds references of a global variable.
+      </li>
+      <li>
+        <strong>:VimDoc</strong> [&lt;keyword&gt;] -
+        Opens the vim help for a keyword.
+      </li>
     </ul>
 
     <p><strong>Xml Commands</strong></p>

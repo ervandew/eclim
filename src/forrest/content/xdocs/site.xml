@@ -127,8 +127,10 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Regular Expression Testing"/>
     </java>
     <vim label="Vim Script" href="vim/">
-      <find label="Find Function" href="find.html"
-          description="Find Vim Function Declaration / References."/>
+      <find label="Vim Find" href="find.html"
+          description="Find Vim declaration or references of functions and global variables."/>
+      <doc label="Vim Doc" href="doc.html"
+          description="Open Vim help for a keyword."/>
     </vim>
     <xml label="Xml" href="xml/">
       <validate label="Validation" href="validate.html"

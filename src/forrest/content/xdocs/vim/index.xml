@@ -189,7 +189,8 @@
     <section id="vim">
       <title>Vim Script Plugins</title>
       <ul>
-        <li><a href="vim/find.html">Find Vim Function.</a></li>
+        <li><a href="vim/find.html">Vim Find.</a></li>
+        <li><a href="vim/doc.html">Vim doc lookup.</a></li>
       </ul>
     </section>
     <section id="xml">

@@ -406,6 +406,10 @@
         Velocity templates broken up into more logical templates to ease
         customization.
       </action>
+      <action dev="ervandew" type="update" context="Java">
+        <strong>:JavaGetSet</strong> now has variable to determine whether or
+        not to add indexed getters and setters.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added couple miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of
@@ -416,14 +420,23 @@
         for use with the vim taglist plugin.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        All of the functionality that previous placed results / errors into the
-        quickfix window, now utilizes vim's new location list functionality.
+        All of the functionality that previously placed results / errors into
+        the quickfix window, now utilizes vim's new location list functionality.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/web.html">web lookup commands</a>.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        Added <a href="vim/vim/find.html">vim script function searching</a>.
+        Added <a href="vim/vim/find.html">
+          vim script function / global variable searching
+        </a>.
+      </action>
+      <action dev="ervandew" type="add" context="Vim">
+        Added <a href="vim/vim/doc.html">vim doc lookup</a>.
+      </action>
+      <action dev="ervandew" type="add" context="Vim">
+        Various improvements to 'sign' support for marking errors, warnings,
+        etc.
       </action>
     </release>
 

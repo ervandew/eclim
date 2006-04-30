@@ -22,30 +22,40 @@
 
 <document>
   <header>
-    <title>Find Vim Function Definition / References</title>
+    <title>Vim Find</title>
     <authors>
       <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
     </authors>
   </header>
   <body>
     <p>
-      When working on vim scripts, eclim provides two commands for finding user
-      defined functions.
+      When working on vim scripts, eclim provides a set of commands for finding
+      user defined functions and global variables.
     </p>
     <ul>
       <li>
         <strong>:FindFunctionDef [function]</strong> -
-        Finds the definition of the supplied function name or for the function
+        Finds the definition of the supplied function name or function name
         under the cursor.
       </li>
       <li>
         <strong>:FindFunctionRef [function]</strong> -
-        Finds references of the supplied function name or the function
+        Finds references of the supplied function name or function name
+        under the cursor.
+      </li>
+      <li>
+        <strong>:FindVariableDef [variable]</strong> -
+        Finds the definition of the supplied global variable name or variable
+        name under the cursor.
+      </li>
+      <li>
+        <strong>:FindVariableRef [variable]</strong> -
+        Finds references of the supplied global variable name or variable name
         under the cursor.
       </li>
     </ul>
     <p>
-      Both of the above commands support ! which can be used to prevent jumping
+      All of the above commands support ! which can be used to prevent jumping
       to the first of mulitple results found.  In the case of a single result,
       you can set the g:EclimVimFindSingleResult variable to determine the
       action to take, as described below.
@@ -57,7 +67,7 @@
     </p>
     <ul>
       <li>
-        <strong>g:EclimVimFindSingleResult</strong><br/>
+        <strong>g:EclimVimFindSingleResult</strong> (Default: 'split')<br/>
         Determines what action to take when a only a single result is
         found.<br/>
         Possible values include:
@@ -66,6 +76,11 @@
           <li>'edit' - open the result in the current window.</li>
           <li>'lopen' - open the location list to display the result.</li>
         </ul>
+      </li>
+      <li>
+        <strong>g:EclimVimPaths</strong> (Default: &amp;runtimepath)<br/>
+        Comma seperated list of paths to recursively search.  Defaults to your
+        systems 'runtimepath' option which should be suitable for most users.
       </li>
     </ul>
   </body>
