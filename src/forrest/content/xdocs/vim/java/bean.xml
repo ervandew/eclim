@@ -70,5 +70,17 @@
       The insertion of these methods is done externally with eclipse and with
       that comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
+
+    <p><strong>Configuration</strong></p>
+    <p>
+      Vim Variables:
+    </p>
+    <ul>
+      <li>
+        <strong>g:EclimJavaBeanInsertIndexed</strong> (Default: 1)<br/>
+        When set to a value greater than 0, eclim will insert indexed getters
+        and setters for array properties.
+      </li>
+    </ul>
   </body>
 </document>

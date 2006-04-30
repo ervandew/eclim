@@ -79,6 +79,7 @@ public class PropertiesCommand
       String[] properties = StringUtils.split(
           _commandLine.getValue(Options.PROPERTIES_OPTION), ',');
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+      boolean indexed = _commandLine.hasOption(Options.INDEXED_OPTION);
 
       ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
       IType type = TypeUtils.getType(src, offset);
@@ -97,7 +98,7 @@ public class PropertiesCommand
             array = true;
           }
           // index setter
-          if(array){
+          if(array && indexed){
             sibling = getSibling(type, fields, field, sibling);
             sibling = insertSetter(position, type, sibling, field, methods, true);
           }
@@ -105,7 +106,7 @@ public class PropertiesCommand
           sibling = getSibling(type, fields, field, sibling);
           sibling = insertSetter(position, type, sibling, field, methods, false);
           // index getter
-          if(array){
+          if(array && indexed){
             sibling = getSibling(type, fields, field, sibling);
             sibling = insertGetter(position, type, sibling, field, methods, true);
           }
