@@ -410,6 +410,10 @@
         <strong>:JavaGetSet</strong> now has variable to determine whether or
         not to add indexed getters and setters.
       </action>
+      <action dev="ervandew" type="add" context="Java">
+        Removed preference org.eclim.java.validation.ignore.warnings in favor of
+        new g:EclimSignLevel.
+      </action>
       <action dev="ervandew" type="add" context="Vim">
         Added couple miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of

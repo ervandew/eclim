@@ -44,9 +44,6 @@ import org.eclipse.jdt.core.compiler.IProblem;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
-  private static final String IGNORE_WARNINGS =
-    "org.eclim.java.validation.ignore.warnings";
-
   /**
    * {@inheritDoc}
    */
@@ -66,18 +63,12 @@ public class SrcUpdateCommand
 
         IProject project =
           ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-        boolean ignoreWarnings = Boolean.valueOf(
-            getPreferences().getPreference(project, IGNORE_WARNINGS))
-          .booleanValue();
 
         ArrayList errors = new ArrayList();
         String filename = src.getResource().getRawLocation().toOSString();
         FileOffsets offsets = FileOffsets.compile(filename);
         for(int ii = 0; ii < problems.length; ii++){
           int[] lineColumn = offsets.offsetToLineColumn(problems[ii].getSourceStart());
-          if(ignoreWarnings && problems[ii].isWarning()){
-            continue;
-          }
           errors.add(new Error(
               problems[ii].getMessage(),
               filename,

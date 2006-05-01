@@ -33,6 +33,14 @@ if v:version < 700 | finish | endif
     let g:EclimLogLevel = 5
   endif
 
+  if !exists("g:EclimSignLevel")
+    if has("signs")
+      let g:EclimSignLevel = 5
+    else
+      let g:EclimSignLevel = 0
+    endif
+  endif
+
   if !exists("g:EclimShowCurrentError")
     let g:EclimShowCurrentError = 1
   endif

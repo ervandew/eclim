@@ -68,6 +68,13 @@
           </ul>
         </li>
         <li>
+          <strong>g:EclimLogLevel</strong> (Default: 5)<br/>
+          Behaves just like <strong>g:EclimLogLevel</strong> except this applies
+          to placing of vim signs for displaying validation errors / warnings,
+          or marking :[vim]grep matches.<br/>
+          The resulting signs also use the same highlighting variables above.
+        </li>
+        <li>
           <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
           Determines which highlight group will be used for informative
           messages.
