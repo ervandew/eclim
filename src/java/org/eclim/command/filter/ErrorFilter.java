@@ -52,7 +52,7 @@ public class ErrorFilter
           .append('|')
           .append(errors[ii].getMessage())
           .append('|')
-          .append(errors[ii].isWarning() ? "warning" : "error");
+          .append(errors[ii].isWarning() ? 'w' : 'e');
       }
 
       return buffer.toString();
