@@ -16,6 +16,11 @@
 package org.eclim.util;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +31,14 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.SystemUtils;
+
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
 
 import org.apache.log4j.Logger;
 
@@ -238,7 +251,11 @@ public class XmlUtils
   private static class EntityResolver
     implements org.xml.sax.EntityResolver
   {
+    private static final String TEMP_PREFIX =
+      "file://" + SystemUtils.JAVA_IO_TMPDIR;
+
     private String path;
+    private String lastPath;
 
     /**
      * Constructs a new instance.
@@ -254,10 +271,48 @@ public class XmlUtils
      * {@inheritDoc}
      */
     public InputSource resolveEntity (String _publicId, String _systemId)
-      throws SAXException, java.io.IOException
+      throws SAXException, IOException
     {
       String location = _systemId;
-      if(location.startsWith("file:")){
+      if(location.startsWith(TEMP_PREFIX)){
+        location = location.substring(TEMP_PREFIX.length());
+        return resolveEntity(_publicId, lastPath + location);
+      }else if(location.startsWith("http://")){
+        int index = location.indexOf('/', 8);
+        lastPath = location.substring(0, index + 1);
+        location = location.substring(index);
+
+        location = TEMP_PREFIX + location;
+
+        FileSystemManager fsManager = VFS.getManager();
+        FileObject tempFile = fsManager.resolveFile(location);
+
+        // check if temp file already exists.
+        if(!tempFile.exists()){
+          InputStream in = null;
+          OutputStream out = null;
+          try{
+            tempFile.createFile();
+
+            // download and save remote file.
+            URL remote = new URL(_systemId);
+            in = remote.openStream();
+            out = tempFile.getContent().getOutputStream();
+            IOUtils.copy(in, out);
+          }catch(FileSystemException fse){
+            IOException ex = new IOException(fse.getMessage());
+            ex.initCause(fse);
+            throw ex;
+          }finally{
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+          }
+          tempFile.close();
+        }
+
+        return new InputSource(location);
+
+      }else if(location.startsWith("file:")){
         location = location.substring("file:".length());
         if(location.startsWith("//")){
           location = location.substring(2);
@@ -267,8 +322,10 @@ public class XmlUtils
         {
           location = FilenameUtils.concat(path, location);
         }
+        return new InputSource(location);
       }
-      return new InputSource(location);
+
+      return new InputSource(_systemId);
     }
   }
 }
