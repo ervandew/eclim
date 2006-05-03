@@ -380,13 +380,13 @@
         Added <a href="vim/ant/doc.html"><strong>:AntDoc</strong></a> command to
         quickly find ant type / task documentation.
       </action>
-      <action dev="ervandew" type="add" context="Java">
+      <action dev="ervandew" type="update" context="Java">
         Utilizing vim's new dictionary based completion results.
       </action>
       <action dev="ervandew" type="add" context="Java">
-        <a href="vim/java/constructor.html">Constructor</a> generation.
+        Added <a href="vim/java/constructor.html">:JavaConstructor</a>.
       </action>
-      <action dev="ervandew" type="add" context="Java">
+      <action dev="ervandew" type="update" context="Java">
         <strong>:JavaImpl</strong> now supports overriding constructors.
       </action>
       <action dev="ervandew" type="add" context="Java">
@@ -410,7 +410,7 @@
         <strong>:JavaGetSet</strong> now has variable to determine whether or
         not to add indexed getters and setters.
       </action>
-      <action dev="ervandew" type="add" context="Java">
+      <action dev="ervandew" type="update" context="Java">
         Removed preference org.eclim.java.validation.ignore.warnings in favor of
         new g:EclimSignLevel.
       </action>
@@ -423,7 +423,7 @@
         Added <a href="vim/taglist.html">groovy script based ctags implementation</a>
         for use with the vim taglist plugin.
       </action>
-      <action dev="ervandew" type="add" context="Vim">
+      <action dev="ervandew" type="update" context="Vim">
         All of the functionality that previously placed results / errors into
         the quickfix window, now utilizes vim's new location list functionality.
       </action>
@@ -438,9 +438,12 @@
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/vim/doc.html">vim doc lookup</a>.
       </action>
-      <action dev="ervandew" type="add" context="Vim">
+      <action dev="ervandew" type="update" context="Vim">
         Various improvements to 'sign' support for marking errors, warnings,
         etc.
+      </action>
+      <action dev="ervandew" type="update" context="Xml">
+        Xml validation now caches remote entities (like dtds).
       </action>
     </release>
 
