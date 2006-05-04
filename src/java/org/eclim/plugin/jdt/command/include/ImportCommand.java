@@ -31,8 +31,10 @@ import org.eclim.plugin.jdt.command.search.SearchResult;
 
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -73,9 +75,11 @@ public class ImportCommand
         SearchMatch match = (SearchMatch)ii.next();
         if(match.getAccuracy() == SearchMatch.A_ACCURATE){
           SearchResult result = (SearchResult)createSearchResult(match);
-          results.add(new ImportResult(
-               result.getElement(),
-               ((IJavaElement)match.getElement()).getElementType()));
+          IType element = (IType)match.getElement();
+          if(Flags.isPublic(element.getFlags())){
+            results.add(new ImportResult(
+                  result.getElement(), element.getElementType()));
+          }
         }
       }
       return filter(_commandLine, results);
