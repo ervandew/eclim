@@ -161,19 +161,6 @@
             <a href="http://www.radrails.org/">rails</a>
           </li>
         </ul>
-        These will be prioritized by demand... My personal preference would be:
-        <ol>
-          <li>ruby</li>
-          <li>python</li>
-          <li>php</li>
-          <li>javascript</li>
-          <li>perl</li>
-          <li>
-            c/c++, cobol<br/>
-            I'd only implement these if there was a high enough demand to
-            warrant it, but would welcome contributions.
-          </li>
-        </ol>
       </action>
       <action context="third_party" dev="ervandew">
         Research additional plugins for more functionality
