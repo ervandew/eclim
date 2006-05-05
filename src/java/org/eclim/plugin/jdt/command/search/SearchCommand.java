@@ -155,9 +155,14 @@ public class SearchCommand
         List matches = search(pattern, getScope(scope, javaProject, type));
         for(Iterator ii = matches.iterator(); ii.hasNext();){
           SearchMatch match = (SearchMatch)ii.next();
-          Object result = createSearchResult(match);
-          if(result != null){
-            results.add(result);
+          if (match.getElement() != null &&
+              ((IJavaElement)match.getElement()).getElementType() != IJavaElement.PACKAGE_FRAGMENT &&
+              ((IJavaElement)match.getElement()).getElementType() != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+          {
+            Object result = createSearchResult(match);
+            if(result != null){
+              results.add(result);
+            }
           }
         }
       }
