@@ -537,9 +537,15 @@ public class TypeUtils
           String typeName = interfaces[ii];
           if(typeName != null){
             // get a handle only reference to the super class that wasn't found.
-            type = _type.getType(typeName);
-            if(!_interfaces.contains(type)){
-              _interfaces.add(type);
+            try{
+              type = _type.getType(typeName);
+              if(!_interfaces.contains(type)){
+                _interfaces.add(type);
+              }
+            }catch(Exception e){
+              // don't let the error cause the command to fail.
+              logger.warn("Unable to get a handle to interface not found: '" +
+                  typeName + "'", e);
             }
           }
         }else if(type == null){
