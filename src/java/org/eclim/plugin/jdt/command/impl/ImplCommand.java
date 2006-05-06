@@ -85,10 +85,10 @@ public class ImplCommand
         if(methodsOption != null){
           String[] methods = StringUtils.split(methodsOption, "|");
           for(int ii = 0; ii < methods.length; ii++){
-            executeInsertMethod(_commandLine, type, superType, methods[ii]);
+            executeInsertMethod(_commandLine, src, type, superType, methods[ii]);
           }
         }else{
-          executeInsertMethod(_commandLine, type, superType, null);
+          executeInsertMethod(_commandLine, src, type, superType, null);
         }
       }
 
@@ -143,6 +143,7 @@ public class ImplCommand
    * super type if no method supplied.
    *
    * @param _commandLine The original command line.
+   * @param _src The compilation unit.
    * @param _type The type to insert the method(s) into.
    * @param _superTypeName The super type to insert methods from.
    * @param _methodName The super type to insert methods from.
@@ -151,6 +152,7 @@ public class ImplCommand
    */
   protected Object executeInsertMethod (
       CommandLine _commandLine,
+      ICompilationUnit _src,
       IType _type,
       String _superTypeName,
       String _methodName)
@@ -185,7 +187,7 @@ public class ImplCommand
 
       IJavaElement sibling =
         getSibling(_type, implementedMethods, methods, method);
-      return insertMethod(_commandLine, _type, superType, method, sibling);
+      return insertMethod(_commandLine, _src, _type, superType, method, sibling);
     }
 
     // insert all methods not already implemented.
@@ -207,7 +209,7 @@ public class ImplCommand
               _type, implementedMethods, methods, methods[ii]);
         }
         Position position =
-          insertMethod(_commandLine, _type, superType, methods[ii], sibling);
+          insertMethod(_commandLine, _src, _type, superType, methods[ii], sibling);
         offset = offset == 0 ? position.getOffset() : offset;
         // account for blank line and leading tab not included in position
         // length.
@@ -295,6 +297,7 @@ public class ImplCommand
    * Inserts the supplied method into the specified source type.
    *
    * @param _commandLine The original command line.
+   * @param _src The compilation unit.
    * @param _type The type to insert the method into.
    * @param _superType The super type the method is defined in.
    * @param _method The method to insert.
@@ -304,6 +307,7 @@ public class ImplCommand
    */
   protected Position insertMethod (
       CommandLine _commandLine,
+      ICompilationUnit _src,
       IType _type,
       IType _superType,
       IMethod _method,
@@ -339,9 +343,10 @@ public class ImplCommand
       values.put("modifier",
           Flags.isPublic(_method.getFlags()) ? "public" : "protected");
     }
+    String typeName =
+      JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
+    values.put("superType", typeName);
     values.put("params", getMethodParameters(_method));
-    values.put("superType",
-        _superType.getFullyQualifiedName().replace('$', '.'));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
     values.put("implements",

@@ -39,6 +39,7 @@ import org.eclim.util.TemplateUtils;
 import org.eclim.util.file.Position;
 
 import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
@@ -145,6 +146,7 @@ public class JUnitImplCommand
    */
   protected Position insertMethod (
       CommandLine _commandLine,
+      ICompilationUnit _src,
       IType _type,
       IType _superType,
       IMethod _method,
@@ -167,7 +169,7 @@ public class JUnitImplCommand
     }
 
     return super.insertMethod(
-        _commandLine, _type, _superType, _method, _sibling);
+        _commandLine, _src, _type, _superType, _method, _sibling);
   }
 
   /**

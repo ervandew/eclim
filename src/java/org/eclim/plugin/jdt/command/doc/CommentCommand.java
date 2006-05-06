@@ -104,7 +104,7 @@ public class CommentCommand
       ASTNode node = ASTUtils.findNode(cu, offset, element);
 
       if(node != null){
-        comment(node, element);
+        comment(src, node, element);
       }
 
       ASTUtils.commitCompilationUnit(src, cu);
@@ -118,10 +118,11 @@ public class CommentCommand
   /**
    * Comment the supplied node.
    *
+   * @param _src The source file.
    * @param _node The node to comment.
    * @param _element The IJavaElement this node corresponds to.
    */
-  private void comment (ASTNode _node, IJavaElement _element)
+  private void comment (ICompilationUnit _src, ASTNode _node, IJavaElement _element)
     throws Exception
   {
     Javadoc javadoc = null;
@@ -144,29 +145,30 @@ public class CommentCommand
 
     switch(_node.getNodeType()){
       case ASTNode.PACKAGE_DECLARATION:
-        commentPackage(javadoc, _element, isNew);
+        commentPackage(_src, javadoc, _element, isNew);
         break;
       case ASTNode.ENUM_DECLARATION:
       case ASTNode.TYPE_DECLARATION:
-        commentType(javadoc, _element, isNew);
+        commentType(_src, javadoc, _element, isNew);
         break;
       case ASTNode.METHOD_DECLARATION:
-        commentMethod(javadoc, _element, isNew);
+        commentMethod(_src, javadoc, _element, isNew);
         break;
       default:
-        commentOther(javadoc, _element, isNew);
+        commentOther(_src, javadoc, _element, isNew);
     }
   }
 
   /**
    * Comment a package declaration.
    *
+   * @param _src The source file.
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
    * @param _isNew true if there was no previous javadoc for this element.
    */
   private void commentPackage (
-      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
     IProject project = _element.getJavaProject().getProject();
@@ -193,19 +195,20 @@ public class CommentCommand
         IOUtils.closeQuietly(reader);
       }
     }else{
-      commentOther(_javadoc, _element, _isNew);
+      commentOther(_src, _javadoc, _element, _isNew);
     }
   }
 
   /**
    * Comment a type declaration.
    *
+   * @param _src The source file.
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
    * @param _isNew true if there was no previous javadoc for this element.
    */
   private void commentType (
-      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
     if(_element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
@@ -268,19 +271,20 @@ public class CommentCommand
         }
       }
     }else{
-      commentOther(_javadoc, _element, _isNew);
+      commentOther(_src, _javadoc, _element, _isNew);
     }
   }
 
   /**
    * Comment a method declaration.
    *
+   * @param _src The source file.
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
    * @param _isNew true if there was no previous javadoc for this element.
    */
   private void commentMethod (
-      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
     IMethod method = (IMethod)_element;
@@ -301,8 +305,11 @@ public class CommentCommand
       if(parentType != null){
         addTag(_javadoc, tags.size(), null, INHERIT_DOC);
 
+        String typeName =
+          JavaUtils.getCompilationUnitRelativeTypeName(_src, parentType);
+
         StringBuffer signature = new StringBuffer();
-        signature.append(parentType.getFullyQualifiedName().replace('$', '.'))
+        signature.append(typeName)
           .append('#').append(TypeUtils.getMinimalMethodSignature(method));
         addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
@@ -335,12 +342,13 @@ public class CommentCommand
   /**
    * Comment everything else.
    *
+   * @param _src The source file.
    * @param _javadoc The Javadoc.
    * @param _element The IJavaElement.
    * @param _isNew true if there was no previous javadoc for this element.
    */
   private void commentOther (
-      Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
     throws Exception
   {
     if(_isNew){
