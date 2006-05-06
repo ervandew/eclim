@@ -301,9 +301,10 @@ public class CommentCommand
       if(parentType != null){
         addTag(_javadoc, tags.size(), null, INHERIT_DOC);
 
-        String signature = JavaUtils.getFullyQualifiedName(
-            TypeUtils.getMethod(parentType, method));
-        addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature);
+        StringBuffer signature = new StringBuffer();
+        signature.append(parentType.getFullyQualifiedName().replace('$', '.'))
+          .append('#').append(TypeUtils.getMinimalMethodSignature(method));
+        addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
       }else{
         addTag(_javadoc, tags.size(), null, "");

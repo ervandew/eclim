@@ -340,7 +340,8 @@ public class ImplCommand
           Flags.isPublic(_method.getFlags()) ? "public" : "protected");
     }
     values.put("params", getMethodParameters(_method));
-    values.put("superType", _superType.getFullyQualifiedName());
+    values.put("superType",
+        _superType.getFullyQualifiedName().replace('$', '.'));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
     values.put("implements",
