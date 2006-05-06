@@ -140,6 +140,7 @@ public class DelegateCommand
    */
   protected Position insertMethod (
       CommandLine _commandLine,
+      ICompilationUnit _src,
       IType _type,
       IType _superType,
       IMethod _method,
@@ -182,7 +183,9 @@ public class DelegateCommand
     methodBody.append(");");
     values.put("methodBody", methodBody.toString());
 
-    values.put("superType", _superType.getFullyQualifiedName());
+    String typeName =
+      JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
+    values.put("superType", typeName);
     values.put("implements", Boolean.TRUE);
     values.put("delegate", Boolean.TRUE);
     values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
