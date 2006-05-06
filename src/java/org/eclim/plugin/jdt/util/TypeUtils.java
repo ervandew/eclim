@@ -330,6 +330,13 @@ public class TypeUtils
     throws Exception
   {
     String typeName = "." + _typeName;
+
+    // strip of generic type if present.
+    int index = typeName.indexOf('<');
+    if(index != -1){
+      typeName = typeName.substring(0, index);
+    }
+
     // search imports
     IImportDeclaration[] imports = _src.getImports();
     for(int ii = 0; ii < imports.length; ii++){
@@ -345,7 +352,14 @@ public class TypeUtils
     }else{
       typeName = _typeName;
     }
-    return _src.getJavaProject().findType(typeName);
+    IType type = _src.getJavaProject().findType(typeName);
+
+    // last effort, search java.lang
+    if(type == null){
+      type = _src.getJavaProject().findType("java.lang." + _typeName);
+    }
+
+    return type;
   }
 
   /**
@@ -469,9 +483,15 @@ public class TypeUtils
       String typeName = _type.getSuperclassName();
       if(typeName != null){
         // get a handle only reference to the super class that wasn't found.
-        superclass = _type.getType(typeName);
-        if(!_superclasses.contains(superclass)){
-          _superclasses.add(superclass);
+        try{
+          superclass = _type.getType(typeName);
+          if(!_superclasses.contains(superclass)){
+            _superclasses.add(superclass);
+          }
+        }catch(Exception e){
+          // don't let the error cause the command to fail.
+          logger.warn("Unable to get a handle to class not found: '" +
+              typeName + "'", e);
         }
       }
     }
