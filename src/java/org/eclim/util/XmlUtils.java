@@ -94,6 +94,7 @@ public class XmlUtils
             spe.getColumnNumber(),
             false)};
     }catch(Exception e){
+      logger.warn("Error parsing xml file.", e);
       return new Error[]{new Error(e.getMessage(), _filename, 1, 1, false)};
     }
 
@@ -251,8 +252,13 @@ public class XmlUtils
   private static class EntityResolver
     implements org.xml.sax.EntityResolver
   {
-    private static final String TEMP_PREFIX =
-      "file://" + SystemUtils.JAVA_IO_TMPDIR;
+    private static String TEMP_PREFIX =
+      "file://" + SystemUtils.JAVA_IO_TMPDIR.replace('\\', '/');
+    static{
+      if(TEMP_PREFIX.endsWith("\\") || TEMP_PREFIX.endsWith("/")){
+        TEMP_PREFIX = TEMP_PREFIX.substring(0, TEMP_PREFIX.length() - 1);
+      }
+    }
 
     private String path;
     private String lastPath;
@@ -274,6 +280,11 @@ public class XmlUtils
       throws SAXException, IOException
     {
       String location = _systemId;
+      // rolling the dice to fix windows issue where parser, or something, is
+      // turning C:/... into C/.  This would cause problems if someone acutally
+      // has a single letter directory, but that is doubtful.
+      location = location.replaceFirst("^file://([a-zA-Z])/", "file://$1:/");
+
       if(location.startsWith(TEMP_PREFIX)){
         location = location.substring(TEMP_PREFIX.length());
         return resolveEntity(_publicId, lastPath + location);
@@ -307,10 +318,12 @@ public class XmlUtils
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
           }
-          tempFile.close();
         }
 
-        return new InputSource(location);
+        InputSource source =  new InputSource(
+            tempFile.getContent().getInputStream());
+        source.setSystemId(location);
+        return source;
 
       }else if(location.startsWith("file:")){
         location = location.substring("file:".length());
