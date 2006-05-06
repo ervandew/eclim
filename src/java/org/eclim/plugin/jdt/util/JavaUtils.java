@@ -41,9 +41,11 @@ import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 
@@ -348,6 +350,92 @@ public class JavaUtils
     }
 
     return elementName.toString();
+  }
+
+  /**
+   *
+   *
+   * @param _src The compilation unit.
+   * @param _type The type.
+   *
+   * @return
+   */
+  public static String getCompilationUnitRelativeTypeName (
+      ICompilationUnit _src, IType _type)
+    throws Exception
+  {
+    String typeName = null;
+    if(JavaUtils.containsImport(_src, _type)){
+      typeName = _type.getElementName();
+
+      int parentType = _type.getParent().getElementType();
+      if (parentType == IJavaElement.TYPE){
+        typeName = _type.getParent().getElementName() + '.' + typeName;
+      }else if (parentType == IJavaElement.CLASS_FILE){
+        String parentName = _type.getParent().getElementName();
+        int index = parentName.indexOf('$');
+        if (index != -1){
+          parentName = parentName.substring(0, index);
+          typeName = parentName + '.' + typeName;
+        }
+      }
+    }else{
+      typeName = _type.getFullyQualifiedName().replace('$', '.');
+    }
+
+
+    return typeName;
+  }
+
+  /**
+   * Determines if the supplied src file contains an import that for the
+   * supplied type (including wildcard .* imports).
+   *
+   * @param _src The compilation unit.
+   * @param _type The type.
+   * @return true if the src file has a qualifying import.
+   */
+  public static boolean containsImport (ICompilationUnit _src, String _type)
+    throws Exception
+  {
+    return containsImport(_src, _src.getType(_type));
+  }
+
+  /**
+   * Determines if the supplied src file contains an import that for the
+   * supplied type (including wildcard .* imports).
+   *
+   * @param _src The compilation unit.
+   * @param _type The type.
+   * @return true if the src file has a qualifying import.
+   */
+  public static boolean containsImport (ICompilationUnit _src, IType _type)
+    throws Exception
+  {
+    String typePkg = _type.getPackageFragment().getElementName();
+    String pkg = _src.getPackageDeclarations()[0].getElementName();
+
+    // classes in same package are auto imported.
+    if(pkg.equals(typePkg)){
+      return true;
+    }
+
+    // java.lang is auto imported.
+    if("java.lang".equals(typePkg)){
+      return true;
+    }
+
+    typePkg = typePkg + ".*";
+    String typeName = _type.getFullyQualifiedName().replace('$', '.');
+
+    IImportDeclaration[] imports = _src.getImports();
+    for (int ii = 0; ii < imports.length; ii++){
+      String name = imports[ii].getElementName();
+      if(name.equals(typeName) || name.equals(typePkg)){
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
