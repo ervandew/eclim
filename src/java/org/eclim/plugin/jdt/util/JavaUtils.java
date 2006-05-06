@@ -353,18 +353,22 @@ public class JavaUtils
   }
 
   /**
-   *
+   * Constructs a compilation unit relative name for the supplied type.
+   * <p/>
+   * If the type is imported, in java.lang, or in the same package as the source
+   * file, then the type name returned is unqualified, otherwise the name
+   * returned is the fully qualified type name.
    *
    * @param _src The compilation unit.
    * @param _type The type.
    *
-   * @return
+   * @return The relative type name.
    */
   public static String getCompilationUnitRelativeTypeName (
       ICompilationUnit _src, IType _type)
     throws Exception
   {
-    String typeName = null;
+    String typeName = _type.getFullyQualifiedName().replace('$', '.');
     if(JavaUtils.containsImport(_src, _type)){
       typeName = _type.getElementName();
 
@@ -382,7 +386,6 @@ public class JavaUtils
     }else{
       typeName = _type.getFullyQualifiedName().replace('$', '.');
     }
-
 
     return typeName;
   }
