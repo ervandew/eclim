@@ -28,12 +28,11 @@ import org.eclim.eclipse.jface.text.DummyTextViewer;
 
 import org.eclim.plugin.ant.util.AntUtils;
 
-import org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor;
-
 import org.eclipse.ant.internal.ui.model.AntModel;
 
 import org.eclipse.jface.text.ITextViewer;
 
+import org.eclipse.jface.text.contentassist.ContentAssistEvent;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 /**
@@ -63,6 +62,7 @@ public class CodeCompleteCommand
 
       ITextViewer viewer =
         new DummyTextViewer(AntUtils.getDocument(file), offset, 1);
+
       ICompletionProposal[] proposals =
         processor.computeCompletionProposals(viewer, offset);
 
