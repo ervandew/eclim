@@ -64,13 +64,13 @@
     </section>
     <section id="news">
       <title>News</title>
-      <section id="news_">
-        <title></title>
+      <section id="news_2006-05-07">
+        <title>2006-05-07</title>
         <p>
-          Eclim (1.1.2) is now available.<br/>
-          Before upgrading, you should upgrade your vim installation to one of
-          the new beta versions.  Details for obtaining the latest release can
-          be found on the
+          Eclim 1.1.2 is now available.<br/>
+          Before upgrading, you should upgrade your vim installation to the
+          stable release of vim 70 or greater. Details for obtaining the latest
+          vim 7 release can be found on the
           <a href="install/index.html#vim_plugin">installation documentation page</a>.
         </p>
         <p>
