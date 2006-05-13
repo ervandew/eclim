@@ -112,7 +112,10 @@ public class SearchCommand
   {
     List results = new ArrayList();
     try{
-      int context = getContext(_commandLine.getValue(Options.CONTEXT_OPTION));
+      int context = -1;
+      if(_commandLine.hasOption(Options.CONTEXT_OPTION)){
+        context = getContext(_commandLine.getValue(Options.CONTEXT_OPTION));
+      }
       String project = _commandLine.getValue(Options.NAME_OPTION);
       String scope = _commandLine.getValue(Options.SCOPE_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
@@ -128,6 +131,10 @@ public class SearchCommand
             file, Integer.parseInt(offset), Integer.parseInt(length));
         IJavaElement element = getElement(position);
         if(element != null){
+          // user requested a contextual search.
+          if(context == -1){
+            context = getElementContextualContext(element);
+          }
           pattern = SearchPattern.createPattern(element, context);
         }
 
@@ -276,6 +283,31 @@ public class SearchCommand
       return SearchEngine.createJavaSearchScope(new IJavaElement[]{_type});
     }
     return SearchEngine.createWorkspaceScope();
+  }
+
+  /**
+   * Determins the appropriate context to used base on the elements context.
+   *
+   * @param _element The IJavaElement.
+   * @return The int context
+   */
+  protected int getElementContextualContext (IJavaElement _element)
+  {
+    Class theClass = _element.getClass();
+
+    // type declaration
+    if(theClass.equals(org.eclipse.jdt.internal.core.SourceType.class)){
+      return IJavaSearchConstants.IMPLEMENTORS;
+    }
+
+    // field / method declaration
+    if (theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
+        theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class))
+    {
+      return IJavaSearchConstants.ALL_OCCURRENCES;
+    }
+
+    return IJavaSearchConstants.DECLARATIONS;
   }
 
   /**
