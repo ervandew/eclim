@@ -196,7 +196,7 @@ public class DummyTextViewer
 
   public Point getSelectedRange()
   {
-    return null;
+    return new Point(-1, -1);
   }
 
   public ISelectionProvider getSelectionProvider()
