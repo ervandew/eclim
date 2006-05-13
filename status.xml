@@ -323,7 +323,21 @@
   </todo>
 
   <changes>
-    <release version="1.1.2" date="unreleased">
+    <release version="1.2.0" date="unreleased">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed processing of dtd related xml validation errors on Windows.
+      </action>
+
+      <action dev="ervandew" type="update" context="Eclipse">
+        Eclim now works and depends on eclipse 3.2.
+      </action>
+
+      <action dev="ervandew" type="add" context="Java">
+        Added <strong>:JavaSearchContext</strong>.
+      </action>
+    </release>
+
+    <release version="1.1.2" date="May 07, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed eclipse .classpath commands.
       </action>
@@ -353,6 +367,7 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
+
       <action dev="ervandew" type="add" context="Ant">
         Added <a href="vim/ant/run.html"><strong>:Ant</strong></a> command to
         allow execution of ant from any file.
@@ -367,6 +382,7 @@
         Added <a href="vim/ant/doc.html"><strong>:AntDoc</strong></a> command to
         quickly find ant type / task documentation.
       </action>
+
       <action dev="ervandew" type="update" context="Java">
         Utilizing vim's new dictionary based completion results.
       </action>
@@ -401,6 +417,7 @@
         Removed preference org.eclim.java.validation.ignore.warnings in favor of
         new g:EclimSignLevel.
       </action>
+
       <action dev="ervandew" type="add" context="Vim">
         Added couple miscellaneous
         <a href="vim/index.html#misc">vim commands</a> for use in or outside of
@@ -429,6 +446,7 @@
         Various improvements to 'sign' support for marking errors, warnings,
         etc.
       </action>
+
       <action dev="ervandew" type="update" context="Xml">
         Xml validation now caches remote entities (like dtds).
       </action>
