@@ -6,3 +6,7 @@ Helpful link for debugging plugin errors.
 Java 1.4 support
   Jars only need to support 1.4
     jaxen, xerces, xml-apis
+
+Core Tools (plugin with tools for debugging / fixing issues)
+  http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
+  - Workspace Re-Builder (looks a bit old, may need some work).
