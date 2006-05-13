@@ -141,6 +141,10 @@
         (With pattern supplied, searches for the element under the cursor).
       </li>
       <li>
+        <strong>:JavaSearchContext</strong> - Perform a context sensitive search
+        for the element under the cursor.
+      </li>
+      <li>
         <strong>:JavaCorrect</strong> -
         Suggest possible corrections for a source error.
       </li>

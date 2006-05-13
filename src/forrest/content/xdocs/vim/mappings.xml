@@ -95,11 +95,11 @@
         </source>
       </li>
       <li>
-        Search for the source declaration of the element under the cursor with
+        Perform a context sensitive search of the element under the cursor with
         <code>&lt;Enter&gt;</code>.<br/>
         <source>
           <![CDATA[
-          nnoremap <silent> <buffer> <cr> :JavaSearch -x declarations<cr>
+          nnoremap <silent> <buffer> <cr> :JavaSearchContext<cr>
           ]]>
         </source>
       </li>

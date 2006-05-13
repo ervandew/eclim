@@ -108,8 +108,28 @@
       </p>
       <p>
         If only one result is found and that result is in the current source
-        file, the cursor will be moved to that element found.
+        file, the cursor will be moved to the element found.
       </p>
+      <p>
+        As a convenience eclim also provides the command
+        <strong>:JavaSearchContext</strong>.  This command accepts no arguments
+        and will perform the appropriate search depending on the context of the
+        element.
+      </p>
+      <ul>
+        <li>
+          If the cursor is on a class or interface declaration, the command
+          will search for all classes / interfaces that implement / extend the
+          element.
+        </li>
+        <li>
+          If the cursor is on a method or field declaration, the command will
+          search for all references to the element.
+        </li>
+        <li>
+          Otherwise, it will search for the declaration of the element.
+        </li>
+      </ul>
     </section>
     <section id="alternate">
       <title>Alternate Searching</title>
