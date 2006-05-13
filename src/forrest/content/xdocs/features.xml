@@ -84,6 +84,18 @@
     </ul>
 
     <p>
+      <strong>Vim Script Integration</strong>
+    </p>
+    <ul>
+      <li>
+        Find function and global variable declarations / references.
+      </li>
+      <li>
+        Quickly lookup help topic for a keyword, functions, command, etc.
+      </li>
+    </ul>
+
+    <p>
       <strong>Xml Integration</strong>
     </p>
     <ul>
