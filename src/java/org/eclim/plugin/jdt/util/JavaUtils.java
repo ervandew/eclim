@@ -543,7 +543,7 @@ public class JavaUtils
    * Gets array of IQuickFixProcessor(s).
    * <p/>
    * Based on
-   * org.eclipse.jdt.internal.ui.text.JavaCorrectionProcessor#getCorrectionProcessors()
+   * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getCorrectionProcessors()
    *
    * @param _src The src file to get processors for.
    * @return quick fix processors.
@@ -552,7 +552,7 @@ public class JavaUtils
     throws Exception
   {
     if (correctionProcessors == null) {
-      correctionProcessors = getProcessorDescriptors("quickFixProcessors");
+      correctionProcessors = getProcessorDescriptors("quickFixProcessors", true);
     }
     IQuickFixProcessor[] processors =
       new IQuickFixProcessor[correctionProcessors.length];
@@ -567,7 +567,7 @@ public class JavaUtils
    * Gets array of IQuickAssistProcessor(s).
    * <p/>
    * Based on
-   * org.eclipse.jdt.internal.ui.text.JavaCorrectionProcessor#getCorrectionProcessors()
+   * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getAssistProcessors()
    *
    * @param _src The src file to get processors for.
    * @return quick assist processors.
@@ -576,7 +576,7 @@ public class JavaUtils
     throws Exception
   {
     if (assistProcessors == null) {
-      assistProcessors = getProcessorDescriptors("quickAssistProcessors");
+      assistProcessors = getProcessorDescriptors("quickAssistProcessors", false);
     }
     IQuickAssistProcessor[] processors =
       new IQuickAssistProcessor[assistProcessors.length];
@@ -587,7 +587,8 @@ public class JavaUtils
     return processors;
   }
 
-  private static ContributedProcessorDescriptor[] getProcessorDescriptors (String _id)
+  private static ContributedProcessorDescriptor[] getProcessorDescriptors (
+      String _id, boolean _testMarkerTypes)
     throws Exception
   {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
@@ -596,7 +597,7 @@ public class JavaUtils
 
     for(int ii = 0; ii < elements.length; ii++){
       ContributedProcessorDescriptor desc =
-        new ContributedProcessorDescriptor(elements[ii]);
+        new ContributedProcessorDescriptor(elements[ii], _testMarkerTypes);
       IStatus status= desc.checkSyntax();
       if(status.isOK()){
         res.add(desc);
