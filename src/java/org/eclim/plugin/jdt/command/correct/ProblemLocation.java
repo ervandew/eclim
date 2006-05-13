@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
+import org.eclipse.jdt.core.IJavaModelMarker;
+
 import org.eclipse.jdt.core.compiler.IProblem;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -109,5 +111,13 @@ public class ProblemLocation
   public boolean isError ()
   {
     return error;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getMarkerType ()
+  {
+    return IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER;
   }
 }
