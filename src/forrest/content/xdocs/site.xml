@@ -40,6 +40,7 @@ See http://forrest.apache.org/docs/linking.html for more info
   <about label="About" tab="home">
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
     <features label="Features" href="features.html" description="Features"/>
+    <screenshots label="Screenshots" href="ext:screenshots" description="Eclim Screenshots"/>
     <quickstart label="Quick Start" href="quickstart.html" description="Quick Start"/>
     <changes label="Change History" href="changes.html"
         description="Change History"/>
@@ -140,13 +141,14 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <external-refs>
     <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
+    <screenshots href="http://sourceforge.net/project/screenshots.php?group_id=145869"/>
     <license href="http://apache.org/licenses/LICENSE-2.0.html"/>
 
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
     <vim href="http://www.vim.org"/>
-    <vim_win href="ftp://ftp.vim.org/pub/vim/unstable/pc"/>
-    <vim_win_latest href="ftp://ftp.vim.org/pub/vim/unstable/pc/gvim70f.exe"/>
+    <vim_win href="ftp://ftp.vim.org/pub/vim/pc"/>
+    <vim_win_latest href="ftp://ftp.vim.org/pub/vim/pc/gvim70.exe"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
     <nailgun href="http://www.martiansoftware.com/nailgun/"/>
 
