@@ -17,7 +17,9 @@ package org.eclim.plugin.jdt.command.doc;
 
 import java.io.IOException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
@@ -31,14 +33,20 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
+import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import org.eclipse.jdt.core.search.SearchMatch;
 
+import org.eclipse.jdt.internal.core.JavaModelManager;
+
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+
+import org.eclipse.jdt.internal.launching.JREContainer;
 
 /**
  * Command to search for javadocs.
@@ -50,6 +58,16 @@ public class DocSearchCommand
   extends SearchCommand
 {
   private static final Logger logger = Logger.getLogger(DocSearchCommand.class);
+
+  private static final Map JRE_DOCS = new HashMap();
+  static{
+    JRE_DOCS.put(JavaCore.VERSION_1_3,
+        "http://java.sun.com/j2se/1.3/docs/api/");
+    JRE_DOCS.put(JavaCore.VERSION_1_4,
+        "http://java.sun.com/j2se/1.4.2/docs/api/");
+    JRE_DOCS.put(JavaCore.VERSION_1_5,
+        "http://java.sun.com/j2se/1.5.0/docs/api/");
+  }
 
   /**
    * {@inheritDoc}
@@ -95,34 +113,58 @@ public class DocSearchCommand
     for(int ii = 0; ii < attributes.length; ii++){
       String name = attributes[ii].getName();
       if(IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals(name)){
-        String qualifiedName = JavaUtils.getFullyQualifiedName(element);
-
-        // split up the class from the field/method
-        String className = qualifiedName;
-        String childElement = "";
-        int index = className.indexOf('#');
-        if(index != -1){
-          childElement = className.substring(index);
-          className = className.substring(0, index);
-        }
-
-        StringBuffer url = new StringBuffer(attributes[ii].getValue());
-        if(url.charAt(url.length() - 1) != '/'){
-          url.append('/');
-        }
-        url.append(className.replace('.', '/').replace('$', '.'))
-          .append(".html");
-
-        /*FileSystemManager fsManager = VFS.getManager();
-        if(!fsManager.resolveFile(url.toString()).exists()){
-          logger.debug("'{}' does not exist.", url);
-          return null;
-        }*/
-
-        url.append(childElement);
-        return url.toString();
+        return buildUrl(attributes[ii].getValue(), element);
       }
     }
+
+    // as of eclipse 3.2, they no longer provide default locations for jre
+    // javadocs... so provide our own.
+    classpath = root.getRawClasspathEntry();
+    if(classpath.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+      IClasspathContainer container =
+        JavaModelManager.getJavaModelManager().getClasspathContainer(
+            classpath.getPath(), element.getJavaProject());
+      if(container instanceof JREContainer){
+        String version = JavaUtils.getCompilerSourceCompliance(
+            element.getJavaProject());
+        String url = (String)JRE_DOCS.get(version);
+        if(url != null){
+          return buildUrl(url, element);
+        }
+      }
+    }
+
     return null;
+  }
+
+  private String buildUrl (String _baseUrl, IJavaElement _element)
+    throws Exception
+  {
+    String qualifiedName = JavaUtils.getFullyQualifiedName(_element);
+
+    // split up the class from the field/method
+    String className = qualifiedName;
+    String childElement = "";
+    int index = className.indexOf('#');
+    if(index != -1){
+      childElement = className.substring(index);
+      className = className.substring(0, index);
+    }
+
+    StringBuffer url = new StringBuffer(_baseUrl);
+    if(url.charAt(url.length() - 1) != '/'){
+      url.append('/');
+    }
+    url.append(className.replace('.', '/').replace('$', '.'))
+      .append(".html");
+
+    /*FileSystemManager fsManager = VFS.getManager();
+    if(!fsManager.resolveFile(url.toString()).exists()){
+      logger.debug("'{}' does not exist.", url);
+      return null;
+    }*/
+
+    url.append(childElement);
+    return url.toString();
   }
 }
