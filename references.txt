@@ -1,0 +1,10 @@
+Online references to eclim:
+
+Eclipse Plugins:
+  http://www.eclipse-plugins.info/eclipse/plugin_details.jsp?id=1349
+
+Freshmeat:
+  http://freshmeat.net/projects/eclim/
+
+Linux Links:
+  http://www.linuxlinks.com/portal/cgi-bin/search.cgi?query=eclim
