@@ -25,6 +25,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.regex.Pattern;
+
 import javax.xml.XMLConstants;
 
 import javax.xml.parsers.SAXParser;
@@ -59,6 +61,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XmlUtils
 {
   private static final Logger logger = Logger.getLogger(XmlUtils.class);
+
+  private static final Pattern WIN_BUG = Pattern.compile("^/[a-zA-Z]:/.*");
 
   /**
    * Validate the supplied xml file.
@@ -227,6 +231,10 @@ public class XmlUtils
       if(location.startsWith("file://")){
         location = location.substring("file://".length());
       }
+      // bug where window paths start with /C:/...
+      if(WIN_BUG.matcher(location).matches()){
+        location = location.substring(1);
+      }
       errors.add(new Error(
             _ex.getMessage(),
             location,
@@ -299,20 +307,28 @@ public class XmlUtils
         FileObject tempFile = fsManager.resolveFile(location);
 
         // check if temp file already exists.
-        if(!tempFile.exists()){
+        if(!tempFile.exists() || tempFile.getContent().getSize() == 0){
           InputStream in = null;
           OutputStream out = null;
           try{
-            tempFile.createFile();
+            if(!tempFile.exists()){
+              tempFile.createFile();
+            }
 
             // download and save remote file.
             URL remote = new URL(_systemId);
             in = remote.openStream();
             out = tempFile.getContent().getOutputStream();
             IOUtils.copy(in, out);
-          }catch(FileSystemException fse){
-            IOException ex = new IOException(fse.getMessage());
-            ex.initCause(fse);
+          }catch(Exception e){
+            IOUtils.closeQuietly(out);
+            try{
+              tempFile.delete();
+            }catch(Exception ignore){
+            }
+
+            IOException ex = new IOException(e.getMessage());
+            ex.initCause(e);
             throw ex;
           }finally{
             IOUtils.closeQuietly(in);
