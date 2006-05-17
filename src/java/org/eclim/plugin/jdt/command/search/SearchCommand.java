@@ -140,10 +140,13 @@ public class SearchCommand
 
       // pattern search
       }else if(pat != null){
+        if(context == -1){
+          context = IJavaSearchConstants.DECLARATIONS;
+        }
         int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
         int matchType = (pat.indexOf('*') != -1 || pat.indexOf('?') != -1) ?
           SearchPattern.R_PATTERN_MATCH :
-          SearchPattern.R_FULL_MATCH;
+          SearchPattern.R_EXACT_MATCH;
 
         pattern = SearchPattern.createPattern(pat, type, context, matchType);
 
@@ -162,13 +165,15 @@ public class SearchCommand
         List matches = search(pattern, getScope(scope, javaProject, type));
         for(Iterator ii = matches.iterator(); ii.hasNext();){
           SearchMatch match = (SearchMatch)ii.next();
-          if (match.getElement() != null &&
-              ((IJavaElement)match.getElement()).getElementType() != IJavaElement.PACKAGE_FRAGMENT &&
-              ((IJavaElement)match.getElement()).getElementType() != IJavaElement.PACKAGE_FRAGMENT_ROOT)
-          {
-            Object result = createSearchResult(match);
-            if(result != null){
-              results.add(result);
+          if (match.getElement() != null){
+            int elementType = ((IJavaElement)match.getElement()).getElementType();
+            if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
+                elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+            {
+              Object result = createSearchResult(match);
+              if(result != null){
+                results.add(result);
+              }
             }
           }
         }
