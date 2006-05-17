@@ -61,10 +61,10 @@ public class ImportCommand
     try{
       String project = _commandLine.getValue(Options.NAME_OPTION);
       String pat = _commandLine.getValue(Options.PATTERN_OPTION);
-      int type = IJavaSearchConstants.TYPE;
 
       SearchPattern pattern =
-        SearchPattern.createPattern(pat, type,
+        SearchPattern.createPattern(pat,
+            IJavaSearchConstants.TYPE,
             IJavaSearchConstants.DECLARATIONS,
             SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
       IJavaProject javaProject = JavaUtils.getJavaProject(project);
