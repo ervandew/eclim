@@ -44,7 +44,10 @@ public class SearchFilter
       if(results != null){
         for(Iterator ii = results.iterator(); ii.hasNext();){
           SearchResult result = (SearchResult)ii.next();
-          String lineColumn = VimUtils.translateLineColumn(result);
+          String lineColumn = VimUtils.DEFAULT_LINE_COL;
+          if(result.getFilename().toLowerCase().endsWith(".java")){
+            lineColumn = VimUtils.translateLineColumn(result);
+          }
 
           if(lineColumn != null){
             if(buffer.length() > 0){
