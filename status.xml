@@ -333,7 +333,16 @@
       </action>
 
       <action dev="ervandew" type="add" context="Java">
-        Added <strong>:JavaSearchContext</strong>.
+        Added <a href="vim/java/search.html#element">
+          <strong>:JavaSearchContext</strong>
+        </a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vim">
+        Added
+        <strong><a href="vim/index.html#misc">:Split</a></strong>,
+        <strong><a href="vim/index.html#misc">:SplitRelative</a></strong>, and
+        <strong><a href="vim/index.html#misc">:EditRelative</a></strong>.
       </action>
     </release>
 

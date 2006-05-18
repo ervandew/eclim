@@ -225,6 +225,22 @@
     <p><strong>Misc. Commands</strong></p>
     <ul>
       <li>
+        <strong>:Split</strong> -
+        Behaves like the 'split' command, but allows multiple files to be
+        supplied.
+      </li>
+      <li>
+        <strong>:SplitRelative</strong> -
+        Like <strong>:Split</strong> this command provides splitting of multiple
+        files, but this command splits file relative to the file in the current
+        buffer.
+      </li>
+      <li>
+        <strong>:EditRelative</strong> -
+        Like <strong>:SplitRelative</strong> except issues an 'edit' and only
+        supports one file at a time.
+      </li>
+      <li>
         <strong>:DiffLastSaved</strong> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.
