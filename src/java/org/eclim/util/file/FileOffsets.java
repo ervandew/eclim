@@ -120,7 +120,7 @@ public class FileOffsets
     }
 
     int bot = -1;
-    int top = offsets.length;
+    int top = offsets.length - 1;
     while (top - bot > 1) {
       int mid = (top + bot) / 2;
       if (offsets[mid].intValue() <  _offset){
