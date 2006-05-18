@@ -200,6 +200,25 @@ public class Services
   }
 
   /**
+   * Gets a resource by searching the available plugins for it.
+   *
+   * @param _resource The resource to find.
+   * @return The URL of the resource or null if not found.
+   */
+  public static URL getResource (String _resource)
+  {
+    Iterator iterator = pluginResources.values().iterator();
+    for(int ii = 0; iterator.hasNext(); ii++){
+      PluginResources resources = (PluginResources)iterator.next();
+      URL url = resources.getResource(_resource);
+      if(url != null){
+        return url;
+      }
+    }
+    return getPluginResources().getResource(_resource);
+  }
+
+  /**
    * Gets the PluginResources for the main eclim plugin.
    *
    * @return The PluginResources.
