@@ -44,6 +44,8 @@ import org.apache.commons.vfs.VFS;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.Services;
+
 import org.eclim.command.Error;
 
 import org.xml.sax.InputSource;
@@ -350,6 +352,18 @@ public class XmlUtils
               FilenameUtils.getPath(location)))
         {
           location = FilenameUtils.concat(path, location);
+        }
+
+        if(!new File(location).exists()){
+          StringBuffer resource = new StringBuffer()
+            .append("/resources/")
+            .append(FilenameUtils.getExtension(location))
+            .append('/')
+            .append(FilenameUtils.getName(location));
+          URL url = Services.getResource(resource.toString());
+          if(url != null){
+            return new InputSource(url.toString());
+          }
         }
         return new InputSource(location);
       }
