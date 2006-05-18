@@ -77,8 +77,11 @@ public class ImportCommand
           SearchResult result = (SearchResult)createSearchResult(match);
           IType element = (IType)match.getElement();
           if(Flags.isPublic(element.getFlags())){
-            results.add(new ImportResult(
-                  result.getElement(), element.getElementType()));
+            ImportResult ir = new ImportResult(
+                  result.getElement(), element.getElementType());
+            if(!results.contains(ir)){
+              results.add(ir);
+            }
           }
         }
       }

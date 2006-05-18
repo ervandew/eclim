@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 /**
  * Represents an import request result.
  *
@@ -56,5 +58,20 @@ public class ImportResult
   public int getType ()
   {
     return this.type;
+  }
+
+  public boolean equals (Object obj)
+  {
+    if (obj instanceof ImportResult == false) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    ImportResult other = (ImportResult) obj;
+    return new EqualsBuilder()
+      .append(getElement(), other.getElement())
+      .append(getType(), other.getType())
+      .isEquals();
   }
 }
