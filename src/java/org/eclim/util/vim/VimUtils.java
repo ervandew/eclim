@@ -39,6 +39,8 @@ public class VimUtils
 {
   private static final Logger logger = Logger.getLogger(VimUtils.class);
 
+  public static final String DEFAULT_LINE_COL = "1 col 1";
+
   /**
    * Converts the position into a vim compatible line / column string.
    *
