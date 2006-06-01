@@ -169,6 +169,18 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
+  public Object refresh (String _name, CommandLine _commandLine)
+    throws Exception
+  {
+    IJavaProject javaProject = JavaUtils.getJavaProject(_name);
+    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+
+    return Services.getMessage("project.refreshed", _name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Object delete (String _name, CommandLine _commandLine)
     throws Exception
   {
@@ -584,8 +596,6 @@ public class JavaProjectManager
   {
     libraryRootPreference = _libraryRootPreference;
   }
-
-// Project delete methods
 
   /**
    * Set preferences.

@@ -60,4 +60,15 @@ public interface ProjectManager
    */
   public Object delete (String _name, CommandLine _commandLine)
     throws Exception;
+
+  /**
+   * Refreshes a project by synchronizing it against the files on disk.
+   *
+   * @param _name The project name.
+   * @param _commandLine The command line for the project create command.
+   *
+   * @return Project refresh response.
+   */
+  public Object refresh (String _name, CommandLine _commandLine)
+    throws Exception;
 }

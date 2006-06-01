@@ -63,6 +63,10 @@
         <strong>:ProjectDelete</strong> &lt;project&gt; -
         Delete a project.
       </li>
+      <li>
+        <strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; ...] -
+        Refresh list of, or all projects against the current files on disk.
+      </li>
     </ul>
 
     <p><strong>Eclipse .classpath Commands</strong></p>

@@ -100,6 +100,10 @@
     <description>Handles client project deletion request.</description>
   </bean>
 
+  <bean name="project_refresh" class="org.eclim.command.project.ProjectRefreshCommand">
+    <description>Handles client project refresh request.</description>
+  </bean>
+
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
     <property name="filters">

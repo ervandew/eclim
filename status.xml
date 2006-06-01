@@ -335,6 +335,10 @@
         Eclim now works and depends on eclipse 3.2.
       </action>
 
+      <action dev="ervandew" type="add" context="Eclim">
+        Added <a href="vim/project.html"><strong>:ProjectRefresh</strong></a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/search.html#element">
           <strong>:JavaSearchContext</strong>
