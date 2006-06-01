@@ -73,22 +73,27 @@ public class ImplCommand
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
-      String superType = _commandLine.getValue(Options.SUPERTYPE_OPTION);
+      String superTypeName = _commandLine.getValue(Options.SUPERTYPE_OPTION);
 
       ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
       IType type = null;
-      if(superType != null){
+      if(superTypeName != null){
         type = src.getJavaProject().findType(
             _commandLine.getValue(Options.TYPE_OPTION).replace('$', '.'));
+        IType superType = type.getJavaProject().findType(superTypeName);
+
         String methodsOption = _commandLine.getValue(Options.METHOD_OPTION);
+
+        String[] methods = null;
         if(methodsOption != null){
-          String[] methods = StringUtils.split(methodsOption, "|");
-          for(int ii = 0; ii < methods.length; ii++){
-            executeInsertMethod(_commandLine, src, type, superType, methods[ii]);
-          }
+          methods = StringUtils.split(methodsOption, "|");
         }else{
-          executeInsertMethod(_commandLine, src, type, superType, null);
+          methods = getUnimplementedMethods(type, superType);
+        }
+
+        for(int ii = 0; ii < methods.length; ii++){
+          executeInsertMethod(_commandLine, src, type, superType, methods[ii]);
         }
       }
 
@@ -145,7 +150,7 @@ public class ImplCommand
    * @param _commandLine The original command line.
    * @param _src The compilation unit.
    * @param _type The type to insert the method(s) into.
-   * @param _superTypeName The super type to insert methods from.
+   * @param _superType The super type to insert methods from.
    * @param _methodName The super type to insert methods from.
    *
    * @return The Position where the method(s) where inserted.
@@ -154,46 +159,58 @@ public class ImplCommand
       CommandLine _commandLine,
       ICompilationUnit _src,
       IType _type,
-      String _superTypeName,
+      IType _superType,
       String _methodName)
     throws Exception
   {
-    IType superType = _type.getJavaProject().findType(_superTypeName);
-    IMethod[] methods = superType.getMethods();
+    IMethod[] methods = _superType.getMethods();
     Map implementedMethods = getImplementedMethods(_type);
 
-    // insert selected methods.
-    if(_methodName != null){
-      IMethod method = null;
-      for(int ii = 0; ii < methods.length; ii++){
-        if(TypeUtils.getMinimalMethodSignature(methods[ii]).equals(_methodName)){
-          method = methods[ii];
-          break;
-        }
+    IMethod method = null;
+    for(int ii = 0; ii < methods.length; ii++){
+      if(TypeUtils.getMinimalMethodSignature(methods[ii]).equals(_methodName)){
+        method = methods[ii];
+        break;
       }
-
-      if(method == null){
-        logger.warn(Services.getMessage("method.not.found",
-            new Object[]{_superTypeName, _methodName}));
-        return null;
-      }
-      if(getImplemented(_type, implementedMethods, method) != null){
-        logger.warn(Services.getMessage("method.already.implemented",
-            new Object[]{
-              _type.getFullyQualifiedName(), _superTypeName, _methodName
-            }));
-        return null;
-      }
-
-      IJavaElement sibling =
-        getSibling(_type, implementedMethods, methods, method);
-      return insertMethod(_commandLine, _src, _type, superType, method, sibling);
     }
 
-    // insert all methods not already implemented.
-    int offset = 0;
-    int length = 0;
-    IJavaElement sibling = null;
+    if(method == null){
+      logger.warn(Services.getMessage("method.not.found",
+          new Object[]{_superType.getFullyQualifiedName(), _methodName}));
+      return null;
+    }
+    if(getImplemented(_type, implementedMethods, method) != null){
+      logger.warn(Services.getMessage("method.already.implemented",
+          new Object[]{
+            _type.getFullyQualifiedName(),
+            _superType.getFullyQualifiedName(),
+            _methodName
+          }));
+      return null;
+    }
+
+    IJavaElement sibling =
+      getSibling(_type, implementedMethods, methods, method);
+    insertMethod(_commandLine, _src, _type, _superType, method, sibling);
+
+    return null;
+  }
+
+  /**
+   * Gets the names of the unimplemented methods from the super type.
+   *
+   * @param _type The type to add the methods to.
+   * @param _superType The super type to add methods from.
+   * @return Array of minimal method signatures.
+   */
+  protected String[] getUnimplementedMethods (IType _type, IType _superType)
+    throws Exception
+  {
+    ArrayList names = new ArrayList();
+
+    IMethod[] methods = _superType.getMethods();
+    Map implementedMethods = getImplementedMethods(_type);
+
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();
       IMethod implemented =
@@ -204,54 +221,11 @@ public class ImplCommand
           !methods[ii].isConstructor() &&
           implemented == null)
       {
-        if(sibling == null){
-          sibling = getSibling(
-              _type, implementedMethods, methods, methods[ii]);
-        }
-        Position position =
-          insertMethod(_commandLine, _src, _type, superType, methods[ii], sibling);
-        offset = offset == 0 ? position.getOffset() : offset;
-        // account for blank line and leading tab not included in position
-        // length.
-        if(length != 0){
-          length += 3;
-        }
-        length = length + position.getLength();
-      }else if(implemented != null){
-        sibling = null;
-
-        // sibling needs to be method after the implemented method.
-        // or the nearest implemented method after this one.
-        IMethod[] all = _type.getMethods();
-        for (int jj = all.length - 1; jj >= 0; jj--){
-          if(all[jj].equals(implemented)){
-            if(sibling == null && jj < all.length - 1){
-              sibling = all[jj + 1];
-            }
-            break;
-          }else{
-            if(TypeUtils.containsMethod(superType, all[jj])){
-              sibling = all[jj];
-            }
-          }
-        }
-
-        // no method after implemented, so find the first non-enum type.
-        if(sibling == null){
-          IType[] types = _type.getTypes();
-          if(types.length > 0){
-            for (int jj = 0; jj < types.length; jj++){
-              if(!types[jj].isEnum()){
-                sibling = types[jj];
-                break;
-              }
-            }
-          }
-        }
+        names.add(TypeUtils.getMinimalMethodSignature(methods[ii]));
       }
     }
-    return new Position(
-        _type.getResource().getLocation().toOSString(), offset, length);
+
+    return (String[])names.toArray(new String[names.size()]);
   }
 
   /**
