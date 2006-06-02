@@ -38,6 +38,8 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
@@ -69,6 +71,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaModelStatus;
 import org.eclipse.jdt.core.IJavaProject;
@@ -95,11 +98,16 @@ import org.w3c.dom.Text;
 public class JavaProjectManager
   implements ProjectManager
 {
+  private static final Logger logger =
+    Logger.getLogger(JavaProjectManager.class);
+
   private static DocumentBuilderFactory factory;
   private static XPath xpath;
 
   private static final Pattern STATUS_PATTERN =
     Pattern.compile(".*[\\\\/](.*)'.*");
+
+  private static final String PRESERVE = "eclim.preserve";
 
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
@@ -459,11 +467,13 @@ public class JavaProjectManager
           entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE)
       {
         results.add(entries[ii]);
+      } else if (preserve(entries[ii])){
+        results.add(entries[ii]);
       }
     }
 
     // merge the dependencies with the classpath entires.
-    for(int ii = 0; ii < _dependencies.length; ii ++){
+    for(int ii = 0; ii < _dependencies.length; ii++){
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
         if (entries[jj].getEntryKind() == IClasspathEntry.CPE_LIBRARY ||
@@ -494,8 +504,9 @@ public class JavaProjectManager
 
       if(match == null){
         boolean variable = startsWithVariable(libraryDir);
-        results.add(createEntry(
-              root, _project, _dependencies[ii], libraryDir, variable));
+        IClasspathEntry entry =
+          createEntry(root, _project, _dependencies[ii], libraryDir, variable);
+        results.add(entry);
       }else{
         match = null;
       }
@@ -503,6 +514,25 @@ public class JavaProjectManager
 
     return (IClasspathEntry[])
       results.toArray(new IClasspathEntry[results.size()]);
+  }
+
+  /**
+   * Determines if the supplied entry contains attribute indicating that it
+   * should not be removed.
+   *
+   * @param entry The IClasspathEntry
+   * @return true to preserve the entry, false otherwise.
+   */
+  protected boolean preserve (IClasspathEntry entry)
+  {
+    IClasspathAttribute[] attributes = entry.getExtraAttributes();
+    for(int ii = 0; ii < attributes.length; ii++){
+      String name = attributes[ii].getName();
+      if(PRESERVE.equals(name)){
+        return Boolean.parseBoolean(attributes[ii].getValue());
+      }
+    }
+    return false;
   }
 
   /**
