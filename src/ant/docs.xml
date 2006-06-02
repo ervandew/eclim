@@ -26,6 +26,10 @@
     <exec executable="${forrest.home}/bin/forrest" failonerror="true" dir=".">
       <arg line="site"/>
     </exec>
+    <xslt in="src/forrest/content/xdocs/site.xml"
+        out="build/sitemap.xml"
+        style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
+    <gzip src="build/sitemap.xml" destfile="build/site/sitemap.xml.gz"/>
   </target>
 
   <!--
