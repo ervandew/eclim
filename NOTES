@@ -1,5 +1,11 @@
 These are just some random notes for myself that don't need to be in the docs.
 
+Minimum execution of vim w/ eclim support
+  echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
+
+  vim -u _vimrc.minimum
+  gvim -u _vimrc.minimum -U none
+
 Helpful link for debugging plugin errors.
   http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
 
