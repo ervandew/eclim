@@ -44,7 +44,7 @@
 
     <p>
       <strong>Ant Mappings</strong><br/>
-      Here are some mappings for the java funtionality provided by eclim.  To
+      Here are some mappings for the ant funtionality provided by eclim.  To
       make use of these mappings, simply create a ftplugin file for ant and
       place your mappings there (:help ftplugin-name).
     </p>
