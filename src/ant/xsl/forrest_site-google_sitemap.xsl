@@ -6,13 +6,12 @@
   -
   - Author: Eric Van Dewoestine
   -->
-<xsl:stylesheet version="2.0"
-    xmlns="http://www.google.com/schemas/sitemap/0.84"
+<xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-  <xsl:variable name="url" select="/site/@href"/>
+  <xsl:variable name="url" select="//@url"/>
 
   <xsl:template match="/">
     <urlset>

@@ -29,8 +29,8 @@ This file contains an outline of the site's information content.  It is used to:
 See http://forrest.apache.org/docs/linking.html for more info
 -->
 
-<site label="Eclim" href="http://eclim.sourceforge.net/"
-  xmlns="http://apache.org/forrest/linkmap/1.0" tab="">
+<site label="Eclim" href="" url="http://eclim.sourceforge.net/"
+  xmlns="http://apache.org/forrest/linkmap/1.0" tab="home">
 
    <!-- Note: No matter what you configure here, Forrest will always try to load
        index.html when you request http://yourHost/.
