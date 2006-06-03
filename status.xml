@@ -330,6 +330,9 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed processing of dtd related xml validation errors on Windows.
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Other various bug fixes.
+      </action>
 
       <action dev="ervandew" type="update" context="Eclipse">
         Eclim now works and depends on eclipse 3.2.
@@ -342,6 +345,16 @@
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/search.html#element">
           <strong>:JavaSearchContext</strong>
+        </a>.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added means to
+        <a href="vim/java/classpath.html#preserve">
+          preserve manually added classpath entries
+        </a>
+        when utilizing eclim's
+        <a href="vim/java/classpath.html#buildfile">
+          integration with ivy or maven dependency files
         </a>.
       </action>
 
@@ -403,7 +416,10 @@
         Utilizing vim's new dictionary based completion results.
       </action>
       <action dev="ervandew" type="add" context="Java">
-        Added <a href="vim/java/constructor.html">:JavaConstructor</a>.
+        Added
+        <a href="vim/java/constructor.html">
+          <strong>:JavaConstructor</strong>
+        </a>.
       </action>
       <action dev="ervandew" type="update" context="Java">
         <strong>:JavaImpl</strong> now supports overriding constructors.
@@ -503,22 +519,23 @@
         for the current file.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Fixed :JavaImport to not import classes that are in the same package as
-        the current file.
+        Fixed <strong>:JavaImport</strong> to not import classes that are in the
+        same package as the current file.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed java source validation to clear out the quickfix results when all
         errors have been fixed.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Fixed :JavaImpl to get the interfaces of superclass lineage in addition
-        to directly implemented interfaces of the current class.
+        Fixed <strong>:JavaImpl</strong> to get the interfaces of superclass
+        lineage in addition to directly implemented interfaces of the current
+        class.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        When adding methods from the resulting buffer of :JavaImpl or
-        :JUnitImpl, if the target class was an inner class of the src file,
-        then the methods were being added to the outer class instead of the
-        inner class.
+        When adding methods from the resulting buffer of
+        <strong>:JavaImpl</strong> or <strong>:JUnitImpl</strong>, if the target
+        class was an inner class of the src file, then the methods were being
+        added to the outer class instead of the inner class.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed javadoc search results to restore &lt;Enter&gt; as mapping to open
@@ -534,7 +551,7 @@
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added support for global settings/preferences via new
-        <a href="vim/index.html#commands">:Settings</a> command.
+        <a href="vim/index.html#commands"><strong>:Settings</strong></a> command.
       </action>
       <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/delegate.html">Delegate method creation</a>.

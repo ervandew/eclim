@@ -178,6 +178,25 @@
           in version.
         </p>
       </section>
+      <section id="preserve">
+        <title>Preserving manually added entries</title>
+        <p>
+          Both of the methods above will attempt to remove any stale entries from
+          your .classpath file.  If you have some manually added entries, these
+          may be removed as well.  To prevent this you can add a classpath entry
+          attribute notifying eclim that the entry should be preserved.<br/>
+          Ex.
+        </p>
+        <source>
+          <![CDATA[
+          <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
+            <attributes>
+              <attribute name="eclim.preserve" value="true"/>
+            </attributes>
+          </classpathentry>
+          ]]>
+        </source>
+      </section>
     </section>
   </body>
 </document>
