@@ -44,7 +44,7 @@
     </p>
     <ul>
       <li>
-        <strong>g:EclimJavaSrcValidation</strong><br/>
+        <strong>g:EclimJavaSrcValidate</strong><br/>
         If set to 0, disables source code validation.
       </li>
     </ul>
