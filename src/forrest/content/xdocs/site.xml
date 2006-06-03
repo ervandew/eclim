@@ -41,6 +41,9 @@ See http://forrest.apache.org/docs/linking.html for more info
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
     <features label="Features" href="features.html" description="Features"/>
     <screenshots label="Screenshots" href="ext:screenshots" description="Eclim Screenshots"/>
+    <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
+    <tracker label="Bugs / Feature Requests" href="ext:tracker"
+        description="Bugs / Feature Requests"/>
     <quickstart label="Quick Start" href="quickstart.html" description="Quick Start"/>
     <changes label="Change History" href="changes.html"
         description="Change History"/>
@@ -142,6 +145,8 @@ See http://forrest.apache.org/docs/linking.html for more info
   <external-refs>
     <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
     <screenshots href="http://sourceforge.net/project/screenshots.php?group_id=145869"/>
+    <forums href="http://sourceforge.net/forum/?group_id=145869"/>
+    <tracker href="http://sourceforge.net/tracker/?group_id=145869"/>
     <license href="http://apache.org/licenses/LICENSE-2.0.html"/>
 
     <eclipse href="http://eclipse.org"/>
