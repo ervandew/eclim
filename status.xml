@@ -342,6 +342,12 @@
         Added <a href="vim/project.html"><strong>:ProjectRefresh</strong></a>.
       </action>
       <action dev="ervandew" type="fix" context="Eclim">
+        Using Ctrl-C on a prompt list (like when choosing a java class to
+        import), stopped working.  At some point durring the vim 7 developement
+        the vim behavor was modified.  Eclim, has been fixed to account for
+        this.
+      </action>
+      <action dev="ervandew" type="fix" context="Eclim">
         Greatly improved support for projects created from eclipse.<br/>
         Fixed support for projects created from eclipse that reside in the
         workspace.
