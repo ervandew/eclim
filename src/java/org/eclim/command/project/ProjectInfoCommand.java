@@ -27,6 +27,8 @@ import org.eclim.command.Options;
 
 import org.eclim.preference.Option;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -56,7 +58,7 @@ public class ProjectInfoCommand
           if(projects[ii].exists()){
             StringBuffer info = new StringBuffer(projects[ii].getName())
               .append(" - ")
-              .append(projects[ii].getRawLocation());
+              .append(ProjectUtils.getPath(projects[ii]));
             results.add(info.toString());
           }
         }

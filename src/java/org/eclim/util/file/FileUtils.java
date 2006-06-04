@@ -30,6 +30,8 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -57,7 +59,7 @@ public class FileUtils
   public static File getProjectRelativeFile (IProject _project, String _file)
   {
     return new File(FilenameUtils.concat(
-          _project.getRawLocation().toOSString(), _file));
+          ProjectUtils.getPath(_project), _file));
   }
 
   /**

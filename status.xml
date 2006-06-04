@@ -341,6 +341,11 @@
       <action dev="ervandew" type="add" context="Eclim">
         Added <a href="vim/project.html"><strong>:ProjectRefresh</strong></a>.
       </action>
+      <action dev="ervandew" type="fix" context="Eclim">
+        Greatly improved support for projects created from eclipse.<br/>
+        Fixed support for projects created from eclipse that reside in the
+        workspace.
+      </action>
 
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/search.html#element">

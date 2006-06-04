@@ -27,6 +27,8 @@ import org.eclim.Services;
 
 import org.eclim.preference.Preferences;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -123,7 +125,7 @@ public class JavaUtils
   public static IJavaProject getJavaProject (IProject _project)
     throws Exception
   {
-    if(_project.getRawLocation() == null){
+    if(ProjectUtils.getPath(_project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", _project.getName()));
     }
@@ -201,17 +203,20 @@ public class JavaUtils
     // normalize the paths
     _file = _file.replace('\\', '/');
 
-    String projectPath = FilenameUtils.getFullPath(
-        _project.getProject().getRawLocation().toOSString())
-      .replace('\\', '/').toLowerCase();
+    String projectPath = ProjectUtils.getPath(_project.getProject());
+    projectPath = projectPath.replace('\\', '/');
 
     // search all src classpath entries.
     IClasspathEntry[] entries = _project.getRawClasspath();
     for(int ii = 0; ii < entries.length; ii++){
       if(entries[ii].getEntryKind() == IClasspathEntry.CPE_SOURCE){
-        String path = projectPath + entries[ii].getPath().toOSString()
-          .replace('\\', '/').toLowerCase();
-        if(_file.toLowerCase().startsWith(path)){
+        String entryPath = entries[ii].getPath().toOSString().replace('\\', '/');
+        // entry path consists of /project name/path.. strip off project name
+        // portion.
+        entryPath = entryPath.substring(entryPath.indexOf('/', 1));
+
+        String path = projectPath + entryPath;
+        if(_file.startsWith(path)){
           String file = _file.substring(path.length() + 1);
           return (ICompilationUnit)_project.findElement(Path.fromOSString(file));
         }
