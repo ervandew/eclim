@@ -2,7 +2,6 @@ These are just some random notes for myself that don't need to be in the docs.
 
 Minimum execution of vim w/ eclim support
   echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
-
   vim -u _vimrc.minimum
   gvim -u _vimrc.minimum -U none
 
@@ -16,3 +15,19 @@ Java 1.4 support
 Core Tools (plugin with tools for debugging / fixing issues)
   http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
   - Workspace Re-Builder (looks a bit old, may need some work).
+
+When using a project created from eclipse, may get errors in log when saving +
+closing a src file, complaining that the .swp file doesn't exist.  To fix this,
+you need to exclude the swp files from the eclipse build.
+
+  Project > Properties > Java Build Path
+    Expand Source folder node
+    Select "Excluded"
+    Hit "Edit"
+    Add exclusion pattern: **/*.swp
+Or
+  Edit .classpath
+    Add attribute to src classpathentry
+      excluding="**/*.swp"
+    You can use '|' to delineate multiple entries
+      excluding="**/*.swp|**/*.tmp"
