@@ -35,6 +35,7 @@ public class ProjectUtils
    * @return The path or null if not found.
    */
   public static String getPath (IProject _project)
+    throws Exception
   {
      IPath path = _project.getRawLocation();
 
@@ -46,5 +47,38 @@ public class ProjectUtils
     }
 
     return path != null ? path.toOSString() : null;
+  }
+
+  /**
+   * Gets a project by name.
+   *
+   * @param _name The name of the project.
+   * @return The project which may or may not exist.
+   */
+  public static IProject getProject (String _name)
+    throws Exception
+  {
+    return getProject(_name, false);
+  }
+
+  /**
+   * Gets a project by name.
+   *
+   * @param _name The name of the project.
+   * @param _open true to open the project if not already open, or false to do
+   * nothing.
+   * @return The project which may or may not exist.
+   */
+  public static IProject getProject (String _name, boolean _open)
+    throws Exception
+  {
+    IProject project =
+      ResourcesPlugin.getWorkspace().getRoot().getProject(_name);
+
+    if(_open && project.exists() && !project.isOpen()){
+      project.open(null);
+    }
+
+    return project;
   }
 }

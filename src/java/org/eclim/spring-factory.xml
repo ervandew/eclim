@@ -104,6 +104,14 @@
     <description>Handles client project refresh request.</description>
   </bean>
 
+  <bean name="project_open" class="org.eclim.command.project.ProjectOpenCommand">
+    <description>Handles client request to open a project.</description>
+  </bean>
+
+  <bean name="project_close" class="org.eclim.command.project.ProjectCloseCommand">
+    <description>Handles client request to close a project.</description>
+  </bean>
+
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
     <property name="filters">

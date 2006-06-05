@@ -67,6 +67,14 @@
         <strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; ...] -
         Refresh list of, or all projects against the current files on disk.
       </li>
+      <li>
+        <strong>:ProjectOpen</strong> &lt;project&gt; -
+        Opens a project.
+      </li>
+      <li>
+        <strong>:ProjectClose</strong> &lt;project&gt; -
+        Closes a project.
+      </li>
     </ul>
 
     <p><strong>Eclipse .classpath Commands</strong></p>

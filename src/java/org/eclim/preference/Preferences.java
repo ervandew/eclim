@@ -29,9 +29,10 @@ import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -330,8 +331,7 @@ public class Preferences
   public String getPreference (String _project, String _name)
     throws Exception
   {
-    IProject project =
-      ResourcesPlugin.getWorkspace().getRoot().getProject(_project);
+    IProject project = ProjectUtils.getProject(_project, true);
     return getPreference(project, _name);
   }
 

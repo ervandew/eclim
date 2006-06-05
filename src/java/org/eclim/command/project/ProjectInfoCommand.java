@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import org.eclim.Services;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -54,9 +58,29 @@ public class ProjectInfoCommand
       // list all projects.
       if(name == null){
         IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        String open = Services.getMessage("project.status.open");
+        String closed = Services.getMessage("project.status.closed");
+
+        // pad status string
+        int pad = Math.max(open.length(), closed.length());
+        closed = StringUtils.rightPad(closed, pad);
+        open = StringUtils.rightPad(open, pad);
+
+        // find longest project name for padding.
+        int length = 0;
+        for (int ii = 0; ii < projects.length; ii++){
+          name = projects[ii].getName();
+          if(name.length() > length){
+            length = name.length();
+          }
+        }
+
         for(int ii = 0; ii < projects.length; ii++){
           if(projects[ii].exists()){
-            StringBuffer info = new StringBuffer(projects[ii].getName())
+            StringBuffer info = new StringBuffer()
+              .append(StringUtils.rightPad(projects[ii].getName(), length))
+              .append(" - ")
+              .append(projects[ii].isOpen() ? open : closed)
               .append(" - ")
               .append(ProjectUtils.getPath(projects[ii]));
             results.add(info.toString());
@@ -65,8 +89,7 @@ public class ProjectInfoCommand
 
       // retrieve project settings.
       }else{
-        IProject project = ResourcesPlugin.getWorkspace().getRoot()
-          .getProject(name);
+        IProject project = ProjectUtils.getProject(name, true);
         String setting = _commandLine.getValue(Options.SETTING_OPTION);
         Option[] options = getPreferences().getOptions(project);
 

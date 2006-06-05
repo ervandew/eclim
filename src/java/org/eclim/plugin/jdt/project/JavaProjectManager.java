@@ -57,6 +57,7 @@ import org.eclim.preference.Preferences;
 
 import org.eclim.project.ProjectManager;
 
+import org.eclim.util.ProjectUtils;
 import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileOffsets;
@@ -256,8 +257,7 @@ public class JavaProjectManager
       }
 
       if(!projectName.equals(_name)){
-        IProject project =
-          ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        IProject project = ProjectUtils.getProject(projectName);
         if(project.exists()){
           project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
         }else{
@@ -279,8 +279,7 @@ public class JavaProjectManager
     throws CoreException
   {
     // create the project if it doesn't already exist.
-    IProject project =
-      ResourcesPlugin.getWorkspace().getRoot().getProject(_name);
+    IProject project = ProjectUtils.getProject(_name, true);
     if(!project.exists()){
       IPath location = new Path(_folder);
       IProjectDescription description =
@@ -317,8 +316,7 @@ public class JavaProjectManager
       String[] dependPaths = StringUtils.split(_depends, ',');
       IClasspathEntry[] entries = new IClasspathEntry[dependPaths.length];
       for(int ii = 0; ii < dependPaths.length; ii++){
-        IProject theProject =
-          ResourcesPlugin.getWorkspace().getRoot().getProject(dependPaths[ii]);
+        IProject theProject = ProjectUtils.getProject(dependPaths[ii]);
         if(!theProject.exists()){
           throw new IllegalArgumentException(Services.getMessage(
               "project.depends.not.found", dependPaths[ii]));

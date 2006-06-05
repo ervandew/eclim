@@ -76,12 +76,12 @@ public class EclimApplication
 
       NGServer server = (NGServer)Services.getService(NGServer.class);
 
-      IProject[] projects =
+      /*IProject[] projects =
         ResourcesPlugin.getWorkspace().getRoot().getProjects();
       for(int ii = 0; ii < projects.length; ii++){
         logger.info("Opening project '{}'", projects[ii].getName());
         projects[ii].open(null);
-      }
+      }*/
 
       // load plugins.
       loadPlugins();

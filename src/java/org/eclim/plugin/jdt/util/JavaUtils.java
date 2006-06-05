@@ -111,8 +111,7 @@ public class JavaUtils
   public static IJavaProject getJavaProject (String _project)
     throws Exception
   {
-    IProject project =
-      ResourcesPlugin.getWorkspace().getRoot().getProject(_project);
+    IProject project = ProjectUtils.getProject(_project, true);
     return getJavaProject(project);
   }
 

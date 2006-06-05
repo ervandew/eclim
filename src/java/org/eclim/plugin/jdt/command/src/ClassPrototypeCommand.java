@@ -38,18 +38,12 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IInitializer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 
 /**

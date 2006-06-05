@@ -23,20 +23,17 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectManager;
-
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 
 /**
- * Command to delete a project.
+ * Command to close a project.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class ProjectDeleteCommand
+public class ProjectCloseCommand
   extends AbstractCommand
 {
   /**
@@ -50,14 +47,8 @@ public class ProjectDeleteCommand
 
       IProject project = ProjectUtils.getProject(name);
       if(project.exists()){
-        // FIXME: need to get the proper project manager depending on the project
-        // nature (not necessary until we actually have projects with natures
-        // other than java).
-        ProjectManager manager = ProjectManagement.getProjectManager(
-            "org.eclipse.jdt.core.javanature");
-        // FIXME: use the manager to do the delete.
-        project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
-        return Services.getMessage("project.deleted", name);
+        project.close(null);
+        return Services.getMessage("project.closed", name);
       }
       return Services.getMessage("project.not.found", name);
     }catch(Throwable t){

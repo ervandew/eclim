@@ -26,10 +26,11 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
@@ -61,8 +62,7 @@ public class SrcUpdateCommand
       if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
         IProblem[] problems = JavaUtils.getProblems(src);
 
-        IProject project =
-          ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        IProject project = ProjectUtils.getProject(projectName, true);
 
         ArrayList errors = new ArrayList();
         String filename = src.getResource().getRawLocation().toOSString();
