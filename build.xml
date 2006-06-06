@@ -16,6 +16,9 @@
   <import file="src/ant/docs.xml"/>
   <import file="src/ant/test.xml"/>
 
+  <!-- exclude vim swap files -->
+  <defaultexcludes add="**/*.swp"/>
+
   <!-- classpath -->
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
@@ -54,7 +57,7 @@
         <include name="**/*.class"/>
         <exclude name="**/plugin/*/**/*.class"/>
       </fileset>
-      <fileset dir="src/java" excludesfile="src/ant/exclude.properties">
+      <fileset dir="src/java">
         <include name="**/*"/>
         <exclude name="**/plugin/*/**/*"/>
         <exclude name="**/package.html"/>
@@ -79,7 +82,7 @@
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
       <fileset dir="." includes="log4j.xml"/>
-      <fileset dir="." includes="lib/**/*" excludesfile="src/ant/exclude.properties"/>
+      <fileset dir="." includes="lib/**/*"/>
       <fileset dir="build/dist" includes="eclim.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
@@ -87,15 +90,13 @@
     <copy todir="${eclipse.home}">
       <mapper type="regexp"
           from="^(.*)(org\.eclim.*?)([/\\].*)$" to="\1\2_${eclim.version}\3"/>
-      <fileset dir="src/eclipse"
-        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+      <fileset dir="src/eclipse" includes="**/*"/>
     </copy>
 
     <mkdir dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/log"/>
     <touch file="${eclipse.home}/plugins/org.eclim_${eclim.version}/log/.keep"/>
     <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
-      <fileset dir="src/shell"
-        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+      <fileset dir="src/shell" includes="**/*"/>
     </copy>
 
     <replace dir="${eclipse.home}/plugins"
@@ -109,8 +110,7 @@
 
     <!-- deploy vim files -->
     <copy todir="${vim.files.home}">
-      <fileset dir="src/vim"
-        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+      <fileset dir="src/vim" includes="**/*"/>
     </copy>
     <replace dir="${vim.files.home}"
       includes="**/*.vim" token="$${eclim.version}" value="${eclim.version}"/>
@@ -125,7 +125,7 @@
       <fileset dir="build/classes">
         <include name="**/plugin/${plugin.name}/**/*.class"/>
       </fileset>
-      <fileset dir="src/java" excludesfile="src/ant/exclude.properties">
+      <fileset dir="src/java">
         <include name="**/plugin/${plugin.name}/**/*"/>
         <exclude name="**/package.html"/>
         <exclude name="**/*.java"/>
@@ -155,20 +155,17 @@
 
     <!-- docs archive -->
     <zip destfile="${eclipse.home}/plugins/org.eclim_${eclim.version}/doc.zip">
-      <fileset dir="build/doc" excludesfile="src/ant/exclude.properties"
-          includes="**/*"/>
+      <fileset dir="build/doc" includes="**/*"/>
     </zip>
 
     <!-- src archive -->
     <zip destfile="${eclipse.home}/plugins/org.eclim_${eclim.version}/src.zip">
-      <fileset dir="src/java" excludesfile="src/ant/exclude.properties"
-          includes="**/*"/>
+      <fileset dir="src/java" includes="**/*"/>
     </zip>
 
     <!-- eclipse plugin archives -->
     <zip destfile="dist/org.eclim_${eclim.version}.zip">
-      <fileset dir="${eclipse.home}/plugins/"
-          excludesfile="src/ant/exclude.properties">
+      <fileset dir="${eclipse.home}/plugins/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
@@ -179,8 +176,7 @@
       </fileset>
     </zip>
     <tar destfile="dist/org.eclim_${eclim.version}.tar.gz" compression="gzip">
-      <tarfileset dir="${eclipse.home}/plugins/"
-          excludesfile="src/ant/exclude.properties">
+      <tarfileset dir="${eclipse.home}/plugins/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/windows/**/*"/>
@@ -191,8 +187,7 @@
         <exclude name="org.eclim_${eclim.version}/bin/**/*.exe"/>
         <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
       </tarfileset>
-      <tarfileset dir="${eclipse.home}/plugins/" mode="755"
-          excludesfile="src/ant/exclude.properties">
+      <tarfileset dir="${eclipse.home}/plugins/" mode="755">
         <include name="org.eclim_${eclim.version}/bin/eclim"/>
         <include name="org.eclim_${eclim.version}/bin/eclimd"/>
       </tarfileset>
@@ -200,8 +195,7 @@
 
     <!-- vim plugins jar -->
     <path id="vim.plugins">
-      <fileset dir="src/vim"
-        includes="**/*" excludesfile="src/ant/exclude.properties"/>
+      <fileset dir="src/vim" includes="**/*"/>
     </path>
     <property name="vim.plugins" refid="vim.plugins"/>
     <propertyregex property="vim.plugins" input="${vim.plugins}" override="true"
