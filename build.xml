@@ -6,7 +6,12 @@
 
   <property environment="env"/>
   <property file="src/ant/build.properties"/>
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
+    </classpath>
+  </taskdef>
 
   <import file="src/ant/docs.xml"/>
   <import file="src/ant/test.xml"/>
