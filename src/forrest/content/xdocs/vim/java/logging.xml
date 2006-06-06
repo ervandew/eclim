@@ -42,6 +42,7 @@
     </p>
     <ul>
       <li>
+        <anchor id="EclimLoggingDisabled"/>
         <strong>g:EclimLoggingDisabled</strong> (Default: 0)<br/>
         If set to a value greater than 0, then this plugin will be disabled.
       </li>

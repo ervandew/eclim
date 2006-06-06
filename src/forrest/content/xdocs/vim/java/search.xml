@@ -30,6 +30,7 @@
   <body>
     <section id="pattern">
       <title>Pattern Search</title>
+      <anchor id="JavaSearch"/>
       <p>
         Pattern searching provides a means to widen a search beyond a single
         element.  A pattern search can be executed using the command<br/>
@@ -110,6 +111,7 @@
         If only one result is found and that result is in the current source
         file, the cursor will be moved to the element found.
       </p>
+      <anchor id="JavaSearchContext"/>
       <p>
         As a convenience eclim also provides the command
         <strong>:JavaSearchContext</strong>.  This command accepts no arguments
@@ -229,6 +231,7 @@
       </p>
       <ul>
         <li>
+          <anchor id="EclimJavaSearchSingleResult"/>
           <strong>g:EclimJavaSearchSingleResult</strong><br/>
           Determines what action to take when a only a single result is
           found.<br/>
@@ -240,6 +243,7 @@
           </ul>
         </li>
         <li>
+          <anchor id="EclimJavaSearchMapping"/>
           <strong>g:EclimJavaSearchMapping</strong><br/>
           When set to 1, &lt;Enter&gt; will be mapped to the java search
           functionality for the various java related xml files (spring,

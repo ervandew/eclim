@@ -31,6 +31,7 @@
 
     <section id="comment">
       <title>Commenting</title>
+      <anchor id="JavaDocComment"/>
       <p>
         Eclim provides the <strong>:JavaDocComment</strong> command which will
         add or update the javadoc comments for the element under the cursor.
@@ -63,6 +64,7 @@
 
     <section id="search">
       <title>Searching</title>
+      <anchor id="JavaDocSearch"/>
       <p>
         Eclim supports searching of javadocs just like you would
         <a href="search.html">search the source code</a>.<br/>
@@ -72,7 +74,7 @@
       <p>
         The results will be displayed in a window and you can simply hit
         &lt;enter&gt; on an entry to open it using the browser you configured via
-        <strong><a href="../index.html#configuration">g:EclimBrowser</a></strong>.
+        <strong><a href="../index.html#EclimBrowser">g:EclimBrowser</a></strong>.
       </p>
       <p>
         The locations of the javadocs are determined via your eclipse project's
@@ -96,6 +98,7 @@
       </p>
       <ul>
         <li>
+          <anchor id="EclimJavaDocSearchSingleResult"/>
           <strong>g:EclimJavaDocSearchSingleResult</strong><br/>
           Determines what action to take when only a singe result is found.<br/>
           Possible values include:

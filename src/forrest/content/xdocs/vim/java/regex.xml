@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JavaRegex"/>
     <p>
       Eclim provides a means to test java regular expressions.  Simply execute
       <strong>:JavaRegex</strong> and a vim window will open allowing you to
@@ -64,8 +65,14 @@
       previous match much like 'n' or 'N' for vim searching:
     </p>
     <ul>
-      <li><strong>:NextMatch</strong> - Jump to the next match.</li>
-      <li><strong>:PrevMatch</strong> - Jump to the previous match.</li>
+      <li>
+        <anchor id="NextMatch"/>
+        <strong>:NextMatch</strong> - Jump to the next match.
+      </li>
+      <li>
+        <anchor id="PreMatch"/>
+        <strong>:PrevMatch</strong> - Jump to the previous match.
+      </li>
     </ul>
     <p>
       <strong>Configuration</strong>
@@ -75,18 +82,22 @@
     </p>
     <ul>
       <li>
+        <anchor id="EclimRegexHi_0"/>
         <strong>g:EclimRegexHi{0}</strong> (Default: 'Constant')<br/>
         The first highlighting group used for full regex matches.
       </li>
       <li>
+        <anchor id="EclimRegexHi_1"/>
         <strong>g:EclimRegexHi{1}</strong> (Default: 'MoreMsg')<br/>
         The second highlighting group used for full regex matches.
       </li>
       <li>
+        <anchor id="EclimRegexGroupHi_0"/>
         <strong>g:EclimRegexGroupHi{0}</strong> (Default: 'Statement')<br/>
         The first highlighting group used for group matches.
       </li>
       <li>
+        <anchor id="EclimRegexGroupHi_1"/>
         <strong>g:EclimRegexGroupHi{1}</strong> (Default: 'Todo')<br/>
         The second highlighting group used for group matches.
       </li>

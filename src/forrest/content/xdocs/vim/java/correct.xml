@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JavaCorrect"/>
     <p>
       Code correction in eclim is equivalent to the quick fix functionality of
       eclipse.  When you save a java source file, eclim

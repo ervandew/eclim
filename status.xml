@@ -339,14 +339,17 @@
       </action>
 
       <action dev="ervandew" type="add" context="Eclim">
-        Added <a href="vim/project.html"><strong>:ProjectRefresh</strong></a>.
+        Added
+        <a href="vim/project.html#ProjectRefresh">
+          <strong>:ProjectRefresh</strong>
+        </a>.
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added
-        <a href="vim/project.html"><strong>:ProjectOpen</strong></a>,
-        <a href="vim/project.html"><strong>:ProjectClose</strong></a>,
+        <a href="vim/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>,
+        <a href="vim/project.html#ProjectClose"><strong>:ProjectClose</strong></a>,
         and updated
-        <a href="vim/project.html"><strong>:ProjectList</strong></a>
+        <a href="vim/project.html#ProjectList"><strong>:ProjectList</strong></a>
         to show the current status of each project.
       </action>
       <action dev="ervandew" type="fix" context="Eclim">
@@ -362,7 +365,7 @@
       </action>
 
       <action dev="ervandew" type="add" context="Java">
-        Added <a href="vim/java/search.html#element">
+        Added <a href="vim/java/search.html#JavaSearchContext">
           <strong>:JavaSearchContext</strong>
         </a>.
       </action>
@@ -379,9 +382,9 @@
 
       <action dev="ervandew" type="add" context="Vim">
         Added
-        <strong><a href="vim/index.html#misc">:Split</a></strong>,
-        <strong><a href="vim/index.html#misc">:SplitRelative</a></strong>, and
-        <strong><a href="vim/index.html#misc">:EditRelative</a></strong>.
+        <strong><a href="vim/index.html#Split">:Split</a></strong>,
+        <strong><a href="vim/index.html#SplitRelative">:SplitRelative</a></strong>, and
+        <strong><a href="vim/index.html#EditRelative">:EditRelative</a></strong>.
       </action>
     </release>
 
@@ -404,12 +407,15 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         <a href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1440606&amp;group_id=145869&amp;atid=763323">Bug 1440606</a>.
         <note>
-          The original implementation of <strong>:JavaImportClean</strong> was
-          written entirely in vim (didn't require eclim server).  To properly
-          handle ignoring comments when determining what imports are unused,
-          this functionality had to be reimplemented with server side help.
-          However, the vim only version is preserved and will be invoked if the
-          current file is not in an eclipse project.
+          The original implementation of
+          <a href="vim/java/import.html#JavaImportClean">
+            <strong>:JavaImportClean</strong>
+          </a>
+          was written entirely in vim (didn't require eclim server).  To
+          properly handle ignoring comments when determining what imports are
+          unused, this functionality had to be reimplemented with server side
+          help.  However, the vim only version is preserved and will be invoked
+          if the current file is not in an eclipse project.
         </note>
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
@@ -441,7 +447,8 @@
         </a>.
       </action>
       <action dev="ervandew" type="update" context="Java">
-        <strong>:JavaImpl</strong> now supports overriding constructors.
+        <a href="vim/java/impl.html#JavaImpl"><strong>:JavaImpl</strong></a>
+        now supports overriding constructors.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/doc.html"><strong>:JavaDocComment</strong></a>
@@ -461,12 +468,13 @@
         customization.
       </action>
       <action dev="ervandew" type="update" context="Java">
-        <strong>:JavaGetSet</strong> now has variable to determine whether or
-        not to add indexed getters and setters.
+        <a href="vim/java/bean.html"><strong>:JavaGetSet</strong></a>
+        now has variable to determine whether or not to add indexed getters and
+        setters.
       </action>
       <action dev="ervandew" type="update" context="Java">
         Removed preference org.eclim.java.validation.ignore.warnings in favor of
-        new g:EclimSignLevel.
+        new <a href="vim/index.html#EclimSignLevel">g:EclimSignLevel</a>.
       </action>
 
       <action dev="ervandew" type="add" context="Vim">
@@ -538,21 +546,28 @@
         for the current file.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Fixed <strong>:JavaImport</strong> to not import classes that are in the
-        same package as the current file.
+        Fixed
+        <a href="vim/java/import.html#JavaImport">
+          <strong>:JavaImport</strong>
+        </a>
+        to not import classes that are in the same package as the current file.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed java source validation to clear out the quickfix results when all
         errors have been fixed.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Fixed <strong>:JavaImpl</strong> to get the interfaces of superclass
-        lineage in addition to directly implemented interfaces of the current
-        class.
+        Fixed
+        <a href="vim/java/impl.html#JavaImpl"><strong>:JavaImpl</strong></a>
+        to get the interfaces of superclass lineage in addition to directly
+        implemented interfaces of the current class.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         When adding methods from the resulting buffer of
-        <strong>:JavaImpl</strong> or <strong>:JUnitImpl</strong>, if the target
+        <a href="vim/java/impl.html#JavaImpl"><strong>:JavaImpl</strong></a>
+        or
+        <a href="vim/java/junit.html#JUnitImpl"><strong>:JUnitImpl</strong></a>,
+        if the target
         class was an inner class of the src file, then the methods were being
         added to the outer class instead of the inner class.
       </action>
@@ -570,7 +585,8 @@
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added support for global settings/preferences via new
-        <a href="vim/index.html#commands"><strong>:Settings</strong></a> command.
+        <a href="vim/index.html#Settings"><strong>:Settings</strong></a>
+        command.
       </action>
       <action dev="ervandew" type="add" context="Java">
         <a href="vim/java/delegate.html">Delegate method creation</a>.
@@ -597,9 +613,8 @@
       </action>
       <action dev="ervandew" type="update" context="Vim">
         Removed global variables g:EclimDebug and g:EclimEchoHighlight in favor
-        of new g:EclimLogLevel and the corresponding highlight varibles.  See
-        the <a href="vim/index.html#configuration">vim configuration</a>
-        page for details.
+        of new <a href="vim/index.html#EclimLogLevel">g:EclimLogLevel</a>
+        and the corresponding highlight varibles.
       </action>
       <action dev="ervandew" type="update" context="Vim">
         Removed all default key mappings.  See the

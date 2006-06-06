@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JUnitImpl"/>
     <p>
       Currently the junit functionality of eclim consists only of stub
       generation for test methods similar to the

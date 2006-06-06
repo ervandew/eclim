@@ -59,6 +59,7 @@
       </p>
       <ul>
         <li>
+          <anchor id="NewSrcEntry"/>
           <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...]<br/>
           Adds a new entry for one or more source code directories relative to
           the project's root directory.<br/>
@@ -69,6 +70,7 @@
           </source>
         </li>
         <li>
+          <anchor id="NewProjectEntry"/>
           <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...]<br/>
           Adds a new entry for one or more dependencies on other projects.
           Project name command completion supported (:NewProjectEntry
@@ -80,6 +82,7 @@
           </source>
         </li>
         <li>
+          <anchor id="NewJarEntry"/>
           <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...]<br/>
           Adds a new entry for one or more jar file dependencies.  If the jar
           file is not in a folder under the project root, you must use an
@@ -103,6 +106,7 @@
           </source>
         </li>
         <li>
+          <anchor id="NewVarEntry"/>
           <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...]<br/>
           Just like NewJarEntry except an eclipse "var" entry is created.
           When a jar entry references an absolute path, you should instead use

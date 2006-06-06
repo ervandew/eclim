@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JavaImport"/>
     <p>
       The automated import functionality is pretty straightforward.  Simply
       place the cursor over the element to import and issue the command<br/>
@@ -56,11 +57,13 @@
     </p>
     <ul>
       <li>
+        <anchor id="JavaImportSort"/>
         <strong>:JavaImportSort</strong><br/>
         Sorts the import statements in alphabetical order with java and javax
         imports first.
       </li>
       <li>
+        <anchor id="JavaImportClean"/>
         <strong>:JavaImportClean</strong><br/>
         Removes any un-used import statements.  If the current file is not
         in an eclipse project, then a vim only implementation is invoked, that
@@ -76,6 +79,7 @@
     </p>
     <ul>
       <li>
+        <anchor id="JavaImportExclude"/>
         <strong>g:JavaImportExclude</strong><br/>
         List of patterns to exclude from import results.<br/>
         Ex. let g:JavaImportExclude = [ "^com\.sun\..*", "^sun\..*", "^sunw\..*" ]

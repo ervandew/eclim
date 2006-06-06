@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="VimDoc"/>
     <p>
       To facilitate quick access of vim help for elements of a vim script, eclim
       provides the command <strong>:VimDoc</strong>.  When executed it will open

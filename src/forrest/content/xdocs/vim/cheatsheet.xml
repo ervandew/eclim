@@ -36,63 +36,81 @@
     <p><strong>Global Commands</strong></p>
     <ul>
       <li>
-        <strong>:PingEclim</strong> - Pings eclimd server.
+        <a href="index.html#PingEclim"><strong>:PingEclim</strong></a> -
+        Pings eclimd server.
       </li>
       <li>
-        <strong>:ShutdownEclim</strong> - Shuts down eclimd server.
+        <a href="index.html#ShutdownEclim"><strong>:ShutdownEclim</strong></a> -
+        Shuts down eclimd server.
       </li>
       <li>
-        <strong>:Settings</strong> - View / edit global settings.
+        <a href="index.html#Settings"><strong>:Settings</strong></a> -
+        View / edit global settings.
       </li>
     </ul>
 
     <p><strong>Project Commands</strong></p>
     <ul>
       <li>
-        <strong>:ProjectCreate</strong> &lt;folder&gt; [&lt;project_dependencies&gt;] -
+        <a href="project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
+        &lt;folder&gt; [&lt;project_dependencies&gt;] -
         Create a new project.
       </li>
       <li>
-        <strong>:ProjectList</strong> - List current projects.
+        <a href="project.html#ProjectList"><strong>:ProjectList</strong></a> -
+        List current projects.
       </li>
       <li>
-        <strong>:ProjectSettings</strong> [&lt;project&gt;] -
-        View / edit project settings.
+        <a href="project.html#ProjectSettings"><strong>:ProjectSettings</strong></a>
+        [&lt;project&gt;] - View / edit project settings.
       </li>
       <li>
-        <strong>:ProjectDelete</strong> &lt;project&gt; -
-        Delete a project.
+        <a href="project.html#ProjectDelete"><strong>:ProjectDelete</strong></a>
+        &lt;project&gt; - Delete a project.
       </li>
       <li>
-        <strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; ...] -
+        <a href="project.html#ProjectRefresh"><strong>:ProjectRefresh</strong></a>
+        [&lt;project&gt; &lt;project&gt; ...] -
         Refresh list of, or all projects against the current files on disk.
       </li>
       <li>
-        <strong>:ProjectOpen</strong> &lt;project&gt; -
-        Opens a project.
+        <a href="project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>
+        &lt;project&gt; - Opens a project.
       </li>
       <li>
-        <strong>:ProjectClose</strong> &lt;project&gt; -
-        Closes a project.
+        <a href="project.html#ProjectClose"><strong>:ProjectClose</strong></a>
+        &lt;project&gt; - Closes a project.
       </li>
     </ul>
 
     <p><strong>Eclipse .classpath Commands</strong></p>
     <ul>
       <li>
-        <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...] -
+        <a href="java/classpath.html#NewSrcEntry">
+          <strong>:NewSrcEntry</strong>
+        </a>
+        &lt;dir&gt; [&lt;dir&gt; ...] -
         Add a new source dir entry.
       </li>
       <li>
-        <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...] -
+        <a href="java/classpath.html#NewProjectEntry">
+          <strong>:NewProjectEntry</strong>
+        </a>
+        &lt;project&gt; [&lt;project&gt; ...] -
         Add a new project entry.
       </li>
       <li>
-        <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...] -
+        <a href="java/classpath.html#NewJarEntry">
+          <strong>:NewJarEntry</strong>
+        </a>
+        &lt;file&gt; [&lt;file&gt; ...] -
         Add a jar entry.
       </li>
       <li>
-        <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
+        <a href="java/classpath.html#NewVarEntry">
+          <strong>:NewVarEntry</strong>
+        </a>
+        &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
         Add a new var entry.
       </li>
     </ul>
@@ -100,76 +118,94 @@
     <p><strong>Ant Commands</strong></p>
     <ul>
       <li>
-        <strong>:Ant</strong> [&lt;target&gt; ...] -
+        <a href="ant/run.html#Ant"><strong>:Ant</strong></a>
+        [&lt;target&gt; ...] -
         Execute ant from the current project.
       </li>
       <li>
-        <strong>:AntDoc</strong> [&lt;element&gt;] -
+        <a href="ant/doc.html#AntDoc"><strong>:AntDoc</strong></a>
+        [&lt;element&gt;] -
         Find and open the documentation for the element under the cursor or the
         element supplied as an argument.
       </li>
       <li>
-        <strong>:Validate</strong> - Validate the current ant build file.
+        <a href="ant/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current ant build file.
       </li>
     </ul>
 
     <p><strong>Java Commands</strong></p>
     <ul>
       <li>
-        <strong>:JavaGet</strong> - Create a java bean getter method.
+        <a href="java/bean.html#JavaGet"><strong>:JavaGet</strong></a> -
+        Create a java bean getter method.
       </li>
       <li>
-        <strong>:JavaSet</strong> - Create a java bean setter method.
+        <a href="java/bean.html#JavaSet"><strong>:JavaSet</strong></a> -
+        Create a java bean setter method.
       </li>
       <li>
-        <strong>:JavaGetSet</strong> -
+        <a href="java/bean.html#JavaGetSet"><strong>:JavaGetSet</strong></a> -
         Create both a java bean getter and setter method.
       </li>
       <li>
-        <strong>:JavaConstructor</strong> -
+        <a href="java/constructor.html#JavaConstructor">
+          <strong>:JavaConstructor</strong>
+        </a> -
         Creates class constructor, either empty or based on selected class
         fields.
       </li>
       <li>
-        <strong>:JavaImpl</strong> -
+        <a href="java/impl.html#JavaImpl"><strong>:JavaImpl</strong></a> -
         View implementable / overridable methods from super classes and
         implemented interfaces.
       </li>
       <li>
-        <strong>:JavaDelegate</strong> -
-        View list of methods that can delegate to the field under the cursor.
+        <a href="java/delegate.html#JavaDelegate">
+          <strong>:JavaDelegate</strong>
+        </a> -
+        View list of methods that delegate to the field under the cursor.
       </li>
       <li>
-        <strong>:JUnitImpl</strong> -
+        <a href="java/junit.html#JUnitImpl"><strong>:JUnitImpl</strong></a> -
         Similar to <strong>:JavaImpl</strong>, but creates test methods.
       </li>
       <li>
-        <strong>:JavaImport</strong> - Import the class under the cursor.
+        <a href="java/import.html#JavaImport"><strong>:JavaImport</strong></a> -
+        Import the class under the cursor.
       </li>
       <li>
-        <strong>:JavaSearch</strong>
+        <a href="java/search.html#JavaSearch"><strong>:JavaSearch</strong></a>
         [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] -
         Search for classes, methods, fields, etc.
         (With pattern supplied, searches for the element under the cursor).
       </li>
       <li>
-        <strong>:JavaSearchContext</strong> - Perform a context sensitive search
-        for the element under the cursor.
+        <a href="java/search.html#JavaSearchContext">
+          <strong>:JavaSearchContext</strong>
+        </a> -
+        Perform a context sensitive search for the element under the cursor.
       </li>
       <li>
-        <strong>:JavaCorrect</strong> -
+        <a href="java/correct.html#JavaCorrect">
+          <strong>:JavaCorrect</strong>
+        </a> -
         Suggest possible corrections for a source error.
       </li>
       <li>
-        <strong>:JavaRegex</strong> -
+        <a href="java/regex.html#JavaRegex"><strong>:JavaRegex</strong></a> -
         Opens a window for testing java regular expressions.
       </li>
       <li>
-        <strong>:JavaDocSearch</strong> -
+        <a href="java/doc.html#JavaDocSearch">
+          <strong>:JavaDocSearch</strong>
+        </a> -
         Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.
       </li>
       <li>
-        <strong>:JavaDocComment</strong> -
+        <a href="java/doc.html#JavaDocComment">
+          <strong>:JavaDocComment</strong>
+        </a> -
         Adds or updates the comments for the element under the cursor.
       </li>
     </ul>
@@ -177,23 +213,36 @@
     <p><strong>Vim Commands</strong></p>
     <ul>
       <li>
-        <strong>:FindFunctionDef</strong> [&lt;function&gt;] -
+        <a href="vim/find.html#FindFunctionDef">
+          <strong>:FindFunctionDef</strong>
+        </a>
+        [&lt;function&gt;] -
         Finds a function definition.
       </li>
       <li>
-        <strong>:FindFunctionRef</strong> [&lt;function&gt;] -
+        <a href="vim/find.html#FindFunctionRef">
+          <strong>:FindFunctionRef</strong>
+        </a>
+        [&lt;function&gt;] -
         Finds references of a function.
       </li>
       <li>
-        <strong>:FindVariableDef</strong> [&lt;variable&gt;] -
+        <a href="vim/find.html#FindVariableDef">
+          <strong>:FindVariableDef</strong>
+        </a>
+        [&lt;variable&gt;] -
         Finds the definition of a global variable.
       </li>
       <li>
-        <strong>:FindVariableRef</strong> [&lt;variable&gt;] -
+        <a href="vim/find.html#FindVariableRef">
+          <strong>:FindVariableRef</strong>
+        </a>
+        [&lt;variable&gt;] -
         Finds references of a global variable.
       </li>
       <li>
-        <strong>:VimDoc</strong> [&lt;keyword&gt;] -
+        <a href="vim/doc.html#VimDoc"><strong>:VimDoc</strong></a>
+        [&lt;keyword&gt;] -
         Opens the vim help for a keyword.
       </li>
     </ul>
@@ -201,7 +250,8 @@
     <p><strong>Xml Commands</strong></p>
     <ul>
       <li>
-        <strong>:Validate</strong> [&lt;file&gt;] -
+        <a href="xml/validate.html#Validate"><strong>:Validate</strong></a>
+        [&lt;file&gt;] -
         Validates the supplied xml file or the current file if none supplied.
       </li>
     </ul>
@@ -209,27 +259,27 @@
     <p><strong>Web Lookup Commands</strong></p>
     <ul>
       <li>
-        <strong>:OpenUrl</strong> [url] -
+        <a href="web.html#OpenUrl"><strong>:OpenUrl</strong></a> [url] -
         Opens a url in your configured web browser.
       </li>
       <li>
-        <strong>:Google</strong> [word ...] -
+        <a href="web.html#Google"><strong>:Google</strong></a> [word ...] -
         Looks up a word or phrase with google.
       </li>
       <li>
-        <strong>:Clusty</strong> [word ...] -
+        <a href="web.html#Clusty"><strong>:Clusty</strong></a> [word ...] -
         Looks up a word or phrase with clusty.
       </li>
       <li>
-        <strong>:Wikipedia</strong> [word ...] -
+        <a href="web.html#Wikipedia"><strong>:Wikipedia</strong></a> [word ...] -
         Looks up a word or phrase on wikipedia.
       </li>
       <li>
-        <strong>:Dictionary</strong> [word] -
+        <a href="web.html#Dictionary"><strong>:Dictionary</strong></a> [word] -
         Looks up a word on dictionary.reference.com.
       </li>
       <li>
-        <strong>:Thesaurus</strong> [word] -
+        <a href="web.html#Thesaurus"><strong>:Thesaurus</strong></a> [word] -
         Looks up a word on thesaurus.reference.com.
       </li>
     </ul>
@@ -237,33 +287,35 @@
     <p><strong>Misc. Commands</strong></p>
     <ul>
       <li>
-        <strong>:Split</strong> -
+        <a href="index.html#Split"><strong>:Split</strong></a> -
         Behaves like the 'split' command, but allows multiple files to be
         supplied.
       </li>
       <li>
-        <strong>:SplitRelative</strong> -
+        <a href="index.html#SplitRelative"><strong>:SplitRelative</strong></a> -
         Like <strong>:Split</strong> this command provides splitting of multiple
         files, but this command splits file relative to the file in the current
         buffer.
       </li>
       <li>
-        <strong>:EditRelative</strong> -
+        <a href="index.html#EditRelative"><strong>:EditRelative</strong></a> -
         Like <strong>:SplitRelative</strong> except issues an 'edit' and only
         supports one file at a time.
       </li>
       <li>
-        <strong>:DiffLastSaved</strong> -
+        <a href="index.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.
       </li>
       <li>
-        <strong>:SwapWords</strong> -
+        <a href="index.html#SwapWords"><strong>:SwapWords</strong></a> -
         Swaps two words (with cursor placed on the first word).
         Supports swapping around non-word characters like commas, periods, etc.
       </li>
       <!--li>
-        <strong>:SwapTypedArguments</strong> -
+        <a href="index.html#SwapTypedArguments">
+          <strong>:SwapTypedArguments</strong>
+        </a> -
         Swaps typed method arguments in a method declaration.
       </li-->
     </ul>

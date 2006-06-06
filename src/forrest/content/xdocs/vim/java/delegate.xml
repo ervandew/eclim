@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JavaDelegate"/>
     <p>
       Eclim supports generation of delegate methods via the
       <strong>:JavaDelegate</strong> command.  To utilize this functionality

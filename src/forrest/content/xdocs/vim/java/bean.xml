@@ -34,16 +34,19 @@
     </p>
     <ul>
       <li>
+        <anchor id="JavaGetSet"/>
         <strong>:JavaGetSet</strong><br/>
         Generates both getters and setters for the field under the cursor or for
         all fields in the specified range.
       </li>
       <li>
+        <anchor id="JavaGet"/>
         <strong>:JavaGet</strong><br/>
         Generates getters for the field under the cursor or for all fields in
         the specified range.
       </li>
       <li>
+        <anchor id="JavaSet"/>
         <strong>:JavaSet</strong><br/>
         Generates setters for the field under the cursor or for all fields in
         the specified range.
@@ -77,6 +80,7 @@
     </p>
     <ul>
       <li>
+        <anchor id="EclimJavaBeanInsertIndexed"/>
         <strong>g:EclimJavaBeanInsertIndexed</strong> (Default: 1)<br/>
         When set to a value greater than 0, eclim will insert indexed getters
         and setters for array properties.

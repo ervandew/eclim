@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+    <anchor id="JavaConstructor"/>
     <p>
       <strong>:JavaConstructor</strong> is a command that will create either an
       empty constructor, or one that takes any selected fields as arguments.

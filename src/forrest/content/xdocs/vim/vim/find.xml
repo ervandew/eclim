@@ -34,21 +34,25 @@
     </p>
     <ul>
       <li>
+        <anchor id="FindFunctionDef"/>
         <strong>:FindFunctionDef [function]</strong> -
         Finds the definition of the supplied function name or function name
         under the cursor.
       </li>
       <li>
+        <anchor id="FindFunctionRef"/>
         <strong>:FindFunctionRef [function]</strong> -
         Finds references of the supplied function name or function name
         under the cursor.
       </li>
       <li>
+        <anchor id="FindVariableDef"/>
         <strong>:FindVariableDef [variable]</strong> -
         Finds the definition of the supplied global variable name or variable
         name under the cursor.
       </li>
       <li>
+        <anchor id="FindVariableRef"/>
         <strong>:FindVariableRef [variable]</strong> -
         Finds references of the supplied global variable name or variable name
         under the cursor.
@@ -67,6 +71,7 @@
     </p>
     <ul>
       <li>
+        <anchor id="EclimVimFindSingleResult"/>
         <strong>g:EclimVimFindSingleResult</strong> (Default: 'split')<br/>
         Determines what action to take when a only a single result is
         found.<br/>
@@ -78,6 +83,7 @@
         </ul>
       </li>
       <li>
+        <anchor id="EclimVimPaths"/>
         <strong>g:EclimVimPaths</strong> (Default: &amp;runtimepath)<br/>
         Comma seperated list of paths to recursively search.  Defaults to your
         systems 'runtimepath' option which should be suitable for most users.
