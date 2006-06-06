@@ -57,6 +57,7 @@ public class FileUtils
    * @return The File.
    */
   public static File getProjectRelativeFile (IProject _project, String _file)
+    throws Exception
   {
     return new File(FilenameUtils.concat(
           ProjectUtils.getPath(_project), _file));

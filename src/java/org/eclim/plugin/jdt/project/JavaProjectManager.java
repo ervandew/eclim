@@ -276,7 +276,7 @@ public class JavaProjectManager
    * @return The created project.
    */
   protected IProject createProject (String _name, String _folder)
-    throws CoreException
+    throws Exception
   {
     // create the project if it doesn't already exist.
     IProject project = ProjectUtils.getProject(_name, true);
@@ -310,7 +310,7 @@ public class JavaProjectManager
    */
   protected IClasspathEntry[] createOrUpdateDependencies (
       IJavaProject _project, String _depends)
-    throws CoreException
+    throws Exception
   {
     if(_depends != null){
       String[] dependPaths = StringUtils.split(_depends, ',');
