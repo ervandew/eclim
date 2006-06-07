@@ -81,6 +81,29 @@ if v:version < 700 | finish | endif
 
     let g:EclimTempDir = substitute(g:EclimTempDir, '\', '/', 'g')
   endif
+
+  if !exists("g:EclimTraceHighlight")
+    let g:EclimTraceHighlight = "Normal"
+  endif
+  if !exists("g:EclimDebugHighlight")
+    let g:EclimDebugHighlight = "Normal"
+  endif
+  if !exists("g:EclimInfoHighlight")
+    let g:EclimInfoHighlight = "Statement"
+  endif
+  if !exists("g:EclimWarningHighlight")
+    let g:EclimWarningHighlight = "WarningMsg"
+  endif
+  if !exists("g:EclimErrorHighlight")
+    let g:EclimErrorHighlight = "Error"
+  endif
+  if !exists("g:EclimFatalHighlight")
+    let g:EclimFatalHighlight = "Error"
+  endif
+
+  if !exists("g:EclimEchoErrorHighlight")
+    let g:EclimEchoErrorHighlight = "Error"
+  endif
 " }}}
 
 " Command Declarations {{{
