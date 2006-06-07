@@ -51,7 +51,7 @@ public class Main
         commandLine = options.parse(_args);
       }catch(ParseException e){
         System.out.println(e.getMessage());
-        options.usageSummary();
+        //options.usageSummary();
         System.exit(1);
       }
 
