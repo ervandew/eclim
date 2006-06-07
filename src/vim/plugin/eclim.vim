@@ -26,8 +26,6 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
-
 " Global Variables {{{
   if !exists("g:EclimLogLevel")
     let g:EclimLogLevel = 5
