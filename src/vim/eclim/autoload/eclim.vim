@@ -34,6 +34,10 @@
     let g:EclimShowErrors = 1
   endif
   let g:EclimdRunning = 1
+
+  if !exists("g:EclimSystemWorkaround")
+    let g:EclimSystemWorkaround = 0
+  endif
 " }}}
 
 " Script Variables {{{
@@ -68,12 +72,14 @@ function! eclim#ExecuteEclim (args)
 
   " determine whether to use system call or exec with a temp file
   let use_exec = 0
-  for cmd in s:exec_commands
-    if command =~ '-command\s\+' . cmd
-      let use_exec = 1
-      break
-    endif
-  endfor
+  if g:EclimSystemWorkaround
+    for cmd in s:exec_commands
+      if command =~ '-command\s\+' . cmd
+        let use_exec = 1
+        break
+      endif
+    endfor
+  endif
 
   " execute the command.
   if use_exec
