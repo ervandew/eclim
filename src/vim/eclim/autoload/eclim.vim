@@ -105,7 +105,8 @@ function! eclim#ExecuteEclim (args)
         call eclim#util#EchoWarning("unable to connect to eclimd - " . error)
         let g:EclimdRunning = 0
       else
-        echoe error | echoe 'while executing command: ' . command
+        let error = error . "\n" . 'while executing command: ' . command
+        call eclim#util#EchoError(error)
       endif
     endif
     return 0
@@ -134,13 +135,14 @@ endfunction " }}}
 function! eclim#GetEclimCommand ()
   if !exists('g:EclimPath')
     if !exists('$ECLIPSE_HOME')
-      echoe 'ECLIPSE_HOME must be set.'
+      call eclim#util#EchoError('ECLIPSE_HOME must be set.')
       return
     endif
     let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim_*')
     if g:EclimHome == ''
-      echoe "eclim plugin not found in eclipse plugins directory for ECLIPSE_HOME = '" .
-        \ expand('$ECLIPSE_HOME') . "'"
+      call eclim#util#EchoError(
+        \ "eclim plugin not found in eclipse plugins directory for " .
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
       return
     endif
     let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
