@@ -51,43 +51,6 @@ function! eclim#xml#util#GetDtd ()
   return ''
 endfunction " }}}
 
-" GetRootElement() {{{
-" Get the root element name.
-function! eclim#xml#util#GetRootElement ()
-  let root = ''
-
-  " search for usage of root element (first occurence of <[a-zA-Z]).
-  let numlines = line("$")
-  let line = 1
-  while line <= numlines
-    if getline(line) =~ '<[a-zA-Z]'
-      let root = substitute(getline(line), s:element, '\1', '')
-      break
-    endif
-    let line = line + 1
-  endwhile
-
-  " no usage, so look for doctype definition of root element
-  if root == ''
-    let linenum = search('<!DOCTYPE\s\+\_.\{-}>', 'bcnw')
-    if linenum > 0
-      let line = ''
-      while getline(linenum) !~ '>'
-        let line = line . getline(linenum)
-        let linenum += 1
-      endwhile
-      let line = line . getline(linenum)
-
-      let root = substitute(line, '.*DOCTYPE\s\+\(.\{-}\)\s\+.*', '\1', '')
-      echom " root from doctype = " . root
-
-      return root != line ? root : ''
-    endif
-  endif
-
-  return root
-endfunction " }}}
-
 " GetParentElement() {{{
 " FIXME: Work in progress, probably not suitable for most situations.
 " Get the parent element name relative to the current cursor position.
