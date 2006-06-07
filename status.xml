@@ -355,11 +355,16 @@
           <ul>
             <li>
               *nix users:
-              <a href="upgrade/resources/1.2.0/upgrade.sh">upgrade.sh</a>
+              <a href="upgrade/resources/1.2.0/upgrade.sh">upgrade.sh</a><br/>
+              Be sure to either make the file executable<br/>
+              $ chmod 755 upgrade.sh<br/>
+              or run via sh<br/>
+              $ sh upgrade.sh
             </li>
             <li>
               Windows users:
-              <a href="upgrade/resources/1.2.0/upgrade.bat">upgrade.bat</a>
+              <a href="upgrade/resources/1.2.0/upgrade.bat">upgrade.bat</a><br/>
+              Run via a command prompt so that you can monitor the output.
             </li>
           </ul>
           <br/>
