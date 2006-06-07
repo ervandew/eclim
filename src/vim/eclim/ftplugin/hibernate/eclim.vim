@@ -2,7 +2,6 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
 "
 " License:
 "
@@ -22,15 +21,12 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
+runtime ftplugin/xml.vim
+runtime ftplugin/java/eclim_search.vim
+runtime ftplugin/java/eclim_util.vim
 
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
-
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+if g:EclimJavaSearchMapping
+  noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
+endif
 
 " vim:ft=vim:fdm=marker

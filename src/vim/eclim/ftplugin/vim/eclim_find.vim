@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
+"   see http://eclim.sourceforge.net/vim/vim/find.html
 "
 " License:
 "
@@ -22,15 +22,23 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
-
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
-
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+" Command Declarations {{{
+if !exists(":FindFunctionDef")
+  command -buffer -nargs=? -bang FindFunctionDef
+    \ :call eclim#vim#find#FindFunctionDef('<args>', '<bang>')
+endif
+if !exists(":FindFunctionRef")
+  command -buffer -nargs=? -bang FindFunctionRef
+    \ :call eclim#vim#find#FindFunctionRef('<args>', '<bang>')
+endif
+if !exists(":FindVariableDef")
+  command -buffer -nargs=? -bang FindVariableDef
+    \ :call eclim#vim#find#FindVariableDef('<args>', '<bang>')
+endif
+if !exists(":FindVariableRef")
+  command -buffer -nargs=? -bang FindVariableRef
+    \ :call eclim#vim#find#FindVariableRef('<args>', '<bang>')
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker

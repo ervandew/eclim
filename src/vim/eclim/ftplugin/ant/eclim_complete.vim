@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
+"   see http://eclim.sourceforge.net/vim/ant/complete.html
 "
 " License:
 "
@@ -22,15 +22,6 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
-
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
-
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+setlocal completefunc=eclim#ant#complete#CodeComplete
 
 " vim:ft=vim:fdm=marker

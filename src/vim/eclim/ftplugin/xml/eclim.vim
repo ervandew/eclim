@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
+"   see http://eclim.sourceforge.net/vim/xml/validate.html
 "
 " License:
 "
@@ -22,15 +22,24 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
+" Global Variables {{{
+if !exists("g:EclimXmlValidate")
+  let g:EclimXmlValidate = 1
+endif
+" }}}
 
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
+if g:EclimXmlValidate
+  augroup eclim_xml
+    autocmd!
+    autocmd BufWritePost *.xml call eclim#xml#Validate('', 1)
+  augroup END
+endif
 
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+" Command Declarations {{{
+if !exists(":Validate")
+  command -nargs=? -complete=file -buffer Validate
+    \ :call eclim#xml#Validate('<args>', 0)
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker

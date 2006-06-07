@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
+"  see http://eclim.sourceforge.net/vim/java/logging.html
 "
 " License:
 "
@@ -22,15 +22,18 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
+" don't continue if disabled.
+if exists("g:EclimLoggingDisabled") && g:EclimLoggingDisabled
+  finish
+endif
 
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
+inoreabbrev <buffer> log log<c-r>=eclim#java#logging#LoggingInit("log")<cr>
+inoreabbrev <buffer> logger logger<c-r>=eclim#java#logging#LoggingInit("logger")<cr>
 
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+" Command Declarations {{{
+if !exists(":JavaLoggingInit")
+  command -buffer JavaLoggingInit :call eclim#java#logging#LoggingInit()
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker

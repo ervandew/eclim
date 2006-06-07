@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   Plugin which bootstraps the eclim environment.
+"   see http://eclim.sourceforge.net/vim/java/complete.html
 "
 " License:
 "
@@ -22,15 +22,16 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled") | finish | endif
-
-" add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
-exec 'set runtimepath+=' . basedir . '/eclim'
-
-" need to be manually sourced
-runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
+" Command Declarations {{{
+if !exists(":JavaImport")
+  command -buffer JavaImport :call eclim#java#import#Import()
+endif
+if !exists(":JavaImportSort")
+  command -buffer JavaImportSort :call eclim#java#import#SortImports()
+endif
+if !exists(":JavaImportClean")
+  command -buffer JavaImportClean :call eclim#java#import#CleanImports()
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker
