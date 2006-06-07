@@ -348,10 +348,10 @@
           be deleted is provided
           <a href="upgrade/resources/1.2.0/vim_plugin_list.txt">here</a>.<br/>
           You may also use one of the following scripts to help automate the
-          process.  Just download the appropriate file to where you extracted
-          the eclim vim plugins and execute it.  Please review the script before
-          executing it so that you are aware of what it does.  Please report any
-          issues as well.
+          process.  Just download the appropriate file to the directory where
+          you extracted the eclim vim plugins and execute it.  Please review the
+          script before executing it so that you are aware of what it does.
+          Please report any issues as well.
           <ul>
             <li>
               *nix users:
@@ -413,6 +413,15 @@
         <a href="vim/java/classpath.html#buildfile">
           integration with ivy or maven dependency files
         </a>.
+      </action>
+      <action dev="ervandew" type="update" context="Java">
+        Updated <a href="vim/java/search.html#JavaSearch">
+          <strong>:JavaSearch</strong>
+        </a>
+        to provide sensible defaults if command ommits various arguments. Also
+        added support for supplying only a pattern to the
+        <strong>:JavaSearch</strong> command which will result in a search for
+        all types (classes, enums, interfaces) that match that pattern.
       </action>
 
       <action dev="ervandew" type="add" context="Vim">

@@ -18,14 +18,9 @@ eclim
     - on JavaSearch for implementors, exclude the javadoc matches.
 
   Enhancements
-    - Add a version of :JavaSearch that accepts just a classname:
-      :JavaSearch MyClass
-      - take a look at that searchcomplete plugin and perhaps add word
-        completion to :JavaSearch
+    - sometimes when warning and error are on the same line+col, the mark
+      shows error, but the cursor hold text shows the warning message.
     - Support switching workspaces?
-    - Make every command reference on cheetsheet a link to the full docs for
-      that command.  Try to make any reference to a command or global variable
-      a link to its full docs.
     - Use a running eclipse gui as the eclimd server?
     - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
       - test on windows.
@@ -68,7 +63,7 @@ eclim
           <duh>somevalue</duh>
         </blah>
     - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
-    - command to place or unplace sign at the current line
+    - command to place or un-place sign at the current line
 
 JTest support:
   - settings
@@ -98,7 +93,7 @@ Other
           {
           }
       }
-    - reformating class declaration doesn't perform proper indent of { when
+    - reformatting class declaration doesn't perform proper indent of { when
       put on a new line (and an = call does not fix it).
       public class Blah extends Foo {
       }

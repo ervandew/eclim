@@ -361,10 +361,7 @@ public class SearchCommand
       return IJavaSearchConstants.METHOD;
     }else if(TYPE_PACKAGE.equals(_type)){
       return IJavaSearchConstants.PACKAGE;
-    }else if(TYPE_TYPE.equals(_type)){
-      return IJavaSearchConstants.TYPE;
     }
-    throw new IllegalArgumentException(
-        Services.getMessage("java_search.type.required"));
+    return IJavaSearchConstants.TYPE;
   }
 }

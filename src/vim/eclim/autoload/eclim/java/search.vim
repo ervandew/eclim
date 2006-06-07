@@ -85,12 +85,12 @@ function! s:Search (command, ...)
     let index = index + 1
   endwhile
 
-  "if argline !~ '\(-p \|-x \|-t \)'
-  "  call eclim#util#EchoError("Missing arguments: (-p|-x|-t)")
-  "  return 0
-  "endif
-
   let in_project = eclim#project#IsCurrentFileInProject(0)
+
+  " check if just a pattern was supplied.
+  if argline =~ '^\s*\w'
+    let argline = '-p ' . argline
+  endif
 
   " element search
   if argline !~ '-p\>'

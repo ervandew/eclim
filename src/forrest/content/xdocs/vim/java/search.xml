@@ -59,7 +59,8 @@
           &nbsp;&nbsp;MyClass.someMethod*
         </li>
         <li>
-          type: The type of element to search for where possible types include
+          type (Default: type): The type of element to search for where possible
+          types include
           <ul>
             <li>annotation</li>
             <li>class</li>
@@ -75,7 +76,8 @@
           </ul>
         </li>
         <li>
-          context: The context to search under where possible context values
+          context (Default: declarations): The context to search under where
+          possible context values
           include
           <ul>
             <li>all - All occurances.</li>
@@ -85,7 +87,8 @@
           </ul>
         </li>
         <li>
-          scope: The scope of the search where possible context values include
+          scope (Default: all): The scope of the search where possible context
+          values include
           <ul>
             <li>all - Search the whole workspace.</li>
             <li>
@@ -96,6 +99,13 @@
           </ul>
         </li>
       </ul>
+      <p>
+        Eclim also provides a shortcut when issuing a pattern search for a type.
+        You may simply invoke <strong>:JavaSearch</strong> supplying only the
+        pattern.<br/><br/>
+        Ex.<br/>
+        <code>:JavaSearch SomeType</code><br/>
+      </p>
     </section>
     <section id="element">
       <title>Element Search</title>
@@ -167,8 +177,7 @@
         the -t option and will notify you of such if supplied.
       </p>
       <p>
-        When invoked the alternate search eclim will attempt its search as
-        follows:
+        When invoked, the alternate search will perform the following:
       </p>
       <ul>
         <li>
@@ -219,9 +228,9 @@
       <note>
         Alternate searching is bound to the performance of the file system and
         as such, the response time on Windows can be significantly slower than
-        Linux.  The biggest impact is when searching for 'implementors',
+        Linux.  This is most noticable when searching for 'implementors',
         'references', and 'all'.  The number of and depth of the directories in
-        your vim 'path' option can also impact performance.
+        your vim 'path' option may also impact performance.
       </note>
     </section>
     <section id="configuration">
