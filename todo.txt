@@ -1,0 +1,112 @@
+eclim
+  Installer
+    - help alleviate need for users to set ECLIPSE_HOME.
+      - inject path into one of the vim scripts and allow override with
+        ECLIPSE_HOME
+      - on Windows, just set the ECLIPSE_HOME for the user if not already set.
+
+  Bugs
+    - xml validate, if a doctype exists, but no dtd, then there is an error for
+      every element since they are "not declared" (ex. ant/cvs.xml).
+    - possible issues with eclipse and symlinks
+    - :JavaImpl comparison of method signatures when an argument has a nested type
+      org.formic.ant.PackageTask#setCompresssion  (:JavaDelegate on tar)
+    - :JavaImpl adding a varargs method results in added method using the
+      array version for the argument.
+      - check syntax for @see javadoc as well.
+
+    - on JavaSearch for implementors, exclude the javadoc matches.
+
+  Enhancements
+    - Add a version of :JavaSearch that accepts just a classname:
+      :JavaSearch MyClass
+      - take a look at that searchcomplete plugin and perhaps add word
+        completion to :JavaSearch
+    - Support switching workspaces?
+    - Make every command reference on cheetsheet a link to the full docs for
+      that command.  Try to make any reference to a command or global variable
+      a link to its full docs.
+    - Use a running eclipse gui as the eclimd server?
+    - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
+      - test on windows.
+    - integrate with jdk tools
+      http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage
+    - :JavaImpl support anonymous classes.
+    - add :DtdDoc command that opens the current xml files dtd and jumps to
+      the element under the cursor.
+    - Recover from deleted cached dtds without having to restart eclim.
+    - add :JavaBeanImpl for defining an implementation of a bean interface.
+    - automate switch statement generation for enums.
+      When switch(enum), create cases for all enum values.
+    - :JavaImpl, wrap long parameter lines.
+    - modify for loop abbreviations to increment the looping var if the current
+      one is taken.  (ii, jj, kk, ll, mm, nn, ...)
+    - auto add junit to classpath if not already defined.
+      - make sure it can deal with user wanting to upgrade to junit 4.
+      - may just have a preference indicating list of jars to auto add to
+        .classpath (j2ee, junit/testng, etc).
+    - create a groovy templating harness
+      - create utility class with methods such as
+        - createMethod (velocity_template, values)
+        - createField (velocity_template, values)
+        - createImport (velocity_template, values)
+        - createClass (velocity_template, values)
+        - createCode (velocity_template, values) - insert code at current
+          cursor position
+      - standard templates
+        - jakarta equals, hashCode, toString.
+        - logging
+    - push method to interface... create method in interface from method in
+      implementation.
+    - With :JavaRun, also have an input buffer that when saved pushes the text
+      to stdin of the running app, and then clears the buffer for more input.
+    - allow re-formatting of xml section that can take an xml file and break up
+      the elements into lines accordingly.
+        <blah><duh>somevalue</duh></blah>
+      becomes
+        <blah>
+          <duh>somevalue</duh>
+        </blah>
+    - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+    - command to place or unplace sign at the current line
+
+JTest support:
+  - settings
+    dict {
+      name
+      src dir
+      output dir
+      command
+    }
+
+  - {'name': 'junit', 'src_dir': , 'output_dir': , 'command': }
+  - {'name': 'cactus', 'src_dir': , 'output_dir': , 'command': }
+  - {'name': 'testng', 'src_dir': , 'output_dir': , 'command': }
+
+Other
+  - add ant-contrib to ant syntax file.
+  - fix java indent
+    - Indents after a annotation
+      @Override
+        public boolean equals (Object _other)
+    - Indents inner class declaration differently than outer
+      public class Blah
+        extends Foo
+      {
+        public class Bar
+            extends Baz
+          {
+          }
+      }
+    - reformating class declaration doesn't perform proper indent of { when
+      put on a new line (and an = call does not fix it).
+      public class Blah extends Foo {
+      }
+      public class Blah
+        extends Foo
+        {
+      }
+    - does not indent { on a new line when used for arrays
+      public static String[] STRINGS =
+      {"one", "two", "three"};
+    - anonymous inner class flaky at times.
