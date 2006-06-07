@@ -64,6 +64,21 @@
     </section>
     <section id="news">
       <title>News</title>
+      <section id="news_2006-xx-xx">
+        <title>2006-xx-xx</title>
+        <p>
+          Eclim 1.2.0 is now available.<br/>
+        </p>
+        <p>
+          To see a list of what's new / changed, be sure to take a look at the
+          <a href="changes.html#version_1.2.0">release notes</a>.
+        </p>
+        <warning>
+          The layout of eclim plugins within the vim runtimepath has changed.
+          Please read the <a href="changes.html#upgrade_1.2.0">details</a> in
+          the release notes and take the appropriate action prior to upgrading.
+        </warning>
+      </section>
       <section id="news_2006-05-07">
         <title>2006-05-07</title>
         <p>

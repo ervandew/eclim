@@ -335,9 +335,39 @@
       </action>
 
       <action dev="ervandew" type="update" context="Eclipse">
-        Eclim now works and depends on eclipse 3.2.
+        Eclim now works with and depends on eclipse 3.2.
       </action>
 
+      <action dev="ervandew" type="add" context="Eclim">
+        <anchor id="upgrade_1.2.0"/>
+        Re-organized eclim files within the vim runtime path.<br/>
+        Based on suggestion by Marc Weber.
+        <warning>
+          This change will require you to remove all the old eclim vim plugins
+          prior to installing the new set.  A comprehensive list of plugins to
+          be deleted is provided
+          <a href="upgrade/resources/1.2.0/vim_plugin_list.txt">here</a>.<br/>
+          You may also use one of the following scripts to help automate the
+          process.  Just download the appropriate file to where you extracted
+          the eclim vim plugins and execute it.  Please review the script before
+          executing it so that you are aware of what it does.  Please report any
+          issues as well.
+          <ul>
+            <li>
+              *nix users:
+              <a href="upgrade/resources/1.2.0/upgrade.sh">upgrade.sh</a>
+            </li>
+            <li>
+              Windows users:
+              <a href="upgrade/resources/1.2.0/upgrade.bat">upgrade.bat</a>
+            </li>
+          </ul>
+          <br/>
+          <br/>
+          I appologize for this inconvience, and hopefully this change will
+          help ease future upgrades.
+        </warning>
+      </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added
         <a href="vim/project.html#ProjectRefresh">
@@ -595,13 +625,13 @@
         Added g:EclimJavaSearchSingleResult setting to determine action to take
         when only a singe result is returned using the
         <a href="vim/java/search.html">java source code searching</a>.<br/>
-        Based on suggested by Ivo Danihelka.
+        Based on suggestion by Ivo Danihelka.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added g:EclimJavaDocSearchSingleResult setting to determine action to take
         when only a singe result is returned using the
         <a href="vim/java/doc.html">javadoc searching</a>.<br/>
-        Based on suggested by Ivo Danihelka.
+        Based on suggestion by Ivo Danihelka.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added <a href="server/settings.html">preference</a> to suppress
