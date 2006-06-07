@@ -109,11 +109,8 @@
       includes="**/*" perm="ugo+x"/>
 
     <!-- deploy vim files -->
-    <copy todir="${vim.files.home}/eclim">
-      <fileset dir="src/vim" includes="**/*" excludes="eclim.vim"/>
-    </copy>
-    <copy todir="${vim.files.home}/plugin">
-      <fileset dir="src/vim" includes="eclim.vim"/>
+    <copy todir="${vim.files.home}">
+      <fileset dir="src/vim" includes="**/*"/>
     </copy>
     <replace dir="${vim.files.home}"
       includes="**/*.vim" token="$${eclim.version}" value="${eclim.version}"/>
