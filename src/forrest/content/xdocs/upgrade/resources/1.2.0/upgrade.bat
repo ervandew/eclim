@@ -20,7 +20,9 @@ for %%i in (%FILES%) do if exist %%i (
   del %%i
 )
 
-echo Attempting to remove directory: autoload\eclim
-rmdir /s /q autoload\eclim
+if exist autoload\eclim\NUL (
+  echo Attempting to remove directory: autoload\eclim
+  rmdir /s /q autoload\eclim
+)
 
 echo Done.
