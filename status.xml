@@ -390,7 +390,7 @@
       </action>
       <action dev="ervandew" type="fix" context="Eclim">
         Using Ctrl-C on a prompt list (like when choosing a java class to
-        import), stopped working.  At some point durring the vim 7 developement
+        import), stopped working.  At some point during the vim 7 developement
         the vim behavor was modified.  Eclim, has been fixed to account for
         this.
       </action>
