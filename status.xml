@@ -367,7 +367,8 @@
               Run via a command prompt so that you can monitor the output.
             </li>
           </ul>
-          <br/>
+          After executing either of these scripts you may be left with one or
+          more empty directories which are then safe to delete.
           <br/>
           I appologize for this inconvience, and hopefully this change will
           help ease future upgrades.

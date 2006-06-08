@@ -17,38 +17,6 @@
 FILES="
   ./after/plugin/eclim_taglist.vim
   ./autoload/eclim.vim
-  ./autoload/eclim/ant/complete.vim
-  ./autoload/eclim/ant/doc.vim
-  ./autoload/eclim/ant/run.vim
-  ./autoload/eclim/ant/util.vim
-  ./autoload/eclim/ant/validate.vim
-  ./autoload/eclim/common.vim
-  ./autoload/eclim/eclipse.vim
-  ./autoload/eclim/html/util.vim
-  ./autoload/eclim/ivy.vim
-  ./autoload/eclim/java/bean.vim
-  ./autoload/eclim/java/complete.vim
-  ./autoload/eclim/java/constructor.vim
-  ./autoload/eclim/java/correct.vim
-  ./autoload/eclim/java/delegate.vim
-  ./autoload/eclim/java/doc.vim
-  ./autoload/eclim/java/impl.vim
-  ./autoload/eclim/java/import.vim
-  ./autoload/eclim/java/junit.vim
-  ./autoload/eclim/java/logging.vim
-  ./autoload/eclim/java/regex.vim
-  ./autoload/eclim/java/search.vim
-  ./autoload/eclim/java/util.vim
-  ./autoload/eclim/maven.vim
-  ./autoload/eclim/project.vim
-  ./autoload/eclim/signs.vim
-  ./autoload/eclim/util.vim
-  ./autoload/eclim/vim/doc.vim
-  ./autoload/eclim/vim/find.vim
-  ./autoload/eclim/vim/src.vim
-  ./autoload/eclim/web.vim
-  ./autoload/eclim/xml.vim
-  ./autoload/eclim/xml/util.vim
   ./ftdetect/eclim.vim
   ./ftplugin/ant/eclim_complete.vim
   ./ftplugin/ant/eclim_doc.vim
@@ -106,5 +74,10 @@ for i in $FILES; do
     rm $i
   fi
 done
+
+if [ -d 'autoload/eclim' ]; then
+  echo "Removing dir: autoload/eclim"
+  rm -R autoload/eclim
+fi
 
 echo "Done."
