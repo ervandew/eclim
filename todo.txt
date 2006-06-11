@@ -13,13 +13,30 @@ eclim
       org.formic.ant.PackageTask#setCompresssion  (:JavaDelegate on tar)
     - :JavaImpl adding a varargs method results in added method using the
       array version for the argument.
-      - check syntax for @see javadoc as well.
-
+      - check syntax for @see javadoc as well.. javadoc references for varargs
+        should be in the form, invoke(Object,Object...)
+    - :JavaImpl... method that takes a nested type as an arg, the outer type
+      is stripped
+      public Action[] getActions (Debt.State state);
+      public Action[] getActions (State state);
+    - sometimes when warning and error are on the same line+col, the mark
+      shows error, but the cursor hold text shows the warning message.
     - on JavaSearch for implementors, exclude the javadoc matches.
 
   Enhancements
-    - sometimes when warning and error are on the same line+col, the mark
-      shows error, but the cursor hold text shows the warning message.
+    - integrate w/ http://www.easyeclipse.org/site/home/
+    - add a project tree view (seperate window or tab)
+      Opening of files should support edit,split,tabs,etc.
+      :ProjectTree [project project ...] (show only current or supplied projects)
+      :ProjectsTree (show all projects)
+        - gui
+        |-  + doc
+        |-  + src
+        |-  + test
+        |-    build.xml
+        + tiger-desktop
+    - :JUnitImpl... generate @see line for each matching method (overloaded
+      methods).
     - Support switching workspaces?
     - Use a running eclipse gui as the eclimd server?
     - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
@@ -36,10 +53,6 @@ eclim
     - :JavaImpl, wrap long parameter lines.
     - modify for loop abbreviations to increment the looping var if the current
       one is taken.  (ii, jj, kk, ll, mm, nn, ...)
-    - auto add junit to classpath if not already defined.
-      - make sure it can deal with user wanting to upgrade to junit 4.
-      - may just have a preference indicating list of jars to auto add to
-        .classpath (j2ee, junit/testng, etc).
     - create a groovy templating harness
       - create utility class with methods such as
         - createMethod (velocity_template, values)
