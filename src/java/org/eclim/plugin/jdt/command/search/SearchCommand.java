@@ -129,7 +129,7 @@ public class SearchCommand
       if(file != null && offset != null && length != null){
         Position position = new Position(
             file, Integer.parseInt(offset), Integer.parseInt(length));
-        IJavaElement element = getElement(position);
+        IJavaElement element = getElement(project, position);
         if(element != null){
           // user requested a contextual search.
           if(context == -1){
@@ -208,13 +208,14 @@ public class SearchCommand
   /**
    * Gets a IJavaElement by its position.
    *
+   * @param project The project the file is in.
    * @param _position The element's position.
    * @return The element.
    */
-  protected IJavaElement getElement (Position _position)
+  protected IJavaElement getElement (String project, Position _position)
     throws Exception
   {
-    ICompilationUnit src = JavaUtils.getCompilationUnit(
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project,
         _position.getFilename());
     IJavaElement[] elements = src.codeSelect(
         _position.getOffset(), _position.getLength());
