@@ -11,10 +11,6 @@ eclim
     - possible issues with eclipse and symlinks
     - :JavaImpl comparison of method signatures when an argument has a nested type
       org.formic.ant.PackageTask#setCompresssion  (:JavaDelegate on tar)
-    - :JavaImpl adding a varargs method results in added method using the
-      array version for the argument.
-      - check syntax for @see javadoc as well.. javadoc references for varargs
-        should be in the form, invoke(Object,Object...)
     - :JavaImpl... method that takes a nested type as an arg, the outer type
       is stripped
       public Action[] getActions (Debt.State state);

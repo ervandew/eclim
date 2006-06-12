@@ -320,13 +320,13 @@ public class ImplCommand
     String typeName =
       JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
     values.put("superType", typeName);
-    values.put("params", getMethodParameters(_method));
+    values.put("params", TypeUtils.getMethodParameters(_method, true));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
     values.put("implements",
         _superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
     values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
-    String thrown = getMethodThrows(_method);
+    String thrown = TypeUtils.getMethodThrows(_method);
     if(thrown != null){
       values.put("throws", thrown);
     }
@@ -358,7 +358,7 @@ public class ImplCommand
     for(int ii = 0; ii < methods.length; ii++){
       IMethod method = methods[ii];
       if(isValidMethod(method)){
-        String signature = getMethodSignature(method);
+        String signature = TypeUtils.getMethodSignature(method);
         ImplMethod implMethod = new ImplMethod();
         implMethod.setSignature(signature);
         implMethod.setImplemented(
@@ -419,86 +419,6 @@ public class ImplCommand
           _type.getElementName());
     }
     return (IMethod)_baseMethods.get(signature);
-  }
-
-  /**
-   * Gets a String representation of the supplied method's signature.
-   *
-   * @param _method The method.
-   * @return The signature.
-   */
-  protected String getMethodSignature (IMethod _method)
-    throws Exception
-  {
-    int flags = _method.getFlags();
-    StringBuffer buffer = new StringBuffer();
-    if(_method.getDeclaringType().isInterface()){
-      buffer.append("public ");
-    }else{
-      buffer.append(
-          Flags.isPublic(_method.getFlags()) ? "public " : "protected ");
-    }
-    buffer.append(Flags.isAbstract(flags) ? "abstract " : "");
-    if(!_method.isConstructor()){
-      buffer.append(Signature.getSignatureSimpleName(_method.getReturnType()))
-      .append(' ');
-    }
-    buffer.append(_method.getElementName())
-      .append(" (")
-      .append(getMethodParameters(_method))
-      .append(')');
-
-    String[] exceptions = _method.getExceptionTypes();
-    if(exceptions.length > 0){
-      buffer.append("\n\tthrows ").append(getMethodThrows(_method));
-    }
-    return buffer.toString();
-  }
-
-  /**
-   * Gets the supplied method's parameter types and names in a comma separated
-   * string.
-   *
-   * @param _method The method.
-   * @return The parameters.
-   */
-  protected String getMethodParameters (IMethod _method)
-    throws Exception
-  {
-    StringBuffer buffer = new StringBuffer();
-    String[] paramTypes = _method.getParameterTypes();
-    String[] paramNames = _method.getParameterNames();
-    for(int jj = 0; jj < paramTypes.length; jj++){
-      if(jj != 0){
-        buffer.append(", ");
-      }
-      buffer.append(Signature.getSignatureSimpleName(paramTypes[jj]));
-      buffer.append(' ').append(paramNames[jj]);
-    }
-    return buffer.toString();
-  }
-
-  /**
-   * Gets the list of thrown exceptions as a comma separated string.
-   *
-   * @param _method The method.
-   * @return The thrown exceptions or null if none.
-   */
-  protected String getMethodThrows (IMethod _method)
-    throws Exception
-  {
-    String[] exceptions = _method.getExceptionTypes();
-    if(exceptions.length > 0){
-      StringBuffer buffer = new StringBuffer();
-      for(int ii = 0; ii < exceptions.length; ii++){
-        if(ii != 0){
-          buffer.append(", ");
-        }
-        buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
-      }
-      return buffer.toString();
-    }
-    return null;
   }
 
   /**

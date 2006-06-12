@@ -44,6 +44,8 @@ public class TypeUtils
 {
   private static final Logger logger = Logger.getLogger(TypeUtils.class);
 
+  private static final String VARARGS = "...";
+
   /**
    * Gets the type at the supplied offset, which will either be the primary type
    * of the comilation unit, or an inner class.
@@ -129,6 +131,40 @@ public class TypeUtils
   }
 
   /**
+   * Gets a String representation of the supplied method's signature.
+   *
+   * @param _method The method.
+   * @return The signature.
+   */
+  public static String getMethodSignature (IMethod _method)
+    throws Exception
+  {
+    int flags = _method.getFlags();
+    StringBuffer buffer = new StringBuffer();
+    if(_method.getDeclaringType().isInterface()){
+      buffer.append("public ");
+    }else{
+      buffer.append(
+          Flags.isPublic(_method.getFlags()) ? "public " : "protected ");
+    }
+    buffer.append(Flags.isAbstract(flags) ? "abstract " : "");
+    if(!_method.isConstructor()){
+      buffer.append(Signature.getSignatureSimpleName(_method.getReturnType()))
+      .append(' ');
+    }
+    buffer.append(_method.getElementName())
+      .append(" (")
+      .append(getMethodParameters(_method, true))
+      .append(')');
+
+    String[] exceptions = _method.getExceptionTypes();
+    if(exceptions.length > 0){
+      buffer.append("\n\tthrows ").append(getMethodThrows(_method));
+    }
+    return buffer.toString();
+  }
+
+  /**
    * Gets just enough of a methods signature that it can be distiguished from
    * the other methods.
    *
@@ -141,35 +177,84 @@ public class TypeUtils
     StringBuffer buffer = new StringBuffer();
     buffer.append(_method.getElementName())
       .append('(')
-      .append(getMethodParameterTypes(_method))
+      .append(getMethodParameters(_method, false))
       .append(')');
 
     return buffer.toString();
   }
 
   /**
-   * Gets the supplied method's parameter types in a comma separated string.
+   * Gets the supplied method's parameter types and optoinally names, in a comma
+   * separated string.
    *
    * @param _method The method.
-   * @return The parameters.
+   * @param _includeNames true to include the paramter names in the string.
+   * @return The parameters as a string.
    */
-  public static String getMethodParameterTypes (IMethod _method)
+  public static String getMethodParameters (IMethod _method, boolean _includeNames)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
     String[] paramTypes = _method.getParameterTypes();
-    for(int jj = 0; jj < paramTypes.length; jj++){
-      if(jj != 0){
-        buffer.append(',');
+    String[] paramNames = null;
+    if(_includeNames){
+      paramNames = _method.getParameterNames();
+    }
+    boolean varargs = false;
+    for(int ii = 0; ii < paramTypes.length; ii++){
+      if(ii != 0){
+        buffer.append(_includeNames ? ", " : ",");
       }
-      String type = Signature.getSignatureSimpleName(paramTypes[jj]);
+
+      String type = paramTypes[ii];
+
+      // check for varargs
+      if (ii == paramTypes.length - 1 &&
+          Signature.getTypeSignatureKind(type) == Signature.ARRAY_TYPE_SIGNATURE &&
+          Flags.isVarargs(_method.getFlags()))
+      {
+        type = Signature.getElementType(paramTypes[ii]);
+        varargs = true;
+      }
+
+      type = Signature.getSignatureSimpleName(type);
       int genericStart = type.indexOf("<");
       if(genericStart != -1){
         type = type.substring(0, genericStart);
       }
       buffer.append(type);
+      if(varargs){
+        buffer.append(VARARGS);
+      }
+
+      if(_includeNames){
+        buffer.append(' ').append(paramNames[ii]);
+      }
     }
     return buffer.toString();
+  }
+
+  /**
+   * Gets the list of thrown exceptions as a comma separated string.
+   *
+   * @param _method The method.
+   * @return The thrown exceptions or null if none.
+   */
+  public static String getMethodThrows (IMethod _method)
+    throws Exception
+  {
+    String[] exceptions = _method.getExceptionTypes();
+    if(exceptions.length > 0){
+      StringBuffer buffer = new StringBuffer();
+      for(int ii = 0; ii < exceptions.length; ii++){
+        if(ii != 0){
+          buffer.append(", ");
+        }
+        buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
+      }
+      return buffer.toString();
+    }
+    return null;
   }
 
   /**
