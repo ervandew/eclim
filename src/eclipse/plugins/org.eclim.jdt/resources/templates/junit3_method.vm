@@ -1,7 +1,9 @@
 /**
  * Tests '$methodName'.
  *
+#foreach ($methodSignature in $methodSignatures)
  * @see ${superType}#${methodSignature}
+#end
  */
 public void $name ()
 	throws Exception

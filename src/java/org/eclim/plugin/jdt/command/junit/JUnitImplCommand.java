@@ -194,7 +194,7 @@ public class JUnitImplCommand
         "test" + StringUtils.capitalize(_method.getElementName()));
     values.put("methodName", _method.getElementName());
     values.put("superType", _superType.getFullyQualifiedName());
-    values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
+    values.put("methodSignatures", getMethodSignatures(_superType, _method));
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
@@ -203,5 +203,26 @@ public class JUnitImplCommand
         _type.createMethod(method, _sibling, false, null));
 
     return position;
+  }
+
+  /**
+   * Constructs an array of method signatures.
+   *
+   * @param _type The type to grab the methods from.
+   * @param _method The method or one of the overloaded methods to construct an
+   * array from.
+   * @return Array of method signatures.
+   */
+  protected String[] getMethodSignatures (IType _type, IMethod _method)
+    throws Exception
+  {
+    ArrayList signatures = new ArrayList();
+    IMethod[] methods = _type.getMethods();
+    for (int ii = 0; ii < methods.length; ii++){
+      if(methods[ii].getElementName().equals(_method.getElementName())){
+        signatures.add(TypeUtils.getMinimalMethodSignature(methods[ii]));
+      }
+    }
+    return (String[])signatures.toArray(new String[signatures.size()]);
   }
 }

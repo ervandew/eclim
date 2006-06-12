@@ -31,8 +31,6 @@ eclim
         |-  + test
         |-    build.xml
         + tiger-desktop
-    - :JUnitImpl... generate @see line for each matching method (overloaded
-      methods).
     - Support switching workspaces?
     - Use a running eclipse gui as the eclimd server?
     - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
