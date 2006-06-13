@@ -161,8 +161,8 @@ public class DelegateCommand
     String returnType = Signature.getSignatureSimpleName(
         _method.getReturnType());
     values.put("return", returnType);
-    values.put("params", getMethodParameters(_method));
-    String thrown = getMethodThrows(_method);
+    values.put("params", TypeUtils.getMethodParameters(_method, true));
+    String thrown = TypeUtils.getMethodThrows(_method);
     if(thrown != null){
       values.put("throws", thrown);
     }
