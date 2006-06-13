@@ -11,10 +11,6 @@ eclim
     - possible issues with eclipse and symlinks
     - :JavaImpl comparison of method signatures when an argument has a nested type
       org.formic.ant.PackageTask#setCompresssion  (:JavaDelegate on tar)
-    - :JavaImpl... method that takes a nested type as an arg, the outer type
-      is stripped
-      public Action[] getActions (Debt.State state);
-      public Action[] getActions (State state);
     - sometimes when warning and error are on the same line+col, the mark
       shows error, but the cursor hold text shows the warning message.
     - on JavaSearch for implementors, exclude the javadoc matches.
@@ -91,6 +87,13 @@ Other
     - Indents after a annotation
       @Override
         public boolean equals (Object _other)
+    - doesn't handle indentation of enums
+      public enum MyEnum
+      {
+        FIRST,
+          SECOND,
+          THIRD
+      }
     - Indents inner class declaration differently than outer
       public class Blah
         extends Foo

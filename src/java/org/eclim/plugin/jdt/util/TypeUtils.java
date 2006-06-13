@@ -45,6 +45,7 @@ public class TypeUtils
   private static final Logger logger = Logger.getLogger(TypeUtils.class);
 
   private static final String VARARGS = "...";
+  private static final String TYPE_REGEX = "\\bQ(.*?);";
 
   /**
    * Gets the type at the supplied offset, which will either be the primary type
@@ -165,7 +166,7 @@ public class TypeUtils
   }
 
   /**
-   * Gets just enough of a methods signature that it can be distiguished from
+   * Gets just enough of a method's signature that it can be distiguished from
    * the other methods.
    *
    * @param _method The method.
@@ -217,7 +218,13 @@ public class TypeUtils
         varargs = true;
       }
 
-      type = Signature.getSignatureSimpleName(type);
+      // check for unresolved types first.
+      if(type.startsWith("Q")){
+        type = type.replaceAll(TYPE_REGEX, "$1");
+      }else{
+        type = Signature.getSignatureSimpleName(type);
+      }
+
       int genericStart = type.indexOf("<");
       if(genericStart != -1){
         type = type.substring(0, genericStart);
