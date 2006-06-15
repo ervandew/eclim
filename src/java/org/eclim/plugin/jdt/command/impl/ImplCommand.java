@@ -317,9 +317,8 @@ public class ImplCommand
       values.put("modifier",
           Flags.isPublic(_method.getFlags()) ? "public" : "protected");
     }
-    String typeName =
-      JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
-    values.put("superType", typeName);
+    values.put("superType",
+      JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType));
     values.put("params", TypeUtils.getMethodParameters(_method, true));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
