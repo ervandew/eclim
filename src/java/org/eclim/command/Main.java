@@ -15,8 +15,6 @@
  */
 package org.eclim.command;
 
-import com.thoughtworks.xstream.XStream;
-
 import org.apache.commons.cli.ParseException;
 
 import org.eclim.Services;
@@ -70,20 +68,16 @@ public class Main
         throw new IllegalArgumentException(
             Services.getMessage("command.required"));
       }
-      Command command = (Command)Services.getService(commandName, Command.class);
+      Command command = (Command)
+        Services.getService(commandName, Command.class);
 
       Object result = command.execute(commandLine);
 
-      if(result instanceof String ||
-         result instanceof Integer ||
-         result instanceof Boolean)
-      {
-        System.out.println(result);
-      }else if(result instanceof Throwable){
+      if(result instanceof Throwable){
         ((Throwable)result).printStackTrace();
         System.exit(1);
-      }else if(result != null){
-        System.out.println(new XStream().toXML(result));
+      }else{
+        System.out.println(result);
       }
     }catch(Exception e){
       e.printStackTrace();
