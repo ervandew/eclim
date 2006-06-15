@@ -100,19 +100,23 @@ public class PropertiesCommand
           // index setter
           if(array && indexed){
             sibling = getSibling(type, fields, field, sibling);
-            sibling = insertSetter(position, type, sibling, field, methods, true);
+            sibling = insertSetter(
+                src, position, type, sibling, field, methods, true);
           }
           // setter
           sibling = getSibling(type, fields, field, sibling);
-          sibling = insertSetter(position, type, sibling, field, methods, false);
+          sibling = insertSetter(
+              src, position, type, sibling, field, methods, false);
           // index getter
           if(array && indexed){
             sibling = getSibling(type, fields, field, sibling);
-            sibling = insertGetter(position, type, sibling, field, methods, true);
+            sibling = insertGetter(
+                src, position, type, sibling, field, methods, true);
           }
           // getter
           sibling = getSibling(type, fields, field, sibling);
-          sibling = insertGetter(position, type, sibling, field, methods, false);
+          sibling = insertGetter(
+              src, position, type, sibling, field, methods, false);
         }
       }
 
@@ -125,6 +129,7 @@ public class PropertiesCommand
   /**
    * Insert a getter for the supplied property.
    *
+   * @param _src The src file.
    * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
@@ -134,6 +139,7 @@ public class PropertiesCommand
    * @return The method element.
    */
   protected IJavaElement insertGetter (
+      ICompilationUnit _src,
       Position _position,
       IType _type,
       IJavaElement _sibling,
@@ -167,7 +173,7 @@ public class PropertiesCommand
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
 
       position = insertMethod(
-          _position, _type, method, _sibling, GETTER_TEMPLATE, values);
+          _src, _position, _type, method, _sibling, GETTER_TEMPLATE, values);
     }
     if(method.exists()){
       position = TypeUtils.getPosition(_type, method);
@@ -179,6 +185,7 @@ public class PropertiesCommand
   /**
    * Insert a setter for the supplied property.
    *
+   * @param _src The src file.
    * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
@@ -188,6 +195,7 @@ public class PropertiesCommand
    * @return The method element.
    */
   protected IJavaElement insertSetter (
+      ICompilationUnit _src,
       Position _position,
       IType _type,
       IJavaElement _sibling,
@@ -216,7 +224,7 @@ public class PropertiesCommand
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
 
       position = insertMethod(
-          _position, _type, method, _sibling, SETTER_TEMPLATE, values);
+          _src, _position, _type, method, _sibling, SETTER_TEMPLATE, values);
     }
     if(method.exists()){
       position = TypeUtils.getPosition(_type, method);
@@ -228,6 +236,7 @@ public class PropertiesCommand
   /**
    * Inserts a method using the supplied values.
    *
+   * @param _src The src file.
    * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _method The method to be created.
@@ -237,6 +246,7 @@ public class PropertiesCommand
    * @return The position the method was insert into.
    */
   protected Position insertMethod (
+      ICompilationUnit _src,
       Position _position,
       IType _type,
       IMethod _method,
@@ -250,7 +260,8 @@ public class PropertiesCommand
 
     IType superType = TypeUtils.getSuperTypeContainingMethod(_type, _method);
     if(superType != null){
-      _values.put("superType", superType.getFullyQualifiedName());
+      _values.put("superType",
+        JavaUtils.getCompilationUnitRelativeTypeName(_src, superType));
       _values.put("overrides",
           superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
       _values.put("implements",
