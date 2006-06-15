@@ -28,6 +28,8 @@ import org.eclim.preference.Preferences;
 public abstract class AbstractCommand
   implements Command
 {
+  private static final String VIM_FILTER = "vim";
+
   private Map filters;
   private Preferences preferences;
 
@@ -65,11 +67,13 @@ public abstract class AbstractCommand
     throws Exception
   {
     String filterName = _commandLine.getValue(Options.FILTER_OPTION);
-    if(filterName != null){
-      OutputFilter filter = getFilter(filterName);
-      if(filter != null){
-        return filter.filter(_commandLine, _result);
-      }
+    if(filterName == null){
+      filterName = VIM_FILTER;
+    }
+
+    OutputFilter filter = getFilter(filterName);
+    if(filter != null){
+      return filter.filter(_commandLine, _result);
     }
     return _result;
   }
