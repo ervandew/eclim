@@ -31,6 +31,5 @@ exec 'set runtimepath+=' . basedir . '/eclim'
 
 " need to be manually sourced
 runtime! eclim/plugin/*.vim
-runtime! eclim/after/plugin/*.vim
 
 " vim:ft=vim:fdm=marker
