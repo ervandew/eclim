@@ -4,6 +4,9 @@ eclim
       - inject path into one of the vim scripts and allow override with
         ECLIPSE_HOME
       - on Windows, just set the ECLIPSE_HOME for the user if not already set.
+    - when deciding where to install vim plugins, run vim to determine its
+      runtime path dirs and give the user the option to install into one that
+      they have write permissions to.
 
   Bugs
     - xml validate, if a doctype exists, but no dtd, then there is an error for
@@ -16,6 +19,13 @@ eclim
     - on JavaSearch for implementors, exclude the javadoc matches.
 
   Enhancements
+    - Work on install docs.
+      - clarify that there are 2 files to download.
+      - remove some uncessary info now that vim 7 is final.
+    - For commands that spawn temp buffer, assign a b:currentfile var to the
+      file that opened the buffer so that other commands can still be invoked
+      by changing the get file name function to examine b:currentfile.
+      - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
     - integrate w/ http://www.easyeclipse.org/site/home/
     - add a project tree view (seperate window or tab)
       Opening of files should support edit,split,tabs,etc.
