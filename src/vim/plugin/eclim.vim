@@ -26,7 +26,7 @@ if v:version < 700 || exists("g:EclimDisabled") | finish | endif
 
 " add eclim dir to runtime path.
 let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(fnamemodify(file, ':p:h'), ':h')
+let basedir = fnamemodify(file, ':p:h:h')
 exec 'set runtimepath+=' . basedir . '/eclim'
 
 " need to be manually sourced
