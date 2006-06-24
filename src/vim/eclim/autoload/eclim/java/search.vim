@@ -191,7 +191,7 @@ function! s:SearchAlternate (argline, element)
     " narrow down to, hopefully, a distribution path for a narrower search.
     let response = eclim#util#PromptList(
       \ "Multiple type matches. Please choose the relevant file.",
-      \ files, "Statement")
+      \ files, g:EclimInfoHighlight)
     if response == -1
       return
     endif

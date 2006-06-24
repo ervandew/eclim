@@ -70,7 +70,7 @@ function! eclim#java#import#Import ()
 
   " prompt the user to choose the class to import.
   let response = eclim#util#PromptList
-    \ ("Choose the class to import", results, "Statement")
+    \ ("Choose the class to import", results, g:EclimInfoHighlight)
   if response == -1
     return
   endif
