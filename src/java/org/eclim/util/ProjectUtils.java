@@ -81,4 +81,19 @@ public class ProjectUtils
 
     return project;
   }
+
+  /**
+   * Closes the supplied project and suppresses any exceptions thrown.
+   *
+   * @param _project The project.
+   */
+  public static void closeQuietly (IProject _project)
+  {
+    try{
+      if(_project != null){
+        _project.close(null);
+      }
+    }catch(Exception ignore){
+    }
+  }
 }
