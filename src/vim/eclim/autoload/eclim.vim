@@ -66,6 +66,10 @@ function! eclim#ExecuteEclim (args)
   let args = substitute(args, '*', '%2A', 'g')
   let args = substitute(args, '\$', '%24', 'g')
   let command = eclim#GetEclimCommand() . ' ' . args
+  if string(command) == '0'
+    return 0
+  endif
+  let command = command . ' ' . args
 
   call eclim#util#EchoDebug("eclim: executing (Ctrl-C to cancel)...")
   call eclim#util#EchoTrace("command: " . command)
@@ -142,10 +146,10 @@ function! eclim#GetEclimCommand ()
     if g:EclimHome == ''
       call eclim#util#EchoError(
         \ "eclim plugin not found in eclipse plugins directory for " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
       return
     endif
-    let g:EclimPath = g:EclimHome . '/bin/' . g:EclimCommand
+    let g:EclimPath = substitute(g:EclimHome, '\', '/', 'g') . '/bin/' . g:EclimCommand
   endif
   return g:EclimPath
 endfunction " }}}
