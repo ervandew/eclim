@@ -185,6 +185,26 @@ function! s:SaveSettings ()
   "endif
 endfunction " }}}
 
+" GetCurrentProjectFile() {{{
+" Gets the path to the project file for the project that the current file is in.
+function! eclim#project#GetCurrentProjectFile ()
+  let dir = fnamemodify(expand('%:p'), ':h')
+  let dir = escape(dir, ' ')
+
+  let projectFile = findfile('.project', dir . ';')
+  while 1
+    if filereadable(projectFile)
+      return fnamemodify(projectFile, ':p')
+    endif
+    if projectName == '' && dir != getcwd()
+      let dir = getcwd()
+    else
+      break
+    endif
+  endwhile
+  return ''
+endfunction " }}}
+
 " GetCurrentProjectName() {{{
 " Gets the project name that the current file is in.
 function! eclim#project#GetCurrentProjectName ()
@@ -192,32 +212,31 @@ function! eclim#project#GetCurrentProjectName ()
   let dir = fnamemodify(expand('%:p'), ':h')
   let dir = escape(dir, ' ')
 
-  let projectFile = findfile(".project", dir . ";")
-  while 1
-    if filereadable(projectFile)
-      let cmd = winrestcmd()
+  let projectFile = eclim#project#GetCurrentProjectFile()
+  if projectFile != ''
+    let cmd = winrestcmd()
 
-      silent exec 'sview ' . escape(projectFile, ' ')
-      setlocal noswapfile
-      setlocal bufhidden=delete
+    silent exec 'sview ' . escape(projectFile, ' ')
+    setlocal noswapfile
+    setlocal bufhidden=delete
 
-      let line = search('<name\s*>', 'wn')
-      if line != 0
-        let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
-      endif
-      silent close
-
-      silent exec cmd
-      redraw
+    let line = search('<name\s*>', 'wn')
+    if line != 0
+      let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
     endif
-    if projectName == "" && dir != getcwd()
-      let dir = getcwd()
-    else
-      break
-    endif
-  endwhile
+    silent close
+
+    silent exec cmd
+    redraw
+  endif
 
   return projectName
+endfunction " }}}
+
+" GetCurrentProjectRoot() {{{
+" Gets the project root dir for the project that the current file is in.
+function! eclim#project#GetCurrentProjectRoot ()
+  return fnamemodify(eclim#project#GetCurrentProjectFile(), ':h')
 endfunction " }}}
 
 " GetProjectNames() {{{
@@ -263,10 +282,10 @@ endfunction " }}}
 " user if the file is not in a project (defaults to 1, to display the
 " message).
 function! eclim#project#IsCurrentFileInProject (...)
-  if eclim#project#GetCurrentProjectName() == ""
+  if eclim#project#GetCurrentProjectName() == ''
     if a:0 == 0 || a:1
-      call eclim#util#EchoError("Unable to determine project. " .
-        \ "Check that the current file is in a valid project.")
+      call eclim#util#EchoError('Unable to determine project. ' .
+        \ 'Check that the current file is in a valid project.')
     endif
     return 0
   endif
