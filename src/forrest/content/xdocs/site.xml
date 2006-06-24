@@ -149,11 +149,11 @@ See http://forrest.apache.org/docs/linking.html for more info
     <tracker href="http://sourceforge.net/tracker/?group_id=145869"/>
     <license href="http://apache.org/licenses/LICENSE-2.0.html"/>
 
+    <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
     <vim href="http://www.vim.org"/>
-    <vim_win href="ftp://ftp.vim.org/pub/vim/pc"/>
-    <vim_win_latest href="ftp://ftp.vim.org/pub/vim/pc/gvim70.exe"/>
+    <vim_download href="http://www.vim.org/download.php"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
     <nailgun href="http://www.martiansoftware.com/nailgun/"/>
 
