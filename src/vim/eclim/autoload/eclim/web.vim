@@ -44,11 +44,7 @@ endif
 function! eclim#web#OpenUrl (url)
   let url = a:url
   if url == ''
-    let line = getline('.')
-    let url = substitute(line,
-      \ "\\(.*[[:space:]\"'(\\[{>]\\|^\\)\\(.*\\%" .
-      \ col('.') . "c.\\{-}\\)\\([[:space:]\"')\\]}<].*\\|$\\)",
-      \ '\2', '')
+    let url = eclim#util#GrabUri()
   endif
 
   " url must at least have a . in the string with a word char on each side to

@@ -229,6 +229,18 @@ function! eclim#util#GoToBufferWindow (bufname)
   endif
 endfunction " }}}
 
+" GrabUri() {{{
+" Grabs an uri from the file's current cursor position.
+function! eclim#util#GrabUri ()
+  let line = getline('.')
+  let uri = substitute(line,
+    \ "\\(.*[[:space:]\"'(\\[{>]\\|^\\)\\(.*\\%" .
+    \ col('.') . "c.\\{-}\\)\\([[:space:]\"')\\]}<].*\\|$\\)",
+    \ '\2', '')
+
+  return uri
+endfunction " }}}
+
 " ListContains(list, element) {{{
 " Returns 1 if the supplied list contains the specified element, 0 otherwise.
 " To determine element equality both '==' and 'is' are tried as well as
