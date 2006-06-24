@@ -49,14 +49,21 @@ function! eclim#project#ProjectCreate (args)
     let command = command . s:command_create_depends
     let command = substitute(command, '<depends>', depends, '')
   endif
-  call eclim#util#Echo(eclim#ExecuteEclim(command))
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
 endfunction " }}}
 
 " ProjectDelete(name) {{{
 " Deletes a project with the supplied name.
 function! eclim#project#ProjectDelete (name)
   let command = substitute(s:command_delete, '<project>', a:name, '')
-  call eclim#util#Echo(eclim#ExecuteEclim(command))
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
 endfunction " }}}
 
 " ProjectRefresh(args) {{{
@@ -96,22 +103,31 @@ endfunction " }}}
 " Open the requested project.
 function! eclim#project#ProjectOpen (name)
   let command = substitute(s:command_open, '<project>', a:name, '')
-  call eclim#util#Echo(eclim#ExecuteEclim(command))
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
 endfunction " }}}
 
 " ProjectClose(name) {{{
 " Close the requested project.
 function! eclim#project#ProjectClose (name)
   let command = substitute(s:command_close, '<project>', a:name, '')
-  call eclim#util#Echo(eclim#ExecuteEclim(command))
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
 endfunction " }}}
 
 " ProjectList() {{{
 " Lists all the projects currently available in eclim.
 function! eclim#project#ProjectList ()
   let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
-  if len(projects) == 0 || (len(projects) == 1 && projects[0] == '0')
+  if len(projects) == 0
     call eclim#util#Echo("No projects.")
+  endif
+  if len(projects) == 1 && projects[0] == '0'
+    return
   endif
   exec "echohl " . g:EclimInfoHighlight
   redraw
@@ -196,7 +212,7 @@ function! eclim#project#GetCurrentProjectFile ()
     if filereadable(projectFile)
       return fnamemodify(projectFile, ':p')
     endif
-    if projectName == '' && dir != getcwd()
+    if projectFile == '' && dir != getcwd()
       let dir = getcwd()
     else
       break
@@ -239,10 +255,28 @@ function! eclim#project#GetCurrentProjectRoot ()
   return fnamemodify(eclim#project#GetCurrentProjectFile(), ':h')
 endfunction " }}}
 
+" GetProjectDirs() {{{
+" Gets list of all project root directories.
+function! eclim#project#GetProjectDirs ()
+  let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
+  if len(projects) == 1 && projects[0] == '0'
+    return []
+  endif
+
+  call map(projects,
+    \ "substitute(v:val, '.\\{-}\\s\\+-\\s.\\{-}\\s\\+-\\s\\(.*\\)', '\\1', '')")
+
+  return projects
+endfunction " }}}
+
 " GetProjectNames() {{{
 " Gets list of all project names.
 function! eclim#project#GetProjectNames ()
   let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
+  if len(projects) == 1 && projects[0] == '0'
+    return []
+  endif
+
   call map(projects, "substitute(v:val, '\\(.\\{-}\\)\\s\\+-\\s\\+.*', '\\1', '')")
 
   return projects

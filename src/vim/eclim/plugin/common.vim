@@ -43,6 +43,11 @@ endif
 if !exists(":SwapTypedArguments")
   command SwapTypedArguments :call eclim#common#SwapTypedArguments()
 endif
+if !exists(":LocateFileSplit")
+  command -nargs=? LocateFileEdit :call eclim#common#LocateFile('edit', '<args>')
+  command -nargs=? LocateFileSplit :call eclim#common#LocateFile('split', '<args>')
+  command -nargs=? LocateFileTab :call eclim#common#LocateFile('tabnew', '<args>')
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

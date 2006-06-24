@@ -58,7 +58,82 @@ function! eclim#common#DiffLastSaved ()
   endif
 endfunction " }}}
 
+" FindInPath(file, path) {{{
+" Find a file in the supplied path returning a list of results.
+function! eclim#common#FindInPath (file, path)
+  let results = findfile(a:file, a:path . '/**', -1)
+  call map(results, "fnamemodify(v:val, ':p')")
+  return results
+endfunction " }}}
+
+" LocateFile(command,file) {{{
+" Locates a file using the following steps:
+" 1) First if current file is in a project, search that project.
+" 2) No results from #1, then search relative to current file.
+" 3) No results from #2, then search other projects.
+function eclim#common#LocateFile (command, file)
+  let results = []
+  let file = a:file
+  if file == ''
+    let file = eclim#util#GrabUri()
+
+    " if grabbing a relative url, remove any anchor info or query parameters
+    let file = substitute(file, '[#?].*', '', '')
+  endif
+
+  " Step 1: Find in current project.
+  if eclim#project#IsCurrentFileInProject(0)
+    let projectDir = eclim#project#GetCurrentProjectRoot()
+    call eclim#util#Echo('Searching current project: ' . projectDir)
+    let results = eclim#common#FindInPath(file, projectDir)
+  endif
+
+  " Step 2: Find relative to current file.
+  if len(results) == 0
+    let dir = expand('%:p:h')
+    call eclim#util#Echo('Searching current file path: ' . dir)
+    let results = eclim#common#FindInPath(file, dir)
+  endif
+
+  " Step 3: Find in other projects.
+  if len(results) == 0
+    let currentProjectDir = eclim#project#GetCurrentProjectRoot()
+    let projectDirs = eclim#project#GetProjectDirs()
+    for dir in projectDirs
+      if dir != currentProjectDir
+        call eclim#util#Echo('Searching project: ' . dir)
+        let results += eclim#common#FindInPath(file, dir)
+      endif
+    endfor
+  endif
+
+  let result = ''
+
+  " One result.
+  if len(results) == 1
+    let result = results[0]
+
+  " More than one result.
+  elseif len(results) > 1
+    let response = eclim#util#PromptList
+      \ ("Multiple results, choose the file to open", results, g:EclimInfoHighlight)
+    if response == -1
+      return
+    endif
+
+    let result = results[response]
+
+  " No results
+  else
+    call eclim#util#Echo('Unable to locate file named "' . file . '".')
+    return
+  endif
+
+  silent exec a:command . ' ' . result
+endfunction " }}}
+
 " OpenRelative(command,arg) {{{
+" Open one or more relative files.
 function eclim#common#OpenRelative (command, arg)
   let dir = expand('%:p:h')
   let files = split(a:arg, '[^\\]\zs\s')
@@ -68,6 +143,7 @@ function eclim#common#OpenRelative (command, arg)
 endfunction " }}}
 
 " Split(arg) {{{
+" Execute a :split on one or more files.
 function eclim#common#Split (arg)
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files

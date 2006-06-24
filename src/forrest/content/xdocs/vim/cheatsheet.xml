@@ -287,6 +287,24 @@
     <p><strong>Misc. Commands</strong></p>
     <ul>
       <li>
+        <a href="index.html#LocateFileEdit">
+          <strong>:LocateFileEdit</strong>
+        </a> [file] -
+        Locates a relative file and opens it via :edit.
+      </li>
+      <li>
+        <a href="index.html#LocateFileSplit">
+          <strong>:LocateFileSplit</strong>
+        </a> [file] -
+        Locates a relative file and opens it via :split.
+      </li>
+      <li>
+        <a href="index.html#LocateFileTab">
+          <strong>:LocateFileTab</strong>
+        </a> [file] -
+        Locates a relative file and opens it via :tabnew.
+      </li>
+      <li>
         <a href="index.html#Split"><strong>:Split</strong></a> -
         Behaves like the 'split' command, but allows multiple files to be
         supplied.

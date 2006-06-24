@@ -103,5 +103,22 @@
         Automatic validation (w/ visual marking of errors and warnings).
       </li>
     </ul>
+
+    <p>
+      <strong>Common Vim Functionality</strong>
+    </p>
+    <ul>
+      <li>
+        :Split supporting multiple files.
+      </li>
+      <li>
+        :SplitRelative / :EditRelative for opening a file relative to the
+        current one.
+      </li>
+      <li>
+        Commands to locate a project, workspace, or current file relative file
+        and open it (split, edit, or tabnew).
+      </li>
+    </ul>
   </body>
 </document>

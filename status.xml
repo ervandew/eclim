@@ -428,8 +428,12 @@
       <action dev="ervandew" type="add" context="Vim">
         Added
         <strong><a href="vim/index.html#Split">:Split</a></strong>,
-        <strong><a href="vim/index.html#SplitRelative">:SplitRelative</a></strong>, and
-        <strong><a href="vim/index.html#EditRelative">:EditRelative</a></strong>.
+        <strong><a href="vim/index.html#SplitRelative">:SplitRelative</a></strong>,
+        <strong><a href="vim/index.html#EditRelative">:EditRelative</a></strong>,
+        <strong><a href="vim/index.html#LocateFileEdit">:LocateFileEdit</a></strong>,
+        <strong><a href="vim/index.html#LocateFileSplit">:LocateFileSplit</a></strong>,
+        and
+        <strong><a href="vim/index.html#LocateFileTab">:LocateFileTab</a></strong>,
       </action>
     </release>
 
