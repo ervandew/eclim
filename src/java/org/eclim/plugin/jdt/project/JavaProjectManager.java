@@ -65,6 +65,7 @@ import org.eclim.util.file.FileOffsets;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -281,22 +282,31 @@ public class JavaProjectManager
     // create the project if it doesn't already exist.
     IProject project = ProjectUtils.getProject(_name, true);
     if(!project.exists()){
+      IWorkspace workspace = ResourcesPlugin.getWorkspace();
       IPath location = new Path(_folder);
-      IProjectDescription description =
-        ResourcesPlugin.getWorkspace().newProjectDescription(_name);
+
       // location must not overlap the workspace.
+      IPath workspaceLocation = workspace.getRoot().getRawLocation();
+      if(location.toOSString().startsWith(workspaceLocation.toOSString())){
+        location = null;
+        /*location = location.removeFirstSegments(
+            location.matchingFirstSegments(workspaceLocation));*/
+      }
+
+      IProjectDescription description = workspace.newProjectDescription(_name);
       description.setLocation(location);
       description.setNatureIds(new String[]{JavaCore.NATURE_ID});
 
       project.create(description, null/*monitor*/);
-    }
 
-    // check if the existing project is located elsewhere.
-    File path = project.getLocation().toFile();
-    if(!path.equals(new File(_folder))){
-      throw new IllegalArgumentException(Services.getMessage(
-          "project.name.exists",
-          new Object[]{_name, path.toString()}));
+    /*}else{
+      // check if the existing project is located elsewhere.
+      File path = project.getLocation().toFile();
+      if(!path.equals(new File(_folder))){
+        throw new IllegalArgumentException(Services.getMessage(
+            "project.name.exists",
+            new Object[]{_name, path.toString()}));
+      }*/
     }
 
     return project;
