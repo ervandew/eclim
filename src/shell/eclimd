@@ -30,4 +30,4 @@ ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
 
 $ECLIPSE_HOME/eclipse -debug -consolelog -nosplash -clean -refresh \
   -application org.eclim.application \
-  -vmargs -Declim.home="$ECLIM_HOME"
+  -vmargs -Declim.home="$ECLIM_HOME" $@
