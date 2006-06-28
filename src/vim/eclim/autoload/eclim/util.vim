@@ -91,6 +91,15 @@ function! eclim#util#Echo (message)
   endif
 endfunction " }}}
 
+" ExecWithoutAutocmds(cmd) {{{
+" Execute a command after disabling all autocommands (borrowed from taglist.vim)
+function! eclim#util#ExecWithoutAutocmds (cmd)
+  let save_opt = &eventignore
+  set eventignore=all
+  exec a:cmd
+  let &eventignore = save_opt
+endfunction " }}}
+
 " FillTemplate(prefix, suffix) {{{
 " Used as part of a vim normal map to allow the user to fill in values for
 " variables in a newly added template of code.
