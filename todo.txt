@@ -12,32 +12,17 @@ eclim
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
     - possible issues with eclipse and symlinks
-    - :JavaImpl comparison of method signatures when an argument has a nested type
-      org.formic.ant.PackageTask#setCompresssion  (:JavaDelegate on tar)
     - sometimes when warning and error are on the same line+col, the mark
       shows error, but the cursor hold text shows the warning message.
     - on JavaSearch for implementors, exclude the javadoc matches.
 
   Enhancements
-    - Work on install docs.
-      - clarify that there are 2 files to download.
-      - remove some uncessary info now that vim 7 is final.
+    - Wiki site.
     - For commands that spawn temp buffer, assign a b:currentfile var to the
       file that opened the buffer so that other commands can still be invoked
       by changing the get file name function to examine b:currentfile.
       - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
     - integrate w/ http://www.easyeclipse.org/site/home/
-    - add a project tree view (seperate window or tab)
-      Opening of files should support edit,split,tabs,etc.
-      :ProjectTree [project project ...] (show only current or supplied projects)
-      :ProjectsTree (show all projects)
-        - gui
-        |-  + doc
-        |-  + src
-        |-  + test
-        |-    build.xml
-        + tiger-desktop
-    - Support switching workspaces?
     - Use a running eclipse gui as the eclimd server?
     - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
       - test on windows.
