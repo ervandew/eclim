@@ -30,6 +30,22 @@
   if !exists('g:EclimProjectTreeContentWincmd')
     let g:EclimProjectTreeContentWincmd = 'winc l'
   endif
+
+  if exists('g:EclimProjectTreeTaglistRelation')
+    if exists('g:Tlist_WinWidth')
+      let g:EclimProjectTreeWidth = g:Tlist_WinWidth
+    endif
+  endif
+  if !exists('g:EclimProjectTreeWidth')
+    let g:EclimProjectTreeWidth = 30
+  endif
+
+  let g:EclimProjectTreeTitle = 'Project_Tree'
+" }}}
+
+" Script Variables {{{
+  let s:project_tree_loaded = 0
+  let s:project_tree_dirs = ''
 " }}}
 
 " ProjectTree(...) {{{
@@ -56,18 +72,31 @@ function! eclim#project#tree#ProjectTree (...)
     endfor
   endif
 
-  call s:OpenTreeWindow()
-  call s:OpenTree(dirs)
+  let dir_list = string(dirs)
 
-  augroup project_tree
-    autocmd!
-    autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
-    autocmd BufWinEnter * echom "TAGLIST OPENED"
-  augroup END
-  "if exists('g:EclimProjectTreeTaglistRelation')
-  "  augroup project_tree
-  "  augroup END
-  "endif
+  if s:project_tree_dirs != dir_list
+    call s:CloseTreeWindow()
+  endif
+
+  if bufwinnr(g:EclimProjectTreeTitle) == -1
+    call s:OpenTreeWindow()
+  endif
+
+  if s:project_tree_dirs != dir_list
+    call s:OpenTree(dirs)
+
+    augroup project_tree
+      autocmd!
+      autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
+    augroup END
+    if exists('g:EclimProjectTreeTaglistRelation')
+      augroup project_tree
+        autocmd BufWinEnter __Tag_List__ call eclim#project#tree#ReopenTree()
+      augroup END
+    endif
+
+    let s:project_tree_dirs = dir_list
+  endif
 endfunction " }}}
 
 " ProjectsTree() {{{
@@ -81,10 +110,10 @@ endfunction " }}}
 
 " CloseIfLastWindow() {{{
 function eclim#project#tree#CloseIfLastWindow ()
-  if (winnr('$') == 1 && bufwinnr('project_tree') != -1) ||
+  if (winnr('$') == 1 && bufwinnr(g:EclimProjectTreeTitle) != -1) ||
       \  (winnr('$') == 2 &&
       \   bufwinnr(g:TagList_title) != -1 &&
-      \   bufwinnr('project_tree') != -1)
+      \   bufwinnr(g:EclimProjectTreeTitle) != -1)
     if tabpagenr('$') > 1
       tabclose
     else
@@ -95,18 +124,23 @@ endfunction " }}}
 
 " ReopenTree() {{{
 function eclim#project#tree#ReopenTree ()
-  echom "Reopen the tree"
-  "let bufnr = bufnr('%')
-  "call s:OpenTreeWindow()
-  "let winnr = bufwinnr(bufnr)
-  "exec 'buffer ' . bufnr
+  let projectwin = bufwinnr(g:EclimProjectTreeTitle)
+  if projectwin != -1
+    exec projectwin . 'winc w'
+    close
+    call s:OpenTreeWindow()
 
-  "let curwinnr = winnr()
+    exec 'vertical resize ' . g:EclimProjectTreeWidth
+  endif
+endfunction " }}}
 
-  "exec winnr . 'winc w'
-  "close
-
-  "exec curwinnr . 'winc w'
+" CloseTreeWindow() " {{{
+function! s:CloseTreeWindow ()
+  let winnr = bufwinnr(g:EclimProjectTreeTitle)
+  if winnr != -1
+    exec winnr . 'winc w'
+    close
+  endif
 endfunction " }}}
 
 " OpenTreeWindow() " {{{
@@ -114,34 +148,42 @@ function! s:OpenTreeWindow ()
   let taglist_window = bufwinnr(g:TagList_title)
   " taglist relative
   if taglist_window != -1 && exists('g:EclimProjectTreeTaglistRelation')
-    let wincmd = taglist_window . 'winc w | ' . g:EclimProjectTreeTaglistRelation
+    let wincmd = taglist_window . 'winc w | ' . g:EclimProjectTreeTaglistRelation . ' '
   " absolute location
   else
-    let wincmd = g:EclimProjectTreeWincmd
+    let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeWidth
   endif
 
   "call eclim#util#ExecWithoutAutocmds(wincmd . ' split project_tree')
-  exec wincmd . ' split project_tree'
+  silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
+  set winfixwidth
+  setlocal nowrap
+  setlocal nonumber
 endfunction " }}}
 
 " OpenTree(dirs) " {{{
 function! s:OpenTree (dirs)
-  " remove any settings related to usage of tree as an external filesystem
-  " explorer.
-  if exists('g:TreeSettingsFunction')
-    unlet g:TreeSettingsFunction
+  if !s:project_tree_loaded
+    " remove any settings related to usage of tree as an external filesystem
+    " explorer.
+    if exists('g:TreeSettingsFunction')
+      unlet g:TreeSettingsFunction
+    endif
   endif
 
-  call tree#Tree('project_tree', a:dirs, len(a:dirs) == 1, [])
-  call tree#RegisterFileAction('.*', 'Split',
-    \ "call eclim#project#tree#OpenProjectFile('split <file>')")
-  call tree#RegisterFileAction('.*', 'Edit',
-    \ "call eclim#project#tree#OpenProjectFile('edit <file>')")
-  call tree#RegisterFileAction('.*', 'Tab', 'tabnew <file>')
+  call tree#Tree(g:EclimProjectTreeTitle, a:dirs, len(a:dirs) == 1, [])
 
-  setlocal nowrap
-  setlocal nonumber
-  set winfixwidth
+  if !s:project_tree_loaded
+    call tree#RegisterFileAction('.*', 'Split',
+      \ "call eclim#project#tree#OpenProjectFile('split <file>')")
+    call tree#RegisterFileAction('.*', 'Edit',
+      \ "call eclim#project#tree#OpenProjectFile('edit <file>')")
+    call tree#RegisterFileAction('.*', 'Tab', 'tabnew <file>')
+
+    let s:project_tree_loaded = 1
+  endif
+
+  setlocal bufhidden=hide
 endfunction " }}}
 
 " OpenProjectFile(cmd) {{{

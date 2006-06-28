@@ -50,16 +50,14 @@ if !exists(":ProjectClose")
     \ ProjectClose :call eclim#project#ProjectClose('<args>')
 endif
 
-" Postponing until some vim issues are resolved.
-" http://groups.yahoo.com/group/vimdev/message/44097?l=1
-"if !exists(":ProjectTree")
-"  command -nargs=* -complete=customlist,eclim#project#CommandCompleteProject
-"    \ ProjectTree :call eclim#project#tree#ProjectTree(<f-args>)
-"endif
-"if !exists(":ProjectsTree")
-"  command -nargs=0 -complete=customlist,eclim#project#CommandCompleteProject
-"    \ ProjectsTree :call eclim#project#tree#ProjectsTree()
-"endif
+if !exists(":ProjectTree")
+  command -nargs=* -complete=customlist,eclim#project#CommandCompleteProject
+    \ ProjectTree :call eclim#project#tree#ProjectTree(<f-args>)
+endif
+if !exists(":ProjectsTree")
+  command -nargs=0 -complete=customlist,eclim#project#CommandCompleteProject
+    \ ProjectsTree :call eclim#project#tree#ProjectsTree()
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker
