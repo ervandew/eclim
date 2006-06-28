@@ -129,7 +129,7 @@ function eclim#common#LocateFile (command, file)
     return
   endif
 
-  silent exec a:command . ' ' . result
+  silent exec a:command . ' ' . simplify(result)
 endfunction " }}}
 
 " OpenRelative(command,arg) {{{
@@ -138,7 +138,7 @@ function eclim#common#OpenRelative (command, arg)
   let dir = expand('%:p:h')
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files
-    exec a:command . ' ' . dir. '/' . file
+    exec a:command . ' ' . simplify(dir. '/' . file)
   endfor
 endfunction " }}}
 
@@ -147,7 +147,7 @@ endfunction " }}}
 function eclim#common#Split (arg)
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files
-    exec 'split ' . file
+    exec 'split ' . simplify(file)
   endfor
 endfunction " }}}
 
@@ -183,17 +183,17 @@ endfunction " }}}
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for relative files and directories.
 function! eclim#common#CommandCompleteRelative (argLead, cmdLine, cursorPos)
-  let dir = expand('%:p:h')
+  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
   let results = split(glob(expand(dir . '/' . argLead) . '*'), '\n')
+  call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, 'substitute(v:val, dir, "", "")')
   call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
-  call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
 
   return eclim#util#ParseCommandCompletionResults(argLead, results)

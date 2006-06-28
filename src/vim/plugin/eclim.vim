@@ -24,9 +24,13 @@
 
 if v:version < 700 || exists("g:EclimDisabled") | finish | endif
 
+" on windows, this eclim plugin gets called first, so force taglist to be
+" called prior.
+runtime! plugin/taglist.vim
+
 " add eclim dir to runtime path.
 let file = findfile('plugin/eclim.vim', &runtimepath)
-let basedir = fnamemodify(file, ':p:h:h')
+let basedir = substitute(fnamemodify(file, ':p:h:h'), '\', '/', 'g')
 exec 'set runtimepath+=' . basedir . '/eclim'
 
 " need to be manually sourced

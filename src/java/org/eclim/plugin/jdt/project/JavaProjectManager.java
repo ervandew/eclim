@@ -287,7 +287,9 @@ public class JavaProjectManager
 
       // location must not overlap the workspace.
       IPath workspaceLocation = workspace.getRoot().getRawLocation();
-      if(location.toOSString().startsWith(workspaceLocation.toOSString())){
+      if(location.toOSString().toLowerCase().startsWith(
+            workspaceLocation.toOSString().toLowerCase()))
+      {
         location = null;
         /*location = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation));*/

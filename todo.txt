@@ -24,8 +24,6 @@ eclim
       - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
     - integrate w/ http://www.easyeclipse.org/site/home/
     - Use a running eclipse gui as the eclimd server?
-    - add log4j.dtd to plugin for retrieval when xml file uses "log4j.dtd".
-      - test on windows.
     - integrate with jdk tools
       http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage
     - :JavaImpl support anonymous classes.
