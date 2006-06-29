@@ -96,7 +96,7 @@ function! eclim#project#ProjectRefresh (args)
     let command = substitute(s:command_refresh, '<project>', project, '')
     call eclim#util#Echo(eclim#ExecuteEclim(command))
   endfor
-  call eclim#util#Echo("")
+  call eclim#util#Echo(' ')
 endfunction " }}}
 
 " ProjectOpen(name) {{{

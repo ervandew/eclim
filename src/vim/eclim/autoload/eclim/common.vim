@@ -84,14 +84,14 @@ function eclim#common#LocateFile (command, file)
   " Step 1: Find in current project.
   if eclim#project#IsCurrentFileInProject(0)
     let projectDir = eclim#project#GetCurrentProjectRoot()
-    call eclim#util#Echo('Searching current project: ' . projectDir)
+    call eclim#util#Echo('Searching current project: ' . projectDir . ' ...')
     let results = eclim#common#FindInPath(file, projectDir)
   endif
 
   " Step 2: Find relative to current file.
   if len(results) == 0
     let dir = expand('%:p:h')
-    call eclim#util#Echo('Searching current file path: ' . dir)
+    call eclim#util#Echo('Searching current file path: ' . dir . ' ...')
     let results = eclim#common#FindInPath(file, dir)
   endif
 
@@ -101,7 +101,7 @@ function eclim#common#LocateFile (command, file)
     let projectDirs = eclim#project#GetProjectDirs()
     for dir in projectDirs
       if dir != currentProjectDir
-        call eclim#util#Echo('Searching project: ' . dir)
+        call eclim#util#Echo('Searching project: ' . dir . ' ...')
         let results += eclim#common#FindInPath(file, dir)
       endif
     endfor
@@ -130,6 +130,7 @@ function eclim#common#LocateFile (command, file)
   endif
 
   silent exec a:command . ' ' . simplify(result)
+  call eclim#util#Echo(' ')
 endfunction " }}}
 
 " OpenRelative(command,arg) {{{
