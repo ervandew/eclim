@@ -24,20 +24,40 @@
 " Global Variables {{{
   " command used (minus the :split) to open the tree window.
   if !exists('g:EclimProjectTreeWincmd')
-    let g:EclimProjectTreeWincmd = 'topleft vertical'
-  endif
-  " command used to navigate to a content window before executing a command.
-  if !exists('g:EclimProjectTreeContentWincmd')
-    let g:EclimProjectTreeContentWincmd = 'winc l'
-  endif
-
-  if exists('g:EclimProjectTreeTaglistRelation')
-    if exists('g:Tlist_WinWidth')
-      let g:EclimProjectTreeWidth = g:Tlist_WinWidth
+    if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
+      let g:EclimProjectTreeWincmd = 'botright'
+    elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
+      let g:EclimProjectTreeWincmd = 'botright vertical'
+    else
+      let g:EclimProjectTreeWincmd = 'topleft vertical'
     endif
   endif
-  if !exists('g:EclimProjectTreeWidth')
+
+  " command used to navigate to a content window before executing a command.
+  if !exists('g:EclimProjectTreeContentWincmd')
+    if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
+      let g:EclimProjectTreeContentWincmd =
+        \ 'call eclim#project#tree#HorizontalContentWindow()'
+    elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
+      let g:EclimProjectTreeContentWincmd = 'winc h'
+    else
+      let g:EclimProjectTreeContentWincmd = 'winc l'
+    endif
+  endif
+
+  if !exists('g:EclimProjectTreeTaglistRelation')
+    let g:EclimProjectTreeTaglistRelation = 'below'
+  endif
+
+  if exists('g:Tlist_WinWidth')
+    let g:EclimProjectTreeWidth = g:Tlist_WinWidth
+  elseif !exists('g:EclimProjectTreeWidth')
     let g:EclimProjectTreeWidth = 30
+  endif
+  if exists('g:Tlist_WinHeight')
+    let g:EclimProjectTreeHeight = g:Tlist_WinHeight
+  elseif !exists('g:EclimProjectTreeHeight')
+    let g:EclimProjectTreeHeight = 10
   endif
 
   let g:EclimProjectTreeTitle = 'Project_Tree'
@@ -130,7 +150,11 @@ function eclim#project#tree#ReopenTree ()
     close
     call s:OpenTreeWindow()
 
-    exec 'vertical resize ' . g:EclimProjectTreeWidth
+    if g:EclimProjectTreeWincmd =~ 'vert'
+      exec 'vertical resize ' . g:EclimProjectTreeWidth
+    else
+      exec 'resize ' . g:EclimProjectTreeHeight
+    endif
   endif
 endfunction " }}}
 
@@ -149,14 +173,28 @@ function! s:OpenTreeWindow ()
   " taglist relative
   if taglist_window != -1 && exists('g:EclimProjectTreeTaglistRelation')
     let wincmd = taglist_window . 'winc w | ' . g:EclimProjectTreeTaglistRelation . ' '
+
+    if g:EclimProjectTreeWincmd !~ 'vert'
+      let wincmd .= g:EclimProjectTreeHeight
+    endif
+
   " absolute location
   else
-    let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeWidth
+    if g:EclimProjectTreeWincmd =~ 'vert'
+      let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeWidth
+    else
+      let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeHeight
+    endif
   endif
 
   "call eclim#util#ExecWithoutAutocmds(wincmd . ' split project_tree')
   silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
-  set winfixwidth
+  if g:EclimProjectTreeWincmd =~ 'vert'
+    set winfixwidth
+  else
+    set winfixheight
+  endif
+
   setlocal nowrap
   setlocal nonumber
 endfunction " }}}
@@ -175,9 +213,9 @@ function! s:OpenTree (dirs)
 
   if !s:project_tree_loaded
     call tree#RegisterFileAction('.*', 'Split',
-      \ "call eclim#project#tree#OpenProjectFile('split <file>')")
+      \ "call eclim#project#tree#OpenProjectFile('split', '<file>')")
     call tree#RegisterFileAction('.*', 'Edit',
-      \ "call eclim#project#tree#OpenProjectFile('edit <file>')")
+      \ "call eclim#project#tree#OpenProjectFile('edit', '<file>')")
     call tree#RegisterFileAction('.*', 'Tab', 'tabnew <file>')
 
     let s:project_tree_loaded = 1
@@ -186,11 +224,22 @@ function! s:OpenTree (dirs)
   setlocal bufhidden=hide
 endfunction " }}}
 
-" OpenProjectFile(cmd) {{{
+" OpenProjectFile(cmd, file) {{{
 " Execute the supplied command in one of the main content windows.
-function! eclim#project#tree#OpenProjectFile (cmd)
+function! eclim#project#tree#OpenProjectFile (cmd, file)
+  let cwd = substitute(getcwd(), '\', '/', 'g')
   exec g:EclimProjectTreeContentWincmd
-  exec a:cmd
+  exec a:cmd . ' ' . cwd . '/' . a:file
+endfunction " }}}
+
+" HorizontalContentWindow() {{{
+" Command for g:EclimProjectTreeContentWincmd used when relative to a
+" horizontal taglist window.
+function! eclim#project#tree#HorizontalContentWindow ()
+  winc k
+  if exists('g:TagList_title') && bufname(bufnr('%')) == g:TagList_title
+    winc k
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
