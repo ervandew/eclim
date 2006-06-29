@@ -21,6 +21,31 @@
 "
 " }}}
 
+" Global Variables {{{
+  let g:EclimProjectTreeTitle = 'Project_Tree'
+
+  if !exists('g:EclimProjectTreeAutoOpen')
+    let g:EclimProjectTreeAutoOpen = 0
+  endif
+
+  if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')
+    let g:EclimProjectTreeAutoOpenProjects = [eclim#project#GetCurrentProjectName()]
+  endif
+" }}}
+
+" Auto Commands {{{
+  if g:EclimProjectTreeAutoOpen
+    autocmd VimEnter *
+      \ call eclim#project#tree#ProjectTree(g:EclimProjectTreeAutoOpenProjects) |
+      \ exec g:EclimProjectTreeContentWincmd
+    autocmd BufWinEnter *
+      \ if tabpagenr() > 1 && !exists('t:project_tree_auto_opened') |
+      \   call eclim#project#tree#ProjectTree(g:EclimProjectTreeAutoOpenProjects) |
+      \   let t:project_tree_auto_opened = 1 |
+      \ endif
+  endif
+" }}}
+
 " Command Declarations {{{
 if !exists(":ProjectCreate")
   command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProjectCreate
@@ -56,7 +81,8 @@ if !exists(":ProjectTree")
 endif
 if !exists(":ProjectsTree")
   command -nargs=0 -complete=customlist,eclim#project#CommandCompleteProject
-    \ ProjectsTree :call eclim#project#tree#ProjectsTree()
+    \ ProjectsTree
+    \ :call eclim#project#tree#ProjectTree(eclim#project#GetProjectNames())
 endif
 " }}}
 

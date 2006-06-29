@@ -59,8 +59,6 @@
   elseif !exists('g:EclimProjectTreeHeight')
     let g:EclimProjectTreeHeight = 10
   endif
-
-  let g:EclimProjectTreeTitle = 'Project_Tree'
 " }}}
 
 " Script Variables {{{
@@ -73,25 +71,26 @@
 function! eclim#project#tree#ProjectTree (...)
   " no project dirs supplied, use current project
   if len(a:000) == 0
-    let dir = eclim#project#GetCurrentProjectRoot()
-    if dir == ''
+    let name = eclim#project#GetCurrentProjectName()
+    if name == ''
       call eclim#util#Echo('Unable to determine project.')
       return
     endif
-    let dirs = [dir]
+    let names = [name]
 
-  " list of dirs supplied (all projects)
+  " list of project names supplied (all projects)
   elseif type(a:000[0]) == 3
-    let dirs = a:000[0]
+    let names = a:000[0]
+    if len(names) == 1 && (names[0] == '0' || names[0] == '')
+      return
+    endif
 
   " list or project names
   else
-    let dirs = []
-    for project in a:000
-      call add(dirs, eclim#project#GetProjectRoot(project))
-    endfor
+    let names = a:000
   endif
 
+  let dirs = map(deepcopy(names), 'eclim#project#GetProjectRoot(v:val)')
   let dir_list = string(dirs)
 
   if s:project_tree_dirs != dir_list
@@ -104,6 +103,7 @@ function! eclim#project#tree#ProjectTree (...)
 
   if s:project_tree_dirs != dir_list
     call s:OpenTree(dirs)
+    normal zs
 
     augroup project_tree
       autocmd!
@@ -116,15 +116,6 @@ function! eclim#project#tree#ProjectTree (...)
     endif
 
     let s:project_tree_dirs = dir_list
-  endif
-endfunction " }}}
-
-" ProjectsTree() {{{
-" Open a tree view of all the projects.
-function! eclim#project#tree#ProjectsTree ()
-  let dirs = eclim#project#GetProjectDirs()
-  if !(len(dirs) == 1 && dirs[0] == '0')
-    call eclim#project#tree#ProjectTree(dirs)
   endif
 endfunction " }}}
 
@@ -187,8 +178,8 @@ function! s:OpenTreeWindow ()
     endif
   endif
 
-  "call eclim#util#ExecWithoutAutocmds(wincmd . ' split project_tree')
-  silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
+  call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . g:EclimProjectTreeTitle)
+  "silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
   if g:EclimProjectTreeWincmd =~ 'vert'
     set winfixwidth
   else
@@ -213,10 +204,11 @@ function! s:OpenTree (dirs)
 
   if !s:project_tree_loaded
     call tree#RegisterFileAction('.*', 'Split',
-      \ "call eclim#project#tree#OpenProjectFile('split', '<file>')")
+      \ "call eclim#project#tree#OpenProjectFile('split', '<cwd>', '<file>')")
     call tree#RegisterFileAction('.*', 'Edit',
-      \ "call eclim#project#tree#OpenProjectFile('edit', '<file>')")
-    call tree#RegisterFileAction('.*', 'Tab', 'tabnew <file>')
+      \ "call eclim#project#tree#OpenProjectFile('edit', '<cwd>', '<file>')")
+    call tree#RegisterFileAction('.*', 'Tab',
+      \ "call eclim#project#tree#OpenProjectFile('tabnew', '<cwd>', '<file>')")
 
     let s:project_tree_loaded = 1
   endif
@@ -224,10 +216,11 @@ function! s:OpenTree (dirs)
   setlocal bufhidden=hide
 endfunction " }}}
 
-" OpenProjectFile(cmd, file) {{{
+" OpenProjectFile(cmd, cwd, file) {{{
 " Execute the supplied command in one of the main content windows.
-function! eclim#project#tree#OpenProjectFile (cmd, file)
+function! eclim#project#tree#OpenProjectFile (cmd, cwd, file)
   let cwd = substitute(getcwd(), '\', '/', 'g')
+  exec 'cd ' . a:cwd
   exec g:EclimProjectTreeContentWincmd
   exec a:cmd . ' ' . cwd . '/' . a:file
 endfunction " }}}
