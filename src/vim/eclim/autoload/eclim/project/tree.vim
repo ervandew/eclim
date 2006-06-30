@@ -90,7 +90,20 @@ function! eclim#project#tree#ProjectTree (...)
     let names = a:000
   endif
 
-  let dirs = map(deepcopy(names), 'eclim#project#GetProjectRoot(v:val)')
+  let dirs = []
+  for name in names
+    let dir = eclim#project#GetProjectRoot(name)
+    if dir != ''
+      call add(dirs, dir)
+    else
+      call remove(names, name)
+    endif
+  endfor
+  if len(dirs) == 0
+    call eclim#util#Echo('ProjectTree: No directories found for requested projects.')
+    return
+  endif
+
   let dir_list = string(dirs)
 
   if s:project_tree_dirs != dir_list
@@ -102,7 +115,7 @@ function! eclim#project#tree#ProjectTree (...)
   endif
 
   if s:project_tree_dirs != dir_list
-    call s:OpenTree(dirs)
+    call s:OpenTree(names, dirs)
     normal zs
 
     augroup project_tree
@@ -190,8 +203,8 @@ function! s:OpenTreeWindow ()
   setlocal nonumber
 endfunction " }}}
 
-" OpenTree(dirs) " {{{
-function! s:OpenTree (dirs)
+" OpenTree(names, dirs) " {{{
+function! s:OpenTree (names, dirs)
   if !s:project_tree_loaded
     " remove any settings related to usage of tree as an external filesystem
     " explorer.
@@ -200,7 +213,7 @@ function! s:OpenTree (dirs)
     endif
   endif
 
-  call tree#Tree(g:EclimProjectTreeTitle, a:dirs, len(a:dirs) == 1, [])
+  call tree#Tree(g:EclimProjectTreeTitle, a:dirs, a:names, len(a:dirs) == 1, [])
 
   if !s:project_tree_loaded
     call tree#RegisterFileAction('.*', 'Split',
