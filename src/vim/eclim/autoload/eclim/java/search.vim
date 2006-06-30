@@ -87,11 +87,6 @@ function! s:Search (command, ...)
 
   let in_project = eclim#project#IsCurrentFileInProject(0)
 
-  " check if just a pattern was supplied.
-  if argline =~ '^\s*\w'
-    let argline = '-p ' . argline
-  endif
-
   " element search
   if argline !~ '-p\>'
     if &ft != 'java'
@@ -236,7 +231,7 @@ function! s:SearchAlternate (argline, element)
       let results = files
     endif
   endif
-  call eclim#util#Echo("")
+  call eclim#util#Echo(' ')
   return join(results, "\n")
 endfunction " }}}
 
@@ -275,7 +270,14 @@ function! eclim#java#search#SearchAndDisplay (type, args)
     call eclim#java#util#SilentUpdate()
   endif
 
-  let results = split(s:Search(a:type, a:args), '\n')
+  let argline = a:args
+
+  " check if just a pattern was supplied.
+  if argline =~ '^\s*\w'
+    let argline = '-p ' . argline
+  endif
+
+  let results = split(s:Search(a:type, argline), '\n')
   if len(results) == 1 && results[0] == '0'
     return
   endif
@@ -315,8 +317,8 @@ function! eclim#java#search#SearchAndDisplay (type, args)
       endif
     endif
   else
-    if a:args =~ '-p '
-      let searchedFor = substitute(a:args, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
+    if argline =~ '-p '
+      let searchedFor = substitute(argline, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
       call eclim#util#EchoInfo("Pattern '" . searchedFor . "' not found.")
     elseif &ft == 'java'
       if !eclim#java#util#IsValidIdentifier(expand('<cword>'))
