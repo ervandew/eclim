@@ -129,7 +129,7 @@ function eclim#common#LocateFile (command, file)
     return
   endif
 
-  silent exec a:command . ' ' . simplify(result)
+  silent exec a:command . ' ' . eclim#util#Simplify(result)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
@@ -139,7 +139,7 @@ function eclim#common#OpenRelative (command, arg)
   let dir = expand('%:p:h')
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files
-    exec a:command . ' ' . simplify(dir. '/' . file)
+    exec a:command . ' ' . eclim#util#Simplify(dir. '/' . file)
   endfor
 endfunction " }}}
 
@@ -148,7 +148,7 @@ endfunction " }}}
 function eclim#common#Split (arg)
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files
-    exec 'split ' . simplify(file)
+    exec 'split ' . eclim#util#Simplify(file)
   endfor
 endfunction " }}}
 

@@ -309,7 +309,7 @@ function! eclim#util#ParseLocationEntries (entries)
     let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
 
     let dict = {
-      \ 'filename': file,
+      \ 'filename': eclim#util#Simplify(file),
       \ 'lnum': line,
       \ 'col': col,
       \ 'text': message,
@@ -441,6 +441,22 @@ function! eclim#util#ShowCurrentError ()
     let message = substitute(message, '\n', ' ', '')
     echo message
   endif
+endfunction " }}}
+
+" Simplify(file) {{{
+" Simply the supplied file to the shortest valid name.
+function! eclim#util#Simplify (file)
+  let file = simplify(a:file)
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  if cwd !~ '/$'
+    let cwd .= '/'
+  endif
+
+  if file =~ '^' . cwd
+    let file = substitute(file, '^' . cwd, '', '')
+  endif
+
+  return file
 endfunction " }}}
 
 " TempWindow(name, lines) {{{
