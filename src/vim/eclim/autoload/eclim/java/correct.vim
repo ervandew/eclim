@@ -75,7 +75,7 @@ function! eclim#java#correct#Correct ()
   let b:filename = filename
   setlocal ft=java
 
-  exec "syntax match Normal /" . escape(getline(1), '^$/\') . "/"
+  "exec "syntax match Normal /" . escape(getline(1), '^$/\') . "/"
   syntax match Correction /^[0-9]\+\.[0-9]\+:.*/
 
   nnoremap <silent> <buffer> <cr>
