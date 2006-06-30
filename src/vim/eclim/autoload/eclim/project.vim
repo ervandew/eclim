@@ -224,7 +224,7 @@ endfunction " }}}
 " GetCurrentProjectName() {{{
 " Gets the project name that the current file is in.
 function! eclim#project#GetCurrentProjectName ()
-  let projectName = ""
+  let projectName = ''
   let dir = fnamemodify(expand('%:p'), ':h')
   let dir = escape(dir, ' ')
 
@@ -243,7 +243,11 @@ function! eclim#project#GetCurrentProjectName ()
     silent close
 
     silent exec cmd
-    redraw
+
+    " can potentially screw up display, like when used durring startup
+    " (project/tree.vim), it causes display for :Ant, :make commands to be all
+    " screwed up.
+    "redraw
   endif
 
   return projectName

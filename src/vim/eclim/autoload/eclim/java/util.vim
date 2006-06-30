@@ -80,7 +80,9 @@ function! eclim#java#util#GetPackage (...)
   if a:0 > 0
     close
     silent exec winreset
-    redraw
+
+    " not necessary and may screw up display (see autoload/project.vim)
+    "redraw
   else
     call cursor(line, col)
   endif
