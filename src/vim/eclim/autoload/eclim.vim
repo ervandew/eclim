@@ -93,7 +93,7 @@ function! eclim#ExecuteEclim (args)
     let result = substitute(result, '\(.*\)\n$', '\1', '')
   endif
 
-  call eclim#util#Echo("")
+  call eclim#util#Echo(' ')
 
   " check for errors
   let error = ''
