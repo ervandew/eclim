@@ -191,7 +191,7 @@ function! s:OpenTreeWindow ()
     endif
   endif
 
-  call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . g:EclimProjectTreeTitle)
+  silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . g:EclimProjectTreeTitle)
   "silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
   if g:EclimProjectTreeWincmd =~ 'vert'
     set winfixwidth
@@ -213,14 +213,14 @@ function! s:OpenTree (names, dirs)
     endif
   endif
 
-  call tree#Tree(g:EclimProjectTreeTitle, a:dirs, a:names, len(a:dirs) == 1, [])
+  call eclim#tree#Tree(g:EclimProjectTreeTitle, a:dirs, a:names, len(a:dirs) == 1, [])
 
   if !s:project_tree_loaded
-    call tree#RegisterFileAction('.*', 'Split',
+    call eclim#tree#RegisterFileAction('.*', 'Split',
       \ "call eclim#project#tree#OpenProjectFile('split', '<cwd>', '<file>')")
-    call tree#RegisterFileAction('.*', 'Edit',
+    call eclim#tree#RegisterFileAction('.*', 'Edit',
       \ "call eclim#project#tree#OpenProjectFile('edit', '<cwd>', '<file>')")
-    call tree#RegisterFileAction('.*', 'Tab',
+    call eclim#tree#RegisterFileAction('.*', 'Tab',
       \ "call eclim#project#tree#OpenProjectFile('tabnew', '<cwd>', '<file>')")
 
     let s:project_tree_loaded = 1
