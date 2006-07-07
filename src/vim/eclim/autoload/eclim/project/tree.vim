@@ -59,11 +59,18 @@
   elseif !exists('g:EclimProjectTreeHeight')
     let g:EclimProjectTreeHeight = 10
   endif
+
+  if !exists('g:EclimProjectTreeActions')
+    let g:EclimProjectTreeActions = [
+        \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
+        \ {'pattern': '.*', 'name': 'Tab', 'action': 'tabnew'},
+        \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
+      \ ]
+  endif
 " }}}
 
 " Script Variables {{{
   let s:project_tree_loaded = 0
-  let s:project_tree_dirs = ''
 " }}}
 
 " ProjectTree(...) {{{
@@ -114,29 +121,23 @@ function! eclim#project#tree#ProjectTree (...)
 
   let dir_list = string(dirs)
 
-  if s:project_tree_dirs != dir_list
-    call s:CloseTreeWindow()
-  endif
+  call s:CloseTreeWindow()
 
   if bufwinnr(s:GetTreeTitle()) == -1
     call s:OpenTreeWindow()
   endif
 
-  if s:project_tree_dirs != dir_list
-    call s:OpenTree(names, dirs)
-    normal zs
+  call s:OpenTree(names, dirs)
+  normal zs
 
+  augroup project_tree
+    autocmd!
+    autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
+  augroup END
+  if exists('g:EclimProjectTreeTaglistRelation')
     augroup project_tree
-      autocmd!
-      autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
+      autocmd BufWinEnter __Tag_List__ call eclim#project#tree#ReopenTree()
     augroup END
-    if exists('g:EclimProjectTreeTaglistRelation')
-      augroup project_tree
-        autocmd BufWinEnter __Tag_List__ call eclim#project#tree#ReopenTree()
-      augroup END
-    endif
-
-    let s:project_tree_dirs = dir_list
   endif
 endfunction " }}}
 
@@ -222,12 +223,10 @@ function! s:OpenTree (names, dirs)
   call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, len(a:dirs) == 1, [])
 
   if !s:project_tree_loaded
-    call eclim#tree#RegisterFileAction('.*', 'Split',
-      \ "call eclim#project#tree#OpenProjectFile('split', '<cwd>', '<file>')")
-    call eclim#tree#RegisterFileAction('.*', 'Edit',
-      \ "call eclim#project#tree#OpenProjectFile('edit', '<cwd>', '<file>')")
-    call eclim#tree#RegisterFileAction('.*', 'Tab',
-      \ "call eclim#project#tree#OpenProjectFile('tabnew', '<cwd>', '<file>')")
+    for action in g:EclimProjectTreeActions
+      call eclim#tree#RegisterFileAction(action.pattern, action.name,
+        \ "call eclim#project#tree#OpenProjectFile('" . action.action . "', '<cwd>', '<file>')")
+    endfor
 
     let s:project_tree_loaded = 1
   endif

@@ -9,8 +9,6 @@ eclim
       they have write permissions to.
 
   Bugs
-    - When autoloaded, the project tree seems to screw up the display for any
-      shell commands (:Ant, :make)
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
     - possible issues with eclipse and symlinks
@@ -20,8 +18,6 @@ eclim
 
   Enhancements
     - Wiki site.
-    - eclim/autoload/eclim/project/tree.vim
-      - add means for user to define file open actions.
     - add ProjectImport dir
       - Given a directory, search for all .project files and create projects
         for their corresponding parent directory (be sure to read the project
