@@ -97,6 +97,7 @@ endfunction " }}}
 "   empty list for no filtering.
 function eclim#tree#Tree (name, roots, aliases, expand, filters)
   silent exec 'edit ' . escape(a:name, ' ')
+  set modifiable
 
   let roots = s:NormalizeDirs(a:roots)
   let b:filters = a:filters
@@ -136,7 +137,8 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
   setlocal ft=tree
   setlocal nowrap
   setlocal noswapfile
-  setlocal buftype=nowrite
+  setlocal nobuflisted
+  setlocal buftype=nofile
   setlocal bufhidden=delete
   setlocal foldtext=getline(v:foldstart)
 
