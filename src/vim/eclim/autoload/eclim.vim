@@ -33,7 +33,6 @@
   if !exists("g:EclimShowErrors")
     let g:EclimShowErrors = 1
   endif
-  let g:EclimdRunning = 1
 
   if !exists("g:EclimSystemWorkaround")
     let g:EclimSystemWorkaround = 0
@@ -55,10 +54,6 @@
 " ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
 function! eclim#ExecuteEclim (args)
-  if !g:EclimdRunning
-    return 0
-  endif
-
   let args = a:args
 
   " encode special characters
@@ -106,8 +101,10 @@ function! eclim#ExecuteEclim (args)
   if v:shell_error
     if g:EclimShowErrors
       if error =~ s:connect
-        call eclim#util#EchoWarning("unable to connect to eclimd - " . error)
-        let g:EclimdRunning = 0
+        " eclimd is not running and we appear to not be in an autocmd
+        if expand('<amatch>') == ''
+          call eclim#util#EchoWarning("unable to connect to eclimd - " . error)
+        endif
       else
         let error = error . "\n" . 'while executing command: ' . command
         call eclim#util#EchoError(error)
