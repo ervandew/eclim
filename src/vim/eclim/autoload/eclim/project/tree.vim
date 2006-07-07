@@ -78,7 +78,7 @@ function! eclim#project#tree#ProjectTree (...)
     endif
     let names = [name]
 
-  " list of project names supplied (all projects)
+  " list of project names supplied
   elseif type(a:000[0]) == 3
     let names = a:000[0]
     if len(names) == 1 && (names[0] == '0' || names[0] == '')
@@ -91,16 +91,24 @@ function! eclim#project#tree#ProjectTree (...)
   endif
 
   let dirs = []
+  let index = 0
   for name in names
+    if name == 'CURRENT'
+      let name = eclim#project#GetCurrentProjectName()
+      let names[index] = name
+    endif
+
     let dir = eclim#project#GetProjectRoot(name)
     if dir != ''
       call add(dirs, dir)
     else
       call remove(names, name)
     endif
+    let index += 1
   endfor
+
   if len(dirs) == 0
-    call eclim#util#Echo('ProjectTree: No directories found for requested projects.')
+    "call eclim#util#Echo('ProjectTree: No directories found for requested projects.')
     return
   endif
 
@@ -110,7 +118,7 @@ function! eclim#project#tree#ProjectTree (...)
     call s:CloseTreeWindow()
   endif
 
-  if bufwinnr(g:EclimProjectTreeTitle) == -1
+  if bufwinnr(s:GetTreeTitle()) == -1
     call s:OpenTreeWindow()
   endif
 
@@ -134,10 +142,10 @@ endfunction " }}}
 
 " CloseIfLastWindow() {{{
 function eclim#project#tree#CloseIfLastWindow ()
-  if (winnr('$') == 1 && bufwinnr(g:EclimProjectTreeTitle) != -1) ||
+  if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
       \  (winnr('$') == 2 &&
       \   bufwinnr(g:TagList_title) != -1 &&
-      \   bufwinnr(g:EclimProjectTreeTitle) != -1)
+      \   bufwinnr(s:GetTreeTitle()) != -1)
     if tabpagenr('$') > 1
       tabclose
     else
@@ -148,7 +156,7 @@ endfunction " }}}
 
 " ReopenTree() {{{
 function eclim#project#tree#ReopenTree ()
-  let projectwin = bufwinnr(g:EclimProjectTreeTitle)
+  let projectwin = bufwinnr(s:GetTreeTitle())
   if projectwin != -1
     exec projectwin . 'winc w'
     close
@@ -164,7 +172,7 @@ endfunction " }}}
 
 " CloseTreeWindow() " {{{
 function! s:CloseTreeWindow ()
-  let winnr = bufwinnr(g:EclimProjectTreeTitle)
+  let winnr = bufwinnr(s:GetTreeTitle())
   if winnr != -1
     exec winnr . 'winc w'
     close
@@ -191,15 +199,13 @@ function! s:OpenTreeWindow ()
     endif
   endif
 
-  silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . g:EclimProjectTreeTitle)
-  "silent exec wincmd . 'split ' . g:EclimProjectTreeTitle
+  silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . s:GetTreeTitle())
   if g:EclimProjectTreeWincmd =~ 'vert'
     set winfixwidth
   else
     set winfixheight
   endif
 
-  setlocal nowrap
   setlocal nonumber
 endfunction " }}}
 
@@ -213,7 +219,7 @@ function! s:OpenTree (names, dirs)
     endif
   endif
 
-  call eclim#tree#Tree(g:EclimProjectTreeTitle, a:dirs, a:names, len(a:dirs) == 1, [])
+  call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, len(a:dirs) == 1, [])
 
   if !s:project_tree_loaded
     call eclim#tree#RegisterFileAction('.*', 'Split',
@@ -246,6 +252,11 @@ function! eclim#project#tree#HorizontalContentWindow ()
   if exists('g:TagList_title') && bufname(bufnr('%')) == g:TagList_title
     winc k
   endif
+endfunction " }}}
+
+" GetTreeTitle() {{{
+function! s:GetTreeTitle ()
+  return g:EclimProjectTreeTitle . tabpagenr()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

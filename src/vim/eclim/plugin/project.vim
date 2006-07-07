@@ -22,25 +22,25 @@
 " }}}
 
 " Global Variables {{{
-  let g:EclimProjectTreeTitle = 'Project_Tree'
+  let g:EclimProjectTreeTitle = 'ProjectTree_'
 
   if !exists('g:EclimProjectTreeAutoOpen')
     let g:EclimProjectTreeAutoOpen = 0
   endif
 
   if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')
-    let g:EclimProjectTreeAutoOpenProjects = [eclim#project#GetCurrentProjectName()]
+    let g:EclimProjectTreeAutoOpenProjects = ['CURRENT']
   endif
 " }}}
 
 " Auto Commands {{{
   if g:EclimProjectTreeAutoOpen
     autocmd VimEnter *
-      \ call eclim#project#tree#ProjectTree(g:EclimProjectTreeAutoOpenProjects) |
+      \ call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
       \ exec g:EclimProjectTreeContentWincmd
     autocmd BufWinEnter *
       \ if tabpagenr() > 1 && !exists('t:project_tree_auto_opened') |
-      \   call eclim#project#tree#ProjectTree(g:EclimProjectTreeAutoOpenProjects) |
+      \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
       \   let t:project_tree_auto_opened = 1 |
       \ endif
   endif
