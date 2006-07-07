@@ -50,13 +50,13 @@
         <li>
           <strong>org.eclim.user.name</strong><br/>
           Used as the name portion of the author tag.
-          Consult the <a href="../../server/settings.html">settings page</a> for
+          Consult the <a href="../settings.html">settings page</a> for
           more info.
         </li>
         <li>
           <strong>org.eclim.user.email</strong><br/>
           Used as the email portion of the author tag.
-          Consult the <a href="../../server/settings.html">settings page</a> for
+          Consult the <a href="../settings.html">settings page</a> for
           more info.
         </li>
       </ul>

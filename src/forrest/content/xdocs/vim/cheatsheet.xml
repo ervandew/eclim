@@ -52,33 +52,33 @@
     <p><strong>Project Commands</strong></p>
     <ul>
       <li>
-        <a href="project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
+        <a href="common/project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
         &lt;folder&gt; [&lt;project_dependencies&gt;] -
         Create a new project.
       </li>
       <li>
-        <a href="project.html#ProjectList"><strong>:ProjectList</strong></a> -
+        <a href="common/project.html#ProjectList"><strong>:ProjectList</strong></a> -
         List current projects.
       </li>
       <li>
-        <a href="project.html#ProjectSettings"><strong>:ProjectSettings</strong></a>
+        <a href="common/project.html#ProjectSettings"><strong>:ProjectSettings</strong></a>
         [&lt;project&gt;] - View / edit project settings.
       </li>
       <li>
-        <a href="project.html#ProjectDelete"><strong>:ProjectDelete</strong></a>
+        <a href="common/project.html#ProjectDelete"><strong>:ProjectDelete</strong></a>
         &lt;project&gt; - Delete a project.
       </li>
       <li>
-        <a href="project.html#ProjectRefresh"><strong>:ProjectRefresh</strong></a>
+        <a href="common/project.html#ProjectRefresh"><strong>:ProjectRefresh</strong></a>
         [&lt;project&gt; &lt;project&gt; ...] -
         Refresh list of, or all projects against the current files on disk.
       </li>
       <li>
-        <a href="project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>
+        <a href="common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>
         &lt;project&gt; - Opens a project.
       </li>
       <li>
-        <a href="project.html#ProjectClose"><strong>:ProjectClose</strong></a>
+        <a href="common/project.html#ProjectClose"><strong>:ProjectClose</strong></a>
         &lt;project&gt; - Closes a project.
       </li>
     </ul>
@@ -259,27 +259,27 @@
     <p><strong>Web Lookup Commands</strong></p>
     <ul>
       <li>
-        <a href="web.html#OpenUrl"><strong>:OpenUrl</strong></a> [url] -
+        <a href="common/web.html#OpenUrl"><strong>:OpenUrl</strong></a> [url] -
         Opens a url in your configured web browser.
       </li>
       <li>
-        <a href="web.html#Google"><strong>:Google</strong></a> [word ...] -
+        <a href="common/web.html#Google"><strong>:Google</strong></a> [word ...] -
         Looks up a word or phrase with google.
       </li>
       <li>
-        <a href="web.html#Clusty"><strong>:Clusty</strong></a> [word ...] -
+        <a href="common/web.html#Clusty"><strong>:Clusty</strong></a> [word ...] -
         Looks up a word or phrase with clusty.
       </li>
       <li>
-        <a href="web.html#Wikipedia"><strong>:Wikipedia</strong></a> [word ...] -
+        <a href="common/web.html#Wikipedia"><strong>:Wikipedia</strong></a> [word ...] -
         Looks up a word or phrase on wikipedia.
       </li>
       <li>
-        <a href="web.html#Dictionary"><strong>:Dictionary</strong></a> [word] -
+        <a href="common/web.html#Dictionary"><strong>:Dictionary</strong></a> [word] -
         Looks up a word on dictionary.reference.com.
       </li>
       <li>
-        <a href="web.html#Thesaurus"><strong>:Thesaurus</strong></a> [word] -
+        <a href="common/web.html#Thesaurus"><strong>:Thesaurus</strong></a> [word] -
         Looks up a word on thesaurus.reference.com.
       </li>
     </ul>
@@ -287,46 +287,46 @@
     <p><strong>Misc. Commands</strong></p>
     <ul>
       <li>
-        <a href="index.html#LocateFileEdit">
+        <a href="common/util.html#LocateFileEdit">
           <strong>:LocateFileEdit</strong>
         </a> [file] -
         Locates a relative file and opens it via :edit.
       </li>
       <li>
-        <a href="index.html#LocateFileSplit">
+        <a href="common/util.html#LocateFileSplit">
           <strong>:LocateFileSplit</strong>
         </a> [file] -
         Locates a relative file and opens it via :split.
       </li>
       <li>
-        <a href="index.html#LocateFileTab">
+        <a href="common/util.html#LocateFileTab">
           <strong>:LocateFileTab</strong>
         </a> [file] -
         Locates a relative file and opens it via :tabnew.
       </li>
       <li>
-        <a href="index.html#Split"><strong>:Split</strong></a> -
+        <a href="common/util.html#Split"><strong>:Split</strong></a> -
         Behaves like the 'split' command, but allows multiple files to be
         supplied.
       </li>
       <li>
-        <a href="index.html#SplitRelative"><strong>:SplitRelative</strong></a> -
+        <a href="common/util.html#SplitRelative"><strong>:SplitRelative</strong></a> -
         Like <strong>:Split</strong> this command provides splitting of multiple
         files, but this command splits file relative to the file in the current
         buffer.
       </li>
       <li>
-        <a href="index.html#EditRelative"><strong>:EditRelative</strong></a> -
+        <a href="common/util.html#EditRelative"><strong>:EditRelative</strong></a> -
         Like <strong>:SplitRelative</strong> except issues an 'edit' and only
         supports one file at a time.
       </li>
       <li>
-        <a href="index.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
+        <a href="common/util.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.
       </li>
       <li>
-        <a href="index.html#SwapWords"><strong>:SwapWords</strong></a> -
+        <a href="common/util.html#SwapWords"><strong>:SwapWords</strong></a> -
         Swaps two words (with cursor placed on the first word).
         Supports swapping around non-word characters like commas, periods, etc.
       </li>

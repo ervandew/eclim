@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Utility Commands</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      The following is a list of utility commands provided by eclim.  These are
+      general purpose commands that are useful in and outside the scope of
+      eclim.
+    </p>
+    <ul>
+      <li>
+        <anchor id="LocateFileEdit"/>
+        <strong>:LocateFileEdit</strong> [file] -
+        Locates a file via the following steps:
+        <ol>
+          <li>
+            If current file is in a project, locate the file relative to
+            that project.
+          </li>
+          <li>
+            If no results from step #1, then attempt to locate relative to the
+            current file.
+          </li>
+          <li>
+            If no results from step #2, then attempt to locate relative to the
+            other projects.
+          </li>
+        </ol>
+        If no file argument is supplied to the
+        <strong>:LocateFileEdit</strong> command then it will attempt to
+        extract a file name from the cursor position of the current file.<br/>
+        When a file is located, an :edit is invoked to open it.
+      </li>
+      <li>
+        <anchor id="LocateFileSplit"/>
+        <strong>:LocateFileSplit</strong> [file] -
+        Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
+        file with :split.
+      </li>
+      <li>
+        <anchor id="LocateFileTab"/>
+        <strong>:LocateFileTab</strong> [file] -
+        Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
+        file with :newtab.
+      </li>
+      <li>
+        <anchor id="Split"/>
+        <strong>:Split</strong> -
+        Behaves like the 'split' command, but allows multiple files to be
+        supplied.
+      </li>
+      <li>
+        <anchor id="SplitRelative"/>
+        <strong>:SplitRelative</strong> -
+        Like <strong>:Split</strong> this command provides splitting of multiple
+        files, but this command splits files relative to the file in the current
+        buffer.
+      </li>
+      <li>
+        <anchor id="EditRelative"/>
+        <strong>:EditRelative</strong> -
+        Like <strong>:SplitRelative</strong> except issues an 'edit' and only
+        supports one file at a time.
+      </li>
+      <li>
+        <anchor id="DiffLastSaved"/>
+        <strong>:DiffLastSaved</strong> -
+        Performs a diffsplit with the last saved version of the currently
+        modifed file.
+      </li>
+      <li>
+        <anchor id="SwapWords"/>
+        <strong>:SwapWords</strong> -
+        Swaps two words (with cursor placed on the first word).
+        Supports swapping around non-word characters like commas, periods, etc.
+      </li>
+      <!--li>
+      <anchor id="SwapTypedArguments"/>
+      <strong>:SwapTypedArguments</strong> -
+        Swaps typed method arguments in a method declaration (with the cursor
+        placed on the type declaration of the first argument to swap).
+        <source>
+          public void test (String _arg1, int arg2)
+        </source>
+        Executing :SwapTypedArguments on "String" would result in.
+        <source>
+          public void test (int arg2, String _arg1)
+        </source>
+      </li-->
+    </ul>
+  </body>
+</document>

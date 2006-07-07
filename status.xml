@@ -376,16 +376,16 @@
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added
-        <a href="vim/project.html#ProjectRefresh">
+        <a href="vim/common/project.html#ProjectRefresh">
           <strong>:ProjectRefresh</strong>
         </a>.
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added
-        <a href="vim/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>,
-        <a href="vim/project.html#ProjectClose"><strong>:ProjectClose</strong></a>,
+        <a href="vim/common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>,
+        <a href="vim/common/project.html#ProjectClose"><strong>:ProjectClose</strong></a>,
         and updated
-        <a href="vim/project.html#ProjectList"><strong>:ProjectList</strong></a>
+        <a href="vim/common/project.html#ProjectList"><strong>:ProjectList</strong></a>
         to show the current status of each project.
       </action>
       <action dev="ervandew" type="fix" context="Eclim">
@@ -427,13 +427,13 @@
 
       <action dev="ervandew" type="add" context="Vim">
         Added
-        <strong><a href="vim/index.html#Split">:Split</a></strong>,
-        <strong><a href="vim/index.html#SplitRelative">:SplitRelative</a></strong>,
-        <strong><a href="vim/index.html#EditRelative">:EditRelative</a></strong>,
-        <strong><a href="vim/index.html#LocateFileEdit">:LocateFileEdit</a></strong>,
-        <strong><a href="vim/index.html#LocateFileSplit">:LocateFileSplit</a></strong>,
+        <strong><a href="vim/common/util.html#Split">:Split</a></strong>,
+        <strong><a href="vim/common/util.html#SplitRelative">:SplitRelative</a></strong>,
+        <strong><a href="vim/common/util.html#EditRelative">:EditRelative</a></strong>,
+        <strong><a href="vim/common/util.html#LocateFileEdit">:LocateFileEdit</a></strong>,
+        <strong><a href="vim/common/util.html#LocateFileSplit">:LocateFileSplit</a></strong>,
         and
-        <strong><a href="vim/index.html#LocateFileTab">:LocateFileTab</a></strong>,
+        <strong><a href="vim/common/util.html#LocateFileTab">:LocateFileTab</a></strong>,
       </action>
     </release>
 
@@ -528,11 +528,14 @@
 
       <action dev="ervandew" type="add" context="Vim">
         Added couple miscellaneous
-        <a href="vim/index.html#misc">vim commands</a> for use in or outside of
+        <a href="vim/common/util.html">vim commands</a> for use in or outside of
         eclim context.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        Added <a href="vim/taglist.html">groovy script based ctags implementation</a>
+        Added
+        <a href="vim/common/taglist.html">
+          groovy script based ctags implementation
+        </a>
         for use with the vim taglist plugin.
       </action>
       <action dev="ervandew" type="update" context="Vim">
@@ -540,7 +543,7 @@
         the quickfix window, now utilizes vim's new location list functionality.
       </action>
       <action dev="ervandew" type="add" context="Vim">
-        Added <a href="vim/web.html">web lookup commands</a>.
+        Added <a href="vim/common/web.html">web lookup commands</a>.
       </action>
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/vim/find.html">
@@ -653,7 +656,7 @@
         Based on suggestion by Ivo Danihelka.
       </action>
       <action dev="ervandew" type="add" context="Java">
-        Added <a href="server/settings.html">preference</a> to suppress
+        Added <a href="vim/settings.html">preference</a> to suppress
         warnings when using java source code validation.
       </action>
       <action dev="ervandew" type="add" context="Vim">

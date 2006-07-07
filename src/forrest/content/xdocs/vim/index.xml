@@ -28,307 +28,46 @@
     </authors>
   </header>
   <body>
-    <section id="requirements">
-      <title>Requirements</title>
-      <p>
-        The Eclim plugins for vim require vim 7.  At the time of this writing,
-        vim 7 is still alpha, but I have yet to encounter any major issues with
-        it.  For information on obtaining and installing vim 7 please see the
-        <a href="../install/index.html#vim_plugin">installation docs</a>.
-      </p>
-    </section>
-    <section id="configuration">
-      <title>Configuration</title>
-      <p>
-        The following is a list of the global configuration settings available.
-      </p>
-      <ul>
-        <li>
-          <anchor id="EclimLogLevel"/>
-          <strong>g:EclimLogLevel</strong> (Default: 5)<br/>
-          Much like the vim 'verbose' option, this variable allows you to
-          control the level of output from eclim as follows:
-          <ul>
-            <li>&lt;= 0: No output.</li>
-            <li>&gt;= 1: Fatal errors.</li>
-            <li>&gt;= 2: Errors.</li>
-            <li>&gt;= 3: Warning messages.</li>
-            <li>&gt;= 4: Info messages.</li>
-            <li>&gt;= 5: Debug messages.</li>
-            <li>&gt;= 6: Trace messages.</li>
-          </ul>
-          Each level also has a corresponding variable to set the highlighting
-          group used for the text.
-          <ul>
-            <li>
-              <anchor id="EclimFatalHighlight"/>
-              <strong>g:EclimFatalHighlight</strong> (Default: "Error")
-            </li>
-            <li>
-              <anchor id="EclimErrorHighlight"/>
-              <strong>g:EclimErrorHighlight</strong> (Default: "Error")
-            </li>
-            <li>
-              <anchor id="EclimWarningHighlight"/>
-              <strong>g:EclimWarningHighlight</strong> (Default: "WarningMsg")
-            </li>
-            <li>
-              <anchor id="EclimInfoHighlight"/>
-              <strong>g:EclimInfoHighlight</strong> (Default: "Statement")
-            </li>
-            <li>
-              <anchor id="EclimDebugHighlight"/>
-              <strong>g:EclimDebugHighlight</strong> (Default: "Normal")
-            </li>
-            <li>
-              <anchor id="EclimTraceHighlight"/>
-              <strong>g:EclimTraceHighlight</strong> (Default: "Normal")
-            </li>
-          </ul>
-        </li>
-        <li>
-          <anchor id="EclimSignLevel"/>
-          <strong>g:EclimSignLevel</strong> (Default: 5)<br/>
-          Behaves just like <strong>g:EclimLogLevel</strong> except this applies
-          to placing of vim signs for displaying validation errors / warnings,
-          or marking :[vim]grep matches.<br/>
-          The resulting signs also use the same highlighting variables above.
-        </li>
-        <li>
-          <anchor id="EclimEchoHighlight"/>
-          <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
-          Determines which highlight group will be used for informative
-          messages.
-        </li>
-        <li>
-          <anchor id="EclimBrowser"/>
-          <strong>g:EclimBrowser</strong> (No Default)<br/>
-          Configures the external web browser command to use when viewing
-          javadocs, etc.  The &lt;url&gt; in the command will be replaced
-          with the target url.
-          <ul>
-            <li>
-              Firefox<br/>let g:EclimBrowser = 'firefox "&lt;url&gt;"'
-            </li>
-            <li>
-              Mozilla<br/>let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
-            </li>
-            <li>
-              Opera<br/>let g:EclimBrowser = 'opera "&lt;url&gt;"'
-            </li>
-            <li>
-              IE<br/>let g:EclimBrowser = 'iexplore &lt;url&gt;'
-            </li>
-          </ul>
-          Note: The above examples assume that the browser executable is in your
-          path. On windows machines they won't be by default, so you will need
-          to add them.
-        </li>
-        <li>
-          <anchor id="EclimShowCurrentError"/>
-          <strong>g:EclimShowCurrentError</strong> (Default: 1)<br/>
-          This variable determines whether or not a CursorHold autocommand is
-          created that will echo the error associated with the current line if
-          any error exists.  Setting this variable to 0 disables this feature.
-        </li>
-        <li>
-          <anchor id="EclimMakeLCD"/>
-          <strong>g:EclimMakeLCD</strong> (Default: 1)<br/>
-          When not set to 0, this enables autocommand which will perform a local
-          change directory (:lcd) for the current window, setting that window's
-          current working directory to the directory of the current file.  After
-          execution of the :make command, that window's current working
-          directory will be restored to the dir it was prior to executing
-          :make.<br/>
-          Enabling this has the benefit of allowing you to run :make or
-          <a href="ant/run.html"><strong>Ant</strong></a> from any file
-          regardless of where it was opened from without having to worry about
-          the directory it is executing from.  For example if you have a file
-          open from project A and split a file from project B, you can execute
-          <strong>Ant</strong> from the project B file and it will utilize
-          project B's build.xml even though your current working directory is in
-          project A.
-        </li>
-      </ul>
-    </section>
-    <section id="commands">
-      <title>Global Commands</title>
-      <p>
-        The following is a list of commands that can be executed in any vim
-        window, regardless of the current filetype.
-      </p>
-      <ul>
-        <li>
-          <anchor id="PingEclim"/>
-          <strong>:PingEclim</strong><br/>
-          Pings eclimd to see if it is up and running.
-        </li>
-        <li>
-          <anchor id="ShutdownEclim"/>
-          <strong>:ShutdownEclim</strong><br/>
-          Shuts down the current running eclimd instance.
-        </li>
-        <li>
-          <anchor id="Settings"/>
-          <strong>:Settings</strong><br/>
-          Allows you to view / edit the global
-          <a href="../server/settings.html">settings</a>.
-          For project level settings see the
-          <a href="project.html#ProjectSettings">
-            <strong>:ProjectSettings</strong>
-          </a>
-          command on the <a href="project.html">project documentation page</a>.
-        </li>
-      </ul>
-    </section>
-    <section id="plugin">
-      <title>Global Plugins</title>
-      <p>
-        The following functionality is provided to all file types.
-      </p>
-      <ul>
-        <li>
-          <a href="project.html">
-            Create projects and view/edit project settings.
-          </a>
-        </li>
-      </ul>
-    </section>
-    <section id="ant">
-      <title>Ant Plugins</title>
-      <ul>
-        <li><a href="ant/run.html">Ant execution from any file.</a></li>
-        <li><a href="ant/complete.html">Ant code completion.</a></li>
-        <li><a href="ant/validate.html">Build file validation.</a></li>
-        <li><a href="ant/doc.html">Ant documentation lookup.</a></li>
-      </ul>
-    </section>
-    <section id="java">
-      <title>Java Plugins</title>
-      <ul>
-        <li><a href="java/classpath.html">Edit your project's classpath.</a></li>
-        <li><a href="java/source.html">Source code validation.</a></li>
-        <li><a href="java/search.html">Source code searching.</a></li>
-        <li><a href="java/doc.html">Javadoc support.</a></li>
-        <li><a href="java/import.html">Automated imports.</a></li>
-        <li><a href="java/complete.html">Code completion.</a></li>
-        <li><a href="java/correct.html">Code correction.</a></li>
-        <li><a href="java/constructor.html">Create class constructors.</a></li>
-        <li><a href="java/impl.html">Implementation / Override Stubbing.</a></li>
-        <li><a href="java/delegate.html">Delegate method creation.</a></li>
-        <li><a href="java/bean.html">Java Bean getter / setter generation.</a></li>
-        <li><a href="java/junit.html">JUnit integration.</a></li>
-        <li><a href="java/logging.html">Logging.</a></li>
-        <li><a href="java/abbreviations.html">Abbreviations.</a></li>
-        <li><a href="java/regex.html">Regular Expression Testing.</a></li>
-      </ul>
-    </section>
-    <section id="vim">
-      <title>Vim Script Plugins</title>
-      <ul>
-        <li><a href="vim/find.html">Vim Find.</a></li>
-        <li><a href="vim/doc.html">Vim doc lookup.</a></li>
-      </ul>
-    </section>
-    <section id="xml">
-      <title>Xml Plugins</title>
-      <ul>
-        <li><a href="xml/validate.html">Validate xml files.</a></li>
-      </ul>
-    </section>
-    <section id="web">
-      <title>Web Lookup Commands</title>
-      <p>
-        Commands to lookup word or phrases on the <a href="web.html">web</a>.
-      </p>
-    </section>
-    <section id="misc">
-      <title>Misc Commands</title>
-      <p>
-        Miscellaneous global commands not specific to eclim.  These are general
-        purpose commands that are useful in and outside the scope of eclim.
-      </p>
-      <ul>
-        <li>
-          <anchor id="LocateFileEdit"/>
-          <strong>:LocateFileEdit</strong> [file] -
-          Locates a file via the following steps:
-          <ol>
-            <li>
-              If current file is in a project, locate the file relative to
-              that project.
-            </li>
-            <li>
-              If no results from step #1, then attempt to locate relative to the
-              current file.
-            </li>
-            <li>
-              If no results from step #2, then attempt to locate relative to the
-              other projects.
-            </li>
-          </ol>
-          If no file argument is supplied to the
-          <strong>:LocateFileEdit</strong> command then it will attempt to
-          extract a file name from the cursor position of the current file.<br/>
-          When a file is located, an :edit is invoked to open it.
-        </li>
-        <li>
-          <anchor id="LocateFileSplit"/>
-          <strong>:LocateFileSplit</strong> [file] -
-          Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
-          file with :split.
-        </li>
-        <li>
-          <anchor id="LocateFileTab"/>
-          <strong>:LocateFileTab</strong> [file] -
-          Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
-          file with :newtab.
-        </li>
-        <li>
-          <anchor id="Split"/>
-          <strong>:Split</strong> -
-          Behaves like the 'split' command, but allows multiple files to be
-          supplied.
-        </li>
-        <li>
-          <anchor id="SplitRelative"/>
-          <strong>:SplitRelative</strong> -
-          Like <strong>:Split</strong> this command provides splitting of multiple
-          files, but this command splits files relative to the file in the current
-          buffer.
-        </li>
-        <li>
-          <anchor id="EditRelative"/>
-          <strong>:EditRelative</strong> -
-          Like <strong>:SplitRelative</strong> except issues an 'edit' and only
-          supports one file at a time.
-        </li>
-        <li>
-          <anchor id="DiffLastSaved"/>
-          <strong>:DiffLastSaved</strong> -
-          Performs a diffsplit with the last saved version of the currently
-          modifed file.
-        </li>
-        <li>
-          <anchor id="SwapWords"/>
-          <strong>:SwapWords</strong> -
-          Swaps two words (with cursor placed on the first word).
-          Supports swapping around non-word characters like commas, periods, etc.
-        </li>
-        <!--li>
-          <anchor id="SwapTypedArguments"/>
-          <strong>:SwapTypedArguments</strong> -
-          Swaps typed method arguments in a method declaration (with the cursor
-          placed on the type declaration of the first argument to swap).
-          <source>
-            public void test (String _arg1, int arg2)
-          </source>
-          Executing :SwapTypedArguments on "String" would result in.
-          <source>
-            public void test (int arg2, String _arg1)
-          </source>
-        </li-->
-      </ul>
-    </section>
+    <p>
+      As stated in the project description, eclim's main goal is to bring
+      eclipse functionality to the vim editor.  Here you will find documentation
+      on the various fuctionality that eclim provides.
+    </p>
+    <p>
+      You may use the navigation to the left to view configuration information
+      (<a href="settings.html">settings</a>,
+      <a href="mappings.html">suggested mappings</a>, etc.), or to navigate the
+      functionality documentation which is broken up into categories (java, ant,
+      etc.).
+    </p>
+    <p>
+      Before diving in, you should first familiarize yourself with the
+      following commands.  After that, take a look at the docs for
+      <a href="common/project.html">managing projects</a>.  Then feel free to
+      move onto the other categories.
+    </p>
+    <ul>
+      <li>
+        <anchor id="PingEclim"/>
+        <strong>:PingEclim</strong><br/>
+        Pings eclimd to see if it is up and running.
+      </li>
+      <li>
+        <anchor id="ShutdownEclim"/>
+        <strong>:ShutdownEclim</strong><br/>
+        Shuts down the current running eclimd instance.
+      </li>
+      <li>
+        <anchor id="Settings"/>
+        <strong>:Settings</strong><br/>
+        Allows you to view / edit the global
+        <a href="settings.html">settings</a>.
+        For project level settings see the
+        <a href="common/project.html#ProjectSettings">
+          <strong>:ProjectSettings</strong>
+        </a>
+        command on the <a href="common/project.html">project documentation page</a>.
+      </li>
+    </ul>
   </body>
 </document>

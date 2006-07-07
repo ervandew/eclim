@@ -64,30 +64,34 @@ See http://forrest.apache.org/docs/linking.html for more info
 
   <server label="Eclimd Server" href="server/" tab="server">
     <index label="Index" href="index.html" description="Index"/>
-    <project label="Settings" href="settings.html"
-        description="Available settings for eclimd."/>
   </server>
 
-  <client label="Command Line Client" href="client/" tab="client">
+  <!--client label="Command Line Client" href="client/" tab="client">
     <index label="Index" href="index.html" description="Index"/>
-  </client>
+  </client-->
 
   <vim label="Vim Integration" href="vim/" tab="vim">
     <index label="Index" href="index.html" description="Index"/>
-    <project label="Projects" href="project.html"
-        description="Create projects and view/edit project settings."/>
-    <taglist label="TagList Integration" href="taglist.html"
-        description="TagList Integration"/>
+    <project label="Settings" href="settings.html"
+        description="Eclim settings."/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
-    <web label="Web Lookup Commands" href="web.html"
-        description="Web Lookup Commands."/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
         description="List of suggested vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
         description="List of all eclim vim commands."/>
     <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet.pdf"
         description="List of all eclim vim commands."/>
+    <common label="Common" href="common/">
+      <project label="Projects" href="project.html"
+          description="Create projects and view/edit project settings."/>
+      <taglist label="TagList Integration" href="taglist.html"
+          description="TagList Integration"/>
+      <web label="Web Lookup Commands" href="web.html"
+          description="Web Lookup Commands."/>
+      <utility label="Utility Commands" href="util.html"
+          description="Utility Commands."/>
+    </common>
     <ant label="Ant" href="ant/">
       <run label="Execution" href="run.html"
           description="Execute Ant"/>

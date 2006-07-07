@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Eclim Settings</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Certain aspects of eclim can be controlled by modifying one or more
+      settings.<br/>
+      There are two types of settings available:
+    </p>
+    <ul>
+      <li>
+        <strong>Eclim global / project settings.</strong><br/>
+        These are settings that reside in your eclipse workspace and are used to
+        control certain aspects of the eclim server's behavior.  These settings
+        can be viewed and modified using one of the following commands:
+        <ul>
+          <li>
+            <a href="index.html#commands"><strong>:Settings</strong></a>
+            <br/>
+          </li>
+          <li>
+            <a href="common/project.html"><strong>:ProjectSettings</strong></a>
+            <br/>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Vim global variable settings.</strong><br/>
+        These are your typical global vim variables which can be set within your
+        vimrc file.
+      </li>
+    </ul>
+
+    <p>
+      Givin these two types, you may be ask, why do we need two? Or, when a new
+      setting is added, how do you decide which type to make it?
+    </p>
+    <p>
+      The reasoning behind having two types is that there are some settings that
+      may vary from one project to another.  For instance, I may have one
+      project that can be used in jdk 1.3 and utilizes log4j for logging, while
+      another project of mine requires jdk 1.4 and utilizes slf4j for logging.
+      Instances like this require that each project be capable of storing their
+      own settings.  Rather than reinvent this support in vim, we utilize
+      eclipse's built in preferences system.
+    </p>
+    <p>
+      If the eclipse preferences system can store project level and global
+      settings, why not make all the eclim settings of this type?  Well, the
+      downside to eclipse prefrences system is that an eclipse instance must be
+      running to obtain the value of that preference.  Eclim however, requires
+      access to many settings, regardless of whether eclipse is running or not.
+      So, to ensure that these settings are always available, we utilize the
+      standard vim global variable support.
+    </p>
+    <p>
+      When adding a new setting, deciding between an eclipse preference or a vim
+      global variable is a matter of answering the following:
+    </p>
+    <ul>
+      <li>
+        Will this setting vary from one project to another?<br/>
+        Yes: Add this setting an eclipse preference.
+      </li>
+      <li>
+        Does eclim need access to this setting regarless of whether an eclipse
+        instance is running or not?<br/>
+        Yes: Add this setting a vim global variable.
+      </li>
+    </ul>
+
+    <section id="eclim_settings">
+      <title>Eclim global / project settings</title>
+      <p>
+        The following is a list of global / project settings available.
+      </p>
+      <ul>
+        <li>
+          <strong>org.eclim.user.name</strong><br/>
+          Should be set to your name. Used by various commands that add contact or
+          author information to a file.
+        </li>
+        <li>
+          <strong>org.eclim.user.email</strong><br/>
+          Should be set to the email address where you can be contacted.  Used by
+          various commands that add contact or author information to a file.
+        </li>
+        <li>
+          <strong>org.eclim.project.version</strong><br/>
+          Should be set to the version number of your project.  This is used by
+          various commands that add version info to a file or utilize the
+          version number in some other manner.
+          <br/>Defaults to "1.0".
+        </li>
+        <li>
+          <strong>org.eclipse.jdt.core.compiler.source</strong><br/>
+          Determines the target java vm version (1.2, 1.3, 1.4, 1.5).  This
+          setting will be used by eclim when generating any code that may
+          optionally contain features not present in all jvm versions.
+        </li>
+        <li>
+          <strong>org.eclim.java.library.root</strong><br/>
+          When utilizing the
+          <a href="java/classpath.html#buildfile">classpath editing</a>
+          features for ivy and maven dependency files, this determines the default
+          directory name prepended to the jar file entries as they are added to
+          the eclipse .classpath file.  Since neither the ivy, nor the maven file
+          contain the final destination of the dependency jars, eclim relies on
+          this setting to build a full path to the resource.
+          <note>
+            Eclim will NOT validate that the jars exist at the supplied path since
+            both ivy and maven can be used to download jars from online
+            repositories, resulting in the chance that the file will not yet exist
+            on disk.
+          </note>
+        </li>
+        <li>
+          <strong>org.eclim.java.logging.impl</strong><br/>
+          When utilizing the <a href="java/logging.html">java logging</a>
+          feature, this setting determines which logging implementation to use.
+          <br/>
+          Possible values include "commons-logging", "slf4j", "log4j", and
+          "jdk".<br/>
+          Defaults to "commons-logging" as both the commons-logging impl and the
+          slf4j replacement can be used.
+        </li>
+      </ul>
+    </section>
+
+    <section id="vim_settings">
+      <title>Vim global variables</title>
+      <p>
+        The following is a list of global vim variables available.
+      </p>
+      <ul>
+        <li>
+          <anchor id="EclimLogLevel"/>
+          <strong>g:EclimLogLevel</strong> (Default: 5)<br/>
+          Much like the vim 'verbose' option, this variable allows you to
+          control the level of output from eclim as follows:
+          <ul>
+            <li>&lt;= 0: No output.</li>
+            <li>&gt;= 1: Fatal errors.</li>
+            <li>&gt;= 2: Errors.</li>
+            <li>&gt;= 3: Warning messages.</li>
+            <li>&gt;= 4: Info messages.</li>
+            <li>&gt;= 5: Debug messages.</li>
+            <li>&gt;= 6: Trace messages.</li>
+          </ul>
+          Each level also has a corresponding variable to set the highlighting
+          group used for the text.
+          <ul>
+            <li>
+              <anchor id="EclimFatalHighlight"/>
+              <strong>g:EclimFatalHighlight</strong> (Default: "Error")
+            </li>
+            <li>
+              <anchor id="EclimErrorHighlight"/>
+              <strong>g:EclimErrorHighlight</strong> (Default: "Error")
+            </li>
+            <li>
+              <anchor id="EclimWarningHighlight"/>
+              <strong>g:EclimWarningHighlight</strong> (Default: "WarningMsg")
+            </li>
+            <li>
+              <anchor id="EclimInfoHighlight"/>
+              <strong>g:EclimInfoHighlight</strong> (Default: "Statement")
+            </li>
+            <li>
+              <anchor id="EclimDebugHighlight"/>
+              <strong>g:EclimDebugHighlight</strong> (Default: "Normal")
+            </li>
+            <li>
+              <anchor id="EclimTraceHighlight"/>
+              <strong>g:EclimTraceHighlight</strong> (Default: "Normal")
+            </li>
+          </ul>
+        </li>
+        <li>
+          <anchor id="EclimSignLevel"/>
+          <strong>g:EclimSignLevel</strong> (Default: 5)<br/>
+          Behaves just like <strong>g:EclimLogLevel</strong> except this applies
+          to placing of vim signs for displaying validation errors / warnings,
+          or marking :[vim]grep matches.<br/>
+          The resulting signs also use the same highlighting variables above.
+        </li>
+        <li>
+          <anchor id="EclimEchoHighlight"/>
+          <strong>g:EclimEchoHighlight</strong> (Default: "Statement")<br/>
+          Determines which highlight group will be used for informative
+          messages.
+        </li>
+        <li>
+          <anchor id="EclimBrowser"/>
+          <strong>g:EclimBrowser</strong> (No Default)<br/>
+          Configures the external web browser command to use when viewing
+          javadocs, etc.  The &lt;url&gt; in the command will be replaced
+          with the target url.
+          <ul>
+            <li>
+              Firefox<br/>let g:EclimBrowser = 'firefox "&lt;url&gt;"'
+            </li>
+            <li>
+              Mozilla<br/>let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
+            </li>
+            <li>
+              Opera<br/>let g:EclimBrowser = 'opera "&lt;url&gt;"'
+            </li>
+            <li>
+              IE<br/>let g:EclimBrowser = 'iexplore &lt;url&gt;'
+            </li>
+          </ul>
+          Note: The above examples assume that the browser executable is in your
+          path. On windows machines they won't be by default, so you will need
+          to add them.
+        </li>
+        <li>
+          <anchor id="EclimShowCurrentError"/>
+          <strong>g:EclimShowCurrentError</strong> (Default: 1)<br/>
+          This variable determines whether or not a CursorHold autocommand is
+          created that will echo the error associated with the current line if
+          any error exists.  Setting this variable to 0 disables this feature.
+        </li>
+        <li>
+          <anchor id="EclimMakeLCD"/>
+          <strong>g:EclimMakeLCD</strong> (Default: 1)<br/>
+          When not set to 0, this enables autocommand which will perform a local
+          change directory (:lcd) for the current window, setting that window's
+          current working directory to the directory of the current file.  After
+          execution of the :make command, that window's current working
+          directory will be restored to the dir it was prior to executing
+          :make.<br/>
+          Enabling this has the benefit of allowing you to run :make or
+          <a href="ant/run.html"><strong>Ant</strong></a> from any file
+          regardless of where it was opened from without having to worry about
+          the directory it is executing from.  For example if you have a file
+          open from project A and split a file from project B, you can execute
+          <strong>Ant</strong> from the project B file and it will utilize
+          project B's build.xml even though your current working directory is in
+          project A.
+        </li>
+      </ul>
+    </section>
+
+  </body>
+</document>
