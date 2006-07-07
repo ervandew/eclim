@@ -16,7 +16,7 @@
 
 # Author: Eric Van Dewoestine
 
-if [ "$ECLIPSE_HOME" == '' ] ; then
+if [ "$ECLIPSE_HOME" = '' ] ; then
   echo "ECLIPSE_HOME not set";
   exit 1;
 fi
