@@ -60,7 +60,7 @@ function! eclim#ExecuteEclim (args)
   " http://www.cs.net/lucid/ascii.htm
   let args = substitute(args, '*', '%2A', 'g')
   let args = substitute(args, '\$', '%24', 'g')
-  let command = eclim#GetEclimCommand() . ' ' . args
+  let command = eclim#GetEclimCommand()
   if string(command) == '0'
     return 0
   endif
@@ -92,13 +92,13 @@ function! eclim#ExecuteEclim (args)
 
   " check for errors
   let error = ''
-  if v:shell_error && result =~ 'Exception.*\s\+\<at\> '
+  if result =~ 'Exception.*\s\+\<at\> '
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
   elseif v:shell_error
     let error = result
   endif
 
-  if v:shell_error
+  if v:shell_error || error != ''
     if g:EclimShowErrors
       if error =~ s:connect
         " eclimd is not running and we appear to not be in an autocmd
