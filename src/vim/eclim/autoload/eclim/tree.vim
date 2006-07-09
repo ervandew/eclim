@@ -321,8 +321,9 @@ function eclim#tree#ExecuteAction (file, command)
   let file = fnamemodify(file, ':t')
   let file = escape(file, ' &') " file needs to be escaped twice.
   let file = escape(file, '&') " '&' needs to be escaped 3 times.
+  let file = substitute(file, '\', '/', 'g')
 
-  let cwd = getcwd()
+  let cwd = substitute(getcwd(), '\', '/', 'g')
   " not using lcd, because the executed command my change windows.
   silent exec 'cd ' . path
 
