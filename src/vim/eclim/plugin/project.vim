@@ -36,10 +36,14 @@
 " Auto Commands {{{
   if g:EclimProjectTreeAutoOpen
     autocmd VimEnter *
-      \ call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
-      \ exec g:EclimProjectTreeContentWincmd
+      \ if eclim#project#GetCurrentProjectRoot() != '' |
+      \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
+      \   exec g:EclimProjectTreeContentWincmd |
+      \ endif
     autocmd BufWinEnter *
-      \ if tabpagenr() > 1 && !exists('t:project_tree_auto_opened') |
+      \ if tabpagenr() > 1 &&
+      \     !exists('t:project_tree_auto_opened') &&
+      \     eclim#project#GetCurrentProjectRoot() != '' |
       \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
       \   let t:project_tree_auto_opened = 1 |
       \ endif
