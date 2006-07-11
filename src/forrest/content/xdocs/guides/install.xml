@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Eclim installation / upgrading guide.</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <note>
+      Currently the installation proceedure is fairly manual, but a graphical
+      installer is in the works and will hopefully be ready by the next eclim
+      release.
+    </note>
+    <section id="requirements">
+      <title>Requirements</title>
+      <p>
+        Before beginning the installation, first confirm that you have met the
+        following requirements.
+      </p>
+      <ul>
+        <li>
+          <a href="ext:jdk_download">Java Development Kit</a> 1.4 or greater.
+        </li>
+        <li>
+          <a href="ext:eclipse_download">Eclipse SDK 3.2.0</a>.
+        </li>
+        <li>
+          <a href="ext:vim_download">Vim 7.0.x</a>.
+          <br/>
+          <br/>
+          <strong>Gentoo users</strong>: To get the latest and greatest
+          version of vim from portage simply make the following entries in the
+          designated files.
+          <ul>
+            <li>
+              /etc/portage/package.keywords (the ~x86 portion will obviously
+              vary if you are not on a x86 architecture).
+              <source>
+                app-editors/vim-core ~x86
+                app-editors/vim ~x86
+                app-editors/gvim ~x86
+                app-vim/gentoo-syntax ~x86
+              </source>
+            </li>
+            <li>
+              /etc/portage/package.unmask
+              <source>
+                app-editors/vim-core
+                app-editors/vim
+                app-editors/gvim
+                app-vim/gentoo-syntax
+              </source>
+            </li>
+          </ul>
+          And then execute "emerge vim" or "emerge gvim" depending on whether
+          you would like the gui version or not.
+        </li>
+      </ul>
+    </section>
+    <section id="install">
+      <title>Install</title>
+
+      <section id="step1">
+        <title>Step 1: Download <strong>2</strong> eclim distribution files.</title>
+        <ol>
+          <li>
+            The first file you will need to <a href="ext:downloads">download</a>
+            is the platform independent vim plugins jar file:
+            <ul>
+              <li>
+                <a href="ext:downloads">
+                  <strong>eclim_vim_<em>version</em>.jar</strong>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            The second file you will need to <a href="ext:downloads">download</a>
+            is the platform dependent eclipse plugins archive:
+            <ul>
+              <li>
+                *nix:
+                <a href="ext:downloads">
+                  <strong>org.eclim_<em>version</em>.tar.gz</strong>
+                </a>
+              </li>
+              <li>
+                Windows:
+                <a href="ext:downloads">
+                  <strong>org.eclim_<em>version</em>.zip</strong>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+
+      <section id="step2">
+        <title>Step 2: Install eclim eclipse plugins.</title>
+        <p>
+          Simply open a shell and extract the eclim eclipse plugins archive to your
+          eclipse plugins directory.
+        </p>
+        <p>
+          *nix Example:<br/>
+          <img alt="Extracting on *nix."
+              src="../images/screenshots/install/linux_eclipse_plugins.png"/>
+        </p>
+        <p>
+          Windows Example:<br/>
+          <img alt="Extracting on Windows."
+              src="../images/screenshots/install/windows_eclipse_plugins.png"/>
+        </p>
+        <p>
+          Once you have the plug-in installed, before you can run the server, you
+          must set the environment variable <strong>ECLIPSE_HOME</strong> to the
+          location of your eclipse installation.
+        </p>
+        <ul>
+          <li>
+            *nix: add export ECLIPSE_HOME="/usr/local/eclipse" to your .bashrc
+            or equivelent for your prefered shell.
+          </li>
+          <li>
+            Windows: Start > Setting > Control Panel > System > Advanced (tab) >
+            Environment Variables.  From there add a new System or User variable
+            for ECLIPSE_HOME.
+          </li>
+        </ul>
+      </section>
+
+      <section id="step3">
+        <title>Step 3: Install eclim vim plugins.</title>
+        <p>
+          Simply open a shell and extract the eclim vim plugins jar file to one
+          of the directories in your vim runtime path.
+        </p>
+        <note>
+          The directory to extract to depends on your platform, but you can find
+          the appropriate directory by opening a vim instance and executing:
+          <br/>
+          &nbsp;&nbsp;<strong>:echo &amp;rtp</strong><br/>
+          This will echo a comma seperated list of directories in vim's runtime
+          path.
+          <br/>
+          <br/>
+          On *nix platforms, you would typically be extracting to the .vim
+          directory in your home folder.<br/>
+          &nbsp;&nbsp;<strong>~/.vim</strong>
+          <br/>
+          <br/>
+          On Windows platforms, you would typically be extracting to the
+          vimfiles directory in your C:\Documents and Settings\Username\
+          folder.<br/>
+          &nbsp;&nbsp;<strong>C:\Documents and Settings\<em>Username</em>\vimfiles</strong>
+          <br/>
+          In some cases you might instead need to extract to vimfiles on your C
+          drive.<br/>
+          &nbsp;&nbsp;<strong>C:\vimfiles</strong>
+        </note>
+        <p>
+          *nix Example:<br/>
+          <img alt="Extracting on *nix."
+              src="../images/screenshots/install/linux_vim_plugins.png"/>
+        </p>
+        <p>
+          Windows Example:<br/>
+          <img alt="Extracting on Windows."
+              src="../images/screenshots/install/windows_vim_plugins.png"/>
+        </p>
+      </section>
+
+      <section id="step4">
+        <title>Step 4: Compile nailgun (non-Windows systems only).</title>
+        <ul>
+          <li>
+            <strong>Windows Users</strong>:
+            On windows there are no additional installation steps for nailgun.
+          </li>
+          <li>
+            <strong>All Other Platforms</strong>:
+            For all other platforms you will need 'gcc' and 'make' to compile
+            nailgun for your system.<br/> To do so, open a command prompt and
+            change directories to
+            ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/src/nailgun.  In
+            that directory issue the command 'make'.  After that finishes you
+            should have an executable named 'ng' in the same directory.  Simply
+            copy or move that file to
+            ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin and you're all
+            done.
+            <source>
+              $ cd $ECLIPSE_HOME/plugins/org.eclim_1.2.0/src/nailgun
+              $ make
+              $ mv ng ../../bin/
+            </source>
+          </li>
+        </ul>
+      </section>
+
+      <section id="step5">
+        <title>Step 5: Start and test eclim.</title>
+        <p>
+          Now that everything is installed, it is time to start up the eclim
+          server and verify that it is running properly.
+        </p>
+        <ol>
+          <li>
+            The first step is to start the eclimd server.  To do so follow the
+            directions found <a href="../eclimd.html#startup">here</a>.
+          </li>
+          <li>
+            Once you have started the server you can test it by opening a vim
+            window and issuing the command,
+            <a href="../vim/index.html#PingEclim">
+              <strong>:PingEclim</strong>
+            </a>.  The result of executing this command should be
+            "<code>eclim</code> <em>version</em>" echoed to the bottom of your
+            vim window.  If however, you receive
+            "<code>unable to connect to eclimd - connect: Connection refused</code>",
+            or something similar, then your eclimd server is not running or
+            something is preventing eclim from connecting to it.  If you receive
+            this or any other errors and are unsure of what steps to take,
+            please feel free to visit the <a href="ext:forums">forums</a> so
+            that someone can help resolve your issue.
+            <br/><br/>
+            <p>
+              Example of successful ping:<br/>
+              <img src="../images/screenshots/ping_success.png" alt="Successful Ping"/>
+            </p>
+            <br/>
+            <p>
+              Example of failed ping:<br/>
+              <img src="../images/screenshots/ping_failed.png" alt="Failed Ping"/>
+            </p>
+          </li>
+        </ol>
+      </section>
+
+    </section>
+
+    <section id="upgrade">
+      <title>Upgrading</title>
+      <p>
+        To upgrade eclim
+      </p>
+      <ol>
+        <li>
+          First check all the <a href="../changes.html">release notes</a>
+          from the previous version you had installed to the latest one, to see
+          if there were any special upgrade notes that may apply to you.
+        </li>
+        <li>
+          <a href="../eclimd.html#shutdown">Shutdown eclimd</a>.
+        </li>
+        <li>
+          Delete the old org.eclim*_<em>version</em> plugins from your
+          ECLIPSE_HOME/plugins directory.
+        </li>
+        <li>
+          <a href="#step2">
+            Extract the new org.eclim_<em>version</em>.tar.gz
+          </a>
+          (or org.eclim_<em>version</em>.zip if on windows) to your
+          ECLIPSE_HOME/plugins directory.
+        </li>
+        <li>
+          <a href="#step3">
+            Extract your new eclim_vim_<em>version</em>.jar
+          </a>
+          file to your vim runtimepath.
+        </li>
+        <li>
+          If not on Windows, recompile the <a href="#step4">nailgun client</a>.
+        </li>
+      </ol>
+    </section>
+  </body>
+</document>

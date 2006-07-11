@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+  Author: Eric Van Dewoestine
+  -->
+
+<document>
+  <header>
+    <title>Creating your first java project.</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section id="project_create">
+      <title>Creating a project</title>
+      <p>
+        Now that everything is installed and eclimd is up and running, you can
+        create your first project.
+      </p>
+      <p>
+        To do so, simply open up a vim window and execute:
+      </p>
+      <source>
+        :ProjectCreate /path/to/my/project
+      </source>
+      <p>
+        The path supplied will be the path to the root of your project.  This
+        path may or may not exist.  If it does not exist it will be created for
+        you.  If the path does exist, it will be examined for any source
+        directories or libraries (jar files) that should be included in the
+        project's classpath.  In either case the end result will be the creation
+        of a <code>.project</code> and <code>.classpath</code> file in the
+        supplied directory.  At this time, the <code>.project</code> file is
+        nothing that you need worry about maintaining as it is purely for
+        eclipse.  The <code>.classpath</code> file on the other hand, is used
+        to manage your project's dependencies, including dependencies on other
+        projects, other libraries, and the location of your source directories.
+        For more on maintaining this file see the
+        <a href="../../vim/java/classpath.html">classpath docs</a>.
+      </p>
+      <p>
+        Once you've created your project you can now use the
+        <strong>:ProjectList</strong> to list the available projects and you
+        should see your newly created one in the list.
+      </p>
+      <source>
+        project - /path/to/my/project
+      </source>
+      <p>
+        The <strong>:ProjectList</strong> result is in the form of
+        <code>projectName - /project/root/path</code>.  When you create
+        projects, the last path element will be used for the project name.  If
+        that element contains any spaces, they will be converted to underscores.
+      </p>
+    </section>
+    <section id="project_settings">
+      <title>Editing project settings.</title>
+      <p>
+        After creating a project, the next thing you'll probably want to do is
+        edit your project's settings.  To do this you can use the
+        <strong>:ProjectSettings</strong> command.  If your current vim window's
+        working directory is at or under the project's root directory then you
+        can execute the <strong>:ProjectSettings</strong> with no arguments,
+        otherwise you will need to supply the project name.
+      </p>
+      <source>
+        :ProjectSettings projectName
+      </source>
+      <p>
+        After your first time editing your project's settings, a .settings
+        directory will be created in the project's root directory.  In there are
+        the project's preferences files.  You should avoid editing these files
+        directly and stick to using <strong>:ProjectSettings</strong> to update
+        them.
+      </p>
+      <note>
+        If you have many projects and most of them share the same settings you
+        can use the <strong>:Settings</strong> command instead to edit the
+        global settings.  These global settings will apply to any project that
+        has not overridden them with values via
+        <strong>:ProjectSettings</strong>.
+      </note>
+    </section>
+    <section id="next">
+      <title>What's next</title>
+      <p>
+        Now that you have an eclim project, you can make full use of all the
+        functionality provided.  You can continue to read the docs on this site
+        for more information on what eclim is currently capabably of.
+        You should probably start with learning how to maintian your
+        <a href="../../vim/java/classpath.html">classpath</a> and then move on to
+        learning all the <a href="../../vim/index.html#java">java functionality</a>
+        that is available.
+      </p>
+      <p>
+        Be sure to report any and all issues, comments, and suggestions.
+      </p>
+    </section>
+  </body>
+</document>

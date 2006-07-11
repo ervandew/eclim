@@ -29,33 +29,23 @@
   </header>
   <body>
     <p>
-      The java code completion makes use of the new "User Defined Completion"
-      added to vim 7.
+      Java code completion uses the standard
+      <a href="../code_completion.html">vim code completion mechanism</a> like
+      so:
     </p>
     <p>
-      To use the code completion use Ctrl-X Ctrl-U while in insert mode at the
-      position you wish to start the completion from.<br/>
+      Usage:
     </p>
     <source>
       System.o&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
       System.out.pri&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
     </source>
     <p>
-      Once you have started the completion you can use Ctrl-N to procede to the
-      next match and Ctrl-P for the previous match.
+      Screenshot of completion in action:
     </p>
     <p>
-      If you are like me and you find those key strokes a bit cumbersome, then
-      you can use the excellent <a href="ext:supertab">SuperTab</a> plugin which
-      allows you to use the Tab key for completion.  However at this time
-      SuperTab does not support the latest completion modes for vim 7, so I have
-      patched it to add the necessary support.  You can download the updated
-      version in the <a href="ext:supertab_patch">downloads</a> area.
-    </p>
-    <p>
-      To find out more about vim's insert completion use<br/>
-      &nbsp;&nbsp;:h ins-completion<br/>
-      from within vim.
+      <img src="../../images/screenshots/java/completion.png"
+          alt="Java Completion"/>
     </p>
   </body>
 </document>

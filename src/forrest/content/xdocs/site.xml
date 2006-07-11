@@ -40,18 +40,24 @@ See http://forrest.apache.org/docs/linking.html for more info
   <about label="About" tab="home">
     <index label="Index / News" href="index.html" description="Welcome to Eclim"/>
     <features label="Features" href="features.html" description="Features"/>
-    <screenshots label="Screenshots" href="ext:screenshots" description="Eclim Screenshots"/>
-    <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
-    <tracker label="Bugs / Feature Requests" href="ext:tracker"
-        description="Bugs / Feature Requests"/>
-    <quickstart label="Quick Start" href="quickstart.html" description="Quick Start"/>
-    <changes label="Change History" href="changes.html"
-        description="Change History"/>
+    <screenshots label="Screenshots" description="Eclim Screenshots"
+        href="ext:screenshots"/>
+    <changes label="Change History" description="Change History"
+        href="changes.html"/>
     <todo label="Todo" href="todo.html" description="Todo"/>
-    <download label="Downloads" description="Downloads"
-        href="ext:downloads"/>
-    <install label="Installation" description="Installation Instructions"
-        href="install/index.html"/>
+    <download label="Downloads" description="Downloads" href="ext:downloads"/>
+    <guides label="Guides">
+      <install label="Installing / Upgrading"
+          description="Installation / Upgrading Instructions"
+          href="guides/install.html"/>
+      <java_project label="Creating a java project." description="Creating a java project."
+          href="guides/java/project.html"/>
+    </guides>
+    <support label="Support">
+      <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
+      <tracker label="Bugs / Feature Requests" href="ext:tracker"
+          description="Bugs / Feature Requests"/>
+    </support>
     <related label="Related Projects">
       <eclipse label="Eclipse" href="ext:eclipse" description="Eclipse IDE"/>
       <vim label="Vim" href="ext:vim" description="Vim Editor"/>
@@ -62,8 +68,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     </related>
   </about>
 
-  <server label="Eclimd Server" href="server/" tab="server">
-    <index label="Index" href="index.html" description="Index"/>
+  <server label="Eclimd Server" tab="server">
+    <eclimd label="Eclimd" href="eclimd.html" description="Eclimd"/>
   </server>
 
   <!--client label="Command Line Client" href="client/" tab="client">
@@ -76,6 +82,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="Eclim settings."/>
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
+    <completion label="Code Completion" href="code_completion.html"
+        description="Code Completion in vim."/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
         description="List of suggested vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
@@ -103,10 +111,10 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Ant Documentation Lookup"/>
     </ant>
     <java label="Java" href="java/">
+      <classpath label="Classpath" href="classpath.html"
+          description="Editing your project's classpath"/>
       <source label="Source Code Validation" href="source.html"
           description="Source Code Validation"/>
-      <classpath label="Classpath" href="classpath.html"
-          description="Edit your project's classpath"/>
       <search label="Searching" href="search.html"
           description="Source code searching"/>
       <doc label="Javadocs" href="doc.html"
@@ -162,7 +170,6 @@ See http://forrest.apache.org/docs/linking.html for more info
     <nailgun href="http://www.martiansoftware.com/nailgun/"/>
 
     <supertab href="http://www.vim.org/scripts/script.php?script_id=182"/>
-    <supertab_patch href="http://sourceforge.net/project/showfiles.php?group_id=145869&amp;package_id=160492&amp;release_id=370674"/>
 
     <taglist href="http://www.vim.org/scripts/script.php?script_id=273"/>
     <taglist_extend

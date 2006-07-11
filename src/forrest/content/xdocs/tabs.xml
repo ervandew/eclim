@@ -34,7 +34,7 @@
   -->
 
   <tab id="home" label="Home" dir="" indexfile="index.html"/>
-  <tab id="server" label="Eclimd Server" dir="server/" indexfile="index.html"/>
+  <tab id="server" label="Eclimd Server" dir="" indexfile="eclimd.html"/>
   <!--tab id="client" label="Command Line Client" dir="client/" indexfile="index.html"/-->
   <tab id="vim" label="Vim Integration" dir="vim/" indexfile="index.html"/>
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Eclimd</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section id="startup">
+      <title>Starting eclimd</title>
+      <p>
+        <strong>Linux</strong>:  To start eclimd from linux, simply execute the
+        eclimd script found in
+        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin.
+      </p>
+      <p>
+        <strong>Windows</strong>: The easiest way to start eclimd in windows is
+        to double click on the eclimd.bat file found in
+        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin.
+      </p>
+    </section>
+    <section id="shutdown">
+      <title>Stopping eclimd</title>
+      <p>
+        To cleanly shutdown eclim you should execute:
+      </p>
+      <source>
+        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin/eclim -command shutdown
+      </source>
+      <p>
+        You can also use
+        <a href="vim/index.html#ShutdownEclim">
+          <strong>:ShutdownEclim</strong>
+        </a>
+        from any vim window which will execute the above command for you.
+      </p>
+      <p>
+        Issuing one of these commands will notify eclimd to save all the
+        projects and the workspace before exiting.
+      </p>
+      <p>
+        You could also just use Ctrl-C to kill eclimd from the console, but this
+        is discouraged.  When using Ctrl-C, eclimd will not perform the
+        necessary cleanup on the projects and workspace.  The result is that the
+        next time eclimd is started, you will see errors from eclipse regarding
+        the state of the workspace ("A workspace crash was detected.").
+        Typically this isn't anything to worry about.  You should be able to use
+        the proper shutdown command, and then bring eclimd back up error free.
+      </p>
+      <p>
+        I've made several attempts to use a shutdown hook to prevent such cases,
+        but the shutdown hooks always seem to disrupt eclipse's shutdown process
+        resulting in threads leaking out and sticking around long after eclimd
+        has exited.  I'll continue to investigate this issue, but regardless of
+        the result, you should stick to using the proper shutdown command to
+        ensure a clean exit.
+      </p>
+    </section>
+    <section id="log">
+      <title>eclimd logging</title>
+      <p>
+        Eclimd utilizes log4j for all of it's logging.  As such, the logging can
+        be configured via the
+        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/log4j.xml file.
+      </p>
+      <p>
+        By default, eclimd writes all logging info to both the console and
+        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/log/eclimd.log.
+      </p>
+    </section>
+  </body>
+</document>

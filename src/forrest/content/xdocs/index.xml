@@ -62,10 +62,12 @@
         Eclim is released under the <a href="ext:license">apache 2.0</a> license.
       </p>
     </section>
+
     <section id="news">
       <title>News</title>
-      <section id="news_2006-xx-xx">
-        <title>2006-xx-xx</title>
+
+      <section id="news_2006-07-11">
+        <title>2006-07-11</title>
         <p>
           Eclim 1.2.0 is now available.<br/>
           This release requires <a href="ext:eclipse_download">eclipse 3.2</a>.
@@ -80,6 +82,7 @@
           the release notes and take the appropriate action prior to upgrading.
         </warning>
       </section>
+
       <section id="news_2006-05-07">
         <title>2006-05-07</title>
         <p>
@@ -92,6 +95,7 @@
           <a href="changes.html#version_1.1.2">release notes</a>.
         </p>
       </section>
+
       <section id="news_2006_02_19">
         <title>2006-02-19</title>
         <p>
@@ -105,6 +109,7 @@
           <a href="changes.html#version_1.1.1">release notes</a>.
         </p>
       </section>
+
       <section id="news_2005_12_26">
         <title>2005-12-26</title>
         <p>
@@ -116,6 +121,7 @@
           <a href="changes.html#version_1.1.0">release notes</a>.
         </p>
       </section>
+
       <section id="news_2005_10_16">
         <title>2005-10-16</title>
         <p>
@@ -128,7 +134,9 @@
           coming in future releases.
         </p>
       </section>
-      <!--section id="news_2005_09_11">
+
+      <!--
+      <section id="news_2005_09_11">
         <title>2005-09-11</title>
         <p>
           Several new additions over the past couple weeks:
@@ -158,6 +166,7 @@
           everything works as expected on Windows.
         </p>
       </section>
+
       <section id="news_2005_08_21">
         <title>2005-08-21</title>
         <p>
@@ -191,6 +200,7 @@
           doesn't seem to work properly.
         </p>
       </section>
+
       <section id="news_2005_08_11">
         <title>2005-08-11</title>
         <p>
@@ -212,7 +222,8 @@
           interface.  Going forward, I want to move more of that functionality
           into vim.
         </p>
-      </section-->
+      </section>
+      -->
     </section>
   </body>
 </document>

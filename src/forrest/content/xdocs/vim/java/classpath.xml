@@ -167,7 +167,7 @@
         </p>
       </section>
       <section id="project.xml">
-        <title>maven's project.xml</title>
+        <title>maven's project.xml (maven 1.x)</title>
         <p>
           The second tool that eclim supports is
           <a href="http://maven.apache.org">maven</a>.  Maven is somewhat of an
