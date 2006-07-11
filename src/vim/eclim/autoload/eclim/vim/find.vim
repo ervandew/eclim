@@ -33,7 +33,7 @@ endif
 " }}}
 
 " Script Variables {{{
-  let s:search{'func_def'} = 'function[!]\?\s\+<name>\>'
+  let s:search{'func_def'} = 'fu\(n\|nc\|nct\|ncti\|nctio\|nction\)\?[!]\?\s\+<name>\>'
   let s:search{'func_ref'} = '\<<name>\>'
   let s:search{'var_def'} = '\<let\s\+\(g:\)\?<name>\>'
   let s:search{'var_ref'} = '\<<name>\>'
@@ -66,6 +66,46 @@ endif
   let s:trim{'var_def'} = '^\(g:\)\(.*\)'
   let s:trim{'var_ref'} = s:trim{'var_def'}
 " }}}
+
+" FindFunctionVariableContext(name, bang) {{{
+" Contextual find that determines the type of element under the cursor and
+" executes the appropriate find.
+function! eclim#vim#find#FindFunctionVariableContext (bang)
+  let line = getline('.')
+
+  let element = substitute(line,
+    \ "\\(.*[[:space:]\"'(\\[{]\\|^\\)\\(.*\\%" .
+    \ col('.') . "c.\\{-}\\s*(\\).*",
+    \ '\2', '')
+
+  " on a function
+  if element =~ '($' && element != line
+    let element = substitute(element, '\s*(', '', '')
+    let type = 'func'
+
+  " on a variable
+  else
+    let element = substitute(line,
+      \ "\\(.*[[:space:]\"'(\\[{]\\|^\\)\\(.*\\%" .
+      \ col('.') . "c.\\{-}\\)\\([[:space:]\"')\\]}].*\\|$\\)",
+      \ '\2', '')
+
+    let type = 'var'
+  endif
+
+  echom " element = " . element
+
+  let def = substitute(s:search{type . '_def'}, '<name>', element, '')
+
+  " on a definition, search for references
+  if line =~ def
+    call s:Find(element, a:bang, type . '_ref')
+
+  " on a reference, search for definition.
+  else
+    call s:Find(element, a:bang, type . '_def')
+  endif
+endfunction " }}}
 
 " FindFunctionDef(name, bang) {{{
 " Finds the definition of the supplied function.
@@ -118,28 +158,33 @@ function! s:Find (name, bang, context)
 
   call setloclist(0, [])
 
-  " if a script local function search current file.
-  if name =~ '^s:.*'
-    silent! exec cnt . 'lvimgrepadd /' . search . '/gj' . ' ' . expand('%:p')
+  let save_opt = &eventignore
+  set eventignore=all
+  try
+    " if a script local function search current file.
+    if name =~ '^s:.*'
+      silent! exec cnt . 'lvimgrepadd /' . search . '/gj' . ' ' . expand('%:p')
 
-  " search globally
-  else
-    for path in split(g:EclimVimPaths, ',')
-      silent! exec cnt . 'lvimgrepadd /' . search . '/gj' . ' ' . path . '/**/*.vim'
-      if a:context == 'def' && len(getloclist(0)) > 0
-        break
-      endif
-    endfor
-  endif
+    " search globally
+    else
+      for path in split(g:EclimVimPaths, ',')
+        " ignore eclim added dir as parent dir will be searched
+        if path =~ '\<eclim$'
+          continue
+        endif
 
-  " something is really fubaring the current folding... seems to be
-  " something in my vim settings since vim -u NONE works fine.
-  " As a result, must issue update + edit in a couple places below to fix it.
+        silent! exec cnt . 'lvimgrepadd /' . search . '/gj' . ' ' . path . '/**/*.vim'
+        if a:context == 'def' && len(getloclist(0)) > 0
+          break
+        endif
+      endfor
+    endif
+  finally
+    let &eventignore = save_opt
+  endtry
 
   let loclist = getloclist(0)
   if len(loclist) == 0
-    silent update
-    silent edit
     call eclim#util#EchoInfo("No results found for '" . name . "'.")
   elseif len(loclist) == 1
     if g:EclimVimFindSingleResult == 'edit'
@@ -147,8 +192,6 @@ function! s:Find (name, bang, context)
     elseif g:EclimVimFindSingleResult == 'split'
       let file = bufname(loclist[0].bufnr)
       if file != expand('%')
-        silent update
-        silent edit
         silent exec "split " . file
       endif
       call cursor(loclist[0].lnum, loclist[0].col)
@@ -156,13 +199,9 @@ function! s:Find (name, bang, context)
       lopen
     endif
   elseif a:bang != ''
-    silent update
-    silent edit
     lopen
   else
     lfirst
-    silent update
-    silent edit
   endif
   call eclim#util#EchoInfo('')
 endfunction " }}}

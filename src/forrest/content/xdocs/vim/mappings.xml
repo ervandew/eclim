@@ -113,11 +113,14 @@
     </p>
     <ul>
       <li>
-        Search for the declaration of the vim function under the cursor with
-        <code>&lt;Enter&gt;</code>.<br/>
+        Perform a context sensitive search for the element under the cursor
+        using <code>&lt;Enter&gt;</code>.<br/>
+        See <a href="vim/find.html#FindFunctionVariableContext">
+          <strong>:FindFunctionVariableContext</strong>
+        </a> for more info.<br/>
         <source>
           <![CDATA[
-          nnoremap <silent> <buffer> <cr> :FindFunctionDef<cr>
+          nnoremap <silent> <buffer> <cr> :FindFunctionVariableContext<cr>
           ]]>
         </source>
       </li>

@@ -57,6 +57,16 @@
         Finds references of the supplied global variable name or variable name
         under the cursor.
       </li>
+      <li>
+        <anchor id="FindFunctionVariableContext"/>
+        <strong>:FindFunctionVariableContext</strong> -
+        Performs the appropriate search for the element under the cursor based
+        on its context.  If the cursor is on a function or variable definition,
+        then this command will search for references of that function or
+        variable.  If the cursor is on a reference of a function or variable,
+        then this command will search for the definition of the function or
+        variable.
+      </li>
     </ul>
     <p>
       All of the above commands support ! which can be used to prevent jumping
