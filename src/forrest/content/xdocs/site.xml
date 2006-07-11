@@ -50,7 +50,7 @@ See http://forrest.apache.org/docs/linking.html for more info
       <install label="Installing / Upgrading"
           description="Installation / Upgrading Instructions"
           href="guides/install.html"/>
-      <java_project label="Creating a java project." description="Creating a java project."
+      <java_project label="Creating A Java Project" description="Creating a java project."
           href="guides/java/project.html"/>
     </guides>
     <support label="Support">
@@ -125,7 +125,7 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Code Completion"/>
       <correct label="Code Correction" href="correct.html"
           description="Code Correction"/>
-      <constructor label="Constructor generation" href="constructor.html"
+      <constructor label="Constructor Generation" href="constructor.html"
           description="Constructor generation."/>
       <impl label="Implementation / Override Stubbing" href="impl.html"
           description="Implementation / Override Stubbing"/>

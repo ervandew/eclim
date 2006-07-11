@@ -258,6 +258,20 @@
         </ol>
       </section>
 
+      <section id="whatsnext">
+        <title>What's Next</title>
+        <p>
+          Now that you have eclim installed, the next step is to familiarize
+          yourself with at least the core set of commands that eclim
+          provides.<br/>
+          You can start by viewing the
+          <a href="../vim/index.html">vim integration documentation</a>.  Once
+          you have done that, you can return to the guides section where you can
+          learn to work with eclim and take full advantage of the functionality
+          it provides.
+        </p>
+      </section>
+
     </section>
 
     <section id="upgrade">
@@ -267,9 +281,13 @@
       </p>
       <ol>
         <li>
-          First check all the <a href="../changes.html">release notes</a>
-          from the previous version you had installed to the latest one, to see
-          if there were any special upgrade notes that may apply to you.
+          First check all the <a href="../changes.html">release notes</a> from
+          your currently installed version to the latest version, to see if
+          there are any special upgrade notes that may apply to you.
+          <warning>
+            These special upgrade notes will be in red warning boxes like this
+            one so that they are easy to identify.
+          </warning>
         </li>
         <li>
           <a href="../eclimd.html#shutdown">Shutdown eclimd</a>.

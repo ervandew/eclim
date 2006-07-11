@@ -28,144 +28,152 @@
     </authors>
   </header>
   <body>
-    <anchor id="OpenUrl"/>
     <p>
       Eclim provides a set of commands that allow you to open information in
-      the web browser or your choice.<br/>
-      The first of these commands is <strong>:OpenUrl</strong> which opens a url
-      in your web browser, or optionally in vim via netrw (:help netrw).
+      the web browser or your choice.
     </p>
-    <p>
-      When executing the command you may supply the url to open, or if ommitted,
-      it will open the url under the cursor.  By default all urls will open in
-      your web browser, but you may optionally configure a list of url patterns
-      to be opened via the netrw plugin.  The following example is configured to
-      open all dtd, xml, xsd, and text files via netrw.
-    </p>
-    <source>
-      let g:EclimOpenUrlInVimPatterns =
-        \ [
-          \ '\.\(dtd\|xml\|xsd\)$',
-          \ '\.txt$',
-        \ ]
-    </source>
-    <p>
-      For urls that match one of these patterns, you may also define how the
-      file is to be opened in vim (split, edit, etc.).
-    </p>
-    <source>
-      let g:EclimOpenUrlInVimAction = 'split'
-    </source>
-    <p>
-      <strong>Configuration</strong>
-    </p>
-    <p>
-      Vim Variables
-    </p>
-    <ul>
-      <li>
-        <anchor id="EclimOpenUrlInVimPatterns"/>
-        <strong>g:EclimOpenUrlInVimPatterns</strong> (Default: [])<br/>
-        Defines a list of url patterns to open in vim via netrw.
-      </li>
-      <li>
-        <anchor id="EclimOpenUrlInVimAction"/>
-        <strong>g:EclimOpenUrlInVimAction</strong> (Default: 'split')<br/>
-        Defines the command used to open files matched by
-        g:EclimOpenUrlInVimPatterns.
-      </li>
-    </ul>
 
-    <p>
-      The remaining web lookup commands provide a means for looking up words or
-      phrases using some great online tools.
-    </p>
-    <ul>
-      <li>
-        <anchor id="Google"/>
-        <strong>:Google</strong> [word ...]<br/>
-        This command is used to look up a word or phrase on
-        <a href="http://google.com">google.com</a>.  You can invoke it one of
-        two ways.
-        <ol>
-          <li>
-            First by supplying the word or words to search for as arguments to
-            the command.<br/>
-            <source>
-              :Google "vim eclim"
-              :Google vim eclim
-              :Google +vim -eclim
-            </source>
-            Note that you can supply the arguments to the command just as you
-            would when using the search input via google's homepage, allowing
-            you to utilize the full querying capabilities of google.
-          </li>
-          <li>
-            The second method is to issue the command with no arguments. The
-            command will then query google with the word under the cursor.
-          </li>
-        </ol>
-      </li>
-      <li>
-        <anchor id="Clusty"/>
-        <strong>:Clusty</strong> [word ...]<br/>
-        This command works just like the <strong>:Google</strong> command except
-        it uses <a href="http://clusty.com">clusty.com</a> as the search engine.
-        For those of you who have not heard of clusty, it is an excellent
-        alternative to google which groups results into clusters, allowing you
-        to quickly filter search results down to the topic you are looking for.
-        It is a great place to go when google returns too many results that are
-        difficult to sift through.
-      </li>
-      <li>
-        <anchor id="Wikipedia"/>
-        <strong>:Wikipedia</strong> [word ...]<br/>
-        Again this command behaves like the previous two, but instead looks up
-        the desired word or phrase on
-        <a href="http://en.wikipedia.com">wikipedia</a>, the great online
-        encyclopedia.
-      </li>
-      <li>
-        <anchor id="Dictionary"/>
-        <strong>:Dictionary</strong> [word]<br/>
-        This command is used to look up a word on
-        <a href="http://dictionary.reference.com">dictionary.reference.com</a>.
-        You can either supply the word to lookup as an argument to the command
-        or it will otherwise use the word under the cursor.
-      </li>
-      <li>
-        <anchor id="Thesaurus"/>
-        <strong>:Thesaurus</strong> [word]<br/>
-        This command behaves the same as <strong>:Dictionary</strong> but looks
-        up the word via
-        <a href="http://thesaurus.reference.com">thesaurus.reference.com</a>.
-      </li>
-    </ul>
-    <p>
-      While these commands can be quite useful, you may notice one thing is
-      absent.  By default eclim does not provide any mappings that allow you to
-      visually select the text to lookup.  However the functions that the above
-      commands rely upon have been built to support this.  All you need to do is
-      define mappings like the following.
-    </p>
-    <source>
-      <![CDATA[
-        vmap <leader>gn :call eclim#web#Google('', 0, 1)<cr>
-        vmap <leader>gq :call eclim#web#Google('', 1, 1)<cr>
-      ]]>
-    </source>
-    <p>
-      This example creates mappings to allow you to visually select some text and
-      submit that text as a query to google.  In this example &lt;leader&gt;gn
-      will submit the text unquoted, and &lt;leader&gt;gq will submit the text
-      in quoted form.<br/>
-      See :help mapleader for more info on using &lt;leader&gt; for command
-      mappings.
-    </p>
-    <p>
-      The above examples can be modified for clusty or wikipedia as well.
-      The dictionary and thesaurus commands don't support this feature as they
-      both operate on single words.
-    </p>
+    <section id="OpenUrl">
+      <title>OpenUrl</title>
+      <p>
+        The first of these commands is <strong>:OpenUrl</strong> which opens a url
+        in your web browser, or optionally in vim via netrw (:help netrw).
+      </p>
+      <p>
+        When executing the command you may supply the url to open, or if ommitted,
+        it will open the url under the cursor.  By default all urls will open in
+        your web browser, but you may optionally configure a list of url patterns
+        to be opened via the netrw plugin.  The following example is configured to
+        open all dtd, xml, xsd, and text files via netrw.
+      </p>
+      <source>
+        let g:EclimOpenUrlInVimPatterns =
+          \ [
+            \ '\.\(dtd\|xml\|xsd\)$',
+            \ '\.txt$',
+          \ ]
+      </source>
+      <p>
+        For urls that match one of these patterns, you may also define how the
+        file is to be opened in vim (split, edit, etc.).
+      </p>
+      <source>
+        let g:EclimOpenUrlInVimAction = 'split'
+      </source>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p>
+        Vim Variables
+      </p>
+      <ul>
+        <li>
+          <anchor id="EclimOpenUrlInVimPatterns"/>
+          <strong>g:EclimOpenUrlInVimPatterns</strong> (Default: [])<br/>
+          Defines a list of url patterns to open in vim via netrw.
+        </li>
+        <li>
+          <anchor id="EclimOpenUrlInVimAction"/>
+          <strong>g:EclimOpenUrlInVimAction</strong> (Default: 'split')<br/>
+          Defines the command used to open files matched by
+          g:EclimOpenUrlInVimPatterns.
+        </li>
+      </ul>
+    </section>
+
+    <section id="search">
+      <title>Web Search Commands</title>
+      <p>
+        The remaining web lookup commands provide a means for looking up words or
+        phrases using some great online tools.
+      </p>
+      <ul>
+        <li>
+          <anchor id="Google"/>
+          <strong>:Google</strong> [word ...]<br/>
+          This command is used to look up a word or phrase on
+          <a href="http://google.com">google.com</a>.  You can invoke it one of
+          two ways.
+          <ol>
+            <li>
+              First by supplying the word or words to search for as arguments to
+              the command.<br/>
+              <source>
+                :Google "vim eclim"
+                :Google vim eclim
+                :Google +vim -eclim
+              </source>
+              Note that you can supply the arguments to the command just as you
+              would when using the search input via google's homepage, allowing
+              you to utilize the full querying capabilities of google.
+            </li>
+            <li>
+              The second method is to issue the command with no arguments. The
+              command will then query google with the word under the cursor.
+            </li>
+          </ol>
+        </li>
+        <li>
+          <anchor id="Clusty"/>
+          <strong>:Clusty</strong> [word ...]<br/>
+          This command works just like the <strong>:Google</strong> command except
+          it uses <a href="http://clusty.com">clusty.com</a> as the search engine.
+          For those of you who have not heard of clusty, it is an excellent
+          alternative to google which groups results into clusters, allowing you
+          to quickly filter search results down to the topic you are looking for.
+          It is a great place to go when google returns too many results that are
+          difficult to sift through.
+        </li>
+        <li>
+          <anchor id="Wikipedia"/>
+          <strong>:Wikipedia</strong> [word ...]<br/>
+          Again this command behaves like the previous two, but instead looks up
+          the desired word or phrase on
+          <a href="http://en.wikipedia.com">wikipedia</a>, the great online
+          encyclopedia.
+        </li>
+        <li>
+          <anchor id="Dictionary"/>
+          <strong>:Dictionary</strong> [word]<br/>
+          This command is used to look up a word on
+          <a href="http://dictionary.reference.com">dictionary.reference.com</a>.
+          You can either supply the word to lookup as an argument to the command
+          or it will otherwise use the word under the cursor.
+        </li>
+        <li>
+          <anchor id="Thesaurus"/>
+          <strong>:Thesaurus</strong> [word]<br/>
+          This command behaves the same as <strong>:Dictionary</strong> but looks
+          up the word via
+          <a href="http://thesaurus.reference.com">thesaurus.reference.com</a>.
+        </li>
+      </ul>
+      <p>
+        While these commands can be quite useful, you may notice one thing is
+        absent.  By default eclim does not provide any mappings that allow you to
+        visually select the text to lookup.  However the functions that the above
+        commands rely upon have been built to support this.  All you need to do is
+        define mappings like the following.
+      </p>
+      <source>
+        <![CDATA[
+          vmap <leader>gn :call eclim#web#Google('', 0, 1)<cr>
+          vmap <leader>gq :call eclim#web#Google('', 1, 1)<cr>
+        ]]>
+      </source>
+      <p>
+        This example creates mappings to allow you to visually select some text and
+        submit that text as a query to google.  In this example &lt;leader&gt;gn
+        will submit the text unquoted, and &lt;leader&gt;gq will submit the text
+        in quoted form.<br/>
+        See :help mapleader for more info on using &lt;leader&gt; for command
+        mappings.
+      </p>
+      <p>
+        The above examples can be modified for clusty or wikipedia as well.
+        The dictionary and thesaurus commands don't support this feature as they
+        both operate on single words.
+      </p>
+    </section>
   </body>
 </document>

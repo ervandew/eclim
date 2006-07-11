@@ -51,7 +51,7 @@
       allows you to use the Tab key for completion.
     </p>
     <p>
-      To find out more about vim's insert completion use<br/>
+      To find out more about vim's insert completion execute<br/>
       &nbsp;&nbsp;<strong>:h ins-completion</strong><br/>
       from within vim.
     </p>

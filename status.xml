@@ -9,6 +9,30 @@
 
   <todo>
     <actions priority="high">
+      <action context="installer" dev="ervandew">
+        Create installer
+        <ul>
+          <li>Verify jdk, vim, and eclipse versions.</li>
+          <li>
+            Extract vim files according to platform (w/ user override option).
+          </li>
+          <li>Stop eclim.</li>
+          <li>Prompt for optional backup of previous eclim plugin.</li>
+          <li>Extract new eclim plugin to eclipse.</li>
+          <li>
+            Install / update window's service (keep linux init.d script as a
+            manual step, since it shouldn't need to be updated often and will
+            contain user defined values).
+          </li>
+          <li>
+            When eclim has additional eclipse plugins (support for third party
+            provided functionality), allow user to choose which plugins to
+            install.  Validate third party plugin versions and maybe automate
+            installation or upgrading of the dependent third party plugins for
+            the user.
+          </li>
+        </ul>
+      </action>
       <action context="junit" dev="ervandew">
         Create junit test harness for starting eclimd, running tests, and then
         stopping eclimd.
@@ -27,9 +51,6 @@
             with logging statements.
           </li>
         </ul>
-      </action>
-      <action context="windows" dev="ervandew">
-        Use my BatchFileService.exe to create a Windows service for eclimd.
       </action>
       <action context="searching" dev="ervandew">
         <p>
@@ -106,35 +127,6 @@
     </actions>
 
     <actions priority="low">
-      <action context="installer" dev="ervandew">
-        Create installer
-        <ul>
-          <li>Verify jdk, vim, and eclipse versions.</li>
-          <li>
-            Extract vim files according to platform (w/ user override option).
-          </li>
-          <li>Stop eclim.</li>
-          <li>Prompt for optional backup of previous eclim plugin.</li>
-          <li>Extract new eclim plugin to eclipse.</li>
-          <li>
-            Install / update window's service (keep linux init.d script as a
-            manual step, since it shouldn't need to be updated often and will
-            contain user defined values).
-          </li>
-          <li>
-            When eclim has additional eclipse plugins (support for third party
-            provided functionality), allow user to choose which plugins to
-            install.  Validate third party plugin versions and maybe automate
-            installation or upgrading of the dependent third party plugins for
-            the user.
-          </li>
-        </ul>
-        Windows: use <a href="http://nsis.sourceforge.net">nsis</a><br/>
-        Linux:
-        <a href="http://linux.org.mt/article/selfextract#N10093">
-          self installing shell script
-        </a>
-      </action>
       <action context="languages" dev="ervandew">
         Support for other languages.
         <ul>
@@ -326,12 +318,23 @@
   </todo>
 
   <changes>
-    <release version="1.2.0" date="unreleased">
+    <release version="1.2.0" date="July 11, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed processing of dtd related xml validation errors on Windows.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Using Ctrl-C on a prompt list (like when choosing a java class to
+        import), stopped working.  At some point during the vim 7 developement
+        the vim behavor was modified.  Eclim, has been fixed to account for
+        this.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Greatly improved support for projects created from eclipse.<br/>
+        Fixed support for projects created from eclipse that reside in the
+        workspace.
       </action>
 
       <action dev="ervandew" type="update" context="Eclipse">
@@ -388,16 +391,11 @@
         <a href="vim/common/project.html#ProjectList"><strong>:ProjectList</strong></a>
         to show the current status of each project.
       </action>
-      <action dev="ervandew" type="fix" context="Eclim">
-        Using Ctrl-C on a prompt list (like when choosing a java class to
-        import), stopped working.  At some point during the vim 7 developement
-        the vim behavor was modified.  Eclim, has been fixed to account for
-        this.
-      </action>
-      <action dev="ervandew" type="fix" context="Eclim">
-        Greatly improved support for projects created from eclipse.<br/>
-        Fixed support for projects created from eclipse that reside in the
-        workspace.
+      <action dev="ervandew" type="add" context="Eclim">
+        Added <strong>:ProjectTree</strong> and <strong>:ProjectsTree</strong>.
+        <fixme author="ervandew">
+          Documentation pending.
+        </fixme>
       </action>
 
       <action dev="ervandew" type="add" context="Java">
@@ -423,6 +421,14 @@
         added support for supplying only a pattern to the
         <strong>:JavaSearch</strong> command which will result in a search for
         all types (classes, enums, interfaces) that match that pattern.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vim">
+        Added <a href="vim/vim/find.html#FindFunctionVariableContext">
+          <strong>:FindFunctionVariableContext</strong>
+        </a>
+        to perform context sensitive searching for vim functions or global
+        variables.
       </action>
 
       <action dev="ervandew" type="add" context="Vim">

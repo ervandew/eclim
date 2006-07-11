@@ -68,6 +68,10 @@
             <classpathentry kind="src" path="src/java"/>
             ]]>
           </source>
+          <note>
+            This command supports command completion of directories relative to
+            the .classpath file.
+          </note>
         </li>
         <li>
           <anchor id="NewProjectEntry"/>
@@ -80,6 +84,9 @@
             <classpathentry exported="true" kind="src" path="/a_project"/>
             ]]>
           </source>
+          <note>
+            This command supports command completion of project names.
+          </note>
         </li>
         <li>
           <anchor id="NewJarEntry"/>
@@ -137,6 +144,9 @@
           </source>
           By default, a USER_HOME variable is created that defaults to the java
           System property "user.home" and you can add more as needed.
+          <note>
+            This command supports command completion of eclipse variable names.
+          </note>
         </li>
       </ul>
     </section>
