@@ -96,8 +96,11 @@ endfunction " }}}
 function! eclim#util#ExecWithoutAutocmds (cmd)
   let save_opt = &eventignore
   set eventignore=all
-  exec a:cmd
-  let &eventignore = save_opt
+  try
+    exec a:cmd
+  finally
+    let &eventignore = save_opt
+  endif
 endfunction " }}}
 
 " FillTemplate(prefix, suffix) {{{
