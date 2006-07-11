@@ -51,8 +51,8 @@ augroup END
 
 " Command Declarations {{{
 if !exists(":NewSrcEntry")
-  command -nargs=+ -complete=dir -buffer NewSrcEntry
-    \ :call eclim#eclipse#NewClasspathEntry
+  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative -buffer
+    \ NewSrcEntry :call eclim#eclipse#NewClasspathEntry
     \     (substitute('<args>', '\', '/', 'g') , s:entry_src)
 endif
 if !exists(":NewProjectEntry")
