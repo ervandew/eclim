@@ -52,16 +52,15 @@ if g:EclimJavaSetCommonOptions
 
   " use ant settings
   if build_xml != ""
-    exec "setlocal makeprg=" . g:AntMakePrg
-    exec "setlocal errorformat=" . g:AntErrorFormat
+    compiler eclim_ant
 
-  " use standard javac settings
+  " use standard jikes if available
+  elseif executable('jikes')
+    compiler jikes
+
+  " default to standard javac settings
   else
-    setlocal makeprg=javac\ %
-    setlocal errorformat=
-      \%A%f:%l:\ %m,
-      \%+Z%p^,%+C%.%#,
-      \%-G%.%#
+    compiler javac
   endif
 endif
 " }}}

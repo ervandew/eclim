@@ -22,33 +22,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists("g:AntMakePrg")
-  let g:AntMakePrg = 'ant\ -find\ build.xml\ $*'
-endif
-
-if !exists("g:AntErrorFormat")
-  let g:AntErrorFormat =
-    \ '\%-G%.%#[javac]\ %.%#:\ warning:\ unmappable\ character\ %.%#,' .
-    \ '\%A%.%#[javac]\ %f:%l:\ %m,' .
-    \ '\%C%.%#[javac]\ symbol\ %#:\ %m,' .
-    \ '\%-Z%.%#[javac]\ %p^,' .
-    \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .
-    \ '\%-C%.%#[javadoc]\ location:\ %.%#,' .
-    \ '\%-C%.%#[javadoc]\ %#,' .
-    \ '\%-Z%.%#[javadoc]\ %p^,' .
-    \ '\%-G%.%#[javadoc]\ Note:%.%#,' .
-    \ '\%-G%.%#[javadoc]\ javadoc:%.%#,' .
-    \ '\%.%#[javadoc]\ %f:\ %m,' .
-    \ '\%.%#[java]\ org\.apache\.jasper\.JasperException:\ file:%f(%l\\,%c)\ %m,' .
-    \ '\%A%.%#[junit]\ %m\\,\ Time\ elapsed:\ %.%#,' .
-    \ '\%Z%.%#[junit]\ Test\ %f\ FAILED,' .
-    \ '\%A%.%#[cactus]\ %m\\,\ Time\ elapsed:\ %.%#,' .
-    \ '\%Z%.%#[cactus]\ Test\ %f\ FAILED,' .
-    \ '\%-G%.%#'
-endif
-" }}}
-
 " Auto Commands {{{
 augroup eclim_ant_make
   autocmd!
