@@ -71,6 +71,7 @@
 
 " Script Variables {{{
   let s:project_tree_loaded = 0
+  let s:project_tree_ids = 0
 " }}}
 
 " ProjectTree(...) {{{
@@ -255,7 +256,11 @@ endfunction " }}}
 
 " GetTreeTitle() {{{
 function! s:GetTreeTitle ()
-  return g:EclimProjectTreeTitle . tabpagenr()
+  if !exists('t:project_tree_id')
+    let t:project_tree_id = s:project_tree_ids + 1
+    let s:project_tree_ids += 1
+  endif
+  return g:EclimProjectTreeTitle . t:project_tree_id
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
