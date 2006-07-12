@@ -66,8 +66,8 @@
     <section id="news">
       <title>News</title>
 
-      <section id="news_2006-07-11">
-        <title>2006-07-11</title>
+      <section id="news_2006-07-12">
+        <title>2006-07-12</title>
         <p>
           Eclim 1.2.0 is now available.<br/>
           This release requires <a href="ext:eclipse_download">eclipse 3.2</a>.
@@ -96,7 +96,7 @@
         </p>
       </section>
 
-      <section id="news_2006_02_19">
+      <section id="news_2006-02-19">
         <title>2006-02-19</title>
         <p>
           New version of eclim (1.1.1) is now available.<br/>
@@ -110,7 +110,7 @@
         </p>
       </section>
 
-      <section id="news_2005_12_26">
+      <section id="news_2005-12-26">
         <title>2005-12-26</title>
         <p>
           New version of eclim (1.1.0) is now available.<br/>
@@ -122,7 +122,7 @@
         </p>
       </section>
 
-      <section id="news_2005_10_16">
+      <section id="news_2005-10-16">
         <title>2005-10-16</title>
         <p>
           The first eclim release (1.0.0) is now available.<br/>
@@ -136,7 +136,7 @@
       </section>
 
       <!--
-      <section id="news_2005_09_11">
+      <section id="news_2005-09-11">
         <title>2005-09-11</title>
         <p>
           Several new additions over the past couple weeks:
@@ -167,7 +167,7 @@
         </p>
       </section>
 
-      <section id="news_2005_08_21">
+      <section id="news_2005-08-21">
         <title>2005-08-21</title>
         <p>
           Code navigation / searching is done!  Most of the vim integration for
@@ -201,7 +201,7 @@
         </p>
       </section>
 
-      <section id="news_2005_08_11">
+      <section id="news_2005-08-11">
         <title>2005-08-11</title>
         <p>
           Sourceforge site is up!  Now it's just a matter of getting the ball
