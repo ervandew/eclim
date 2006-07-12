@@ -15,6 +15,14 @@ eclim
     - sometimes when warning and error are on the same line+col, the mark
       shows error, but the cursor hold text shows the warning message.
     - on JavaSearch for implementors, exclude the javadoc matches.
+    - issues working with
+      http://vim.sourceforge.net/scripts/script.php?script_id=69 ?
+      According to http://tompurl.com/index.php/2006/06/27/eclim-vim-eclipse/
+      line 1244: Change from:
+        if !exists(':Project')
+      to
+        if exists(':Project') != 2
+      Waiting for confirmation that this is the only error.
 
   Enhancements
     - Wiki site.
@@ -72,6 +80,22 @@ eclim
         </blah>
     - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
     - command to place or un-place sign at the current line
+
+Maven support:
+  - Maven1 support
+    - Deprecate the maven support i've already added in favor of:
+      http://maven.apache.org/maven-1.x/plugins/eclipse/goals.html
+  - Maven2 support
+    - http://maven.apache.org/guides/mini/guide-ide-eclipse.html
+    - Add :Mvn command similar to :Ant for running maven.
+    - :MvnDependencySearch junit
+      - http://maven.ozacc.com/
+        - pass parameter format=xml to get xml results.
+      - should search all repositories for any jars containing 'junit' in the
+        name, display then in a window, and allow the user to add entries to pom
+        via <cr>.
+    - :MvnInit or :MvnCreate or something else?
+      - prompt for required properties to create the initial pom.xml
 
 JTest support:
   - settings
