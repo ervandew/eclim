@@ -49,15 +49,20 @@
     let g:EclimProjectTreeTaglistRelation = 'below'
   endif
 
-  if exists('g:Tlist_WinWidth')
-    let g:EclimProjectTreeWidth = g:Tlist_WinWidth
-  elseif !exists('g:EclimProjectTreeWidth')
-    let g:EclimProjectTreeWidth = 30
+  if !exists('g:EclimProjectTreeWidth')
+    if exists('g:Tlist_WinWidth')
+      let g:EclimProjectTreeWidth = g:Tlist_WinWidth
+    else
+      let g:EclimProjectTreeWidth = 30
+    endif
   endif
-  if exists('g:Tlist_WinHeight')
-    let g:EclimProjectTreeHeight = g:Tlist_WinHeight
-  elseif !exists('g:EclimProjectTreeHeight')
-    let g:EclimProjectTreeHeight = 10
+
+  if !exists('g:EclimProjectTreeHeight')
+    if exists('g:Tlist_WinHeight')
+      let g:EclimProjectTreeHeight = g:Tlist_WinHeight
+    else
+      let g:EclimProjectTreeHeight = 10
+    endif
   endif
 
   if !exists('g:EclimProjectTreeActions')
