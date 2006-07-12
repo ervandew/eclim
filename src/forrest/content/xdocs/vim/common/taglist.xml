@@ -82,7 +82,7 @@
     <p>
       Adding a new language involves the following three steps:
     </p>
-    <ul>
+    <ol>
       <li>
         Write a groovy script that conforms to a simple interface defined
         below.
@@ -100,7 +100,12 @@
         See the <a href="ext:taglist_extend">taglist documentation</a> for
         more details.
       </li>
-    </ul>
+    </ol>
+    <p>
+      The second step is self explanatory and the third step is well
+      documented by the <a href="ext:taglist_extend">taglist documentation</a>
+      so the rest of this document will concentrate on step one.
+    </p>
     <note>
       When opening the taglist window, eclim will search for the taglist
       script in the directory noted above by looking for a file named
@@ -110,11 +115,6 @@
       your system's ctags command as
       <a href="ext:taglist_ctags">configured</a> for taglist.vim.
     </note>
-    <p>
-      The second step is self explanatory and the third step is well
-      documented by the <a href="ext:taglist_extend">taglist documentation</a>
-      so the rest of this document will concentrate on step one.
-    </p>
     <p>
       <strong>Writing the Groovy Script</strong>
     </p>
