@@ -100,7 +100,7 @@ function! eclim#util#ExecWithoutAutocmds (cmd)
     exec a:cmd
   finally
     let &eventignore = save_opt
-  endif
+  endtry
 endfunction " }}}
 
 " FillTemplate(prefix, suffix) {{{
