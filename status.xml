@@ -323,9 +323,6 @@
         Fixed processing of dtd related xml validation errors on Windows.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Other various bug fixes.
-      </action>
-      <action dev="ervandew" type="fix" context="Bug Fixes">
         Using Ctrl-C on a prompt list (like when choosing a java class to
         import), stopped working.  At some point during the vim 7 developement
         the vim behavor was modified.  Eclim, has been fixed to account for
@@ -335,6 +332,9 @@
         Greatly improved support for projects created from eclipse.<br/>
         Fixed support for projects created from eclipse that reside in the
         workspace.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Other various bug fixes.
       </action>
 
       <action dev="ervandew" type="update" context="Eclipse">
