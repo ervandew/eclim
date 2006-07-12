@@ -101,9 +101,161 @@
         Closes a project.  According to eclipse documentation, closing unused
         projects can reduce the amount of memory used, and may improve
         performance when building projects.
-        <note>
-          Searching for an element in a closed project will yield no results.
-        </note>
+      </li>
+      <li>
+        <anchor id="ProjectTree"/>
+        <strong>:ProjectTree</strong> [&lt;project&gt; &lt;project&gt; ...]<br/>
+        Opens a window containing a navigable tree for the root directory of
+        one or more projects.  If no arguments are supplied, the resulting tree
+        is for the current project.  Otherwise, the tree contains multiple root
+        nodes, one for each project root directory.<br/>
+        <strong>Available key mappings in project tree window.</strong>
+        <ul>
+          <li>
+            <strong>&lt;cr&gt;</strong> -
+            Toggles expansion / collapsing of a directory, or executes the first
+            available action for a file.
+          </li>
+          <li>
+            <strong>o</strong> -
+            Toggles folding / unfolding of a directory, or opens a window of
+            available actions to be executed on the selected file.  Hitting
+            &lt;enter&gt; on an entry in the action window will execute that
+            action on the current file.
+          </li>
+          <li>
+            <strong>s</strong> -
+            Executes <strong>:shell</strong> for the directory under the cursor
+            or the parent directory of the file under the cursor.
+          </li>
+          <li>
+            <strong>S</strong> -
+            Like <strong>s</strong> but opens an external shell.
+            Requires that you set the variable g:TreeExternalShell which will be
+            the command executed to open the external shell.<br/>
+            Example that opens an aterm window:
+            <source>
+              let g:TreeExternalShell = '!aterm -geometry 125x30 &amp;'
+            </source>
+          </li>
+          <li>
+            <strong>R</strong> -
+            Refreshes the current directory against the current state of the
+            file system.
+          </li>
+          <li>
+            <strong>A</strong> -
+            Toggles whether or not hidden files are displayed in the tree.
+          </li>
+          <li>
+            <strong>H</strong> -
+            Changes the root node to the current user's home directory.
+          </li>
+          <li>
+            <strong>C</strong> -
+            Changes the root node to the directory under cursor.
+          </li>
+          <li>
+            <strong>B</strong> -
+            Changes the root node to the parent directory of the current root
+            node.
+          </li>
+          <li>
+            <strong>p</strong> -
+            Moves the cursor to the parent of the node under the cursor.
+          </li>
+          <li>
+            <strong>P</strong> -
+            Moves the cursor to the last child of the nearest open directory.
+          </li>
+          <li>
+            <strong>:CD</strong> &lt;dir&gt; -
+            Changes the root to the supplied directory.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <anchor id="ProjectsTree"/>
+        <strong>:ProjectsTree</strong><br/>
+        Similar to <strong>:ProjectTree</strong> but opens a tree containing all
+        projects.
+      </li>
+    </ul>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimProjectTreeAutoOpen"/>
+        <strong>g:EclimProjectTreeAutoOpen</strong> (Default: 0)<br/>
+        When non 0, a project tree window will be auto opened for new vim
+        sessions or new tabs in existing sessions if the current file is in a
+        project.
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeAutoOpenProjects"/>
+        <strong>g:EclimProjectTreeAutoOpenProjects</strong> (Default: ['CURRENT'])<br/>
+        List of project names that will be in the project tree when it is auto
+        opened.  The special name 'CURRENT' represents the current project of
+        the file being loaded in vim when the tree is auto opened.
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeTaglistRelation"/>
+        <strong>g:EclimProjectTreeTaglistRelation</strong> (Default: 'below')<br/>
+        Used to define the relation to the <a href="ext:taglist">taglist</a>
+        window if the <a href="ext:taglist">taglist</a> plugin is present.
+        Valid values include 'below' and 'above'.
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeWincmd"/>
+        <strong>g:EclimProjectTreeWincmd</strong><br/>
+        (Default: Varies depending on presence of
+        <a href="ext:taglist">taglist</a> plugin and its settings.)
+        Vim command prepended to the split command used to open the project tree
+        window (Ex. 'botright', 'botright vertical', etc.).
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeContentWincmd"/>
+        <strong>g:EclimProjectTreeContentWincmd</strong><br/>
+        (Default: Varies depending on presence of
+        <a href="ext:taglist">taglist</a> plugin and its settings.)
+        Vim command used to move focus to the nearest content window where
+        actions to open selected files will be executed from.  For instance,
+        when issuing a split on a file from the project tree, you most likely
+        do not want to split that file relative to the project tree, but rather
+        split it relative to the file open in the window to the left or right of
+        the project tree (Ex. 'winc h', 'winc l', etc).
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeWidth"/>
+        <strong>g:EclimProjectTreeWidth</strong><br/>
+        (Default: Defaults to same width as <a href="ext:taglist">taglist</a>
+        if present, otherwise defaults to 30.)
+        Only used if the project tree is to be opened in a vertical window.
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeHeight"/>
+        <strong>g:EclimProjectTreeHeight</strong><br/>
+        (Default: Defaults to same height as <a href="ext:taglist">taglist</a>
+        if present, otherwise defaults to 10.)
+        Only used if the project tree is to be opened in a horizontal window.
+      </li>
+      <li>
+        <anchor id="EclimProjectTreeActions"/>
+        <strong>g:EclimProjectTreeActions</strong><br/>
+        Default:
+        <source>
+          let g:EclimProjectTreeActions = [
+              \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
+              \ {'pattern': '.*', 'name': 'Tab', 'action': 'tabnew'},
+              \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
+            \ ]
+        </source>
+        Map of file patterns to the available actions for opening files that
+        match that pattern.
       </li>
     </ul>
   </body>

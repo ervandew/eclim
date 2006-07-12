@@ -81,6 +81,15 @@
         <a href="common/project.html#ProjectClose"><strong>:ProjectClose</strong></a>
         &lt;project&gt; - Closes a project.
       </li>
+      <li>
+        <a href="common/project.html#ProjectTree"><strong>:ProjectTree</strong></a>
+        [&lt;project&gt; &lt;project&gt; ...] - Opens navigable a tree for one
+        or more projects.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectsTree"><strong>:ProjectsTree</strong></a>
+        - Opens a tree containing all projects.
+      </li>
     </ul>
 
     <p><strong>Eclipse .classpath Commands</strong></p>

@@ -385,17 +385,27 @@
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added
-        <a href="vim/common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>,
-        <a href="vim/common/project.html#ProjectClose"><strong>:ProjectClose</strong></a>,
+        <a href="vim/common/project.html#ProjectOpen">
+          <strong>:ProjectOpen</strong>
+        </a>,
+        <a href="vim/common/project.html#ProjectClose">
+          <strong>:ProjectClose</strong>
+        </a>,
         and updated
-        <a href="vim/common/project.html#ProjectList"><strong>:ProjectList</strong></a>
+        <a href="vim/common/project.html#ProjectList">
+          <strong>:ProjectList</strong>
+        </a>
         to show the current status of each project.
       </action>
       <action dev="ervandew" type="add" context="Eclim">
-        Added <strong>:ProjectTree</strong> and <strong>:ProjectsTree</strong>.
-        <fixme author="ervandew">
-          Documentation pending.
-        </fixme>
+        Added
+        <a href="vim/common/project.html#ProjectTree">
+          <strong>:ProjectTree</strong>
+        </a>
+        and
+        <a href="vim/common/project.html#ProjectsTree">
+          <strong>:ProjectsTree</strong>
+        </a>.
       </action>
 
       <action dev="ervandew" type="add" context="Java">
