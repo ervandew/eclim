@@ -15,6 +15,7 @@
  */
 package org.eclim.util;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 
@@ -70,7 +71,22 @@ public class ScriptUtils
   }
 
   /**
-   * Parses the names script from the supplied PluginResources and returns the
+   * Searches all plugin resources for and parses the names script and returns
+   * the Class that can be used to create instances to invoke methods on.
+   *
+   * @param _script The script path relative to the scripts directory.
+   * @return The resulting class.
+   */
+  public static Class parseClass (String _script)
+    throws Exception
+  {
+    String script = FilenameUtils.separatorsToUnix(
+        FilenameUtils.concat(SCRIPT_PATH, _script));
+    return parseClass(Services.getResourceAsStream(script), script);
+  }
+
+  /**
+   * Parses the named script from the supplied PluginResources and returns the
    * Class that can be used to create instances to invoke methods on.
    *
    * @param _resources The plugin resources.
@@ -80,14 +96,28 @@ public class ScriptUtils
   public static Class parseClass (PluginResources _resources, String _script)
     throws Exception
   {
-    GroovyClassLoader gcl = new GroovyClassLoader();
     String script = FilenameUtils.separatorsToUnix(
         FilenameUtils.concat(SCRIPT_PATH, _script));
+    return parseClass(_resources.getResourceAsStream(script), script);
+  }
+
+  /**
+   * Parses the supplied script stream and returns the Class that can be used to
+   * create instances to invoke methods on.
+   *
+   * @param _stream The stream for the script.
+   * @param _script The script path (for error reporting purposes).
+   * @return The resulting class.
+   */
+  private static Class parseClass (InputStream _stream, String _script)
+    throws Exception
+  {
+    GroovyClassLoader gcl = new GroovyClassLoader();
     try{
-      return gcl.parseClass(_resources.getResourceAsStream(script));
+      return gcl.parseClass(_stream);
     }catch(NullPointerException npe){
       IllegalArgumentException iae = new IllegalArgumentException(
-          Services.getMessage("script.not.found", script));
+          Services.getMessage("script.not.found", _script));
       iae.initCause(npe);
       throw iae;
     }
