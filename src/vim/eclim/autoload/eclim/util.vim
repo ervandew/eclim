@@ -268,6 +268,29 @@ function! eclim#util#ListContains (list, element)
   return 0
 endfunction " }}}
 
+" MakeWithCompiler(compiler, bang, args) {{{
+" Executes :make using the supplied compiler.
+function! eclim#util#MakeWithCompiler (compiler, bang, args)
+  if exists('g:current_compiler')
+    let saved_compiler = g:current_compiler
+  endif
+  if exists('b:current_compiler')
+    let saved_compiler = b:current_compiler
+  endif
+
+  try
+    unlet! g:current_compiler b:current_compiler
+    exec 'compiler ' . a:compiler
+    exec 'make' . a:bang . ' ' . a:args
+  finally
+    if exists('saved_compiler')
+      unlet! g:current_compiler b:current_compiler
+      exec 'compiler ' . saved_compiler
+      unlet saved_compiler
+    endif
+  endtry
+endfunction " }}}
+
 " MarkRestore(markLine) {{{
 " Restores the ' mark with the new line.
 function! eclim#util#MarkRestore (markLine)
