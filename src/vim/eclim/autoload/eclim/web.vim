@@ -47,21 +47,20 @@ function! eclim#web#OpenUrl (url)
     let url = eclim#util#GrabUri()
   endif
 
-  " url must at least have a . in the string with a word char on each side to
-  " be a url.
-  " 192.168.0.123   blah.com
-  " Exception would be file:///home/blah/somefile, but user should probably be
-  " using netrw for that.
-  if url !~ '\w\.\w'
-    call eclim#util#EchoInfo("Not a valid url or hostname.")
-    return
+  " prepend http:// or file:// if no protocol defined.
+  if url !~ '^\w\+:\/\/'
+    " absolute file on windows or unix
+    if url =~ '^\([a-zA-Z]:[/\\]\|/\)'
+      let url = 'file://' . url
+
+    " everything else
+    else
+      let url = 'http://' . url
+    endif
   endif
 
   for pattern in g:EclimOpenUrlInVimPatterns
     if url =~ pattern
-      if url !~ '\w:\/\/'
-        let url = 'http://' . url
-      endif
       exec g:EclimOpenUrlInVimAction . ' ' . url
       return
     endif
