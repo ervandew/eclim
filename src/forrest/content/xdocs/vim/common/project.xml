@@ -103,6 +103,18 @@
         performance when building projects.
       </li>
       <li>
+        <anchor id="ProjectCD"/>
+        <strong>:ProjectCD</strong><br/>
+        Changes the global current working directory to the root directory of
+        the current file's project (executes a :cd).
+      </li>
+      <li>
+        <anchor id="ProjectLCD"/>
+        <strong>:ProjectLCD</strong><br/>
+        Changes the current working directory of the current window to the
+        root directory of the current file's project (executes a :lcd).
+      </li>
+      <li>
         <anchor id="ProjectTree"/>
         <strong>:ProjectTree</strong> [&lt;project&gt; &lt;project&gt; ...]<br/>
         Opens a window containing a navigable tree for the root directory of

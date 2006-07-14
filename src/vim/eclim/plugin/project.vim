@@ -88,6 +88,13 @@ if !exists(":ProjectsTree")
     \ ProjectsTree
     \ :call eclim#project#tree#ProjectTree(eclim#project#GetProjectNames())
 endif
+
+if !exists(":ProjectCD")
+  command ProjectCD :call eclim#project#ProjectCD(0)
+endif
+if !exists(":ProjectLCD")
+  command ProjectLCD :call eclim#project#ProjectCD(1)
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

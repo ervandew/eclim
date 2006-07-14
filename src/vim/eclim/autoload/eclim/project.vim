@@ -34,6 +34,17 @@
   let s:command_close = '-command project_close -n "<project>"'
 " }}}
 
+" ProjectCD(scope) {{{
+" Change the current working directory to the current project root.
+function! eclim#project#ProjectCD (scope)
+  let dir = eclim#project#GetCurrentProjectRoot()
+  if a:scope == 0
+    exec 'cd ' . dir
+  elseif a:scope == 1
+    exec 'lcd ' . dir
+  endif
+endfunction " }}}
+
 " ProjectCreate(args) {{{
 " Creates a project at the supplied folder
 function! eclim#project#ProjectCreate (args)
