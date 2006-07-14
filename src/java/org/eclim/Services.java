@@ -15,6 +15,8 @@
  */
 package org.eclim;
 
+import java.io.InputStream;
+
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -216,6 +218,25 @@ public class Services
       }
     }
     return getPluginResources().getResource(_resource);
+  }
+
+  /**
+   * Gets a resource stream by searching the available plugins for it.
+   *
+   * @param _resource The resource to find.
+   * @return The resource stream or null if not found.
+   */
+  public static InputStream getResourceAsStream (String _resource)
+  {
+    Iterator iterator = pluginResources.values().iterator();
+    for(int ii = 0; iterator.hasNext(); ii++){
+      PluginResources resources = (PluginResources)iterator.next();
+      InputStream stream = resources.getResourceAsStream(_resource);
+      if(stream != null){
+        return stream;
+      }
+    }
+    return getPluginResources().getResourceAsStream(_resource);
   }
 
   /**
