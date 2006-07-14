@@ -277,6 +277,10 @@ function! eclim#util#MakeWithCompiler (compiler, bang, args)
   if exists('b:current_compiler')
     let saved_compiler = b:current_compiler
   endif
+  if !exists('saved_compiler')
+    let saved_makeprg = &makeprg
+    let saved_errorformat = &errorformat
+  endif
 
   try
     unlet! g:current_compiler b:current_compiler
@@ -287,6 +291,9 @@ function! eclim#util#MakeWithCompiler (compiler, bang, args)
       unlet! g:current_compiler b:current_compiler
       exec 'compiler ' . saved_compiler
       unlet saved_compiler
+    else
+      let &makeprg = saved_makeprg
+      let &errorformat = saved_errorformat
     endif
   endtry
 endfunction " }}}
