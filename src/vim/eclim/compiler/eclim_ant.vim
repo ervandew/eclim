@@ -22,16 +22,10 @@
 "
 " }}}
 
-" relying on this breaks :Ant since it sets and restores the previous
-" compiler.
-"if exists("current_compiler")
-"  finish
-"endif
-"let current_compiler = "eclim_ant"
-
-if exists(":CompilerSet") != 2    " older Vim always used :setlocal
-  command -nargs=* CompilerSet setlocal <args>
+if exists("current_compiler")
+  finish
 endif
+let current_compiler = "eclim_ant"
 
 CompilerSet makeprg=ant\ -find\ build.xml\ $*
 CompilerSet errorformat=
