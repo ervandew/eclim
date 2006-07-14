@@ -102,7 +102,7 @@ public class TaglistCommand
           Class scriptClass = ScriptUtils.parseClass(
               Services.getPluginResources(), "taglist/" + lang + ".groovy");
           script = (TaglistScript)scriptClass.newInstance();
-// After some extended period of time groovy starts loosing the ability to
+// After some extended period of time groovy starts losing the ability to
 // resolve eclim classes.  Until this is resolved, don't cache groovy scripts.
 // If not a groovy issue, may be an issue with eclipse classloaders.
 //          scriptCache.put(lang, script);
@@ -187,7 +187,7 @@ public class TaglistCommand
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
-        new Thread(){
+        Thread outThread = new Thread(){
           public void run (){
             try{
               IOUtils.copy(process.getInputStream(), out);
@@ -195,9 +195,10 @@ public class TaglistCommand
               ioe.printStackTrace();
             }
           }
-        }.start();
+        };
+        outThread.start();
 
-        new Thread(){
+        Thread errThread = new Thread(){
           public void run (){
             try{
               IOUtils.copy(process.getErrorStream(), err);
@@ -205,9 +206,12 @@ public class TaglistCommand
               ioe.printStackTrace();
             }
           }
-        }.start();
+        };
+        errThread.start();
 
         returnCode = process.waitFor();
+        outThread.join(1000);
+        errThread.join(1000);
 
         result = out.toString();
         error = err.toString();
