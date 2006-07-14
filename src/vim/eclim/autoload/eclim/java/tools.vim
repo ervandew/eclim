@@ -44,7 +44,12 @@ function eclim#java#tools#Jps ()
   call eclim#util#Echo('Executing...')
 
   let content = []
-  for process in eclim#java#tools#GetJavaProcesses()
+  let processes = eclim#java#tools#GetJavaProcesses()
+  if len(processes) == 1 && string(processes[0]) == '0'
+    return
+  endif
+
+  for process in processes
     if len(content) > 0
       call add(content, "")
     endif
@@ -108,7 +113,12 @@ endfunction " }}}
 " args_vm - Any arguments passed to the vm.
 function eclim#java#tools#GetJavaProcesses ()
   let java_processes = []
-  let vm_args = split(system('jps -vV'), '\n')
+  let result = system('jps -vV')
+  if v:shell_error
+    call eclim#util#EchoError('Unable to execute jps - ' . result)
+    return [0]
+  endif
+  let vm_args = split(result, '\n')
   for process in split(system('jps -lm'), '\n')
     if process =~ 'sun.tools.jps.Jps' || process =~ '^[0-9]\+\s*$'
       continue
@@ -146,6 +156,10 @@ endfunction " }}}
 function eclim#java#tools#GetJavaProcessInfo (id)
   if executable('jinfo')
     let output = split(system('jinfo ' . a:id), '\n')
+    if v:shell_error
+      call eclim#util#EchoError('Unable to execute jps.')
+      return []
+    endif
 
     " could not connect to process.
     if len(output) == 2
@@ -166,6 +180,11 @@ endfunction " }}}
 function eclim#java#tools#GetJavaProcessStacks (id)
   if executable('jstack')
     let output = split(system('jstack ' . a:id), '\n')
+
+    if v:shell_error
+      call eclim#util#EchoError('Unable to execute jps.')
+      return []
+    endif
 
     " could not connect to process.
     if len(output) == 2
@@ -194,6 +213,11 @@ endfunction " }}}
 function eclim#java#tools#GetJavaProcessMap (id)
   if executable('jmap')
     let output = split(system('jmap ' . a:id), '\n')
+
+    if v:shell_error
+      call eclim#util#EchoError('Unable to execute jps.')
+      return []
+    endif
 
     " could not connect to process.
     if len(output) == 2
