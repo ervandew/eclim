@@ -265,7 +265,11 @@ function eclim#tree#GetLastChildPosition ()
   while getline(lnum) !~ sibling && s:GetIndent(lnum) >= indent && lnum != line('$')
     let lnum += 1
   endwhile
-  let lnum -= 1
+
+  " back up one if on a node of equal or less depth
+  if s:GetIndent(lnum) <= indent
+    let lnum -= 1
+  endif
 
   " no sibling below, use parent's value
   if lnum == line('.') && getline(lnum + 1) !~ sibling
@@ -514,6 +518,9 @@ function eclim#tree#Refresh ()
     return
   endif
 
+  if s:refresh_nesting == 0
+    call eclim#util#Echo('Refreshing...')
+  endif
   let s:refresh_nesting += 1
 
   " move cursor to first child
@@ -591,6 +598,7 @@ function eclim#tree#Refresh ()
 
   if s:refresh_nesting == 0
     call s:Uneditable()
+    call eclim#util#Echo(' ')
   endif
 endfunction " }}}
 
