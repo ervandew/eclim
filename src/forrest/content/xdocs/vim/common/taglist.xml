@@ -88,9 +88,13 @@
         below.
       </li>
       <li>
-        Place the script in your
+        Place the script in the appropriate plugin's
+        <code>resources/scripts/taglist</code> dir.<br/>
+        For example general purpose taglist scripts should be placed in:<br/>
         $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/resources/scripts/taglist
-        directory.
+        <br/>
+        While those specific to java programming should be placed in:<br/>
+        $ECLIPSE_HOME/plugins/org.eclim.jdt_<em>version</em>/resources/scripts/taglist
       </li>
       <li>
         Add a vim variable that informs the taglist plugin about your new
@@ -134,7 +138,8 @@
     </p>
     <p>
       To see this all in action, lets look at the code for the
-      <code>ant.groovy</code> script, which provides taglist support for ant
+      <code>ant.groovy</code> script (found in the org.eclim.ant plugin's
+      resources directory), which provides taglist support for ant
       build files.
     </p>
     <source>
@@ -194,7 +199,8 @@
       If you decide that you'd rather perform the ctags standard line by line
       regex matching, that can be accomplished just as easily.  To show an
       example of just that, let's look at the <code>jproperties.groovy</code>
-      script which is used to process java property files.
+      script (found in the org.eclim.jdt plugin's resources directory) which is
+      used to process java property files.
     </p>
     <source>
       <![CDATA[
