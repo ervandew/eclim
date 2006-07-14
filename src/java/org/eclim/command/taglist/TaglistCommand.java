@@ -100,7 +100,7 @@ public class TaglistCommand
       if(!scriptCache.containsKey(lang) && script == null){
         try{
           Class scriptClass = ScriptUtils.parseClass(
-              Services.getPluginResources(), "taglist/" + lang + ".groovy");
+              "taglist/" + lang + ".groovy");
           script = (TaglistScript)scriptClass.newInstance();
 // After some extended period of time groovy starts losing the ability to
 // resolve eclim classes.  Until this is resolved, don't cache groovy scripts.
