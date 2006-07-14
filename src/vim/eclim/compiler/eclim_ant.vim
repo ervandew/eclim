@@ -27,24 +27,33 @@ if exists("current_compiler")
 endif
 let current_compiler = "eclim_ant"
 
+if !exists('g:EclimAntCompilerAdditionalErrorFormat')
+  let g:EclimAntCompilerAdditionalErrorFormat = ''
+endif
+
 CompilerSet makeprg=ant\ -find\ build.xml\ $*
-CompilerSet errorformat=
-  \%-G%.%#[javac]\ %.%#:\ warning:\ unmappable\ character\ %.%#,
-  \%A%.%#[javac]\ %f:%l:\ %m,
-  \%C%.%#[javac]\ symbol\ %#:\ %m,
-  \%-Z%.%#[javac]\ %p^,
-  \%A%.%#[javadoc]\ %f:%l:\ %m,
-  \%-C%.%#[javadoc]\ location:\ %.%#,
-  \%-C%.%#[javadoc]\ %#,
-  \%-Z%.%#[javadoc]\ %p^,
-  \%-G%.%#[javadoc]\ Note:%.%#,
-  \%-G%.%#[javadoc]\ javadoc:%.%#,
-  \%.%#[javadoc]\ %f:\ %m,
-  \%.%#[java]\ org\.apache\.jasper\.JasperException:\ file:%f(%l\\,%c)\ %m,
-  \%A%.%#[junit]\ %m\\,\ Time\ elapsed:\ %.%#,
-  \%Z%.%#[junit]\ Test\ %f\ FAILED,
-  \%A%.%#[cactus]\ %m\\,\ Time\ elapsed:\ %.%#,
-  \%Z%.%#[cactus]\ Test\ %f\ FAILED,
-  \%-G%.%#
+exec 'CompilerSet errorformat=' .
+  \ '\%-G%.%#[javac]\ %.%#:\ warning:\ unmappable\ character\ %.%#,' .
+  \ '\%A%.%#[javac]\ %f:%l:\ %m,' .
+  \ '\%C%.%#[javac]\ symbol\ %#:\ %m,' .
+  \ '\%-Z%.%#[javac]\ %p^,' .
+  \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .
+  \ '\%-C%.%#[javadoc]\ location:\ %.%#,' .
+  \ '\%-C%.%#[javadoc]\ %#,' .
+  \ '\%-Z%.%#[javadoc]\ %p^,' .
+  \ '\%-G%.%#[javadoc]\ Note:%.%#,' .
+  \ '\%-G%.%#[javadoc]\ javadoc:%.%#,' .
+  \ '\%.%#[javadoc]\ %f:\ %m,' .
+  \ '\%.%#[java]\ org\.apache\.jasper\.JasperException:\ file:%f(%l\\,%c)\ %m,' .
+  \ '\%+A%.%#[junit]\ %.%#Failures:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ '\%-Z%.%#[junit]\ Test\ %f\ FAILED,' .
+  \ '\%+A%.%#[junit]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ '\%-Z%.%#[junit]\ Test\ %f\ FAILED,' .
+  \ '\%+A%.%#[cactus]\ %.%#Failures:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
+  \ '\%+A%.%#[cactus]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
+  \ g:EclimAntCompilerAdditionalErrorFormat .
+  \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker

@@ -93,12 +93,7 @@ function! eclim#java#junit#ResolveQuickfixResults ()
   let newentries = []
   for entry in entries
     let filename = bufname(entry.bufnr)
-    if entry.text =~ '^Tests run:'
-      if entry.bufnr == 0
-        " test was successful, no corresponding file.
-        continue
-      endif
-
+    if entry.text =~ '] Tests run:'
       let filename = fnamemodify(filename, ':t')
       let command = s:command_src_find
       let command = substitute(command, '<classname>', filename, '')
