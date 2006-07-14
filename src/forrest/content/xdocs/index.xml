@@ -66,8 +66,8 @@
     <section id="news">
       <title>News</title>
 
-      <section id="news_2006-07-12">
-        <title>2006-07-12</title>
+      <section id="news_2006-07-14">
+        <title>2006-07-14</title>
         <p>
           Eclim 1.2.0 is now available.<br/>
           This release requires <a href="ext:eclipse_download">eclipse 3.2</a>.
