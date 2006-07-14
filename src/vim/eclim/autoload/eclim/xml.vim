@@ -66,26 +66,8 @@ function! eclim#xml#Validate (file, on_save)
   else
     " alternative method via xmllint
     if !a:on_save && executable('xmllint')
-      try
-        let saved_make = &makeprg
-        let saved_errorformat = &errorformat
-        setlocal makeprg=xmllint\ --noout\ --valid\ %
-        setlocal errorformat=
-          \%A%f:%l:\ %.%#\ error\ :\ %m,
-          \%-Z%p^,
-          \%-C%.%#,
-          \%-G%.%#
-        make
-        let errors = getloclist(0)
-        for error in errors
-          let error['type'] = 'e'
-        endfor
-        call eclim#signs#Update()
-        redraw!
-      finally
-        let &makeprg = escape(saved_make, ' ')
-        let &errorformat = escape(saved_errorformat, ' ')
-      endtry
+      call eclim#util#MakeWithCompiler('eclim_xmllint', '', file)
+      call eclim#signs#Update()
     else
       call eclim#util#EchoDebug("Eclimd not running.")
     endif
