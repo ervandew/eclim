@@ -57,7 +57,7 @@ if !exists("g:tlist_forreststatus_settings")
 endif
 
 if !exists("g:tlist_hibernate_settings")
-  let g:tlist_hibernate_settings='hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class'
+  let g:tlist_hibernate_settings='hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class;j:joined-subclass'
 endif
 
 if !exists("g:tlist_junitresult_settings")
