@@ -141,6 +141,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Abbreviations"/>
       <regex label="Regex" href="regex.html"
           description="Regular Expression Testing"/>
+      <tools label="Tools" href="tools.html"
+          description="JDK Tools Integration"/>
     </java>
     <vim label="Vim Script" href="vim/">
       <find label="Vim Find" href="find.html"

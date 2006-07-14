@@ -82,6 +82,16 @@
         &lt;project&gt; - Closes a project.
       </li>
       <li>
+        <a href="common/project.html#ProjectCD"><strong>:ProjectCD</strong></a>
+        - Changes the global current working directory to the root directory of
+        the current file's project (executes a :cd).
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLCD"><strong>:ProjectLCD</strong></a>
+        - Changes the current working directory of the current window to the
+        root directory of the current file's project (executes a :lcd).
+      </li>
+      <li>
         <a href="common/project.html#ProjectTree"><strong>:ProjectTree</strong></a>
         [&lt;project&gt; &lt;project&gt; ...] - Opens navigable a tree for one
         or more projects.
@@ -216,6 +226,13 @@
           <strong>:JavaDocComment</strong>
         </a> -
         Adds or updates the comments for the element under the cursor.
+      </li>
+      <li>
+        <a href="java/tools.html#Jps">
+          <strong>:Jps</strong>
+        </a> -
+        Opens window with information about the currently running java
+        processes.
       </li>
     </ul>
 

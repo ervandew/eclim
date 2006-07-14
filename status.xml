@@ -407,6 +407,16 @@
           <strong>:ProjectsTree</strong>
         </a>.
       </action>
+      <action dev="ervandew" type="add" context="Eclim">
+        Added
+        <a href="vim/common/project.html#ProjectCD">
+          <strong>:ProjectCD</strong>
+        </a>
+        and
+        <a href="vim/common/project.html#ProjectLCD">
+          <strong>:ProjectLCD</strong>
+        </a>.
+      </action>
 
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/search.html#JavaSearchContext">
@@ -431,6 +441,11 @@
         added support for supplying only a pattern to the
         <strong>:JavaSearch</strong> command which will result in a search for
         all types (classes, enums, interfaces) that match that pattern.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added <a href="vim/java/tools.html#Jps">
+          <strong>:Jps</strong>
+        </a> for viewing java process info.
       </action>
 
       <action dev="ervandew" type="add" context="Vim">
