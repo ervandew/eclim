@@ -31,8 +31,8 @@ augroup END
 
 " Command Declarations {{{
 if !exists(":Ant")
-  command -bang -nargs=* -complete=customlist,eclim#ant#run#CommandCompleteTarget
-    \ Ant :call eclim#ant#run#Ant('<bang>', '<args>')
+  command -bang -nargs=* -complete=customlist,eclim#java#ant#run#CommandCompleteTarget
+    \ Ant :call eclim#java#ant#run#Ant('<bang>', '<args>')
 endif
 " }}}
 

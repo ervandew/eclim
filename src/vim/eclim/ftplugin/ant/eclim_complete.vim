@@ -22,6 +22,6 @@
 "
 " }}}
 
-setlocal completefunc=eclim#ant#complete#CodeComplete
+setlocal completefunc=eclim#java#ant#complete#CodeComplete
 
 " vim:ft=vim:fdm=marker

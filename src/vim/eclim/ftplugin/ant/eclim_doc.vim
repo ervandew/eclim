@@ -24,7 +24,7 @@
 
 " Command Declarations {{{
 if !exists(":AntDoc")
-  command -buffer -nargs=? AntDoc :call eclim#ant#doc#FindDoc('<args>')
+  command -buffer -nargs=? AntDoc :call eclim#java#ant#doc#FindDoc('<args>')
 endif
 " }}}
 

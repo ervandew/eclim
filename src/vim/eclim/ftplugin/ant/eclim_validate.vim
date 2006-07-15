@@ -31,13 +31,13 @@ endif
 if g:EclimAntValidate
   augroup eclim_ant
     autocmd!
-    autocmd BufWritePost *.xml call eclim#ant#validate#Validate()
+    autocmd BufWritePost *.xml call eclim#java#ant#validate#Validate()
   augroup END
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#ant#validate#Validate()
+  command -nargs=0 -buffer Validate :call eclim#java#ant#validate#Validate()
 endif
 " }}}
 
