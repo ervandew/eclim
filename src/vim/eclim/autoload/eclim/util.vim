@@ -471,7 +471,7 @@ function! eclim#util#ShowCurrentError ()
       let message = strpart(message, 0, textwidth - 3) . '...'
     endif
     " remove any new lines
-    let message = substitute(message, '\n', ' ', '')
+    let message = substitute(message, '\n', ' ', 'g')
     echo message
   endif
 endfunction " }}}
