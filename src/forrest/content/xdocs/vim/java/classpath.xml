@@ -150,67 +150,43 @@
         </li>
       </ul>
     </section>
-    <section id="buildfile">
-      <title>Build Dependency Files</title>
+    <section id="ivy">
+      <title>Ivy</title>
       <p>
         The second method of keeping your eclipse <code>.classpath</code> file
-        up to date, is to utilize eclim's plugins for a couple commonly used
-        build tools.  By default, eclim only provides support for two such
-        tools, but feel free to contribute additional implementations or submit
-        a request for another one.
+        up to date, is to utilize eclim's plugin for one commonly used
+        build tool, <a href="http://jayasoft.org/ivy">ivy</a>.<br/>
+        Ivy is an extension to ant that provides dependency management similar
+        to the more popular <a href="ext:maven">apache maven</a>,
       </p>
-      <section id="ivy.xml">
-        <title>ivy.xml</title>
-        <p>
-          The first such tool that eclim supports is
-          <a href="http://jayasoft.org/ivy">ivy</a>.
-          Ivy is an extension to ant that provides a very maven like dependency
-          manager, which even supports the maven repositories.
-        </p>
-        <p>
-          Like maven, ivy manages a project's dependencies in a single file,
-          ivy.xml.  Just like the direct .classpath editing that eclim supports,
-          when editing an ivy.xml file from vim, eclim adds an auto command to
-          update eclipse's classpath when you save the ivy.xml.  Any entries
-          found in the ivy.xml that are not in the <code>.classpath</code> will
-          be added, and any entries that differ in version will be updated.
-        </p>
-      </section>
-      <section id="project.xml">
-        <title>maven's project.xml (maven 1.x)</title>
-        <p>
-          The second tool that eclim supports is
-          <a href="http://maven.apache.org">maven</a>.  Maven is somewhat of an
-          ant alternative that provides a robust yet simple way to manage
-          projects.
-        </p>
-        <p>
-          Just like the ivy.xml and .classpath file plugins, eclim also
-          provides a plugin to notify the server of any changes when editing the
-          maven project.xml file.  Eclim will add any entries from the
-          project.xml not found in the .classpath file or update any that differ
-          in version.
-        </p>
-      </section>
-      <section id="preserve">
-        <title>Preserving manually added entries</title>
-        <p>
-          Both of the methods above will attempt to remove any stale entries from
-          your .classpath file.  If you have some manually added entries, these
-          may be removed as well.  To prevent this you can add a classpath entry
-          attribute notifying eclim that the entry should be preserved.<br/>
-          Ex.
-        </p>
-        <source>
-          <![CDATA[
-          <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
-            <attributes>
-              <attribute name="eclim.preserve" value="true"/>
-            </attributes>
-          </classpathentry>
-          ]]>
-        </source>
-      </section>
+      <p>
+        Like maven, ivy manages a project's dependencies in a single file,
+        ivy.xml.  Just like the direct .classpath editing that eclim supports,
+        when editing an ivy.xml file from vim, eclim adds an auto command to
+        update eclipse's classpath when you save the ivy.xml.  Any entries
+        found in the ivy.xml that are not in the <code>.classpath</code> will
+        be added, and any entries that differ in version will be updated.
+      </p>
+      <p>
+        <strong>Preserving manually added entries</strong><br/>
+      </p>
+      <p>
+        When utilizing the ivy support, eclim will attempt to remove any stale
+        entries from your .classpath file.  If you have some manually added
+        entries, these may be removed as well.  To prevent this you can add a
+        classpath entry attribute notifying eclim that the entry should be
+        preserved.<br/>
+        Ex.
+      </p>
+      <source>
+        <![CDATA[
+        <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
+          <attributes>
+            <attribute name="eclim.preserve" value="true"/>
+          </attributes>
+        </classpathentry>
+        ]]>
+      </source>
     </section>
   </body>
 </document>

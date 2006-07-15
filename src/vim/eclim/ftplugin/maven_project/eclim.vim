@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/classpath.html
+"   see http://eclim.sourceforge.net/vim/java/maven.html
 "
 " License:
 "
@@ -24,13 +24,5 @@
 
 " load any xml related functionality
 runtime ftplugin/xml.vim
-
-augroup eclim_xml
-  autocmd!
-augroup END
-augroup maven_project
-  autocmd!
-  autocmd BufWritePost project.xml call eclim#maven#UpdateClasspath()
-augroup END
 
 " vim:ft=vim:fdm=marker
