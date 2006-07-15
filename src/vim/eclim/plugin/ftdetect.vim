@@ -32,7 +32,6 @@ let xmltypes = {
     \ 'testsuite': 'junitresult',
   \ }
 
-autocmd BufRead *.xml call <SID>SetXmlFileType(xmltypes)
 autocmd BufRead .classpath
   \ call <SID>SetXmlFileType({'classpath': 'eclipse_classpath'})
 autocmd BufRead ivy.xml
@@ -43,19 +42,23 @@ autocmd BufRead web.xml
   \ call <SID>SetXmlFileType({'web-app': 'webxml'})
 autocmd BufRead struts-config.xml
   \ call <SID>SetXmlFileType({'struts-config': 'strutsconfig'})
+autocmd BufRead *.xml call <SID>SetXmlFileType(xmltypes)
 
 " SetXmlFileType(map) {{{
 " Sets the filetype of the current xml file to the if its root element is in the
 " supplied map.
 function! s:SetXmlFileType (map)
-  " cache the root element so that subsiquent calls don't need to re-examine
-  " the file.
-  if !exists("b:xmlroot")
-    let b:xmlroot = s:GetRootElement()
-  endif
+  if !exists("b:eclim_xml_filetype")
+    " cache the root element so that subsiquent calls don't need to re-examine
+    " the file.
+    if !exists("b:xmlroot")
+      let b:xmlroot = s:GetRootElement()
+    endif
 
-  if has_key(a:map, b:xmlroot)
-    exec "set filetype=" . a:map[b:xmlroot]
+    if has_key(a:map, b:xmlroot)
+      exec "set filetype=" . a:map[b:xmlroot]
+      let b:eclim_xml_filetype = a:map[b:xmlroot]
+    endif
   endif
 endfunction " }}}
 
