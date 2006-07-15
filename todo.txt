@@ -1,101 +1,96 @@
-eclim
-  Installer
-    - help alleviate need for users to set ECLIPSE_HOME.
-      - inject path into one of the vim scripts and allow override with
-        ECLIPSE_HOME
-      - on Windows, just set the ECLIPSE_HOME for the user if not already set.
-    - when deciding where to install vim plugins, run vim to determine its
-      runtime path dirs and give the user the option to install into one that
-      they have write permissions to.
+Installer
+  - help alleviate need for users to set ECLIPSE_HOME.
+    - inject path into one of the vim scripts and allow override with
+      ECLIPSE_HOME
+    - on Windows, just set the ECLIPSE_HOME for the user if not already set.
+  - when deciding where to install vim plugins, run vim to determine its
+    runtime path dirs and give the user the option to install into one that
+    they have write permissions to.
+  - maintain a version database for resources directories so we can determine
+    what files were added or modified by the user.
+    - keep an md5sum of each file to determine user changes which can be
+      resolved at install time via a visual diff.
 
-  Bugs
-    - xml validate, if a doctype exists, but no dtd, then there is an error for
-      every element since they are "not declared" (ex. ant/cvs.xml).
-    - possible issues with eclipse and symlinks
-    - sometimes when warning and error are on the same line+col, the mark
-      shows error, but the cursor hold text shows the warning message.
-    - on JavaSearch for implementors, exclude the javadoc matches.
-    - issues working with
-      http://vim.sourceforge.net/scripts/script.php?script_id=69 ?
-      According to http://tompurl.com/index.php/2006/06/27/eclim-vim-eclipse/
-      line 1244: Change from:
-        if !exists(':Project')
-      to
-        if exists(':Project') != 2
-      Waiting for confirmation that this is the only error.
+Bugs
+  - xml validate, if a doctype exists, but no dtd, then there is an error for
+    every element since they are "not declared" (ex. ant/cvs.xml).
+  - possible issues with eclipse and symlinks
+  - sometimes when warning and error are on the same line+col, the mark
+    shows error, but the cursor hold text shows the warning message.
+  - on JavaSearch for implementors, exclude the javadoc matches.
+  - issues working with
+    http://vim.sourceforge.net/scripts/script.php?script_id=69 ?
+    According to http://tompurl.com/index.php/2006/06/27/eclim-vim-eclipse/
+    line 1244: Change from:
+      if !exists(':Project')
+    to
+      if exists(':Project') != 2
+    Waiting for confirmation that this is the only error.
 
-  Enhancements
-    - Wiki site.
-    - add ProjectImport dir
-      - Given a directory, search for all .project files and create projects
-        for their corresponding parent directory (be sure to read the project
-        name from the file as it may not follow the eclim naming standard).
-      - If no dir supplied use workspace dir?
-    - get working under cygwin
-      if has('win32unix')
-      - eclim command
-      - file paths
-      - search results
-    - implement means to highlight text and push it to the command prompt
-      Ctrl-: or something similar.
-    - For commands that spawn temp buffer, assign a b:currentfile var to the
-      file that opened the buffer so that other commands can still be invoked
-      by changing the get file name function to examine b:currentfile.
-      - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
-    - integrate w/ http://www.easyeclipse.org/site/home/
-    - Use a running eclipse gui as the eclimd server?
-    - integrate with jdk tools
-      http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage
-    - :JavaImpl support anonymous classes.
-    - add :DtdDoc command that opens the current xml files dtd and jumps to
-      the element under the cursor.
-    - Recover from deleted cached dtds without having to restart eclim.
-    - add :JavaBeanImpl for defining an implementation of a bean interface.
-    - automate switch statement generation for enums.
-      When switch(enum), create cases for all enum values.
-    - :JavaImpl, wrap long parameter lines.
-    - modify for loop abbreviations to increment the looping var if the current
-      one is taken.  (ii, jj, kk, ll, mm, nn, ...)
-    - create a groovy templating harness
-      - create utility class with methods such as
-        - createMethod (velocity_template, values)
-        - createField (velocity_template, values)
-        - createImport (velocity_template, values)
-        - createClass (velocity_template, values)
-        - createCode (velocity_template, values) - insert code at current
-          cursor position
-      - standard templates
-        - jakarta equals, hashCode, toString.
-        - logging
-    - push method to interface... create method in interface from method in
-      implementation.
-    - With :JavaRun, also have an input buffer that when saved pushes the text
-      to stdin of the running app, and then clears the buffer for more input.
-    - allow re-formatting of xml section that can take an xml file and break up
-      the elements into lines accordingly.
-        <blah><duh>somevalue</duh></blah>
-      becomes
-        <blah>
-          <duh>somevalue</duh>
-        </blah>
-    - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
-    - command to place or un-place sign at the current line
+Enhancements
+  - Wiki site.
+    http://www.pmwiki.org/
+  - Add support for using a running eclipse gui as the eclimd server.
+    - add a menu item which starts up nailgun and spring.
+    - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
+  - add :DtdDoc command that opens the current xml files dtd and jumps to
+    the element under the cursor.
+  - :JavaImpl support anonymous classes.
+  - add ProjectImport dir
+    - Given a directory, search for all .project files and create projects
+      for their corresponding parent directory (be sure to read the project
+      name from the file as it may not follow the eclim naming standard).
+    - If no dir supplied use workspace dir?
+  - get working under cygwin
+    if has('win32unix')
+    - eclim command
+    - file paths
+    - search results
+  - implement means to highlight text and push it to the command prompt
+    Ctrl-: or something similar.
+  - For commands that spawn temp buffer, assign a b:currentfile var to the
+    file that opened the buffer so that other commands can still be invoked
+    by changing the get file name function to examine b:currentfile.
+    - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
+  - integrate w/ http://www.easyeclipse.org/site/home/
+  - add :JavaBeanImpl for defining an implementation of a bean interface.
+  - automate switch statement generation for enums.
+    When switch(enum), create cases for all enum values.
+  - :JavaImpl, wrap long parameter lines.
+  - modify for loop abbreviations to increment the looping var if the current
+    one is taken.  (ii, jj, kk, ll, mm, nn, ...)
+  - create a groovy templating harness
+    - create utility class with methods such as
+      - createMethod (velocity_template, values)
+      - createField (velocity_template, values)
+      - createImport (velocity_template, values)
+      - createClass (velocity_template, values)
+      - createCode (velocity_template, values) - insert code at current
+        cursor position
+    - standard templates
+      - jakarta equals, hashCode, toString.
+      - logging
+  - push method to interface... create method in interface from method in
+    implementation.
+  - With :JavaRun, also have an input buffer that when saved pushes the text
+    to stdin of the running app, and then clears the buffer for more input.
+  - allow re-formatting of xml section that can take an xml file and break up
+    the elements into lines accordingly.
+      <blah><duh>somevalue</duh></blah>
+    becomes
+      <blah>
+        <duh>somevalue</duh>
+      </blah>
+  - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
 Maven support:
-  - Maven1 support
-    - Deprecate the maven support i've already added in favor of:
-      http://maven.apache.org/maven-1.x/plugins/eclipse/goals.html
   - Maven2 support
-    - http://maven.apache.org/guides/mini/guide-ide-eclipse.html
-    - Add :Mvn command similar to :Ant for running maven.
     - :MvnDependencySearch junit
       - http://maven.ozacc.com/
         - pass parameter format=xml to get xml results.
       - should search all repositories for any jars containing 'junit' in the
         name, display then in a window, and allow the user to add entries to pom
         via <cr>.
-    - :MvnInit or :MvnCreate or something else?
-      - prompt for required properties to create the initial pom.xml
 
 JTest support:
   - settings
@@ -114,33 +109,42 @@ Other
   - add ant-contrib to ant syntax file.
   - fix java indent
     - Indents after a annotation
-      @Override
-        public boolean equals (Object _other)
+        @Override
+          public boolean equals (Object _other)
     - doesn't handle indentation of enums
-      public enum MyEnum
-      {
-        FIRST,
-          SECOND,
-          THIRD
-      }
+        public enum MyEnum
+        {
+          FIRST,
+            SECOND,
+            THIRD
+        }
     - Indents inner class declaration differently than outer
-      public class Blah
-        extends Foo
-      {
-        public class Bar
-            extends Baz
-          {
-          }
-      }
+        public class Blah
+          extends Foo
+        {
+          public class Bar
+              extends Baz
+            {
+            }
+        }
     - reformatting class declaration doesn't perform proper indent of { when
       put on a new line (and an = call does not fix it).
-      public class Blah extends Foo {
-      }
-      public class Blah
-        extends Foo
-        {
-      }
+        public class Blah extends Foo {
+        }
+        public class Blah
+          extends Foo
+          {
+        }
     - does not indent { on a new line when used for arrays
-      public static String[] STRINGS =
-      {"one", "two", "three"};
+        public static String[] STRINGS =
+        {"one", "two", "three"};
     - anonymous inner class flaky at times.
+
+Vim Suggestions
+  - Set syntax on a region?
+    Useful for help files, or any other text file containing mix of text and
+    code.
+    Ex.
+      let blah = 'duh'
+      unlet blah
+  - :tcd  tab local change directory (like lcd, but for all windows in current tab).
