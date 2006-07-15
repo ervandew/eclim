@@ -30,7 +30,7 @@ augroup eclim_xml
 augroup END
 augroup ivy
   autocmd!
-  autocmd BufWritePost ivy.xml call eclim#ivy#UpdateClasspath()
+  autocmd BufWritePost ivy.xml call eclim#java#ivy#UpdateClasspath()
 augroup END
 
 " vim:ft=vim:fdm=marker
