@@ -33,7 +33,7 @@ endif
 
 CompilerSet makeprg=maven\ --find\ project.xml\ $*
 
-" Lines 7 - 9: javac (must be last to prevent picking up other errors in the
+" Lines 12 - 15: javac (must be last to prevent picking up other errors in the
 " wrong format).
 exec 'CompilerSet errorformat=' .
   \ '\%W%.%#[javadoc]\ %f:%l:\ warning\ -\ %m,' .
