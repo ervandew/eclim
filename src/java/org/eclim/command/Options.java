@@ -74,6 +74,7 @@ public class Options
   public static final String PROPERTIES_OPTION = "r";
   public static final String SCHEMA_OPTION = "s";
   public static final String SCOPE_OPTION = "s";
+  public static final String SEARCH_OPTION = "s";
   public static final String SETTINGS_OPTION = "s";
   public static final String SETTING_OPTION = "s";
   public static final String SOURCE_OPTION = "s";
