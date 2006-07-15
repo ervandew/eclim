@@ -82,7 +82,10 @@
       enabled by default) so that when running <strong>:Maven</strong> or
       <strong>Mvn</strong> you do not need to worry about what your current
       working directory is. The proper pom file will be used for the currently
-      open file.
+      open file.<br/><br/>
+
+      Note that <strong>:Mvn</strong> MUST have this enabled since maven 2.x no
+      longer has support for the <code>--find</code> option.
     </note>
 
   </body>

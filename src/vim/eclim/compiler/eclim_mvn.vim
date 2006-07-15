@@ -2,6 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
+"   Compiler for maven 2.x.
 "
 " License:
 "
@@ -21,7 +22,30 @@
 "
 " }}}
 
-" load any xml related functionality
-runtime ftplugin/xml.vim
+if exists("current_compiler")
+  finish
+endif
+let current_compiler = "eclim_maven"
+
+if !exists('g:EclimMvnCompilerAdditionalErrorFormat')
+  let g:EclimMvnCompilerAdditionalErrorFormat = ''
+endif
+
+CompilerSet makeprg=mvn\ $*
+
+" Lines 1 - 3: javac
+" Lines 4 - 7: javadoc
+exec 'CompilerSet errorformat=' .
+  \ '\%A%f:[%l\\,%c]\ %m,' .
+  \ '\%Csymbol%.%#:\ %m,' .
+  \ '\%Zlocation%.%#:\ %m,' .
+  \ '\%AEmbedded\ error:%.%#\ -\ %f:%l:\ %m,' .
+  \ '\%-Z\ %p^,' .
+  \ '\%A%f:%l:\ %m,' .
+  \ '\%-Z\ %p^,' .
+  \ '\%ARunning\ %f,' .
+  \ '\%+Z%.%#Failures:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ g:EclimMvnCompilerAdditionalErrorFormat .
+  \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker

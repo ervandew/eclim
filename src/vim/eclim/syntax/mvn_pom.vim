@@ -2,6 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
+"  Syntax file for maven 2.x pom.xml files.
 "
 " License:
 "
@@ -21,7 +22,6 @@
 "
 " }}}
 
-" load any xml related functionality
-runtime ftplugin/xml.vim
+runtime! syntax/xml.vim
 
 " vim:ft=vim:fdm=marker
