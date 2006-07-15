@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclim.maven; singleton:=true
+Bundle-Version: ${eclim.version}
+Bundle-ClassPath: .,
+  eclim.maven.jar
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclim
+Eclipse-AutoStart: true
