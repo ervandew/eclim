@@ -127,12 +127,21 @@ endif
 if g:EclimMakeLCD
   augroup eclim_make_lcd
     autocmd!
-    autocmd QuickFixCmdPre make
-      \ let w:quickfix_dir = getcwd() | exec "lcd " . expand('%:p:h')
-    autocmd QuickFixCmdPost make
-      \ exec "lcd " . w:quickfix_dir
+    autocmd QuickFixCmdPre make call <SID>QuickFixLocalChangeDirectory()
+    autocmd QuickFixCmdPost make exec "lcd " . w:quickfix_dir
   augroup END
 endif
 " }}}
+
+" QuickFixLocalChangeDirectory() {{{
+function! s:QuickFixLocalChangeDirectory ()
+  let w:quickfix_dir = getcwd()
+
+  let dir = eclim#project#GetCurrentProjectRoot()
+  if dir == ''
+    let dir = expand('%:p:h')
+  endif
+  exec "lcd " . dir
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker
