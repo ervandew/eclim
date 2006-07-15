@@ -27,10 +27,7 @@ import java.util.List;
 
 import java.util.regex.Pattern;
 
-import javax.xml.XMLConstants;
-
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -38,7 +35,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
 
 import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
@@ -230,11 +226,11 @@ public class XmlUtils
     private void addError (SAXParseException _ex, boolean _warning)
     {
       String location = _ex.getSystemId();
-      if(location.startsWith("file://")){
+      if(location != null && location.startsWith("file://")){
         location = location.substring("file://".length());
       }
       // bug where window paths start with /C:/...
-      if(WIN_BUG.matcher(location).matches()){
+      if(location != null && WIN_BUG.matcher(location).matches()){
         location = location.substring(1);
       }
       errors.add(new Error(
