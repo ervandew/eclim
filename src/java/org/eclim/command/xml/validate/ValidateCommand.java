@@ -49,21 +49,35 @@ public class ValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
 
-      Error[] errors = XmlUtils.validateXml(file, schema);
-      ArrayList list = new ArrayList();
-      for(int ii = 0; ii < errors.length; ii++){
-        // FIXME: hack to ignore errors regarding no defined dtd.
-        // When 1.4 no longer needs to be supported, this can be scrapped.
-        if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
-            errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
-        {
-          list.add(errors[ii]);
-        }
-      }
+      List list = validate(file, schema);
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
     }catch(Throwable t){
       return t;
     }
+  }
+
+  /**
+   * Validate the supplied file.
+   *
+   * @param _file The file to validate.
+   * @param _schema true to use declared schema, false otherwise.
+   * @return The list of errors.
+   */
+  protected List validate (String _file, boolean _schema)
+    throws Exception
+  {
+    Error[] errors = XmlUtils.validateXml(_file, _schema);
+    ArrayList list = new ArrayList();
+    for(int ii = 0; ii < errors.length; ii++){
+      // FIXME: hack to ignore errors regarding no defined dtd.
+      // When 1.4 no longer needs to be supported, this can be scrapped.
+      if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
+          errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
+      {
+        list.add(errors[ii]);
+      }
+    }
+    return list;
   }
 }
