@@ -257,7 +257,7 @@
           directory will be restored to the dir it was prior to executing
           :make.<br/>
           Enabling this has the benefit of allowing you to run :make or
-          <a href="ant/run.html"><strong>Ant</strong></a> from any file
+          <a href="java/ant/run.html"><strong>Ant</strong></a> from any file
           regardless of where it was opened from without having to worry about
           the directory it is executing from.  For example if you have a file
           open from project A and split a file from project B, you can execute

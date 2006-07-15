@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Ant File Validation</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      When editing an ant xml file eclim will default to validating the file
+      when it is written.  Any errors will be added to the current window's
+      location list (:help location-list) and their corresponding line number
+      noted via vim's sign functionality.
+    </p>
+    <note>
+      Ant file validation does not require that the file exist in an eclipse
+      project, but this may change in the future.
+    </note>
+    <p>
+      Currently the eclipse ant file validation isn't as robust as one might
+      hope.  It doesn't validate that element attributes are correct, that child
+      elements are valid, etc., but it does perform the following:
+    </p>
+    <ul>
+      <li>
+        If a default target is specified, validate that it exists and that the
+        target dependencies exist.
+      </li>
+      <li>
+        Check for missing dependencies.
+      </li>
+      <li>
+        Check for circular dependencies.
+      </li>
+    </ul>
+    <p>
+      Eclim also combines the above validation with
+      <a href="../../xml/validate.html">xml validation</a> to validate
+      that the ant file is well formed.
+    </p>
+    <p>
+      If you do not want your ant files validated automatically when saved, you
+      can set the
+      <a href="#EclimAntValidate">g:EclimAntValidate</a> variable described in
+      the configuration section
+      below.
+    </p>
+    <anchor id="Validate"/>
+    <p>
+      Whether or not auto validation has been enabled, eclim also exposes
+      the following command for manually executing the validation of the ant
+      file:<br/>
+      <strong>:Validate</strong>
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimAntValidate"/>
+        <strong>g:EclimAntValidate</strong> (Default: 1)<br/>
+        If set to 0, disables ant xml validation when saving the file.
+      </li>
+    </ul>
+  </body>
+</document>
