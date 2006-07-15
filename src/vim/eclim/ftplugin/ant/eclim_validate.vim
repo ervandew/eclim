@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/ant/validate.html
+"   see http://eclim.sourceforge.net/vim/java/ant/validate.html
 "
 " License:
 "
