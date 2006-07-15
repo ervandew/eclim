@@ -18,6 +18,8 @@ package org.eclim.command;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import org.eclim.util.StringUtils;
+
 /**
  * Represents an error to be reported to the user.
  *
@@ -50,8 +52,8 @@ public class Error
   {
     this.message = _message;
     this.filename = _filename;
-    this.lineNumber = _lineNumber;
-    this.columnNumber = _columnNumber;
+    this.lineNumber = _lineNumber > 0 ? _lineNumber : 1;
+    this.columnNumber = _columnNumber > 0 ? _columnNumber : 1;
     this.warning = _warning;
   }
 
@@ -62,7 +64,7 @@ public class Error
    */
   public String getMessage ()
   {
-    return message;
+    return message != null ? message : StringUtils.EMPTY;
   }
 
   /**
