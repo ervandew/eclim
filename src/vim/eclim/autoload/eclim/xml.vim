@@ -32,9 +32,9 @@ endif
 let s:command_validate = '-filter vim -command xml_validate -f "<file>"'
 " }}}
 
-" Validate(file, on_save) {{{
+" Validate(file, on_save, ...) {{{
 " Validate the supplied file.
-function! eclim#xml#Validate (file, on_save)
+function! eclim#xml#Validate (file, on_save, ...)
   if a:on_save && (!g:EclimXmlValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
@@ -43,6 +43,8 @@ function! eclim#xml#Validate (file, on_save)
   if file == ""
     let file = expand('%:p')
     update
+  else
+    let file = fnamemodify(file, ':p')
   endif
   let file = substitute(file, '\', '/', 'g')
 
@@ -51,13 +53,29 @@ function! eclim#xml#Validate (file, on_save)
     return
   endif
 
-  let command = substitute(s:command_validate, '<file>', file, '')
-
   if eclim#PingEclim(0)
+    let command = substitute(s:command_validate, '<file>', file, '')
+
+    if substitute(expand('%:p'), '\', '/', 'g') != file
+      let restore = winrestcmd()
+      exec 'split ' . file
+    endif
+    if search('xsi:schemaLocation', 'cnw')
+      let command .= ' -s'
+    endif
+    if exists('restore')
+      close
+      exec restore
+    endif
+
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'
       let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
       call eclim#util#SetLocationList(errors)
+      " bang arg supplied, but no bang, so jump to first error.
+      if len(a:000) > 0 && a:000[0] == ''
+        lfirst
+      endif
       return 1
     else
       call eclim#util#SetLocationList([], 'r')

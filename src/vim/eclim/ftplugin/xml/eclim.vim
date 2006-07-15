@@ -37,8 +37,8 @@ endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=? -complete=file -buffer Validate
-    \ :call eclim#xml#Validate('<args>', 0)
+  command -nargs=? -complete=file -bang -buffer Validate
+    \ :call eclim#xml#Validate('<args>', 0, '<bang>')
 endif
 " }}}
 

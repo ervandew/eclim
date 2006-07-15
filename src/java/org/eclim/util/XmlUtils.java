@@ -71,6 +71,20 @@ public class XmlUtils
   public static Error[] validateXml (String _filename)
     throws Exception
   {
+    return validateXml(_filename, false);
+  }
+
+  /**
+   * Validate the supplied xml file.
+   *
+   * @param _filename The file path to the xml file.
+   * @param _schema True to use schema validation relying on the
+   * xsi:schemaLocation attribute of the document.
+   * @return A possibly empty array of errors.
+   */
+  public static Error[] validateXml (String _filename, boolean _schema)
+    throws Exception
+  {
     // jdk < 1.5 requires a doctype to validate (won't just check well formness
     // if no doctype specified like 1.5 does)
     /*SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -82,6 +96,13 @@ public class XmlUtils
     org.apache.xerces.parsers.SAXParser parser =
       new org.apache.xerces.parsers.SAXParser();
     parser.setFeature("http://xml.org/sax/features/validation", true);
+
+    if(_schema){
+      parser.setFeature("http://apache.org/xml/features/validation/schema", true);
+      parser.setFeature(
+          "http://apache.org/xml/features/validation/schema-full-checking", true);
+    }
+
     parser.setErrorHandler(handler);
     parser.setEntityResolver(
         new EntityResolver(FilenameUtils.getFullPath(_filename)));
