@@ -318,7 +318,7 @@
   </todo>
 
   <changes>
-    <release version="1.2.0" date="July 14, 2006">
+    <release version="1.2.0" date="July 16, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed processing of dtd related xml validation errors on Windows.
       </action>
@@ -447,6 +447,19 @@
           <strong>:Jps</strong>
         </a> for viewing java process info.
       </action>
+      <action dev="ervandew" type="add" context="Java">
+        Removed support for auto update of .classpath upon writing of maven
+        project.xml in favor of new
+        <a href="guides/java/maven/maven_eclipse.html">maven support</a>.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added
+        <strong><a href="vim/java/maven/run.html#Maven">:Maven</a></strong>
+        and
+        <strong><a href="vim/java/maven/run.html#Mvn">:Mvn</a></strong>
+        commands for
+        executing mave 1.x and 2.x.
+      </action>
 
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/vim/find.html#FindFunctionVariableContext">
@@ -503,18 +516,18 @@
       </action>
 
       <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/run.html"><strong>:Ant</strong></a> command to
-        allow execution of ant from any file.
+        Added <a href="vim/java/ant/run.html"><strong>:Ant</strong></a> command
+        to allow execution of ant from any file.
       </action>
       <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/complete.html">ant code completion</a>.
+        Added <a href="vim/java/ant/complete.html">ant code completion</a>.
       </action>
       <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/validate.html">ant file validation</a>.
+        Added <a href="vim/java/ant/validate.html">ant file validation</a>.
       </action>
       <action dev="ervandew" type="add" context="Ant">
-        Added <a href="vim/ant/doc.html"><strong>:AntDoc</strong></a> command to
-        quickly find ant type / task documentation.
+        Added <a href="vim/java/ant/doc.html"><strong>:AntDoc</strong></a>
+        command to quickly find ant type / task documentation.
       </action>
 
       <action dev="ervandew" type="update" context="Java">

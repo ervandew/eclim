@@ -50,8 +50,15 @@ See http://forrest.apache.org/docs/linking.html for more info
       <install label="Installing / Upgrading"
           description="Installation / Upgrading Instructions"
           href="guides/install.html"/>
-      <java_project label="Creating A Java Project" description="Creating a java project."
+      <java_project label="Java: Creating A Java Project"
+          description="Creating a java project."
           href="guides/java/project.html"/>
+      <maven_project label="Maven 1.x: Maintaining A Java Project"
+          description="Maintaining a java project with maven 1.x."
+          href="guides/java/maven/maven_eclipse.html"/>
+      <mvn_project label="Maven 2.x: Maintaining A Java Project"
+          description="Maintaining a java project with maven 2.x."
+          href="guides/java/maven/mvn_eclipse.html"/>
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
@@ -100,9 +107,9 @@ See http://forrest.apache.org/docs/linking.html for more info
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
     </common>
-    <ant label="Ant" href="ant/">
+    <ant label="Ant" href="java/ant/">
       <run label="Execution" href="run.html"
-          description="Execute Ant"/>
+          description="Executing Ant"/>
       <complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <validate label="Validation" href="validate.html"
@@ -110,6 +117,10 @@ See http://forrest.apache.org/docs/linking.html for more info
       <doc label="Documentation" href="doc.html"
           description="Ant Documentation Lookup"/>
     </ant>
+    <maven label="Maven" href="java/maven/">
+      <run label="Execution" href="run.html"
+          description="Executing Maven"/>
+    </maven>
     <java label="Java" href="java/">
       <classpath label="Classpath" href="classpath.html"
           description="Editing your project's classpath"/>
@@ -185,6 +196,9 @@ See http://forrest.apache.org/docs/linking.html for more info
     <antcontrib href="http://ant-contrib.sourceforge.net"/>
 
     <groovy href="http://groovy.codehaus.org"/>
+
+    <ant href="http://ant.apache.org"/>
+    <maven href="http://maven.apache.org"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

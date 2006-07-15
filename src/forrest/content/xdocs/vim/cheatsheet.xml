@@ -137,19 +137,33 @@
     <p><strong>Ant Commands</strong></p>
     <ul>
       <li>
-        <a href="ant/run.html#Ant"><strong>:Ant</strong></a>
+        <a href="java/ant/run.html#Ant"><strong>:Ant</strong></a>
         [&lt;target&gt; ...] -
         Execute ant from the current project.
       </li>
       <li>
-        <a href="ant/doc.html#AntDoc"><strong>:AntDoc</strong></a>
+        <a href="java/ant/doc.html#AntDoc"><strong>:AntDoc</strong></a>
         [&lt;element&gt;] -
         Find and open the documentation for the element under the cursor or the
         element supplied as an argument.
       </li>
       <li>
-        <a href="ant/validate.html#Validate"><strong>:Validate</strong></a> -
+        <a href="java/ant/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current ant build file.
+      </li>
+    </ul>
+
+    <p><strong>Maven Commands</strong></p>
+    <ul>
+      <li>
+        <a href="java/maven/run.html#Maven"><strong>:Maven</strong></a>
+        [&lt;goal&gt; ...] -
+        Execute maven 1.x from the current project.
+      </li>
+      <li>
+        <a href="java/maven/run.html#Mvn"><strong>:Mvn</strong></a>
+        [&lt;goal&gt; ...] -
+        Execute maven 2.x from the current project.
       </li>
     </ul>
 
