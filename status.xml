@@ -454,11 +454,22 @@
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added
-        <strong><a href="vim/java/maven/run.html#Maven">:Maven</a></strong>
+        <a href="vim/java/maven/run.html#Maven"><strong>:Maven</strong></a>
         and
-        <strong><a href="vim/java/maven/run.html#Mvn">:Mvn</a></strong>
+        <a href="vim/java/maven/run.html#Mvn"><strong>:Mvn</strong></a>
         commands for
-        executing mave 1.x and 2.x.
+        executing maven 1.x and 2.x.
+      </action>
+      <action dev="ervandew" type="add" context="Java">
+        Added
+        <a href="vim/java/maven/dependency.html#MavenDependencySearch">
+          <strong>:MavenDependencySearch</strong>
+        </a>
+        and
+        <a href="vim/java/maven/dependency.html#MvnDependencySearch">
+          <strong>:MvnDependencySearch</strong>
+        </a>
+        for searching for and adding dependencies to your maven pom file.
       </action>
 
       <action dev="ervandew" type="add" context="Vim">

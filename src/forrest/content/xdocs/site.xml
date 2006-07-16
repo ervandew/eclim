@@ -120,6 +120,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <maven label="Maven" href="java/maven/">
       <run label="Execution" href="run.html"
           description="Executing Maven"/>
+      <dependency label="Dependencies" href="dependency.html"
+          description="Maven Dependencies"/>
     </maven>
     <java label="Java" href="java/">
       <classpath label="Classpath" href="classpath.html"

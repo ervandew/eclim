@@ -165,6 +165,24 @@
         [&lt;goal&gt; ...] -
         Execute maven 2.x from the current project.
       </li>
+      <li>
+        <a href="java/maven/dependency.html#MavenDependencySearch">
+          <strong>:MavenDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        Searches online repository and opens a window with results that can be
+        added to the current project file by hitting &lt;Enter&gt; on a result.
+        Available when editing a maven 1.x <code>project.xml</code> file.
+      </li>
+      <li>
+        <a href="java/maven/dependency.html#MvnDependencySearch">
+          <strong>:MvnDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        Searches online repository and opens a window with results that can be
+        added to the current pom file by hitting &lt;Enter&gt; on a result.
+        Available when editing a maven 2.x <code>pom.xml</code> file.
+      </li>
     </ul>
 
     <p><strong>Java Commands</strong></p>

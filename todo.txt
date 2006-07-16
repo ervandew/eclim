@@ -33,7 +33,9 @@ Enhancements
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
-  - add :DtdDoc command that opens the current xml files dtd and jumps to
+  - add :DtdDoc command that opens the current xml file's dtd and jumps to
+    the element under the cursor.
+  - add :SchemaDoc command that opens the current xml file's schema and jumps to
     the element under the cursor.
   - :JavaImpl support anonymous classes.
   - add ProjectImport dir
@@ -82,15 +84,6 @@ Enhancements
         <duh>somevalue</duh>
       </blah>
   - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
-
-Maven support:
-  - Maven2 support
-    - :MvnDependencySearch junit
-      - http://maven.ozacc.com/
-        - pass parameter format=xml to get xml results.
-      - should search all repositories for any jars containing 'junit' in the
-        name, display then in a window, and allow the user to add entries to pom
-        via <cr>.
 
 JTest support:
   - settings
