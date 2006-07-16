@@ -16,8 +16,8 @@
 package org.eclim.util;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.net.URL;
@@ -43,6 +43,8 @@ import org.apache.log4j.Logger;
 import org.eclim.Services;
 
 import org.eclim.command.Error;
+
+import org.w3c.dom.Element;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -201,6 +203,19 @@ public class XmlUtils
     }
 
     return handler.getErrors();
+  }
+
+  /**
+   * Gets the value of a named child element.
+   *
+   * @param element The parent element.
+   * @param name The name of the child element to retrieve the value from.
+   * @return The text value of the child element.
+   */
+  public static String getElementValue (Element element, String name)
+  {
+    return ((Element)element.getElementsByTagName(name).item(0))
+      .getFirstChild().getNodeValue();
   }
 
   /**
