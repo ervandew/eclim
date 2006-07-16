@@ -24,7 +24,8 @@
 
 " Script Variables {{{
   let s:command_search =
-    \ '-filter vim -command maven_dependency_search -s <query>'
+    \ '-filter vim -command maven_dependency_search ' .
+    \ '-p "<project>" -f "<file>" -s <query>'
 
   let s:dependency_scope = "\t\t<scope>compile</scope>"
   let s:dependency_template = [
@@ -38,16 +39,23 @@
 " Search(query) {{{
 " Searches online maven repository.
 function! eclim#java#maven#dependency#Search (query)
-  let command = s:command_search
-  let command = substitute(command, '<query>', a:query, '')
+  update
 
   let filename = expand('%:p')
+  let project = eclim#project#GetCurrentProjectName()
+
+  let command = s:command_search
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', filename, '')
+  let command = substitute(command, '<query>', a:query, '')
+
   call eclim#util#TempWindowCommand(command, "Maven_Dependency_Results")
   let b:filename = filename
 
   setlocal ft=maven_search_results
   syntax match Statement /^\w\+.*$/
   syntax match Identifier /(.\{-})/
+  syntax match Comment /^\s*\/\/.*$/
 
   nnoremap <silent> <buffer> <cr> :call <SID>AddDependency()<cr>
 endfunction " }}}
@@ -55,7 +63,7 @@ endfunction " }}}
 " AddDependency() {{{
 function! s:AddDependency ()
   let line = getline('.')
-  if line =~ '\s\+.*(.*)$'
+  if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
     let artifact = substitute(line, '\s\+\(.*\)\.\w\+ (.*)$', '\1', '')
     let vrsn = substitute(line, '.*(\(.*\))$', '\1', '')
     let group = getline(search('^\w\+', 'bnW'))
@@ -65,6 +73,15 @@ function! s:AddDependency ()
 
     call s:InsertDependency(group, artifact, vrsn)
     exec results_winnr . "winc w"
+
+    " mark dependency as added
+    let line = substitute(line, '^\(\s*\)', '\1//', '')
+
+    setlocal modifiable
+    setlocal noreadonly
+    call setline(line('.'), line)
+    setlocal nomodifiable
+    setlocal readonly
   endif
 endfunction " }}}
 

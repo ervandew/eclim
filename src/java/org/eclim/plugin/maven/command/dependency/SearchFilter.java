@@ -15,11 +15,27 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.io.IOUtils;
+
+import org.apache.log4j.Logger;
+
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
+
+import org.eclim.util.XmlUtils;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Filter for repository search results.
@@ -30,11 +46,25 @@ import org.eclim.command.OutputFilter;
 public class SearchFilter
   implements OutputFilter
 {
+  private static final Logger logger = Logger.getLogger(SearchFilter.class);
+
+  private static final String DEPENDENCIES = "dependencies";
+  private static final String DEPENDENCY = "dependency";
+
   /**
    * {@inheritDoc}
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
+    List dependencies = null;
+    try{
+      String file = _commandLine.getValue(Options.FILE_OPTION);
+      dependencies = getDependencies(file);
+    }catch(Exception e){
+      logger.warn("Unable to get dependencies.", e);
+      dependencies = new ArrayList();
+    }
+
     StringBuffer buffer = new StringBuffer();
     String groupId = null;
     List results = (List)_result;
@@ -46,8 +76,13 @@ public class SearchFilter
         }
         buffer.append(groupId = dependency.getGroupId());
       }
-      buffer.append("\n\t")
-        .append(dependency.getArtifactId())
+
+      buffer.append("\n\t");
+      if(dependencies.contains(dependency)){
+        buffer.append("//");
+      }
+
+      buffer.append(dependency.getArtifactId())
         .append('.')
         .append(dependency.getType())
         .append(" (")
@@ -55,5 +90,42 @@ public class SearchFilter
         .append(')');
     }
     return buffer.toString();
+  }
+
+  /**
+   * Get the project file's current dependencies.
+   *
+   * @param _file The project file.
+   * @return List of dependencies.
+   */
+  private List getDependencies (String _file)
+    throws Exception
+  {
+    ArrayList list = new ArrayList();
+    InputStream in = null;
+    try{
+      Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .parse(in = new FileInputStream(_file)).getDocumentElement();
+      NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))
+        .getElementsByTagName(DEPENDENCY);
+
+      for (int ii = 0; ii < nodes.getLength(); ii++){
+        Element element = (Element)nodes.item(ii);
+
+        Dependency dependency = new Dependency();
+        dependency.setGroupId(
+            XmlUtils.getElementValue(element, Dependency.GROUP_ID));
+        dependency.setArtifactId(
+            XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
+        dependency.setVersion(
+            XmlUtils.getElementValue(element, Dependency.VERSION));
+        dependency.setType(Dependency.JAR);
+
+        list.add(dependency);
+      }
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+    return list;
   }
 }
