@@ -2,7 +2,7 @@
 " Version: ${eclim.version}
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/maven/run.html
+"   see http://eclim.sourceforge.net/vim/java/maven/run.html
 "
 " License:
 "
