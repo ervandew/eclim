@@ -15,6 +15,9 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Represents a maven dependency.
  *
@@ -23,6 +26,13 @@ package org.eclim.plugin.maven.command.dependency;
  */
 public class Dependency
 {
+  public static final String GROUP_ID = "groupId";
+  public static final String ARTIFACT_ID = "artifactId";
+  public static final String VERSION = "version";
+  public static final String TYPE = "type";
+  public static final String REPOSITORY = "repository";
+  public static final String JAR = "jar";
+
   private String groupId;
   private String artifactId;
   private String version;
@@ -127,5 +137,42 @@ public class Dependency
   public void setRepository (String repository)
   {
     this.repository = repository;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Object#hashCode()
+   */
+  public int hashCode ()
+  {
+    return new HashCodeBuilder()
+      .append(groupId)
+      .append(artifactId)
+      .append(version)
+      .append(type)
+      .toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Object#equals(Object)
+   */
+  public boolean equals (Object obj)
+  {
+    if (!(obj instanceof Dependency)){
+      return false;
+    }
+
+    if (this == obj){
+      return true;
+    }
+
+    Dependency other = (Dependency)obj;
+    return new EqualsBuilder()
+      .append(groupId, other.getGroupId())
+      .append(artifactId, other.getArtifactId())
+      .append(version, other.getVersion())
+      .append(type, other.getType())
+      .isEquals();
   }
 }
