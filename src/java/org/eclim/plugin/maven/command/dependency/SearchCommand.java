@@ -31,6 +31,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.util.XmlUtils;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -45,11 +47,6 @@ public class SearchCommand
 {
   private static final String URL =
     "http://maven.ozacc.com/search?type=jar&format=xml&keyword=";
-  private static final String GROUP_ID = "groupId";
-  private static final String ARTIFACT_ID = "artifactId";
-  private static final String VERSION = "version";
-  private static final String TYPE = "type";
-  private static final String REPOSITORY = "repository";
 
   /**
    * {@inheritDoc}
@@ -88,11 +85,16 @@ public class SearchCommand
         Element element = (Element)nodes.item(ii);
 
         Dependency dependency = new Dependency();
-        dependency.setGroupId(getElementValue(element, GROUP_ID));
-        dependency.setArtifactId(getElementValue(element, ARTIFACT_ID));
-        dependency.setVersion(getElementValue(element, VERSION));
-        dependency.setType(getElementValue(element, TYPE));
-        dependency.setRepository(getElementValue(element, REPOSITORY));
+        dependency.setGroupId(
+            XmlUtils.getElementValue(element, Dependency.GROUP_ID));
+        dependency.setArtifactId(
+            XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
+        dependency.setVersion(
+            XmlUtils.getElementValue(element, Dependency.VERSION));
+        dependency.setType(
+            XmlUtils.getElementValue(element, Dependency.TYPE));
+        dependency.setRepository(
+            XmlUtils.getElementValue(element, Dependency.REPOSITORY));
 
         dependencies.add(dependency);
       }
@@ -101,18 +103,5 @@ public class SearchCommand
     }
 
     return dependencies;
-  }
-
-  /**
-   * Gets the value of a named child element.
-   *
-   * @param element The parent element.
-   * @param name The name of the child element to retrieve the value from.
-   * @return The text value of the child element.
-   */
-  private String getElementValue (Element element, String name)
-  {
-    return ((Element)element.getElementsByTagName(name).item(0))
-      .getFirstChild().getNodeValue();
   }
 }
