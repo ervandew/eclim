@@ -21,9 +21,4 @@
     </property>
   </bean>
 
-  <bean name="maven_dependency_add"
-      class="org.eclim.plugin.maven.command.dependency.AddCommand">
-    <description>Handles client request to add a new dependency.</description>
-  </bean>
-
 </beans>
