@@ -139,9 +139,9 @@ function! s:QuickFixLocalChangeDirectory ()
 
   let dir = eclim#project#GetCurrentProjectRoot()
   if dir == ''
-    let dir = expand('%:p:h')
+    let dir = substitute(expand('%:p:h'), '\', '/', 'g')
   endif
-  exec "lcd " . dir
+  exec 'lcd ' . dir
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

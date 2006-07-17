@@ -27,7 +27,7 @@
 function! eclim#java#ant#util#FindBuildFile ()
   let buildFile = findfile('build.xml', fnamemodify(expand('%:p'), ':h') . ';')
   if filereadable(buildFile)
-    return fnamemodify(buildFile, ':p')
+    return substitute(fnamemodify(buildFile, ':p'), '\', '/', 'g')
   endif
 
   return ''
