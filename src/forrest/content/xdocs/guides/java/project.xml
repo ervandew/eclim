@@ -57,9 +57,9 @@
         <a href="../../vim/java/classpath.html">classpath docs</a>.
       </p>
       <p>
-        Once you've created your project you can now use the
-        <strong>:ProjectList</strong> to list the available projects and you
-        should see your newly created one in the list.
+        Once you've created your project you can use the
+        <strong>:ProjectList</strong> command to list the available projects and
+        you should see your newly created one in the list.
       </p>
       <source>
         my_project - open   - /path/to/my_project
@@ -68,7 +68,7 @@
         The <strong>:ProjectList</strong> result is in the form of
         <code>projectName - (open|closed) - /project/root/path</code>.  When you
         create projects, the last path element will be used for the project
-        name.  If that element contains any spaces, they will be converted to
+        name.  If that element contains any spaces, these will be converted to
         underscores.
       </p>
     </section>
