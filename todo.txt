@@ -132,12 +132,3 @@ Other
         public static String[] STRINGS =
         {"one", "two", "three"};
     - anonymous inner class flaky at times.
-
-Vim Suggestions
-  - Set syntax on a region?
-    Useful for help files, or any other text file containing mix of text and
-    code.
-    Ex.
-      let blah = 'duh'
-      unlet blah
-  - :tcd  tab local change directory (like lcd, but for all windows in current tab).
