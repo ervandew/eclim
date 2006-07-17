@@ -59,6 +59,16 @@
     </ul>
 
     <p>
+      <strong>Maven Integration</strong>
+    </p>
+    <ul>
+      <li>Maven execution from any file.</li>
+      <li>
+        Maven repository searching and ability to add results to pom file.
+      </li>
+    </ul>
+
+    <p>
       <strong>Java Integration</strong>
     </p>
     <ul>
