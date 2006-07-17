@@ -117,8 +117,10 @@ public class DocSearchCommand
       }
     }
 
-    // as of eclipse 3.2, they no longer provide default locations for jre
-    // javadocs... so provide our own.
+    // somewhere in the eclipse 3.2 release canidate stage they stopped
+    // providing default locations for jre javadocs, but the final version of
+    // 3.2 seems to have contain it.  The following will lookup location from
+    // our own settings should this occur again.
     classpath = root.getRawClasspathEntry();
     if(classpath.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
       IClasspathContainer container =
