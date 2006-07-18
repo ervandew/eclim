@@ -30,8 +30,13 @@ Bugs
 Enhancements
   - Wiki site.
     http://www.pmwiki.org/
+    http://www.pmwiki.org/wiki/Cookbook/SourceForgeServers
+  - Deprecate org.eclim.java.library.root and instead add a command to add
+    IVY_REPO variable similar to the way maven does.
+    :IvyAddRepo
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
+      - ping first to see if one is running.
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
   - add :DtdDoc command that opens the current xml file's dtd and jumps to
     the element under the cursor.
