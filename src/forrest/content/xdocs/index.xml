@@ -66,6 +66,22 @@
     <section id="news">
       <title>News</title>
 
+      <section id="news_2006-07-17">
+        <title>2006-07-17</title>
+        <p>
+          <strong>Windows Users</strong>:  Eclim 1.2.0 contained a couple issues
+          that can potentially prevent eclim from functioning.  A new version of
+          <a href="ext:downloads">eclim_vim_1.2.0.jar</a> is now available, which
+          fixes these issues.<br/>
+          Simply download the new file and extract it as explained in the
+          <a href="guides/install.html#step3">installation guide</a>.  There is
+          no need to download or re-install the eclipse plugins.
+        </p>
+        <p>
+          If any other issues are encountered please report them.
+        </p>
+      </section>
+
       <section id="news_2006-07-16">
         <title>2006-07-16</title>
         <p>
