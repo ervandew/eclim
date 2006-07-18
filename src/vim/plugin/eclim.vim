@@ -29,9 +29,15 @@ if v:version < 700 || exists("g:EclimDisabled") | finish | endif
 runtime! plugin/taglist.vim
 
 " add eclim dir to runtime path.
-let file = findfile('plugin/eclim.vim', &runtimepath)
+let file = findfile('plugin/eclim.vim', escape(&runtimepath, ' '))
+if file == ''
+  echoe 'Unable to find path to plugin/eclim.vim.  ' .
+    \ 'Please report this issue on the eclim forums.'
+  finish
+endif
+
 let basedir = substitute(fnamemodify(file, ':p:h:h'), '\', '/', 'g')
-exec 'set runtimepath+=' . basedir . '/eclim'
+exec 'set runtimepath+=' . escape(basedir, ' ') . '/eclim'
 
 " need to be manually sourced
 runtime! eclim/plugin/*.vim
