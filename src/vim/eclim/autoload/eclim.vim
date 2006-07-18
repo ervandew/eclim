@@ -142,11 +142,25 @@ function! eclim#GetEclimCommand ()
     let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim_*')
     if g:EclimHome == ''
       call eclim#util#EchoError(
-        \ "eclim plugin not found in eclipse plugins directory for " .
+        \ "eclim plugin not found in eclipse plugins directory at " .
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
+      return
+    elseif g:EclimHome =~ "\n"
+      call eclim#util#EchoError(
+        \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
         \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
       return
     endif
-    let g:EclimPath = substitute(g:EclimHome, '\', '/', 'g') . '/bin/' . g:EclimCommand
+    let g:EclimPath = substitute(g:EclimHome, '\', '/', 'g') .
+      \ '/bin/' . g:EclimCommand
+
+    " on windows, the command must be executed on the drive where eclipse is
+    " installed.
+    if g:EclimPath =~ '^[a-zA-Z]:'
+      let g:EclimPath =
+        \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
+        \ ' && ' . g:EclimPath . '"'
+    endif
   endif
   return g:EclimPath
 endfunction " }}}
