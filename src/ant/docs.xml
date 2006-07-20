@@ -23,13 +23,35 @@
     - Runs forrest to generate the docs.
     -->
   <target name="docs" depends="init" description="Builds the documentation.">
+    <!-- generate forrest site -->
     <exec executable="${forrest.home}/bin/forrest" failonerror="true" dir=".">
       <arg line="site"/>
     </exec>
+
+    <!-- create google sitemap -->
     <xslt in="src/forrest/content/xdocs/site.xml"
         out="build/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
     <gzip src="build/sitemap.xml" destfile="build/site/sitemap.xml.gz"/>
+
+    <!-- extract pmwiki -->
+    <untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
+    <mkdir dir="build/site/wiki"/>
+    <move todir="build/site">
+      <fileset dir="build/site" includes="pmwiki-*/**/*"/>
+      <mapper type="regexp"
+          from="^pmwiki-[0-9]+\.[0-9]+\.[0-9]+(.*)" to="wiki\1"/>
+    </move>
+    <path id="pmwiki.dir">
+      <dirset dir="build/site" includes="pmwiki*"/>
+    </path>
+    <property name="pmwiki" refid="pmwiki.dir"/>
+    <delete dir="${pmwiki}"/>
+
+    <!-- copy over any pmwiki config files, etc. -->
+    <copy todir="build/site/wiki">
+      <fileset dir="src/forrest/wiki" includes="**/*" excludes="pmwiki.tgz"/>
+    </copy>
   </target>
 
   <!--

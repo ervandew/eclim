@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Backs up wiki data.
+
+# Perform the backup
+tar zcvf backups/backup-`date +%Y%m%d`.tar.gz \
+ /tmp/persistent/eclim/pmwiki.d/ \
+ /home/groups/e/ec/eclim/htdocs/wiki/{wikilib.d,wikilib2.d}
+
+# Move wiki pages out of the temp space.
+mv -f /tmp/persistent/eclim/pmwiki.d/wiki.d/* \
+ /home/groups/e/ec/eclim/htdocs/wiki/wikilib2.d
