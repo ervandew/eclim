@@ -11,7 +11,18 @@ Installer
     - keep an md5sum of each file to determine user changes which can be
       resolved at install time via a visual diff.
 
+Documentation
+  - Wiki site.
+    http://www.pmwiki.org/
+    http://www.pmwiki.org/wiki/Cookbook/SourceForgeServers
+  - update docs on setting g:EclimBrowser.
+  - docs on new ant syntax file.
+
+Test on Windows
+  - new browser discovery
+
 Bugs
+  - re-visit Ctrl-C hook to perform a clean exit of eclim/eclipse.
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
   - possible issues with eclipse and symlinks
@@ -28,12 +39,17 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
-  - Wiki site.
-    http://www.pmwiki.org/
-    http://www.pmwiki.org/wiki/Cookbook/SourceForgeServers
+  - Integrate w/ google calendar
+    http://code.google.com/apis/gdata/client-java.html
+  - :ListVariables
+    - add command to .classpath for listing variables and their values.
   - Deprecate org.eclim.java.library.root and instead add a command to add
     IVY_REPO variable similar to the way maven does.
     :IvyAddRepo
+  - Maven Repo commands
+    - we know the location of the workspace, so we can save the user from
+      having to type it out.
+    - test if eclimd really needs to be shutdown.
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
       - ping first to see if one is running.
@@ -104,7 +120,6 @@ JTest support:
   - {'name': 'testng', 'src_dir': , 'output_dir': , 'command': }
 
 Other
-  - add ant-contrib to ant syntax file.
   - fix java indent
     - Indents after a annotation
         @Override
