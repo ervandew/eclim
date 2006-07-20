@@ -81,7 +81,7 @@
     <section id="log">
       <title>eclimd logging</title>
       <p>
-        Eclimd utilizes log4j for all of it's logging.  As such, the logging can
+        Eclimd utilizes log4j for all of its logging.  As such, the logging can
         be configured via the
         $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/log4j.xml file.
       </p>
