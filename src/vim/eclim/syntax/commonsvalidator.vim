@@ -23,3 +23,5 @@
 " }}}
 
 runtime! syntax/xml.vim
+
+" vim:ft=vim:fdm=marker
