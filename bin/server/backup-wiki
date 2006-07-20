@@ -3,7 +3,7 @@
 # Backs up wiki data.
 
 # Perform the backup
-tar zcvf backups/backup-`date +%Y%m%d`.tar.gz \
+tar zcvf backups/backup-wiki.tar.gz \
  /tmp/persistent/eclim/pmwiki.d/ \
  /home/groups/e/ec/eclim/htdocs/wiki/{wikilib.d,wikilib2.d}
 
