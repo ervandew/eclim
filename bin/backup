@@ -1,0 +1,15 @@
+#!/bin/sh
+
+BACKUP_DIR="/home/ervandew/files/development/eclim/backup"
+
+if [ ! -d $BACKUP_DIR ]; then
+  mkdir -p $BACKUP_DIR
+fi
+cd $BACKUP_DIR
+
+rsync -av rsync://eclim.cvs.sourceforge.net/cvsroot/eclim/* .
+
+tar zcvf backup-cvs-`date +%Y%m%d`.tar.gz CVSROOT eclim
+rm -Rf CVSROOT eclim
+
+cd -
