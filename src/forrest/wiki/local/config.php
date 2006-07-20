@@ -8,7 +8,7 @@ session_save_path('/tmp/persistent/eclim/pmwiki.d/sessions');
 
 ## Store wiki pages outside the document tree.
 $WorkDir = '/tmp/persistent/eclim/pmwiki.d/wiki.d';
-$WikiDir = new PageStore('/tmp/eclim/projectname/pmwiki.d/wiki.d/$FullName');
+$WikiDir = new PageStore('/tmp/persistent/eclim/pmwiki.d/wiki.d/$FullName');
 
 $DefaultPasswords['admin']='$1$zlC1Ya1G$5paaylTMDCveyhwfQQuWc1';
 
