@@ -1,0 +1,17 @@
+#wikicmds {
+  float:right; white-space:nowrap;
+  font-family:Verdana,sans-serif; font-size:80%;
+}
+
+#menu .menupage {
+  background-image: none;
+}
+
+#menu .menupage ul {
+  list-style-type: none;
+  padding-left: 1.5em;
+}
+
+#menu .menupage ul li {
+  margin-top: 3px;
+}
