@@ -27,6 +27,10 @@ $where = count($WikiLibDirs);
 if ($where>1) $where--;
 array_splice($WikiLibDirs, $where, 0, array(new PageStore($PageStorePath)));
 
+# Require admin password to edit RecentChanges (etc.) pages.
+if ($action=='edit' && preg_match('/\\.(All)?RecentChanges$/', $pagename))
+  { $DefaultPasswords['edit'] = '*'; }
+
 ######### Cookbook Aditions ##########
 
 # Black List support
