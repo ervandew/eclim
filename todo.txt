@@ -1,3 +1,6 @@
+System
+  - update backup script to pull down nightly wiki tarballs.
+
 Installer
   - help alleviate need for users to set ECLIPSE_HOME.
     - inject path into one of the vim scripts and allow override with
@@ -12,9 +15,6 @@ Installer
       resolved at install time via a visual diff.
 
 Documentation
-  - Wiki site.
-    http://www.pmwiki.org/
-    http://www.pmwiki.org/wiki/Cookbook/SourceForgeServers
   - update docs on setting g:EclimBrowser.
   - docs on new ant syntax file.
 
@@ -43,6 +43,7 @@ Enhancements
     http://code.google.com/apis/gdata/client-java.html
   - :ListVariables
     - add command to .classpath for listing variables and their values.
+  - eclim#util#GetWorkspaceDir()
   - Deprecate org.eclim.java.library.root and instead add a command to add
     IVY_REPO variable similar to the way maven does.
     :IvyAddRepo
