@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.Services;
 
 import org.eclim.preference.Preferences;
@@ -74,6 +76,8 @@ import org.eclipse.jface.text.IDocument;
  */
 public class JavaUtils
 {
+  private static final Logger logger = Logger.getLogger(JavaUtils.class);
+
   /**
    * Java 1.1 compliance.
    */
@@ -212,7 +216,13 @@ public class JavaUtils
         String entryPath = entries[ii].getPath().toOSString().replace('\\', '/');
         // entry path consists of /project name/path.. strip off project name
         // portion.
-        entryPath = entryPath.substring(entryPath.indexOf('/', 1));
+        int index = entryPath.indexOf('/', 1);
+        if(index != -1){
+          entryPath = entryPath.substring(index);
+        }else{
+          // occurs when src path == "" in .classpath
+          entryPath = "";
+        }
 
         String path = projectPath + entryPath;
         if(_file.startsWith(path)){
