@@ -1,5 +1,11 @@
 #!/bin/sh
 
-rsync --recursive --compress --force --whole-file --delete --delete-after --stats -v --rsh="ssh -l ervandew" ~/files/development/eclim/build/site/* ervandew@shell.sf.net:/home/groups/e/ec/eclim/htdocs
+rsync --recursive --compress --force --whole-file --delete --delete-after \
+  --stats -v --rsh="ssh -l ervandew" \
+  ~/files/development/eclim/build/site/* \
+  ervandew@shell.sf.net:/home/groups/e/ec/eclim/htdocs
 
-rsync --recursive --compress --force --whole-file --delete --delete-after --stats -v --rsh="ssh -l ervandew" ~/files/development/eclim/bin/server/* ervandew@shell.sf.net:/home/groups/e/ec/eclim
+rsync --recursive --compress --force --whole-file --delete --delete-after \
+  --stats -v --rsh="ssh -l ervandew" --exclude="CVS" \
+  ~/files/development/eclim/bin/server/* \
+  ervandew@shell.sf.net:/home/groups/e/ec/eclim/scripts

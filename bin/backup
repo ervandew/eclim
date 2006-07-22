@@ -7,9 +7,12 @@ if [ ! -d $BACKUP_DIR ]; then
 fi
 cd $BACKUP_DIR
 
+# backup cvs files
 rsync -av rsync://eclim.cvs.sourceforge.net/cvsroot/eclim/* .
-
-tar zcvf backup-cvs-`date +%Y%m%d`.tar.gz CVSROOT eclim
+tar zcvf eclim-backup-cvs-`date +%Y%m%d`.tar.gz CVSROOT eclim
 rm -Rf CVSROOT eclim
+
+# backup wiki data
+rsync -av ervandew@shell.sf.net:/home/users/e/er/ervandew/backup/* .
 
 cd -

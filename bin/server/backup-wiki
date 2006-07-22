@@ -1,12 +1,11 @@
 #!/bin/sh
 
-# Backs up wiki data.
+# Remove last backup(s) to free disk space.
+for i in `find /home/users/e/er/ervandew/backup -name "eclim-backup-wiki*"`; do
+  rm -f $i
+done
 
-# Perform the backup
-tar zcvf backups/backup-wiki.tar.gz \
- /tmp/persistent/eclim/pmwiki.d/ \
- /home/groups/e/ec/eclim/htdocs/wiki/{wikilib.d,wikilib2.d}
-
-# Move wiki pages out of the temp space.
-mv -f /tmp/persistent/eclim/pmwiki.d/wiki.d/* \
- /home/groups/e/ec/eclim/htdocs/wiki/wikilib2.d
+# Back up wiki data.
+tar zcvf \
+  /home/users/e/er/ervandew/backup/eclim-backup-wiki-`date +%Y%m%d`.tar.gz \
+  /tmp/persistent/eclim/pmwiki.d/wiki.d/
