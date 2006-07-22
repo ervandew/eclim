@@ -159,7 +159,7 @@ function! eclim#GetEclimCommand ()
     if g:EclimPath =~ '^[a-zA-Z]:'
       let g:EclimPath =
         \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
-        \ ' && ' . g:EclimPath . '"'
+        \ ' && "' . g:EclimPath . '""'
     endif
   endif
   return g:EclimPath
