@@ -319,20 +319,16 @@ endfunction " }}}
 
 " ExecuteAction(file, command) {{{
 function eclim#tree#ExecuteAction (file, command)
-  let file = escape(a:file, ' &')
-  let path = fnamemodify(file, ':h')
-
-  let file = fnamemodify(file, ':t')
-  let file = escape(file, ' &') " file needs to be escaped twice.
-  let file = escape(file, '&') " '&' needs to be escaped 3 times.
-  let file = substitute(file, '\', '/', 'g')
+  let path = substitute(fnamemodify(a:file, ':h'), '\', '/', 'g')
+  let file = substitute(fnamemodify(a:file, ':t'), '\', '/', 'g')
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
+
   " not using lcd, because the executed command my change windows.
-  silent exec 'cd ' . path
+  silent exec 'cd ' . escape(path, ' &')
 
   let command = a:command
-  let command = substitute(command, '<file>', file, 'g')
+  let command = substitute(command, '<file>', '"' . escape(file, '&') . '"', 'g')
   let command = substitute(command, '<cwd>', cwd, 'g')
   silent exec command
 
