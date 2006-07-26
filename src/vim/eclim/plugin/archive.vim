@@ -40,7 +40,18 @@ function! s:ReadArchiveFile ()
   if file =~ '.class$'
     let class = substitute(file, '.*!\(.*\)\.class', '\1', '')
     let class = substitute(class, '/', '.', 'g')
-    let project = eclim#project#GetCurrentProjectName()
+
+    if exists('g:EclimLastProject')
+      let project = g:EclimLastProject
+    else
+      let project = eclim#project#GetCurrentProjectName()
+    endif
+    if project == ''
+      call eclim#util#EchoError(
+        \ 'Could not open archive file: Unable to determine project.')
+      return
+    endif
+
     let command = s:command_read_class
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<class>', class, '')
@@ -50,16 +61,18 @@ function! s:ReadArchiveFile ()
 
   let file = eclim#ExecuteEclim(command)
 
-  silent! exec "edit " . file
+  if(string(file) != '0')
+    silent! exec "edit " . file
 
-  silent exec "doautocmd BufReadPre " . file
-  silent exec "doautocmd BufReadPost " . file
+    silent exec "doautocmd BufReadPre " . file
+    silent exec "doautocmd BufReadPost " . file
 
-  setlocal readonly
-  setlocal nomodifiable
-  setlocal noswapfile
-  " causes taglist.vim errors (fold then delete fails)
-  "setlocal bufhidden=delete
+    setlocal readonly
+    setlocal nomodifiable
+    setlocal noswapfile
+    " causes taglist.vim errors (fold then delete fails)
+    "setlocal bufhidden=delete
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
