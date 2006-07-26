@@ -6,6 +6,6 @@ for i in `find /home/users/e/er/ervandew/backup -name "eclim-backup-wiki*"`; do
 done
 
 # Back up wiki data.
-tar zcvf \
+tar zcf \
   /home/users/e/er/ervandew/backup/eclim-backup-wiki-`date +%Y%m%d`.tar.gz \
-  /tmp/persistent/eclim/pmwiki.d/wiki.d/
+  /tmp/persistent/eclim/pmwiki.d/wiki.d/ > /dev/null
