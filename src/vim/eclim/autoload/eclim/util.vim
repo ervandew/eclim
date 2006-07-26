@@ -466,13 +466,14 @@ function! eclim#util#ShowCurrentError ()
 
     let message = src . ' - (' . errornum . ' of ' . cnt . '): '
       \ . errors[errornum - 1].text
-    let textwidth = &textwidth > 0 ? &textwidth : 80
-    if len(message) > textwidth
-      let message = strpart(message, 0, textwidth - 3) . '...'
-    endif
     " remove any new lines
     let message = substitute(message, '\n', ' ', 'g')
-    echo message
+
+    if len(message) > (&columns - 1)
+      let message = strpart(message, 0, &columns - 4) . '...'
+    endif
+
+    call eclim#util#WideMessage('echo', message)
   endif
 endfunction " }}}
 
@@ -566,6 +567,22 @@ function! eclim#util#TempWindowCommand (command, name)
     autocmd!
     autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
   augroup END
+endfunction " }}}
+
+" WideMessage(command,message) {{{
+" Executes the supplied echo command and forces vim to display as much as
+" possible without the "Press Enter" prompt.
+" Thanks to vimtip #1289
+function! eclim#util#WideMessage (command, message)
+  let saved_ruler = &ruler
+  let saved_showcmd = &showcmd
+
+  set noruler noshowcmd
+  redraw
+  exec a:command . ' "' . a:message . '"'
+
+  let &ruler = saved_ruler
+  let &showcmd = saved_showcmd
 endfunction " }}}
 
 " WillWrittenBufferClose() {{{
