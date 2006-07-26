@@ -39,6 +39,7 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
+  - add taglist support for dtds.
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
   - :ListVariables
@@ -76,6 +77,9 @@ Enhancements
     file that opened the buffer so that other commands can still be invoked
     by changing the get file name function to examine b:currentfile.
     - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
+  - for temp buffers containing java code (JavaImpl, class prototypes, etc.)
+    set a variable to mainain the name of the current project, and add a way to
+    force element based searches to become keyword based.
   - integrate w/ http://www.easyeclipse.org/site/home/
   - add :JavaBeanImpl for defining an implementation of a bean interface.
   - automate switch statement generation for enums.
