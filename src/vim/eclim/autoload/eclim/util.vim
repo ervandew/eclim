@@ -579,7 +579,7 @@ function! eclim#util#WideMessage (command, message)
 
   set noruler noshowcmd
   redraw
-  exec a:command . ' "' . a:message . '"'
+  exec a:command . ' "' . escape(a:message, '"') . '"'
 
   let &ruler = saved_ruler
   let &showcmd = saved_showcmd
