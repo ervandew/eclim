@@ -39,12 +39,11 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
-  - add taglist support for dtds.
-  - Integrate w/ google calendar
-    http://code.google.com/apis/gdata/client-java.html
   - :ListVariables
     - add command to .classpath for listing variables and their values.
   - eclim#util#GetWorkspaceDir()
+  - Integrate w/ google calendar
+    http://code.google.com/apis/gdata/client-java.html
   - Deprecate org.eclim.java.library.root and instead add a command to add
     IVY_REPO variable similar to the way maven does.
     :IvyAddRepo

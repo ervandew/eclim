@@ -48,6 +48,10 @@ if !exists("g:tlist_commonsvalidator_settings")
   let g:tlist_commonsvalidator_settings='commonsvalidator;c:constant;f:form'
 endif
 
+if !exists("g:tlist_dtd_settings")
+  let g:tlist_dtd_settings='dtd;e:element'
+endif
+
 if !exists("g:tlist_forrestdocument_settings")
   let g:tlist_forrestdocument_settings='forrestdocument;s:section'
 endif
