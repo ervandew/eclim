@@ -23,7 +23,7 @@ import org.eclim.command.taglist.TagResult;
 /**
  * Processes tags for sql files.
  */
-class ForrestDocumentTags implements TaglistScript
+class SqlTags implements TaglistScript
 {
   public TagResult[] execute (String file)
   {

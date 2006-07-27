@@ -21,7 +21,7 @@ import org.eclim.command.taglist.TagResult;
 /**
  * Processes tags for spring files.
  */
-class AntTags implements TaglistScript
+class SpringTags implements TaglistScript
 {
   public TagResult[] execute (String file)
   {
