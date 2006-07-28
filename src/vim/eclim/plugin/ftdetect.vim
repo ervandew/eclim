@@ -61,6 +61,10 @@ function! s:SetXmlFileType (map)
       exec "set filetype=" . a:map[b:xmlroot]
       let b:eclim_xml_filetype = a:map[b:xmlroot]
     endif
+
+  " occurs when re-opening an existing buffer.
+  elseif &ft != b:eclim_xml_filetype
+    exec "set filetype=" . a:map[b:xmlroot]
   endif
 endfunction " }}}
 
