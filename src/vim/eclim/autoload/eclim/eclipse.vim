@@ -23,8 +23,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:variables_command = '-command java_classpath_variables -filter vim'
-  let s:update_command = '-command project_update -n "<name>" -filter vim'
+  let s:command_variables = '-command java_classpath_variables -filter vim'
+  let s:command_update = '-command project_update -n "<name>" -filter vim'
 " }}}
 
 " NewClasspathEntry(template) {{{
@@ -59,7 +59,7 @@ endfunction " }}}
 " Updates the classpath on the server w/ the changes made to the current file.
 function! eclim#eclipse#UpdateClasspath ()
   let name = eclim#project#GetCurrentProjectName()
-  let command = substitute(s:update_command, '<name>', name, '')
+  let command = substitute(s:command_update, '<name>', name, '')
 
   let result = eclim#ExecuteEclim(command)
   if result =~ '|'
@@ -70,10 +70,28 @@ function! eclim#eclipse#UpdateClasspath ()
   endif
 endfunction " }}}
 
+" VariableList() {{{
+" Lists all the variables currently available.
+function! eclim#eclipse#VariableList ()
+  let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
+  if len(variables) == 0
+    call eclim#util#Echo("No variables.")
+  endif
+  if len(variables) == 1 && variables[0] == '0'
+    return
+  endif
+  exec "echohl " . g:EclimInfoHighlight
+  redraw
+  for variable in variables
+    echom variable
+  endfor
+ echohl None
+endfunction " }}}
+
 " CommandCompleteVar(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
 function! eclim#eclipse#CommandCompleteVar (argLead, cmdLine, cursorPos)
-  let vars = split(eclim#ExecuteEclim(s:variables_command), '\n')
+  let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
@@ -83,9 +101,9 @@ function! eclim#eclipse#CommandCompleteVar (argLead, cmdLine, cursorPos)
   call filter(var_names, 'v:val =~ "^' . argLead . '"')
   if len(var_names) > 0
     call map(var_names,
-      \ "isdirectory(substitute(v:val, '.\\{-} - \\(.*\\)', '\\1', '')) ? " .
-      \ "substitute(v:val, '\\(.\\{-}\\)\\s-.*', '\\1', '') . '/' : " .
-      \ "substitute(v:val, '\\(.\\{-}\\)\\s-.*', '\\1', '')")
+      \ "isdirectory(substitute(v:val, '.\\{-}\\s\\+- \\(.*\\)', '\\1', '')) ? " .
+      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '') . '/' : " .
+      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '')")
     return var_names
   endif
 
@@ -93,7 +111,7 @@ function! eclim#eclipse#CommandCompleteVar (argLead, cmdLine, cursorPos)
   let var_dir = ""
   for cv in vars
     if cv =~ '^' . var
-      let var_dir = substitute(cv, '.\{-} - \(.*\)', '\1', '')
+      let var_dir = substitute(cv, '.\{-}\s\+- \(.*\)', '\1', '')
       break
     endif
   endfor

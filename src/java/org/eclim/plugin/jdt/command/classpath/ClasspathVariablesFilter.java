@@ -15,12 +15,16 @@
  */
 package org.eclim.plugin.jdt.command.classpath;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanComparator;
+
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 /**
  * Filter for ClasspathVariablesCommand.
@@ -39,12 +43,21 @@ public class ClasspathVariablesFilter
     StringBuffer buffer = new StringBuffer();
 
     List list = (List)_result;
+    Collections.sort(list, new BeanComparator("name"));
+
+    int length = 0;
+    for(Iterator ii = list.iterator(); ii.hasNext();){
+      ClasspathVariable variable = (ClasspathVariable)ii.next();
+      length = variable.getName().length() > length ?
+        variable.getName().length() : length;
+    }
+
     for(Iterator ii = list.iterator(); ii.hasNext();){
       ClasspathVariable variable = (ClasspathVariable)ii.next();
       if(buffer.length() > 0){
         buffer.append('\n');
       }
-      buffer.append(variable.getName())
+      buffer.append(StringUtils.rightPad(variable.getName(), length))
         .append(" - ")
         .append(variable.getPath());
     }

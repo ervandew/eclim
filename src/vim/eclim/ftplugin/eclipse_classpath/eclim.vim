@@ -70,6 +70,9 @@ if !exists(":NewVarEntry")
     \ :call eclim#eclipse#NewClasspathEntry
     \     (substitute(fnamemodify('<args>', ':p'), '\', '/', 'g'), s:entry_var)
 endif
+if !exists(":VariableList")
+  command -buffer VariableList :call eclim#eclipse#VariableList()
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

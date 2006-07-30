@@ -132,6 +132,12 @@
         &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
         Add a new var entry.
       </li>
+      <li>
+        <a href="java/classpath.html#VariableList">
+          <strong>:VariableList</strong>
+        </a>
+        List available classpath variables and their corresponding values.
+      </li>
     </ul>
 
     <p><strong>Ant Commands</strong></p>

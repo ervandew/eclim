@@ -147,6 +147,10 @@
           <note>
             This command supports command completion of eclipse variable names.
           </note>
+          <anchor id="VariableList"/>
+          <strong>:VariableList</strong><br/>
+          Lists all the currently available classpath variables and their
+          corresponding values.
         </li>
       </ul>
     </section>

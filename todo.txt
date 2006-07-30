@@ -39,8 +39,6 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
-  - :ListVariables
-    - add command to .classpath for listing variables and their values.
   - eclim#util#GetWorkspaceDir()
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
