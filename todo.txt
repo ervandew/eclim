@@ -42,6 +42,11 @@ Enhancements
   - eclim#util#GetWorkspaceDir()
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
+
+  - :VariableCreate command to add variable definition to
+    workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs
+      org.eclipse.jdt.core.classpathVariable.VAR_NAME=VALUE
+    - Add via call to server.
   - Deprecate org.eclim.java.library.root and instead add a command to add
     IVY_REPO variable similar to the way maven does.
     :IvyAddRepo
@@ -49,14 +54,21 @@ Enhancements
     - we know the location of the workspace, so we can save the user from
       having to type it out.
     - test if eclimd really needs to be shutdown.
+
+  - tree
+    - symbolic links: show as link -> target
+    - syntax color for executable files
+
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
       - ping first to see if one is running.
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
-  - add :DtdDoc command that opens the current xml file's dtd and jumps to
+
+  - add :DtdDefinition command that opens the current xml file's dtd and jumps to
     the element under the cursor.
-  - add :SchemaDoc command that opens the current xml file's schema and jumps to
+  - add :SchemaDefinition command that opens the current xml file's schema and jumps to
     the element under the cursor.
+
   - :JavaImpl support anonymous classes.
   - add ProjectImport dir
     - Given a directory, search for all .project files and create projects
@@ -70,6 +82,7 @@ Enhancements
     - search results
   - implement means to highlight text and push it to the command prompt
     Ctrl-: or something similar.
+
   - For commands that spawn temp buffer, assign a b:currentfile var to the
     file that opened the buffer so that other commands can still be invoked
     by changing the get file name function to examine b:currentfile.
@@ -77,6 +90,7 @@ Enhancements
   - for temp buffers containing java code (JavaImpl, class prototypes, etc.)
     set a variable to mainain the name of the current project, and add a way to
     force element based searches to become keyword based.
+
   - integrate w/ http://www.easyeclipse.org/site/home/
   - add :JavaBeanImpl for defining an implementation of a bean interface.
   - automate switch statement generation for enums.
