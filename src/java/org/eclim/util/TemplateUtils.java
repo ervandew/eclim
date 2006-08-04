@@ -56,6 +56,9 @@ public class TemplateUtils
           "org.apache.velocity");
       properties.setProperty("directive.foreach.counter.initial.value", "0");
       properties.setProperty("resource.loader", "file");
+
+      // stop annoying error regarding VM_global_library.vm not found.
+      properties.setProperty("velocimacro.library", "");
       /*properties.setProperty("file.resource.loader.path",
           System.getProperty("eclim.home") + TEMPLATE_ROOT);*/
       Velocity.init(properties);
