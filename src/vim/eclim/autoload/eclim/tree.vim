@@ -1,35 +1,24 @@
 " Author:  Eric Van Dewoestine
-" Version:
+" Version: ${eclim.version}
 "
 " Description: {{{
-"
-" TODO:
-"   - alternate display for symlinks.
-"
-" Bugs:
-"   - refresh of folded dir when file has been removed cause dir to be
-"     deleted.
+"   Filesystem explorer.
 "
 " License:
 "
-"   Permission is hereby granted, free of charge, to any person obtaining
-"   a copy of this software and associated documentation files (the
-"   "Software"), to deal in the Software without restriction, including
-"   without limitation the rights to use, copy, modify, merge, publish,
-"   distribute, sublicense, and/or sell copies of the Software, and to
-"   permit persons to whom the Software is furnished to do so, subject to
-"   the following conditions:
+" Copyright (c) 2005 - 2006
 "
-"   The above copyright notice and this permission notice shall be included
-"   in all copies or substantial portions of the Software.
+" Licensed under the Apache License, Version 2.0 (the "License");
+" you may not use this file except in compliance with the License.
+" You may obtain a copy of the License at
 "
-"   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-"   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-"   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-"   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-"   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-"   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-"   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"      http://www.apache.org/licenses/LICENSE-2.0
+"
+" Unless required by applicable law or agreed to in writing, software
+" distributed under the License is distributed on an "AS IS" BASIS,
+" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+" See the License for the specific language governing permissions and
+" limitations under the License.
 "
 " }}}
 
@@ -39,6 +28,9 @@
   endif
   if !exists("g:TreeFileHighlight")
     let g:TreeFileHighlight = "Normal"
+  endif
+  if !exists("g:TreeFileExecutableHighlight")
+    let g:TreeFileExecutableHighlight = "Constant"
   endif
   if !exists("g:TreeActionHighlight")
     let g:TreeActionHighlight = "Statement"
@@ -197,6 +189,14 @@ function eclim#tree#ToggleViewHidden ()
   call eclim#tree#Cursor(line)
 endfunction " }}}
 
+" GetFileInfo(file) {{{
+function eclim#tree#GetFileInfo (file)
+  if executable('ls')
+    return split(system('ls -ld ' . a:file), '\n')[0]
+  endif
+  return ''
+endfunction "}}}
+
 " GetPath() {{{
 function eclim#tree#GetPath ()
   let line = getline('.')
@@ -207,7 +207,22 @@ function eclim#tree#GetPath ()
   let node = eclim#tree#GetParent() . node
   call cursor(lnum, cnum)
 
-  return s:AliasToPath(node)
+  let path = s:AliasToPath(node)
+
+  " handle symbolic links
+  if path =~ '->'
+    let path = substitute(path, '\(.*\) -> .*', '\1', '')
+    if node =~ '/$'
+      let path .= '/'
+    endif
+  endif
+
+  " handle executable files.
+  if path =~ '\*$'
+    let path = strpart(path, 0, len(path) - 1)
+  endif
+
+  return path
 endfunction "}}}
 
 " GetParent() {{{
@@ -319,16 +334,20 @@ endfunction " }}}
 
 " ExecuteAction(file, command) {{{
 function eclim#tree#ExecuteAction (file, command)
-  let path = substitute(fnamemodify(a:file, ':h'), '\', '/', 'g')
-  let file = substitute(fnamemodify(a:file, ':t'), '\', '/', 'g')
+  let file = escape(a:file, ' &')
+  let path = fnamemodify(file, ':h')
+
+  let file = fnamemodify(file, ':t')
+  let file = escape(file, ' &') " file needs to be escaped twice.
+  let file = escape(file, '&') " '&' needs to be escaped 3 times.
+  let file = substitute(file, '\', '/', 'g')
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
-
   " not using lcd, because the executed command my change windows.
-  silent exec 'cd ' . escape(path, ' &')
+  silent exec 'cd ' . path
 
   let command = a:command
-  let command = substitute(command, '<file>', '"' . escape(file, '&') . '"', 'g')
+  let command = substitute(command, '<file>', file, 'g')
   let command = substitute(command, '<cwd>', cwd, 'g')
   silent exec command
 
@@ -374,13 +393,8 @@ endfunction " }}}
 " Opens a shell either in the current vim session or externally.
 function eclim#tree#Shell (external)
   let path = eclim#tree#GetPath()
-  if isdirectory(path)
-    " noop
-  elseif filereadable(path)
+  if !isdirectory(path)
     let path = fnamemodify(path, ':h')
-  else
-    echo "Directory not found or may have been deleted."
-    return
   endif
 
   let cwd = getcwd()
@@ -484,8 +498,9 @@ function eclim#tree#Refresh ()
 
   let startpath = eclim#tree#GetPath()
 
-  " if on a file, refresh it's parent
-  if startpath !~ '/$'
+  " if on a file or closed directory, refresh it's parent
+  if startpath !~ '/$' ||
+      \ getline('.') =~ '^\s*' . s:node_prefix . s:dir_closed_prefix
     call cursor(eclim#tree#GetParentPosition(), 1)
     let startpath = eclim#tree#GetPath()
   endif
@@ -499,15 +514,6 @@ function eclim#tree#Refresh ()
   if (!isdirectory(startpath) && !filereadable(startpath)) ||
       \ (getline('.') !~ s:root_regex && s:IsHidden(startpath))
     silent exec start . ',' . end . 'delete'
-    if s:refresh_nesting == 0
-      call s:Uneditable()
-    endif
-    return
-  endif
-
-  " early exit if not an open dir
-  if getline('.') !~ '\s*' . s:node_prefix . s:dir_opened_prefix &&
-      \ getline('.') !~ s:root_regex
     if s:refresh_nesting == 0
       call s:Uneditable()
     endif
@@ -564,12 +570,13 @@ function eclim#tree#Refresh ()
   for entry in contents
     if eclim#tree#GetPath() != entry
       if s:MatchesFilter(entry)
+        let rewrote = s:RewriteSpecial(entry)
         if isdirectory(entry)
           let entry = indent . s:node_prefix . s:dir_closed_prefix .
-            \ fnamemodify(entry, ':h:t') . '/'
+            \ fnamemodify(rewrote, ':h:t') . '/'
         else
           let entry = indent . s:node_prefix . s:file_prefix .
-            \ fnamemodify(entry, ':t')
+            \ fnamemodify(rewrote, ':t')
         endif
         if lnum <= line('$')
           call append(lnum - 1, entry)
@@ -655,13 +662,8 @@ function s:ExpandDir ()
   endif
   let contents = s:NormalizeDirs(contents)
 
-  let indent = s:GetChildIndent(line('.'))
-
   let dirs = filter(copy(contents), 'isdirectory(v:val)')
-  call map(dirs, 'substitute(v:val, dir, indent . s:node_prefix . s:dir_closed_prefix, "")')
-
   let files = filter(copy(contents), '!isdirectory(v:val)')
-  call map(files, 'substitute(v:val, dir, indent . s:node_prefix . s:file_prefix, "")')
 
   " filter files
   let filtered = []
@@ -672,6 +674,14 @@ function s:ExpandDir ()
   endfor
   let files = filtered
 
+  " rewrite any special files (executables, symbolic links, etc).
+  call map(dirs, 's:RewriteSpecial(v:val)')
+  call map(files, 's:RewriteSpecial(v:val)')
+
+  let indent = s:GetChildIndent(line('.'))
+  call map(dirs, 'substitute(v:val, dir, indent . s:node_prefix . s:dir_closed_prefix, "")')
+  call map(files, 'substitute(v:val, dir, indent . s:node_prefix . s:file_prefix, "")')
+
   " update current line
   call s:UpdateLine(s:node_prefix . s:dir_closed_prefix,
     \ s:node_prefix . s:dir_opened_prefix)
@@ -679,6 +689,52 @@ function s:ExpandDir ()
   call s:Editable()
   call append(line('.'), dirs + files)
   call s:Uneditable()
+endfunction " }}}
+
+" RewriteSpecial(file) {{{
+function s:RewriteSpecial (file)
+  let file = a:file
+  if executable('ls')
+    let info = ''
+
+    " executable files
+    if s:IsFileExecutable(file)
+      let file .= '*'
+    endif
+
+    " symbolic links
+    let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
+    if getftype(tmpfile) == 'link'
+      if info == ''
+        let info = system('ls -ldF ' . tmpfile)
+      endif
+      let linkto = substitute(info, '.*-> \(.*\)\n', '\1', '')
+
+      if linkto =~ '//$'
+        let linkto = strpart(linkto, 0, len(linkto) - 1)
+      endif
+
+      if s:IsFileExecutable(linkto =~ '^/' ? linkto : fnamemodify(tmpfile, ':h') . linkto)
+        let linkto .= '*'
+      endif
+
+      let file = tmpfile . ' -> ' . linkto
+    endif
+  endif
+  return file
+endfunction " }}}
+
+" IsFileExecutable(file) {{{
+" Determines if the supplied file is executable, ignoring links and
+" directories.
+function s:IsFileExecutable (file)
+  if !isdirectory(a:file)
+    let info = system('ls -l ' . a:file)
+    if info[3] =~ '[sx]' && info[0] != 'l'
+      return 1
+    endif
+  endif
+  return 0
 endfunction " }}}
 
 " CollapseDir() {{{
@@ -862,6 +918,9 @@ function s:Mappings ()
   nmap <buffer> <silent> <cr> :call eclim#tree#Execute(0)<cr>
   nmap <buffer> <silent> o    :call eclim#tree#Execute(1)<cr>
 
+  nmap <buffer> <silent> i    :echo eclim#tree#GetFileInfo(eclim#tree#GetPath())<cr>
+  nmap <buffer> <silent> I    :echo eclim#tree#GetFileInfo(eclim#tree#GetPath())<cr>
+
   nmap <buffer> <silent> s    :call eclim#tree#Shell(0)<cr>
   nmap <buffer> <silent> S    :call eclim#tree#Shell(1)<cr>
 
@@ -886,8 +945,10 @@ endfunction " }}}
 function s:Syntax ()
   exec "hi link TreeDir " . g:TreeDirHighlight
   exec "hi link TreeFile " . g:TreeFileHighlight
+  exec "hi link TreeFileExecutable " . g:TreeFileExecutableHighlight
   syntax match TreeDir /\([[:alpha:]]\?:\?[\/]\?[.[:alnum:]_]\+.*\/$\|^\/$\)/
-  syntax match TreeFile /[.[:alnum:]_].*[^\/]$/
+  syntax match TreeFile /[.[:alnum:]_].*[^\/\*]$/
+  syntax match TreeFileExecutable /[.[:alnum:]_].*[^\/]\*$/
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
