@@ -32,12 +32,7 @@ class PropertiesTags implements TaglistScript
       line -> processTag(line, ++lineNumber, file, results)
     };
 
-    // toArray broken in jsr-05
-    //return (TagResult[])results.toArray(new TagResult[results.size()]);
-
-    TagResult[] tags = new TagResult[results.size()];
-    results.eachWithIndex { result, ii -> tags[ii] = result};
-    return tags;
+    return (TagResult[])results.toArray(new TagResult[results.size()]);
   }
 
   void processTag (line, lineNumber, file, results)
