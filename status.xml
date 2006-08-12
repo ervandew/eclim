@@ -320,12 +320,26 @@
   <changes>
     <release version="1.2.1" date="unreleased">
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed issues when eclipse is installed in a directory containing a
+        space, like "Program Files".
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Other various bug fixes.
       </action>
 
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/classpath.html#VariableList">
           <strong>:VariableList</strong>
+        </a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Xml">
+        Added
+        <a href="vim/xml/definition.html#DtdDefinition">
+          <strong>:DtdDefinition</strong>
+        </a> and
+        <a href="vim/xml/definition.html#XsdDefinition">
+          <strong>:XsdDefinition</strong>
         </a>.
       </action>
     </release>

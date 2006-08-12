@@ -164,6 +164,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Open Vim help for a keyword."/>
     </vim>
     <xml label="Xml" href="xml/">
+      <definition label="Definition Lookup" href="definition.html"
+          description="Definition Lookup"/>
       <validate label="Validation" href="validate.html"
           description="Validation"/>
     </xml>

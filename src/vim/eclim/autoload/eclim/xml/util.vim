@@ -26,8 +26,9 @@
 " }}}
 
 " Script Variables {{{
-let s:quote = "['\"]"
-let s:dtd = '.*' . s:quote . '\(.*\)' . s:quote . '\s*>'
+let s:dtd = '.*' . g:EclimQuote . '\(.*\)' . g:EclimQuote . '\s*>.*'
+let s:xsd = '.\{-}<ns>:schemaLocation\s*=\s*' .
+  \ g:EclimQuote . '\(.\{-}\)' . g:EclimQuote . '.*'
 let s:element = '.\{-}<\([a-zA-Z].\{-}\)\(\s\|>\|$\).*'
 " }}}
 
@@ -51,8 +52,68 @@ function! eclim#xml#util#GetDtd ()
   return ''
 endfunction " }}}
 
+" GetXsd() {{{
+" Get the schema defined in the current file, for the optionally provided
+" namespace prefix, or the default namespace.
+function! eclim#xml#util#GetXsd (...)
+  let namespace = ''
+  if len(a:000) > 0
+    let namespace = a:000[0]
+  endif
+
+  " if no namespace given, try 'xsi' as that is a common default.
+  if namespace == ''
+    let xsd = eclim#xml#util#GetXsd('xsi')
+    if xsd != ''
+      return xsd
+    endif
+  endif
+
+  let linenum = search(namespace . ':schemaLocation\>', 'bcnw')
+  if linenum > 0
+    let line = ''
+    while getline(linenum) !~ '>'
+      let line = line . getline(linenum)
+      let linenum += 1
+    endwhile
+    let line = line . getline(linenum)
+
+    let pattern = substitute(s:xsd, '<ns>', namespace, '')
+    let xsd = substitute(line, pattern, '\1', '')
+    if xsd != line
+      " last http definition is the schema
+      return strpart(xsd, strridx(xsd, 'http://'))
+    endif
+  endif
+  return ''
+endfunction " }}}
+
+" GetElementName() {{{
+" Get name of the element that the cursor is currently on.
+function! eclim#xml#util#GetElementName ()
+  let line = getline('.')
+  let cnum = col('.')
+  if line[cnum - 1] == '<'
+    let cnum += 1
+  endif
+  if line[cnum - 1] == '>'
+    let cnum -= 1
+  endif
+
+  let name = substitute(line,
+    \ '.*</\?\s*\(.*\%' . cnum . 'c.\{-}\)\(\s.*\|\s*/\?>.*\|$\)', '\1', '')
+
+  if name == line || name =~ '<\|>' || name =~ '\S\s\S'
+    return ''
+  endif
+
+  let name = substitute(name, '\s', '', 'g')
+
+  return name
+endfunction " }}}
+
 " GetParentElement() {{{
-" FIXME: Work in progress, probably not suitable for most situations.
+" FIXME: Work in progress, probably not suitable for all situations.
 " Get the parent element name relative to the current cursor position.
 " Works great on well formed xml and requires matchit.vim to be functioning
 " properly (% on an element jumps to the corresponding start/end tag).

@@ -39,6 +39,11 @@ endif
 if !exists(":Validate")
   command -nargs=? -complete=file -bang -buffer Validate
     \ :call eclim#xml#Validate('<args>', 0, '<bang>')
+
+  command -nargs=? -buffer DtdDefinition
+    \ :call eclim#xml#DtdDefinition('<args>')
+  command -nargs=? -buffer XsdDefinition
+    \ :call eclim#xml#XsdDefinition('<args>')
 endif
 " }}}
 

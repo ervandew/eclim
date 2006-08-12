@@ -22,12 +22,11 @@ Test on Windows
   - new browser discovery
 
 Bugs
+  - command-line buffer (<Esc> when in : command), uses ft = vim, so need to
+    exclude mapping of <CR> when in this buffer.
   - re-visit Ctrl-C hook to perform a clean exit of eclim/eclipse.
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
-  - possible issues with eclipse and symlinks
-  - sometimes when warning and error are on the same line+col, the mark
-    shows error, but the cursor hold text shows the warning message.
   - on JavaSearch for implementors, exclude the javadoc matches.
   - issues working with
     http://vim.sourceforge.net/scripts/script.php?script_id=69 ?
@@ -39,6 +38,11 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
+  - :FindFunctionVariableContext
+    - add support for commands
+      Ex. :FindFunctionVariableContext, should find command ... FindFunctionVariableContext
+      Ex. command ... FindFunctionVariableContext, should find all :FindFunctionVariableContext calls
+
   - eclim#util#GetWorkspaceDir()
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
@@ -63,11 +67,6 @@ Enhancements
     - add a menu item which starts up nailgun and spring.
       - ping first to see if one is running.
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
-
-  - add :DtdDefinition command that opens the current xml file's dtd and jumps to
-    the element under the cursor.
-  - add :SchemaDefinition command that opens the current xml file's schema and jumps to
-    the element under the cursor.
 
   - :JavaImpl support anonymous classes.
   - add ProjectImport dir

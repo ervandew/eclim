@@ -30,6 +30,11 @@ endif
 
 " Script Variables {{{
 let s:command_validate = '-filter vim -command xml_validate -f "<file>"'
+
+let s:element_def{'dtd'} = '<!ELEMENT\s\+<name>\>'
+let s:element_def{'xsd'} =
+    \ '<\s*\(.\{-}:\)\?element\>\_[^>]*name\s*=\s*' .
+    \ g:EclimQuote . '<name>' . g:EclimQuote
 " }}}
 
 " Validate(file, on_save, ...) {{{
@@ -91,6 +96,53 @@ function! eclim#xml#Validate (file, on_save, ...)
     endif
   endif
   return 0
+endfunction " }}}
+
+" DtdDefinition(element) {{{
+" Opens the current xml file's dtd definition and optionally jumps to an
+" element if an element name supplied.
+function! eclim#xml#DtdDefinition (element)
+  let dtd = eclim#xml#util#GetDtd()
+  let element = a:element == '' ? eclim#xml#util#GetElementName() : a:element
+  call s:OpenDefinition(dtd, element, 'dtd')
+endfunction " }}}
+
+" XsdDefinition(element) {{{
+" Opens the current xml file's xsd definition and optionally jumps to an
+" element if an element name supplied.
+function! eclim#xml#XsdDefinition (element)
+  let element = a:element == '' ? eclim#xml#util#GetElementName() : a:element
+  if element =~ ':'
+    let namespace = substitute(element, ':.*', '', '')
+    let element = substitute(element, '.*:', '', '')
+    let xsd = eclim#xml#util#GetXsd(namespace)
+  else
+    let xsd = eclim#xml#util#GetXsd()
+  endif
+  call s:OpenDefinition(xsd, element, 'xsd')
+endfunction " }}}
+
+" OpenDefinition(file, element, type) {{{
+" Open the supplied definition file and jump to the element if supplied.
+function! s:OpenDefinition (file, element, type)
+  if a:file == ''
+    call eclim#util#EchoWarning('Unable to locate ' . a:type . ' in current file.')
+    return
+  endif
+
+  " see if file is already open.
+  let winnr = bufwinnr(a:file)
+  if winnr != -1
+    exec winnr . 'winc w'
+  else
+    exec 'split ' . a:file
+  endif
+
+  " jump to element definition if supplied
+  if a:element != ''
+    let search = substitute(s:element_def{a:type}, '<name>', a:element, 'g')
+    call search(search, 'w')
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

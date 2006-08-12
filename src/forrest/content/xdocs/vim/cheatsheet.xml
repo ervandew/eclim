@@ -314,6 +314,18 @@
     <p><strong>Xml Commands</strong></p>
     <ul>
       <li>
+        <a href="xml/definition.html#DtdDefinition"><strong>:DtdDefinition</strong></a>
+        [&lt;element&gt;] -
+        Open the current xml file's dtd and jump to the element definition if
+        supplied.
+      </li>
+      <li>
+        <a href="xml/definition.html#XsdDefinition"><strong>:XsdDefinition</strong></a>
+        [&lt;element&gt;] -
+        Open the current xml file's xsd and jump to the element definition if
+        supplied.
+      </li>
+      <li>
         <a href="xml/validate.html#Validate"><strong>:Validate</strong></a>
         [&lt;file&gt;] -
         Validates the supplied xml file or the current file if none supplied.
