@@ -30,9 +30,21 @@
   <body>
     <p>
       When working on vim scripts, eclim provides a set of commands for finding
-      user defined functions and global variables.
+      user defined commands, functions, and global variables.
     </p>
     <ul>
+      <li>
+        <anchor id="FindCommandDef"/>
+        <strong>:FindCommandDef [command]</strong> -
+        Finds the definition of the supplied command name or command name
+        under the cursor.
+      </li>
+      <li>
+        <anchor id="FindCommandRef"/>
+        <strong>:FindCommandRef [command]</strong> -
+        Finds references of the supplied command name or command name
+        under the cursor.
+      </li>
       <li>
         <anchor id="FindFunctionDef"/>
         <strong>:FindFunctionDef [function]</strong> -
@@ -58,14 +70,14 @@
         under the cursor.
       </li>
       <li>
-        <anchor id="FindFunctionVariableContext"/>
-        <strong>:FindFunctionVariableContext</strong> -
+        <anchor id="FindByContext"/>
+        <strong>:FindByContext</strong> -
         Performs the appropriate search for the element under the cursor based
-        on its context.  If the cursor is on a function or variable definition,
-        then this command will search for references of that function or
-        variable.  If the cursor is on a reference of a function or variable,
-        then this command will search for the definition of the function or
-        variable.
+        on its context.  If the cursor is on a command, function, or variable
+        definition, then this command will search for references of that
+        command, function, or variable.  If the cursor is on a reference of a
+        command, function, or variable, then this command will search for the
+        definition of the command, function, or variable.
       </li>
     </ul>
     <p>

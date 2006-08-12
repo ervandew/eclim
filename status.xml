@@ -342,6 +342,22 @@
           <strong>:XsdDefinition</strong>
         </a>.
       </action>
+
+      <action dev="ervandew" type="add" context="Vim">
+        Added
+        <a href="vim/vim/find.html#FindCommandDef">
+          <strong>:FindCommandDef</strong>
+        </a> and
+        <a href="vim/vim/find.html#FindCommandRef">
+          <strong>:FindCommandRef</strong>
+        </a>.
+      </action>
+      <action dev="ervandew" type="update" context="Vim">
+        Changed <strong>:FindFunctionVariableContext</strong> to
+        <a href="vim/vim/find.html#FindByContext">
+          <strong>:FindByContext</strong>
+        </a>.
+      </action>
     </release>
 
     <release version="1.2.0" date="July 16, 2006">

@@ -23,9 +23,17 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(":FindFunctionVariableContext")
-  command -buffer -nargs=0 -bang FindFunctionVariableContext
-    \ :call eclim#vim#find#FindFunctionVariableContext('<bang>')
+if !exists(":FindByContext")
+  command -buffer -nargs=0 -bang FindByContext
+    \ :call eclim#vim#find#FindByContext('<bang>')
+endif
+if !exists(":FindCommandDef")
+  command -buffer -nargs=? -bang FindCommandDef
+    \ :call eclim#vim#find#FindCommandDef('<args>', '<bang>')
+endif
+if !exists(":FindCommandRef")
+  command -buffer -nargs=? -bang FindCommandRef
+    \ :call eclim#vim#find#FindCommandRef('<args>', '<bang>')
 endif
 if !exists(":FindFunctionDef")
   command -buffer -nargs=? -bang FindFunctionDef

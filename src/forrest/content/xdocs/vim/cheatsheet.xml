@@ -277,6 +277,20 @@
     <p><strong>Vim Commands</strong></p>
     <ul>
       <li>
+        <a href="vim/find.html#FindCommandDef">
+          <strong>:FindCommandDef</strong>
+        </a>
+        [&lt;command&gt;] -
+        Finds a command definition.
+      </li>
+      <li>
+        <a href="vim/find.html#FindCommandRef">
+          <strong>:FindCommandRef</strong>
+        </a>
+        [&lt;command&gt;] -
+        Finds references of a command.
+      </li>
+      <li>
         <a href="vim/find.html#FindFunctionDef">
           <strong>:FindFunctionDef</strong>
         </a>
@@ -303,6 +317,13 @@
         </a>
         [&lt;variable&gt;] -
         Finds references of a global variable.
+      </li>
+      <li>
+        <a href="vim/find.html#FindByContext">
+          <strong>:FindByContext</strong>
+        </a>
+        Finds command, function, or variable based on the context of the element
+        under the cursor.
       </li>
       <li>
         <a href="vim/doc.html#VimDoc"><strong>:VimDoc</strong></a>

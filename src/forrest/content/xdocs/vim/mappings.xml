@@ -115,12 +115,15 @@
       <li>
         Perform a context sensitive search for the element under the cursor
         using <code>&lt;Enter&gt;</code>.<br/>
-        See <a href="vim/find.html#FindFunctionVariableContext">
-          <strong>:FindFunctionVariableContext</strong>
+        See <a href="vim/find.html#FindByContext">
+          <strong>:FindByContext</strong>
         </a> for more info.<br/>
         <source>
           <![CDATA[
-          nnoremap <silent> <buffer> <cr> :FindFunctionVariableContext<cr>
+          " avoid overwriting <cr> mapping in 'command-line' buffer (:h cmdwin).
+          if bufname('%') != 'command-line'
+            nnoremap <silent> <buffer> <cr> :FindByContext<cr>
+          endif
           ]]>
         </source>
       </li>

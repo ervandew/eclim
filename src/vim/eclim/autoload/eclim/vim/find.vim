@@ -33,26 +33,36 @@ endif
 " }}}
 
 " Script Variables {{{
+  let s:search{'cmd_def'} = 'command\s.\{-}\<<name>\>'
+  let s:search{'cmd_ref'} = ':\s*<name>\>'
   let s:search{'func_def'} = 'fu\(n\|nc\|nct\|ncti\|nctio\|nction\)\?[!]\?\s\+<name>\>'
   let s:search{'func_ref'} = '\<<name>\>'
   let s:search{'var_def'} = '\<let\s\+\(g:\)\?<name>\>'
   let s:search{'var_ref'} = '\<<name>\>'
 
+  let s:count{'cmd_def'} = '1'
+  let s:count{'cmd_ref'} = ''
   let s:count{'func_def'} = '1'
   let s:count{'func_ref'} = ''
   let s:count{'var_def'} = ''
   let s:count{'var_ref'} = ''
 
+  let s:type{'cmd_def'} = 'user defined command'
+  let s:type{'cmd_ref'} = s:type{'cmd_def'}
   let s:type{'func_def'} = 'user defined function'
   let s:type{'func_ref'} = s:type{'func_def'}
   let s:type{'var_def'} = 'global variable'
   let s:type{'var_ref'} = s:type{'var_def'}
 
+  let s:valid{'cmd_def'} = '^\w\+$'
+  let s:valid{'cmd_ref'} = s:valid{'cmd_def'}
   let s:valid{'func_def'} = '\(:\|#\|^\)[A-Z]\w\+$'
   let s:valid{'func_ref'} = s:valid{'func_def'}
   let s:valid{'var_def'} = '^\w\+$'
   let s:valid{'var_ref'} = s:valid{'var_def'}
 
+  let s:extract{'cmd_def'} = '\(.*:\|.*\s\|^\)\(.*\%<col>c.\{-}\)\(\W.*\|\s.*\|$\)'
+  let s:extract{'cmd_ref'} = s:extract{'cmd_def'}
   let s:extract{'func_def'} = '\(.*\s\|^\)\(.*\%<col>c.\{-}\)\((.*\|\s.*\|$\)'
   let s:extract{'func_ref'} = s:extract{'func_def'}
   let s:extract{'var_def'} =
@@ -61,16 +71,18 @@ endif
     \ "\\([[:space:]\"')\\]},].*\\|$\\)"
   let s:extract{'var_ref'} = s:extract{'var_def'}
 
+  let s:trim{'cmd_def'} = ''
+  let s:trim{'cmd_ref'} = s:trim{'cmd_def'}
   let s:trim{'func_def'} = ''
   let s:trim{'func_ref'} = s:trim{'func_def'}
   let s:trim{'var_def'} = '^\(g:\)\(.*\)'
   let s:trim{'var_ref'} = s:trim{'var_def'}
 " }}}
 
-" FindFunctionVariableContext(name, bang) {{{
+" FindByContext(name, bang) {{{
 " Contextual find that determines the type of element under the cursor and
 " executes the appropriate find.
-function! eclim#vim#find#FindFunctionVariableContext (bang)
+function! eclim#vim#find#FindByContext (bang)
   let line = getline('.')
 
   let element = substitute(line,
@@ -79,9 +91,19 @@ function! eclim#vim#find#FindFunctionVariableContext (bang)
     \ '\2', '')
 
   " on a function
-  if element =~ '($' && element != line
-    let element = substitute(element, '\s*(', '', '')
+  if line =~ '\%' . col('.') . 'c[[:alnum:]#:]\+\s*('
+    let element = substitute(element, '\s*(.*', '', '')
     let type = 'func'
+
+  " on a command ref
+  elseif line =~ '\W:\w*\%' . col('.') . 'c'
+    let element = substitute(line, '.*:\(.*\%' . col('.') . 'c\w*\).*', '\1', '')
+    let type = 'cmd'
+
+  " on a command def
+  elseif line =~ '^\s*:\?\<command\>.*\s\w*\%' . col('.') . 'c\w*\(\s\|$\)'
+    let element = substitute(line, '.*\s\(.*\%' . col('.') . 'c\w*\).*', '\1', '')
+    let type = 'cmd'
 
   " on a variable
   else
@@ -93,7 +115,9 @@ function! eclim#vim#find#FindFunctionVariableContext (bang)
     let type = 'var'
   endif
 
-  echom " element = " . element
+  if element == line || element !~ '^[[:alnum:]:#]\+$'
+    return
+  endif
 
   let def = substitute(s:search{type . '_def'}, '<name>', element, '')
 
@@ -107,14 +131,26 @@ function! eclim#vim#find#FindFunctionVariableContext (bang)
   endif
 endfunction " }}}
 
+" FindCommandDef(name, bang) {{{
+" Finds the definition of the supplied user defined command.
+function! eclim#vim#find#FindCommandDef (name, bang)
+  call s:Find(a:name, a:bang, 'cmd_def')
+endfunction " }}}
+
+" FindCommandRef(name, bang) {{{
+" Finds the definition of the supplied user defined command.
+function! eclim#vim#find#FindCommandRef (name, bang)
+  call s:Find(a:name, a:bang, 'cmd_ref')
+endfunction " }}}
+
 " FindFunctionDef(name, bang) {{{
-" Finds the definition of the supplied function.
+" Finds the definition of the supplied user defined function.
 function! eclim#vim#find#FindFunctionDef (name, bang)
   call s:Find(a:name, a:bang, 'func_def')
 endfunction " }}}
 
 " FindFunctionRef(name, bang) {{{
-" Finds the definition of the supplied function.
+" Finds the definition of the supplied user defined function.
 function! eclim#vim#find#FindFunctionRef (name, bang)
   call s:Find(a:name, a:bang, 'func_ref')
 endfunction " }}}
