@@ -70,6 +70,12 @@ function! eclim#web#OpenUrl (url)
     let url = eclim#util#GrabUri()
   endif
 
+  if url == ''
+    call eclim#util#EchoError(
+      \ 'No url supplied at command line or found under the cursor.')
+    return
+  endif
+
   " prepend http:// or file:// if no protocol defined.
   if url !~ '^\w\+:\/\/'
     " absolute file on windows or unix
