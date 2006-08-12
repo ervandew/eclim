@@ -66,6 +66,7 @@
       let g:EclimSeparator = '\'
     endif
   endif
+  let g:EclimQuote = "['\"]"
 
   if !exists("g:EclimTempDir")
     let g:EclimTempDir = expand('$TMP')
