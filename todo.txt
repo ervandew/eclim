@@ -43,6 +43,15 @@ Enhancements
       Ex. :FindFunctionVariableContext, should find command ... FindFunctionVariableContext
       Ex. command ... FindFunctionVariableContext, should find all :FindFunctionVariableContext calls
 
+  - Ant properties
+    - Eclipse 3.2 adds code completion for ant properties (${}), and is
+      suppose to show the current value as well.  Tap into that current value
+      so it can be shown in the popup menu.
+
+  - :JavaImpl, :JavaGetSet
+    - look into using non-Javadoc comments for the method so that the 
+      parent's javadoc is auto inserted at generation time.
+
   - eclim#util#GetWorkspaceDir()
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
