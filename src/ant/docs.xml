@@ -28,11 +28,12 @@
       <arg line="site"/>
     </exec>
 
-    <!-- create google sitemap -->
+    <!-- handle google files -->
     <xslt in="src/forrest/content/xdocs/site.xml"
         out="build/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
     <gzip src="build/sitemap.xml" destfile="build/site/sitemap.xml.gz"/>
+    <touch file="build/site/google4c368e38cc6ac62e.html"/>
 
     <!-- extract pmwiki -->
     <untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
