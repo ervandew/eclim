@@ -22,7 +22,6 @@ $EnablePostAuthorRequired = 1;
 
 # Config to help facilitate backups.
 # Add a custom page storage location for wiki pages.
-$PageStorePath = "wikilib2.d/\$FullName";
 $where = count($WikiLibDirs);
 if ($where>1) $where--;
 array_splice($WikiLibDirs, $where, 0, array(new PageStore($PageStorePath)));
