@@ -44,7 +44,9 @@
       <![CDATA[
       <ja<Ctrl-X><Ctrl-U>
       <jar de<Ctrl-X><Ctrl-U>
-      <jar destfile
+      <jar destfile="${bas<Ctrl-X><Ctrl-U>
+      <jar destfile="${basdir
+      ...
       ]]>
     </source>
     <p>

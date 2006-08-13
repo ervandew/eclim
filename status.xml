@@ -327,6 +327,10 @@
         Other various bug fixes.
       </action>
 
+      <action dev="ervandew" type="update" context="Ant">
+        Made some improvements to ant code completion.
+      </action>
+
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/classpath.html#VariableList">
           <strong>:VariableList</strong>

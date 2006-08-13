@@ -36,11 +36,6 @@ Bugs
     Waiting for confirmation that this is the only error.
 
 Enhancements
-  - Ant properties
-    - Eclipse 3.2 adds code completion for ant properties (${}), and is
-      suppose to show the current value as well.  Tap into that current value
-      so it can be shown in the popup menu.
-
   - :JavaImpl, :JavaGetSet
     - look into using non-Javadoc comments for the method so that the
       parent's javadoc is auto inserted at generation time.

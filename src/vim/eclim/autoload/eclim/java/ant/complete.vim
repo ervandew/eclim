@@ -39,6 +39,11 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
 
     let start = col('.') - 1
 
+    "exceptions that break the rule
+    if line[start - 1] == '.'
+      let start -= 1
+    endif
+
     " always start in front of the the '<'
     if line[start] == '<'
       let start += 1
@@ -81,7 +86,7 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
       let word = substitute(word, '^<\(.*\)>$', '\1', '')
 
       let menu = substitute(result, '.\{-}|\(.*\)|.*', '\1', '')
-      let menu = substitute(menu, '<br/>', '', 'g')
+      let menu = eclim#html#util#HtmlToText(menu)
 
       let info = substitute(result, '.*|\(.*\)', '\1', '')
       let info = eclim#html#util#HtmlToText(info)

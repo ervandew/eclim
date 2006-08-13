@@ -69,14 +69,9 @@ public class CodeCompleteCommand
       for (int ii = 0; ii < proposals.length; ii++){
         String description = null;
 
-        // TODO:
-        // hopefully Bram will take my advice to add lazy retrieval of
-        // completion 'info' so that I can provide this text without the
-        // overhead involved with retrieving it for every completion regardless
-        // of whether the user ever views it.
-        /*if(proposals[ii].getAdditionalProposalInfo() != null){
+        if(proposals[ii].getAdditionalProposalInfo() != null){
           description = proposals[ii].getAdditionalProposalInfo().trim();
-        }*/
+        }
 
         String completion = proposals[ii].getDisplayString();
         int index = completion.indexOf(" - ");
