@@ -149,9 +149,10 @@ endfunction " }}}
 
 " CloseIfLastWindow() {{{
 function eclim#project#tree#CloseIfLastWindow ()
+  let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
   if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
       \  (winnr('$') == 2 &&
-      \   bufwinnr(g:TagList_title) != -1 &&
+      \   taglist_window != -1 &&
       \   bufwinnr(s:GetTreeTitle()) != -1)
     if tabpagenr('$') > 1
       tabclose
@@ -188,7 +189,7 @@ endfunction " }}}
 
 " OpenTreeWindow() " {{{
 function! s:OpenTreeWindow ()
-  let taglist_window = bufwinnr(g:TagList_title)
+  let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
   " taglist relative
   if taglist_window != -1 && exists('g:EclimProjectTreeTaglistRelation')
     let wincmd = taglist_window . 'winc w | ' . g:EclimProjectTreeTaglistRelation . ' '
