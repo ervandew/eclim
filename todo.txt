@@ -15,7 +15,6 @@ Installer
       resolved at install time via a visual diff.
 
 Documentation
-  - update docs on setting g:EclimBrowser.
   - docs on new ant syntax file.
 
 Test on Windows

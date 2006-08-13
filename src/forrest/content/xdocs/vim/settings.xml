@@ -73,7 +73,7 @@
     <p>
       If the eclipse preferences system can store project level and global
       settings, why not make all the eclim settings of this type?  Well, the
-      downside to eclipse prefrences system is that an eclipse instance must be
+      downside to eclipse preferences system is that an eclipse instance must be
       running to obtain the value of that preference.  Eclim however, requires
       access to many settings, regardless of whether eclipse is running or not.
       So, to ensure that these settings are always available, we utilize the
@@ -89,7 +89,7 @@
         Yes: Add this setting an eclipse preference.
       </li>
       <li>
-        Does eclim need access to this setting regarless of whether an eclipse
+        Does eclim need access to this setting regardless of whether an eclipse
         instance is running or not?<br/>
         Yes: Add this setting a vim global variable.
       </li>
@@ -218,22 +218,23 @@
         </li>
         <li>
           <anchor id="EclimBrowser"/>
-          <strong>g:EclimBrowser</strong> (No Default)<br/>
-          Configures the external web browser command to use when viewing
-          javadocs, etc.  The &lt;url&gt; in the command will be replaced
-          with the target url.
+          <strong>g:EclimBrowser</strong> (Default: Dependent on OS)<br/>
+          Configures the external web browser to use when opening urls.<br/>
+          By default eclim will attempt to set a default browser based on your
+          system, but if it cannot find a compatible browser, you will need to
+          set one in your vimrc.
           <ul>
             <li>
-              Firefox<br/>let g:EclimBrowser = 'firefox "&lt;url&gt;"'
+              Firefox<br/>let g:EclimBrowser = 'firefox'
             </li>
             <li>
-              Mozilla<br/>let g:EclimBrowser = 'mozilla "&lt;url&gt;"'
+              Mozilla<br/>let g:EclimBrowser = 'mozilla'
             </li>
             <li>
-              Opera<br/>let g:EclimBrowser = 'opera "&lt;url&gt;"'
+              Opera<br/>let g:EclimBrowser = 'opera'
             </li>
             <li>
-              IE<br/>let g:EclimBrowser = 'iexplore &lt;url&gt;'
+              IE<br/>let g:EclimBrowser = 'iexplore'
             </li>
           </ul>
           Note: The above examples assume that the browser executable is in your
@@ -257,11 +258,11 @@
           directory will be restored to the dir it was prior to executing
           :make.<br/>
           Enabling this has the benefit of allowing you to run :make or
-          <a href="java/ant/run.html"><strong>Ant</strong></a> from any file
+          <a href="java/ant/run.html"><strong>:Ant</strong></a> from any file
           regardless of where it was opened from without having to worry about
           the directory it is executing from.  For example if you have a file
           open from project A and split a file from project B, you can execute
-          <strong>Ant</strong> from the project B file and it will utilize
+          <strong>:Ant</strong> from the project B file and it will utilize
           project B's build.xml even though your current working directory is in
           project A.
         </li>
