@@ -72,7 +72,7 @@
 
     <note>
       Both <strong>:Maven</strong> and <strong>:Mvn</strong> also supports use
-      of '!' (:Maven!) just like :make does, which tells vim not to jump to the
+      of '!' (:Maven!) just like :make does, which tells Vim not to jump to the
       first error if one exists.
     </note>
 

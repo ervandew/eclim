@@ -30,7 +30,7 @@
   <body>
     <anchor id="VimDoc"/>
     <p>
-      To facilitate quick access of vim help for elements of a vim script, eclim
+      To facilitate quick access of Vim help for elements of a Vim script, eclim
       provides the command <strong>:VimDoc</strong>.  When executed it will open
       the help docs for the supplied argument or for the element under the
       cursor.  When mapped to a key binding of your choosing, this command can
@@ -40,7 +40,7 @@
     </p>
     <note>
       If you come across any instances where this command does not find the
-      expected vim help topic, please report it so that it may be accounted for
+      expected Vim help topic, please report it so that it may be accounted for
       in future revisions.
     </note>
   </body>

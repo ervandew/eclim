@@ -70,7 +70,7 @@
       fields.
     </p>
     <note>
-      The insertion of these methods is done externally with eclipse and with
+      The insertion of these methods is done externally with Eclipse and with
       that comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
 

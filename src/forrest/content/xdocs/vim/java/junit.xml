@@ -57,7 +57,7 @@
       regular overriding stub will be generated.
     </p>
     <note>
-      The insertion of methods is done externally with eclipse and with that
+      The insertion of methods is done externally with Eclipse and with that
       comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
     <note>

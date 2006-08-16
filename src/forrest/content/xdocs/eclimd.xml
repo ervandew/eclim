@@ -54,7 +54,7 @@
         <a href="vim/index.html#ShutdownEclim">
           <strong>:ShutdownEclim</strong>
         </a>
-        from any vim window which will execute the above command for you.
+        from any Vim window which will execute the above command for you.
       </p>
       <p>
         Issuing one of these commands will notify eclimd to save all the
@@ -64,14 +64,14 @@
         You could also just use Ctrl-C to kill eclimd from the console, but this
         is discouraged.  When using Ctrl-C, eclimd will not perform the
         necessary cleanup on the projects and workspace.  The result is that the
-        next time eclimd is started, you will see errors from eclipse regarding
+        next time eclimd is started, you will see errors from Eclipse regarding
         the state of the workspace ("A workspace crash was detected.").
         Typically this isn't anything to worry about.  You should be able to use
         the proper shutdown command, and then bring eclimd back up error free.
       </p>
       <p>
         I've made several attempts to use a shutdown hook to prevent such cases,
-        but the shutdown hooks always seem to disrupt eclipse's shutdown process
+        but the shutdown hooks always seem to disrupt Eclipse's shutdown process
         resulting in threads leaking out and sticking around long after eclimd
         has exited.  I'll continue to investigate this issue, but regardless of
         the result, you should stick to using the proper shutdown command to

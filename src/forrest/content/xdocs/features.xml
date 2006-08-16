@@ -32,15 +32,15 @@
       The following is a list of eclim features with much more still yet to
       come.<br/>
       For more details please see
-      <a href="vim/index.html">the vim integration docs</a>.
+      <a href="vim/index.html">the Vim integration docs</a>.
     </p>
 
     <p>
       <strong>Eclipse Projects</strong>
     </p>
     <ul>
-      <li>Create, update, and delete eclipse projects.</li>
-      <li>Easily manage eclipse .classpath files.</li>
+      <li>Create, update, and delete Eclipse projects.</li>
+      <li>Easily manage Eclipse .classpath files.</li>
       <li>
         Quickly and easily manage settings globally or on a project basis.
       </li>

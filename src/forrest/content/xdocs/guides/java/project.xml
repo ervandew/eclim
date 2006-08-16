@@ -35,7 +35,7 @@
     <section id="project_create">
       <title>Creating a project</title>
       <p>
-        The first step is to open a vim window and create the project by
+        The first step is to open a Vim window and create the project by
         executing:
       </p>
       <source>
@@ -50,7 +50,7 @@
         of a <code>.project</code> and <code>.classpath</code> file in the
         supplied directory.  At this time, the <code>.project</code> file is
         nothing that you need to worry about maintaining as it is purely for
-        eclipse.  The <code>.classpath</code> file on the other hand, is used
+        Eclipse.  The <code>.classpath</code> file on the other hand, is used
         to manage your project's dependencies, including dependencies on other
         projects, other libraries, and the location of your source directories.
         For more on maintaining this file see the
@@ -80,7 +80,7 @@
         <a href="../../vim/common/project.html#ProjectSettings">
           <strong>:ProjectSettings</strong>
         </a>
-        command.  If your current vim window's
+        command.  If your current Vim window's
         working directory is at or under the project's root directory then you
         can execute the <strong>:ProjectSettings</strong> with no arguments,
         otherwise you will need to supply the project name.
@@ -114,7 +114,7 @@
         .classpath file is also created at the root directory of the project.
         If you did not create a project from an existing project directory (one
         containing source files, etc.), then your next step will be to tell
-        eclipse where you plan to store you source files.
+        Eclipse where you plan to store you source files.
       </p>
       <p>
         For the purpose of this example we will assume that you will store your
@@ -125,7 +125,7 @@
       </source>
       <p>
         So, given that location, you will need to open the file
-        /path/to/my_project/.classpath in vim.
+        /path/to/my_project/.classpath in Vim.
       </p>
       <source>
         vim /path/to/my_project/src/java/.classpath

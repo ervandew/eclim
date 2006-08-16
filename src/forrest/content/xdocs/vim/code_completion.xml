@@ -30,9 +30,9 @@
   <body>
     <p>
       All the code completion functionality provided by eclim (ant, java, etc)
-      makes use of the new "User Defined Completion" added to vim 7.  To
+      makes use of the new "User Defined Completion" added to Vim 7.  To
       initiate code completion enter insert mode and type
-      <em>Ctrl-X Ctrl-U</em>.  By default vim will open a popup if there is more
+      <em>Ctrl-X Ctrl-U</em>.  By default Vim will open a popup if there is more
       than one completion.
     </p>
     <p>
@@ -51,9 +51,9 @@
       allows you to use the Tab key for completion.
     </p>
     <p>
-      To find out more about vim's insert completion execute<br/>
+      To find out more about Vim's insert completion execute<br/>
       &nbsp;&nbsp;<strong>:h ins-completion</strong><br/>
-      from within vim.
+      from within Vim.
     </p>
   </body>
 </document>

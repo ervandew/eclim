@@ -38,7 +38,7 @@
     </p>
     <p>
       The first step in the process is to execute <strong>:JavaImpl</strong>
-      which will open a vim window containing a list possible methods to
+      which will open a Vim window containing a list possible methods to
       implement / override and the interface / class which defines those
       methods.
     </p>
@@ -95,7 +95,7 @@
       interface.
     </p>
     <note>
-      The insertion of method stubs is done externally with eclipse and with
+      The insertion of method stubs is done externally with Eclipse and with
       that comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
     <p>

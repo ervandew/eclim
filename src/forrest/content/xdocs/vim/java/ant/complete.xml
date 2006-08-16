@@ -29,12 +29,12 @@
   </header>
   <body>
     <note>
-      Ant code completion does not require that the file exist in an eclipse
+      Ant code completion does not require that the file exist in an Eclipse
       project, but this may change in the future.
     </note>
     <p>
       Ant code completion uses the standard
-      <a href="../../code_completion.html">vim code completion mechanism</a> like
+      <a href="../../code_completion.html">Vim code completion mechanism</a> like
       so:
     </p>
     <p>
@@ -58,8 +58,8 @@
     </p>
     <warning>
       If your ant file has a lot of imports, then the code completion may be
-      slow as eclipse parses all the imports when creating the ant model.  You
-      will notice the same slow behavior when using eclipse directly.
+      slow as Eclipse parses all the imports when creating the ant model.  You
+      will notice the same slow behavior when using Eclipse directly.
     </warning>
   </body>
 </document>

@@ -29,7 +29,7 @@
   </header>
   <body>
     <p>
-      When working on vim scripts, eclim provides a set of commands for finding
+      When working on Vim scripts, eclim provides a set of commands for finding
       user defined commands, functions, and global variables.
     </p>
     <ul>

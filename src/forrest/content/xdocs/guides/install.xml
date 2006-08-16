@@ -51,7 +51,7 @@
           <br/>
           <br/>
           <strong>Gentoo users</strong>: To get the latest and greatest
-          version of vim from portage simply make the following entries in the
+          version of Vim from portage simply make the following entries in the
           designated files.
           <ul>
             <li>
@@ -87,7 +87,7 @@
         <ol>
           <li>
             The first file you will need to <a href="ext:downloads">download</a>
-            is the platform independent vim plugins jar file:
+            is the platform independent Vim plugins jar file:
             <ul>
               <li>
                 <a href="ext:downloads">
@@ -98,7 +98,7 @@
           </li>
           <li>
             The second file you will need to <a href="ext:downloads">download</a>
-            is the platform dependent eclipse plugins archive:
+            is the platform dependent Eclipse plugins archive:
             <ul>
               <li>
                 *nix:
@@ -118,10 +118,10 @@
       </section>
 
       <section id="step2">
-        <title>Step 2: Install eclim eclipse plugins.</title>
+        <title>Step 2: Install eclim Eclipse plugins.</title>
         <p>
-          Simply open a shell and extract the eclim eclipse plugins archive to your
-          eclipse plugins directory.
+          Simply open a shell and extract the eclim Eclipse plugins archive to your
+          Eclipse plugins directory.
         </p>
         <p>
           *nix Example:<br/>
@@ -136,7 +136,7 @@
         <p>
           Once you have the plug-in installed, before you can run the server, you
           must set the environment variable <strong>ECLIPSE_HOME</strong> to the
-          location of your eclipse installation.
+          location of your Eclipse installation.
         </p>
         <ul>
           <li>
@@ -152,17 +152,17 @@
       </section>
 
       <section id="step3">
-        <title>Step 3: Install eclim vim plugins.</title>
+        <title>Step 3: Install eclim Vim plugins.</title>
         <p>
-          Simply open a shell and extract the eclim vim plugins jar file to one
-          of the directories in your vim runtime path.
+          Simply open a shell and extract the eclim Vim plugins jar file to one
+          of the directories in your Vim runtime path.
         </p>
         <note>
           The directory to extract to depends on your platform, but you can find
-          the appropriate directory by opening a vim instance and executing:
+          the appropriate directory by opening a Vim instance and executing:
           <br/>
           &nbsp;&nbsp;<strong>:echo &amp;rtp</strong><br/>
-          This will echo a comma seperated list of directories in vim's runtime
+          This will echo a comma seperated list of directories in Vim's runtime
           path.
           <br/>
           <br/>
@@ -231,13 +231,13 @@
             directions found <a href="../eclimd.html#startup">here</a>.
           </li>
           <li>
-            Once you have started the server you can test it by opening a vim
+            Once you have started the server you can test it by opening a Vim
             window and issuing the command,
             <a href="../vim/index.html#PingEclim">
               <strong>:PingEclim</strong>
             </a>.  The result of executing this command should be
             "<code>eclim</code> <em>version</em>" echoed to the bottom of your
-            vim window.  If however, you receive
+            Vim window.  If however, you receive
             "<code>unable to connect to eclimd - connect: Connection refused</code>",
             or something similar, then your eclimd server is not running or
             something is preventing eclim from connecting to it.  If you receive
@@ -265,7 +265,7 @@
           yourself with at least the core set of commands that eclim
           provides.<br/>
           You can start by viewing the
-          <a href="../vim/index.html">vim integration documentation</a>.  Once
+          <a href="../vim/index.html">Vim integration documentation</a>.  Once
           you have done that, you can return to the guides section where you can
           learn to work with eclim and take full advantage of the functionality
           it provides.
@@ -307,7 +307,7 @@
           <a href="#step3">
             Extract your new eclim_vim_<em>version</em>.jar
           </a>
-          file to your vim runtimepath.
+          file to your Vim runtimepath.
         </li>
         <li>
           If not on Windows, recompile the <a href="#step4">nailgun client</a>.

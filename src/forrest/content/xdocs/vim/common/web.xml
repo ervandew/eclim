@@ -37,7 +37,7 @@
       <title>OpenUrl</title>
       <p>
         The first of these commands is <strong>:OpenUrl</strong> which opens a url
-        in your web browser, or optionally in vim via netrw (:help netrw).
+        in your web browser, or optionally in Vim via netrw (:help netrw).
       </p>
       <p>
         When executing the command you may supply the url to open, or if ommitted,
@@ -55,7 +55,7 @@
       </source>
       <p>
         For urls that match one of these patterns, you may also define how the
-        file is to be opened in vim (split, edit, etc.).
+        file is to be opened in Vim (split, edit, etc.).
       </p>
       <source>
         let g:EclimOpenUrlInVimAction = 'split'
@@ -70,7 +70,7 @@
         <li>
           <anchor id="EclimOpenUrlInVimPatterns"/>
           <strong>g:EclimOpenUrlInVimPatterns</strong> (Default: [])<br/>
-          Defines a list of url patterns to open in vim via netrw.
+          Defines a list of url patterns to open in Vim via netrw.
         </li>
         <li>
           <anchor id="EclimOpenUrlInVimAction"/>

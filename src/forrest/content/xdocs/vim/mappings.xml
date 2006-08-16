@@ -38,8 +38,8 @@
     </p>
     <note>
       In the mappings below you will see &lt;leader&gt; used quite frequently.
-      In vim the &lt;leader&gt; argument is mapped to a character of your choice.
-      Please see ":help mapleader" in vim for more information.
+      In Vim the &lt;leader&gt; argument is mapped to a character of your choice.
+      Please see ":help mapleader" in Vim for more information.
     </note>
 
     <p>
@@ -107,8 +107,8 @@
 
     <p>
       <strong>Vim Script Mappings</strong><br/>
-      Here are some mappings for the vim script funtionality provided by eclim.
-      To make use of these mappings, simply create a ftplugin file for vim and
+      Here are some mappings for the Vim script funtionality provided by eclim.
+      To make use of these mappings, simply create a ftplugin file for Vim and
       place your mappings there (:help ftplugin-name).
     </p>
     <ul>

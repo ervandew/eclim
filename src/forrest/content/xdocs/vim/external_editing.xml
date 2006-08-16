@@ -29,7 +29,7 @@
   </header>
   <body>
     <p>
-      Some portions of eclim make use of the editing APIs provided by eclipse.
+      Some portions of eclim make use of the editing APIs provided by Eclipse.
       While this makes for much cleaner code and far fewer chances of errors or
       other issues trying to accomodate everyone's coding style, it does have
       its drawbacks:
@@ -37,15 +37,15 @@
     <ul>
       <li>
         <strong>Undo:</strong><br/>
-        When changes to the source file are made outside of vim, the plugin must
-        issue a :edit on the file to force vim to re-read the now updated file.
-        The downside is that vim clears the undo tree when the file is re-read.
+        When changes to the source file are made outside of Vim, the plugin must
+        issue a :edit on the file to force Vim to re-read the now updated file.
+        The downside is that Vim clears the undo tree when the file is re-read.
         I'll be looking into ways to remedy this situation and also talking with
-        the vim developers to see if perhaps some changes to vim 7 may
+        the Vim developers to see if perhaps some changes to Vim 7 may
         facilitate a solution as well.
         <note>
           I had some email correspondence with Bram on this issue and it has
-          made it into the vim todo list (<strong>:h todo</strong>).<br/><br/>
+          made it into the Vim todo list (<strong>:h todo</strong>).<br/><br/>
           <code>
             "See ":e" as a change operation, find the changes and add them to the
             undo info.  Needed for when an external tool changes the file."
@@ -55,18 +55,18 @@
       <li>
         <strong>Formatting (tabs vs. spaces):</strong><br/>
         When inserting new code eclim will always use tabs and the corresponding
-        vim plugin will issue a :retab on the new code so that the user's vim
+        Vim plugin will issue a :retab on the new code so that the user's Vim
         settings will reformat the code to the user's chosen preference.
-        However, eclipse gets in the way a little bit here.  Eclipse defaults to
-        tabs for all indentation, so if that is how your vim options are setup
+        However, Eclipse gets in the way a little bit here.  Eclipse defaults to
+        tabs for all indentation, so if that is how your Vim options are setup
         then you probably don't have anything to worry about.<br/>
-        If you instead have vim setup to expand tabs to spaces, then you may
-        encounter times when eclipse will insert the code with no
+        If you instead have Vim setup to expand tabs to spaces, then you may
+        encounter times when Eclipse will insert the code with no
         indentation.<br/>
-        To resolve this you will need to edit some settings in eclipse:
+        To resolve this you will need to edit some settings in Eclipse:
         <ol>
           <li>Shutdown eclimd.</li>
-          <li>Open eclipse.</li>
+          <li>Open Eclipse.</li>
           <li>Under the "Window" menu choose "Preferences"</li>
           <li>
             Expand the "Java" node and then the "Code Style" node in the tree on
@@ -82,14 +82,14 @@
           <li>
             When the "Edit Profile" window comes up, you should be on the
             "Indentation" tab where you can edit the tab policy.  Change it
-            to match your vim settings (note: using Mixed may or may not work
+            to match your Vim settings (note: using Mixed may or may not work
             all the time).  When using "Spaces only" be sure to set the
             "Indentation size" and "Tab size" to your preference.
           </li>
         </ol>
         This should fix any known indentation issues, but if you encounter any
-        other problems just send me a sample file along with your vim and
-        eclipse settings so that I can attempt to reproduce and fix the problem.
+        other problems just send me a sample file along with your Vim and
+        Eclipse settings so that I can attempt to reproduce and fix the problem.
         <!--
           // set tab style to mixed, so that user can choose tabs or spaces
           // Doesn't work... the code to do it the right way is in

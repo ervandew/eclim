@@ -69,7 +69,7 @@ See http://forrest.apache.org/docs/linking.html for more info
       <eclipse label="Eclipse" href="ext:eclipse" description="Eclipse IDE"/>
       <vim label="Vim" href="ext:vim" description="Vim Editor"/>
       <vimplugin label="Vimplugin" href="ext:vimplugin"
-          description="Eclipse plugin to use vim as the editor in eclipse."/>
+          description="Eclipse plugin to use vim as the editor in Eclipse."/>
       <viplugin label="viPlugin" href="ext:viplugin"
           description="Eclipse editor plugin with vi/vim like functionality."/>
     </related>
@@ -90,13 +90,13 @@ See http://forrest.apache.org/docs/linking.html for more info
     <external label="Issues / Quirks" href="external_editing.html"
         description="Issues / Quirks"/>
     <completion label="Code Completion" href="code_completion.html"
-        description="Code Completion in vim."/>
+        description="Code Completion in Vim."/>
     <mappings label="Suggested Vim Mappings" href="mappings.html"
-        description="List of suggested vim mappings."/>
+        description="List of suggested Vim mappings."/>
     <cheatsheet label="Cheatsheet" href="cheatsheet.html"
-        description="List of all eclim vim commands."/>
+        description="List of all eclim Vim commands."/>
     <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet.pdf"
-        description="List of all eclim vim commands."/>
+        description="List of all eclim Vim commands."/>
     <common label="Common" href="common/">
       <project label="Projects" href="project.html"
           description="Create projects and view/edit project settings."/>

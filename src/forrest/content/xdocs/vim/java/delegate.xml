@@ -92,7 +92,7 @@
       interface or class.
     </p>
     <note>
-      The insertion of method stubs is done externally with eclipse and with
+      The insertion of method stubs is done externally with Eclipse and with
       that comes a couple <a href="../external_editing.html">caveats</a>.
     </note>
     <p>

@@ -29,13 +29,13 @@
   </header>
   <body>
     <p>
-      For those that use vim as an editor and ant as a build tool, is is common
-      to set your vim 'makeprg' option to execute ant so that you may navigate
-      compilation errors via vim's quickfix functionality.
+      For those that use Vim as an editor and ant as a build tool, is is common
+      to set your Vim 'makeprg' option to execute ant so that you may navigate
+      compilation errors via Vim's quickfix functionality.
     </p>
     <p>
       Eclim utilizes this same paradigm to provide users with ant execution
-      functionality from any file without any of the setup required by vim.
+      functionality from any file without any of the setup required by Vim.
     </p>
     <anchor id="Ant"/>
     <p>
@@ -77,7 +77,7 @@
 
     <note>
       <strong>:Ant</strong> also supports use of '!' (:Ant!) just like :make
-      does, which tells vim not to jump to the first error if one exists.
+      does, which tells Vim not to jump to the first error if one exists.
     </note>
 
     <note>
@@ -98,8 +98,8 @@
 
     <warning>
       If your ant file has a lot of imports, then the command completion may be
-      slow as eclipse parses all the imports when creating the ant model.  You
-      will notice the same slow behavior when using eclipse directly to perform
+      slow as Eclipse parses all the imports when creating the ant model.  You
+      will notice the same slow behavior when using Eclipse directly to perform
       ant code completion.
     </warning>
 

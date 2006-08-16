@@ -37,7 +37,7 @@
         add or update the javadoc comments for the element under the cursor.
       </p>
       <note>
-        The insertion of javadoc comments is done externally with eclipse and
+        The insertion of javadoc comments is done externally with Eclipse and
         with that comes a couple <a href="../external_editing.html">caveats</a>.
       </note>
       <p>
@@ -77,7 +77,7 @@
         <strong><a href="../index.html#EclimBrowser">g:EclimBrowser</a></strong>.
       </p>
       <p>
-        The locations of the javadocs are determined via your eclipse project's
+        The locations of the javadocs are determined via your Eclipse project's
         .classpath file.  For each library entry you can define a javadoc attribute
         that points to the base url of the javadoc (http, file, etc).
       </p>

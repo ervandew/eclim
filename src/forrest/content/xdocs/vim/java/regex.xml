@@ -31,7 +31,7 @@
     <anchor id="JavaRegex"/>
     <p>
       Eclim provides a means to test java regular expressions.  Simply execute
-      <strong>:JavaRegex</strong> and a vim window will open allowing you to
+      <strong>:JavaRegex</strong> and a Vim window will open allowing you to
       test your regular expression.
     </p>
     <p>
@@ -58,11 +58,11 @@
       they occur one right after the other.  Before utilizing the regex testing,
       you should first modify the four variables defined below which define what
       highlighting groups will be used.  Since color schemes can vary greatly,
-      eclim defaults to using some common groups already defined by vim.
+      eclim defaults to using some common groups already defined by Vim.
     </p>
     <p>
       The regex window also provides two commands to jump to the next or
-      previous match much like 'n' or 'N' for vim searching:
+      previous match much like 'n' or 'N' for Vim searching:
     </p>
     <ul>
       <li>

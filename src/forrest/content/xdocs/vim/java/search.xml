@@ -22,7 +22,7 @@
 
 <document>
   <header>
-    <title>Searching code in vim</title>
+    <title>Searching code in Vim</title>
     <authors>
       <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
     </authors>
@@ -162,7 +162,7 @@
       <p>
         Secondly, it can only search for and locate types within the current
         source tree.  Searching across the jdk source or other third party
-        source files without setting up an eclipse or similar classpath, is
+        source files without setting up an Eclipse or similar classpath, is
         difficult at worst, and slow at best.
       </p>
       <p>
@@ -189,7 +189,7 @@
         </li>
         <li>
           If no files are found in that directory, then it will proceed to
-          search vim's 'path' option (:h 'path' for more info on this option).
+          search Vim's 'path' option (:h 'path' for more info on this option).
           <br/>As an example, I have my 'path' set to '/usr/local/java/java-src'
           and in that directory is where I store all my third party source
           distributions (hibernate, spring, axis, etc.).
@@ -230,7 +230,7 @@
         as such, the response time on Windows can be significantly slower than
         Linux.  This is most noticable when searching for 'implementors',
         'references', and 'all'.  The number of and depth of the directories in
-        your vim 'path' option may also impact performance.
+        your Vim 'path' option may also impact performance.
       </note>
     </section>
     <section id="configuration">

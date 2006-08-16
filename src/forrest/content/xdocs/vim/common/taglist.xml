@@ -32,7 +32,7 @@
       Eclim provides a scripted ctags implementation that sits on top of the
       original ctags to provide an alternative approach to adding new languages
       for use by the excellent <a href="ext:taglist">taglist</a> plugin for
-      vim.
+      Vim.
     </p>
     <p>
       The standard ctags, gives you two choices when you wish to add support
@@ -97,7 +97,7 @@
         $ECLIPSE_HOME/plugins/org.eclim.jdt_<em>version</em>/resources/scripts/taglist
       </li>
       <li>
-        Add a vim variable that informs the taglist plugin about your new
+        Add a Vim variable that informs the taglist plugin about your new
         language.<br/>
         <code>let g:tlist_mylang_settings='mylang;t:mytype;f:myfield'</code>
         <br/>
@@ -114,7 +114,7 @@
       When opening the taglist window, eclim will search for the taglist
       script in the directory noted above by looking for a file named
       <em>filetype</em>.groovy, where <em>filetype</em> is the case
-      sensitive value of vim's <code>&amp;filetype</code> option.  If no
+      sensitive value of Vim's <code>&amp;filetype</code> option.  If no
       script is found for the file type, then eclim will delegate the call to
       your system's ctags command as
       <a href="ext:taglist_ctags">configured</a> for taglist.vim.

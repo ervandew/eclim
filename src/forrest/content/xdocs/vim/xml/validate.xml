@@ -31,11 +31,11 @@
     <p>
       When editing a xml file eclim will default to validating the file when it
       is written.  Any errors will be added to the current window's location list
-      (:help location-list) and their corresponding line number noted via vim's
+      (:help location-list) and their corresponding line number noted via Vim's
       sign functionality.
     </p>
     <note>
-      Xml validation does not require that the file exist in an eclipse project.
+      Xml validation does not require that the file exist in an Eclipse project.
     </note>
     <p>
       If you don't want xml files validated when saving them, you can set the

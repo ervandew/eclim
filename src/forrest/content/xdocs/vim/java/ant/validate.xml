@@ -32,14 +32,14 @@
       When editing an ant xml file eclim will default to validating the file
       when it is written.  Any errors will be added to the current window's
       location list (:help location-list) and their corresponding line number
-      noted via vim's sign functionality.
+      noted via Vim's sign functionality.
     </p>
     <note>
-      Ant file validation does not require that the file exist in an eclipse
+      Ant file validation does not require that the file exist in an Eclipse
       project, but this may change in the future.
     </note>
     <p>
-      Currently the eclipse ant file validation isn't as robust as one might
+      Currently the Eclipse ant file validation isn't as robust as one might
       hope.  It doesn't validate that element attributes are correct, that child
       elements are valid, etc., but it does perform the following:
     </p>

@@ -29,14 +29,14 @@
   </header>
   <body>
     <p>
-      The core concept in most IDEs is the that of a project, and eclipse is no
+      The core concept in most IDEs is the that of a project, and Eclipse is no
       different.  Since a project must exist before you can perform any of the
       more interesting tasks, eclim provides a set of commands to create and
-      manage projects from within vim.
+      manage projects from within Vim.
     </p>
     <note>
       For the commands below that accept a project name as an argument, you may
-      use vim's command line completion to complete the project name.
+      use Vim's command line completion to complete the project name.
       <br/>
       <code>:ProjectSettings a_p&lt;Tab&gt;</code>
       <br/>
@@ -70,7 +70,7 @@
         directory, then the settings for the current project will be opened.
         <br/>
         In the resulting window you can modify the values and save the changes
-        by simply writing the file in the usual vim manner (:w).<br/>
+        by simply writing the file in the usual Vim manner (:w).<br/>
         The format of the buffer is in the standard properties file format as
         supported by java, so all the same rules apply when editing.<br/>
         You can refer to the <a href="../settings.html">settings</a>
@@ -98,8 +98,8 @@
       <li>
         <anchor id="ProjectClose"/>
         <strong>:ProjectClose</strong> &lt;project&gt;<br/>
-        Closes a project.  According to eclipse documentation, closing unused
-        projects can reduce the amount of memory used, and may improve
+        Closes a project.  According to the Eclipse documentation, closing
+        unused projects can reduce the amount of memory used, and may improve
         performance when building projects.
       </li>
       <li>
@@ -203,7 +203,7 @@
       <li>
         <anchor id="EclimProjectTreeAutoOpen"/>
         <strong>g:EclimProjectTreeAutoOpen</strong> (Default: 0)<br/>
-        When non 0, a project tree window will be auto opened for new vim
+        When non 0, a project tree window will be auto opened for new Vim
         sessions or new tabs in existing sessions if the current file is in a
         project.
       </li>
@@ -212,7 +212,7 @@
         <strong>g:EclimProjectTreeAutoOpenProjects</strong> (Default: ['CURRENT'])<br/>
         List of project names that will be in the project tree when it is auto
         opened.  The special name 'CURRENT' represents the current project of
-        the file being loaded in vim when the tree is auto opened.
+        the file being loaded in Vim when the tree is auto opened.
       </li>
       <li>
         <anchor id="EclimProjectTreeTaglistRelation"/>
