@@ -32,28 +32,57 @@
       <title>Overview</title>
       <p>
         The primary goal of eclim is to bring
-        <a href="ext:eclipse">eclipse</a> functionality to the vim
+        <a href="ext:eclipse">Eclipse</a>&trade; functionality to the Vim
         editor.
       </p>
       <p>
         Eclim is less of an application and more of an integration of two great
-        projects.  The first, <a href="ext:vim">vim</a>, is
+        projects.  The first, <a href="ext:vim">Vim</a>, is
         <a href="http://en.wikipedia.org/wiki/Editor_wars">arguably</a> one of
         the best text editors in existence.  The second,
-        <a href="ext:eclipse">eclipse</a>, provides many great tools for
+        <a href="ext:eclipse">Eclipse</a>, provides many great tools for
         development, especially java development.
       </p>
       <p>
         Each provides many features that can increase developer productivity,
         but both are lacking overall.  Vim lacks native Java support, and
-        eclipse still requires the use of the mouse for many things, and when
-        compared to vim, provides a less than ideal interface for editing text.
+        Eclipse still requires the use of the mouse for many things, and when
+        compared to Vim, provides a less than ideal interface for editing text.
       </p>
       <p>
         That is where eclim comes into play.  Instead of trying to write a java
-        ide in vim or a vim editor in eclipse, eclim provides an eclipse plug-in
-        that exposes eclipse features through a server interface, and a set of
-        vim plug-ins that communicate with eclipse over that interface.
+        IDE in Vim or a Vim editor in Eclipse, eclim provides an Eclipse plug-in
+        that exposes Eclipse features through a server interface, and a set of
+        Vim plug-ins that communicate with Eclipse over that interface (as
+        illustrated below).<br/>
+        <img alt="eclim diagram" src="images/diagram.png"/>
+      </p>
+      <p>
+        There are several benefits to this approach:
+      </p>
+      <ul>
+        <li>
+          You can easily migrate from using the Eclipse gui to using the lighter
+          and more productive Vim interface to work on new or existing projects,
+          while still having the option to open the Eclipse gui for any tasks
+          or third party plug-ins not yet exposed in Vim.
+        </li>
+        <li>
+          You can spawn many instances of Vim all sharing a single background
+          instance of Eclipse.
+        </li>
+        <li>
+          You can seamlessly work in a group of developers who use Eclipse,
+          giving you the freedom to work in an environment that makes you most
+          productive.
+        </li>
+        <li>
+          You have the potential to utilize the full power of both Vim and
+          Eclipse.
+        </li>
+      </ul>
+      <p>
+
       </p>
     </section>
     <section id="license">
@@ -75,7 +104,7 @@
           fixes these issues.<br/>
           Simply download the new file and extract it as explained in the
           <a href="guides/install.html#step3">installation guide</a>.  There is
-          no need to download or re-install the eclipse plugins.
+          no need to download or re-install the Eclipse plugins.
         </p>
         <p>
           If any other issues are encountered please report them.
@@ -86,14 +115,14 @@
         <title>2006-07-16</title>
         <p>
           Eclim 1.2.0 is now available.<br/>
-          This release requires <a href="ext:eclipse_download">eclipse 3.2</a>.
+          This release requires <a href="ext:eclipse_download">Eclipse 3.2</a>.
         </p>
         <p>
           To see a list of what's new / changed, be sure to take a look at the
           <a href="changes.html#version_1.2.0">release notes</a>.
         </p>
         <warning>
-          The layout of eclim plugins within the vim runtimepath has changed.
+          The layout of eclim plugins within the Vim runtimepath has changed.
           Please read the <a href="changes.html#upgrade_1.2.0">details</a> in
           the release notes and take the appropriate action prior to upgrading.
         </warning>
@@ -103,8 +132,8 @@
         <title>2006-05-07</title>
         <p>
           Eclim 1.1.2 is now available.<br/>
-          Before upgrading, you should upgrade your vim installation to the
-          stable release of vim 7.0 or greater.
+          Before upgrading, you should upgrade your Vim installation to the
+          stable release of Vim 7.0 or greater.
         </p>
         <p>
           To see a list of what's new / changed, be sure to take a look at the
@@ -117,7 +146,7 @@
         <p>
           New version of eclim (1.1.1) is now available.<br/>
           This is mostly a bug fix release will a few new additions.<br/>
-          Please note, that this latest version requires eclipse version 3.1.2
+          Please note, that this latest version requires Eclipse version 3.1.2
           for some bug fixes and improvements.
         </p>
         <p>
@@ -159,13 +188,13 @@
         </p>
         <ul>
           <li>
-            Java code completion: Integrated into vim via vim 7's new "User
+            Java code completion: Integrated into Vim via Vim 7's new "User
             Defined Completion".
           </li>
           <li>
             Added eclim command line support for creating and updating projects,
-            including vim support for editing eclipse .classpath files and
-            updating eclipse upon writing of those files.
+            including Vim support for editing Eclipse .classpath files and
+            updating Eclipse upon writing of those files.
           </li>
           <li>
             Integrated
@@ -186,10 +215,10 @@
       <section id="news_2005-08-21">
         <title>2005-08-21</title>
         <p>
-          Code navigation / searching is done!  Most of the vim integration for
+          Code navigation / searching is done!  Most of the Vim integration for
           searching is done as well.  The only thing missing is viewing code for
           results that are found in a jar file that have no corresponding source
-          attachment.  I may end up doing what eclipse appears to do, which is
+          attachment.  I may end up doing what Eclipse appears to do, which is
           to use javap to display the class and method signatures.  That or I'll
           use jad to decompile the whole source.  My only issue with jad, is
           that it is not up to date with the 1.5 byte code.
@@ -197,13 +226,13 @@
         <p>
           I also have automated importing done as well.  The eclim server
           request just returns a list of possible results to import for a given
-          request and the editor (vim in this case) handles prompting the user
+          request and the editor (Vim in this case) handles prompting the user
           and updating the code.
         </p>
         <note>
-          The vim integration now requires vim 7.  Even though vim 7 is still
+          The Vim integration now requires Vim 7.  Even though Vim 7 is still
           alpha, I haven't had any major issues with it and the new additions to
-          the vim scripting language are just too good to pass up.
+          the Vim scripting language are just too good to pass up.
         </note>
         <p>
           My next step is to start documenting everything and testing on a
@@ -228,15 +257,15 @@
           week.  This includes the ability to simply hit &lt;enter&gt; on a
           class name, method name, method call, etc. to jump to its declaration.
           Basically I want to replace my previous
-          <a href="http://www.vim.org/scripts/script.php?script_id=1106">vim plug-in</a>
-          with the new eclipse one.
+          <a href="http://www.vim.org/scripts/script.php?script_id=1106">Vim plug-in</a>
+          with the new Eclipse one.
         </p>
         <p>
           Before I put out any releases though, I want to have a comprehensive
           set of documentation.  For the first few releases, setup will probably
           be pretty manual, with most of it occurring through the Eclipse
           interface.  Going forward, I want to move more of that functionality
-          into vim.
+          into Vim.
         </p>
       </section>
       -->
