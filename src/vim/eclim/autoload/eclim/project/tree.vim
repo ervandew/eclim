@@ -105,20 +105,22 @@ function! eclim#project#tree#ProjectTree (...)
 
   let dirs = []
   let index = 0
+  let names_copy = copy(names)
   for name in names
     if name == 'CURRENT'
       let name = eclim#project#GetCurrentProjectName()
-      let names[index] = name
+      let names_copy[index] = name
     endif
 
     let dir = eclim#project#GetProjectRoot(name)
     if dir != ''
       call add(dirs, dir)
     else
-      call remove(names, name)
+      call remove(names_copy, name)
     endif
     let index += 1
   endfor
+  let names = names_copy
 
   if len(dirs) == 0
     "call eclim#util#Echo('ProjectTree: No directories found for requested projects.')
@@ -245,7 +247,9 @@ endfunction " }}}
 " Execute the supplied command in one of the main content windows.
 function! eclim#project#tree#OpenProjectFile (cmd, cwd, file)
   let cwd = substitute(getcwd(), '\', '/', 'g')
-  exec 'cd ' . a:cwd
+  let cwd = escape(cwd, ' &')
+
+  "exec 'cd ' . a:cwd
   exec g:EclimProjectTreeContentWincmd
   exec a:cmd . ' ' . cwd . '/' . a:file
 endfunction " }}}

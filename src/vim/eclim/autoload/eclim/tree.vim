@@ -334,17 +334,17 @@ endfunction " }}}
 
 " ExecuteAction(file, command) {{{
 function eclim#tree#ExecuteAction (file, command)
-  let file = escape(a:file, ' &')
-  let path = fnamemodify(file, ':h')
+  let path = fnamemodify(a:file, ':h')
+  let path = substitute(path, '\', '/', 'g')
 
-  let file = fnamemodify(file, ':t')
-  let file = escape(file, ' &') " file needs to be escaped twice.
+  let file = fnamemodify(a:file, ':t')
+  let file = escape(file, ' &')
+  let file = escape(file, ' &') " need to double escape
   let file = escape(file, '&') " '&' needs to be escaped 3 times.
-  let file = substitute(file, '\', '/', 'g')
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
-  " not using lcd, because the executed command my change windows.
-  silent exec 'cd ' . path
+  " not using lcd, because the executed command may change windows.
+  silent exec 'cd ' . escape(path, ' &')
 
   let command = a:command
   let command = substitute(command, '<file>', file, 'g')
@@ -497,6 +497,11 @@ function eclim#tree#Refresh ()
   let ccnum = col('.')
 
   let startpath = eclim#tree#GetPath()
+  if s:refresh_nesting == 0
+    let s:startpath = startpath
+    " let vim track shifts in line numbers with a mark
+    mark Z
+  endif
 
   " if on a file or closed directory, refresh it's parent
   if startpath !~ '/$' ||
@@ -541,6 +546,8 @@ function eclim#tree#Refresh ()
     if line =~ '\s*' . s:node_prefix . s:dir_opened_prefix
       call eclim#tree#Refresh()
       let lnum = eclim#tree#GetLastChildPosition()
+      let ldiff = lnum - line('.')
+      let end += ldiff
       call cursor(lnum, 1)
     endif
 
@@ -602,6 +609,12 @@ function eclim#tree#Refresh ()
   if s:refresh_nesting == 0
     call s:Uneditable()
     call eclim#util#Echo(' ')
+    " return to marked position.
+    call cursor(line("'Z"), col("`Z"))
+    " if the entry that we started on is gone, move the cursor up a line.
+    if s:startpath != eclim#tree#GetPath()
+      call cursor(line('.') - 1, col('.'))
+    endif
   endif
 endfunction " }}}
 
