@@ -55,10 +55,6 @@ Enhancements
       having to type it out.
     - test if eclimd really needs to be shutdown.
 
-  - tree
-    - symbolic links: show as link -> target
-    - syntax color for executable files
-
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
       - ping first to see if one is running.
