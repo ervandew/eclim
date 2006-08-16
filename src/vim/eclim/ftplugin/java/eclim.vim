@@ -26,15 +26,21 @@
   if !exists("g:EclimJavaSrcValidate")
     let g:EclimJavaSrcValidate = 1
   endif
+
   if !exists("g:EclimJavaSetCommonOptions")
     let g:EclimJavaSetCommonOptions = 1
   endif
+
   let g:java_fori = "for (int ii = 0; ii < ${array}.length; ii++){\<cr>}" .
     \ "\<esc>\<up>\<tab>\<right>"
   let g:java_forI = "for (Iterator ii = ${col}.iterator(); ii.hasNext();){\<cr>}" .
     \ "\<esc>\<up>\<tab>\<right>"
   let g:java_fore =
     \ "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>\<tab>\<right>"
+
+  if !exists("g:EclimJavaCompilerAutoDetect")
+    let g:EclimJavaCompilerAutoDetect = 1
+  endif
 " }}}
 
 " Options {{{
@@ -48,19 +54,37 @@ if g:EclimJavaSetCommonOptions
   setlocal suffixesadd=.java
 
   " set make program and error format accordingly.
-  let build_xml = findfile("build.xml", ".;")
+  if g:EclimJavaCompilerAutoDetect
+    " use ant settings
+    if findfile('build.xml', '.;') != ''
+      compiler eclim_ant
 
-  " use ant settings
-  if build_xml != ""
-    compiler eclim_ant
+    " use mvn settings
+    elseif findfile('pom.xml', '.;') != ''
+      compiler eclim_mvn
 
-  " use standard jikes if available
-  elseif executable('jikes')
-    compiler jikes
+      if !g:EclimMakeLCD && !exists('g:EclimMakeLCDWarning')
+        call eclim#util#EchoWarning("WARNING: g:EclimMakeLCD disabled.\n" .
+          \ "Unlike maven and ant, mvn does not provide a mechanism to " .
+          \ "search for the target build file.\n" .
+          \ "Disabling g:EclimMakeLCD may cause issues when executing :make or :Mvn")
+        let g:EclimMakeLCDWarning = 1
+      endif
 
-  " default to standard javac settings
-  else
-    compiler javac
+    " use maven settings
+    elseif findfile('project.xml', '.;') != ''
+      compiler eclim_maven
+
+    " use standard jikes if available
+    elseif executable('jikes')
+      compiler jikes
+      let g:EclimMakeLCD = 0
+
+    " default to standard javac settings
+    else
+      compiler javac
+      let g:EclimMakeLCD = 0
+    endif
   endif
 endif
 " }}}
