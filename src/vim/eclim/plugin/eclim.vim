@@ -128,8 +128,10 @@ endif
 if g:EclimMakeLCD
   augroup eclim_make_lcd
     autocmd!
-    autocmd QuickFixCmdPre make call <SID>QuickFixLocalChangeDirectory()
-    autocmd QuickFixCmdPost make exec "lcd " . w:quickfix_dir
+    autocmd QuickFixCmdPre make
+      \ if g:EclimMakeLCD | call <SID>QuickFixLocalChangeDirectory() | endif
+    autocmd QuickFixCmdPost make
+      \ if g:EclimMakeLCD | exec "lcd " . w:quickfix_dir | endif
   augroup END
 endif
 " }}}
