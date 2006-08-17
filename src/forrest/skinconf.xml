@@ -195,6 +195,7 @@ which will be used to configure the chosen Forrest skin.
     #footer a { color: #0F3660; }
     #footer a:visited { color: #009999; }
 
+    <!-- Added: draw a border around code blocks -->
     pre.code {
       border: 1px solid #b1b1b1;
       padding-top: 1em;
@@ -202,6 +203,17 @@ which will be used to configure the chosen Forrest skin.
       padding-left: 0;
       padding-right: 0;
     }
+
+    <!-- Added: modify sizes of header text -->
+    h1 { font-size : 160%; }
+    h2 { font-size : 140%; }
+    h3 { font-size : 120%; }
+    h4 { font-size : 110%; }
+    h4.faq { font-size : 110%; }
+    h5 { font-size : 100%; }
+
+    <!-- Added: indent sections -->
+    div.section { margin-left: 20px; }
   </extra-css>
 
   <colors>

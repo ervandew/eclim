@@ -62,28 +62,24 @@
       </p>
       <ul>
         <li>
-          You can easily migrate from using the Eclipse gui to using the lighter
-          and more productive Vim interface to work on new or existing projects,
-          while still having the option to open the Eclipse gui for any tasks
-          or third party plug-ins not yet exposed in Vim.
+          Easily migrate from using the Eclipse gui to using the lighter and
+          more productive Vim interface to work on new or existing projects,
+          while still having the option to open the Eclipse gui for any tasks or
+          third party plug-ins not yet exposed in Vim.
         </li>
         <li>
-          You can spawn many instances of Vim all sharing a single background
-          instance of Eclipse.
+          Spawn many instances of Vim all sharing a single background instance
+          of Eclipse.
         </li>
         <li>
-          You can seamlessly work in a group of developers who use Eclipse,
-          giving you the freedom to work in an environment that makes you most
-          productive.
+          Seamlessly work in a group of developers who use Eclipse, giving you
+          the freedom to work in an environment that makes you most productive.
         </li>
         <li>
-          You have the potential to utilize the full power of both Vim and
-          Eclipse.
+          Utilize the full power of Vim's scripting capabilities with support
+          for running more advanced functions in the Eclipse jvm.
         </li>
       </ul>
-      <p>
-
-      </p>
     </section>
     <section id="license">
       <title>License</title>

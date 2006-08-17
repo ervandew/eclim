@@ -22,7 +22,7 @@
 
 <document>
   <header>
-    <title>Eclim Vim Integration</title>
+    <title>Eclim Documentation</title>
     <authors>
       <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
     </authors>
@@ -31,19 +31,25 @@
     <p>
       As stated in the project description, eclim's main goal is to bring
       Eclipse functionality to the Vim editor.  Here you will find documentation
-      on the fuctionality that eclim provides.
+      on the functionality that eclim provides.
     </p>
     <p>
-      You may use the navigation to the left to view configuration information
-      (<a href="settings.html">settings</a>,
-      <a href="mappings.html">suggested mappings</a>, etc.), or to navigate the
-      functionality documentation which is broken up into categories (java, ant,
-      etc.).
+      The eclim documentation is broken up into two parts.  The first is the
+      comprehensive documentation which details the usage and purpose of every
+      command and setting.  This portion is found on the "Documentation" tab
+      which you are currently on.  You may use the menu on this tab, which is
+      located to the left, to navigate these docs.  Here you will find
+      configuration information (<a href="settings.html">settings</a>,
+      <a href="mappings.html">suggested mappings</a>, etc.), and the
+      detailed functionality documentation which is broken up into categories
+      (common functionality, java development functionality, etc.).
     </p>
     <p>
-      When you wish to return to the home navigation menu, simply click the
-      "Home" tab located in the upper left.  This will take you back to the
-      guides, change history, todo, etc.
+      The second portion of the documentation consists of a set of guides which
+      are written to help you perform specific tasks.  These guides are located
+      on the <a href="../index.html">"Home" tab</a> under the "Guides" section
+      of the left hand menu.  You may return to the "Home" tab at any time by
+      simply clicking the corresponding tab located in the upper left.
     </p>
     <p>
       Before diving in, you should first familiarize yourself with the

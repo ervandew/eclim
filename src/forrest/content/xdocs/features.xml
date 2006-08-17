@@ -29,10 +29,10 @@
   </header>
   <body>
     <p>
-      The following is a list of eclim features with much more still yet to
+      The following is a list of eclim features with much more still to
       come.<br/>
-      For more details please see
-      <a href="vim/index.html">the Vim integration docs</a>.
+      For more details please see the detailed
+      <a href="vim/index.html">documentation</a>.
     </p>
 
     <p>
@@ -98,7 +98,7 @@
     </p>
     <ul>
       <li>
-        Find function and global variable declarations / references.
+        Find user defined command, function, or global variable declarations / references.
       </li>
       <li>
         Quickly lookup help topic for a keyword, functions, command, etc.
@@ -111,6 +111,10 @@
     <ul>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
+      </li>
+      <li>
+        Quickly look up element definition from the current xml file's dtd or
+        xsd.
       </li>
     </ul>
 

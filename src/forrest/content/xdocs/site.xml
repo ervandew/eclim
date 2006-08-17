@@ -75,15 +75,15 @@ See http://forrest.apache.org/docs/linking.html for more info
     </related>
   </about>
 
-  <server label="Eclimd Server" tab="server">
+  <!--server label="Eclimd Server" tab="documentation">
     <eclimd label="Eclimd" href="eclimd.html" description="Eclimd"/>
-  </server>
+  </server-->
 
   <!--client label="Command Line Client" href="client/" tab="client">
     <index label="Index" href="index.html" description="Index"/>
   </client-->
 
-  <vim label="Vim Integration" href="vim/" tab="vim">
+  <vim label="Documentation" href="vim/" tab="documentation">
     <index label="Index" href="index.html" description="Index"/>
     <project label="Settings" href="settings.html"
         description="Eclim settings."/>
@@ -97,6 +97,8 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="List of all eclim Vim commands."/>
     <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet.pdf"
         description="List of all eclim Vim commands."/>
+    <eclimd label="Eclimd Server" href="../eclimd.html"
+        description="Info related to running and monitoring the eclimd server."/>
     <common label="Common" href="common/">
       <project label="Projects" href="project.html"
           description="Create projects and view/edit project settings."/>
