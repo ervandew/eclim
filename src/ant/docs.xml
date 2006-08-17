@@ -28,12 +28,27 @@
       <arg line="site"/>
     </exec>
 
-    <!-- handle google files -->
+    <!-- support for google sitemaps and analytics -->
     <xslt in="src/forrest/content/xdocs/site.xml"
         out="build/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
     <gzip src="build/sitemap.xml" destfile="build/site/sitemap.xml.gz"/>
     <touch file="build/site/google4c368e38cc6ac62e.html"/>
+    <replace dir="build/site" includes="**/*.html">
+      <replacetoken><![CDATA[</body>]]></replacetoken>
+      <replacevalue><![CDATA[
+      <!-- Google Analytics -->
+          <script src="http://www.google-analytics.com/urchin.js"
+            type="text/javascript">
+          </script>
+          <script type="text/javascript">
+            _uacct = "UA-575508-1";
+            urchinTracker();
+          </script>
+      <!-- End Google Analytics -->
+      </body>
+      ]]></replacevalue>
+    </replace>
 
     <!-- extract pmwiki -->
     <untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
