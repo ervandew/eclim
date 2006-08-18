@@ -66,6 +66,11 @@ function! eclim#ExecuteEclim (args)
   endif
   let command = command . ' ' . args
 
+  " for windows, need to add a trailing quote to complete the command.
+  if command =~ '^"[a-zA-Z]:'
+    let command = command . '"'
+  endif
+
   call eclim#util#EchoDebug("eclim: executing (Ctrl-C to cancel)...")
   call eclim#util#EchoTrace("command: " . command)
 
@@ -159,7 +164,7 @@ function! eclim#GetEclimCommand ()
     if g:EclimPath =~ '^[a-zA-Z]:'
       let g:EclimPath =
         \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
-        \ ' && "' . g:EclimPath . '""'
+        \ ' && "' . g:EclimPath . '"'
     endif
   endif
   return g:EclimPath
