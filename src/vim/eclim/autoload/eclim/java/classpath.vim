@@ -178,7 +178,7 @@ function! eclim#java#classpath#CommandCompleteVarAndDir (argLead, cmdLine, curso
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
   " complete dirs for first arg
-  if cmdLine =~ '^VariableCreate\s*' . argLead . '$'
+  if cmdLine =~ '^VariableCreate\s*' . escape(argLead, '~.\') . '$'
     return eclim#java#classpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
   endif
 
