@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: 1.2.0
+" Version: ${eclim.version}
 "
 " Description: {{{
 "   see http://eclim.sourceforge.net/vim/web.html
