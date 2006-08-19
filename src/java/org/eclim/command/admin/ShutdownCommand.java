@@ -46,8 +46,6 @@ public class ShutdownCommand
     try{
       NGServer server = (NGServer)Services.getService(NGServer.class);
 
-      Services.close();
-
       server.shutdown(false);
     }catch(IllegalStateException ise){
       // workspace already closed.

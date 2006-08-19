@@ -44,6 +44,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPlatformRunnable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.swt.widgets.EclimDisplay;
@@ -57,6 +59,8 @@ public class EclimApplication
   implements IPlatformRunnable
 {
   private static final Logger logger = Logger.getLogger(EclimApplication.class);
+
+  private boolean saved = false;
 
   /**
    * Runs this runnable with the supplied args.
@@ -76,13 +80,6 @@ public class EclimApplication
 
       NGServer server = (NGServer)Services.getService(NGServer.class);
 
-      /*IProject[] projects =
-        ResourcesPlugin.getWorkspace().getRoot().getProjects();
-      for(int ii = 0; ii < projects.length; ii++){
-        logger.info("Opening project '{}'", projects[ii].getName());
-        projects[ii].open(null);
-      }*/
-
       // load plugins.
       loadPlugins();
 
@@ -95,25 +92,49 @@ public class EclimApplication
     }
 
     logger.info("Shutting down eclim...");
+
+    // Saving workspace MUST be before closing of service contexts.
+    saveWorkspace();
     Services.close();
-    closePlugins();
+
+    EclimPlugin.getDefault().stop(null);
+
+    // when shutdown normally, eclipse will handle this.
+    /*ResourcesPlugin.getPlugin().shutdown();
+      ResourcesPlugin.getPlugin().stop(null);*/
 
     logger.info("Eclim stopped.");
     return new Integer(0);
   }
 
   /**
-   * Shutdown core plugins.
+   * Save the workspace.
    */
-  protected void closePlugins ()
+  protected void saveWorkspace ()
     throws Exception
   {
-    logger.info("Shutting down core plugins.");
-    EclimPlugin.getDefault().stop(null);
-    ResourcesPlugin.getWorkspace().save(true, null);
-    // when shutdown normally, eclipse will handle this.
-    /*ResourcesPlugin.getPlugin().shutdown();
-      ResourcesPlugin.getPlugin().stop(null);*/
+    logger.info("Saving workspace.");
+
+    final IProgressMonitor monitor = new NullProgressMonitor(){
+      public void done () {
+        synchronized(this){
+          if(!saved){
+            saved = true;
+            notifyAll();
+          }
+        }
+      }
+    };
+
+    try{
+      ResourcesPlugin.getWorkspace().save(true, monitor);
+      while(!saved){
+        monitor.wait();
+      }
+    }catch(Exception e){
+      logger.warn("Error saving workspace.", e);
+    }
+    logger.info("Workspace saved.");
   }
 
   /**
