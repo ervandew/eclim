@@ -25,11 +25,15 @@
 " Script Variables {{{
   let s:command_variables = '-command java_classpath_variables -filter vim'
   let s:command_update = '-command project_update -n "<name>" -filter vim'
+  let s:command_variable_create =
+    \ '-command java_classpath_variable_create -n "<name>" -p "<path>"'
+  let s:command_variable_delete =
+    \ '-command java_classpath_variable_delete -n "<name>"'
 " }}}
 
 " NewClasspathEntry(template) {{{
 " Adds a new entry to the current .classpath file.
-function! eclim#eclipse#NewClasspathEntry (arg, template)
+function! eclim#java#classpath#NewClasspathEntry (arg, template)
   let args = split(a:arg)
   for arg in args
     call s:MoveToInsertPosition()
@@ -57,7 +61,7 @@ endfunction " }}}
 
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
-function! eclim#eclipse#UpdateClasspath ()
+function! eclim#java#classpath#UpdateClasspath ()
   let name = eclim#project#GetCurrentProjectName()
   let command = substitute(s:command_update, '<name>', name, '')
 
@@ -70,9 +74,16 @@ function! eclim#eclipse#UpdateClasspath ()
   endif
 endfunction " }}}
 
+" GetVariableNames() {{{
+" Gets a list of all variable names.
+function! eclim#java#classpath#GetVariableNames ()
+  let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
+  return map(variables, "substitute(v:val, '\\(.\\{-}\\)\\s.*', '\\1', '')")
+endfunction " }}}
+
 " VariableList() {{{
 " Lists all the variables currently available.
-function! eclim#eclipse#VariableList ()
+function! eclim#java#classpath#VariableList ()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   if len(variables) == 0
     call eclim#util#Echo("No variables.")
@@ -88,9 +99,46 @@ function! eclim#eclipse#VariableList ()
  echohl None
 endfunction " }}}
 
+" VariableCreate() {{{
+" Create or update a variable.
+function! eclim#java#classpath#VariableCreate (name, path)
+  let command = s:command_variable_create
+  let command = substitute(command, '<name>', a:name, '')
+  let command = substitute(command, '<path>', a:path, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
+" VariableDelete() {{{
+" Delete a variable.
+function! eclim#java#classpath#VariableDelete (name)
+  let command = s:command_variable_delete
+  let command = substitute(command, '<name>', a:name, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
 " CommandCompleteVar(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#eclipse#CommandCompleteVar (argLead, cmdLine, cursorPos)
+function! eclim#java#classpath#CommandCompleteVar (argLead, cmdLine, cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+
+  let vars = eclim#java#classpath#GetVariableNames()
+  call filter(vars, 'v:val =~ "^' . argLead . '"')
+
+  return vars
+endfunction " }}}
+
+" CommandCompleteVarPath(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for classpath var relative files.
+function! eclim#java#classpath#CommandCompleteVarPath (argLead, cmdLine, cursorPos)
   let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
@@ -116,10 +164,25 @@ function! eclim#eclipse#CommandCompleteVar (argLead, cmdLine, cursorPos)
     endif
   endfor
   let argLead = substitute(argLead, var, var_dir, '')
-  let dirs = eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
-  call map(dirs, "substitute(v:val, '" . var_dir . "', '" . var . "', '')")
+  let files = eclim#util#CommandCompleteFile(argLead, a:cmdLine, a:cursorPos)
+  call map(files, "substitute(v:val, '" . var_dir . "', '" . var . "', '')")
 
-  return dirs
+  return files
+endfunction " }}}
+
+" CommandCompleteVarAndDir(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for classpath var relative files.
+function! eclim#java#classpath#CommandCompleteVarAndDir (argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+
+  " complete dirs for first arg
+  if cmdLine =~ '^VariableCreate\s*' . argLead . '$'
+    return eclim#java#classpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

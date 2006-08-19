@@ -191,7 +191,9 @@
 
   <bean name="java_classpath_variables"
       class="org.eclim.plugin.jdt.command.classpath.ClasspathVariablesCommand">
-    <description>Handles client request to update a java src file.</description>
+    <description>
+      Handles client request to list available classpath variables.
+    </description>
     <property name="filters">
       <map>
         <entry key="vim">
@@ -199,6 +201,20 @@
         </entry>
       </map>
     </property>
+  </bean>
+
+  <bean name="java_classpath_variable_create"
+      class="org.eclim.plugin.jdt.command.classpath.ClasspathVariableCreateCommand">
+    <description>
+      Handles client request to create or update a classpath variable.
+    </description>
+  </bean>
+
+  <bean name="java_classpath_variable_delete"
+      class="org.eclim.plugin.jdt.command.classpath.ClasspathVariableDeleteCommand">
+    <description>
+      Handles client request to delete a classpath variable.
+    </description>
   </bean>
 
   <bean name="javadoc_comment"

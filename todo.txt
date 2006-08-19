@@ -43,10 +43,6 @@ Enhancements
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
-  - :VariableCreate command to add variable definition to
-    workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs
-      org.eclipse.jdt.core.classpathVariable.VAR_NAME=VALUE
-    - Add via call to server.
   - Deprecate org.eclim.java.library.root and instead add a command to add
     IVY_REPO variable similar to the way maven does.
     :IvyAddRepo

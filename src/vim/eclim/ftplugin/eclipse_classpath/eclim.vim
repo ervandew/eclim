@@ -46,32 +46,40 @@ runtime ftplugin/xml.vim
 
 augroup eclipse_classpath
   autocmd!
-  autocmd BufWritePost .classpath call eclim#eclipse#UpdateClasspath()
+  autocmd BufWritePost .classpath call eclim#java#classpath#UpdateClasspath()
 augroup END
 
 " Command Declarations {{{
 if !exists(":NewSrcEntry")
   command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative -buffer
-    \ NewSrcEntry :call eclim#eclipse#NewClasspathEntry
+    \ NewSrcEntry :call eclim#java#classpath#NewClasspathEntry
     \     (substitute('<args>', '\', '/', 'g') , s:entry_src)
 endif
 if !exists(":NewProjectEntry")
   command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProject -buffer
-    \ NewProjectEntry :call eclim#eclipse#NewClasspathEntry('<args>', s:entry_project)
+    \ NewProjectEntry :call eclim#java#classpath#NewClasspathEntry('<args>', s:entry_project)
 endif
 if !exists(":NewJarEntry")
   command -nargs=+ -complete=file -buffer NewJarEntry
-    \ :call eclim#eclipse#NewClasspathEntry
+    \ :call eclim#java#classpath#NewClasspathEntry
     \     (substitute(fnamemodify('<args>', ':p'), '\', '/', 'g'), s:entry_jar)
 endif
 if !exists(":NewVarEntry")
-  command -nargs=+ -complete=customlist,eclim#eclipse#CommandCompleteVar  -buffer
+  command -nargs=+ -complete=customlist,eclim#java#classpath#CommandCompleteVarPath -buffer
     \ NewVarEntry
-    \ :call eclim#eclipse#NewClasspathEntry
+    \ :call eclim#java#classpath#NewClasspathEntry
     \     (substitute(fnamemodify('<args>', ':p'), '\', '/', 'g'), s:entry_var)
 endif
 if !exists(":VariableList")
-  command -buffer VariableList :call eclim#eclipse#VariableList()
+  command -buffer VariableList :call eclim#java#classpath#VariableList()
+endif
+if !exists(":VariableCreate")
+  command -nargs=+ -buffer -complete=customlist,eclim#java#classpath#CommandCompleteVarAndDir
+    \ VariableCreate :call eclim#java#classpath#VariableCreate(<f-args>)
+endif
+if !exists(":VariableDelete")
+  command -nargs=1 -buffer -complete=customlist,eclim#java#classpath#CommandCompleteVar
+    \ VariableDelete :call eclim#java#classpath#VariableDelete('<args>')
 endif
 " }}}
 

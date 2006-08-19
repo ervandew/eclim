@@ -17,25 +17,23 @@ package org.eclim.plugin.jdt.command.classpath;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.JavaCore;
 
 /**
- * Command to work with classpath variables.
+ * Command to add a classpath variable.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class ClasspathVariablesCommand
+public class ClasspathVariableCreateCommand
   extends AbstractCommand
 {
   /**
@@ -44,19 +42,13 @@ public class ClasspathVariablesCommand
   public Object execute (CommandLine _commandLine)
     throws IOException
   {
-    List results = new ArrayList();
     try{
-      String[] names = JavaCore.getClasspathVariableNames();
-      for(int ii = 0; ii < names.length; ii++){
-        IPath path = JavaCore.getClasspathVariable(names[ii]);
-        if(path != null){
-          ClasspathVariable variable = new ClasspathVariable();
-          variable.setName(names[ii]);
-          variable.setPath(path.toOSString());
-          results.add(variable);
-        }
-      }
-      return filter(_commandLine, results);
+      String name = _commandLine.getValue(Options.NAME_OPTION);
+      String path = _commandLine.getValue(Options.PATH_OPTION);
+
+      JavaCore.setClasspathVariable(name, new Path(path), null);
+
+      return Services.getMessage("classpath.variable.created", name);
     }catch(Exception e){
       return e;
     }

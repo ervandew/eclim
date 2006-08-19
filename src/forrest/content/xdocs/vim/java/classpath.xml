@@ -147,10 +147,26 @@
           <note>
             This command supports command completion of Eclipse variable names.
           </note>
-          <anchor id="VariableList"/>
-          <strong>:VariableList</strong><br/>
-          Lists all the currently available classpath variables and their
-          corresponding values.
+          To manage the available variables, eclim also provides the following
+          commands.
+          <ul>
+            <li>
+              <anchor id="VariableList"/>
+              <strong>:VariableList</strong><br/>
+              Lists all the currently available classpath variables and their
+              corresponding values.
+            </li>
+            <li>
+              <anchor id="VariableCreate"/>
+              <strong>:VariableCreate</strong> &lt;name&gt; &lt;path&gt;<br/>
+              Creates or updates the variable with the supplied name.
+            </li>
+            <li>
+              <anchor id="VariableDelete"/>
+              <strong>:VariableDelete</strong> &lt;name&gt;<br/>
+              Deletes the variable with the supplied name.
+            </li>
+          </ul>
         </li>
       </ul>
     </section>

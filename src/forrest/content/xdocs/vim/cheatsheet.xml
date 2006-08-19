@@ -138,6 +138,20 @@
         </a>
         List available classpath variables and their corresponding values.
       </li>
+      <li>
+        <a href="java/classpath.html#VariableCreate">
+          <strong>:VariableCreate</strong>
+        </a>
+        &lt;name&gt; &lt;path&gt; -
+        Creates or updates the variable with the supplied name.
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableDelete">
+          <strong>:VariableDelete</strong>
+        </a>
+        &lt;name&gt; -
+        Deletes the variable with the supplied name.
+      </li>
     </ul>
 
     <p><strong>Ant Commands</strong></p>

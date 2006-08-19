@@ -334,7 +334,18 @@
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/classpath.html#VariableList">
           <strong>:VariableList</strong>
+        </a>,
+        <a href="vim/java/classpath.html#VariableCreate">
+          <strong>:VariableCreate</strong>
+        </a> and
+        <a href="vim/java/classpath.html#VariableDelete">
+          <strong>:VariableDelete</strong>
         </a>.
+        <warning>
+          The file eclim/autoload/eclim/eclipse.vim was moved to
+          eclim/autoload/eclim/java/classpath.vim.  So you will need to manually
+          remove the eclipse.vim file from your .vim or vimfiles.
+        </warning>
       </action>
 
       <action dev="ervandew" type="add" context="Xml">
