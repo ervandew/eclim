@@ -39,7 +39,6 @@ Enhancements
     - look into using non-Javadoc comments for the method so that the
       parent's javadoc is auto inserted at generation time.
 
-  - eclim#util#GetWorkspaceDir()
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
