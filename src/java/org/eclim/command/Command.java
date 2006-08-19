@@ -15,8 +15,6 @@
  */
 package org.eclim.command;
 
-import java.io.IOException;
-
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 
@@ -34,8 +32,7 @@ public interface Command
    * @param _commandLine The commandLine options supplied.
    * @return The result.
    */
-  public Object execute (CommandLine _commandLine)
-    throws IOException;
+  public Object execute (CommandLine _commandLine);
 
   /**
    * Gets an output filter by name.

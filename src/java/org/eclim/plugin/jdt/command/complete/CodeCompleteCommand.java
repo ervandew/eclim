@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,7 +52,6 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

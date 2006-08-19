@@ -15,7 +15,6 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -52,7 +51,6 @@ public class SearchCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String search = _commandLine.getValue(Options.SEARCH_OPTION);

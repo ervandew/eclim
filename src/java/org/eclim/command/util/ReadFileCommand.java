@@ -17,7 +17,6 @@ package org.eclim.command.util;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.lang.SystemUtils;
@@ -32,8 +31,6 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.file.FileUtils;
-
 /**
  * Command that reads a file from a commons vfs compatable path.
  *
@@ -47,7 +44,6 @@ public class ReadFileCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     InputStream in = null;
     OutputStream out = null;

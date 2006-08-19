@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +46,6 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

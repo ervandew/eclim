@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
-import java.io.IOException;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -38,7 +36,6 @@ public class SrcFileExistsCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);

@@ -15,8 +15,6 @@
  */
 package org.eclim.command.xml.validate;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +41,6 @@ public class ValidateCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);

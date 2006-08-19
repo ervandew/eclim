@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.ant.command.validate;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,7 +44,6 @@ public class ValidateCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

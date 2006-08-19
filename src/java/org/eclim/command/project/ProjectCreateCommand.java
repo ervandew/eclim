@@ -15,8 +15,6 @@
  */
 package org.eclim.command.project;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import org.apache.commons.io.FilenameUtils;
@@ -44,7 +42,6 @@ public class ProjectCreateCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String folder = _commandLine.getValue(Options.FOLDER_OPTION);

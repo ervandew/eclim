@@ -15,8 +15,6 @@
  */
 package org.eclim.command.project;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +47,6 @@ public class ProjectInfoCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String name = _commandLine.getValue(Options.NAME_OPTION);

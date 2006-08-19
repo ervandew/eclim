@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.bean;
 
-import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +68,6 @@ public class PropertiesCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.search;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -88,7 +87,6 @@ public class SearchCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     Object result = executeSearch(_commandLine);
     if(result instanceof Throwable){
@@ -108,7 +106,6 @@ public class SearchCommand
    * @return The search results.
    */
   public Object executeSearch (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +53,6 @@ public class ImportCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

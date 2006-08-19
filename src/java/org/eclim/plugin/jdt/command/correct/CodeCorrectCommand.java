@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +52,6 @@ public class CodeCorrectCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);

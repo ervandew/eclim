@@ -15,8 +15,6 @@
  */
 package org.eclim.command.admin;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +38,6 @@ public class SettingsCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       List results = new ArrayList();

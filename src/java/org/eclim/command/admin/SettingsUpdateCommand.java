@@ -16,7 +16,6 @@
 package org.eclim.command.admin;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 import java.util.Iterator;
 import java.util.Properties;
@@ -40,7 +39,6 @@ public class SettingsUpdateCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
@@ -49,7 +47,6 @@ public class SettingsUpdateCommand
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(settings.getBytes()));
 
-      boolean updateOptions = false;
       for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
         String name = (String)ii.next();
         String value = properties.getProperty(name);

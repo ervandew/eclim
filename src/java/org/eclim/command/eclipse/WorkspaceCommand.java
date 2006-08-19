@@ -15,8 +15,6 @@
  */
 package org.eclim.command.eclipse;
 
-import java.io.IOException;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -35,7 +33,6 @@ public class WorkspaceCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       return ResourcesPlugin.getWorkspace().getRoot().getRawLocation();

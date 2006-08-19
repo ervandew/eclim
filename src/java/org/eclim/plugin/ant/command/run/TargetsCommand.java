@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.ant.command.run;
 
-import java.io.IOException;
-
 import java.text.Collator;
 
 import java.util.ArrayList;
@@ -49,7 +47,6 @@ public class TargetsCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

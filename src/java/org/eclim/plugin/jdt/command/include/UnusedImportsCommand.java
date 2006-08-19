@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,6 @@ public class UnusedImportsCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);

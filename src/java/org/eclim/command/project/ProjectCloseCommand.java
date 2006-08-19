@@ -15,8 +15,6 @@
  */
 package org.eclim.command.project;
 
-import java.io.IOException;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -40,7 +38,6 @@ public class ProjectCloseCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String name = _commandLine.getValue(Options.NAME_OPTION);

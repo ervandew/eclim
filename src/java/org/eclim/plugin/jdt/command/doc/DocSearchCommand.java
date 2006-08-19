@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +71,6 @@ public class DocSearchCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     Object result = super.executeSearch(_commandLine);
     if(result instanceof Throwable){

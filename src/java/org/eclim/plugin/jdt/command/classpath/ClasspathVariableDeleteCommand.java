@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.classpath;
 
-import java.io.IOException;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -38,7 +36,6 @@ public class ClasspathVariableDeleteCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String name = _commandLine.getValue(Options.NAME_OPTION);

@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.classpath;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +40,6 @@ public class ClasspathVariablesCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     List results = new ArrayList();
     try{

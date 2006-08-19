@@ -15,8 +15,6 @@
  */
 package org.eclim.command.admin;
 
-import java.io.IOException;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -37,7 +35,6 @@ public class PingCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     PluginResources resources = Services.getPluginResources();
     return resources.getProperty("pluginName") + " " +

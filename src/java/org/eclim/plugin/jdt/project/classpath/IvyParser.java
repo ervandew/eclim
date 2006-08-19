@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.project.classpath;
 
-import java.io.IOException;
-
 import java.util.List;
 
 import org.eclim.Services;

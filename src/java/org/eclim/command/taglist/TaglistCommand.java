@@ -30,8 +30,6 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
-import org.eclim.Services;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -60,7 +58,6 @@ public class TaglistCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String[] args = _commandLine.getArgs();

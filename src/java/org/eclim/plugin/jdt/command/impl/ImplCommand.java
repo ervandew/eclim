@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.impl;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,7 +66,6 @@ public class ImplCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

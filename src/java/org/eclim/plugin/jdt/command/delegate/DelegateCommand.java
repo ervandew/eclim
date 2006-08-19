@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.delegate;
 
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +64,6 @@ public class DelegateCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

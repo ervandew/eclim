@@ -17,7 +17,6 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -65,7 +64,6 @@ public class ClassPrototypeCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String className = _commandLine.getValue(Options.CLASSNAME_OPTION);

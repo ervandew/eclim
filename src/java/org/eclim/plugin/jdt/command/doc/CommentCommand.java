@@ -18,7 +18,6 @@ package org.eclim.plugin.jdt.command.doc;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -86,7 +85,6 @@ public class CommentCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

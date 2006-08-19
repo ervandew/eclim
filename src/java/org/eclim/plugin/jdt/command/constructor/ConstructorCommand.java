@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.constructor;
 
-import java.io.IOException;
-
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -58,7 +56,6 @@ public class ConstructorCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);

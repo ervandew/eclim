@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
-import java.io.IOException;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -39,7 +37,6 @@ public class SrcFindCommand
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
-    throws IOException
   {
     try{
       String classname = _commandLine.getValue(Options.CLASSNAME_OPTION);
