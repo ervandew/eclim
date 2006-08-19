@@ -44,6 +44,7 @@ public class IvyParser
   extends AbstractXmlParser
 {
   private static final String IVY_REPO = "IVY_REPO";
+  private static final String ORG = "org";
   private static final String NAME = "name";
   private static final String REVISION = "rev";
 
@@ -70,8 +71,11 @@ public class IvyParser
       Dependency[] dependencies = new Dependency[results.size()];
       for(int ii = 0; ii < results.size(); ii++){
         Element element = (Element)results.get(ii);
-        dependencies[ii] = new Dependency(
-            element.getAttribute(NAME), element.getAttribute(REVISION), path);
+        dependencies[ii] = new IvyDependency(
+            element.getAttribute(ORG),
+            element.getAttribute(NAME),
+            element.getAttribute(REVISION),
+            path);
         dependencies[ii].setVariable(true);
       }
 

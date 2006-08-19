@@ -28,6 +28,7 @@ public class Dependency
   public static final String JAR = ".jar";
   public static final String VERSION_SEPARATOR = "-";
 
+  private String organization;
   private String name;
   private String version;
   private IPath path;
@@ -36,38 +37,39 @@ public class Dependency
   /**
    * Constructs a new instance.
    *
+   * @param _org The organization the dependency originates from.
    * @param _name The name.
    * @param _version The version.
    * @param _path The root IPath where the dependecy is located.  Construtor
    * will call _path.append() with the constructed dependency file name.
    */
-  public Dependency (String _name, String _version, IPath _path)
+  public Dependency (String _org, String _name, String _version, IPath _path)
   {
+    this.organization = _org;
     this.name = _name;
     this.version = _version;
 
-    this.path = _path.append(toString());
+    this.path = _path.append(resolveArtifact());
   }
 
   /**
-   * Converts this dependency into a usable String.
-   * <p/>
-   * Ex.<br/>
-   * For a dependency with the name 'commons-lang' and a version '1.0.2' this
-   * method will return 'commons-lang-1.0.2.jar'.
-   * <p/>
-   * Subclasses are free to override this method if necessary.
+   * Gets the organization for this instance.
    *
-   * @return The string representation.
+   * @return The organization.
    */
-  public String toString ()
+  public String getOrganization ()
   {
-    StringBuffer buffer = new StringBuffer(getName());
-    if(getVersion() != null && getVersion().trim().length() > 0){
-      buffer.append(VERSION_SEPARATOR).append(getVersion());
-    }
-    buffer.append(JAR);
-    return buffer.toString();
+    return this.organization;
+  }
+
+  /**
+   * Sets the organization for this instance.
+   *
+   * @param organization The organization.
+   */
+  public void setOrganization (String organization)
+  {
+    this.organization = organization;
   }
 
   /**
@@ -148,5 +150,36 @@ public class Dependency
   public void setVariable (boolean variable)
   {
     this.variable = variable;
+  }
+
+  /**
+   * Resolves the artifact to a path relative to the dependencies root.
+   *
+   * @return The resolved artifact path.
+   */
+  public String resolveArtifact ()
+  {
+    return toString();
+  }
+
+  /**
+   * Converts this dependency into a usable String.
+   * <p/>
+   * Ex.<br/>
+   * For a dependency with the name 'commons-lang' and a version '1.0.2' this
+   * method will return 'commons-lang-1.0.2.jar'.
+   * <p/>
+   * Subclasses are free to override this method if necessary.
+   *
+   * @return The string representation.
+   */
+  public String toString ()
+  {
+    StringBuffer buffer = new StringBuffer(getName());
+    if(getVersion() != null && getVersion().trim().length() > 0){
+      buffer.append(VERSION_SEPARATOR).append(getVersion());
+    }
+    buffer.append(JAR);
+    return buffer.toString();
   }
 }

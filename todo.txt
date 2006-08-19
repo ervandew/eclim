@@ -16,10 +16,6 @@ Installer
 
 Documentation
   - docs on new ant syntax file.
-  - docs for new IVY_REPO
-    - update status.xml with note regarding removal of
-      org.eclim.java.library.root
-    - add guide for ivy management.
 
 Test on Windows
   - new browser discovery
