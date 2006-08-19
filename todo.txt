@@ -16,6 +16,10 @@ Installer
 
 Documentation
   - docs on new ant syntax file.
+  - docs for new IVY_REPO
+    - update status.xml with note regarding removal of
+      org.eclim.java.library.root
+    - add guide for ivy management.
 
 Test on Windows
   - new browser discovery
@@ -43,9 +47,6 @@ Enhancements
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
-  - Deprecate org.eclim.java.library.root and instead add a command to add
-    IVY_REPO variable similar to the way maven does.
-    :IvyAddRepo
   - Maven Repo commands
     - we know the location of the workspace, so we can save the user from
       having to type it out.

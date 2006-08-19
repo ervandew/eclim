@@ -348,6 +348,15 @@
         </warning>
       </action>
 
+      <action dev="ervandew" type="update" context="Java">
+        Removed the preference <code>org.eclim.java.library.root</code>.
+      </action>
+
+      <action dev="ervandew" type="update" context="Java">
+        Updated <a href="guides/java/ivy/ivy_eclipse.html">ivy support</a>
+        to behave more like maven.
+      </action>
+
       <action dev="ervandew" type="add" context="Xml">
         Added
         <a href="vim/xml/definition.html#DtdDefinition">

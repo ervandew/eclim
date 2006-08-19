@@ -59,7 +59,6 @@
       factory-method="addPreferences">
     <constructor-arg>
       <value>
-        JDT org.eclim.java.library.root lib
         JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
         JDT org.eclim.java.validation.ignore.warnings false (true|false)
         JDT/Javadoc org.eclim.java.doc.version \$Revision\$
@@ -94,7 +93,6 @@
           <bean class="org.eclim.preference.Preferences"
               factory-method="getInstance"/>
         </property>
-        <property name="libraryRootPreference" value="org.eclim.java.library.root"/>
       </bean>
     </constructor-arg>
   </bean>

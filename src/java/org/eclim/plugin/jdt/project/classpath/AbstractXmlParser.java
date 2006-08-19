@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.project.classpath;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -37,20 +36,14 @@ public abstract class AbstractXmlParser
    * {@inheritDoc}
    */
   public Dependency[] parse (String _filename)
-    throws IOException
+    throws Exception
   {
     if(factory == null){
       factory = DocumentBuilderFactory.newInstance();
     }
-    try{
-      Document document = factory.newDocumentBuilder().parse(new File(_filename));
 
-      return parse(document);
-    }catch(IOException ioe){
-      throw ioe;
-    }catch(Exception e){
-      throw (IOException)new IOException().initCause(e);
-    }
+    Document document = factory.newDocumentBuilder().parse(new File(_filename));
+    return parse(document);
   }
 
   /**
@@ -60,5 +53,5 @@ public abstract class AbstractXmlParser
    * @return The array of Dependency.
    */
   public abstract Dependency[] parse (Document _document)
-    throws IOException;
+    throws Exception;
 }

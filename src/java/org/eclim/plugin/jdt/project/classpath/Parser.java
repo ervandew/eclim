@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.jdt.project.classpath;
 
-import java.io.IOException;
-
 /**
  * Defines a parse capable of parsing some external build file that defines the
  * dependencies for the project.
@@ -34,5 +32,5 @@ public interface Parser
    * @return The array of Dependency.
    */
   public Dependency[] parse (String _filename)
-    throws IOException;
+    throws Exception;
 }

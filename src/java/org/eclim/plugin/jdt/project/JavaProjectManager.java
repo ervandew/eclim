@@ -114,7 +114,6 @@ public class JavaProjectManager
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
 
-  private String libraryRootPreference;
   private Preferences preferences;
 
   /**
@@ -465,9 +464,6 @@ public class JavaProjectManager
     throws Exception
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
-    String libraryDir = preferences.getPreference(
-        _project.getProject(), libraryRootPreference);
-
     Collection results = new ArrayList();
 
     // load the results with all the non library entries.
@@ -513,9 +509,7 @@ public class JavaProjectManager
       }
 
       if(match == null){
-        boolean variable = startsWithVariable(libraryDir);
-        IClasspathEntry entry =
-          createEntry(root, _project, _dependencies[ii], libraryDir, variable);
+        IClasspathEntry entry = createEntry(root, _project, _dependencies[ii]);
         results.add(entry);
       }else{
         match = null;
@@ -551,61 +545,17 @@ public class JavaProjectManager
    * @param _root The workspace root.
    * @param _project The project to create the dependency in.
    * @param _dependency The dependency to create the entry for.
-   * @param _libraryDir The root library dir to use.
-   * @param _variable If the library path indicates a variable entry.
    * @return The classpath entry.
    */
   protected IClasspathEntry createEntry (
-      IWorkspaceRoot _root,
-      IJavaProject _project,
-      Dependency _dependency,
-      String _libraryDir,
-      boolean _variable)
+      IWorkspaceRoot _root, IJavaProject _project, Dependency _dependency)
     throws Exception
   {
-    String dependency = _dependency.toString();
-
-    if(_variable){
-      return JavaCore.newVariableEntry(
-          new Path(_libraryDir).append(dependency), null, null, true);
+    if(_dependency.isVariable()){
+      return JavaCore.newVariableEntry(_dependency.getPath(), null, null, true);
     }
 
-    IPath dir = new Path(_libraryDir);
-    if(!dir.isAbsolute()){
-      IPath path = new Path(_project.getElementName())
-        .append(dir).append(dependency);
-      IResource resource = _root.findMember(path);
-
-      // if the file doesn't exist, create a temp one, grab the resource and
-      // then delete the file (handles cases where the jar file is downloaded
-      // from a repository).
-      if(resource == null){
-        IPath fullPath = _project.getResource().getRawLocation()
-          .append(_libraryDir);
-        File theDir = new File(fullPath.toOSString());
-        if(!theDir.exists()){
-          throw new IllegalArgumentException(
-              Services.getMessage("dir.not.found", fullPath.toOSString()));
-        }
-        fullPath = fullPath.append(dependency);
-        File file = new File(fullPath.toOSString());
-        if(file.createNewFile()){
-          _root.findMember(new Path(_project.getElementName()).append(dir))
-            .refreshLocal(IResource.DEPTH_ONE, null);
-          resource = _root.findMember(path);
-          file.delete();
-        }
-      }
-      if(resource == null){
-        throw new IllegalArgumentException(Services.getMessage(
-              "resource.unable.resolve", path.toOSString()));
-      }
-      path = resource.getFullPath();
-      return JavaCore.newLibraryEntry(path, null, null, true);
-    }
-
-    IPath path = dir.append(dependency);
-    return JavaCore.newLibraryEntry(path, null, null, true);
+    return JavaCore.newLibraryEntry(_dependency.getPath(), null, null, true);
   }
 
   /**
@@ -623,18 +573,6 @@ public class JavaProjectManager
       }
     }
     return false;
-  }
-
-  /**
-   * Set libraryRootPreference.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _libraryRootPreference the value to set.
-   */
-  public void setLibraryRootPreference (String _libraryRootPreference)
-  {
-    libraryRootPreference = _libraryRootPreference;
   }
 
   /**

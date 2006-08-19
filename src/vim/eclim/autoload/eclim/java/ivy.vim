@@ -27,6 +27,12 @@
     \ '-command project_update -n "<name>" -b "<build>" -filter vim'
 " }}}
 
+" SetRepo(path) {{{
+" Sets the location of the ivy repository.
+function! eclim#java#ivy#SetRepo (path)
+  call eclim#java#classpath#VariableCreate('IVY_REPO', a:path)
+endfunction " }}}
+
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
 function! eclim#java#ivy#UpdateClasspath ()

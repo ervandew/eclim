@@ -38,175 +38,136 @@
     </p>
     <p>
       Regardless of the state of your project you will at some point need to
-      update the classpath.  Eclim provides a couple different ways to keep your
-      Eclipse <code>.classpath</code> up to date.
+      update the classpath.  The primary method of doing so, is to directly
+      edit the <code>.classpath</code> to add, update, or remove entries as
+      needed. To help you do this, eclim provides several commands to ease the
+      creation of new classpath entries and variables.
     </p>
     <note>
-      For all the of the methods below, when saving the file, eclim will attempt
-      to validate the <code>.classpath</code> file and will report any errors
-      in the current window's location list (:help location-list).
+      When you write the <code>.classpath</code> file, Vim will issue a command
+      to the eclim server to update the project's classpath, and will report any
+      errors via vim's location list (:help location-list).
+      <br/><br/>
+      In addition to directly editing the <code>.classpath</code> file, you may
+      also use maven's support
+      (<a href="../../guides/java/maven/maven_eclipse.html">1.x</a> or
+      <a href="../../guides/java/maven/mvn_eclipse.html">2.x</a>) for
+      maintaining the eclipse classpath.  For users who use
+      <a href="ext:ivy">ivy</a>, eclim also provides a means to
+      <a href="../../guides/java/ivy/ivy_eclipse.html">
+        auto update the eclipse classpath
+      </a>
+      when saving changes to your ivy.xml.
     </note>
-    <section id="eclipse.classpath">
-      <title>.classpath</title>
-      <p>
-        The first method is to simply edit the .classpath file with Vim and make
-        the necessary changes.  When you write the file, Vim will issue a
-        command to the eclim server to update the project's classpath.
-      </p>
-      <p>
-        While editing the <code>.classpath</code> file, eclim also provides a
-        few commands to ease the creation of new classpath entries.
-      </p>
-      <ul>
-        <li>
-          <anchor id="NewSrcEntry"/>
-          <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...]<br/>
-          Adds a new entry for one or more source code directories relative to
-          the project's root directory.<br/>
-          <source>
-            <![CDATA[
-            <classpathentry kind="src" path="src/java"/>
-            ]]>
-          </source>
-          <note>
-            This command supports command completion of directories relative to
-            the .classpath file.
-          </note>
-        </li>
-        <li>
-          <anchor id="NewProjectEntry"/>
-          <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...]<br/>
-          Adds a new entry for one or more dependencies on other projects.
-          Project name command completion supported (:NewProjectEntry
-          a_pro&lt;Tab&gt;).
-          <source>
-            <![CDATA[
-            <classpathentry exported="true" kind="src" path="/a_project"/>
-            ]]>
-          </source>
-          <note>
-            This command supports command completion of project names.
-          </note>
-        </li>
-        <li>
-          <anchor id="NewJarEntry"/>
-          <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...]<br/>
-          Adds a new entry for one or more jar file dependencies.  If the jar
-          file is not in a folder under the project root, you must use an
-          absolute path (apparent limitation with Eclipse).  When adding the
-          template, this command also adds the necessary (although commented
-          out) elements and attributes to set the location of the jar's source
-          code and javadocs.
-          <source>
-            <![CDATA[
-            <classpathentry exported="true" kind="lib" path="lib/hibernate-3.0.jar">
-              <!--
-                sourcepath="<path>">
-              -->
-              <!--
-              <attributes>
-                <attribute value="file:<javadoc>" name="javadoc_location"/>
-              </attributes>
-              -->
-            </classpath>
-            ]]>
-          </source>
-        </li>
-        <li>
-          <anchor id="NewVarEntry"/>
-          <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...]<br/>
-          Just like NewJarEntry except an Eclipse "var" entry is created.
-          When a jar entry references an absolute path, you should instead use
-          a var entry.  The var entry allows you to define a base dir as a
-          variable (ex. USER_HOME = /home/username), and then reference files
-          relative to that variable.
-          <source>
-            <![CDATA[
-            <classpathentry exported="true" kind="var" path="USER_HOME/lib/hibernate-3.0.jar">
-              <!--
-                sourcepath="<path>">
-              -->
-              <!--
-              <attributes>
-                <attribute value="http://<javadoc>" name="javadoc_location"/>
-              </attributes>
-              -->
-            </classpath>
-            ]]>
-          </source>
-          This allows you to share .classpath files with other developers
-          without each having a local copy with environment specific paths.
-          <br/>
-          <br/>
-          To add new base classpath variables, you can edit
-          <source>
-            $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/classpath_variables.properties
-          </source>
-          By default, a USER_HOME variable is created that defaults to the java
-          System property "user.home" and you can add more as needed.
-          <note>
-            This command supports command completion of Eclipse variable names.
-          </note>
-          To manage the available variables, eclim also provides the following
+    <ul>
+      <li>
+        <anchor id="NewSrcEntry"/>
+        <strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...]<br/>
+        Adds a new entry for one or more source code directories relative to
+        the project's root directory.<br/>
+        <source>
+          <![CDATA[
+          <classpathentry kind="src" path="src/java"/>
+          ]]>
+        </source>
+        This command supports command completion of directories relative to
+        the .classpath file.
+      </li>
+      <li>
+        <anchor id="NewProjectEntry"/>
+        <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...]<br/>
+        Adds a new entry for one or more dependencies on other projects.
+        Project name command completion supported (:NewProjectEntry
+        a_pro&lt;Tab&gt;).
+        <source>
+          <![CDATA[
+          <classpathentry exported="true" kind="src" path="/a_project"/>
+          ]]>
+        </source>
+        This command supports command completion of project names.
+      </li>
+      <li>
+        <anchor id="NewJarEntry"/>
+        <strong>:NewJarEntry</strong> &lt;file&gt; [&lt;file&gt; ...]<br/>
+        Adds a new entry for one or more jar file dependencies.  If the jar
+        file is not in a folder under the project root, you must use an
+        absolute path (apparent limitation with Eclipse).  When adding the
+        template, this command also adds the necessary (although commented
+        out) elements and attributes to set the location of the jar's source
+        code and javadocs.
+        <source>
+          <![CDATA[
+          <classpathentry exported="true" kind="lib" path="lib/hibernate-3.0.jar">
+            <!--
+              sourcepath="<path>">
+            -->
+            <!--
+            <attributes>
+              <attribute value="file:<javadoc>" name="javadoc_location"/>
+            </attributes>
+            -->
+          </classpath>
+          ]]>
+        </source>
+      </li>
+      <li>
+        <anchor id="NewVarEntry"/>
+        <strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;VAR/file&gt; ...]<br/>
+        Just like NewJarEntry except an Eclipse "var" entry is created.
+        When a jar entry references an absolute path, you should instead use
+        a var entry.  The var entry allows you to define a base dir as a
+        variable (ex. USER_HOME = /home/username), and then reference files
+        relative to that variable.
+        <source>
+          <![CDATA[
+          <classpathentry exported="true" kind="var" path="USER_HOME/lib/hibernate-3.0.jar">
+            <!--
+              sourcepath="<path>">
+            -->
+            <!--
+            <attributes>
+              <attribute value="http://<javadoc>" name="javadoc_location"/>
+            </attributes>
+            -->
+          </classpath>
+          ]]>
+        </source>
+        This allows you to share .classpath files with other developers
+        without each having a local copy with environment specific paths.
+        <br/>
+        <br/>
+        To add new base classpath variables, you can edit
+        <source>
+          $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/classpath_variables.properties
+        </source>
+        By default, a USER_HOME variable is created that defaults to the java
+        System property "user.home" and you can add more as needed.<br/>
+        This command supports command completion of Eclipse variable names as
+        well as the files and directories beneath the path the variable
+        represents.
+        <p>
+          To manage the classpath variables, eclim also provides the following
           commands.
-          <ul>
-            <li>
-              <anchor id="VariableList"/>
-              <strong>:VariableList</strong><br/>
-              Lists all the currently available classpath variables and their
-              corresponding values.
-            </li>
-            <li>
-              <anchor id="VariableCreate"/>
-              <strong>:VariableCreate</strong> &lt;name&gt; &lt;path&gt;<br/>
-              Creates or updates the variable with the supplied name.
-            </li>
-            <li>
-              <anchor id="VariableDelete"/>
-              <strong>:VariableDelete</strong> &lt;name&gt;<br/>
-              Deletes the variable with the supplied name.
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </section>
-    <section id="ivy">
-      <title>Ivy</title>
-      <p>
-        The second method of keeping your Eclipse <code>.classpath</code> file
-        up to date, is to utilize eclim's plugin for one commonly used
-        build tool, <a href="http://jayasoft.org/ivy">ivy</a>.<br/>
-        Ivy is an extension to ant that provides dependency management similar
-        to the more popular <a href="ext:maven">apache maven</a>,
-      </p>
-      <p>
-        Like maven, ivy manages a project's dependencies in a single file,
-        ivy.xml.  Just like the direct .classpath editing that eclim supports,
-        when editing an ivy.xml file from Vim, eclim adds an auto command to
-        update Eclipse's classpath when you save the ivy.xml.  Any entries
-        found in the ivy.xml that are not in the <code>.classpath</code> will
-        be added, and any entries that differ in version will be updated.
-      </p>
-      <p>
-        <strong>Preserving manually added entries</strong><br/>
-      </p>
-      <p>
-        When utilizing the ivy support, eclim will attempt to remove any stale
-        entries from your .classpath file.  If you have some manually added
-        entries, these may be removed as well.  To prevent this you can add a
-        classpath entry attribute notifying eclim that the entry should be
-        preserved.<br/>
-        Ex.
-      </p>
-      <source>
-        <![CDATA[
-        <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
-          <attributes>
-            <attribute name="eclim.preserve" value="true"/>
-          </attributes>
-        </classpathentry>
-        ]]>
-      </source>
-    </section>
+        </p>
+        <ul>
+          <li>
+            <anchor id="VariableList"/>
+            <strong>:VariableList</strong><br/>
+            Lists all the currently available classpath variables and their
+            corresponding values.
+          </li>
+          <li>
+            <anchor id="VariableCreate"/>
+            <strong>:VariableCreate</strong> &lt;name&gt; &lt;path&gt;<br/>
+            Creates or updates the variable with the supplied name.
+          </li>
+          <li>
+            <anchor id="VariableDelete"/>
+            <strong>:VariableDelete</strong> &lt;name&gt;<br/>
+            Deletes the variable with the supplied name.
+          </li>
+        </ul>
+      </li>
+    </ul>
   </body>
 </document>

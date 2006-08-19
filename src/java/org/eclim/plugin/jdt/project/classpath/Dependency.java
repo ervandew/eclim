@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.project.classpath;
 
+import org.eclipse.core.runtime.IPath;
+
 /**
  * Represents a dependecy from a build file or other external source.
  *
@@ -28,17 +30,23 @@ public class Dependency
 
   private String name;
   private String version;
+  private IPath path;
+  private boolean variable;
 
   /**
    * Constructs a new instance.
    *
    * @param _name The name.
    * @param _version The version.
+   * @param _path The root IPath where the dependecy is located.  Construtor
+   * will call _path.append() with the constructed dependency file name.
    */
-  public Dependency (String _name, String _version)
+  public Dependency (String _name, String _version, IPath _path)
   {
     this.name = _name;
     this.version = _version;
+
+    this.path = _path.append(toString());
   }
 
   /**
@@ -100,5 +108,45 @@ public class Dependency
   public void setVersion (String _version)
   {
     this.version = _version;
+  }
+
+  /**
+   * Gets the path for this instance.
+   *
+   * @return The path.
+   */
+  public IPath getPath ()
+  {
+    return this.path;
+  }
+
+  /**
+   * Sets the path for this instance.
+   *
+   * @param path The path.
+   */
+  public void setPath (IPath path)
+  {
+    this.path = path;
+  }
+
+  /**
+   * Gets whether this dependency is relative to a classpath variable.
+   *
+   * @return true if relative to a variable, false otherwise.
+   */
+  public boolean isVariable ()
+  {
+    return this.variable;
+  }
+
+  /**
+   * Sets whether this dependency is relative to a classpath variable.
+   *
+   * @param variable true if relative to a variable, false otherwise.
+   */
+  public void setVariable (boolean variable)
+  {
+    this.variable = variable;
   }
 }

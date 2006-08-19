@@ -59,6 +59,9 @@ See http://forrest.apache.org/docs/linking.html for more info
       <mvn_project label="Maven 2.x: Maintaining A Java Project"
           description="Maintaining a java project with maven 2.x."
           href="guides/java/maven/mvn_eclipse.html"/>
+      <ivy_project label="Ivy: Maintaining A Java Project"
+          description="Maintaining a java project with ivy."
+          href="guides/java/ivy/ivy_eclipse.html"/>
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
@@ -205,6 +208,7 @@ See http://forrest.apache.org/docs/linking.html for more info
 
     <ant href="http://ant.apache.org"/>
     <maven href="http://maven.apache.org"/>
+    <ivy href="http://jayasoft.org/ivy"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

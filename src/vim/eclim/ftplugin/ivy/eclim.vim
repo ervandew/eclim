@@ -33,4 +33,11 @@ augroup ivy
   autocmd BufWritePost ivy.xml call eclim#java#ivy#UpdateClasspath()
 augroup END
 
+" Command Declarations {{{
+if !exists(":IvyRepo")
+  command -nargs=1 -complete=dir -buffer IvyRepo
+    \ :call eclim#java#ivy#SetRepo('<args>')
+endif
+" }}}
+
 " vim:ft=vim:fdm=marker

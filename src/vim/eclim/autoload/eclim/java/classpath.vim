@@ -104,7 +104,7 @@ endfunction " }}}
 function! eclim#java#classpath#VariableCreate (name, path)
   let command = s:command_variable_create
   let command = substitute(command, '<name>', a:name, '')
-  let command = substitute(command, '<path>', a:path, '')
+  let command = substitute(command, '<path>', fnamemodify(a:path, ':p'), '')
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'

@@ -19,6 +19,13 @@ import java.io.IOException;
 
 import java.util.List;
 
+import org.eclim.Services;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
+import org.eclipse.jdt.core.JavaCore;
+
 import org.jaxen.XPath;
 
 import org.jaxen.dom.DOMXPath;
@@ -36,6 +43,7 @@ import org.w3c.dom.Element;
 public class IvyParser
   extends AbstractXmlParser
 {
+  private static final String IVY_REPO = "IVY_REPO";
   private static final String NAME = "name";
   private static final String REVISION = "rev";
 
@@ -45,23 +53,31 @@ public class IvyParser
    * {@inheritDoc}
    */
   public Dependency[] parse (Document _document)
-    throws IOException
+    throws Exception
   {
     try{
       if(xpath == null){
         xpath = new DOMXPath("/ivy-module/dependencies/dependency");
       }
+
+      if(JavaCore.getClasspathVariable(IVY_REPO) == null){
+        throw new IllegalStateException(
+            Services.getMessage("ivy.repo.not.set", IVY_REPO));
+      }
+      IPath path = new Path(IVY_REPO);
+
       List results = xpath.selectNodes(_document);
       Dependency[] dependencies = new Dependency[results.size()];
       for(int ii = 0; ii < results.size(); ii++){
         Element element = (Element)results.get(ii);
         dependencies[ii] = new Dependency(
-            element.getAttribute(NAME), element.getAttribute(REVISION));
+            element.getAttribute(NAME), element.getAttribute(REVISION), path);
+        dependencies[ii].setVariable(true);
       }
 
       return dependencies;
-    }catch(Exception e){
-      throw (IOException)new IOException().initCause(e);
+    }catch(IllegalStateException iae){
+      throw iae;
     }
   }
 }

@@ -125,22 +125,6 @@
           optionally contain features not present in all jvm versions.
         </li>
         <li>
-          <strong>org.eclim.java.library.root</strong><br/>
-          When utilizing the
-          <a href="java/classpath.html#buildfile">classpath editing</a>
-          features for ivy and maven dependency files, this determines the default
-          directory name prepended to the jar file entries as they are added to
-          the Eclipse .classpath file.  Since neither the ivy, nor the maven file
-          contain the final destination of the dependency jars, eclim relies on
-          this setting to build a full path to the resource.
-          <note>
-            Eclim will NOT validate that the jars exist at the supplied path since
-            both ivy and maven can be used to download jars from online
-            repositories, resulting in the chance that the file will not yet exist
-            on disk.
-          </note>
-        </li>
-        <li>
           <strong>org.eclim.java.logging.impl</strong><br/>
           When utilizing the <a href="java/logging.html">java logging</a>
           feature, this setting determines which logging implementation to use.
