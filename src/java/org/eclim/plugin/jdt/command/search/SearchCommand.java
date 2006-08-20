@@ -141,9 +141,18 @@ public class SearchCommand
           context = IJavaSearchConstants.DECLARATIONS;
         }
         int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
-        int matchType = (pat.indexOf('*') != -1 || pat.indexOf('?') != -1) ?
-          SearchPattern.R_PATTERN_MATCH :
-          SearchPattern.R_EXACT_MATCH;
+
+        int matchType = SearchPattern.R_EXACT_MATCH;
+
+        // wild card character supplied, use pattern matching.
+        if(pat.indexOf('*') != -1 || pat.indexOf('?') != -1){
+          matchType = SearchPattern.R_PATTERN_MATCH;
+
+        // all upper case, add camel case support.
+        }else if(pat.equals(pat.toUpperCase())){
+          matchType =
+            SearchPattern.R_EXACT_MATCH | SearchPattern.R_CAMELCASE_MATCH;
+        }
 
         pattern = SearchPattern.createPattern(pat, type, context, matchType);
 

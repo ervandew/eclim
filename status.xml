@@ -198,14 +198,6 @@
       <action context="bean" dev="ervandew">
         Additional bean functionality (beaninfo, resource bundles).
       </action>
-      <action context="cvs" dev="ervandew">
-        CVS support.
-        <ul>
-          <li>cvs annotations: see who made what changes in the src.</li>
-        </ul>
-        This will be a real challenge to display in vim cleanly (vim signs
-        aren't going to cut it).
-      </action>
       <action context="run" dev="ervandew">
         Run main class and catch any exceptions into a new window and allow
         jumping to a stack trace element's referenced source location.
@@ -288,9 +280,6 @@
         </a>
         <ul>
           <li>
-            camel case searching ("NPE" finds "NullPointerException").
-          </li>
-          <li>
             javadoc context sensitive completion.
           </li>
           <li>
@@ -341,6 +330,11 @@
         <a href="vim/java/classpath.html#VariableDelete">
           <strong>:VariableDelete</strong>
         </a>.
+      </action>
+
+      <action dev="ervandew" type="update" context="Java">
+        Added camel case searching support:<br/>
+        :<a href="vim/java/search.html">JavaSearch</a> NPE
       </action>
 
       <action dev="ervandew" type="update" context="Java">

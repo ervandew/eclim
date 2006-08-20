@@ -100,11 +100,24 @@
         </li>
       </ul>
       <p>
+        <br/>
         Eclim also provides a shortcut when issuing a pattern search for a type.
         You may simply invoke <strong>:JavaSearch</strong> supplying only the
-        pattern.<br/><br/>
-        Ex.<br/>
-        <code>:JavaSearch SomeType</code><br/>
+        pattern.
+      </p>
+      <source>
+        :JavaSearch SomeType
+      </source>
+      <p>
+        To shorten things even more, there is support for camel case searching
+        as well.
+      </p>
+      <source>
+        :JavaSearch NPE
+      </source>
+      <p>
+        However, please note that camel case searching does not permit wild card
+        characters ('*', '?').
       </p>
     </section>
     <section id="element">
