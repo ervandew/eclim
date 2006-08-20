@@ -352,6 +352,13 @@
         to behave more like maven.
       </action>
 
+      <action dev="ervandew" type="update" context="Java">
+        Added commands to ease setting of classpath repo variables for
+        <a href="guides/java/maven/maven_eclipse.html">maven's</a> and
+        <a href="guides/java/maven/mvn_eclipse.html">mvn's</a>
+        eclipse support.
+      </action>
+
       <action dev="ervandew" type="add" context="Xml">
         Added
         <a href="vim/xml/definition.html#DtdDefinition">

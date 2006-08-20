@@ -186,6 +186,20 @@
         Execute maven 2.x from the current project.
       </li>
       <li>
+        <a href="../guides/java/maven/maven_eclipse.html#MavenRepo">
+          <strong>:MavenRepo</strong>
+        </a>
+        - Sets the necessary MAVEN_REPO classpath variable for maven's (1.x)
+        eclipse support.
+      </li>
+      <li>
+        <a href="../guides/java/maven/mvn_eclipse.html#MvnRepo">
+          <strong>:MvnRepo</strong>
+        </a>
+        - Sets the necessary M2_REPO classpath variable for maven's (2.x)
+        eclipse support.
+      </li>
+      <li>
         <a href="java/maven/dependency.html#MavenDependencySearch">
           <strong>:MavenDependencySearch</strong>
         </a>

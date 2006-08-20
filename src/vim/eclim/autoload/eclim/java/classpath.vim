@@ -99,7 +99,7 @@ function! eclim#java#classpath#VariableList ()
  echohl None
 endfunction " }}}
 
-" VariableCreate() {{{
+" VariableCreate(name, path) {{{
 " Create or update a variable.
 function! eclim#java#classpath#VariableCreate (name, path)
   let command = s:command_variable_create
@@ -112,7 +112,7 @@ function! eclim#java#classpath#VariableCreate (name, path)
   endif
 endfunction " }}}
 
-" VariableDelete() {{{
+" VariableDelete(name) {{{
 " Delete a variable.
 function! eclim#java#classpath#VariableDelete (name)
   let command = s:command_variable_delete

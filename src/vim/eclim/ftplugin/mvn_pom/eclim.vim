@@ -24,7 +24,14 @@
 " load any xml related functionality
 runtime ftplugin/xml.vim
 
+" Global Variables {{{
+" }}}
+
 " Command Declarations {{{
+if !exists(":MvnRepo")
+  command -nargs=0 -buffer
+    \ MvnRepo :call eclim#java#maven#repo#SetClasspathVariable('Mvn', 'M2_REPO')
+endif
 if !exists(":MvnDependencySearch")
   command -nargs=1 -buffer
     \ MvnDependencySearch :call eclim#java#maven#dependency#Search('<args>')

@@ -42,11 +42,6 @@ Enhancements
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
-  - Maven Repo commands
-    - we know the location of the workspace, so we can save the user from
-      having to type it out.
-    - test if eclimd really needs to be shutdown.
-
   - Add support for using a running eclipse gui as the eclimd server.
     - add a menu item which starts up nailgun and spring.
       - ping first to see if one is running.

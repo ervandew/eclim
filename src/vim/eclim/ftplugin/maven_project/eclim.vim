@@ -25,6 +25,10 @@
 runtime ftplugin/xml.vim
 
 " Command Declarations {{{
+if !exists(":MavenRepo")
+  command -nargs=0 -buffer
+    \ MavenRepo :call eclim#java#maven#repo#SetClasspathVariable('Maven', 'MAVEN_REPO')
+endif
 if !exists(":MavenDependencySearch")
   command -nargs=1 -buffer
     \ MavenDependencySearch :call eclim#java#maven#dependency#Search('<args>')
