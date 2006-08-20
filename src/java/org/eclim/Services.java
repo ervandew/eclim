@@ -19,10 +19,8 @@ import java.io.InputStream;
 
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -61,7 +59,6 @@ public class Services
   private static Map pluginResources = new HashMap();
   private static Map serviceCache = new HashMap();
   private static Map messageCache = new HashMap();
-  private static Map propertyCache = new HashMap();
 
   /**
    * Gets a service by type.
