@@ -50,11 +50,11 @@
       <br/><br/>
       In addition to directly editing the <code>.classpath</code> file, you may
       also use maven's support
-      (<a href="../../guides/java/maven/maven_eclipse.html">1.x</a> or
-      <a href="../../guides/java/maven/mvn_eclipse.html">2.x</a>) for
+      (<a href="../../guides/java/maven/maven_classpath.html">1.x</a> or
+      <a href="../../guides/java/maven/mvn_classpath.html">2.x</a>) for
       maintaining the eclipse classpath.  For users who use
       <a href="ext:ivy">ivy</a>, eclim also provides a means to
-      <a href="../../guides/java/ivy/ivy_eclipse.html">
+      <a href="../../guides/java/ivy/ivy_classpath.html">
         auto update the eclipse classpath
       </a>
       when saving changes to your ivy.xml.

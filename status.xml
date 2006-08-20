@@ -348,14 +348,14 @@
       </action>
 
       <action dev="ervandew" type="update" context="Java">
-        Updated <a href="guides/java/ivy/ivy_eclipse.html">ivy support</a>
+        Updated <a href="guides/java/ivy/ivy_classpath.html">ivy support</a>
         to behave more like maven.
       </action>
 
       <action dev="ervandew" type="update" context="Java">
         Added commands to ease setting of classpath repo variables for
-        <a href="guides/java/maven/maven_eclipse.html">maven's</a> and
-        <a href="guides/java/maven/mvn_eclipse.html">mvn's</a>
+        <a href="guides/java/maven/maven_classpath.html">maven's</a> and
+        <a href="guides/java/maven/mvn_classpath.html">mvn's</a>
         eclipse support.
       </action>
 
@@ -518,7 +518,7 @@
       <action dev="ervandew" type="add" context="Java">
         Removed support for auto update of .classpath upon writing of maven
         project.xml in favor of new
-        <a href="guides/java/maven/maven_eclipse.html">maven support</a>.
+        <a href="guides/java/maven/maven_classpath.html">maven support</a>.
       </action>
       <action dev="ervandew" type="add" context="Java">
         Added

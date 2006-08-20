@@ -53,15 +53,15 @@ See http://forrest.apache.org/docs/linking.html for more info
       <java_project label="Java: Creating A Java Project"
           description="Creating a java project."
           href="guides/java/project.html"/>
-      <maven_project label="Maven 1.x: Maintaining A Java Project"
-          description="Maintaining a java project with maven 1.x."
-          href="guides/java/maven/maven_eclipse.html"/>
-      <mvn_project label="Maven 2.x: Maintaining A Java Project"
-          description="Maintaining a java project with maven 2.x."
-          href="guides/java/maven/mvn_eclipse.html"/>
-      <ivy_project label="Ivy: Maintaining A Java Project"
-          description="Maintaining a java project with ivy."
-          href="guides/java/ivy/ivy_eclipse.html"/>
+      <maven_project label="Maven 1.x: Maintaining Java Classpath"
+          description="Maintaining java classpath with maven 1.x."
+          href="guides/java/maven/maven_classpath.html"/>
+      <mvn_project label="Maven 2.x: Maintaining Java Classpath"
+          description="Maintaining java classpath with maven 2.x."
+          href="guides/java/maven/mvn_classpath.html"/>
+      <ivy_project label="Ivy: Maintaining Java Classpath"
+          description="Maintaining java classpath with ivy."
+          href="guides/java/ivy/ivy_classpath.html"/>
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
