@@ -59,13 +59,9 @@ public class Initializer
   public void initialize ()
   {
     logger.info("Initializing java environment");
+
     // initialize variables.
     initializeJreSrc();
-    String[] vars = JavaCore.getClasspathVariableNames();
-    for(int ii = 0; ii < vars.length; ii++){
-      logger.info("Variable {} = {}", vars[ii],
-          JavaCore.getClasspathVariable(vars[ii]));
-    }
     initializeVars(variables);
 
     /*java.util.Hashtable options = JavaCore.getOptions();

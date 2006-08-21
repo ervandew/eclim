@@ -35,7 +35,11 @@
   </category>
 
   <category name="org.eclim.util.spring">
-    <priority value="info"/>
+    <priority value="warn"/>
+  </category>
+
+  <category name="org.springframework">
+    <priority value="warn"/>
   </category>
 
   <root>
