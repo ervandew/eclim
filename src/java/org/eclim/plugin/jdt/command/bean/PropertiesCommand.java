@@ -31,6 +31,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
@@ -300,26 +301,25 @@ public class PropertiesCommand
   {
     // first run through
     if(_lastSibling == null || !_lastSibling.exists()){
-      // insert before the next property's bean methods
-      int index = _fields.indexOf(_field) + 1;
-      if(index < _fields.size()){
-        IField field = (IField)_fields.get(index);
-        String nextProperty = StringUtils.capitalize(field.getElementName());
-        // regular getter
-        IMethod method = _type.getMethod("get" + nextProperty, null);
-        // index getter
-        method = !method.exists() ?
-          _type.getMethod("get" + nextProperty, INT_ARG) : method;
-        // regular setter
-        method = !method.exists() ?
-          _type.getMethod("set" + nextProperty,
-              new String[]{field.getTypeSignature()}) : method;
-        // index setter
-        method = !method.exists() ?
-          _type.getMethod("set" + nextProperty,
-              new String[]{INT_SIG,
-                Signature.getElementType(field.getTypeSignature())}) : method;
-        if(method.exists()){
+      int index = _fields.indexOf(_field);
+
+      // insert before the next property's bean methods, if there are other
+      // properties.
+      if(_fields.size() > 1 && (index + 1) < _fields.size()){
+        IField field = (IField)_fields.get(index + 1);
+        IMethod method = getBeanMethod(_type, field, false);
+        if(method != null){
+          return method;
+        }
+      }
+
+      // insert after previous property's bean methods, if there are other
+      // properties.
+      if(_fields.size() > 1 && index > 0){
+        IField field = (IField)_fields.get(index - 1);
+        IMethod method = getBeanMethod(_type, field, true);
+        method = MethodUtils.getMethodAfter(_type, method);
+        if(method != null){
           return method;
         }
       }
@@ -337,5 +337,47 @@ public class PropertiesCommand
       return _lastSibling;
     }
     return null;
+  }
+
+  /**
+   * Gets either the first or last occurring bean method for the supplied field.
+   *
+   * @param _field The field to retrieve the method for.
+   * @param _last true to return the last declared bean method, false for the
+   * first.
+   * @return The method or null if not round.
+   */
+  protected IMethod getBeanMethod (IType _type, IField _field, boolean _last)
+    throws Exception
+  {
+    String nextProperty = StringUtils.capitalize(_field.getElementName());
+    // regular getter
+    IMethod method = _type.getMethod("get" + nextProperty, null);
+    if(method.exists() && !_last){
+      return method;
+    }
+
+    // index getter
+    method = !method.exists() ?
+      _type.getMethod("get" + nextProperty, INT_ARG) : method;
+    if(method.exists() && !_last){
+      return method;
+    }
+
+    // regular setter
+    method = !method.exists() ?
+      _type.getMethod("set" + nextProperty,
+          new String[]{_field.getTypeSignature()}) : method;
+    if(method.exists() && !_last){
+      return method;
+    }
+
+    // index setter
+    method = !method.exists() ?
+      _type.getMethod("set" + nextProperty,
+          new String[]{INT_SIG,
+            Signature.getElementType(_field.getTypeSignature())}) : method;
+
+    return method.exists() ? method : null;
   }
 }
