@@ -34,6 +34,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
@@ -452,14 +453,7 @@ public class ImplCommand
 
     if(implementedIndex < index && sibling != null){
       // get the method after the sibling.
-      IMethod[] all = _type.getMethods();
-      IMethod find = (IMethod)sibling;
-      sibling = null;
-      for (int ii = 0; ii < all.length; ii++){
-        if(all[ii].equals(find) && ii < all.length - 1){
-          return sibling = all[ii + 1];
-        }
-      }
+      sibling = MethodUtils.getMethodAfter(_type, (IMethod)sibling);
     }
 
     // no sibling, get first non enum type.
