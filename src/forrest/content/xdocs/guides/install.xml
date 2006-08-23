@@ -47,12 +47,48 @@
           <a href="ext:eclipse_download">Eclipse SDK 3.2.0</a>.
         </li>
         <li>
-          <a href="ext:vim_download">Vim 7.0.x</a>.
+          <a href="ext:vim_download">Vim 7.0.x</a>.<br/><br/>
+          <p>
+            <strong>Minimum Vim Settings</strong>: In order for eclim to
+            function properly, there is a minimum set of vim options that must
+            be enabled in your vimrc file (:h vimrc).
+          </p>
+          <ul>
+            <li>
+              <strong><code>set nocompatible</code></strong>
+              <p>
+                Execute :h 'compatible' for more info.  You can confirm that
+                compatibliity is turned off by executing the following:
+              </p>
+              <source>
+                :echo &amp;compatible
+              </source>
+              <p>
+                Which should output '0'.
+              </p>
+              <br/>
+            </li>
+            <li>
+              <strong><code>filetype plugin on</code></strong>
+              <p>
+                Execute :h filetype-plugin-on for more info.  You can confirm
+                that file type plugins are enabled by executing the following:
+              </p>
+              <source>
+                :filetype
+              </source>
+              <p>
+                Which should output 'filetype detection:ON  plugin:ON  indent:ON'
+                which should at least show 'ON' for 'detection' and 'plugin'.
+              </p>
+            </li>
+          </ul>
           <br/>
-          <br/>
-          <strong>Gentoo users</strong>: To get the latest and greatest
-          version of Vim from portage simply make the following entries in the
-          designated files.
+          <p>
+            <strong>Gentoo users</strong>: To get the latest and greatest
+            version of Vim from portage simply make the following entries in the
+            designated files.
+          </p>
           <ul>
             <li>
               /etc/portage/package.keywords (the ~x86 portion will obviously
@@ -263,12 +299,8 @@
         <p>
           Now that you have eclim installed, the next step is to familiarize
           yourself with at least the core set of commands that eclim
-          provides.<br/>
-          You can start by viewing the
-          <a href="../vim/index.html">Vim integration documentation</a>.  Once
-          you have done that, you can return to the guides section where you can
-          learn to work with eclim and take full advantage of the functionality
-          it provides.
+          provides, all of which are found at the index of the eclim
+          <a href="../vim/index.html">documentation</a>.
         </p>
       </section>
 
