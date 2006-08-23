@@ -49,6 +49,7 @@ import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
@@ -102,6 +103,11 @@ public class JavaUtils
    * Java 1.5 compliance.
    */
   public static final String JAVA_1_5 = JavaCore.VERSION_1_5;
+
+  /**
+   * String version of java.lang package.
+   */
+  public static final String JAVA_LANG = "java.lang";
 
   private static ContributedProcessorDescriptor[] correctionProcessors;
   private static ContributedProcessorDescriptor[] assistProcessors;
@@ -430,15 +436,19 @@ public class JavaUtils
     throws Exception
   {
     String typePkg = _type.getPackageFragment().getElementName();
-    String pkg = _src.getPackageDeclarations()[0].getElementName();
+
+    IPackageDeclaration[] packages = _src.getPackageDeclarations();
+    String pkg = packages.length > 0 ? packages[0].getElementName() : null;
 
     // classes in same package are auto imported.
-    if(pkg.equals(typePkg)){
+    if( (pkg == null && typePkg == null) ||
+        (pkg != null && pkg.equals(typePkg)))
+    {
       return true;
     }
 
     // java.lang is auto imported.
-    if("java.lang".equals(typePkg)){
+    if(JAVA_LANG.equals(typePkg)){
       return true;
     }
 
