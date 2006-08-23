@@ -140,14 +140,29 @@ endfunction " }}}
 " Gets list of selected fields.
 function! eclim#java#util#GetSelectedFields (first, last) range
   " normalize each field statement into a single line.
-  let selection = ""
+  let selection = ''
   let index = a:first
+  let blockcomment = 0
   while index <= a:last
-    let selection = selection . getline(index)
+    let line = getline(index)
+
+    " ignore comment lines
+    if line =~ '^\s*/\*'
+      let blockcomment = 1
+    elseif line =~ '\*/\s*$'
+      let blockcomment = 0
+    elseif line !~ '^\s*//' && !blockcomment
+      " remove quoted values.
+      let line = substitute(line, '".\{-}"', '', 'g')
+      " strip off trailing comment
+      let line = substitute(line, '//.*', '', '')
+
+      let selection = selection . line
+    endif
+
     let index += 1
   endwhile
-  " remove any quoted values.
-  let selection = substitute(selection, '".\{-}"', '', 'g')
+
   " compact comma separated multi field declarations
   let selection = substitute(selection, ',\s*', ',', 'g')
   " break fields back up into their own line.
