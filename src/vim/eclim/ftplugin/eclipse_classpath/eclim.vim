@@ -44,10 +44,7 @@
 " load any xml related functionality
 runtime ftplugin/xml.vim
 
-augroup eclipse_classpath
-  autocmd!
-  autocmd BufWritePost .classpath call eclim#java#classpath#UpdateClasspath()
-augroup END
+autocmd BufWritePost <buffer> call eclim#java#classpath#UpdateClasspath()
 
 " Command Declarations {{{
 if !exists(":NewSrcEntry")

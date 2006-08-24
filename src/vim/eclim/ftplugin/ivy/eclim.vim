@@ -25,13 +25,12 @@
 " load any xml related functionality
 runtime ftplugin/xml.vim
 
+" turn off xml validation
 augroup eclim_xml
   autocmd!
 augroup END
-augroup ivy
-  autocmd!
-  autocmd BufWritePost ivy.xml call eclim#java#ivy#UpdateClasspath()
-augroup END
+
+autocmd BufWritePost <buffer> call eclim#java#ivy#UpdateClasspath()
 
 " Command Declarations {{{
 if !exists(":IvyRepo")
