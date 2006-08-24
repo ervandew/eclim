@@ -353,6 +353,11 @@
         eclipse support.
       </action>
 
+      <action dev="ervandew" type="add" context="Java">
+        Added <a href="vim/java/testng.html">TestNG support</a> to ant
+        compiler's error format.
+      </action>
+
       <action dev="ervandew" type="add" context="Xml">
         Added
         <a href="vim/xml/definition.html#DtdDefinition">

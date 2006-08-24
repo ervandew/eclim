@@ -153,6 +153,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Java Bean Getter / Setter Generation"/>
       <junit label="JUnit Integration" href="junit.html"
           description="JUnit Integration"/>
+      <testng label="TestNG Integration" href="testng.html"
+          description="TestNG Integration"/>
       <logging label="Logging" href="logging.html"
           description="Logging"/>
       <abbreviations label="Abbreviations" href="abbreviations.html"
@@ -209,6 +211,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <ant href="http://ant.apache.org"/>
     <maven href="http://maven.apache.org"/>
     <ivy href="http://jayasoft.org/ivy"/>
+
+    <testng href="http://testng.org/doc"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>
