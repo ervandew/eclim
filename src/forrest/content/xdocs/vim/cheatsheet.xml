@@ -430,19 +430,33 @@
         Locates a relative file and opens it via :tabnew.
       </li>
       <li>
-        <a href="common/util.html#Split"><strong>:Split</strong></a> -
+        <a href="common/util.html#Split"><strong>:Split</strong></a>
+        file [file ...] -
         Behaves like the 'split' command, but allows multiple files to be
         supplied.
       </li>
       <li>
-        <a href="common/util.html#SplitRelative"><strong>:SplitRelative</strong></a> -
+        <a href="common/util.html#SplitRelative"><strong>:SplitRelative</strong></a>
+        file [file ...] -
         Like <strong>:Split</strong> this command provides splitting of multiple
         files, but this command splits file relative to the file in the current
         buffer.
       </li>
       <li>
-        <a href="common/util.html#EditRelative"><strong>:EditRelative</strong></a> -
-        Like <strong>:SplitRelative</strong> except issues an 'edit' and only
+        <a href="common/util.html#Tabnew"><strong>:Tabnew</strong></a>
+        file [file ...] -
+        Behaves like <strong>:Split</strong>, but issues a :tabnew on each file.
+      </li>
+      <li>
+        <a href="common/util.html#TabnewRelative"><strong>:TabnewRelative</strong></a> -
+        file [file ...] -
+        Behaves like <strong>:SplitRelative</strong>, but issues a :tabnew on
+        each file.
+      </li>
+      <li>
+        <a href="common/util.html#EditRelative"><strong>:EditRelative</strong></a>
+        file -
+        Behaves like <strong>:SplitRelative</strong>, but issues an 'edit' and only
         supports one file at a time.
       </li>
       <li>

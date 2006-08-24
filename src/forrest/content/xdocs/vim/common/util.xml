@@ -71,20 +71,31 @@
       </li>
       <li>
         <anchor id="Split"/>
-        <strong>:Split</strong> -
+        <strong>:Split</strong> file [file ...] -
         Behaves like the 'split' command, but allows multiple files to be
         supplied.
       </li>
       <li>
         <anchor id="SplitRelative"/>
-        <strong>:SplitRelative</strong> -
+        <strong>:SplitRelative</strong> file [file ...] -
         Like <strong>:Split</strong> this command provides splitting of multiple
         files, but this command splits files relative to the file in the current
         buffer.
       </li>
       <li>
+        <anchor id="Tabnew"/>
+        <strong>:Tabnew</strong> file [file ...] -
+        Behaves like <strong>:Split</strong>, but issues a :tabnew on each file.
+      </li>
+      <li>
+        <anchor id="TabnewRelative"/>
+        <strong>:TabnewRelative</strong> file [file ...] -
+        Behaves like <strong>:SplitRelative</strong>, but issues a :tabnew on
+        each file.
+      </li>
+      <li>
         <anchor id="EditRelative"/>
-        <strong>:EditRelative</strong> -
+        <strong>:EditRelative</strong> file -
         Like <strong>:SplitRelative</strong> except issues an 'edit' and only
         supports one file at a time.
       </li>

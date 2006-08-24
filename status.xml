@@ -313,7 +313,7 @@
         space, like "Program Files".
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Other various bug fixes.
+        Several other various bug fixes.
       </action>
 
       <action dev="ervandew" type="update" context="Ant">
@@ -376,6 +376,15 @@
         Changed <strong>:FindFunctionVariableContext</strong> to
         <a href="vim/vim/find.html#FindByContext">
           <strong>:FindByContext</strong>
+        </a>.
+      </action>
+      <action dev="ervandew" type="add" context="Vim">
+        Added
+        <a href="vim/common/util.html#Tabnew">
+          <strong>:Tabnew</strong>
+        </a> and
+        <a href="vim/common/util.html#TabnewRelative">
+          <strong>:TabnewRelative</strong>
         </a>.
       </action>
     </release>

@@ -24,11 +24,18 @@
 
 " Command Declarations {{{
 if !exists(":Split")
-  command -nargs=+ -complete=file Split :call eclim#common#Split('<args>')
+  command -nargs=+ -complete=file Split :call eclim#common#OpenFiles('split', '<args>')
 endif
 if !exists(":SplitRelative")
   command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
     \ SplitRelative :call eclim#common#OpenRelative('split', '<args>')
+endif
+if !exists(":Tabnew")
+  command -nargs=+ -complete=file Tabnew :call eclim#common#OpenFiles('tabnew', '<args>')
+endif
+if !exists(":TabnewRelative")
+  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
+    \ TabnewRelative :call eclim#common#OpenRelative('tabnew', '<args>')
 endif
 if !exists(":EditRelative")
   command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative

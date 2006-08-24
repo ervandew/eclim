@@ -143,12 +143,12 @@ function eclim#common#OpenRelative (command, arg)
   endfor
 endfunction " }}}
 
-" Split(arg) {{{
-" Execute a :split on one or more files.
-function eclim#common#Split (arg)
+" OpenFiles(arg) {{{
+" Opens one or more files using the supplied command.
+function eclim#common#OpenFiles (command, arg)
   let files = split(a:arg, '[^\\]\zs\s')
   for file in files
-    exec 'split ' . eclim#util#Simplify(file)
+    exec a:command . ' ' . eclim#util#Simplify(file)
   endfor
 endfunction " }}}
 
