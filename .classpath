@@ -18,9 +18,11 @@
 	<classpathentry kind="lib" path="lib/spring-beans-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/spring-context-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core-1.2.8.jar"/>
+  <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/xerces-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src/java"/>
+  <classpathentry kind="src" path="src/test/testng"/>
 </classpath>

@@ -4,6 +4,9 @@
 -->
 <project name="test" default="test" basedir="../..">
 
+  <taskdef name="testng" classpathref="classpath"
+      classname="org.testng.TestNGAntTask"/>
+
   <!--
     - Executes the unit tests.
     -->
@@ -11,18 +14,30 @@
     <mkdir dir="build/test/classes"/>
     <mkdir dir="build/test/results"/>
 
-    <javac destdir="build/test/classes" debug="on" optimize="false">
-      <src path="test/junit"/>
+    <javac destdir="build/test/classes" debug="on" optimize="false"
+        target="${test.javac.target}" source="${test.javac.target}"
+        deprecation="${deprecation}">
+      <src path="src/test/testng"/>
       <include name="**/*.java"/>
       <classpath refid="classpath"/>
     </javac>
 
     <copy todir="build/test/classes" includeEmptyDirs="false">
-      <fileset dir="src/junit" excludesfile="exclude.properties">
+      <fileset dir="src/test/testng">
         <include name="**/*"/>
         <exclude name="**/*.java"/>
       </fileset>
     </copy>
+
+    <testng outputdir="build/test/results"
+        listener="org.eclim.misc.testng.TestNgListener">
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement path="build/classes"/>
+        <pathelement path="build/test/classes"/>
+      </classpath>
+      <classfileset dir="build" includes="**/*Test.class"/>
+    </testng>
   </target>
 
 </project>
