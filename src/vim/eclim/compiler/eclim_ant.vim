@@ -33,7 +33,8 @@ endif
 
 CompilerSet makeprg=ant\ -find\ build.xml\ $*
 
-" second to last entry is for build file errors.
+" The two entries before the last one, are for catching ant build file names
+" and error line numbers.
 exec 'CompilerSet errorformat=' .
   \ '\%-G%.%#[javac]\ %.%#:\ warning:\ unmappable\ character\ %.%#,' .
   \ '\%A%.%#[javac]\ %f:%l:\ %m,' .
@@ -57,6 +58,7 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
+  \ '\%A%.%#[exec]\ %f:%l:\ %m,' .
   \ '\%A%f:%l:\ %m,' .
   \ '\%-G%.%#'
 
