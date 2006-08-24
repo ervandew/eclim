@@ -30,13 +30,6 @@ Bugs
   - /etc/{init,conf}.d/eclimd
 
 Enhancements
-  - Move shutdown functionality to a different port.  This way if nailgun is
-    hung, the user will still be able to issue a graceful shutdown, hopefully.
-
-  - :JavaImpl, :JavaGetSet
-    - look into using non-Javadoc comments for the method so that the
-      parent's javadoc is auto inserted at generation time.
-
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
