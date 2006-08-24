@@ -7,10 +7,42 @@
   <taskdef name="testng" classpathref="classpath"
       classname="org.testng.TestNGAntTask"/>
 
+  <property name="eclim.home"
+      value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
+
   <!--
-    - Executes the unit tests.
+    - Task for starting eclimd and running unit tests.
     -->
-  <target name="test" depends="build" description="Runs the junit tests">
+  <target name="test" depends="build"
+      description="Starts the eclim server and runs the junit tests">
+    <if>
+      <socket server="localhost" port="9091"/>
+      <then>
+        <runtarget target="tests.run"/>
+      </then>
+      <else>
+        <echo>Starting eclimd...</echo>
+        <parallel>
+          <exec executable="${eclim.home}/bin/eclimd"
+              output="build/test/eclimd.log"/>
+          <sequential>
+            <waitfor maxwait="20" maxwaitunit="second">
+              <socket server="localhost" port="9091"/>
+            </waitfor>
+            <runtarget target="tests.run"/>
+            <exec executable="${eclim.home}/bin/eclim">
+              <arg line="-command shutdown"/>
+            </exec>
+          </sequential>
+        </parallel>
+      </else>
+    </if>
+  </target>
+
+  <!--
+    - Runs the tests after eclimd has been started.
+    -->
+  <target name="tests.run" description="Runs the junit tests">
     <mkdir dir="build/test/classes"/>
     <mkdir dir="build/test/results"/>
 
@@ -19,7 +51,10 @@
         deprecation="${deprecation}">
       <src path="src/test/testng"/>
       <include name="**/*.java"/>
-      <classpath refid="classpath"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement path="build/classes"/>
+      </classpath>
     </javac>
 
     <copy todir="build/test/classes" includeEmptyDirs="false">
@@ -37,6 +72,7 @@
         <pathelement path="build/test/classes"/>
       </classpath>
       <classfileset dir="build" includes="**/*Test.class"/>
+      <sysproperty key="eclim.home" value="${eclim.home}"/>
     </testng>
   </target>
 
