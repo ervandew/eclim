@@ -149,13 +149,14 @@ function! eclim#java#util#GetSelectedFields (first, last) range
     " ignore comment lines
     if line =~ '^\s*/\*'
       let blockcomment = 1
-    elseif line =~ '\*/\s*$'
+    elseif blockcomment && line =~ '\*/\s*$'
       let blockcomment = 0
     elseif line !~ '^\s*//' && !blockcomment
       " remove quoted values.
       let line = substitute(line, '".\{-}"', '', 'g')
-      " strip off trailing comment
+      " strip off trailing comments
       let line = substitute(line, '//.*', '', '')
+      let line = substitute(line, '/\*.*\*/', '', '')
 
       let selection = selection . line
     endif
