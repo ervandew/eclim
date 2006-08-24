@@ -15,9 +15,7 @@
  */
 package org.eclim.command.taglist;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,13 +24,12 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanComparator;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.log4j.Logger;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
+import org.eclim.util.CommandExecutor;
 import org.eclim.util.ScriptUtils;
 
 /**
@@ -132,16 +129,7 @@ public class TaglistCommand
   private String executeCtags (String[] _args)
     throws Exception
   {
-    Ctags process = new Ctags(_args);
-    Thread thread = new Thread(process);
-    thread.start();
-
-    long timeout = System.currentTimeMillis() + 10000;
-    // wait for the thread to end.
-    while(process.getReturnCode() == -1 && System.currentTimeMillis() < timeout){
-      Thread.sleep(50);
-    }
-
+    CommandExecutor process = CommandExecutor.execute(_args, 10000);
     if(process.getReturnCode() == -1){
       process.destroy();
       throw new RuntimeException("ctags command timed out.");
@@ -150,113 +138,5 @@ public class TaglistCommand
     }
 
     return process.getResult();
-  }
-
-  /**
-   * Thread to run the external ctags process.
-   */
-  private class Ctags
-    implements Runnable
-  {
-    private int returnCode = -1;
-    private String[] args;
-    private String result;
-    private String error;
-    private Process process;
-
-    /**
-     * Construct a new instance.
-     */
-    public Ctags (String[] _args)
-    {
-      args = _args;
-    }
-
-    /**
-     * Run the thread.
-     */
-    public void run ()
-    {
-      try{
-        Runtime runtime = Runtime.getRuntime();
-        process = runtime.exec(args);
-
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final ByteArrayOutputStream err = new ByteArrayOutputStream();
-
-        Thread outThread = new Thread(){
-          public void run (){
-            try{
-              IOUtils.copy(process.getInputStream(), out);
-            }catch(IOException ioe){
-              ioe.printStackTrace();
-            }
-          }
-        };
-        outThread.start();
-
-        Thread errThread = new Thread(){
-          public void run (){
-            try{
-              IOUtils.copy(process.getErrorStream(), err);
-            }catch(IOException ioe){
-              ioe.printStackTrace();
-            }
-          }
-        };
-        errThread.start();
-
-        returnCode = process.waitFor();
-        outThread.join(1000);
-        errThread.join(1000);
-
-        result = out.toString();
-        error = err.toString();
-      }catch(Exception e){
-        returnCode = 12;
-        error = e.getMessage();
-        logger.error("run()", e);
-      }
-    }
-
-    /**
-     * Destroy this process.
-     */
-    public void destroy ()
-    {
-      if(process != null){
-        process.destroy();
-      }
-    }
-
-    /**
-     * Gets the output of the command.
-     *
-     * @return The command result.
-     */
-    public String getResult ()
-    {
-      return result;
-    }
-
-    /**
-     * Get the return code from the process.
-     *
-     * @return The return code.
-     */
-    public int getReturnCode ()
-    {
-      return returnCode;
-    }
-
-    /**
-     * Gets the error message from the command if there was one.
-     *
-     * @return The possibly empty error message.
-     */
-    public String getErrorMessage ()
-    {
-      return error;
-    }
   }
 }
