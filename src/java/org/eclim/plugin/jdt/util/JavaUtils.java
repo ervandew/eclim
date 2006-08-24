@@ -163,7 +163,7 @@ public class JavaUtils
 
     IJavaProject javaProject = getJavaProject(_project);
     ICompilationUnit src = getCompilationUnit(javaProject, _file);
-    if(src == null){
+    if(src == null || !src.exists()){
       throw new IllegalArgumentException(
           Services.getMessage("src.file.not.found", _file));
     }
@@ -187,7 +187,7 @@ public class JavaUtils
       IJavaProject javaProject = getJavaProject(projects[ii]);
 
       ICompilationUnit src = getCompilationUnit(javaProject, _file);
-      if(src != null){
+      if(src != null && src.exists()){
         return src;
       }
     }
@@ -232,8 +232,13 @@ public class JavaUtils
 
         String path = projectPath + entryPath;
         if(_file.startsWith(path)){
-          String file = _file.substring(path.length() + 1);
-          return (ICompilationUnit)_project.findElement(Path.fromOSString(file));
+          String file = entryPath + '/' + _file.substring(path.length() + 1);
+
+          return JavaCore.createCompilationUnitFrom(
+              _project.getProject().getFile(file));
+          // will return a class file if the file as an equivelant class in the
+          // project's classpath.
+          //return (ICompilationUnit)_project.findElement(Path.fromOSString(file));
         }
       }
     }

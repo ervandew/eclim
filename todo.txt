@@ -18,23 +18,21 @@ Documentation
   - docs on new ant syntax file.
 
 Test on Windows
-  - new browser discovery
+  - new browser discovery.
+  - new compilation unit retrieval logic.
+    - make sure src file not found results in proper error.
 
 Bugs
   - re-visit Ctrl-C hook to perform a clean exit of eclim/eclipse.
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
   - on JavaSearch for implementors, exclude the javadoc matches.
-  - issues working with
-    http://vim.sourceforge.net/scripts/script.php?script_id=69 ?
-    According to http://tompurl.com/index.php/2006/06/27/eclim-vim-eclipse/
-    line 1244: Change from:
-      if !exists(':Project')
-    to
-      if exists(':Project') != 2
-    Waiting for confirmation that this is the only error.
+  - /etc/{init,conf}.d/eclimd
 
 Enhancements
+  - Move shutdown functionality to a different port.  This way if nailgun is
+    hung, the user will still be able to issue a graceful shutdown, hopefully.
+
   - :JavaImpl, :JavaGetSet
     - look into using non-Javadoc comments for the method so that the
       parent's javadoc is auto inserted at generation time.
@@ -115,34 +113,10 @@ JTest support:
 
 Other
   - fix java indent
-    - Indents after a annotation
-        @Override
-          public boolean equals (Object _other)
-    - doesn't handle indentation of enums
+    - doesn't properly handle indentation of enums
         public enum MyEnum
         {
           FIRST,
             SECOND,
             THIRD
         }
-    - Indents inner class declaration differently than outer
-        public class Blah
-          extends Foo
-        {
-          public class Bar
-              extends Baz
-            {
-            }
-        }
-    - reformatting class declaration doesn't perform proper indent of { when
-      put on a new line (and an = call does not fix it).
-        public class Blah extends Foo {
-        }
-        public class Blah
-          extends Foo
-          {
-        }
-    - does not indent { on a new line when used for arrays
-        public static String[] STRINGS =
-        {"one", "two", "three"};
-    - anonymous inner class flaky at times.
