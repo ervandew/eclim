@@ -28,7 +28,6 @@ let s:command_impl =
 let s:command_insert =
   \ '-filter vim -command java_junit_impl -p "<project>" -f "<file>" <base> ' .
   \ '-t "<type>" -s <superType> <methods>'
-let s:command_src_find = '-filter vim -command java_src_find -c <classname>'
 " }}}
 
 " JUnitImpl() {{{
@@ -84,36 +83,6 @@ function! s:AddTestImpl (visual)
 
   call eclim#java#impl#ImplAdd
     \ (command, function("eclim#java#junit#JUnitImplWindow"), a:visual)
-endfunction " }}}
-
-" ResolveQuickfixResults() {{{
-" Invoked after a :make to resolve any junit results in the quickfix entries.
-function! eclim#java#junit#ResolveQuickfixResults ()
-  let entries = getqflist()
-  let newentries = []
-  for entry in entries
-    let filename = bufname(entry.bufnr)
-    if entry.text =~ '] Tests run:'
-      let filename = fnamemodify(filename, ':t')
-      let command = s:command_src_find
-      let command = substitute(command, '<classname>', filename, '')
-      let filename = eclim#ExecuteEclim(command)
-      if filename == ''
-        " file not found.
-        continue
-      endif
-    endif
-
-    let newentry = {
-        \ 'filename': filename,
-        \ 'lnum': entry.lnum,
-        \ 'col': entry.col,
-        \ 'text': entry.text
-      \ }
-    call add(newentries, newentry)
-  endfor
-
-  call setqflist(newentries, 'r')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

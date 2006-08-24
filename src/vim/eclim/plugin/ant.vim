@@ -25,7 +25,8 @@
 " Auto Commands {{{
 augroup eclim_ant_make
   autocmd!
-  autocmd QuickFixCmdPost make call eclim#java#junit#ResolveQuickfixResults()
+  autocmd QuickFixCmdPost make call eclim#java#test#ResolveQuickfixResults('junit')
+  autocmd QuickFixCmdPost make call eclim#java#test#ResolveQuickfixResults('testng')
 augroup END
 " }}}
 

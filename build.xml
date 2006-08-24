@@ -51,15 +51,32 @@
       <classpath refid="classpath"/>
     </javac>
 
-    <!-- build jar files -->
+    <!-- eclim jar file -->
     <jar jarfile="build/dist/eclim.jar">
       <fileset dir="build/classes">
         <include name="**/*.class"/>
-        <exclude name="**/plugin/*/**/*.class"/>
+        <exclude name="org/eclim/misc/**/*.class"/>
+        <exclude name="org/eclim/plugin/*/**/*.class"/>
       </fileset>
       <fileset dir="src/java">
         <include name="**/*"/>
-        <exclude name="**/plugin/*/**/*"/>
+        <exclude name="org/eclim/misc/"/>
+        <exclude name="org/eclim/misc/*/"/>
+        <exclude name="org/eclim/misc/**/*.class"/>
+        <exclude name="org/eclim/plugin/*/"/>
+        <exclude name="org/eclim/plugin/*/**/*"/>
+        <exclude name="**/package.html"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </jar>
+
+    <!-- eclim misc jar file -->
+    <jar jarfile="build/dist/eclim-misc.jar">
+      <fileset dir="build/classes">
+        <include name="org/eclim/misc/**/*.class"/>
+      </fileset>
+      <fileset dir="src/java">
+        <include name="org/eclim/misc/*/**/*"/>
         <exclude name="**/package.html"/>
         <exclude name="**/*.java"/>
       </fileset>
@@ -82,8 +99,8 @@
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
       <fileset dir="." includes="log4j.xml"/>
-      <fileset dir="." includes="lib/**/*"/>
-      <fileset dir="build/dist" includes="eclim.jar"/>
+      <fileset dir="." includes="lib/**/*" excludes="lib/testng*.jar"/>
+      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
 
@@ -101,7 +118,7 @@
 
     <!-- build list of jar files for main plugin's manifest. -->
     <path id="lib.jars">
-      <fileset dir="lib" includes="*"/>
+      <fileset dir="lib" includes="*" excludes="testng*.jar"/>
     </path>
     <property name="lib.jars" refid="lib.jars"/>
     <propertyregex property="lib.jars" override="true"

@@ -32,6 +32,8 @@ if !exists('g:EclimAntCompilerAdditionalErrorFormat')
 endif
 
 CompilerSet makeprg=ant\ -find\ build.xml\ $*
+
+" second to last entry is for build file errors.
 exec 'CompilerSet errorformat=' .
   \ '\%-G%.%#[javac]\ %.%#:\ warning:\ unmappable\ character\ %.%#,' .
   \ '\%A%.%#[javac]\ %f:%l:\ %m,' .
@@ -53,7 +55,9 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#[cactus]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
+  \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
+  \ '\%A%f:%l:\ %m,' .
   \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker
