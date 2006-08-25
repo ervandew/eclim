@@ -226,9 +226,11 @@ function! eclim#Settings ()
   setlocal filetype=jproperties
   setlocal noreadonly
   setlocal modifiable
+  setlocal foldmethod=marker
+  setlocal foldmarker={,}
 
   augroup eclim_settings
-    autocmd!
+    autocmd! BufWriteCmd <buffer>
     autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
   augroup END
 endfunction " }}}
