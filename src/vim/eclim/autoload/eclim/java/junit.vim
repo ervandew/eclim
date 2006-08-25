@@ -80,6 +80,13 @@ function! eclim#java#junit#JUnitResult (test)
   endif
 
   let found = globpath(path, file)
+
+  " try text version if xml not found.
+  if found == ""
+    let file = fnamemodify(file, ':r') . '.txt'
+    let found = globpath(path, file)
+  endif
+
   if found != ""
     let filename = expand('%:p')
     exec "botright split " . found
@@ -92,7 +99,7 @@ function! eclim#java#junit#JUnitResult (test)
 
     return
   endif
-  call eclim#util#Echo("Test result file not found for: " . file)
+  call eclim#util#Echo("Test result file not found for: " . fnamemodify(file, ':r'))
 endfunction " }}}
 
 " JUnitImpl() {{{
