@@ -564,7 +564,7 @@ function! eclim#util#TempWindowCommand (command, name)
 
   let b:filename = filename
   augroup temp_window
-    autocmd!
+    autocmd! BufUnload <buffer>
     autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
   augroup END
 endfunction " }}}
