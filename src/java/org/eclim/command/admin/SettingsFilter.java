@@ -26,9 +26,10 @@ import org.apache.commons.beanutils.BeanComparator;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 import org.eclim.preference.Option;
 import org.eclim.preference.OptionInstance;
@@ -42,6 +43,7 @@ import org.eclim.preference.OptionInstance;
 public class SettingsFilter
   implements OutputFilter
 {
+  private static final String COMMENT = "# ";
   private static ComparatorChain OPTION_COMPARATOR = new ComparatorChain();
   static{
     OPTION_COMPARATOR.addComparator(new PathComparator());
@@ -73,18 +75,39 @@ public class SettingsFilter
     // sort the list
     Collections.sort(_options, OPTION_COMPARATOR);
     String lastPath = ((Option)_options.get(0)).getPath();
-    buffer.append("# ").append(lastPath);
+    buffer.append(comment(lastPath, StringUtils.EMPTY)).append(" {");
     for(Iterator ii = _options.iterator(); ii.hasNext();){
       OptionInstance option = (OptionInstance)ii.next();
       if(!option.getPath().equals(lastPath)){
         lastPath = option.getPath();
-        buffer.append("\n\n# ").append(lastPath);
+        buffer.append("\n# }\n\n")
+          .append(comment(lastPath, StringUtils.EMPTY))
+          .append(" {");
       }
 
-      buffer.append("\n\t# ").append(option.getDescription()).append("\n\t");
+      buffer.append('\n')
+        .append(comment(option.getDescription(), "\t"))
+        .append("\n\t");
       buffer.append(option.getName()).append('=').append(option.getValue());
     }
+    buffer.append("\n# }");
     return buffer.toString();
+  }
+
+  /**
+   * Generate a comment string using the supplied text and indentation.
+   *
+   * @param text The text.
+   * @param indent The indentation.
+   * @return The comment.
+   */
+  private String comment (String text, String indent)
+  {
+    return new StringBuffer()
+      .append(indent)
+      .append(COMMENT)
+      .append(text.replaceAll("\n", "\n" + indent + COMMENT))
+      .toString();
   }
 
   /**
