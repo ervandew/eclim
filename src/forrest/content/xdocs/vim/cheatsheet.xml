@@ -256,6 +256,18 @@
         Similar to <strong>:JavaImpl</strong>, but creates test methods.
       </li>
       <li>
+        <a href="java/junit.html#JUnitExecute">
+          <strong>:JUnitExecute</strong>
+        </a> - [testcase]
+        Allows you to execute test cases in your favorite build tool.
+      </li>
+      <li>
+        <a href="java/junit.html#JUnitResult">
+          <strong>:JUnitResult</strong>
+        </a> - [testcase]
+        Allows you to view the results of a test case.
+      </li>
+      <li>
         <a href="java/import.html#JavaImport"><strong>:JavaImport</strong></a> -
         Import the class under the cursor.
       </li>

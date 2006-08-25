@@ -330,7 +330,7 @@
 
       <action dev="ervandew" type="update" context="Java">
         Added camel case searching support:<br/>
-        :<a href="vim/java/search.html">JavaSearch</a> NPE
+        :<a href="vim/java/search.html"><strong>JavaSearch</strong></a> NPE
       </action>
 
       <action dev="ervandew" type="update" context="Java">
@@ -352,6 +352,16 @@
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/testng.html">TestNG support</a> to ant
         compiler's error format.
+      </action>
+
+      <action dev="ervandew" type="add" context="Java">
+        Added
+        <a href="vim/java/junit.html#JUnitExecute">
+          <strong>:JUnitExecute</strong>
+        </a> and
+        <a href="vim/java/junit.html#JUnitResult">
+          <strong>:JUnitResult</strong>
+        </a>.
       </action>
 
       <action dev="ervandew" type="add" context="Xml">
@@ -881,11 +891,13 @@
         <a href="vim/xml/validate.html">Xml validation</a>.
       </action>
     </release>
+
     <release version="1.0.0" date="Oct 16, 2005">
       <action dev="ervandew" type="add" context="Eclim">
         Initial release.
       </action>
     </release>
+
   </changes>
 
 </status>
