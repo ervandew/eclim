@@ -4,9 +4,6 @@
 -->
 <project name="test" default="test" basedir="../..">
 
-  <taskdef name="testng" classpathref="classpath"
-      classname="org.testng.TestNGAntTask"/>
-
   <property name="eclim.home"
       value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
 
@@ -49,7 +46,7 @@
     <javac destdir="build/test/classes" debug="on" optimize="false"
         target="${test.javac.target}" source="${test.javac.target}"
         deprecation="${deprecation}">
-      <src path="src/test/testng"/>
+      <src path="src/test/junit"/>
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -58,22 +55,28 @@
     </javac>
 
     <copy todir="build/test/classes" includeEmptyDirs="false">
-      <fileset dir="src/test/testng">
+      <fileset dir="src/test/junit">
         <include name="**/*"/>
         <exclude name="**/*.java"/>
       </fileset>
     </copy>
 
-    <testng outputdir="build/test/results"
-        listener="org.eclim.misc.testng.TestNgListener">
+    <taskdef name="junit" classpathref="classpath"
+        classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+
+    <junit printsummary="yes">
       <classpath>
         <path refid="classpath"/>
         <pathelement path="build/classes"/>
         <pathelement path="build/test/classes"/>
       </classpath>
-      <classfileset dir="build" includes="**/*Test.class"/>
+      <formatter type="xml"/>
+      <batchtest fork="yes" todir="build/test/results">
+        <fileset dir="build/test/classes" includes="**/*Test.class"/>
+      </batchtest>
       <sysproperty key="eclim.home" value="${eclim.home}"/>
-    </testng>
+      <sysproperty key="eclim.version" value="${eclim.version}"/>
+    </junit>
   </target>
 
 </project>

@@ -99,7 +99,7 @@
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="." includes="NOTICE"/>
       <fileset dir="." includes="log4j.xml"/>
-      <fileset dir="." includes="lib/**/*" excludes="lib/testng*.jar"/>
+      <fileset dir="." includes="lib/**/*" excludes="lib/junit*.jar,lib/testng*.jar"/>
       <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
@@ -118,7 +118,7 @@
 
     <!-- build list of jar files for main plugin's manifest. -->
     <path id="lib.jars">
-      <fileset dir="lib" includes="*" excludes="testng*.jar"/>
+      <fileset dir="lib" includes="*" excludes="junit*.jar,testng*.jar"/>
     </path>
     <property name="lib.jars" refid="lib.jars"/>
     <propertyregex property="lib.jars" override="true"

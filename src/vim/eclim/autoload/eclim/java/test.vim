@@ -28,7 +28,7 @@ let s:command_src_find = '-filter vim -command java_src_find -c <classname>'
 let s:entry_match{'junit'} = '] Tests run:'
 let s:entry_match{'testng'} = 'eclim testng:'
 
-let s:entry_text_replace{'junit'} = ''
+let s:entry_text_replace{'junit'} = '.*[junit] '
 let s:entry_text_with{'junit'} = ''
 
 let s:entry_text_replace{'testng'} = '.*eclim testng: .\{-}:'
