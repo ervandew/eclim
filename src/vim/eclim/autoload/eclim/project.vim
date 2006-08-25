@@ -170,10 +170,12 @@ function! eclim#project#ProjectSettings (project)
   setlocal filetype=jproperties
   setlocal noreadonly
   setlocal modifiable
+  setlocal foldmethod=marker
+  setlocal foldmarker={,}
 
   let b:project = project
   augroup project_settings
-    autocmd!
+    autocmd! BufWriteCmd <buffer>
     autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
   augroup END
 endfunction " }}}
@@ -318,9 +320,15 @@ function! eclim#project#GetProjectSetting (setting)
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<setting>', a:setting, '')
 
-    let result = eclim#ExecuteEclim(command)
+    let result = split(eclim#ExecuteEclim(command), '\n')
+    call filter(result, 'v:val !~ "^\\s*#"')
 
-    return substitute(result, '.\{-}=\(.*\)', '\1', '')
+    if len(result) == 0
+      call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
+      return ""
+    endif
+
+    return substitute(result[0], '.\{-}=\(.*\)', '\1', '')
   endif
   return ""
 endfunction " }}}
