@@ -33,10 +33,6 @@
           </li>
         </ul>
       </action>
-      <action context="junit" dev="ervandew">
-        Create junit test harness for starting eclimd, running tests, and then
-        stopping eclimd.
-      </action>
     </actions>
 
     <actions priority="medium">
