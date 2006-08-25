@@ -450,7 +450,7 @@ endfunction " }}}
 
 " SetRoot(path) {{{
 function eclim#tree#SetRoot (path)
-  let path = s:NormalizeDirs([a:path])[0]
+  let path = s:NormalizeDirs([fnamemodify(a:path, ':p')])[0]
   if !isdirectory(path)
     echo 'Directory does not exist or may have been deleted.'
     return
