@@ -64,6 +64,7 @@
     <taskdef name="junit" classpathref="classpath"
         classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
+    <property name="junit.include" value="**/*Test"/>
     <junit printsummary="yes">
       <classpath>
         <path refid="classpath"/>
@@ -72,7 +73,7 @@
       </classpath>
       <formatter type="xml"/>
       <batchtest fork="yes" todir="build/test/results">
-        <fileset dir="build/test/classes" includes="**/*Test.class"/>
+        <fileset dir="build/test/classes" includes="${junit.include}.class"/>
       </batchtest>
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
