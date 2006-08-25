@@ -62,6 +62,9 @@
         JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
         JDT org.eclim.java.validation.ignore.warnings false (true|false)
         JDT/Javadoc org.eclim.java.doc.version \$Revision\$
+        JDT/JUnit org.eclim.java.junit.command
+        JDT/JUnit org.eclim.java.junit.output_dir
+        JDT/JUnit org.eclim.java.junit.src_dir
       </value>
     </constructor-arg>
   </bean>
