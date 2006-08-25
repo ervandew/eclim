@@ -31,6 +31,9 @@ import static org.junit.Assert.*;
  */
 public class PingCommandTest
 {
+  /**
+   * Test the command.
+   */
   @Test
   public void execute ()
   {
