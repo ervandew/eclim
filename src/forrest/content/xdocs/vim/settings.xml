@@ -98,41 +98,29 @@
     <section id="eclim_settings">
       <title>Eclim global / project settings</title>
       <p>
-        The following is a list of global / project settings available.
+        The following is a list of the common global / project settings
+        available.
       </p>
       <ul>
         <li>
+          <anchor id="org.eclim.user.name"/>
           <strong>org.eclim.user.name</strong><br/>
           Should be set to your name. Used by various commands that add contact or
           author information to a file.
         </li>
         <li>
+          <anchor id="org.eclim.user.email"/>
           <strong>org.eclim.user.email</strong><br/>
           Should be set to the email address where you can be contacted.  Used by
           various commands that add contact or author information to a file.
         </li>
         <li>
+          <anchor id="org.eclim.project.version"/>
           <strong>org.eclim.project.version</strong><br/>
           Should be set to the version number of your project.  This is used by
           various commands that add version info to a file or utilize the
           version number in some other manner.
           <br/>Defaults to "1.0".
-        </li>
-        <li>
-          <strong>org.eclipse.jdt.core.compiler.source</strong><br/>
-          Determines the target java vm version (1.2, 1.3, 1.4, 1.5).  This
-          setting will be used by eclim when generating any code that may
-          optionally contain features not present in all jvm versions.
-        </li>
-        <li>
-          <strong>org.eclim.java.logging.impl</strong><br/>
-          When utilizing the <a href="java/logging.html">java logging</a>
-          feature, this setting determines which logging implementation to use.
-          <br/>
-          Possible values include "commons-logging", "slf4j", "log4j", and
-          "jdk".<br/>
-          Defaults to "commons-logging" as both the commons-logging impl and the
-          slf4j replacement can be used.
         </li>
       </ul>
     </section>

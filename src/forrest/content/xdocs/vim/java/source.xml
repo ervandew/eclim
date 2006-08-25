@@ -54,9 +54,14 @@
     </p>
     <ul>
       <li>
+        <anchor id="org.eclipse.jdt.core.compiler.source"/>
+        <strong>org.eclipse.jdt.core.compiler.source</strong><br/>
+        Determines the target java vm version (1.2, 1.3, 1.4, 1.5).
+      </li>
+      <li>
+        <anchor id="org.eclim.java.validation.ignore.warnings"/>
         <strong>org.eclim.java.validation.ignore.warnings</strong><br/>
-        Used to determine if warnings are suppressed.  For more information
-        consult the <a href="../settings.html">settings page</a>.
+        Determines if warnings are suppressed.
       </li>
     </ul>
   </body>
