@@ -112,6 +112,16 @@ function! eclim#java#util#GetClassname (...)
   return expand("%:t:r")
 endfunction " }}}
 
+" GetFullyQualifiedClassname(...) {{{
+" Gets the fully qualified classname of the current file.
+" Optional file argument may be supplied.
+function! eclim#java#util#GetFullyQualifiedClassname(...)
+  if a:0 > 0
+    return eclim#java#util#GetPackage(a:1) . '.' . eclim#java#util#GetClassname(a:1)
+  endif
+  return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
+endfunction " }}}
+
 " GetFilename() {{{
 " Gets the src dir relative file name.
 function! eclim#java#util#GetFilename ()
