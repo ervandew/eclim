@@ -30,8 +30,8 @@ endif
 
 if g:EclimXmlValidate
   augroup eclim_xml
-    autocmd!
-    autocmd BufWritePost *.xml call eclim#xml#Validate('', 1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#xml#Validate('', 1)
   augroup END
 endif
 

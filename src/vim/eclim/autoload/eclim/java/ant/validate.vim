@@ -36,7 +36,7 @@ function! eclim#java#ant#validate#Validate ()
 
   " ensure xml validate is OFF.
   augroup eclim_xml
-    autocmd!
+    autocmd! BufWritePost <buffer>
   augroup END
 
   let project = eclim#project#GetCurrentProjectName()

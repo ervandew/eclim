@@ -27,7 +27,7 @@ runtime ftplugin/xml.vim
 
 " turn off xml validation
 augroup eclim_xml
-  autocmd!
+  autocmd! BufWritePost <buffer>
 augroup END
 
 autocmd BufWritePost <buffer> call eclim#java#ivy#UpdateClasspath()

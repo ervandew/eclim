@@ -29,6 +29,7 @@ endif
 " }}}
 
 if g:EclimAntValidate
+  autocmd! BufWritePost <buffer>
   autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate()
 endif
 
