@@ -43,7 +43,7 @@ function! eclim#common#DiffLastSaved ()
     let diffnum = winnr()
 
     augroup diff_saved
-      autocmd!
+      autocmd! BufUnload <buffer>
       autocmd BufUnload <buffer> :diffoff!
     augroup END
 
