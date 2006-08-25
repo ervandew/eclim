@@ -91,19 +91,6 @@ Enhancements
       </blah>
   - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
-JTest support:
-  - settings
-    dict {
-      name
-      src dir
-      output dir
-      command
-    }
-
-  - {'name': 'junit', 'src_dir': , 'output_dir': , 'command': }
-  - {'name': 'cactus', 'src_dir': , 'output_dir': , 'command': }
-  - {'name': 'testng', 'src_dir': , 'output_dir': , 'command': }
-
 Other
   - fix java indent
     - doesn't properly handle indentation of enums

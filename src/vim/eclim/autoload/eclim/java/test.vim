@@ -69,4 +69,44 @@ function! eclim#java#test#ResolveQuickfixResults (framework)
   call setqflist(newentries, 'r')
 endfunction " }}}
 
+" GetTestSrcDir(type) {{{
+" Where type is 'junit', etc.
+function eclim#java#test#GetTestSrcDir (type)
+  let path = eclim#project#GetProjectSetting("org.eclim.java." . a:type . ".src_dir")
+  let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
+  let path = path !~ '/$' ? path . '/' : path
+  return path
+endfunction " }}}
+
+" CommandCompleteTest(type, argLead, cmdLine, cursorPos) {{{
+" Custom command completion for test cases.
+function eclim#java#test#CommandCompleteTest (type, argLead, cmdLine, cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+
+  let path = eclim#java#test#GetTestSrcDir(a:type)
+  if path == '' || path == '/'
+    call eclim#util#EchoWarning(
+      \ "Source directory setting for '" . a:type . "' not set. " .
+      \ "Use :Settings or :ProjectSettings to set it.")
+    return []
+  endif
+
+  let partial = fnamemodify(argLead, ':t')
+  let argLead = fnamemodify(argLead, ':h')
+  let argLead = argLead != '' ? argLead . '/' : argLead
+  let results = split(globpath(path . argLead, '*'), '\n')
+
+  call filter(results, 'v:val =~ argLead . partial')
+  call filter(results, '(isdirectory(v:val) && v:val !~ "CVS") || v:val =~ "\\.java$"')
+  call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
+  call map(results, 'substitute(v:val, "\\(" . path . "\\|\\.java$\\)", "", "g")')
+  call map(results, 'substitute(v:val, "\\\\", "/", "g")')
+
+  " filter out invalid package / class names.
+  call filter(results, 'v:val =~ "^[[:alnum:]_/]\\+$"')
+
+  return results
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

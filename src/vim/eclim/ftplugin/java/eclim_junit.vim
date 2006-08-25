@@ -23,6 +23,14 @@
 " }}}
 
 " Command Declarations {{{
+if !exists(":JUnitExecute")
+  command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteTest
+    \ JUnitExecute :call eclim#java#junit#JUnitExecute('<args>')
+endif
+if !exists(":JUnitResult")
+  command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteResult
+    \ JUnitResult :call eclim#java#junit#JUnitResult('<args>')
+endif
 if !exists(":JUnitImpl")
   command -buffer JUnitImpl :call eclim#java#junit#JUnitImpl()
 endif

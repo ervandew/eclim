@@ -30,6 +30,70 @@ let s:command_insert =
   \ '-t "<type>" -s <superType> <methods>'
 " }}}
 
+" JUnitExecute(test) {{{
+" Execute the supplied test, or if none supplied, the current test.
+function! eclim#java#junit#JUnitExecute (test)
+  let test = a:test
+  if test == ''
+    let test = substitute(eclim#java#util#GetFullyQualifiedClassname(), '\.', '/', 'g')
+  endif
+
+  let command = eclim#project#GetProjectSetting("org.eclim.java.junit.command")
+  if command == ''
+    call eclim#util#EchoWarning(
+      \ "Command setting for 'junit' not set. " .
+      \ "Use :Settings or :ProjectSettings to set it.")
+    return
+  endif
+
+  let command = substitute(command, '<testcase>', test)
+  exec command
+endfunction " }}}
+
+" JUnitResult(test) {{{
+" Argument test can be one of the following:
+"   Empty string: Use the current file to determine the test result file.
+"   Class name of a test: Locate the results for class (ex. 'TestMe').
+"   The results dir relative results file name: TEST-org.foo.TestMe.xml
+function! eclim#java#junit#JUnitResult (test)
+  let path = s:GetResultsDir()
+  if path == '' || path == '/'
+    call eclim#util#EchoWarning(
+      \ "Output directory setting for 'junit' not set. " .
+      \ "Use :Settings or :ProjectSettings to set it.")
+    return
+  endif
+
+  if a:test != ''
+    let file = a:test
+    if file !~ '^TEST-'
+      let file = '*' . file
+    endif
+  else
+    let file = substitute(eclim#java#util#GetFullyQualifiedClassname(), '\.', '/', 'g')
+  endif
+
+  if file !~ '^TEST-'
+    let file = substitute(file, '\/', '.', 'g')
+    let file = 'TEST-' . file . '.xml'
+  endif
+
+  let found = globpath(path, file)
+  if found != ""
+    let filename = expand('%:p')
+    exec "botright split " . found
+
+    let b:filename = filename
+    augroup temp_window
+      autocmd! BufUnload <buffer>
+      autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
+    augroup END
+
+    return
+  endif
+  call eclim#util#Echo("Test result file not found for: " . file)
+endfunction " }}}
+
 " JUnitImpl() {{{
 " Opens a window that allows the user to choose methods to implement tests
 " for.
@@ -83,6 +147,41 @@ function! s:AddTestImpl (visual)
 
   call eclim#java#impl#ImplAdd
     \ (command, function("eclim#java#junit#JUnitImplWindow"), a:visual)
+endfunction " }}}
+
+" GetResultsDir() {{{
+function s:GetResultsDir ()
+  let path = eclim#project#GetProjectSetting("org.eclim.java.junit.output_dir")
+  let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
+  let path = path !~ '/$' ? path . '/' : path
+  return path
+endfunction " }}}
+
+" CommandCompleteTest(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for junit test cases.
+function eclim#java#junit#CommandCompleteTest (argLead, cmdLine, cursorPos)
+  return eclim#java#test#CommandCompleteTest('junit', a:argLead, a:cmdLine, a:cursorPos)
+endfunction " }}}
+
+" CommandCompleteResult(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for test case results.
+function! eclim#java#junit#CommandCompleteResult (argLead, cmdLine, cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+
+  let path = s:GetResultsDir()
+  if path == '' || path == '/'
+    call eclim#util#EchoWarning(
+      \ "Output directory setting for 'junit' not set. " .
+      \ "Use :Settings or :ProjectSettings to set it.")
+    return []
+  endif
+
+  let results = split(globpath(path, '*'), '\n')
+  call map(results, 'fnamemodify(v:val, ":r:e")')
+  call filter(results, 'v:val =~ "^' . argLead . '"')
+
+  return results
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
