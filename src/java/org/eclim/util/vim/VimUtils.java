@@ -15,17 +15,6 @@
  */
 package org.eclim.util.vim;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import org.apache.commons.io.IOUtils;
-
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.VFS;
-
-import org.apache.log4j.Logger;
-
 import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
 
@@ -37,8 +26,6 @@ import org.eclim.util.file.Position;
  */
 public class VimUtils
 {
-  private static final Logger logger = Logger.getLogger(VimUtils.class);
-
   public static final String DEFAULT_LINE_COL = "1 col 1";
 
   /**

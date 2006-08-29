@@ -17,11 +17,6 @@ package org.eclim.command.filter;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
-
-import org.eclim.util.file.Position;
-
-import org.eclim.util.vim.VimUtils;
 
 /**
  * Filter for Position.

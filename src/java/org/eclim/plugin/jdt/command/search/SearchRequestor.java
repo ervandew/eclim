@@ -25,8 +25,6 @@ import org.eclim.plugin.jdt.util.IJavaElementComparator;
 
 import org.eclipse.core.runtime.CoreException;
 
-import org.eclipse.jdt.core.IJavaElement;
-
 import org.eclipse.jdt.core.search.SearchMatch;
 
 /**

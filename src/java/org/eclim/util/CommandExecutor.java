@@ -17,8 +17,8 @@ package org.eclim.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Runs an external process.
@@ -93,7 +93,7 @@ public class CommandExecutor
       Thread outThread = new Thread(){
         public void run (){
           try{
-            copy(process.getInputStream(), out);
+            IOUtils.copy(process.getInputStream(), out);
           }catch(IOException ioe){
             ioe.printStackTrace();
           }
@@ -104,7 +104,7 @@ public class CommandExecutor
       Thread errThread = new Thread(){
         public void run (){
           try{
-            copy(process.getErrorStream(), err);
+            IOUtils.copy(process.getErrorStream(), err);
           }catch(IOException ioe){
             ioe.printStackTrace();
           }
@@ -122,22 +122,6 @@ public class CommandExecutor
       returnCode = 12;
       error = e.getMessage();
       e.printStackTrace();
-    }
-  }
-
-  /**
-   * Copy the contents of the InputStream to the OutputStream.
-   *
-   * @param in The InputStream to read from.
-   * @param out The OutputStream to write to.
-   */
-  private void copy (InputStream in, OutputStream out)
-    throws IOException
-  {
-    byte[] buffer = new byte[1024 * 4];
-    int n = 0;
-    while (-1 != (n = in.read(buffer))) {
-      out.write(buffer, 0, n);
     }
   }
 

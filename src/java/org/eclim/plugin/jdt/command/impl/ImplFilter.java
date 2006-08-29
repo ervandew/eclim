@@ -23,11 +23,6 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
-
-import org.eclim.util.file.Position;
-
-import org.eclim.util.vim.VimUtils;
 
 /**
  * Output filter for impl results.

@@ -113,7 +113,7 @@ public class EclimApplication
   protected void saveWorkspace ()
     throws Exception
   {
-    logger.info("Saving workspace.");
+    logger.info("Saving workspace...");
 
     final IProgressMonitor monitor = new NullProgressMonitor(){
       public void done () {

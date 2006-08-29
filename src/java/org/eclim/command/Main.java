@@ -17,6 +17,8 @@ package org.eclim.command;
 
 import org.apache.commons.cli.ParseException;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.Services;
 
 import org.eclipse.swt.widgets.EclimDisplay;
@@ -29,8 +31,6 @@ import org.eclipse.swt.widgets.EclimDisplay;
  */
 public class Main
 {
-  private static final String PORT_PROPERTY = "eclim.server.port";
-
   /**
    * Main method for executing the client.
    *
@@ -49,22 +49,16 @@ public class Main
         commandLine = options.parse(_args);
       }catch(ParseException e){
         System.out.println(e.getMessage());
-        //options.usageSummary();
         System.exit(1);
       }
 
-      if(commandLine.hasOption(options.HELP_OPTION)){
-        options.usage(commandLine.getValue(options.HELP_OPTION));
+      if(commandLine.hasOption(Options.HELP_OPTION)){
+        options.usage(commandLine.getValue(Options.HELP_OPTION));
         System.exit(0);
       }
 
-      if(commandLine.hasOption(options.PORT_OPTION)){
-        System.setProperty(
-          PORT_PROPERTY, commandLine.getValue(options.PORT_OPTION));
-      }
-
-      String commandName = commandLine.getValue(options.COMMAND_OPTION);
-      if(commandName == null || commandName.trim().equals("")){
+      String commandName = commandLine.getValue(Options.COMMAND_OPTION);
+      if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
         throw new IllegalArgumentException(
             Services.getMessage("command.required"));
       }

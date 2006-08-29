@@ -43,6 +43,7 @@ import org.eclim.preference.OptionInstance;
 public class SettingsFilter
   implements OutputFilter
 {
+  private static final String GENERAL = "General";
   private static final String COMMENT = "# ";
   private static ComparatorChain OPTION_COMPARATOR = new ComparatorChain();
   static{
@@ -59,7 +60,7 @@ public class SettingsFilter
     if(list.size() > 0){
       return printOptions(list);
     }
-    return "";
+    return StringUtils.EMPTY;
   }
 
   /**
@@ -130,14 +131,14 @@ public class SettingsFilter
         return 0;
       }
 
-      if (option1.getPath().startsWith("General") &&
-          !option2.getPath().startsWith("General"))
+      if (option1.getPath().startsWith(GENERAL) &&
+          !option2.getPath().startsWith(GENERAL))
       {
         return -1;
       }
 
-      if (option2.getPath().startsWith("General") &&
-          !option1.getPath().startsWith("General"))
+      if (option2.getPath().startsWith(GENERAL) &&
+          !option1.getPath().startsWith(GENERAL))
       {
         return 1;
       }

@@ -31,7 +31,6 @@ public abstract class AbstractCommand
   private static final String VIM_FILTER = "vim";
 
   private Map filters;
-  private Preferences preferences;
 
   /**
    * {@inheritDoc}
@@ -59,6 +58,9 @@ public abstract class AbstractCommand
   /**
    * If a filter name was provided in the CommandLine, then an attempt will be
    * made to locate the filter and run the result through it.
+   * <p/>
+   * When no filter name is supplied in the command line, "vim" will be used as
+   * the default.
    *
    * @param _result The pre-filtered result.
    * @return The post-filtered result.

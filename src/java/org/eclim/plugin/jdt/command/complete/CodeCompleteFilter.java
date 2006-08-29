@@ -24,8 +24,6 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 import org.eclim.command.Options;
 
-import org.eclim.util.vim.VimUtils;
-
 import org.eclipse.jdt.core.CompletionProposal;
 
 /**

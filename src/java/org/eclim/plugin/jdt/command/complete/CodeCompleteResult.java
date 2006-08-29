@@ -17,8 +17,6 @@ package org.eclim.plugin.jdt.command.complete;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.eclim.util.file.Position;
-
 /**
  * Represents a proposed code completion result.
  *

@@ -38,7 +38,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Class responsible for retrieving service implementations.
+ * Class responsible for retrieving service implementations and provides access
+ * to localized messages.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
@@ -119,7 +120,7 @@ public class Services
    * Retrieves a message for the supplied message key.
    *
    * @param _key The message key.
-   * @param _object Optional message arg used to format the message.
+   * @param _object Optional message arg used when formatting the message.
    *
    * @return The message.
    */
@@ -132,7 +133,7 @@ public class Services
    * Retrieves and optionally formats a message for the supplied message key.
    *
    * @param _key The message key.
-   * @param _args Optional message args used to format the message.
+   * @param _args Optional message args used when formatting the message.
    *
    * @return The formatted message.
    */

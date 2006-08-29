@@ -16,11 +16,9 @@
 package org.eclim.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
 
@@ -31,9 +29,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 
-import org.apache.commons.collections.CollectionUtils;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
@@ -70,7 +65,6 @@ public class Options
   public static final String OFFSET_OPTION = "o";
   public static final String PATH_OPTION = "p";
   public static final String PATTERN_OPTION = "p";
-  public static final String PORT_OPTION = "port";
   public static final String PROJECT_OPTION = "p";
   public static final String PROPERTIES_OPTION = "r";
   public static final String SCHEMA_OPTION = "s";
@@ -98,10 +92,6 @@ public class Options
         .withLongOpt(HELP)
         .withDescription(Services.getMessage("help.description"))
         .create(HELP_OPTION));
-    coreOptions.addOption(OptionBuilder.withArgName(PORT_OPTION)
-        .hasArg()
-        .withDescription(Services.getMessage("port.description"))
-        .create(PORT_OPTION));
     coreOptions.addOption(OptionBuilder.withArgName(COMMAND_OPTION)
         .hasArg()
         .withDescription(Services.getMessage("command.description"))

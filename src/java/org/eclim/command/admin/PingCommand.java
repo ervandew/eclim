@@ -31,13 +31,19 @@ import org.eclim.plugin.PluginResources;
 public class PingCommand
   extends AbstractCommand
 {
+  private String version;
+
   /**
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
   {
-    PluginResources resources = Services.getPluginResources();
-    return resources.getProperty("pluginName") + " " +
-      resources.getProperty("pluginVersion");
+    if(version == null){
+      PluginResources resources = Services.getPluginResources();
+      version = resources.getProperty("pluginName") + ' ' +
+        resources.getProperty("pluginVersion");
+    }
+
+    return version;
   }
 }

@@ -28,8 +28,6 @@ import javax.naming.CompositeName;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
@@ -42,8 +40,6 @@ import org.eclipse.core.resources.IProject;
  */
 public class FileUtils
 {
-  private static final Logger logger = Logger.getLogger(FileUtils.class);
-
   public static final String JAR_PREFIX = "jar://";
   public static final String ZIP_PREFIX = "zip://";
   public static final String JAR_EXT = ".jar";

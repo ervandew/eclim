@@ -18,8 +18,6 @@ package org.eclim.plugin.jdt.command.delegate;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
@@ -53,8 +51,6 @@ import org.eclipse.jdt.core.Signature;
 public class DelegateCommand
   extends ImplCommand
 {
-  private static final Logger logger = Logger.getLogger(DelegateCommand.class);
-
   private static final String TEMPLATE = "method.vm";
 
   private IField field;

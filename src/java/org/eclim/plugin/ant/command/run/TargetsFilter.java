@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 /**
  * Filter for command to get ant targets.

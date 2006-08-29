@@ -16,12 +16,10 @@
 package org.eclim.plugin.jdt.command.classpath;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclipse.core.runtime.IPath;
 

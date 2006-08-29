@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 /**
  * Output filter for import results.

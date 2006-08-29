@@ -18,7 +18,6 @@ package org.eclim.command.filter;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 /**
  * Filter for generating vim output for an array of Error.

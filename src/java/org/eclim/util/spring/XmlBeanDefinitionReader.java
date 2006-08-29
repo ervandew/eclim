@@ -15,13 +15,7 @@
  */
 package org.eclim.util.spring;
 
-import org.w3c.dom.Document;
-
-import org.springframework.beans.BeansException;
-
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-
-import org.springframework.core.io.Resource;
 
 /**
  * XmlBeanDefinitionReader extension that allows the classloader to be supplied

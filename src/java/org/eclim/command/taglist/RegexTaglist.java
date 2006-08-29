@@ -72,7 +72,6 @@ public class RegexTaglist
   public void addPattern (String _kind, String _pattern, String _replace)
     throws Exception
   {
-    Pattern pattern = Pattern.compile(_pattern);
     addPattern(_kind, _pattern, _replace);
   }
 

@@ -17,7 +17,7 @@ package org.eclim.eclipse;
 
 /**
  * Dummy workbench advisor that allows the workbench to be created, but never
- * shown..
+ * shown.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$

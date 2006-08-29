@@ -79,7 +79,7 @@ public class CommandLine
   {
     String value = (String)options.get(_name);
     value = CODEC.decode(value);
-    // '*' isn't decode so decode manually
+    // '*' isn't decoded so decode manually
     value = StringUtils.replace(value, "%2A", "*");
     return value;
   }

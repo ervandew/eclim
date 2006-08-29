@@ -27,8 +27,6 @@ import java.util.List;
 
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.SAXParser;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -191,7 +189,7 @@ public class XmlUtils
    * FIXME: When start using this again, need to test relative xml entities
    * (test with ant/cvs.xml).
    */
-  private static Error[] validate (String _filename, SAXParser _parser)
+  /*private static Error[] validate (String _filename, SAXParser _parser)
     throws Exception
   {
     ErrorAggregator handler = new ErrorAggregator();
@@ -203,7 +201,7 @@ public class XmlUtils
     }
 
     return handler.getErrors();
-  }
+  }*/
 
   /**
    * Gets the value of a named child element.

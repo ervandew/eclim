@@ -15,6 +15,8 @@
  */
 package org.eclim.util;
 
+import org.eclim.Services;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -94,6 +96,21 @@ public class ProjectUtils
         _project.close(null);
       }
     }catch(Exception ignore){
+    }
+  }
+
+  /**
+   * Assertion that the supplied project exists.
+   *
+   * @param _project The project.
+   */
+  public static void assertExists (IProject _project)
+    throws Exception
+  {
+    if(_project == null || !_project.exists()){
+      throw new IllegalArgumentException(
+          Services.getMessage("project.not.found",
+            _project != null ? _project.getName() : null));
     }
   }
 }

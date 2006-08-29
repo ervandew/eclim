@@ -17,15 +17,12 @@ package org.eclim.util.spring;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
 
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-
-import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 

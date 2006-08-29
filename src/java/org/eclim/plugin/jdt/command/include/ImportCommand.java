@@ -27,8 +27,6 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 import org.eclim.plugin.jdt.command.search.SearchResult;
 
-import org.eclipse.core.runtime.CoreException;
-
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;

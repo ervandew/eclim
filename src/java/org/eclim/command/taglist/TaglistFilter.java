@@ -17,7 +17,6 @@ package org.eclim.command.taglist;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-import org.eclim.command.Options;
 
 /**
  * Filter for tag list results.
