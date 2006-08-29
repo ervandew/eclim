@@ -30,4 +30,5 @@
 	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" path="src/test/junit"/>
+  <classpathentry kind="src" path="src/test/resources/eclim_unit_test_java/src"/>
 </classpath>
