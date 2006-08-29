@@ -42,7 +42,7 @@ public class SettingsCommandTest
   public void execute ()
     throws Exception
   {
-    String result = Eclim.execute(new String[]{"-command", "settings"});
+    String result = Eclim.execute(new String[]{"settings"});
 
     Properties properties = new Properties();
     properties.load(new ByteArrayInputStream(result.getBytes()));

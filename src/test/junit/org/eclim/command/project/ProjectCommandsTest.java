@@ -17,8 +17,6 @@ package org.eclim.command.project;
 
 import java.util.regex.Pattern;
 
-import junit.framework.JUnit4TestAdapter;
-
 import org.eclim.Eclim;
 
 import org.junit.BeforeClass;
@@ -35,39 +33,28 @@ import static org.junit.Assert.*;
 public class ProjectCommandsTest
 {
   private static final String TEST_PROJECT = "eclim_unit_test";
-  private static final Pattern PROJECT_EXISTS_PATTERN =
-    Pattern.compile(TEST_PROJECT + "\\s+-");
   private static final Pattern PROJECT_OPEN_PATTERN =
     Pattern.compile(TEST_PROJECT + "\\s+- open");
-
-  private static String workspace;
-
-  @BeforeClass
-  public static void getWorkspace ()
-  {
-    workspace = Eclim.execute(new String[]{"-command", "workspace_dir"});
-  }
 
   @Test
   public void createProject ()
   {
-    assertNotNull("Workspace not retrieved.", workspace);
-    assertFalse("Project already exists.", projectExists());
+    assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "-command", "project_create", "-f", workspace + "/" + TEST_PROJECT});
+      "project_create", "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT});
     System.out.println(result);
 
-    assertTrue("Project not created.", projectExists());
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
   }
 
   @Test
   public void closeProject ()
   {
-    assertTrue("Project not created.", projectExists());
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "-command", "project_close", "-n", TEST_PROJECT});
+      "project_close", "-n", TEST_PROJECT});
     System.out.println(result);
 
     assertFalse("Project not closed.", projectOpen());
@@ -76,10 +63,10 @@ public class ProjectCommandsTest
   @Test
   public void openProject ()
   {
-    assertTrue("Project not created.", projectExists());
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "-command", "project_open", "-n", TEST_PROJECT});
+      "project_open", "-n", TEST_PROJECT});
     System.out.println(result);
 
     assertTrue("Project not opened.", projectOpen());
@@ -88,25 +75,13 @@ public class ProjectCommandsTest
   @Test
   public void deleteProject ()
   {
-    assertTrue("Project not created.", projectExists());
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "-command", "project_delete", "-n", TEST_PROJECT});
+      "project_delete", "-n", TEST_PROJECT});
     System.out.println(result);
 
-    assertFalse("Project not deleted.", projectExists());
-  }
-
-  /**
-   * Determines if the unit test project already exists.
-   *
-   * @return true if the project exists, false otherwise.
-   */
-  private boolean projectExists ()
-  {
-    String list = Eclim.execute(new String[]{"-command", "project_info"});
-
-    return PROJECT_EXISTS_PATTERN.matcher(list).find();
+    assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT));
   }
 
   /**
@@ -116,7 +91,7 @@ public class ProjectCommandsTest
    */
   private boolean projectOpen ()
   {
-    String list = Eclim.execute(new String[]{"-command", "project_info"});
+    String list = Eclim.execute(new String[]{"project_info"});
 
     return PROJECT_OPEN_PATTERN.matcher(list).find();
   }
@@ -126,6 +101,6 @@ public class ProjectCommandsTest
    */
   public static junit.framework.Test suite()
   {
-    return new JUnit4TestAdapter(ProjectCommandsTest.class);
+    return new junit.framework.JUnit4TestAdapter(ProjectCommandsTest.class);
   }
 }

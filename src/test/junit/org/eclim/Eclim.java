@@ -15,6 +15,14 @@
  */
 package org.eclim;
 
+import java.io.FileInputStream;
+
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.util.CommandExecutor;
 
 /**
@@ -27,9 +35,14 @@ public class Eclim
 {
   private static final String ECLIM =
     System.getProperty("eclim.home") + "/bin/eclim";
+  private static final String COMMAND = "-command";
+
+  private static String workspace;
 
   /**
    * Executes eclim using the supplied arguments.
+   * <p/>
+   * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param _args The arguments to pass to eclim.
    * @return The result of the command execution as a string.
@@ -41,6 +54,8 @@ public class Eclim
 
   /**
    * Executes eclim using the supplied arguments.
+   * <p/>
+   * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param _args The arguments to pass to eclim.
    * @param _timeout Timeout in milliseconds.
@@ -48,9 +63,12 @@ public class Eclim
    */
   public static String execute (String[] _args, long _timeout)
   {
-    String[] args = new String[_args.length + 1];
-    System.arraycopy(_args, 0, args, 1, _args.length);
+    String[] args = new String[_args.length + 2];
+    System.arraycopy(_args, 0, args, 2, _args.length);
     args[0] = ECLIM;
+    args[1] = COMMAND;
+
+    System.out.println("Command: " + StringUtils.join(args, ' '));
 
     CommandExecutor process = null;
     try{
@@ -65,8 +83,8 @@ public class Eclim
     }
 
     if(process.getReturnCode() != 0){
-      System.out.println("ERR: " + process.getErrorMessage());
       System.out.println("OUT: " + process.getResult());
+      System.out.println("ERR: " + process.getErrorMessage());
       throw new RuntimeException("Command failed: " + process.getReturnCode());
     }
 
@@ -74,5 +92,67 @@ public class Eclim
 
     // strip off trailing newline char and return
     return result.substring(0, result.length() - 1);
+  }
+
+  /**
+   * Determines if a project with the supplied name exists.
+   *
+   * @return true if the project exists, false otherwise.
+   */
+  public static boolean projectExists (String _name)
+  {
+    String list = Eclim.execute(new String[]{"project_info"});
+
+    return Pattern.compile(_name + "\\s+-").matcher(list).find();
+  }
+
+  /**
+   * Gets the path to the current workspace.
+   *
+   * @return The workspace path.
+   */
+  public static String getWorkspace ()
+  {
+    if(workspace == null){
+      workspace = execute(new String[]{"workspace_dir"});
+    }
+    return workspace;
+  }
+
+  /**
+   * Constructs a full path for the given project relative file.
+   *
+   * @param _project The name of the project the file belongs to.
+   * @param _file The project relative file path.
+   * @return The absolute path to the file.
+   */
+  public static String resolveFile (String _project, String _file)
+  {
+    return new StringBuffer()
+      .append(getWorkspace()).append('/')
+      .append(_project).append('/')
+      .append(_file)
+      .toString();
+  }
+
+  /**
+   * Reads the project relative file into a string which is then returned.
+   *
+   * @param _project The name of the project the file belongs to.
+   * @param _file The project relative file path.
+   * @return The file contents as a string.
+   */
+  public static String fileToString (String _project, String _file)
+  {
+    String file = resolveFile(_project, _file);
+    FileInputStream fin = null;
+    try{
+      fin = new FileInputStream(file);
+      return IOUtils.toString(fin);
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }finally{
+      IOUtils.closeQuietly(fin);
+    }
   }
 }
