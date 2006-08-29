@@ -85,6 +85,10 @@
     - Sets up the test projects.
     -->
   <target name="test.setup_projects">
+    <delete includeEmptyDirs="true">
+      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*/**/*"/>
+      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*"/>
+    </delete>
     <copy todir="${eclipse.workspace}">
       <fileset dir="src/test/resources" includes="eclim_unit_test*/**/*"/>
     </copy>
@@ -104,8 +108,10 @@
       <arg line="-command project_delete -n eclim_unit_test_java"/>
     </exec>
 
-    <delete dir="${eclipse.workspace}/eclim_unit_test"/>
-    <delete dir="${eclipse.workspace}/eclim_unit_test_java"/>
+    <!--delete includeEmptyDirs="true">
+      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*/**/*"/>
+      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*"/>
+    </delete-->
   </target>
 
 </project>
