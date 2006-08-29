@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
 
+import org.eclim.plugin.jdt.Jdt;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -33,6 +35,8 @@ public class ClasspathVariableCommandsTest
   @Test
   public void createVariable ()
   {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
     assertFalse("Variable already exists.", variableExists());
 
     String result = Eclim.execute(new String[]{
@@ -45,6 +49,8 @@ public class ClasspathVariableCommandsTest
   @Test
   public void deleteVariable ()
   {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
     assertTrue("Variable does not exist.", variableExists());
 
     String result = Eclim.execute(new String[]{

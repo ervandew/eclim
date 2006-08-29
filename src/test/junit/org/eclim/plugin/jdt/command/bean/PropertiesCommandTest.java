@@ -18,7 +18,8 @@ package org.eclim.plugin.jdt.command.bean;
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
-import org.eclim.Jdt;
+
+import org.eclim.plugin.jdt.Jdt;
 
 import org.junit.Test;
 
