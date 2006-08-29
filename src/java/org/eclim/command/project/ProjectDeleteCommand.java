@@ -22,11 +22,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectManager;
 
 import org.eclim.util.ProjectUtils;
-
-import org.eclipse.core.resources.IProject;
 
 /**
  * Command to delete a project.
@@ -45,18 +42,9 @@ public class ProjectDeleteCommand
     try{
       String name = _commandLine.getValue(Options.NAME_OPTION);
 
-      IProject project = ProjectUtils.getProject(name);
-      if(project.exists()){
-        // FIXME: need to get the proper project manager depending on the project
-        // nature (not necessary until we actually have projects with natures
-        // other than java).
-        ProjectManager manager = ProjectManagement.getProjectManager(
-            "org.eclipse.jdt.core.javanature");
-        // FIXME: use the manager to do the delete.
-        project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
-        return Services.getMessage("project.deleted", name);
-      }
-      return Services.getMessage("project.not.found", name);
+      ProjectManagement.delete(ProjectUtils.getProject(name), _commandLine);
+
+      return Services.getMessage("project.deleted", name);
     }catch(Throwable t){
       return t;
     }

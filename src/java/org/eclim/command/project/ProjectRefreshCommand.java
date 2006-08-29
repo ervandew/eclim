@@ -15,12 +15,15 @@
  */
 package org.eclim.command.project;
 
+import org.eclim.Services;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectManager;
+
+import org.eclim.util.ProjectUtils;
 
 /**
  * Command to refresh / synchronize the in memory project with the files on
@@ -38,15 +41,11 @@ public class ProjectRefreshCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String projectName = _commandLine.getValue(Options.NAME_OPTION);
+      String name = _commandLine.getValue(Options.NAME_OPTION);
 
-      // FIXME: need to get the proper project manager depending on the project
-      // nature (not necessary until we actually have projects with natures
-      // other than java).
-      ProjectManager manager = ProjectManagement.getProjectManager(
-          "org.eclipse.jdt.core.javanature");
-      return filter(_commandLine,
-          manager.refresh(projectName, _commandLine));
+      ProjectManagement.refresh(ProjectUtils.getProject(name), _commandLine);
+
+      return Services.getMessage("project.refreshed", name);
     }catch(Throwable t){
       return t;
     }

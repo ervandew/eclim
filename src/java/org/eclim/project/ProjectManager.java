@@ -16,6 +16,9 @@
 package org.eclim.project;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Error;
+
+import org.eclipse.core.resources.IProject;
 
 /**
  * Defines methods for managing a project.
@@ -32,43 +35,37 @@ public interface ProjectManager
    * @param _name The project name.
    * @param _folder The project folder.
    * @param _commandLine The command line for the project create command.
-   *
-   * @return Project creation response.
    */
-  public Object create (String _name, String _folder, CommandLine _commandLine)
+  public void create (String _name, String _folder, CommandLine _commandLine)
     throws Exception;
 
   /**
    * Updates a project.
    *
-   * @param _name The project name.
+   * @param _project The project.
    * @param _commandLine The command line for the project create command.
    *
-   * @return Project update response.
+   * @return Array of Error if any errors encountered during update.
    */
-  public Object update (String _name, CommandLine _commandLine)
+  public Error[] update (IProject _project, CommandLine _commandLine)
     throws Exception;
 
   /**
    * Removes the nature(s) from a project that this manager manages, or deletes
    * the project if no other natures exist for the project.
    *
-   * @param _name The project name.
+   * @param _project The project.
    * @param _commandLine The command line for the project create command.
-   *
-   * @return Project deletion response.
    */
-  public Object delete (String _name, CommandLine _commandLine)
+  public void delete (IProject _project, CommandLine _commandLine)
     throws Exception;
 
   /**
    * Refreshes a project by synchronizing it against the files on disk.
    *
-   * @param _name The project name.
+   * @param _project The project.
    * @param _commandLine The command line for the project create command.
-   *
-   * @return Project refresh response.
    */
-  public Object refresh (String _name, CommandLine _commandLine)
+  public void refresh (IProject _project, CommandLine _commandLine)
     throws Exception;
 }

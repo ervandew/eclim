@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.OutputFilter;
 
 import org.eclim.command.admin.SettingsFilter;
 

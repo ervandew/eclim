@@ -119,24 +119,23 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public Object create (String _name, String _folder, CommandLine _commandLine)
+  public void create (String _name, String _folder, CommandLine _commandLine)
     throws Exception
   {
     String depends = _commandLine.getValue(Options.DEPENDS_OPTION);
     create(_name, _folder, depends);
-    return Services.getMessage("project.created", _name);
   }
 
   /**
    * {@inheritDoc}
    */
-  public Object update (String _name, CommandLine _commandLine)
+  public Error[] update (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
     String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
-    IJavaProject javaProject = JavaUtils.getJavaProject(_name);
+    IJavaProject javaProject = JavaUtils.getJavaProject(_project);
     javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     // project settings update
@@ -172,28 +171,25 @@ public class JavaProjectManager
         return errors;
       }
     }
-    return Services.getMessage("project.updated", _name);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object refresh (String _name, CommandLine _commandLine)
-    throws Exception
-  {
-    IJavaProject javaProject = JavaUtils.getJavaProject(_name);
-    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
-
-    return Services.getMessage("project.refreshed", _name);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object delete (String _name, CommandLine _commandLine)
-    throws Exception
-  {
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void refresh (IProject _project, CommandLine _commandLine)
+    throws Exception
+  {
+    IJavaProject javaProject = JavaUtils.getJavaProject(_project);
+    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void delete (IProject _project, CommandLine _commandLine)
+    throws Exception
+  {
   }
 
 // Project creation methods

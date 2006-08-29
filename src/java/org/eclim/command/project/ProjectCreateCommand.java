@@ -15,9 +15,11 @@
  */
 package org.eclim.command.project;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.apache.log4j.Logger;
 
-import org.apache.commons.io.FilenameUtils;
+import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -56,8 +58,9 @@ public class ProjectCreateCommand
       // other than java).
       ProjectManager manager = ProjectManagement.getProjectManager(
           "org.eclipse.jdt.core.javanature");
-      return filter(_commandLine,
-        manager.create(name, folder, _commandLine));
+      manager.create(name, folder, _commandLine);
+
+      return Services.getMessage("project.created", name);
     }catch(Throwable t){
       return t;
     }
