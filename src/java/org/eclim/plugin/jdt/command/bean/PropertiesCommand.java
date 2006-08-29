@@ -59,7 +59,6 @@ public class PropertiesCommand
 
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
-  private static final String GETTER_SETTER = "getter_setter";
 
   private static final String INT_SIG =
     Signature.createTypeSignature("int", true);
@@ -149,7 +148,8 @@ public class PropertiesCommand
     String propertyType =
       Signature.getSignatureSimpleName(_field.getTypeSignature());
     String methodName = StringUtils.capitalize(_field.getElementName());
-    if(propertyType.equals("boolean")){
+    boolean isBoolean = propertyType.equals("boolean");
+    if(isBoolean){
       methodName = "is" + methodName;
     }else{
       methodName = "get" + methodName;
@@ -162,19 +162,19 @@ public class PropertiesCommand
       args = INT_ARG;
     }
     IMethod method = _type.getMethod(methodName, args);
-    Position position = null;
     if(_context.indexOf(GETTER) != -1 && !method.exists()){
       Map values = new HashMap();
       values.put("propertyType", propertyType);
       values.put("name", methodName);
       values.put("property", _field.getElementName());
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
+      values.put("boolean", isBoolean ? Boolean.TRUE : Boolean.FALSE);
 
-      position = insertMethod(
+      insertMethod(
           _src, _position, _type, method, _sibling, GETTER_TEMPLATE, values);
     }
     if(method.exists()){
-      position = TypeUtils.getPosition(_type, method);
+      TypeUtils.getPosition(_type, method);
     }
 
     return method;
@@ -213,19 +213,20 @@ public class PropertiesCommand
         INT_SIG, Signature.getElementType(_field.getTypeSignature())};
     }
     IMethod method = _type.getMethod(methodName, args);
-    Position position = null;
     if(_context.indexOf(SETTER) != -1 && !method.exists()){
       Map values = new HashMap();
       values.put("name", methodName);
       values.put("property", _field.getElementName());
       values.put("propertyType", propertyType);
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
+      values.put("boolean", propertyType.equals("boolean") ?
+          Boolean.TRUE : Boolean.FALSE);
 
-      position = insertMethod(
+      insertMethod(
           _src, _position, _type, method, _sibling, SETTER_TEMPLATE, values);
     }
     if(method.exists()){
-      position = TypeUtils.getPosition(_type, method);
+      TypeUtils.getPosition(_type, method);
     }
 
     return method;
@@ -318,8 +319,8 @@ public class PropertiesCommand
       if(_fields.size() > 1 && index > 0){
         IField field = (IField)_fields.get(index - 1);
         IMethod method = getBeanMethod(_type, field, true);
-        method = MethodUtils.getMethodAfter(_type, method);
         if(method != null){
+          method = MethodUtils.getMethodAfter(_type, method);
           return method;
         }
       }
@@ -350,34 +351,41 @@ public class PropertiesCommand
   protected IMethod getBeanMethod (IType _type, IField _field, boolean _last)
     throws Exception
   {
+    IMethod result = null;
+
     String nextProperty = StringUtils.capitalize(_field.getElementName());
     // regular getter
     IMethod method = _type.getMethod("get" + nextProperty, null);
     if(method.exists() && !_last){
       return method;
+    }else if(method.exists()){
+      result = method;
     }
 
     // index getter
-    method = !method.exists() ?
-      _type.getMethod("get" + nextProperty, INT_ARG) : method;
+    method = _type.getMethod("get" + nextProperty, INT_ARG);
     if(method.exists() && !_last){
       return method;
+    }else if(method.exists()){
+      result = method;
     }
 
     // regular setter
-    method = !method.exists() ?
-      _type.getMethod("set" + nextProperty,
-          new String[]{_field.getTypeSignature()}) : method;
+    method = _type.getMethod("set" + nextProperty,
+        new String[]{_field.getTypeSignature()});
     if(method.exists() && !_last){
       return method;
+    }else if(method.exists()){
+      result = method;
     }
 
     // index setter
-    method = !method.exists() ?
-      _type.getMethod("set" + nextProperty,
-          new String[]{INT_SIG,
-            Signature.getElementType(_field.getTypeSignature())}) : method;
+    method = _type.getMethod("set" + nextProperty,
+        new String[]{INT_SIG, Signature.getElementType(_field.getTypeSignature())});
+    if(method.exists()){
+      result = method;
+    }
 
-    return method.exists() ? method : null;
+    return result;
   }
 }
