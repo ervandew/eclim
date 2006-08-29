@@ -3,7 +3,11 @@
  * {@inheritDoc}
  * @see ${superType}#${methodSignature}
 #else
+#if ($boolean)
+ * Determines if this instance is ${property}.
+#else
  * Gets the ${property} for this instance.
+#end
  *
 #if ($array)
  * @param index The index to get.
