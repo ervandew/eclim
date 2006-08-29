@@ -142,6 +142,9 @@ public class FileUtils
 
           if(!new File(buffer.toString()).exists()){
             String path = FilenameUtils.getFullPath(buffer.toString());
+            if(path.endsWith("/") || path.endsWith("\\")){
+              path = path.substring(0, path.length() -1);
+            }
             if(path.endsWith(JAR_EXT)){
               buffer = new StringBuffer(JAR_PREFIX)
                 .append(path).append('!').append('/').append(name);
