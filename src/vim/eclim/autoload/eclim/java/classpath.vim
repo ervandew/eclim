@@ -71,6 +71,7 @@ function! eclim#java#classpath#UpdateClasspath ()
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#SetLocationList([], 'r')
+    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 
