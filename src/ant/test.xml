@@ -4,9 +4,6 @@
 -->
 <project name="test" default="test" basedir="../..">
 
-  <property name="eclim.home"
-      value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
-
   <!--
     - Task for starting eclimd and running unit tests.
     -->
@@ -61,6 +58,8 @@
       </fileset>
     </copy>
 
+    <antcall target="test.setup_projects"/>
+
     <taskdef name="junit" classpathref="classpath"
         classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
@@ -78,6 +77,35 @@
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
     </junit>
+
+    <antcall target="test.teardown_projects"/>
+  </target>
+
+  <!--
+    - Sets up the test projects.
+    -->
+  <target name="test.setup_projects">
+    <copy todir="${eclipse.workspace}">
+      <fileset dir="src/test/resources" includes="eclim_unit_test*/**/*"/>
+    </copy>
+
+    <exec executable="${eclim.home}/bin/eclim" failonerror="true"
+        output="build/test/eclim.log" append="false">
+      <arg line="-command project_create -f ${eclipse.workspace}/eclim_unit_test_java"/>
+    </exec>
+  </target>
+
+  <!--
+    - Tears down the test projects.
+    -->
+  <target name="test.teardown_projects">
+    <exec executable="${eclim.home}/bin/eclim" failonerror="true"
+        output="build/test/eclim.log" append="true">
+      <arg line="-command project_delete -n eclim_unit_test_java"/>
+    </exec>
+
+    <delete dir="${eclipse.workspace}/eclim_unit_test"/>
+    <delete dir="${eclipse.workspace}/eclim_unit_test_java"/>
   </target>
 
 </project>
