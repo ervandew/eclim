@@ -95,7 +95,7 @@ public class CommentCommand
       IJavaElement element = src.getElementAt(offset);
       // don't comment import declarations.
       if(element.getElementType() == IJavaElement.IMPORT_DECLARATION){
-        return "";
+        return StringUtils.EMPTY;
       }
 
       CompilationUnit cu = ASTUtils.getCompilationUnit(src, true);
@@ -107,7 +107,7 @@ public class CommentCommand
 
       ASTUtils.commitCompilationUnit(src, cu);
 
-      return "";
+      return StringUtils.EMPTY;
     }catch(Exception e){
       return e;
     }
@@ -213,8 +213,8 @@ public class CommentCommand
       List tags = _javadoc.tags();
       IProject project = _element.getJavaProject().getProject();
       if(_isNew){
-        addTag(_javadoc, tags.size(), null, "");
-        addTag(_javadoc, tags.size(), null, "");
+        addTag(_javadoc, tags.size(), null, null);
+        addTag(_javadoc, tags.size(), null, null);
         addTag(_javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
         String version = getPreferences().getPreference(
             project, "org.eclim.java.doc.version");
@@ -312,8 +312,8 @@ public class CommentCommand
         addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
       }else{
-        addTag(_javadoc, tags.size(), null, "");
-        addTag(_javadoc, tags.size(), null, "");
+        addTag(_javadoc, tags.size(), null, null);
+        addTag(_javadoc, tags.size(), null, null);
       }
     }
 
@@ -350,7 +350,7 @@ public class CommentCommand
     throws Exception
   {
     if(_isNew){
-      addTag(_javadoc, 0, null, "");
+      addTag(_javadoc, 0, null, null);
     }
   }
 
@@ -444,7 +444,7 @@ public class CommentCommand
         Signature.getSignatureSimpleName(_method.getReturnType());
       if (!"void".equals(returnType)){
         if(_isNew){
-          addTag(_javadoc, tags.size(), TagElement.TAG_RETURN, "");
+          addTag(_javadoc, tags.size(), TagElement.TAG_RETURN, null);
         }else{
           // search starting from the bottom since @return should be near the
           // end.
@@ -466,7 +466,7 @@ public class CommentCommand
             index = ii;
           }
           if(index > -1){
-            addTag(_javadoc, index, TagElement.TAG_RETURN, "");
+            addTag(_javadoc, index, TagElement.TAG_RETURN, null);
           }
         }
       }else{
@@ -504,7 +504,7 @@ public class CommentCommand
     // get thrown exceptions from element.
     String[] exceptions = _method.getExceptionTypes();
     if(_isNew && exceptions.length > 0){
-      addTag(_javadoc, tags.size(), null, "");
+      addTag(_javadoc, tags.size(), null, null);
       for (int ii = 0; ii < exceptions.length; ii++){
         addTag(_javadoc, tags.size(), TagElement.TAG_THROWS,
             Signature.getSignatureSimpleName(exceptions[ii]));
@@ -594,10 +594,14 @@ public class CommentCommand
     throws Exception
   {
     TagElement tag = _javadoc.getAST().newTagElement();
-    TextElement text = _javadoc.getAST().newTextElement();
-    text.setText(_text);
     tag.setTagName(_name);
-    tag.fragments().add(text);
+
+    if(_text != null){
+      TextElement text = _javadoc.getAST().newTextElement();
+      text.setText(_text);
+      tag.fragments().add(text);
+    }
+
     _javadoc.tags().add(_index, tag);
   }
 }
