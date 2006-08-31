@@ -416,7 +416,7 @@ public class JavaUtils
   }
 
   /**
-   * Determines if the supplied src file contains an import that for the
+   * Determines if the supplied src file contains an import for the
    * supplied type (including wildcard .* imports).
    *
    * @param _src The compilation unit.
@@ -430,7 +430,7 @@ public class JavaUtils
   }
 
   /**
-   * Determines if the supplied src file contains an import that for the
+   * Determines if the supplied src file contains an import for the
    * supplied type (including wildcard .* imports).
    *
    * @param _src The compilation unit.
