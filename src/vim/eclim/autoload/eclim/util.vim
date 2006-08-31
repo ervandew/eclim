@@ -480,7 +480,14 @@ endfunction " }}}
 " Simplify(file) {{{
 " Simply the supplied file to the shortest valid name.
 function! eclim#util#Simplify (file)
-  let file = simplify(a:file)
+  let file = a:file
+
+  " Don't run simplify on url files, it will screw them up.
+  if file !~ '://'
+    let file = simplify(file)
+  endif
+
+  let file = substitute(file, '\', '/', 'g')
   let cwd = substitute(getcwd(), '\', '/', 'g')
   if cwd !~ '/$'
     let cwd .= '/'
