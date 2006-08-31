@@ -13,7 +13,7 @@
 
     <javadoc packagenames="org.eclim" destdir="build/doc/api">
       <classpath refid="classpath"/>
-      <fileset dir="src">
+      <fileset dir="src/java">
         <include name="**/*.java"/>
       </fileset>
     </javadoc>
