@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-vfs-1.0-RC5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-vfs-20060830.jar"/>
 	<classpathentry kind="lib" path="lib/groovy-all-1.0-jsr-06.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1-beta-9.jar"/>
   <classpathentry kind="lib" path="lib/junit-4.1.jar"/>
