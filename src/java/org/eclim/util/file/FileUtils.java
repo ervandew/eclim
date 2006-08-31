@@ -108,25 +108,24 @@ public class FileUtils
    */
   public static String toUrl (String _file)
   {
+    String file = _file.replace('\\', '/');
+
     // if the path points to a real file, return it.
-    if(new File(_file).exists()){
-      return _file;
+    if(new File(file).exists()){
+      return file;
     }
 
     // already an url.
-    if(_file.startsWith(JAR_PREFIX) || _file.startsWith(ZIP_PREFIX)){
-      return _file;
+    if(file.startsWith(JAR_PREFIX) || file.startsWith(ZIP_PREFIX)){
+      return file;
     }
 
-    // convert to unix path separator so CompositeName can parse it.
-    _file = _file.replace('\\', '/');
-
-    // otherwise do some convertion.
-    StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(_file));
+    // otherwise do some conversion.
+    StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(file));
 
     try{
-      int index = FilenameUtils.getPrefixLength(_file);
-      CompositeName fileName = new CompositeName(_file.substring(index));
+      int index = FilenameUtils.getPrefixLength(file);
+      CompositeName fileName = new CompositeName(file.substring(index));
       Enumeration names = fileName.getAll();
       while(names.hasMoreElements()){
         String name = (String)names.nextElement();
