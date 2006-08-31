@@ -295,7 +295,7 @@ function! eclim#java#search#SearchAndDisplay (type, args)
       elseif len(results) == 1 && g:EclimJavaSearchSingleResult != "lopen"
         let entry = getloclist(0)[0]
         let g:EclimLastProject = eclim#project#GetCurrentProjectName()
-        exec g:EclimJavaSearchSingleResult . " " . bufname(entry.bufnr)
+        exec g:EclimJavaSearchSingleResult . ' ' . bufname(entry.bufnr)
         unlet g:EclimLastProject
 
         call cursor(entry.lnum, entry.col)
