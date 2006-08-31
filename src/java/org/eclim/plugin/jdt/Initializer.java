@@ -51,7 +51,8 @@ public class Initializer
 {
   private static final Logger logger = Logger.getLogger(Initializer.class);
 
-  private String variables = "resources/classpath_variables";
+  private static final String[] SRC_LOCATIONS = {"share/src.zip", "src.zip"};
+  private static final String VARIABLES = "resources/classpath_variables";
 
   /**
    * Initialize the java env.
@@ -62,7 +63,7 @@ public class Initializer
 
     // initialize variables.
     initializeJreSrc();
-    initializeVars(variables);
+    initializeVars(VARIABLES);
 
     /*java.util.Hashtable options = JavaCore.getOptions();
     options.put(
@@ -100,23 +101,28 @@ public class Initializer
       LibraryLocation[] newLocations = new LibraryLocation[locations.length];
       for(int ii = 0; ii < locations.length; ii++){
         IPath libraryPath = locations[ii].getSystemLibraryPath();
-        String name = libraryPath.lastSegment();
 
         // eclipse didn't find src.zip, so search other known locations.
-        if (name.equals("rt.jar") &&
-            locations[ii].getSystemLibrarySourcePath().isEmpty())
+        if (libraryPath.lastSegment().equals("rt.jar") &&
+            (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
+             !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
         {
-          IPath jreSrc = libraryPath.removeLastSegments(3)
-            .append("share" + IPath.SEPARATOR + "src.zip");
-          if(jreSrc.toFile().exists()){
-            logger.debug("Setting '{}' to '{}'",
-                JavaRuntime.JRESRC_VARIABLE, jreSrc);
+          IPath jreSrc = null;
+
+          for (int jj = 0; jj < SRC_LOCATIONS.length; jj++){
+            jreSrc = libraryPath.removeLastSegments(3).append(SRC_LOCATIONS[jj]);
+
+            if(jreSrc.toFile().exists()){
+              logger.debug("Setting '{}' to '{}'",
+                  JavaRuntime.JRESRC_VARIABLE, jreSrc);
+              newLocations[ii] = new LibraryLocation(
+                  locations[ii].getSystemLibraryPath(),
+                  jreSrc,
+                  locations[ii].getPackageRootPath(),
+                  locations[ii].getJavadocLocation());
+              break;
+            }
           }
-          newLocations[ii] = new LibraryLocation(
-              locations[ii].getSystemLibraryPath(),
-              jreSrc,
-              locations[ii].getPackageRootPath(),
-              locations[ii].getJavadocLocation());
         }else{
           newLocations[ii] = locations[ii];
         }
