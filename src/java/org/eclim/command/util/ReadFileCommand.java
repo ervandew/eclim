@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.lang.SystemUtils;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.SystemUtils;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
@@ -40,6 +42,9 @@ import org.eclim.command.Options;
 public class ReadFileCommand
   extends AbstractCommand
 {
+  private static final String URI_PREFIX = "file://";
+  private static final Pattern WIN_PATH = Pattern.compile("^/[a-zA-Z]:/.*");
+
   /**
    * {@inheritDoc}
    */
@@ -61,6 +66,15 @@ public class ReadFileCommand
       //fsManager.getFilesCache().clear(fileObject.getFileSystem());
       //fsManager.getFilesCache().clear(tempFile.getFileSystem());
 
+      // NOTE: FileObject.getName().getPath() does not include the drive
+      // information.
+      String path = tempFile.getName().getURI().substring(URI_PREFIX.length());
+      // account for windows uri which has an extra '/' in front of the drive
+      // letter (file:///C:/blah/blah/blah).
+      if (WIN_PATH.matcher(path).matches()){
+        path = path.substring(1);
+      }
+
       if(!tempFile.exists()){
         tempFile.createFile();
 
@@ -68,10 +82,10 @@ public class ReadFileCommand
         out = tempFile.getContent().getOutputStream();
         IOUtils.copy(in, out);
 
-        new File(tempFile.getName().getPath()).deleteOnExit();
+        new File(path).deleteOnExit();
       }
 
-      return tempFile.getName().getPath();
+      return path;
     }catch(Exception e){
       return e;
     }finally{
