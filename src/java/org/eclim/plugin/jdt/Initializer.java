@@ -19,12 +19,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.SystemUtils;
 
 import org.apache.log4j.Logger;
 
@@ -51,8 +53,15 @@ public class Initializer
 {
   private static final Logger logger = Logger.getLogger(Initializer.class);
 
-  private static final String[] SRC_LOCATIONS = {"share/src.zip", "src.zip"};
   private static final String VARIABLES = "resources/classpath_variables";
+  private static final String[] SRC_LOCATIONS = {
+    "src.zip",
+    "share/src.zip",
+    SystemUtils.JAVA_HOME.replace('\\', '/') + "/src.zip",
+    SystemUtils.JAVA_HOME.replace('\\', '/') + "/share/src.zip",
+    SystemUtils.JAVA_HOME.replace('\\', '/') + "/../src.zip",
+    SystemUtils.JAVA_HOME.replace('\\', '/') + "/../share/src.zip",
+  };
 
   /**
    * Initialize the java env.
@@ -110,10 +119,21 @@ public class Initializer
           IPath jreSrc = null;
 
           for (int jj = 0; jj < SRC_LOCATIONS.length; jj++){
-            jreSrc = libraryPath.removeLastSegments(3).append(SRC_LOCATIONS[jj]);
+            String location = SRC_LOCATIONS[jj];
+
+            // absolute path
+            if (location.startsWith("/") ||
+                location.indexOf(':') != -1)
+            {
+              jreSrc = new Path(location);
+
+            // relative path
+            }else{
+              jreSrc = libraryPath.removeLastSegments(3).append(location);
+            }
 
             if(jreSrc.toFile().exists()){
-              logger.debug("Setting '{}' to '{}'",
+              logger.info("Setting '{}' to '{}'",
                   JavaRuntime.JRESRC_VARIABLE, jreSrc);
               newLocations[ii] = new LibraryLocation(
                   locations[ii].getSystemLibraryPath(),
@@ -122,6 +142,16 @@ public class Initializer
                   locations[ii].getJavadocLocation());
               break;
             }
+          }
+
+          // jre src not found.
+          if(!jreSrc.toFile().exists()){
+            logger.warn("Unable to locate jre src.zip.");
+            newLocations[ii] = new LibraryLocation(
+                locations[ii].getSystemLibraryPath(),
+                Path.EMPTY,
+                locations[ii].getPackageRootPath(),
+                locations[ii].getJavadocLocation());
           }
         }else{
           newLocations[ii] = locations[ii];
