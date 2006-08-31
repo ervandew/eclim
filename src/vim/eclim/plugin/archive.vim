@@ -24,7 +24,8 @@
 
 augroup eclim_archive
   autocmd!
-  autocmd BufReadCmd zip:/*,jar:/*,zip:file:/*,jar:file:/*
+  autocmd BufReadCmd
+    \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,zip:/*,zip:\*,zip:file:/*,zip:file:\*
     \ call <SID>ReadArchiveFile()
 augroup END
 
