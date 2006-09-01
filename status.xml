@@ -309,7 +309,19 @@
         space, like "Program Files".
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Several other various bug fixes.
+        Fixed error when .classpath src dir is "" or ".".
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed error if taglist.vim is not installed.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed auto setting of jre source.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed couple java code completion issues.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Several other bug fixes.
       </action>
 
       <action dev="ervandew" type="update" context="Ant">
