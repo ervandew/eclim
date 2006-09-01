@@ -28,6 +28,7 @@
     </authors>
   </header>
   <body>
+
     <section id="startup">
       <title>Starting eclimd</title>
       <p>
@@ -41,6 +42,7 @@
         $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin.
       </p>
     </section>
+
     <section id="shutdown">
       <title>Stopping eclimd</title>
       <p>
@@ -78,6 +80,36 @@
         ensure a clean exit.
       </p>
     </section>
+
+    <section id="eclimrc">
+      <title>~/.eclimrc</title>
+      <p>
+        On unix platforms eclim supports an optional .eclimrc file located in
+        your home directory.  In this file you may supply any system properties
+        which you would like passed to eclimd at startup.  The format of this
+        file is the same as the standard java properties file format.
+      </p>
+      <p>
+        Ex.
+      </p>
+      <source>
+        # Specifies the port that nailgun / eclim listens on for client requests.
+        nailgun.server.port=10012
+
+        # Specifies the workspace directory to use
+        # See $ECLIPSE_HOME/configuration/config.ini for other osgi properties.
+        osgi.instance.area.default=@user.home/myworkspace
+      </source>
+      <p>
+        The eclim client will also utilize this file, but only to determine the
+        nailgun server port should you choose to change the default.
+      </p>
+      <note>
+        Your system must have <strong>sed</strong> available so that eclim can
+        process your .eclimrc file.
+      </note>
+    </section>
+
     <section id="log">
       <title>eclimd logging</title>
       <p>
@@ -90,5 +122,6 @@
         $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/log/eclimd.log.
       </p>
     </section>
+
   </body>
 </document>

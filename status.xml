@@ -316,6 +316,11 @@
         Made some improvements to ant code completion.
       </action>
 
+      <action dev="ervandew" type="add" context="Eclim">
+        Added support for <a href="eclimd.html#eclimrc">~/.eclimrc</a> on unix
+        platforms.
+      </action>
+
       <action dev="ervandew" type="add" context="Java">
         Added <a href="vim/java/classpath.html#VariableList">
           <strong>:VariableList</strong>
