@@ -86,6 +86,14 @@ function! eclim#java#complete#CodeComplete (findstart, base)
     let prefix = substitute(getline('.'),
       \ '.\{-}\([[:alnum:].]\+\%' . col('.') . 'c\).*', '\1', '')
 
+    " as of eclipse 3.2 it will include the parens on a completion result even
+    " if the file already has them.
+    let open_paren = getline('.') =~ '\%' . col('.') . 'c\s*('
+    let close_paren = getline('.') =~ '\%' . col('.') . 'c\s*(\s*)'
+
+    " when completing imports, the completions include ending ';'
+    let semicolon = getline('.') =~ '\%' . col('.') . 'c\s*;'
+
     for result in results
       let kind = substitute(result, '\(.\{-}\)|.*', '\1', '')
 
@@ -98,6 +106,21 @@ function! eclim#java#complete#CodeComplete (findstart, base)
       " strip off prefix if necessary.
       if word =~ '\.'
         let word = substitute(word, prefix, '', '')
+      endif
+
+      " strip off close paren if necessary.
+      if word =~ ')$' && close_paren
+        let word = strpart(word, 0, strlen(word) - 1)
+      endif
+
+      " strip off open paren if necessary.
+      if word =~ '($' && open_paren
+        let word = strpart(word, 0, strlen(word) - 1)
+      endif
+
+      " strip off semicolon if necessary.
+      if word =~ ';$' && semicolon
+        let word = strpart(word, 0, strlen(word) - 1)
       endif
 
       let dict = {
