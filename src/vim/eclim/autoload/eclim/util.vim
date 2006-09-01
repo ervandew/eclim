@@ -487,7 +487,8 @@ function! eclim#util#Simplify (file)
     let file = simplify(file)
   endif
 
-  let file = substitute(file, '\', '/', 'g')
+  " replace all '\' chars with '/' except those escaping spaces.
+  let file = substitute(file, '\\\([^[:space:]]\)', '/\1', 'g')
   let cwd = substitute(getcwd(), '\', '/', 'g')
   if cwd !~ '/$'
     let cwd .= '/'
