@@ -398,6 +398,14 @@
           <strong>:TabnewRelative</strong>
         </a>.
       </action>
+      <action dev="ervandew" type="update" context="Vim">
+        <a href="vim/common/util.html#Split">
+          <strong>:Split</strong>
+        </a> and
+        <a href="vim/common/util.html#SplitRelative">
+          <strong>:SplitRelative</strong>
+        </a> now support '*' and '**' wildcards.
+      </action>
     </release>
 
     <release version="1.2.0" date="July 16, 2006">

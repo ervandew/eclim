@@ -58,6 +58,34 @@ function! eclim#common#DiffLastSaved ()
   endif
 endfunction " }}}
 
+" GetFiles(dir, arg) {{{
+" Parses the supplied arg to obtain a list of files based in the supplied
+" directory.
+function eclim#common#GetFiles (dir, arg)
+  let dir = a:dir
+  if dir != '' && dir !~ '[/\]$'
+    let dir .= '/'
+  endif
+
+  let results = []
+  let files = split(a:arg, '[^\\]\zs\s')
+  for file in files
+    " wildcard filename
+    if file =~ '\*'
+      let glob = split(glob(dir . file), '\n')
+      call map(glob, "escape(v:val, ' ')")
+      if len(glob) > 0
+        let results += glob
+      endif
+
+    " regular filename
+    else
+      call add(results, dir . file)
+    endif
+  endfor
+  return results
+endfunction " }}}
+
 " FindInPath(file, path) {{{
 " Find a file in the supplied path returning a list of results.
 function! eclim#common#FindInPath (file, path)
@@ -66,7 +94,7 @@ function! eclim#common#FindInPath (file, path)
   return results
 endfunction " }}}
 
-" LocateFile(command,file) {{{
+" LocateFile(command, file) {{{
 " Locates a file using the following steps:
 " 1) First if current file is in a project, search that project.
 " 2) No results from #1, then search relative to current file.
@@ -133,20 +161,25 @@ function eclim#common#LocateFile (command, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" OpenRelative(command,arg) {{{
+" OpenRelative(command, arg) {{{
 " Open one or more relative files.
 function eclim#common#OpenRelative (command, arg)
+  if a:arg =~ '\*' && a:command == 'edit'
+    call eclim#util#EchoError(':EditRelative does not support wildcard characters.')
+    return
+  endif
+
   let dir = expand('%:p:h')
-  let files = split(a:arg, '[^\\]\zs\s')
+  let files = eclim#common#GetFiles(dir, a:arg)
   for file in files
-    exec a:command . ' ' . eclim#util#Simplify(dir. '/' . file)
+    exec a:command . ' ' . eclim#util#Simplify(file)
   endfor
 endfunction " }}}
 
 " OpenFiles(arg) {{{
 " Opens one or more files using the supplied command.
 function eclim#common#OpenFiles (command, arg)
-  let files = split(a:arg, '[^\\]\zs\s')
+  let files = eclim#common#GetFiles('', a:arg)
   for file in files
     exec a:command . ' ' . eclim#util#Simplify(file)
   endfor
