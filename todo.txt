@@ -16,11 +16,10 @@ Installer
 
 Documentation
   - docs on new ant syntax file.
+  - FAQs
+    - how to specify workspace dir.
 
 Test on Windows
-  - new browser discovery.
-  - new compilation unit retrieval logic.
-    - make sure src file not found results in proper error.
 
 Bugs
   - re-visit Ctrl-C hook to perform a clean exit of eclim/eclipse.
@@ -38,17 +37,17 @@ Enhancements
       - ping first to see if one is running.
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
 
+  - In addition to marking lines w/ errors/warnings, highlight the offending text.
+    - vim lacks functionality to do this at the moment.
+  - CursorHold validation of files.
+    - via temp file?
+
   - :JavaImpl support anonymous classes.
   - add ProjectImport dir
     - Given a directory, search for all .project files and create projects
       for their corresponding parent directory (be sure to read the project
       name from the file as it may not follow the eclim naming standard).
     - If no dir supplied use workspace dir?
-  - get working under cygwin
-    if has('win32unix')
-    - eclim command
-    - file paths
-    - search results
   - implement means to highlight text and push it to the command prompt
     Ctrl-: or something similar.
 
@@ -60,7 +59,6 @@ Enhancements
     set a variable to mainain the name of the current project, and add a way to
     force element based searches to become keyword based.
 
-  - integrate w/ http://www.easyeclipse.org/site/home/
   - add :JavaBeanImpl for defining an implementation of a bean interface.
   - automate switch statement generation for enums.
     When switch(enum), create cases for all enum values.
@@ -91,12 +89,12 @@ Enhancements
       </blah>
   - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
-Other
-  - fix java indent
-    - doesn't properly handle indentation of enums
-        public enum MyEnum
-        {
-          FIRST,
-            SECOND,
-            THIRD
-        }
+  - get working under cygwin
+    if has('win32unix')
+    - eclim command
+    - file paths
+    - search results
+  - fedora + eclipse + gcj/gnu classpath
+    - http://www.fedoraproject.org/wiki/Eclipse
+    - http://sourceware.org/eclipse/
+  - integrate w/ http://www.easyeclipse.org/site/home/
