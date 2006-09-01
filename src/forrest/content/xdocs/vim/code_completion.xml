@@ -47,8 +47,8 @@
     </p>
     <p>
       If you are like me and you find those key strokes a bit cumbersome, then
-      you can use the excellent <a href="ext:supertab">SuperTab</a> plugin which
-      allows you to use the Tab key for completion.
+      you can use the <a href="ext:supertab">SuperTab</a> plugin which allows
+      you to use the Tab key for completion.
     </p>
     <p>
       To find out more about Vim's insert completion execute<br/>
