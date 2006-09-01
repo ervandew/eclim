@@ -43,8 +43,6 @@ public class Error
    * @param _filename The file containing the error.
    * @param _lineNumber The line where the error occured.
    * @param _columnNumber The column where the error occured.
-   * @param _lineNumber The line where the error occured.
-   * @param _columnNumber The column where the error occured.
    * @param _warning true if this error is just a warning, false otherwise.
    */
   public Error (
@@ -65,7 +63,7 @@ public class Error
    * @param _lineNumber The line where the error occured.
    * @param _columnNumber The column where the error occured.
    * @param _endLineNumber The line where the error ends.
-   * @param _endLolumnNumber The column where the error ends.
+   * @param _endColumnNumber The column where the error ends.
    * @param _warning true if this error is just a warning, false otherwise.
    */
   public Error (
