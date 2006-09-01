@@ -94,26 +94,28 @@ public class PropertiesCommand
           if(Signature.getArrayCount(field.getTypeSignature()) > 0){
             array = true;
           }
-          // index setter
-          if(array && indexed){
+
+          if(methods.indexOf(SETTER) != -1){
+            // index setter
+            if(array && indexed){
+              sibling = getSibling(type, fields, field, sibling);
+              sibling = insertSetter(src, position, type, sibling, field, true);
+            }
+            // setter
             sibling = getSibling(type, fields, field, sibling);
-            sibling = insertSetter(
-                src, position, type, sibling, field, methods, true);
+            sibling = insertSetter(src, position, type, sibling, field, false);
           }
-          // setter
-          sibling = getSibling(type, fields, field, sibling);
-          sibling = insertSetter(
-              src, position, type, sibling, field, methods, false);
-          // index getter
-          if(array && indexed){
+
+          if(methods.indexOf(GETTER) != -1){
+            // index getter
+            if(array && indexed){
+              sibling = getSibling(type, fields, field, sibling);
+              sibling = insertGetter(src, position, type, sibling, field, true);
+            }
+            // getter
             sibling = getSibling(type, fields, field, sibling);
-            sibling = insertGetter(
-                src, position, type, sibling, field, methods, true);
+            sibling = insertGetter(src, position, type, sibling, field, false);
           }
-          // getter
-          sibling = getSibling(type, fields, field, sibling);
-          sibling = insertGetter(
-              src, position, type, sibling, field, methods, false);
         }
       }
 
@@ -131,7 +133,6 @@ public class PropertiesCommand
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
    * @param _field The field.
-   * @param _context The requested context (getter/setter).
    * @param _array true if inserting the array version.
    * @return The method element.
    */
@@ -141,7 +142,6 @@ public class PropertiesCommand
       IType _type,
       IJavaElement _sibling,
       IField _field,
-      String _context,
       boolean _array)
     throws Exception
   {
@@ -162,7 +162,7 @@ public class PropertiesCommand
       args = INT_ARG;
     }
     IMethod method = _type.getMethod(methodName, args);
-    if(_context.indexOf(GETTER) != -1 && !method.exists()){
+    if(!method.exists()){
       Map values = new HashMap();
       values.put("propertyType", propertyType);
       values.put("name", methodName);
@@ -188,7 +188,6 @@ public class PropertiesCommand
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
    * @param _field The property.
-   * @param _context The requested context (getter/setter).
    * @param _array true if inserting the array version.
    * @return The method element.
    */
@@ -198,7 +197,6 @@ public class PropertiesCommand
       IType _type,
       IJavaElement _sibling,
       IField _field,
-      String _context,
       boolean _array)
     throws Exception
   {
@@ -213,7 +211,7 @@ public class PropertiesCommand
         INT_SIG, Signature.getElementType(_field.getTypeSignature())};
     }
     IMethod method = _type.getMethod(methodName, args);
-    if(_context.indexOf(SETTER) != -1 && !method.exists()){
+    if(!method.exists()){
       Map values = new HashMap();
       values.put("name", methodName);
       values.put("property", _field.getElementName());
@@ -307,8 +305,11 @@ public class PropertiesCommand
       // insert before the next property's bean methods, if there are other
       // properties.
       if(_fields.size() > 1 && (index + 1) < _fields.size()){
-        IField field = (IField)_fields.get(index + 1);
-        IMethod method = getBeanMethod(_type, field, false);
+        IMethod method = null;
+        for(int ii = index + 1; method == null && ii < _fields.size(); ii++){
+          IField field = (IField)_fields.get(ii);
+          method = getBeanMethod(_type, field, false);
+        }
         if(method != null){
           return method;
         }
@@ -317,8 +318,11 @@ public class PropertiesCommand
       // insert after previous property's bean methods, if there are other
       // properties.
       if(_fields.size() > 1 && index > 0){
-        IField field = (IField)_fields.get(index - 1);
-        IMethod method = getBeanMethod(_type, field, true);
+        IMethod method = null;
+        for(int ii = index - 1; method == null && ii >= 0; ii--){
+          IField field = (IField)_fields.get(ii);
+          method = getBeanMethod(_type, field, true);
+        }
         if(method != null){
           method = MethodUtils.getMethodAfter(_type, method);
           return method;
@@ -351,11 +355,19 @@ public class PropertiesCommand
   protected IMethod getBeanMethod (IType _type, IField _field, boolean _last)
     throws Exception
   {
+    boolean isBoolean = Signature.getSignatureSimpleName(
+        _field.getTypeSignature()).equals("boolean");
+
     IMethod result = null;
 
     String nextProperty = StringUtils.capitalize(_field.getElementName());
     // regular getter
-    IMethod method = _type.getMethod("get" + nextProperty, null);
+    IMethod method = null;
+    if(isBoolean){
+      method = _type.getMethod("is" + nextProperty, null);
+    }else{
+      method = _type.getMethod("get" + nextProperty, null);
+    }
     if(method.exists() && !_last){
       return method;
     }else if(method.exists()){
@@ -363,7 +375,11 @@ public class PropertiesCommand
     }
 
     // index getter
-    method = _type.getMethod("get" + nextProperty, INT_ARG);
+    if(isBoolean){
+      method = _type.getMethod("is" + nextProperty, INT_ARG);
+    }else{
+      method = _type.getMethod("get" + nextProperty, INT_ARG);
+    }
     if(method.exists() && !_last){
       return method;
     }else if(method.exists()){
