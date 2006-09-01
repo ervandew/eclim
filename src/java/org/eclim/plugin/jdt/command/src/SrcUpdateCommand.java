@@ -17,6 +17,8 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -59,7 +61,13 @@ public class SrcUpdateCommand
         String filename = src.getResource().getRawLocation().toOSString();
         FileOffsets offsets = FileOffsets.compile(filename);
         for(int ii = 0; ii < problems.length; ii++){
-          int[] lineColumn = offsets.offsetToLineColumn(problems[ii].getSourceStart());
+          int[] lineColumn =
+            offsets.offsetToLineColumn(problems[ii].getSourceStart());
+
+          // one day vim might support ability to mark the offending text.
+          /*int[] endLineColumn =
+            offsets.offsetToLineColumn(problems[ii].getSourceEnd());*/
+
           errors.add(new Error(
               problems[ii].getMessage(),
               filename,
@@ -74,6 +82,6 @@ public class SrcUpdateCommand
     }catch(Exception e){
       return e;
     }
-    return "";
+    return StringUtils.EMPTY;
   }
 }

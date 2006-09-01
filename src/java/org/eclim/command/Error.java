@@ -32,6 +32,8 @@ public class Error
   private String filename;
   private int lineNumber;
   private int columnNumber;
+  private int endLineNumber;
+  private int endColumnNumber;
   private boolean warning;
 
   /**
@@ -39,6 +41,8 @@ public class Error
    *
    * @param _message The error message.
    * @param _filename The file containing the error.
+   * @param _lineNumber The line where the error occured.
+   * @param _columnNumber The column where the error occured.
    * @param _lineNumber The line where the error occured.
    * @param _columnNumber The column where the error occured.
    * @param _warning true if this error is just a warning, false otherwise.
@@ -50,10 +54,35 @@ public class Error
       int _columnNumber,
       boolean _warning)
   {
+    this(_message, _filename, _lineNumber, _columnNumber, -1, -1, _warning);
+  }
+
+  /**
+   * Constructs a new instance from the supplied values.
+   *
+   * @param _message The error message.
+   * @param _filename The file containing the error.
+   * @param _lineNumber The line where the error occured.
+   * @param _columnNumber The column where the error occured.
+   * @param _endLineNumber The line where the error ends.
+   * @param _endLolumnNumber The column where the error ends.
+   * @param _warning true if this error is just a warning, false otherwise.
+   */
+  public Error (
+      String _message,
+      String _filename,
+      int _lineNumber,
+      int _columnNumber,
+      int _endLineNumber,
+      int _endColumnNumber,
+      boolean _warning)
+  {
     this.message = _message;
     this.filename = _filename;
     this.lineNumber = _lineNumber > 0 ? _lineNumber : 1;
     this.columnNumber = _columnNumber > 0 ? _columnNumber : 1;
+    this.endLineNumber = _endLineNumber;
+    this.endColumnNumber = _endColumnNumber;
     this.warning = _warning;
   }
 
@@ -88,13 +117,33 @@ public class Error
   }
 
   /**
-   * Gets the column number.
+   * Gets the columnNumber for this instance.
    *
-   * @return The column number.
+   * @return The columnNumber.
    */
   public int getColumnNumber ()
   {
-    return columnNumber;
+    return this.columnNumber;
+  }
+
+  /**
+   * Gets the endLineNumber for this instance.
+   *
+   * @return The endLineNumber.
+   */
+  public int getEndLineNumber ()
+  {
+    return this.endLineNumber;
+  }
+
+  /**
+   * Gets the endColumnNumber for this instance.
+   *
+   * @return The endColumnNumber.
+   */
+  public int getEndColumnNumber ()
+  {
+    return this.endColumnNumber;
   }
 
   /**
@@ -126,6 +175,8 @@ public class Error
       .append(getFilename(), error.getFilename())
       .append(getLineNumber(), error.getLineNumber())
       .append(getColumnNumber(), error.getColumnNumber())
+      .append(getEndLineNumber(), error.getEndLineNumber())
+      .append(getEndColumnNumber(), error.getEndColumnNumber())
       .append(getMessage(), error.getMessage())
       .isEquals();
 
@@ -143,6 +194,8 @@ public class Error
       .append(filename)
       .append(lineNumber)
       .append(columnNumber)
+      .append(endLineNumber)
+      .append(endColumnNumber)
       .append(message)
       .toHashCode();
   }
