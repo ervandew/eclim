@@ -90,9 +90,20 @@ endif
 " }}}
 
 " Abbreviations {{{
-  inoreabbrev <buffer> fori <c-r>=<SID>Abbreviate(g:java_fori, ' ')<cr>
-  inoreabbrev <buffer> forI <c-r>=<SID>Abbreviate(g:java_forI, ' ')<cr>
-  inoreabbrev <buffer> fore <c-r>=<SID>Abbreviate(g:java_fore, '')<cr>
+  " the vim latex plugin (http://vim-latex.sourceforge.net) prevents the
+  " normal abbreviations from working properly if the user has any IMAP calls
+  " with a rhs value that ends in a space:
+  "   au VimEnter * call IMAP(' . ', ' <++> ', 'tex')
+  " So, if we can't beat 'em, join 'em
+  if exists('*IMAP')
+    call IMAP('fori', "\<c-r>=EclimAbbreviate(g:java_fori)\<cr>", 'java')
+    call IMAP('forI', "\<c-r>=EclimAbbreviate(g:java_forI)\<cr>", 'java')
+    call IMAP('fore', "\<c-r>=EclimAbbreviate(g:java_fore)\<cr>", 'java')
+  else
+    inoreabbrev <buffer> fori <c-r>=EclimAbbreviate(g:java_fori)<cr>
+    inoreabbrev <buffer> forI <c-r>=EclimAbbreviate(g:java_forI)<cr>
+    inoreabbrev <buffer> fore <c-r>=EclimAbbreviate(g:java_fore)<cr>
+  endif
 " }}}
 
 " StartAutocommands() {{{
@@ -112,10 +123,14 @@ function! StopAutocommands ()
   augroup END
 endfunction " }}}
 
-" Abbreviate(abbreviation) {{{
-function! s:Abbreviate (abbreviation, char)
+" EclimAbbreviate(abbreviation) {{{
+function! EclimAbbreviate (abbreviation)
+  " gobble up the space char used to kick off the abbreviation
   let char = nr2char(getchar())
+
+  " insert the abbreviation text.
   exec "normal i" . a:abbreviation
+
   return ''
 endfunction " }}}
 
