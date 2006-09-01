@@ -201,6 +201,7 @@
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
         <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclim*.sed"/>
         <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
       </fileset>
     </zip>
