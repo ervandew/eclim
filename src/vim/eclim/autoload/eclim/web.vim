@@ -101,6 +101,12 @@ function! eclim#web#OpenUrl (url)
   let command = escape(substitute(s:browser, '<url>', url, ''), '#')
   silent! exec command
   redraw!
+
+  if v:shell_error
+    call eclim#util#EchoError("Unable to open browser:\n" . s:browser .
+      \ "\nCheck that the browser executable is in your PATH " .
+      \ "or that you have properly configured g:EclimBrowser")
+  endif
 endfunction " }}}
 
 " Google(args, quote, visual) {{{
