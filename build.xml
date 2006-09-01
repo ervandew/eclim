@@ -135,7 +135,7 @@
       <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
     </replace>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
-      includes="**/*" perm="ugo+x"/>
+      includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
     <!-- deploy vim files -->
     <copy todir="${vim.files.home}">
