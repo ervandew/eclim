@@ -16,7 +16,16 @@
 
 # Author: Eric Van Dewoestine
 
-JAVA_CMD="`dirname $0`/ng --nailgun-port 9091"
+CURPATH=`dirname $0`
+SED=`which sed 2> /dev/null`
+NAILGUN_PORT="9091"
+
+# attempt to grab port number from .eclimrc file if available.
+if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
+  NAILGUN_PORT=`sed -f $CURPATH/eclim.sed $HOME/.eclimrc`
+fi
+
+JAVA_CMD="$CURPATH/ng --nailgun-port $NAILGUN_PORT"
 $JAVA_CMD org.eclim.command.Main "$@" 2>&1
 
 # Weirdest thing that for the life of me I can't figure out.

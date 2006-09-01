@@ -16,7 +16,7 @@
 
 # Author: Eric Van Dewoestine
 
-if [ "$ECLIPSE_HOME" = '' ] ; then
+if [ -z "$ECLIPSE_HOME" ] ; then
   echo "ECLIPSE_HOME not set";
   exit 1;
 fi
@@ -26,8 +26,15 @@ if [ ! -e "$ECLIPSE_HOME/eclipse" ] ; then
   exit 1;
 fi
 
+CURPATH=`dirname $0`
+SED=`which sed 2> /dev/null`
 ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
+ECLIM_ARGS="-Declim.home="$ECLIM_HOME""
+
+# attempt to grab properties from .eclimrc if available.
+if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
+  ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
+fi
 
 $ECLIPSE_HOME/eclipse -debug -consolelog -nosplash -clean -refresh \
-  -application org.eclim.application \
-  -vmargs -Declim.home="$ECLIM_HOME" $@
+  -application org.eclim.application -vmargs $ECLIM_ARGS $@
