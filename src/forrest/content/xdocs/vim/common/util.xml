@@ -60,14 +60,12 @@
       <li>
         <anchor id="LocateFileSplit"/>
         <strong>:LocateFileSplit</strong> [file] -
-        Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
-        file with :split.
+        Like <strong>:LocateFileEdit</strong> except open the file with :split.
       </li>
       <li>
         <anchor id="LocateFileTab"/>
         <strong>:LocateFileTab</strong> [file] -
-        Like <a href="#LocateFileEdit">:LocateFileEdit</a> except open the
-        file with :newtab.
+        Like <strong>:LocateFileEdit</strong> except open the file with :newtab.
       </li>
       <li>
         <anchor id="Split"/>
