@@ -58,7 +58,9 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
+  \ '\%A%.%#[exec]\ %f:%l:%c:\ %m,' .
   \ '\%A%.%#[exec]\ %f:%l:\ %m,' .
+  \ '\%A%f:%l:%c:\ %m,' .
   \ '\%A%f:%l:\ %m,' .
   \ '\%-G%.%#'
 
