@@ -1,8 +1,10 @@
+# Eclipse requires access to the user's display
+DISPLAY=":0.0"
 # jdk home
 JAVA_HOME="/opt/java"
 # eclipse installation dir.
 ECLIPSE_HOME="/usr/local/java/eclipse"
 # eclim plugin dir.
-ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
+ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_1.2.0"
 # the user to run as.
 ECLIM_USER="ervandew"

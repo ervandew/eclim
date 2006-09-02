@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Eclipse requires access to the user's display
+DISPLAY=":0.0"
 # jdk home
 JAVA_HOME="/opt/java"
 # eclipse installation dir.
@@ -12,7 +14,7 @@ ECLIM_USER="ervandew"
 case "$1" in
   start)
     echo -n "Starting eclimd"
-    su $ECLIM_USER -c "source /etc/profile && $ECLIM_HOME/bin/eclimd > /dev/null &"
+    su $ECLIM_USER -c "source /etc/profile && DISPLAY=$DISPLAY ECLIPSE_HOME=$ECLIPSE_HOME $ECLIM_HOME/bin/eclimd > /dev/null &"
     echo
     ;;
 
