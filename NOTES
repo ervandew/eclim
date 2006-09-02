@@ -37,3 +37,12 @@ These are just some random notes for myself that don't need to be in the docs.
         excluding="**/*.swp"
       You can use '|' to delineate multiple entries
         excluding="**/*.swp|**/*.tmp"
+
+Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
+1) start the application
+2) open and save org.eclim.Service
+2) open and save build.xml
+
+         Virtual  Resident  Shared  (in megs)
+eclim    360      132       54
+eclipse  500      143       59
