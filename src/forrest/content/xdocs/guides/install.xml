@@ -291,6 +291,15 @@
               <img src="../images/screenshots/ping_failed.png" alt="Failed Ping"/>
             </p>
           </li>
+          <li>
+            Regardless of the ping result, you can also verify your vim settings
+            using the command <strong>:EclimValidate</strong>.  This will check
+            various settings and options and report any problems. If all is ok
+            you will receive the following message:
+            <source>
+              Result: OK, required settings are valid.
+            </source>
+          </li>
         </ol>
       </section>
 
