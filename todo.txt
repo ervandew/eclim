@@ -22,11 +22,9 @@ Documentation
 Test on Windows
 
 Bugs
-  - re-visit Ctrl-C hook to perform a clean exit of eclim/eclipse.
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
   - on JavaSearch for implementors, exclude the javadoc matches.
-  - /etc/{init,conf}.d/eclimd
 
 Enhancements
   - Integrate w/ google calendar

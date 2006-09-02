@@ -83,6 +83,9 @@ public class EclimApplication
       // load plugins.
       loadPlugins();
 
+      // add shutdown hook.
+      Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+
       // start nail gun
       logger.info("Eclim Server Started.");
       server.run();
@@ -91,6 +94,16 @@ public class EclimApplication
       return new Integer(1);
     }
 
+    shutdown();
+    return new Integer(0);
+  }
+
+  /**
+   * Shuts down the eclim server.
+   */
+  protected void shutdown ()
+    throws Exception
+  {
     logger.info("Shutting down eclim...");
 
     // Saving workspace MUST be before closing of service contexts.
@@ -104,7 +117,6 @@ public class EclimApplication
       ResourcesPlugin.getPlugin().stop(null);*/
 
     logger.info("Eclim stopped.");
-    return new Integer(0);
   }
 
   /**
@@ -196,6 +208,25 @@ public class EclimApplication
         throw new RuntimeException(e);
       }
       logger.info("Loaded plugin {}.", plugins[ii]);
+    }
+  }
+
+  /**
+   * Shutdown hook for non-typical shutdown.
+   */
+  private class ShutdownHook
+    extends Thread
+  {
+    /**
+     * Runs the shutdown hook.
+     */
+    public void run ()
+    {
+      try{
+        shutdown();
+      }catch(Exception e){
+        logger.error("Error running shutdown hook.", e);
+      }
     }
   }
 }
