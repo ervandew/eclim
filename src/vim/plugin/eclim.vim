@@ -22,6 +22,24 @@
 "
 " }}}
 
+" EclimBaseDir() {{{
+" Gets the base directory where the eclim vim scripts are located.
+function EclimBaseDir ()
+  if !exists("g:EclimBaseDir")
+    let file = findfile('plugin/eclim.vim', escape(&runtimepath, ' '))
+    if file == ''
+      echoe 'Unable to determine eclim basedir.  ' .
+        \ 'Please report this issue on the eclim forums.'
+      finish
+    endif
+    let basedir = substitute(fnamemodify(file, ':p:h:h'), '\', '/', 'g')
+
+    let g:EclimBaseDir = escape(basedir, ' ')
+  endif
+
+  return g:EclimBaseDir
+endfunction " }}}
+
 " Init() {{{
 " Initializes eclim.
 function s:Init ()
@@ -30,15 +48,7 @@ function s:Init ()
   runtime! plugin/taglist.vim
 
   " add eclim dir to runtime path.
-  let file = findfile('plugin/eclim.vim', escape(&runtimepath, ' '))
-  if file == ''
-    echoe 'Unable to find path to plugin/eclim.vim.  ' .
-      \ 'Please report this issue on the eclim forums.'
-    finish
-  endif
-
-  let basedir = substitute(fnamemodify(file, ':p:h:h'), '\', '/', 'g')
-  exec 'set runtimepath+=' . escape(basedir, ' ') . '/eclim'
+  exec 'set runtimepath+=' . EclimBaseDir() . '/eclim'
 
   " need to be manually sourced
   runtime! eclim/plugin/*.vim
