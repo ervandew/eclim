@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<project name="test" default="none">
+  <property name="test.ant.property" value="Test Value"/>
+
+  <target name="test">
+    <mkdir dir="${test.an"/>
+
+    <java/>
+  </target>
+<project>
