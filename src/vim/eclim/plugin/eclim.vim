@@ -28,7 +28,7 @@
 
 " Global Variables {{{
   if !exists("g:EclimLogLevel")
-    let g:EclimLogLevel = 5
+    let g:EclimLogLevel = 4
   endif
 
   if !exists("g:EclimSignLevel")
@@ -114,6 +114,10 @@ if !exists(":ShutdownEclim")
 endif
 if !exists(":Settings")
   command -nargs=0 Settings :call eclim#Settings()
+endif
+if !exists(":PatchEclim")
+  command -nargs=+ -complete=customlist,eclim#CommandCompleteScriptRevision
+    \ PatchEclim :call eclim#PatchEclim(<f-args>)
 endif
 " }}}
 

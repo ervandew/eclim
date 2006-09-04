@@ -40,6 +40,9 @@
 " }}}
 
 " Script Variables {{{
+  let s:command_patch_file =
+    \ '-command patch_file -f <file> -r <revision> -b <basedir>'
+  let s:command_patch_revisions = '-command patch_revisions -f <file>'
   let s:command_ping = '-command ping'
   let s:command_settings = '-command settings -filter vim'
   let s:command_settings_update = '-command settings_update -s "<settings>"'
@@ -170,6 +173,20 @@ function! eclim#GetEclimCommand ()
   return g:EclimPath
 endfunction " }}}
 
+" PatchEclim(file, revision) {{{
+" Patches an eclim vim script file.
+function! eclim#PatchEclim (file, revision)
+  let command = s:command_patch_file
+  let command = substitute(command, '<file>', a:file, '')
+  let command = substitute(command, '<revision>', a:revision, '')
+  let command = substitute(command, '<basedir>', EclimBaseDir(), '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
 " PingEclim(echo) {{{
 " Pings the eclimd server.
 " If echo is non 0, then the result is echoed to the user.
@@ -239,6 +256,39 @@ endfunction " }}}
 " Shuts down the eclimd server.
 function! eclim#ShutdownEclim ()
   call eclim#ExecuteEclim(s:command_shutdown)
+endfunction " }}}
+
+" CommandCompleteScriptRevision(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for vim script names and revision numbers.
+function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+
+  " complete script name for first arg.
+  if cmdLine =~ '^PatchEclim\s*' . escape(argLead, '.\') . '$'
+    let dir = EclimBaseDir()
+    let results = split(glob(dir . '/' . argLead . '*'), '\n')
+    call map(results, "substitute(v:val, '\\', '/', 'g')")
+    call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
+    call map(results, 'substitute(v:val, dir, "", "")')
+    call map(results, 'substitute(v:val, "^/", "", "")')
+
+    return results
+  endif
+
+  " for remaining args, complete revision numbers
+  let file = substitute(cmdLine, '^PatchEclim\s*\(.\{-}\)\s.*', '\1', '')
+  let command = s:command_patch_revisions
+  let command = substitute(command, '<file>', file, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    let results =  split(result, '\n')
+    call filter(results, 'v:val =~ "^' . argLead . '"')
+    return results
+  endif
+  return []
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

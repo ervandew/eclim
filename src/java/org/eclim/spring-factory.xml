@@ -165,4 +165,25 @@
     </property>
   </bean>
 
+  <bean name="patch_revisions"
+      class="org.eclim.command.patch.RevisionsCommand">
+    <description>
+      Handles requests for obtaining revision numbers for a vim file.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.patch.RevisionsFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="patch_file"
+      class="org.eclim.command.patch.PatchFileCommand">
+    <description>
+      Handles requests to patch a vim script file.
+    </description>
+  </bean>
+
 </beans>

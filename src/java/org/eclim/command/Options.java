@@ -46,6 +46,7 @@ public class Options
   public static final String FILTER_OPTION = "filter";
 
   public static final String APPLY_OPTION = "a";
+  public static final String BASEDIR_OPTION = "b";
   public static final String BASETYPE_OPTION = "b";
   public static final String BUILD_FILE_OPTION = "b";
   public static final String CLASSNAME_OPTION = "c";
@@ -67,6 +68,7 @@ public class Options
   public static final String PATTERN_OPTION = "p";
   public static final String PROJECT_OPTION = "p";
   public static final String PROPERTIES_OPTION = "r";
+  public static final String REVISION_OPTION = "r";
   public static final String SCHEMA_OPTION = "s";
   public static final String SCOPE_OPTION = "s";
   public static final String SEARCH_OPTION = "s";
