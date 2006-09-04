@@ -4,6 +4,16 @@
 -->
 <project name="test" default="test" basedir="../..">
 
+  <path id="junit">
+    <pathelement location="lib/junit-4.1.jar"/>
+    <pathelement location="src/ant/lib/ant-junit-1.6.5.jar"/>
+  </path>
+
+  <taskdef name="junit" classpathref="junit"
+      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+  <taskdef name="junitreport" classpathref="junit"
+      classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"/>
+
   <!--
     - Task for starting eclimd and running unit tests.
     -->
@@ -31,6 +41,12 @@
         </parallel>
       </else>
     </if>
+
+    <!-- generate html results -->
+    <!--junitreport todir="build/test/results">
+      <fileset dir="build/test/results" includes="*.xml"/>
+      <report format="noframes" todir="build/test/results/html"/>
+    </junitreport-->
   </target>
 
   <!--
@@ -59,9 +75,6 @@
     </copy>
 
     <antcall target="test.setup_projects"/>
-
-    <taskdef name="junit" classpathref="classpath"
-        classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
     <property name="junit.include" value="**/*Test"/>
     <junit printsummary="yes">
