@@ -66,19 +66,29 @@
             Push methods / fields up to superclass or down to subclass.
           </li>
           <li>Move types, methods, fields.</li>
+          <li>
+            Code "Clean Up"
+            <ul>
+              <li>
+                Remove Unused Code (imports, private methods, private constructors,
+                private types).
+              </li>
+              <li>
+                JSE 5.0 (add missing @Override, add missing @Deprecated)
+              </li>
+            </ul>
+          </li>
         </ul>
       </action>
       <action context="junit" dev="ervandew">
         Junit integration.
         <ul>
           <li>Template for test case</li>
-          <li>Run and view test results in a browser.</li>
           <li>
             When viewing a junit result file allow linking from stack trace
             elements.
           </li>
           <li>File type support of junit result files w/ search functionality.</li>
-          <li>Functionality from my junit.vim plugin.</li>
         </ul>
       </action>
       <action context="content assist" dev="ervandew">
@@ -264,38 +274,6 @@
           <li>
             SQL editor w/ completion support for keywords, table names, column
             names, etc.
-          </li>
-        </ul>
-      </action>
-    </actions>
-
-    <actions priority="eclipse 3.2">
-      <action context="3.2 enhancements" dev="ervandew">
-        <a href="http://download.eclipse.org/eclipse/downloads/drops/S-3.2M6-200603312000/eclipse-news-M6.html">
-          Eclipse 3.2 Features
-        </a>
-        <ul>
-          <li>
-            javadoc context sensitive completion.
-          </li>
-          <li>
-            automatic javadoc attachment (refer to org.eclipse.pde.core.javadoc
-            extension point documentation)
-          </li>
-          <li>
-            Code "Clean Up"
-            <ul>
-              <li>
-                Remove Unused Code (imports, private methods, private constructors,
-                private types).
-              </li>
-              <li>
-                JSE 5.0 (add missing @Override, add missing @Deprecated)
-              </li>
-              <li>
-                more to come with 3.2 release cycle
-              </li>
-            </ul>
           </li>
         </ul>
       </action>
