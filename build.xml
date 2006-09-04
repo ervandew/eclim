@@ -134,6 +134,17 @@
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
       <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
     </replace>
+
+    <!--
+      - separates lib entries onto new lines since the single line length of
+      - the classpath entry seems to be limited.
+      -->
+    <replace dir="${eclipse.home}/plugins"
+        includes="org.eclim*_${eclim.version}/META-INF/MANIFEST.MF">
+      <replacetoken>,lib</replacetoken>
+      <replacevalue>,
+  lib</replacevalue>
+    </replace>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
       includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
@@ -141,8 +152,6 @@
     <copy todir="${vim.files.home}">
       <fileset dir="src/vim" includes="**/*"/>
     </copy>
-    <replace dir="${vim.files.home}"
-      includes="**/*.vim" token="$${eclim.version}" value="${eclim.version}"/>
 
   </target>
 
