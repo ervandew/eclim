@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: ${eclim.version}
+" Version: $Revision$
 "
 " Description: {{{
 "   Various functions that are useful in and out of eclim.

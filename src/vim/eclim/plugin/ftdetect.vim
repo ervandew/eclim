@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: ${eclim.version}
+" Version: $Revision$
 "
 " Description: {{{
 "   Vim file type detection script for eclim.

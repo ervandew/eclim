@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: ${eclim.version}
+" Version: $Revision$
 "
 " Description: {{{
 "  Syntax file for junit result files in xml format.

@@ -1,4 +1,5 @@
 " Author:  Eric Van Dewoestine
+" Version: $Revision$
 
 if exists("current_compiler")
   finish
