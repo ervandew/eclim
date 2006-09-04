@@ -80,6 +80,12 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
     if len(results) == 1 && results[0] == '0'
       return
     endif
+
+    " if the word has a '.' in it (like package completion) then we need to
+    " strip some off according to what is currently in the buffer.
+    let prefix = substitute(getline('.'),
+      \ '.\{-}\([[:alnum:].]\+\%' . col('.') . 'c\).*', '\1', '')
+
     for result in results
       let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
       " removed '<' and '>' from end tag results
@@ -90,6 +96,11 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
 
       let info = substitute(result, '.*|\(.*\)', '\1', '')
       let info = eclim#html#util#HtmlToText(info)
+
+      " strip off prefix if necessary.
+      if word =~ '\.'
+        let word = substitute(word, prefix, '', '')
+      endif
 
       let dict = {'word': word, 'menu': menu, 'info': info}
 
