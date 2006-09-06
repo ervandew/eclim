@@ -25,7 +25,6 @@
 " TestGetEclimCommand() {{{
 function! TestGetEclimCommand ()
   let result = eclim#GetEclimCommand()
-
   call VUAssertTrue(result =~ '\<eclim\>')
 endfunction " }}}
 

@@ -5,12 +5,6 @@
 "   Based heavily on vim_unit.vim by Staale Flock:
 "     http://www.vim.org/scripts/script.php?script_id=1125
 "
-" Todo:
-"   - Add means to run all test functions from all .vim files in a given
-"     directory.
-"   - Add means to edit a specific file prior to calling a test file.
-"   - Support xml output?
-"
 " License:
 "
 " Copyright (c) 2005 - 2006
@@ -33,24 +27,24 @@
   if !exists('g:vimUnitOutputDir')
     " Sets the output directory where test results will be written to.
     " Default value '' forces all output to be written to the screen (echo).
-    let g:vimUnitOutputDir = ''
-  endif
-
-  if !exists('g:vimUnitVerbosity')
-    " At the moment there is just 0 (quiet) and 1(verbose)
-    " Only used if output is written to screen instead of a result file.
-    let g:vimUnitVerbosity = 1
+    let g:vimUnitOutputDir = '.'
   endif
 " }}}
 
 " Script Variables {{{
-  let s:testRunCount = 0
-  let s:testRunFailureCount = 0
+  let s:tests_run = 0
+  let s:tests_failed = 0
+
+  let s:test_results = []
 
   let s:suite_methods = []
+  let s:redir_stack = []
 
   let s:function_regex = '^\s*fu\%[nction]\%[!]\s\+\(.\{-}\)\s*(\s*).*$'
   let s:non_failure_regex = '^\%(\%(^Fail.*$\)\@!.\)*$'
+
+  let s:testsuite = '<testsuite name="<suite>" tests="<tests>" failures="<failures>" time="<time>">'
+  let s:testcase = '  <testcase classname="<testcase>" name="<test>" time="<time>"'
 " }}}
 
 " VUAssertEquals(arg1, arg2, ...) {{{
@@ -111,43 +105,45 @@ if !exists('*VURunnerRunTests')
 function! VURunnerRunTests(basedir, testfile)
   call s:Init(a:basedir, a:testfile)
 
-  echo "Running: " . a:testfile
+  echom "Running: " . a:testfile
 
   let tests = s:GetTestFunctionNames()
+  let testcase = fnamemodify(a:testfile, ':r')
 
-  if exists('s:vimUnitOutputFile')
-    exec 'redir >> ' . s:vimUnitOutputFile
-  endif
-
+  call PushRedir('=>> g:vu_sysout')
   exec 'source ' . s:vimUnitTestFile
 
   if exists('*BeforeTestCase')
     call BeforeTestCase()
   endif
 
+  let now = strftime('%s')
   for test in tests
-    call s:RunTest(test)
+    call s:RunTest(testcase, test)
   endfor
 
   if exists('*AfterTestCase')
     call AfterTestCase()
   endif
 
-  if exists('s:vimUnitOutputFile')
-    call s:PrintResults(a:testfile)
-    redir END
-    unlet s:vimUnitOutputFile
-  endif
+  call PopRedir()
 
-  call s:PrintResults(a:testfile)
+  let duration = strftime('%s') - now
+  call s:WriteResults(a:testfile, duration)
+
+  echom 'Tests run: ' . s:tests_run . ', ' . 'Failures: ' . s:tests_failed . ', Time elapsed ' . duration . ' sec'
+  if s:tests_failed > 0
+    echom "Test " . a:testfile . " FAILED"
+  endif
 endfunction
 endif " }}}
 
 " Init(basedir, testfile) {{{
 function! s:Init(basedir, testfile)
-  let s:testRunCount = 0
-  let s:testRunFailureCount = 0
+  let s:tests_run = 0
+  let s:tests_failed = 0
   let s:suite_methods = []
+  let g:vu_sysout = ''
 
   unlet! s:vimUnitOutputFile
 
@@ -161,9 +157,7 @@ function! s:Init(basedir, testfile)
   if !exists('s:vimUnitOutputDir')
     let g:vimUnitOutputDir = expand(g:vimUnitOutputDir)
     let s:vimUnitOutputDir = g:vimUnitOutputDir
-  endif
 
-  if s:vimUnitOutputDir != ''
     " check if directory exists, if not try to create it.
     if !isdirectory(g:vimUnitOutputDir)
       " FIXME: fix to create parent directories as necessary
@@ -186,7 +180,7 @@ function! s:Init(basedir, testfile)
       " substitute all path separators with '.'
       let file = substitute(file, '\(/\|\\\)', '.', 'g')
 
-      let s:vimUnitOutputFile = s:vimUnitOutputDir . '/TEST-' . file . '.txt'
+      let s:vimUnitOutputFile = s:vimUnitOutputDir . '/TEST-' . file . '.xml'
 
       " write output to the file
       call delete(s:vimUnitOutputFile)
@@ -194,50 +188,30 @@ function! s:Init(basedir, testfile)
   endif
 endfunction " }}}
 
-" RunTest(test) {{{
-function! s:RunTest(test)
+" RunTest(testcase, test) {{{
+function! s:RunTest(testcase, test)
+  let now = strftime('%s')
   if exists('*SetUp')
     call SetUp()
   endif
 
+  let fail = []
   try
-    let s:testRunCount += 1
+    let s:tests_run += 1
     call {a:test}()
   catch
-    let s:testRunFailureCount += 1
-    call s:Output(v:throwpoint)
-    call s:Output('  ' . v:exception)
+    let s:tests_failed += 1
+    call add(fail, v:exception)
+    call add(fail, v:throwpoint)
   endtry
 
   if exists('*TearDown')
     call TearDown()
   endif
-endfunction " }}}
 
-" PrintResults(testfile) {{{
-function! s:PrintResults(testfile)
-  let statistics = 'Tests run: ' . s:testRunCount . ', '
-  let statistics .= 'Failures: ' . s:testRunFailureCount
-
-  if s:testRunFailureCount > 0
-    let statistics .= "\nTest " . a:testfile . " FAILED"
-  endif
-
-  call s:Output('')
-  call s:Output(statistics)
-
-  return statistics
-endfunction " }}}
-
-" Output(message) {{{
-function! s:Output(message)
-  if exists('s:vimUnitOutputFile')
-    silent echo a:message
-  else
-    if g:vimUnitVerbosity > 0
-      echo a:message
-    endif
-  endif
+  let time = strftime('%s') - now
+  let result = {'testcase': a:testcase, 'test': a:test, 'time': time, 'fail': fail}
+  call add(s:test_results, result)
 endfunction " }}}
 
 " GetTestFunctionNames() " {{{
@@ -265,6 +239,83 @@ function! s:GetTestFunctionNames ()
     exec winreset
   endtry
   return filter(results, 'v:val =~ "^Test"')
+endfunction " }}}
+
+" WriteResults(testfile, running_time) {{{
+function! s:WriteResults (testfile, running_time)
+  let root = s:testsuite
+  let root = substitute(root, '<suite>', a:testfile, '')
+  let root = substitute(root, '<tests>', s:tests_run, '')
+  let root = substitute(root, '<failures>', s:tests_failed, '')
+  let root = substitute(root, '<time>', a:running_time, '')
+  let results = ['<?xml version="1.0" encoding="UTF-8" ?>', root, '  <system-out>', '    <![CDATA[', '    ]]>', '  </system-out>', '</testsuite>']
+
+  " insert test results
+  let index = -5
+  for result in s:test_results
+    let testcase = s:testcase
+    let testcase = substitute(testcase, '<testcase>', result.testcase, '')
+    let testcase = substitute(testcase, '<test>', result.test, '')
+    let testcase = substitute(testcase, '<time>', result.time, '')
+
+    let testcase .= len(result.fail) == 0 ? '/>' : '>'
+
+    call insert(results, testcase, index)
+
+    if len(result.fail) > 0
+      call insert(results, '    <failure message="' . result.fail[0] . '">', index)
+      let lines = split(result.fail[1], '\n')
+      call map(lines, '"      " . v:val')
+      for line in lines
+        call insert(results, line, index)
+      endfor
+      call insert(results, '    </failure>', index)
+      call insert(results, '  </testcase>', index)
+    endif
+  endfor
+
+  " insert system output
+  let out = split(g:vu_sysout, '\n')
+  call map(out, '"    " . v:val')
+  let index = -3
+  for line in out
+    call insert(results, line, index)
+  endfor
+
+  let winreset = winrestcmd()
+  let save_opt = &eventignore
+  let save = @"
+  try
+    set eventignore=all
+    silent exec 'split ' . s:vimUnitOutputFile
+    1,$ delete
+    call append(1, results)
+    1,1 delete
+    silent write
+    silent close
+  finally
+    exec winreset
+    let &eventignore = save_opt
+    let @" = save
+  endtry
+endfunction " }}}
+
+" PushRedir(redir) {{{
+function! PushRedir (redir)
+  exec 'redir ' . a:redir
+  call add(s:redir_stack, a:redir)
+endfunction " }}}
+
+" PopRedir() {{{
+function! PopRedir ()
+  let index = len(s:redir_stack) - 1
+  if index >= 0
+    let redir = s:redir_stack[index]
+    exec 'redir ' . redir
+    call remove(s:redir_stack, index)
+  else
+    redir END
+  endif
 endfunction " }}}
 
 " VimUnitTest() {{{

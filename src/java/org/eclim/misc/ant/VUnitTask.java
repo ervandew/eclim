@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.commons.io.FilenameUtils;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.BuildException;
@@ -31,6 +36,11 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
 
 import org.eclim.util.CommandExecutor;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Ant task for executing vunit test cases.
@@ -43,6 +53,7 @@ import org.eclim.util.CommandExecutor;
 public class VUnitTask
   extends Task
 {
+  private static final String TESTSUITE = "testsuite";
   private static final String PLUGIN = "\"source <plugin>\"";
   private static final String OUTPUT = "\"let g:vimUnitOutputDir='<todir>'\"";
   private static final String TESTCASE =
@@ -63,56 +74,79 @@ public class VUnitTask
   {
     validateAttributes();
 
-    String vunit = PLUGIN.replaceFirst("<plugin>", plugin.getAbsolutePath());
-    String output = OUTPUT.replaceFirst("<todir>", todir.getAbsolutePath());
+    try{
+      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      DefaultHandler handler = new ResultHandler();
 
-    for (Iterator it = filesets.iterator(); it.hasNext();){
-      FileSet set = (FileSet)it.next();
-      DirectoryScanner scanner = set.getDirectoryScanner(getProject());
-      File basedir = scanner.getBasedir();
-      String[] files = scanner.getIncludedFiles();
+      String vunit = PLUGIN.replaceFirst("<plugin>", plugin.getAbsolutePath());
+      String output = OUTPUT.replaceFirst("<todir>", todir.getAbsolutePath());
 
-      String run = TESTCASE.replaceFirst("<basedir>", basedir.getAbsolutePath());
+      for (Iterator it = filesets.iterator(); it.hasNext();){
+        FileSet set = (FileSet)it.next();
+        DirectoryScanner scanner = set.getDirectoryScanner(getProject());
+        File basedir = scanner.getBasedir();
+        String[] files = scanner.getIncludedFiles();
 
-      for (int ii = 0; ii < files.length; ii++){
-        log("Running: " + files[ii]);
+        String run = TESTCASE.replaceFirst("<basedir>", basedir.getAbsolutePath());
 
-        String[] command = new String[VUNIT.length];
-        System.arraycopy(VUNIT, 0, command, 0, VUNIT.length);
+        for (int ii = 0; ii < files.length; ii++){
+          log("Running: " + files[ii]);
 
-        command[2] = vunit;
-        command[4] = output;
-        command[6] = run.replaceFirst("<testcase>", files[ii]);
+          String[] command = new String[VUNIT.length];
+          System.arraycopy(VUNIT, 0, command, 0, VUNIT.length);
 
-        // ncurses and Runtime.exec don't play well together, so execute via sh.
-        log("sh -c " + StringUtils.join(command, ' ') + " exit",
-            Project.MSG_DEBUG);
-        command = new String[]{
-          "sh", "-c", StringUtils.join(command, ' '), "exit"
-        };
+          command[2] = vunit;
+          command[4] = output;
+          command[6] = run.replaceFirst("<testcase>", files[ii]);
 
-        try{
-          CommandExecutor executor = CommandExecutor.execute(command);
+          // ncurses and Runtime.exec don't play well together, so execute via sh.
+          log("sh -c " + StringUtils.join(command, ' ') + " exit",
+              Project.MSG_DEBUG);
+          command = new String[]{
+            "sh", "-c", StringUtils.join(command, ' '), "exit"
+          };
 
-          if(executor.getResult().trim().length() > 0){
-            log(executor.getResult());
+          try{
+            CommandExecutor executor = CommandExecutor.execute(command);
+
+            if(executor.getResult().trim().length() > 0){
+              log(executor.getResult());
+            }
+
+            if(executor.getReturnCode() != 0){
+              throw new BuildException(
+                  "Failed to run command: " + executor.getErrorMessage());
+            }
+          }finally{
+            // some aspect of the external execution can screw up the terminal,
+            // but 'resize' can fix it.
+            try{
+              Runtime.getRuntime().exec("resize");
+            }catch(Exception ignore){
+            }
           }
 
-          if(executor.getReturnCode() != 0){
-            throw new BuildException(
-                "Failed to run command: " + executor.getErrorMessage());
+          StringBuffer file = new StringBuffer()
+            .append("TEST-")
+            .append(FilenameUtils.getPath(files[ii]).replace('/', '.'))
+            .append(FilenameUtils.getBaseName(files[ii]))
+            .append(".xml");
+          File resultFile = new File(FilenameUtils.concat(
+              todir.getAbsolutePath(), file.toString()));
+
+          try{
+            parser.parse(resultFile, handler);
+          }catch(SAXException se){
+            if(!TESTSUITE.equals(se.getMessage())){
+              throw se;
+            }
           }
-        }catch(Exception e){
-          throw new BuildException(e);
         }
       }
-    }
-
-    // some aspect of the external execution can screw up the terminal, but
-    // 'resize' can fix it.
-    try{
-      Runtime.getRuntime().exec("resize");
-    }catch(Exception ignore){
+    }catch(BuildException be){
+      throw be;
+    }catch(Exception e){
+      throw new BuildException(e);
     }
   }
 
@@ -172,5 +206,38 @@ public class VUnitTask
   public void setTodir (File todir)
   {
     this.todir = todir;
+  }
+
+  /**
+   * SAX handler for vunit result parsing.
+   */
+  private class ResultHandler
+    extends DefaultHandler
+  {
+    /**
+     * {@inheritDoc}
+     * @see org.xml.sax.ContentHandler#startElement(String,String,String,Attributes)
+     */
+    public void startElement (
+        String uri, String localName, String qName, Attributes atts)
+      throws SAXException
+    {
+      int tests = Integer.parseInt(atts.getValue("tests"));
+      int failures = Integer.parseInt(atts.getValue("failures"));
+      String time = atts.getValue("time");
+      String name = atts.getValue("name");
+
+      StringBuffer buffer = new StringBuffer()
+        .append("Tests run: ").append(tests)
+        .append(", Failures: ").append(failures)
+        .append(", Time elapsed: ").append(time).append(" sec");
+      log(buffer.toString());
+
+      if(failures > 0){
+        log("Test " + name + " FAILED");
+      }
+
+      throw new SAXException(TESTSUITE);
+    }
   }
 }
