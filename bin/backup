@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BACKUP_DIR="/home/ervandew/files/development/eclim/backup"
+BACKUP_DIR=`dirname $0`
+BACKUP_DIR="$BACKUP_DIR/../backup"
 
 if [ ! -d $BACKUP_DIR ]; then
   mkdir -p $BACKUP_DIR
