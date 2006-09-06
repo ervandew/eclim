@@ -4,36 +4,38 @@
 -->
 <project name="test" default="test" basedir="../..">
 
-  <path id="junit">
-    <pathelement location="lib/junit-4.1.jar"/>
-    <pathelement location="src/ant/lib/ant-junit-1.6.5.jar"/>
-  </path>
-
-  <taskdef name="junit" classpathref="junit"
-      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
-  <taskdef name="junitreport" classpathref="junit"
-      classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"/>
+  <property name="test.include" value="**/*Test"/>
 
   <!--
     - Task for starting eclimd and running unit tests.
     -->
   <target name="test" depends="build"
       description="Starts the eclim server and runs the junit tests">
+    <path id="junit">
+      <pathelement location="lib/junit-4.1.jar"/>
+      <pathelement location="src/ant/lib/ant-junit-1.6.5.jar"/>
+    </path>
+
+    <taskdef name="junit" classpathref="junit"
+        classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+    <taskdef name="junitreport" classpathref="junit"
+        classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"/>
+
     <if>
       <socket server="localhost" port="9091"/>
       <then>
-        <runtarget target="tests.run"/>
+        <runtarget target="tests.run.junit"/>
       </then>
       <else>
         <echo>Starting eclimd...</echo>
         <parallel>
           <exec executable="${eclim.home}/bin/eclimd"
-              output="build/test/eclimd.log"/>
+              output="build/test/junit/eclimd.log"/>
           <sequential>
             <waitfor maxwait="20" maxwaitunit="second">
               <socket server="localhost" port="9091"/>
             </waitfor>
-            <runtarget target="tests.run"/>
+            <runtarget target="tests.run.junit"/>
             <exec executable="${eclim.home}/bin/eclim">
               <arg line="-command shutdown"/>
             </exec>
@@ -43,20 +45,21 @@
     </if>
 
     <!-- generate html results -->
-    <!--junitreport todir="build/test/results">
-      <fileset dir="build/test/results" includes="*.xml"/>
-      <report format="noframes" todir="build/test/results/html"/>
+    <!--junitreport todir="build/test/junit/results">
+      <fileset dir="build/test/junit/results" includes="*.xml"/>
+      <report format="noframes" todir="build/junit/test/results/html"/>
     </junitreport-->
   </target>
 
   <!--
-    - Runs the tests after eclimd has been started.
+    - Runs the junit tests after eclimd has been started.
     -->
-  <target name="tests.run" description="Runs the junit tests">
-    <mkdir dir="build/test/classes"/>
-    <mkdir dir="build/test/results"/>
+  <target name="tests.run.junit" description="Runs the junit tests">
+    <mkdir dir="build/test/junit/classes"/>
+    <mkdir dir="build/test/junit/results"/>
+    <mkdir dir="build/test/vunit/results"/>
 
-    <javac destdir="build/test/classes" debug="on" optimize="false"
+    <javac destdir="build/test/junit/classes" debug="on" optimize="false"
         target="${test.javac.target}" source="${test.javac.target}"
         deprecation="${deprecation}">
       <src path="src/test/junit"/>
@@ -67,7 +70,7 @@
       </classpath>
     </javac>
 
-    <copy todir="build/test/classes" includeEmptyDirs="false">
+    <copy todir="build/test/junit/classes" includeEmptyDirs="false">
       <fileset dir="src/test/junit">
         <include name="**/*"/>
         <exclude name="**/*.java"/>
@@ -76,22 +79,40 @@
 
     <antcall target="test.setup_projects"/>
 
-    <property name="junit.include" value="**/*Test"/>
     <junit printsummary="yes">
       <classpath>
         <path refid="classpath"/>
         <pathelement path="build/classes"/>
-        <pathelement path="build/test/classes"/>
+        <pathelement path="build/test/junit/classes"/>
       </classpath>
       <formatter type="xml"/>
-      <batchtest fork="yes" todir="build/test/results">
-        <fileset dir="build/test/classes" includes="${junit.include}.class"/>
+      <batchtest fork="yes" todir="build/test/junit/results">
+        <fileset dir="build/test/junit/classes" includes="${test.include}.class"/>
       </batchtest>
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
     </junit>
 
+    <antcall target="tests.run.vunit"/>
+
     <antcall target="test.teardown_projects"/>
+  </target>
+
+  <!--
+    - Runs vim script unit tests.
+    -->
+  <target name="tests.run.vunit" description="Runs the vunit tests.">
+    <taskdef name="vunit" classname="org.eclim.misc.ant.VUnitTask">
+      <classpath>
+        <pathelement location="build/classes"/>
+        <pathelement location="build/dist/eclim-misc.jar"/>
+        <path refid="classpath"/>
+      </classpath>
+    </taskdef>
+
+    <vunit plugin="src/ant/lib/vunit.vim" todir="build/test/vunit/results">
+      <fileset dir="src/test/vunit" includes="${test.include}.vim"/>
+    </vunit>
   </target>
 
   <!--
@@ -107,7 +128,7 @@
     </copy>
 
     <exec executable="${eclim.home}/bin/eclim" failonerror="true"
-        output="build/test/eclim.log" append="false">
+        output="build/test/junit/eclim.log" append="false">
       <arg line="-command project_create -f ${eclipse.workspace}/eclim_unit_test_java"/>
     </exec>
   </target>
@@ -117,7 +138,7 @@
     -->
   <target name="test.teardown_projects">
     <exec executable="${eclim.home}/bin/eclim" failonerror="true"
-        output="build/test/eclim.log" append="true">
+        output="build/test/junit/eclim.log" append="true">
       <arg line="-command project_delete -n eclim_unit_test_java"/>
     </exec>
 
