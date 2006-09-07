@@ -258,7 +258,8 @@ function! s:WriteResults (testfile, running_time)
     call insert(results, testcase, index)
 
     if len(result.fail) > 0
-      call insert(results, '    <failure message="' . result.fail[0] . '">', index)
+      let message = substitute(result.fail[0], '"', '\&quot;', 'g')
+      call insert(results, '    <failure message="' . message . '">', index)
       let lines = split(result.fail[1], '\n')
       call map(lines, '"      " . v:val')
       for line in lines
@@ -284,10 +285,8 @@ function! s:WriteResults (testfile, running_time)
     set eventignore=all
     silent exec 'split ' . s:vimUnitOutputFile
     1,$ delete
-    call append(1, results)
-    1,1 delete
-    silent write
-    silent close
+    call setline(1, results)
+    silent wq
   finally
     exec winreset
     let &eventignore = save_opt

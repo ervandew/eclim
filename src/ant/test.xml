@@ -110,8 +110,13 @@
       </classpath>
     </taskdef>
 
+    <delete>
+      <fileset defaultexcludes="no"
+          dir="build/test/vunit/results/" includes=".*.xml.swp"/>
+    </delete>
     <vunit plugin="src/ant/lib/vunit.vim" todir="build/test/vunit/results">
       <fileset dir="src/test/vunit" includes="${test.include}.vim"/>
+      <sysproperty key="g:TestEclimWorkspace" value="${eclipse.workspace}"/>
     </vunit>
   </target>
 

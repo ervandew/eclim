@@ -33,6 +33,7 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
+import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 
 import org.eclim.util.CommandExecutor;
@@ -59,12 +60,14 @@ public class VUnitTask
   private static final String TESTCASE =
     "\"silent! call VURunnerRunTests('<basedir>', '<testcase>')\"";
   private static final String[] VUNIT = {
-    "vim", "--cmd", "", "--cmd", "", "-c", "", "-c", "\"qa\""
+    "vim", "--cmd", "", "--cmd", "", "--cmd", "", "-c", "", "-c", "\"qa!\""
   };
 
   private File plugin;
   private File todir;
   private List filesets = new ArrayList();
+  private List properties = new ArrayList();
+  private boolean failed;
 
   /**
    * Executes this task.
@@ -81,6 +84,20 @@ public class VUnitTask
       String vunit = PLUGIN.replaceFirst("<plugin>", plugin.getAbsolutePath());
       String output = OUTPUT.replaceFirst("<todir>", todir.getAbsolutePath());
 
+      // build properties string.
+      StringBuffer propertiesBuffer = new StringBuffer();
+      for (Iterator ii = properties.iterator(); ii.hasNext();){
+        Environment.Variable var = (Environment.Variable)ii.next();
+        if(propertiesBuffer.length() > 0){
+          propertiesBuffer.append(" | ");
+        }
+        propertiesBuffer.append("let ")
+          .append(var.getKey())
+          .append("='")
+          .append(var.getValue()).append("'");
+      }
+      String setproperties = "\"" + propertiesBuffer.append('"').toString();
+
       for (Iterator it = filesets.iterator(); it.hasNext();){
         FileSet set = (FileSet)it.next();
         DirectoryScanner scanner = set.getDirectoryScanner(getProject());
@@ -95,9 +112,10 @@ public class VUnitTask
           String[] command = new String[VUNIT.length];
           System.arraycopy(VUNIT, 0, command, 0, VUNIT.length);
 
-          command[2] = vunit;
-          command[4] = output;
-          command[6] = run.replaceFirst("<testcase>", files[ii]);
+          command[2] = setproperties;
+          command[4] = vunit;
+          command[6] = output;
+          command[8] = run.replaceFirst("<testcase>", files[ii]);
 
           // ncurses and Runtime.exec don't play well together, so execute via sh.
           log("sh -c " + StringUtils.join(command, ' ') + " exit",
@@ -189,6 +207,15 @@ public class VUnitTask
   }
 
   /**
+   * Adds a property to be set when running the tests.
+   * @param prop The property.
+   */
+  public void addSysproperty (Environment.Variable prop)
+  {
+    properties.add(prop);
+  }
+
+  /**
    * Sets the plugin for this instance.
    *
    * @param plugin The plugin.
@@ -234,6 +261,7 @@ public class VUnitTask
       log(buffer.toString());
 
       if(failures > 0){
+        failed = true;
         log("Test " + name + " FAILED");
       }
 
