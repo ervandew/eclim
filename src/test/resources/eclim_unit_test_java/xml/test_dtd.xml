@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+ -->
+<!DOCTYPE test [
+  <!ELEMENT test (foo)>
+  <!ELEMENT foo (blah)>
+  <!ELEMENT bar (baz)>
+]>
+<test>
+  <foo>
+    <bar/>
+  </foo>
+</test>
