@@ -233,7 +233,7 @@ function! eclim#util#GetPathEntry (file)
 endfunction " }}}
 
 " GoToBufferWindow(bufname) {{{
-" Returns the to window containing the supplied buffer name.
+" Returns to the window containing the supplied buffer name.
 function! eclim#util#GoToBufferWindow (bufname)
   let winnr = bufwinnr(bufnr(b:filename))
   if winnr != -1
