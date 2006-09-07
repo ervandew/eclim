@@ -57,7 +57,7 @@ public class VUnitTask
   private static final String PLUGIN = "\"source <plugin>\"";
   private static final String OUTPUT = "\"let g:vimUnitOutputDir='<todir>'\"";
   private static final String TESTCASE =
-    "\"silent call VURunnerRunTests('<basedir>', '<testcase>')\"";
+    "\"silent! call VURunnerRunTests('<basedir>', '<testcase>')\"";
   private static final String[] VUNIT = {
     "vim", "--cmd", "", "--cmd", "", "-c", "", "-c", "\"qa\""
   };

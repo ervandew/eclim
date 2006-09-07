@@ -32,14 +32,6 @@
 " }}}
 
 " Script Variables {{{
-  let s:tests_run = 0
-  let s:tests_failed = 0
-
-  let s:test_results = []
-
-  let s:suite_methods = []
-  let s:redir_stack = []
-
   let s:function_regex = '^\s*fu\%[nction]\%[!]\s\+\(.\{-}\)\s*(\s*).*$'
   let s:non_failure_regex = '^\%(\%(^Fail.*$\)\@!.\)*$'
 
@@ -143,9 +135,12 @@ function! s:Init(basedir, testfile)
   let s:tests_run = 0
   let s:tests_failed = 0
   let s:suite_methods = []
+  let s:test_results = []
+  let s:redir_stack = []
   let g:vu_sysout = ''
 
   unlet! s:vimUnitOutputFile
+  unlet! s:vimUnitOutputDir
 
   silent! delfunction BeforeTestCase
   silent! delfunction SetUp
@@ -308,12 +303,13 @@ endfunction " }}}
 
 " PopRedir() {{{
 function! PopRedir ()
-  let index = len(s:redir_stack) - 1
+  let index = len(s:redir_stack) - 2
   if index >= 0
     let redir = s:redir_stack[index]
     exec 'redir ' . redir
-    call remove(s:redir_stack, index)
+    call remove(s:redir_stack, index, len(s:redir_stack) - 1)
   else
+    let s:redir_stack = []
     redir END
   endif
 endfunction " }}}
