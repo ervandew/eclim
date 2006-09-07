@@ -43,7 +43,7 @@
 " Compares the two arguments to determine if they are equal.
 function! VUAssertEquals(arg1, arg2, ...)
   if a:arg1 != a:arg2
-    let message = '"' . a:arg1 . '" != "' . a:arg2 . '"'
+    let message = '"' . string(a:arg1) . '" != "' . string(a:arg2) . '"'
     if a:0 > 0
       let message = a:1 . ' (' . message . ')'
     endif
@@ -306,11 +306,18 @@ function! PopRedir ()
   if index >= 0
     let redir = s:redir_stack[index]
     exec 'redir ' . redir
-    call remove(s:redir_stack, index, len(s:redir_stack) - 1)
+    call remove(s:redir_stack, index + 1, len(s:redir_stack) - 1)
   else
     let s:redir_stack = []
     redir END
   endif
+endfunction " }}}
+
+" PeekRedir() {{{
+function! PeekRedir ()
+  call PushRedir(s:redir_stack[len(s:redir_stack) - 1])
+  call PopRedir()
+  return s:redir_stack[len(s:redir_stack) - 1]
 endfunction " }}}
 
 " VimUnitTest() {{{
