@@ -78,8 +78,8 @@
                 :filetype
               </source>
               <p>
-                Which should output 'filetype detection:ON  plugin:ON  indent:ON'
-                which should at least show 'ON' for 'detection' and 'plugin'.
+                Which should output 'filetype detection:ON  plugin:ON
+                indent:ON', showing at least 'ON' for 'detection' and 'plugin'.
               </p>
             </li>
           </ul>
