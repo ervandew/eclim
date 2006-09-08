@@ -35,7 +35,7 @@
       <p>
         When editing java source files eclim exposes a couple commands which
         allow you to easily execute junit test cases and view the results.
-        First please note that eclim does not attempt to provide a junit
+        First, please note that eclim does not attempt to provide a junit
         execution environment.  Instead the goal is to allow you to easily
         interface with your favorite build tool (ant, maven, etc.).
       </p>
