@@ -22,6 +22,10 @@
 "
 " }}}
 
+if v:version < 700 || exists("g:EclimDisabled")
+  finish
+endif
+
 " EclimBaseDir() {{{
 " Gets the base directory where the eclim vim scripts are located.
 function EclimBaseDir ()
@@ -117,10 +121,6 @@ if !exists(":EclimValidate")
 endif
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled")
-  finish
-else
-  call <SID>Init()
-endif
+call <SID>Init()
 
 " vim:ft=vim:fdm=marker
