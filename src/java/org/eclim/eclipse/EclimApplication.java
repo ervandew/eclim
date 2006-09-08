@@ -61,6 +61,7 @@ public class EclimApplication
   private static final Logger logger = Logger.getLogger(EclimApplication.class);
 
   private boolean saved = false;
+  private boolean shuttingDown = false;
 
   /**
    * Runs this runnable with the supplied args.
@@ -101,28 +102,34 @@ public class EclimApplication
   /**
    * Shuts down the eclim server.
    */
-  protected void shutdown ()
+  private synchronized void shutdown ()
     throws Exception
   {
-    logger.info("Shutting down eclim...");
+    if(!shuttingDown){
+      shuttingDown = true;
+      logger.info("Shutting down eclim...");
 
-    // Saving workspace MUST be before closing of service contexts.
-    saveWorkspace();
-    Services.close();
+      // Saving workspace MUST be before closing of service contexts.
+      saveWorkspace();
+      Services.close();
 
-    EclimPlugin.getDefault().stop(null);
+      EclimPlugin plugin = EclimPlugin.getDefault();
+      if(plugin != null){
+        plugin.stop(null);
+      }
 
-    // when shutdown normally, eclipse will handle this.
-    /*ResourcesPlugin.getPlugin().shutdown();
-      ResourcesPlugin.getPlugin().stop(null);*/
+      // when shutdown normally, eclipse will handle this.
+      /*ResourcesPlugin.getPlugin().shutdown();
+        ResourcesPlugin.getPlugin().stop(null);*/
 
-    logger.info("Eclim stopped.");
+      logger.info("Eclim stopped.");
+    }
   }
 
   /**
    * Save the workspace.
    */
-  protected void saveWorkspace ()
+  private void saveWorkspace ()
     throws Exception
   {
     logger.info("Saving workspace...");
@@ -152,7 +159,7 @@ public class EclimApplication
   /**
    * Loads any eclim plugins found.
    */
-  protected void loadPlugins ()
+  private void loadPlugins ()
   {
     logger.info("Loading eclim plugins...");
     String pluginsDir =
