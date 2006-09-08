@@ -79,7 +79,7 @@ endif
   let s:trim{'var_ref'} = s:trim{'var_def'}
 " }}}
 
-" FindByContext(name, bang) {{{
+" FindByContext(bang) {{{
 " Contextual find that determines the type of element under the cursor and
 " executes the appropriate find.
 function! eclim#vim#find#FindByContext (bang)
