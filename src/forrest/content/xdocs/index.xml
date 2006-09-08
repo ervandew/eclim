@@ -91,6 +91,19 @@
     <section id="news">
       <title>News</title>
 
+      <section id="news_2006-09-07">
+        <title>2006-09-07</title>
+        <p>
+          Eclim 1.2.1 is now available.<br/>
+          This is primarily a bug fix release, but some new functionality has
+          been added as well. This release should resolve all known issues.
+        </p>
+        <p>
+          To see a list of what's new / changed, be sure to take a look at the
+          <a href="changes.html#version_1.2.1">release notes</a>.
+        </p>
+      </section>
+
       <section id="news_2006-07-17">
         <title>2006-07-17</title>
         <p>

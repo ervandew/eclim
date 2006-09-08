@@ -281,7 +281,7 @@
   </todo>
 
   <changes>
-    <release version="1.2.1" date="unreleased">
+    <release version="1.2.1" date="September 07, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed issues when eclipse is installed in a directory containing a
         space, like "Program Files".
