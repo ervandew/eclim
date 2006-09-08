@@ -83,35 +83,6 @@
               </p>
             </li>
           </ul>
-          <br/>
-          <p>
-            <strong>Gentoo users</strong>: To get the latest and greatest
-            version of Vim from portage simply make the following entries in the
-            designated files.
-          </p>
-          <ul>
-            <li>
-              /etc/portage/package.keywords (the ~x86 portion will obviously
-              vary if you are not on a x86 architecture).
-              <source>
-                app-editors/vim-core ~x86
-                app-editors/vim ~x86
-                app-editors/gvim ~x86
-                app-vim/gentoo-syntax ~x86
-              </source>
-            </li>
-            <li>
-              /etc/portage/package.unmask
-              <source>
-                app-editors/vim-core
-                app-editors/vim
-                app-editors/gvim
-                app-vim/gentoo-syntax
-              </source>
-            </li>
-          </ul>
-          And then execute "emerge vim" or "emerge gvim" depending on whether
-          you would like the gui version or not.
         </li>
       </ul>
     </section>
