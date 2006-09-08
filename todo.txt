@@ -24,9 +24,9 @@ Test on Windows
 Bugs
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
-  - on JavaSearch for implementors, exclude the javadoc matches.
 
 Enhancements
+  - JUnit results in the browser.
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
@@ -36,7 +36,6 @@ Enhancements
     - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
 
   - In addition to marking lines w/ errors/warnings, highlight the offending text.
-    - vim lacks functionality to do this at the moment.
   - CursorHold validation of files.
     - via temp file?
 
