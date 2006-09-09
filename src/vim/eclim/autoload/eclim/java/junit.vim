@@ -134,14 +134,14 @@ endfunction " }}}
 
 " JUnitImplWindow(command) {{{
 function! eclim#java#junit#JUnitImplWindow (command)
-  call eclim#util#TempWindowCommand
-    \ (a:command, eclim#java#util#GetFilename() . "_impl")
+  let name = eclim#java#util#GetFilename() . "_impl"
+  if eclim#util#TempWindowCommand(a:command, name)
+    setlocal ft=java
+    call eclim#java#impl#ImplWindowFolding()
 
-  setlocal ft=java
-  call eclim#java#impl#ImplWindowFolding()
-
-  nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
-  vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
+    nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
+    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
+  endif
 endfunction " }}}
 
 " AddTestImpl(visual) {{{

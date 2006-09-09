@@ -237,19 +237,19 @@ endfunction " }}}
 " Settings() {{{
 " Opens a window that can be used to edit the global settings.
 function! eclim#Settings ()
-  call eclim#util#TempWindowCommand(s:command_settings, "Eclim_Global_Settings")
+  if eclim#util#TempWindowCommand(s:command_settings, "Eclim_Global_Settings")
+    setlocal buftype=acwrite
+    setlocal filetype=jproperties
+    setlocal noreadonly
+    setlocal modifiable
+    setlocal foldmethod=marker
+    setlocal foldmarker={,}
 
-  setlocal buftype=acwrite
-  setlocal filetype=jproperties
-  setlocal noreadonly
-  setlocal modifiable
-  setlocal foldmethod=marker
-  setlocal foldmarker={,}
-
-  augroup eclim_settings
-    autocmd! BufWriteCmd <buffer>
-    autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
-  augroup END
+    augroup eclim_settings
+      autocmd! BufWriteCmd <buffer>
+      autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
+    augroup END
+  endif
 endfunction " }}}
 
 " ShutdownEclim() {{{

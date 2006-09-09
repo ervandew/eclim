@@ -53,19 +53,19 @@ endfunction " }}}
 
 " DelegateWindow(command) {{{
 function! eclim#java#delegate#DelegateWindow (command)
-  call eclim#util#TempWindowCommand
-    \ (a:command, eclim#java#util#GetFilename() . "_delegate")
+  let name = eclim#java#util#GetFilename() . "_delegate"
+  if eclim#util#TempWindowCommand(a:command, name)
+    setlocal ft=java
+    call eclim#java#impl#ImplWindowFolding()
 
-  setlocal ft=java
-  call eclim#java#impl#ImplWindowFolding()
-
-  if line('$') == 1
-    let error = getline(1)
-    close
-    call eclim#util#EchoError(error)
+    if line('$') == 1
+      let error = getline(1)
+      close
+      call eclim#util#EchoError(error)
+    endif
+    nnoremap <silent> <buffer> <cr> :call <SID>AddDelegate(0)<cr>
+    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddDelegate(1)<cr>
   endif
-  nnoremap <silent> <buffer> <cr> :call <SID>AddDelegate(0)<cr>
-  vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddDelegate(1)<cr>
 endfunction " }}}
 
 " AddDelegate(visual) {{{

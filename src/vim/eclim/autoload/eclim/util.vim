@@ -563,7 +563,7 @@ function! eclim#util#TempWindowCommand (command, name)
 
   let results = split(eclim#ExecuteEclim(a:command), '\n')
   if len(results) == 1 && results[0] == '0'
-    return
+    return 0
   endif
 
   call eclim#util#TempWindow(name, results)
@@ -575,6 +575,8 @@ function! eclim#util#TempWindowCommand (command, name)
     autocmd! BufUnload <buffer>
     autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
   augroup END
+
+  return 1
 endfunction " }}}
 
 " WideMessage(command,message) {{{

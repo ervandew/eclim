@@ -163,21 +163,21 @@ function! eclim#project#ProjectSettings (project)
   endif
 
   let command = substitute(s:command_project_info, '<project>', project, '')
-  call eclim#util#TempWindowCommand(command, project . "_settings")
+  if eclim#util#TempWindowCommand(command, project . "_settings")
+    exec "lcd " . eclim#project#GetProjectRoot(project)
+    setlocal buftype=acwrite
+    setlocal filetype=jproperties
+    setlocal noreadonly
+    setlocal modifiable
+    setlocal foldmethod=marker
+    setlocal foldmarker={,}
 
-  exec "lcd " . eclim#project#GetProjectRoot(project)
-  setlocal buftype=acwrite
-  setlocal filetype=jproperties
-  setlocal noreadonly
-  setlocal modifiable
-  setlocal foldmethod=marker
-  setlocal foldmarker={,}
-
-  let b:project = project
-  augroup project_settings
-    autocmd! BufWriteCmd <buffer>
-    autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
-  augroup END
+    let b:project = project
+    augroup project_settings
+      autocmd! BufWriteCmd <buffer>
+      autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
+    augroup END
+  endif
 endfunction " }}}
 
 " SaveSettings() {{{

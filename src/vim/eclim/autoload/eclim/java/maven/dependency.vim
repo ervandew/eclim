@@ -49,15 +49,16 @@ function! eclim#java#maven#dependency#Search (query)
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<query>', a:query, '')
 
-  call eclim#util#TempWindowCommand(command, "Maven_Dependency_Results")
-  let b:filename = filename
+  if eclim#util#TempWindowCommand(command, "Maven_Dependency_Results")
+    let b:filename = filename
 
-  setlocal ft=maven_search_results
-  syntax match Statement /^\w\+.*$/
-  syntax match Identifier /(.\{-})/
-  syntax match Comment /^\s*\/\/.*$/
+    setlocal ft=maven_search_results
+    syntax match Statement /^\w\+.*$/
+    syntax match Identifier /(.\{-})/
+    syntax match Comment /^\s*\/\/.*$/
 
-  nnoremap <silent> <buffer> <cr> :call <SID>AddDependency()<cr>
+    nnoremap <silent> <buffer> <cr> :call <SID>AddDependency()<cr>
+  endif
 endfunction " }}}
 
 " AddDependency() {{{
