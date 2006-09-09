@@ -197,8 +197,11 @@ public class Preferences
       if(option == null){
         option = (Option)this.preferences.get(key);
       }
-      OptionInstance instance = new OptionInstance(option, value);
-      results.add(instance);
+
+      if(option != null){
+        OptionInstance instance = new OptionInstance(option, value);
+        results.add(instance);
+      }
     }
 
     return (Option[])results.toArray(new Option[results.size()]);
