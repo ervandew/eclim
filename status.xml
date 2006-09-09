@@ -281,6 +281,21 @@
   </todo>
 
   <changes>
+
+    <release version="1.2.2" date="September 08, 2006">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed NullPointerException when accessing eclim preferences containing
+        remnant property <code>org.eclim.java.library.root</code>.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed plugin/eclim.vim to check vim version earlier to avoid errors on
+        pre Vim 7 instances.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed all usages of the temp window to account properly for errors.
+      </action>
+    </release>
+
     <release version="1.2.1" date="September 07, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Fixed issues when eclipse is installed in a directory containing a
