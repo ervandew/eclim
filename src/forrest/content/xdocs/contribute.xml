@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Contributing to Eclim</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Eclim is a project developed entirely in my spare time, so its growth and
+      success can be directly impacted by contributions from the community.
+      There are several ways in which you can contribute:
+    </p>
+    <ol>
+      <li>
+        <strong>Documentation</strong>: The documentation can always use
+        improvements.  Right now it is written entirely by me, and as such, it
+        may not be as detailed in some areas as it should.  What the
+        documentation could really use is some help from its users:
+        <ul>
+          <li>
+            Point out any grammar or spelling errors, since some always manage
+            to slip through.
+          </li>
+          <li>
+            Point out areas of the documentation that are vague and could use
+            elaboration.
+          </li>
+          <li>
+            Write new guides to be included in the "Guides" section of the site.
+          </li>
+          <li>
+            Write translations.  Eclim gets visitors from all over the world and
+            it would be nice to be able to provide localized documentation for
+            them.
+          </li>
+          <li>
+            Contribute to the tutorials or tips and tricks sections of the wiki.
+            I'm sure people have already begun to find new and interesting ways
+            to use eclim, and I'm sure everyone would love to hear about them.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Bug Reports</strong>: Some people are a bit shy about speaking
+        up and reporting bugs.  I want to urge people not to be.  If something
+        doesn't work, report it.  It may be a bug, but even if it is just a
+        configuration issue on your end, a misconception on how you thought it
+        should work, or some other quirk specific to your environment, speak up.
+        These can signal that some scripts may need to validate or account for
+        some aspect of the user's environment, or that the documentation may
+        need some work to ensure the user knows what to expect.  Any issue that
+        goes unreported, goes unfixed, so please report all issues, big and
+        small.
+      </li>
+      <li>
+        <strong>Feature Requests</strong>: On occasion I receive a request or
+        two, but I would like to encourage more people to voice their opinion on
+        what they think should be added or changed in eclim.  Once again,
+        nothing is too small to suggest.  Chances are, that if you have
+        something that you would like added or changed, there are others out
+        there that would benefit from the same addition or
+        modification.<br/>
+        To see what features I have already thought about, you can view the
+        online <a href="todo.html">todo list</a>, and
+        <a href="http://eclim.cvs.sourceforge.net/eclim/eclim/todo.txt?view=log">
+          my secondary list
+        </a>.
+      </li>
+      <li>
+        <strong>Code Contributions</strong>: In addition to reporting bugs or
+        requesting features, you can also take that next step and implement a
+        fix or feature yourself.  I just ask that you document your patch
+        accordingly so that I know exactly what you are attempting to fix or
+        add.  Also, if you plan to add a medium or large feature, please let me
+        know prior to beginning your work.  That way I can keep a small list of
+        who is working on what to avoid any duplication of effort and link
+        people together that wish to work on the same feature.  The list would
+        also afford me the ability to contact you should a change to eclim
+        possibly affect what you are working on.
+        <!--br/><br/>
+        It is probably worth mentioning a few things about being granted cvs
+        commit privileges.  For now I would like all code committed to cvs to go
+        through me so that I can provide a certain level of quality assurance.
+        It is ultimately my responsibility to maintain the code in cvs, so I
+        want to ensure that all code committed is maintainable. Should I be
+        unable to contact you for whatever reason, I want to be able to quickly
+        and effectively provide any fixes to the code you provided.  I also need
+        to ensure that there are suitable test cases for your code so that I can
+        maintain a set of regression tests to further maintain the code quality.
+        -->
+      </li>
+      <!--li>
+        <strong>Plugins</strong>: Eclim is currently broken up into several
+        eclipse plugins, each targeting a specific area.  For instance, there is
+        a plugin for java development (org.eclim.jdt), one for working with ant
+        (org.eclim.ant), and another for working with maven (org.eclim.maven).
+        <br/><br/>
+        When viewing the <a href="todo.html">todo list</a>, you will notice that
+        some of the features I would like added depend on third party plugins.
+        These are great places to start development of new eclim plugins.  For
+        instance, to add enhanced support for the springframework, it would make
+        sense to integrate with the Spring IDE which is a
+
+        My long term intension for eclim is to not only be a great java
+        development tool, but also a
+      </li-->
+      <li>
+        <strong>Monetary Contributions</strong>: I am not currently accepting any
+        donations.  My day job pays pays well, and I work on eclim for the love
+        of it.  If you have money you would like to donate, it would go to much
+        better use if you donated to
+        <a href="http://www.vim.org/sponsor/index.php">vim</a>, where it is used
+        to help children in Uganda.  Feel free to mention your referral from
+        eclim if appropriate.
+      </li>
+    </ol>
+  </body>
+</document>
