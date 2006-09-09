@@ -42,10 +42,12 @@ See http://forrest.apache.org/docs/linking.html for more info
     <features label="Features" href="features.html" description="Features"/>
     <screenshots label="Screenshots" description="Eclim Screenshots"
         href="ext:screenshots"/>
+    <download label="Downloads" description="Downloads" href="ext:downloads"/>
     <changes label="Change History" description="Change History"
         href="changes.html"/>
     <todo label="Todo" href="todo.html" description="Todo"/>
-    <download label="Downloads" description="Downloads" href="ext:downloads"/>
+    <contribute label="How To Contribute" href="contribute.html"
+        description="How To Contribute"/>
     <guides label="Guides">
       <install label="Installing / Upgrading"
           description="Installation / Upgrading Instructions"
