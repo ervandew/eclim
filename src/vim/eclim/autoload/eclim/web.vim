@@ -38,20 +38,10 @@ endif
   let s:dictionary = 'http://dictionary.reference.com/search?q=<query>'
   let s:thesaurus = 'http://thesaurus.reference.com/search?q=<query>'
 
-  let s:browsers = {
-      \ 'opera':
-        \ {'unix': 'opera -newpage', 'windows': 'start opera -newpage'},
-      \ 'firefox':
-        \ {'unix': 'firefox', 'windows': 'start firefox'},
-      \ 'konqueror':
-        \ {'unix': 'konqueror', 'windows': 'start konqueror'},
-      \ 'epiphany':
-        \ {'unix': 'epiphany', 'windows': 'start epiphany'},
-      \ 'mozilla':
-        \ {'unix': 'mozilla', 'windows': 'start mozilla'},
-      \ 'netscape':
-        \ {'unix': 'netscape', 'windows': 'start netscape'}
-    \ }
+  let s:browsers = [
+      \ 'opera', 'firefox', 'konqueror', 'epiphany',
+      \ 'mozilla', 'netscape', 'iexplore'
+    \ ]
 " }}}
 
 " OpenUrl(url) {{{
@@ -174,6 +164,8 @@ endfunction " }}}
 " DetermineBrowser() {{{
 function! s:DetermineBrowser ()
   let browser = ''
+
+  " user specified a browser, we just need to fill in any gaps if necessary.
   if exists("g:EclimBrowser")
     let browser = g:EclimBrowser
     " add "<url>" if necessary
@@ -203,26 +195,30 @@ function! s:DetermineBrowser ()
     if browser !~ '^\s*!'
       let browser = '!' . browser
     endif
+
+  " user did not specify a browser, so attempt to find a suitable one.
   else
     if has("win32") || has("win64")
       if executable('rundll32')
         let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
       endif
+    elseif has("mac")
+      let browser = '!open <url>'
     endif
 
+    " no default OS method found, so loop through known browsers.
     if browser == ''
-      for key in keys(s:browsers)
-        if executable(key)
-          if has("win32") || has("win64")
-            let browser = s:browsers[key].windows
-          else
-            let browser = s:browsers[key].unix
-          endif
+      for name in s:browsers
+        if executable(name)
+          let browser = name
           break
         endif
       endfor
-      let g:EclimBrowser = browser
-      let browser = s:DetermineBrowser()
+
+      if browser != ''
+        let g:EclimBrowser = browser
+        let browser = s:DetermineBrowser()
+      endif
     endif
   endif
 
@@ -230,6 +226,7 @@ function! s:DetermineBrowser ()
     call eclim#util#EchoError("Unable to determine browser.  " .
       \ "Please set g:EclimBrowser to your preferred browser.")
   endif
+
   return browser
 endfunction " }}}
 
