@@ -16,14 +16,14 @@
 
 # Author: Eric Van Dewoestine
 
-if [ -z "$ECLIPSE_HOME" ] ; then
-  echo "ECLIPSE_HOME not set";
-  exit 1;
+if [ -z "$ECLIPSE_HOME" ]; then
+  echo "ECLIPSE_HOME not set" 1>&2
+  exit 1
 fi
 
-if [ ! -e "$ECLIPSE_HOME/eclipse" ] ; then
-  echo "No eclipse executable found.  ECLIPSE_HOME may be invalid.";
-  exit 1;
+if [ ! -e "$ECLIPSE_HOME/eclipse" ]; then
+  echo "No eclipse executable found.  ECLIPSE_HOME may be invalid." 1>&2
+  exit 1
 fi
 
 CURPATH=`dirname $0`
@@ -36,5 +36,13 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
 fi
 
-$ECLIPSE_HOME/eclipse -debug -consolelog -nosplash -clean -refresh \
-  -application org.eclim.application -vmargs $ECLIM_ARGS $@
+ECLIM_COMMAND="$ECLIPSE_HOME/eclipse
+  -debug -consolelog -nosplash -clean -refresh -application
+  org.eclim.application -vmargs $ECLIM_ARGS"
+
+if [ "$1" = "start" ]; then
+  shift
+  $ECLIM_COMMAND $@ > /dev/null &
+else
+  $ECLIM_COMMAND $@
+fi
