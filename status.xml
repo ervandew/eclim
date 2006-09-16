@@ -137,7 +137,7 @@
         Support for other languages.
         <ul>
           <li>
-            <a href="http://www.eclipse.org/cdt/">c/c++</a>
+            <a href="http://www.eclipse.org/cdt/">c/c++ (cdt)</a>
           </li>
           <li>
             <a href="http://www.eclipse.org/cobol/">cobol</a>
@@ -146,17 +146,18 @@
             <a href="http://www.ee.ryerson.ca/~hkataria/">javascript</a>
           </li>
           <li>
-            <a href="http://e-p-i-c.sourceforge.net/">perl</a>
+            <a href="http://e-p-i-c.sourceforge.net/">perl (epic)</a>
           </li>
           <li>
-            <a href="http://www.phpeclipse.net">php</a>
+            <a href="http://www.eclipse.org/php">php IDE</a> or
+            <a href="http://www.phpeclipse.net">phpeclipse</a>
           </li>
           <li>
-            <a href="http://pydev.sourceforge.net/">python</a>
+            <a href="http://pydev.sourceforge.net/">python (pydev)</a>
           </li>
           <li>
-            <a href="http://rubyeclipse.sourceforge.net/">ruby</a><br/>
-            <a href="http://www.radrails.org/">rails</a>
+            <a href="http://rubyeclipse.sourceforge.net/">rubyeclipse</a>,
+            <a href="http://www.radrails.org/">rad rails</a>
           </li>
         </ul>
       </action>
