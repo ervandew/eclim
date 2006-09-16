@@ -40,7 +40,9 @@
     </p>
     <ul>
       <li>Create, update, and delete Eclipse projects.</li>
-      <li>Easily manage Eclipse .classpath files.</li>
+      <li>
+        Easily manage Eclipse .classpath files (support for maven and ivy).
+      </li>
       <li>
         Quickly and easily manage settings globally or on a project basis.
       </li>
@@ -51,9 +53,10 @@
     </p>
     <ul>
       <li>Ant execution from any file.</li>
-      <li>Context sensitive code completion.</li>
+      <li>Context sensitive code completion when editing build files.</li>
       <li>
-        Automatic validation (w/ visual marking of errors and warnings).
+        Automatic validation of build files (w/ visual marking of errors and
+        warnings).
       </li>
       <li>Quick access to ant documentation.</li>
     </ul>
@@ -82,7 +85,7 @@
       <li>Java Bean getter and setter generation.</li>
       <li>Generation of delegate methods.</li>
       <li>Java source and java doc searching capabilities.</li>
-      <li>Generate stub methods from implemented interfaces or superclasses.</li>
+      <li>Generate stub methods from implemented interfaces or super classes.</li>
       <li>Generate stub methods for junit testing.</li>
       <li>Quickly clean and sort imports and easily import new classes.</li>
       <li>
@@ -123,15 +126,18 @@
     </p>
     <ul>
       <li>
-        :Split supporting multiple files.
+        :Split / :Tabnew supporting multiple files.
       </li>
       <li>
-        :SplitRelative / :EditRelative for opening a file relative to the
+        :SplitRelative / :EditRelative / TabnewRelative for opening a file relative to the
         current one.
       </li>
       <li>
         Commands to locate a project, workspace, or current file relative file
         and open it (split, edit, or tabnew).
+      </li>
+      <li>
+        Enhanced taglist support.
       </li>
     </ul>
   </body>
