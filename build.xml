@@ -54,12 +54,14 @@
     <!-- eclim jar file -->
     <jar jarfile="build/dist/eclim.jar">
       <fileset dir="build/classes">
-        <include name="**/*.class"/>
+        <include name="org/eclim/**/*.class"/>
+        <include name="org/eclipse/**/*.class"/>
         <exclude name="org/eclim/misc/**/*.class"/>
         <exclude name="org/eclim/plugin/*/**/*.class"/>
       </fileset>
       <fileset dir="src/java">
-        <include name="**/*"/>
+        <include name="org/eclim/**/*"/>
+        <include name="org/eclipse/**/*"/>
         <exclude name="org/eclim/misc/"/>
         <exclude name="org/eclim/misc/*/"/>
         <exclude name="org/eclim/misc/**/*.class"/>
@@ -82,6 +84,14 @@
       </fileset>
     </jar>
 
+    <!-- update nailgun jar file -->
+    <copy tofile="build/dist/lib/nailgun-0.7.1.jar" file="lib/nailgun-0.7.1.jar"/>
+    <jar jarfile="build/dist/lib/nailgun-0.7.1.jar" update="true">
+      <fileset dir="build/classes">
+        <include name="com/martiansoftware/nailgun/**/*.class"/>
+      </fileset>
+    </jar>
+
     <!-- determine what plugins exist (other than the core) -->
     <path id="plugin.dirs">
       <dirset dir="build/classes/org/eclim/plugin" includes="*"/>
@@ -101,7 +111,7 @@
       <fileset dir="." includes="log4j.xml"/>
       <fileset dir="." includes="lib/**/*"
           excludes="lib/ant*.jar,lib/junit*.jar,lib/testng*.jar"/>
-      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar"/>
+      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar,lib/*.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
 
