@@ -22,7 +22,9 @@
           <li>
             Install / update window's service (keep linux init.d script as a
             manual step, since it shouldn't need to be updated often and will
-            contain user defined values).
+            contain user defined values).<br/>
+            http://support.microsoft.com/kb/q137890/<br/>
+            ftp://ftp.microsoft.com/bussys/winnt/winnt-public/reskit/nt40/i386/srvany_x86.exe
           </li>
           <li>
             When eclim has additional eclipse plugins (support for third party
@@ -137,25 +139,34 @@
         Support for other languages.
         <ul>
           <li>
-            <a href="http://www.eclipse.org/cdt/">c/c++ (cdt)</a>
+            <strong>C/C++</strong>:
+            <a href="http://www.eclipse.org/cdt/">cdt</a>
           </li>
           <li>
-            <a href="http://www.eclipse.org/cobol/">cobol</a>
+            <strong>Cobol</strong>:
+            <a href="http://www.eclipse.org/cobol/">COBOL IDE</a>
           </li>
           <li>
-            <a href="http://www.ee.ryerson.ca/~hkataria/">javascript</a>
+            <strong>Javascript</strong>:
+            <a href="http://www.ee.ryerson.ca/~hkataria/">javascript editor</a>
           </li>
           <li>
-            <a href="http://e-p-i-c.sourceforge.net/">perl (epic)</a>
+            <strong>Perl</strong>:
+            <a href="http://e-p-i-c.sourceforge.net/">epic</a>
           </li>
           <li>
-            <a href="http://www.eclipse.org/php">php IDE</a> or
-            <a href="http://www.phpeclipse.net">phpeclipse</a>
+            <strong>Php</strong>:
+            <a href="http://www.eclipse.org/php">php IDE</a>,
+            <a href="http://www.phpeclipse.net">phpeclipse</a>, or
+            <a href="http://www.xored.com/trustudio">trustudio</a>
           </li>
           <li>
-            <a href="http://pydev.sourceforge.net/">python (pydev)</a>
+            <strong>Python</strong>:
+            <a href="http://pydev.sourceforge.net/">pydev</a> or
+            <a href="http://www.xored.com/trustudio">trustudio</a>
           </li>
           <li>
+            <strong>Ruby</strong>:
             <a href="http://rubyeclipse.sourceforge.net/">rubyeclipse</a>,
             <a href="http://www.radrails.org/">rad rails</a>
           </li>
