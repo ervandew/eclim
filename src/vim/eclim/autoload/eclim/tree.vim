@@ -344,7 +344,7 @@ function eclim#tree#ExecuteAction (file, command)
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
   " not using lcd, because the executed command may change windows.
-  silent exec 'cd ' . escape(path, ' &')
+  silent exec 'cd ' . escape(path, ' &#')
 
   let command = a:command
   let command = substitute(command, '<file>', file, 'g')
