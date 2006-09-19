@@ -246,8 +246,8 @@ endfunction " }}}
 function! eclim#util#GrabUri ()
   let line = getline('.')
   let uri = substitute(line,
-    \ "\\(.*[[:space:]\"'(\\[{><]\\|^\\)\\(.*\\%" .
-    \ col('.') . "c.\\{-}\\)\\([[:space:]\"')\\]}<>].*\\|$\\)",
+    \ "\\(.*[[:space:]\"',(\\[{><]\\|^\\)\\(.*\\%" .
+    \ col('.') . "c.\\{-}\\)\\([[:space:]\"',)\\]}<>].*\\|$\\)",
     \ '\2', '')
 
   return uri
