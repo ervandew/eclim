@@ -198,13 +198,14 @@
   <!--
     - Target for creating distributable jars.
     -->
-  <target name="dist" depends="build,javadoc"
+  <target name="dist" depends="build,javadoc,docs"
       description="Creates the distributable jars.">
     <mkdir dir="dist"/>
 
     <!-- docs archive -->
     <zip destfile="${eclipse.home}/plugins/org.eclim_${eclim.version}/doc.zip">
       <fileset dir="build/doc" includes="**/*"/>
+      <fileset dir="build" includes="site/**/*" excludes="site/wiki,site/wiki/**/*"/>
     </zip>
 
     <!-- src archive -->
