@@ -17,6 +17,7 @@ package org.eclim.plugin.maven.command.dependency;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Represents a maven dependency.
@@ -26,9 +27,16 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class Dependency
 {
+  // maven element names
   public static final String GROUP_ID = "groupId";
   public static final String ARTIFACT_ID = "artifactId";
   public static final String VERSION = "version";
+
+  // ivy element attribute names
+  public static final String ORG = "org";
+  public static final String NAME = "name";
+  public static final String REV = "rev";
+
   public static final String TYPE = "type";
   public static final String REPOSITORY = "repository";
   public static final String JAR = "jar";
@@ -174,5 +182,19 @@ public class Dependency
       .append(version, other.getVersion())
       .append(type, other.getType())
       .isEquals();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Object#toString()
+   */
+  public String toString ()
+  {
+    return new ToStringBuilder(this)
+      .append(GROUP_ID, getGroupId())
+      .append(ARTIFACT_ID, getArtifactId())
+      .append(VERSION, getVersion())
+      .append(TYPE, getType())
+      .toString();
   }
 }

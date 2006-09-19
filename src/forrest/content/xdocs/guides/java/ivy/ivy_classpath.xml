@@ -57,6 +57,7 @@
         via this command.
       </p>
     </section>
+
     <section id="classpath">
       <title>Updating .classpath</title>
       <p>
@@ -65,7 +66,7 @@
         saving your ivy.xml file (:w) and letting eclim do the rest.
       </p>
     </section>
-    <section>
+    <section id="preserve">
       <title>Preserving manually added entries</title>
       <p>
         When utilizing the ivy support, eclim will attempt to remove any stale
@@ -84,6 +85,19 @@
         </classpathentry>
         ]]>
       </source>
+    </section>
+
+    <section>
+      <title>Search Online Maven Repository</title>
+      <anchor id="IvyDependencySearch"/>
+      <p>
+        Eclim also provides the command <strong>:IvyDependencySearch</strong>
+        which allows you to search for dependencies in the online maven
+        repository as described in the
+        <a href="../../../vim/java/maven/dependency.html">
+          maven documentation
+        </a>.
+      </p>
     </section>
   </body>
 </document>

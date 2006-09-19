@@ -48,6 +48,7 @@ public class SearchFilter
 {
   private static final Logger logger = Logger.getLogger(SearchFilter.class);
 
+  private static final String IVY = "ivy";
   private static final String DEPENDENCIES = "dependencies";
   private static final String DEPENDENCY = "dependency";
 
@@ -59,7 +60,8 @@ public class SearchFilter
     List dependencies = null;
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);
-      dependencies = getDependencies(file);
+      String type = _commandLine.getValue(Options.TYPE_OPTION);
+      dependencies = getDependencies(file, type);
     }catch(Exception e){
       logger.warn("Unable to get dependencies.", e);
       dependencies = new ArrayList();
@@ -96,9 +98,10 @@ public class SearchFilter
    * Get the project file's current dependencies.
    *
    * @param _file The project file.
+   * @param _type The file type (ivy, maven, mvn).
    * @return List of dependencies.
    */
-  private List getDependencies (String _file)
+  private List getDependencies (String _file, String _type)
     throws Exception
   {
     ArrayList list = new ArrayList();
@@ -113,13 +116,20 @@ public class SearchFilter
         Element element = (Element)nodes.item(ii);
 
         Dependency dependency = new Dependency();
-        dependency.setGroupId(
-            XmlUtils.getElementValue(element, Dependency.GROUP_ID));
-        dependency.setArtifactId(
-            XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
-        dependency.setVersion(
-            XmlUtils.getElementValue(element, Dependency.VERSION));
-        dependency.setType(Dependency.JAR);
+        if(IVY.equals(_type)){
+          dependency.setGroupId(element.getAttribute(Dependency.ORG));
+          dependency.setArtifactId(element.getAttribute(Dependency.NAME));
+          dependency.setVersion(element.getAttribute(Dependency.REV));
+          dependency.setType(Dependency.JAR);
+        }else{
+          dependency.setGroupId(
+              XmlUtils.getElementValue(element, Dependency.GROUP_ID));
+          dependency.setArtifactId(
+              XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
+          dependency.setVersion(
+              XmlUtils.getElementValue(element, Dependency.VERSION));
+          dependency.setType(Dependency.JAR);
+        }
 
         list.add(dependency);
       }

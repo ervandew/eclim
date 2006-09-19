@@ -219,6 +219,27 @@
       </li>
     </ul>
 
+    <p><strong>Ivy Commands</strong></p>
+    <ul>
+      <li>
+        <a href="../guides/java/ivy/ivy_classpath.html#IvyRepo">
+          <strong>:IvyRepo</strong>
+        </a>
+        &lt;path&gt;-
+        Sets the necessary IVY_REPO classpath variable for supporting
+        automatic updates to .classpath files upon ivy.xml updates.
+      </li>
+      <li>
+        <a href="../guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
+          <strong>:IvyDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        Searches online repository and opens a window with results that can be
+        added to the current ivy file by hitting &lt;Enter&gt; on a result.
+        Available when editing an <code>ivy.xml</code> file.
+      </li>
+    </ul>
+
     <p><strong>Java Commands</strong></p>
     <ul>
       <li>

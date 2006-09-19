@@ -25,20 +25,30 @@
 " Script Variables {{{
   let s:command_search =
     \ '-filter vim -command maven_dependency_search ' .
-    \ '-p "<project>" -f "<file>" -s <query>'
+    \ '-p "<project>" -f "<file>" -t "<type>" -s <query>'
 
-  let s:dependency_scope = "\t\t<scope>compile</scope>"
-  let s:dependency_template = [
-    \ "\t<dependency>",
-    \ "\t\t<groupId>${groupId}</groupId>",
-    \ "\t\t<artifactId>${artifactId}</artifactId>",
-    \ "\t\t<version>${version}</version>",
-    \ "\t</dependency>" ]
+  let s:dependency_template{'maven'} =
+    \ "\t<dependency>\n" .
+    \ "\t\t<groupId>${groupId}</groupId>\n" .
+    \ "\t\t<artifactId>${artifactId}</artifactId>\n" .
+    \ "\t\t<version>${version}</version>\n" .
+    \ "\t</dependency>"
+
+  let s:dependency_template{'mvn'} =
+    \ "\t<dependency>\n" .
+    \ "\t\t<groupId>${groupId}</groupId>\n" .
+    \ "\t\t<artifactId>${artifactId}</artifactId>\n" .
+    \ "\t\t<version>${version}</version>\n" .
+    \ "\t\t<scope>compile</scope>\n" .
+    \ "\t</dependency>"
+
+  let s:dependency_template{'ivy'} =
+    \ "\t<dependency org=\"${groupId}\" name=\"${artifactId}\" rev=\"${version}\"/>"
 " }}}
 
-" Search(query) {{{
+" Search(query, type) {{{
 " Searches online maven repository.
-function! eclim#java#maven#dependency#Search (query)
+function! eclim#java#maven#dependency#Search (query, type)
   update
 
   let filename = substitute(expand('%:p'), '\', '/', 'g')
@@ -47,22 +57,24 @@ function! eclim#java#maven#dependency#Search (query)
   let command = s:command_search
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', filename, '')
+  let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<query>', a:query, '')
 
-  if eclim#util#TempWindowCommand(command, "Maven_Dependency_Results")
+  if eclim#util#TempWindowCommand(command, "Dependency_Search_Results")
     let b:filename = filename
 
-    setlocal ft=maven_search_results
+    setlocal ft=dependency_search_results
     syntax match Statement /^\w\+.*$/
     syntax match Identifier /(.\{-})/
     syntax match Comment /^\s*\/\/.*$/
 
-    nnoremap <silent> <buffer> <cr> :call <SID>AddDependency()<cr>
+    let b:type = a:type
+    nnoremap <silent> <buffer> <cr> :call <SID>AddDependency(b:type)<cr>
   endif
 endfunction " }}}
 
-" AddDependency() {{{
-function! s:AddDependency ()
+" AddDependency(type) {{{
+function! s:AddDependency (type)
   let line = getline('.')
   if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
     let artifact = substitute(line, '\s\+\(.*\)\.\w\+ (.*)$', '\1', '')
@@ -72,7 +84,7 @@ function! s:AddDependency ()
     let results_winnr = winnr()
     exec bufwinnr(b:filename) . "winc w"
 
-    call s:InsertDependency(group, artifact, vrsn)
+    call s:InsertDependency(a:type, group, artifact, vrsn)
     exec results_winnr . "winc w"
 
     " mark dependency as added
@@ -87,15 +99,12 @@ function! s:AddDependency ()
 endfunction " }}}
 
 " InsertDependency(group, artifact, vrsn) {{{
-function! s:InsertDependency (group, artifact, vrsn)
-  let dependency = deepcopy(s:dependency_template)
-  let dependency[1] = substitute(dependency[1], '\${groupId}', a:group, '')
-  let dependency[2] = substitute(dependency[2], '\${artifactId}', a:artifact, '')
-  let dependency[3] = substitute(dependency[3], '\${version}', a:vrsn, '')
-
-  if expand('%') =~ 'pom.xml$'
-    call insert(dependency, s:dependency_scope, 4)
-  endif
+function! s:InsertDependency (type, group, artifact, vrsn)
+  let depend = deepcopy(s:dependency_template{a:type})
+  let depend = substitute(depend, '\${groupId}', a:group, '')
+  let depend = substitute(depend, '\${artifactId}', a:artifact, '')
+  let depend = substitute(depend, '\${version}', a:vrsn, '')
+  let dependency = split(depend, '\n')
 
   let lnum = search('</dependencies>', 'cnw')
   if !lnum

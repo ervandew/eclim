@@ -170,6 +170,11 @@
             <a href="http://rubyeclipse.sourceforge.net/">rubyeclipse</a>,
             <a href="http://www.radrails.org/">rad rails</a>
           </li>
+          <li>
+            <strong>Dymanic Language Toolkit</strong>:
+            <a href="http://www.eclipse.org/proposals/dltk/">http://www.eclipse.org/proposals/dltk/</a>,
+            <a href="http://www.eclipsedltk.org">http://www.eclipsedltk.org</a>
+          </li>
         </ul>
       </action>
       <action context="third_party" dev="ervandew">
@@ -293,6 +298,24 @@
   </todo>
 
   <changes>
+
+    <release version="1.2.3" date="">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Several other bug fixes.
+      </action>
+
+      <action dev="ervandew" type="add" context="Eclim">
+        Improved linux scripts and now shipping with
+        <a href="guides/system/linux_initd.html">initd files for eclimd</a>.
+      </action>
+
+      <action dev="ervandew" type="update" context="Java">
+        Maven dependency searching now expanded to ivy files via
+        <a href="guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
+          <strong>:IvyDependencySearch</strong>
+        </a>.
+      </action>
+    </release>
 
     <release version="1.2.2" date="September 08, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">

@@ -26,7 +26,6 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
-  - add maven repository search and depedency adding for ivy files.
   - JUnit results in the browser.
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html

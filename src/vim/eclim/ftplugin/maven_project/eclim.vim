@@ -30,8 +30,8 @@ if !exists(":MavenRepo")
     \ MavenRepo :call eclim#java#maven#repo#SetClasspathVariable('Maven', 'MAVEN_REPO')
 endif
 if !exists(":MavenDependencySearch")
-  command -nargs=1 -buffer
-    \ MavenDependencySearch :call eclim#java#maven#dependency#Search('<args>')
+  command -nargs=1 -buffer MavenDependencySearch
+    \ :call eclim#java#maven#dependency#Search('<args>', 'maven')
 endif
 " }}}
 
