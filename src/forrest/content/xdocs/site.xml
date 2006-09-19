@@ -52,18 +52,25 @@ See http://forrest.apache.org/docs/linking.html for more info
       <install label="Installing / Upgrading"
           description="Installation / Upgrading Instructions"
           href="guides/install.html"/>
-      <java_project label="Java: Creating A Java Project"
-          description="Creating a java project."
-          href="guides/java/project.html"/>
-      <maven_project label="Maven 1.x: Maintaining Java Classpath"
-          description="Maintaining java classpath with maven 1.x."
-          href="guides/java/maven/maven_classpath.html"/>
-      <mvn_project label="Maven 2.x: Maintaining Java Classpath"
-          description="Maintaining java classpath with maven 2.x."
-          href="guides/java/maven/mvn_classpath.html"/>
-      <ivy_project label="Ivy: Maintaining Java Classpath"
-          description="Maintaining java classpath with ivy."
-          href="guides/java/ivy/ivy_classpath.html"/>
+      <system label="System Guides">
+        <install label="Linux: Running eclimd in the background."
+            description="Linux: Running eclimd in the background."
+            href="guides/system/linux_initd.html"/>
+      </system>
+      <java label="Java Guides">
+        <java_project label="Java: Creating A Java Project"
+            description="Creating a java project."
+            href="guides/java/project.html"/>
+        <maven_project label="Maven 1.x: Maintaining Java Classpath"
+            description="Maintaining java classpath with maven 1.x."
+            href="guides/java/maven/maven_classpath.html"/>
+        <mvn_project label="Maven 2.x: Maintaining Java Classpath"
+            description="Maintaining java classpath with maven 2.x."
+            href="guides/java/maven/mvn_classpath.html"/>
+        <ivy_project label="Ivy: Maintaining Java Classpath"
+            description="Maintaining java classpath with ivy."
+            href="guides/java/ivy/ivy_classpath.html"/>
+      </java>
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
