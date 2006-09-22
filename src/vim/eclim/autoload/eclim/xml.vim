@@ -31,7 +31,7 @@ endif
 " Script Variables {{{
 let s:command_validate = '-filter vim -command xml_validate -f "<file>"'
 
-let s:element_def{'dtd'} = '<!ELEMENT\s\+<name>\>'
+let s:element_def{'dtd'} = '<!ELEMENT\s\+<name>\>\(\s\|(\|$\)'
 let s:element_def{'xsd'} =
     \ '<\s*\(.\{-}:\)\?element\>\_[^>]*name\s*=\s*' .
     \ g:EclimQuote . '<name>' . g:EclimQuote
