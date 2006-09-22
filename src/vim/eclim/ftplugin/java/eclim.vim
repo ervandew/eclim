@@ -32,11 +32,10 @@
   endif
 
   let g:java_fori = "for (int ii = 0; ii < ${array}.length; ii++){\<cr>}" .
-    \ "\<esc>\<up>\<tab>\<right>"
+    \ "\<esc>\<up>\<tab>"
   let g:java_forI = "for (Iterator ii = ${col}.iterator(); ii.hasNext();){\<cr>}" .
-    \ "\<esc>\<up>\<tab>\<right>"
-  let g:java_fore =
-    \ "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>\<tab>\<right>"
+    \ "\<esc>\<up>\<tab>"
+  let g:java_fore = "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>\<tab>"
 
   if !exists("g:EclimJavaCompilerAutoDetect")
     let g:EclimJavaCompilerAutoDetect = 1
@@ -96,13 +95,13 @@ endif
   "   au VimEnter * call IMAP(' . ', ' <++> ', 'tex')
   " So, if we can't beat 'em, join 'em
   if exists('*IMAP')
-    call IMAP('fori', "\<c-r>=EclimAbbreviate(g:java_fori)\<cr>", 'java')
-    call IMAP('forI', "\<c-r>=EclimAbbreviate(g:java_forI)\<cr>", 'java')
-    call IMAP('fore', "\<c-r>=EclimAbbreviate(g:java_fore)\<cr>", 'java')
+    call IMAP('fori', "\<c-r>=eclim#util#Abbreviate(g:java_fori)\<cr>", 'java')
+    call IMAP('forI', "\<c-r>=eclim#util#Abbreviate(g:java_forI)\<cr>", 'java')
+    call IMAP('fore', "\<c-r>=eclim#util#Abbreviate(g:java_fore)\<cr>", 'java')
   else
-    inoreabbrev <buffer> fori <c-r>=EclimAbbreviate(g:java_fori)<cr>
-    inoreabbrev <buffer> forI <c-r>=EclimAbbreviate(g:java_forI)<cr>
-    inoreabbrev <buffer> fore <c-r>=EclimAbbreviate(g:java_fore)<cr>
+    inoreabbrev <buffer> fori <c-r>=eclim#util#Abbreviate(g:java_fori)<cr>
+    inoreabbrev <buffer> forI <c-r>=eclim#util#Abbreviate(g:java_forI)<cr>
+    inoreabbrev <buffer> fore <c-r>=eclim#util#Abbreviate(g:java_fore)<cr>
   endif
 " }}}
 
@@ -121,17 +120,6 @@ function! StopAutocommands ()
   augroup eclim_java
     autocmd!
   augroup END
-endfunction " }}}
-
-" EclimAbbreviate(abbreviation) {{{
-function! EclimAbbreviate (abbreviation)
-  " gobble up the space char used to kick off the abbreviation
-  let char = nr2char(getchar())
-
-  " insert the abbreviation text.
-  exec "normal i" . a:abbreviation
-
-  return ''
 endfunction " }}}
 
 call StartAutocommands()
