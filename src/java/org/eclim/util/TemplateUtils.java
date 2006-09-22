@@ -34,7 +34,7 @@ import org.eclim.Services;
 import org.eclim.plugin.PluginResources;
 
 /**
- * Utility class for running evaluating templates.
+ * Utility class for evaluating templates.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
