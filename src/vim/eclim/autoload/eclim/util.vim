@@ -33,6 +33,22 @@
     \ '\)'
 " }}}
 
+" Abbreviate(abbreviation) {{{
+function! eclim#util#Abbreviate (abbreviation)
+  " gobble up the space char used to kick off the abbreviation
+  let char = nr2char(getchar())
+
+  " support <indent> placemark to combat indenting issues when attempting to
+  " start the cursor on a blank line, and possibly else where.
+  let indent = eclim#util#GetIndent(indent(line('.')))
+  let abbrev = substitute(a:abbreviation, '<indent>', indent, 'g')
+
+  " insert the abbreviation text.
+  exec "normal i" . abbrev
+
+  return "\<right>"
+endfunction " }}}
+
 " EchoTrace(message) {{{
 function! eclim#util#EchoTrace (message)
   call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
@@ -109,7 +125,7 @@ endfunction " }}}
 function! eclim#util#FillTemplate (prefix, suffix)
   let line = getline('.')
   let prefixCol = stridx(line, a:prefix)
-  let suffixCol = stridx(line, a:suffix)
+  let suffixCol = stridx(line, a:suffix, prefixCol)
   if prefixCol != -1 && suffixCol != -1
     let line = strpart(line, 0, prefixCol) . strpart(line, suffixCol + 1)
     call setline(line('.'), line)
@@ -211,6 +227,23 @@ function! eclim#util#GetCurrentElementOffset ()
   call cursor(curline, curcol)
 
   return offset
+endfunction " }}}
+
+" GetIndent(indent) {{{
+" Gets an indentation string for the supplied number of spaces the indent
+" consists of.  Ex. eclim#util#GetIndent(indent(line('.')))
+function! eclim#util#GetIndent (indent)
+  let result = ''
+
+  if a:indent
+    let num = a:indent / &sw
+    while num >= 0
+      let result .= g:EclimIndent
+      let num -= 1
+    endwhile
+  endif
+
+  return result
 endfunction " }}}
 
 " GetPathEntry(file) {{{
