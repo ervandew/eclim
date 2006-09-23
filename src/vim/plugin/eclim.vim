@@ -30,7 +30,11 @@ endif
 " Gets the base directory where the eclim vim scripts are located.
 function EclimBaseDir ()
   if !exists("g:EclimBaseDir")
+    let savewig = &wildignore
+    set wildignore=""
     let file = findfile('plugin/eclim.vim', escape(&runtimepath, ' '))
+    let &wildignore = savewig
+
     if file == ''
       echoe 'Unable to determine eclim basedir.  ' .
         \ 'Please report this issue on the eclim forums.'

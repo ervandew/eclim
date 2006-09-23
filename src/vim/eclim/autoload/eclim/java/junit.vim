@@ -79,12 +79,12 @@ function! eclim#java#junit#JUnitResult (test)
     let file = 'TEST-' . file . '.xml'
   endif
 
-  let found = globpath(path, file)
+  let found = eclim#util#Globpath(path, file)
 
   " try text version if xml not found.
   if found == ""
     let file = fnamemodify(file, ':r') . '.txt'
-    let found = globpath(path, file)
+    let found = eclim#util#Globpath(path, file)
   endif
 
   if found != ""
@@ -185,7 +185,7 @@ function! eclim#java#junit#CommandCompleteResult (argLead, cmdLine, cursorPos)
     return []
   endif
 
-  let results = split(globpath(path, '*'), '\n')
+  let results = split(eclim#util#Globpath(path, '*'), '\n')
   call map(results, 'fnamemodify(v:val, ":r:e")')
   call filter(results, 'v:val =~ "^' . argLead . '"')
 

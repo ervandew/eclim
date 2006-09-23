@@ -72,7 +72,7 @@ function eclim#common#GetFiles (dir, arg)
   for file in files
     " wildcard filename
     if file =~ '\*'
-      let glob = split(glob(dir . file), '\n')
+      let glob = split(eclim#util#Glob(dir . file), '\n')
       call map(glob, "escape(v:val, ' ')")
       if len(glob) > 0
         let results += glob
@@ -89,7 +89,7 @@ endfunction " }}}
 " FindInPath(file, path) {{{
 " Find a file in the supplied path returning a list of results.
 function! eclim#common#FindInPath (file, path)
-  let results = findfile(a:file, a:path . '/**', -1)
+  let results = eclim#util#Findfile(a:file, a:path . '/**', -1)
   call map(results, "fnamemodify(v:val, ':p')")
   return results
 endfunction " }}}
@@ -223,7 +223,7 @@ function! eclim#common#CommandCompleteRelative (argLead, cmdLine, cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
-  let results = split(glob(expand(dir . '/' . argLead) . '*'), '\n')
+  let results = split(eclim#util#Glob(dir . '/' . argLead . '*'), '\n')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, 'substitute(v:val, dir, "", "")')

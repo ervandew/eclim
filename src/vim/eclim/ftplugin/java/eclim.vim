@@ -55,11 +55,11 @@ if g:EclimJavaSetCommonOptions
   " set make program and error format accordingly.
   if g:EclimJavaCompilerAutoDetect
     " use ant settings
-    if findfile('build.xml', '.;') != ''
+    if eclim#util#Findfile('build.xml', '.;') != ''
       compiler eclim_ant
 
     " use mvn settings
-    elseif findfile('pom.xml', '.;') != ''
+    elseif eclim#util#Findfile('pom.xml', '.;') != ''
       compiler eclim_mvn
 
       if !g:EclimMakeLCD && !exists('g:EclimMakeLCDWarning')
@@ -71,7 +71,7 @@ if g:EclimJavaSetCommonOptions
       endif
 
     " use maven settings
-    elseif findfile('project.xml', '.;') != ''
+    elseif eclim#util#Findfile('project.xml', '.;') != ''
       compiler eclim_maven
 
     " use standard jikes if available

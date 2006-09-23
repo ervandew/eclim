@@ -147,7 +147,8 @@ function! eclim#GetEclimCommand ()
       call eclim#util#EchoError('ECLIPSE_HOME must be set.')
       return
     endif
-    let g:EclimHome = glob(expand('$ECLIPSE_HOME') . '/plugins/org.eclim_*')
+    let g:EclimHome = eclim#util#Glob('$ECLIPSE_HOME/plugins/org.eclim_*')
+
     if g:EclimHome == ''
       call eclim#util#EchoError(
         \ "eclim plugin not found in eclipse plugins directory at " .
@@ -268,7 +269,7 @@ function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   " complete script name for first arg.
   if cmdLine =~ '^PatchEclim\s*' . escape(argLead, '.\') . '$'
     let dir = EclimBaseDir()
-    let results = split(glob(dir . '/' . argLead . '*'), '\n')
+    let results = split(eclim#util#Glob(dir . '/' . argLead . '*'), '\n')
     call map(results, "substitute(v:val, '\\', '/', 'g')")
     call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
     call map(results, 'substitute(v:val, dir, "", "")')

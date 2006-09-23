@@ -220,7 +220,7 @@ function! eclim#project#GetCurrentProjectFile ()
   let dir = fnamemodify(expand('%:p'), ':h')
   let dir = escape(dir, ' ')
 
-  let projectFile = findfile('.project', dir . ';')
+  let projectFile = eclim#util#Findfile('.project', dir . ';')
   while 1
     if filereadable(projectFile)
       return fnamemodify(projectFile, ':p')

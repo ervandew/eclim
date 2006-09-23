@@ -567,9 +567,9 @@ function eclim#tree#Refresh ()
   call cursor(start + 1, ccnum)
 
   " merge in any dirs that have been added
-  let contents = split(globpath(escape(startpath, ','), '*'), '\n')
+  let contents = split(eclim#util#Globpath(escape(startpath, ','), '*'), '\n')
   if b:view_hidden
-    let contents = split(globpath(escape(startpath, ','), '.*'), '\n') + contents
+    let contents = split(eclim#util#Globpath(escape(startpath, ','), '.*'), '\n') + contents
   endif
   let contents = s:NormalizeDirs(contents)
   let indent = s:GetChildIndent(start)
@@ -669,9 +669,9 @@ function s:ExpandDir ()
     return
   endif
 
-  let contents = split(globpath(escape(dir, ','), '*'), '\n')
+  let contents = split(eclim#util#Globpath(escape(dir, ','), '*'), '\n')
   if b:view_hidden
-    let contents = split(globpath(escape(dir, ','), '.*'), '\n') + contents
+    let contents = split(eclim#util#Globpath(escape(dir, ','), '.*'), '\n') + contents
   endif
   let contents = s:NormalizeDirs(contents)
 

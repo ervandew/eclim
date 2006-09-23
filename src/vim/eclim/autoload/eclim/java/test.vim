@@ -95,7 +95,7 @@ function eclim#java#test#CommandCompleteTest (type, argLead, cmdLine, cursorPos)
   let partial = fnamemodify(argLead, ':t')
   let argLead = fnamemodify(argLead, ':h')
   let argLead = argLead != '' ? argLead . '/' : argLead
-  let results = split(globpath(path . argLead, '*'), '\n')
+  let results = split(eclim#util#Globpath(path . argLead, '*'), '\n')
 
   call filter(results, 'v:val =~ argLead . partial')
   call filter(results, '(isdirectory(v:val) && v:val !~ "CVS") || v:val =~ "\\.java$"')

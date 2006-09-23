@@ -172,11 +172,11 @@ function! s:SearchAlternate (argline, element)
   let package_path = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
   let path = substitute(expand('%:p:h'), '\', '/', 'g')
   let path = substitute(path, package_path, '', '')
-  let files = split(globpath(path, "**/" . file_pattern), '\n')
+  let files = split(eclim#util#Globpath(path, "**/" . file_pattern), '\n')
 
   " if none found, then search the path.
   if len(files) == 0
-    let files = eclim#util#FindFile(file_pattern, 1)
+    let files = eclim#util#FindFileInPath(file_pattern, 1)
     let path = ""
   endif
 

@@ -134,11 +134,11 @@ function! eclim#util#FillTemplate (prefix, suffix)
   endif
 endfunction " }}}
 
-" FindFile(file, exclude_relative) {{{
+" FindFileInPath(file, exclude_relative) {{{
 " Searches for the supplied file in the &path.
 " If exclude_relative supplied is 1, then relative &path entries ('.' and '')
 " are not searched).
-function! eclim#util#FindFile (file, exclude_relative)
+function! eclim#util#FindFileInPath (file, exclude_relative)
   let path = &path
   if a:exclude_relative
     " remove '' path entry
@@ -146,7 +146,25 @@ function! eclim#util#FindFile (file, exclude_relative)
     " remove '.' path entry
     let path = substitute(path, '[,]\?\.[,]\?', '', 'g')
   endif
-  return split(globpath(path, "**/" . a:file), '\n')
+  return split(eclim#util#Globpath(path, "**/" . a:file), '\n')
+endfunction " }}}
+
+" Findfile(name, [, path [, count]]) {{{
+" Used to issue a findfile() handling any vim options that may otherwise
+" disrupt it.
+function! eclim#util#Findfile (name, ...)
+  let savewig = &wildignore
+  set wildignore=""
+  if len(a:000) == 0
+    let result = findfile(a:name)
+  elseif len(a:000) == 1
+    let result = findfile(a:name, expand(escape(a:000[0], '*')))
+  elseif len(a:000) == 2
+    let result = findfile(a:name, expand(escape(a:000[0], '*')), a:000[1])
+  endif
+  let &wildignore = savewig
+
+  return result
 endfunction " }}}
 
 " GetCharacterOffset() {{{
@@ -263,6 +281,30 @@ function! eclim#util#GetPathEntry (file)
     endif
   endfor
   return 0
+endfunction " }}}
+
+" Glob(expr) {{{
+" Used to issue a glob() handling any vim options that may otherwise disrupt
+" it.
+function! eclim#util#Glob (expr)
+  let savewig = &wildignore
+  set wildignore=""
+  let result = glob(expand(escape(a:expr, '*')))
+  let &wildignore = savewig
+
+  return result
+endfunction " }}}
+
+" Globpath(path, expr) {{{
+" Used to issue a globpath() handling any vim options that may otherwise disrupt
+" it.
+function! eclim#util#Globpath (path, expr)
+  let savewig = &wildignore
+  set wildignore=""
+  let result = globpath(a:path, a:expr)
+  let &wildignore = savewig
+
+  return result
 endfunction " }}}
 
 " GoToBufferWindow(bufname) {{{
@@ -646,7 +688,7 @@ endfunction " }}}
 function! eclim#util#CommandCompleteFile (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(glob(expand(argLead) . '*'), '\n')
+  let results = split(eclim#util#Glob(argLead . '*'), '\n')
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
@@ -659,7 +701,7 @@ endfunction " }}}
 function! eclim#util#CommandCompleteDir (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(glob(expand(argLead) . '*'), '\n')
+  let results = split(eclim#util#Glob(argLead . '*'), '\n')
   let index = 0
   for result in results
     if !isdirectory(result)

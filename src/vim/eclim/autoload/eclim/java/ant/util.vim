@@ -25,7 +25,7 @@
 " FindBuildFile () {{{
 " Finds the build file relative to the current file (like ant -find).
 function! eclim#java#ant#util#FindBuildFile ()
-  let buildFile = findfile('build.xml', fnamemodify(expand('%:p'), ':h') . ';')
+  let buildFile = eclim#util#Findfile('build.xml', fnamemodify(expand('%:p'), ':h') . ';')
   if filereadable(buildFile)
     return substitute(fnamemodify(buildFile, ':p'), '\', '/', 'g')
   endif
