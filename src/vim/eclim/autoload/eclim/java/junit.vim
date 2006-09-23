@@ -48,7 +48,7 @@ function! eclim#java#junit#JUnitExecute (test)
 
   let command = substitute(command, '<testcase>', test, 'g')
   echom 'command = ' . command
-  exec command
+  call eclim#util#Exec(command)
 endfunction " }}}
 
 " JUnitResult(test) {{{

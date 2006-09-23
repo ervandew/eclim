@@ -192,7 +192,7 @@ endfunction " }}}
 " GetFileInfo(file) {{{
 function eclim#tree#GetFileInfo (file)
   if executable('ls')
-    return split(system('ls -ld ' . a:file), '\n')[0]
+    return split(eclim#util#System('ls -ld ' . a:file), '\n')[0]
   endif
   return ''
 endfunction "}}}
@@ -349,7 +349,7 @@ function eclim#tree#ExecuteAction (file, command)
   let command = a:command
   let command = substitute(command, '<file>', file, 'g')
   let command = substitute(command, '<cwd>', cwd, 'g')
-  silent exec command
+  silent eclim#util#Exec(command)
 
   redraw!
   silent exec 'cd ' . escape(cwd, ' &')
@@ -403,8 +403,7 @@ function eclim#tree#Shell (external)
     if !exists("g:TreeExternalShell")
       echo "No external shell configured via 'g:TreeExternalShell' variable."
     else
-      echo g:TreeExternalShell
-      silent exec g:TreeExternalShell
+      silent call eclim#util#Exec(g:TreeExternalShell)
       redraw!
     endif
   else
@@ -719,7 +718,7 @@ function s:RewriteSpecial (file)
     let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
     if getftype(tmpfile) == 'link'
       if info == ''
-        let info = system('ls -ldF ' . tmpfile)
+        let info = eclim#util#System('ls -ldF ' . tmpfile)
       endif
       let linkto = substitute(info, '.*-> \(.*\)\n', '\1', '')
 
@@ -742,7 +741,7 @@ endfunction " }}}
 " directories.
 function s:IsFileExecutable (file)
   if !isdirectory(a:file)
-    let info = system('ls -l ' . a:file)
+    let info = eclim#util#System('ls -l ' . a:file)
     if info[3] =~ '[sx]' && info[0] != 'l'
       return 1
     endif

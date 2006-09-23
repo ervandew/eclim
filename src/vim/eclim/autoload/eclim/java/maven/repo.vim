@@ -34,7 +34,7 @@ function eclim#java#maven#repo#SetClasspathVariable (cmd, variable)
     \ ' -Declipse.workspace=' . workspace .
     \ ' -Dmaven.eclipse.workspace=' . workspace .
     \ ' eclipse:add-maven-repo'
-  exec command
+  call eclim#util#Exec(command)
 
   if !v:shell_error
     " the maven command edits the eclipse preference file directly, so in

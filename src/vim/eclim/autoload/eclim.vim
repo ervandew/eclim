@@ -92,7 +92,7 @@ function! eclim#ExecuteEclim (args)
   if use_exec
     let result = eclim#ExecuteTempFile(command)
   else
-    let result = system(command)
+    let result = eclim#util#System(command)
     let result = substitute(result, '\(.*\)\n$', '\1', '')
   endif
 
@@ -130,7 +130,7 @@ function! eclim#ExecuteTempFile (command)
   let tempfile = tempname()
 
   let command = '!' . a:command . ' > ' . tempfile . ' 2>&1'
-  silent exec command
+  silent eclim#util#Exec(command)
   let result = join(readfile(tempfile), "\n")
 
   call delete(tempfile)

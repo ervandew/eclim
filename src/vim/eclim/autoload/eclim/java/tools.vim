@@ -113,13 +113,13 @@ endfunction " }}}
 " args_vm - Any arguments passed to the vm.
 function eclim#java#tools#GetJavaProcesses ()
   let java_processes = []
-  let result = system('jps -vV')
+  let result = eclim#util#System('jps -vV')
   if v:shell_error
     call eclim#util#EchoError('Unable to execute jps - ' . result)
     return [0]
   endif
   let vm_args = split(result, '\n')
-  for process in split(system('jps -lm'), '\n')
+  for process in split(eclim#util#System('jps -lm'), '\n')
     if process =~ 'sun.tools.jps.Jps' || process =~ '^[0-9]\+\s*$'
       continue
     endif
@@ -155,7 +155,7 @@ endfunction " }}}
 " Returns empty list if jinfo not supported on this platform.
 function eclim#java#tools#GetJavaProcessInfo (id)
   if executable('jinfo')
-    let output = split(system('jinfo ' . a:id), '\n')
+    let output = split(eclim#util#System('jinfo ' . a:id), '\n')
     if v:shell_error
       call eclim#util#EchoError('Unable to execute jps.')
       return []
@@ -179,7 +179,7 @@ endfunction " }}}
 " Returns empty list if jstack not supported on this platform.
 function eclim#java#tools#GetJavaProcessStacks (id)
   if executable('jstack')
-    let output = split(system('jstack ' . a:id), '\n')
+    let output = split(eclim#util#System('jstack ' . a:id), '\n')
 
     if v:shell_error
       call eclim#util#EchoError('Unable to execute jps.')
@@ -212,7 +212,7 @@ endfunction " }}}
 " Returns empty list if jmap not supported on this platform.
 function eclim#java#tools#GetJavaProcessMap (id)
   if executable('jmap')
-    let output = split(system('jmap ' . a:id), '\n')
+    let output = split(eclim#util#System('jmap ' . a:id), '\n')
 
     if v:shell_error
       call eclim#util#EchoError('Unable to execute jps.')

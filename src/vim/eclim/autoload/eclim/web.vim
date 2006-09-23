@@ -89,7 +89,7 @@ function! eclim#web#OpenUrl (url)
   let url = escape(url, '&%')
   let url = escape(url, '%')
   let command = escape(substitute(s:browser, '<url>', url, ''), '#')
-  silent! exec command
+  silent! call eclim#util#Exec(command)
   redraw!
 
   if v:shell_error

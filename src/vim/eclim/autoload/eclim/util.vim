@@ -107,6 +107,13 @@ function! eclim#util#Echo (message)
   endif
 endfunction " }}}
 
+" Exec(cmd) {{{
+" Used when executing ! commands that may be disrupted by non default vim
+" options.
+function! eclim#util#Exec (cmd)
+  call eclim#util#System(a:cmd, 1)
+endfunction " }}}
+
 " ExecWithoutAutocmds(cmd) {{{
 " Execute a command after disabling all autocommands (borrowed from taglist.vim)
 function! eclim#util#ExecWithoutAutocmds (cmd)
@@ -289,7 +296,14 @@ endfunction " }}}
 function! eclim#util#Glob (expr)
   let savewig = &wildignore
   set wildignore=""
-  let result = glob(expand(escape(a:expr, '*')))
+
+  let paths = split(expand(a:expr), '\n')
+  if len(paths) == 1
+    let result = glob(paths[0])
+  else
+    let result = join(paths, "\n")
+  endif
+
   let &wildignore = savewig
 
   return result
@@ -574,6 +588,52 @@ function! eclim#util#Simplify (file)
   endif
 
   return file
+endfunction " }}}
+
+" System(cmd [, exec]) {{{
+" Executes system() accounting for possibly disruptive vim options.
+function! eclim#util#System (cmd, ...)
+  " save
+  if has("win32") || has("win64")
+    let saveshell = &shell
+    let saveshellcmdflag = &shellcmdflag
+    let saveshellpipe = &shellpipe
+    let saveshellquote = &shellquote
+    let saveshellredir = &shellredir
+    let saveshellslash = &shellslash
+    let saveshelltemp = &shelltemp
+    let saveshellxquote = &shellxquote
+
+    set shell=cmd.exe
+    set shellcmdflag=/c
+    set shellpipe=>%s\ 2>&1
+    set shellquote=
+    set shellredir=>%s\ 2>&1
+    set noshellslash
+    set shelltemp
+    set shellxquote=
+  endif
+
+  if len(a:000) > 0 && a:000[0]
+    let result = ''
+    exec a:cmd
+  else
+    let result = system(a:cmd)
+  endif
+
+  " restore
+  if has("win32") || has("win64")
+    let &shell = saveshell
+    let &shellcmdflag = saveshellcmdflag
+    let &shellpipe = saveshellpipe
+    let &shellquote = saveshellquote
+    let &shellredir = saveshellredir
+    let &shellslash = saveshellslash
+    let &shelltemp = saveshelltemp
+    let &shellxquote = saveshellxquote
+  endif
+
+  return result
 endfunction " }}}
 
 " TempWindow(name, lines) {{{
