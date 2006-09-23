@@ -17,6 +17,7 @@ package org.eclim.util;
 
 import org.eclim.Services;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -82,6 +83,32 @@ public class ProjectUtils
     }
 
     return project;
+  }
+
+  /**
+   * Gets the IFile instance for the specified file located in the supplied
+   * project.
+   *
+   * @param _project The file's project.
+   * @param _file The file.
+   * @return The IFile.
+   */
+  public static IFile getFile (IProject _project, String _file)
+    throws Exception
+  {
+    String path = getPath(_project);
+    if(!_file.startsWith(path)){
+      throw new RuntimeException(
+          Services.getMessage("project.file.mismatch",
+            new String[]{_file, path}));
+    }
+
+    String file = _file.substring(path.length());
+    if(file.startsWith("/") || file.startsWith("\\")){
+      file = file.substring(1);
+    }
+
+    return _project.getFile(file);
   }
 
   /**
