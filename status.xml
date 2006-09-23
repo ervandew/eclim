@@ -301,6 +301,13 @@
 
     <release version="1.2.3" date="">
       <action dev="ervandew" type="fix" context="Bug Fixes">
+        Vim scripts now account for possibly disruptive 'wildignore' option.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        On Windows, vim scripts account for users who have modified the 'shell'
+        that vim uses, temporarily restoring the default.
+      </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
         Several other bug fixes.
       </action>
 
