@@ -85,10 +85,17 @@ public class CodeCompleteCommand
       for (int ii = 0; ii < proposals.length; ii++){
         ICompletionProposal proposal = proposals[ii];
         String description = proposal.getAdditionalProposalInfo().trim();
-        String completion = proposal.getDisplayString();
+        String shortDescription = proposal.getDisplayString();
+        String completion = shortDescription;
+
+        int open = completion.indexOf('(');
+        int close = completion.indexOf(')');
+        if(close > open + 1){
+          completion = completion.substring(0, open + 1);
+        }
 
         CodeCompleteResult result =
-          new CodeCompleteResult(completion, description, null);
+          new CodeCompleteResult(completion, description, shortDescription);
         if(!results.contains(result)){
           results.add(result);
         }
