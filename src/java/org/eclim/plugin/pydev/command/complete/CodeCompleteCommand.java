@@ -1,0 +1,102 @@
+/**
+ * Copyright (c) 2005 - 2006
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.eclim.plugin.pydev.command.complete;
+
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.eclim.command.AbstractCommand;
+import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
+
+import org.eclim.command.complete.CodeCompleteResult;
+
+import org.eclim.eclipse.jface.text.DummyTextViewer;
+
+import org.eclim.util.ProjectUtils;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextViewer;
+
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+
+import org.python.pydev.editor.codecompletion.CompletionRequest;
+import org.python.pydev.editor.codecompletion.PyCodeCompletion;
+
+import org.python.pydev.plugin.nature.PythonNature;
+
+/**
+ *
+ *
+ * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @version $Revision$
+ */
+public class CodeCompleteCommand
+  extends AbstractCommand
+{
+  private static final PyCodeCompletion PY_CC = new PyCodeCompletion();
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object execute (CommandLine _commandLine)
+  {
+    try{
+      String file = _commandLine.getValue(Options.FILE_OPTION);
+      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+
+      IProject project = ProjectUtils.getProject(projectName);
+
+      IDocument document = ProjectUtils.getDocument(file);
+      ITextViewer viewer =
+        new DummyTextViewer(document, offset, 1);
+
+      PythonNature nature = PythonNature.getPythonNature(project);
+      CompletionRequest request = new CompletionRequest(
+          new File(file), nature, document, offset, PY_CC);
+
+      List results = new ArrayList();
+      ICompletionProposal[] proposals = PY_CC.onlyValidSorted(
+          PY_CC.getCodeCompletionProposals(viewer, request),
+          request.qualifier, request.isInCalltip);
+      for (int ii = 0; ii < proposals.length; ii++){
+        ICompletionProposal proposal = proposals[ii];
+        String description = proposal.getAdditionalProposalInfo().trim();
+        String completion = proposal.getDisplayString();
+
+        CodeCompleteResult result =
+          new CodeCompleteResult(completion, description, null);
+        if(!results.contains(result)){
+          results.add(result);
+        }
+      }
+
+      return filter(_commandLine, results);
+    }catch(Exception e){
+      return e;
+    }
+  }
+}

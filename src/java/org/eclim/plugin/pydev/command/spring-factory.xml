@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<!DOCTYPE beans PUBLIC
+  "-//SPRING//DTD BEAN//EN"
+  "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <bean name="python_src_update"
+      class="org.eclim.plugin.pydev.command.src.SrcUpdateCommand">
+    <description>
+      Handles updating the supplied src file and optionally validating it.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="python_complete"
+      class="org.eclim.plugin.pydev.command.complete.CodeCompleteCommand">
+    <description>
+      Handles requests for code completion.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+</beans>

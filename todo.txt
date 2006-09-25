@@ -95,3 +95,6 @@ Enhancements
     - http://www.fedoraproject.org/wiki/Eclipse
     - http://sourceware.org/eclipse/
   - integrate w/ http://www.easyeclipse.org/site/home/
+
+Python
+  - when adding new method for a class, auto add self as first parameter.

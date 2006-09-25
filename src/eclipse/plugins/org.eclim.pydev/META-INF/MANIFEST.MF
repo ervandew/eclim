@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclim.pydev; singleton:=true
+Bundle-Version: ${eclim.version}
+Bundle-ClassPath: .,
+  eclim.pydev.jar
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclim,
+  org.eclipse.core.resources,
+  org.eclipse.core.runtime,
+  org.eclipse.jface.text,
+  org.eclipse.ui,
+  org.eclipse.ui.console,
+  org.eclipse.ui.ide,
+  org.python.pydev,
+  org.python.pydev.core,
+  org.python.pydev.parser
+Eclipse-AutoStart: true
