@@ -15,7 +15,7 @@
     <property name="filters">
       <map>
         <entry key="vim">
-          <bean class="org.eclim.plugin.ant.command.complete.CodeCompleteFilter"/>
+          <bean class="org.eclim.command.complete.CodeCompleteFilter"/>
         </entry>
       </map>
     </property>

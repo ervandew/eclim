@@ -22,9 +22,13 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.command.complete.CodeCompleteResult;
+
 import org.eclim.eclipse.jface.text.DummyTextViewer;
 
 import org.eclim.plugin.ant.util.AntUtils;
+
+import org.eclim.util.ProjectUtils;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 
@@ -47,7 +51,6 @@ public class CodeCompleteCommand
    */
   public Object execute (CommandLine _commandLine)
   {
-    List results = new ArrayList();
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
@@ -58,14 +61,14 @@ public class CodeCompleteCommand
         new AntEditorCompletionProcessor(model);
 
       ITextViewer viewer =
-        new DummyTextViewer(AntUtils.getDocument(file), offset, 1);
+        new DummyTextViewer(ProjectUtils.getDocument(file), offset, 1);
 
       ICompletionProposal[] proposals =
         processor.computeCompletionProposals(viewer, offset);
 
+      List results = new ArrayList();
       for (int ii = 0; ii < proposals.length; ii++){
         String description = null;
-
         if(proposals[ii].getAdditionalProposalInfo() != null){
           description = proposals[ii].getAdditionalProposalInfo().trim();
         }
@@ -76,8 +79,8 @@ public class CodeCompleteCommand
           completion = completion.substring(0, index);
         }
 
-        CodeCompletionResult result =
-          new CodeCompletionResult(completion, description);
+        CodeCompleteResult result =
+          new CodeCompleteResult(completion, description, null);
         if(!results.contains(result)){
           results.add(result);
         }

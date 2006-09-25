@@ -71,7 +71,7 @@ public class CodeCompleteCommand
         collector.getJavaCompletionProposals();
       for(int ii = 0; ii < proposals.length; ii++){
         results.add(
-            createCompletionResult(filename, collector, ii, proposals[ii]));
+            createCompletionResult(collector, ii, proposals[ii]));
       }
       Collections.sort(results, COMPLETION_COMPARATOR);
       return filter(_commandLine, results);
@@ -83,14 +83,12 @@ public class CodeCompleteCommand
   /**
    * Create a CodeCompleteResult from the supplied CompletionProposal.
    *
-   * @param _filename The filename.
    * @param _collector The completion collector.
    * @param _proposal The proposal.
    *
    * @return The result.
    */
   protected CodeCompleteResult createCompletionResult (
-      String _filename,
       CompletionProposalCollector _collector,
       int _index,
       IJavaCompletionProposal _proposal)
@@ -137,14 +135,13 @@ public class CodeCompleteCommand
     // overhead involved with retrieving it for every completion regardless
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
-        kind, _filename, completion, displayString,
-        _proposal.getAdditionalProposalInfo(),
+        kind, completion,
+        _proposal.getAdditionalProposalInfo(), displayString,
         offset, offset + length);*/
     if("class".equals(completion)){
       kind = CompletionProposal.KEYWORD;
     }
     return new CodeCompleteResult(
-        kind, _filename, completion, displayString,
-        null, offset, offset + length);
+        kind, completion, null, displayString, offset, offset + length);
   }
 }

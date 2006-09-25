@@ -18,18 +18,15 @@ package org.eclim.plugin.jdt.command.complete;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Represents a proposed code completion result.
+ * Represents a proposed java code completion result.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
 public class CodeCompleteResult
+  extends org.eclim.command.complete.CodeCompleteResult
 {
-  private String filename;
   private int type;
-  private String completion;
-  private String description;
-  private String shortDescription;
   private int replaceStart;
   private int replaceEnd;
 
@@ -38,18 +35,17 @@ public class CodeCompleteResult
    */
   public CodeCompleteResult (
       int _type,
-      String _filename,
       String _completion,
-      String _shortDescription,
       String _description,
+      String _shortDescription,
       int _replaceStart,
       int _replaceEnd)
   {
+    super(_completion, _description, _shortDescription);
+
+    setDescription(StringUtils.replace(_description, "\n", "<br/>"));
+
     type = _type;
-    filename = _filename;
-    completion = _completion;
-    shortDescription = _shortDescription;
-    description = StringUtils.replace(_description, "\n", "<br/>");
     replaceStart = _replaceStart;
     replaceEnd = _replaceEnd;
   }
@@ -62,46 +58,6 @@ public class CodeCompleteResult
   public int getType ()
   {
     return this.type;
-  }
-
-  /**
-   * Get filename.
-   *
-   * @return filename as String.
-   */
-  public String getFilename ()
-  {
-    return this.filename;
-  }
-
-  /**
-   * Get completion.
-   *
-   * @return completion as String.
-   */
-  public String getCompletion ()
-  {
-    return this.completion;
-  }
-
-  /**
-   * Get short description.
-   *
-   * @return short description as String.
-   */
-  public String getShortDescription ()
-  {
-    return this.shortDescription;
-  }
-
-  /**
-   * Get description.
-   *
-   * @return description as String.
-   */
-  public String getDescription ()
-  {
-    return this.description;
   }
 
   /**
