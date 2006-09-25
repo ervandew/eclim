@@ -34,7 +34,10 @@ import org.apache.log4j.Logger;
 import org.eclim.Services;
 
 import org.eclim.command.Command;
+
 import org.eclim.command.admin.ShutdownCommand;
+
+import org.eclim.eclipse.core.runtime.BlockingProgressMonitor;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
@@ -60,7 +63,6 @@ public class EclimApplication
 {
   private static final Logger logger = Logger.getLogger(EclimApplication.class);
 
-  private boolean saved = false;
   private boolean shuttingDown = false;
 
   /**
@@ -134,22 +136,8 @@ public class EclimApplication
   {
     logger.info("Saving workspace...");
 
-    final IProgressMonitor monitor = new NullProgressMonitor(){
-      public void done () {
-        synchronized(this){
-          if(!saved){
-            saved = true;
-            notifyAll();
-          }
-        }
-      }
-    };
-
     try{
-      ResourcesPlugin.getWorkspace().save(true, monitor);
-      while(!saved){
-        monitor.wait();
-      }
+      ResourcesPlugin.getWorkspace().save(true, null);
     }catch(Exception e){
       logger.warn("Error saving workspace.", e);
     }
