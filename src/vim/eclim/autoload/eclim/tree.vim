@@ -349,7 +349,7 @@ function eclim#tree#ExecuteAction (file, command)
   let command = a:command
   let command = substitute(command, '<file>', file, 'g')
   let command = substitute(command, '<cwd>', cwd, 'g')
-  silent eclim#util#Exec(command)
+  silent call eclim#util#Exec(command)
 
   redraw!
   silent exec 'cd ' . escape(cwd, ' &')
