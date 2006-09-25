@@ -15,7 +15,7 @@
  */
 package org.eclim.plugin.ant.util;
 
-import java.io.File;
+import org.eclim.util.ProjectUtils;
 
 import org.eclipse.ant.internal.ui.AntUtil;
 
@@ -24,14 +24,9 @@ import org.eclipse.ant.internal.ui.model.IAntModel;
 import org.eclipse.ant.internal.ui.model.IProblemRequestor;
 import org.eclipse.ant.internal.ui.model.LocationProvider;
 
-import org.eclipse.core.filebuffers.FileBuffers;
-import org.eclipse.core.filebuffers.ITextFileBuffer;
-import org.eclipse.core.filebuffers.ITextFileBufferManager;
-
 import org.eclipse.core.resources.IFile;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jface.text.IDocument;
@@ -44,47 +39,6 @@ import org.eclipse.jface.text.IDocument;
  */
 public class AntUtils
 {
-  /**
-   * Gets the IDocument instance for the given ant file.
-   * <p/>
-   * Borrowed from org.eclipse.ant.internal.ui.AntUtil
-   *
-   * @param _antFile The ant file.
-   * @return The IDocument.
-   */
-  public static IDocument getDocument (String _antFile)
-    throws Exception
-  {
-    File file = new File(_antFile);
-    if(!file.exists()){
-      return null;
-    }
-
-    ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
-    IPath location= new Path(file.getAbsolutePath());
-    boolean connected= false;
-    try {
-      ITextFileBuffer buffer= manager.getTextFileBuffer(location);
-      if (buffer == null) {
-        //no existing file buffer..create one
-        manager.connect(location, new NullProgressMonitor());
-        connected= true;
-        buffer= manager.getTextFileBuffer(location);
-        if (buffer == null) {
-          return null;
-        }
-      }
-      return buffer.getDocument();
-    } finally {
-      if (connected) {
-        try {
-          manager.disconnect(location, new NullProgressMonitor());
-        } catch (Exception e) {
-        }
-      }
-    }
-  }
-
   /**
    * Gets an ant model for the given file.
    *
@@ -111,7 +65,7 @@ public class AntUtils
       final String _antFile, IProblemRequestor _requestor)
     throws Exception
   {
-    IDocument doc = getDocument(_antFile);
+    IDocument doc = ProjectUtils.getDocument(_antFile);
     if (doc == null) {
       return null;
     }
