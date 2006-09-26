@@ -48,7 +48,8 @@ public class Main
       try{
         commandLine = options.parse(_args);
       }catch(ParseException e){
-        System.out.println(e.getMessage());
+        System.out.println(
+            Services.getMessage(e.getClass().getName(), e.getMessage()));
         System.exit(1);
       }
 
