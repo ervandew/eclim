@@ -157,7 +157,7 @@ function eclim#common#LocateFile (command, file)
     return
   endif
 
-  silent exec a:command . ' ' . eclim#util#Simplify(result)
+  silent exec a:command . ' ' . escape(eclim#util#Simplify(result), ' ')
   call eclim#util#Echo(' ')
 endfunction " }}}
 
@@ -172,7 +172,7 @@ function eclim#common#OpenRelative (command, arg)
   let dir = expand('%:p:h')
   let files = eclim#common#GetFiles(dir, a:arg)
   for file in files
-    exec a:command . ' ' . eclim#util#Simplify(file)
+    exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
   endfor
 endfunction " }}}
 
@@ -181,7 +181,7 @@ endfunction " }}}
 function eclim#common#OpenFiles (command, arg)
   let files = eclim#common#GetFiles('', a:arg)
   for file in files
-    exec a:command . ' ' . eclim#util#Simplify(file)
+    exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
   endfor
 endfunction " }}}
 
