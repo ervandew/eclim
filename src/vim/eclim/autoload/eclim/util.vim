@@ -408,7 +408,7 @@ endfunction " }}}
 " Parses the supplied argument line into a list of args.
 function! eclim#util#ParseArgs (args)
   let args = split(a:args, '[^\\]\s\zs')
-  call map(args, 'substitute(v:val, "\\s*$", "", "")')
+  call map(args, 'substitute(v:val, "\\([^\\\\]\\)\\s\\+$", "\\1", "")')
 
   return args
 endfunction " }}}
