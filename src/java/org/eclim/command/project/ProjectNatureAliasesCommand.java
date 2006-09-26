@@ -15,47 +15,29 @@
  */
 package org.eclim.command.project;
 
-import org.apache.commons.io.FilenameUtils;
-
-import org.apache.log4j.Logger;
-
-import org.eclim.Services;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
-import org.eclim.project.ProjectManagement;
+import org.apache.commons.lang.StringUtils;
+
+import org.eclim.project.ProjectNatureFactory;
 
 /**
- * Command to create a project.
+ * Command to get available project nature aliases.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class ProjectCreateCommand
+public class ProjectNatureAliasesCommand
   extends AbstractCommand
 {
-  private static final Logger logger =
-    Logger.getLogger(ProjectCreateCommand.class);
-
   /**
    * {@inheritDoc}
    */
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String folder = _commandLine.getValue(Options.FOLDER_OPTION);
-      if(folder.endsWith("/") || folder.endsWith("\\")){
-        folder = folder.substring(0, folder.length() - 1);
-      }
-
-      String name = FilenameUtils.getBaseName(folder).replace(' ', '_');
-      logger.debug("Creating project '{}' at folder '{}'", name, folder);
-
-      ProjectManagement.create(name, folder, _commandLine);
-
-      return Services.getMessage("project.created", name);
+      return StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
     }catch(Throwable t){
       return t;
     }

@@ -315,6 +315,20 @@
         Improved linux scripts and now shipping with
         <a href="guides/system/linux_initd.html">initd files for eclimd</a>.
       </action>
+      <action dev="ervandew" type="add" context="Eclim">
+        Modified
+        <a href="vim/common/project.html#ProjectCreate">
+          <strong>:ProjectCreate</strong>
+        </a>
+        to require a -n argument specifying the project natures.
+        <warning>
+          Please read the updated
+          <a href="vim/common/project.html#ProjectCreate">
+            <strong>:ProjectCreate</strong>
+          </a>
+          docs so you understand how to use the updated command.
+        </warning>
+      </action>
 
       <action dev="ervandew" type="update" context="Java">
         Maven dependency searching now expanded to ivy files via

@@ -32,11 +32,10 @@ public interface ProjectManager
    * Creates a new project, or if a project already exists, updates it to add
    * the necessary nature(s) for the type of project being created.
    *
-   * @param _name The project name.
-   * @param _folder The project folder.
+   * @param _project The project.
    * @param _commandLine The command line for the project create command.
    */
-  public void create (String _name, String _folder, CommandLine _commandLine)
+  public void create (IProject _project, CommandLine _commandLine)
     throws Exception;
 
   /**

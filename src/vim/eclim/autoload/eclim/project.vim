@@ -23,6 +23,7 @@
 
 " Script Variables {{{
   let s:command_create = '-command project_create -f "<folder>"'
+  let s:command_create_natures = ' -n <natures>'
   let s:command_create_depends = ' -d <depends>'
   let s:command_delete = '-command project_delete -n "<project>"'
   let s:command_refresh = '-command project_refresh -n "<project>"'
@@ -32,6 +33,7 @@
   let s:command_update = '-command project_update -n "<project>" -s "<settings>"'
   let s:command_open = '-command project_open -n "<project>"'
   let s:command_close = '-command project_close -n "<project>"'
+  let s:command_nature_aliases = '-command project_nature_aliases'
 " }}}
 
 " ProjectCD(scope) {{{
@@ -54,11 +56,16 @@ function! eclim#project#ProjectCreate (args)
   let folder = substitute(folder, '\', '/', 'g')
   let command = substitute(s:command_create, '<folder>', folder, '')
 
-  " get dependent project names.
-  if len(args) > 1
-    let depends = join(args[1:], ',')
-    let command = command . s:command_create_depends
-    let command = substitute(command, '<depends>', depends, '')
+  let natures = substitute(a:args, '.* -n\s\+\(.\{-}\)\(\s\+-d\>.*\|$\)', '\1', '')
+  if natures != a:args
+    let natures = substitute(natures, '\s\+', ',', 'g')
+    let command .= substitute(s:command_create_natures, '<natures>', natures, '')
+  endif
+
+  let depends = substitute(a:args, '.* -d\s\+\(.\{-}\)\(\s\+-n\>.*\|$\)', '\1', '')
+  if depends != a:args
+    let depends = substitute(depends, '\s\+', ',', 'g')
+    let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
   let result = eclim#ExecuteEclim(command)
@@ -299,6 +306,17 @@ function! eclim#project#GetProjectNames ()
   return projects
 endfunction " }}}
 
+" GetProjectNatureAliases() {{{
+" Gets list of all project nature aliases.
+function! eclim#project#GetProjectNatureAliases ()
+  let aliases = split(eclim#ExecuteEclim(s:command_nature_aliases), '\n')
+  if len(aliases) == 1 && aliases[0] == '0'
+    return []
+  endif
+
+  return aliases
+endfunction " }}}
+
 " GetProjectRoot(project) {{{
 " Gets the project root dir for the supplied project name.
 function! eclim#project#GetProjectRoot (project)
@@ -352,11 +370,14 @@ endfunction " }}}
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#project#CommandCompleteProject (argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
   let projects = eclim#project#GetProjectNames()
-  call filter(projects, 'v:val =~ "^' . argLead . '"')
+  if cmdLine !~ '[^\\]\s$'
+    call filter(projects, 'v:val =~ "^' . argLead . '"')
+  endif
 
   return projects
 endfunction " }}}
@@ -369,12 +390,42 @@ function! eclim#project#CommandCompleteProjectCreate (argLead, cmdLine, cursorPo
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
   " complete dirs for first arg
-  if cmdLine =~ '^ProjectCreate\s*' . escape(argLead, '~.\') . '$'
+  if cmdLine =~ '^ProjectCreate\s\+' . escape(argLead, '~.\') . '$'
     return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  " complete options
+  if cmdLine =~ '^ProjectCreate\s\+' . escape(argLead, '~.\') . '\s\+$'
+    return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
+  endif
+  if argLead =~ '-$'
+    return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  if cmdLine =~ '\s-n\s.*$' && stridx(cmdLine, ' -d') < stridx(cmdLine, ' -n')
+    let aliases = eclim#project#GetProjectNatureAliases()
+    if cmdLine !~ '[^\\]\s$'
+      call filter(aliases, 'v:val =~ "^' . argLead . '"')
+    endif
+
+    return aliases
   endif
 
   " for remaining args, complete project name.
   return eclim#project#CommandCompleteProject(argLead, a:cmdLine, a:cursorPos)
+endfunction " }}}
+
+" CommandCompleteProjectCreateOptions(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for ProjectCreate options.
+function! s:CommandCompleteProjectCreateOptions (argLead, cmdLine, cursorPos)
+  let options = ['-n', '-d']
+  if a:cmdLine =~ '\s-n\>'
+    call remove(options, 0)
+  endif
+  if a:cmdLine =~ '\s-d\>'
+    call remove(options, 1)
+  endif
+  return options
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

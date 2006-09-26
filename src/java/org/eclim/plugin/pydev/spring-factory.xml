@@ -50,4 +50,13 @@
     </property>
   </bean>
 
+  <bean class="org.eclim.project.ProjectNatureFactory"
+      factory-method="addNatures">
+    <constructor-arg>
+      <value>
+        python org.python.pydev.pythonNature
+      </value>
+    </constructor-arg>
+  </bean>
+
 </beans>

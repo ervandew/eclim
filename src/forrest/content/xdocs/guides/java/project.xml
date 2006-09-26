@@ -39,7 +39,7 @@
         executing:
       </p>
       <source>
-        :ProjectCreate /path/to/my_project
+        :ProjectCreate /path/to/my_project -n java
       </source>
       <p>
         The path supplied will be the path to the root of your project.  This

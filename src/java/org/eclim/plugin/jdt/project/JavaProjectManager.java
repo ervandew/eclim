@@ -29,8 +29,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.io.FilenameUtils;
@@ -63,14 +61,10 @@ import org.eclim.util.XmlUtils;
 import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -84,13 +78,6 @@ import org.eclipse.jdt.internal.ui.wizards.ClassPathDetector;
 
 import org.eclipse.jdt.launching.JavaRuntime;
 
-import org.jaxen.XPath;
-
-import org.jaxen.dom.DOMXPath;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Text;
-
 /**
  * Implementation of {@link ProjectManager} for java projects.
  *
@@ -102,9 +89,6 @@ public class JavaProjectManager
 {
   private static final Logger logger =
     Logger.getLogger(JavaProjectManager.class);
-
-  private static DocumentBuilderFactory factory;
-  private static XPath xpath;
 
   private static final Pattern STATUS_PATTERN =
     Pattern.compile(".*[\\\\/](.*)'.*");
@@ -119,11 +103,11 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public void create (String _name, String _folder, CommandLine _commandLine)
+  public void create (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     String depends = _commandLine.getValue(Options.DEPENDS_OPTION);
-    create(_name, _folder, depends);
+    create(_project, depends);
   }
 
   /**
@@ -197,20 +181,14 @@ public class JavaProjectManager
   /**
    * Creates a new project.
    *
-   * @param _name The project name.
-   * @param _folder The project root folder.
+   * @param _project The project.
    * @param _depends Comma seperated project names this project depends on.
    */
-  protected void create (String _name, String _folder, String _depends)
+  protected void create (IProject _project, String _depends)
     throws Exception
   {
-    deleteStaleProject(_name, _folder);
-    IProject project = createProject(_name, _folder);
-
-    project.open(null);
-
-    IJavaProject javaProject = JavaCore.create(project);
-    ClassPathDetector detector = new ClassPathDetector(project, null);
+    IJavaProject javaProject = JavaCore.create(_project);
+    ClassPathDetector detector = new ClassPathDetector(_project, null);
     IClasspathEntry[] detected = detector.getClasspath();
     IClasspathEntry[] depends =
       createOrUpdateDependencies(javaProject, _depends);
@@ -226,87 +204,6 @@ public class JavaProjectManager
     javaProject.setRawClasspath(classpath, null);
     javaProject.makeConsistent(null);
     javaProject.save(null, false);
-  }
-
-  /**
-   * Handle deleting the stale project if it exists.
-   *
-   * @param _name  The project name.
-   * @param _folder The project folder.
-   */
-  protected void deleteStaleProject (String _name, String _folder)
-    throws Exception
-  {
-    // check for same project location w/ diff project name, or a stale
-    // .project file.
-    File projectFile = new File(_folder + File.separator + ".project");
-    if(projectFile.exists()){
-      if(xpath == null){
-        xpath = new DOMXPath("/projectDescription/name/text()");
-        factory = DocumentBuilderFactory.newInstance();
-      }
-      Document document = factory.newDocumentBuilder().parse(projectFile);
-      String projectName = "";
-      Object result = xpath.selectSingleNode(document);
-      if(result != null){
-        projectName = ((Text)result).getData();
-      }
-
-      if(!projectName.equals(_name)){
-        IProject project = ProjectUtils.getProject(projectName);
-        if(project.exists()){
-          project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
-        }else{
-          projectFile.delete();
-        }
-      }
-    }
-  }
-
-  /**
-   * Handle creation of project if necessary.
-   *
-   * @param _name  The project name.
-   * @param _folder The project folder.
-   *
-   * @return The created project.
-   */
-  protected IProject createProject (String _name, String _folder)
-    throws Exception
-  {
-    // create the project if it doesn't already exist.
-    IProject project = ProjectUtils.getProject(_name, true);
-    if(!project.exists()){
-      IWorkspace workspace = ResourcesPlugin.getWorkspace();
-      IPath location = new Path(_folder);
-
-      // location must not overlap the workspace.
-      IPath workspaceLocation = workspace.getRoot().getRawLocation();
-      if(location.toOSString().toLowerCase().startsWith(
-            workspaceLocation.toOSString().toLowerCase()))
-      {
-        location = null;
-        /*location = location.removeFirstSegments(
-            location.matchingFirstSegments(workspaceLocation));*/
-      }
-
-      IProjectDescription description = workspace.newProjectDescription(_name);
-      description.setLocation(location);
-      description.setNatureIds(new String[]{JavaCore.NATURE_ID});
-
-      project.create(description, null/*monitor*/);
-
-    /*}else{
-      // check if the existing project is located elsewhere.
-      File path = project.getLocation().toFile();
-      if(!path.equals(new File(_folder))){
-        throw new IllegalArgumentException(Services.getMessage(
-            "project.name.exists",
-            new Object[]{_name, path.toString()}));
-      }*/
-    }
-
-    return project;
   }
 
   /**

@@ -55,6 +55,15 @@
     <description>Initializes java environment.</description>
   </bean>
 
+  <bean class="org.eclim.project.ProjectNatureFactory"
+      factory-method="addNatures">
+    <constructor-arg>
+      <value>
+        java org.eclipse.jdt.core.javanature
+      </value>
+    </constructor-arg>
+  </bean>
+
   <bean class="org.eclim.preference.PreferenceFactory"
       factory-method="addPreferences">
     <constructor-arg>

@@ -15,20 +15,42 @@
  */
 package org.eclim.project;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.collections.CollectionUtils;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
+import org.eclim.command.Options;
+
+import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
+import org.jaxen.XPath;
+
+import org.jaxen.dom.DOMXPath;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Text;
 
 /**
  * Class that handles registering and retrieving of {@link ProjectManager}s.
@@ -39,6 +61,9 @@ import org.eclipse.core.resources.IProject;
 public class ProjectManagement
 {
   private static Map managers = new HashMap();
+
+  private static XPath xpath;
+  private static DocumentBuilderFactory factory;
 
   /**
    * Registers a ProjectManager.
@@ -63,6 +88,119 @@ public class ProjectManagement
   public static ProjectManager getProjectManager (String _nature)
   {
     return (ProjectManager)managers.get(_nature);
+  }
+
+  /**
+   * Creates a project.
+   *
+   * @param _name The project name to use.
+   * @param _folder The folder to create the project at.
+   * @param _commandLine The command line for the project create command.
+   */
+  public static void create (
+      String _name, String _folder, CommandLine _commandLine)
+    throws Exception
+  {
+    String[] natures = StringUtils.split(
+        _commandLine.getValue(Options.NATURE_OPTION), ',');
+    // convert from aliases to real nature names.
+    for (int ii = 0; ii < natures.length; ii++){
+      natures[ii] = ProjectNatureFactory.getNatureForAlias(natures[ii]);
+    }
+
+    deleteStaleProject(_name, _folder);
+    IProject project = createProject(_name, _folder, natures);
+    project.open(null);
+
+    for (int ii = 0; ii < natures.length; ii++){
+      ProjectManager manager = getProjectManager(natures[ii]);
+      if(manager != null){
+        manager.create(project, _commandLine);
+      }
+    }
+  }
+
+  /**
+   * Handle creation of project if necessary.
+   *
+   * @param _name  The project name.
+   * @param _folder The project folder.
+   * @param _natures Array of natures.
+   *
+   * @return The created project.
+   */
+  protected static IProject createProject (
+      String _name, String _folder, String[] _natures)
+    throws Exception
+  {
+    // create the project if it doesn't already exist.
+    IProject project = ProjectUtils.getProject(_name, true);
+    if(!project.exists()){
+      IWorkspace workspace = ResourcesPlugin.getWorkspace();
+      IPath location = new Path(_folder);
+
+      // location must not overlap the workspace.
+      IPath workspaceLocation = workspace.getRoot().getRawLocation();
+      if(location.toOSString().toLowerCase().startsWith(
+            workspaceLocation.toOSString().toLowerCase()))
+      {
+        location = null;
+        /*location = location.removeFirstSegments(
+            location.matchingFirstSegments(workspaceLocation));*/
+      }
+
+      IProjectDescription description = workspace.newProjectDescription(_name);
+      description.setLocation(location);
+      description.setNatureIds(_natures);
+
+      project.create(description, null/*monitor*/);
+
+    /*}else{
+      // check if the existing project is located elsewhere.
+      File path = project.getLocation().toFile();
+      if(!path.equals(new File(_folder))){
+        throw new IllegalArgumentException(Services.getMessage(
+            "project.name.exists",
+            new Object[]{_name, path.toString()}));
+      }*/
+    }
+
+    return project;
+  }
+
+  /**
+   * Handle deleting the stale project if it exists.
+   *
+   * @param _name  The project name.
+   * @param _folder The project folder.
+   */
+  protected static void deleteStaleProject (String _name, String _folder)
+    throws Exception
+  {
+    // check for same project location w/ diff project name, or a stale
+    // .project file.
+    File projectFile = new File(_folder + File.separator + ".project");
+    if(projectFile.exists()){
+      if(xpath == null){
+        xpath = new DOMXPath("/projectDescription/name/text()");
+        factory = DocumentBuilderFactory.newInstance();
+      }
+      Document document = factory.newDocumentBuilder().parse(projectFile);
+      String projectName = "";
+      Object result = xpath.selectSingleNode(document);
+      if(result != null){
+        projectName = ((Text)result).getData();
+      }
+
+      if(!projectName.equals(_name)){
+        IProject project = ProjectUtils.getProject(projectName);
+        if(project.exists()){
+          project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+        }else{
+          projectFile.delete();
+        }
+      }
+    }
   }
 
   /**

@@ -117,6 +117,10 @@
     <description>Handles client request to close a project.</description>
   </bean>
 
+  <bean name="project_nature_aliases" class="org.eclim.command.project.ProjectNatureAliasesCommand">
+    <description>Handles request for list of project nature aliases.</description>
+  </bean>
+
   <bean name="project_update" class="org.eclim.command.project.ProjectUpdateCommand">
     <description>Handles client project update request.</description>
     <property name="filters">
