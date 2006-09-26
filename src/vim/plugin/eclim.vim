@@ -79,6 +79,7 @@ function s:Validate ()
   if &compatible
     call add(errors, "Error: You have 'compatible' set:")
     call add(errors, "       Please add 'set nocompatible' to your vimrc.")
+    call add(errors, "       Type ':help 'compatible'' for more details.")
   endif
 
   " Check filetype support
@@ -91,8 +92,8 @@ function s:Validate ()
     let chose = 0
     while string(chose) !~ '1\|2'
       redraw
-      echo "Due to possible language differences, " .
-        \ "please check the following line manually."
+      echo "Filetype plugin support looks to be disabled, but due to possible"
+      echo "language differences, please check the following line manually."
       echo "    " . ftsupport
       echo "Does it have detection and plugin 'ON'?"
       echo "1) Yes"
@@ -103,6 +104,7 @@ function s:Validate ()
       call add(errors, "Error: Filetype detection and plugins must be enabled.")
       call add(errors, "       Please add 'filetype plugin on' or " .
         \ "'filetype plugin indent on' to your vimrc.")
+      call add(errors, "       Type ':help filetype-plugin-on' for more details.")
     endif
   endif
 
