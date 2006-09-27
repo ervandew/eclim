@@ -636,18 +636,20 @@ function! eclim#util#System (cmd, ...)
   return result
 endfunction " }}}
 
-" TempWindow(name, lines) {{{
+" TempWindow(name, lines [, readonly]) {{{
 " Opens a temp window w/ the given name and contents.
-function! eclim#util#TempWindow (name, lines)
+function! eclim#util#TempWindow (name, lines, ...)
   call eclim#util#TempWindowClear(a:name)
 
   if bufwinnr(a:name) == -1
     silent! exec "botright 10split " . a:name
-    setlocal nowrap
-    setlocal winfixheight
-    setlocal noswapfile
-    setlocal buftype=nofile
-    setlocal bufhidden=delete
+    if len(a:000) == 0 || a:000[0]
+      setlocal nowrap
+      setlocal winfixheight
+      setlocal noswapfile
+      setlocal buftype=nofile
+      setlocal bufhidden=delete
+    endif
   else
     exec bufwinnr(a:name) . "winc w"
   endif
@@ -655,12 +657,14 @@ function! eclim#util#TempWindow (name, lines)
   call append(1, a:lines)
   retab
   let saved = @"
-  1delete
+  silent 1,1delete
   let @" = saved
 
-  setlocal nomodified
-  setlocal nomodifiable
-  setlocal readonly
+  if len(a:000) == 0 || a:000[0]
+    setlocal nomodified
+    setlocal nomodifiable
+    setlocal readonly
+  endif
 endfunction " }}}
 
 " TempWindowClear(name) {{{
@@ -672,7 +676,7 @@ function! eclim#util#TempWindowClear (name)
     setlocal modifiable
     setlocal noreadonly
     let saved = @"
-    1,$delete
+    silent 1,$delete
     let @" = saved
     exec curwinnr . "winc w"
   endif
