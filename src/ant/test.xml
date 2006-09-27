@@ -134,7 +134,7 @@
 
     <exec executable="${eclim.home}/bin/eclim" failonerror="true"
         output="build/test/junit/eclim.log" append="false">
-      <arg line="-command project_create -f ${eclipse.workspace}/eclim_unit_test_java"/>
+      <arg line="-command project_create -f ${eclipse.workspace}/eclim_unit_test_java -n java"/>
     </exec>
   </target>
 

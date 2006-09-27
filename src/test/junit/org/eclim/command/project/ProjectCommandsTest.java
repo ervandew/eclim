@@ -42,7 +42,10 @@ public class ProjectCommandsTest
     assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "project_create", "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT});
+      "project_create",
+      "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT,
+      "-n", "java"
+    });
     System.out.println(result);
 
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
