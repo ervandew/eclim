@@ -310,6 +310,10 @@
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Several other bug fixes.
       </action>
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Reimplemented <strong>:Settings</strong> and
+        <strong>:ProjectSettings</strong> saving to be more fault tolerant.
+      </action>
 
       <action dev="ervandew" type="add" context="Eclim">
         Improved linux scripts and now shipping with
@@ -335,6 +339,12 @@
         <a href="guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
           <strong>:IvyDependencySearch</strong>
         </a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Xml">
+        Added command
+        <a href="vim/xml/format.html"><strong>:XmlFormat</strong></a> to
+        reformat range of lines in a xml file.
       </action>
     </release>
 

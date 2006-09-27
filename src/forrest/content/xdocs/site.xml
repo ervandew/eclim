@@ -184,6 +184,7 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Definition Lookup"/>
       <validate label="Validation" href="validate.html"
           description="Validation"/>
+      <format label="Format" href="format.html" description="Format"/>
     </xml>
   </vim>
 

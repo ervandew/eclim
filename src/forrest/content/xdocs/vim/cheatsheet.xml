@@ -412,6 +412,10 @@
         [&lt;file&gt;] -
         Validates the supplied xml file or the current file if none supplied.
       </li>
+      <li>
+        <a href="xml/format.html#XmlFormat"><strong>:XmlFormat</strong></a>
+        Reformats a given range within an xml file.
+      </li>
     </ul>
 
     <p><strong>Web Lookup Commands</strong></p>
