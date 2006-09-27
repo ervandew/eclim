@@ -16,9 +16,15 @@
 package org.eclim.command.admin;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
 import java.util.Iterator;
 import java.util.Properties;
+
+import org.apache.commons.io.IOUtils;
+
+import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
@@ -35,6 +41,9 @@ import org.eclim.command.Options;
 public class SettingsUpdateCommand
   extends AbstractCommand
 {
+  private static final Logger logger =
+    Logger.getLogger(SettingsUpdateCommand.class);
+
   /**
    * {@inheritDoc}
    */
@@ -43,15 +52,26 @@ public class SettingsUpdateCommand
     try{
       String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
-      settings = settings.replace('|', '\n');
       Properties properties = new Properties();
-      properties.load(new ByteArrayInputStream(settings.getBytes()));
+      FileInputStream in = null;
+      File file = new File(settings);
+      try{
+        in = new FileInputStream(file);
+        properties.load(in);
 
-      for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
-        String name = (String)ii.next();
-        String value = properties.getProperty(name);
-        getPreferences().setOption(name, value);
+        for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
+          String name = (String)ii.next();
+          String value = properties.getProperty(name);
+          getPreferences().setOption(name, value);
+        }
+    }finally{
+      IOUtils.closeQuietly(in);
+      try{
+        file.delete();
+      }catch(Exception e){
+        logger.warn("Error deleting settings temp file: " + file, e);
       }
+    }
 
       return Services.getMessage("settings.updated");
     }catch(Throwable t){

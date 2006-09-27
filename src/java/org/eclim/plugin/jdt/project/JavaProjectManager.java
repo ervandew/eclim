@@ -15,16 +15,12 @@
  */
 package org.eclim.plugin.jdt.project;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,8 +31,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
@@ -50,8 +44,6 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.plugin.jdt.project.classpath.Dependency;
 import org.eclim.plugin.jdt.project.classpath.Parser;
-
-import org.eclim.preference.Preferences;
 
 import org.eclim.project.ProjectManager;
 
@@ -87,9 +79,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
 public class JavaProjectManager
   implements ProjectManager
 {
-  private static final Logger logger =
-    Logger.getLogger(JavaProjectManager.class);
-
   private static final Pattern STATUS_PATTERN =
     Pattern.compile(".*[\\\\/](.*)'.*");
 
@@ -97,8 +86,6 @@ public class JavaProjectManager
 
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
-
-  private Preferences preferences;
 
   /**
    * {@inheritDoc}
@@ -117,43 +104,36 @@ public class JavaProjectManager
     throws Exception
   {
     String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
-    String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
     IJavaProject javaProject = JavaUtils.getJavaProject(_project);
     javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    // project settings update
-    if(settings != null){
-      updateSettings(javaProject, settings);
-      javaProject.makeConsistent(null);
+    // validate that .classpath xml is well formed and valid.
+    String dotclasspath = javaProject.getProject().getFile(".classpath")
+      .getRawLocation().toOSString();
+    PluginResources resources = (PluginResources)
+      Services.getPluginResources(PluginResources.NAME);
+    Error[] errors = XmlUtils.validateXml(dotclasspath,
+        resources.getResource(CLASSPATH_XSD).toString());
+    if(errors.length > 0){
+      return errors;
+    }
+
+    // ivy.xml, etc updated.
+    if(buildfile != null){
+      String filename = FilenameUtils.getName(buildfile);
+      Parser parser = (Parser)Services.getService(filename, Parser.class);
+      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+      errors = setClasspath(javaProject, entries, dotclasspath);
+
+    // .classpath updated.
     }else{
-      // validate that .classpath xml is well formed and valid.
-      String dotclasspath = javaProject.getProject().getFile(".classpath")
-        .getRawLocation().toOSString();
-      PluginResources resources = (PluginResources)
-        Services.getPluginResources(PluginResources.NAME);
-      Error[] errors = XmlUtils.validateXml(dotclasspath,
-          resources.getResource(CLASSPATH_XSD).toString());
-      if(errors.length > 0){
-        return errors;
-      }
+      IClasspathEntry[] entries = javaProject.readRawClasspath();
+      errors = setClasspath(javaProject, entries, dotclasspath);
+    }
 
-      // ivy.xml, project.xml, etc updated.
-      if(buildfile != null){
-        String filename = FilenameUtils.getName(buildfile);
-        Parser parser = (Parser)Services.getService(filename, Parser.class);
-        IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
-        errors = setClasspath(javaProject, entries, dotclasspath);
-
-      // .classpath updated.
-      }else{
-        IClasspathEntry[] entries = javaProject.readRawClasspath();
-        errors = setClasspath(javaProject, entries, dotclasspath);
-      }
-
-      if(errors.length > 0){
-        return errors;
-      }
+    if(errors.length > 0){
+      return errors;
     }
     return null;
   }
@@ -325,27 +305,6 @@ public class JavaProjectManager
   }
 
   /**
-   * Updates the projects settings.
-   *
-   * @param _project The project.
-   * @param _settings The settings.
-   */
-  protected void updateSettings (IJavaProject _project, String _settings)
-    throws Exception
-  {
-    String settings = _settings.replace('|', '\n');
-    Properties properties = new Properties();
-    properties.load(new ByteArrayInputStream(settings.getBytes()));
-
-    boolean updateOptions = false;
-    for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
-      String name = (String)ii.next();
-      String value = properties.getProperty(name);
-      preferences.setOption(_project.getProject(), name, value);
-    }
-  }
-
-  /**
    * Merges the supplied project's classpath with the specified dependencies.
    *
    * @param _project The project.
@@ -466,17 +425,5 @@ public class JavaProjectManager
       }
     }
     return false;
-  }
-
-  /**
-   * Set preferences.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _preferences the value to set.
-   */
-  public void setPreferences (Preferences _preferences)
-  {
-    this.preferences = _preferences;
   }
 }

@@ -191,20 +191,11 @@ endfunction " }}}
 function! s:SaveSettings ()
   " don't check modified since undo seems to not set the modified flag
   "if &modified
-    let settings = getline(1, line('$'))
-    let result = ""
-    for setting in settings
-      if setting !~ '^\s*\($\|#\)'
-        if result != ""
-          let result = result . "|"
-        endif
-        let result = result . setting
-      endif
-    endfor
-
+    let tempfile = tempname()
+    silent exec 'write! ' . escape(tempfile, ' ')
     let command = s:command_update
     let command = substitute(command, '<project>', b:project, '')
-    let command = substitute(command, '<settings>', result, '')
+    let command = substitute(command, '<settings>', tempfile, '')
 
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'

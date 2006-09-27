@@ -100,12 +100,7 @@
       factory-method="addProjectManager">
     <constructor-arg value="org.eclipse.jdt.core.javanature"/>
     <constructor-arg>
-      <bean class="org.eclim.plugin.jdt.project.JavaProjectManager">
-        <property name="preferences">
-          <bean class="org.eclim.preference.Preferences"
-              factory-method="getInstance"/>
-        </property>
-      </bean>
+      <bean class="org.eclim.plugin.jdt.project.JavaProjectManager"/>
     </constructor-arg>
   </bean>
 
