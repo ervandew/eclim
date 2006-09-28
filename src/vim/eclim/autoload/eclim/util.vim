@@ -324,10 +324,17 @@ endfunction " }}}
 " GoToBufferWindow(bufname) {{{
 " Returns to the window containing the supplied buffer name.
 function! eclim#util#GoToBufferWindow (bufname)
-  let winnr = bufwinnr(bufnr(b:filename))
+  let winnr = bufwinnr(bufnr(a:bufname))
   if winnr != -1
     exec winnr . "winc w"
   endif
+endfunction " }}}
+
+" GoToBufferWindowRegister(bufname) {{{
+" Registers the autocmd for returning the user to the supplied buffer when the
+" current buffer is closed.
+function! eclim#util#GoToBufferWindowRegister (bufname)
+  exec 'autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow("' . a:bufname . '")'
 endfunction " }}}
 
 " GrabUri() {{{
@@ -709,10 +716,9 @@ function! eclim#util#TempWindowCommand (command, name)
 
   call cursor(line, col)
 
-  let b:filename = filename
   augroup temp_window
     autocmd! BufUnload <buffer>
-    autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
+    call eclim#util#GoToBufferWindowRegister(filename)
   augroup END
 
   return 1

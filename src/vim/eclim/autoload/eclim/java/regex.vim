@@ -71,11 +71,10 @@ function! eclim#java#regex#OpenTestWindow ()
     command -buffer NextMatch :call s:NextMatch()
     command -buffer PrevMatch :call s:PrevMatch()
 
-    let b:filename = filename
     augroup eclim_java_regex
       autocmd!
       autocmd BufWritePost <buffer> call s:Evaluate()
-      autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
+      call eclim#util#GoToBufferWindowRegister(filename)
     augroup END
   endif
 

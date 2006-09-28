@@ -91,10 +91,9 @@ function! eclim#java#junit#JUnitResult (test)
     let filename = expand('%:p')
     exec "botright split " . found
 
-    let b:filename = filename
     augroup temp_window
       autocmd! BufUnload <buffer>
-      autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
+      call eclim#util#GoToBufferWindowRegister(filename)
     augroup END
 
     return

@@ -72,7 +72,6 @@ function! eclim#java#correct#Correct ()
 
   call eclim#util#TempWindow(window_name, results)
 
-  let b:filename = filename
   setlocal ft=java
 
   "exec "syntax match Normal /" . escape(getline(1), '^$/\') . "/"
@@ -80,8 +79,6 @@ function! eclim#java#correct#Correct ()
 
   nnoremap <silent> <buffer> <cr>
     \ :call eclim#java#correct#CorrectApply()<cr>
-  autocmd! BufUnload <buffer>
-  autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow(b:filename)
 
   redraw | echo ""
 endfunction " }}}
