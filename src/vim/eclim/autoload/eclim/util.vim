@@ -334,7 +334,8 @@ endfunction " }}}
 " Registers the autocmd for returning the user to the supplied buffer when the
 " current buffer is closed.
 function! eclim#util#GoToBufferWindowRegister (bufname)
-  exec 'autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow("' . a:bufname . '")'
+  exec 'autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow("' .
+    \ escape(a:bufname, '\') . '")'
 endfunction " }}}
 
 " GrabUri() {{{

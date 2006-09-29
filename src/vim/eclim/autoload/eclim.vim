@@ -216,7 +216,7 @@ endfunction " }}}
 function! s:SaveSettings ()
   " don't check modified since undo seems to not set the modified flag
   "if &modified
-    let tempfile = tempname()
+    let tempfile = substitute(tempname(), '\', '/', 'g')
     silent exec 'write! ' . escape(tempfile, ' ')
 
     let command = substitute(s:command_settings_update, '<settings>', tempfile, '')
