@@ -39,38 +39,48 @@ function! eclim#xml#format#Format (start, end)
   let end = a:end
   if start >= b:root
     call cursor(start, 1)
-    let outer = s:SelectOuterTag(1)
-    let inner = s:SelectInnerTag()
 
-    " inner tags on the same line, push to a new line.
-    if outer.lstart == inner.lstart &&
-        \ (inner.lstart != outer.lstart || inner.cstart != outer.cstart)
-      call s:InsertCr(inner.lstart, inner.cstart)
+    " handle xml delcaration case
+    let line = getline(start)
+    if line =~ '^\s*<?xml.\{-}?>\s*<'
+      call s:InsertCr(start, stridx(line, '?>') + 3)
       let end += 1
-    endif
+      let b:root += 1
 
-    " handle repositioning parent ending tag if necessary.
-    if getline(inner.lstart) =~ '^\s*<\w'
-      let element = s:SelectOuterTag(1)
-      let parent = s:SelectOuterTag(2)
     else
-      let element = s:SelectInnerTag()
-      let parent = s:SelectOuterTag(1)
-    endif
-    if element.lend == parent.lend &&
-        \ (parent.lstart != parent.lend || parent.cstart != parent.cend)
-      call s:InsertCr(element.lend, element.cend + 1)
-      let end += 1
-    endif
+      let outer = s:SelectOuterTag(1)
+      let inner = s:SelectInnerTag()
 
-    " handle sibling elements on the same line.
-    let element = s:SelectOuterTag(1)
-    if len(getline(element.lend)) > element.cend
-      call cursor(element.lend, element.cend + 1)
-      let sibling = s:SelectOuterTag(1)
-      if element.lend == sibling.lstart
+      " inner tags on the same line, push to a new line.
+      if outer.lstart == inner.lstart &&
+          \ (inner.lstart != outer.lstart || inner.cstart != outer.cstart)
+        call s:InsertCr(inner.lstart, inner.cstart)
+        let end += 1
+      endif
+
+      " handle repositioning parent ending tag if necessary.
+      if getline(inner.lstart) =~ '^\s*<\w'
+        let element = s:SelectOuterTag(1)
+        let parent = s:SelectOuterTag(2)
+      else
+        let element = s:SelectInnerTag()
+        let parent = s:SelectOuterTag(1)
+      endif
+      if element.lend == parent.lend &&
+          \ (parent.lstart != parent.lend || parent.cstart != parent.cend)
         call s:InsertCr(element.lend, element.cend + 1)
         let end += 1
+      endif
+
+      " handle sibling elements on the same line.
+      let element = s:SelectOuterTag(1)
+      if len(getline(element.lend)) > element.cend
+        call cursor(element.lend, element.cend + 1)
+        let sibling = s:SelectOuterTag(1)
+        if element.lend == sibling.lstart
+          call s:InsertCr(element.lend, element.cend + 1)
+          let end += 1
+        endif
       endif
     endif
 
@@ -141,9 +151,9 @@ function! s:GetRootLine ()
   let clnum = line('.')
   let ccnum = col('.')
 
-  let line = -1
+  let line = 1
   call cursor(1, 1)
-  while getline('.') !~ '^\s*<\w'
+  while getline('.') !~ '<\w'
     let line = line('.') + 1
     if line > line('$')
       break
