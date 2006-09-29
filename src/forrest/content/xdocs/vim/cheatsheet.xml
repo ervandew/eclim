@@ -53,7 +53,8 @@
     <ul>
       <li>
         <a href="common/project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
-        &lt;folder&gt; -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...]
+        <!-- &lt;folder&gt; -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
+        &lt;folder&gt; [-d &lt;project_dependency&gt; ...]
         Create a new project.
       </li>
       <li>

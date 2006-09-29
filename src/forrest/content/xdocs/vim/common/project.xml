@@ -46,7 +46,8 @@
       <li>
         <anchor id="ProjectCreate"/>
         <strong>:ProjectCreate</strong>
-        &lt;folder&gt; -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...]
+        <!-- &lt;folder&gt; -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
+        &lt;folder&gt; [-d &lt;project_dependency&gt; ...]
         <br/>
         Creates a project at the supplied folder name.  With the supplied space
         delimited project natures.  Project natures are used by Eclipse plugins
@@ -57,9 +58,13 @@
         Also, if the the project depends on other projects, you can
         specify the names of those projects separated by space using the -d
         argument.
-        <source>
+        <!--source>
           :ProjectCreate ~/projects/a_project -n java
           :ProjectCreate ~/projects/a_project -n java -d another_project yet_another_project
+        </source-->
+        <source>
+          :ProjectCreate ~/projects/a_project
+          :ProjectCreate ~/projects/a_project -d another_project yet_another_project
         </source>
       </li>
       <li>

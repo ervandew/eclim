@@ -39,8 +39,11 @@
         executing:
       </p>
       <source>
-        :ProjectCreate /path/to/my_project -n java
+        :ProjectCreate /path/to/my_project
       </source>
+      <!--source>
+        :ProjectCreate /path/to/my_project -n java
+      </source-->
       <p>
         The path supplied will be the path to the root of your project.  This
         path may or may not exist.  If it does not exist it will be created for
