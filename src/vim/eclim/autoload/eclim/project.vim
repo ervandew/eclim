@@ -68,6 +68,11 @@ function! eclim#project#ProjectCreate (args)
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
+  " backwards compatability (default to java nature)
+  if command !~ 'a:args$'
+    let command .= ' -n java -d ' . join(args[1:], ',')
+  endif
+
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)
@@ -247,7 +252,7 @@ function! eclim#project#GetCurrentProjectName ()
     setlocal noswapfile
     setlocal bufhidden=delete
 
-    let line = search('<name\s*>', 'wn')
+    let line = search('<name\s*>', 'wnc')
     if line != 0
       let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
     endif
