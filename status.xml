@@ -308,16 +308,21 @@
         that vim uses, temporarily restoring the default.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Reimplemented <strong>:Settings</strong> and
+        Reimplemented <strong>:EclimSettings</strong> and
         <strong>:ProjectSettings</strong> saving to be more fault tolerant.
       </action>
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Several other bug fixes.
       </action>
 
-      <action dev="ervandew" type="add" context="Eclim">
+      <!--action dev="ervandew" type="add" context="Eclim">
         Improved linux scripts and now shipping with
         <a href="guides/system/linux_initd.html">initd files for eclimd</a>.
+      </action-->
+      <action dev="ervandew" type="update" context="Eclim">
+        Renamed <strong>:Settings</strong> to <strong>:EclimSettings</strong> to
+        increase the uniqueness of the command name in an effort to avoid
+        clashing with other vim plugins.
       </action>
 
       <action dev="ervandew" type="update" context="Java">
@@ -325,6 +330,10 @@
         <a href="guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
           <strong>:IvyDependencySearch</strong>
         </a>.
+      </action>
+      <action dev="ervandew" type="fix" context="Java">
+        Fixed <a href="vim/java/junit.html">junit support</a> to handle
+        execution via maven 1.x and 2.x.
       </action>
 
       <action dev="ervandew" type="add" context="Xml">
@@ -844,7 +853,7 @@
       </action>
       <action dev="ervandew" type="add" context="Eclim">
         Added support for global settings/preferences via new
-        <a href="vim/index.html#Settings"><strong>:Settings</strong></a>
+        <a href="vim/index.html#EclimSettings"><strong>:EclimSettings</strong></a>
         command.
       </action>
       <action dev="ervandew" type="add" context="Java">

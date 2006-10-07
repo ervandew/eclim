@@ -26,7 +26,14 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
+  - Update :Settings and :Project settings to only grab jdt settings if jdt
+    plugin is installed... same for pydev, etc.
+
   - JUnit results in the browser.
+  - Integrate with eclipse junit execution env and provide user with option to
+    choice which to use (eclipse or current external version).
+    org.eclim.java.junit.engine=(eclipse|external)
+
   - Integrate w/ google calendar
     http://code.google.com/apis/gdata/client-java.html
 
@@ -98,3 +105,9 @@ Enhancements
 
 Python
   - when adding new method for a class, auto add self as first parameter.
+  - add :PythonRegex
+
+PyDev
+  - Allow user to set pythong interpreter
+    org.python.pydev.ui.interpreters.PythonInterpreterManager
+  - Allow user to add more paths to sys.path.
