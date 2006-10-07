@@ -101,8 +101,8 @@
       <note>
         If you have only one project or many projects that share the same
         settings you can use the
-        <a href="../../vim/index.html#Settings">
-          <strong>:Settings</strong>
+        <a href="../../vim/index.html#EclimSettings">
+          <strong>:EclimSettings</strong>
         </a>
         command instead to edit the
         global settings.  These global settings will apply to any project that

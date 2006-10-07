@@ -112,8 +112,8 @@ endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()
 endif
-if !exists(":Settings")
-  command -nargs=0 Settings :call eclim#Settings()
+if !exists(":EclimSettings")
+  command -nargs=0 EclimSettings :call eclim#Settings()
 endif
 if !exists(":PatchEclim")
   command -nargs=+ -complete=customlist,eclim#CommandCompleteScriptRevision

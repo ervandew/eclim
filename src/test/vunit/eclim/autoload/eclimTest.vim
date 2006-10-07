@@ -46,7 +46,7 @@ endfunction " }}}
 
 " TestSettings() {{{
 function! TestSettings ()
-  :Settings
+  :EclimSettings
   call VUAssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")
   close
