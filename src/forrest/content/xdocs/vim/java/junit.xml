@@ -90,13 +90,33 @@
         <li>
           <anchor id="org.eclim.java.junit.command"/>
           <strong>org.eclim.java.junit.command</strong><br/>
-          Defines the command used to execute a test case. Supports
-          "&lt;testcase&gt;" key to represent the requested test case to
-          execute.<br/>
+          Defines the command used to execute a test case.<br/>
+          Supports the following keys:
+          <ul>
+            <li>
+              &lt;testcase&gt;: key representing the requested test case to
+              execute using path separators.  Ex. org/test/SomeTest<br/>
+              Useful for use with ant and maven 2.x.
+            </li>
+            <li>
+              &lt;testcase_class&gt;: key representing the fully qualified
+              class name of the requested test case to execute.  Ex.
+              org.test.SomeTest<br/>
+              Useful for use with maven 1.x.
+            </li>
+          </ul>
           Ex.
           <source>
             <![CDATA[
+            # Ant, assuming you have a target 'test' supporting
+            # property 'junit.include'.
             org.eclim.java.junit.command=Ant -Djunit.include=<testcase> test
+
+            # Maven 2.x using built in surefire plugin.
+            org.eclim.java.junit.command=Mvn -Dtest=<testcase> test
+
+            # Maven 1.x using built in test plugin.
+            org.eclim.java.junit.command=Maven -Dtestcase=<testcase_class> test:single
             ]]>
           </source>
         </li>
