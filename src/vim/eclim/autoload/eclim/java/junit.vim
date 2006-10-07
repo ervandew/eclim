@@ -35,19 +35,23 @@ let s:command_insert =
 function! eclim#java#junit#JUnitExecute (test)
   let test = a:test
   if test == ''
-    let test = substitute(eclim#java#util#GetFullyQualifiedClassname(), '\.', '/', 'g')
+    let class = eclim#java#util#GetFullyQualifiedClassname()
+    let test = substitute(class, '\.', '/', 'g')
+  else
+    let class = substitute(test, '/', '\.', 'g')
   endif
 
   let command = eclim#project#GetProjectSetting("org.eclim.java.junit.command")
   if command == ''
     call eclim#util#EchoWarning(
       \ "Command setting for 'junit' not set. " .
-      \ "Use :Settings or :ProjectSettings to set it.")
+      \ "Use :EclimSettings or :ProjectSettings to set it.")
     return
   endif
 
   let command = substitute(command, '<testcase>', test, 'g')
-  echom 'command = ' . command
+  let command = substitute(command, '<testcase_class>', class, 'g')
+
   call eclim#util#Exec(command)
 endfunction " }}}
 
@@ -61,7 +65,7 @@ function! eclim#java#junit#JUnitResult (test)
   if path == '' || path == '/'
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
-      \ "Use :Settings or :ProjectSettings to set it.")
+      \ "Use :EclimSettings or :ProjectSettings to set it.")
     return
   endif
 
@@ -180,7 +184,7 @@ function! eclim#java#junit#CommandCompleteResult (argLead, cmdLine, cursorPos)
   if path == '' || path == '/'
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
-      \ "Use :Settings or :ProjectSettings to set it.")
+      \ "Use :EclimSettings or :ProjectSettings to set it.")
     return []
   endif
 
