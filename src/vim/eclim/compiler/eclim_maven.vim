@@ -33,9 +33,13 @@ endif
 
 CompilerSet makeprg=maven\ --find\ project.xml\ $*
 
-" Lines 12 - 15: javac (must be last to prevent picking up other errors in the
-" wrong format).
+" Lines 17 - 20: javac minus adornments (must be last to prevent picking up
+" other errors in the wrong format).
 exec 'CompilerSet errorformat=' .
+  \ '\%A%.%#[javac]\ %f:%l:\ %m,' .
+  \ '\%C%.%#[javac]\ symbol%.%#:\ %m,' .
+  \ '\%C%.%#[javac]\ location%.%#:\ %m,' .
+  \ '\%-Z%.%#[javac]\ %p^,' .
   \ '\%W%.%#[javadoc]\ %f:%l:\ warning\ -\ %m,' .
   \ '\%E%.%#[javadoc]\ %f:%l:\ error\ -\ %m,' .
   \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .
@@ -47,11 +51,11 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[junit]%.%#\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#[junit]%.%#\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
   \ '\%-Z%.%#[junit]\ Test\ %f\ FAILED,' .
+  \ g:EclimMavenCompilerAdditionalErrorFormat .
   \ '\%A%f:%l:\ %m,' .
   \ '\%Csymbol%.%#:\ %m,' .
   \ '\%Clocation%.%#:\ %m,' .
   \ '\%-Z\ %p^,' .
-  \ g:EclimMavenCompilerAdditionalErrorFormat .
   \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker

@@ -44,7 +44,7 @@ exec 'CompilerSet errorformat=' .
   \ '\%A%f:%l:\ %m,' .
   \ '\%-Z\ %p^,' .
   \ '\%ARunning\ %f,' .
-  \ '\%+Z%.%#Failures:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
+  \ '\%+ZTests\ run%.%#FAILURE!,' .
   \ g:EclimMvnCompilerAdditionalErrorFormat .
   \ '\%-G%.%#'
 
