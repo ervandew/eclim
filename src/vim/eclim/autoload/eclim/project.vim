@@ -70,7 +70,10 @@ function! eclim#project#ProjectCreate (args)
 
   " backwards compatability (default to java nature)
   if command !~ 'a:args$'
-    let command .= ' -n java -d ' . join(args[1:], ',')
+    let command .= ' -n java'
+    if len(args) > 1
+      let command .= ' -d ' . join(args[1:], ',')
+    endif
   endif
 
   let result = eclim#ExecuteEclim(command)
@@ -386,12 +389,12 @@ function! eclim#project#CommandCompleteProjectCreate (argLead, cmdLine, cursorPo
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
   " complete dirs for first arg
-  if cmdLine =~ '^ProjectCreate\s\+' . escape(argLead, '~.\') . '$'
+  if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'
     return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
   endif
 
   " complete options
-  if cmdLine =~ '^ProjectCreate\s\+' . escape(argLead, '~.\') . '\s\+$'
+  if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '\s\+$'
     return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
   endif
   if argLead =~ '-$'

@@ -259,7 +259,7 @@ function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
   " complete script name for first arg.
-  if cmdLine =~ '^PatchEclim\s*' . escape(argLead, '.\') . '$'
+  if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '.\') . '$'
     let dir = EclimBaseDir()
     let results = split(eclim#util#Glob(dir . '/' . argLead . '*'), '\n')
     call map(results, "substitute(v:val, '\\', '/', 'g')")
@@ -271,7 +271,7 @@ function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   endif
 
   " for remaining args, complete revision numbers
-  let file = substitute(cmdLine, '^PatchEclim\s*\(.\{-}\)\s.*', '\1', '')
+  let file = substitute(cmdLine, '^' . args[0] . '\s*\(.\{-}\)\s.*', '\1', '')
   let command = s:command_patch_revisions
   let command = substitute(command, '<file>', file, '')
 
