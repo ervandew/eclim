@@ -52,11 +52,11 @@ See http://forrest.apache.org/docs/linking.html for more info
       <install label="Installing / Upgrading"
           description="Installation / Upgrading Instructions"
           href="guides/install.html"/>
-      <system label="System Guides">
+      <!--system label="System Guides">
         <install label="Linux: Running eclimd in the background."
             description="Linux: Running eclimd in the background."
             href="guides/system/linux_initd.html"/>
-      </system>
+      </system-->
       <java label="Java Guides">
         <java_project label="Java: Creating A Java Project"
             description="Creating a java project."
