@@ -23,9 +23,9 @@
 " }}}
 
 " Script Variables {{{
-let s:command_src_find = '-filter vim -command java_src_find -c <classname>'
+let s:command_src_find = '-command java_src_find -p "<project>" -c "<classname>"'
 
-let s:entry_match{'junit'} = '] Tests run:'
+let s:entry_match{'junit'} = 'Tests run:'
 let s:entry_match{'testng'} = 'eclim testng:'
 
 let s:entry_text_replace{'junit'} = '.*[junit] '
@@ -48,7 +48,9 @@ function! eclim#java#test#ResolveQuickfixResults (framework)
       let text = substitute(text,
         \ s:entry_text_replace{a:framework}, s:entry_text_with{a:framework}, '')
 
+      let project = eclim#project#GetCurrentProjectName()
       let command = s:command_src_find
+      let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<classname>', filename, '')
       let filename = eclim#ExecuteEclim(command)
       if filename == ''
@@ -88,7 +90,7 @@ function eclim#java#test#CommandCompleteTest (type, argLead, cmdLine, cursorPos)
   if path == '' || path == '/'
     call eclim#util#EchoWarning(
       \ "Source directory setting for '" . a:type . "' not set. " .
-      \ "Use :Settings or :ProjectSettings to set it.")
+      \ "Use :EclimSettings or :ProjectSettings to set it.")
     return []
   endif
 
