@@ -24,7 +24,8 @@
 
 " Command Declarations {{{
 if !exists(":XmlFormat")
-  command -buffer -range XmlFormat :call eclim#xml#format#Format(<line1>, <line2>)
+  "command -buffer -range XmlFormat :call eclim#xml#format#Format(<line1>, <line2>)
+  command -buffer XmlFormat :call eclim#xml#format#Format()
 endif
 " }}}
 

@@ -86,6 +86,10 @@
     <description>Retrieves the path to the current workspace.</description>
   </bean>
 
+  <bean name="xml_format" class="org.eclim.command.xml.format.FormatCommand">
+    <description>Handles client request to format an xml file.</description>
+  </bean>
+
   <bean name="xml_validate" class="org.eclim.command.xml.validate.ValidateCommand">
     <description>Handles client request to validate an xml file.</description>
     <property name="filters">

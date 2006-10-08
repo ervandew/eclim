@@ -415,7 +415,7 @@
       </li>
       <li>
         <a href="xml/format.html#XmlFormat"><strong>:XmlFormat</strong></a>
-        Reformats a given range within an xml file.
+        Reformats the current xml file.
       </li>
     </ul>
 

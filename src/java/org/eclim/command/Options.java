@@ -56,11 +56,13 @@ public class Options
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
   public static final String HELP_OPTION = "?";
+  public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
   public static final String LAYOUT_OPTION = "l";
   public static final String LENGTH_OPTION = "l";
   public static final String LINE_OPTION = "l";
+  public static final String LINE_WIDTH_OPTION = "w";
   public static final String METHOD_OPTION = "m";
   public static final String NAME_OPTION = "n";
   public static final String NATURE_OPTION = "n";

@@ -22,83 +22,106 @@
 "
 " }}}
 
-" Format(start, end) {{{
-function! eclim#xml#format#Format (start, end)
-  if !exists('b:root')
-    let b:root = s:GetRootLine()
+" Script Variables {{{
+  let s:command_format = '-command xml_format -f "<file>" -w <width> -i <indent>'
+" }}}
 
-    if b:root < 1
-      return
-    endif
+" Format() {{{
+function! eclim#xml#format#Format ()
+  let file = substitute(expand('%:p'), '\', '/', 'g')
+
+  let command = s:command_format
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<width>', &textwidth, '')
+  let command = substitute(command, '<indent>', &shiftwidth, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    let saved = @"
+    silent! 1,$delete
+    call append(1, split(result, '\n'))
+    silent! 1,1delete
+    let @" = saved
   endif
-
-  let clnum = line('.')
-  let ccnum = col('.')
-
-  let start = a:start
-  let end = a:end
-  if start >= b:root
-    call cursor(start, 1)
-
-    " handle xml delcaration case
-    let line = getline(start)
-    if line =~ '^\s*<?xml.\{-}?>\s*<'
-      call s:InsertCr(start, stridx(line, '?>') + 3)
-      let end += 1
-      let b:root += 1
-
-    else
-      let outer = s:SelectOuterTag(1)
-      let inner = s:SelectInnerTag()
-
-      " inner tags on the same line, push to a new line.
-      if outer.lstart == inner.lstart &&
-          \ (inner.lstart != outer.lstart || inner.cstart != outer.cstart)
-        call s:InsertCr(inner.lstart, inner.cstart)
-        let end += 1
-      endif
-
-      " handle repositioning parent ending tag if necessary.
-      if getline(inner.lstart) =~ '^\s*<\w'
-        let element = s:SelectOuterTag(1)
-        let parent = s:SelectOuterTag(2)
-      else
-        let element = s:SelectInnerTag()
-        let parent = s:SelectOuterTag(1)
-      endif
-      if element.lend == parent.lend &&
-          \ (parent.lstart != parent.lend || parent.cstart != parent.cend)
-        call s:InsertCr(element.lend, element.cend + 1)
-        let end += 1
-      endif
-
-      " handle sibling elements on the same line.
-      let element = s:SelectOuterTag(1)
-      if len(getline(element.lend)) > element.cend
-        call cursor(element.lend, element.cend + 1)
-        let sibling = s:SelectOuterTag(1)
-        if element.lend == sibling.lstart
-          call s:InsertCr(element.lend, element.cend + 1)
-          let end += 1
-        endif
-      endif
-    endif
-
-    " let vim re-indent
-    call cursor(start, 1)
-    normal ==
-  endif
-
-  " recurse.
-  if start < end
-    call cursor(start + 1, 1)
-    call eclim#xml#format#Format(start + 1, end)
-  else
-    unlet b:root
-  endif
-
-  call cursor(clnum, ccnum)
 endfunction " }}}
+
+" Format(start, end) {{{
+"function! eclim#xml#format#Format (start, end)
+"  if !exists('b:root')
+"    let b:root = s:GetRootLine()
+"
+"    if b:root < 1
+"      return
+"    endif
+"  endif
+"
+"  let clnum = line('.')
+"  let ccnum = col('.')
+"
+"  let start = a:start
+"  let end = a:end
+"  if start >= b:root
+"    call cursor(start, 1)
+"
+"    " handle xml delcaration case
+"    let line = getline(start)
+"    if line =~ '^\s*<?xml.\{-}?>\s*<'
+"      call s:InsertCr(start, stridx(line, '?>') + 3)
+"      let end += 1
+"      let b:root += 1
+"
+"    else
+"      let outer = s:SelectOuterTag(1)
+"      let inner = s:SelectInnerTag()
+"
+"      " inner tags on the same line, push to a new line.
+"      if outer.lstart == inner.lstart &&
+"          \ (inner.lstart != outer.lstart || inner.cstart != outer.cstart)
+"        call s:InsertCr(inner.lstart, inner.cstart)
+"        let end += 1
+"      endif
+"
+"      " handle repositioning parent ending tag if necessary.
+"      if getline(inner.lstart) =~ '^\s*<\w'
+"        let element = s:SelectOuterTag(1)
+"        let parent = s:SelectOuterTag(2)
+"      else
+"        let element = s:SelectInnerTag()
+"        let parent = s:SelectOuterTag(1)
+"      endif
+"      if element.lend == parent.lend &&
+"          \ (parent.lstart != parent.lend || parent.cstart != parent.cend)
+"        call s:InsertCr(element.lend, element.cend + 1)
+"        let end += 1
+"      endif
+"
+"      " handle sibling elements on the same line.
+"      let element = s:SelectOuterTag(1)
+"      if len(getline(element.lend)) > element.cend
+"        call cursor(element.lend, element.cend + 1)
+"        let sibling = s:SelectOuterTag(1)
+"        if element.lend == sibling.lstart
+"          call s:InsertCr(element.lend, element.cend + 1)
+"          let end += 1
+"        endif
+"      endif
+"    endif
+"
+"    " let vim re-indent
+"    call cursor(start, 1)
+"    normal ==
+"  endif
+"
+"  " recurse.
+"  if start < end
+"    call cursor(start + 1, 1)
+"    call eclim#xml#format#Format(start + 1, end)
+"  else
+"    unlet b:root
+"  endif
+"
+"  call cursor(clnum, ccnum)
+"endfunction " }}}
 
 " SelectOuterTag (count) {{{
 function! s:SelectOuterTag (count)

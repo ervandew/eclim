@@ -339,7 +339,7 @@
       <action dev="ervandew" type="add" context="Xml">
         Added command
         <a href="vim/xml/format.html"><strong>:XmlFormat</strong></a> to
-        reformat range of lines in a xml file.
+        reformat a xml file.
       </action>
     </release>
 
