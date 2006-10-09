@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.log4j.Logger;
 
 import org.eclim.Services;
@@ -227,7 +229,7 @@ public class JavaUtils
           entryPath = entryPath.substring(index);
         }else{
           // occurs when src path == "" in .classpath
-          entryPath = "";
+          entryPath = StringUtils.EMPTY;
         }
 
         String path = projectPath + entryPath;
@@ -236,7 +238,7 @@ public class JavaUtils
 
           return JavaCore.createCompilationUnitFrom(
               _project.getProject().getFile(file));
-          // will return a class file if the file as an equivelant class in the
+          // will return a class file if the file has an equivelant class in the
           // project's classpath.
           //return (ICompilationUnit)_project.findElement(Path.fromOSString(file));
         }
