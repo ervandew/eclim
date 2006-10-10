@@ -26,8 +26,6 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.eclipse.core.runtime.BlockingProgressMonitor;
-
 import org.eclim.plugin.pydev.util.PyDevUtils;
 
 import org.eclim.util.ProjectUtils;

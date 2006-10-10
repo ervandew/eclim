@@ -37,8 +37,6 @@ import org.eclim.command.Command;
 
 import org.eclim.command.admin.ShutdownCommand;
 
-import org.eclim.eclipse.core.runtime.BlockingProgressMonitor;
-
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
