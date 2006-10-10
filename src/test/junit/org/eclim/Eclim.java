@@ -33,6 +33,8 @@ import org.eclim.util.CommandExecutor;
  */
 public class Eclim
 {
+  public static final String TEST_PROJECT = "eclim_unit_test_java";
+
   private static final String ECLIM =
     System.getProperty("eclim.home") + "/bin/eclim";
   private static final String COMMAND = "-command";
@@ -117,6 +119,21 @@ public class Eclim
       workspace = execute(new String[]{"workspace_dir"});
     }
     return workspace;
+  }
+
+  /**
+   * Constructs a full path for the given project relative file.
+   *
+   * @param _file The project relative file path.
+   * @return The absolute path to the file.
+   */
+  public static String resolveFile (String _file)
+  {
+    return new StringBuffer()
+      .append(getWorkspace()).append('/')
+      .append(TEST_PROJECT).append('/')
+      .append(_file)
+      .toString();
   }
 
   /**
