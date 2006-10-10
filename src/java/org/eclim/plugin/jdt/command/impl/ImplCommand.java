@@ -165,7 +165,7 @@ public class ImplCommand
 
     IMethod method = null;
     for(int ii = 0; ii < methods.length; ii++){
-      if(TypeUtils.getMinimalMethodSignature(methods[ii]).equals(_methodName)){
+      if(MethodUtils.getMinimalMethodSignature(methods[ii]).equals(_methodName)){
         method = methods[ii];
         break;
       }
@@ -218,7 +218,7 @@ public class ImplCommand
           !methods[ii].isConstructor() &&
           implemented == null)
       {
-        names.add(TypeUtils.getMinimalMethodSignature(methods[ii]));
+        names.add(MethodUtils.getMinimalMethodSignature(methods[ii]));
       }
     }
 
@@ -257,7 +257,7 @@ public class ImplCommand
           !Flags.isPrivate(flags))
       {
         implementedMethods.put(
-            TypeUtils.getMinimalMethodSignature(methods[ii]),
+            MethodUtils.getMinimalMethodSignature(methods[ii]),
             methods[ii]);
       }
     }
@@ -316,13 +316,13 @@ public class ImplCommand
     }
     values.put("superType",
       JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType));
-    values.put("params", TypeUtils.getMethodParameters(_method, true));
+    values.put("params", MethodUtils.getMethodParameters(_method, true));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
     values.put("implements",
         _superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
-    values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
-    String thrown = TypeUtils.getMethodThrows(_method);
+    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(_method));
+    String thrown = MethodUtils.getMethodThrows(_method);
     if(thrown != null){
       values.put("throws", thrown);
     }
@@ -354,7 +354,7 @@ public class ImplCommand
     for(int ii = 0; ii < methods.length; ii++){
       IMethod method = methods[ii];
       if(isValidMethod(method)){
-        String signature = TypeUtils.getMethodSignature(method);
+        String signature = MethodUtils.getMethodSignature(method);
         ImplMethod implMethod = new ImplMethod();
         implMethod.setSignature(signature);
         implMethod.setImplemented(
@@ -408,7 +408,7 @@ public class ImplCommand
       IType _type, Map _baseMethods, IMethod _method)
     throws Exception
   {
-    String signature = TypeUtils.getMinimalMethodSignature(_method);
+    String signature = MethodUtils.getMinimalMethodSignature(_method);
     if(_method.isConstructor()){
       signature = signature.replaceFirst(
           _method.getDeclaringType().getElementName(),

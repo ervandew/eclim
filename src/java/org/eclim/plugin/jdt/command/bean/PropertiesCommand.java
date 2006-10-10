@@ -261,7 +261,7 @@ public class PropertiesCommand
       _values.put("implements",
           superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
       _values.put("methodSignature",
-          TypeUtils.getMinimalMethodSignature(_method));
+          MethodUtils.getMinimalMethodSignature(_method));
     }
     _values.put("interface",
         _type.isInterface() ? Boolean.TRUE : Boolean.FALSE);
@@ -391,7 +391,7 @@ public class PropertiesCommand
     if(signature != null){
       IMethod[] methods = _type.getMethods();
       for(int ii = 0; ii < methods.length; ii++){
-        if(TypeUtils.getMinimalMethodSignature(methods[ii]).equals(signature)){
+        if(MethodUtils.getMinimalMethodSignature(methods[ii]).equals(signature)){
           return methods[ii];
         }
       }

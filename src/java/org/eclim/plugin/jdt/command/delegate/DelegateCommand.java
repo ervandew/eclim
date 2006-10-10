@@ -25,10 +25,11 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.PluginResources;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-import org.eclim.plugin.jdt.util.TypeUtils;
-
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
 
@@ -154,8 +155,8 @@ public class DelegateCommand
     String returnType = Signature.getSignatureSimpleName(
         _method.getReturnType());
     values.put("return", returnType);
-    values.put("params", TypeUtils.getMethodParameters(_method, true));
-    String thrown = TypeUtils.getMethodThrows(_method);
+    values.put("params", MethodUtils.getMethodParameters(_method, true));
+    String thrown = MethodUtils.getMethodThrows(_method);
     if(thrown != null){
       values.put("throws", thrown);
     }
@@ -181,7 +182,7 @@ public class DelegateCommand
     values.put("superType", typeName);
     values.put("implements", Boolean.TRUE);
     values.put("delegate", Boolean.TRUE);
-    values.put("methodSignature", TypeUtils.getMinimalMethodSignature(_method));
+    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(_method));
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

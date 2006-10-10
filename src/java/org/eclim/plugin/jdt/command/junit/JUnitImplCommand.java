@@ -29,10 +29,11 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.PluginResources;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-import org.eclim.plugin.jdt.util.TypeUtils;
-
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
 
@@ -117,7 +118,7 @@ public class JUnitImplCommand
     throws Exception
   {
     IMethod method = (IMethod)_baseMethods.get(
-        TypeUtils.getMinimalMethodSignature(_method));
+        MethodUtils.getMinimalMethodSignature(_method));
     if(method != null){
       return method;
     }
@@ -220,7 +221,7 @@ public class JUnitImplCommand
     IMethod[] methods = _type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
       if(methods[ii].getElementName().equals(_method.getElementName())){
-        signatures.add(TypeUtils.getMinimalMethodSignature(methods[ii]));
+        signatures.add(MethodUtils.getMinimalMethodSignature(methods[ii]));
       }
     }
     return (String[])signatures.toArray(new String[signatures.size()]);

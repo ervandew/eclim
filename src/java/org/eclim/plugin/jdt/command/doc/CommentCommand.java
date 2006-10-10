@@ -38,11 +38,12 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.preference.Preferences;
-
 import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
+
+import org.eclim.preference.Preferences;
 
 import org.eclim.util.file.FileUtils;
 
@@ -293,7 +294,7 @@ public class CommentCommand
       IType parentType = null;
       IType[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
       for (int ii = 0; ii < types.length; ii++){
-        if(TypeUtils.containsMethod(types[ii], method)){
+        if(MethodUtils.containsMethod(types[ii], method)){
           parentType = types[ii];
           break;
         }
@@ -308,7 +309,7 @@ public class CommentCommand
 
         StringBuffer signature = new StringBuffer();
         signature.append(typeName)
-          .append('#').append(TypeUtils.getMinimalMethodSignature(method));
+          .append('#').append(MethodUtils.getMinimalMethodSignature(method));
         addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
       }else{
