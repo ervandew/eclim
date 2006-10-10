@@ -33,6 +33,8 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
+import org.apache.tools.ant.taskdefs.Property;
+
 import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 
@@ -67,6 +69,8 @@ public class VUnitTask
   private File todir;
   private List filesets = new ArrayList();
   private List properties = new ArrayList();
+  private String failureProperty;
+  private boolean haltOnFailure;
   private boolean failed;
 
   /**
@@ -159,6 +163,18 @@ public class VUnitTask
               throw se;
             }
           }
+
+          if(failed){
+            if (failureProperty != null &&
+                getProject().getProperty(failureProperty) == null)
+            {
+              getProject().setNewProperty(failureProperty, "true");
+            }
+
+            if(haltOnFailure){
+              throw new BuildException("Test failed: " + files[ii]);
+            }
+          }
         }
       }
     }catch(BuildException be){
@@ -236,6 +252,26 @@ public class VUnitTask
   }
 
   /**
+   * Sets the name of the property to be set if a failure occurs.
+   *
+   * @param failureProperty The failureProperty.
+   */
+  public void setFailureproperty (String failureProperty)
+  {
+    this.failureProperty = failureProperty;
+  }
+
+  /**
+   * Sets whether or not to halt on failure.
+   *
+   * @param haltOnFailure The haltOnFailure.
+   */
+  public void setHaltonfailure (boolean haltOnFailure)
+  {
+    this.haltOnFailure = haltOnFailure;
+  }
+
+  /**
    * SAX handler for vunit result parsing.
    */
   private class ResultHandler
@@ -261,8 +297,8 @@ public class VUnitTask
       log(buffer.toString());
 
       if(failures > 0){
-        failed = true;
         log("Test " + name + " FAILED");
+        failed = true;
       }
 
       throw new SAXException(TESTSUITE);
