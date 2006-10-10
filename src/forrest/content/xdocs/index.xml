@@ -91,6 +91,22 @@
     <section id="news">
       <title>News</title>
 
+      <section id="news_2006-10-09">
+        <title>2006-10-09</title>
+        <p>
+          <strong>All Users</strong>:  A bug made its way into the initial
+          1.2.3 release which prevents you from adding methods via
+          <strong>:JavaImpl</strong>.
+          An updated <a href="ext:downloads">eclim_vim_1.2.3.jar</a> is now
+          available to resolve this issue.  If you downloaded this file on
+          October 8th or 9th you can either download the updated version or
+          execute the following within vim:
+        </p>
+        <source>
+          :PatchEclim eclim/autoload/eclim/util.vim 1.27
+        </source>
+      </section>
+
       <section id="news_2006-10-08">
         <title>2006-10-08</title>
         <p>
