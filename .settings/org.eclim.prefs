@@ -1,3 +1,4 @@
-#Sun Jul 16 00:20:42 PDT 2006
+#Mon Oct 09 19:02:30 PDT 2006
 eclipse.preferences.version=1
+org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.logging.impl=log4j
