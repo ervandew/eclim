@@ -22,6 +22,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -35,8 +37,6 @@ import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
-
-import org.eclim.util.file.Position;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -54,11 +54,19 @@ import org.eclipse.jdt.core.Signature;
 public class PropertiesCommand
   extends AbstractCommand
 {
+  private static final Logger logger =
+    Logger.getLogger(PropertiesCommand.class);
+
   private static final String GETTER_TEMPLATE = "getter.vm";
   private static final String SETTER_TEMPLATE = "setter.vm";
 
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
+
+  private static final int TYPE_GET = 0;
+  private static final int TYPE_GET_INDEX = 1;
+  private static final int TYPE_SET = 2;
+  private static final int TYPE_SET_INDEX = 3;
 
   private static final String INT_SIG =
     Signature.createTypeSignature("int", true);
@@ -82,8 +90,6 @@ public class PropertiesCommand
       IType type = TypeUtils.getType(src, offset);
       List fields = Arrays.asList(type.getFields());
 
-      Position position = new Position(
-        type.getResource().getLocation().toOSString(), 0, 0);
       IJavaElement sibling = null;
       // insert in reverse order since eclipse IType only has an insert before,
       // no insert after.
@@ -98,28 +104,28 @@ public class PropertiesCommand
           if(methods.indexOf(SETTER) != -1){
             // index setter
             if(array && indexed){
-              sibling = getSibling(type, fields, field, sibling);
-              sibling = insertSetter(src, position, type, sibling, field, true);
+              sibling = getSibling(type, fields, field, sibling, TYPE_SET_INDEX);
+              sibling = insertSetter(src, type, sibling, field, true);
             }
             // setter
-            sibling = getSibling(type, fields, field, sibling);
-            sibling = insertSetter(src, position, type, sibling, field, false);
+            sibling = getSibling(type, fields, field, sibling, TYPE_SET);
+            sibling = insertSetter(src, type, sibling, field, false);
           }
 
           if(methods.indexOf(GETTER) != -1){
             // index getter
             if(array && indexed){
-              sibling = getSibling(type, fields, field, sibling);
-              sibling = insertGetter(src, position, type, sibling, field, true);
+              sibling = getSibling(type, fields, field, sibling, TYPE_GET_INDEX);
+              sibling = insertGetter(src, type, sibling, field, true);
             }
             // getter
-            sibling = getSibling(type, fields, field, sibling);
-            sibling = insertGetter(src, position, type, sibling, field, false);
+            sibling = getSibling(type, fields, field, sibling, TYPE_GET);
+            sibling = insertGetter(src, type, sibling, field, false);
           }
         }
       }
 
-      return filter(_commandLine, position);
+      return StringUtils.EMPTY;
     }catch(Exception e){
       return e;
     }
@@ -129,7 +135,6 @@ public class PropertiesCommand
    * Insert a getter for the supplied property.
    *
    * @param _src The src file.
-   * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
    * @param _field The field.
@@ -138,7 +143,6 @@ public class PropertiesCommand
    */
   protected IJavaElement insertGetter (
       ICompilationUnit _src,
-      Position _position,
       IType _type,
       IJavaElement _sibling,
       IField _field,
@@ -170,8 +174,7 @@ public class PropertiesCommand
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
       values.put("boolean", isBoolean ? Boolean.TRUE : Boolean.FALSE);
 
-      insertMethod(
-          _src, _position, _type, method, _sibling, GETTER_TEMPLATE, values);
+      insertMethod(_src, _type, method, _sibling, GETTER_TEMPLATE, values);
     }
     if(method.exists()){
       TypeUtils.getPosition(_type, method);
@@ -184,7 +187,6 @@ public class PropertiesCommand
    * Insert a setter for the supplied property.
    *
    * @param _src The src file.
-   * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _sibling The element to insert before.
    * @param _field The property.
@@ -193,7 +195,6 @@ public class PropertiesCommand
    */
   protected IJavaElement insertSetter (
       ICompilationUnit _src,
-      Position _position,
       IType _type,
       IJavaElement _sibling,
       IField _field,
@@ -220,8 +221,7 @@ public class PropertiesCommand
       values.put("boolean", propertyType.equals("boolean") ?
           Boolean.TRUE : Boolean.FALSE);
 
-      insertMethod(
-          _src, _position, _type, method, _sibling, SETTER_TEMPLATE, values);
+      insertMethod(_src, _type, method, _sibling, SETTER_TEMPLATE, values);
     }
     if(method.exists()){
       TypeUtils.getPosition(_type, method);
@@ -234,17 +234,14 @@ public class PropertiesCommand
    * Inserts a method using the supplied values.
    *
    * @param _src The src file.
-   * @param _position The position to update.
    * @param _type The type to insert into.
    * @param _method The method to be created.
    * @param _sibling The element to insert before.
    * @param _template The template to use.
    * @param _values The values.
-   * @return The position the method was insert into.
    */
-  protected Position insertMethod (
+  protected void insertMethod (
       ICompilationUnit _src,
-      Position _position,
       IType _type,
       IMethod _method,
       IJavaElement _sibling,
@@ -272,16 +269,7 @@ public class PropertiesCommand
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     String method = TemplateUtils.evaluate(resources, _template, _values);
-    Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(method, _sibling, false, null));
-
-    _position.setOffset(position.getOffset());
-    if(_position.getLength() != 0){
-      _position.setLength(_position.getLength() + 3);
-    }
-    _position.setLength(_position.getLength() + position.getLength());
-
-    return position;
+    _type.createMethod(method, _sibling, false, null);
   }
 
   /**
@@ -291,15 +279,37 @@ public class PropertiesCommand
    * @param _fields List of all the fields.
    * @param _field The resolved field.
    * @param _lastSibling The last sibling.
+   * @param _methodType The type of the method to be inserted.
    *
    * @return The relative sibling to use.
    */
   protected IJavaElement getSibling (
-      IType _type, List _fields, IField _field, IJavaElement _lastSibling)
+      IType _type,
+      List _fields,
+      IField _field,
+      IJavaElement _lastSibling,
+      int _methodType)
     throws Exception
   {
     // first run through
     if(_lastSibling == null || !_lastSibling.exists()){
+      // first try other methods for the same field.
+      for(int ii = TYPE_GET; ii <= TYPE_SET_INDEX; ii++){
+        if(ii != _methodType){
+          IMethod method = getBeanMethod(_type, _field, ii);
+          if(method != null){
+            if(ii < _methodType){
+              method = MethodUtils.getMethodAfter(_type, method);
+            }
+            if(method != null){
+              return method;
+            }else{
+              return getFirstInnerType(_type);
+            }
+          }
+        }
+      }
+
       int index = _fields.indexOf(_field);
 
       // insert before the next property's bean methods, if there are other
@@ -325,23 +335,93 @@ public class PropertiesCommand
         }
         if(method != null){
           method = MethodUtils.getMethodAfter(_type, method);
-          return method;
+          if(method != null){
+            return method;
+          }
         }
       }
 
-      // insert before inner classes.
-      IType[] types = _type.getTypes();
-      // find the first non-enum type.
-      for (int ii = 0; ii < types.length; ii++){
-        if(!types[ii].isEnum()){
-          return types[ii];
-        }
-      }
+      return getFirstInnerType(_type);
     }
     if(_lastSibling != null && _lastSibling.exists()){
       return _lastSibling;
     }
     return null;
+  }
+
+  /**
+   * Attempts to get the method of the supplied type for the specified field.
+   *
+   * @param _type The parent type.
+   * @param _field The field to retrieve the method for.
+   * @param _methodType The method type.
+   * first.
+   * @return The method or null if not round.
+   */
+  protected IMethod getBeanMethod (IType _type, IField _field, int _methodType)
+    throws Exception
+  {
+    String propertyName = StringUtils.capitalize(_field.getElementName());
+    String type = Signature.getSignatureSimpleName(_field.getTypeSignature());
+    boolean isBoolean = Signature.getSignatureSimpleName(
+        _field.getTypeSignature()).equals("boolean");
+
+    String signature = null;
+    switch(_methodType){
+      case TYPE_GET:
+        if(isBoolean){
+          signature = "is" + propertyName + "()";
+        }else{
+          signature = " get" + propertyName + "()";
+        }
+        break;
+      case TYPE_GET_INDEX:
+        if(!isBoolean){
+          signature = " get" + propertyName + "(int)";
+        }
+        break;
+      case TYPE_SET:
+        signature =  "set" + propertyName + '(' + type + ')';
+      case TYPE_SET_INDEX:
+        if(!isBoolean){
+          signature = "set" + propertyName + "(int, " + type + ')';
+        }
+    }
+
+    if(signature != null){
+      IMethod[] methods = _type.getMethods();
+      for(int ii = 0; ii < methods.length; ii++){
+        if(TypeUtils.getMinimalMethodSignature(methods[ii]).equals(signature)){
+          return methods[ii];
+        }
+      }
+    }
+    return null;
+
+    // Weird Eclipse bug: too many calls to IType.getMethod() and createMethod()
+    // calls will fail later.
+    /*switch(_methodType){
+      case TYPE_GET:
+        if(isBoolean){
+          return _type.getMethod("is" + propertyName, null);
+        }else{
+          return _type.getMethod("get" + propertyName, null);
+        }
+      case TYPE_GET_INDEX:
+        if(!isBoolean){
+          return _type.getMethod("get" + propertyName, INT_ARG);
+        }
+      case TYPE_SET:
+        return _type.getMethod("set" + propertyName,
+            new String[]{_field.getTypeSignature()});
+      case TYPE_SET_INDEX:
+        if(!isBoolean){
+          return _type.getMethod("set" + propertyName,
+              new String[]{INT_SIG, Signature.getElementType(_field.getTypeSignature())});
+        }
+      default:
+        return null;
+    }*/
   }
 
   /**
@@ -375,15 +455,13 @@ public class PropertiesCommand
     }
 
     // index getter
-    if(isBoolean){
-      method = _type.getMethod("is" + nextProperty, INT_ARG);
-    }else{
+    if(!isBoolean){
       method = _type.getMethod("get" + nextProperty, INT_ARG);
-    }
-    if(method.exists() && !_last){
-      return method;
-    }else if(method.exists()){
-      result = method;
+      if(method.exists() && !_last){
+        return method;
+      }else if(method.exists()){
+        result = method;
+      }
     }
 
     // regular setter
@@ -396,12 +474,34 @@ public class PropertiesCommand
     }
 
     // index setter
-    method = _type.getMethod("set" + nextProperty,
-        new String[]{INT_SIG, Signature.getElementType(_field.getTypeSignature())});
-    if(method.exists()){
-      result = method;
+    if(!isBoolean){
+      method = _type.getMethod("set" + nextProperty,
+          new String[]{INT_SIG, Signature.getElementType(_field.getTypeSignature())});
+      if(method.exists()){
+        result = method;
+      }
     }
 
     return result;
+  }
+
+  /**
+   * Gets the first non-enum inner type.
+   *
+   * @param _type The parent type.
+   * @return The inner type.
+   */
+  protected IType getFirstInnerType (IType _type)
+    throws Exception
+  {
+    // insert before inner classes.
+    IType[] types = _type.getTypes();
+    // find the first non-enum type.
+    for (int ii = 0; ii < types.length; ii++){
+      if(!types[ii].isEnum()){
+        return types[ii];
+      }
+    }
+    return null;
   }
 }
