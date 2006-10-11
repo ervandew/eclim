@@ -27,16 +27,17 @@
   let s:entry_project =
     \ "\t<classpathentry exported=\"true\" kind=\"src\" path=\"/<arg>\"/>"
   let s:entry_var =
-    \ "\t<classpathentry exported=\"true\" kind=\"<kind>\" path=\"<arg>\">\n" .
-    \ "\t\t<!--\n" .
-    \ "\t\t\tsourcepath=\"<path>\">\n" .
-    \ "\t\t-->\n" .
-    \ "\t\t<!--\n" .
-    \ "\t\t<attributes>\n" .
-    \ "\t\t\t<attribute value=\"file:<javadoc>\" name=\"javadoc_location\"/>\n" .
-    \ "\t\t</attributes>\n" .
-    \ "\t\t-->\n" .
-    \ "\t</classpathentry>"
+    \ "\t<classpathentry kind=\"<kind>\" path=\"<arg>\"/>"
+  "  \ "\t<classpathentry exported=\"true\" kind=\"<kind>\" path=\"<arg>\">\n" .
+  "  \ "\t\t<!--\n" .
+  "  \ "\t\t\tsourcepath=\"<path>\">\n" .
+  "  \ "\t\t-->\n" .
+  "  \ "\t\t<!--\n" .
+  "  \ "\t\t<attributes>\n" .
+  "  \ "\t\t\t<attribute value=\"file:<javadoc>\" name=\"javadoc_location\"/>\n" .
+  "  \ "\t\t</attributes>\n" .
+  "  \ "\t\t-->\n" .
+  "  \ "\t</classpathentry>"
   let s:entry_jar = substitute(s:entry_var, '<kind>', 'lib', '')
   let s:entry_var = substitute(s:entry_var, '<kind>', 'var', '')
 " }}}
@@ -60,7 +61,7 @@ endif
 if !exists(":NewJarEntry")
   command -nargs=+ -complete=file -buffer NewJarEntry
     \ :call eclim#java#classpath#NewClasspathEntry
-    \     (substitute(fnamemodify('<args>', ':p'), '\', '/', 'g'), s:entry_jar)
+    \     (substitute('<args>', '\', '/', 'g'), s:entry_jar)
 endif
 if !exists(":NewVarEntry")
   command -nargs=+ -complete=customlist,eclim#java#classpath#CommandCompleteVarPath -buffer
