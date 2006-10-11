@@ -24,7 +24,7 @@
     <if>
       <socket server="localhost" port="9091"/>
       <then>
-        <runtarget target="tests.run.junit"/>
+        <runtarget target="tests.run"/>
       </then>
       <else>
         <echo>Starting eclimd...</echo>
@@ -35,7 +35,7 @@
             <waitfor maxwait="20" maxwaitunit="second">
               <socket server="localhost" port="9091"/>
             </waitfor>
-            <runtarget target="tests.run.junit"/>
+            <runtarget target="tests.run"/>
             <exec executable="${eclim.home}/bin/eclim">
               <arg line="-command shutdown"/>
             </exec>
@@ -54,10 +54,22 @@
   <!--
     - Runs the junit tests after eclimd has been started.
     -->
-  <target name="tests.run.junit" description="Runs the junit tests">
-    <mkdir dir="build/test/junit/classes"/>
+  <target name="tests.run" description="Runs the unit tests.">
     <mkdir dir="build/test/junit/results"/>
     <mkdir dir="build/test/vunit/results"/>
+
+    <antcall target="test.setup_projects"/>
+    <antcall target="tests.run.junit"/>
+    <antcall target="tests.run.vunit"/>
+    <antcall target="test.teardown_projects"/>
+  </target>
+
+  <!--
+    - Runs the junit tests after eclimd has been started.
+    -->
+  <target name="tests.run.junit" description="Runs the junit tests"
+      unless="junit.skip">
+    <mkdir dir="build/test/junit/classes"/>
 
     <javac destdir="build/test/junit/classes" debug="on" optimize="false"
         target="${test.javac.target}" source="${test.javac.target}"
@@ -77,8 +89,6 @@
       </fileset>
     </copy>
 
-    <antcall target="test.setup_projects"/>
-
     <junit printsummary="yes">
       <classpath>
         <path refid="classpath"/>
@@ -92,16 +102,13 @@
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
     </junit>
-
-    <antcall target="tests.run.vunit"/>
-
-    <antcall target="test.teardown_projects"/>
   </target>
 
   <!--
     - Runs vim script unit tests.
     -->
-  <target name="tests.run.vunit" description="Runs the vunit tests.">
+  <target name="tests.run.vunit" description="Runs the vunit tests."
+      unless="vunit.skip">
     <taskdef name="vunit" classname="org.eclim.misc.ant.VUnitTask">
       <classpath>
         <pathelement location="build/classes"/>
