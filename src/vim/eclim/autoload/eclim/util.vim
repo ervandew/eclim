@@ -355,11 +355,16 @@ endfunction " }}}
 " To determine element equality both '==' and 'is' are tried as well as
 " ^element$ to support a regex supplied element string.
 function! eclim#util#ListContains (list, element)
+  let string = type(a:element) == 1 ? a:element : escape(string(a:element), '\')
   for element in a:list
-    if element == a:element ||
-        \ element is a:element ||
-        \ string(element) =~ '^' . escape(string(a:element), '\') . '$'
+    if element is a:element ||
+        \ (type(element) == type(a:element) && element == a:element)
       return 1
+    else
+      let estring = type(element) == 1 ? element : string(element)
+      if estring =~ '^' . string . '$'
+        return 1
+      endif
     endif
   endfor
   return 0
