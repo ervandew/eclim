@@ -314,6 +314,10 @@ function! eclim#java#search#SearchAndDisplay (type, args)
         call eclim#util#TempWindow(window_name, results)
 
         nnoremap <silent> <buffer> <cr> :call <SID>ViewDoc()<cr>
+        augroup temp_window
+          autocmd! BufUnload <buffer>
+          call eclim#util#GoToBufferWindowRegister(filename)
+        augroup END
       endif
     endif
   else

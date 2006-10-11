@@ -72,6 +72,12 @@ function! eclim#java#correct#Correct ()
 
   call eclim#util#TempWindow(window_name, results)
 
+  let b:filename = filename
+  augroup temp_window
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(filename)
+  augroup END
+
   setlocal ft=java
 
   "exec "syntax match Normal /" . escape(getline(1), '^$/\') . "/"
