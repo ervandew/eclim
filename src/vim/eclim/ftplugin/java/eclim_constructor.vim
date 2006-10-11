@@ -24,7 +24,7 @@
 
 " Command Declarations {{{
 if !exists(":JavaConstructor")
-  command -buffer -range JavaConstructor
+  command -buffer -range=0 JavaConstructor
     \ :call eclim#java#constructor#Constructor(<line1>, <line2>)
 endif
 " }}}

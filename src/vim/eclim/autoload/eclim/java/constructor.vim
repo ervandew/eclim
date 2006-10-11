@@ -37,7 +37,8 @@ function! eclim#java#constructor#Constructor (first, last)
   call eclim#java#util#SilentUpdate()
 
   let project = eclim#project#GetCurrentProjectName()
-  let properties = eclim#java#util#GetSelectedFields(a:first, a:last)
+  let properties = a:last == 1 ? [] :
+    \ eclim#java#util#GetSelectedFields(a:first, a:last)
 
   let command = s:command_properties
   let command = substitute(command, '<project>', project, '')
