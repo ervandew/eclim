@@ -5,15 +5,15 @@ import java.util.List;
 
 public class TestCompletionVUnit
 {
-  public void test ()
-  {
-    List list = new ArrayList();
-    list.
-  }
-
   public void testAnother ()
   {
     List list = new ArrayList();
     list.a();
+  }
+
+  public void test ()
+  {
+    List list = new ArrayList();
+    list.;
   }
 }
