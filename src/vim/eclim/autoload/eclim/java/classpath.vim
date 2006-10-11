@@ -35,6 +35,8 @@
 " Adds a new entry to the current .classpath file.
 function! eclim#java#classpath#NewClasspathEntry (arg, template)
   let args = split(a:arg)
+  let cline = line('.')
+  let ccol = col('.')
   for arg in args
     call s:MoveToInsertPosition()
 
@@ -45,8 +47,9 @@ function! eclim#java#classpath#NewClasspathEntry (arg, template)
     silent put
     let @" = saved
 
-    call cursor(line, 1)
+    call cursor(line + 1, 1)
   endfor
+  call cursor(cline + 1, ccol)
 endfunction " }}}
 
 " MoveToInsertPosition() {{{
@@ -54,7 +57,7 @@ endfunction " }}}
 function! s:MoveToInsertPosition ()
   let start = search('<classpath\s*>', 'wn')
   let end = search('</classpath\s*>', 'wn')
-  if line('.') < start || line('.') > end
+  if line('.') < start || line('.') >= end
     call cursor(end - 1, 1)
   endif
 endfunction " }}}
