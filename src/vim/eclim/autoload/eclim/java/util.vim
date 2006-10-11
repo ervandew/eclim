@@ -56,6 +56,50 @@ function! eclim#java#util#FileExists (name)
   return result =~ '^true$'
 endfunction " }}}
 
+" GetClassname(...) {{{
+" Gets the classname of the current file.
+" Optional file argument may be supplied.
+function! eclim#java#util#GetClassname (...)
+  if a:0 > 0
+    return fnamemodify(a:1, ":t:r")
+  endif
+  return expand("%:t:r")
+endfunction " }}}
+
+" GetClassDeclarationPosition(movecursor) {{{
+" Gets the line number of the current file's class declaration.
+function! eclim#java#util#GetClassDeclarationPosition (movecursor)
+  let line = line('.')
+  let col = col('.')
+  call cursor(1,1)
+
+  let position = search(s:class_declaration)
+
+  if !a:movecursor || !position
+    call cursor(line, col)
+  endif
+
+  return position
+endfunction " }}}
+
+" GetFullyQualifiedClassname(...) {{{
+" Gets the fully qualified classname of the current file.
+" Optional file argument may be supplied.
+function! eclim#java#util#GetFullyQualifiedClassname(...)
+  if a:0 > 0
+    return eclim#java#util#GetPackage(a:1) . '.' . eclim#java#util#GetClassname(a:1)
+  endif
+  return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
+endfunction " }}}
+
+" GetFilename() {{{
+" Gets the src dir relative file name.
+function! eclim#java#util#GetFilename ()
+  "let filename = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
+  "return filename . '/' . expand('%:t')
+  return escape(expand('%:p'), '\')
+endfunction " }}}
+
 " GetPackage(...) {{{
 " Gets the package of the current src file, or of the optionally supplied file
 " argument.
@@ -100,50 +144,6 @@ function! eclim#java#util#GetPackageFromImport (class)
     return substitute(getline(found), pattern, '\1', '')
   endif
   return ""
-endfunction " }}}
-
-" GetClassname(...) {{{
-" Gets the classname of the current file.
-" Optional file argument may be supplied.
-function! eclim#java#util#GetClassname (...)
-  if a:0 > 0
-    return fnamemodify(a:1, ":t:r")
-  endif
-  return expand("%:t:r")
-endfunction " }}}
-
-" GetFullyQualifiedClassname(...) {{{
-" Gets the fully qualified classname of the current file.
-" Optional file argument may be supplied.
-function! eclim#java#util#GetFullyQualifiedClassname(...)
-  if a:0 > 0
-    return eclim#java#util#GetPackage(a:1) . '.' . eclim#java#util#GetClassname(a:1)
-  endif
-  return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
-endfunction " }}}
-
-" GetFilename() {{{
-" Gets the src dir relative file name.
-function! eclim#java#util#GetFilename ()
-  "let filename = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
-  "return filename . '/' . expand('%:t')
-  return escape(expand('%:p'), '\')
-endfunction " }}}
-
-" GetClassDeclarationPosition(movecursor) {{{
-" Gets the line number of the current file's class declaration.
-function! eclim#java#util#GetClassDeclarationPosition (movecursor)
-  let line = line('.')
-  let col = col('.')
-  call cursor(1,1)
-
-  let position = search(s:class_declaration)
-
-  if !a:movecursor || !position
-    call cursor(line, col)
-  endif
-
-  return position
 endfunction " }}}
 
 " GetSelectedFields(first, last) {{{
@@ -230,7 +230,7 @@ function! eclim#java#util#IsImported (classname)
     return 1
   endif
 
-  " no imported
+  " not imported
   return 0
 endfunction " }}}
 
