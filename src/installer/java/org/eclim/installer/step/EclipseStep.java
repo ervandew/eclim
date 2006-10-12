@@ -8,7 +8,11 @@ import org.apache.commons.io.FilenameUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
+import org.formic.Installer;
+
 import org.formic.form.Validator;
+
+import org.formic.form.gui.GuiForm;
 
 import org.formic.form.validator.AggregateValidator;
 
@@ -51,6 +55,22 @@ public class EclipseStep
   protected String getIconPath ()
   {
     return ICON;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see FileChooserStep#initGuiForm()
+   */
+  public GuiForm initGuiForm ()
+  {
+    GuiForm form = super.initGuiForm();
+
+    String home = Installer.getEnvironmentVariable("ECLIPSE_HOME");
+    if(home != null){
+      getGuiFileChooser().getTextField().setText(home);
+    }
+
+    return form;
   }
 
   /**
