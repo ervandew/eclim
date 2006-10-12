@@ -3,7 +3,6 @@
  Author: Eric Van Dewoestine
 -->
 <project name="docs" default="docs" basedir="../..">
-
   <!--
     - Target for generating the javadocs.
     -->
