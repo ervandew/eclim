@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<!--
+  - Installer build file that is executed upon installation.
+  -->
+<project xmlns:formic="antlib:org.formic.ant"
+    name="eclim_installer" default="installer">
+
+  <!--
+    - Standard target to install the app.
+    - Note: Must be named "installer".
+    -->
+  <target name="installer">
+    <formic:installer property="install.complete"
+        resources="resources.install" steps="resources.steps">
+      <!-- main path -->
+      <formic:path name="main">
+        <formic:step name="welcome"/>
+        <formic:step name="license"/>
+        <formic:step name="eclipseHome"/>
+        <formic:step name="vimfiles"/>
+        <formic:step name="summary"/>
+        <formic:step name="install"/>
+        <formic:step name="finished"/>
+      </formic:path>
+    </formic:installer>
+  </target>
+
+  <!--
+    - Task that will run at the end of the wizard process to perform user
+    - defined task after gathering info from the user via the wizard.
+    - Note: Must be named "install".
+    -->
+  <target name="install">
+  </target>
+
+  <!--
+    - Task that will run if the wizard was canceled, where any necessary
+    - cleanup can occur.
+    - Note: Must be named "canceled".
+    -->
+  <target name="canceled">
+    <echo>Installation canceled.</echo>
+  </target>
+
+</project>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<!--
+  - Build file for creating eclim installers.
+  -->
+<project xmlns:formic="antlib:org.formic.ant"
+    name="installer" default="installer" basedir="../..">
+
+  <property environment="env"/>
+  <property file="src/ant/build.properties"/>
+
+  <formic:classpath id="formic.classpath"/>
+
+  <target name="installer">
+    <mkdir dir="dist"/>
+    <mkdir dir="build/formic/dist"/>
+    <mkdir dir="build/formic/classes"/>
+
+    <!-- compile sample install steps and helper classes -->
+    <javac destdir="build/formic/classes" debug="on" optimize="false">
+      <src path="src/installer/java"/>
+      <include name="**/*.java"/>
+      <classpath refid="formic.classpath"/>
+    </javac>
+
+    <!-- create jar with sample classes -->
+    <jar jarfile="build/formic/dist/eclim.jar">
+      <fileset dir="build/formic/classes">
+        <include name="**/*.class"/>
+      </fileset>
+    </jar>
+
+    <!-- build linux installer -->
+    <formic:package os="linux"
+        destfile="dist/eclim_${eclim.version}.sh" compression="gzip">
+      <formic:libset dir="build/formic/dist">
+        <include name="eclim.jar"/>
+      </formic:libset>
+      <tarfileset dir="." includes="LICENSE"/>
+      <tarfileset dir="src/installer">
+        <include name="resources/**/*"/>
+        <include name="*.xml"/>
+        <exclude name="build.xml"/>
+      </tarfileset>
+    </formic:package>
+
+    <!-- build windows installer -->
+    <formic:package os="windows"
+        destfile="dist/eclim_${eclim.version}.exe">
+      <formic:libset dir="build/formic/dist">
+        <include name="eclim.jar"/>
+      </formic:libset>
+      <fileset dir="." includes="LICENSE"/>
+      <fileset dir="src/installer">
+        <include name="resources/**/*"/>
+        <include name="*.xml"/>
+        <exclude name="build.xml"/>
+      </fileset>
+    </formic:package>
+  </target>
+
+</project>
