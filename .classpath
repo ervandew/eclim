@@ -30,7 +30,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.2.0.v20060603.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.2.0.v_671.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/formic.jar"/>
-	<classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="output" path="bin"/>
   <classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" path="src/installer/java"/>
