@@ -1,5 +1,16 @@
 <html>
   <body>
-    <b>Install Folder:</b> $context.getValue("installLocation.location")
+    Please review the following before continuing to ensure it is correct:
+    <br><br>
+    <table border="none">
+      <tr>
+        <td><b>Eclipse Home:</b></td>
+        <td>$installer.context.getValue("eclipseHome.eclipseHome")</td>
+      </tr>
+      <tr>
+        <td><b>Vimfiles Dir:</b></td>
+        <td>$installer.context.getValue("vimfiles.vimfiles")</td>
+      </tr>
+    </table>
   </body>
 </html>
