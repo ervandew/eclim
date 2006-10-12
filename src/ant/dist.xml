@@ -6,7 +6,7 @@
   <!--
     - Target for creating distributable files.
     -->
-  <target name="dist" depends="build,javadoc,docs"
+  <target name="dist" depends="clean,build,javadoc,docs"
       description="Creates the distributable files.">
     <mkdir dir="dist"/>
 
