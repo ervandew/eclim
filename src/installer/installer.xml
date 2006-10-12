@@ -9,6 +9,10 @@
 <project xmlns:formic="antlib:org.formic.ant"
     name="eclim_installer" default="installer">
 
+  <property file="build.properties"/>
+
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
   <!--
     - Standard target to install the app.
     - Note: Must be named "installer".
@@ -35,6 +39,30 @@
     - Note: Must be named "install".
     -->
   <target name="install">
+    <property name="eclim.home"
+        value="${eclipseHome.eclipseHome}/plugins/org.eclim_${eclim.version}"/>
+
+    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vimfiles.vimfiles}"/>
+    <if>
+      <os family="windows"/>
+      <then>
+        <unzip src="org.eclim_${eclim.version}.zip"
+            dest="${eclipseHome.eclipseHome}"/>
+      </then>
+      <else>
+        <!--
+          use exec with native tar since ant untar does not preserver
+          permissions
+        -->
+        <exec executable="tar" failonerror="true"
+            dir="${eclipseHome.eclipseHome}/plugins">
+          <arg line="-zxf ${basedir}/org.eclim_${eclim.version}.tar.gz"/>
+        </exec>
+        <exec executable="make" failonerror="true"
+            dir="${eclim.home}/src/nailgun"/>
+        <move file="${eclim.home}/src/nailgun/ng" todir="${eclim.home}/bin"/>
+      </else>
+    </if>
   </target>
 
   <!--
