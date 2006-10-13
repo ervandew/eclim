@@ -47,7 +47,7 @@
       <os family="windows"/>
       <then>
         <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclipseHome.eclipseHome}"/>
+            dest="${eclipseHome.eclipseHome}/plugins"/>
       </then>
       <else>
         <!--
