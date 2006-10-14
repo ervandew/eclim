@@ -43,7 +43,7 @@ public class EclipseStep
    */
   public void initProperties (Properties properties)
   {
-    properties.put(PROPERTY, "eclipseHome");
+    properties.put(PROPERTY, "home");
     properties.put("selectionMode", "directories");
     super.initProperties(properties);
   }
@@ -119,7 +119,7 @@ public class EclipseStep
      */
     public String getErrorMessage ()
     {
-      return getName() + ".eclipseHome.invalid";
+      return getName() + ".home.invalid";
     }
   }
 }

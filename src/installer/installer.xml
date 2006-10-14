@@ -25,8 +25,8 @@
       <formic:path name="main">
         <formic:step name="welcome"/>
         <formic:step name="license"/>
-        <formic:step name="eclipseHome"/>
-        <formic:step name="vimfiles"/>
+        <formic:step name="eclipse"/>
+        <formic:step name="vim"/>
         <formic:step name="summary"/>
         <formic:step name="install"/>
         <formic:step name="finished"/>
@@ -41,7 +41,7 @@
     -->
   <target name="install">
     <property name="eclim.home"
-        value="${eclipseHome.eclipseHome}/plugins/org.eclim_${eclim.version}"/>
+        value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
 
     <!-- shutdown any running instance of eclimd -->
     <antcall target="shutdown"/>
@@ -54,7 +54,7 @@
       <os family="windows"/>
       <then>
         <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclipseHome.eclipseHome}/plugins"/>
+            dest="${eclipse.home}/plugins"/>
       </then>
       <else>
         <!--
@@ -62,7 +62,7 @@
           permissions
         -->
         <exec executable="tar" failonerror="true"
-            dir="${eclipseHome.eclipseHome}/plugins">
+            dir="${eclipse.home}/plugins">
           <arg line="-zxf ${basedir}/org.eclim_${eclim.version}.tar.gz"/>
         </exec>
         <exec executable="make" failonerror="true"
@@ -72,8 +72,8 @@
     </if>
 
     <!-- install vim plugins -->
-    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vimfiles.vimfiles}"/>
-    <replace file="${vimfiles.vimfiles}/eclim/autoload/eclim.vim"
+    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}"/>
+    <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;" value="let g:EclimHome = '${eclim.home}'"/>
   </target>
 
@@ -83,7 +83,7 @@
   <target name="shutdown">
     <!-- discover old install location -->
     <path id="eclim.plugin">
-      <dirset dir="${eclipseHome.eclipseHome}/plugins" includes="org.eclim_*"/>
+      <dirset dir="${eclipse.home}/plugins" includes="org.eclim_*"/>
     </path>
     <property name="eclim.plugin" refid="eclim.plugin"/>
 
@@ -118,17 +118,18 @@
   <target name="clean">
     <!-- remove eclipse plugins -->
     <path id="eclim.plugins">
-      <dirset dir="${eclipseHome.eclipseHome}/plugins" includes="org.eclim*"/>
+      <dirset dir="${eclipse.home}/plugins" includes="org.eclim*"/>
     </path>
     <property name="eclim.plugins" refid="eclim.plugins"/>
-    <for list="${eclim.plugins}" param="eclim.plugin" delimiter="${path.separator}">
+    <for list="${eclim.plugins}" param="eclim.plugin"
+        delimiter="${path.separator}">
       <sequential>
         <delete dir="@{eclim.plugin}"/>
       </sequential>
     </for>
 
     <!-- remove vim files -->
-    <delete dir="${vimfiles.vimfiles}/eclim"/>
+    <delete dir="${vim.files}/eclim"/>
   </target>
 
   <!--
