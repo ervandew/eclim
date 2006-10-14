@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.swing.JComponent;
@@ -104,22 +105,26 @@ public class VimStep
             throws Exception
           {
             String[] rtp = getVimRuntimePath();
-            if(rtp != null){
-              final JList list = new JList(rtp);
-              list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-              JScrollPane scrollPane = new JScrollPane(list);
-              panel.add(scrollPane, BorderLayout.CENTER);
+            if(rtp != null && rtp.length > 0){
+              if(rtp.length == 1){
+                getGuiFileChooser().getTextField().setText(rtp[0]);
+              }else{
+                final JList list = new JList(rtp);
+                list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                JScrollPane scrollPane = new JScrollPane(list);
+                panel.add(scrollPane, BorderLayout.CENTER);
 
-              list.addListSelectionListener(new ListSelectionListener(){
-                public void valueChanged (ListSelectionEvent event){
-                  if(!event.getValueIsAdjusting()){
-                    getGuiFileChooser().getTextField()
-                      .setText((String)list.getSelectedValue());
+                list.addListSelectionListener(new ListSelectionListener(){
+                  public void valueChanged (ListSelectionEvent event){
+                    if(!event.getValueIsAdjusting()){
+                      getGuiFileChooser().getTextField()
+                        .setText((String)list.getSelectedValue());
+                    }
                   }
-                }
-              });
+                });
 
-              list.setSelectedIndex(0);
+                list.setSelectedIndex(0);
+              }
             }
             return null;
           }
@@ -198,7 +203,16 @@ public class VimStep
     FileInputStream in = null;
     try{
       String contents = IOUtils.toString(in = new FileInputStream(file));
-      return StringUtils.stripAll(StringUtils.split(contents, ','));
+      String[] paths = StringUtils.stripAll(StringUtils.split(contents, ','));
+      ArrayList results = new ArrayList();
+      for (int ii = 0; ii < paths.length; ii++){
+        File path = new File(paths[ii]);
+        if(path.isDirectory() && path.canWrite()){
+          results.add(paths[ii]);
+        }
+      }
+
+      return (String[])results.toArray(new String[results.size()]);
     }catch(Exception e){
       e.printStackTrace();
     }finally{
