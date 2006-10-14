@@ -12,6 +12,7 @@
   <property file="build.properties"/>
 
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  <taskdef name="for" classname="net.sf.antcontrib.logic.For"/>
 
   <!--
     - Standard target to install the app.
@@ -42,7 +43,13 @@
     <property name="eclim.home"
         value="${eclipseHome.eclipseHome}/plugins/org.eclim_${eclim.version}"/>
 
-    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vimfiles.vimfiles}"/>
+    <!-- shutdown any running instance of eclimd -->
+    <antcall target="shutdown"/>
+
+    <!-- remove old files -->
+    <antcall target="clean"/>
+
+    <!-- install eclipse plugins -->
     <if>
       <os family="windows"/>
       <then>
@@ -63,6 +70,65 @@
         <move file="${eclim.home}/src/nailgun/ng" todir="${eclim.home}/bin"/>
       </else>
     </if>
+
+    <!-- install vim plugins -->
+    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vimfiles.vimfiles}"/>
+    <replace file="${vimfiles.vimfiles}/eclim/autoload/eclim.vim"
+        token="&quot;$${vim.eclim.home}&quot;" value="let g:EclimHome = '${eclim.home}'"/>
+  </target>
+
+  <!--
+    - Task to shutdown eclimd.
+    -->
+  <target name="shutdown">
+    <!-- discover old install location -->
+    <path id="eclim.plugin">
+      <dirset dir="${eclipseHome.eclipseHome}/plugins" includes="org.eclim_*"/>
+    </path>
+    <property name="eclim.plugin" refid="eclim.plugin"/>
+
+    <!-- call shutdown -->
+    <if>
+      <os family="windows"/>
+      <then>
+        <exec executable="${eclim.plugin}/bin/eclim.bat" failonerror="false">
+          <arg line="-command shutdown"/>
+        </exec>
+      </then>
+      <else>
+        <exec executable="${eclim.plugin}/bin/eclim" failonerror="false">
+          <arg line="-command shutdown"/>
+        </exec>
+      </else>
+    </if>
+
+    <!-- wait for server to shutdown -->
+    <!-- FIXME: depends on default port. -->
+    <waitfor maxwait="10" maxwaitunit="second">
+      <not>
+        <socket server="localhost" port="9091"/>
+      </not>
+    </waitfor>
+    <sleep seconds="3"/>
+  </target>
+
+  <!--
+    - Task to remove old eclim files.
+    -->
+  <target name="clean">
+    <!-- remove eclipse plugins -->
+    <path id="eclim.plugins">
+      <dirset dir="${eclipseHome.eclipseHome}/plugins" includes="org.eclim*"/>
+    </path>
+    <property name="eclim.plugins" refid="eclim.plugins"/>
+    <for list="${eclim.plugins}" param="eclim.plugin" delimiter="${path.separator}">
+      <sequential>
+        <delete dir="@{eclim.plugin}"/>
+      </sequential>
+    </for>
+
+    <!-- remove vim files -->
+    <delete dir="${vimfiles.vimfiles}/eclim"/>
   </target>
 
   <!--
