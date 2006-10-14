@@ -37,6 +37,11 @@
   if !exists("g:EclimSystemWorkaround")
     let g:EclimSystemWorkaround = 0
   endif
+
+  if !exists("g:EclimHome")
+    " set via installer
+    "${vim.eclim.home}"
+  endif
 " }}}
 
 " Script Variables {{{
@@ -143,24 +148,12 @@ endfunction " }}}
 " Gets the command to exexute eclim.
 function! eclim#GetEclimCommand ()
   if !exists('g:EclimPath')
-    if !exists('$ECLIPSE_HOME')
-      call eclim#util#EchoError('ECLIPSE_HOME must be set.')
+    let eclim_home = eclim#GetEclimHome()
+    if eclim_home == '' || string(eclim_home) == '0'
       return
     endif
-    let g:EclimHome = eclim#util#Glob('$ECLIPSE_HOME/plugins/org.eclim_*')
 
-    if g:EclimHome == ''
-      call eclim#util#EchoError(
-        \ "eclim plugin not found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
-      return
-    elseif g:EclimHome =~ "\n"
-      call eclim#util#EchoError(
-        \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
-      return
-    endif
-    let g:EclimPath = substitute(g:EclimHome, '\', '/', 'g') .
+    let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
       \ '/bin/' . g:EclimCommand
 
     " on windows, the command must be executed on the drive where eclipse is
@@ -172,6 +165,31 @@ function! eclim#GetEclimCommand ()
     endif
   endif
   return g:EclimPath
+endfunction " }}}
+
+" GetEclimHome() {{{
+" Gets the directory of the main eclim eclipse plugin.
+function! eclim#GetEclimHome ()
+  if !exists('g:EclimHome')
+    if !exists('$ECLIPSE_HOME')
+      call eclim#util#EchoError('ECLIPSE_HOME must be set.')
+      return
+    endif
+
+    let g:EclimHome = eclim#util#Glob('$ECLIPSE_HOME/plugins/org.eclim_*')
+    if g:EclimHome == ''
+      call eclim#util#EchoError(
+        \ "eclim plugin not found in eclipse plugins directory at " .
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
+      return
+    elseif g:EclimHome =~ "\n"
+      call eclim#util#EchoError(
+        \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
+      return
+    endif
+  endif
+  return g:EclimHome
 endfunction " }}}
 
 " PatchEclim(file, revision) {{{
