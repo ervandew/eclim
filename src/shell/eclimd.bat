@@ -16,21 +16,7 @@ rem limitations under the License.
 rem
 rem Author: Eric Van Dewoestine
 
-if "%ECLIPSE_HOME%" == "" goto no_eclipse_home
-
-if not exist "%ECLIPSE_HOME%\eclipse.exe" goto no_eclipse_executable
-
-set ECLIM_HOME=%ECLIPSE_HOME%\plugins\org.eclim_${eclim.version}
+set ECLIPSE_HOME=%~dp0\..\..\..
+set ECLIM_HOME=%~dp0\..
 
 start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -consolelog -nosplash -clean -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%" %*
-goto exit
-
-:no_eclipse_home
-  echo ECLIPSE_HOME not set
-  goto exit
-
-:no_eclipse_executable
-  echo No eclipse executable found.  ECLIPSE_HOME may be invalid.
-  goto exit
-
-:exit

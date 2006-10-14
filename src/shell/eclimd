@@ -16,20 +16,15 @@
 
 # Author: Eric Van Dewoestine
 
-if [ -z "$ECLIPSE_HOME" ]; then
-  echo "ECLIPSE_HOME not set" 1>&2
-  exit 1
-fi
-
-if [ ! -e "$ECLIPSE_HOME/eclipse" ]; then
-  echo "No eclipse executable found.  ECLIPSE_HOME may be invalid." 1>&2
-  exit 1
-fi
-
 CURPATH=`dirname $0`
-SED=`which sed 2> /dev/null`
-ECLIM_HOME="$ECLIPSE_HOME/plugins/org.eclim_${eclim.version}"
+if [[ $CURPATH != $PWD* ]] ; then
+  CURPATH=$PWD/$CURPATH
+fi
+
+ECLIM_HOME=$(dirname $CURPATH)
+ECLIPSE_HOME=$(dirname $(dirname $ECLIM_HOME))
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME""
+SED=`which sed 2> /dev/null`
 
 # attempt to grab properties from .eclimrc if available.
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
