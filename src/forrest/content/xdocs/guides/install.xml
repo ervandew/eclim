@@ -28,11 +28,6 @@
     </authors>
   </header>
   <body>
-    <note>
-      Currently the installation proceedure is fairly manual, but a graphical
-      installer is in the works and will hopefully be ready by the next eclim
-      release.
-    </note>
     <section id="requirements">
       <title>Requirements</title>
       <p>
@@ -86,10 +81,67 @@
         </li>
       </ul>
     </section>
-    <section id="install">
-      <title>Install</title>
 
-      <section id="step1">
+    <section id="installer">
+      <title>Eclim Graphical Installer</title>
+      <p>
+        Using the eclim graphical installer is the quickest and easiest way to
+        install eclim on your system.
+      </p>
+      <section id="installer_step1">
+        <title>Step 1: Download the eclim installer for your platform.</title>
+        <ul>
+          <li>
+            <strong>Linux (and other unix based systems):</strong>
+            <a href="ext:downloads">eclim_<em>version</em>.sh</a>
+          </li>
+          <li>
+            <strong>Windows:</strong>
+            <a href="ext:downloads">eclim_<em>version</em>.exe</a>
+          </li>
+        </ul>
+      </section>
+
+      <section id="installer_step2">
+        <title>Step 2: Run the installer.</title>
+        <ul>
+          <li>
+            <strong>Linux (and other unix based systems):</strong>
+            You can start the installer by running the script you downloaded
+            (note: you may have to make it executable first).
+            <source>
+              $ chmod 755 eclim_<em>version</em>.sh
+              $ ./eclim_<em>version</em>.sh
+            </source>
+          </li>
+          <li>
+            <strong>Windows:</strong>
+            On Windows systems, simply double click the
+            eclim_<em>version</em>.exe file you downloaded.
+          </li>
+        </ul>
+        <p>
+          After the installer starts up, simply follow the steps in the wizard
+          to install the application.
+        </p>
+      </section>
+
+      <section id="installer_step3">
+        <title>Step 3: Start the eclimd server and test it.</title>
+        <p>
+          See the documentation <a href="#start_and_test">below</a>.
+        </p>
+      </section>
+    </section>
+
+    <section id="manual">
+      <title>Manual Installation</title>
+      <p>
+        If for some reason you cannot use the graphical installer, these steps
+        will walk you through how to perform a manual installation.
+      </p>
+
+      <section id="manual_step1">
         <title>Step 1: Download <strong>2</strong> eclim distribution files.</title>
         <ol>
           <li>
@@ -124,7 +176,7 @@
         </ol>
       </section>
 
-      <section id="step2">
+      <section id="manual_step2">
         <title>Step 2: Install eclim Eclipse plugins.</title>
         <p>
           Simply open a shell and extract the eclim Eclipse plugins archive to your
@@ -158,7 +210,7 @@
         </ul>
       </section>
 
-      <section id="step3">
+      <section id="manual_step3">
         <title>Step 3: Install eclim Vim plugins.</title>
         <p>
           Simply open a shell and extract the eclim Vim plugins jar file to one
@@ -199,7 +251,7 @@
         </p>
       </section>
 
-      <section id="step4">
+      <section id="manual_step4">
         <title>Step 4: Compile nailgun (non-Windows systems only).</title>
         <ul>
           <li>
@@ -226,105 +278,126 @@
         </ul>
       </section>
 
-      <section id="step5">
-        <title>Step 5: Start and test eclim.</title>
+      <section id="manual_step5">
+        <title>Step 5: Start the eclimd server and test it.</title>
         <p>
-          Now that everything is installed, it is time to start up the eclim
-          server and verify that it is running properly.
-        </p>
-        <ol>
-          <li>
-            The first step is to start the eclimd server.  To do so follow the
-            directions found <a href="../eclimd.html#startup">here</a>.
-          </li>
-          <li>
-            Once you have started the server you can test it by opening a Vim
-            window and issuing the command,
-            <a href="../vim/index.html#PingEclim">
-              <strong>:PingEclim</strong>
-            </a>.  The result of executing this command should be
-            "<code>eclim</code> <em>version</em>" echoed to the bottom of your
-            Vim window.  If however, you receive
-            "<code>unable to connect to eclimd - connect: Connection refused</code>",
-            or something similar, then your eclimd server is not running or
-            something is preventing eclim from connecting to it.  If you receive
-            this or any other errors and are unsure of what steps to take,
-            please feel free to visit the <a href="ext:forums">forums</a> so
-            that someone can help resolve your issue.
-            <br/><br/>
-            <p>
-              Example of successful ping:<br/>
-              <img src="../images/screenshots/ping_success.png" alt="Successful Ping"/>
-            </p>
-            <br/>
-            <p>
-              Example of failed ping:<br/>
-              <img src="../images/screenshots/ping_failed.png" alt="Failed Ping"/>
-            </p>
-          </li>
-          <li>
-            Regardless of the ping result, you can also verify your vim settings
-            using the command <strong>:EclimValidate</strong>.  This will check
-            various settings and options and report any problems. If all is ok
-            you will receive the following message:
-            <source>
-              Result: OK, required settings are valid.
-            </source>
-          </li>
-        </ol>
-      </section>
-
-      <section id="whatsnext">
-        <title>What's Next</title>
-        <p>
-          Now that you have eclim installed, the next step is to familiarize
-          yourself with at least the core set of commands that eclim
-          provides, all of which are found at the index of the eclim
-          <a href="../vim/index.html">documentation</a>.
+          See the documentation <a href="#start_and_test">below</a>.
         </p>
       </section>
+    </section>
 
+    <section id="start_and_test">
+      <title>Starting and testing eclim.</title>
+      <p>
+        Once you have finished the installation process, you can then start up
+        the eclim server and verify that it is running properly.
+      </p>
+      <ol>
+        <li>
+          The first step is to start the eclimd server.  To do so follow the
+          directions found <a href="../eclimd.html#startup">here</a>.
+        </li>
+        <li>
+          Once you have started the server you can test it by opening a Vim
+          window and issuing the command,
+          <a href="../vim/index.html#PingEclim">
+            <strong>:PingEclim</strong>
+          </a>.  The result of executing this command should be
+          "<code>eclim</code> <em>version</em>" echoed to the bottom of your
+          Vim window.  If however, you receive
+          "<code>unable to connect to eclimd - connect: Connection refused</code>",
+          or something similar, then your eclimd server is not running or
+          something is preventing eclim from connecting to it.  If you receive
+          this or any other errors and are unsure of what steps to take,
+          please feel free to visit the <a href="ext:forums">forums</a> so
+          that someone can help resolve your issue.
+          <br/><br/>
+          <p>
+            Example of successful ping:<br/>
+            <img src="../images/screenshots/ping_success.png" alt="Successful Ping"/>
+          </p>
+          <br/>
+          <p>
+            Example of failed ping:<br/>
+            <img src="../images/screenshots/ping_failed.png" alt="Failed Ping"/>
+          </p>
+        </li>
+        <li>
+          Regardless of the ping result, you can also verify your vim settings
+          using the command <strong>:EclimValidate</strong>.  This will check
+          various settings and options and report any problems. If all is ok
+          you will receive the following message:
+          <source>
+            Result: OK, required settings are valid.
+          </source>
+        </li>
+      </ol>
+    </section>
+
+    <section id="whatsnext">
+      <title>What's Next</title>
+      <p>
+        Now that you have eclim installed, the next step is to familiarize
+        yourself with at least the core set of commands that eclim
+        provides, all of which are found at the index of the eclim
+        <a href="../vim/index.html">documentation</a>.
+      </p>
     </section>
 
     <section id="upgrade">
       <title>Upgrading</title>
-      <p>
-        To upgrade eclim
-      </p>
-      <ol>
-        <li>
-          First check all the <a href="../changes.html">release notes</a> from
-          your currently installed version to the latest version, to see if
-          there are any special upgrade notes that may apply to you.
-          <warning>
-            These special upgrade notes will be in red warning boxes like this
-            one so that they are easy to identify.
-          </warning>
-        </li>
-        <li>
-          <a href="../eclimd.html#shutdown">Shutdown eclimd</a>.
-        </li>
-        <li>
-          Delete the old org.eclim*_<em>version</em> plugins from your
-          ECLIPSE_HOME/plugins directory.
-        </li>
-        <li>
-          <a href="#step2">
-            Extract the new org.eclim_<em>version</em>.tar.gz
-          </a>
-          (or org.eclim_<em>version</em>.zip if on windows) to your
-          ECLIPSE_HOME/plugins directory.
-        </li>
-        <li>
-          <a href="#step3">
-            Extract your new eclim_vim_<em>version</em>.jar
-          </a>
-          file to your Vim runtimepath.
-        </li>
-        <li>
-          If not on Windows, recompile the <a href="#step4">nailgun client</a>.
-        </li>
-      </ol>
+
+      <section id="installer_upgrade">
+        <title>Installer</title>
+        <p>
+          When using the installer, the upgrading procedure is the same as the
+          installation procedure.  The installer will remove the previous
+          version of eclim and install the new one.
+        </p>
+      </section>
+
+      <section id="manual_upgrade">
+        <title>Manual Upgrade</title>
+        <p>
+          If you cannot use the installer, then you should follow these steps to
+          ensure a smooth upgrade.
+        </p>
+        <ol>
+          <li>
+            First check all the <a href="../changes.html">release notes</a> from
+            your currently installed version to the latest version, to see if
+            there are any special upgrade notes that may apply to you.
+            <warning>
+              These special upgrade notes will be in red warning boxes like this
+              one so that they are easy to identify.
+            </warning>
+          </li>
+          <li>
+            <a href="../eclimd.html#shutdown">Shutdown eclimd</a>.
+          </li>
+          <li>
+            Delete the old org.eclim*_<em>version</em> plugins from your
+            ECLIPSE_HOME/plugins directory.
+          </li>
+          <li>
+            <a href="#step2">
+              Extract the new org.eclim_<em>version</em>.tar.gz
+            </a>
+            (or org.eclim_<em>version</em>.zip if on windows) to your
+            ECLIPSE_HOME/plugins directory.
+          </li>
+          <li>
+            <a href="#step3">
+              Extract your new eclim_vim_<em>version</em>.jar
+            </a>
+            file to your Vim runtimepath.
+          </li>
+          <li>
+            If you are on a non Windows system be sure to recompile the
+            <a href="#step4">nailgun client</a>.
+          </li>
+        </ol>
+      </section>
     </section>
   </body>
 </document>

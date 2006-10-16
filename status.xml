@@ -298,6 +298,16 @@
   </todo>
 
   <changes>
+    <release version="1.2.4" date="">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Few bug fixes.
+      </action>
+
+      <action dev="ervandew" type="add" context="Eclim">
+        New graphical installer for easing the installation and upgrading
+        procedure.
+      </action>
+    </release>
 
     <release version="1.2.3" date="October 08, 2006">
       <action dev="ervandew" type="fix" context="Bug Fixes">

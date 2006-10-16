@@ -91,6 +91,21 @@
     <section id="news">
       <title>News</title>
 
+      <section id="news_2006">
+        <title>2006</title>
+        <p>
+          Eclim 1.2.4 is now available.<br/>
+          This is a very minimal release containing only a few bug fixes, but
+          now includes a new
+          <a href="guides/install.html#installer">graphical installer</a>
+          built on the <a href="site:formic">formic</a> installer framework.
+        </p>
+        <p>
+          View the <a href="changes.html#version_1.2.4">release notes</a> for
+          more info.
+        </p>
+      </section>
+
       <section id="news_2006-10-09">
         <title>2006-10-09</title>
         <p>
@@ -180,6 +195,7 @@
         </warning>
       </section>
 
+      <!--
       <section id="news_2006-05-07">
         <title>2006-05-07</title>
         <p>
@@ -232,7 +248,6 @@
         </p>
       </section>
 
-      <!--
       <section id="news_2005-09-11">
         <title>2005-09-11</title>
         <p>
