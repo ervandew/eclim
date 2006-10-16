@@ -2,13 +2,6 @@ System
   - update backup script to pull down nightly wiki tarballs.
 
 Installer
-  - help alleviate need for users to set ECLIPSE_HOME.
-    - inject path into one of the vim scripts and allow override with
-      ECLIPSE_HOME
-    - on Windows, just set the ECLIPSE_HOME for the user if not already set.
-  - when deciding where to install vim plugins, run vim to determine its
-    runtime path dirs and give the user the option to install into one that
-    they have write permissions to.
   - maintain a version database for resources directories so we can determine
     what files were added or modified by the user.
     - keep an md5sum of each file to determine user changes which can be
@@ -108,6 +101,6 @@ Python
   - add :PythonRegex
 
 PyDev
-  - Allow user to set pythong interpreter
+  - Allow user to set python interpreter
     org.python.pydev.ui.interpreters.PythonInterpreterManager
   - Allow user to add more paths to sys.path.
