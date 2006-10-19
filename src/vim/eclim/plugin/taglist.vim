@@ -40,48 +40,129 @@ let g:Tlist_Ctags_Cmd =
 " }}}
 
 " Taglist Settings {{{
-if !exists("g:tlist_ant_settings")
-  let g:tlist_ant_settings='ant;p:project;i:import;r:property;t:target'
-endif
+" taglist.vim settings
+if !exists(':TlistToo')
+  if !exists("g:tlist_ant_settings")
+    let g:tlist_ant_settings = 'ant;p:project;i:import;r:property;t:target'
+  endif
 
-if !exists("g:tlist_commonsvalidator_settings")
-  let g:tlist_commonsvalidator_settings='commonsvalidator;c:constant;f:form'
-endif
+  if !exists("g:tlist_commonsvalidator_settings")
+    let g:tlist_commonsvalidator_settings = 'commonsvalidator;c:constant;f:form'
+  endif
 
-if !exists("g:tlist_dtd_settings")
-  let g:tlist_dtd_settings='dtd;e:element'
-endif
+  if !exists("g:tlist_dtd_settings")
+    let g:tlist_dtd_settings = 'dtd;e:element'
+  endif
 
-if !exists("g:tlist_forrestdocument_settings")
-  let g:tlist_forrestdocument_settings='forrestdocument;s:section'
-endif
+  if !exists("g:tlist_forrestdocument_settings")
+    let g:tlist_forrestdocument_settings = 'forrestdocument;s:section'
+  endif
 
-if !exists("g:tlist_forreststatus_settings")
-  let g:tlist_forreststatus_settings='forreststatus;t:todo;r:release'
-endif
+  if !exists("g:tlist_forreststatus_settings")
+    let g:tlist_forreststatus_settings = 'forreststatus;t:todo;r:release'
+  endif
 
-if !exists("g:tlist_hibernate_settings")
-  let g:tlist_hibernate_settings='hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class;j:joined-subclass'
-endif
+  if !exists("g:tlist_hibernate_settings")
+    let g:tlist_hibernate_settings = 'hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class;j:joined-subclass'
+  endif
 
-if !exists("g:tlist_junitresult_settings")
-  let g:tlist_junitresult_settings='junitresult;t:testcase;o:output'
-endif
+  if !exists("g:tlist_junitresult_settings")
+    let g:tlist_junitresult_settings = 'junitresult;t:testcase;o:output'
+  endif
 
-if !exists("g:tlist_jproperties_settings")
-  let g:tlist_jproperties_settings='jproperties;p:property'
-endif
+  if !exists("g:tlist_jproperties_settings")
+    let g:tlist_jproperties_settings = 'jproperties;p:property'
+  endif
 
-if !exists("g:tlist_spring_settings")
-  let g:tlist_spring_settings='spring;i:import;a:alias;b:bean'
-endif
+  if !exists("g:tlist_spring_settings")
+    let g:tlist_spring_settings = 'spring;i:import;a:alias;b:bean'
+  endif
 
-if !exists("g:tlist_sql_settings")
-  let g:tlist_sql_settings='sql;g:group / role;r:role;u:user;m:user;p:tablespace;z:tablespace;s:schema;t:table;v:view;q:sequence;f:function'
-endif
+  if !exists("g:tlist_sql_settings")
+    let g:tlist_sql_settings = 'sql;g:group / role;r:role;u:user;m:user;p:tablespace;z:tablespace;s:schema;t:table;v:view;q:sequence;f:function'
+  endif
 
-if !exists("g:tlist_webxml_settings")
-  let g:tlist_webxml_settings='webxml;p:context-param;f:filter;i:filter-mapping;l:listener;s:servlet;v:servlet-mapping'
+  if !exists("g:tlist_webxml_settings")
+    let g:tlist_webxml_settings = 'webxml;p:context-param;f:filter;i:filter-mapping;l:listener;s:servlet;v:servlet-mapping'
+  endif
+
+" taglisttoo.vim settings
+else
+  if !exists("g:tlist_ant_settings")
+    let g:tlist_ant_settings = {
+        \ 'p': 'project',
+        \ 'i': 'import',
+        \ 'r': 'property',
+        \ 't': 'target'
+      \ }
+  endif
+
+  if !exists("g:tlist_commonsvalidator_settings")
+    let g:tlist_commonsvalidator_settings = {'c': 'constant', 'f': 'form'}
+  endif
+
+  if !exists("g:tlist_dtd_settings")
+    let g:tlist_dtd_settings = {'e': 'element'}
+  endif
+
+  if !exists("g:tlist_forrestdocument_settings")
+    let g:tlist_forrestdocument_settings = {'s': 'section'}
+  endif
+
+  if !exists("g:tlist_forreststatus_settings")
+    let g:tlist_forreststatus_settings = {'t': 'todo', 'r': 'release'}
+  endif
+
+  if !exists("g:tlist_hibernate_settings")
+    let g:tlist_hibernate_settings = {
+        \ 't': 'typedef',
+        \ 'f': 'filter-def',
+        \ 'i': 'import',
+        \ 'q': 'query',
+        \ 's': 'sql-query',
+        \ 'c': 'class',
+        \ 'j': 'joined-subclass'
+      \ }
+  endif
+
+  if !exists("g:tlist_junitresult_settings")
+    let g:tlist_junitresult_settings = {'t': 'testcase', 'o': 'output'}
+  endif
+
+  if !exists("g:tlist_jproperties_settings")
+    let g:tlist_jproperties_settings = {'p': 'property'}
+  endif
+
+  if !exists("g:tlist_spring_settings")
+    let g:tlist_spring_settings = {'i': 'import', 'a': 'alias', 'b': 'bean'}
+  endif
+
+  if !exists("g:tlist_sql_settings")
+    let g:tlist_sql_settings = {
+        \ 'g': 'group / role',
+        \ 'r': 'role',
+        \ 'u': 'user',
+        \ 'm': 'user',
+        \ 'p': 'tablespace',
+        \ 'z': 'tablespace',
+        \ 's': 'schema',
+        \ 't': 'table',
+        \ 'v': 'view',
+        \ 'q': 'sequence',
+        \ 'f': 'function'
+      \ }
+  endif
+
+  if !exists("g:tlist_webxml_settings")
+    let g:tlist_webxml_settings = {
+        \ 'p': 'context-param',
+        \ 'f': 'filter',
+        \ 'i': 'filter-mapping',
+        \ 'l': 'listener',
+        \ 's': 'servlet',
+        \ 'v': 'servlet-mapping'
+      \ }
+  endif
 endif
 " }}}
 
