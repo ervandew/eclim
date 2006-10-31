@@ -66,6 +66,10 @@ if !exists(':TlistToo')
     let g:tlist_hibernate_settings = 'hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class;j:joined-subclass'
   endif
 
+  if !exists("g:tlist_html_settings")
+    let g:tlist_html_settings = 'html;a:anchor;i:id;f:function'}
+  endif
+
   if !exists("g:tlist_junitresult_settings")
     let g:tlist_junitresult_settings = 'junitresult;t:testcase;o:output'
   endif
@@ -123,6 +127,10 @@ else
         \ 'c': 'class',
         \ 'j': 'joined-subclass'
       \ }
+  endif
+
+  if !exists("g:tlist_html_settings")
+    let g:tlist_html_settings = {'a': 'anchor', 'i': 'id', 'f': 'function'}
   endif
 
   if !exists("g:tlist_junitresult_settings")
