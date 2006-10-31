@@ -42,11 +42,9 @@ function! s:ReadArchiveFile ()
     let class = substitute(file, '.*!\(.*\)\.class', '\1', '')
     let class = substitute(class, '/', '.', 'g')
 
-    if exists('g:EclimLastProject')
-      let project = g:EclimLastProject
-    else
-      let project = eclim#project#GetCurrentProjectName()
-    endif
+    let project = exists('g:EclimLastProject') ?
+      \ g:EclimLastProject : eclim#project#GetCurrentProjectName()
+
     if project == ''
       call eclim#util#EchoError(
         \ 'Could not open archive file: Unable to determine project.')
@@ -62,8 +60,20 @@ function! s:ReadArchiveFile ()
 
   let file = eclim#ExecuteEclim(command)
 
-  if(string(file) != '0')
-    silent! exec "edit " . file
+  if string(file) != '0'
+    let bufnum = bufnr('%')
+    silent exec "keepjumps edit! " . file
+
+    exec 'bdelete ' . bufnum
+
+    " alternate solution, that keeps the archive url as the buffer's filename,
+    " but prevents taglist from being able to parse tags.
+    "setlocal noreadonly
+    "setlocal modifiable
+    "silent! exec "read " . file
+    "let saved = @"
+    "1,1delete
+    "let @" = saved
 
     silent exec "doautocmd BufReadPre " . file
     silent exec "doautocmd BufReadPost " . file
@@ -71,6 +81,7 @@ function! s:ReadArchiveFile ()
     setlocal readonly
     setlocal nomodifiable
     setlocal noswapfile
+    setlocal bufhidden=hide
     " causes taglist.vim errors (fold then delete fails)
     "setlocal bufhidden=delete
   endif
