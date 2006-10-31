@@ -55,7 +55,7 @@
       </li>
     </ul>
     <p>
-      When editing a java source file simple enter the abbreviation while in
+      When editing a java source file simply enter the abbreviation while in
       insert mode, followed by a space or &lt;ESC&gt; and the corresponding
       code above will be added for you.
     </p>
