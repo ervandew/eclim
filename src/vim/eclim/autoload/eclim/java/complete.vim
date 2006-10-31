@@ -51,7 +51,7 @@ function! eclim#java#complete#CodeComplete (findstart, base)
     let start = col('.') - 1
 
     "exceptions that break the rule
-    if line[start] =~ '\.'
+    if line[start] == '.' && line[start - 1] != '.'
       let start -= 1
     endif
 
