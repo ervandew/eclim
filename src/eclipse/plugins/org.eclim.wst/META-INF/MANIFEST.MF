@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclim.wst; singleton:=true
+Bundle-Version: ${eclim.version}
+Bundle-ClassPath: .,
+  eclim.wst.jar
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclim,
+  org.eclipse.core.resources,
+  org.eclipse.jface.text,
+  org.eclipse.swt,
+  org.eclipse.wst.css.ui,
+  org.eclipse.wst.html.ui,
+  org.eclipse.wst.javascript.ui,
+  org.eclipse.wst.sse.core,
+  org.eclipse.wst.sse.ui
+Eclipse-AutoStart: true

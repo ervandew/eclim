@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<!DOCTYPE beans PUBLIC
+  "-//SPRING//DTD BEAN//EN"
+  "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <bean name="css_complete"
+      class="org.eclim.plugin.wst.command.complete.CssCodeCompleteCommand">
+    <description>
+      Handles requests for css code completion.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <!--bean name="html_complete"
+      class="org.eclim.plugin.wst.command.complete.HtmlCodeCompleteCommand">
+    <description>
+      Handles requests for html code completion.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean-->
+
+  <bean name="javascript_complete"
+      class="org.eclim.plugin.wst.command.complete.JavascriptCodeCompleteCommand">
+    <description>
+      Handles requests for javascript code completion.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.complete.CodeCompleteFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+</beans>
