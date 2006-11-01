@@ -76,4 +76,36 @@
       description="Builds the vim documentation.">
   </target>
 
+  <!--
+    - Extracts all eclipse doc jars.
+    -->
+  <target name="eclipse.docs"
+      description="Extracts all eclipse doc jars.">
+    <for param="doc.jar" delimiter=":">
+      <path id="eclipse.docs">
+        <fileset dir="${eclipse.home}/plugins" includes="*.doc.*.jar"/>
+      </path>
+      <sequential>
+        <propertyregex override="yes" property="doc.dir" input="@{doc.jar}"
+            regexp=".*(org.eclipse.*?)_.*" replace="\1"/>
+        <unjar src="@{doc.jar}" dest="${eclipse.home}/docs/${doc.dir}"/>
+      </sequential>
+    </for>
+  </target>
+
+  <!--
+    - Extracts all eclipse src zips.
+    -->
+  <target name="eclipse.src"
+      description="Extracts all eclipse src zips.">
+    <for param="src.zip" delimiter=":">
+      <path id="eclipse.docs">
+        <fileset dir="${eclipse.home}/plugins" includes="**/src.zip"/>
+      </path>
+      <sequential>
+        <unzip src="@{src.zip}" dest="${eclipse.home}/src"/>
+      </sequential>
+    </for>
+  </target>
+
 </project>
