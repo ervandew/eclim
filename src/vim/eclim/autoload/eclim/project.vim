@@ -69,7 +69,7 @@ function! eclim#project#ProjectCreate (args)
   endif
 
   " backwards compatability (default to java nature)
-  if command !~ 'a:args$'
+  if command !~ '-n '
     let command .= ' -n java'
     if len(args) > 1
       let command .= ' -d ' . join(args[1:], ',')
