@@ -29,6 +29,8 @@ import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.log4j.Logger;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -60,6 +62,9 @@ import org.w3c.dom.Text;
  */
 public class ProjectManagement
 {
+  private static final Logger logger =
+    Logger.getLogger(ProjectManagement.class);
+
   private static Map managers = new HashMap();
 
   private static XPath xpath;
@@ -241,14 +246,23 @@ public class ProjectManagement
   {
     ProjectUtils.assertExists(_project);
 
-    for (Iterator ii = managers.keySet().iterator(); ii.hasNext();){
-      String nature = (String)ii.next();
-      if(_project.hasNature(nature)){
-        ProjectManager manager = ProjectManagement.getProjectManager(nature);
-        manager.delete(_project, _commandLine);
+    try{
+      if(!_project.isOpen()){
+        _project.open(null);
       }
+
+      for (Iterator ii = managers.keySet().iterator(); ii.hasNext();){
+        String nature = (String)ii.next();
+        if(_project.hasNature(nature)){
+          ProjectManager manager = ProjectManagement.getProjectManager(nature);
+          manager.delete(_project, _commandLine);
+        }
+      }
+    }catch(Exception e){
+      logger.debug("Failed to perform nature level delete.", e);
+    }finally{
+      _project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
     }
-    _project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
   }
 
   /**
