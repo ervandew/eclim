@@ -17,6 +17,9 @@ package org.eclim.eclipse;
 
 import org.eclipse.core.runtime.Plugin;
 
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+
 import org.osgi.framework.BundleContext;
 
 /**
@@ -27,6 +30,8 @@ public class EclimPlugin
 {
   //The shared instance.
   private static EclimPlugin plugin;
+
+  private static Shell shell;
 
   /**
    * The constructor.
@@ -65,5 +70,18 @@ public class EclimPlugin
   public static EclimPlugin getDefault ()
   {
     return plugin;
+  }
+
+  /**
+   * Gets the shell to use.
+   *
+   * @return The Shell.
+   */
+  public static Shell getShell ()
+  {
+    if(shell == null){
+      shell = new Shell(Display.getDefault());
+    }
+    return shell;
   }
 }
