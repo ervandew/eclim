@@ -15,27 +15,13 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclim.command.AbstractCommand;
-import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
-
-import org.eclim.command.complete.CodeCompleteResult;
-
-import org.eclim.eclipse.jface.text.DummyTextViewer;
+import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclim.plugin.ant.util.AntUtils;
 
-import org.eclim.util.ProjectUtils;
-
 import org.eclipse.ant.internal.ui.model.AntModel;
 
-import org.eclipse.jface.text.ITextViewer;
-
-import org.eclipse.jface.text.contentassist.ContentAssistEvent;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 /**
  * Command to handle ant file code completion requests.
@@ -44,51 +30,17 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
  * @version $Revision$
  */
 public class CodeCompleteCommand
-  extends AbstractCommand
+  extends AbstractCodeCompleteCommand
 {
   /**
    * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(String,String)
    */
-  public Object execute (CommandLine _commandLine)
+  protected IContentAssistProcessor getContentAssistProcessor (
+      String project, String file)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
-
-      AntModel model = (AntModel)AntUtils.getAntModel(file);
-      AntEditorCompletionProcessor processor =
-        new AntEditorCompletionProcessor(model);
-
-      ITextViewer viewer =
-        new DummyTextViewer(ProjectUtils.getDocument(file), offset, 1);
-
-      ICompletionProposal[] proposals =
-        processor.computeCompletionProposals(viewer, offset);
-
-      List results = new ArrayList();
-      for (int ii = 0; ii < proposals.length; ii++){
-        String description = null;
-        if(proposals[ii].getAdditionalProposalInfo() != null){
-          description = proposals[ii].getAdditionalProposalInfo().trim();
-        }
-
-        String completion = proposals[ii].getDisplayString();
-        int index = completion.indexOf(" - ");
-        if(index != -1){
-          completion = completion.substring(0, index);
-        }
-
-        CodeCompleteResult result =
-          new CodeCompleteResult(completion, description, null);
-        if(!results.contains(result)){
-          results.add(result);
-        }
-      }
-
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
-    }
+    AntModel model = (AntModel)AntUtils.getAntModel(file);
+    return new AntEditorCompletionProcessor(model);
   }
 }
