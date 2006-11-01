@@ -81,7 +81,6 @@ function! s:ReadArchiveFile ()
     setlocal readonly
     setlocal nomodifiable
     setlocal noswapfile
-    setlocal bufhidden=hide
     " causes taglist.vim errors (fold then delete fails)
     "setlocal bufhidden=delete
   endif
