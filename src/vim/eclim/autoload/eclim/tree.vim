@@ -429,9 +429,16 @@ function eclim#tree#Cursor (line)
     endif
 
     " attempt to keep the content in view when not wrapping
-    if !&wrap
+    "if !&wrap
+    "  normal zs
+    "  exec 'normal ' . (winwidth(winnr()) / 2). 'zh'
+    "endif
+    let winwidth = winwidth(winnr())
+    let wincol = wincol()
+    let col = col('.')
+    if (winwidth > 10 && wincol > (winwidth - 10)) || (col > 10 && wincol < 10)
       normal zs
-      exec 'normal ' . (winwidth(winnr()) / 2). 'zh'
+      exec 'normal ' . (winwidth / 2). 'zh'
     endif
 
     call cursor(lnum, col('.') - offset)
@@ -958,9 +965,11 @@ function s:Syntax ()
   exec "hi link TreeDir " . g:TreeDirHighlight
   exec "hi link TreeFile " . g:TreeFileHighlight
   exec "hi link TreeFileExecutable " . g:TreeFileExecutableHighlight
-  syntax match TreeDir /\([[:alpha:]]\?:\?[\/]\?[.[:alnum:]_]\+.*\/$\|^\/$\)/
-  syntax match TreeFile /[.[:alnum:]_].*[^\/\*]$/
-  syntax match TreeFileExecutable /[.[:alnum:]_].*[^\/]\*$/
+  hi link TreeMarker Normal
+  syntax match TreeMarker /^\s*[-+]/
+  syntax match TreeDir /\S.*\// contains=TreeMarker
+  syntax match TreeFile /\S.*[^\/]$/
+  syntax match TreeFileExecutable /\S.*[^\/]\*$/
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
