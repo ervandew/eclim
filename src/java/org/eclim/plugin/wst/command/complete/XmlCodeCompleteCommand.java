@@ -77,7 +77,8 @@ public class XmlCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    IFile ifile = ProjectUtils.getFile(ProjectUtils.getProject(project), file);
+    IFile ifile = ProjectUtils.getFile(
+        ProjectUtils.getProject(project, true), file);
     ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
 
     IStructuredModel model =
