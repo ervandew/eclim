@@ -116,4 +116,15 @@ public class CommandLine
   {
     return args;
   }
+
+  /**
+   * Adds another option to this command line.
+   *
+   * @param _option The option.
+   * @param _value The option value.
+   */
+  public void addOption (String _option, String _value)
+  {
+    options.put(_option, _value);
+  }
 }
