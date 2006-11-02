@@ -33,6 +33,7 @@ public class CodeCompleteResult
 {
   private static final Pattern FIRST_LINE =
     Pattern.compile("(\\.\\s|\\.<|<br|<BR|<p|<P)");
+  private static final int MAX_SHORT_DESCRIPTION_LENGTH = 74;
 
   private String completion;
   private String description;
@@ -49,20 +50,17 @@ public class CodeCompleteResult
       String _completion, String _description, String _shortDescription)
   {
     completion = _completion;
-    description = StringUtils.replace(_description, "\n", "<br/>");
+    description = _description;
+    if(description != null){
+      description = StringUtils.replace(description, "\n", "<br/>");
+    }
     shortDescription = _shortDescription;
+    if(shortDescription != null){
+      shortDescription = StringUtils.replace(shortDescription, "\n", "<br/>");
+    }
 
     if(description != null && shortDescription == null){
-      Matcher matcher = FIRST_LINE.matcher(description);
-      if(matcher.find()){
-        shortDescription = description.substring(0, matcher.start() + 1);
-        if(shortDescription.endsWith("<")){
-          shortDescription =
-            shortDescription.substring(0, shortDescription.length() - 1);
-        }
-      }else{
-        shortDescription = description;
-      }
+      shortDescription = createShortDescription(description);
     }
   }
 
@@ -124,6 +122,31 @@ public class CodeCompleteResult
   protected void setShortDescription (String shortDescription)
   {
     this.shortDescription = shortDescription;
+  }
+
+  /**
+   * Creates a short description based on the supplied full description.
+   *
+   * @param _description The description.
+   * @return The short description.
+   */
+  public static String createShortDescription (String _description)
+  {
+    if(_description == null){
+      return null;
+    }
+
+    String shortDesc = _description;
+    Matcher matcher = FIRST_LINE.matcher(shortDesc);
+    if(shortDesc.length() > 1 && matcher.find(1)){
+      shortDesc = shortDesc.substring(0, matcher.start() + 1);
+      if(shortDesc.endsWith("<")){
+        shortDesc= shortDesc.substring(0, shortDesc.length() - 1);
+      }
+    }
+    shortDesc = shortDesc.replaceAll("\n", StringUtils.EMPTY);
+    shortDesc = shortDesc.replaceAll("<.*?>", StringUtils.EMPTY);
+    return StringUtils.abbreviate(shortDesc, MAX_SHORT_DESCRIPTION_LENGTH);
   }
 
   /**
