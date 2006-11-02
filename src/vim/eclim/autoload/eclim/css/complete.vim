@@ -63,11 +63,14 @@ function! eclim#css#complete#CodeComplete (findstart, base)
       return
     endif
 
-    " for : class names, eclipse doesn't filter by leading character
-    "call filter(results, 'v:val =~ "^" . a:base')
-
+    let filter = 0
     for result in results
       let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
+      if word =~ '^:'
+        let word = strpart(word, 1)
+        let filter = 1
+      endif
+
       let menu = substitute(result, '.\{-}|\(.*\)|.*', '\1', '')
       let info = substitute(result, '.*|\(.*\)', '\1', '')
 
@@ -75,6 +78,11 @@ function! eclim#css#complete#CodeComplete (findstart, base)
 
       call add(completions, dict)
     endfor
+
+    " eclipse doesn't filter out :results properly.
+    if filter
+      call filter(completions, 'v:val.word =~ "^" . a:base')
+    endif
 
     return completions
   endif
