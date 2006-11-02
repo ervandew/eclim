@@ -99,7 +99,7 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
 
       " strip off prefix if necessary.
       if word =~ '\.'
-        let word = substitute(word, prefix, '', '')
+        let word = substitute(word, escape(prefix, '*'), '', '')
       endif
 
       let dict = {'word': word, 'menu': menu, 'info': info}
