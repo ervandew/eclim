@@ -28,9 +28,10 @@ import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.ITextViewer;
 
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
-import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
+import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
@@ -39,12 +40,12 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
 /**
- * Command to handle css code completion requests.
+ * Command to handle html code completion requests.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class CssCodeCompleteCommand
+public class HtmlCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
   /**
@@ -55,7 +56,7 @@ public class CssCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    return new CSSContentAssistProcessor();
+    return new HTMLContentAssistProcessor();
   }
 
   /**
@@ -75,6 +76,17 @@ public class CssCodeCompleteCommand
     StructuredTextViewer viewer =
       new StructuredTextViewer(EclimPlugin.getShell(), null, null, false, 0);
     viewer.setDocument(model.getStructuredDocument());
+
     return viewer;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   */
+  protected boolean acceptProposal (ICompletionProposal proposal)
+  {
+    String display = proposal.getDisplayString();
+    return !display.toLowerCase().startsWith("close with");
   }
 }

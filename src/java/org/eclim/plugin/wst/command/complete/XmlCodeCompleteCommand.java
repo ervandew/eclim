@@ -15,9 +15,13 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
+import org.eclim.command.complete.CodeCompleteResult;
 
 import org.eclim.eclipse.EclimPlugin;
 
@@ -28,9 +32,8 @@ import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.ITextViewer;
 
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-
-import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
@@ -38,15 +41,23 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
+
 /**
- * Command to handle css code completion requests.
+ * Command to handle xml code completion requests.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class CssCodeCompleteCommand
+public class XmlCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  private static final List IGNORE = new ArrayList();
+  static{
+    IGNORE.add("comment - xml comment");
+    IGNORE.add("XSL processing instruction - XSL processing instruction");
+  }
+
   /**
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
@@ -55,7 +66,7 @@ public class CssCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    return new CSSContentAssistProcessor();
+    return new XMLContentAssistProcessor();
   }
 
   /**
@@ -76,5 +87,33 @@ public class CssCodeCompleteCommand
       new StructuredTextViewer(EclimPlugin.getShell(), null, null, false, 0);
     viewer.setDocument(model.getStructuredDocument());
     return viewer;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   */
+  protected boolean acceptProposal (ICompletionProposal proposal)
+  {
+    String display = proposal.getDisplayString();
+    return !display.toLowerCase().startsWith("close with") &&
+      !IGNORE.contains(display);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   */
+  protected String getShortDescription (ICompletionProposal proposal)
+  {
+    String shortDesc = proposal.getAdditionalProposalInfo();
+    if(shortDesc != null){
+      int index = shortDesc.indexOf("</p>");
+      if(index != -1){
+        shortDesc = shortDesc.substring(index + 4);
+        shortDesc = CodeCompleteResult.createShortDescription(shortDesc);
+      }
+    }
+    return shortDesc;
   }
 }

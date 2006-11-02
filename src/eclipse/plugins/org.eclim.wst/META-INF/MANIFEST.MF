@@ -16,5 +16,7 @@ Require-Bundle: org.eclim,
   org.eclipse.wst.html.ui,
   org.eclipse.wst.javascript.ui,
   org.eclipse.wst.sse.core,
-  org.eclipse.wst.sse.ui
+  org.eclipse.wst.sse.ui,
+  org.eclipse.wst.xml.core,
+  org.eclipse.wst.xml.ui
 Eclipse-AutoStart: true
