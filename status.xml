@@ -307,6 +307,21 @@
         New graphical installer for easing the installation and upgrading
         procedure.
       </action>
+
+      <action dev="ervandew" type="add" context="Css">
+        Added css <a href="vim/css/complete.html">code completion</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Html">
+        Added html <a href="vim/html/complete.html">code completion</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Xml">
+        Added xml <a href="vim/xml/complete.html">code completion</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
     </release>
 
     <release version="1.2.3" date="October 08, 2006">

@@ -62,13 +62,17 @@
     </ul>
 
     <p>
-      <strong>Maven Integration</strong>
+      <strong>Css Integration</strong>
     </p>
     <ul>
-      <li>Maven execution from any file.</li>
-      <li>
-        Maven repository searching and ability to add results to pom file.
-      </li>
+      <li>Context sensitive code completion.</li>
+    </ul>
+
+    <p>
+      <strong>Html Integration</strong>
+    </p>
+    <ul>
+      <li>Context sensitive code completion.</li>
     </ul>
 
     <p>
@@ -97,6 +101,16 @@
     </ul>
 
     <p>
+      <strong>Maven Integration</strong>
+    </p>
+    <ul>
+      <li>Maven execution from any file.</li>
+      <li>
+        Maven repository searching and ability to add results to pom file.
+      </li>
+    </ul>
+
+    <p>
       <strong>Vim Script Integration</strong>
     </p>
     <ul>
@@ -119,6 +133,7 @@
         Quickly look up element definition from the current xml file's dtd or
         xsd.
       </li>
+      <li>Context sensitive code completion.</li>
     </ul>
 
     <p>

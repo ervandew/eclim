@@ -121,6 +121,9 @@ See http://forrest.apache.org/docs/linking.html for more info
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
     </common>
+    <css label="Css" href="css/">
+      <complete label="Code Completion" href="complete.html" description="Code Completion"/>
+    </css>
     <ant label="Ant" href="java/ant/">
       <run label="Execution" href="run.html"
           description="Executing Ant"/>
@@ -131,12 +134,9 @@ See http://forrest.apache.org/docs/linking.html for more info
       <doc label="Documentation" href="doc.html"
           description="Ant Documentation Lookup"/>
     </ant>
-    <maven label="Maven" href="java/maven/">
-      <run label="Execution" href="run.html"
-          description="Executing Maven"/>
-      <dependency label="Dependencies" href="dependency.html"
-          description="Maven Dependencies"/>
-    </maven>
+    <html label="Html" href="html/">
+      <complete label="Code Completion" href="complete.html" description="Code Completion"/>
+    </html>
     <java label="Java" href="java/">
       <classpath label="Classpath" href="classpath.html"
           description="Editing your project's classpath"/>
@@ -173,6 +173,12 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
+    <maven label="Maven" href="java/maven/">
+      <run label="Execution" href="run.html"
+          description="Executing Maven"/>
+      <dependency label="Dependencies" href="dependency.html"
+          description="Maven Dependencies"/>
+    </maven>
     <vim label="Vim Script" href="vim/">
       <find label="Vim Find" href="find.html"
           description="Find Vim declaration or references of functions and global variables."/>
@@ -180,6 +186,7 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Open Vim help for a keyword."/>
     </vim>
     <xml label="Xml" href="xml/">
+      <complete label="Code Completion" href="complete.html" description="Code Completion"/>
       <definition label="Definition Lookup" href="definition.html"
           description="Definition Lookup"/>
       <validate label="Validation" href="validate.html"
@@ -198,6 +205,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
+    <eclipse_wst href="http://eclipse.org/webtools"/>
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->

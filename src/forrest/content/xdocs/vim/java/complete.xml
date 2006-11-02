@@ -33,9 +33,6 @@
       <a href="../code_completion.html">Vim code completion mechanism</a> like
       so:
     </p>
-    <p>
-      Usage:
-    </p>
     <source>
       System.o&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
       System.out.pri&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;

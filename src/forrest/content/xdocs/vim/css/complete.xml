@@ -22,41 +22,34 @@
 
 <document>
   <header>
-    <title>Ant Code Completion</title>
+    <title>Css Code Completion</title>
     <authors>
       <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
     </authors>
   </header>
   <body>
-    <note>
-      Ant code completion does not require that the file exist in an Eclipse
-      project, but this may change in the future.
-    </note>
     <p>
-      Ant code completion uses the standard
-      <a href="../../code_completion.html">Vim code completion mechanism</a> like
+      Css code completion uses the standard
+      <a href="../code_completion.html">Vim code completion mechanism</a> like
       so:
     </p>
     <source>
       <![CDATA[
-      <ja<Ctrl-X><Ctrl-U>
-      <jar de<Ctrl-X><Ctrl-U>
-      <jar destfile="${bas<Ctrl-X><Ctrl-U>
-      <jar destfile="${basdir
+      bo<Ctrl-X><Ctrl-U>
+
+      body {
+        font-<Ctr-X><Ctrl-U>
+
+      body {
+        font-family: sa<Ctrl-X><Ctrl-U>
+
+      body {
+        font-family: sans-serif;
       ...
       ]]>
     </source>
-    <p>
-      Screenshot of completion in action:
-    </p>
-    <p>
-      <img src="../../../images/screenshots/java/ant/completion.png"
-          alt="Ant Completion"/>
-    </p>
-    <warning>
-      If your ant file has a lot of imports, then the code completion may be
-      slow as Eclipse parses all the imports when creating the ant model.  You
-      will notice the same slow behavior when using Eclipse directly.
-    </warning>
+    <note>
+      Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+    </note>
   </body>
 </document>
