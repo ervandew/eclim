@@ -90,6 +90,10 @@ if !exists(':TlistToo')
     let g:tlist_webxml_settings = 'webxml;p:context-param;f:filter;i:filter-mapping;l:listener;s:servlet;v:servlet-mapping'
   endif
 
+  if !exists("g:tlist_tld_settings")
+    let g:tlist_tld_settings = 'tld;t:tag'
+  endif
+
 " taglisttoo.vim settings
 else
   if !exists("g:tlist_ant_settings")
@@ -170,6 +174,10 @@ else
         \ 's': 'servlet',
         \ 'v': 'servlet-mapping'
       \ }
+  endif
+
+  if !exists("g:tlist_tld_settings")
+    let g:tlist_tld_settings = {'t': 'tag'}
   endif
 endif
 " }}}

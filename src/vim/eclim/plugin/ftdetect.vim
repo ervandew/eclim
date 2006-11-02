@@ -40,6 +40,8 @@ autocmd BufRead pom.xml
   \ call <SID>SetXmlFileType({'project': 'mvn_pom'})
 autocmd BufRead project.xml
   \ call <SID>SetXmlFileType({'project': 'maven_project'})
+autocmd BufRead *.tld
+  \ call <SID>SetXmlFileType({'taglib': 'tld'})
 autocmd BufRead web.xml
   \ call <SID>SetXmlFileType({'web-app': 'webxml'})
 autocmd BufRead struts-config.xml
