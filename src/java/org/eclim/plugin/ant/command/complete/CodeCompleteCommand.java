@@ -15,12 +15,15 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
+import org.eclim.command.CommandLine;
+
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclim.plugin.ant.util.AntUtils;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 /**
@@ -34,13 +37,27 @@ public class CodeCompleteCommand
 {
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(String,String)
+   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
   protected IContentAssistProcessor getContentAssistProcessor (
-      String project, String file)
+      CommandLine commandLine, String project, String file)
     throws Exception
   {
     AntModel model = (AntModel)AntUtils.getAntModel(file);
     return new AntEditorCompletionProcessor(model);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
+   */
+  protected String getCompletion (ICompletionProposal proposal)
+  {
+    String completion = super.getCompletion(proposal);
+    int index = completion.indexOf(" - ");
+    if(index != -1){
+      completion = completion.substring(0, index);
+    }
+    return completion;
   }
 }

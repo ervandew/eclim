@@ -55,30 +55,27 @@ public abstract class AbstractCodeCompleteCommand
           _commandLine.getValue(Options.OFFSET_OPTION));
 
       IContentAssistProcessor processor =
-        getContentAssistProcessor(project, file);
+        getContentAssistProcessor(_commandLine, project, file);
 
-      ITextViewer viewer = getTextViewer(project, file, offset);
+      ITextViewer viewer = getTextViewer(_commandLine, project, file);
 
       ICompletionProposal[] proposals =
         processor.computeCompletionProposals(viewer, offset);
 
       List results = new ArrayList();
-      for (int ii = 0; ii < proposals.length; ii++){
-        String description = null;
-        if(proposals[ii].getAdditionalProposalInfo() != null){
-          description = proposals[ii].getAdditionalProposalInfo().trim();
-        }
 
-        String completion = proposals[ii].getDisplayString();
-        int index = completion.indexOf(" - ");
-        if(index != -1){
-          completion = completion.substring(0, index);
-        }
+      if(proposals != null){
+        for (int ii = 0; ii < proposals.length; ii++){
+          if(acceptProposal(proposals[ii])){
+            CodeCompleteResult result = new CodeCompleteResult(
+                getCompletion(proposals[ii]),
+                getDescription(proposals[ii]),
+                getShortDescription(proposals[ii]));
 
-        CodeCompleteResult result =
-          new CodeCompleteResult(completion, description, null);
-        if(!results.contains(result)){
-          results.add(result);
+            if(!results.contains(result)){
+              results.add(result);
+            }
+          }
         }
       }
 
@@ -91,25 +88,76 @@ public abstract class AbstractCodeCompleteCommand
   /**
    * Gets the IContentAssistProcessor to use.
    *
+   * @param _commandLine The current command line.
    * @param project The project where the file is located.
    * @param file The file to be processed.
    * @return The IContentAssistProcessor.
    */
   protected abstract IContentAssistProcessor getContentAssistProcessor (
-      String project, String file)
+      CommandLine _commandLine, String project, String file)
     throws Exception;
 
   /**
    * Gets the text viewer passed to the content assist processor.
    *
+   * @param _commandLine The current command line.
    * @param project The project the file is in.
    * @param file The file.
-   * @param offset The offset in the file.
    * @return The ITextViewer.
    */
-  protected ITextViewer getTextViewer (String project, String file, int offset)
+  protected ITextViewer getTextViewer (
+      CommandLine _commandLine, String project, String file)
     throws Exception
   {
+    int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
     return new DummyTextViewer(ProjectUtils.getDocument(file), offset, 1);
+  }
+
+  /**
+   * Determines if the supplied proposal will be accepted as a result.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return true if the proposal is accepted, false otherwise.
+   */
+  protected boolean acceptProposal (ICompletionProposal proposal)
+  {
+    return true;
+  }
+
+  /**
+   * Get the completion from the proposal.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return The completion.
+   */
+  protected String getCompletion (ICompletionProposal proposal)
+  {
+    return proposal.getDisplayString();
+  }
+
+  /**
+   * Get the description from the proposal.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return The description.
+   */
+  protected String getDescription (ICompletionProposal proposal)
+  {
+    String description = proposal.getAdditionalProposalInfo();
+    if(description != null){
+      description = description.trim();
+    }
+    return description;
+  }
+
+  /**
+   * Get the short description from the proposal.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return The short description.
+   */
+  protected String getShortDescription (ICompletionProposal proposal)
+  {
+    return null;
   }
 }
