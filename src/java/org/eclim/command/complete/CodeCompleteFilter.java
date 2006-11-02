@@ -18,6 +18,7 @@ package org.eclim.command.complete;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
 
 /**
@@ -29,11 +30,21 @@ import org.eclim.command.OutputFilter;
 public class CodeCompleteFilter
   implements OutputFilter
 {
+  private static final String DELIMETER = "|";
+
   /**
    * {@inheritDoc}
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
+    String delimeter = null;
+    try{
+      delimeter = _commandLine.hasOption(Options.DELIMETER_OPTION) ?
+        _commandLine.getValue(Options.DELIMETER_OPTION) : DELIMETER;
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+
     StringBuffer buffer = new StringBuffer();
     List results = (List)_result;
     if(results != null){
@@ -43,13 +54,13 @@ public class CodeCompleteFilter
           buffer.append('\n');
         }
 
-        buffer.append(result.getCompletion()).append('|');
+        buffer.append(result.getCompletion()).append(delimeter);
 
         if(result.getShortDescription() != null){
           buffer.append(result.getShortDescription());
         }
 
-        buffer.append('|');
+        buffer.append(delimeter);
 
         if(result.getDescription() != null){
           buffer.append(result.getDescription());
