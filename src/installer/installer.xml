@@ -27,6 +27,9 @@
         <formic:step name="license"/>
         <formic:step name="eclipse"/>
         <formic:step name="vim"/>
+        <formic:step name="featureList">
+          <property name="features.xml" value="/resources/features.xml"/>
+        </formic:step>
         <formic:step name="summary"/>
         <formic:step name="install"/>
         <formic:step name="finished"/>

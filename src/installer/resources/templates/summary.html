@@ -11,6 +11,16 @@
         <td><b>Vimfiles Dir:</b></td>
         <td>$installer.context.getValue("vim.files")</td>
       </tr>
+      <tr>
+        <td><b>Features:</b></td>
+        <td>
+        #foreach($feature in $installer.context.getKeysByPrefix("featureList"))
+          #if($installer.context.getValue("${feature}"))
+            $installer.getString("${feature}")<br>
+          #end
+        #end
+        </td>
+      </tr>
     </table>
     <br><br>
     <b>Warning:</b> Any previous eclim eclipse and vim plugins will be deleted.
