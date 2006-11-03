@@ -17,26 +17,9 @@ package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.command.complete.AbstractCodeCompleteCommand;
-
-import org.eclim.eclipse.EclimPlugin;
-
-import org.eclim.util.ProjectUtils;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-
-import org.eclipse.jface.text.ITextViewer;
-
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
-
-import org.eclipse.wst.sse.core.StructuredModelManager;
-
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-
-import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
 /**
  * Command to handle css code completion requests.
@@ -45,7 +28,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
  * @version $Revision$
  */
 public class CssCodeCompleteCommand
-  extends AbstractCodeCompleteCommand
+  extends WstCodeCompleteCommand
 {
   /**
    * {@inheritDoc}
@@ -56,26 +39,5 @@ public class CssCodeCompleteCommand
     throws Exception
   {
     return new CSSContentAssistProcessor();
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
-   */
-  protected ITextViewer getTextViewer (
-      CommandLine commandLine, String project, String file)
-    throws Exception
-  {
-    IFile ifile = ProjectUtils.getFile(
-        ProjectUtils.getProject(project, true), file);
-    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
-
-    IStructuredModel model =
-      StructuredModelManager.getModelManager().getModelForRead(ifile);
-
-    StructuredTextViewer viewer =
-      new StructuredTextViewer(EclimPlugin.getShell(), null, null, false, 0);
-    viewer.setDocument(model.getStructuredDocument());
-    return viewer;
   }
 }
