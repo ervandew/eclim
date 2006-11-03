@@ -13,10 +13,13 @@ Require-Bundle: org.eclim,
   org.eclipse.jface.text,
   org.eclipse.swt,
   org.eclipse.wst.css.ui,
+  org.eclipse.wst.dtd.core,
   org.eclipse.wst.html.ui,
   org.eclipse.wst.javascript.ui,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
+  org.eclipse.wst.wsdl.validation,
   org.eclipse.wst.xml.core,
-  org.eclipse.wst.xml.ui
+  org.eclipse.wst.xml.ui,
+  org.eclipse.wst.xsd.core
 Eclipse-AutoStart: true

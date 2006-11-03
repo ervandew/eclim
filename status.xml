@@ -288,6 +288,11 @@
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Dtd">
+        Added dtd <a href="vim/dtd/validate.html">validation</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Html">
         Added html <a href="vim/html/complete.html">code completion</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.

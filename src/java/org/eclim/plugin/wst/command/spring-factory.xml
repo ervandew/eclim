@@ -65,4 +65,18 @@
     </property>
   </bean>
 
+  <bean name="dtd_validate"
+      class="org.eclim.plugin.wst.command.validate.DtdValidateCommand">
+    <description>
+      Handles requests for dtd file validation.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>
