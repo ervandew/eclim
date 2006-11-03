@@ -19,6 +19,8 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
+  - log4j validation, check each package to see if it exists in user's classpath.
+
   - Update :Settings and :Project settings to only grab jdt settings if jdt
     plugin is installed... same for pydev, etc.
 
@@ -95,6 +97,25 @@ Enhancements
     - http://www.fedoraproject.org/wiki/Eclipse
     - http://sourceware.org/eclipse/
   - integrate w/ http://www.easyeclipse.org/site/home/
+
+WTP
+  - dtd validation
+    org.eclipse.wst.dtd.core.internal.validation.DTDValidator
+  - html validation
+  - javascript code completion
+  - xsd validation
+    org.eclipse.wst.xsd.core.internal.validation.XSDValidator
+  - wsdl validation
+    org.eclipse.wst.wsdl.validation.WSDLValidator
+  Other
+    - supports default css file?  additional code completion w/ this set?
+
+JST
+  jsp
+    - <%%>, <%=%> code completion
+    - <%@ page import="javax." %> completion
+    - <jsp: completion, with attribute name completion
+    - taglib completion (<core:<c-x><c-u>), including attribute name completion
 
 Python
   - when adding new method for a class, auto add self as first parameter.

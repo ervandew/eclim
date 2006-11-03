@@ -13,26 +13,6 @@
         Create installer
         <ul>
           <li>Verify jdk, vim, and eclipse versions.</li>
-          <li>
-            Extract vim files according to platform (w/ user override option).
-          </li>
-          <li>Stop eclim.</li>
-          <li>Prompt for optional backup of previous eclim plugin.</li>
-          <li>Extract new eclim plugin to eclipse.</li>
-          <li>
-            Install / update window's service (keep linux init.d script as a
-            manual step, since it shouldn't need to be updated often and will
-            contain user defined values).<br/>
-            http://support.microsoft.com/kb/q137890/<br/>
-            ftp://ftp.microsoft.com/bussys/winnt/winnt-public/reskit/nt40/i386/srvany_x86.exe
-          </li>
-          <li>
-            When eclim has additional eclipse plugins (support for third party
-            provided functionality), allow user to choose which plugins to
-            install.  Validate third party plugin versions and maybe automate
-            installation or upgrading of the dependent third party plugins for
-            the user.
-          </li>
         </ul>
       </action>
     </actions>
@@ -191,11 +171,6 @@
           </li>
           <li>
             XSLT: <a href="http://eclipsexslt.sourceforge.net/">eclipsexslt</a>
-          </li>
-          <li>
-            <a href="http://eclipse.org/webtools/index.html">
-              Eclipse web tools platform
-            </a>.
           </li>
           <li>
             <a href="http://www.eclipse.org/xsd">Eclipse XSD</a>.
