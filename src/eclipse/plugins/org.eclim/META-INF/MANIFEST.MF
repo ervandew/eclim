@@ -38,6 +38,7 @@ Export-Package: org.eclim,
   org.jaxen,
   org.jaxen.dom,
   org.springframework.beans.factory.config,
+  org.w3c.tidy,
   groovy.lang
 Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.core.resources,
