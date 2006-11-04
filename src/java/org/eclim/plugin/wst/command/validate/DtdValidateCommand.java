@@ -18,7 +18,6 @@ package org.eclim.plugin.wst.command.validate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -35,10 +34,8 @@ import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
  * @version $Revision$
  */
 public class DtdValidateCommand
-  extends AbstractCommand
+  extends WstValidateCommand
 {
-  private static final String URI_PREFIX = "file://";
-
   /**
    * {@inheritDoc}
    */
@@ -50,7 +47,7 @@ public class DtdValidateCommand
 
       ArrayList results = new ArrayList();
       DTDValidator validator = new DTDValidator();
-      ValidationReport result = validator.validate(URI_PREFIX + file);
+      ValidationReport result = validator.validate(toUri(file));
       ValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){
         StringBuffer message = new StringBuffer(messages[ii].getMessage());
@@ -61,7 +58,7 @@ public class DtdValidateCommand
 
         results.add(new Error(
               message.toString(),
-              messages[ii].getUri().substring(URI_PREFIX.length()),
+              toFile(messages[ii].getUri()),
               messages[ii].getLineNumber(),
               messages[ii].getColumnNumber(),
               false//messages[ii].getSeverity() != ValidationMessage.SEV_HIGH
