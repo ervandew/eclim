@@ -137,6 +137,6 @@ public class TaglistCommand
       throw new RuntimeException("ctags error: " + process.getErrorMessage());
     }
 
-    return process.getResult();
+    return process.getResult().trim();
   }
 }
