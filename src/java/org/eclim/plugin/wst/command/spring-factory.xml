@@ -79,4 +79,32 @@
     </property>
   </bean>
 
+  <bean name="wsdl_validate"
+      class="org.eclim.plugin.wst.command.validate.WsdlValidateCommand">
+    <description>
+      Handles requests for wsdl file validation.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="xsd_validate"
+      class="org.eclim.plugin.wst.command.validate.XsdValidateCommand">
+    <description>
+      Handles requests for xsd file validation.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

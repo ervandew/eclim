@@ -284,22 +284,32 @@
       </action>
 
       <action dev="ervandew" type="add" context="Css">
-        Added css <a href="vim/css/complete.html">code completion</a>.<br/>
+        Added <a href="vim/css/complete.html">css code completion</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
       <action dev="ervandew" type="add" context="Dtd">
-        Added dtd <a href="vim/dtd/validate.html">validation</a>.<br/>
+        Added <a href="vim/dtd/validate.html">dtd validation</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
       <action dev="ervandew" type="add" context="Html">
-        Added html <a href="vim/html/complete.html">code completion</a>.<br/>
+        Added <a href="vim/html/complete.html">html code completion</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Wsdl">
+        Added <a href="vim/wsdl/validate.html">wsdl validation</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Xsd">
+        Added <a href="vim/xsd/validate.html">xsd validation</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
       <action dev="ervandew" type="add" context="Xml">
-        Added xml <a href="vim/xml/complete.html">code completion</a>.<br/>
+        Added <a href="vim/xml/complete.html">xml code completion</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
     </release>

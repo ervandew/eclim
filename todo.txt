@@ -101,10 +101,6 @@ Enhancements
 WTP
   - html validation
   - javascript code completion
-  - wsdl validation
-    org.eclipse.wst.wsdl.validation.WSDLValidator
-  - xsd validation
-    org.eclipse.wst.xsd.core.internal.validation.XSDValidator
   Other
     - supports default css file?  additional code completion w/ this set?
 
