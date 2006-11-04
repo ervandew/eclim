@@ -27,10 +27,10 @@
     \ '-filter vim -command dtd_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate() {{{
-" Validates the current ant file.
-function! eclim#dtd#validate#Validate ()
-  if !g:EclimDtdValidate || eclim#util#WillWrittenBufferClose()
+" Validate(on_save) {{{
+" Validates the current file.
+function! eclim#dtd#validate#Validate (on_save)
+  if a:on_save && (!g:EclimDtdValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 

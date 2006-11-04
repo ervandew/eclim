@@ -27,10 +27,10 @@
     \ '-filter vim -command ant_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate() {{{
-" Validates the current ant file.
-function! eclim#java#ant#validate#Validate ()
-  if !g:EclimAntValidate || eclim#util#WillWrittenBufferClose()
+" Validate(on_save) {{{
+" Validates the current file.
+function! eclim#java#ant#validate#Validate (onsave)
+  if a:on_save && (!g:EclimAntValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 

@@ -27,10 +27,10 @@
     \ '-filter vim -command wsdl_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate() {{{
-" Validates the current ant file.
-function! eclim#wsdl#validate#Validate ()
-  if !g:EclimWsdlValidate || eclim#util#WillWrittenBufferClose()
+" Validate(on_save) {{{
+" Validates the current file.
+function! eclim#wsdl#validate#Validate (on_save)
+  if a:on_save && (!g:EclimWsdlValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 

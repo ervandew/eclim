@@ -30,12 +30,12 @@ endif
 
 if g:EclimDtdValidate
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#dtd#validate#Validate()
+  autocmd BufWritePost <buffer> call eclim#dtd#validate#Validate(1)
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#dtd#validate#Validate()
+  command -nargs=0 -buffer Validate :call eclim#dtd#validate#Validate(0)
 endif
 " }}}
 

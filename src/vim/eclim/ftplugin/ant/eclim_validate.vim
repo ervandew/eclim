@@ -30,12 +30,12 @@ endif
 
 if g:EclimAntValidate
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate()
+  autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate(1)
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#java#ant#validate#Validate()
+  command -nargs=0 -buffer Validate :call eclim#java#ant#validate#Validate(0)
 endif
 " }}}
 

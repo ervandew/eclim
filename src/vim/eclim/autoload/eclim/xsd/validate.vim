@@ -27,10 +27,10 @@
     \ '-filter vim -command xsd_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate() {{{
-" Validates the current ant file.
-function! eclim#xsd#validate#Validate ()
-  if !g:EclimXsdValidate || eclim#util#WillWrittenBufferClose()
+" Validate(on_save) {{{
+" Validates the current file.
+function! eclim#xsd#validate#Validate (on_save)
+  if a:on_save && (!g:EclimXsdValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 

@@ -30,12 +30,12 @@ endif
 
 if g:EclimWsdlValidate
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#wsdl#validate#Validate()
+  autocmd BufWritePost <buffer> call eclim#wsdl#validate#Validate(1)
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#wsdl#validate#Validate()
+  command -nargs=0 -buffer Validate :call eclim#wsdl#validate#Validate(0)
 endif
 " }}}
 
