@@ -99,7 +99,6 @@ Enhancements
   - integrate w/ http://www.easyeclipse.org/site/home/
 
 WTP
-  - html validation
   - javascript code completion
   Other
     - supports default css file?  additional code completion w/ this set?

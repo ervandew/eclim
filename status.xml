@@ -298,6 +298,11 @@
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Html">
+        Added <a href="vim/html/validate.html">html validation</a>.<br/>
+        Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Wsdl">
         Added <a href="vim/wsdl/validate.html">wsdl validation</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
