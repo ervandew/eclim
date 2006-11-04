@@ -86,12 +86,20 @@ if !exists(':TlistToo')
     let g:tlist_sql_settings = 'sql;g:group / role;r:role;u:user;m:user;p:tablespace;z:tablespace;s:schema;t:table;v:view;q:sequence;f:function'
   endif
 
+  if !exists("g:tlist_tld_settings")
+    let g:tlist_tld_settings = 'tld;t:tag'
+  endif
+
   if !exists("g:tlist_webxml_settings")
     let g:tlist_webxml_settings = 'webxml;p:context-param;f:filter;i:filter-mapping;l:listener;s:servlet;v:servlet-mapping'
   endif
 
-  if !exists("g:tlist_tld_settings")
-    let g:tlist_tld_settings = 'tld;t:tag'
+  if !exists("g:tlist_wsdl_settings")
+    let g:tlist_wsdl_settings = 'wsdl;t:types;m:messages;p:ports;b:bindings'
+  endif
+
+  if !exists("g:tlist_xsd_settings")
+    let g:tlist_xsd_settings = 'xsd;e:elements;t:types'
   endif
 
 " taglisttoo.vim settings
@@ -165,6 +173,10 @@ else
       \ }
   endif
 
+  if !exists("g:tlist_tld_settings")
+    let g:tlist_tld_settings = {'t': 'tag'}
+  endif
+
   if !exists("g:tlist_webxml_settings")
     let g:tlist_webxml_settings = {
         \ 'p': 'context-param',
@@ -176,8 +188,17 @@ else
       \ }
   endif
 
-  if !exists("g:tlist_tld_settings")
-    let g:tlist_tld_settings = {'t': 'tag'}
+  if !exists("g:tlist_wsdl_settings")
+    let g:tlist_wsdl_settings = {
+        \ 't': 'types',
+        \ 'm': 'messages',
+        \ 'p': 'ports',
+        \ 'b': 'bindings'
+      \ }
+  endif
+
+  if !exists("g:tlist_xsd_settings")
+    let g:tlist_xsd_settings = {'e': 'elements', 't': 'types'}
   endif
 endif
 " }}}
