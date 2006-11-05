@@ -28,7 +28,8 @@
         <formic:step name="eclipse"/>
         <formic:step name="vim"/>
         <formic:step name="featureList">
-          <property name="features.xml" value="/resources/features.xml"/>
+          <property name="provider"
+              value="org.eclim.installer.step.FeatureProvider"/>
         </formic:step>
         <formic:step name="summary"/>
         <formic:step name="install"/>
