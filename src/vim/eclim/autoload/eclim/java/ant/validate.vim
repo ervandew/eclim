@@ -29,7 +29,7 @@
 
 " Validate(on_save) {{{
 " Validates the current file.
-function! eclim#java#ant#validate#Validate (onsave)
+function! eclim#java#ant#validate#Validate (on_save)
   if a:on_save && (!g:EclimAntValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
