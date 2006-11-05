@@ -121,9 +121,6 @@ See http://forrest.apache.org/docs/linking.html for more info
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
     </common>
-    <css label="Css" href="css/">
-      <complete label="Code Completion" href="complete.html" description="Code Completion"/>
-    </css>
     <ant label="Ant" href="java/ant/">
       <run label="Execution" href="run.html"
           description="Executing Ant"/>
@@ -134,8 +131,15 @@ See http://forrest.apache.org/docs/linking.html for more info
       <doc label="Documentation" href="doc.html"
           description="Ant Documentation Lookup"/>
     </ant>
+    <css label="Css" href="css/">
+      <complete label="Code Completion" href="complete.html" description="Code Completion"/>
+    </css>
+    <dtd label="Dtd" href="dtd/">
+      <complete label="Validation" href="validate.html" description="Validation"/>
+    </dtd>
     <html label="Html" href="html/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
+      <complete label="Validation" href="validate.html" description="Validation"/>
     </html>
     <java label="Java" href="java/">
       <classpath label="Classpath" href="classpath.html"
@@ -185,6 +189,9 @@ See http://forrest.apache.org/docs/linking.html for more info
       <doc label="Vim Doc" href="doc.html"
           description="Open Vim help for a keyword."/>
     </vim>
+    <wsdl label="Wsdl" href="wsdl/">
+      <complete label="Validation" href="validate.html" description="Validation"/>
+    </wsdl>
     <xml label="Xml" href="xml/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
       <definition label="Definition Lookup" href="definition.html"
@@ -193,6 +200,9 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Validation"/>
       <format label="Format" href="format.html" description="Format"/>
     </xml>
+    <xsd label="Xsd" href="xsd/">
+      <complete label="Validation" href="validate.html" description="Validation"/>
+    </xsd>
   </vim>
 
   <external-refs>

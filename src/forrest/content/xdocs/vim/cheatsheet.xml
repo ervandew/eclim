@@ -174,49 +174,19 @@
       </li>
     </ul>
 
-    <p><strong>Maven Commands</strong></p>
+    <p><strong>Dtd Commands</strong></p>
     <ul>
       <li>
-        <a href="java/maven/run.html#Maven"><strong>:Maven</strong></a>
-        [&lt;goal&gt; ...] -
-        Execute maven 1.x from the current project.
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current file.
       </li>
+    </ul>
+
+    <p><strong>Html Commands</strong></p>
+    <ul>
       <li>
-        <a href="java/maven/run.html#Mvn"><strong>:Mvn</strong></a>
-        [&lt;goal&gt; ...] -
-        Execute maven 2.x from the current project.
-      </li>
-      <li>
-        <a href="../guides/java/maven/maven_classpath.html#MavenRepo">
-          <strong>:MavenRepo</strong>
-        </a>
-        - Sets the necessary MAVEN_REPO classpath variable for maven's (1.x)
-        eclipse support.
-      </li>
-      <li>
-        <a href="../guides/java/maven/mvn_classpath.html#MvnRepo">
-          <strong>:MvnRepo</strong>
-        </a>
-        - Sets the necessary M2_REPO classpath variable for maven's (2.x)
-        eclipse support.
-      </li>
-      <li>
-        <a href="java/maven/dependency.html#MavenDependencySearch">
-          <strong>:MavenDependencySearch</strong>
-        </a>
-        &lt;artifact&gt; -
-        Searches online repository and opens a window with results that can be
-        added to the current project file by hitting &lt;Enter&gt; on a result.
-        Available when editing a maven 1.x <code>project.xml</code> file.
-      </li>
-      <li>
-        <a href="java/maven/dependency.html#MvnDependencySearch">
-          <strong>:MvnDependencySearch</strong>
-        </a>
-        &lt;artifact&gt; -
-        Searches online repository and opens a window with results that can be
-        added to the current pom file by hitting &lt;Enter&gt; on a result.
-        Available when editing a maven 2.x <code>pom.xml</code> file.
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current file.
       </li>
     </ul>
 
@@ -336,6 +306,52 @@
       </li>
     </ul>
 
+    <p><strong>Maven Commands</strong></p>
+    <ul>
+      <li>
+        <a href="java/maven/run.html#Maven"><strong>:Maven</strong></a>
+        [&lt;goal&gt; ...] -
+        Execute maven 1.x from the current project.
+      </li>
+      <li>
+        <a href="java/maven/run.html#Mvn"><strong>:Mvn</strong></a>
+        [&lt;goal&gt; ...] -
+        Execute maven 2.x from the current project.
+      </li>
+      <li>
+        <a href="../guides/java/maven/maven_classpath.html#MavenRepo">
+          <strong>:MavenRepo</strong>
+        </a>
+        - Sets the necessary MAVEN_REPO classpath variable for maven's (1.x)
+        eclipse support.
+      </li>
+      <li>
+        <a href="../guides/java/maven/mvn_classpath.html#MvnRepo">
+          <strong>:MvnRepo</strong>
+        </a>
+        - Sets the necessary M2_REPO classpath variable for maven's (2.x)
+        eclipse support.
+      </li>
+      <li>
+        <a href="java/maven/dependency.html#MavenDependencySearch">
+          <strong>:MavenDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        Searches online repository and opens a window with results that can be
+        added to the current project file by hitting &lt;Enter&gt; on a result.
+        Available when editing a maven 1.x <code>project.xml</code> file.
+      </li>
+      <li>
+        <a href="java/maven/dependency.html#MvnDependencySearch">
+          <strong>:MvnDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        Searches online repository and opens a window with results that can be
+        added to the current pom file by hitting &lt;Enter&gt; on a result.
+        Available when editing a maven 2.x <code>pom.xml</code> file.
+      </li>
+    </ul>
+
     <p><strong>Vim Commands</strong></p>
     <ul>
       <li>
@@ -394,6 +410,14 @@
       </li>
     </ul>
 
+    <p><strong>Wsdl Commands</strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current file.
+      </li>
+    </ul>
+
     <p><strong>Xml Commands</strong></p>
     <ul>
       <li>
@@ -416,6 +440,14 @@
       <li>
         <a href="xml/format.html#XmlFormat"><strong>:XmlFormat</strong></a>
         Reformats the current xml file.
+      </li>
+    </ul>
+
+    <p><strong>Xsd Commands</strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current file.
       </li>
     </ul>
 
