@@ -16,10 +16,23 @@
 
 # Sed script which processes the file ~/.eclimrc, to grab the nailgun port
 # number which the eclim client will use to connect to the eclimd server.
-# Usage: sed -f eclim.sed ~/.eclimrc
+# Usage: sed -n -f eclim.sed ~/.eclimrc
 
-# delete any line not containing nailgun.server.port
-/^\s*nailgun.server.port=/!d
+# delete any line not containing nailgun.server.*
+/^\s*nailgun.server.\(.*\)=/!d
 
-# grab the port number
-s/^\s*nailgun.server.port=\s*\(.*\)\s*/\1/
+# remove all leading spaces.
+s/^\s\+//g
+
+# block to process portions spanning across lines.
+H
+${
+  g
+  # remove line continuation chars.
+  s/\\\s*//g
+  # remove all new line characters
+  s/\n/ /g
+  # convert properties to nailgun arguments.
+  s/nailgun.server.\(\w*\)\s*=\s*\(\w*\)\s*/ --nailgun-\1 \2/g
+  p
+}
