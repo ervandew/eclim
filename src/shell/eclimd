@@ -17,7 +17,7 @@
 # Author: Eric Van Dewoestine
 
 CURPATH=`dirname $0`
-if [[ $CURPATH != $PWD* ]] ; then
+if [[ $CURPATH != '/'* ]] ; then
   CURPATH=$PWD/$CURPATH
 fi
 
