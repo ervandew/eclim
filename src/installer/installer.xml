@@ -21,7 +21,6 @@
   <target name="installer">
     <formic:installer property="install.complete"
         resources="resources.install" steps="resources.steps">
-      <!-- main path -->
       <formic:path name="main">
         <formic:step name="welcome"/>
         <formic:step name="license"/>
@@ -31,9 +30,19 @@
           <property name="provider"
               value="org.eclim.installer.step.FeatureProvider"/>
         </formic:step>
+        <formic:branch path="branch_requirements">
+          <istrue value="featureList.wst"/>
+        </formic:branch>
         <formic:step name="summary"/>
         <formic:step name="install"/>
         <formic:step name="finished"/>
+      </formic:path>
+
+      <formic:path name="branch_requirements">
+        <formic:step name="requirements">
+          <property name="provider"
+              value="org.eclim.installer.step.RequirementProvider"/>
+        </formic:step>
       </formic:path>
     </formic:installer>
   </target>
@@ -78,7 +87,8 @@
     <!-- install vim plugins -->
     <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}"/>
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
-        token="&quot;$${vim.eclim.home}&quot;" value="let g:EclimHome = '${eclim.home}'"/>
+        token="&quot;$${vim.eclim.home}&quot;"
+        value="let g:EclimHome = '${eclim.home}'"/>
   </target>
 
   <!--
