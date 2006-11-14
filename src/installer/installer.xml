@@ -71,7 +71,7 @@
       </then>
       <else>
         <!--
-          use exec with native tar since ant untar does not preserver
+          use exec with native tar since ant untar does not preserve
           permissions
         -->
         <exec executable="tar" failonerror="true"
