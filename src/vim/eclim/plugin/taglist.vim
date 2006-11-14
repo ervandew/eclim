@@ -82,6 +82,10 @@ if !exists(':TlistToo')
     let g:tlist_jproperties_settings = 'jproperties;p:property'
   endif
 
+  if !exists("g:tlist_log4j_settings")
+    let g:tlist_log4j_settings = 'log4j;a:appender;c:category;l:logger;r:root'
+  endif
+
   if !exists("g:tlist_spring_settings")
     let g:tlist_spring_settings = 'spring;i:import;a:alias;b:bean'
   endif
@@ -159,6 +163,15 @@ else
 
   if !exists("g:tlist_jproperties_settings")
     let g:tlist_jproperties_settings = {'p': 'property'}
+  endif
+
+  if !exists("g:tlist_log4j_settings")
+    let g:tlist_log4j_settings = {
+        \ 'a': 'appender',
+        \ 'c': 'category',
+        \ 'l': 'logger',
+        \ 'r': 'root',
+      \ }
   endif
 
   if !exists("g:tlist_spring_settings")
