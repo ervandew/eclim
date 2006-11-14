@@ -35,6 +35,9 @@
   if !exists("g:TreeActionHighlight")
     let g:TreeActionHighlight = "Statement"
   endif
+  if !exists("g:TreeExcludesList")
+    let g:TreeExcludesList = []
+  endif
 " }}}
 
 " Script Variables {{{
@@ -573,10 +576,7 @@ function eclim#tree#Refresh ()
   call cursor(start + 1, ccnum)
 
   " merge in any dirs that have been added
-  let contents = split(eclim#util#Globpath(escape(startpath, ','), '*'), '\n')
-  if b:view_hidden
-    let contents = split(eclim#util#Globpath(escape(startpath, ','), '.*'), '\n') + contents
-  endif
+  let contents = s:ListDir(startpath)
   let contents = s:NormalizeDirs(contents)
   let indent = s:GetChildIndent(start)
   let lnum = line('.')
@@ -675,10 +675,7 @@ function s:ExpandDir ()
     return
   endif
 
-  let contents = split(eclim#util#Globpath(escape(dir, ','), '*'), '\n')
-  if b:view_hidden
-    let contents = split(eclim#util#Globpath(escape(dir, ','), '.*'), '\n') + contents
-  endif
+  let contents = s:ListDir(dir)
   let contents = s:NormalizeDirs(contents)
 
   let dirs = filter(copy(contents), 'isdirectory(v:val)')
@@ -789,6 +786,29 @@ function s:FoldDir ()
   let end = eclim#tree#GetLastChildPosition()
 
   exec start . ',' . end . 'fold'
+endfunction " }}}
+
+" ListDir(dir) {{{
+function s:ListDir (dir)
+  let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
+  if b:view_hidden
+    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '.*'), '\n') + contents
+  endif
+
+  if !b:view_hidden && len(g:TreeExcludesList) > 0
+    let index = 0
+    for result in contents
+      for exclude in g:TreeExcludesList
+        if result =~ exclude
+          call remove(contents, index)
+          let index -= 1
+        endif
+      endfor
+      let index += 1
+    endfor
+  endif
+
+  return contents
 endfunction " }}}
 
 " GetIndent() {{{
