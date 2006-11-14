@@ -31,6 +31,10 @@ if !exists('g:EclimAntCompilerAdditionalErrorFormat')
   let g:EclimAntCompilerAdditionalErrorFormat = ''
 endif
 
+if !exists('g:EclimAntErrorFormat')
+  let g:EclimAntErrorFormat = '\%A%f:%l:\ %m,'
+endif
+
 CompilerSet makeprg=ant\ -find\ build.xml\ $*
 
 " The two entries before the last one, are for catching ant build file names
@@ -57,11 +61,12 @@ exec 'CompilerSet errorformat=' .
   \ '\%+A%.%#[cactus]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
+  \ '\%A%.%#\ ERROR\ %.%#\ line\ %l\ in\ file:\ %.%f%.:\ %m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
   \ '\%A%.%#[exec]\ %f:%l:%c:\ %m,' .
   \ '\%A%.%#[exec]\ %f:%l:\ %m,' .
   \ '\%A%f:%l:%c:\ %m,' .
-  \ '\%A%f:%l:\ %m,' .
+  \ g:EclimAntErrorFormat .
   \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker
