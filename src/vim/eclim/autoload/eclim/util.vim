@@ -309,14 +309,20 @@ function! eclim#util#Glob (expr)
   return result
 endfunction " }}}
 
-" Globpath(path, expr) {{{
+" Globpath(path, expr, [honor_wildignore]) {{{
 " Used to issue a globpath() handling any vim options that may otherwise disrupt
 " it.
-function! eclim#util#Globpath (path, expr)
-  let savewig = &wildignore
-  set wildignore=""
+function! eclim#util#Globpath (path, expr, ...)
+  if len(a:000) == 0
+    let savewig = &wildignore
+    set wildignore=""
+  endif
+
   let result = globpath(a:path, a:expr)
-  let &wildignore = savewig
+
+  if len(a:000) == 0
+    let &wildignore = savewig
+  endif
 
   return result
 endfunction " }}}

@@ -35,9 +35,6 @@
   if !exists("g:TreeActionHighlight")
     let g:TreeActionHighlight = "Statement"
   endif
-  if !exists("g:TreeExcludesList")
-    let g:TreeExcludesList = []
-  endif
 " }}}
 
 " Script Variables {{{
@@ -790,22 +787,11 @@ endfunction " }}}
 
 " ListDir(dir) {{{
 function s:ListDir (dir)
-  let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
-  if b:view_hidden
+  if !b:view_hidden
+    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*', 1), '\n')
+  else
+    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
     let contents = split(eclim#util#Globpath(escape(a:dir, ','), '.*'), '\n') + contents
-  endif
-
-  if !b:view_hidden && len(g:TreeExcludesList) > 0
-    let index = 0
-    for result in contents
-      for exclude in g:TreeExcludesList
-        if result =~ exclude
-          call remove(contents, index)
-          let index -= 1
-        endif
-      endfor
-      let index += 1
-    endfor
   endif
 
   return contents
