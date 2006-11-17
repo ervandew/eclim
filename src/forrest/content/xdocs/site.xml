@@ -121,16 +121,6 @@ See http://forrest.apache.org/docs/linking.html for more info
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
     </common>
-    <ant label="Ant" href="java/ant/">
-      <run label="Execution" href="run.html"
-          description="Executing Ant"/>
-      <complete label="Code Completion" href="complete.html"
-          description="Code Completion"/>
-      <validate label="Validation" href="validate.html"
-          description="Validation"/>
-      <doc label="Documentation" href="doc.html"
-          description="Ant Documentation Lookup"/>
-    </ant>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
     </css>
@@ -142,6 +132,26 @@ See http://forrest.apache.org/docs/linking.html for more info
       <complete label="Validation" href="validate.html" description="Validation"/>
     </html>
     <java label="Java" href="java/">
+      <ant label="Ant" href="ant/">
+        <run label="Execution" href="run.html"
+            description="Executing Ant"/>
+        <complete label="Code Completion" href="complete.html"
+            description="Code Completion"/>
+        <validate label="Validation" href="validate.html"
+            description="Validation"/>
+        <doc label="Documentation" href="doc.html"
+            description="Ant Documentation Lookup"/>
+      </ant>
+      <log4j label="Log4j" href="log4j/">
+        <validate label="Validation" href="validate.html"
+            description="Validation"/>
+      </log4j>
+      <maven label="Maven" href="maven/">
+        <run label="Execution" href="run.html"
+            description="Executing Maven"/>
+        <dependency label="Dependencies" href="dependency.html"
+            description="Maven Dependencies"/>
+      </maven>
       <classpath label="Classpath" href="classpath.html"
           description="Editing your project's classpath"/>
       <source label="Source Code Validation" href="source.html"
@@ -177,12 +187,6 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
-    <maven label="Maven" href="java/maven/">
-      <run label="Execution" href="run.html"
-          description="Executing Maven"/>
-      <dependency label="Dependencies" href="dependency.html"
-          description="Maven Dependencies"/>
-    </maven>
     <vim label="Vim Script" href="vim/">
       <find label="Vim Find" href="find.html"
           description="Find Vim declaration or references of functions and global variables."/>

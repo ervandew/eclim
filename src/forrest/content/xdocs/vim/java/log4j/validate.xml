@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Log4j File Validation</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      When editing a log4j xml file eclim will default to validating the file
+      when it is written.  Any errors will be added to the current window's
+      location list (:help location-list) and their corresponding line number
+      noted via Vim's sign functionality.
+    </p>
+    <p>
+      Eclim also combines the above validation with
+      <a href="../../xml/validate.html">xml validation</a> to validate
+      that the file is well formed.
+    </p>
+    <p>
+      If you do not want your log4j files validated automatically when saved, you
+      can set the
+      <a href="#EclimLog4jValidate">g:EclimLog4jValidate</a> variable described in
+      the configuration section below.
+    </p>
+    <anchor id="Validate"/>
+    <p>
+      Whether or not auto validation has been enabled, eclim also exposes the
+      following command for manually executing the validation of the file:<br/>
+      <strong>:Validate</strong>
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimLog4jValidate"/>
+        <strong>g:EclimLog4jValidate</strong> (Default: 1)<br/>
+        If set to 0, disables validation when saving the file.
+      </li>
+    </ul>
+  </body>
+</document>

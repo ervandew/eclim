@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/ant/validate.html
+"   see http://eclim.sourceforge.net/vim/java/log4j/validate.html
 "
 " License:
 "
@@ -23,18 +23,18 @@
 " }}}
 
 " Global Variables {{{
-if !exists("g:EclimAntValidate")
-  let g:EclimAntValidate = 1
+if !exists("g:EclimLog4jValidate")
+  let g:EclimLog4jValidate = 1
 endif
 " }}}
 
-if g:EclimAntValidate
+if g:EclimLog4jValidate
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate(1)
+  autocmd BufWritePost <buffer> call eclim#java#log4j#validate#Validate(1)
 endif
 
 " Command Declarations {{{
-command! -nargs=0 -buffer Validate :call eclim#java#ant#validate#Validate(0)
+command! -nargs=0 -buffer Validate :call eclim#java#log4j#validate#Validate(0)
 " }}}
 
 " vim:ft=vim:fdm=marker

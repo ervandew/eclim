@@ -306,6 +306,14 @@
       </li>
     </ul>
 
+    <p><strong>Log4j Commands</strong></p>
+    <ul>
+      <li>
+        <a href="java/log4j/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current log4j xml configuration file.
+      </li>
+    </ul>
+
     <p><strong>Maven Commands</strong></p>
     <ul>
       <li>

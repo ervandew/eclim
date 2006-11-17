@@ -26,13 +26,21 @@ runtime! syntax/xml.vim
 
 syn cluster xmlTagHook add=log4jElement
 
-syn keyword log4jElement display log4j configuration
 syn keyword log4jElement display renderer appender category logger root categoryFactory
-syn keyword log4jElement display errorHandler param layout filter appender-ref
-syn keyword log4jElement display root-ref logger-ref
+syn keyword log4jElement display errorHandler param layout filter
 syn keyword log4jElement display priority level
-syn keyword log4jElement display eventSet event
-syn keyword log4jElement display message NDC throwable locationInfo
+
+syn match log4jElement /appender-ref/
+syn match log4jElement /logger-ref/
+syn match log4jElement /root-ref/
+
+syn match log4jElement /log4j:configuration/
+syn match log4jElement /log4j:event/
+syn match log4jElement /log4j:eventSet/
+syn match log4jElement /log4j:message/
+syn match log4jElement /log4j:NDC/
+syn match log4jElement /log4j:throwable/
+syn match log4jElement /log4j:locationInfo/
 
 hi def link log4jElement Statement
 

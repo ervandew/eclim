@@ -113,6 +113,13 @@
     </ul>
 
     <p>
+      <strong>Log4j Integration</strong>
+    </p>
+    <ul>
+      <li>Validation of log4j xml files.</li>
+    </ul>
+
+    <p>
       <strong>Maven Integration</strong>
     </p>
     <ul>
