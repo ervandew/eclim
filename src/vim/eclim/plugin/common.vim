@@ -41,6 +41,10 @@ if !exists(":EditRelative")
   command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
     \ EditRelative :call eclim#common#OpenRelative('edit', '<args>')
 endif
+if !exists(":ReadRelative")
+  command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
+    \ ReadRelative :call eclim#common#OpenRelative('read', '<args>')
+endif
 if !exists(":DiffLastSaved")
   command DiffLastSaved :call eclim#common#DiffLastSaved()
 endif

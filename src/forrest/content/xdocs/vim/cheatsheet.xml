@@ -538,6 +538,12 @@
         supports one file at a time.
       </li>
       <li>
+        <a href="common/util.html#ReadRelative"><strong>:ReadRelative</strong></a>
+        file -
+        Behaves like <strong>:SplitRelative</strong>, but issues a 'read' and only
+        supports one file at a time.
+      </li>
+      <li>
         <a href="common/util.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.

@@ -181,8 +181,8 @@
         :Split / :Tabnew supporting multiple files.
       </li>
       <li>
-        :SplitRelative / :EditRelative / TabnewRelative for opening a file relative to the
-        current one.
+        :SplitRelative / :EditRelative / :TabnewRelative / :ReadRelative for
+        opening / reading a file relative to the current one.
       </li>
       <li>
         Commands to locate a project, workspace, or current file relative file

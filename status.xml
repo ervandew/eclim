@@ -303,6 +303,18 @@
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Log4j">
+        Added
+        <a href="vim/java/log4j/validate.html">log4j xml file validation</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vim">
+        Added
+        <a href="vim/common/util.html#ReadRelative">
+          <strong>:ReadRelative</strong>
+        </a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Wsdl">
         Added <a href="vim/wsdl/validate.html">wsdl validation</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.

@@ -99,6 +99,12 @@
         supports one file at a time.
       </li>
       <li>
+        <anchor id="ReadRelative"/>
+        <strong>:ReadRelative</strong> file -
+        Like <strong>:SplitRelative</strong> except issues a 'read' and only
+        supports one file at a time.
+      </li>
+      <li>
         <anchor id="DiffLastSaved"/>
         <strong>:DiffLastSaved</strong> -
         Performs a diffsplit with the last saved version of the currently

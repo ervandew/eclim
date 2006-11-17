@@ -19,7 +19,8 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
-  - log4j validation, check each package to see if it exists in user's classpath.
+  - for taglist, support universal marker tag:
+    |-- marker_name --|
 
   - Update :Settings and :Project settings to only grab jdt settings if jdt
     plugin is installed... same for pydev, etc.
