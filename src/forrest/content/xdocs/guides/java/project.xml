@@ -131,7 +131,7 @@
         /path/to/my_project/.classpath in Vim.
       </p>
       <source>
-        vim /path/to/my_project/src/java/.classpath
+        vim /path/to/my_project/.classpath
       </source>
       <p>
         To add the source directory simply execute the following
