@@ -4,4 +4,5 @@
 -->
 <antlib xmlns:current="ant:current">
   <taskdef name="installexcludes" classname="org.eclim.installer.ant.InstallExcludesTask"/>
+  <taskdef name="shutdown" classname="org.eclim.installer.ant.ShutdownTask"/>
 </antlib>

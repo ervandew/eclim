@@ -58,7 +58,7 @@
         value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
 
     <!-- shutdown any running instance of eclimd -->
-    <antcall target="shutdown"/>
+    <eclim:shutdown/>
 
     <!-- remove old files -->
     <antcall target="clean"/>
@@ -106,58 +106,6 @@
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;"
         value="let g:EclimHome = '${eclim.home}'"/>
-  </target>
-
-  <!--
-    - Task to shutdown eclimd.
-    -->
-  <target name="shutdown">
-    <!-- discover old install location -->
-    <path id="eclim.plugin">
-      <dirset dir="${eclipse.home}/plugins" includes="org.eclim_*"/>
-    </path>
-    <property name="eclim.plugin" refid="eclim.plugin"/>
-
-    <!-- call shutdown -->
-    <trycatch property="message">
-      <try>
-        <if>
-          <os family="windows"/>
-          <then>
-            <if>
-              <available file="${eclim.plugin}/bin/eclim.bat"/>
-              <then>
-                <exec executable="${eclim.plugin}/bin/eclim.bat" failonerror="false">
-                  <arg line="-command shutdown"/>
-                </exec>
-              </then>
-            </if>
-          </then>
-          <else>
-            <if>
-              <available file="${eclim.plugin}/bin/eclim"/>
-              <then>
-                <exec executable="${eclim.plugin}/bin/eclim" failonerror="false">
-                  <arg line="-command shutdown"/>
-                </exec>
-              </then>
-            </if>
-          </else>
-        </if>
-      </try>
-      <catch>
-        <echo>Error attempting to shut down previous eclimd instance: ${message}</echo>
-      </catch>
-    </trycatch>
-
-    <!-- wait for server to shutdown -->
-    <!-- FIXME: depends on default port. -->
-    <waitfor maxwait="10" maxwaitunit="second">
-      <not>
-        <socket server="localhost" port="9091"/>
-      </not>
-    </waitfor>
-    <sleep seconds="3"/>
   </target>
 
   <!--
