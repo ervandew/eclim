@@ -19,7 +19,7 @@
     <mkdir dir="build/formic/dist"/>
     <mkdir dir="build/formic/classes"/>
 
-    <!-- compile sample install steps and helper classes -->
+    <!-- compile install steps and helper classes -->
     <javac destdir="build/formic/classes" debug="on" optimize="false">
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
@@ -28,9 +28,8 @@
 
     <!-- create jar with sample classes -->
     <jar jarfile="build/formic/dist/eclim.jar">
-      <fileset dir="build/formic/classes">
-        <include name="**/*.class"/>
-      </fileset>
+      <fileset dir="build/formic/classes" includes="**/*.class"/>
+      <fileset dir="src/installer/java" includes="**/*.xml"/>
     </jar>
 
     <!-- prepare installer's build.properties -->

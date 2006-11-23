@@ -1,0 +1,11 @@
+org.eclim.maven_${eclim.version}/**/*
+org.eclim.maven_${eclim.version}
+eclim/autoload/eclim/java/maven/*.vim
+eclim/autoload/eclim/java/maven
+eclim/compiler/eclim_maven.vim
+eclim/compiler/eclim_mvn.vim
+eclim/ftplugin/maven_project/*.vim
+eclim/ftplugin/maven_project
+eclim/ftplugin/mvn_pom/*.vim
+eclim/ftplugin/mvn_pom
+eclim/plugin/maven.vim

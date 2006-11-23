@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<antlib xmlns:current="ant:current">
+  <taskdef name="installexcludes" classname="org.eclim.installer.ant.InstallExcludesTask"/>
+</antlib>

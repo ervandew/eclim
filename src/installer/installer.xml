@@ -6,8 +6,9 @@
 <!--
   - Installer build file that is executed upon installation.
   -->
-<project xmlns:formic="antlib:org.formic.ant"
-    name="eclim_installer" default="installer">
+<project name="eclim_installer" default="installer"
+    xmlns:formic="antlib:org.formic.ant"
+    xmlns:eclim="antlib:org.eclim.installer.ant">
 
   <property file="build.properties"/>
 
@@ -62,22 +63,36 @@
     <!-- remove old files -->
     <antcall target="clean"/>
 
+    <!-- generate excludes file based on components user chose not to install -->
+    <touch file="install.excludes"/>
+    <eclim:installexcludes destfile="install.excludes"/>
+
     <!-- install eclipse plugins -->
     <if>
       <os family="windows"/>
       <then>
         <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclipse.home}/plugins"/>
+            dest="${eclipse.home}/plugins">
+          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
+        </unzip>
       </then>
       <else>
         <!--
           use exec with native tar since ant untar does not preserve
           permissions
-        -->
-        <exec executable="tar" failonerror="true"
-            dir="${eclipse.home}/plugins">
-          <arg line="-zxf ${basedir}/org.eclim_${eclim.version}.tar.gz"/>
-        </exec>
+          -->
+        <untar src="${basedir}/org.eclim_${eclim.version}.tar.gz"
+            dest="${eclipse.home}/plugins" compression="gzip">
+          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
+        </untar>
+        <chmod perm="755">
+          <fileset dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
+            <include name="eclim"/>
+            <include name="eclimd"/>
+            <include name="native/**/*"/>
+          </fileset>
+        </chmod>
+
         <exec executable="make" failonerror="true"
             dir="${eclim.home}/src/nailgun"/>
         <move file="${eclim.home}/src/nailgun/ng" todir="${eclim.home}/bin"/>
@@ -85,7 +100,9 @@
     </if>
 
     <!-- install vim plugins -->
-    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}"/>
+    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
+      <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
+    </unjar>
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;"
         value="let g:EclimHome = '${eclim.home}'"/>
@@ -102,19 +119,36 @@
     <property name="eclim.plugin" refid="eclim.plugin"/>
 
     <!-- call shutdown -->
-    <if>
-      <os family="windows"/>
-      <then>
-        <exec executable="${eclim.plugin}/bin/eclim.bat" failonerror="false">
-          <arg line="-command shutdown"/>
-        </exec>
-      </then>
-      <else>
-        <exec executable="${eclim.plugin}/bin/eclim" failonerror="false">
-          <arg line="-command shutdown"/>
-        </exec>
-      </else>
-    </if>
+    <trycatch property="message">
+      <try>
+        <if>
+          <os family="windows"/>
+          <then>
+            <if>
+              <available file="${eclim.plugin}/bin/eclim.bat"/>
+              <then>
+                <exec executable="${eclim.plugin}/bin/eclim.bat" failonerror="false">
+                  <arg line="-command shutdown"/>
+                </exec>
+              </then>
+            </if>
+          </then>
+          <else>
+            <if>
+              <available file="${eclim.plugin}/bin/eclim"/>
+              <then>
+                <exec executable="${eclim.plugin}/bin/eclim" failonerror="false">
+                  <arg line="-command shutdown"/>
+                </exec>
+              </then>
+            </if>
+          </else>
+        </if>
+      </try>
+      <catch>
+        <echo>Error attempting to shut down previous eclimd instance: ${message}</echo>
+      </catch>
+    </trycatch>
 
     <!-- wait for server to shutdown -->
     <!-- FIXME: depends on default port. -->
