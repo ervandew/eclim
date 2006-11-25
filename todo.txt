@@ -1,3 +1,8 @@
+Upgrade
+  - spring from 1.2.8 to 2.0
+  - commons-lang from 2.1 to 2.2
+  - commons-logging from 1.0.4 to 1.1
+
 System
   - update backup script to pull down nightly wiki tarballs.
 
@@ -19,6 +24,8 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
+  - honor wildignore on all custom file completion functions.
+  - add web xml validation of classnames.
   - for taglist, support universal marker tag:
     |-- marker_name --|
 
