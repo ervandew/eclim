@@ -68,13 +68,37 @@ function! eclim#project#ProjectCreate (args)
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
-  " backwards compatability (default to java nature)
-  if command !~ '-n '
+  " BEGIN: backwards compatability
+  let index = index(args, '-p')
+  if index != -1
+    if index + 1 >= len(args)
+      call eclim#util#EchoError('No argument for "-p" supplied.')
+      return
+    endif
+    let command .= ' ' . args[index] . ' "' . args[index + 1] . '"'
+    call remove(args, index, index + 1)
+  endif
+
+  let index = index(args, '-n')
+  if index != -1
+    if index + 1 >= len(args)
+      call eclim#util#EchoError('No argument for "-n" supplied.')
+      return
+    endif
+    if command !~ '-n'
+      let command .= ' ' . args[index] . ' ' . args[index + 1]
+    endif
+    call remove(args, index, index + 1)
+  else
     let command .= ' -n java'
+  endif
+
+  if command !~ '-d '
     if len(args) > 1
       let command .= ' -d ' . join(args[1:], ',')
     endif
   endif
+  " END: backwards compatability
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'
@@ -417,7 +441,7 @@ endfunction " }}}
 " CommandCompleteProjectCreateOptions(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for ProjectCreate options.
 function! s:CommandCompleteProjectCreateOptions (argLead, cmdLine, cursorPos)
-  let options = ['-n', '-d']
+  let options = ['-n', '-d', '-p']
   if a:cmdLine =~ '\s-n\>'
     call remove(options, 0)
   endif

@@ -282,6 +282,13 @@
         New graphical installer for easing the installation and upgrading
         procedure.
       </action>
+      <action dev="ervandew" type="update" context="Eclim">
+        <a href="vim/common/project.html#ProjectCreate">
+          <strong>:ProjectCreate</strong>
+        </a>
+        now supports optional -p argument for specifying the project name to
+        use.
+      </action>
 
       <action dev="ervandew" type="add" context="Css">
         Added <a href="vim/css/complete.html">css code completion</a>.<br/>

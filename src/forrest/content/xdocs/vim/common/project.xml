@@ -46,14 +46,17 @@
       <li>
         <anchor id="ProjectCreate"/>
         <strong>:ProjectCreate</strong>
-        <!-- &lt;folder&gt; -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
-        &lt;folder&gt; [-d &lt;project_dependency&gt; ...]
+        <!-- &lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
+        &lt;folder&gt; [-p &lt;project_name&gt; -d &lt;project_dependency&gt; ...]
         <br/>
-        Creates a project at the supplied folder name.  With the supplied space
+        Creates a project at the supplied folder name.  You may optionally
+        specify the name of the project via the -p argument.  If ommitted, eclim
+        will use the last segment of the project's path as the project name.
+        <!-- With the supplied space
         delimited project natures.  Project natures are used by Eclipse plugins
         to tag the project and add specific behavior based on that tag.
         Eclim supports command completion of the project nature names so you
-        don't have to remember them.
+        don't have to remember them.-->
         <br/>
         Also, if the the project depends on other projects, you can
         specify the names of those projects separated by space using the -d
@@ -65,6 +68,7 @@
         <source>
           :ProjectCreate ~/projects/a_project
           :ProjectCreate ~/projects/a_project -d another_project yet_another_project
+          :ProjectCreate ~/projects/a_project -p My\ Project\ Name
         </source>
       </li>
       <li>

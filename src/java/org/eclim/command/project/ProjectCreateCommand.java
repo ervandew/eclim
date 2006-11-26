@@ -50,7 +50,9 @@ public class ProjectCreateCommand
         folder = folder.substring(0, folder.length() - 1);
       }
 
-      String name = FilenameUtils.getBaseName(folder).replace(' ', '_');
+      String name = _commandLine.hasOption(Options.PROJECT_OPTION) ?
+        _commandLine.getValue(Options.PROJECT_OPTION) :
+        FilenameUtils.getBaseName(folder).replace(' ', '_');
       logger.debug("Creating project '{}' at folder '{}'", name, folder);
 
       ProjectManagement.create(name, folder, _commandLine);
