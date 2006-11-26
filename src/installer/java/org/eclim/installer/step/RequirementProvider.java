@@ -18,6 +18,10 @@ package org.eclim.installer.step;
 import java.io.File;
 import java.io.FileFilter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.io.FilenameUtils;
 
 import org.formic.Installer;
@@ -39,7 +43,17 @@ import org.formic.wizard.step.RequirementsValidationStep;
 public class RequirementProvider
   implements RequirementsValidationStep.RequirementProvider
 {
-  private static final String WST = "wst";
+  private static final Map REQUIREMENTS = new HashMap();
+  static {
+    REQUIREMENTS.put("ant", new String[]{"org.eclipse.ant.ui"});
+    REQUIREMENTS.put("jdt", new String[]{"org.eclipse.jdt.ui"});
+    REQUIREMENTS.put("wst", new String[]{
+      "org.eclipse.wst.css.ui",
+      "org.eclipse.wst.html.ui",
+      "org.eclipse.wst.sse.ui",
+      "org.eclipse.wst.xml.ui",
+    });
+  }
 
   private GuiForm guiForm;
   private ConsoleForm consoleForm;
@@ -50,27 +64,41 @@ public class RequirementProvider
    */
   public Requirement[] getRequirements ()
   {
-    Requirement[] requirements = new Requirement[1];
-    requirements[0] = new Requirement(WST);
-    return requirements;
+    ArrayList requirements = new ArrayList();
+    String[] features = Installer.getContext().getKeysByPrefix("featureList");
+    for (int ii = 0; ii < features.length; ii++){
+      Boolean value = (Boolean)Installer.getContext().getValue(features[ii]);
+      String name = features[ii].substring(features[ii].indexOf('.') + 1);
+      if(value.booleanValue() && REQUIREMENTS.containsKey(name)){
+        requirements.add(new Requirement(name));
+      }
+    }
+
+    return (Requirement[])
+      requirements.toArray(new Requirement[requirements.size()]);
   }
 
   /**
    * {@inheritDoc}
    * @see RequirementProvider#validate(Requirement)
    */
-  public int validate (Requirement requirement)
+  public Status validate (Requirement requirement)
   {
     String eclipseHome = (String)
       Installer.getContext().getValue("eclipse.home");
     String plugins = FilenameUtils.concat(eclipseHome, "plugins");
-    if(WST.equals(requirement.getKey())){
+
+    String[] list = (String[])REQUIREMENTS.get(requirement.getKey());
+    for(int ii = 0; ii < list.length; ii++){
       File[] results =
-        new File(plugins).listFiles(new PluginFileFilter("org.eclipse.wst."));
-      return results != null && results.length > 0 ? OK : FAIL;
+        new File(plugins).listFiles(new PluginFileFilter(list[ii]));
+      if(results.length == 0){
+        return new Status(
+            FAIL, Installer.getString("plugin.not.found", list[ii]));
+      }
     }
 
-    return OK;
+    return OK_STATUS;
   }
 
   /**
