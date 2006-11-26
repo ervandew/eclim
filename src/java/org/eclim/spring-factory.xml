@@ -49,6 +49,7 @@
 
   <bean class="org.eclim.preference.PreferenceFactory"
       factory-method="addPreferences">
+    <constructor-arg value="core"/>
     <constructor-arg>
       <value>
         General org.eclim.user.name

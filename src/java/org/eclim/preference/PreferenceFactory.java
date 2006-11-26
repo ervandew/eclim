@@ -29,13 +29,14 @@ public class PreferenceFactory
 {
   /**
    * Adds options via the supplied options string that contains new line
-   * seperated options in the form <code>name defaultValue regex</code>.
+   * separated options in the form <code>name defaultValue regex</code>.
    *
+   * @param _nature The project nature the options belong to.
    * @param _optionsString The options string.
    *
-   * @return Preferences
+   * @return The Preferences instance the options were added to.
    */
-  public static Preferences addOptions (String _optionsString)
+  public static Preferences addOptions (String _nature, String _optionsString)
   {
     Preferences preferences = Preferences.getInstance();
     String[] strings = StringUtils.split(_optionsString, '\n');
@@ -43,6 +44,7 @@ public class PreferenceFactory
       if(strings[ii].trim().length() > 0){
         String[] attrs = parseOptionAttributes(strings[ii]);
         Option option = new Option();
+        option.setNature(_nature);
         option.setPath(attrs[0]);
         option.setName(attrs[1]);
         option.setRegex(attrs[2]);
@@ -56,13 +58,15 @@ public class PreferenceFactory
 
   /**
    * Adds preferences via the supplied preferences string that contains new line
-   * seperated preferences in the form <code>name defaultValue regex</code>.
+   * separated preferences in the form <code>name defaultValue regex</code>.
    *
+   * @param _nature The project nature the preferences belong to.
    * @param _preferencesString The preferences string.
    *
-   * @return Preferences
+   * @return The Preferences instance the preferences were added to.
    */
-  public static Preferences addPreferences (String _preferencesString)
+  public static Preferences addPreferences (
+      String _nature, String _preferencesString)
   {
     Preferences preferences = Preferences.getInstance();
     String[] strings = StringUtils.split(_preferencesString, '\n');
@@ -70,6 +74,7 @@ public class PreferenceFactory
       if(strings[ii].trim().length() > 0){
         String[] attrs = parsePreferenceAttributes(strings[ii]);
         Preference preference = new Preference();
+        preference.setNature(_nature);
         preference.setPath(attrs[0]);
         preference.setName(attrs[1]);
         preference.setDefaultValue(attrs[2]);

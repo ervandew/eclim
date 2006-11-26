@@ -28,6 +28,13 @@ import org.eclipse.core.resources.IProject;
 public interface OptionHandler
 {
   /**
+   * Gets the nature that this handler supports.
+   *
+   * @return The project nature id.
+   */
+  public String getNature ();
+
+  /**
    * Gets the manage options as a Map.
    *
    * @return Map of option names to option values, or null if none.

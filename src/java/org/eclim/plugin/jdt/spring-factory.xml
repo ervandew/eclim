@@ -66,6 +66,7 @@
 
   <bean class="org.eclim.preference.PreferenceFactory"
       factory-method="addPreferences">
+    <constructor-arg value="org.eclipse.jdt.core.javanature"/>
     <constructor-arg>
       <value>
         JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)
@@ -80,6 +81,7 @@
 
   <bean class="org.eclim.preference.PreferenceFactory"
       factory-method="addOptions">
+    <constructor-arg value="org.eclipse.jdt.core.javanature"/>
     <constructor-arg>
       <value>
         JDT org.eclipse.jdt.core.compiler.source 1\.[2-5]
@@ -90,11 +92,10 @@
   <bean class="org.eclim.preference.Preferences"
       factory-method="addOptionHandler">
     <constructor-arg value="org.eclipse.jdt"/>
-    <constructor-arg ref="jdtOptionHandler"/>
+    <constructor-arg>
+      <bean class="org.eclim.plugin.jdt.preference.OptionHandler"/>
+    </constructor-arg>
   </bean>
-
-  <bean name="jdtOptionHandler"
-      class="org.eclim.plugin.jdt.preference.OptionHandler"/>
 
   <bean class="org.eclim.project.ProjectManagement"
       factory-method="addProjectManager">

@@ -33,12 +33,12 @@ public class Option
   public static final int PROJECT = 2;*/
 
   //private int scope;
+  private String nature;
   private String path;
   private String name;
   private String regex;
   private String description;
   private Pattern pattern;
-  private Category category;
 
   /**
    * Gets this option's scope.
@@ -59,6 +59,26 @@ public class Option
   {
     scope = _scope;
   }*/
+
+  /**
+   * Gets the nature for this instance.
+   *
+   * @return The nature.
+   */
+  public String getNature ()
+  {
+    return this.nature;
+  }
+
+  /**
+   * Sets the nature for this instance.
+   *
+   * @param nature The nature.
+   */
+  public void setNature (String nature)
+  {
+    this.nature = nature;
+  }
 
   /**
    * Get path.
@@ -151,25 +171,5 @@ public class Option
   public void setDescription (String _description)
   {
     this.description = Services.getMessage(_description);
-  }
-
-  /**
-   * Gets the option category.
-   *
-   * @return The category.
-   */
-  public Category getCategory ()
-  {
-    return category;
-  }
-
-  /**
-   * Sets the option category.
-   *
-   * @param _category The category.
-   */
-  public void setCategory (Category _category)
-  {
-    category = _category;
   }
 }

@@ -57,6 +57,7 @@ public class Preferences
 
   private static final String ECLIM_PREFIX = "org.eclim";
   private static final String NODE_NAME = "org.eclim";
+  private static final String CORE = "core";
 
   private static Preferences instance = new Preferences();
   private static Map optionHandlers = new HashMap();
@@ -155,12 +156,16 @@ public class Preferences
     Map allOptions = new HashMap();
     for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
       OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
-      allOptions.putAll(handler.getOptionsAsMap(_project));
+      String nature = handler.getNature();
+      if(CORE.equals(nature) || _project.getNature(nature) != null){
+        allOptions.putAll(handler.getOptionsAsMap(_project));
+      }
     }
 
     Map preferences = getPreferencesAsMap(_project);
     for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
       Option option = (Option)options.get(ii.next());
+      String nature = option.getNature();
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
@@ -199,8 +204,14 @@ public class Preferences
       }
 
       if(option != null){
-        OptionInstance instance = new OptionInstance(option, value);
-        results.add(instance);
+        String nature = option.getNature();
+        if (CORE.equals(nature) ||
+            _project == null ||
+            _project.getNature(nature) != null)
+        {
+          OptionInstance instance = new OptionInstance(option, value);
+          results.add(instance);
+        }
       }
     }
 
