@@ -1,19 +1,20 @@
 #!/bin/sh
 
 BACKUP_DIR=`dirname $0`
-BACKUP_DIR="$BACKUP_DIR/../backup"
+BACKUP_DIR="$BACKUP_DIR/../backup/eclim"
 
 if [ ! -d $BACKUP_DIR ]; then
   mkdir -p $BACKUP_DIR
 fi
 cd $BACKUP_DIR
 
-# backup cvs files
-rsync -av rsync://eclim.cvs.sourceforge.net/cvsroot/eclim/* .
-tar zcvf eclim-backup-cvs-`date +%Y%m%d`.tar.gz CVSROOT eclim
-rm -Rf CVSROOT eclim
+# backup svn files
+rsync -av eclim.svn.sourceforge.net::svn/eclim/* .
+tar zcvf ../eclim-backup-svn-`date +%Y%m%d`.tar.gz *
+
+cd -
+
+rm -rf $BACKUP_DIR
 
 # backup wiki data
 rsync -av ervandew@shell.sf.net:/home/users/e/er/ervandew/backup/* .
-
-cd -
