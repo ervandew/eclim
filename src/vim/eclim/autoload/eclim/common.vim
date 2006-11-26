@@ -223,7 +223,7 @@ function! eclim#common#CommandCompleteRelative (argLead, cmdLine, cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = len(args) > 1 ? args[len(args) - 1] : ""
 
-  let results = split(eclim#util#Glob(dir . '/' . argLead . '*'), '\n')
+  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, 'substitute(v:val, dir, "", "")')

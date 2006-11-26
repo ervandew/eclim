@@ -290,12 +290,14 @@ function! eclim#util#GetPathEntry (file)
   return 0
 endfunction " }}}
 
-" Glob(expr) {{{
+" Glob(expr, [honor_wildignore]) {{{
 " Used to issue a glob() handling any vim options that may otherwise disrupt
 " it.
-function! eclim#util#Glob (expr)
-  let savewig = &wildignore
-  set wildignore=""
+function! eclim#util#Glob (expr, ...)
+  if len(a:000) == 0
+    let savewig = &wildignore
+    set wildignore=""
+  endif
 
   let paths = split(expand(a:expr), '\n')
   if len(paths) == 1
@@ -304,7 +306,9 @@ function! eclim#util#Glob (expr)
     let result = join(paths, "\n")
   endif
 
-  let &wildignore = savewig
+  if len(a:000) == 0
+    let &wildignore = savewig
+  endif
 
   return result
 endfunction " }}}
@@ -773,7 +777,7 @@ endfunction " }}}
 function! eclim#util#CommandCompleteFile (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(eclim#util#Glob(argLead . '*'), '\n')
+  let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
@@ -786,7 +790,7 @@ endfunction " }}}
 function! eclim#util#CommandCompleteDir (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let results = split(eclim#util#Glob(argLead . '*'), '\n')
+  let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
   let index = 0
   for result in results
     if !isdirectory(result)
