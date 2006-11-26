@@ -14,7 +14,9 @@ tar zcvf ../eclim-backup-svn-`date +%Y%m%d`.tar.gz *
 
 cd -
 
-rm -rf $BACKUP_DIR
-
 # backup wiki data
+cd $BACKUP_DIR/..
 rsync -av ervandew@shell.sf.net:/home/users/e/er/ervandew/backup/* .
+cd -
+
+rm -rf $BACKUP_DIR
