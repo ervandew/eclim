@@ -9,12 +9,6 @@
 
   <todo>
     <actions priority="high">
-      <action context="installer" dev="ervandew">
-        Create installer
-        <ul>
-          <li>Verify jdk, vim, and eclipse versions.</li>
-        </ul>
-      </action>
     </actions>
 
     <actions priority="medium">
