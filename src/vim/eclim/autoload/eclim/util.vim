@@ -552,6 +552,7 @@ function! eclim#util#ShowCurrentError ()
   let col = col('.')
 
   let errornum = 0
+  let errorcol = 0
   let index = 0
 
   let locerrors = getloclist(0)
@@ -559,8 +560,9 @@ function! eclim#util#ShowCurrentError ()
   for error in qferrors + locerrors
     let index += 1
     if bufname(error.bufnr) == expand("%") && error.lnum == line
-      if errornum == 0 || col >= error.col
+      if errornum == 0 || (col >= error.col && error.col != errorcol)
         let errornum = index
+        let errorcol = error.col
       endif
     endif
   endfor
