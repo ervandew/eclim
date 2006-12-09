@@ -17,14 +17,30 @@
 # Author: Eric Van Dewoestine
 
 CURPATH=`dirname $0`
+
 if [[ $CURPATH != '/'* ]] ; then
   CURPATH=$PWD/$CURPATH
+fi
+
+# account for invocation ./eclimd
+if [[ $CURPATH = *'.' ]] ; then
+  CURPATH=`dirname $CURPATH`
 fi
 
 ECLIM_HOME=$(dirname $CURPATH)
 ECLIPSE_HOME=$(dirname $(dirname $ECLIM_HOME))
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME""
 SED=`which sed 2> /dev/null`
+
+# account for invocation ./bin/eclimd
+if [[ $ECLIM_HOME = *'.' ]] ; then
+  ECLIPSE_HOME=`dirname $ECLIPSE_HOME`
+  ECLIM_HOME=`dirname $ECLIM_HOME`
+
+# account for invocation ./org.eclim_version/bin/eclimd
+elif [[ $ECLIPSE_HOME = *'plugins' ]] ; then
+  ECLIPSE_HOME=`dirname $ECLIPSE_HOME`
+fi
 
 # attempt to grab properties from .eclimrc if available.
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
