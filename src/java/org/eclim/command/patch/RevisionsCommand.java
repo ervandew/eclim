@@ -47,9 +47,9 @@ public class RevisionsCommand
   extends AbstractCommand
 {
   private static final String URL =
-    "http://eclim.cvs.sourceforge.net/eclim/eclim/src/vim/<file>?view=log";
+    "http://eclim.svn.sourceforge.net/viewvc/eclim/trunk/src/vim/<file>?view=log";
   private static final Pattern REVISION_REGEX =
-    Pattern.compile("Revision\\s+<strong>\\s*(.*?)\\s*</strong>");
+    Pattern.compile("Revision\\s+<a\\s+.*?><strong>\\s*(.*?)\\s*</strong>");
   private static int TIMEOUT = 5 * 1000;
 
   /**

@@ -42,8 +42,8 @@ public class PatchFileCommand
   extends AbstractCommand
 {
   private static final String URL =
-    "http://eclim.cvs.sourceforge.net/*checkout*/" +
-    "eclim/eclim/src/vim/<file>?revision=<revision>";
+    "http://eclim.svn.sourceforge.net/viewvc/*checkout*/" +
+    "eclim/trunk/src/vim/<file>?revision=<revision>";
   private static int TIMEOUT = 8 * 1000;
 
   /**
