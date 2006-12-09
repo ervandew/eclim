@@ -70,7 +70,9 @@ function! s:SetXmlFileType (map)
 
   " occurs when re-opening an existing buffer.
   elseif &ft != b:eclim_xml_filetype
-    exec "set filetype=" . a:map[b:xmlroot]
+    if has_key(a:map, b:xmlroot)
+      exec "set filetype=" . a:map[b:xmlroot]
+    endif
   endif
 endfunction " }}}
 
