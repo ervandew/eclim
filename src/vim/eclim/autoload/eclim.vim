@@ -293,6 +293,7 @@ function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   let command = s:command_patch_revisions
   let command = substitute(command, '<file>', file, '')
 
+  let argLead = len(args) > 2 ? args[len(args) - 1] : ""
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     let results =  split(result, '\n')
