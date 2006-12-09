@@ -128,7 +128,10 @@ public class HtmlValidateCommand
       String[] lines = StringUtils.split(out.toString(), '\n');
       for (int ii = 0; ii < lines.length; ii++){
         if(accept(lines[ii])){
-          results.add(parseError(file, lines[ii]));
+          Error error = parseError(file, lines[ii]);
+          if(error != null){
+            results.add(error);
+          }
         }
       }
 
@@ -164,13 +167,16 @@ public class HtmlValidateCommand
   {
     String[] parts = StringUtils.split(line, ':');
 
-    return new Error(
-      parts[4].trim(),
-      file,
-      Integer.parseInt(parts[1]),
-      Integer.parseInt(parts[2]),
-      parts[3].trim().equals("Warning")
-    );
+    if (parts.length == 5){
+      return new Error(
+        parts[4].trim(),
+        file,
+        Integer.parseInt(parts[1]),
+        Integer.parseInt(parts[2]),
+        parts[3].trim().equals("Warning")
+      );
+    }
+    return null;
   }
 
   /**
