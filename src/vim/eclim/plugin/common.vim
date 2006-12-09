@@ -26,25 +26,35 @@
 if !exists(":Split")
   command -nargs=+ -complete=file Split :call eclim#common#OpenFiles('split', '<args>')
 endif
-if !exists(":SplitRelative")
-  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ SplitRelative :call eclim#common#OpenRelative('split', '<args>')
-endif
 if !exists(":Tabnew")
   command -nargs=+ -complete=file Tabnew :call eclim#common#OpenFiles('tabnew', '<args>')
 endif
+
+if !exists(":SplitRelative")
+  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
+    \ SplitRelative :call eclim#common#OpenRelative('split', '<args>', 1)
+endif
 if !exists(":TabnewRelative")
   command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ TabnewRelative :call eclim#common#OpenRelative('tabnew', '<args>')
+    \ TabnewRelative :call eclim#common#OpenRelative('tabnew', '<args>', 1)
 endif
 if !exists(":EditRelative")
   command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
-    \ EditRelative :call eclim#common#OpenRelative('edit', '<args>')
+    \ EditRelative :call eclim#common#OpenRelative('edit', '<args>', 0)
 endif
 if !exists(":ReadRelative")
   command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
-    \ ReadRelative :call eclim#common#OpenRelative('read', '<args>')
+    \ ReadRelative :call eclim#common#OpenRelative('read', '<args>', 0)
 endif
+if !exists(":ArgsRelative")
+  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
+    \ ArgsRelative :call eclim#common#OpenRelative('args', '<args>', 0)
+endif
+if !exists(":ArgAddRelative")
+  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
+    \ ArgAddRelative :call eclim#common#OpenRelative('argadd', '<args>', 0)
+endif
+
 if !exists(":DiffLastSaved")
   command DiffLastSaved :call eclim#common#DiffLastSaved()
 endif

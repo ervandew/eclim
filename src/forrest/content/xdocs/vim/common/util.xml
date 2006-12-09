@@ -105,6 +105,16 @@
         supports one file at a time.
       </li>
       <li>
+        <anchor id="ArgsRelative"/>
+        <strong>:ArgsRelative</strong> file_pattern [file_pattern ...] -
+        Like <strong>:SplitRelative</strong> except executes 'args'.
+      </li>
+      <li>
+        <anchor id="ArgsAddRelative"/>
+        <strong>:ArgsAddRelative</strong> file_pattern [file_pattern ...] -
+        Like <strong>:SplitRelative</strong> except executes 'argadd'.
+      </li>
+      <li>
         <anchor id="DiffLastSaved"/>
         <strong>:DiffLastSaved</strong> -
         Performs a diffsplit with the last saved version of the currently

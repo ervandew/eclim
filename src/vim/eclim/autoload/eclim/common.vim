@@ -161,9 +161,9 @@ function eclim#common#LocateFile (command, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" OpenRelative(command, arg) {{{
+" OpenRelative(command, arg, individual) {{{
 " Open one or more relative files.
-function eclim#common#OpenRelative (command, arg)
+function eclim#common#OpenRelative (command, arg, individual)
   if a:arg =~ '\*' && a:command == 'edit'
     call eclim#util#EchoError(':EditRelative does not support wildcard characters.')
     return
@@ -171,9 +171,14 @@ function eclim#common#OpenRelative (command, arg)
 
   let dir = expand('%:p:h')
   let files = eclim#common#GetFiles(dir, a:arg)
-  for file in files
-    exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
-  endfor
+  if a:individual
+    for file in files
+      exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
+    endfor
+  else
+    call map(files, "escape(eclim#util#Simplify(v:val), ' ')")
+    exec a:command . ' ' . join(files, ' ')
+  endif
 endfunction " }}}
 
 " OpenFiles(arg) {{{

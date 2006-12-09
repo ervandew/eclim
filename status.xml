@@ -225,7 +225,8 @@
       <action context="todo/fixme" dev="ervandew">
         Command to add all FIXME/TODO into a grep quickfix.<br/>
         The eclipse compiler will pick these up as warnings, so may be able to
-        use that.
+        use that.  Also look into "task list" feature of eclipse.
+        mentioned.
       </action>
       <action context="folding" dev="ervandew">
         Lots of folding support... comments, code blocks, xml, html.<br/>
@@ -311,6 +312,12 @@
 
       <action dev="ervandew" type="add" context="Vim">
         Added
+        <a href="vim/common/util.html#ArgsRelative">
+          <strong>:ArgsRelative</strong>
+        </a>,
+        <a href="vim/common/util.html#ArgAddRelative">
+          <strong>:ArgAddRelative</strong>
+        </a>,
         <a href="vim/common/util.html#ReadRelative">
           <strong>:ReadRelative</strong>
         </a>.

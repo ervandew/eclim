@@ -544,6 +544,16 @@
         supports one file at a time.
       </li>
       <li>
+        <a href="common/util.html#ArgsRelative"><strong>:ArgsRelative</strong></a>
+        file_pattern [ file_pattern ...] -
+        Behaves like <strong>:SplitRelative</strong>, but executes 'args'.
+      </li>
+      <li>
+        <a href="common/util.html#ArgAddRelative"><strong>:ArgAddRelative</strong></a>
+        file_pattern [ file_pattern ...] -
+        Behaves like <strong>:SplitRelative</strong>, but executes 'argadd'.
+      </li>
+      <li>
         <a href="common/util.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.
