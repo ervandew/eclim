@@ -126,6 +126,21 @@
         Swaps two words (with cursor placed on the first word).
         Supports swapping around non-word characters like commas, periods, etc.
       </li>
+      <li>
+        <anchor id="Sign"/>
+        <strong>:Sign</strong> -
+        Toggles adding or removing a vim sign on the current line.
+      </li>
+      <li>
+        <anchor id="SignClearUser"/>
+        <strong>:SignClearUser</strong> -
+        Removes all vim signs added via :Sign.
+      </li>
+      <li>
+        <anchor id="SignClearAll"/>
+        <strong>:SignClearUser</strong> -
+        Removes all vim signs.
+      </li>
       <!--li>
       <anchor id="SwapTypedArguments"/>
       <strong>:SwapTypedArguments</strong> -

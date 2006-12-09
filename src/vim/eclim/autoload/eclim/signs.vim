@@ -26,6 +26,14 @@
 if !exists("g:EclimShowQuickfixSigns")
   let g:EclimShowQuickfixSigns = 1
 endif
+
+if !exists("g:EclimUserSignText")
+  let g:EclimUserSignText = '#'
+endif
+
+if !exists("g:EclimUserSignHighlight")
+  let g:EclimUserSignHighlight = g:EclimInfoHighlight
+endif
 " }}}
 
 " Define(name, text, highlight) {{{
@@ -60,6 +68,33 @@ function! eclim#signs#Unplace (id)
   exec 'sign unplace ' . a:id . ' buffer=' . bufnr('%')
 endfunction " }}}
 
+" UnplaceAll(id) {{{
+" Un-places all signs in the supplied list from the current buffer.
+" The list may be a list of ids or a list of dictionaries as returned by
+" GetExisting()
+function! eclim#signs#UnplaceAll (list)
+  for sign in a:list
+    if type(sign) == 4
+      call eclim#signs#Unplace(sign['id'])
+    else
+      call eclim#signs#Unplace(sign)
+    endif
+  endfor
+endfunction " }}}
+
+" Toggle(name, line) {{{
+" Toggle a sign on the current line.
+function! eclim#signs#Toggle (name, line)
+  if a:line > 0
+    let exists = len(filter(eclim#signs#GetExisting(a:name), "v:val['line'] == a:line"))
+    if exists
+      call eclim#signs#Unplace(a:line)
+    else
+      call eclim#signs#Place(a:name, a:line)
+    endif
+  endif
+endfunction " }}}
+
 " GetDefined() {{{
 " Gets a list of defined sign names.
 function! eclim#signs#GetDefined ()
@@ -75,13 +110,15 @@ function! eclim#signs#GetDefined ()
   return names
 endfunction " }}}
 
-" GetExisting() {{{
+" GetExisting(...) {{{
 " Gets a list of existing signs for the current buffer.
 " The list consists of dictionaries with the following keys:
 "   id:   The sign id.
 "   line: The line number.
 "   name: The sign name (erorr, warning, etc.)
-function! eclim#signs#GetExisting ()
+"
+" Optionally a sign name may be supplied to only retrieve signs of that name.
+function! eclim#signs#GetExisting (...)
   let bufnr = bufnr('%')
 
   redir => signs
@@ -97,6 +134,11 @@ function! eclim#signs#GetExisting ()
       call add(existing, {'id': id, 'line': line, 'name': name})
     endif
   endfor
+
+  if len(a:000) > 0
+    call filter(existing, "v:val['name'] == a:000[0]")
+  endif
+
   return existing
 endfunction " }}}
 
@@ -174,5 +216,8 @@ function! eclim#signs#Update ()
 
   let &lazyredraw = save_lazy
 endfunction " }}}
+
+" define signs for manually added user marks.
+call eclim#signs#Define('user', g:EclimUserSignText, g:EclimUserSignHighlight)
 
 " vim:ft=vim:fdm=marker

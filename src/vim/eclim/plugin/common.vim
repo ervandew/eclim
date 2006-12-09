@@ -69,6 +69,16 @@ if !exists(":LocateFileSplit")
   command -nargs=? LocateFileSplit :call eclim#common#LocateFile('split', '<args>')
   command -nargs=? LocateFileTab :call eclim#common#LocateFile('tabnew', '<args>')
 endif
+
+if !exists(":Sign")
+  command Sign :call eclim#signs#Toggle('user', line('.'))
+endif
+if !exists(":SignClearUser")
+  command SignClearUser :call eclim#signs#UnplaceAll(eclim#signs#GetExisting('user'))
+endif
+if !exists(":SignClearAll")
+  command SignClearAll :call eclim#signs#UnplaceAll(eclim#signs#GetExisting())
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

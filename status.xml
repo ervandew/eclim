@@ -323,6 +323,19 @@
         </a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Vim">
+        Added
+        <a href="vim/common/util.html#Sign">
+          <strong>:Sign</strong>
+        </a>,
+        <a href="vim/common/util.html#SignClearUser">
+          <strong>:SignClearUser</strong>
+        </a>,
+        <a href="vim/common/util.html#SignClearAll">
+          <strong>:SignClearAll</strong>
+        </a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Wsdl">
         Added <a href="vim/wsdl/validate.html">wsdl validation</a>.<br/>
         Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
