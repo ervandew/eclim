@@ -15,6 +15,9 @@
  */
 package org.eclim.command.filter;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.OutputFilter;
@@ -28,6 +31,8 @@ import org.eclim.command.OutputFilter;
 public class ErrorFilter
   implements OutputFilter
 {
+  private static final ErrorComparator COMPARTATOR = new ErrorComparator();
+
   /**
    * {@inheritDoc}
    */
@@ -39,6 +44,7 @@ public class ErrorFilter
     {
       StringBuffer buffer = new StringBuffer();
       Error[] errors = (Error[])_result;
+      Arrays.sort(errors, COMPARTATOR);
       for(int ii = 0; ii < errors.length; ii++){
         if(ii > 0){
           buffer.append('\n');
@@ -58,4 +64,52 @@ public class ErrorFilter
     }
     return _result.toString();
   }
+
+  /**
+   * Comparator for sorting Error arrays.
+   */
+  public static class ErrorComparator
+    implements Comparator
+  {
+    /**
+     * {@inheritDoc}
+     */
+    public int compare (Object _o1, Object _o2)
+    {
+      if(_o1 == null && _o2 == null){
+        return 0;
+      }else if(_o2 == null){
+        return -1;
+      }else if(_o1 == null){
+        return 1;
+      }
+
+      Error p1 = (Error)_o1;
+      Error p2 = (Error)_o2;
+
+      // sort by line / col / error,warning
+      if (p1.getLineNumber() != p2.getLineNumber()){
+        return p1.getLineNumber() - p2.getLineNumber();
+      }
+      if (p1.getColumnNumber() != p2.getColumnNumber()){
+        return p1.getColumnNumber() - p2.getColumnNumber();
+      }
+      if (p1.isWarning() != p2.isWarning()){
+        return !p1.isWarning() ? -1 : 1;
+      }
+      return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean equals (Object _obj)
+    {
+      if(_obj instanceof ErrorComparator){
+        return true;
+      }
+      return false;
+    }
+  }
+
 }
