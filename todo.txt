@@ -24,13 +24,9 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
-  - honor wildignore on all custom file completion functions.
   - add web xml validation of classnames.
   - for taglist, support universal marker tag:
     |-- marker_name --|
-
-  - Update :Settings and :Project settings to only grab jdt settings if jdt
-    plugin is installed... same for pydev, etc.
 
   - JUnit results in the browser.
   - Integrate with eclipse junit execution env and provide user with option to
@@ -87,13 +83,6 @@ Enhancements
     implementation.
   - With :JavaRun, also have an input buffer that when saved pushes the text
     to stdin of the running app, and then clears the buffer for more input.
-  - allow re-formatting of xml section that can take an xml file and break up
-    the elements into lines accordingly.
-      <blah><duh>somevalue</duh></blah>
-    becomes
-      <blah>
-        <duh>somevalue</duh>
-      </blah>
   - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
   - get working under cygwin
