@@ -116,10 +116,12 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Create projects and view/edit project settings."/>
       <taglist label="TagList Integration" href="taglist.html"
           description="TagList Integration"/>
-      <web label="Web Lookup Commands" href="web.html"
-          description="Web Lookup Commands."/>
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
+      <vcs label="Version Control System Commands" href="vcs.html"
+          description="Version Control System Commands."/>
+      <web label="Web Lookup Commands" href="web.html"
+          description="Web Lookup Commands."/>
     </common>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>

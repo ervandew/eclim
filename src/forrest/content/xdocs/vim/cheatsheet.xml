@@ -459,6 +459,23 @@
       </li>
     </ul>
 
+    <p><strong>Version Control Commands</strong></p>
+    <note>
+      Currently only cvs and subversion are supported by the following commands.
+    </note>
+    <ul>
+      <li>
+        <a href="common/vcs.html#VcsAnnotate"><strong>:VcsAnnotate</strong></a> -
+        Annotates the currently versioned file using vim signs.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsAnnotateOff">
+          <strong>:VcsAnnotateOff</strong>
+        </a> -
+        Turns off any current annotations.
+      </li>
+    </ul>
+
     <p><strong>Web Lookup Commands</strong></p>
     <ul>
       <li>
