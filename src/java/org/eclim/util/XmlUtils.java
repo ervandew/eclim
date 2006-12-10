@@ -44,6 +44,7 @@ import org.eclim.command.Error;
 
 import org.w3c.dom.Element;
 
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -71,7 +72,7 @@ public class XmlUtils
   public static Error[] validateXml (String _filename)
     throws Exception
   {
-    return validateXml(_filename, false);
+    return validateXml(_filename, false, null);
   }
 
   /**
@@ -83,6 +84,22 @@ public class XmlUtils
    * @return A possibly empty array of errors.
    */
   public static Error[] validateXml (String _filename, boolean _schema)
+    throws Exception
+  {
+    return validateXml(_filename, _schema, null);
+  }
+
+  /**
+   * Validate the supplied xml file.
+   *
+   * @param _filename The file path to the xml file.
+   * @param _schema True to use schema validation relying on the
+   * xsi:schemaLocation attribute of the document.
+   * @param _contentHandler The content handler to use while parsing the file.
+   * @return A possibly empty array of errors.
+   */
+  public static Error[] validateXml (
+      String _filename, boolean _schema, ContentHandler _contentHandler)
     throws Exception
   {
     // jdk < 1.5 requires a doctype to validate (won't just check well formness
@@ -103,6 +120,9 @@ public class XmlUtils
           "http://apache.org/xml/features/validation/schema-full-checking", true);
     }
 
+    if (_contentHandler != null){
+      parser.setContentHandler(_contentHandler);
+    }
     parser.setErrorHandler(handler);
     parser.setEntityResolver(
         new EntityResolver(FilenameUtils.getFullPath(_filename)));

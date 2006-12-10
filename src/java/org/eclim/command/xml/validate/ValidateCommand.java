@@ -25,6 +25,8 @@ import org.eclim.command.Options;
 
 import org.eclim.util.XmlUtils;
 
+import org.xml.sax.ContentHandler;
+
 /**
  * Command to validate a xml file.
  *
@@ -46,7 +48,7 @@ public class ValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
 
-      List list = validate(file, schema);
+      List list = validate(file, schema, getContentHandler());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
     }catch(Throwable t){
@@ -59,12 +61,15 @@ public class ValidateCommand
    *
    * @param _file The file to validate.
    * @param _schema true to use declared schema, false otherwise.
+   * @param _contentHandler The ContentHandler to use while parsing the xml
+   * file.
    * @return The list of errors.
    */
-  protected List validate (String _file, boolean _schema)
+  protected List validate (
+      String _file, boolean _schema, ContentHandler _contentHandler)
     throws Exception
   {
-    Error[] errors = XmlUtils.validateXml(_file, _schema);
+    Error[] errors = XmlUtils.validateXml(_file, _schema, _contentHandler);
     ArrayList list = new ArrayList();
     for(int ii = 0; ii < errors.length; ii++){
       // FIXME: hack to ignore errors regarding no defined dtd.
@@ -76,5 +81,15 @@ public class ValidateCommand
       }
     }
     return list;
+  }
+
+  /**
+   * Retrieves the ContentHandler to use while parsing the xml file.
+   *
+   * @return The ContentHandler.
+   */
+  protected ContentHandler getContentHandler ()
+  {
+    return null;
   }
 }
