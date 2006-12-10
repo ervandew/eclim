@@ -154,6 +154,10 @@ See http://forrest.apache.org/docs/linking.html for more info
         <dependency label="Dependencies" href="dependency.html"
             description="Maven Dependencies"/>
       </maven>
+      <webxml label="WebXml" href="webxml/">
+        <validate label="Validation" href="validate.html"
+            description="Validation"/>
+      </webxml>
       <classpath label="Classpath" href="classpath.html"
           description="Editing your project's classpath"/>
       <source label="Source Code Validation" href="source.html"

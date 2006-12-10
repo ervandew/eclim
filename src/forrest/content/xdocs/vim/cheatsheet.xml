@@ -418,6 +418,14 @@
       </li>
     </ul>
 
+    <p><strong>WebXml Commands</strong></p>
+    <ul>
+      <li>
+        <a href="java/webxml/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current web.xml file.
+      </li>
+    </ul>
+
     <p><strong>Wsdl Commands</strong></p>
     <ul>
       <li>

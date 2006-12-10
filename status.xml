@@ -310,6 +310,11 @@
         <a href="vim/java/log4j/validate.html">log4j xml file validation</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="WebXml">
+        Added
+        <a href="vim/java/webxml/validate.html">web.xml file validation</a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Vim">
         Added
         <a href="vim/common/util.html#ArgsRelative">

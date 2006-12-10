@@ -238,4 +238,18 @@
     </property>
   </bean>
 
+  <bean name="webxml_validate"
+      class="org.eclim.plugin.jdt.command.webxml.ValidateCommand">
+    <description>
+      Handles request to validate a web.xml file.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.ErrorFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>
