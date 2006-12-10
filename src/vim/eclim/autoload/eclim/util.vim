@@ -452,13 +452,17 @@ function! eclim#util#ParseLocationEntries (entries)
     let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
     let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
     let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
+    if type == entry
+      let type = ''
+    endif
 
     let dict = {
-      \ 'filename': eclim#util#Simplify(file),
-      \ 'lnum': line,
-      \ 'col': col,
-      \ 'text': message,
-      \ 'type': type}
+        \ 'filename': eclim#util#Simplify(file),
+        \ 'lnum': line,
+        \ 'col': col,
+        \ 'text': message,
+        \ 'type': type
+      \ }
 
     call add(entries, dict)
   endfor

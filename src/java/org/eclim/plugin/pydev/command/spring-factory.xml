@@ -37,4 +37,18 @@
     </property>
   </bean>
 
+  <bean name="python_find_definition"
+      class="org.eclim.plugin.pydev.command.definition.FindDefinitionCommand">
+    <description>
+      Handles requests to find an element's definition.
+    </description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.LocationFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

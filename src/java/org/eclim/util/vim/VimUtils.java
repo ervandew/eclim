@@ -16,6 +16,7 @@
 package org.eclim.util.vim;
 
 import org.eclim.util.file.FileUtils;
+import org.eclim.util.file.Location;
 import org.eclim.util.file.Position;
 
 /**
@@ -43,6 +44,21 @@ public class VimUtils
       if(position != null){
         return position[0] + " col " + position[1];
       }
+    }
+    return "1 col 1";
+  }
+
+  /**
+   * Converts the location into a vim compatible line / column string.
+   *
+   * @param _location The location instance.
+   * @return The vim compatable string.
+   */
+  public static String translateLineColumn (Location _location)
+    throws Exception
+  {
+    if(_location != null){
+      return _location.getLine() + " col " + _location.getColumn();
     }
     return "1 col 1";
   }

@@ -13,51 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.plugin.pydev.command.complete;
+package org.eclim.plugin.pydev.command.definition;
 
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.command.complete.CodeCompleteResult;
-
 import org.eclim.eclipse.jface.text.DummyTextViewer;
+
+import org.eclim.plugin.pydev.util.PyDevUtils;
 
 import org.eclim.util.ProjectUtils;
 
-import org.eclipse.core.resources.IFile;
+import org.eclim.util.file.Location;
+
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.python.pydev.core.docutils.PySelection;
 
-import org.python.pydev.editor.codecompletion.CompletionRequest;
-import org.python.pydev.editor.codecompletion.PyCodeCompletion;
+import org.python.pydev.editor.PyEdit;
+
+import org.python.pydev.editor.model.ItemPointer;
+
+import org.python.pydev.editor.refactoring.PyRefactoring;
+import org.python.pydev.editor.refactoring.RefactoringRequest;
 
 import org.python.pydev.plugin.nature.PythonNature;
 
 /**
- * Command to perform python code completion.
+ * Command to find the definition of the element at the specified location in
+ * the supplied file.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class CodeCompleteCommand
+public class FindDefinitionCommand
   extends AbstractCommand
 {
-  private static final PyCodeCompletion PY_CC = new PyCodeCompletion();
-
   /**
    * {@inheritDoc}
    */
@@ -73,35 +73,26 @@ public class CodeCompleteCommand
       IDocument document = ProjectUtils.getDocument(file);
       ITextViewer viewer =
         new DummyTextViewer(document, offset, 1);
-
       PythonNature nature = PythonNature.getPythonNature(project);
-      CompletionRequest request = new CompletionRequest(
-          new File(file), nature, document, offset, PY_CC);
+      PyEdit edit = PyDevUtils.getEditor(project, file);
+      PySelection selection =
+        new PySelection(document, offset);
 
-      List results = new ArrayList();
-      ICompletionProposal[] proposals = PY_CC.onlyValidSorted(
-          PY_CC.getCodeCompletionProposals(viewer, request),
-          request.qualifier, request.isInCalltip);
-      for (int ii = 0; ii < proposals.length; ii++){
-        ICompletionProposal proposal = proposals[ii];
-        String description = proposal.getAdditionalProposalInfo().trim();
-        String shortDescription = proposal.getDisplayString();
-        String completion = shortDescription;
-
-        int open = completion.indexOf('(');
-        int close = completion.indexOf(')');
-        if(close > open + 1){
-          completion = completion.substring(0, open + 1);
-        }
-
-        CodeCompleteResult result =
-          new CodeCompleteResult(completion, description, shortDescription);
-        if(!results.contains(result)){
-          results.add(result);
+      PyRefactoring refactor = new PyRefactoring();
+      RefactoringRequest request = new RefactoringRequest(
+          new File(file), document, selection, null, nature, edit);
+      ItemPointer[] results = refactor.findDefinition(request);
+      List locations = new ArrayList();
+      if(results != null){
+        for (int ii = 0; ii < results.length; ii++){
+          locations.add(new Location(
+                results[ii].file.toString(),
+                results[ii].start.line + 1,
+                results[ii].start.column + 1));
         }
       }
 
-      return filter(_commandLine, results);
+      return super.filter(_commandLine, locations);
     }catch(Exception e){
       return e;
     }

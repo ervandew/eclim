@@ -16,7 +16,7 @@
 package org.eclim.util.file;
 
 /**
- * Represents a position within a file.
+ * Represents a position within a file as denoted by an offset and length.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
