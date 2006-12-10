@@ -15,10 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.log4j;
 
-import java.io.IOException;
-
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +32,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
@@ -60,39 +55,16 @@ public class ValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      // first validate xml.
-      List list = super.validate(file, false);
+      Log4jHandler handler = new Log4jHandler(
+          JavaUtils.getJavaProject(project), file);
 
-      // no xml errors, validate log4j values.
-      if(list.size() == 0){
-        list = validate(JavaUtils.getJavaProject(project), file);
-      }
+      List list = super.validate(file, false, handler);
+      list.addAll(handler.getErrors());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
     }catch(Throwable t){
       return t;
     }
-  }
-
-  /**
-   * Validates log4j values.
-   *
-   * @param _project The project.
-   * @param _file The log4j xml file.
-   * @return List of errors.
-   */
-  private List validate (IJavaProject _project, String _file)
-    throws Exception
-  {
-    Log4jHandler handler = new Log4jHandler(_project, _file);
-
-    org.apache.xerces.parsers.SAXParser parser =
-      new org.apache.xerces.parsers.SAXParser();
-    parser.setEntityResolver(new EntityResolver());
-    parser.setContentHandler(handler);
-    parser.parse(_file);
-
-    return handler.getErrors();
   }
 
   private static class Log4jHandler
@@ -235,20 +207,6 @@ public class ValidateCommand
         }
       }
       return null;
-    }
-  }
-
-  private static class EntityResolver
-    implements org.xml.sax.EntityResolver
-  {
-    /**
-     * {@inheritDoc}
-     */
-    public InputSource resolveEntity (String _publicId, String _systemId)
-      throws SAXException, IOException
-    {
-      URL url = Services.getResource("/resources/dtd/log4j.dtd");
-      return new InputSource(url.toString());
     }
   }
 }
