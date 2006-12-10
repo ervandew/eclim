@@ -33,6 +33,11 @@ if g:EclimLog4jValidate
   autocmd BufWritePost <buffer> call eclim#java#log4j#validate#Validate(1)
 endif
 
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
 " Command Declarations {{{
 command! -nargs=0 -buffer Validate :call eclim#java#log4j#validate#Validate(0)
 " }}}
