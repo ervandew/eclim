@@ -62,6 +62,12 @@ function! eclim#signs#PlaceAll (name, list)
   endfor
 endfunction " }}}
 
+" Undefine(name) {{{
+" Undefines a sign name.
+function! eclim#signs#Undefine (name)
+  exec "sign undefine " . a:name
+endfunction " }}}
+
 " Unplace(id) {{{
 " Un-places a sign in the current buffer.
 function! eclim#signs#Unplace (id)
