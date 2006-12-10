@@ -95,11 +95,19 @@
         <title>2006</title>
         <p>
           Eclim 1.2.4 is now available.<br/>
-          This is a very minimal release containing only a few bug fixes, but
-          now includes a new
-          <a href="guides/install.html#installer">graphical installer</a>
-          built on the <a href="site:formic">formic</a> installer framework.
+          The most notable changes are:
         </p>
+        <ul>
+          <li>
+            A new
+            <a href="guides/install.html#installer">graphical installer</a>
+            built on the <a href="site:formic">formic</a> installer framework.
+          </li>
+          <li>
+            Functionality based on and requiring the
+            <a href="site:eclipse_wst">eclipse wst plugin</a>.
+          </li>
+        </ul>
         <p>
           View the <a href="changes.html#version_1.2.4">release notes</a> for
           more info.
