@@ -24,7 +24,6 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
-  - add web xml validation of classnames.
   - for taglist, support universal marker tag:
     |-- marker_name --|
 
@@ -97,8 +96,6 @@ Enhancements
 
 WTP
   - javascript code completion
-  Other
-    - supports default css file?  additional code completion w/ this set?
 
 JST
   jsp
