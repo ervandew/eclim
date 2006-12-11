@@ -1,0 +1,6 @@
+org.eclim.pydev_${eclim.version}/**/*
+org.eclim.pydev_${eclim.version}
+eclim/autoload/python/css/*.vim
+eclim/autoload/python/css
+eclim/ftplugin/python/*.vim
+eclim/ftplugin/python

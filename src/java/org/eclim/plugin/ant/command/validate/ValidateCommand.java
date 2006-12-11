@@ -49,7 +49,7 @@ public class ValidateCommand
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      List errors = super.validate(file, false);
+      List errors = super.validate(file, false, null);
 
       ProblemRequestor requestor = new ProblemRequestor();
       IAntModel model = AntUtils.getAntModel(file, requestor);

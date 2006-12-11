@@ -34,8 +34,6 @@
         <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
         <exclude name="org.eclim_${eclim.version}/src"/>
         <exclude name="org.eclim_${eclim.version}/src/**/*"/>
-<exclude name="org.eclim.pydev_${eclim.version}"/>
-<exclude name="org.eclim.pydev_${eclim.version}/**/*"/>
       </fileset>
     </zip>
     <tar destfile="dist/org.eclim_${eclim.version}.tar.gz" compression="gzip">
@@ -49,8 +47,6 @@
         <exclude name="org.eclim_${eclim.version}/bin/**/*.bat"/>
         <exclude name="org.eclim_${eclim.version}/bin/**/*.exe"/>
         <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
-<exclude name="org.eclim.pydev_${eclim.version}"/>
-<exclude name="org.eclim.pydev_${eclim.version}/**/*"/>
       </tarfileset>
       <tarfileset dir="${eclipse.home}/plugins/" mode="755">
         <include name="org.eclim_${eclim.version}/bin/eclim"/>
@@ -60,10 +56,7 @@
 
     <!-- vim plugins jar -->
     <zip destfile="dist/eclim_vim_${eclim.version}.jar">
-      <fileset dir="src/vim" includes="**/*.vim">
-<exclude name="**/python"/>
-<exclude name="**/python/**/*"/>
-      </fileset>
+      <fileset dir="src/vim" includes="**/*.vim"/>
     </zip>
 
     <antcall target="installer"/>

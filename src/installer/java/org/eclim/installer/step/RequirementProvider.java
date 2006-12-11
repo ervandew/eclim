@@ -53,6 +53,7 @@ public class RequirementProvider
       "org.eclipse.wst.sse.ui",
       "org.eclipse.wst.xml.ui",
     });
+    REQUIREMENTS.put("pydev", new String[]{"org.python.pydev"});
   }
 
   private GuiForm guiForm;
