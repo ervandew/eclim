@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/regex.html
+"   see http://eclim.sourceforge.net/vim/python/regex.html
 "
 " License:
 "
@@ -23,8 +23,8 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(":JavaRegex")
-  command -buffer JavaRegex :call eclim#regex#OpenTestWindow('java')
+if !exists(":PythonRegex")
+  command -buffer PythonRegex :call eclim#regex#OpenTestWindow('python')
 endif
 " }}}
 
