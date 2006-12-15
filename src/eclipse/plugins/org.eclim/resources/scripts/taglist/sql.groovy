@@ -60,8 +60,16 @@ class SqlTags implements TaglistScript
       regex.addPattern('q', pattern, "\$2");
 
       pattern = Pattern.compile(
+        "(x?)create\\s+trigger\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+      regex.addPattern('x', pattern, "\$2");
+
+      pattern = Pattern.compile(
         "(s?)create(\\s+or\\s+replace)?\\s+function\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
       regex.addPattern('f', pattern, "\$3");
+
+      pattern = Pattern.compile(
+        "(s?)create\\s+procedure\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+      regex.addPattern('c', pattern, "\$2");
 
       pattern = Pattern.compile(
         "(s?)exec\\s+sp_addrole\\s+['\"]([a-zA-Z0-9_.]+)['\"]", Pattern.CASE_INSENSITIVE);

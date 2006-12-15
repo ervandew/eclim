@@ -91,7 +91,7 @@ if !exists(':TlistToo')
   endif
 
   if !exists("g:tlist_sql_settings")
-    let g:tlist_sql_settings = 'sql;g:group / role;r:role;u:user;m:user;p:tablespace;z:tablespace;s:schema;t:table;v:view;q:sequence;f:function'
+    let g:tlist_sql_settings = 'sql;g:group / role;r:role;u:user;m:user;p:tablespace;z:tablespace;s:schema;t:table;v:view;q:sequence;x:trigger;f:function;c:procedure'
   endif
 
   if !exists("g:tlist_tld_settings")
@@ -190,7 +190,9 @@ else
         \ 't': 'table',
         \ 'v': 'view',
         \ 'q': 'sequence',
-        \ 'f': 'function'
+        \ 'x': 'trigger',
+        \ 'f': 'function',
+        \ 'c': 'procedure'
       \ }
   endif
 
