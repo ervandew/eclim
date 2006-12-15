@@ -110,7 +110,7 @@ public class RegexCommand
     result.setStartLine(lineColumn[0]);
     result.setStartColumn(lineColumn[1]);
 
-    lineColumn = _offsets.offsetToLineColumn(_matcher.end());
+    lineColumn = _offsets.offsetToLineColumn(_matcher.end() - 1);
     result.setEndLine(lineColumn[0]);
     result.setEndColumn(lineColumn[1]);
 
@@ -121,7 +121,7 @@ public class RegexCommand
       group.setStartLine(lineColumn[0]);
       group.setStartColumn(lineColumn[1]);
 
-      lineColumn = _offsets.offsetToLineColumn(_matcher.end(ii));
+      lineColumn = _offsets.offsetToLineColumn(_matcher.end(ii) - 1);
       group.setEndLine(lineColumn[0]);
       group.setEndColumn(lineColumn[1]);
 
