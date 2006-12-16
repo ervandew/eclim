@@ -23,10 +23,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.preference.Preferences;
@@ -34,7 +30,6 @@ import org.eclim.preference.Preferences;
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -44,7 +39,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.jdt.core.IBuffer;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IImportDeclaration;
@@ -79,8 +73,6 @@ import org.eclipse.jface.text.IDocument;
  */
 public class JavaUtils
 {
-  private static final Logger logger = Logger.getLogger(JavaUtils.class);
-
   /**
    * Java 1.1 compliance.
    */
@@ -161,8 +153,6 @@ public class JavaUtils
   public static ICompilationUnit getCompilationUnit (String _project, String _file)
     throws Exception
   {
-    IPath path = Path.fromOSString(_file);
-
     IJavaProject javaProject = getJavaProject(_project);
     ICompilationUnit src = getCompilationUnit(javaProject, _file);
     if(src == null || !src.exists()){
@@ -208,44 +198,8 @@ public class JavaUtils
       IJavaProject _project, String _file)
     throws Exception
   {
-    _project.open(null);
-    _project.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
-
-    // normalize the paths
-    _file = _file.replace('\\', '/');
-
-    String projectPath = ProjectUtils.getPath(_project.getProject());
-    projectPath = projectPath.replace('\\', '/');
-
-    // search all src classpath entries.
-    IClasspathEntry[] entries = _project.getRawClasspath();
-    for(int ii = 0; ii < entries.length; ii++){
-      if(entries[ii].getEntryKind() == IClasspathEntry.CPE_SOURCE){
-        String entryPath = entries[ii].getPath().toOSString().replace('\\', '/');
-        // entry path consists of /project name/path.. strip off project name
-        // portion.
-        int index = entryPath.indexOf('/', 1);
-        if(index != -1){
-          entryPath = entryPath.substring(index);
-        }else{
-          // occurs when src path == "" in .classpath
-          entryPath = StringUtils.EMPTY;
-        }
-
-        String path = projectPath + entryPath;
-        if(_file.startsWith(path)){
-          String file = entryPath + '/' + _file.substring(path.length() + 1);
-
-          return JavaCore.createCompilationUnitFrom(
-              _project.getProject().getFile(file));
-          // will return a class file if the file has an equivelant class in the
-          // project's classpath.
-          //return (ICompilationUnit)_project.findElement(Path.fromOSString(file));
-        }
-      }
-    }
-
-    return null;
+    return JavaCore.createCompilationUnitFrom(
+        ProjectUtils.getFile(_project.getProject(), _file));
   }
 
   /**
@@ -264,7 +218,7 @@ public class JavaUtils
 
     IJavaProject javaProject = getJavaProject(_project);
     javaProject.open(null);
-    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+    //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
 
@@ -286,7 +240,7 @@ public class JavaUtils
     for(int ii = 0; ii < projects.length; ii++){
       IJavaProject javaProject = getJavaProject(projects[ii]);
       javaProject.open(null);
-      javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+      //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
       ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
       if(src != null){

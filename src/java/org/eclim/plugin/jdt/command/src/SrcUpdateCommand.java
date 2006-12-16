@@ -26,6 +26,8 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -50,11 +52,16 @@ public class SrcUpdateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      // JavaUtils refreshes the file when getting it.
-      ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+      // only refresh the file.
+      if(!_commandLine.hasOption(Options.VALIDATE_OPTION)){
+        // getting the file will refresh it.
+        ProjectUtils.getFile(projectName, file);
 
       // validate the src file.
-      if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
+      }else{
+        // JavaUtils refreshes the file when getting it.
+        ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+
         IProblem[] problems = JavaUtils.getProblems(src);
 
         ArrayList errors = new ArrayList();

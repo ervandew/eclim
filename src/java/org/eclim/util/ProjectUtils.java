@@ -25,6 +25,7 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
@@ -103,10 +104,26 @@ public class ProjectUtils
    * @param _file The file.
    * @return The IFile.
    */
+  public static IFile getFile (String _project, String _file)
+    throws Exception
+  {
+    return getFile(getProject(_project), _file);
+  }
+
+  /**
+   * Gets the IFile instance for the specified file located in the supplied
+   * project.
+   *
+   * @param _project The file's project.
+   * @param _file The file.
+   * @return The IFile.
+   */
   public static IFile getFile (IProject _project, String _file)
     throws Exception
   {
+    _project.open(null);
     String path = getPath(_project);
+    path = path.replace('\\', '/');
     if(!_file.startsWith(path)){
       throw new RuntimeException(
           Services.getMessage("project.file.mismatch",
@@ -114,11 +131,9 @@ public class ProjectUtils
     }
 
     String file = _file.substring(path.length());
-    if(file.startsWith("/") || file.startsWith("\\")){
-      file = file.substring(1);
-    }
-
-    return _project.getFile(file);
+    IFile ifile = _project.getFile(file);
+    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    return ifile;
   }
 
   /**
