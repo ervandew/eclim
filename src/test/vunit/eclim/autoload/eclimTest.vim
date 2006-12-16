@@ -63,10 +63,10 @@ function! TestCommandCompleteScriptRevision ()
     \ "Wrong second completion.")
 
   let results = eclim#CommandCompleteScriptRevision(
-    \ 'eclim/autoload/eclim.vim 1.', 'PatchEclim eclim/autoload/eclim.vim 1.', 38)
+    \ 'eclim/autoload/eclim.vim 1.', 'PatchEclim eclim/autoload/eclim.vim 59', 38)
   call VUAssertTrue(len(results) > 0, "Insuficient number of completions.")
   for result in results
-    call VUAssertTrue(result =~ '^1\.', "Invalid completion: '" . result . "'")
+    call VUAssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
   endfor
 endfunction " }}}
 

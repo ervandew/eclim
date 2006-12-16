@@ -27,7 +27,7 @@ function! TestOpenRelative ()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test_java/build.xml
 
-  call eclim#common#OpenRelative('edit', 'pom.xml')
+  call eclim#common#OpenRelative('edit', 'pom.xml', 1)
   call VUAssertTrue(bufwinnr('eclim_unit_test_java/pom.xml') > -1,
     \ 'Did not open pom.xml.')
   bdelete

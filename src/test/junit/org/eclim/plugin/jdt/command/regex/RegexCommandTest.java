@@ -46,7 +46,7 @@ public class RegexCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong result", "3:6-3:10\n3:22-3:26", result);
+    assertEquals("Wrong result", "3:6-3:9\n3:22-3:25", result);
   }
 
   /**
