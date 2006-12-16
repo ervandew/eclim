@@ -104,8 +104,12 @@
             built on the <a href="site:formic">formic</a> installer framework.
           </li>
           <li>
-            Functionality based on and requiring the
+            New functionality based on and requiring the
             <a href="site:eclipse_wst">eclipse wst plugin</a>.
+          </li>
+          <li>
+            Project refreshing is no longer automatic (performance vs convience
+            trade off).
           </li>
         </ul>
         <p>

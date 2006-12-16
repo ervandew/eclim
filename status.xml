@@ -277,12 +277,45 @@
         New graphical installer for easing the installation and upgrading
         procedure.
       </action>
+
+      <action dev="ervandew" type="update" context="Eclim">
+        In previous releases of eclim, any time a command required access to
+        the eclipse representation of a source file, eclim would force a full
+        refresh of the current project to ensure that any external additions,
+        deletions, or changes to other files would be automatically detected.
+        However, this approach, while convenient and transparent to the user,
+        comes with a performance penalty that grows as the project size grows.
+        <br/>
+        <br/>
+        For some users this performance penalty has been more noticeable than
+        for others.  So in response to this feedback, eclim no longer performs
+        an automatic project refresh.  What this means for you is that any time
+        you perform an action that results in any file additions, deletions, or
+        changes, like a svn / cvs update, you should issue a
+        <a href="vim/common/project.html#ProjectRefresh">
+          <strong>:ProjectRefresh</strong>
+        </a>
+        to ensure that eclipse and eclim are updated with the latest version of
+        the files on disk.
+      </action>
+
       <action dev="ervandew" type="update" context="Eclim">
         <a href="vim/common/project.html#ProjectCreate">
           <strong>:ProjectCreate</strong>
         </a>
         now supports optional -p argument for specifying the project name to
         use.
+      </action>
+      <action dev="ervandew" type="update" context="Eclim">
+        Created new command
+        <a href="vim/common/project.html#ProjectRefreshAll">
+          <strong>:ProjectRefreshAll</strong>
+        </a>
+        to support refreshing all projects at once, and modified
+        <a href="vim/common/project.html#ProjectRefresh">
+          <strong>:ProjectRefresh</strong>
+        </a>
+        to only refresh the current project if no project names are supplied.
       </action>
 
       <action dev="ervandew" type="add" context="Css">
