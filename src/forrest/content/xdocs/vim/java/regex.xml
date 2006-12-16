@@ -38,10 +38,9 @@
       By default the content of the regex window will be:
     </p>
     <source>
-      test
-
-      Some test content to test
-      a java regex against.
+      te(st)
+      Some test content used to test
+      language specific regex against.
     </source>
     <p>
       The first line of this window is the regular expression to test, and the

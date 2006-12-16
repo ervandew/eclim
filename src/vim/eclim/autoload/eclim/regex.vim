@@ -46,7 +46,7 @@
 
   let s:test_content = [
       \ 'te(st)',
-      \ 'Some test content to used to test',
+      \ 'Some test content used to test',
       \ 'language specific regex against.',
     \ ]
 
