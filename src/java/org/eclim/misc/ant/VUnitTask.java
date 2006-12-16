@@ -33,8 +33,6 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
-import org.apache.tools.ant.taskdefs.Property;
-
 import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 

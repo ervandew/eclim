@@ -18,10 +18,7 @@ package org.eclim.plugin.pydev.command.complete;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -33,9 +30,7 @@ import org.eclim.eclipse.jface.text.DummyTextViewer;
 
 import org.eclim.util.ProjectUtils;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;

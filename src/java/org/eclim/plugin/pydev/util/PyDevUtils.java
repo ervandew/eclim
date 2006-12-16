@@ -15,16 +15,11 @@
  */
 package org.eclim.plugin.pydev.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-
-import org.eclipse.core.runtime.IAdaptable;
 
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -32,8 +27,6 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IEditorSite;
 
-import org.eclipse.ui.internal.EditorAreaHelper;
-import org.eclipse.ui.internal.EditorManager;
 import org.eclipse.ui.internal.EditorReference;
 import org.eclipse.ui.internal.EditorSite;
 import org.eclipse.ui.internal.WorkbenchPage;
@@ -86,8 +79,6 @@ public class PyDevUtils
   private static IEditorSite getEditorSite (IEditorInput input)
     throws Exception
   {
-    EditorAreaHelper helper = null;
-
     WorkbenchWindow window = new WorkbenchWindow(1);
     window.create();
 

@@ -20,8 +20,6 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 //import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -70,7 +68,7 @@ public class HtmlValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
       final String file = _commandLine.getValue(Options.FILE_OPTION);
 
       // eclipse wst html valiation... currently not very good.

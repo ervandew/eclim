@@ -39,7 +39,7 @@ public class CodeCompleteFilter
     Logger.getLogger(CodeCompleteFilter.class);
 
   private static String COMPACT = "compact";
-  private static String STANDARD = "standard";
+  //private static String STANDARD = "standard";
 
   /**
    * {@inheritDoc}

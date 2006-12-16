@@ -16,13 +16,7 @@
 package org.eclim.plugin.jdt.command.doc;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.VFS;
-
-import org.apache.log4j.Logger;
 
 import org.eclim.command.CommandLine;
 
@@ -36,7 +30,6 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 
 import org.eclipse.jdt.core.search.SearchMatch;
 
@@ -55,8 +48,6 @@ import org.eclipse.jdt.internal.launching.JREContainer;
 public class DocSearchCommand
   extends SearchCommand
 {
-  private static final Logger logger = Logger.getLogger(DocSearchCommand.class);
-
   private static final Map JRE_DOCS = new HashMap();
   static{
     JRE_DOCS.put(JavaCore.VERSION_1_3,

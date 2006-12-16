@@ -24,8 +24,6 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.eclipse.jface.text.DummyTextViewer;
-
 import org.eclim.plugin.pydev.util.PyDevUtils;
 
 import org.eclim.util.ProjectUtils;
@@ -35,7 +33,6 @@ import org.eclim.util.file.Location;
 import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextViewer;
 
 import org.python.pydev.core.docutils.PySelection;
 
@@ -71,8 +68,6 @@ public class FindDefinitionCommand
       IProject project = ProjectUtils.getProject(projectName);
 
       IDocument document = ProjectUtils.getDocument(file);
-      ITextViewer viewer =
-        new DummyTextViewer(document, offset, 1);
       PythonNature nature = PythonNature.getPythonNature(project);
       PyEdit edit = PyDevUtils.getEditor(project, file);
       PySelection selection =

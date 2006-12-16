@@ -26,8 +26,6 @@ import org.eclipse.jdt.core.ICompilationUnit;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 
-import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
-
 /**
  * Extension to eclipse CompletionProposalCollector that saves reference to
  * original CompletionProposals.

@@ -33,8 +33,6 @@ import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 
 import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
-import org.eclipse.jdt.internal.ui.text.java.JavaMethodCompletionProposal;
-import org.eclipse.jdt.internal.ui.text.java.JavaTypeCompletionProposal;
 
 /**
  * Command to handle java code completion requests.
@@ -60,8 +58,6 @@ public class CodeCompleteCommand
       int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
       ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-
-      String filename = src.getResource().getRawLocation().toOSString();
 
       CompletionProposalCollector collector =
         new CompletionProposalCollector(src);

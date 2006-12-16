@@ -21,32 +21,22 @@ import java.io.FilenameFilter;
 
 import java.net.URL;
 
-import java.util.Hashtable;
 import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
 import org.apache.commons.io.IOUtils;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
-import org.eclim.command.Command;
-
-import org.eclim.command.admin.ShutdownCommand;
-
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPlatformRunnable;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.swt.widgets.EclimDisplay;

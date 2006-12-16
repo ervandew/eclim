@@ -26,18 +26,12 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.pydev.util.PyDevUtils;
-
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-
-import org.eclipse.core.runtime.IAdaptable;
-
-import org.eclipse.jface.text.IDocument;
 
 import org.python.pydev.builder.pylint.PyLintVisitor;
 

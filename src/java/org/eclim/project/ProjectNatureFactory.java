@@ -21,8 +21,6 @@ import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
-import org.eclipse.core.resources.IProjectNature;
-
 /**
  * Factory for registering project natures.
  *

@@ -22,8 +22,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -54,9 +52,6 @@ import org.eclipse.jdt.core.Signature;
 public class PropertiesCommand
   extends AbstractCommand
 {
-  private static final Logger logger =
-    Logger.getLogger(PropertiesCommand.class);
-
   private static final String GETTER_TEMPLATE = "getter.vm";
   private static final String SETTER_TEMPLATE = "setter.vm";
 

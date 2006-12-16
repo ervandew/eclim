@@ -37,8 +37,6 @@ import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.JavaCore;
 
-import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
-
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;

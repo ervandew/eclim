@@ -15,11 +15,8 @@
  */
 package org.eclim.preference;
 
-import java.io.StringWriter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +33,6 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
-
-import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Class for handling preferences for eclim.
@@ -165,7 +160,6 @@ public class Preferences
     Map preferences = getPreferencesAsMap(_project);
     for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
       Option option = (Option)options.get(ii.next());
-      String nature = option.getNature();
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 

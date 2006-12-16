@@ -30,8 +30,6 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -63,7 +61,6 @@ import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
  * Handles requests to add javadoc comments to an element.
@@ -74,8 +71,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 public class CommentCommand
   extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(CommentCommand.class);
-
   private static final Pattern THROWS_PATTERN =
     Pattern.compile("\\s*[a-zA-Z0-9._]*\\.(\\w*)($|\\s.*)");
 

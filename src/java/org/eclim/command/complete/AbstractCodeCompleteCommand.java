@@ -28,7 +28,6 @@ import org.eclim.eclipse.jface.text.DummyTextViewer;
 
 import org.eclim.util.ProjectUtils;
 
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
