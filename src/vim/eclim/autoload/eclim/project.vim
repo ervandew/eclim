@@ -116,37 +116,37 @@ function! eclim#project#ProjectDelete (name)
   endif
 endfunction " }}}
 
+" ProjectRefreshAll() {{{
+" Refresh all projects.
+function! eclim#project#ProjectRefreshAll ()
+  let projects = eclim#project#GetProjectNames()
+  for project in projects
+    call eclim#project#ProjectRefresh(project)
+  endfor
+  call eclim#util#Echo('Done.')
+endfunction " }}}
+
 " ProjectRefresh(args) {{{
 " Refresh the requested projects.
 function! eclim#project#ProjectRefresh (args)
   if a:args != ''
-    let projects = split(a:args)
-
-    " validate project names.
-    let valid = eclim#project#GetProjectNames()
-    let message = ''
-    for project in projects
-      if count(valid, project) == 0
-        if message != ''
-          let message .= "\n"
-        endif
-        let message .= "Project '" . project . "' not found."
-      endif
-    endfor
-    if message != ''
-      call eclim#util#EchoError(message)
+    let projects = eclim#util#ParseArgs(a:args)
+  else
+    if !eclim#project#IsCurrentFileInProject()
       return
     endif
-  else
-    let projects = eclim#project#GetProjectNames()
+    let project = eclim#project#GetCurrentProjectName()
+    let projects = [project]
   endif
-
   for project in projects
     call eclim#util#Echo("Updating project '" . project . "'...")
     let command = substitute(s:command_refresh, '<project>', project, '')
     call eclim#util#Echo(eclim#ExecuteEclim(command))
   endfor
-  call eclim#util#Echo(' ')
+
+  if len(projects) > 1
+    call eclim#util#Echo('Done.')
+  endif
 endfunction " }}}
 
 " ProjectOpen(name) {{{

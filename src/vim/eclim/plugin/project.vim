@@ -63,6 +63,9 @@ if !exists(":ProjectRefresh")
   command -nargs=* -complete=customlist,eclim#project#CommandCompleteProject
     \ ProjectRefresh :call eclim#project#ProjectRefresh('<args>')
 endif
+if !exists(":ProjectRefreshAll")
+  command ProjectRefreshAll :call eclim#project#ProjectRefreshAll()
+endif
 if !exists(":ProjectList")
   command ProjectList :call eclim#project#ProjectList()
 endif

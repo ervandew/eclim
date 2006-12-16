@@ -62,7 +62,9 @@
         List current projects.
       </li>
       <li>
-        <a href="common/project.html#ProjectSettings"><strong>:ProjectSettings</strong></a>
+        <a href="common/project.html#ProjectSettings">
+          <strong>:ProjectSettings</strong>
+        </a>
         [&lt;project&gt;] - View / edit project settings.
       </li>
       <li>
@@ -72,7 +74,14 @@
       <li>
         <a href="common/project.html#ProjectRefresh"><strong>:ProjectRefresh</strong></a>
         [&lt;project&gt; &lt;project&gt; ...] -
-        Refresh list of, or all projects against the current files on disk.
+        Refresh supplied list of projects against the current files on disk.  If
+        no project names supplied, refresh the current project.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectRefreshAll">
+          <strong>:ProjectRefreshAll</strong>
+        </a> -
+        Refresh all projects.
       </li>
       <li>
         <a href="common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>

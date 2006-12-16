@@ -101,10 +101,17 @@
         <anchor id="ProjectRefresh"/>
         <strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; ...]
         <br/>
-        Refreshes all, or the supplied list of named projects by synchronizing
-        each project against the current files on disk.  Useful when files may
+        Refreshes the supplied list of named projects by synchronizing
+        each project against the current files on disk.  If no projects names
+        are supplied, refresh the current project. Useful when files may
         have been added, removed, or updated by a secondary application, like a
         version control system (cvs, subversion, etc).
+      </li>
+      <li>
+        <anchor id="ProjectRefreshAll"/>
+        <strong>:ProjectRefreshAll</strong>
+        <br/>
+        Refreshes all projects.
       </li>
       <li>
         <anchor id="ProjectOpen"/>
