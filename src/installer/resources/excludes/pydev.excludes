@@ -1,6 +1,10 @@
 org.eclim.pydev_${eclim.version}/**/*
 org.eclim.pydev_${eclim.version}
-eclim/autoload/python/css/*.vim
-eclim/autoload/python/css
+eclim/autoload/python/*.vim
+eclim/autoload/python
+eclim/ftplugin/htmldjango/eclim.vim
 eclim/ftplugin/python/*.vim
 eclim/ftplugin/python
+eclim/indent/htmldjango.vim
+eclim/plugin/django.vim
+eclim/syntax/htmldjango.vim

@@ -2,6 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
+"   see http://eclim.sourceforge.net/vim/python/django/manage.html
 "
 " License:
 "
@@ -21,26 +22,11 @@
 "
 " }}}
 
-runtime ftplugin/html.vim
-
-if !exists('g:HtmlDjanogUserBodyElements')
-  let g:HtmlDjanogUserBodyElements = []
+" Command Declarations {{{
+if !exists(":DjangoManage")
+  command -nargs=+  -complete=customlist,eclim#python#django#CommandCompleteManage
+    \ DjangoManage :call eclim#python#django#Manage('<args>')
 endif
-
-let g:HtmlDjangoBodyElements = [
-    \ 'block',
-    \ 'comment',
-    \ 'if',
-    \ 'else',
-    \ 'filter',
-    \ 'for',
-    \ 'spaceless'
-  \ ] + g:HtmlDjanogUserBodyElements
-
-if exists("b:match_words")
-  let b:match_words = b:match_words . ',' .
-    \ '{%\s*\(e_\)\?if\(changed\|equal\|notequal\)\?\s\+.\{-}%}:{%\s*elif\s\+.\{-}\s*%}:{%\s*else\s*%}:{%\s*endif\(changed\|equal\|notequal\)\?\s*%},' .
-    \ '{%\s*\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\>.\{-}%}:{%\s*end\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\s*%}'
-endif
+" }}}
 
 " vim:ft=vim:fdm=marker

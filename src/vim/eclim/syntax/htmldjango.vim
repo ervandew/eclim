@@ -21,26 +21,22 @@
 "
 " }}}
 
-runtime ftplugin/html.vim
+source $VIMRUNTIME/syntax/htmldjango.vim
 
-if !exists('g:HtmlDjanogUserBodyElements')
-  let g:HtmlDjanogUserBodyElements = []
+if !exists('g:HtmlDjangoUserTags')
+  let g:HtmlDjangoUserTags = []
 endif
 
-let g:HtmlDjangoBodyElements = [
-    \ 'block',
-    \ 'comment',
-    \ 'if',
-    \ 'else',
-    \ 'filter',
-    \ 'for',
-    \ 'spaceless'
-  \ ] + g:HtmlDjanogUserBodyElements
+if !exists('g:HtmlDjangoUserFilters')
+  let g:HtmlDjangoUserFilters = []
+endif
 
-if exists("b:match_words")
-  let b:match_words = b:match_words . ',' .
-    \ '{%\s*\(e_\)\?if\(changed\|equal\|notequal\)\?\s\+.\{-}%}:{%\s*elif\s\+.\{-}\s*%}:{%\s*else\s*%}:{%\s*endif\(changed\|equal\|notequal\)\?\s*%},' .
-    \ '{%\s*\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\>.\{-}%}:{%\s*end\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\s*%}'
+syn region djangoComment start="{#" end="#}"
+if len(g:HtmlDjangoUserTags)
+  exec 'syn keyword djangoStatement ' . join(g:HtmlDjangoUserTags)
+endif
+if len(g:HtmlDjangoUserFilters)
+  exec 'syn keyword djangoFilter ' . join(g:HtmlDjangoUserFilters)
 endif
 
 " vim:ft=vim:fdm=marker
