@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/ant/run.html
+"   see http://eclim.sourceforge.net/vim/java/ant/run.html
 "
 " License:
 "
