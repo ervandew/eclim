@@ -231,7 +231,7 @@ fun! <SID>HtmlIndentSum(lnum, style)
       return <SID>HtmlIndentOpenAlt(a:lnum) - <SID>HtmlIndentCloseAlt(a:lnum)
     endif
   endif
-  if a:style == 0
+  if a:style == 0 && getline(a:lnum) !~ '^\s*{'
     return <SID>HtmlIndentAttributeWrap(line('.'))
   endif
   return 0
