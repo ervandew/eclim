@@ -219,6 +219,27 @@ function! eclim#project#ProjectSettings (project)
   endif
 endfunction " }}}
 
+" ProjectGrep(command, pattern, ...) {{{
+" Executes the supplied vim grep command with the specified pattern against
+" one or more file patterns.
+function! eclim#project#ProjectGrep (command, args)
+  if !eclim#project#IsCurrentFileInProject()
+    return
+  endif
+
+  let project_dir = eclim#project#GetCurrentProjectRoot()
+  let cwd = getcwd()
+  let save_opt = &eventignore
+  set eventignore=all
+  try
+    exec 'lcd ' . project_dir
+    exec a:command . ' ' . a:args
+  finally
+    let &eventignore = save_opt
+    exec 'lcd ' . cwd
+  endtry
+endfunction " }}}
+
 " SaveSettings() {{{
 function! s:SaveSettings ()
   " don't check modified since undo seems to not set the modified flag

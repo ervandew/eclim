@@ -141,6 +141,16 @@
         <strong>:SignClearUser</strong> -
         Removes all vim signs.
       </li>
+      <li>
+        <anchor id="QuickFixClear"/>
+        <strong>:QuickFixClear</strong> -
+        Removes all entries from the quick fix window.
+      </li>
+      <li>
+        <anchor id="LocationListClear"/>
+        <strong>:LocationListClear</strong> -
+        Removes all entries from the location list window.
+      </li>
       <!--li>
       <anchor id="SwapTypedArguments"/>
       <strong>:SwapTypedArguments</strong> -

@@ -110,6 +110,26 @@
         <a href="common/project.html#ProjectsTree"><strong>:ProjectsTree</strong></a>
         - Opens a tree containing all projects.
       </li>
+      <li>
+        <a href="common/project.html#ProjectGrep"><strong>:ProjectGrep</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        Issues a vimgrep starting at the root of the current project.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectGrepAdd"><strong>:ProjectGrepAdd</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        Issues a vimgrepadd starting at the root of the current project.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLGrep"><strong>:ProjectLGrep</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        Issues a lvimgrep starting at the root of the current project.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLGrepAdd"><strong>:ProjectLGrepAdd</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        Issues a lvimgrepadd starting at the root of the current project.
+      </li>
     </ul>
 
     <p><strong>Eclipse .classpath Commands</strong></p>
@@ -608,6 +628,16 @@
       <li>
         <a href="common/util.html#SignClearAll"><strong>:SignClearAll</strong></a> -
         Removes all vim signs.
+      </li>
+      <li>
+        <a href="common/util.html#QuickFixClear"><strong>:QuickFixClear</strong></a> -
+        Removes all entries from the quick fix window.
+      </li>
+      <li>
+        <a href="common/util.html#LocationListClear">
+          <strong>:LocationListClear</strong>
+        </a> -
+        Removes all entries from the location list window.
       </li>
       <!--li>
         <a href="index.html#SwapTypedArguments">

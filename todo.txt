@@ -2,6 +2,7 @@ Upgrade
   - spring from 1.2.8 to 2.0
   - commons-lang from 2.1 to 2.2
   - commons-logging from 1.0.4 to 1.1
+  - commons-vfs from dev to 1.0
 
 System
   - update backup script to pull down nightly wiki tarballs.
@@ -24,6 +25,13 @@ Bugs
     every element since they are "not declared" (ex. ant/cvs.xml).
 
 Enhancements
+  - :ProjectTodo run vimgrep against all files using user defined pattern...
+    by default '\(\<fixme\>\|\<todo\>\)\c'
+    - create list of file extensions to search
+    - lvimgrep first item and lvimgrep add the rest
+    - don't jump to first file, just open location list window.
+  - :Todo run vimgrep on current file using user defined pattern.
+
   - for taglist, support universal marker tag:
     |-- marker_name --|
 
@@ -112,3 +120,10 @@ PyDev
   - Allow user to set python interpreter
     org.python.pydev.ui.interpreters.PythonInterpreterManager
   - Allow user to add more paths to sys.path.
+
+  - set the project's source path, external source path, etc.:
+    IPythonNature nature ...
+    nature.getPythonPathNature().setProjectSourcePath(folder.getFullPath().toString());
+    nature.getPythonPathNature().setExternalSourcePath(folder.getFullPath().toString());
+    nature.setVersion(IPythonNature.PYTHON_VERSION_2_4);
+    nature.rebuildPath()

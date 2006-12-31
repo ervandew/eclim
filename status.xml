@@ -184,6 +184,10 @@
           </li>
         </ul>
       </action>
+      <action context="bug_tracking" dev="ervandew">
+        Bug Tracking integration via
+        <a href="http://www.eclipse.org/mylar">mylar</a>.
+      </action>
       <action context="debugger" dev="ervandew">
         Debugger functionality.
       </action>
@@ -316,6 +320,21 @@
           <strong>:ProjectRefresh</strong>
         </a>
         to only refresh the current project if no project names are supplied.
+      </action>
+      <action dev="ervandew" type="add" context="Eclim">
+        Added
+        <a href="vim/common/project.html#ProjectGrep">
+          <strong>:ProjectGrep</strong>
+        </a>,
+        <a href="vim/common/project.html#ProjectGrepAdd">
+          <strong>:ProjectGrepAdd</strong>
+        </a>,
+        <a href="vim/common/project.html#ProjectLGrep">
+          <strong>:ProjectLGrep</strong>
+        </a>, and
+        <a href="vim/common/project.html#ProjectLGrepAdd">
+          <strong>:ProjectLGrepAdd</strong>
+        </a>.
       </action>
 
       <action dev="ervandew" type="add" context="Css">

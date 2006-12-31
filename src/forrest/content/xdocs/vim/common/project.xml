@@ -215,6 +215,32 @@
         Similar to <strong>:ProjectTree</strong> but opens a tree containing all
         projects.
       </li>
+      <li>
+        <anchor id="ProjectGrep"/>
+        <strong>:ProjectGrep</strong>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...]<br/>
+        Executes vimgrep using the supplied arguments from the root of the
+        current project allowing you to run a project wide grep from any file
+        within the project.
+      </li>
+      <li>
+        <anchor id="ProjectGrepAdd"/>
+        <strong>:ProjectGrepAdd</strong>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...]<br/>
+        Just like <strong>:ProjectGrep</strong> but using vimgrepadd instead.
+      </li>
+      <li>
+        <anchor id="ProjectLGrep"/>
+        <strong>:ProjectLGrep</strong>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...]<br/>
+        Just like <strong>:ProjectGrep</strong> but using lvimgrep instead.
+      </li>
+      <li>
+        <anchor id="ProjectLGrepAdd"/>
+        <strong>:ProjectLGrepAdd</strong>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...]<br/>
+        Just like <strong>:ProjectGrep</strong> but using lvimgrepadd instead.
+      </li>
     </ul>
     <p>
       <strong>Configuration</strong>

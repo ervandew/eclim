@@ -79,6 +79,13 @@ endif
 if !exists(":SignClearAll")
   command SignClearAll :call eclim#signs#UnplaceAll(eclim#signs#GetExisting())
 endif
+
+if !exists(":QuickFixClear")
+  command QuickFixClear :call setqflist([])
+endif
+if !exists(":LocationListClear")
+  command LocationListClear :call setloclist(0, [])
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

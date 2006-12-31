@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/web.html
+"   see http://eclim.sourceforge.net/vim/common/web.html
 "
 " License:
 "
