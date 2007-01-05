@@ -132,6 +132,13 @@
         Toggles adding or removing a vim sign on the current line.
       </li>
       <li>
+        <anchor id="Signs"/>
+        <strong>:Signs</strong> -
+        Opens a new window containing a list of signs for the current buffer.
+        Hitting &lt;Enter&gt; on one of the signs in the list will take you to
+        that sign in the corresponding buffer.
+      </li>
+      <li>
         <anchor id="SignClearUser"/>
         <strong>:SignClearUser</strong> -
         Removes all vim signs added via :Sign.

@@ -73,6 +73,9 @@ endif
 if !exists(":Sign")
   command Sign :call eclim#signs#Toggle('user', line('.'))
 endif
+if !exists(":Signs")
+  command Signs :call eclim#signs#ViewSigns('user')
+endif
 if !exists(":SignClearUser")
   command SignClearUser :call eclim#signs#UnplaceAll(eclim#signs#GetExisting('user'))
 endif

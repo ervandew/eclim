@@ -622,6 +622,10 @@
         Toggles adding or removing a vim sign on the current line.
       </li>
       <li>
+        <a href="common/util.html#Signs"><strong>:Signs</strong></a> -
+        Opens a new window containing a list of signs for the current buffer.
+      </li>
+      <li>
         <a href="common/util.html#SignClearUser"><strong>:SignClearUser</strong></a> -
         Removes all vim signs added via :Sign.
       </li>

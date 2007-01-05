@@ -101,6 +101,38 @@ function! eclim#signs#Toggle (name, line)
   endif
 endfunction " }}}
 
+" ViewSigns(name) {{{
+" Open a window to view all placed signs with the given name in the current
+" buffer.
+function! eclim#signs#ViewSigns (name)
+  let filename = expand('%:p')
+  let signs = eclim#signs#GetExisting(a:name)
+  let content = map(signs, "v:val.line . '|' . getline(v:val.line)")
+
+  call eclim#util#TempWindow('[Sign List]', sort(content))
+
+  set ft=qf
+  nnoremap <silent> <buffer> <cr> :call <SID>JumpToSign()<cr>
+
+  " Store filename so that plugins can use it if necessary.
+  let b:filename = filename
+  augroup temp_window
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(filename)
+  augroup END
+endfunction " }}}
+
+" JumpToSign () {{{
+function! s:JumpToSign ()
+  let winnr = bufwinnr(bufnr(b:filename))
+  if winnr != -1
+    let line = substitute(getline('.'), '^\(\d\+\)|.*', '\1', '')
+    exec winnr . "winc w"
+    echom 'line = ' . line
+    call cursor(line, 1)
+  endif
+endfunction " }}}
+
 " GetDefined() {{{
 " Gets a list of defined sign names.
 function! eclim#signs#GetDefined ()

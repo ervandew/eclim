@@ -385,6 +385,9 @@
         <a href="vim/common/util.html#Sign">
           <strong>:Sign</strong>
         </a>,
+        <a href="vim/common/util.html#Signs">
+          <strong>:Signs</strong>
+        </a>,
         <a href="vim/common/util.html#SignClearUser">
           <strong>:SignClearUser</strong>
         </a>,

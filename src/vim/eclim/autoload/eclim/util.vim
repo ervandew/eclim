@@ -669,9 +669,10 @@ endfunction " }}}
 " Opens a temp window w/ the given name and contents.
 function! eclim#util#TempWindow (name, lines, ...)
   call eclim#util#TempWindowClear(a:name)
+  let name = escape(a:name, ' []')
 
-  if bufwinnr(a:name) == -1
-    silent! exec "botright 10split " . a:name
+  if bufwinnr(name) == -1
+    silent! exec "botright 10split " . name
     if len(a:000) == 0 || a:000[0]
       setlocal nowrap
       setlocal winfixheight
@@ -680,7 +681,7 @@ function! eclim#util#TempWindow (name, lines, ...)
       setlocal bufhidden=delete
     endif
   else
-    exec bufwinnr(a:name) . "winc w"
+    exec bufwinnr(name) . "winc w"
   endif
 
   call append(1, a:lines)
@@ -699,9 +700,10 @@ endfunction " }}}
 " TempWindowClear(name) {{{
 " Opens a temp window w/ the given name and contents.
 function! eclim#util#TempWindowClear (name)
-  if bufwinnr(a:name) != -1
+  let name = escape(a:name, ' []')
+  if bufwinnr(name) != -1
     let curwinnr = winnr()
-    exec bufwinnr(a:name) . "winc w"
+    exec bufwinnr(name) . "winc w"
     setlocal modifiable
     setlocal noreadonly
     let saved = @"
@@ -716,7 +718,7 @@ endfunction " }}}
 " supplied command.
 function! eclim#util#TempWindowCommand (command, name)
   let filename = expand('%:p')
-  let name = escape(a:name, ' ')
+  let name = escape(a:name, ' []')
 
   let line = 1
   let col = 1
