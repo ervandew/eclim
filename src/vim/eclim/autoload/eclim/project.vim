@@ -472,4 +472,23 @@ function! s:CommandCompleteProjectCreateOptions (argLead, cmdLine, cursorPos)
   return options
 endfunction " }}}
 
+" CommandCompleteProjectRelative(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project relative files and directories.
+function! eclim#project#CommandCompleteProjectRelative (argLead, cmdLine, cursorPos)
+  let dir = eclim#project#GetCurrentProjectRoot()
+
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+
+  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
+  call map(results, "substitute(v:val, '\\', '/', 'g')")
+  call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
+  call map(results, 'substitute(v:val, dir, "", "")')
+  call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
+  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
+
+  return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

@@ -88,4 +88,26 @@ function! eclim#vcs#AnnotateInfo ()
   endif
 endfunction " }}}
 
+function eclim#vcs#Viewvc (file)
+  let root = eclim#project#GetProjectSetting("org.eclim.project.vcs.viewvc")
+  if root == ''
+    return
+  elseif root !~ '/$'
+    root .= '/'
+  endif
+
+  let file = a:file
+  let project_root = eclim#project#GetCurrentProjectRoot()
+  if file == ''
+    let file = substitute(expand('%:p'), project_root . '/', '', '')
+  endif
+
+  let url = root . file
+  if !isdirectory(project_root . '/' . file)
+    let url .= '?view=log'
+  endif
+
+  call eclim#web#OpenUrl(url)
+endfunction
+
 " vim:ft=vim:fdm=marker

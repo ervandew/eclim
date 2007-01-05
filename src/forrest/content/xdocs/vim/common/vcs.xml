@@ -51,6 +51,32 @@
         Turns any current annotations off by removing all vim signs and removing
         'j' and 'k' mappings.
       </li>
+      <li>
+        <anchor id="Viewvc"/>
+        <strong>:Viewvc</strong> [file] -
+        Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
+        directory, or to the current buffer if no argument supplied. Requires
+        that the property 'org.eclim.project.vcs.viewvc' be set to the root url
+        of your ViewVC instance such that any project relative path can be
+        appended to it to render a valid url.<br/>
+        Ex.
+        <source>
+          org.eclim.project.vcs.viewvc=http://eclim.svn.sourceforge.net/viewvc/eclim/trunk/
+        </source>
+      </li>
+    </ul>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Eclim Settings:
+    </p>
+    <ul>
+      <li>
+        <anchor id="org.eclim.project.vcs.viewvc"/>
+        <strong>org.eclim.project.vcs.viewvc</strong><br/>
+        Base url from which ViewVC urls can be constructed for project relative files.
+      </li>
     </ul>
   </body>
 </document>

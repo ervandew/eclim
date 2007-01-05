@@ -400,6 +400,9 @@
         Added
         <a href="vim/common/vcs.html#VcsAnnotate">
           <strong>:VcsAnnotate</strong>
+        </a> and
+        <a href="vim/common/vcs.html#Viewvc">
+          <strong>:Viewvc</strong>
         </a>.
       </action>
 

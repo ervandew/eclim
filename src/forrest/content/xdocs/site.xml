@@ -251,6 +251,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <ivy href="http://jayasoft.org/ivy"/>
     <formic href="http://sourceforge.net/projects/formic"/>
 
+    <viewvc href="http://viewvc.org"/>
+
     <testng href="http://testng.org/doc"/>
 
     <forrest href="http://forrest.apache.org/"/>

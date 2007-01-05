@@ -1,4 +1,5 @@
-#Mon Oct 09 19:02:30 PDT 2006
+#Thu Jan 04 22:02:35 PST 2007
 eclipse.preferences.version=1
 org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.logging.impl=log4j
+org.eclim.project.vcs.viewvc=http\://eclim.svn.sourceforge.net/viewvc/eclim/trunk/

@@ -27,6 +27,10 @@ if !exists(":VcsAnnotate")
   command VcsAnnotate :call eclim#vcs#Annotate()
   command VcsAnnotateOff :call eclim#vcs#AnnotateOff()
 endif
+if !exists(":Viewvc")
+  command -nargs=? -complete=customlist,eclim#project#CommandCompleteProjectRelative
+    \ Viewvc :call eclim#vcs#Viewvc('<args>')
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

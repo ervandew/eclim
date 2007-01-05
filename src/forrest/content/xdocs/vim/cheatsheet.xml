@@ -511,6 +511,11 @@
         </a> -
         Turns off any current annotations.
       </li>
+      <li>
+        <a href="common/vcs.html#Viewvc"><strong>:Viewvc</strong></a> [file] -
+        Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
+        directory, or to the current buffer if no argument supplied.
+      </li>
     </ul>
 
     <p><strong>Web Lookup Commands</strong></p>
