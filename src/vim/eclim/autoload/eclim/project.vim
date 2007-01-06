@@ -227,6 +227,7 @@ function! eclim#project#ProjectGrep (command, args)
     return
   endif
 
+  let bufnum = bufnr('%')
   let project_dir = eclim#project#GetCurrentProjectRoot()
   let cwd = getcwd()
   let save_opt = &eventignore
@@ -238,6 +239,13 @@ function! eclim#project#ProjectGrep (command, args)
     let &eventignore = save_opt
     exec 'lcd ' . cwd
   endtry
+  if bufnum != bufnr('%')
+    " force autocommands to execute if grep jumped to a file.
+    edit
+  else
+    " force quickfix / location list signs to update.
+    call eclim#signs#Update()
+  endif
 endfunction " }}}
 
 " SaveSettings() {{{
