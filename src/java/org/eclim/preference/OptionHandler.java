@@ -39,7 +39,8 @@ public interface OptionHandler
    *
    * @return Map of option names to option values, or null if none.
    */
-  public Map getOptionsAsMap ();
+  public Map getOptionsAsMap ()
+    throws Exception;
 
   /**
    * Gets the manage options as a Map for the supplied project.
@@ -47,7 +48,8 @@ public interface OptionHandler
    * @param _project The project.
    * @return Map of option names to option values, or null if none.
    */
-  public Map getOptionsAsMap (IProject _project);
+  public Map getOptionsAsMap (IProject _project)
+    throws Exception;
 
   /**
    * Sets the supplied option.
@@ -55,7 +57,8 @@ public interface OptionHandler
    * @param _name The option name.
    * @param _value The option value.
    */
-  public void setOption (String _name, String _value);
+  public void setOption (String _name, String _value)
+    throws Exception;
 
   /**
    * Sets the supplied option for the specified project.
@@ -64,5 +67,6 @@ public interface OptionHandler
    * @param _name The option name.
    * @param _value The option value.
    */
-  public void setOption (IProject _project, String _name, String _value);
+  public void setOption (IProject _project, String _name, String _value)
+    throws Exception;
 }

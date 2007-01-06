@@ -16,6 +16,7 @@ Require-Bundle: org.eclim,
   org.eclipse.ui.console,
   org.eclipse.ui.ide,
   org.python.pydev,
+  org.python.pydev.ast,
   org.python.pydev.core,
   org.python.pydev.parser
 Eclipse-AutoStart: true

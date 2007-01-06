@@ -127,7 +127,10 @@ public class Preferences
     Map allOptions = new HashMap();
     for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
       OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
-      allOptions.putAll(handler.getOptionsAsMap());
+      Map options = handler.getOptionsAsMap();
+      if (options != null){
+        allOptions.putAll(options);
+      }
     }
 
     Map preferences = getPreferencesAsMap();
@@ -197,7 +200,7 @@ public class Preferences
         option = (Option)this.preferences.get(key);
       }
 
-      if(option != null){
+      if(option != null && value != null){
         String nature = option.getNature();
         if (CORE.equals(nature) ||
             _project == null ||

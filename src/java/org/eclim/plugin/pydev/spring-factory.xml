@@ -50,6 +50,27 @@
     </property>
   </bean>
 
+  <bean class="org.eclim.preference.Preferences"
+      factory-method="addOptionHandler">
+    <constructor-arg value="org.python.pydev"/>
+    <constructor-arg>
+      <bean class="org.eclim.plugin.pydev.preference.OptionHandler"/>
+    </constructor-arg>
+  </bean>
+
+
+  <bean class="org.eclim.preference.PreferenceFactory"
+      factory-method="addOptions">
+    <constructor-arg value="org.python.pydev.pythonNature"/>
+    <constructor-arg>
+      <value>
+        PyDev org.python.pydev.PYTHON_PROJECT_VERSION python 2\.[3-5]
+        PyDev org.python.pydev.PROJECT_SOURCE_PATH
+        PyDev org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH
+      </value>
+    </constructor-arg>
+  </bean>
+
   <bean class="org.eclim.project.ProjectNatureFactory"
       factory-method="addNatures">
     <constructor-arg>

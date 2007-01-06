@@ -47,7 +47,9 @@ public class PreferenceFactory
         option.setNature(_nature);
         option.setPath(attrs[0]);
         option.setName(attrs[1]);
-        option.setRegex(attrs[2]);
+        if (attrs.length > 2){
+          option.setRegex(attrs[2]);
+        }
 
         preferences.addOption(option);
       }
@@ -151,9 +153,12 @@ public class PreferenceFactory
 
     _attrString = _attrString.substring(index + 1);
     index = _attrString.indexOf(' ');
-
-    attrs[1] = _attrString.substring(0, index);
-    attrs[2] = _attrString.substring(index + 1);
+    if(index != -1){
+      attrs[1] = _attrString.substring(0, index);
+      attrs[2] = _attrString.substring(index + 1);
+    }else{
+      attrs[1] = _attrString;
+    }
 
     return attrs;
   }

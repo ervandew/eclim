@@ -51,6 +51,7 @@ public class OptionHandler
    * {@inheritDoc}
    */
   public Map getOptionsAsMap ()
+    throws Exception
   {
     return JavaCore.getOptions();
   }
@@ -59,6 +60,7 @@ public class OptionHandler
    * {@inheritDoc}
    */
   public Map getOptionsAsMap (IProject _project)
+    throws Exception
   {
     IJavaProject javaProject = JavaCore.create(_project);
     if(!javaProject.exists()){
@@ -73,18 +75,15 @@ public class OptionHandler
    * {@inheritDoc}
    */
   public void setOption (String _name, String _value)
+    throws Exception
   {
-    try{
-      Map options = JavaCore.getOptions();
+    Map options = JavaCore.getOptions();
 
-      if(_name.equals(JavaCore.COMPILER_SOURCE)){
-        JavaUtils.setCompilerSourceCompliance((String)_value);
-      }else{
-        options.put(_name, _value);
-        JavaCore.setOptions((Hashtable)options);
-      }
-    }catch(Exception e){
-      throw new RuntimeException(e);
+    if(_name.equals(JavaCore.COMPILER_SOURCE)){
+      JavaUtils.setCompilerSourceCompliance((String)_value);
+    }else{
+      options.put(_name, _value);
+      JavaCore.setOptions((Hashtable)options);
     }
   }
 
@@ -92,6 +91,7 @@ public class OptionHandler
    * {@inheritDoc}
    */
   public void setOption (IProject _project, String _name, String _value)
+    throws Exception
   {
     IJavaProject javaProject = JavaCore.create(_project);
     if(!javaProject.exists()){
@@ -102,17 +102,13 @@ public class OptionHandler
     Map options = javaProject.getOptions(false);
 
     Object current = global.get(_name);
-    try{
-      if(current == null || !current.equals(_value)){
-        if(_name.equals(JavaCore.COMPILER_SOURCE)){
-          JavaUtils.setCompilerSourceCompliance(javaProject, (String)_value);
-        }else{
-          options.put(_name, _value);
-          javaProject.setOptions(options);
-        }
+    if(current == null || !current.equals(_value)){
+      if(_name.equals(JavaCore.COMPILER_SOURCE)){
+        JavaUtils.setCompilerSourceCompliance(javaProject, (String)_value);
+      }else{
+        options.put(_name, _value);
+        javaProject.setOptions(options);
       }
-    }catch(Exception e){
-      throw new RuntimeException(e);
     }
   }
 }
