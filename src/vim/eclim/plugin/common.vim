@@ -84,10 +84,10 @@ if !exists(":SignClearAll")
 endif
 
 if !exists(":QuickFixClear")
-  command QuickFixClear :call setqflist([])
+  command QuickFixClear :call setqflist([]) | call eclim#signs#Update()
 endif
 if !exists(":LocationListClear")
-  command LocationListClear :call setloclist(0, [])
+  command LocationListClear :call setloclist(0, []) | call eclim#signs#Update()
 endif
 " }}}
 
