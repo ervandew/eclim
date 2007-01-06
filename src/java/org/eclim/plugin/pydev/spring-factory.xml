@@ -64,6 +64,7 @@
     <constructor-arg value="org.python.pydev.pythonNature"/>
     <constructor-arg>
       <value>
+        PyDev org.python.pydev.INTERPRETER_PATH
         PyDev org.python.pydev.PYTHON_PROJECT_VERSION python 2\.[3-5]
         PyDev org.python.pydev.PROJECT_SOURCE_PATH
         PyDev org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH

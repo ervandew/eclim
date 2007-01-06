@@ -15,17 +15,22 @@
  */
 package org.eclim.plugin.pydev.preference;
 
+import java.io.File;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
-import org.eclim.util.ProjectUtils;
-
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
+import org.python.pydev.core.IInterpreterManager;
 import org.python.pydev.core.IPythonPathNature;
 
 import org.python.pydev.plugin.PydevPlugin;
@@ -42,6 +47,8 @@ public class OptionHandler
   implements org.eclim.preference.OptionHandler
 {
   private static final String NATURE = "org.python.pydev.pythonNature";
+  private static final String INTERPRETER_PATH =
+    PydevPlugin.getPluginID() + ".INTERPRETER_PATH";
   private static final String PYTHON_VERSION =
     PydevPlugin.getPluginID() + ".PYTHON_PROJECT_VERSION";
   private static final String PROJECT_SOURCE_PATH =
@@ -67,7 +74,13 @@ public class OptionHandler
   public Map getOptionsAsMap ()
     throws Exception
   {
-    return null;
+    IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
+    String list = manager.getPersistedString();
+    String [] executables = manager.getInterpretersFromPersistedString(list);
+    HashMap options = new HashMap();
+    options.put(INTERPRETER_PATH,
+        formatArrayOption(StringUtils.join(executables, PATH_DELIMITER)));
+    return options;
   }
 
   /**
@@ -99,6 +112,34 @@ public class OptionHandler
   public void setOption (String _name, String _value)
     throws Exception
   {
+    IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
+    if(INTERPRETER_PATH.equals(_name)){
+      String[] executables = StringUtils.stripAll(
+          StringUtils.split(_value, PATH_DELIMITER));
+      List original = Arrays.asList(
+        manager.getInterpretersFromPersistedString(manager.getPersistedString()));
+      for (int ii = 0; ii < executables.length; ii++){
+        if(!original.contains(executables[ii])){
+          File file = new File(executables[ii]);
+          if(!file.exists()){
+            throw new RuntimeException(
+                Services.getMessage("executable.not.found", executables[ii]));
+          }
+          if(!file.isFile()){
+            throw new RuntimeException(
+                Services.getMessage("executable.not.a.file", executables[ii]));
+          }
+          String message = canExecute(executables[ii]);
+          if(message != null){
+            throw new RuntimeException(message);
+          }
+          manager.getInterpreterInfo(executables[ii], new NullProgressMonitor());
+        }
+      }
+      String list = manager.getStringToPersist(executables);
+      manager.setPersistedString(list);
+      PydevPlugin.getDefault().savePluginPreferences();
+    }
   }
 
   /**
@@ -205,5 +246,20 @@ public class OptionHandler
   private String formatArrayOption (String _value)
   {
     return "\\\n\t\t" + _value.replaceAll("\\|", "|\\\\\n\t\t");
+  }
+
+  private String canExecute (String _file)
+  {
+    try{
+      Process process = Runtime.getRuntime().exec(_file + " -V");
+      int exit = process.waitFor();
+      if(exit != 0){
+        return Services.getMessage("executable.failed",
+            new Object[]{_file, new Integer(exit)});
+      }
+    }catch(Exception e){
+      return e.getMessage();
+    }
+    return null;
   }
 }
