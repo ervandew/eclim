@@ -18,6 +18,8 @@ package org.eclim.plugin.pydev.preference;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.Services;
 
 import org.eclim.util.ProjectUtils;
@@ -46,6 +48,9 @@ public class OptionHandler
     PydevPlugin.getPluginID() + ".PROJECT_SOURCE_PATH";
   private static final String PROJECT_EXTERNAL_SOURCE_PATH =
     PydevPlugin.getPluginID() + ".PROJECT_EXTERNAL_SOURCE_PATH";
+
+  private static final String PROJECT_ROOT = ".";
+  private static final String PATH_DELIMITER = "|";
 
   /**
    * {@inheritDoc}
@@ -77,21 +82,12 @@ public class OptionHandler
       HashMap options = new HashMap();
       options.put(PYTHON_VERSION, nature.getVersion());
 
-      String paths = pathNature.getProjectExternalSourcePath();
-      // make it look good in eclim settings window.
-      paths = "\\\n\t\t" + paths.replaceAll("\\|", "|\\\\\n\t\t");
-      options.put(PROJECT_EXTERNAL_SOURCE_PATH, paths);
+      String paths = pathNature.getProjectSourcePath();
+      options.put(PROJECT_SOURCE_PATH, normalizeProjectPaths(_project, paths));
 
-      // account pydev including project name at root the the path.
-      String name = _project.getName();
-      String path = pathNature.getProjectSourcePath();
-      if (path.startsWith('/' + name + '/')){
-        path = path.substring(name.length() + 2);
-      }
-      if (path.length() == 0){
-        path = ".";
-      }
-      options.put(PROJECT_SOURCE_PATH, path);
+      paths = pathNature.getProjectExternalSourcePath();
+      options.put(PROJECT_EXTERNAL_SOURCE_PATH, formatArrayOption(paths));
+
       return options;
     }
     return null;
@@ -117,18 +113,97 @@ public class OptionHandler
       if(PYTHON_VERSION.equals(_name)){
         nature.setVersion(_value);
       }else if(PROJECT_SOURCE_PATH.equals(_name)){
-        if (!".".equals(_value) && !_project.getFolder(_value).exists()){
-          throw new RuntimeException(Services.getMessage(
-                "project.path.not.found", _value));
+        String[] paths = StringUtils.split(_value, PATH_DELIMITER);
+        for (int ii = 0; ii < paths.length; ii++){
+          String path = paths[ii];
+          if (path.endsWith("/")){
+            path = path.substring(0, path.length() - 1);
+          }
+          if (!PROJECT_ROOT.equals(path) &&
+              !_project.getFolder(path).exists())
+          {
+            throw new RuntimeException(Services.getMessage(
+                  "project.path.not.found", path));
+          }
         }
-        if(".".equals(_value)){
-          _value = "";
-        }
-        pathNature.setProjectSourcePath('/' + _project.getName() + '/' + _value);
+        pathNature.setProjectSourcePath(
+            denormalizeProjectPaths(_project, _value));
       }else if(PROJECT_EXTERNAL_SOURCE_PATH.equals(_name)){
         pathNature.setProjectExternalSourcePath(_value);
       }
       nature.rebuildPath();
     }
+  }
+
+  /**
+   * Normalize all the paths in the pipe delimited list of paths so that they
+   * aren't prefixed with the project name.
+   *
+   * @param _project The project.
+   * @param _paths The pipe delimited array of paths.
+   * @return Normalized paths.
+   */
+  private String normalizeProjectPaths (IProject _project, String _paths)
+    throws Exception
+  {
+    String projectName = _project.getName();
+    String[] paths = StringUtils.split(_paths, PATH_DELIMITER);
+    for (int ii = 0; ii < paths.length; ii++){
+      String path = paths[ii];
+      if (path.startsWith('/' + projectName)){
+        path = path.substring(projectName.length() + 1);
+        if (path.startsWith("/")){
+          path = path.substring(1);
+        }
+      }
+      if (path.trim().length() == 0){
+        path = PROJECT_ROOT;
+      }
+      paths[ii] = path;
+    }
+    return StringUtils.join(paths, PATH_DELIMITER);
+  }
+
+  /**
+   * De-normalize all the paths in the pipe delimited list of paths so that they
+   * are prefixed with the project name.
+   *
+   * @param _project The project.
+   * @param _paths The pipe delimited array of paths.
+   * @return De-normalized paths.
+   */
+  private String denormalizeProjectPaths (IProject _project, String _paths)
+    throws Exception
+  {
+    String projectName = _project.getName();
+    if (_paths.trim().length() == 0){
+      return '/' + projectName;
+    }
+
+    String[] paths = StringUtils.split(_paths, PATH_DELIMITER);
+    for (int ii = 0; ii < paths.length; ii++){
+      String path = paths[ii];
+      path = '/' + projectName + '/' + path;
+      int index = path.indexOf('/' + PROJECT_ROOT);
+      if (index != -1){
+        path = path.replaceAll("/\\.", "");
+      }
+      paths[ii] = path;
+    }
+    return StringUtils.join(paths, PATH_DELIMITER);
+  }
+
+  /**
+   * Format the supplied array property for display on eclim settings page.
+   * <p/>
+   * TODO: This should be an attribute of the option configuration so that the
+   * settings filter can handle display issues.
+   *
+   * @param _value The option value.
+   * @return The formatted option.
+   */
+  private String formatArrayOption (String _value)
+  {
+    return "\\\n\t\t" + _value.replaceAll("\\|", "|\\\\\n\t\t");
   }
 }
