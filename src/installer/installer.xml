@@ -31,23 +31,34 @@
           <property name="provider"
               value="org.eclim.installer.step.FeatureProvider"/>
         </formic:step>
-        <formic:branch path="branch_requirements">
+        <!--formic:branch path="branch_requirements">
+          <or>
+            <istrue value="featureList.ant"/>
+            <istrue value="featureList.jdt"/>
+            <istrue value="featureList.wst"/>
+          </or>
+        </formic:branch-->
+        <formic:step name="summary"/>
+        <formic:branch path="branch_eclipse_plugins">
           <or>
             <istrue value="featureList.ant"/>
             <istrue value="featureList.jdt"/>
             <istrue value="featureList.wst"/>
           </or>
         </formic:branch>
-        <formic:step name="summary"/>
         <formic:step name="install"/>
         <formic:step name="finished"/>
       </formic:path>
 
-      <formic:path name="branch_requirements">
+      <!--formic:path name="branch_requirements">
         <formic:step name="requirements">
           <property name="provider"
               value="org.eclim.installer.step.RequirementProvider"/>
         </formic:step>
+      </formic:path-->
+
+      <formic:path name="branch_eclipse_plugins">
+        <formic:step name="eclipsePlugins"/>
       </formic:path>
     </formic:installer>
   </target>
