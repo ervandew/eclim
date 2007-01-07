@@ -46,8 +46,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.ide_3.2.1.M20060915-1030.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.2.1.M20060906-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.2.0.v20060605-1400.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.python.pydev_1.2.5/pydev.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.python.pydev.core_1.2.5/core.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.update.core_3.2.1.v20092006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.css.ui_1.0.101.v200609140550.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.dtd.core_1.1.1.v200609210600.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.html.ui_1.0.101.v200608142042.jar"/>
@@ -58,6 +57,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xsd.core_1.1.100.v200608112037.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.100.v200609182120.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.0.200.v200609211325.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.python.pydev_1.2.5/pydev.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.python.pydev.core_1.2.5/core.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/formic.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="output" path="bin"/>

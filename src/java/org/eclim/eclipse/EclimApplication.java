@@ -144,7 +144,9 @@ public class EclimApplication
     File root = new File(pluginsDir);
     String[] plugins = root.list(new FilenameFilter(){
       public boolean accept (File _dir, String _name){
-        if(_name.startsWith("org.eclim.")){
+        if(_name.startsWith("org.eclim.") && 
+          !_name.startsWith("org.eclim.installer"))
+        {
           return true;
         }
         return false;
