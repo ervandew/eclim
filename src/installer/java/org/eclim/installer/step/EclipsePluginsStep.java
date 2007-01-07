@@ -17,12 +17,24 @@ package org.eclim.installer.step;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.InputStreamReader;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.formic.Installer;
 
 import org.formic.wizard.step.InstallStep;
 
@@ -57,16 +69,76 @@ public class EclipsePluginsStep
   protected void execute ()
     throws Exception
   {
-    InstallProcess process = new InstallProcess();
-    try{
-      process.start();
-      process.join();
-      if(process.getReturnCode() != 0){
-        throw new RuntimeException(process.getErrorMessage());
+    List dependencies = getDependencies();
+    filterDependencies(dependencies, getInstalledFeatures());
+    guiOverallProgress.setMaximum(dependencies.size());
+    guiOverallProgress.setValue(0);
+    for (Iterator ii = dependencies.iterator(); ii.hasNext();){
+      String[] dependency = (String[])ii.next();
+      guiOverallLabel.setText("Installing feature: " + dependency[1]);
+
+      InstallProcess process = new InstallProcess(dependency);
+      try{
+        process.start();
+        process.join();
+        if(process.getReturnCode() != 0){
+          throw new RuntimeException(process.getErrorMessage());
+        }
+      }finally{
+        process.destroy();
       }
-    }finally{
-      process.destroy();
+      guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
     }
+    guiTaskLabel.setText("");
+  }
+
+  private List getDependencies ()
+    throws Exception
+  {
+    ArrayList dependencies = new ArrayList();
+    Properties properties = new Properties();
+    properties.load(EclipsePluginsStep.class.getResourceAsStream(
+          "/resources/dependencies.properties"));
+    String[] features = Installer.getContext().getKeysByPrefix("featureList");
+    for (int ii = 0; ii < features.length; ii++){
+      Boolean enabled = (Boolean)Installer.getContext().getValue(features[ii]);
+      String name = features[ii].substring(features[ii].indexOf('.') + 1);
+      if(enabled.booleanValue() && properties.containsKey(name)){
+        String[] depends = StringUtils.split(properties.getProperty(name), ',');
+        for (int jj = 0; jj < depends.length; jj++){
+          String[] dependency = StringUtils.split(depends[jj]);
+          dependencies.add(dependency);
+        }
+      }
+    }
+    return dependencies;
+  }
+
+  private void filterDependencies (List dependencies, List features)
+  {
+    // TODO: check if newer version is installed.
+    ArrayList copy = new ArrayList(dependencies);
+    for (Iterator ii = copy.iterator(); ii.hasNext();){
+      String[] dependency = (String[])ii.next();
+      if(features.contains(dependency[1] + '_' + dependency[2])){
+        dependencies.remove(dependency);
+      }
+    }
+  }
+
+  private List getInstalledFeatures ()
+  {
+    String eclipseHome = (String)
+      Installer.getContext().getValue("eclipse.home");
+    String features = FilenameUtils.concat(eclipseHome, "features");
+
+    String[] results = new File(features).list(new FilenameFilter(){
+      public boolean accept (File file, String name){
+        return file.isDirectory();
+      }
+    });
+
+    return Arrays.asList(results);
   }
 
   private void processLine (final String line)
@@ -100,12 +172,32 @@ public class EclipsePluginsStep
     private Process process;
     private int returnCode;
     private String errorMessage;
+    private String[] cmd;
+
+    public InstallProcess (String[] dependency)
+    {
+      String eclipseHome = (String)
+        Installer.getContext().getValue("eclipse.home");
+      cmd = new String[12];
+      cmd[0] = FilenameUtils.concat(eclipseHome, "eclipse");
+      cmd[1] = "-nosplash";
+      cmd[2] = "-application";
+      cmd[3] = "org.eclim.installer.application";
+      cmd[4] = "-command";
+      cmd[5] = "install";
+      cmd[6] = "-from";
+      cmd[7] = dependency[0];
+      cmd[8] = "-featureId";
+      cmd[9] = dependency[1];
+      cmd[10] = "-version";
+      cmd[11] = dependency[2];
+    }
 
     public void run ()
     {
       try{
         Runtime runtime = Runtime.getRuntime();
-        process = runtime.exec("cat /home/ervandew/output.txt");
+        process = runtime.exec(cmd);
 
         final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
@@ -117,7 +209,6 @@ public class EclipsePluginsStep
               String line = null;
               while((line = reader.readLine()) != null){
                 processLine(line);
-Thread.sleep(100);
               }
             }catch(Exception e){
               e.printStackTrace();
