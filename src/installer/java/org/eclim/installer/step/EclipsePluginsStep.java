@@ -15,11 +15,7 @@
  */
 package org.eclim.installer.step;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.InputStreamReader;
+import java.text.Collator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,14 +25,19 @@ import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.formic.Installer;
 
 import org.formic.wizard.step.InstallStep;
+
+import org.eclim.installer.step.command.Command;
+import org.eclim.installer.step.command.EnableCommand;
+import org.eclim.installer.step.command.InstallCommand;
+import org.eclim.installer.step.command.ListCommand;
+import org.eclim.installer.step.command.OutputHandler;
+import org.eclim.installer.step.command.UninstallCommand;
+import org.eclim.installer.step.command.UpdateCommand;
 
 /**
  * Step which installs necessary third party eclipse plugins.
@@ -46,11 +47,14 @@ import org.formic.wizard.step.InstallStep;
  */
 public class EclipsePluginsStep
   extends InstallStep
+  implements OutputHandler
 {
   private static final String BEGIN_TASK = "beginTask";
   private static final String SUB_TASK = "subTask";
   private static final String INTERNAL_WORKED = "internalWorked";
   private static final String SET_TASK_NAME = "setTaskName";
+  private static final String FEATURE = "  Feature";
+  private static final String ENABLED = "enabled";
 
   private String taskName = "";
 
@@ -70,26 +74,54 @@ public class EclipsePluginsStep
     throws Exception
   {
     List dependencies = getDependencies();
-    filterDependencies(dependencies, getInstalledFeatures());
+    filterDependencies(dependencies, getFeatures());
     guiOverallProgress.setMaximum(dependencies.size());
     guiOverallProgress.setValue(0);
     for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-      String[] dependency = (String[])ii.next();
-      guiOverallLabel.setText("Installing feature: " + dependency[1]);
+      Dependency dependency = (Dependency)ii.next();
+      if(!dependency.isUpgrade()){
+        guiOverallLabel.setText("Installing feature: " + dependency.getId());
+      }else{
+        guiOverallLabel.setText("Updating feature: " + dependency.getId());
+      }
 
-      InstallProcess process = new InstallProcess(dependency);
-      try{
-        process.start();
-        process.join();
-        if(process.getReturnCode() != 0){
-          throw new RuntimeException(process.getErrorMessage());
+      List commands = getCommands(dependency);
+      for (Iterator jj = commands.iterator(); jj.hasNext();){
+        Command command = (Command)jj.next();
+        try{
+          command.start();
+          command.join();
+          if(command.getReturnCode() != 0){
+            throw new RuntimeException(command.getErrorMessage());
+          }
+        }finally{
+          command.destroy();
         }
-      }finally{
-        process.destroy();
       }
       guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
     }
     guiTaskLabel.setText("");
+    guiTaskProgress.setValue(guiTaskProgress.getMaximum());
+    guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+  }
+
+  private List getCommands (Dependency dependency)
+  {
+    ArrayList list = new ArrayList();
+    if(!dependency.isUpgrade()){
+      list.add(new InstallCommand(this,
+          dependency.getUrl(), dependency.getId(), dependency.getVersion()));
+    }else{
+      if(!dependency.getFeature().isEnabled()){
+        list.add(new EnableCommand(this,
+            dependency.getId(), dependency.getFeature().getVersion()));
+      }
+      list.add(new UpdateCommand(this,
+          dependency.getId(), dependency.getVersion()));
+      list.add(new UninstallCommand(this,
+          dependency.getId(), dependency.getFeature().getVersion()));
+    }
+    return list;
   }
 
   private List getDependencies ()
@@ -107,41 +139,69 @@ public class EclipsePluginsStep
         String[] depends = StringUtils.split(properties.getProperty(name), ',');
         for (int jj = 0; jj < depends.length; jj++){
           String[] dependency = StringUtils.split(depends[jj]);
-          dependencies.add(dependency);
+          dependencies.add(new Dependency(dependency));
         }
       }
     }
     return dependencies;
   }
 
+  private List getFeatures ()
+    throws Exception
+  {
+    final ArrayList features = new ArrayList();
+    Command command = new ListCommand(new OutputHandler(){
+      public void process (String line){
+        if(line.startsWith(FEATURE)){
+          String[] attrs = StringUtils.split(
+            line.substring(FEATURE.length() + 2));
+          features.add(new Feature(attrs[0], attrs[1], attrs[2].equals(ENABLED)));
+        }
+      }
+    });
+    try{
+      command.start();
+      command.join();
+    }finally{
+      command.destroy();
+    }
+    return features;
+  }
+
   private void filterDependencies (List dependencies, List features)
   {
-    // TODO: check if newer version is installed.
-    ArrayList copy = new ArrayList(dependencies);
-    for (Iterator ii = copy.iterator(); ii.hasNext();){
-      String[] dependency = (String[])ii.next();
-      if(features.contains(dependency[1] + '_' + dependency[2])){
-        dependencies.remove(dependency);
+    Collator collator = Collator.getInstance();
+
+    for (Iterator ii = features.iterator(); ii.hasNext();){
+      Feature feature = (Feature)ii.next();
+      boolean installed = false;
+      Dependency dependency = null;
+      for (Iterator jj = dependencies.iterator(); jj.hasNext();){
+        dependency = (Dependency)jj.next();
+        if(feature.getId().equals(dependency.getId())){
+          installed = true;
+          break;
+        }
+      }
+
+      // compare installed in dependency
+      if (installed){
+        int order = collator.compare(
+            feature.getVersion(), dependency.getVersion());
+        // if required or newer version installed, remove dependency.
+        if(order >= 0){
+          dependencies.remove(dependency);
+
+        // need to upgrade the dependency
+        }else{
+          dependency.setUpgrade(true);
+          dependency.setFeature(feature);
+        }
       }
     }
   }
 
-  private List getInstalledFeatures ()
-  {
-    String eclipseHome = (String)
-      Installer.getContext().getValue("eclipse.home");
-    String features = FilenameUtils.concat(eclipseHome, "features");
-
-    String[] results = new File(features).list(new FilenameFilter(){
-      public boolean accept (File file, String name){
-        return file.isDirectory();
-      }
-    });
-
-    return Arrays.asList(results);
-  }
-
-  private void processLine (final String line)
+  public void process (final String line)
   {
     SwingUtilities.invokeLater(new Runnable(){
       public void run (){
@@ -166,113 +226,74 @@ public class EclipsePluginsStep
     });
   }
 
-  private class InstallProcess
-    extends Thread
+  private static class Dependency
   {
-    private Process process;
-    private int returnCode;
-    private String errorMessage;
-    private String[] cmd;
+    private String url;
+    private String id;
+    private String version;
+    private String previousVersion;
+    private boolean upgrade;
+    private Feature feature;
 
-    public InstallProcess (String[] dependency)
+    public Dependency (String[] attrs)
     {
-      String eclipseHome = (String)
-        Installer.getContext().getValue("eclipse.home");
-      cmd = new String[12];
-      cmd[0] = FilenameUtils.concat(eclipseHome, "eclipse");
-      cmd[1] = "-nosplash";
-      cmd[2] = "-application";
-      cmd[3] = "org.eclim.installer.application";
-      cmd[4] = "-command";
-      cmd[5] = "install";
-      cmd[6] = "-from";
-      cmd[7] = dependency[0];
-      cmd[8] = "-featureId";
-      cmd[9] = dependency[1];
-      cmd[10] = "-version";
-      cmd[11] = dependency[2];
+      url = attrs[0];
+      id = attrs[1];
+      version = attrs[2];
     }
 
-    public void run ()
-    {
-      try{
-        Runtime runtime = Runtime.getRuntime();
-        process = runtime.exec(cmd);
-
-        final ByteArrayOutputStream err = new ByteArrayOutputStream();
-
-        Thread outThread = new Thread(){
-          public void run (){
-            try{
-              BufferedReader reader = new BufferedReader(
-                  new InputStreamReader(process.getInputStream()));
-              String line = null;
-              while((line = reader.readLine()) != null){
-                processLine(line);
-              }
-            }catch(Exception e){
-              e.printStackTrace();
-              errorMessage = e.getMessage();
-              returnCode = 1000;
-              process.destroy();
-            }
-          }
-        };
-        outThread.start();
-
-        Thread errThread = new Thread(){
-          public void run (){
-            try{
-              IOUtils.copy(process.getErrorStream(), err);
-            }catch(Exception e){
-              e.printStackTrace();
-            }
-          }
-        };
-        errThread.start();
-
-        returnCode = process.waitFor();
-        outThread.join();
-        errThread.join();
-
-        if(errorMessage == null){
-          errorMessage = err.toString();
-        }
-      }catch(Exception e){
-        returnCode = 12;
-        errorMessage = e.getMessage();
-        e.printStackTrace();
-      }
+    public String getUrl () {
+      return url;
     }
 
-    /**
-     * Gets the returnCode for this instance.
-     *
-     * @return The returnCode.
-     */
-    public int getReturnCode ()
-    {
-      return this.returnCode;
+    public String getId () {
+      return id;
     }
 
-    /**
-     * Gets the errorMessage for this instance.
-     *
-     * @return The errorMessage.
-     */
-    public String getErrorMessage ()
-    {
-      return this.errorMessage;
+    public String getVersion () {
+      return version;
     }
 
-    /**
-     * Destroy this process.
-     */
-    public void destroy ()
+    public boolean isUpgrade () {
+      return upgrade;
+    }
+
+    public void setUpgrade (boolean upgrade) {
+      this.upgrade = upgrade;
+    }
+
+    public Feature getFeature () {
+      return feature;
+    }
+
+    public void setFeature (Feature feature) {
+      this.feature = feature;
+    }
+  }
+
+  private static class Feature
+  {
+    private String id;
+    private String version;
+    private boolean enabled;
+
+    public Feature (String id, String version, boolean enabled)
     {
-      if(process != null){
-        process.destroy();
-      }
+      this.id = id;
+      this.version = version;
+      this.enabled = enabled;
+    }
+
+    public String getId () {
+      return id;
+    }
+
+    public String getVersion () {
+      return version;
+    }
+
+    public boolean isEnabled () {
+      return enabled;
     }
   }
 }
