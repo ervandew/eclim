@@ -15,6 +15,8 @@
  */
 package org.eclim.installer.step;
 
+import java.io.File;
+
 import java.text.Collator;
 
 import java.util.ArrayList;
@@ -25,7 +27,11 @@ import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.tools.ant.taskdefs.Untar;
 
 import org.formic.Installer;
 
@@ -73,6 +79,8 @@ public class EclipsePluginsStep
   protected void execute ()
     throws Exception
   {
+    extractInstallerPlugin();
+
     List dependencies = getDependencies();
     filterDependencies(dependencies, getFeatures());
     if(dependencies.size() == 0){
@@ -110,6 +118,27 @@ public class EclipsePluginsStep
       guiTaskProgress.setValue(guiTaskProgress.getMaximum());
       guiOverallProgress.setValue(guiOverallProgress.getMaximum());
     }
+  }
+
+  private void extractInstallerPlugin ()
+  {
+    // extract eclipse installer plugin.
+    String eclipseHome = (String)
+      Installer.getContext().getValue("eclipse.home");
+    String plugins = FilenameUtils.concat(eclipseHome, "plugins");
+    String tar = Installer.getProject().replaceProperties(
+        "${basedir}/org.eclim.installer_${eclim.version}.tar.gz");
+
+    Untar untar = new Untar();
+    untar.setTaskName("untar");
+    untar.setDest(new File(plugins));
+    untar.setSrc(new File(tar));
+    Untar.UntarCompressionMethod compression =
+      new Untar.UntarCompressionMethod();
+    compression.setValue("gzip");
+    untar.setCompression(compression);
+    untar.setProject(Installer.getProject());
+    untar.execute();
   }
 
   private List getCommands (Dependency dependency)

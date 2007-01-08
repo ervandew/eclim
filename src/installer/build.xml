@@ -53,6 +53,7 @@
       <tarfileset dir="dist">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.tar.gz"/>
+        <include name="org.eclim.installer_${eclim.version}.tar.gz"/>
       </tarfileset>
     </formic:package>
 
@@ -72,6 +73,7 @@
       <fileset dir="dist">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.zip"/>
+        <include name="org.eclim.installer_${eclim.version}.tar.gz"/>
       </fileset>
     </formic:package>
   </target>

@@ -33,7 +33,6 @@
         </formic:step>
         <!--formic:branch path="branch_requirements">
           <or>
-            <istrue value="featureList.ant"/>
             <istrue value="featureList.jdt"/>
             <istrue value="featureList.wst"/>
           </or>
@@ -41,7 +40,6 @@
         <formic:step name="summary"/>
         <formic:branch path="branch_eclipse_plugins">
           <or>
-            <istrue value="featureList.ant"/>
             <istrue value="featureList.jdt"/>
             <istrue value="featureList.wst"/>
           </or>
@@ -121,6 +119,8 @@
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;"
         value="let g:EclimHome = '${eclim.home}'"/>
+
+    <antcall target="cleanup"/>
   </target>
 
   <!--
@@ -150,6 +150,14 @@
     -->
   <target name="canceled">
     <echo>Installation canceled.</echo>
+    <antcall target="cleanup"/>
+  </target>
+
+  <!--
+    - Cleanup any installer files when installer has completed or has been canceled.
+    -->
+  <target name="cleanup">
+    <delete dir="${eclipse.home}/plugins/org.eclim.installer_${eclim.version}"/>
   </target>
 
 </project>
