@@ -75,34 +75,41 @@ public class EclipsePluginsStep
   {
     List dependencies = getDependencies();
     filterDependencies(dependencies, getFeatures());
-    guiOverallProgress.setMaximum(dependencies.size());
-    guiOverallProgress.setValue(0);
-    for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-      Dependency dependency = (Dependency)ii.next();
-      if(!dependency.isUpgrade()){
-        guiOverallLabel.setText("Installing feature: " + dependency.getId());
-      }else{
-        guiOverallLabel.setText("Updating feature: " + dependency.getId());
-      }
-
-      List commands = getCommands(dependency);
-      for (Iterator jj = commands.iterator(); jj.hasNext();){
-        Command command = (Command)jj.next();
-        try{
-          command.start();
-          command.join();
-          if(command.getReturnCode() != 0){
-            throw new RuntimeException(command.getErrorMessage());
-          }
-        }finally{
-          command.destroy();
+    if(dependencies.size() == 0){
+      guiOverallProgress.setMaximum(1);
+      guiOverallProgress.setValue(1);
+      guiTaskProgress.setMaximum(1);
+      guiTaskProgress.setValue(1);
+    }else{
+      guiOverallProgress.setMaximum(dependencies.size());
+      guiOverallProgress.setValue(0);
+      for (Iterator ii = dependencies.iterator(); ii.hasNext();){
+        Dependency dependency = (Dependency)ii.next();
+        if(!dependency.isUpgrade()){
+          guiOverallLabel.setText("Installing feature: " + dependency.getId());
+        }else{
+          guiOverallLabel.setText("Updating feature: " + dependency.getId());
         }
+
+        List commands = getCommands(dependency);
+        for (Iterator jj = commands.iterator(); jj.hasNext();){
+          Command command = (Command)jj.next();
+          try{
+            command.start();
+            command.join();
+            if(command.getReturnCode() != 0){
+              throw new RuntimeException(command.getErrorMessage());
+            }
+          }finally{
+            command.destroy();
+          }
+        }
+        guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
       }
-      guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
+      guiTaskLabel.setText("");
+      guiTaskProgress.setValue(guiTaskProgress.getMaximum());
+      guiOverallProgress.setValue(guiOverallProgress.getMaximum());
     }
-    guiTaskLabel.setText("");
-    guiTaskProgress.setValue(guiTaskProgress.getMaximum());
-    guiOverallProgress.setValue(guiOverallProgress.getMaximum());
   }
 
   private List getCommands (Dependency dependency)
