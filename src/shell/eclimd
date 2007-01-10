@@ -28,7 +28,16 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
 fi
 
-ECLIM_COMMAND="$ECLIPSE_HOME/eclipse
+ECLIPSE=`which eclipse 2> /dev/null`
+if [ -z $ECLIPSE ]; then
+  ECLIPSE="$ECLIPSE_HOME/eclipse"
+fi
+if [ ! -e $ECLIPSE ]; then
+  echo "No eclipse executable found." 1>&2
+  exit 1
+fi
+
+ECLIM_COMMAND="$ECLIPSE
   -debug -consolelog -nosplash -clean -refresh -application
   org.eclim.application -vmargs $ECLIM_ARGS"
 
