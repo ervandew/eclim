@@ -41,15 +41,15 @@
         This command will run the corresponding 'cvs annotate' or 'svn blame'
         and annotate the current file via vim's sign support.  Due to vim
         limiting sign text to a maximum of two characters, the sign text will be
-        the first two characters of the username.  This command will also remap
-        'j' and 'k' so that the version number and author of the current line
-        will be echoed to the status bar as you navigate the file.
+        the first two characters of the username.  This command will also create
+        a CursorHold event which will echo the version number and author of the
+        current line.
       </li>
       <li>
         <anchor id="VcsAnnotateOff"/>
         <strong>:VcsAnnotateOff</strong> -
-        Turns any current annotations off by removing all vim signs and removing
-        'j' and 'k' mappings.
+        Turns any current annotations off by removing all vim signs and
+        disabling the CursorHold event.
       </li>
       <li>
         <anchor id="Viewvc"/>
