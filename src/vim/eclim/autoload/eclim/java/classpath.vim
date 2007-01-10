@@ -39,14 +39,8 @@ function! eclim#java#classpath#NewClasspathEntry (arg, template)
   let ccol = col('.')
   for arg in args
     call s:MoveToInsertPosition()
-
     let line = line('.')
-
-    let saved = @"
-    let @" = substitute(a:template, '<arg>', arg, 'g')
-    silent put
-    let @" = saved
-
+    call append(line, split(substitute(a:template, '<arg>', arg, 'g'), '\n'))
     call cursor(line + 1, 1)
   endfor
   call cursor(cline + 1, ccol)
