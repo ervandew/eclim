@@ -44,7 +44,7 @@
   endif
 
   if !exists("g:EclimShowCurrentErrorBalloon")
-    let g:EclimShowCurrentError = 1
+    let g:EclimShowCurrentErrorBalloon = 1
   endif
 
   if !exists("g:EclimMakeLCD")
