@@ -56,8 +56,11 @@ function! eclim#vcs#Annotate ()
     let index += 1
   endfor
   let b:vcs_annotations = annotations
-  nmap <silent> j j:call eclim#vcs#AnnotateInfo()<cr>
-  nmap <silent> k k:call eclim#vcs#AnnotateInfo()<cr>
+
+  augroup vcs_annotate
+    autocmd!
+    autocmd CursorHold <buffer> call eclim#vcs#AnnotateInfo()
+  augroup END
 endfunction " }}}
 
 " AnnotateOff() {{{
@@ -77,8 +80,9 @@ function! eclim#vcs#AnnotateOff ()
     endfor
     unlet b:vcs_annotations
   endif
-  nunmap j
-  nunmap k
+  augroup vcs_annotate
+    autocmd!
+  augroup END
 endfunction " }}}
 
 " AnnotateInfo() {{{
@@ -88,12 +92,14 @@ function! eclim#vcs#AnnotateInfo ()
   endif
 endfunction " }}}
 
+" Viewvc(file) {{{
+" Convert file or directory to viewvc url and open in the browser.
 function eclim#vcs#Viewvc (file)
   let root = eclim#project#GetProjectSetting("org.eclim.project.vcs.viewvc")
   if root == ''
     return
   elseif root !~ '/$'
-    root .= '/'
+    let root .= '/'
   endif
 
   let file = a:file
@@ -108,6 +114,6 @@ function eclim#vcs#Viewvc (file)
   endif
 
   call eclim#web#OpenUrl(url)
-endfunction
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker
