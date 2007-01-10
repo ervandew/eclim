@@ -49,6 +49,17 @@ function! eclim#util#Abbreviate (abbreviation)
   return "\<right>"
 endfunction " }}}
 
+" Balloon(message) {{{
+" Function for use as a vim balloonexpr expression.
+function! eclim#util#Balloon (message)
+  let message = a:message
+  if !has('balloon_multiline')
+    " remove any new lines
+    let message = substitute(message, '\n', ' ', 'g')
+  endif
+  return message
+endfunction " }}}
+
 " EchoTrace(message) {{{
 function! eclim#util#EchoTrace (message)
   call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
@@ -269,6 +280,46 @@ function! eclim#util#GetIndent (indent)
   endif
 
   return result
+endfunction " }}}
+
+" GetLineError(line) {{{
+" Gets the error (or message) for the supplie line number if one.
+function! eclim#util#GetLineError (line)
+  let line = line('.')
+  let col = col('.')
+
+  let errornum = 0
+  let errorcol = 0
+  let index = 0
+
+  let locerrors = getloclist(0)
+  let qferrors = getqflist()
+  for error in qferrors + locerrors
+    let index += 1
+    if bufname(error.bufnr) == expand("%") && error.lnum == line
+      if errornum == 0 || (col >= error.col && error.col != errorcol)
+        let errornum = index
+        let errorcol = error.col
+      endif
+    endif
+  endfor
+
+  if errornum > 0
+    let src = 'qf'
+    let cnt = len(qferrors)
+    let errors = qferrors
+    if errornum > cnt
+      let errornum -= cnt
+      let src = 'loc'
+      let cnt = len(locerrors)
+      let errors = locerrors
+    endif
+
+    let message = src . ' - (' . errornum . ' of ' . cnt . '): '
+      \ . errors[errornum - 1].text
+    return message
+  endif
+  return ''
 endfunction " }}}
 
 " GetPathEntry(file) {{{
@@ -552,38 +603,8 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError ()
-  let line = line('.')
-  let col = col('.')
-
-  let errornum = 0
-  let errorcol = 0
-  let index = 0
-
-  let locerrors = getloclist(0)
-  let qferrors = getqflist()
-  for error in qferrors + locerrors
-    let index += 1
-    if bufname(error.bufnr) == expand("%") && error.lnum == line
-      if errornum == 0 || (col >= error.col && error.col != errorcol)
-        let errornum = index
-        let errorcol = error.col
-      endif
-    endif
-  endfor
-
-  if errornum > 0
-    let src = 'qf'
-    let cnt = len(qferrors)
-    let errors = qferrors
-    if errornum > cnt
-      let errornum -= cnt
-      let src = 'loc'
-      let cnt = len(locerrors)
-      let errors = locerrors
-    endif
-
-    let message = src . ' - (' . errornum . ' of ' . cnt . '): '
-      \ . errors[errornum - 1].text
+  let message = eclim#util#GetLineError(line('.'))
+  if message != ''
     " remove any new lines
     let message = substitute(message, '\n', ' ', 'g')
 
@@ -593,6 +614,7 @@ function! eclim#util#ShowCurrentError ()
 
     call eclim#util#WideMessage('echo', message)
   endif
+  call eclim#util#WideMessage('echo', message)
 endfunction " }}}
 
 " Simplify(file) {{{

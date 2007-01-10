@@ -43,6 +43,10 @@
     let g:EclimShowCurrentError = 1
   endif
 
+  if !exists("g:EclimShowCurrentErrorBalloon")
+    let g:EclimShowCurrentError = 1
+  endif
+
   if !exists("g:EclimMakeLCD")
     let g:EclimMakeLCD = 1
   endif
@@ -127,6 +131,11 @@ if g:EclimShowCurrentError
     autocmd!
     autocmd CursorHold * call eclim#util#ShowCurrentError()
   augroup END
+endif
+
+if g:EclimShowCurrentErrorBalloon && has('balloon_eval')
+  set ballooneval
+  set balloonexpr=eclim#util#Balloon(eclim#util#GetLineError(line('.')))
 endif
 
 if g:EclimMakeLCD
