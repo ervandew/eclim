@@ -44,10 +44,7 @@ function! eclim#java#logging#LoggingInit (var)
 
       let position = search('{')
       call append(position, '')
-      let saved = @"
-      let @" = logger
-      silent put
-      let @" = saved
+      call append(position, split(logger, '\n'))
       call cursor(line + offset, col)
       for import in s:logger_imports
         call eclim#java#import#InsertImport(import)
