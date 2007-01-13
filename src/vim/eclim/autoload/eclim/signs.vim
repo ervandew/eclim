@@ -101,15 +101,28 @@ function! eclim#signs#Toggle (name, line)
   endif
 endfunction " }}}
 
+" CompareSigns(s1, s2) {{{
+" Used by ViewSigns to sort list of sign dictionaries.
+function! s:CompareSigns (s1, s2)
+  if a:s1.line == a:s2.line
+    return 0
+  endif
+  if a:s1.line > a:s2.line
+    return 1
+  endif
+  return -1
+endfunction " }}}
+
 " ViewSigns(name) {{{
 " Open a window to view all placed signs with the given name in the current
 " buffer.
 function! eclim#signs#ViewSigns (name)
   let filename = expand('%:p')
   let signs = eclim#signs#GetExisting(a:name)
+  call sort(signs, 's:CompareSigns')
   let content = map(signs, "v:val.line . '|' . getline(v:val.line)")
 
-  call eclim#util#TempWindow('[Sign List]', sort(content))
+  call eclim#util#TempWindow('[Sign List]', content)
 
   set ft=qf
   nnoremap <silent> <buffer> <cr> :call <SID>JumpToSign()<cr>
@@ -167,7 +180,7 @@ function! eclim#signs#GetExisting (...)
   for sign in split(signs, '\n')
     if sign =~ 'id='
       let id = substitute(sign, '.*\sid=\(.\{-}\)\(\s.*\|$\)', '\1', '')
-      let line = substitute(sign, '.*\sline=\(.\{-}\)\(\s.*\|$\)', '\1', '')
+      exec 'let line = ' . substitute(sign, '.*\sline=\(.\{-}\)\(\s.*\|$\)', '\1', '')
       let name = substitute(sign, '.*\sname=\(.\{-}\)\(\s.*\|$\)', '\1', '')
       call add(existing, {'id': id, 'line': line, 'name': name})
     endif
