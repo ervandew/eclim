@@ -28,19 +28,29 @@ if !exists('g:HtmlDjanogUserBodyElements')
 endif
 
 let g:HtmlDjangoBodyElements = [
-    \ 'block',
-    \ 'comment',
-    \ 'if',
-    \ 'else',
-    \ 'filter',
-    \ 'for',
-    \ 'spaceless'
+    \ ['block', 'endblock'],
+    \ ['comment', 'endcomment'],
+    \ ['filter', 'endfilter'],
+    \ ['for', 'endfor'],
+    \ ['\(if\|e_if\)', 'else', 'elif', 'endif'],
+    \ ['ifchanged', 'endifchanged'],
+    \ ['ifequal', 'endifequal'],
+    \ ['ifnotequal', 'endifnotequal'],
+    \ ['spaceless', 'endspaceless']
   \ ] + g:HtmlDjanogUserBodyElements
 
 if exists("b:match_words")
-  let b:match_words = b:match_words . ',' .
-    \ '{%\s*\(e_\)\?if\(changed\|equal\|notequal\)\?\s\+.\{-}%}:{%\s*elif\s\+.\{-}\s*%}:{%\s*else\s*%}:{%\s*endif\(changed\|equal\|notequal\)\?\s*%},' .
-    \ '{%\s*\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\>.\{-}%}:{%\s*end\(' . join(g:HtmlDjangoBodyElements, '\|') . '\)\s*%}'
+  for element in g:HtmlDjangoBodyElements
+    let pattern = ''
+    for tag in element[:-2]
+      if pattern != ''
+        let pattern .= ':'
+      endif
+      let pattern .= '{%\s*\<' . tag . '\>.\{-}%}'
+    endfor
+    let pattern .= ':{%\s*\<' . element[-1:][0] . '\>\s*%}'
+    let b:match_words .= ',' . pattern
+  endfor
 endif
 
 " vim:ft=vim:fdm=marker
