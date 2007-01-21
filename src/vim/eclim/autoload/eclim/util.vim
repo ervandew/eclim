@@ -316,7 +316,7 @@ function! eclim#util#GetLineError (line)
     endif
 
     let message = src . ' - (' . errornum . ' of ' . cnt . '): '
-      \ . errors[errornum - 1].text
+      \ . substitute(errors[errornum - 1].text, '^\s\+', '', '')
     return message
   endif
   return ''
@@ -603,18 +603,21 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError ()
-  let message = eclim#util#GetLineError(line('.'))
-  if message != ''
-    " remove any new lines
-    let message = substitute(message, '\n', ' ', 'g')
+  if !exists('b:eclim_last_error_line') || line('.') != b:eclim_last_error_line
+    let message = eclim#util#GetLineError(line('.'))
+    if message != ''
+      " remove any new lines
+      let message = substitute(message, '\n', ' ', 'g')
 
-    if len(message) > (&columns - 1)
-      let message = strpart(message, 0, &columns - 4) . '...'
+      if len(message) > (&columns - 1)
+        let message = strpart(message, 0, &columns - 4) . '...'
+      endif
+
+      call eclim#util#WideMessage('echo', message)
     endif
-
     call eclim#util#WideMessage('echo', message)
+    let b:eclim_last_error_line = line('.')
   endif
-  call eclim#util#WideMessage('echo', message)
 endfunction " }}}
 
 " Simplify(file) {{{
@@ -781,9 +784,11 @@ function! eclim#util#WideMessage (command, message)
   let saved_ruler = &ruler
   let saved_showcmd = &showcmd
 
+  let message = substitute(a:message, '^\s\+', '', '')
+
   set noruler noshowcmd
   redraw
-  exec a:command . ' "' . escape(a:message, '"\') . '"'
+  exec a:command . ' "' . escape(message, '"\') . '"'
 
   let &ruler = saved_ruler
   let &showcmd = saved_showcmd

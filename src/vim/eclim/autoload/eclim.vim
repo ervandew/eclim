@@ -62,6 +62,10 @@
 " ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
 function! eclim#ExecuteEclim (args)
+  if exists('g:EclimDisabled')
+    return
+  endif
+
   let args = a:args
 
   " encode special characters
@@ -70,6 +74,10 @@ function! eclim#ExecuteEclim (args)
   let args = substitute(args, '\$', '%24', 'g')
   let command = eclim#GetEclimCommand()
   if string(command) == '0'
+    "let g:EclimDisabled = 1
+    if expand('<amatch>') == '' && exists('g:EclimErrorReason')
+      call eclim#util#EchoError(g:EclimErrorReason)
+    endif
     return 0
   endif
   let command = command . ' ' . args
@@ -156,6 +164,11 @@ function! eclim#GetEclimCommand ()
     let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
       \ '/bin/' . g:EclimCommand
 
+    if !filereadable(g:EclimPath)
+      let g:EclimErrorReason = 'Could not locate file: ' . g:EclimPath
+      return
+    endif
+
     " on windows, the command must be executed on the drive where eclipse is
     " installed.
     if g:EclimPath =~ '^[a-zA-Z]:'
@@ -172,20 +185,20 @@ endfunction " }}}
 function! eclim#GetEclimHome ()
   if !exists('g:EclimHome')
     if !exists('$ECLIPSE_HOME')
-      call eclim#util#EchoError('ECLIPSE_HOME must be set.')
+      let g:EclimErrorReason = 'ECLIPSE_HOME must be set.'
       return
     endif
 
     let g:EclimHome = eclim#util#Glob('$ECLIPSE_HOME/plugins/org.eclim_*')
     if g:EclimHome == ''
-      call eclim#util#EchoError(
+      let g:EclimErrorReason =
         \ "eclim plugin not found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
       return
     elseif g:EclimHome =~ "\n"
-      call eclim#util#EchoError(
+      let g:EclimErrorReason =
         \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'")
+        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
       return
     endif
   endif
