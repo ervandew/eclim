@@ -35,8 +35,8 @@ syn region djangoComment start="{#" end="#}"
 if len(g:HtmlDjangoUserTags)
   exec 'syn keyword djangoStatement ' . join(g:HtmlDjangoUserTags)
 endif
-if len(g:HtmlDjanogUserBodyElements)
-  for element in g:HtmlDjanogUserBodyElements
+if len(g:HtmlDjangoUserBodyElements)
+  for element in g:HtmlDjangoUserBodyElements
     exec 'syn keyword djangoStatement ' . join(element)
   endfor
 endif

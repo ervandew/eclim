@@ -23,8 +23,8 @@
 
 runtime ftplugin/html.vim
 
-if !exists('g:HtmlDjanogUserBodyElements')
-  let g:HtmlDjanogUserBodyElements = []
+if !exists('g:HtmlDjangoUserBodyElements')
+  let g:HtmlDjangoUserBodyElements = []
 endif
 
 let g:HtmlDjangoBodyElements = [
@@ -37,8 +37,9 @@ let g:HtmlDjangoBodyElements = [
     \ ['ifequal', 'endifequal'],
     \ ['ifnotequal', 'endifnotequal'],
     \ ['spaceless', 'endspaceless']
-  \ ] + g:HtmlDjanogUserBodyElements
+  \ ] + g:HtmlDjangoUserBodyElements
 
+" add matchit.vim support for django tags
 if exists("b:match_words")
   for element in g:HtmlDjangoBodyElements
     let pattern = ''
@@ -52,5 +53,16 @@ if exists("b:match_words")
     let b:match_words .= ',' . pattern
   endfor
 endif
+
+" used by indent/htmldjango.vim
+let g:HtmlDjangoIndentElements = ''
+for element in g:HtmlDjangoBodyElements
+  for tag in element[:-2]
+    if len(g:HtmlDjangoIndentElements) > 0
+      let g:HtmlDjangoIndentElements .= '\|'
+    endif
+    let g:HtmlDjangoIndentElements .= tag
+  endfor
+endfor
 
 " vim:ft=vim:fdm=marker

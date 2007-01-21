@@ -144,7 +144,7 @@ endfun
 fun! <SID>DjangoHtmlIndentOpen(lnum)
   " exceptions to the rule
   let s = substitute('x'.getline(a:lnum),
-        \ '.\{-}\({%\s*\(end\)\@!\(' . join(g:HtmlDjangoBodyElements, '\|') . '\).\{-}%}\)', "\1", 'g')
+        \ '.\{-}\({%\s*\(end\)\@!\(' . g:HtmlDjangoIndentElements . '\).\{-}%}\)', "\1", 'g')
   let s = substitute(s, "[^\1].*$", '', '')
   return strlen(s)
 endfun
