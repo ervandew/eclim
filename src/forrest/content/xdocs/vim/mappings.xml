@@ -106,6 +106,24 @@
     </ul>
 
     <p>
+      <strong>Python Mappings</strong><br/>
+      Here are some mappings for the python funtionality provided by eclim.  To
+      make use of these mappings, simply create a ftplugin file for python and
+      place your mappings there (:help ftplugin-name).
+    </p>
+    <ul>
+      <li>
+        Jump to the definition of the class, method, function, or variable under
+        the cursor with <code>&lt;Enter&gt;</code>.<br/>
+        <source>
+          <![CDATA[
+          nnoremap <silent> <buffer> <cr> :PythonFindDefinition<cr>
+          ]]>
+        </source>
+      </li>
+    </ul>
+
+    <p>
       <strong>Vim Script Mappings</strong><br/>
       Here are some mappings for the Vim script funtionality provided by eclim.
       To make use of these mappings, simply create a ftplugin file for Vim and

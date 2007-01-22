@@ -389,6 +389,21 @@
       </li>
     </ul>
 
+    <p><strong>Python Commands</strong></p>
+    <ul>
+      <li>
+        <a href="python/definition.html#PythonFindDefinition">
+          <strong>:PythonFindDefinition</strong>
+        </a> -
+        Jump to the definition of the class, method, function, or variable under
+        the cursor.
+      </li>
+      <li>
+        <a href="python/regex.html#PythonRegex"><strong>:PythonRegex</strong></a> -
+        Opens a window for testing python regular expressions.
+      </li>
+    </ul>
+
     <p><strong>Vim Commands</strong></p>
     <ul>
       <li>
