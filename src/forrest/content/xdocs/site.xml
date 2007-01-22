@@ -193,6 +193,16 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
+    <python label="Python" href="python/">
+      <complete label="Code Completion" href="complete.html"
+          description="Code Completion"/>
+      <definition label="Jumping To Definition" href="definition.html"
+          description="Code Completion"/>
+      <regex label="Regex" href="regex.html"
+          description="Regular Expression Testing"/>
+      <django label="Django" href="django.html"
+          description="Django Support"/>
+    </python>
     <vim label="Vim Script" href="vim/">
       <find label="Vim Find" href="find.html"
           description="Find Vim declaration or references of functions and global variables."/>
@@ -254,6 +264,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <viewvc href="http://viewvc.org"/>
 
     <testng href="http://testng.org/doc"/>
+
+    <pydev href="http://pydev.sourceforge.net"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

@@ -130,6 +130,16 @@
     </ul>
 
     <p>
+      <strong>Python Integration</strong>
+    </p>
+    <ul>
+      <li>Code completion.</li>
+      <li>Find definition.</li>
+      <li>Regular expression testing.</li>
+      <li>Django functionality.</li>
+    </ul>
+
+    <p>
       <strong>Vim Script Integration</strong>
     </p>
     <ul>
