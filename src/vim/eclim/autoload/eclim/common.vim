@@ -89,7 +89,7 @@ endfunction " }}}
 " FindInPath(file, path) {{{
 " Find a file in the supplied path returning a list of results.
 function! eclim#common#FindInPath (file, path)
-  let results = eclim#util#Findfile(a:file, a:path . '/**', -1)
+  let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
   call map(results, "fnamemodify(v:val, ':p')")
   return results
 endfunction " }}}
