@@ -20,7 +20,6 @@ import java.io.File;
 import java.text.Collator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -31,11 +30,10 @@ import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.tools.ant.taskdefs.Chmod;
 import org.apache.tools.ant.taskdefs.Untar;
 
-import org.formic.Installer;
-
-import org.formic.wizard.step.InstallStep;
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.EnableCommand;
@@ -44,6 +42,10 @@ import org.eclim.installer.step.command.ListCommand;
 import org.eclim.installer.step.command.OutputHandler;
 import org.eclim.installer.step.command.UninstallCommand;
 import org.eclim.installer.step.command.UpdateCommand;
+
+import org.formic.Installer;
+
+import org.formic.wizard.step.InstallStep;
 
 /**
  * Step which installs necessary third party eclipse plugins.
@@ -139,6 +141,17 @@ public class EclipsePluginsStep
     untar.setCompression(compression);
     untar.setProject(Installer.getProject());
     untar.execute();
+
+    // on unix based systems, chmod the install sh file.
+    if (Os.isFamily("unix")){
+      Chmod chmod = new Chmod();
+      chmod.setTaskName("chmod");
+      chmod.setFile(new File(Installer.getProject().replaceProperties(
+        "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install")));
+      chmod.setPerm("755");
+      chmod.setProject(Installer.getProject());
+      chmod.execute();
+    }
   }
 
   private List getCommands (Dependency dependency)

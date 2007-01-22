@@ -100,15 +100,11 @@ public class EclipseStep
     {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
-        String exe = null;
-        if(Os.isFamily("windows")){
-          exe = FilenameUtils.concat(folder, "eclipse.exe");
-        }else{
-          exe = FilenameUtils.concat(folder, "eclipse");
-        }
+        File startup = new File(FilenameUtils.concat(folder, "startup.jar"));
+        File plugins = new File(FilenameUtils.concat(folder, "plugins"));
 
-        File file = new File(exe);
-        return file.exists() && file.isFile();
+        return startup.exists() && startup.isFile() &&
+          plugins.exists() && plugins.isDirectory();
       }
       return true;
     }

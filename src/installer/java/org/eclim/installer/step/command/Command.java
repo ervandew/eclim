@@ -24,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.formic.Installer;
 
 /**
@@ -44,15 +46,15 @@ public abstract class Command
   public Command (OutputHandler handler, String[] cmd)
   {
     this.handler = handler;
-    this.cmd = new String[cmd.length + 4];
+    this.cmd = new String[cmd.length + 1];
 
-    String eclipseHome = (String)
-      Installer.getContext().getValue("eclipse.home");
-    this.cmd[0] = FilenameUtils.concat(eclipseHome, "eclipse");
-    this.cmd[1] = "-nosplash";
-    this.cmd[2] = "-application";
-    this.cmd[3] = "org.eclim.installer.application";
-    System.arraycopy(cmd, 0, this.cmd, 4, cmd.length);
+    this.cmd[0] = Installer.getProject().replaceProperties(
+        "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install");
+    if (Os.isFamily("windows")){
+      this.cmd[0] += ".bat";
+    }
+
+    System.arraycopy(cmd, 0, this.cmd, 1, cmd.length);
   }
 
   public void run ()

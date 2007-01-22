@@ -60,6 +60,10 @@
     <tar destfile="dist/org.eclim.installer_${eclim.version}.tar.gz" compression="gzip">
       <tarfileset dir="${eclipse.home}/plugins/">
         <include name="org.eclim.installer_${eclim.version}/**/*"/>
+        <exclude name="org.eclim.installer_${eclim.version}/bin/install"/>
+      </tarfileset>
+      <tarfileset dir="${eclipse.home}/plugins/" mode="755">
+        <include name="org.eclim.installer_${eclim.version}/bin/install"/>
       </tarfileset>
     </tar>
 
