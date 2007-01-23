@@ -53,6 +53,8 @@ function eclim#python#definition#Find ()
     return
   endif
   if !empty(results)
+    " filter out pydev output which occurs on first invocation.
+    call filter(results, 'v:val !~ "\\*sys-package-mgr\\*"')
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
