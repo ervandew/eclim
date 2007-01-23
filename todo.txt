@@ -3,6 +3,8 @@ Upgrade
   - commons-lang from 2.1 to 2.2
   - commons-logging from 1.0.4 to 1.1
   - commons-vfs from dev to 1.0
+  - commons-vfs from dev to 1.0
+  - groovy to 1.0
 
 System
   - update backup script to pull down nightly wiki tarballs.
@@ -21,10 +23,23 @@ Documentation
 Test on Windows
 
 Bugs
+  - https://sourceforge.net/tracker/index.php?func=detail&aid=1635747&group_id=145869&atid=763323
+  - https://sourceforge.net/tracker/index.php?func=detail&aid=1635756&group_id=145869&atid=763323
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
+  - update python project guide to note that a python interpreter must be set
+    prior to creating a project.
 
 Enhancements
+  - :ProjectGrep support project relative file completion
+  - :MinimizeWindows, map <space>hjkl to move to next un-minimized window in
+    that direction, or stay in current window if none.
+    OR, map that to something else and use <space>hjkl to grow or shrink the
+    current window.
+    On minimize, execute winc = ?
+    - bug, maybe cause of my new taglist, when minimizing 2 of 4 python files,
+      focus ends up in the taglist window.
+
   - :ProjectTodo run vimgrep against all files using user defined pattern...
     by default '\(\<fixme\>\|\<todo\>\)\c'
     - create list of file extensions to search
@@ -114,16 +129,11 @@ JST
 
 Python
   - when adding new method for a class, auto add self as first parameter.
-  - add :PythonRegex
 
-PyDev
-  - Allow user to set python interpreter
-    org.python.pydev.ui.interpreters.PythonInterpreterManager
-  - Allow user to add more paths to sys.path.
-
-  - set the project's source path, external source path, etc.:
-    IPythonNature nature ...
-    nature.getPythonPathNature().setProjectSourcePath(folder.getFullPath().toString());
-    nature.getPythonPathNature().setExternalSourcePath(folder.getFullPath().toString());
-    nature.setVersion(IPythonNature.PYTHON_VERSION_2_4);
-    nature.rebuildPath()
+PHP
+  - Code completion
+    - org.eclipse.php.ui.editor.contentassist.ContentAssistSupport.getCompletionOption
+  - Validation
+    - org.eclipse.php.core.documentModel.validate.PHPProblemsValidator.validateFile
+  - Search
+    - org.eclipse.php.ui.search.PHPSearchEngine.search
