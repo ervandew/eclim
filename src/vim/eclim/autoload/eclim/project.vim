@@ -307,6 +307,7 @@ function! eclim#project#GetCurrentProjectName ()
     setlocal noswapfile
     setlocal bufhidden=delete
 
+    call cursor(1,1)
     let line = search('<name\s*>', 'wnc')
     if line != 0
       let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
