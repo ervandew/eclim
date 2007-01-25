@@ -21,20 +21,18 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 
-//import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
-
-//import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-/*import org.eclim.util.ProjectUtils;
+import org.eclim.util.ProjectUtils;
 
-import org.eclim.util.file.FileOffsets;
+/*import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
 
@@ -68,8 +66,10 @@ public class HtmlValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      final String file = _commandLine.getValue(Options.FILE_OPTION);
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      final String file = FilenameUtils.concat(
+          ProjectUtils.getPath(project),
+          _commandLine.getValue(Options.FILE_OPTION));
 
       // eclipse wst html valiation... currently not very good.
       /*IProject iproject = ProjectUtils.getProject(project, true);
