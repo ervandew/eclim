@@ -17,6 +17,8 @@ package org.eclim.util;
 
 import java.io.File;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.eclim.Services;
 
 import org.eclipse.core.filebuffers.FileBuffers;
@@ -42,6 +44,18 @@ import org.eclipse.jface.text.IDocument;
  */
 public class ProjectUtils
 {
+  /**
+   * Gets the path on disk to the directory of the supplied project.
+   *
+   * @param _project The project name.
+   * @return The path or null if not found.
+   */
+  public static String getPath (String _project)
+    throws Exception
+  {
+    return getPath(getProject(_project));
+  }
+
   /**
    * Gets the path on disk to the directory of the supplied project.
    *
@@ -124,14 +138,14 @@ public class ProjectUtils
     _project.open(null);
     String path = getPath(_project);
     path = path.replace('\\', '/');
-    if(!_file.startsWith(path)){
+    /*if(!_file.startsWith(path)){
       throw new RuntimeException(
           Services.getMessage("project.file.mismatch",
             new String[]{_file, path}));
-    }
+    }*/
+    //String file = _file.substring(path.length());
 
-    String file = _file.substring(path.length());
-    IFile ifile = _project.getFile(file);
+    IFile ifile = _project.getFile(_file);
     ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
     return ifile;
   }
@@ -141,13 +155,29 @@ public class ProjectUtils
    * <p/>
    * Borrowed from org.eclipse.ant.internal.ui.AntUtil
    *
+   * @param _project The project name.
    * @param _file The file.
    * @return The IDocument.
    */
-  public static IDocument getDocument (String _file)
+  public static IDocument getDocument (String _project, String _file)
     throws Exception
   {
-    File file = new File(_file);
+    return getDocument(getProject(_project), _file);
+  }
+
+  /**
+   * Gets the IDocument instance for the given file.
+   * <p/>
+   * Borrowed from org.eclipse.ant.internal.ui.AntUtil
+   *
+   * @param _project The project.
+   * @param _file The file.
+   * @return The IDocument.
+   */
+  public static IDocument getDocument (IProject _project, String _file)
+    throws Exception
+  {
+    File file = new File(FilenameUtils.concat(getPath(_project), _file));
     if(!file.exists()){
       return null;
     }

@@ -62,7 +62,7 @@ public class SrcUpdateCommand
       // validate the src file.
       if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
         PyLintThread pylint = new PyLintThread(
-            ifile, ProjectUtils.getDocument(file), ifile.getRawLocation());
+            ifile, ProjectUtils.getDocument(project, file), ifile.getRawLocation());
         pylint.start();
         pylint.join();
 

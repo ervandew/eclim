@@ -50,7 +50,7 @@ function! eclim#css#complete#CodeComplete (findstart, base)
 
     let offset = eclim#util#GetCharacterOffset() + len(a:base)
     let project = eclim#project#GetCurrentProjectName()
-    let filename = escape(expand('%:p'), '\')
+    let filename = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
 
     let command = s:complete_command
     let command = substitute(command, '<project>', project, '')

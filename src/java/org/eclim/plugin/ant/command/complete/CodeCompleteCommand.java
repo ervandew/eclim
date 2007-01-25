@@ -43,7 +43,7 @@ public class CodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    AntModel model = (AntModel)AntUtils.getAntModel(file);
+    AntModel model = (AntModel)AntUtils.getAntModel(project, file);
     return new AntEditorCompletionProcessor(model);
   }
 

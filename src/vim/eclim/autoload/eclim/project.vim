@@ -331,6 +331,16 @@ function! eclim#project#GetCurrentProjectRoot ()
   return fnamemodify(eclim#project#GetCurrentProjectFile(), ':h')
 endfunction " }}}
 
+" GetProjectRelativeFilePath (file) {{{
+" Gets the project relative path for the given file.
+function! eclim#project#GetProjectRelativeFilePath (file)
+  let result = substitute(a:file, eclim#project#GetCurrentProjectRoot(), '', '')
+  if result =~ '^/'
+    let result = result[1:]
+  endif
+  return escape(result, '\')
+endfunction " }}}
+
 " GetProjectDirs() {{{
 " Gets list of all project root directories.
 function! eclim#project#GetProjectDirs ()

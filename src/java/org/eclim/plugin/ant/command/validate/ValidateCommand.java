@@ -46,13 +46,13 @@ public class ValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      List errors = super.validate(file, false, null);
+      List errors = super.validate(project, file, false, null);
 
       ProblemRequestor requestor = new ProblemRequestor();
-      IAntModel model = AntUtils.getAntModel(file, requestor);
+      IAntModel model = AntUtils.getAntModel(project, file, requestor);
       model.reconcile();
 
       List problems = requestor.getProblems();

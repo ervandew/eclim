@@ -29,7 +29,7 @@ endif
 " }}}
 
 " Script Variables {{{
-let s:command_validate = '-filter vim -command xml_validate -f "<file>"'
+let s:command_validate = '-filter vim -command xml_validate -p "<project>" -f "<file>"'
 
 let s:element_def{'dtd'} = '<!ELEMENT\s\+<name>\>\(\s\|(\|$\)'
 let s:element_def{'xsd'} =
@@ -59,7 +59,11 @@ function! eclim#xml#Validate (file, on_save, ...)
   endif
 
   if eclim#PingEclim(0)
-    let command = substitute(s:command_validate, '<file>', file, '')
+    let project = eclim#project#GetCurrentProjectName()
+    let filename = eclim#project#GetProjectRelativeFilePath(file)
+    let command = s:command_validate
+    let command = substitute(command, '<project>', project, '')
+    let command = substitute(command, '<file>', filename, '')
 
     if substitute(expand('%:p'), '\', '/', 'g') != file
       let restore = winrestcmd()

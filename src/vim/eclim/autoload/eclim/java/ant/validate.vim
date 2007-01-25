@@ -45,7 +45,7 @@ function! eclim#java#ant#validate#Validate (on_save)
     let project = 'none'
   endif
   if project != ""
-    let file = escape(expand("%:p"), '\')
+    let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
     let command = s:validate_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')

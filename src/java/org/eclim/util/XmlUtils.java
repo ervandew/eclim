@@ -66,32 +66,35 @@ public class XmlUtils
   /**
    * Validate the supplied xml file.
    *
+   * @param _project The project name.
    * @param _filename The file path to the xml file.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _filename)
+  public static Error[] validateXml (String _project, String _filename)
     throws Exception
   {
-    return validateXml(_filename, false, null);
+    return validateXml(_project, _filename, false, null);
   }
 
   /**
    * Validate the supplied xml file.
    *
+   * @param _project The project name.
    * @param _filename The file path to the xml file.
    * @param _schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _filename, boolean _schema)
+  public static Error[] validateXml (String _project, String _filename, boolean _schema)
     throws Exception
   {
-    return validateXml(_filename, _schema, null);
+    return validateXml(_project, _filename, _schema, null);
   }
 
   /**
    * Validate the supplied xml file.
    *
+   * @param _project The project name.
    * @param _filename The file path to the xml file.
    * @param _schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
@@ -99,7 +102,10 @@ public class XmlUtils
    * @return A possibly empty array of errors.
    */
   public static Error[] validateXml (
-      String _filename, boolean _schema, ContentHandler _contentHandler)
+      String _project,
+      String _filename,
+      boolean _schema,
+      ContentHandler _contentHandler)
     throws Exception
   {
     // jdk < 1.5 requires a doctype to validate (won't just check well formness
@@ -108,6 +114,8 @@ public class XmlUtils
     factory.setValidating(true);
 
     return validate(_filename, factory.newSAXParser());*/
+    String filename = FilenameUtils.concat(
+        ProjectUtils.getPath(_project), _filename);
 
     ErrorAggregator handler = new ErrorAggregator();
     org.apache.xerces.parsers.SAXParser parser =
@@ -125,20 +133,20 @@ public class XmlUtils
     }
     parser.setErrorHandler(handler);
     parser.setEntityResolver(
-        new EntityResolver(FilenameUtils.getFullPath(_filename)));
+        new EntityResolver(FilenameUtils.getFullPath(filename)));
     try{
-      parser.parse(_filename);
+      parser.parse(filename);
     }catch(SAXParseException spe){
       return new Error[]{
         new Error(
             spe.getMessage(),
-            _filename,
+            filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
     }catch(Exception e){
       logger.warn("Error parsing xml file.", e);
-      return new Error[]{new Error(e.getMessage(), _filename, 1, 1, false)};
+      return new Error[]{new Error(e.getMessage(), filename, 1, 1, false)};
     }
 
     return handler.getErrors();
@@ -147,11 +155,12 @@ public class XmlUtils
   /**
    * Validate the supplied xml file against the specified xsd.
    *
+   * @param _project The project name.
    * @param _filename The file path to the xml file.
    * @param _schema The file path to the xsd.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _filename, String _schema)
+  public static Error[] validateXml (String _project, String _filename, String _schema)
     throws Exception
   {
     // doesn't work on jdk < 1.5
@@ -168,6 +177,8 @@ public class XmlUtils
         "file://" + _schema);
 
     return validate(_filename, parser);*/
+    String filename = FilenameUtils.concat(
+        ProjectUtils.getPath(_project), _filename);
 
     ErrorAggregator handler = new ErrorAggregator();
     org.apache.xerces.parsers.SAXParser parser =
@@ -182,19 +193,19 @@ public class XmlUtils
         //"file://" + _schema.replace('\\', '/'));
     parser.setErrorHandler(handler);
     parser.setEntityResolver(
-        new EntityResolver(FilenameUtils.getFullPath(_filename)));
+        new EntityResolver(FilenameUtils.getFullPath(filename)));
     try{
-      parser.parse(_filename);
+      parser.parse(filename);
     }catch(SAXParseException spe){
       return new Error[]{
         new Error(
             spe.getMessage(),
-            _filename,
+            filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
     }catch(Exception e){
-      return new Error[]{new Error(e.getMessage(), _filename, 1, 1, false)};
+      return new Error[]{new Error(e.getMessage(), filename, 1, 1, false)};
     }
 
     return handler.getErrors();

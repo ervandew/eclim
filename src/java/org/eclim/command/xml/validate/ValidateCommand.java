@@ -45,10 +45,11 @@ public class ValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
 
-      List list = validate(file, schema, getContentHandler());
+      List list = validate(project, file, schema, getContentHandler());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
     }catch(Throwable t){
@@ -59,6 +60,7 @@ public class ValidateCommand
   /**
    * Validate the supplied file.
    *
+   * @param _project The project name.
    * @param _file The file to validate.
    * @param _schema true to use declared schema, false otherwise.
    * @param _contentHandler The ContentHandler to use while parsing the xml
@@ -66,10 +68,10 @@ public class ValidateCommand
    * @return The list of errors.
    */
   protected List validate (
-      String _file, boolean _schema, ContentHandler _contentHandler)
+      String _project, String _file, boolean _schema, ContentHandler _contentHandler)
     throws Exception
   {
-    Error[] errors = XmlUtils.validateXml(_file, _schema, _contentHandler);
+    Error[] errors = XmlUtils.validateXml(_project, _file, _schema, _contentHandler);
     ArrayList list = new ArrayList();
     for(int ii = 0; ii < errors.length; ii++){
       // FIXME: hack to ignore errors regarding no defined dtd.

@@ -42,13 +42,14 @@ public class AntUtils
   /**
    * Gets an ant model for the given file.
    *
+   * @param _project The project name.
    * @param _antFile The ant file.
    * @return The ant model.
    */
-  public static IAntModel getAntModel (String _antFile)
+  public static IAntModel getAntModel (String _project, String _antFile)
     throws Exception
   {
-    return getAntModel(_antFile, null);
+    return getAntModel(_project, _antFile, null);
   }
 
   /**
@@ -56,16 +57,17 @@ public class AntUtils
    * <p/>
    * Based on similar method in org.eclipse.ant.internal.ui.AntUtil
    *
+   * @param _project The project name.
    * @param _antFile The ant file.
    * @param _requestor Optional IProblemRequestor to be notified of errors in
    * the ant file.
    * @return The ant model.
    */
   public static IAntModel getAntModel (
-      final String _antFile, IProblemRequestor _requestor)
+      String _project, final String _antFile, IProblemRequestor _requestor)
     throws Exception
   {
-    IDocument doc = ProjectUtils.getDocument(_antFile);
+    IDocument doc = ProjectUtils.getDocument(_project, _antFile);
     if (doc == null) {
       return null;
     }

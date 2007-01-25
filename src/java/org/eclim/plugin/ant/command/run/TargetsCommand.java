@@ -50,10 +50,10 @@ public class TargetsCommand
   {
     List results = new ArrayList();
     try{
-      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      AntModel model = (AntModel)AntUtils.getAntModel(file);
+      AntModel model = (AntModel)AntUtils.getAntModel(project, file);
       AntProjectNode projectNode = model.getProjectNode(true);
       Project antProject = projectNode.getProject();
 

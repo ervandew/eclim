@@ -52,13 +52,13 @@ public class ValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      String file = _commandLine.getValue(Options.FILE_OPTION);
 
       Log4jHandler handler = new Log4jHandler(
           JavaUtils.getJavaProject(project), file);
 
-      List list = super.validate(file, false, handler);
+      List list = super.validate(project, file, false, handler);
       list.addAll(handler.getErrors());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));

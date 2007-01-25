@@ -65,7 +65,7 @@ public class CodeCompleteCommand
 
       IProject project = ProjectUtils.getProject(projectName);
 
-      IDocument document = ProjectUtils.getDocument(file);
+      IDocument document = ProjectUtils.getDocument(project, file);
       ITextViewer viewer =
         new DummyTextViewer(document, offset, 1);
 

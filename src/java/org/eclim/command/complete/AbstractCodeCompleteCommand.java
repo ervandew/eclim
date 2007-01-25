@@ -109,7 +109,8 @@ public abstract class AbstractCodeCompleteCommand
     throws Exception
   {
     int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
-    return new DummyTextViewer(ProjectUtils.getDocument(file), offset, 1);
+    return new DummyTextViewer(
+        ProjectUtils.getDocument(project, file), offset, 1);
   }
 
   /**

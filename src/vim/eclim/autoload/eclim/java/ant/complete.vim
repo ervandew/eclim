@@ -68,7 +68,7 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
       let project = 'none'
     endif
 
-    let filename = escape(expand('%:p'), '\')
+    let filename = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
 
     let command = s:complete_command
     let command = substitute(command, '<project>', project, '')

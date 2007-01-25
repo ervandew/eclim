@@ -97,7 +97,7 @@ endfunction " }}}
 function! eclim#java#util#GetFilename ()
   "let filename = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
   "return filename . '/' . expand('%:t')
-  return escape(expand('%:p'), '\')
+  return eclim#project#GetProjectRelativeFilePath(expand('%:p'))
 endfunction " }}}
 
 " GetPackage(...) {{{

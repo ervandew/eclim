@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -67,15 +69,16 @@ public class FindDefinitionCommand
 
       IProject project = ProjectUtils.getProject(projectName);
 
-      IDocument document = ProjectUtils.getDocument(file);
+      IDocument document = ProjectUtils.getDocument(project, file);
       PythonNature nature = PythonNature.getPythonNature(project);
       PyEdit edit = PyDevUtils.getEditor(project, file);
       PySelection selection =
         new PySelection(document, offset);
 
       PyRefactoring refactor = new PyRefactoring();
+      File theFile = new File(FilenameUtils.concat(ProjectUtils.getPath(project), file));
       RefactoringRequest request = new RefactoringRequest(
-          new File(file), document, selection, null, nature, edit);
+          theFile, document, selection, null, nature, edit);
       ItemPointer[] results = refactor.findDefinition(request);
       List locations = new ArrayList();
       if(results != null){
