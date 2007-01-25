@@ -41,7 +41,7 @@ function eclim#python#definition#Find ()
 
   let offset = eclim#util#GetCharacterOffset()
   let project = eclim#project#GetCurrentProjectName()
-  let filename = expand('%:p')
+  let filename = eclim#project#GetProjectRelativeFilePath(expand('%:p'))
 
   let command = s:find_command
   let command = substitute(command, '<project>', project, '')
