@@ -59,7 +59,7 @@ public class VimStep
   private boolean rtpAttempted;
 
   /**
-   * Constructs the welcome step.
+   * Constructs the step.
    */
   public VimStep (String name)
   {
