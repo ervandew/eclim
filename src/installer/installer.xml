@@ -31,32 +31,26 @@
           <property name="provider"
               value="org.eclim.installer.step.FeatureProvider"/>
         </formic:step>
-        <!--formic:branch path="branch_requirements">
-          <or>
-            <istrue value="featureList.jdt"/>
-            <istrue value="featureList.wst"/>
-          </or>
-        </formic:branch-->
         <formic:step name="summary"/>
         <formic:branch path="branch_eclipse_plugins">
           <or>
-            <istrue value="featureList.jdt"/>
+            <istrue value="featureList.pydev"/>
             <istrue value="featureList.wst"/>
           </or>
+        </formic:branch>
+        <formic:branch path="branch_python_interpreter">
+          <istrue value="featureList.pydev"/>
         </formic:branch>
         <formic:step name="install"/>
         <formic:step name="finished"/>
       </formic:path>
 
-      <!--formic:path name="branch_requirements">
-        <formic:step name="requirements">
-          <property name="provider"
-              value="org.eclim.installer.step.RequirementProvider"/>
-        </formic:step>
-      </formic:path-->
-
       <formic:path name="branch_eclipse_plugins">
         <formic:step name="eclipsePlugins"/>
+      </formic:path>
+
+      <formic:path name="branch_python_interpreter">
+        <formic:step name="pythonInterpreter"/>
       </formic:path>
     </formic:installer>
   </target>
