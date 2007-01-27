@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.ant.util;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.ant.internal.ui.AntUtil;
@@ -64,7 +66,7 @@ public class AntUtils
    * @return The ant model.
    */
   public static IAntModel getAntModel (
-      String _project, final String _antFile, IProblemRequestor _requestor)
+      String _project, String _antFile, IProblemRequestor _requestor)
     throws Exception
   {
     IDocument doc = ProjectUtils.getDocument(_project, _antFile);
@@ -73,13 +75,16 @@ public class AntUtils
     }
 
     final IFile file = AntUtil.getFileForLocation(_antFile, null);
+    final String filepath = FilenameUtils.concat(
+        ProjectUtils.getPath(_project), _antFile);
+
     LocationProvider provider = new LocationProvider(null) {
       public IFile getFile() {
         return file;
       }
       public IPath getLocation() {
         if (file == null) {
-          return new Path(_antFile);
+          return new Path(filepath);
         }
         return file.getLocation();
       }

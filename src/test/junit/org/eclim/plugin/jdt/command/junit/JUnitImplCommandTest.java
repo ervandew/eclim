@@ -44,7 +44,7 @@ public class JUnitImplCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass"
     });
 
@@ -76,7 +76,7 @@ public class JUnitImplCommandTest
 
     result = Eclim.execute(new String[]{
       "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass",
       "-t", "org.eclim.test.junit.SomeClassTest",
       "-s", "org.eclim.test.junit.SomeClass",

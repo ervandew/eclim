@@ -38,7 +38,7 @@ public class ValidateCommandTest
   {
     String result = Eclim.execute(new String[]{
       "ant_validate", "-p", Ant.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Ant.TEST_PROJECT, TEST_FILE)
+      "-f", TEST_FILE
     });
 
     System.out.println(result);

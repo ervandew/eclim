@@ -36,16 +36,18 @@ public class ValidateCommandTest
   @Test
   public void execute ()
   {
-    String file = Eclim.resolveFile(TEST_FILE);
-    String result = Eclim.execute(new String[]{"xml_validate", "-f", file });
+    String file = TEST_FILE;
+    String project = Eclim.TEST_PROJECT;
+    String result = Eclim.execute(
+        new String[]{"xml_validate", "-p", project, "-f", file });
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
 
     assertEquals("Wrong number of errors.", 2, results.length);
 
-    assertTrue("Wrong filename.", results[0].startsWith(file));
-    assertTrue("Wrong filename.", results[1].startsWith(file));
+    assertTrue("Wrong filename.", results[0].indexOf(file) != -1);
+    assertTrue("Wrong filename.", results[1].indexOf(file) != -1);
 
     assertTrue("Wrong error.",
         results[0].indexOf("The content of element type \"bar\" is incomplete") != -1);

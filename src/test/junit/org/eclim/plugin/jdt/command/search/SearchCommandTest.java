@@ -44,7 +44,7 @@ public class SearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-p", "NPE", "-s", "project"
     });
     System.out.println(result);
@@ -66,7 +66,7 @@ public class SearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "180", "-l", "4"
     });
     System.out.println(result);
@@ -84,7 +84,7 @@ public class SearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-p", "org.eclim.eclipse.Eclim%2A"
     });
     System.out.println(result);
@@ -106,7 +106,7 @@ public class SearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-p", "Jdt.TEST_PROJECT", "-t", "field"
     });
     System.out.println(result);

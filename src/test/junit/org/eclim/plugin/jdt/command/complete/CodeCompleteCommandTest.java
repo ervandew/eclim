@@ -44,7 +44,7 @@ public class CodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_complete", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "184", "-l", "standard"
     });
 
@@ -64,7 +64,7 @@ public class CodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_complete", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "266", "-l", "standard"
     });
 

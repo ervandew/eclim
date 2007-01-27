@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
+import java.io.File;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Eclim;
@@ -40,7 +42,7 @@ public class CodeCompleteCommandTest
   {
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Ant.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "220"
     });
 
@@ -55,7 +57,7 @@ public class CodeCompleteCommandTest
   {
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Ant.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "234"
     });
 

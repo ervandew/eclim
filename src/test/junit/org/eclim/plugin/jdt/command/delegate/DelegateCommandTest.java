@@ -44,7 +44,7 @@ public class DelegateCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "124"
     });
 
@@ -59,7 +59,7 @@ public class DelegateCommandTest
 
     result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-t", "org.eclim.test.delegate.TestDelegate",
       "-s", "java.util.List", "-m", "remove(Object)"
     });

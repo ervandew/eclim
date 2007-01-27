@@ -44,7 +44,7 @@ public class ImplCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "83"
     });
 
@@ -59,7 +59,7 @@ public class ImplCommandTest
 
     result = Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-t", "org.eclim.test.impl.TestImpl",
       "-s", "java.util.List", "-m", "remove(Object)"
     });

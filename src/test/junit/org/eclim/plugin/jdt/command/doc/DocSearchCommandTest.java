@@ -42,7 +42,7 @@ public class DocSearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-o", "68", "-l", "4", "-x", "declarations"
     });
 
@@ -60,7 +60,7 @@ public class DocSearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-p", "ArrayList"
     });
 
@@ -80,7 +80,7 @@ public class DocSearchCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-p", "currentTime%2A", "-t", "method"
     });
 

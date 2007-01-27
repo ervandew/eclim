@@ -38,7 +38,7 @@ public class SearchCommandTest
   {
     String result = Eclim.execute(new String[]{
       "maven_dependency_search", "-p", Maven.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Maven.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-t", "mvn", "-s", "junit"
     });
 

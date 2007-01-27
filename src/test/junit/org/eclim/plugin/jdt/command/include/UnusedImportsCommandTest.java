@@ -42,7 +42,7 @@ public class UnusedImportsCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_imports_unused", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE)
+      "-f", TEST_FILE
     });
 
     System.out.println(result);

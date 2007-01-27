@@ -59,7 +59,7 @@ public class CommentCommandTest
 
     Eclim.execute(new String[]{
       "javadoc_comment", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE), "-o", "158"
+      "-f", TEST_FILE, "-o", "158"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -74,7 +74,7 @@ public class CommentCommandTest
 
     Eclim.execute(new String[]{
       "javadoc_comment", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE), "-o", "58"
+      "-f", TEST_FILE, "-o", "58"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);

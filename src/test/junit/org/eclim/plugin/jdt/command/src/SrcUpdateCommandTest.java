@@ -44,9 +44,8 @@ public class SrcUpdateCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_ERRORS);
     String result = Eclim.execute(new String[]{
-      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", file, "-v"
+      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_ERRORS, "-v"
     });
 
     System.out.println(result);
@@ -55,6 +54,7 @@ public class SrcUpdateCommandTest
 
     assertEquals("Wrong number of errors.", 1, results.length);
 
+    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_ERRORS);
     for(int ii = 0; ii < results.length; ii++){
       assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
       assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|e"));
@@ -69,9 +69,8 @@ public class SrcUpdateCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_WARNINGS);
     String result = Eclim.execute(new String[]{
-      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", file, "-v"
+      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_WARNINGS, "-v"
     });
 
     System.out.println(result);
@@ -80,6 +79,7 @@ public class SrcUpdateCommandTest
 
     assertEquals("Wrong number of warnings.", 2, results.length);
 
+    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_WARNINGS);
     for(int ii = 0; ii < results.length; ii++){
       assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
       assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|w"));

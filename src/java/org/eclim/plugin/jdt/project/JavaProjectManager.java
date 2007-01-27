@@ -112,7 +112,9 @@ public class JavaProjectManager
       .getRawLocation().toOSString();
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
-    Error[] errors = XmlUtils.validateXml(dotclasspath,
+    Error[] errors = XmlUtils.validateXml(
+        javaProject.getProject().getName(),
+        dotclasspath,
         resources.getResource(CLASSPATH_XSD).toString());
     if(errors.length > 0){
       return errors;

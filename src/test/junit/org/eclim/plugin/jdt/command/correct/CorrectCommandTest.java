@@ -46,7 +46,7 @@ public class CorrectCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-l", "5", "-o", "74"
     });
 
@@ -69,7 +69,7 @@ public class CorrectCommandTest
 
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
-      "-f", Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+      "-f", TEST_FILE,
       "-l", "5", "-o", "74", "-a", "1"
     });
 

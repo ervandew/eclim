@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,7 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
 
+import org.eclim.util.ProjectUtils;
 import org.eclim.util.XmlUtils;
 
 import org.w3c.dom.Element;
@@ -59,9 +61,10 @@ public class SearchFilter
   {
     List dependencies = null;
     try{
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String type = _commandLine.getValue(Options.TYPE_OPTION);
-      dependencies = getDependencies(file, type);
+      dependencies = getDependencies(project, file, type);
     }catch(Exception e){
       logger.warn("Unable to get dependencies.", e);
       dependencies = new ArrayList();
@@ -97,18 +100,20 @@ public class SearchFilter
   /**
    * Get the project file's current dependencies.
    *
+   * @param _project The eclipse project name.
    * @param _file The project file.
    * @param _type The file type (ivy, maven, mvn).
    * @return List of dependencies.
    */
-  private List getDependencies (String _file, String _type)
+  private List getDependencies (String _project, String _file, String _type)
     throws Exception
   {
     ArrayList list = new ArrayList();
     InputStream in = null;
     try{
+      String file = FilenameUtils.concat(ProjectUtils.getPath(_project), _file);
       Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        .parse(in = new FileInputStream(_file)).getDocumentElement();
+        .parse(in = new FileInputStream(file)).getDocumentElement();
       NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))
         .getElementsByTagName(DEPENDENCY);
 

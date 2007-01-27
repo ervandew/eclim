@@ -19,11 +19,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.ant.util.AntUtils;
+
+import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
 
@@ -55,13 +59,15 @@ public class ValidateCommand
       IAntModel model = AntUtils.getAntModel(project, file, requestor);
       model.reconcile();
 
+      String filepath = FilenameUtils.concat(ProjectUtils.getPath(project), file);
+
       List problems = requestor.getProblems();
-      FileOffsets offsets = FileOffsets.compile(file);
+      FileOffsets offsets = FileOffsets.compile(filepath);
       for (Iterator ii = problems.iterator(); ii.hasNext();){
         IProblem problem = (IProblem)ii.next();
         int[] lineColumn = offsets.offsetToLineColumn(problem.getOffset());
         Error error = new Error(
-          problem.getUnmodifiedMessage(), file,
+          problem.getUnmodifiedMessage(), filepath,
           lineColumn[0], lineColumn[1],
           problem.isWarning());
         if(!errors.contains(error)){
