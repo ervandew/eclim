@@ -12,6 +12,22 @@
   <property environment="env"/>
   <property file="src/ant/build.properties"/>
 
+  <!-- classpath -->
+  <path id="classpath">
+    <fileset dir="lib" includes="**/*.jar"/>
+    <!--fileset dir="build/dist" includes="**/*.jar"/-->
+    <fileset dir="${eclipse.home}" includes="startup.jar"/>
+    <fileset dir="${eclipse.home}/plugins"
+        includes="**/*.jar" excludes="org.eclim*/*.jar"/>
+  </path>
+  <path id="ant-contrib-classpath">
+    <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
+  </path>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+      classpathref="ant-contrib-classpath"/>
+  <taskdef classname="net.sf.antcontrib.logic.For" name="for"
+      classpathref="ant-contrib-classpath"/>
+
   <formic:classpath id="formic.classpath"/>
 
   <target name="installer">
@@ -24,13 +40,32 @@
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
       <classpath refid="formic.classpath"/>
+      <classpath refid="classpath"/>
     </javac>
 
-    <!-- create jar with sample classes -->
+    <!-- create jar with installer classes -->
     <jar jarfile="build/formic/dist/eclim.jar">
-      <fileset dir="build/formic/classes" includes="**/*.class"/>
-      <fileset dir="src/installer/java" includes="**/*.xml"/>
+      <fileset dir="build/formic/classes">
+        <include name="**/*.class"/>
+        <exclude name="org/eclim/plugin/**/*"/>
+        <exclude name="org/eclim/plugin"/>
+      </fileset>
+      <fileset dir="src/installer/java">
+        <include name="**/*.xml"/>
+        <exclude name="org/eclim/plugin/**/*"/>
+        <exclude name="org/eclim/plugin"/>
+      </fileset>
     </jar>
+
+    <!-- build installer plugins -->
+    <antcall target="plugin">
+      <param name="plugin.name" value="installer"/>
+      <param name="classes.include" value="**/plugin/*.class"/>
+    </antcall>
+    <antcall target="plugin">
+      <param name="plugin.name" value="installer.pydev"/>
+      <param name="classes.include" value="**/plugin/pydev/**/*.class"/>
+    </antcall>
 
     <!-- prepare installer's build.properties -->
     <copy file="src/installer/build.properties" todir="build/formic"/>
@@ -53,7 +88,7 @@
       <tarfileset dir="dist">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.tar.gz"/>
-        <include name="org.eclim.installer_${eclim.version}.tar.gz"/>
+        <include name="org.eclim.installer*.tar.gz"/>
       </tarfileset>
     </formic:package>
 
@@ -73,9 +108,26 @@
       <fileset dir="dist">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.zip"/>
-        <include name="org.eclim.installer_${eclim.version}.tar.gz"/>
+        <include name="org.eclim.installer*.tar.gz"/>
       </fileset>
     </formic:package>
+  </target>
+
+  <!--
+    - Create the core jar file for a plugin
+    -->
+  <target name="plugin">
+    <jar jarfile="build/dist/eclim.${plugin.name}.jar">
+      <fileset dir="build/formic/classes">
+        <include name="${classes.include}"/>
+      </fileset>
+    </jar>
+    <tar compression="gzip" destfile="dist/org.eclim.${plugin.name}.tar.gz">
+      <tarfileset dir="src/eclipse/plugins/"
+          includes="org.eclim.${plugin.name}/**/*"/>
+      <tarfileset dir="build/dist/" prefix="org.eclim.${plugin.name}"
+          includes="eclim.${plugin.name}.jar"/>
+    </tar>
   </target>
 
 </project>

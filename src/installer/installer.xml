@@ -152,6 +152,7 @@
     -->
   <target name="cleanup">
     <delete dir="${eclipse.home}/plugins/org.eclim.installer_${eclim.version}"/>
+    <delete dir="${eclipse.home}/plugins/org.eclim.installer.pydev_${eclim.version}"/>
   </target>
 
 </project>

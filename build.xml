@@ -8,11 +8,11 @@
   <property file="src/ant/build.properties"/>
 
   <path id="ant-contrib-classpath">
-    <pathelement location="lib/java/ant/ant-contrib-1.0b1.jar"/>
+    <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
   </path>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"
       classpathref="ant-contrib-classpath"/>
-  <taskdef classname="net.sf.antcontrib.logic.ForTask" name="for"
+  <taskdef classname="net.sf.antcontrib.logic.For" name="for"
       classpathref="ant-contrib-classpath"/>
 
   <import file="src/ant/dist.xml"/>
@@ -121,7 +121,11 @@
     <copy todir="${eclipse.home}">
       <mapper type="regexp"
           from="^(.*)(org\.eclim.*?)([/\\].*)$" to="\1\2_${eclim.version}\3"/>
-      <fileset dir="src/eclipse" includes="**/*"/>
+      <fileset dir="src/eclipse">
+        <include name="**/*"/>
+        <exclude name="plugins/org.eclim.installer*/**/*"/>
+        <exclude name="plugins/org.eclim.installer*"/>
+      </fileset>
     </copy>
 
     <mkdir dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/log"/>

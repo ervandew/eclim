@@ -129,7 +129,7 @@ public class EclipsePluginsStep
       Installer.getContext().getValue("eclipse.home");
     String plugins = FilenameUtils.concat(eclipseHome, "plugins");
     String tar = Installer.getProject().replaceProperties(
-        "${basedir}/org.eclim.installer_${eclim.version}.tar.gz");
+        "${basedir}/org.eclim.installer.tar.gz");
 
     Untar untar = new Untar();
     untar.setTaskName("untar");
@@ -147,7 +147,7 @@ public class EclipsePluginsStep
       Chmod chmod = new Chmod();
       chmod.setTaskName("chmod");
       chmod.setFile(new File(Installer.getProject().replaceProperties(
-        "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install")));
+        "${eclipse.home}/plugins/org.eclim.installer/bin/install")));
       chmod.setPerm("755");
       chmod.setProject(Installer.getProject());
       chmod.execute();

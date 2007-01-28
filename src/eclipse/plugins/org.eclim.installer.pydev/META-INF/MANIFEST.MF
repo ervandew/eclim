@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclim.installer; singleton:=true
+Bundle-SymbolicName: org.eclim.installer.pydev; singleton:=true
 Bundle-ClassPath: .,
-  eclim.installer.jar
-Bundle-Activator: org.eclim.plugin.Plugin
+  eclim.pydev.installer.jar
+Bundle-Activator: org.eclim.plugin.pydev.Plugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
   org.eclipse.ui,

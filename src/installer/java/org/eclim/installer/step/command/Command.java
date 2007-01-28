@@ -49,7 +49,7 @@ public abstract class Command
     this.cmd = new String[cmd.length + 1];
 
     this.cmd[0] = Installer.getProject().replaceProperties(
-        "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install");
+        "${eclipse.home}/plugins/org.eclim.installer/bin/install");
     if (Os.isFamily("windows")){
       this.cmd[0] += ".bat";
     }
