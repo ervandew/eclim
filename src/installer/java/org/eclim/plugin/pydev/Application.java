@@ -17,6 +17,7 @@ package org.eclim.plugin.pydev;
 
 import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.swt.widgets.Display;
 
@@ -60,9 +61,10 @@ public class Application
           System.out.println(executables[ii]);
         }
       }else if(SET.equals(params[params.length - 2])){
-        System.out.println("#### set = " + params[params.length - 1]);
-        manager.setPersistedString(manager.getStringToPersist(
-              new String[]{params[params.length - 1]}));
+        String interpreter = params[params.length - 1];
+        manager.getInterpreterInfo(interpreter, new NullProgressMonitor());
+        manager.setPersistedString(
+            manager.getStringToPersist(new String[]{interpreter}));
         PydevPlugin.getDefault().savePluginPreferences();
       }
     }catch(Throwable t){
