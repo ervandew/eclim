@@ -29,4 +29,4 @@ if [ ! -e $ECLIPSE ]; then
   exit 1
 fi
 
-$ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.application $@
+$ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.pydev.application $@

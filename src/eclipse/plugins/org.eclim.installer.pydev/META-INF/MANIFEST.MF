@@ -4,11 +4,12 @@ Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclim.installer.pydev; singleton:=true
 Bundle-ClassPath: .,
-  eclim.pydev.installer.jar
+  eclim.installer.pydev.jar
 Bundle-Activator: org.eclim.plugin.pydev.Plugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
   org.eclipse.ui,
-  org.eclipse.update.core
+  org.python.pydev,
+  org.python.pydev.core
 Eclipse-AutoStart: true
 

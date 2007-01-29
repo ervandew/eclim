@@ -17,4 +17,4 @@ rem
 rem Author: Eric Van Dewoestine
 
 set ECLIPSE_HOME=%~dp0\..\..\..
-"%ECLIPSE_HOME%\eclipse" -nosplash -clean -refresh -application org.eclim.install.application %*
+"%ECLIPSE_HOME%\eclipse" -nosplash -clean -refresh -application org.eclim.installer.application %*

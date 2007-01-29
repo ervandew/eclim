@@ -15,15 +15,34 @@
  */
 package org.eclim.installer.step;
 
+import java.awt.BorderLayout;
+
 import java.io.File;
 
 import java.util.Properties;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
+import foxtrot.Task;
+import foxtrot.Worker;
+
+import org.apache.commons.io.FilenameUtils;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.apache.tools.ant.taskdefs.Chmod;
+import org.apache.tools.ant.taskdefs.Untar;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
 
-import org.formic.form.Validator;
+import org.formic.Installer;
 
-import org.formic.form.gui.GuiForm;
+import org.formic.form.Validator;
 
 import org.formic.form.validator.AggregateValidator;
 
@@ -49,6 +68,10 @@ public class PythonInterpreterStep
 
   private static final String ICON = "/resources/images/python.png";
 
+  private JPanel panel;
+  private boolean firstDisplay = true;
+  private String[] pydevInterpreters;
+
   /**
    * Constructs the step.
    */
@@ -70,6 +93,18 @@ public class PythonInterpreterStep
 
   /**
    * {@inheritDoc}
+   * @see org.formic.wizard.WizardStep#initGui()
+   */
+  public JComponent initGui ()
+  {
+    panel = new JPanel(new BorderLayout());
+    panel.add(super.initGui(), BorderLayout.NORTH);
+
+    return panel;
+  }
+
+  /**
+   * {@inheritDoc}
    * @see AbstractStep#getIconPath()
    */
   protected String getIconPath ()
@@ -79,35 +114,104 @@ public class PythonInterpreterStep
 
   /**
    * {@inheritDoc}
-   * @see FileChooserStep#initGuiForm()
+   * @see org.formic.wizard.WizardStep#displayed()
    */
-  public GuiForm initGuiForm ()
+  public void displayed ()
   {
-    GuiForm form = super.initGuiForm();
+    if(firstDisplay){
+      firstDisplay = false;
+      setBusy(true);
+      try{
+        Worker.post(new Task(){
+          public Object run ()
+            throws Exception
+          {
+            extractInstallerPlugin();
+            String interpreter = null;
 
-    String interpreter = null;
-    if(Os.isFamily("windows")){
-      for (int ii = 0; ii < WINDOWS_INTERPRETERS.length; ii++){
-        if(new File(WINDOWS_INTERPRETERS[ii]).exists()){
-          interpreter = WINDOWS_INTERPRETERS[ii];
-          break;
-        }
+            // see if pydev already has an interpreter already set.
+            pydevInterpreters = listInterpreters();
+            if(pydevInterpreters != null && pydevInterpreters.length > 0){
+              interpreter = pydevInterpreters[0];
+              if(pydevInterpreters.length > 1){
+                JPanel interpreters = new JPanel(new BorderLayout());
+                interpreters.add(new JLabel("All PyDev configured interpreters:"),
+                  BorderLayout.NORTH);
+                JList list = new JList(pydevInterpreters);
+                list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                JScrollPane scrollPane = new JScrollPane(list);
+                interpreters.add(scrollPane, BorderLayout.CENTER);
+                panel.add(interpreters, BorderLayout.CENTER);
+              }
+            }else{
+              // pydev interpreter not yet set, so attempt to find one at common
+              // locations.
+              if(Os.isFamily("windows")){
+                for (int ii = 0; ii < WINDOWS_INTERPRETERS.length; ii++){
+                  if(new File(WINDOWS_INTERPRETERS[ii]).exists()){
+                    interpreter = WINDOWS_INTERPRETERS[ii];
+                    break;
+                  }
+                }
+              }else{
+                for (int ii = 0; ii < UNIX_INTERPRETERS.length; ii++){
+                  String path = which(UNIX_INTERPRETERS[ii]);
+                  if(path != null){
+                    interpreter = path;
+                    break;
+                  }
+                }
+              }
+            }
+
+            if(interpreter != null) {
+              getGuiFileChooser().getTextField().setText(interpreter);
+            }
+            return null;
+          }
+        });
+      }catch(Exception e){
+        e.printStackTrace();
       }
-    }else{
-      for (int ii = 0; ii < UNIX_INTERPRETERS.length; ii++){
-        String path = which(UNIX_INTERPRETERS[ii]);
-        if(path != null){
-          interpreter = path;
-          break;
+      setBusy(false);
+      getGuiFileChooser().getTextField().grabFocus();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.formic.wizard.WizardStep#displayed()
+   */
+  public void proceed ()
+  {
+    try{
+      setBusy(true);
+      Worker.post(new Task(){
+        public Object run ()
+          throws Exception
+        {
+          String chosen = getGuiFileChooser().getTextField().getText();
+          boolean set = true;
+          if(pydevInterpreters != null){
+            for (int ii = 0; ii < pydevInterpreters.length; ii++){
+              if(chosen.equals(pydevInterpreters[ii])){
+                set = false;
+                break;
+              }
+            }
+          }
+
+          // set user chosen interpreter.
+          if(set){
+            setInterpreter(chosen);
+          }
+          return null;
         }
-      }
+      });
+    }catch(Exception e){
+      e.printStackTrace();
     }
-
-    if(interpreter != null) {
-      getGuiFileChooser().getTextField().setText(interpreter);
-    }
-
-    return form;
+    setBusy(false);
   }
 
   /**
@@ -121,6 +225,89 @@ public class PythonInterpreterStep
     validator.addValidator(new PythonValidator());
 
     return validator;
+  }
+
+  private void extractInstallerPlugin ()
+  {
+    // extract eclipse installer plugin.
+    String eclipseHome = (String)
+      Installer.getContext().getValue("eclipse.home");
+    String plugins = FilenameUtils.concat(eclipseHome, "plugins");
+    String tar = Installer.getProject().replaceProperties(
+        "${basedir}/org.eclim.installer.pydev.tar.gz");
+
+    Untar untar = new Untar();
+    untar.setTaskName("untar");
+    untar.setDest(new File(plugins));
+    untar.setSrc(new File(tar));
+    Untar.UntarCompressionMethod compression =
+      new Untar.UntarCompressionMethod();
+    compression.setValue("gzip");
+    untar.setCompression(compression);
+    untar.setProject(Installer.getProject());
+    untar.execute();
+
+    // on unix based systems, chmod the install sh file.
+    if (Os.isFamily("unix")){
+      Chmod chmod = new Chmod();
+      chmod.setTaskName("chmod");
+      chmod.setFile(new File(Installer.getProject().replaceProperties(
+        "${eclipse.home}/plugins/org.eclim.installer.pydev/bin/install")));
+      chmod.setPerm("755");
+      chmod.setProject(Installer.getProject());
+      chmod.execute();
+    }
+  }
+
+  /**
+   * Get array of pydev configured interpreters.
+   *
+   * @return Array of interpreters.
+   */
+  private String[] listInterpreters ()
+  {
+    try{
+      String[] cmd = new String[2];
+      cmd[0] = Installer.getProject().replaceProperties(
+          "${eclipse.home}/plugins/org.eclim.installer.pydev/bin/install");
+      if (Os.isFamily("windows")){
+        cmd[0] += ".bat";
+      }
+      cmd[1] = "list";
+
+      CommandExecutor executor = CommandExecutor.execute(cmd);
+      if(executor.getReturnCode() == 0){
+        return StringUtils.split(executor.getResult().trim(), '\n');
+      }
+      executor.destroy();
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * Sets the pydev interpreter.
+   *
+   * @return Array of interpreters.
+   */
+  private void setInterpreter (String interpreter)
+  {
+    try{
+      String[] cmd = new String[3];
+      cmd[0] = Installer.getProject().replaceProperties(
+          "${eclipse.home}/plugins/org.eclim.installer.pydev/bin/install");
+      if (Os.isFamily("windows")){
+        cmd[0] += ".bat";
+      }
+      cmd[1] = "set";
+      cmd[2] = interpreter;
+
+      CommandExecutor executor = CommandExecutor.execute(cmd);
+      executor.destroy();
+    }catch(Exception e){
+      e.printStackTrace();
+    }
   }
 
   /**
