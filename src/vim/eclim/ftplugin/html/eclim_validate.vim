@@ -29,8 +29,10 @@ endif
 " }}}
 
 if g:EclimHtmlValidate
-  autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#html#validate#Validate(1)
+  augroup eclim_html_validate
+    autocmd!
+    autocmd BufWritePost <buffer> call eclim#html#validate#Validate(1)
+  augroup END
 endif
 
 " Command Declarations {{{
