@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Copyright (c) 2005 - 2007
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - Author: Eric Van Dewoestine
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+
+<document>
+  <header>
+    <title>Django</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <anchor id="DjangoManage"/>
+    <section id="manage">
+      <title>Django manage.py</title>
+      <p>
+        For each project you create with the django framework, django provides
+        you with a manage.py which can be used to perform various tasks.  To
+        make the invocation of the manage.py script even easier, eclim provides
+        the command <strong>:DjangoManage</strong> which can be invoked from any
+        file in the same directory as your manage.py or in any of the child
+        directories.
+      </p>
+      <p>
+        <strong>:DjangoManage</strong> supports all the same commands as
+        manage.py and supports command line completion of command names and app
+        names where supported.
+      </p>
+      <p>
+        Several of the manage.py commands simply perform an action without
+        generating much if any output.  However there is also a set of commands
+        which generate sql statements.  For all of these commands, instead of
+        just running the command in a shell, <strong>:DjangoManage</strong> will
+        run the command and populate a new buffer with the resulting output and
+        set the proper file type.
+      </p>
+    </section>
+    <section id="template">
+      <title>Django html template support</title>
+      <p><strong>Syntax</strong></p>
+      <p>
+        Vim ships with a syntax file for django html template files, but eclim
+        builds on that base to support highlighting of user defined tags and
+        filters.
+      </p>
+      <p><strong>Indent</strong></p>
+      <p>
+        Using the same settings as the enhanced syntax file, eclim also ships
+        with an indent script which provides indentation support all of the
+        default django tags and any user defined tags that have been configured.
+      </p>
+      <p><strong>Match It</strong></p>
+      <p>
+        Again, using the same set of variables, eclim set the necessary
+        variables to allow proper matchit.vim support for django default and
+        user defined tags.
+      </p>
+    </section>
+  </body>
+</document>

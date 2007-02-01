@@ -402,6 +402,13 @@
         <a href="python/regex.html#PythonRegex"><strong>:PythonRegex</strong></a> -
         Opens a window for testing python regular expressions.
       </li>
+      <li>
+        <a href="python/django.html#DjangoManage">
+          <strong>:DjangoManage</strong>
+        </a> -
+        Invokes django's manage.py from any file in the same directory as your
+        manage.py or in any of the child directories.
+      </li>
     </ul>
 
     <p><strong>Vim Commands</strong></p>

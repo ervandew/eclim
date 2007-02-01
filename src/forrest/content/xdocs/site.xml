@@ -71,6 +71,11 @@ See http://forrest.apache.org/docs/linking.html for more info
             description="Maintaining java classpath with ivy."
             href="guides/java/ivy/ivy_classpath.html"/>
       </java>
+      <python label="Python Guides">
+        <python_project label="Python: Creating A Python Project"
+            description="Creating a python project."
+            href="guides/python/project.html"/>
+      </python>
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>

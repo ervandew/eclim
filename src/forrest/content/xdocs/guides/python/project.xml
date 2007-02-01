@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+  Author: Eric Van Dewoestine
+  -->
+
+<document>
+  <header>
+    <title>Creating your first python project.</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      The goal of this guide is to walk you through creating your first python
+      project via eclim.
+    </p>
+    <section id="project_create">
+      <title>Creating a project</title>
+      <p>
+        The first step is to open a Vim window and create the project by
+        executing:
+      </p>
+      <source>
+        :ProjectCreate /path/to/my_project -n python
+      </source>
+      <p>
+        The path supplied will be the path to the root of your project.  This
+        path may or may not exist.  If it does not exist it will be created for
+        you.
+      </p>
+      <p>
+        Once you've created your project you can use the
+        <strong>:ProjectList</strong> command to list the available projects and
+        you should see your newly created one in the list.
+      </p>
+      <source>
+        my_project - open   - /path/to/my_project
+      </source>
+      <p>
+        The <strong>:ProjectList</strong> result is in the form of
+        <code>projectName - (open|closed) - /project/root/path</code>.  When you
+        create projects, the last path element will be used for the project
+        name.  If that element contains any spaces, these will be converted to
+        underscores.
+      </p>
+    </section>
+    <section id="project_settings">
+      <title>Editing project settings.</title>
+      <p>
+        After creating a project, the next thing you'll probably want to do is
+        edit your project's settings.  To do this you can use the
+        <a href="../../vim/common/project.html#ProjectSettings">
+          <strong>:ProjectSettings</strong>
+        </a>
+        command.  If your current Vim window's
+        working directory is at or under the project's root directory then you
+        can execute the <strong>:ProjectSettings</strong> with no arguments,
+        otherwise you will need to supply the project name.
+      </p>
+      <source>
+        :ProjectSettings projectName
+      </source>
+      <p>
+        After your first time editing your project's settings, a .settings
+        directory will be created in the project's root directory.  In there are
+        the project's preferences files.  You should avoid editing these files
+        directly and stick to using <strong>:ProjectSettings</strong> to update
+        them.
+      </p>
+      <note>
+        If you have only one project or many projects that share the same
+        settings you can use the
+        <a href="../../vim/index.html#EclimSettings">
+          <strong>:EclimSettings</strong>
+        </a>
+        command instead to edit the
+        global settings.  These global settings will apply to any project that
+        has not overridden them with values via
+        <strong>:ProjectSettings</strong>.
+      </note>
+    </section>
+  </body>
+</document>
