@@ -63,9 +63,8 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
   else
     let offset = eclim#util#GetCharacterOffset() + len(a:base) - 1
     let project = eclim#project#GetCurrentProjectName()
-    " as of now a valid project name is not necessary, but may be later.
     if project == ''
-      let project = 'none'
+      return []
     endif
 
     let filename = eclim#project#GetProjectRelativeFilePath(expand("%:p"))

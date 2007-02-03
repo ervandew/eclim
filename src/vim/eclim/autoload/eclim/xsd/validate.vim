@@ -35,9 +35,8 @@ function! eclim#xsd#validate#Validate (on_save)
   endif
 
   let project = eclim#project#GetCurrentProjectName()
-  " as of now a valid project name is not necessary, but may be later.
   if project == ''
-    let project = 'none'
+    return
   endif
 
   if project != ""

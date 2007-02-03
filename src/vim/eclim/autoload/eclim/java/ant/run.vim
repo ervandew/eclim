@@ -37,9 +37,8 @@ endfunction " }}}
 " Custom command completion for ant targets.
 function! eclim#java#ant#run#CommandCompleteTarget (argLead, cmdLine, cursorPos)
   let project = eclim#project#GetCurrentProjectName()
-  " as of now a valid project name is not necessary, but may be later.
   if project == ''
-    let project = 'none'
+    return []
   endif
 
   let file = eclim#java#ant#util#FindBuildFile()
