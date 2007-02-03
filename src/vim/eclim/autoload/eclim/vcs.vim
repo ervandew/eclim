@@ -95,20 +95,57 @@ endfunction " }}}
 " Viewvc(file) {{{
 " Convert file or directory to viewvc url and open in the browser.
 function eclim#vcs#Viewvc (file)
-  let root = eclim#project#GetProjectSetting("org.eclim.project.vcs.viewvc")
+  let root = eclim#project#GetProjectSetting('org.eclim.project.vcs.viewvc')
   if root == ''
+    call eclim#util#EchoWarning(
+      \ ":Viewvc requires project setting 'org.eclim.project.vcs.viewvc'.")
     return
-  elseif root !~ '/$'
-    let root .= '/'
+  elseif root =~ '/$'
+    let root = root[:-2]
   endif
+
+  let project_root = eclim#project#GetCurrentProjectRoot()
 
   let file = a:file
-  let project_root = eclim#project#GetCurrentProjectRoot()
+  let dir = file
   if file == ''
-    let file = substitute(expand('%:p'), project_root . '/', '', '')
+    let file = expand('%:t')
+    let dir = expand('%:p:h')
+  elseif !isdirectory(project_root . '/' . file)
+    let dir = fnamemodify(project_root . '/' . file, ':p:h')
+    let file = fnamemodify(project_root . '/' . file, ':p:t')
+  else
+    let dir = fnamemodify(project_root . '/' . file, ':p')
+    let file = ''
   endif
 
-  let url = root . file
+  let cmd = winrestcmd()
+  if isdirectory(dir . '/CVS')
+    silent exec 'sview ' . escape(dir . '/CVS/Repository', ' ')
+    setlocal noswapfile
+    setlocal bufhidden=delete
+
+    let path = '/' . getline(1)
+
+    silent close
+  elseif isdirectory(dir . '/.svn')
+    silent exec 'sview ' . escape(dir . '/.svn/entries', ' ')
+    setlocal noswapfile
+    setlocal bufhidden=delete
+
+    call cursor(1, 1)
+    let url = substitute(getline(search('^\s*url=')), '^\s*url="\(.*\)"', '\1', '')
+    let repos = substitute(getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
+    let path = substitute(url, repos, '', '')
+
+    silent close
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+    return
+  endif
+  silent exec cmd
+
+  let url = root . path . '/' . file
   if !isdirectory(project_root . '/' . file)
     let url .= '?view=log'
   endif
