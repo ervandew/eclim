@@ -50,7 +50,7 @@
     </replace>
 
     <!-- extract pmwiki -->
-    <untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
+    <!--untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
     <mkdir dir="build/site/wiki"/>
     <move todir="build/site">
       <fileset dir="build/site" includes="pmwiki-*/**/*"/>
@@ -61,12 +61,12 @@
       <dirset dir="build/site" includes="pmwiki*"/>
     </path>
     <property name="pmwiki" refid="pmwiki.dir"/>
-    <delete dir="${pmwiki}"/>
+    <delete dir="${pmwiki}"/-->
 
     <!-- copy over any pmwiki config files, etc. -->
-    <copy todir="build/site/wiki">
+    <!--copy todir="build/site/wiki">
       <fileset dir="src/forrest/wiki" includes="**/*" excludes="pmwiki.tgz"/>
-    </copy>
+    </copy-->
   </target>
 
   <!--
