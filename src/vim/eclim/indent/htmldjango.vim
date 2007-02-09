@@ -182,7 +182,7 @@ fun! <SID>HtmlIndentAttributeWrap (lnum)
     endif
   elseif start == end
     let prev = getline(prevnonblank(a:lnum - 1))
-    if prev =~ '>' && prev !~ '<'
+    if prev =~ '>' && (prev !~ '<' && prev !~ '%}')
       return -1
     endif
   elseif start == a:lnum
@@ -259,7 +259,7 @@ fun! HtmlIndentGet(lnum)
 
   " [-- special handling for <javascript>: use cindent --]
   let js = '<script.*type\s*=\s*.*java'
-  if   0 < searchpair(js, '', '</script>', 'nWb')
+  if 0 < searchpair(js, '', '</script>', 'nWb')
         \ || 0 < searchpair(js, '', '</script>', 'nW')
     " we're inside javascript
     if getline(lnum) !~ js && getline(a:lnum) !~ '</script>'
