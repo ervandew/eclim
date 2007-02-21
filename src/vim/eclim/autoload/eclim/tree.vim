@@ -89,7 +89,7 @@ endfunction " }}}
 "   empty list for no filtering.
 function eclim#tree#Tree (name, roots, aliases, expand, filters)
   silent exec 'edit ' . escape(a:name, ' ')
-  set modifiable
+  setlocal modifiable
 
   let roots = s:NormalizeDirs(a:roots)
   let b:filters = a:filters
