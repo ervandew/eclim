@@ -61,7 +61,7 @@
         appended to it to render a valid url.<br/>
         Ex.
         <source>
-          org.eclim.project.vcs.viewvc=http://eclim.svn.sourceforge.net/viewvc/eclim/trunk/
+          org.eclim.project.vcs.viewvc=http://eclim.svn.sourceforge.net/viewvc/eclim/
         </source>
       </li>
     </ul>
