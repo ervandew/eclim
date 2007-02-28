@@ -51,6 +51,20 @@
         run the command and populate a new buffer with the resulting output and
         set the proper file type.
       </p>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p><strong>Vim Variables:</strong></p>
+      <ul>
+        <li>
+          <anchor id="EclimPythonInterpreter"/>
+          <strong>g:EclimPythonInterpreter</strong> = 'python'
+        </li>
+        <li>
+          <anchor id="EclimDjangoAdmin"/>
+          <strong>g:EclimDjangoAdmin</strong> = 'django-admin.py'
+        </li>
+      </ul>
     </section>
     <section id="template">
       <title>Django html template support</title>
@@ -72,6 +86,41 @@
         variables to allow proper matchit.vim support for django default and
         user defined tags.
       </p>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p><strong>Vim Variables:</strong></p>
+      <ul>
+        <li>
+          <anchor id="HtmlDjangoUserBodyElements"/>
+          <strong>g:HtmlDjangoUserBodyElements</strong><br/>
+          List of lists, where each list contains the name of the start and end
+          tag, as well as any intermediary tags of any custom tags which have a
+          body.<br/>
+          Ex.
+          <source>
+            let g:HtmlDjangoUserBodyElements = [
+                \ ['repeat', 'endrepeat'],
+                \ ['try', 'except', 'finally', 'endtry'],
+              \ ]
+          </source>
+          This setting is used for indentation of the custom tag's body, as well
+          as arguments for proper matchit support, and syntax highlighting.
+        </li>
+        <li>
+          <anchor id="HtmlDjangoUserTags"/>
+          <strong>g:HtmlDjangoUserTags</strong><br/>
+          This setting is a list of any non-body tags which don't require
+          indentation or matchit support.  The items configured here will be
+          used for syntax highlighting.
+        </li>
+        <li>
+          <anchor id="HtmlDjangoUserFilters"/>
+          <strong>g:HtmlDjangoUserFilters</strong><br/>
+          This settings contains a list of any user defined django filters.  It
+          is currently used for syntax highlighting.
+        </li>
+      </ul>
     </section>
   </body>
 </document>

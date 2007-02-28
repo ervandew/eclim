@@ -382,16 +382,6 @@
         <a href="vim/python/regex.html">testing regular expressions</a>.
       </action>
 
-      <action dev="ervandew" type="add" context="Python">
-        Added support for invoking django's manage.py via
-        <strong><a href="vim/python/django.html">:DjangoManage</a></strong>.
-      </action>
-
-      <action dev="ervandew" type="add" context="Python">
-        Added enhanced support for invoking
-        <a href="vim/python/django.html">django's html templates</a>.
-      </action>
-
       <action dev="ervandew" type="add" context="WebXml">
         Added
         <a href="vim/java/webxml/validate.html">web.xml file validation</a>.
