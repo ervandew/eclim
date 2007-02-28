@@ -97,5 +97,11 @@
         <strong>:ProjectSettings</strong>.
       </note>
     </section>
+    <section id="python_path">
+      <title>Project Python Path</title>
+      <fixme author="ervandew">
+        Finish this guide.
+      </fixme>
+    </section>
   </body>
 </document>
