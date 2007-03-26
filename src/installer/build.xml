@@ -36,7 +36,8 @@
     <mkdir dir="build/formic/classes"/>
 
     <!-- compile install steps and helper classes -->
-    <javac destdir="build/formic/classes" debug="on" optimize="false">
+    <javac destdir="build/formic/classes" debug="on" optimize="false"
+        target="${javac.target}" source="${javac.target}">
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
       <classpath refid="formic.classpath"/>
