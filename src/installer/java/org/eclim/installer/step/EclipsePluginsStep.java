@@ -35,6 +35,8 @@ import org.apache.tools.ant.taskdefs.Untar;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
+import org.eclim.installer.EclipseFeatures;
+
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.EnableCommand;
 import org.eclim.installer.step.command.InstallCommand;
@@ -84,6 +86,8 @@ public class EclipsePluginsStep
     extractInstallerPlugin();
 
     List dependencies = getDependencies();
+
+    guiOverallLabel.setText("Analyzing installed features...");
     filterDependencies(dependencies, getFeatures());
     if(dependencies.size() == 0){
       guiOverallProgress.setMaximum(1);
@@ -122,6 +126,9 @@ public class EclipsePluginsStep
     }
   }
 
+  /**
+   * Extracts the eclipse plugin used to install eclipse features.
+   */
   private void extractInstallerPlugin ()
   {
     // extract eclipse installer plugin.
@@ -154,6 +161,13 @@ public class EclipsePluginsStep
     }
   }
 
+  /**
+   * Gets a list of commands which need to be executed to install or upgrade the
+   * supplied dependency.
+   *
+   * @param dependency The dependency to install or upgrade.
+   * @return List of commands.
+   */
   private List getCommands (Dependency dependency)
   {
     ArrayList list = new ArrayList();
@@ -173,6 +187,12 @@ public class EclipsePluginsStep
     return list;
   }
 
+  /**
+   * Gets a list of required dependencies based on the chosen set of eclim
+   * features to be installed.
+   *
+   * @return List of dependencies.
+   */
   private List getDependencies ()
     throws Exception
   {
@@ -184,17 +204,38 @@ public class EclipsePluginsStep
     for (int ii = 0; ii < features.length; ii++){
       Boolean enabled = (Boolean)Installer.getContext().getValue(features[ii]);
       String name = features[ii].substring(features[ii].indexOf('.') + 1);
-      if(enabled.booleanValue() && properties.containsKey(name)){
-        String[] depends = StringUtils.split(properties.getProperty(name), ',');
-        for (int jj = 0; jj < depends.length; jj++){
-          String[] dependency = StringUtils.split(depends[jj]);
-          dependencies.add(new Dependency(dependency));
+
+      // check if the enabled eclim feature has any dependencies.
+      if(enabled.booleanValue() && properties.containsKey(name + ".features")){
+        // check if dependencies are eclipse based
+        if(properties.containsKey(name + ".eclipse")){
+          EclipseFeatures eclipseFeatures = EclipseFeatures.getInstance(properties);
+          String[] depends = StringUtils.split(
+              properties.getProperty(name + ".features"), ',');
+          String site = properties.getProperty(name + ".site");
+          for (int jj = 0; jj < depends.length; jj++){
+            dependencies.add(new Dependency(new String[]{
+              site, depends[jj], eclipseFeatures.getVersion(depends[jj].trim())}));
+          }
+
+        }else{  // third party features.
+          String[] depends = StringUtils.split(
+              properties.getProperty(name + ".features"), ',');
+          for (int jj = 0; jj < depends.length; jj++){
+            String[] dependency = StringUtils.split(depends[jj]);
+            dependencies.add(new Dependency(dependency));
+          }
         }
       }
     }
     return dependencies;
   }
 
+  /**
+   * Gets a list of already installed features.
+   *
+   * @return List of features.
+   */
   private List getFeatures ()
     throws Exception
   {
@@ -217,6 +258,13 @@ public class EclipsePluginsStep
     return features;
   }
 
+  /**
+   * Filters the supplied list of dependencies to determine which are already
+   * installed or need to be upgraded.
+   *
+   * @param dependencies The original list of dependencies.
+   * @param features The list of already installed features.
+   */
   private void filterDependencies (List dependencies, List features)
   {
     Collator collator = Collator.getInstance();
