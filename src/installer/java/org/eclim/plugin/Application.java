@@ -49,8 +49,12 @@ public class Application
       String[] params = (String[])_args;
       CmdLineArgs cmdLineArgs = new CmdLineArgs(params);
       ScriptedCommand cmd = cmdLineArgs.getCommand();
-      cmd.run(new ProgressMonitor());
+      boolean installed = cmd.run(new ProgressMonitor());
+      if(!installed){
+        throw new RuntimeException("Feature not installed.");
+      }
     }catch(Throwable t){
+      t.printStackTrace();
       return new Integer(1);
     }
 
@@ -69,6 +73,7 @@ public class Application
      */
     public void beginTask (String name, int totalWork)
     {
+// FIXME: validate that the requested plugin was found.
       System.out.println("beginTask: totalWork=" + totalWork + " name=" + name);
     }
 
