@@ -100,9 +100,11 @@ public class EclipsePluginsStep
       for (Iterator ii = dependencies.iterator(); ii.hasNext();){
         Dependency dependency = (Dependency)ii.next();
         if(!dependency.isUpgrade()){
-          guiOverallLabel.setText("Installing feature: " + dependency.getId());
+          guiOverallLabel.setText("Installing feature: " +
+              dependency.getId() + '-' + dependency.getVersion());
         }else{
-          guiOverallLabel.setText("Updating feature: " + dependency.getId());
+          guiOverallLabel.setText("Updating feature: " +
+              dependency.getId() + '-' + dependency.getVersion());
         }
 
         List commands = getCommands(dependency);
@@ -215,7 +217,8 @@ public class EclipsePluginsStep
           String site = properties.getProperty(name + ".site");
           for (int jj = 0; jj < depends.length; jj++){
             dependencies.add(new Dependency(new String[]{
-              site, depends[jj], eclipseFeatures.getVersion(depends[jj].trim())}));
+              site, depends[jj].trim(),
+              eclipseFeatures.getVersion(depends[jj].trim())}));
           }
 
         }else{  // third party features.
@@ -285,6 +288,7 @@ public class EclipsePluginsStep
       if (installed){
         int order = collator.compare(
             feature.getVersion(), dependency.getVersion());
+
         // if required or newer version installed, remove dependency.
         if(order >= 0){
           dependencies.remove(dependency);
