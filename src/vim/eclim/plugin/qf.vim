@@ -36,25 +36,33 @@ augroup END
 " Set the type on each entry in the specified list and mark any matches in the
 " current file.
 function! s:Show (type, list)
-  if a:list == 'qf'
-    let list = getqflist()
-  else
-    let list = getloclist(0)
+  if a:type != ''
+    echom 'type ' . a:type
+    if a:list == 'qf'
+      let list = getqflist()
+    else
+      let list = getloclist(0)
+    endif
+
+    let newentries = []
+    for entry in list
+      let newentry = {
+          \ 'filename': bufname(entry.bufnr),
+          \ 'lnum': entry.lnum,
+          \ 'col': entry.col,
+          \ 'text': entry.text,
+          \ 'type': a:type
+        \ }
+      call add(newentries, newentry)
+    endfor
+
+    if a:list == 'qf'
+      call setqflist(newentries, 'r')
+    else
+      call setloclist(0, newentries, 'r')
+    endif
   endif
 
-  let newentries = []
-  for entry in list
-    let newentry = {
-        \ 'filename': bufname(entry.bufnr),
-        \ 'lnum': entry.lnum,
-        \ 'col': entry.col,
-        \ 'text': entry.text,
-        \ 'type': a:type
-      \ }
-    call add(newentries, newentry)
-  endfor
-
-  call setqflist(newentries, 'r')
   call eclim#signs#Update()
 
   redraw!
