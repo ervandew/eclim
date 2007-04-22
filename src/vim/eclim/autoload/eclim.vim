@@ -164,6 +164,10 @@ function! eclim#GetEclimCommand ()
     let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
       \ '/bin/' . g:EclimCommand
 
+    if g:EclimPath =~ '^[a-zA-Z]:'
+      let g:EclimPath = g:EclimPath . '.bat'
+    endif
+
     if !filereadable(g:EclimPath)
       let g:EclimErrorReason = 'Could not locate file: ' . g:EclimPath
       return
