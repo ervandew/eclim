@@ -209,20 +209,19 @@ function! eclim#signs#Update ()
   set lazyredraw
 
   call eclim#signs#Define("error", ">>", g:EclimErrorHighlight)
+  call eclim#signs#Define("placeholder", ">>", g:EclimInfoHighlight)
 
   let existing = eclim#signs#GetExisting()
 
   " set sign at line 1 to prevent sign column from collapsing (prevent screen
   " flash).
   if len(existing) > 0
-    call eclim#signs#Place("error", 1)
+    call eclim#signs#Place("placeholder", 1)
   endif
 
   " remove all existing signs
   for exists in existing
-    if !(exists.name == "error" && exists.line == 1)
-      call eclim#signs#Unplace(exists.id)
-    endif
+    call eclim#signs#Unplace(exists.id)
   endfor
 
   if g:EclimShowQuickfixSigns
@@ -256,19 +255,17 @@ function! eclim#signs#Update ()
     call eclim#signs#PlaceAll("error", errors)
   endif
 
-  " remove placeholder sign if no real sign exists there
-  let existing = eclim#signs#GetExisting()
-  if len(existing) > 0 &&
-    \ (!exists("errors") || len(errors) == 0 || errors[0] != 1) &&
-    \ existing[0].name == 'error' &&
-    \ existing[0].line == '1'
-    call eclim#signs#Unplace(existing[0].id)
-  endif
+  " remove placeholder sign
+  let existing = eclim#signs#GetExisting('placeholder')
+  for exists in existing
+    call eclim#signs#Unplace(exists.id)
+  endfor
 
   let &lazyredraw = save_lazy
 endfunction " }}}
 
 " define signs for manually added user marks.
-call eclim#signs#Define('user', g:EclimUserSignText, g:EclimUserSignHighlight)
+call eclim#signs#Define(
+  \ 'user', g:EclimUserSignText, g:EclimUserSignHighlight)
 
 " vim:ft=vim:fdm=marker
