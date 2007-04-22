@@ -281,7 +281,7 @@ function! eclim#project#GetCurrentProjectFile ()
   let projectFile = eclim#util#Findfile('.project', dir . ';')
   while 1
     if filereadable(projectFile)
-      return fnamemodify(projectFile, ':p')
+      return substitute(fnamemodify(projectFile, ':p'), '\', '/', 'g')
     endif
     if projectFile == '' && dir != getcwd()
       let dir = getcwd()
@@ -334,11 +334,12 @@ endfunction " }}}
 " GetProjectRelativeFilePath (file) {{{
 " Gets the project relative path for the given file.
 function! eclim#project#GetProjectRelativeFilePath (file)
-  let result = substitute(a:file, eclim#project#GetCurrentProjectRoot(), '', '')
+  let file = substitute(a:file, '\', '/', 'g')
+  let result = substitute(file, eclim#project#GetCurrentProjectRoot(), '', '')
   if result =~ '^/'
     let result = result[1:]
   endif
-  return escape(result, '\')
+  return result
 endfunction " }}}
 
 " GetProjectDirs() {{{
