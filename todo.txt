@@ -19,18 +19,22 @@ Documentation
   - docs on new ant syntax file.
   - FAQs
     - how to specify workspace dir.
+      eclimd -Dosgi.instance.area.default=@user.home/another_workspace
 
 Test on Windows
 
 Bugs
-  - https://sourceforge.net/tracker/index.php?func=detail&aid=1635747&group_id=145869&atid=763323
-  - https://sourceforge.net/tracker/index.php?func=detail&aid=1635756&group_id=145869&atid=763323
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
-  - update python project guide to note that a python interpreter must be set
-    prior to creating a project.
 
 Enhancements
+  - determines the user's default workspace using
+    eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
+    RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
+
+  - add support for filtering validation errors based on regex.
+    - be sure to make settings buffer local
+
   - :ProjectGrep support project relative file completion
   - :MinimizeWindows, map <space>hjkl to move to next un-minimized window in
     that direction, or stay in current window if none.
