@@ -28,10 +28,10 @@ if !exists(":OpenUrl")
   command -nargs=? OpenUrl :call eclim#web#OpenUrl('<args>')
 endif
 if !exists(":Google")
-  command -nargs=* Google :call eclim#web#Google('<args>', 0, 0)
+  command -nargs=* Google :call eclim#web#Google(<q-args>, 0, 0)
 endif
 if !exists(":Clusty")
-  command -nargs=* Clusty :call eclim#web#Clusty('<args>', 0, 0)
+  command -nargs=* Clusty :call eclim#web#Clusty(<q-args>, 0, 0)
 endif
 if !exists(":Dictionary")
   command -nargs=? Dictionary :call eclim#web#Dictionary('<args>')
