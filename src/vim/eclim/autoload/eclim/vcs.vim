@@ -133,9 +133,22 @@ function eclim#vcs#Viewvc (file)
     setlocal noswapfile
     setlocal bufhidden=delete
 
-    call cursor(1, 1)
-    let url = substitute(getline(search('^\s*url=')), '^\s*url="\(.*\)"', '\1', '')
-    let repos = substitute(getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
+    " xml entries format < 1.4
+    if getline(1) =~ '<?xml'
+      call cursor(1, 1)
+      let url = substitute(
+        \ getline(search('^\s*url=')), '^\s*url="\(.*\)"', '\1', '')
+      let repos = substitute(
+        \ getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
+
+    " entries format >= 1.4
+    else
+      " can't find official doc on the format, but lines 5 and 6 seem to
+      " always have the necessary values.
+      let url = getline(5)
+      let repos = getline(6)
+    endif
+
     let path = substitute(url, repos, '', '')
 
     silent close
