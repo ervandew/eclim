@@ -37,8 +37,11 @@ import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
+import org.python.pydev.core.IPythonNature;
+
 import org.python.pydev.editor.codecompletion.CompletionRequest;
 import org.python.pydev.editor.codecompletion.PyCodeCompletion;
+import org.python.pydev.editor.codecompletion.PyCodeCompletionUtils;
 
 import org.python.pydev.plugin.nature.PythonNature;
 
@@ -69,12 +72,12 @@ public class CodeCompleteCommand
       ITextViewer viewer =
         new DummyTextViewer(document, offset, 1);
 
-      PythonNature nature = PythonNature.getPythonNature(project);
+      IPythonNature nature = PythonNature.getPythonNature(project);
       CompletionRequest request = new CompletionRequest(
           new File(file), nature, document, offset, PY_CC);
 
       List results = new ArrayList();
-      ICompletionProposal[] proposals = PY_CC.onlyValidSorted(
+      ICompletionProposal[] proposals = PyCodeCompletionUtils.onlyValidSorted(
           PY_CC.getCodeCompletionProposals(viewer, request),
           request.qualifier, request.isInCalltip);
       for (int ii = 0; ii < proposals.length; ii++){

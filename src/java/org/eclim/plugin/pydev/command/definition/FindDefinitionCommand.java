@@ -76,9 +76,10 @@ public class FindDefinitionCommand
         new PySelection(document, offset);
 
       PyRefactoring refactor = new PyRefactoring();
-      File theFile = new File(FilenameUtils.concat(ProjectUtils.getPath(project), file));
+      File theFile = new File(
+          FilenameUtils.concat(ProjectUtils.getPath(project), file));
       RefactoringRequest request = new RefactoringRequest(
-          theFile, document, selection, null, nature, edit);
+          theFile, selection, null, nature, edit);
       ItemPointer[] results = refactor.findDefinition(request);
       List locations = new ArrayList();
       if(results != null){
