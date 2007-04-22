@@ -44,6 +44,11 @@ function! eclim#xml#Validate (file, on_save, ...)
     return
   endif
 
+  let project = eclim#project#GetCurrentProjectName()
+  if project == ""
+    return
+  endif
+
   let file = a:file
   if file == ""
     let file = expand('%:p')
@@ -59,7 +64,6 @@ function! eclim#xml#Validate (file, on_save, ...)
   endif
 
   if eclim#PingEclim(0)
-    let project = eclim#project#GetCurrentProjectName()
     let filename = eclim#project#GetProjectRelativeFilePath(file)
     let command = s:command_validate
     let command = substitute(command, '<project>', project, '')
