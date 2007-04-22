@@ -23,8 +23,10 @@
 " }}}
 
 " Script Varables {{{
+  let s:delim = ',,'
   let s:complete_command =
-    \ '-command xml_complete -p "<project>" -f "<file>" -o <offset> -d "||"'
+    \ '-command xml_complete -p "<project>" -f "<file>" -o <offset> -d "' .
+    \ s:delim . '"'
 " }}}
 
 " CodeComplete(findstart, base) {{{
@@ -64,12 +66,13 @@ function! eclim#xml#complete#CodeComplete (findstart, base)
     endif
 
     for result in results
-      let word = substitute(result, '\(.\{-}\)||.*', '\1', '')
+      let word = substitute(result, '\(.\{-}\)' . s:delim . '.*', '\1', '')
 
-      let menu = substitute(result, '.\{-}||\(.*\)||.*', '\1', '')
+      let menu = substitute(
+        \ result, '.\{-}' . s:delim . '\(.*\)' . s:delim . '.*', '\1', '')
       let menu = eclim#html#util#HtmlToText(menu)
 
-      let info = substitute(result, '.*||\(.*\)', '\1', '')
+      let info = substitute(result, '.*' . s:delim . '\(.*\)', '\1', '')
       let info = eclim#html#util#HtmlToText(info)
 
       let dict = {'word': word, 'menu': menu, 'info': info}
