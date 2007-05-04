@@ -61,6 +61,7 @@ call <SID>HtmlIndentPush('h5')
 call <SID>HtmlIndentPush('h6')
 call <SID>HtmlIndentPush('i')
 call <SID>HtmlIndentPush('iframe')
+call <SID>HtmlIndentPush('input')
 call <SID>HtmlIndentPush('ins')
 call <SID>HtmlIndentPush('kbd')
 call <SID>HtmlIndentPush('label')
@@ -125,7 +126,7 @@ endfun
 " [-- count indent-decreasing tags of line a:lnum --]
 fun! <SID>HtmlIndentClose(lnum, pattern)
   let s = substitute('x'.getline(a:lnum),
-        \ '.\{-}\(\(<\)/\('.a:pattern.'\)\>>\)', "\1", 'g')
+        \ '.\{-}\(\(<\)/\('.a:pattern.'\)\>>\|\/>\)', "\1", 'g')
   let s = substitute(s, "[^\1].*$", '', '')
   return strlen(s)
 endfun
