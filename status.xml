@@ -336,6 +336,21 @@
           <strong>:ProjectLGrepAdd</strong>
         </a>.
       </action>
+      <action dev="ervandew" type="add" context="Eclim">
+        Added support for buffer local variable
+        <strong>b:EclimLocationListFilter</strong> which can contain a list of
+        regular expression patterns used to filter location list entries with
+        text / message field matching one of the patterns.  The main intention
+        of this new variable is to allow you to filter out validation errors /
+        warnings per file type, that you wish to ignore.
+        <br/>
+        Example which I have in my .vim/ftplugin/html/html.vim file:
+        <source>
+          let b:EclimLocationListFilter = [
+              \ '&lt;table&gt; lacks "summary" attribute'
+            \ ]
+        </source>
+      </action>
 
       <action dev="ervandew" type="add" context="Css">
         Added <a href="vim/css/complete.html">css code completion</a>.<br/>
