@@ -1,0 +1,647 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+ Translator: Xu Shi-Xing
+-->
+
+<document>
+  <header>
+    <title>Eclim Vim 指令參考</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      以下包含所有在 Eclim 中可以使用的指令，並提供簡要參考用法。
+    </p>
+
+    <p><strong>全區域指令集</strong></p>
+    <ul>
+      <li>
+        <a href="index.html#PingEclim"><strong>:PingEclim</strong></a> -
+        連接 eclimd 伺服器。
+      </li>
+      <li>
+        <a href="index.html#ShutdownEclim"><strong>:ShutdownEclim</strong></a> -
+        關閉 eclimd 伺服器。
+      </li>
+      <li>
+        <a href="index.html#EclimSettings"><strong>:EclimSettings</strong></a> -
+        瀏覽/編輯全區域設定選項。
+      </li>
+    </ul>
+
+    <p><strong>Project 專案指令集</strong></p>
+    <ul>
+      <li>
+        <a href="common/project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
+        <!-- &lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
+        &lt;資料夾&gt; [-p &lt;專案名稱&gt; -d &lt;依存的專案&gt; ...]
+        建立新專案。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectList"><strong>:ProjectList</strong></a> -
+        顯示目前專案清單。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectSettings">
+          <strong>:ProjectSettings</strong>
+        </a>
+        [&lt;專案名稱&gt;] - 瀏覽/編輯專案設定選項。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectDelete"><strong>:ProjectDelete</strong></a>
+        &lt;專案名稱&gt; - 刪除指定的專案。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectRefresh"><strong>:ProjectRefresh</strong></a>
+        [&lt;專案名稱&gt; &lt;專案名稱&gt; ...] -
+        更新列表中或所有的專案，這將會更新設定值至實際磁碟檔案中。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectRefreshAll">
+          <strong>:ProjectRefreshAll</strong>
+        </a> -
+        同 :ProjectRefreshAll 指令，但更新所有的專案。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>
+        &lt;專案名稱&gt; - 開啟舊專案。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectClose"><strong>:ProjectClose</strong></a>
+        &lt;專案名稱&gt; - 關閉專案。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectCD"><strong>:ProjectCD</strong></a>
+        - 改變全區域的工作目錄至目前檔案所在的專案目錄(即執行 :cd)。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLCD"><strong>:ProjectLCD</strong></a>
+        - 改變目前工作目錄至目前檔案所在的專案目錄(即執行 :lcd)。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectTree"><strong>:ProjectTree</strong></a>
+        [&lt;專案名稱&gt; &lt;專案名稱&gt; ...] - 針對一個或多個專案開啟可導覽的樹狀結構表。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectsTree"><strong>:ProjectsTree</strong></a>
+        - 對於所有的專案開啟一份可導覽的樹狀結構表。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectGrep"><strong>:ProjectGrep</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        在專案根目錄使用 :vim[grep] 指令功能。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectGrepAdd"><strong>:ProjectGrepAdd</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        在專案根目錄使用 :vimgrepa[dd] 指令功能。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLGrep"><strong>:ProjectLGrep</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        在專案根目錄使用 :lv[imgrep] 指令功能。
+      </li>
+      <li>
+        <a href="common/project.html#ProjectLGrepAdd"><strong>:ProjectLGrepAdd</strong></a>
+        /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+        在專案根目錄使用 :lvimgrepa[dd] 指令功能。
+      </li>
+    </ul>
+
+    <p><strong>Eclipse .classpath 維護指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/classpath.html#NewSrcEntry">
+          <strong>:NewSrcEntry</strong>
+        </a>
+        &lt;目錄&gt; [&lt;目錄&gt; ...] -
+        新增一個原始碼目前節點。
+      </li>
+      <li>
+        <a href="java/classpath.html#NewProjectEntry">
+          <strong>:NewProjectEntry</strong>
+        </a>
+        &lt;專案名稱&gt; [&lt;專案名稱&gt; ...] -
+        新增一個專案節點。
+      </li>
+      <li>
+        <a href="java/classpath.html#NewJarEntry">
+          <strong>:NewJarEntry</strong>
+        </a>
+        &lt;檔案&gt; [&lt;檔案&gt; ...] -
+        新增一個 .jar 檔案節點。
+      </li>
+      <li>
+        <a href="java/classpath.html#NewVarEntry">
+          <strong>:NewVarEntry</strong>
+        </a>
+        &lt;參數/檔案&gt; [&lt;參數/檔案&gt; ...] -
+        新增一個參數節點。
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableList">
+          <strong>:VariableList</strong>
+        </a>
+        列出可使用的 classpath 參數及相對應的值。
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableCreate">
+          <strong>:VariableCreate</strong>
+        </a>
+        &lt;名稱&gt; &lt;路徑&gt; - 建立或修改一個名稱的變數。
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableDelete">
+          <strong>:VariableDelete</strong>
+        </a>
+        &lt;名稱&gt; - 刪除指定名稱的變數。
+      </li>
+    </ul>
+
+    <p><strong>Ant 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/ant/run.html#Ant"><strong>:Ant</strong></a>
+        [&lt;目標&gt; ...] -
+        在目前專案設定下，執行 ant。
+      </li>
+      <li>
+        <a href="java/ant/doc.html#AntDoc"><strong>:AntDoc</strong></a>
+        [&lt;元素&gt;] -
+        以目前游標位置的元素或指定元素尋找並開啟文件檔案。
+      </li>
+      <li>
+        <a href="java/ant/validate.html#Validate"><strong>:Validate</strong></a> -
+        驗證目前的 ant 檔案。
+      </li>
+    </ul>
+
+    <p><strong>DTD 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+  驗證目前的 DTD 檔案。
+      </li>
+    </ul>
+
+    <p><strong>HTML 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        驗證目前的 HTML 檔案。
+      </li>
+    </ul>
+
+    <p><strong>Ivy Commands</strong></p>
+    <ul>
+      <li>
+        <a href="../guides/java/ivy/ivy_classpath.html#IvyRepo">
+          <strong>:IvyRepo</strong>
+        </a>
+        &lt;路徑&gt; -
+  設定必須的 IVY_REPO classpath 參數予會自動更新 .classpath 檔案的 <code>ivy.xml</code> 設定檔。
+      </li>
+      <li>
+        <a href="../guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
+          <strong>:IvyDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+  尋找線上的資料庫，並將結果列示在一個視窗內，使用者可經由按下&lt;Enter&gt;鍵將結果加入目前專案內。在編輯 <code>ivy.xml</code> 檔案時可以使用本指令。
+      </li>
+    </ul>
+
+    <p><strong>Java 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/bean.html#JavaGet"><strong>:JavaGet</strong></a> -
+        建立 java bean getter 方法。
+      </li>
+      <li>
+        <a href="java/bean.html#JavaSet"><strong>:JavaSet</strong></a> -
+        建立 java bean setter 方法。
+      </li>
+      <li>
+        <a href="java/bean.html#JavaGetSet"><strong>:JavaGetSet</strong></a> -
+        建立 java bean getter 及 setter 方法。
+      </li>
+      <li>
+        <a href="java/constructor.html#JavaConstructor">
+          <strong>:JavaConstructor</strong>
+        </a> -
+        建立類別的建構子，內容為空或以選擇的欄位建立預設值。
+      </li>
+      <li>
+        <a href="java/impl.html#JavaImpl"><strong>:JavaImpl</strong></a> -
+        自 super class 及實作的 interface 列示可實作/可重載的方法。
+      </li>
+      <li>
+        <a href="java/delegate.html#JavaDelegate">
+          <strong>:JavaDelegate</strong>
+        </a> -
+        列示操作目前游標欄位的方法。
+      </li>
+      <li>
+        <a href="java/junit.html#JUnitImpl"><strong>:JUnitImpl</strong></a> -
+        類似 <strong>:JavaImpl</strong> 的動作, 但建立的方法為測試用途。
+      </li>
+      <li>
+        <a href="java/junit.html#JUnitExecute">
+          <strong>:JUnitExecute</strong>
+        </a> - [測試例子]
+        以常用的建置工具執行測試例子。
+      </li>
+      <li>
+        <a href="java/junit.html#JUnitResult">
+          <strong>:JUnitResult</strong>
+        </a> - [測試例子]
+        檢視測試例子的執行結果。
+      </li>
+      <li>
+        <a href="java/import.html#JavaImport"><strong>:JavaImport</strong></a> -
+        Import 目前游標位置的 class。
+      </li>
+      <li>
+        <a href="java/search.html#JavaSearch"><strong>:JavaSearch</strong></a>
+        [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;內文內容&gt;] -
+        尋找類別, 方法, 欄位等(使用 pattern 支持，尋找目前游標位置的元素)。
+      </li>
+      <li>
+        <a href="java/search.html#JavaSearchContext">
+          <strong>:JavaSearchContext</strong>
+        </a> -
+        執行目前游標位置元素的內文搜尋。
+      </li>
+      <li>
+        <a href="java/correct.html#JavaCorrect">
+          <strong>:JavaCorrect</strong>
+        </a> -
+        建議應修正的程式碼。
+      </li>
+      <li>
+        <a href="java/regex.html#JavaRegex"><strong>:JavaRegex</strong></a> -
+        開啟一個視窗，進行 regular ecpression 測試。
+      </li>
+      <li>
+        <a href="java/doc.html#JavaDocSearch">
+          <strong>:JavaDocSearch</strong>
+        </a> -
+        尋找 javadoc，如同 <strong>:JavaSearch</strong> 指令。
+      </li>
+      <li>
+        <a href="java/doc.html#JavaDocComment">
+          <strong>:JavaDocComment</strong>
+        </a> -
+        新增或修改目前游標位置元素的註解。
+      </li>
+      <li>
+        <a href="java/tools.html#Jps">
+          <strong>:Jps</strong>
+        </a> -
+        開啟目前 java 運作資訊的視窗。
+      </li>
+    </ul>
+
+    <p><strong>Log4j 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/log4j/validate.html#Validate"><strong>:Validate</strong></a> -
+  驗證目前的 log4j 組態設定檔案。
+      </li>
+    </ul>
+
+    <p><strong>Maven 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/maven/run.html#Maven"><strong>:Maven</strong></a>
+        [&lt;目標&gt; ...] -
+        在目前的專案設定下執行 maven 1.x。
+      </li>
+      <li>
+        <a href="java/maven/run.html#Mvn"><strong>:Mvn</strong></a>
+        [&lt;目標&gt; ...] -
+        在目前的專案設定下執行 maven 2.x。
+      </li>
+      <li>
+        <a href="../guides/java/maven/maven_classpath.html#MavenRepo">
+          <strong>:MavenRepo</strong>
+        </a>
+        - 設定必須的 MAVEN_REPO classpath 參數予帶有 eclipse 支持的 maven's (1.x)。
+      </li>
+      <li>
+        <a href="../guides/java/maven/mvn_classpath.html#MvnRepo">
+          <strong>:MvnRepo</strong>
+        </a>
+        - 設定必須的 M2_REPO classpath 參數予帶有 eclipse 支持的 maven's (2.x)。
+      </li>
+      <li>
+        <a href="java/maven/dependency.html#MavenDependencySearch">
+          <strong>:MavenDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        尋找線上的資料庫，並將結果列示在一個視窗內，使用者可經由按下&lt;Enter&gt;鍵將結果加入目前專案內。在編輯 maven 1.x <code>project.xml</code> 檔案時可以使用本指令。
+      </li>
+      <li>
+        <a href="java/maven/dependency.html#MvnDependencySearch">
+          <strong>:MvnDependencySearch</strong>
+        </a>
+        &lt;artifact&gt; -
+        尋找線上的資料庫，並將結果列示在一個視窗內，使用者可經由按下&lt;Enter&gt;鍵將結果加入目前專案內。在編輯 maven 2.x <code>pom.xml</code> 檔案時可以使用本指令。
+      </li>
+    </ul>
+
+    <p><strong>Python 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="python/definition.html#PythonFindDefinition">
+          <strong>:PythonFindDefinition</strong>
+        </a> -
+  移至目前游標位置的類別、方法、函數或變數的宣告式定義。
+      </li>
+      <li>
+        <a href="python/regex.html#PythonRegex"><strong>:PythonRegex</strong></a> -
+  開啟一個視窗來測試 python regular expressions。
+      </li>
+      <li>
+        <a href="python/django.html#DjangoManage">
+          <strong>:DjangoManage</strong>
+        </a> -
+  存在 manage.py 的同一個目錄下或子目錄下，自任何檔案中呼叫 django's <code>manage.py</code>。
+      </li>
+    </ul>
+
+    <p><strong>Vim 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="vim/find.html#FindCommandDef">
+          <strong>:FindCommandDef</strong>
+        </a>
+        [&lt;command&gt;] -
+        尋找 command 的定義。
+      </li>
+      <li>
+        <a href="vim/find.html#FindCommandRef">
+          <strong>:FindCommandRef</strong>
+        </a>
+        [&lt;command&gt;] -
+        尋找 command 的參考。
+      </li>
+      <li>
+        <a href="vim/find.html#FindFunctionDef">
+          <strong>:FindFunctionDef</strong>
+        </a>
+        [&lt;function&gt;] -
+        尋找函數的定義。
+      </li>
+      <li>
+        <a href="vim/find.html#FindFunctionRef">
+          <strong>:FindFunctionRef</strong>
+        </a>
+        [&lt;function&gt;] -
+        尋找函數的參考。
+      </li>
+      <li>
+        <a href="vim/find.html#FindVariableDef">
+          <strong>:FindVariableDef</strong>
+        </a>
+        [&lt;變數名稱&gt;] -
+        尋找全區域變數的定義
+      </li>
+      <li>
+        <a href="vim/find.html#FindVariableRef">
+          <strong>:FindVariableRef</strong>
+        </a>
+        [&lt;變數名稱&gt;] -
+        尋找全區域變數的參考。
+      </li>
+      <li>
+        <a href="vim/find.html#FindByContext">
+          <strong>:FindByContext</strong>
+        </a> -
+        以游標位置元素在內文中尋找 command, 函數或變數。
+      </li>
+      <li>
+        <a href="vim/doc.html#VimDoc"><strong>:VimDoc</strong></a>
+        [&lt;關鍵字&gt;] -
+        以關鍵字開啟相關的 vim 說明文件。
+      </li>
+    </ul>
+
+    <p><strong>WebXml 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="java/webxml/validate.html#Validate"><strong>:Validate</strong></a> -
+        驗證目前的 <code>web.xml</code> 檔案。
+      </li>
+    </ul>
+
+    <p><strong>Wsdl 指令集 </strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        驗證目前的檔案。
+      </li>
+    </ul>
+
+    <p><strong>Xml 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="xml/definition.html#DtdDefinition"><strong>:DtdDefinition</strong></a>
+        [&lt;元素&gt;] -
+        開啟目前 XML 檔案的 dtd 檔案，並移置指定元素的定義。
+      </li>
+      <li>
+        <a href="xml/definition.html#XsdDefinition"><strong>:XsdDefinition</strong></a>
+        [&lt;元素&gt;] -
+        開啟目前 XML 檔案的 xsd 檔案，並移置指定元素的定義。
+      </li>
+      <li>
+        <a href="xml/validate.html#Validate"><strong>:Validate</strong></a>
+        [&lt;檔案&gt;] -
+        驗證指定的 XML 檔案或目前的 XML 檔案。
+      </li>
+      <li>
+        <a href="xml/format.html#XmlFormat"><strong>:XmlFormat</strong></a>
+        重新編排目前的 XML 檔案。
+      </li>
+    </ul>
+
+    <p><strong>Xsd 指令集</strong></p>
+    <ul>
+      <li>
+        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        驗證目前的檔案。
+      </li>
+    </ul>
+
+    <p><strong>版本控制指令集</strong></p>
+    <note>
+      目前這項指令集只支援 CVS 及 subversion 兩種系統。
+    </note>
+    <ul>
+      <li>
+        <a href="common/vcs.html#VcsAnnotate"><strong>:VcsAnnotate</strong></a> -
+  使用 vim 簽名對目前版本檔案作注釋。
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsAnnotateOff">
+          <strong>:VcsAnnotateOff</strong>
+        </a> -
+        關閉所有的注釋。
+      </li>
+      <li>
+        <a href="common/vcs.html#Viewvc"><strong>:Viewvc</strong></a> [檔案] -
+  開啟指定檔案、目錄或目前緩衝內容(未指定)的 <a href="site:viewvc">ViewVc</a> 超連結。
+      </li>
+    </ul>
+
+    <p><strong>網際網路搜尋指令集</strong></p>
+    <ul>
+      <li>
+        <a href="common/web.html#OpenUrl"><strong>:OpenUrl</strong></a> [超連結] -
+        以定義好的瀏覽器開啟超連結。
+      </li>
+      <li>
+        <a href="common/web.html#Google"><strong>:Google</strong></a> [關鍵字 ...] -
+        在 Google 搜尋關鍵字。
+      </li>
+      <li>
+        <a href="common/web.html#Clusty"><strong>:Clusty</strong></a> [關鍵字 ...] -
+        在 Clusty 搜尋關鍵字。
+      </li>
+      <li>
+        <a href="common/web.html#Wikipedia"><strong>:Wikipedia</strong></a> [關鍵字 ...] -
+        在 wikipedia 搜尋關鍵字。
+      </li>
+      <li>
+        <a href="common/web.html#Dictionary"><strong>:Dictionary</strong></a> [word] -
+        在 dictionary.reference.com 尋找字典內容。
+      </li>
+      <li>
+        <a href="common/web.html#Thesaurus"><strong>:Thesaurus</strong></a> [word] -
+        在 thesaurus.reference.com 尋找內容。
+      </li>
+    </ul>
+
+    <p><strong>其他指令集</strong></p>
+    <ul>
+      <li>
+        <a href="common/util.html#LocateFileEdit">
+          <strong>:LocateFileEdit</strong>
+        </a> [檔案] -
+        尋找檔案並以 :edit 開啟。
+      </li>
+      <li>
+        <a href="common/util.html#LocateFileSplit">
+          <strong>:LocateFileSplit</strong>
+        </a> [檔案] -
+        尋找檔案並以 :split 開啟。
+      </li>
+      <li>
+        <a href="common/util.html#LocateFileTab">
+          <strong>:LocateFileTab</strong>
+        </a> [檔案] -
+        尋找檔案並以 :tabnew 開啟。
+      </li>
+      <li>
+        <a href="common/util.html#Split"><strong>:Split</strong></a>
+        檔案 [檔案 ...] -
+        類似 :split 指令, 但允許同時開啟多個檔案。
+      </li>
+      <li>
+        <a href="common/util.html#SplitRelative"><strong>:SplitRelative</strong></a>
+        檔案 [檔案 ...] -
+  類似 <strong>:Split</strong> 指令，但會個別將檔案分割至目前 buffer 內。
+      </li>
+      <li>
+        <a href="common/util.html#Tabnew"><strong>:Tabnew</strong></a>
+        檔案 [檔案 ...] -
+  類似 <strong>:Split</strong> 指令, 但會以 :tabnew 開啟個別的檔案。
+      </li>
+      <li>
+        <a href="common/util.html#TabnewRelative"><strong>:TabnewRelative</strong></a> -
+        檔案 [檔案...] -
+        類似 <strong>:SplitRelative</strong> 指令, 但會以 :tabnew 開啟個別的檔案。
+      </li>
+      <li>
+        <a href="common/util.html#EditRelative"><strong>:EditRelative</strong></a>
+        檔案 -
+        類似 :SplitRelative 指令, 但會以 edit 開啟檔案，並且一次只能開啟一個檔案。
+      </li>
+      <li>
+        <a href="common/util.html#ReadRelative"><strong>:ReadRelative</strong></a>
+        檔案 -
+        類似 <strong>:SplitRelative</strong> 指令, 但會以 :read 指令開啟, 並同一次只能開啟一個檔案。
+      </li>
+      <li>
+        <a href="common/util.html#ArgsRelative"><strong>:ArgsRelative</strong></a>
+        file_pattern [ file_pattern ...] -
+        類似 <strong>:SplitRelative</strong> 指令, 但會以 :args 指令執行動作。
+      </li>
+      <li>
+        <a href="common/util.html#ArgAddRelative"><strong>:ArgAddRelative</strong></a>
+        file_pattern [ file_pattern ...] -
+        類似 <strong>:SplitRelative</strong> 指令, 但會以 :argadd 指令執行動作。
+      </li>
+      <li>
+        <a href="common/util.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
+        執行 diffsplit 比較目前修改的檔案內容與前一次存檔的內容。
+      </li>
+      <li>
+        <a href="common/util.html#SwapWords"><strong>:SwapWords</strong></a> -
+        交換游標目前位置的字與下一個字。這個指令可以處理非英文單字間的交換，例如: commas, periods 等。
+      </li>
+      <li>
+        <a href="common/util.html#Sign"><strong>:Sign</strong></a> -
+  切換新增或移除 vim 簽名在目前列。
+      </li>
+      <li>
+        <a href="common/util.html#Signs"><strong>:Signs</strong></a> -
+  開啟一個新視窗, 包含所有在緩衝內容的簽名清單。
+      </li>
+      <li>
+        <a href="common/util.html#SignClearUser"><strong>:SignClearUser</strong></a> -
+        移除所有經由 :Sign 指令寫入的 vim 簽名。
+      </li>
+      <li>
+        <a href="common/util.html#SignClearAll"><strong>:SignClearAll</strong></a> -
+        移除所有 vim 簽名
+      </li>
+      <li>
+        <a href="common/util.html#QuickFixClear"><strong>:QuickFixClear</strong></a> -
+        移除所有 QuickFix 視窗的連接點。
+      </li>
+      <li>
+        <a href="common/util.html#LocationListClear">
+          <strong>:LocationListClear</strong>
+        </a> -
+        移除所有在位置視窗的連接點。
+      </li>
+      <!--li>
+        <a href="index.html#SwapTypedArguments">
+          <strong>:SwapTypedArguments</strong>
+        </a> -
+        Swaps typed method arguments in a method declaration.
+      </li-->
+    </ul>
+  </body>
+</document>
