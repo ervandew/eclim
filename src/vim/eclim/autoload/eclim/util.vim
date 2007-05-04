@@ -592,10 +592,32 @@ endfunction " }}}
 " SetLocationList(list, ...) {{{
 " Sets the contents of the location list for the current window.
 function! eclim#util#SetLocationList (list, ...)
+  let loclist = a:list
+
+  " filter the list if the current buffer defines a list of filters.
+  if exists('b:EclimLocationListFilter')
+    let newlist = []
+    for item in loclist
+      let addit = 1
+
+      for filter in b:EclimLocationListFilter
+        if item.text =~ filter
+          let addit = 0
+          break
+        endif
+      endfor
+
+      if addit
+        call add(newlist, item)
+      endif
+    endfor
+    let loclist = newlist
+  endif
+
   if a:0 == 0
-    call setloclist(0, a:list)
+    call setloclist(0, loclist)
   else
-    call setloclist(0, a:list, a:1)
+    call setloclist(0, loclist, a:1)
   endif
   call eclim#signs#Update()
 endfunction " }}}
