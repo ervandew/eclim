@@ -3,6 +3,7 @@ org.eclim.pydev_${eclim.version}
 eclim/autoload/python/*.vim
 eclim/autoload/python
 eclim/ftplugin/htmldjango/eclim.vim
+eclim/ftplugin/htmldjango
 eclim/ftplugin/python/*.vim
 eclim/ftplugin/python
 eclim/indent/htmldjango.vim
