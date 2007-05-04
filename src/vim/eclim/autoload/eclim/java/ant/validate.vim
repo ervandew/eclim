@@ -39,23 +39,22 @@ function! eclim#java#ant#validate#Validate (on_save)
     autocmd! BufWritePost <buffer>
   augroup END
 
-  let project = eclim#project#GetCurrentProjectName()
-  if project == ''
+  if !eclim#project#IsCurrentFileInProject(!a:on_save)
     return
   endif
-  if project != ""
-    let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
-    let command = s:validate_command
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', file, '')
 
-    let result = eclim#ExecuteEclim(command)
-    if result =~ '|'
-      let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
-      call eclim#util#SetLocationList(errors)
-    else
-      call eclim#util#SetLocationList([], 'r')
-    endif
+  let project = eclim#project#GetCurrentProjectName()
+  let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+  let command = s:validate_command
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result =~ '|'
+    let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+    call eclim#util#SetLocationList(errors)
+  else
+    call eclim#util#SetLocationList([], 'r')
   endif
 endfunction " }}}
 
