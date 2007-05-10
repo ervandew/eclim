@@ -1,8 +1,8 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
+" Version: $Revision: 1155 $
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/import.html
+"   See http://eclim.sourceforge.net/vim/python/django.html
 "
 " License:
 "
@@ -23,12 +23,8 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(':PythonImportClean')
-  command PythonImportClean :call eclim#python#import#CleanImports()
-endif
-
-if !exists(':PythonImportSort')
-  command PythonImportSort :call eclim#python#import#SortImports()
+if !exists(':DjangoFind')
+  command DjangoFind :call eclim#python#django#TemplateFind()
 endif
 " }}}
 

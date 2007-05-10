@@ -34,6 +34,7 @@ call <SID>HtmlIndentPush('abbr')
 call <SID>HtmlIndentPush('acronym')
 call <SID>HtmlIndentPush('address')
 call <SID>HtmlIndentPush('b')
+call <SID>HtmlIndentPush('br')
 call <SID>HtmlIndentPush('bdo')
 call <SID>HtmlIndentPush('big')
 call <SID>HtmlIndentPush('blockquote')
@@ -61,6 +62,7 @@ call <SID>HtmlIndentPush('h5')
 call <SID>HtmlIndentPush('h6')
 call <SID>HtmlIndentPush('i')
 call <SID>HtmlIndentPush('iframe')
+call <SID>HtmlIndentPush('img')
 call <SID>HtmlIndentPush('input')
 call <SID>HtmlIndentPush('ins')
 call <SID>HtmlIndentPush('kbd')
@@ -74,6 +76,7 @@ call <SID>HtmlIndentPush('noscript')
 call <SID>HtmlIndentPush('object')
 call <SID>HtmlIndentPush('ol')
 call <SID>HtmlIndentPush('optgroup')
+call <SID>HtmlIndentPush('p')
 " call <SID>HtmlIndentPush('pre')
 call <SID>HtmlIndentPush('q')
 call <SID>HtmlIndentPush('s')
@@ -167,33 +170,34 @@ fun! <SID>HtmlIndentAttributeWrap (lnum)
   let end = 0
   while lnum > 0 && (start == 0 || end == 0)
     let line = getline(lnum)
-    if start == 0 && line =~ '<'
+    if start == 0 && line =~ '<[^/][^>]*$'
       let start = lnum
     end
-    if end == 0 && line =~ '>'
+    if end == 0 && line =~ '^[^<]*>'
       let end = lnum
+    endif
+    if line =~ '<.*>'
+      break
     endif
     let lnum = lnum - 1
   endwhile
-  let line = getline(a:lnum)
-  if line !~ '^\s*<' && line !~ '>\s*$'
-    if start == prevnonblank(a:lnum) && start != end
-      return 1
-    elseif start < end && end == prevnonblank(a:lnum)
-      return -1
-    endif
-  elseif start == end
-    let prev = getline(prevnonblank(a:lnum - 1))
-    if prev =~ '>' && (prev !~ '<' && prev !~ '%}')
-      return -1
-    endif
-  elseif start == a:lnum
+
+  if a:lnum == start
     return 0
-  elseif start > end
-    return 1
-  elseif end == (start + 1) && end == a:lnum
+  endif
+
+  if (start == (a:lnum - 1))
     return 1
   endif
+
+  if (start < end) && (a:lnum == (end + 1))
+    return -1
+  endif
+
+  if prevnonblank(a:lnum) == end
+    return -1
+  endif
+
   return 0
 endfun
 " ######### End EV added ##########
@@ -262,7 +266,7 @@ fun! HtmlIndentGet(lnum)
   " [-- special handling for <javascript>: use cindent --]
   let js = '<script.*type\s*=\s*.*java'
   if 0 < searchpair(js, '', '</script>', 'nWb')
-        \ || 0 < searchpair(js, '', '</script>', 'nW')
+      "  \ || 0 < searchpair(js, '', '</script>', 'nW')
     " we're inside javascript
     if getline(lnum) !~ js && getline(a:lnum) !~ '</script>'
       let indent = cindent(a:lnum)

@@ -116,6 +116,50 @@ endfunction " }}}
 
 " CleanImports() {{{
 function! eclim#python#import#CleanImports ()
+  let line = line('.')
+  let col = col('.')
+
+  let import_data = eclim#python#import#GetImports()
+  let names = []
+  for import in import_data.imports
+    let importing = import
+    let importing = substitute(importing,
+      \ '.*\<import\>\s\+\(.\{-}\<as\>\s\+\)\?\(.\{-}\)\s*$', '\2', '')
+    let importing = substitute(importing, '\(\s\+\|\\\|\n\)', '', 'g')
+    let names += split(importing, ',')
+  endfor
+
+  let remove = []
+  call cursor(import_data.end, 1)
+  for name in names
+    if !search('\<' . name . '\>', 'nW')
+      call add(remove, name)
+    endif
+  endfor
+
+  let saved = @"
+  for name in remove
+    call cursor(1, 1)
+    call search('\<' . name . '\>', 'W', import_data.end)
+    let import = getline('.')
+    if import =~ '\<import\>\s\+' . name . '\>\s*$'
+      exec line('.') . ',' . line('.') . 'delete'
+      " if deleting of import results in 2 blank lines, delete one of them
+      if getline('.') =~ '^\s*$' && getline(line('.') - 1) =~ '^\s*$'
+        exec line('.') . ',' . line('.') . 'delete'
+      endif
+    else
+      if import =~ ',\s*\<' . name . '\>'
+        let newimport = substitute(import, ',\s*\<' . name . '\>', '', '')
+      else
+        let newimport = substitute(import, '\<' . name . '\>\s*,\s\?', '', '')
+      endif
+      call setline(line('.'), newimport)
+    endif
+  endfor
+  let @" = saved
+
+  call cursor(line, col)
 endfunction " }}}
 
 " GetImports() {{{

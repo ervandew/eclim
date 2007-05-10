@@ -29,6 +29,9 @@ endif
 if !exists('g:EclimDjangoAdmin')
   let g:EclimDjangoAdmin = 'django-admin.py'
 endif
+if !exists('g:EclimDjangoFindAction')
+  let g:EclimDjangoFindAction = 'split'
+endif
 " }}}
 
 " Script Variables {{{
@@ -158,7 +161,7 @@ function! eclim#python#django#Manage (args)
   endtry
 endfunction " }}}
 
-" GetProjectPath ([path]) {{{
+" GetProjectPath([path]) {{{
 function eclim#python#django#GetProjectPath(...)
   let path = len(a:000) > 0 ? a:000[0] : escape(expand('%:p:h'), ' ')
   let dir = findfile("manage.py", path . ';')
@@ -173,7 +176,7 @@ function eclim#python#django#GetProjectPath(...)
   return dir
 endfunction " }}}
 
-" GetProjectApps (project_dir) {{{
+" GetProjectApps(project_dir) {{{
 " Gets a list of applications for the supplied project directory.
 function eclim#python#django#GetProjectApps(project_dir)
   if a:project_dir != ''
@@ -182,6 +185,102 @@ function eclim#python#django#GetProjectApps(project_dir)
     return apps
   endif
   return []
+endfunction " }}}
+
+" TemplateFind() {{{
+" Find the template, tag, or filter under the cursor.
+function eclim#python#django#TemplateFind ()
+  let project_dir = eclim#python#django#GetProjectPath()
+  if project_dir == ''
+    call eclim#util#EchoError(
+      \ 'Unable to locate django project path with manage.py and settings.py')
+    return
+  endif
+
+  let line = getline('.')
+  let element = eclim#util#GrabUri()
+  if element =~ '|'
+    let element = substitute(element, '.\{-}|\(\w*\).*', '\1', '')
+    call eclim#python#django#FindFilterOrTag(project_dir, element, 'filter')
+  elseif line =~ '{%\s*' . element . '\>'
+    call eclim#python#django#FindFilterOrTag(project_dir, element, 'tag')
+  elseif line =~ '{%\s*load\s\+' . element . '\>'
+    call eclim#python#django#FindFilterTagFile(project_dir, element)
+  elseif line =~ '{%\s*\(extends\|include\)\s\+"' . element . '"'
+    call eclim#python#django#FindTemplate(project_dir, element)
+  else
+    call eclim#util#EchoError(
+      \ 'Element under the cursor does not appear to be a ' .
+      \ 'valid tag, filter, or template reference.')
+  endif
+endfunction " }}}
+
+" FindFilterOrTag(project_dir, element, type) {{{
+" Finds and opens the supplied filter or tag definition.
+function eclim#python#django#FindFilterOrTag (project_dir, element, type)
+  let loaded = eclim#python#django#GetLoadList(a:project_dir)
+  let cmd = 'lvimgrep /\<def\s\+' . a:element . '\>/j '
+  for file in loaded
+    let cmd .= ' ' . file
+  endfor
+
+  exec cmd
+
+  let results = getloclist(0)
+  if len(results) > 0
+    exec g:EclimDjangoFindAction . ' ' . bufname(results[0].bufnr)
+    lfirst
+    return
+  endif
+  call eclim#util#EchoError(
+    \ 'Unable to find the definition for tag/file "' . a:element . '"')
+endfunction " }}}
+
+" FindFilterTagFile(project_dir, file) {{{
+" Finds and opens the supplied tag/file definition file.
+function eclim#python#django#FindFilterTagFile (project_dir, file)
+  let file = findfile(a:file . '.py', a:project_dir . '*/templatetags/')
+  if file != ''
+    silent exec g:EclimDjangoFindAction . ' ' . file
+    return
+  endif
+  call eclim#util#EchoError('Could not find tag/filter file "' . a:file . '.py"')
+endfunction " }}}
+
+" FindTemplate(project_dir, template) {{{
+" Finds and opens the supplied template definition.
+function eclim#python#django#FindTemplate (project_dir, template)
+  let file = findfile(a:template, a:project_dir . '/*/templates')
+  if file != ''
+    silent exec g:EclimDjangoFindAction . ' ' . file
+    return
+  endif
+  call eclim#util#EchoError('Could not find the template "' . a:template . '"')
+endfunction " }}}
+
+" GetLoadList(project_dir) {{{
+" Returns a list of tag/filter files loaded by the current template.
+function eclim#python#django#GetLoadList (project_dir)
+  let line = line('.')
+  let col = col('.')
+
+  call cursor(1, 1)
+  let loaded = []
+  while search('{%\s*load\s', 'cW')
+    call add(loaded, substitute(getline('.'), '.*{%\s*load\s\+\(\w\+\)\s*%}.*', '\1', ''))
+    call cursor(line('.') + 1, 1)
+  endwhile
+  call cursor(line, col)
+
+  let file_names = []
+  for load in loaded
+    let file = findfile(load . '.py', a:project_dir . '*/templatetags/')
+    if file != ''
+      call add(file_names, file)
+    endif
+  endfor
+
+  return file_names
 endfunction " }}}
 
 " CommandCompleteManage(argLead, cmdLine, cursorPos) {{{
