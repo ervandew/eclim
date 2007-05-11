@@ -224,11 +224,11 @@ function eclim#python#django#FindFilterOrTag (project_dir, element, type)
     let cmd .= ' ' . file
   endfor
 
-  exec cmd
+  silent exec cmd
 
   let results = getloclist(0)
   if len(results) > 0
-    exec g:EclimDjangoFindAction . ' ' . bufname(results[0].bufnr)
+    silent exec g:EclimDjangoFindAction . ' ' . bufname(results[0].bufnr)
     lfirst
     return
   endif
