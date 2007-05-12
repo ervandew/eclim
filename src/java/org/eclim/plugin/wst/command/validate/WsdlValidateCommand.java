@@ -24,7 +24,8 @@ import org.eclim.command.Options;
 
 import org.eclipse.wst.wsdl.validation.internal.IValidationMessage;
 import org.eclipse.wst.wsdl.validation.internal.IValidationReport;
-import org.eclipse.wst.wsdl.validation.internal.WSDLValidator;
+
+import org.eclipse.wst.wsdl.validation.internal.eclipse.WSDLValidator;
 
 /**
  * Command for wsdl validation requests.
@@ -45,7 +46,7 @@ public class WsdlValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
       ArrayList results = new ArrayList();
-      WSDLValidator validator = new WSDLValidator();
+      WSDLValidator validator = WSDLValidator.getInstance();
       IValidationReport result = validator.validate(toUri(project, file));
       IValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){

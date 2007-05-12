@@ -22,10 +22,10 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclipse.wst.xsd.core.internal.validation.XSDValidator;
-
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
+
+import org.eclipse.wst.xsd.core.internal.validation.eclipse.XSDValidator;
 
 /**
  * Command to validate dtd files.
@@ -46,7 +46,7 @@ public class XsdValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
       ArrayList results = new ArrayList();
-      XSDValidator validator = new XSDValidator();
+      XSDValidator validator = XSDValidator.getInstance();
       ValidationReport result = validator.validate(toUri(project, file));
       ValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){
