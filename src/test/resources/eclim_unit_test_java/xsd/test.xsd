@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://test.org/1.0.0" xmlns="http://test.org/1.0.0">
+  <xs:element name="project" type="Model">
+    <xs:annotation>
+      <xs:documentation source="version">3.0.0+</xs:documentation>
+      <xs:documentation source="description">
+         The &lt;code&gt;&amp;lt;project&amp;gt;&lt;/code&gt; element is the root of the descriptor.
+         The following table lists all of the possible child elements.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:un>
+    </xs:un>
+  </xs:element>
+</xs:schema>
