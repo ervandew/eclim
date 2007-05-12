@@ -39,6 +39,7 @@ function! TestCorrect ()
 
   call cursor(errors[0].lnum, errors[0].col)
   JavaCorrect
+  call PeekRedir()
 
   call VUAssertTrue(bufname('%') =~ 'TestCorrectVUnit.java_correct$',
     \ 'Correct window not opened.')
@@ -47,9 +48,18 @@ function! TestCorrect ()
 
   call VUAssertTrue(search("Import 'ArrayList' (java.util)"),
     \ 'Required correction not found.')
-  exec "normal \<cr>"
 
-  call VUAssertTrue(search('^import java\.util\.ArrayList;$'),
+  call cursor(16, 1)
+  exec "normal \<cr>"
+  call PeekRedir()
+
+  let lines = readfile(expand('%'))
+  call PeekRedir()
+  for line in lines
+    echom '|' . line
+  endfor
+
+  call VUAssertTrue(search('^import java\.'),
     \ 'Correction not applied.')
 
   bdelete!

@@ -13,6 +13,9 @@ Installer
       resolved at install time via a visual diff.
 
 Documentation
+  - document new django commands
+    - :DjangoFind  - Find available from django templates.
+    - :DjangoTemplateOpen - Template open available from python files.
   - integrate the trad. chinese translation that was contributed.
   - FAQs
     - how to specify workspace dir.
@@ -37,15 +40,7 @@ Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
 
 Enhancements
-  - create a :DjangoFind available for django html files which will,
-    - if on on the template name of an extends or include tag, finds the
-      template by searching for the settings.py and looking relative to that.
-    - if on a 'load' tag, find the tag/filter definition file similar to how
-      the template is found.
-    - if on a tag or filter usage, find the definition file and jump to the
-      tag or filter.  create dictionary of built in tags and filters to open
-      the django provided ones as well.
-    - support a variable to determine how the result is opened (split, edit, etc.)
+  - modify :DjangoFind to account for django provided tags and filters.
 
   - look into platform based releases on sourceforge:
     http://sourceforge.net/features/platformpages.php

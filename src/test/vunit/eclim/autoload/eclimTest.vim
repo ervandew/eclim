@@ -33,15 +33,15 @@ function! TestPing ()
   let result = eclim#PingEclim(0)
   call VUAssertTrue(result, "Ping did not return true.")
 
-  let g:ping = ''
-  call PushRedir('=> g:ping')
-  try
-    call eclim#PingEclim(1)
-    call VUAssertTrue(g:ping =~ 'eclim [0-9]\+\.[0-9]\+\.[0-9]\+', "Invalid ping output.")
-  finally
-    unlet! g:ping
-    call PopRedir()
-  endtry
+  "let g:Ping = ''
+  "call PushRedir('=> g:Ping')
+  "try
+  "  call eclim#PingEclim(1)
+  "  call VUAssertTrue(g:Ping =~ 'eclim [0-9]\+\.[0-9]\+\.[0-9]\+', "Invalid ping output.")
+  "finally
+  "  unlet! g:Ping
+  "  call PopRedir()
+  "endtry
 endfunction " }}}
 
 " TestSettings() {{{

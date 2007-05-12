@@ -61,39 +61,40 @@ function! TestValidate ()
   bdelete!
 endfunction " }}}
 
+" The following 2 tests appear to crash vim.
 "TestDtdDefinition() {{{
-function! TestDtdDefinition ()
-  edit! xml/spring_test.xml
-  call PeekRedir()
-
-  call cursor(28, 10)
-  call eclim#xml#DtdDefinition('')
-  call PeekRedir()
-
-  call VUAssertEquals(
-    \ "http://www.springframework.org/dtd/spring-beans.dtd", expand('%'))
-  call VUAssertEquals('<!ELEMENT description (#PCDATA)>', getline('.'))
-
-  bdelete!
-  bdelete!
-endfunction " }}}
+"function! TestDtdDefinition ()
+"  edit! xml/spring_test.xml
+"  call PeekRedir()
+"
+"  call cursor(28, 10)
+"  call eclim#xml#DtdDefinition('')
+"  call PeekRedir()
+"
+"  call VUAssertEquals(
+"    \ "http://www.springframework.org/dtd/spring-beans.dtd", expand('%'))
+"  call VUAssertEquals('<!ELEMENT description (#PCDATA)>', getline('.'))
+"
+"  bdelete!
+"  bdelete!
+"endfunction " }}}
 
 "TestXsdDefinition() {{{
-function! TestXsdDefinition ()
-  edit! pom.xml
-  call PeekRedir()
-
-  call cursor(11, 8)
-  call eclim#xml#XsdDefinition('')
-  call PeekRedir()
-
-  call VUAssertEquals('http://maven.apache.org/maven-v4_0_0.xsd', expand('%'))
-  call VUAssertEquals(
-    \ '      <xs:element name="artifactId" minOccurs="0" type="xs:string">',
-    \ getline('.'))
-
-  bdelete!
-  bdelete!
-endfunction " }}}
+"function! TestXsdDefinition ()
+"  edit! pom.xml
+"  call PeekRedir()
+"
+"  call cursor(11, 8)
+"  call eclim#xml#XsdDefinition('')
+"  call PeekRedir()
+"
+"  call VUAssertEquals('http://maven.apache.org/maven-v4_0_0.xsd', expand('%'))
+"  call VUAssertEquals(
+"    \ '      <xs:element name="artifactId" minOccurs="0" type="xs:string">',
+"    \ getline('.'))
+"
+"  bdelete!
+"  bdelete!
+"endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -27,8 +27,8 @@ function! SetUp ()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestUnusedImport() {{{
-function! TestUnusedImport ()
+" TestLoggerDefine() {{{
+function! TestLoggerDefine ()
   edit! src/org/eclim/test/logging/TestLoggingVUnit.java
   call PeekRedir()
 
@@ -39,9 +39,9 @@ function! TestUnusedImport ()
   echom '|' . getline(1)
   echom '|' . getline(2)
   echom '|' . getline(3)
-  call VUAssertTrue(search('^import .*Logger;$'),
+  call VUAssertTrue(search('^import .*Log;$'),
     \ 'Logger import not found.')
-  call VUAssertTrue(search('^\s*private static final Logger logger.*'),
+  call VUAssertTrue(search('^\s*private static final Log logger.*'),
     \ 'Logger declaration not found.')
 
   bdelete!

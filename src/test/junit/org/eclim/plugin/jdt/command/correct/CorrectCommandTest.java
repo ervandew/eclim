@@ -53,12 +53,11 @@ public class CorrectCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    int offset = 8;
 
     assertEquals("Wrong error.",
         "ArrayList cannot be resolved to a type", results[0]);
-    assertEquals("Wrong suggestion.",
-        "1.70:  Import 'ArrayList' (java.util)", results[offset]);
+    assertTrue("Wrong suggestion.",
+        results[1].indexOf(".70:  Change to") != -1);
   }
 
   @Test
@@ -70,7 +69,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-l", "5", "-o", "74", "-a", "1"
+      "-l", "5", "-o", "74", "-a", "3"
     });
 
     System.out.println(result);
