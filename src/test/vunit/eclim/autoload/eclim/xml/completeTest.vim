@@ -44,4 +44,25 @@ function! TestCompleteXsd()
     \ 'Results does not contain xs:unique')
 endfunction " }}}
 
+" TestCompleteWsdl() {{{
+function! TestCompleteWsdl()
+  edit! wsdl/GoogleSearch.wsdl
+  call PeekRedir()
+
+  call cursor(14, 13)
+  let start = eclim#xml#complete#CodeComplete(1, '')
+  call VUAssertEquals(11, start, 'Wrong starting column.')
+
+  let results = eclim#xml#complete#CodeComplete(0, '')
+  call PeekRedir()
+  echo string(results)
+  call VUAssertEquals(3, len(results), 'Wrong number of results.')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'annotation'.*"),
+    \ 'Results does not contain xs:unique')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'attribute'.*"),
+    \ 'Results does not contain xs:unique')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'attributeGroup'.*"),
+    \ 'Results does not contain xs:unique')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

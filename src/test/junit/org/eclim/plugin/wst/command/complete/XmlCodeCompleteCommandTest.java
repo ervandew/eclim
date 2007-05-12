@@ -34,6 +34,7 @@ import static org.junit.Assert.*;
 public class XmlCodeCompleteCommandTest
 {
   private static final String TEST_FILE_XSD = "xsd/test.xsd";
+  private static final String TEST_FILE_WSDL = "wsdl/GoogleSearch.wsdl";
 
   @Test
   public void completeXsd ()
@@ -51,6 +52,26 @@ public class XmlCodeCompleteCommandTest
     String[] results = StringUtils.split(result, '\n');
     assertEquals("Wrong number of errors.", 1, results.length);
     assertTrue("Wrong result.", results[0].indexOf("xs:unique,,Content Model") != -1);
+  }
+
+  @Test
+  public void completeWsdl ()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Wst.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "xml_complete", "-p", Wst.TEST_PROJECT,
+      "-f", TEST_FILE_WSDL, "-o", "516"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+    assertEquals("Wrong number of errors.", 3, results.length);
+    assertTrue("Wrong result.", results[0].indexOf("annotation") != -1);
+    assertTrue("Wrong result.", results[1].indexOf("attribute") != -1);
+    assertTrue("Wrong result.", results[2].indexOf("attributeGroup") != -1);
   }
 
   /**
