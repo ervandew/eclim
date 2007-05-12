@@ -26,14 +26,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test case for XsdValidateCommand.
+ * Test case for DtdValidateCommand.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public class XsdValidateCommandTest
+public class DtdValidateCommandTest
 {
-  private static final String TEST_FILE = "xsd/test.xsd";
+  private static final String TEST_FILE = "dtd/test.dtd";
 
   @Test
   public void validate ()
@@ -42,13 +42,13 @@ public class XsdValidateCommandTest
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "xsd_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
+      "dtd_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
     });
 
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 2, results.length);
+    assertEquals("Wrong number of errors.", 1, results.length);
 
     String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
     for(int ii = 0; ii < results.length; ii++){
@@ -57,9 +57,7 @@ public class XsdValidateCommandTest
     }
 
     assertTrue("Wrong error.",
-        results[0].indexOf("Cannot resolve the name 'Model'") != -1);
-    assertTrue("Wrong error.",
-        results[1].indexOf("The content of 'project' must match") != -1);
+        results[0].indexOf("The element 'MissingDef' has not been declared") != -1);
   }
 
   /**
@@ -67,6 +65,6 @@ public class XsdValidateCommandTest
    */
   public static junit.framework.Test suite()
   {
-    return new junit.framework.JUnit4TestAdapter(XsdValidateCommandTest.class);
+    return new junit.framework.JUnit4TestAdapter(DtdValidateCommandTest.class);
   }
 }

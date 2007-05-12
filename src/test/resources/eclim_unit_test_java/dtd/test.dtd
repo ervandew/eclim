@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT TestRoot (TestChild+, MissingDef)>
+<!ELEMENT TestChild (#PCDATA)>
+
+<!ATTLIST TestChild name CDATA #REQUIRED>
+<!ATTLIST TestChild email CDATA #IMPLIED>
