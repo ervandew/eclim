@@ -19,7 +19,10 @@ import java.awt.BorderLayout;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Properties;
+
+import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -276,10 +279,21 @@ public class PythonInterpreterStep
       cmd[1] = "list";
 
       CommandExecutor executor = CommandExecutor.execute(cmd);
+      ArrayList interpreters = new ArrayList();
+      Pattern pattern = Pattern.compile("^(/|\\w:).*");
       if(executor.getReturnCode() == 0){
-        return StringUtils.split(executor.getResult().trim(), '\n');
+        String[] lines = StringUtils.split(executor.getResult().trim(), '\n');
+        // this block is used to filter out any errors that may occur when
+        // trying to list interpreters in pydev.
+        for (int ii = 0; ii < lines.length; ii++){
+          String line = lines[ii];
+          if (pattern.matcher(line).matches()){
+            interpreters.add(line);
+          }
+        }
       }
       executor.destroy();
+      return (String[])interpreters.toArray(new String[interpreters.size()]);
     }catch(Exception e){
       e.printStackTrace();
     }
