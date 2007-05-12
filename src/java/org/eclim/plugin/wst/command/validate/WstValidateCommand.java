@@ -15,7 +15,13 @@
  */
 package org.eclim.plugin.wst.command.validate;
 
+import org.apache.commons.io.FilenameUtils;
+
 import org.eclim.command.AbstractCommand;
+
+import org.eclim.util.ProjectUtils;
+
+import org.eclipse.core.resources.IProject;
 
 /**
  * Abstract super class for wst based validators.
@@ -31,12 +37,18 @@ public abstract class WstValidateCommand
   /**
    * Converts the supplied file name to a uri if necessary.
    *
+   * @param project The project name.
    * @param file The file.
    * @return The uri.
    */
-  protected String toUri (String file)
+  protected String toUri (String project, String filename)
+    throws Exception
   {
-    return file.indexOf("://") == -1 ? URI_PREFIX + file : file;
+    if (filename.indexOf("://") == -1){
+      filename = URI_PREFIX + FilenameUtils.concat(
+          ProjectUtils.getPath(project), filename);
+    }
+    return filename;
   }
 
   /**

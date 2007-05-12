@@ -67,6 +67,9 @@ function! eclim#xml#complete#CodeComplete (findstart, base)
 
     for result in results
       let word = substitute(result, '\(.\{-}\)' . s:delim . '.*', '\1', '')
+      if getline('.') =~ '\w:\w*\%' . col('.') . 'c'
+        let word = substitute(word, '^\w\+:', '', '')
+      endif
 
       let menu = substitute(
         \ result, '.\{-}' . s:delim . '\(.*\)' . s:delim . '.*', '\1', '')

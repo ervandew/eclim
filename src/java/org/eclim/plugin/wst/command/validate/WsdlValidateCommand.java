@@ -41,12 +41,12 @@ public class WsdlValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
       ArrayList results = new ArrayList();
       WSDLValidator validator = new WSDLValidator();
-      IValidationReport result = validator.validate(toUri(file));
+      IValidationReport result = validator.validate(toUri(project, file));
       IValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){
         StringBuffer message = new StringBuffer(messages[ii].getMessage());

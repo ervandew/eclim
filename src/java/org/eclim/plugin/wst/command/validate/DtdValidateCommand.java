@@ -42,12 +42,12 @@ public class DtdValidateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      //String project = _commandLine.getValue(Options.PROJECT_OPTION);
+      String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
       ArrayList results = new ArrayList();
       DTDValidator validator = new DTDValidator();
-      ValidationReport result = validator.validate(toUri(file));
+      ValidationReport result = validator.validate(toUri(project, file));
       ValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){
         StringBuffer message = new StringBuffer(messages[ii].getMessage());

@@ -33,10 +33,13 @@ if g:EclimWsdlValidate
   autocmd BufWritePost <buffer> call eclim#wsdl#validate#Validate(1)
 endif
 
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
 " Command Declarations {{{
-if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#wsdl#validate#Validate(0)
-endif
+command! -nargs=0 -buffer Validate :call eclim#wsdl#validate#Validate(0)
 " }}}
 
 " vim:ft=vim:fdm=marker
