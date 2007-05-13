@@ -409,6 +409,20 @@
         Invokes django's manage.py from any file in the same directory as your
         manage.py or in any of the child directories.
       </li>
+      <li>
+        <a href="python/django.html#DjangoFind">
+          <strong>:DjangoFind</strong>
+        </a> -
+        Available when editing a django html template file.  Finds tag/filter
+        definition, other template files, and static files.
+      </li>
+      <li>
+        <a href="python/django.html#DjangoTemplateFind">
+          <strong>:DjangoTemplateFind</strong>
+        </a> -
+        Available when editing a python file.  Finds the template reference
+        under the cursor.
+      </li>
     </ul>
 
     <p><strong>Vim Commands</strong></p>

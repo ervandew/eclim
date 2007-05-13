@@ -13,13 +13,15 @@ Installer
       resolved at install time via a visual diff.
 
 Documentation
-  - document new django commands
-    - :DjangoFind  - Find available from django templates.
-    - :DjangoTemplateOpen - Template open available from python files.
   - integrate the trad. chinese translation that was contributed.
   - FAQs
     - how to specify workspace dir.
       eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+
+Translations
+  - Chinese cheatsheet
+    :DjangoFind
+    :DjangoTemplateFind
 
 Test on Windows
 

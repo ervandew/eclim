@@ -397,6 +397,19 @@
         <a href="vim/python/regex.html">testing regular expressions</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Django">
+        Added
+        <a href="vim/python/django.html#DjangoManage">
+          <strong>:DjangoManage</strong>
+        </a>,
+        <a href="vim/python/django.html#DjangoTemplateFind">
+          <strong>:DjangoTemplateFind</strong>
+        </a>, and
+        <a href="vim/python/django.html#DjangoFind">
+          <strong>:DjangoFind</strong>
+        </a>.
+      </action>
+
       <action dev="ervandew" type="add" context="WebXml">
         Added
         <a href="vim/java/webxml/validate.html">web.xml file validation</a>.
