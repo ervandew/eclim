@@ -102,6 +102,8 @@ function! s:EchoLevel (message, level, highlight)
       echom line
     endfor
     echohl None
+    " prevent ShowCurrentError from overriding the displayed message.
+    let b:eclim_last_message_line = line('.')
   endif
 endfunction " }}}
 
@@ -115,6 +117,8 @@ function! eclim#util#Echo (message)
       echom line
     endfor
     echohl None
+    " prevent ShowCurrentError from overriding the displayed message.
+    let b:eclim_last_message_line = line('.')
   endif
 endfunction " }}}
 
@@ -625,7 +629,7 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError ()
-  if !exists('b:eclim_last_error_line') || line('.') != b:eclim_last_error_line
+  if !exists('b:eclim_last_message_line') || line('.') != b:eclim_last_message_line
     let message = eclim#util#GetLineError(line('.'))
     if message != ''
       " remove any new lines
@@ -638,7 +642,10 @@ function! eclim#util#ShowCurrentError ()
       call eclim#util#WideMessage('echo', message)
     endif
     call eclim#util#WideMessage('echo', message)
-    let b:eclim_last_error_line = line('.')
+  else
+    " reset the value so next time cursor on this line, the message will be
+    " shown.
+    let b:eclim_last_message_line = 0
   endif
 endfunction " }}}
 
