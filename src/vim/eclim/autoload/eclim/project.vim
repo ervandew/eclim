@@ -233,11 +233,11 @@ function! eclim#project#ProjectGrep (command, args)
 "  let save_opt = &eventignore
 "  set eventignore=all
   try
-    exec 'lcd ' . project_dir
-    exec a:command . ' ' . a:args
+    silent exec 'lcd ' . project_dir
+    silent! exec a:command . ' ' . a:args
   finally
 "    let &eventignore = save_opt
-    exec 'lcd ' . cwd
+    silent exec 'lcd ' . cwd
     " force quickfix / location list signs to update.
     call eclim#signs#Update()
   endtry
@@ -245,6 +245,15 @@ function! eclim#project#ProjectGrep (command, args)
     " force autocommands to execute if grep jumped to a file.
 "    edit
 "  endif
+  if a:command =~ '^l'
+    let numresults = len(getloclist(0))
+  else
+    let numresults = len(getqflist())
+  endif
+
+  if numresults == 0
+    call eclim#util#EchoInfo('No results found.')
+  endif
 endfunction " }}}
 
 " SaveSettings() {{{
