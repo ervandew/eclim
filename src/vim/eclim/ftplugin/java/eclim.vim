@@ -105,23 +105,9 @@ endif
   endif
 " }}}
 
-" StartAutocommands() {{{
-" Starts the global java autocommands.
-function! StartAutocommands ()
-  augroup eclim_java
-    autocmd!
-    autocmd BufWritePost *.java call eclim#java#util#UpdateSrcFile()
-  augroup END
-endfunction " }}}
-
-" StopAutocommands() {{{
-" Stops the global java autocommands.
-function! StopAutocommands ()
-  augroup eclim_java
-    autocmd!
-  augroup END
-endfunction " }}}
-
-call StartAutocommands()
+augroup eclim_java
+  autocmd!
+  autocmd BufWritePost *.java call eclim#java#util#UpdateSrcFile()
+augroup END
 
 " vim:ft=vim:fdm=marker

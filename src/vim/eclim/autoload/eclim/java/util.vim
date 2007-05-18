@@ -248,13 +248,10 @@ endfunction " }}}
 function! eclim#java#util#SilentUpdate ()
   let saved = g:EclimJavaSrcValidate
   try
-    "stopping the autocommands breaks code completion.
-    "call StopAutocommands()
     let g:EclimJavaSrcValidate = 0
     silent update
   finally
     let g:EclimJavaSrcValidate = saved
-    "call StartAutocommands()
   endtry
 endfunction " }}}
 
