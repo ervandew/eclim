@@ -91,6 +91,15 @@ let s:output_actions = [
     \ 'sqlsequencereset'
   \ ]
 
+let s:sql_dialects = {
+    \ 'ado_mysql': 'mysql.vim',
+    \ 'mysql': 'mysql.vim',
+    \ 'mysql_old': 'mysql.vim',
+    \ 'postgresql': 'plsql.vim',
+    \ 'postgresql_psycopg2': 'plsql.vim',
+    \ 'sqlite3': 'sql.vim',
+  \ }
+
 " }}}
 
 " DjangoManage(args) {{{
@@ -134,11 +143,15 @@ function! eclim#python#django#Manage (args)
         endif
         call eclim#util#EchoError(error)
       else
+        let engine = eclim#python#django#GetSqlEngine(path)
+        let dialect = has_key(s:sql_dialects, engine) ? s:sql_dialects[engine] : 'plsql'
+
         let filename = expand('%')
         let name = '__' . action . '__'
         call eclim#util#TempWindow(name, split(result, '\n'), 0)
         if action =~ '^sql'
           set filetype=sql
+          exec 'SQLSetType ' . dialect
         elseif action == 'adminindex'
           set filetype=html
         elseif action =~ '\(diffsettings\|inspectdb\)'
@@ -213,6 +226,25 @@ function eclim#python#django#GetProjectApps(project_dir)
     return apps
   endif
   return []
+endfunction " }}}
+
+" GetSqlEngine(project_dir) {{{
+" Gets the configured sql engine for the project at the supplied project directory.
+function eclim#python#django#GetSqlEngine (project_dir)
+  let engine = 'postgresql'
+  " determine user's sql dialect
+  let restore = winrestcmd()
+  try
+    exec 'silent split ' . a:project_dir . '/settings.py'
+    if search('DATABASE_ENGINE')
+      let engine = substitute(getline('.'),
+        \ "^.*DATABASE_ENGINE\\s*=\\s*['\"]\\(\\w\\+\\)['\"].*$", '\1', '')
+    endif
+    close
+  finally
+    silent exec restore
+  endtry
+  return engine
 endfunction " }}}
 
 " FindFilterOrTag(project_dir, element, type) {{{
@@ -299,7 +331,7 @@ function eclim#python#django#TemplateFind ()
     call eclim#python#django#FindFilterOrTag(project_dir, element, 'tag')
   elseif line =~ '{%\s*load\s\+' . element . '\>'
     call eclim#python#django#FindFilterTagFile(project_dir, element)
-  elseif line =~ '{%\s*\(extends\|include\)\s\+"' . element . '"'
+  elseif line =~ "{%\\s*\\(extends\\|include\\)\\s\\+['\"]" . element . "['\"]"
     call eclim#python#django#FindTemplate(project_dir, element)
   elseif line =~ "\\(src\\|href\\)\\s*=\\s*['\"]\\?\\s*" . element
     let element = substitute(element, '^/', '', '')
