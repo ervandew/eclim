@@ -55,13 +55,19 @@ if exists("b:match_words")
 endif
 
 " used by indent/htmldjango.vim
-let g:HtmlDjangoIndentElements = ''
+let g:HtmlDjangoIndentOpenElements = ''
+let g:HtmlDjangoIndentMidElements = ''
 for element in g:HtmlDjangoBodyElements
-  for tag in element[:-2]
-    if len(g:HtmlDjangoIndentElements) > 0
-      let g:HtmlDjangoIndentElements .= '\|'
+  if len(g:HtmlDjangoIndentOpenElements) > 0
+    let g:HtmlDjangoIndentOpenElements .= '\|'
+  endif
+  let g:HtmlDjangoIndentOpenElements .= element[0]
+
+  for tag in element[1:-2]
+    if len(g:HtmlDjangoIndentMidElements) > 0
+      let g:HtmlDjangoIndentMidElements .= '\|'
     endif
-    let g:HtmlDjangoIndentElements .= tag
+    let g:HtmlDjangoIndentMidElements .= tag
   endfor
 endfor
 
