@@ -32,10 +32,7 @@ let g:HtmlDjangoBodyElements = [
     \ ['comment', 'endcomment'],
     \ ['filter', 'endfilter'],
     \ ['for', 'endfor'],
-    \ ['\(if\|e_if\)', 'else', 'elif', 'endif'],
-    \ ['ifchanged', 'endifchanged'],
-    \ ['ifequal', 'endifequal'],
-    \ ['ifnotequal', 'endifnotequal'],
+    \ ['\(if\|e_if\)\(changed\|equal\|notequal\)\?', 'else', 'elif', 'endif\(changed\|equal\|notequal\)\?'],
     \ ['spaceless', 'endspaceless']
   \ ] + g:HtmlDjangoUserBodyElements
 
@@ -53,22 +50,5 @@ if exists("b:match_words")
     let b:match_words .= ',' . pattern
   endfor
 endif
-
-" used by indent/htmldjango.vim
-let g:HtmlDjangoIndentOpenElements = ''
-let g:HtmlDjangoIndentMidElements = ''
-for element in g:HtmlDjangoBodyElements
-  if len(g:HtmlDjangoIndentOpenElements) > 0
-    let g:HtmlDjangoIndentOpenElements .= '\|'
-  endif
-  let g:HtmlDjangoIndentOpenElements .= element[0]
-
-  for tag in element[1:-2]
-    if len(g:HtmlDjangoIndentMidElements) > 0
-      let g:HtmlDjangoIndentMidElements .= '\|'
-    endif
-    let g:HtmlDjangoIndentMidElements .= tag
-  endfor
-endfor
 
 " vim:ft=vim:fdm=marker
