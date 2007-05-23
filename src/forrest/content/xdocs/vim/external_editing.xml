@@ -30,9 +30,9 @@
   <body>
     <p>
       Some portions of eclim make use of the editing APIs provided by Eclipse.
-      While this makes for much cleaner code and far fewer chances of errors or
-      other issues trying to accomodate everyone's coding style, it does have
-      its drawbacks:
+      While this makes for much cleaner code and far fewer chances of errors
+      while trying to accomodate everyone's coding style, or other issues, it
+      does have its drawbacks:
     </p>
     <ul>
       <li>
