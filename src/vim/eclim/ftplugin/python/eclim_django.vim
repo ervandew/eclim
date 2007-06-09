@@ -32,6 +32,10 @@ if !exists(':DjangoViewOpen')
   command DjangoViewOpen :call eclim#python#django#FindView(
     \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
 endif
+
+if !exists(':DjangoContextOpen')
+  command DjangoContextOpen :call eclim#python#django#ContextFind()
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

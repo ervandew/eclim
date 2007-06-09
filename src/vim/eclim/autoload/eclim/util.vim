@@ -395,6 +395,18 @@ function! eclim#util#GoToBufferWindow (bufname)
   endif
 endfunction " }}}
 
+" GoToBufferWindowOrOpen(filename, cmd) {{{
+" Gives focus to the window containing the buffer for the supplied file, or if
+" none, opens the file using the supplied command.
+function! eclim#util#GoToBufferWindowOrOpen (filename, cmd)
+  let winnr = bufwinnr(bufnr(a:filename))
+  if winnr != -1
+    exec winnr . "winc w"
+  else
+    silent exec a:cmd . ' ' . a:filename
+  endif
+endfunction " }}}
+
 " GoToBufferWindowRegister(bufname) {{{
 " Registers the autocmd for returning the user to the supplied buffer when the
 " current buffer is closed.
