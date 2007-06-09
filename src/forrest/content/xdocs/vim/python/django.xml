@@ -67,19 +67,44 @@
       </ul>
     </section>
 
-    <anchor id="DjangoTemplateOpen"/>
     <section id="code">
       <title>Django python support</title>
+      <anchor id="DjangoTemplateOpen"/>
       <p><strong>Locating templates</strong></p>
       <p>
-        When the cursor is placed on a template reference, this command attempts
-        to find and open it.<br/>
+        The command <strong>:DjangoTemplateOpen</strong> supports finding and
+        opening a template referenced under the cursor.<br/>
         Ex.
       </p>
       <source>
-        # w/ cursor on "mytemplates/mytemplate.html"
-        return render_to_response("mytemplates/mytemplate.html", ...)
+        # w/ cursor on 'mytemplates/mytemplate.html'
+        return render_to_response('mytemplates/mytemplate.html', ...)
       </source>
+
+      <anchor id="DjangoViewOpen"/>
+      <p><strong>Locating views</strong></p>
+      <p>
+        The command <strong>:DjangoViewOpen</strong> supports finding and
+        opening a view referenced under the cursor.<br/>
+        Ex.
+      </p>
+      <source>
+        <![CDATA[
+          # w/ cursor on 'myproject.myapp.views' or 'my_view' on the second line.
+          urlpatterns = patterns('myproject.myapp.views',
+              (r'^$', 'my_view'),
+          )
+        ]]>
+      </source>
+
+      <anchor id="DjangoContextOpen"/>
+      <p><strong>Contextually locate file</strong></p>
+      <p>
+        The command <strong>:DjangoContextOpen</strong> supports executing
+        <strong>:DjangoViewOpen</strong>, <strong>:DjangoTemplateOpen</strong>,
+        or <strong>:PythonFindDefinition</strong> depending on the context of
+        the text under the cursor.
+      </p>
     </section>
 
     <section id="template">

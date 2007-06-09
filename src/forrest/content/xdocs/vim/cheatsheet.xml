@@ -420,8 +420,24 @@
         <a href="python/django.html#DjangoTemplateOpen">
           <strong>:DjangoTemplateOpen</strong>
         </a> -
-        Available when editing a python file.  Finds the template reference
+        Available when editing a python file.  Finds the template referenced
         under the cursor.
+      </li>
+      <li>
+        <a href="python/django.html#DjangoViewOpen">
+          <strong>:DjangoViewOpen</strong>
+        </a> -
+        Available when editing a python file.  When within a django url patterns
+        definition, finds the view referenced under the cursor.
+      </li>
+      <li>
+        <a href="python/django.html#DjangoContextOpen">
+          <strong>:DjangoContextOpen</strong>
+        </a> -
+        Available when editing a python file.  Executes
+        <strong>:DjangoViewOpen</strong>, <strong>:DjangoTemplateOpen</strong>,
+        or <strong>:PythonFindDefinition</strong> depending on the context of
+        the text under the cursor.
       </li>
     </ul>
 

@@ -120,6 +120,18 @@
           nnoremap <silent> <buffer> <cr> :PythonFindDefinition<cr>
           ]]>
         </source>
+        <note>
+          If you are doing django development you may want to use the following
+          mapping instead which will execute <strong>:DjangoViewOpen</strong>,
+          <strong>:DjangoTemplateOpen</strong>, or
+          <strong>:PythonFindDefinition</strong> depending on the context of the
+          text under the cursor:<br/><br/>
+          <code>
+            <![CDATA[
+              nnoremap <silent> <buffer> <cr> :DjangoContextOpen<cr>
+            ]]>
+          </code>
+        </note>
       </li>
     </ul>
 
