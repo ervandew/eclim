@@ -1,14 +1,12 @@
 " Author:  Eric Van Dewoestine
 
-let IndentAnything_Dbg = 0
-let IndentAnything_Dbg = 1
-
 " Only load this indent file when no other was loaded.
-if exists("b:did_indent") && ! IndentAnything_Dbg
+if exists("b:did_htmldjango_indent")
   finish
 endif
 
 runtime indent/html.vim
+let b:did_htmldjango_indent = 1
 
 let g:HtmlDjangoIndentOpenElements = ''
 let g:HtmlDjangoIndentMidElements = ''
