@@ -260,7 +260,8 @@ function eclim#python#django#FindFilterOrTag (project_dir, element, type)
 
   let results = getloclist(0)
   if len(results) > 0
-    silent exec g:EclimDjangoFindAction . ' ' . bufname(results[0].bufnr)
+    call eclim#util#GoToBufferWindowOrOpen(
+      \ bufname(results[0].bufnr), g:EclimDjangoFindAction)
     lfirst
     return
   endif
@@ -273,7 +274,7 @@ endfunction " }}}
 function eclim#python#django#FindFilterTagFile (project_dir, file)
   let file = findfile(a:file . '.py', a:project_dir . '*/templatetags/')
   if file != ''
-    silent exec g:EclimDjangoFindAction . ' ' . file
+    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
     return
   endif
   call eclim#util#EchoError('Could not find tag/filter file "' . a:file . '.py"')
@@ -294,7 +295,7 @@ function eclim#python#django#FindStaticFile (project_dir, file)
     endif
     let file = findfile(a:file, path)
     if file != ''
-      silent exec g:EclimDjangoFindAction . ' ' . file
+      call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
       return
     endif
   endfor
@@ -306,7 +307,7 @@ endfunction " }}}
 function eclim#python#django#FindTemplate (project_dir, template)
   let file = findfile(a:template, a:project_dir . '/*/templates')
   if file != ''
-    silent exec g:EclimDjangoFindAction . ' ' . file
+    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
     return
   endif
   call eclim#util#EchoError('Could not find the template "' . a:template . '"')
@@ -343,7 +344,7 @@ function eclim#python#django#FindView (project_dir, view)
   let view = join(split(substitute(view, '\.', '/', 'g') . '.py', '/')[1:], '/')
   let file = findfile(view, a:project_dir)
   if file != ''
-    silent exec g:EclimDjangoFindAction . ' ' . file
+    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
     if function != ''
       call search('def\s\+' . function . '\>', 'cw')
     endif
@@ -381,6 +382,22 @@ function eclim#python#django#TemplateFind ()
     call eclim#util#EchoError(
       \ 'Element under the cursor does not appear to be a ' .
       \ 'valid tag, filter, or template reference.')
+  endif
+endfunction " }}}
+
+" ContextFind() {{{
+" Execute DjangoViewOpen, DjangoTemplateOpen, or PythonFindDefinition based on
+" the context of the text under the cursor.
+function! eclim#python#django#ContextFind ()
+  if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
+    if search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
+        \ eclim#util#GrabUri() !~ '\.html'
+      DjangoViewOpen
+    else
+      DjangoTemplateOpen
+    endif
+  else
+    PythonFindDefinition
   endif
 endfunction " }}}
 
