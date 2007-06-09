@@ -75,8 +75,7 @@ public class CorrectCommandTest
     System.out.println(result);
 
     assertTrue("Import not found.",
-        Pattern.compile("import java\\.util\\.ArrayList;")
-        .matcher(result).find());
+        Pattern.compile("import java\\.").matcher(result).find());
   }
 
   /**

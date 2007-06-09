@@ -22,7 +22,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclipse.wst.dtd.core.internal.validation.eclipse.DTDValidator;
+//import org.eclipse.wst.dtd.core.internal.validation.eclipse.DTDValidator;
+import org.eclipse.wst.dtd.core.internal.validation.DTDValidator;
 
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
@@ -36,6 +37,9 @@ import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
 public class DtdValidateCommand
   extends WstValidateCommand
 {
+  private DTDValidator validator = new DTDValidator();
+  //private DTDValidator validator = DTDValidator().getInstance();
+
   /**
    * {@inheritDoc}
    */
@@ -46,7 +50,6 @@ public class DtdValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
       ArrayList results = new ArrayList();
-      DTDValidator validator = DTDValidator.getInstance();
       ValidationReport result = validator.validate(toUri(project, file));
       ValidationMessage[] messages = result.getValidationMessages();
       for (int ii = 0; ii < messages.length; ii++){
