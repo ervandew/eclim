@@ -278,7 +278,7 @@ public class PythonInterpreterStep
       }
       cmd[1] = "list";
 
-      CommandExecutor executor = CommandExecutor.execute(cmd, 5000);
+      CommandExecutor executor = CommandExecutor.execute(cmd, 10 * 1000);
       ArrayList interpreters = new ArrayList();
       Pattern pattern = Pattern.compile("^(/|\\w:).*");
       if(executor.getReturnCode() == 0){
