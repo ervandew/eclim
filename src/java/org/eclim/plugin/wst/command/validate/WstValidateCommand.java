@@ -38,7 +38,7 @@ public abstract class WstValidateCommand
    * Converts the supplied file name to a uri if necessary.
    *
    * @param project The project name.
-   * @param file The file.
+   * @param filename The file.
    * @return The uri.
    */
   protected String toUri (String project, String filename)

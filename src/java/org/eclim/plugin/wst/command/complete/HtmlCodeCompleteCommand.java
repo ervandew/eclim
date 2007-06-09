@@ -33,7 +33,7 @@ public class HtmlCodeCompleteCommand
 {
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
+   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
   protected IContentAssistProcessor getContentAssistProcessor (
       CommandLine commandLine, String project, String file)
@@ -44,7 +44,7 @@ public class HtmlCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
    */
   protected boolean acceptProposal (ICompletionProposal proposal)
   {

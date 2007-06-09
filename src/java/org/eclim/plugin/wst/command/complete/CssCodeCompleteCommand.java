@@ -32,7 +32,7 @@ public class CssCodeCompleteCommand
 {
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
+   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
   protected IContentAssistProcessor getContentAssistProcessor (
       CommandLine commandLine, String project, String file)
