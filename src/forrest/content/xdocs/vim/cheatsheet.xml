@@ -417,8 +417,8 @@
         definition, other template files, and static files.
       </li>
       <li>
-        <a href="python/django.html#DjangoTemplateFind">
-          <strong>:DjangoTemplateFind</strong>
+        <a href="python/django.html#DjangoTemplateOpen">
+          <strong>:DjangoTemplateOpen</strong>
         </a> -
         Available when editing a python file.  Finds the template reference
         under the cursor.

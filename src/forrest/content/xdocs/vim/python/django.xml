@@ -67,7 +67,7 @@
       </ul>
     </section>
 
-    <anchor id="DjangoTemplateFind"/>
+    <anchor id="DjangoTemplateOpen"/>
     <section id="code">
       <title>Django python support</title>
       <p><strong>Locating templates</strong></p>
@@ -220,7 +220,7 @@
           <anchor id="EclimDjangoFindAction"/>
           <strong>g:EclimDjangoFindAction</strong> (Default: "split")<br/>
           For <strong>:DjangoFind</strong> and
-          <strong>:DjangoTemplateFind</strong>, used as the action to perform on
+          <strong>:DjangoTemplateOpen</strong>, used as the action to perform on
           the file found.
         </li>
       </ul>

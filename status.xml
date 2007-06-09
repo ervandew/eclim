@@ -402,8 +402,8 @@
         <a href="vim/python/django.html#DjangoManage">
           <strong>:DjangoManage</strong>
         </a>,
-        <a href="vim/python/django.html#DjangoTemplateFind">
-          <strong>:DjangoTemplateFind</strong>
+        <a href="vim/python/django.html#DjangoTemplateOpen">
+          <strong>:DjangoTemplateOpen</strong>
         </a>, and
         <a href="vim/python/django.html#DjangoFind">
           <strong>:DjangoFind</strong>
