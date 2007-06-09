@@ -27,6 +27,11 @@ if !exists(':DjangoTemplateOpen')
   command DjangoTemplateOpen :call eclim#python#django#FindTemplate(
     \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
 endif
+
+if !exists(':DjangoViewOpen')
+  command DjangoViewOpen :call eclim#python#django#FindView(
+    \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

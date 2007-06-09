@@ -312,6 +312,46 @@ function eclim#python#django#FindTemplate (project_dir, template)
   call eclim#util#EchoError('Could not find the template "' . a:template . '"')
 endfunction " }}}
 
+" FindView(project_dir, template) {{{
+" Finds and opens the supplied view.
+function eclim#python#django#FindView (project_dir, view)
+  let view = a:view
+  let function = ''
+
+  " basic check to see if on a url pattern instead of the view.
+  if view =~ '[?(*^$]'
+    call eclim#util#EchoError(
+      \ 'String under the curser does not appear to be a view: "' . view . '"')
+    return
+  endif
+
+  if getline('.') !~ "\\(include\\|patterns\\)\\s*(\\s*['\"]" . view
+    " see if a view prefix was defined.
+    let result = search('patterns\s*(', 'bnW')
+    if result
+      let prefix = substitute(
+        \ getline(result), ".*patterns\\s*(\\s*['\"]\\(.\\{-}\\)['\"].*", '\1', '')
+      if prefix != ''
+        let view = prefix . '.' . view
+      endif
+    endif
+
+    let function = split(view, '\.')[-1]
+    let view = join(split(view, '\.')[0:-2], '.')
+  endif
+
+  let view = join(split(substitute(view, '\.', '/', 'g') . '.py', '/')[1:], '/')
+  let file = findfile(view, a:project_dir)
+  if file != ''
+    silent exec g:EclimDjangoFindAction . ' ' . file
+    if function != ''
+      call search('def\s\+' . function . '\>', 'cw')
+    endif
+    return
+  endif
+  call eclim#util#EchoError('Could not find the view "' . view . '"')
+endfunction " }}}
+
 " TemplateFind() {{{
 " Find the template, tag, or filter under the cursor.
 function eclim#python#django#TemplateFind ()
