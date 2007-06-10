@@ -1,10 +1,11 @@
 Upgrade
-  - spring from 1.2.8 to 2.0
-  - commons-lang from 2.1 to 2.2
+  - spring from 1.2.8 to 2.0.5
+  - commons-lang from 2.1 to 2.3
   - commons-logging from 1.0.4 to 1.1
   - commons-vfs from dev to 1.0
-  - commons-vfs from dev to 1.0
+    - http://jakarta.apache.org/site/downloads/downloads_commons-vfs.cgi
   - groovy to 1.0
+  - forrest to 0.8
 
 Installer
   - maintain a version database for resources directories so we can determine
@@ -21,22 +22,20 @@ Documentation
 Translations
   - Chinese cheatsheet
     :DjangoFind
-    :DjangoTemplateFind
+    :DjangoTemplateOpen
+    :DjangoViewOpen
+    :DjangoContextOpen
 
 Test on Windows
 
 Bugs
+  - :PythonImportClean
+    - not cleaning 'import cPickle as pickle'
+    - not cleaning 'from one.two import \ SomeClass' # line continuation
+      before first import
   - figure out way to get graphical installer to skip DISPLAY check on mac osx.
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
-
-  - html indent script
-    - fix indent after a DOCTYPE definition (probably just need to exclude '!'
-      after a '<' when searching for start tags).
-    - <script> after a <span> not indenting
-    - wrapping of <script> attributes indents double, as it should, but
-      closing </script> (or other closing tag on new line) does not adjust
-      accordingly.
 
 Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
