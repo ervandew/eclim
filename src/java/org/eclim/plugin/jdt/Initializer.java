@@ -116,6 +116,8 @@ public class Initializer
         {
           IPath jreSrc = null;
 
+          logger.debug("Attempting to locate jre src.zip for JAVA_HOME: {}",
+              SystemUtils.JAVA_HOME);
           for (int jj = 0; jj < SRC_LOCATIONS.length; jj++){
             String location = SRC_LOCATIONS[jj];
 
@@ -130,6 +132,7 @@ public class Initializer
               jreSrc = libraryPath.removeLastSegments(3).append(location);
             }
 
+            logger.debug("Trying location: {}", jreSrc);
             if(jreSrc.toFile().exists()){
               logger.info("Setting '{}' to '{}'",
                   JavaRuntime.JRESRC_VARIABLE, jreSrc);
