@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import org.apache.commons.io.FilenameUtils;
 
+import org.apache.commons.lang.SystemUtils;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
@@ -28,6 +30,17 @@ public class EclipseStep
   extends FileChooserStep
 {
   private static final String ICON = "/resources/images/eclipse.png";
+
+  private static final String[] WINDOWS_ECLIPSES = {
+    "C:/eclipse",
+    "C:/Program Files/eclipse",
+  };
+
+  private static final String[] UNIX_ECLIPSES = {
+    "/opt/eclipse",
+    "/usr/local/eclipse",
+    SystemUtils.USER_HOME + "/eclipse"
+  };
 
   /**
    * Constructs the welcome step.
@@ -66,8 +79,27 @@ public class EclipseStep
     GuiForm form = super.initGuiForm();
 
     String home = Installer.getEnvironmentVariable("ECLIPSE_HOME");
-    if(home != null){
+    if(home != null && home.trim().length() > 0){
       getGuiFileChooser().getTextField().setText(home);
+    }else{
+      if(Os.isFamily("windows")){
+        for (int ii = 0; ii < WINDOWS_ECLIPSES.length; ii++){
+          if(new File(WINDOWS_ECLIPSES[ii]).exists()){
+            home = WINDOWS_ECLIPSES[ii];
+            break;
+          }
+        }
+      }else{
+        for (int ii = 0; ii < UNIX_ECLIPSES.length; ii++){
+          if(new File(UNIX_ECLIPSES[ii]).exists()){
+            home = UNIX_ECLIPSES[ii];
+            break;
+          }
+        }
+      }
+      if(home != null){
+        getGuiFileChooser().getTextField().setText(home);
+      }
     }
 
     return form;

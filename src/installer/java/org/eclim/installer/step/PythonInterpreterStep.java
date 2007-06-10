@@ -64,7 +64,9 @@ public class PythonInterpreterStep
 {
   private static final String[] WINDOWS_INTERPRETERS = {
     "C:/Program Files/Python25/python.exe",
-    "C:/Program Files/Python24/python.exe"
+    "C:/Program Files/Python24/python.exe",
+    "C:/Program Files/Python/Python25/python.exe",
+    "C:/Program Files/Python/Python24/python.exe"
   };
 
   private static final String[] UNIX_INTERPRETERS = {"python"};
@@ -133,7 +135,7 @@ public class PythonInterpreterStep
             String interpreter = null;
 
             // see if pydev already has an interpreter already set.
-            pydevInterpreters = listInterpreters();
+            pydevInterpreters = null; //listInterpreters();
             if(pydevInterpreters != null && pydevInterpreters.length > 0){
               interpreter = pydevInterpreters[0];
               if(pydevInterpreters.length > 1){

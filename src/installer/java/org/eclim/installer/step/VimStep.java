@@ -45,7 +45,9 @@ public class VimStep
 {
   private static final String[] WINDOWS_VIMS = {
     "C:/Program Files/Vim/vim70/vim.exe",
-    "C:/Program Files/Vim/vim70/gvim.exe"
+    "C:/Program Files/Vim/vim70/gvim.exe",
+    "C:/Program Files/Vim/vim71/vim.exe",
+    "C:/Program Files/Vim/vim71/gvim.exe"
   };
 
   private static final String[] UNIX_VIMS = {"vim", "gvim"};
