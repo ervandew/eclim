@@ -161,14 +161,14 @@
         15       regex.addPattern('p', ~/(s?)<project\s+[^>]*?name=['"](.*?)['"]/, "\$2");
         16       regex.addPattern('i', ~/(s?)<import\s+[^>]*?file=['"](.*?)['"]/, "\$2");
         17       regex.addPattern('t', ~/(s?)<target\s+[^>]*?name=['"](.*?)['"]/, "\$2");
-        18       regex.addPattern('r', ~/(s?)<property\s+[^>]*?name=['"](.*?)['"]/, "\$2")19
-        20
-        21       return regex.execute();
-        22     }finally{
-        23       if (regex != null) regex.close();
-        24     }
-        25   }
-        30 }
+        18       regex.addPattern('r', ~/(s?)<property\s+[^>]*?name=['"](.*?)['"]/, "\$2");
+        19
+        20       return regex.execute();
+        21     }finally{
+        22       if (regex != null) regex.close();
+        23     }
+        24   }
+        25 }
       ]]>
     </source>
     <p>
