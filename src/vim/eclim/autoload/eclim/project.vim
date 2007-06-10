@@ -285,7 +285,7 @@ endfunction " }}}
 " Gets the path to the project file for the project that the current file is in.
 function! eclim#project#GetCurrentProjectFile ()
   let dir = fnamemodify(expand('%:p'), ':h')
-  let dir = escape(dir, ' ')
+  let dir = substitute(escape(dir, ' '), '\', '/', 'g')
 
   let projectFile = eclim#util#Findfile('.project', dir . ';')
   while 1
