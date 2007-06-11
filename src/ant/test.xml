@@ -5,6 +5,17 @@
 <project name="test" default="test" basedir="../..">
 
   <property name="test.include" value="**/*Test"/>
+  <if>
+    <os family="windows"/>
+    <then>
+      <property name="script.ext" value=".bat"/>
+      <propertyregex property="eclipse.workspace" override="true"
+          input="${eclipse.workspace}" regexp="\\" replace="/"/>
+    </then>
+    <else>
+      <property name="script.ext" value=""/>
+    </else>
+  </if>
 
   <!--
     - Task for starting eclimd and running unit tests.
@@ -29,14 +40,14 @@
       <else>
         <echo>Starting eclimd...</echo>
         <parallel>
-          <exec executable="${eclim.home}/bin/eclimd"
+          <exec executable="${eclim.home}/bin/eclimd${script.ext}"
               output="build/test/junit/eclimd.log"/>
           <sequential>
             <waitfor maxwait="20" maxwaitunit="second">
               <socket server="localhost" port="9091"/>
             </waitfor>
             <runtarget target="tests.run"/>
-            <exec executable="${eclim.home}/bin/eclim">
+            <exec executable="${eclim.home}/bin/eclim${script.ext}">
               <arg line="-command shutdown"/>
             </exec>
           </sequential>
@@ -144,9 +155,9 @@
     <move file="${eclipse.workspace}/eclim_unit_test_java/project"
         tofile="${eclipse.workspace}/eclim_unit_test_java/.project"/>
 
-    <exec executable="${eclim.home}/bin/eclim" failonerror="true"
+    <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="false">
-      <arg line="-command project_create -f ${eclipse.workspace}/eclim_unit_test_java -n java"/>
+      <arg line='-command project_create -f "${eclipse.workspace}/eclim_unit_test_java" -n java'/>
     </exec>
   </target>
 
@@ -154,7 +165,7 @@
     - Tears down the test projects.
     -->
   <target name="test.teardown_projects">
-    <exec executable="${eclim.home}/bin/eclim" failonerror="true"
+    <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="true">
       <arg line="-command project_delete -n eclim_unit_test_java"/>
     </exec>
