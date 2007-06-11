@@ -166,11 +166,10 @@ public class HtmlValidateCommand
     String[] parts = StringUtils.split(line, ':');
 
     if (parts.length == 5){
+      int lnum = Integer.parseInt(parts[1].replaceAll(",", ""));
+      int cnum = Integer.parseInt(parts[2].replaceAll(",", ""));
       return new Error(
-        parts[4].trim(),
-        file,
-        Integer.parseInt(parts[1]),
-        Integer.parseInt(parts[2]),
+        parts[4].trim(), file, lnum, cnum,
         parts[3].trim().equals("Warning")
       );
     }
