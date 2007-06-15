@@ -130,9 +130,9 @@ function! eclim#python#import#CleanImports ()
   endfor
 
   let remove = []
-  call cursor(import_data.end, 1)
+  call cursor(import_data.end, len(getline(import_data.end)))
   for name in names
-    if !search('\<' . name . '\>', 'nW')
+    if !search('\<' . name . '\>', 'cnW')
       call add(remove, name)
     endif
   endfor
@@ -142,7 +142,8 @@ function! eclim#python#import#CleanImports ()
     call cursor(1, 1)
     call search('\<' . name . '\>', 'W', import_data.end)
     let import = getline('.')
-    if import =~ '\<import\>\s\+' . name . '\>\s*$'
+    if import =~ '\<import\>\s\+' . name . '\>\s*$' ||
+     \ import =~ '\<import\>\s\+.*as\s\+' . name . '\>\s*$'
       exec line('.') . ',' . line('.') . 'delete'
       " if deleting of import results in 2 blank lines, delete one of them
       if getline('.') =~ '^\s*$' && getline(line('.') - 1) =~ '^\s*$'
@@ -176,7 +177,7 @@ function! eclim#python#import#GetImports ()
   let imports = []
   let start = 0
   let end = 0
-  while search('^\(import\|from\)\>\s\+', 'cW')
+  while search('^\(import\|from\)\>\s\+', 'cW') && end != line('$')
     let import = getline('.')
     while import =~ '\\\s*$'
       call cursor(line('.') + 1, 1)
