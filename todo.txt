@@ -18,6 +18,8 @@ Documentation
   - FAQs
     - how to specify workspace dir.
       eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+  - finish python project guide
+  - added -n doc to project creation docs.
 
 Translations
   - Chinese cheatsheet
@@ -26,14 +28,26 @@ Translations
     :DjangoViewOpen
     :DjangoContextOpen
 
-Test on Windows
+Windows Bugs
+  - dtd validate (no results)
+  - html completion hangs
+  - css completion hangs on "font-weight: ^;"
+  - xsd validation (no results)
+  - xsd completion hangs on close tag if open tag is not valid.  hangs on
+    everything after that first hang.
+  - :DtdDefinition fails if wget or fetch are not available... should at least
+    fix to not open the empty buffer.
+  - xml validate.. test_dtd.xml should have 2 errors?
+  - wsdl validate... cannot read file.
+  - vim :FindByContext not working on test.vim 9,34
+    - also need to test the other cases in eclim/vim/findTest.vim
+
+  -- need to test all the java stuff
 
 Bugs
-  - :PythonImportClean
-    - not cleaning 'import cPickle as pickle'
-    - not cleaning 'from one.two import \ SomeClass' # line continuation
-      before first import
   - figure out way to get graphical installer to skip DISPLAY check on mac osx.
+    - http://www.macgeekery.com/how_to_get_the_version_of_mac_os_x_from_the_cli
+      - $ sw_vers -productVersion
   - xml validate, if a doctype exists, but no dtd, then there is an error for
     every element since they are "not declared" (ex. ant/cvs.xml).
 
@@ -41,6 +55,8 @@ Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
 
 Enhancements
+  - javascript taglib groovy script
+
   - modify :DjangoFind to account for django provided tags and filters.
 
   - look into platform based releases on sourceforge:

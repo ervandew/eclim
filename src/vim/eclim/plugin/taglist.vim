@@ -74,6 +74,10 @@ if !exists(':TlistToo')
     let g:tlist_htmldjango_settings = 'htmldjango;a:anchor;i:id;f:function'
   endif
 
+  if !exists("g:tlist_javascript_settings")
+    let g:tlist_javascript_settings = 'javascript;f:function'
+  endif
+
   if !exists("g:tlist_junitresult_settings")
     let g:tlist_junitresult_settings = 'junitresult;t:testcase;o:output'
   endif
@@ -155,6 +159,10 @@ else
 
   if !exists("g:tlist_htmldjango_settings")
     let g:tlist_htmldjango_settings = {'a': 'anchor', 'i': 'id', 'f': 'function'}
+  endif
+
+  if !exists("g:tlist_javascript_settings")
+    let g:tlist_javascript_settings = {'o': 'object', 'f': 'function'}
   endif
 
   if !exists("g:tlist_junitresult_settings")
