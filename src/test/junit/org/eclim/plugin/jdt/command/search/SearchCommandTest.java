@@ -90,7 +90,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, "\n");
-    assertTrue("Not enough results.", results.length == 2);
+    assertEquals("Wrong number of results.", 2, results.length);
 
     assertTrue("EclimApplication not found.",
         results[0].endsWith("org.eclim.eclipse.EclimApplication"));
