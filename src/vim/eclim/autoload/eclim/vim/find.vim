@@ -209,6 +209,7 @@ function! s:Find (name, bang, context)
           continue
         endif
 
+        let path = escape(substitute(path, '\', '/', 'g'), ' ')
         silent! exec cnt . 'lvimgrepadd /' . search . '/gj' . ' ' . path . '/**/*.vim'
         if a:context == 'def' && len(getloclist(0)) > 0
           break
