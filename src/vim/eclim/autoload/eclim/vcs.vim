@@ -102,6 +102,8 @@ function eclim#vcs#Viewvc (file)
     return
   elseif root =~ '/$'
     let root = root[:-2]
+  elseif root == 0
+    return
   endif
 
   let project_root = eclim#project#GetCurrentProjectRoot()
