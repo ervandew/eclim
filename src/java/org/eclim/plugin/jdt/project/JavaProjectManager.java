@@ -178,9 +178,8 @@ public class JavaProjectManager
     };
 
     IClasspathEntry[] classpath = merge(
-        new IClasspathEntry[][]{
-          javaProject.readRawClasspath(), detected, depends, container
-        });
+        new IClasspathEntry[][]{detected, depends, container});
+          //javaProject.readRawClasspath(), detected, depends, container
 
     javaProject.setRawClasspath(classpath, null);
     javaProject.makeConsistent(null);
