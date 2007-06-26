@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.net.URL;
+import java.net.URLDecoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -298,12 +299,16 @@ public class XmlUtils
       if(location != null && WIN_BUG.matcher(location).matches()){
         location = location.substring(1);
       }
-      errors.add(new Error(
-            _ex.getMessage(),
-            location,
-            _ex.getLineNumber(),
-            _ex.getColumnNumber(),
-            _warning));
+      try{
+        errors.add(new Error(
+              _ex.getMessage(),
+              URLDecoder.decode(location, "utf-8"),
+              _ex.getLineNumber(),
+              _ex.getColumnNumber(),
+              _warning));
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
     }
 
     /**

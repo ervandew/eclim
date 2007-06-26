@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.wst.command.validate;
 
+import java.net.URLDecoder;
+
 import org.apache.commons.io.FilenameUtils;
 
 import org.eclim.command.AbstractCommand;
@@ -32,7 +34,8 @@ import org.eclipse.core.resources.IProject;
 public abstract class WstValidateCommand
   extends AbstractCommand
 {
-  private static final String URI_PREFIX = "file://";
+  // eclipse looks for 3 leading slashes on every os, so 3 are necessary here.
+  private static final String URI_PREFIX = "file:///";
 
   /**
    * Converts the supplied file name to a uri if necessary.
@@ -48,7 +51,7 @@ public abstract class WstValidateCommand
       filename = URI_PREFIX + FilenameUtils.concat(
           ProjectUtils.getPath(project), filename);
     }
-    return filename;
+    return filename.replace('\\', '/');
   }
 
   /**
@@ -59,6 +62,11 @@ public abstract class WstValidateCommand
    */
   protected String toFile (String uri)
   {
-    return uri.startsWith(URI_PREFIX) ? uri.substring(URI_PREFIX.length()) : uri;
+    String file = uri.startsWith(URI_PREFIX) ? uri.substring(URI_PREFIX.length()) : uri;
+    try{
+      return URLDecoder.decode(file, "utf-8");
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
   }
 }
