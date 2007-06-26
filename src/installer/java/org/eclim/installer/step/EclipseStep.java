@@ -132,11 +132,9 @@ public class EclipseStep
     {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
-        File startup = new File(FilenameUtils.concat(folder, "startup.jar"));
         File plugins = new File(FilenameUtils.concat(folder, "plugins"));
 
-        return startup.exists() && startup.isFile() &&
-          plugins.exists() && plugins.isDirectory();
+        return plugins.exists() && plugins.isDirectory();
       }
       return true;
     }
