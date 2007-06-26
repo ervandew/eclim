@@ -43,6 +43,8 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 public abstract class WstCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  private static StructuredTextViewer viewer;
+
   /**
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
@@ -58,8 +60,10 @@ public abstract class WstCodeCompleteCommand
     IStructuredModel model =
       StructuredModelManager.getModelManager().getModelForRead(ifile);
 
-    StructuredTextViewer viewer =
-      new StructuredTextViewer(EclimPlugin.getShell(), null, null, false, 0);
+    if (viewer == null) {
+      viewer = new StructuredTextViewer(
+          EclimPlugin.getShell(), null, null, false, 0);
+    }
     viewer.setDocument(model.getStructuredDocument());
     return viewer;
   }
