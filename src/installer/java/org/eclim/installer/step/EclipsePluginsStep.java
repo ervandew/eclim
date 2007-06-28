@@ -15,6 +15,11 @@
  */
 package org.eclim.installer.step;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import java.awt.event.ActionEvent;
+
 import java.io.File;
 
 import java.text.Collator;
@@ -24,7 +29,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+
+import javax.swing.table.DefaultTableModel;
+
+import foxtrot.Worker;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -47,6 +63,8 @@ import org.eclim.installer.step.command.UpdateCommand;
 
 import org.formic.Installer;
 
+import org.formic.dialog.gui.GuiDialogs;
+
 import org.formic.wizard.step.InstallStep;
 
 /**
@@ -66,7 +84,15 @@ public class EclipsePluginsStep
   private static final String FEATURE = "  Feature";
   private static final String ENABLED = "enabled";
 
+  private static final String SKIP_FEATURES =
+    "If you skip installing of the required features some " +
+    "features of eclim may not work, or eclim may not start at all.\n" +
+    "Are you sure you want to skip this step?";
+
   private String taskName = "";
+
+  private JPanel stepPanel;
+  private DefaultTableModel tableModel = new DefaultTableModel();
 
   /**
    * Constructs this step.
@@ -78,53 +104,90 @@ public class EclipsePluginsStep
 
   /**
    * {@inheritDoc}
-   * @see org.formic.wizard.InstallStep#execute()
+   * @see org.formic.wizard.WizardStep#initGui()
    */
-  protected void execute ()
-    throws Exception
+  public JComponent initGui ()
   {
-    extractInstallerPlugin();
+    stepPanel = (JPanel)super.initGui();
+    stepPanel.setBorder(BorderFactory.createEmptyBorder(20, 25, 10, 25));
+    return stepPanel;
+  }
 
-    List dependencies = getDependencies();
+  /**
+   * Invoked when this step is displayed in the gui.
+   */
+  protected void displayedGui ()
+  {
+    setBusy(true);
+    try{
+      guiOverallLabel.setText("Analyzing installed features...");
+      List dependencies = (List)Worker.post(new foxtrot.Task(){
+        public Object run ()
+          throws Exception
+        {
+          extractInstallerPlugin();
+          List dependencies = getDependencies();
+          filterDependencies(dependencies, getFeatures());
+          return dependencies;
+        }
+      });
 
-    guiOverallLabel.setText("Analyzing installed features...");
-    filterDependencies(dependencies, getFeatures());
-    if(dependencies.size() == 0){
-      guiOverallProgress.setMaximum(1);
-      guiOverallProgress.setValue(1);
-      guiTaskProgress.setMaximum(1);
-      guiTaskProgress.setValue(1);
-    }else{
-      guiOverallProgress.setMaximum(dependencies.size());
-      guiOverallProgress.setValue(0);
-      for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-        Dependency dependency = (Dependency)ii.next();
-        if(!dependency.isUpgrade()){
-          guiOverallLabel.setText("Installing feature: " +
-              dependency.getId() + '-' + dependency.getVersion());
-        }else{
-          guiOverallLabel.setText("Updating feature: " +
-              dependency.getId() + '-' + dependency.getVersion());
+      if(dependencies.size() == 0){
+        guiOverallProgress.setMaximum(1);
+        guiOverallProgress.setValue(1);
+        guiTaskProgress.setMaximum(1);
+        guiTaskProgress.setValue(1);
+      }else{
+        tableModel.addColumn("Feature");
+        tableModel.addColumn("Version");
+        tableModel.addColumn("Install / Upgrade");
+        JTable table = new JTable(tableModel);
+        table.setRowSelectionAllowed(false);
+        final JPanel featuresPanel = new JPanel(new BorderLayout());
+        featuresPanel.setAlignmentX(0.0f);
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(table, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(container);
+        scrollPane.setAlignmentX(0.0f);
+
+        for (int ii = 0; ii < dependencies.size(); ii++){
+          Dependency dependency = (Dependency)dependencies.get(ii);
+          tableModel.addRow(new Object[]{
+            dependency.getId(),
+            dependency.getVersion(),
+            dependency.isUpgrade() ? "Upgrade" : "Install"
+          });
         }
 
-        List commands = getCommands(dependency);
-        for (Iterator jj = commands.iterator(); jj.hasNext();){
-          Command command = (Command)jj.next();
-          try{
-            command.start();
-            command.join();
-            if(command.getReturnCode() != 0){
-              throw new RuntimeException(command.getErrorMessage());
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        buttons.setAlignmentX(0.0f);
+
+        JButton skipButton = new JButton(new AbstractAction("Skip"){
+          public void actionPerformed (ActionEvent e){
+            if(GuiDialogs.showConfirm(SKIP_FEATURES)){
+              setValid(true);
             }
-          }finally{
-            command.destroy();
           }
-        }
-        guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
+        });
+        final JButton installButton =
+          new JButton(new InstallPluginsAction(dependencies, skipButton));
+
+        buttons.add(installButton);
+        buttons.add(skipButton);
+
+        featuresPanel.add(buttons, BorderLayout.NORTH);
+        featuresPanel.add(scrollPane, BorderLayout.CENTER);
+
+        stepPanel.add(featuresPanel);
       }
-      guiTaskLabel.setText("");
-      guiTaskProgress.setValue(guiTaskProgress.getMaximum());
-      guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+      guiOverallLabel.setText("");
+    }catch(Exception e){
+      setError(e);
+    }finally{
+      setValid(false);
+      setBusy(false);
+      guiTaskProgress.setIndeterminate(false);
+      Installer.getProject().removeBuildListener(this);
     }
   }
 
@@ -132,6 +195,7 @@ public class EclipsePluginsStep
    * Extracts the eclipse plugin used to install eclipse features.
    */
   private void extractInstallerPlugin ()
+    throws Exception
   {
     // extract eclipse installer plugin.
     String eclipseHome = (String)
@@ -268,7 +332,8 @@ public class EclipsePluginsStep
    * @param dependencies The original list of dependencies.
    * @param features The list of already installed features.
    */
-  private void filterDependencies (List dependencies, List features)
+  private void filterDependencies (final List dependencies, final List features)
+    throws Exception
   {
     Collator collator = Collator.getInstance();
 
@@ -325,6 +390,86 @@ public class EclipsePluginsStep
         }
       }
     });
+  }
+
+  private class InstallPluginsAction
+    extends AbstractAction
+  {
+    private List dependencies;
+    private JButton skipButton;
+
+    public InstallPluginsAction (List dependencies, JButton skipButton)
+    {
+      super("Install Features");
+      this.dependencies = dependencies;
+      this.skipButton = skipButton;
+    }
+
+    public void actionPerformed (ActionEvent e)
+    {
+      ((JButton)e.getSource()).setEnabled(false);
+      final List dependencies = this.dependencies;
+      try{
+        Worker.post(new foxtrot.Task(){
+          public Object run ()
+            throws Exception
+          {
+            guiOverallProgress.setMaximum(dependencies.size());
+            guiOverallProgress.setValue(0);
+            int index = 0;
+            for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
+              Dependency dependency = (Dependency)ii.next();
+              if(!dependency.isUpgrade()){
+                guiOverallLabel.setText("Installing feature: " +
+                    dependency.getId() + '-' + dependency.getVersion());
+              }else{
+                guiOverallLabel.setText("Updating feature: " +
+                    dependency.getId() + '-' + dependency.getVersion());
+              }
+
+              List commands = getCommands(dependency);
+              for (Iterator jj = commands.iterator(); jj.hasNext();){
+                Command command = (Command)jj.next();
+                try{
+                  command.start();
+                  command.join();
+                  if(command.getReturnCode() != 0){
+                    throw new RuntimeException(command.getErrorMessage());
+                  }
+                }finally{
+                  command.destroy();
+                }
+              }
+
+              try{
+                Thread.sleep(1000);
+              }catch(Exception ex){
+              }
+              tableModel.removeRow(0);
+              guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
+            }
+            guiTaskLabel.setText("");
+            guiTaskProgress.setValue(guiTaskProgress.getMaximum());
+            guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+
+            return null;
+          }
+        });
+        guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+        guiOverallLabel.setText(Installer.getString("install.done"));
+
+        guiTaskProgress.setValue(guiTaskProgress.getMaximum());
+        guiTaskLabel.setText(Installer.getString("install.done"));
+
+        setBusy(false);
+        setValid(true);
+        guiTaskProgress.setIndeterminate(false);
+
+        skipButton.setEnabled(false);
+      }catch(Exception ex){
+        setError(ex);
+      }
+    }
   }
 
   private static class Dependency
