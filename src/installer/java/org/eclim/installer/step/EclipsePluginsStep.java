@@ -46,6 +46,8 @@ import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.log4j.Logger;
+
 import org.apache.tools.ant.taskdefs.Chmod;
 import org.apache.tools.ant.taskdefs.Untar;
 
@@ -77,6 +79,9 @@ public class EclipsePluginsStep
   extends InstallStep
   implements OutputHandler
 {
+  private static final Logger logger =
+    Logger.getLogger(EclipsePluginsStep.class);
+
   private static final String BEGIN_TASK = "beginTask";
   private static final String SUB_TASK = "subTask";
   private static final String INTERNAL_WORKED = "internalWorked";
@@ -93,6 +98,7 @@ public class EclipsePluginsStep
 
   private JPanel stepPanel;
   private DefaultTableModel tableModel = new DefaultTableModel();
+  private List dependencies;
 
   /**
    * Constructs this step.
@@ -121,7 +127,7 @@ public class EclipsePluginsStep
     setBusy(true);
     try{
       guiOverallLabel.setText("Analyzing installed features...");
-      List dependencies = (List)Worker.post(new foxtrot.Task(){
+      dependencies = (List)Worker.post(new foxtrot.Task(){
         public Object run ()
           throws Exception
         {
@@ -162,15 +168,9 @@ public class EclipsePluginsStep
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttons.setAlignmentX(0.0f);
 
-        JButton skipButton = new JButton(new AbstractAction("Skip"){
-          public void actionPerformed (ActionEvent e){
-            if(GuiDialogs.showConfirm(SKIP_FEATURES)){
-              setValid(true);
-            }
-          }
-        });
-        final JButton installButton =
-          new JButton(new InstallPluginsAction(dependencies, skipButton));
+        JButton skipButton = new JButton(new SkipPluginsAction());
+        JButton installButton =
+          new JButton(new InstallPluginsAction(skipButton));
 
         buttons.add(installButton);
         buttons.add(skipButton);
@@ -395,20 +395,17 @@ public class EclipsePluginsStep
   private class InstallPluginsAction
     extends AbstractAction
   {
-    private List dependencies;
     private JButton skipButton;
 
-    public InstallPluginsAction (List dependencies, JButton skipButton)
+    public InstallPluginsAction (JButton skipButton)
     {
       super("Install Features");
-      this.dependencies = dependencies;
       this.skipButton = skipButton;
     }
 
     public void actionPerformed (ActionEvent e)
     {
       ((JButton)e.getSource()).setEnabled(false);
-      final List dependencies = this.dependencies;
       try{
         Worker.post(new foxtrot.Task(){
           public Object run ()
@@ -468,6 +465,43 @@ public class EclipsePluginsStep
         skipButton.setEnabled(false);
       }catch(Exception ex){
         setError(ex);
+      }
+    }
+  }
+
+  private class SkipPluginsAction
+    extends AbstractAction
+  {
+    public SkipPluginsAction ()
+    {
+      super("Skip");
+    }
+
+    public void actionPerformed (ActionEvent e){
+      if(GuiDialogs.showConfirm(SKIP_FEATURES)){
+        setValid(true);
+
+        // determine if the python interpreter step should be skipped.
+        boolean pydevRequired = false;
+        boolean pydevInstalled = true;
+        for (int ii = 0; ii < dependencies.size(); ii++){
+          Dependency dependency = (Dependency)dependencies.get(ii);
+          if("org.python.pydev.feature".equals(dependency.getId())){
+            pydevRequired = true;
+            break;
+          }
+        }
+        for (int ii = 0; ii < tableModel.getRowCount(); ii++){
+          String feature = (String)tableModel.getValueAt(ii, 0);
+          if("org.python.pydev.feature".equals(feature)){
+            pydevInstalled = false;
+            break;
+          }
+        }
+
+        if (pydevRequired && !pydevInstalled){
+          Installer.getContext().setValue("pydev.skipped", "true");
+        }
       }
     }
   }
