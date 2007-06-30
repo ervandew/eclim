@@ -15,11 +15,17 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclim.plugin.ant.util.AntUtils;
+
+import org.eclipse.ant.internal.ui.editor.TaskDescriptionProvider;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 
@@ -43,8 +49,12 @@ public class CodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
+    taskDescriptionProviderHack();
     AntModel model = (AntModel)AntUtils.getAntModel(project, file);
-    return new AntEditorCompletionProcessor(model);
+    AntEditorCompletionProcessor processor =
+      new AntEditorCompletionProcessor(model);
+    antEditorCompletionProcessorHack(processor);
+    return processor;
   }
 
   /**
@@ -59,5 +69,58 @@ public class CodeCompleteCommand
       completion = completion.substring(0, index);
     }
     return completion;
+  }
+
+  /**
+   * Hack required because the eclipse version relies on a gui resulting in a
+   * hanging process when trying to initialize the messages.
+   */
+  private void taskDescriptionProviderHack ()
+  {
+    try{
+      Field fgDefault =
+        TaskDescriptionProvider.class.getDeclaredField("fgDefault");
+      fgDefault.setAccessible(true);
+      if(fgDefault.get(null) == null){
+        Constructor constructor =
+          TaskDescriptionProvider.class.getDeclaredConstructor(null);
+        constructor.setAccessible(true);
+        TaskDescriptionProvider instance =
+          (TaskDescriptionProvider)constructor.newInstance(null);
+
+        Method initialize =
+          TaskDescriptionProvider.class.getDeclaredMethod("initialize", null);
+        initialize.setAccessible(true);
+        initialize.invoke(instance, null);
+
+        fgDefault.set(null, instance);
+      }
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Hack required because the eclipse version relies on a gui resulting in a
+   * hanging process when trying to initialize the dtd.
+   */
+  private void antEditorCompletionProcessorHack (
+      AntEditorCompletionProcessor processor)
+  {
+    try{
+      Class theClass =
+        org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor.class;
+      Field fgDtd = theClass.getDeclaredField("fgDtd");
+      fgDtd.setAccessible(true);
+      if(fgDtd.get(null) == null){
+        Method parseDtd = theClass.getDeclaredMethod("parseDtd", null);
+        parseDtd.setAccessible(true);
+
+        Object dtd = parseDtd.invoke(processor, null);
+        fgDtd.set(null, dtd);
+      }
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
   }
 }
