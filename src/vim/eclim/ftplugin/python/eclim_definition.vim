@@ -23,9 +23,9 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(":PythonFindDefinition")
-  command -buffer PythonFindDefinition :call eclim#python#definition#Find()
-endif
+"if !exists(":PythonFindDefinition")
+"  command -buffer PythonFindDefinition :call eclim#python#definition#Find()
+"endif
 " }}}
 
 " vim:ft=vim:fdm=marker

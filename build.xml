@@ -51,6 +51,7 @@
         deprecation="${deprecation}">
       <src path="src/java"/>
       <include name="**/*.java"/>
+      <exclude name="**/pydev/**/*.java"/>
       <classpath refid="classpath"/>
     </javac>
 
@@ -97,7 +98,7 @@
 
     <!-- determine what plugins exist (other than the core) -->
     <path id="plugin.dirs">
-      <dirset dir="build/classes/org/eclim/plugin" includes="*"/>
+      <dirset dir="build/classes/org/eclim/plugin" includes="*" excludes="pydev"/>
     </path>
     <property name="plugins" refid="plugin.dirs"/>
     <propertyregex property="plugins" override="true"
@@ -123,6 +124,8 @@
           from="^(.*)(org\.eclim.*?)([/\\].*)$" to="\1\2_${eclim.version}\3"/>
       <fileset dir="src/eclipse">
         <include name="**/*"/>
+        <exclude name="plugins/org.eclim.pydev/**/*"/>
+        <exclude name="plugins/org.eclim.pydev"/>
         <exclude name="plugins/org.eclim.installer*/**/*"/>
         <exclude name="plugins/org.eclim.installer*"/>
       </fileset>

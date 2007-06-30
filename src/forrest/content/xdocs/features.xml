@@ -133,8 +133,8 @@
       <strong>Python Integration</strong>
     </p>
     <ul>
-      <li>Code completion.</li>
-      <li>Find definition.</li>
+      <!--li>Code completion.</li>
+      <li>Find definition.</li-->
       <li>Regular expression testing.</li>
       <li>Django functionality.</li>
     </ul>

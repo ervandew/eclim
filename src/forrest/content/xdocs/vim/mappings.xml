@@ -112,7 +112,7 @@
       place your mappings there (:help ftplugin-name).
     </p>
     <ul>
-      <li>
+      <!--li>
         Jump to the definition of the class, method, function, or variable under
         the cursor with <code>&lt;Enter&gt;</code>.<br/>
         <source>
@@ -132,6 +132,17 @@
             ]]>
           </code>
         </note>
+      </li-->
+      <li>
+        If you are doing django development you may want to use the following
+        mapping which will execute <strong>:DjangoViewOpen</strong>, or
+        <strong>:DjangoTemplateOpen</strong> depending on the context of the
+        text under the cursor:<br/><br/>
+        <code>
+          <![CDATA[
+            nnoremap <silent> <buffer> <cr> :DjangoContextOpen<cr>
+          ]]>
+        </code>
       </li>
     </ul>
 

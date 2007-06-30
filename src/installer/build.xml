@@ -40,6 +40,7 @@
         target="${javac.target}" source="${javac.target}">
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
+      <exclude name="**/pydev/**/*.java"/>
       <classpath refid="formic.classpath"/>
       <classpath refid="classpath"/>
     </javac>
@@ -63,10 +64,10 @@
       <param name="plugin.name" value="installer"/>
       <param name="classes.include" value="**/plugin/*.class"/>
     </antcall>
-    <antcall target="plugin">
+    <!--antcall target="plugin">
       <param name="plugin.name" value="installer.pydev"/>
       <param name="classes.include" value="**/plugin/pydev/**/*.class"/>
-    </antcall>
+    </antcall-->
 
     <!-- prepare installer's build.properties -->
     <copy file="src/installer/build.properties" todir="build/formic"/>

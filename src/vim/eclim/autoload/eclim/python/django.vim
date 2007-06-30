@@ -396,8 +396,8 @@ function! eclim#python#django#ContextFind ()
     else
       DjangoTemplateOpen
     endif
-  else
-    PythonFindDefinition
+  "else
+  "  PythonFindDefinition
   endif
 endfunction " }}}
 

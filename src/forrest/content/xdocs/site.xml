@@ -71,11 +71,11 @@ See http://forrest.apache.org/docs/linking.html for more info
             description="Maintaining java classpath with ivy."
             href="guides/java/ivy/ivy_classpath.html"/>
       </java>
-      <python label="Python Guides">
+      <!--python label="Python Guides">
         <python_project label="Python: Creating A Python Project"
             description="Creating a python project."
             href="guides/python/project.html"/>
-      </python>
+      </python-->
     </guides>
     <support label="Support">
       <forums label="Forums" href="ext:forums" description="Discussion Forums"/>
@@ -205,10 +205,10 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="JDK Tools Integration"/>
     </java>
     <python label="Python" href="python/">
-      <complete label="Code Completion" href="complete.html"
+      <!--complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <definition label="Jumping To Definition" href="definition.html"
-          description="Code Completion"/>
+          description="Code Completion"/-->
       <regex label="Regex" href="regex.html"
           description="Regular Expression Testing"/>
       <django label="Django" href="django.html"

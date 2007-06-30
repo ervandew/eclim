@@ -33,17 +33,18 @@
         </formic:step>
         <formic:step name="summary"/>
         <formic:branch path="branch_eclipse_plugins">
-          <or>
+          <!--or>
             <istrue value="featureList.pydev"/>
             <istrue value="featureList.wst"/>
-          </or>
+          </or-->
+          <istrue value="featureList.wst"/>
         </formic:branch>
-        <formic:branch path="branch_python_interpreter">
+        <!--formic:branch path="branch_python_interpreter">
           <and>
             <istrue value="featureList.pydev"/>
             <not><isset property="pydev.skipped"/></not>
           </and>
-        </formic:branch>
+        </formic:branch-->
         <formic:step name="install"/>
         <formic:step name="finished"/>
       </formic:path>

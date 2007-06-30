@@ -274,7 +274,7 @@
   <changes>
     <release version="1.3.0" date="">
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Few bug fixes.
+        Bug fixes.
       </action>
 
       <action dev="ervandew" type="add" context="Eclim">
@@ -377,7 +377,7 @@
         <a href="vim/java/log4j/validate.html">log4j xml file validation</a>.
       </action>
 
-      <action dev="ervandew" type="add" context="Python">
+      <!--action dev="ervandew" type="add" context="Python">
         Added <a href="vim/python/complete.html">code completion</a>.<br/>
         Requires the <a href="site:pydev">PyDev plugin</a>.
       </action>
@@ -386,18 +386,14 @@
         Added <a href="vim/python/definition.html">find definition support</a>.
         <br/>
         Requires the <a href="site:pydev">PyDev plugin</a>.
-      </action>
-
-      <action dev="ervandew" type="add" context="Python">
-        Added <a href="vim/python/django.html">some django functionality</a>.
-      </action>
+      </action-->
 
       <action dev="ervandew" type="add" context="Python">
         Added support for
         <a href="vim/python/regex.html">testing regular expressions</a>.
       </action>
 
-      <action dev="ervandew" type="add" context="Django">
+      <action dev="ervandew" type="add" context="Python Django">
         Added
         <a href="vim/python/django.html#DjangoManage">
           <strong>:DjangoManage</strong>
