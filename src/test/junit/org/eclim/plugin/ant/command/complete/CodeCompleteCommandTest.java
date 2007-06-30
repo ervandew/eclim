@@ -65,13 +65,15 @@ public class CodeCompleteCommandTest
 
     String[] results = StringUtils.split(result, '\n');
 
-    assertEquals("Wrong number of results.", 6, results.length);
+    assertEquals("Wrong number of results.", 7, results.length);
     assertTrue("Target 'java' not found.", results[0].startsWith("java|"));
     assertTrue("Target 'javac' not found.", results[1].startsWith("javac|"));
     assertTrue("Target 'javacc' not found.", results[2].startsWith("javacc|"));
     assertTrue("Target 'javadoc' not found.", results[3].startsWith("javadoc|"));
     assertTrue("Target 'javadoc2' not found.", results[4].startsWith("javadoc2|"));
     assertTrue("Target 'javah' not found.", results[5].startsWith("javah|"));
+    assertTrue("Target 'javaresource' not found.",
+        results[6].startsWith("javaresource|"));
   }
 
   /**

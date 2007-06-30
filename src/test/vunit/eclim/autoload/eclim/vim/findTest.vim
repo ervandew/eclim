@@ -93,7 +93,7 @@ endfunction " }}}
 " Cursor on variable ref
 function! TestFindByContextVariableRef ()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
-  call cursor(226, 10)
+  call cursor(227, 10)
 
   call s:FindByContext()
 
