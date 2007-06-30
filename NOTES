@@ -58,3 +58,20 @@ Troubleshooting:
              -jar startup.jar -debug -consolelog -nosplash -clean -refresh
              -application org.eclim.application -vmargs
              -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
+
+Pydev, files modified to remove it:
+  build.xml
+  status.xml
+  src/ant/docs.xml
+  src/forrest/content/xdocs/features.xml
+  src/forrest/content/xdocs/site.xml
+  src/forrest/content/xdocs/vim/cheatsheet.xml
+  src/forrest/content/xdocs/vim/mappings.xml
+  src/installer/build.xml
+  src/installer/installer.xml
+  src/installer/java/org/eclim/installer/step/FeatureProvider.java
+  src/installer/resources/dependencies.properties
+  src/installer/resources/install.properties
+  src/vim/eclim/autoload/eclim/python/django.vim
+  src/vim/eclim/ftplugin/python/eclim_complete.vim
+  src/vim/eclim/ftplugin/python/eclim_definition.vim
