@@ -305,9 +305,6 @@ endfunction " }}}
 " Gets the project name that the current file is in.
 function! eclim#project#GetCurrentProjectName ()
   let projectName = ''
-  let dir = fnamemodify(expand('%:p'), ':h')
-  let dir = escape(dir, ' ')
-
   let projectFile = eclim#project#GetCurrentProjectFile()
   if projectFile != ''
     let cmd = winrestcmd()
