@@ -111,6 +111,19 @@ public class ProjectUtils
   }
 
   /**
+   * Gets the absolute file path.
+   *
+   * @param _project The file's project.
+   * @param _file The file.
+   * @return The absolute file path.
+   */
+  public static String getFilePath (String _project, String _file)
+    throws Exception
+  {
+    return FilenameUtils.concat(getPath(_project), _file);
+  }
+
+  /**
    * Gets the IFile instance for the specified file located in the supplied
    * project.
    *

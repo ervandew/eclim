@@ -27,6 +27,7 @@ import org.eclipse.ant.internal.ui.model.IProblemRequestor;
 import org.eclipse.ant.internal.ui.model.LocationProvider;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -69,12 +70,15 @@ public class AntUtils
       String _project, String _antFile, IProblemRequestor _requestor)
     throws Exception
   {
-    IDocument doc = ProjectUtils.getDocument(_project, _antFile);
-    if (doc == null) {
+    // must refres the file before grabbing the document.
+    final IFile file = AntUtil.getFileForLocation(
+        ProjectUtils.getFilePath(_project, _antFile), null);
+    if (file == null) {
       return null;
     }
+    file.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    final IFile file = AntUtil.getFileForLocation(_antFile, null);
+    IDocument doc = ProjectUtils.getDocument(_project, _antFile);
     final String filepath = FilenameUtils.concat(
         ProjectUtils.getPath(_project), _antFile);
 

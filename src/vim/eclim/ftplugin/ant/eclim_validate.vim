@@ -29,8 +29,10 @@ endif
 " }}}
 
 if g:EclimAntValidate
-  autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate(1)
+  augroup eclim_xml
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate(1)
+  augroup END
 endif
 
 " Command Declarations {{{
