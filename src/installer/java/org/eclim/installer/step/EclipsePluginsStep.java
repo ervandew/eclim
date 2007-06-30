@@ -143,6 +143,7 @@ public class EclipsePluginsStep
         guiOverallProgress.setValue(1);
         guiTaskProgress.setMaximum(1);
         guiTaskProgress.setValue(1);
+        guiOverallLabel.setText("All third party plugins are up to date.");
       }else{
         tableModel.addColumn("Feature");
         tableModel.addColumn("Version");
@@ -179,12 +180,12 @@ public class EclipsePluginsStep
         featuresPanel.add(scrollPane, BorderLayout.CENTER);
 
         stepPanel.add(featuresPanel);
+        guiOverallLabel.setText("");
       }
-      guiOverallLabel.setText("");
     }catch(Exception e){
       setError(e);
     }finally{
-      setValid(false);
+      setValid(dependencies.size() == 0);
       setBusy(false);
       guiTaskProgress.setIndeterminate(false);
       Installer.getProject().removeBuildListener(this);
