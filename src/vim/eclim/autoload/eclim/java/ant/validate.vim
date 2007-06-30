@@ -34,11 +34,6 @@ function! eclim#java#ant#validate#Validate (on_save)
     return
   endif
 
-  " ensure xml validate is OFF.
-  augroup eclim_xml
-    autocmd! BufWritePost <buffer>
-  augroup END
-
   if !eclim#project#IsCurrentFileInProject(!a:on_save)
     return
   endif
