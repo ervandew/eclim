@@ -5,6 +5,3 @@ Eclipse Plugins:
 
 Freshmeat:
   http://freshmeat.net/projects/eclim/
-
-Linux Links:
-  http://www.linuxlinks.com/portal/cgi-bin/search.cgi?query=eclim
