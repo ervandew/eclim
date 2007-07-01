@@ -199,9 +199,11 @@ function! s:DetermineBrowser ()
   " user did not specify a browser, so attempt to find a suitable one.
   else
     if has("win32") || has("win64")
-      if executable('rundll32')
-        let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
-      endif
+      " this version doesn't like .html suffixes on windows 2000
+      "if executable('rundll32')
+        "let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
+      "endif
+      let browser = '!cmd /c start <url>'
     elseif has("mac")
       let browser = '!open <url>'
     endif
