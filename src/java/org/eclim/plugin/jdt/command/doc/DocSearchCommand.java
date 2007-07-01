@@ -56,6 +56,8 @@ public class DocSearchCommand
         "http://java.sun.com/j2se/1.4.2/docs/api/");
     JRE_DOCS.put(JavaCore.VERSION_1_5,
         "http://java.sun.com/j2se/1.5.0/docs/api/");
+    JRE_DOCS.put(JavaCore.VERSION_1_6,
+        "http://java.sun.com/javase/6/docs/api/");
   }
 
   /**
