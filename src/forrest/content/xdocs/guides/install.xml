@@ -39,10 +39,10 @@
           <a href="ext:jdk_download">Java Development Kit</a> 1.4 or greater.
         </li>
         <li>
-          <a href="ext:eclipse_download">Eclipse SDK 3.2.0</a>.
+          <a href="ext:eclipse_download">Eclipse SDK 3.3.x</a>.
         </li>
         <li>
-          <a href="ext:vim_download">Vim 7.0.x</a>.<br/><br/>
+          <a href="ext:vim_download">Vim 7.x.x</a>.<br/><br/>
           <p>
             <strong>Minimum Vim Settings</strong>: In order for eclim to
             function properly, there is a minimum set of vim options that must
