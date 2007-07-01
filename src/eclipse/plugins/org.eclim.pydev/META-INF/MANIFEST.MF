@@ -4,6 +4,7 @@ Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclim.pydev; singleton:=true
 Bundle-Version: ${eclim.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.pydev.jar
 Bundle-Activator: org.eclim.eclipse.GenericPlugin

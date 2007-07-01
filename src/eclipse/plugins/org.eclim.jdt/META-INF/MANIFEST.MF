@@ -4,6 +4,7 @@ Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclim.jdt; singleton:=true
 Bundle-Version: ${eclim.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.jdt.jar
 Bundle-Activator: org.eclim.eclipse.GenericPlugin

@@ -36,7 +36,7 @@
       </p>
       <ul>
         <li>
-          <a href="ext:jdk_download">Java Development Kit</a> 1.4 or greater.
+          <a href="ext:jdk_download">Java Development Kit</a> 1.5 or greater.
         </li>
         <li>
           <a href="ext:eclipse_download">Eclipse SDK 3.3.x</a>.
@@ -84,10 +84,6 @@
 
     <section id="installer">
       <title>Eclim Graphical Installer</title>
-      <p>
-        Using the eclim graphical installer is the quickest and easiest way to
-        install eclim on your system.
-      </p>
       <section id="installer_step1">
         <title>Step 1: Download the eclim installer for your platform.</title>
         <ul>
@@ -128,158 +124,6 @@
 
       <section id="installer_step3">
         <title>Step 3: Start the eclimd server and test it.</title>
-        <p>
-          See the documentation <a href="#start_and_test">below</a>.
-        </p>
-      </section>
-    </section>
-
-    <section id="manual">
-      <title>Manual Installation</title>
-      <p>
-        If for some reason you cannot use the graphical installer, these steps
-        will walk you through how to perform a manual installation.
-      </p>
-
-      <section id="manual_step1">
-        <title>Step 1: Download <strong>2</strong> eclim distribution files.</title>
-        <ol>
-          <li>
-            The first file you will need to <a href="ext:downloads">download</a>
-            is the platform independent Vim plugins jar file:
-            <ul>
-              <li>
-                <a href="ext:downloads">
-                  <strong>eclim_vim_<em>version</em>.jar</strong>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            The second file you will need to <a href="ext:downloads">download</a>
-            is the platform dependent Eclipse plugins archive:
-            <ul>
-              <li>
-                *nix:
-                <a href="ext:downloads">
-                  <strong>org.eclim_<em>version</em>.tar.gz</strong>
-                </a>
-              </li>
-              <li>
-                Windows:
-                <a href="ext:downloads">
-                  <strong>org.eclim_<em>version</em>.zip</strong>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ol>
-      </section>
-
-      <section id="manual_step2">
-        <title>Step 2: Install eclim Eclipse plugins.</title>
-        <p>
-          Simply open a shell and extract the eclim Eclipse plugins archive to your
-          Eclipse plugins directory.
-        </p>
-        <p>
-          *nix Example:<br/>
-          <img alt="Extracting on *nix."
-              src="../images/screenshots/install/linux_eclipse_plugins.png"/>
-        </p>
-        <p>
-          Windows Example:<br/>
-          <img alt="Extracting on Windows."
-              src="../images/screenshots/install/windows_eclipse_plugins.png"/>
-        </p>
-        <p>
-          Once you have the plug-in installed, before you can run the server, you
-          must set the environment variable <strong>ECLIPSE_HOME</strong> to the
-          location of your Eclipse installation.
-        </p>
-        <ul>
-          <li>
-            *nix: add export ECLIPSE_HOME="/usr/local/eclipse" to your .bashrc
-            or equivelent for your prefered shell.
-          </li>
-          <li>
-            Windows: Start > Setting > Control Panel > System > Advanced (tab) >
-            Environment Variables.  From there add a new System or User variable
-            for ECLIPSE_HOME.
-          </li>
-        </ul>
-      </section>
-
-      <section id="manual_step3">
-        <title>Step 3: Install eclim Vim plugins.</title>
-        <p>
-          Simply open a shell and extract the eclim Vim plugins jar file to one
-          of the directories in your Vim runtime path.
-        </p>
-        <note>
-          The directory to extract to depends on your platform, but you can find
-          the appropriate directory by opening a Vim instance and executing:
-          <br/>
-          &nbsp;&nbsp;<strong>:echo &amp;rtp</strong><br/>
-          This will echo a comma seperated list of directories in Vim's runtime
-          path.
-          <br/>
-          <br/>
-          On *nix platforms, you would typically be extracting to the .vim
-          directory in your home folder.<br/>
-          &nbsp;&nbsp;<strong>~/.vim</strong>
-          <br/>
-          <br/>
-          On Windows platforms, you would typically be extracting to the
-          vimfiles directory in your C:\Documents and Settings\Username\
-          folder.<br/>
-          &nbsp;&nbsp;<strong>C:\Documents and Settings\<em>Username</em>\vimfiles</strong>
-          <br/>
-          In some cases you might instead need to extract to vimfiles on your C
-          drive.<br/>
-          &nbsp;&nbsp;<strong>C:\vimfiles</strong>
-        </note>
-        <p>
-          *nix Example:<br/>
-          <img alt="Extracting on *nix."
-              src="../images/screenshots/install/linux_vim_plugins.png"/>
-        </p>
-        <p>
-          Windows Example:<br/>
-          <img alt="Extracting on Windows."
-              src="../images/screenshots/install/windows_vim_plugins.png"/>
-        </p>
-      </section>
-
-      <section id="manual_step4">
-        <title>Step 4: Compile nailgun (non-Windows systems only).</title>
-        <ul>
-          <li>
-            <strong>Windows Users</strong>:
-            On windows there are no additional installation steps for nailgun.
-          </li>
-          <li>
-            <strong>All Other Platforms</strong>:
-            For all other platforms you will need 'gcc' and 'make' to compile
-            nailgun for your system.<br/> To do so, open a command prompt and
-            change directories to
-            ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/src/nailgun.  In
-            that directory issue the command 'make'.  After that finishes you
-            should have an executable named 'ng' in the same directory.  Simply
-            copy or move that file to
-            ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/bin and you're all
-            done.
-            <source>
-              $ cd $ECLIPSE_HOME/plugins/org.eclim_1.2.0/src/nailgun
-              $ make
-              $ mv ng ../../bin/
-            </source>
-          </li>
-        </ul>
-      </section>
-
-      <section id="manual_step5">
-        <title>Step 5: Start the eclimd server and test it.</title>
         <p>
           See the documentation <a href="#start_and_test">below</a>.
         </p>
@@ -346,58 +190,26 @@
 
     <section id="upgrade">
       <title>Upgrading</title>
-
-      <section id="installer_upgrade">
-        <title>Installer</title>
-        <p>
-          When using the installer, the upgrading procedure is the same as the
-          installation procedure.  The installer will remove the previous
-          version of eclim and install the new one.
-        </p>
-      </section>
-
-      <section id="manual_upgrade">
-        <title>Manual Upgrade</title>
-        <p>
-          If you cannot use the installer, then you should follow these steps to
-          ensure a smooth upgrade.
-        </p>
-        <ol>
-          <li>
-            First check all the <a href="../changes.html">release notes</a> from
-            your currently installed version to the latest version, to see if
-            there are any special upgrade notes that may apply to you.
-            <warning>
-              These special upgrade notes will be in red warning boxes like this
-              one so that they are easy to identify.
-            </warning>
-          </li>
-          <li>
-            <a href="../eclimd.html#shutdown">Shutdown eclimd</a>.
-          </li>
-          <li>
-            Delete the old org.eclim*_<em>version</em> plugins from your
-            ECLIPSE_HOME/plugins directory.
-          </li>
-          <li>
-            <a href="#step2">
-              Extract the new org.eclim_<em>version</em>.tar.gz
-            </a>
-            (or org.eclim_<em>version</em>.zip if on windows) to your
-            ECLIPSE_HOME/plugins directory.
-          </li>
-          <li>
-            <a href="#step3">
-              Extract your new eclim_vim_<em>version</em>.jar
-            </a>
-            file to your Vim runtimepath.
-          </li>
-          <li>
-            If you are on a non Windows system be sure to recompile the
-            <a href="#step4">nailgun client</a>.
-          </li>
-        </ol>
-      </section>
+      <p>
+        The upgrading procedure is the same as the installation procedure but
+        there are a couple things worth noting.
+      </p>
+      <ul>
+        <li>
+          The installer will remove the previous version of eclim and
+          install the new one.  This includes all the files in the eclim
+          eclipse plugins and the files eclim adds to your .vim or vimfiles
+          directory.  So if you made any alterations to any of these files,
+          be sure to back them up prior to upgrading.
+        </li>
+        <li>
+          Since the previous version is removed any time you run the
+          installer, whether upgrading or reinstalling the current version,
+          you will need to always select the features you want installed
+          regardless of whether they are already installed.  In a future
+          version, the installer will attempt to auto select them for you.
+        </li>
+      </ul>
     </section>
   </body>
 </document>
