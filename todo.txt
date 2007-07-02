@@ -18,12 +18,8 @@ Documentation
   - FAQs
     - how to specify workspace dir.
       eclimd -Dosgi.instance.area.default=@user.home/another_workspace
-  - finish python project guide
   - document python import functionality
   - added -n doc to project creation docs.
-  - *JDK VERSION*
-    - without wtp or pydev: 1.4
-    - with wtp or pydev: 1.5
 
 Translations
   - Chinese cheatsheet
@@ -33,7 +29,9 @@ Translations
     :DjangoContextOpen
 
 Windows Bugs
-  -- need to test all the java stuff
+  - TestDocSearch
+    - only finds java.awt.List
+    - can't open the url
 
 Bugs
   - xml validate, if a doctype exists, but no dtd, then there is an error for
@@ -41,24 +39,6 @@ Bugs
 
 Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
-
-  wst
-   - org.eclipse.wst-2.0.0.v200706041905-7C...
-   - org.eclipse.xsd-2.3.0.v200705300200
-   - org.eclipse.gef-3.3.0.v20070529
-
-   - org.eclipse.emf.common-2.3.0.v200705300200
-   - org.eclipse.emf.common.ui-2.3.0.v200705300200
-   - org.eclipse.emf.ecore-2.3.0.v200705300200
-   - org.eclipse.emf.ecore.edit-2.3.0.v200705300200
-   - org.eclipse.emf.edit-2.3.0.v200705300200
-   - org.eclipse.emf.edit.ui-2.3.0.v200705300200
-   - org.eclipse.xsd.edit-2.3.0.v200705300200
-
-   - Unit Test Failures
-     - pydev integration broken
-     test vim unit tests.
-     ...
 
 Enhancements
   - javascript doc lookup for common libraries

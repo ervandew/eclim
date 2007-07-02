@@ -246,7 +246,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
-    <eclipse_wst href="http://eclipse.org/webtools"/>
+    <eclipse_wst href="http://www.eclipse.org/webtools/main.php"/>
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
