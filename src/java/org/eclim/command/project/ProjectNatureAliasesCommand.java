@@ -37,7 +37,8 @@ public class ProjectNatureAliasesCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      return StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
+      String natures = StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
+      return natures + '\n' + ProjectNatureFactory.NONE;
     }catch(Throwable t){
       return t;
     }

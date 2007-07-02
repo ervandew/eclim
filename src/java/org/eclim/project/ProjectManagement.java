@@ -106,19 +106,23 @@ public class ProjectManagement
       String _name, String _folder, CommandLine _commandLine)
     throws Exception
   {
-    String[] natures = StringUtils.split(
+    String[] aliases = StringUtils.split(
         _commandLine.getValue(Options.NATURE_OPTION), ',');
     // convert from aliases to real nature names.
-    for (int ii = 0; ii < natures.length; ii++){
-      natures[ii] = ProjectNatureFactory.getNatureForAlias(natures[ii]);
+    List natures = new ArrayList();
+    for (int ii = 0; ii < aliases.length; ii++){
+      if(!ProjectNatureFactory.NONE.equals(aliases[ii])){
+        natures.add(ProjectNatureFactory.getNatureForAlias(aliases[ii]));
+      }
     }
 
     deleteStaleProject(_name, _folder);
-    IProject project = createProject(_name, _folder, natures);
+    IProject project = createProject(
+        _name, _folder, (String[])natures.toArray(new String[natures.size()]));
     project.open(null);
 
-    for (int ii = 0; ii < natures.length; ii++){
-      ProjectManager manager = getProjectManager(natures[ii]);
+    for (int ii = 0; ii < natures.size(); ii++){
+      ProjectManager manager = getProjectManager((String)natures.get(ii));
       if(manager != null){
         manager.create(project, _commandLine);
       }

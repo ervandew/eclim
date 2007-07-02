@@ -29,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ProjectNatureFactory
 {
+  public static String NONE = "none";
+
   private static Map natureAliases = new HashMap();
 
   /**
