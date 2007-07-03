@@ -15,23 +15,26 @@
  */
 package org.eclim.command.xml.format;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.OutputStreamWriter;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+
+import javax.xml.transform.sax.SAXSource;
+
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * Command to format an xml file.
@@ -53,27 +56,20 @@ public class FormatCommand
       int lineWidth = _commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
       int indent = _commandLine.getIntValue(Options.INDENT_OPTION);
 
-      // xerces
-      Document document = DocumentBuilderFactory.newInstance()
-        .newDocumentBuilder().parse(new File(file));
-      OutputFormat format = new OutputFormat(document);
-      format.setLineWidth(lineWidth);
-      format.setIndenting(true);
-      format.setIndent(indent);
-
-      XMLSerializer serializer = new XMLSerializer(System.out, format);
-      serializer.serialize(document);
-
       // javax.xml.transform (indentation issues)
-      /*TransformerFactory factory =TransformerFactory.newInstance();
+      TransformerFactory factory =TransformerFactory.newInstance();
       factory.setAttribute("indent-number", Integer.valueOf(indent));
       Transformer serializer = factory.newTransformer();
       serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-      serializer.setOutputProperty(
-          "{http://xml.apache.org/xslt}indent-amount", indent);
+      // broken in 1.5
+      /*serializer.setOutputProperty(
+          "{http://xml.apache.org/xslt}indent-amount", String.valueOf(indent));
       in = new FileInputStream(file);
       serializer.transform(new SAXSource(new InputSource(in)),
           new StreamResult(System.out));*/
+      in = new FileInputStream(file);
+      serializer.transform(new SAXSource(new InputSource(in)),
+          new StreamResult(new OutputStreamWriter(System.out, "utf-8")));
 
       return StringUtils.EMPTY;
     }catch(Throwable t){

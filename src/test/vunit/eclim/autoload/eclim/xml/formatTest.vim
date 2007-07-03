@@ -37,12 +37,12 @@ function! TestFormat()
 
   XmlFormat
 
-  call VUAssertEquals(6, line('$'))
-  call VUAssertTrue(getline(2) =~ '^<blah attr1.*attr5="five"$')
-  call VUAssertEquals('  attr6="six" attr7="seven">', getline(3))
-  call VUAssertEquals('  <one>one</one>', getline(4))
-  call VUAssertEquals('  <two/>', getline(5))
-  call VUAssertEquals('</blah>', getline(6))
+  call VUAssertEquals(5, line('$'))
+  call VUAssertTrue(
+     \ getline(2) =~ '^<blah attr1.*attr5="five" attr6="six" attr7="seven">$')
+  call VUAssertEquals('  <one>one</one>', getline(3))
+  call VUAssertEquals('  <two/>', getline(4))
+  call VUAssertEquals('</blah>', getline(5))
 
   bdelete!
 endfunction " }}}

@@ -44,13 +44,12 @@ public class FormatCommandTest
 
     String[] lines = StringUtils.split(result, '\n');
 
-    assertEquals("Wrong number of lines.", 6, lines.length);
+    assertEquals("Wrong number of lines.", 5, lines.length);
 
-    assertEquals("<blah attr1=\"one\" attr2=\"two\" attr3=\"three\" attr4=\"four\" attr5=\"five\"", lines[1]);
-    assertEquals("  attr6=\"six\" attr7=\"seven\">", lines[2]);
-    assertEquals("  <one>one</one>", lines[3]);
-    assertEquals("  <two/>", lines[4]);
-    assertEquals("</blah>", lines[5]);
+    assertEquals("<blah attr1=\"one\" attr2=\"two\" attr3=\"three\" attr4=\"four\" attr5=\"five\" attr6=\"six\" attr7=\"seven\">", lines[1]);
+    assertEquals("  <one>one</one>", lines[2]);
+    assertEquals("  <two/>", lines[3]);
+    assertEquals("</blah>", lines[4]);
   }
 
   /**

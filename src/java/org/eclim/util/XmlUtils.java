@@ -28,6 +28,9 @@ import java.util.List;
 
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -45,8 +48,9 @@ import org.eclim.command.Error;
 
 import org.w3c.dom.Element;
 
-import org.xml.sax.ContentHandler;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -99,44 +103,35 @@ public class XmlUtils
    * @param _filename The file path to the xml file.
    * @param _schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
-   * @param _contentHandler The content handler to use while parsing the file.
+   * @param _handler The content handler to use while parsing the file.
    * @return A possibly empty array of errors.
    */
   public static Error[] validateXml (
       String _project,
       String _filename,
       boolean _schema,
-      ContentHandler _contentHandler)
+      DefaultHandler _handler)
     throws Exception
   {
-    // jdk < 1.5 requires a doctype to validate (won't just check well formness
-    // if no doctype specified like 1.5 does)
-    /*SAXParserFactory factory = SAXParserFactory.newInstance();
+    SAXParserFactory factory = SAXParserFactory.newInstance();
+    factory.setNamespaceAware(true);
     factory.setValidating(true);
-
-    return validate(_filename, factory.newSAXParser());*/
-    String filename = FilenameUtils.concat(
-        ProjectUtils.getPath(_project), _filename);
-
-    ErrorAggregator handler = new ErrorAggregator();
-    org.apache.xerces.parsers.SAXParser parser =
-      new org.apache.xerces.parsers.SAXParser();
-    parser.setFeature("http://xml.org/sax/features/validation", true);
-
     if(_schema){
-      parser.setFeature("http://apache.org/xml/features/validation/schema", true);
-      parser.setFeature(
+      factory.setFeature("http://apache.org/xml/features/validation/schema", true);
+      factory.setFeature(
           "http://apache.org/xml/features/validation/schema-full-checking", true);
     }
 
-    if (_contentHandler != null){
-      parser.setContentHandler(_contentHandler);
-    }
-    parser.setErrorHandler(handler);
-    parser.setEntityResolver(
-        new EntityResolver(FilenameUtils.getFullPath(filename)));
+    SAXParser parser = factory.newSAXParser();
+
+    String filename = FilenameUtils.concat(
+        ProjectUtils.getPath(_project), _filename);
+
+    ErrorAggregator errorHandler = new ErrorAggregator();
+    EntityResolver entityResolver = new EntityResolver(
+        FilenameUtils.getFullPath(filename));
     try{
-      parser.parse(filename);
+      parser.parse(filename, getHandler(_handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       return new Error[]{
         new Error(
@@ -145,12 +140,9 @@ public class XmlUtils
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
-    }catch(Exception e){
-      logger.warn("Error parsing xml file.", e);
-      return new Error[]{new Error(e.getMessage(), filename, 1, 1, false)};
     }
 
-    return handler.getErrors();
+    return errorHandler.getErrors();
   }
 
   /**
@@ -164,39 +156,34 @@ public class XmlUtils
   public static Error[] validateXml (String _project, String _filename, String _schema)
     throws Exception
   {
-    // doesn't work on jdk < 1.5
-    /*SAXParserFactory factory = SAXParserFactory.newInstance();
+    SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setNamespaceAware(true);
     factory.setValidating(true);
+    factory.setFeature("http://apache.org/xml/features/validation/schema", true);
+    factory.setFeature(
+        "http://apache.org/xml/features/validation/schema-full-checking", true);
 
     SAXParser parser = factory.newSAXParser();
     parser.setProperty(
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
         "http://www.w3.org/2001/XMLSchema");
+    if(!_schema.startsWith("file:")){
+      _schema = "file://" + _schema;
+    }
     parser.setProperty(
-        "http://java.sun.com/xml/jaxp/properties/schemaSource",
-        "file://" + _schema);
-
-    return validate(_filename, parser);*/
-    String filename = FilenameUtils.concat(
-        ProjectUtils.getPath(_project), _filename);
-
-    ErrorAggregator handler = new ErrorAggregator();
-    org.apache.xerces.parsers.SAXParser parser =
-      new org.apache.xerces.parsers.SAXParser();
-    parser.setFeature("http://xml.org/sax/features/validation", true);
-    parser.setFeature("http://apache.org/xml/features/validation/schema", true);
-    parser.setFeature(
-        "http://apache.org/xml/features/validation/schema-full-checking", true);
+        "http://java.sun.com/xml/jaxp/properties/schemaSource", _schema);
     parser.setProperty(
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
         _schema.replace('\\', '/'));
-        //"file://" + _schema.replace('\\', '/'));
-    parser.setErrorHandler(handler);
-    parser.setEntityResolver(
-        new EntityResolver(FilenameUtils.getFullPath(filename)));
+
+    String filename = FilenameUtils.concat(
+        ProjectUtils.getPath(_project), _filename);
+
+    ErrorAggregator errorHandler = new ErrorAggregator();
+    EntityResolver entityResolver = new EntityResolver(
+        FilenameUtils.getFullPath(filename));
     try{
-      parser.parse(filename);
+      parser.parse(filename, getHandler(null, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       return new Error[]{
         new Error(
@@ -205,35 +192,10 @@ public class XmlUtils
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
-    }catch(Exception e){
-      return new Error[]{new Error(e.getMessage(), filename, 1, 1, false)};
     }
 
-    return handler.getErrors();
+    return errorHandler.getErrors();
   }
-
-  /**
-   * Validate the supplied file with the specified parser.
-   *
-   * @param _filename The path to the xml file.
-   * @param _parser The SAXParser.
-   * @return A possibly empty array of errors.
-   * FIXME: When start using this again, need to test relative xml entities
-   * (test with ant/cvs.xml).
-   */
-  /*private static Error[] validate (String _filename, SAXParser _parser)
-    throws Exception
-  {
-    ErrorAggregator handler = new ErrorAggregator();
-    try{
-      _parser.parse(_filename, handler);
-    }catch(SAXParseException spe){
-      // handler should catch these
-      logger.debug("Unhandled SAXParseException", spe);
-    }
-
-    return handler.getErrors();
-  }*/
 
   /**
    * Gets the value of a named child element.
@@ -246,6 +208,206 @@ public class XmlUtils
   {
     return ((Element)element.getElementsByTagName(name).item(0))
       .getFirstChild().getNodeValue();
+  }
+
+  /**
+   * Gets an aggregate handler which delegates accordingly to the supplied
+   * handlers.
+   *
+   * @param _handler Main DefaultHandler to delegate to (may be null).
+   * @param _errorHandler DefaultHandler to delegate errors to (may be null).
+   * @param _entityResolver EntityResolver to delegate to (may be null).
+   * @return
+   */
+  private static DefaultHandler getHandler (
+      DefaultHandler _handler,
+      DefaultHandler _errorHandler,
+      EntityResolver _entityResolver)
+  {
+    DefaultHandler handler = _handler != null ? _handler : new DefaultHandler();
+    return new AggregateHandler(handler, _errorHandler, _entityResolver);
+  }
+
+  /**
+   * Aggregate DefaultHandler which delegates to other handlers.
+   */
+  private static class AggregateHandler
+    extends DefaultHandler
+  {
+    private DefaultHandler handler;
+    private DefaultHandler errorHandler;
+    private org.xml.sax.EntityResolver entityResolver;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param handler The handler for this instance.
+     * @param errorHandler The errorHandler for this instance.
+     * @param entityResolver The entityResolver for this instance.
+     */
+    public AggregateHandler (
+        DefaultHandler handler,
+        DefaultHandler errorHandler,
+        EntityResolver entityResolver)
+    {
+      this.handler = handler;
+      this.errorHandler = errorHandler != null ? errorHandler : handler;
+      this.entityResolver = entityResolver != null ? entityResolver : handler;
+    }
+
+    /**
+     * @see DefaultHandler#resolveEntity(String,String)
+     */
+    public InputSource resolveEntity (String publicId, String systemId)
+      throws IOException, SAXException
+    {
+      return entityResolver.resolveEntity(publicId, systemId);
+    }
+
+    /**
+     * @see DefaultHandler#notationDecl(String,String,String)
+     */
+    public void notationDecl (String name, String publicId, String systemId)
+      throws SAXException
+    {
+      handler.notationDecl(name, publicId, systemId);
+    }
+
+    /**
+     * @see DefaultHandler#unparsedEntityDecl(String,String,String,String)
+     */
+    public void unparsedEntityDecl (
+        String name, String publicId, String systemId, String notationName)
+      throws SAXException
+    {
+      handler.unparsedEntityDecl(name, publicId, systemId, notationName);
+    }
+
+    /**
+     * @see DefaultHandler#setDocumentLocator(Locator)
+     */
+    public void setDocumentLocator (Locator locator)
+    {
+      handler.setDocumentLocator(locator);
+    }
+
+    /**
+     * @see DefaultHandler#startDocument()
+     */
+    public void startDocument ()
+      throws SAXException
+    {
+      handler.startDocument();
+    }
+
+    /**
+     * @see DefaultHandler#endDocument()
+     */
+    public void endDocument ()
+      throws SAXException
+    {
+      handler.endDocument();
+    }
+
+    /**
+     * @see DefaultHandler#startPrefixMapping(String,String)
+     */
+    public void startPrefixMapping (String prefix, String uri)
+      throws SAXException
+    {
+      handler.startPrefixMapping(prefix, uri);
+    }
+
+    /**
+     * @see DefaultHandler#endPrefixMapping(String)
+     */
+    public void endPrefixMapping (String prefix)
+      throws SAXException
+    {
+      handler.endPrefixMapping(prefix);
+    }
+
+    /**
+     * @see DefaultHandler#startElement(String,String,String,Attributes)
+     */
+    public void startElement (
+        String uri, String localName, String qName, Attributes attributes)
+      throws SAXException
+    {
+      handler.startElement(uri, localName, qName, attributes);
+    }
+
+    /**
+     * @see DefaultHandler#endElement(String,String,String)
+     */
+    public void endElement (String uri, String localName, String qName)
+      throws SAXException
+    {
+      handler.endElement(uri, localName, qName);
+    }
+
+    /**
+     * @see DefaultHandler#characters(char[],int,int)
+     */
+    public void characters (char[] ch, int start, int length)
+      throws SAXException
+    {
+      handler.characters(ch, start, length);
+    }
+
+    /**
+     * @see DefaultHandler#ignorableWhitespace(char[],int,int)
+     */
+    public void ignorableWhitespace (char[] ch, int start, int length)
+      throws SAXException
+    {
+      handler.ignorableWhitespace(ch, start, length);
+    }
+
+    /**
+     * @see DefaultHandler#processingInstruction(String,String)
+     */
+    public void processingInstruction (String target, String data)
+      throws SAXException
+    {
+      handler.processingInstruction(target, data);
+    }
+
+    /**
+     * @see DefaultHandler#skippedEntity(String)
+     */
+    public void skippedEntity (String name)
+      throws SAXException
+    {
+      handler.skippedEntity(name);
+    }
+
+    /**
+     * @see DefaultHandler#warning(SAXParseException)
+     */
+    public void warning (SAXParseException e)
+      throws SAXException
+    {
+      errorHandler.warning(e);
+    }
+
+    /**
+     * @see DefaultHandler#error(SAXParseException)
+     */
+    public void error (SAXParseException e)
+      throws SAXException
+    {
+      errorHandler.error(e);
+    }
+
+    /**
+     * @see DefaultHandler#fatalError(SAXParseException)
+     */
+    public void fatalError (SAXParseException e)
+      throws SAXException
+    {
+      errorHandler.fatalError(e);
+    }
   }
 
   /**
@@ -323,7 +485,7 @@ public class XmlUtils
   }
 
   /**
-   * Extension to apache xerces entity manager.
+   * EntityResolver extension.
    */
   private static class EntityResolver
     implements org.xml.sax.EntityResolver

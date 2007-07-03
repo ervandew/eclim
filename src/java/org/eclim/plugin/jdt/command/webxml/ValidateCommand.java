@@ -101,7 +101,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(Locator)
+     * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(Locator)
      */
     public void setDocumentLocator (Locator locator)
     {
@@ -111,7 +111,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#startElement(String,String,String,Attributes)
+     * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
     public void startElement (
         String uri, String localName, String qName, Attributes attributes)
@@ -128,7 +128,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#endElement(String,String,String)
+     * @see org.xml.sax.helpers.DefaultHandler#endElement(String,String,String)
      */
     public void endElement (String uri, String localName, String qName)
       throws SAXException
@@ -174,7 +174,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#characters(char[],int,int)
+     * @see org.xml.sax.helpers.DefaultHandler#characters(char[],int,int)
      */
     public void characters (char[] ch, int start, int length)
       throws SAXException

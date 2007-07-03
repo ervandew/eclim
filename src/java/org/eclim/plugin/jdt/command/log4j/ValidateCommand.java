@@ -110,7 +110,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(Locator)
+     * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(Locator)
      */
     public void setDocumentLocator (Locator locator)
     {
@@ -120,7 +120,7 @@ public class ValidateCommand
 
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#startElement(String,String,String,Attributes)
+     * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
     public void startElement (
         String uri, String localName, String qName, Attributes atts)

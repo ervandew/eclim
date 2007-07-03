@@ -24,8 +24,6 @@
   <classpathentry kind="lib" path="lib/spring-core-1.2.8.jar"/>
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
   <classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
-  <classpathentry kind="lib" path="lib/xerces-2.8.0.jar"/>
-  <classpathentry kind="lib" path="lib/xml-apis.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.2.100.v20070511.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.3.0.v20070606-0010.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.3.0.v20070423.jar"/>

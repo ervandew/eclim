@@ -277,7 +277,7 @@ public class VUnitTask
   {
     /**
      * {@inheritDoc}
-     * @see org.xml.sax.ContentHandler#startElement(String,String,String,Attributes)
+     * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
     public void startElement (
         String uri, String localName, String qName, Attributes atts)

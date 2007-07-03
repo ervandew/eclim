@@ -45,8 +45,10 @@
 " load any xml related functionality
 runtime ftplugin/xml.vim
 
-autocmd! BufWritePost <buffer>
-autocmd BufWritePost <buffer> call eclim#java#classpath#UpdateClasspath()
+augroup eclim_xml
+  autocmd! BufWritePost <buffer>
+  autocmd BufWritePost <buffer> call eclim#java#classpath#UpdateClasspath()
+augroup END
 
 " Command Declarations {{{
 if !exists(":NewSrcEntry")

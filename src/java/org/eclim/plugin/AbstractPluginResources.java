@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 import org.eclim.util.spring.ResourceBundleMessageSource;
 import org.eclim.util.spring.UrlXmlApplicationContext;
 
+import org.eclipse.core.runtime.FileLocator;
+
 import org.springframework.context.support.AbstractApplicationContext;
 
 /**
@@ -159,7 +161,11 @@ public abstract class AbstractPluginResources
    */
   public URL getResource (String _resource)
   {
-    return getClass().getResource(_resource);
+    try{
+      return FileLocator.resolve(getClass().getResource(_resource));
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
   }
 
   /**
