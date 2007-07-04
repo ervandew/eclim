@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Author: Eric Van Dewoestine
+-->
+<project name="patch" default="patch" basedir="../..">
+
+  <target name="patch.validate" unless="plugin">
+    <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch"/>
+  </target>
+
+  <target name="patch.revert.validate" unless="plugin">
+    <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch.revert"/>
+  </target>
+
+  <!--
+    - Target to patch an eclipse plugin jar.
+    -->
+  <target name="patch" depends="patch.validate" if="plugin">
+    <antcallback target="plugin.jar.resolve" return="plugin_jar"/>
+    <echo>Patching plugin: ${plugin_jar}</echo>
+
+    <!-- backup plugin file if necessary -->
+    <if>
+      <not><available file="${plugin_jar}.bak"/></not>
+      <then>
+        <copy file="${plugin_jar}" tofile="${plugin_jar}.bak"/>
+      </then>
+    </if>
+
+    <mkdir dir="build/patch/${plugin}/classes"/>
+    <javac destdir="build/patch/${plugin}/classes"
+        debug="on" optimize="false"
+        target="${javac.target}" source="${javac.target}"
+        deprecation="${deprecation}">
+      <src path="src/patch/${plugin}"/>
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement path="build/classes"/>
+      </classpath>
+    </javac>
+
+    <jar jarfile="${plugin_jar}" update="true">
+      <fileset dir="build/patch/${plugin}/classes">
+        <include name="**/*.class"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <!--
+    - Target to revert a patched jar to its original version.
+    -->
+  <target name="patch.revert">
+    <antcallback target="plugin.jar.resolve" return="plugin_jar"/>
+    <echo>Reverting patch for plugin: ${plugin_jar}</echo>
+    <if>
+      <available file="${plugin_jar}.bak"/>
+      <then>
+        <move file="${plugin_jar}.bak" tofile="${plugin_jar}"/>
+      </then>
+    </if>
+  </target>
+
+  <!--
+    - Target which resolves the location of the plugin jar file.
+    -->
+  <target name="plugin.jar.resolve">
+    <path id="plugin_jar">
+      <fileset dir="${eclipse.home}/plugins/" includes="${plugin}_*.jar"/>
+    </path>
+    <property name="plugin_jar" refid="plugin_jar"/>
+    <if>
+      <or>
+        <equals arg1="" arg2="${plugin_jar}"/>
+        <not><available file="${plugin_jar}"/></not>
+      </or>
+      <then>
+        <fail>
+          No plugin jar file found for '${plugin}' in '${eclipse.home}/plugins'.
+        </fail>
+      </then>
+    </if>
+  </target>
+
+</project>
