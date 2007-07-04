@@ -4,8 +4,8 @@ eclim/autoload/eclim/css/*.vim
 eclim/autoload/eclim/css
 eclim/autoload/eclim/dtd/*.vim
 eclim/autoload/eclim/dtd
-eclim/autoload/eclim/html/*.vim
-eclim/autoload/eclim/html
+eclim/autoload/eclim/html/complete.vim
+eclim/autoload/eclim/html/validate.vim
 eclim/autoload/eclim/wsdl/*.vim
 eclim/autoload/eclim/wsdl
 eclim/autoload/eclim/xml/complete.vim
