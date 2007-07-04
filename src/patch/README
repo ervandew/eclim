@@ -13,3 +13,9 @@ Steps:
 
 To revert a patched jar to the original:
   $ ant -Dplugin=org.eclipse.ui.workbench patch.revert
+
+To apply all patch plugin dirs:
+  # ant patch.all
+
+To revert all patches based on available plugin dirs:
+  # ant patch.revert.all

@@ -48,6 +48,15 @@
   </target>
 
   <!--
+    - Task to run patch for all plugin patches available.
+    -->
+  <target name="patch.all">
+    <antcallback target="plugin.names.resolve" return="plugin_names"/>
+    <foreach list="${plugin_names}" delimiter=":"
+        target="patch" param="plugin"/>
+  </target>
+
+  <!--
     - Target to revert a patched jar to its original version.
     -->
   <target name="patch.revert">
@@ -59,6 +68,15 @@
         <move file="${plugin_jar}.bak" tofile="${plugin_jar}"/>
       </then>
     </if>
+  </target>
+
+  <!--
+    - Task to run patch for all plugin patches available.
+    -->
+  <target name="patch.revert.all">
+    <antcallback target="plugin.names.resolve" return="plugin_names"/>
+    <foreach list="${plugin_names}" delimiter=":"
+        target="patch.revert" param="plugin"/>
   </target>
 
   <!--
@@ -80,6 +98,24 @@
         </fail>
       </then>
     </if>
+  </target>
+
+  <!--
+    - Target which resolves all plugin patch names.
+    -->
+  <target name="plugin.names.resolve">
+    <path id="plugin_names">
+      <dirset dir="src/patch" includes="*"/>
+    </path>
+    <property name="plugin_names" refid="plugin_names"/>
+    <if>
+      <equals arg1="" arg2="${plugin_names}"/>
+      <then>
+        <fail>No plugin patch directories found.</fail>
+      </then>
+    </if>
+    <propertyregex property="plugin_names" override="true"
+        input="${plugin_names}" regexp=".*?/([a-zA-Z0-9.]*(:|$))" replace="\1"/>
   </target>
 
 </project>
