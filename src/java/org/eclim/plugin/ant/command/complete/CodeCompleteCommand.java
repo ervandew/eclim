@@ -83,15 +83,15 @@ public class CodeCompleteCommand
       fgDefault.setAccessible(true);
       if(fgDefault.get(null) == null){
         Constructor constructor =
-          TaskDescriptionProvider.class.getDeclaredConstructor(null);
+          TaskDescriptionProvider.class.getDeclaredConstructor();
         constructor.setAccessible(true);
         TaskDescriptionProvider instance =
-          (TaskDescriptionProvider)constructor.newInstance(null);
+          (TaskDescriptionProvider)constructor.newInstance();
 
         Method initialize =
-          TaskDescriptionProvider.class.getDeclaredMethod("initialize", null);
+          TaskDescriptionProvider.class.getDeclaredMethod("initialize");
         initialize.setAccessible(true);
-        initialize.invoke(instance, null);
+        initialize.invoke(instance);
 
         fgDefault.set(null, instance);
       }
@@ -113,10 +113,10 @@ public class CodeCompleteCommand
       Field fgDtd = theClass.getDeclaredField("fgDtd");
       fgDtd.setAccessible(true);
       if(fgDtd.get(null) == null){
-        Method parseDtd = theClass.getDeclaredMethod("parseDtd", null);
+        Method parseDtd = theClass.getDeclaredMethod("parseDtd");
         parseDtd.setAccessible(true);
 
-        Object dtd = parseDtd.invoke(processor, null);
+        Object dtd = parseDtd.invoke(processor);
         fgDtd.set(null, dtd);
       }
     }catch(Exception e){
