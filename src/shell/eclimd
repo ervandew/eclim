@@ -29,16 +29,18 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
 fi
 
+# find eclipse executable
 ECLIPSE="$ECLIPSE_HOME/eclipse"
-if [ ! -e $ECLIPSE ]; then
+if [ ! -e "$ECLIPSE" ]; then
   ECLIPSE=`which eclipse 2> /dev/null`
-  if [ ! -e $ECLIPSE ]; then
+  if [ ! -e "$ECLIPSE" ]; then
     echo "No eclipse executable found." 1>&2
     exit 1
   fi
 fi
 
-if [ -n $IS_GENTOO ]; then
+# handle eclipse 3.3 issue on gentoo
+if [ -n "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 fi
 
@@ -46,7 +48,6 @@ ECLIM_COMMAND="$ECLIPSE
   -debug -consolelog -nosplash -clean -refresh -application
   org.eclim.application -vmargs $ECLIM_ARGS"
 
-echo $ECLIM_COMMAND
 if [ "$1" = "start" ]; then
   shift
   $ECLIM_COMMAND $@ > /dev/null &
