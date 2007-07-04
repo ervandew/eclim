@@ -121,6 +121,24 @@
           View the <a href="changes.html#version_1.3.0">release notes</a> for
           more info.
         </p>
+        <note>
+          There are a couple bugs that have come to light since this version was
+          released:<br/><br/>
+          <strong>All Users:</strong> If at installation time you do not
+          choose to install the wst integration, then you will get a vim
+          error when attempting java code completion.  To solve this issue,
+          simply download the following file and place it in your .vim
+          (linux/mac) or vimfiles (windows) directory under
+          eclim/autoload/eclim/html/ (you'll need to create the last html
+          dir in that path):<br/>
+          <a href="http://eclim.svn.sourceforge.net/viewvc/*checkout*/eclim/trunk/src/vim/eclim/autoload/eclim/html/util.vim?revision=854">util.vim</a>
+
+          <br/><br/>
+          <strong>Linux / Mac Users:</strong> If you encounter any issues
+          starting eclimd, please download the following version of eclimd and
+          place it in your eclipse/plugins/org.eclim_1.3.0/bin directory:
+          <a href="http://eclim.svn.sourceforge.net/viewvc/*checkout*/eclim/trunk/src/shell/eclimd?revision=1304">eclimd</a>
+        </note>
       </section>
 
       <section id="news_2006-10-09">
