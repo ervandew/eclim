@@ -1,0 +1,15 @@
+This directory is used for my development purposes.
+
+Here I can patch eclipse source files and update the corresponding plugin jar
+in eclipse.
+
+Steps:
+  1) create directory with the plugin name, without the plugin version, and any
+     necessary package directories.
+     Ex. $ mkdir -p src/patch/org.eclipse.ui.workbench/org/eclipse/ui/internal
+  2) add any src files to be patched.
+  3) Run the patch ant task.
+     $ ant -Dplugin=org.eclipse.ui.workbench patch
+
+To revert a patched jar to the original:
+  $ ant -Dplugin=org.eclipse.ui.workbench patch.revert
