@@ -17,6 +17,7 @@
 
   <import file="src/ant/dist.xml"/>
   <import file="src/ant/docs.xml"/>
+  <import file="src/ant/patch.xml"/>
   <import file="src/ant/test.xml"/>
 
   <!-- exclude vim swap files -->
