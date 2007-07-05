@@ -53,7 +53,7 @@ public class CodeCompleteCommand
     AntModel model = (AntModel)AntUtils.getAntModel(project, file);
     AntEditorCompletionProcessor processor =
       new AntEditorCompletionProcessor(model);
-    antEditorCompletionProcessorHack(processor);
+    //antEditorCompletionProcessorHack(processor);
     return processor;
   }
 
@@ -104,7 +104,7 @@ public class CodeCompleteCommand
    * Hack required because the eclipse version relies on a gui resulting in a
    * hanging process when trying to initialize the dtd.
    */
-  private void antEditorCompletionProcessorHack (
+  /*private void antEditorCompletionProcessorHack (
       AntEditorCompletionProcessor processor)
   {
     try{
@@ -122,5 +122,5 @@ public class CodeCompleteCommand
     }catch(Exception e){
       throw new RuntimeException(e);
     }
-  }
+  }*/
 }

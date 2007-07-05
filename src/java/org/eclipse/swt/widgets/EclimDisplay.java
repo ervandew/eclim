@@ -30,6 +30,7 @@ public class EclimDisplay
   extends Display
 {
   private static final String THREAD = "thread";
+  //private static Shell shell;
 
   /**
    * Force the display to think that it's tied to the supplied thread.
@@ -43,5 +44,35 @@ public class EclimDisplay
     }catch(Exception e){
       throw new RuntimeException(e);
     }
+
+    // hangs the first command executed.
+    /*if (shell == null){
+      shell = new Shell();
+      shell.setData(new org.eclipse.ui.internal.WorkbenchWindow(1));
+    }*/
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Display#getActiveShell()
+   */
+  /*@Override
+  public Shell getActiveShell ()
+  {
+    return shell;
+  }*/
+
+  /*public boolean isValidThread ()
+  {
+    return false;
+  }*/
+
+  /**
+   * {@inheritDoc}
+   * @see Display#getActiveShell()
+   */
+  @Override
+  public void setSynchronizer (Synchronizer synchronizer) {
+    // don't let eclipse set its UISynchronizer.
   }
 }
