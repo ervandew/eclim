@@ -155,8 +155,7 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <delete dir="${eclipse.home}/plugins/org.eclim.installer_${eclim.version}"/>
-    <delete dir="${eclipse.home}/plugins/org.eclim.installer.pydev_${eclim.version}"/>
+    <delete dir="${eclipse.home}/plugins/org.eclim.installer"/>
   </target>
 
 </project>
