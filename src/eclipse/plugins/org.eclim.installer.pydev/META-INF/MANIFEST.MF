@@ -11,5 +11,4 @@ Require-Bundle: org.eclipse.core.runtime,
   org.eclipse.ui,
   org.python.pydev,
   org.python.pydev.core
-Eclipse-AutoStart: true
-
+Eclipse-AutoStart: false
