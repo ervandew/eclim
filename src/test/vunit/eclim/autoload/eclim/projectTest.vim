@@ -77,8 +77,9 @@ function! TestCommandCompleteProject ()
   let results = eclim#project#CommandCompleteProject(
     \ 'eclim_', 'ProjectRefresh eclim_', 21)
 
-  call VUAssertEquals(1, len(results), "Wrong number of results.")
+  call VUAssertEquals(2, len(results), "Wrong number of results.")
   call VUAssertEquals('eclim_unit_test_java', results[0], "Wrong result.")
+  call VUAssertEquals('eclim_unit_test_php', results[1], "Wrong result.")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
