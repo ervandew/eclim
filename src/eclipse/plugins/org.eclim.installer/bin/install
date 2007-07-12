@@ -17,21 +17,22 @@
 # Author: Eric Van Dewoestine
 
 CURPATH=`dirname $0`
+ECLIPSE_HOME=`cd "$CURPATH/../../.." ; pwd`
 IS_GENTOO=`which emerge 2> /dev/null`
 
-ECLIPSE=`which eclipse 2> /dev/null`
-if [ -z $ECLIPSE ]; then
-  ECLIPSE_HOME=`cd "$CURPATH/../../.." ; pwd`
-  ECLIPSE="$ECLIPSE_HOME/eclipse"
+# find eclipse executable
+ECLIPSE="$ECLIPSE_HOME/eclipse"
+if [ ! -e "$ECLIPSE" ]; then
+  ECLIPSE=`which eclipse 2> /dev/null`
+  if [ ! -e "$ECLIPSE" ]; then
+    echo "No eclipse executable found." 1>&2
+    exit 1
+  fi
 fi
 
-if [ -n $IS_GENTOO ]; then
+# handle eclipse 3.3 issue on gentoo
+if [ -n "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
-fi
-
-if [ ! -e $ECLIPSE ]; then
-  echo "No eclipse executable found." 1>&2
-  exit 1
 fi
 
 $ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.application $@
