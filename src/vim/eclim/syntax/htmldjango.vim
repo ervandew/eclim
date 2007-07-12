@@ -31,7 +31,8 @@ if !exists('g:HtmlDjangoUserFilters')
   let g:HtmlDjangoUserFilters = []
 endif
 
-syn region djangoComment start="{#" end="#}"
+syn match djangoComment "{#.*#}"
+
 if len(g:HtmlDjangoUserTags)
   exec 'syn keyword djangoStatement ' . join(g:HtmlDjangoUserTags)
 endif
