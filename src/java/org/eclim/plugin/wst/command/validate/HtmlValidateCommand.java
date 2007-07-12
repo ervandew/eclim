@@ -175,44 +175,4 @@ public class HtmlValidateCommand
     }
     return null;
   }
-
-  /**
-   * Implementation of IReporter to collect validation messages.
-   */
-  /*private class Reporter
-    implements IReporter
-  {
-    private ArrayList messages = new ArrayList();
-
-    public void addMessage(IValidator origin, IMessage message)
-    {
-      messages.add(message);
-    }
-
-    public void displaySubtask(IValidator validator, IMessage message)
-    {
-    }
-
-    public List getMessages()
-    {
-      return messages;
-    }
-
-    public boolean isCancelled()
-    {
-      return false;
-    }
-
-    public void removeAllMessages(IValidator origin)
-    {
-    }
-
-    public void removeAllMessages(IValidator origin, Object object)
-    {
-    }
-
-    public void removeMessageSubset(IValidator validator, Object obj, String groupName)
-    {
-    }
-  }*/
 }
