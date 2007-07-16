@@ -380,8 +380,9 @@ endfunction " }}}
 " Returns a list of dictionaries with keys 'name' and 'action'.
 function eclim#tree#GetFileActions (file)
   let actions = []
+  let thefile = tolower(a:file)
   for entry in s:file_actions
-    if a:file =~ entry.regex
+    if thefile =~ entry.regex
       let actions += entry.actions
     endif
   endfor
