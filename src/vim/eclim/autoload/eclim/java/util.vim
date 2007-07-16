@@ -255,21 +255,21 @@ function! eclim#java#util#SilentUpdate ()
   endtry
 endfunction " }}}
 
-" UpdateSrcFile() {{{
+" UpdateSrcFile(validate) {{{
 " Updates the src file on the server w/ the changes made to the current file.
-function! eclim#java#util#UpdateSrcFile ()
+function! eclim#java#util#UpdateSrcFile (validate)
   let project = eclim#project#GetCurrentProjectName()
   if project != ""
     let file = eclim#java#util#GetFilename()
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
-    if g:EclimJavaSrcValidate && !eclim#util#WillWrittenBufferClose()
+    if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       let command = command . " -v"
     endif
 
     let result = eclim#ExecuteEclim(command)
-    if g:EclimJavaSrcValidate && !eclim#util#WillWrittenBufferClose()
+    if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       if result =~ '|'
         let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
         call eclim#util#SetLocationList(errors)

@@ -107,7 +107,13 @@ endif
 
 augroup eclim_java
   autocmd!
-  autocmd BufWritePost *.java call eclim#java#util#UpdateSrcFile()
+  autocmd BufWritePost *.java call eclim#java#util#UpdateSrcFile(0)
 augroup END
+
+" Command Declarations {{{
+if !exists(":Validate")
+  command -nargs=0 -buffer Validate :call eclim#java#util#UpdateSrcFile(1)
+endif
+" }}}
 
 " vim:ft=vim:fdm=marker
