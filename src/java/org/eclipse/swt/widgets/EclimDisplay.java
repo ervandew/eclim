@@ -17,14 +17,11 @@ package org.eclipse.swt.widgets;
 
 import java.lang.reflect.Field;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
-import org.eclipse.swt.SWT;
+//import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
 import org.eclipse.swt.widgets.Display;
 
-import org.eclipse.ui.internal.WorkbenchPage;
-import org.eclipse.ui.internal.WorkbenchWindow;
+//import org.eclipse.ui.internal.WorkbenchWindow;
 
 /**
  * Giant hack to get some of the eclipse features that are too closely tied to
@@ -37,7 +34,7 @@ public class EclimDisplay
   extends Display
 {
   private static final String THREAD = "thread";
-  private static Shell shell;
+  //private static Shell shell;
 
   /**
    * Force the display to think that it's tied to the supplied thread.
@@ -50,18 +47,11 @@ public class EclimDisplay
       thread.set(this, _thread);
 
       // set up some default workspace environment components.
-      if (shell == null){
+      /*if (shell == null){
         shell = new Shell();
-        WorkbenchWindow window = new WorkbenchWindow(1);
-        // need to figure out how to set the page composite.
-        // window.getPageComposite() <-- need to make sure this does not return
-        // null.
-        //window.setPageComposite(new Composite(null, SWT.NONE));
+        WorkbenchWindow window = new EclimWorkbenchWindow(shell);
         shell.setData(window);
-
-        //WorkbenchPage page = new WorkbenchPage(window, ResourcesPlugin.getWorkspace());
-        //window.setActivePage(page);
-      }
+      }*/
     }catch(Exception e){
       throw new RuntimeException(e);
     }
@@ -71,11 +61,11 @@ public class EclimDisplay
    * {@inheritDoc}
    * @see Display#getActiveShell()
    */
-  @Override
+  /*@Override
   public Shell getActiveShell ()
   {
     return shell;
-  }
+  }*/
 
   /**
    * {@inheritDoc}

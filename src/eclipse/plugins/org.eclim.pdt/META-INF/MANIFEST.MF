@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclim.pdt; singleton:=true
+Bundle-Version: ${eclim.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ClassPath: .,
+  eclim.pdt.jar
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclim,
+  org.eclim.wst,
+  org.eclipse.ui,
+  org.eclipse.core.resources,
+  org.eclipse.core.runtime,
+  org.eclipse.jface.text,
+  org.eclipse.php.core,
+  org.eclipse.php.ui,
+  org.eclipse.wst.sse.core,
+  org.eclipse.wst.sse.ui,
+  org.eclipse.wst.validation
+Eclipse-AutoStart: true

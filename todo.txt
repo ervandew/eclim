@@ -53,9 +53,6 @@ Enhancements
 
   - modify :DjangoFind to account for django provided tags and filters.
 
-  - look into platform based releases on sourceforge:
-    http://sourceforge.net/features/platformpages.php
-
   - determines the user's default workspace using
     eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
     RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
