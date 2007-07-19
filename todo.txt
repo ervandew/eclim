@@ -157,9 +157,5 @@ Python
   - when adding new method for a class, auto add self as first parameter.
 
 PHP
-  - Code completion
-    - org.eclipse.php.ui.editor.contentassist.ContentAssistSupport.getCompletionOption
-  - Validation
-    - org.eclipse.php.internal.core.documentModel.validate.PHPProblemsValidator.validateFile
   - Search
-    - org.eclipse.php.ui.search.PHPSearchEngine.search
+    - org.eclipse.php.internal.ui.search.PHPSearchEngine.search

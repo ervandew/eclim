@@ -16,6 +16,7 @@
 package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
@@ -53,6 +54,7 @@ public abstract class WstCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
+    int offset = Integer.parseInt(commandLine.getValue(Options.OFFSET_OPTION));
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
     ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -65,6 +67,7 @@ public abstract class WstCodeCompleteCommand
           EclimPlugin.getShell(), null, null, false, 0);
     }
     viewer.setDocument(model.getStructuredDocument());
+    viewer.setSelectedRange(offset, 10);
     return viewer;
   }
 }

@@ -23,7 +23,7 @@
     </property>
   </bean>
 
-  <!--bean name="php_complete"
+  <bean name="php_complete"
       class="org.eclim.plugin.pdt.command.complete.CodeCompleteCommand">
     <description>
       Handles requests for code completion.
@@ -35,6 +35,6 @@
         </entry>
       </map>
     </property>
-  </bean-->
+  </bean>
 
 </beans>

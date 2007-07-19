@@ -9,7 +9,8 @@ Bundle-ClassPath: .,
   eclim.wst.jar
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
-Export-Package: org.eclim.plugin.wst.command.validate
+Export-Package: org.eclim.plugin.wst.command.complete,
+  org.eclim.plugin.wst.command.validate
 Require-Bundle: org.eclim,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
