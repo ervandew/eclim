@@ -74,7 +74,7 @@ public class AntUtils
     final IFile file = AntUtil.getFileForLocation(
         ProjectUtils.getFilePath(_project, _antFile), null);
     if (file == null) {
-      return null;
+      throw new RuntimeException("Invalid project or file location");
     }
     file.refreshLocal(IResource.DEPTH_INFINITE, null);
 
