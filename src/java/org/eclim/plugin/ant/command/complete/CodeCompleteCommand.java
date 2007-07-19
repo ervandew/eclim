@@ -49,11 +49,9 @@ public class CodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    taskDescriptionProviderHack();
     AntModel model = (AntModel)AntUtils.getAntModel(project, file);
     AntEditorCompletionProcessor processor =
       new AntEditorCompletionProcessor(model);
-    //antEditorCompletionProcessorHack(processor);
     return processor;
   }
 
@@ -70,57 +68,4 @@ public class CodeCompleteCommand
     }
     return completion;
   }
-
-  /**
-   * Hack required because the eclipse version relies on a gui resulting in a
-   * hanging process when trying to initialize the messages.
-   */
-  private void taskDescriptionProviderHack ()
-  {
-    try{
-      Field fgDefault =
-        TaskDescriptionProvider.class.getDeclaredField("fgDefault");
-      fgDefault.setAccessible(true);
-      if(fgDefault.get(null) == null){
-        Constructor constructor =
-          TaskDescriptionProvider.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        TaskDescriptionProvider instance =
-          (TaskDescriptionProvider)constructor.newInstance();
-
-        Method initialize =
-          TaskDescriptionProvider.class.getDeclaredMethod("initialize");
-        initialize.setAccessible(true);
-        initialize.invoke(instance);
-
-        fgDefault.set(null, instance);
-      }
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }
-  }
-
-  /**
-   * Hack required because the eclipse version relies on a gui resulting in a
-   * hanging process when trying to initialize the dtd.
-   */
-  /*private void antEditorCompletionProcessorHack (
-      AntEditorCompletionProcessor processor)
-  {
-    try{
-      Class theClass =
-        org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor.class;
-      Field fgDtd = theClass.getDeclaredField("fgDtd");
-      fgDtd.setAccessible(true);
-      if(fgDtd.get(null) == null){
-        Method parseDtd = theClass.getDeclaredMethod("parseDtd");
-        parseDtd.setAccessible(true);
-
-        Object dtd = parseDtd.invoke(processor);
-        fgDtd.set(null, dtd);
-      }
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }
-  }*/
 }
