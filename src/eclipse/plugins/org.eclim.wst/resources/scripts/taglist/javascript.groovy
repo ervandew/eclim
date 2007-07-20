@@ -28,7 +28,7 @@ class JavascriptTags implements TaglistScript
     def regex = null;
     try{
       regex = new RegexTaglist(file);
-      regex.addPattern('f', ~/(s?)function\s+([a-zA-Z0-9_.\$]*?)\s*\(/, "\$2");
+      regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_.\$]*?)\s*\(/, "\$2");
       regex.addPattern('f', ~/(s?)([a-zA-Z0-9_.\$]*?)\s*=\s*function\s*\(/, "\$2");
       regex.addPattern('f', ~/(s?)([a-zA-Z0-9_.\$]*?)\s*:\s*function\s*\(/, "\$2");
       regex.addPattern('o', ~/(s?)(var\s\+)?\b([A-Z][A-Za-z0-9_.]*)\s*=\s*\{/, "\$3");
