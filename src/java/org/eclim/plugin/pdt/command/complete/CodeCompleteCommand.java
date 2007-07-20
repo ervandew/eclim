@@ -15,12 +15,18 @@
  */
 package org.eclim.plugin.pdt.command.complete;
 
+import java.lang.reflect.Field;
+
+import java.util.regex.Pattern;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.wst.command.complete.WstCodeCompleteCommand;
 
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
+import org.eclipse.php.internal.ui.editor.contentassist.CodeDataCompletionProposal;
 import org.eclipse.php.internal.ui.editor.contentassist.PHPContentAssistProcessor;
 
 /**
@@ -32,6 +38,8 @@ import org.eclipse.php.internal.ui.editor.contentassist.PHPContentAssistProcesso
 public class CodeCompleteCommand
   extends WstCodeCompleteCommand
 {
+  private static final Pattern METHOD_WITH_ARGS =
+    Pattern.compile("^\\w+\\s*\\(.+\\).*$");
   private static PHPContentAssistProcessor processor;
 
   /**
@@ -46,5 +54,43 @@ public class CodeCompleteCommand
       processor = new PHPContentAssistProcessor();
     }
     return processor;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
+   */
+  @Override
+  protected String getCompletion (ICompletionProposal proposal)
+  {
+    CodeDataCompletionProposal phpProposal = (CodeDataCompletionProposal)proposal;
+    String prefix = (String)phpProposal.getPrefixCompletionText(null, 0);
+    try {
+      Field suffixField = CodeDataCompletionProposal.class.getDeclaredField("suffix");
+      suffixField.setAccessible(true);
+      String suffix = (String)suffixField.get(phpProposal);
+      if (suffix.endsWith(";")){
+        suffix = suffix.substring(0, suffix.length() - 1);
+      }
+      if (suffix.endsWith(")") &&
+          METHOD_WITH_ARGS.matcher(proposal.getDisplayString()).matches())
+      {
+        suffix = suffix.substring(0, suffix.length() - 1);
+      }
+
+      return prefix + phpProposal.getCodeData().getName() + suffix;
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   */
+  @Override
+  protected String getShortDescription (ICompletionProposal proposal)
+  {
+    return proposal.getDisplayString();
   }
 }

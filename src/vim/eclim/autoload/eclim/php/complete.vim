@@ -90,9 +90,6 @@ function! eclim#php#complete#CodeComplete (findstart, base)
         let word = strpart(word, 0, strlen(word) - 1)
       endif
 
-      " remove extranous info
-      let word = substitute(word, '\s.*', '', '')
-
       let dict = {
           \ 'word': word,
           \ 'menu': menu,
