@@ -37,4 +37,15 @@
     </property>
   </bean>
 
+  <bean name="php_find_definition" class="org.eclim.plugin.pdt.command.search.FindDefinitionCommand">
+    <description>Handles client requests to find the element definition.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.PositionFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

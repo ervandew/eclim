@@ -120,7 +120,7 @@ public class ProjectUtils
   public static String getFilePath (String _project, String _file)
     throws Exception
   {
-    return FilenameUtils.concat(getPath(_project), _file);
+    return getFilePath(getProject(_project), _file);
   }
 
   /**
@@ -133,6 +133,9 @@ public class ProjectUtils
   public static String getFilePath (IProject _project, String _file)
     throws Exception
   {
+    if(_file.startsWith("/" + _project.getName() + "/")){
+      _file = _file.substring(2 + _project.getName().length());
+    }
     return FilenameUtils.concat(getPath(_project), _file);
   }
 

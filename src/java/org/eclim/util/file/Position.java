@@ -26,6 +26,7 @@ public class Position
   private String filename;
   private int offset;
   private int length;
+  private String message;
 
   /**
    * Constructs a new instance.
@@ -90,5 +91,25 @@ public class Position
   public void setLength (int _length)
   {
     this.length = _length;
+  }
+
+  /**
+   * Gets the message for this instance.
+   *
+   * @return The message.
+   */
+  public String getMessage ()
+  {
+    return this.message;
+  }
+
+  /**
+   * Sets the message for this instance.
+   *
+   * @param message The message.
+   */
+  public void setMessage (String message)
+  {
+    this.message = message;
   }
 }
