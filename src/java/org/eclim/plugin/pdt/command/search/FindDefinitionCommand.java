@@ -28,6 +28,8 @@ import org.eclim.util.file.Position;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 
 import org.eclipse.php.internal.core.phpModel.phpElementData.CodeData;
 
@@ -48,25 +50,25 @@ public class FindDefinitionCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      final String file = _commandLine.getValue(Options.FILE_OPTION);
+      String file = _commandLine.getValue(Options.FILE_OPTION);
       String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
       IProject project = ProjectUtils.getProject(projectName);
       int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
       IFile ifile = ProjectUtils.getFile(project, file);
-      /*IModelManager manager = StructuredModelManager.getModelManager();
-      IStructuredModel model = manager.getModelForRead(ifile);
-      IDocument document = model.getStructuredDocument();*/
 
       CodeData[] codeDatas = CodeDataResolver.getInstance().resolve(ifile, offset);
+
+      IWorkspaceRoot root = project.getWorkspace().getRoot();
 
       List<Position> results = new ArrayList<Position>();
       for (CodeData data : codeDatas) {
         if (data.isUserCode()) {
+          IResource resource =
+            root.findMember(data.getUserData().getFileName());
+          String filename = resource.getRawLocation().toOSString();
           Position position = new Position(
-              ProjectUtils.getFilePath(project, data.getUserData().getFileName()),
-              data.getUserData().getStartPosition(),
-              0);
+              filename, data.getUserData().getStartPosition(), 0);
           position.setMessage(data.getName());
           results.add(position);
         }

@@ -48,4 +48,15 @@
     </property>
   </bean>
 
+  <bean name="php_search" class="org.eclim.plugin.pdt.command.search.SearchCommand">
+    <description>Handles client search requests.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.command.filter.PositionFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

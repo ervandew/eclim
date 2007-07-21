@@ -17,6 +17,7 @@ Require-Bundle: org.eclim,
   org.eclipse.jface.text,
   org.eclipse.php.core,
   org.eclipse.php.ui,
+  org.eclipse.search,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
   org.eclipse.wst.validation
