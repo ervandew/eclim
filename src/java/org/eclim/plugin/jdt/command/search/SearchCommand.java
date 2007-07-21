@@ -298,7 +298,7 @@ public class SearchCommand
   }
 
   /**
-   * Determins the appropriate context to used base on the elements context.
+   * Determines the appropriate context to used base on the elements context.
    *
    * @param _element The IJavaElement.
    * @return The int context
