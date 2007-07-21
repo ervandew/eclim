@@ -68,6 +68,7 @@
         <move file="${plugin_jar}.bak" tofile="${plugin_jar}"/>
       </then>
     </if>
+    <delete dir="build/patch/${plugin}/classes"/>
   </target>
 
   <!--
