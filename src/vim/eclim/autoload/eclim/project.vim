@@ -68,38 +68,6 @@ function! eclim#project#ProjectCreate (args)
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
-  " BEGIN: backwards compatability
-  let index = index(args, '-p')
-  if index != -1
-    if index + 1 >= len(args)
-      call eclim#util#EchoError('No argument for "-p" supplied.')
-      return
-    endif
-    let command .= ' ' . args[index] . ' "' . args[index + 1] . '"'
-    call remove(args, index, index + 1)
-  endif
-
-  let index = index(args, '-n')
-  if index != -1
-    if index + 1 >= len(args)
-      call eclim#util#EchoError('No argument for "-n" supplied.')
-      return
-    endif
-    if command !~ '-n'
-      let command .= ' ' . args[index] . ' ' . args[index + 1]
-    endif
-    call remove(args, index, index + 1)
-  else
-    let command .= ' -n java'
-  endif
-
-  if command !~ '-d '
-    if len(args) > 1
-      let command .= ' -d ' . join(args[1:], ',')
-    endif
-  endif
-  " END: backwards compatability
-
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)

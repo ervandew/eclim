@@ -46,29 +46,43 @@
       <li>
         <anchor id="ProjectCreate"/>
         <strong>:ProjectCreate</strong>
-        <!-- &lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -->
-        &lt;folder&gt; [-p &lt;project_name&gt; -d &lt;project_dependency&gt; ...]
+        &lt;folder&gt; [-p &lt;project_name&gt;]
+        -n &lt;nature&gt; ...
+        [-d &lt;project_dependency&gt; ...]
+        <ul>
+          <li>
+            <strong>-p</strong>: Optional argument used to specify the project
+            name.  If ommitted, eclim will use the last segment of the project's
+            path, with any spaces replaced with underscores, as the project name.
+          </li>
+          <li>
+            <strong>-n</strong>: Required argument which specifies a space
+            separated list of project natures (java, php, etc.) to add to the
+            project.  If you want to create a project with no natures, you can
+            use the word "none" here.
+            <source>
+              :ProjectCreate ~/workspace/test -n none
+            </source>
+            Note that eclim support command completion of available nature
+            names.
+            <source>
+              :ProjectCreate ~/workspace/test -n p&lt;tab&gt;
+              :ProjectCreate ~/workspace/test -n php
+            </source>
+          </li>
+          <li>
+            <strong>-d</strong>: Optional argument used to specify a space
+            separated list of project names which the project you're creating
+            depends on.
+          </li>
+        </ul>
         <br/>
-        Creates a project at the supplied folder name.  You may optionally
-        specify the name of the project via the -p argument.  If ommitted, eclim
-        will use the last segment of the project's path as the project name.
-        <!-- With the supplied space
-        delimited project natures.  Project natures are used by Eclipse plugins
-        to tag the project and add specific behavior based on that tag.
-        Eclim supports command completion of the project nature names so you
-        don't have to remember them.-->
         <br/>
-        Also, if the the project depends on other projects, you can
-        specify the names of those projects separated by space using the -d
-        argument.
-        <!--source>
+        <strong>Some Examples</strong>
+        <source>
           :ProjectCreate ~/projects/a_project -n java
           :ProjectCreate ~/projects/a_project -n java -d another_project yet_another_project
-        </source-->
-        <source>
-          :ProjectCreate ~/projects/a_project
-          :ProjectCreate ~/projects/a_project -d another_project yet_another_project
-          :ProjectCreate ~/projects/a_project -p My\ Project\ Name
+          :ProjectCreate ~/projects/a_project -n java php -p My\ Project\ Name
         </source>
       </li>
       <li>
