@@ -28,6 +28,10 @@ if !exists("g:EclimPhpValidate")
 endif
 " }}}
 
+augroup eclim_html_validate
+  autocmd!
+augroup END
+
 augroup eclim_php
   autocmd!
   autocmd BufWritePost *.php call eclim#php#util#UpdateSrcFile(0)
