@@ -33,7 +33,7 @@
   let s:search_element =
     \ '-command php_find_definition -p "<project>" -f "<file>" -o <offset>'
   let s:search_pattern =
-    \ '-command php_search -n "<project>" -f "<file>" <args>'
+    \ '-command php_search -n "<project>" <args>'
   let s:options = ['-p', '-t', '-s']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -46,10 +46,6 @@
 " Search (...) {{{
 " Executes a search.
 function! eclim#php#search#Search (...)
-if 1
-  echom "Run Search"
-  return
-endif
   let argline = ""
   let index = 1
   while index <= a:0
@@ -68,15 +64,10 @@ endif
   "  return s:SearchAlternate(argline, 0)
   "endif
 
-  " update the file.
-  call eclim#util#ExecWithoutAutocmds('silent update')
-
   let project = eclim#project#GetCurrentProjectName()
-  let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
 
   let search_cmd = s:search_pattern
   let search_cmd = substitute(search_cmd, '<project>', project, '')
-  let search_cmd = substitute(search_cmd, '<file>', file, '')
   let search_cmd = substitute(search_cmd, '<args>', argline, '')
   " quote the search pattern
   let search_cmd =
