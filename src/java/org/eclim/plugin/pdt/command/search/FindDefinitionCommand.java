@@ -64,9 +64,11 @@ public class FindDefinitionCommand
       List<Position> results = new ArrayList<Position>();
       for (CodeData data : codeDatas) {
         if (data.isUserCode()) {
-          IResource resource =
-            root.findMember(data.getUserData().getFileName());
-          String filename = resource.getRawLocation().toOSString();
+          String filename = data.getUserData().getFileName();
+          IResource resource = root.findMember(filename);
+          if(resource != null){
+            filename = resource.getRawLocation().toOSString();
+          }
           Position position = new Position(
               filename, data.getUserData().getStartPosition(), 0);
           position.setMessage(data.getName());

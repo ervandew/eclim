@@ -82,9 +82,11 @@ public class SearchCommand
       List<Position> results = new ArrayList<Position>();
       for(Object element : result.getElements()){
         PHPDataDecorator decorator = (PHPDataDecorator)element;
-        IResource resource =
-          root.findMember(decorator.getUserData().getFileName());
-        String file = resource.getRawLocation().toOSString();
+        String file = decorator.getUserData().getFileName();
+        IResource resource = root.findMember(file);
+        if (resource != null){
+          file = resource.getRawLocation().toOSString();
+        }
         String name = decorator.getName();
         Match[] matches = result.getMatches(element);
         for(Match match : matches){
