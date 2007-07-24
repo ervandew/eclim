@@ -59,4 +59,12 @@
     </constructor-arg>
   </bean>
 
+  <bean class="org.eclim.project.ProjectManagement"
+      factory-method="addProjectManager">
+    <constructor-arg value="org.eclipse.php.core.PHPNature"/>
+    <constructor-arg>
+      <bean class="org.eclim.plugin.pdt.project.PhpProjectManager"/>
+    </constructor-arg>
+  </bean>
+
 </beans>
