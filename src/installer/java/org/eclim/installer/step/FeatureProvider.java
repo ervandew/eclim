@@ -21,11 +21,14 @@ public class FeatureProvider
   implements FeatureListStep.FeatureProvider, PropertyChangeListener
 {
   private static final String[] FEATURES =
-    {"ant", "maven", "jdt", "wst", "python"};
+    {"ant", "maven", "jdt", "wst", "pdt", "python"};
     //{"ant", "maven", "jdt", "wst", "pydev"};
 
   private static final boolean[] FEATURES_ENABLED =
-    {true, true, true, false, false};
+    {true, true, true, false, false, false};
+
+  private static final String[][] FEATURES_DEPENDS =
+    {null, null, null, null, {"wst"}, null};
 
   private GuiForm guiForm;
   private ConsoleForm consoleForm;
@@ -38,7 +41,8 @@ public class FeatureProvider
   {
     Feature[] features = new Feature[FEATURES.length];
     for (int ii = 0; ii < features.length; ii++){
-      features[ii] = new Feature(FEATURES[ii], FEATURES_ENABLED[ii]);
+      features[ii] = new Feature(
+          FEATURES[ii], FEATURES_ENABLED[ii], FEATURES_DEPENDS[ii]);
     }
 
     return features;
