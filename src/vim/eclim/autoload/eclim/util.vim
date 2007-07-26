@@ -103,7 +103,9 @@ function! s:EchoLevel (message, level, highlight)
     endfor
     echohl None
     " prevent ShowCurrentError from overriding the displayed message.
-    let b:eclim_last_message_line = line('.')
+    if a:message !~ '^\s*$'
+      let b:eclim_last_message_line = line('.')
+    endif
   endif
 endfunction " }}}
 
@@ -118,7 +120,9 @@ function! eclim#util#Echo (message)
     endfor
     echohl None
     " prevent ShowCurrentError from overriding the displayed message.
-    let b:eclim_last_message_line = line('.')
+    if a:message !~ '^\s*$'
+      let b:eclim_last_message_line = line('.')
+    endif
   endif
 endfunction " }}}
 
