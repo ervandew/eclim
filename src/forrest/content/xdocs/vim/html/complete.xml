@@ -57,5 +57,25 @@
     <note>
       Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
     </note>
+    <p>
+      In addition to the standard code completion, eclim also supports auto
+      completion of end tags. When you type '&lt;/' eclim will attempt to
+      determine which element you are closing and complete it for you.  If you
+      wish to disable this feature you can simply set g:EclimSgmlCompleteEndTag
+      to 0.
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimSgmlCompleteEndTag"/>
+        <strong>g:EclimSgmlCompleteEndTag</strong><br/>
+        If set to 0, disables auto completion of end tags.
+      </li>
+    </ul>
   </body>
 </document>
