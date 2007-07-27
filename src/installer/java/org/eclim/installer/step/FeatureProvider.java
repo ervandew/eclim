@@ -28,7 +28,7 @@ public class FeatureProvider
     {true, true, true, false, false, false};
 
   private static final String[][] FEATURES_DEPENDS =
-    {null, null, null, null, {"wst"}, null};
+    {{"jdt"}, null, null, null, {"wst"}, null};
 
   private GuiForm guiForm;
   private ConsoleForm consoleForm;
