@@ -2,7 +2,6 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/xml/validate.html
 "
 " License:
 "
@@ -23,36 +22,14 @@
 " }}}
 
 " Global Variables {{{
-if !exists("g:EclimXmlValidate")
-  let g:EclimXmlValidate = 1
-endif
 if !exists('g:EclimSgmlCompleteEndTag')
   let g:EclimSgmlCompleteEndTag = 1
 endif
 " }}}
 
-if g:EclimXmlValidate
-  augroup eclim_xml
-    autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#xml#Validate('', 1)
-  augroup END
-endif
-
 " Mappings {{{
 if g:EclimSgmlCompleteEndTag
   imap <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
-endif
-" }}}
-
-" Command Declarations {{{
-if !exists(":Validate")
-  command -nargs=? -complete=file -bang -buffer Validate
-    \ :call eclim#xml#Validate('<args>', 0, '<bang>')
-
-  command -nargs=? -buffer DtdDefinition
-    \ :call eclim#xml#DtdDefinition('<args>')
-  command -nargs=? -buffer XsdDefinition
-    \ :call eclim#xml#XsdDefinition('<args>')
 endif
 " }}}
 

@@ -31,7 +31,8 @@ function eclim#sgml#util#CompleteEndTag ()
     let pos = searchpairpos('<\w', '', '</\w', 'bn')
     if pos[0]
       let line = getline(pos[0])
-      let tag =  substitute(line, '.*\%' . (pos[1] + 1) . 'c\(\w\+\)\W.*', '\1', '')
+      let tag =  substitute(
+        \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
       if tag != line
         return '/' . tag . '>'
       endif
