@@ -28,17 +28,36 @@
 function eclim#sgml#util#CompleteEndTag ()
   let line = getline('.')
   if line[col('.') - 2] == '<' && line[col('.')] !~ '\w'
-    let pos = searchpairpos('<\w', '', '</\w', 'bn')
-    if pos[0]
-      let line = getline(pos[0])
-      let tag =  substitute(
-        \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
-      if tag != line
-        return '/' . tag . '>'
-      endif
+    let tag = s:GetStartTag(line('.'))
+    if tag != ''
+      return '/' . tag . '>'
     endif
   endif
   return '/'
+endfunction " }}}
+
+" s:GetStartTag() {{{
+function s:GetStartTag (line)
+  let pos = searchpairpos('<\w', '', '</\w', 'bn')
+  if pos[0]
+    "if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW')
+    if !(indent(pos[0]) < indent(a:line))
+      let lnum = line('.')
+      let cnum = col('.')
+      call cursor(pos[0], pos[1])
+      let tag = s:GetStartTag(a:line)
+      call cursor(lnum, cnum)
+      return tag
+    endif
+
+    let line = getline(pos[0])
+    let tag =  substitute(
+      \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
+    if tag != line
+      return tag
+    endif
+  endif
+  return ''
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

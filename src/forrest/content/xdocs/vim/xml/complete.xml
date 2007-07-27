@@ -56,6 +56,9 @@
       wish to disable this feature you can simply set g:EclimSgmlCompleteEndTag
       to 0.
     </p>
+    <note>
+      This feature currently relies on properly indented xml.
+    </note>
     <p>
       <strong>Configuration</strong>
     </p>
