@@ -1,13 +1,13 @@
 <html>
   <body>
     <?php
-    include 'models.php';
+    include '../models.php';
 
     echo "Hello World.";
 
     $testA = new TestA();
-    $testA->methodA2();
-    $testA->variable1;
+    $testA->
+    $testA->m
 
     $testB = new TestB();
     $testB->methodB1();

@@ -152,17 +152,19 @@
     <copy todir="${eclipse.workspace}">
       <fileset dir="src/test/resources" includes="eclim_unit_test*/**/*"/>
     </copy>
-    <!--move file="${eclipse.workspace}/eclim_unit_test_java/project"
-        tofile="${eclipse.workspace}/eclim_unit_test_java/.project"/-->
 
     <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="false">
       <arg line='-command project_create -f "${eclipse.workspace}/eclim_unit_test_java" -n java'/>
     </exec>
+    <move overwrite="true" file="${eclipse.workspace}/eclim_unit_test_java/project"
+        tofile="${eclipse.workspace}/eclim_unit_test_java/.project"/>
     <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="false">
       <arg line='-command project_create -f "${eclipse.workspace}/eclim_unit_test_php" -n php'/>
     </exec>
+    <move overwrite="true" file="${eclipse.workspace}/eclim_unit_test_php/project"
+        tofile="${eclipse.workspace}/eclim_unit_test_php/.project"/>
   </target>
 
   <!--
