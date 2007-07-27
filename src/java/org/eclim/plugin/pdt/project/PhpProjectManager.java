@@ -27,6 +27,7 @@ import org.eclim.project.ProjectManager;
 import org.eclim.util.XmlUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * Implementation of {@link ProjectManager} for php projects.
@@ -82,6 +83,7 @@ public class PhpProjectManager
   public void refresh (IProject _project, CommandLine _commandLine)
     throws Exception
   {
+    _project.refreshLocal(IResource.DEPTH_INFINITE, null);
   }
 
   /**
