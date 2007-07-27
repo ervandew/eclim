@@ -103,10 +103,8 @@
     </path>
     <property name="plugins" refid="plugin.dirs"/>
     <propertyregex property="plugins" override="true"
-        input="${plugins}" regexp=":" replace=","/>
-    <propertyregex property="plugins" override="true"
         input="${plugins}" regexp="/*?[a-zA-Z0-9-]*?/" replace=""/>
-    <foreach list="${plugins}" target="plugin"
+    <foreach list="${plugins}" target="plugin" delimiter=":"
         inheritAll="true" param="plugin.name" trim="true"/>
 
     <!-- deploy eclipse plugins -->
