@@ -21,7 +21,6 @@ Documentation
     - how to specify workspace dir.
       eclimd -Dosgi.instance.area.default=@user.home/another_workspace
   - document python import functionality
-  - added -n doc to project creation docs.
 
 Translations
   - Chinese cheatsheet
@@ -40,7 +39,14 @@ Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
 
 Enhancements
-  - sgml style files... on </ try to complete proper close tag.
+  - :ProjectNatureAdd <project> <nature> <nature> ...
+
+  - :JavaRegex and :PythonRegex, add means to switch between line by line
+    matching and full file matching.
+
+  - make sure html files (html, php, etc) are context aware on code
+    completion, switching to html, css, javascript completion as necessary.
+
   - javascript doc lookup for common libraries
     - yui
     - prototype
@@ -157,5 +163,8 @@ Python
   - when adding new method for a class, auto add self as first parameter.
 
 PHP
-  - Search
-    - org.eclipse.php.internal.ui.search.PHPSearchEngine.search
+  - org.eclipse.php.internal.core.projects.options.PHPProjectOptions
+    - setRawIncludePath
+  - org.eclipse.php.internal.ui.preferences.includepath.IncludePathBlock
+     - steal code out of init().  doesn't seem to actaully read the file, but
+       does check it's modified date, so give it a shot.

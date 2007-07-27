@@ -152,12 +152,16 @@
     <copy todir="${eclipse.workspace}">
       <fileset dir="src/test/resources" includes="eclim_unit_test*/**/*"/>
     </copy>
-    <move file="${eclipse.workspace}/eclim_unit_test_java/project"
-        tofile="${eclipse.workspace}/eclim_unit_test_java/.project"/>
+    <!--move file="${eclipse.workspace}/eclim_unit_test_java/project"
+        tofile="${eclipse.workspace}/eclim_unit_test_java/.project"/-->
 
     <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="false">
       <arg line='-command project_create -f "${eclipse.workspace}/eclim_unit_test_java" -n java'/>
+    </exec>
+    <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
+        output="build/test/junit/eclim.log" append="false">
+      <arg line='-command project_create -f "${eclipse.workspace}/eclim_unit_test_php" -n php'/>
     </exec>
   </target>
 
@@ -165,10 +169,10 @@
     - Tears down the test projects.
     -->
   <target name="test.teardown_projects">
-    <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
+    <!--exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
         output="build/test/junit/eclim.log" append="true">
       <arg line="-command project_delete -n eclim_unit_test_java"/>
-    </exec>
+    </exec-->
 
     <!--delete includeEmptyDirs="true">
       <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*/**/*"/>
