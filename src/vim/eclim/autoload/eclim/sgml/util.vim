@@ -40,8 +40,8 @@ endfunction " }}}
 function s:GetStartTag (line)
   let pos = searchpairpos('<\w', '', '</\w', 'bn')
   if pos[0]
-    "if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW')
-    if !(indent(pos[0]) < indent(a:line))
+    if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW') ||
+     \ (a:line != pos[0] && !(indent(pos[0]) < indent(a:line)))
       let lnum = line('.')
       let cnum = col('.')
       call cursor(pos[0], pos[1])
