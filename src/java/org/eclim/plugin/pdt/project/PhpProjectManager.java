@@ -47,6 +47,7 @@ public class PhpProjectManager
   public void create (IProject _project, CommandLine _commandLine)
     throws Exception
   {
+    refresh(_project, _commandLine);
   }
 
   /**
