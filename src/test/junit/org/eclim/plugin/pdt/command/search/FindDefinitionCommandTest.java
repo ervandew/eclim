@@ -82,6 +82,22 @@ public class FindDefinitionCommandTest
   }
 
   @Test
+  public void findConstant ()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "111"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result", file + "|29 col 1|CONSTANT1", result);
+  }
+
+  @Test
   public void findFunction ()
   {
     assertTrue("Project doesn't exist.",

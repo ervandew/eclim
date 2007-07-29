@@ -26,4 +26,6 @@ class TestB
   }
 }
 
+define ('CONSTANT1', 'test constant');
+
 ?>

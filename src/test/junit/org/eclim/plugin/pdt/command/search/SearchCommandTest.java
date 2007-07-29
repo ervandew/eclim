@@ -25,8 +25,6 @@ import static org.junit.Assert.*;
 
 public class SearchCommandTest
 {
-  private static final String TEST_FILE_PHP = "php/search/search.php";
-
   @Test
   public void searchClass ()
   {
@@ -56,23 +54,23 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|13 col 3|methodA2", result);
+    assertEquals("Wrong Result", file + "|9 col 19|methodA1", result);
   }
 
   @Test
-  public void searchVariable ()
+  public void searchConstant ()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "variable1", "-t", "constant"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "constant"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|8 col 3|variable1", result);
+    assertEquals("Wrong Result", file + "|29 col 10|CONSTANT1", result);
   }
 
   @Test
@@ -82,13 +80,13 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "methodA1", "-t", "function"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "functionA", "-t", "function"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|13 col 3|methodA2", result);
+    assertEquals("Wrong Result", file + "|3 col 10|functionA", result);
   }
 
   /**

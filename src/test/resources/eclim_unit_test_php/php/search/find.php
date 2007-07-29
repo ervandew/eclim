@@ -5,4 +5,5 @@ $testA = new TestA();
 $testA->methodA2();
 $testA->variable1;
 functionA();
+echo CONSTANT1;
 ?>
