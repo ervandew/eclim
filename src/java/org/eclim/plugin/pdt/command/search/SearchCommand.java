@@ -54,7 +54,7 @@ public class SearchCommand
   public static final String SCOPE_PROJECT = "project";
 
   public static final String TYPE_CLASS = "class";
-  public static final String TYPE_FUNCTION = "funtion";
+  public static final String TYPE_FUNCTION = "function";
   public static final String TYPE_CONSTANT = "constant";
 
   private static final PHPSearchEngine SEARCH = new PHPSearchEngine();
