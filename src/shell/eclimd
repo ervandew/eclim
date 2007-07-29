@@ -22,7 +22,7 @@ ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME""
 SED=`which sed 2> /dev/null`
-IS_GENTOO=`which emerge 2> /dev/null`
+IS_GENTOO=`which java-config 2> /dev/null`
 
 # attempt to grab properties from .eclimrc if available.
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then

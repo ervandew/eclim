@@ -18,7 +18,7 @@
 
 CURPATH=`dirname $0`
 ECLIPSE_HOME=`cd "$CURPATH/../../.." ; pwd`
-IS_GENTOO=`which emerge 2> /dev/null`
+IS_GENTOO=`which java-config 2> /dev/null`
 
 # find eclipse executable
 ECLIPSE="$ECLIPSE_HOME/eclipse"
