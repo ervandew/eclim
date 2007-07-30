@@ -51,7 +51,7 @@ public class SrcUpdateCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/src/test.php");
     assertEquals("Wrong result.",
-        file + "|3 col 1|Syntax Error: expecting: ',' or ';'|e", results[0]);
+        file + "|5 col 5|Syntax Error: expecting: ',' or ';'|e", results[0]);
   }
 
   /**
