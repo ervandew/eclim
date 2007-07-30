@@ -29,6 +29,8 @@ import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.ITextViewer;
 
+import org.eclipse.swt.graphics.Point;
+
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -64,7 +66,15 @@ public abstract class WstCodeCompleteCommand
 
     if (viewer == null) {
       viewer = new StructuredTextViewer(
-          EclimPlugin.getShell(), null, null, false, 0);
+          EclimPlugin.getShell(), null, null, false, 0){
+        private Point point;
+        public Point getSelectedRange (){
+          return point;
+        }
+        public void setSelectedRange (int x, int y){
+          point = new Point(x, y);
+        }
+      };
     }
     viewer.setDocument(model.getStructuredDocument());
     viewer.setSelectedRange(offset, 10);
