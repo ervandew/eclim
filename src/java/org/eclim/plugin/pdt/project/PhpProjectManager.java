@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.pdt.project;
 
+import java.util.ArrayList;
+
 import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
@@ -29,6 +31,13 @@ import org.eclim.util.XmlUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
+import org.eclipse.php.internal.core.project.IIncludePathEntry;
+import org.eclipse.php.internal.core.project.PHPNature;
+
+import org.eclipse.php.internal.core.project.options.PHPProjectOptions;
+
+import org.eclipse.php.internal.core.project.options.includepath.IncludePathValidator;
+
 /**
  * Implementation of {@link ProjectManager} for php projects.
  *
@@ -40,6 +49,9 @@ public class PhpProjectManager
 {
   private static final String PROJECT_OPTIONS_XSD =
     "/resources/schema/eclipse/projectOptions.xsd";
+
+  private static final IncludePathValidator VALIDATOR =
+    new IncludePathValidator();
 
   /**
    * {@inheritDoc}
@@ -69,13 +81,26 @@ public class PhpProjectManager
       return errors;
     }
 
-    /*IClasspathEntry[] entries = javaProject.readRawClasspath();
-    errors = setClasspath(javaProject, entries, dotclasspath);
+    // force the .projectOptions file to be refreshed.
+    _project.refreshLocal(IResource.DEPTH_ONE, null);
 
-    if(errors.length > 0){
-      return errors;
-    }*/
-    return null;
+    PHPNature nature = (PHPNature)_project.getNature(PHPNature.ID);
+    // not ideal, but does the job.
+    nature.setProject(_project);
+
+    PHPProjectOptions options = PHPProjectOptions.forProject(_project);
+    IIncludePathEntry[] entries = options.readRawIncludePath();
+    ArrayList<Error> errs = new ArrayList<Error>();
+    for(IIncludePathEntry entry : entries){
+      String message = entry.validate();
+      if (message != null){
+        // hacky... using filename arg as the entry path to caculate line/col on
+        // the vim side.
+        errs.add(new Error(message, entry.getPath().toString(), 1, 1, false));
+      }
+    }
+
+    return (Error[])errs.toArray(new Error[errs.size()]);
   }
 
   /**

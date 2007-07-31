@@ -32,8 +32,8 @@
 " Script Varables {{{
   let s:search_element =
     \ '-command php_find_definition -p "<project>" -f "<file>" -o <offset>'
-  let s:search_pattern =
-    \ '-command php_search -n "<project>" <args>'
+  let s:search_pattern = '-command php_search -n "<project>" <args>'
+  let s:include_paths = '-command php_include_paths -p "<project>"'
   let s:options = ['-p', '-t', '-s']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -135,13 +135,13 @@ function eclim#php#search#FindDefinition ()
 
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
-    if results[0] =~ escape(expand('%:p'), '\') . '|'
+    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
       if results[0] !~ '|1 col 1|'
         lfirst
       endif
 
     " single result in another file.
-    elseif g:EclimPhpSearchSingleResult != "lopen"
+    elseif len(results) == 1 && g:EclimPhpSearchSingleResult != "lopen"
       let entry = getloclist(0)[0]
       call eclim#util#GoToBufferWindowOrOpen
         \ (bufname(entry.bufnr), g:EclimPhpSearchSingleResult)
@@ -152,6 +152,40 @@ function eclim#php#search#FindDefinition ()
     endif
   else
     call eclim#util#EchoInfo("Element not found.")
+  endif
+endfunction " }}}
+
+" FindInclude () {{{
+" Finds the include file under the cursor
+function eclim#php#search#FindInclude ()
+  if !eclim#project#IsCurrentFileInProject(1)
+    return
+  endif
+
+  let file = substitute(getline('.'),
+    \ ".*\\<\\(require\\|include\\)\\s*[(]\\?['\"]\\([^'\"]*\\)['\"].*", '\2', '')
+
+  let project = eclim#project#GetCurrentProjectName()
+  let command = s:include_paths
+  let command = substitute(command, '<project>', project, '')
+  let result =  eclim#ExecuteEclim(command)
+  let paths = split(result, '\n')
+
+  let results = split(globpath('.,' . join(paths, ','), file), '\n')
+
+  if !empty(results)
+    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+
+    " single result in another file.
+    if len(results) == 1 && g:EclimPhpSearchSingleResult != "lopen"
+      let entry = getloclist(0)[0]
+      call eclim#util#GoToBufferWindowOrOpen
+        \ (bufname(entry.bufnr), g:EclimPhpSearchSingleResult)
+    else
+      lopen
+    endif
+  else
+    call eclim#util#EchoInfo("File not found.")
   endif
 endfunction " }}}
 
@@ -166,15 +200,21 @@ function! eclim#php#search#SearchContext ()
     let cnum = eclim#util#GetCurrentElementColumn()
   endif
 
-  if getline('.') =~ '\<class\s\+\%' . cnum . 'c'
-    call eclim#util#EchoInfo("TODO: Search class")
+  if getline('.') =~ "\\<\\(require\\|include\\)\\s*[(]\\?['\"][^'\"]*\\%" . cnum . "c"
+    call eclim#php#search#FindInclude()
+    return
+  elseif getline('.') =~ '\<class\s\+\%' . cnum . 'c'
+    call eclim#util#EchoInfo("TODO: Search class references")
     return
   elseif getline('.') =~ '\<function\s\+\%' . cnum . 'c'
-    call eclim#util#EchoInfo("TODO: Search function")
+    call eclim#util#EchoInfo("TODO: Search function references")
     return
-  elseif getline('.') =~ '\<var\s\+[$]\?\%' . cnum . 'c'
-    call eclim#util#EchoInfo("TODO: Search var")
+  elseif getline('.') =~ "\\<define\\s*(['\"]\\%" . cnum . "c"
+    call eclim#util#EchoInfo("TODO: Search constant references")
     return
+  "elseif getline('.') =~ '\<var\s\+[$]\?\%' . cnum . 'c'
+  "  call eclim#util#EchoInfo("TODO: Search var references")
+  "  return
   endif
 
   call eclim#php#search#FindDefinition()

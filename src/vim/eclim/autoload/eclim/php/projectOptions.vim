@@ -23,8 +23,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_variables = '-command php_includepath_variables -filter vim'
-  let s:command_update = '-command project_update -n "<name>" -filter vim'
+  let s:command_variables = '-command php_includepath_variables'
+  let s:command_update = '-command project_update -n "<name>"'
   let s:command_variable_create =
     \ '-command php_includepath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
@@ -65,6 +65,14 @@ function! eclim#php#projectOptions#UpdateIncludePath ()
   let result = eclim#ExecuteEclim(command)
   if result =~ '|'
     let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+    for error in errors
+      let path = error.filename
+      let error.filename = expand('%')
+      let lnum = search("['\"]" . path . "['\"]", 'nw')
+      if lnum > 0
+        let error.lnum = lnum
+      endif
+    endfor
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#SetLocationList([], 'r')

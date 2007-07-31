@@ -71,6 +71,11 @@ See http://forrest.apache.org/docs/linking.html for more info
             description="Maintaining java classpath with ivy."
             href="guides/java/ivy/ivy_classpath.html"/>
       </java>
+      <!--php label="Php Guides">
+        <php_project label="Php: Creating A Php Project"
+            description="Creating a php project."
+            href="guides/php/project.html"/>
+      </php-->
       <!--python label="Python Guides">
         <python_project label="Python: Creating A Python Project"
             description="Creating a python project."
@@ -204,6 +209,12 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
+    <php label="Php" href="php/">
+      <complete label="Code Completion" href="complete.html"
+          description="Code Completion"/>
+      <definition label="Search" href="search.html"
+          description="Search"/>
+    </php>
     <python label="Python" href="python/">
       <!--complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
@@ -244,9 +255,13 @@ See http://forrest.apache.org/docs/linking.html for more info
     <license href="http://apache.org/licenses/LICENSE-2.0.html"/>
 
     <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
+
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
-    <eclipse_wst href="http://www.eclipse.org/webtools/main.php"/>
+    <eclipse_pdt href="http://eclipse.org/pdt/"/>
+    <eclipse_wst href="http://eclipse.org/webtools/main.php"/>
+    <pydev href="http://pydev.sourceforge.net"/>
+
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
@@ -275,8 +290,6 @@ See http://forrest.apache.org/docs/linking.html for more info
     <viewvc href="http://viewvc.org"/>
 
     <testng href="http://testng.org/doc"/>
-
-    <pydev href="http://pydev.sourceforge.net"/>
 
     <forrest href="http://forrest.apache.org/"/>
     <cocoon href="http://cocoon.apache.org/"/>

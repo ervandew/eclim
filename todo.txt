@@ -39,6 +39,8 @@ Eclipse 3.3
   - code completion for eclipse plugin.xml and MANIFEST.MF
 
 Enhancements
+  - create spring file validation of class names like w/ log4j.
+
   - :ProjectNatureAdd <project> <nature> <nature> ...
 
   - :JavaRegex and :PythonRegex, add means to switch between line by line
@@ -163,8 +165,15 @@ Python
   - when adding new method for a class, auto add self as first parameter.
 
 PHP
-  - org.eclipse.php.internal.core.projects.options.PHPProjectOptions
-    - setRawIncludePath
-  - org.eclipse.php.internal.ui.preferences.includepath.IncludePathBlock
-     - steal code out of init().  doesn't seem to actaully read the file, but
-       does check it's modified date, so give it a shot.
+  - validate parts of .projectOptions that pdt does not
+    - variable names.
+    - path attribute of project entry
+
+  - php include path variable support
+    - org.eclipse.php.internal.core.projects.options.PHPProjectOptions
+      - IPath getIncludePathVariable(final String variableName)
+      - String[] getIncludePathVariableNames()
+      - IPath getResolvedVariablePath(final IPath path)
+    - org.eclipse.php.internal.core.projects.options.includepath.IncludePathVariableManager
+      - putVariable(String name, IPath path)
+      - setIncludePathVariables(String[] names, IPath[] paths, SubProgressMonitor monitor)

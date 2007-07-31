@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Copyright (c) 2005 - 2007
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - Author: Eric Van Dewoestine
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+
+<document>
+  <header>
+    <title>Code Completion</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      Php code completion uses the standard
+      <a href="../code_completion.html">Vim code completion mechanism</a> like
+      so:
+    </p>
+    <source>
+      <![CDATA[
+      <?php
+      class Test {
+        function getName () {
+        }
+        function getValue () {
+        }
+      }
+
+      $test = new Test();
+
+      $test->get<C-X><C-U>
+      $test->getName()
+      ?>
+      ]]>
+    </source>
+  </body>
+</document>

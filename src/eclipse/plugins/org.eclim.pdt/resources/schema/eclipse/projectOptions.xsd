@@ -5,12 +5,16 @@
       <xs:sequence>
         <xs:element name="projectOption" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
-            <xs:attribute name="name" use="required">
-              <xs:simpleType>
-                <xs:restriction base="xs:string">
-                </xs:restriction>
-              </xs:simpleType>
-            </xs:attribute>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="name" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:extension>
+            </xs:simpleContent>
           </xs:complexType>
         </xs:element>
         <xs:element name="includepath" minOccurs="0" maxOccurs="1">

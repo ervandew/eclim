@@ -27,7 +27,7 @@
 " Ex. imap <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
 function eclim#sgml#util#CompleteEndTag ()
   let line = getline('.')
-  if line[col('.') - 2] == '<' && line[col('.')] !~ '\w'
+  if line[col('.') - 2] == '<' && line[col('.') - 1] !~ '\w'
     let tag = s:GetStartTag(line('.'))
     if tag != ''
       return '/' . tag . '>'

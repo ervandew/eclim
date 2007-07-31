@@ -19,8 +19,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -50,9 +48,8 @@ import org.eclipse.php.internal.core.phpModel.phpElementData.PHPFileData;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(SrcUpdateCommand.class);
-
-  private static PhpParserSchedulerTask scheduler = PhpParserSchedulerTask.getInstance();
+  private static PhpParserSchedulerTask scheduler =
+    PhpParserSchedulerTask.getInstance();
 
   /**
    * {@inheritDoc}
@@ -60,7 +57,7 @@ public class SrcUpdateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      final String file = _commandLine.getValue(Options.FILE_OPTION);
+      String file = _commandLine.getValue(Options.FILE_OPTION);
       String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
       IProject project = ProjectUtils.getProject(projectName, true);

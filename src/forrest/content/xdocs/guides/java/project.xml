@@ -117,7 +117,7 @@
         .classpath file is also created at the root directory of the project.
         If you did not create a project from an existing project directory (one
         containing source files, etc.), then your next step will be to tell
-        Eclipse where you plan to store you source files.
+        Eclipse where you plan to store your source files.
       </p>
       <p>
         For the purpose of this example we will assume that you will store your

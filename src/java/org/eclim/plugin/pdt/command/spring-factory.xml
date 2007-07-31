@@ -37,7 +37,8 @@
     </property>
   </bean>
 
-  <bean name="php_find_definition" class="org.eclim.plugin.pdt.command.search.FindDefinitionCommand">
+  <bean name="php_find_definition"
+      class="org.eclim.plugin.pdt.command.search.FindDefinitionCommand">
     <description>Handles client requests to find the element definition.</description>
     <property name="filters">
       <map>
@@ -48,12 +49,30 @@
     </property>
   </bean>
 
-  <bean name="php_search" class="org.eclim.plugin.pdt.command.search.SearchCommand">
+  <bean name="php_search"
+      class="org.eclim.plugin.pdt.command.search.SearchCommand">
     <description>Handles client search requests.</description>
     <property name="filters">
       <map>
         <entry key="vim">
           <bean class="org.eclim.command.filter.PositionFilter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean name="php_include_paths"
+      class="org.eclim.plugin.pdt.command.includepath.IncludePathsCommand">
+    <description>Handles client request for list of project include paths.</description>
+  </bean>
+
+  <bean name="php_includepath_variables"
+      class="org.eclim.plugin.pdt.command.includepath.IncludePathVariablesCommand">
+    <description>Handles client requests to list include variables.</description>
+    <property name="filters">
+      <map>
+        <entry key="vim">
+          <bean class="org.eclim.plugin.pdt.command.includepath.IncludePathVariablesFilter"/>
         </entry>
       </map>
     </property>
