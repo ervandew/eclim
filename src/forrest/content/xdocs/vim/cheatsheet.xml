@@ -33,7 +33,7 @@
       use as a reference.
     </p>
 
-    <p><strong>Global Commands</strong></p>
+    <p><strong>Global Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="index.html#PingEclim"><strong>:PingEclim</strong></a> -
@@ -47,9 +47,9 @@
         <a href="index.html#EclimSettings"><strong>:EclimSettings</strong></a> -
         View / edit global settings.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Project Commands</strong></p>
+    <p><strong>Project Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="common/project.html#ProjectCreate"><strong>:ProjectCreate</strong></a>
@@ -130,61 +130,9 @@
         /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
         Issues a lvimgrepadd starting at the root of the current project.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Eclipse .classpath Commands</strong></p>
-    <ul>
-      <li>
-        <a href="java/classpath.html#NewSrcEntry">
-          <strong>:NewSrcEntry</strong>
-        </a>
-        &lt;dir&gt; [&lt;dir&gt; ...] -
-        Add a new source dir entry.
-      </li>
-      <li>
-        <a href="java/classpath.html#NewProjectEntry">
-          <strong>:NewProjectEntry</strong>
-        </a>
-        &lt;project&gt; [&lt;project&gt; ...] -
-        Add a new project entry.
-      </li>
-      <li>
-        <a href="java/classpath.html#NewJarEntry">
-          <strong>:NewJarEntry</strong>
-        </a>
-        &lt;file&gt; [&lt;file&gt; ...] -
-        Add a jar entry.
-      </li>
-      <li>
-        <a href="java/classpath.html#NewVarEntry">
-          <strong>:NewVarEntry</strong>
-        </a>
-        &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
-        Add a new var entry.
-      </li>
-      <li>
-        <a href="java/classpath.html#VariableList">
-          <strong>:VariableList</strong>
-        </a>
-        List available classpath variables and their corresponding values.
-      </li>
-      <li>
-        <a href="java/classpath.html#VariableCreate">
-          <strong>:VariableCreate</strong>
-        </a>
-        &lt;name&gt; &lt;path&gt; -
-        Creates or updates the variable with the supplied name.
-      </li>
-      <li>
-        <a href="java/classpath.html#VariableDelete">
-          <strong>:VariableDelete</strong>
-        </a>
-        &lt;name&gt; -
-        Deletes the variable with the supplied name.
-      </li>
-    </ul>
-
-    <p><strong>Ant Commands</strong></p>
+    <p><strong>Ant Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="java/ant/run.html#Ant"><strong>:Ant</strong></a>
@@ -201,25 +149,25 @@
         <a href="java/ant/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current ant build file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Dtd Commands</strong></p>
+    <p><strong>Dtd Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Html Commands</strong></p>
+    <p><strong>Html Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Ivy Commands</strong></p>
+    <p><strong>Ivy Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="../guides/java/ivy/ivy_classpath.html#IvyRepo">
@@ -238,9 +186,9 @@
         added to the current ivy file by hitting &lt;Enter&gt; on a result.
         Available when editing an <code>ivy.xml</code> file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Java Commands</strong></p>
+    <p><strong>Java Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="java/bean.html#JavaGet"><strong>:JavaGet</strong></a> -
@@ -294,7 +242,7 @@
       </li>
       <li>
         <a href="java/search.html#JavaSearch"><strong>:JavaSearch</strong></a>
-        [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] -
+        [-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] [-s &lt;scope&gt;]-
         Search for classes, methods, fields, etc.
         (With pattern supplied, searches for the element under the cursor).
       </li>
@@ -333,17 +281,69 @@
         Opens window with information about the currently running java
         processes.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Log4j Commands</strong></p>
+    <p><strong>Java .classpath Commands</strong></p> <!-- {{{ -->
+    <ul>
+      <li>
+        <a href="java/classpath.html#NewSrcEntry">
+          <strong>:NewSrcEntry</strong>
+        </a>
+        &lt;dir&gt; [&lt;dir&gt; ...] -
+        Add a new source dir entry.
+      </li>
+      <li>
+        <a href="java/classpath.html#NewProjectEntry">
+          <strong>:NewProjectEntry</strong>
+        </a>
+        &lt;project&gt; [&lt;project&gt; ...] -
+        Add a new project entry.
+      </li>
+      <li>
+        <a href="java/classpath.html#NewJarEntry">
+          <strong>:NewJarEntry</strong>
+        </a>
+        &lt;file&gt; [&lt;file&gt; ...] -
+        Add a jar entry.
+      </li>
+      <li>
+        <a href="java/classpath.html#NewVarEntry">
+          <strong>:NewVarEntry</strong>
+        </a>
+        &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
+        Add a new var entry.
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableList">
+          <strong>:VariableList</strong>
+        </a>
+        List available classpath variables and their corresponding values.
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableCreate">
+          <strong>:VariableCreate</strong>
+        </a>
+        &lt;name&gt; &lt;path&gt; -
+        Creates or updates the variable with the supplied name.
+      </li>
+      <li>
+        <a href="java/classpath.html#VariableDelete">
+          <strong>:VariableDelete</strong>
+        </a>
+        &lt;name&gt; -
+        Deletes the variable with the supplied name.
+      </li>
+    </ul> <!-- }}} -->
+
+    <p><strong>Log4j Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="java/log4j/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current log4j xml configuration file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Maven Commands</strong></p>
+    <p><strong>Maven Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="java/maven/run.html#Maven"><strong>:Maven</strong></a>
@@ -387,9 +387,71 @@
         added to the current pom file by hitting &lt;Enter&gt; on a result.
         Available when editing a maven 2.x <code>pom.xml</code> file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Python Commands</strong></p>
+    <p><strong>Php Commands</strong></p> <!-- {{{ -->
+    <ul>
+      <li>
+        <a href="php/search.html#PhpSearch"><strong>:PhpSearch</strong></a>
+        -p &lt;pattern&gt; -t &lt;type&gt; [-s &lt;scope&gt;]-
+        Search for classes, methods, and constants.
+      </li>
+      <li>
+        <a href="php/search.html#PhpFindDefinition"><strong>:PhpFindDefinition</strong></a>
+        Find the element under the cursor.
+      </li>
+      <li>
+        <a href="php/search.html#PhpSearchContext"><strong>:PhpSearchContext</strong></a>
+        Find the element under the cursor based on its context.
+      </li>
+    </ul> <!-- }}} -->
+
+    <p><strong>Php .projectOption Commands</strong></p> <!-- {{{ -->
+    <ul>
+      <li>
+        <a href="php/includepath.html#NewLibEntry">
+          <strong>:NewLibEntry</strong>
+        </a>
+        &lt;file&gt; [&lt;file&gt; ...] -
+        Add a lib entry referencing an external folder.
+      </li>
+      <li>
+        <a href="php/includepath.html#NewProjectEntry">
+          <strong>:NewProjectEntry</strong>
+        </a>
+        &lt;project&gt; [&lt;project&gt; ...] -
+        Add a new project entry.
+      </li>
+      <li>
+        <a href="php/includepath.html#NewVarEntry">
+          <strong>:NewVarEntry</strong>
+        </a>
+        &lt;VAR/file&gt; [&lt;VAR/file&gt; ...] -
+        Add a new var entry.
+      </li>
+      <li>
+        <a href="php/includepath.html#VariableList">
+          <strong>:VariableList</strong>
+        </a>
+        List available include path variables and their corresponding values.
+      </li>
+      <li>
+        <a href="php/includepath.html#VariableCreate">
+          <strong>:VariableCreate</strong>
+        </a>
+        &lt;name&gt; &lt;path&gt; -
+        Creates or updates the variable with the supplied name.
+      </li>
+      <li>
+        <a href="php/includepath.html#VariableDelete">
+          <strong>:VariableDelete</strong>
+        </a>
+        &lt;name&gt; -
+        Deletes the variable with the supplied name.
+      </li>
+    </ul> <!-- }}} -->
+
+    <p><strong>Python Commands</strong></p> <!-- {{{ -->
     <ul>
       <!--li>
         <a href="python/definition.html#PythonFindDefinition">
@@ -439,9 +501,9 @@
         or <strong>:PythonFindDefinition</strong> depending on the context of
         the text under the cursor.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Vim Commands</strong></p>
+    <p><strong>Vim Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="vim/find.html#FindCommandDef">
@@ -497,25 +559,25 @@
         [&lt;keyword&gt;] -
         Opens the vim help for a keyword.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>WebXml Commands</strong></p>
+    <p><strong>WebXml Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="java/webxml/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current web.xml file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Wsdl Commands</strong></p>
+    <p><strong>Wsdl Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Xml Commands</strong></p>
+    <p><strong>Xml Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="xml/definition.html#DtdDefinition"><strong>:DtdDefinition</strong></a>
@@ -538,17 +600,17 @@
         <a href="xml/format.html#XmlFormat"><strong>:XmlFormat</strong></a>
         Reformats the current xml file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Xsd Commands</strong></p>
+    <p><strong>Xsd Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current file.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Version Control Commands</strong></p>
+    <p><strong>Version Control Commands</strong></p> <!-- {{{ -->
     <note>
       Currently only cvs and subversion are supported by the following commands.
     </note>
@@ -568,9 +630,9 @@
         Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
         directory, or to the current buffer if no argument supplied.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Web Lookup Commands</strong></p>
+    <p><strong>Web Lookup Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="common/web.html#OpenUrl"><strong>:OpenUrl</strong></a> [url] -
@@ -596,9 +658,9 @@
         <a href="common/web.html#Thesaurus"><strong>:Thesaurus</strong></a> [word] -
         Looks up a word on thesaurus.reference.com.
       </li>
-    </ul>
+    </ul> <!-- }}} -->
 
-    <p><strong>Misc. Commands</strong></p>
+    <p><strong>Misc. Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
         <a href="common/util.html#LocateFileEdit">
@@ -706,6 +768,10 @@
         </a> -
         Swaps typed method arguments in a method declaration.
       </li-->
-    </ul>
+    </ul> <!-- }}} -->
   </body>
 </document>
+
+<!--
+vim:fdm=marker:tw=0
+-->

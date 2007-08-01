@@ -210,6 +210,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="JDK Tools Integration"/>
     </java>
     <php label="Php" href="php/">
+      <includepath label="Include Path" href="includepath.html"
+          description="Include Path"/>
       <complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <definition label="Search" href="search.html"

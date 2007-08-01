@@ -77,8 +77,6 @@
         <anchor id="NewProjectEntry"/>
         <strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...]<br/>
         Adds a new entry for one or more dependencies on other projects.
-        Project name command completion supported (:NewProjectEntry
-        a_pro&lt;Tab&gt;).
         <source>
           <![CDATA[
           <classpathentry exported="true" kind="src" path="/a_project"/>

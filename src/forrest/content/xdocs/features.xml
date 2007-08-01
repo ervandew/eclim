@@ -35,9 +35,7 @@
       <a href="vim/index.html">documentation</a>.
     </p>
 
-    <p>
-      <strong>Eclipse Projects</strong>
-    </p>
+    <p><strong>Eclipse Projects</strong></p>
     <ul>
       <li>Create, update, and delete Eclipse projects.</li>
       <li>
@@ -48,9 +46,7 @@
       </li>
     </ul>
 
-    <p>
-      <strong>Ant Integration</strong>
-    </p>
+    <p><strong>Ant Integration</strong></p>
     <ul>
       <li>Ant execution from any file.</li>
       <li>Context sensitive code completion when editing build files.</li>
@@ -61,25 +57,19 @@
       <li>Quick access to ant documentation.</li>
     </ul>
 
-    <p>
-      <strong>Css Integration</strong>
-    </p>
+    <p><strong>Css Integration</strong></p>
     <ul>
       <li>Context sensitive code completion.</li>
     </ul>
 
-    <p>
-      <strong>Dtd Integration</strong>
-    </p>
+    <p><strong>Dtd Integration</strong></p>
     <ul>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
       </li>
     </ul>
 
-    <p>
-      <strong>Html Integration</strong>
-    </p>
+    <p><strong>Html Integration</strong></p>
     <ul>
       <li>Context sensitive code completion.</li>
       <li>
@@ -87,9 +77,7 @@
       </li>
     </ul>
 
-    <p>
-      <strong>Java Integration</strong>
-    </p>
+    <p><strong>Java Integration</strong></p>
     <ul>
       <li>
         Automatic source code validation (w/ visual marking of errors and
@@ -112,16 +100,12 @@
       <li>Java regular expression testing.</li>
     </ul>
 
-    <p>
-      <strong>Log4j Integration</strong>
-    </p>
+    <p><strong>Log4j Integration</strong></p>
     <ul>
       <li>Validation of log4j xml files.</li>
     </ul>
 
-    <p>
-      <strong>Maven Integration</strong>
-    </p>
+    <p><strong>Maven Integration</strong></p>
     <ul>
       <li>Maven execution from any file.</li>
       <li>
@@ -129,9 +113,14 @@
       </li>
     </ul>
 
-    <p>
-      <strong>Python Integration</strong>
-    </p>
+    <p><strong>Php Integration</strong></p>
+    <ul>
+      <li>Code completion.</li>
+      <li>Searching.</li>
+      <li>Source code validation.</li>
+    </ul>
+
+    <p><strong>Python Integration</strong></p>
     <ul>
       <!--li>Code completion.</li>
       <li>Find definition.</li-->
@@ -139,9 +128,7 @@
       <li>Django functionality.</li>
     </ul>
 
-    <p>
-      <strong>Vim Script Integration</strong>
-    </p>
+    <p><strong>Vim Script Integration</strong></p>
     <ul>
       <li>
         Find user defined command, function, or global variable declarations / references.
@@ -151,18 +138,14 @@
       </li>
     </ul>
 
-    <p>
-      <strong>Wsdl Integration</strong>
-    </p>
+    <p><strong>Wsdl Integration</strong></p>
     <ul>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
       </li>
     </ul>
 
-    <p>
-      <strong>Xml Integration</strong>
-    </p>
+    <p><strong>Xml Integration</strong></p>
     <ul>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
@@ -174,18 +157,14 @@
       <li>Context sensitive code completion.</li>
     </ul>
 
-    <p>
-      <strong>Xsd Integration</strong>
-    </p>
+    <p><strong>Xsd Integration</strong></p>
     <ul>
       <li>
         Automatic validation (w/ visual marking of errors and warnings).
       </li>
     </ul>
 
-    <p>
-      <strong>Common Vim Functionality</strong>
-    </p>
+    <p><strong>Common Vim Functionality</strong></p>
     <ul>
       <li>
         :Split / :Tabnew supporting multiple files.

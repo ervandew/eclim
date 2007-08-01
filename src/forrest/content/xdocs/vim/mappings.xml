@@ -106,6 +106,24 @@
     </ul>
 
     <p>
+      <strong>Php Mappings</strong><br/>
+      Here are some mappings for the php funtionality provided by eclim.  To
+      make use of these mappings, simply create a ftplugin file for php and
+      place your mappings there (:help ftplugin-name).
+    </p>
+    <ul>
+      <li>
+        The following mapping allows you to simply hit &lt;Enter&gt; on an
+        element to perform a search to find it.
+        <code>
+          <![CDATA[
+          nnoremap <silent> <buffer> <cr> :PhpSearchContext<cr>
+          ]]>
+        </code>
+      </li>
+    </ul>
+
+    <p>
       <strong>Python Mappings</strong><br/>
       Here are some mappings for the python funtionality provided by eclim.  To
       make use of these mappings, simply create a ftplugin file for python and
