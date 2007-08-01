@@ -53,6 +53,12 @@ function! s:MoveToInsertPosition ()
   let end = search('</includepath\s*>', 'wn')
   if line('.') < start || line('.') >= end
     call cursor(end - 1, 1)
+  else
+    let start = search('<includepathentry\s*>', 'n')
+    let end = search('</includepathentry\s*>', 'cn')
+    if end > start
+      call cursor(end, 1)
+    endif
   endif
 endfunction " }}}
 
