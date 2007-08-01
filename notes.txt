@@ -1,0 +1,296 @@
+TODO {{{
+
+  Bugs {{{
+    - xml validate, if a doctype exists, but no dtd, then there is an error for
+      every element since they are "not declared" (ex. ant/cvs.xml).
+  }}}
+
+  Documentation {{{
+    - FAQs
+      - how to specify workspace dir.
+        eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+    - document python import functionality
+
+    - Chinese cheatsheet
+      :DjangoFind
+      :DjangoTemplateOpen
+      :DjangoViewOpen
+      :DjangoContextOpen
+  }}}
+
+  Common {{{
+
+    Upgrade
+      - spring from 1.2.8 to 2.0.5
+      - commons-cli from 1.0 to 1.1
+      - commons-io from 1.2 to 1.3.2
+      - commons-lang from 2.1 to 2.3
+      - commons-logging from 1.0.4 to 1.1
+      - commons-vfs from dev to 1.0
+        - http://jakarta.apache.org/site/downloads/downloads_commons-vfs.cgi
+      - groovy to 1.0
+      - forrest to 0.8
+
+    Installer
+      - maintain a version database for resources directories so we can determine
+        what files were added or modified by the user.
+        - keep an md5sum of each file to determine user changes which can be
+          resolved at install time via a visual diff.
+
+    Eclipse 3.3
+      - code completion for eclipse plugin.xml and MANIFEST.MF
+
+    - :ProjectNatureAdd <project> <nature> <nature> ...
+    - :ProjectNatureRemove <project> <nature> <nature> ...
+    - :ProjectNatureList <project>
+      - support command completion project names.
+      - support command completion of natures
+        - add: only complete natures not already in the project.
+        - remove: only complete natures in the project.
+      - IProject.setDescription(IProjectDescription, IProgressMonitor)
+        - any new natures in IProjectDescription will be configured, any not
+          included, will be deconfigured.
+      - Ex.
+        IProjectDescription desc = project.getDescription();
+        String[] natureIds = desc.getNatureIds();
+        // modify naturesIds
+        ...
+        desc.setNatureIds(natureIds);
+        project.setDescription(desc);
+      - Be sure to consider calling the nature's associated
+        ProjectManagement.create/delete methods in eclim to perform any nature
+        specific setup on any new natures added/removed.
+        - may want to add new methods: natureAdded, natureRemoved.
+
+    - :JavaRegex and :PythonRegex, add means to switch between line by line
+      matching and full file matching.
+
+    - make sure html files (html, php, etc) are context aware on code
+      completion, switching to html, css, javascript completion as necessary.
+
+    - create :ProjectImport <dir> command
+      - Eclipse equivalant:
+        File > Import... > General > Existing Projects Into Workspace
+
+    - determines the user's default workspace using
+      eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
+      RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
+
+    - :ProjectGrep support project relative file completion
+    - :MinimizeWindows, map <space>hjkl to move to next un-minimized window in
+      that direction, or stay in current window if none.
+      OR, map that to something else and use <space>hjkl to grow or shrink the
+      current window.
+      On minimize, execute winc = ?
+      - bug, maybe cause of my new taglist, when minimizing 2 of 4 python files,
+        focus ends up in the taglist window.
+
+    - :ProjectTodo run vimgrep against all files using user defined pattern...
+      by default '\(\<fixme\>\|\<todo\>\)\c'
+      - create list of file extensions to search
+      - lvimgrep first item and lvimgrep add the rest
+      - don't jump to first file, just open location list window.
+    - :Todo run vimgrep on current file using user defined pattern.
+
+    - for taglist, support universal marker tag:
+      |-- marker_name --|
+
+    - Integrate w/ google calendar
+      http://code.google.com/apis/gdata/client-java.html
+
+    - Add support for using a running eclipse gui as the eclimd server.
+      - add a menu item which starts up nailgun and spring.
+        - ping first to see if one is running.
+      - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
+
+    - In addition to marking lines w/ errors/warnings, highlight the offending text.
+    - CursorHold validation of files.
+      - via temp file?
+
+    - implement means to highlight text and push it to the command prompt
+      Ctrl-: or something similar.
+
+    - get working under cygwin
+      if has('win32unix')
+      - eclim command
+      - file paths
+      - search results
+    - fedora + eclipse + gcj/gnu classpath
+      - http://www.fedoraproject.org/wiki/Eclipse
+      - http://sourceware.org/eclipse/
+
+  }}}
+
+  Java {{{
+
+    - create spring file validation of class names like w/ log4j.
+
+    - JUnit results in the browser.
+    - Integrate with eclipse junit execution env and provide user with option to
+      choice which to use (eclipse or current external version).
+      org.eclim.java.junit.engine=(eclipse|external)
+
+    - :JavaImpl support anonymous classes.
+
+    - For commands that spawn temp buffer, assign a b:currentfile var to the
+      file that opened the buffer so that other commands can still be invoked
+      by changing the get file name function to examine b:currentfile.
+      - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
+    - for temp buffers containing java code (JavaImpl, class prototypes, etc.)
+      set a variable to mainain the name of the current project, and add a way to
+      force element based searches to become keyword based.
+
+    - add :JavaBeanImpl for defining an implementation of a bean interface.
+    - automate switch statement generation for enums.
+      When switch(enum), create cases for all enum values.
+    - :JavaImpl, wrap long parameter lines.
+    - modify for loop abbreviations to increment the looping var if the current
+      one is taken.  (ii, jj, kk, ll, mm, nn, ...)
+    - create a groovy templating harness
+      - create utility class with methods such as
+        - createMethod (velocity_template, values)
+        - createField (velocity_template, values)
+        - createImport (velocity_template, values)
+        - createClass (velocity_template, values)
+        - createCode (velocity_template, values) - insert code at current
+          cursor position
+      - standard templates
+        - jakarta equals, hashCode, toString.
+        - logging
+    - push method to interface... create method in interface from method in
+      implementation.
+    - With :JavaRun, also have an input buffer that when saved pushes the text
+      to stdin of the running app, and then clears the buffer for more input.
+    - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+
+    JST
+      jsp
+        - <%%>, <%=%> code completion
+        - <%@ page import="javax." %> completion
+        - <jsp: completion, with attribute name completion
+        - taglib completion (<core:<c-x><c-u>), including attribute name completion
+
+  }}}
+
+  Php {{{
+
+  }}}
+
+  Python {{{
+
+    - modify :DjangoFind to account for django provided tags and filters.
+
+    - when adding new method for a class, auto add self as first parameter.
+
+  }}}
+
+  Wst {{{
+
+    - javascript code completion
+
+    - sgml end tag completion, look into using fuzzy xml instead
+      - http://amateras.sourceforge.jp/cgi-bin/fswiki_en/wiki.cgi?page=FuzzyXML
+
+    - javascript doc lookup for common libraries
+      - yui
+      - prototype
+      - jquery
+      ...
+
+  }}}
+
+}}}
+
+NOTES {{{
+
+  Steps for new releases:
+    1) tag svn
+    2) create sourceforge release
+       - update windows and linux download pages with latest file to download.
+    3) update documentation website
+    4) announce on freshmeat
+       - http://freshmeat.net/projects/eclim/
+
+  Minimum execution of vim w/ eclim support
+    echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
+    vim -u _vimrc.minimum
+    gvim -u _vimrc.minimum -U none
+
+  Helpful link for debugging plugin errors.
+    http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
+
+  Eclipse Plugins:
+    http://www.eclipse-plugins.info/eclipse/plugin_details.jsp?id=1349
+
+  Java 1.4 support
+    Jars only need to support 1.4
+      jaxen
+
+  Core Tools (plugin with tools for debugging / fixing issues)
+    http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
+    - Workspace Re-Builder (looks a bit old, may need some work).
+
+  When using a project created from eclipse, may get errors in log when saving +
+  closing a src file, complaining that the .swp file doesn't exist.  To fix this,
+  you need to exclude the swp files from the eclipse build.
+
+    Project > Properties > Java Build Path
+      Expand Source folder node
+      Select "Excluded"
+      Hit "Edit"
+      Add exclusion pattern: **/*.swp
+  Or
+    Edit .classpath
+      Add attribute to src classpathentry
+        excluding="**/*.swp"
+      You can use '|' to delineate multiple entries
+        excluding="**/*.swp|**/*.tmp"
+
+  Running in true headless environment:
+  http://en.wikipedia.org/wiki/Xvfb
+    - Xvfb is included with xorg-server
+
+  Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
+  1) start the application
+  2) open and save org.eclim.Service
+  2) open and save build.xml
+
+           Virtual  Resident  Shared  (in megs)
+  eclim    360      132       54
+  eclipse  500      143       59
+
+
+  Troubleshooting:
+    Windows:
+      - starting eclim without spawning seperate console
+        > java -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
+               -jar startup.jar -debug -consolelog -nosplash -clean -refresh
+               -application org.eclim.application -vmargs
+               -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
+
+  Pydev, files modified to remove it:
+    build.xml
+    status.xml
+    src/ant/docs.xml
+    src/forrest/content/xdocs/features.xml
+    src/forrest/content/xdocs/site.xml
+    src/forrest/content/xdocs/vim/cheatsheet.xml
+    src/forrest/content/xdocs/vim/cheatsheet_zh_TW.xml
+    src/forrest/content/xdocs/vim/mappings.xml
+    src/installer/build.xml
+    src/installer/installer.xml
+    src/installer/java/org/eclim/installer/step/FeatureProvider.java
+    src/installer/resources/dependencies.properties
+    src/installer/resources/install.properties
+    src/vim/eclim/autoload/eclim/python/django.vim
+    src/vim/eclim/ftplugin/python/eclim_complete.vim
+    src/vim/eclim/ftplugin/python/eclim_definition.vim
+
+
+  Release  /  Revision
+  --------------------
+  1.3.0       1253
+
+}}}
+
+// vim:fdm=marker:tw=0
