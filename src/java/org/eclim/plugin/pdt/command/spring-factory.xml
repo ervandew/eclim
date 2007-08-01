@@ -78,4 +78,14 @@
     </property>
   </bean>
 
+  <bean name="php_includepath_variable_create"
+      class="org.eclim.plugin.pdt.command.includepath.IncludePathVariableCreateCommand">
+    <description>Handles client request to create an include path variable.</description>
+  </bean>
+
+  <bean name="php_includepath_variable_delete"
+      class="org.eclim.plugin.pdt.command.includepath.IncludePathVariableDeleteCommand">
+    <description>Handles client request to delete an include path variable.</description>
+  </bean>
+
 </beans>
