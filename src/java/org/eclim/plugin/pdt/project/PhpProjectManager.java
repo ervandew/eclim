@@ -16,6 +16,8 @@
 package org.eclim.plugin.pdt.project;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclim.Services;
 
@@ -36,8 +38,6 @@ import org.eclipse.php.internal.core.project.PHPNature;
 
 import org.eclipse.php.internal.core.project.options.PHPProjectOptions;
 
-import org.eclipse.php.internal.core.project.options.includepath.IncludePathValidator;
-
 /**
  * Implementation of {@link ProjectManager} for php projects.
  *
@@ -49,9 +49,6 @@ public class PhpProjectManager
 {
   private static final String PROJECT_OPTIONS_XSD =
     "/resources/schema/eclipse/projectOptions.xsd";
-
-  private static final IncludePathValidator VALIDATOR =
-    new IncludePathValidator();
 
   /**
    * {@inheritDoc}
@@ -88,11 +85,30 @@ public class PhpProjectManager
     // not ideal, but does the job.
     nature.setProject(_project);
 
+    List<String> names =
+      Arrays.asList(PHPProjectOptions.getIncludePathVariableNames());
+
     PHPProjectOptions options = PHPProjectOptions.forProject(_project);
     IIncludePathEntry[] entries = options.readRawIncludePath();
     ArrayList<Error> errs = new ArrayList<Error>();
     for(IIncludePathEntry entry : entries){
       String message = entry.validate();
+
+      // perform validation that pdt does not.
+      if (message == null){
+        if (entry.getEntryKind() == IIncludePathEntry.IPE_VARIABLE){
+          String name = entry.getPath().toString();
+          if (!names.contains(name)){
+            message = Services.getMessage("variable.not.found", name);
+          }
+        }else if (entry.getEntryKind() == IIncludePathEntry.IPE_PROJECT){
+          String path = entry.getPath().toString();
+          if(!path.equals("/" + entry.getResource().getName())){
+            message = Services.getMessage("project.path.invalid", path);
+          }
+        }
+      }
+
       if (message != null){
         // hacky... using filename arg as the entry path to caculate line/col on
         // the vim side.
