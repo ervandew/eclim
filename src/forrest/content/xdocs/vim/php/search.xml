@@ -1,33 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  - Copyright (c) 2005 - 2007
-  -
-  - Licensed under the Apache License, Version 2.0 (the "License");
-  - you may not use this file except in compliance with the License.
-  - You may obtain a copy of the License at
-  -
-  -      http://www.apache.org/licenses/LICENSE-2.0
-  -
-  - Unless required by applicable law or agreed to in writing, software
-  - distributed under the License is distributed on an "AS IS" BASIS,
-  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  - See the License for the specific language governing permissions and
-  - limitations under the License.
-  -
-  - Author: Eric Van Dewoestine
-  -->
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
   "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
 
 <document>
   <header>
-    <title>Searching</title>
+    <title>Php Search</title>
     <authors>
       <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
     </authors>
   </header>
   <body>
-    <p>
-    </p>
+    <section id="element">
+      <title>Element Search</title>
+      <p>
+        Element searching allows you to place the cursor over just about any
+        element in a source file (method call, class name, constant) and perform
+        a search for that element by issuing the command
+        <strong>:PhpFindDefinition</strong>.
+      </p>
+      <p>
+        If only one result is found and that result is in the current source
+        file, the cursor will be moved to the element found.
+      </p>
+      <anchor id="PhpSearchContext"/>
+      <p>
+        As a convenience eclim also provides the command
+        <strong>:PhpSearchContext</strong>.  This command accepts no arguments
+        and will perform the appropriate search depending on the context of the
+        element.
+      </p>
+      <ul>
+        <li>
+          If the cursor is on the file name in a require or include call, it
+          will search the configured include path for the file.
+        </li>
+        <li>
+          Otherwise, it will search for the declaration of the element.
+        </li>
+      </ul>
+    </section>
+    <section id="pattern">
+      <title>Pattern Search</title>
+      <anchor id="PhpSearch"/>
+      <p>
+        Pattern searching provides a means to widen a search beyond a single
+        element.  A pattern search can be executed using the command<br/>
+        &nbsp;&nbsp;<strong>:PhpSearch</strong> -p &lt;pattern&gt; -t &lt;type&gt;
+        -s &lt;scope&gt;
+      </p>
+      <p>
+        All of the results will be placed into the current window's location
+        list (:help location-list) so that you can easily navigate the results.
+      </p>
+      <note>
+        Vim command completion is supported through out the command with the
+        excption of the pattern to search for.<br/>
+        <code>:PhpSearch &lt;Tab&gt;</code><br/>
+        <code>:PhpSearch -p MyClass* &lt;Tab&gt;</code><br/>
+        <code>:PhpSearch -p MyClass* -t &lt;Tab&gt;</code><br/>
+        <code>:PhpSearch -p MyClass* -t class &lt;Tab&gt;</code><br/>
+        <code>:PhpSearch -p MyClass* -t class -s &lt;Tab&gt;</code><br/>
+        <code>:PhpSearch -p MyClass* -t class -s project</code>
+      </note>
+      <ul>
+        <li>
+          pattern: The pattern to search for.<br/>
+          Ex.<br/>
+          &nbsp;&nbsp;MyClass<br/>
+          &nbsp;&nbsp;myFunction<br/>
+          &nbsp;&nbsp;my*<br/>
+        </li>
+        <li>
+          type: The type of element to search for where possible
+          types include
+          <ul>
+            <li>class</li>
+            <li>function</li>
+            <li>constant</li>
+          </ul>
+        </li>
+        <li>
+          scope (Default: all): The scope of the search where possible context
+          values include
+          <ul>
+            <li>all - Search the whole workspace.</li>
+            <li>
+              project - Search the current project, dependent projects, and
+              libraries.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!--p>
+        Eclim also provides a shortcut when issuing a pattern search for a type.
+        You may simply invoke <strong>:PhpSearch</strong> supplying only the
+        pattern.
+      </p>
+      <source>
+        :PhpSearch SomeType
+      </source-->
+    </section>
+    <section id="configuration">
+      <title>Configuration</title>
+      <p>
+        Vim Variables:
+      </p>
+      <ul>
+        <li>
+          <anchor id="EclimPhpSearchSingleResult"/>
+          <strong>g:EclimPhpSearchSingleResult</strong><br/>
+          Determines what action to take when a only a single result is
+          found.<br/>
+          Possible values include:
+          <ul>
+            <li>'split' - open the result in a new window via "split".</li>
+            <li>'edit' - open the result in the current window.</li>
+            <li>'lopen' - open the location list to display the result.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
   </body>
 </document>
