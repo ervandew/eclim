@@ -16,6 +16,7 @@ TODO {{{
       :DjangoTemplateOpen
       :DjangoViewOpen
       :DjangoContextOpen
+      - all the php commands
   }}}
 
   Common {{{
@@ -40,24 +41,8 @@ TODO {{{
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
-    - :ProjectNatureAdd <project> <nature> <nature> ...
-    - :ProjectNatureRemove <project> <nature> <nature> ...
-    - :ProjectNatureList <project>
-      - support command completion project names.
-      - support command completion of natures
-        - add: only complete natures not already in the project.
-        - remove: only complete natures in the project.
-      - IProject.setDescription(IProjectDescription, IProgressMonitor)
-        - any new natures in IProjectDescription will be configured, any not
-          included, will be deconfigured.
-      - Ex.
-        IProjectDescription desc = project.getDescription();
-        String[] natureIds = desc.getNatureIds();
-        // modify naturesIds
-        ...
-        desc.setNatureIds(natureIds);
-        project.setDescription(desc);
-      - Be sure to consider calling the nature's associated
+    - :ProjectNatureAdd/Remove
+      - Consider calling the nature's associated
         ProjectManagement.create/delete methods in eclim to perform any nature
         specific setup on any new natures added/removed.
         - may want to add new methods: natureAdded, natureRemoved.
@@ -190,6 +175,7 @@ TODO {{{
 
     - sgml end tag completion, look into using fuzzy xml instead
       - http://amateras.sourceforge.jp/cgi-bin/fswiki_en/wiki.cgi?page=FuzzyXML
+      - fall back to vimscript version when fuzzy fails or eclim is not running.
 
     - javascript doc lookup for common libraries
       - yui
