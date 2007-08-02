@@ -15,11 +15,14 @@
  */
 package org.eclim.project;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+
+import org.eclipse.core.resources.IProject;
 
 /**
  * Factory for registering project natures.
@@ -31,7 +34,7 @@ public class ProjectNatureFactory
 {
   public static String NONE = "none";
 
-  private static Map natureAliases = new HashMap();
+  private static Map<String,String> natureAliases = new HashMap<String,String>();
 
   /**
    * Registers project natures separated by new lines.
@@ -84,5 +87,41 @@ public class ProjectNatureFactory
   public static String getNatureForAlias (String _alias)
   {
     return (String)natureAliases.get(_alias);
+  }
+
+  /**
+   * Gets the alias for a given nature id.
+   *
+   * @param _natureId The nature id.
+   * @return The alias.
+   */
+  public static String getAliasForNature (String _natureId)
+  {
+    for(String key : natureAliases.keySet()){
+      if(_natureId.equals((String)natureAliases.get(key))){
+        return (String)key;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Gets an array of natures aliases which are associated with the supplied
+   * project.
+   *
+   * @param _project The project to get the aliases for.
+   * @return Array of aliases.
+   */
+  public static String[] getProjectNatureAliases (IProject _project)
+    throws Exception
+  {
+    ArrayList<String> aliases = new ArrayList<String>();
+    for(String key : natureAliases.keySet()){
+      if(_project.hasNature(natureAliases.get(key))){
+        aliases.add(key);
+      }
+    }
+
+    return (String[])aliases.toArray(new String[aliases.size()]);
   }
 }

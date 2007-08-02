@@ -62,4 +62,11 @@ function! eclim#php#util#UpdateSrcFile (validate)
   endif
 endfunction " }}}
 
+" CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names.
+function! eclim#php#util#CommandCompleteProject (argLead, cmdLine, cursorPos)
+  return eclim#project#CommandCompleteProjectByNature(
+    \ a:argLead, a:cmdLine, a:cursorPos, 'php')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

@@ -17,7 +17,6 @@ package org.eclim.command.project;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -28,6 +27,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.preference.Option;
+
+import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.ProjectUtils;
 
@@ -49,12 +50,25 @@ public class ProjectInfoCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
-      List results = new ArrayList();
+      String name = _commandLine.getValue(Options.PROJECT_OPTION);
+      ArrayList<Object> results = new ArrayList<Object>();
 
       // list all projects.
       if(name == null){
         IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        String natureId = null;
+        if(_commandLine.hasOption(Options.NATURE_OPTION)){
+          String alias = _commandLine.getValue(Options.NATURE_OPTION);
+          natureId = ProjectNatureFactory.getNatureForAlias(alias);
+          ArrayList<IProject> filtered = new ArrayList<IProject>();
+          for (IProject project : projects){
+            if (project.hasNature(natureId)){
+              filtered.add(project);
+            }
+          }
+          projects = (IProject[])filtered.toArray(new IProject[filtered.size()]);
+        }
+
         String open = Services.getMessage("project.status.open");
         String closed = Services.getMessage("project.status.closed");
 

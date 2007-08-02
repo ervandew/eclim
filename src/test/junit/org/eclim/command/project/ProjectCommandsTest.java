@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -57,7 +56,7 @@ public class ProjectCommandsTest
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "project_close", "-n", TEST_PROJECT});
+      "project_close", "-p", TEST_PROJECT});
     System.out.println(result);
 
     assertFalse("Project not closed.", projectOpen());
@@ -69,7 +68,7 @@ public class ProjectCommandsTest
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "project_open", "-n", TEST_PROJECT});
+      "project_open", "-p", TEST_PROJECT});
     System.out.println(result);
 
     assertTrue("Project not opened.", projectOpen());
@@ -81,7 +80,7 @@ public class ProjectCommandsTest
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "project_delete", "-n", TEST_PROJECT});
+      "project_delete", "-p", TEST_PROJECT});
     System.out.println(result);
 
     assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT));

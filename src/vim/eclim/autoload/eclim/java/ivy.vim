@@ -24,7 +24,7 @@
 
 " Script Variables {{{
   let s:update_command =
-    \ '-command project_update -n "<name>" -b "<build>" -filter vim'
+    \ '-command project_update -p "<project>" -b "<build>" -filter vim'
 " }}}
 
 " SetRepo(path) {{{
@@ -47,7 +47,7 @@ function! eclim#java#ivy#UpdateClasspath ()
 
   let name = eclim#project#GetCurrentProjectName()
   let command = s:update_command
-  let command = substitute(command, '<name>', name, '')
+  let command = substitute(command, '<project>', name, '')
   let command = substitute(command, '<build>', escape(expand('%:p'), '\'), '')
   let result = eclim#ExecuteEclim(command)
 

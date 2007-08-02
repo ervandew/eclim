@@ -57,7 +57,7 @@ if !exists(":NewSrcEntry")
     \     (substitute('<args>', '\', '/', 'g') , s:entry_src)
 endif
 if !exists(":NewProjectEntry")
-  command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProject -buffer
+  command -nargs=+ -complete=customlist,eclim#java#util#CommandCompleteProject -buffer
     \ NewProjectEntry :call eclim#java#classpath#NewClasspathEntry('<args>', s:entry_project)
 endif
 if !exists(":NewJarEntry")

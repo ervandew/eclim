@@ -149,6 +149,21 @@
     </property>
   </bean>
 
+  <bean name="project_natures"
+      class="org.eclim.command.project.ProjectNaturesCommand">
+    <description>Handles client request for project natures.</description>
+  </bean>
+
+  <bean name="project_nature_add"
+      class="org.eclim.command.project.ProjectNatureAddCommand">
+    <description>Handles client request to add natures to a project.</description>
+  </bean>
+
+  <bean name="project_nature_remove"
+      class="org.eclim.command.project.ProjectNatureRemoveCommand">
+    <description>Handles client request to remove natures from a project.</description>
+  </bean>
+
   <bean name="settings_update" class="org.eclim.command.admin.SettingsUpdateCommand">
     <description>Handles settings update request.</description>
   </bean>

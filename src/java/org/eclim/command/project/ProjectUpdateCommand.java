@@ -56,7 +56,7 @@ public class ProjectUpdateCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
+      String name = _commandLine.getValue(Options.PROJECT_OPTION);
       String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
       IProject project = ProjectUtils.getProject(name);

@@ -24,7 +24,7 @@
 
 " Script Variables {{{
   let s:command_variables = '-command php_includepath_variables'
-  let s:command_update = '-command project_update -n "<name>"'
+  let s:command_update = '-command project_update -p "<project>"'
   let s:command_variable_create =
     \ '-command php_includepath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
@@ -66,7 +66,7 @@ endfunction " }}}
 " Updates the include path on the server w/ the changes made to the current file.
 function! eclim#php#projectOptions#UpdateIncludePath ()
   let name = eclim#project#GetCurrentProjectName()
-  let command = substitute(s:command_update, '<name>', name, '')
+  let command = substitute(s:command_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)
   if result =~ '|'

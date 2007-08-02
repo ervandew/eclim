@@ -40,7 +40,7 @@ public class ProjectDeleteCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
+      String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
       ProjectManagement.delete(ProjectUtils.getProject(name), _commandLine);
 

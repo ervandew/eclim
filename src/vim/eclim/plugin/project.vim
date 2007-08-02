@@ -81,6 +81,18 @@ if !exists(":ProjectClose")
   command -nargs=1 -complete=customlist,eclim#project#CommandCompleteProject
     \ ProjectClose :call eclim#project#ProjectClose('<args>')
 endif
+if !exists(":ProjectNatures")
+  command -nargs=? -complete=customlist,eclim#project#CommandCompleteProject
+    \ ProjectNatures :call eclim#project#ProjectNatures('<args>')
+endif
+if !exists(":ProjectNatureAdd")
+  command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProjectNatureAdd
+    \ ProjectNatureAdd :call eclim#project#ProjectNatureModify('add', '<args>')
+endif
+if !exists(":ProjectNatureRemove")
+  command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProjectNatureRemove
+    \ ProjectNatureRemove :call eclim#project#ProjectNatureModify('remove', '<args>')
+endif
 
 if !exists(":ProjectTree")
   command -nargs=* -complete=customlist,eclim#project#CommandCompleteProject

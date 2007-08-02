@@ -49,7 +49,7 @@ if !exists(":NewLibEntry")
     \     (substitute('<args>', '\', '/', 'g') , s:entry_lib)
 endif
 if !exists(":NewProjectEntry")
-  command -nargs=+ -complete=customlist,eclim#project#CommandCompleteProject -buffer
+  command -nargs=+ -complete=customlist,eclim#php#util#CommandCompleteProject -buffer
     \ NewProjectEntry :call eclim#php#projectOptions#NewIncludePathEntry('<args>', s:entry_project)
 endif
 if !exists(":NewVarEntry")

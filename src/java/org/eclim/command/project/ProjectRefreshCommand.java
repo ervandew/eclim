@@ -41,7 +41,7 @@ public class ProjectRefreshCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
+      String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
       ProjectManagement.refresh(ProjectUtils.getProject(name), _commandLine);
 

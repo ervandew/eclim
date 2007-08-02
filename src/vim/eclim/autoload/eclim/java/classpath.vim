@@ -24,7 +24,7 @@
 
 " Script Variables {{{
   let s:command_variables = '-command java_classpath_variables -filter vim'
-  let s:command_update = '-command project_update -n "<name>" -filter vim'
+  let s:command_update = '-command project_update -p "<project>" -filter vim'
   let s:command_variable_create =
     \ '-command java_classpath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
@@ -60,7 +60,7 @@ endfunction " }}}
 " Updates the classpath on the server w/ the changes made to the current file.
 function! eclim#java#classpath#UpdateClasspath ()
   let name = eclim#project#GetCurrentProjectName()
-  let command = substitute(s:command_update, '<name>', name, '')
+  let command = substitute(s:command_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)
   if result =~ '|'

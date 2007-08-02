@@ -25,15 +25,20 @@
   let s:command_create = '-command project_create -f "<folder>"'
   let s:command_create_natures = ' -n <natures>'
   let s:command_create_depends = ' -d <depends>'
-  let s:command_delete = '-command project_delete -n "<project>"'
-  let s:command_refresh = '-command project_refresh -n "<project>"'
-  let s:command_projects = '-command project_info -filter vim'
-  let s:command_project_info = s:command_projects . ' -n "<project>"'
+  let s:command_delete = '-command project_delete -p "<project>"'
+  let s:command_refresh = '-command project_refresh -p "<project>"'
+  let s:command_projects = '-command project_info'
+  let s:command_project_info = s:command_projects . ' -p "<project>"'
   let s:command_project_setting = s:command_project_info . ' -s <setting>'
-  let s:command_update = '-command project_update -n "<project>" -s "<settings>"'
-  let s:command_open = '-command project_open -n "<project>"'
-  let s:command_close = '-command project_close -n "<project>"'
+  let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
+  let s:command_open = '-command project_open -p "<project>"'
+  let s:command_close = '-command project_close -p "<project>"'
   let s:command_nature_aliases = '-command project_nature_aliases'
+  let s:command_natures = '-command project_natures'
+  let s:command_nature_add =
+    \ '-command project_nature_add -p "<project>" -n "<natures>"'
+  let s:command_nature_remove =
+    \ '-command project_nature_remove -p "<project>" -n "<natures>"'
 " }}}
 
 " ProjectCD(scope) {{{
@@ -155,6 +160,51 @@ function! eclim#project#ProjectList ()
  echohl None
 endfunction " }}}
 
+" ProjectNatures(project) {{{
+" Prints nature info one or all projects.
+function! eclim#project#ProjectNatures (project)
+  let command = s:command_natures
+  if a:project != ''
+    let command .= ' -p "' . a:project . '"'
+  endif
+  let projects = split(eclim#ExecuteEclim(command), '\n')
+  if len(projects) == 0
+    call eclim#util#Echo("No projects.")
+  endif
+  if len(projects) == 1 && projects[0] == '0'
+    return
+  endif
+
+  if len(projects) == 1
+    call eclim#util#Echo(projects[0])
+  else
+    exec "echohl " . g:EclimInfoHighlight
+    redraw
+    for project in projects
+      echom project
+    endfor
+    echohl None
+  endif
+endfunction " }}}
+
+" ProjectNatureModify(project) {{{
+" Modifies one or more natures for the specified project.
+function! eclim#project#ProjectNatureModify (command, args)
+  let args = eclim#util#ParseArgs(a:args)
+
+  let project = args[0]
+  let natures = join(args[1:], ',')
+  let command = a:command == 'add' ? s:command_nature_add : s:command_nature_remove
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<natures>', natures, '')
+
+  call eclim#util#Echo(command)
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
 " ProjectSettings(project) {{{
 " Opens a window that can be used to edit a project's settings.
 function! eclim#project#ProjectSettings (project)
@@ -187,7 +237,7 @@ function! eclim#project#ProjectSettings (project)
   endif
 endfunction " }}}
 
-" ProjectGrep(command, pattern, ...) {{{
+" ProjectGrep(command, args) {{{
 " Executes the supplied vim grep command with the specified pattern against
 " one or more file patterns.
 function! eclim#project#ProjectGrep (command, args)
@@ -330,10 +380,15 @@ function! eclim#project#GetProjectDirs ()
   return projects
 endfunction " }}}
 
-" GetProjectNames() {{{
-" Gets list of all project names.
-function! eclim#project#GetProjectNames ()
-  let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
+" GetProjectNames(...) {{{
+" Gets list of all project names, with optional filter by the supplied nature
+" alias.
+function! eclim#project#GetProjectNames (...)
+  let command = s:command_projects
+  if a:0 > 0 && a:1 != ''
+    let command = s:command_projects . ' -n ' . a:1
+  endif
+  let projects = split(eclim#ExecuteEclim(command), '\n')
   if len(projects) == 1 && projects[0] == '0'
     return []
   endif
@@ -343,9 +398,20 @@ function! eclim#project#GetProjectNames ()
   return projects
 endfunction " }}}
 
-" GetProjectNatureAliases() {{{
-" Gets list of all project nature aliases.
-function! eclim#project#GetProjectNatureAliases ()
+" GetProjectNatureAliases(...) {{{
+" Gets list of all project nature aliases or a list of aliases associated with
+" a project if the project name is supplied.
+function! eclim#project#GetProjectNatureAliases (...)
+  if a:0 > 0 && a:1 != ''
+    let command = s:command_natures . ' -p "' . a:1 . '"'
+    let result = eclim#ExecuteEclim(command)
+    if result == '0'
+      return []
+    endif
+    let aliases = split(substitute(result, '.\{-}\s-\s', '', ''), ' ')
+    return aliases
+  endif
+
   let aliases = split(eclim#ExecuteEclim(s:command_nature_aliases), '\n')
   if len(aliases) == 1 && aliases[0] == '0'
     return []
@@ -407,11 +473,19 @@ endfunction " }}}
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#project#CommandCompleteProject (argLead, cmdLine, cursorPos)
+  return eclim#project#CommandCompleteProjectByNature(
+    \ a:argLead, a:cmdLine, a:cursorPos, '')
+endfunction " }}}
+
+" CommandCompleteProjectByNature(argLead, cmdLine, cursorPos, nature) {{{
+" Custom command completion for project names.
+function! eclim#project#CommandCompleteProjectByNature (
+    \ argLead, cmdLine, cursorPos, nature)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
-  let projects = eclim#project#GetProjectNames()
+  let projects = eclim#project#GetProjectNames(a:nature)
   if cmdLine !~ '[^\\]\s$'
     call filter(projects, 'v:val =~ "^' . argLead . '"')
   endif
@@ -482,6 +556,54 @@ function! eclim#project#CommandCompleteProjectRelative (argLead, cmdLine, cursor
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
 
   return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+" CommandCompleteProjectNatureAdd(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names and natures.
+function! eclim#project#CommandCompleteProjectNatureAdd (argLead, cmdLine, cursorPos)
+  return s:CommandCompleteProjectNatureModify(
+    \ a:argLead, a:cmdLine, a:cursorPos, function("s:AddAliases"))
+endfunction
+function s:AddAliases (allAliases, projectAliases)
+  let aliases = a:allAliases
+  call filter(aliases, 'index(a:projectAliases, v:val) == -1')
+  return aliases
+endfunction " }}}
+
+" CommandCompleteProjectNatureRemove(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names and natures.
+function! eclim#project#CommandCompleteProjectNatureRemove (argLead, cmdLine, cursorPos)
+  return s:CommandCompleteProjectNatureModify(
+    \ a:argLead, a:cmdLine, a:cursorPos, function("s:RemoveAliases"))
+endfunction
+function s:RemoveAliases (allAliases, projectAliases)
+  return a:projectAliases
+endfunction " }}}
+
+" CommandCompleteProjectNatureModify(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names and natures.
+function! s:CommandCompleteProjectNatureModify (argLead, cmdLine, cursorPos, aliasesFunc)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+
+  " complete dirs for first arg
+  if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'
+    return eclim#project#CommandCompleteProject(argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  let allAliases = eclim#project#GetProjectNatureAliases()
+  call filter(allAliases, 'v:val != "none"')
+
+  let projectAliases = eclim#project#GetProjectNatureAliases(args[1])
+  let aliases = a:aliasesFunc(allAliases, projectAliases)
+  if cmdLine !~ '[^\\]\s$'
+    call filter(aliases, 'v:val =~ "^' . argLead . '"')
+  endif
+
+  call filter(aliases, 'index(args[2:], v:val) == -1')
+
+  return aliases
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
