@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 - 2006
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+  Author: Eric Van Dewoestine
+  -->
+
+<document>
+  <header>
+    <title>Creating your first php project.</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      The goal of this guide is to walk you through creating your first php
+      project via eclim.
+    </p>
+    <section id="project_create">
+      <title>Creating a project</title>
+      <p>
+        The first step is to open a Vim window and create the project by
+        executing:
+      </p>
+      <source>
+        :ProjectCreate /path/to/my_project -n php
+      </source>
+      <p>
+        The path supplied will be the path to the root of your project.  This
+        path may or may not exist.  If it does not exist it will be created for
+        you. When the project is created two file will be added to the root
+        directory of your project, <code>.project</code> and
+        <code>.projectOptions</code> At this time, the <code>.project</code>
+        file is nothing that you need to worry about maintaining as it is purely
+        for Eclipse.  The <code>.projectOptions</code> file on the other hand,
+        is used to manage your project's dependencies, including dependencies on
+        other projects and other libraries.
+        For more on maintaining this file see the
+        <a href="../../vim/php/includepath.html">include path docs</a>.
+      </p>
+      <p>
+        Once you've created your project you can use the
+        <strong>:ProjectList</strong> command to list the available projects and
+        you should see your newly created one in the list.
+      </p>
+      <source>
+        my_project - open   - /path/to/my_project
+      </source>
+      <p>
+        The <strong>:ProjectList</strong> result is in the form of
+        <code>projectName - (open|closed) - /project/root/path</code>.  When you
+        create projects, the last path element will be used for the project
+        name.  If that element contains any spaces, these will be converted to
+        underscores.
+      </p>
+    </section>
+  </body>
+</document>
