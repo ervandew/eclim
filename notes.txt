@@ -12,11 +12,17 @@ TODO {{{
     - document python import functionality
 
     - Chinese cheatsheet
+      :ProjectNatures
+      :ProjectNatureAdd
+      :ProjectNatureRemove
       :DjangoFind
       :DjangoTemplateOpen
       :DjangoViewOpen
       :DjangoContextOpen
-      - all the php commands
+      :PhpFindDefinition
+      :PhpSearch
+      :PhpSearchContext
+      :Validate (php and java)
   }}}
 
   Common {{{

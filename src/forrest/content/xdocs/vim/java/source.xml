@@ -37,6 +37,12 @@
       margin.
     </p>
     <p>
+      Automatic validation of java source files can be disabled via the
+      <strong>g:EclimJavaSrcValidate</strong> variable (described below).  If
+      you choose to disable automatic validation, you can still use the
+      <strong>:Validate</strong> command to manually validate the current file.
+    </p>
+    <p>
       <strong>Configuration</strong>
     </p>
     <p>

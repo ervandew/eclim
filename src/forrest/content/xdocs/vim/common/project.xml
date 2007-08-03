@@ -140,6 +140,27 @@
         performance when building projects.
       </li>
       <li>
+        <anchor id="ProjectNatures"/>
+        <strong>:ProjectNatures</strong> [&lt;project&gt;]
+        <br/>
+        Echos list of natures for the supplied project name or for all projects
+        if no project name specified.
+      </li>
+      <li>
+        <anchor id="ProjectNatureAdd"/>
+        <strong>:ProjectNatureAdd</strong> &lt;project&gt; [&lt;nature&gt; ...]
+        <br/>
+        Adds one or more natures to a project.<br/>
+        Supports command line completion of nature names.
+      </li>
+      <li>
+        <anchor id="ProjectNatureRemove"/>
+        <strong>:ProjectNatureRemove</strong> &lt;project&gt; [&lt;nature&gt; ...]
+        <br/>
+        Removes one or more natures from a project.<br/>
+        Supports command line completion of nature names.
+      </li>
+      <li>
         <anchor id="ProjectCD"/>
         <strong>:ProjectCD</strong><br/>
         Changes the global current working directory to the root directory of

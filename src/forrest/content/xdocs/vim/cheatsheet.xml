@@ -92,6 +92,18 @@
         &lt;project&gt; - Closes a project.
       </li>
       <li>
+        <a href="common/project.html#ProjectNatures"><strong>:ProjectNatures</strong></a>
+        [&lt;project&gt;] - View the configured natures for one or all projects.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectNatureAdd"><strong>:ProjectNatureAdd</strong></a>
+        &lt;project&gt; [&lt;nature&gt; ...] - Add one or more natures to a project.
+      </li>
+      <li>
+        <a href="common/project.html#ProjectNatureRemove"><strong>:ProjectNatureRemove</strong></a>
+        &lt;project&gt; [&lt;nature&gt; ...] - Remove one or more natures from a project.
+      </li>
+      <li>
         <a href="common/project.html#ProjectCD"><strong>:ProjectCD</strong></a>
         - Changes the global current working directory to the root directory of
         the current file's project (executes a :cd).
@@ -281,6 +293,12 @@
         Opens window with information about the currently running java
         processes.
       </li>
+      <li>
+        <a href="java/source.html#Validate">
+          <strong>:Validate</strong>
+        </a> -
+        Manually runs source code validation.
+      </li>
     </ul> <!-- }}} -->
 
     <p><strong>Java .classpath Commands</strong></p> <!-- {{{ -->
@@ -403,6 +421,12 @@
       <li>
         <a href="php/search.html#PhpSearchContext"><strong>:PhpSearchContext</strong></a>
         Find the element under the cursor based on its context.
+      </li>
+      <li>
+        <a href="php/validate.html#Validate">
+          <strong>:Validate</strong>
+        </a> -
+        Manually runs source code validation.
       </li>
     </ul> <!-- }}} -->
 
