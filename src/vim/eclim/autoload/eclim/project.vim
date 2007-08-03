@@ -23,6 +23,7 @@
 
 " Script Variables {{{
   let s:command_create = '-command project_create -f "<folder>"'
+  let s:command_create_name = ' -p "<name>"'
   let s:command_create_natures = ' -n <natures>'
   let s:command_create_depends = ' -d <depends>'
   let s:command_delete = '-command project_delete -p "<project>"'
@@ -61,13 +62,18 @@ function! eclim#project#ProjectCreate (args)
   let folder = substitute(folder, '\', '/', 'g')
   let command = substitute(s:command_create, '<folder>', folder, '')
 
-  let natures = substitute(a:args, '.* -n\s\+\(.\{-}\)\(\s\+-d\>.*\|$\)', '\1', '')
+  let name = substitute(a:args, '.* -p\s\+\(.\{-}\)\(\s\+-\(d\|n\)\>.*\|$\)', '\1', '')
+  if name != a:args
+    let command .= substitute(s:command_create_name, '<name>', name, '')
+  endif
+
+  let natures = substitute(a:args, '.* -n\s\+\(.\{-}\)\(\s\+-\(d\|p\)\>.*\|$\)', '\1', '')
   if natures != a:args
     let natures = substitute(natures, '\s\+', ',', 'g')
     let command .= substitute(s:command_create_natures, '<natures>', natures, '')
   endif
 
-  let depends = substitute(a:args, '.* -d\s\+\(.\{-}\)\(\s\+-n\>.*\|$\)', '\1', '')
+  let depends = substitute(a:args, '.* -d\s\+\(.\{-}\)\(\s\+-\(n\|p\)\>.*\|$\)', '\1', '')
   if depends != a:args
     let depends = substitute(depends, '\s\+', ',', 'g')
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
