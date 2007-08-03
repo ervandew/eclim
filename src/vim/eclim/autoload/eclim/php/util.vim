@@ -43,15 +43,15 @@ function! eclim#php#util#UpdateSrcFile (validate)
     endif
     let result = eclim#ExecuteEclim(command)
 
-    " html validate
-    let project = eclim#project#GetCurrentProjectName()
-    let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
-    let command = s:html_validate_command
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', file, '')
-    let result .= "\n" . eclim#ExecuteEclim(command)
-
     if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
+      " html validate
+      let project = eclim#project#GetCurrentProjectName()
+      let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+      let command = s:html_validate_command
+      let command = substitute(command, '<project>', project, '')
+      let command = substitute(command, '<file>', file, '')
+      let result .= "\n" . eclim#ExecuteEclim(command)
+
       if result =~ '|'
         let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
         call eclim#util#SetLocationList(errors)
