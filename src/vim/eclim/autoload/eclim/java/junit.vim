@@ -42,6 +42,10 @@ function! eclim#java#junit#JUnitExecute (test)
   endif
 
   let command = eclim#project#GetProjectSetting("org.eclim.java.junit.command")
+  if command == '0'
+    return
+  endif
+
   if command == ''
     call eclim#util#EchoWarning(
       \ "Command setting for 'junit' not set. " .
@@ -163,6 +167,10 @@ endfunction " }}}
 " GetResultsDir() {{{
 function s:GetResultsDir ()
   let path = eclim#project#GetProjectSetting("org.eclim.java.junit.output_dir")
+  if path == '0'
+    return
+  endif
+
   let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
   let path = path !~ '/$' ? path . '/' : path
   return path

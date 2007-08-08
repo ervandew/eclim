@@ -440,6 +440,8 @@ function! eclim#project#GetProjectRoot (project)
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{
+" Gets a project setting from eclim.  Returns '' if not in a project.  Returns
+" '0' if an error occurs communicating with the server.
 function! eclim#project#GetProjectSetting (setting)
   let project = eclim#project#GetCurrentProjectName()
   if project != ""
@@ -448,6 +450,10 @@ function! eclim#project#GetProjectSetting (setting)
     let command = substitute(command, '<setting>', a:setting, '')
 
     let result = split(eclim#ExecuteEclim(command), '\n')
+    if len(result) == 1 && result[0] == '0'
+      return result[0]
+    endif
+
     call filter(result, 'v:val !~ "^\\s*#"')
 
     if len(result) == 0

@@ -96,6 +96,10 @@ endfunction " }}}
 " Convert file or directory to viewvc url and open in the browser.
 function eclim#vcs#Viewvc (file)
   let root = eclim#project#GetProjectSetting('org.eclim.project.vcs.viewvc')
+  if root == '0'
+    return
+  endif
+
   if root == ''
     call eclim#util#EchoWarning(
       \ ":Viewvc requires project setting 'org.eclim.project.vcs.viewvc'.")

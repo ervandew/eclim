@@ -75,6 +75,10 @@ endfunction " }}}
 " Where type is 'junit', etc.
 function eclim#java#test#GetTestSrcDir (type)
   let path = eclim#project#GetProjectSetting("org.eclim.java." . a:type . ".src_dir")
+  if path == '0'
+    return
+  endif
+
   let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
   let path = path !~ '/$' ? path . '/' : path
   return path
