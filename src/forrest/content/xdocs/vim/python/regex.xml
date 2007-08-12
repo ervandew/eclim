@@ -49,6 +49,15 @@
       occurrences.
     </p>
     <p>
+      When applying the regex against the text, by default eclim will run the
+      regex against the whole text at once, where '^' and '$' would match the
+      start and end of the whole sample text, not each individual line.  If you
+      would like to instead have the regex matched against each line
+      individually, then you can set the buffer local variable
+      <strong>b:eclim_regex_type</strong> to 'line'.  To switch back to the
+      default mode simply set the same variable to 'file' instead.
+    </p>
+    <p>
       By default eclim uses four different highlighting groups,
       two which are alternated between for the full matches, and two that are
       alternated between for the group matches.  Eclim alternates the
@@ -98,6 +107,13 @@
         <anchor id="EclimRegexGroupHi_1"/>
         <strong>g:EclimRegexGroupHi{1}</strong> (Default: 'Todo')<br/>
         The second highlighting group used for group matches.
+      </li>
+      <li>
+        <anchor id="eclim_regex_type"/>
+        <strong>b:eclim_regex_type</strong> (Default: 'file')<br/>
+        Possible values: 'file' or 'line'<br/>
+        Determines if the supplied regex should be applied against the sample
+        text all at once ('file') or on each line individually ('line').
       </li>
     </ul>
   </body>

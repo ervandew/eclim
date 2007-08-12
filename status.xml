@@ -291,6 +291,14 @@
         <strong>g:EclimSgmlCompletionEndTag</strong> to 0.
       </action>
 
+      <action dev="ervandew" type="update" context="Java / Python">
+        <a href="vim/java/regex.html"><strong>:JavaRegex</strong></a> and
+        <a href="vim/python/regex.html"><strong>:PythonRegex</strong></a>
+        now support <strong>b:eclim_regex_type</strong> to determine if the
+        regex should be applied to the whole sample text at once, or to each
+        line individually.
+      </action>
+
       <action dev="ervandew" type="add" context="Php">
         Added php support for
         <a href="vim/php/complete.html">code completion</a>,

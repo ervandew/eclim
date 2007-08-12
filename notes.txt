@@ -5,14 +5,15 @@ TODO {{{
       every element since they are "not declared" (ex. ant/cvs.xml).
   }}}
 
+  Tests {{{
+    - add unit tests for line based matching via :JavaRegex and :PythonRegex
+  }}}
+
   Documentation {{{
     - FAQs
       - how to specify workspace dir.
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
-
-    - document b:eclim_regex_type for :JavaRegex and :PythonRegex
-      - let b:eclim_regex_type = 'file|line'
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -30,8 +31,9 @@ TODO {{{
 
   Common {{{
 
+    Rename all eclim- files under ftplugin... maybe
+
     Upgrade
-      - spring from 1.2.8 to 2.0.5
       - commons-cli from 1.0 to 1.1
       - commons-io from 1.2 to 1.3.2
       - commons-lang from 2.1 to 2.3
@@ -40,6 +42,20 @@ TODO {{{
         - http://jakarta.apache.org/site/downloads/downloads_commons-vfs.cgi
       - groovy to 1.0
       - forrest to 0.8
+
+      Remove
+        - commons-beanutils
+          - BeanComparator
+        - commons-collections
+          - CollectionUtils.addAll
+          - CollectionUtils.union
+          - ComparatorChain
+        - commons-io
+          - IOUtils
+          - FilenameUtils
+        - commons-logging
+        - jaxen
+        - spring
 
     Installer
       - maintain a version database for resources directories so we can determine
