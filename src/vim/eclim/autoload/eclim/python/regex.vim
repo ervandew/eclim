@@ -29,7 +29,7 @@ import StringIO
 import re
 import vim
 
-def run (regex, text):
+def run (regex, text, lnum):
   """
   Run the regular expression against the supplied text and return list of
   matches and corresponding groups.
@@ -47,10 +47,12 @@ def run (regex, text):
   results = []
   for match in pattern.finditer(text):
     string = StringIO.StringIO()
-    string.write('%s-%s' % (linecol(match.start() + 1), linecol(match.end())))
+    string.write('%s-%s' % \
+      (linecol(lnum, match.start() + 1), linecol(lnum, match.end())))
     if(match.groups()):
       for ii in range(1, len(match.groups()) + 1):
-        string.write('|%s-%s' % (linecol(match.start(ii) + 1), linecol(match.end(ii))))
+        string.write('|%s-%s' % \
+          (linecol(lnum, match.start(ii) + 1), linecol(lnum, match.end(ii))))
     results.append(string.getvalue())
 
   return results
@@ -68,10 +70,13 @@ def compileOffsets (text):
   return offsets
 
 
-def linecol(offset):
+def linecol (lnum, offset):
   """
   Translate the supplied offset to a line column string.
   """
+  if lnum:
+    return '%i:%i' % (lnum, offset)
+
   line, col = 0, offset
   for entry in offsets:
     if offset > entry:
@@ -83,10 +88,19 @@ def linecol(offset):
 
 
 # process the file
+type = vim.eval('exists("b:eclim_regex_type") ? b:eclim_regex_type : "file"')
 file = open(vim.eval('a:file'))
 regex, text = file.read().split('\n', 1)
-offsets = compileOffsets(text)
-vim.command("let results = '%s'" % '\n'.join(run(regex, text)))
+if not type or type == 'file':
+  offsets = compileOffsets(text)
+  vim.command("let results = '%s'" % '\n'.join(run(regex, text, 0)))
+else:
+  results = []
+  lnum = 1
+  for line in text.split('\n'):
+    lnum += 1
+    results += run(regex, line, lnum)
+  vim.command("let results = '%s'" % '\n'.join(results))
 EOF
   return results
 endfunction " }}}

@@ -74,6 +74,10 @@ function! eclim#regex#OpenTestWindow (lang)
       exec "autocmd BufWritePost <buffer> call s:Evaluate('" . a:lang . "')"
       call eclim#util#GoToBufferWindowRegister(filename)
     augroup END
+
+    if !exists('b:eclim_regex_type')
+      let b:eclim_regex_type = 'file'
+    endif
   endif
 
   nohlsearch

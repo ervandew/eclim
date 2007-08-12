@@ -55,6 +55,7 @@ TODO {{{
 
     - :JavaRegex and :PythonRegex, add means to switch between line by line
       matching and full file matching.
+      - variable b:eclim_regex_type = 'file|line'
 
     - make sure html files (html, php, etc) are context aware on code
       completion, switching to html, css, javascript completion as necessary.
