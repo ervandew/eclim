@@ -106,9 +106,6 @@ TODO {{{
       - eclim command
       - file paths
       - search results
-    - fedora + eclipse + gcj/gnu classpath
-      - http://www.fedoraproject.org/wiki/Eclipse
-      - http://sourceware.org/eclipse/
 
   }}}
 
@@ -259,6 +256,10 @@ NOTES {{{
                -jar startup.jar -debug -consolelog -nosplash -clean -refresh
                -application org.eclim.application -vmargs
                -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
+
+    fedora + eclipse + gcj/gnu classpath
+      - http://www.fedoraproject.org/wiki/Eclipse
+      - http://sourceware.org/eclipse/
 
   Pydev, files modified to remove it:
     build.xml

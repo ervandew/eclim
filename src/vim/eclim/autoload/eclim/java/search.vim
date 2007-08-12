@@ -38,10 +38,8 @@
   let s:search_src = "java_search"
   let s:search_doc = "java_docsearch"
   let s:search_element =
-    \ '-filter vim -command <search> -n "<project>" -f "<file>" ' .
-    \ '-o <offset> -l <length> <args>'
-  let s:search_pattern =
-    \ '-filter vim -command <search> -n "<project>" -f "<file>" <args>'
+    \ '-command <search> -n "<project>" -f "<file>" -o <offset> -l <length> <args>'
+  let s:search_pattern = '-command <search> -n "<project>" -f "<file>" <args>'
   let s:options = ['-p', '-t', '-x', '-s']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
   let s:scopes = ['all', 'project', 'type']

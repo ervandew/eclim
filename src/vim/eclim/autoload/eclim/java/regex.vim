@@ -23,7 +23,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_regex = '-filter vim -command java_regex -f "<file>"'
+  let s:command_regex = '-command java_regex -f "<file>"'
 " }}}
 
 " Evaluate(file) {{{

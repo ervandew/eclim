@@ -24,7 +24,7 @@
 
 " Script Variables {{{
 let s:command_comment =
-  \ '-filter vim -command javadoc_comment -p "<project>" -f "<file>" -o <offset>'
+  \ '-command javadoc_comment -p "<project>" -f "<file>" -o <offset>'
 " }}}
 
 " Comment() {{{

@@ -23,10 +23,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:update_command =
-    \ '-filter vim -command php_src_update -p "<project>" -f "<file>"'
-  let s:html_validate_command =
-    \ '-filter vim -command html_validate -p "<project>" -f "<file>"'
+  let s:update_command = '-command php_src_update -p "<project>" -f "<file>"'
+  let s:html_validate_command = '-command html_validate -p "<project>" -f "<file>"'
 " }}}
 
 " UpdateSrcFile(validate) {{{

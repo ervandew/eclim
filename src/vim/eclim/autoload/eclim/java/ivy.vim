@@ -23,8 +23,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:update_command =
-    \ '-command project_update -p "<project>" -b "<build>" -filter vim'
+  let s:update_command = '-command project_update -p "<project>" -b "<build>"'
 " }}}
 
 " SetRepo(path) {{{

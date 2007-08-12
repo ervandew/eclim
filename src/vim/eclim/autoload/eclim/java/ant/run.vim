@@ -23,8 +23,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_targets =
-    \ '-filter vim -command ant_targets -p "<project>" -f "<file>"'
+  let s:command_targets = '-command ant_targets -p "<project>" -f "<file>"'
 " }}}
 
 " Ant(bang, args) {{{

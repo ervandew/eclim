@@ -24,7 +24,7 @@
 
 " Script Variables {{{
   let s:command_search =
-    \ '-filter vim -command maven_dependency_search ' .
+    \ '-command maven_dependency_search ' .
     \ '-p "<project>" -f "<file>" -t "<type>" -s <query>'
 
   let s:dependency_template{'maven'} =

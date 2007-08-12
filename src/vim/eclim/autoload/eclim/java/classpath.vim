@@ -23,8 +23,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_variables = '-command java_classpath_variables -filter vim'
-  let s:command_update = '-command project_update -p "<project>" -filter vim'
+  let s:command_variables = '-command java_classpath_variables'
+  let s:command_update = '-command project_update -p "<project>"'
   let s:command_variable_create =
     \ '-command java_classpath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =

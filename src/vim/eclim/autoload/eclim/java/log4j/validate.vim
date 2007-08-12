@@ -23,8 +23,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:validate_command =
-    \ '-filter vim -command log4j_validate -p "<project>" -f "<file>"'
+  let s:validate_command = '-command log4j_validate -p "<project>" -f "<file>"'
 " }}}
 
 " Validate(on_save) {{{

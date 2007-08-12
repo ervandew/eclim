@@ -41,9 +41,8 @@
 
   let s:class_declaration = '^\s*\(public\|private\|protected\)\?\(\s\+abstract\)\?\s\+\(class\|interface\|enum\)\s\+[A-Z]'
 
-  let s:update_command =
-    \ '-filter vim -command java_src_update -p "<project>" -f "<file>"'
-  let s:command_src_exists = '-command java_src_exists -f "<file>" -filter vim'
+  let s:update_command = '-command java_src_update -p "<project>" -f "<file>"'
+  let s:command_src_exists = '-command java_src_exists -f "<file>"'
 
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
 " }}}

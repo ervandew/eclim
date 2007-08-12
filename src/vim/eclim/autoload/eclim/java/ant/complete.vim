@@ -24,7 +24,7 @@
 
 " Script Varables {{{
   let s:complete_command =
-    \ '-filter vim -command ant_complete -p "<project>" -f "<file>" -o <offset>'
+    \ '-command ant_complete -p "<project>" -f "<file>" -o <offset>'
 " }}}
 
 " CodeComplete(findstart, base) {{{

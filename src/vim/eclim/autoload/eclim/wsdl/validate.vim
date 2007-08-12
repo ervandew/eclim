@@ -23,8 +23,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:validate_command =
-    \ '-filter vim -command wsdl_validate -p "<project>" -f "<file>"'
+  let s:validate_command = '-command wsdl_validate -p "<project>" -f "<file>"'
 " }}}
 
 " Validate(on_save) {{{

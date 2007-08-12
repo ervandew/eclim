@@ -34,8 +34,7 @@
 
 " Script Varables {{{
   let s:complete_command =
-    \ '-filter vim -command java_complete ' .
-    \ '-p "<project>" -f "<file>" -o <offset> -l <layout>'
+    \ '-command java_complete -p "<project>" -f "<file>" -o <offset> -l <layout>'
 " }}}
 
 " CodeComplete(findstart, base) {{{

@@ -49,7 +49,7 @@
     \ '-command patch_file -f <file> -r <revision> -b <basedir>'
   let s:command_patch_revisions = '-command patch_revisions -f <file>'
   let s:command_ping = '-command ping'
-  let s:command_settings = '-command settings -filter vim'
+  let s:command_settings = '-command settings'
   let s:command_settings_update = '-command settings_update -s "<settings>"'
   let s:command_shutdown = "-command shutdown"
   let s:connect= '^connect: .*$'

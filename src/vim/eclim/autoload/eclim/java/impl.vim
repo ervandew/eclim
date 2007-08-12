@@ -24,9 +24,9 @@
 
 " Script Varables {{{
   let s:command_impl =
-    \ '-filter vim -command java_impl -p "<project>" -f "<file>" -o <offset>'
+    \ '-command java_impl -p "<project>" -f "<file>" -o <offset>'
   let g:JavaImplCommandInsert =
-    \ '-filter vim -command java_impl -p "<project>" -f "<file>" -t "<type>" ' .
+    \ '-command java_impl -p "<project>" -f "<file>" -t "<type>" ' .
     \ '-s "<superType>" <methods>'
   let s:cross_type_selection = "Visual selection is currently limited to methods of one super type at a time."
 " }}}

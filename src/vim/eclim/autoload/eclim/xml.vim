@@ -29,7 +29,7 @@ endif
 " }}}
 
 " Script Variables {{{
-let s:command_validate = '-filter vim -command xml_validate -p "<project>" -f "<file>"'
+let s:command_validate = '-command xml_validate -p "<project>" -f "<file>"'
 
 let s:element_def{'dtd'} = '<!ELEMENT\s\+<name>\>\(\s\|(\|$\)'
 let s:element_def{'xsd'} =

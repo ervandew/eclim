@@ -24,9 +24,9 @@
 
 " Script Variables {{{
 let s:command_delegate =
-  \ '-filter vim -command java_delegate -p "<project>" -f "<file>" -o <offset>'
+  \ '-command java_delegate -p "<project>" -f "<file>" -o <offset>'
 let s:command_insert =
-  \ '-filter vim -command java_delegate -p "<project>" -f "<file>" -t "<type>" ' .
+  \ '-command java_delegate -p "<project>" -f "<file>" -t "<type>" ' .
   \ '-s <superType> <methods>'
 " }}}
 

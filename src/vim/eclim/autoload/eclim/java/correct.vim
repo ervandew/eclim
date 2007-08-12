@@ -27,8 +27,8 @@ hi link Correction Normal
 hi Correction gui=underline,bold term=underline,bold cterm=underline,bold
 
 " Script Varables {{{
-  let s:command_correct = '-filter vim -command java_correct ' .
-    \ '-p "<project>" -f "<file>" -l <line> -o <offset>'
+  let s:command_correct = 
+    \ '-command java_correct -p "<project>" -f "<file>" -l <line> -o <offset>'
   let s:command_correct_apply = s:command_correct . ' -a <apply>'
 " }}}
 

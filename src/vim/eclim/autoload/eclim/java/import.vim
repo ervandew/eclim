@@ -23,10 +23,9 @@
 " }}}
 
 " Script Variables {{{
-let s:command_import =
-  \ '-command java_import -n "<project>" -p <classname> -filter vim'
+let s:command_import = '-command java_import -n "<project>" -p <classname>'
 let s:command_unused_imports =
-  \ '-command java_imports_unused -p "<project>" -f "<file>" -filter vim'
+  \ '-command java_imports_unused -p "<project>" -f "<file>"'
 " }}}
 
 " Import() {{{

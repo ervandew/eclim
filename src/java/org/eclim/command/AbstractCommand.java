@@ -68,11 +68,7 @@ public abstract class AbstractCommand
   protected Object filter (CommandLine _commandLine, Object _result)
     throws Exception
   {
-    String filterName = _commandLine.getValue(Options.FILTER_OPTION);
-    if(filterName == null){
-      filterName = VIM_FILTER;
-    }
-
+    String filterName = VIM_FILTER;
     OutputFilter filter = getFilter(filterName);
     if(filter != null){
       return filter.filter(_commandLine, _result);

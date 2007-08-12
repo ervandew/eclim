@@ -30,7 +30,7 @@ endif
 
 " Script Variables {{{
 let s:command_properties =
-  \ '-filter vim -command java_bean_properties -p "<project>" -f "<file>" ' .
+  \ '-command java_bean_properties -p "<project>" -f "<file>" ' .
   \ '-o <offset> -t <type> -r <properties> <indexed>'
 
 let s:no_properties =

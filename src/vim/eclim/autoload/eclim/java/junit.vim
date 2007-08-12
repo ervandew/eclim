@@ -23,10 +23,9 @@
 " }}}
 
 " Script Variables {{{
-let s:command_impl =
-  \ '-filter vim -command java_junit_impl -p "<project>" -f "<file>" <base>'
+let s:command_impl = '-command java_junit_impl -p "<project>" -f "<file>" <base>'
 let s:command_insert =
-  \ '-filter vim -command java_junit_impl -p "<project>" -f "<file>" <base> ' .
+  \ '-command java_junit_impl -p "<project>" -f "<file>" <base> ' .
   \ '-t "<type>" -s <superType> <methods>'
 " }}}
 

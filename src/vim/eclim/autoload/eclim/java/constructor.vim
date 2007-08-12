@@ -24,8 +24,7 @@
 
 " Script Variables {{{
 let s:command_properties =
-  \ '-filter vim -command java_constructor -p "<project>" -f "<file>" ' .
-  \ '-o <offset>'
+  \ '-command java_constructor -p "<project>" -f "<file>" -o <offset>'
 " }}}
 
 " Constructor(first, last) {{{

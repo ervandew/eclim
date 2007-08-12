@@ -63,26 +63,25 @@ public class Main
       if(commandLine.hasOption(Options.HELP_OPTION)){
         options.usage(commandLine.getValue(Options.HELP_OPTION));
         logger.debug("Main - exit");
-        System.exit(0);
-      }
-
-      String commandName = commandLine.getValue(Options.COMMAND_OPTION);
-      logger.debug("Main - command: {}", commandName);
-      if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
-        throw new IllegalArgumentException(
-            Services.getMessage("command.required"));
-      }
-      Command command = (Command)
-        Services.getService(commandName, Command.class);
-
-      Object result = command.execute(commandLine);
-
-      if(result instanceof Throwable){
-        ((Throwable)result).printStackTrace();
-        logger.debug("Main - exit on error");
-        System.exit(1);
       }else{
-        System.out.println(result);
+        String commandName = commandLine.getValue(Options.COMMAND_OPTION);
+        logger.debug("Main - command: {}", commandName);
+        if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
+          throw new IllegalArgumentException(
+              Services.getMessage("command.required"));
+        }
+        Command command = (Command)
+          Services.getService(commandName, Command.class);
+
+        Object result = command.execute(commandLine);
+
+        if(result instanceof Throwable){
+          ((Throwable)result).printStackTrace();
+          logger.debug("Main - exit on error");
+          System.exit(1);
+        }else{
+          System.out.println(result);
+        }
       }
     }catch(Exception e){
       e.printStackTrace();

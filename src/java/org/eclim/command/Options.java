@@ -43,7 +43,6 @@ import org.eclim.Services;
 public class Options
 {
   public static final String COMMAND_OPTION = "command";
-  public static final String FILTER_OPTION = "filter";
 
   public static final String APPLY_OPTION = "a";
   public static final String BASEDIR_OPTION = "b";
@@ -94,7 +93,7 @@ public class Options
       new org.apache.commons.cli.Options();
   static {
     coreOptions.addOption(OptionBuilder.withArgName(HELP)
-        .hasArg()
+        .hasOptionalArg()
         .withLongOpt(HELP)
         .withDescription(Services.getMessage("help.description"))
         .create(HELP_OPTION));
@@ -102,10 +101,6 @@ public class Options
         .hasArg()
         .withDescription(Services.getMessage("command.description"))
         .create(COMMAND_OPTION));
-    coreOptions.addOption(OptionBuilder.withArgName(FILTER_OPTION)
-        .hasArg()
-        .withDescription(Services.getMessage("filter.description"))
-        .create(FILTER_OPTION));
   }
 
   protected org.apache.commons.cli.Options options =
@@ -134,7 +129,9 @@ public class Options
   public void usage (String _plugin)
   {
     usageSummary();
-    System.out.println(buildFooter(_plugin));
+    if(_plugin != null){
+      System.out.println(buildFooter(_plugin));
+    }
   }
 
   /**
