@@ -69,7 +69,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-l", "5", "-o", "74", "-a", "3"
+      "-l", "5", "-o", "74", "-a", "1"
     });
 
     System.out.println(result);

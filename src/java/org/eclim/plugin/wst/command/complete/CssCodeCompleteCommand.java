@@ -17,9 +17,13 @@ package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
 
+import org.eclim.eclipse.EclimPlugin;
+
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
+
+import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
 /**
  * Command to handle css code completion requests.
@@ -39,5 +43,16 @@ public class CssCodeCompleteCommand
     throws Exception
   {
     return new CSSContentAssistProcessor();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see WstCodeCompleteCommand#newViewerInstance()
+   */
+  @Override
+  protected StructuredTextViewer newViewerInstance ()
+  {
+    return new StructuredTextViewer(
+        EclimPlugin.getShell(), null, null, false, 0);
   }
 }

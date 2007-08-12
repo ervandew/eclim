@@ -126,7 +126,7 @@ public class ConstructorCommand
       Position position = TypeUtils.getPosition(type,
           type.createMethod(constructor, sibling, false, null));
 
-      return filter(_commandLine, position);
+      return StringUtils.EMPTY;
     }catch(Exception e){
       return e;
     }

@@ -49,7 +49,7 @@ public class CodeCompleteCommandTest
     });
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results.", 35, results.length);
+    assertEquals("Wrong number of results.", 32, results.length);
     assertEquals("Invalid First Result",
         "f|add(|add(int index, Object element)  void - List|", results[0]);
     assertEquals("Invalid Last Result",
