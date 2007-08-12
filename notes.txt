@@ -11,6 +11,9 @@ TODO {{{
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
 
+    - document b:eclim_regex_type for :JavaRegex and :PythonRegex
+      - let b:eclim_regex_type = 'file|line'
+
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd
@@ -52,10 +55,6 @@ TODO {{{
         ProjectManagement.create/delete methods in eclim to perform any nature
         specific setup on any new natures added/removed.
         - may want to add new methods: natureAdded, natureRemoved.
-
-    - :JavaRegex and :PythonRegex, add means to switch between line by line
-      matching and full file matching.
-      - variable b:eclim_regex_type = 'file|line'
 
     - make sure html files (html, php, etc) are context aware on code
       completion, switching to html, css, javascript completion as necessary.

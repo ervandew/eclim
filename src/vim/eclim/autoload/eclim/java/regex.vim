@@ -30,6 +30,9 @@
 function eclim#java#regex#Evaluate (file)
   let command = s:command_regex
   let command = substitute(command, '<file>', a:file, '')
+  if exists('b:eclim_regex_type')
+    let command .= ' -t ' . b:eclim_regex_type
+  endif
   return eclim#ExecuteEclim(command)
 endfunction " }}}
 

@@ -43,6 +43,9 @@ import org.eclim.util.file.FileUtils;
 public class RegexCommand
   extends AbstractCommand
 {
+  private static final String FILE = "file";
+  private static final String LINE = "line";
+
   /**
    * {@inheritDoc}
    */
@@ -50,7 +53,8 @@ public class RegexCommand
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);
-      return filter(_commandLine, evaluate(file));
+      String type = _commandLine.getValue(Options.TYPE_OPTION);
+      return filter(_commandLine, evaluate(file, type));
     }catch(Exception e){
       return e;
     }
@@ -60,9 +64,10 @@ public class RegexCommand
    * Evaluates the supplied test regex file.
    *
    * @param _file The file name.
+   * @param _type The regex evaluation type to use.
    * @return The results.
    */
-  private List evaluate (String _file)
+  private List evaluate (String _file, String _type)
     throws Exception
   {
     List results = new ArrayList();
@@ -71,24 +76,38 @@ public class RegexCommand
     FileInputStream fis = null;
     try{
       fis = new FileInputStream(_file);
+      BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 
       // read the pattern from the first line of the file.
-      regex = new BufferedReader(new InputStreamReader(fis)).readLine();
+      regex = reader.readLine();
+      Pattern pattern = Pattern.compile(regex.trim());
+
+      if (_type == null || FILE.equals(_type)){
+        FileOffsets offsets = FileOffsets.compile(_file);
+        Matcher matcher = FileUtils.matcher(pattern, _file);
+
+        // force matching to start past the first line.
+        if(matcher.find(regex.length() + 1)){
+          processFinding(offsets, matcher, results);
+        }
+        while(matcher.find()){
+          processFinding(offsets, matcher, results);
+        }
+      }else{
+        String line = null;
+        for(int ii = 2; (line = reader.readLine()) != null; ii++){
+          Matcher matcher = pattern.matcher(line);
+
+          if(matcher.find()){
+            processFinding(ii, matcher, results);
+          }
+          while(matcher.find()){
+            processFinding(ii, matcher, results);
+          }
+        }
+      }
     }finally{
       IOUtils.closeQuietly(fis);
-    }
-
-    Pattern pattern = Pattern.compile(regex.trim());
-
-    FileOffsets offsets = FileOffsets.compile(_file);
-    Matcher matcher = FileUtils.matcher(pattern, _file);
-
-    // force matching to start past the first line.
-    if(matcher.find(regex.length() + 1)){
-      processFinding(offsets, matcher, results);
-    }
-    while(matcher.find()){
-      processFinding(offsets, matcher, results);
     }
 
     return results;
@@ -124,6 +143,37 @@ public class RegexCommand
       lineColumn = _offsets.offsetToLineColumn(_matcher.end(ii) - 1);
       group.setEndLine(lineColumn[0]);
       group.setEndColumn(lineColumn[1]);
+
+      result.addGroupMatch(group);
+    }
+    _results.add(result);
+  }
+
+  /**
+   * Process the current regex finding.
+   *
+   * @param _line The current line number being processed.
+   * @param _matcher The Matcher.
+   * @param _results The list of results to add to.
+   */
+  private void processFinding (int _line, Matcher _matcher, List _results)
+  {
+    MatcherResult result = new MatcherResult();
+
+    result.setStartLine(_line);
+    result.setStartColumn(_matcher.start() + 1);
+
+    result.setEndLine(_line);
+    result.setEndColumn(_matcher.end());
+
+    for (int ii = 1; ii <= _matcher.groupCount(); ii++){
+      MatcherResult group = new MatcherResult();
+
+      group.setStartLine(_line);
+      group.setStartColumn(_matcher.start(ii) + 1);
+
+      group.setEndLine(_line);
+      group.setEndColumn(_matcher.end(ii));
 
       result.addGroupMatch(group);
     }
