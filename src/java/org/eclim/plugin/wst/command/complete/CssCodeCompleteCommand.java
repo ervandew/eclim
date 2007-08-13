@@ -16,12 +16,24 @@
 package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.eclipse.EclimPlugin;
+
+import org.eclim.util.ProjectUtils;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+
+import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
+
+import org.eclipse.wst.sse.core.StructuredModelManager;
+
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
@@ -34,6 +46,8 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 public class CssCodeCompleteCommand
   extends WstCodeCompleteCommand
 {
+  private static StructuredTextViewer viewer;
+
   /**
    * {@inheritDoc}
    * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
@@ -47,12 +61,24 @@ public class CssCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see WstCodeCompleteCommand#newViewerInstance()
+   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
    */
-  @Override
-  protected StructuredTextViewer newViewerInstance ()
+  protected ITextViewer getTextViewer (
+      CommandLine commandLine, String project, String file)
+    throws Exception
   {
-    return new StructuredTextViewer(
-        EclimPlugin.getShell(), null, null, false, 0);
+    IFile ifile = ProjectUtils.getFile(
+        ProjectUtils.getProject(project, true), file);
+    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+    IStructuredModel model =
+      StructuredModelManager.getModelManager().getModelForRead(ifile);
+
+    if (viewer == null) {
+      viewer = new StructuredTextViewer(
+          EclimPlugin.getShell(), null, null, false, 0);
+    }
+    viewer.setDocument(model.getStructuredDocument());
+    return viewer;
   }
 }

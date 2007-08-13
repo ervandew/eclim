@@ -65,29 +65,19 @@ public abstract class WstCodeCompleteCommand
       StructuredModelManager.getModelManager().getModelForRead(ifile);
 
     if (viewer == null) {
-      viewer = newViewerInstance();
+      viewer = new StructuredTextViewer(
+          EclimPlugin.getShell(), null, null, false, 0){
+        private Point point;
+        public Point getSelectedRange (){
+          return point;
+        }
+        public void setSelectedRange (int x, int y){
+          point = new Point(x, y);
+        }
+      };
     }
     viewer.setDocument(model.getStructuredDocument());
     viewer.setSelectedRange(offset, 10);
     return viewer;
-  }
-
-  /**
-   * Gets the text view instance to use.
-   *
-   * @return A StructuredTextViewer.
-   */
-  protected StructuredTextViewer newViewerInstance ()
-  {
-    return new StructuredTextViewer(
-        EclimPlugin.getShell(), null, null, false, 0){
-      private Point point;
-      public Point getSelectedRange (){
-        return point;
-      }
-      public void setSelectedRange (int x, int y){
-        point = new Point(x, y);
-      }
-    };
   }
 }
