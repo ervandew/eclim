@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Revision$
  */
 public class TagResult
+  implements Comparable<TagResult>
 {
   private String name;
   private String file;
@@ -138,5 +139,17 @@ public class TagResult
   public void setLine (int _line)
   {
     line = _line;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Comparable#compareTo(T)
+   */
+  public int compareTo (TagResult obj)
+  {
+    if(obj == this){
+      return 0;
+    }
+    return this.getName().compareTo(obj.getName());
   }
 }

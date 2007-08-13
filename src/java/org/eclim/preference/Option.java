@@ -27,7 +27,10 @@ import org.eclim.Services;
  * @version $Revision$
  */
 public class Option
+  implements Comparable<Option>
 {
+  private static final String GENERAL = "General";
+
   /*public static final int ALL = 0;
   public static final int GLOBAL = 1;
   public static final int PROJECT = 2;*/
@@ -171,5 +174,39 @@ public class Option
   public void setDescription (String _description)
   {
     this.description = Services.getMessage(_description);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Comparable#compareTo(T)
+   */
+  public int compareTo (Option obj)
+  {
+    if(obj == this){
+      return 0;
+    }
+
+    int compare = 0;
+    if(this.getPath().equals(obj.getPath())){
+      compare = 0;
+    }
+
+    if (this.getPath().startsWith(GENERAL) &&
+        !obj.getPath().startsWith(GENERAL))
+    {
+      return -1;
+    }
+
+    if (obj.getPath().startsWith(GENERAL) &&
+        !this.getPath().startsWith(GENERAL))
+    {
+      return 1;
+    }
+
+    compare = this.getPath().compareTo(obj.getPath());
+    if (compare == 0){
+      compare = this.getName().compareTo(obj.getName());
+    }
+    return compare;
   }
 }

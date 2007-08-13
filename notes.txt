@@ -44,8 +44,6 @@ TODO {{{
       - forrest to 0.8
 
       Remove
-        - commons-beanutils
-          - BeanComparator
         - commons-collections
           - CollectionUtils.addAll
           - CollectionUtils.union
@@ -177,7 +175,7 @@ TODO {{{
   }}}
 
   Php {{{
-
+    - add :PhpRegex
   }}}
 
   Python {{{

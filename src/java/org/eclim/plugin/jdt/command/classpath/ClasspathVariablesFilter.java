@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanComparator;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
@@ -42,18 +40,16 @@ public class ClasspathVariablesFilter
   {
     StringBuffer buffer = new StringBuffer();
 
-    List list = (List)_result;
-    Collections.sort(list, new BeanComparator("name"));
+    List<ClasspathVariable> list = (List<ClasspathVariable>)_result;
+    Collections.sort(list);
 
     int length = 0;
-    for(Iterator ii = list.iterator(); ii.hasNext();){
-      ClasspathVariable variable = (ClasspathVariable)ii.next();
+    for(ClasspathVariable variable : list){
       length = variable.getName().length() > length ?
         variable.getName().length() : length;
     }
 
-    for(Iterator ii = list.iterator(); ii.hasNext();){
-      ClasspathVariable variable = (ClasspathVariable)ii.next();
+    for(ClasspathVariable variable : list){
       if(buffer.length() > 0){
         buffer.append('\n');
       }

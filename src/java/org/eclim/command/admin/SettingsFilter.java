@@ -15,16 +15,9 @@
  */
 package org.eclim.command.admin;
 
-import java.text.Collator;
-
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.beanutils.BeanComparator;
-
-import org.apache.commons.collections.comparators.ComparatorChain;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -43,20 +36,14 @@ import org.eclim.preference.OptionInstance;
 public class SettingsFilter
   implements OutputFilter
 {
-  private static final String GENERAL = "General";
   private static final String COMMENT = "# ";
-  private static ComparatorChain OPTION_COMPARATOR = new ComparatorChain();
-  static{
-    OPTION_COMPARATOR.addComparator(new PathComparator());
-    OPTION_COMPARATOR.addComparator(new BeanComparator("name"));
-  }
 
   /**
    * {@inheritDoc}
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
-    List list = (List)_result;
+    List<Option> list = (List<Option>)_result;
     if(list.size() > 0){
       return printOptions(list);
     }
@@ -69,12 +56,12 @@ public class SettingsFilter
    * @param _options The option list.
    * @return The result.
    */
-  protected String printOptions (List _options)
+  protected String printOptions (List<Option> _options)
   {
     StringBuffer buffer = new StringBuffer();
 
     // sort the list
-    Collections.sort(_options, OPTION_COMPARATOR);
+    Collections.sort(_options);
     String lastPath = ((Option)_options.get(0)).getPath();
     buffer.append(comment(lastPath, StringUtils.EMPTY)).append(" {");
     for(Iterator ii = _options.iterator(); ii.hasNext();){
@@ -109,49 +96,5 @@ public class SettingsFilter
       .append(COMMENT)
       .append(text.replaceAll("\n", "\n" + indent + COMMENT))
       .toString();
-  }
-
-  /**
-   * Comparator to sort options by path.
-   */
-  private static class PathComparator
-    implements Comparator
-  {
-    private Collator collator = Collator.getInstance();
-
-    /**
-     * {@inheritDoc}
-     */
-    public int compare (Object _o1, Object _o2)
-    {
-      Option option1 = (Option)_o1;
-      Option option2 = (Option)_o2;
-
-      if(option1.getPath().equals(option2.getPath())){
-        return 0;
-      }
-
-      if (option1.getPath().startsWith(GENERAL) &&
-          !option2.getPath().startsWith(GENERAL))
-      {
-        return -1;
-      }
-
-      if (option2.getPath().startsWith(GENERAL) &&
-          !option1.getPath().startsWith(GENERAL))
-      {
-        return 1;
-      }
-
-      return collator.compare(option1.getPath(), option2.getPath());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean equals (Object _obj)
-    {
-      return super.equals(_obj);
-    }
   }
 }

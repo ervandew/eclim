@@ -18,11 +18,8 @@ package org.eclim.command.taglist;
 import java.io.File;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanComparator;
 
 import org.apache.log4j.Logger;
 
@@ -43,13 +40,13 @@ public class TaglistCommand
 {
   private static final Logger logger = Logger.getLogger(TaglistCommand.class);
 
-  private static final Comparator TAG_COMPARATOR = new BeanComparator("name");
   private static final String LANGUAGE = "--language-force";
   private static final String SORT = "--sort";
   private static final String CTAGS_OPTION = "c";
   private static final long MAX_FILE_SIZE = 500 * 1024;
 
-  private static final Map scriptCache = new HashMap();
+  private static final Map<String,TaglistScript> scriptCache =
+    new HashMap<String,TaglistScript>();
 
   /**
    * {@inheritDoc}
@@ -110,7 +107,7 @@ public class TaglistCommand
       if(script != null){
         TagResult[] results = script.execute(file);
         if(sort){
-          Arrays.sort(results, TAG_COMPARATOR);
+          Arrays.sort(results);
         }
         return getFilter("vim").filter(_commandLine, results);
       }

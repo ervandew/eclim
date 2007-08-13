@@ -18,8 +18,6 @@ package org.eclim.plugin.pdt.command.includepath;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanComparator;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
@@ -43,7 +41,7 @@ public class IncludePathVariablesFilter
 
     List<IncludePathVariable> variables =
       (List<IncludePathVariable>)_result;
-    Collections.sort(variables, new BeanComparator("name"));
+    Collections.sort(variables);
 
     int length = 0;
     for(IncludePathVariable variable : variables){

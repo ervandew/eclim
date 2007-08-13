@@ -22,6 +22,7 @@ package org.eclim.plugin.pdt.command.includepath;
  * @version $Revision$
  */
 public class IncludePathVariable
+  implements Comparable<IncludePathVariable>
 {
   private String name;
   private String path;
@@ -64,5 +65,18 @@ public class IncludePathVariable
   public void setPath (String _path)
   {
     this.path = _path;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Comparable#compareTo(T)
+   */
+  public int compareTo (IncludePathVariable obj)
+  {
+    if (obj == this){
+      return 0;
+    }
+
+    return this.getName().compareTo(obj.getName());
   }
 }

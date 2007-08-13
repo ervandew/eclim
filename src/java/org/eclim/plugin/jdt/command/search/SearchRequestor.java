@@ -17,9 +17,8 @@ package org.eclim.plugin.jdt.command.search;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import org.apache.commons.beanutils.BeanComparator;
 
 import org.eclim.plugin.jdt.util.IJavaElementComparator;
 
@@ -36,7 +35,10 @@ import org.eclipse.jdt.core.search.SearchMatch;
 public class SearchRequestor
   extends org.eclipse.jdt.core.search.SearchRequestor
 {
-  private List matches = new ArrayList();
+  private static final SearchMatchComparator MATCH_COMPARATOR =
+    new SearchMatchComparator();
+
+  private ArrayList<SearchMatch> matches = new ArrayList<SearchMatch>();
 
   /**
    * {@inheritDoc}
@@ -54,10 +56,38 @@ public class SearchRequestor
    *
    * @return List of SearchMatch.
    */
-  public List getMatches ()
+  public List<SearchMatch> getMatches ()
   {
-    Collections.sort(matches,
-        new BeanComparator("element", new IJavaElementComparator()));
+    Collections.sort(matches, MATCH_COMPARATOR);
     return matches;
+  }
+
+  /**
+   * Comparator for search matches.
+   */
+  public static class SearchMatchComparator
+    implements Comparator<SearchMatch>
+  {
+    private static final IJavaElementComparator ELEMENT_COMPATATOR =
+      new IJavaElementComparator();
+
+    /**
+     * {@inheritDoc}
+     */
+    public int compare (SearchMatch _o1, SearchMatch _o2)
+    {
+      return ELEMENT_COMPATATOR.compare(_o1.getElement(), _o2.getElement());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean equals (Object _obj)
+    {
+      if(_obj instanceof SearchMatchComparator){
+        return true;
+      }
+      return false;
+    }
   }
 }

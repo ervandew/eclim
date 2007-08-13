@@ -22,6 +22,7 @@ package org.eclim.plugin.jdt.command.classpath;
  * @version $Revision$
  */
 public class ClasspathVariable
+  implements Comparable<ClasspathVariable>
 {
   private String name;
   private String path;
@@ -64,5 +65,17 @@ public class ClasspathVariable
   public void setPath (String _path)
   {
     this.path = _path;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Comparable#compareTo(T)
+   */
+  public int compareTo (ClasspathVariable obj)
+  {
+    if(obj == this){
+      return 0;
+    }
+    return this.getName().compareTo(obj.getName());
   }
 }
