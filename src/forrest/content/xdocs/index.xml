@@ -33,7 +33,9 @@
       <p>
         The primary goal of eclim is to bring
         <a href="ext:eclipse">Eclipse</a>&trade; functionality to the Vim
-        editor.
+        editor.  The initial goal was to provide Eclipse's java functionality to
+        vim, but support for various other languages (python, php, css, html,
+        xml, etc.) have been added and several more are planned.
       </p>
       <p>
         Eclim is less of an application and more of an integration of two great
@@ -41,21 +43,20 @@
         <a href="http://en.wikipedia.org/wiki/Editor_wars">arguably</a> one of
         the best text editors in existence.  The second,
         <a href="ext:eclipse">Eclipse</a>, provides many great tools for
-        development, especially java development.
+        development in various languages.  Each provides many features that can
+        increase developer productivity, but both still leave something to be
+        desired.  Vim lacks native Java support and many of the advanced
+        features available in Eclipse. Eclipse, on the other hand, still
+        requires the use of the mouse for many things, and when compared to Vim,
+        provides a less than ideal interface for editing text.
       </p>
       <p>
-        Each provides many features that can increase developer productivity,
-        but both are lacking overall.  Vim lacks native Java support, and
-        Eclipse still requires the use of the mouse for many things, and when
-        compared to Vim, provides a less than ideal interface for editing text.
-      </p>
-      <p>
-        That is where eclim comes into play.  Instead of trying to write a java
-        IDE in Vim or a Vim editor in Eclipse, eclim provides an Eclipse plug-in
+        That is where eclim comes into play.  Instead of trying to write an IDE
+        in Vim or a Vim editor in Eclipse, eclim provides an Eclipse plug-in
         that exposes Eclipse features through a server interface, and a set of
         Vim plug-ins that communicate with Eclipse over that interface (as
         illustrated below).<br/>
-        <img alt="eclim diagram" src="images/diagram.png"/>
+        <img alt="eclim diagram" src="images/diagram.gif"/>
       </p>
       <p>
         There are several benefits to this approach:
