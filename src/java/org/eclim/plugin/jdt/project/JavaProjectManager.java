@@ -18,14 +18,9 @@ package org.eclim.plugin.jdt.project;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -222,11 +217,15 @@ public class JavaProjectManager
    */
   protected IClasspathEntry[] merge (IClasspathEntry[][] _entries)
   {
-    Collection union = new ArrayList();
+    ArrayList<IClasspathEntry> union = new ArrayList<IClasspathEntry>();
     if(_entries != null){
-      for(int ii = 0; ii < _entries.length; ii++){
-        if(_entries[ii] != null){
-          union = CollectionUtils.union(union, Arrays.asList(_entries[ii]));
+      for(IClasspathEntry[] entries : _entries){
+        if(entries != null){
+          for(IClasspathEntry entry : entries){
+            if(!union.contains(entry)){
+             union.add(entry);
+            }
+          }
         }
       }
     }
@@ -249,7 +248,7 @@ public class JavaProjectManager
   {
     FileOffsets offsets = FileOffsets.compile(_classpath);
     String classpath = IOUtils.toString(new FileInputStream(_classpath));
-    List errors = new ArrayList();
+    ArrayList<Error> errors = new ArrayList<Error>();
     for(int ii = 0; ii < _entries.length; ii++){
       IJavaModelStatus status = JavaConventions.validateClasspathEntry(
           _javaProject, _entries[ii], true);
@@ -316,7 +315,7 @@ public class JavaProjectManager
     throws Exception
   {
     IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
-    Collection results = new ArrayList();
+    ArrayList<IClasspathEntry> results = new ArrayList<IClasspathEntry>();
 
     // load the results with all the non library entries.
     IClasspathEntry[] entries = _project.getRawClasspath();
