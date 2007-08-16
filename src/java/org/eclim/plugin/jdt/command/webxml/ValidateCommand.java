@@ -56,7 +56,7 @@ public class ValidateCommand
       WebXmlHandler handler = new WebXmlHandler(
           JavaUtils.getJavaProject(project), file);
 
-      List list = super.validate(project, file, false, handler);
+      List<Error> list = super.validate(project, file, false, handler);
       list.addAll(handler.getErrors());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
@@ -81,9 +81,9 @@ public class ValidateCommand
     private String file;
     private StringBuffer text = new StringBuffer();
     private boolean mapping = false;
-    private List filters = new ArrayList();
-    private List servlets = new ArrayList();
-    private List errors = new ArrayList();
+    private ArrayList<String> filters = new ArrayList<String>();
+    private ArrayList<String> servlets = new ArrayList<String>();
+    private ArrayList<Error> errors = new ArrayList<Error>();
 
     //private List appenders = new ArrayList();
 
@@ -189,7 +189,7 @@ public class ValidateCommand
      *
      * @return List of errors.
      */
-    public List getErrors ()
+    public List<Error> getErrors ()
     {
       return errors;
     }

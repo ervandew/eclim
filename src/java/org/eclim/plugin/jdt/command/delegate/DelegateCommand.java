@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.delegate;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclim.Services;
 
@@ -141,7 +140,7 @@ public class DelegateCommand
       IJavaElement _sibling)
     throws Exception
   {
-    Map values = new HashMap();
+    HashMap<String,Object> values = new HashMap<String,Object>();
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), values);
 

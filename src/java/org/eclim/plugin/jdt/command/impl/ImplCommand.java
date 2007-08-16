@@ -285,7 +285,7 @@ public class ImplCommand
       IJavaElement _sibling)
     throws Exception
   {
-    Map values = new HashMap();
+    HashMap<String,Object> values = new HashMap<String,Object>();
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), values);
 
@@ -349,7 +349,7 @@ public class ImplCommand
       IType _type, Map _baseMethods, IType _superType)
     throws Exception
   {
-    List results = new ArrayList();
+    ArrayList<ImplMethod> results = new ArrayList<ImplMethod>();
     IMethod[] methods = _superType.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
       IMethod method = methods[ii];

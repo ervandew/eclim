@@ -171,9 +171,9 @@ public class Options
         throw new IllegalArgumentException(
             Services.getMessage("command.not.found", command));
       }
-      Collection commandOptions = parseOptions(optionsString);
-      for(Iterator iterator = commandOptions.iterator(); iterator.hasNext();){
-        options.addOption((Option)iterator.next());
+      Collection<Option> commandOptions = parseOptions(optionsString);
+      for(Option option : commandOptions){
+        options.addOption(option);
       }
     }
 
@@ -192,7 +192,7 @@ public class Options
     StringBuffer buffer = new StringBuffer();
     buffer.append(Services.getMessage("command.usage.header"));
 
-    TreeSet set = new TreeSet();
+    TreeSet<String> set = new TreeSet<String>();
     ResourceBundle resources = Services.getResourceBundle(_plugin);
     for(Enumeration keys = resources.getKeys(); keys.hasMoreElements();){
       String key = (String)keys.nextElement();
@@ -201,8 +201,8 @@ public class Options
       }
     }
 
-    for(Iterator ii = set.iterator(); ii.hasNext();){
-      buffer.append("\n").append(ii.next()).append("\n");
+    for(String string : set){
+      buffer.append("\n").append(string).append("\n");
     }
 
     return buffer.toString();
@@ -214,9 +214,9 @@ public class Options
    * @param _options The options String.
    * @return The Collection of Option instances.
    */
-  protected Collection parseOptions (String _options)
+  protected Collection<Option> parseOptions (String _options)
   {
-    ArrayList options = new ArrayList();
+    ArrayList<Option> options = new ArrayList<Option>();
     if(_options != null && _options.trim().length() > 0){
       String[] lines = StringUtils.split(_options, ',');
       for(int ii = 0; ii < lines.length; ii++){

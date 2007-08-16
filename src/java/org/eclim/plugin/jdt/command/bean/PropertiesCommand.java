@@ -162,7 +162,7 @@ public class PropertiesCommand
     }
     IMethod method = _type.getMethod(methodName, args);
     if(!method.exists()){
-      Map values = new HashMap();
+      HashMap<String,Object> values = new HashMap<String,Object>();
       values.put("propertyType", propertyType);
       values.put("name", methodName);
       values.put("property", _field.getElementName());
@@ -208,7 +208,7 @@ public class PropertiesCommand
     }
     IMethod method = _type.getMethod(methodName, args);
     if(!method.exists()){
-      Map values = new HashMap();
+      HashMap<String,Object> values = new HashMap<String,Object>();
       values.put("name", methodName);
       values.put("property", _field.getElementName());
       values.put("propertyType", propertyType);
@@ -241,7 +241,7 @@ public class PropertiesCommand
       IMethod _method,
       IJavaElement _sibling,
       String _template,
-      Map _values)
+      Map<String,Object> _values)
     throws Exception
   {
     JavaUtils.loadPreferencesForTemplate(

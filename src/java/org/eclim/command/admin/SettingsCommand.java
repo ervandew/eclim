@@ -17,7 +17,6 @@ package org.eclim.command.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -40,7 +39,7 @@ public class SettingsCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      List results = new ArrayList();
+      ArrayList<Option> results = new ArrayList<Option>();
 
       String setting = _commandLine.getValue(Options.SETTING_OPTION);
       Option[] options = getPreferences().getOptions();

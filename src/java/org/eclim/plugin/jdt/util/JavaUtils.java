@@ -445,7 +445,7 @@ public class JavaUtils
   public static void setCompilerSourceCompliance (String _version)
     throws Exception
   {
-    Map options = JavaCore.getOptions();
+    Map<String,String> options = JavaCore.getOptions();
     options.put(JavaCore.COMPILER_SOURCE, _version);
     options.put(JavaCore.COMPILER_COMPLIANCE, _version);
     options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, _version);
@@ -464,7 +464,7 @@ public class JavaUtils
     throws Exception
   {
     // using _project.setOption(String,String) doesn't save the setting.
-    Map options = _project.getOptions(false);
+    Map<String,String> options = _project.getOptions(false);
     options.put(JavaCore.COMPILER_SOURCE, _version);
     options.put(JavaCore.COMPILER_COMPLIANCE, _version);
     options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, _version);
@@ -578,7 +578,7 @@ public class JavaUtils
   {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
       .getConfigurationElementsFor(JavaUI.ID_PLUGIN, _id);
-    ArrayList res= new ArrayList(elements.length);
+    ArrayList res = new ArrayList(elements.length);
 
     for(int ii = 0; ii < elements.length; ii++){
       ContributedProcessorDescriptor desc =
@@ -600,7 +600,7 @@ public class JavaUtils
   public static class ProblemRequestor
     implements org.eclipse.jdt.core.IProblemRequestor
   {
-    private List problems = new ArrayList();
+    private ArrayList<IProblem> problems = new ArrayList<IProblem>();
     private int[] ids;
 
     /**
@@ -618,7 +618,7 @@ public class JavaUtils
      *
      * @return The list of problems.
      */
-    public List getProblems ()
+    public List<IProblem> getProblems ()
     {
       return problems;
     }

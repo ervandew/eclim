@@ -49,7 +49,7 @@ public class ValidateCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
 
-      List list = validate(project, file, schema, null);
+      List<Error> list = validate(project, file, schema, null);
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
     }catch(Throwable t){
@@ -66,19 +66,19 @@ public class ValidateCommand
    * @param _handler The DefaultHandler to use while parsing the xml file.
    * @return The list of errors.
    */
-  protected List validate (
+  protected List<Error> validate (
       String _project, String _file, boolean _schema, DefaultHandler _handler)
     throws Exception
   {
     Error[] errors = XmlUtils.validateXml(_project, _file, _schema, _handler);
-    ArrayList list = new ArrayList();
-    for(int ii = 0; ii < errors.length; ii++){
+    ArrayList<Error> list = new ArrayList<Error>();
+    for(Error error : errors){
       // FIXME: hack to ignore errors regarding no defined dtd.
       // When 1.4 no longer needs to be supported, this can be scrapped.
-      if (errors[ii].getMessage().indexOf(NO_GRAMMER) == -1 &&
-          errors[ii].getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
+      if (error.getMessage().indexOf(NO_GRAMMER) == -1 &&
+          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
       {
-        list.add(errors[ii]);
+        list.add(error);
       }
     }
     return list;

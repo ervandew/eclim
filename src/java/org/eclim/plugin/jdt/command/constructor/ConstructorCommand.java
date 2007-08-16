@@ -113,7 +113,7 @@ public class ConstructorCommand
         }
       }
 
-      HashMap values = new HashMap();
+      HashMap<String,Object> values = new HashMap<String,Object>();
       values.put("type", type.getElementName());
       if(properties != null && properties.length > 0){
         values.put("fields", properties);

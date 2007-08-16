@@ -20,9 +20,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -57,9 +55,12 @@ public class Services
 
   private static PluginResources defaultPluginResources;
 
-  private static Map pluginResources = new HashMap();
-  private static Map serviceCache = new HashMap();
-  private static Map messageCache = new HashMap();
+  private static HashMap<String,PluginResources> pluginResources =
+    new HashMap<String,PluginResources>();
+  private static HashMap<String,String> serviceCache =
+    new HashMap<String,String>();
+  private static HashMap<String,String> messageCache =
+    new HashMap<String,String>();
 
   /**
    * Gets a service by type.
@@ -85,9 +86,7 @@ public class Services
   {
     String name = (String)serviceCache.get(_name);
     if(name == null){
-      Iterator iterator = pluginResources.values().iterator();
-      for(int ii = 0; iterator.hasNext(); ii++){
-        PluginResources resources = (PluginResources)iterator.next();
+      for(PluginResources resources : pluginResources.values()){
         if(resources.containsService(_name)){
           serviceCache.put(_name, resources.getName());
           return resources.getService(_name, _type);
@@ -142,10 +141,8 @@ public class Services
     try{
       String name = (String)messageCache.get(_key);
       if(name == null){
-        Iterator iterator = pluginResources.values().iterator();
-        for(int ii = 0; iterator.hasNext(); ii++){
+        for(PluginResources resources : pluginResources.values()){
           try{
-            PluginResources resources = (PluginResources)iterator.next();
             String message = resources.getMessage(_key, _args);
             messageCache.put(_key, resources.getName());
             return message;
@@ -207,9 +204,7 @@ public class Services
    */
   public static URL getResource (String _resource)
   {
-    Iterator iterator = pluginResources.values().iterator();
-    for(int ii = 0; iterator.hasNext(); ii++){
-      PluginResources resources = (PluginResources)iterator.next();
+    for(PluginResources resources : pluginResources.values()){
       URL url = resources.getResource(_resource);
       if(url != null){
         return url;
@@ -226,9 +221,7 @@ public class Services
    */
   public static InputStream getResourceAsStream (String _resource)
   {
-    Iterator iterator = pluginResources.values().iterator();
-    for(int ii = 0; iterator.hasNext(); ii++){
-      PluginResources resources = (PluginResources)iterator.next();
+    for(PluginResources resources : pluginResources.values()){
       InputStream stream = resources.getResourceAsStream(_resource);
       if(stream != null){
         return stream;
@@ -273,8 +266,7 @@ public class Services
    */
   public static void close ()
   {
-    for(Iterator ii = pluginResources.values().iterator(); ii.hasNext();){
-      PluginResources resources = (PluginResources)ii.next();
+    for(PluginResources resources : pluginResources.values()){
       resources.close();
       logger.info("{} closed.", resources.getClass().getName());
     }

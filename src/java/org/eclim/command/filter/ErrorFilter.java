@@ -69,12 +69,12 @@ public class ErrorFilter
    * Comparator for sorting Error arrays.
    */
   public static class ErrorComparator
-    implements Comparator
+    implements Comparator<Error>
   {
     /**
      * {@inheritDoc}
      */
-    public int compare (Object _o1, Object _o2)
+    public int compare (Error _o1, Error _o2)
     {
       if(_o1 == null && _o2 == null){
         return 0;
@@ -84,18 +84,15 @@ public class ErrorFilter
         return 1;
       }
 
-      Error p1 = (Error)_o1;
-      Error p2 = (Error)_o2;
-
       // sort by line / col / error,warning
-      if (p1.getLineNumber() != p2.getLineNumber()){
-        return p1.getLineNumber() - p2.getLineNumber();
+      if (_o1.getLineNumber() != _o2.getLineNumber()){
+        return _o1.getLineNumber() - _o2.getLineNumber();
       }
-      if (p1.getColumnNumber() != p2.getColumnNumber()){
-        return p1.getColumnNumber() - p2.getColumnNumber();
+      if (_o1.getColumnNumber() != _o2.getColumnNumber()){
+        return _o1.getColumnNumber() - _o2.getColumnNumber();
       }
-      if (p1.isWarning() != p2.isWarning()){
-        return !p1.isWarning() ? -1 : 1;
+      if (_o1.isWarning() != _o2.isWarning()){
+        return !_o1.isWarning() ? -1 : 1;
       }
       return 0;
     }
@@ -111,5 +108,4 @@ public class ErrorFilter
       return false;
     }
   }
-
 }

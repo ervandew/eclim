@@ -16,7 +16,6 @@
 package org.eclim.command.complete;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -61,7 +60,7 @@ public abstract class AbstractCodeCompleteCommand
       ICompletionProposal[] proposals =
         processor.computeCompletionProposals(viewer, offset);
 
-      List results = new ArrayList();
+      ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
       if(proposals != null){
         for (int ii = 0; ii < proposals.length; ii++){

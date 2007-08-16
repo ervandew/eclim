@@ -59,14 +59,14 @@ public class ProjectInfoFilter
    * @param _projects The project list.
    * @return The result.
    */
-  protected String printProjects (List _projects)
+  protected String printProjects (List<String> _projects)
   {
     StringBuffer buffer = new StringBuffer();
-    for(Iterator ii = _projects.iterator(); ii.hasNext();){
+    for(String project : _projects){
       if(buffer.length() > 0){
         buffer.append('\n');
       }
-      buffer.append(ii.next());
+      buffer.append(project);
     }
     return buffer.toString();
   }

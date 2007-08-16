@@ -26,12 +26,12 @@ import java.util.List;
 public class ImplResult
 {
   private String type;
-  private List superTypes;
+  private List<ImplType> superTypes;
 
   /**
    * Default constructor.
    */
-  public ImplResult (String _type, List _superTypes)
+  public ImplResult (String _type, List<ImplType> _superTypes)
   {
     type = _type;
     superTypes = _superTypes;
@@ -52,7 +52,7 @@ public class ImplResult
    *
    * @return The results.
    */
-  public List getSuperTypes ()
+  public List<ImplType> getSuperTypes ()
   {
     return superTypes;
   }

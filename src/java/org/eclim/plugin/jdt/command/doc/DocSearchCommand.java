@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.doc;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclim.command.CommandLine;
 
@@ -48,7 +47,7 @@ import org.eclipse.jdt.internal.launching.JREContainer;
 public class DocSearchCommand
   extends SearchCommand
 {
-  private static final Map JRE_DOCS = new HashMap();
+  private static final HashMap<String,String> JRE_DOCS = new HashMap<String,String>();
   static{
     JRE_DOCS.put(JavaCore.VERSION_1_3,
         "http://java.sun.com/j2se/1.3/docs/api/");

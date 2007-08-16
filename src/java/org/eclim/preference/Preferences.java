@@ -18,7 +18,6 @@ package org.eclim.preference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -55,10 +54,11 @@ public class Preferences
   private static final String CORE = "core";
 
   private static Preferences instance = new Preferences();
-  private static Map optionHandlers = new HashMap();
+  private static HashMap<String,OptionHandler> optionHandlers =
+    new HashMap<String,OptionHandler>();
 
-  private Map preferences = new HashMap();
-  private Map options = new HashMap();
+  private HashMap<String,Preference> preferences = new HashMap<String,Preference>();
+  private HashMap<String,Option> options = new HashMap<String,Option>();
 
   private Preferences () {}
 
@@ -103,7 +103,7 @@ public class Preferences
     IEclipsePreferences projectPrefs = getPreferences(_project);
 
     String[] keys = globalPrefs.keys();
-    Map map = new HashMap();
+    HashMap map = new HashMap();
     for(int ii = 0; ii < keys.length; ii++){
       map.put(keys[ii], globalPrefs.get(keys[ii], null));
     }
@@ -124,7 +124,7 @@ public class Preferences
   public Map getOptionsAsMap ()
     throws Exception
   {
-    Map allOptions = new HashMap();
+    HashMap allOptions = new HashMap();
     for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
       OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
       Map options = handler.getOptionsAsMap();
@@ -151,9 +151,8 @@ public class Preferences
   public Map getOptionsAsMap (IProject _project)
     throws Exception
   {
-    Map allOptions = new HashMap();
-    for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
-      OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
+    HashMap allOptions = new HashMap();
+    for(OptionHandler handler : optionHandlers.values()){
       String nature = handler.getNature();
       if(CORE.equals(nature) || _project.getNature(nature) != null){
         allOptions.putAll(handler.getOptionsAsMap(_project));
@@ -161,8 +160,7 @@ public class Preferences
     }
 
     Map preferences = getPreferencesAsMap(_project);
-    for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      Option option = (Option)options.get(ii.next());
+    for (Option option : options.values()){
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
@@ -189,11 +187,10 @@ public class Preferences
   public Option[] getOptions (IProject _project)
     throws Exception
   {
-    List results = new ArrayList();
+    ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
     Map options = _project == null ?
       getOptionsAsMap() : getOptionsAsMap(_project);
-    for(Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      String key = (String)ii.next();
+    for(Object key : options.keySet()){
       String value = (String)options.get(key);
       Option option = (Option)this.options.get(key);
       if(option == null){
@@ -284,8 +281,8 @@ public class Preferences
       validateOption(_name, _value);
 
       OptionHandler handler = null;
-      for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
-        String key = (String)ii.next();
+      for(Object k : optionHandlers.keySet()){
+        String key = (String)k;
         if(_name.startsWith(key)){
           handler = (OptionHandler)optionHandlers.get(key);
           break;
@@ -316,8 +313,8 @@ public class Preferences
       validateOption(_name, _value);
 
       OptionHandler handler = null;
-      for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
-        String key = (String)ii.next();
+      for(Object k : optionHandlers.keySet()){
+        String key = (String)k;
         if(_name.startsWith(key)){
           handler = (OptionHandler)optionHandlers.get(key);
           break;
@@ -396,8 +393,7 @@ public class Preferences
   protected void initializeDefaultPreferences (IEclipsePreferences _preferences)
     throws Exception
   {
-    for(Iterator ii = preferences.keySet().iterator(); ii.hasNext();){
-      Preference preference = (Preference)preferences.get(ii.next());
+    for(Preference preference : preferences.values()){
       if(_preferences.get(preference.getName(), null) == null){
         _preferences.put(preference.getName(), preference.getDefaultValue());
       }

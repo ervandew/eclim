@@ -68,7 +68,7 @@ public class CodeCorrectCommand
             new String[]{file, String.valueOf(line)});
       }
 
-      List proposals = getProposals(src, problem);
+      List<IJavaCompletionProposal> proposals = getProposals(src, problem);
       if(_commandLine.hasOption(Options.APPLY_OPTION)){
         IJavaCompletionProposal proposal = (IJavaCompletionProposal)
           proposals.get(_commandLine.getIntValue(Options.APPLY_OPTION));
@@ -96,7 +96,7 @@ public class CodeCorrectCommand
     throws Exception
   {
     IProblem[] problems = JavaUtils.getProblems(_src);
-    ArrayList errors = new ArrayList();
+    ArrayList<IProblem> errors = new ArrayList<IProblem>();
     for(int ii = 0; ii < problems.length; ii++){
       if(problems[ii].getSourceLineNumber() == _line){
         errors.add(problems[ii]);
@@ -107,8 +107,7 @@ public class CodeCorrectCommand
     if(errors.size() == 0){
       return null;
     }else if(errors.size() > 0){
-      for (Iterator ii = errors.iterator(); ii.hasNext();){
-        IProblem p = (IProblem)ii.next();
+      for (IProblem p : errors){
         if(_offset < p.getSourceStart() && _offset <= p.getSourceEnd()){
           problem = p;
         }
@@ -128,10 +127,12 @@ public class CodeCorrectCommand
    * @param _problem The problem.
    * @return Returns a List of IJavaCompletionProposal.
    */
-  protected List getProposals (ICompilationUnit _src, IProblem _problem)
+  protected List<IJavaCompletionProposal> getProposals (
+      ICompilationUnit _src, IProblem _problem)
     throws Exception
   {
-    List results = new ArrayList();
+    ArrayList<IJavaCompletionProposal> results =
+      new ArrayList<IJavaCompletionProposal>();
     int length = _problem.getSourceEnd() - _problem.getSourceStart();
     AssistContext context = new AssistContext(
         _src, _problem.getSourceStart(), length);
@@ -163,11 +164,10 @@ public class CodeCorrectCommand
       List _proposals, IProblem _problem)
     throws Exception
   {
-    List corrections = new ArrayList();
-    Iterator iterator = _proposals.iterator();
+    ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
+    Iterator<IJavaCompletionProposal> iterator = _proposals.iterator();
     for(int ii = 0; iterator.hasNext(); ii++){
-      IJavaCompletionProposal proposal =
-        (IJavaCompletionProposal)iterator.next();
+      IJavaCompletionProposal proposal = iterator.next();
       corrections.add(new CodeCorrectResult(ii, _problem,
           proposal.getDisplayString(),
           proposal.getAdditionalProposalInfo()));

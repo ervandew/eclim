@@ -24,7 +24,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import java.util.regex.Pattern;
 
@@ -430,7 +429,7 @@ public class XmlUtils
   private static class ErrorAggregator
     extends DefaultHandler
   {
-    private List errors = new ArrayList();
+    private ArrayList<Error> errors = new ArrayList<Error>();
 
     /**
      * {@inheritDoc}

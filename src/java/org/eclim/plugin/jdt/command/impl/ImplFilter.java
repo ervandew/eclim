@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -48,11 +47,10 @@ public class ImplFilter
       StringBuffer buffer = new StringBuffer();
       buffer.append(result.getType());
 
-      List results = result.getSuperTypes();
+      List<ImplType> results = result.getSuperTypes();
       if(results != null){
-        List notFound = new ArrayList();
-        for(Iterator ii = results.iterator(); ii.hasNext();){
-          ImplType type = (ImplType)ii.next();
+        ArrayList<ImplType> notFound = new ArrayList<ImplType>();
+        for(ImplType type : results){
           if(!type.getExists()){
             notFound.add(type);
           }
@@ -88,8 +86,8 @@ public class ImplFilter
         if(notFound.size() > 0){
           buffer.append("\n\n");
           buffer.append(NOT_FOUND_HEADER);
-          for(Iterator ii = notFound.iterator(); ii.hasNext();){
-            buffer.append("\n\t// ").append(((ImplType)ii.next()).getSignature());
+          for(ImplType type : notFound){
+            buffer.append("\n\t// ").append(type.getSignature());
           }
         }
       }
