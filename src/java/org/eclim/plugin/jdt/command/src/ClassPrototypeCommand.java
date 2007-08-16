@@ -108,7 +108,7 @@ public class ClassPrototypeCommand
   protected String prototype (IType _type)
     throws Exception
   {
-    Set imports = new TreeSet();
+    Set<String> imports = new TreeSet<String>();
     StringBuffer buffer = new StringBuffer();
     buffer.append(Services.getMessage("prototype.header"));
     buffer.append("package ")
@@ -118,8 +118,7 @@ public class ClassPrototypeCommand
 
     // insert the imports
     StringBuffer importClauses = new StringBuffer().append("\n\n");
-    for(Iterator ii = imports.iterator(); ii.hasNext();){
-      String className = (String)ii.next();
+    for(String className : imports){
       importClauses.append("import ").append(className).append(";\n");
     }
 
@@ -137,7 +136,7 @@ public class ClassPrototypeCommand
    * @param _imports Keep track of imports.
    */
   protected void prototype (
-      StringBuffer _buffer, IType _type, String _indent, Set _imports)
+      StringBuffer _buffer, IType _type, String _indent, Set<String> _imports)
     throws Exception
   {
     _buffer.append(_indent);
@@ -223,7 +222,7 @@ public class ClassPrototypeCommand
    * @param _imports Keep track of imports.
    */
   protected void prototypeField (
-      StringBuffer _buffer, IField _field, String _indent, Set _imports)
+      StringBuffer _buffer, IField _field, String _indent, Set<String> _imports)
     throws Exception
   {
     String fieldName = _field.getElementName();
@@ -271,7 +270,7 @@ public class ClassPrototypeCommand
    * @param _imports Keep track of imports.
    */
   protected void prototypeMethod (
-      StringBuffer _buffer, IMethod _method, String _indent, Set _imports)
+      StringBuffer _buffer, IMethod _method, String _indent, Set<String> _imports)
     throws Exception
   {
     String methodName = _method.getElementName();
@@ -367,7 +366,7 @@ public class ClassPrototypeCommand
    * @param _imports The imports.
    * @param _signature The signature of the type to add.
    */
-  protected void addImport (Set _imports, String _signature)
+  protected void addImport (Set<String> _imports, String _signature)
   {
     String name = Signature.getSignatureSimpleName(_signature);
     if(name.length() > 1 && !name.equals("void")){

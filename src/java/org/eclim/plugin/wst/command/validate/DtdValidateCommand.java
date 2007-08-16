@@ -48,7 +48,7 @@ public class DtdValidateCommand
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      ArrayList results = new ArrayList();
+      ArrayList<Error> results = new ArrayList<Error>();
       DTDValidator validator = DTDValidator.getInstance();
       ValidationReport result = validator.validate(toUri(project, file));
       ValidationMessage[] messages = result.getValidationMessages();

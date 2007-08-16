@@ -45,7 +45,7 @@ public class WsdlValidateCommand
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      ArrayList results = new ArrayList();
+      ArrayList<Error> results = new ArrayList<Error>();
       WSDLValidator validator = WSDLValidator.getInstance();
       IValidationReport result = validator.validate(toUri(project, file));
       IValidationMessage[] messages = result.getValidationMessages();

@@ -58,7 +58,7 @@ public class ValidateCommand
       Log4jHandler handler = new Log4jHandler(
           JavaUtils.getJavaProject(project), file);
 
-      List list = super.validate(project, file, false, handler);
+      List<Error> list = super.validate(project, file, false, handler);
       list.addAll(handler.getErrors());
 
       return filter(_commandLine, list.toArray(new Error[list.size()]));
@@ -81,7 +81,7 @@ public class ValidateCommand
     //private static final String REF = "ref";
     private static final String VALUE = "value";
 
-    private static final List LEVELS = new ArrayList();
+    private static final ArrayList<String> LEVELS = new ArrayList<String>();
     static {
       LEVELS.add("debug");
       LEVELS.add("info");
@@ -92,7 +92,7 @@ public class ValidateCommand
     private Locator locator;
     private IJavaProject project;
     private String file;
-    private List errors = new ArrayList();
+    private ArrayList<Error> errors = new ArrayList<Error>();
 
     //private List appenders = new ArrayList();
 
@@ -191,7 +191,7 @@ public class ValidateCommand
      *
      * @return List of errors.
      */
-    public List getErrors ()
+    public List<Error> getErrors ()
     {
       return errors;
     }

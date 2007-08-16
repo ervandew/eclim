@@ -64,7 +64,7 @@ public class SrcUpdateCommand
 
         IProblem[] problems = JavaUtils.getProblems(src);
 
-        ArrayList errors = new ArrayList();
+        ArrayList<Error> errors = new ArrayList<Error>();
         String filename = src.getResource().getRawLocation().toOSString();
         FileOffsets offsets = FileOffsets.compile(filename);
         for(int ii = 0; ii < problems.length; ii++){

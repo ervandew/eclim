@@ -67,10 +67,10 @@ public class RegexCommand
    * @param _type The regex evaluation type to use.
    * @return The results.
    */
-  private List evaluate (String _file, String _type)
+  private List<MatcherResult> evaluate (String _file, String _type)
     throws Exception
   {
-    List results = new ArrayList();
+    ArrayList<MatcherResult> results = new ArrayList<MatcherResult>();
 
     String regex = null;
     FileInputStream fis = null;
@@ -121,7 +121,7 @@ public class RegexCommand
    * @param _results The list of results to add to.
    */
   private void processFinding (
-      FileOffsets _offsets, Matcher _matcher, List _results)
+      FileOffsets _offsets, Matcher _matcher, List<MatcherResult> _results)
   {
     MatcherResult result = new MatcherResult();
 
@@ -156,7 +156,8 @@ public class RegexCommand
    * @param _matcher The Matcher.
    * @param _results The list of results to add to.
    */
-  private void processFinding (int _line, Matcher _matcher, List _results)
+  private void processFinding (
+      int _line, Matcher _matcher, List<MatcherResult> _results)
   {
     MatcherResult result = new MatcherResult();
 

@@ -85,7 +85,7 @@ public class SrcUpdateCommand
         if(markers.length > 0){
           String filepath = ProjectUtils.getFilePath(project, file);
           FileOffsets offsets = FileOffsets.compile(filepath);
-          ArrayList errors = new ArrayList();
+          ArrayList<Error> errors = new ArrayList<Error>();
           for(int ii = 0; ii < markers.length; ii++){
             IPHPMarker marker = markers[ii];
             int[] lineColumn = offsets.offsetToLineColumn(

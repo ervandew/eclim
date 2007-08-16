@@ -17,7 +17,6 @@ package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,11 +38,10 @@ public class ImportFilter
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
-    List results = (List)_result;
+    List<ImportResult> results = (List<ImportResult>)_result;
     if(results != null){
-      List elements = new ArrayList(results.size());
-      for(Iterator ii = results.iterator(); ii.hasNext();){
-        ImportResult result = (ImportResult)ii.next();
+      ArrayList<String> elements = new ArrayList<String>(results.size());
+      for(ImportResult result : results){
         elements.add(result.getElement());
       }
       Collections.sort(elements);

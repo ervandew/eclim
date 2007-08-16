@@ -31,7 +31,7 @@ public class MatcherResult
   private int endLine;
   private int endColumn;
 
-  private List groups = new ArrayList();
+  private ArrayList<MatcherResult> groups = new ArrayList<MatcherResult>();
 
   public int getStartLine ()
   {
@@ -73,7 +73,7 @@ public class MatcherResult
     endColumn = _endColumn;
   }
 
-  public List getGroupMatches ()
+  public List<MatcherResult> getGroupMatches ()
   {
     return groups;
   }

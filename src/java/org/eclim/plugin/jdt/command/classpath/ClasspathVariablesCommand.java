@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.classpath;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -39,7 +38,7 @@ public class ClasspathVariablesCommand
    */
   public Object execute (CommandLine _commandLine)
   {
-    List results = new ArrayList();
+    ArrayList<ClasspathVariable> results = new ArrayList<ClasspathVariable>();
     try{
       String[] names = JavaCore.getClasspathVariableNames();
       for(int ii = 0; ii < names.length; ii++){

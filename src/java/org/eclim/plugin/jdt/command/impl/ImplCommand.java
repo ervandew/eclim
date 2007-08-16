@@ -17,7 +17,6 @@ package org.eclim.plugin.jdt.command.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -114,9 +113,9 @@ public class ImplCommand
   protected Object executeGetMethods (CommandLine _commandLine, IType _type)
     throws Exception
   {
-    List results = new ArrayList();
+    ArrayList<ImplType> results = new ArrayList<ImplType>();
     if(isValidType(_type)){
-      Map implementedMethods = getImplementedMethods(_type);
+      Map<String,IMethod> implementedMethods = getImplementedMethods(_type);
 
       IType[] types = getSuperTypes(_commandLine, _type);
       for(int ii = 0; ii < types.length; ii++){
@@ -203,10 +202,10 @@ public class ImplCommand
   protected String[] getUnimplementedMethods (IType _type, IType _superType)
     throws Exception
   {
-    ArrayList names = new ArrayList();
+    ArrayList<String> names = new ArrayList<String>();
 
     IMethod[] methods = _superType.getMethods();
-    Map implementedMethods = getImplementedMethods(_type);
+    Map<String,IMethod> implementedMethods = getImplementedMethods(_type);
 
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();
@@ -245,10 +244,10 @@ public class ImplCommand
    * @param _type The type.
    * @return Map of minimal method signatures and the corresponding methods.
    */
-  protected Map getImplementedMethods (IType _type)
+  protected Map<String,IMethod> getImplementedMethods (IType _type)
     throws Exception
   {
-    Map implementedMethods = new HashMap();
+    HashMap<String,IMethod> implementedMethods = new HashMap<String,IMethod>();
     IMethod[] methods = _type.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();

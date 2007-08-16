@@ -29,12 +29,12 @@ import org.eclipse.jdt.core.CompletionProposal;
  * @version $Revision$
  */
 public class CompletionComparator
-  implements Comparator
+  implements Comparator<CodeCompleteResult>
 {
   /**
    * {@inheritDoc}
    */
-  public int compare (Object _o1, Object _o2)
+  public int compare (CodeCompleteResult _o1, CodeCompleteResult _o2)
   {
     if(_o1 == null && _o2 == null){
       return 0;
@@ -44,29 +44,26 @@ public class CompletionComparator
       return 1;
     }
 
-    CodeCompleteResult p1 = (CodeCompleteResult)_o1;
-    CodeCompleteResult p2 = (CodeCompleteResult)_o2;
-
     // push keywords to the end.
-    if (p1.getType() != CompletionProposal.KEYWORD &&
-        p2.getType() != CompletionProposal.KEYWORD)
+    if (_o1.getType() != CompletionProposal.KEYWORD &&
+        _o2.getType() != CompletionProposal.KEYWORD)
     {
-      int kind = p1.getType() - p2.getType();
+      int kind = _o1.getType() - _o2.getType();
       if(kind != 0){
         return kind;
       }
-    }else if(p1.getType() == CompletionProposal.KEYWORD &&
-        p2.getType() != CompletionProposal.KEYWORD)
+    }else if(_o1.getType() == CompletionProposal.KEYWORD &&
+        _o2.getType() != CompletionProposal.KEYWORD)
     {
       return 1;
-    }else if(p2.getType() == CompletionProposal.KEYWORD &&
-        p1.getType() != CompletionProposal.KEYWORD)
+    }else if(_o2.getType() == CompletionProposal.KEYWORD &&
+        _o1.getType() != CompletionProposal.KEYWORD)
     {
       return -1;
     }
 
     return Collator.getInstance(Locale.US).compare(
-        new String(p1.getCompletion()), new String(p2.getCompletion()));
+        new String(_o1.getCompletion()), new String(_o2.getCompletion()));
   }
 
   /**

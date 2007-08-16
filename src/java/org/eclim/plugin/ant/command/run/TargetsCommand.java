@@ -20,7 +20,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.tools.ant.Project;
@@ -48,7 +47,7 @@ public class TargetsCommand
    */
   public Object execute (CommandLine _commandLine)
   {
-    List results = new ArrayList();
+    ArrayList<String> results = new ArrayList<String>();
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);

@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -52,7 +51,7 @@ public class ImportCommand
    */
   public Object execute (CommandLine _commandLine)
   {
-    List results = new ArrayList();
+    ArrayList<ImportResult> results = new ArrayList<ImportResult>();
     try{
       String project = _commandLine.getValue(Options.NAME_OPTION);
       String pat = _commandLine.getValue(Options.PATTERN_OPTION);
@@ -65,9 +64,8 @@ public class ImportCommand
       IJavaProject javaProject = JavaUtils.getJavaProject(project);
       IJavaSearchScope scope =
         SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
-      List matches = super.search(pattern, scope);
-      for(Iterator ii = matches.iterator(); ii.hasNext();){
-        SearchMatch match = (SearchMatch)ii.next();
+      List<SearchMatch> matches = super.search(pattern, scope);
+      for(SearchMatch match : matches){
         if(match.getAccuracy() == SearchMatch.A_ACCURATE){
           SearchResult result = (SearchResult)createSearchResult(match);
           IType element = (IType)match.getElement();

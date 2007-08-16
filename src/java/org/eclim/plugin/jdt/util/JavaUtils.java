@@ -481,13 +481,12 @@ public class JavaUtils
    * @param _values The values to populate.
    */
   public static void loadPreferencesForTemplate (
-      IProject _project, Preferences _preferences, Map _values)
+      IProject _project, Preferences _preferences, Map<String,Object> _values)
     throws Exception
   {
-    Map options = _preferences.getOptionsAsMap(_project);
-    for(Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      String key = (String)ii.next();
-      String value = (String)options.get(key);
+    Map<String,String> options = _preferences.getOptionsAsMap(_project);
+    for(String key : options.keySet()){
+      String value = options.get(key);
       _values.put(key.replace('.', '_'), value);
     }
   }
@@ -520,7 +519,7 @@ public class JavaUtils
     }finally{
       _src.discardWorkingCopy();
     }
-    List problems = requestor.getProblems();
+    List<IProblem> problems = requestor.getProblems();
     return (IProblem[])problems.toArray(new IProblem[problems.size()]);
   }
 
@@ -578,7 +577,8 @@ public class JavaUtils
   {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
       .getConfigurationElementsFor(JavaUI.ID_PLUGIN, _id);
-    ArrayList res = new ArrayList(elements.length);
+    ArrayList<ContributedProcessorDescriptor> res =
+      new ArrayList<ContributedProcessorDescriptor>(elements.length);
 
     for(int ii = 0; ii < elements.length; ii++){
       ContributedProcessorDescriptor desc =

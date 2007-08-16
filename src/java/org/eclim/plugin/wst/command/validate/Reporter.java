@@ -28,14 +28,14 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 public class Reporter
   implements IReporter
 {
-  private ArrayList messages = new ArrayList();
+  private ArrayList<IMessage> messages = new ArrayList<IMessage>();
 
   /**
    * Gets the list of accumulated messages.
    *
    * @return List of messages.
    */
-  public List getMessages ()
+  public List<IMessage> getMessages ()
   {
     return messages;
   }

@@ -50,7 +50,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map getOptionsAsMap ()
+  public Map<String,String> getOptionsAsMap ()
     throws Exception
   {
     return JavaCore.getOptions();
@@ -59,7 +59,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map getOptionsAsMap (IProject _project)
+  public Map<String,String> getOptionsAsMap (IProject _project)
     throws Exception
   {
     IJavaProject javaProject = JavaCore.create(_project);
@@ -77,7 +77,7 @@ public class OptionHandler
   public void setOption (String _name, String _value)
     throws Exception
   {
-    Map options = JavaCore.getOptions();
+    Map<String,String> options = JavaCore.getOptions();
 
     if(_name.equals(JavaCore.COMPILER_SOURCE)){
       JavaUtils.setCompilerSourceCompliance((String)_value);
@@ -98,8 +98,8 @@ public class OptionHandler
       throw new IllegalArgumentException(
           Services.getMessage("project.not.found", _project.getName()));
     }
-    Map global = javaProject.getOptions(true);
-    Map options = javaProject.getOptions(false);
+    Map<String,String> global = javaProject.getOptions(true);
+    Map<String,String> options = javaProject.getOptions(false);
 
     Object current = global.get(_name);
     if(current == null || !current.equals(_value)){

@@ -46,7 +46,7 @@ public class CodeCompleteFilter
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
-    List results = (List)_result;
+    List<CodeCompleteResult> results = (List<CodeCompleteResult>)_result;
     if(results != null){
       try{
         String layout = _commandLine.getValue(Options.LAYOUT_OPTION);
@@ -67,7 +67,7 @@ public class CodeCompleteFilter
    * @param _results The results in standard format.
    * @return The formatted results.
    */
-  private String standardFormat (List _results)
+  private String standardFormat (List<CodeCompleteResult> _results)
   {
     StringBuffer buffer = new StringBuffer();
     for(int ii = 0; ii < _results.size(); ii++){
@@ -98,7 +98,7 @@ public class CodeCompleteFilter
    * @param _results The results in compact format.
    * @return The formatted results.
    */
-  private String compactFormat (List _results)
+  private String compactFormat (List<CodeCompleteResult> _results)
   {
     StringBuffer buffer = new StringBuffer();
     if(_results.size() > 0){
@@ -156,7 +156,8 @@ public class CodeCompleteFilter
     private String word;
     private String type;
     private String menu;
-    private List list = new ArrayList();
+    private ArrayList<CodeCompleteResult> list =
+      new ArrayList<CodeCompleteResult>();
 
     public void add (CodeCompleteResult _result)
     {

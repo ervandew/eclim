@@ -17,7 +17,6 @@ package org.eclim.plugin.jdt.command.junit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +61,7 @@ public class JUnitImplCommand
   protected IType[] getSuperTypes (CommandLine _commandLine, IType _type)
     throws Exception
   {
-    List types = new ArrayList();
+    ArrayList<IType> types = new ArrayList<IType>();
 
     String baseType = _commandLine.getValue(Options.BASETYPE_OPTION);
     if(baseType != null){
@@ -187,7 +186,7 @@ public class JUnitImplCommand
       IType _type, IType _superType, IMethod _method, IJavaElement _sibling)
     throws Exception
   {
-    Map values = new HashMap();
+    HashMap<String,Object> values = new HashMap<String,Object>();
     JavaUtils.loadPreferencesForTemplate(
         _type.getJavaProject().getProject(), getPreferences(), values);
 
@@ -217,7 +216,7 @@ public class JUnitImplCommand
   protected String[] getMethodSignatures (IType _type, IMethod _method)
     throws Exception
   {
-    ArrayList signatures = new ArrayList();
+    ArrayList<String> signatures = new ArrayList<String>();
     IMethod[] methods = _type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
       if(methods[ii].getElementName().equals(_method.getElementName())){

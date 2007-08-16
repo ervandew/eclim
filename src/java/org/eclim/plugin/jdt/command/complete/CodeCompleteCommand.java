@@ -18,7 +18,6 @@ package org.eclim.plugin.jdt.command.complete;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -43,7 +42,7 @@ import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
 public class CodeCompleteCommand
   extends AbstractCommand
 {
-  private static final Comparator COMPLETION_COMPARATOR =
+  private static final Comparator<CodeCompleteResult> COMPLETION_COMPARATOR =
     new CompletionComparator();
 
   /**
@@ -51,7 +50,7 @@ public class CodeCompleteCommand
    */
   public Object execute (CommandLine _commandLine)
   {
-    List results = new ArrayList();
+    ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);

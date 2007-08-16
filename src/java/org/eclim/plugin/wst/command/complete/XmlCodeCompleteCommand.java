@@ -16,7 +16,6 @@
 package org.eclim.plugin.wst.command.complete;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclim.command.CommandLine;
 
@@ -36,7 +35,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
 public class XmlCodeCompleteCommand
   extends WstCodeCompleteCommand
 {
-  private static final List IGNORE = new ArrayList();
+  private static final ArrayList<String> IGNORE = new ArrayList<String>();
   static{
     IGNORE.add("comment - xml comment");
     IGNORE.add("XSL processing instruction - XSL processing instruction");

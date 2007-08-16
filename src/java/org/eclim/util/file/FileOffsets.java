@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
@@ -80,7 +79,7 @@ public class FileOffsets
       reader = new BufferedReader(
           new InputStreamReader(file.getContent().getInputStream()));
 
-      List lines = new ArrayList();
+      ArrayList<Integer> lines = new ArrayList<Integer>();
       lines.add(new Integer(0));
 
       int offset = 0;

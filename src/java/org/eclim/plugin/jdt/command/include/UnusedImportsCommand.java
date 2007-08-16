@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -52,7 +51,7 @@ public class UnusedImportsCommand
       ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 
       IProblem[] problems = JavaUtils.getProblems(src, UNUSED_IMPORTS);
-      List results = new ArrayList();
+      ArrayList<String> results = new ArrayList<String>();
       for(int ii = 0; ii < problems.length; ii++){
         IJavaElement element = src.getElementAt(problems[ii].getSourceStart());
         if(element != null){
