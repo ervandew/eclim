@@ -24,6 +24,7 @@ import org.eclim.util.file.FileUtils;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -215,12 +216,13 @@ public class ProjectUtils
     IPath location= new Path(file.getAbsolutePath());
     boolean connected= false;
     try {
-      ITextFileBuffer buffer= manager.getTextFileBuffer(location);
+      ITextFileBuffer buffer =
+        manager.getTextFileBuffer(location, LocationKind.LOCATION);
       if (buffer == null) {
         //no existing file buffer..create one
-        manager.connect(location, new NullProgressMonitor());
-        connected= true;
-        buffer= manager.getTextFileBuffer(location);
+        manager.connect(location, LocationKind.LOCATION, new NullProgressMonitor());
+        connected = true;
+        buffer = manager.getTextFileBuffer(location, LocationKind.LOCATION);
         if (buffer == null) {
           return null;
         }
@@ -229,7 +231,8 @@ public class ProjectUtils
     } finally {
       if (connected) {
         try {
-          manager.disconnect(location, new NullProgressMonitor());
+          manager.disconnect(
+              location, LocationKind.LOCATION, new NullProgressMonitor());
         } catch (Exception e) {
         }
       }

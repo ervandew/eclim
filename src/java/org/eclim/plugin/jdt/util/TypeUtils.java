@@ -34,6 +34,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.Signature;
 
+import org.eclipse.jdt.internal.core.CompilationUnit;
+
 /**
  * Utility methods for working with IType.
  *
@@ -61,7 +63,7 @@ public class TypeUtils
     // offset outside the class source (Above the package declaration most
     // likely)
     if(element == null){
-      type = _src.findPrimaryType();
+      type = ((CompilationUnit)_src).getTypeRoot().findPrimaryType();
 
     // inner class
     }else if(element != null && element.getElementType() == IJavaElement.TYPE){
@@ -76,7 +78,7 @@ public class TypeUtils
 
       // offset on the package declaration or continuation of import ^
       if(element.getElementType() == IJavaElement.COMPILATION_UNIT){
-        element = ((ICompilationUnit)element).findPrimaryType();
+        element = ((CompilationUnit)element).getTypeRoot().findPrimaryType();
       }
       type = (IType)element;
     }
@@ -318,7 +320,7 @@ public class TypeUtils
   public static IType[] getSuperClasses (IType _type, boolean _returnNotFound)
     throws Exception
   {
-    List types = new ArrayList();
+    ArrayList<IType> types = new ArrayList<IType>();
 
     getSuperClasses(_type, types, _returnNotFound);
 
@@ -354,7 +356,7 @@ public class TypeUtils
   public static IType[] getInterfaces (IType _type, boolean _returnNotFound)
     throws Exception
   {
-    List types = new ArrayList();
+    ArrayList<IType> types = new ArrayList<IType>();
     getInterfaces(_type, types, _returnNotFound);
 
     return (IType[])types.toArray(new IType[types.size()]);
@@ -369,7 +371,7 @@ public class TypeUtils
    * (adds them as handle only IType instances).
    */
   private static void getSuperClasses (
-      IType _type, List _superclasses, boolean _includeNotFound)
+      IType _type, List<IType> _superclasses, boolean _includeNotFound)
     throws Exception
   {
     IType superclass = getSuperClass(_type);
@@ -429,7 +431,7 @@ public class TypeUtils
    *  (adds them as handle only IType instances).
    */
   private static void getInterfaces (
-      IType _type, List _interfaces, boolean _includeNotFound)
+      IType _type, List<IType> _interfaces, boolean _includeNotFound)
     throws Exception
   {
     // directly implemented interfaces.

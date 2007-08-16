@@ -18,7 +18,6 @@ package org.eclim.plugin.jdt.command.search;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.vfs.FileObject;
@@ -51,6 +50,8 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
+
+import org.eclipse.jdt.internal.core.CompilationUnit;
 
 /**
  * Command to handle java search requests.
@@ -107,7 +108,7 @@ public class SearchCommand
    */
   public Object executeSearch (CommandLine _commandLine)
   {
-    List results = new ArrayList();
+    ArrayList<Object> results = new ArrayList<Object>();
     try{
       int context = -1;
       if(_commandLine.hasOption(Options.CONTEXT_OPTION)){
@@ -166,11 +167,12 @@ public class SearchCommand
         IJavaProject javaProject = JavaUtils.getJavaProject(project);
         IType type = null;
         if(file.endsWith(".java")){
-          type = JavaUtils.getCompilationUnit(project, file).findPrimaryType();
+          type = ((CompilationUnit)JavaUtils.getCompilationUnit(project, file))
+            .getTypeRoot().findPrimaryType();
         }
-        List matches = search(pattern, getScope(scope, javaProject, type));
-        for(Iterator ii = matches.iterator(); ii.hasNext();){
-          SearchMatch match = (SearchMatch)ii.next();
+        List<SearchMatch> matches =
+          search(pattern, getScope(scope, javaProject, type));
+        for(SearchMatch match : matches){
           if (match.getElement() != null){
             int elementType = ((IJavaElement)match.getElement()).getElementType();
             if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
@@ -198,7 +200,7 @@ public class SearchCommand
    *
    * @return List of matches.
    */
-  protected List search (SearchPattern _pattern, IJavaSearchScope _scope)
+  protected List<SearchMatch> search (SearchPattern _pattern, IJavaSearchScope _scope)
     throws CoreException
   {
     SearchRequestor requestor = new SearchRequestor();
