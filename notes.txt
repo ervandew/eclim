@@ -58,7 +58,6 @@ TODO {{{
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
-    - Convert EclimApplication to implement IApplication
     - :ProjectNatureAdd/Remove
       - Consider calling the nature's associated
         ProjectManagement.create/delete methods in eclim to perform any nature

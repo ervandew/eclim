@@ -23,6 +23,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.3.0.v20070423.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.3.0.v20070604.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.3.100.v20070530.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.0.0.v20070606.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.3.0.v20070426.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.preferences_3.2.100.v20070522.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.registry_3.3.0.v20070522.jar"/>

@@ -36,8 +36,10 @@ import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.core.runtime.Platform;
+
+import org.eclipse.equinox.app.IApplication;
+import org.eclipse.equinox.app.IApplicationContext;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
@@ -47,19 +49,17 @@ import org.osgi.framework.Bundle;
  * This class controls all aspects of the application's execution
  */
 public class EclimApplication
-  implements IPlatformRunnable
+  implements IApplication
 {
   private static final Logger logger = Logger.getLogger(EclimApplication.class);
 
   private boolean shuttingDown = false;
 
   /**
-   * Runs this runnable with the supplied args.
-   *
-   * @param _args The arguments (typically a String[]).
-   * @return The result (returned Integer is treated as exit code).
+   * {@inheritDoc}
+   * @see IApplication#start(IApplicationContext)
    */
-  public Object run (Object _args)
+  public Object start (IApplicationContext _context)
     throws Exception
   {
     logger.info("Starting eclim...");
@@ -87,6 +87,19 @@ public class EclimApplication
 
     shutdown();
     return new Integer(0);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see IApplication#stop()
+   */
+  public void stop ()
+  {
+    try{
+      shutdown();
+    }catch(Exception e){
+      logger.error("Error shutting down.", e);
+    }
   }
 
   /**
