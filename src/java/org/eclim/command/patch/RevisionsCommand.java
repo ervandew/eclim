@@ -17,25 +17,21 @@ package org.eclim.command.patch;
 
 import java.io.ByteArrayOutputStream;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-
-import org.apache.commons.httpclient.methods.GetMethod;
-
-import org.apache.commons.io.IOUtils;
 
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
 
 /**
  * Command to fetch available revisions for a give vim script file.
@@ -61,21 +57,19 @@ public class RevisionsCommand
       String file = _commandLine.getValue(Options.FILE_OPTION);
       String url = URL.replaceFirst("<file>", file);
 
-      HttpClient client = new HttpClient();
-      client.getHttpConnectionManager().getParams().setConnectionTimeout(TIMEOUT);
-
-      HttpMethod method = new GetMethod(url);
+      HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
+      client.setReadTimeout(TIMEOUT);
       try{
-        int status = client.executeMethod(method);
-        if(status != HttpStatus.SC_OK){
+        client.connect();
+        if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
           throw new RuntimeException(
-              Services.getMessage("http.error", method.getStatusLine()));
+              Services.getMessage("http.error", client.getResponseMessage()));
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.copy(method.getResponseBodyAsStream(), out);
+        IOUtils.copy(client.getInputStream(), out);
 
-        List revisions = new ArrayList();
+        ArrayList<String> revisions = new ArrayList<String>();
         Matcher matcher = REVISION_REGEX.matcher(out.toString());
         while(matcher.find()){
           revisions.add(matcher.group(1));
@@ -83,7 +77,10 @@ public class RevisionsCommand
 
         return super.filter(_commandLine, revisions);
       }finally{
-        method.releaseConnection();
+        try{
+          client.disconnect();
+        }catch(Exception ignore){
+        }
       }
     }catch(Exception e){
       return e;

@@ -21,8 +21,6 @@ import java.io.OutputStream;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.SystemUtils;
 
 import org.apache.commons.vfs.FileObject;
@@ -32,6 +30,8 @@ import org.apache.commons.vfs.VFS;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
 
 /**
  * Command that reads a file from a commons vfs compatable path.

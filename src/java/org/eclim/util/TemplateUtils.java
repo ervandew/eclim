@@ -22,8 +22,6 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.log4j.Logger;
 
 import org.apache.velocity.app.Velocity;

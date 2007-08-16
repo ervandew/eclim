@@ -18,10 +18,7 @@ package org.eclim.command.admin;
 import java.io.File;
 import java.io.FileInputStream;
 
-import java.util.Iterator;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
@@ -30,6 +27,8 @@ import org.eclim.Services;
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
 
 /**
  * Command to update global settings.
@@ -58,8 +57,8 @@ public class SettingsUpdateCommand
         in = new FileInputStream(file);
         properties.load(in);
 
-        for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
-          String name = (String)ii.next();
+        for(Object key : properties.keySet()){
+          String name = (String)key;
           String value = properties.getProperty(name);
           getPreferences().setOption(name, value);
         }

@@ -18,13 +18,9 @@ package org.eclim.misc.ant;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -37,6 +33,8 @@ import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 
 import org.eclim.util.CommandExecutor;
+
+import org.eclim.util.file.FileUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -65,8 +63,9 @@ public class VUnitTask
 
   private File plugin;
   private File todir;
-  private List filesets = new ArrayList();
-  private List properties = new ArrayList();
+  private ArrayList<FileSet> filesets = new ArrayList<FileSet>();
+  private ArrayList<Environment.Variable> properties =
+    new ArrayList<Environment.Variable>();
   private String failureProperty;
   private boolean haltOnFailure;
   private boolean failed;
@@ -88,8 +87,7 @@ public class VUnitTask
 
       // build properties string.
       StringBuffer propertiesBuffer = new StringBuffer();
-      for (Iterator ii = properties.iterator(); ii.hasNext();){
-        Environment.Variable var = (Environment.Variable)ii.next();
+      for (Environment.Variable var : properties){
         if(propertiesBuffer.length() > 0){
           propertiesBuffer.append(" | ");
         }
@@ -100,8 +98,7 @@ public class VUnitTask
       }
       String setproperties = "\"" + propertiesBuffer.append('"').toString();
 
-      for (Iterator it = filesets.iterator(); it.hasNext();){
-        FileSet set = (FileSet)it.next();
+      for (FileSet set : filesets){
         DirectoryScanner scanner = set.getDirectoryScanner(getProject());
         File basedir = scanner.getBasedir();
         String[] files = scanner.getIncludedFiles();
@@ -148,10 +145,10 @@ public class VUnitTask
 
           StringBuffer file = new StringBuffer()
             .append("TEST-")
-            .append(FilenameUtils.getPath(files[ii]).replace('/', '.'))
-            .append(FilenameUtils.getBaseName(files[ii]))
+            .append(FileUtils.getPath(files[ii]).replace('/', '.'))
+            .append(FileUtils.getFileName(files[ii]))
             .append(".xml");
-          File resultFile = new File(FilenameUtils.concat(
+          File resultFile = new File(FileUtils.concat(
               todir.getAbsolutePath(), file.toString()));
 
           try{

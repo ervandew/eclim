@@ -17,9 +17,9 @@ package org.eclim.util;
 
 import java.io.File;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.Services;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -31,8 +31,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jface.text.IDocument;
 
@@ -136,7 +136,7 @@ public class ProjectUtils
     if(_file.startsWith("/" + _project.getName() + "/")){
       _file = _file.substring(2 + _project.getName().length());
     }
-    return FilenameUtils.concat(getPath(_project), _file);
+    return FileUtils.concat(getPath(_project), _file);
   }
 
   /**
@@ -206,7 +206,7 @@ public class ProjectUtils
   public static IDocument getDocument (IProject _project, String _file)
     throws Exception
   {
-    File file = new File(FilenameUtils.concat(getPath(_project), _file));
+    File file = new File(FileUtils.concat(getPath(_project), _file));
     if(!file.exists()){
       return null;
     }

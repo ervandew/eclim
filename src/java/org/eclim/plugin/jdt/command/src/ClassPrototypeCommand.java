@@ -24,9 +24,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.SystemUtils;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.apache.log4j.Logger;
 
 import org.eclim.Services;
@@ -36,6 +33,10 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.IOUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
@@ -72,7 +73,7 @@ public class ClassPrototypeCommand
       File file = new File(
         SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
       if(!file.exists()){
-        new File(FilenameUtils.getFullPath(file.getAbsolutePath())).mkdirs();
+        new File(FileUtils.getFullPath(file.getAbsolutePath())).mkdirs();
         file.deleteOnExit();
         FileWriter out = null;
         try{

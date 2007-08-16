@@ -18,14 +18,13 @@ package org.eclim.command.taglist;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-
 import org.eclim.Services;
+
+import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileOffsets;
 
@@ -40,7 +39,7 @@ public class RegexTaglist
   private String file;
   private String contents;
   private FileOffsets offsets;
-  private List results = new ArrayList();
+  private ArrayList<TagResult> results = new ArrayList<TagResult>();
 
   /**
    * Constructs a new instance.

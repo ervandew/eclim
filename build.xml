@@ -26,10 +26,10 @@
   <!-- classpath -->
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
-    <!--fileset dir="build/dist" includes="**/*.jar"/-->
+    <fileset dir="src/eclipse/plugins/" includes="*/lib/*.jar"/>
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
     <fileset dir="${eclipse.home}/plugins"
-        includes="**/*.jar" excludes="org.eclim*/*.jar"/>
+        includes="**/*.jar" excludes="org.eclim*/**/*.jar"/>
   </path>
 
   <!--
@@ -90,7 +90,8 @@
     </jar>
 
     <!-- update nailgun jar file -->
-    <copy tofile="build/dist/lib/nailgun-0.7.1.jar" file="lib/nailgun-0.7.1.jar"/>
+    <copy file="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"
+        tofile="build/dist/lib/nailgun-0.7.1.jar"/>
     <jar jarfile="build/dist/lib/nailgun-0.7.1.jar" update="true">
       <fileset dir="build/classes">
         <include name="com/martiansoftware/nailgun/**/*.class"/>
@@ -109,11 +110,6 @@
 
     <!-- deploy eclipse plugins -->
     <sync todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
-      <fileset dir="." includes="LICENSE"/>
-      <fileset dir="." includes="NOTICE"/>
-      <fileset dir="." includes="log4j.xml"/>
-      <fileset dir="." includes="lib/**/*"
-          excludes="lib/ant*.jar,lib/junit*.jar,lib/testng*.jar"/>
       <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar,lib/*.jar"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
@@ -136,35 +132,20 @@
       <fileset dir="src/shell" includes="**/*"/>
     </copy>
 
-    <!-- build list of jar files for main plugin's manifest. -->
-    <path id="lib.jars">
-      <fileset dir="lib" includes="*" excludes="ant*.jar,junit*.jar,testng*.jar"/>
-    </path>
-    <property name="lib.jars" refid="lib.jars"/>
-    <propertyregex property="lib.jars" override="true"
-        input="${lib.jars}" regexp=":" replace=","/>
-    <propertyregex property="lib.jars" override="true"
-        input="${lib.jars}" regexp="/.*?/lib/" replace="lib/"/>
-
     <replace dir="${eclipse.home}/plugins"
         includes="org.eclim*_${eclim.version}/bin/**/*,
                   org.eclim*_${eclim.version}/about.html,
                   org.eclim*_${eclim.version}/plugin.properties,
                   org.eclim*_${eclim.version}/META-INF/MANIFEST.MF">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-      <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
     </replace>
 
-    <!--
-      - separates lib entries onto new lines since the single line length of
-      - the classpath entry seems to be limited.
-      -->
-    <replace dir="${eclipse.home}/plugins"
-        includes="org.eclim*_${eclim.version}/META-INF/MANIFEST.MF">
-      <replacetoken>,lib</replacetoken>
-      <replacevalue>,
-  lib</replacevalue>
-    </replace>
+    <antcall target="plugin.lib.jars">
+      <param name="plugin.name.full" value="org.eclim"/>
+    </antcall>
+    <foreach list="${plugins}" target="plugin.lib.jars" delimiter=":"
+        inheritAll="true" param="plugin.name" trim="true"/>
+
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
       includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
@@ -190,10 +171,46 @@
       </fileset>
     </jar>
     <sync todir="${eclipse.home}/plugins/org.eclim.${plugin.name}_${eclim.version}">
-      <fileset dir="." includes="LICENSE"/>
-      <fileset dir="." includes="NOTICE"/>
       <fileset dir="build/dist" includes="eclim.${plugin.name}.jar"/>
     </sync>
+  </target>
+
+  <!--
+    - Target responsible for building a list of jar files for the specified
+    - plugin and updating its manifest accordingly.
+    -->
+  <target name="plugin.lib.jars">
+    <!-- build list of jar files for main plugin's manifest. -->
+    <property name="plugin.name.full" value="org.eclim.${plugin.name}"/>
+    <if>
+      <available file="src/eclipse/plugins/${plugin.name.full}/lib"/>
+      <then>
+        <path id="lib.jars">
+          <fileset dir="src/eclipse/plugins/${plugin.name.full}/lib" includes="*"/>
+        </path>
+        <property name="lib.jars" refid="lib.jars"/>
+        <propertyregex property="lib.jars" override="true"
+            input="${lib.jars}" regexp=":" replace=","/>
+        <propertyregex property="lib.jars" override="true"
+            input="${lib.jars}" regexp="/.*?/lib/" replace="lib/"/>
+
+        <replace dir="${eclipse.home}/plugins"
+            includes="${plugin.name.full}_${eclim.version}/META-INF/MANIFEST.MF">
+          <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
+        </replace>
+
+        <!--
+          - separates lib entries onto new lines since the single line length of
+          - the classpath entry seems to be limited.
+          -->
+        <replace dir="${eclipse.home}/plugins"
+            includes="${plugin.name.full}_${eclim.version}/META-INF/MANIFEST.MF">
+          <replacetoken>,lib</replacetoken>
+          <replacevalue>,
+  lib</replacevalue>
+        </replace>
+      </then>
+    </if>
   </target>
 
   <!--

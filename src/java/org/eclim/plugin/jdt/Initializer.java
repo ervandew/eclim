@@ -17,19 +17,15 @@ package org.eclim.plugin.jdt;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.SystemUtils;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.runtime.IPath;
@@ -176,14 +172,11 @@ public class Initializer
     InputStream in = null;
     try{
       in = getClass().getResourceAsStream(file);
-      StringWriter writer = new StringWriter();
-      IOUtils.copy(in, writer);
-      String propertiesString = writer.toString();
+      String propertiesString = IOUtils.toString(in);
 
-      Map values = new HashMap();
-      for(Iterator ii = System.getProperties().keySet().iterator(); ii.hasNext();){
-        String key = (String)ii.next();
-        values.put(key, System.getProperty(key).replace('\\', '/'));
+      HashMap<Object,String> values = new HashMap<Object,String>();
+      for(Object key : System.getProperties().keySet()){
+        values.put(key, System.getProperty((String)key).replace('\\', '/'));
       }
       propertiesString =
         StringUtils.replacePlaceholders(propertiesString, values);
@@ -191,8 +184,8 @@ public class Initializer
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(propertiesString.getBytes()));
 
-      for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
-        String name = (String)ii.next();
+      for(Object key : properties.keySet()){
+        String name = (String)key;
         IPath path = new Path(properties.getProperty(name));
         logger.debug("Setting classpath variable '{}' to path '{}'", name, path);
         JavaCore.setClasspathVariable(name, path, null);

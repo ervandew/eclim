@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
@@ -35,17 +32,19 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.PluginResources;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-
 import org.eclim.plugin.jdt.project.classpath.Dependency;
 import org.eclim.plugin.jdt.project.classpath.Parser;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+
 import org.eclim.project.ProjectManager;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileOffsets;
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -117,7 +116,7 @@ public class JavaProjectManager
 
     // ivy.xml, etc updated.
     if(buildfile != null){
-      String filename = FilenameUtils.getName(buildfile);
+      String filename = FileUtils.getBaseName(buildfile);
       Parser parser = (Parser)Services.getService(filename, Parser.class);
       IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
       errors = setClasspath(javaProject, entries, dotclasspath);

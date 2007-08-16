@@ -18,8 +18,6 @@ package org.eclim.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * Runs an external process.
  */

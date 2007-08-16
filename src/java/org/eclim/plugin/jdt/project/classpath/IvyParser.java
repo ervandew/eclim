@@ -15,21 +15,21 @@
  */
 package org.eclim.plugin.jdt.project.classpath;
 
-import java.util.List;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 
 import org.eclim.Services;
+
+import org.eclim.util.XmlUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.JavaCore;
 
-import org.jaxen.XPath;
-
-import org.jaxen.dom.DOMXPath;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Implementation of {@link Parser} for parsing an
@@ -46,7 +46,7 @@ public class IvyParser
   private static final String NAME = "name";
   private static final String REVISION = "rev";
 
-  private static XPath xpath;
+  private static XPathExpression xpath;
 
   /**
    * {@inheritDoc}
@@ -56,7 +56,8 @@ public class IvyParser
   {
     try{
       if(xpath == null){
-        xpath = new DOMXPath("/ivy-module/dependencies/dependency");
+        xpath = XmlUtils.createXPathExpression(
+            "/ivy-module/dependencies/dependency");
       }
 
       if(JavaCore.getClasspathVariable(IVY_REPO) == null){
@@ -65,10 +66,11 @@ public class IvyParser
       }
       IPath path = new Path(IVY_REPO);
 
-      List results = xpath.selectNodes(_document);
-      Dependency[] dependencies = new Dependency[results.size()];
-      for(int ii = 0; ii < results.size(); ii++){
-        Element element = (Element)results.get(ii);
+      NodeList results = (NodeList)
+        xpath.evaluate(_document, XPathConstants.NODESET);
+      Dependency[] dependencies = new Dependency[results.getLength()];
+      for(int ii = 0; ii < results.getLength(); ii++){
+        Element element = (Element)results.item(ii);
         dependencies[ii] = new IvyDependency(
             element.getAttribute(ORG),
             element.getAttribute(NAME),

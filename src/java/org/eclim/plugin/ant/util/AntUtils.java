@@ -15,9 +15,9 @@
  */
 package org.eclim.plugin.ant.util;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.util.ProjectUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.ant.internal.ui.AntUtil;
 
@@ -79,7 +79,7 @@ public class AntUtils
     file.refreshLocal(IResource.DEPTH_INFINITE, null);
 
     IDocument doc = ProjectUtils.getDocument(_project, _antFile);
-    final String filepath = FilenameUtils.concat(
+    final String filepath = FileUtils.concat(
         ProjectUtils.getPath(_project), _antFile);
 
     LocationProvider provider = new LocationProvider(null) {

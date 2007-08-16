@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -30,6 +28,7 @@ import org.eclim.plugin.pydev.util.PyDevUtils;
 
 import org.eclim.util.ProjectUtils;
 
+import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Location;
 
 import org.eclipse.core.resources.IProject;
@@ -77,7 +76,7 @@ public class FindDefinitionCommand
 
       PyRefactoring refactor = new PyRefactoring();
       File theFile = new File(
-          FilenameUtils.concat(ProjectUtils.getPath(project), file));
+          FileUtils.concat(ProjectUtils.getPath(project), file));
       RefactoringRequest request = new RefactoringRequest(
           theFile, selection, null, nature, edit);
       ItemPointer[] results = refactor.findDefinition(request);

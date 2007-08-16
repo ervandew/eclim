@@ -21,13 +21,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.Services;
 
 import org.eclim.preference.Preferences;
 
 import org.eclim.util.ProjectUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -306,7 +306,7 @@ public class JavaUtils
     StringBuffer elementName = new StringBuffer()
       .append(parent.getParent().getElementName())
       .append('.')
-      .append(FilenameUtils.getBaseName(parent.getElementName()));
+      .append(FileUtils.getFileName(parent.getElementName()));
 
     switch(_element.getElementType()){
       case IJavaElement.FIELD:

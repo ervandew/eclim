@@ -26,8 +26,6 @@ import java.util.Map;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
@@ -42,6 +40,8 @@ import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.preference.Preferences;
+
+import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileUtils;
 

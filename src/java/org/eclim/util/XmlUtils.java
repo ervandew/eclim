@@ -31,8 +31,9 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang.SystemUtils;
 
@@ -40,11 +41,11 @@ import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.Error;
+
+import org.eclim.util.file.FileUtils;
 
 import org.w3c.dom.Element;
 
@@ -64,9 +65,24 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlUtils
 {
-  private static final Logger logger = Logger.getLogger(XmlUtils.class);
-
   private static final Pattern WIN_BUG = Pattern.compile("^/[a-zA-Z]:/.*");
+
+  private static XPath XPATH;
+
+  /**
+   * Create an XPathExpression from the supplied xpath string.
+   *
+   * @param xpath The xpath string.
+   * @return An XPathExpression.
+   */
+  public static XPathExpression createXPathExpression (String xpath)
+    throws Exception
+  {
+    if(XPATH == null){
+      XPATH = XPathFactory.newInstance().newXPath();
+    }
+    return XPATH.compile(xpath);
+  }
 
   /**
    * Validate the supplied xml file.
@@ -124,12 +140,12 @@ public class XmlUtils
 
     SAXParser parser = factory.newSAXParser();
 
-    String filename = FilenameUtils.concat(
+    String filename = FileUtils.concat(
         ProjectUtils.getPath(_project), _filename);
 
     ErrorAggregator errorHandler = new ErrorAggregator();
     EntityResolver entityResolver = new EntityResolver(
-        FilenameUtils.getFullPath(filename));
+        FileUtils.getFullPath(filename));
     try{
       parser.parse(filename, getHandler(_handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
@@ -176,19 +192,16 @@ public class XmlUtils
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
         _schema.replace('\\', '/'));
 
-    String filename = FilenameUtils.concat(
-        ProjectUtils.getPath(_project), _filename);
-
     ErrorAggregator errorHandler = new ErrorAggregator();
     EntityResolver entityResolver = new EntityResolver(
-        FilenameUtils.getFullPath(filename));
+        FileUtils.getFullPath(_filename));
     try{
-      parser.parse(filename, getHandler(null, errorHandler, entityResolver));
+      parser.parse(_filename, getHandler(null, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       return new Error[]{
         new Error(
             spe.getMessage(),
-            filename,
+            _filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)};
@@ -576,18 +589,18 @@ public class XmlUtils
         if(location.startsWith("//")){
           location = location.substring(2);
         }
-        if(FilenameUtils.getFullPath(location).equals(
-              FilenameUtils.getPath(location)))
+        if(FileUtils.getFullPath(location).equals(
+              FileUtils.getPath(location)))
         {
-          location = FilenameUtils.concat(path, location);
+          location = FileUtils.concat(path, location);
         }
 
         if(!new File(location).exists()){
           StringBuffer resource = new StringBuffer()
             .append("/resources/")
-            .append(FilenameUtils.getExtension(location))
+            .append(FileUtils.getExtension(location))
             .append('/')
-            .append(FilenameUtils.getName(location));
+            .append(FileUtils.getFileName(location));
           URL url = Services.getResource(resource.toString());
           if(url != null){
             return new InputSource(url.toString());

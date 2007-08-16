@@ -19,4 +19,4 @@ rem Author: Eric Van Dewoestine
 set ECLIPSE_HOME=%~dp0\..\..\..
 set ECLIM_HOME=%~dp0\..
 
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -consolelog -nosplash -clean -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%" %*
+start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%" %*

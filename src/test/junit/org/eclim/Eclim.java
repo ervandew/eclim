@@ -19,11 +19,10 @@ import java.io.FileInputStream;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.util.CommandExecutor;
+import org.eclim.util.IOUtils;
 
 /**
  * Utility class to executing eclim commands and returning the results.

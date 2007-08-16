@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileOffsets;
 import org.eclim.util.file.FileUtils;

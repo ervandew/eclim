@@ -23,11 +23,11 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.Services;
 
 import org.eclim.plugin.PluginResources;
+
+import org.eclim.util.file.FileUtils;
 
 /**
  * Utility classes for working with scripts.
@@ -56,8 +56,8 @@ public class ScriptUtils
     Binding binding = new Binding(_values);
     GroovyShell shell = new GroovyShell(binding);
 
-    String script = FilenameUtils.separatorsToUnix(
-        FilenameUtils.concat(SCRIPT_PATH, _script));
+    String script = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, _script));
     try{
       return shell.evaluate(_resources.getResourceAsStream(script));
     }catch(NullPointerException npe){
@@ -78,8 +78,8 @@ public class ScriptUtils
   public static Class parseClass (String _script)
     throws Exception
   {
-    String script = FilenameUtils.separatorsToUnix(
-        FilenameUtils.concat(SCRIPT_PATH, _script));
+    String script = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, _script));
     return parseClass(Services.getResourceAsStream(script), script);
   }
 
@@ -94,8 +94,8 @@ public class ScriptUtils
   public static Class parseClass (PluginResources _resources, String _script)
     throws Exception
   {
-    String script = FilenameUtils.separatorsToUnix(
-        FilenameUtils.concat(SCRIPT_PATH, _script));
+    String script = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, _script));
     return parseClass(_resources.getResourceAsStream(script), script);
   }
 

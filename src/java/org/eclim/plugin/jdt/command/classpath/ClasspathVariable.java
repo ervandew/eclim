@@ -69,7 +69,7 @@ public class ClasspathVariable
 
   /**
    * {@inheritDoc}
-   * @see Comparable#compareTo(T)
+   * @see Comparable#compareTo(Object)
    */
   public int compareTo (ClasspathVariable obj)
   {

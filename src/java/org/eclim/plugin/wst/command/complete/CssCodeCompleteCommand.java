@@ -16,7 +16,8 @@
 package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
+
+import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclim.eclipse.EclimPlugin;
 

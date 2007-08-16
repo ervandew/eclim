@@ -19,13 +19,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
@@ -33,8 +29,11 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.XmlUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -59,7 +58,7 @@ public class SearchFilter
    */
   public String filter (CommandLine _commandLine, Object _result)
   {
-    List dependencies = null;
+    List<Dependency> dependencies = null;
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
@@ -67,14 +66,13 @@ public class SearchFilter
       dependencies = getDependencies(project, file, type);
     }catch(Exception e){
       logger.warn("Unable to get dependencies.", e);
-      dependencies = new ArrayList();
+      dependencies = new ArrayList<Dependency>();
     }
 
     StringBuffer buffer = new StringBuffer();
     String groupId = null;
-    List results = (List)_result;
-    for (Iterator ii = results.iterator(); ii.hasNext();){
-      Dependency dependency = (Dependency)ii.next();
+    List<Dependency> results = (List<Dependency>)_result;
+    for (Dependency dependency : results){
       if(!dependency.getGroupId().equals(groupId)){
         if(buffer.length() != 0){
           buffer.append('\n');
@@ -105,13 +103,14 @@ public class SearchFilter
    * @param _type The file type (ivy, maven, mvn).
    * @return List of dependencies.
    */
-  private List getDependencies (String _project, String _file, String _type)
+  private List<Dependency> getDependencies (
+      String _project, String _file, String _type)
     throws Exception
   {
-    ArrayList list = new ArrayList();
+    ArrayList<Dependency> list = new ArrayList<Dependency>();
     InputStream in = null;
     try{
-      String file = FilenameUtils.concat(ProjectUtils.getPath(_project), _file);
+      String file = FileUtils.concat(ProjectUtils.getPath(_project), _file);
       Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         .parse(in = new FileInputStream(file)).getDocumentElement();
       NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))

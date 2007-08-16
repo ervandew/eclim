@@ -143,7 +143,7 @@ public class TagResult
 
   /**
    * {@inheritDoc}
-   * @see Comparable#compareTo(T)
+   * @see Comparable#compareTo(Object)
    */
   public int compareTo (TagResult obj)
   {

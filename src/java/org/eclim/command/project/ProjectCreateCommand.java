@@ -15,8 +15,6 @@
  */
 package org.eclim.command.project;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.apache.log4j.Logger;
 
 import org.eclim.Services;
@@ -26,6 +24,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.project.ProjectManagement;
+
+import org.eclim.util.file.FileUtils;
 
 /**
  * Command to create a project.
@@ -52,7 +52,7 @@ public class ProjectCreateCommand
 
       String name = _commandLine.hasOption(Options.PROJECT_OPTION) ?
         _commandLine.getValue(Options.PROJECT_OPTION) :
-        FilenameUtils.getBaseName(folder).replace(' ', '_');
+        FileUtils.getBaseName(folder).replace(' ', '_');
       logger.debug("Creating project '{}' at folder '{}'", name, folder);
 
       ProjectManagement.create(name, folder, _commandLine);

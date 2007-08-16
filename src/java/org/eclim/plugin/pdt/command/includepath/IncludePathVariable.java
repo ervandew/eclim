@@ -69,7 +69,7 @@ public class IncludePathVariable
 
   /**
    * {@inheritDoc}
-   * @see Comparable#compareTo(T)
+   * @see Comparable#compareTo(Object)
    */
   public int compareTo (IncludePathVariable obj)
   {

@@ -2,28 +2,22 @@
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-  <classpathentry kind="lib" path="lib/ant-1.6.5.jar"/>
-  <classpathentry kind="lib" path="lib/commons-beanutils-1.7.0.jar"/>
-  <classpathentry kind="lib" path="lib/commons-cli-1.0.jar"/>
-  <classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-  <classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
-  <classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
-  <classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
-  <classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
-  <classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
-  <classpathentry kind="lib" path="lib/commons-vfs-20060830.jar"/>
-  <classpathentry kind="lib" path="lib/groovy-all-1.0-jsr-06.jar"/>
-  <classpathentry kind="lib" path="lib/jaxen-1.1-beta-9.jar"/>
-  <classpathentry kind="lib" path="lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="lib" path="lib/junit-4.1.jar"/>
-  <classpathentry kind="lib" path="lib/nailgun-0.7.1.jar"/>
-  <classpathentry kind="lib" path="lib/nlog4j-1.2.25.jar"/>
-  <classpathentry kind="lib" path="lib/spring-aop-1.2.8.jar"/>
-  <classpathentry kind="lib" path="lib/spring-beans-1.2.8.jar"/>
-  <classpathentry kind="lib" path="lib/spring-context-1.2.8.jar"/>
-  <classpathentry kind="lib" path="lib/spring-core-1.2.8.jar"/>
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
-  <classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.0.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-collections-3.2.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.1.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-logging-1.0.4.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-20060830.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.0-jsr-06.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nlog4j-1.2.25.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/spring-aop-1.2.8.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/spring-beans-1.2.8.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/spring-context-1.2.8.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/spring-core-1.2.8.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/velocity-1.4.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.2.100.v20070511.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.3.0.v20070606-0010.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.3.0.v20070423.jar"/>
@@ -60,6 +54,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.3.0.v200706262000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.201.v200706212223.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.0.302.v200706192034.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/ant.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="output" path="bin"/>
   <classpathentry kind="src" path="src/java"/>

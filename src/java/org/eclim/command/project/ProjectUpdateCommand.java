@@ -18,10 +18,7 @@ package org.eclim.command.project;
 import java.io.File;
 import java.io.FileInputStream;
 
-import java.util.Iterator;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
@@ -34,6 +31,7 @@ import org.eclim.command.Options;
 
 import org.eclim.project.ProjectManagement;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
@@ -92,8 +90,8 @@ public class ProjectUpdateCommand
       in = new FileInputStream(file);
       properties.load(in);
 
-      for(Iterator ii = properties.keySet().iterator(); ii.hasNext();){
-        String name = (String)ii.next();
+      for(Object key : properties.keySet()){
+        String name = (String)key;
         String value = properties.getProperty(name);
         getPreferences().setOption(_project, name, value);
       }

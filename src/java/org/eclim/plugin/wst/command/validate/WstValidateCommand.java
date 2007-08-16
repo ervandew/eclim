@@ -17,13 +17,11 @@ package org.eclim.plugin.wst.command.validate;
 
 import java.net.URLDecoder;
 
-import org.apache.commons.io.FilenameUtils;
-
 import org.eclim.command.AbstractCommand;
 
 import org.eclim.util.ProjectUtils;
 
-import org.eclipse.core.resources.IProject;
+import org.eclim.util.file.FileUtils;
 
 /**
  * Abstract super class for wst based validators.
@@ -48,7 +46,7 @@ public abstract class WstValidateCommand
     throws Exception
   {
     if (filename.indexOf("://") == -1){
-      filename = URI_PREFIX + FilenameUtils.concat(
+      filename = URI_PREFIX + FileUtils.concat(
           ProjectUtils.getPath(project), filename);
     }
     return filename.replace('\\', '/');

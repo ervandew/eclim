@@ -21,13 +21,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
 import org.eclim.Services;
+
+import org.eclim.util.IOUtils;
 
 /**
  * Compiles a list of offsets to line numbers and stores them for quick

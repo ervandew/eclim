@@ -18,11 +18,11 @@ package org.eclim.plugin.jdt.command.src;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
+
+import org.eclim.util.IOUtils;
 
 import org.junit.Test;
 

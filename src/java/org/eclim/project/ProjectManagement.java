@@ -19,11 +19,10 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import javax.xml.xpath.XPathExpression;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -38,6 +37,7 @@ import org.eclim.command.Options;
 import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.ProjectUtils;
+import org.eclim.util.XmlUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -47,12 +47,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import org.jaxen.XPath;
-
-import org.jaxen.dom.DOMXPath;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Text;
 
 /**
  * Class that handles registering and retrieving of {@link ProjectManager}s.
@@ -65,9 +60,10 @@ public class ProjectManagement
   private static final Logger logger =
     Logger.getLogger(ProjectManagement.class);
 
-  private static Map managers = new HashMap();
+  private static HashMap<String,ProjectManager> managers =
+    new HashMap<String,ProjectManager>();
 
-  private static XPath xpath;
+  private static XPathExpression xpath;
   private static DocumentBuilderFactory factory;
 
   /**
@@ -109,7 +105,7 @@ public class ProjectManagement
     String[] aliases = StringUtils.split(
         _commandLine.getValue(Options.NATURE_OPTION), ',');
     // convert from aliases to real nature names.
-    List natures = new ArrayList();
+    ArrayList<String> natures = new ArrayList<String>();
     for (int ii = 0; ii < aliases.length; ii++){
       if(!ProjectNatureFactory.NONE.equals(aliases[ii])){
         natures.add(ProjectNatureFactory.getNatureForAlias(aliases[ii]));
@@ -191,15 +187,12 @@ public class ProjectManagement
     File projectFile = new File(_folder + File.separator + ".project");
     if(projectFile.exists()){
       if(xpath == null){
-        xpath = new DOMXPath("/projectDescription/name/text()");
+        xpath = XmlUtils.createXPathExpression(
+            "/projectDescription/name/text()");
         factory = DocumentBuilderFactory.newInstance();
       }
       Document document = factory.newDocumentBuilder().parse(projectFile);
-      String projectName = "";
-      Object result = xpath.selectSingleNode(document);
-      if(result != null){
-        projectName = ((Text)result).getData();
-      }
+      String projectName = (String)xpath.evaluate(document);
 
       if(!projectName.equals(_name)){
         IProject project = ProjectUtils.getProject(projectName);
@@ -223,10 +216,9 @@ public class ProjectManagement
   {
     ProjectUtils.assertExists(_project);
 
-    List errors = new ArrayList();
+    ArrayList<Error> errors = new ArrayList<Error>();
 
-    for (Iterator ii = managers.keySet().iterator(); ii.hasNext();){
-      String nature = (String)ii.next();
+    for (String nature : managers.keySet()){
       if(_project.hasNature(nature)){
         ProjectManager manager = ProjectManagement.getProjectManager(nature);
         Error[] errs = manager.update(_project, _commandLine);
@@ -255,8 +247,7 @@ public class ProjectManagement
         _project.open(null);
       }
 
-      for (Iterator ii = managers.keySet().iterator(); ii.hasNext();){
-        String nature = (String)ii.next();
+      for (String nature : managers.keySet()){
         if(_project.hasNature(nature)){
           ProjectManager manager = ProjectManagement.getProjectManager(nature);
           manager.delete(_project, _commandLine);
@@ -280,8 +271,7 @@ public class ProjectManagement
   {
     ProjectUtils.assertExists(_project);
 
-    for (Iterator ii = managers.keySet().iterator(); ii.hasNext();){
-      String nature = (String)ii.next();
+    for (String nature : managers.keySet()){
       if(_project.hasNature(nature)){
         ProjectManager manager = ProjectManagement.getProjectManager(nature);
         manager.refresh(_project, _commandLine);

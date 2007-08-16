@@ -24,12 +24,11 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.io.IOUtils;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.XmlUtils;
 
 import org.w3c.dom.Element;
@@ -66,10 +65,10 @@ public class SearchCommand
    * @param query The search query.
    * @return Possibly empty List of results.
    */
-  private List searchRepositories (String query)
+  private List<Dependency> searchRepositories (String query)
     throws Exception
   {
-    ArrayList dependencies = new ArrayList();
+    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
 
     URL url = new URL(URL + query);
     InputStream in = null;

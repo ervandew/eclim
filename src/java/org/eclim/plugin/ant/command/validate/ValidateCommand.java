@@ -16,10 +16,7 @@
 package org.eclim.plugin.ant.command.validate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.io.FilenameUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -30,6 +27,7 @@ import org.eclim.plugin.ant.util.AntUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.ant.internal.ui.model.IAntModel;
 import org.eclipse.ant.internal.ui.model.IProblem;
@@ -53,18 +51,17 @@ public class ValidateCommand
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
       String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      List errors = super.validate(project, file, false, null);
+      List<Error> errors = super.validate(project, file, false, null);
 
       ProblemRequestor requestor = new ProblemRequestor();
       IAntModel model = AntUtils.getAntModel(project, file, requestor);
       model.reconcile();
 
-      String filepath = FilenameUtils.concat(ProjectUtils.getPath(project), file);
+      String filepath = FileUtils.concat(ProjectUtils.getPath(project), file);
 
-      List problems = requestor.getProblems();
+      List<IProblem> problems = requestor.getProblems();
       FileOffsets offsets = FileOffsets.compile(filepath);
-      for (Iterator ii = problems.iterator(); ii.hasNext();){
-        IProblem problem = (IProblem)ii.next();
+      for (IProblem problem : problems){
         int[] lineColumn = offsets.offsetToLineColumn(problem.getOffset());
         Error error = new Error(
           problem.getUnmodifiedMessage(), filepath,
@@ -87,9 +84,9 @@ public class ValidateCommand
   private class ProblemRequestor
     implements IProblemRequestor
   {
-    private List problems = new ArrayList();
+    private ArrayList<IProblem> problems = new ArrayList<IProblem>();
 
-    public List getProblems ()
+    public List<IProblem> getProblems ()
     {
       return problems;
     }

@@ -3,10 +3,12 @@ TODO {{{
   Bugs {{{
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
+    - end tag completion for html code in javadoc comments results in vim error.
   }}}
 
   Tests {{{
     - add unit tests for line based matching via :JavaRegex and :PythonRegex
+    - add unit test for util classes
   }}}
 
   Documentation {{{
@@ -29,6 +31,15 @@ TODO {{{
       :Validate (php and java)
   }}}
 
+  Installer {{{
+    - pre check features on the feature list based on user's local files
+
+    - maintain a version database for resources directories so we can determine
+      what files were added or modified by the user.
+      - keep an md5sum of each file to determine user changes which can be
+        resolved at install time via a visual diff.
+  }}}
+
   Common {{{
 
     Rename all eclim- files under ftplugin... maybe
@@ -44,26 +55,13 @@ TODO {{{
       - forrest to 0.8
 
       Remove
-        - commons-collections
-          - CollectionUtils.addAll
-          - CollectionUtils.union
-          - ComparatorChain
-        - commons-io
-          - IOUtils
-          - FilenameUtils
         - commons-logging
-        - jaxen
         - spring
-
-    Installer
-      - maintain a version database for resources directories so we can determine
-        what files were added or modified by the user.
-        - keep an md5sum of each file to determine user changes which can be
-          resolved at install time via a visual diff.
 
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
+    - Convert EclimApplication to implement IApplication
     - :ProjectNatureAdd/Remove
       - Consider calling the nature's associated
         ProjectManagement.create/delete methods in eclim to perform any nature
@@ -187,6 +185,17 @@ TODO {{{
   }}}
 
   Wst {{{
+
+    - css file validation
+      http://jigsaw.w3.org/css-validator/DOWNLOAD.html
+      $ java -cp jigsaw.jar:css-validator.jar org.w3c.css.css.CssValidator \
+          file:///home/ervandew/files/development/work/sodahead/modules/www/static/css/main.css
+      - put jar files in eclim-wst plugin.
+      - move tidy there as well.
+
+    - add support for validation via the w3c online validator
+      (be sure to support the url to post to for local installs)
+      http://validator.w3.org/docs/install.html
 
     - javascript code completion
 

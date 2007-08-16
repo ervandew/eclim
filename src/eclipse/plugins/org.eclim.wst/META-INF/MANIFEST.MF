@@ -6,7 +6,8 @@ Bundle-SymbolicName: org.eclim.wst; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
-  eclim.wst.jar
+  eclim.wst.jar,
+  ${eclim.lib.jars}
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.wst.command.complete,

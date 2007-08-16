@@ -17,20 +17,18 @@ package org.eclim.command.patch;
 
 import java.io.FileOutputStream;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-
-import org.apache.commons.httpclient.methods.GetMethod;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
+
+import org.eclim.util.file.FileUtils;
 
 /**
  * Command to patch a vim script file.
@@ -59,23 +57,24 @@ public class PatchFileCommand
       String url = URL.replaceFirst("<file>", file);
       url = url.replaceFirst("<revision>", revision);
 
-      HttpClient client = new HttpClient();
-      client.getHttpConnectionManager().getParams().setConnectionTimeout(TIMEOUT);
-
-      HttpMethod method = new GetMethod(url);
+      HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
+      client.setReadTimeout(TIMEOUT);
 
       FileOutputStream out = null;
       try{
-        int status = client.executeMethod(method);
-        if(status != HttpStatus.SC_OK){
+        client.connect();
+        if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
           throw new RuntimeException(
-              Services.getMessage("http.error", method.getStatusLine()));
+              Services.getMessage("http.error", client.getResponseMessage()));
         }
 
-        IOUtils.copy(method.getResponseBodyAsStream(),
-            out = new FileOutputStream(FilenameUtils.concat(basedir, file)));
+        IOUtils.copy(client.getInputStream(),
+            out = new FileOutputStream(FileUtils.concat(basedir, file)));
       }finally{
-        method.releaseConnection();
+        try{
+          client.disconnect();
+        }catch(Exception ignore){
+        }
         IOUtils.closeQuietly(out);
       }
 

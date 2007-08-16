@@ -25,12 +25,15 @@ import java.util.regex.Pattern;
 
 import javax.naming.CompositeName;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * Utilities for working w/ files and commons vfs.
@@ -44,6 +47,8 @@ public class FileUtils
   public static final String ZIP_PREFIX = "zip://";
   public static final String JAR_EXT = ".jar";
   public static final String ZIP_EXT = ".zip";
+  public static final char UNIX_SEPARATOR = '/';
+  public static final char WINDOWS_SEPARATOR = '\\';
 
   /**
    * Gets a project relative file.
@@ -55,8 +60,7 @@ public class FileUtils
   public static File getProjectRelativeFile (IProject _project, String _file)
     throws Exception
   {
-    return new File(FilenameUtils.concat(
-          ProjectUtils.getPath(_project), _file));
+    return new File(concat(ProjectUtils.getPath(_project), _file));
   }
 
   /**
@@ -121,26 +125,20 @@ public class FileUtils
     }
 
     // otherwise do some conversion.
-    StringBuffer buffer = new StringBuffer(FilenameUtils.getPrefix(file));
-
+    StringBuffer buffer = new StringBuffer();
     try{
-      int index = FilenameUtils.getPrefixLength(file);
-      CompositeName fileName = new CompositeName(file.substring(index));
-      Enumeration names = fileName.getAll();
+      CompositeName fileName = new CompositeName(file);
+      Enumeration<String> names = fileName.getAll();
       while(names.hasMoreElements()){
-        String name = (String)names.nextElement();
+        String name = names.nextElement();
         if(name.indexOf("$") != -1){
-          name = name.substring(0, name.indexOf("$")) + '.' +
-            FilenameUtils.getExtension(name);
+          name = name.substring(0, name.indexOf("$")) + '.' + getExtension(name);
         }
         if(name.length() != 0){
-          if(buffer.length() != index){
-            buffer.append('/');
-          }
-          buffer.append(name);
+          buffer.append('/').append(name);
 
           if(!new File(buffer.toString()).exists()){
-            String path = FilenameUtils.getFullPath(buffer.toString());
+            String path = getFullPath(buffer.toString());
             if(path.endsWith("/") || path.endsWith("\\")){
               path = path.substring(0, path.length() -1);
             }
@@ -159,5 +157,152 @@ public class FileUtils
     }
 
     return buffer.toString();
+  }
+
+  /**
+   * Concatenates the given head path with the supplied tail path to form a new
+   * path.
+   *
+   * @param head The head path.
+   * @param tail The tail path.
+   * @return The concatenated paths.
+   */
+  public static String concat (String head, String tail)
+  {
+    return Path.fromOSString(head).append(tail).toOSString();
+  }
+
+  /**
+   * Gets the base name of the supplied path.
+   * <pre>
+   * FileUtils.getBaseName("/a/b/c/") :  "c"
+   * FileUtils.getBaseName("/a/b/c") :  "c"
+   * FileUtils.getBaseName("/a/b/c.txt") :  "c.txt"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The base name of the path.
+   */
+  public static String getBaseName (String path)
+  {
+    IPath p = Path.fromOSString(path);
+    return p.segment(p.segmentCount() - 1);
+  }
+
+  /**
+   * Gets the file extension from the supplied path.
+   * <pre>
+   * FileUtils.getExtension("/a/b/c/") :  ""
+   * FileUtils.getExtension("/a/b/c") :  ""
+   * FileUtils.getExtension("/a/b/c.txt") :  "txt"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The file extension.
+   */
+  public static String getExtension (String path)
+  {
+    String ext = Path.fromOSString(path).getFileExtension();
+    if (ext == null){
+      return StringUtils.EMPTY;
+    }
+    return ext;
+  }
+
+  /**
+   *
+   * <pre>
+   * FileUtils.getPath("/a/b/c/") :  ""
+   * FileUtils.getPath("/a/b/c") :  ""
+   * FileUtils.getPath("/a/b/c.txt") :  "txt"
+   * </pre>
+   *
+   * @param path The path.
+   * @return
+   */
+  public static String getPath (String path)
+  {
+    IPath p = null;
+    int index = path.indexOf(':');
+    if (index != -1){
+      p = new Path(path.substring(index + 1));
+    }else{
+      p = new Path(path);
+    }
+    if (!p.hasTrailingSeparator()){
+      p = p.uptoSegment(p.segmentCount() - 1);
+    }
+    return p.makeRelative().addTrailingSeparator().toOSString();
+  }
+
+  /**
+   * Gets the full path from the supplied path by removing any trialing path
+   * segments that do not have a trailing separator.
+   * <pre>
+   * FileUtils.getFullPath("/a/b/c/") :  "/a/b/c/"
+   * FileUtils.getFullPath("/a/b/c") :  "/a/b/"
+   * FileUtils.getFullPath("/a/b/c.txt") :  "/a/b/"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The full path.
+   */
+  public static String getFullPath (String path)
+  {
+    IPath p = Path.fromOSString(path);
+    if (!p.hasTrailingSeparator()){
+      p = p.uptoSegment(p.segmentCount() - 1);
+    }
+    return p.addTrailingSeparator().toOSString();
+  }
+
+  /**
+   * Gets the file name minus the extension from the supplied path.
+   * <pre>
+   * FileUtils.getFullPath("/a/b/c/") :  ""
+   * FileUtils.getFullPath("/a/b/c") :  "c"
+   * FileUtils.getFullPath("/a/b/c.txt") :  "c"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The file name without the extension.
+   */
+  public static String getFileName (String path)
+  {
+    IPath p = Path.fromOSString(path);
+    if (p.hasTrailingSeparator()){
+      return StringUtils.EMPTY;
+    }
+    return p.removeFileExtension().segment(p.segmentCount() - 1);
+  }
+
+  /**
+   * Removes the extension from the supplied file name.
+   * <pre>
+   * FileUtils.removeExtension("/a/b/c/") :  "/a/b/c/"
+   * FileUtils.removeExtension("/a/b/c") :  "/a/b/c"
+   * FileUtils.removeExtension("/a/b/c.txt") :  "/a/b/c"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The path with the extension removed.
+   */
+  public static String removeExtension (String path)
+  {
+    return Path.fromOSString(path).removeFileExtension().toOSString();
+  }
+
+  /**
+   * Convert all path separators for the given path to unix style separators.
+   *
+   * @param path The path.
+   * @return The updated path.
+   */
+  public static String separatorsToUnix (String path)
+  {
+    if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
+      return path;
+    }
+    return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
   }
 }

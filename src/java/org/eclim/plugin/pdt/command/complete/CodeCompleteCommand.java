@@ -21,6 +21,8 @@ import java.util.regex.Pattern;
 
 import org.eclim.command.CommandLine;
 
+import org.eclim.command.complete.AbstractCodeCompleteCommand;
+
 import org.eclim.plugin.wst.command.complete.WstCodeCompleteCommand;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;

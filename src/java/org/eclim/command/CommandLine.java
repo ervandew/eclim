@@ -20,8 +20,6 @@ import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
-import org.apache.commons.codec.net.URLCodec;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -32,9 +30,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class CommandLine
 {
-  private static final URLCodec CODEC = new URLCodec();
-
-  private Map options = new HashMap();
+  private HashMap<String,String> options = new HashMap<String,String>();
   private String[] args;
   private String[] unrecognized;
 
@@ -78,9 +74,9 @@ public class CommandLine
     throws Exception
   {
     String value = (String)options.get(_name);
-    value = CODEC.decode(value);
-    // '*' isn't decoded so decode manually
+    // decoded special characters encoded by eclim#ExecuteEclim
     value = StringUtils.replace(value, "%2A", "*");
+    value = StringUtils.replace(value, "%24", "$");
     return value;
   }
 

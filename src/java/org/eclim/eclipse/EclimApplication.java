@@ -25,14 +25,14 @@ import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.log4j.Logger;
 
 import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
+
+import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 

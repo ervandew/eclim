@@ -21,16 +21,16 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
+
+import org.eclim.util.file.FileUtils;
 
 /*import org.eclim.util.file.FileOffsets;
 
@@ -67,13 +67,13 @@ public class HtmlValidateCommand
   {
     try{
       String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      final String file = FilenameUtils.concat(
+      final String file = FileUtils.concat(
           ProjectUtils.getPath(project),
           _commandLine.getValue(Options.FILE_OPTION));
 
       // eclipse wst html valiation... currently not very good.
       /*IProject iproject = ProjectUtils.getProject(project, true);
-      final String projectPath = FilenameUtils.getFullPath(
+      final String projectPath = FileUtils.getFullPath(
           ProjectUtils.getPath(iproject));
 
       Reporter reporter = new Reporter();
@@ -122,7 +122,7 @@ public class HtmlValidateCommand
         IOUtils.closeQuietly(out);
       }
 
-      ArrayList results = new ArrayList();
+      ArrayList<Error> results = new ArrayList<Error>();
       String[] lines = StringUtils.split(out.toString(), '\n');
       for (int ii = 0; ii < lines.length; ii++){
         if(accept(lines[ii])){

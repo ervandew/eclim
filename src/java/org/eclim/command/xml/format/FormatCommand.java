@@ -26,13 +26,13 @@ import javax.xml.transform.sax.SAXSource;
 
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.IOUtils;
 
 import org.xml.sax.InputSource;
 
@@ -53,7 +53,7 @@ public class FormatCommand
     FileInputStream in = null;
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);
-      int lineWidth = _commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
+      //int lineWidth = _commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
       int indent = _commandLine.getIntValue(Options.INDENT_OPTION);
 
       // javax.xml.transform (indentation issues)

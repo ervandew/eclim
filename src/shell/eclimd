@@ -45,7 +45,7 @@ if [ -n "$IS_GENTOO" ]; then
 fi
 
 ECLIM_COMMAND="$ECLIPSE
-  -debug -consolelog -nosplash -clean -refresh -application
+  -debug -nosplash -clean -refresh -application
   org.eclim.application -vmargs $ECLIM_ARGS"
 
 if [ "$1" = "start" ]; then
