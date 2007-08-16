@@ -3,7 +3,6 @@ TODO {{{
   Bugs {{{
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
-    - end tag completion for html code in javadoc comments results in vim error.
   }}}
 
   Tests {{{
@@ -32,8 +31,6 @@ TODO {{{
   }}}
 
   Installer {{{
-    - pre check features on the feature list based on user's local files
-
     - maintain a version database for resources directories so we can determine
       what files were added or modified by the user.
       - keep an md5sum of each file to determine user changes which can be

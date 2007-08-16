@@ -3,6 +3,11 @@ package org.eclim.installer.step;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
+import org.formic.Installer;
+
 import org.formic.form.console.ConsoleForm;
 
 import org.formic.form.gui.GuiForm;
@@ -39,10 +44,24 @@ public class FeatureProvider
    */
   public Feature[] getFeatures ()
   {
+    boolean[] enabled = new boolean[FEATURES.length];
+    for (int ii = 0; ii < FEATURES.length; ii++){
+      String path = Installer.getProject()
+        .replaceProperties("${eclipse.home}/plugins/");
+      final String pluginPath = "org.eclim." + FEATURES[ii] + "_";
+      String[] list = new File(path).list(new FilenameFilter(){
+        public boolean accept (File file, String name) {
+          return name.startsWith(pluginPath);
+        }
+      });
+
+      enabled[ii] = list.length > 0 ? true : FEATURES_ENABLED[ii];
+    }
+
     Feature[] features = new Feature[FEATURES.length];
     for (int ii = 0; ii < features.length; ii++){
       features[ii] = new Feature(
-          FEATURES[ii], FEATURES_ENABLED[ii], FEATURES_DEPENDS[ii]);
+          FEATURES[ii], enabled[ii], FEATURES_DEPENDS[ii]);
     }
 
     return features;
