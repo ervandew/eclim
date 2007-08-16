@@ -29,7 +29,7 @@ endif
 
 " Mappings {{{
 if g:EclimSgmlCompleteEndTag
-  imap <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
+  imap <buffer> <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
 endif
 " }}}
 
