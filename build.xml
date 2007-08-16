@@ -47,9 +47,11 @@
       description="Compiles the src and builds the jar file.">
 
     <property name="deprecation" value="false"/>
+    <property name="compilerargs" value=""/>
     <javac destdir="build/classes" debug="on" optimize="false"
         target="${javac.target}" source="${javac.target}"
         deprecation="${deprecation}">
+      <compilerarg line="${compilerargs}"/>
       <src path="src/java"/>
       <include name="**/*.java"/>
       <exclude name="**/pydev/**/*.java"/>
