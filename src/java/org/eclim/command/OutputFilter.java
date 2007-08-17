@@ -22,7 +22,7 @@ package org.eclim.command;
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
  */
-public interface OutputFilter
+public interface OutputFilter<T>
 {
   /**
    * Filters the output.
@@ -31,5 +31,5 @@ public interface OutputFilter
    * @param _result The result from the server.
    * @return The filtered output.
    */
-  public String filter (CommandLine _commandLine, Object _result);
+  public String filter (CommandLine _commandLine, T _result);
 }
