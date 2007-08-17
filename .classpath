@@ -4,11 +4,11 @@
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="lib" path="lib/junit-4.1.jar"/>
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.0.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-collections-3.2.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.1.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-logging-1.0.4.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-20060830.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.0-jsr-06.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nlog4j-1.2.25.jar"/>
