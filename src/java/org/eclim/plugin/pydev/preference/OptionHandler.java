@@ -71,7 +71,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map getOptionsAsMap ()
+  public Map<String,String> getOptionsAsMap ()
     throws Exception
   {
     IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
@@ -86,13 +86,13 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map getOptionsAsMap (IProject _project)
+  public Map<String,String> getOptionsAsMap (IProject _project)
     throws Exception
   {
     PythonNature nature = PythonNature.getPythonNature(_project);
     if (nature != null){
       IPythonPathNature pathNature = nature.getPythonPathNature();
-      HashMap options = new HashMap();
+      HashMap<String,String> options = new HashMap<String,String>();
       options.put(PYTHON_VERSION, nature.getVersion());
 
       String paths = pathNature.getProjectSourcePath();

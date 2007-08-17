@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.complete;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -36,7 +35,8 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
 public class CompletionProposalCollector
   extends org.eclipse.jdt.ui.text.java.CompletionProposalCollector
 {
-  private List proposals = new ArrayList();
+  private ArrayList<CompletionProposal> proposals =
+    new ArrayList<CompletionProposal>();
 
   public CompletionProposalCollector (ICompilationUnit cu)
   {

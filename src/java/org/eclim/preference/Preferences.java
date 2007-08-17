@@ -17,7 +17,6 @@ package org.eclim.preference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -77,14 +76,13 @@ public class Preferences
    *
    * @return The preferences in a Map.
    */
-  public Map getPreferencesAsMap ()
+  public Map<String,String> getPreferencesAsMap ()
     throws Exception
   {
     IEclipsePreferences preferences = getPreferences();
-    String[] keys = preferences.keys();
-    Map map = new HashMap();
-    for(int ii = 0; ii < keys.length; ii++){
-      map.put(keys[ii], preferences.get(keys[ii], null));
+    HashMap<String,String> map = new HashMap<String,String>();
+    for(String key : preferences.keys()){
+      map.put(key, preferences.get(key, null));
     }
 
     return map;
@@ -96,21 +94,21 @@ public class Preferences
    * @param _project The project.
    * @return The preferences in a Map.
    */
-  public Map getPreferencesAsMap (IProject _project)
+  public Map<String,String> getPreferencesAsMap (IProject _project)
     throws Exception
   {
     IEclipsePreferences globalPrefs = getPreferences();
     IEclipsePreferences projectPrefs = getPreferences(_project);
 
     String[] keys = globalPrefs.keys();
-    HashMap map = new HashMap();
-    for(int ii = 0; ii < keys.length; ii++){
-      map.put(keys[ii], globalPrefs.get(keys[ii], null));
+    HashMap<String,String> map = new HashMap<String,String>();
+    for(String key : keys){
+      map.put(key, globalPrefs.get(key, null));
     }
 
     keys = projectPrefs.keys();
-    for(int ii = 0; ii < keys.length; ii++){
-      map.put(keys[ii], projectPrefs.get(keys[ii], null));
+    for(String key : keys){
+      map.put(key, projectPrefs.get(key, null));
     }
 
     return map;
@@ -121,21 +119,19 @@ public class Preferences
    *
    * @return The options in a Map.
    */
-  public Map getOptionsAsMap ()
+  public Map<String,String> getOptionsAsMap ()
     throws Exception
   {
-    HashMap allOptions = new HashMap();
-    for(Iterator ii = optionHandlers.keySet().iterator(); ii.hasNext();){
-      OptionHandler handler = (OptionHandler)optionHandlers.get(ii.next());
-      Map options = handler.getOptionsAsMap();
+    HashMap<String,String> allOptions = new HashMap<String,String>();
+    for(OptionHandler handler : optionHandlers.values()){
+      Map<String,String> options = handler.getOptionsAsMap();
       if (options != null){
         allOptions.putAll(options);
       }
     }
 
-    Map preferences = getPreferencesAsMap();
-    for (Iterator ii = options.keySet().iterator(); ii.hasNext();){
-      Option option = (Option)options.get(ii.next());
+    Map<String,String> preferences = getPreferencesAsMap();
+    for (Option option : options.values()){
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
 
@@ -148,10 +144,10 @@ public class Preferences
    * @param _project The project.
    * @return The options in a Map.
    */
-  public Map getOptionsAsMap (IProject _project)
+  public Map<String,String> getOptionsAsMap (IProject _project)
     throws Exception
   {
-    HashMap allOptions = new HashMap();
+    HashMap<String,String> allOptions = new HashMap<String,String>();
     for(OptionHandler handler : optionHandlers.values()){
       String nature = handler.getNature();
       if(CORE.equals(nature) || _project.getNature(nature) != null){
@@ -159,7 +155,7 @@ public class Preferences
       }
     }
 
-    Map preferences = getPreferencesAsMap(_project);
+    Map<String,String> preferences = getPreferencesAsMap(_project);
     for (Option option : options.values()){
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
@@ -188,7 +184,7 @@ public class Preferences
     throws Exception
   {
     ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
-    Map options = _project == null ?
+    Map<String,String> options = _project == null ?
       getOptionsAsMap() : getOptionsAsMap(_project);
     for(Object key : options.keySet()){
       String value = (String)options.get(key);

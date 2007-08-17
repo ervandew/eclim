@@ -20,9 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import java.util.regex.Pattern;
 
@@ -175,7 +173,7 @@ public class CommentCommand
             Services.getMessage("project.copyright.not.found", file));
       }
 
-      List tags = _javadoc.tags();
+      List<TagElement> tags = _javadoc.tags();
       tags.clear();
 
       BufferedReader reader = null;
@@ -206,7 +204,7 @@ public class CommentCommand
     throws Exception
   {
     if(_element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
-      List tags = _javadoc.tags();
+      List<TagElement> tags = _javadoc.tags();
       IProject project = _element.getJavaProject().getProject();
       if(_isNew){
         addTag(_javadoc, tags.size(), null, null);
@@ -282,7 +280,7 @@ public class CommentCommand
     throws Exception
   {
     IMethod method = (IMethod)_element;
-    List tags = _javadoc.tags();
+    List<TagElement> tags = _javadoc.tags();
 
     if(_isNew){
       // see if method is overriding / implementing method from superclass
@@ -315,8 +313,7 @@ public class CommentCommand
 
     // only add/update tags if javadoc doesn't contain inheritDoc.
     boolean update = true;
-    for (Iterator ii = tags.iterator(); ii.hasNext();){
-      TagElement tag = (TagElement)ii.next();
+    for (TagElement tag : tags){
       if(tag.getTagName() == null && tag.fragments().size() > 0){
         String text = ((TextElement)tag.fragments().get(0)).getText();
         if(INHERIT_DOC.equals(text)){
@@ -361,7 +358,7 @@ public class CommentCommand
       Javadoc _javadoc, IMethod _method, boolean _isNew)
     throws Exception
   {
-    List tags = _javadoc.tags();
+    List<TagElement> tags = _javadoc.tags();
     String[] params = _method.getParameterNames();
     if(_isNew){
       for (int ii = 0; ii < params.length; ii++){
@@ -370,7 +367,7 @@ public class CommentCommand
     }else{
       // find current params.
       int index = 0;
-      Map current = new HashMap();
+      HashMap<String,TagElement> current = new HashMap<String,TagElement>();
       for (int ii = 0; ii < tags.size(); ii++){
         TagElement tag = (TagElement)tags.get(ii);
         if(TagElement.TAG_PARAM.equals(tag.getTagName())){
@@ -411,8 +408,8 @@ public class CommentCommand
         }
 
         // remove any other param tags.
-        for (Iterator ii = current.keySet().iterator(); ii.hasNext();){
-          tags.remove(current.get(ii.next()));
+        for (TagElement tag : current.values()){
+          tags.remove(tag);
         }
       }else{
         for (int ii = 0; ii < params.length; ii++){
@@ -433,7 +430,7 @@ public class CommentCommand
       Javadoc _javadoc, IMethod _method, boolean _isNew)
     throws Exception
   {
-    List tags = _javadoc.tags();
+    List<TagElement> tags = _javadoc.tags();
     // get return type from element.
     if(!_method.isConstructor()){
       String returnType =
@@ -495,7 +492,7 @@ public class CommentCommand
       Javadoc _javadoc, IMethod _method, boolean _isNew)
     throws Exception
   {
-    List tags = _javadoc.tags();
+    List<TagElement> tags = _javadoc.tags();
 
     // get thrown exceptions from element.
     String[] exceptions = _method.getExceptionTypes();
@@ -507,7 +504,7 @@ public class CommentCommand
       }
     }else{
       // get current throws tags
-      Map current = new HashMap();
+      HashMap<String,TagElement> current = new HashMap<String,TagElement>();
       int index = tags.size();
       for (int ii = tags.size() - 1; ii >= 0; ii--){
         TagElement tag = (TagElement)tags.get(ii);
@@ -543,8 +540,8 @@ public class CommentCommand
       }
 
       // remove any left over thows clauses.
-      for (Iterator ii = current.keySet().iterator(); ii.hasNext();){
-        tags.remove(current.get(ii.next()));
+      for (TagElement tag : current.values()){
+        tags.remove(tag);
       }
     }
   }

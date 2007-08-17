@@ -109,7 +109,7 @@ public class TaglistCommand
         if(sort){
           Arrays.sort(results);
         }
-        return getFilter("vim").filter(_commandLine, results);
+        return super.filter(_commandLine, results);
       }
       return executeCtags(ctagArgs);
     }catch(Exception e){
