@@ -16,7 +16,6 @@
 package org.eclim.plugin.jdt.command.classpath;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,25 +30,24 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class ClasspathVariablesFilter
-  implements OutputFilter
+  implements OutputFilter<List<ClasspathVariable>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<ClasspathVariable> _result)
   {
     StringBuffer buffer = new StringBuffer();
 
-    List<ClasspathVariable> list = (List<ClasspathVariable>)_result;
-    Collections.sort(list);
+    Collections.sort(_result);
 
     int length = 0;
-    for(ClasspathVariable variable : list){
+    for(ClasspathVariable variable : _result){
       length = variable.getName().length() > length ?
         variable.getName().length() : length;
     }
 
-    for(ClasspathVariable variable : list){
+    for(ClasspathVariable variable : _result){
       if(buffer.length() > 0){
         buffer.append('\n');
       }

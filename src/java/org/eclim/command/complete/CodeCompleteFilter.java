@@ -28,14 +28,14 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class CodeCompleteFilter
-  implements OutputFilter
+  implements OutputFilter<List<CodeCompleteResult>>
 {
   private static final String DELIMETER = "|";
 
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<CodeCompleteResult> _result)
   {
     String delimeter = null;
     try{
@@ -46,10 +46,8 @@ public class CodeCompleteFilter
     }
 
     StringBuffer buffer = new StringBuffer();
-    List results = (List)_result;
-    if(results != null){
-      for(int ii = 0; ii < results.size(); ii++){
-        CodeCompleteResult result = (CodeCompleteResult)results.get(ii);
+    if(_result != null){
+      for(CodeCompleteResult result : _result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }

@@ -33,7 +33,7 @@ import org.eclipse.jdt.core.CompletionProposal;
  * @version $Revision$
  */
 public class CodeCompleteFilter
-  implements OutputFilter
+  implements OutputFilter<List<CodeCompleteResult>>
 {
   private static final Logger logger =
     Logger.getLogger(CodeCompleteFilter.class);
@@ -44,19 +44,18 @@ public class CodeCompleteFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<CodeCompleteResult> _result)
   {
-    List<CodeCompleteResult> results = (List<CodeCompleteResult>)_result;
-    if(results != null){
+    if(_result != null){
       try{
         String layout = _commandLine.getValue(Options.LAYOUT_OPTION);
         if(COMPACT.equals(layout)){
-          return compactFormat(results);
+          return compactFormat(_result);
         }
       }catch(Exception e){
         logger.warn("Failed to get layout option.", e);
       }
-      return standardFormat(results);
+      return standardFormat(_result);
     }
     return "";
   }

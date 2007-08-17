@@ -15,7 +15,6 @@
  */
 package org.eclim.command.filter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -32,19 +31,17 @@ import org.eclim.util.vim.VimUtils;
  * @version $Revision$
  */
 public class PositionFilter
-  implements OutputFilter
+  implements OutputFilter<List<Position>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<Position> _result)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      List results = (List)_result;
-      if(results != null){
-        for(Iterator ii = results.iterator(); ii.hasNext();){
-          Position result = (Position)ii.next();
+      if(_result != null){
+        for(Position result : _result){
           String lineColumn = lineColumn = VimUtils.translateLineColumn(result);
 
           if(lineColumn != null){

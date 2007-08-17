@@ -15,7 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -28,21 +27,20 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class DocSearchFilter
-  implements OutputFilter
+  implements OutputFilter<List<String>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<String> _result)
   {
     StringBuffer buffer = new StringBuffer();
-    List results = (List)_result;
-    if(results != null){
-      for(Iterator ii = results.iterator(); ii.hasNext();){
+    if(_result != null){
+      for(String doc : _result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        buffer.append(ii.next());
+        buffer.append(doc);
       }
     }
     return buffer.toString();

@@ -30,26 +30,24 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class IncludePathVariablesFilter
-  implements OutputFilter
+  implements OutputFilter<List<IncludePathVariable>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<IncludePathVariable> _result)
   {
     StringBuffer buffer = new StringBuffer();
 
-    List<IncludePathVariable> variables =
-      (List<IncludePathVariable>)_result;
-    Collections.sort(variables);
+    Collections.sort(_result);
 
     int length = 0;
-    for(IncludePathVariable variable : variables){
+    for(IncludePathVariable variable : _result){
       length = variable.getName().length() > length ?
         variable.getName().length() : length;
     }
 
-    for(IncludePathVariable variable : variables){
+    for(IncludePathVariable variable : _result){
       if(buffer.length() > 0){
         buffer.append('\n');
       }

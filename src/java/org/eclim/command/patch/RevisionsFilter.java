@@ -15,7 +15,6 @@
  */
 package org.eclim.command.patch;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -28,21 +27,20 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class RevisionsFilter
-  implements OutputFilter
+  implements OutputFilter<List<String>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<String> _result)
   {
     if (_result != null && _result instanceof List) {
       StringBuffer buffer = new StringBuffer();
-      List revisions = (List)_result;
-      for (Iterator ii = revisions.iterator(); ii.hasNext();){
+      for (String revision : _result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        buffer.append(ii.next());
+        buffer.append(revision);
       }
       return buffer.toString();
     }

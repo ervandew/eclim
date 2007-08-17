@@ -15,10 +15,10 @@
  */
 package org.eclim.command.project;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.OutputFilter;
 
 import org.eclim.command.admin.SettingsFilter;
 
@@ -31,22 +31,23 @@ import org.eclim.preference.OptionInstance;
  * @version $Revision$
  */
 public class ProjectInfoFilter
-  extends SettingsFilter
+  implements OutputFilter<List>
 {
+  private final SettingsFilter settingsFilter = new SettingsFilter();
+
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List _result)
   {
-    List list = (List)_result;
-    if(list.size() > 0){
+    if(_result.size() > 0){
       // list of project's current settings.
-      if(list.get(0) instanceof OptionInstance){
-        return printOptions(list);
+      if(_result.get(0) instanceof OptionInstance){
+        return settingsFilter.printOptions(_result);
 
       // list of all projects.
       }else{
-        return printProjects(list);
+        return printProjects(_result);
       }
     }
 

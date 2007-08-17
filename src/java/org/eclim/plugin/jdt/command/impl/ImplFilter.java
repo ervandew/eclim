@@ -30,7 +30,7 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class ImplFilter
-  implements OutputFilter
+  implements OutputFilter<ImplResult>
 {
   private static final String NOT_FOUND_HEADER =
     "// The following types were not found, either because they were not\n" +
@@ -39,15 +39,13 @@ public class ImplFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, ImplResult _result)
   {
-    if(_result instanceof ImplResult){
-      ImplResult result = (ImplResult)_result;
-
+    if(_result != null){
       StringBuffer buffer = new StringBuffer();
-      buffer.append(result.getType());
+      buffer.append(_result.getType());
 
-      List<ImplType> results = result.getSuperTypes();
+      List<ImplType> results = _result.getSuperTypes();
       if(results != null){
         ArrayList<ImplType> notFound = new ArrayList<ImplType>();
         for(ImplType type : results){
@@ -93,8 +91,6 @@ public class ImplFilter
       }
       return buffer.toString();
     }
-
-    //Position position = (Position)_result;
-    return "";
+    return StringUtils.EMPTY;
   }
 }

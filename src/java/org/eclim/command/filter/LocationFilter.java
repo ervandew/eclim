@@ -15,7 +15,6 @@
  */
 package org.eclim.command.filter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -32,19 +31,17 @@ import org.eclim.util.vim.VimUtils;
  * @version $Revision: 798 $
  */
 public class LocationFilter
-  implements OutputFilter
+  implements OutputFilter<List<Location>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<Location> _result)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      List results = (List)_result;
-      if(results != null){
-        for(Iterator ii = results.iterator(); ii.hasNext();){
-          Location result = (Location)ii.next();
+      if(_result != null){
+        for(Location result : _result){
           String lineColumn = VimUtils.translateLineColumn(result);
 
           if(buffer.length() > 0){
@@ -55,7 +52,7 @@ public class LocationFilter
             .append(lineColumn)
             .append('|')
             .append(result.getMessage() != null ? result.getMessage() : " ");
-          }
+        }
       }
       return buffer.toString();
     }catch(Exception e){

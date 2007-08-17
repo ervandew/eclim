@@ -27,21 +27,19 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class RegexFilter
-  implements OutputFilter
+  implements OutputFilter<List<MatcherResult>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<MatcherResult> _result)
   {
     StringBuffer buffer = new StringBuffer();
-    List results = (List)_result;
-    if(results != null){
-      for (int ii = 0; ii < results.size(); ii++){
+    if(_result != null){
+      for (MatcherResult result : _result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        MatcherResult result = (MatcherResult)results.get(ii);
         buffer.append(matchToString(result));
         for (int jj = 0; jj < result.getGroupMatches().size(); jj++){
           MatcherResult group = (MatcherResult)result.getGroupMatches().get(jj);

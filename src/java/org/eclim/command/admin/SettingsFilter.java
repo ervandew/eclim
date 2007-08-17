@@ -16,7 +16,6 @@
 package org.eclim.command.admin;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,18 +33,17 @@ import org.eclim.preference.OptionInstance;
  * @version $Revision$
  */
 public class SettingsFilter
-  implements OutputFilter
+  implements OutputFilter<List<Option>>
 {
   private static final String COMMENT = "# ";
 
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<Option> _result)
   {
-    List<Option> list = (List<Option>)_result;
-    if(list.size() > 0){
-      return printOptions(list);
+    if(_result.size() > 0){
+      return printOptions(_result);
     }
     return StringUtils.EMPTY;
   }
@@ -56,7 +54,7 @@ public class SettingsFilter
    * @param _options The option list.
    * @return The result.
    */
-  protected String printOptions (List<Option> _options)
+  public String printOptions (List<Option> _options)
   {
     StringBuffer buffer = new StringBuffer();
 
@@ -64,8 +62,8 @@ public class SettingsFilter
     Collections.sort(_options);
     String lastPath = ((Option)_options.get(0)).getPath();
     buffer.append(comment(lastPath, StringUtils.EMPTY)).append(" {");
-    for(Iterator ii = _options.iterator(); ii.hasNext();){
-      OptionInstance option = (OptionInstance)ii.next();
+    for(Option option : _options){
+      OptionInstance instance = (OptionInstance)option;
       if(!option.getPath().equals(lastPath)){
         lastPath = option.getPath();
         buffer.append("\n# }\n\n")
@@ -76,7 +74,7 @@ public class SettingsFilter
       buffer.append('\n')
         .append(comment(option.getDescription(), "\t"))
         .append("\n\t");
-      buffer.append(option.getName()).append('=').append(option.getValue());
+      buffer.append(option.getName()).append('=').append(instance.getValue());
     }
     buffer.append("\n# }");
     return buffer.toString();

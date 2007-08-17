@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  */
 public class SearchFilter
-  implements OutputFilter
+  implements OutputFilter<List<Dependency>>
 {
   private static final Logger logger = Logger.getLogger(SearchFilter.class);
 
@@ -56,7 +56,7 @@ public class SearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<Dependency> _result)
   {
     List<Dependency> dependencies = null;
     try{
@@ -71,8 +71,7 @@ public class SearchFilter
 
     StringBuffer buffer = new StringBuffer();
     String groupId = null;
-    List<Dependency> results = (List<Dependency>)_result;
-    for (Dependency dependency : results){
+    for (Dependency dependency : _result){
       if(!dependency.getGroupId().equals(groupId)){
         if(buffer.length() != 0){
           buffer.append('\n');

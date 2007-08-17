@@ -108,9 +108,9 @@ public class ImplCommand
    *
    * @param _commandLine The original command line.
    * @param _type The type.
-   * @return List of ImplMethod.
+   * @return ImplResult
    */
-  protected Object executeGetMethods (CommandLine _commandLine, IType _type)
+  protected ImplResult executeGetMethods (CommandLine _commandLine, IType _type)
     throws Exception
   {
     ArrayList<ImplType> results = new ArrayList<ImplType>();
@@ -160,7 +160,7 @@ public class ImplCommand
     throws Exception
   {
     IMethod[] methods = _superType.getMethods();
-    Map implementedMethods = getImplementedMethods(_type);
+    Map<String,IMethod> implementedMethods = getImplementedMethods(_type);
 
     IMethod method = null;
     for(int ii = 0; ii < methods.length; ii++){
@@ -345,7 +345,7 @@ public class ImplCommand
    * @return Array of methods.
    */
   protected ImplMethod[] getMethods (
-      IType _type, Map _baseMethods, IType _superType)
+      IType _type, Map<String,IMethod> _baseMethods, IType _superType)
     throws Exception
   {
     ArrayList<ImplMethod> results = new ArrayList<ImplMethod>();
@@ -404,7 +404,7 @@ public class ImplCommand
    * @return The implemented method or null if none.
    */
   protected IMethod getImplemented (
-      IType _type, Map _baseMethods, IMethod _method)
+      IType _type, Map<String,IMethod> _baseMethods, IMethod _method)
     throws Exception
   {
     String signature = MethodUtils.getMinimalMethodSignature(_method);
@@ -413,7 +413,7 @@ public class ImplCommand
           _method.getDeclaringType().getElementName(),
           _type.getElementName());
     }
-    return (IMethod)_baseMethods.get(signature);
+    return _baseMethods.get(signature);
   }
 
   /**
@@ -426,7 +426,10 @@ public class ImplCommand
    * @return The sibling, or null if none.
    */
   protected IJavaElement getSibling (
-      IType _type, Map _baseMethods, IMethod[] _methods, IMethod _method)
+      IType _type,
+      Map<String,IMethod> _baseMethods,
+      IMethod[] _methods,
+      IMethod _method)
     throws Exception
   {
     int index = -1;

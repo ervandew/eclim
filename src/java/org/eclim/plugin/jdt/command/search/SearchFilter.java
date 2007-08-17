@@ -15,7 +15,6 @@
  */
 package org.eclim.plugin.jdt.command.search;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -30,19 +29,17 @@ import org.eclim.util.vim.VimUtils;
  * @version $Revision$
  */
 public class SearchFilter
-  implements OutputFilter
+  implements OutputFilter<List<SearchResult>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<SearchResult> _result)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      List results = (List)_result;
-      if(results != null){
-        for(Iterator ii = results.iterator(); ii.hasNext();){
-          SearchResult result = (SearchResult)ii.next();
+      if(_result != null){
+        for(SearchResult result : _result){
           String lineColumn = VimUtils.DEFAULT_LINE_COL;
           if(result.getFilename().toLowerCase().endsWith(".java")){
             lineColumn = VimUtils.translateLineColumn(result);

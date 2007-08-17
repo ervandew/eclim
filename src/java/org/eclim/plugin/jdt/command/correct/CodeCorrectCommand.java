@@ -160,8 +160,8 @@ public class CodeCorrectCommand
    * @param _problem The problem the proposals are associated w/.
    * @return Array of CodeCorrectResult.
    */
-  protected CodeCorrectResult[] getCorrections (
-      List _proposals, IProblem _problem)
+  protected List<CodeCorrectResult> getCorrections (
+      List<IJavaCompletionProposal> _proposals, IProblem _problem)
     throws Exception
   {
     ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
@@ -172,7 +172,6 @@ public class CodeCorrectCommand
           proposal.getDisplayString(),
           proposal.getAdditionalProposalInfo()));
     }
-    return (CodeCorrectResult[])
-      corrections.toArray(new CodeCorrectResult[corrections.size()]);
+    return corrections;
   }
 }

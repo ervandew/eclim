@@ -29,14 +29,13 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class UnusedImportsFilter
-  implements OutputFilter
+  implements OutputFilter<List<String>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<String> _result)
   {
-    List results = (List)_result;
-    return StringUtils.join(results.toArray(), '\n');
+    return StringUtils.join(_result.toArray(), '\n');
   }
 }

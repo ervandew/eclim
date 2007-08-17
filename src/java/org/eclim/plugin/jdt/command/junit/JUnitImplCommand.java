@@ -113,7 +113,7 @@ public class JUnitImplCommand
    * {@inheritDoc}
    */
   protected IMethod getImplemented (
-      IType _type, Map _baseMethods, IMethod _method)
+      IType _type, Map<String,IMethod> _baseMethods, IMethod _method)
     throws Exception
   {
     IMethod method = (IMethod)_baseMethods.get(

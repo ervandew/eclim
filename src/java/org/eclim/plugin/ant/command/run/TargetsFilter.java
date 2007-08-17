@@ -27,21 +27,19 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class TargetsFilter
-  implements OutputFilter
+  implements OutputFilter<List<String>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<String> _result)
   {
     StringBuffer buffer = new StringBuffer();
     if(_result != null){
-      List targets = (List)_result;
-      for (int ii = 0; ii < targets.size(); ii++){
+      for (String target : _result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
-        String target = (String)targets.get(ii);
         buffer.append(target);
       }
     }

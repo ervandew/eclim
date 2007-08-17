@@ -25,27 +25,26 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class TaglistFilter
-  implements OutputFilter
+  implements OutputFilter<TagResult[]>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, TagResult[] _result)
   {
     StringBuffer buffer = new StringBuffer();
 
-    TagResult[] tags = (TagResult[])_result;
-    for (int ii = 0; ii < tags.length; ii++){
+    for (TagResult result : _result){
       if(buffer.length() > 0){
         buffer.append('\n');
       }
-      buffer.append(tags[ii].getName())
+      buffer.append(result.getName())
         .append('\t')
-        .append(tags[ii].getFile())
-        .append("\t/^").append(tags[ii].getPattern()).append("$/;\"")
+        .append(result.getFile())
+        .append("\t/^").append(result.getPattern()).append("$/;\"")
         .append('\t')
-        .append(tags[ii].getKind())
-        .append("\tline:").append(tags[ii].getLine());
+        .append(result.getKind())
+        .append("\tline:").append(result.getLine());
     }
 
     return buffer.toString();

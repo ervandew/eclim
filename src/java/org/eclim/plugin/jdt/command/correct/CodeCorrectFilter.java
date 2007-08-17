@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
+import java.util.List;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 
@@ -25,28 +27,27 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class CodeCorrectFilter
-  implements OutputFilter
+  implements OutputFilter<List<CodeCorrectResult>>
 {
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<CodeCorrectResult> _result)
   {
     StringBuffer buffer = new StringBuffer();
-    if(_result != null && !(_result instanceof String)){
-      CodeCorrectResult[] results = (CodeCorrectResult[])_result;
-      for(int ii = 0; ii < results.length; ii++){
+    if(_result != null){
+      for(CodeCorrectResult result : _result){
         // filter out corrections that have no preview, since they can't be
         // applied in the same fashion as those that have previews.
-        if(results[ii].getPreview() != null){
+        if(result.getPreview() != null){
           if(buffer.length() == 0){
-            buffer.append(results[ii].getProblem().getMessage());
+            buffer.append(result.getProblem().getMessage());
           }
-          buffer.append('\n').append(results[ii].getIndex())
-            .append('.').append(results[ii].getProblem().getSourceStart())
-            .append(":  ").append(results[ii].getDescription());
+          buffer.append('\n').append(result.getIndex())
+            .append('.').append(result.getProblem().getSourceStart())
+            .append(":  ").append(result.getDescription());
 
-          String preview = results[ii].getPreview()
+          String preview = result.getPreview()
               .replaceAll("<br>", "\n")
               .replaceAll("<.+>", "")
               .replaceAll("\\n\\s*", "\n\t");
