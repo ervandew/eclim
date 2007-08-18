@@ -23,20 +23,6 @@
  Author: Eric Van Dewoestine
 -->
 <beans>
-  <bean class="org.eclim.preference.PreferenceFactory"
-      factory-method="addPreferences">
-    <constructor-arg value="core"/>
-    <constructor-arg>
-      <value>
-        General org.eclim.user.name
-        General org.eclim.user.email
-        General/Project org.eclim.project.version 1.0
-        General/Project org.eclim.project.copyright
-        General/Project org.eclim.project.vcs.viewvc
-      </value>
-    </constructor-arg>
-  </bean>
-
   <bean name="ping" class="org.eclim.command.admin.PingCommand">
     <description>Handles client ping request.</description>
   </bean>

@@ -52,7 +52,9 @@ public class EclimApplication
   implements IApplication
 {
   private static final Logger logger = Logger.getLogger(EclimApplication.class);
+  private static EclimApplication instance;
 
+  private NGServer server;
   private boolean shuttingDown = false;
 
   /**
@@ -63,6 +65,7 @@ public class EclimApplication
     throws Exception
   {
     logger.info("Starting eclim...");
+    instance = this;
     try{
       // create the eclipse workbench.
       org.eclipse.ui.PlatformUI.createAndRunWorkbench(
@@ -72,7 +75,7 @@ public class EclimApplication
       // initialize nailgun
       int port = Integer.parseInt(
           Services.getPluginResources().getProperty("nailgun.server.port"));
-      NGServer server = new NGServer(null, port);
+      server = new NGServer(null, port);
 
       // load plugins.
       loadPlugins();
@@ -100,9 +103,22 @@ public class EclimApplication
   {
     try{
       shutdown();
+      if(server.isRunning()){
+        server.shutdown(false /* exit vm */);
+      }
     }catch(Exception e){
       logger.error("Error shutting down.", e);
     }
+  }
+
+  /**
+   * Gets the running instance of this application.
+   *
+   * @return The EclimApplication instance.
+   */
+  public static EclimApplication getInstance ()
+  {
+    return instance;
   }
 
   /**

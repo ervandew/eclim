@@ -23,6 +23,7 @@ import org.eclim.plugin.jdt.preference.OptionHandler;
 
 import org.eclim.plugin.jdt.project.JavaProjectManager;
 
+import org.eclim.preference.PreferenceFactory;
 import org.eclim.preference.Preferences;
 
 import org.eclim.project.ProjectManagement;
@@ -56,6 +57,18 @@ public class PluginResources
     ProjectNatureFactory.addNature("java", "org.eclipse.jdt.core.javanature");
     ProjectManagement.addProjectManager(
         "org.eclipse.jdt.core.javanature", new JavaProjectManager());
+
+    PreferenceFactory.addPreferences("org.eclipse.jdt.core.javanature",
+      "JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk)\n" +
+      "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
+      "JDT/Javadoc org.eclim.java.doc.version \\$Revision\\$\n" +
+      "JDT/JUnit org.eclim.java.junit.command\n" +
+      "JDT/JUnit org.eclim.java.junit.output_dir\n" +
+      "JDT/JUnit org.eclim.java.junit.src_dir"
+    );
+    PreferenceFactory.addOptions("org.eclipse.jdt.core.javanature",
+      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]"
+    );
   }
 
   /**

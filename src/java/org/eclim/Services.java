@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -28,6 +27,8 @@ import org.apache.log4j.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
+
+import org.eclim.preference.PreferenceFactory;
 
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -262,6 +263,24 @@ public class Services
   private static class DefaultPluginResources
     extends AbstractPluginResources
   {
+    /**
+     * {@inheritDoc}
+     * @see AbstractPluginResources#initialize(String,URL)
+     */
+    @Override
+    public void initialize (String _name, URL _resource)
+    {
+      super.initialize(_name, _resource);
+
+      PreferenceFactory.addPreferences("core",
+        "General org.eclim.user.name\n" +
+        "General org.eclim.user.email\n" +
+        "General/Project org.eclim.project.version 1.0\n" +
+        "General/Project org.eclim.project.copyright\n" +
+        "General/Project org.eclim.project.vcs.viewvc"
+      );
+    }
+
     protected AbstractApplicationContext createContext (URL _resource)
     {
       return context;

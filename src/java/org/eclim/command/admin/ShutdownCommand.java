@@ -15,14 +15,12 @@
  */
 package org.eclim.command.admin;
 
-import com.martiansoftware.nailgun.NGServer;
-
 import org.apache.log4j.Logger;
-
-import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+
+import org.eclim.eclipse.EclimApplication;
 
 /**
  * Command to shutdown the eclim server.
@@ -41,9 +39,7 @@ public class ShutdownCommand
   public Object execute (CommandLine _commandLine)
   {
     try{
-      NGServer server = (NGServer)Services.getService(NGServer.class);
-
-      server.shutdown(false);
+      EclimApplication.getInstance().stop();
     }catch(Exception e){
       logger.error("Error shutting down eclim:", e);
     }

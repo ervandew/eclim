@@ -21,6 +21,7 @@ import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.pydev.preference.OptionHandler;
 
+import org.eclim.preference.PreferenceFactory;
 import org.eclim.preference.Preferences;
 
 import org.eclim.project.ProjectNatureFactory;
@@ -51,6 +52,13 @@ public class PluginResources
 
     Preferences.addOptionHandler("org.python.pydev", new OptionHandler());
     ProjectNatureFactory.addNature("python", "org.python.pydev.pythonNature");
+
+    PreferenceFactory.addOptions("org.python.pydev.pythonNature",
+      "PyDev org.python.pydev.INTERPRETER_PATH\n" +
+      "PyDev org.python.pydev.PYTHON_PROJECT_VERSION python 2\\.[3-5]\n" +
+      "PyDev org.python.pydev.PROJECT_SOURCE_PATH\n" +
+      "PyDev org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH"
+    );
   }
 
   /**
