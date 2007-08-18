@@ -30,6 +30,8 @@ import org.eclim.command.OutputFilter;
 public class ErrorFilter
   implements OutputFilter<List<Error>>
 {
+  public static final ErrorFilter instance = new ErrorFilter();
+
   /**
    * {@inheritDoc}
    */

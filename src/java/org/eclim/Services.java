@@ -25,13 +25,12 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import org.eclim.command.Command;
+
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
 import org.eclim.preference.PreferenceFactory;
-
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Class responsible for retrieving service implementations and provides access
@@ -46,11 +45,6 @@ public class Services
 
   private static final String MAIN = "main";
 
-  private static AbstractApplicationContext context =
-    new ClassPathXmlApplicationContext(
-        System.getProperty("org.eclim.spring-factory.xml",
-          "org/eclim/spring-factory.xml"));
-
   private static PluginResources defaultPluginResources;
 
   private static HashMap<String,PluginResources> pluginResources =
@@ -61,44 +55,32 @@ public class Services
     new HashMap<String,String>();
 
   /**
-   * Gets a service by type.
+   * Gets a command by name.
    *
-   * @param _type The service type.
+   * @param _name The command name.
    *
-   * @return The service implementation.
+   * @return The command implementation.
    */
-  public static Object getService (Class _type)
-  {
-    return getService(_type.getName(), _type);
-  }
-
-  /**
-   * Gets a service by name and type.
-   *
-   * @param _name The service name.
-   * @param _type The service type.
-   *
-   * @return The service implementation.
-   */
-  public static Object getService (String _name, Class _type)
+  public static Command getCommand (String _name)
+    throws Exception
   {
     String name = (String)serviceCache.get(_name);
     if(name == null){
       for(PluginResources resources : pluginResources.values()){
-        if(resources.containsService(_name)){
+        if(resources.containsCommand(_name)){
           serviceCache.put(_name, resources.getName());
-          return resources.getService(_name, _type);
+          return resources.getCommand(_name);
         }
       }
     }else{
       if(!MAIN.equals(name)){
-        PluginResources resources = (PluginResources)pluginResources.get(name);
-        return resources.getService(_name, _type);
+        PluginResources resources = pluginResources.get(name);
+        return resources.getCommand(_name);
       }
-      return context.getBean(_name, _type);
+      return getPluginResources().getCommand(_name);
     }
     serviceCache.put(_name, MAIN);
-    return context.getBean(_name, _type);
+    return getPluginResources().getCommand(_name);
   }
 
   /**
@@ -211,8 +193,7 @@ public class Services
   {
     if(defaultPluginResources == null){
       defaultPluginResources = new DefaultPluginResources();
-      ((DefaultPluginResources)defaultPluginResources)
-        .initialize("org.eclim", null);
+      ((DefaultPluginResources)defaultPluginResources).initialize("org.eclim");
     }
     return defaultPluginResources;
   }
@@ -242,7 +223,6 @@ public class Services
       resources.close();
       logger.info("{} closed.", resources.getClass().getName());
     }
-    context.close();
     logger.info("{} closed.", Services.class.getName());
   }
 
@@ -265,12 +245,12 @@ public class Services
   {
     /**
      * {@inheritDoc}
-     * @see AbstractPluginResources#initialize(String,URL)
+     * @see AbstractPluginResources#initialize(String)
      */
     @Override
-    public void initialize (String _name, URL _resource)
+    public void initialize (String _name)
     {
-      super.initialize(_name, _resource);
+      super.initialize(_name);
 
       PreferenceFactory.addPreferences("core",
         "General org.eclim.user.name\n" +
@@ -279,11 +259,50 @@ public class Services
         "General/Project org.eclim.project.copyright\n" +
         "General/Project org.eclim.project.vcs.viewvc"
       );
-    }
 
-    protected AbstractApplicationContext createContext (URL _resource)
-    {
-      return context;
+      registerCommand("ping", org.eclim.command.admin.PingCommand.class);
+      registerCommand("shutdown", org.eclim.command.admin.ShutdownCommand.class);
+      registerCommand("read_file", org.eclim.command.util.ReadFileCommand.class);
+      registerCommand("workspace_dir",
+          org.eclim.command.eclipse.WorkspaceCommand.class);
+
+      registerCommand("project_create",
+          org.eclim.command.project.ProjectCreateCommand.class);
+      registerCommand("project_delete",
+          org.eclim.command.project.ProjectDeleteCommand.class);
+      registerCommand("project_refresh",
+          org.eclim.command.project.ProjectRefreshCommand.class);
+      registerCommand("project_open",
+          org.eclim.command.project.ProjectOpenCommand.class);
+      registerCommand("project_close",
+          org.eclim.command.project.ProjectCloseCommand.class);
+      registerCommand("project_nature_aliases",
+          org.eclim.command.project.ProjectNatureAliasesCommand.class);
+      registerCommand("project_update",
+          org.eclim.command.project.ProjectUpdateCommand.class);
+      registerCommand("project_info",
+          org.eclim.command.project.ProjectInfoCommand.class);
+      registerCommand("project_natures",
+          org.eclim.command.project.ProjectNaturesCommand.class);
+      registerCommand("project_nature_add",
+          org.eclim.command.project.ProjectNatureAddCommand.class);
+      registerCommand("project_nature_remove",
+          org.eclim.command.project.ProjectNatureRemoveCommand.class);
+      registerCommand("settings_update",
+          org.eclim.command.admin.SettingsUpdateCommand.class);
+      registerCommand("settings", org.eclim.command.admin.SettingsCommand.class);
+
+      registerCommand("taglist", org.eclim.command.taglist.TaglistCommand.class);
+
+      registerCommand("patch_revisions",
+          org.eclim.command.patch.RevisionsCommand.class);
+      registerCommand("patch_file",
+          org.eclim.command.patch.PatchFileCommand.class);
+
+      registerCommand("xml_format",
+          org.eclim.command.xml.format.FormatCommand.class);
+      registerCommand("xml_validate",
+          org.eclim.command.xml.validate.ValidateCommand.class);
     }
 
     /**

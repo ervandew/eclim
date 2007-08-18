@@ -24,6 +24,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
@@ -54,55 +56,52 @@ public class SrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      IProject project = ProjectUtils.getProject(projectName, true);
-      IFile ifile = ProjectUtils.getFile(project, file);
+    IProject project = ProjectUtils.getProject(projectName, true);
+    IFile ifile = ProjectUtils.getFile(project, file);
 
-      // validate the src file.
-      if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
-        // ensure model is refreshed with latest version of the file.
-        PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
-        long timeout = 5000;
-        long now = System.currentTimeMillis();
-        while (!scheduler.isDone(ifile.getFullPath().toString()) &&
-            (System.currentTimeMillis() - now) < timeout)
-        {
-          Thread.sleep(100);
-        }
-
-        PHPProblemsValidator validator = PHPProblemsValidator.getInstance();
-        validator.validateFileProblems(ifile, true);
-
-        PHPFileData fileData = PHPWorkspaceModelManager.getInstance()
-          .getModelForFile(ifile.getFullPath().toString(), true);
-        IPHPMarker[] markers = fileData.getMarkers();
-
-        if(markers.length > 0){
-          String filepath = ProjectUtils.getFilePath(project, file);
-          FileOffsets offsets = FileOffsets.compile(filepath);
-          ArrayList<Error> errors = new ArrayList<Error>();
-          for(int ii = 0; ii < markers.length; ii++){
-            IPHPMarker marker = markers[ii];
-            int[] lineColumn = offsets.offsetToLineColumn(
-                marker.getUserData().getStartPosition());
-            errors.add(new Error(
-                marker.getDescription(),
-                filepath,
-                lineColumn[0],
-                lineColumn[1],
-                !IPHPMarker.ERROR.equals(marker.getType())
-            ));
-          }
-          return super.filter(_commandLine, errors);
-        }
+    // validate the src file.
+    if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
+      // ensure model is refreshed with latest version of the file.
+      PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
+      long timeout = 5000;
+      long now = System.currentTimeMillis();
+      while (!scheduler.isDone(ifile.getFullPath().toString()) &&
+          (System.currentTimeMillis() - now) < timeout)
+      {
+        Thread.sleep(100);
       }
-    }catch(Exception e){
-      return e;
+
+      PHPProblemsValidator validator = PHPProblemsValidator.getInstance();
+      validator.validateFileProblems(ifile, true);
+
+      PHPFileData fileData = PHPWorkspaceModelManager.getInstance()
+        .getModelForFile(ifile.getFullPath().toString(), true);
+      IPHPMarker[] markers = fileData.getMarkers();
+
+      if(markers.length > 0){
+        String filepath = ProjectUtils.getFilePath(project, file);
+        FileOffsets offsets = FileOffsets.compile(filepath);
+        ArrayList<Error> errors = new ArrayList<Error>();
+        for(int ii = 0; ii < markers.length; ii++){
+          IPHPMarker marker = markers[ii];
+          int[] lineColumn = offsets.offsetToLineColumn(
+              marker.getUserData().getStartPosition());
+          errors.add(new Error(
+              marker.getDescription(),
+              filepath,
+              lineColumn[0],
+              lineColumn[1],
+              !IPHPMarker.ERROR.equals(marker.getType())
+          ));
+        }
+        return ErrorFilter.instance.filter(_commandLine, errors);
+      }
     }
     return StringUtils.EMPTY;
   }

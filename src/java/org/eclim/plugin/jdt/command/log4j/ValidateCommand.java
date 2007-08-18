@@ -24,6 +24,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.IJavaProject;
@@ -49,22 +51,19 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      Log4jHandler handler = new Log4jHandler(
-          JavaUtils.getJavaProject(project), file);
+    Log4jHandler handler = new Log4jHandler(
+        JavaUtils.getJavaProject(project), file);
 
-      List<Error> list = super.validate(project, file, false, handler);
-      list.addAll(handler.getErrors());
+    List<Error> errors = super.validate(project, file, false, handler);
+    errors.addAll(handler.getErrors());
 
-      return filter(_commandLine, list);
-    }catch(Throwable t){
-      return t;
-    }
+    return ErrorFilter.instance.filter(_commandLine, errors);
   }
 
   private static class Log4jHandler

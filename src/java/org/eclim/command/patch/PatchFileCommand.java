@@ -47,40 +47,37 @@ public class PatchFileCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String revision = _commandLine.getValue(Options.REVISION_OPTION);
+    String basedir = _commandLine.getValue(Options.BASEDIR_OPTION);
+
+    String url = URL.replaceFirst("<file>", file);
+    url = url.replaceFirst("<revision>", revision);
+
+    HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
+    client.setReadTimeout(TIMEOUT);
+
+    FileOutputStream out = null;
     try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String revision = _commandLine.getValue(Options.REVISION_OPTION);
-      String basedir = _commandLine.getValue(Options.BASEDIR_OPTION);
-
-      String url = URL.replaceFirst("<file>", file);
-      url = url.replaceFirst("<revision>", revision);
-
-      HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
-      client.setReadTimeout(TIMEOUT);
-
-      FileOutputStream out = null;
-      try{
-        client.connect();
-        if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
-          throw new RuntimeException(
-              Services.getMessage("http.error", client.getResponseMessage()));
-        }
-
-        IOUtils.copy(client.getInputStream(),
-            out = new FileOutputStream(FileUtils.concat(basedir, file)));
-      }finally{
-        try{
-          client.disconnect();
-        }catch(Exception ignore){
-        }
-        IOUtils.closeQuietly(out);
+      client.connect();
+      if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
+        throw new RuntimeException(
+            Services.getMessage("http.error", client.getResponseMessage()));
       }
 
-      return Services.getMessage("vim.script.updated", file);
-    }catch(Exception e){
-      return e;
+      IOUtils.copy(client.getInputStream(),
+          out = new FileOutputStream(FileUtils.concat(basedir, file)));
+    }finally{
+      try{
+        client.disconnect();
+      }catch(Exception ignore){
+      }
+      IOUtils.closeQuietly(out);
     }
+
+    return Services.getMessage("vim.script.updated", file);
   }
 }

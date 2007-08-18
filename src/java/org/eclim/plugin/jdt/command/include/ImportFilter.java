@@ -33,6 +33,8 @@ import org.eclim.command.OutputFilter;
 public class ImportFilter
   implements OutputFilter<List<ImportResult>>
 {
+  public static final ImportFilter instance = new ImportFilter();
+
   /**
    * {@inheritDoc}
    */

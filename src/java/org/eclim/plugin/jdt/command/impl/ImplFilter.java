@@ -32,6 +32,8 @@ import org.eclim.command.OutputFilter;
 public class ImplFilter
   implements OutputFilter<ImplResult>
 {
+  public static final ImplFilter instance = new ImplFilter();
+
   private static final String NOT_FOUND_HEADER =
     "// The following types were not found, either because they were not\n" +
     "// imported or they were not found in the classpath.";

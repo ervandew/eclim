@@ -199,7 +199,6 @@ public class EclimApplication
       }
 
       String resourceClass = properties.getProperty("eclim.plugin.resources");
-      String resourceFile = properties.getProperty("eclim.plugin.resources.file");
       String pluginName = plugins[ii].substring(0, plugins[ii].lastIndexOf('_'));
 
       logger.info("Loading plugin " + pluginName);
@@ -216,9 +215,7 @@ public class EclimApplication
         PluginResources resources = (PluginResources)
           bundle.loadClass(resourceClass).newInstance();
         if(resources instanceof AbstractPluginResources){
-          URL resourceUrl = bundle.getResource(resourceFile);
-          ((AbstractPluginResources)resources)
-            .initialize(pluginName, resourceUrl);
+          ((AbstractPluginResources)resources).initialize(pluginName);
         }
         Services.addPluginResources(resources);
       }catch(Exception e){

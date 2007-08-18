@@ -16,7 +16,6 @@
 package org.eclim.command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.OutputFilter;
 
 /**
  * Defines a command that can be exected.
@@ -32,10 +31,6 @@ public interface Command
    * @param _commandLine The commandLine options supplied.
    * @return The result.
    */
-  public Object execute (CommandLine _commandLine);
-
-  /**
-   * Gets an output filter by name.
-   */
-  public OutputFilter getFilter (String _name);
+  public String execute (CommandLine _commandLine)
+    throws Exception;
 }

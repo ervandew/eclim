@@ -22,6 +22,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.PositionFilter;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.Position;
@@ -47,37 +49,34 @@ public class FindDefinitionCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      IProject project = ProjectUtils.getProject(projectName);
-      int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
+    int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
-      IFile ifile = ProjectUtils.getFile(project, file);
+    IFile ifile = ProjectUtils.getFile(project, file);
 
-      CodeData[] codeDatas = CodeDataResolver.getInstance().resolve(ifile, offset);
+    CodeData[] codeDatas = CodeDataResolver.getInstance().resolve(ifile, offset);
 
-      IWorkspaceRoot root = project.getWorkspace().getRoot();
+    IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-      List<Position> results = new ArrayList<Position>();
-      for (CodeData data : codeDatas) {
-        if (data.isUserCode()) {
-          String filename = data.getUserData().getFileName();
-          IResource resource = root.findMember(filename);
-          if(resource != null){
-            filename = resource.getRawLocation().toOSString();
-          }
-          Position position = new Position(
-              filename, data.getUserData().getStartPosition(), 0);
-          position.setMessage(data.getName());
-          results.add(position);
+    List<Position> results = new ArrayList<Position>();
+    for (CodeData data : codeDatas) {
+      if (data.isUserCode()) {
+        String filename = data.getUserData().getFileName();
+        IResource resource = root.findMember(filename);
+        if(resource != null){
+          filename = resource.getRawLocation().toOSString();
         }
+        Position position = new Position(
+            filename, data.getUserData().getStartPosition(), 0);
+        position.setMessage(data.getName());
+        results.add(position);
       }
-      return super.filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+    return PositionFilter.instance.filter(_commandLine, results);
   }
 }

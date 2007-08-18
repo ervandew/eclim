@@ -31,6 +31,8 @@ import org.eclim.command.OutputFilter;
 public class UnusedImportsFilter
   implements OutputFilter<List<String>>
 {
+  public static final UnusedImportsFilter instance = new UnusedImportsFilter();
+
   /**
    * {@inheritDoc}
    */

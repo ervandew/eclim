@@ -36,27 +36,24 @@ public class SrcFindCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String classname = _commandLine.getValue(Options.CLASSNAME_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String classname = _commandLine.getValue(Options.CLASSNAME_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      ICompilationUnit src = null;
-      String file = classname.replace('.', '/') + ".java";
-      if(projectName != null){
-        src = JavaUtils.findCompilationUnit(projectName, file);
-      }else{
-        src = JavaUtils.findCompilationUnit(file);
-      }
-
-      if (src != null && src.exists()){
-        return src.getResource().getLocation().toOSString();
-      }
-
-      return "";
-    }catch(Exception e){
-      return e;
+    ICompilationUnit src = null;
+    String file = classname.replace('.', '/') + ".java";
+    if(projectName != null){
+      src = JavaUtils.findCompilationUnit(projectName, file);
+    }else{
+      src = JavaUtils.findCompilationUnit(file);
     }
+
+    if (src != null && src.exists()){
+      return src.getResource().getLocation().toOSString();
+    }
+
+    return "";
   }
 }

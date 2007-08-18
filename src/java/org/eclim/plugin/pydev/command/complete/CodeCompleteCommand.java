@@ -24,6 +24,7 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.command.complete.CodeCompleteFilter;
 import org.eclim.command.complete.CodeCompleteResult;
 
 import org.eclim.eclipse.jface.text.DummyTextViewer;
@@ -59,49 +60,46 @@ public class CodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      IProject project = ProjectUtils.getProject(projectName);
+    IProject project = ProjectUtils.getProject(projectName);
 
-      IDocument document = ProjectUtils.getDocument(project, file);
-      ITextViewer viewer =
-        new DummyTextViewer(document, offset, 1);
+    IDocument document = ProjectUtils.getDocument(project, file);
+    ITextViewer viewer =
+      new DummyTextViewer(document, offset, 1);
 
-      IPythonNature nature = PythonNature.getPythonNature(project);
-      CompletionRequest request = new CompletionRequest(
-          new File(file), nature, document, offset, PY_CC);
+    IPythonNature nature = PythonNature.getPythonNature(project);
+    CompletionRequest request = new CompletionRequest(
+        new File(file), nature, document, offset, PY_CC);
 
-      List results = new ArrayList();
-      ICompletionProposal[] proposals = PyCodeCompletionUtils.onlyValidSorted(
-          PY_CC.getCodeCompletionProposals(viewer, request),
-          request.qualifier, request.isInCalltip);
-      for (int ii = 0; ii < proposals.length; ii++){
-        ICompletionProposal proposal = proposals[ii];
-        String description = proposal.getAdditionalProposalInfo().trim();
-        String shortDescription = proposal.getDisplayString();
-        String completion = shortDescription;
+    List results = new ArrayList();
+    ICompletionProposal[] proposals = PyCodeCompletionUtils.onlyValidSorted(
+        PY_CC.getCodeCompletionProposals(viewer, request),
+        request.qualifier, request.isInCalltip);
+    for (int ii = 0; ii < proposals.length; ii++){
+      ICompletionProposal proposal = proposals[ii];
+      String description = proposal.getAdditionalProposalInfo().trim();
+      String shortDescription = proposal.getDisplayString();
+      String completion = shortDescription;
 
-        int open = completion.indexOf('(');
-        int close = completion.indexOf(')');
-        if(close > open + 1){
-          completion = completion.substring(0, open + 1);
-        }
-
-        CodeCompleteResult result =
-          new CodeCompleteResult(completion, description, shortDescription);
-        if(!results.contains(result)){
-          results.add(result);
-        }
+      int open = completion.indexOf('(');
+      int close = completion.indexOf(')');
+      if(close > open + 1){
+        completion = completion.substring(0, open + 1);
       }
 
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
+      CodeCompleteResult result =
+        new CodeCompleteResult(completion, description, shortDescription);
+      if(!results.contains(result)){
+        results.add(result);
+      }
     }
+
+    return CodeCompleteFilter.instance.filter(_commandLine, results);
   }
 }

@@ -70,18 +70,10 @@ public class Main
           throw new IllegalArgumentException(
               Services.getMessage("command.required"));
         }
-        Command command = (Command)
-          Services.getService(commandName, Command.class);
+        Command command = Services.getCommand(commandName);
 
-        Object result = command.execute(commandLine);
-
-        if(result instanceof Throwable){
-          ((Throwable)result).printStackTrace();
-          logger.debug("Main - exit on error");
-          System.exit(1);
-        }else{
-          System.out.println(result);
-        }
+        String result = command.execute(commandLine);
+        System.out.println(result);
       }
     }catch(Exception e){
       e.printStackTrace();

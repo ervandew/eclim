@@ -36,23 +36,20 @@ public class ClasspathVariablesCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     ArrayList<ClasspathVariable> results = new ArrayList<ClasspathVariable>();
-    try{
-      String[] names = JavaCore.getClasspathVariableNames();
-      for(int ii = 0; ii < names.length; ii++){
-        IPath path = JavaCore.getClasspathVariable(names[ii]);
-        if(path != null){
-          ClasspathVariable variable = new ClasspathVariable();
-          variable.setName(names[ii]);
-          variable.setPath(path.toOSString());
-          results.add(variable);
-        }
+    String[] names = JavaCore.getClasspathVariableNames();
+    for(int ii = 0; ii < names.length; ii++){
+      IPath path = JavaCore.getClasspathVariable(names[ii]);
+      if(path != null){
+        ClasspathVariable variable = new ClasspathVariable();
+        variable.setName(names[ii]);
+        variable.setPath(path.toOSString());
+        results.add(variable);
       }
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+    return ClasspathVariablesFilter.instance.filter(_commandLine, results);
   }
 }

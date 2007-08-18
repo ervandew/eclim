@@ -42,24 +42,21 @@ public class ProjectCreateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String folder = _commandLine.getValue(Options.FOLDER_OPTION);
-      if(folder.endsWith("/") || folder.endsWith("\\")){
-        folder = folder.substring(0, folder.length() - 1);
-      }
-
-      String name = _commandLine.hasOption(Options.PROJECT_OPTION) ?
-        _commandLine.getValue(Options.PROJECT_OPTION) :
-        FileUtils.getBaseName(folder).replace(' ', '_');
-      logger.debug("Creating project '{}' at folder '{}'", name, folder);
-
-      ProjectManagement.create(name, folder, _commandLine);
-
-      return Services.getMessage("project.created", name);
-    }catch(Throwable t){
-      return t;
+    String folder = _commandLine.getValue(Options.FOLDER_OPTION);
+    if(folder.endsWith("/") || folder.endsWith("\\")){
+      folder = folder.substring(0, folder.length() - 1);
     }
+
+    String name = _commandLine.hasOption(Options.PROJECT_OPTION) ?
+      _commandLine.getValue(Options.PROJECT_OPTION) :
+      FileUtils.getBaseName(folder).replace(' ', '_');
+    logger.debug("Creating project '{}' at folder '{}'", name, folder);
+
+    ProjectManagement.create(name, folder, _commandLine);
+
+    return Services.getMessage("project.created", name);
   }
 }

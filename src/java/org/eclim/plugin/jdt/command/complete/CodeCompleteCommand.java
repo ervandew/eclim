@@ -48,31 +48,28 @@ public class CodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
-      CompletionProposalCollector collector =
-        new CompletionProposalCollector(src);
-      src.codeComplete(offset, collector);
+    CompletionProposalCollector collector =
+      new CompletionProposalCollector(src);
+    src.codeComplete(offset, collector);
 
-      IJavaCompletionProposal[] proposals =
-        collector.getJavaCompletionProposals();
-      for(int ii = 0; ii < proposals.length; ii++){
-        results.add(
-            createCompletionResult(collector, ii, proposals[ii]));
-      }
-      Collections.sort(results, COMPLETION_COMPARATOR);
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
+    IJavaCompletionProposal[] proposals =
+      collector.getJavaCompletionProposals();
+    for(int ii = 0; ii < proposals.length; ii++){
+      results.add(
+          createCompletionResult(collector, ii, proposals[ii]));
     }
+    Collections.sort(results, COMPLETION_COMPARATOR);
+    return CodeCompleteFilter.instance.filter(_commandLine, results);
   }
 
   /**

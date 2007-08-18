@@ -36,7 +36,8 @@ public class ShutdownCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     try{
       EclimApplication.getInstance().stop();

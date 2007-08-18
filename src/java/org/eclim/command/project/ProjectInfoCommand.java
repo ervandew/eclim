@@ -47,80 +47,77 @@ public class ProjectInfoCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
-      ArrayList<Object> results = new ArrayList<Object>();
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    ArrayList<Object> results = new ArrayList<Object>();
 
-      // list all projects.
-      if(name == null){
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-        String natureId = null;
-        if(_commandLine.hasOption(Options.NATURE_OPTION)){
-          String alias = _commandLine.getValue(Options.NATURE_OPTION);
-          natureId = ProjectNatureFactory.getNatureForAlias(alias);
-          ArrayList<IProject> filtered = new ArrayList<IProject>();
-          for (IProject project : projects){
-            if (project.hasNature(natureId)){
-              filtered.add(project);
-            }
-          }
-          projects = (IProject[])filtered.toArray(new IProject[filtered.size()]);
-        }
-
-        String open = Services.getMessage("project.status.open");
-        String closed = Services.getMessage("project.status.closed");
-
-        // pad status string
-        int pad = Math.max(open.length(), closed.length());
-        closed = StringUtils.rightPad(closed, pad);
-        open = StringUtils.rightPad(open, pad);
-
-        // find longest project name for padding.
-        int length = 0;
-        for (int ii = 0; ii < projects.length; ii++){
-          name = projects[ii].getName();
-          if(name.length() > length){
-            length = name.length();
+    // list all projects.
+    if(name == null){
+      IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      String natureId = null;
+      if(_commandLine.hasOption(Options.NATURE_OPTION)){
+        String alias = _commandLine.getValue(Options.NATURE_OPTION);
+        natureId = ProjectNatureFactory.getNatureForAlias(alias);
+        ArrayList<IProject> filtered = new ArrayList<IProject>();
+        for (IProject project : projects){
+          if (project.hasNature(natureId)){
+            filtered.add(project);
           }
         }
+        projects = (IProject[])filtered.toArray(new IProject[filtered.size()]);
+      }
 
-        for(int ii = 0; ii < projects.length; ii++){
-          if(projects[ii].exists()){
-            StringBuffer info = new StringBuffer()
-              .append(StringUtils.rightPad(projects[ii].getName(), length))
-              .append(" - ")
-              .append(projects[ii].isOpen() ? open : closed)
-              .append(" - ")
-              .append(ProjectUtils.getPath(projects[ii]));
-            results.add(info.toString());
-          }
-        }
+      String open = Services.getMessage("project.status.open");
+      String closed = Services.getMessage("project.status.closed");
 
-      // retrieve project settings.
-      }else{
-        IProject project = ProjectUtils.getProject(name, true);
-        String setting = _commandLine.getValue(Options.SETTING_OPTION);
-        Option[] options = getPreferences().getOptions(project);
+      // pad status string
+      int pad = Math.max(open.length(), closed.length());
+      closed = StringUtils.rightPad(closed, pad);
+      open = StringUtils.rightPad(open, pad);
 
-        // only retrieving the requested setting.
-        if(setting != null){
-          for(int ii = 0; ii < options.length; ii++){
-            if(options[ii].getName().equals(setting)){
-              results.add(options[ii]);
-              break;
-            }
-          }
-
-        // retrieve all settings.
-        }else{
-          results.addAll(Arrays.asList(options));
+      // find longest project name for padding.
+      int length = 0;
+      for (int ii = 0; ii < projects.length; ii++){
+        name = projects[ii].getName();
+        if(name.length() > length){
+          length = name.length();
         }
       }
-     return filter(_commandLine, results);
-    }catch(Throwable t){
-      return t;
+
+      for(int ii = 0; ii < projects.length; ii++){
+        if(projects[ii].exists()){
+          StringBuffer info = new StringBuffer()
+            .append(StringUtils.rightPad(projects[ii].getName(), length))
+            .append(" - ")
+            .append(projects[ii].isOpen() ? open : closed)
+            .append(" - ")
+            .append(ProjectUtils.getPath(projects[ii]));
+          results.add(info.toString());
+        }
+      }
+
+    // retrieve project settings.
+    }else{
+      IProject project = ProjectUtils.getProject(name, true);
+      String setting = _commandLine.getValue(Options.SETTING_OPTION);
+      Option[] options = getPreferences().getOptions(project);
+
+      // only retrieving the requested setting.
+      if(setting != null){
+        for(int ii = 0; ii < options.length; ii++){
+          if(options[ii].getName().equals(setting)){
+            results.add(options[ii]);
+            break;
+          }
+        }
+
+      // retrieve all settings.
+      }else{
+        results.addAll(Arrays.asList(options));
+      }
     }
+   return ProjectInfoFilter.instance.filter(_commandLine, results);
   }
 }

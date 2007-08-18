@@ -36,30 +36,27 @@ public class SettingsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      ArrayList<Option> results = new ArrayList<Option>();
+    ArrayList<Option> results = new ArrayList<Option>();
 
-      String setting = _commandLine.getValue(Options.SETTING_OPTION);
-      Option[] options = getPreferences().getOptions();
+    String setting = _commandLine.getValue(Options.SETTING_OPTION);
+    Option[] options = getPreferences().getOptions();
 
-      // only retrieving the requested setting.
-      if(setting != null){
-        for(int ii = 0; ii < options.length; ii++){
-          if(options[ii].getName().equals(setting)){
-            results.add(options[ii]);
-            break;
-          }
+    // only retrieving the requested setting.
+    if(setting != null){
+      for(int ii = 0; ii < options.length; ii++){
+        if(options[ii].getName().equals(setting)){
+          results.add(options[ii]);
+          break;
         }
-
-      // retrieve all settings.
-      }else{
-        results.addAll(Arrays.asList(options));
       }
-     return filter(_commandLine, results);
-    }catch(Throwable t){
-      return t;
+
+    // retrieve all settings.
+    }else{
+      results.addAll(Arrays.asList(options));
     }
+   return SettingsFilter.instance.filter(_commandLine, results);
   }
 }

@@ -34,13 +34,10 @@ public class ProjectNatureAliasesCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String natures = StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
-      return natures + '\n' + ProjectNatureFactory.NONE;
-    }catch(Throwable t){
-      return t;
-    }
+    String natures = StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
+    return natures + '\n' + ProjectNatureFactory.NONE;
   }
 }

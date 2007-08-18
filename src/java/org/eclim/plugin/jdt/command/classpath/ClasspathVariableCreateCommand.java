@@ -37,17 +37,14 @@ public class ClasspathVariableCreateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
-      String path = _commandLine.getValue(Options.PATH_OPTION);
+    String name = _commandLine.getValue(Options.NAME_OPTION);
+    String path = _commandLine.getValue(Options.PATH_OPTION);
 
-      JavaCore.setClasspathVariable(name, new Path(path), null);
+    JavaCore.setClasspathVariable(name, new Path(path), null);
 
-      return Services.getMessage("classpath.variable.created", name);
-    }catch(Exception e){
-      return e;
-    }
+    return Services.getMessage("classpath.variable.created", name);
   }
 }

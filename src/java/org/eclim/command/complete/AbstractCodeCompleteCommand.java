@@ -44,43 +44,40 @@ public abstract class AbstractCodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      int offset = Integer.parseInt(
-          _commandLine.getValue(Options.OFFSET_OPTION));
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    int offset = Integer.parseInt(
+        _commandLine.getValue(Options.OFFSET_OPTION));
 
-      IContentAssistProcessor processor =
-        getContentAssistProcessor(_commandLine, project, file);
+    IContentAssistProcessor processor =
+      getContentAssistProcessor(_commandLine, project, file);
 
-      ITextViewer viewer = getTextViewer(_commandLine, project, file);
+    ITextViewer viewer = getTextViewer(_commandLine, project, file);
 
-      ICompletionProposal[] proposals =
-        processor.computeCompletionProposals(viewer, offset);
+    ICompletionProposal[] proposals =
+      processor.computeCompletionProposals(viewer, offset);
 
-      ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
+    ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
-      if(proposals != null){
-        for (int ii = 0; ii < proposals.length; ii++){
-          if(acceptProposal(proposals[ii])){
-            CodeCompleteResult result = new CodeCompleteResult(
-                getCompletion(proposals[ii]),
-                getDescription(proposals[ii]),
-                getShortDescription(proposals[ii]));
+    if(proposals != null){
+      for (int ii = 0; ii < proposals.length; ii++){
+        if(acceptProposal(proposals[ii])){
+          CodeCompleteResult result = new CodeCompleteResult(
+              getCompletion(proposals[ii]),
+              getDescription(proposals[ii]),
+              getShortDescription(proposals[ii]));
 
-            if(!results.contains(result)){
-              results.add(result);
-            }
+          if(!results.contains(result)){
+            results.add(result);
           }
         }
       }
-
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+
+    return CodeCompleteFilter.instance.filter(_commandLine, results);
   }
 
   /**

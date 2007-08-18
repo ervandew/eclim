@@ -22,6 +22,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.PositionFilter;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.Position;
@@ -62,44 +64,41 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      String pattern = _commandLine.getValue(Options.PATTERN_OPTION);
-      IProject project = ProjectUtils.getProject(projectName);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String pattern = _commandLine.getValue(Options.PATTERN_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
 
-      // TODO: if type == -1, run 3 searches?
-      int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
-      IPHPSearchScope scope = getScope(
-          _commandLine.getValue(Options.SCOPE_OPTION), type, project);
+    // TODO: if type == -1, run 3 searches?
+    int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
+    IPHPSearchScope scope = getScope(
+        _commandLine.getValue(Options.SCOPE_OPTION), type, project);
 
-      PHPSearchResult result = new PHPSearchResult(null);
-      SEARCH.search(pattern, scope, result, true, new NullProgressMonitor());
+    PHPSearchResult result = new PHPSearchResult(null);
+    SEARCH.search(pattern, scope, result, true, new NullProgressMonitor());
 
-      IWorkspaceRoot root = project.getWorkspace().getRoot();
+    IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-      List<Position> results = new ArrayList<Position>();
-      for(Object element : result.getElements()){
-        PHPDataDecorator decorator = (PHPDataDecorator)element;
-        String file = decorator.getUserData().getFileName();
-        IResource resource = root.findMember(file);
-        if (resource != null){
-          file = resource.getRawLocation().toOSString();
-        }
-        String name = decorator.getName();
-        Match[] matches = result.getMatches(element);
-        for(Match match : matches){
-          Position position = new Position(file, match.getOffset(), 0);
-          position.setMessage(name);
-          results.add(position);
-        }
+    List<Position> results = new ArrayList<Position>();
+    for(Object element : result.getElements()){
+      PHPDataDecorator decorator = (PHPDataDecorator)element;
+      String file = decorator.getUserData().getFileName();
+      IResource resource = root.findMember(file);
+      if (resource != null){
+        file = resource.getRawLocation().toOSString();
       }
-
-      return super.filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
+      String name = decorator.getName();
+      Match[] matches = result.getMatches(element);
+      for(Match match : matches){
+        Position position = new Position(file, match.getOffset(), 0);
+        position.setMessage(name);
+        results.add(position);
+      }
     }
+
+    return PositionFilter.instance.filter(_commandLine, results);
   }
 
   /**

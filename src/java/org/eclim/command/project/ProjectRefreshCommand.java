@@ -38,16 +38,13 @@ public class ProjectRefreshCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      ProjectManagement.refresh(ProjectUtils.getProject(name), _commandLine);
+    ProjectManagement.refresh(ProjectUtils.getProject(name), _commandLine);
 
-      return Services.getMessage("project.refreshed", name);
-    }catch(Throwable t){
-      return t;
-    }
+    return Services.getMessage("project.refreshed", name);
   }
 }

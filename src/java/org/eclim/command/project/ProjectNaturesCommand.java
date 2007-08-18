@@ -43,51 +43,48 @@ public class ProjectNaturesCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      // list all projects.
-      if(name == null){
-        ArrayList<String> results = new ArrayList<String>();
+    // list all projects.
+    if(name == null){
+      ArrayList<String> results = new ArrayList<String>();
 
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 
-        // find longest project name for padding.
-        int length = 0;
-        for(IProject project : projects){
-          name = project.getName();
-          if(name.length() > length){
-            length = name.length();
-          }
+      // find longest project name for padding.
+      int length = 0;
+      for(IProject project : projects){
+        name = project.getName();
+        if(name.length() > length){
+          length = name.length();
         }
-
-        for(IProject project : projects){
-          String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
-          if (aliases.length == 0){
-            aliases = new String[]{"none"};
-          }
-          StringBuffer info = new StringBuffer()
-            .append(StringUtils.rightPad(project.getName(), length))
-            .append(" - ")
-            .append(StringUtils.join(aliases, ' '));
-          results.add(info.toString());
-        }
-
-        return StringUtils.join(
-            (String[])results.toArray(new String[results.size()]), '\n');
       }
 
-      // list for requested project.
-      String[] aliases = ProjectNatureFactory.getProjectNatureAliases(
-          ProjectUtils.getProject(name));
-      if (aliases.length == 0){
-        aliases = new String[]{"none"};
+      for(IProject project : projects){
+        String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
+        if (aliases.length == 0){
+          aliases = new String[]{"none"};
+        }
+        StringBuffer info = new StringBuffer()
+          .append(StringUtils.rightPad(project.getName(), length))
+          .append(" - ")
+          .append(StringUtils.join(aliases, ' '));
+        results.add(info.toString());
       }
-      return name + " - " + StringUtils.join(aliases, ' ');
-    }catch(Throwable t){
-      return t;
+
+      return StringUtils.join(
+          (String[])results.toArray(new String[results.size()]), '\n');
     }
+
+    // list for requested project.
+    String[] aliases = ProjectNatureFactory.getProjectNatureAliases(
+        ProjectUtils.getProject(name));
+    if (aliases.length == 0){
+      aliases = new String[]{"none"};
+    }
+    return name + " - " + StringUtils.join(aliases, ' ');
   }
 }

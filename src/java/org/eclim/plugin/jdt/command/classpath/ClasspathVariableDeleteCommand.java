@@ -35,16 +35,13 @@ public class ClasspathVariableDeleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
+    String name = _commandLine.getValue(Options.NAME_OPTION);
 
-      JavaCore.removeClasspathVariable(name, null);
+    JavaCore.removeClasspathVariable(name, null);
 
-      return Services.getMessage("classpath.variable.deleted", name);
-    }catch(Exception e){
-      return e;
-    }
+    return Services.getMessage("classpath.variable.deleted", name);
   }
 }

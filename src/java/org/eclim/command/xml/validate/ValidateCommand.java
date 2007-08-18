@@ -15,7 +15,6 @@
  */
 package org.eclim.command.xml.validate;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +22,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
+
+import org.eclim.command.filter.ErrorFilter;
 
 import org.eclim.util.XmlUtils;
 
@@ -43,19 +44,16 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
 
-      List<Error> list = validate(project, file, schema, null);
+    List<Error> list = validate(project, file, schema, null);
 
-      return filter(_commandLine, list);
-    }catch(Throwable t){
-      return t;
-    }
+    return ErrorFilter.instance.filter(_commandLine, list);
   }
 
   /**

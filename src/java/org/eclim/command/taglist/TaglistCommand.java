@@ -51,70 +51,67 @@ public class TaglistCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String[] args = _commandLine.getArgs();
-      String file = args[args.length - 1];
+    String[] args = _commandLine.getArgs();
+    String file = args[args.length - 1];
 
-      // check file first
-      File theFile = new File(file);
-      if(!theFile.exists() || theFile.length() > MAX_FILE_SIZE){
-        logger.debug(
-            "File '{}' not processed: exists = {} size = " + theFile.length(),
-            file, Boolean.valueOf(theFile.exists()));
-        return "";
+    // check file first
+    File theFile = new File(file);
+    if(!theFile.exists() || theFile.length() > MAX_FILE_SIZE){
+      logger.debug(
+          "File '{}' not processed: exists = {} size = " + theFile.length(),
+          file, Boolean.valueOf(theFile.exists()));
+      return "";
+    }
+
+    String ctags = _commandLine.getValue(CTAGS_OPTION);
+    String lang = null;
+    boolean sort = false;
+
+    String[] ctagArgs = new String[args.length - 3];
+    ctagArgs[0] = ctags;
+    for (int ii = 0; ii < args.length; ii++){
+      // first four args are for this command.
+      if(ii > 3){
+        ctagArgs[ii - 3] = args[ii];
       }
 
-      String ctags = _commandLine.getValue(CTAGS_OPTION);
-      String lang = null;
-      boolean sort = false;
-
-      String[] ctagArgs = new String[args.length - 3];
-      ctagArgs[0] = ctags;
-      for (int ii = 0; ii < args.length; ii++){
-        // first four args are for this command.
-        if(ii > 3){
-          ctagArgs[ii - 3] = args[ii];
-        }
-
-        if(args[ii].startsWith(LANGUAGE)){
-          lang = args[ii].substring(args[ii].indexOf('=') + 1);
-        }else if(args[ii].startsWith(SORT)){
-          if("yes".equals(args[ii].substring(args[ii].indexOf('=') + 1))){
-            sort = true;
-          }
+      if(args[ii].startsWith(LANGUAGE)){
+        lang = args[ii].substring(args[ii].indexOf('=') + 1);
+      }else if(args[ii].startsWith(SORT)){
+        if("yes".equals(args[ii].substring(args[ii].indexOf('=') + 1))){
+          sort = true;
         }
       }
+    }
 
-      TaglistScript script = (TaglistScript)scriptCache.get(lang);
-      if(!scriptCache.containsKey(lang) && script == null){
-        try{
-          Class scriptClass = ScriptUtils.parseClass(
-              "taglist/" + lang + ".groovy");
-          script = (TaglistScript)scriptClass.newInstance();
+    TaglistScript script = (TaglistScript)scriptCache.get(lang);
+    if(!scriptCache.containsKey(lang) && script == null){
+      try{
+        Class scriptClass = ScriptUtils.parseClass(
+            "taglist/" + lang + ".groovy");
+        script = (TaglistScript)scriptClass.newInstance();
 // After some extended period of time groovy starts losing the ability to
 // resolve eclim classes.  Until this is resolved, don't cache groovy scripts.
 // If not a groovy issue, may be an issue with eclipse classloaders.
 //          scriptCache.put(lang, script);
-        }catch(IllegalArgumentException iae){
-          // script not found.
-          logger.debug("No taglist script found for '" + lang + "'", iae);
-          scriptCache.put(lang, null);
-        }
+      }catch(IllegalArgumentException iae){
+        // script not found.
+        logger.debug("No taglist script found for '" + lang + "'", iae);
+        scriptCache.put(lang, null);
       }
-
-      if(script != null){
-        TagResult[] results = script.execute(file);
-        if(sort){
-          Arrays.sort(results);
-        }
-        return super.filter(_commandLine, results);
-      }
-      return executeCtags(ctagArgs);
-    }catch(Exception e){
-      return e;
     }
+
+    if(script != null){
+      TagResult[] results = script.execute(file);
+      if(sort){
+        Arrays.sort(results);
+      }
+      return TaglistFilter.instance.filter(_commandLine, results);
+    }
+    return executeCtags(ctagArgs);
   }
 
   /**

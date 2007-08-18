@@ -35,6 +35,8 @@ import org.eclipse.jdt.core.CompletionProposal;
 public class CodeCompleteFilter
   implements OutputFilter<List<CodeCompleteResult>>
 {
+  public static final CodeCompleteFilter instance = new CodeCompleteFilter();
+
   private static final Logger logger =
     Logger.getLogger(CodeCompleteFilter.class);
 

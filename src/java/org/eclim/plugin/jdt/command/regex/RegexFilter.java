@@ -29,6 +29,8 @@ import org.eclim.command.OutputFilter;
 public class RegexFilter
   implements OutputFilter<List<MatcherResult>>
 {
+  public static final RegexFilter instance = new RegexFilter();
+
   /**
    * {@inheritDoc}
    */

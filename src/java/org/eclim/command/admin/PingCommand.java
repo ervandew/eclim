@@ -36,7 +36,8 @@ public class PingCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     if(version == null){
       PluginResources resources = Services.getPluginResources();

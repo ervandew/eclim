@@ -49,14 +49,11 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String search = _commandLine.getValue(Options.SEARCH_OPTION);
-      return filter(_commandLine, searchRepositories(search));
-    }catch(Exception e){
-      return e;
-    }
+    String search = _commandLine.getValue(Options.SEARCH_OPTION);
+    return SearchFilter.instance.filter(_commandLine, searchRepositories(search));
   }
 
   /**

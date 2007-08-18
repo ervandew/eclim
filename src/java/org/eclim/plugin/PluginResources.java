@@ -21,6 +21,8 @@ import java.net.URL;
 
 import java.util.ResourceBundle;
 
+import org.eclim.command.Command;
+
 /**
  * Interface that every plugin must provide an implemtation of, which will be
  * used to locate services, messages, etc, that the plugin provides.
@@ -31,22 +33,22 @@ import java.util.ResourceBundle;
 public interface PluginResources
 {
   /**
-   * Gets a service by name and type.
+   * Gets a command by name.
    *
    * @param _name The name of the service.
-   * @param _type The type of the service.
    *
-   * @return The service instance.
+   * @return The command instance.
    */
-  public Object getService (String _name, Class _type);
+  public Command getCommand (String _name)
+    throws Exception;
 
   /**
-   * Determines if this instance contains a service with the supplied name.
+   * Determines if this instance contains the command with the supplied name.
    *
-   * @param _name The name of the service.
-   * @return true if this instance contains the service, false otherwise.
+   * @param _name The name of the command.
+   * @return true if this instance contains the command, false otherwise.
    */
-  public boolean containsService (String _name);
+  public boolean containsCommand (String _name);
 
   /**
    * Gets a message that can be formated with the optional array of arguments

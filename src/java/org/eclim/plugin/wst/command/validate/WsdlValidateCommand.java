@@ -22,6 +22,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclipse.wst.wsdl.validation.internal.IValidationMessage;
 import org.eclipse.wst.wsdl.validation.internal.IValidationReport;
 
@@ -39,35 +41,32 @@ public class WsdlValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      ArrayList<Error> results = new ArrayList<Error>();
-      WSDLValidator validator = WSDLValidator.getInstance();
-      IValidationReport result = validator.validate(toUri(project, file));
-      IValidationMessage[] messages = result.getValidationMessages();
-      for (int ii = 0; ii < messages.length; ii++){
-        StringBuffer message = new StringBuffer(messages[ii].getMessage());
-        for (Iterator jj = messages[ii].getNestedMessages().iterator(); jj.hasNext();){
-          IValidationMessage nested = (IValidationMessage)jj.next();
-          message.append(' ').append(nested.getMessage());
-        }
-
-        results.add(new Error(
-              message.toString(),
-              toFile(messages[ii].getURI()),
-              messages[ii].getLine(),
-              messages[ii].getColumn(),
-              messages[ii].getSeverity() == IValidationMessage.SEV_WARNING
-        ));
+    ArrayList<Error> results = new ArrayList<Error>();
+    WSDLValidator validator = WSDLValidator.getInstance();
+    IValidationReport result = validator.validate(toUri(project, file));
+    IValidationMessage[] messages = result.getValidationMessages();
+    for (int ii = 0; ii < messages.length; ii++){
+      StringBuffer message = new StringBuffer(messages[ii].getMessage());
+      for (Iterator jj = messages[ii].getNestedMessages().iterator(); jj.hasNext();){
+        IValidationMessage nested = (IValidationMessage)jj.next();
+        message.append(' ').append(nested.getMessage());
       }
 
-      return super.filter(_commandLine, results);
-    }catch(Throwable t){
-      return t;
+      results.add(new Error(
+            message.toString(),
+            toFile(messages[ii].getURI()),
+            messages[ii].getLine(),
+            messages[ii].getColumn(),
+            messages[ii].getSeverity() == IValidationMessage.SEV_WARNING
+      ));
     }
+
+    return ErrorFilter.instance.filter(_commandLine, results);
   }
 }

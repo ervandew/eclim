@@ -30,6 +30,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.project.ProjectManagement;
 
 import org.eclim.util.IOUtils;
@@ -52,27 +54,24 @@ public class ProjectUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
-      String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
 
-      IProject project = ProjectUtils.getProject(name);
+    IProject project = ProjectUtils.getProject(name);
 
-      if(settings != null){
-        updateSettings(project, settings);
-      }else{
-        List<Error> errors = ProjectManagement.update(project, _commandLine);
-        if(errors.size() > 0){
-          return super.filter(_commandLine, errors);
-        }
+    if(settings != null){
+      updateSettings(project, settings);
+    }else{
+      List<Error> errors = ProjectManagement.update(project, _commandLine);
+      if(errors.size() > 0){
+        return ErrorFilter.instance.filter(_commandLine, errors);
       }
-
-      return Services.getMessage("project.updated", name);
-    }catch(Throwable t){
-      return t;
     }
+
+    return Services.getMessage("project.updated", name);
   }
 
   /**

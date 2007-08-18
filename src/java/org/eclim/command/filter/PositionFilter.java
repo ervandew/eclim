@@ -33,6 +33,8 @@ import org.eclim.util.vim.VimUtils;
 public class PositionFilter
   implements OutputFilter<List<Position>>
 {
+  public static final PositionFilter instance = new PositionFilter();
+
   /**
    * {@inheritDoc}
    */
@@ -42,7 +44,7 @@ public class PositionFilter
       StringBuffer buffer = new StringBuffer();
       if(_result != null){
         for(Position result : _result){
-          String lineColumn = lineColumn = VimUtils.translateLineColumn(result);
+          String lineColumn = VimUtils.translateLineColumn(result);
 
           if(lineColumn != null){
             if(buffer.length() > 0){

@@ -29,6 +29,8 @@ import org.eclim.command.OutputFilter;
 public class DocSearchFilter
   implements OutputFilter<List<String>>
 {
+  public static final DocSearchFilter instance = new DocSearchFilter();
+
   /**
    * {@inheritDoc}
    */

@@ -33,6 +33,8 @@ import org.eclim.util.vim.VimUtils;
 public class LocationFilter
   implements OutputFilter<List<Location>>
 {
+  public static final LocationFilter instance = new LocationFilter();
+
   /**
    * {@inheritDoc}
    */

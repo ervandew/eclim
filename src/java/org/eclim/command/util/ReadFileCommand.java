@@ -48,7 +48,8 @@ public class ReadFileCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     InputStream in = null;
     OutputStream out = null;
@@ -86,8 +87,6 @@ public class ReadFileCommand
       }
 
       return path;
-    }catch(Exception e){
-      return e;
     }finally{
       IOUtils.closeQuietly(in);
       IOUtils.closeQuietly(out);

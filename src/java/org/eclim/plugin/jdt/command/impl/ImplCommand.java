@@ -64,43 +64,41 @@ public class ImplCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String superTypeName = _commandLine.getValue(Options.SUPERTYPE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String superTypeName = _commandLine.getValue(Options.SUPERTYPE_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
-      IType type = null;
-      if(superTypeName != null){
-        type = src.getJavaProject().findType(
-            _commandLine.getValue(Options.TYPE_OPTION).replace('$', '.'));
-        IType superType = type.getJavaProject().findType(superTypeName);
+    IType type = null;
+    if(superTypeName != null){
+      type = src.getJavaProject().findType(
+          _commandLine.getValue(Options.TYPE_OPTION).replace('$', '.'));
+      IType superType = type.getJavaProject().findType(superTypeName);
 
-        String methodsOption = _commandLine.getValue(Options.METHOD_OPTION);
+      String methodsOption = _commandLine.getValue(Options.METHOD_OPTION);
 
-        String[] methods = null;
-        if(methodsOption != null){
-          methods = StringUtils.split(methodsOption, "|");
-        }else{
-          methods = getUnimplementedMethods(type, superType);
-        }
-
-        for(int ii = 0; ii < methods.length; ii++){
-          executeInsertMethod(_commandLine, src, type, superType, methods[ii]);
-        }
+      String[] methods = null;
+      if(methodsOption != null){
+        methods = StringUtils.split(methodsOption, "|");
+      }else{
+        methods = getUnimplementedMethods(type, superType);
       }
 
-      if(type == null){
-        int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
-        type = TypeUtils.getType(src, offset);
+      for(int ii = 0; ii < methods.length; ii++){
+        executeInsertMethod(_commandLine, src, type, superType, methods[ii]);
       }
-      return filter(_commandLine, executeGetMethods(_commandLine, type));
-    }catch(Exception e){
-      return e;
     }
+
+    if(type == null){
+      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+      type = TypeUtils.getType(src, offset);
+    }
+    ImplResult result = executeGetMethods(_commandLine, type);
+    return ImplFilter.instance.filter(_commandLine, result);
   }
 
   /**

@@ -49,38 +49,35 @@ public class ImportCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     ArrayList<ImportResult> results = new ArrayList<ImportResult>();
-    try{
-      String project = _commandLine.getValue(Options.NAME_OPTION);
-      String pat = _commandLine.getValue(Options.PATTERN_OPTION);
+    String project = _commandLine.getValue(Options.NAME_OPTION);
+    String pat = _commandLine.getValue(Options.PATTERN_OPTION);
 
-      SearchPattern pattern =
-        SearchPattern.createPattern(pat,
-            IJavaSearchConstants.TYPE,
-            IJavaSearchConstants.DECLARATIONS,
-            SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-      IJavaProject javaProject = JavaUtils.getJavaProject(project);
-      IJavaSearchScope scope =
-        SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
-      List<SearchMatch> matches = super.search(pattern, scope);
-      for(SearchMatch match : matches){
-        if(match.getAccuracy() == SearchMatch.A_ACCURATE){
-          SearchResult result = (SearchResult)createSearchResult(match);
-          IType element = (IType)match.getElement();
-          if(Flags.isPublic(element.getFlags())){
-            ImportResult ir = new ImportResult(
-                  result.getElement(), element.getElementType());
-            if(!results.contains(ir)){
-              results.add(ir);
-            }
+    SearchPattern pattern =
+      SearchPattern.createPattern(pat,
+          IJavaSearchConstants.TYPE,
+          IJavaSearchConstants.DECLARATIONS,
+          SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+    IJavaProject javaProject = JavaUtils.getJavaProject(project);
+    IJavaSearchScope scope =
+      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
+    List<SearchMatch> matches = super.search(pattern, scope);
+    for(SearchMatch match : matches){
+      if(match.getAccuracy() == SearchMatch.A_ACCURATE){
+        SearchResult result = createSearchResult(match);
+        IType element = (IType)match.getElement();
+        if(Flags.isPublic(element.getFlags())){
+          ImportResult ir = new ImportResult(
+                result.getElement(), element.getElementType());
+          if(!results.contains(ir)){
+            results.add(ir);
           }
         }
       }
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+    return ImportFilter.instance.filter(_commandLine, results);
   }
 }

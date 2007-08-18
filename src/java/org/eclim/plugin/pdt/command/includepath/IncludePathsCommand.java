@@ -45,37 +45,34 @@ public class IncludePathsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      IProject project = ProjectUtils.getProject(projectName);
-      PHPProjectOptions options = PHPProjectOptions.forProject(project);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
+    PHPProjectOptions options = PHPProjectOptions.forProject(project);
 
-      ArrayList<String> paths = new ArrayList<String>();
-      if (options != null){
-        IIncludePathEntry[] entries = options.readRawIncludePath();
-        for(IIncludePathEntry entry : entries){
-          if (entry.getEntryKind() == IIncludePathEntry.IPE_VARIABLE){
-            IPath path =
-              PHPProjectOptions.getResolvedVariablePath(entry.getPath());
-            paths.add(path.toOSString());
-          }else if (entry.getEntryKind() == IIncludePathEntry.IPE_PROJECT){
-            paths.add(entry.getResource().getLocation().toOSString());
-          /*}else if (entry.getEntryKind() == IIncludePathEntry.IPE_CONTAINER){
-            IIncludePathContainer container =
-              PHPProjectOptions.getIncludePathContainer(entry.getPath(), project)
-            // still need resolution... the following probably won't work.
-            paths.add(container.getPath().toOSString());*/
-          }else{
-            paths.add(entry.getPath().toOSString());
-          }
+    ArrayList<String> paths = new ArrayList<String>();
+    if (options != null){
+      IIncludePathEntry[] entries = options.readRawIncludePath();
+      for(IIncludePathEntry entry : entries){
+        if (entry.getEntryKind() == IIncludePathEntry.IPE_VARIABLE){
+          IPath path =
+            PHPProjectOptions.getResolvedVariablePath(entry.getPath());
+          paths.add(path.toOSString());
+        }else if (entry.getEntryKind() == IIncludePathEntry.IPE_PROJECT){
+          paths.add(entry.getResource().getLocation().toOSString());
+        /*}else if (entry.getEntryKind() == IIncludePathEntry.IPE_CONTAINER){
+          IIncludePathContainer container =
+            PHPProjectOptions.getIncludePathContainer(entry.getPath(), project)
+          // still need resolution... the following probably won't work.
+          paths.add(container.getPath().toOSString());*/
+        }else{
+          paths.add(entry.getPath().toOSString());
         }
       }
-
-      return StringUtils.join(paths.iterator(), "\n");
-    }catch(Exception e){
-      return e;
     }
+
+    return StringUtils.join(paths.iterator(), "\n");
   }
 }

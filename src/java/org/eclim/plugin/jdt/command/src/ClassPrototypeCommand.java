@@ -18,7 +18,6 @@ package org.eclim.plugin.jdt.command.src;
 import java.io.File;
 import java.io.FileWriter;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -64,38 +63,35 @@ public class ClassPrototypeCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String className = _commandLine.getValue(Options.CLASSNAME_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String className = _commandLine.getValue(Options.CLASSNAME_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      File file = new File(
-        SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
-      if(!file.exists()){
-        new File(FileUtils.getFullPath(file.getAbsolutePath())).mkdirs();
-        file.deleteOnExit();
-        FileWriter out = null;
-        try{
-          IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+    File file = new File(
+      SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
+    if(!file.exists()){
+      new File(FileUtils.getFullPath(file.getAbsolutePath())).mkdirs();
+      file.deleteOnExit();
+      FileWriter out = null;
+      try{
+        IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
 
-          IType type = javaProject.findType(className);
-          if(type == null){
-            throw new IllegalArgumentException(
-                Services.getMessage("type.not.found", projectName, className));
-          }
-
-          String prototype = prototype(type);
-          out = new FileWriter(file);
-          out.write(prototype);
-        }finally{
-          IOUtils.closeQuietly(out);
+        IType type = javaProject.findType(className);
+        if(type == null){
+          throw new IllegalArgumentException(
+              Services.getMessage("type.not.found", projectName, className));
         }
+
+        String prototype = prototype(type);
+        out = new FileWriter(file);
+        out.write(prototype);
+      }finally{
+        IOUtils.closeQuietly(out);
       }
-      return file.getAbsolutePath();
-    }catch(Exception e){
-      return e;
     }
+    return file.getAbsolutePath();
   }
 
   /**

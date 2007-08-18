@@ -51,36 +51,34 @@ public class CodeCorrectCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      int line = _commandLine.getIntValue(Options.LINE_OPTION);
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    int line = _commandLine.getIntValue(Options.LINE_OPTION);
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      // JavaUtils refreshes the file when getting it.
-      ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+    // JavaUtils refreshes the file when getting it.
+    ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 
-      IProblem problem = getProblem(src, line, offset);
-      if(problem == null){
-        return Services.getMessage("error.not.found", file, line);
-      }
-
-      List<IJavaCompletionProposal> proposals = getProposals(src, problem);
-      if(_commandLine.hasOption(Options.APPLY_OPTION)){
-        IJavaCompletionProposal proposal = (IJavaCompletionProposal)
-          proposals.get(_commandLine.getIntValue(Options.APPLY_OPTION));
-
-        // not working for some reason (silently does nothing).
-        // probably because it's so heavily dependent on the ui.
-        //proposal.apply(JavaUtils.getDocument(src));
-        return proposal.toString();
-      }
-      return super.filter(_commandLine, getCorrections(proposals, problem));
-    }catch(Exception e){
-      return e;
+    IProblem problem = getProblem(src, line, offset);
+    if(problem == null){
+      return Services.getMessage("error.not.found", file, line);
     }
+
+    List<IJavaCompletionProposal> proposals = getProposals(src, problem);
+    if(_commandLine.hasOption(Options.APPLY_OPTION)){
+      IJavaCompletionProposal proposal = (IJavaCompletionProposal)
+        proposals.get(_commandLine.getIntValue(Options.APPLY_OPTION));
+
+      // not working for some reason (silently does nothing).
+      // probably because it's so heavily dependent on the ui.
+      //proposal.apply(JavaUtils.getDocument(src));
+      return proposal.toString();
+    }
+    List<CodeCorrectResult> corrections = getCorrections(proposals, problem);
+    return CodeCorrectFilter.instance.filter(_commandLine, corrections);
   }
 
   /**

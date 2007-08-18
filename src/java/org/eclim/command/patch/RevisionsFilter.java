@@ -29,6 +29,8 @@ import org.eclim.command.OutputFilter;
 public class RevisionsFilter
   implements OutputFilter<List<String>>
 {
+  public static final RevisionsFilter instance = new RevisionsFilter();
+
   /**
    * {@inheritDoc}
    */

@@ -45,29 +45,26 @@ public class TargetsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     ArrayList<String> results = new ArrayList<String>();
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      AntModel model = (AntModel)AntUtils.getAntModel(project, file);
-      AntProjectNode projectNode = model.getProjectNode(true);
-      Project antProject = projectNode.getProject();
+    AntModel model = (AntModel)AntUtils.getAntModel(project, file);
+    AntProjectNode projectNode = model.getProjectNode(true);
+    Project antProject = projectNode.getProject();
 
-      Map targets = antProject.getTargets();
-      for (Iterator ii = targets.keySet().iterator(); ii.hasNext();){
-        String target = (String)ii.next();
-        if(target.trim().length() > 0){
-          results.add(target);
-        }
+    Map targets = antProject.getTargets();
+    for (Iterator ii = targets.keySet().iterator(); ii.hasNext();){
+      String target = (String)ii.next();
+      if(target.trim().length() > 0){
+        results.add(target);
       }
-
-      Collections.sort(results, Collator.getInstance());
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+
+    Collections.sort(results, Collator.getInstance());
+    return TargetsFilter.instance.filter(_commandLine, results);
   }
 }

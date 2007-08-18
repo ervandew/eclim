@@ -70,60 +70,57 @@ public class PropertiesCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String methods = _commandLine.getValue(Options.TYPE_OPTION);
-      String[] properties = StringUtils.split(
-          _commandLine.getValue(Options.PROPERTIES_OPTION), ',');
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
-      boolean indexed = _commandLine.hasOption(Options.INDEXED_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String methods = _commandLine.getValue(Options.TYPE_OPTION);
+    String[] properties = StringUtils.split(
+        _commandLine.getValue(Options.PROPERTIES_OPTION), ',');
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    boolean indexed = _commandLine.hasOption(Options.INDEXED_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-      IType type = TypeUtils.getType(src, offset);
-      List fields = Arrays.asList(type.getFields());
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    IType type = TypeUtils.getType(src, offset);
+    List fields = Arrays.asList(type.getFields());
 
-      IJavaElement sibling = null;
-      // insert in reverse order since eclipse IType only has an insert before,
-      // no insert after.
-      for(int ii = properties.length - 1; ii >= 0; ii--){
-        IField field = type.getField(properties[ii]);
-        if(field != null){
-          boolean array = false;
-          if(Signature.getArrayCount(field.getTypeSignature()) > 0){
-            array = true;
+    IJavaElement sibling = null;
+    // insert in reverse order since eclipse IType only has an insert before,
+    // no insert after.
+    for(int ii = properties.length - 1; ii >= 0; ii--){
+      IField field = type.getField(properties[ii]);
+      if(field != null){
+        boolean array = false;
+        if(Signature.getArrayCount(field.getTypeSignature()) > 0){
+          array = true;
+        }
+
+        if(methods.indexOf(SETTER) != -1){
+          // index setter
+          if(array && indexed){
+            sibling = getSibling(type, fields, field, sibling, TYPE_SET_INDEX);
+            sibling = insertSetter(src, type, sibling, field, true);
           }
+          // setter
+          sibling = getSibling(type, fields, field, sibling, TYPE_SET);
+          sibling = insertSetter(src, type, sibling, field, false);
+        }
 
-          if(methods.indexOf(SETTER) != -1){
-            // index setter
-            if(array && indexed){
-              sibling = getSibling(type, fields, field, sibling, TYPE_SET_INDEX);
-              sibling = insertSetter(src, type, sibling, field, true);
-            }
-            // setter
-            sibling = getSibling(type, fields, field, sibling, TYPE_SET);
-            sibling = insertSetter(src, type, sibling, field, false);
+        if(methods.indexOf(GETTER) != -1){
+          // index getter
+          if(array && indexed){
+            sibling = getSibling(type, fields, field, sibling, TYPE_GET_INDEX);
+            sibling = insertGetter(src, type, sibling, field, true);
           }
-
-          if(methods.indexOf(GETTER) != -1){
-            // index getter
-            if(array && indexed){
-              sibling = getSibling(type, fields, field, sibling, TYPE_GET_INDEX);
-              sibling = insertGetter(src, type, sibling, field, true);
-            }
-            // getter
-            sibling = getSibling(type, fields, field, sibling, TYPE_GET);
-            sibling = insertGetter(src, type, sibling, field, false);
-          }
+          // getter
+          sibling = getSibling(type, fields, field, sibling, TYPE_GET);
+          sibling = insertGetter(src, type, sibling, field, false);
         }
       }
-
-      return StringUtils.EMPTY;
-    }catch(Exception e){
-      return e;
     }
+
+    return StringUtils.EMPTY;
   }
 
   /**

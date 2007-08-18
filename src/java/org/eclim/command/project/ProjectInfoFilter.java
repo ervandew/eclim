@@ -33,6 +33,8 @@ import org.eclim.preference.OptionInstance;
 public class ProjectInfoFilter
   implements OutputFilter<List>
 {
+  public static final ProjectInfoFilter instance = new ProjectInfoFilter();
+
   private final SettingsFilter settingsFilter = new SettingsFilter();
 
   /**

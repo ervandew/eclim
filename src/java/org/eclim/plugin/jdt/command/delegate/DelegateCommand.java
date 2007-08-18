@@ -59,38 +59,35 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
-      if(offset != -1){
-        IJavaElement element = src.getElementAt(offset);
-        if(element.getElementType() != IJavaElement.FIELD){
-          return Services.getMessage("not.a.field");
-        }
-
-        field = (IField)element;
-
-        String signature = field.getTypeSignature();
-        delegateType = TypeUtils.findUnqualifiedType(
-            src, Signature.getSignatureSimpleName(signature));
-
-        if(delegateType == null){
-          return Services.getMessage("type.not.found",
-              src.getJavaProject().getElementName(),
-              Signature.getSignatureSimpleName(signature)) + "  " +
-            Services.getMessage("check.import");
-        }
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    if(offset != -1){
+      IJavaElement element = src.getElementAt(offset);
+      if(element.getElementType() != IJavaElement.FIELD){
+        return Services.getMessage("not.a.field");
       }
 
-      return super.execute(_commandLine);
-    }catch(Exception e){
-      return e;
+      field = (IField)element;
+
+      String signature = field.getTypeSignature();
+      delegateType = TypeUtils.findUnqualifiedType(
+          src, Signature.getSignatureSimpleName(signature));
+
+      if(delegateType == null){
+        return Services.getMessage("type.not.found",
+            src.getJavaProject().getElementName(),
+            Signature.getSignatureSimpleName(signature)) + "  " +
+          Services.getMessage("check.import");
+      }
     }
+
+    return super.execute(_commandLine);
   }
 
   /**

@@ -87,17 +87,26 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    Object result = executeSearch(_commandLine);
-    if(result instanceof Throwable){
-      return result;
+    List<SearchMatch> matches = executeSearch(_commandLine);
+
+    ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+    for(SearchMatch match : matches){
+      if (match.getElement() != null){
+        int elementType = ((IJavaElement)match.getElement()).getElementType();
+        if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+        {
+          SearchResult result = createSearchResult(match);
+          if(result != null){
+            results.add(result);
+          }
+        }
+      }
     }
-    try{
-      return filter(_commandLine, result);
-    }catch(Exception e){
-      return e;
-    }
+    return SearchFilter.instance.filter(_commandLine, results);
   }
 
   /**
@@ -106,90 +115,71 @@ public class SearchCommand
    * @param _commandLine The command line for the search.
    * @return The search results.
    */
-  public Object executeSearch (CommandLine _commandLine)
+  public List<SearchMatch> executeSearch (CommandLine _commandLine)
+    throws Exception
   {
-    ArrayList<Object> results = new ArrayList<Object>();
-    try{
-      int context = -1;
-      if(_commandLine.hasOption(Options.CONTEXT_OPTION)){
-        context = getContext(_commandLine.getValue(Options.CONTEXT_OPTION));
-      }
-      String project = _commandLine.getValue(Options.NAME_OPTION);
-      String scope = _commandLine.getValue(Options.SCOPE_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String offset = _commandLine.getValue(Options.OFFSET_OPTION);
-      String length = _commandLine.getValue(Options.LENGTH_OPTION);
-      String pat = _commandLine.getValue(Options.PATTERN_OPTION);
-
-      SearchPattern pattern = null;
-
-      // element search
-      if(file != null && offset != null && length != null){
-        Position position = new Position(
-            file, Integer.parseInt(offset), Integer.parseInt(length));
-        IJavaElement element = getElement(project, position);
-        if(element != null){
-          // user requested a contextual search.
-          if(context == -1){
-            context = getElementContextualContext(element);
-          }
-          pattern = SearchPattern.createPattern(element, context);
-        }
-
-      // pattern search
-      }else if(pat != null){
-        if(context == -1){
-          context = IJavaSearchConstants.DECLARATIONS;
-        }
-        int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
-
-        int matchType = SearchPattern.R_EXACT_MATCH;
-
-        // wild card character supplied, use pattern matching.
-        if(pat.indexOf('*') != -1 || pat.indexOf('?') != -1){
-          matchType = SearchPattern.R_PATTERN_MATCH;
-
-        // all upper case, add camel case support.
-        }else if(pat.equals(pat.toUpperCase())){
-          matchType =
-            SearchPattern.R_EXACT_MATCH | SearchPattern.R_CAMELCASE_MATCH;
-        }
-
-        pattern = SearchPattern.createPattern(pat, type, context, matchType);
-
-      // bad search request
-      }else{
-        throw new IllegalArgumentException(
-            Services.getMessage("java_search.indeterminate"));
-      }
-
-      if(pattern != null){
-        IJavaProject javaProject = JavaUtils.getJavaProject(project);
-        IType type = null;
-        if(file.endsWith(".java")){
-          type = ((CompilationUnit)JavaUtils.getCompilationUnit(project, file))
-            .getTypeRoot().findPrimaryType();
-        }
-        List<SearchMatch> matches =
-          search(pattern, getScope(scope, javaProject, type));
-        for(SearchMatch match : matches){
-          if (match.getElement() != null){
-            int elementType = ((IJavaElement)match.getElement()).getElementType();
-            if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-                elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
-            {
-              Object result = createSearchResult(match);
-              if(result != null){
-                results.add(result);
-              }
-            }
-          }
-        }
-      }
-    }catch(Exception e){
-      return e;
+    int context = -1;
+    if(_commandLine.hasOption(Options.CONTEXT_OPTION)){
+      context = getContext(_commandLine.getValue(Options.CONTEXT_OPTION));
     }
-    return results;
+    String project = _commandLine.getValue(Options.NAME_OPTION);
+    String scope = _commandLine.getValue(Options.SCOPE_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String offset = _commandLine.getValue(Options.OFFSET_OPTION);
+    String length = _commandLine.getValue(Options.LENGTH_OPTION);
+    String pat = _commandLine.getValue(Options.PATTERN_OPTION);
+
+    SearchPattern pattern = null;
+
+    // element search
+    if(file != null && offset != null && length != null){
+      Position position = new Position(
+          file, Integer.parseInt(offset), Integer.parseInt(length));
+      IJavaElement element = getElement(project, position);
+      if(element != null){
+        // user requested a contextual search.
+        if(context == -1){
+          context = getElementContextualContext(element);
+        }
+        pattern = SearchPattern.createPattern(element, context);
+      }
+
+    // pattern search
+    }else if(pat != null){
+      if(context == -1){
+        context = IJavaSearchConstants.DECLARATIONS;
+      }
+      int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
+
+      int matchType = SearchPattern.R_EXACT_MATCH;
+
+      // wild card character supplied, use pattern matching.
+      if(pat.indexOf('*') != -1 || pat.indexOf('?') != -1){
+        matchType = SearchPattern.R_PATTERN_MATCH;
+
+      // all upper case, add camel case support.
+      }else if(pat.equals(pat.toUpperCase())){
+        matchType =
+          SearchPattern.R_EXACT_MATCH | SearchPattern.R_CAMELCASE_MATCH;
+      }
+
+      pattern = SearchPattern.createPattern(pat, type, context, matchType);
+
+    // bad search request
+    }else{
+      throw new IllegalArgumentException(
+          Services.getMessage("java_search.indeterminate"));
+    }
+
+    IJavaProject javaProject = JavaUtils.getJavaProject(project);
+    IType type = null;
+    if(file.endsWith(".java")){
+      type = ((CompilationUnit)JavaUtils.getCompilationUnit(project, file))
+        .getTypeRoot().findPrimaryType();
+    }
+    List<SearchMatch> matches =
+      search(pattern, getScope(scope, javaProject, type));
+    return matches;
   }
 
   /**
@@ -239,7 +229,7 @@ public class SearchCommand
    * @param _match The SearchMatch.
    * @return The SearchResult.
    */
-  protected Object createSearchResult (SearchMatch _match)
+  protected SearchResult createSearchResult (SearchMatch _match)
     throws Exception
   {
     IJavaElement element = (IJavaElement)_match.getElement();

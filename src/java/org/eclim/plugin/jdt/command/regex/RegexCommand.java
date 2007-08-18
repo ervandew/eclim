@@ -49,15 +49,12 @@ public class RegexCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String type = _commandLine.getValue(Options.TYPE_OPTION);
-      return filter(_commandLine, evaluate(file, type));
-    }catch(Exception e){
-      return e;
-    }
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String type = _commandLine.getValue(Options.TYPE_OPTION);
+    return RegexFilter.instance.filter(_commandLine, evaluate(file, type));
   }
 
   /**

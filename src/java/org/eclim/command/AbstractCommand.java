@@ -15,8 +15,6 @@
  */
 package org.eclim.command;
 
-import java.util.Map;
-
 import org.eclim.preference.Preferences;
 
 /**
@@ -28,54 +26,6 @@ import org.eclim.preference.Preferences;
 public abstract class AbstractCommand
   implements Command
 {
-  private static final String VIM_FILTER = "vim";
-
-  private Map filters;
-
-  /**
-   * {@inheritDoc}
-   */
-  public OutputFilter getFilter (String _name)
-  {
-    if(filters != null){
-      return (OutputFilter)filters.get(_name);
-    }
-    return null;
-  }
-
-  /**
-   * Set filters.
-   * <p/>
-   * Dependency injection.
-   *
-   * @param _filters the value to set.
-   */
-  public void setFilters (Map _filters)
-  {
-    this.filters = _filters;
-  }
-
-  /**
-   * If a filter name was provided in the CommandLine, then an attempt will be
-   * made to locate the filter and run the result through it.
-   * <p/>
-   * When no filter name is supplied in the command line, "vim" will be used as
-   * the default.
-   *
-   * @param _result The pre-filtered result.
-   * @return The post-filtered result.
-   */
-  protected Object filter (CommandLine _commandLine, Object _result)
-    throws Exception
-  {
-    String filterName = VIM_FILTER;
-    OutputFilter filter = getFilter(filterName);
-    if(filter != null){
-      return filter.filter(_commandLine, _result);
-    }
-    return _result;
-  }
-
   /**
    * Gets the preferences.
    *

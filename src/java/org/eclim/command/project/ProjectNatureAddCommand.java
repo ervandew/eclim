@@ -48,31 +48,28 @@ public class ProjectNatureAddCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
-      IProject project = ProjectUtils.getProject(name);
-      String[] aliases = StringUtils.split(
-          _commandLine.getValue(Options.NATURE_OPTION), ',');
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(name);
+    String[] aliases = StringUtils.split(
+        _commandLine.getValue(Options.NATURE_OPTION), ',');
 
-      IProjectDescription desc = project.getDescription();
-      String[] natureIds = desc.getNatureIds();
-      ArrayList<String> modified = new ArrayList<String>();
-      CollectionUtils.addAll(modified, natureIds);
-      for(String alias : aliases){
-        String natureId = ProjectNatureFactory.getNatureForAlias(alias);
-        if (natureId != null && !modified.contains(natureId)){
-          modified.add(natureId);
-        }
+    IProjectDescription desc = project.getDescription();
+    String[] natureIds = desc.getNatureIds();
+    ArrayList<String> modified = new ArrayList<String>();
+    CollectionUtils.addAll(modified, natureIds);
+    for(String alias : aliases){
+      String natureId = ProjectNatureFactory.getNatureForAlias(alias);
+      if (natureId != null && !modified.contains(natureId)){
+        modified.add(natureId);
       }
-
-      desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
-      project.setDescription(desc, new NullProgressMonitor());
-
-      return Services.getMessage("project.nature.added");
-    }catch(Throwable t){
-      return t;
     }
+
+    desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
+    project.setDescription(desc, new NullProgressMonitor());
+
+    return Services.getMessage("project.nature.added");
   }
 }

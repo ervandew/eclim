@@ -32,12 +32,9 @@ public class WorkspaceCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      return ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-    }catch(Exception e){
-      return e;
-    }
+    return ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString();
   }
 }

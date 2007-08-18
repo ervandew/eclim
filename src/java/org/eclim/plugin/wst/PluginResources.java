@@ -34,6 +34,32 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
+   * @see AbstractPluginResources#initialize(String)
+   */
+  @Override
+  public void initialize (String _name)
+  {
+    super.initialize(_name);
+    registerCommand("css_complete",
+        org.eclim.plugin.wst.command.complete.CssCodeCompleteCommand.class);
+    registerCommand("html_complete",
+        org.eclim.plugin.wst.command.complete.HtmlCodeCompleteCommand.class);
+    registerCommand("javascript_complete",
+        org.eclim.plugin.wst.command.complete.JavascriptCodeCompleteCommand.class);
+    registerCommand("xml_complete",
+        org.eclim.plugin.wst.command.complete.XmlCodeCompleteCommand.class);
+    registerCommand("dtd_validate",
+        org.eclim.plugin.wst.command.validate.DtdValidateCommand.class);
+    registerCommand("html_validate",
+        org.eclim.plugin.wst.command.validate.HtmlValidateCommand.class);
+    registerCommand("wsdl_validate",
+        org.eclim.plugin.wst.command.validate.WsdlValidateCommand.class);
+    registerCommand("xsd_validate",
+        org.eclim.plugin.wst.command.validate.XsdValidateCommand.class);
+  }
+
+  /**
+   * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
   protected String getBundleBaseName ()

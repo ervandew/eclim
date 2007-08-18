@@ -31,6 +31,8 @@ import org.eclim.util.vim.VimUtils;
 public class SearchFilter
   implements OutputFilter<List<SearchResult>>
 {
+  public static final SearchFilter instance = new SearchFilter();
+
   /**
    * {@inheritDoc}
    */

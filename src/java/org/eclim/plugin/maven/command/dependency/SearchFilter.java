@@ -47,6 +47,8 @@ import org.w3c.dom.NodeList;
 public class SearchFilter
   implements OutputFilter<List<Dependency>>
 {
+  public static final SearchFilter instance = new SearchFilter();
+
   private static final Logger logger = Logger.getLogger(SearchFilter.class);
 
   private static final String IVY = "ivy";

@@ -30,6 +30,8 @@ import org.eclim.command.OutputFilter;
 public class CodeCompleteFilter
   implements OutputFilter<List<CodeCompleteResult>>
 {
+  public static final CodeCompleteFilter instance = new CodeCompleteFilter();
+
   private static final String DELIMETER = "|";
 
   /**

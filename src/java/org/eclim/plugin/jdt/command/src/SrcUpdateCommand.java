@@ -24,6 +24,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.ProjectUtils;
@@ -46,47 +48,44 @@ public class SrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      // only refresh the file.
-      if(!_commandLine.hasOption(Options.VALIDATE_OPTION)){
-        // getting the file will refresh it.
-        ProjectUtils.getFile(projectName, file);
+    // only refresh the file.
+    if(!_commandLine.hasOption(Options.VALIDATE_OPTION)){
+      // getting the file will refresh it.
+      ProjectUtils.getFile(projectName, file);
 
-      // validate the src file.
-      }else{
-        // JavaUtils refreshes the file when getting it.
-        ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+    // validate the src file.
+    }else{
+      // JavaUtils refreshes the file when getting it.
+      ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 
-        IProblem[] problems = JavaUtils.getProblems(src);
+      IProblem[] problems = JavaUtils.getProblems(src);
 
-        ArrayList<Error> errors = new ArrayList<Error>();
-        String filename = src.getResource().getRawLocation().toOSString();
-        FileOffsets offsets = FileOffsets.compile(filename);
-        for(int ii = 0; ii < problems.length; ii++){
-          int[] lineColumn =
-            offsets.offsetToLineColumn(problems[ii].getSourceStart());
+      ArrayList<Error> errors = new ArrayList<Error>();
+      String filename = src.getResource().getRawLocation().toOSString();
+      FileOffsets offsets = FileOffsets.compile(filename);
+      for(int ii = 0; ii < problems.length; ii++){
+        int[] lineColumn =
+          offsets.offsetToLineColumn(problems[ii].getSourceStart());
 
-          // one day vim might support ability to mark the offending text.
-          /*int[] endLineColumn =
-            offsets.offsetToLineColumn(problems[ii].getSourceEnd());*/
+        // one day vim might support ability to mark the offending text.
+        /*int[] endLineColumn =
+          offsets.offsetToLineColumn(problems[ii].getSourceEnd());*/
 
-          errors.add(new Error(
-              problems[ii].getMessage(),
-              filename,
-              lineColumn[0],
-              lineColumn[1],
-              problems[ii].isWarning()));
-        }
-
-        return super.filter(_commandLine, errors);
+        errors.add(new Error(
+            problems[ii].getMessage(),
+            filename,
+            lineColumn[0],
+            lineColumn[1],
+            problems[ii].isWarning()));
       }
-    }catch(Exception e){
-      return e;
+
+      return ErrorFilter.instance.filter(_commandLine, errors);
     }
     return StringUtils.EMPTY;
   }

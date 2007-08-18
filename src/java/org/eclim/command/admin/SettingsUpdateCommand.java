@@ -45,23 +45,23 @@ public class SettingsUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
+    String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
+
+    Properties properties = new Properties();
+    FileInputStream in = null;
+    File file = new File(settings);
     try{
-      String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
+      in = new FileInputStream(file);
+      properties.load(in);
 
-      Properties properties = new Properties();
-      FileInputStream in = null;
-      File file = new File(settings);
-      try{
-        in = new FileInputStream(file);
-        properties.load(in);
-
-        for(Object key : properties.keySet()){
-          String name = (String)key;
-          String value = properties.getProperty(name);
-          getPreferences().setOption(name, value);
-        }
+      for(Object key : properties.keySet()){
+        String name = (String)key;
+        String value = properties.getProperty(name);
+        getPreferences().setOption(name, value);
+      }
     }finally{
       IOUtils.closeQuietly(in);
       try{
@@ -71,9 +71,6 @@ public class SettingsUpdateCommand
       }
     }
 
-      return Services.getMessage("settings.updated");
-    }catch(Throwable t){
-      return t;
-    }
+    return Services.getMessage("settings.updated");
   }
 }

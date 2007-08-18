@@ -22,6 +22,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.plugin.ant.util.AntUtils;
 
 import org.eclim.util.ProjectUtils;
@@ -45,36 +47,33 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      List<Error> errors = super.validate(project, file, false, null);
+    List<Error> errors = super.validate(project, file, false, null);
 
-      ProblemRequestor requestor = new ProblemRequestor();
-      IAntModel model = AntUtils.getAntModel(project, file, requestor);
-      model.reconcile();
+    ProblemRequestor requestor = new ProblemRequestor();
+    IAntModel model = AntUtils.getAntModel(project, file, requestor);
+    model.reconcile();
 
-      String filepath = FileUtils.concat(ProjectUtils.getPath(project), file);
+    String filepath = FileUtils.concat(ProjectUtils.getPath(project), file);
 
-      List<IProblem> problems = requestor.getProblems();
-      FileOffsets offsets = FileOffsets.compile(filepath);
-      for (IProblem problem : problems){
-        int[] lineColumn = offsets.offsetToLineColumn(problem.getOffset());
-        Error error = new Error(
-          problem.getUnmodifiedMessage(), filepath,
-          lineColumn[0], lineColumn[1],
-          problem.isWarning());
-        if(!errors.contains(error)){
-          errors.add(error);
-        }
+    List<IProblem> problems = requestor.getProblems();
+    FileOffsets offsets = FileOffsets.compile(filepath);
+    for (IProblem problem : problems){
+      int[] lineColumn = offsets.offsetToLineColumn(problem.getOffset());
+      Error error = new Error(
+        problem.getUnmodifiedMessage(), filepath,
+        lineColumn[0], lineColumn[1],
+        problem.isWarning());
+      if(!errors.contains(error)){
+        errors.add(error);
       }
-      return filter(_commandLine, errors);
-    }catch(Exception e){
-      return e;
     }
+    return ErrorFilter.instance.filter(_commandLine, errors);
   }
 
   /**

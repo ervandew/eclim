@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.pydev;
 
-import java.net.URL;
-
 import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.pydev.preference.OptionHandler;
@@ -43,12 +41,12 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String,URL)
+   * @see AbstractPluginResources#initialize(String)
    */
   @Override
-  public void initialize (String _name, URL _resource)
+  public void initialize (String _name)
   {
-    super.initialize(_name, _resource);
+    super.initialize(_name);
 
     Preferences.addOptionHandler("org.python.pydev", new OptionHandler());
     ProjectNatureFactory.addNature("python", "org.python.pydev.pythonNature");
@@ -59,6 +57,13 @@ public class PluginResources
       "PyDev org.python.pydev.PROJECT_SOURCE_PATH\n" +
       "PyDev org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH"
     );
+
+    registerCommand("python_src_update",
+        org.eclim.plugin.pydev.command.src.SrcUpdateCommand.class);
+    registerCommand("python_complete",
+        org.eclim.plugin.pydev.command.complete.CodeCompleteCommand.class);
+    registerCommand("python_find_definition",
+        org.eclim.plugin.pydev.command.definition.FindDefinitionCommand.class);
   }
 
   /**

@@ -37,16 +37,13 @@ public class ProjectDeleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      ProjectManagement.delete(ProjectUtils.getProject(name), _commandLine);
+    ProjectManagement.delete(ProjectUtils.getProject(name), _commandLine);
 
-      return Services.getMessage("project.deleted", name);
-    }catch(Throwable t){
-      return t;
-    }
+    return Services.getMessage("project.deleted", name);
   }
 }

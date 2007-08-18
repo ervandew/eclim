@@ -118,9 +118,9 @@ public class JavaProjectManager
     // ivy.xml, etc updated.
     if(buildfile != null){
       String filename = FileUtils.getBaseName(buildfile);
-      Parser parser = (Parser)Services.getService(filename, Parser.class);
-      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
-      errors = setClasspath(javaProject, entries, dotclasspath);
+//      Parser parser = (Parser)Services.getService(filename, Parser.class);
+//      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+//      errors = setClasspath(javaProject, entries, dotclasspath);
 
     // .classpath updated.
     }else{

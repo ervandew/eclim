@@ -29,6 +29,8 @@ import org.eclim.command.OutputFilter;
 public class CodeCorrectFilter
   implements OutputFilter<List<CodeCorrectResult>>
 {
+  public static final CodeCorrectFilter instance = new CodeCorrectFilter();
+
   /**
    * {@inheritDoc}
    */

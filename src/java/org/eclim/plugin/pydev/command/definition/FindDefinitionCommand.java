@@ -24,6 +24,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.LocationFilter;
+
 import org.eclim.plugin.pydev.util.PyDevUtils;
 
 import org.eclim.util.ProjectUtils;
@@ -59,40 +61,37 @@ public class FindDefinitionCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      IProject project = ProjectUtils.getProject(projectName);
+    IProject project = ProjectUtils.getProject(projectName);
 
-      IDocument document = ProjectUtils.getDocument(project, file);
-      PythonNature nature = PythonNature.getPythonNature(project);
-      PyEdit edit = PyDevUtils.getEditor(project, file);
-      PySelection selection =
-        new PySelection(document, offset);
+    IDocument document = ProjectUtils.getDocument(project, file);
+    PythonNature nature = PythonNature.getPythonNature(project);
+    PyEdit edit = PyDevUtils.getEditor(project, file);
+    PySelection selection =
+      new PySelection(document, offset);
 
-      PyRefactoring refactor = new PyRefactoring();
-      File theFile = new File(
-          FileUtils.concat(ProjectUtils.getPath(project), file));
-      RefactoringRequest request = new RefactoringRequest(
-          theFile, selection, null, nature, edit);
-      ItemPointer[] results = refactor.findDefinition(request);
-      List locations = new ArrayList();
-      if(results != null){
-        for (int ii = 0; ii < results.length; ii++){
-          locations.add(new Location(
-                results[ii].file.toString(),
-                results[ii].start.line + 1,
-                results[ii].start.column + 1));
-        }
+    PyRefactoring refactor = new PyRefactoring();
+    File theFile = new File(
+        FileUtils.concat(ProjectUtils.getPath(project), file));
+    RefactoringRequest request = new RefactoringRequest(
+        theFile, selection, null, nature, edit);
+    ItemPointer[] results = refactor.findDefinition(request);
+    List locations = new ArrayList();
+    if(results != null){
+      for (int ii = 0; ii < results.length; ii++){
+        locations.add(new Location(
+              results[ii].file.toString(),
+              results[ii].start.line + 1,
+              results[ii].start.column + 1));
       }
-
-      return super.filter(_commandLine, locations);
-    }catch(Exception e){
-      return e;
     }
+
+    return LocationFilter.instance.filter(_commandLine, locations);
   }
 }

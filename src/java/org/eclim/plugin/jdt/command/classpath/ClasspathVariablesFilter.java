@@ -32,6 +32,9 @@ import org.eclim.command.OutputFilter;
 public class ClasspathVariablesFilter
   implements OutputFilter<List<ClasspathVariable>>
 {
+  public static final ClasspathVariablesFilter instance =
+    new ClasspathVariablesFilter();
+
   /**
    * {@inheritDoc}
    */

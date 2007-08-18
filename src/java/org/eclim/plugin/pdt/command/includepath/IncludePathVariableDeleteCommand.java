@@ -45,35 +45,32 @@ public class IncludePathVariableDeleteCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
+    String name = _commandLine.getValue(Options.NAME_OPTION);
 
-      ArrayList<String> existing = new ArrayList<String>();
-      CollectionUtils.addAll(
-          existing, PHPProjectOptions.getIncludePathVariableNames());
-      if(!existing.contains(name)){
-        throw new RuntimeException(
-            Services.getMessage("variable.not.found", name));
-      }
-
-      existing.remove(name);
-      String[] names = (String[])existing.toArray(new String[existing.size()]);
-      IPath[] paths = new IPath[names.length];
-      for(int ii = 0; ii < names.length; ii++){
-        paths[ii] = PHPProjectOptions.getIncludePathVariable(names[ii]);
-      }
-
-      PHPProjectOptions.setIncludePathVariables(names, paths, null);
-
-      IScopeContext context = new InstanceScope();
-      IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
-      preferences.flush();
-
-      return Services.getMessage("includepath.variable.deleted", name);
-    }catch(Exception e){
-      return e;
+    ArrayList<String> existing = new ArrayList<String>();
+    CollectionUtils.addAll(
+        existing, PHPProjectOptions.getIncludePathVariableNames());
+    if(!existing.contains(name)){
+      throw new RuntimeException(
+          Services.getMessage("variable.not.found", name));
     }
+
+    existing.remove(name);
+    String[] names = (String[])existing.toArray(new String[existing.size()]);
+    IPath[] paths = new IPath[names.length];
+    for(int ii = 0; ii < names.length; ii++){
+      paths[ii] = PHPProjectOptions.getIncludePathVariable(names[ii]);
+    }
+
+    PHPProjectOptions.setIncludePathVariables(names, paths, null);
+
+    IScopeContext context = new InstanceScope();
+    IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
+    preferences.flush();
+
+    return Services.getMessage("includepath.variable.deleted", name);
   }
 }

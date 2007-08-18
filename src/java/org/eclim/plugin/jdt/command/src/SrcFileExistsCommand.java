@@ -35,7 +35,8 @@ public class SrcFileExistsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     try{
       String file = _commandLine.getValue(Options.FILE_OPTION);
@@ -43,14 +44,14 @@ public class SrcFileExistsCommand
 
       if(projectName != null){
         ICompilationUnit src = JavaUtils.findCompilationUnit(projectName, file);
-        return src != null && src.exists() ? Boolean.TRUE : Boolean.FALSE;
+        return src != null && src.exists() ?
+          Boolean.TRUE.toString() : Boolean.FALSE.toString();
       }
       ICompilationUnit src = JavaUtils.findCompilationUnit(file);
-      return src != null && src.exists() ? Boolean.TRUE : Boolean.FALSE;
+      return src != null && src.exists() ?
+        Boolean.TRUE.toString() : Boolean.FALSE.toString();
     }catch(IllegalArgumentException iae){
-      return Boolean.FALSE;
-    }catch(Exception e){
-      return e;
+      return Boolean.FALSE.toString();
     }
   }
 }

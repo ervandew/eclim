@@ -78,33 +78,30 @@ public class CommentCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-      IJavaElement element = src.getElementAt(offset);
-      // don't comment import declarations.
-      if(element.getElementType() == IJavaElement.IMPORT_DECLARATION){
-        return StringUtils.EMPTY;
-      }
-
-      CompilationUnit cu = ASTUtils.getCompilationUnit(src, true);
-      ASTNode node = ASTUtils.findNode(cu, offset, element);
-
-      if(node != null){
-        comment(src, node, element);
-      }
-
-      ASTUtils.commitCompilationUnit(src, cu);
-
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    IJavaElement element = src.getElementAt(offset);
+    // don't comment import declarations.
+    if(element.getElementType() == IJavaElement.IMPORT_DECLARATION){
       return StringUtils.EMPTY;
-    }catch(Exception e){
-      return e;
     }
+
+    CompilationUnit cu = ASTUtils.getCompilationUnit(src, true);
+    ASTNode node = ASTUtils.findNode(cu, offset, element);
+
+    if(node != null){
+      comment(src, node, element);
+    }
+
+    ASTUtils.commitCompilationUnit(src, cu);
+
+    return StringUtils.EMPTY;
   }
 
   /**

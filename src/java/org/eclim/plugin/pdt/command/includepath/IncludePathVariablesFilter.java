@@ -32,6 +32,9 @@ import org.eclim.command.OutputFilter;
 public class IncludePathVariablesFilter
   implements OutputFilter<List<IncludePathVariable>>
 {
+  public static final IncludePathVariablesFilter instance =
+    new IncludePathVariablesFilter();
+
   /**
    * {@inheritDoc}
    */

@@ -42,25 +42,22 @@ public class UnusedImportsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+    ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 
-      IProblem[] problems = JavaUtils.getProblems(src, UNUSED_IMPORTS);
-      ArrayList<String> results = new ArrayList<String>();
-      for(int ii = 0; ii < problems.length; ii++){
-        IJavaElement element = src.getElementAt(problems[ii].getSourceStart());
-        if(element != null){
-          results.add(element.getElementName());
-        }
+    IProblem[] problems = JavaUtils.getProblems(src, UNUSED_IMPORTS);
+    ArrayList<String> results = new ArrayList<String>();
+    for(int ii = 0; ii < problems.length; ii++){
+      IJavaElement element = src.getElementAt(problems[ii].getSourceStart());
+      if(element != null){
+        results.add(element.getElementName());
       }
-      return super.filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+    return UnusedImportsFilter.instance.filter(_commandLine, results);
   }
 }

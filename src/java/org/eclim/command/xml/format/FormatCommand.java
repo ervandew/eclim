@@ -48,7 +48,8 @@ public class FormatCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
     FileInputStream in = null;
     try{
@@ -72,8 +73,6 @@ public class FormatCommand
           new StreamResult(new OutputStreamWriter(System.out, "utf-8")));
 
       return StringUtils.EMPTY;
-    }catch(Throwable t){
-      return t;
     }finally{
       IOUtils.closeQuietly(in);
     }

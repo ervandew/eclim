@@ -27,6 +27,8 @@ import org.eclim.command.OutputFilter;
 public class TaglistFilter
   implements OutputFilter<TagResult[]>
 {
+  public static final TaglistFilter instance = new TaglistFilter();
+
   /**
    * {@inheritDoc}
    */

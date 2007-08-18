@@ -37,19 +37,16 @@ public class ProjectOpenCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      IProject project = ProjectUtils.getProject(name);
-      if(project.exists()){
-        project.open(null);
-        return Services.getMessage("project.opened", name);
-      }
-      return Services.getMessage("project.not.found", name);
-    }catch(Throwable t){
-      return t;
+    IProject project = ProjectUtils.getProject(name);
+    if(project.exists()){
+      project.open(null);
+      return Services.getMessage("project.opened", name);
     }
+    return Services.getMessage("project.not.found", name);
   }
 }

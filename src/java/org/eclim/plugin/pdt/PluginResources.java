@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.pdt;
 
-import java.net.URL;
-
 import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.pdt.project.PhpProjectManager;
@@ -41,16 +39,33 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String,URL)
+   * @see AbstractPluginResources#initialize(String)
    */
   @Override
-  public void initialize (String _name, URL _resource)
+  public void initialize (String _name)
   {
-    super.initialize(_name, _resource);
+    super.initialize(_name);
 
     ProjectNatureFactory.addNature("php", "org.eclipse.php.core.PHPNature");
     ProjectManagement.addProjectManager(
         "org.eclipse.php.core.PHPNature", new PhpProjectManager());
+
+    registerCommand("php_src_update",
+        org.eclim.plugin.pdt.command.src.SrcUpdateCommand.class);
+    registerCommand("php_complete",
+        org.eclim.plugin.pdt.command.complete.CodeCompleteCommand.class);
+    registerCommand("php_find_definition",
+        org.eclim.plugin.pdt.command.search.FindDefinitionCommand.class);
+    registerCommand("php_search",
+        org.eclim.plugin.pdt.command.search.SearchCommand.class);
+    registerCommand("php_include_paths",
+        org.eclim.plugin.pdt.command.includepath.IncludePathsCommand.class);
+    registerCommand("php_includepath_variables",
+        org.eclim.plugin.pdt.command.includepath.IncludePathVariablesCommand.class);
+    registerCommand("php_includepath_variable_create",
+        org.eclim.plugin.pdt.command.includepath.IncludePathVariableCreateCommand.class);
+    registerCommand("php_includepath_variable_delete",
+        org.eclim.plugin.pdt.command.includepath.IncludePathVariableDeleteCommand.class);
   }
 
   /**

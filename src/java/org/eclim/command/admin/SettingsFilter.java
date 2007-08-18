@@ -35,6 +35,8 @@ import org.eclim.preference.OptionInstance;
 public class SettingsFilter
   implements OutputFilter<List<Option>>
 {
+  public static final SettingsFilter instance = new SettingsFilter();
+
   private static final String COMMENT = "# ";
 
   /**

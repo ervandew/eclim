@@ -36,24 +36,21 @@ public class IncludePathVariablesCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      ArrayList<IncludePathVariable> results =
-        new ArrayList<IncludePathVariable>();
-      String[] names = PHPProjectOptions.getIncludePathVariableNames();
-      for(String name : names){
-        IPath path = PHPProjectOptions.getIncludePathVariable(name);
-        if(path != null){
-          IncludePathVariable variable = new IncludePathVariable();
-          variable.setName(name);
-          variable.setPath(path.toOSString());
-          results.add(variable);
-        }
+    ArrayList<IncludePathVariable> results =
+      new ArrayList<IncludePathVariable>();
+    String[] names = PHPProjectOptions.getIncludePathVariableNames();
+    for(String name : names){
+      IPath path = PHPProjectOptions.getIncludePathVariable(name);
+      if(path != null){
+        IncludePathVariable variable = new IncludePathVariable();
+        variable.setName(name);
+        variable.setPath(path.toOSString());
+        results.add(variable);
       }
-      return filter(_commandLine, results);
-    }catch(Exception e){
-      return e;
     }
+    return IncludePathVariablesFilter.instance.filter(_commandLine, results);
   }
 }

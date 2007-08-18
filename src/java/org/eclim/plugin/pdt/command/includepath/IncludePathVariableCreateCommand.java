@@ -42,32 +42,29 @@ public class IncludePathVariableCreateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String name = _commandLine.getValue(Options.NAME_OPTION);
-      String path = _commandLine.getValue(Options.PATH_OPTION);
+    String name = _commandLine.getValue(Options.NAME_OPTION);
+    String path = _commandLine.getValue(Options.PATH_OPTION);
 
-      String[] existing = PHPProjectOptions.getIncludePathVariableNames();
-      String[] names = new String[existing.length + 1];
-      IPath[] paths = new IPath[existing.length + 1];
+    String[] existing = PHPProjectOptions.getIncludePathVariableNames();
+    String[] names = new String[existing.length + 1];
+    IPath[] paths = new IPath[existing.length + 1];
 
-      for (int ii = 0; ii < existing.length; ii++){
-        names[ii] = existing[ii];
-        paths[ii] = PHPProjectOptions.getIncludePathVariable(names[ii]);
-      }
-      names[names.length - 1] = name;
-      paths[paths.length - 1] = new Path(path);
-
-      PHPProjectOptions.setIncludePathVariables(names, paths, null);
-
-      IScopeContext context = new InstanceScope();
-      IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
-      preferences.flush();
-
-      return Services.getMessage("includepath.variable.created", name);
-    }catch(Exception e){
-      return e;
+    for (int ii = 0; ii < existing.length; ii++){
+      names[ii] = existing[ii];
+      paths[ii] = PHPProjectOptions.getIncludePathVariable(names[ii]);
     }
+    names[names.length - 1] = name;
+    paths[paths.length - 1] = new Path(path);
+
+    PHPProjectOptions.setIncludePathVariables(names, paths, null);
+
+    IScopeContext context = new InstanceScope();
+    IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
+    preferences.flush();
+
+    return Services.getMessage("includepath.variable.created", name);
   }
 }

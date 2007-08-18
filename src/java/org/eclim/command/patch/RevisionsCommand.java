@@ -51,39 +51,36 @@ public class RevisionsCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String url = URL.replaceFirst("<file>", file);
+
+    HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
+    client.setReadTimeout(TIMEOUT);
     try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String url = URL.replaceFirst("<file>", file);
-
-      HttpURLConnection client = (HttpURLConnection)new URL(url).openConnection();
-      client.setReadTimeout(TIMEOUT);
-      try{
-        client.connect();
-        if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
-          throw new RuntimeException(
-              Services.getMessage("http.error", client.getResponseMessage()));
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.copy(client.getInputStream(), out);
-
-        ArrayList<String> revisions = new ArrayList<String>();
-        Matcher matcher = REVISION_REGEX.matcher(out.toString());
-        while(matcher.find()){
-          revisions.add(matcher.group(1));
-        }
-
-        return super.filter(_commandLine, revisions);
-      }finally{
-        try{
-          client.disconnect();
-        }catch(Exception ignore){
-        }
+      client.connect();
+      if(client.getResponseCode() != HttpURLConnection.HTTP_OK){
+        throw new RuntimeException(
+            Services.getMessage("http.error", client.getResponseMessage()));
       }
-    }catch(Exception e){
-      return e;
+
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      IOUtils.copy(client.getInputStream(), out);
+
+      ArrayList<String> revisions = new ArrayList<String>();
+      Matcher matcher = REVISION_REGEX.matcher(out.toString());
+      while(matcher.find()){
+        revisions.add(matcher.group(1));
+      }
+
+      return RevisionsFilter.instance.filter(_commandLine, revisions);
+    }finally{
+      try{
+        client.disconnect();
+      }catch(Exception ignore){
+      }
     }
   }
 }

@@ -22,6 +22,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
 
@@ -39,35 +41,32 @@ public class XsdValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
 
-      ArrayList<Error> results = new ArrayList<Error>();
-      XSDValidator validator = XSDValidator.getInstance();
-      ValidationReport result = validator.validate(toUri(project, file));
-      ValidationMessage[] messages = result.getValidationMessages();
-      for (int ii = 0; ii < messages.length; ii++){
-        StringBuffer message = new StringBuffer(messages[ii].getMessage());
-        for (Iterator jj = messages[ii].getNestedMessages().iterator(); jj.hasNext();){
-          ValidationMessage nested = (ValidationMessage)jj.next();
-          message.append(' ').append(nested.getMessage());
-        }
-
-        results.add(new Error(
-              message.toString(),
-              toFile(messages[ii].getUri()),
-              messages[ii].getLineNumber(),
-              messages[ii].getColumnNumber(),
-              false//messages[ii].getSeverity() != ValidationMessage.SEV_HIGH
-        ));
+    ArrayList<Error> results = new ArrayList<Error>();
+    XSDValidator validator = XSDValidator.getInstance();
+    ValidationReport result = validator.validate(toUri(project, file));
+    ValidationMessage[] messages = result.getValidationMessages();
+    for (int ii = 0; ii < messages.length; ii++){
+      StringBuffer message = new StringBuffer(messages[ii].getMessage());
+      for (Iterator jj = messages[ii].getNestedMessages().iterator(); jj.hasNext();){
+        ValidationMessage nested = (ValidationMessage)jj.next();
+        message.append(' ').append(nested.getMessage());
       }
 
-      return super.filter(_commandLine, results);
-    }catch(Throwable t){
-      return t;
+      results.add(new Error(
+            message.toString(),
+            toFile(messages[ii].getUri()),
+            messages[ii].getLineNumber(),
+            messages[ii].getColumnNumber(),
+            false//messages[ii].getSeverity() != ValidationMessage.SEV_HIGH
+      ));
     }
+
+    return ErrorFilter.instance.filter(_commandLine, results);
   }
 }

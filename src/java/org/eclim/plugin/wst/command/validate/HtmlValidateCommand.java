@@ -27,6 +27,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 
@@ -63,80 +65,77 @@ public class HtmlValidateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    final String file = FileUtils.concat(
+        ProjectUtils.getPath(project),
+        _commandLine.getValue(Options.FILE_OPTION));
+
+    // eclipse wst html valiation... currently not very good.
+    /*IProject iproject = ProjectUtils.getProject(project, true);
+    final String projectPath = FileUtils.getFullPath(
+        ProjectUtils.getPath(iproject));
+
+    Reporter reporter = new Reporter();
+    HTMLValidator validator = new HTMLValidator();
+    IValidationContext context = new IValidationContext(){
+      public String[] getURIs(){
+        return new String[]{file.substring(projectPath.length())};
+      }
+      public Object loadModel (String name){
+        return null;
+      }
+      public Object loadModel (String name, Object[] params){
+        return null;
+      }
+    };
+    validator.validate(context, reporter);
+
+    FileOffsets offsets = FileOffsets.compile(file);
+
+    ArrayList results = new ArrayList();
+    for (Iterator ii = reporter.getMessages().iterator(); ii.hasNext();){
+      IMessage message = (IMessage)ii.next();
+      int[] lineColumn = offsets.offsetToLineColumn(message.getOffset());
+      results.add(new Error(
+          message.getText(),
+          file,
+          lineColumn[0],
+          lineColumn[1],
+          false
+      ));
+    }*/
+
+    // jtidy validation, currently better than wst version.
+    Tidy tidy = new Tidy();
+    tidy.setEmacs(true);
+    tidy.setOnlyErrors(true);
+    tidy.setQuiet(true);
+    FileInputStream in = new FileInputStream(file);
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    PrintWriter writer = new PrintWriter(out, true);
     try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      final String file = FileUtils.concat(
-          ProjectUtils.getPath(project),
-          _commandLine.getValue(Options.FILE_OPTION));
-
-      // eclipse wst html valiation... currently not very good.
-      /*IProject iproject = ProjectUtils.getProject(project, true);
-      final String projectPath = FileUtils.getFullPath(
-          ProjectUtils.getPath(iproject));
-
-      Reporter reporter = new Reporter();
-      HTMLValidator validator = new HTMLValidator();
-      IValidationContext context = new IValidationContext(){
-        public String[] getURIs(){
-          return new String[]{file.substring(projectPath.length())};
-        }
-        public Object loadModel (String name){
-          return null;
-        }
-        public Object loadModel (String name, Object[] params){
-          return null;
-        }
-      };
-      validator.validate(context, reporter);
-
-      FileOffsets offsets = FileOffsets.compile(file);
-
-      ArrayList results = new ArrayList();
-      for (Iterator ii = reporter.getMessages().iterator(); ii.hasNext();){
-        IMessage message = (IMessage)ii.next();
-        int[] lineColumn = offsets.offsetToLineColumn(message.getOffset());
-        results.add(new Error(
-            message.getText(),
-            file,
-            lineColumn[0],
-            lineColumn[1],
-            false
-        ));
-      }*/
-
-      // jtidy validation, currently better than wst version.
-      Tidy tidy = new Tidy();
-      tidy.setEmacs(true);
-      tidy.setOnlyErrors(true);
-      tidy.setQuiet(true);
-      FileInputStream in = new FileInputStream(file);
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      PrintWriter writer = new PrintWriter(out, true);
-      try{
-        tidy.setErrout(writer);
-        tidy.parse(in, out);
-      }finally{
-        IOUtils.closeQuietly(in);
-        IOUtils.closeQuietly(out);
-      }
-
-      ArrayList<Error> results = new ArrayList<Error>();
-      String[] lines = StringUtils.split(out.toString(), '\n');
-      for (int ii = 0; ii < lines.length; ii++){
-        if(accept(lines[ii])){
-          Error error = parseError(file, lines[ii]);
-          if(error != null){
-            results.add(error);
-          }
-        }
-      }
-
-      return super.filter(_commandLine, results);
-    }catch(Throwable t){
-      return t;
+      tidy.setErrout(writer);
+      tidy.parse(in, out);
+    }finally{
+      IOUtils.closeQuietly(in);
+      IOUtils.closeQuietly(out);
     }
+
+    ArrayList<Error> results = new ArrayList<Error>();
+    String[] lines = StringUtils.split(out.toString(), '\n');
+    for (int ii = 0; ii < lines.length; ii++){
+      if(accept(lines[ii])){
+        Error error = parseError(file, lines[ii]);
+        if(error != null){
+          results.add(error);
+        }
+      }
+    }
+
+    return ErrorFilter.instance.filter(_commandLine, results);
   }
 
   /**

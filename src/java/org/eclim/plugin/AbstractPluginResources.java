@@ -21,21 +21,21 @@ import java.net.URL;
 
 import java.text.MessageFormat;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import org.eclim.util.spring.UrlXmlApplicationContext;
+import org.eclim.Services;
+
+import org.eclim.command.Command;
 
 import org.eclipse.core.runtime.FileLocator;
 
-import org.springframework.context.support.AbstractApplicationContext;
-
 /**
- * Abstract implementation of {@link PluginResources} that uses spring to manage
- * the services and messages.
+ * Abstract implementation of {@link PluginResources}.
  *
  * @author Eric Van Dewoestine (ervandew@yahoo.com)
  * @version $Revision$
@@ -49,52 +49,21 @@ public abstract class AbstractPluginResources
   private static final String PLUGIN_PROPERTIES = "/plugin.properties";
 
   private String name;
-  private AbstractApplicationContext context;
   private Properties properties;
   private ResourceBundle bundle;
 
+  private HashMap<String,Class> commands =
+    new HashMap<String,Class>();
+  private HashMap<String,Command> instances = new HashMap<String,Command>();
+
   /**
-   * Initializes this instance with the resource at the supplied url.
+   * Initializes this instance.
    *
    * @param _name The plugin name.
-   * @param _resource The resource url.
    */
-  public void initialize (String _name, URL _resource)
+  public void initialize (String _name)
   {
     name = _name;
-    context = createContext(_resource);
-    properties = createProperties();
-  }
-
-  /**
-   * Creates the application context for locating services.
-   *
-   * @param _resource The url of the context configuration file.
-   * @return The application context.
-   */
-  protected AbstractApplicationContext createContext (URL _resource)
-  {
-    AbstractApplicationContext context =
-      new UrlXmlApplicationContext(_resource, getClass().getClassLoader());
-
-    return context;
-  }
-
-  /**
-   * Create the Properties for this instance.
-   *
-   * @return The Properties.
-   */
-  protected Properties createProperties ()
-  {
-    Properties properties = new Properties();
-    try{
-      properties.load(getClass().getResourceAsStream(PLUGIN_PROPERTIES));
-    }catch(Exception e){
-      logger.warn(
-          "Error loading plugin.properties for plugin '" + getName() + "'", e);
-    }
-    return properties;
   }
 
   /**
@@ -108,17 +77,28 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public Object getService (String _name, Class _type)
+  public Command getCommand (String _name)
+    throws Exception
   {
-    return context.getBean(_name, _type);
+    Command command = instances.get(_name);
+    if(command == null){
+      if(!containsCommand(_name)){
+        throw new RuntimeException(
+            Services.getMessage("command.not.found", _name));
+      }
+      Class cc = commands.get(_name);
+      command = (Command)cc.newInstance();
+      instances.put(_name, command);
+    }
+    return command;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean containsService (String _name)
+  public boolean containsCommand (String _name)
   {
-    return context.containsBean(_name);
+    return commands.containsKey(_name);
   }
 
   /**
@@ -148,7 +128,7 @@ public abstract class AbstractPluginResources
    */
   public String getProperty (String _name)
   {
-    return System.getProperty(_name, properties.getProperty(_name));
+    return getProperty(_name, null);
   }
 
   /**
@@ -156,6 +136,15 @@ public abstract class AbstractPluginResources
    */
   public String getProperty (String _name, String _default)
   {
+    if (properties == null){
+      properties = new Properties();
+      try{
+        properties.load(getClass().getResourceAsStream(PLUGIN_PROPERTIES));
+      }catch(Exception e){
+        logger.warn(
+            "Error loading plugin.properties for plugin '" + getName() + "'", e);
+      }
+    }
     return System.getProperty(_name, properties.getProperty(_name, _default));
   }
 
@@ -184,7 +173,17 @@ public abstract class AbstractPluginResources
    */
   public void close ()
   {
-    context.close();
+  }
+
+  /**
+   * Registers the supplied command under the specified name.
+   *
+   * @param _name The name of the command.
+   * @param _command The command class.
+   */
+  protected void registerCommand (String _name, Class _command)
+  {
+    commands.put(_name, _command);
   }
 
   /**

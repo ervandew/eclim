@@ -34,6 +34,19 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
+   * @see AbstractPluginResources#initialize(String)
+   */
+  @Override
+  public void initialize (String _name)
+  {
+    super.initialize(_name);
+
+    registerCommand("maven_dependency_search",
+        org.eclim.plugin.maven.command.dependency.SearchCommand.class);
+  }
+
+  /**
+   * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
   protected String getBundleBaseName ()

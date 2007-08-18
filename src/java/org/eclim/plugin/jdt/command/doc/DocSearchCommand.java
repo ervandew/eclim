@@ -15,13 +15,15 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-
 import org.eclim.plugin.jdt.command.search.SearchCommand;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -62,27 +64,35 @@ public class DocSearchCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    Object result = super.executeSearch(_commandLine);
-    if(result instanceof Throwable){
-      return result;
-    }
+    List<SearchMatch> matches = executeSearch(_commandLine);
 
-    try{
-      return filter(_commandLine, result);
-    }catch(Exception e){
-      return e;
+    ArrayList<String> results = new ArrayList<String>();
+    for(SearchMatch match : matches){
+      if (match.getElement() != null){
+        int elementType = ((IJavaElement)match.getElement()).getElementType();
+        if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+        {
+          String result = createDocSearchResult(match);
+          if(result != null){
+            results.add(result);
+          }
+        }
+      }
     }
+    return DocSearchFilter.instance.filter(_commandLine, results);
   }
 
   /**
-   * Creates a DocSearchResult from the supplied SearchMatch.
+   * Creates a javadoc url from the supplied SearchMatch.
    *
    * @param _match The SearchMatch.
-   * @return The DocSearchResult.
+   * @return The javadoc url.
    */
-  protected Object createSearchResult (SearchMatch _match)
+  private String createDocSearchResult (SearchMatch _match)
     throws Exception
   {
     IJavaElement element = (IJavaElement)_match.getElement();

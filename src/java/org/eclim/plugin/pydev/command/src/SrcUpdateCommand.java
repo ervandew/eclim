@@ -26,6 +26,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.command.filter.ErrorFilter;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -49,36 +51,33 @@ public class SrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public Object execute (CommandLine _commandLine)
+  public String execute (CommandLine _commandLine)
+    throws Exception
   {
-    try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
 
-      IProject project = ProjectUtils.getProject(projectName);
-      IFile ifile = ProjectUtils.getFile(project, file);
-      ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    IProject project = ProjectUtils.getProject(projectName);
+    IFile ifile = ProjectUtils.getFile(project, file);
+    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-      // validate the src file.
-      if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
-        PyLintThread pylint = new PyLintThread(
-            ifile, ProjectUtils.getDocument(project, file), ifile.getRawLocation());
-        pylint.start();
-        pylint.join();
+    // validate the src file.
+    if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
+      PyLintThread pylint = new PyLintThread(
+          ifile, ProjectUtils.getDocument(project, file), ifile.getRawLocation());
+      pylint.start();
+      pylint.join();
 
-        ArrayList errors = new ArrayList();
+      ArrayList errors = new ArrayList();
 
 IMarker[] markers = ifile.findMarkers(
-    PyLintVisitor.PYLINT_PROBLEM_MARKER, true, IResource.DEPTH_ZERO);
+  PyLintVisitor.PYLINT_PROBLEM_MARKER, true, IResource.DEPTH_ZERO);
 for (int ii = 0; ii < markers.length; ii++){
-  logger.info("### marker = " + markers[ii]);
-  logger.info("### message = " + markers[ii].getAttribute(IMarker.MESSAGE));
-  logger.info("### line = " + markers[ii].getAttribute(IMarker.LINE_NUMBER));
+logger.info("### marker = " + markers[ii]);
+logger.info("### message = " + markers[ii].getAttribute(IMarker.MESSAGE));
+logger.info("### line = " + markers[ii].getAttribute(IMarker.LINE_NUMBER));
 }
-        return super.filter(_commandLine, errors);
-      }
-    }catch(Exception e){
-      return e;
+      return ErrorFilter.instance.filter(_commandLine, errors);
     }
     return StringUtils.EMPTY;
   }
