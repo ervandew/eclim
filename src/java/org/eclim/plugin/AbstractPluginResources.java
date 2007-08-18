@@ -19,13 +19,14 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.text.MessageFormat;
+
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import org.eclim.util.spring.ResourceBundleMessageSource;
 import org.eclim.util.spring.UrlXmlApplicationContext;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -45,12 +46,12 @@ public abstract class AbstractPluginResources
   private static final Logger logger =
     Logger.getLogger(AbstractPluginResources.class);
 
-  private static final String MESSAGE_SOURCE = "messageSource";
   private static final String PLUGIN_PROPERTIES = "/plugin.properties";
 
   private String name;
   private AbstractApplicationContext context;
   private Properties properties;
+  private ResourceBundle bundle;
 
   /**
    * Initializes this instance with the resource at the supplied url.
@@ -75,9 +76,6 @@ public abstract class AbstractPluginResources
   {
     AbstractApplicationContext context =
       new UrlXmlApplicationContext(_resource, getClass().getClassLoader());
-    ResourceBundleMessageSource messages = (ResourceBundleMessageSource)
-        context.getBean(MESSAGE_SOURCE, ResourceBundleMessageSource.class);
-    messages.setClassLoader(getClass().getClassLoader());
 
     return context;
   }
@@ -126,9 +124,11 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public String getMessage (String _key, Object[] _args)
+  public String getMessage (String _key, Object... _args)
   {
-    return context.getMessage(_key, _args, Locale.getDefault());
+    ResourceBundle bundle = getResourceBundle();
+    String message = bundle.getString(_key);
+    return MessageFormat.format(message, _args);
   }
 
   /**
@@ -136,8 +136,11 @@ public abstract class AbstractPluginResources
    */
   public ResourceBundle getResourceBundle ()
   {
-    return ((ResourceBundleMessageSource)getService(MESSAGE_SOURCE,
-          ResourceBundleMessageSource.class)).getResourceBundle();
+    if (bundle == null){
+      bundle = ResourceBundle.getBundle(
+          getBundleBaseName(), Locale.getDefault(), getClass().getClassLoader());
+    }
+    return bundle;
   }
 
   /**
@@ -145,7 +148,7 @@ public abstract class AbstractPluginResources
    */
   public String getProperty (String _name)
   {
-    return properties.getProperty(_name);
+    return System.getProperty(_name, properties.getProperty(_name));
   }
 
   /**
@@ -153,7 +156,7 @@ public abstract class AbstractPluginResources
    */
   public String getProperty (String _name, String _default)
   {
-    return properties.getProperty(_name, _default);
+    return System.getProperty(_name, properties.getProperty(_name, _default));
   }
 
   /**
@@ -183,4 +186,11 @@ public abstract class AbstractPluginResources
   {
     context.close();
   }
+
+  /**
+   * Gets the base name used to lookup the plugin's ResourceBundle.
+   *
+   * @return The ResourceBundle base name.
+   */
+  protected abstract String getBundleBaseName ();
 }

@@ -50,7 +50,7 @@ public class ScriptUtils
    * @return The result of evaluating the supplied script.
    */
   public static Object evaluateScript (
-      PluginResources _resources, String _script, Map _values)
+      PluginResources _resources, String _script, Map<String,Object> _values)
     throws Exception
   {
     Binding binding = new Binding(_values);
@@ -58,14 +58,12 @@ public class ScriptUtils
 
     String script = FileUtils.separatorsToUnix(
         FileUtils.concat(SCRIPT_PATH, _script));
-    try{
-      return shell.evaluate(_resources.getResourceAsStream(script));
-    }catch(NullPointerException npe){
-      IllegalArgumentException iae = new IllegalArgumentException(
+    InputStream stream = _resources.getResourceAsStream(script);
+    if (stream == null){
+      throw new IllegalArgumentException(
           Services.getMessage("script.not.found", script));
-      iae.initCause(npe);
-      throw iae;
     }
+    return shell.evaluate(stream);
   }
 
   /**
@@ -80,7 +78,12 @@ public class ScriptUtils
   {
     String script = FileUtils.separatorsToUnix(
         FileUtils.concat(SCRIPT_PATH, _script));
-    return parseClass(Services.getResourceAsStream(script), script);
+    InputStream stream = Services.getResourceAsStream(script);
+    if (stream == null){
+      throw new IllegalArgumentException(
+          Services.getMessage("script.not.found", script));
+    }
+    return parseClass(stream);
   }
 
   /**
@@ -96,7 +99,12 @@ public class ScriptUtils
   {
     String script = FileUtils.separatorsToUnix(
         FileUtils.concat(SCRIPT_PATH, _script));
-    return parseClass(_resources.getResourceAsStream(script), script);
+    InputStream stream = _resources.getResourceAsStream(script);
+    if (stream == null){
+      throw new IllegalArgumentException(
+          Services.getMessage("script.not.found", script));
+    }
+    return parseClass(stream);
   }
 
   /**
@@ -104,20 +112,12 @@ public class ScriptUtils
    * create instances to invoke methods on.
    *
    * @param _stream The stream for the script.
-   * @param _script The script path (for error reporting purposes).
    * @return The resulting class.
    */
-  private static Class parseClass (InputStream _stream, String _script)
+  private static Class parseClass (InputStream _stream)
     throws Exception
   {
     GroovyClassLoader gcl = new GroovyClassLoader();
-    try{
-      return gcl.parseClass(_stream);
-    }catch(NullPointerException npe){
-      IllegalArgumentException iae = new IllegalArgumentException(
-          Services.getMessage("script.not.found", _script));
-      iae.initCause(npe);
-      throw iae;
-    }
+    return gcl.parseClass(_stream);
   }
 }

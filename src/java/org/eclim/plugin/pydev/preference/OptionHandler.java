@@ -254,8 +254,7 @@ public class OptionHandler
       Process process = Runtime.getRuntime().exec(_file + " -V");
       int exit = process.waitFor();
       if(exit != 0){
-        return Services.getMessage("executable.failed",
-            new Object[]{_file, new Integer(exit)});
+        return Services.getMessage("executable.failed", _file, new Integer(exit));
       }
     }catch(Exception e){
       return e.getMessage();

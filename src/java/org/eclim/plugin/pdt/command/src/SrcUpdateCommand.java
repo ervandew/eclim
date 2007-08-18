@@ -98,8 +98,7 @@ public class SrcUpdateCommand
                 !IPHPMarker.ERROR.equals(marker.getType())
             ));
           }
-          return super.filter(_commandLine,
-              (Error[])errors.toArray(new Error[errors.size()]));
+          return super.filter(_commandLine, errors);
         }
       }
     }catch(Exception e){

@@ -81,9 +81,8 @@ public class DelegateCommand
 
         if(delegateType == null){
           return Services.getMessage("type.not.found",
-                new Object[]{
-                  src.getJavaProject().getElementName(),
-                  Signature.getSignatureSimpleName(signature)}) + "  " +
+              src.getJavaProject().getElementName(),
+              Signature.getSignatureSimpleName(signature)) + "  " +
             Services.getMessage("check.import");
         }
       }

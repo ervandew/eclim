@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -37,34 +36,13 @@ public class ProjectNatureFactory
   private static Map<String,String> natureAliases = new HashMap<String,String>();
 
   /**
-   * Registers project natures separated by new lines.
-   * <pre>
-   *   alias nature
-   * </pre>
-   * <p/>
-   * Ex.
-   * <pre>
-   *   java org.eclipse.jdt.core.javanature
-   * </pre>
-   *
-   * @param _natures Natures to add.
-   * @return the original natures string.
+   * Registers a project nature.
+   * @param _alias The nature alias for users.
+   * @param _nature The actual nature name the alias maps to.
    */
-  public static Object addNatures (String _natures)
+  public static void addNature (String _alias, String _nature)
   {
-    String[] natures = StringUtils.split(_natures, '\n');
-    for (int ii = 0; ii < natures.length; ii++){
-      if(natures[ii].trim().length() > 0){
-        String[] values = StringUtils.split(natures[ii].trim());
-        if(values.length != 2){
-          throw new RuntimeException(
-              "Invalid nature definition: '" + natures[ii] + "'");
-        }
-        natureAliases.put(values[0], values[1]);
-      }
-    }
-
-    return _natures;
+    natureAliases.put(_alias, _nature);
   }
 
   /**
@@ -74,8 +52,7 @@ public class ProjectNatureFactory
    */
   public static String[] getNatureAliases ()
   {
-    return (String[])
-      natureAliases.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    return natureAliases.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
   }
 
   /**
@@ -86,7 +63,7 @@ public class ProjectNatureFactory
    */
   public static String getNatureForAlias (String _alias)
   {
-    return (String)natureAliases.get(_alias);
+    return natureAliases.get(_alias);
   }
 
   /**
@@ -98,8 +75,8 @@ public class ProjectNatureFactory
   public static String getAliasForNature (String _natureId)
   {
     for(String key : natureAliases.keySet()){
-      if(_natureId.equals((String)natureAliases.get(key))){
-        return (String)key;
+      if(_natureId.equals(natureAliases.get(key))){
+        return key;
       }
     }
     return null;
@@ -122,6 +99,6 @@ public class ProjectNatureFactory
       }
     }
 
-    return (String[])aliases.toArray(new String[aliases.size()]);
+    return aliases.toArray(new String[aliases.size()]);
   }
 }

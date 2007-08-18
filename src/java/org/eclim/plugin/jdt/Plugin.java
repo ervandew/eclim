@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2006
+ * Copyright (c) 2005 - 2007
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,15 +37,20 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 
+import org.osgi.framework.BundleContext;
+
 /**
- * Initializes the java env.
+ * Jdt plugin.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class Initializer
+public class Plugin
+  extends org.eclipse.core.runtime.Plugin
 {
-  private static final Logger logger = Logger.getLogger(Initializer.class);
+  private static Plugin plugin;
+
+  private static final Logger logger = Logger.getLogger(Plugin.class);
 
   private static final String VARIABLES = "resources/classpath_variables";
   private static final String[] SRC_LOCATIONS = {
@@ -58,11 +63,23 @@ public class Initializer
   };
 
   /**
-   * Initialize the java env.
+   * The constructor.
    */
-  public void initialize ()
+  public Plugin ()
+  {
+    plugin = this;
+  }
+
+  /**
+   * This method is called upon plug-in activation
+   *
+   * @param _context The bundle context.
+   */
+  public void start (BundleContext _context)
+    throws Exception
   {
     logger.info("Initializing java environment");
+    super.start(_context);
 
     // initialize variables.
     initializeJreSrc();
@@ -81,13 +98,25 @@ public class Initializer
   }
 
   /**
-   * Shutdown the java env.
+   * This method is called when the plug-in is stopped
+   *
+   * @param _context The bundle context.
    */
-  public void shutdown ()
+  public void stop (BundleContext _context)
     throws Exception
   {
     logger.info("Shutting down java environment");
+    super.stop(_context);
+    plugin = null;
     JavaCore.getJavaCore().stop(null);
+  }
+
+  /**
+   * Returns the shared instance.
+   */
+  public static Plugin getDefault ()
+  {
+    return plugin;
   }
 
   /**

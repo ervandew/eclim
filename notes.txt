@@ -43,7 +43,6 @@ TODO {{{
 
     Upgrade
       - commons-logging from 1.0.4 to 1.1
-      - groovy to 1.0
       - forrest to 0.8
 
       Remove
@@ -54,6 +53,12 @@ TODO {{{
 
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
+
+    - gvim menu items.
+
+    - add IndentAnything into distribution
+    - consider adding an optional set of vim scripts which set up an evironment like mine.
+      - licensing issues?
 
     - :ProjectNatureAdd/Remove
       - Consider calling the nature's associated
@@ -115,6 +120,8 @@ TODO {{{
   }}}
 
   Java {{{
+
+    - look into code refactoring support.
 
     - create spring file validation of class names like w/ log4j.
 

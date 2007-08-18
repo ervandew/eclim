@@ -9,7 +9,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-logging-1.0.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.0-jsr-06.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.1-beta-2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nlog4j-1.2.25.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/spring-aop-1.2.8.jar"/>

@@ -59,7 +59,7 @@ public class ValidateCommand
       List<Error> list = super.validate(project, file, false, handler);
       list.addAll(handler.getErrors());
 
-      return filter(_commandLine, list.toArray(new Error[list.size()]));
+      return filter(_commandLine, list);
     }catch(Throwable t){
       return t;
     }
@@ -139,7 +139,7 @@ public class ValidateCommand
           IType type = project.findType(name);
           if(type == null || !type.exists()){
             String message = Services.getMessage("class.not.found",
-                new Object[]{project.getElementName(), name});
+                project.getElementName(), name);
             errors.add(new Error(
                   message, file, locator.getLineNumber(), 1, false
             ));

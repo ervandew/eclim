@@ -75,8 +75,7 @@ for (int ii = 0; ii < markers.length; ii++){
   logger.info("### message = " + markers[ii].getAttribute(IMarker.MESSAGE));
   logger.info("### line = " + markers[ii].getAttribute(IMarker.LINE_NUMBER));
 }
-        return super.filter(_commandLine,
-            (Error[])errors.toArray(new Error[errors.size()]));
+        return super.filter(_commandLine, errors);
       }
     }catch(Exception e){
       return e;

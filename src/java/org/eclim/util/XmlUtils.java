@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import java.util.regex.Pattern;
 
@@ -90,7 +91,7 @@ public class XmlUtils
    * @param _filename The file path to the xml file.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _project, String _filename)
+  public static List<Error> validateXml (String _project, String _filename)
     throws Exception
   {
     return validateXml(_project, _filename, false, null);
@@ -105,7 +106,8 @@ public class XmlUtils
    * xsi:schemaLocation attribute of the document.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _project, String _filename, boolean _schema)
+  public static List<Error> validateXml (
+      String _project, String _filename, boolean _schema)
     throws Exception
   {
     return validateXml(_project, _filename, _schema, null);
@@ -119,9 +121,9 @@ public class XmlUtils
    * @param _schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
    * @param _handler The content handler to use while parsing the file.
-   * @return A possibly empty array of errors.
+   * @return A possibly empty list of errors.
    */
-  public static Error[] validateXml (
+  public static List<Error> validateXml (
       String _project,
       String _filename,
       boolean _schema,
@@ -148,13 +150,16 @@ public class XmlUtils
     try{
       parser.parse(filename, getHandler(_handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
-      return new Error[]{
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(
         new Error(
             spe.getMessage(),
             filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
-            false)};
+            false)
+        );
+      return errors;
     }
 
     return errorHandler.getErrors();
@@ -168,7 +173,7 @@ public class XmlUtils
    * @param _schema The file path to the xsd.
    * @return A possibly empty array of errors.
    */
-  public static Error[] validateXml (String _project, String _filename, String _schema)
+  public static List<Error> validateXml (String _project, String _filename, String _schema)
     throws Exception
   {
     SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -197,13 +202,16 @@ public class XmlUtils
     try{
       parser.parse(_filename, getHandler(null, errorHandler, entityResolver));
     }catch(SAXParseException spe){
-      return new Error[]{
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(
         new Error(
             spe.getMessage(),
             _filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
-            false)};
+            false)
+        );
+      return errors;
     }
 
     return errorHandler.getErrors();
@@ -490,9 +498,9 @@ public class XmlUtils
      *
      * @return Array of Error.
      */
-    public Error[] getErrors ()
+    public List<Error> getErrors ()
     {
-      return (Error[])errors.toArray(new Error[errors.size()]);
+      return errors;
     }
   }
 

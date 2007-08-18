@@ -15,9 +15,15 @@
  */
 package org.eclim.plugin.pydev;
 
-import org.eclim.Services;
+import java.net.URL;
 
 import org.eclim.plugin.AbstractPluginResources;
+
+import org.eclim.plugin.pydev.preference.OptionHandler;
+
+import org.eclim.preference.Preferences;
+
+import org.eclim.project.ProjectNatureFactory;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -33,4 +39,26 @@ public class PluginResources
    * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.pydev";
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#initialize(String,URL)
+   */
+  @Override
+  public void initialize (String _name, URL _resource)
+  {
+    super.initialize(_name, _resource);
+
+    Preferences.addOptionHandler("org.python.pydev", new OptionHandler());
+    ProjectNatureFactory.addNature("python", "org.python.pydev.pythonNature");
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#getBundleBaseName()
+   */
+  protected String getBundleBaseName ()
+  {
+    return "org/eclim/plugin/pydev/messages";
+  }
 }

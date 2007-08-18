@@ -416,7 +416,7 @@ public class Preferences
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("preference.invalid",
-              new Object[]{_name, _value, preference.getRegex()}));
+                _name, _value, preference.getRegex()));
         }
       }
     }
@@ -443,7 +443,7 @@ public class Preferences
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("option.invalid",
-              new Object[]{_name, _value, option.getRegex()}));
+                _name, _value, option.getRegex()));
         }
       }
     }

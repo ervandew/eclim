@@ -16,6 +16,7 @@
 package org.eclim.command.xml.validate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.command.AbstractCommand;
@@ -51,7 +52,7 @@ public class ValidateCommand
 
       List<Error> list = validate(project, file, schema, null);
 
-      return filter(_commandLine, list.toArray(new Error[list.size()]));
+      return filter(_commandLine, list);
     }catch(Throwable t){
       return t;
     }
@@ -70,18 +71,17 @@ public class ValidateCommand
       String _project, String _file, boolean _schema, DefaultHandler _handler)
     throws Exception
   {
-    Error[] errors = XmlUtils.validateXml(_project, _file, _schema, _handler);
-    ArrayList<Error> list = new ArrayList<Error>();
-    for(Error error : errors){
+    List<Error> errors = XmlUtils.validateXml(_project, _file, _schema, _handler);
+    for(Iterator<Error> ii = errors.iterator(); ii.hasNext();){
+      Error error = ii.next();
       // FIXME: hack to ignore errors regarding no defined dtd.
       // When 1.4 no longer needs to be supported, this can be scrapped.
-      if (error.getMessage().indexOf(NO_GRAMMER) == -1 &&
-          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) == -1)
+      if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
+          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
       {
-        list.add(error);
+        ii.remove();
       }
     }
-    return list;
-    //return Arrays.asList(errors);
+    return errors;
   }
 }

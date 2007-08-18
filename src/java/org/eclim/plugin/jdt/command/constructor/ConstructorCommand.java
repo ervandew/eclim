@@ -73,8 +73,8 @@ public class ConstructorCommand
       for(int ii = 0; ii < properties.length; ii++){
         if(!type.getField(properties[ii]).exists()){
           throw new RuntimeException(
-              Services.getMessage("field.not.found",
-                new Object[]{properties[ii], type.getElementName()}));
+              Services.getMessage(
+                "field.not.found", properties[ii], type.getElementName()));
         }
       }
 

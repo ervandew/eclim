@@ -83,8 +83,7 @@ public class SrcUpdateCommand
               problems[ii].isWarning()));
         }
 
-        return super.filter(_commandLine,
-            (Error[])errors.toArray(new Error[errors.size()]));
+        return super.filter(_commandLine, errors);
       }
     }catch(Exception e){
       return e;

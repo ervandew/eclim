@@ -15,9 +15,18 @@
  */
 package org.eclim.plugin.jdt;
 
-import org.eclim.Services;
+import java.net.URL;
 
 import org.eclim.plugin.AbstractPluginResources;
+
+import org.eclim.plugin.jdt.preference.OptionHandler;
+
+import org.eclim.plugin.jdt.project.JavaProjectManager;
+
+import org.eclim.preference.Preferences;
+
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectNatureFactory;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -33,4 +42,28 @@ public class PluginResources
    * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.jdt";
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#initialize(String,URL)
+   */
+  @Override
+  public void initialize (String _name, URL _resource)
+  {
+    super.initialize(_name, _resource);
+
+    Preferences.addOptionHandler("org.eclipse.jdt", new OptionHandler());
+    ProjectNatureFactory.addNature("java", "org.eclipse.jdt.core.javanature");
+    ProjectManagement.addProjectManager(
+        "org.eclipse.jdt.core.javanature", new JavaProjectManager());
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#getBundleBaseName()
+   */
+  protected String getBundleBaseName ()
+  {
+    return "org/eclim/plugin/jdt/messages";
+  }
 }

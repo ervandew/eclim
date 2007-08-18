@@ -19,12 +19,11 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javax.xml.xpath.XPathExpression;
-
-import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -165,8 +164,7 @@ public class ProjectManagement
       File path = project.getLocation().toFile();
       if(!path.equals(new File(_folder))){
         throw new IllegalArgumentException(Services.getMessage(
-            "project.name.exists",
-            new Object[]{_name, path.toString()}));
+            "project.name.exists", _name, path.toString()));
       }*/
     }
 
@@ -211,7 +209,7 @@ public class ProjectManagement
    * @param _project The project.
    * @param _commandLine The command line for the project create command.
    */
-  public static Error[] update (IProject _project, CommandLine _commandLine)
+  public static List<Error> update (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     ProjectUtils.assertExists(_project);
@@ -221,13 +219,13 @@ public class ProjectManagement
     for (String nature : managers.keySet()){
       if(_project.hasNature(nature)){
         ProjectManager manager = ProjectManagement.getProjectManager(nature);
-        Error[] errs = manager.update(_project, _commandLine);
+        List<Error> errs = manager.update(_project, _commandLine);
         if(errs != null){
-          CollectionUtils.addAll(errors, errs);
+          errors.addAll(errs);
         }
       }
     }
-    return (Error[])errors.toArray(new Error[errors.size()]);
+    return errors;
   }
 
   /**

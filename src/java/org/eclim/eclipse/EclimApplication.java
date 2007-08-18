@@ -69,7 +69,10 @@ public class EclimApplication
           new EclimDisplay(),//org.eclipse.ui.PlatformUI.createDisplay()),
           new WorkbenchAdvisor());
 
-      NGServer server = (NGServer)Services.getService(NGServer.class);
+      // initialize nailgun
+      int port = Integer.parseInt(
+          Services.getPluginResources().getProperty("nailgun.server.port"));
+      NGServer server = new NGServer(null, port);
 
       // load plugins.
       loadPlugins();
@@ -78,7 +81,7 @@ public class EclimApplication
       Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
       // start nail gun
-      logger.info("Eclim Server Started.");
+      logger.info("Eclim Server Started on port " + port + '.');
       server.run();
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);

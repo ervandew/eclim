@@ -15,9 +15,14 @@
  */
 package org.eclim.plugin.pdt;
 
-import org.eclim.Services;
+import java.net.URL;
 
 import org.eclim.plugin.AbstractPluginResources;
+
+import org.eclim.plugin.pdt.project.PhpProjectManager;
+
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectNatureFactory;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -33,4 +38,27 @@ public class PluginResources
    * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.pdt";
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#initialize(String,URL)
+   */
+  @Override
+  public void initialize (String _name, URL _resource)
+  {
+    super.initialize(_name, _resource);
+
+    ProjectNatureFactory.addNature("php", "org.eclipse.php.core.PHPNature");
+    ProjectManagement.addProjectManager(
+        "org.eclipse.php.core.PHPNature", new PhpProjectManager());
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#getBundleBaseName()
+   */
+  protected String getBundleBaseName ()
+  {
+    return "org/eclim/plugin/pdt/messages";
+  }
 }

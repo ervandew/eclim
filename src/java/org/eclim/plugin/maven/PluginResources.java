@@ -15,8 +15,6 @@
  */
 package org.eclim.plugin.maven;
 
-import org.eclim.Services;
-
 import org.eclim.plugin.AbstractPluginResources;
 
 /**
@@ -33,4 +31,13 @@ public class PluginResources
    * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.maven";
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#getBundleBaseName()
+   */
+  protected String getBundleBaseName ()
+  {
+    return "org/eclim/plugin/maven/messages";
+  }
 }

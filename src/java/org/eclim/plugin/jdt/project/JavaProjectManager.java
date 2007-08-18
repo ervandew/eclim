@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.project;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,7 +94,7 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public Error[] update (IProject _project, CommandLine _commandLine)
+  public List<Error> update (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
@@ -106,11 +107,11 @@ public class JavaProjectManager
       .getRawLocation().toOSString();
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
-    Error[] errors = XmlUtils.validateXml(
+    List<Error> errors = XmlUtils.validateXml(
         javaProject.getProject().getName(),
         dotclasspath,
         resources.getResource(CLASSPATH_XSD).toString());
-    if(errors.length > 0){
+    if(errors.size() > 0){
       return errors;
     }
 
@@ -127,7 +128,7 @@ public class JavaProjectManager
       errors = setClasspath(javaProject, entries, dotclasspath);
     }
 
-    if(errors.length > 0){
+    if(errors.size() > 0){
       return errors;
     }
     return null;
@@ -241,7 +242,7 @@ public class JavaProjectManager
    * @param _classpath The file path of the .classpath file.
    * @return Array of Error or null if no errors reported.
    */
-  protected Error[] setClasspath (
+  protected List<Error> setClasspath (
       IJavaProject _javaProject, IClasspathEntry[] _entries, String _classpath)
     throws Exception
   {
@@ -268,7 +269,7 @@ public class JavaProjectManager
     if(!status.isOK()){
       errors.add(createErrorFromStatus(offsets, _classpath, classpath, status));
     }
-    return (Error[])errors.toArray(new Error[errors.size()]);
+    return errors;
   }
 
   /**

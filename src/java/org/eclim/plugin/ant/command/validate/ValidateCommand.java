@@ -71,7 +71,7 @@ public class ValidateCommand
           errors.add(error);
         }
       }
-      return filter(_commandLine, errors.toArray(new Error[errors.size()]));
+      return filter(_commandLine, errors);
     }catch(Exception e){
       return e;
     }

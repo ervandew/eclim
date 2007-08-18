@@ -15,8 +15,7 @@
  */
 package org.eclim.command.filter;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -29,83 +28,31 @@ import org.eclim.command.OutputFilter;
  * @version $Revision$
  */
 public class ErrorFilter
-  implements OutputFilter
+  implements OutputFilter<List<Error>>
 {
-  private static final ErrorComparator COMPARTATOR = new ErrorComparator();
-
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, Object _result)
+  public String filter (CommandLine _commandLine, List<Error> _result)
   {
-    if (_result != null &&
-        _result.getClass().isArray() &&
-        Error.class.isAssignableFrom(_result.getClass().getComponentType()))
-    {
-      StringBuffer buffer = new StringBuffer();
-      Error[] errors = (Error[])_result;
-      Arrays.sort(errors, COMPARTATOR);
-      for(int ii = 0; ii < errors.length; ii++){
-        if(ii > 0){
+    StringBuffer buffer = new StringBuffer();
+    if (_result != null){
+      for(Error error : _result){
+        if(buffer.length() > 0){
           buffer.append('\n');
         }
-        buffer.append(errors[ii].getFilename())
+        buffer.append(error.getFilename())
           .append('|')
-          .append(errors[ii].getLineNumber())
+          .append(error.getLineNumber())
           .append(" col ")
-          .append(errors[ii].getColumnNumber())
+          .append(error.getColumnNumber())
           .append('|')
-          .append(errors[ii].getMessage())
+          .append(error.getMessage())
           .append('|')
-          .append(errors[ii].isWarning() ? 'w' : 'e');
+          .append(error.isWarning() ? 'w' : 'e');
       }
 
-      return buffer.toString();
     }
-    return _result.toString();
-  }
-
-  /**
-   * Comparator for sorting Error arrays.
-   */
-  public static class ErrorComparator
-    implements Comparator<Error>
-  {
-    /**
-     * {@inheritDoc}
-     */
-    public int compare (Error _o1, Error _o2)
-    {
-      if(_o1 == null && _o2 == null){
-        return 0;
-      }else if(_o2 == null){
-        return -1;
-      }else if(_o1 == null){
-        return 1;
-      }
-
-      // sort by line / col / error,warning
-      if (_o1.getLineNumber() != _o2.getLineNumber()){
-        return _o1.getLineNumber() - _o2.getLineNumber();
-      }
-      if (_o1.getColumnNumber() != _o2.getColumnNumber()){
-        return _o1.getColumnNumber() - _o2.getColumnNumber();
-      }
-      if (_o1.isWarning() != _o2.isWarning()){
-        return !_o1.isWarning() ? -1 : 1;
-      }
-      return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean equals (Object _obj)
-    {
-      if(_obj instanceof ErrorComparator){
-        return true;
-      }
-      return false;
-    }
+    return buffer.toString();
   }
 }

@@ -62,7 +62,7 @@ public class PhpProjectManager
   /**
    * {@inheritDoc}
    */
-  public Error[] update (IProject _project, CommandLine _commandLine)
+  public List<Error> update (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     // validate that .classpath xml is well formed and valid.
@@ -70,11 +70,11 @@ public class PhpProjectManager
       .getRawLocation().toOSString();
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
-    Error[] errors = XmlUtils.validateXml(
+    List<Error> errors = XmlUtils.validateXml(
         _project.getName(),
         projectOptions,
         resources.getResource(PROJECT_OPTIONS_XSD).toString());
-    if(errors.length > 0){
+    if(errors.size() > 0){
       return errors;
     }
 
@@ -116,7 +116,7 @@ public class PhpProjectManager
       }
     }
 
-    return (Error[])errs.toArray(new Error[errs.size()]);
+    return errs;
   }
 
   /**

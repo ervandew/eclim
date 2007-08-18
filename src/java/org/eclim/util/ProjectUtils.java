@@ -170,8 +170,7 @@ public class ProjectUtils
     path = path.replace('\\', '/');
     /*if(!_file.startsWith(path)){
       throw new RuntimeException(
-          Services.getMessage("project.file.mismatch",
-            new String[]{_file, path}));
+          Services.getMessage("project.file.mismatch", _file, path));
     }*/
     //String file = _file.substring(path.length());
 

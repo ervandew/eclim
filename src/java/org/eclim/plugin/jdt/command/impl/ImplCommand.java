@@ -172,16 +172,15 @@ public class ImplCommand
 
     if(method == null){
       logger.warn(Services.getMessage("method.not.found",
-          new Object[]{_superType.getFullyQualifiedName(), _methodName}));
+          _superType.getFullyQualifiedName(), _methodName));
       return null;
     }
     if(getImplemented(_type, implementedMethods, method) != null){
       logger.warn(Services.getMessage("method.already.implemented",
-          new Object[]{
             _type.getFullyQualifiedName(),
             _superType.getFullyQualifiedName(),
             _methodName
-          }));
+      ));
       return null;
     }
 

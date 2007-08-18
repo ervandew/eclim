@@ -21,16 +21,13 @@ import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
-
-import org.eclim.util.spring.ResourceBundleMessageSource;
-
-import org.springframework.context.NoSuchMessageException;
 
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -104,31 +101,6 @@ public class Services
   }
 
   /**
-   * Retrieves a message for the supplied message key.
-   *
-   * @param _key The message key.
-   *
-   * @return The message.
-   */
-  public static String getMessage (String _key)
-  {
-    return getMessage(_key, null);
-  }
-
-  /**
-   * Retrieves a message for the supplied message key.
-   *
-   * @param _key The message key.
-   * @param _object Optional message arg used when formatting the message.
-   *
-   * @return The message.
-   */
-  public static String getMessage (String _key, Object _object)
-  {
-    return getMessage(_key, new Object[]{_object});
-  }
-
-  /**
    * Retrieves and optionally formats a message for the supplied message key.
    *
    * @param _key The message key.
@@ -136,7 +108,7 @@ public class Services
    *
    * @return The formatted message.
    */
-  public static String getMessage (String _key, Object[] _args)
+  public static String getMessage (String _key, Object... _args)
   {
     try{
       String name = (String)messageCache.get(_key);
@@ -146,7 +118,7 @@ public class Services
             String message = resources.getMessage(_key, _args);
             messageCache.put(_key, resources.getName());
             return message;
-          }catch(NoSuchMessageException nsme){
+          }catch(MissingResourceException nsme){
             // message not found in this plugin.
           }
         }
@@ -156,11 +128,11 @@ public class Services
             (PluginResources)pluginResources.get(name);
           return resources.getMessage(_key, _args);
         }
-        return context.getMessage(_key, _args, Locale.getDefault());
+        return getPluginResources().getMessage(_key, _args);
       }
       messageCache.put(_key, MAIN);
-      return context.getMessage(_key, _args, Locale.getDefault());
-    }catch(NoSuchMessageException nsme){
+      return getPluginResources().getMessage(_key, _args);
+    }catch(MissingResourceException nsme){
       return _key;
     }
   }
@@ -192,8 +164,7 @@ public class Services
    */
   public static ResourceBundle getResourceBundle ()
   {
-    return ((ResourceBundleMessageSource)context.getBean("messageSource",
-          ResourceBundleMessageSource.class)).getResourceBundle();
+    return getPluginResources().getResourceBundle();
   }
 
   /**
@@ -294,6 +265,15 @@ public class Services
     protected AbstractApplicationContext createContext (URL _resource)
     {
       return context;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see AbstractPluginResources#getBundleBaseName()
+     */
+    protected String getBundleBaseName ()
+    {
+      return "org/eclim/messages";
     }
   }
 }

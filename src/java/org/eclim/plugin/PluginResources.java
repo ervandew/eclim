@@ -57,7 +57,7 @@ public interface PluginResources
    *  with.
    * @return The message.
    */
-  public String getMessage (String _key, Object[] _args);
+  public String getMessage (String _key, Object... _args);
 
   /**
    * Gets the underlying resource bundle.

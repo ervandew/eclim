@@ -61,7 +61,7 @@ public class ValidateCommand
       List<Error> list = super.validate(project, file, false, handler);
       list.addAll(handler.getErrors());
 
-      return filter(_commandLine, list.toArray(new Error[list.size()]));
+      return filter(_commandLine, list);
     }catch(Throwable t){
       return t;
     }
@@ -175,7 +175,7 @@ public class ValidateCommand
           IType type = project.findType(classname);
           if(type == null || !type.exists()){
             String message = Services.getMessage("type.not.found",
-                new Object[]{project.getElementName(), classname});
+                project.getElementName(), classname);
             errors.add(new Error(
                   message, file, locator.getLineNumber(), 1, false
             ));

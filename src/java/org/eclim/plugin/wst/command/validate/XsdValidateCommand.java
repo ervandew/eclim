@@ -65,8 +65,7 @@ public class XsdValidateCommand
         ));
       }
 
-      return super.filter(_commandLine,
-          (Error[])results.toArray(new Error[results.size()]));
+      return super.filter(_commandLine, results);
     }catch(Throwable t){
       return t;
     }

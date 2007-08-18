@@ -82,8 +82,7 @@ public class ClassPrototypeCommand
           IType type = javaProject.findType(className);
           if(type == null){
             throw new IllegalArgumentException(
-                Services.getMessage("type.not.found",
-                  new Object[]{projectName, className}));
+                Services.getMessage("type.not.found", projectName, className));
           }
 
           String prototype = prototype(type);

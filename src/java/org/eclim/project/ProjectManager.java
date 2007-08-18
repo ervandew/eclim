@@ -15,6 +15,8 @@
  */
 package org.eclim.project;
 
+import java.util.List;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 
@@ -46,7 +48,7 @@ public interface ProjectManager
    *
    * @return Array of Error if any errors encountered during update.
    */
-  public Error[] update (IProject _project, CommandLine _commandLine)
+  public List<Error> update (IProject _project, CommandLine _commandLine)
     throws Exception;
 
   /**

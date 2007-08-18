@@ -18,6 +18,7 @@ package org.eclim.command.project;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -62,8 +63,8 @@ public class ProjectUpdateCommand
       if(settings != null){
         updateSettings(project, settings);
       }else{
-        Error[] errors = ProjectManagement.update(project, _commandLine);
-        if(errors.length > 0){
+        List<Error> errors = ProjectManagement.update(project, _commandLine);
+        if(errors.size() > 0){
           return super.filter(_commandLine, errors);
         }
       }
