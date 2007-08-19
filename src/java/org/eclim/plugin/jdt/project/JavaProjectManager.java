@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.project;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.regex.Matcher;
@@ -34,6 +35,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.project.classpath.Dependency;
+import org.eclim.plugin.jdt.project.classpath.IvyParser;
 import org.eclim.plugin.jdt.project.classpath.Parser;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
@@ -81,6 +83,12 @@ public class JavaProjectManager
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
 
+  private static final HashMap<String,Parser> PARSERS =
+    new HashMap<String,Parser>();
+  static{
+    PARSERS.put("ivy.xml", new IvyParser());
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -118,9 +126,9 @@ public class JavaProjectManager
     // ivy.xml, etc updated.
     if(buildfile != null){
       String filename = FileUtils.getBaseName(buildfile);
-//      Parser parser = (Parser)Services.getService(filename, Parser.class);
-//      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
-//      errors = setClasspath(javaProject, entries, dotclasspath);
+      Parser parser = PARSERS.get(filename);
+      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+      errors = setClasspath(javaProject, entries, dotclasspath);
 
     // .classpath updated.
     }else{
