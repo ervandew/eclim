@@ -28,9 +28,9 @@
   let s:command_create_depends = ' -d <depends>'
   let s:command_delete = '-command project_delete -p "<project>"'
   let s:command_refresh = '-command project_refresh -p "<project>"'
-  let s:command_projects = '-command project_info'
-  let s:command_project_info = s:command_projects . ' -p "<project>"'
-  let s:command_project_setting = s:command_project_info . ' -s <setting>'
+  let s:command_projects = '-command project_list'
+  let s:command_project_settings = '-command project_settings -p "<project>"'
+  let s:command_project_setting = s:command_project_settings . ' -s <setting>'
   let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
   let s:command_open = '-command project_open -p "<project>"'
   let s:command_close = '-command project_close -p "<project>"'
@@ -225,7 +225,7 @@ function! eclim#project#ProjectSettings (project)
     return
   endif
 
-  let command = substitute(s:command_project_info, '<project>', project, '')
+  let command = substitute(s:command_project_settings, '<project>', project, '')
   if eclim#util#TempWindowCommand(command, project . "_settings")
     exec "lcd " . eclim#project#GetProjectRoot(project)
     setlocal buftype=acwrite

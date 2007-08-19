@@ -280,8 +280,10 @@ public class Services
           org.eclim.command.project.ProjectNatureAliasesCommand.class);
       registerCommand("project_update",
           org.eclim.command.project.ProjectUpdateCommand.class);
-      registerCommand("project_info",
-          org.eclim.command.project.ProjectInfoCommand.class);
+      registerCommand("project_list",
+          org.eclim.command.project.ProjectListCommand.class);
+      registerCommand("project_settings",
+          org.eclim.command.project.ProjectSettingsCommand.class);
       registerCommand("project_natures",
           org.eclim.command.project.ProjectNaturesCommand.class);
       registerCommand("project_nature_add",
