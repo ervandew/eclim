@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -28,6 +26,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.CollectionUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 

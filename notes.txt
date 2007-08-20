@@ -304,8 +304,6 @@ NOTES {{{
   Dependencies
     commons-vfs
       - requires commons-logging
-    velocity
-      - requires commons-collections
 
 }}}
 

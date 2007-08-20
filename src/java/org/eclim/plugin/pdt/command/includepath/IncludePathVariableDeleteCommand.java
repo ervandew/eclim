@@ -17,13 +17,13 @@ package org.eclim.plugin.pdt.command.includepath;
 
 import java.util.ArrayList;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.util.CollectionUtils;
 
 import org.eclipse.core.runtime.IPath;
 

@@ -17,8 +17,6 @@ package org.eclim.command.project;
 
 import java.util.ArrayList;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
@@ -29,6 +27,7 @@ import org.eclim.command.Options;
 
 import org.eclim.project.ProjectNatureFactory;
 
+import org.eclim.util.CollectionUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
