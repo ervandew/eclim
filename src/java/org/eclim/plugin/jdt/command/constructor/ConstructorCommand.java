@@ -50,7 +50,7 @@ import org.eclipse.jdt.core.Signature;
 public class ConstructorCommand
   extends AbstractCommand
 {
-  private static final String TEMPLATE = "constructor.vm";
+  private static final String TEMPLATE = "constructor.gst";
 
   /**
    * {@inheritDoc}
@@ -115,10 +115,10 @@ public class ConstructorCommand
 
     HashMap<String,Object> values = new HashMap<String,Object>();
     values.put("type", type.getElementName());
-    if(properties != null && properties.length > 0){
-      values.put("fields", properties);
-      values.put("params", buildParams(type, properties));
-    }
+    boolean hasProperties = properties != null && properties.length > 0;
+    values.put("fields", hasProperties ? properties : null);
+    values.put("params",
+        hasProperties ? buildParams(type, properties) : StringUtils.EMPTY);
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

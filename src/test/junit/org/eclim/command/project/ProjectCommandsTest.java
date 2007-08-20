@@ -93,7 +93,7 @@ public class ProjectCommandsTest
    */
   private boolean projectOpen ()
   {
-    String list = Eclim.execute(new String[]{"project_info"});
+    String list = Eclim.execute(new String[]{"project_list"});
 
     return PROJECT_OPEN_PATTERN.matcher(list).find();
   }

@@ -45,12 +45,6 @@ TODO {{{
       - commons-logging from 1.0.4 to 1.1
       - forrest to 0.8
 
-      Remove
-        - spring
-          - commons-logging
-        - velocity
-          - commons-collections
-
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
@@ -306,6 +300,12 @@ NOTES {{{
   Release  /  Revision
   --------------------
   1.3.0       1253
+
+  Dependencies
+    commons-vfs
+      - requires commons-logging
+    velocity
+      - requires commons-collections
 
 }}}
 

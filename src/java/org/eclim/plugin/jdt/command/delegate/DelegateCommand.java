@@ -51,7 +51,7 @@ import org.eclipse.jdt.core.Signature;
 public class DelegateCommand
   extends ImplCommand
 {
-  private static final String TEMPLATE = "method.vm";
+  private static final String TEMPLATE = "method.gst";
 
   private IField field;
   private IType delegateType;
@@ -149,12 +149,11 @@ public class DelegateCommand
     values.put("name", _method.getElementName());
     String returnType = Signature.getSignatureSimpleName(
         _method.getReturnType());
-    values.put("return", returnType);
+    values.put("returnType", returnType);
     values.put("params", MethodUtils.getMethodParameters(_method, true));
     String thrown = MethodUtils.getMethodThrows(_method);
-    if(thrown != null){
-      values.put("throws", thrown);
-    }
+    values.put("throwsType", thrown != null ? thrown : null);
+    values.put("overrides", Boolean.FALSE);
 
     StringBuffer methodBody = new StringBuffer();
     if(!returnType.equals("void")){
@@ -175,7 +174,7 @@ public class DelegateCommand
     String typeName =
       JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
     values.put("superType", typeName);
-    values.put("implements", Boolean.TRUE);
+    values.put("implementof", Boolean.TRUE);
     values.put("delegate", Boolean.TRUE);
     values.put("methodSignature", MethodUtils.getMinimalMethodSignature(_method));
 

@@ -52,8 +52,8 @@ import org.eclipse.jdt.core.Signature;
 public class PropertiesCommand
   extends AbstractCommand
 {
-  private static final String GETTER_TEMPLATE = "getter.vm";
-  private static final String SETTER_TEMPLATE = "setter.vm";
+  private static final String GETTER_TEMPLATE = "getter.gst";
+  private static final String SETTER_TEMPLATE = "setter.gst";
 
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
@@ -83,7 +83,7 @@ public class PropertiesCommand
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IType type = TypeUtils.getType(src, offset);
-    List fields = Arrays.asList(type.getFields());
+    List<IField> fields = Arrays.asList(type.getFields());
 
     IJavaElement sibling = null;
     // insert in reverse order since eclipse IType only has an insert before,
@@ -250,13 +250,17 @@ public class PropertiesCommand
         JavaUtils.getCompilationUnitRelativeTypeName(_src, superType));
       _values.put("overrides",
           superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
-      _values.put("implements",
+      _values.put("implementof",
           superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
       _values.put("methodSignature",
           MethodUtils.getMinimalMethodSignature(_method));
+    }else{
+      _values.put("superType", null);
+      _values.put("overrides", null);
+      _values.put("implementof", null);
+      _values.put("methodSignature", null);
     }
-    _values.put("interface",
-        _type.isInterface() ? Boolean.TRUE : Boolean.FALSE);
+    _values.put("isinterface", _type.isInterface() ? Boolean.TRUE : Boolean.FALSE);
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
@@ -277,7 +281,7 @@ public class PropertiesCommand
    */
   protected IJavaElement getSibling (
       IType _type,
-      List _fields,
+      List<IField> _fields,
       IField _field,
       IJavaElement _lastSibling,
       int _methodType)

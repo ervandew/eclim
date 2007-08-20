@@ -59,7 +59,7 @@ public class ImplCommand
 {
   private static final Logger logger = Logger.getLogger(ImplCommand.class);
 
-  private static final String TEMPLATE = "method.vm";
+  private static final String TEMPLATE = "method.gst";
 
   /**
    * {@inheritDoc}
@@ -286,9 +286,11 @@ public class ImplCommand
         _type.getJavaProject().getProject(), getPreferences(), values);
 
     if(!_method.isConstructor()){
+      values.put("constructor", Boolean.FALSE);
       values.put("name", _method.getElementName());
-      values.put("return",
+      values.put("returnType",
           Signature.getSignatureSimpleName(_method.getReturnType()));
+      values.put("methodBody", null);
     }else{
       values.put("constructor", Boolean.TRUE);
       values.put("name", _type.getElementName());
@@ -302,6 +304,7 @@ public class ImplCommand
       }
       buffer.append(");");
       values.put("methodBody", buffer.toString());
+      values.put("returnType", null);
     }
 
     if(_superType.isInterface()){
@@ -315,13 +318,12 @@ public class ImplCommand
     values.put("params", MethodUtils.getMethodParameters(_method, true));
     values.put("overrides",
         _superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
-    values.put("implements",
+    values.put("implementof",
         _superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
     values.put("methodSignature", MethodUtils.getMinimalMethodSignature(_method));
     String thrown = MethodUtils.getMethodThrows(_method);
-    if(thrown != null){
-      values.put("throws", thrown);
-    }
+    values.put("throwsType", thrown != null ? thrown : null);
+    values.put("delegate", Boolean.FALSE);
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

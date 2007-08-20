@@ -53,7 +53,7 @@ import org.eclipse.jdt.core.IType;
 public class JUnitImplCommand
   extends ImplCommand
 {
-  private static final String JUNIT3_TEMPLATE = "junit3_method.vm";
+  private static final String JUNIT3_TEMPLATE = "junit3_method.gst";
 
   /**
    * {@inheritDoc}
@@ -195,6 +195,7 @@ public class JUnitImplCommand
     values.put("methodName", _method.getElementName());
     values.put("superType", _superType.getFullyQualifiedName());
     values.put("methodSignatures", getMethodSignatures(_superType, _method));
+    values.put("methodBody", null);
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

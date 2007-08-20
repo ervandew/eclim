@@ -102,7 +102,7 @@ public class Eclim
    */
   public static boolean projectExists (String _name)
   {
-    String list = Eclim.execute(new String[]{"project_info"});
+    String list = Eclim.execute(new String[]{"project_list"});
 
     return Pattern.compile(_name + "\\s+-").matcher(list).find();
   }
