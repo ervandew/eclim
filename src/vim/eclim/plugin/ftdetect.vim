@@ -54,6 +54,8 @@ autocmd BufRead *.wsdl
   \ call <SID>SetXmlFileType({'definitions': 'wsdl', 'wsdl:definitions': 'wsdl'})
 autocmd BufRead *.xml call <SID>SetXmlFileType(xmltypes)
 
+autocmd BufRead *.gst set ft=groovy_simple_template
+
 " SetXmlFileType(map) {{{
 " Sets the filetype of the current xml file to the if its root element is in the
 " supplied map.
