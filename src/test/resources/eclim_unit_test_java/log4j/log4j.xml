@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+  <!--
+    - A time/date based rolling appender
+    -->
+  <appender name="file" class="org.apache.log4j.RollingFileAppender">
+    <param name="file" value="${eclim.home}/log/eclimd.log"/>
+    <param name="append" value="true"/>
+    <param name="maxFileSize" value="2MB"/>
+    <param name="maxBackupIndex" value="25"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="conversionPattern" value="%d %-5p [%c] %m%n"/>
+    </layout>
+  </appender>
+
+  <!--
+    - Console appender.
+    -->
+  <appender name="console" class="org.eclim.util.logging.ConsoleAppender">
+    <pram name="Target" value="System.out"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+    </layout>
+  </appender>
+
+  <root>
+    <priority value="info"/>
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+
+</log4j:configuration>
