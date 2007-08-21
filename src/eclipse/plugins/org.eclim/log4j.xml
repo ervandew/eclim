@@ -26,24 +26,12 @@
     </layout>
   </appender>
 
-  <category name="org.apache.velocity">
-    <priority value="warn"/>
-  </category>
-
   <category name="org.apache.commons.vfs">
     <priority value="warn"/>
   </category>
 
   <category name="org.eclim">
     <priority value="info"/>
-  </category>
-
-  <category name="org.eclim.util.spring">
-    <priority value="warn"/>
-  </category>
-
-  <category name="org.springframework">
-    <priority value="warn"/>
   </category>
 
   <root>
