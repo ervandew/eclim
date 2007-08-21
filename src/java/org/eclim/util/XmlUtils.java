@@ -607,7 +607,9 @@ public class XmlUtils
             .append("/resources/")
             .append(FileUtils.getExtension(location))
             .append('/')
-            .append(FileUtils.getFileName(location));
+            .append(FileUtils.getFileName(location))
+            .append('.')
+            .append(FileUtils.getExtension(location));
           URL url = Services.getResource(resource.toString());
           if(url != null){
             return new InputSource(url.toString());
