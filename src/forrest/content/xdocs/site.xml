@@ -141,6 +141,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     </common>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
+      <validate label="Validation" href="validate.html" description="Validation"/>
     </css>
     <dtd label="Dtd" href="dtd/">
       <complete label="Validation" href="validate.html" description="Validation"/>

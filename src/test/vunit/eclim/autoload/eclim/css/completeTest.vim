@@ -29,7 +29,7 @@ endfunction " }}}
 
 " TestComplete() {{{
 function! TestComplete ()
-  edit! css/test.css
+  edit! css/complete.css
   call PeekRedir()
 
   call cursor(5, 7)

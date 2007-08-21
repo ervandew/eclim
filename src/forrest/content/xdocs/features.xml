@@ -60,6 +60,7 @@
     <p><strong>Css Integration</strong></p>
     <ul>
       <li>Context sensitive code completion.</li>
+      <li>Source code validation.</li>
     </ul>
 
     <p><strong>Dtd Integration</strong></p>

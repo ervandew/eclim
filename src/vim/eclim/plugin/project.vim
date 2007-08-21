@@ -125,4 +125,10 @@ if !exists(":ProjectGrepAdd")
 endif
 " }}}
 
+" Menu Items {{{
+"if has('gui')
+"  amenu <silent> &Plugin.&eclim.Projects.List :ProjectList<cr>
+"endif
+" }}}
+
 " vim:ft=vim:fdm=marker

@@ -163,6 +163,14 @@
       </li>
     </ul> <!-- }}} -->
 
+    <p><strong>Css Commands</strong></p> <!-- {{{ -->
+    <ul>
+      <li>
+        <a href="css/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current file.
+      </li>
+    </ul> <!-- }}} -->
+
     <p><strong>Dtd Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.plugin.wst.command.complete;
+package org.eclim.plugin.wst.command.validate;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -26,37 +26,40 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test case for CssCodeCompleteCommand.
+ * Test case for CssValidateCommand.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class CssCodeCompleteCommandTest
+public class CssValidateCommandTest
 {
-  private static final String TEST_FILE = "css/complete.css";
+  private static final String TEST_FILE = "css/validate.css";
 
   @Test
-  public void complete ()
+  public void validate ()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE, "-o", "52"
+      "css_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
     });
 
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 8, results.length);
-    assertTrue("Wrong result.", results[0].startsWith("font"));
-    assertTrue("Wrong result.", results[1].startsWith("font-family"));
-    assertTrue("Wrong result.", results[2].startsWith("font-size"));
-    assertTrue("Wrong result.", results[3].startsWith("font-size-adjust"));
-    assertTrue("Wrong result.", results[4].startsWith("font-stretch"));
-    assertTrue("Wrong result.", results[5].startsWith("font-style"));
-    assertTrue("Wrong result.", results[6].startsWith("font-variant"));
-    assertTrue("Wrong result.", results[7].startsWith("font-weight"));
+    assertEquals("Wrong number of errors.", 2, results.length);
+
+    String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
+    for(int ii = 0; ii < results.length; ii++){
+      assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
+      assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|e"));
+    }
+
+    assertTrue("Wrong error.",
+        results[0].indexOf("bald is not a font-weight value") != -1);
+    assertTrue("Wrong error.",
+        results[1].indexOf("Property fnt-size doesn't exist") != -1);
   }
 
   /**
@@ -64,6 +67,6 @@ public class CssCodeCompleteCommandTest
    */
   public static junit.framework.Test suite()
   {
-    return new junit.framework.JUnit4TestAdapter(CssCodeCompleteCommandTest.class);
+    return new junit.framework.JUnit4TestAdapter(CssValidateCommandTest.class);
   }
 }

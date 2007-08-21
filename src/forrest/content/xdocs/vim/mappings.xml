@@ -114,12 +114,12 @@
     <ul>
       <li>
         The following mapping allows you to simply hit &lt;Enter&gt; on an
-        element to perform a search to find it.
-        <code>
+        element to perform a search to find it.<br/>
+        <source>
           <![CDATA[
           nnoremap <silent> <buffer> <cr> :PhpSearchContext<cr>
           ]]>
-        </code>
+        </source>
       </li>
     </ul>
 
@@ -155,12 +155,12 @@
         If you are doing django development you may want to use the following
         mapping which will execute <strong>:DjangoViewOpen</strong>, or
         <strong>:DjangoTemplateOpen</strong> depending on the context of the
-        text under the cursor:<br/><br/>
-        <code>
+        text under the cursor:<br/>
+        <source>
           <![CDATA[
             nnoremap <silent> <buffer> <cr> :DjangoContextOpen<cr>
           ]]>
-        </code>
+        </source>
       </li>
     </ul>
 

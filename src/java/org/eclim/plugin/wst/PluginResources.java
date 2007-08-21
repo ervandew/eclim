@@ -48,6 +48,8 @@ public class PluginResources
         org.eclim.plugin.wst.command.complete.JavascriptCodeCompleteCommand.class);
     registerCommand("xml_complete",
         org.eclim.plugin.wst.command.complete.XmlCodeCompleteCommand.class);
+    registerCommand("css_validate",
+        org.eclim.plugin.wst.command.validate.CssValidateCommand.class);
     registerCommand("dtd_validate",
         org.eclim.plugin.wst.command.validate.DtdValidateCommand.class);
     registerCommand("html_validate",
