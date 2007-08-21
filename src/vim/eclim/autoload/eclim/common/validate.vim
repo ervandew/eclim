@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/dtd/validate.html
+"   Shared functionality.
 "
 " License:
 "
@@ -23,13 +23,13 @@
 " }}}
 
 " Script Variables {{{
-  let s:validate_command = '-command dtd_validate -p "<project>" -f "<file>"'
+  let s:validate_command = '-command <type>_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate(on_save) {{{
+" Validate(type, on_save) {{{
 " Validates the current file.
-function! eclim#dtd#validate#Validate (on_save)
-  if a:on_save && (!g:EclimDtdValidate || eclim#util#WillWrittenBufferClose())
+function! eclim#common#validate#Validate (type, on_save)
+  if eclim#util#WillWrittenBufferClose()
     return
   endif
 
@@ -40,6 +40,7 @@ function! eclim#dtd#validate#Validate (on_save)
   let project = eclim#project#GetCurrentProjectName()
   let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
   let command = s:validate_command
+  let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
 

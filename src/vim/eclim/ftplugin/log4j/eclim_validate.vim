@@ -29,8 +29,10 @@ endif
 " }}}
 
 if g:EclimLog4jValidate
-  autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#log4j#validate#Validate(1)
+  augroup eclim_log4j_validate
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('log4j', 1)
+  augroup END
 endif
 
 " disable plain xml validation.
@@ -39,7 +41,7 @@ augroup eclim_xml
 augroup END
 
 " Command Declarations {{{
-command! -nargs=0 -buffer Validate :call eclim#java#log4j#validate#Validate(0)
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('log4j', 0)
 " }}}
 
 " vim:ft=vim:fdm=marker

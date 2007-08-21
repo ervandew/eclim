@@ -8,6 +8,8 @@ TODO {{{
   Tests {{{
     - add unit tests for line based matching via :JavaRegex and :PythonRegex
     - add unit test for util classes
+    - log4j validation
+    - web.xml validation
   }}}
 
   Documentation {{{

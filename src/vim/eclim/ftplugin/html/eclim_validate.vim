@@ -31,13 +31,13 @@ endif
 if g:EclimHtmlValidate
   augroup eclim_html_validate
     autocmd!
-    autocmd BufWritePost <buffer> call eclim#html#validate#Validate(1)
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('html', 1)
   augroup END
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#html#validate#Validate(0)
+  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('html', 0)
 endif
 " }}}
 

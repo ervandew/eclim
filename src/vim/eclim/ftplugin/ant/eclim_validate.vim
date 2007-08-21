@@ -31,12 +31,12 @@ endif
 if g:EclimAntValidate
   augroup eclim_xml
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#java#ant#validate#Validate(1)
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('ant', 1)
   augroup END
 endif
 
 " Command Declarations {{{
-command! -nargs=0 -buffer Validate :call eclim#java#ant#validate#Validate(0)
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('ant', 0)
 " }}}
 
 " vim:ft=vim:fdm=marker

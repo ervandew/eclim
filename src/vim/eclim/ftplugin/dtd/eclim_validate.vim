@@ -29,13 +29,15 @@ endif
 " }}}
 
 if g:EclimDtdValidate
-  autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#dtd#validate#Validate(1)
+  augroup eclim_css_validate
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('dtd', 1)
+  augroup END
 endif
 
 " Command Declarations {{{
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#dtd#validate#Validate(0)
+  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('dtd', 0)
 endif
 " }}}
 
