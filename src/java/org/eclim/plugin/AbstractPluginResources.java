@@ -154,7 +154,11 @@ public abstract class AbstractPluginResources
   public URL getResource (String _resource)
   {
     try{
-      return FileLocator.resolve(getClass().getResource(_resource));
+      URL resource = getClass().getResource(_resource);
+      if (resource == null){
+        return null;
+      }
+      return FileLocator.resolve(resource);
     }catch(Exception e){
       throw new RuntimeException(e);
     }
