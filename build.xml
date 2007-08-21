@@ -152,9 +152,12 @@
       includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
     <!-- deploy vim files -->
-    <copy todir="${vim.files.home}" overwrite="true">
-      <fileset dir="src/vim" includes="**/*"/>
-    </copy>
+    <mkdir dir="${vim.files.home}/eclim"/>
+    <copy todir="${vim.files.home}/plugin"
+        file="src/vim/plugin/eclim.vim" overwrite="true"/>
+    <sync todir="${vim.files.home}/eclim">
+      <fileset dir="src/vim/eclim" includes="**/*"/>
+    </sync>
 
   </target>
 
