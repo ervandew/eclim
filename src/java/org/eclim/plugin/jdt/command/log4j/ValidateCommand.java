@@ -28,6 +28,8 @@ import org.eclim.command.filter.ErrorFilter;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -102,9 +104,10 @@ public class ValidateCommand
      * @param file The log4j xml file.
      */
     public Log4jHandler (IJavaProject project, String file)
+      throws Exception
     {
       this.project = project;
-      this.file = file;
+      this.file = ProjectUtils.getFilePath(project.getProject(), file);
     }
 
     /**
