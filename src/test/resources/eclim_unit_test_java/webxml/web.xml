@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <!--
+    - Listener for loading up settings.
+    -->
+  <listener>
+    <listener-class>foo.bar.Listener</listener-class>
+  </listener>
+
+  <!--
+    - Solr servlet definitions.
+    -->
+  <servlet>
+    <servlet-name>SolrServer</servlet-name>
+    <display-name>Solr</display-name>
+    <description>Solr Server</description>
+    <servlet-class>org.apache.solr.servlet.SolrServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ping</servlet-name>
+    <jsp-file>/admin/ping.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>pong</servlet-name>
+    <url-pattern>/admin/ping</url-pattern>
+  </servlet-mapping>
+
+</web-app>
