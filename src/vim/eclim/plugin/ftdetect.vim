@@ -30,6 +30,7 @@ let xmltypes = {
     \ 'form-validation': 'commonsvalidator',
     \ 'status': 'forreststatus',
     \ 'testsuite': 'junitresult',
+    \ 'log4j:configuration': 'log4j'
   \ }
 
 autocmd BufRead .classpath
@@ -38,8 +39,6 @@ autocmd BufRead .projectOptions
   \ call <SID>SetXmlFileType({'phpProjectOptions': 'eclipse_projectOptions'})
 autocmd BufRead ivy.xml
   \ call <SID>SetXmlFileType({'ivy-module': 'ivy'})
-autocmd BufRead log4j.xml
-  \ call <SID>SetXmlFileType({'log4j:configuration': 'log4j'})
 autocmd BufRead pom.xml
   \ call <SID>SetXmlFileType({'project': 'mvn_pom'})
 autocmd BufRead project.xml
