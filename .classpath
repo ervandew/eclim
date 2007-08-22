@@ -6,13 +6,11 @@
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.3.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-logging-1.0.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.1-beta-2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nlog4j-1.2.25.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.4.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jigsaw-2.2-20070228.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.2.100.v20070511.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.3.0.v20070606-0010.jar"/>

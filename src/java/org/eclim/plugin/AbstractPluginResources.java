@@ -15,6 +15,7 @@
  */
 package org.eclim.plugin;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -26,11 +27,13 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.Command;
+
+import org.eclim.logging.Logger;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.runtime.FileLocator;
 
@@ -49,6 +52,7 @@ public abstract class AbstractPluginResources
   private static final String PLUGIN_PROPERTIES = "/plugin.properties";
 
   private String name;
+  private String pluginName;
   private Properties properties;
   private ResourceBundle bundle;
 
@@ -64,6 +68,8 @@ public abstract class AbstractPluginResources
   public void initialize (String _name)
   {
     name = _name;
+    int index = name.lastIndexOf('.');
+    pluginName = index != -1 ? _name.substring(index + 1) : name;
   }
 
   /**
@@ -154,11 +160,33 @@ public abstract class AbstractPluginResources
   public URL getResource (String _resource)
   {
     try{
-      URL resource = getClass().getResource(_resource);
-      if (resource == null){
-        return null;
+    // try vim resources first
+    // Ex: /home/ervandew/.vim/eclim/resources/jdt/template/logger.gst
+
+      // inject the pluginName ("jdt", "wst", etc)
+      String vimResource = _resource;
+      int index = vimResource.indexOf("resources");
+      if(index != -1){
+        vimResource = FileUtils.concat(
+            vimResource.substring(0, index + 9),
+            pluginName,
+            vimResource.substring(index + 9));
       }
-      return FileLocator.resolve(resource);
+      String file = FileUtils.concat(
+          System.getProperty("vim.files"), "eclim", vimResource);
+      if (new File(file).exists()){
+        return new URL("file://" + FileUtils.separatorsToUnix(file));
+      }
+
+    // next try plugin resources
+      URL resource = getClass().getResource(_resource);
+      if (resource != null){
+        // convert any eclipse specific url to a native java one.
+        return FileLocator.resolve(resource);
+      }
+
+      // not found
+      return null;
     }catch(Exception e){
       throw new RuntimeException(e);
     }
@@ -169,7 +197,15 @@ public abstract class AbstractPluginResources
    */
   public InputStream getResourceAsStream (String _resource)
   {
-    return getClass().getResourceAsStream(_resource);
+    try{
+      URL resource = getResource(_resource);
+      if (resource != null){
+        return resource.openStream();
+      }
+      return null;
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
   }
 
   /**

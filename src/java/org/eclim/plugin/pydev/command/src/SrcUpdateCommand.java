@@ -19,14 +19,14 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
+
+import org.eclim.logging.Logger
 
 import org.eclim.util.ProjectUtils;
 

@@ -25,9 +25,9 @@ import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;

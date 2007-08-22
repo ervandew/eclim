@@ -23,7 +23,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.SystemUtils;
 
-import org.apache.log4j.Logger;
+import org.eclim.logging.Logger;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;

@@ -34,13 +34,13 @@ import groovy.lang.Writable;
 import groovy.text.Template;
 import groovy.text.TemplateEngine;
 
-import org.apache.log4j.Logger;
-
 import org.codehaus.groovy.control.CompilationFailedException;
 
 import org.codehaus.groovy.runtime.InvokerHelper;
 
 import org.eclim.Services;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.PluginResources;
 

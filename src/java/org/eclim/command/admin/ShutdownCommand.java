@@ -15,12 +15,12 @@
  */
 package org.eclim.command.admin;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
 import org.eclim.eclipse.EclimApplication;
+
+import org.eclim.logging.Logger;
 
 /**
  * Command to shutdown the eclim server.

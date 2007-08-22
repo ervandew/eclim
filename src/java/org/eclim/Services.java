@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.Command;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;

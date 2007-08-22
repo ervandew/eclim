@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.util.logging;
+package org.eclim.logging.log4j;
 
 import java.io.IOException;
 import java.io.OutputStream;

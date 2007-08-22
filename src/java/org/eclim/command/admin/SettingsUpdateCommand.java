@@ -20,9 +20,9 @@ import java.io.FileInputStream;
 
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;

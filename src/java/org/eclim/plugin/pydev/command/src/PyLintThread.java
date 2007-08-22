@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.eclim.logging.Logger
 
 import org.eclipse.core.resources.IResource;
 

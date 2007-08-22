@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.ScriptUtils;

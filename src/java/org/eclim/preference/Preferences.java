@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.util.ProjectUtils;
 

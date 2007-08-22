@@ -18,11 +18,11 @@ package org.eclim.plugin.jdt.command.complete;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 import org.eclim.command.Options;
+
+import org.eclim.logging.Logger;
 
 import org.eclipse.jdt.core.CompletionProposal;
 

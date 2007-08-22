@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<project name="logger" default="logger" basedir="../..">
+  <!--
+    - Target for creating distributable files.
+    -->
+  <target name="logger" description="Creates the logger jar file.">
+    <property file="src/ant/logger.properties"/>
+
+    <delete>
+      <fileset dir="build" includes="slf4j-log4j-*.jar"/>
+    </delete>
+    <mkdir dir="build/logger"/>
+    <unjar dest="build/logger">
+      <fileset dir="${log4j.dist.home}">
+        <include name="dist/lib/log4j-*.jar"/>
+      </fileset>
+      <fileset dir="${slf4j.dist.home}">
+        <include name="jcl104-over-slf4j-*.jar"/>
+        <include name="slf4j-api-*.jar"/>
+        <include name="slf4j-log4j12-*.jar"/>
+        <exclude name="*sources.jar"/>
+      </fileset>
+    </unjar>
+
+    <jar destfile="build/slf4j-log4j-${logger.version}.jar" basedir="build/logger">
+      <exclude name="META-INF/**/*"/>
+      <exclude name="META-INF"/>
+      <exclude name="org/apache/log4j/chainsaw/**/*"/>
+      <exclude name="org/apache/log4j/chainsaw"/>
+      <exclude name="org/apache/log4j/jdbc/**/*"/>
+      <exclude name="org/apache/log4j/jdbc"/>
+      <exclude name="org/apache/log4j/jmx/**/*"/>
+      <exclude name="org/apache/log4j/jmx"/>
+      <exclude name="org/apache/log4j/lf5/**/*"/>
+      <exclude name="org/apache/log4j/lf5"/>
+      <exclude name="org/apache/log4j/net/**/*"/>
+      <exclude name="org/apache/log4j/net"/>
+      <exclude name="org/apache/log4j/nt/**/*"/>
+      <exclude name="org/apache/log4j/nt"/>
+      <exclude name="org/apache/log4j/or/jms/**/*"/>
+      <exclude name="org/apache/log4j/or/jms"/>
+      <exclude name="org/apache/log4j/or/sax/**/*"/>
+      <exclude name="org/apache/log4j/or/sax"/>
+    </jar>
+  </target>
+</project>

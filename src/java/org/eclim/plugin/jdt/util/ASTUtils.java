@@ -15,7 +15,7 @@
  */
 package org.eclim.plugin.jdt.util;
 
-import org.apache.log4j.Logger;
+import org.eclim.logging.Logger;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;

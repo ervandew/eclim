@@ -43,6 +43,11 @@ public class PluginResources
   public static final String NAME = "org.eclim.jdt";
 
   /**
+   * The eclipse nature id for this plugin.
+   */
+  public static final String NATURE = "org.eclipse.jdt.core.javanature";
+
+  /**
    * {@inheritDoc}
    * @see AbstractPluginResources#initialize(String)
    */

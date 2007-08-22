@@ -27,11 +27,11 @@ import javax.xml.xpath.XPathExpression;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.project.ProjectNatureFactory;
 

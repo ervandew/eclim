@@ -29,7 +29,7 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
 fi
 
 JAVA_CMD="$CURPATH/ng $NAILGUN_ARGS"
-$JAVA_CMD org.eclim.command.Main "$@" 2>&1
+$JAVA_CMD org.eclim.command.Main "-Dvim.files=${vim.files}" "$@" 2>&1
 
 # Weirdest thing that for the life of me I can't figure out.
 # Sometimes when executed through vim, the exit status will be

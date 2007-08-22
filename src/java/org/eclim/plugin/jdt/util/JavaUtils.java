@@ -17,13 +17,16 @@ package org.eclim.plugin.jdt.util;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.eclim.Services;
 
+import org.eclim.plugin.jdt.PluginResources;
+
 import org.eclim.preference.Preferences;
+
+import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.ProjectUtils;
 
@@ -131,6 +134,13 @@ public class JavaUtils
     if(ProjectUtils.getPath(_project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", _project.getName()));
+    }
+
+    if(!_project.hasNature(PluginResources.NATURE)){
+      throw new IllegalArgumentException(Services.getMessage(
+            "project.missing.nature",
+            _project.getName(),
+            ProjectNatureFactory.getAliasForNature(PluginResources.NATURE)));
     }
 
     IJavaProject javaProject = JavaCore.create(_project);

@@ -18,7 +18,7 @@ package org.eclim.plugin.jdt.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.eclim.logging.Logger;
 
 import org.eclim.util.file.Position;
 

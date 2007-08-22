@@ -8,6 +8,7 @@ TODO {{{
   Tests {{{
     - add unit tests for line based matching via :JavaRegex and :PythonRegex
     - add unit test for util classes
+    - add unit test for project nature add/remove
   }}}
 
   Documentation {{{
@@ -30,19 +31,9 @@ TODO {{{
       :Validate (css, php, and java)
   }}}
 
-  Installer {{{
-    - maintain a version database for resources directories so we can determine
-      what files were added or modified by the user.
-      - keep an md5sum of each file to determine user changes which can be
-        resolved at install time via a visual diff.
-  }}}
-
   Common {{{
 
     Rename all eclim- files under ftplugin... maybe
-
-    Upgrade
-      - commons-logging from 1.0.4 to 1.1
 
     Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
@@ -52,12 +43,6 @@ TODO {{{
     - add IndentAnything into distribution
     - consider adding an optional set of vim scripts which set up an evironment like mine.
       - licensing issues?
-
-    - :ProjectNatureAdd/Remove
-      - Consider calling the nature's associated
-        ProjectManagement.create/delete methods in eclim to perform any nature
-        specific setup on any new natures added/removed.
-        - may want to add new methods: natureAdded, natureRemoved.
 
     - make sure html files (html, php, etc) are context aware on code
       completion, switching to html, css, javascript completion as necessary.
@@ -113,6 +98,14 @@ TODO {{{
   }}}
 
   Java {{{
+
+    - add support to logging shortcut for custom logger definition template.
+      - first implement support for alternate location of resources (templates and scripts)
+        .vim/resources/eclim/jdt/templates/
+        .vim/resources/eclim/jdt/scripts/
+      - org.eclim.java.logging.impl=custom
+      - .vim/resources/eclim/jdt/templates/logger.gst
+      - move my local resources (dict, licenses, template) to .vim/resources
 
     - look into code refactoring support.
 
@@ -196,6 +189,7 @@ TODO {{{
     - javascript doc lookup for common libraries
       - :JavascriptDocSearch
       - yui
+        http://developer.yahoo.com/yui/docs/YAHOO.widget.Dialog.html#configButtons
       - prototype
       - jquery
       ...

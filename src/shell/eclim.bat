@@ -19,4 +19,4 @@ rem Author: Eric Van Dewoestine
 set CUR_PATH=%~p0
 set JAVA_CMD="%CUR_PATH%\ng" --nailgun-port 9091
 
-%JAVA_CMD% org.eclim.command.Main %* 2>&1
+%JAVA_CMD% org.eclim.command.Main "-Dvim.files=${vim.files}" %* 2>&1

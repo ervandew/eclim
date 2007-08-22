@@ -25,6 +25,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectManager;
 import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.CollectionUtils;
@@ -58,16 +60,25 @@ public class ProjectNatureAddCommand
     IProjectDescription desc = project.getDescription();
     String[] natureIds = desc.getNatureIds();
     ArrayList<String> modified = new ArrayList<String>();
+    ArrayList<String> newNatures = new ArrayList<String>();
     CollectionUtils.addAll(modified, natureIds);
     for(String alias : aliases){
       String natureId = ProjectNatureFactory.getNatureForAlias(alias);
       if (natureId != null && !modified.contains(natureId)){
         modified.add(natureId);
+        newNatures.add(natureId);
       }
     }
 
     desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
     project.setDescription(desc, new NullProgressMonitor());
+
+    for (String nature : newNatures){
+      ProjectManager manager = ProjectManagement.getProjectManager(nature);
+      if (manager != null) {
+        manager.create(project, _commandLine);
+      }
+    }
 
     return Services.getMessage("project.nature.added");
   }

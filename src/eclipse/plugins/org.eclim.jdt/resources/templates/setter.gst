@@ -3,7 +3,7 @@
  * {@inheritDoc}
  * @see ${superType}#${methodSignature}
 <% } else { %>
-<% if (boolean) { %>
+<% if (isBoolean) { %>
  * Sets whether or not this instance is ${property}.
 <% } else { %>
  * Sets the ${property} for this instance.

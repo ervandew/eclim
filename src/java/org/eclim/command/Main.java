@@ -15,13 +15,15 @@
  */
 package org.eclim.command;
 
+import java.util.ArrayList;
+
 import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
+
+import org.eclim.logging.Logger;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
@@ -49,10 +51,20 @@ public class Main
       ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
         .setThread(Thread.currentThread());
 
+      ArrayList<String> args = new ArrayList<String>();
+      for(String arg : _args){
+        if(arg.startsWith("-D")){
+          String[] prop = StringUtils.split(arg.substring(2), '=');
+          System.setProperty(prop[0], prop[1]);
+        }else{
+          args.add(arg);
+        }
+      }
+
       CommandLine commandLine = null;
       Options options = new Options();
       try{
-        commandLine = options.parse(_args);
+        commandLine = options.parse((String[])args.toArray(new String[args.size()]));
       }catch(ParseException e){
         System.out.println(
             Services.getMessage(e.getClass().getName(), e.getMessage()));

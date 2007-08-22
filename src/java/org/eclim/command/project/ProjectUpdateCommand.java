@@ -21,8 +21,6 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
@@ -31,6 +29,8 @@ import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.project.ProjectManagement;
 

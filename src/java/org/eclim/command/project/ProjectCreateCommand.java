@@ -15,13 +15,13 @@
  */
 package org.eclim.command.project;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.project.ProjectManagement;
 

@@ -164,12 +164,16 @@ public class FileUtils
    * path.
    *
    * @param head The head path.
-   * @param tail The tail path.
+   * @param parts The path parts to concat.
    * @return The concatenated paths.
    */
-  public static String concat (String head, String tail)
+  public static String concat (String head, String... parts)
   {
-    return Path.fromOSString(head).append(tail).toOSString();
+    IPath path = Path.fromOSString(head);
+    for (String part : parts){
+      path = path.append(part);
+    }
+    return path.toOSString();
   }
 
   /**

@@ -164,7 +164,7 @@ public class PropertiesCommand
       values.put("name", methodName);
       values.put("property", _field.getElementName());
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("boolean", isBoolean ? Boolean.TRUE : Boolean.FALSE);
+      values.put("isBoolean", isBoolean ? Boolean.TRUE : Boolean.FALSE);
 
       insertMethod(_src, _type, method, _sibling, GETTER_TEMPLATE, values);
     }
@@ -210,7 +210,7 @@ public class PropertiesCommand
       values.put("property", _field.getElementName());
       values.put("propertyType", propertyType);
       values.put("array", _array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("boolean", propertyType.equals("boolean") ?
+      values.put("isBoolean", propertyType.equals("boolean") ?
           Boolean.TRUE : Boolean.FALSE);
 
       insertMethod(_src, _type, method, _sibling, SETTER_TEMPLATE, values);

@@ -17,6 +17,7 @@
 
   <import file="src/ant/dist.xml"/>
   <import file="src/ant/docs.xml"/>
+  <import file="src/ant/logger.xml"/>
   <import file="src/ant/patch.xml"/>
   <import file="src/ant/test.xml"/>
 
@@ -140,6 +141,7 @@
                   org.eclim*_${eclim.version}/plugin.properties,
                   org.eclim*_${eclim.version}/META-INF/MANIFEST.MF">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+      <replacefilter token="$${vim.files}" value="${vim.files}"/>
     </replace>
 
     <antcall target="plugin.lib.jars">
@@ -152,10 +154,10 @@
       includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
     <!-- deploy vim files -->
-    <mkdir dir="${vim.files.home}/eclim"/>
-    <copy todir="${vim.files.home}/plugin"
+    <mkdir dir="${vim.files}/eclim"/>
+    <copy todir="${vim.files}/plugin"
         file="src/vim/plugin/eclim.vim" overwrite="true"/>
-    <sync todir="${vim.files.home}/eclim">
+    <sync todir="${vim.files}/eclim">
       <fileset dir="src/vim/eclim" includes="**/*"/>
     </sync>
 

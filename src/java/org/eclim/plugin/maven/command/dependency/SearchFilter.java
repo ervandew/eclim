@@ -23,11 +23,11 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.log4j.Logger;
-
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
