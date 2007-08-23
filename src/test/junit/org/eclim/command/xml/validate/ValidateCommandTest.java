@@ -54,12 +54,4 @@ public class ValidateCommandTest
     assertTrue("Wrong error.",
         results[1].indexOf("The content of element type \"foo\" must match") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ValidateCommandTest.class);
-  }
 }

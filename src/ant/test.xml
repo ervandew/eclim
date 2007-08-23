@@ -24,7 +24,6 @@
       description="Starts the eclim server and runs the junit tests">
     <path id="junit">
       <pathelement location="lib/junit-4.1.jar"/>
-      <pathelement location="src/ant/lib/ant-junit-1.6.5.jar"/>
     </path>
 
     <taskdef name="junit" classpathref="junit"

@@ -73,12 +73,4 @@ public class XmlCodeCompleteCommandTest
     assertTrue("Wrong result.", results[1].indexOf("attribute") != -1);
     assertTrue("Wrong result.", results[2].indexOf("attributeGroup") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(XmlCodeCompleteCommandTest.class);
-  }
 }

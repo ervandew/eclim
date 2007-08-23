@@ -91,12 +91,4 @@ public class DocSearchCommandTest
         "System.html#currentTimeMillis()",
         result);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(DocSearchCommandTest.class);
-  }
 }

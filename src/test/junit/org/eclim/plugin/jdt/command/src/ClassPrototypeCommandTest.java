@@ -74,12 +74,4 @@ public class ClassPrototypeCommandTest
       IOUtils.closeQuietly(fin);
     }
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ClassPrototypeCommandTest.class);
-  }
 }

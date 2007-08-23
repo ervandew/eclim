@@ -74,12 +74,4 @@ public class ImplCommandTest
     assertTrue("Method not commented out in results.",
         result.indexOf("//public abstract boolean remove (Object o)") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ImplCommandTest.class);
-  }
 }

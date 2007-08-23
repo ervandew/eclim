@@ -48,12 +48,4 @@ public class ValidateCommandTest
         "|5 col 2|Default target none does not exist in this project|e",
         result);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ValidateCommandTest.class);
-  }
 }

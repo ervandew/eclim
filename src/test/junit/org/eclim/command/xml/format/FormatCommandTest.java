@@ -51,12 +51,4 @@ public class FormatCommandTest
     assertEquals("  <two/>", lines[3]);
     assertEquals("</blah>", lines[4]);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(FormatCommandTest.class);
-  }
 }

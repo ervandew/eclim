@@ -100,12 +100,4 @@ for(int ii = 0; ii < c1.length; ii++){
 
     return "" + _char;
   }*/
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CommentCommandTest.class);
-  }
 }

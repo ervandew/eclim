@@ -97,12 +97,4 @@ public class ProjectCommandsTest
 
     return PROJECT_OPEN_PATTERN.matcher(list).find();
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ProjectCommandsTest.class);
-  }
 }

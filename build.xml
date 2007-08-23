@@ -159,6 +159,9 @@
         file="src/vim/plugin/eclim.vim" overwrite="true"/>
     <sync todir="${vim.files}/eclim">
       <fileset dir="src/vim/eclim" includes="**/*"/>
+      <preserveintarget>
+        <include name="resources/**/*"/>
+      </preserveintarget>
     </sync>
 
   </target>

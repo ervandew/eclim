@@ -59,12 +59,4 @@ public class DtdValidateCommandTest
     assertTrue("Wrong error.",
         results[0].indexOf("The element 'MissingDef' has not been declared") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(DtdValidateCommandTest.class);
-  }
 }

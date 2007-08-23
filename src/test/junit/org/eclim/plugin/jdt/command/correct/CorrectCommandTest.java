@@ -77,12 +77,4 @@ public class CorrectCommandTest
     assertTrue("Import not found.",
         Pattern.compile("import java\\.").matcher(result).find());
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CorrectCommandTest.class);
-  }
 }

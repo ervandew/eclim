@@ -73,12 +73,4 @@ public class CodeCompleteCommandTest
     assertTrue("Wrong result", results[0].startsWith("methodA1(|"));
     assertTrue("Wrong result", results[1].startsWith("methodA2()|"));
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CodeCompleteCommandTest.class);
-  }
 }

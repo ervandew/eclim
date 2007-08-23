@@ -61,12 +61,4 @@ public class CssValidateCommandTest
     assertTrue("Wrong error.",
         results[1].indexOf("Property fnt-size doesn't exist") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CssValidateCommandTest.class);
-  }
 }

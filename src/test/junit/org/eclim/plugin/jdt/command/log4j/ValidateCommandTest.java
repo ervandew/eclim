@@ -79,12 +79,4 @@ public class ValidateCommandTest
         "|24 col 1|Type 'org.apache.log4j.PatternLayout' not found in project 'eclim_unit_test_java'.|e",
         results[5]);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ValidateCommandTest.class);
-  }
 }

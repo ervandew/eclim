@@ -15,8 +15,6 @@
  */
 package org.eclim.command.admin;
 
-import junit.framework.JUnit4TestAdapter;
-
 import org.eclim.Eclim;
 
 import org.junit.Test;
@@ -40,13 +38,5 @@ public class PingCommandTest
     String result = Eclim.execute(new String[]{"ping"});
     assertEquals("Unexpected result",
         "eclim " + System.getProperty("eclim.version"), result);
-  }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new JUnit4TestAdapter(PingCommandTest.class);
   }
 }

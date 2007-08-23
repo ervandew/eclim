@@ -75,12 +75,4 @@ public class CodeCompleteCommandTest
     assertTrue("Target 'javaresource' not found.",
         results[6].startsWith("javaresource|"));
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CodeCompleteCommandTest.class);
-  }
 }

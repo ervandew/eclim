@@ -67,12 +67,4 @@ public class HtmlValidateCommandTest
     assertTrue("Wrong error [2].",
         results[2].indexOf("discarding unexpected </div>") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(HtmlValidateCommandTest.class);
-  }
 }

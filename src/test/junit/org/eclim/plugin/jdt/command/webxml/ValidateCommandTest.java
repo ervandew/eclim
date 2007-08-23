@@ -62,12 +62,4 @@ public class ValidateCommandTest
         "|32 col 1|No servlet definition with name 'pong' defined.|e",
         results[2]);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ValidateCommandTest.class);
-  }
 }

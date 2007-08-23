@@ -90,12 +90,4 @@ public class SrcUpdateCommandTest
     assertTrue("Wrong second warning.",
         results[1].indexOf("The import java.util.List is never used") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(SrcUpdateCommandTest.class);
-  }
 }

@@ -112,12 +112,4 @@ public class FindDefinitionCommandTest
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
     assertEquals("Wrong Result", file + "|3 col 1|functionA", result);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(FindDefinitionCommandTest.class);
-  }
 }

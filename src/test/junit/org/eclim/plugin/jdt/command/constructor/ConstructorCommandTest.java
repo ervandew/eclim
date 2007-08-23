@@ -70,12 +70,4 @@ public class ConstructorCommandTest
         Pattern.compile("public TestConstructor \\(int id, String name\\)")
         .matcher(contents).find());
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(ConstructorCommandTest.class);
-  }
 }

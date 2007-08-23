@@ -90,12 +90,4 @@ public class PropertiesCommandTest
         Pattern.compile("public void setValid \\(boolean valid\\)")
         .matcher(contents).find());
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(PropertiesCommandTest.class);
-  }
 }

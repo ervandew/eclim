@@ -19,8 +19,6 @@ import java.io.ByteArrayInputStream;
 
 import java.util.Properties;
 
-import junit.framework.JUnit4TestAdapter;
-
 import org.eclim.Eclim;
 
 import org.junit.Test;
@@ -66,13 +64,5 @@ public class SettingsCommandTest
 
     assertTrue("Missing org.eclim.java.doc.version",
         properties.containsKey("org.eclim.java.doc.version"));
-  }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new JUnit4TestAdapter(SettingsCommandTest.class);
   }
 }

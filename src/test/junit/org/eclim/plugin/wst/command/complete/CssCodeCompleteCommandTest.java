@@ -58,12 +58,4 @@ public class CssCodeCompleteCommandTest
     assertTrue("Wrong result.", results[6].startsWith("font-variant"));
     assertTrue("Wrong result.", results[7].startsWith("font-weight"));
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(CssCodeCompleteCommandTest.class);
-  }
 }

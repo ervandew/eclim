@@ -53,12 +53,4 @@ public class SrcUpdateCommandTest
     assertEquals("Wrong result.",
         file + "|5 col 5|Syntax Error: expecting: ',' or ';'|e", results[0]);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(SrcUpdateCommandTest.class);
-  }
 }

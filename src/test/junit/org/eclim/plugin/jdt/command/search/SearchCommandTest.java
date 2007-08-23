@@ -114,12 +114,4 @@ public class SearchCommandTest
     assertTrue("EclimApplication not found.",
         result.endsWith("org.eclim.plugin.jdt.Jdt#TEST_PROJECT"));
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(SearchCommandTest.class);
-  }
 }

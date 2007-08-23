@@ -51,12 +51,4 @@ public class SearchCommandTest
     assertTrue("JUnit dependency not commented out.",
         result.indexOf("\n\t//junit.jar (3.8.1)\n") != -1);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(SearchCommandTest.class);
-  }
 }

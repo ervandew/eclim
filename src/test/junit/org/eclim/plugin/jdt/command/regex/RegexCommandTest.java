@@ -48,12 +48,4 @@ public class RegexCommandTest
 
     assertEquals("Wrong result", "3:6-3:9\n3:22-3:25", result);
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(RegexCommandTest.class);
-  }
 }

@@ -87,12 +87,4 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Wrong result.", results[0].startsWith("font"));
     assertTrue("Wrong result.", results[1].startsWith("font-family"));
   }
-
-  /**
-   * Required for running tests in ant 1.6.5.
-   */
-  public static junit.framework.Test suite()
-  {
-    return new junit.framework.JUnit4TestAdapter(HtmlCodeCompleteCommandTest.class);
-  }
 }
