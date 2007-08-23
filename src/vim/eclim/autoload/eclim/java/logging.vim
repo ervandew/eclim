@@ -28,23 +28,23 @@ function! eclim#java#logging#LoggingInit (var)
   " only execute if the user types a '.' for a method call and if the logger
   " is not already present.
   if char == '.' && s:InitLoggingSettings() && !search('final Log\(ger\)\?\s', 'n')
-    let offset = 2
     let line = line('.')
     let col = col('.')
     let position = eclim#java#util#GetClassDeclarationPosition(1)
     if position
       let logger = s:logger
-      let logger = substitute(logger, '<class>', eclim#java#util#GetClassname(), '')
-      let logger = substitute(logger, '<var>', a:var, '')
-      if strlen(logger) > &textwidth
+      let logger = substitute(logger, '\${class}', eclim#java#util#GetClassname(), '')
+      let logger = substitute(logger, '\${var}', a:var, '')
+      if strlen(logger) > &textwidth && logger !~ '\n'
         let logger = substitute(logger,
           \ '\(.*\)\s\(.*\)', '\1\n' . g:EclimIndent . g:EclimIndent . '\2', '')
-        let offset = 3
       endif
 
       let position = search('{')
+      let lines = split(logger, '\n')
+      let offset = len(lines) + 1
       call append(position, '')
-      call append(position, split(logger, '\n'))
+      call append(position, lines)
       call cursor(line + offset, col)
       for import in s:logger_imports
         call eclim#java#import#InsertImport(import)
@@ -61,22 +61,35 @@ function! s:InitLoggingSettings ()
     \ eclim#project#GetProjectSetting("org.eclim.java.logging.impl")
   if s:EclimLoggingImpl == "commons-logging"
     let s:logger = g:EclimIndent .
-      \ "private static final Log <var> = LogFactory.getLog(<class>.class);"
+      \ "private static final Log ${var} = LogFactory.getLog(${class}.class);"
     let s:logger_imports = [
       \ "org.apache.commons.logging.Log",
       \ "org.apache.commons.logging.LogFactory"]
   elseif s:EclimLoggingImpl == "slf4j"
     let s:logger = g:EclimIndent .
-      \ "private static final Logger <var> = LoggerFactory.getLogger(<class>.class);"
+      \ "private static final Logger ${var} = LoggerFactory.getLogger(${class}.class);"
     let s:logger_imports = ["org.slf4j.Logger", "org.slf4j.LoggerFactory"]
   elseif s:EclimLoggingImpl == "log4j"
     let s:logger = g:EclimIndent .
-      \ "private static final Logger <var> = Logger.getLogger(<class>.class);"
+      \ "private static final Logger ${var} = Logger.getLogger(${class}.class);"
     let s:logger_imports = ["org.apache.log4j.Logger"]
   elseif s:EclimLoggingImpl == "jdk"
     let s:logger = g:EclimIndent .
-      \ "private static final Logger <var> = Logger.getLogger(<class>.class.getName());"
+      \ "private static final Logger ${var} = Logger.getLogger(${class}.class.getName());"
     let s:logger_imports = ["java.util.logging.Logger"]
+  elseif s:EclimLoggingImpl == "custom"
+    let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/logger.gst'
+    if(!filereadable(template))
+      echoe 'Custom logger template not found at "' . template . '"'
+      return 0
+    endif
+    let lines = readfile(template)
+    let s:logger_imports = lines[:]
+    call filter(s:logger_imports, "v:val =~ '^\\s*import\\>'")
+    call map(s:logger_imports,
+      \ "substitute(v:val, '^\\s*import\\>\\s*\\(.*\\);\\s*', '\\1', '')")
+    call filter(lines, "v:val !~ '\\(^\\s*$\\|^\\s*import\\>\\)'")
+    let s:logger = g:EclimIndent . join(lines, "\n" . g:EclimIndent)
   elseif s:EclimLoggingImpl == ""
     " no setting returned, probably not in a project, or user is attempting to
     " disable this functionality for the current project.

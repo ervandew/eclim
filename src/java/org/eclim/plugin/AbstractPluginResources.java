@@ -161,7 +161,7 @@ public abstract class AbstractPluginResources
   {
     try{
     // try vim resources first
-    // Ex: /home/ervandew/.vim/eclim/resources/jdt/template/logger.gst
+    // Ex: /home/ervandew/.vim/eclim/resources/jdt/templates/logger.gst
 
       // inject the pluginName ("jdt", "wst", etc)
       String vimResource = _resource;

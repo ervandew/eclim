@@ -6,9 +6,10 @@ TODO {{{
   }}}
 
   Tests {{{
-    - add unit tests for line based matching via :JavaRegex and :PythonRegex
-    - add unit test for util classes
-    - add unit test for project nature add/remove
+    - line based matching via :JavaRegex and :PythonRegex
+    - util classes
+    - project nature add/remove
+    - logger (custom logger)
   }}}
 
   Documentation {{{
@@ -16,6 +17,8 @@ TODO {{{
       - how to specify workspace dir.
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
+
+    - custom logger template
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -98,14 +101,6 @@ TODO {{{
   }}}
 
   Java {{{
-
-    - add support to logging shortcut for custom logger definition template.
-      - first implement support for alternate location of resources (templates and scripts)
-        .vim/resources/eclim/jdt/templates/
-        .vim/resources/eclim/jdt/scripts/
-      - org.eclim.java.logging.impl=custom
-      - .vim/resources/eclim/jdt/templates/logger.gst
-      - move my local resources (dict, licenses, template) to .vim/resources
 
     - look into code refactoring support.
 
