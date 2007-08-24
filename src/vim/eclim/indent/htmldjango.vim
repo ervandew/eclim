@@ -23,12 +23,13 @@
 " }}}
 
 " Only load this indent file when no other was loaded.
-if exists("b:did_htmldjango_indent")
+if exists("b:htmldjango_did_indent")
   finish
 endif
 
 runtime indent/html.vim
-let b:did_htmldjango_indent = 1
+let b:did_indent = 1
+let b:htmldjango_did_indent = 1
 
 let g:HtmlDjangoIndentOpenElements = ''
 let g:HtmlDjangoIndentMidElements = ''

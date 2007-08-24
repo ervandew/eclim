@@ -23,12 +23,13 @@
 " }}}
 
 " Only load this indent file when no other was loaded.
-if exists("b:xml_did_indent")
+if exists("b:xml_did_indent") && &indentexpr =~ 'GetXmlIndent'
   finish
 endif
 
 runtime indent/dtd.vim
 
+let b:did_indent = 1
 let b:xml_did_indent = 1
 
 setlocal indentexpr=GetXmlIndent(v:lnum)
@@ -48,6 +49,13 @@ function! GetXmlIndent (lnum)
   endif
   call cursor(line, col)
 
+  let cdatastart = search('<!\[CDATA\[', 'bcW')
+  if cdatastart > 0
+    let cdatastart = search('\[', 'cW', cdatastart)
+    let cdataend = search('\]\]>', 'cW')
+  endif
+  call cursor(line, col)
+
   " Inside <DOCTYPE, let dtd indent do the work.
   if doctypestart > 0 && doctypestart < a:lnum &&
         \ (doctypeend == 0 || (doctypeend > doctypestart && a:lnum <= doctypeend))
@@ -55,11 +63,31 @@ function! GetXmlIndent (lnum)
       call DtdIndentAnythingSettings()
       return GetDtdIndent(a:lnum)
     elseif a:lnum == doctypeend
-      let indent = indent(a:lnum) - &sw
-      echom "End doctype " . indent
-      return indent
+      return indent(a:lnum) - &sw
     endif
   else
+    " in a <[CDATA[ section
+    if cdatastart > 0 && cdatastart < a:lnum &&
+          \ (cdataend == 0 || (cdataend >= cdatastart && a:lnum <= cdataend))
+      " only indent if nested text looks like xml
+      if getline(a:lnum) =~ '^\s*<'
+        if a:lnum == cdatastart + 1
+          return indent(cdatastart) + &sw
+        endif
+      else
+        return indent(a:lnum)
+      endif
+
+      " make sure the closing of the CDATA lines up with the opening.
+      if a:lnum == cdataend
+        return indent(cdatastart)
+      endif
+    " make sure that tag following close of CDATA is properly indented.
+    elseif cdatastart > 0 && cdatastart < a:lnum &&
+          \ (cdataend >= cdatastart && prevnonblank(a:lnum - 1) == cdataend)
+      return indent(cdatastart) - &sw
+    endif
+
     call XmlIndentAnythingSettings()
     let adj = s:XmlIndentAttributeWrap(a:lnum) * &sw
   endif
@@ -98,7 +126,9 @@ function! XmlIndentAnythingSettings ()
   let b:singleQuoteStringRE = b:stringRE
   let b:doubleQuoteStringRE = b:stringRE
 
-  setl comments=sr:<!--,m:-,e:-->
+  setlocal formatoptions+=croql
+  setlocal comments=sr:<!--,mb:-,ex0:-->
+
   let b:blockCommentStartRE  = '<!--'
   let b:blockCommentMiddleRE = '-'
   let b:blockCommentEndRE    = '-->'

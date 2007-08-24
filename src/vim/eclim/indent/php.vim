@@ -22,7 +22,7 @@
 "
 " }}}
 
-if exists("b:did_indent")
+if exists("b:php_did_indent")
   finish
 endif
 
@@ -30,6 +30,7 @@ source $VIMRUNTIME/indent/php.vim
 unlet b:did_indent
 runtime indent/html.vim
 let b:did_indent = 1
+let b:php_did_indent = 1
 
 setlocal indentexpr=GetPhpHtmlIndent(v:lnum)
 setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}

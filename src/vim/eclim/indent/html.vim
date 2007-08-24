@@ -23,7 +23,7 @@
 " }}}
 
 " Only load this indent file when no other was loaded.
-if exists("b:did_indent")
+if exists("b:html_did_indent")
   finish
 endif
 
@@ -31,6 +31,7 @@ runtime indent/javascript.vim
 unlet b:did_indent
 runtime indent/css.vim
 let b:did_indent = 1
+let b:html_did_indent = 1
 
 setlocal indentexpr=GetHtmlIndent(v:lnum)
 setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O

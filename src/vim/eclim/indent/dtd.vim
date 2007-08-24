@@ -27,6 +27,7 @@ if exists("b:dtd_did_indent")
   finish
 endif
 
+let b:did_indent = 1
 let b:dtd_did_indent = 1
 
 setlocal indentexpr=GetDtdIndent(v:lnum)

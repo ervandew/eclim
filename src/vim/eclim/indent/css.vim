@@ -24,11 +24,12 @@
 
 
 " Only load this indent file when no other was loaded.
-if exists("b:did_indent")
+if exists("b:css_did_indent")
   finish
 endif
 
 let b:did_indent = 1
+let b:css_did_indent = 1
 
 setlocal indentexpr=GetCssIndent(v:lnum)
 setlocal indentkeys=0{,0},!^F,o,O
