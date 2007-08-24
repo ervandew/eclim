@@ -307,6 +307,11 @@
         line individually.
       </action>
 
+      <action dev="ervandew" type="update" context="Java">
+        Updated the <a href="vim/java/logging.html">java logger</a> functionality
+        to support a custom logger template.
+      </action>
+
       <action dev="ervandew" type="add" context="Php">
         Added php support for
         <a href="vim/php/complete.html">code completion</a>,

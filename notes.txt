@@ -294,8 +294,6 @@ HIGH {{{
   - add options to disable eclim indent files
     - note: html and htmldjango must be enabled/disabled in tandum
 
-  - document custom logger template
-
   - php, java, on files out of src path, support definition searching.
 
 }}}
