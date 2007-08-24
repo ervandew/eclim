@@ -22,6 +22,7 @@
 " }}}
 
 runtime ftplugin/xml.vim
+runtime indent/xml.vim
 runtime ftplugin/java/eclim_search.vim
 runtime ftplugin/java/eclim_util.vim
 

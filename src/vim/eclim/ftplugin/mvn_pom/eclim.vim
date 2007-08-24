@@ -23,6 +23,7 @@
 
 " load any xml related functionality
 runtime ftplugin/xml.vim
+runtime indent/xml.vim
 
 " Global Variables {{{
 " }}}

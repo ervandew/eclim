@@ -22,6 +22,7 @@
 " }}}
 
 runtime ftplugin/xml.vim
+runtime indent/xml.vim
 
 set textwidth=80
 

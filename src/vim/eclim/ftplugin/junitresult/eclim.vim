@@ -22,5 +22,6 @@
 " }}}
 
 runtime ftplugin/xml.vim
+runtime indent/xml.vim
 
 " vim:ft=vim:fdm=marker
