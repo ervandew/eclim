@@ -232,11 +232,10 @@ endfunction " }}}
 " Gets the configured sql engine for the project at the supplied project directory.
 function eclim#python#django#GetSqlEngine (project_dir)
   let engine = 'postgresql'
-  " determine user's sql dialect
   let restore = winrestcmd()
   try
-    exec 'silent split ' . a:project_dir . '/settings.py'
-    if search('DATABASE_ENGINE')
+    exec 'silent sview ' . a:project_dir . '/settings.py'
+    if search('^\s*\<DATABASE_ENGINE\>')
       let engine = substitute(getline('.'),
         \ "^.*DATABASE_ENGINE\\s*=\\s*['\"]\\(\\w\\+\\)['\"].*$", '\1', '')
     endif
@@ -245,6 +244,36 @@ function eclim#python#django#GetSqlEngine (project_dir)
     silent exec restore
   endtry
   return engine
+endfunction " }}}
+
+" GetTemplateDirs(project_dir) {{{
+" Gets the configured list of template directories relative to the project
+" dir.
+function eclim#python#django#GetTemplateDirs (project_dir)
+  let dirs = []
+  let restore = winrestcmd()
+  try
+    exec 'silent sview ' . a:project_dir . '/settings.py'
+    let lnum = search('^\s*\<TEMPLATE_DIRS\>\s*=')
+    if lnum
+      let regex = ".\\\\{-}['\\\"]\\\\(.\\\\{-}\\\\)['\\\"].*"
+      while 1
+        let line = substitute(getline(lnum), '#.*', '', '')
+        let names = split(line, ',')
+        let names = map(names, 'substitute(v:val, "' . regex . '", "\\1", "")')
+        let dirs += names
+        if getline(lnum) =~ ')'
+          break
+        endif
+        let lnum += 1
+      endwhile
+      call filter(dirs, 'v:val !~ "^\\(TEMPLATE_DIRS\\|)\\|\\s*$\\)"')
+    endif
+    close
+  finally
+    silent exec restore
+  endtry
+  return dirs
 endfunction " }}}
 
 " FindFilterOrTag(project_dir, element, type) {{{
@@ -305,11 +334,14 @@ endfunction " }}}
 " FindTemplate(project_dir, template) {{{
 " Finds and opens the supplied template definition.
 function eclim#python#django#FindTemplate (project_dir, template)
-  let file = findfile(a:template, a:project_dir . '/*/templates')
-  if file != ''
-    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
-    return
-  endif
+  let dirs = eclim#python#django#GetTemplateDirs(a:project_dir)
+  for dir in dirs
+    let file = findfile(a:template, a:project_dir . '/' . dir)
+    if file != ''
+      call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
+      return
+    endif
+  endfor
   call eclim#util#EchoError('Could not find the template "' . a:template . '"')
 endfunction " }}}
 

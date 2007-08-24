@@ -18,8 +18,6 @@ TODO {{{
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
 
-    - custom logger template
-
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd
@@ -43,7 +41,6 @@ TODO {{{
 
     - gvim menu items.
 
-    - add IndentAnything into distribution
     - consider adding an optional set of vim scripts which set up an evironment like mine.
       - licensing issues?
 
@@ -290,6 +287,16 @@ NOTES {{{
   Dependencies
     commons-vfs
       - requires commons-logging
+
+}}}
+
+HIGH {{{
+  - add options to disable eclim indent files
+    - note: html and htmldjango must be enabled/disabled in tandum
+
+  - document custom logger template
+
+  - php, java, on files out of src path, support definition searching.
 
 }}}
 
