@@ -37,7 +37,6 @@ augroup END
 " current file.
 function! s:Show (type, list)
   if a:type != ''
-    echom 'type ' . a:type
     if a:list == 'qf'
       let list = getqflist()
     else
