@@ -52,7 +52,7 @@ function eclim#java#maven#repo#SetClasspathVariable (cmd, variable)
     endif
 
     if filereadable(prefs)
-      silent exec 'split ' . prefs
+      silent exec 'sview ' . prefs
       let line = search('org.eclipse.jdt.core.classpathVariable.' . a:variable, 'cnw')
       if line
         let value = substitute(getline(line), '.\{-}=\(.*\)', '\1', '')

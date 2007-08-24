@@ -71,7 +71,7 @@ function! eclim#xml#Validate (file, on_save, ...)
 
     if substitute(expand('%:p'), '\', '/', 'g') != file
       let restore = winrestcmd()
-      exec 'split ' . file
+      exec 'sview ' . file
     endif
     if search('xsi:schemaLocation', 'cnw')
       let command .= ' -s'

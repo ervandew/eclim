@@ -105,7 +105,7 @@ endfunction " }}}
 function! eclim#java#util#GetPackage (...)
   if a:0 > 0
     let winreset = winrestcmd()
-    silent exec "split " . a:1
+    silent exec "sview " . a:1
   endif
 
   let line = line('.')
