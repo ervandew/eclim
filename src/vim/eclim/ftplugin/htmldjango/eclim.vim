@@ -22,6 +22,7 @@
 " }}}
 
 runtime ftplugin/html.vim
+runtime indent/html.vim
 runtime ftplugin/html/eclim.vim
 
 if !exists('g:HtmlDjangoUserBodyElements')
