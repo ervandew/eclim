@@ -1,4 +1,26 @@
 " Author:  Eric Van Dewoestine
+" Version: $Revision$
+"
+" Description: {{{
+"   Django Html template indent file using IndentAnything.
+"
+" License:
+"
+" Copyright (c) 2005 - 2006
+"
+" Licensed under the Apache License, Version 2.0 (the "License");
+" you may not use this file except in compliance with the License.
+" You may obtain a copy of the License at
+"
+"      http://www.apache.org/licenses/LICENSE-2.0
+"
+" Unless required by applicable law or agreed to in writing, software
+" distributed under the License is distributed on an "AS IS" BASIS,
+" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+" See the License for the specific language governing permissions and
+" limitations under the License.
+"
+" }}}
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_htmldjango_indent")
@@ -25,6 +47,8 @@ for element in g:HtmlDjangoBodyElements
 endfor
 
 let HtmlSettings = function('HtmlIndentAnythingSettings')
+
+" HtmlIndentAnythingSettings() {{{
 function! HtmlIndentAnythingSettings ()
   call HtmlSettings()
 
@@ -34,4 +58,6 @@ function! HtmlIndentAnythingSettings ()
         \ '{%\s*\(' . g:HtmlDjangoIndentMidElements . '\)\s\+.\{-}%}',
         \ '{%\s*end\w\+\s*%}' ],
     \ ]
-endfunction
+endfunction " }}}
+
+" vim:ft=vim:fdm=marker
