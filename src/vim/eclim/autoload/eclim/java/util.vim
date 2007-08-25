@@ -4,20 +4,6 @@
 " Description: {{{
 "   Utility functions for java eclim ftplugins.
 "
-" Platform:
-"   All platforms (tested on linux).
-"
-" Dependencies:
-"   Requires plugin/eclim.vim
-"
-" Usage:
-"   :call JavaIsKeyword(word)
-"   :call JavaGetPackage()
-"   etc...
-"
-" Configuration:
-"   None.
-"
 " License:
 "
 " Copyright (c) 2005 - 2006
@@ -200,7 +186,7 @@ endfunction " }}}
 " IsKeyword(word) {{{
 " Determines if the supplied word is a java keyword.
 function! eclim#java#util#IsKeyword (word)
-  return (a:word =~ '^' . s:keywords . '$')
+  return (a:word =~ '^' . s:keywords . '$\C')
 endfunction " }}}
 
 " IsImported(classname) {{{
