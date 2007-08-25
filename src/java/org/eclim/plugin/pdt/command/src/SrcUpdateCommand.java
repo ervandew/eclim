@@ -36,7 +36,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.php.internal.core.documentModel.validate.PHPProblemsValidator;
 
 import org.eclipse.php.internal.core.phpModel.parser.PHPWorkspaceModelManager;
-import org.eclipse.php.internal.core.phpModel.parser.PhpParserSchedulerTask;
 
 import org.eclipse.php.internal.core.phpModel.phpElementData.IPHPMarker;
 import org.eclipse.php.internal.core.phpModel.phpElementData.PHPFileData;
@@ -50,9 +49,6 @@ import org.eclipse.php.internal.core.phpModel.phpElementData.PHPFileData;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
-  private static PhpParserSchedulerTask scheduler =
-    PhpParserSchedulerTask.getInstance();
-
   /**
    * {@inheritDoc}
    */
@@ -69,13 +65,6 @@ public class SrcUpdateCommand
     if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
       // ensure model is refreshed with latest version of the file.
       PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
-      long timeout = 5000;
-      long now = System.currentTimeMillis();
-      while (!scheduler.isDone(ifile.getFullPath().toString()) &&
-          (System.currentTimeMillis() - now) < timeout)
-      {
-        Thread.sleep(100);
-      }
 
       PHPProblemsValidator validator = PHPProblemsValidator.getInstance();
       validator.validateFileProblems(ifile, true);
