@@ -22,19 +22,16 @@
 "
 " }}}
 
-" Only load this indent file when no other was loaded.
-if exists("b:dtd_did_indent")
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetDtdIndent'
   finish
 endif
 
-let b:did_indent = 1
-let b:dtd_did_indent = 1
-
-setlocal indentexpr=GetDtdIndent(v:lnum)
+setlocal indentexpr=EclimGetDtdIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>
 
-" GetDtdIndent(lnum) {{{
-function! GetDtdIndent (lnum)
+" EclimGetDtdIndent(lnum) {{{
+function! EclimGetDtdIndent (lnum)
   return IndentAnything()
 endfunction " }}}
 

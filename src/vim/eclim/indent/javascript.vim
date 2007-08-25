@@ -26,19 +26,16 @@
 "
 " }}}
 
-" Only load this indent file when no other was loaded.
-if exists("b:javascript_did_indent")
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetJavascriptIndent'
   finish
 endif
 
-let b:did_indent = 1
-let b:javascript_did_indent = 1
-
-setlocal indentexpr=GetJavascriptIndent(v:lnum)
+setlocal indentexpr=EclimGetJavascriptIndent(v:lnum)
 setlocal indentkeys+=0),0},),;
 
-" GetJavascriptIndent(lnum) {{{
-function! GetJavascriptIndent (lnum)
+" EclimGetJavascriptIndent(lnum) {{{
+function! EclimGetJavascriptIndent (lnum)
   let line = getline(a:lnum)
   let prevlnum = prevnonblank(a:lnum - 1)
   let prevline = getline(prevlnum)

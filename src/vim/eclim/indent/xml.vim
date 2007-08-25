@@ -22,21 +22,18 @@
 "
 " }}}
 
-" Only load this indent file when no other was loaded.
-if exists("b:xml_did_indent") && &indentexpr =~ 'GetXmlIndent'
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetXmlIndent'
   finish
 endif
 
 runtime indent/dtd.vim
 
-let b:did_indent = 1
-let b:xml_did_indent = 1
-
-setlocal indentexpr=GetXmlIndent(v:lnum)
+setlocal indentexpr=EclimGetXmlIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,}
 
-" GetXmlIndent(lnum) {{{
-function! GetXmlIndent (lnum)
+" EclimGetXmlIndent(lnum) {{{
+function! EclimGetXmlIndent (lnum)
   let line = line('.')
   let col = line('.')
 
@@ -61,7 +58,7 @@ function! GetXmlIndent (lnum)
         \ (doctypeend == 0 || (doctypeend > doctypestart && a:lnum <= doctypeend))
     if a:lnum < doctypeend
       call DtdIndentAnythingSettings()
-      return GetDtdIndent(a:lnum)
+      return EclimGetDtdIndent(a:lnum)
     elseif a:lnum == doctypeend
       return indent(a:lnum) - &sw
     endif

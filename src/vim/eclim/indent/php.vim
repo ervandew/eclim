@@ -22,26 +22,24 @@
 "
 " }}}
 
-if exists("b:php_did_indent")
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetPhpHtmlIndent'
   finish
 endif
 
 source $VIMRUNTIME/indent/php.vim
-unlet b:did_indent
 runtime indent/html.vim
-let b:did_indent = 1
-let b:php_did_indent = 1
 
-setlocal indentexpr=GetPhpHtmlIndent(v:lnum)
+setlocal indentexpr=EclimGetPhpHtmlIndent(v:lnum)
 setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 
-" GetPhpHtmlIndent(lnum) {{{
-function! GetPhpHtmlIndent (lnum)
+" EclimGetPhpHtmlIndent(lnum) {{{
+function! EclimGetPhpHtmlIndent (lnum)
   " FIXME: may get confused if either of these occur in a comment.
   let phpstart = search('<?php', 'bcnW')
   let phpend = search('?>', 'bcnW')
   if phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
-    let indent = GetPhpIndent()
+    let indent = EclimGetPhpIndent()
     " default php indent pushes first line of php code to left margin and
     " indents all following php code relative to that. So just make sure that
     " the first line of php after the opening php tag is indented at the same
@@ -54,7 +52,7 @@ function! GetPhpHtmlIndent (lnum)
     endif
     return indent
   endif
-  return GetHtmlIndent(a:lnum)
+  return EclimGetHtmlIndent(a:lnum)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

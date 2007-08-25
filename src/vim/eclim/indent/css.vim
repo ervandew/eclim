@@ -22,20 +22,16 @@
 "
 " }}}
 
-
-" Only load this indent file when no other was loaded.
-if exists("b:css_did_indent")
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetCssIndent'
   finish
 endif
 
-let b:did_indent = 1
-let b:css_did_indent = 1
-
-setlocal indentexpr=GetCssIndent(v:lnum)
+setlocal indentexpr=EclimGetCssIndent(v:lnum)
 setlocal indentkeys=0{,0},!^F,o,O
 
-" GetCssIndent(lnum) {{{
-function! GetCssIndent (lnum)
+" EclimGetCssIndent(lnum) {{{
+function! EclimGetCssIndent (lnum)
   let adj = 0
   let prevline = prevnonblank(a:lnum - 1)
 

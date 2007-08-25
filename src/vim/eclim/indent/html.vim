@@ -22,8 +22,8 @@
 "
 " }}}
 
-" Only load this indent file when no other was loaded.
-if exists("b:html_did_indent")
+let b:did_indent = 1
+if &indentexpr =~ 'EclimGetHtmlIndent'
   finish
 endif
 
@@ -33,11 +33,11 @@ runtime indent/css.vim
 let b:did_indent = 1
 let b:html_did_indent = 1
 
-setlocal indentexpr=GetHtmlIndent(v:lnum)
+setlocal indentexpr=EclimGetHtmlIndent(v:lnum)
 setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O
 
-" GetHtmlIndent(lnum) {{{
-function! GetHtmlIndent (lnum)
+" EclimGetHtmlIndent(lnum) {{{
+function! EclimGetHtmlIndent (lnum)
   let line = line('.')
   let col = line('.')
 
@@ -64,7 +64,7 @@ function! GetHtmlIndent (lnum)
     if a:lnum == scriptstart + 1
       let adj = &sw
     endif
-    return GetJavascriptIndent(a:lnum) + adj
+    return EclimGetJavascriptIndent(a:lnum) + adj
 
   " Inside <style> tags... let css indent file do the work.
   elseif stylestart > 0 && stylestart < a:lnum &&
@@ -73,7 +73,7 @@ function! GetHtmlIndent (lnum)
     if a:lnum == stylestart + 1
       let adj = &sw
     endif
-    return GetCssIndent(a:lnum) + adj
+    return EclimGetCssIndent(a:lnum) + adj
 
   " Indenting html code, do our work.
   else
