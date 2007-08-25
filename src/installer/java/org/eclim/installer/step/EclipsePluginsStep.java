@@ -25,6 +25,8 @@ import java.io.File;
 import java.text.Collator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -268,6 +270,7 @@ public class EclipsePluginsStep
     properties.load(EclipsePluginsStep.class.getResourceAsStream(
           "/resources/dependencies.properties"));
     String[] features = Installer.getContext().getKeysByPrefix("featureList");
+    Arrays.sort(features, new FeatureNameComparator());
     for (int ii = 0; ii < features.length; ii++){
       Boolean enabled = (Boolean)Installer.getContext().getValue(features[ii]);
       String name = features[ii].substring(features[ii].indexOf('.') + 1);
@@ -575,6 +578,25 @@ public class EclipsePluginsStep
 
     public boolean isEnabled () {
       return enabled;
+    }
+  }
+
+  private static class FeatureNameComparator
+    implements Comparator
+  {
+    private static ArrayList NAMES = new ArrayList();
+    static{
+      NAMES.add("featureList.jdt");
+      NAMES.add("featureList.ant");
+      NAMES.add("featureList.maven");
+      NAMES.add("featureList.wst");
+      NAMES.add("featureList.pdt");
+      NAMES.add("featureList.python");
+    }
+
+    public int compare (Object ob1, Object ob2)
+    {
+      return NAMES.indexOf(ob1) - NAMES.indexOf(ob2);
     }
   }
 }
