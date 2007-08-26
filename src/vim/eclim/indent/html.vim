@@ -27,17 +27,15 @@ if &indentexpr =~ 'EclimGetHtmlIndent'
   finish
 endif
 
-runtime indent/javascript.vim
-unlet b:did_indent
-runtime indent/css.vim
-let b:did_indent = 1
-let b:html_did_indent = 1
+runtime! indent/javascript.vim
+runtime! indent/css.vim
 
 setlocal indentexpr=EclimGetHtmlIndent(v:lnum)
 setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O
 
 " EclimGetHtmlIndent(lnum) {{{
 function! EclimGetHtmlIndent (lnum)
+  echom 'in html'
   let line = line('.')
   let col = line('.')
 

@@ -27,7 +27,7 @@ if &indentexpr =~ 'EclimGetXmlIndent'
   finish
 endif
 
-runtime indent/dtd.vim
+runtime! indent/dtd.vim
 
 setlocal indentexpr=EclimGetXmlIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,}
