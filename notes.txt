@@ -34,18 +34,15 @@ TODO {{{
 
   Common {{{
 
-    Rename all eclim- files under ftplugin... maybe
-
-    Eclipse 3.3
+    - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
+
+    :VimGrepRelative, perform a vimgrep relative to the current file.
 
     - gvim menu items.
 
     - consider adding an optional set of vim scripts which set up an evironment like mine.
       - licensing issues?
-
-    - make sure html files (html, php, etc) are context aware on code
-      completion, switching to html, css, javascript completion as necessary.
 
     - create :ProjectImport <dir> command
       - Eclipse equivalant:
@@ -99,6 +96,8 @@ TODO {{{
 
   Java {{{
 
+    - for custom logger template, allow one per project.
+
     - look into code refactoring support.
 
     - create spring file validation of class names like w/ log4j.
@@ -114,9 +113,6 @@ TODO {{{
       file that opened the buffer so that other commands can still be invoked
       by changing the get file name function to examine b:currentfile.
       - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
-    - for temp buffers containing java code (JavaImpl, class prototypes, etc.)
-      set a variable to mainain the name of the current project, and add a way to
-      force element based searches to become keyword based.
 
     - add :JavaBeanImpl for defining an implementation of a bean interface.
     - automate switch statement generation for enums.
@@ -139,15 +135,15 @@ TODO {{{
       implementation.
     - With :JavaRun, also have an input buffer that when saved pushes the text
       to stdin of the running app, and then clears the buffer for more input.
-    - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+      - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+  }}}
 
-    JST
-      jsp
-        - <%%>, <%=%> code completion
-        - <%@ page import="javax." %> completion
-        - <jsp: completion, with attribute name completion
-        - taglib completion (<core:<c-x><c-u>), including attribute name completion
-
+  Jst {{{
+    jsp
+      - <%%>, <%=%> code completion
+      - <%@ page import="javax." %> completion
+      - <jsp: completion, with attribute name completion
+      - taglib completion (<core:<c-x><c-u>), including attribute name completion
   }}}
 
   Php {{{
@@ -164,6 +160,12 @@ TODO {{{
   }}}
 
   Wst {{{
+
+    - for css validation, attempt to provide messages for errors that the validator does not.
+      - * ie hacks.
+        - ignore error immediately following this error report (if not another * hack).
+      - missing closing }
+      - font: 100%;
 
     - look into using jericho instead of tidy as the html validator.
 
@@ -192,7 +194,20 @@ TODO {{{
 
 NOTES {{{
 
-  Steps for new releases:
+  Adding a new plugin {{{
+
+    Installer:
+      install.properties: add the following keys
+        - featureList.<plugin>
+        - featureList.<plugin>.html
+      dependencies.properties: add feature dependencies
+      EclipsePluginStep: add feature to FeatureNameComparator
+      excludes: add <plugin>.excludes file
+
+  }}}
+
+  Steps for new releases {{{
+
     1) tag svn
     2) create sourceforge release
        - update windows and linux download pages with latest file to download.
@@ -200,56 +215,10 @@ NOTES {{{
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
 
-  Minimum execution of vim w/ eclim support
-    echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
-    vim -u _vimrc.minimum
-    gvim -u _vimrc.minimum -U none
+  }}}
 
-  Helpful link for debugging plugin errors.
-    http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
+  Troubleshooting {{{
 
-  Eclipse Plugins:
-    http://www.eclipse-plugins.info/eclipse/plugin_details.jsp?id=1349
-
-  Java 1.4 support
-    Jars only need to support 1.4
-      jaxen
-
-  Core Tools (plugin with tools for debugging / fixing issues)
-    http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
-    - Workspace Re-Builder (looks a bit old, may need some work).
-
-  When using a project created from eclipse, may get errors in log when saving +
-  closing a src file, complaining that the .swp file doesn't exist.  To fix this,
-  you need to exclude the swp files from the eclipse build.
-
-    Project > Properties > Java Build Path
-      Expand Source folder node
-      Select "Excluded"
-      Hit "Edit"
-      Add exclusion pattern: **/*.swp
-  Or
-    Edit .classpath
-      Add attribute to src classpathentry
-        excluding="**/*.swp"
-      You can use '|' to delineate multiple entries
-        excluding="**/*.swp|**/*.tmp"
-
-  Running in true headless environment:
-  http://en.wikipedia.org/wiki/Xvfb
-    - Xvfb is included with xorg-server
-
-  Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
-  1) start the application
-  2) open and save org.eclim.Service
-  2) open and save build.xml
-
-           Virtual  Resident  Shared  (in megs)
-  eclim    360      132       54
-  eclipse  500      143       59
-
-
-  Troubleshooting:
     Windows:
       - starting eclim without spawning seperate console
         > java -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
@@ -257,11 +226,54 @@ NOTES {{{
                -application org.eclim.application -vmargs
                -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
 
+    Minimum execution of vim w/ eclim support
+      echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
+      vim -u _vimrc.minimum
+      gvim -u _vimrc.minimum -U none
+
+    Helpful link for debugging plugin errors.
+      http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
+
+    Core Tools (plugin with tools for debugging / fixing issues)
+      http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
+      - Workspace Re-Builder (looks a bit old, may need some work).
+
     fedora + eclipse + gcj/gnu classpath
       - http://www.fedoraproject.org/wiki/Eclipse
       - http://sourceware.org/eclipse/
 
-  Pydev, files modified to remove it:
+    When using a project created from eclipse, may get errors in log when saving +
+    closing a src file, complaining that the .swp file doesn't exist.  To fix this,
+    you need to exclude the swp files from the eclipse build.
+
+      Project > Properties > Java Build Path
+        Expand Source folder node
+        Select "Excluded"
+        Hit "Edit"
+        Add exclusion pattern: **/*.swp
+    Or
+      Edit .classpath
+        Add attribute to src classpathentry
+          excluding="**/*.swp"
+        You can use '|' to delineate multiple entries
+          excluding="**/*.swp|**/*.tmp"
+  }}}
+
+  Benchmarks {{{
+
+    Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
+    1) start the application
+    2) open and save org.eclim.Service
+    2) open and save build.xml
+
+             Virtual  Resident  Shared  (in megs)
+    eclim    360      132       54
+    eclipse  500      143       59
+
+  }}}
+
+  Pydev, files modified to remove it: {{{
+
     build.xml
     status.xml
     src/ant/docs.xml
@@ -279,23 +291,20 @@ NOTES {{{
     src/vim/eclim/ftplugin/python/eclim_complete.vim
     src/vim/eclim/ftplugin/python/eclim_definition.vim
 
+  }}}
 
-  Release  /  Revision
-  --------------------
-  1.3.0       1253
-
-  Dependencies
-    commons-vfs
-      - requires commons-logging
+  Running in true headless environment:
+  http://en.wikipedia.org/wiki/Xvfb
+    - Xvfb is included with xorg-server
 
 }}}
 
 HIGH {{{
-  - add options to disable eclim indent files
-    - note: html and htmldjango must be enabled/disabled in tandum
-
+  - make a note that eclim.php requires pdt 1.0.0.v20070808 exactly.
   - php, java, on files out of src path, support definition searching.
 
+  - make sure html files (html, php, etc) are context aware on code
+    completion, switching to html, css, javascript completion as necessary.
 }}}
 
 // vim:fdm=marker:tw=0
