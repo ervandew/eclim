@@ -30,7 +30,7 @@ class JavascriptTags implements TaglistScript
       regex = new RegexTaglist(file);
       regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_.\$]*?)\s*\(/, "\$2");
       regex.addPattern('f', ~/(s?)([a-zA-Z0-9_.\$]*?)\s*=\s*function\s*\(/, "\$2");
-      regex.addPattern('f', ~/(s?)([a-zA-Z0-9_.\$]*?)\s*:\s*function\s*\(/, "\$2");
+      regex.addPattern('f', ~/(s?)\b([a-zA-Z0-9_.\$]*?)\s*:\s*function\s*\(/, "\$2");
       regex.addPattern('o', ~/(s?)(var\s\+)?\b([A-Z][A-Za-z0-9_.]*)\s*=\s*\{/, "\$3");
 
       // prototype.js has Object.extend to extend existing objects.
