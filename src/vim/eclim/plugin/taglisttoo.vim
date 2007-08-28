@@ -211,7 +211,7 @@ let s:tlist_def_html_settings = {
   \ }
 
 " java language
-let s:tlist_format_java = 's:FormatJava'
+let s:tlist_format_java = 'eclim#taglist#java#FormatJava'
 let s:tlist_def_java_settings = {
     \ 'p': 'package',
     \ 'c': 'class',
@@ -220,7 +220,7 @@ let s:tlist_def_java_settings = {
     \ 'm': 'method'
   \ }
 
-let s:tlist_format_javascript = 's:FormatJavascript'
+let s:tlist_format_javascript = 'eclim#taglist#javascript#FormatJavascript'
 let s:tlist_def_javascript_settings = {
     \ 'o': 'object',
     \ 'f': 'function',
@@ -253,7 +253,7 @@ let s:tlist_def_perl_settings = {
   \ }
 
 " php language
-let s:tlist_format_php = 's:FormatPhp'
+let s:tlist_format_php = 'eclim#taglist#php#FormatPhp'
 let s:tlist_def_php_settings = {
     \ 'c': 'class',
     \ 'd': 'constant',
@@ -262,7 +262,7 @@ let s:tlist_def_php_settings = {
   \ }
 
 " python language
-let s:tlist_format_python = 's:FormatPython'
+let s:tlist_format_python = 'eclim#taglist#python#FormatPython'
 let s:tlist_def_python_settings = {
     \ 'c': 'class',
     \ 'm': 'member',
@@ -477,12 +477,10 @@ function! s:ProcessTags ()
     endfor
 
     if exists('s:tlist_format_{&ft}')
-      let Format = function(s:tlist_format_{&ft})
+      exec 'call s:Window(settings, tags, ' . s:tlist_format_{&ft} . '(settings, tags))'
     else
-      let Format = function('s:FormatDefault')
+      call s:Window(settings, tags, s:FormatDefault(settings, tags))
     endif
-
-    call s:Window(settings, tags, Format(settings, tags))
   else
     call s:Window({}, tags, [[],[]])
   endif
@@ -507,220 +505,7 @@ function! s:FormatDefault (types, tags)
 
   for key in keys(a:types)
     let values = filter(copy(a:tags), 'len(v:val) > 3 && v:val[3] == key')
-    call s:FormatType(a:tags, a:types[key], values, lines, content, "\t")
-  endfor
-
-  return [lines, content]
-endfunction " }}}
-
-" s:FormatType(tags, type, values, lines, content, indent) {{{
-function! s:FormatType (tags, type, values, lines, content, indent)
-  if len(a:values) > 0
-    call add(a:content, a:indent . a:type)
-    call add(a:lines, -1)
-
-    for value in a:values
-      call add(a:content, "\t" . a:indent . s:GetVisibility(value) . value[0])
-      call add(a:lines, index(a:tags, value))
-    endfor
-  endif
-endfunction " }}}
-
-" s:FormatJava(types, tags) {{{
-function! s:FormatJava (types, tags)
-  let lines = []
-  let content = []
-
-  call add(content, expand('%:t'))
-  call add(lines, -1)
-
-  let package = filter(copy(a:tags), 'v:val[3] == "p"')
-  call s:FormatType(a:tags, a:types['p'], package, lines, content, "\t")
-
-  let classes = filter(copy(a:tags), 'v:val[3] == "c"')
-  for class in classes
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . s:GetVisibility(class) . a:types['c'] . ' ' . class[0])
-    call add(lines, index(a:tags, class))
-
-    let fields = filter(copy(a:tags),
-      \ 'v:val[3] == "f" && len(v:val) > 5 && v:val[5] =~ "class:.*\\<" . class[0] . "$"')
-    call s:FormatType(a:tags, a:types['f'], fields, lines, content, "\t\t")
-
-    let methods = filter(copy(a:tags),
-      \ 'v:val[3] == "m" && len(v:val) > 5 && v:val[5] =~ "class:.*\\<" . class[0] . "$"')
-    call s:FormatType(a:tags, a:types['m'], methods, lines, content, "\t\t")
-  endfor
-
-  let interfaces = filter(copy(a:tags), 'v:val[3] == "i"')
-  for interface in interfaces
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . s:GetVisibility(interface) . a:types['i'] . ' ' . interface[0])
-    call add(lines, index(a:tags, interface))
-
-    let fields = filter(copy(a:tags),
-      \ 'v:val[3] == "f" && len(v:val) > 5 && v:val[5] =~ "interface:.*\\<" . interface[0] . "$"')
-    call s:FormatType(a:tags, a:types['f'], fields, lines, content, "\t\t")
-
-    let methods = filter(copy(a:tags),
-      \ 'v:val[3] == "m" && len(v:val) > 5 && v:val[5] =~ "interface:.*\\<" . interface[0] . "$"')
-    call s:FormatType(a:tags, a:types['m'], methods, lines, content, "\t\t")
-  endfor
-
-  return [lines, content]
-endfunction " }}}
-
-" s:FormatJavascript(types, tags) {{{
-function! s:FormatJavascript (types, tags)
-  let clnum = line('.')
-  let ccnum = col('.')
-
-  let lines = []
-  let content = []
-
-  call add(content, expand('%:t'))
-  call add(lines, -1)
-
-  let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
-  let object_contents = []
-
-  let objects = filter(copy(a:tags), 'v:val[3] == "o"')
-  for object in objects
-    exec 'let object_start = ' . split(object[4], ':')[1]
-    call cursor(object_start, 1)
-    call search('{', 'W')
-    let object_end = searchpair('{', '', '}', 'W')
-
-    let functions = []
-    let indexes = []
-    let index = 0
-    for fct in top_functions
-      if len(fct) > 3
-        exec 'let fct_line = ' . split(fct[4], ':')[1]
-        if fct_line > object_start && fct_line < object_end
-          call add(functions, fct)
-          call add(indexes, index)
-        endif
-      endif
-      let index += 1
-    endfor
-    call reverse(indexes)
-    for i in indexes
-      call remove(top_functions, i)
-    endfor
-
-    call add(object_contents, {'object': object, 'functions': functions})
-  endfor
-
-  if len(top_functions) > 0
-    call add(content, "")
-    call add(lines, -1)
-    call s:FormatType(a:tags, a:types['f'], top_functions, lines, content, "\t")
-  endif
-
-  for object_content in object_contents
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . a:types['o'] . ' ' . object_content.object[0])
-    call add(lines, index(a:tags, object_content.object))
-
-    call s:FormatType(
-      \ a:tags, a:types['f'], object_content.functions, lines, content, "\t\t")
-  endfor
-
-  call cursor(clnum, ccnum)
-
-  return [lines, content]
-endfunction " }}}
-
-" s:FormatPhp(types, tags) {{{
-function! s:FormatPhp (types, tags)
-  let clnum = line('.')
-  let ccnum = col('.')
-
-  let lines = []
-  let content = []
-
-  call add(content, expand('%:t'))
-  call add(lines, -1)
-
-  let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
-  let class_contents = []
-
-  let classes = filter(copy(a:tags), 'v:val[3] == "c"')
-  for class in classes
-    exec 'let object_start = ' . split(class[4], ':')[1]
-    call cursor(object_start, 1)
-    call search('{', 'W')
-    let object_end = searchpair('{', '', '}', 'W')
-
-    let functions = []
-    let indexes = []
-    let index = 0
-    for fct in top_functions
-      if len(fct) > 3
-        exec 'let fct_line = ' . split(fct[4], ':')[1]
-        if fct_line > object_start && fct_line < object_end
-          call add(functions, fct)
-          call add(indexes, index)
-        endif
-      endif
-      let index += 1
-    endfor
-    call reverse(indexes)
-    for i in indexes
-      call remove(top_functions, i)
-    endfor
-
-    call add(class_contents, {'class': class, 'functions': functions})
-  endfor
-
-  if len(top_functions) > 0
-    call add(content, "")
-    call add(lines, -1)
-    call s:FormatType(a:tags, a:types['f'], top_functions, lines, content, "\t")
-  endif
-
-  for class_content in class_contents
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . a:types['c'] . ' ' . class_content.class[0])
-    call add(lines, index(a:tags, class_content.class))
-
-    call s:FormatType(
-      \ a:tags, a:types['f'], class_content.functions, lines, content, "\t\t")
-  endfor
-
-  call cursor(clnum, ccnum)
-
-  return [lines, content]
-endfunction " }}}
-
-" s:FormatPython(types, tags) {{{
-function! s:FormatPython (types, tags)
-  let lines = []
-  let content = []
-
-  call add(content, expand('%:t'))
-  call add(lines, -1)
-
-  let functions = filter(copy(a:tags), 'len(v:val) > 3 && v:val[3] == "f"')
-  call s:FormatType(a:tags, a:types['f'], functions, lines, content, "\t")
-
-  let classes = filter(copy(a:tags), 'len(v:val) > 3 && v:val[3] == "c"')
-  for class in classes
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . a:types['c'] . ' ' . class[0])
-    call add(lines, index(a:tags, class))
-
-    let members = filter(copy(a:tags), 'len(v:val) > 5 && v:val[3] == "m" && v:val[5] == "class:" . class[0]')
-    for member in members
-      call add(content, "\t\t" . member[0])
-      call add(lines, index(a:tags, member))
-    endfor
+    call eclim#taglist#util#FormatType(a:tags, a:types[key], values, lines, content, "\t")
   endfor
 
   return [lines, content]
@@ -740,7 +525,7 @@ function! s:JumpToTag ()
   call s:StartAutocmds()
 
   let lnum = s:GetTagLineNumber(tag_info)
-  let pattern = s:GetTagPattern(tag_info)
+  let pattern = eclim#taglist#util#GetTagPattern(tag_info)
 
   if getline(lnum) =~ escape(pattern, '*[]')
     mark '
@@ -980,28 +765,6 @@ function! s:GetTagLineNumber (tag)
     return substitute(a:tag[4], '.*:\(.*\)', '\1', '')
   endif
   return 0
-endfunction " }}}
-
-" s:GetTagPattern(tag) {{{
-function! s:GetTagPattern (tag)
-  return strpart(a:tag[2], 1, len(a:tag[2]) - 4)
-endfunction " }}}
-
-" s:GetVisibility(tag) {{{
-" Gets the visibility string for the supplied tag.
-function! s:GetVisibility (tag)
-  let pattern = s:GetTagPattern(a:tag)
-  if pattern =~ '\<public\>'
-    if pattern =~ '\<static\>'
-      return '*'
-    endif
-    return '+'
-  elseif pattern =~ '\<protected\>'
-    return '#'
-  elseif pattern =~ '\<private\>'
-    return '-'
-  endif
-  return ''
 endfunction " }}}
 
 " Command Declarations {{{
