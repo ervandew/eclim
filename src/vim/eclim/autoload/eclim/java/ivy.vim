@@ -35,16 +35,16 @@ endfunction " }}}
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
 function! eclim#java#ivy#UpdateClasspath ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   " validate the xml first
-  if eclim#xml#Validate(expand('%:p'), 0)
+  if eclim#xml#validate#Validate(expand('%:p'), 0)
     return
   endif
 
-  let name = eclim#project#GetCurrentProjectName()
+  let name = eclim#project#util#GetCurrentProjectName()
   let command = s:update_command
   let command = substitute(command, '<project>', name, '')
   let command = substitute(command, '<build>', escape(expand('%:p'), '\'), '')

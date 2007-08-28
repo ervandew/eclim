@@ -40,13 +40,13 @@ let s:no_properties =
 
 " GetterSetter(first, last, type) {{{
 function! eclim#java#bean#GetterSetter (first, last, type)
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let properties = eclim#java#util#GetSelectedFields(a:first, a:last)
 
   if len(properties) == 0

@@ -34,7 +34,7 @@ endif
 if g:EclimXmlValidate
   augroup eclim_xml
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#xml#Validate('', 1)
+    autocmd BufWritePost <buffer> call eclim#xml#validate#Validate('', 1)
   augroup END
 endif
 
@@ -47,12 +47,12 @@ endif
 " Command Declarations {{{
 if !exists(":Validate")
   command -nargs=? -complete=file -bang -buffer Validate
-    \ :call eclim#xml#Validate('<args>', 0, '<bang>')
+    \ :call eclim#xml#validate#Validate('<args>', 0, '<bang>')
 
   command -nargs=? -buffer DtdDefinition
-    \ :call eclim#xml#DtdDefinition('<args>')
+    \ :call eclim#xml#definition#DtdDefinition('<args>')
   command -nargs=? -buffer XsdDefinition
-    \ :call eclim#xml#XsdDefinition('<args>')
+    \ :call eclim#xml#definition#XsdDefinition('<args>')
 endif
 " }}}
 

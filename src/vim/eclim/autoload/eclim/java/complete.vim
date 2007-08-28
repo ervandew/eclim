@@ -60,12 +60,12 @@ function! eclim#java#complete#CodeComplete (findstart, base)
 
     return start
   else
-    if !eclim#project#IsCurrentFileInProject()
+    if !eclim#project#util#IsCurrentFileInProject()
       return []
     endif
 
     let offset = eclim#util#GetCharacterOffset() + len(a:base)
-    let project = eclim#project#GetCurrentProjectName()
+    let project = eclim#project#util#GetCurrentProjectName()
     let filename = eclim#java#util#GetFilename()
 
     let command = s:complete_command

@@ -40,8 +40,8 @@ function eclim#python#definition#Find ()
   call eclim#util#ExecWithoutAutocmds('silent update')
 
   let offset = eclim#util#GetCharacterOffset()
-  let project = eclim#project#GetCurrentProjectName()
-  let filename = eclim#project#GetProjectRelativeFilePath(expand('%:p'))
+  let project = eclim#project#util#GetCurrentProjectName()
+  let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
   let command = s:find_command
   let command = substitute(command, '<project>', project, '')

@@ -32,14 +32,14 @@ endfunction " }}}
 function! TestProjectCD ()
   call VUAssertEquals(s:test_dir, getcwd(), "Setup failed.")
 
-  call eclim#project#ProjectCD(0)
+  call eclim#project#util#ProjectCD(0)
   call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java', getcwd(),
     \ "Project cd failed.")
 endfunction " }}}
 
 " TestProjectSettings() {{{
 function! TestProjectSettings ()
-  call eclim#project#ProjectSettings('eclim_unit_test_java')
+  call eclim#project#util#ProjectSettings('eclim_unit_test_java')
   call VUAssertEquals('eclim_unit_test_java_settings', expand('%'),
     \ "Didn't open settings window.")
   close
@@ -47,34 +47,34 @@ endfunction " }}}
 
 " TestGetCurrentProjectFile() {{{
 function! TestGetCurrentProjectFile ()
-  let file = eclim#project#GetCurrentProjectFile()
+  let file = eclim#project#util#GetCurrentProjectFile()
   call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java/.project', file,
     \ "Wrong project file.")
 endfunction " }}}
 
 " TestGetCurrentProjectName() {{{
 function! TestGetCurrentProjectName ()
-  let name = eclim#project#GetCurrentProjectName()
+  let name = eclim#project#util#GetCurrentProjectName()
   call VUAssertEquals('eclim_unit_test_java', name, "Wrong project name.")
 endfunction " }}}
 
 " TestGetCurrentProjectRoot() {{{
 function! TestGetCurrentProjectRoot ()
-  let dir = eclim#project#GetCurrentProjectRoot()
+  let dir = eclim#project#util#GetCurrentProjectRoot()
   call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java', dir,
     \ "Wrong project dir.")
 endfunction " }}}
 
 " TestIsCurrentFileInProject() {{{
 function! TestIsCurrentFileInProject ()
-  call VUAssertTrue(eclim#project#IsCurrentFileInProject(0), "Wrong result.")
+  call VUAssertTrue(eclim#project#util#IsCurrentFileInProject(0), "Wrong result.")
   cd ~
-  call VUAssertFalse(eclim#project#IsCurrentFileInProject(0), "Wrong result.")
+  call VUAssertFalse(eclim#project#util#IsCurrentFileInProject(0), "Wrong result.")
 endfunction " }}}
 
 " TestCommandCompleteProject() {{{
 function! TestCommandCompleteProject ()
-  let results = eclim#project#CommandCompleteProject(
+  let results = eclim#project#util#CommandCompleteProject(
     \ 'eclim_', 'ProjectRefresh eclim_', 21)
 
   call VUAssertEquals(2, len(results), "Wrong number of results.")

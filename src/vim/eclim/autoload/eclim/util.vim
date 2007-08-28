@@ -639,7 +639,7 @@ function! eclim#util#SetLocationList (list, ...)
   else
     call setloclist(0, loclist, a:1)
   endif
-  call eclim#signs#Update()
+  call eclim#display#signs#Update()
 endfunction " }}}
 
 " ShowCurrentError() {{{

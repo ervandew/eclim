@@ -1,5 +1,5 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
+" Version: $Revision: 1197 $
 "
 " Description: {{{
 "   Various functions that are useful in and out of eclim.
@@ -24,7 +24,7 @@
 
 " DiffLastSaved() {{{
 " Diff a modified file with the last saved version.
-function! eclim#common#DiffLastSaved ()
+function! eclim#common#util#DiffLastSaved ()
   if &modified
     let winnum = winnr()
     let filetype=&ft
@@ -61,7 +61,7 @@ endfunction " }}}
 " GetFiles(dir, arg) {{{
 " Parses the supplied arg to obtain a list of files based in the supplied
 " directory.
-function eclim#common#GetFiles (dir, arg)
+function eclim#common#util#GetFiles (dir, arg)
   let dir = a:dir
   if dir != '' && dir !~ '[/\]$'
     let dir .= '/'
@@ -88,7 +88,7 @@ endfunction " }}}
 
 " FindInPath(file, path) {{{
 " Find a file in the supplied path returning a list of results.
-function! eclim#common#FindInPath (file, path)
+function! eclim#common#util#FindInPath (file, path)
   let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
   let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
   call map(results, "fnamemodify(v:val, ':p')")
@@ -100,7 +100,7 @@ endfunction " }}}
 " 1) First if current file is in a project, search that project.
 " 2) No results from #1, then search relative to current file.
 " 3) No results from #2, then search other projects.
-function eclim#common#LocateFile (command, file)
+function eclim#common#util#LocateFile (command, file)
   let results = []
   let file = a:file
   if file == ''
@@ -111,27 +111,27 @@ function eclim#common#LocateFile (command, file)
   endif
 
   " Step 1: Find in current project.
-  if eclim#project#IsCurrentFileInProject(0)
-    let projectDir = eclim#project#GetCurrentProjectRoot()
+  if eclim#project#util#IsCurrentFileInProject(0)
+    let projectDir = eclim#project#util#GetCurrentProjectRoot()
     call eclim#util#Echo('Searching current project: ' . projectDir . ' ...')
-    let results = eclim#common#FindInPath(file, projectDir)
+    let results = eclim#common#util#FindInPath(file, projectDir)
   endif
 
   " Step 2: Find relative to current file.
   if len(results) == 0
     let dir = expand('%:p:h')
     call eclim#util#Echo('Searching current file path: ' . dir . ' ...')
-    let results = eclim#common#FindInPath(file, dir)
+    let results = eclim#common#util#FindInPath(file, dir)
   endif
 
   " Step 3: Find in other projects.
   if len(results) == 0
-    let currentProjectDir = eclim#project#GetCurrentProjectRoot()
-    let projectDirs = eclim#project#GetProjectDirs()
+    let currentProjectDir = eclim#project#util#GetCurrentProjectRoot()
+    let projectDirs = eclim#project#util#GetProjectDirs()
     for dir in projectDirs
       if dir != currentProjectDir
         call eclim#util#Echo('Searching project: ' . dir . ' ...')
-        let results += eclim#common#FindInPath(file, dir)
+        let results += eclim#common#util#FindInPath(file, dir)
       endif
     endfor
   endif
@@ -164,14 +164,14 @@ endfunction " }}}
 
 " OpenRelative(command, arg, individual) {{{
 " Open one or more relative files.
-function eclim#common#OpenRelative (command, arg, individual)
+function eclim#common#util#OpenRelative (command, arg, individual)
   if a:arg =~ '\*' && a:command == 'edit'
     call eclim#util#EchoError(':EditRelative does not support wildcard characters.')
     return
   endif
 
   let dir = expand('%:p:h')
-  let files = eclim#common#GetFiles(dir, a:arg)
+  let files = eclim#common#util#GetFiles(dir, a:arg)
   if a:individual
     for file in files
       exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
@@ -184,8 +184,8 @@ endfunction " }}}
 
 " OpenFiles(arg) {{{
 " Opens one or more files using the supplied command.
-function eclim#common#OpenFiles (command, arg)
-  let files = eclim#common#GetFiles('', a:arg)
+function eclim#common#util#OpenFiles (command, arg)
+  let files = eclim#common#util#GetFiles('', a:arg)
   for file in files
     exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
   endfor
@@ -193,7 +193,7 @@ endfunction " }}}
 
 " SwapTypedArguments() {{{
 " Swaps typed method declaration arguments.
-function! eclim#common#SwapTypedArguments ()
+function! eclim#common#util#SwapTypedArguments ()
   " FIXME: add validation to see if user is executing on a valid position.
   normal w
   SwapWords
@@ -208,7 +208,7 @@ endfunction " }}}
 
 " SwapWords() {{{
 " Initially based on http://www.vim.org/tips/tip.php?tip_id=329
-function! eclim#common#SwapWords ()
+function! eclim#common#util#SwapWords ()
   " save the last search pattern
   let save_search = @/
 
@@ -222,7 +222,7 @@ endfunction " }}}
 
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for relative files and directories.
-function! eclim#common#CommandCompleteRelative (argLead, cmdLine, cursorPos)
+function! eclim#common#util#CommandCompleteRelative (argLead, cmdLine, cursorPos)
   let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)

@@ -59,7 +59,7 @@ endfunction " }}}
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
 function! eclim#java#classpath#UpdateClasspath ()
-  let name = eclim#project#GetCurrentProjectName()
+  let name = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:command_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)

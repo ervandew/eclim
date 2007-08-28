@@ -84,7 +84,7 @@
 function! eclim#project#tree#ProjectTree (...)
   " no project dirs supplied, use current project
   if len(a:000) == 0
-    let name = eclim#project#GetCurrentProjectName()
+    let name = eclim#project#util#GetCurrentProjectName()
     if name == ''
       call eclim#util#Echo('Unable to determine project.')
       return
@@ -108,11 +108,11 @@ function! eclim#project#tree#ProjectTree (...)
   let names_copy = copy(names)
   for name in names
     if name == 'CURRENT'
-      let name = eclim#project#GetCurrentProjectName()
+      let name = eclim#project#util#GetCurrentProjectName()
       let names_copy[index] = name
     endif
 
-    let dir = eclim#project#GetProjectRoot(name)
+    let dir = eclim#project#util#GetProjectRoot(name)
     if dir != ''
       call add(dirs, dir)
     else

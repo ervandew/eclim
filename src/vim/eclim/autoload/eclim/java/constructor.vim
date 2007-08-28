@@ -29,13 +29,13 @@ let s:command_properties =
 
 " Constructor(first, last) {{{
 function! eclim#java#constructor#Constructor (first, last)
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let properties = a:last == 1 ? [] :
     \ eclim#java#util#GetSelectedFields(a:first, a:last)
 

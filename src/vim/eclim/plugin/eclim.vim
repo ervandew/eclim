@@ -153,7 +153,7 @@ endif
 function! s:QuickFixLocalChangeDirectory ()
   let w:quickfix_dir = getcwd()
 
-  let dir = eclim#project#GetCurrentProjectRoot()
+  let dir = eclim#project#util#GetCurrentProjectRoot()
   if dir == ''
     let dir = substitute(expand('%:p:h'), '\', '/', 'g')
   endif

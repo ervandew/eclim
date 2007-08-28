@@ -65,7 +65,7 @@ endfunction " }}}
 " UpdateIncludePath() {{{
 " Updates the include path on the server w/ the changes made to the current file.
 function! eclim#php#projectOptions#UpdateIncludePath ()
-  let name = eclim#project#GetCurrentProjectName()
+  let name = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:command_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)

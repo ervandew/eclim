@@ -50,13 +50,13 @@ function! eclim#python#complete#CodeComplete (findstart, base)
 
     return start
   else
-    if !eclim#project#IsCurrentFileInProject()
+    if !eclim#project#util#IsCurrentFileInProject()
       return []
     endif
 
     let offset = eclim#util#GetCharacterOffset() + len(a:base)
-    let project = eclim#project#GetCurrentProjectName()
-    let filename = eclim#project#GetProjectRelativeFilePath(expand('%:p'))
+    let project = eclim#project#util#GetCurrentProjectName()
+    let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
     let command = s:complete_command
     let command = substitute(command, '<project>', project, '')

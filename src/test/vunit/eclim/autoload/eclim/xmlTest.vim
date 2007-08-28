@@ -68,7 +68,7 @@ endfunction " }}}
 "  call PeekRedir()
 "
 "  call cursor(28, 10)
-"  call eclim#xml#DtdDefinition('')
+"  call eclim#xml#definition#DtdDefinition('')
 "  call PeekRedir()
 "
 "  call VUAssertEquals(
@@ -85,7 +85,7 @@ endfunction " }}}
 "  call PeekRedir()
 "
 "  call cursor(11, 8)
-"  call eclim#xml#XsdDefinition('')
+"  call eclim#xml#definition#XsdDefinition('')
 "  call PeekRedir()
 "
 "  call VUAssertEquals('http://maven.apache.org/maven-v4_0_0.xsd', expand('%'))

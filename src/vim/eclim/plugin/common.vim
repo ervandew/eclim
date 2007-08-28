@@ -24,70 +24,72 @@
 
 " Command Declarations {{{
 if !exists(":Split")
-  command -nargs=+ -complete=file Split :call eclim#common#OpenFiles('split', '<args>')
+  command -nargs=+ -complete=file Split :call eclim#common#util#OpenFiles('split', '<args>')
 endif
 if !exists(":Tabnew")
-  command -nargs=+ -complete=file Tabnew :call eclim#common#OpenFiles('tabnew', '<args>')
+  command -nargs=+ -complete=file Tabnew :call eclim#common#util#OpenFiles('tabnew', '<args>')
 endif
 
 if !exists(":SplitRelative")
-  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ SplitRelative :call eclim#common#OpenRelative('split', '<args>', 1)
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ SplitRelative :call eclim#common#util#OpenRelative('split', '<args>', 1)
 endif
 if !exists(":TabnewRelative")
-  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ TabnewRelative :call eclim#common#OpenRelative('tabnew', '<args>', 1)
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ TabnewRelative :call eclim#common#util#OpenRelative('tabnew', '<args>', 1)
 endif
 if !exists(":EditRelative")
-  command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
-    \ EditRelative :call eclim#common#OpenRelative('edit', '<args>', 0)
+  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ EditRelative :call eclim#common#util#OpenRelative('edit', '<args>', 0)
 endif
 if !exists(":ReadRelative")
-  command -nargs=1 -complete=customlist,eclim#common#CommandCompleteRelative
-    \ ReadRelative :call eclim#common#OpenRelative('read', '<args>', 0)
+  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ ReadRelative :call eclim#common#util#OpenRelative('read', '<args>', 0)
 endif
 if !exists(":ArgsRelative")
-  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ ArgsRelative :call eclim#common#OpenRelative('args', '<args>', 0)
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ ArgsRelative :call eclim#common#util#OpenRelative('args', '<args>', 0)
 endif
 if !exists(":ArgAddRelative")
-  command -nargs=+ -complete=customlist,eclim#common#CommandCompleteRelative
-    \ ArgAddRelative :call eclim#common#OpenRelative('argadd', '<args>', 0)
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ ArgAddRelative :call eclim#common#util#OpenRelative('argadd', '<args>', 0)
 endif
 
 if !exists(":DiffLastSaved")
-  command DiffLastSaved :call eclim#common#DiffLastSaved()
+  command DiffLastSaved :call eclim#common#util#DiffLastSaved()
 endif
 if !exists(":SwapWords")
-  command SwapWords :call eclim#common#SwapWords()
+  command SwapWords :call eclim#common#util#SwapWords()
 endif
 if !exists(":SwapTypedArguments")
-  command SwapTypedArguments :call eclim#common#SwapTypedArguments()
+  command SwapTypedArguments :call eclim#common#util#SwapTypedArguments()
 endif
 if !exists(":LocateFileSplit")
-  command -nargs=? LocateFileEdit :call eclim#common#LocateFile('edit', '<args>')
-  command -nargs=? LocateFileSplit :call eclim#common#LocateFile('split', '<args>')
-  command -nargs=? LocateFileTab :call eclim#common#LocateFile('tabnew', '<args>')
+  command -nargs=? LocateFileEdit :call eclim#common#util#LocateFile('edit', '<args>')
+  command -nargs=? LocateFileSplit :call eclim#common#util#LocateFile('split', '<args>')
+  command -nargs=? LocateFileTab :call eclim#common#util#LocateFile('tabnew', '<args>')
 endif
 
 if !exists(":Sign")
-  command Sign :call eclim#signs#Toggle('user', line('.'))
+  command Sign :call eclim#display#signs#Toggle('user', line('.'))
 endif
 if !exists(":Signs")
-  command Signs :call eclim#signs#ViewSigns('user')
+  command Signs :call eclim#display#signs#ViewSigns('user')
 endif
 if !exists(":SignClearUser")
-  command SignClearUser :call eclim#signs#UnplaceAll(eclim#signs#GetExisting('user'))
+  command SignClearUser :call eclim#display#signs#UnplaceAll(
+    \ eclim#display#signs#GetExisting('user'))
 endif
 if !exists(":SignClearAll")
-  command SignClearAll :call eclim#signs#UnplaceAll(eclim#signs#GetExisting())
+  command SignClearAll :call eclim#display#signs#UnplaceAll(
+    \ eclim#display#signs#GetExisting())
 endif
 
 if !exists(":QuickFixClear")
-  command QuickFixClear :call setqflist([]) | call eclim#signs#Update()
+  command QuickFixClear :call setqflist([]) | call eclim#display#signs#Update()
 endif
 if !exists(":LocationListClear")
-  command LocationListClear :call setloclist(0, []) | call eclim#signs#Update()
+  command LocationListClear :call setloclist(0, []) | call eclim#display#signs#Update()
 endif
 " }}}
 

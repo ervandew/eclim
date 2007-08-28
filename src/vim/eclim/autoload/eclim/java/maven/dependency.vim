@@ -52,7 +52,7 @@ function! eclim#java#maven#dependency#Search (query, type)
   update
 
   let filename = substitute(expand('%:p'), '\', '/', 'g')
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
 
   let command = s:command_search
   let command = substitute(command, '<project>', project, '')

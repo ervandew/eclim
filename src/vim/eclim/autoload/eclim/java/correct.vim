@@ -27,21 +27,21 @@ hi link Correction Normal
 hi Correction gui=underline,bold term=underline,bold cterm=underline,bold
 
 " Script Varables {{{
-  let s:command_correct = 
+  let s:command_correct =
     \ '-command java_correct -p "<project>" -f "<file>" -l <line> -o <offset>'
   let s:command_correct_apply = s:command_correct . ' -a <apply>'
 " }}}
 
 " Correct() {{{
 function! eclim#java#correct#Correct ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
   let filename = eclim#java#util#GetFilename()
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
 
   let command = s:command_correct
   let command = substitute(command, '<project>', project, '')
@@ -103,7 +103,7 @@ function! eclim#java#correct#CorrectApply ()
 
       let index = substitute(line, '^\([0-9]\+\)\..*', '\1', '')
 
-      let project = eclim#project#GetCurrentProjectName()
+      let project = eclim#project#util#GetCurrentProjectName()
       let command = s:command_correct_apply
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')

@@ -18,6 +18,9 @@ TODO {{{
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
 
+    - taglisttoo
+    - maximize
+
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd
@@ -37,7 +40,8 @@ TODO {{{
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
-    :VimGrepRelative, perform a vimgrep relative to the current file.
+    :VimgrepRelative, :LvimgrepRelative perform a vimgrep relative to the current file.
+    :CdRelative, :LcdRelative
 
     - gvim menu items.
 

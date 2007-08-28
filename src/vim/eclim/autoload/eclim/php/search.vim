@@ -56,15 +56,15 @@ function! eclim#php#search#Search (...)
     let index = index + 1
   endwhile
 
-  if !eclim#project#IsCurrentFileInProject(1)
+  if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
-  "let in_project = eclim#project#IsCurrentFileInProject(0)
+  "let in_project = eclim#project#util#IsCurrentFileInProject(0)
   "if !in_project
   "  return s:SearchAlternate(argline, 0)
   "endif
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
 
   let search_cmd = s:search_pattern
   let search_cmd = substitute(search_cmd, '<project>', project, '')
@@ -108,15 +108,15 @@ endfunction " }}}
 " FindDefinition () {{{
 " Finds the defintion of the element under the cursor.
 function eclim#php#search#FindDefinition ()
-  if !eclim#project#IsCurrentFileInProject(1)
+  if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
 
   " update the file.
   call eclim#util#ExecWithoutAutocmds('silent update')
 
-  let project = eclim#project#GetCurrentProjectName()
-  let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
   let offset = eclim#util#GetCurrentElementOffset()
 
   let search_cmd = s:search_element
@@ -158,14 +158,14 @@ endfunction " }}}
 " FindInclude () {{{
 " Finds the include file under the cursor
 function eclim#php#search#FindInclude ()
-  if !eclim#project#IsCurrentFileInProject(1)
+  if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
 
   let file = substitute(getline('.'),
     \ ".*\\<\\(require\\|include\\)\\s*[(]\\?['\"]\\([^'\"]*\\)['\"].*", '\2', '')
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let command = s:include_paths
   let command = substitute(command, '<project>', project, '')
   let result =  eclim#ExecuteEclim(command)

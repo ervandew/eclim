@@ -48,7 +48,7 @@ function! eclim#java#test#ResolveQuickfixResults (framework)
       let text = substitute(text,
         \ s:entry_text_replace{a:framework}, s:entry_text_with{a:framework}, '')
 
-      let project = eclim#project#GetCurrentProjectName()
+      let project = eclim#project#util#GetCurrentProjectName()
       let command = s:command_src_find
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<classname>', filename, '')
@@ -74,12 +74,14 @@ endfunction " }}}
 " GetTestSrcDir(type) {{{
 " Where type is 'junit', etc.
 function eclim#java#test#GetTestSrcDir (type)
-  let path = eclim#project#GetProjectSetting("org.eclim.java." . a:type . ".src_dir")
+  let setting = "org.eclim.java." . a:type . ".src_dir"
+  let path = eclim#project#util#GetProjectSetting(setting)
   if path == '0'
     return
   endif
 
-  let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
+  let root = eclim#project#util#GetCurrentProjectRoot()
+  let path = substitute(path, '<project>', root, '')
   let path = path !~ '/$' ? path . '/' : path
   return path
 endfunction " }}}

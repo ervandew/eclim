@@ -33,12 +33,12 @@ function! eclim#common#validate#Validate (type, on_save)
     return
   endif
 
-  if !eclim#project#IsCurrentFileInProject(!a:on_save)
+  if !eclim#project#util#IsCurrentFileInProject(!a:on_save)
     return
   endif
 
-  let project = eclim#project#GetCurrentProjectName()
-  let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
   let command = s:validate_command
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<project>', project, '')

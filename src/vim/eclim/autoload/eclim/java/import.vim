@@ -33,7 +33,7 @@ let s:command_unused_imports =
 function! eclim#java#import#Import ()
   let classname = expand('<cword>')
 
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
@@ -49,7 +49,7 @@ function! eclim#java#import#Import ()
     return
   endif
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_import
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<classname>', classname, '')
@@ -187,7 +187,7 @@ function! eclim#java#import#CleanImports ()
   let col = col('.')
 
   " eclim method
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   if project != ''
     call eclim#java#util#SilentUpdate()
 

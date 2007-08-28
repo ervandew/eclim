@@ -30,13 +30,13 @@ let s:command_comment =
 " Comment() {{{
 " Add / update the comments for the element under the cursor.
 function! eclim#java#doc#Comment ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#java#util#GetFilename()
   let offset = eclim#util#GetCurrentElementOffset()
 

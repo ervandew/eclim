@@ -27,7 +27,7 @@ function! TestOpenRelative ()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test_java/build.xml
 
-  call eclim#common#OpenRelative('edit', 'pom.xml', 1)
+  call eclim#common#util#OpenRelative('edit', 'pom.xml', 1)
   call VUAssertTrue(bufwinnr('eclim_unit_test_java/pom.xml') > -1,
     \ 'Did not open pom.xml.')
   bdelete
@@ -36,7 +36,7 @@ endfunction " }}}
 " TestOpenFiles() {{{
 function! TestOpenFiles ()
   exec 'cd ' . g:TestEclimWorkspace
-  call eclim#common#OpenFiles('split',
+  call eclim#common#util#OpenFiles('split',
     \ 'eclim_unit_test_java/build.xml eclim_unit_test_java/pom.xml')
   call VUAssertTrue(bufwinnr('eclim_unit_test_java/build.xml') > -1,
     \ 'Did not open build.xml.')
@@ -51,7 +51,7 @@ function! TestSwapWords ()
   new
   call setline(1, 'one, two')
   call cursor(1, 1)
-  call eclim#common#SwapWords()
+  call eclim#common#util#SwapWords()
   call VUAssertEquals('two, one', getline(1), "Words not swaped correctly.")
   bdelete!
 endfunction " }}}
@@ -60,7 +60,7 @@ endfunction " }}}
 function! TestCommandCompleteRelative ()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test_java/build.xml
-  let results = eclim#common#CommandCompleteRelative('p', 'SplitRelative p', 15)
+  let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative p', 15)
   call VUAssertEquals(1, len(results), "Wrong number of results.")
   call VUAssertEquals('pom.xml', results[0], "Wrong result.")
   bdelete

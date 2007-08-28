@@ -40,7 +40,7 @@ function! eclim#java#junit#JUnitExecute (test)
     let class = substitute(test, '/', '\.', 'g')
   endif
 
-  let command = eclim#project#GetProjectSetting("org.eclim.java.junit.command")
+  let command = eclim#project#util#GetProjectSetting("org.eclim.java.junit.command")
   if command == '0'
     return
   endif
@@ -112,13 +112,13 @@ endfunction " }}}
 " Opens a window that allows the user to choose methods to implement tests
 " for.
 function! eclim#java#junit#JUnitImpl ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
 
   let command = s:command_impl
   let command = substitute(command, '<project>', project, '')
@@ -165,12 +165,13 @@ endfunction " }}}
 
 " GetResultsDir() {{{
 function s:GetResultsDir ()
-  let path = eclim#project#GetProjectSetting("org.eclim.java.junit.output_dir")
+  let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
   if path == '0'
     return
   endif
 
-  let path = substitute(path, '<project>', eclim#project#GetCurrentProjectRoot(), '')
+  let root = eclim#project#util#GetCurrentProjectRoot()
+  let path = substitute(path, '<project>', root, '')
   let path = path !~ '/$' ? path . '/' : path
   return path
 endfunction " }}}

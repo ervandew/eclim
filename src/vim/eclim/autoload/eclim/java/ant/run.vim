@@ -35,7 +35,7 @@ endfunction " }}}
 " CommandCompleteTarget(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for ant targets.
 function! eclim#java#ant#run#CommandCompleteTarget (argLead, cmdLine, cursorPos)
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   if project == ''
     return []
   endif

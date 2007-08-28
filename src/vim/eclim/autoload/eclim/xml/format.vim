@@ -30,7 +30,7 @@
 function! eclim#xml#format#Format ()
   " first save the file and validate to ensure no errors
   call eclim#util#ExecWithoutAutocmds('update')
-  call eclim#xml#Validate('', 1)
+  call eclim#xml#validate#Validate('', 1)
   if len(getloclist(0)) > 0
     call eclim#util#EchoError(
       \ 'File contains errors (:lopen), please correct before formatting.')

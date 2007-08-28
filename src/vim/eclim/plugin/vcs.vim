@@ -28,7 +28,7 @@ if !exists(":VcsAnnotate")
   command VcsAnnotateOff :call eclim#vcs#AnnotateOff()
 endif
 if !exists(":Viewvc")
-  command -nargs=? -complete=customlist,eclim#project#CommandCompleteProjectRelative
+  command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
     \ Viewvc :call eclim#vcs#Viewvc('<args>')
 endif
 " }}}

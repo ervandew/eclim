@@ -62,12 +62,12 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
     return start
   else
     let offset = eclim#util#GetCharacterOffset() + len(a:base) - 1
-    let project = eclim#project#GetCurrentProjectName()
+    let project = eclim#project#util#GetCurrentProjectName()
     if project == ''
       return []
     endif
 
-    let filename = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+    let filename = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
 
     let command = s:complete_command
     let command = substitute(command, '<project>', project, '')

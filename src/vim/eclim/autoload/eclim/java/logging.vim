@@ -58,7 +58,7 @@ endfunction " }}}
 " Initializes the necessary logging settings.
 function! s:InitLoggingSettings ()
   let s:EclimLoggingImpl =
-    \ eclim#project#GetProjectSetting("org.eclim.java.logging.impl")
+    \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
   if s:EclimLoggingImpl == "commons-logging"
     let s:logger = g:EclimIndent .
       \ "private static final Log ${var} = LogFactory.getLog(${class}.class);"

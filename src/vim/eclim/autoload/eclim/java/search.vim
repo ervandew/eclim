@@ -83,7 +83,7 @@ function! s:Search (command, ...)
     let index = index + 1
   endwhile
 
-  let in_project = eclim#project#IsCurrentFileInProject(0)
+  let in_project = eclim#project#util#IsCurrentFileInProject(0)
 
   " element search
   if argline !~ '-p\>'
@@ -104,7 +104,7 @@ function! s:Search (command, ...)
       return s:SearchAlternate('-p ' . s:BuildPattern() . ' ' . argline, 1)
     endif
 
-    let project = eclim#project#GetCurrentProjectName()
+    let project = eclim#project#util#GetCurrentProjectName()
     let filename = eclim#java#util#GetFilename()
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
@@ -126,7 +126,7 @@ function! s:Search (command, ...)
       return s:SearchAlternate(argline, 0)
     endif
 
-    let project = eclim#project#GetCurrentProjectName()
+    let project = eclim#project#util#GetCurrentProjectName()
     let filename = eclim#java#util#GetFilename()
 
     " pattern search
@@ -281,7 +281,7 @@ function! eclim#java#search#SearchAndDisplay (type, args)
   endif
   if !empty(results)
     if a:type == 'java_search'
-      let g:EclimLastProject = eclim#project#GetCurrentProjectName()
+      let g:EclimLastProject = eclim#project#util#GetCurrentProjectName()
       call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
       " if only one result and it's for the current file, just jump to it.
       " note: on windows the expand result must be escaped

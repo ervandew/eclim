@@ -30,9 +30,9 @@
 " UpdateSrcFile(validate) {{{
 " Updates the src file on the server w/ the changes made to the current file.
 function! eclim#php#util#UpdateSrcFile (validate)
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
-    let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+    let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
@@ -43,8 +43,8 @@ function! eclim#php#util#UpdateSrcFile (validate)
 
     if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       " html validate
-      let project = eclim#project#GetCurrentProjectName()
-      let file = eclim#project#GetProjectRelativeFilePath(expand("%:p"))
+      let project = eclim#project#util#GetCurrentProjectName()
+      let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
@@ -63,7 +63,7 @@ endfunction " }}}
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#php#util#CommandCompleteProject (argLead, cmdLine, cursorPos)
-  return eclim#project#CommandCompleteProjectByNature(
+  return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'php')
 endfunction " }}}
 

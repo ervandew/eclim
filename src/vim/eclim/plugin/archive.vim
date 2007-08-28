@@ -43,7 +43,7 @@ function! s:ReadArchiveFile ()
     let class = substitute(class, '/', '.', 'g')
 
     let project = exists('g:EclimLastProject') ?
-      \ g:EclimLastProject : eclim#project#GetCurrentProjectName()
+      \ g:EclimLastProject : eclim#project#util#GetCurrentProjectName()
 
     if project == ''
       call eclim#util#EchoError(

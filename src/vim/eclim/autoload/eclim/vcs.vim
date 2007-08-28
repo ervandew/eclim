@@ -43,16 +43,16 @@ function! eclim#vcs#Annotate ()
   let annotations = split(result, '\n')
   call map(annotations,
       \ "substitute(v:val, '^\\s*\\(.\\{-}\\s\\+.\\{-}\\)\\s\\+.*', '\\1', '')")
-  let defined = eclim#signs#GetDefined()
+  let defined = eclim#display#signs#GetDefined()
   let index = 1
   for annotation in annotations
     let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
     let user_abbrv = user[:1]
     if index(defined, user) == -1
-      call eclim#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
+      call eclim#display#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
       call add(defined, user_abbrv)
     endif
-    call eclim#signs#Place(user, index)
+    call eclim#display#signs#Place(user, index)
     let index += 1
   endfor
   let b:vcs_annotations = annotations
@@ -66,15 +66,15 @@ endfunction " }}}
 " AnnotateOff() {{{
 function! eclim#vcs#AnnotateOff ()
   if exists('b:vcs_annotations')
-    let defined = eclim#signs#GetDefined()
+    let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
       let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
       if index(defined, user) != -1
-        let signs = eclim#signs#GetExisting(user)
+        let signs = eclim#display#signs#GetExisting(user)
         for sign in signs
-          call eclim#signs#Unplace(sign.id)
+          call eclim#display#signs#Unplace(sign.id)
         endfor
-        call eclim#signs#Undefine(user)
+        call eclim#display#signs#Undefine(user)
         call remove(defined, index(defined, user))
       endif
     endfor
@@ -95,7 +95,7 @@ endfunction " }}}
 " Viewvc(file) {{{
 " Convert file or directory to viewvc url and open in the browser.
 function eclim#vcs#Viewvc (file)
-  let root = eclim#project#GetProjectSetting('org.eclim.project.vcs.viewvc')
+  let root = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.viewvc')
   if root == '0'
     return
   endif
@@ -110,7 +110,7 @@ function eclim#vcs#Viewvc (file)
     return
   endif
 
-  let project_root = eclim#project#GetCurrentProjectRoot()
+  let project_root = eclim#project#util#GetCurrentProjectRoot()
 
   let file = a:file
   let dir = file

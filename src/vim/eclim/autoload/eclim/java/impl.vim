@@ -33,13 +33,13 @@
 
 " Impl() {{{
 function! eclim#java#impl#Impl ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let filename = eclim#java#util#GetFilename()
   let offset = eclim#util#GetCurrentElementOffset()
 
@@ -179,7 +179,7 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
   exec winnr . "winc w"
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
 
   let command = a:command
   let command = substitute(command, '<project>', project, '')

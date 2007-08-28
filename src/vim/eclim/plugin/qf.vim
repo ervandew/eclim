@@ -28,7 +28,7 @@ augroup eclim_qf
   autocmd QuickFixCmdPost grep*,vimgrep* call <SID>Show('i', 'qf')
   autocmd QuickFixCmdPost lgrep*,lvimgrep* call <SID>Show('i', 'loc')
 
-  autocmd BufWinEnter * call eclim#signs#Update()
+  autocmd BufWinEnter * call eclim#display#signs#Update()
 augroup END
 " }}}
 
@@ -62,7 +62,7 @@ function! s:Show (type, list)
     endif
   endif
 
-  call eclim#signs#Update()
+  call eclim#display#signs#Update()
 
   redraw!
 endfunction " }}}

@@ -82,7 +82,7 @@ endfunction " }}}
 function! eclim#java#util#GetFilename ()
   "let filename = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
   "return filename . '/' . expand('%:t')
-  return eclim#project#GetProjectRelativeFilePath(expand('%:p'))
+  return eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 endfunction " }}}
 
 " GetPackage(...) {{{
@@ -243,7 +243,7 @@ endfunction " }}}
 " UpdateSrcFile(validate) {{{
 " Updates the src file on the server w/ the changes made to the current file.
 function! eclim#java#util#UpdateSrcFile (validate)
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let file = eclim#java#util#GetFilename()
     let command = s:update_command
@@ -268,7 +268,7 @@ endfunction " }}}
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#java#util#CommandCompleteProject (argLead, cmdLine, cursorPos)
-  return eclim#project#CommandCompleteProjectByNature(
+  return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'java')
 endfunction " }}}
 

@@ -33,13 +33,13 @@ let s:command_insert =
 " Delegate() {{{
 " Opens a window that allows the user to choose delegate methods to implement.
 function! eclim#java#delegate#Delegate ()
-  if !eclim#project#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   call eclim#java#util#SilentUpdate()
 
-  let project = eclim#project#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectName()
   let filename = eclim#java#util#GetFilename()
   let offset = eclim#util#GetCurrentElementOffset()
 
