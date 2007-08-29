@@ -36,6 +36,15 @@
   if !exists('g:MaximizeQuickfixHeight')
     let g:MaximizeQuickfixHeight = 10
   endif
+  if !exists('g:MaximizeSpecialtyWindowsRestore')
+    let g:MaximizeSpecialtyWindowsRestore = [
+        \ ['g:TagList_title', '"vertical <window>resize " . g:Tlist_WinWidth'],
+        \ [
+          \ 'g:EclimProjectTreeTitle',
+          \ '"vertical <window>resize " . g:EclimProjectTreeWidth'
+        \ ],
+      \ ]
+  endif
 " }}}
 
 " MaximizeWindow() {{{
@@ -71,86 +80,20 @@ function! eclim#display#maximize#MinimizeWindow (...)
 
   let args = []
   if len(a:000) == 0
-    let args = [bufnr('%')]
+    let args = [winnr()]
   else
     let args = a:000[:]
     call map(args, 's:BufferNumber(v:val)')
   endif
 
   " first loop through and mark the buffers
-  for buffer in args
-    let winnum = bufwinnr(buffer)
+  for winnum in args
     if winnum != -1
       call setwinvar(winnum, "minimized", 1)
     endif
   endfor
 
   call s:Reminimize()
-
-  " second loop sweep through and resize
-  "for buffer in args
-  "  let winnum = bufwinnr(buffer)
-  "  if winnum != -1
-  "    let row_wins = s:RowMinimized(winnum)
-  "    let column_wins = s:ColumnMinimized(winnum)
-  "    let vertical_split = s:IsVerticalSplit(winnum)
-  "    echom 'row_wins    = ' . string(row_wins)
-  "    echom 'column_wins = ' . string(column_wins)
-  "    if vertical_split && len(row_wins) && len(column_wins)
-  "      let windows = column_wins
-  "      let cmd = 'vertical <window>resize 0'
-  "      let winvar = '&winfixwidth'
-
-  "    elseif len(row_wins) && len(column_wins)
-  "      let windows = row_wins
-  "      let cmd = '<window>resize 0'
-  "      let winvar = '&winfixheight'
-
-  "    elseif len(column_wins)
-  "      let windows = column_wins
-  "      let cmd = 'vertical <window>resize 0'
-  "      let winvar = '&winfixwidth'
-
-  "    elseif s:IsInColumn(winnum)
-  "      let windows = []
-  "      let cmd = '<window>resize 0'
-  "      let winvar = '&winfixheight'
-
-  "    elseif s:IsInRow(winnum)
-  "      let windows = []
-  "      let cmd = 'vertical <window>resize 0'
-  "      let winvar = '&winfixwidth'
-
-  "    elseif vertical_split
-  "      let windows = column_wins
-  "      let cmd = 'vertical <window>resize 0'
-  "      let winvar = '&winfixwidth'
-
-  "    else
-  "      let windows = row_wins
-  "      let cmd = '<window>resize 0'
-  "      let winvar = '&winfixheight'
-  "    endif
-
-  "    echom 'windows = ' . string(windows)
-  "    echom 'cmd = ' . cmd
-  "    echom 'winvar = ' . winvar
-  "    call add(windows, winnum)
-  "    for window in windows + [winnum]
-  "      exec substitute(cmd, '<window>', window, 'g')
-  "      call setwinvar(window, winvar, 1)
-  "    endfor
-  "  endif
-  "endfor
-
-  " ensure we end up in the window we started in
-  "exec curwinnum . 'winc w'
-  "echom 'min end ' . curwinnum
-
-  "winc =
-
-  "call s:RestoreFixedWindows()
-  "call s:EnableMinimizeAutoCommands()
 endfunction " }}}
 
 " MaximizeNewWindow() {{{
@@ -389,19 +332,15 @@ endfunction " }}}
 
 " RestoreFixedWindows() {{{
 function! s:RestoreFixedWindows ()
-  "fixes TList pane that ends up getting resized
-  if exists("g:TagList_title")
-    if bufwinnr(g:TagList_title) != -1
-      exec "vertical " . bufwinnr(g:TagList_title) .
-        \ "resize " . g:Tlist_WinWidth
+  for settings in g:MaximizeSpecialtyWindowsRestore
+    if exists(settings[0])
+      exec 'let name = ' . settings[0]
+      let winnr = bufwinnr('*' . name . '*')
+      if winnr != -1
+        exec 'exec ' . substitute(settings[1], '<window>', winnr, 'g')
+      endif
     endif
-  endif
-  if exists("g:EclimProjectTreeTitle")
-    let winnr = bufwinnr(g:EclimProjectTreeTitle . '_*')
-    if winnr != -1
-      exec "vertical " . winnr . "resize " . g:EclimProjectTreeWidth
-    endif
-  endif
+  endfor
 endfunction " }}}
 
 " BufferNumber() {{{
@@ -412,29 +351,29 @@ endfunction " }}}
 
 " IsVerticalSplit(window) {{{
 " Determines if the current window is vertically split.
-function! s:IsVerticalSplit (window)
-  let origwinnr = winnr()
-
-  exec a:window . 'winc w'
-  let curwinnr = winnr()
-
-  " check to the right
-  winc l
-  if winnr() != curwinnr && expand('%') !~ g:MaximizeExcludes
-    return 1
-  endif
-
-  exec a:window . 'winc w'
-
-  " check to the left
-  winc h
-  if winnr() != curwinnr && expand('%') !~ g:MaximizeExcludes
-    return 1
-  endif
-
-  exec origwinnr . 'winc w'
-  return 0
-endfunction " }}}
+"function! s:IsVerticalSplit (window)
+"  let origwinnr = winnr()
+"
+"  exec a:window . 'winc w'
+"  let curwinnr = winnr()
+"
+"  " check to the right
+"  winc l
+"  if winnr() != curwinnr && expand('%') !~ g:MaximizeExcludes
+"    return 1
+"  endif
+"
+"  exec a:window . 'winc w'
+"
+"  " check to the left
+"  winc h
+"  if winnr() != curwinnr && expand('%') !~ g:MaximizeExcludes
+"    return 1
+"  endif
+"
+"  exec origwinnr . 'winc w'
+"  return 0
+"endfunction " }}}
 
 " IsInRow(window) {{{
 " Determines if the supplied window is in a row of equally sized windows.

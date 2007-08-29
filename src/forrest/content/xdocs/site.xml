@@ -138,6 +138,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Version Control System Commands."/>
       <web label="Web Lookup Commands" href="web.html"
           description="Web Lookup Commands."/>
+      <maximize label="Vim Window Maximize / Minimize" href="maximize.html"
+          description="Vim Window Maximize / Minimize"/>
     </common>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>

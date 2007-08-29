@@ -19,7 +19,6 @@ TODO {{{
     - document python import functionality
 
     - taglisttoo
-    - maximize
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -33,6 +32,9 @@ TODO {{{
       :PhpSearch
       :PhpSearchContext
       :Validate (css, php, and java)
+      :MaximizeWindow
+      :MinimizeWindow
+      :MinimizeRestore
   }}}
 
   Common {{{
@@ -170,6 +172,7 @@ TODO {{{
         - ignore error immediately following this error report (if not another * hack).
       - missing closing }
       - font: 100%;
+      - trailing , on list of selectors
 
     - look into using jericho instead of tidy as the html validator.
 
