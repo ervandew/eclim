@@ -144,7 +144,7 @@ public class XmlUtils
     String filename = FileUtils.concat(
         ProjectUtils.getPath(_project), _filename);
 
-    ErrorAggregator errorHandler = new ErrorAggregator();
+    ErrorAggregator errorHandler = new ErrorAggregator(filename);
     EntityResolver entityResolver = new EntityResolver(
         FileUtils.getFullPath(filename));
     try{
@@ -196,7 +196,7 @@ public class XmlUtils
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
         _schema.replace('\\', '/'));
 
-    ErrorAggregator errorHandler = new ErrorAggregator();
+    ErrorAggregator errorHandler = new ErrorAggregator(_filename);
     EntityResolver entityResolver = new EntityResolver(
         FileUtils.getFullPath(_filename));
     try{
@@ -438,6 +438,17 @@ public class XmlUtils
     extends DefaultHandler
   {
     private ArrayList<Error> errors = new ArrayList<Error>();
+    private String filename;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param filename The filename for this instance.
+     */
+    public ErrorAggregator (String filename)
+    {
+      this.filename = filename;
+    }
 
     /**
      * {@inheritDoc}
@@ -480,6 +491,9 @@ public class XmlUtils
       // bug where window paths start with /C:/...
       if(location != null && WIN_BUG.matcher(location).matches()){
         location = location.substring(1);
+      }
+      if(location == null){
+        location = filename;
       }
       try{
         errors.add(new Error(
