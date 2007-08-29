@@ -109,7 +109,7 @@ endif
 if !exists(":MinimizeRestore")
   command MinimizeRestore
       \ :call eclim#display#maximize#ResetMinimized() |
-      \ call eclim#display#maximize#RestoreWindows()
+      \ call eclim#display#maximize#RestoreWindows(0)
 endif
 " }}}
 

@@ -45,21 +45,19 @@ function! eclim#display#maximize#MaximizeWindow ()
 
   " get the window that is maximized
   let maximized = s:GetMaximizedWindow()
-
   if maximized
     call s:DisableMaximizeAutoCommands()
-    call eclim#display#maximize#RestoreWindows()
+    call eclim#display#maximize#RestoreWindows(maximized)
   else
     exec "set winminwidth=" . g:MaximizeMinWinWidth
     exec "set winminheight=" . g:MaximizeMinWinHeight
     call s:MaximizeNewWindow()
   endif
-  unlet maximized
 endfunction " }}}
 
 " MinimizeWindow() {{{
 function! eclim#display#maximize#MinimizeWindow (...)
-  let winnum = winnr()
+  let curwinnum = winnr()
 
   exec "set winminheight=" . g:MaximizeMinWinHeight
   exec "set winminwidth=" . g:MaximizeMinWinWidth
@@ -68,7 +66,7 @@ function! eclim#display#maximize#MinimizeWindow (...)
   " first turn off maximized if enabled
   let maximized = s:GetMaximizedWindow()
   if maximized
-    call eclim#display#maximize#RestoreWindows()
+    call eclim#display#maximize#RestoreWindows(maximized)
   endif
 
   let args = []
@@ -81,34 +79,78 @@ function! eclim#display#maximize#MinimizeWindow (...)
 
   " first loop through and mark the buffers
   for buffer in args
-    let window = bufwinnr(buffer)
-    if window != -1
-      call setbufvar(buffer, "minimized", 1)
+    let winnum = bufwinnr(buffer)
+    if winnum != -1
+      call setwinvar(winnum, "minimized", 1)
     endif
   endfor
+
+  call s:Reminimize()
 
   " second loop sweep through and resize
-  for buffer in args
-    let window = bufwinnr(buffer)
-    if window != -1
-      if s:IsVerticalSplit(window) && s:IsColumnMinimized(window)
-        exec "vertical " . window . "resize 0"
-        call setwinvar(window, "&winfixwidth", 1)
-      " if s:IsRowMinimized(window)
-      else
-        exec window . "resize 0"
-        call setwinvar(window, "&winfixheight", 1)
-      endif
-    endif
-  endfor
+  "for buffer in args
+  "  let winnum = bufwinnr(buffer)
+  "  if winnum != -1
+  "    let row_wins = s:RowMinimized(winnum)
+  "    let column_wins = s:ColumnMinimized(winnum)
+  "    let vertical_split = s:IsVerticalSplit(winnum)
+  "    echom 'row_wins    = ' . string(row_wins)
+  "    echom 'column_wins = ' . string(column_wins)
+  "    if vertical_split && len(row_wins) && len(column_wins)
+  "      let windows = column_wins
+  "      let cmd = 'vertical <window>resize 0'
+  "      let winvar = '&winfixwidth'
+
+  "    elseif len(row_wins) && len(column_wins)
+  "      let windows = row_wins
+  "      let cmd = '<window>resize 0'
+  "      let winvar = '&winfixheight'
+
+  "    elseif len(column_wins)
+  "      let windows = column_wins
+  "      let cmd = 'vertical <window>resize 0'
+  "      let winvar = '&winfixwidth'
+
+  "    elseif s:IsInColumn(winnum)
+  "      let windows = []
+  "      let cmd = '<window>resize 0'
+  "      let winvar = '&winfixheight'
+
+  "    elseif s:IsInRow(winnum)
+  "      let windows = []
+  "      let cmd = 'vertical <window>resize 0'
+  "      let winvar = '&winfixwidth'
+
+  "    elseif vertical_split
+  "      let windows = column_wins
+  "      let cmd = 'vertical <window>resize 0'
+  "      let winvar = '&winfixwidth'
+
+  "    else
+  "      let windows = row_wins
+  "      let cmd = '<window>resize 0'
+  "      let winvar = '&winfixheight'
+  "    endif
+
+  "    echom 'windows = ' . string(windows)
+  "    echom 'cmd = ' . cmd
+  "    echom 'winvar = ' . winvar
+  "    call add(windows, winnum)
+  "    for window in windows + [winnum]
+  "      exec substitute(cmd, '<window>', window, 'g')
+  "      call setwinvar(window, winvar, 1)
+  "    endfor
+  "  endif
+  "endfor
 
   " ensure we end up in the window we started in
-  exec winnum . 'winc w'
+  "exec curwinnum . 'winc w'
+  "echom 'min end ' . curwinnum
 
-  winc =
+  "winc =
 
-  call s:RestoreFixedWindows()
-  call s:EnableMinimizeAutoCommands()
+  "call s:RestoreFixedWindows()
+  "call s:EnableMinimizeAutoCommands()
 endfunction " }}}
 
 " MaximizeNewWindow() {{{
@@ -116,7 +158,7 @@ function! s:MaximizeNewWindow ()
   if expand('%') !~ g:MaximizeExcludes
     call s:DisableMaximizeAutoCommands()
     call s:GetMaximizedWindow()
-    let b:maximized = 1
+    let w:maximized = 1
     call s:ResizeWindows()
     call s:EnableMaximizeAutoCommands()
   endif
@@ -124,41 +166,30 @@ endfunction " }}}
 
 " GetMaximizedWindow() {{{
 function! s:GetMaximizedWindow ()
-  let result = 0
-
-  let bufend = bufnr('$')
-  let bufnum = 1
-  while bufnum <= bufend
-    if bufexists(bufnum)
-      let max = getbufvar(bufnum, "maximized")
-      " reset the maximized/minimized vars.
-      call setbufvar(bufnum, "maximized", 0)
-
-      if max && bufwinnr(bufnum) != -1
-        let result = bufwinnr(bufnum)
-      endif
+  let winend = winnr('$')
+  let winnum = 1
+  while winnum <= winend
+    let max = getwinvar(winnum, "maximized")
+    if max
+      return winnum
     endif
-    let bufnum = bufnum + 1
+    let winnum = winnum + 1
   endwhile
-  unlet bufend bufnum
 
-  return result
+  return 0
 endfunction " }}}
 
 " ResetMinimized() {{{
 function! eclim#display#maximize#ResetMinimized ()
   call s:DisableMinimizeAutoCommands()
-  let bufend = bufnr('$')
-  let bufnum = 1
-  while bufnum <= bufend
-    if bufwinnr(bufnum) != -1
-      call setbufvar(bufnum, "minimized", 0)
-      call setwinvar(bufwinnr(bufnum), "&winfixheight", 0)
-      call setwinvar(bufwinnr(bufnum), "&winfixwidth", 0)
-    endif
-    let bufnum = bufnum + 1
+  let winend = winnr('$')
+  let winnum = 1
+  while winnum <= winend
+    call setwinvar(winnum, "minimized", 0)
+    call setwinvar(winnum, "&winfixheight", 0)
+    call setwinvar(winnum, "&winfixwidth", 0)
+    let winnum = winnum + 1
   endwhile
-  unlet bufend bufnum
 endfunction " }}}
 
 " ResizeWindows() {{{
@@ -265,32 +296,82 @@ endfunction " }}}
 " returned to their minimized state.
 function s:Reminimize ()
   call s:DisableMinimizeAutoCommands()
-  let bufend = bufnr('$')
-  let bufnum = 1
-  while bufnum <= bufend
-    if bufwinnr(bufnum) != -1 && expand('%') !~ g:MaximizeExcludes
-      let window = bufwinnr(bufnum)
-      let minimized = getbufvar(bufnum, "minimized")
+  let curwinnum = winnr()
+  let winend = winnr('$')
+  let winnum = 1
+  let commands = []
+  while winnum <= winend
+    if bufname(winbufnr(winnum)) !~ g:MaximizeExcludes
+      let minimized = getwinvar(winnum, "minimized")
       if minimized
-        if s:IsVerticalSplit(window) && s:IsColumnMinimized(window)
-          exec "vertical " . window . "resize 0"
-          call setwinvar(window, "&winfixwidth", 1)
-        " if s:IsRowMinimized(window)
+        let row_wins = s:RowMinimized(winnum)
+        let column_wins = s:ColumnMinimized(winnum)
+        "let vertical_split = s:IsVerticalSplit(winnum)
+
+        "echom 'buffer = ' . winbufnr(winnum)
+        "echom '  row minimized    = ' . len(row_wins)
+        "echom '  column minimized = ' . len(column_wins)
+        "echom '  in row           = ' . s:IsInRow(winnum)
+        "echom '  in column        = ' . s:IsInColumn(winnum)
+
+        "if vertical_split && len(row_wins) && len(column_wins)
+        "  exec "vertical " . winnum . "resize 0"
+        "  call setwinvar(winnum, "&winfixwidth", 1)
+
+        if len(row_wins) && len(column_wins)
+          call add(commands, winnum . "resize 0")
+          call setwinvar(winnum, "&winfixheight", 1)
+
+        elseif len(column_wins)
+          call add(commands, "vertical " . winnum . "resize 0")
+          call setwinvar(winnum, "&winfixwidth", 1)
+
+        elseif s:IsInRow(winnum)
+          call add(commands, "vertical " . winnum . "resize 0")
+          call setwinvar(winnum, "&winfixwidth", 1)
+
+        elseif s:IsInColumn(winnum)
+          call add(commands, winnum . "resize 0")
+          call setwinvar(winnum, "&winfixheight", 1)
+
+        "elseif vertical_split
+        "  exec "vertical " . winnum . "resize 0"
+        "  call setwinvar(winnum, "&winfixwidth", 1)
+
         else
-          exec window . "resize 0"
-          call setwinvar(window, "&winfixheight", 1)
+          call add(commands, winnum . "resize 0")
+          call add(commands, "vertical " . winnum . "resize 0")
+          call setwinvar(winnum, "&winfixheight", 1)
+          call setwinvar(winnum, "&winfixwidth", 1)
         endif
       endif
     endif
-    let bufnum = bufnum + 1
+    let winnum = winnum + 1
   endwhile
-  unlet bufend bufnum
+
+  " ensure we end up in the window we started in
+  exec curwinnum . 'winc w'
+
+  " run all the resizing commands
+  for cmd in commands
+    exec cmd
+  endfor
+
+  call s:RestoreFixedWindows()
+
+  winc =
+
   call s:RestoreFixedWindows()
   call s:EnableMinimizeAutoCommands()
 endfunction " }}}
 
-" RestoreWindows() {{{
-function! eclim#display#maximize#RestoreWindows ()
+" RestoreWindows(maximized) {{{
+function! eclim#display#maximize#RestoreWindows (maximized)
+  " reset the maximized var.
+  if a:maximized
+    call setwinvar(a:maximized, "maximized", 0)
+  endif
+
   winc _
   winc =
 
@@ -355,90 +436,179 @@ function! s:IsVerticalSplit (window)
   return 0
 endfunction " }}}
 
-" IsRowMinimized(window) {{{
-" Determines all windows on a row are minimized.
-function! s:IsRowMinimized (window)
+" IsInRow(window) {{{
+" Determines if the supplied window is in a row of equally sized windows.
+function! s:IsInRow (window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
-  let curwinnr = winnr()
 
   " check windows to the right
-  let lastwinnr = winnr()
+  let curwinnr = winnr()
   winc l
-  while winnr() != lastwinnr
-    let buffer = bufnr('%')
-    let lastwinnr = winnr()
-    if winheight(lastwinnr) == winheight(curwinnr) &&
-        \ getbufvar(buffer, 'minimized') == '' &&
-        \ expand('%') !~ g:MaximizeExcludes
+  while winnr() != curwinnr
+    let curwinnr = winnr()
+    if winheight(curwinnr) == winheight(a:window)
       exec origwinnr . 'winc w'
-      return 0
+      return 1
     endif
     winc l
   endwhile
 
-  exec curwinnr . 'winc w'
+  exec a:window . 'winc w'
 
   " check windows to the left
-  let lastwinnr = winnr()
+  let curwinnr = winnr()
   winc h
-  while winnr() != lastwinnr
+  while winnr() != curwinnr
     let buffer = bufnr('%')
-    let lastwinnr = winnr()
-    if winheight(lastwinnr) == winheight(curwinnr) &&
-        \ getbufvar(buffer, 'minimized') == '' &&
-        \ expand('%') !~ g:MaximizeExcludes
+    let curwinnr = winnr()
+    if winheight(curwinnr) == winheight(a:window)
       exec origwinnr . 'winc w'
-      return 0
+      return 1
     endif
     winc h
   endwhile
 
   exec origwinnr . 'winc w'
-  return 1
+  return 0
 endfunction " }}}
 
-" IsColumnMinimized(window) {{{
-" Determines all windows on in column are minimized.
-function! s:IsColumnMinimized (window)
+" IsInColumn(window) {{{
+" Determines is the supplied window is in a column of equally sized windows.
+function! s:IsInColumn (window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
-  let curwinnr = winnr()
 
   " check windows above
-  let lastwinnr = winnr()
+  let curwinnr = winnr()
   winc k
-  while winnr() != lastwinnr
+  while winnr() != curwinnr
     let buffer = bufnr('%')
-    let lastwinnr = winnr()
-    if winwidth(lastwinnr) == winwidth(curwinnr) &&
-        \ getbufvar(buffer, 'minimized') == '' &&
-        \ expand('%') !~ g:MaximizeExcludes
+    let curwinnr = winnr()
+    if winwidth(curwinnr) == winwidth(a:window)
       exec origwinnr . 'winc w'
-      return 0
+      return 1
     endif
     winc k
   endwhile
 
-  exec curwinnr . 'winc w'
+  exec a:window . 'winc w'
 
   " check windows below
-  let lastwinnr = winnr()
+  let curwinnr = winnr()
   winc j
-  while winnr() != lastwinnr
+  while winnr() != curwinnr
     let buffer = bufnr('%')
-    let lastwinnr = winnr()
-    if winwidth(lastwinnr) == winwidth(curwinnr) &&
-        \ getbufvar(buffer, 'minimized') == '' &&
-        \ expand('%') !~ g:MaximizeExcludes
+    let curwinnr = winnr()
+    if winwidth(curwinnr) == winwidth(a:window)
       exec origwinnr . 'winc w'
-      return 0
+      return 1
     endif
     winc j
   endwhile
 
   exec origwinnr . 'winc w'
-  return 1
+  return 0
+endfunction " }}}
+
+" RowMinimized(window) {{{
+" Determines all windows on a row are minimized.
+function! s:RowMinimized (window)
+  let origwinnr = winnr()
+  exec a:window . 'winc w'
+
+  let windows = []
+
+  " check windows to the right
+  let curwinnr = winnr()
+  winc l
+  while winnr() != curwinnr
+    let buffer = bufnr('%')
+    let curwinnr = winnr()
+    if winheight(curwinnr) == winheight(a:window) &&
+        \ expand('%') !~ g:MaximizeExcludes
+      if getwinvar(curwinnr, 'minimized') == ''
+        exec origwinnr . 'winc w'
+        return []
+      else
+        call add(windows, curwinnr)
+      endif
+    endif
+    winc l
+  endwhile
+
+  exec a:window . 'winc w'
+
+  " check windows to the left
+  let curwinnr = winnr()
+  winc h
+  while winnr() != curwinnr
+    let buffer = bufnr('%')
+    let curwinnr = winnr()
+    if winheight(curwinnr) == winheight(a:window) &&
+        \ expand('%') !~ g:MaximizeExcludes
+      if getwinvar(curwinnr, 'minimized') == ''
+        exec origwinnr . 'winc w'
+        return []
+      else
+        call add(windows, curwinnr)
+      endif
+    endif
+    winc h
+  endwhile
+
+  exec origwinnr . 'winc w'
+  return windows
+endfunction " }}}
+
+" ColumnMinimized(window) {{{
+" Determines all windows in column are minimized.
+function! s:ColumnMinimized (window)
+  let origwinnr = winnr()
+  exec a:window . 'winc w'
+
+  let windows = []
+
+  " check windows above
+  let curwinnr = winnr()
+  winc k
+  while winnr() != curwinnr
+    let buffer = bufnr('%')
+    let curwinnr = winnr()
+    if winwidth(curwinnr) == winwidth(a:window) &&
+        \ expand('%') !~ g:MaximizeExcludes
+      if getwinvar(curwinnr, 'minimized') == ''
+        exec origwinnr . 'winc w'
+        return []
+      else
+        call add(windows, curwinnr)
+      endif
+    endif
+    winc k
+  endwhile
+
+  exec a:window . 'winc w'
+
+  " check windows below
+  let curwinnr = winnr()
+  winc j
+  while winnr() != curwinnr
+    let buffer = bufnr('%')
+    let curwinnr = winnr()
+    if winwidth(curwinnr) == winwidth(a:window) &&
+        \ expand('%') !~ g:MaximizeExcludes
+      if getwinvar(curwinnr, 'minimized') == ''
+        exec origwinnr . 'winc w'
+        return []
+      else
+        call add(windows, curwinnr)
+      endif
+    endif
+    winc j
+  endwhile
+
+  exec origwinnr . 'winc w'
+  return windows
 endfunction " }}}
 
 " NavigateWindows(cmd) {{{
@@ -448,12 +618,12 @@ function! eclim#display#maximize#NavigateWindows (wincmd)
   let lastwindow = start
 
   exec a:wincmd
-  while exists('b:minimized') && b:minimized && winnr() != lastwindow
+  while exists('w:minimized') && w:minimized && winnr() != lastwindow
     let lastwindow = winnr()
     exec a:wincmd
   endwhile
 
-  if exists('b:minimized') && b:minimized
+  if exists('w:minimized') && w:minimized
     exec start . 'wincmd w'
   endif
 endfunction " }}}
