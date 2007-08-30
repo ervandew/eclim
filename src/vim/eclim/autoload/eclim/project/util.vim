@@ -510,23 +510,24 @@ endfunction " }}}
 function! eclim#project#util#CommandCompleteProjectCreate (argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'
     return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
   endif
 
-  " complete options
-  if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '\s\+$'
-    return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
-  endif
-  if argLead =~ '-$'
-    return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
-  endif
-
-  if cmdLine =~ '\s-n\s.*$' && stridx(cmdLine, ' -d') < stridx(cmdLine, ' -n')
+  " complete nature aliases
+  if cmdLine =~ '-n\s\+[^-]*$'
     let aliases = eclim#project#util#GetProjectNatureAliases()
+
+    " if one alias already supplied complete options as well
+    if cmdLine !~ '-n\s\+$' && argLead == ''
+      let aliases =
+        \ s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos) +
+        \ aliases
+    endif
+
     if cmdLine !~ '[^\\]\s$'
       call filter(aliases, 'v:val =~ "^' . argLead . '"')
     endif
@@ -534,8 +535,19 @@ function! eclim#project#util#CommandCompleteProjectCreate (argLead, cmdLine, cur
     return aliases
   endif
 
-  " for remaining args, complete project name.
-  return eclim#project#util#CommandCompleteProject(argLead, a:cmdLine, a:cursorPos)
+  " complete project dependencies
+  if cmdLine =~ '-d\s\+[^-]*$'
+    " if one dependency already supplied complete options as well
+    if cmdLine !~ '-d\s\+$' && argLead == ''
+      let options =
+        \ s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
+      return options +
+        \ eclim#project#util#CommandCompleteProject(argLead, a:cmdLine, a:cursorPos)
+    endif
+    return eclim#project#util#CommandCompleteProject(argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  return s:CommandCompleteProjectCreateOptions(argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
 " CommandCompleteProjectCreateOptions(argLead, cmdLine, cursorPos) {{{
@@ -543,10 +555,13 @@ endfunction " }}}
 function! s:CommandCompleteProjectCreateOptions (argLead, cmdLine, cursorPos)
   let options = ['-n', '-d', '-p']
   if a:cmdLine =~ '\s-n\>'
-    call remove(options, 0)
+    call remove(options, index(options, '-n'))
   endif
   if a:cmdLine =~ '\s-d\>'
-    call remove(options, 1)
+    call remove(options, index(options, '-d'))
+  endif
+  if a:cmdLine =~ '\s-p\>'
+    call remove(options, index(options, '-p'))
   endif
   return options
 endfunction " }}}
@@ -559,7 +574,7 @@ function! eclim#project#util#CommandCompleteProjectRelative (
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
@@ -601,7 +616,7 @@ function! s:CommandCompleteProjectNatureModify (
     \ argLead, cmdLine, cursorPos, aliasesFunc)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'

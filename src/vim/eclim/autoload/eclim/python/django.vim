@@ -437,7 +437,7 @@ endfunction " }}}
 function! eclim#python#django#CommandCompleteManage (argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'
     let actions = copy(s:manage_actions)

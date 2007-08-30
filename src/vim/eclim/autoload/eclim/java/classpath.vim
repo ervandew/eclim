@@ -141,7 +141,7 @@ function! eclim#java#classpath#CommandCompleteVarPath (argLead, cmdLine, cursorP
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   let var_names = deepcopy(vars)
   call filter(var_names, 'v:val =~ "^' . argLead . '"')
@@ -173,7 +173,7 @@ endfunction " }}}
 function! eclim#java#classpath#CommandCompleteVarAndDir (argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'

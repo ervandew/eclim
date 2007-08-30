@@ -291,7 +291,7 @@ endfunction " }}}
 function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = len(args) > 1 ? args[len(args) - 1] : ""
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete script name for first arg.
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '.\') . '$'
@@ -310,7 +310,7 @@ function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
   let command = s:command_patch_revisions
   let command = substitute(command, '<file>', file, '')
 
-  let argLead = len(args) > 2 ? args[len(args) - 1] : ""
+  "let argLead = len(args) > 2 ? args[len(args) - 1] : ""
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     let results =  split(result, '\n')
