@@ -100,9 +100,28 @@ endfunction " }}}
 function! s:MaximizeNewWindow ()
   if expand('%') !~ g:MaximizeExcludes
     call s:DisableMaximizeAutoCommands()
-    call s:GetMaximizedWindow()
+
     let w:maximized = 1
-    call s:ResizeWindows()
+    winc |
+    winc _
+
+    " check to see if a quickfix window is open
+    let winend = winnr('$')
+    let winnum = 1
+    while winnum <= winend
+      let buffername = bufname(winbufnr(winnum))
+      if getwinvar(winnum, '&ft') == 'qf'
+        let quickfixwindow = winnum
+      endif
+      let winnum = winnum + 1
+    endwhile
+
+    if exists("quickfixwindow")
+      exec quickfixwindow . "resize " . g:MaximizeQuickfixHeight
+      exec "vertical " . quickfixwindow . "resize"
+    endif
+
+    call s:RestoreFixedWindows()
     call s:EnableMaximizeAutoCommands()
   endif
 endfunction " }}}
@@ -133,43 +152,6 @@ function! eclim#display#maximize#ResetMinimized ()
     call setwinvar(winnum, "&winfixwidth", 0)
     let winnum = winnum + 1
   endwhile
-endfunction " }}}
-
-" ResizeWindows() {{{
-function! s:ResizeWindows ()
-  winc |
-  winc _
-
-  let curwindow = winnr()
-  if &ft == 'qf'
-    let quickfixwindow = curwindow
-  endif
-
-  winc w
-  while curwindow != winnr()
-    let window = winnr()
-    let buffername = expand('%')
-    let quickfix = (&ft == 'qf')
-    if quickfix
-      let quickfixwindow = window
-    endif
-    winc w
-    if !quickfix && buffername !~ g:MaximizeExcludes
-      exec "vertical " . window . "resize 0"
-      exec window . "resize 0"
-    endif
-  endwhile
-
-  resize +100
-  vertical resize +100
-  if exists("quickfixwindow")
-    exec quickfixwindow . "resize " . g:MaximizeQuickfixHeight
-    exec "vertical " . quickfixwindow . "resize"
-    winc |
-  endif
-  unlet curwindow
-
-  call s:RestoreFixedWindows()
 endfunction " }}}
 
 " DisableMaximizeAutoCommands() {{{
