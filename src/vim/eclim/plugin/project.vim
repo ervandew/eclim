@@ -112,16 +112,20 @@ if !exists(":ProjectLCD")
 endif
 
 if !exists(":ProjectGrep")
-  command -nargs=+ ProjectGrep :call eclim#project#util#ProjectGrep('vimgrep', <q-args>)
+  command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
+    \ ProjectGrep :call eclim#project#util#ProjectGrep('vimgrep', <q-args>)
 endif
 if !exists(":ProjectGrepAdd")
-  command -nargs=+ ProjectGrepAdd :call eclim#project#util#ProjectGrep('vimgrepadd', <q-args>)
+  command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
+    \ ProjectGrepAdd :call eclim#project#util#ProjectGrep('vimgrepadd', <q-args>)
 endif
 if !exists(":ProjectLGrep")
-  command -nargs=+ ProjectLGrep :call eclim#project#util#ProjectGrep('lvimgrep', <q-args>)
+  command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
+    \ ProjectLGrep :call eclim#project#util#ProjectGrep('lvimgrep', <q-args>)
 endif
 if !exists(":ProjectGrepAdd")
-  command -nargs=+ ProjectLGrepAdd :call eclim#project#util#ProjectGrep('lvimgrepadd', <q-args>)
+  command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
+    \ ProjectLGrepAdd :call eclim#project#util#ProjectGrep('lvimgrepadd', <q-args>)
 endif
 " }}}
 
