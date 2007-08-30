@@ -220,6 +220,31 @@ function! eclim#common#util#SwapWords ()
   let @/ = save_search
 endfunction " }}}
 
+" GrepRelative(command, args) {{{
+" Executes the supplied vim grep command with the specified pattern against
+" one or more file patterns.
+function! eclim#common#util#GrepRelative (command, args)
+  let rel_dir = expand('%:p:h')
+  let cwd = getcwd()
+  try
+    silent exec 'lcd ' . rel_dir
+    silent! exec a:command . ' ' . a:args
+  finally
+    silent exec 'lcd ' . cwd
+    " force quickfix / location list signs to update.
+    call eclim#display#signs#Update()
+  endtry
+  if a:command =~ '^l'
+    let numresults = len(getloclist(0))
+  else
+    let numresults = len(getqflist())
+  endif
+
+  if numresults == 0
+    call eclim#util#EchoInfo('No results found.')
+  endif
+endfunction " }}}
+
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for relative files and directories.
 function! eclim#common#util#CommandCompleteRelative (argLead, cmdLine, cursorPos)
@@ -233,6 +258,25 @@ function! eclim#common#util#CommandCompleteRelative (argLead, cmdLine, cursorPos
   call map(results, "substitute(v:val, '\\', '/', 'g')")
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, 'substitute(v:val, dir, "", "")')
+  call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
+  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
+
+  return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+" CommandCompleteRelativeDirs(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for relative directories.
+function! eclim#common#util#CommandCompleteRelativeDirs (argLead, cmdLine, cursorPos)
+  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
+
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+
+  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
+  call filter(results, "isdirectory(v:val)")
+  call map(results, "substitute(v:val, '\\', '/', 'g')")
+  call map(results, 'substitute(v:val, dir . "\\(.*\\)", "\\1/", "")')
   call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
 

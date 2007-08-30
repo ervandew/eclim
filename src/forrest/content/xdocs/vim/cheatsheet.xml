@@ -759,6 +759,40 @@
         Behaves like <strong>:SplitRelative</strong>, but executes 'argadd'.
       </li>
       <li>
+        <a href="common/util.html#VimgrepRelative"><strong>:VimgrepRelative</strong></a>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :vimgrep relative to the current file.
+      </li>
+      <li>
+        <a href="common/util.html#VimgrepAddRelative">
+          <strong>:VimgrepAddRelative</strong>
+        </a>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :vimgrepadd relative to the current file.
+      </li>
+      <li>
+        <a href="common/util.html#LvimgrepRelative"><strong>:LvimgrepRelative</strong></a>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :lvimgrep relative to the current file.
+      </li>
+      <li>
+        <a href="common/util.html#LvimgrepAddRelative">
+          <strong>:LvimgrepAddRelative</strong>
+        </a>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :lvimgrepadd relative to the current file.
+      </li>
+      <li>
+        <a href="common/util.html#CdRelative"><strong>:CdRelative</strong></a>
+        dir -
+        Executes :cd relative to the current file.
+      </li>
+      <li>
+        <a href="common/util.html#LcdRelative"><strong>:LcdRelative</strong></a>
+        dir -
+        Executes :lcd relative to the current file.
+      </li>
+      <li>
         <a href="common/util.html#DiffLastSaved"><strong>:DiffLastSaved</strong></a> -
         Performs a diffsplit with the last saved version of the currently
         modifed file.

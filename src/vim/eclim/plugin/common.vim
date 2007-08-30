@@ -91,6 +91,33 @@ endif
 if !exists(":LocationListClear")
   command LocationListClear :call setloclist(0, []) | call eclim#display#signs#Update()
 endif
+
+if !exists(":VimgrepRelative")
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ VimgrepRelative :call eclim#common#util#GrepRelative('vimgrep', <q-args>)
+endif
+if !exists(":VimgrepAddRelative")
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ VimgrepAddRelative :call eclim#common#util#GrepRelative('vimgrepadd', <q-args>)
+endif
+if !exists(":LvimgrepRelative")
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ LvimgrepRelative :call eclim#common#util#GrepRelative('lvimgrep', <q-args>)
+endif
+if !exists(":LvimgrepAddRelative")
+  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ LvimgrepAddRelative :call eclim#common#util#GrepRelative('lvimgrepadd', <q-args>)
+endif
+
+if !exists(":CdRelative")
+  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
+    \ CdRelative :exec 'cd ' . expand('%:p:h') . '/<args>'
+endif
+
+if !exists(":LcdRelative")
+  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
+    \ LcdRelative :exec 'lcd ' . expand('%:p:h') . '/<args>'
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

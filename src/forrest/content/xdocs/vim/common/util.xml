@@ -115,6 +115,41 @@
         Like <strong>:SplitRelative</strong> except executes 'argadd'.
       </li>
       <li>
+        <anchor id="VimgrepRelative"/>
+        <strong>:VimgrepRelative</strong>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :vimgrep relative to the current file.
+      </li>
+      <li>
+        <anchor id="VimgrepAddRelative"/>
+        <strong>:VimgrepAddRelative</strong>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :vimgrepadd relative to the current file.
+      </li>
+      <li>
+        <anchor id="LvimgrepRelative"/>
+        <strong>:LvimgrepRelative</strong>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :lvimgrep relative to the current file.
+      </li>
+      <li>
+        <anchor id="LvimgrepAddRelative"/>
+        <strong>:LvimgrepAddRelative</strong>
+        /regex/ file_pattern [ file_pattern ...] -
+        Executes :lvimgrepadd relative to the current file.
+      </li>
+      <li>
+        <anchor id="CdRelative"/>
+        <strong>:CdRelative</strong> dir -
+        Executes :cd relative to the current file.
+      </li>
+      <li>
+        <anchor id="LcdRelative"/>
+        <strong>:LcdRelative</strong> dir -
+        Executes :lcd relative to the current file.
+      </li>
+
+      <li>
         <anchor id="DiffLastSaved"/>
         <strong>:DiffLastSaved</strong> -
         Performs a diffsplit with the last saved version of the currently
