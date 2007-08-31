@@ -30,7 +30,7 @@
     <mkdir dir="build/patch/${plugin}/classes"/>
     <javac destdir="build/patch/${plugin}/classes"
         debug="on" optimize="false"
-        target="${javac.target}" source="${javac.target}"
+        target="1.4" source="1.4"
         deprecation="${deprecation}">
       <src path="src/patch/${plugin}"/>
       <include name="**/*.java"/>
