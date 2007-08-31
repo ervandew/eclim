@@ -21,4 +21,4 @@ Require-Bundle: org.eclim,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
   org.eclipse.wst.validation
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false

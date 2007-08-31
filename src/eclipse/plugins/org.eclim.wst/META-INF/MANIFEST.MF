@@ -28,4 +28,4 @@ Require-Bundle: org.eclim,
   org.eclipse.wst.xml.core,
   org.eclipse.wst.xml.ui,
   org.eclipse.wst.xsd.core
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false

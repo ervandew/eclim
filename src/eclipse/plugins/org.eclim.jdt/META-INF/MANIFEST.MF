@@ -20,4 +20,4 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.launching,
   org.eclipse.jdt.ui,
   org.eclipse.jface.text
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false

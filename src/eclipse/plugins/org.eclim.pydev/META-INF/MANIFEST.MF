@@ -20,4 +20,4 @@ Require-Bundle: org.eclim,
   org.python.pydev.ast,
   org.python.pydev.core,
   org.python.pydev.parser
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false

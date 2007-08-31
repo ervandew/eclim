@@ -10,4 +10,4 @@ Bundle-ClassPath: .,
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclim
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false
