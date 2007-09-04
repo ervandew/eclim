@@ -32,8 +32,12 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclim.util.ProjectUtils;
+
 import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
+
+import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -249,8 +253,21 @@ public class SearchCommand
       // if a source path attachment exists, use it.
       IPath srcPath = root.getSourceAttachmentPath();
       if(srcPath != null){
+        String rootPath;
+        IProject elementProject = root.getJavaProject().getProject();
+
+        // determine if src path is project relative or file system absolute.
+        if(srcPath.isAbsolute() &&
+           elementProject.getName().equals(srcPath.segment(0)))
+        {
+          rootPath = ProjectUtils.getFilePath(elementProject,
+              srcPath.toString());
+        }else{
+          rootPath = srcPath.toOSString();
+        }
         String srcFile = FileUtils.toUrl(
-            srcPath.toOSString() + File.separator + classFile + ".java");
+            rootPath + File.separator + classFile + ".java");
+
         // see if source file exists at source path.
         FileSystemManager fsManager = VFS.getManager();
         FileObject fileObject = fsManager.resolveFile(srcFile);
