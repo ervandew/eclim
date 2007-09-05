@@ -38,10 +38,8 @@ setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 " EclimGetPhpHtmlIndent(lnum) {{{
 function! EclimGetPhpHtmlIndent (lnum)
   " FIXME: may get confused if either of these occur in a comment.
-  echom 'HERE'
   let phpstart = search('<?php', 'bcnW')
   let phpend = search('?>', 'bcnW')
-  echom 'phpstart = ' . phpstart . ' phpend ' . phpend
   if phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
     let indent = GetPhpIndent()
     " default php indent pushes first line of php code to left margin and
@@ -56,9 +54,7 @@ function! EclimGetPhpHtmlIndent (lnum)
     endif
     return indent
   endif
-  echom 'go html'
   let indent = EclimGetHtmlIndent(a:lnum)
-  echom 'indent = ' . indent
   return EclimGetHtmlIndent(a:lnum)
 endfunction " }}}
 
