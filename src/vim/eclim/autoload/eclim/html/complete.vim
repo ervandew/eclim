@@ -30,6 +30,14 @@
 " CodeComplete(findstart, base) {{{
 " Handles html code completion.
 function! eclim#html#complete#CodeComplete (findstart, base)
+  "if eclim#html#util#InJavascriptBlock()
+  "  return eclim#javascript#complete#CodeComplete(a:findstart, a:base)
+  "endif
+
+  if eclim#html#util#InCssBlock()
+    return eclim#css#complete#CodeComplete(a:findstart, a:base)
+  endif
+
   if a:findstart
     update
 

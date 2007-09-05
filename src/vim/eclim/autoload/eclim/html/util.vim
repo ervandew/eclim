@@ -44,6 +44,40 @@ function! eclim#html#util#HtmlToText (html)
   return text
 endfunction " }}}
 
+" InCssBlock() {{{
+" Determines if the cusor is inside of <style> tags.
+function! eclim#html#util#InCssBlock ()
+  let line = line('.')
+
+  let stylestart = search('<style\>', 'bcWn')
+  if stylestart > 0
+    let styleend = search('</style\s*>', 'bcWn', line('w0'))
+  endif
+  if stylestart > 0 && stylestart < line &&
+      \ (styleend == 0 || (styleend > stylestart && line < styleend))
+    return stylestart
+  endif
+
+  return 0
+endfunction " }}}
+
+" InJavascriptBlock() {{{
+" Determines if the cursor is inside of <script> tags.
+function! eclim#html#util#InJavascriptBlock ()
+  let line = line('.')
+
+  let scriptstart = search('<script\>', 'bcWn')
+  if scriptstart > 0
+    let scriptend = search('</script\s*>', 'bcWn', line('w0'))
+  endif
+  if scriptstart > 0 && scriptstart < line &&
+        \ (scriptend == 0 || (scriptend > scriptstart && line < scriptend))
+    return scriptstart
+  endif
+
+  return 0
+endfunction " }}}
+
 " UrlEncode(string) {{{
 function! eclim#html#util#UrlEncode (string)
   let result = a:string

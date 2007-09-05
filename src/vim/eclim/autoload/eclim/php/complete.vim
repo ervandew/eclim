@@ -30,6 +30,13 @@
 " CodeComplete(findstart, base) {{{
 " Handles php code completion.
 function! eclim#php#complete#CodeComplete (findstart, base)
+  let line = line('.')
+  let phpstart = search('<?php', 'bcnW')
+  let phpend = search('?>', 'bcnW', line('w0'))
+  if phpstart == 0 || (phpend != 0 && line > phpend)
+    return eclim#html#complete#CodeComplete(a:findstart, a:base)
+  endif
+
   if a:findstart
     " update the file before vim makes any changes.
     call eclim#util#ExecWithoutAutocmds('silent update')
