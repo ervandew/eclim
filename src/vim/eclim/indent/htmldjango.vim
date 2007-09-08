@@ -22,10 +22,12 @@
 "
 " }}}
 
-if exists("b:htmldjango_did_indent")
+if exists("b:htmldjango_did_indent") ||
+    \ (!exists('b:disableOverride') && exists('g:EclimHtmldjangoIndentDisabled'))
   finish
 endif
 
+let b:disableOverride = 1
 runtime! indent/html.vim
 let b:htmldjango_did_indent = 1
 

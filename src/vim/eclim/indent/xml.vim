@@ -23,10 +23,12 @@
 " }}}
 
 let b:did_indent = 1
-if &indentexpr =~ 'EclimGetXmlIndent'
+if &indentexpr =~ 'EclimGetXmlIndent' ||
+    \ (!exists('b:disableOverride') && exists('g:EclimXmlIndentDisabled'))
   finish
 endif
 
+let b:disableOverride = 1
 runtime! indent/dtd.vim
 
 setlocal indentexpr=EclimGetXmlIndent(v:lnum)

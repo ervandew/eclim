@@ -27,7 +27,8 @@
 " }}}
 
 let b:did_indent = 1
-if &indentexpr =~ 'EclimGetJavascriptIndent'
+if &indentexpr =~ 'EclimGetJavascriptIndent' ||
+    \ (!exists('b:disableOverride') && exists('g:EclimJavascriptIndentDisabled'))
   finish
 endif
 

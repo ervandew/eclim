@@ -23,7 +23,8 @@
 " }}}
 
 let b:did_indent = 1
-if &indentexpr =~ 'EclimGetDtdIndent'
+if &indentexpr =~ 'EclimGetDtdIndent' ||
+    \ (!exists('b:disableOverride') && exists('g:EclimDtdIndentDisabled'))
   finish
 endif
 

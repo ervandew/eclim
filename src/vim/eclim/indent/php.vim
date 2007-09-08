@@ -22,7 +22,8 @@
 "
 " }}}
 
-if &indentexpr =~ 'EclimGetPhpHtmlIndent'
+if &indentexpr =~ 'EclimGetPhpHtmlIndent' ||
+    \ (!exists('b:disableOverride') && exists('g:EclimPhpIndentDisabled'))
   finish
 endif
 
@@ -30,6 +31,7 @@ unlet! b:did_indent
 source $VIMRUNTIME/indent/php.vim
 let b:did_indent = 1
 
+let b:disableOverride = 1
 runtime! indent/html.vim
 
 setlocal indentexpr=EclimGetPhpHtmlIndent(v:lnum)
