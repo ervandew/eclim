@@ -87,31 +87,16 @@ function! EclimGetXmlIndent (lnum)
 
     call XmlIndentAnythingSettings()
     let adj = s:XmlIndentAttributeWrap(a:lnum) * &sw
+
+    " handle case where previous line is a multi-line comment (<!-- -->) on one
+    " line, which IndentAnything doesn't handle properly.
+    let prevline = prevnonblank(a:lnum - 1)
+    if getline(prevline) =~ '^\s\+<!--.\{-}-->'
+      let adj = indent(prevline)
+    endif
   endif
 
   return IndentAnything() + adj
-endfunction " }}}
-
-" DtdIndentAnythingSettings() {{{
-function! DtdIndentAnythingSettings ()
-  " Syntax name REs for comments and strings.
-  let b:blockCommentRE = 'dtdComment'
-  let b:commentRE      = b:blockCommentRE
-  let b:stringRE       = 'dtdString'
-  let b:singleQuoteStringRE = b:stringRE
-  let b:doubleQuoteStringRE = b:stringRE
-
-  setl comments=sr:<!--,m:-,e:-->
-  let b:blockCommentStartRE  = '<!--'
-  let b:blockCommentMiddleRE = '-'
-  let b:blockCommentEndRE    = '-->'
-  let b:blockCommentMiddleExtra = 2
-
-  " Indent another level for each non-closed element tag.
-  let b:indentTrios = [
-      \ [ '<\!\w', '', '>' ],
-      \ [ '(', '', ')' ],
-    \ ]
 endfunction " }}}
 
 " XmlIndentAnythingSettings() {{{
@@ -119,13 +104,12 @@ function! XmlIndentAnythingSettings ()
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'xmlComment'
   let b:commentRE      = b:blockCommentRE
+  let b:lineCommentRE  = 'xmlComment'
   let b:stringRE       = 'xmlString'
   let b:singleQuoteStringRE = b:stringRE
   let b:doubleQuoteStringRE = b:stringRE
 
-  setlocal formatoptions+=croql
   setlocal comments=sr:<!--,mb:-,ex0:-->
-
   let b:blockCommentStartRE  = '<!--'
   let b:blockCommentMiddleRE = '-'
   let b:blockCommentEndRE    = '-->'

@@ -27,24 +27,34 @@ if &indentexpr =~ 'EclimGetDtdIndent'
   finish
 endif
 
+runtime indent/indentanything.vim
+
 setlocal indentexpr=EclimGetDtdIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>
 
 " EclimGetDtdIndent(lnum) {{{
 function! EclimGetDtdIndent (lnum)
-  return IndentAnything()
+  let adj = 0
+  " handle case where previous line is a multi-line comment (<!-- -->) on one
+  " line, which IndentAnything doesn't handle properly.
+  let prevline = prevnonblank(a:lnum - 1)
+  if getline(prevline) =~ '^\s\+<!--.\{-}-->'
+    let adj = indent(prevline)
+  endif
+  return IndentAnything() + adj
 endfunction " }}}
 
 " DtdIndentAnythingSettings() {{{
 function! DtdIndentAnythingSettings ()
   " Syntax name REs for comments and strings.
-  let b:blockCommentRE = 'dtdComment'
+  let b:blockCommentRE = 'dtdComment\|xmlComment'
   let b:commentRE      = b:blockCommentRE
-  let b:stringRE       = 'dtdString'
+  let b:lineCommentRE      = b:blockCommentRE
+  let b:stringRE       = 'dtdString\|xmlString'
   let b:singleQuoteStringRE = b:stringRE
   let b:doubleQuoteStringRE = b:stringRE
 
-  setl comments=sr:<!--,m:-,e:-->
+  setlocal comments=sr:<!--,m:-,e:-->
   let b:blockCommentStartRE  = '<!--'
   let b:blockCommentMiddleRE = '-'
   let b:blockCommentEndRE    = '-->'

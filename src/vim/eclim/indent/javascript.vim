@@ -31,6 +31,8 @@ if &indentexpr =~ 'EclimGetJavascriptIndent'
   finish
 endif
 
+runtime indent/indentanything.vim
+
 setlocal indentexpr=EclimGetJavascriptIndent(v:lnum)
 setlocal indentkeys+=0),0},),;
 

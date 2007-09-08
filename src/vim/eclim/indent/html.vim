@@ -77,6 +77,13 @@ function! EclimGetHtmlIndent (lnum)
   else
     call HtmlIndentAnythingSettings()
     let adj = s:HtmlIndentAttributeWrap(a:lnum) * &sw
+
+    " handle case where previous line is a multi-line comment (<!-- -->) on one
+    " line, which IndentAnything doesn't handle properly.
+    let prevline = prevnonblank(a:lnum - 1)
+    if getline(prevline) =~ '^\s\+<!--.\{-}-->'
+      let adj = indent(prevline)
+    endif
   endif
 
   return IndentAnything() + adj
@@ -92,7 +99,7 @@ function! HtmlIndentAnythingSettings ()
   let b:singleQuoteStringRE = b:stringRE
   let b:doubleQuoteStringRE = b:stringRE
 
-  setl comments=sr:<!--,m:-,e:-->
+  setlocal comments=sr:<!--,m:-,e:-->
   let b:blockCommentStartRE  = '<!--'
   let b:blockCommentMiddleRE = '-'
   let b:blockCommentEndRE    = '-->'

@@ -27,6 +27,8 @@ if &indentexpr =~ 'EclimGetCssIndent'
   finish
 endif
 
+runtime indent/indentanything.vim
+
 setlocal indentexpr=EclimGetCssIndent(v:lnum)
 setlocal indentkeys=0{,0},!^F,o,O
 
