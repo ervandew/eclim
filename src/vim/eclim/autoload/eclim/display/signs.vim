@@ -266,7 +266,9 @@ function! eclim#display#signs#Update ()
 endfunction " }}}
 
 " define signs for manually added user marks.
-call eclim#display#signs#Define(
-  \ 'user', g:EclimUserSignText, g:EclimUserSignHighlight)
+if has('signs')
+  call eclim#display#signs#Define(
+    \ 'user', g:EclimUserSignText, g:EclimUserSignHighlight)
+endif
 
 " vim:ft=vim:fdm=marker

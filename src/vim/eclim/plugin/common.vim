@@ -70,19 +70,21 @@ if !exists(":LocateFileSplit")
   command -nargs=? LocateFileTab :call eclim#common#util#LocateFile('tabnew', '<args>')
 endif
 
-if !exists(":Sign")
-  command Sign :call eclim#display#signs#Toggle('user', line('.'))
-endif
-if !exists(":Signs")
-  command Signs :call eclim#display#signs#ViewSigns('user')
-endif
-if !exists(":SignClearUser")
-  command SignClearUser :call eclim#display#signs#UnplaceAll(
-    \ eclim#display#signs#GetExisting('user'))
-endif
-if !exists(":SignClearAll")
-  command SignClearAll :call eclim#display#signs#UnplaceAll(
-    \ eclim#display#signs#GetExisting())
+if has('signs')
+  if !exists(":Sign")
+    command Sign :call eclim#display#signs#Toggle('user', line('.'))
+  endif
+  if !exists(":Signs")
+    command Signs :call eclim#display#signs#ViewSigns('user')
+  endif
+  if !exists(":SignClearUser")
+    command SignClearUser :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting('user'))
+  endif
+  if !exists(":SignClearAll")
+    command SignClearAll :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting())
+  endif
 endif
 
 if !exists(":QuickFixClear")

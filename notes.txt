@@ -35,9 +35,12 @@ TODO {{{
       :MaximizeWindow
       :MinimizeWindow
       :MinimizeRestore
-
-      :VimgrepRelative, :LvimgrepRelative
-      :CdRelative, :LcdRelative
+      :VimgrepRelative
+      :VimgrepAddRelative
+      :LvimgrepRelative
+      :LvimgrepAddRelative
+      :CdRelative
+      :LcdRelative
   }}}
 
   Common {{{
@@ -46,9 +49,6 @@ TODO {{{
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
     - gvim menu items.
-
-    - consider adding an optional set of vim scripts which set up an evironment like mine.
-      - licensing issues?
 
     - create :ProjectImport <dir> command
       - Eclipse equivalant:
@@ -218,6 +218,9 @@ NOTES {{{
 
   Troubleshooting {{{
 
+    Update manager from command line:
+      http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
+
     Windows:
       - starting eclim without spawning seperate console
         > java -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
@@ -299,13 +302,13 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - update php complete unit test (test html/css completions)
+  - update html complete unit test (test css completions)
+
   - make a note that eclim.php requires pdt 1.0.0.v20070808 exactly.
    - FIRST, check pdt update site... looks like they have the sdk for the lastest version now.
 
   - php, java, on files out of src path, support definition searching.
-
-  - make sure html files (html, php, etc) are context aware on code
-    completion, switching to html, css, javascript completion as necessary.
 }}}
 
 // vim:fdm=marker:tw=0

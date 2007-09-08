@@ -126,7 +126,7 @@ endif
 " }}}
 
 " Auto Commands{{{
-if g:EclimShowCurrentError
+if g:EclimShowCurrentError && has('signs')
   augroup eclim_show_error
     autocmd!
     autocmd CursorHold * call eclim#util#ShowCurrentError()
