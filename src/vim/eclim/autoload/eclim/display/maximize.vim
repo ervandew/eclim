@@ -83,14 +83,11 @@ function! eclim#display#maximize#MinimizeWindow (...)
     let args = [winnr()]
   else
     let args = a:000[:]
-    call map(args, 's:BufferNumber(v:val)')
   endif
 
   " first loop through and mark the buffers
   for winnum in args
-    if winnum != -1
-      call setwinvar(winnum, "minimized", 1)
-    endif
+    call setwinvar(winnum, "minimized", 1)
   endfor
 
   call s:Reminimize()
@@ -323,12 +320,6 @@ function! s:RestoreFixedWindows ()
       endif
     endif
   endfor
-endfunction " }}}
-
-" BufferNumber() {{{
-" Convert a string buffer # to an int buffer #
-function! s:BufferNumber (number)
-  exec "return winbufnr(bufwinnr(" . a:number . "))"
 endfunction " }}}
 
 " IsVerticalSplit(window) {{{
