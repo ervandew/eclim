@@ -92,9 +92,96 @@ function! eclim#vcs#AnnotateInfo ()
   endif
 endfunction " }}}
 
-" Viewvc(file) {{{
-" Convert file or directory to viewvc url and open in the browser.
-function eclim#vcs#Viewvc (file)
+" GetRevision() {{{
+" Gets the current revision of the current file.
+function eclim#vcs#GetRevision ()
+  let revision = '0'
+
+  let cwd = getcwd()
+  let dir = expand('%:p:h')
+  exec 'lcd ' . dir
+  try
+    if isdirectory(dir . '/CVS')
+      let status = system('cvs status ' . expand('%:t'))
+      let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
+      if status =~ pattern
+        let revision = substitute(status, pattern, '\1', '')
+      endif
+    elseif isdirectory(dir . '/.svn')
+      let info = system('svn info ' . expand('%:t'))
+      let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
+      if info =~ pattern
+        let revision = substitute(info, pattern, '\1', '')
+      endif
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  return revision
+endfunction " }}}
+
+" GetPreviousRevision() {{{
+" Gets the previous revision of the current file.
+function eclim#vcs#GetPreviousRevision ()
+  let revision = '0'
+
+  let cwd = getcwd()
+  let dir = expand('%:p:h')
+  exec 'lcd ' . dir
+  try
+    if isdirectory(dir . '/CVS')
+      let log = system('cvs log ' . expand('%:t'))
+      let lines = split(log, '\n')
+      call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
+      if len(lines) >= 2
+        let revision = substitute(lines[1], '^revision \([0-9.]\+\)\s*.*', '\1', '')
+      endif
+    elseif isdirectory(dir . '/.svn')
+      let log = system('svn log -q --limit 2 ' . expand('%:t'))
+      let lines = split(log, '\n')
+      if len(lines) == 5 && lines[1] =~ '^r[0-9]\+' && lines[3] =~ '^r[0-9]\+'
+        let revision = substitute(lines[3], '^r\([0-9]\+\)\s.*', '\1', '')
+      endif
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  return revision
+endfunction " }}}
+
+" GetRevisions() {{{
+" Gets a list of revision numbers for the current file.
+function eclim#vcs#GetRevisions ()
+  let revisions = []
+
+  let cwd = getcwd()
+  let dir = expand('%:p:h')
+  exec 'lcd ' . dir
+  try
+    if isdirectory(dir . '/CVS')
+      let log = system('cvs log ' . expand('%:t'))
+      let lines = split(log, '\n')
+      call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
+      call map(lines, 'substitute(v:val, "^revision \\([0-9.]\\+\\)\\s*$", "\\1", "")')
+      let revisions = lines
+    elseif isdirectory(dir . '/.svn')
+      let log = system('svn log -q ' . expand('%:t'))
+      let lines = split(log, '\n')
+      call filter(lines, 'v:val =~ "^r[0-9]\\+\\s.*"')
+      call map(lines, 'substitute(v:val, "^r\\([0-9]\\+\\)\\s.*", "\\1", "")')
+      let revisions = lines
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  return revisions
+endfunction " }}}
+
+" GetViewvcUrl (file) {{{
+function eclim#vcs#GetViewvcUrl (file)
   let root = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.viewvc')
   if root == '0'
     return
@@ -165,11 +252,86 @@ function eclim#vcs#Viewvc (file)
   silent exec cmd
 
   let url = root . path . '/' . file
-  if !isdirectory(project_root . '/' . file)
-    let url .= '?view=log'
+  echom url
+  return url
+endfunction " }}}
+
+" Viewvc(file) {{{
+" Convert file or directory to viewvc url with the supplied view parameters
+" and open the url in the browser.
+function eclim#vcs#Viewvc (file, view_args)
+  let url = eclim#vcs#GetViewvcUrl(a:file)
+  if url == '0'
+    return
+  endif
+  call eclim#web#OpenUrl(url . '?' . a:view_args)
+endfunction " }}}
+
+" ViewvcChangeSet(revision) {{{
+" View the viewvc revision info for the supplied or current revision of the
+" current file.
+function eclim#vcs#ViewvcChangeSet (revision)
+  let revision = a:revision
+  if revision == ''
+    let revision = eclim#vcs#GetRevision()
   endif
 
-  call eclim#web#OpenUrl(url)
+  call eclim#vcs#Viewvc('', 'view=rev&revision=' . revision)
+endfunction " }}}
+
+" ViewvcAnnotate(revision) {{{
+" View annotated version of the file in viewvc.
+function eclim#vcs#ViewvcAnnotate (revision)
+  let revision = a:revision
+  if revision == ''
+    let revision = eclim#vcs#GetRevision()
+  endif
+
+  call eclim#vcs#Viewvc('', 'annotate=' . revision)
+endfunction " }}}
+
+" ViewvcDiff(revision1, revision2) {{{
+" View diff between two revisions in viewvc.
+function eclim#vcs#ViewvcDiff (...)
+  let args = a:000
+  if len(args) == 1
+    let args = split(args[0])
+  endif
+
+  if len(args) > 2
+    call eclim#util#EchoWarning(":ViewvcDiff accepts at most 2 revision arguments.")
+    return
+  endif
+
+  let revision1 = len(args) > 0 ? args[0] : ''
+  if revision1 == ''
+    let revision1 = eclim#vcs#GetRevision()
+  endif
+
+  let revision2 = len(args) > 1 ? args[1] : ''
+  if revision2 == ''
+    let revision2 = len(args) == 1 ?
+      \ eclim#vcs#GetRevision() : eclim#vcs#GetPreviousRevision()
+    if revision2 == '0'
+      call eclim#util#EchoWarning(
+        \ "File '" . expand('%') . "' has no previous revision to diff.")
+      return
+    endif
+  endif
+
+  call eclim#vcs#Viewvc('', 'r1=' . revision1 . '&r2=' . revision2)
+endfunction " }}}
+
+" CommandCompleteRevision(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for revision numbers out of viewvc.
+function! eclim#vcs#CommandCompleteRevision (argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+
+  let revisions = eclim#vcs#GetRevisions()
+  call filter(revisions, 'v:val =~ "^' . argLead . '"')
+  return revisions
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

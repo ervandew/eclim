@@ -29,7 +29,19 @@ if !exists(":VcsAnnotate")
 endif
 if !exists(":Viewvc")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
-    \ Viewvc :call eclim#vcs#Viewvc('<args>')
+    \ Viewvc :call eclim#vcs#Viewvc('<args>', 'view=log')
+endif
+if !exists(":ViewvcChangeSet")
+  command -nargs=? -complete=customlist,eclim#vcs#CommandCompleteRevision
+    \ ViewvcChangeSet :call eclim#vcs#ViewvcChangeSet(<q-args>)
+endif
+if !exists(":ViewvcAnnotate")
+  command -nargs=? -complete=customlist,eclim#vcs#CommandCompleteRevision
+    \ ViewvcAnnotate :call eclim#vcs#ViewvcAnnotate(<q-args>)
+endif
+if !exists(":ViewvcDiff")
+  command -nargs=* -complete=customlist,eclim#vcs#CommandCompleteRevision
+    \ ViewvcDiff :call eclim#vcs#ViewvcDiff(<q-args>)
 endif
 " }}}
 
