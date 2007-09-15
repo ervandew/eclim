@@ -24,25 +24,36 @@
 
 " Annotate() {{{
 function! eclim#vcs#Annotate ()
-  let file = expand('%:p')
   let dir = expand('%:p:h')
-  if isdirectory(dir . '/CVS')
-    let result = system('cvs annotate "' . file . '"')
-  elseif isdirectory(dir . '/.svn')
-    let result = system('svn blame "' . file . '"')
-  else
-    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-    return
-  endif
+  let cwd = getcwd()
+  exec 'lcd ' . dir
+
+  try
+    let file = expand('%:p:t')
+    if isdirectory(dir . '/CVS')
+      let result = system('cvs annotate "' . file . '"')
+      let annotations = split(result, '\n')
+      call filter(annotations, 'v:val =~ "^[0-9]"')
+      call map(annotations,
+          \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+    elseif isdirectory(dir . '/.svn')
+      let result = system('svn blame "' . file . '"')
+      let annotations = split(result, '\n')
+      call map(annotations,
+          \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+    else
+      call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+      return
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
 
   if v:shell_error
     call eclim#util#EchoError(result)
     return
   endif
 
-  let annotations = split(result, '\n')
-  call map(annotations,
-      \ "substitute(v:val, '^\\s*\\(.\\{-}\\s\\+.\\{-}\\)\\s\\+.*', '\\1', '')")
   let defined = eclim#display#signs#GetDefined()
   let index = 1
   for annotation in annotations
