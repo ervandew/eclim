@@ -77,7 +77,7 @@ function! eclim#java#import#Import ()
   let class = get(results, response)
 
   " check if the class is in java.lang
-  if class =~ '^java\.lang\.[A-Z]'
+  if class =~ '^java\.lang\.[A-Z]\C'
     call eclim#util#EchoInfo("No need to import '" . classname . "' from 'java.lang'.")
     return
   endif
