@@ -41,9 +41,22 @@ TODO {{{
       :LvimgrepAddRelative
       :CdRelative
       :LcdRelative
+      :ViewvcChangeSet
+      :ViewvcAnnotate
+      :ViewvcDiff
   }}}
 
   Common {{{
+    - :VcsLog
+      - open results buffer, make things linkable similar to viewvc.
+        - linkable breadcrumbs
+        - link to changeset
+        - link to annotated file
+        - link to view a revision
+        - link to diffs
+        - etc.
+        - keep a history for navigating back (override <c-o> and <c-i>)?
+      - maybe support a tree structure?
 
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
@@ -133,6 +146,21 @@ TODO {{{
     - With :JavaRun, also have an input buffer that when saved pushes the text
       to stdin of the running app, and then clears the buffer for more input.
       - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+  }}}
+
+  Jdbc {{{
+    - Create connection profiles
+      - eclim_jdbc_profile_<name> (where to store these settings?)
+        - Driver Class:
+        - Driver Url:
+        - Libs (comma seperated paths to jar files):
+
+    - Support two open buffers, one for statements to execute, another for results
+      [Sql Editor]
+      [Sql Results]
+      - support some sort of query history
+
+    - Support tree with database metadata
   }}}
 
   Jst {{{
@@ -302,13 +330,17 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - look into converting .bat files into .cmd files
+
   - update php complete unit test (test html/css completions)
   - update html complete unit test (test css completions)
 
-  - make a note that eclim.php requires pdt 1.0.0.v20070808 exactly.
-   - FIRST, check pdt update site... looks like they have the sdk for the lastest version now.
-
   - php, java, on files out of src path, support definition searching.
+
+  - Document Viewvc commands
+    - :ViewvcChangeSet [<revision>] (default: current file's revision)
+    - :ViewvcAnnotate [<revision>] (default: current file's revision)
+    - :ViewvcDiff [<revision>] (default: previous)
 }}}
 
 // vim:fdm=marker:tw=0

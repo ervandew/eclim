@@ -662,6 +662,27 @@
         Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
         directory, or to the current buffer if no argument supplied.
       </li>
+      <li>
+        <a href="common/vcs.html#ViewvcAnnotate"><strong>:ViewvcAnnotate</strong></a>
+        [revision] -
+        Opens the <a href="site:viewvc">ViewVc</a> url for the current file in
+        the annotation view for the last committed revision or the revision
+        supplied.
+      </li>
+      <li>
+        <a href="common/vcs.html#ViewvcChangeSet"><strong>:ViewvcChangeSet</strong></a>
+        [revision] -
+        Opens the <a href="site:viewvc">ViewVc</a> url for the change set of
+        the last committed revision of the current file or the revision
+        supplied.
+      </li>
+      <li>
+        <a href="common/vcs.html#ViewvcDiff"><strong>:ViewvcDiff</strong></a>
+        [revision, revision] -
+        Opens the <a href="site:viewvc">ViewVc</a> url for the current file's
+        revision diffed against the previous revision, the revision supplied,
+        or a diff of the two revision numbers supplied.
+      </li>
     </ul> <!-- }}} -->
 
     <p><strong>Web Lookup Commands</strong></p> <!-- {{{ -->

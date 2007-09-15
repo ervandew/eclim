@@ -320,6 +320,19 @@
         Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Vcs">
+        Added
+        <a href="vim/common/vcs.html#ViewvcAnnotate">
+          <strong>:ViewvcAnnotate</strong>
+        </a>,
+        <a href="vim/common/vcs.html#ViewvcChangeSet">
+          <strong>:ViewvcChangeSet</strong>
+        </a>,
+        <a href="vim/common/vcs.html#ViewvcDiff">
+          <strong>:ViewvcDiff</strong>
+        </a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Vim">
         Added vim <a href="vim/common/maximize.html">window maximize and minimize</a>
         support.
