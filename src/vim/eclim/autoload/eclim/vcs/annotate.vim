@@ -37,7 +37,6 @@ function! eclim#vcs#annotate#Annotate ()
       call map(annotations,
           \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
     elseif isdirectory(dir . '/.svn')
-      echom 'svn blame "' . file . '"'
       let result = system('svn blame "' . file . '"')
       let annotations = split(result, '\n')
       call map(annotations,
