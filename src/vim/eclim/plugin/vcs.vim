@@ -27,6 +27,10 @@ if !exists(":VcsAnnotate")
   command VcsAnnotate :call eclim#vcs#annotate#Annotate()
   command VcsAnnotateOff :call eclim#vcs#annotate#AnnotateOff()
 endif
+if !exists(":VcsLog")
+  command VcsLog :call eclim#vcs#log#Log()
+endif
+
 if !exists(":Viewvc")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
     \ Viewvc :call eclim#vcs#viewvc#Viewvc('<args>', 'view=log')
