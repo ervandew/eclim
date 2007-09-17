@@ -45,7 +45,7 @@ function! eclim#vcs#log#Log ()
   finally
     exec 'lcd ' . cwd
   endtry
-  let lines = []
+  let lines = [eclim#vcs#util#GetPath(dir, file), '']
   let index = 0
   for entry in log
     let index += 1
@@ -57,16 +57,29 @@ function! eclim#vcs#log#Log ()
     endif
     call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
     if index < len(log)
-      call add(lines, 'Diff to |previous ' . log[index].revision . '|')
+      call add(lines, 'Diff: |previous ' . log[index].revision . '|')
     endif
     call add(lines, '')
     let lines += entry.comment
+    if lines[-1] !~ '^\s*$' && index != len(log)
+      call add(lines, '')
+    endif
   endfor
 
   call eclim#util#TempWindow('[vcs_log]', lines)
   let b:vcs_type = type
-  " TODO: commands, syntax, formatting
-  "   changeset: svn log -vr <revision>
+
+  set ft=vcs_log
+  hi link VcsDivider Constant
+  hi link VcsHeader Identifier
+  hi link VcsLink Label
+  " TODO: highlight path and make linkable
+  hi link VcsPathLink Label
+  syntax match VcsDivider /^-\+$/
+  syntax match VcsLink /|.\{-}|/
+  syntax match VcsHeader /^\(Revision\|Modified\):/
+
+  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
 endfunction " }}}
 
 " s:ParseCvsLog() {{{
@@ -139,6 +152,19 @@ function! s:ParseSvnLog (lines)
     endif
   endfor
   return log
+endfunction " }}}
+
+" s:FollowLink () {{{
+function! s:FollowLink ()
+  let line = getline('.')
+  let link = substitute(
+    \ getline('.'), '.*|\(.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
+  if link == line
+    return
+  endif
+
+  echom link
+  "   changeset: svn log -vr <revision>
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
