@@ -22,14 +22,49 @@
 "
 " }}}
 
-" Log() {{{
-function! eclim#vcs#log#Log ()
-  let dir = expand('%:p:h')
+" ListDir(dir) {{{
+function! eclim#vcs#log#ListDir (type, dir)
+  let dir = a:dir
+
+  if a:type == 'cvs'
+    if exists('b:vcs_local_dir')
+      let dir = strpart(
+        \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
+    endif
+
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+    try
+      let listing = readfile('CVS/Entries')
+    finally
+      exec 'lcd ' . cwd
+    endtry
+  elseif a:type == 'svn'
+    if exists('b:vcs_local_dir')
+      let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . dir
+    else
+      let url = eclim#vcs#util#GetSvnUrl(dir, '')
+    endif
+    let listing = split(system('svn list ' . url), '\n')
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+    return
+  endif
+
+  let lines = listing
+
+  call s:TempWindow(lines)
+endfunction " }}}
+
+" Log(dir, file) {{{
+function! eclim#vcs#log#Log (dir, file)
+  let file = a:dir != '' ? a:file : expand('%:p:t')
+  let dir = a:dir != '' ? a:dir : expand('%:p:h')
+
   let cwd = getcwd()
   exec 'lcd ' . dir
 
   try
-    let file = expand('%:p:t')
     if isdirectory(dir . '/CVS')
       let type = 'cvs'
       let result = system('cvs log -l "' . file . '"')
@@ -45,7 +80,10 @@ function! eclim#vcs#log#Log ()
   finally
     exec 'lcd ' . cwd
   endtry
-  let lines = [eclim#vcs#util#GetPath(dir, file), '']
+
+  let path = split(eclim#vcs#util#GetPath(dir, file), '/')
+  let head = map(path[:-2], '"|" . v:val . "|"')
+  let lines = [join(head, ' / ') . ' / ' . path[-1], '']
   let index = 0
   for entry in log
     let index += 1
@@ -66,7 +104,9 @@ function! eclim#vcs#log#Log ()
     endif
   endfor
 
-  call eclim#util#TempWindow('[vcs_log]', lines)
+  call s:TempWindow(lines)
+
+  let b:vcs_local_dir = dir
   let b:vcs_type = type
 
   set ft=vcs_log
@@ -164,7 +204,44 @@ function! s:FollowLink ()
   endif
 
   echom link
-  "   changeset: svn log -vr <revision>
+  " link to svn folder
+  if line('.') == 1
+    let path = substitute(
+      \ getline('.'), '\(.*|.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
+    let path = substitute(path, '\(| / |\||\)', '/', 'g')
+
+    call eclim#vcs#log#ListDir(b:vcs_type, path)
+
+  " link to view a change set
+  elseif link =~ '^[0-9.]\+$'
+    " changeset: svn log -vr <revision>
+
+  " link to annotate a file
+  elseif link == 'annotate'
+
+  " link to view a file
+  elseif link == 'view'
+
+  " link to diff a file
+  elseif link =~ '^previous [0-9.]\+$'
+
+  endif
+endfunction " }}}
+
+" s:TempWindow (lines) {{{
+function! s:TempWindow (lines)
+  let filename = expand('%:p')
+  if expand('%') == '[vcs_log]' && exists('b:filename')
+    let filename = b:filename
+  endif
+
+  call eclim#util#TempWindow('[vcs_log]', a:lines)
+
+  let b:filename = filename
+  augroup temp_window
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(b:filename)
+  augroup END
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

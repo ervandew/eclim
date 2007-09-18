@@ -23,7 +23,8 @@
 " }}}
 
 " GetPath(dir, file) {{{
-" Gets the repository root relative path of the current file in svn.
+" Gets the repository root relative path of the specified file in the supplied
+" dir.
 " Ex. /trunk/src/vim/eclim/autoload/eclim/eclipse.vim
 function eclim#vcs#util#GetPath (dir, file)
   let path = ''
@@ -39,6 +40,62 @@ function eclim#vcs#util#GetPath (dir, file)
 
       silent close
     elseif isdirectory(a:dir . '/.svn')
+      let url = eclim#vcs#util#GetSvnUrl(a:dir, a:file)
+      let repos = eclim#vcs#util#GetSvnReposUrl(a:dir)
+
+      let path = substitute(url, repos, '', '')
+    endif
+  finally
+    silent exec cmd
+  endtry
+
+  return path
+endfunction " }}}
+
+" GetSvnReposUrl(dir, file) {{{
+" Gets the repository root url for the repository backing the supplied dir.
+" Ex. http://svn.eclim.sf.net/
+function eclim#vcs#util#GetSvnReposUrl (dir)
+  let repos = ''
+  let cmd = winrestcmd()
+
+  try
+    if isdirectory(a:dir . '/.svn')
+      silent exec 'sview ' . escape(a:dir . '/.svn/entries', ' ')
+      setlocal noswapfile
+      setlocal bufhidden=delete
+
+      " xml entries format < 1.4
+      if getline(1) =~ '<?xml'
+        call cursor(1, 1)
+        let repos = substitute(
+          \ getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
+
+      " entries format >= 1.4
+      else
+        " can't find official doc on the format, but line 6 seems to
+        " always have the necessary value.
+        let repos = getline(6)
+      endif
+
+      silent close
+    endif
+  finally
+    silent exec cmd
+  endtry
+
+  return repos
+endfunction " }}}
+
+" GetSvnUrl(dir, file) {{{
+" Gets the repository url for the specified file in the supplied dir.
+" Ex. http://svn.eclim.sf.net/trunk/src/vim/eclim/autoload/eclim/eclipse.vim
+function eclim#vcs#util#GetSvnUrl (dir, file)
+  let url = ''
+  let cmd = winrestcmd()
+
+  try
+    if isdirectory(a:dir . '/.svn')
       silent exec 'sview ' . escape(a:dir . '/.svn/entries', ' ')
       setlocal noswapfile
       setlocal bufhidden=delete
@@ -48,18 +105,15 @@ function eclim#vcs#util#GetPath (dir, file)
         call cursor(1, 1)
         let url = substitute(
           \ getline(search('^\s*url=')), '^\s*url="\(.*\)"', '\1', '')
-        let repos = substitute(
-          \ getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
 
       " entries format >= 1.4
       else
-        " can't find official doc on the format, but lines 5 and 6 seem to
-        " always have the necessary values.
+        " can't find official doc on the format, but line 5 seems to
+        " always have the necessary value.
         let url = getline(5)
-        let repos = getline(6)
       endif
 
-      let path = substitute(url, repos, '', '') . '/' . a:file
+      let url .= '/' . a:file
 
       silent close
     endif
@@ -67,7 +121,7 @@ function eclim#vcs#util#GetPath (dir, file)
     silent exec cmd
   endtry
 
-  return path
+  return url
 endfunction " }}}
 
 " GetRevision() {{{

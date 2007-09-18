@@ -738,6 +738,8 @@ endfunction " }}}
 " TempWindow(name, lines [, readonly]) {{{
 " Opens a temp window w/ the given name and contents.
 function! eclim#util#TempWindow (name, lines, ...)
+  let filename = expand('%:p')
+
   call eclim#util#TempWindowClear(a:name)
   let name = escape(a:name, ' []')
 
@@ -765,6 +767,13 @@ function! eclim#util#TempWindow (name, lines, ...)
     setlocal nomodifiable
     setlocal readonly
   endif
+
+  " Store filename so that plugins can use it if necessary.
+  let b:filename = filename
+  augroup temp_window
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(b:filename)
+  augroup END
 endfunction " }}}
 
 " TempWindowClear(name) {{{
@@ -787,7 +796,6 @@ endfunction " }}}
 " Opens a temp window w/ the given name and contents from the result of the
 " supplied command.
 function! eclim#util#TempWindowCommand (command, name)
-  let filename = expand('%:p')
   let name = escape(a:name, ' []')
 
   let line = 1
@@ -799,8 +807,6 @@ function! eclim#util#TempWindowCommand (command, name)
     let col = col('.')
   endif
 
-  call eclim#util#TempWindowClear(name)
-
   let results = split(eclim#ExecuteEclim(a:command), '\n')
   if len(results) == 1 && results[0] == '0'
     return 0
@@ -809,14 +815,6 @@ function! eclim#util#TempWindowCommand (command, name)
   call eclim#util#TempWindow(name, results)
 
   call cursor(line, col)
-
-  " Store filename so that plugins can use it if necessary.
-  let b:filename = filename
-
-  augroup temp_window
-    autocmd! BufUnload <buffer>
-    call eclim#util#GoToBufferWindowRegister(filename)
-  augroup END
 
   return 1
 endfunction " }}}

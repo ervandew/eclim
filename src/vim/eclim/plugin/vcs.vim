@@ -28,7 +28,7 @@ if !exists(":VcsAnnotate")
   command VcsAnnotateOff :call eclim#vcs#annotate#AnnotateOff()
 endif
 if !exists(":VcsLog")
-  command VcsLog :call eclim#vcs#log#Log()
+  command VcsLog :call eclim#vcs#log#Log(expand('%:p:h'), expand('%:t'))
 endif
 
 if !exists(":Viewvc")
