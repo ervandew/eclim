@@ -22,40 +22,6 @@
 "
 " }}}
 
-" ListDir(dir) {{{
-function! eclim#vcs#log#ListDir (type, dir)
-  let dir = a:dir
-
-  if a:type == 'cvs'
-    if exists('b:vcs_local_dir')
-      let dir = strpart(
-        \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
-    endif
-
-    let cwd = getcwd()
-    exec 'lcd ' . dir
-    try
-      let listing = readfile('CVS/Entries')
-    finally
-      exec 'lcd ' . cwd
-    endtry
-  elseif a:type == 'svn'
-    if exists('b:vcs_local_dir')
-      let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . dir
-    else
-      let url = eclim#vcs#util#GetSvnUrl(dir, '')
-    endif
-    let listing = split(system('svn list ' . url), '\n')
-  else
-    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-    return
-  endif
-
-  let lines = listing
-
-  call s:TempWindow(lines)
-endfunction " }}}
-
 " Log(dir, file) {{{
 function! eclim#vcs#log#Log (dir, file)
   let file = a:dir != '' ? a:file : expand('%:p:t')
@@ -109,6 +75,73 @@ function! eclim#vcs#log#Log (dir, file)
   let b:vcs_local_dir = dir
   let b:vcs_type = type
 
+  call s:LogSyntax()
+
+  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+endfunction " }}}
+
+" ListDir(dir) {{{
+function! eclim#vcs#log#ListDir (type, dir)
+  let dir = a:dir
+
+  if a:type == 'cvs'
+    if exists('b:vcs_local_dir')
+      let dir = strpart(
+        \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
+    endif
+
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+    try
+      let listing = readfile('CVS/Entries')
+      let dirs = sort(filter(listing[:], 'v:val =~ "^D/"'))
+      call map(dirs, 'substitute(v:val, "^D/\\(.\\{-}/\\).*", "\\1", "")')
+      let files = sort(filter(listing[:], 'v:val =~ "^/"'))
+      call map(files, 'substitute(v:val, "^/\\(.\\{-}\\)/.*", "\\1", "")')
+    finally
+      exec 'lcd ' . cwd
+    endtry
+  elseif a:type == 'svn'
+    if exists('b:vcs_local_dir')
+      let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . dir
+    else
+      let url = eclim#vcs#util#GetSvnUrl(dir, '')
+    endif
+    let listing = split(system('svn list ' . url), '\n')
+    let dirs = sort(filter(listing[:], 'v:val =~ "/$"'))
+    let files = sort(filter(listing[:], 'v:val =~ "[^/]$"'))
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+    return
+  endif
+
+  let lines = extend(dirs, files)
+  call map(lines, '"|" . v:val . "|"')
+
+  call s:TempWindow(lines)
+endfunction " }}}
+
+" ChangeSet(revision, dir) {{{
+function! eclim#vcs#log#ChangeSet (revision, dir)
+  let url = eclim#vcs#util#GetSvnReposUrl(a:dir)
+  let log = split(system('svn log -vr ' . a:revision . ' ' . url), '\n')
+
+  let lines = []
+  let entry = {}
+  call s:ParseSvnInfo(entry, log[1])
+  call add(lines, 'Revision: ' . entry.revision)
+  call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
+  let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D  |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
+  call extend(lines, files)
+
+  call s:TempWindow(lines)
+endfunction " }}}
+
+" s:LogSyntax() {{{
+function! s:LogSyntax ()
   set ft=vcs_log
   hi link VcsDivider Constant
   hi link VcsHeader Identifier
@@ -117,9 +150,7 @@ function! eclim#vcs#log#Log (dir, file)
   hi link VcsPathLink Label
   syntax match VcsDivider /^-\+$/
   syntax match VcsLink /|.\{-}|/
-  syntax match VcsHeader /^\(Revision\|Modified\):/
-
-  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+  syntax match VcsHeader /^\(Revision\|Modified\|Diff\|Changed paths\):/
 endfunction " }}}
 
 " s:ParseCvsLog() {{{
@@ -179,9 +210,7 @@ function! s:ParseSvnLog (lines)
     elseif section == 'head'
       continue
     elseif section == 'info'
-      let entry['revision'] = substitute(line, '^r\(\w\+\).*', '\1', '')
-      let entry['author'] = substitute(line, '.\{-}|\s*\(\w\+\)\s*|.*', '\1', '')
-      let entry['date'] = substitute(line, '.\{-}|.\{-}|\s*\(.\{-}\)\s\+[+-].\{-}|.*', '\1', '')
+      call s:ParseSvnInfo(entry, line)
       let section = 'comment'
     elseif section == 'comment'
       " ignore leading blank line of comment section
@@ -192,6 +221,14 @@ function! s:ParseSvnLog (lines)
     endif
   endfor
   return log
+endfunction " }}}
+
+" s:ParseSvnInfo(entry, line) {{{
+" Parse the svn info line of the log.
+function! s:ParseSvnInfo (entry, line)
+  let a:entry['revision'] = substitute(a:line, '^r\(\w\+\).*', '\1', '')
+  let a:entry['author'] = substitute(a:line, '.\{-}|\s*\(\w\+\)\s*|.*', '\1', '')
+  let a:entry['date'] = substitute(a:line, '.\{-}|.\{-}|\s*\(.\{-}\)\s\+[+-].\{-}|.*', '\1', '')
 endfunction " }}}
 
 " s:FollowLink () {{{
@@ -214,7 +251,7 @@ function! s:FollowLink ()
 
   " link to view a change set
   elseif link =~ '^[0-9.]\+$'
-    " changeset: svn log -vr <revision>
+    call eclim#vcs#log#ChangeSet(link, b:vcs_local_dir)
 
   " link to annotate a file
   elseif link == 'annotate'
