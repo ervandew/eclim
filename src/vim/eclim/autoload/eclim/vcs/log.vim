@@ -22,6 +22,26 @@
 "
 " }}}
 
+" ChangeSet(revision, dir) {{{
+function! eclim#vcs#log#ChangeSet (revision, dir)
+  let url = eclim#vcs#util#GetSvnUrl(a:dir, '')
+  let log = split(system('svn log -vr ' . a:revision . ' ' . url), '\n')
+
+  let lines = []
+  let entry = {}
+  call s:ParseSvnInfo(entry, log[1])
+  call add(lines, 'Revision: ' . entry.revision)
+  call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
+  let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D  |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
+  call extend(lines, files)
+
+  call s:TempWindow(lines)
+  let b:vcs_view = 'changeset'
+endfunction " }}}
+
 " Log(dir, file) {{{
 function! eclim#vcs#log#Log (dir, file)
   let file = a:dir != '' ? a:file : expand('%:p:t')
@@ -47,9 +67,7 @@ function! eclim#vcs#log#Log (dir, file)
     exec 'lcd ' . cwd
   endtry
 
-  let path = split(eclim#vcs#util#GetPath(dir, file), '/')
-  let head = map(path[:-2], '"|" . v:val . "|"')
-  let lines = [join(head, ' / ') . ' / ' . path[-1], '']
+  let lines = [s:Breadcrumb(dir, file), '']
   let index = 0
   for entry in log
     let index += 1
@@ -71,6 +89,7 @@ function! eclim#vcs#log#Log (dir, file)
   endfor
 
   call s:TempWindow(lines)
+  let b:vcs_view = 'log'
 
   let b:vcs_local_dir = dir
   let b:vcs_type = type
@@ -83,12 +102,15 @@ endfunction " }}}
 " ListDir(dir) {{{
 function! eclim#vcs#log#ListDir (type, dir)
   let dir = a:dir
+  let local_dir = dir
 
   if a:type == 'cvs'
     if exists('b:vcs_local_dir')
+      let local_dir = b:vcs_local_dir
       let dir = strpart(
         \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
     endif
+    let lines = [s:Breadcrumb(dir, ''), '']
 
     let cwd = getcwd()
     exec 'lcd ' . dir
@@ -103,9 +125,16 @@ function! eclim#vcs#log#ListDir (type, dir)
     endtry
   elseif a:type == 'svn'
     if exists('b:vcs_local_dir')
+      let local_dir = b:vcs_local_dir
       let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . dir
+
+      let path = split(dir, '/')
+      let head = map(path[:-2], '"|" . v:val . "|"')
+      let breadcrumb = join(head, ' / ') . ' / ' . path[-1]
+      let lines = [breadcrumb, '']
     else
       let url = eclim#vcs#util#GetSvnUrl(dir, '')
+      let lines = [s:Breadcrumb(dir, ''), '']
     endif
     let listing = split(system('svn list ' . url), '\n')
     let dirs = sort(filter(listing[:], 'v:val =~ "/$"'))
@@ -115,29 +144,75 @@ function! eclim#vcs#log#ListDir (type, dir)
     return
   endif
 
-  let lines = extend(dirs, files)
-  call map(lines, '"|" . v:val . "|"')
-
-  call s:TempWindow(lines)
-endfunction " }}}
-
-" ChangeSet(revision, dir) {{{
-function! eclim#vcs#log#ChangeSet (revision, dir)
-  let url = eclim#vcs#util#GetSvnReposUrl(a:dir)
-  let log = split(system('svn log -vr ' . a:revision . ' ' . url), '\n')
-
-  let lines = []
-  let entry = {}
-  call s:ParseSvnInfo(entry, log[1])
-  call add(lines, 'Revision: ' . entry.revision)
-  call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-  let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D  |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
+  call map(dirs, '"|" . v:val . "|"')
+  call map(files, '"|" . v:val . "|"')
+  call extend(lines, dirs)
   call extend(lines, files)
 
   call s:TempWindow(lines)
+  let b:vcs_view = 'dir'
+  let b:vcs_type = a:type
+  let b:vcs_local_dir = local_dir
+
+  call s:LogSyntax()
+
+  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+endfunction " }}}
+
+" ViewFileRevision(type, file, revision) {{{
+function! eclim#vcs#log#ViewFileRevision (type, file, revision)
+  let file = a:file
+
+  if a:type == 'cvs'
+    "if exists('b:vcs_local_dir')
+    "  let dir = strpart(
+    "    \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
+    "endif
+
+    "let cwd = getcwd()
+    "exec 'lcd ' . dir
+    "try
+    "  let listing = readfile('CVS/Entries')
+    "  let dirs = sort(filter(listing[:], 'v:val =~ "^D/"'))
+    "  call map(dirs, 'substitute(v:val, "^D/\\(.\\{-}/\\).*", "\\1", "")')
+    "  let files = sort(filter(listing[:], 'v:val =~ "^/"'))
+    "  call map(files, 'substitute(v:val, "^/\\(.\\{-}\\)/.*", "\\1", "")')
+    "finally
+    "  exec 'lcd ' . cwd
+    "endtry
+  elseif a:type == 'svn'
+    if exists('b:vcs_local_dir')
+      let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . file
+    else
+      let url = eclim#vcs#util#GetSvnUrl(fnamemodify(file, ':h'), fnamemodify(file, ':t'))
+    endif
+
+    if exists('b:filename')
+      call eclim#util#GoToBufferWindow(b:filename)
+    endif
+    let svn_file = a:type . '_' . a:revision . '_' . fnamemodify(file, ':t')
+    call eclim#util#GoToBufferWindowOrOpen(svn_file, 'split')
+
+    setlocal noreadonly
+    setlocal modifiable
+    let saved = @"
+    silent 1,$delete
+    let @" = saved
+    exec 'silent read !svn cat -r ' . a:revision . ' ' . url
+    silent 1,1delete
+    call cursor(1, 1)
+
+    setlocal nomodified
+    setlocal readonly
+    setlocal nomodifiable
+    setlocal noswapfile
+
+    let b:vcs_url = url
+    let b:vcs_revision = a:revision
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+    return
+  endif
 endfunction " }}}
 
 " s:LogSyntax() {{{
@@ -231,6 +306,13 @@ function! s:ParseSvnInfo (entry, line)
   let a:entry['date'] = substitute(a:line, '.\{-}|.\{-}|\s*\(.\{-}\)\s\+[+-].\{-}|.*', '\1', '')
 endfunction " }}}
 
+" s:Breadcrumb(dir, file) {{{
+function! s:Breadcrumb (dir, file)
+  let path = split(eclim#vcs#util#GetPath(a:dir, a:file), '/')
+  let head = map(path[:-2], '"|" . v:val . "|"')
+  return join(head, ' / ') . ' / ' . path[-1]
+endfunction " }}}
+
 " s:FollowLink () {{{
 function! s:FollowLink ()
   let line = getline('.')
@@ -253,11 +335,17 @@ function! s:FollowLink ()
   elseif link =~ '^[0-9.]\+$'
     call eclim#vcs#log#ChangeSet(link, b:vcs_local_dir)
 
-  " link to annotate a file
-  elseif link == 'annotate'
+  " link to view / annotate a file
+  elseif link == 'view' || link == 'annotate'
+    let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+    let file = substitute(file, ' / ', '', 'g')
+    let revision = substitute(line, '.\{-}|\([0-9.]\+\)|.*', '\1', '')
+    call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision)
 
-  " link to view a file
-  elseif link == 'view'
+    if link == 'annotate'
+      let annotations = eclim#vcs#annotate#GetSvnAnnotations(b:vcs_url, revision)
+      call eclim#vcs#annotate#ApplyAnnotations(annotations)
+    endif
 
   " link to diff a file
   elseif link =~ '^previous [0-9.]\+$'

@@ -31,16 +31,9 @@ function! eclim#vcs#annotate#Annotate ()
   try
     let file = expand('%:p:t')
     if isdirectory(dir . '/CVS')
-      let result = system('cvs annotate "' . file . '"')
-      let annotations = split(result, '\n')
-      call filter(annotations, 'v:val =~ "^[0-9]"')
-      call map(annotations,
-          \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+      let annotations = eclim#vcs#annotate#GetCvsAnnotations(file, '')
     elseif isdirectory(dir . '/.svn')
-      let result = system('svn blame "' . file . '"')
-      let annotations = split(result, '\n')
-      call map(annotations,
-          \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+      let annotations = eclim#vcs#annotate#GetSvnAnnotations(file, '')
     else
       call eclim#util#EchoError('Current file is not under cvs or svn version control.')
       return
@@ -54,24 +47,7 @@ function! eclim#vcs#annotate#Annotate ()
     return
   endif
 
-  let defined = eclim#display#signs#GetDefined()
-  let index = 1
-  for annotation in annotations
-    let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
-    let user_abbrv = user[:1]
-    if index(defined, user) == -1
-      call eclim#display#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
-      call add(defined, user_abbrv)
-    endif
-    call eclim#display#signs#Place(user, index)
-    let index += 1
-  endfor
-  let b:vcs_annotations = annotations
-
-  augroup vcs_annotate
-    autocmd!
-    autocmd CursorHold <buffer> call eclim#vcs#annotate#AnnotateInfo()
-  augroup END
+  call eclim#vcs#annotate#ApplyAnnotations(annotations)
 endfunction " }}}
 
 " AnnotateOff() {{{
@@ -101,6 +77,57 @@ function! eclim#vcs#annotate#AnnotateInfo ()
   if exists('b:vcs_annotations')
     echo b:vcs_annotations[line('.') - 1]
   endif
+endfunction " }}}
+
+" ApplyAnnotations(annotations) {{{
+function! eclim#vcs#annotate#ApplyAnnotations (annotations)
+  let defined = eclim#display#signs#GetDefined()
+  let index = 1
+  for annotation in a:annotations
+    let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
+    let user_abbrv = user[:1]
+    if index(defined, user) == -1
+      call eclim#display#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
+      call add(defined, user_abbrv)
+    endif
+    call eclim#display#signs#Place(user, index)
+    let index += 1
+  endfor
+  let b:vcs_annotations = a:annotations
+
+  augroup vcs_annotate
+    autocmd!
+    autocmd CursorHold <buffer> call eclim#vcs#annotate#AnnotateInfo()
+  augroup END
+endfunction " }}}
+
+" GetCvsAnnotations (file, revision) {{{
+function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
+  let cmd = 'cvs annotate'
+  if a:revision != ''
+    let cmd .= ' -r ' . a:revision
+  endif
+  let result = system(cmd . ' "' . a:file . '"')
+  let annotations = split(result, '\n')
+  call filter(annotations, 'v:val =~ "^[0-9]"')
+  call map(annotations,
+      \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+
+  return annotations
+endfunction " }}}
+
+" GetSvnAnnotations (file, revision) {{{
+function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
+  let cmd = 'svn blame'
+  if a:revision != ''
+    let cmd .= ' -r ' . a:revision
+  endif
+  let result = system(cmd . ' "' . a:file . '"')
+  let annotations = split(result, '\n')
+  call map(annotations,
+      \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+
+  return annotations
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
