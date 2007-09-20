@@ -25,25 +25,20 @@
 " Annotate() {{{
 function! eclim#vcs#annotate#Annotate ()
   let dir = expand('%:p:h')
-  let cwd = getcwd()
-  exec 'lcd ' . dir
-
-  try
+  if isdirectory(dir . '/CVS')
+    let file = expand('%:p')
+    let annotations = eclim#vcs#annotate#GetCvsAnnotations(file, '')
+  elseif isdirectory(dir . '/.svn')
     let file = expand('%:p:t')
-    if isdirectory(dir . '/CVS')
-      let annotations = eclim#vcs#annotate#GetCvsAnnotations(file, '')
-    elseif isdirectory(dir . '/.svn')
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+    try
       let annotations = eclim#vcs#annotate#GetSvnAnnotations(file, '')
-    else
-      call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-      return
-    endif
-  finally
-    exec 'lcd ' . cwd
-  endtry
-
-  if v:shell_error
-    call eclim#util#EchoError(result)
+    finally
+      exec 'lcd ' . cwd
+    endtry
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
     return
   endif
 
@@ -107,11 +102,26 @@ function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
   if a:revision != ''
     let cmd .= ' -r ' . a:revision
   endif
-  let result = system(cmd . ' "' . a:file . '"')
-  let annotations = split(result, '\n')
-  call filter(annotations, 'v:val =~ "^[0-9]"')
-  call map(annotations,
+
+  let dir = fnamemodify(a:file, ':h')
+  let file = fnamemodify(a:file, ':t')
+
+  let cwd = getcwd()
+  exec 'lcd ' . dir
+  try
+    let result = system(cmd . ' "' . file . '"')
+    let annotations = split(result, '\n')
+    call filter(annotations, 'v:val =~ "^[0-9]"')
+    call map(annotations,
       \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  if v:shell_error
+    call eclim#util#EchoError(result)
+    return
+  endif
 
   return annotations
 endfunction " }}}
@@ -123,6 +133,12 @@ function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
     let cmd .= ' -r ' . a:revision
   endif
   let result = system(cmd . ' "' . a:file . '"')
+
+  if v:shell_error
+    call eclim#util#EchoError(result)
+    return
+  endif
+
   let annotations = split(result, '\n')
   call map(annotations,
       \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")

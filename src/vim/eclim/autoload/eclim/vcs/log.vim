@@ -170,22 +170,25 @@ function! eclim#vcs#log#ViewFileRevision (type, file, revision, split)
   endif
 
   if a:type == 'cvs'
-    "if exists('b:vcs_local_dir')
-    "  let dir = strpart(
-    "    \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
-    "endif
+    if exists('b:vcs_url')
+      let file = b:vcs_url
+    elseif exists('b:vcs_local_dir')
+      let file = b:vcs_local_dir . '/' . fnamemodify(file, ':t')
+    endif
+    let url = file
 
-    "let cwd = getcwd()
-    "exec 'lcd ' . dir
-    "try
-    "  let listing = readfile('CVS/Entries')
-    "  let dirs = sort(filter(listing[:], 'v:val =~ "^D/"'))
-    "  call map(dirs, 'substitute(v:val, "^D/\\(.\\{-}/\\).*", "\\1", "")')
-    "  let files = sort(filter(listing[:], 'v:val =~ "^/"'))
-    "  call map(files, 'substitute(v:val, "^/\\(.\\{-}\\)/.*", "\\1", "")')
-    "finally
-    "  exec 'lcd ' . cwd
-    "endtry
+    let cwd = getcwd()
+    exec 'lcd ' . fnamemodify(file, ':h')
+    try
+      let file = fnamemodify(file, ':t')
+      echom 'cvs annotate -r ' . a:revision . ' "' . file . '"'
+      let result = system('cvs annotate -r ' . a:revision . ' "' . file . '"')
+      let lines = split(result, '\n')
+      call filter(lines, 'v:val =~ "^[0-9]"')
+      call map(lines, "substitute(v:val, '^.\\{-}: ', '', '')")
+    finally
+      exec 'lcd ' . cwd
+    endtry
   elseif a:type == 'svn'
     if exists('b:vcs_url')
       let url = b:vcs_url
@@ -194,33 +197,37 @@ function! eclim#vcs#log#ViewFileRevision (type, file, revision, split)
     else
       let url = eclim#vcs#util#GetSvnUrl(fnamemodify(file, ':h'), fnamemodify(file, ':t'))
     endif
-
-    if exists('b:filename')
-      call eclim#util#GoToBufferWindow(b:filename)
-    endif
-    let svn_file = a:type . '_' . a:revision . '_' . fnamemodify(file, ':t')
-    call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
-
-    setlocal noreadonly
-    setlocal modifiable
-    let saved = @"
-    silent 1,$delete
-    let @" = saved
-    exec 'silent read !svn cat -r ' . a:revision . ' ' . url
-    silent 1,1delete
-    call cursor(1, 1)
-
-    setlocal nomodified
-    setlocal readonly
-    setlocal nomodifiable
-    setlocal noswapfile
-
-    let b:vcs_url = url
-    let b:vcs_revision = a:revision
-  else
-    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-    return
   endif
+
+  if exists('b:filename')
+    call eclim#util#GoToBufferWindow(b:filename)
+  endif
+  let svn_file = a:type . '_' . a:revision . '_' . fnamemodify(file, ':t')
+  call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
+
+  setlocal noreadonly
+  setlocal modifiable
+  let saved = @"
+  silent 1,$delete
+  let @" = saved
+
+  " load in content
+  if a:type == 'cvs'
+    call append(1, lines)
+  elseif a:type == 'svn'
+    exec 'silent read !svn cat -r ' . a:revision . ' ' . url
+  endif
+
+  silent 1,1delete
+  call cursor(1, 1)
+
+  setlocal nomodified
+  setlocal readonly
+  setlocal nomodifiable
+  setlocal noswapfile
+
+  let b:vcs_url = url
+  let b:vcs_revision = a:revision
 endfunction " }}}
 
 " s:LogSyntax() {{{
@@ -347,11 +354,16 @@ function! s:FollowLink ()
   elseif link == 'view' || link == 'annotate'
     let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
     let file = substitute(file, ' / ', '', 'g')
-    let revision = substitute(line, '.\{-}|\([0-9.]\+\)|.*', '\1', '')
+    let revision = substitute(line, '.\{-}|\?\([0-9.]\+\)|\?.*', '\1', '')
+    let vcs_type = b:vcs_type
     call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision, 'split')
 
     if link == 'annotate'
-      let annotations = eclim#vcs#annotate#GetSvnAnnotations(b:vcs_url, revision)
+      if vcs_type == 'cvs'
+        let annotations = eclim#vcs#annotate#GetCvsAnnotations(b:vcs_url, revision)
+      elseif vcs_type == 'svn'
+        let annotations = eclim#vcs#annotate#GetSvnAnnotations(b:vcs_url, revision)
+      endif
       call eclim#vcs#annotate#ApplyAnnotations(annotations)
     endif
 
@@ -359,7 +371,8 @@ function! s:FollowLink ()
   elseif link =~ '^previous [0-9.]\+$'
     let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
     let file = substitute(file, ' / ', '', 'g')
-    let r1 = substitute(getline(line('.') - 2), 'Revision: |\([0-9.]\+\)|.*', '\1', '')
+    let r1 = substitute(
+      \ getline(line('.') - 2), 'Revision: |\?\([0-9.]\+\)|\?.*', '\1', '')
     let r2 = substitute(link, 'previous \(.*\)', '\1', '')
 
     let vcs_type = b:vcs_type
@@ -372,7 +385,8 @@ function! s:FollowLink ()
   elseif link == 'working copy'
     let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
     let file = substitute(file, ' / ', '', 'g')
-    let revision = substitute(getline(line('.') - 2), 'Revision: |\([0-9.]\+\)|.*', '\1', '')
+    let revision = substitute(
+      \ getline(line('.') - 2), 'Revision: |\?\([0-9.]\+\)|\?.*', '\1', '')
 
     let filename = b:filename
     call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision, 'vertical split')
