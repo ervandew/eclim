@@ -79,7 +79,9 @@ function! eclim#vcs#log#Log (dir, file)
     endif
     call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
     if index < len(log)
-      call add(lines, 'Diff: |previous ' . log[index].revision . '|')
+      call add(lines, 'Diff: |previous ' . log[index].revision . '| |working copy|')
+    else
+      call add(lines, 'Diff: |working copy|')
     endif
     call add(lines, '')
     let lines += entry.comment
@@ -159,9 +161,13 @@ function! eclim#vcs#log#ListDir (type, dir)
   nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
 endfunction " }}}
 
-" ViewFileRevision(type, file, revision) {{{
-function! eclim#vcs#log#ViewFileRevision (type, file, revision)
+" ViewFileRevision(type, file, revision, split) {{{
+function! eclim#vcs#log#ViewFileRevision (type, file, revision, split)
   let file = a:file
+  let split = a:split
+  if split == ''
+    let split = 'split'
+  endif
 
   if a:type == 'cvs'
     "if exists('b:vcs_local_dir')
@@ -181,7 +187,9 @@ function! eclim#vcs#log#ViewFileRevision (type, file, revision)
     "  exec 'lcd ' . cwd
     "endtry
   elseif a:type == 'svn'
-    if exists('b:vcs_local_dir')
+    if exists('b:vcs_url')
+      let url = b:vcs_url
+    elseif exists('b:vcs_local_dir')
       let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . file
     else
       let url = eclim#vcs#util#GetSvnUrl(fnamemodify(file, ':h'), fnamemodify(file, ':t'))
@@ -191,7 +199,7 @@ function! eclim#vcs#log#ViewFileRevision (type, file, revision)
       call eclim#util#GoToBufferWindow(b:filename)
     endif
     let svn_file = a:type . '_' . a:revision . '_' . fnamemodify(file, ':t')
-    call eclim#util#GoToBufferWindowOrOpen(svn_file, 'split')
+    call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
 
     setlocal noreadonly
     setlocal modifiable
@@ -340,16 +348,37 @@ function! s:FollowLink ()
     let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
     let file = substitute(file, ' / ', '', 'g')
     let revision = substitute(line, '.\{-}|\([0-9.]\+\)|.*', '\1', '')
-    call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision)
+    call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision, 'split')
 
     if link == 'annotate'
       let annotations = eclim#vcs#annotate#GetSvnAnnotations(b:vcs_url, revision)
       call eclim#vcs#annotate#ApplyAnnotations(annotations)
     endif
 
-  " link to diff a file
+  " link to diff one version against previous
   elseif link =~ '^previous [0-9.]\+$'
+    let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+    let file = substitute(file, ' / ', '', 'g')
+    let r1 = substitute(getline(line('.') - 2), 'Revision: |\([0-9.]\+\)|.*', '\1', '')
+    let r2 = substitute(link, 'previous \(.*\)', '\1', '')
 
+    let vcs_type = b:vcs_type
+    call eclim#vcs#log#ViewFileRevision(vcs_type, file, r1, 'split')
+    diffthis
+    call eclim#vcs#log#ViewFileRevision(vcs_type, file, r2, 'vertical split')
+    diffthis
+
+  " link to diff against working copy
+  elseif link == 'working copy'
+    let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+    let file = substitute(file, ' / ', '', 'g')
+    let revision = substitute(getline(line('.') - 2), 'Revision: |\([0-9.]\+\)|.*', '\1', '')
+
+    let filename = b:filename
+    call eclim#vcs#log#ViewFileRevision(b:vcs_type, file, revision, 'vertical split')
+    diffthis
+    call eclim#util#GoToBufferWindow(filename)
+    diffthis
   endif
 endfunction " }}}
 
