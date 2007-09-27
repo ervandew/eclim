@@ -33,4 +33,11 @@ if g:EclimSgmlCompleteEndTag
 endif
 " }}}
 
+" Command Declarations {{{
+if !exists(":BrowserOpen")
+  command -nargs=? -complete=file -buffer BrowserOpen
+    \ :call eclim#html#util#OpenInBrowser(<q-args>)
+endif
+" }}}
+
 " vim:ft=vim:fdm=marker

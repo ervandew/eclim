@@ -78,6 +78,18 @@ function! eclim#html#util#InJavascriptBlock ()
   return 0
 endfunction " }}}
 
+" OpenInBrowser(file) {{{
+function! eclim#html#util#OpenInBrowser (file)
+  let file = a:file
+  if file == ''
+    let file = expand('%:p')
+  else
+    let file = getcwd() . '/' . file
+  endif
+  let url = 'file://' . file
+  call eclim#web#OpenUrl(url)
+endfunction " }}}
+
 " UrlEncode(string) {{{
 function! eclim#html#util#UrlEncode (string)
   let result = a:string
