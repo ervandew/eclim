@@ -49,7 +49,6 @@ function! eclim#vcs#log#Log (dir, file)
 
   let cwd = getcwd()
   exec 'lcd ' . dir
-
   try
     if isdirectory(dir . '/CVS')
       let type = 'cvs'
@@ -181,7 +180,6 @@ function! eclim#vcs#log#ViewFileRevision (type, file, revision, split)
     exec 'lcd ' . fnamemodify(file, ':h')
     try
       let file = fnamemodify(file, ':t')
-      echom 'cvs annotate -r ' . a:revision . ' "' . file . '"'
       let result = system('cvs annotate -r ' . a:revision . ' "' . file . '"')
       let lines = split(result, '\n')
       call filter(lines, 'v:val =~ "^[0-9]"')
@@ -393,6 +391,15 @@ function! s:FollowLink ()
     diffthis
     call eclim#util#GoToBufferWindow(filename)
     diffthis
+
+  elseif exists('b:vcs_view') && b:vcs_view == 'dir'
+    let path = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+    let path = substitute(path, ' / ', '', 'g')
+    let path .= '/' . link
+
+    if path =~ '/$'
+      call eclim#vcs#log#ListDir(b:vcs_type, path)
+    endif
   endif
 endfunction " }}}
 
