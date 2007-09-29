@@ -35,7 +35,8 @@ function! eclim#vcs#log#ChangeSet (repos_url, revision)
   let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
   let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
   let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D  |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
+  let files = map(files,
+    \ 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
   call extend(lines, files)
 
   call s:TempWindow(lines)
@@ -191,7 +192,24 @@ function! s:FollowLink ()
 
   " link to file or dir in change set view.
   elseif exists('b:vcs_view') && b:vcs_view == 'changeset'
-    call eclim#vcs#log#Log(b:vcs_repos_url, b:vcs_repos_url . link)
+    if link == 'M'
+      let file = substitute(line, '\s*|M|\s*|\(.\{-}\)|.*', '\1', '')
+      let repos_url = b:vcs_repos_url
+      let r1 = substitute(getline(1), 'Revision:\s*', '', '')
+
+      let cmd = 'svn log -qr ' . r1 . ':1 --limit 2 ' . repos_url . file
+      let info = split(system(cmd), '\n')
+      " TODO: error handling for this
+      let r2 = substitute(info[-2], '^r\([0-9]\+\).*', '\1', '')
+
+      call eclim#vcs#log#ViewFileRevision(repos_url, repos_url . file, r1, '')
+      diffthis
+      call eclim#vcs#log#ViewFileRevision(
+        \ repos_url, repos_url . file, r2, 'vertical split')
+      diffthis
+    else
+      call eclim#vcs#log#Log(b:vcs_repos_url, b:vcs_repos_url . link)
+    endif
 
   " link to view a change set
   elseif link =~ '^[0-9.]\+$'
