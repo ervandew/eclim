@@ -81,9 +81,24 @@ function! EclimGetHtmlIndent (lnum)
 
     " handle case where previous line is a multi-line comment (<!-- -->) on one
     " line, which IndentAnything doesn't handle properly.
-    let prevline = prevnonblank(a:lnum - 1)
-    if getline(prevline) =~ '^\s\+<!--.\{-}-->'
-      let adj = indent(prevline)
+    let prevlnum = prevnonblank(a:lnum - 1)
+    let prevline = getline(prevlnum)
+    if prevline =~ '^\s\+<!--.\{-}-->'
+      let adj = indent(prevlnum)
+
+    " handle <br> tags without '/>'
+    elseif prevline =~ '<br\s*>'
+      let line = prevline
+      let occurrences = 0
+      while line =~ '<br\s*>'
+        let occurrences += 1
+        let line = substitute(line, '<br\s*>', '', '')
+      endwhile
+      let adj = 0 - (&sw * occurrences)
+
+    " handle <input> tags without '/>'
+    elseif prevline =~ '<input[^/]\{-}>' " FIXME: handle wrapped input tag
+      let adj = 0 - &sw
     endif
   endif
 
