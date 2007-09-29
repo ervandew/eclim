@@ -42,36 +42,53 @@ function! eclim#vcs#log#ChangeSet (revision, dir)
   let b:vcs_view = 'changeset'
 endfunction " }}}
 
-" Log(dir, file) {{{
-function! eclim#vcs#log#Log (dir, file)
-  let file = a:dir != '' ? a:file : expand('%:p:t')
-  let dir = a:dir != '' ? a:dir : expand('%:p:h')
+" Log(type, file) {{{
+function! eclim#vcs#log#Log (type, file)
+  let dir = fnamemodify(a:file, ':h')
+  let file = fnamemodify(a:file, ':t')
+  let local_dir = dir
 
-  let cwd = getcwd()
-  exec 'lcd ' . dir
-  try
-    if isdirectory(dir . '/CVS')
-      let type = 'cvs'
+  if a:type == 'cvs'
+    if exists('b:vcs_local_dir')
+      let local_dir = b:vcs_local_dir
+      let dir = strpart(
+        \ b:vcs_local_dir, 0, stridx(b:vcs_local_dir, dir) + len(dir))
+    endif
+    let lines = [s:Breadcrumb(dir, ''), '']
+
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+    try
       let result = system('cvs log -l "' . file . '"')
       let log = s:ParseCvsLog(split(result, '\n'))
-    elseif isdirectory(dir . '/.svn')
-      let type = 'svn'
-      let result = system('svn log "' . file . '"')
-      let log = s:ParseSvnLog(split(result, '\n'))
-    else
-      call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-      return
-    endif
-  finally
-    exec 'lcd ' . cwd
-  endtry
+    finally
+      exec 'lcd ' . cwd
+    endtry
+  elseif a:type == 'svn'
+    if exists('b:vcs_local_dir')
+      let local_dir = b:vcs_local_dir
+      let url = eclim#vcs#util#GetSvnReposUrl(b:vcs_local_dir) . dir . '/' . file
 
-  let lines = [s:Breadcrumb(dir, file), '']
+      let path = split(dir, '/')
+      let head = map(path, '"|" . v:val . "|"')
+      let breadcrumb = join(head, ' / ') . ' / ' . file
+      let lines = [breadcrumb, '']
+    else
+      let url = eclim#vcs#util#GetSvnUrl(dir, file)
+      let lines = [s:Breadcrumb(dir, file), '']
+    endif
+    let result = system('svn log "' . url . '"')
+    let log = s:ParseSvnLog(split(result, '\n'))
+  else
+    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+    return
+  endif
+
   let index = 0
   for entry in log
     let index += 1
     call add(lines, '------------------------------------------')
-    if type == 'cvs'
+    if a:type == 'cvs'
       call add(lines, 'Revision: ' . entry.revision . ' |view| |annotate|')
     else
       call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
@@ -91,9 +108,8 @@ function! eclim#vcs#log#Log (dir, file)
 
   call s:TempWindow(lines)
   let b:vcs_view = 'log'
-
-  let b:vcs_local_dir = dir
-  let b:vcs_type = type
+  let b:vcs_local_dir = local_dir
+  let b:vcs_type = a:type
 
   call s:LogSyntax()
 
@@ -399,6 +415,8 @@ function! s:FollowLink ()
 
     if path =~ '/$'
       call eclim#vcs#log#ListDir(b:vcs_type, path)
+    else
+      call eclim#vcs#log#Log(b:vcs_type, path)
     endif
   endif
 endfunction " }}}
