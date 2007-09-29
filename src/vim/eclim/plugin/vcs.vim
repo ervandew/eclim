@@ -29,7 +29,8 @@ if !exists(":VcsAnnotate")
 endif
 if !exists(":VcsLog")
   command VcsLog :call eclim#vcs#log#Log(
-    \ eclim#vcs#util#GetType(expand('%:p:h'), expand('%:t')), expand('%:p'))
+    \ eclim#vcs#util#GetSvnReposUrl(expand('%:h')),
+    \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')))
 endif
 
 if !exists(":Viewvc")
