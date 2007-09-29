@@ -37,7 +37,6 @@ setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O
 
 " EclimGetHtmlIndent(lnum) {{{
 function! EclimGetHtmlIndent (lnum)
-  echom 'in html'
   let line = line('.')
   let col = line('.')
 
@@ -92,7 +91,7 @@ function! EclimGetHtmlIndent (lnum)
 endfunction " }}}
 
 " HtmlIndentAnythingSettings() {{{
-if !exists('*HtmlIndentAnythingSettings') " prevent overriding any html extensions
+if !exists('*HtmlIndentAnythingSettings') || &ft == 'html'
 function! HtmlIndentAnythingSettings ()
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'htmlComment'
@@ -154,5 +153,7 @@ function! <SID>HtmlIndentAttributeWrap (lnum)
     call cursor(line, col)
   endtry
 endfunction " }}}
+
+call HtmlIndentAnythingSettings()
 
 " vim:ft=vim:fdm=marker

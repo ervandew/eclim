@@ -47,7 +47,9 @@ for element in g:HtmlDjangoBodyElements
   endfor
 endfor
 
-let HtmlSettings = function('HtmlIndentAnythingSettings')
+if !exists('*HtmlSettings')
+  let HtmlSettings = function('HtmlIndentAnythingSettings')
+endif
 
 " HtmlIndentAnythingSettings() {{{
 function! HtmlIndentAnythingSettings ()
