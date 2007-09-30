@@ -20,7 +20,7 @@ CURPATH=`dirname $0`
 
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
-ECLIM_ARGS="-Declim.home="$ECLIM_HOME""
+ECLIM_ARGS="-Declim.home="$ECLIM_HOME" -Djava.ext.dirs"
 SED=`which sed 2> /dev/null`
 IS_GENTOO=`which java-config 2> /dev/null`
 
@@ -50,7 +50,7 @@ ECLIM_COMMAND="$ECLIPSE
 
 if [ "$1" = "start" ]; then
   shift
-  $ECLIM_COMMAND $@ > /dev/null &
+  CLASSPATH="" $ECLIM_COMMAND $@ > /dev/null &
 else
-  $ECLIM_COMMAND $@
+  CLASSPATH="" $ECLIM_COMMAND $@
 fi
