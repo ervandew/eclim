@@ -236,10 +236,11 @@ function! s:FollowLink ()
     let file = substitute(file, ' / ', '', 'g')
     let revision = substitute(line, '.\{-}|\?\([0-9.]\+\)|\?.*', '\1', '')
     let repos_url = b:vcs_repos_url
-    call eclim#vcs#log#ViewFileRevision(repos_url, repos_url . file, revision, '')
+    let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
+    call eclim#vcs#log#ViewFileRevision(repos_url, prefix . file, revision, '')
 
     if link == 'annotate'
-      let annotations = eclim#vcs#annotate#GetSvnAnnotations(repos_url . file, revision)
+      let annotations = eclim#vcs#annotate#GetSvnAnnotations(prefix . file, revision)
       call eclim#vcs#annotate#ApplyAnnotations(annotations)
     endif
 
@@ -251,10 +252,11 @@ function! s:FollowLink ()
       \ getline(line('.') - 2), 'Revision: |\?\([0-9.]\+\)|\?.*', '\1', '')
     let r2 = substitute(link, 'previous \(.*\)', '\1', '')
     let repos_url = b:vcs_repos_url
+    let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
 
-    call eclim#vcs#log#ViewFileRevision(repos_url, repos_url . file, r1, '')
+    call eclim#vcs#log#ViewFileRevision(repos_url, prefix . file, r1, '')
     diffthis
-    call eclim#vcs#log#ViewFileRevision(repos_url, repos_url . file, r2, 'vertical split')
+    call eclim#vcs#log#ViewFileRevision(repos_url, prefix . file, r2, 'vertical split')
     diffthis
 
   " link to diff against working copy
@@ -264,10 +266,11 @@ function! s:FollowLink ()
     let revision = substitute(
       \ getline(line('.') - 2), 'Revision: |\?\([0-9.]\+\)|\?.*', '\1', '')
     let repos_url = b:vcs_repos_url
+    let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
 
     let filename = b:filename
     call eclim#vcs#log#ViewFileRevision(
-      \ repos_url, repos_url . file, revision, 'vertical split')
+      \ repos_url, prefix . file, revision, 'vertical split')
     diffthis
 
     let b:filename = filename
