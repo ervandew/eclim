@@ -167,6 +167,10 @@ function eclim#vcs#util#GetSvnReposUrl (dir)
       endif
 
       silent close
+
+      if repos !~ '/$'
+        let repos .= '/'
+      endif
     endif
   finally
     silent exec cmd
