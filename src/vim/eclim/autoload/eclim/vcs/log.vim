@@ -41,11 +41,12 @@ function! eclim#vcs#log#ChangeSet (repos_url, revision)
 
   call s:TempWindow(lines)
   call s:LogSyntax()
+  call s:LogMappings()
 
   let b:vcs_view = 'changeset'
   let b:vcs_repos_url = a:repos_url
 
-  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+  call s:HistoryPush('eclim#vcs#log#ChangeSet', [a:repos_url, a:revision])
 endfunction " }}}
 
 " Log(repos_url, url) {{{
@@ -80,12 +81,13 @@ function! eclim#vcs#log#Log (repos_url, url)
 
   call s:TempWindow(lines)
   call s:LogSyntax()
+  call s:LogMappings()
 
   let b:vcs_view = 'log'
   let b:vcs_repos_url = a:repos_url
   let b:vcs_url = a:url
 
-  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+  call s:HistoryPush('eclim#vcs#log#Log', [a:repos_url, a:url])
 endfunction " }}}
 
 " ListDir(repos_url, url) {{{
@@ -108,12 +110,13 @@ function! eclim#vcs#log#ListDir (repos_url, url)
 
   call s:TempWindow(lines)
   call s:LogSyntax()
+  call s:LogMappings()
 
   let b:vcs_view = 'dir'
   let b:vcs_repos_url = a:repos_url
   let b:vcs_url = a:url
 
-  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+  call s:HistoryPush('eclim#vcs#log#ListDir', [a:repos_url, a:url])
 endfunction " }}}
 
 " ViewFileRevision(repos_url, url, revision, split) {{{
@@ -258,6 +261,40 @@ function! s:FollowLink ()
     call eclim#util#GoToBufferWindow(filename)
     diffthis
   endif
+endfunction " }}}
+
+" s:HistoryPop() {{{
+function! s:HistoryPop ()
+  if exists('w:vcs_history') && len(w:vcs_history) > 1
+    call remove(w:vcs_history, -1) " remove current page entry
+    exec w:vcs_history[-1]
+    call remove(w:vcs_history, -1) " remove entry added by going back
+  endif
+endfunction " }}}
+
+" s:HistoryPush(command) {{{
+function! s:HistoryPush (name, args)
+  if !exists('w:vcs_history')
+    let w:vcs_history = []
+  endif
+
+  let command = 'call ' . a:name . '('
+  let index = 0
+  for arg in a:args
+    if index != 0
+      let command .= ', '
+    endif
+    let command .= '"' . arg . '"'
+    let index += 1
+  endfor
+  let command .= ')'
+  call add(w:vcs_history, command)
+endfunction " }}}
+
+" s:LogMappings() {{{
+function! s:LogMappings ()
+  nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
+  nnoremap <silent> <buffer> <c-o> :call <SID>HistoryPop()<cr>
 endfunction " }}}
 
 " s:LogSyntax() {{{
