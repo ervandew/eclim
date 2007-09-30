@@ -770,7 +770,7 @@ function! eclim#util#TempWindow (name, lines, ...)
 
   " Store filename so that plugins can use it if necessary.
   let b:filename = filename
-  augroup temp_window
+  augroup eclim_temp_window
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
   augroup END
