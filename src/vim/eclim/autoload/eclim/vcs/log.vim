@@ -158,7 +158,12 @@ endfunction " }}}
 
 " s:Breadcrumb(repos_url, url) {{{
 function! s:Breadcrumb (repos_url, url)
+  if a:repos_url =~ '^' . a:url . '[/]\?$'
+    return '/'
+  endif
+
   let path = split(substitute(a:url, a:repos_url, '', ''), '/')
+  call insert(path, fnamemodify(a:repos_url, ':h:t'))
   let head = map(path[:-2], '"|" . v:val . "|"')
   return join(head, ' / ') . ' / ' . path[-1]
 endfunction " }}}
@@ -177,19 +182,27 @@ function! s:FollowLink ()
     let path = substitute(
       \ getline('.'), '\(.*|.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
     let path = substitute(path, '\(| / |\||\)', '/', 'g')
+    let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
 
-    call eclim#vcs#log#ListDir(b:vcs_repos_url, b:vcs_repos_url . path)
+    call eclim#vcs#log#ListDir(b:vcs_repos_url, prefix . path)
 
   " link to file or dir in directory listing view.
   elseif exists('b:vcs_view') && b:vcs_view == 'dir'
-    let path = substitute(getline(1), '\(| / |\||\)', '/', 'g')
-    let path = substitute(path, ' / ', '', 'g')
+    let line = getline(1)
+    let path = ''
+    let prefix = b:vcs_repos_url
+    if line != '/'
+      let path = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+      let path = substitute(path, ' / ', '', 'g')
+      let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
+    endif
+
     let path .= '/' . link
 
     if path =~ '/$'
-      call eclim#vcs#log#ListDir(b:vcs_repos_url, b:vcs_repos_url . path)
+      call eclim#vcs#log#ListDir(b:vcs_repos_url, prefix . path)
     else
-      call eclim#vcs#log#Log(b:vcs_repos_url, b:vcs_repos_url . path)
+      call eclim#vcs#log#Log(b:vcs_repos_url, prefix . path)
     endif
 
   " link to file or dir in change set view.
