@@ -172,7 +172,6 @@ function! s:FollowLink ()
     return
   endif
 
-  echom link
   " link to folder
   if line('.') == 1
     let path = substitute(
@@ -257,7 +256,14 @@ function! s:FollowLink ()
     call eclim#vcs#log#ViewFileRevision(
       \ repos_url, repos_url . file, revision, 'vertical split')
     diffthis
-    " TODO: added autocommand that turns off diffmode after closing buffer
+
+    let b:filename = filename
+    augroup vcs_diff
+      autocmd! BufUnload <buffer>
+      call eclim#util#GoToBufferWindowRegister(b:filename)
+      autocmd BufUnload <buffer> diffoff
+    augroup END
+
     call eclim#util#GoToBufferWindow(filename)
     diffthis
   endif
@@ -365,7 +371,7 @@ function! s:TempWindow (lines)
   call eclim#util#TempWindow('[vcs_log]', a:lines)
 
   let b:filename = filename
-  augroup temp_window
+  augroup eclim_temp_window
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
   augroup END
