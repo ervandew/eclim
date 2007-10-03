@@ -55,6 +55,10 @@ if !exists(":ArgAddRelative")
     \ ArgAddRelative :call eclim#common#util#OpenRelative('argadd', '<args>', 0)
 endif
 
+if !exists(":Buffers")
+  command Buffers :call eclim#common#util#Buffers()
+endif
+
 if !exists(":DiffLastSaved")
   command DiffLastSaved :call eclim#common#util#DiffLastSaved()
 endif

@@ -10,6 +10,10 @@ TODO {{{
     - util classes
     - project nature add/remove
     - logger (custom logger)
+
+    - test handling of CLASSPATH and ext.dirs by eclimd.
+    Windows Testing
+      - test handling of CLASSPATH and ext.dirs by installer.
   }}}
 
   Documentation {{{
@@ -19,6 +23,14 @@ TODO {{{
     - document python import functionality
 
     - taglisttoo
+
+    - document :BrowserOpen [<file>] for html files.
+    - document Viewvc commands
+      - :ViewvcChangeSet [<revision>] (default: current file's revision)
+      - :ViewvcAnnotate [<revision>] (default: current file's revision)
+      - :ViewvcDiff [<revision>] (default: previous)
+    - document VcsLog commands
+    - document :Buffers
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -41,23 +53,15 @@ TODO {{{
       :LvimgrepAddRelative
       :CdRelative
       :LcdRelative
+      :BrowserOpen
       :ViewvcChangeSet
       :ViewvcAnnotate
       :ViewvcDiff
+      :VcsLog
+      :Buffers
   }}}
 
   Common {{{
-    - :VcsLog
-      - open results buffer, make things linkable similar to viewvc.
-        - linkable breadcrumbs
-        - link to changeset
-        - link to annotated file
-        - link to view a revision
-        - link to diffs
-        - etc.
-        - keep a history for navigating back (override <c-o> and <c-i>)?
-      - maybe support a tree structure?
-
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
@@ -185,7 +189,6 @@ TODO {{{
   }}}
 
   Wst {{{
-
     - for css validation, attempt to provide messages for errors that the validator does not.
       - FIRST, try checking out latest css validation code and see if they have any messages.
       - * ie hacks.
@@ -330,17 +333,18 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - make sure formic ant logger is actually writing to the log.
+
+  - formic / eclim scripts: look into setting $CLASSPATH and ext.dirs so that
+    any user classpath defaults don't get in the way (like log4j-1.2.9.jar).
+    - also, add jvm version verification to formic bootstrap.
+
   - look into converting .bat files into .cmd files
 
   - update php complete unit test (test html/css completions)
   - update html complete unit test (test css completions)
 
   - php, java, on files out of src path, support definition searching.
-
-  - Document Viewvc commands
-    - :ViewvcChangeSet [<revision>] (default: current file's revision)
-    - :ViewvcAnnotate [<revision>] (default: current file's revision)
-    - :ViewvcDiff [<revision>] (default: previous)
 }}}
 
 // vim:fdm=marker:tw=0

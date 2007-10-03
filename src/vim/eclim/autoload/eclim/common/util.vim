@@ -22,6 +22,55 @@
 "
 " }}}
 
+" Buffers() {{{
+" Like, :buffers, but opens a temporary buffer.
+function! eclim#common#util#Buffers ()
+  redir => list
+  silent exec 'buffers'
+  redir END
+
+  let lines = []
+  let current = ''
+  for entry in split(list, '\n')
+    let status = substitute(entry, '\s*[0-9]\+\s\+\(.\{-}\)\s\+".*', '\1', '')
+    let bufnr = substitute(entry, '\s*\([0-9]\+\).*', '\1', '')
+    let path = substitute(entry, '.\{-}"\(.\{-}\)".*', '\1', '')
+    let lnum = substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', '')
+
+    let line = ''
+    let line .= status =~ '+' ? '+' : ' '
+    let line .= status =~ 'a' ? 'active' : 'hidden'
+    let line .= status =~ '[-=]' ? ' [RO] ' : '      '
+    let line .= path
+
+    if status =~ '%'
+      let current = path
+    endif
+
+    call add(lines, line)
+  endfor
+
+  call eclim#util#TempWindow('[buffers]', lines)
+
+  " syntax
+  set ft=eclim_buffers
+  hi link BufferInfo Comment
+  syntax match BufferInfo /+\?\(active\|hidden\)\s\+\(\[RO\]\)\?/
+
+  " mappings
+  nnoremap <silent> <buffer> E :call <SID>BufferOpen('edit')<cr>
+  nnoremap <silent> <buffer> S :call <SID>BufferOpen('split')<cr>
+  nnoremap <silent> <buffer> T :call <SID>BufferOpen('tabnew')<cr>
+  nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
+endfunction " }}}
+
+" s:BufferOpen(cmd) {{{
+function! s:BufferOpen (cmd)
+  let path = strpart(getline('.'), 13)
+  exec b:winnr . 'winc w'
+  call eclim#util#GoToBufferWindowOrOpen(path, a:cmd)
+endfunction " }}}
+
 " DiffLastSaved() {{{
 " Diff a modified file with the last saved version.
 function! eclim#common#util#DiffLastSaved ()
@@ -58,6 +107,15 @@ function! eclim#common#util#DiffLastSaved ()
   endif
 endfunction " }}}
 
+" FindInPath(file, path) {{{
+" Find a file in the supplied path returning a list of results.
+function! eclim#common#util#FindInPath (file, path)
+  let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
+  let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
+  call map(results, "fnamemodify(v:val, ':p')")
+  return results
+endfunction " }}}
+
 " GetFiles(dir, arg) {{{
 " Parses the supplied arg to obtain a list of files based in the supplied
 " directory.
@@ -86,13 +144,29 @@ function eclim#common#util#GetFiles (dir, arg)
   return results
 endfunction " }}}
 
-" FindInPath(file, path) {{{
-" Find a file in the supplied path returning a list of results.
-function! eclim#common#util#FindInPath (file, path)
-  let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
-  let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
-  call map(results, "fnamemodify(v:val, ':p')")
-  return results
+" GrepRelative(command, args) {{{
+" Executes the supplied vim grep command with the specified pattern against
+" one or more file patterns.
+function! eclim#common#util#GrepRelative (command, args)
+  let rel_dir = expand('%:p:h')
+  let cwd = getcwd()
+  try
+    silent exec 'lcd ' . rel_dir
+    silent! exec a:command . ' ' . a:args
+  finally
+    silent exec 'lcd ' . cwd
+    " force quickfix / location list signs to update.
+    call eclim#display#signs#Update()
+  endtry
+  if a:command =~ '^l'
+    let numresults = len(getloclist(0))
+  else
+    let numresults = len(getqflist())
+  endif
+
+  if numresults == 0
+    call eclim#util#EchoInfo('No results found.')
+  endif
 endfunction " }}}
 
 " LocateFile(command, file) {{{
@@ -218,31 +292,6 @@ function! eclim#common#util#SwapWords ()
 
   " restore the last search pattern
   let @/ = save_search
-endfunction " }}}
-
-" GrepRelative(command, args) {{{
-" Executes the supplied vim grep command with the specified pattern against
-" one or more file patterns.
-function! eclim#common#util#GrepRelative (command, args)
-  let rel_dir = expand('%:p:h')
-  let cwd = getcwd()
-  try
-    silent exec 'lcd ' . rel_dir
-    silent! exec a:command . ' ' . a:args
-  finally
-    silent exec 'lcd ' . cwd
-    " force quickfix / location list signs to update.
-    call eclim#display#signs#Update()
-  endtry
-  if a:command =~ '^l'
-    let numresults = len(getloclist(0))
-  else
-    let numresults = len(getqflist())
-  endif
-
-  if numresults == 0
-    call eclim#util#EchoInfo('No results found.')
-  endif
 endfunction " }}}
 
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{

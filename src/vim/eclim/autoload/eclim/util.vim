@@ -739,6 +739,7 @@ endfunction " }}}
 " Opens a temp window w/ the given name and contents.
 function! eclim#util#TempWindow (name, lines, ...)
   let filename = expand('%:p')
+  let winnr = winnr()
 
   call eclim#util#TempWindowClear(a:name)
   let name = escape(a:name, ' []')
@@ -749,6 +750,7 @@ function! eclim#util#TempWindow (name, lines, ...)
       setlocal nowrap
       setlocal winfixheight
       setlocal noswapfile
+      setlocal nobuflisted
       setlocal buftype=nofile
       setlocal bufhidden=delete
     endif
@@ -768,8 +770,11 @@ function! eclim#util#TempWindow (name, lines, ...)
     setlocal readonly
   endif
 
-  " Store filename so that plugins can use it if necessary.
-  let b:filename = filename
+  " Store filename and window number so that plugins can use it if necessary.
+  if !exists('b:filename')
+    let b:filename = filename
+    let b:winnr = winnr
+  endif
   augroup eclim_temp_window
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
