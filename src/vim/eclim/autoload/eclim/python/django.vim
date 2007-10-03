@@ -104,6 +104,7 @@ let s:sql_dialects = {
 
 " DjangoManage(args) {{{
 function! eclim#python#django#Manage (args)
+  let cwd = getcwd()
   if a:args =~ '^startproject\s'
     if !executable(g:EclimDjangoAdmin)
       call eclim#util#EchoError(
@@ -118,16 +119,14 @@ function! eclim#python#django#Manage (args)
       return
     endif
     let command = g:EclimPythonInterpreter . ' manage.py'
-    let b:savedir = getcwd()
 
     " change to project directory before executing manage script.
     let path = eclim#python#django#GetProjectPath()
-    if path != ''
-      exec 'lcd ' . path
-    else
+    if path == ''
       call eclim#util#EchoError('Current file not in a django project.')
       return
     endif
+    exec 'cd ' . path
   endif
 
   try
@@ -170,10 +169,7 @@ function! eclim#python#django#Manage (args)
     endif
   finally
     " change back to original directory if necessary.
-    if exists('b:savedir')
-      exec 'lcd ' . b:savedir
-      unlet b:savedir
-    endif
+    exec 'cd ' . cwd
   endtry
 endfunction " }}}
 
