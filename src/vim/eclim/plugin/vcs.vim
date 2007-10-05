@@ -32,6 +32,18 @@ if !exists(":VcsLog")
     \ eclim#vcs#util#GetSvnReposUrl(expand('%:h')),
     \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')))
 endif
+if !exists(":VcsChangeSet")
+  command -nargs=? VcsChangeSet :call eclim#vcs#log#ChangeSet(
+    \ eclim#vcs#util#GetSvnReposUrl(expand('%:h')),
+    \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')),
+    \ '<args>')
+endif
+if !exists(":VcsDiff")
+  command -nargs=? VcsDiff :call eclim#vcs#log#Diff(
+    \ eclim#vcs#util#GetSvnReposUrl(expand('%:h')),
+    \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')),
+    \ '<args>')
+endif
 
 if !exists(":Viewvc")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative

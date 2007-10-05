@@ -22,10 +22,24 @@
 "
 " }}}
 
-" ChangeSet(repos_url, revision) {{{
+" ChangeSet(repos_url, url, revision) {{{
 " Opens a buffer with change set info for the supplied revision.
-function! eclim#vcs#log#ChangeSet (repos_url, revision)
-  let log = split(system('svn log -vr ' . a:revision . ' ' . a:repos_url), '\n')
+function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
+  if a:repos_url == ''
+    call eclim#util#EchoError('Current file is not under svn version control.')
+    return
+  endif
+
+  let revision = a:revision
+  if revision == ''
+    let revision = eclim#vcs#util#GetSvnRevision(a:url)
+    if revision == ''
+      call eclim#util#Echo('Unable to determine file revision.')
+      return
+    endif
+  endif
+
+  let log = split(system('svn log -vr ' . revision . ' ' . a:url), '\n')
 
   let lines = []
   let entry = {}
@@ -34,7 +48,7 @@ function! eclim#vcs#log#ChangeSet (repos_url, revision)
   call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
   let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
   let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D  |\\1|", "")')
+  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D   \\1", "")')
   let files = map(files,
     \ 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
   call extend(lines, files)
@@ -46,7 +60,38 @@ function! eclim#vcs#log#ChangeSet (repos_url, revision)
   let b:vcs_view = 'changeset'
   let b:vcs_repos_url = a:repos_url
 
-  call s:HistoryPush('eclim#vcs#log#ChangeSet', [a:repos_url, a:revision])
+  call s:HistoryPush('eclim#vcs#log#ChangeSet', [a:repos_url, a:url, a:revision])
+endfunction " }}}
+
+" Diff(repos_url, url, revision) {{{
+" Diffs the current file against the current or supplied revision.
+function! eclim#vcs#log#Diff (repos_url, url, revision)
+  if a:repos_url == ''
+    call eclim#util#EchoError('Current file is not under svn version control.')
+    return
+  endif
+
+  let revision = a:revision
+  if revision == ''
+    let revision = eclim#vcs#util#GetSvnRevision(a:url)
+    if revision == ''
+      call eclim#util#Echo('Unable to determine file revision.')
+      return
+    endif
+  endif
+
+  let filename = expand('%:p')
+  diffthis
+
+  call eclim#vcs#log#ViewFileRevision(a:repos_url, a:url, revision, 'vertical split')
+  diffthis
+
+  let b:filename = filename
+  augroup vcs_diff
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(b:filename)
+    autocmd BufUnload <buffer> diffoff
+  augroup END
 endfunction " }}}
 
 " Log(repos_url, url) {{{
@@ -228,7 +273,11 @@ function! s:FollowLink ()
 
   " link to view a change set
   elseif link =~ '^[0-9.]\+$'
-    call eclim#vcs#log#ChangeSet(b:vcs_repos_url, link)
+    let file = substitute(getline(1), '\(| / |\||\)', '/', 'g')
+    let file = substitute(file, ' / ', '', 'g')
+    let repos_url = b:vcs_repos_url
+    let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
+    call eclim#vcs#log#ChangeSet(repos_url, prefix . file, link)
 
   " link to view / annotate a file
   elseif link == 'view' || link == 'annotate'
@@ -334,7 +383,7 @@ endfunction " }}}
 " Parse the svn info line of the log.
 function! s:ParseSvnInfo (entry, line)
   let a:entry['revision'] = substitute(a:line, '^r\(\w\+\).*', '\1', '')
-  let a:entry['author'] = substitute(a:line, '.\{-}|\s*\(\w\+\)\s*|.*', '\1', '')
+  let a:entry['author'] = substitute(a:line, '.\{-}|\s*\(\S\+\)\s*|.*', '\1', '')
   let a:entry['date'] = substitute(a:line, '.\{-}|.\{-}|\s*\(.\{-}\)\s\+[+-].\{-}|.*', '\1', '')
 endfunction " }}}
 
@@ -348,13 +397,13 @@ function! s:ParseSvnLog (lines)
     let index += 1
     if line =~ '^-\+$' && index == len(a:lines)
       " get rid of empty line at the end of last entry's comment
-      if exists('l:entry') && entry.comment[-1] =~ '^\s*$'
+      if exists('l:entry') && len(entry.comment) > 1 && entry.comment[-1] =~ '^\s*$'
         let entry.comment = entry.comment[:-2]
       endif
       continue
     elseif line =~ '^-\+$'
       " get rid of empty line at the end of entry's comment
-      if exists('l:entry') && entry.comment[-1] =~ '^\s*$'
+      if exists('l:entry') && len(entry.comment) > 1 && entry.comment[-1] =~ '^\s*$'
         let entry.comment = entry.comment[:-2]
       endif
       let section = 'info'

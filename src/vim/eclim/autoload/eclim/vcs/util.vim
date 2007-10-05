@@ -140,7 +140,7 @@ function eclim#vcs#util#GetRevisions ()
   return revisions
 endfunction " }}}
 
-" GetSvnReposUrl(dir, file) {{{
+" GetSvnReposUrl(dir) {{{
 " Gets the repository root url for the repository backing the supplied dir.
 " Ex. http://svn.eclim.sf.net/
 function eclim#vcs#util#GetSvnReposUrl (dir)
@@ -214,6 +214,17 @@ function eclim#vcs#util#GetSvnUrl (dir, file)
   endtry
 
   return url
+endfunction " }}}
+
+" GetSvnRevision(url) {{{
+" Gets the current revision for the supplied svn url.
+function eclim#vcs#util#GetSvnRevision (url)
+  let info = system('svn info ' . a:url)
+  let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
+  if info =~ pattern
+    return substitute(info, pattern, '\1', '')
+  endif
+  return ''
 endfunction " }}}
 
 " GetType(dir, file) {{{
