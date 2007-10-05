@@ -56,7 +56,7 @@ if !exists(":ArgAddRelative")
 endif
 
 if !exists(":Buffers")
-  command Buffers :call eclim#common#util#Buffers()
+  command Buffers :call eclim#common#buffers#Buffers()
 endif
 
 if !exists(":DiffLastSaved")
