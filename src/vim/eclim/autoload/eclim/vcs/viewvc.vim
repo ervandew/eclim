@@ -60,7 +60,7 @@ function eclim#vcs#viewvc#GetViewvcUrl (file)
     return
   endif
 
-  let url = root . path
+  let url = root . '/' . path
   return url
 endfunction " }}}
 
