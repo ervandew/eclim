@@ -33,10 +33,10 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
   call add(content, expand('%:t'))
   call add(lines, -1)
 
-  let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
   let object_contents = []
 
   let objects = filter(copy(a:tags), 'v:val[3] == "o"')
+  let members = filter(copy(a:tags), 'v:val[3] == "m"')
   for object in objects
     exec 'let object_start = ' . split(object[4], ':')[1]
     call cursor(object_start, 1)
@@ -46,7 +46,7 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
     let functions = []
     let indexes = []
     let index = 0
-    for fct in top_functions
+    for fct in members
       if len(fct) > 3
         exec 'let fct_line = ' . split(fct[4], ':')[1]
         if fct_line > object_start && fct_line < object_end
@@ -56,14 +56,15 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
       endif
       let index += 1
     endfor
-    call reverse(indexes)
-    for i in indexes
-      call remove(top_functions, i)
-    endfor
+    "call reverse(indexes)
+    "for i in indexes
+    "  call remove(members, i)
+    "endfor
 
     call add(object_contents, {'object': object, 'functions': functions})
   endfor
 
+  let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
   if len(top_functions) > 0
     call add(content, "")
     call add(lines, -1)

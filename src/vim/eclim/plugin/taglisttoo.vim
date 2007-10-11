@@ -223,6 +223,7 @@ let s:tlist_def_java_settings = {
 let s:tlist_format_javascript = 'eclim#taglist#javascript#FormatJavascript'
 let s:tlist_def_javascript_settings = {
     \ 'o': 'object',
+    \ 'm': 'member',
     \ 'f': 'function',
   \ }
 
