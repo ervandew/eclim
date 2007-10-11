@@ -358,7 +358,8 @@ endfunction " }}}
 " GetCurrentProjectRoot() {{{
 " Gets the project root dir for the project that the current file is in.
 function! eclim#project#util#GetCurrentProjectRoot ()
-  return fnamemodify(eclim#project#util#GetCurrentProjectFile(), ':h')
+  let file = eclim#project#util#GetCurrentProjectFile()
+  return file != '' ? fnamemodify(file, ':h') : ''
 endfunction " }}}
 
 " GetProjectRelativeFilePath (file) {{{
