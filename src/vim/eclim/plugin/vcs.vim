@@ -44,6 +44,12 @@ if !exists(":VcsDiff")
     \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')),
     \ '<args>')
 endif
+if !exists(":VcsCat")
+  command -nargs=? VcsCat :call eclim#vcs#log#ViewFileRevision(
+    \ eclim#vcs#util#GetSvnReposUrl(expand('%:h')),
+    \ eclim#vcs#util#GetSvnUrl(expand('%:h'), expand('%:t')),
+    \ '<args>', 'split')
+endif
 
 if !exists(":Viewvc")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative

@@ -177,10 +177,19 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
     let split = 'split'
   endif
 
+  let revision = a:revision
+  if revision == ''
+    let revision = eclim#vcs#util#GetSvnRevision(a:url)
+    if revision == ''
+      call eclim#util#Echo('Unable to determine file revision.')
+      return
+    endif
+  endif
+
   if exists('b:filename')
     call eclim#util#GoToBufferWindow(b:filename)
   endif
-  let svn_file = 'svn_' . a:revision . '_' . fnamemodify(a:url, ':t')
+  let svn_file = 'svn_' . revision . '_' . fnamemodify(a:url, ':t')
   call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
 
   setlocal noreadonly
@@ -190,7 +199,7 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
   let @" = saved
 
   " load in content
-  exec 'silent read !svn cat -r ' . a:revision . ' ' . a:url
+  exec 'silent read !svn cat -r ' . revision . ' ' . a:url
 
   silent 1,1delete
   call cursor(1, 1)
