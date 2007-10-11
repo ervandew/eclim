@@ -7,7 +7,7 @@ Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.jdt.jar
-Bundle-Activator: org.eclim.plugin.jdt.Plugin
+Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
   org.eclipse.core.resources,

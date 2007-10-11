@@ -39,4 +39,4 @@ Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.text,
   org.eclipse.ui,
   org.eclipse.jface.text
-Eclipse-AutoStart: true
+Eclipse-AutoStart: false

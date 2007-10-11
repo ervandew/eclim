@@ -111,7 +111,8 @@ public interface PluginResources
   /**
    * Closes this resource instance and releases any held resources.
    */
-  public void close ();
+  public void close ()
+    throws Exception;
 
   /**
    * Gets the name of the plugin resources (org.eclim.ant, org.eclim.jdt, etc.).

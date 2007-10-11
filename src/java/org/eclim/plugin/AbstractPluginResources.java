@@ -212,6 +212,7 @@ public abstract class AbstractPluginResources
    * {@inheritDoc}
    */
   public void close ()
+    throws Exception
   {
   }
 

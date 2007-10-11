@@ -220,7 +220,12 @@ public class Services
   public static void close ()
   {
     for(PluginResources resources : pluginResources.values()){
-      resources.close();
+      try{
+        resources.close();
+      }catch(Exception e){
+        logger.error(
+            "Error closing plugin: " + resources.getClass().getName(), e);
+      }
       logger.info("{} closed.", resources.getClass().getName());
     }
     logger.info("{} closed.", Services.class.getName());
