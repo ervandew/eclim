@@ -182,8 +182,12 @@
     <p><strong>Html Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>
-        <a href="dtd/validate.html#Validate"><strong>:Validate</strong></a> -
+        <a href="html/validate.html#Validate"><strong>:Validate</strong></a> -
         Validate the current file.
+      </li>
+      <li>
+        <a href="html/util.html#BrowserOpen"><strong>:BrowserOpen</strong></a> -
+        Opens the current file in your configured browser.
       </li>
     </ul> <!-- }}} -->
 

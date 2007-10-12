@@ -293,6 +293,13 @@
         Added <a href="vim/css/validate.html">css validation</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Html">
+        Added
+        <strong>
+          <a href="vim/html/util.html#BrowserOpen">:BrowserOpen</a>
+        </strong>.
+      </action>
+
       <action dev="ervandew" type="add" context="Html / Xml">
         Added auto completion of end tags when typing '&lt;/'.
         This can be disabled by setting

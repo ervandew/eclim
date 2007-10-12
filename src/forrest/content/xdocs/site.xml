@@ -151,6 +151,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <html label="Html" href="html/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
       <complete label="Validation" href="validate.html" description="Validation"/>
+      <complete label="Utils" href="util.html" description="Utils"/>
     </html>
     <java label="Java" href="java/">
       <ant label="Ant" href="ant/">

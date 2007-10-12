@@ -24,12 +24,11 @@ TODO {{{
 
     - taglisttoo
 
-    - document :BrowserOpen [<file>] for html files.
-    - document Viewvc commands
-      - :ViewvcChangeSet [<revision>] (default: current file's revision)
-      - :ViewvcAnnotate [<revision>] (default: current file's revision)
-      - :ViewvcDiff [<revision>] (default: previous)
     - document VcsLog commands
+               VcsChangeSet [revision]
+               VcsDiff [revision]
+               VcsCat [revision]
+
     - document :Buffers
 
     - Chinese cheatsheet
@@ -57,6 +56,10 @@ TODO {{{
       :ViewvcChangeSet
       :ViewvcAnnotate
       :ViewvcDiff
+      :VcsLog
+      :VcsCat
+      :VcsChangeSet
+      :VcsDiff
       :VcsLog
       :Buffers
   }}}
@@ -333,11 +336,8 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - make sure formic ant logger is actually writing to the log.
-
-  - formic / eclim scripts: look into setting $CLASSPATH and ext.dirs so that
-    any user classpath defaults don't get in the way (like log4j-1.2.9.jar).
-    - also, add jvm version verification to formic bootstrap.
+  - consider adding command line option to installer to specify temp dir to write to
+    - or maybe just use ~/.tmp
 
   - look into converting .bat files into .cmd files
 
