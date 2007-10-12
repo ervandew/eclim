@@ -57,8 +57,8 @@ function! HtmlIndentAnythingSettings ()
 
   let b:indentTrios = [
       \ [ '<\w', '', '\(/>\|</\)' ],
-      \ [ '{%\s*\(' . g:HtmlDjangoIndentOpenElements . '\)\s\+.\{-}%}',
-        \ '{%\s*\(' . g:HtmlDjangoIndentMidElements . '\)\s\+.\{-}%}',
+      \ [ '{%\s*\(' . g:HtmlDjangoIndentOpenElements . '\)\(\s\+.\{-}\)\?%}',
+        \ '{%\s*\(' . g:HtmlDjangoIndentMidElements . '\)\(\s\+.\{-}\)\?%}',
         \ '{%\s*end\w\+\s*%}' ],
     \ ]
 endfunction " }}}
