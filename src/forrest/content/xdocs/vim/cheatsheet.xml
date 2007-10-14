@@ -652,16 +652,6 @@
     </note>
     <ul>
       <li>
-        <a href="common/vcs.html#VcsAnnotate"><strong>:VcsAnnotate</strong></a> -
-        Annotates the currently versioned file using vim signs.
-      </li>
-      <li>
-        <a href="common/vcs.html#VcsAnnotateOff">
-          <strong>:VcsAnnotateOff</strong>
-        </a> -
-        Turns off any current annotations.
-      </li>
-      <li>
         <a href="common/vcs.html#Viewvc"><strong>:Viewvc</strong></a> [file] -
         Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
         directory, or to the current buffer if no argument supplied.
@@ -686,6 +676,43 @@
         Opens the <a href="site:viewvc">ViewVc</a> url for the current file's
         revision diffed against the previous revision, the revision supplied,
         or a diff of the two revision numbers supplied.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsAnnotate"><strong>:VcsAnnotate</strong></a> -
+        Annotates the currently versioned file using vim signs.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsAnnotateOff">
+          <strong>:VcsAnnotateOff</strong>
+        </a> -
+        Turns off any current annotations.
+      </li>
+    </ul>
+    <note>
+      Currently only subversion is supported by the following commands.
+    </note>
+    <ul>
+      <li>
+        <a href="common/vcs.html#VcsLog"><strong>:VcsLog</strong></a> -
+        Opens a buffer with svn log information for the current file.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsChangeSet"><strong>:VcsChangeSet</strong></a>
+        [revision] -
+        Opens a buffer with svn change set information for the supplied
+        repository version or the current revision of the currently open file.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsDiff"><strong>:VcsDiff</strong></a>
+        [revision] -
+        Performs a vertical diffsplit of the current file against the last
+        committed revision of the current file or the revision supplied.
+      </li>
+      <li>
+        <a href="common/vcs.html#VcsCat"><strong>:VcsCat</strong></a>
+        [revision] -
+        Splits the current file with the contents of the last committed version
+        of the current file or the supplied revision.
       </li>
     </ul> <!-- }}} -->
 

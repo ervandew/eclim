@@ -36,22 +36,6 @@
     </p>
     <ul>
       <li>
-        <anchor id="VcsAnnotate"/>
-        <strong>:VcsAnnotate</strong> -
-        This command will run the corresponding 'cvs annotate' or 'svn blame'
-        and annotate the current file via vim's sign support.  Due to vim
-        limiting sign text to a maximum of two characters, the sign text will be
-        the first two characters of the username.  This command will also create
-        a CursorHold event which will echo the version number and author of the
-        current line.
-      </li>
-      <li>
-        <anchor id="VcsAnnotateOff"/>
-        <strong>:VcsAnnotateOff</strong> -
-        Turns any current annotations off by removing all vim signs and
-        disabling the CursorHold event.
-      </li>
-      <li>
         <anchor id="Viewvc"/>
         <strong>:Viewvc</strong> [file] -
         Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
@@ -85,7 +69,52 @@
         revision diffed against the previous revision, the revision supplied,
         or a diff of the two revision numbers supplied.
       </li>
+      <li>
+        <anchor id="VcsAnnotate"/>
+        <strong>:VcsAnnotate</strong> -
+        This command will run the corresponding 'cvs annotate' or 'svn blame'
+        and annotate the current file via vim's sign support.  Due to vim
+        limiting sign text to a maximum of two characters, the sign text will be
+        the first two characters of the username.  This command will also create
+        a CursorHold event which will echo the version number and author of the
+        current line.
+      </li>
+      <li>
+        <anchor id="VcsAnnotateOff"/>
+        <strong>:VcsAnnotateOff</strong> -
+        Turns any current annotations off by removing all vim signs and
+        disabling the CursorHold event.
+      </li>
     </ul>
+
+    <note>
+      Currently only subversion is supported by the following commands.
+    </note>
+    <ul>
+      <li>
+        <anchor id="VcsLog"/>
+        <strong>:VcsLog</strong> -
+        Opens a buffer with svn log information for the current file.
+      </li>
+      <li>
+        <anchor id="VcsChangeSet"/>
+        <strong>:VcsChangeSet</strong> [revision] -
+        Opens a buffer with svn change set information for the supplied
+        repository version or the current revision of the currently open file.
+      </li>
+      <li>
+        <anchor id="VcsDiff"/>
+        <strong>:VcsDiff</strong> [revision] -
+        Performs a vertical diffsplit of the current file against the last
+        committed revision of the current file or the revision supplied.
+      </li>
+      <li>
+        <anchor id="VcsCat"/>
+        <strong>:VcsCat</strong> [revision] -
+        Splits the current file with the contents of the last committed version
+        of the current file or the supplied revision.
+      </li>
+    </ul> <!-- }}} -->
     <p>
       <strong>Configuration</strong>
     </p>
