@@ -121,12 +121,6 @@ See http://forrest.apache.org/docs/linking.html for more info
         description="List of all eclim Vim commands."/>
     <eclimd label="Eclimd Server" href="../eclimd.html"
         description="Info related to running and monitoring the eclimd server."/>
-    <translations label="Translations">
-      <traditional_chinese label="Tranditional Chinese">
-        <cheatsheet label="Cheatsheet" href="cheatsheet_zh_TW.html"/>
-        <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet_zh_TW.pdf"/>
-      </traditional_chinese>
-    </translations>
     <common label="Common" href="common/">
       <project label="Projects" href="project.html"
           description="Create projects and view/edit project settings."/>
@@ -252,6 +246,13 @@ See http://forrest.apache.org/docs/linking.html for more info
       <complete label="Validation" href="validate.html" description="Validation"/>
     </xsd>
   </vim>
+
+  <translations label="Translations" href="vim/" tab="translations">
+    <traditional_chinese label="Tranditional Chinese">
+      <cheatsheet label="Cheatsheet" href="cheatsheet_zh_TW.html"/>
+      <cheatsheet_pdf label="Cheatsheet (pdf)" href="cheatsheet_zh_TW.pdf"/>
+    </traditional_chinese>
+  </translations>
 
   <external-refs>
     <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
