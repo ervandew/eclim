@@ -251,7 +251,7 @@ function! eclim#display#signs#Update ()
   endif
 
   if g:EclimSignLevel >= 2
-    let errors = filter(list, 'v:val.type == "e"')
+    let errors = filter(list, 'v:val.type == "e" || v:val.type == ""')
     call map(errors, 'v:val.lnum')
     call eclim#display#signs#PlaceAll("error", errors)
   endif
