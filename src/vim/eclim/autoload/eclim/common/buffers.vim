@@ -21,6 +21,12 @@
 "
 " }}}
 
+" Global Variables {{{
+if !exists('g:EclimBuffersDefaultAction')
+  let g:EclimBuffersDefaultAction = 'split'
+endif
+" }}}
+
 " Buffers() {{{
 " Like, :buffers, but opens a temporary buffer.
 function! eclim#common#buffers#Buffers ()
@@ -28,7 +34,6 @@ function! eclim#common#buffers#Buffers ()
   silent exec 'buffers'
   redir END
 
-  let lines = []
   let buffers = []
   let current = ''
   for entry in split(list, '\n')
@@ -43,6 +48,12 @@ function! eclim#common#buffers#Buffers ()
     endif
 
     call add(buffers, buffer)
+  endfor
+
+  call sort(buffers, 'eclim#common#buffers#BufferCompare')
+
+  let lines = []
+  for buffer in buffers
     call add(lines, s:BufferEntryToLine(buffer))
   endfor
 
@@ -57,21 +68,25 @@ function! eclim#common#buffers#Buffers ()
   syntax match BufferHidden /+\?hidden\s\+\(\[RO\]\)\?/
 
   " mappings
+  nnoremap <silent> <buffer> <cr> :call <SID>BufferOpen(g:EclimBuffersDefaultAction)<cr>
   nnoremap <silent> <buffer> E :call <SID>BufferOpen('edit')<cr>
   nnoremap <silent> <buffer> S :call <SID>BufferOpen('split')<cr>
   nnoremap <silent> <buffer> T :call <SID>BufferOpen('tabnew')<cr>
   nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
 
-  augroup eclim_buffers
-    autocmd!
-    autocmd BufAdd,BufWinEnter,BufDelete,BufWinLeave * call eclim#common#buffers#BuffersUpdate()
-    autocmd BufUnload <buffer> autocmd! eclim_buffers
-  augroup END
+  "augroup eclim_buffers
+  "  autocmd!
+  "  autocmd BufAdd,BufWinEnter,BufDelete,BufWinLeave *
+  "    \ call eclim#common#buffers#BuffersUpdate()
+  "  autocmd BufUnload <buffer> autocmd! eclim_buffers
+  "augroup END
 endfunction " }}}
 
-" BuffersUpdate() {{{
-function! eclim#common#buffers#BuffersUpdate ()
-  "echom 'update buffers'
+" BufferCompare(buffer1, buffer2) {{{
+function! eclim#common#buffers#BufferCompare (buffer1, buffer2)
+  let path1 = a:buffer1.path
+  let path2 = a:buffer2.path
+  return path1 == path2 ? 0 : path1 > path2 ? 1 : -1
 endfunction " }}}
 
 " s:BufferDelete() {{{
@@ -102,7 +117,9 @@ endfunction " }}}
 " s:BufferOpen(cmd) {{{
 function! s:BufferOpen (cmd)
   let file = bufname(b:eclim_buffers[line('.') - 1].bufnr)
-  exec b:winnr . 'winc w'
+  let winnr = b:winnr
+  close
+  exec winnr . 'winc w'
   call eclim#util#GoToBufferWindowOrOpen(file, a:cmd)
 endfunction " }}}
 
