@@ -35,6 +35,7 @@
 
   <tab id="home" label="Home" dir="" indexfile="index.html"/>
   <tab id="documentation" label="Documentation" dir="vim/" indexfile="index.html"/>
+  <tab id="translations" label="Translations" dir="vim/" indexfile="cheatsheet_zh_TW.html"/>
   <!--tab id="server" label="Eclimd Server" dir="" indexfile="eclimd.html"/-->
   <!--tab id="client" label="Command Line Client" dir="client/" indexfile="index.html"/-->
   <!--tab id="wiki" label="Wiki" dir="wiki/" indexfile="pmwiki.php"/-->
