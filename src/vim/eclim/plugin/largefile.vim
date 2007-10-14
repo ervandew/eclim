@@ -22,7 +22,8 @@
 "
 " }}}
 
-if exists('g:eclim_largefile') || exists('#LargeFile')
+if exists('g:eclim_largefile') || exists('#LargeFile') ||
+    \ (exists('g:EclimLargeFileEnabled') && !g:EclimLargeFileEnabled)
   finish
 endif
 let g:eclim_largefile = 1
