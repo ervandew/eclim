@@ -193,6 +193,29 @@
         <strong>:LocationListClear</strong> -
         Removes all entries from the location list window.
       </li>
+      <li>
+        <anchor id="Buffers"/>
+        <strong>:Buffers</strong> -
+        Opens a temporary window with a list of all the currently listed buffers
+        in vim (like :buffers).  From this list you can open any of the files
+        using one of the following shortcuts:
+        <ul>
+          <li><strong>E</strong> (shift-e) - Open the file with 'edit'.</li>
+          <li><strong>S</strong> (shift-s) - Open the file with 'split'.</li>
+          <li><strong>T</strong> (shift-t) - Open the file with 'tabnew'.</li>
+          <li>
+            <strong>D</strong> (shift-d) - Deletes the buffer and removes it
+            from the list.
+          </li>
+        </ul>
+        In addition to the above mappings you can also use &lt;Return&gt; to
+        execute the configured default action on the buffer under the cursor.
+        <br/>
+        To configure the default action you can set the following variable:
+        <p>
+          <strong>g:EclimBuffersDefaultAction</strong> (defaults to 'split')
+        </p>
+      </li>
       <!--li>
       <anchor id="SwapTypedArguments"/>
       <strong>:SwapTypedArguments</strong> -

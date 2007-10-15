@@ -899,6 +899,13 @@
         </a> -
         Restore all minimized windows.
       </li>
+      <li>
+        <a href="common/util.html#Buffers">
+          <strong>:Buffers</strong>
+        </a> -
+        Opens a temporary window with a list of all the currently listed
+        buffers allowing you to open any one.
+      </li>
       <!--li>
         <a href="index.html#SwapTypedArguments">
           <strong>:SwapTypedArguments</strong>

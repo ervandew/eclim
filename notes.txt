@@ -24,8 +24,6 @@ TODO {{{
 
     - taglisttoo
 
-    - document :Buffers
-
     - python validate
 
     - Chinese cheatsheet
