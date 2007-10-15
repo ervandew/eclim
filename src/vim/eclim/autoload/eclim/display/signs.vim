@@ -237,7 +237,7 @@ function! eclim#display#signs#Update ()
 
   if g:EclimSignLevel >= 4
     let info = filter(getqflist() + list,
-      \ 'bufnr("%") == v:val.bufnr && v:val.type == "i"')
+      \ 'bufnr("%") == v:val.bufnr && (v:val.type == "i" || v:val.type == "")')
     call map(info, 'v:val.lnum')
     call eclim#display#signs#Define("info", ">>", g:EclimInfoHighlight)
     call eclim#display#signs#PlaceAll("info", info)
@@ -251,7 +251,7 @@ function! eclim#display#signs#Update ()
   endif
 
   if g:EclimSignLevel >= 2
-    let errors = filter(list, 'v:val.type == "e" || v:val.type == ""')
+    let errors = filter(list, 'v:val.type == "e"')
     call map(errors, 'v:val.lnum')
     call eclim#display#signs#PlaceAll("error", errors)
   endif
