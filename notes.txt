@@ -24,12 +24,9 @@ TODO {{{
 
     - taglisttoo
 
-    - document VcsLog commands
-               VcsChangeSet [revision]
-               VcsDiff [revision]
-               VcsCat [revision]
-
     - document :Buffers
+
+    - python validate
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -340,9 +337,6 @@ HIGH {{{
     - or maybe just use ~/.tmp
 
   - look into converting .bat files into .cmd files
-
-  - update php complete unit test (test html/css completions)
-  - update html complete unit test (test css completions)
 
   - php, java, on files out of src path, support definition searching.
 }}}
