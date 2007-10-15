@@ -27,8 +27,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.3.0.I20070606-0010.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.3.0.v20070606-0010.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.3.0.v20070530.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_1.0.0.v20070808.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_1.0.0.v20070808.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_1.0.0.v20070917.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_1.0.0.v20070917.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.3.0.v20070606-0010.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_3.3.0.v3346.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.text_3.3.0.v20070606-0010.jar"/>
