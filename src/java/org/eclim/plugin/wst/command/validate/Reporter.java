@@ -42,7 +42,6 @@ public class Reporter
 
   public void addMessage (IValidator origin, IMessage message)
   {
-    System.out.println("### message = " + message);
     messages.add(message);
   }
 
