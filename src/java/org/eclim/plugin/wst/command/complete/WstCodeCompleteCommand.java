@@ -25,7 +25,6 @@ import org.eclim.eclipse.EclimPlugin;
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jface.text.ITextViewer;
 
@@ -59,7 +58,6 @@ public abstract class WstCodeCompleteCommand
     int offset = Integer.parseInt(commandLine.getValue(Options.OFFSET_OPTION));
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
-    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
 
     IStructuredModel model =
       StructuredModelManager.getModelManager().getModelForRead(ifile);
