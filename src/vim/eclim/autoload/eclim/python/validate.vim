@@ -51,6 +51,7 @@ function! eclim#python#validate#Validate (on_save)
           \ 'filename': eclim#util#Simplify(file),
           \ 'lnum': line,
           \ 'text': message,
+          \ 'type': 'e',
         \ }
 
       call add(errors, dict)
