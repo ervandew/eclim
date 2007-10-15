@@ -206,12 +206,17 @@ public class ProjectUtils
   public static IDocument getDocument (IProject _project, String _file)
     throws Exception
   {
+    // using IFile would ensure that ifile.getProject() (used by at least pdt
+    // internally) would result in the proper project reference, but seems to
+    // break ant code completion and validation.
+    //IFile file = getFile(_project, _file);
     File file = new File(FileUtils.concat(getPath(_project), _file));
     if(!file.exists()){
       return null;
     }
 
     ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
+    //IPath location = file.getFullPath();
     IPath location= new Path(file.getAbsolutePath());
     boolean connected= false;
     try {
