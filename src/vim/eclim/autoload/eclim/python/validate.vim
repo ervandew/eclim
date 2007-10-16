@@ -22,6 +22,12 @@
 "
 " }}}
 
+" Script Variables {{{
+  let s:warnings = '\(' . join([
+      \ 'imported but unused',
+    \ ], '\|') . '\)'
+" }}}
+
 " Validate(on_save) {{{
 " Validates the current file.
 function! eclim#python#validate#Validate (on_save)
@@ -51,7 +57,7 @@ function! eclim#python#validate#Validate (on_save)
           \ 'filename': eclim#util#Simplify(file),
           \ 'lnum': line,
           \ 'text': message,
-          \ 'type': 'e',
+          \ 'type': message =~ s:warnings ? 'w' : 'e',
         \ }
 
       call add(errors, dict)
