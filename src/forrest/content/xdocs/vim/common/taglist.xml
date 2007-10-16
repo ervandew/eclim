@@ -28,233 +28,324 @@
     </authors>
   </header>
   <body>
-    <p>
-      Eclim provides a scripted ctags implementation that sits on top of the
-      original ctags to provide an alternative approach to adding new languages
-      for use by the excellent <a href="ext:taglist">taglist</a> plugin for
-      Vim.
-    </p>
-    <p>
-      The standard ctags, gives you two choices when you wish to add support
-      for a new language.  First, you can define a new language via regular
-      expression patterns in your .ctags file.  Or, using the second approach,
-      you can write the C code necessary to truly integrate the new language
-      into ctags.
-    </p>
-    <p>
-      The first approach, while fairly simple, is a bit limiting.  The most
-      frustrating limitation is that the file to be parse is processed one
-      line at a time, which prevents you from identifying tags that span two
-      or more lines.
-    </p>
-    <p>
-      For example, given the following web.xml file, you would not be able to
-      distinguish between the first block which is a servlet definition, and
-      the second which is a servlet mapping, because you would need to process
-      the parent tag, not just the servlet-name tag.
-    </p>
-    <source>
-      <![CDATA[
-        <servlet>
-          <servlet-name>MyServlet</servlet-name>
-          <servlet-class>org.foo.MyServlet</servlet-class>
-        </servlet>
+    <section id="taglist">
+      <title>Taglist Enhancement</title>
+      <p>
+        Eclim provides a scripted ctags implementation that sits on top of the
+        original ctags to provide an alternative approach to adding new languages
+        for use by the excellent <a href="ext:taglist">taglist</a> plugin for
+        Vim.
+      </p>
+      <p>
+        The standard ctags, gives you two choices when you wish to add support
+        for a new language.  First, you can define a new language via regular
+        expression patterns in your .ctags file.  Or, using the second approach,
+        you can write the C code necessary to truly integrate the new language
+        into ctags.
+      </p>
+      <p>
+        The first approach, while fairly simple, is a bit limiting.  The most
+        frustrating limitation is that the file to be parse is processed one
+        line at a time, which prevents you from identifying tags that span two
+        or more lines.
+      </p>
+      <p>
+        For example, given the following web.xml file, you would not be able to
+        distinguish between the first block which is a servlet definition, and
+        the second which is a servlet mapping, because you would need to process
+        the parent tag, not just the servlet-name tag.
+      </p>
+      <source>
+        <![CDATA[
+          <servlet>
+            <servlet-name>MyServlet</servlet-name>
+            <servlet-class>org.foo.MyServlet</servlet-class>
+          </servlet>
 
-        <servlet-mapping>
-          <servlet-name>MyServlet</servlet-name>
-          <servlet-class>/my-servlet</servlet-class>
-        </servlet-mapping>
-      ]]>
-    </source>
-    <p>
-      The second approach, is much more flexible, but writing a language
-      processor in C may not be a feasible solution for various reasons
-      (unfamiliarity with C, portability, etc.).
-    </p>
-    <p>
-      Taking into account these concerns, eclim provides a means to add new
-      languages by writing a <a href="ext:groovy">groovy</a> script which can
-      range from simple multi-line capable regular expression matching, to
-      a full blown language parser using a scripting language that borrows
-      many of its convenient language constructs from languages such as
-      Python, Ruby, and Smalltalk.
-    </p>
-    <p>
-      Adding a new language involves the following three steps:
-    </p>
-    <ol>
-      <li>
-        Write a groovy script that conforms to a simple interface defined
-        below.
-      </li>
-      <li>
-        Place the script in the appropriate plugin's
-        <code>resources/scripts/taglist</code> dir.<br/>
-        For example general purpose taglist scripts should be placed in:<br/>
-        $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/resources/scripts/taglist
-        <br/>
-        While those specific to java programming should be placed in:<br/>
-        $ECLIPSE_HOME/plugins/org.eclim.jdt_<em>version</em>/resources/scripts/taglist
-      </li>
-      <li>
-        Add a Vim variable that informs the taglist plugin about your new
-        language.<br/>
-        <code>let g:tlist_mylang_settings='mylang;t:mytype;f:myfield'</code>
-        <br/>
-        See the <a href="ext:taglist_extend">taglist documentation</a> for
-        more details.
-      </li>
-    </ol>
-    <p>
-      The second step is self explanatory and the third step is well
-      documented by the <a href="ext:taglist_extend">taglist documentation</a>
-      so the rest of this document will concentrate on step one.
-    </p>
-    <note>
-      When opening the taglist window, eclim will search for the taglist
-      script in the directory noted above by looking for a file named
-      <em>filetype</em>.groovy, where <em>filetype</em> is the case
-      sensitive value of Vim's <code>&amp;filetype</code> option.  If no
-      script is found for the file type, then eclim will delegate the call to
-      your system's ctags command as
-      <a href="ext:taglist_ctags">configured</a> for taglist.vim.
-    </note>
-    <p>
-      <strong>Writing the Groovy Script</strong>
-    </p>
-    <p>
-      Writing the groovy script is a pretty simple process.  The script simply
-      needs to define one class which implements
-      <code>org.eclim.command.taglist.TaglistScript</code>.  This interface
-      defines a single method, <code>execute(String)</code> which takes the
-      name of the file to be processed and returns an array of
-      <code>org.eclim.command.taglist.TagResult</code>.
-    </p>
-    <p>
-      Since regular expression matching tends to be the easiest way to add new
-      language support, eclim provides a helper class,
-      <code>org.eclim.command.taglist.RegexTaglist</code> which makes the
-      pattern matching process as painless as possible.
-    </p>
-    <p>
-      To see this all in action, lets look at the code for the
-      <code>ant.groovy</code> script (found in the org.eclim.ant plugin's
-      resources directory), which provides taglist support for ant
-      build files.
-    </p>
-    <source>
-      <![CDATA[
-         1 import org.eclim.command.taglist.RegexTaglist;
-         2 import org.eclim.command.taglist.TaglistScript;
-         3 import org.eclim.command.taglist.TagResult;
-         4
-         5 /**
-         6  * Processes tags for ant files.
-         7  */
-         8 class AntTags implements TaglistScript
-         9 {
-        10   public TagResult[] execute (String file)
-        11   {
-        12     def regex = null;
-        13     try{
-        14       regex = new RegexTaglist(file);
-        15       regex.addPattern('p', ~/(s?)<project\s+[^>]*?name=['"](.*?)['"]/, "\$2");
-        16       regex.addPattern('i', ~/(s?)<import\s+[^>]*?file=['"](.*?)['"]/, "\$2");
-        17       regex.addPattern('t', ~/(s?)<target\s+[^>]*?name=['"](.*?)['"]/, "\$2");
-        18       regex.addPattern('r', ~/(s?)<property\s+[^>]*?name=['"](.*?)['"]/, "\$2");
-        19
-        20       return regex.execute();
-        21     }finally{
-        22       if (regex != null) regex.close();
-        23     }
-        24   }
-        25 }
-      ]]>
-    </source>
-    <p>
-      Lines 14 - 18 are the real meat of the script.  Here we create a new
-      <code>RegexTaglist</code> instance for our file and add the necessary
-      patterns to match our tags (project, import, target, and property).
-      There are a few things to note about the regular expressions here.  The
-      first is the use of '(s?)' at the beginning of each.  This tells the
-      java regex matcher to include line breaks when dealing with the \s
-      operator.  Another thing to note, is that we do not use ^ or $.  Ctags
-      processes the file one line at a time so it's common to use ^ and $ in
-      your regex, but here we are processing the whole file, so ^ and $ would
-      denote the start and end of the file, not a line.
-    </p>
-    <p>
-      The third argument to <code>addPattern</code> also deserves some
-      explanation.  This value is the substitution to be made on the matched
-      segment of the file, which denotes the tag name.  In this instance we
-      use $2 (groovy requires that the $ be escaped), which means that the tag
-      name should be taken from the second group of the matched text.  Note,
-      that the first group is taken by (s?).
-    </p>
-    <p>
-      So, to summarize the meaning of line 15: Match the 'project' element and
-      use the value of the 'name' attribute of that element as the tag name.
-    </p>
-    <p>
-      If you decide that you'd rather perform the ctags standard line by line
-      regex matching, that can be accomplished just as easily.  To show an
-      example of just that, let's look at the <code>jproperties.groovy</code>
-      script (found in the org.eclim.jdt plugin's resources directory) which is
-      used to process java property files.
-    </p>
-    <source>
-      <![CDATA[
-         1 import java.io.File;
-         2
-         3 import org.eclim.command.taglist.TaglistScript;
-         4 import org.eclim.command.taglist.TagResult;
-         5
-         6 /**
-         7  * Processes tags for java property files.
-         8  */
-         9 class PropertiesTags implements TaglistScript
-        10 {
-        11   public TagResult[] execute (String file)
-        12   {
-        13     def results = [];
-        14     def lineNumber = 0;
-        15     new File(file).eachLine {
-        16       line -> processTag(line, ++lineNumber, file, results)
-        17     };
-        18
-        19     return (TagResult[])results.toArray(new TagResult[results.size()]);
-        20   }
-        21
-        22   void processTag (line, lineNumber, file, results)
-        23   {
-        24     def matcher = line =~ /^\s*([^#]+)\s*=.*/;
-        25     if(matcher.matches()){
-        26       def name = matcher[0][1];
-        27       def tag = new TagResult(
-        28         file:file, pattern:line, line:lineNumber, kind:'p', name:name);
-        29
-        30       results.add(tag);
-        31     }
-        32   }
-        33 }
-      ]]>
-    </source>
-    <p>
-      In this script you can see that on lines 15 - 17, it makes use of the
-      groovy added <code>eachLine</code> method of <code>File</code> to
-      process each line individually.
-    </p>
-    <p>
-      <strong>Configuration</strong>
-    </p>
-    <p>
-      Vim Variables
-    </p>
-    <ul>
-      <li>
-        <strong>g:EclimTaglistEnabled</strong> (Default: 1)<br/>
-        If set to 0, disables usage of eclim's ctags implementation.
-      </li>
-    </ul>
+          <servlet-mapping>
+            <servlet-name>MyServlet</servlet-name>
+            <servlet-class>/my-servlet</servlet-class>
+          </servlet-mapping>
+        ]]>
+      </source>
+      <p>
+        The second approach, is much more flexible, but writing a language
+        processor in C may not be a feasible solution for various reasons
+        (unfamiliarity with C, portability, etc.).
+      </p>
+      <p>
+        Taking into account these concerns, eclim provides a means to add new
+        languages by writing a <a href="ext:groovy">groovy</a> script which can
+        range from simple multi-line capable regular expression matching, to
+        a full blown language parser using a scripting language that borrows
+        many of its convenient language constructs from languages such as
+        Python, Ruby, and Smalltalk.
+      </p>
+      <p>
+        Adding a new language involves the following three steps:
+      </p>
+      <ol>
+        <li>
+          Write a groovy script that conforms to a simple interface defined
+          below.
+        </li>
+        <li>
+          Place the script in the appropriate plugin's
+          <code>resources/scripts/taglist</code> dir.<br/>
+          For example general purpose taglist scripts should be placed in:<br/>
+          $ECLIPSE_HOME/plugins/org.eclim_<em>version</em>/resources/scripts/taglist
+          <br/>
+          While those specific to java programming should be placed in:<br/>
+          $ECLIPSE_HOME/plugins/org.eclim.jdt_<em>version</em>/resources/scripts/taglist
+        </li>
+        <li>
+          Add a Vim variable that informs the taglist plugin about your new
+          language.<br/>
+          <code>let g:tlist_mylang_settings='mylang;t:mytype;f:myfield'</code>
+          <br/>
+          See the <a href="ext:taglist_extend">taglist documentation</a> for
+          more details.
+        </li>
+      </ol>
+      <p>
+        The second step is self explanatory and the third step is well
+        documented by the <a href="ext:taglist_extend">taglist documentation</a>
+        so the rest of this document will concentrate on step one.
+      </p>
+      <note>
+        When opening the taglist window, eclim will search for the taglist
+        script in the directory noted above by looking for a file named
+        <em>filetype</em>.groovy, where <em>filetype</em> is the case
+        sensitive value of Vim's <code>&amp;filetype</code> option.  If no
+        script is found for the file type, then eclim will delegate the call to
+        your system's ctags command as
+        <a href="ext:taglist_ctags">configured</a> for taglist.vim.
+      </note>
+      <p>
+        <strong>Writing the Groovy Script</strong>
+      </p>
+      <p>
+        Writing the groovy script is a pretty simple process.  The script simply
+        needs to define one class which implements
+        <code>org.eclim.command.taglist.TaglistScript</code>.  This interface
+        defines a single method, <code>execute(String)</code> which takes the
+        name of the file to be processed and returns an array of
+        <code>org.eclim.command.taglist.TagResult</code>.
+      </p>
+      <p>
+        Since regular expression matching tends to be the easiest way to add new
+        language support, eclim provides a helper class,
+        <code>org.eclim.command.taglist.RegexTaglist</code> which makes the
+        pattern matching process as painless as possible.
+      </p>
+      <p>
+        To see this all in action, lets look at the code for the
+        <code>ant.groovy</code> script (found in the org.eclim.ant plugin's
+        resources directory), which provides taglist support for ant
+        build files.
+      </p>
+      <source>
+        <![CDATA[
+           1 import org.eclim.command.taglist.RegexTaglist;
+           2 import org.eclim.command.taglist.TaglistScript;
+           3 import org.eclim.command.taglist.TagResult;
+           4
+           5 /**
+           6  * Processes tags for ant files.
+           7  */
+           8 class AntTags implements TaglistScript
+           9 {
+          10   public TagResult[] execute (String file)
+          11   {
+          12     def regex = null;
+          13     try{
+          14       regex = new RegexTaglist(file);
+          15       regex.addPattern('p', ~/(s?)<project\s+[^>]*?name=['"](.*?)['"]/, "\$2");
+          16       regex.addPattern('i', ~/(s?)<import\s+[^>]*?file=['"](.*?)['"]/, "\$2");
+          17       regex.addPattern('t', ~/(s?)<target\s+[^>]*?name=['"](.*?)['"]/, "\$2");
+          18       regex.addPattern('r', ~/(s?)<property\s+[^>]*?name=['"](.*?)['"]/, "\$2");
+          19
+          20       return regex.execute();
+          21     }finally{
+          22       if (regex != null) regex.close();
+          23     }
+          24   }
+          25 }
+        ]]>
+      </source>
+      <p>
+        Lines 14 - 18 are the real meat of the script.  Here we create a new
+        <code>RegexTaglist</code> instance for our file and add the necessary
+        patterns to match our tags (project, import, target, and property).
+        There are a few things to note about the regular expressions here.  The
+        first is the use of '(s?)' at the beginning of each.  This tells the
+        java regex matcher to include line breaks when dealing with the \s
+        operator.  Another thing to note, is that we do not use ^ or $.  Ctags
+        processes the file one line at a time so it's common to use ^ and $ in
+        your regex, but here we are processing the whole file, so ^ and $ would
+        denote the start and end of the file, not a line.
+      </p>
+      <p>
+        The third argument to <code>addPattern</code> also deserves some
+        explanation.  This value is the substitution to be made on the matched
+        segment of the file, which denotes the tag name.  In this instance we
+        use $2 (groovy requires that the $ be escaped), which means that the tag
+        name should be taken from the second group of the matched text.  Note,
+        that the first group is taken by (s?).
+      </p>
+      <p>
+        So, to summarize the meaning of line 15: Match the 'project' element and
+        use the value of the 'name' attribute of that element as the tag name.
+      </p>
+      <p>
+        If you decide that you'd rather perform the ctags standard line by line
+        regex matching, that can be accomplished just as easily.  To show an
+        example of just that, let's look at the <code>jproperties.groovy</code>
+        script (found in the org.eclim.jdt plugin's resources directory) which is
+        used to process java property files.
+      </p>
+      <source>
+        <![CDATA[
+           1 import java.io.File;
+           2
+           3 import org.eclim.command.taglist.TaglistScript;
+           4 import org.eclim.command.taglist.TagResult;
+           5
+           6 /**
+           7  * Processes tags for java property files.
+           8  */
+           9 class PropertiesTags implements TaglistScript
+          10 {
+          11   public TagResult[] execute (String file)
+          12   {
+          13     def results = [];
+          14     def lineNumber = 0;
+          15     new File(file).eachLine {
+          16       line -> processTag(line, ++lineNumber, file, results)
+          17     };
+          18
+          19     return (TagResult[])results.toArray(new TagResult[results.size()]);
+          20   }
+          21
+          22   void processTag (line, lineNumber, file, results)
+          23   {
+          24     def matcher = line =~ /^\s*([^#]+)\s*=.*/;
+          25     if(matcher.matches()){
+          26       def name = matcher[0][1];
+          27       def tag = new TagResult(
+          28         file:file, pattern:line, line:lineNumber, kind:'p', name:name);
+          29
+          30       results.add(tag);
+          31     }
+          32   }
+          33 }
+        ]]>
+      </source>
+      <p>
+        In this script you can see that on lines 15 - 17, it makes use of the
+        groovy added <code>eachLine</code> method of <code>File</code> to
+        process each line individually.
+      </p>
+      <p>
+        <strong>Configuration</strong>
+      </p>
+      <p>
+        Vim Variables
+      </p>
+      <ul>
+        <li>
+          <strong>g:EclimTaglistEnabled</strong> (Default: 1)<br/>
+          If set to 0, disables usage of eclim's ctags implementation.
+        </li>
+      </ul>
+    </section>
+    <section id="taglisttoo">
+      <title>TaglistToo: Alternate taglist implementation</title>
+      <p>
+        The <a href="ext:taglist">taglist</a> plugin written by Yegappan
+        Lakshmanan is an excellent enhancement to vim which provides an outline
+        of the current file.  However, in my usage I've found that there were
+        enhancements that I wanted to make to it, but since the plugin was
+        written to support vim prior to 7.0, the data structures used to hold
+        and display the tags are very difficult to modify.  So, I decide to
+        implement an alternate version targeting vim 7.x which would be easier
+        to enhance.  Please note though, that this new version does not
+        duplicate <strong>all</strong> of the functionality provided by the
+        original (although I may add more of those features if user feedback
+        warrants it).
+      </p>
+      <note>
+        The eclim taglist will not be activated if it detects that you have the
+        original taglist plugin installed.  So if you want to try the eclim
+        version out, please rename your taglist.vim to taglist.vim.bak or move
+        it out of your plugins directory.
+      </note>
+      <p>
+        Here is a list of enhancements vs unimplemented features:
+      </p>
+      <p>
+        <strong>Enhancements</strong>
+      </p>
+      <ul>
+        <li>
+          Supports an extension mechanism allowing the taglist display to be
+          different depending on file type.
+        </li>
+        <li>
+          Provides a custom display for java, javascript, and python files which
+          groups methods and variables by object/class for easier viewing and
+          navigation.
+        </li>
+      </ul>
+      <p>
+        <strong>Unimplemented features:</strong>
+      </p>
+      <ul>
+        <li>Drop down list in gvim with the list of tags.</li>
+        <li>Tag re-sorting</li>
+        <li>Vim session support</li>
+        <li>Support for tags for more than one file in the taglist window.</li>
+        <li>... possibly others.</li>
+      </ul>
+      <p>
+        Other than the feature differences the behavior of the eclim taglist is
+        very similar to the original taglist.<br/>
+        To open / close the taglist simply execute the command
+        <strong>:TlistToo</strong>.
+      </p>
+      <p>
+        In an attempt to make your transition from the original taglist to the
+        eclim taglist as easy as possible, the eclim taglist also supports
+        some of the same configuration variables:
+      </p>
+      <ul>
+        <li>
+          <strong>g:Tlist_Ctags_Cmd</strong> - Sets the location or your ctags
+          executable (if not configured it tries exuberant-ctags, ctags,
+          ctags.exe, and tags on your path).
+        </li>
+        <li>
+          <strong>g:Tlist_Auto_Open</strong> (Defaults to 0, disabled) -
+          When non-zero, the taglist will auto open at vim startup for files
+          that have taglist support.
+        </li>
+        <li>
+          <strong>g:tlist_{ft}_settings</strong> - Supports file type specific
+          configuration, but unlike the original taglist, uses a dictionary of
+          taglist key to tag title.<br/>
+          Ex:
+          <source>
+            <![CDATA[
+            let g:tlist_ant_settings = {
+                \ 'p': 'project',
+                \ 'i': 'import',
+                \ 'r': 'property',
+                \ 't': 'target'
+              \ }
+            ]]>
+          </source>
+        </li>
+      </ul>
+    </section>
   </body>
 </document>

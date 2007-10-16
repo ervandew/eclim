@@ -124,8 +124,8 @@ See http://forrest.apache.org/docs/linking.html for more info
     <common label="Common" href="common/">
       <project label="Projects" href="project.html"
           description="Create projects and view/edit project settings."/>
-      <taglist label="TagList Integration" href="taglist.html"
-          description="TagList Integration"/>
+      <taglist label="TagList Enhancements" href="taglist.html"
+          description="TagList Enhancements"/>
       <utility label="Utility Commands" href="util.html"
           description="Utility Commands."/>
       <vcs label="Version Control System Commands" href="vcs.html"

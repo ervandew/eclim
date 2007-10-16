@@ -22,8 +22,6 @@ TODO {{{
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
 
-    - taglisttoo
-
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd

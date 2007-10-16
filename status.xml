@@ -367,6 +367,11 @@
       </action>
 
       <action dev="ervandew" type="add" context="Vim">
+        Added an alternate implementation of
+        <a href="vim/common/taglist.html#taglisttoo">taglist</a>.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vim">
         Added command
         <strong>
           <a href="vim/common/util.html#Buffers">:Buffer</a>
