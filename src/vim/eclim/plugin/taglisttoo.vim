@@ -32,8 +32,8 @@ let g:taglisttoo_loaded = 1
 " Global Variables {{{
 
 " Automatically open the taglist window on Vim startup
-if !exists('Tlist_Auto_Open')
-  let Tlist_Auto_Open = 0
+if !exists('g:Tlist_Auto_Open')
+  let g:Tlist_Auto_Open = 0
 endif
 
 if !exists('g:Tlist_Ctags_Cmd')
