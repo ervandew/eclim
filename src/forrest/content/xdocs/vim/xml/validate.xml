@@ -48,7 +48,7 @@
     </p>
     <anchor id="Validate"/>
     <p>
-      <strong>:Validation</strong> [&lt;file&gt;]<br/>
+      <strong>:Validate</strong> [&lt;file&gt;]<br/>
       Validate the supplied file or the current file if no file name provided.
       <br/>
       If eclimd is not currently running, and the xmllint command is available,
