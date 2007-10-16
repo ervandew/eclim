@@ -69,7 +69,7 @@ endfunction " }}}
 
 " AnnotateInfo() {{{
 function! eclim#vcs#annotate#AnnotateInfo ()
-  if exists('b:vcs_annotations')
+  if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
     echo b:vcs_annotations[line('.') - 1]
   endif
 endfunction " }}}
