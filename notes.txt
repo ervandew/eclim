@@ -24,8 +24,6 @@ TODO {{{
 
     - taglisttoo
 
-    - python validate
-
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd
@@ -37,7 +35,7 @@ TODO {{{
       :PhpFindDefinition
       :PhpSearch
       :PhpSearchContext
-      :Validate (css, php, and java)
+      :Validate (css, php, python, and java)
       :MaximizeWindow
       :MinimizeWindow
       :MinimizeRestore
@@ -331,6 +329,10 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - upgrade eclipse to fall release
+  - upgrade wtp to 2.0.1
+    - update all related installer dependencies
+
   - consider adding command line option to installer to specify temp dir to write to
     - or maybe just use ~/.tmp
 

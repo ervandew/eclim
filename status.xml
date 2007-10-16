@@ -327,6 +327,11 @@
         Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
       </action>
 
+      <action dev="ervandew" type="add" context="Python">
+        Added basic <a href="vim/python/validate.html">python validation</a>
+        using <a href="site:pyflakes">pyflakes</a>.
+      </action>
+
       <action dev="ervandew" type="add" context="Vcs">
         Added
         <a href="vim/common/vcs.html#ViewvcAnnotate">

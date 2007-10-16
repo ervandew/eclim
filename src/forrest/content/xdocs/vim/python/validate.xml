@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Copyright (c) 2005 - 2007
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - Author: Eric Van Dewoestine
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+
+<document>
+  <header>
+    <title>Validation</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <note>
+      Python validation currently uses <a href="site:pyflakes">pyflakes</a> to
+      perform the validation.  So in order to use eclim's python validation you
+      will first need to install pyflakes and make sure it is in your path.
+    </note>
+    <p>
+      When editing a python file eclim will default to validating the file when
+      it is written.  Any errors will be added to the current window's location
+      list (:help location-list) and their corresponding line number noted via
+      Vim's sign functionality.
+    </p>
+    <note>
+      Python validation does not currently require that the file exist in an
+      Eclipse project, but this may change in the future.
+    </note>
+    <p>
+      If you don't want python files validated when saving them, you can set the
+      g:EclimPythonValidate variable described in the configuration section
+      below.
+    </p>
+    <p>
+      Regardless of whether you have validation enabled upon saving or not, the
+      following command is still available for validating xml files on demand.
+    </p>
+    <anchor id="Validate"/>
+    <p>
+      <strong>:Validate</strong><br/>
+      Validate the current file.
+    </p>
+    <p>
+      <strong>Configuration</strong>
+    </p>
+    <p>
+      Vim Variables
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimPythonValidate"/>
+        <strong>g:EclimPythonValidate</strong><br/>
+        If set to 0, disables python validation when saving the file.
+      </li>
+    </ul>
+  </body>
+</document>

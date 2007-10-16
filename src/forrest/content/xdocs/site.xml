@@ -220,6 +220,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Code Completion"/>
       <definition label="Jumping To Definition" href="definition.html"
           description="Code Completion"/-->
+      <validate label="Validation" href="validate.html"
+          description="Validation"/>
       <regex label="Regex" href="regex.html"
           description="Regular Expression Testing"/>
       <django label="Django" href="django.html"
@@ -232,7 +234,7 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Open Vim help for a keyword."/>
     </vim>
     <wsdl label="Wsdl" href="wsdl/">
-      <complete label="Validation" href="validate.html" description="Validation"/>
+      <validate label="Validation" href="validate.html" description="Validation"/>
     </wsdl>
     <xml label="Xml" href="xml/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
@@ -268,6 +270,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <eclipse_pdt href="http://eclipse.org/pdt/"/>
     <eclipse_wst href="http://eclipse.org/webtools/main.php"/>
     <pydev href="http://pydev.sourceforge.net"/>
+    <pyflakes href="http://www.divmod.org/trac/wiki/DivmodPyflakes"/>
 
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>
