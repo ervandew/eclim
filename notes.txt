@@ -327,9 +327,9 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - upgrade eclipse to fall release
-  - upgrade wtp to 2.0.1
-    - update all related installer dependencies
+  - for installer try to validate java and eclipse version
+
+  - look into libarchive for bsd support (installer).
 
   - consider adding command line option to installer to specify temp dir to write to
     - or maybe just use ~/.tmp
