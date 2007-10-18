@@ -27,6 +27,10 @@
         <formic:step name="license"/>
         <formic:step name="eclipse"/>
         <formic:step name="vim"/>
+        <formic:step name="requirements">
+          <property name="provider"
+              value="org.eclim.installer.step.RequirementProvider"/>
+        </formic:step>
         <formic:step name="featureList">
           <property name="provider"
               value="org.eclim.installer.step.FeatureProvider"/>

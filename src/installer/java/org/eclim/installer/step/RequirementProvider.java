@@ -15,15 +15,6 @@
  */
 package org.eclim.installer.step;
 
-import java.io.File;
-import java.io.FileFilter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.io.FilenameUtils;
-
 import org.formic.Installer;
 
 import org.formic.form.console.ConsoleForm;
@@ -34,6 +25,9 @@ import org.formic.wizard.step.RequirementsValidationStep.Requirement;
 
 import org.formic.wizard.step.RequirementsValidationStep;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Provides requirements to validate for RequirementsValidationStep.
  *
@@ -43,18 +37,8 @@ import org.formic.wizard.step.RequirementsValidationStep;
 public class RequirementProvider
   implements RequirementsValidationStep.RequirementProvider
 {
-  private static final Map REQUIREMENTS = new HashMap();
-  static {
-    REQUIREMENTS.put("ant", new String[]{"org.eclipse.ant.ui"});
-    REQUIREMENTS.put("jdt", new String[]{"org.eclipse.jdt.ui"});
-    REQUIREMENTS.put("wst", new String[]{
-      "org.eclipse.wst.css.ui",
-      "org.eclipse.wst.html.ui",
-      "org.eclipse.wst.sse.ui",
-      "org.eclipse.wst.xml.ui",
-    });
-    REQUIREMENTS.put("pydev", new String[]{"org.python.pydev"});
-  }
+  private static final Logger logger =
+    LoggerFactory.getLogger(RequirementProvider.class);
 
   private GuiForm guiForm;
   private ConsoleForm consoleForm;
@@ -65,18 +49,9 @@ public class RequirementProvider
    */
   public Requirement[] getRequirements ()
   {
-    ArrayList requirements = new ArrayList();
-    String[] features = Installer.getContext().getKeysByPrefix("featureList");
-    for (int ii = 0; ii < features.length; ii++){
-      Boolean value = (Boolean)Installer.getContext().getValue(features[ii]);
-      String name = features[ii].substring(features[ii].indexOf('.') + 1);
-      if(value.booleanValue() && REQUIREMENTS.containsKey(name)){
-        requirements.add(new Requirement(name));
-      }
-    }
-
-    return (Requirement[])
-      requirements.toArray(new Requirement[requirements.size()]);
+    Requirement[] requirements = new Requirement[1];
+    requirements[0] = new Requirement("make");
+    return requirements;
   }
 
   /**
@@ -87,17 +62,22 @@ public class RequirementProvider
   {
     String eclipseHome = (String)
       Installer.getContext().getValue("eclipse.home");
-    String plugins = FilenameUtils.concat(eclipseHome, "plugins");
 
-    String[] list = (String[])REQUIREMENTS.get(requirement.getKey());
-    for(int ii = 0; ii < list.length; ii++){
-      File[] results =
-        new File(plugins).listFiles(new PluginFileFilter(list[ii]));
-      if(results.length == 0){
+    if ("make".equals(requirement.getKey())){
+      try{
+        int result = Runtime.getRuntime().exec(
+            new String[] {"which", "make"}).waitFor();
+        if (result != 0){
+          return new Status(
+              FAIL, Installer.getString("make.not.found"));
+        }
+      }catch(Exception e){
+        logger.error("Error checking for 'make'", e);
         return new Status(
-            FAIL, Installer.getString("plugin.not.found", list[ii]));
+            WARN, Installer.getString("make.validation.failed"));
       }
     }
+
 
     return OK_STATUS;
   }
@@ -118,33 +98,5 @@ public class RequirementProvider
   public void setConsoleForm (ConsoleForm form)
   {
     this.consoleForm = form;
-  }
-
-  /**
-   * FileFilter implementation for finding plugins by prefix.
-   */
-  private class PluginFileFilter
-    implements FileFilter
-  {
-    private String prefix;
-
-    /**
-     * Constructs a new instance.
-     *
-     * @param prefix The prefix for this instance.
-     */
-    public PluginFileFilter (String prefix)
-    {
-      this.prefix = prefix;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see FileFilter#accept(File)
-     */
-    public boolean accept (File pathname)
-    {
-      return pathname.getName().startsWith(prefix);
-    }
   }
 }
