@@ -51,7 +51,7 @@ endif
 " Initialize everything needed by this script.  Only set those values that are
 " not set already.
 "
-function! IndentAnythingInit()
+function! s:IndentAnythingInit()
     let b:IndentAnythingInitialized = 1
     " Start with a regular expression that will never match.  Matching
     " will influence behavior, which the defaults should not do.
@@ -104,13 +104,13 @@ function! IndentAnythingInit()
     endif
 endfunction
 
-function! SynHere()
+function! s:SynHere()
     return synIDattr(synID(line('.'), col('.'), 1), "name")
 endfunction
 "
 " Returns true if the cursor is currently inside a comment or a string
 "
-function! InCommentOrString()
+function! s:InCommentOrString()
     let syn = synIDattr(synID(line("."), col("."), 1), "name")
     if syn =~ b:commentRE || syn =~ b:stringRE
         return 1
@@ -121,7 +121,7 @@ endfunction
 "
 " Returns true if the given line is a comment line (b:lineCommentRE)
 "
-function! IsLineComment(linenum)
+function! s:IsLineComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
     normal ^
@@ -137,7 +137,7 @@ endfunction
 "
 " Returns true if the given line is a comment line (b:lineCommentRE)
 "
-function! IsComment(linenum)
+function! s:IsComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
     normal ^
@@ -153,7 +153,7 @@ endfunction
 "
 " Returns true if the given line is a comment line (b:lineCommentRE)
 "
-function! IsBlockComment(linenum)
+function! s:IsBlockComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
     normal ^
@@ -170,7 +170,7 @@ endfunction
 " Get the first line at or on the given line that is not blank and is not a
 " comment line.
 "
-function! GetPrevNonBlankNonComment(begin)
+function! s:GetPrevNonBlankNonComment(begin)
     let cursor = getpos('.')
 
     let l:prevbegin = a:begin
@@ -180,8 +180,8 @@ function! GetPrevNonBlankNonComment(begin)
             return 0
         endif
 
-        "if IsLineComment(l:lnum)
-        if IsComment(l:lnum)
+        "if s:IsLineComment(l:lnum)
+        if s:IsComment(l:lnum)
             let l:prevbegin -= 1
             continue
         endif
@@ -204,7 +204,7 @@ endfunction
 function! IndentAnything()
 
     if !exists('b:IndentAnythingInitialized')
-        call IndentAnythingInit()
+        call s:IndentAnythingInit()
     endif
 
     let adj = 0  " Adjustment
@@ -227,8 +227,8 @@ function! IndentAnything()
         let prevline = getline(prevlnum)
     endif
     if b:contTraversesLineComments
-        let lastcodelnum = GetPrevNonBlankNonComment(currlnum - 1)
-        let prevcodelnum = GetPrevNonBlankNonComment(lastcodelnum - 1)
+        let lastcodelnum = s:GetPrevNonBlankNonComment(currlnum - 1)
+        let prevcodelnum = s:GetPrevNonBlankNonComment(lastcodelnum - 1)
         if lastcodelnum !=0
             let lastcodeline = getline(lastcodelnum)
         endif
@@ -272,7 +272,7 @@ function! IndentAnything()
     "
     let contadj = 0
     let isBlockCommentStart = currline =~ '^\s*' . b:blockCommentStartRE
-    let isBlockCommentMid = (IsBlockComment(currlnum) && !isBlockCommentStart)
+    let isBlockCommentMid = (s:IsBlockComment(currlnum) && !isBlockCommentStart)
     if !isBlockCommentMid
         " If the current line is not the middle of a block comment, then
         " process line continuations.
@@ -305,7 +305,7 @@ function! IndentAnything()
         let prevind = indent(lastcodelnum)
         let g:lastindent .= " indent (prevcode: " . prevind . " at " . lastcodelnum . ") "
 
-    elseif (isBlockCommentStart || !IsBlockComment(currlnum)) && IsBlockComment(lastlnum)
+    elseif (isBlockCommentStart || !s:IsBlockComment(currlnum)) && s:IsBlockComment(lastlnum)
         " If this is the first line after a block comment, then add the
         " adjustment to the line where the block comment started.
         let prevind = s:GetPostBlockCommentIndent(lastlnum)
@@ -473,7 +473,7 @@ function! s:GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
                 "if pairend == 0 || a:LastLNum != pairend
                 "let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W', '', a:LastLNum)
                 let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W',
-                            \'InCommentOrString()', a:LastLNum)
+                            \'s:InCommentOrString()', a:LastLNum)
                 if pairend == 0 "|| a:LastLNum != pairend
 
                     " STARTS with a:Tail, since we already know the line
@@ -578,7 +578,7 @@ function! s:GetContIndent(Rule, CurrLine, LastLine, LastLNum, PrevLNum)
                     \ . l:preblockstart . '/' . col('.') . ' '
 
         if b:contTraversesLineComments
-            let l:prevlnum = GetPrevNonBlankNonComment(line('.') - 1)
+            let l:prevlnum = s:GetPrevNonBlankNonComment(line('.') - 1)
         else
             let l:prevlnum = prevnonblank(line('.') - 1)
         endif
@@ -660,7 +660,3 @@ function! s:GetContIndent(Rule, CurrLine, LastLine, LastLNum, PrevLNum)
     return adj
 
 endfunction
-
-
-
-
