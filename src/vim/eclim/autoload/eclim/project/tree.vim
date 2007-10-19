@@ -40,8 +40,10 @@
         \ 'call eclim#project#tree#HorizontalContentWindow()'
     elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
       let g:EclimProjectTreeContentWincmd = 'winc h'
+      let g:EclimProjectTreePreventClose = 0
     else
       let g:EclimProjectTreeContentWincmd = 'winc l'
+      let g:EclimProjectTreePreventClose = 1
     endif
   endif
 
@@ -140,6 +142,7 @@ function! eclim#project#tree#ProjectTree (...)
 
   augroup project_tree
     autocmd!
+    autocmd BufDelete * call eclim#project#tree#PreventCloseOnBufferDelete()
     autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
   augroup END
   if exists('g:EclimProjectTreeTaglistRelation')
@@ -151,15 +154,36 @@ endfunction " }}}
 
 " CloseIfLastWindow() {{{
 function eclim#project#tree#CloseIfLastWindow ()
-  let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
-  if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
-      \  (winnr('$') == 2 &&
-      \   taglist_window != -1 &&
-      \   bufwinnr(s:GetTreeTitle()) != -1)
-    if tabpagenr('$') > 1
-      tabclose
-    else
-      quitall
+  if histget(':', -1) !~ '^bd'
+    let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
+    if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
+        \  (winnr('$') == 2 &&
+        \   taglist_window != -1 &&
+        \   bufwinnr(s:GetTreeTitle()) != -1)
+      if tabpagenr('$') > 1
+        tabclose
+      else
+        quitall
+      endif
+    endif
+  endif
+endfunction " }}}
+
+" PreventCloseOnBufferDelete() {{{
+function eclim#project#tree#PreventCloseOnBufferDelete ()
+  if exists('g:EclimProjectTreePreventClose')
+    let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
+    if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
+        \  (winnr('$') == 2 &&
+        \   taglist_window != -1 &&
+        \   bufwinnr(s:GetTreeTitle()) != -1)
+      let saved = &splitright
+      let &splitright = g:EclimProjectTreePreventClose
+      vnew
+      winc w
+      exec 'vertical resize ' . g:EclimProjectTreeWidth
+      winc w
+      let &splitright = saved
     endif
   endif
 endfunction " }}}
@@ -246,12 +270,19 @@ endfunction " }}}
 " OpenProjectFile(cmd, cwd, file) {{{
 " Execute the supplied command in one of the main content windows.
 function! eclim#project#tree#OpenProjectFile (cmd, cwd, file)
+  let cmd = a:cmd
   let cwd = substitute(getcwd(), '\', '/', 'g')
   let cwd = escape(cwd, ' &')
 
   "exec 'cd ' . a:cwd
   exec g:EclimProjectTreeContentWincmd
-  exec a:cmd . ' ' . cwd . '/' . a:file
+
+  " if the buffer is a no name and action is split, use edit instead.
+  if bufname('%') == '' && cmd == 'split'
+    let cmd = 'edit'
+  endif
+
+  exec cmd . ' ' . cwd . '/' . a:file
 endfunction " }}}
 
 " HorizontalContentWindow() {{{
