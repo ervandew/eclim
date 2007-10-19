@@ -327,7 +327,8 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - for installer try to validate java and eclipse version
+  - installer validation
+    - java version
 
   - look into libarchive for bsd support (installer).
 
@@ -337,6 +338,24 @@ HIGH {{{
   - look into converting .bat files into .cmd files
 
   - php, java, on files out of src path, support definition searching.
+}}}
+
+DOCS (scratch) {{{
+
+  Builing eclim {{{
+    Note: the ant scripts for building eclim are not setup to run on windows.
+
+    Before building eclipse you will need to:
+      - set the environment variable ECLIPSE_HOME which points to your eclipse install
+      - make sure you install the required eclipse features
+        - wst
+        - pdt
+
+    Also note that the eclim build files assume that your vimfiles directory is located at ~/.vim
+
+    Once your environment is setup you should then just need to run '$ ant' from the top level directory of the eclim code base.  From there, starting and stopping eclim is the same as if you had installed it via the installer.
+  }}}
+
 }}}
 
 // vim:fdm=marker:tw=0
