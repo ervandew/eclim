@@ -184,6 +184,14 @@ function eclim#project#tree#PreventCloseOnBufferDelete ()
       exec 'vertical resize ' . g:EclimProjectTreeWidth
       winc w
       let &splitright = saved
+      exec 'let bufnr = ' . expand('<abuf>')
+      silent! bprev
+      if bufnr('%') == bufnr
+        silent! bprev
+      endif
+      doautocmd BufEnter
+      doautocmd BufWinEnter
+      doautocmd BufReadPost
     endif
   endif
 endfunction " }}}
