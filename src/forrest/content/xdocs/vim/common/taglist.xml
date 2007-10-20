@@ -296,6 +296,10 @@
           groups methods and variables by object/class for easier viewing and
           navigation.
         </li>
+        <li>
+          Supports denoting tags based on their visibiltiy (+public, -private,
+          *static, #protected).
+        </li>
       </ul>
       <p>
         <strong>Unimplemented features:</strong>
