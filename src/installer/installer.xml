@@ -142,7 +142,7 @@
     </for>
 
     <!-- remove vim files -->
-    <delete>
+    <delete failonerror="false">
       <fileset dir="${vim.files}/eclim">
         <include name="**/*"/>
         <exclude name="resources/**/*"/>
