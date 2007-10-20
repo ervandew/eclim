@@ -26,6 +26,8 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.formic.Installer;
 
 import org.formic.form.console.ConsoleForm;
@@ -63,6 +65,11 @@ public class RequirementProvider
    */
   public Requirement[] getRequirements ()
   {
+    if(Os.isFamily("windows")){
+      Requirement[] requirements = new Requirement[1];
+      requirements[0] = new EclipseRequirement();
+      return requirements;
+    }
     Requirement[] requirements = new Requirement[3];
     requirements[0] = new EclipseRequirement();
     requirements[1] = new VimRequirement();
