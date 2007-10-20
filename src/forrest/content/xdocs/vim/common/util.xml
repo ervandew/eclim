@@ -180,7 +180,7 @@
       </li>
       <li>
         <anchor id="SignClearAll"/>
-        <strong>:SignClearUser</strong> -
+        <strong>:SignClearAll</strong> -
         Removes all vim signs.
       </li>
       <li>
