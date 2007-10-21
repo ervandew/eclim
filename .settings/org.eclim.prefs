@@ -1,7 +1,9 @@
-#Wed Aug 22 16:31:55 PDT 2007
+#Sun Oct 21 16:28:28 PDT 2007
 eclipse.preferences.version=1
+org.eclim.java.doc.version=$Revision$
 org.eclim.java.junit.command=Ant -Dtest.include\=<testcase> test
 org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.junit.src_dir=<project>/src/test/junit
 org.eclim.java.logging.impl=custom
+org.eclim.java.logging.template=eclim.logger.gst
 org.eclim.project.vcs.viewvc=http\://eclim.svn.sourceforge.net/viewvc/eclim/

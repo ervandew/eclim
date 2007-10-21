@@ -113,7 +113,9 @@ public class PluginResources
         "org.eclipse.jdt.core.javanature", new JavaProjectManager());
 
     PreferenceFactory.addPreferences("org.eclipse.jdt.core.javanature",
-      "JDT org.eclim.java.logging.impl commons-logging (commons-logging|log4j|slf4j|jdk|custom)\n" +
+      "JDT org.eclim.java.logging.impl commons-logging " +
+        "(commons-logging|log4j|slf4j|jdk|custom)\n" +
+      "JDT org.eclim.java.logging.template logger.gst\n" +
       "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
       "JDT/Javadoc org.eclim.java.doc.version \\$Revision\\$\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +

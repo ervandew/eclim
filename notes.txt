@@ -22,6 +22,8 @@ TODO {{{
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
     - document python import functionality
 
+    - document template plugin
+
     - Chinese cheatsheet
       :ProjectNatures
       :ProjectNatureAdd
@@ -103,8 +105,6 @@ TODO {{{
   }}}
 
   Java {{{
-
-    - for custom logger template, allow one per project.
 
     - look into code refactoring support.
 

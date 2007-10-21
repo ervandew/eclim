@@ -75,11 +75,19 @@
     <ul>
       <li>
         <anchor id="org.eclim.java.logging.impl"/>
-        <strong>org.eclim.java.logging.impl</strong><br/>
-          Determines which logging implementation to use.
-          <br/>
-          Possible values include "commons-logging", "slf4j", "log4j", "jdk",
-          and "custom".
+        <strong>org.eclim.java.logging.impl</strong>
+        (Default: "commons-logging")<br/>
+        Determines which logging implementation to use.
+        <br/>
+        Possible values include "commons-logging", "slf4j", "log4j", "jdk",
+        and "custom".
+      </li>
+      <li>
+        <anchor id="org.eclim.java.logging.template"/>
+        <strong>org.eclim.java.logging.template</strong> (Default: 'logger.gst')
+        <br/>
+        Determines the name of the template to use for the custom logger.  The
+        name must be a file name relative to eclim/resources/jdt/templates/.
       </li>
     </ul>
   </body>

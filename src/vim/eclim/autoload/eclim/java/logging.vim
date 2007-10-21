@@ -78,7 +78,11 @@ function! s:InitLoggingSettings ()
       \ "private static final Logger ${var} = Logger.getLogger(${class}.class.getName());"
     let s:logger_imports = ["java.util.logging.Logger"]
   elseif s:EclimLoggingImpl == "custom"
-    let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/logger.gst'
+    let name = eclim#project#util#GetProjectSetting("org.eclim.java.logging.template")
+    if name == '' || name == '0'
+      return 0
+    endif
+    let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/' . name
     if(!filereadable(template))
       echoe 'Custom logger template not found at "' . template . '"'
       return 0
