@@ -85,9 +85,12 @@ function! eclim#vcs#log#Diff (repos_url, url, revision)
   endif
 
   let filename = expand('%:p')
-  diffthis
+  let buf1 = bufnr('%')
 
-  call eclim#vcs#log#ViewFileRevision(a:repos_url, a:url, revision, 'vertical split')
+  call eclim#vcs#log#ViewFileRevision(
+    \ a:repos_url, a:url, revision, 'bel vertical split')
+  diffthis
+  exec bufwinnr(buf1) . 'winc w'
   diffthis
 
   let b:filename = filename
@@ -291,9 +294,11 @@ function! s:FollowLink ()
       let r2 = substitute(info[-2], '^r\([0-9]\+\).*', '\1', '')
 
       call eclim#vcs#log#ViewFileRevision(repos_url, repos_url . file, r1, '')
-      diffthis
+      let buf1 = bufnr('%')
       call eclim#vcs#log#ViewFileRevision(
-        \ repos_url, repos_url . file, r2, 'vertical split')
+        \ repos_url, repos_url . file, r2, 'bel vertical split')
+      diffthis
+      exec bufwinnr(buf1) . 'winc w'
       diffthis
     else
       call eclim#vcs#log#Log(b:vcs_repos_url, b:vcs_repos_url . link)
@@ -332,8 +337,11 @@ function! s:FollowLink ()
     let prefix = fnamemodify(b:vcs_repos_url, ':h:h')
 
     call eclim#vcs#log#ViewFileRevision(repos_url, prefix . file, r1, '')
+    let buf1 = bufnr('%')
+    call eclim#vcs#log#ViewFileRevision(
+      \ repos_url, prefix . file, r2, 'bel vertical split')
     diffthis
-    call eclim#vcs#log#ViewFileRevision(repos_url, prefix . file, r2, 'vertical split')
+    exec bufwinnr(buf1) . 'winc w'
     diffthis
 
   " link to diff against working copy
@@ -347,7 +355,7 @@ function! s:FollowLink ()
 
     let filename = b:filename
     call eclim#vcs#log#ViewFileRevision(
-      \ repos_url, prefix . file, revision, 'vertical split')
+      \ repos_url, prefix . file, revision, 'bel vertical split')
     diffthis
 
     let b:filename = filename
