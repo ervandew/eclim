@@ -39,7 +39,11 @@ function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
     endif
   endif
 
-  let log = split(system('svn log -vr ' . revision . ' ' . a:url), '\n')
+  let result = eclim#vcs#util#Svn('log -vr ' . revision . ' "' . a:url . '"')
+  if result == '0'
+    return
+  endif
+  let log = split(result, '\n')
 
   let lines = []
   let entry = {}
@@ -102,7 +106,10 @@ function! eclim#vcs#log#Log (repos_url, url)
     return
   endif
 
-  let result = system('svn log "' . a:url . '"')
+  let result = eclim#vcs#util#Svn('log "' . a:url . '"')
+  if result == '0'
+    return
+  endif
   let log = s:ParseSvnLog(split(result, '\n'))
 
   let index = 0
@@ -142,7 +149,11 @@ function! eclim#vcs#log#ListDir (repos_url, url)
     call eclim#util#EchoError('Current file is not under svn version control.')
     return
   endif
-  let listing = split(system('svn list ' . a:url), '\n')
+  let result = eclim#vcs#util#Svn('list "' . a:url . '"')
+  if result == '0'
+    return
+  endif
+  let listing = split(result, '\n')
   let dirs = sort(filter(listing[:], 'v:val =~ "/$"'))
   let files = sort(filter(listing[:], 'v:val =~ "[^/]$"'))
 
@@ -199,7 +210,11 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
   let @" = saved
 
   " load in content
-  exec 'silent read !svn cat -r ' . revision . ' ' . a:url
+  let result = eclim#vcs#util#Svn('info "' . a:url . '"')
+  if result == '0'
+    return
+  endif
+  exec 'silent read !svn cat -r ' . revision . ' "' . a:url . '"'
 
   silent 1,1delete
   call cursor(1, 1)
@@ -266,8 +281,12 @@ function! s:FollowLink ()
       let repos_url = b:vcs_repos_url
       let r1 = substitute(getline(1), 'Revision:\s*', '', '')
 
-      let cmd = 'svn log -qr ' . r1 . ':1 --limit 2 ' . repos_url . file
-      let info = split(system(cmd), '\n')
+      let cmd = 'log -qr ' . r1 . ':1 --limit 2 "' . repos_url . file . '"'
+      let result = eclim#vcs#util#Svn(cmd)
+      if result == '0'
+        return
+      endif
+      let info = split(result, '\n')
       " TODO: error handling for this
       let r2 = substitute(info[-2], '^r\([0-9]\+\).*', '\1', '')
 

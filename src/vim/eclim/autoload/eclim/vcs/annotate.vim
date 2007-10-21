@@ -128,14 +128,12 @@ endfunction " }}}
 
 " GetSvnAnnotations (file, revision) {{{
 function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
-  let cmd = 'svn blame'
+  let cmd = 'blame'
   if a:revision != ''
     let cmd .= ' -r ' . a:revision
   endif
-  let result = system(cmd . ' "' . a:file . '"')
-
-  if v:shell_error
-    call eclim#util#EchoError(result)
+  let result = eclim#vcs#util#Svn(cmd . ' "' . a:file . '"')
+  if result == '0'
     return
   endif
 

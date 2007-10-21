@@ -69,7 +69,10 @@ function eclim#vcs#util#GetPreviousRevision ()
         let revision = substitute(lines[1], '^revision \([0-9.]\+\)\s*.*', '\1', '')
       endif
     elseif isdirectory(dir . '/.svn')
-      let log = system('svn log -q --limit 2 ' . expand('%:t'))
+      let log = eclim#vcs#util#Svn('log -q --limit 2 "' . expand('%:t') . '"')
+      if log == '0'
+        return
+      endif
       let lines = split(log, '\n')
       if len(lines) == 5 && lines[1] =~ '^r[0-9]\+' && lines[3] =~ '^r[0-9]\+'
         let revision = substitute(lines[3], '^r\([0-9]\+\)\s.*', '\1', '')
@@ -98,7 +101,10 @@ function eclim#vcs#util#GetRevision ()
         let revision = substitute(status, pattern, '\1', '')
       endif
     elseif isdirectory(dir . '/.svn')
-      let info = system('svn info ' . expand('%:t'))
+      let info = eclim#vcs#util#Svn('info "' . expand('%:t') . '"')
+      if info == '0'
+        return
+      endif
       let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
       if info =~ pattern
         let revision = substitute(info, pattern, '\1', '')
@@ -127,7 +133,10 @@ function eclim#vcs#util#GetRevisions ()
       call map(lines, 'substitute(v:val, "^revision \\([0-9.]\\+\\)\\s*$", "\\1", "")')
       let revisions = lines
     elseif isdirectory(dir . '/.svn')
-      let log = system('svn log -q ' . expand('%:t'))
+      let log = eclim#vcs#util#Svn('log -q "' . expand('%:t') . '"')
+      if log == '0'
+        return
+      endif
       let lines = split(log, '\n')
       call filter(lines, 'v:val =~ "^r[0-9]\\+\\s.*"')
       call map(lines, 'substitute(v:val, "^r\\([0-9]\\+\\)\\s.*", "\\1", "")')
@@ -219,7 +228,10 @@ endfunction " }}}
 " GetSvnRevision(url) {{{
 " Gets the current revision for the supplied svn url.
 function eclim#vcs#util#GetSvnRevision (url)
-  let info = system('svn info ' . a:url)
+  let info = eclim#vcs#util#Svn('info "' . a:url . '"')
+  if info == '0'
+    return
+  endif
   let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
   if info =~ pattern
     return substitute(info, pattern, '\1', '')
@@ -248,6 +260,24 @@ function eclim#vcs#util#GetType (dir, file)
   endtry
 
   return type
+endfunction " }}}
+
+" Svn(args) {{{
+" Executes 'svn' with the supplied args.
+function eclim#vcs#util#Svn (args)
+  if !executable('svn')
+    call eclim#util#EchoError('svn executable not found in your path.')
+    return
+  endif
+
+  let result = system('svn ' . a:args)
+  if v:shell_error
+    call eclim#util#EchoError(
+      \ "Error executing svn command: svn " . a:args . "\n" . result)
+    return
+  endif
+
+  return result
 endfunction " }}}
 
 " CommandCompleteRevision(argLead, cmdLine, cursorPos) {{{
