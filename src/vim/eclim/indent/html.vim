@@ -22,7 +22,6 @@
 "
 " }}}
 
-let b:did_indent = 1
 if &indentexpr =~ 'EclimGetHtmlIndent' ||
     \ (!exists('b:disableOverride') && exists('g:EclimHtmlIndentDisabled'))
   finish

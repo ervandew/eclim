@@ -51,7 +51,9 @@ endif
 
 " HtmlIndentAnythingSettings() {{{
 function! HtmlIndentAnythingSettings ()
-  call HtmlSettings()
+  if exists('*HtmlSettings')
+    call HtmlSettings()
+  endif
 
   let b:indentTrios = [
       \ [ '<\w', '', '\(/>\|</\)' ],
