@@ -207,14 +207,16 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
-    <php label="Php" href="php/">
+    <!--php label="Php" href="php/">
       <includepath label="Include Path" href="includepath.html"
           description="Include Path"/>
+      <validate label="Validation" href="validate.html"
+          description="Validation"/>
       <complete label="Code Completion" href="complete.html"
           description="Code Completion"/>
       <definition label="Search" href="search.html"
           description="Search"/>
-    </php>
+    </php-->
     <python label="Python" href="python/">
       <!--complete label="Code Completion" href="complete.html"
           description="Code Completion"/>

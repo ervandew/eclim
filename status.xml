@@ -319,13 +319,23 @@
         to support a custom logger template.
       </action>
 
-      <action dev="ervandew" type="add" context="Php">
+      <!--action dev="ervandew" type="add" context="Php">
         Added php support for
         <a href="vim/php/complete.html">code completion</a>,
         <a href="vim/php/search.html">searching</a>, and
         <a href="vim/php/validate.html">validation</a>.<br/>
         Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
-      </action>
+        <anchor id="php_hang"/>
+        <warning>
+          Please note, there is a known issue with the pdt where it may hang for
+          a couple minutes if you attempt to execute any pdt functionality while
+          the eclipse pdt is still initializing in the background.  On windows
+          it may hang for that amount of time on the first usage regardless <br/>
+          <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977">
+            Bugzilla Bug 204977
+          </a>
+        </warning>
+      </action-->
 
       <action dev="ervandew" type="add" context="Python">
         Added basic <a href="vim/python/validate.html">python validation</a>

@@ -26,14 +26,17 @@ public class FeatureProvider
   implements FeatureListStep.FeatureProvider, PropertyChangeListener
 {
   private static final String[] FEATURES =
-    {"ant", "maven", "jdt", "wst", "pdt", "python"};
+    {"ant", "maven", "jdt", "wst", "python"};
+    //{"ant", "maven", "jdt", "wst", "pdt", "python"};
     //{"ant", "maven", "jdt", "wst", "pydev"};
 
   private static final boolean[] FEATURES_ENABLED =
-    {true, true, true, false, false, false};
+    {true, true, true, false, false};
+    //{true, true, true, false, false, false};
 
   private static final String[][] FEATURES_DEPENDS =
-    {{"jdt"}, null, null, null, {"wst"}, null};
+    {{"jdt"}, null, null, null, null};
+    //{{"jdt"}, null, null, null, {"wst"}, null};
 
   private GuiForm guiForm;
   private ConsoleForm consoleForm;
