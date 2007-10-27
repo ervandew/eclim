@@ -203,7 +203,7 @@ function eclim#python#django#GetProjectPath(...)
   let path = len(a:000) > 0 ? a:000[0] : escape(expand('%:p:h'), ' ')
   let dir = findfile("manage.py", path . ';')
   if dir != ''
-    let dir = fnamemodify(dir, ':p:h')
+    let dir = substitute(fnamemodify(dir, ':p:h'), '\', '/', 'g')
     " secondary check on the dir, if settings.py exists, then probably the
     " right dir, otherwise, search again from the parent.
     if !filereadable(dir . '/settings.py')
@@ -224,21 +224,61 @@ function eclim#python#django#GetProjectApps(project_dir)
   return []
 endfunction " }}}
 
+" GetSetting(project_dir, name) {{{
+function eclim#python#django#GetSetting (project_dir, name)
+  let setting = ''
+  let restore = winrestcmd()
+  try
+    let settings = a:project_dir . '/settings.py'
+    let winnr = bufwinnr(bufnr(settings))
+    if winnr == -1
+      exec 'silent sview ' . settings
+    else
+      let orig = winnr()
+      exec winnr . 'winc w'
+    endif
+    let clnum = line('.')
+    let ccnum = col('.')
+    call cursor(1, 1)
+
+    " GET SETTING
+    let start = search('^\s*\<' . a:name . '\>\s*=', 'c')
+    if start
+      let end = search('^\s*[a-zA-Z_][^#]*\s*=', 'w')
+      let lnum = start
+      while lnum != end
+        let line = substitute(getline(lnum), '#.*', '', '')
+        if line !~ '^\s*$'
+          let line = substitute(line, '^\s*', '', '')
+          let line = substitute(line, '\s*$', '', '')
+          let setting .= line
+        endif
+        let lnum += 1
+      endwhile
+    endif
+    let setting = substitute(setting, '^\s*\<'. a:name . '\>\s*=\s*', '', '')
+
+    cal cursor(clnum, ccnum)
+    if winnr == -1
+      bd
+    else
+      exec orig . 'winc w'
+    endif
+  finally
+    silent exec restore
+  endtry
+  return setting
+endfunction " }}}
+
 " GetSqlEngine(project_dir) {{{
 " Gets the configured sql engine for the project at the supplied project directory.
 function eclim#python#django#GetSqlEngine (project_dir)
   let engine = 'postgresql'
-  let restore = winrestcmd()
-  try
-    exec 'silent sview ' . a:project_dir . '/settings.py'
-    if search('^\s*\<DATABASE_ENGINE\>')
-      let engine = substitute(getline('.'),
-        \ "^.*DATABASE_ENGINE\\s*=\\s*['\"]\\(\\w\\+\\)['\"].*$", '\1', '')
-    endif
-    close
-  finally
-    silent exec restore
-  endtry
+  let setting = eclim#python#django#GetSetting(a:project_dir, 'DATABASE_ENGINE')
+  let setting = substitute(setting, "^['\"]\\(.\\{-}\\)['\"]$", '\1', '')
+  if setting !~ '^\s*$'
+    let engine = setting
+  endif
   return engine
 endfunction " }}}
 
@@ -246,30 +286,10 @@ endfunction " }}}
 " Gets the configured list of template directories relative to the project
 " dir.
 function eclim#python#django#GetTemplateDirs (project_dir)
-  let dirs = []
-  let restore = winrestcmd()
-  try
-    exec 'silent sview ' . a:project_dir . '/settings.py'
-    let lnum = search('^\s*\<TEMPLATE_DIRS\>\s*=')
-    if lnum
-      let regex = ".\\\\{-}['\\\"]\\\\(.\\\\{-}\\\\)['\\\"].*"
-      while 1
-        let line = substitute(getline(lnum), '#.*', '', '')
-        let names = split(line, ',')
-        let names = map(names, 'substitute(v:val, "' . regex . '", "\\1", "")')
-        let dirs += names
-        if getline(lnum) =~ ')'
-          break
-        endif
-        let lnum += 1
-      endwhile
-      call filter(dirs, 'v:val !~ "^\\(TEMPLATE_DIRS\\|)\\|\\s*$\\)"')
-    endif
-    close
-  finally
-    silent exec restore
-  endtry
-  return dirs
+  let setting = eclim#python#django#GetSetting(a:project_dir, 'TEMPLATE_DIRS')
+  let setting = substitute(setting, '^[\[(]\(.\{-}\)[\])]$', '\1', '')
+  let dirs = split(setting, ',')
+  return map(dirs, "substitute(v:val, \"^['\\\"]\\\\(.\\\\{-}\\\\)['\\\"]$\", '\\1', '')")
 endfunction " }}}
 
 " FindFilterOrTag(project_dir, element, type) {{{
@@ -303,6 +323,27 @@ function eclim#python#django#FindFilterTagFile (project_dir, file)
     return
   endif
   call eclim#util#EchoError('Could not find tag/filter file "' . a:file . '.py"')
+endfunction " }}}
+
+" FindSettingDefinition(project_dir, value) {{{
+" Finds and opens the definition for the supplied setting middleware, context
+" processor or template loader.
+function eclim#python#django#FindSettingDefinition (project_dir, value)
+  let file = substitute(a:value, '\(.*\)\..*', '\1', '')
+  let def = substitute(a:value, '.*\.\(.*\)', '\1', '')
+  let file = substitute(file, '\.', '/', 'g') . '.py'
+  let project_dir = fnamemodify(a:project_dir, ':h')
+  let found = findfile(file, project_dir)
+  if found == ''
+    let file = substitute(file, '\.py', '/__init__.py', '')
+    let found = findfile(file, project_dir)
+  endif
+  if found != ''
+    call eclim#util#GoToBufferWindowOrOpen(found, g:EclimDjangoFindAction)
+    call search('\(def\|class\)\s\+' . def . '\>', 'cw')
+    return
+  endif
+  call eclim#util#EchoError('Could not definition of "' . a:value . '"')
 endfunction " }}}
 
 " FindStaticFile(project_dir, file) {{{
@@ -421,6 +462,9 @@ function! eclim#python#django#ContextFind ()
     if search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
         \ eclim#util#GrabUri() !~ '\.html'
       DjangoViewOpen
+    elseif expand('%:t') == 'settings.py'
+      call eclim#python#django#FindSettingDefinition(
+        \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
     else
       DjangoTemplateOpen
     endif
