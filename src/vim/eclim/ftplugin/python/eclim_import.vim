@@ -24,11 +24,11 @@
 
 " Command Declarations {{{
 if !exists(':PythonImportClean')
-  command PythonImportClean :call eclim#python#import#CleanImports()
+  command -buffer PythonImportClean :call eclim#python#import#CleanImports()
 endif
 
 if !exists(':PythonImportSort')
-  command PythonImportSort :call eclim#python#import#SortImports()
+  command -buffer PythonImportSort :call eclim#python#import#SortImports()
 endif
 " }}}
 
