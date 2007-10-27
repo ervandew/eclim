@@ -26,6 +26,8 @@
       <fileset dir="${eclipse.home}/plugins/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
+        <exclude name="org.eclim.pdt_${eclim.version}/**/*"/>
+        <exclude name="org.eclim.pdt_${eclim.version}"/>
         <exclude name="org.eclim.installer*_${eclim.version}/**/*"/>
         <exclude name="org.eclim.installer*_${eclim.version}"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
@@ -40,6 +42,8 @@
       <tarfileset dir="${eclipse.home}/plugins/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
+        <exclude name="org.eclim.pdt_${eclim.version}/**/*"/>
+        <exclude name="org.eclim.pdt_${eclim.version}"/>
         <exclude name="org.eclim.installer*_${eclim.version}/**/*"/>
         <exclude name="org.eclim.installer*_${eclim.version}"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/windows/**/*"/>
@@ -58,7 +62,12 @@
 
     <!-- vim plugins jar -->
     <zip destfile="dist/eclim_vim_${eclim.version}.jar">
-      <fileset dir="src/vim" includes="**/*.vim"/>
+      <fileset dir="src/vim">
+        <include name="**/*.vim"/>
+        <exclude name="eclim/indent/php.vim"/>
+        <exclude name="**/php/**/*.vim"/>
+        <exclude name="**/php"/>
+      </fileset>
     </zip>
 
     <antcall target="installer"/>

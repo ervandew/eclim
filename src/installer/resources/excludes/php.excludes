@@ -4,3 +4,4 @@ eclim/autoload/eclim/php/*.vim
 eclim/autoload/eclim/php
 eclim/ftplugin/php/*.vim
 eclim/ftplugin/php
+eclim/indent/php.vim

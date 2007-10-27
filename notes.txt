@@ -320,6 +320,15 @@ NOTES {{{
 
   }}}
 
+  Pdt, files modified to remove it: {{{
+
+    status.xml
+    src/ant/dist.xml
+    src/forrest/content/xdocs/site.xml
+    src/installer/java/org/eclim/installer/step/FeatureProvider.java
+
+  }}}
+
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
     - Xvfb is included with xorg-server
@@ -327,6 +336,13 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - show proper error when attempting to validate a css file in a dir with a
+    .project file, but no real project.
+
+  - creating a project in the workspace dir w/ a different name than the
+    directory doesn't work (tested on windows).
+    :ProjectCreate ~/workspace/my_project_dir -p my_project
+
   - installer validation
     - java version
 
@@ -338,6 +354,16 @@ HIGH {{{
   - look into converting .bat files into .cmd files
 
   - php, java, on files out of src path, support definition searching.
+
+  Windows Bugs {{{
+    - xml validation
+      - log4j.xml validation
+      - web.xml validation
+    - :JavaDelegate , selection of more than one method to add.
+    - :JavaImpl , selection of more than one method to add.
+    - :JUnitImpl , selection of more than one method to add.
+    - :JavaSearch seems short on results
+  }}}
 }}}
 
 DOCS (scratch) {{{
