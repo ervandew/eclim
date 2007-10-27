@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.pdt;
 
+import org.eclim.Services;
+
 import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.pdt.project.PhpProjectManager;

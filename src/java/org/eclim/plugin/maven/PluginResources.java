@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.maven;
 
+import org.eclim.Services;
+
 import org.eclim.plugin.AbstractPluginResources;
 
 /**

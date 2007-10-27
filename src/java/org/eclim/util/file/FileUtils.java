@@ -215,14 +215,6 @@ public class FileUtils
 
   /**
    *
-   * <pre>
-   * FileUtils.getPath("/a/b/c/") :  ""
-   * FileUtils.getPath("/a/b/c") :  ""
-   * FileUtils.getPath("/a/b/c.txt") :  "txt"
-   * </pre>
-   *
-   * @param path The path.
-   * @return
    */
   public static String getPath (String path)
   {
@@ -240,7 +232,7 @@ public class FileUtils
   }
 
   /**
-   * Gets the full path from the supplied path by removing any trialing path
+   * Gets the full path from the supplied path by removing any trailing path
    * segments that do not have a trailing separator.
    * <pre>
    * FileUtils.getFullPath("/a/b/c/") :  "/a/b/c/"

@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.ant;
 
+import org.eclim.Services;
+
 import org.eclim.plugin.AbstractPluginResources;
 
 /**

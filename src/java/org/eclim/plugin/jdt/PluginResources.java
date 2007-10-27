@@ -23,6 +23,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang.SystemUtils;
 
+import org.eclim.Services;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
