@@ -39,6 +39,11 @@ function! eclim#python#validate#Validate (on_save)
   "  return
   "endif
 
+  if !executable('pyflakes')
+    call eclim#util#EchoError("Unable to find 'pyflakes' command.")
+    return
+  endif
+
   let command = 'pyflakes "' . expand('%:p') . '"'
   let result = system(command)
   if v:shell_error
@@ -47,9 +52,11 @@ function! eclim#python#validate#Validate (on_save)
   endif
 
   if result =~ ':'
-    let errors = []
+    let results = split(result, '\n')
+    call filter(results, "v:val !~ 'unable to detect undefined names'")
 
-    for error in split(result, '\n')
+    let errors = []
+    for error in results
       let file = substitute(error, '\(.\{-}\):[0-9]\+:.*', '\1', '')
       let line = substitute(error, '.\{-}:\([0-9]\+\):.*', '\1', '')
       let message = substitute(error, '.\{-}:[0-9]\+:\(.*\)', '\1', '')
