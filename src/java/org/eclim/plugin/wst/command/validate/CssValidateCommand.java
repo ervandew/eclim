@@ -17,11 +17,17 @@ package org.eclim.plugin.wst.command.validate;
 
 import java.util.ArrayList;
 
+import org.eclim.Services;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
+
+import org.eclim.util.ProjectUtils;
+
+import org.eclipse.core.resources.IProject;
 
 import org.w3c.css.css.DocumentParser;
 import org.w3c.css.css.StyleSheet;
@@ -48,8 +54,13 @@ public class CssValidateCommand
   public String execute (CommandLine _commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String uri = toUri(project, _commandLine.getValue(Options.FILE_OPTION));
+    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
+    if (!project.exists()){
+      throw new RuntimeException(
+          Services.getMessage("project.not.found", projectName));
+    }
+    String uri = toUri(projectName, _commandLine.getValue(Options.FILE_OPTION));
 
     ApplContext context = new ApplContext("en");
     // possible values: css1, css2, css21, css3, svg, svgbasic, svgtiny
