@@ -148,16 +148,27 @@ public class ProjectManagement
       if(location.toOSString().toLowerCase().startsWith(
             workspaceLocation.toOSString().toLowerCase()))
       {
-        location = null;
-        /*location = location.removeFirstSegments(
-            location.matchingFirstSegments(workspaceLocation));*/
+        String tmpName = location.removeFirstSegments(
+            location.matchingFirstSegments(workspaceLocation)).toString();
+
+        project = ProjectUtils.getProject(tmpName, true);
+        if(!project.exists()){
+          IProjectDescription description = workspace.newProjectDescription(tmpName);
+          description.setNatureIds(_natures);
+          project.create(description, null/*monitor*/);
+          // FIXME: eclipse will ignore this name change.  need to find the
+          // proper way to rename a project if we want to support this.
+          /*project.open(null);
+          description = project.getDescription();
+          description.setName(_name);*/
+        }
+
+      }else{
+        IProjectDescription description = workspace.newProjectDescription(_name);
+        description.setLocation(location);
+        description.setNatureIds(_natures);
+        project.create(description, null/*monitor*/);
       }
-
-      IProjectDescription description = workspace.newProjectDescription(_name);
-      description.setLocation(location);
-      description.setNatureIds(_natures);
-
-      project.create(description, null/*monitor*/);
 
     /*}else{
       // check if the existing project is located elsewhere.
