@@ -58,6 +58,10 @@ TODO {{{
   }}}
 
   Common {{{
+    - creating a project in the workspace dir w/ a different name than the
+      directory doesn't work.
+      :ProjectCreate ~/workspace/my_project_dir -p my_project
+
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
@@ -336,13 +340,6 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - show proper error when attempting to validate a css file in a dir with a
-    .project file, but no real project.
-
-  - creating a project in the workspace dir w/ a different name than the
-    directory doesn't work (tested on windows).
-    :ProjectCreate ~/workspace/my_project_dir -p my_project
-
   - installer validation
     - java version
 
@@ -356,12 +353,6 @@ HIGH {{{
   - php, java, on files out of src path, support definition searching.
 
   Windows Bugs {{{
-    - xml validation
-      - log4j.xml validation
-      - web.xml validation
-    - :JavaDelegate , selection of more than one method to add.
-    - :JavaImpl , selection of more than one method to add.
-    - :JUnitImpl , selection of more than one method to add.
     - :JavaSearch seems short on results
   }}}
 }}}

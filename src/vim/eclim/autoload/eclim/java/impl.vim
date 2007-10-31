@@ -128,7 +128,7 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
       " on a method line
       elseif line =~ '^\s\+'
         if methods != ""
-          let methods = methods . "|"
+          let methods = methods . ",,"
         endif
         let method = substitute(line, '.*\s\(\w\+\s(.*\)', '\1', '')
         let method = substitute(method, '\s\w\+\(,\|)\)', '\1', 'g')
