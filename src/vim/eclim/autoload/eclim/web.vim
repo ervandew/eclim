@@ -58,6 +58,8 @@ function! eclim#web#OpenUrl (url)
   let url = a:url
   if url == ''
     let url = eclim#util#GrabUri()
+  else
+    let url = substitute(url, ' ', '%20', 'g')
   endif
 
   if url == ''
