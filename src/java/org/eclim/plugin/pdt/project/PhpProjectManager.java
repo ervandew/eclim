@@ -66,13 +66,11 @@ public class PhpProjectManager
     throws Exception
   {
     // validate that .classpath xml is well formed and valid.
-    String projectOptions = _project.getFile(".projectOptions")
-      .getRawLocation().toOSString();
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     List<Error> errors = XmlUtils.validateXml(
         _project.getName(),
-        projectOptions,
+        ".projectOptions",
         resources.getResource(PROJECT_OPTIONS_XSD).toString());
     if(errors.size() > 0){
       return errors;

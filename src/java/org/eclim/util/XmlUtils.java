@@ -143,12 +143,14 @@ public class XmlUtils
 
     String filename = FileUtils.concat(
         ProjectUtils.getPath(_project), _filename);
+    filename = filename.replace('\\', '/');
 
     ErrorAggregator errorHandler = new ErrorAggregator(filename);
     EntityResolver entityResolver = new EntityResolver(
         FileUtils.getFullPath(filename));
     try{
-      parser.parse(filename, getHandler(_handler, errorHandler, entityResolver));
+      parser.parse(new File(filename),
+          getHandler(_handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
@@ -173,7 +175,8 @@ public class XmlUtils
    * @param _schema The file path to the xsd.
    * @return A possibly empty array of errors.
    */
-  public static List<Error> validateXml (String _project, String _filename, String _schema)
+  public static List<Error> validateXml (
+      String _project, String _filename, String _schema)
     throws Exception
   {
     SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -196,17 +199,22 @@ public class XmlUtils
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
         _schema.replace('\\', '/'));
 
-    ErrorAggregator errorHandler = new ErrorAggregator(_filename);
+    String filename = FileUtils.concat(
+        ProjectUtils.getPath(_project), _filename);
+    filename = filename.replace('\\', '/');
+
+    ErrorAggregator errorHandler = new ErrorAggregator(filename);
     EntityResolver entityResolver = new EntityResolver(
-        FileUtils.getFullPath(_filename));
+        FileUtils.getFullPath(filename));
     try{
-      parser.parse(_filename, getHandler(null, errorHandler, entityResolver));
+      parser.parse(new File(filename),
+          getHandler(null, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
         new Error(
             spe.getMessage(),
-            _filename,
+            filename,
             spe.getLineNumber(),
             spe.getColumnNumber(),
             false)
@@ -485,8 +493,12 @@ public class XmlUtils
     private void addError (SAXParseException _ex, boolean _warning)
     {
       String location = _ex.getSystemId();
-      if(location != null && location.startsWith("file://")){
-        location = location.substring("file://".length());
+      if(location != null){
+        if(location.startsWith("file://")){
+          location = location.substring("file://".length());
+        }else if(location.startsWith("file:")){
+          location = location.substring("file:".length());
+        }
       }
       // bug where window paths start with /C:/...
       if(location != null && WIN_BUG.matcher(location).matches()){

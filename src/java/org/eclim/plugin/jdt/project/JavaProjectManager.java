@@ -111,17 +111,18 @@ public class JavaProjectManager
     javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     // validate that .classpath xml is well formed and valid.
-    String dotclasspath = javaProject.getProject().getFile(".classpath")
-      .getRawLocation().toOSString();
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     List<Error> errors = XmlUtils.validateXml(
         javaProject.getProject().getName(),
-        dotclasspath,
+        ".classpath",
         resources.getResource(CLASSPATH_XSD).toString());
     if(errors.size() > 0){
       return errors;
     }
+
+    String dotclasspath = javaProject.getProject().getFile(".classpath")
+      .getRawLocation().toOSString();
 
     // ivy.xml, etc updated.
     if(buildfile != null){
