@@ -186,6 +186,7 @@ public abstract class AbstractPluginResources
       }
 
       // not found
+      logger.warn("Unable to locate resource: " + _resource);
       return null;
     }catch(Exception e){
       throw new RuntimeException(e);
