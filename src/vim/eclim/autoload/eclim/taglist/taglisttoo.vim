@@ -361,6 +361,11 @@ endfunction " }}}
 
 " eclim#taglist#taglisttoo#Taglist() {{{
 function! eclim#taglist#taglisttoo#Taglist ()
+  if !exists('g:Tlist_Ctags_Cmd')
+    call eclim#util#EchoError('Unable to find a version of ctags installed.')
+    return
+  endif
+
   if bufname('%') == g:TagList_title
     call s:CloseTaglist()
     return
@@ -436,12 +441,13 @@ function! s:ProcessTags ()
       let types = join(keys(s:tlist_def_{&ft}_settings), '')
     endif
 
+    let file = substitute(expand('%:p'), '\', '/', 'g')
     let command = g:Tlist_Ctags_Cmd . ' -f - --format=2 --excmd=pattern ' .
         \ '--fields=nks --sort=no --language-force=<lang> ' .
-        \ '--<lang>-types=<types> <file>'
+        \ '--<lang>-types=<types> "<file>"'
     let command = substitute(command, '<lang>', &ft, 'g')
     let command = substitute(command, '<types>', types, 'g')
-    let command = substitute(command, '<file>', expand('%:p'), '')
+    let command = substitute(command, '<file>', file, '')
 
     let results = split(system(command), '\n')
     if v:shell_error
@@ -583,6 +589,7 @@ function! s:Window (types, tags, content)
     setlocal nonumber
     setlocal nowrap
     setlocal winfixwidth
+    setlocal tabstop=2
 
     syn match TagListFileName "^.*\%1l.*"
     hi link TagListFileName Identifier

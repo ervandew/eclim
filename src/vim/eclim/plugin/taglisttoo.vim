@@ -45,10 +45,6 @@ if !exists('g:Tlist_Ctags_Cmd')
     let g:Tlist_Ctags_Cmd = 'ctags.exe'
   elseif executable('tags')
     let g:Tlist_Ctags_Cmd = 'tags'
-  else
-  "  echom 'TaglistToo: Ctags (http://ctags.sf.net) ' .
-  "      \ 'not found in PATH. Plugin is not loaded.'
-    finish
   endif
 endif
 
@@ -91,6 +87,10 @@ endif
 " set command for taglist.vim
 let g:Tlist_Ctags_Cmd =
   \ eclim#GetEclimCommand() . ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+" for windows, need to add a trailing quote to complete the command.
+if g:Tlist_Ctags_Cmd =~ '^"[a-zA-Z]:'
+  let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd . '"'
+endif
 
 " }}}
 
