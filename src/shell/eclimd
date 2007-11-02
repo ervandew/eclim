@@ -18,13 +18,18 @@
 
 CURPATH=`dirname $0`
 
+# handle symlink to eclimd script
+if [ -h $0 ] ; then
+  RESOLVED=`readlink -f $0`
+  CURPATH=`dirname $RESOLVED`
+fi
+
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME" -Djava.ext.dirs"
-SED=`which sed 2> /dev/null`
-IS_GENTOO=`which java-config 2> /dev/null`
 
 # attempt to grab properties from .eclimrc if available.
+SED=`which sed 2> /dev/null`
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
 fi
@@ -40,6 +45,7 @@ if [ ! -e "$ECLIPSE" ]; then
 fi
 
 # handle eclipse 3.3 issue on gentoo
+IS_GENTOO=`which java-config 2> /dev/null`
 if [ -n "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 fi
