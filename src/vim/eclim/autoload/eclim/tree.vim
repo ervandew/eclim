@@ -965,6 +965,7 @@ function s:Mappings ()
   nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
 
   command! -nargs=1 -complete=dir -buffer CD :call eclim#tree#SetRoot('<args>')
+  command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')
 endfunction " }}}
 
 " Syntax() {{{
