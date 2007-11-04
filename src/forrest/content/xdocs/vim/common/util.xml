@@ -215,6 +215,14 @@
         <p>
           <strong>g:EclimBuffersDefaultAction</strong> (defaults to 'split')
         </p>
+        By default entries will be sorted by path name, but you may change the
+        sorting via these two variables:
+        <p>
+          <strong>g:EclimBuffersSort</strong> (defaults to 'path')  Supports one
+          of 'path', 'status' (active or hidden), 'bufnr'.<br/>
+          <strong>g:EclimBuffersSortDirection</strong> (defaults to 'asc')
+          Supports one of 'asc' or 'desc'.
+        </p>
       </li>
       <!--li>
       <anchor id="SwapTypedArguments"/>

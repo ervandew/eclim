@@ -384,7 +384,7 @@
       <action dev="ervandew" type="add" context="Vim">
         Added command
         <strong>
-          <a href="vim/common/util.html#Buffers">:Buffer</a>
+          <a href="vim/common/util.html#Buffers">:Buffers</a>
         </strong>.
       </action>
 

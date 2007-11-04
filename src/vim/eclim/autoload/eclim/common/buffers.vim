@@ -22,6 +22,12 @@
 " }}}
 
 " Global Variables {{{
+if !exists('g:EclimBuffersSort')
+  let g:EclimBuffersSort = 'path'
+endif
+if !exists('g:EclimBuffersSortDirection')
+  let g:EclimBuffersSortDirection = 'asc'
+endif
 if !exists('g:EclimBuffersDefaultAction')
   let g:EclimBuffersDefaultAction = 'split'
 endif
@@ -50,7 +56,9 @@ function! eclim#common#buffers#Buffers ()
     call add(buffers, buffer)
   endfor
 
-  call sort(buffers, 'eclim#common#buffers#BufferCompare')
+  if g:EclimBuffersSort != ''
+    call sort(buffers, 'eclim#common#buffers#BufferCompare')
+  endif
 
   let lines = []
   for buffer in buffers
@@ -84,9 +92,13 @@ endfunction " }}}
 
 " BufferCompare(buffer1, buffer2) {{{
 function! eclim#common#buffers#BufferCompare (buffer1, buffer2)
-  let path1 = a:buffer1.path
-  let path2 = a:buffer2.path
-  return path1 == path2 ? 0 : path1 > path2 ? 1 : -1
+  exec 'let attr1 = a:buffer1.' . g:EclimBuffersSort
+  exec 'let attr2 = a:buffer2.' . g:EclimBuffersSort
+  let compare = attr1 == attr2 ? 0 : attr1 > attr2 ? 1 : -1
+  if g:EclimBuffersSortDirection == 'desc'
+    let compare = 0 - compare
+  endif
+  return compare
 endfunction " }}}
 
 " s:BufferDelete() {{{
