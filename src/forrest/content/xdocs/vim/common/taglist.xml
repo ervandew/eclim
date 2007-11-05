@@ -289,7 +289,7 @@
       <ul>
         <li>
           Supports an extension mechanism allowing the taglist display to be
-          different depending on file type.
+          customized by file type.
         </li>
         <li>
           Provides a custom display for java, javascript, and python files which
