@@ -38,6 +38,12 @@ endif
   let s:dictionary = 'http://dictionary.reference.com/search?q=<query>'
   let s:thesaurus = 'http://thesaurus.reference.com/search?q=<query>'
 
+  let s:win_browsers = [
+      \ 'C:/Program Files/Opera/Opera.exe',
+      \ 'C:/Program Files/Mozilla Firefox/firefox.exe',
+      \ 'C:/Program Files/Internet Explorer/iexplore.exe'
+    \ ]
+
   let s:browsers = [
       \ 'opera', 'firefox', 'konqueror', 'epiphany',
       \ 'mozilla', 'netscape', 'iexplore'
@@ -49,6 +55,11 @@ endif
 function! eclim#web#OpenUrl (url)
   if !exists('s:browser') || s:browser == ''
     let s:browser = s:DetermineBrowser()
+
+    " slight hack for IE which doesn't like the url to be quoted.
+    if s:browser =~ 'iexplore'
+      let s:browser = substitute(s:browser, '"', '', 'g')
+    endif
   endif
 
   if s:browser == ''
@@ -58,8 +69,6 @@ function! eclim#web#OpenUrl (url)
   let url = a:url
   if url == ''
     let url = eclim#util#GrabUri()
-  else
-    let url = substitute(url, ' ', '%20', 'g')
   endif
 
   if url == ''
@@ -131,7 +140,6 @@ function! eclim#web#SearchEngine (url, args, quote, visual)
   let search_string = a:args
   if search_string == ''
     if a:visual
-      echom "visual"
       let saved = @"
       normal gvy
       let search_string = substitute(@", '\n', '', '')
@@ -203,26 +211,30 @@ function! s:DetermineBrowser ()
     if has("win32") || has("win64")
       " this version doesn't like .html suffixes on windows 2000
       "if executable('rundll32')
-        "let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
+      "  let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
       "endif
-      let browser = '!cmd /c start <url>'
+      " the doesn't handle local files very well or '&' in the url.
+      "let browser = '!cmd /c start <url>'
+      for name in s:win_browsers
+        if executable(name)
+          let browser = name
+          break
+        endif
+      endfor
     elseif has("mac")
       let browser = '!open <url>'
-    endif
-
-    " no default OS method found, so loop through known browsers.
-    if browser == ''
+    else
       for name in s:browsers
         if executable(name)
           let browser = name
           break
         endif
       endfor
+    endif
 
-      if browser != ''
-        let g:EclimBrowser = browser
-        let browser = s:DetermineBrowser()
-      endif
+    if browser != ''
+      let g:EclimBrowser = browser
+      let browser = s:DetermineBrowser()
     endif
   endif
 
