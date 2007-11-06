@@ -39,7 +39,6 @@ endfunction " }}}
 " s:GetStartTag(line, lastpos) {{{
 function s:GetStartTag (line, lastpos)
   let pos = searchpairpos('<\w', '', '</\w', 'bnW')
-  echom 'pos = ' . string(pos) . ' lastpos = ' . string(a:lastpos)
   if pos[0]
     if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW') ||
      \ (a:line != pos[0] && !(indent(pos[0]) < indent(a:line)))
