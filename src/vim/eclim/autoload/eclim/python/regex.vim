@@ -25,9 +25,7 @@
 " Evaluate(file) {{{
 function eclim#python#regex#Evaluate (file)
 python << EOF
-import StringIO
-import re
-import vim
+import StringIO, re, vim
 
 def run (regex, text, lnum):
   """
@@ -90,17 +88,20 @@ def linecol (lnum, offset):
 # process the file
 type = vim.eval('exists("b:eclim_regex_type") ? b:eclim_regex_type : "file"')
 file = open(vim.eval('a:file'))
-regex, text = file.read().split('\n', 1)
-if not type or type == 'file':
-  offsets = compileOffsets(text)
-  vim.command("let results = '%s'" % '\n'.join(run(regex, text, 0)))
-else:
-  results = []
-  lnum = 1
-  for line in text.split('\n'):
-    lnum += 1
-    results += run(regex, line, lnum)
-  vim.command("let results = '%s'" % '\n'.join(results))
+try:
+  regex, text = file.read().split('\n', 1)
+  if not type or type == 'file':
+    offsets = compileOffsets(text)
+    vim.command("let results = '%s'" % '\n'.join(run(regex, text, 0)))
+  else:
+    results = []
+    lnum = 1
+    for line in text.split('\n'):
+      lnum += 1
+      results += run(regex, line, lnum)
+    vim.command("let results = '%s'" % '\n'.join(results))
+finally:
+  file.close()
 EOF
   return results
 endfunction " }}}
