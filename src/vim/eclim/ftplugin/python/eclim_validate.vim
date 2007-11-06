@@ -28,7 +28,7 @@ if !exists("g:EclimPythonValidate")
 endif
 " }}}
 
-if g:EclimPythonValidate && executable('pyflakes')
+if g:EclimPythonValidate
   augroup eclim_python_validate
     autocmd!
     autocmd BufWritePost <buffer> call eclim#python#validate#Validate(1)

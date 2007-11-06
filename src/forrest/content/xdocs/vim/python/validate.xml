@@ -28,8 +28,9 @@
   </header>
   <body>
     <note>
-      Python validation currently uses <a href="site:pyflakes">pyflakes</a> to
-      perform the validation.  So in order to use eclim's python validation you
+      Python validation currently uses both the python compile to check for
+      syntax errors and <a href="site:pyflakes">pyflakes</a> to perform the
+      additiona validation.  To make use pyflakes portion of the validation you
       will first need to install pyflakes and make sure it is in your path.
     </note>
     <p>

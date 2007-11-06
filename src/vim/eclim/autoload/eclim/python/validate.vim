@@ -39,40 +39,75 @@ function! eclim#python#validate#Validate (on_save)
   "  return
   "endif
 
-  if !executable('pyflakes')
-    call eclim#util#EchoError("Unable to find 'pyflakes' command.")
-    return
+  let result = ''
+  let syntax_error = eclim#python#validate#ValidateSyntax()
+
+  if syntax_error == ''
+    if !executable('pyflakes')
+      if !exists('g:eclim_python_pyflakes_warn')
+        call eclim#util#EchoWarning("Unable to find 'pyflakes' command.")
+        let g:eclim_python_pyflakes_warn = 1
+      endif
+    else
+      let command = 'pyflakes "' . expand('%:p') . '"'
+      let result = system(command)
+      if v:shell_error
+        call eclim#util#EchoError('Error running command: ' . command)
+        return
+      endif
+    endif
   endif
 
-  let command = 'pyflakes "' . expand('%:p') . '"'
-  let result = system(command)
-  if v:shell_error
-    call eclim#util#EchoError('Error running command: ' . command)
-    return
-  endif
-
-  if result =~ ':'
+  if result =~ ':' || syntax_error != ''
     let results = split(result, '\n')
     call filter(results, "v:val !~ 'unable to detect undefined names'")
 
     let errors = []
-    for error in results
-      let file = substitute(error, '\(.\{-}\):[0-9]\+:.*', '\1', '')
-      let line = substitute(error, '.\{-}:\([0-9]\+\):.*', '\1', '')
-      let message = substitute(error, '.\{-}:[0-9]\+:\(.*\)', '\1', '')
-      let dict = {
-          \ 'filename': eclim#util#Simplify(file),
-          \ 'lnum': line,
-          \ 'text': message,
-          \ 'type': message =~ s:warnings ? 'w' : 'e',
-        \ }
+    if syntax_error != ''
+      call add(errors, {
+          \ 'filename': eclim#util#Simplify(expand('%')),
+          \ 'lnum': substitute(syntax_error, '.*(line \(\d\+\))', '\1', ''),
+          \ 'text': substitute(syntax_error, '\(.*\)\s\+(line .*', '\1', ''),
+          \ 'type': 'e'
+        \ })
+    endif
 
-      call add(errors, dict)
-    endfor
+    if syntax_error == ''
+      for error in results
+        let file = substitute(error, '\(.\{-}\):[0-9]\+:.*', '\1', '')
+        let line = substitute(error, '.\{-}:\([0-9]\+\):.*', '\1', '')
+        let message = substitute(error, '.\{-}:[0-9]\+:\(.*\)', '\1', '')
+        let dict = {
+            \ 'filename': eclim#util#Simplify(file),
+            \ 'lnum': line,
+            \ 'text': message,
+            \ 'type': message =~ s:warnings ? 'w' : 'e',
+          \ }
+
+        call add(errors, dict)
+      endfor
+    endif
+
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#SetLocationList([], 'r')
   endif
+endfunction " }}}
+
+" ValidateSyntax() {{{
+function eclim#python#validate#ValidateSyntax ()
+  let syntax_error = ''
+
+python << EOF
+import vim
+from compiler import parseFile
+try:
+  parseFile(vim.eval('expand("%:p")'))
+except SyntaxError, se:
+  vim.command("let syntax_error = '%s'" % str(se))
+EOF
+
+  return syntax_error
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

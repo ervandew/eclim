@@ -339,7 +339,7 @@
 
       <action dev="ervandew" type="add" context="Python">
         Added basic <a href="vim/python/validate.html">python validation</a>
-        using <a href="site:pyflakes">pyflakes</a>.
+        using <a href="site:pyflakes">pyflakes</a> and the python compiler.
       </action>
 
       <action dev="ervandew" type="add" context="Vcs">
