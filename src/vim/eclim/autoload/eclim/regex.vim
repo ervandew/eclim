@@ -92,11 +92,9 @@ function! s:Evaluate (lang)
     call s:AddTestContent()
   endif
 
-  " reload the file to reset syntax highlighting.
-  " downside is that we lose undo (will be resolved when edit is recognized as
-  " an modification by vim and changes added to undo tree).
-  update
-  edit
+  syntax off
+  syntax on
+  write 
 
   let file = substitute(s:regexfile, '<lang>', a:lang, '')
   let b:results = []
