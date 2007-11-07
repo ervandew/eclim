@@ -110,4 +110,70 @@ EOF
   return syntax_error
 endfunction " }}}
 
+" PyLint() {{{
+function eclim#python#validate#PyLint ()
+  let file = expand('%:p')
+
+  if !executable('pylint')
+    call eclim#util#EchoError("Unable to find 'pylint' command.")
+    return
+  endif
+
+  let pylint_env = ''
+  if exists('g:EclimPyLintEnv')
+    let pylint_env = g:EclimPyLintEnv
+  else
+    let django_dir = eclim#python#django#GetProjectPath()
+    if django_dir != ''
+      let path = fnamemodify(django_dir, ':h')
+      let settings = fnamemodify(django_dir, ':t')
+      if has('win32') || has('win64')
+        let pylint_env =
+          \ 'set "PYTHONPATH=' . path . '" && ' .
+          \ 'set DJANGO_SETTINGS_MODULE='. settings . '.settings &&'
+      else
+        let pylint_env =
+          \ 'PYTHONPATH="$PYTHONPATH:' . path . '" ' .
+          \ 'DJANGO_SETTINGS_MODULE="'. settings . '.settings"'
+      endif
+    endif
+  endif
+
+  let command = pylint_env . ' pylint --reports=n "' . file . '"'
+  if has('win32') || has('win64')
+    let command = 'cmd /c "' . command . '"'
+  endif
+
+  call eclim#util#Echo('Running pylint (ctrl-c to cancel) ...')
+  let result = system(command)
+  call eclim#util#Echo(' ')
+  if v:shell_error
+    call eclim#util#EchoError('Error running command: ' . command)
+    return
+  endif
+
+  if result =~ ':'
+    let errors = []
+    for error in split(result, '\n')
+      if error =~ '^[CWERF]\(: \)\?[0-9]'
+        let line = substitute(error, '.\{-}:\s*\([0-9]\+\):.*', '\1', '')
+        let message = substitute(error, '.\{-}:\s*[0-9]\+:\(.*\)', '\1', '')
+        let dict = {
+            \ 'filename': eclim#util#Simplify(file),
+            \ 'lnum': line,
+            \ 'text': message,
+            \ 'type': error =~ '^E' ? 'e' : 'w',
+          \ }
+
+        call add(errors, dict)
+      endif
+    endfor
+    call eclim#util#SetLocationList(errors)
+    " FIXME: consider adding var here that the on write validator sees which
+    " prevents clearing of all pylint markers on save.
+  else
+    call eclim#util#SetLocationList([], 'r')
+  endif
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

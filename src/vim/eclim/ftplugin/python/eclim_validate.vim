@@ -39,6 +39,9 @@ endif
 if !exists(":Validate")
   command -nargs=0 -buffer Validate :call eclim#python#validate#Validate(0)
 endif
+if !exists(":PyLint")
+  command -nargs=0 -buffer PyLint :call eclim#python#validate#PyLint()
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker
