@@ -142,7 +142,6 @@ function! s:JumpToSign ()
   if winnr != -1
     let line = substitute(getline('.'), '^\(\d\+\)|.*', '\1', '')
     exec winnr . "winc w"
-    echom 'line = ' . line
     call cursor(line, 1)
   endif
 endfunction " }}}
@@ -225,8 +224,10 @@ function! eclim#display#signs#Update ()
     call eclim#display#signs#Unplace(exists.id)
   endfor
 
+  let qflist = getqflist()
+
   if g:EclimShowQuickfixSigns
-    let list = filter(getqflist(),
+    let list = filter(copy(qflist),
       \ 'bufnr("%") == v:val.bufnr && v:val.type == ""')
     call map(list, 'v:val.lnum')
     call eclim#display#signs#Define("qf", "> ", g:EclimErrorHighlight)
@@ -236,8 +237,11 @@ function! eclim#display#signs#Update ()
   let list = filter(getloclist(0), 'bufnr("%") == v:val.bufnr')
 
   if g:EclimSignLevel >= 4
-    let info = filter(getqflist() + list,
-      \ 'bufnr("%") == v:val.bufnr && (v:val.type == "i" || v:val.type == "")')
+    let info = filter(copy(qflist) + copy(list),
+      \ 'bufnr("%") == v:val.bufnr && v:val.type == "i"')
+    let locinfo = filter(copy(list),
+      \ 'bufnr("%") == v:val.bufnr && v:val.type == ""')
+    call extend(info, locinfo)
     call map(info, 'v:val.lnum')
     call eclim#display#signs#Define("info", ">>", g:EclimInfoHighlight)
     call eclim#display#signs#PlaceAll("info", info)
@@ -251,7 +255,7 @@ function! eclim#display#signs#Update ()
   endif
 
   if g:EclimSignLevel >= 2
-    let errors = filter(list, 'v:val.type == "e"')
+    let errors = filter(copy(list), 'v:val.type == "e"')
     call map(errors, 'v:val.lnum')
     call eclim#display#signs#PlaceAll("error", errors)
   endif
