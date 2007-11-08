@@ -227,11 +227,16 @@ function! eclim#display#signs#Update ()
   let qflist = getqflist()
 
   if g:EclimShowQuickfixSigns
-    let list = filter(copy(qflist),
-      \ 'bufnr("%") == v:val.bufnr && v:val.type == ""')
-    call map(list, 'v:val.lnum')
-    call eclim#display#signs#Define("qf", "> ", g:EclimErrorHighlight)
-    call eclim#display#signs#PlaceAll("qf", list)
+    let errors = filter(copy(qflist),
+      \ 'bufnr("%") == v:val.bufnr && (v:val.type == "" || v:val.type == "e")')
+    let warnings = filter(copy(qflist),
+      \ 'bufnr("%") == v:val.bufnr && v:val.type == "w"')
+    call map(errors, 'v:val.lnum')
+    call map(warnings, 'v:val.lnum')
+    call eclim#display#signs#Define("qf_error", "> ", g:EclimErrorHighlight)
+    call eclim#display#signs#Define("qf_warning", "> ", g:EclimWarningHighlight)
+    call eclim#display#signs#PlaceAll("qf_error", errors)
+    call eclim#display#signs#PlaceAll("qf_warning", warnings)
   endif
 
   let list = filter(getloclist(0), 'bufnr("%") == v:val.bufnr')
