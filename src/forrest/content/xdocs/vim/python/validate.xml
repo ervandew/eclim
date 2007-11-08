@@ -28,10 +28,11 @@
   </header>
   <body>
     <note>
-      Python validation currently uses both the python compile to check for
-      syntax errors and <a href="site:pyflakes">pyflakes</a> to perform the
-      additiona validation.  To make use pyflakes portion of the validation you
-      will first need to install pyflakes and make sure it is in your path.
+      Python validation currently uses both the python compiler to check for
+      syntax errors and <a href="site:pyflakes">pyflakes</a> to perform some
+      additional validation.  To make use of the pyflakes portion of the
+      validation you will first need to install pyflakes and make sure it is in
+      your path.
     </note>
     <p>
       When editing a python file eclim will default to validating the file when
@@ -56,6 +57,13 @@
     <p>
       <strong>:Validate</strong><br/>
       Validate the current file.
+    </p>
+    <anchor id="PyLint"/>
+    <p>
+      <strong>:PyLint</strong><br/>
+      Runs <a href="site:pylint">pylint</a> on the current file, populates the
+      quickfix list with the results (:h quickfix), and marks all the affected
+      lines using vim's sign support.
     </p>
     <p>
       <strong>Configuration</strong>

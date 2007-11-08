@@ -273,6 +273,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <eclipse_wst href="http://eclipse.org/webtools/main.php"/>
     <pydev href="http://pydev.sourceforge.net"/>
     <pyflakes href="http://www.divmod.org/trac/wiki/DivmodPyflakes"/>
+    <pylint href="http://www.logilab.org/857"/>
 
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>

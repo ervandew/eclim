@@ -339,7 +339,10 @@
 
       <action dev="ervandew" type="add" context="Python">
         Added basic <a href="vim/python/validate.html">python validation</a>
-        using <a href="site:pyflakes">pyflakes</a> and the python compiler.
+        using <a href="site:pyflakes">pyflakes</a> and the python compiler.<br/>
+        Also added support for <a href="site:pylint">pylint</a> using new
+        <a href="vim/python/validate.html#PyLint"><strong>:PyLint</strong></a>
+        command.
       </action>
 
       <action dev="ervandew" type="add" context="Vcs">

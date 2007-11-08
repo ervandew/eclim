@@ -419,8 +419,8 @@
       </li>
     </ul> <!-- }}} -->
 
-    <p><strong>Php Commands</strong></p> <!-- {{{ -->
-    <ul>
+    <!--p><strong>Php Commands</strong></p!--> <!-- {{{ -->
+    <!--ul>
       <li>
         <a href="php/search.html#PhpSearch"><strong>:PhpSearch</strong></a>
         -p &lt;pattern&gt; -t &lt;type&gt; [-s &lt;scope&gt;]-
@@ -440,10 +440,10 @@
         </a> -
         Manually runs source code validation.
       </li>
-    </ul> <!-- }}} -->
+    </ul!--> <!-- }}} -->
 
-    <p><strong>Php .projectOption Commands</strong></p> <!-- {{{ -->
-    <ul>
+    <!--p><strong>Php .projectOption Commands</strong></p!--> <!-- {{{ -->
+    <!--ul>
       <li>
         <a href="php/includepath.html#NewLibEntry">
           <strong>:NewLibEntry</strong>
@@ -485,7 +485,7 @@
         &lt;name&gt; -
         Deletes the variable with the supplied name.
       </li>
-    </ul> <!-- }}} -->
+    </ul!--> <!-- }}} -->
 
     <p><strong>Python Commands</strong></p> <!-- {{{ -->
     <ul>
@@ -499,6 +499,10 @@
       <li>
         <a href="python/validate.html#Validate"><strong>:Validate</strong></a> -
         Validates the current file using <a href="site:pyflakes">pyflakes</a>.
+      </li>
+      <li>
+        <a href="python/validate.html#PyLint"><strong>:PyLint</strong></a> -
+        Runs <a href="site:pyflakes">pylint</a> on the current file.
       </li>
       <li>
         <a href="python/regex.html#PythonRegex"><strong>:PythonRegex</strong></a> -
