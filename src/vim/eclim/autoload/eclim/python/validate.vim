@@ -168,11 +168,9 @@ function eclim#python#validate#PyLint ()
         call add(errors, dict)
       endif
     endfor
-    call eclim#util#SetLocationList(errors)
-    " FIXME: consider adding var here that the on write validator sees which
-    " prevents clearing of all pylint markers on save.
+    call eclim#util#SetQuickfixList(errors)
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#SetQuickfixList([], 'r')
   endif
 endfunction " }}}
 
