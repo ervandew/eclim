@@ -642,6 +642,18 @@ function! eclim#util#SetLocationList (list, ...)
   call eclim#display#signs#Update()
 endfunction " }}}
 
+" SetQuickfixList(list, ...) {{{
+" Sets the contents of the quickfix list.
+function! eclim#util#SetQuickfixList (list, ...)
+  let qflist = a:list
+  if a:0 == 0
+    call setqflist(qflist)
+  else
+    call setqflist(qflist, a:1)
+  endif
+  call eclim#display#signs#Update()
+endfunction " }}}
+
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError ()
