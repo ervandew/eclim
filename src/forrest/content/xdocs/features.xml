@@ -29,10 +29,12 @@
   </header>
   <body>
     <p>
-      The following is a list of eclim features with much more still to
+      The following is a partial list of eclim features with much more still to
       come.<br/>
       For more details please see the detailed
-      <a href="vim/index.html">documentation</a>.
+      <a href="vim/index.html">documentation</a>.<br/>
+      For a more comprehensive list you can also visit the
+      <a href="vim/cheatsheet.html">cheatsheet</a>.
     </p>
 
     <p><strong>Eclipse Projects</strong></p>
@@ -127,6 +129,7 @@
       <li>Find definition.</li-->
       <li>Regular expression testing.</li>
       <li>Django functionality.</li>
+      <li>Validation via python compiler, pyflakes, and pylint.</li>
     </ul>
 
     <p><strong>Vim Script Integration</strong></p>
@@ -178,9 +181,7 @@
         Commands to locate a project, workspace, or current file relative file
         and open it (split, edit, or tabnew).
       </li>
-      <li>
-        Enhanced taglist support.
-      </li>
+      <li>Enhanced taglist support.</li>
     </ul>
   </body>
 </document>
