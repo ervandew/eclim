@@ -28,7 +28,7 @@
 function eclim#sgml#util#CompleteEndTag ()
   let line = getline('.')
   if line[col('.') - 2] == '<' && line[col('.') - 1] !~ '\w'
-    let tag = s:GetStartTag(line('.'), [])
+    let tag = s:GetStartTag(line('.'))
     if tag != ''
       return '/' . tag . '>'
     endif
@@ -36,52 +36,48 @@ function eclim#sgml#util#CompleteEndTag ()
   return '/'
 endfunction " }}}
 
-" s:GetStartTag(line, lastpos) {{{
-function s:GetStartTag (line, lastpos)
+" s:GetStartTag(line) {{{
+" One known failure case:
+"   - non-self closing tag on one line with another self-closing tag of the
+"     same name
+"<path> <fileset dir="modules/www//${pymodule}" includes="**/*.py"/> <fileset dir=""></fileset></
+function s:GetStartTag (line)
   let pos = searchpairpos('<\w', '', '</\w', 'bnW')
   if pos[0]
-    if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW') ||
-     \ (a:line != pos[0] && indent(pos[0]) > indent(a:line))
+    " test if tag found is self closing
+    if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW')
       let lnum = line('.')
       let cnum = col('.')
       call cursor(pos[0], pos[1])
       try
-        let tag = s:GetStartTag(a:line, pos)
+        return s:GetStartTag(a:line)
       finally
         call cursor(lnum, cnum)
       endtry
-      return tag
     endif
 
     let line = getline(pos[0])
-    "let tag =  substitute(
-    "  \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
-    "if tag != line
-    "  return tag
-    "endif
     let lnum = line('.')
     let cnum = col('.')
     call cursor(pos[0], pos[1])
     try
       let tags = s:ExtractTags(line)
       for tag in reverse(tags)
+        " place the cursor on the start tag
+        call cursor(line('.'), 1)
+        call search('<' . tag . '\>', '', line('.'))
+
+        " see if the tag as a matching close tag
         let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
         if !pos[0] || pos[0] > a:line
           return tag
         endif
       endfor
+      call cursor(line('.'), 1)
+      return s:GetStartTag(a:line)
     finally
       call cursor(lnum, cnum)
     endtry
-
-  " Don't recall what the purpose of this was... it may no longer be needed.
-  "elseif len(a:lastpos) > 0 && a:lastpos[0]
-  "  let line = getline(a:lastpos[0])
-  "  let tag =  substitute(
-  "    \ line, '.*\%' . (a:lastpos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
-  "  if tag != line
-  "    return tag
-  "  endif
   endif
   return ''
 endfunction " }}}
