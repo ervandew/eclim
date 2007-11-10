@@ -34,7 +34,7 @@
         The primary goal of eclim is to bring
         <a href="ext:eclipse">Eclipse</a>&trade; functionality to the Vim
         editor.  The initial goal was to provide Eclipse's java functionality to
-        vim, but support for various other languages (python, php, css, html,
+        vim, but support for various other languages (python, css, html,
         xml, etc.) have been added and several more are planned.
       </p>
       <p>
