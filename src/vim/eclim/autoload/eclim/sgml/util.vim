@@ -37,10 +37,6 @@ function eclim#sgml#util#CompleteEndTag ()
 endfunction " }}}
 
 " s:GetStartTag(line) {{{
-" One known failure case:
-"   - non-self closing tag on one line with another self-closing tag of the
-"     same name
-"<path> <fileset dir="modules/www//${pymodule}" includes="**/*.py"/> <fileset dir=""></fileset></
 function s:GetStartTag (line)
   let pos = searchpairpos('<\w', '', '</\w', 'bnW')
   if pos[0]
@@ -63,9 +59,10 @@ function s:GetStartTag (line)
     try
       let tags = s:ExtractTags(line)
       for tag in reverse(tags)
-        " place the cursor on the start tag
-        call cursor(line('.'), 1)
-        call search('<' . tag . '\>', '', line('.'))
+        " place the cursor at the end of the line
+        call cursor(line('.'), col('$'))
+        " find first non self closing tag searching backwards
+        call search('<' . tag . '\>[^/]\{-}>', 'b', line('.'))
 
         " see if the tag as a matching close tag
         let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
