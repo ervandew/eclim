@@ -42,6 +42,7 @@ function! eclim#java#ant#run#CommandCompleteTarget (argLead, cmdLine, cursorPos)
 
   let file = eclim#java#ant#util#FindBuildFile()
   if project != "" && file != ""
+    let file = eclim#project#util#GetProjectRelativeFilePath(file)
     let command = s:command_targets
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
