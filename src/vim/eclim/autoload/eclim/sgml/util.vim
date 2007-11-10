@@ -41,7 +41,7 @@ function s:GetStartTag (line, lastpos)
   let pos = searchpairpos('<\w', '', '</\w', 'bnW')
   if pos[0]
     if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW') ||
-     \ (a:line != pos[0] && !(indent(pos[0]) < indent(a:line)))
+     \ (a:line != pos[0] && indent(pos[0]) > indent(a:line))
       let lnum = line('.')
       let cnum = col('.')
       call cursor(pos[0], pos[1])
@@ -54,20 +54,51 @@ function s:GetStartTag (line, lastpos)
     endif
 
     let line = getline(pos[0])
-    let tag =  substitute(
-      \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
-    if tag != line
-      return tag
-    endif
-  elseif len(a:lastpos) > 0 && a:lastpos[0]
-    let line = getline(a:lastpos[0])
-    let tag =  substitute(
-      \ line, '.*\%' . (a:lastpos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
-    if tag != line
-      return tag
-    endif
+    "let tag =  substitute(
+    "  \ line, '.*\%' . (pos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
+    "if tag != line
+    "  return tag
+    "endif
+    let lnum = line('.')
+    let cnum = col('.')
+    call cursor(pos[0], pos[1])
+    try
+      let tags = s:ExtractTags(line)
+      for tag in reverse(tags)
+        let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
+        if !pos[0] || pos[0] > a:line
+          return tag
+        endif
+      endfor
+    finally
+      call cursor(lnum, cnum)
+    endtry
+
+  " Don't recall what the purpose of this was... it may no longer be needed.
+  "elseif len(a:lastpos) > 0 && a:lastpos[0]
+  "  let line = getline(a:lastpos[0])
+  "  let tag =  substitute(
+  "    \ line, '.*\%' . (a:lastpos[1] + 1) . 'c\([0-9a-zA-Z_\-:]\+\)\W.*', '\1', '')
+  "  if tag != line
+  "    return tag
+  "  endif
   endif
   return ''
+endfunction " }}}
+
+" s:ExtractTags() {{{
+" Extracts a list of open tag names from the current line.
+function s:ExtractTags (line)
+  let line = a:line
+  let tags = []
+  while line =~ '<\w\+'
+    let tag = substitute(line, '.\{-}<\([a-zA-Z0-9:_]\+\).*', '\1', '')
+    if line !~ '<' . tag . '[^>]\{-}/>'
+      call add(tags, tag)
+    endif
+    let line = substitute(line, '.\{-}<' . tag . '\(.*\)', '\1', '')
+  endwhile
+  return tags
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
