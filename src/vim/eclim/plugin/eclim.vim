@@ -51,6 +51,10 @@
     let g:EclimMakeLCD = 1
   endif
 
+  if !exists("g:EclimMakeQfFilter")
+    let g:EclimMakeQfFilter = 1
+  endif
+
   if !exists("g:EclimIndent")
     if !&expandtab
       let g:EclimIndent = "\t"
@@ -145,6 +149,16 @@ if g:EclimMakeLCD
       \ if g:EclimMakeLCD | call <SID>QuickFixLocalChangeDirectory() | endif
     autocmd QuickFixCmdPost make
       \ if g:EclimMakeLCD | exec "lcd " . w:quickfix_dir | endif
+  augroup END
+endif
+
+if g:EclimMakeQfFilter
+  augroup eclim_qf_filter
+    autocmd!
+    autocmd QuickFixCmdPost make
+      \ if exists('b:EclimQuickfixFilter') |
+      \   call eclim#util#SetQuickfixList(getqflist(), 'r') |
+      \ endif
   augroup END
 endif
 " }}}
