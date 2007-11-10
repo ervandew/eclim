@@ -196,9 +196,9 @@ public class RequirementProvider
         int minor = Integer.parseInt(parts[1]);
         int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-        if(major < 7 || minor < 1 || patch < 0){
+        if(major < 7 || minor < 0 || patch < 0){
           return new Status(FAIL,
-              Installer.getString("vim.version.invalid", version, "7.1.x"));
+              Installer.getString("vim.version.invalid", version, "7.0.x"));
         }
       }catch(Exception e){
         logger.error("Error checking vim version.", e);
