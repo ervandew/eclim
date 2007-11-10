@@ -16,6 +16,16 @@ TODO {{{
       - test handling of CLASSPATH and ext.dirs by installer.
   }}}
 
+  Installer {{{
+    - installer validation
+      - java version
+
+    - look into libarchive for bsd support (installer).
+
+    - consider adding command line option to installer to specify temp dir to write to
+      - or maybe just use ~/.tmp
+  }}}
+
   Documentation {{{
     - FAQs
       - how to specify workspace dir.
@@ -36,6 +46,7 @@ TODO {{{
       :PhpSearch
       :PhpSearchContext
       :Validate (css, php, python, and java)
+      :PyLint
       :MaximizeWindow
       :MinimizeWindow
       :MinimizeRestore
@@ -58,6 +69,10 @@ TODO {{{
   }}}
 
   Common {{{
+    - debugger interface
+      http://www.vim.org/scripts/script.php?script_id=1703
+      (not windows compatible, but worth watching)
+
     - creating a project in the workspace dir w/ a different name than the
       directory doesn't work.
       :ProjectCreate ~/workspace/my_project_dir -p my_project
@@ -202,6 +217,8 @@ TODO {{{
       http://validator.w3.org/docs/install.html
 
     - javascript code completion
+    - javascript validation
+      - http://www.javascriptlint.com/index.htm
 
     - sgml end tag completion, look into using fuzzy xml instead
       - http://amateras.sourceforge.jp/cgi-bin/fswiki_en/wiki.cgi?page=FuzzyXML
@@ -340,20 +357,22 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - installer validation
-    - java version
+  - document qf filtering support
 
-  - look into libarchive for bsd support (installer).
-
-  - consider adding command line option to installer to specify temp dir to write to
-    - or maybe just use ~/.tmp
+  - test g:EclimPyLintEnv
 
   - look into converting .bat files into .cmd files
 
   - php, java, on files out of src path, support definition searching.
 
+  - check out license info on indent anything files
+    http://www.vim.org/scripts/script.php?script_id=1839
+    http://www.vim.org/scripts/script.php?script_id=1840
+
   Windows Bugs {{{
     - :JavaSearch seems short on results
+    - :TlistToo
+      - python: filter out all tags that equal 'ault' to account for ctags bug on windows.
   }}}
 }}}
 
