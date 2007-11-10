@@ -646,6 +646,24 @@ endfunction " }}}
 " Sets the contents of the quickfix list.
 function! eclim#util#SetQuickfixList (list, ...)
   let qflist = a:list
+  if exists('b:EclimQuickfixFilter')
+    let newlist = []
+    for item in qflist
+      let addit = 1
+
+      for filter in b:EclimQuickfixFilter
+        if item.text =~ filter
+          let addit = 0
+          break
+        endif
+      endfor
+
+      if addit
+        call add(newlist, item)
+      endif
+    endfor
+    let qflist = newlist
+  endif
   if a:0 == 0
     call setqflist(qflist)
   else
@@ -704,20 +722,33 @@ endfunction " }}}
 " System(cmd [, exec]) {{{
 " Executes system() accounting for possibly disruptive vim options.
 function! eclim#util#System (cmd, ...)
-  " save
-  if has("win32") || has("win64")
-    let saveshell = &shell
-    let saveshellcmdflag = &shellcmdflag
-    let saveshellpipe = &shellpipe
-    let saveshellquote = &shellquote
-    let saveshellredir = &shellredir
-    let saveshellslash = &shellslash
-    let saveshelltemp = &shelltemp
-    let saveshellxquote = &shellxquote
+  let saveshell = &shell
+  let saveshellcmdflag = &shellcmdflag
+  let saveshellpipe = &shellpipe
+  let saveshellquote = &shellquote
+  let saveshellredir = &shellredir
+  let saveshellslash = &shellslash
+  let saveshelltemp = &shelltemp
+  let saveshellxquote = &shellxquote
 
+  if has("win32") || has("win64")
     set shell=cmd.exe
     set shellcmdflag=/c
     set shellpipe=>%s\ 2>&1
+    set shellquote=
+    set shellredir=>%s\ 2>&1
+    set noshellslash
+    set shelltemp
+    set shellxquote=
+  else
+    if executable('/bin/bash')
+      set shell=/bin/bash
+    else
+      set shell=/bin/sh
+    endif
+    set shell=/bin/sh
+    set shellcmdflag=-c
+    set shellpipe=2>&1\|\ tee
     set shellquote=
     set shellredir=>%s\ 2>&1
     set noshellslash
@@ -732,17 +763,14 @@ function! eclim#util#System (cmd, ...)
     let result = system(a:cmd)
   endif
 
-  " restore
-  if has("win32") || has("win64")
-    let &shell = saveshell
-    let &shellcmdflag = saveshellcmdflag
-    let &shellpipe = saveshellpipe
-    let &shellquote = saveshellquote
-    let &shellredir = saveshellredir
-    let &shellslash = saveshellslash
-    let &shelltemp = saveshelltemp
-    let &shellxquote = saveshellxquote
-  endif
+  let &shell = saveshell
+  let &shellcmdflag = saveshellcmdflag
+  let &shellpipe = saveshellpipe
+  let &shellquote = saveshellquote
+  let &shellredir = saveshellredir
+  let &shellslash = saveshellslash
+  let &shelltemp = saveshelltemp
+  let &shellxquote = saveshellxquote
 
   return result
 endfunction " }}}

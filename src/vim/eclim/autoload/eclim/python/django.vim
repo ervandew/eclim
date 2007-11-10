@@ -132,7 +132,7 @@ function! eclim#python#django#Manage (args)
   try
     let action = substitute(a:args, '^\(.\{-}\)\(\s.*\|$\)', '\1', '')
     if eclim#util#ListContains(s:output_actions, action)
-      let result = system(command . ' ' . a:args)
+      let result = eclim#util#System(command . ' ' . a:args)
       if v:shell_error
         if result =~ '^Error:'
           let error = substitute(result, '^\(.\{-}\)\n.*', '\1', '')

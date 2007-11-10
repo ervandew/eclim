@@ -33,7 +33,7 @@ endif
 " FIXME: how to get the year in windows.
 " Script Variables {{{
   if executable('date')
-    let s:year = substitute(system("date +%Y"), '\n', '', '')
+    let s:year = substitute(eclim#util#System("date +%Y"), '\n', '', '')
   else
     let s:year = '2007'
   endif

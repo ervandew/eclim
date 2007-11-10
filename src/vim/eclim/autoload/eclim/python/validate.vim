@@ -50,7 +50,7 @@ function! eclim#python#validate#Validate (on_save)
       endif
     else
       let command = 'pyflakes "' . expand('%:p') . '"'
-      let result = system(command)
+      let result = eclim#util#System(command)
       if v:shell_error
         call eclim#util#EchoError('Error running command: ' . command)
         return
@@ -145,7 +145,7 @@ function eclim#python#validate#PyLint ()
   endif
 
   call eclim#util#Echo('Running pylint (ctrl-c to cancel) ...')
-  let result = system(command)
+  let result = eclim#util#System(command)
   call eclim#util#Echo(' ')
   if v:shell_error
     call eclim#util#EchoError('Error running command: ' . command)

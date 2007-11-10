@@ -62,7 +62,7 @@ function eclim#vcs#util#GetPreviousRevision ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let log = system('cvs log ' . expand('%:t'))
+      let log = eclim#util#System('cvs log ' . expand('%:t'))
       let lines = split(log, '\n')
       call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
       if len(lines) >= 2
@@ -95,7 +95,7 @@ function eclim#vcs#util#GetRevision ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let status = system('cvs status ' . expand('%:t'))
+      let status = eclim#util#System('cvs status ' . expand('%:t'))
       let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
       if status =~ pattern
         let revision = substitute(status, pattern, '\1', '')
@@ -127,7 +127,7 @@ function eclim#vcs#util#GetRevisions ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let log = system('cvs log ' . expand('%:t'))
+      let log = eclim#util#System('cvs log ' . expand('%:t'))
       let lines = split(log, '\n')
       call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
       call map(lines, 'substitute(v:val, "^revision \\([0-9.]\\+\\)\\s*$", "\\1", "")')
@@ -270,7 +270,7 @@ function eclim#vcs#util#Svn (args)
     return
   endif
 
-  let result = system('svn ' . a:args)
+  let result = eclim#util#System('svn ' . a:args)
   if v:shell_error
     call eclim#util#EchoError(
       \ "Error executing svn command: svn " . a:args . "\n" . result)

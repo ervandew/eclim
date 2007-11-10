@@ -449,7 +449,7 @@ function! s:ProcessTags ()
     let command = substitute(command, '<types>', types, 'g')
     let command = substitute(command, '<file>', file, '')
 
-    let results = split(system(command), '\n')
+    let results = split(eclim#util#System(command), '\n')
     if v:shell_error
       return
     endif

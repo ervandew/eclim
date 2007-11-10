@@ -109,7 +109,7 @@ function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
   let cwd = getcwd()
   exec 'lcd ' . dir
   try
-    let result = system(cmd . ' "' . file . '"')
+    let result = eclim#util#System(cmd . ' "' . file . '"')
     let annotations = split(result, '\n')
     call filter(annotations, 'v:val =~ "^[0-9]"')
     call map(annotations,
