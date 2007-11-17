@@ -30,6 +30,7 @@ class PhpTags implements TaglistScript
       regex = new RegexTaglist(file);
       regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_]+)\s*\(/, "\$2");
       regex.addPattern('c', ~/(s?)\bclass\s+([a-zA-Z0-9_]+)/, "\$2");
+      regex.addPattern('i', ~/(s?)\binterface\s+([a-zA-Z0-9_]+)/, "\$2");
 
       return regex.execute();
     }finally{
