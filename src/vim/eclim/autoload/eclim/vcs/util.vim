@@ -280,6 +280,13 @@ function eclim#vcs#util#Svn (args)
   return result
 endfunction " }}}
 
+" IsCacheValid(metadata) {{{
+" Function used to validate cached values on get from the cache.
+function eclim#vcs#util#IsCacheValid (metadata)
+  let revision = eclim#vcs#util#GetSvnRevision(a:metadata.url)
+  return revision == a:metadata.revision
+endfunction " }}}
+
 " CommandCompleteRevision(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for revision numbers out of viewvc.
 function! eclim#vcs#util#CommandCompleteRevision (argLead, cmdLine, cursorPos)

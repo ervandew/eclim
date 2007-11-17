@@ -39,23 +39,32 @@ function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
     endif
   endif
 
-  let result = eclim#vcs#util#Svn('log -vr ' . revision . ' "' . a:url . '"')
-  if result == '0'
-    return
-  endif
-  let log = split(result, '\n')
+  let key = a:url . '_' . revision
+  let cached = eclim#cache#Get(key)
+  if has_key(cached, 'content')
+    let lines = cached.content
+  else
+    let result = eclim#vcs#util#Svn('log -vr ' . revision . ' "' . a:url . '"')
+    if result == '0'
+      return
+    endif
+    let log = split(result, '\n')
 
-  let lines = []
-  let entry = {}
-  call s:ParseSvnInfo(entry, log[1])
-  call add(lines, 'Revision: ' . entry.revision)
-  call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-  let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
-  let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D   \\1", "")')
-  let files = map(files,
-    \ 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
-  call extend(lines, files)
+    let lines = []
+    let entry = {}
+    call s:ParseSvnInfo(entry, log[1])
+    call add(lines, 'Revision: ' . entry.revision)
+    call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
+    let files = map(log[2:-2], 'substitute(v:val, "\\s*M\\s*\\(.*\\)", "  |M| |\\1|", "")')
+    let files = map(files, 'substitute(v:val, "\\s*A\\s*\\(.*\\)", "   A  |\\1|", "")')
+    let files = map(files, 'substitute(v:val, "\\s*D\\s*\\(.*\\)", "   D   \\1", "")')
+    let files = map(files,
+      \ 'substitute(v:val, "\\(.*\\)\\( (.*)\\)\\(.*\\)", "\\1\\3\\2", "")')
+    let files = map(files, 'substitute(v:val, "\\(#\\d\\+\\)", "|\\1|", "g")')
+    call extend(lines, files)
+
+    call eclim#cache#Set(key, lines, {'url': a:url, 'revision': revision})
+  endif
 
   call s:TempWindow(lines)
   call s:LogSyntax()
@@ -109,30 +118,40 @@ function! eclim#vcs#log#Log (repos_url, url)
     return
   endif
 
-  let result = eclim#vcs#util#Svn('log "' . a:url . '"')
-  if result == '0'
-    return
-  endif
-  let log = s:ParseSvnLog(split(result, '\n'))
+  let cached = eclim#cache#Get(a:url, function('eclim#vcs#util#IsCacheValid'))
+  if has_key(cached, 'content')
+    let lines = cached.content
+  else
+    let result = eclim#vcs#util#Svn('log "' . a:url . '"')
+    if result == '0'
+      return
+    endif
+    let log = s:ParseSvnLog(split(result, '\n'))
 
-  let index = 0
-  let lines = [s:Breadcrumb(a:repos_url, a:url), '']
-  for entry in log
-    let index += 1
-    call add(lines, '------------------------------------------')
-    call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
-    call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-    if index < len(log)
-      call add(lines, 'Diff: |previous ' . log[index].revision . '| |working copy|')
-    else
-      call add(lines, 'Diff: |working copy|')
-    endif
-    call add(lines, '')
-    let lines += entry.comment
-    if lines[-1] !~ '^\s*$' && index != len(log)
+    let index = 0
+    let lines = [s:Breadcrumb(a:repos_url, a:url), '']
+    for entry in log
+      let index += 1
+      call add(lines, '------------------------------------------')
+      call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
+      call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
+      if index < len(log)
+        call add(lines, 'Diff: |previous ' . log[index].revision . '| |working copy|')
+      else
+        call add(lines, 'Diff: |working copy|')
+      endif
       call add(lines, '')
-    endif
-  endfor
+      let lines += entry.comment
+      if lines[-1] !~ '^\s*$' && index != len(log)
+        call add(lines, '')
+      endif
+    endfor
+
+    call eclim#cache#Set(a:url, lines, {
+        \ 'url': a:url,
+        \ 'revision': eclim#vcs#util#GetSvnRevision(a:url)
+      \ })
+  endif
 
   call s:TempWindow(lines)
   call s:LogSyntax()
@@ -278,7 +297,7 @@ function! s:FollowLink ()
     endif
 
   " link to file or dir in change set view.
-  elseif exists('b:vcs_view') && b:vcs_view == 'changeset'
+  elseif link !~ '^#' && exists('b:vcs_view') && b:vcs_view == 'changeset'
     if link == 'M'
       let file = substitute(line, '\s*|M|\s*|\(.\{-}\)|.*', '\1', '')
       let repos_url = b:vcs_repos_url
@@ -367,6 +386,25 @@ function! s:FollowLink ()
 
     call eclim#util#GoToBufferWindow(filename)
     diffthis
+
+  " link to bug / feature report
+  elseif link =~ '^#\d\+$'
+    let url = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.tracker')
+    if url == '0'
+      return
+    endif
+
+    if url == ''
+      call eclim#util#EchoWarning(
+        \ "Link to bug report / feature request requires project setting " .
+        \ "'org.eclim.project.vcs.tracker'.")
+      return
+    elseif type(url) == 0 && url == 0
+      return
+    endif
+
+    let url = substitute(url, '<id>', link[1:], 'g')
+    call eclim#web#OpenUrl(url)
   endif
 endfunction " }}}
 
@@ -456,6 +494,7 @@ function! s:ParseSvnLog (lines)
       if len(entry.comment) == 0 && line =~ '^\s*$'
         continue
       endif
+      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor
