@@ -34,8 +34,8 @@ function! eclim#taglist#php#FormatPhp (types, tags)
   call add(lines, -1)
 
   let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
-  let class_contents = []
 
+  let class_contents = []
   let classes = filter(copy(a:tags), 'v:val[3] == "c"')
   for class in classes
     exec 'let object_start = ' . split(class[4], ':')[1]
@@ -64,6 +64,35 @@ function! eclim#taglist#php#FormatPhp (types, tags)
     call add(class_contents, {'class': class, 'functions': functions})
   endfor
 
+  let interface_contents = []
+  let interfaces = filter(copy(a:tags), 'v:val[3] == "i"')
+  for interface in interfaces
+    exec 'let object_start = ' . split(interface[4], ':')[1]
+    call cursor(object_start, 1)
+    call search('{', 'W')
+    let object_end = searchpair('{', '', '}', 'W')
+
+    let functions = []
+    let indexes = []
+    let index = 0
+    for fct in top_functions
+      if len(fct) > 3
+        exec 'let fct_line = ' . split(fct[4], ':')[1]
+        if fct_line > object_start && fct_line < object_end
+          call add(functions, fct)
+          call add(indexes, index)
+        endif
+      endif
+      let index += 1
+    endfor
+    call reverse(indexes)
+    for i in indexes
+      call remove(top_functions, i)
+    endfor
+
+    call add(interface_contents, {'interface': interface, 'functions': functions})
+  endfor
+
   if len(top_functions) > 0
     call add(content, "")
     call add(lines, -1)
@@ -79,6 +108,16 @@ function! eclim#taglist#php#FormatPhp (types, tags)
 
     call eclim#taglist#util#FormatType(
         \ a:tags, a:types['f'], class_content.functions, lines, content, "\t\t")
+  endfor
+
+  for interface_content in interface_contents
+    call add(content, "")
+    call add(lines, -1)
+    call add(content, "\t" . a:types['i'] . ' ' . interface_content.interface[0])
+    call add(lines, index(a:tags, interface_content.interface))
+
+    call eclim#taglist#util#FormatType(
+        \ a:tags, a:types['f'], interface_content.functions, lines, content, "\t\t")
   endfor
 
   call cursor(clnum, ccnum)
