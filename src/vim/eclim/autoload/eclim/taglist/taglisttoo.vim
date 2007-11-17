@@ -338,7 +338,7 @@ let s:tlist_def_vim_settings = {
 let s:tlist_def_yacc_settings = {'l': 'label'}
 " }}}
 
-" eclim#taglist#taglisttoo#AutoOpen() {{{
+" AutoOpen() {{{
 function! eclim#taglist#taglisttoo#AutoOpen()
   let open_window = 0
 
@@ -359,7 +359,7 @@ function! eclim#taglist#taglisttoo#AutoOpen()
   endif
 endfunction " }}}
 
-" eclim#taglist#taglisttoo#Taglist() {{{
+" Taglist() {{{
 function! eclim#taglist#taglisttoo#Taglist ()
   if !exists('g:Tlist_Ctags_Cmd')
     call eclim#util#EchoError('Unable to find a version of ctags installed.')
@@ -463,6 +463,17 @@ function! s:ProcessTags ()
       let pattern = substitute(result, '.\{-}\(\/\^.*\$\/;"\).*', '\1', '')
       let post = substitute(result, '.*\$\/;"\t', '\1', '')
       let values = split(pre, '\t') + [pattern] + split(post, '\t')
+
+      " filter false positives found in comments.
+      if values[-1] =~ 'line:[0-9]\+'
+        exec 'let lnum = ' . substitute(values[-1], 'line:\([0-9]\+\).*', '\1', '')
+        let line = getline(lnum)
+        let col = len(line) - len(substitute(line, '^\s*', '', '')) + 1
+        if synIDattr(synID(lnum, col, 1), "name") =~ '[Cc]omment'
+          continue
+        endif
+      endif
+
       call add(tags, values)
     endfor
 
