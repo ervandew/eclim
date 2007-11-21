@@ -43,8 +43,6 @@ function! eclim#php#util#UpdateSrcFile (validate)
 
     if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       " html validate
-      let project = eclim#project#util#GetCurrentProjectName()
-      let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
