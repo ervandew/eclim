@@ -30,8 +30,8 @@ endif
 
 if g:EclimDtdValidate
   augroup eclim_css_validate
-    autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('dtd', 1)
+    autocmd!
+    autocmd BufWritePost *.dtd call eclim#common#validate#Validate('dtd', 1)
   augroup END
 endif
 

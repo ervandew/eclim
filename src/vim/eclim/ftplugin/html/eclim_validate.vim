@@ -31,7 +31,7 @@ endif
 if g:EclimHtmlValidate
   augroup eclim_html_validate
     autocmd!
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('html', 1)
+    autocmd BufWritePost *.html call eclim#common#validate#Validate('html', 1)
   augroup END
 endif
 

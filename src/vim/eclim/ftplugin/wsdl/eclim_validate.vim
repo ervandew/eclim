@@ -30,8 +30,8 @@ endif
 
 if g:EclimWsdlValidate
   augroup eclim_wsdl_validate
-    autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('wsdl', 1)
+    autocmd!
+    autocmd BufWritePost *.wsdl call eclim#common#validate#Validate('wsdl', 1)
   augroup END
 endif
 

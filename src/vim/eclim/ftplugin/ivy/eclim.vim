@@ -29,9 +29,8 @@ runtime indent/xml.vim
 " turn off xml validation
 augroup eclim_xml
   autocmd! BufWritePost <buffer>
+  autocmd BufWritePost <buffer> call eclim#java#ivy#UpdateClasspath()
 augroup END
-
-autocmd BufWritePost <buffer> call eclim#java#ivy#UpdateClasspath()
 
 " Command Declarations {{{
 if !exists(":IvyRepo")

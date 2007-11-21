@@ -30,8 +30,8 @@ endif
 
 if g:EclimXsdValidate
   augroup eclim_xsd_validate
-    autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('xsd', 1)
+    autocmd!
+    autocmd BufWritePost *.xsd call eclim#common#validate#Validate('xsd', 1)
   augroup END
 endif
 

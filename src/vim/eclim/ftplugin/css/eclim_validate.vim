@@ -31,7 +31,7 @@ endif
 if g:EclimCssValidate
   augroup eclim_css_validate
     autocmd!
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('css', 1)
+    autocmd BufWritePost *.css call eclim#common#validate#Validate('css', 1)
   augroup END
 endif
 
