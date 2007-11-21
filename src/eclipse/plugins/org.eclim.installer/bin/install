@@ -18,7 +18,6 @@
 
 CURPATH=`dirname $0`
 ECLIPSE_HOME=`cd "$CURPATH/../../.." ; pwd`
-IS_GENTOO=`which java-config 2> /dev/null`
 
 # find eclipse executable
 ECLIPSE="$ECLIPSE_HOME/eclipse"
@@ -31,6 +30,7 @@ if [ ! -e "$ECLIPSE" ]; then
 fi
 
 # handle eclipse 3.3 issue on gentoo
+IS_GENTOO=`which java-config 2> /dev/null`
 if [ -n "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 fi
