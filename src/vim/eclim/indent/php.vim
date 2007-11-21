@@ -40,6 +40,7 @@ setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 " EclimGetPhpHtmlIndent(lnum) {{{
 function! EclimGetPhpHtmlIndent (lnum)
   " FIXME: may get confused if either of these occur in a comment.
+  "        can fix with searchpos and checking syntax name on result.
   let phpstart = search('<?php', 'bcnW')
   let phpend = search('?>', 'bcnW')
   if phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
