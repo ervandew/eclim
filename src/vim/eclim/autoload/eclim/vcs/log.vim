@@ -232,11 +232,20 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
   let @" = saved
 
   " load in content
-  let result = eclim#vcs#util#Svn('info "' . a:url . '"')
-  if result == '0'
-    return
+  let key = a:url . '_' . revision
+  let cached = eclim#cache#Get(key)
+  if has_key(cached, 'content')
+    let lines = cached.content
+    call append(1, lines)
+  else
+    let result = eclim#vcs#util#Svn('info "' . a:url . '"')
+    if result == '0'
+      return
+    endif
+    exec 'silent read !svn cat -r ' . revision . ' "' . a:url . '"'
+    let lines = getline(2, line('$'))
+    call eclim#cache#Set(key, lines, {'url': a:url, 'revision': revision})
   endif
-  exec 'silent read !svn cat -r ' . revision . ' "' . a:url . '"'
 
   silent 1,1delete
   call cursor(1, 1)
