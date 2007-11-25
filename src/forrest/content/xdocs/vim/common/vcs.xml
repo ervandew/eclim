@@ -134,6 +134,21 @@
         <strong>org.eclim.project.vcs.viewvc</strong><br/>
         Base url from which ViewVC urls can be constructed for project relative files.
       </li>
+      <li>
+        <anchor id="org.eclim.project.vcs.tracker"/>
+        <strong>org.eclim.project.vcs.tracker</strong><br/>
+        Url used to view tickets in your ticket tracking software. This url
+        supports the '&lt;id&gt;' placeholder which will be replaced with the
+        ticket id.<br/>
+        Ex. An example setting for a Trac installation:<br/>
+        <source>
+          org.eclim.project.vcs.tracker=http://somedomain.com/trac/ticket/&lt;id&gt;
+        </source>
+        Currently this setting is only used in conjunction with
+        <strong>:VcsLog</strong> and <strong>:VcsChangeSet</strong> to enable
+        linking of ticket ids of the form #ticket_id (#1234) found in user
+        supplied commit comments.
+      </li>
     </ul>
   </body>
 </document>
