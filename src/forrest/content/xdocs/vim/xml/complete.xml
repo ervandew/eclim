@@ -71,6 +71,16 @@
         <strong>g:EclimSgmlCompleteEndTag</strong><br/>
         If set to 0, disables auto completion of end tags.
       </li>
+      <li>
+        <anchor id="EclimSgmlCompleteEndTagIgnore"/>
+        <strong>b:EclimSgmlCompleteEndTagIgnore</strong><br/>
+        Buffer local variable that can be set to a list of tags to ignore when
+        searching for the start tag to complete.<br/>
+        Example that can be added to an html ftplugin file:
+        <source>
+          let b:EclimSgmlCompleteEndTagIgnore = ['br', 'input']
+        </source>
+      </li>
     </ul>
   </body>
 </document>
