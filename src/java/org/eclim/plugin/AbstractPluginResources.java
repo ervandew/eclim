@@ -22,7 +22,9 @@ import java.net.URL;
 
 import java.text.MessageFormat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -55,6 +57,7 @@ public abstract class AbstractPluginResources
   private String pluginName;
   private Properties properties;
   private ResourceBundle bundle;
+  private List<String> missingResources = new ArrayList<String>();
 
   private HashMap<String,Class> commands =
     new HashMap<String,Class>();
@@ -159,6 +162,11 @@ public abstract class AbstractPluginResources
    */
   public URL getResource (String _resource)
   {
+    // short circuit resources we know are missing
+    if (missingResources.contains(_resource)){
+      return null;
+    }
+
     try{
     // try vim resources first
     // Ex: /home/ervandew/.vim/eclim/resources/jdt/templates/logger.gst
@@ -186,7 +194,9 @@ public abstract class AbstractPluginResources
       }
 
       // not found
-      logger.warn("Unable to locate resource: " + _resource);
+      missingResources.add(_resource);
+      logger.warn(
+          "Unable to locate resource in '" + getName() + "': " + _resource);
       return null;
     }catch(Exception e){
       throw new RuntimeException(e);
