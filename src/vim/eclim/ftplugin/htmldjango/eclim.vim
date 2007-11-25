@@ -34,8 +34,11 @@ let g:HtmlDjangoBodyElements = [
     \ ['comment', 'endcomment'],
     \ ['filter', 'endfilter'],
     \ ['for', 'endfor'],
-    \ ['\(if\|e_if\)\(changed\|equal\|notequal\)\?', 'else', 'elif', 'endif\(changed\|equal\|notequal\)\?'],
-    \ ['spaceless', 'endspaceless']
+    \ ['if', 'else', 'endif'],
+    \ ['ifchanged', 'else', 'endifchanged'],
+    \ ['ifequal', 'else', 'endifequal'],
+    \ ['ifnotequal', 'else', 'endifnotequal'],
+    \ ['spaceless', 'else', 'endspaceless']
   \ ] + g:HtmlDjangoUserBodyElements
 
 " add matchit.vim support for django tags
