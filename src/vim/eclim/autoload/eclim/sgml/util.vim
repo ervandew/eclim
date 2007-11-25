@@ -62,7 +62,7 @@ function s:GetStartTag (line)
         " place the cursor at the end of the line
         call cursor(line('.'), col('$'))
         " find first non self closing tag searching backwards
-        call search('<' . tag . '\>[^/]\{-}>', 'b', line('.'))
+        call search('<' . tag . '\>[^>]\{-}[^/]>', 'b', line('.'))
 
         " see if the tag as a matching close tag
         let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
@@ -86,12 +86,25 @@ function s:ExtractTags (line)
   let tags = []
   while line =~ '<\w\+'
     let tag = substitute(line, '.\{-}<\([a-zA-Z0-9:_]\+\).*', '\1', '')
-    if line !~ '<' . tag . '[^>]\{-}/>'
+    if line !~ '<' . tag . '[^>]\{-}/>' && !s:IgnoreTag(tag)
       call add(tags, tag)
     endif
     let line = substitute(line, '.\{-}<' . tag . '\(.*\)', '\1', '')
   endwhile
   return tags
+endfunction " }}}
+
+" s:IgnoreTag(tag) {{{
+" Determines if a tag should be ignored.
+function s:IgnoreTag (tag)
+  if exists('b:EclimSgmlCompleteEndTagIgnore')
+    for ignore in b:EclimSgmlCompleteEndTagIgnore
+      if a:tag == ignore
+        return 1
+      endif
+    endfor
+  endif
+  return 0
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
