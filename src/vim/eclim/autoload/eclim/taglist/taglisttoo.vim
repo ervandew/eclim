@@ -469,7 +469,7 @@ function! s:ProcessTags ()
         exec 'let lnum = ' . substitute(values[-1], 'line:\([0-9]\+\).*', '\1', '')
         let line = getline(lnum)
         let col = len(line) - len(substitute(line, '^\s*', '', '')) + 1
-        if synIDattr(synID(lnum, col, 1), "name") =~ '[Cc]omment'
+        if synIDattr(synID(lnum, col, 1), "name") =~ '\([Cc]omment\|[Ss]tring\)'
           continue
         endif
       endif
