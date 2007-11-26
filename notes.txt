@@ -30,9 +30,14 @@ TODO {{{
     - FAQs
       - how to specify workspace dir.
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+        or .eclimrc (non windows only)
+          osgi.instance.area.default=@user.home/another_workspace
+
     - document python import functionality
 
     - document template plugin
+
+    - document qf/location list filtering support
 
     - Chinese cheatsheet
       :ProjectNatures
@@ -220,11 +225,6 @@ TODO {{{
     - javascript validation
       - http://www.javascriptlint.com/index.htm
 
-    - sgml end tag completion, look into using fuzzy xml instead
-      - http://amateras.sourceforge.jp/cgi-bin/fswiki_en/wiki.cgi?page=FuzzyXML
-      - jericho (java html parser) is another good alternative (maybe even better)
-      - fall back to vimscript version when eclim is not running.
-
     - javascript doc lookup for common libraries
       - :JavascriptDocSearch
       - yui
@@ -357,23 +357,20 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - document qf filtering support
+  - support max number of cache entries
+    - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
 
-  - test g:EclimPyLintEnv
+  - org.eclim.project.vcs.tracker
+    for sourceforge we need n urls, one for bugs, one for features, etc.
+    but in the vcs log, how do you know which to use?
+    ... maybe support something like '#F123' or '#123f'
+    B:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763323&aid=<id> |
+    F:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763326&aid=<id>
 
-  - look into converting .bat files into .cmd files
-
-  - php, java, on files out of src path, support definition searching.
-
-  - check out license info on indent anything files
-    http://www.vim.org/scripts/script.php?script_id=1839
-    http://www.vim.org/scripts/script.php?script_id=1840
-
-  Windows Bugs {{{
-    - :JavaSearch seems short on results
-    - :TlistToo
-      - python: filter out all tags that equal 'ault' to account for ctags bug on windows.
-  }}}
+  - php support waiting on: https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
+    - add support for setting php interpreter version (4 or 5)
+      - org.eclipse.php.core.prefs
+        phpVersion=php4
 }}}
 
 DOCS (scratch) {{{
