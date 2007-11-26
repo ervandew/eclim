@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  */
 public class ProjectCommandsTest
 {
-  private static final String TEST_PROJECT = "eclim_unit_test";
+  private static final String TEST_PROJECT = "unit_test_created";
   private static final Pattern PROJECT_OPEN_PATTERN =
     Pattern.compile(TEST_PROJECT + "\\s+- open");
 
