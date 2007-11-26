@@ -165,7 +165,7 @@ function! eclim#GetEclimCommand ()
       \ '/bin/' . g:EclimCommand
 
     if g:EclimPath =~ '^[a-zA-Z]:'
-      let g:EclimPath = g:EclimPath . '.bat'
+      let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
     endif
 
     if !filereadable(g:EclimPath)
