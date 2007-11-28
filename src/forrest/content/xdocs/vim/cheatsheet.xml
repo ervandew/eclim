@@ -365,6 +365,14 @@
       </li>
     </ul> <!-- }}} -->
 
+    <p><strong>Javascript Commands</strong></p> <!-- {{{ -->
+    <ul>
+      <li>
+        <a href="javascript/validate.html#Validate"><strong>:Validate</strong></a> -
+        Validate the current javascript file.
+      </li>
+    </ul> <!-- }}} -->
+
     <p><strong>Log4j Commands</strong></p> <!-- {{{ -->
     <ul>
       <li>

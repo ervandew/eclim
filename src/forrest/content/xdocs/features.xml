@@ -103,6 +103,12 @@
       <li>Java regular expression testing.</li>
     </ul>
 
+    <p><strong>Java Integration</strong></p>
+    <ul>
+      <li>File validation using <a href="site:jsl">jsl</a>.</li>
+      <li>Improved taglist (outline) support.</li>
+    </ul>
+
     <p><strong>Log4j Integration</strong></p>
     <ul>
       <li>Validation of log4j xml files.</li>
@@ -129,7 +135,10 @@
       <li>Find definition.</li-->
       <li>Regular expression testing.</li>
       <li>Django functionality.</li>
-      <li>Validation via python compiler, pyflakes, and pylint.</li>
+      <li>
+        Validation via python compiler, <a href="site:pyflakes">pyflakes</a>,
+        and <a href="site:pylint">pylint</a>.
+      </li>
     </ul>
 
     <p><strong>Vim Script Integration</strong></p>
@@ -182,6 +191,7 @@
         and open it (split, edit, or tabnew).
       </li>
       <li>Enhanced taglist support.</li>
+      <li>Much more...</li>
     </ul>
   </body>
 </document>

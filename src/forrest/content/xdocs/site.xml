@@ -207,6 +207,10 @@ See http://forrest.apache.org/docs/linking.html for more info
       <tools label="Tools" href="tools.html"
           description="JDK Tools Integration"/>
     </java>
+    <javascript label="Javascript" href="javascript/">
+      <validate label="Validation" href="validate.html"
+          description="Validation"/>
+    </javascript>
     <!--php label="Php" href="php/">
       <includepath label="Include Path" href="includepath.html"
           description="Include Path"/>
@@ -259,53 +263,53 @@ See http://forrest.apache.org/docs/linking.html for more info
   </translations>
 
   <external-refs>
+    <!-- eclim sourceforge links -->
     <downloads href="http://sourceforge.net/project/showfiles.php?group_id=145869"/>
-    <screenshots href="http://sourceforge.net/project/screenshots.php?group_id=145869"/>
     <forums href="http://sourceforge.net/forum/?group_id=145869"/>
-    <tracker href="http://sourceforge.net/tracker/?group_id=145869"/>
     <license href="http://apache.org/licenses/LICENSE-2.0.html"/>
+    <screenshots href="http://sourceforge.net/project/screenshots.php?group_id=145869"/>
+    <tracker href="http://sourceforge.net/tracker/?group_id=145869"/>
 
-    <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
-
+    <!-- core 3rd party dependencies -->
     <eclipse href="http://eclipse.org"/>
     <eclipse_download href="http://eclipse.org/downloads/index.php"/>
-    <eclipse_pdt href="http://eclipse.org/pdt/"/>
-    <eclipse_wst href="http://eclipse.org/webtools/main.php"/>
-    <pydev href="http://pydev.sourceforge.net"/>
-    <pyflakes href="http://www.divmod.org/trac/wiki/DivmodPyflakes"/>
-    <pylint href="http://www.logilab.org/857"/>
-
+    <jdk_download href="http://java.sun.com/javase/downloads/index.html"/>
+    <nailgun href="http://www.martiansoftware.com/nailgun/"/>
     <vim href="http://www.vim.org"/>
     <vim_download href="http://www.vim.org/download.php"/>
     <!--vim_windows href="http://users.skynet.be/antoine.mechelynck/vim/#vim7"/-->
-    <nailgun href="http://www.martiansoftware.com/nailgun/"/>
 
+    <!-- 3rd party eclipse plugins -->
+    <eclipse_pdt href="http://eclipse.org/pdt/"/>
+    <eclipse_wst href="http://eclipse.org/webtools/main.php"/>
+    <pydev href="http://pydev.sourceforge.net"/>
+
+    <!-- 3rd party vim plugins -->
     <supertab href="http://www.vim.org/scripts/script.php?script_id=1643"/>
-
     <taglist href="http://www.vim.org/scripts/script.php?script_id=273"/>
-    <taglist_extend
-        href="http://www.geocities.com/yegappan/taglist/manual.html#taglist-extend"/>
-    <taglist_ctags
-        href="http://www.geocities.com/yegappan/taglist/manual.html#'Tlist_Ctags_Cmd'"/>
+    <taglist_extend href="http://www.geocities.com/yegappan/taglist/manual.html#taglist-extend"/>
+    <taglist_ctags href="http://www.geocities.com/yegappan/taglist/manual.html#'Tlist_Ctags_Cmd'"/>
 
+    <!-- external third party tools / libraries -->
+    <ant href="http://ant.apache.org"/>
+    <antcontrib href="http://ant-contrib.sourceforge.net"/>
+    <formic href="http://sourceforge.net/projects/formic"/>
+    <groovy href="http://groovy.codehaus.org"/>
+    <ivy href="http://jayasoft.org/ivy"/>
+    <jsl href="http://www.javascriptlint.com/"/>
+    <maven href="http://maven.apache.org"/>
+    <pyflakes href="http://www.divmod.org/trac/wiki/DivmodPyflakes"/>
+    <pylint href="http://www.logilab.org/857"/>
+    <testng href="http://testng.org/doc"/>
+    <viewvc href="http://viewvc.org"/>
+
+    <!-- related projects -->
     <vimplugin href="http://vimplugin.sourceforge.net/"/>
     <viplugin href="http://www.satokar.com/viplugin/index.php"/>
 
-    <antcontrib href="http://ant-contrib.sourceforge.net"/>
-
-    <groovy href="http://groovy.codehaus.org"/>
-
-    <ant href="http://ant.apache.org"/>
-    <maven href="http://maven.apache.org"/>
-    <ivy href="http://jayasoft.org/ivy"/>
-    <formic href="http://sourceforge.net/projects/formic"/>
-
-    <viewvc href="http://viewvc.org"/>
-
-    <testng href="http://testng.org/doc"/>
-
-    <forrest href="http://forrest.apache.org/"/>
+    <!-- forrest defaults -->
     <cocoon href="http://cocoon.apache.org/"/>
+    <forrest href="http://forrest.apache.org/"/>
     <xml.apache.org href="http://xml.apache.org/"/>
   </external-refs>
 

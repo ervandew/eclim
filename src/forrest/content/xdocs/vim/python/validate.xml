@@ -27,18 +27,18 @@
     </authors>
   </header>
   <body>
-    <note>
-      Python validation currently uses both the python compiler to check for
-      syntax errors and <a href="site:pyflakes">pyflakes</a> to perform some
-      additional validation.  To make use of the pyflakes portion of the
-      validation you will first need to install pyflakes and make sure it is in
-      your path.
-    </note>
     <p>
       When editing a python file eclim will default to validating the file when
       it is written.  Any errors will be added to the current window's location
       list (:help location-list) and their corresponding line number noted via
       Vim's sign functionality.
+    </p>
+    <p>
+      Python validation currently uses both the python compiler to check for
+      syntax errors and <a href="site:pyflakes">pyflakes</a> to perform some
+      additional validation.  To make use of the pyflakes portion of the
+      validation you will first need to install pyflakes and make sure it is in
+      your path.
     </p>
     <note>
       Python validation does not currently require that the file exist in an

@@ -319,6 +319,11 @@
         to support a custom logger template.
       </action>
 
+      <action dev="ervandew" type="add" context="Javascript">
+        Added <a href="vim/javascript/validate.html">javascript validation</a>
+        using <a href="site:jsl">jsl</a>.
+      </action>
+
       <!--action dev="ervandew" type="add" context="Php">
         Added php support for
         <a href="vim/php/complete.html">code completion</a>,
