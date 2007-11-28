@@ -57,7 +57,6 @@ function! EclimGetPhpHtmlIndent (lnum)
     endif
     return indent
   endif
-  let indent = EclimGetHtmlIndent(a:lnum)
   return EclimGetHtmlIndent(a:lnum)
 endfunction " }}}
 
