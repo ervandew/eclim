@@ -163,7 +163,7 @@ function eclim#php#search#FindInclude ()
   endif
 
   let file = substitute(getline('.'),
-    \ ".*\\<\\(require\\|include\\)\\s*[(]\\?['\"]\\([^'\"]*\\)['\"].*", '\2', '')
+    \ ".*\\<\\(require\\|include\\)\\(_once\\)\\?\\s*[(]\\?['\"]\\([^'\"]*\\)['\"].*", '\3', '')
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:include_paths
@@ -200,7 +200,7 @@ function! eclim#php#search#SearchContext ()
     let cnum = eclim#util#GetCurrentElementColumn()
   endif
 
-  if getline('.') =~ "\\<\\(require\\|include\\)\\s*[(]\\?['\"][^'\"]*\\%" . cnum . "c"
+  if getline('.') =~ "\\<\\(require\\|include\\)\\(_once\\)\\?\\s*[(]\\?['\"][^'\"]*\\%" . cnum . "c"
     call eclim#php#search#FindInclude()
     return
   elseif getline('.') =~ '\<class\s\+\%' . cnum . 'c'
