@@ -95,12 +95,12 @@ function! EclimGetHtmlIndent (lnum)
       endwhile
       let adj = 0 - (&sw * occurrences)
 
-    " handle <input> tags without '/>'
-    elseif prevline =~ '<input[^/]\{-}>' " FIXME: handle wrapped input tag
+    " handle <input> tags without '/>' NOTE: the '?' in this regex is to
+    " compat issues with php
+    elseif prevline =~ '<input[^/?]\{-}>' " FIXME: handle wrapped input tag
       let adj = 0 - &sw
     endif
   endif
-
   return IndentAnything() + adj
 endfunction " }}}
 
