@@ -42,7 +42,7 @@ function! eclim#cache#Set (key, content, metadata)
   call writefile([string(a:metadata)] + a:content, file)
 
   if executable('gzip')
-    call system('gzip "' . file . '"')
+    call eclim#util#System('gzip "' . file . '"')
   endif
 endfunction " }}}
 
@@ -60,9 +60,9 @@ function! eclim#cache#Get (key, ...)
 
   let file = s:GetCachedFilename(a:key)
   if filereadable(file . '.gz')
-    call system('gunzip "' . file . '.gz"')
+    call eclim#util#System('gunzip "' . file . '.gz"')
     let contents = readfile(file)
-    call system('gzip "' . file . '"')
+    call eclim#util#System('gzip "' . file . '"')
   elseif filereadable(file)
     let contents = readfile(file)
   else
