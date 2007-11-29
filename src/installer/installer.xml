@@ -90,16 +90,21 @@
             dest="${eclipse.home}/plugins">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
+        <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
+            token="$${vim.files}" value="${vim.files}">
+          <include name="eclim"/>
+          <include name="eclim.*"/>
+        </replace>
       </then>
       <else>
-        <!--
-          use exec with native tar since ant untar does not preserve
-          permissions
-          -->
         <untar src="${basedir}/org.eclim_${eclim.version}.tar.gz"
             dest="${eclipse.home}/plugins" compression="gzip">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
+        <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
+            token="$${vim.files}" value="${vim.files}">
+          <include name="eclim"/>
+        </replace>
         <chmod perm="755">
           <fileset dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
             <include name="eclim"/>
