@@ -16,20 +16,20 @@
 
 # Author: Eric Van Dewoestine
 
-CURPATH=`dirname $0`
+CURPATH=`dirname "$0"`
 SED=`which sed 2> /dev/null`
 NAILGUN_ARGS="--nailgun-port 9091"
 
 # attempt to grab port number from .eclimrc file if available.
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
-  ARGS=`sed -n -f $CURPATH/eclim.sed $HOME/.eclimrc`
+  ARGS=`sed -n -f "$CURPATH/eclim.sed" $HOME/.eclimrc`
   if [ "$ARGS" != "" ] ; then
     NAILGUN_ARGS=$ARGS
   fi
 fi
 
-JAVA_CMD="$CURPATH/ng $NAILGUN_ARGS"
-$JAVA_CMD org.eclim.command.Main "-Dvim.files=${vim.files}" "$@" 2>&1
+"$CURPATH/ng" $NAILGUN_ARGS org.eclim.command.Main \
+  "-Dvim.files=${vim.files}" "$@" 2>&1
 
 # Weirdest thing that for the life of me I can't figure out.
 # Sometimes when executed through vim, the exit status will be

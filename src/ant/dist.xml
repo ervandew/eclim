@@ -32,11 +32,13 @@
         <exclude name="org.eclim.installer*_${eclim.version}"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
-        <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
-        <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
-        <exclude name="org.eclim_${eclim.version}/bin/eclim*.sed"/>
-        <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclim*"/>
       </fileset>
+      <zipfileset dir="src/shell" prefix="org.eclim_${eclim.version}/bin/">
+        <include name="eclim"/>
+        <include name="eclim*.bat"/>
+        <include name="eclim*.cmd"/>
+      </zipfileset>
     </zip>
     <tar destfile="dist/org.eclim_${eclim.version}.tar.gz" compression="gzip">
       <tarfileset dir="${eclipse.home}/plugins/">
@@ -48,15 +50,16 @@
         <exclude name="org.eclim.installer*_${eclim.version}"/>
         <exclude name="org.eclim_${eclim.version}/bin/native/windows/**/*"/>
         <exclude name="org.eclim_${eclim.version}/bin/ng"/>
-        <exclude name="org.eclim_${eclim.version}/bin/eclim"/>
-        <exclude name="org.eclim_${eclim.version}/bin/eclimd"/>
+        <exclude name="org.eclim_${eclim.version}/bin/eclim*"/>
         <exclude name="org.eclim_${eclim.version}/bin/**/*.bat"/>
         <exclude name="org.eclim_${eclim.version}/bin/**/*.exe"/>
-        <exclude name="org.eclim_${eclim.version}/log/eclim.log"/>
       </tarfileset>
-      <tarfileset dir="${eclipse.home}/plugins/" mode="755">
-        <include name="org.eclim_${eclim.version}/bin/eclim"/>
-        <include name="org.eclim_${eclim.version}/bin/eclimd"/>
+      <tarfileset dir="src/shell"
+          prefix="org.eclim_${eclim.version}/bin/" mode="755">
+        <include name="eclim"/>
+        <include name="eclim.sed"/>
+        <include name="eclimd"/>
+        <include name="eclimd.sed"/>
       </tarfileset>
     </tar>
 

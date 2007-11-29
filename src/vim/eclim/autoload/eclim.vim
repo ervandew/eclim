@@ -164,8 +164,11 @@ function! eclim#GetEclimCommand ()
     let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
       \ '/bin/' . g:EclimCommand
 
-    if g:EclimPath =~ '^[a-zA-Z]:'
+    if has("win32") || has("win64")
       let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
+    elseif has("win32unix")
+      let g:EclimPath = system('cygpath "' . g:EclimPath . '"')
+      let g:EclimPath = substitute(g:EclimPath, '\n.*', '', '')
     endif
 
     if !filereadable(g:EclimPath)
@@ -175,10 +178,12 @@ function! eclim#GetEclimCommand ()
 
     " on windows, the command must be executed on the drive where eclipse is
     " installed.
-    if g:EclimPath =~ '^[a-zA-Z]:'
+    if has("win32") || has("win64")
       let g:EclimPath =
         \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
         \ ' && "' . g:EclimPath . '"'
+    else
+      let g:EclimPath = '"' . g:EclimPath . '"'
     endif
   endif
   return g:EclimPath
