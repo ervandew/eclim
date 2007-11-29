@@ -70,7 +70,7 @@ endfunction " }}}
 " AnnotateInfo() {{{
 function! eclim#vcs#annotate#AnnotateInfo ()
   if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
-    echo b:vcs_annotations[line('.') - 1]
+    call eclim#util#WideMessage('echo', b:vcs_annotations[line('.') - 1])
   endif
 endfunction " }}}
 
@@ -79,7 +79,7 @@ function! eclim#vcs#annotate#ApplyAnnotations (annotations)
   let defined = eclim#display#signs#GetDefined()
   let index = 1
   for annotation in a:annotations
-    let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
+    let user = substitute(annotation, '^.\{-})\s\+\(.*\)', '\1', '')
     let user_abbrv = user[:1]
     if index(defined, user) == -1
       call eclim#display#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
@@ -113,7 +113,7 @@ function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
     let annotations = split(result, '\n')
     call filter(annotations, 'v:val =~ "^[0-9]"')
     call map(annotations,
-      \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+      \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s\\+\\(.\\{-}\\)).*', '\\1 (\\3) \\2', '')")
   finally
     exec 'lcd ' . cwd
   endtry
@@ -128,7 +128,7 @@ endfunction " }}}
 
 " GetSvnAnnotations (file, revision) {{{
 function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
-  let cmd = 'blame'
+  let cmd = 'annotate -v'
   if a:revision != ''
     let cmd .= ' -r ' . a:revision
   endif
@@ -139,7 +139,7 @@ function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
 
   let annotations = split(result, '\n')
   call map(annotations,
-      \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s.*', '\\1 \\2', '')")
+      \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s\\+.\\{-}\\s\\+\\(.\\{-}\\)\\s\\+.\\{-}(\\(.\\{-}\\)).*', '\\1 (\\4 \\3) \\2', '')")
 
   return annotations
 endfunction " }}}
