@@ -110,7 +110,7 @@ function! s:EchoLevel (message, level, highlight)
 endfunction " }}}
 
 " Echo(message) {{{
-" Echos a message using the info highlight regarless of what log level is set.
+" Echos a message using the info highlight regardless of what log level is set.
 function! eclim#util#Echo (message)
   if a:message != "0" && g:EclimLogLevel > 0
     exec "echohl " . g:EclimInfoHighlight
@@ -870,7 +870,7 @@ function! eclim#util#TempWindowCommand (command, name)
   return 1
 endfunction " }}}
 
-" WideMessage(command,message) {{{
+" WideMessage(command, message) {{{
 " Executes the supplied echo command and forces vim to display as much as
 " possible without the "Press Enter" prompt.
 " Thanks to vimtip #1289
