@@ -210,7 +210,7 @@ public class VimStep
       for (int ii = 0; ii < paths.length; ii++){
         File path = new File(paths[ii]);
         if(path.isDirectory() && path.canWrite()){
-          results.add(paths[ii]);
+          results.add(paths[ii].replace('\\', '/'));
         }
       }
 
