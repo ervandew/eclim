@@ -50,7 +50,7 @@ function! eclim#vcs#annotate#AnnotateOff ()
   if exists('b:vcs_annotations')
     let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
-      let user = substitute(annotation, '^.\{-}\s\+\(.*\)', '\1', '')
+      let user = substitute(annotation, '^.*)\s\+\(.*\)', '\1', '')
       if index(defined, user) != -1
         let signs = eclim#display#signs#GetExisting(user)
         for sign in signs
@@ -98,7 +98,7 @@ endfunction " }}}
 
 " GetCvsAnnotations (file, revision) {{{
 function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
-  let cmd = 'cvs annotate'
+  let cmd = 'annotate'
   if a:revision != ''
     let cmd .= ' -r ' . a:revision
   endif
@@ -109,7 +109,7 @@ function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
   let cwd = getcwd()
   exec 'lcd ' . dir
   try
-    let result = eclim#util#System(cmd . ' "' . file . '"')
+    let result = eclim#vcs#util#Cvs(cmd . ' "' . file . '"')
     let annotations = split(result, '\n')
     call filter(annotations, 'v:val =~ "^[0-9]"')
     call map(annotations,
