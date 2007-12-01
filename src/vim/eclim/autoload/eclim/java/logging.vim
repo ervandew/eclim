@@ -83,6 +83,7 @@ function! s:InitLoggingSettings ()
       return 0
     endif
     let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/' . name
+    let template = substitute(template, '\\ ', ' ', 'g')
     if(!filereadable(template))
       echoe 'Custom logger template not found at "' . template . '"'
       return 0
