@@ -85,6 +85,11 @@
         Turns any current annotations off by removing all vim signs and
         disabling the CursorHold event.
       </li>
+      <li>
+        <anchor id="VcsInfo"/>
+        <strong>:VcsInfo</strong> -
+        Echos vcs info about the currently versioned file.
+      </li>
     </ul>
 
     <note>

@@ -703,6 +703,12 @@
         </a> -
         Turns off any current annotations.
       </li>
+      <li>
+        <a href="common/vcs.html#VcsInfo">
+          <strong>:VcsInfo</strong>
+        </a> -
+        Echos vcs info about the current versioned file.
+      </li>
     </ul>
     <note>
       Currently only subversion is supported by the following commands.

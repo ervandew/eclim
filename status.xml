@@ -352,6 +352,9 @@
 
       <action dev="ervandew" type="add" context="Vcs">
         Added
+        <a href="vim/common/vcs.html#VcsInfo">
+          <strong>:VcsInfo</strong>
+        </a>,
         <a href="vim/common/vcs.html#ViewvcAnnotate">
           <strong>:ViewvcAnnotate</strong>
         </a>,

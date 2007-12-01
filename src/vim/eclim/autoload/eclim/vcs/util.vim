@@ -62,7 +62,7 @@ function eclim#vcs#util#GetPreviousRevision ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let log = eclim#util#System('cvs log ' . expand('%:t'))
+      let log = eclim#vcs#util#Cvs('log ' . expand('%:t'))
       let lines = split(log, '\n')
       call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
       if len(lines) >= 2
@@ -95,7 +95,7 @@ function eclim#vcs#util#GetRevision ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let status = eclim#util#System('cvs status ' . expand('%:t'))
+      let status = eclim#vcs#util#Cvs('status ' . expand('%:t'))
       let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
       if status =~ pattern
         let revision = substitute(status, pattern, '\1', '')
@@ -127,7 +127,7 @@ function eclim#vcs#util#GetRevisions ()
   exec 'lcd ' . dir
   try
     if isdirectory(dir . '/CVS')
-      let log = eclim#util#System('cvs log ' . expand('%:t'))
+      let log = eclim#vcs#util#Cvs('log ' . expand('%:t'))
       let lines = split(log, '\n')
       call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
       call map(lines, 'substitute(v:val, "^revision \\([0-9.]\\+\\)\\s*$", "\\1", "")')
@@ -262,18 +262,63 @@ function eclim#vcs#util#GetType (dir, file)
   return type
 endfunction " }}}
 
+" Info() {{{
+" Retrieves and echos info on the current file.
+function eclim#vcs#util#Info ()
+  let info = []
+
+  let cwd = getcwd()
+  let dir = expand('%:p:h')
+  exec 'lcd ' . dir
+  try
+    if isdirectory(dir . '/CVS')
+      let result = eclim#vcs#util#Cvs('status "' . expand('%:t') . '"')
+      if result == '0'
+        return
+      endif
+      let info = split(result, "\n")[1:]
+      call map(info, "substitute(v:val, '^\\s\\+', '', '')")
+      call map(info, "substitute(v:val, '\\t', ' ', 'g')")
+      let info[0] = substitute(info[0], '.\{-}\(Status:.*\)', '\1', '')
+    elseif isdirectory(dir . '/.svn')
+      let result = eclim#vcs#util#Svn('info "' . expand('%:t') . '"')
+      if result == '0'
+        return
+      endif
+      let info = split(result, "\n")
+      call filter(info, "v:val =~ '^\\(Last\\|URL\\)'")
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  call eclim#util#Echo(join(info, "\n"))
+endfunction " }}}
+
+" Cvs(args) {{{
+" Executes 'cvs' with the supplied args.
+function eclim#vcs#util#Cvs (args)
+  return eclim#vcs#util#Vcs('cvs', a:args)
+endfunction " }}}
+
 " Svn(args) {{{
 " Executes 'svn' with the supplied args.
 function eclim#vcs#util#Svn (args)
-  if !executable('svn')
-    call eclim#util#EchoError('svn executable not found in your path.')
+  return eclim#vcs#util#Vcs('svn', a:args)
+endfunction " }}}
+
+" Vcs(cmd, args) {{{
+" Executes the supplied vcs command with the supplied args.
+function eclim#vcs#util#Vcs (cmd, args)
+  if !executable(a:cmd)
+    call eclim#util#EchoError(a:cmd . ' executable not found in your path.')
     return
   endif
 
-  let result = eclim#util#System('svn ' . a:args)
+  let result = eclim#util#System(a:cmd . ' ' . a:args)
   if v:shell_error
     call eclim#util#EchoError(
-      \ "Error executing svn command: svn " . a:args . "\n" . result)
+      \ "Error executing command: " . a:cmd . " " . a:args . "\n" . result)
     return
   endif
 

@@ -50,6 +50,9 @@ if !exists(":VcsCat")
     \ eclim#vcs#util#GetSvnUrl(expand('%:p:h'), expand('%:t')),
     \ '<args>', 'split')
 endif
+if !exists(":VcsInfo")
+  command -nargs=0 VcsInfo :call eclim#vcs#util#Info()
+endif
 
 if !exists(":Viewvc")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
