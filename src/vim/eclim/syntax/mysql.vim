@@ -24,6 +24,7 @@
 
 source $VIMRUNTIME/syntax/mysql.vim
 
+syn keyword mysqlKeyword engine
 syn keyword mysqlKeyword if elseif else loop leave
 syn keyword mysqlKeyword before close cursor each fetch open set trigger
 syn keyword mysqlKeyword begin call declare return
