@@ -10,17 +10,13 @@ TODO {{{
     - util classes
     - project nature add/remove
     - logger (custom logger)
-
-    - test handling of CLASSPATH and ext.dirs by eclimd.
-    Windows Testing
-      - test handling of CLASSPATH and ext.dirs by installer.
   }}}
 
   Installer {{{
     - installer validation
       - java version
 
-    - look into libarchive for bsd support (installer).
+    - look into libarchive for bsd support.
 
     - consider adding command line option to installer to specify temp dir to write to
       - or maybe just use ~/.tmp
@@ -50,7 +46,7 @@ TODO {{{
       :PhpFindDefinition
       :PhpSearch
       :PhpSearchContext
-      :Validate (css, php, python, and java)
+      :Validate (css, php, python, java, and javascript)
       :PyLint
       :MaximizeWindow
       :MinimizeWindow
@@ -65,6 +61,7 @@ TODO {{{
       :ViewvcChangeSet
       :ViewvcAnnotate
       :ViewvcDiff
+      :VcsInfo
       :VcsLog
       :VcsCat
       :VcsChangeSet
@@ -86,10 +83,6 @@ TODO {{{
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
     - gvim menu items.
-
-    - create :ProjectImport <dir> command
-      - Eclipse equivalant:
-        File > Import... > General > Existing Projects Into Workspace
 
     - determines the user's default workspace using
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
@@ -119,16 +112,25 @@ TODO {{{
 
     - implement means to highlight text and push it to the command prompt
       Ctrl-: or something similar.
+  }}}
 
-    - get working under cygwin
-      if has('win32unix')
-      - eclim command
-      - file paths
-      - search results
+  C/C++ {{{
+    - http://wiki.eclipse.org/index.php/CDT
 
+    - project creation
+      - windows: select which toolchain to use, cygwin or mingw
+      - ibm xl toolchain:
+        http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.cdt.doc.user/concepts/cdt_c_whatsnew.htm
+
+    - :Hierarchy command which opens a buffer showing the class hierarchy for
+      the current file.
+    - :IncludeHierarchy command which opens a buffer showing hierarchy of each
+      header file included in the current source file.
   }}}
 
   Java {{{
+    - :Hierarchy command which opens a buffer showing the class hierarchy for
+      the current file.
 
     - look into code refactoring support.
 
@@ -172,7 +174,7 @@ TODO {{{
 
   Jdbc {{{
     - Create connection profiles
-      - eclim_jdbc_profile_<name> (where to store these settings?)
+      - eclim_jdbc_profile_<name> (where to store these settings? ... .eclim/jdbc/<name>.properties)
         - Driver Class:
         - Driver Url:
         - Libs (comma seperated paths to jar files):
@@ -252,6 +254,7 @@ NOTES {{{
   }}}
 
   Steps for new releases {{{
+    Note: make sure to do a quick test with sh (dash) instead of bash
 
     1) tag svn
     2) create sourceforge release
@@ -357,6 +360,16 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - create :ProjectImport <dir> command
+    - Eclipse equivalant:
+      File > Import... > General > Existing Projects Into Workspace
+
+  - write a script to visit all update sites in
+    src/installer/resources/dependencies.properties and check for new versions
+    of required plugins.
+    - maybe create a script to run installer task which installs required
+      plugins without having to build/run the installer.
+
   - support max number of cache entries
     - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
 
@@ -367,10 +380,17 @@ HIGH {{{
     B:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763323&aid=<id> |
     F:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763326&aid=<id>
 
-  - php support waiting on: https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
+  - php support waiting on:
+    https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
+    https://bugs.eclipse.org/bugs/show_bug.cgi?id=205243 <-- duplicate of 204977
     - add support for setting php interpreter version (4 or 5)
       - org.eclipse.php.core.prefs
         phpVersion=php4
+
+  - get working under cygwin
+    if has('win32unix')
+    - eclim command
+    - file paths
 }}}
 
 DOCS (scratch) {{{
