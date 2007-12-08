@@ -31,7 +31,7 @@ fi
 
 # handle eclipse 3.3 issue on gentoo
 IS_GENTOO=`which java-config 2> /dev/null`
-if [ -n "$IS_GENTOO" ]; then
+if [ -x "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 fi
 
