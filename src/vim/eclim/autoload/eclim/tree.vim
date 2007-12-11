@@ -743,7 +743,7 @@ endfunction " }}}
 " directories.
 function s:IsFileExecutable (file)
   if !isdirectory(a:file)
-    let info = eclim#util#System('ls -l ' . a:file)
+    let info = eclim#util#System('ls -l "' . a:file . '"')
     if info[3] =~ '[sx]' && info[0] != 'l'
       return 1
     endif
