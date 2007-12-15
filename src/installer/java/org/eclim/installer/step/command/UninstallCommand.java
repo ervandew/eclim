@@ -15,6 +15,8 @@
  */
 package org.eclim.installer.step.command;
 
+import org.apache.log4j.Logger;
+
 /**
  * Uninstall a feature.
  *
@@ -24,6 +26,12 @@ package org.eclim.installer.step.command;
 public class UninstallCommand
   extends Command
 {
+  private static final Logger logger =
+    Logger.getLogger(UninstallCommand.class);
+
+  private String feature;
+  private String version;
+
   public UninstallCommand (OutputHandler handler, String id, String version)
   {
     super(handler, new String[]{
@@ -31,5 +39,22 @@ public class UninstallCommand
       "-featureId", id,
       "-version", version
     });
+    this.feature = id;
+    this.version = version;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Command#getReturnCode()
+   */
+  public int getReturnCode ()
+  {
+    if (super.getReturnCode() != 0){
+      logger.warn("Unable to uninstall feature: " + feature + " " + version);
+    }
+
+    // don't fail on uninstall error.  later versions of eclipse may auto
+    // uninstall.
+    return 0;
   }
 }
