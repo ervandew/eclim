@@ -209,6 +209,8 @@ TODO {{{
   }}}
 
   Wst {{{
+    - :JavascriptRegex (maybe use rhino or see if eclipse has something)
+
     - for css validation, attempt to provide messages for errors that the validator does not.
       - FIRST, try checking out latest css validation code and see if they have any messages.
       - * ie hacks.
@@ -360,15 +362,12 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - support an eclim 'after' directory and update installer to not delete it.
+    .vim/eclim/after
+
   - create :ProjectImport <dir> command
     - Eclipse equivalant:
       File > Import... > General > Existing Projects Into Workspace
-
-  - write a script to visit all update sites in
-    src/installer/resources/dependencies.properties and check for new versions
-    of required plugins.
-    - maybe create a script to run installer task which installs required
-      plugins without having to build/run the installer.
 
   - support max number of cache entries
     - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
