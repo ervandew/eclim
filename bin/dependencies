@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+##
+# Script to check for any new updates for each of eclim's eclipse plugin
+# dependencies.
+#
+# Author: Eric Van Dewoestine
+##
+
+import os.path, re, sys
+from urllib import urlopen
+from xml.dom.minidom import parse
+
+def checkForUpdates ():
+  dependencies = getDependencies()
+  for dependency in dependencies:
+    versions = checkForUpdate(*dependency)
+    if versions:
+      versions.sort()
+      versions.reverse()
+      print '%s has the following updates available:' % dependency[1]
+      print '\t' + '\n\t'.join(versions)
+    else:
+      print '%s is up to date.' % dependency[1]
+
+def checkForUpdate (url, feature, currentVersion):
+  dom = parse(urlopen(url + 'site.xml'))
+  versions = []
+  try:
+    for featureElement in dom.getElementsByTagName("feature"):
+      name = featureElement.getAttribute("id")
+      if name == feature:
+        version = featureElement.getAttribute('version')
+        if version > currentVersion:
+          versions.append(version)
+  finally:
+    dom.unlink()
+  return versions
+
+def getDependencies ():
+  ignore = re.compile(r'^(\s*[a-z.]+=|\s*#|\s*$)')
+  entry = re.compile(r'^\s*(.*?)\s*(,\s*\\)?\s*$')
+
+  path = os.path.dirname(sys.path[0])
+  properties = file(os.path.join(path,
+      'src/installer/resources/dependencies.properties'))
+
+  dependencies = []
+  try:
+    for line in properties.readlines():
+      if not ignore.match(line):
+        dependencies.append(entry.sub(r'\1', line).split())
+  finally:
+    properties.close()
+  return dependencies
+
+checkForUpdates()
+
+# vim:ft=python
