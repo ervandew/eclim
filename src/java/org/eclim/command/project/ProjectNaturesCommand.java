@@ -57,22 +57,26 @@ public class ProjectNaturesCommand
       // find longest project name for padding.
       int length = 0;
       for(IProject project : projects){
-        name = project.getName();
-        if(name.length() > length){
-          length = name.length();
+        if (project.isOpen()){
+          name = project.getName();
+          if(name.length() > length){
+            length = name.length();
+          }
         }
       }
 
       for(IProject project : projects){
-        String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
-        if (aliases.length == 0){
-          aliases = new String[]{"none"};
+        if (project.isOpen()){
+          String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
+          if (aliases.length == 0){
+            aliases = new String[]{"none"};
+          }
+          StringBuffer info = new StringBuffer()
+            .append(StringUtils.rightPad(project.getName(), length))
+            .append(" - ")
+            .append(StringUtils.join(aliases, ' '));
+          results.add(info.toString());
         }
-        StringBuffer info = new StringBuffer()
-          .append(StringUtils.rightPad(project.getName(), length))
-          .append(" - ")
-          .append(StringUtils.join(aliases, ' '));
-        results.add(info.toString());
       }
 
       return StringUtils.join(
