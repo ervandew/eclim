@@ -271,6 +271,19 @@
   </todo>
 
   <changes>
+    <release version="1.3.4" date="2007">
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Various bug fixes.
+      </action>
+
+      <action dev="ervandew" type="add" context="Eclim">
+        Added
+        <a href="vim/common/project.html#ProjectInfo">
+          <strong>:ProjectInfo</strong>
+        </a>.
+      </action>
+    </release>
+
     <release version="1.3.3" date="December 15, 2007">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Installer bug fixes.

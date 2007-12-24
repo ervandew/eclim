@@ -73,6 +73,10 @@ if !exists(":ProjectSettings")
   command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectSettings :call eclim#project#util#ProjectSettings('<args>')
 endif
+if !exists(":ProjectInfo")
+  command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProject
+    \ ProjectInfo :call eclim#project#util#ProjectInfo('<args>')
+endif
 if !exists(":ProjectOpen")
   command -nargs=1 -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectOpen :call eclim#project#util#ProjectOpen('<args>')

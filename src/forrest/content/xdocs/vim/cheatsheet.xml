@@ -84,6 +84,10 @@
         Refresh all projects.
       </li>
       <li>
+        <a href="common/project.html#ProjectInfo"><strong>:ProjectInfo</strong></a>
+        [&lt;project&gt;] - Echos info for the current or supplied project.
+      </li>
+      <li>
         <a href="common/project.html#ProjectOpen"><strong>:ProjectOpen</strong></a>
         &lt;project&gt; - Opens a project.
       </li>

@@ -278,6 +278,8 @@ public class Services
           org.eclim.command.project.ProjectDeleteCommand.class);
       registerCommand("project_refresh",
           org.eclim.command.project.ProjectRefreshCommand.class);
+      registerCommand("project_info",
+          org.eclim.command.project.ProjectInfoCommand.class);
       registerCommand("project_open",
           org.eclim.command.project.ProjectOpenCommand.class);
       registerCommand("project_close",

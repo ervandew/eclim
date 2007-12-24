@@ -36,6 +36,7 @@ TODO {{{
     - document qf/location list filtering support
 
     - Chinese cheatsheet
+      :ProjectInfo
       :ProjectNatures
       :ProjectNatureAdd
       :ProjectNatureRemove
@@ -365,9 +366,6 @@ NOTES {{{
 }}}
 
 HIGH {{{
-  - add :ProjectInfo [<project>] command
-    - natures, status (open/closed), location, dependencies
-
   - test installer w/ eclipse running
     - may cause issues, if so, attempt to detect if eclipse is running and
       display an intermediate step (or added to requirements steps as warning)
@@ -375,6 +373,8 @@ HIGH {{{
 
   - support an eclim 'after' directory and update installer to not delete it.
     .vim/eclim/after
+    - or when inserting eclim into the runtimepath, insert before user's last 'after' path.
+      (probably less reliable though)
 
   - create :ProjectImport <dir> command
     - Eclipse equivalant:
@@ -382,6 +382,7 @@ HIGH {{{
 
   - support max number of cache entries
     - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
+    - exclude entries beginning w/ 'eclim_'
 
   - org.eclim.project.vcs.tracker
     for sourceforge we need n urls, one for bugs, one for features, etc.

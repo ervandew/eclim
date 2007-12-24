@@ -29,6 +29,7 @@
   let s:command_delete = '-command project_delete -p "<project>"'
   let s:command_refresh = '-command project_refresh -p "<project>"'
   let s:command_projects = '-command project_list'
+  let s:command_project_info = '-command project_info -p "<project>"'
   let s:command_project_settings = '-command project_settings -p "<project>"'
   let s:command_project_setting = s:command_project_settings . ' -s <setting>'
   let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
@@ -138,6 +139,27 @@ function! eclim#project#util#ProjectRefresh (args)
   endif
 endfunction " }}}
 
+" ProjectInfo(project) {{{
+" Echos info for the current or supplied project.
+function! eclim#project#util#ProjectInfo (project)
+  let project = a:project
+  if project == ''
+    let project = eclim#project#util#GetCurrentProjectName()
+  endif
+  if project == ''
+    call eclim#util#EchoError("Unable to determine project. " .
+      \ "Please specify a project name or " .
+      \ "execute from a valid project directory.")
+    return
+  endif
+
+  let command = substitute(s:command_project_info, '<project>', project, '')
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
 " ProjectOpen(name) {{{
 " Open the requested project.
 function! eclim#project#util#ProjectOpen (name)
@@ -168,12 +190,7 @@ function! eclim#project#util#ProjectList ()
   if len(projects) == 1 && projects[0] == '0'
     return
   endif
-  exec "echohl " . g:EclimInfoHighlight
-  redraw
-  for project in projects
-    echom project
-  endfor
- echohl None
+  call eclim#util#Echo(join(projects, "\n"))
 endfunction " }}}
 
 " ProjectNatures(project) {{{
@@ -191,16 +208,7 @@ function! eclim#project#util#ProjectNatures (project)
     return
   endif
 
-  if len(projects) == 1
-    call eclim#util#Echo(projects[0])
-  else
-    exec "echohl " . g:EclimInfoHighlight
-    redraw
-    for project in projects
-      echom project
-    endfor
-    echohl None
-  endif
+  call eclim#util#Echo(join(projects, "\n"))
 endfunction " }}}
 
 " ProjectNatureModify(project) {{{
