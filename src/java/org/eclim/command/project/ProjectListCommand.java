@@ -56,7 +56,7 @@ public class ProjectListCommand
       natureId = ProjectNatureFactory.getNatureForAlias(alias);
       ArrayList<IProject> filtered = new ArrayList<IProject>();
       for (IProject project : projects){
-        if (project.hasNature(natureId)){
+        if (project.isOpen() && project.hasNature(natureId)){
           filtered.add(project);
         }
       }
