@@ -42,6 +42,12 @@
     \ '-command project_nature_remove -p "<project>" -n "<natures>"'
 " }}}
 
+" ClearProjectsCache() {{{
+" Flush the cached list of projects.
+function! eclim#project#util#ClearProjectsCache ()
+  call eclim#cache#Delete('eclim_projects')
+endfunction " }}}
+
 " ProjectCD(scope) {{{
 " Change the current working directory to the current project root.
 function! eclim#project#util#ProjectCD (scope)
@@ -82,6 +88,7 @@ function! eclim#project#util#ProjectCreate (args)
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)
+    call eclim#project#util#ClearProjectsCache()
   endif
 endfunction " }}}
 
@@ -92,12 +99,14 @@ function! eclim#project#util#ProjectDelete (name)
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)
+    call eclim#project#util#ClearProjectsCache()
   endif
 endfunction " }}}
 
 " ProjectRefreshAll() {{{
 " Refresh all projects.
 function! eclim#project#util#ProjectRefreshAll ()
+  call eclim#project#util#ClearProjectsCache()
   let projects = eclim#project#util#GetProjectNames()
   for project in projects
     call eclim#project#util#ProjectRefresh(project)
@@ -108,6 +117,7 @@ endfunction " }}}
 " ProjectRefresh(args) {{{
 " Refresh the requested projects.
 function! eclim#project#util#ProjectRefresh (args)
+  call eclim#project#util#ClearProjectsCache()
   if a:args != ''
     let projects = eclim#util#ParseArgs(a:args)
   else
@@ -305,61 +315,22 @@ function! s:SaveSettings ()
   "endif
 endfunction " }}}
 
-" GetCurrentProjectFile() {{{
-" Gets the path to the project file for the project that the current file is in.
-function! eclim#project#util#GetCurrentProjectFile ()
-  let dir = fnamemodify(expand('%:p'), ':h')
-  let dir = substitute(escape(dir, ' '), '\', '/', 'g')
-
-  let projectFile = eclim#util#Findfile('.project', dir . ';')
-  while 1
-    if filereadable(projectFile)
-      return substitute(fnamemodify(projectFile, ':p'), '\', '/', 'g')
-    endif
-    if projectFile == '' && dir != getcwd()
-      let dir = getcwd()
-    else
-      break
-    endif
-  endwhile
-  return ''
-endfunction " }}}
-
 " GetCurrentProjectName() {{{
 " Gets the project name that the current file is in.
 function! eclim#project#util#GetCurrentProjectName ()
-  let projectName = ''
-  let projectFile = eclim#project#util#GetCurrentProjectFile()
-  if projectFile != ''
-    let cmd = winrestcmd()
-
-    silent exec 'sview ' . escape(projectFile, ' ')
-    setlocal noswapfile
-    setlocal bufhidden=delete
-
-    call cursor(1,1)
-    let line = search('<name\s*>', 'wnc')
-    if line != 0
-      let projectName = substitute(getline(line), '.\{-}>\(.*\)<.*', '\1', '')
-    endif
-    silent close
-
-    silent exec cmd
-
-    " can potentially screw up display, like when used durring startup
-    " (project/tree.vim), it causes display for :Ant, :make commands to be all
-    " screwed up.
-    "redraw
-  endif
-
-  return projectName
+  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
+  let projects = filter(copy(eclim#project#util#GetProjects()),
+    \ 'dir =~ "^" . v:val ')
+  return len(projects) > 0 ? keys(projects)[0] : ''
 endfunction " }}}
 
 " GetCurrentProjectRoot() {{{
 " Gets the project root dir for the project that the current file is in.
 function! eclim#project#util#GetCurrentProjectRoot ()
-  let file = eclim#project#util#GetCurrentProjectFile()
-  return file != '' ? fnamemodify(file, ':h') : ''
+  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
+  let projects = filter(copy(eclim#project#util#GetProjects()),
+    \ 'dir =~ "^" . v:val ')
+  return len(projects) > 0 ? values(projects)[0] : ''
 endfunction " }}}
 
 " GetProjectRelativeFilePath (file) {{{
@@ -373,36 +344,76 @@ function! eclim#project#util#GetProjectRelativeFilePath (file)
   return result
 endfunction " }}}
 
+" GetProjects() {{{
+" Gets a map of project names to project locations.
+function! eclim#project#util#GetProjects ()
+  let cached = eclim#cache#Get('eclim_projects')
+  if has_key(cached, 'content') && len(cached.content) > 0
+    let projects = eval(cached.content[0])
+  else
+    let projects = {}
+
+    " using eclipse files (running eclim not necessary)
+    let projectsdir = eclim#eclipse#GetWorkspaceDir() .
+      \ '.metadata/.plugins/org.eclipse.core.resources/.projects/'
+    if isdirectory(projectsdir)
+      let dirs = split(glob(projectsdir . '*'), '\n')
+      for dir in dirs
+        if filereadable(dir . '/.location')
+          let lines = readfile(dir . '/.location', 'b')
+          call filter(lines, 'v:val =~ "file:"')
+          if len(lines) > 0
+            let name = fnamemodify(dir, ':t')
+            let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
+            let projects[name] = substitute(dir, '\', '/', 'g')
+          endif
+        endif
+      endfor
+
+    " using running eclim
+    else
+      let result = split(eclim#ExecuteEclim(s:command_projects), '\n')
+      if len(result) == 1 && result[0] == '0'
+        return []
+      endif
+
+      for line in result
+        let name = substitute(line, '\(.\{-}\)\s\+-\s\+.*', '\1', '')
+        let dir = substitute(line, '.\{-}\s\+-\s.\{-}\s\+-\s\(.*\)', '\1', '')
+        let projects[name] = substitute(dir, '\', '/', 'g')
+      endfor
+    endif
+
+    call eclim#cache#Set('eclim_projects', [string(projects)])
+  endif
+
+  return projects
+endfunction " }}}
+
 " GetProjectDirs() {{{
 " Gets list of all project root directories.
 function! eclim#project#util#GetProjectDirs ()
-  let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
-  if len(projects) == 1 && projects[0] == '0'
-    return []
-  endif
-
-  call map(projects,
-    \ "substitute(v:val, '.\\{-}\\s\\+-\\s.\\{-}\\s\\+-\\s\\(.*\\)', '\\1', '')")
-
-  return projects
+  return values(eclim#project#util#GetProjects())
 endfunction " }}}
 
 " GetProjectNames(...) {{{
 " Gets list of all project names, with optional filter by the supplied nature
 " alias.
 function! eclim#project#util#GetProjectNames (...)
-  let command = s:command_projects
+  " filter by nature
   if a:0 > 0 && a:1 != ''
+    let command = s:command_projects
     let command = s:command_projects . ' -n ' . a:1
-  endif
-  let projects = split(eclim#ExecuteEclim(command), '\n')
-  if len(projects) == 1 && projects[0] == '0'
-    return []
-  endif
+    let projects = split(eclim#ExecuteEclim(command), '\n')
+    if len(projects) == 1 && projects[0] == '0'
+      return []
+    endif
 
-  call map(projects, "substitute(v:val, '\\(.\\{-}\\)\\s\\+-\\s\\+.*', '\\1', '')")
+    call map(projects, "substitute(v:val, '\\(.\\{-}\\)\\s\\+-\\s\\+.*', '\\1', '')")
 
-  return projects
+    return projects
+  endif
+  return keys(eclim#project#util#GetProjects())
 endfunction " }}}
 
 " GetProjectNatureAliases(...) {{{
@@ -430,14 +441,7 @@ endfunction " }}}
 " GetProjectRoot(project) {{{
 " Gets the project root dir for the supplied project name.
 function! eclim#project#util#GetProjectRoot (project)
-  let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
-  for project in projects
-    if project =~ '^' . a:project . ' '
-      return substitute(project, '.\{-}\s\+-\s\+.\{-}\s\+-\s\+\(.*\)', '\1', '')
-    endif
-  endfor
-
-  return ""
+  return eclim#project#util#GetProjects()[a:project]
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{

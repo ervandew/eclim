@@ -45,13 +45,6 @@ function! TestProjectSettings ()
   close
 endfunction " }}}
 
-" TestGetCurrentProjectFile() {{{
-function! TestGetCurrentProjectFile ()
-  let file = eclim#project#util#GetCurrentProjectFile()
-  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java/.project', file,
-    \ "Wrong project file.")
-endfunction " }}}
-
 " TestGetCurrentProjectName() {{{
 function! TestGetCurrentProjectName ()
   let name = eclim#project#util#GetCurrentProjectName()

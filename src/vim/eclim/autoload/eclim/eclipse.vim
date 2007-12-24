@@ -24,24 +24,48 @@
 
 " Script Variables {{{
   let s:command_workspace_dir = '-command workspace_dir'
+  let s:ide_prefs =
+    \ g:EclimHome . '/../../configuration/.settings/org.eclipse.ui.ide.prefs'
 " }}}
 
 " GetWorkspaceDir() {{{
-" Gets the path tot the workspace.  Ensures the path uses cross platform '/'
-" separators and includes a trailing '/'.  If eclim is not running the empty
-" string is returned.
+" Gets the path to the workspace.  Ensures the path uses cross platform '/'
+" separators and includes a trailing '/'.  If the workspace could not be
+" determined, the empty string is returned.
 function! eclim#eclipse#GetWorkspaceDir ()
-  let result = eclim#ExecuteEclim(s:command_workspace_dir)
+  if !exists('g:EclimWorkspace')
+    let result = ''
 
-  if result == '0'
-    return ''
-  endif
+    if filereadable(s:ide_prefs)
+      let lines = readfile(s:ide_prefs)
+      call filter(lines, 'v:val =~ "^\s*RECENT_WORKSPACES\s*="')
+      if len(lines) == 1
+        let result = substitute(lines[0], '.\{-}=\s*\(.\{-}\)\(\s*,\|$\)', '\1', '')
+      endif
+    endif
 
-  let result = substitute(result, '\', '/', 'g')
-  if result !~ '/$'
-    let result .= '/'
+    " fall back to asking eclipse
+    if result == ''
+      let result = eclim#ExecuteEclim(s:command_workspace_dir)
+      if result == '0'
+        return ''
+      endif
+    endif
+
+    " failed to get the workspace.
+    if result == ''
+      return result
+    endif
+
+    " ensure value uses unix slashes and ends in a slash
+    let result = substitute(result, '\', '/', 'g')
+    if result !~ '/$'
+      let result .= '/'
+    endif
+
+    let g:EclimWorkspace = result
   endif
-  return result
+  return g:EclimWorkspace
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
