@@ -31,7 +31,7 @@
 " Set(key, content, metadata) {{{
 " Adds the supplied content (list of lines) along with the supplied metadata
 " (dictionary of key / value pairs) to the cache under the specified key.
-function! eclim#cache#Set (key, content, metadata)
+function! eclim#cache#Set (key, content, ...)
   if !s:InitCache()
     return
   endif
@@ -39,7 +39,13 @@ function! eclim#cache#Set (key, content, metadata)
   call eclim#cache#Delete(a:key)
 
   let file = s:GetCachedFilename(a:key)
-  call writefile([string(a:metadata)] + a:content, file)
+  let content = a:content
+  if a:0 > 0 && len(a:1) > 0
+    let content = [string(a:1)] + content
+  else
+    let content = [''] + content
+  endif
+  call writefile(content, file)
 
   if executable('gzip')
     call eclim#util#System('gzip "' . file . '"')
@@ -69,7 +75,7 @@ function! eclim#cache#Get (key, ...)
     return {}
   endif
 
-  let metadata = eval(contents[0])
+  let metadata = contents[0] != '' ? eval(contents[0]) : {}
   if len(a:000) > 0
     let Function = a:000[0]
     if !Function(metadata)
