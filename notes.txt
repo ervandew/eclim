@@ -259,6 +259,8 @@ NOTES {{{
     Note: make sure to do a quick test with sh (dash) instead of bash
 
     1) tag svn
+       $ svn cp https://eclim.svn.sourceforge.net/svnroot/eclim/trunk \
+                https://eclim.svn.sourceforge.net/svnroot/eclim/tags/<version>
     2) create sourceforge release
        - update windows and linux download pages with latest file to download.
     3) update documentation website
@@ -350,6 +352,7 @@ NOTES {{{
 
     status.xml
     src/ant/dist.xml
+    src/forrest/content/xdocs/features.xml
     src/forrest/content/xdocs/site.xml
     src/installer/java/org/eclim/installer/step/FeatureProvider.java
 
@@ -362,6 +365,14 @@ NOTES {{{
 }}}
 
 HIGH {{{
+  - add :ProjectInfo [<project>] command
+    - natures, status (open/closed), location, dependencies
+
+  - test installer w/ eclipse running
+    - may cause issues, if so, attempt to detect if eclipse is running and
+      display an intermediate step (or added to requirements steps as warning)
+      alerting the user to shut it down.
+
   - support an eclim 'after' directory and update installer to not delete it.
     .vim/eclim/after
 
@@ -382,9 +393,6 @@ HIGH {{{
   - php support waiting on:
     https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
     https://bugs.eclipse.org/bugs/show_bug.cgi?id=205243 <-- duplicate of 204977
-    - add support for setting php interpreter version (4 or 5)
-      - org.eclipse.php.core.prefs
-        phpVersion=php4
 
   - get working under cygwin
     if has('win32unix')
