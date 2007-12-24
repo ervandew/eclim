@@ -19,7 +19,12 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.pdt.preference.OptionHandler;
+
 import org.eclim.plugin.pdt.project.PhpProjectManager;
+
+import org.eclim.preference.PreferenceFactory;
+import org.eclim.preference.Preferences;
 
 import org.eclim.project.ProjectManagement;
 import org.eclim.project.ProjectNatureFactory;
@@ -51,6 +56,11 @@ public class PluginResources
     ProjectNatureFactory.addNature("php", "org.eclipse.php.core.PHPNature");
     ProjectManagement.addProjectManager(
         "org.eclipse.php.core.PHPNature", new PhpProjectManager());
+
+    Preferences.addOptionHandler("org.eclipse.php", new OptionHandler());
+    PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",
+      "PDT org.eclipse.php.core.phpVersion php[45]"
+    );
 
     registerCommand("php_src_update",
         org.eclim.plugin.pdt.command.src.SrcUpdateCommand.class);
