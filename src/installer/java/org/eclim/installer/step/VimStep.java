@@ -37,7 +37,7 @@ import org.formic.wizard.step.FileChooserStep;
 /**
  * Step for choosing the vimfiles directory to install vim scripts in.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class VimStep

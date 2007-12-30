@@ -123,14 +123,14 @@ TODO {{{
       - ibm xl toolchain:
         http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.cdt.doc.user/concepts/cdt_c_whatsnew.htm
 
-    - :Hierarchy command which opens a buffer showing the class hierarchy for
+    - :CHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
-    - :IncludeHierarchy command which opens a buffer showing hierarchy of each
+    - :CIncludeHierarchy command which opens a buffer showing hierarchy of each
       header file included in the current source file.
   }}}
 
   Java {{{
-    - :Hierarchy command which opens a buffer showing the class hierarchy for
+    - :JavaHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
 
     - look into code refactoring support.

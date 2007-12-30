@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2006
+ * Copyright (c) 2005 - 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.eclim.preference;
  * Represents a preference which is similar to an option, except under non
  * eclipse node keys, new preference keys may be created.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class Preference

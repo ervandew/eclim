@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2007
+ * Copyright (c) 2005 - 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Collection;
 /**
  * Utility methods for working with collections.
  *
- * @author Eric Van Dewoestine
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class CollectionUtils

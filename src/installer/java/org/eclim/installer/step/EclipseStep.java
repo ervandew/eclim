@@ -23,7 +23,7 @@ import org.formic.wizard.step.FileChooserStep;
 /**
  * Step for specifying location of eclipse installation.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class EclipseStep

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2006
+ * Copyright (c) 2005 - 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.eclim.util.IOUtils;
  * Compiles a list of offsets to line numbers and stores them for quick
  * translation of offset to line number and column.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class FileOffsets

@@ -19,7 +19,7 @@ import org.formic.wizard.step.FeatureListStep;
 /**
  * Provider to supply avaiable features to FeatureListStep.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class FeatureProvider

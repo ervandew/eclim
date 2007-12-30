@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2006
+ * Copyright (c) 2005 - 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.eclim.eclipse;
  * Dummy workbench advisor that allows the workbench to be created, but never
  * shown.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public class WorkbenchAdvisor

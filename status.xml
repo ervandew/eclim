@@ -4,7 +4,7 @@
 -->
 <status>
   <developers>
-    <person name="Eric Van Dewoestine" email="ervandew@yahoo.com" id="ervandew"/>
+    <person name="Eric Van Dewoestine" email="ervandew@gmail.com" id="ervandew"/>
   </developers>
 
   <todo>
@@ -271,7 +271,7 @@
   </todo>
 
   <changes>
-    <release version="1.3.4" date="2007">
+    <release version="1.3.4" date="2008">
       <action dev="ervandew" type="fix" context="Bug Fixes">
         Various bug fixes.
       </action>

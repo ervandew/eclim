@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (c) 2005 - 2006
+" Copyright (c) 2005 - 2008
 "
 " Licensed under the Apache License, Version 2.0 (the "License");
 " you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ function! s:Evaluate (lang)
 
   syntax off
   syntax on
-  write 
+  write
 
   let file = substitute(s:regexfile, '<lang>', a:lang, '')
   let b:results = []

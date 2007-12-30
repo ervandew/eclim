@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 - 2006
+ * Copyright (c) 2005 - 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.eclim.plugin.jdt.project.classpath;
  * Defines a parse capable of parsing some external build file that defines the
  * dependencies for the project.
  *
- * @author Eric Van Dewoestine (ervandew@yahoo.com)
+ * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
 public interface Parser
