@@ -375,6 +375,9 @@ function! eclim#project#util#GetProjects ()
             let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
             let projects[name] = substitute(dir, '\', '/', 'g')
           endif
+        else
+          let name = fnamemodify(dir, ':t')
+          let projects[name] = eclim#eclipse#GetWorkspaceDir() . name
         endif
       endfor
 
