@@ -27,7 +27,7 @@ if !exists(":Split")
   command -nargs=+ -complete=file Split :call eclim#common#util#OpenFiles('split', '<args>')
 endif
 if !exists(":Tabnew")
-  command -nargs=+ -complete=file Tabnew :call eclim#common#util#OpenFiles('tabnew', '<args>')
+  command -nargs=+ -complete=file Tabnew :call eclim#common#util#OpenFiles('tablast | tabnew', '<args>')
 endif
 
 if !exists(":SplitRelative")
@@ -36,7 +36,7 @@ if !exists(":SplitRelative")
 endif
 if !exists(":TabnewRelative")
   command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ TabnewRelative :call eclim#common#util#OpenRelative('tabnew', '<args>', 1)
+    \ TabnewRelative :call eclim#common#util#OpenRelative('tablast | tabnew', '<args>', 1)
 endif
 if !exists(":EditRelative")
   command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
@@ -71,7 +71,7 @@ endif
 if !exists(":LocateFileSplit")
   command -nargs=? LocateFileEdit :call eclim#common#util#LocateFile('edit', '<args>')
   command -nargs=? LocateFileSplit :call eclim#common#util#LocateFile('split', '<args>')
-  command -nargs=? LocateFileTab :call eclim#common#util#LocateFile('tabnew', '<args>')
+  command -nargs=? LocateFileTab :call eclim#common#util#LocateFile('tablast | tabnew', '<args>')
 endif
 
 if has('signs')

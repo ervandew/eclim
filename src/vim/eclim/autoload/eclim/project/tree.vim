@@ -70,7 +70,7 @@
   if !exists('g:EclimProjectTreeActions')
     let g:EclimProjectTreeActions = [
         \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
-        \ {'pattern': '.*', 'name': 'Tab', 'action': 'tabnew'},
+        \ {'pattern': '.*', 'name': 'Tab', 'action': 'tablast | tabnew'},
         \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
       \ ]
   endif

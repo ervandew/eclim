@@ -79,7 +79,7 @@ function! eclim#common#buffers#Buffers ()
   nnoremap <silent> <buffer> <cr> :call <SID>BufferOpen(g:EclimBuffersDefaultAction)<cr>
   nnoremap <silent> <buffer> E :call <SID>BufferOpen('edit')<cr>
   nnoremap <silent> <buffer> S :call <SID>BufferOpen('split')<cr>
-  nnoremap <silent> <buffer> T :call <SID>BufferOpen('tabnew')<cr>
+  nnoremap <silent> <buffer> T :call <SID>BufferOpen('tablast \| tabnew')<cr>
   nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
 
   "augroup eclim_buffers
