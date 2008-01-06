@@ -33,20 +33,24 @@
     \ '\)'
 " }}}
 
-" Abbreviate(abbreviation) {{{
-function! eclim#util#Abbreviate (abbreviation)
-  " gobble up the space char used to kick off the abbreviation
-  let char = nr2char(getchar())
+" Abbreviate(lhs, abbreviation) {{{
+function! eclim#util#Abbreviate (lhs, abbreviation)
+  " ensure that the abbreviation never kicks off while in a word.
+  if getline('.') =~ '\(^\|.*\s\)\%' . col('.') . 'c'
+    " gobble up the space char used to kick off the abbreviation
+    let char = nr2char(getchar())
 
-  " support <indent> placemark to combat indenting issues when attempting to
-  " start the cursor on a blank line, and possibly else where.
-  let indent = eclim#util#GetIndent(indent(line('.')))
-  let abbrev = substitute(a:abbreviation, '<indent>', indent, 'g')
+    " support <indent> placemark to combat indenting issues when attempting to
+    " start the cursor on a blank line, and possibly else where.
+    let indent = eclim#util#GetIndent(indent(line('.')))
+    let abbrev = substitute(a:abbreviation, '<indent>', indent, 'g')
 
-  " insert the abbreviation text.
-  exec "normal i" . abbrev
+    " insert the abbreviation text.
+    exec "normal i" . abbrev
 
-  return "\<right>"
+    return "\<right>"
+  endif
+  return a:lhs
 endfunction " }}}
 
 " Balloon(message) {{{

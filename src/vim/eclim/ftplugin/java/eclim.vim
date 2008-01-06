@@ -95,13 +95,13 @@ endif
   "   au VimEnter * call IMAP(' . ', ' <++> ', 'tex')
   " So, if we can't beat 'em, join 'em
   if exists('*IMAP')
-    call IMAP('fori', "\<c-r>=eclim#util#Abbreviate(g:java_fori)\<cr>", 'java')
-    call IMAP('forI', "\<c-r>=eclim#util#Abbreviate(g:java_forI)\<cr>", 'java')
-    call IMAP('fore', "\<c-r>=eclim#util#Abbreviate(g:java_fore)\<cr>", 'java')
+    call IMAP('fori', "\<c-r>=eclim#util#Abbreviate('fori', g:java_fori)\<cr>", 'java')
+    call IMAP('forI', "\<c-r>=eclim#util#Abbreviate('forI', g:java_forI)\<cr>", 'java')
+    call IMAP('fore', "\<c-r>=eclim#util#Abbreviate('fore', g:java_fore)\<cr>", 'java')
   else
-    inoreabbrev <buffer> fori <c-r>=eclim#util#Abbreviate(g:java_fori)<cr>
-    inoreabbrev <buffer> forI <c-r>=eclim#util#Abbreviate(g:java_forI)<cr>
-    inoreabbrev <buffer> fore <c-r>=eclim#util#Abbreviate(g:java_fore)<cr>
+    inoreabbrev <buffer> fori <c-r>=eclim#util#Abbreviate('fori', g:java_fori)<cr>
+    inoreabbrev <buffer> forI <c-r>=eclim#util#Abbreviate('forI', g:java_forI)<cr>
+    inoreabbrev <buffer> fore <c-r>=eclim#util#Abbreviate('fore', g:java_fore)<cr>
   endif
 " }}}
 
