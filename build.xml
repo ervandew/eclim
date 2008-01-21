@@ -45,7 +45,7 @@
     - Main target for building the library.
     -->
   <target name="build" depends="init"
-      description="Compiles the src and builds the jar file.">
+      description="Builds eclim and deploys it to the local eclipse instance.">
 
     <property name="deprecation" value="false"/>
     <property name="compilerargs" value=""/>
@@ -226,7 +226,7 @@
   <!--
     - Delete any generated artifacts of the build.
     -->
-  <target name="clean" description="Deletes the build directory.">
+  <target name="clean" description="Deletes the build and dist directories.">
     <delete dir="build"/>
     <delete dir="dist"/>
   </target>
