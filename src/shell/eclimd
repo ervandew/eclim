@@ -24,9 +24,14 @@ if [ -h $0 ] ; then
   CURPATH=`dirname $RESOLVED`
 fi
 
+#ECLIMD_OPTS="-Djava.ext.dirs"
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
-ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
-ECLIM_ARGS="-Declim.home="$ECLIM_HOME" -Djava.ext.dirs"
+
+#${eclipse.home}
+if [ -x "$ECLIPSE_HOME" ]; then
+  ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
+fi
+ECLIM_ARGS="-Declim.home="$ECLIM_HOME" $ECLIMD_OPTS"
 
 # attempt to grab properties from .eclimrc if available.
 SED=`which sed 2> /dev/null`
@@ -53,6 +58,7 @@ fi
 ECLIM_COMMAND="$ECLIPSE
   -debug -nosplash -clean -refresh -application
   org.eclim.application -vmargs $ECLIM_ARGS"
+#echo $ECLIM_COMMAND | sed 's/\s\(-[a-z]\)/\n \1/g'
 
 if [ "$1" = "start" ]; then
   shift

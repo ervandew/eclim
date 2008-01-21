@@ -21,4 +21,5 @@ set ECLIM_HOME=%~dp0\..
 
 set CLASSPATH=
 
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%" -Djava.ext.dirs %*
+rem ECLIMD_OPTS=-java.ext.dirs
+start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application -vmargs -Declim.home="%ECLIM_HOME%" %ECLIMD_OPTS% %*
