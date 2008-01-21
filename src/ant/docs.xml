@@ -73,9 +73,9 @@
   <!--
     - Generates vim docs from forrest xml files.
     -->
-  <target name="vimdocs" depends="init"
+  <!--target name="vimdocs" depends="init"
       description="Builds the vim documentation.">
-  </target>
+  </target-->
 
   <!--
     - Extracts all eclipse doc jars.
