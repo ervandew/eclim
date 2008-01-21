@@ -55,8 +55,6 @@ import org.apache.tools.ant.taskdefs.Untar;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
-import org.eclim.installer.EclipseFeatures;
-
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.EnableCommand;
 import org.eclim.installer.step.command.InstallCommand;
@@ -200,10 +198,14 @@ public class EclipsePluginsStep
   private void extractInstallerPlugin ()
     throws Exception
   {
-    // extract eclipse installer plugin.
-    String eclipseHome = (String)
-      Installer.getContext().getValue("eclipse.home");
-    String plugins = FilenameUtils.concat(eclipseHome, "plugins");
+    String plugins = null;
+    if (Os.isFamily("windows")){
+      String home = (String)Installer.getContext().getValue("eclipse.home");
+      plugins = FilenameUtils.concat(home, "plugins");
+    }else{
+      plugins = (String)Installer.getContext().getValue("eclipse.plugins");
+    }
+
     String tar = Installer.getProject().replaceProperties(
         "${basedir}/org.eclim.installer.tar.gz");
 
@@ -219,11 +221,11 @@ public class EclipsePluginsStep
     untar.execute();
 
     // on unix based systems, chmod the install sh file.
-    if (Os.isFamily("unix")){
+    if (!Os.isFamily("windows")){
       Chmod chmod = new Chmod();
       chmod.setTaskName("chmod");
       chmod.setFile(new File(Installer.getProject().replaceProperties(
-        "${eclipse.home}/plugins/org.eclim.installer/bin/install")));
+        "${eclipse.plugins}/org.eclim.installer/bin/install")));
       chmod.setPerm("755");
       chmod.setProject(Installer.getProject());
       chmod.execute();
@@ -235,23 +237,24 @@ public class EclipsePluginsStep
    * supplied dependency.
    *
    * @param dependency The dependency to install or upgrade.
+   * @param to The location where the plugin is (to be) located.
    * @return List of commands.
    */
-  private List getCommands (Dependency dependency)
+  private List getCommands (Dependency dependency, String to)
   {
     ArrayList list = new ArrayList();
     if(!dependency.isUpgrade()){
       list.add(new InstallCommand(this,
-          dependency.getUrl(), dependency.getId(), dependency.getVersion()));
+          dependency.getUrl(), dependency.getId(), dependency.getVersion(), to));
     }else{
       if(!dependency.getFeature().isEnabled()){
         list.add(new EnableCommand(this,
-            dependency.getId(), dependency.getFeature().getVersion()));
+            dependency.getId(), dependency.getFeature().getVersion(), to));
       }
       list.add(new UpdateCommand(this,
           dependency.getId(), dependency.getVersion()));
       list.add(new UninstallCommand(this,
-          dependency.getId(), dependency.getFeature().getVersion()));
+          dependency.getId(), dependency.getFeature().getVersion(), to));
     }
     return list;
   }
@@ -277,25 +280,11 @@ public class EclipsePluginsStep
 
       // check if the enabled eclim feature has any dependencies.
       if(enabled.booleanValue() && properties.containsKey(name + ".features")){
-        // check if dependencies are eclipse based
-        if(properties.containsKey(name + ".eclipse")){
-          EclipseFeatures eclipseFeatures = EclipseFeatures.getInstance(properties);
-          String[] depends = StringUtils.split(
-              properties.getProperty(name + ".features"), ',');
-          String site = properties.getProperty(name + ".site");
-          for (int jj = 0; jj < depends.length; jj++){
-            dependencies.add(new Dependency(new String[]{
-              site, depends[jj].trim(),
-              eclipseFeatures.getVersion(depends[jj].trim())}));
-          }
-
-        }else{  // third party features.
-          String[] depends = StringUtils.split(
-              properties.getProperty(name + ".features"), ',');
-          for (int jj = 0; jj < depends.length; jj++){
-            String[] dependency = StringUtils.split(depends[jj]);
-            dependencies.add(new Dependency(dependency));
-          }
+        String[] depends = StringUtils.split(
+            properties.getProperty(name + ".features"), ',');
+        for (int jj = 0; jj < depends.length; jj++){
+          String[] dependency = StringUtils.split(depends[jj]);
+          dependencies.add(new Dependency(dependency));
         }
       }
     }
@@ -417,6 +406,11 @@ public class EclipsePluginsStep
           {
             guiOverallProgress.setMaximum(dependencies.size());
             guiOverallProgress.setValue(0);
+            String to = (String)Installer.getContext().getValue("eclipse.plugins");
+            if(to.endsWith("/")){
+              to.substring(0, to.length() - 1);
+            }
+            to = FilenameUtils.getFullPath(to);
             int index = 0;
             for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
               Dependency dependency = (Dependency)ii.next();
@@ -428,7 +422,7 @@ public class EclipsePluginsStep
                     dependency.getId() + '-' + dependency.getVersion());
               }
 
-              List commands = getCommands(dependency);
+              List commands = getCommands(dependency, to);
               for (Iterator jj = commands.iterator(); jj.hasNext();){
                 Command command = (Command)jj.next();
                 try{

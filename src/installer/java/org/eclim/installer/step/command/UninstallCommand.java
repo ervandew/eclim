@@ -32,12 +32,13 @@ public class UninstallCommand
   private String feature;
   private String version;
 
-  public UninstallCommand (OutputHandler handler, String id, String version)
+  public UninstallCommand (OutputHandler handler, String id, String version, String to)
   {
     super(handler, new String[]{
       "-command", "uninstall",
       "-featureId", id,
-      "-version", version
+      "-version", version,
+      "-to", to
     });
     this.feature = id;
     this.version = version;

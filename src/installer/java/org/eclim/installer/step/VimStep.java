@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -102,35 +103,33 @@ public class VimStep
 
       setBusy(true);
       try{
-        Worker.post(new Task(){
-          public Object run ()
-            throws Exception
-          {
-            String[] rtp = getVimRuntimePath();
-            if(rtp != null && rtp.length > 0){
-              if(rtp.length == 1){
-                getGuiFileChooser().getTextField().setText(rtp[0]);
-              }else{
-                final JList list = new JList(rtp);
-                list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                JScrollPane scrollPane = new JScrollPane(list);
-                panel.add(scrollPane, BorderLayout.CENTER);
-
-                list.addListSelectionListener(new ListSelectionListener(){
-                  public void valueChanged (ListSelectionEvent event){
-                    if(!event.getValueIsAdjusting()){
-                      getGuiFileChooser().getTextField()
-                        .setText((String)list.getSelectedValue());
-                    }
-                  }
-                });
-
-                list.setSelectedIndex(0);
-              }
-            }
-            return null;
+        String[] rtp = (String[])Worker.post(new Task(){
+          public Object run () throws Exception {
+            return getVimRuntimePath();
           }
         });
+
+        if(rtp != null && rtp.length > 0){
+          if(rtp.length == 1){
+            getGuiFileChooser().getTextField().setText(rtp[0]);
+          }else{
+            final JList list = new JList(rtp);
+            list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane scrollPane = new JScrollPane(list);
+            panel.add(scrollPane, BorderLayout.CENTER);
+
+            list.addListSelectionListener(new ListSelectionListener(){
+              public void valueChanged (ListSelectionEvent event){
+                if(!event.getValueIsAdjusting()){
+                  getGuiFileChooser().getTextField()
+                    .setText((String)list.getSelectedValue());
+                }
+              }
+            });
+
+            list.setSelectedIndex(0);
+          }
+        }
       }catch(Exception e){
         e.printStackTrace();
       }
@@ -213,7 +212,6 @@ public class VimStep
           results.add(paths[ii].replace('\\', '/'));
         }
       }
-
       return (String[])results.toArray(new String[results.size()]);
     }catch(Exception e){
       e.printStackTrace();

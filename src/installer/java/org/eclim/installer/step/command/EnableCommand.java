@@ -24,12 +24,13 @@ package org.eclim.installer.step.command;
 public class EnableCommand
   extends Command
 {
-  public EnableCommand (OutputHandler handler, String id, String version)
+  public EnableCommand (OutputHandler handler, String id, String version, String to)
   {
     super(handler, new String[]{
       "-command", "enable",
       "-featureId", id,
-      "-version", version
+      "-version", version,
+      "-to", to
     });
   }
 }

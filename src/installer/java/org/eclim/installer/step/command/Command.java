@@ -48,10 +48,12 @@ public abstract class Command
     this.handler = handler;
     this.cmd = new String[cmd.length + 1];
 
-    this.cmd[0] = Installer.getProject().replaceProperties(
-        "${eclipse.home}/plugins/org.eclim.installer/bin/install");
     if (Os.isFamily("windows")){
-      this.cmd[0] += ".bat";
+      this.cmd[0] = Installer.getProject().replaceProperties(
+          "${eclipse.home}/plugins/org.eclim.installer/bin/install.bat");
+    }else{
+      this.cmd[0] = Installer.getProject().replaceProperties(
+          "${eclipse.plugins}/org.eclim.installer/bin/install");
     }
 
     System.arraycopy(cmd, 0, this.cmd, 1, cmd.length);

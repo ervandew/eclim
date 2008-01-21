@@ -25,13 +25,14 @@ public class InstallCommand
   extends Command
 {
   public InstallCommand (
-      OutputHandler handler, String url, String id, String version)
+      OutputHandler handler, String url, String id, String version, String to)
   {
     super(handler, new String[]{
       "-command", "install",
       "-from", url,
       "-featureId", id,
-      "-version", version
+      "-version", version,
+      "-to", to
     });
   }
 }

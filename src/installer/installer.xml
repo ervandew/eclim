@@ -69,8 +69,9 @@
     - Note: Must be named "install".
     -->
   <target name="install">
+    <property name="eclipse.plugins" value="${eclipse.home}/plugins"/>
     <property name="eclim.home"
-        value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
+        value="${eclipse.plugins}/org.eclim_${eclim.version}"/>
 
     <!-- shutdown any running instance of eclimd -->
     <eclim:shutdown/>
@@ -87,10 +88,10 @@
       <os family="windows"/>
       <then>
         <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclipse.home}/plugins">
+            dest="${eclipse.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
-        <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
+        <replace dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin"
             token="$${vim.files}" value="${vim.files}">
           <include name="eclim"/>
           <include name="eclim.*"/>
@@ -98,15 +99,31 @@
       </then>
       <else>
         <untar src="${basedir}/org.eclim_${eclim.version}.tar.gz"
-            dest="${eclipse.home}/plugins" compression="gzip">
+            dest="${eclipse.plugins}" compression="gzip">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
-        <replace dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
+        <replace dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin"
             token="$${vim.files}" value="${vim.files}">
           <include name="eclim"/>
         </replace>
+
+        <!--
+          - hard code the eclipse home for people that install plugins outside
+          - of the ecilpse home.
+          -->
+        <if>
+          <not>
+            <contains string="${eclipse.plugins}" substring="${eclipse.home}"/>
+          </not>
+          <then>
+            <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/eclimd"
+                token="#$${eclipse.home}"
+                value="ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
+          </then>
+        </if>
+
         <chmod perm="755">
-          <fileset dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
+          <fileset dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin">
             <include name="eclim"/>
             <include name="eclimd"/>
             <include name="native/**/*"/>
@@ -136,7 +153,7 @@
   <target name="clean">
     <!-- remove eclipse plugins -->
     <path id="eclim.plugins">
-      <dirset dir="${eclipse.home}/plugins" includes="org.eclim*"/>
+      <dirset dir="${eclipse.plugins}" includes="org.eclim*"/>
     </path>
     <property name="eclim.plugins" refid="eclim.plugins"/>
     <for list="${eclim.plugins}" param="eclim.plugin"
@@ -169,7 +186,7 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <delete dir="${eclipse.home}/plugins/org.eclim.installer"/>
+    <delete dir="${eclipse.plugins}/org.eclim.installer"/>
   </target>
 
 </project>
