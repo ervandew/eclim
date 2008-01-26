@@ -25,7 +25,7 @@
 " Global Variables {{{
   if !exists('g:MaximizeExcludes')
     let g:MaximizeExcludes =
-      \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|^\[.*\]$\)'
+      \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\)'
   endif
   if !exists('g:MaximizeMinWinHeight')
     let g:MaximizeMinWinHeight = 0
@@ -53,14 +53,14 @@ function! eclim#display#maximize#MaximizeWindow ()
   call eclim#display#maximize#ResetMinimized()
 
   " get the window that is maximized
-  let maximized = s:GetMaximizedWindow()
+  let maximized = eclim#display#maximize#GetMaximizedWindow()
   if maximized
     call s:DisableMaximizeAutoCommands()
     call eclim#display#maximize#RestoreWindows(maximized)
   else
     exec "set winminwidth=" . g:MaximizeMinWinWidth
     exec "set winminheight=" . g:MaximizeMinWinHeight
-    call s:MaximizeNewWindow()
+    call eclim#display#maximize#MaximizeUpdate()
   endif
 endfunction " }}}
 
@@ -73,7 +73,7 @@ function! eclim#display#maximize#MinimizeWindow (...)
   call s:DisableMaximizeAutoCommands()
 
   " first turn off maximized if enabled
-  let maximized = s:GetMaximizedWindow()
+  let maximized = eclim#display#maximize#GetMaximizedWindow()
   if maximized
     call eclim#display#maximize#RestoreWindows(maximized)
   endif
@@ -93,22 +93,25 @@ function! eclim#display#maximize#MinimizeWindow (...)
   call s:Reminimize()
 endfunction " }}}
 
-" MaximizeNewWindow() {{{
-function! s:MaximizeNewWindow ()
-  if expand('%') !~ g:MaximizeExcludes
+" MaximizeUpdate() {{{
+function! eclim#display#maximize#MaximizeUpdate ()
+  if expand('%') !~ g:MaximizeExcludes && !exists('b:eclim_temp_window') && &ft != 'qf'
     call s:DisableMaximizeAutoCommands()
 
     let w:maximized = 1
     winc |
     winc _
 
-    " check to see if a quickfix window is open
+    " check to see if a quickfix / eclim temp window is open
     let winend = winnr('$')
     let winnum = 1
     while winnum <= winend
-      let buffername = bufname(winbufnr(winnum))
+      let buffernum = winbufnr(winnum)
+      let buffername = bufname(buffernum)
       if getwinvar(winnum, '&ft') == 'qf'
         let quickfixwindow = winnum
+      elseif getbufvar(buffernum, 'eclim_temp_window')
+        let eclimtempwindow = winnum
       endif
       let winnum = winnum + 1
     endwhile
@@ -118,13 +121,18 @@ function! s:MaximizeNewWindow ()
       exec "vertical " . quickfixwindow . "resize"
     endif
 
+    if exists("eclimtempwindow")
+      exec eclimtempwindow . "resize 10"
+      exec "vertical " . eclimtempwindow . "resize"
+    endif
+
     call s:RestoreFixedWindows()
     call s:EnableMaximizeAutoCommands()
   endif
 endfunction " }}}
 
 " GetMaximizedWindow() {{{
-function! s:GetMaximizedWindow ()
+function! eclim#display#maximize#GetMaximizedWindow ()
   let winend = winnr('$')
   let winnum = 1
   while winnum <= winend
@@ -164,9 +172,10 @@ function! s:EnableMaximizeAutoCommands ()
   call s:DisableMinimizeAutoCommands()
   augroup maximize
     autocmd!
-    autocmd BufReadPost quickfix call s:FixQuickfix(1)
-    autocmd BufUnload * call s:CloseQuickfix()
-    autocmd BufWinEnter,WinEnter * call s:MaximizeNewWindow()
+    autocmd BufReadPost quickfix
+      \ call eclim#display#maximize#AdjustFixedWindow(g:MaximizeQuickfixHeight, 1)
+    autocmd BufUnload * call s:CloseFixedWindow()
+    autocmd BufWinEnter,WinEnter * nested call eclim#display#maximize#MaximizeUpdate()
   augroup END
 endfunction " }}}
 
@@ -182,34 +191,33 @@ function! s:EnableMinimizeAutoCommands ()
   call s:DisableMaximizeAutoCommands()
   augroup minimize
     autocmd!
-    autocmd BufReadPost quickfix call s:FixQuickfix(0)
-    autocmd BufWinEnter,WinEnter * call s:Reminimize()
+    autocmd BufReadPost quickfix
+      \ call eclim#display#maximize#AdjustFixedWindow(g:MaximizeQuickfixHeight, 0)
+    autocmd BufWinEnter,WinEnter * nested call s:Reminimize()
   augroup END
 endfunction " }}}
 
-" FixQuickfix(maximize) {{{
-function s:FixQuickfix (maximize)
-  exec "resize " . g:MaximizeQuickfixHeight
+" AdjustFixedWindow(height, maximize) {{{
+function! eclim#display#maximize#AdjustFixedWindow (height, maximize)
+  exec "resize " . a:height
   set winfixheight
-
-  let curwindow = winnr()
 
   if a:maximize
     "return to previous window to restore it's maximized
+    let curwindow = winnr()
     winc p
-    call s:MaximizeNewWindow()
-
+    call eclim#display#maximize#MaximizeUpdate()
     exec curwindow . "winc w"
   endif
 endfunction " }}}
 
-" CloseQuickfix() {{{
-function s:CloseQuickfix ()
-  if expand('<afile>') == ""
-    "echom "Closing nofile (maybe quickfix)"
-    " can't figure out how to re-maximize if cclose is called from a maximized
-    " window, so just resetting.
-    call s:GetMaximizedWindow()
+" CloseFixedWindow() {{{
+function! s:CloseFixedWindow ()
+  if expand('<afile>') == "" || exists('b:eclim_temp_window')
+    let maximized = eclim#display#maximize#GetMaximizedWindow()
+    if maximized
+      call eclim#util#DelayedCommand('call eclim#display#maximize#MaximizeUpdate()')
+    endif
   endif
 endfunction " }}}
 
@@ -312,7 +320,7 @@ endfunction " }}}
 " RestoreFixedWindows() {{{
 function! s:RestoreFixedWindows ()
   for settings in g:MaximizeSpecialtyWindowsRestore
-    if exists(settings[0])
+    if exists(settings[0]) || settings[0] =~ '^".*"$'
       exec 'let name = ' . settings[0]
       let winnr = bufwinnr('*' . name . '*')
       if winnr != -1

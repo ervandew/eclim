@@ -64,6 +64,24 @@ function! eclim#util#Balloon (message)
   return message
 endfunction " }}}
 
+" DelayedCommand(command, ...) {{{
+" Executes a delayed command.  Useful in cases where one would expect an
+" autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
+" command to execute after other autocommands have finished.
+function! eclim#util#DelayedCommand (command, ...)
+  " hack since WinEnter doesn't fire on :close of qf or temp window
+  let g:eclim_updatetime_save = &updatetime
+  let g:eclim_delayed_command = a:command
+  let &updatetime = len(a:000) ? a:000[0] : 1
+  augroup maximize_hack
+    autocmd CursorHold *
+      \ let &updatetime = g:eclim_updatetime_save |
+      \ exec g:eclim_delayed_command |
+      \ unlet g:eclim_updatetime_save g:eclim_delayed_command |
+      \ autocmd! maximize_hack
+  augroup END
+endfunction " }}}
+
 " EchoTrace(message) {{{
 function! eclim#util#EchoTrace (message)
   call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
@@ -791,7 +809,14 @@ function! eclim#util#TempWindow (name, lines, ...)
   let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 
   if bufwinnr(name) == -1
-    silent! exec "botright 10split " . escape(a:name, ' ')
+    silent! noautocmd exec "botright 10split " . escape(a:name, ' ')
+    let b:eclim_temp_window = 1
+
+    " play nice with maximize.vim
+    if eclim#display#maximize#GetMaximizedWindow()
+      call eclim#display#maximize#AdjustFixedWindow(10, 1)
+    endif
+
     if len(a:000) == 0 || a:000[0]
       setlocal nowrap
       setlocal winfixheight
