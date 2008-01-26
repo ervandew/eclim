@@ -186,6 +186,13 @@
         provides, all of which are found at the index of the eclim
         <a href="../vim/index.html">documentation</a>.
       </p>
+      <p>
+        After doing that you can then procede to create your first project:
+      </p>
+      <ul>
+        <li><a href="java/project.html">Java Project Guide</a></li>
+        <!--li><a href="php/project.html">Php Project Guide</a></li!-->
+      </ul>
     </section>
 
     <section id="upgrade">
