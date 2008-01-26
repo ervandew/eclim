@@ -273,7 +273,17 @@
   <changes>
     <release version="1.3.4" date="2008">
       <action dev="ervandew" type="fix" context="Bug Fixes">
-        Various bug fixes.
+        Fixed <strong>:JavaImpl</strong> when adding multi-argument methods.
+      </action>
+
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Various other bug fixes.
+      </action>
+
+      <action dev="ervandew" type="update" context="Installer">
+        Updated installer to handle eclipse installs which have a local user
+        install location for plugins.<br/>
+        Also fixed some issues with running the installer on the icedtea jvm.
       </action>
 
       <action dev="ervandew" type="add" context="Eclim">
