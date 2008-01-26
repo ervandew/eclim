@@ -195,7 +195,7 @@ public abstract class AbstractPluginResources
 
       // not found
       missingResources.add(_resource);
-      logger.warn(
+      logger.debug(
           "Unable to locate resource in '" + getName() + "': " + _resource);
       return null;
     }catch(Exception e){
