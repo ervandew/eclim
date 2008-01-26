@@ -16,6 +16,9 @@
 package org.eclim.installer.step;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
@@ -33,22 +36,31 @@ import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
 
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.apache.log4j.Logger;
 
 import org.apache.tools.ant.taskdefs.Chmod;
 import org.apache.tools.ant.taskdefs.Untar;
@@ -62,6 +74,8 @@ import org.eclim.installer.step.command.ListCommand;
 import org.eclim.installer.step.command.OutputHandler;
 import org.eclim.installer.step.command.UninstallCommand;
 import org.eclim.installer.step.command.UpdateCommand;
+
+import org.eclim.installer.theme.DesertBlue;
 
 import org.formic.Installer;
 
@@ -79,26 +93,24 @@ public class EclipsePluginsStep
   extends InstallStep
   implements OutputHandler
 {
-  private static final Logger logger =
-    Logger.getLogger(EclipsePluginsStep.class);
-
   private static final String BEGIN_TASK = "beginTask";
   private static final String SUB_TASK = "subTask";
   private static final String INTERNAL_WORKED = "internalWorked";
   private static final String SET_TASK_NAME = "setTaskName";
   private static final String FEATURE = "  Feature";
+  private static final String SITE = "Site: file:";
   private static final String ENABLED = "enabled";
 
-  private static final String SKIP_FEATURES =
-    "If you skip installing of the required features some " +
-    "features of eclim may not work, or eclim may not start at all.\n" +
-    "Are you sure you want to skip this step?";
+  private static final Color ERROR_COLOR = new Color(255, 201, 201);
 
   private String taskName = "";
 
   private JPanel stepPanel;
+  private JLabel messageLabel;
+  private ImageIcon errorIcon;
   private DefaultTableModel tableModel = new DefaultTableModel();
   private List dependencies;
+  private PlasticTheme theme;
 
   /**
    * Constructs this step.
@@ -114,9 +126,33 @@ public class EclipsePluginsStep
    */
   public JComponent initGui ()
   {
+    theme = new DesertBlue();
     stepPanel = (JPanel)super.initGui();
-    stepPanel.setBorder(BorderFactory.createEmptyBorder(20, 25, 10, 25));
-    return stepPanel;
+    stepPanel.setBorder(null);
+
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+    messageLabel = new JLabel();
+    messageLabel.setPreferredSize(new Dimension(25, 25));
+    panel.add(messageLabel);
+    panel.add(stepPanel);
+    panel.setBorder(BorderFactory.createEmptyBorder(25, 25, 10, 25));
+
+    return panel;
+  }
+
+  private void setMessage (String message)
+  {
+    if(errorIcon == null){
+      errorIcon = new ImageIcon(Installer.getImage("form.error.icon"));
+    }
+    if(message != null){
+      messageLabel.setIcon(errorIcon);
+      messageLabel.setText(message);
+    }else{
+      messageLabel.setIcon(null);
+      messageLabel.setText(null);
+    }
   }
 
   /**
@@ -149,11 +185,17 @@ public class EclipsePluginsStep
         tableModel.addColumn("Version");
         tableModel.addColumn("Install / Upgrade");
         JTable table = new JTable(tableModel);
-        table.setRowSelectionAllowed(false);
-        final JPanel featuresPanel = new JPanel(new BorderLayout());
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setDefaultRenderer(Object.class, new DependencyCellRenderer());
+        table.getSelectionModel().addListSelectionListener(
+            new DependencySelectionListener());
+
+        JPanel featuresPanel = new JPanel(new BorderLayout());
         featuresPanel.setAlignmentX(0.0f);
+
         JPanel container = new JPanel(new BorderLayout());
         container.add(table, BorderLayout.CENTER);
+
         JScrollPane scrollPane = new JScrollPane(container);
         scrollPane.setAlignmentX(0.0f);
 
@@ -301,11 +343,15 @@ public class EclipsePluginsStep
   {
     final ArrayList features = new ArrayList();
     Command command = new ListCommand(new OutputHandler(){
+      File site = null;
       public void process (String line){
-        if(line.startsWith(FEATURE)){
+        if(line.startsWith(SITE)){
+          site = new File(line.substring(SITE.length()));
+        }else if(line.startsWith(FEATURE)){
           String[] attrs = StringUtils.split(
             line.substring(FEATURE.length() + 2));
-          features.add(new Feature(attrs[0], attrs[1], attrs[2].equals(ENABLED)));
+          features.add(new Feature(
+              attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
         }
       }
     });
@@ -400,10 +446,22 @@ public class EclipsePluginsStep
     {
       ((JButton)e.getSource()).setEnabled(false);
       try{
-        Worker.post(new foxtrot.Task(){
+        Boolean successful = (Boolean)Worker.post(new foxtrot.Task(){
           public Object run ()
             throws Exception
           {
+            int index = 0;
+
+            // check if any of the features cannot be installed.
+            for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
+              Feature feature = ((Dependency)ii.next()).getFeature();
+              if (feature != null && !feature.getSite().canWrite()){
+                GuiDialogs.showWarning(Installer.getString(
+                    "eclipsePlugins.install.features.permission.denied"));
+                return Boolean.FALSE;
+              }
+            }
+
             guiOverallProgress.setMaximum(dependencies.size());
             guiOverallProgress.setValue(0);
             String to = (String)Installer.getContext().getValue("eclipse.plugins");
@@ -411,7 +469,6 @@ public class EclipsePluginsStep
               to.substring(0, to.length() - 1);
             }
             to = FilenameUtils.getFullPath(to);
-            int index = 0;
             for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
               Dependency dependency = (Dependency)ii.next();
               if(!dependency.isUpgrade()){
@@ -447,20 +504,23 @@ public class EclipsePluginsStep
             guiTaskProgress.setValue(guiTaskProgress.getMaximum());
             guiOverallProgress.setValue(guiOverallProgress.getMaximum());
 
-            return null;
+            return Boolean.TRUE;
           }
         });
-        guiOverallProgress.setValue(guiOverallProgress.getMaximum());
-        guiOverallLabel.setText(Installer.getString("install.done"));
 
-        guiTaskProgress.setValue(guiTaskProgress.getMaximum());
-        guiTaskLabel.setText(Installer.getString("install.done"));
+        if(successful.booleanValue()){
+          guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+          guiOverallLabel.setText(Installer.getString("install.done"));
 
-        setBusy(false);
-        setValid(true);
-        guiTaskProgress.setIndeterminate(false);
+          guiTaskProgress.setValue(guiTaskProgress.getMaximum());
+          guiTaskLabel.setText(Installer.getString("install.done"));
 
-        skipButton.setEnabled(false);
+          setBusy(false);
+          setValid(true);
+          guiTaskProgress.setIndeterminate(false);
+
+          skipButton.setEnabled(false);
+        }
       }catch(Exception ex){
         setError(ex);
       }
@@ -476,7 +536,7 @@ public class EclipsePluginsStep
     }
 
     public void actionPerformed (ActionEvent e){
-      if(GuiDialogs.showConfirm(SKIP_FEATURES)){
+      if(GuiDialogs.showConfirm(Installer.getString("eclipsePlugins.skip"))){
         setValid(true);
 
         // determine if the python interpreter step should be skipped.
@@ -504,12 +564,61 @@ public class EclipsePluginsStep
     }
   }
 
+  private class DependencyCellRenderer
+    extends DefaultTableCellRenderer
+  {
+    public Component getTableCellRendererComponent (
+        JTable table, Object value,
+        boolean isSelected, boolean hasFocus,
+        int row, int column)
+    {
+      Component component = super.getTableCellRendererComponent(
+          table, value, isSelected, hasFocus, row, column);
+      Feature feature = ((Dependency)dependencies.get(row)).getFeature();
+      if (feature != null && !feature.getSite().canWrite()){
+        component.setBackground(isSelected ?
+            theme.getMenuItemSelectedBackground() : ERROR_COLOR);
+        component.setForeground(isSelected ? ERROR_COLOR : Color.BLACK);
+      }else{
+        component.setBackground(isSelected ?
+            theme.getMenuItemSelectedBackground() : Color.WHITE);
+        component.setForeground(isSelected ?
+            theme.getMenuItemSelectedForeground() : theme.getMenuForeground());
+      }
+      return component;
+    }
+  }
+
+  /**
+   * Mouse listener for the feature list.
+   */
+  private class DependencySelectionListener
+    implements ListSelectionListener
+  {
+    /**
+     * {@inheritDoc}
+     * @see ListSelectionListener#valueChanged(ListSelectionEvent)
+     */
+    public void valueChanged (ListSelectionEvent e)
+    {
+      ListSelectionModel model = (ListSelectionModel)e.getSource();
+      int index = model.getMinSelectionIndex();
+      Feature feature = index >= 0 ?
+        ((Dependency)dependencies.get(index)).getFeature() : null;
+
+      if (feature != null && !feature.getSite().canWrite()){
+        setMessage(Installer.getString("eclipsePlugins.upgrade.permission.denied"));
+      }else{
+        setMessage(null);
+      }
+    }
+  }
+
   private static class Dependency
   {
     private String url;
     private String id;
     private String version;
-    private String previousVersion;
     private boolean upgrade;
     private Feature feature;
 
@@ -553,12 +662,14 @@ public class EclipsePluginsStep
   {
     private String id;
     private String version;
+    private File site;
     private boolean enabled;
 
-    public Feature (String id, String version, boolean enabled)
+    public Feature (String id, String version, File site, boolean enabled)
     {
       this.id = id;
       this.version = version;
+      this.site = site;
       this.enabled = enabled;
     }
 
@@ -568,6 +679,10 @@ public class EclipsePluginsStep
 
     public String getVersion () {
       return version;
+    }
+
+    public File getSite () {
+      return this.site;
     }
 
     public boolean isEnabled () {
