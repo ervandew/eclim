@@ -83,7 +83,7 @@ public class ImplCommand
 
       String[] methods = null;
       if(methodsOption != null){
-        methods = StringUtils.split(methodsOption, ",,");
+        methods = StringUtils.splitByWholeSeparator(methodsOption, ",,");
       }else{
         methods = getUnimplementedMethods(type, superType);
       }
