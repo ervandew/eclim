@@ -809,7 +809,7 @@ function! eclim#util#TempWindow (name, lines, ...)
   let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 
   if bufwinnr(name) == -1
-    silent! noautocmd exec "botright 10split " . escape(a:name, ' ')
+    silent! noautocmd exec "botright 10sview " . escape(a:name, ' ')
     let b:eclim_temp_window = 1
 
     " play nice with maximize.vim
@@ -817,18 +817,18 @@ function! eclim#util#TempWindow (name, lines, ...)
       call eclim#display#maximize#AdjustFixedWindow(10, 1)
     endif
 
-    if len(a:000) == 0 || a:000[0]
-      setlocal nowrap
-      setlocal winfixheight
-      setlocal noswapfile
-      setlocal nobuflisted
-      setlocal buftype=nofile
-      setlocal bufhidden=delete
-    endif
+    setlocal nowrap
+    setlocal winfixheight
+    setlocal noswapfile
+    setlocal nobuflisted
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
   else
     exec bufwinnr(name) . "winc w"
   endif
 
+  set modifiable
+  set noreadonly
   call append(1, a:lines)
   retab
   let saved = @"
