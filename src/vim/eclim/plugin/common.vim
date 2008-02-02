@@ -24,35 +24,37 @@
 
 " Command Declarations {{{
 if !exists(":Split")
-  command -nargs=+ -complete=file Split :call eclim#common#util#OpenFiles('split', '<args>')
+  command -nargs=+ -complete=file
+    \ Split :call eclim#common#util#OpenFiles('split', '<args>')
 endif
 if !exists(":Tabnew")
-  command -nargs=+ -complete=file Tabnew :call eclim#common#util#OpenFiles('tablast | tabnew', '<args>')
+  command -nargs=+ -complete=file
+    \ Tabnew :call eclim#common#util#OpenFiles('tablast | tabnew', '<args>')
 endif
 
+if !exists(":EditRelative")
+  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
+    \ EditRelative :call eclim#common#util#OpenRelative('edit', '<args>', 1)
+endif
 if !exists(":SplitRelative")
   command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
     \ SplitRelative :call eclim#common#util#OpenRelative('split', '<args>', 1)
 endif
 if !exists(":TabnewRelative")
   command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ TabnewRelative :call eclim#common#util#OpenRelative('tablast | tabnew', '<args>', 1)
-endif
-if !exists(":EditRelative")
-  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ EditRelative :call eclim#common#util#OpenRelative('edit', '<args>', 0)
+    \ TabnewRelative :call eclim#common#util#OpenRelative('tablast | tabnew', '<args>')
 endif
 if !exists(":ReadRelative")
   command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ReadRelative :call eclim#common#util#OpenRelative('read', '<args>', 0)
+    \ ReadRelative :call eclim#common#util#OpenRelative('read', '<args>')
 endif
 if !exists(":ArgsRelative")
   command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ArgsRelative :call eclim#common#util#OpenRelative('args', '<args>', 0)
+    \ ArgsRelative :call eclim#common#util#OpenRelative('args', '<args>')
 endif
 if !exists(":ArgAddRelative")
   command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ArgAddRelative :call eclim#common#util#OpenRelative('argadd', '<args>', 0)
+    \ ArgAddRelative :call eclim#common#util#OpenRelative('argadd', '<args>')
 endif
 
 if !exists(":Buffers")
