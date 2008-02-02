@@ -1,6 +1,6 @@
 package org.eclim.installer.step;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,12 +8,12 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -21,19 +21,25 @@ import javax.swing.event.ListSelectionListener;
 import foxtrot.Task;
 import foxtrot.Worker;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
-import org.formic.form.Validator;
-
-import org.formic.form.validator.ValidatorBuilder;
+import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
 
-import org.formic.wizard.step.FileChooserStep;
+import org.formic.wizard.form.GuiForm;
+
+import org.formic.wizard.form.gui.component.FileChooser;
+
+import org.formic.wizard.form.validator.ValidatorBuilder;
+
+import org.formic.wizard.step.AbstractGuiStep;
 
 /**
  * Step for choosing the vimfiles directory to install vim scripts in.
@@ -42,7 +48,7 @@ import org.formic.wizard.step.FileChooserStep;
  * @version $Revision$
  */
 public class VimStep
-  extends FileChooserStep
+  extends AbstractGuiStep
 {
   private static final String[] WINDOWS_VIMS = {
     "C:/Program Files/Vim/vim70/vim.exe",
@@ -56,38 +62,36 @@ public class VimStep
   private static final String COMMAND =
     "redir! > <file> | silent! echo &rtp | quit";
 
-  private static final String ICON = "/resources/images/vim.png";
-
   private JPanel panel;
+  private FileChooser fileChooser;
   private boolean rtpAttempted;
 
   /**
    * Constructs the step.
    */
-  public VimStep (String name)
+  public VimStep (String name, Properties properties)
   {
-    super(name);
+    super(name, properties);
   }
 
   /**
    * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#initProperties(Properties)
+   * @see org.formic.wizard.step.GuiStep#init()
    */
-  public void initProperties (Properties properties)
+  public Component init ()
   {
-    properties.put(PROPERTY, "files");
-    properties.put("selectionMode", "directories");
-    super.initProperties(properties);
-  }
+    GuiForm form = createForm();
+    String files = fieldName("files");
+    fileChooser = new FileChooser(JFileChooser.DIRECTORIES_ONLY);
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#initGui()
-   */
-  public JComponent initGui ()
-  {
-    panel = new JPanel(new BorderLayout());
-    panel.add(super.initGui(), BorderLayout.NORTH);
+    panel = new JPanel(new MigLayout(
+          "wrap 2", "[fill]", "[] [] [fill, grow]"));
+    panel.add(form.createMessagePanel(), "span");
+    panel.add(new JLabel(Installer.getString(files)), "split");
+    panel.add(fileChooser, "skip");
+
+    form.bind(files, fileChooser.getTextField(),
+        new ValidatorBuilder().required().isDirectory().fileExists().validator());
 
     return panel;
   }
@@ -111,17 +115,17 @@ public class VimStep
 
         if(rtp != null && rtp.length > 0){
           if(rtp.length == 1){
-            getGuiFileChooser().getTextField().setText(rtp[0]);
+            fileChooser.getTextField().setText(rtp[0]);
           }else{
             final JList list = new JList(rtp);
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane scrollPane = new JScrollPane(list);
-            panel.add(scrollPane, BorderLayout.CENTER);
+            panel.add(scrollPane, "span, grow");
 
             list.addListSelectionListener(new ListSelectionListener(){
               public void valueChanged (ListSelectionEvent event){
                 if(!event.getValueIsAdjusting()){
-                  getGuiFileChooser().getTextField()
+                  fileChooser.getTextField()
                     .setText((String)list.getSelectedValue());
                 }
               }
@@ -134,28 +138,8 @@ public class VimStep
         e.printStackTrace();
       }
       setBusy(false);
-      getGuiFileChooser().getTextField().grabFocus();
+      fileChooser.getTextField().grabFocus();
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractStep#getIconPath()
-   */
-  protected String getIconPath ()
-  {
-    return ICON;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see FileChooserStep#getValidator()
-   */
-  protected Validator getValidator ()
-  {
-    ValidatorBuilder builder = new ValidatorBuilder();
-    builder.validator(super.getValidator()).isDirectory().fileExists();
-    return builder.validator();
   }
 
   /**

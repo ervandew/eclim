@@ -36,11 +36,9 @@ import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -79,9 +77,9 @@ import org.eclim.installer.theme.DesertBlue;
 
 import org.formic.Installer;
 
-import org.formic.dialog.gui.GuiDialogs;
+import org.formic.util.dialog.gui.GuiDialogs;
 
-import org.formic.wizard.step.InstallStep;
+import org.formic.wizard.step.gui.InstallStep;
 
 /**
  * Step which installs necessary third party eclipse plugins.
@@ -115,19 +113,19 @@ public class EclipsePluginsStep
   /**
    * Constructs this step.
    */
-  public EclipsePluginsStep (String name)
+  public EclipsePluginsStep (String name, Properties properties)
   {
-    super(name);
+    super(name, properties);
   }
 
   /**
    * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#initGui()
+   * @see org.formic.wizard.step.GuiStep#init()
    */
-  public JComponent initGui ()
+  public Component init ()
   {
     theme = new DesertBlue();
-    stepPanel = (JPanel)super.initGui();
+    stepPanel = (JPanel)super.init();
     stepPanel.setBorder(null);
 
     JPanel panel = new JPanel();
@@ -158,11 +156,11 @@ public class EclipsePluginsStep
   /**
    * Invoked when this step is displayed in the gui.
    */
-  protected void displayedGui ()
+  public void displayed ()
   {
     setBusy(true);
     try{
-      guiOverallLabel.setText("Analyzing installed features...");
+      overallLabel.setText("Analyzing installed features...");
       dependencies = (List)Worker.post(new foxtrot.Task(){
         public Object run ()
           throws Exception
@@ -175,11 +173,11 @@ public class EclipsePluginsStep
       });
 
       if(dependencies.size() == 0){
-        guiOverallProgress.setMaximum(1);
-        guiOverallProgress.setValue(1);
-        guiTaskProgress.setMaximum(1);
-        guiTaskProgress.setValue(1);
-        guiOverallLabel.setText("All third party plugins are up to date.");
+        overallProgress.setMaximum(1);
+        overallProgress.setValue(1);
+        taskProgress.setMaximum(1);
+        taskProgress.setValue(1);
+        overallLabel.setText("All third party plugins are up to date.");
       }else{
         tableModel.addColumn("Feature");
         tableModel.addColumn("Version");
@@ -222,15 +220,14 @@ public class EclipsePluginsStep
         featuresPanel.add(scrollPane, BorderLayout.CENTER);
 
         stepPanel.add(featuresPanel);
-        guiOverallLabel.setText("");
+        overallLabel.setText("");
       }
     }catch(Exception e){
       setError(e);
     }finally{
       setValid(dependencies.size() == 0);
       setBusy(false);
-      guiTaskProgress.setIndeterminate(false);
-      Installer.getProject().removeBuildListener(this);
+      taskProgress.setIndeterminate(false);
     }
   }
 
@@ -414,16 +411,16 @@ public class EclipsePluginsStep
           String l = line.substring(BEGIN_TASK.length() + 2);
           double work = Double.parseDouble(
               l.substring(l.indexOf('=') + 1, l.indexOf(' ')));
-          guiTaskProgress.setIndeterminate(false);
-          guiTaskProgress.setMaximum((int)(work * 100d));
-          guiTaskProgress.setValue(0);
+          taskProgress.setIndeterminate(false);
+          taskProgress.setMaximum((int)(work * 100d));
+          taskProgress.setValue(0);
         }else if(line.startsWith(SUB_TASK)){
-          guiTaskLabel.setText(
+          taskLabel.setText(
               taskName + line.substring(SUB_TASK.length() + 1).trim());
         }else if(line.startsWith(INTERNAL_WORKED)){
           double worked = Double.parseDouble(
               line.substring(INTERNAL_WORKED.length() + 2));
-          guiTaskProgress.setValue((int)(worked * 100d));
+          taskProgress.setValue((int)(worked * 100d));
         }else if(line.startsWith(SET_TASK_NAME)){
           taskName = line.substring(SET_TASK_NAME.length() + 1).trim() + ' ';
         }
@@ -462,8 +459,8 @@ public class EclipsePluginsStep
               }
             }
 
-            guiOverallProgress.setMaximum(dependencies.size());
-            guiOverallProgress.setValue(0);
+            overallProgress.setMaximum(dependencies.size());
+            overallProgress.setValue(0);
             String to = (String)Installer.getContext().getValue("eclipse.plugins");
             if(to.endsWith("/")){
               to.substring(0, to.length() - 1);
@@ -472,10 +469,10 @@ public class EclipsePluginsStep
             for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
               Dependency dependency = (Dependency)ii.next();
               if(!dependency.isUpgrade()){
-                guiOverallLabel.setText("Installing feature: " +
+                overallLabel.setText("Installing feature: " +
                     dependency.getId() + '-' + dependency.getVersion());
               }else{
-                guiOverallLabel.setText("Updating feature: " +
+                overallLabel.setText("Updating feature: " +
                     dependency.getId() + '-' + dependency.getVersion());
               }
 
@@ -498,26 +495,26 @@ public class EclipsePluginsStep
               }catch(Exception ex){
               }
               tableModel.removeRow(0);
-              guiOverallProgress.setValue(guiOverallProgress.getValue() + 1);
+              overallProgress.setValue(overallProgress.getValue() + 1);
             }
-            guiTaskLabel.setText("");
-            guiTaskProgress.setValue(guiTaskProgress.getMaximum());
-            guiOverallProgress.setValue(guiOverallProgress.getMaximum());
+            taskLabel.setText("");
+            taskProgress.setValue(taskProgress.getMaximum());
+            overallProgress.setValue(overallProgress.getMaximum());
 
             return Boolean.TRUE;
           }
         });
 
         if(successful.booleanValue()){
-          guiOverallProgress.setValue(guiOverallProgress.getMaximum());
-          guiOverallLabel.setText(Installer.getString("install.done"));
+          overallProgress.setValue(overallProgress.getMaximum());
+          overallLabel.setText(Installer.getString("install.done"));
 
-          guiTaskProgress.setValue(guiTaskProgress.getMaximum());
-          guiTaskLabel.setText(Installer.getString("install.done"));
+          taskProgress.setValue(taskProgress.getMaximum());
+          taskLabel.setText(Installer.getString("install.done"));
 
           setBusy(false);
           setValid(true);
-          guiTaskProgress.setIndeterminate(false);
+          taskProgress.setIndeterminate(false);
 
           skipButton.setEnabled(false);
         }
@@ -622,8 +619,7 @@ public class EclipsePluginsStep
     private boolean upgrade;
     private Feature feature;
 
-    public Dependency (String[] attrs)
-    {
+    public Dependency (String[] attrs) {
       url = attrs[0];
       id = attrs[1];
       version = attrs[2];
@@ -665,8 +661,7 @@ public class EclipsePluginsStep
     private File site;
     private boolean enabled;
 
-    public Feature (String id, String version, File site, boolean enabled)
-    {
+    public Feature (String id, String version, File site, boolean enabled) {
       this.id = id;
       this.version = version;
       this.site = site;
@@ -703,8 +698,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.python");
     }
 
-    public int compare (Object ob1, Object ob2)
-    {
+    public int compare (Object ob1, Object ob2) {
       return NAMES.indexOf(ob1) - NAMES.indexOf(ob2);
     }
   }

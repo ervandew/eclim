@@ -30,16 +30,10 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
 
-import org.formic.form.console.ConsoleForm;
-
-import org.formic.form.gui.GuiForm;
-
 import org.formic.util.CommandExecutor;
 
-import org.formic.wizard.step.RequirementsValidationStep.Requirement;
-import org.formic.wizard.step.RequirementsValidationStep.ValidatingRequirement;
-
-import org.formic.wizard.step.RequirementsValidationStep;
+import org.formic.wizard.step.gui.RequirementsValidationStep;
+import org.formic.wizard.step.gui.RequirementsValidationStep.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +49,6 @@ public class RequirementProvider
 {
   private static final Logger logger =
     LoggerFactory.getLogger(RequirementProvider.class);
-
-  private GuiForm guiForm;
-  private ConsoleForm consoleForm;
 
   /**
    * {@inheritDoc}
@@ -85,24 +76,6 @@ public class RequirementProvider
   {
     ValidatingRequirement req = (ValidatingRequirement)requirement;
     return req.validate();
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see RequirementProvider#setGuiForm(GuiForm)
-   */
-  public void setGuiForm (GuiForm form)
-  {
-    this.guiForm = form;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see RequirementProvider#setConsoleForm(ConsoleForm)
-   */
-  public void setConsoleForm (ConsoleForm form)
-  {
-    this.consoleForm = form;
   }
 
   private class EclipseRequirement

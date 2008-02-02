@@ -7,6 +7,12 @@
         <td><b>Eclipse Home:</b></td>
         <td>$installer.context.getValue("eclipse.home")</td>
       </tr>
+      #if(!$os.isFamily("windows"))
+      <tr>
+        <td><b>Eclipse Plugins:</b></td>
+        <td>$installer.context.getValue("eclipse.plugins")</td>
+      </tr>
+      #end
       <tr>
         <td><b>Vimfiles Dir:</b></td>
         <td>$installer.context.getValue("vim.files")</td>

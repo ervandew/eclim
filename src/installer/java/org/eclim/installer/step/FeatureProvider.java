@@ -8,13 +8,7 @@ import java.io.FilenameFilter;
 
 import org.formic.Installer;
 
-import org.formic.form.console.ConsoleForm;
-
-import org.formic.form.gui.GuiForm;
-
-import org.formic.wizard.step.FeatureListStep.Feature;
-
-import org.formic.wizard.step.FeatureListStep;
+import org.formic.wizard.step.shared.Feature;
 
 /**
  * Provider to supply avaiable features to FeatureListStep.
@@ -23,7 +17,7 @@ import org.formic.wizard.step.FeatureListStep;
  * @version $Revision$
  */
 public class FeatureProvider
-  implements FeatureListStep.FeatureProvider, PropertyChangeListener
+  implements org.formic.wizard.step.shared.FeatureProvider, PropertyChangeListener
 {
   private static final String[] FEATURES =
     {"ant", "maven", "jdt", "wst", "python"};
@@ -38,12 +32,9 @@ public class FeatureProvider
     {{"jdt"}, null, null, null, null};
     //{{"jdt"}, null, null, null, {"wst"}, null};
 
-  private GuiForm guiForm;
-  private ConsoleForm consoleForm;
-
   /**
    * {@inheritDoc}
-   * @see FeatureListStep.FeatureProvider#getFeatures()
+   * @see org.formic.wizard.step.shared.FeatureProvider#getFeatures()
    */
   public Feature[] getFeatures ()
   {
@@ -68,24 +59,6 @@ public class FeatureProvider
     }
 
     return features;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see FeatureListStep.FeatureProvider#setGuiForm(GuiForm)
-   */
-  public void setGuiForm (GuiForm form)
-  {
-    this.guiForm = form;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see FeatureListStep.FeatureProvider#setConsoleForm(ConsoleForm)
-   */
-  public void setConsoleForm (ConsoleForm form)
-  {
-    this.consoleForm = form;
   }
 
   /**

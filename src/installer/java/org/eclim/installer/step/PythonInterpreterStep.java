@@ -16,6 +16,7 @@
 package org.eclim.installer.step;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import java.io.File;
 
@@ -24,7 +25,7 @@ import java.util.Properties;
 
 import java.util.regex.Pattern;
 
-import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -33,6 +34,8 @@ import javax.swing.ListSelectionModel;
 
 import foxtrot.Task;
 import foxtrot.Worker;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -45,13 +48,15 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
 
-import org.formic.form.Validator;
-
-import org.formic.form.validator.AggregateValidator;
-
 import org.formic.util.CommandExecutor;
 
-import org.formic.wizard.step.FileChooserStep;
+import org.formic.wizard.form.GuiForm;
+
+import org.formic.wizard.form.gui.component.FileChooser;
+
+import org.formic.wizard.form.validator.ValidatorBuilder;
+
+import org.formic.wizard.step.AbstractGuiStep;
 
 /**
  * Step for choosing the location of the python interpreter.
@@ -60,7 +65,7 @@ import org.formic.wizard.step.FileChooserStep;
  * @version $Revision$
  */
 public class PythonInterpreterStep
-  extends FileChooserStep
+  extends AbstractGuiStep
 {
   private static final String[] WINDOWS_INTERPRETERS = {
     "C:/Program Files/Python25/python.exe",
@@ -71,50 +76,39 @@ public class PythonInterpreterStep
 
   private static final String[] UNIX_INTERPRETERS = {"python"};
 
-  private static final String ICON = "/resources/images/python.png";
-
   private JPanel panel;
+  private FileChooser fileChooser;
   private boolean firstDisplay = true;
   private String[] pydevInterpreters;
 
   /**
    * Constructs the step.
    */
-  public PythonInterpreterStep (String name)
+  public PythonInterpreterStep (String name, Properties properties)
   {
-    super(name);
+    super(name, properties);
   }
 
   /**
    * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#initProperties(Properties)
+   * @see org.formic.wizard.step.GuiStep#init()
    */
-  public void initProperties (Properties properties)
+  public Component init ()
   {
-    properties.put(PROPERTY, "interpreter");
-    properties.put("selectionMode", "files");
-    super.initProperties(properties);
-  }
+    GuiForm form = createForm();
+    String interpreter = fieldName("interpreter");
+    fileChooser = new FileChooser(JFileChooser.FILES_ONLY);
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#initGui()
-   */
-  public JComponent initGui ()
-  {
-    panel = new JPanel(new BorderLayout());
-    panel.add(super.initGui(), BorderLayout.NORTH);
+    panel = new JPanel();
+    panel.setLayout(new MigLayout("wrap 2"));
+    panel.add(form.createMessagePanel(), "span");
+    panel.add(new JLabel(Installer.getString(interpreter)));
+    panel.add(fileChooser, "width 300!");
+
+    form.bind(interpreter, fileChooser.getTextField(),
+        new ValidatorBuilder().required().isFile().fileExists().validator());
 
     return panel;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractStep#getIconPath()
-   */
-  protected String getIconPath ()
-  {
-    return ICON;
   }
 
   /**
@@ -170,7 +164,7 @@ public class PythonInterpreterStep
             }
 
             if(interpreter != null) {
-              getGuiFileChooser().getTextField().setText(interpreter);
+              fileChooser.getTextField().setText(interpreter);
             }
             return null;
           }
@@ -179,7 +173,7 @@ public class PythonInterpreterStep
         e.printStackTrace();
       }
       setBusy(false);
-      getGuiFileChooser().getTextField().grabFocus();
+      fileChooser.getTextField().grabFocus();
     }
   }
 
@@ -195,7 +189,7 @@ public class PythonInterpreterStep
         public Object run ()
           throws Exception
         {
-          String chosen = getGuiFileChooser().getTextField().getText();
+          String chosen = fileChooser.getTextField().getText();
           boolean set = true;
           if(pydevInterpreters != null){
             for (int ii = 0; ii < pydevInterpreters.length; ii++){
@@ -217,19 +211,6 @@ public class PythonInterpreterStep
       e.printStackTrace();
     }
     setBusy(false);
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see FileChooserStep#getValidator()
-   */
-  protected Validator getValidator ()
-  {
-    AggregateValidator validator = new AggregateValidator();
-    validator.addValidator(super.getValidator());
-    validator.addValidator(new PythonValidator());
-
-    return validator;
   }
 
   private void extractInstallerPlugin ()
@@ -346,31 +327,5 @@ public class PythonInterpreterStep
       e.printStackTrace();
     }
     return null;
-  }
-
-  /**
-   * Validates python interpreter.
-   */
-  private class PythonValidator
-    implements Validator
-  {
-    /**
-     * {@inheritDoc}
-     * @see Validator#isValid(Object)
-     */
-    public boolean isValid (Object value)
-    {
-      File file = new File((String)value);
-      return file.exists() && file.isFile();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see Validator#getErrorMessage()
-     */
-    public String getErrorMessage ()
-    {
-      return getName() + ".interpreter.invalid";
-    }
   }
 }
