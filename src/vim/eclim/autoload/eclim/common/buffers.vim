@@ -23,7 +23,7 @@
 
 " Global Variables {{{
 if !exists('g:EclimBuffersSort')
-  let g:EclimBuffersSort = 'path'
+  let g:EclimBuffersSort = 'file'
 endif
 if !exists('g:EclimBuffersSortDirection')
   let g:EclimBuffersSortDirection = 'asc'
@@ -41,19 +41,22 @@ function! eclim#common#buffers#Buffers ()
   redir END
 
   let buffers = []
-  let current = ''
+  let filelength = 0
   for entry in split(list, '\n')
     let buffer = {}
     let buffer.status = substitute(entry, '\s*[0-9]\+\s\+\(.\{-}\)\s\+".*', '\1', '')
     let buffer.path = substitute(entry, '.\{-}"\(.\{-}\)".*', '\1', '')
+    let buffer.path = fnamemodify(buffer.path, ':p')
+    let buffer.file = fnamemodify(buffer.path, ':p:t')
+    let buffer.dir = fnamemodify(buffer.path, ':p:h')
     exec 'let buffer.bufnr = ' . substitute(entry, '\s*\([0-9]\+\).*', '\1', '')
-    exec 'let buffer.lnum = ' . substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', '')
-
-    if buffer.status =~ '%'
-      let current = buffer.path
-    endif
-
+    exec 'let buffer.lnum = ' .
+      \ substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', '')
     call add(buffers, buffer)
+
+    if len(buffer.file) > filelength
+      let filelength = len(buffer.file)
+    endif
   endfor
 
   if g:EclimBuffersSort != ''
@@ -62,7 +65,7 @@ function! eclim#common#buffers#Buffers ()
 
   let lines = []
   for buffer in buffers
-    call add(lines, s:BufferEntryToLine(buffer))
+    call add(lines, s:BufferEntryToLine(buffer, filelength))
   endfor
 
   call eclim#util#TempWindow('[buffers]', lines)
@@ -116,13 +119,21 @@ function! s:BufferDelete ()
   call remove(b:eclim_buffers, index)
 endfunction " }}}
 
-" s:BufferEntryToLine(buffer) {{{
-function! s:BufferEntryToLine (buffer)
+" s:BufferEntryToLine(buffer, filelength) {{{
+function! s:BufferEntryToLine (buffer, filelength)
   let line = ''
   let line .= a:buffer.status =~ '+' ? '+' : ' '
   let line .= a:buffer.status =~ 'a' ? 'active' : 'hidden'
   let line .= a:buffer.status =~ '[-=]' ? ' [RO] ' : '      '
-  let line .= a:buffer.path
+  let line .= a:buffer.file
+
+  let pad = a:filelength - len(a:buffer.file) + 2
+  while pad > 0
+    let line .= ' '
+    let pad -= 1
+  endwhile
+
+  let line .= a:buffer.dir
   return line
 endfunction " }}}
 
