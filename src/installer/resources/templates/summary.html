@@ -4,21 +4,21 @@
     <br><br>
     <table border="none">
       <tr>
-        <td><b>Eclipse Home:</b></td>
+        <td nowrap="nowrap"><b>Eclipse Home:</b></td>
         <td>$installer.context.getValue("eclipse.home")</td>
       </tr>
       #if(!$os.isFamily("windows"))
       <tr>
-        <td><b>Eclipse Plugins:</b></td>
+        <td nowrap="nowrap"><b>Eclipse Plugins:</b></td>
         <td>$installer.context.getValue("eclipse.plugins")</td>
       </tr>
       #end
       <tr>
-        <td><b>Vimfiles Dir:</b></td>
+        <td nowrap="nowrap"><b>Vimfiles Dir:</b></td>
         <td>$installer.context.getValue("vim.files")</td>
       </tr>
       <tr>
-        <td><b>Features:</b></td>
+        <td nowrap="nowrap"><b>Features:</b></td>
         <td>
         #foreach($feature in $installer.context.getKeysByPrefix("featureList"))
           #if($installer.context.getValue("${feature}"))
@@ -28,9 +28,10 @@
         </td>
       </tr>
     </table>
-    <br><br>
-    <b>Warning:</b> Any previous eclim eclipse and vim plugins will be deleted.
-    If you want to back anything up from these directories, do so now before
+    <br>
+    <b><font color="red">Warning:</font></b>
+    Any previous eclim eclipse and vim plugins will be deleted.<br>
+    If you want to back anything up from these directories, do so now before<br>
     proceeding to the next step.
   </body>
 </html>
