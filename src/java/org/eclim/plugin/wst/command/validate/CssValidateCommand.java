@@ -34,6 +34,8 @@ import org.w3c.css.css.StyleSheet;
 
 import org.w3c.css.parser.CssError;
 
+import org.w3c.css.parser.analyzer.TokenMgrError;
+
 import org.w3c.css.util.ApplContext;
 import org.w3c.css.util.Warning;
 
@@ -69,29 +71,38 @@ public class CssValidateCommand
     // projection, screen, tty, tv, presentation
     context.setMedium("all");
 
-    DocumentParser parser = new DocumentParser(context, uri);
-    StyleSheet css = parser.getStyleSheet();
-    css.findConflicts(context);
-
     ArrayList<Error> errors = new ArrayList<Error>();
+    try{
+      DocumentParser parser = new DocumentParser(context, uri);
+      StyleSheet css = parser.getStyleSheet();
+      css.findConflicts(context);
 
-    for(CssError error : css.getErrors().getErrors()){
+      for(CssError error : css.getErrors().getErrors()){
+        errors.add(new Error(
+              error.getException().getMessage(),
+              toFile(error.getSourceFile()),
+              error.getLine(),
+              1,
+              false
+        ));
+      }
+
+      for(Warning warning : css.getWarnings().getWarnings()){
+        errors.add(new Error(
+              warning.getWarningMessage(),
+              toFile(warning.getSourceFile()),
+              warning.getLine(),
+              1,
+              true
+        ));
+      }
+    }catch(TokenMgrError tme){
       errors.add(new Error(
-            error.getException().getMessage(),
-            toFile(error.getSourceFile()),
-            error.getLine(),
+            tme.getMessage(),
+            toFile(uri),
+            tme.getErrorLine(),
             1,
             false
-      ));
-    }
-
-    for(Warning warning : css.getWarnings().getWarnings()){
-      errors.add(new Error(
-            warning.getWarningMessage(),
-            toFile(warning.getSourceFile()),
-            warning.getLine(),
-            1,
-            true
       ));
     }
 
