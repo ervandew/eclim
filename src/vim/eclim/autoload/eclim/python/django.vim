@@ -147,10 +147,12 @@ function! eclim#python#django#Manage (args)
 
         let filename = expand('%')
         let name = '__' . action . '__'
-        call eclim#util#TempWindow(name, split(result, '\n'), 0)
+        call eclim#util#TempWindow(name, split(result, '\n'))
         if action =~ '^sql'
           set filetype=sql
-          exec 'SQLSetType ' . dialect
+          if exists('b:current_syntax') && dialect !~ b:current_syntax
+            exec 'SQLSetType ' . dialect
+          endif
         elseif action == 'adminindex'
           set filetype=html
         elseif action =~ '\(diffsettings\|inspectdb\)'
