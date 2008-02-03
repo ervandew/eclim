@@ -461,7 +461,15 @@ public class EclipsePluginsStep
 
             overallProgress.setMaximum(dependencies.size());
             overallProgress.setValue(0);
-            String to = (String)Installer.getContext().getValue("eclipse.plugins");
+
+            String to = null;
+            if (Os.isFamily("windows")){
+              String home = (String)Installer.getContext().getValue("eclipse.home");
+              to = FilenameUtils.concat(home, "plugins");
+            }else{
+              to = (String)Installer.getContext().getValue("eclipse.plugins");
+            }
+
             if(to.endsWith("/")){
               to.substring(0, to.length() - 1);
             }
