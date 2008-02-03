@@ -301,4 +301,25 @@ public class FileUtils
     }
     return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
   }
+
+  /**
+   * Deletes a directory and all of its contents.
+   *
+   * @param dir The directory to delete.
+   */
+  public static void deleteDirectory (File dir)
+  {
+    if(!dir.exists()){
+      return;
+    }
+
+    for(File f : dir.listFiles()){
+      if(f.isDirectory()){
+        deleteDirectory(f);
+      }else{
+        f.delete();
+      }
+    }
+    dir.delete();
+  }
 }
