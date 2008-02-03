@@ -54,13 +54,15 @@ function s:Init ()
   " on windows, this eclim plugin gets called first, so force taglist to be
   " called prior.
   runtime! plugin/taglist.vim
-  runtime! plugin/taglisttoo.vim
 
   " add eclim dir to runtime path.
-  exec 'set runtimepath+=' . EclimBaseDir() . '/eclim'
+  exec 'set runtimepath+=' .
+    \ EclimBaseDir() . '/eclim,' .
+    \ EclimBaseDir() . '/eclim/after'
 
   " need to be manually sourced
   runtime! eclim/plugin/*.vim
+  runtime! eclim/after/plugin/*.vim
 endfunction " }}}
 
 " Validate() {{{

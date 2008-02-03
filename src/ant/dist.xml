@@ -67,6 +67,7 @@
     <zip destfile="dist/eclim_vim_${eclim.version}.jar">
       <fileset dir="src/vim">
         <include name="**/*.vim"/>
+        <include name="**/*.example"/>
         <exclude name="eclim/indent/php.vim"/>
         <exclude name="**/php/**/*.vim"/>
         <exclude name="**/php"/>

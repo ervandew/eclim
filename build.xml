@@ -160,6 +160,7 @@
     <sync todir="${vim.files}/eclim">
       <fileset dir="src/vim/eclim" includes="**/*"/>
       <preserveintarget>
+        <include name="after/**/*.vim"/>
         <include name="resources/**/*"/>
       </preserveintarget>
     </sync>

@@ -167,6 +167,7 @@
     <delete failonerror="false">
       <fileset dir="${vim.files}/eclim">
         <include name="**/*"/>
+        <exclude name="after/**/*"/>
         <exclude name="resources/**/*"/>
       </fileset>
     </delete>
