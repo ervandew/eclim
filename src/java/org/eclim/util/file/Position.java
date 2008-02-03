@@ -15,6 +15,8 @@
  */
 package org.eclim.util.file;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 /**
  * Represents a position within a file as denoted by an offset and length.
  *
@@ -111,5 +113,29 @@ public class Position
   public void setMessage (String message)
   {
     this.message = message;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Object#equals(Object)
+   */
+  @Override
+  public boolean equals (Object obj)
+  {
+    if(!(obj instanceof Position)){
+      return false;
+    }
+
+    if(this == obj){
+      return true;
+    }
+
+    Position rhs = (Position)obj;
+    return new EqualsBuilder()
+      .append(filename, rhs.getFilename())
+      .append(offset, rhs.getOffset())
+      .append(length, rhs.getLength())
+      .append(message, rhs.getMessage())
+      .isEquals();
   }
 }
