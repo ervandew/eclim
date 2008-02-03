@@ -15,6 +15,8 @@
  */
 package org.eclim.plugin.pdt.project;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,10 +30,17 @@ import org.eclim.plugin.pdt.PluginResources;
 
 import org.eclim.project.ProjectManager;
 
+import org.eclim.util.ProjectUtils;
 import org.eclim.util.XmlUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+
+import org.eclipse.php.internal.core.phpModel.parser.PHPIncludePathModelManager;
+import org.eclipse.php.internal.core.phpModel.parser.PHPProjectModel;
+import org.eclipse.php.internal.core.phpModel.parser.PHPWorkspaceModelManager;
 
 import org.eclipse.php.internal.core.project.IIncludePathEntry;
 import org.eclipse.php.internal.core.project.PHPNature;
@@ -123,7 +132,18 @@ public class PhpProjectManager
   public void refresh (IProject _project, CommandLine _commandLine)
     throws Exception
   {
+    /*File cacheDir = new File(ProjectUtils.getPath(_project) + "/.cache");
+    if(cacheDir.exists()){
+      FileUtils.deleteDirectory(cacheDir);
+    }*/
+
     _project.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+    /*PHPWorkspaceModelManager manager = PHPWorkspaceModelManager.getInstance();
+    PHPProjectModel model = manager.getModelForProject(_project, true);
+    PHPIncludePathModelManager includeManager = (PHPIncludePathModelManager)
+      model.getModel(PHPIncludePathModelManager.COMPOSITE_INCLUDE_PATH_MODEL_ID);
+    includeManager.clear();*/
   }
 
   /**
