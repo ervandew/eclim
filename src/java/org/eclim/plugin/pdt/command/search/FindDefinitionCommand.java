@@ -73,7 +73,9 @@ public class FindDefinitionCommand
           Position position = new Position(
               filename, data.getUserData().getStartPosition(), 0);
           position.setMessage(data.getName());
-          results.add(position);
+          if(!results.contains(position)){
+            results.add(position);
+          }
         }
       }
     }
