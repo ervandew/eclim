@@ -70,11 +70,11 @@ public class FindDefinitionCommand
         IResource resource = root.findMember(filename);
         if(resource != null){
           filename = resource.getRawLocation().toOSString();
+          Position position = new Position(
+              filename, data.getUserData().getStartPosition(), 0);
+          position.setMessage(data.getName());
+          results.add(position);
         }
-        Position position = new Position(
-            filename, data.getUserData().getStartPosition(), 0);
-        position.setMessage(data.getName());
-        results.add(position);
       }
     }
     return PositionFilter.instance.filter(_commandLine, results);
