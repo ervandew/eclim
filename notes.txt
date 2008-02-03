@@ -1,3 +1,30 @@
+HIGH {{{
+  - test installer w/ eclipse running
+    - may cause issues, if so, attempt to detect if eclipse is running and
+      display an intermediate step (or add to requirements steps as warning)
+      alerting the user to shut it down.
+
+  - create command :ProjectImport <dir>
+    - Eclipse equivalant:
+      File > Import... > General > Existing Projects Into Workspace
+
+  - support max number of cache entries
+    - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
+    - exclude entries beginning w/ 'eclim_'
+
+  - php support waiting on:
+    https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
+    https://bugs.eclipse.org/bugs/show_bug.cgi?id=205243 <-- duplicate of 204977
+
+  - get working under cygwin
+    if has('win32unix')
+    - eclim command
+    - file paths
+
+  - Unsolved
+    - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
+}}}
+
 TODO {{{
 
   Bugs {{{
@@ -72,12 +99,21 @@ TODO {{{
   }}}
 
   Common {{{
+    - org.eclim.project.vcs.tracker
+      for sourceforge we need n urls, one for bugs, one for features, etc.
+      but in the vcs log, how do you know which to use?
+      ... maybe support something like '#F123' or '#123f'
+      B:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763323&aid=<id> |
+      F:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763326&aid=<id>
+
     - debugger interface
       http://www.vim.org/scripts/script.php?script_id=1703
       (not windows compatible, but worth watching)
+      http://www.vim.org/scripts/script.php?script_id=663
+      (probably not windows compatible either)
 
     - creating a project in the workspace dir w/ a different name than the
-      directory doesn't work.
+      directory doesn't work (Eclipse doesn't support this).
       :ProjectCreate ~/workspace/my_project_dir -p my_project
 
     - Eclipse 3.3
@@ -85,7 +121,7 @@ TODO {{{
 
     - gvim menu items.
 
-    - determines the user's default workspace using
+    - determines the user's default workspace using (account for ~/.eclipse/org.eclipse.../configuration)
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
       RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
 
@@ -117,6 +153,7 @@ TODO {{{
 
   C/C++ {{{
     - http://wiki.eclipse.org/index.php/CDT
+      http://download.eclipse.org/tools/cdt/releases/europa/site.xml
 
     - project creation
       - windows: select which toolchain to use, cygwin or mingw
@@ -215,7 +252,7 @@ TODO {{{
     - for css validation, attempt to provide messages for errors that the validator does not.
       - FIRST, try checking out latest css validation code and see if they have any messages.
       - * ie hacks.
-        - ignore error immediately following this error report (if not another * hack).
+        - ignore error immediately following this error report (if not another valid error).
       - missing closing }
       - font: 100%;
       - trailing , on list of selectors
@@ -227,8 +264,6 @@ TODO {{{
       http://validator.w3.org/docs/install.html
 
     - javascript code completion
-    - javascript validation
-      - http://www.javascriptlint.com/index.htm
 
     - javascript doc lookup for common libraries
       - :JavascriptDocSearch
@@ -349,56 +384,10 @@ NOTES {{{
 
   }}}
 
-  Pdt, files modified to remove it: {{{
-
-    status.xml
-    src/ant/dist.xml
-    src/forrest/content/xdocs/features.xml
-    src/forrest/content/xdocs/site.xml
-    src/installer/java/org/eclim/installer/step/FeatureProvider.java
-
-  }}}
-
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
     - Xvfb is included with xorg-server
 
-}}}
-
-HIGH {{{
-  - test installer w/ eclipse running
-    - may cause issues, if so, attempt to detect if eclipse is running and
-      display an intermediate step (or added to requirements steps as warning)
-      alerting the user to shut it down.
-
-  - support an eclim 'after' directory and update installer to not delete it.
-    .vim/eclim/after
-    - or when inserting eclim into the runtimepath, insert before user's last 'after' path.
-      (probably less reliable though)
-
-  - create :ProjectImport <dir> command
-    - Eclipse equivalant:
-      File > Import... > General > Existing Projects Into Workspace
-
-  - support max number of cache entries
-    - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
-    - exclude entries beginning w/ 'eclim_'
-
-  - org.eclim.project.vcs.tracker
-    for sourceforge we need n urls, one for bugs, one for features, etc.
-    but in the vcs log, how do you know which to use?
-    ... maybe support something like '#F123' or '#123f'
-    B:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763323&aid=<id> |
-    F:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763326&aid=<id>
-
-  - php support waiting on:
-    https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
-    https://bugs.eclipse.org/bugs/show_bug.cgi?id=205243 <-- duplicate of 204977
-
-  - get working under cygwin
-    if has('win32unix')
-    - eclim command
-    - file paths
 }}}
 
 DOCS (scratch) {{{

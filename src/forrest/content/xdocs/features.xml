@@ -122,12 +122,12 @@
       </li>
     </ul>
 
-    <!--p><strong>Php Integration</strong></p>
+    <p><strong>Php Integration</strong></p>
     <ul>
       <li>Code completion.</li>
       <li>Searching.</li>
       <li>Source code validation.</li>
-    </ul-->
+    </ul>
 
     <p><strong>Python Integration</strong></p>
     <ul>

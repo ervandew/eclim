@@ -71,11 +71,11 @@ See http://forrest.apache.org/docs/linking.html for more info
             description="Maintaining java classpath with ivy."
             href="guides/java/ivy/ivy_classpath.html"/>
       </java>
-      <!--php label="Php Guides">
+      <php label="Php Guides">
         <php_project label="Php: Creating A Php Project"
             description="Creating a php project."
             href="guides/php/project.html"/>
-      </php-->
+      </php>
       <!--python label="Python Guides">
         <python_project label="Python: Creating A Python Project"
             description="Creating a python project."
@@ -211,7 +211,7 @@ See http://forrest.apache.org/docs/linking.html for more info
       <validate label="Validation" href="validate.html"
           description="Validation"/>
     </javascript>
-    <!--php label="Php" href="php/">
+    <php label="Php" href="php/">
       <includepath label="Include Path" href="includepath.html"
           description="Include Path"/>
       <validate label="Validation" href="validate.html"
@@ -220,7 +220,7 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Code Completion"/>
       <definition label="Search" href="search.html"
           description="Search"/>
-    </php-->
+    </php>
     <python label="Python" href="python/">
       <!--complete label="Code Completion" href="complete.html"
           description="Code Completion"/>

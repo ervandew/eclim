@@ -280,12 +280,6 @@
         Various other bug fixes.
       </action>
 
-      <action dev="ervandew" type="update" context="Installer">
-        Updated installer to handle eclipse installs which have a local user
-        install location for plugins.<br/>
-        Also fixed some issues with running the installer on the icedtea jvm.
-      </action>
-
       <action dev="ervandew" type="add" context="Eclim">
         Added
         <a href="vim/common/project.html#ProjectInfo">
@@ -296,6 +290,30 @@
       <action dev="ervandew" type="add" context="Eclim">
         Added an eclim/after directory to vim's runtime path for any user
         scripts to be sourced after eclim.
+      </action>
+
+      <action dev="ervandew" type="update" context="Installer">
+        Updated installer to handle eclipse installs which have a local user
+        install location for plugins.<br/>
+        Also fixed some issues with running the installer on the icedtea jvm.
+      </action>
+
+      <action dev="ervandew" type="add" context="Php">
+        Added php support for
+        <a href="vim/php/complete.html">code completion</a>,
+        <a href="vim/php/search.html">searching</a>, and
+        <a href="vim/php/validate.html">validation</a>.<br/>
+        Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
+        <anchor id="php_hang"/>
+        <warning>
+          Please note, there is a known issue with the pdt where it may hang for
+          a couple minutes if you attempt to execute any pdt functionality while
+          the eclipse pdt is still initializing in the background.  On windows
+          it may hang for that amount of time on the first usage regardless.<br/>
+          <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977">
+            Bugzilla Bug 204977
+          </a>
+        </warning>
       </action>
     </release>
 
@@ -357,24 +375,6 @@
         Added <a href="vim/javascript/validate.html">javascript validation</a>
         using <a href="site:jsl">jsl</a>.
       </action>
-
-      <!--action dev="ervandew" type="add" context="Php">
-        Added php support for
-        <a href="vim/php/complete.html">code completion</a>,
-        <a href="vim/php/search.html">searching</a>, and
-        <a href="vim/php/validate.html">validation</a>.<br/>
-        Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
-        <anchor id="php_hang"/>
-        <warning>
-          Please note, there is a known issue with the pdt where it may hang for
-          a couple minutes if you attempt to execute any pdt functionality while
-          the eclipse pdt is still initializing in the background.  On windows
-          it may hang for that amount of time on the first usage regardless <br/>
-          <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977">
-            Bugzilla Bug 204977
-          </a>
-        </warning>
-      </action-->
 
       <action dev="ervandew" type="add" context="Python">
         Added basic <a href="vim/python/validate.html">python validation</a>
