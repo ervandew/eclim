@@ -292,6 +292,11 @@
           <strong>:ProjectInfo</strong>
         </a>.
       </action>
+
+      <action dev="ervandew" type="add" context="Eclim">
+        Added an eclim/after directory to vim's runtime path for any user
+        scripts to be sourced after eclim.
+      </action>
     </release>
 
     <release version="1.3.3" date="December 15, 2007">
