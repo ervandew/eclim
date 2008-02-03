@@ -99,7 +99,7 @@ public class CssValidateCommand
     }catch(TokenMgrError tme){
       errors.add(new Error(
             tme.getMessage(),
-            toFile(uri),
+            super.toFile(uri), // need to use the super version
             tme.getErrorLine(),
             1,
             false

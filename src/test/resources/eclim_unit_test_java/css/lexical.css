@@ -1,0 +1,13 @@
+.test {
+  width: expression(
+    this.width > 800 ? "800px" : "auto"
+  );
+}
+
+body {
+  font-weight: bald;
+}
+
+p {
+  fnt-size: 15px;
+}

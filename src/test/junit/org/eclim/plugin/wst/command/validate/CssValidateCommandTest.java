@@ -34,6 +34,7 @@ import static org.junit.Assert.*;
 public class CssValidateCommandTest
 {
   private static final String TEST_FILE = "css/validate.css";
+  private static final String TEST_LEXICAL_FILE = "css/lexical.css";
 
   @Test
   public void validate ()
@@ -60,5 +61,29 @@ public class CssValidateCommandTest
         results[0].indexOf("bald is not a font-weight value") != -1);
     assertTrue("Wrong error.",
         results[1].indexOf("Property fnt-size doesn't exist") != -1);
+  }
+
+  @Test
+  public void lexical ()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Wst.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "css_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_LEXICAL_FILE
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+    assertEquals("Wrong number of errors.", 1, results.length);
+
+    String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_LEXICAL_FILE);
+    for(int ii = 0; ii < results.length; ii++){
+      assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
+      assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|e"));
+    }
+
+    assertTrue("Wrong error.", results[0].indexOf("Lexical error") != -1);
   }
 }
