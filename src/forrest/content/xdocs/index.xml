@@ -33,8 +33,8 @@
       <p>
         The primary goal of eclim is to bring
         <a href="ext:eclipse">Eclipse</a>&trade; functionality to the Vim
-        editor.  The initial goal was to provide Eclipse's java functionality to
-        vim, but support for various other languages (python, css, html,
+        editor.  The initial goal was to provide Eclipse's java functionality in
+        vim, but support for various other languages (php, python, css, html,
         xml, etc.) have been added and several more are planned.
       </p>
       <p>
@@ -91,6 +91,18 @@
 
     <section id="news">
       <title>News</title>
+
+      <section id="news_2008-02-05">
+        <title>2008-02-05</title>
+        <p>
+          Eclim 1.3.4 is now available.<br/>
+          This release fixes a few minor bugs, improves the installer to account
+          for eclipse installs with per user plugin locations, and adds php
+          support.<br/>
+          You can view the
+          <a href="changes.html#version_1.3.2">release notes</a> for more info.
+        </p>
+      </section>
 
       <section id="news_2007-12-15">
         <title>2007-12-15</title>

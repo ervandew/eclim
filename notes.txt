@@ -1,4 +1,7 @@
 HIGH {{{
+  - generic support for java based xml config file validation
+    - support list of xpaths to class name attributes / values to validate
+
   - test installer w/ eclipse running
     - may cause issues, if so, attempt to detect if eclipse is running and
       display an intermediate step (or add to requirements steps as warning)
