@@ -132,18 +132,19 @@ public class PhpProjectManager
   public void refresh (IProject _project, CommandLine _commandLine)
     throws Exception
   {
-    /*File cacheDir = new File(ProjectUtils.getPath(_project) + "/.cache");
-    if(cacheDir.exists()){
-      FileUtils.deleteDirectory(cacheDir);
-    }*/
-
     _project.refreshLocal(IResource.DEPTH_INFINITE, null);
 
+    // FIXME: The following clears the dataModel cache properly, but doesn't
+    // reseed it.
     /*PHPWorkspaceModelManager manager = PHPWorkspaceModelManager.getInstance();
-    PHPProjectModel model = manager.getModelForProject(_project, true);
-    PHPIncludePathModelManager includeManager = (PHPIncludePathModelManager)
-      model.getModel(PHPIncludePathModelManager.COMPOSITE_INCLUDE_PATH_MODEL_ID);
-    includeManager.clear();*/
+    manager.removeModel(_project);
+
+    File cacheDir = new File(ProjectUtils.getPath(_project) + "/.cache");
+    if(cacheDir.exists()){
+      FileUtils.deleteDirectory(cacheDir);
+    }
+
+    PHPProjectModel model = manager.getModelForProject(_project, true);*/
   }
 
   /**
