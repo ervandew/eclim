@@ -41,7 +41,7 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
     exec 'let object_start = ' . split(object[4], ':')[1]
     call cursor(object_start, 1)
     call search('{', 'W')
-    let object_end = searchpair('{', '', '}', 'W')
+    let object_end = searchpair('{', '', '}', 'W', 's:SkipComments()')
 
     let functions = []
     let indexes = []
@@ -86,5 +86,10 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
 
   return [lines, content]
 endfunction " }}}
+
+function s:SkipComments ()
+  let synname = synIDattr(synID(line('.'), col('.'), 1), "name")
+  return synname =~ '\([Cc]omment\|[Ss]tring\)'
+endfunction
 
 " vim:ft=vim:fdm=marker
