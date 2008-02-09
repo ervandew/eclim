@@ -104,6 +104,11 @@
         log for another file, etc.) by hitting &lt;Return&gt; on any of the text
         links denoted by <strong>|link name|</strong> (ex.
         <strong>|annotate|</strong>).
+        <br/><br/>
+        By default the number of entries retrieved will be limited to 50 in an
+        effort to reduce the latency of retrieving logs for files with a long
+        revision history.  This value can be changed via the
+        <a href="#EclimVcsLogMaxEntries">g:EclimVcsLogMaxEntries</a> variable.
       </li>
       <li>
         <anchor id="VcsChangeSet"/>
@@ -130,6 +135,17 @@
     <p>
       <strong>Configuration</strong>
     </p>
+    <p>
+      Vim Settings:
+    </p>
+    <ul>
+      <li>
+        <anchor id="EclimVcsLogMaxEntries"/>
+        <strong>g:EclimVcsLogMaxEntries (Default: 50)</strong><br/>
+        When greater than 0, limits the number of log entries retrieved by
+        <strong>:VcsLog</strong>.
+      </li>
+    </ul>
     <p>
       Eclim Settings:
     </p>

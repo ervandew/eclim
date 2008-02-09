@@ -22,6 +22,12 @@
 "
 " }}}
 
+" Global Variables {{{
+  if !exists('g:EclimVcsLogMaxEntries')
+    let g:EclimVcsLogMaxEntries = 50
+  endif
+" }}}
+
 " ChangeSet(repos_url, url, revision) {{{
 " Opens a buffer with change set info for the supplied revision.
 function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
@@ -118,11 +124,16 @@ function! eclim#vcs#log#Log (repos_url, url)
     return
   endif
 
-  let cached = eclim#cache#Get(a:url, function('eclim#vcs#util#IsCacheValid'))
+  let cache_key = a:url . '_' . g:EclimVcsLogMaxEntries
+  let cached = eclim#cache#Get(cache_key, function('eclim#vcs#util#IsCacheValid'))
   if has_key(cached, 'content')
     let lines = cached.content
   else
-    let result = eclim#vcs#util#Svn('log "' . a:url . '"')
+    let logcmd = 'log'
+    if g:EclimVcsLogMaxEntries > 0
+      let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
+    endif
+    let result = eclim#vcs#util#Svn(logcmd . ' "' . a:url . '"')
     if result == '0'
       return
     endif
@@ -146,8 +157,13 @@ function! eclim#vcs#log#Log (repos_url, url)
         call add(lines, '')
       endif
     endfor
+    if g:EclimVcsLogMaxEntries > 0 && len(log) == g:EclimVcsLogMaxEntries
+      call add(lines, '------------------------------------------')
+      call add(lines, 'Note: entries limited to ' . g:EclimVcsLogMaxEntries . '.')
+      call add(lines, '      let g:EclimVcsLogMaxEntries = ' . g:EclimVcsLogMaxEntries)
+    endif
 
-    call eclim#cache#Set(a:url, lines, {
+    call eclim#cache#Set(cache_key, lines, {
         \ 'url': a:url,
         \ 'revision': eclim#vcs#util#GetSvnRevision(a:url)
       \ })
@@ -458,7 +474,7 @@ function! s:LogSyntax ()
   hi link VcsHeader Identifier
   hi link VcsLink Label
   syntax match VcsDivider /^-\+$/
-  syntax match VcsLink /|.\{-}|/
+  syntax match VcsLink /|\S.\{-}\S|/
   syntax match VcsHeader /^\(Revision\|Modified\|Diff\|Changed paths\):/
 endfunction " }}}
 
