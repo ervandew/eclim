@@ -8,7 +8,11 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.1-beta-2.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar">
+    <attributes>
+      <attribute value="file:///usr/local/java/java-src/nailgun-0.7.1/docs/api " name="javadoc_location"/>
+      </attributes>
+  </classpathentry>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.4.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>

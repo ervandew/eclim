@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.regex.Pattern;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
@@ -49,7 +51,10 @@ import org.eclipse.jdt.internal.launching.JREContainer;
 public class DocSearchCommand
   extends SearchCommand
 {
-  private static final HashMap<String,String> JRE_DOCS = new HashMap<String,String>();
+  private static final Pattern LOCAL_URL =
+    Pattern.compile("^file://(/|[A-Z]).*");
+  private static final HashMap<String,String> JRE_DOCS =
+    new HashMap<String,String>();
   static{
     JRE_DOCS.put(JavaCore.VERSION_1_3,
         "http://java.sun.com/j2se/1.3/docs/api/");
@@ -152,7 +157,11 @@ public class DocSearchCommand
       className = className.substring(0, index);
     }
 
-    StringBuffer url = new StringBuffer(_baseUrl);
+    String base = _baseUrl.trim();
+    if(base.startsWith("file:") && !LOCAL_URL.matcher(base).matches()){
+      base = base.replaceFirst("file:/*(/|[A-Z])", "file://$1");
+    }
+    StringBuffer url = new StringBuffer(base);
     if(url.charAt(url.length() - 1) != '/'){
       url.append('/');
     }
