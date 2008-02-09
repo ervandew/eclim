@@ -124,8 +124,9 @@ endfunction
 "
 " Returns true if the cursor is currently inside a comment or a string
 "
-function! s:InCommentOrString()
+function! InCommentOrString()
     let syn = synIDattr(synID(line("."), col("."), 1), "name")
+    echom 'synname = ' . syn
     if syn =~ b:commentRE || syn =~ b:stringRE
         return 1
     endif
@@ -488,7 +489,7 @@ function! s:GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
                 "if pairend == 0 || a:LastLNum != pairend
                 "let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W', '', a:LastLNum)
                 let pairend = searchpair(a:Head, a:Mid, a:Tail, 'W',
-                            \'s:InCommentOrString()', a:LastLNum)
+                            \'InCommentOrString()', a:LastLNum)
                 if pairend == 0 "|| a:LastLNum != pairend
 
                     " STARTS with a:Tail, since we already know the line
