@@ -75,7 +75,7 @@ endfunction " }}}
 
 " ImplAdd(command, function) {{{
 function! eclim#java#impl#ImplAdd (command, function, visual)
-  let winnr = bufwinnr(bufnr(b:filename))
+  let winnr = bufwinnr(bufnr('^' . b:filename))
   " src window is not longer open.
   if winnr == -1
     call eclim#util#EchoError(b:filename . ' no longer found in an open window.')

@@ -138,7 +138,7 @@ endfunction " }}}
 
 " JumpToSign () {{{
 function! s:JumpToSign ()
-  let winnr = bufwinnr(bufnr(b:filename))
+  let winnr = bufwinnr(bufnr('^' . b:filename))
   if winnr != -1
     let line = substitute(getline('.'), '^\(\d\+\)|.*', '\1', '')
     exec winnr . "winc w"

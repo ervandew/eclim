@@ -415,7 +415,7 @@ endfunction " }}}
 " GoToBufferWindow(bufname) {{{
 " Returns to the window containing the supplied buffer name.
 function! eclim#util#GoToBufferWindow (bufname)
-  let winnr = bufwinnr(bufnr(a:bufname))
+  let winnr = bufwinnr(bufnr('^' . a:bufname))
   if winnr != -1
     exec winnr . "winc w"
   endif
@@ -425,7 +425,7 @@ endfunction " }}}
 " Gives focus to the window containing the buffer for the supplied file, or if
 " none, opens the file using the supplied command.
 function! eclim#util#GoToBufferWindowOrOpen (filename, cmd)
-  let winnr = bufwinnr(bufnr(a:filename))
+  let winnr = bufwinnr(bufnr('^' . a:filename))
   if winnr != -1
     exec winnr . "winc w"
   else

@@ -95,7 +95,7 @@ function! eclim#java#correct#CorrectApply ()
   if line =~ '^[0-9]\+\.[0-9]\+:'
     let winnr = bufwinnr('%')
     let name = substitute(expand('%:p'), '_correct$', '', '')
-    let file_winnr = bufwinnr(bufnr(b:filename))
+    let file_winnr = bufwinnr(bufnr('^' . b:filename))
     if file_winnr != -1
       let filename = b:filename
       exec file_winnr . "winc w"
