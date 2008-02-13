@@ -193,6 +193,31 @@ function! eclim#display#signs#GetExisting (...)
   return existing
 endfunction " }}}
 
+" HasExisting(...) {{{
+" Determines if there are an existing signs.
+" Optionally a sign name may be supplied to only test for signs of that name.
+function! eclim#display#signs#HasExisting (...)
+  let bufnr = bufnr('%')
+
+  redir => results
+  silent exec 'sign place buffer=' . bufnr
+  redir END
+
+  for sign in split(results, '\n')
+    if sign =~ 'id='
+      if len(a:000) == 0
+        return 1
+      endif
+      let name = substitute(sign, '.*\sname=\(.\{-}\)\(\s.*\|$\)', '\1', '')
+      if name == a:000[0]
+        return 1
+      endif
+    endif
+  endfor
+
+  return 0
+endfunction " }}}
+
 " Update() {{{
 " Updates the signs for the current buffer.  This function will read both the
 " location list and the quickfix list and place a sign for any entries for the
@@ -208,20 +233,15 @@ function! eclim#display#signs#Update ()
   let save_lazy = &lazyredraw
   set lazyredraw
 
-  call eclim#display#signs#Define("error", ">>", g:EclimErrorHighlight)
-  call eclim#display#signs#Define("placeholder", ">>", g:EclimInfoHighlight)
-
-  let existing = eclim#display#signs#GetExisting()
-
-  " set sign at line 1 to prevent sign column from collapsing (prevent screen
-  " flash).
-  if len(existing) > 0
-    call eclim#display#signs#Place("placeholder", 1)
-  endif
+  call eclim#display#signs#Define('error', '>>', g:EclimErrorHighlight)
+  let placeholder = eclim#display#signs#SetPlaceholder()
 
   " remove all existing signs
+  let existing = eclim#display#signs#GetExisting()
   for exists in existing
-    call eclim#display#signs#Unplace(exists.id)
+    if exists.name !~ 'placeholder'
+      call eclim#display#signs#Unplace(exists.id)
+    endif
   endfor
 
   let qflist = getqflist()
@@ -265,13 +285,35 @@ function! eclim#display#signs#Update ()
     call eclim#display#signs#PlaceAll("error", errors)
   endif
 
-  " remove placeholder sign
+  if placeholder
+    call eclim#display#signs#RemovePlaceholder()
+  endif
+
+  let &lazyredraw = save_lazy
+endfunction " }}}
+
+" SetPlaceholder() {{{
+" Set sign at line 1 to prevent sign column from collapsing (prevent screen
+" flash).
+function! eclim#display#signs#SetPlaceholder ()
+  if !has("signs")
+    return
+  endif
+  call eclim#display#signs#Define('placeholder', '_ ', g:EclimInfoHighlight)
+  let existing = eclim#display#signs#GetExisting('placeholder')
+  if len(existing) == 0 && eclim#display#signs#HasExisting()
+    call eclim#display#signs#Place('placeholder', 1)
+    return 1
+  endif
+  return 0
+endfunction " }}}
+
+" RemovePlaceholder() {{{
+function! eclim#display#signs#RemovePlaceholder ()
   let existing = eclim#display#signs#GetExisting('placeholder')
   for exists in existing
     call eclim#display#signs#Unplace(exists.id)
   endfor
-
-  let &lazyredraw = save_lazy
 endfunction " }}}
 
 " define signs for manually added user marks.
