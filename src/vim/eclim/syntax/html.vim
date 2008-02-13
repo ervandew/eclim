@@ -30,7 +30,6 @@ syn region htmlBody start="<body\>" end="</body>"me=e-7 end="</html\>"me=e-7 con
 syn region htmlDoctype start=+<!DOCTYPE+ keepend end=+>+
 
 hi link htmlDoctype Comment
-
-syn clear javaScript
+hi link javaScript Normal
 
 " vim:ft=vim:fdm=marker
