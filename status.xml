@@ -273,6 +273,11 @@
         Various other bug fixes.
       </action>
 
+      <action dev="ervandew" type="add" context="Eclim">
+        Added an <a href="vim/common/archive.html">archive</a> (jar, tar, etc.)
+        viewer.
+      </action>
+
       <action dev="ervandew" type="add" context="Vcs (subversion)">
         Added support for limiting the number of log entries returned by
         <a href="vim/common/vcs.html#VcsLog">

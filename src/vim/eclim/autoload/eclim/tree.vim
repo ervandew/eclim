@@ -60,6 +60,8 @@
 
   let s:tree_count = 0
   let s:refresh_nesting = 0
+
+  let s:has_ls = executable('ls')
 " }}}
 
 " TreeHome() {{{
@@ -114,7 +116,7 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
     let index = len(roots)
     while index > 0
       call cursor(index + 1, 1)
-      call s:ExpandDir()
+      call eclim#tree#ExpandDir()
       let index = index - 1
     endwhile
   endif
@@ -136,7 +138,7 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
 
   call s:Uneditable()
   call s:Mappings()
-  call s:Syntax()
+  call eclim#tree#Syntax()
 
   if exists("g:TreeSettingsFunction") && !s:settings_loaded
     let Settings = function(g:TreeSettingsFunction)
@@ -145,20 +147,20 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
   endif
 endfunction " }}}
 
-" ToggleCollapsedDir() {{{
-function eclim#tree#ToggleCollapsedDir ()
+" ToggleCollapsedDir(Expand) {{{
+function eclim#tree#ToggleCollapsedDir (Expand)
   if eclim#tree#GetPath() =~ '/$'
     if getline('.') =~ '\s*' . s:node_prefix . s:dir_closed_prefix ||
         \ (getline('.') =~ s:root_regex && eclim#tree#GetLastChildPosition() == line('.'))
-      call s:ExpandDir()
+      call a:Expand()
     else
       call s:CollapseDir()
     endif
   endif
 endfunction " }}}
 
-" ToggleFoldedDir() {{{
-function eclim#tree#ToggleFoldedDir ()
+" ToggleFoldedDir(Expand) {{{
+function eclim#tree#ToggleFoldedDir (Expand)
   if eclim#tree#GetPath() =~ '/$'
     if foldclosed(line('.')) != -1
       call s:UnfoldDir()
@@ -166,7 +168,7 @@ function eclim#tree#ToggleFoldedDir ()
         \ (getline('.') =~ s:root_regex && eclim#tree#GetLastChildPosition() != line('.'))
       call s:FoldDir()
     else
-      call s:ExpandDir()
+      call a:Expand()
     endif
   endif
 endfunction " }}}
@@ -307,9 +309,9 @@ function eclim#tree#Execute (alt)
   " execute action on dir
   if path =~ '/$'
     if a:alt || foldclosed(line('.')) != -1
-      call eclim#tree#ToggleFoldedDir()
+      call eclim#tree#ToggleFoldedDir(function('eclim#tree#ExpandDir'))
     else
-      call eclim#tree#ToggleCollapsedDir()
+      call eclim#tree#ToggleCollapsedDir(function('eclim#tree#ExpandDir'))
     endif
 
   " execute action on file
@@ -494,7 +496,7 @@ function eclim#tree#SetRoot (path)
   endif
 
   call cursor(line + 1, 1)
-  call s:ExpandDir()
+  call eclim#tree#ExpandDir()
   call s:Uneditable()
 endfunction " }}}
 
@@ -576,7 +578,7 @@ function eclim#tree#Refresh ()
   " merge in any dirs that have been added
   let contents = s:ListDir(startpath)
   let contents = s:NormalizeDirs(contents)
-  let indent = s:GetChildIndent(start)
+  let indent = eclim#tree#GetChildIndent(start)
   let lnum = line('.')
   for entry in contents
     if eclim#tree#GetPath() != entry
@@ -665,7 +667,7 @@ function s:PathToAlias (path)
 endfunction " }}}
 
 " ExpandDir() {{{
-function s:ExpandDir ()
+function eclim#tree#ExpandDir ()
   let dir = eclim#tree#GetPath()
 
   if !isdirectory(dir)
@@ -692,29 +694,35 @@ function s:ExpandDir ()
   call map(dirs, 's:RewriteSpecial(v:val)')
   call map(files, 's:RewriteSpecial(v:val)')
 
-  let indent = s:GetChildIndent(line('.'))
-  call map(dirs, 'substitute(v:val, dir, indent . s:node_prefix . s:dir_closed_prefix, "")')
-  call map(files, 'substitute(v:val, dir, indent . s:node_prefix . s:file_prefix, "")')
+  call eclim#tree#WriteContents(dir, dirs, files)
+endfunction " }}}
+
+" WriteContents(dir, dirs, files) {{{
+function eclim#tree#WriteContents (dir, dirs, files)
+  let dirs = a:dirs
+  let files = a:files
+  let indent = eclim#tree#GetChildIndent(line('.'))
+  call map(dirs,
+    \ 'substitute(v:val, a:dir, indent . s:node_prefix . s:dir_closed_prefix, "")')
+  call map(files,
+    \ 'substitute(v:val, a:dir, indent . s:node_prefix . s:file_prefix, "")')
 
   " update current line
   call s:UpdateLine(s:node_prefix . s:dir_closed_prefix,
     \ s:node_prefix . s:dir_opened_prefix)
 
   call s:Editable()
-  call append(line('.'), dirs + files)
+  let content = dirs + files
+  call append(line('.'), content)
   call s:Uneditable()
+  return content
 endfunction " }}}
 
 " RewriteSpecial(file) {{{
 function s:RewriteSpecial (file)
   let file = a:file
-  if executable('ls')
+  if s:has_ls
     let info = ''
-
-    " executable files
-    if s:IsFileExecutable(file)
-      let file .= '*'
-    endif
 
     " symbolic links
     let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
@@ -728,27 +736,10 @@ function s:RewriteSpecial (file)
         let linkto = strpart(linkto, 0, len(linkto) - 1)
       endif
 
-      if s:IsFileExecutable(linkto =~ '^/' ? linkto : fnamemodify(tmpfile, ':h') . linkto)
-        let linkto .= '*'
-      endif
-
       let file = tmpfile . ' -> ' . linkto
     endif
   endif
   return file
-endfunction " }}}
-
-" IsFileExecutable(file) {{{
-" Determines if the supplied file is executable, ignoring links and
-" directories.
-function s:IsFileExecutable (file)
-  if !isdirectory(a:file)
-    let info = eclim#util#System('ls -l "' . a:file . '"')
-    if info[3] =~ '[sx]' && info[0] != 'l'
-      return 1
-    endif
-  endif
-  return 0
 endfunction " }}}
 
 " CollapseDir() {{{
@@ -788,11 +779,23 @@ endfunction " }}}
 
 " ListDir(dir) {{{
 function s:ListDir (dir)
-  if !b:view_hidden
-    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*', 1), '\n')
+  if s:has_ls
+    let ls = 'ls -1F'
+    if b:view_hidden
+      let ls .= 'a'
+    elseif &wildignore != ''
+      let ls .= ' ' . join(map(split(&wildignore, ','), '"-I \"" . v:val . "\""'))
+    endif
+    let contents = split(eclim#util#System(ls . ' "' . a:dir . '"'), '\n')
+    call map(contents, 'a:dir . v:val')
+    call map(contents, 'substitute(v:val, "@$", "", "")')
   else
-    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
-    let contents = split(eclim#util#Globpath(escape(a:dir, ','), '.*'), '\n') + contents
+    if !b:view_hidden
+      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*', 1), '\n')
+    else
+      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
+      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '.*'), '\n') + contents
+    endif
   endif
 
   return contents
@@ -812,7 +815,7 @@ function s:GetIndent (line)
 endfunction " }}}
 
 " GetChildIndent() {{{
-function s:GetChildIndent (line)
+function eclim#tree#GetChildIndent (line)
   let indent = ''
   if getline(a:line) =~ '\s*' . s:node_prefix
     let num = indent(a:line)
@@ -890,6 +893,7 @@ function s:DisplayActionChooser (file, actions)
   new
   exec "resize " . (len(a:actions) + 1)
 
+  call s:Editable()
   let b:actions = a:actions
   let b:file = a:file
   for action in a:actions
@@ -901,7 +905,6 @@ function s:DisplayActionChooser (file, actions)
   exec "hi link TreeAction " . g:TreeActionHighlight
   syntax match TreeAction /.*/
 
-  call s:Editable()
   1,1delete
   call s:Uneditable()
   setlocal noswapfile
@@ -969,7 +972,7 @@ function s:Mappings ()
 endfunction " }}}
 
 " Syntax() {{{
-function s:Syntax ()
+function eclim#tree#Syntax ()
   exec "hi link TreeDir " . g:TreeDirHighlight
   exec "hi link TreeFile " . g:TreeFileHighlight
   exec "hi link TreeFileExecutable " . g:TreeFileExecutableHighlight

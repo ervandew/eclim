@@ -134,6 +134,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Web Lookup Commands."/>
       <maximize label="Vim Window Maximize / Minimize" href="maximize.html"
           description="Vim Window Maximize / Minimize"/>
+      <archive label="Archive Viewer" href="archive.html"
+          description="Archive Viewer"/>
     </common>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>

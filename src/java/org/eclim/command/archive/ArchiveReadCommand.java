@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclim.command.util;
+package org.eclim.command.archive;
 
 import java.io.File;
 import java.io.InputStream;
@@ -34,12 +34,12 @@ import org.eclim.command.Options;
 import org.eclim.util.IOUtils;
 
 /**
- * Command that reads a file from a commons vfs compatable path.
+ * Command to read a file from a commons vfs compatable path.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
+ * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class ReadFileCommand
+public class ArchiveReadCommand
   extends AbstractCommand
 {
   private static final String URI_PREFIX = "file://";

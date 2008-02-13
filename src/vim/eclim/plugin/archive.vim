@@ -22,68 +22,50 @@
 "
 " }}}
 
-augroup eclim_archive
-  autocmd!
-  autocmd BufReadCmd
-    \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,zip:/*,zip:\*,zip:file:/*,zip:file:\*
-    \ call <SID>ReadArchiveFile()
-augroup END
+" Global Variables {{{
 
-" Script Variables {{{
-let s:command_read = '-command read_file -f "<file>"'
-let s:command_read_class =
-  \ '-command java_class_prototype -p "<project>" -c <class>'
+if !exists('g:EclimArchiveViewerEnabled')
+  let g:EclimArchiveViewerEnabled = 1
+endif
+
+if g:EclimArchiveViewerEnabled
+  " disable tar.vim autocmds... tar.vim is now included w/ vim7
+  let g:loaded_tarPlugin = 1
+
+  " disable zipPlugin.vim autocmds... zipPlugin.vim is now included w/ vim7
+  let g:loaded_zipPlugin = 1
+endif
+
 " }}}
 
-" ReadArchiveFile() {{{
-function! s:ReadArchiveFile ()
-  let file = substitute(expand('%'), '\', '/', 'g')
-  if file =~ '.class$'
-    let class = substitute(file, '.*!\(.*\)\.class', '\1', '')
-    let class = substitute(class, '/', '.', 'g')
+" Autocommands Variables {{{
 
-    let project = exists('g:EclimLastProject') ?
-      \ g:EclimLastProject : eclim#project#util#GetCurrentProjectName()
+augroup eclim_archive_read
+  autocmd!
+  autocmd BufReadCmd
+    \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
+    \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
+    \tbz2:/*,tgz:\*,tbz2:file:/*,tbz2:file:\*,
+    \tgz:/*,tgz:\*,tgz:file:/*,tgz:file:\*,
+    \zip:/*,zip:\*,zip:file:/*,zip:file:\*
+    \ call eclim#common#archive#ReadFile()
+augroup END
 
-    if project == ''
-      call eclim#util#EchoError(
-        \ 'Could not open archive file: Unable to determine project.')
-      return
-    endif
+if g:EclimArchiveViewerEnabled
+  augroup eclim_archive
+    autocmd!
+    autocmd BufReadCmd *.egg     call eclim#common#archive#List()
+    autocmd BufReadCmd *.jar     call eclim#common#archive#List()
+    autocmd BufReadCmd *.war     call eclim#common#archive#List()
+    autocmd BufReadCmd *.ear     call eclim#common#archive#List()
+    autocmd BufReadCmd *.zip     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tgz     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar.gz  call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar.bz2 call eclim#common#archive#List()
+  augroup END
+endif
 
-    let command = s:command_read_class
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<class>', class, '')
-  else
-    let command = substitute(s:command_read, '<file>', file, '')
-  endif
-
-  let file = eclim#ExecuteEclim(command)
-
-  if string(file) != '0'
-    let bufnum = bufnr('%')
-    silent exec "keepjumps edit! " . file
-
-    exec 'bdelete ' . bufnum
-
-    " alternate solution, that keeps the archive url as the buffer's filename,
-    " but prevents taglist from being able to parse tags.
-    "setlocal noreadonly
-    "setlocal modifiable
-    "silent! exec "read " . file
-    "let saved = @"
-    "1,1delete
-    "let @" = saved
-
-    silent exec "doautocmd BufReadPre " . file
-    silent exec "doautocmd BufReadPost " . file
-
-    setlocal readonly
-    setlocal nomodifiable
-    setlocal noswapfile
-    " causes taglist.vim errors (fold then delete fails)
-    "setlocal bufhidden=delete
-  endif
-endfunction " }}}
+" }}}
 
 " vim:ft=vim:fdm=marker
