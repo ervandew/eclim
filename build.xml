@@ -92,12 +92,21 @@
       </fileset>
     </jar>
 
-    <!-- update nailgun jar file -->
+    <!-- patch nailgun jar file -->
     <copy file="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"
-        tofile="build/dist/lib/nailgun-0.7.1.jar"/>
-    <jar jarfile="build/dist/lib/nailgun-0.7.1.jar" update="true">
+        tofile="build/dist/org.eclim/lib/nailgun-0.7.1.jar"/>
+    <jar jarfile="build/dist/org.eclim/lib/nailgun-0.7.1.jar" update="true">
       <fileset dir="build/classes">
         <include name="com/martiansoftware/nailgun/**/*.class"/>
+      </fileset>
+    </jar>
+
+    <!-- patch tagsoup jar file -->
+    <copy file="src/eclipse/plugins/org.eclim.wst/lib/tagsoup-1.2.jar"
+        tofile="build/dist/org.eclim.wst/lib/tagsoup-1.2.jar"/>
+    <jar jarfile="build/dist/org.eclim.wst/lib/tagsoup-1.2.jar" update="true">
+      <fileset dir="build/classes">
+        <include name="org/ccil/cowan/tagsoup/**/*.class"/>
       </fileset>
     </jar>
 
@@ -111,9 +120,10 @@
     <foreach list="${plugins}" target="plugin" delimiter=":"
         inheritAll="true" param="plugin.name" trim="true"/>
 
-    <!-- deploy eclipse plugins -->
+    <!-- deploy eclipse plugin -->
     <sync todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
-      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar,lib/*.jar"/>
+      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar"/>
+      <fileset dir="build/dist/org.eclim" includes="**/*"/>
       <fileset dir="." includes="src/nailgun/**/*"/>
     </sync>
 
@@ -184,6 +194,14 @@
     <sync todir="${eclipse.home}/plugins/org.eclim.${plugin.name}_${eclim.version}">
       <fileset dir="build/dist" includes="eclim.${plugin.name}.jar"/>
     </sync>
+    <if>
+      <available file="build/dist/org.eclim.${plugin.name}"/>
+      <then>
+        <copy todir="${eclipse.home}/plugins/org.eclim.${plugin.name}_${eclim.version}">
+          <fileset dir="build/dist/org.eclim.${plugin.name}" includes="**/*"/>
+        </copy>
+      </then>
+    </if>
   </target>
 
   <!--
