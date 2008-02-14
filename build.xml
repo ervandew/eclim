@@ -42,7 +42,7 @@
   </target>
 
   <!--
-    - Main target for building the library.
+    - Main target for building and deploying plugins.
     -->
   <target name="build" depends="init"
       description="Builds eclim and deploys it to the local eclipse instance.">
@@ -59,8 +59,10 @@
       <classpath refid="classpath"/>
     </javac>
 
+    <mkdir dir="build/dist/org.eclim/lib"/>
+
     <!-- eclim jar file -->
-    <jar jarfile="build/dist/eclim.jar">
+    <jar jarfile="build/dist/org.eclim/eclim.jar">
       <fileset dir="build/classes">
         <include name="org/eclim/**/*.class"/>
         <include name="org/eclipse/**/*.class"/>
@@ -81,7 +83,7 @@
     </jar>
 
     <!-- eclim misc jar file -->
-    <jar jarfile="build/dist/eclim-misc.jar">
+    <jar jarfile="build/dist/org.eclim/eclim-misc.jar">
       <fileset dir="build/classes">
         <include name="org/eclim/misc/**/*.class"/>
       </fileset>
@@ -92,23 +94,18 @@
       </fileset>
     </jar>
 
-    <!-- patch nailgun jar file -->
-    <copy file="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"
-        tofile="build/dist/org.eclim/lib/nailgun-0.7.1.jar"/>
-    <jar jarfile="build/dist/org.eclim/lib/nailgun-0.7.1.jar" update="true">
-      <fileset dir="build/classes">
-        <include name="com/martiansoftware/nailgun/**/*.class"/>
-      </fileset>
-    </jar>
+    <copy todir="build/dist/org.eclim">
+      <fileset dir="." includes="src/nailgun/**/*"/>
+    </copy>
 
-    <!-- patch tagsoup jar file -->
-    <copy file="src/eclipse/plugins/org.eclim.wst/lib/tagsoup-1.2.jar"
-        tofile="build/dist/org.eclim.wst/lib/tagsoup-1.2.jar"/>
-    <jar jarfile="build/dist/org.eclim.wst/lib/tagsoup-1.2.jar" update="true">
-      <fileset dir="build/classes">
-        <include name="org/ccil/cowan/tagsoup/**/*.class"/>
-      </fileset>
-    </jar>
+    <touch mkdirs="true" file="build/dist/org.eclim/log/.keep"/>
+    <copy todir="build/dist/org.eclim/bin">
+      <fileset dir="src/shell" includes="**/*"/>
+    </copy>
+
+    <antcall target="plugin">
+      <param name="plugin.name" value=""/>
+    </antcall>
 
     <!-- determine what plugins exist (other than the core) -->
     <path id="plugin.dirs">
@@ -120,46 +117,26 @@
     <foreach list="${plugins}" target="plugin" delimiter=":"
         inheritAll="true" param="plugin.name" trim="true"/>
 
-    <!-- deploy eclipse plugin -->
-    <sync todir="${eclipse.home}/plugins/org.eclim_${eclim.version}">
-      <fileset dir="build/dist" includes="eclim.jar,eclim-misc.jar"/>
-      <fileset dir="build/dist/org.eclim" includes="**/*"/>
-      <fileset dir="." includes="src/nailgun/**/*"/>
-    </sync>
-
-    <copy todir="${eclipse.home}">
-      <mapper type="regexp"
-          from="^(.*)(org\.eclim.*?)([/\\].*)$" to="\1\2_${eclim.version}\3"/>
-      <fileset dir="src/eclipse">
-        <include name="**/*"/>
-        <exclude name="plugins/org.eclim.pydev/**/*"/>
-        <exclude name="plugins/org.eclim.pydev"/>
-        <exclude name="plugins/org.eclim.installer*/**/*"/>
-        <exclude name="plugins/org.eclim.installer*"/>
+    <!-- patch nailgun jar file -->
+    <jar jarfile="build/dist/org.eclim/lib/nailgun-0.7.1.jar" update="true">
+      <fileset dir="build/classes">
+        <include name="com/martiansoftware/nailgun/**/*.class"/>
       </fileset>
-    </copy>
+    </jar>
 
-    <mkdir dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/log"/>
-    <touch file="${eclipse.home}/plugins/org.eclim_${eclim.version}/log/.keep"/>
-    <copy todir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin">
-      <fileset dir="src/shell" includes="**/*"/>
-    </copy>
+    <!-- patch tagsoup jar file -->
+    <jar jarfile="build/dist/org.eclim.wst/lib/tagsoup-1.2.jar" update="true">
+      <fileset dir="build/classes">
+        <include name="org/ccil/cowan/tagsoup/**/*.class"/>
+      </fileset>
+    </jar>
 
-    <replace dir="${eclipse.home}/plugins"
-        includes="org.eclim*_${eclim.version}/bin/**/*,
-                  org.eclim*_${eclim.version}/about.html,
-                  org.eclim*_${eclim.version}/plugin.properties,
-                  org.eclim*_${eclim.version}/META-INF/MANIFEST.MF">
-      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-      <replacefilter token="$${vim.files}" value="${vim.files}"/>
-    </replace>
-
-    <antcall target="plugin.lib.jars">
-      <param name="plugin.name.full" value="org.eclim"/>
+    <!-- deploy eclipse files -->
+    <antcall target="plugin.deploy">
+      <param name="plugin.name" value=""/>
     </antcall>
-    <foreach list="${plugins}" target="plugin.lib.jars" delimiter=":"
+    <foreach list="${plugins}" target="plugin.deploy" delimiter=":"
         inheritAll="true" param="plugin.name" trim="true"/>
-
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
       includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
@@ -181,27 +158,37 @@
     - Create the jar file for a plugin
     -->
   <target name="plugin">
-    <jar jarfile="build/dist/eclim.${plugin.name}.jar">
-      <fileset dir="build/classes">
-        <include name="**/plugin/${plugin.name}/**/*.class"/>
-      </fileset>
-      <fileset dir="src/java">
-        <include name="**/plugin/${plugin.name}/**/*"/>
-        <exclude name="**/package.html"/>
-        <exclude name="**/*.java"/>
-      </fileset>
-    </jar>
-    <sync todir="${eclipse.home}/plugins/org.eclim.${plugin.name}_${eclim.version}">
-      <fileset dir="build/dist" includes="eclim.${plugin.name}.jar"/>
-    </sync>
+    <echo> building plugin: ${plugin.name} </echo>
     <if>
-      <available file="build/dist/org.eclim.${plugin.name}"/>
+      <not><equals arg1="${plugin.name}" arg2=""/></not>
       <then>
-        <copy todir="${eclipse.home}/plugins/org.eclim.${plugin.name}_${eclim.version}">
-          <fileset dir="build/dist/org.eclim.${plugin.name}" includes="**/*"/>
-        </copy>
+        <mkdir dir="build/dist/org.eclim.${plugin.name}"/>
+        <jar jarfile="build/dist/org.eclim.${plugin.name}/eclim.${plugin.name}.jar">
+          <fileset dir="build/classes">
+            <include name="**/plugin/${plugin.name}/**/*.class"/>
+          </fileset>
+          <fileset dir="src/java">
+            <include name="**/plugin/${plugin.name}/**/*"/>
+            <exclude name="**/package.html"/>
+            <exclude name="**/*.java"/>
+          </fileset>
+        </jar>
+        <var name="plugin.name" value=".${plugin.name}"/>
       </then>
     </if>
+    <copy todir="build/dist/org.eclim${plugin.name}">
+      <fileset dir="src/eclipse/plugins/org.eclim${plugin.name}" includes="**/*"/>
+    </copy>
+
+    <replace dir="build/dist/org.eclim${plugin.name}"
+        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
+      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+      <replacefilter token="$${vim.files}" value="${vim.files}"/>
+    </replace>
+
+    <antcall target="plugin.lib.jars">
+      <param name="plugin.name" value="${plugin.name}"/>
+    </antcall>
   </target>
 
   <!--
@@ -210,12 +197,11 @@
     -->
   <target name="plugin.lib.jars">
     <!-- build list of jar files for main plugin's manifest. -->
-    <property name="plugin.name.full" value="org.eclim.${plugin.name}"/>
     <if>
-      <available file="src/eclipse/plugins/${plugin.name.full}/lib"/>
+      <available file="build/dist/org.eclim${plugin.name}/lib"/>
       <then>
         <path id="lib.jars">
-          <fileset dir="src/eclipse/plugins/${plugin.name.full}/lib" includes="*"/>
+          <fileset dir="build/dist/org.eclim${plugin.name}/lib" includes="*"/>
         </path>
         <property name="lib.jars" refid="lib.jars"/>
         <propertyregex property="lib.jars" override="true"
@@ -223,8 +209,8 @@
         <propertyregex property="lib.jars" override="true"
             input="${lib.jars}" regexp="/.*?/lib/" replace="lib/"/>
 
-        <replace dir="${eclipse.home}/plugins"
-            includes="${plugin.name.full}_${eclim.version}/META-INF/MANIFEST.MF">
+        <replace dir="build/dist/org.eclim${plugin.name}"
+            includes="META-INF/MANIFEST.MF">
           <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
         </replace>
 
@@ -232,14 +218,29 @@
           - separates lib entries onto new lines since the single line length of
           - the classpath entry seems to be limited.
           -->
-        <replace dir="${eclipse.home}/plugins"
-            includes="${plugin.name.full}_${eclim.version}/META-INF/MANIFEST.MF">
+        <replace dir="build/dist/org.eclim${plugin.name}"
+            includes="META-INF/MANIFEST.MF">
           <replacetoken>,lib</replacetoken>
           <replacevalue>,
   lib</replacevalue>
         </replace>
       </then>
     </if>
+  </target>
+
+  <!--
+    - Target to deploy a plugin to eclipse.
+    -->
+  <target name="plugin.deploy">
+    <if>
+      <not><equals arg1="${plugin.name}" arg2=""/></not>
+      <then>
+        <var name="plugin.name" value=".${plugin.name}"/>
+      </then>
+    </if>
+    <sync todir="${eclipse.home}/plugins/org.eclim${plugin.name}_${eclim.version}">
+      <fileset dir="build/dist/org.eclim${plugin.name}" includes="**/*"/>
+    </sync>
   </target>
 
   <!--
