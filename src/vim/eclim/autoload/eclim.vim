@@ -88,7 +88,6 @@ function! eclim#ExecuteEclim (args)
   endif
 
   call eclim#util#EchoDebug("eclim: executing (Ctrl-C to cancel)...")
-  call eclim#util#EchoTrace("command: " . command)
 
   " determine whether to use system call or exec with a temp file
   let use_exec = 0
