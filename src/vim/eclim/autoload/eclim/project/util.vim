@@ -47,6 +47,9 @@
 " Flush the cached list of projects.
 function! eclim#project#util#ClearProjectsCache ()
   call eclim#cache#Delete('eclim_projects')
+  if exists('s:projects')
+    unlet s:projects
+  endif
 endfunction " }}}
 
 " ProjectCD(scope) {{{
@@ -355,55 +358,58 @@ endfunction " }}}
 " GetProjects() {{{
 " Gets a map of project names to project locations.
 function! eclim#project#util#GetProjects ()
-  let cached = eclim#cache#Get('eclim_projects')
-  if has_key(cached, 'content') && len(cached.content) > 0
-    let projects = eval(cached.content[0])
-  else
-    let projects = {}
+  if !exists('s:projects')
+    let cached = eclim#cache#Get('eclim_projects')
+    if has_key(cached, 'content') && len(cached.content) > 0
+      let projects = eval(cached.content[0])
+    else
+      let projects = {}
 
-    " using eclipse files (running eclim not necessary)
-    let projectsdir = eclim#eclipse#GetWorkspaceDir() .
-      \ '.metadata/.plugins/org.eclipse.core.resources/.projects/'
-    if isdirectory(projectsdir)
-      let dirs = split(glob(projectsdir . '*'), '\n')
-      for dir in dirs
-        if filereadable(dir . '/.location')
-          let lines = readfile(dir . '/.location', 'b')
-          call filter(lines, 'v:val =~ "file:"')
-          if len(lines) > 0
+      " using eclipse files (running eclim not necessary)
+      let projectsdir = eclim#eclipse#GetWorkspaceDir() .
+        \ '.metadata/.plugins/org.eclipse.core.resources/.projects/'
+      if isdirectory(projectsdir)
+        let dirs = split(glob(projectsdir . '*'), '\n')
+        for dir in dirs
+          if filereadable(dir . '/.location')
+            let lines = readfile(dir . '/.location', 'b')
+            call filter(lines, 'v:val =~ "file:"')
+            if len(lines) > 0
+              let name = fnamemodify(dir, ':t')
+              let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
+              if isdirectory(dir)
+                let projects[name] = substitute(dir, '\', '/', 'g')
+              endif
+            endif
+          else
             let name = fnamemodify(dir, ':t')
-            let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
+            let dir = eclim#eclipse#GetWorkspaceDir() . name
             if isdirectory(dir)
-              let projects[name] = substitute(dir, '\', '/', 'g')
+              let projects[name] = dir
             endif
           endif
-        else
-          let name = fnamemodify(dir, ':t')
-          let dir = eclim#eclipse#GetWorkspaceDir() . name
-          if isdirectory(dir)
-            let projects[name] = dir
-          endif
-        endif
-      endfor
+        endfor
 
-    " using running eclim
-    else
-      let result = split(eclim#ExecuteEclim(s:command_projects), '\n')
-      if len(result) == 1 && result[0] == '0'
-        return []
+      " using running eclim
+      else
+        let result = split(eclim#ExecuteEclim(s:command_projects), '\n')
+        if len(result) == 1 && result[0] == '0'
+          return []
+        endif
+
+        for line in result
+          let name = substitute(line, '\(.\{-}\)\s\+-\s\+.*', '\1', '')
+          let dir = substitute(line, '.\{-}\s\+-\s.\{-}\s\+-\s\(.*\)', '\1', '')
+          let projects[name] = substitute(dir, '\', '/', 'g')
+        endfor
       endif
 
-      for line in result
-        let name = substitute(line, '\(.\{-}\)\s\+-\s\+.*', '\1', '')
-        let dir = substitute(line, '.\{-}\s\+-\s.\{-}\s\+-\s\(.*\)', '\1', '')
-        let projects[name] = substitute(dir, '\', '/', 'g')
-      endfor
+      call eclim#cache#Set('eclim_projects', [string(projects)])
     endif
-
-    call eclim#cache#Set('eclim_projects', [string(projects)])
+    let s:projects = projects
   endif
 
-  return projects
+  return s:projects
 endfunction " }}}
 
 " GetProjectDirs() {{{
