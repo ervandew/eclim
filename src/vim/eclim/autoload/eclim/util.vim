@@ -780,8 +780,10 @@ function! eclim#util#System (cmd, ...)
 
   if len(a:000) > 0 && a:000[0]
     let result = ''
+    call eclim#util#EchoTrace('exec: ' . a:cmd)
     exec a:cmd
   else
+    call eclim#util#EchoTrace('system: ' . a:cmd)
     let result = system(a:cmd)
   endif
 
