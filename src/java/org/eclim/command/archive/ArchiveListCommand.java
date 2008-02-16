@@ -91,4 +91,10 @@ public class ArchiveListCommand
   {
     return DATE_FORMAT.format(new Date(time));
   }
+
+  protected String formatTime (Date time)
+    throws Exception
+  {
+    return DATE_FORMAT.format(time);
+  }
 }

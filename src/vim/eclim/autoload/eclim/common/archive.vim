@@ -136,13 +136,8 @@ function eclim#common#archive#Execute (alt)
   " execute action on file
   else
     let info = b:file_info[getline('.')]
-    if s:IsArchive(info.name)
-      noautocmd exec 'split ' . s:FileUrl(info.url) . '!/'
-      call eclim#common#archive#List()
-    else
-      noautocmd exec 'split ' . info.url
-      call eclim#common#archive#ReadFile()
-    endif
+    noautocmd exec 'split ' . info.url
+    call eclim#common#archive#ReadFile()
   endif
 endfunction " }}}
 
@@ -191,7 +186,7 @@ endfunction " }}}
 " ListAll() {{{
 " Function for listing all the archive files (for 'list' layout).
 function eclim#common#archive#ListAll ()
-  let path = s:FileUrl(expand('%:p'))
+  let path = expand('%:p')
   let command = s:command_list_all
   let command = substitute(command, '<file>', path, '')
   let results = split(eclim#ExecuteEclim(command), '\n')
@@ -200,6 +195,7 @@ function eclim#common#archive#ListAll ()
   endif
 
   call filter(results, 'v:val =~ "|file|.\\{-}|[^|]\\{-}$"')
+  call sort(results)
   let lnum = 1
   for entry in results
     let parsed = s:ParseEntry(entry)
