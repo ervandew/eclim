@@ -15,10 +15,17 @@
  */
 package org.eclim.command.archive;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.commons.vfs.FileContent;
+import org.apache.commons.vfs.FileName;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.FileType;
 import org.apache.commons.vfs.VFS;
 
 import org.eclim.command.AbstractCommand;
@@ -34,6 +41,9 @@ import org.eclim.command.Options;
 public class ArchiveListCommand
   extends AbstractCommand
 {
+  private static final SimpleDateFormat DATE_FORMAT =
+    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
   /**
    * {@inheritDoc}
    */
@@ -43,15 +53,42 @@ public class ArchiveListCommand
     String file = _commandLine.getValue(Options.FILE_OPTION);
     FileSystemManager manager = VFS.getManager();
     FileObject archive = manager.resolveFile(file);
-    FileObject[] children = archive.getChildren();
-    String[] results = new String[children.length];
-    for (int ii = 0; ii < children.length; ii++){
+    FileObject[] children = getFiles(archive);
+    String[] results = processFiles(children);
+    return StringUtils.join(results, '\n');
+  }
+
+  protected FileObject[] getFiles (FileObject archive)
+    throws Exception
+  {
+    return archive.getChildren();
+  }
+
+  protected String[] processFiles (FileObject[] files)
+    throws Exception
+  {
+    String[] results = new String[files.length];
+    for (int ii = 0; ii < files.length; ii++){
+      FileObject file = files[ii];
+      FileType type = file.getType();
+      FileContent content = file.getContent();
+      FileName name = file.getName();
       results[ii] = new StringBuffer()
-        .append(children[ii].getName().getBaseName()).append('|')
-        .append(children[ii].getURL()).append('|')
-        .append(children[ii].getType())
+        .append(name.getPath()).append('|')
+        .append(name.getBaseName()).append('|')
+        .append(file.getURL()).append('|')
+        .append(type).append('|')
+        .append(type.hasContent() ? content.getSize() : 0).append('|')
+        .append(type.hasContent() ?
+            formatTime(content.getLastModifiedTime()) : "")
         .toString();
     }
-    return StringUtils.join(results, '\n');
+    return results;
+  }
+
+  protected String formatTime (long time)
+    throws Exception
+  {
+    return DATE_FORMAT.format(new Date(time));
   }
 }

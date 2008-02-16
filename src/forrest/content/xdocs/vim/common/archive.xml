@@ -29,10 +29,57 @@
   <body>
     <p>
       Eclim includes a plugin which allows you to view the contents of archive
-      files (jar, tar, tbz2, tgz, zip, and more).  Unlike the tar and zip
-      plugins that ship with vim, the eclim version allows you to navigate the
-      archive in a tree interface, and supports nested archives.
+      files (jar, tar, tbz2, tgz, zip, and more).
     </p>
+    <source>
+      $ vim myarchive.tar.gz
+    </source>
+    <p>
+      Unlike the tar and zip
+      plugins that ship with vim, the eclim version gives you the option to view
+      and navigate the archive in a tree or list interface, and supports nested
+      archives.
+    </p>
+    <p>
+      When viewing the archive you can switch layouts by using
+      <strong>:AsList</strong> to switch from the tree layout to the list, and
+      <strong>:AsTree</strong> to switch back.<br/>
+      There are also various mappings depending on the view:
+    </p>
+    <ul>
+      <li>
+        <strong>Tree</strong>
+        <ul>
+          <li>
+            <strong>&lt;Enter&gt;</strong> - View the file under the cursor in a
+            new split window, or in the case of a directory, expand / collapse
+            it.
+          </li>
+          <li>
+            <strong>o</strong> - For files, this has the same behavior as
+            <strong>&lt;Enter&gt;</strong>. For directories, it will fold /
+            unfold open directories preserving the state of all the sub
+            directories.
+          </li>
+          <li>
+            <strong>p</strong> - Jumps to the nearest parent directory.
+          </li>
+          <li>
+            <strong>P</strong> - Jumps to the furthest child in the currect
+            branch of directories.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>List</strong>
+        <ul>
+          <li>
+            <strong>&lt;Enter&gt;</strong> - View the file under the cursor in a
+            new split window.
+          </li>
+        </ul>
+      </li>
+    </ul>
     <section id="config">
       <title>Configuration</title>
       <p>
@@ -45,6 +92,13 @@
           <br/>
           When greater than 0, enables the eclim archive viewer (disabling the
           default vim tar and zip plugins).
+        </li>
+        <li>
+          <anchor id="EclimArchiveLayout"/>
+          <strong>g:EclimArchiveLayout</strong> (Default: none)
+          <br/>
+          When non existant or equal to 'tree', displays the archive as a tree.
+          When set to 'list', display the archive as a flat list.
         </li>
       </ul>
     </section>

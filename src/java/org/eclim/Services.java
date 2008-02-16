@@ -305,6 +305,8 @@ public class Services
 
       registerCommand("archive_list",
           org.eclim.command.archive.ArchiveListCommand.class);
+      registerCommand("archive_list_all",
+          org.eclim.command.archive.ArchiveListAllCommand.class);
       registerCommand("archive_read",
           org.eclim.command.archive.ArchiveReadCommand.class);
 
