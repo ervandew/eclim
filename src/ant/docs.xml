@@ -30,11 +30,12 @@
 
     <!-- support for google sitemaps and analytics -->
     <xslt in="src/forrest/content/xdocs/site.xml"
-        out="build/sitemap.xml"
+        out="build/doc/forrest/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
-    <gzip src="build/sitemap.xml" destfile="build/site/sitemap.xml.gz"/>
-    <touch file="build/site/google4c368e38cc6ac62e.html"/>
-    <replace dir="build/site" includes="**/*.html">
+    <gzip src="build/doc/forrest/sitemap.xml"
+        destfile="build/doc/forrest/site/sitemap.xml.gz"/>
+    <touch file="build/doc/forrest/site/google4c368e38cc6ac62e.html"/>
+    <replace dir="build/doc/forrest/site" includes="**/*.html">
       <replacetoken><![CDATA[</body>]]></replacetoken>
       <replacevalue><![CDATA[
       <!-- Google Analytics -->
@@ -51,21 +52,22 @@
     </replace>
 
     <!-- extract pmwiki -->
-    <!--untar src="src/forrest/wiki/pmwiki.tgz" dest="build/site" compression="gzip"/>
-    <mkdir dir="build/site/wiki"/>
-    <move todir="build/site">
-      <fileset dir="build/site" includes="pmwiki-*/**/*"/>
+    <!--untar src="src/doc/forrest/wiki/pmwiki.tgz"
+        dest="build/doc/forrest/site" compression="gzip"/>
+    <mkdir dir="build/doc/forrest/site/wiki"/>
+    <move todir="build/doc/forrest/site">
+      <fileset dir="build/doc/forrest/site" includes="pmwiki-*/**/*"/>
       <mapper type="regexp"
           from="^pmwiki-[0-9]+\.[0-9]+\.[0-9]+(.*)" to="wiki\1"/>
     </move>
     <path id="pmwiki.dir">
-      <dirset dir="build/site" includes="pmwiki*"/>
+      <dirset dir="build/doc/forrest/site" includes="pmwiki*"/>
     </path>
     <property name="pmwiki" refid="pmwiki.dir"/>
     <delete dir="${pmwiki}"/-->
 
     <!-- copy over any pmwiki config files, etc. -->
-    <!--copy todir="build/site/wiki">
+    <!--copy todir="build/doc/forrest/site/wiki">
       <fileset dir="src/forrest/wiki" includes="**/*" excludes="pmwiki.tgz"/>
     </copy-->
   </target>
