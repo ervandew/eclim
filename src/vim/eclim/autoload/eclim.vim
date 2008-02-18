@@ -142,7 +142,7 @@ function! eclim#ExecuteTempFile (command)
   let tempfile = tempname()
 
   let command = '!' . a:command . ' > ' . tempfile . ' 2>&1'
-  silent eclim#util#Exec(command)
+  call eclim#util#Exec(command)
   let result = join(readfile(tempfile), "\n")
 
   call delete(tempfile)
