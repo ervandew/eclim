@@ -947,8 +947,10 @@ function s:Mappings ()
   nmap <buffer> <silent> <cr> :call eclim#tree#Execute(0)<cr>
   nmap <buffer> <silent> o    :call eclim#tree#Execute(1)<cr>
 
-  nmap <buffer> <silent> i    :echo eclim#tree#GetFileInfo(eclim#tree#GetPath())<cr>
-  nmap <buffer> <silent> I    :echo eclim#tree#GetFileInfo(eclim#tree#GetPath())<cr>
+  nmap <buffer> <silent> i    :call eclim#util#Echo(
+    \ eclim#tree#GetFileInfo(eclim#tree#GetPath()))<cr>
+  nmap <buffer> <silent> I    :call eclim#util#Echo(
+    \ eclim#tree#GetFileInfo(eclim#tree#GetPath()))<cr>
 
   nmap <buffer> <silent> s    :call eclim#tree#Shell(0)<cr>
   nmap <buffer> <silent> S    :call eclim#tree#Shell(1)<cr>
