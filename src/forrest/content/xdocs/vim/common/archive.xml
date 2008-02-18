@@ -68,6 +68,10 @@
             <strong>P</strong> - Jumps to the furthest child in the currect
             branch of directories.
           </li>
+          <li>
+            <strong>i</strong> - Prints the size and date for the file under the
+            cursor.
+          </li>
         </ul>
       </li>
       <li>

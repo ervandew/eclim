@@ -16,8 +16,16 @@
 package org.eclim.command.archive;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 
+import java.text.Collator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 
 import org.apache.tools.ant.taskdefs.Untar.UntarCompressionMethod;
@@ -34,8 +42,6 @@ import org.eclim.command.Options;
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclim.util.file.FileUtils;
-
 /**
  * Command to list all contents of an archive.
  *
@@ -45,6 +51,8 @@ import org.eclim.util.file.FileUtils;
 public class ArchiveListAllCommand
   extends ArchiveListCommand
 {
+  private static final Comparator<String[]> COMPARATOR = new EntryComparator();
+
   /**
    * {@inheritDoc}
    */
@@ -52,59 +60,81 @@ public class ArchiveListAllCommand
     throws Exception
   {
     String file = _commandLine.getValue(Options.FILE_OPTION);
+    Object[] results = null;
     if (file.endsWith(".jar") ||
         file.endsWith(".ear") ||
         file.endsWith(".war") ||
         file.endsWith(".egg") ||
         file.endsWith(".zip"))
     {
-      return expand(file);
-    }
-
-    if (file.endsWith(".tar") ||
+      results = expand(file);
+    } else if (file.endsWith(".tar") ||
         file.endsWith(".tar.gz") ||
         file.endsWith(".tar.bz2") ||
         file.endsWith(".tgz") ||
         file.endsWith(".tbz2"))
     {
-      return expandTar(file);
+      results = expandTar(file);
     }
 
-    return StringUtils.EMPTY;
+    File tmp = File.createTempFile("eclim", "archive");
+    BufferedWriter out = null;
+    try{
+      out = new BufferedWriter(new FileWriter(tmp));
+      ArrayList<String[]> entries = (ArrayList<String[]>)results[0];
+      Collections.sort(entries, COMPARATOR);
+      int maxName = (Integer)results[1] + 2;
+      int maxSize = (Integer)results[2] + 2;
+
+      for (String[] entry : entries) {
+        out.write(
+            StringUtils.rightPad(entry[0], maxName, ' ') +
+            StringUtils.rightPad(entry[1], maxSize, ' ') +
+            entry[2] + '\n');
+      }
+    }finally{
+      IOUtils.closeQuietly(out);
+      tmp.deleteOnExit();
+    }
+
+    return tmp.getAbsolutePath();
   }
 
-  private String expand (String file)
+  private Object[] expand (String file)
     throws Exception
   {
-    StringBuffer result = new StringBuffer();
+    ArrayList<String[]> results = new ArrayList<String[]>();
+    int maxName = 0;
+    int maxSize = 0;
 
     ZipFile zf = null;
     try{
       zf = new ZipFile(file, "UTF8");
-      Enumeration e = zf.getEntries();
+      Enumeration<ZipEntry> e = zf.getEntries();
       while (e.hasMoreElements()) {
-        ZipEntry ze = (ZipEntry)e.nextElement();
-        if(result.length() > 0){
-          result.append('\n');
+        ZipEntry ze = e.nextElement();
+        if(!ze.isDirectory()){
+          String name = ze.getName();
+          String size = String.valueOf(ze.getSize());
+          results.add(new String[]{
+            name, size, formatTime(ze.getTime())
+          });
+          maxName = name.length() > maxName ? name.length() : maxName;
+          maxSize = size.length() > maxSize ? size.length() : maxSize;
         }
-        result
-          .append(ze.getName()).append('|')
-          .append(FileUtils.getBaseName(ze.getName())).append('|')
-          .append(toUrl(file, ze.getName())).append('|')
-          .append(ze.isDirectory() ? "folder" : "file").append('|')
-          .append(ze.getSize()).append('|')
-          .append(formatTime(ze.getTime()));
       }
     }finally{
       ZipFile.closeQuietly(zf);
     }
-    return result.toString();
+    return new Object[]{results, maxName, maxSize};
   }
 
-  private String expandTar (String file)
+  private Object[] expandTar (String file)
     throws Exception
   {
-    StringBuffer result = new StringBuffer();
+    ArrayList<String[]> results = new ArrayList<String[]>();
+    int maxName = 0;
+    int maxSize = 0;
 
     TarInputStream tis = null;
     FileInputStream fis = null;
@@ -120,25 +150,24 @@ public class ArchiveListAllCommand
           compression.decompress("", new BufferedInputStream(fis)));
       TarEntry te = null;
       while ((te = tis.getNextEntry()) != null) {
-        if(result.length() > 0){
-          result.append('\n');
+        if(!te.isDirectory()){
+          String name = te.getName();
+          String size = String.valueOf(te.getSize());
+          results.add(new String[]{
+            name, size, formatTime(te.getModTime())
+          });
+          maxName = name.length() > maxName ? name.length() : maxName;
+          maxSize = size.length() > maxSize ? size.length() : maxSize;
         }
-        result
-          .append(te.getName()).append('|')
-          .append(FileUtils.getBaseName(te.getName())).append('|')
-          .append(toUrl(file, te.getName())).append('|')
-          .append(te.isDirectory() ? "folder" : "file").append('|')
-          .append(te.getSize()).append('|')
-          .append(formatTime(te.getModTime()));
       }
     }finally{
         IOUtils.closeQuietly(tis);
         IOUtils.closeQuietly(fis);
     }
-    return result.toString();
+    return new Object[]{results, maxName, maxSize};
   }
 
-  private String toUrl (String archive, String file)
+  /*private String toUrl (String archive, String file)
   {
     if (archive.endsWith(".jar") ||
         archive.endsWith(".ear") ||
@@ -162,5 +191,32 @@ public class ArchiveListAllCommand
     }
     // shouldn't happen
     return archive + '/' + file;
+  }*/
+
+  private static class EntryComparator
+    implements Comparator<String[]>
+  {
+    private static final Collator COLLATOR = Collator.getInstance();
+
+    /**
+     * {@inheritDoc}
+     * @see Comparator#compare(T,T)
+     */
+    public int compare (String[] o1, String[] o2)
+    {
+      return COLLATOR.compare(o1[0], o2[0]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see Comparator#equals(Object)
+     */
+    public boolean equals (Object obj)
+    {
+      if(obj instanceof EntryComparator){
+        return true;
+      }
+      return false;
+    }
   }
 }

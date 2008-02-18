@@ -36,6 +36,9 @@ let s:urls = {
     \ 'tbz2:': ['.tbz2', '.tar.bz2'],
     \ 'zip:': ['.zip', '.egg'],
   \ }
+
+let s:file_regex =
+  \ '\(.\{-}\)\s*[0-9]\+\s\+[0-9]\{4}-[0-9]\{2}-[0-9]\{2} [0-9]\{2}:[0-9]\{2}:[0-9]\{2}$'
 " }}}
 
 " List() {{{
@@ -135,8 +138,13 @@ function eclim#common#archive#Execute (alt)
 
   " execute action on file
   else
-    let info = b:file_info[getline('.')]
-    noautocmd exec 'split ' . info.url
+    if g:EclimArchiveLayout == 'list'
+      let file = substitute(getline('.'), s:file_regex, '\1', '')
+      let url = s:FileUrl(expand('%:p')) . '!/' . file
+    else
+      let url = b:file_info[getline('.')].url
+    endif
+    noautocmd exec 'split ' . url
     call eclim#common#archive#ReadFile()
   endif
 endfunction " }}}
@@ -194,15 +202,8 @@ function eclim#common#archive#ListAll ()
     return
   endif
 
-  call filter(results, 'v:val =~ "|file|.\\{-}|[^|]\\{-}$"')
-  call sort(results)
-  let lnum = 1
-  for entry in results
-    let parsed = s:ParseEntry(entry)
-    let b:file_info[parsed.path] = parsed
-    call append(lnum, parsed.path)
-    let lnum += 1
-  endfor
+  exec 'read ' . results[0]
+  call delete(results[0])
 endfunction " }}}
 
 " s:ParseEntry(entry) {{{
@@ -254,6 +255,14 @@ function! s:ChangeLayout (layout)
   endif
 endfunction " }}}
 
+" s:FileInfo() {{{
+function! s:FileInfo ()
+  let info = b:file_info[substitute(getline('.'), '^\(\s*\)-\(.*/$\)', '\1+\2', '')]
+  if has_key(info, 'type') && info.type == 'file'
+    call eclim#util#Echo(printf('%-15s', info.size) . info.date)
+  endif
+endfunction " }}}
+
 " s:Mappings() {{{
 function s:Mappings ()
   nmap <buffer> <silent> <cr> :call eclim#common#archive#Execute(0)<cr>
@@ -265,19 +274,23 @@ function s:Mappings ()
     nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>
     nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
     nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
+    nmap <buffer> <silent> i    :call <SID>FileInfo()<cr>
+    nmap <buffer> <silent> I    :call <SID>FileInfo()<cr>
 
     silent! delcommand AsTree
     command -nargs=0 AsList :call <SID>ChangeLayout('list')
-  elseif exists('b:tree_mappings_active')
-    unlet b:tree_mappings_active
-    unmap <buffer> o
-    unmap <buffer> j
-    unmap <buffer> k
-    unmap <buffer> p
-    unmap <buffer> P
+  else
+    if exists('b:tree_mappings_active')
+      unlet b:tree_mappings_active
+      unmap <buffer> o
+      unmap <buffer> j
+      unmap <buffer> k
+      unmap <buffer> p
+      unmap <buffer> P
+    endif
 
     silent! delcommand AsList
-    command -nargs=0 AsTree :call <SID>ChangeLayout('tree')
+    command! -nargs=0 AsTree :call <SID>ChangeLayout('tree')
   endif
 
 endfunction " }}}
