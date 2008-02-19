@@ -22,9 +22,6 @@
 " }}}
 
 " Global Variables {{{
-if !exists("g:EclimLicenseDir")
-  let g:EclimLicenseDir = g:EclimBaseDir . '/license'
-endif
 if !exists("g:Author")
   let g:Author = ''
 endif
@@ -34,19 +31,43 @@ endif
   let s:year = exists('*strftime') ? strftime('%Y') : '2008'
 " }}}
 
+" GetLicense () {{{
+" Retrieves the file containing the license text.
+function! eclim#common#license#GetLicense ()
+  let file = eclim#project#util#GetProjectSetting('org.eclim.project.copyright')
+  if file == '0'
+    return
+  endif
+  if file == ''
+    call eclim#util#EchoWarning(
+      \ "Project setting 'org.eclim.project.copyright' has not been supplied.")
+    return
+  elseif type(file) == 0 && file == 0
+    return
+  endif
+
+  let file = eclim#project#util#GetCurrentProjectRoot() . '/' . file
+  if !filereadable(file)
+    return
+  endif
+  return file
+endfunction " }}}
+
 " License (name, pre, post, mid) {{{
 " Retrieves the license given the supplied name and applies the specified
 " prefix and postfix as the lines before and after the license and uses 'mid'
 " as the prefix for every line.
 " Returns the license as a list of strings.
-function! eclim#common#license#License (name, pre, post, mid)
-  let file = g:EclimLicenseDir . '/' . a:name . '.license'
-  if !filereadable(file)
+function! eclim#common#license#License (pre, post, mid)
+  let file = eclim#common#license#GetLicense()
+  if type(file) == 0 && file == 0
     return ''
   endif
 
   let contents = readfile(file)
-  call map(contents, 'a:mid . v:val')
+  if a:mid != ''
+    call map(contents, 'a:mid . v:val')
+  endif
 
   if a:pre != ''
     call insert(contents, a:pre)
@@ -61,22 +82,6 @@ function! eclim#common#license#License (name, pre, post, mid)
   call map(contents, "substitute(v:val, '\\s\\+$', '', '')")
 
   return contents
-endfunction " }}}
-
-" LicenseForFile (name, pre, post, mid) {{{
-" Retrieves the license that should be used for the given file.
-" Determines the license by taking the file's path and checking if any of the
-" licenses have a name matching one of the directories in that path.
-function! eclim#common#license#LicenseForFile (file, pre, post, mid)
-  let path = fnamemodify(a:file, ':p:h')
-  let licenses = split(globpath(g:EclimLicenseDir, '*.license'), '\n')
-  for license in licenses
-    let name = fnamemodify(license, ':t:r')
-    if path =~ name
-      return eclim#common#license#License(name, a:pre, a:post, a:mid)
-    endif
-  endfor
-  return ''
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

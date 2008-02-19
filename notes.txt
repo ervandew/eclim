@@ -1,6 +1,4 @@
 HIGH {{{
-  - integrate org.eclim.project.copyright into the templating plugins.
-
   - integrate w/ eclipse build/run system for at least simple programs.
 
   - add/test proxy support to the installer.
