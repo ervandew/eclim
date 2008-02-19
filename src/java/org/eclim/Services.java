@@ -263,7 +263,8 @@ public class Services
         "General/Project org.eclim.project.version 1.0\n" +
         "General/Project org.eclim.project.copyright\n" +
         "General/Project org.eclim.project.vcs.tracker\n" +
-        "General/Project org.eclim.project.vcs.viewvc"
+        "General/Project org.eclim.project.vcs.viewvc\n" +
+        "General/Project org.eclim.project.trac"
       );
 
       registerCommand("ping", org.eclim.command.admin.PingCommand.class);

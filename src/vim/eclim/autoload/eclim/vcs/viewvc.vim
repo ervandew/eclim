@@ -39,22 +39,7 @@ function eclim#vcs#viewvc#GetViewvcUrl (file)
     return
   endif
 
-  let project_root = eclim#project#util#GetCurrentProjectRoot()
-
-  let file = a:file
-  let dir = file
-  if file == ''
-    let file = expand('%:t')
-    let dir = expand('%:p:h')
-  elseif !isdirectory(project_root . '/' . file)
-    let dir = fnamemodify(project_root . '/' . file, ':p:h')
-    let file = fnamemodify(project_root . '/' . file, ':t')
-  else
-    let dir = fnamemodify(project_root . '/' . file, ':p')
-    let file = ''
-  endif
-
-  let path = eclim#vcs#util#GetPath(dir, file)
+  let path = eclim#vcs#util#GetFilePath(a:file)
   if path == ''
     call eclim#util#EchoError('Current file is not under cvs or svn version control.')
     return

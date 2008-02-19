@@ -136,6 +136,8 @@ See http://forrest.apache.org/docs/linking.html for more info
           description="Vim Window Maximize / Minimize"/>
       <archive label="Archive Viewer" href="archive.html"
           description="Archive Viewer"/>
+      <tac label="Trac Support" href="trac.html"
+          description="Trac Support"/>
     </common>
     <css label="Css" href="css/">
       <complete label="Code Completion" href="complete.html" description="Code Completion"/>
@@ -303,6 +305,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <pyflakes href="http://www.divmod.org/trac/wiki/DivmodPyflakes"/>
     <pylint href="http://www.logilab.org/857"/>
     <testng href="http://testng.org/doc"/>
+    <trac href="http://trac.edgewall.org"/>
     <viewvc href="http://viewvc.org"/>
 
     <!-- related projects -->

@@ -1,6 +1,23 @@
 HIGH {{{
+  - integrate org.eclim.project.copyright into the templating plugins.
+
+  - integrate w/ eclipse build/run system for at least simple programs.
+
+  - add/test proxy support to the installer.
+
   - generic support for java based xml config file validation
     - support list of xpaths to class name attributes / values to validate
+
+  - add mecurial support to vcs commands.
+    - annotate: hg annotate -udn <file>
+    - get root dir: hg root
+    - log: hg log [--limit <limit>] <file>
+    - current revision: hg log -q --limit 1 <file>
+    - previous revision: hg log -q --limit 2 <file>
+    - revisions: hg log -q <file>
+    - info: hg log --limit 1 <file>
+    - changeset: hg log -vr <revision>
+    - list: ???
 
   - test installer w/ eclipse running
     - may cause issues, if so, attempt to detect if eclipse is running and
@@ -14,6 +31,8 @@ HIGH {{{
   - support max number of cache entries
     - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
     - exclude entries beginning w/ 'eclim_'
+    - maybe let the eclim server side manage this via a TimerTask.
+      - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
 
   - php support waiting on:
     https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
@@ -23,6 +42,8 @@ HIGH {{{
     if has('win32unix')
     - eclim command
     - file paths
+    - sh installer via cygwin
+      - https://sourceforge.net/forum/forum.php?thread_id=1931818&forum_id=487811
 
   - Unsolved
     - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
@@ -40,6 +61,8 @@ TODO {{{
     - util classes
     - project nature add/remove
     - logger (custom logger)
+    - indenting test cases
+    - html validate: validation of nested javascript and css
   }}}
 
   Installer {{{
@@ -55,6 +78,7 @@ TODO {{{
   Documentation {{{
     - FAQs
       - how to specify workspace dir.
+        https://sourceforge.net/forum/forum.php?thread_id=1932073&forum_id=487811
         eclimd -Dosgi.instance.area.default=@user.home/another_workspace
         or .eclimrc (non windows only)
           osgi.instance.area.default=@user.home/another_workspace
@@ -98,6 +122,10 @@ TODO {{{
       :VcsChangeSet
       :VcsDiff
       :VcsLog
+      :TracLog
+      :TracAnnotate
+      :TracChangeSet
+      :TracDiff
       :Buffers
   }}}
 
@@ -246,6 +274,14 @@ TODO {{{
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
+
+  }}}
+
+  SQL {{{
+
+    - antlr grammers for sql dialects (mysql, postgreql, oracle)
+      - http://www.antlr.org/grammar/list contains a couple oracle pl/sql
+        grammers and an ansi sql grammer
 
   }}}
 

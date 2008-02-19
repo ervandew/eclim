@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Copyright (c) 2005 - 2008
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - Author: Eric Van Dewoestine
+  -->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!--
+ Author: Eric Van Dewoestine
+-->
+
+<document>
+  <header>
+    <title>Trac Support</title>
+    <authors>
+      <person name="Eric Van Dewoestine" email="ervandew@gmail.com"/>
+    </authors>
+  </header>
+  <body>
+    <p>
+      <a href="site:trac">Trac</a> is a web based wiki and issue tracking
+      software package that has quickly becoming a favorite amongst many open
+      source projects. In addition to its wiki and ticketing sytem, it also
+      includes a source code repository browser much like
+      <a href="site:viewvc">ViewVc</a>.  As such, eclim supports several
+      commands to quickly navigate to some of Trac's source code tools.
+    </p>
+    <ul>
+      <li>
+        <anchor id="TracLog"/>
+        <strong>:TracLog</strong> [file] -
+        Opens the Trac repository log url for the supplied file / directory, or
+        current buffer if no argument supplied.
+      </li>
+      <li>
+        <anchor id="TracAnnotate"/>
+        <strong>:TracAnnotate</strong> [revision] -
+        Opens the Trac url for the current file in the annotation view for the
+        last committed revision or the revision supplied.
+      </li>
+      <li>
+        <anchor id="TracChangeSet"/>
+        <strong>:TracChangeSet</strong> [revision] -
+        Opens the Trac url for the change set of the last committed revision of
+        the current file or the revision supplied.
+      </li>
+      <li>
+        <anchor id="TracDiff"/>
+        <strong>:TracDiff</strong> [revision, revision] -
+        Opens the Trac url for the current file's revision diffed against the
+        previous revision, the revision supplied, or a diff of the two revision
+        numbers supplied.
+      </li>
+    </ul>
+    <p>
+      Eclim Settings:
+    </p>
+    <ul>
+      <li>
+        <anchor id="org.eclim.project.trac"/>
+        <strong>org.eclim.project.trac</strong><br/>
+        The root url of the Trac server you wish to use.
+      </li>
+    </ul>
+  </body>
+</document>

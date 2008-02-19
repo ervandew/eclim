@@ -22,6 +22,27 @@
 "
 " }}}
 
+" GetFilePath(dir, file) {{{
+" Gets the repository root relative path of the specified file, or the current
+" file if the empty string supplied.
+" Ex. /trunk/src/vim/eclim/autoload/eclim/eclipse.vim
+function eclim#vcs#util#GetFilePath (file)
+  let project_root = eclim#project#util#GetCurrentProjectRoot()
+  let file = a:file
+  let dir = file
+  if file == ''
+    let file = expand('%:t')
+    let dir = expand('%:p:h')
+  elseif !isdirectory(project_root . '/' . file)
+    let dir = fnamemodify(project_root . '/' . file, ':p:h')
+    let file = fnamemodify(project_root . '/' . file, ':t')
+  else
+    let dir = fnamemodify(project_root . '/' . file, ':p')
+    let file = ''
+  endif
+  return eclim#vcs#util#GetPath(dir, file)
+endfunction " }}}
+
 " GetPath(dir, file) {{{
 " Gets the repository root relative path of the specified file in the supplied
 " dir.

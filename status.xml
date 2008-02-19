@@ -289,6 +289,22 @@
           <strong>:VcsLog</strong>
         </a> (limits to 50 entries by default).
       </action>
+
+      <action dev="ervandew" type="add" context="Trac">
+        Added
+        <a href="vim/common/trac.html#TracLog">
+          <strong>:TracLog</strong>
+        </a>,
+        <a href="vim/common/trac.html#TracAnnotate">
+          <strong>:TracAnnotate</strong>
+        </a>,
+        <a href="vim/common/trac.html#TracChangeSet">
+          <strong>:TracChangeSet</strong>
+        </a>, and
+        <a href="vim/common/trac.html#TracDiff">
+          <strong>:TracDiff</strong>
+        </a>.
+      </action>
     </release>
 
     <release version="1.3.4" date="February 05, 2008">
