@@ -26,7 +26,7 @@ import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
 
-import org.eclim.logging.Logger
+import org.eclim.logging.Logger;
 
 import org.eclim.util.ProjectUtils;
 
