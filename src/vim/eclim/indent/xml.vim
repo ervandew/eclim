@@ -91,10 +91,15 @@ function! EclimGetXmlIndent (lnum)
     let adj = s:XmlIndentAttributeWrap(a:lnum) * &sw
 
     " handle case where previous line is a multi-line comment (<!-- -->) on one
-    " line, which IndentAnything doesn't handle properly.
+    " line.
     let prevline = prevnonblank(a:lnum - 1)
     if getline(prevline) =~ '^\s\+<!--.\{-}-->'
       let adj = indent(prevline)
+    endif
+
+    " handle case where comment end is on its own line.
+    if getline(line) =~ '^\s*-->'
+      let adj -= &sw
     endif
   endif
 
@@ -111,9 +116,9 @@ function! XmlIndentAnythingSettings ()
   let b:singleQuoteStringRE = b:stringRE
   let b:doubleQuoteStringRE = b:stringRE
 
-  setlocal comments=sr:<!--,mb:-,ex0:-->
+  setlocal comments=sr:<!--,mb:\ ,ex0:-->
   let b:blockCommentStartRE  = '<!--'
-  let b:blockCommentMiddleRE = '-'
+  let b:blockCommentMiddleRE = ''
   let b:blockCommentEndRE    = '-->'
   let b:blockCommentMiddleExtra = 2
 
