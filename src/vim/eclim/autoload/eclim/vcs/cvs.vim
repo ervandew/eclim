@@ -23,7 +23,7 @@
 " }}}
 
 if !exists('g:eclim_vcs_cvs_loaded')
-  let g:eclim_vcs_svn_loaded = 1
+  let g:eclim_vcs_cvs_loaded = 1
 else
   finish
 endif
@@ -50,7 +50,7 @@ function! eclim#vcs#cvs#GetAnnotations (file, revision)
 endfunction " }}}
 
 " GetPath(dir, file) {{{
-function eclim#vcs#svn#GetPath (dir, file)
+function eclim#vcs#cvs#GetPath (dir, file)
   silent exec 'sview ' . escape(a:dir . '/CVS/Repository', ' ')
   setlocal noswapfile
   setlocal bufhidden=delete
@@ -93,7 +93,7 @@ endfunction " }}}
 
 " Info() {{{
 " Retrieves and echos info on the current file.
-function eclim#vcs#util#Info ()
+function eclim#vcs#cvs#Info ()
   let result = eclim#vcs#cvs#Cvs('status "' . expand('%:t') . '"')
   if result == '0'
     return
