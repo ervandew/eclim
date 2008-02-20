@@ -25,22 +25,20 @@
 " Annotate() {{{
 function! eclim#vcs#annotate#Annotate ()
   let dir = expand('%:p:h')
-  if isdirectory(dir . '/CVS')
-    let file = expand('%:p')
-    let annotations = eclim#vcs#annotate#GetCvsAnnotations(file, '')
-  elseif isdirectory(dir . '/.svn')
-    let file = expand('%:p:t')
-    let cwd = getcwd()
-    exec 'lcd ' . dir
-    try
-      let annotations = eclim#vcs#annotate#GetSvnAnnotations(file, '')
-    finally
-      exec 'lcd ' . cwd
-    endtry
-  else
-    call eclim#util#EchoError('Current file is not under cvs or svn version control.')
-    return
-  endif
+  let file = expand('%:p:t')
+  let cwd = getcwd()
+  exec 'lcd ' . dir
+  try
+    let Annotate = eclim#vcs#util#GetVcsFunction(dir, 'GetAnnotations')
+    if type(Annotate) == 2
+      let annotations = Annotate(file, '')
+    else
+      call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+      return
+    endif
+  finally
+    exec 'lcd ' . cwd
+  endtry
 
   call eclim#vcs#annotate#ApplyAnnotations(annotations)
 endfunction " }}}
@@ -94,54 +92,6 @@ function! eclim#vcs#annotate#ApplyAnnotations (annotations)
     autocmd!
     autocmd CursorHold <buffer> call eclim#vcs#annotate#AnnotateInfo()
   augroup END
-endfunction " }}}
-
-" GetCvsAnnotations (file, revision) {{{
-function! eclim#vcs#annotate#GetCvsAnnotations (file, revision)
-  let cmd = 'annotate'
-  if a:revision != ''
-    let cmd .= ' -r ' . a:revision
-  endif
-
-  let dir = fnamemodify(a:file, ':h')
-  let file = fnamemodify(a:file, ':t')
-
-  let cwd = getcwd()
-  exec 'lcd ' . dir
-  try
-    let result = eclim#vcs#util#Cvs(cmd . ' "' . file . '"')
-    let annotations = split(result, '\n')
-    call filter(annotations, 'v:val =~ "^[0-9]"')
-    call map(annotations,
-      \ "substitute(v:val, '^\\s*\\([0-9.]\\+\\)\\s*(\\(.\\{-}\\)\\s\\+\\(.\\{-}\\)).*', '\\1 (\\3) \\2', '')")
-  finally
-    exec 'lcd ' . cwd
-  endtry
-
-  if v:shell_error
-    call eclim#util#EchoError(result)
-    return
-  endif
-
-  return annotations
-endfunction " }}}
-
-" GetSvnAnnotations (file, revision) {{{
-function! eclim#vcs#annotate#GetSvnAnnotations (file, revision)
-  let cmd = 'annotate -v'
-  if a:revision != ''
-    let cmd .= ' -r ' . a:revision
-  endif
-  let result = eclim#vcs#util#Svn(cmd . ' "' . a:file . '"')
-  if result == '0'
-    return
-  endif
-
-  let annotations = split(result, '\n')
-  call map(annotations,
-      \ "substitute(v:val, '^\\s*\\([0-9]\\+\\)\\s*\\(.\\{-}\\)\\s\\+.\\{-}\\s\\+\\(.\\{-}\\)\\s\\+.\\{-}(\\(.\\{-}\\)).*', '\\1 (\\4 \\3) \\2', '')")
-
-  return annotations
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -22,6 +22,31 @@
 "
 " }}}
 
+" GetVcsFunction() {{{
+" Gets a reference to the proper vcs function.
+" Ex. let GetRevision = eclim#vcs#util#GetVcsFunction(expand('%:p:h'), 'GetRevision')
+function eclim#vcs#util#GetVcsFunction (dir, func_name)
+  let type = ''
+  if isdirectory(a:dir . '/CVS')
+    runtime autoload/eclim/vcs/cvs.vim
+    let type = 'cvs'
+  elseif isdirectory(a:dir . '/.svn')
+    runtime autoload/eclim/vcs/svn.vim
+    let type = 'svn'
+  else
+    runtime autoload/eclim/vcs/hg.vim
+    let dir = finddir('.hg', a:dir . ';')
+    if dir != ''
+      let type = 'hg'
+    endif
+  endif
+
+  if type == ''
+    return ''
+  endif
+  return function('eclim#vcs#' . type . '#' . a:func_name)
+endfunction " }}}
+
 " GetFilePath(dir, file) {{{
 " Gets the repository root relative path of the specified file, or the current
 " file if the empty string supplied.
@@ -51,23 +76,16 @@ function eclim#vcs#util#GetPath (dir, file)
   let path = ''
   let cmd = winrestcmd()
 
+  let cwd = getcwd()
+  exec 'lcd ' . a:dir
   try
-    if isdirectory(a:dir . '/CVS')
-      silent exec 'sview ' . escape(a:dir . '/CVS/Repository', ' ')
-      setlocal noswapfile
-      setlocal bufhidden=delete
-
-      let path = '/' . getline(1) . '/' . a:file
-
-      silent close
-    elseif isdirectory(a:dir . '/.svn')
-      let url = eclim#vcs#util#GetSvnUrl(a:dir, a:file)
-      let repos = eclim#vcs#util#GetSvnReposUrl(a:dir)
-
-      let path = substitute(url, repos, '', '')
+    let GetPath = eclim#vcs#util#GetVcsFunction(a:dir, 'GetPath')
+    if type(GetPath) == 2
+      let path = GetPath(a:dir, a:file)
     endif
   finally
     silent exec cmd
+    exec 'lcd ' . cwd
   endtry
 
   return path
@@ -82,22 +100,10 @@ function eclim#vcs#util#GetPreviousRevision ()
   let dir = expand('%:p:h')
   exec 'lcd ' . dir
   try
-    if isdirectory(dir . '/CVS')
-      let log = eclim#vcs#util#Cvs('log ' . expand('%:t'))
-      let lines = split(log, '\n')
-      call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
-      if len(lines) >= 2
-        let revision = substitute(lines[1], '^revision \([0-9.]\+\)\s*.*', '\1', '')
-      endif
-    elseif isdirectory(dir . '/.svn')
-      let log = eclim#vcs#util#Svn('log -q --limit 2 "' . expand('%:t') . '"')
-      if log == '0'
-        return
-      endif
-      let lines = split(log, '\n')
-      if len(lines) == 5 && lines[1] =~ '^r[0-9]\+' && lines[3] =~ '^r[0-9]\+'
-        let revision = substitute(lines[3], '^r\([0-9]\+\)\s.*', '\1', '')
-      endif
+    let GetPreviousRevision =
+      \ eclim#vcs#util#GetVcsFunction(dir, 'GetPreviousRevision')
+    if type(GetPreviousRevision) == 2
+      let revision = GetPreviousRevision()
     endif
   finally
     exec 'lcd ' . cwd
@@ -106,33 +112,26 @@ function eclim#vcs#util#GetPreviousRevision ()
   return revision
 endfunction " }}}
 
-" GetRevision() {{{
-" Gets the current revision of the current file.
-function eclim#vcs#util#GetRevision ()
+" GetRevision([url]) {{{
+" Gets the current revision of the current or supplied file.
+function eclim#vcs#util#GetRevision (...)
   let revision = '0'
 
-  let cwd = getcwd()
+  let file = len(a:000) > 0 ? a:000[0] : expand('%:t')
   let dir = expand('%:p:h')
-  exec 'lcd ' . dir
+  if len(a:000) == 0
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+  endif
   try
-    if isdirectory(dir . '/CVS')
-      let status = eclim#vcs#util#Cvs('status ' . expand('%:t'))
-      let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
-      if status =~ pattern
-        let revision = substitute(status, pattern, '\1', '')
-      endif
-    elseif isdirectory(dir . '/.svn')
-      let info = eclim#vcs#util#Svn('info "' . expand('%:t') . '"')
-      if info == '0'
-        return
-      endif
-      let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
-      if info =~ pattern
-        let revision = substitute(info, pattern, '\1', '')
-      endif
+    let GetRevision = eclim#vcs#util#GetVcsFunction(dir, 'GetRevision')
+    if type(GetRevision) == 2
+      let revision = GetRevision(file)
     endif
   finally
-    exec 'lcd ' . cwd
+    if len(a:000) == 0
+      exec 'lcd ' . cwd
+    endif
   endtry
 
   return revision
@@ -147,21 +146,9 @@ function eclim#vcs#util#GetRevisions ()
   let dir = expand('%:p:h')
   exec 'lcd ' . dir
   try
-    if isdirectory(dir . '/CVS')
-      let log = eclim#vcs#util#Cvs('log ' . expand('%:t'))
-      let lines = split(log, '\n')
-      call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
-      call map(lines, 'substitute(v:val, "^revision \\([0-9.]\\+\\)\\s*$", "\\1", "")')
-      let revisions = lines
-    elseif isdirectory(dir . '/.svn')
-      let log = eclim#vcs#util#Svn('log -q "' . expand('%:t') . '"')
-      if log == '0'
-        return
-      endif
-      let lines = split(log, '\n')
-      call filter(lines, 'v:val =~ "^r[0-9]\\+\\s.*"')
-      call map(lines, 'substitute(v:val, "^r\\([0-9]\\+\\)\\s.*", "\\1", "")')
-      let revisions = lines
+    let GetRevisions = eclim#vcs#util#GetVcsFunction(dir, 'GetRevisions')
+    if type(GetRevisions) == 2
+      let revisions = GetRevisions()
     endif
   finally
     exec 'lcd ' . cwd
@@ -170,37 +157,17 @@ function eclim#vcs#util#GetRevisions ()
   return revisions
 endfunction " }}}
 
-" GetSvnReposUrl(dir) {{{
+" GetReposUrl(dir) {{{
 " Gets the repository root url for the repository backing the supplied dir.
 " Ex. http://svn.eclim.sf.net/
-function eclim#vcs#util#GetSvnReposUrl (dir)
+function eclim#vcs#util#GetReposUrl (dir)
   let repos = ''
   let cmd = winrestcmd()
 
   try
-    if isdirectory(a:dir . '/.svn')
-      silent exec 'sview ' . escape(a:dir . '/.svn/entries', ' ')
-      setlocal noswapfile
-      setlocal bufhidden=delete
-
-      " xml entries format < 1.4
-      if getline(1) =~ '<?xml'
-        call cursor(1, 1)
-        let repos = substitute(
-          \ getline(search('^\s*repos=')), '^\s*repos="\(.*\)"', '\1', '')
-
-      " entries format >= 1.4
-      else
-        " can't find official doc on the format, but line 6 seems to
-        " always have the necessary value.
-        let repos = getline(6)
-      endif
-
-      silent close
-
-      if repos !~ '/$'
-        let repos .= '/'
-      endif
+    let GetReposUrl = eclim#vcs#util#GetVcsFunction(a:dir, 'GetReposUrl')
+    if type(GetReposUrl) == 2
+      let repos = GetReposUrl(a:dir)
     endif
   finally
     silent exec cmd
@@ -209,123 +176,46 @@ function eclim#vcs#util#GetSvnReposUrl (dir)
   return repos
 endfunction " }}}
 
-" GetSvnUrl(dir, file) {{{
+" GetUrl(dir, file) {{{
 " Gets the repository url for the specified file in the supplied dir.
 " Ex. http://svn.eclim.sf.net/trunk/src/vim/eclim/autoload/eclim/eclipse.vim
-function eclim#vcs#util#GetSvnUrl (dir, file)
-  let url = ''
-  let cmd = winrestcmd()
+function eclim#vcs#util#GetUrl (dir, file)
+  let url = '0'
 
+  let file = len(a:000) > 0 ? a:000[0] : expand('%:t')
+  let dir = expand('%:p:h')
+  if len(a:000) == 0
+    let cwd = getcwd()
+    exec 'lcd ' . dir
+  endif
   try
-    if isdirectory(a:dir . '/.svn')
-      silent exec 'sview ' . escape(a:dir . '/.svn/entries', ' ')
-      setlocal noswapfile
-      setlocal bufhidden=delete
-
-      " xml entries format < 1.4
-      if getline(1) =~ '<?xml'
-        call cursor(1, 1)
-        let url = substitute(
-          \ getline(search('^\s*url=')), '^\s*url="\(.*\)"', '\1', '')
-
-      " entries format >= 1.4
-      else
-        " can't find official doc on the format, but line 5 seems to
-        " always have the necessary value.
-        let url = getline(5)
-      endif
-
-      let url .= '/' . a:file
-
-      silent close
+    let GetUrl = eclim#vcs#util#GetVcsFunction(a:dir, 'GetUrl')
+    if type(GetUrl) == 2
+      let url = GetUrl(a:dir, a:file)
     endif
   finally
-    silent exec cmd
+    if len(a:000) == 0
+      exec 'lcd ' . cwd
+    endif
   endtry
 
   return url
 endfunction " }}}
 
-" GetSvnRevision(url) {{{
-" Gets the current revision for the supplied svn url.
-function eclim#vcs#util#GetSvnRevision (url)
-  let info = eclim#vcs#util#Svn('info "' . a:url . '"')
-  if info == '0'
-    return
-  endif
-  let pattern = '.*Last Changed Rev:\s*\([0-9]\+\)\s*.*'
-  if info =~ pattern
-    return substitute(info, pattern, '\1', '')
-  endif
-  return ''
-endfunction " }}}
-
-" GetType(dir, file) {{{
-" Gets the vcs type ('cvs' or 'svn') of the supplied file in the specified
-" direcctory.
-function eclim#vcs#util#GetType (dir, file)
-  let type = ''
-  let file = a:dir != '' ? a:file : expand('%:p:t')
-  let dir = a:dir != '' ? a:dir : expand('%:p:h')
-
-  let cwd = getcwd()
-  exec 'lcd ' . dir
-  try
-    if isdirectory(dir . '/CVS')
-      let type = 'cvs'
-    elseif isdirectory(dir . '/.svn')
-      let type = 'svn'
-    endif
-  finally
-    exec 'lcd ' . cwd
-  endtry
-
-  return type
-endfunction " }}}
-
 " Info() {{{
 " Retrieves and echos info on the current file.
 function eclim#vcs#util#Info ()
-  let info = []
-
   let cwd = getcwd()
   let dir = expand('%:p:h')
   exec 'lcd ' . dir
   try
-    if isdirectory(dir . '/CVS')
-      let result = eclim#vcs#util#Cvs('status "' . expand('%:t') . '"')
-      if result == '0'
-        return
-      endif
-      let info = split(result, "\n")[1:]
-      call map(info, "substitute(v:val, '^\\s\\+', '', '')")
-      call map(info, "substitute(v:val, '\\t', ' ', 'g')")
-      let info[0] = substitute(info[0], '.\{-}\(Status:.*\)', '\1', '')
-    elseif isdirectory(dir . '/.svn')
-      let result = eclim#vcs#util#Svn('info "' . expand('%:t') . '"')
-      if result == '0'
-        return
-      endif
-      let info = split(result, "\n")
-      call filter(info, "v:val =~ '^\\(Last\\|URL\\)'")
+    let Info = eclim#vcs#util#GetVcsFunction(dir, 'Info')
+    if type(Info) == 2
+      call Info()
     endif
   finally
     exec 'lcd ' . cwd
   endtry
-
-  call eclim#util#Echo(join(info, "\n"))
-endfunction " }}}
-
-" Cvs(args) {{{
-" Executes 'cvs' with the supplied args.
-function eclim#vcs#util#Cvs (args)
-  return eclim#vcs#util#Vcs('cvs', a:args)
-endfunction " }}}
-
-" Svn(args) {{{
-" Executes 'svn' with the supplied args.
-function eclim#vcs#util#Svn (args)
-  return eclim#vcs#util#Vcs('svn', a:args)
 endfunction " }}}
 
 " Vcs(cmd, args) {{{
@@ -349,7 +239,7 @@ endfunction " }}}
 " IsCacheValid(metadata) {{{
 " Function used to validate cached values on get from the cache.
 function eclim#vcs#util#IsCacheValid (metadata)
-  let revision = eclim#vcs#util#GetSvnRevision(a:metadata.url)
+  let revision = eclim#vcs#util#GetRevision(a:metadata.url)
   return revision == a:metadata.revision
 endfunction " }}}
 

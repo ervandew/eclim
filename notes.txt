@@ -7,13 +7,8 @@ HIGH {{{
     - support list of xpaths to class name attributes / values to validate
 
   - add mecurial support to vcs commands.
-    - annotate: hg annotate -udn <file>
     - get root dir: hg root
     - log: hg log [--limit <limit>] <file>
-    - current revision: hg log -q --limit 1 <file>
-    - previous revision: hg log -q --limit 2 <file>
-    - revisions: hg log -q <file>
-    - info: hg log --limit 1 <file>
     - changeset: hg log -vr <revision>
     - list: ???
 
@@ -309,6 +304,7 @@ TODO {{{
       - prototype
       - jquery
       ...
+      http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference
 
   }}}
 
@@ -419,6 +415,14 @@ NOTES {{{
     src/vim/eclim/ftplugin/python/eclim_complete.vim
     src/vim/eclim/ftplugin/python/eclim_definition.vim
 
+  }}}
+
+  Potential Contributors {{{
+    fidlej
+      - good patch work so far
+        https://sourceforge.net/tracker/index.php?func=detail&aid=1617060&group_id=145869&atid=763326
+        https://sourceforge.net/tracker/index.php?func=detail&aid=1787180&group_id=145869&atid=763323
+        https://sourceforge.net/tracker/index.php?func=detail&aid=1781687&group_id=145869&atid=763323
   }}}
 
   Running in true headless environment:

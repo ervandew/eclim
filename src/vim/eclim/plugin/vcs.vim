@@ -29,25 +29,25 @@ if !exists(":VcsAnnotate")
 endif
 if !exists(":VcsLog")
   command VcsLog :call eclim#vcs#log#Log(
-    \ eclim#vcs#util#GetSvnReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetSvnUrl(expand('%:p:h'), expand('%:t')))
+    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
+    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')))
 endif
 if !exists(":VcsChangeSet")
   command -nargs=? VcsChangeSet :call eclim#vcs#log#ChangeSet(
-    \ eclim#vcs#util#GetSvnReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetSvnUrl(expand('%:p:h'), expand('%:t')),
+    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
+    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
     \ '<args>')
 endif
 if !exists(":VcsDiff")
   command -nargs=? VcsDiff :call eclim#vcs#log#Diff(
-    \ eclim#vcs#util#GetSvnReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetSvnUrl(expand('%:p:h'), expand('%:t')),
+    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
+    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
     \ '<args>')
 endif
 if !exists(":VcsCat")
   command -nargs=? VcsCat :call eclim#vcs#log#ViewFileRevision(
-    \ eclim#vcs#util#GetSvnReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetSvnUrl(expand('%:p:h'), expand('%:t')),
+    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
+    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
     \ '<args>', 'split')
 endif
 if !exists(":VcsInfo")

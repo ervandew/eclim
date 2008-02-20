@@ -38,8 +38,8 @@ function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
 
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetSvnRevision(a:url)
-    if revision == ''
+    let revision = eclim#vcs#util#GetRevision(a:url)
+    if type(revision) == 1 && revision == 0
       call eclim#util#Echo('Unable to determine file revision.')
       return
     endif
@@ -50,7 +50,7 @@ function! eclim#vcs#log#ChangeSet (repos_url, url, revision)
   if has_key(cached, 'content')
     let lines = cached.content
   else
-    let result = eclim#vcs#util#Svn('log -vr ' . revision . ' "' . a:url . '"')
+    let result = eclim#vcs#svn#Svn('log -vr ' . revision . ' "' . a:url . '"')
     if result == '0'
       return
     endif
@@ -92,7 +92,7 @@ function! eclim#vcs#log#Diff (repos_url, url, revision)
 
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetSvnRevision(a:url)
+    let revision = eclim#vcs#util#GetRevision(a:url)
     if revision == ''
       call eclim#util#Echo('Unable to determine file revision.')
       return
@@ -133,7 +133,7 @@ function! eclim#vcs#log#Log (repos_url, url)
     if g:EclimVcsLogMaxEntries > 0
       let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
     endif
-    let result = eclim#vcs#util#Svn(logcmd . ' "' . a:url . '"')
+    let result = eclim#vcs#svn#Svn(logcmd . ' "' . a:url . '"')
     if result == '0'
       return
     endif
@@ -165,7 +165,7 @@ function! eclim#vcs#log#Log (repos_url, url)
 
     call eclim#cache#Set(cache_key, lines, {
         \ 'url': a:url,
-        \ 'revision': eclim#vcs#util#GetSvnRevision(a:url)
+        \ 'revision': eclim#vcs#util#GetRevision(a:url)
       \ })
   endif
 
@@ -187,7 +187,7 @@ function! eclim#vcs#log#ListDir (repos_url, url)
     call eclim#util#EchoError('Current file is not under svn version control.')
     return
   endif
-  let result = eclim#vcs#util#Svn('list "' . a:url . '"')
+  let result = eclim#vcs#svn#Svn('list "' . a:url . '"')
   if result == '0'
     return
   endif
@@ -228,7 +228,7 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
 
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetSvnRevision(a:url)
+    let revision = eclim#vcs#util#GetRevision(a:url)
     if revision == ''
       call eclim#util#Echo('Unable to determine file revision.')
       return
@@ -239,7 +239,14 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
     call eclim#util#GoToBufferWindow(b:filename)
   endif
   let svn_file = 'svn_' . revision . '_' . fnamemodify(a:url, ':t')
-  call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
+
+  let saved = &eventignore
+  let &eventignore = 'BufNewFile'
+  try
+    call eclim#util#GoToBufferWindowOrOpen(svn_file, split)
+  finally
+    let &eventignore = saved
+  endtry
 
   setlocal noreadonly
   setlocal modifiable
@@ -254,7 +261,7 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
     let lines = cached.content
     call append(1, lines)
   else
-    let result = eclim#vcs#util#Svn('info "' . a:url . '"')
+    let result = eclim#vcs#svn#Svn('info "' . a:url . '"')
     if result == '0'
       return
     endif
@@ -270,6 +277,7 @@ function! eclim#vcs#log#ViewFileRevision (repos_url, url, revision, split)
   setlocal readonly
   setlocal nomodifiable
   setlocal noswapfile
+  doautocmd BufReadPost
 endfunction " }}}
 
 " s:Breadcrumb(repos_url, url) {{{
@@ -329,7 +337,7 @@ function! s:FollowLink ()
       let r1 = substitute(getline(1), 'Revision:\s*', '', '')
 
       let cmd = 'log -qr ' . r1 . ':1 --limit 2 "' . repos_url . file . '"'
-      let result = eclim#vcs#util#Svn(cmd)
+      let result = eclim#vcs#svn#Svn(cmd)
       if result == '0'
         return
       endif
