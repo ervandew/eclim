@@ -58,13 +58,13 @@ function s:GetStartTag (line)
     call cursor(pos[0], pos[1])
     try
       let tags = s:ExtractTags(line)
+      " place the cursor at the end of the line
+      call cursor(line('.'), col('$'))
       for tag in reverse(tags)
-        " place the cursor at the end of the line
-        call cursor(line('.'), col('$'))
         " find first non self closing tag searching backwards
-        call search('<' . tag . '\>[^>]\{-}[^/]>', 'b', line('.'))
+        call search('<' . tag . '\>\([^>]\{-}[^/]\)\?>', 'b', line('.'))
 
-        " see if the tag as a matching close tag
+        " see if the tag has a matching close tag
         let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
         if !pos[0] || pos[0] > a:line
           return tag
