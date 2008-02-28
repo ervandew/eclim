@@ -64,7 +64,7 @@ function! eclim#util#Balloon (message)
   return message
 endfunction " }}}
 
-" DelayedCommand(command, ...) {{{
+" DelayedCommand(command [, delay]) {{{
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
 " command to execute after other autocommands have finished.
