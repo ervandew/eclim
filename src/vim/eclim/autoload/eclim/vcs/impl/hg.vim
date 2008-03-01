@@ -1,0 +1,229 @@
+" Author:  Eric Van Dewoestine
+" Version: $Revision$
+"
+" Description: {{{
+"   see http://eclim.sourceforge.net/vim/common/vcs.html
+"
+" License:
+"
+" Copyright (c) 2005 - 2008
+"
+" Licensed under the Apache License, Version 2.0 (the "License");
+" you may not use this file except in compliance with the License.
+" You may obtain a copy of the License at
+"
+"      http://www.apache.org/licenses/LICENSE-2.0
+"
+" Unless required by applicable law or agreed to in writing, software
+" distributed under the License is distributed on an "AS IS" BASIS,
+" WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+" See the License for the specific language governing permissions and
+" limitations under the License.
+"
+" }}}
+
+if !exists('g:eclim_vcs_hg_loaded')
+  let g:eclim_vcs_hg_loaded = 1
+else
+  finish
+endif
+
+" GetAnnotations (revision) {{{
+function! eclim#vcs#impl#hg#GetAnnotations (revision)
+  if exists('b:vcs_props')
+    if filereadable(b:vcs_props.path)
+      let file = fnamemodify(b:vcs_props.path, ':t')
+    else
+      let file = b:vcs_props.svn_root_url . b:vcs_props.path
+    endif
+  else
+    let file = expand('%')
+  endif
+
+  let cmd = 'annotate -udn'
+  if a:revision != ''
+    let cmd .= ' -r ' . a:revision
+  endif
+  let result = eclim#vcs#impl#hg#Hg(cmd . ' "' . file . '"')
+  if type(result) == 0
+    return
+  endif
+
+  let annotations = split(result, '\n')
+  call map(annotations,
+      \ "substitute(v:val, '^\\(.\\{-}\\)\\s\\([0-9]\\+\\)\\s\\(.\\{-}\\):\\s.*', '\\2 (\\3) \\1', '')")
+
+  return annotations
+endfunction " }}}
+
+" GetRelativePath(dir, file) {{{
+function eclim#vcs#impl#hg#GetRelativePath (dir, file)
+  let root = eclim#vcs#impl#hg#Hg('root')
+  if type(root) == 0
+    return
+  endif
+  let root = fnamemodify(substitute(root, '\n', '', ''), ':h')
+  return substitute(a:dir, root, '', '') . '/' . a:file
+endfunction " }}}
+
+" GetPreviousRevision() {{{
+function eclim#vcs#impl#hg#GetPreviousRevision ()
+  let log = eclim#vcs#impl#hg#Hg('log -q --limit 2 "' . expand('%:t') . '"')
+  if type(log) == 0
+    return
+  endif
+  let revisions = split(log, '\n')
+  return len(revisions) > 1 ? revisions[1] : 0
+endfunction " }}}
+
+" GetRevision(file) {{{
+function eclim#vcs#impl#hg#GetRevision (file)
+  let log = eclim#vcs#impl#hg#Hg('log -q --limit 1 "' . a:file . '"')
+  if type(log) == 0
+    return
+  endif
+  return substitute(log, '\n', '', '')
+endfunction " }}}
+
+" GetRevisions() {{{
+function eclim#vcs#impl#hg#GetRevisions ()
+  let log = eclim#vcs#impl#hg#Hg('log -q "' . expand('%:t') . '"')
+  if type(log) == 0
+    return
+  endif
+  return split(log, '\n')
+endfunction " }}}
+
+" GetRoot() {{{
+function eclim#vcs#impl#hg#GetRoot ()
+  let root = eclim#vcs#impl#hg#Hg('root')
+  if type(root) == 0
+    return
+  endif
+  return substitute(root, '\n', '', '')
+endfunction " }}}
+
+" ChangeSet(revision) {{{
+function eclim#vcs#impl#hg#ChangeSet (revision)
+  let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision . ' ' . expand('%'))
+  if type(result) == 0
+    return
+  endif
+  let log = split(result, '\n')
+  let author = substitute(log[2], '^user:\s\+', '', '')
+  let date = substitute(log[3], '^date:\s\+', '', '')
+  let files = split(substitute(log[4], '^files:\s\+', '', ''))
+  call map(files, 'filereadable(fnamemodify(v:val, ":t")) ? "  A/M |" . v:val . "|" : "  R   |" . v:val . "|"')
+  let comment = filter(log[6:], 'v:val !~ "^\\s*$"')
+  let lines = []
+  call add(lines, 'Revision: ' . a:revision)
+  call add(lines, 'Modified: ' . date . ' by ' . author)
+  call add(lines, 'Changed paths:')
+  let lines += files
+  call add(lines, '')
+  let lines += comment
+
+  let root_dir = exists('b:vcs_props') ?
+    \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
+  return {'changeset': lines, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" Info() {{{
+function eclim#vcs#impl#hg#Info ()
+  let result = eclim#vcs#impl#hg#Hg('log --limit 1 "' . expand('%:t') . '"')
+  if type(result) == 0
+    return
+  endif
+  call eclim#util#Echo(result)
+endfunction " }}}
+
+" Log([file]) {{{
+function eclim#vcs#impl#hg#Log (...)
+  if len(a:000) > 0
+    let dir = fnamemodify(a:000[0], ':h')
+    let file = fnamemodify(a:000[0], ':t')
+  else
+    let dir = expand('%:h')
+    let file = expand('%:t')
+  endif
+
+  let logcmd = 'log -v'
+  if g:EclimVcsLogMaxEntries > 0
+    let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
+  endif
+
+  let result = eclim#vcs#impl#hg#Hg(logcmd . ' "' . file . '"')
+  if type(result) == 0
+    return
+  endif
+  let log = s:ParseHgLog(split(result, '\n'))
+
+  let index = 0
+  let lines = [s:Breadcrumb(dir, file), '']
+  for entry in log
+    let index += 1
+    call add(lines, '--------------------------------------------------')
+    call add(lines, 'Revision: ' . entry.revision . ' |view| |annotate|')
+    call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
+    let working_copy = isdirectory(file) || filereadable(file) ? ' |working copy|' : ''
+    if index < len(log)
+      call add(lines, 'Diff: |previous ' . log[index].revision . '|' . working_copy)
+    elseif working_copy != ''
+      call add(lines, 'Diff: |working copy|')
+    endif
+    call add(lines, '')
+    let lines += entry.comment[:-3]
+    if lines[-1] !~ '^\s*$' && index != len(log)
+      call add(lines, '')
+    endif
+  endfor
+  let root_dir = exists('b:vcs_props') ?
+    \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
+  return {'log': lines, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" ViewFileRevision(path, revision) {{{
+function! eclim#vcs#impl#hg#ViewFileRevision (path, revision)
+  let path = fnamemodify(a:path, ':t')
+  let result = eclim#vcs#impl#hg#Hg('cat -r ' . a:revision . ' "' . path . '"')
+  return split(result, '\n')
+endfunction " }}}
+
+" Hg(args) {{{
+" Executes 'hg' with the supplied args.
+function eclim#vcs#impl#hg#Hg (args)
+  return eclim#vcs#util#Vcs('hg', a:args)
+endfunction " }}}
+
+" s:Breadcrumb(dir, file) {{{
+function! s:Breadcrumb (dir, file)
+  let path = split(eclim#vcs#impl#hg#GetRelativePath(a:dir, a:file), '/')
+  return join(path, ' / ' )
+endfunction " }}}
+
+" s:ParseHgLog(lines) {{{
+function! s:ParseHgLog (lines)
+  let log = []
+  let section = 'header'
+  let index = 0
+  for line in a:lines
+    let index += 1
+    if line =~ '^changeset:\s\+[0-9]:[0-9a-z]\+'
+      let entry = {'revision': substitute(line, 'changeset:\s\+', '', ''), 'comment': []}
+      call add(log, entry)
+      let section = 'header'
+    elseif line =~ '^user:\s\+'
+      let entry.author = substitute(line, 'user:\s\+', '', '')
+    elseif line =~ '^date:\s\+'
+      let entry.date = substitute(line, 'date:\s\+', '', '')
+    elseif line =~ '^description:'
+      let section = 'comment'
+    elseif section == 'comment'
+      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
+      call add(entry.comment, line)
+    endif
+  endfor
+  return log
+endfunction " }}}
+
+" vim:ft=vim:fdm=marker

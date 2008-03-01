@@ -283,11 +283,16 @@
         contents.
       </action>
 
-      <action dev="ervandew" type="add" context="Vcs (subversion)">
+      <action dev="ervandew" type="add" context="Vcs">
         Added support for limiting the number of log entries returned by
         <a href="vim/common/vcs.html#VcsLog">
           <strong>:VcsLog</strong>
         </a> (limits to 50 entries by default).
+      </action>
+
+      <action dev="ervandew" type="update" context="Vcs">
+        Updated <strong>:VcsLog</strong>, <strong>:VcsChangeSet</strong>, etc.
+        to support cvs and hg where applicable.
       </action>
 
       <action dev="ervandew" type="add" context="Trac">

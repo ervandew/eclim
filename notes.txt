@@ -1,16 +1,24 @@
 HIGH {{{
+  - archive, show hidden files
+
+  - :ProjectCreateWizard  use input()
+
+  - django indent gets set to html in following case
+    - open django template
+    - split non-django html file
+    - return to django template (indentation will be html)
+
+  - vcs fixmes
+    - executing vcs commands from vcs window
+
+  - sql pretty print
+
   - integrate w/ eclipse build/run system for at least simple programs.
 
   - add/test proxy support to the installer.
 
   - generic support for java based xml config file validation
     - support list of xpaths to class name attributes / values to validate
-
-  - add mecurial support to vcs commands.
-    - get root dir: hg root
-    - log: hg log [--limit <limit>] <file>
-    - changeset: hg log -vr <revision>
-    - list: ???
 
   - test installer w/ eclipse running
     - may cause issues, if so, attempt to detect if eclipse is running and
@@ -267,6 +275,9 @@ TODO {{{
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
+
+    - refactoring: http://rope.sourceforge.net/
+      - this lib includes auto-completion and find definition!!!
 
   }}}
 

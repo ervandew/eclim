@@ -32,7 +32,7 @@
   <body>
     <p>
       The following is a list of commands that may be execute when viewing a
-      file versioned in either cvs or subversion.
+      file versioned in cvs, subversion, or mercurial (where applicable).
     </p>
     <ul>
       <li>
@@ -90,16 +90,10 @@
         <strong>:VcsInfo</strong> -
         Echos vcs info about the currently versioned file.
       </li>
-    </ul>
-
-    <note>
-      Currently only subversion is supported by the following commands.
-    </note>
-    <ul>
       <li>
         <anchor id="VcsLog"/>
         <strong>:VcsLog</strong> -
-        Opens a buffer with svn log information for the current file.<br/>
+        Opens a buffer with log information for the current file.<br/>
         In this buffer you can perform various operations (diff, annotate, view
         log for another file, etc.) by hitting &lt;Return&gt; on any of the text
         links denoted by <strong>|link name|</strong> (ex.
@@ -113,7 +107,7 @@
       <li>
         <anchor id="VcsChangeSet"/>
         <strong>:VcsChangeSet</strong> [revision] -
-        Opens a buffer with svn change set information for the supplied
+        Opens a buffer with change set information for the supplied
         repository version or the current revision of the currently open
         file.<br/>
         Like <strong>:VcsLog</strong>, this buffer will contain text links which

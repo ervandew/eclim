@@ -668,7 +668,8 @@
 
     <p><strong>Version Control Commands</strong></p> <!-- {{{ -->
     <note>
-      Currently only cvs and subversion are supported by the following commands.
+      Currently cvs, subversion, and mercurial are supported by the following
+      commands where applicable.
     </note>
     <ul>
       <li>
@@ -713,19 +714,14 @@
         </a> -
         Echos vcs info about the current versioned file.
       </li>
-    </ul>
-    <note>
-      Currently only subversion is supported by the following commands.
-    </note>
-    <ul>
       <li>
         <a href="common/vcs.html#VcsLog"><strong>:VcsLog</strong></a> -
-        Opens a buffer with svn log information for the current file.
+        Opens a buffer with log information for the current file.
       </li>
       <li>
         <a href="common/vcs.html#VcsChangeSet"><strong>:VcsChangeSet</strong></a>
         [revision] -
-        Opens a buffer with svn change set information for the supplied
+        Opens a buffer with change set information for the supplied
         repository version or the current revision of the currently open file.
       </li>
       <li>

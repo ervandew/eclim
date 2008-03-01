@@ -39,13 +39,26 @@ function eclim#vcs#viewvc#GetViewvcUrl (file)
     return
   endif
 
-  let path = eclim#vcs#util#GetFilePath(a:file)
+  let file = a:file != '' ? a:file : expand('%:p')
+  let dir = fnamemodify(file, ':h')
+  let cwd = getcwd()
+  exec 'lcd ' . dir
+  try
+    let GetViewvcPath = eclim#vcs#util#GetVcsFunction(dir, 'GetViewvcPath')
+    if type(GetViewvcPath) != 2
+      return
+    endif
+    let path = GetViewvcPath()
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
   if path == ''
     call eclim#util#EchoError('Current file is not under cvs or svn version control.')
     return
   endif
 
-  let url = root . '/' . path
+  let url = root . path
   return url
 endfunction " }}}
 

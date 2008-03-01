@@ -24,34 +24,38 @@
 
 " Command Declarations {{{
 if !exists(":VcsAnnotate")
-  command VcsAnnotate :call eclim#vcs#annotate#Annotate()
-  command VcsAnnotateOff :call eclim#vcs#annotate#AnnotateOff()
+  command VcsAnnotate :call eclim#vcs#command#Annotate()
+  command VcsAnnotateOff :call eclim#vcs#command#AnnotateOff()
 endif
 if !exists(":VcsLog")
-  command VcsLog :call eclim#vcs#log#Log(
-    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')))
+  command VcsLog
+    \ :if s:CheckWindow() |
+    \    call eclim#vcs#command#Log(expand('%:p')) |
+    \  endif
 endif
 if !exists(":VcsChangeSet")
-  command -nargs=? VcsChangeSet :call eclim#vcs#log#ChangeSet(
-    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
-    \ '<args>')
+  command -nargs=? VcsChangeSet
+    \ :if s:CheckWindow() |
+    \    call eclim#vcs#command#ChangeSet(expand('%:p'), '<args>') |
+    \  endif
 endif
 if !exists(":VcsDiff")
-  command -nargs=? VcsDiff :call eclim#vcs#log#Diff(
-    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
-    \ '<args>')
+  command -nargs=? VcsDiff
+    \ :if s:CheckWindow() |
+    \    call eclim#vcs#command#Diff(expand('%:p'), '<args>') |
+    \  endif
 endif
 if !exists(":VcsCat")
-  command -nargs=? VcsCat :call eclim#vcs#log#ViewFileRevision(
-    \ eclim#vcs#util#GetReposUrl(expand('%:p:h')),
-    \ eclim#vcs#util#GetUrl(expand('%:p:h'), expand('%:t')),
-    \ '<args>', 'split')
+  command -nargs=? VcsCat
+    \ :if s:CheckWindow() |
+    \    call eclim#vcs#command#ViewFileRevision(expand('%:p'), '<args>', 'split') |
+    \  endif
 endif
 if !exists(":VcsInfo")
-  command -nargs=0 VcsInfo :call eclim#vcs#util#Info()
+  command -nargs=0 VcsInfo
+    \ :if s:CheckWindow() |
+    \    call eclim#vcs#command#Info() |
+    \  endif
 endif
 
 if !exists(":Viewvc")
@@ -70,6 +74,11 @@ if !exists(":ViewvcDiff")
   command -nargs=* -complete=customlist,eclim#vcs#util#CommandCompleteRevision
     \ ViewvcDiff :call eclim#vcs#viewvc#ViewvcDiff(<q-args>)
 endif
+
+function s:CheckWindow ()
+  return !exists('b:vcs_props')
+endfunction
+
 " }}}
 
 " vim:ft=vim:fdm=marker
