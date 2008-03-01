@@ -1,6 +1,4 @@
 HIGH {{{
-  - archive, show hidden files
-
   - :ProjectCreateWizard  use input()
 
   - django indent gets set to html in following case
