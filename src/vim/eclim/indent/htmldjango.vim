@@ -45,14 +45,11 @@ for element in g:HtmlDjangoBodyElements
   endfor
 endfor
 
-if !exists('*HtmlSettings')
-  let HtmlSettings = function('HtmlIndentAnythingSettings')
-endif
-
-" HtmlIndentAnythingSettings() {{{
-function! HtmlIndentAnythingSettings ()
+" HtmlDjangoIndentAnythingSettings() {{{
+function! HtmlDjangoIndentAnythingSettings ()
+  echom 'HtmlIndentAnythingSettings (django)'
   if exists('*HtmlSettings')
-    call HtmlSettings()
+    call HtmlIndentAnythingSettings()
   endif
 
   let b:indentTrios = [
@@ -62,5 +59,7 @@ function! HtmlIndentAnythingSettings ()
         \ '{%\s*end\w\+\s*%}' ],
     \ ]
 endfunction " }}}
+
+let b:indent_settings = 'HtmlDjangoIndentAnythingSettings'
 
 " vim:ft=vim:fdm=marker

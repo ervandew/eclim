@@ -75,7 +75,9 @@ function! EclimGetHtmlIndent (lnum)
 
   " Indenting html code, do our work.
   else
-    call HtmlIndentAnythingSettings()
+    let Settings = exists('b:indent_settings') ?
+      \ function(b:indent_settings) : function('HtmlIndentAnythingSettings')
+    call Settings()
     let adj = s:HtmlIndentAttributeWrap(a:lnum) * &sw
 
     " handle case where previous line is a multi-line comment (<!-- -->) on one
@@ -105,8 +107,8 @@ function! EclimGetHtmlIndent (lnum)
 endfunction " }}}
 
 " HtmlIndentAnythingSettings() {{{
-if !exists('*HtmlIndentAnythingSettings') || &ft == 'html'
 function! HtmlIndentAnythingSettings ()
+  echom 'HtmlIndentAnythingSettings (html)'
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'htmlComment'
   let b:commentRE      = b:blockCommentRE
@@ -128,8 +130,7 @@ function! HtmlIndentAnythingSettings ()
   "let b:lineContList = [
   "    \ {'pattern' : '^<!DOCTYPE.*[^>]\s*$' },
   "  \ ]
-endfunction
-endif " }}}
+endfunction " }}}
 
 " HtmlIndentAttributeWrap(lnum) {{{
 " Function which indents line continued attributes an extra level for
@@ -167,7 +168,5 @@ function! <SID>HtmlIndentAttributeWrap (lnum)
     call cursor(line, col)
   endtry
 endfunction " }}}
-
-call HtmlIndentAnythingSettings()
 
 " vim:ft=vim:fdm=marker

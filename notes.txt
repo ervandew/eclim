@@ -1,14 +1,6 @@
 HIGH {{{
   - :ProjectCreateWizard  use input()
 
-  - django indent gets set to html in following case
-    - open django template
-    - split non-django html file
-    - return to django template (indentation will be html)
-
-  - vcs fixmes
-    - executing vcs commands from vcs window
-
   - sql pretty print
 
   - integrate w/ eclipse build/run system for at least simple programs.
