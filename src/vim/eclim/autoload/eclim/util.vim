@@ -843,6 +843,8 @@ function! eclim#util#TempWindow (name, lines, ...)
     setlocal readonly
   endif
 
+  doautocmd BufEnter
+
   " Store filename and window number so that plugins can use it if necessary.
   if !exists('b:filename')
     let b:filename = filename
