@@ -44,7 +44,7 @@ function eclim#vcs#viewvc#GetViewvcUrl (file)
   let cwd = getcwd()
   exec 'lcd ' . dir
   try
-    let GetViewvcPath = eclim#vcs#util#GetVcsFunction(dir, 'GetViewvcPath')
+    let GetViewvcPath = eclim#vcs#util#GetVcsFunction('GetViewvcPath')
     if type(GetViewvcPath) != 2
       return
     endif

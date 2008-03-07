@@ -489,7 +489,15 @@ function! s:FollowLink ()
 
   " link to bug / feature report
   elseif link =~ '^#\d\+$'
-    let url = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.tracker')
+    let cwd = getcwd()
+    let dir = fnamemodify(b:filename, ':h')
+    exec 'lcd ' . dir
+    try
+      let url = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.tracker')
+    finally
+      exec 'lcd ' . cwd
+    endtry
+
     if url == '0'
       return
     endif
