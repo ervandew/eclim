@@ -255,6 +255,7 @@ function! eclim#project#util#ProjectSettings (project)
     setlocal modifiable
     setlocal foldmethod=marker
     setlocal foldmarker={,}
+    setlocal foldlevel=0
 
     let b:project = project
     augroup project_settings
