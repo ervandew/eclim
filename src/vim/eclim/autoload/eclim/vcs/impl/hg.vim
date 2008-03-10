@@ -114,7 +114,7 @@ function eclim#vcs#impl#hg#ChangeSet (revision)
   let results = split(result, '\n')
   let log = {}
   let comment = []
-  for line in results[:-2]
+  for line in results[:-3]
     if line =~ '^[a-z]\+:'
       let name = substitute(line, '^\(.\{-}\):.*', '\1', '')
       let line = substitute(line, '^.\{-}:\s*\(.*\)', '\1', '')
