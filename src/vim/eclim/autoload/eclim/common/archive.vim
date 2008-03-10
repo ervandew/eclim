@@ -45,8 +45,9 @@ let s:file_regex =
 " Lists the contents of the archive.
 function! eclim#common#archive#List ()
   let b:file_info = {}
-  let root = expand('%:t') . '/'
-  let b:file_info[root] = {'url': s:FileUrl(expand('%:p'))}
+  let file = substitute(expand('%:p'), '\', '/', 'g')
+  let root = fnamemodify(file, ':t') . '/'
+  let b:file_info[root] = {'url': s:FileUrl(file)}
 
   if exists('g:EclimArchiveLayout') && g:EclimArchiveLayout == 'list'
     call eclim#common#archive#ListAll()
@@ -76,6 +77,7 @@ endfunction " }}}
 " Reads the contents of an archived file.
 function! eclim#common#archive#ReadFile ()
   let file = substitute(expand('%'), '\', '/', 'g')
+  echom 'file = ' . file
   if file =~ '.class$'
     let class = substitute(file, '.*!\(.*\)\.class', '\1', '')
     let class = substitute(class, '/', '.', 'g')
@@ -140,18 +142,19 @@ function eclim#common#archive#Execute (alt)
   else
     if g:EclimArchiveLayout == 'list'
       let file = substitute(getline('.'), s:file_regex, '\1', '')
-      let url = s:FileUrl(expand('%:p')) . '!/' . file
+      let archive = substitute(expand('%:p'), '\', '/', 'g')
+      let url = s:FileUrl(archive) . '!/' . file
     else
       let url = b:file_info[getline('.')].url
     endif
-    noautocmd exec 'split ' . url
+    silent! noautocmd exec 'split ' . escape(url, ' ')
     call eclim#common#archive#ReadFile()
   endif
 endfunction " }}}
 
 " ExpandDir() {{{
 function eclim#common#archive#ExpandDir ()
-  let path = expand('%:p')
+  let path = substitute(expand('%:p'), '\', '/', 'g')
   let dir = b:file_info[getline('.')].url
   if dir !~ path . '$' && s:IsArchive(dir)
     let dir = s:FileUrl(dir) . '!/'
@@ -194,7 +197,7 @@ endfunction " }}}
 " ListAll() {{{
 " Function for listing all the archive files (for 'list' layout).
 function eclim#common#archive#ListAll ()
-  let path = expand('%:p')
+  let path = substitute(expand('%:p'), '\', '/', 'g')
   let command = s:command_list_all
   let command = substitute(command, '<file>', path, '')
   let results = split(eclim#ExecuteEclim(command), '\n')
@@ -222,6 +225,9 @@ endfunction " }}}
 " s:FileUrl(file) {{{
 function! s:FileUrl (file)
   let url = a:file
+  if url =~ '^[a-zA-Z]:'
+    let url = '/' . url
+  endif
   for key in keys(s:urls)
     for ext in s:urls[key]
       if url =~ ext . '$'
