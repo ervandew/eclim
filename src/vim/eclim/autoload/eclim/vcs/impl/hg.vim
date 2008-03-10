@@ -58,11 +58,11 @@ endfunction " }}}
 
 " GetRelativePath(dir, file) {{{
 function eclim#vcs#impl#hg#GetRelativePath (dir, file)
-  let root = eclim#vcs#impl#hg#Hg('root')
+  let root = eclim#vcs#impl#hg#GetRoot()
   if type(root) == 0
     return
   endif
-  let root = fnamemodify(substitute(root, '\n', '', ''), ':h')
+  let root = fnamemodify(root, ':h')
   return substitute(a:dir, root, '', '') . '/' . a:file
 endfunction " }}}
 
@@ -100,21 +100,33 @@ function eclim#vcs#impl#hg#GetRoot ()
   if type(root) == 0
     return
   endif
-  return substitute(root, '\n', '', '')
+  let root = substitute(root, '\n', '', '')
+  let root = substitute(root, '\', '/', 'g')
+  return root
 endfunction " }}}
 
 " ChangeSet(revision) {{{
 function eclim#vcs#impl#hg#ChangeSet (revision)
-  let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision . ' ' . expand('%'))
+  let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision)
   if type(result) == 0
     return
   endif
-  let log = split(result, '\n')
-  let author = substitute(log[2], '^user:\s\+', '', '')
-  let date = substitute(log[3], '^date:\s\+', '', '')
-  let files = split(substitute(log[4], '^files:\s\+', '', ''))
+  let results = split(result, '\n')
+  let log = {}
+  let comment = []
+  for line in results[:-2]
+    if line =~ '^[a-z]\+:'
+      let name = substitute(line, '^\(.\{-}\):.*', '\1', '')
+      let line = substitute(line, '^.\{-}:\s*\(.*\)', '\1', '')
+      let log[name] = line
+    else
+      call add(comment, line)
+    endif
+  endfor
+  let author = substitute(log.user, '^user:\s\+', '', '')
+  let date = substitute(log.date, '^date:\s\+', '', '')
+  let files = split(substitute(log.files, '^files:\s\+', '', ''))
   call map(files, 'filereadable(fnamemodify(v:val, ":t")) ? "  A/M |" . v:val . "|" : "  R   |" . v:val . "|"')
-  let comment = filter(log[6:], 'v:val !~ "^\\s*$"')
   let lines = []
   call add(lines, 'Revision: ' . a:revision)
   call add(lines, 'Modified: ' . date . ' by ' . author)
@@ -163,7 +175,7 @@ function eclim#vcs#impl#hg#Log (...)
   for entry in log
     let index += 1
     call add(lines, '--------------------------------------------------')
-    call add(lines, 'Revision: ' . entry.revision . ' |view| |annotate|')
+    call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
     call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
     let working_copy = isdirectory(file) || filereadable(file) ? ' |working copy|' : ''
     if index < len(log)
@@ -184,8 +196,9 @@ endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
 function! eclim#vcs#impl#hg#ViewFileRevision (path, revision)
+  let revision = substitute(a:revision, '.\{-}:', '', '')
   let path = fnamemodify(a:path, ':t')
-  let result = eclim#vcs#impl#hg#Hg('cat -r ' . a:revision . ' "' . path . '"')
+  let result = eclim#vcs#impl#hg#Hg('cat -r ' . revision . ' "' . path . '"')
   return split(result, '\n')
 endfunction " }}}
 

@@ -141,7 +141,10 @@ function eclim#vcs#impl#svn#GetRoot ()
     let dir_parts = dir_parts[:-2]
   endwhile
   let dir = join(dir_parts, '/')
-  return '/' . dir
+  if has('unix')
+    return '/' . dir
+  endif
+  return dir
 endfunction " }}}
 
 " GetViewvcPath([file]) {{{
@@ -328,7 +331,8 @@ endfunction " }}}
 
 " s:GetUrlAndRoot([file]) {{{
 function s:GetUrlAndRoot (...)
-  let info = eclim#vcs#impl#svn#Svn('info ' . (len(a:000) > 0 ? a:000[0] : ''))
+  let path = len(a:000) > 0 ? fnamemodify(a:000[0], ':t') : ''
+  let info = eclim#vcs#impl#svn#Svn('info ' . path)
   if type(info) == 0
     return
   endif

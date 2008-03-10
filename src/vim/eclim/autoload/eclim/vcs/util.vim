@@ -130,11 +130,14 @@ endfunction " }}}
 " GetRevision([file]) {{{
 " Gets the current revision of the current or supplied file.
 function eclim#vcs#util#GetRevision (...)
-  let file = len(a:000) > 0 ? a:000[0] : expand('%:t')
-  let dir = expand('%:p:h')
-  if len(a:000) == 0
-    let cwd = getcwd()
+  let path = len(a:000) > 0 ? a:000[0] : expand('%')
+  let cwd = getcwd()
+  if filereadable(path)
+    let file = fnamemodify(path, ':t')
+    let dir = fnamemodify(path, ':h')
     exec 'lcd ' . dir
+  else
+    let file = path
   endif
   try
     let GetRevision = eclim#vcs#util#GetVcsFunction('GetRevision')
@@ -143,9 +146,7 @@ function eclim#vcs#util#GetRevision (...)
     endif
     let revision = GetRevision(file)
   finally
-    if len(a:000) == 0
-      exec 'lcd ' . cwd
-    endif
+    exec 'lcd ' . cwd
   endtry
   return revision
 endfunction " }}}

@@ -99,10 +99,14 @@ endfunction " }}}
 
 " GetRoot() {{{
 function eclim#vcs#impl#cvs#GetRoot ()
-  let dir = getcwd()
-  let lines = readfile(escape(dir . '/CVS/Repository', ' '), '', 1)
+  let dir = substitute(getcwd(), '\', '/', 'g')
+  let lines = readfile(dir . '/CVS/Repository', '', 1)
   let remove = len(split(lines[0], '/'))
-  return '/' . join(split(dir, '/')[:0 - remove], '/')
+  let root = join(split(dir, '/')[:0 - remove], '/')
+  if has('unix')
+    return '/' . root
+  endif
+  return root
 endfunction " }}}
 
 " Info() {{{
@@ -132,6 +136,8 @@ function eclim#vcs#impl#cvs#ListDir (...)
   let files = filter(copy(contents), 'v:val =~ "^/"')
   call map(dirs, 'substitute(v:val, "^D/\\(.\\{-}/\\).*", "|\\1|", "")')
   call map(files, 'substitute(v:val, "^/\\(.\\{-}\\)/.*", "|\\1|", "")')
+  call sort(dirs)
+  call sort(files)
   call extend(lines, dirs)
   call extend(lines, files)
 
@@ -161,7 +167,11 @@ function eclim#vcs#impl#cvs#Log (...)
     call add(lines, '------------------------------------------')
     call add(lines, 'Revision: ' . entry.revision . ' |view| |annotate|')
     call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-    let working_copy = isdirectory(path) || filereadable(path) ? ' |working copy|' : ''
+    let working_copy = ''
+    if (isdirectory(path) || filereadable(path)) &&
+     \ (!exists('b:filename') || b:filename =~ path . '$')
+      let working_copy = ' |working copy|'
+    endif
     if index < len(log)
       call add(lines, 'Diff: |previous ' . log[index].revision . '|' . working_copy)
     elseif working_copy != ''
@@ -180,7 +190,8 @@ endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
 function! eclim#vcs#impl#cvs#ViewFileRevision (path, revision)
-  let result = eclim#vcs#impl#cvs#Cvs('annotate -r ' . a:revision . ' "' . a:path . '"')
+  let path = fnamemodify(a:path, ':t')
+  let result = eclim#vcs#impl#cvs#Cvs('annotate -r ' . a:revision . ' "' . path . '"')
   let content = split(result, '\n')
   let content = map(content[2:], 'substitute(v:val, "^.\\{-}):\\s", "", "")')
   return content
