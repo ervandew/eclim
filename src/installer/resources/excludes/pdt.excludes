@@ -1,5 +1,5 @@
-org.eclim.php_${eclim.version}/**/*
-org.eclim.php_${eclim.version}
+org.eclim.pdt_${eclim.version}/**/*
+org.eclim.pdt_${eclim.version}
 eclim/autoload/eclim/php/*.vim
 eclim/autoload/eclim/php
 eclim/ftplugin/php/*.vim
