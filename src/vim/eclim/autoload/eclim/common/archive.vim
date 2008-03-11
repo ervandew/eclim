@@ -102,7 +102,7 @@ function! eclim#common#archive#ReadFile ()
 
   if string(file) != '0'
     let bufnum = bufnr('%')
-    silent exec "keepjumps edit! " . file
+    silent exec "keepjumps edit! " . escape(file, ' ')
 
     exec 'bdelete ' . bufnum
 
