@@ -171,7 +171,7 @@ function eclim#php#search#FindInclude ()
   let result =  eclim#ExecuteEclim(command)
   let paths = split(result, '\n')
 
-  let results = split(globpath('.,' . join(paths, ','), file), '\n')
+  let results = split(globpath(expand('%:h') . ',' . join(paths, ','), file), '\n')
 
   if !empty(results)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
