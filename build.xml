@@ -148,8 +148,8 @@
 
     <!-- deploy vim files -->
     <mkdir dir="${vim.files}/eclim"/>
-    <copy todir="${vim.files}/plugin"
-        file="src/vim/plugin/eclim.vim" overwrite="true"/>
+    <copy todir="${vim.files}/eclim/autoload"
+        file="src/vim/eclim/autoload/eclim.vim" overwrite="true"/>
     <sync todir="${vim.files}/eclim">
       <fileset dir="src/vim/eclim" includes="**/*"/>
       <preserveintarget>
