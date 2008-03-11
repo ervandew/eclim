@@ -30,6 +30,6 @@ public class UpdateCommand
       "-command", "update",
       "-featureId", id,
       "-version", version
-    });
+    }, null);
   }
 }

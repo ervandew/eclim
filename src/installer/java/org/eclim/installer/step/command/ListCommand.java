@@ -28,6 +28,6 @@ public class ListCommand
   {
     super(handler, new String[]{
       "-command", "listFeatures"
-    });
+    }, null);
   }
 }

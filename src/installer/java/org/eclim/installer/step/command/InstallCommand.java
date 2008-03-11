@@ -31,8 +31,7 @@ public class InstallCommand
       "-command", "install",
       "-from", url,
       "-featureId", id,
-      "-version", version,
-      "-to", to
-    });
+      "-version", version
+    }, to);
   }
 }

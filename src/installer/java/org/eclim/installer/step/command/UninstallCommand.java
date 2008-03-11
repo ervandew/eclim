@@ -37,9 +37,8 @@ public class UninstallCommand
     super(handler, new String[]{
       "-command", "uninstall",
       "-featureId", id,
-      "-version", version,
-      "-to", to
-    });
+      "-version", version
+    }, to);
     this.feature = id;
     this.version = version;
   }

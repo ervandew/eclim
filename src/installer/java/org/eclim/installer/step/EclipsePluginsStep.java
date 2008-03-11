@@ -276,11 +276,23 @@ public class EclipsePluginsStep
    * supplied dependency.
    *
    * @param dependency The dependency to install or upgrade.
-   * @param to The location where the plugin is (to be) located.
    * @return List of commands.
    */
-  private List getCommands (Dependency dependency, String to)
+  private List getCommands (Dependency dependency)
   {
+    String to = null;
+    if (!Os.isFamily("windows")){
+      String home = (String)Installer.getContext().getValue("eclipse.home");
+      String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
+      if(plugins.endsWith("/")){
+        plugins.substring(0, plugins.length() - 1);
+      }
+      if (!plugins.equals(FilenameUtils.concat(home, "plugins"))){
+        to = plugins;
+        to = FilenameUtils.getFullPath(to);
+      }
+    }
+
     ArrayList list = new ArrayList();
     if(!dependency.isUpgrade()){
       list.add(new InstallCommand(this,
@@ -462,18 +474,6 @@ public class EclipsePluginsStep
             overallProgress.setMaximum(dependencies.size());
             overallProgress.setValue(0);
 
-            String to = null;
-            if (Os.isFamily("windows")){
-              String home = (String)Installer.getContext().getValue("eclipse.home");
-              to = FilenameUtils.concat(home, "plugins");
-            }else{
-              to = (String)Installer.getContext().getValue("eclipse.plugins");
-            }
-
-            if(to.endsWith("/")){
-              to.substring(0, to.length() - 1);
-            }
-            to = FilenameUtils.getFullPath(to);
             for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
               Dependency dependency = (Dependency)ii.next();
               if(!dependency.isUpgrade()){
@@ -484,7 +484,7 @@ public class EclipsePluginsStep
                     dependency.getId() + '-' + dependency.getVersion());
               }
 
-              List commands = getCommands(dependency, to);
+              List commands = getCommands(dependency);
               for (Iterator jj = commands.iterator(); jj.hasNext();){
                 Command command = (Command)jj.next();
                 try{

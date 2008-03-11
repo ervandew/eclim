@@ -43,17 +43,20 @@ public abstract class Command
   private String[] cmd;
   private OutputHandler handler;
 
-  public Command (OutputHandler handler, String[] cmd)
+  public Command (OutputHandler handler, String[] cmd, String to)
   {
     this.handler = handler;
-    this.cmd = new String[cmd.length + 1];
 
     if (Os.isFamily("windows")){
+      this.cmd = new String[cmd.length + 1];
       this.cmd[0] = Installer.getProject().replaceProperties(
           "${eclipse.home}/plugins/org.eclim.installer/bin/install.bat");
     }else{
+      this.cmd = new String[cmd.length + (to != null ? 3 : 1)];
       this.cmd[0] = Installer.getProject().replaceProperties(
           "${eclipse.plugins}/org.eclim.installer/bin/install");
+      this.cmd[this.cmd.length - 2] = "-to";
+      this.cmd[this.cmd.length - 1] = to;
     }
 
     System.arraycopy(cmd, 0, this.cmd, 1, cmd.length);
