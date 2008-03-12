@@ -92,6 +92,15 @@
     <section id="news">
       <title>News</title>
 
+      <section id="news_2008-03-11">
+        <title>2008-03-11</title>
+        <p>
+          Eclim 1.3.5 is now available.<br/>
+          You can view the
+          <a href="changes.html#version_1.3.5">release notes</a> for more info.
+        </p>
+      </section>
+
       <section id="news_2008-02-05">
         <title>2008-02-05</title>
         <p>
@@ -100,7 +109,7 @@
           for eclipse installs with per user plugin locations, and adds php
           support.<br/>
           You can view the
-          <a href="changes.html#version_1.3.2">release notes</a> for more info.
+          <a href="changes.html#version_1.3.4">release notes</a> for more info.
         </p>
       </section>
 
@@ -164,6 +173,7 @@
         </p>
       </section>
 
+      <!--
       <section id="news_2006-10-09">
         <title>2006-10-09</title>
         <p>
@@ -253,7 +263,6 @@
         </warning>
       </section>
 
-      <!--
       <section id="news_2006-05-07">
         <title>2006-05-07</title>
         <p>

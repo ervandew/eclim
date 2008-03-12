@@ -1,4 +1,13 @@
 HIGH {{{
+  - https://sourceforge.net/forum/message.php?msg_id=4818569
+
+  - javascript indent
+    var friendRequest = dataRequest.newFetchPeopleRequest(
+      opensocial.DataRequest.Group.VIEWER_FRIENDS, {
+        filter: opensocial.DataRequest.FilterType.HAS_APP
+      });
+      // this line indent one level too far
+
   - :ProjectCreateWizard  use input()
 
   - sql pretty print
@@ -161,7 +170,7 @@ TODO {{{
       http://code.google.com/apis/gdata/client-java.html
 
     - Add support for using a running eclipse gui as the eclimd server.
-      - add a menu item which starts up nailgun and spring.
+      - add a menu item which starts up nailgun.
         - ping first to see if one is running.
       - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
 
@@ -328,12 +337,12 @@ NOTES {{{
   Steps for new releases {{{
     Note: make sure to do a quick test with sh (dash) instead of bash
 
-    1) tag svn
+    1) create sourceforge release
+       - update windows and linux download pages with latest file to download.
+    2) update documentation website
+    3) tag svn
        $ svn cp https://eclim.svn.sourceforge.net/svnroot/eclim/trunk \
                 https://eclim.svn.sourceforge.net/svnroot/eclim/tags/<version>
-    2) create sourceforge release
-       - update windows and linux download pages with latest file to download.
-    3) update documentation website
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
 
@@ -342,7 +351,7 @@ NOTES {{{
   Troubleshooting {{{
 
     Update manager from command line:
-      http://help.eclipse.org/help32/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
+      http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
 
     Windows:
       - starting eclim without spawning seperate console
