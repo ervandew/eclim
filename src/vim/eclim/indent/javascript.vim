@@ -49,8 +49,24 @@ function! EclimGetJavascriptIndent (lnum)
     " current line indent to the same indent as the line starting that trio.
     if line =~ '^\s*' . trio[2]
       let col = col('.')
-      call cursor(0, 1)
-      let matchstart = searchpair(trio[0], '', trio[2], 'bnW', 'InCommentOrString()')
+      call cursor(0, col('$'))
+
+      while search(')\|}\|\]', 'bcW', line('.')) && col('.') != 1
+        let end = line[col('.') - 1]
+        let start = ''
+        for trio in b:indentTrios
+          if trio[2] == end
+            let start = trio[0]
+            break
+          endif
+        endfor
+        let matchstart = searchpair(start, '', end, 'bnW', 'InCommentOrString()')
+        if matchstart > 0 && matchstart < line('.')
+          break
+        endif
+        call cursor(0, col('.') - 1)
+      endwhile
+
       call cursor(0, col)
 
       if matchstart > 0
@@ -82,7 +98,7 @@ function! JavascriptIndentAnythingSettings ()
   let b:commentRE      = 'javaScript\(Line\)\?Comment'
   let b:lineCommentRE  = 'javaScriptLineComment'
   let b:blockCommentRE = 'javaScriptComment'
-  let b:stringRE            = 'javaScriptString\(S\|D\)'
+  let b:stringRE            = 'javaScript\(String\(S\|D\)\|RegexpString\|Special\)'
   let b:singleQuoteStringRE = 'javaScriptStringS'
   let b:doubleQuoteStringRE = 'javaScriptStringD'
 
