@@ -45,7 +45,20 @@ endfunction " }}}
 " GetFilePath(file) {{{
 " Gets the vcs root relative path of the supplied file.
 function eclim#project#trac#GetFilePath (file)
-  let path = eclim#vcs#util#GetFilePath(a:file)
+  let file = a:file != '' ? a:file : expand('%')
+  let dir = fnamemodify(file, ':h')
+  let cwd = getcwd()
+  exec 'lcd ' . dir
+  try
+    let GetViewvcPath = eclim#vcs#util#GetVcsFunction('GetViewvcPath')
+    if type(GetViewvcPath) != 2
+      return
+    endif
+    let path = GetViewvcPath()
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
   if path == ''
     call eclim#util#EchoError('Current file is not under cvs or svn version control.')
     return
@@ -61,7 +74,7 @@ function eclim#project#trac#Log (file)
     return
   endif
 
-  call eclim#web#OpenUrl(url . '/log/' . path . '?verbose=on')
+  call eclim#web#OpenUrl(url . '/log' . path . '?verbose=on')
 endfunction " }}}
 
 " ChangeSet(revision) {{{
@@ -133,7 +146,7 @@ function eclim#project#trac#Annotate (revision)
     let revision = eclim#vcs#util#GetRevision()
   endif
 
-  call eclim#web#OpenUrl(url . '/' . path . '?annotate=1&rev=' . revision)
+  call eclim#web#OpenUrl(url . path . '?annotate=1&rev=' . revision)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
