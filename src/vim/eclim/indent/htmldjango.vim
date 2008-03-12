@@ -47,7 +47,6 @@ endfor
 
 " HtmlDjangoIndentAnythingSettings() {{{
 function! HtmlDjangoIndentAnythingSettings ()
-  echom 'HtmlIndentAnythingSettings (django)'
   if exists('*HtmlSettings')
     call HtmlIndentAnythingSettings()
   endif
