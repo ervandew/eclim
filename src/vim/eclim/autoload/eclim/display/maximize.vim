@@ -25,7 +25,7 @@
 " Global Variables {{{
   if !exists('g:MaximizeExcludes')
     let g:MaximizeExcludes =
-      \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\)'
+      \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)'
   endif
   if !exists('g:MaximizeMinWinHeight')
     let g:MaximizeMinWinHeight = 0
