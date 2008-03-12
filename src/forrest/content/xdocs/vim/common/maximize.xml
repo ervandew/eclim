@@ -82,7 +82,7 @@
         <li>
           <anchor id="MaximizeExcludes"/>
           <strong>g:MaximizeExcludes</strong>
-          (Default: '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|^\[.*\]$\)' )
+          (Default: '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
           <br/>
           Regular expression used to match window buffer names to exclude from
           minimizing.
