@@ -126,7 +126,6 @@ endfunction
 "
 function! InCommentOrString()
     let syn = synIDattr(synID(line("."), col("."), 1), "name")
-    echom 'synname = ' . syn
     if syn =~ b:commentRE || syn =~ b:stringRE
         return 1
     endif
