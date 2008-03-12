@@ -80,6 +80,7 @@ function eclim#tree#TreePanes ()
   call eclim#tree#TreeHome()
   vertical new
   call eclim#tree#TreeHome()
+  1winc w
 endfunction " }}}
 
 " Tree(name, roots, aliases, expand, filters) {{{
@@ -581,6 +582,7 @@ function eclim#tree#Refresh ()
   let indent = eclim#tree#GetChildIndent(start)
   let lnum = line('.')
   for entry in contents
+    let entry = substitute(entry, '\*$', '', '')
     if eclim#tree#GetPath() != entry
       if s:MatchesFilter(entry)
         let rewrote = s:RewriteSpecial(entry)
