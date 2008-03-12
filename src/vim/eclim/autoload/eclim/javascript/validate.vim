@@ -59,7 +59,7 @@ function! eclim#javascript#validate#Validate (on_save)
       let command .= ' -conf "' . conf . '"'
     endif
     let result = eclim#util#System(command)
-    if v:shell_error == 2 || v:shell_error == 4
+    if v:shell_error == 2 "|| v:shell_error == 4
       call eclim#util#EchoError('Error running command: ' . command)
       return
     endif
