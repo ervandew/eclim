@@ -111,7 +111,11 @@
     </path>
     <property name="plugins" refid="plugin.dirs"/>
     <propertyregex property="plugins" override="true"
-        input="${plugins}" regexp="/*?[a-zA-Z0-9-]*?/" replace=""/>
+        input="${plugins}" regexp="\\" replace="/"/>
+    <propertyregex property="plugins" override="true"
+        input="${plugins}" regexp="([A-Z]:)?/*?[a-zA-Z0-9- ]*?/" replace=""/>
+    <propertyregex property="plugins" override="true"
+        input="${plugins}" regexp=";" replace=":"/>
 
     <!-- build non-core plugins -->
     <foreach list="${plugins}" target="plugin" delimiter=":"
@@ -213,9 +217,11 @@
         </path>
         <property name="lib.jars" refid="lib.jars"/>
         <propertyregex property="lib.jars" override="true"
-            input="${lib.jars}" regexp=":" replace=","/>
+            input="${lib.jars}" regexp="\\" replace="/"/>
         <propertyregex property="lib.jars" override="true"
-            input="${lib.jars}" regexp="/.*?/lib/" replace="lib/"/>
+            input="${lib.jars}" regexp="([A-Z]:)?/.*?/lib/" replace="lib/"/>
+        <propertyregex property="lib.jars" override="true"
+            input="${lib.jars}" regexp="(:|;)" replace=","/>
 
         <replace dir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
             includes="META-INF/MANIFEST.MF">
@@ -232,6 +238,9 @@
           <replacevalue>,
   lib</replacevalue>
         </replace>
+
+        <fixcrlf srcdir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
+            includes="META-INF/MANIFEST.MF" eol="unix"/>
       </then>
     </if>
   </target>
@@ -241,8 +250,6 @@
     -->
   <target name="clean" description="Deletes the build directory.">
     <delete dir="build"/>
-    <!--delete>
-    </delete-->
   </target>
 
 </project>
