@@ -36,19 +36,21 @@ function! eclim#eclipse#GetWorkspaceDir ()
   if !exists('g:EclimWorkspace')
     let result = ''
 
-    if filereadable(s:ide_prefs)
+    if result == ''
+      let result = eclim#ExecuteEclim(s:command_workspace_dir)
+      if result == '0'
+        let result = ''
+      endif
+    endif
+
+    " fall back to file based discovery
+    if result == '' && filereadable(s:ide_prefs)
       let lines = readfile(s:ide_prefs)
       call filter(lines, 'v:val =~ "^\s*RECENT_WORKSPACES\s*="')
       if len(lines) == 1
         let result = substitute(lines[0], '.\{-}=\s*\(.\{-}\)\(\s*,\|$\)', '\1', '')
-      endif
-    endif
-
-    " fall back to asking eclipse
-    if result == ''
-      let result = eclim#ExecuteEclim(s:command_workspace_dir)
-      if result == '0'
-        return ''
+        " unescape the escaped dir name in windows
+        exec 'let result = "' . result . '"'
       endif
     endif
 
