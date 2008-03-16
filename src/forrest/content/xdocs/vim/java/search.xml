@@ -261,6 +261,7 @@
           <ul>
             <li>'split' - open the result in a new window via "split".</li>
             <li>'edit' - open the result in the current window.</li>
+            <li>'tabnew' - open the result in a new tab.</li>
             <li>'lopen' - open the location list to display the result.</li>
           </ul>
         </li>
