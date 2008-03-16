@@ -390,18 +390,17 @@ endfunction
 " EV ADDED
 " Function which determines if there are equal number of opening and closing
 " patterns on the supplied line.
-function! s:EqualPairs(Line, Head, Tail)
-    let pattern = a:Head . '\(.\(' . a:Head . '\)\@!\)\{-}' . a:Tail
-    if a:Line =~ pattern
-        let line = substitute(a:Line, pattern, '', '')
-        return s:EqualPairs(line, a:Head, a:Tail)
-    elseif a:Line =~ a:Head
-        return 0
-    elseif a:Line =~ a:Tail
-        return 0
-    endif
-
-    return 1
+function! s:EqualPairs(Line, LNum, Head, Tail)
+    let lnum = line('.')
+    let cnum = col('.')
+    call cursor(a:LNum, 1)
+    try
+        let head_matches = search('\(' . a:Head . '\)', 'ncp', a:LNum)
+        let tail_matches = search('\(' . a:Tail . '\)', 'ncp', a:LNum)
+        return head_matches == tail_matches
+    finally
+        call cursor(lnum, cnum)
+    endtry
 endfunction
 
 "
@@ -427,7 +426,7 @@ function! s:GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
     if a:LastLine =~ a:Head
         while 1
             " EV ADDED
-            if s:EqualPairs(a:LastLine, a:Head, a:Tail)
+            if s:EqualPairs(a:LastLine, a:LastLNum, a:Head, a:Tail)
                 break
             endif
             " END EV ADDED
