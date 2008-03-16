@@ -154,7 +154,7 @@ function! <SID>XmlIndentAttributeWrap (lnum)
         endif
 
         " line after last continuation line
-        if close != 0 && a:lnum == close + 1
+        if close == prevnonblank(a:lnum)
           " inner content
           return -1
         endif
