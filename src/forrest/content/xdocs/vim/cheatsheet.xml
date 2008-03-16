@@ -700,13 +700,7 @@
       </li>
       <li>
         <a href="common/vcs.html#VcsAnnotate"><strong>:VcsAnnotate</strong></a> -
-        Annotates the currently versioned file using vim signs.
-      </li>
-      <li>
-        <a href="common/vcs.html#VcsAnnotateOff">
-          <strong>:VcsAnnotateOff</strong>
-        </a> -
-        Turns off any current annotations.
+        Toggles annotation of the currently versioned file using vim signs.
       </li>
       <li>
         <a href="common/vcs.html#VcsInfo">

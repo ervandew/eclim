@@ -72,18 +72,14 @@
       <li>
         <anchor id="VcsAnnotate"/>
         <strong>:VcsAnnotate</strong> -
-        This command will run the corresponding 'cvs annotate' or 'svn annotate'
-        and annotate the current file via vim's sign support.  Due to vim
-        limiting sign text to a maximum of two characters, the sign text will be
-        the first two characters of the username.  This command will also create
-        a CursorHold event which will echo the version number and full author
-        name for the current annotated line.
-      </li>
-      <li>
-        <anchor id="VcsAnnotateOff"/>
-        <strong>:VcsAnnotateOff</strong> -
-        Turns any current annotations off by removing all vim signs and
-        disabling the CursorHold event.
+        This command will run annotate / blame and visually annotate the current
+        file via vim's sign support.  Due to vim limiting sign text to a maximum
+        of two characters, the sign text will be the first two characters of the
+        username.  This command will also create a CursorHold event which will
+        echo the version number and full author name for the current annotated
+        line.<br/>
+        Running this command on an already annotated file removes all
+        annotations and disables the CursorHold event.
       </li>
       <li>
         <anchor id="VcsInfo"/>

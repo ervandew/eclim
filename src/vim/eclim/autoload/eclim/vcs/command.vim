@@ -32,6 +32,11 @@ runtime autoload/eclim/vcs/util.vim
 
 " Annotate([revision]) {{{
 function! eclim#vcs#command#Annotate (...)
+  if exists('b:vcs_annotations')
+    call s:AnnotateOff()
+    return
+  endif
+
   let path = exists('b:vcs_props') ? b:vcs_props.path : expand('%:p')
   let revision = len(a:000) > 0 ? a:000[0] : ''
   let key = 'annotate_' . path . '_' . revision
@@ -59,28 +64,6 @@ function! eclim#vcs#command#Annotate (...)
   endif
 
   call s:ApplyAnnotations(annotations)
-endfunction " }}}
-
-" AnnotateOff() {{{
-function! eclim#vcs#command#AnnotateOff ()
-  if exists('b:vcs_annotations')
-    let defined = eclim#display#signs#GetDefined()
-    for annotation in b:vcs_annotations
-      let user = substitute(annotation, '^.*)\s\+\(.*\)', '\1', '')
-      if index(defined, user) != -1
-        let signs = eclim#display#signs#GetExisting(user)
-        for sign in signs
-          call eclim#display#signs#Unplace(sign.id)
-        endfor
-        call eclim#display#signs#Undefine(user)
-        call remove(defined, index(defined, user))
-      endif
-    endfor
-    unlet b:vcs_annotations
-  endif
-  augroup vcs_annotate
-    autocmd!
-  augroup END
 endfunction " }}}
 
 " ChangeSet(path, revision) {{{
@@ -385,6 +368,28 @@ function! s:AnnotateInfo ()
   if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
     call eclim#util#WideMessage('echo', b:vcs_annotations[line('.') - 1])
   endif
+endfunction " }}}
+
+" s:AnnotateOff() {{{
+function! s:AnnotateOff ()
+  if exists('b:vcs_annotations')
+    let defined = eclim#display#signs#GetDefined()
+    for annotation in b:vcs_annotations
+      let user = substitute(annotation, '^.*)\s\+\(.*\)', '\1', '')
+      if index(defined, user) != -1
+        let signs = eclim#display#signs#GetExisting(user)
+        for sign in signs
+          call eclim#display#signs#Unplace(sign.id)
+        endfor
+        call eclim#display#signs#Undefine(user)
+        call remove(defined, index(defined, user))
+      endif
+    endfor
+    unlet b:vcs_annotations
+  endif
+  augroup vcs_annotate
+    autocmd!
+  augroup END
 endfunction " }}}
 
 " s:FollowLink () {{{

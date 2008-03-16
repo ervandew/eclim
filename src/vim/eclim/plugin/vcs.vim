@@ -25,7 +25,6 @@
 " Command Declarations {{{
 if !exists(":VcsAnnotate")
   command VcsAnnotate :call eclim#vcs#command#Annotate()
-  command VcsAnnotateOff :call eclim#vcs#command#AnnotateOff()
 endif
 if !exists(":VcsLog")
   command VcsLog

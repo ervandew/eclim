@@ -504,12 +504,6 @@
   使用 vim 簽名對目前版本檔案作注釋。
       </li>
       <li>
-        <a href="common/vcs.html#VcsAnnotateOff">
-          <strong>:VcsAnnotateOff</strong>
-        </a> -
-        關閉所有的注釋。
-      </li>
-      <li>
         <a href="common/vcs.html#Viewvc"><strong>:Viewvc</strong></a> [檔案] -
   開啟指定檔案、目錄或目前緩衝內容(未指定)的 <a href="site:viewvc">ViewVc</a> 超連結。
       </li>
