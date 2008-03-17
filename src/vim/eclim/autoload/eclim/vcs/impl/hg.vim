@@ -105,6 +105,15 @@ function eclim#vcs#impl#hg#GetRoot ()
   return root
 endfunction " }}}
 
+" GetEditorFile() {{{
+function eclim#vcs#impl#hg#GetEditorFile ()
+  let line = getline('.')
+  if line =~ '^HG: changed .*'
+    return substitute(line, '^HG: changed\s\+\(.*\)\s*', '\1', '')
+  endif
+  return ''
+endfunction " }}}
+
 " ChangeSet(revision) {{{
 function eclim#vcs#impl#hg#ChangeSet (revision)
   let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision)

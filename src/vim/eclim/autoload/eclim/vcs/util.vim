@@ -41,9 +41,9 @@ function eclim#vcs#util#GetVcsFunction (func_name)
     runtime autoload/eclim/vcs/impl/svn.vim
     let type = 'svn'
   else
-    runtime autoload/eclim/vcs/impl/hg.vim
-    let dir = finddir('.hg', '.;')
+    let dir = finddir('.hg', getcwd() . ';')
     if dir != ''
+      runtime autoload/eclim/vcs/impl/hg.vim
       let type = 'hg'
     endif
   endif

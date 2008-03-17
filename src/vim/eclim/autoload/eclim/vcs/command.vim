@@ -146,6 +146,7 @@ function! eclim#vcs#command#Diff (path, revision)
   diffthis
 
   let b:filename = filename
+  let b:vcs_diff_temp = 1
   augroup vcs_diff
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)

@@ -154,6 +154,15 @@ function eclim#vcs#impl#svn#GetViewvcPath (...)
   return substitute(url_root.url, url_root.root, '', '')
 endfunction " }}}
 
+" GetEditorFile() {{{
+function eclim#vcs#impl#svn#GetEditorFile ()
+  let line = getline('.')
+  if line =~ '^M\s\+.*'
+    return substitute(line, '^M\s\+\(.*\)\s*', '\1', '')
+  endif
+  return ''
+endfunction " }}}
+
 " ChangeSet(revision) {{{
 function eclim#vcs#impl#svn#ChangeSet (revision)
   if exists('b:vcs_props') && has_key(b:vcs_props, 'svn_root_url')
