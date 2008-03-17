@@ -36,8 +36,8 @@ endif
 " Script Variables {{{
 let s:quote = "['\"]"
 let s:tag_regex =
-  \ '<vim:[a-zA-Z]\+\s\+[a-zA-Z]\+\s*=\s*' . s:quote . '.*' . s:quote . '\s*/>'
-let s:tagname_regex = '.*<vim:\([a-zA-Z]\+\)\s\+.*'
+  \ '<vim:[a-zA-Z]\+\(\s\+[a-zA-Z]\+\s*=\s*' . s:quote . '.*' . s:quote . '\)\?\s*/>'
+let s:tagname_regex = '.\{-}<vim:\([a-zA-Z]\+\).*'
 " }}}
 
 " Template() {{{
@@ -118,10 +118,11 @@ function! s:ExecuteTemplate ()
   let line = 1
   while line <= line('$')
     let currentLine = getline(line)
-    if currentLine =~ s:tag_regex
+    while currentLine =~ s:tag_regex
       let tag = substitute(currentLine, s:tagname_regex, '\1', '')
       let line = s:Process_{tag}(line)
-    endif
+      let currentLine = getline(line)
+    endwhile
     let line = line + 1
   endwhile
 endfunction " }}}
@@ -136,7 +137,7 @@ endfunction " }}}
 " Gets the an attribute value.
 function! s:GetAttribute (line, tag, attribute, fail)
   let attribute = substitute(a:line,
-    \ '.*<vim:' . a:tag . '.*\s\+' . a:attribute .
+    \ '.\{-}<vim:' . a:tag . '.\{-}\s\+' . a:attribute .
       \ '\s*=\s*\(' . s:quote . '\)\(.\{-}\)\1.*/>.*',
     \ '\2', '')
 
@@ -201,19 +202,7 @@ function! s:Process_out (line)
   let currentLine = getline(a:line)
   let value = s:GetAttribute(currentLine, 'out', 'value', 1)
   let result = s:EvaluateExpression(value)
-  let results = type(result) == 3 ? result : [result]
-
-  if results[0] == '' && currentLine =~ '^\s*<vim:out\s\+.\{-}\s*\/>\s*$'
-    let saved = @"
-    exec a:line . 'delete'
-    let @" = saved
-    return a:line - 1
-  endif
-
-  exec a:line . 'substitute/<vim:out\s\+.\{-}\s*\/>/' . escape(results[0], '/') . '/'
-  call append(a:line, results[1:])
-
-  return a:line
+  return s:Out(a:line, '<vim:out\s\+.\{-}\s*\/>', result)
 endfunction " }}}
 
 " s:Process_include(line) {{{
@@ -232,6 +221,31 @@ function! s:Process_include (line)
   let saved = @"
   silent exec a:line . "delete"
   let @" = saved
+
+  return a:line
+endfunction " }}}
+
+" s:Process_username(line) {{{
+" Process <vim:username/> tags.
+function! s:Process_username (line)
+  let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
+  return s:Out(a:line, '<vim:username\s*\/>', username)
+endfunction " }}}
+
+" s:Out(line, pattern, value) {{{
+function! s:Out (line, pattern, value)
+  let currentLine = getline(a:line)
+
+  let results = type(a:value) == 3 ? a:value : [a:value]
+  if results[0] == '' && currentLine =~ '^\s*' . a:pattern . '\s*$'
+    let saved = @"
+    exec a:line . 'delete'
+    let @" = saved
+    return a:line - 1
+  endif
+
+  exec a:line . 'substitute/' . a:pattern . '/' . escape(results[0], '/') . '/'
+  call append(a:line, results[1:])
 
   return a:line
 endfunction " }}}
