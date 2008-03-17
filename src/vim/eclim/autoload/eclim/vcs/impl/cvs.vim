@@ -109,6 +109,25 @@ function eclim#vcs#impl#cvs#GetRoot ()
   return root
 endfunction " }}}
 
+" GetEditorFile() {{{
+function eclim#vcs#impl#cvs#GetEditorFile ()
+  let line = getline('.')
+  if line =~ '^CVS:\s\+.*'
+    " FIXME: cvs will put more than one file on a line if they fit
+    let file = substitute(line, '^CVS:\s\+\(.\{-}\)\(\s.*\|$\)', '\1', '')
+
+    if col('.') > (len(file) + len(substitute(line, '^\(CVS:\s\+\).*', '\1', '')))
+      let file = substitute(
+        \ line, '^.*\s\+\(.*\%' . col('.') . 'c.\{-}\)\(\s.*\|$\)', '\1', '')
+    endif
+
+    if filereadable(file)
+      return file
+    endif
+  endif
+  return ''
+endfunction " }}}
+
 " Info() {{{
 " Retrieves and echos info on the current file.
 function eclim#vcs#impl#cvs#Info ()
