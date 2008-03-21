@@ -224,6 +224,20 @@
           Supports one of 'asc' or 'desc'.
         </p>
       </li>
+      <li>
+        <anchor id="Only"/>
+        <strong>:Only</strong> -
+        Alternative for vim's :only command.  The purpose of this command and
+        the original vim version is to close all but the current window.
+        Unfortunately there is no way to tell the vim version to exclude some
+        windows you may wish to keep open (taglist, quickfix, etc.).  The eclim
+        version provides that ability via the
+        <strong>g:EclimOnlyExclude</strong> variable.
+        <p>
+          <strong>g:EclimOnlyExclude</strong> (defaults to
+          '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
+        </p>
+      </li>
       <!--li>
       <anchor id="SwapTypedArguments"/>
       <strong>:SwapTypedArguments</strong> -

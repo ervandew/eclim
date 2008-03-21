@@ -920,7 +920,14 @@
           <strong>:Buffers</strong>
         </a> -
         Opens a temporary window with a list of all the currently listed
-        buffers allowing you to open any one.
+        buffers, allowing you to open or remove them.
+      </li>
+      <li>
+        <a href="common/util.html#Only">
+          <strong>:Only</strong>
+        </a> -
+        Closes all but the current window and any windows excluded by
+        <strong>g:EclimOnlyExclude</strong>.
       </li>
       <!--li>
         <a href="index.html#SwapTypedArguments">

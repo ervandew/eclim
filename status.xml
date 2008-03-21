@@ -269,7 +269,21 @@
 
   <changes>
     <release version="1.3.6" date="2008">
-      <action dev="ervandew" type="add" context="Vcs">
+      <action dev="ervandew" type="add" context="Bug Fixes">
+        Fixed possible issue on Windows determining workspace for users not
+        using the default location.
+      </action>
+
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Various bug fixes.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vim">
+        Added <a href="vim/common/util.html#Only"><strong>:Only</strong></a> as
+        a configurable alternative to vim's :only command.
+      </action>
+
+      <action dev="ervandew" type="update" context="Vcs">
         Removed <strong>:VcsAnnotateOff</strong> in favor of invoking
         <strong>:VcsAnnotate</strong> again to remove the annotations.
       </action>

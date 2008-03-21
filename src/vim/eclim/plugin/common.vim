@@ -61,6 +61,10 @@ if !exists(":Buffers")
   command Buffers :call eclim#common#buffers#Buffers()
 endif
 
+if !exists(":Only")
+  command Only :call eclim#common#buffers#Only()
+endif
+
 if !exists(":DiffLastSaved")
   command DiffLastSaved :call eclim#common#util#DiffLastSaved()
 endif

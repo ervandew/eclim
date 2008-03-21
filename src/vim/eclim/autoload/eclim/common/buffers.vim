@@ -31,6 +31,10 @@ endif
 if !exists('g:EclimBuffersDefaultAction')
   let g:EclimBuffersDefaultAction = 'split'
 endif
+if !exists('g:EclimOnlyExclude')
+  let g:EclimOnlyExclude =
+    \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)'
+endif
 " }}}
 
 " Buffers() {{{
@@ -102,6 +106,26 @@ function! eclim#common#buffers#BufferCompare (buffer1, buffer2)
     let compare = 0 - compare
   endif
   return compare
+endfunction " }}}
+
+" Only() {{{
+function! eclim#common#buffers#Only ()
+  let curwin = winnr()
+  let winnum = 1
+  while winnum <= winnr('$')
+    if winnum != curwin &&
+     \ getwinvar(winnum, '&ft') != 'qf' &&
+     \ bufname(winbufnr(winnum)) !~ g:EclimOnlyExclude
+      if winnum < curwin
+        let curwin -= 1
+      endif
+      exec winnum . 'winc w'
+      close
+      exec curwin . 'winc w'
+      continue
+    endif
+    let winnum += 1
+  endwhile
 endfunction " }}}
 
 " s:BufferDelete() {{{
