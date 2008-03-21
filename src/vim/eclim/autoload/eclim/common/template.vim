@@ -109,6 +109,11 @@ function! s:FindTemplate ()
     endwhile
   endif
 
+  " template equal to file type
+  if filereadable(templatesDir . '/' . &ft . g:EclimTemplateExtension)
+    return templatesDir . '/' . &ft . g:EclimTemplateExtension
+  endif
+
   return ''
 endfunction " }}}
 
