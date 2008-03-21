@@ -24,7 +24,7 @@
 
 " Command Declarations {{{
 if !exists(':DjangoFind')
-  command -buffer DjangoFind :call eclim#python#django#TemplateFind()
+  command -buffer DjangoFind :call eclim#python#django#find#TemplateFind()
 endif
 " }}}
 

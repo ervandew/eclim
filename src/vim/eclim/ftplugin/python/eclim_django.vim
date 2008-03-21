@@ -24,17 +24,17 @@
 
 " Command Declarations {{{
 if !exists(':DjangoTemplateOpen')
-  command -buffer DjangoTemplateOpen :call eclim#python#django#FindTemplate(
-    \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
+  command -buffer DjangoTemplateOpen :call eclim#python#django#find#FindTemplate(
+    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
 endif
 
 if !exists(':DjangoViewOpen')
-  command -buffer DjangoViewOpen :call eclim#python#django#FindView(
-    \ eclim#python#django#GetProjectPath(), eclim#util#GrabUri())
+  command -buffer DjangoViewOpen :call eclim#python#django#find#FindView(
+    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
 endif
 
 if !exists(':DjangoContextOpen')
-  command -buffer DjangoContextOpen :call eclim#python#django#ContextFind()
+  command -buffer DjangoContextOpen :call eclim#python#django#find#ContextFind()
 endif
 " }}}
 

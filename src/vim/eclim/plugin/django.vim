@@ -24,8 +24,8 @@
 
 " Command Declarations {{{
 if !exists(":DjangoManage")
-  command -nargs=+  -complete=customlist,eclim#python#django#CommandCompleteManage
-    \ DjangoManage :call eclim#python#django#Manage('<args>')
+  command -nargs=+  -complete=customlist,eclim#python#django#manage#CommandCompleteManage
+    \ DjangoManage :call eclim#python#django#manage#Manage('<args>')
 endif
 " }}}
 
