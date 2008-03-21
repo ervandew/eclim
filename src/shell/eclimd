@@ -28,7 +28,7 @@ fi
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 
 #${eclipse.home}
-if [ -x "$ECLIPSE_HOME" ]; then
+if [ -z "$ECLIPSE_HOME" ]; then
   ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
 fi
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME" $ECLIMD_OPTS"
