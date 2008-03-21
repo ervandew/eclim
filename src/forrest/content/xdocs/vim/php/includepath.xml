@@ -33,7 +33,7 @@
       pdt's .projectOptions to locate external php resource.  When you first
       create a project, a <code>.projectOptions</code> file is created in the
       project's root directory.  If your project depends on any php files
-      located outside your project or in another project, the you'll need to
+      located outside your project or in another project, then you'll need to
       edit your .projectOptions accordingly.
     </p>
     <p>
