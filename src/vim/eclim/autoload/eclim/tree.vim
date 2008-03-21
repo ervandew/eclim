@@ -784,7 +784,7 @@ function s:ListDir (dir)
   if s:has_ls
     let ls = 'ls -1F'
     if b:view_hidden
-      let ls .= 'a'
+      let ls .= 'A'
     elseif &wildignore != ''
       let ls .= ' ' . join(map(split(&wildignore, ','), '"-I \"" . v:val . "\""'))
     endif
