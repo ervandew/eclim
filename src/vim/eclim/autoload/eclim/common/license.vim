@@ -53,10 +53,10 @@ function! eclim#common#license#GetLicense ()
   return file
 endfunction " }}}
 
-" License (name, pre, post, mid) {{{
-" Retrieves the license given the supplied name and applies the specified
-" prefix and postfix as the lines before and after the license and uses 'mid'
-" as the prefix for every line.
+" License (pre, post, mid) {{{
+" Retrieves the license configured license and applies the specified prefix
+" and postfix as the lines before and after the license and uses 'mid' as the
+" prefix for every line.
 " Returns the license as a list of strings.
 function! eclim#common#license#License (pre, post, mid)
   let file = eclim#common#license#GetLicense()
