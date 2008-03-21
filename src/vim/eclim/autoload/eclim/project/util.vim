@@ -21,6 +21,16 @@
 "
 " }}}
 
+" Global Variables {{{
+  if !exists('g:EclimTodoSearchPattern')
+    let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
+  endif
+
+  if !exists('g:EclimTodoSearchExtensions')
+    let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+  endif
+" }}}
+
 " Script Variables {{{
   let s:command_create = '-command project_create -f "<folder>"'
   let s:command_create_name = ' -p "<name>"'
@@ -299,6 +309,46 @@ function! eclim#project#util#ProjectGrep (command, args)
 
   if numresults == 0
     call eclim#util#EchoInfo('No results found.')
+  endif
+endfunction " }}}
+
+" Todo() {{{
+" Show the todo tags of the curent file in the location list.
+function! eclim#project#util#Todo ()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let path = expand('%:p')
+  silent! exec 'lvimgrep /' . g:EclimTodoSearchPattern . '/gj ' . path
+  if !empty(getloclist(0))
+    lopen
+  else
+    call eclim#util#Echo('No Results found')
+  endif
+endfunction " }}}
+
+" ProjectTodo() {{{
+" Show the todo tags of the whole project in the location list.
+function! eclim#project#util#ProjectTodo ()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let path = eclim#project#util#GetCurrentProjectRoot()
+  if len(g:EclimTodoSearchExtensions) > 0
+    let paths = map(copy(g:EclimTodoSearchExtensions), 'path . "/**/*." . v:val')
+
+    silent! exec 'lvimgrep /' . g:EclimTodoSearchPattern . '/gj ' . paths[0]
+    for path in paths[1:]
+      silent! exec 'lvimgrepadd /' . g:EclimTodoSearchPattern . '/gj ' . path
+    endfor
+
+    if !empty(getloclist(0))
+      lopen
+    else
+      call eclim#util#Echo('No Results found')
+    endif
   endif
 endfunction " }}}
 

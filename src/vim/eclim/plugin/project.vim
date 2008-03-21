@@ -131,6 +131,13 @@ if !exists(":ProjectGrepAdd")
   command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
     \ ProjectLGrepAdd :call eclim#project#util#ProjectGrep('lvimgrepadd', <q-args>)
 endif
+
+if !exists(":Todo")
+  command -nargs=0 Todo :call eclim#project#util#Todo()
+endif
+if !exists(":ProjectTodo")
+  command -nargs=0 ProjectTodo :call eclim#project#util#ProjectTodo()
+endif
 " }}}
 
 " Menu Items {{{
