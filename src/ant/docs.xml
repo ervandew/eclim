@@ -13,7 +13,7 @@
     <javadoc packagenames="org.eclim" destdir="build/doc/api">
       <classpath refid="classpath"/>
       <fileset dir="src/java">
-        <include name="**/*.java"/>
+        <include name="org/ec*/**/*.java"/>
         <exclude name="**/pydev/**/*.java"/>
       </fileset>
     </javadoc>
