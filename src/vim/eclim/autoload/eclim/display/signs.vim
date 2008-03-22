@@ -179,9 +179,11 @@ function! eclim#display#signs#GetExisting (...)
   let existing = []
   for sign in split(signs, '\n')
     if sign =~ 'id='
-      let id = substitute(sign, '.*\sid=\(.\{-}\)\(\s.*\|$\)', '\1', '')
-      exec 'let line = ' . substitute(sign, '.*\sline=\(.\{-}\)\(\s.*\|$\)', '\1', '')
-      let name = substitute(sign, '.*\sname=\(.\{-}\)\(\s.*\|$\)', '\1', '')
+      " for multi language support, don't have have regex w/ english
+      " identifiers
+      let id = substitute(sign, '.\{-}=.\{-}=\(.\{-}\)\s.*', '\1', '')
+      exec 'let line = ' . substitute(sign, '.\{-}=\(.\{-}\)\s.*', '\1', '')
+      let name = substitute(sign, '.\{-}=.\{-}=.\{-}=\(.\{-}\)\s*$', '\1', '')
       call add(existing, {'id': id, 'line': line, 'name': name})
     endif
   endfor
