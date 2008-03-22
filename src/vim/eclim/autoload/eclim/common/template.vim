@@ -54,9 +54,7 @@ function! eclim#common#template#Template ()
   if template != ''
     silent exec "read " . template
     call cursor(1, 1)
-    let saved = @"
-    delete
-    let @" = saved
+    delete _
 
     call s:ExecuteTemplate()
   endif
@@ -172,9 +170,7 @@ function! s:Process_var (line)
 
   exec "let " . name . " = \"" .  s:EvaluateExpression(value) . "\""
 
-  let saved = @"
-  silent exec a:line . "delete"
-  let @" = saved
+  silent exec a:line . "delete _"
 
   return a:line - 1
 endfunction " }}}
@@ -194,9 +190,7 @@ function! s:Process_import (line)
   endif
 
   exec "source " . resource
-  let saved = @"
-  silent exec a:line . "delete"
-  let @" = saved
+  silent exec a:line . "delete _"
 
   return a:line - 1
 endfunction " }}}
@@ -223,9 +217,7 @@ function! s:Process_include (line)
 
   exec "read " . template
   call cursor(a:line, 1)
-  let saved = @"
-  silent exec a:line . "delete"
-  let @" = saved
+  silent exec a:line . "delete _"
 
   return a:line
 endfunction " }}}
@@ -243,9 +235,7 @@ function! s:Out (line, pattern, value)
 
   let results = type(a:value) == 3 ? a:value : [a:value]
   if results[0] == '' && currentLine =~ '^\s*' . a:pattern . '\s*$'
-    let saved = @"
-    exec a:line . 'delete'
-    let @" = saved
+    exec a:line . 'delete _'
     return a:line - 1
   endif
 

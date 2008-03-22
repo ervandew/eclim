@@ -52,9 +52,7 @@ function! eclim#common#archive#List ()
   if exists('g:EclimArchiveLayout') && g:EclimArchiveLayout == 'list'
     call eclim#common#archive#ListAll()
     let g:EclimArchiveLayout = 'list'
-    let saved = @"
-    1,1delete
-    let @" = saved
+    1,1delete _
   else
     call setline(1, root)
     call eclim#common#archive#ExpandDir()
@@ -111,9 +109,7 @@ function! eclim#common#archive#ReadFile ()
     "setlocal noreadonly
     "setlocal modifiable
     "silent! exec "read " . file
-    "let saved = @"
-    "1,1delete
-    "let @" = saved
+    "1,1delete _
 
     silent exec "doautocmd BufReadPre " . file
     silent exec "doautocmd BufReadPost " . file

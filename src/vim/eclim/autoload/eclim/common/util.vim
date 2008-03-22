@@ -29,9 +29,7 @@ function! eclim#common#util#DiffLastSaved ()
     let winnum = winnr()
     let filetype=&ft
     vertical botright new | r #
-    let saved = @"
-    1,1delete
-    let @" = saved
+    1,1delete _
 
     diffthis
     setlocal buftype=nofile

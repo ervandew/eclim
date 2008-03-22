@@ -620,13 +620,9 @@ function! eclim#util#RefreshFile ()
   "checktime
   "autocmd! FileChangedShell <buffer>
 
-  "let saved = @"
-
-  "1,$delete
+  "1,$delete _
   "silent exec "read " . expand('%:p')
-  "1delete
-
-  "let @" = saved
+  "1delete _
 
   silent write!
 endfunction " }}}
@@ -833,9 +829,7 @@ function! eclim#util#TempWindow (name, lines, ...)
   set noreadonly
   call append(1, a:lines)
   retab
-  let saved = @"
-  silent 1,1delete
-  let @" = saved
+  silent 1,1delete _
 
   if len(a:000) == 0 || a:000[0]
     setlocal nomodified
@@ -867,9 +861,7 @@ function! eclim#util#TempWindowClear (name)
     exec bufwinnr(name) . "winc w"
     setlocal modifiable
     setlocal noreadonly
-    let saved = @"
-    silent 1,$delete
-    let @" = saved
+    silent 1,$delete _
     exec curwinnr . "winc w"
   endif
 endfunction " }}}

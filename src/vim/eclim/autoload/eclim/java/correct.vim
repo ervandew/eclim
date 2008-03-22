@@ -116,11 +116,9 @@ function! eclim#java#correct#CorrectApply ()
       let line = line('.')
       let col = col('.')
 
-      let saved_reg = @"
-      1,$delete
+      1,$delete _
       call append(1, content)
-      1delete
-      let @" = saved_reg
+      1,1delete _
 
       call cursor(line, col)
       update

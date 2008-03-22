@@ -42,7 +42,7 @@ function! eclim#python#import#SortImports ()
   let saved = @"
 
   " remove unsorted imports from the file
-  silent exec import_data.start . ',' . import_data.end . 'delete'
+  silent exec import_data.start . ',' . import_data.end . 'delete _'
 
   let pre_packages = copy(s:significant_packages)
   let post_packages = copy(s:significant_packages)
@@ -137,17 +137,16 @@ function! eclim#python#import#CleanImports ()
     endif
   endfor
 
-  let saved = @"
   for name in remove
     call cursor(1, 1)
     call search('\<' . name . '\>', 'W', import_data.end)
     let import = getline('.')
     if import =~ '\<import\>\s\+' . name . '\>\s*$' ||
      \ import =~ '\<import\>\s\+.*as\s\+' . name . '\>\s*$'
-      exec line('.') . ',' . line('.') . 'delete'
+      exec line('.') . ',' . line('.') . 'delete _'
       " if deleting of import results in 2 blank lines, delete one of them
       if getline('.') =~ '^\s*$' && getline(line('.') - 1) =~ '^\s*$'
-        exec line('.') . ',' . line('.') . 'delete'
+        exec line('.') . ',' . line('.') . 'delete _'
       endif
     else
       if import =~ ',\s*\<' . name . '\>'
@@ -158,7 +157,6 @@ function! eclim#python#import#CleanImports ()
       call setline(line('.'), newimport)
     endif
   endfor
-  let @" = saved
 
   call cursor(line, col)
 endfunction " }}}

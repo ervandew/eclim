@@ -122,12 +122,10 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
     endwhile
   endif
 
-  call s:Editable()
+  setlocal noreadonly modifiable
 
   " delete empty first line.
-  let saved = @"
-  1,1delete
-  let @" = saved
+  1,1delete _
 
   setlocal ft=tree
   setlocal nowrap
@@ -136,8 +134,8 @@ function eclim#tree#Tree (name, roots, aliases, expand, filters)
   setlocal buftype=nofile
   setlocal bufhidden=delete
   setlocal foldtext=getline(v:foldstart)
+  setlocal nomodifiable
 
-  call s:Uneditable()
   call s:Mappings()
   call eclim#tree#Syntax()
 
@@ -478,8 +476,8 @@ function eclim#tree#SetRoot (path)
   endif
   let end = eclim#tree#GetLastChildPosition()
 
-  call s:Editable()
-  silent exec start . ',' . end . 'delete'
+  setlocal noreadonly modifiable
+  silent exec start . ',' . end . 'delete _'
 
   let line = line('.')
   if line == 1
@@ -489,16 +487,16 @@ function eclim#tree#SetRoot (path)
 
   " delete blank first line if any
   if getline(1) =~ '^$'
-    silent 1,1delete
+    silent 1,1delete _
   endif
   " delete blank last line if any
   if getline('$') =~ '^$'
-    silent exec line('$') . ',' . line('$') . 'delete'
+    silent exec line('$') . ',' . line('$') . 'delete _'
   endif
 
   call cursor(line + 1, 1)
   call eclim#tree#ExpandDir()
-  call s:Uneditable()
+  setlocal nomodifiable
 endfunction " }}}
 
 " Refresh() {{{
@@ -523,14 +521,14 @@ function eclim#tree#Refresh ()
   let start = line('.')
   let end = eclim#tree#GetLastChildPosition()
 
-  call s:Editable()
+  setlocal noreadonly modifiable
 
   " first check the node we are on
   if (!isdirectory(startpath) && !filereadable(startpath)) ||
       \ (getline('.') !~ s:root_regex && s:IsHidden(startpath))
-    silent exec start . ',' . end . 'delete'
+    silent exec start . ',' . end . 'delete _'
     if s:refresh_nesting == 0
-      call s:Uneditable()
+      setlocal nomodifiable
     endif
     return
   endif
@@ -566,7 +564,7 @@ function eclim#tree#Refresh ()
     " delete files, and dirs that do not exist, or are hidden.
     if (!isdirectory(path) && !filereadable(path)) || s:IsHidden(path)
       let last = eclim#tree#GetLastChildPosition()
-      silent exec lnum . ',' . last . 'delete'
+      silent exec lnum . ',' . last . 'delete _'
       let end -= (last - lnum) + 1
       continue
     endif
@@ -615,7 +613,7 @@ function eclim#tree#Refresh ()
   let s:refresh_nesting -= 1
 
   if s:refresh_nesting == 0
-    call s:Uneditable()
+    setlocal nomodifiable
     call eclim#util#Echo(' ')
     " return to marked position.
     call cursor(line("'Z"), col("`Z"))
@@ -713,10 +711,10 @@ function eclim#tree#WriteContents (dir, dirs, files)
   call s:UpdateLine(s:node_prefix . s:dir_closed_prefix,
     \ s:node_prefix . s:dir_opened_prefix)
 
-  call s:Editable()
+  setlocal noreadonly modifiable
   let content = dirs + files
   call append(line('.'), content)
-  call s:Uneditable()
+  setlocal nomodifiable
   return content
 endfunction " }}}
 
@@ -759,9 +757,9 @@ function s:CollapseDir ()
     return
   endif
 
-  call s:Editable()
-  silent exec start . ',' . end . 'delete'
-  call s:Uneditable()
+  setlocal noreadonly modifiable
+  silent exec start . ',' . end . 'delete _'
+  setlocal nomodifiable
 
   call cursor(lnum, cnum)
 endfunction " }}}
@@ -884,10 +882,10 @@ function s:UpdateLine (pattern, substitution)
   let line = getline(lnum)
   let line = substitute(line, a:pattern, a:substitution, '')
 
-  call s:Editable()
+  setlocal noreadonly modifiable
   call append(lnum, line)
-  silent exec lnum . ',' . lnum . 'delete'
-  call s:Uneditable()
+  silent exec lnum . ',' . lnum . 'delete _'
+  setlocal nomodifiable
 endfunction " }}}
 
 " DisplayActionChooser(file, actions) {{{
@@ -895,7 +893,7 @@ function s:DisplayActionChooser (file, actions)
   new
   exec "resize " . (len(a:actions) + 1)
 
-  call s:Editable()
+  setlocal noreadonly modifiable
   let b:actions = a:actions
   let b:file = a:file
   for action in a:actions
@@ -907,8 +905,8 @@ function s:DisplayActionChooser (file, actions)
   exec "hi link TreeAction " . g:TreeActionHighlight
   syntax match TreeAction /.*/
 
-  1,1delete
-  call s:Uneditable()
+  1,1delete _
+  setlocal nomodifiable
   setlocal noswapfile
   setlocal buftype=nofile
   setlocal bufhidden=delete
@@ -930,19 +928,6 @@ function eclim#tree#ActionExecute ()
   call eclim#tree#ExecuteAction(file, command)
 
 endfunction "}}}
-
-" Editable() {{{
-function s:Editable ()
-  let b:saved = @"
-  setlocal noreadonly
-  setlocal modifiable
-endfunction " }}}
-
-" Uneditable() {{{
-function s:Uneditable ()
-  setlocal nomodifiable
-  let @" = b:saved
-endfunction " }}}
 
 " Mappings() {{{
 function s:Mappings ()

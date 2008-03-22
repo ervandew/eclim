@@ -295,9 +295,7 @@ function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
 
   setlocal noreadonly
   setlocal modifiable
-  let saved = @"
-  silent 1,$delete
-  let @" = saved
+  silent 1,$delete _
 
   let b:vcs_props = copy(props)
   let b:vcs_props.view = 'cat'

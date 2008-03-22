@@ -46,11 +46,9 @@ function! eclim#xml#format#Format ()
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'
-    let saved = @"
-    silent! 1,$delete
+    silent! 1,$delete _
     call append(1, split(result, '\n'))
-    silent! 1,1delete
-    let @" = saved
+    silent! 1,1delete _
   endif
 endfunction " }}}
 

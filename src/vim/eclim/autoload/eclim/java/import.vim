@@ -135,14 +135,13 @@ function! eclim#java#import#SortImports ()
   endif
 
   " create list of the imports
-  let saved = @"
+  let save = @"
   silent exec firstImport . "," . lastImport . "delete"
   let imports = split(@", '\n')
   let prevLength = len(imports)
   call filter(imports, 'v:val !~ "^\s*$"')
   let line = line - (prevLength - len(imports))
   let markLine = markLine - (prevLength - len(imports))
-  let @" = saved
 
   " sort the imports and put them back in the file
   call sort(imports)
@@ -154,12 +153,11 @@ function! eclim#java#import#SortImports ()
   call cursor(line('$'),1)
   let lastJava = search('^\s*import\s\+java[x]\?\..*;', 'bW')
   if firstJava != 0
-    let save = @"
     silent exec firstJava . ',' . lastJava . 'delete'
     call cursor(firstImport, 1)
     silent put!
-    let @" = save
   endif
+  let @" = save
 
   " separate imports by package name
   call cursor(firstImport, 1)
@@ -202,18 +200,17 @@ function! eclim#java#import#CleanImports ()
       return
     endif
 
-    let saved = @"
     " save mark
     let markLine = eclim#util#MarkSave()
 
     for result in results
       let importLine = search('^\s*import\s\+' . result . '\s*;\s*$', 'nw')
       if importLine > 0
-        silent exec importLine . ',' . importLine . 'delete'
+        silent exec importLine . ',' . importLine . 'delete _'
         let markLine = markLine - 1
         let line = line - 1
         if getline(importLine) =~ '^\s*$' && getline(importLine - 1) =~ '^\s*$'
-          silent exec importLine . ',' . importLine . 'delete'
+          silent exec importLine . ',' . importLine . 'delete _'
           let mark = markLine - 1
           let line = line - 1
         endif
@@ -221,7 +218,6 @@ function! eclim#java#import#CleanImports ()
     endfor
 
     " restore saved values
-    let @" = saved
     call eclim#util#MarkRestore(markLine)
     call cursor(line, col)
 

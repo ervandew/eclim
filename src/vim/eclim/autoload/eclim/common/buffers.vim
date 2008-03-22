@@ -133,13 +133,11 @@ function! s:BufferDelete ()
   let line = line('.')
   let index = line - 1
   exec 'bd ' . b:eclim_buffers[index].bufnr
-  let save = @"
   setlocal modifiable
   setlocal noreadonly
-  exec line . ',' . line . 'delete'
+  exec line . ',' . line . 'delete _'
   setlocal nomodifiable
   setlocal readonly
-  let @" = save
   call remove(b:eclim_buffers, index)
 endfunction " }}}
 

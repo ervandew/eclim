@@ -195,9 +195,7 @@ endfunction " }}}
 " Add the test content to the current regex test file.
 function! s:AddTestContent ()
   call append(1, s:test_content)
-  let saved = @"
-  1,1delete
-  let @" = saved
+  1,1delete _
 
   "augroup eclim_regex
   "  autocmd!

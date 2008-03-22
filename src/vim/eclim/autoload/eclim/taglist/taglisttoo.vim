@@ -610,19 +610,15 @@ function! s:Window (types, tags, content)
     nnoremap <silent> <buffer> <cr> :call <SID>JumpToTag()<cr>
   endif
 
-  let saved = @"
-
   let clnum = line('.')
   let ccnum = line('.')
   setlocal modifiable
-  silent 1,$delete
+  silent 1,$delete _
   call append(1, a:content[1])
   silent retab
-  silent 1,1delete
+  silent 1,1delete _
   setlocal nomodifiable
   call cursor(clnum, ccnum)
-
-  let @" = saved
 
   silent! syn clear TagListKeyword
   for value in values(a:types)
