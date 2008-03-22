@@ -210,7 +210,7 @@ function! eclim#display#signs#HasExisting (...)
       if len(a:000) == 0
         return 1
       endif
-      let name = substitute(sign, '.*\sname=\(.\{-}\)\(\s.*\|$\)', '\1', '')
+      let name = substitute(sign, '.\{-}=.\{-}=.\{-}=\(.\{-}\)\s*$', '\1', '')
       if name == a:000[0]
         return 1
       endif
