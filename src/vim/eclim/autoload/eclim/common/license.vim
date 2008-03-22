@@ -21,12 +21,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists("g:Author")
-  let g:Author = ''
-endif
-" }}}
-
 " Script Variables {{{
   let s:year = exists('*strftime') ? strftime('%Y') : '2008'
 " }}}
@@ -78,7 +72,16 @@ function! eclim#common#license#License (pre, post, mid)
   endif
 
   call map(contents, "substitute(v:val, '${year}', s:year, 'g')")
-  call map(contents, "substitute(v:val, '${author}', g:Author, 'g')")
+
+  let author = eclim#project#util#GetProjectSetting('org.eclim.user.name')
+  if author != '0' && author != ''
+    call map(contents, "substitute(v:val, '${author}', author, 'g')")
+  endif
+
+  let email = eclim#project#util#GetProjectSetting('org.eclim.user.email')
+  if email != '0' && email != ''
+    call map(contents, "substitute(v:val, '${email}', email, 'g')")
+  endif
   call map(contents, "substitute(v:val, '\\s\\+$', '', '')")
 
   return contents
