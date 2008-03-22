@@ -131,6 +131,17 @@
         user defined tags.
       </p>
 
+      <p><strong>End Tag Completion</strong></p>
+      <p>
+        Using the
+        <a href="#HtmlDjangoUserBodyElements">
+          <strong>g:HtmlDjangoUserBodyElements</strong>
+        </a>
+        setting along with the pre-configured default list of body elements,
+        eclim includes support for auto completion of ending template tags when
+        you type a '%' preceded by a '{':
+      </p>
+
       <anchor id="DjangoFind"/>
       <p><strong>Contextual Find</strong></p>
       <p>
@@ -214,7 +225,8 @@
               \ ]
           </source>
           This setting is used for indentation of the custom tag's body, as well
-          as arguments for proper matchit support, and syntax highlighting.
+          as arguments for proper matchit support, end tag completion, and
+          syntax highlighting.
         </li>
         <li>
           <anchor id="HtmlDjangoUserTags"/>
@@ -228,6 +240,11 @@
           <strong>g:HtmlDjangoUserFilters</strong><br/>
           This settings contains a list of any user defined django filters.  It
           is currently used for syntax highlighting.
+        </li>
+        <li>
+          <anchor id="HtmlDjangoCompleteEndTag"/>
+          <strong>g:HtmlDjangoCompleteEndTag</strong>(Default: 1)<br/>
+          When set to 0, disables the auto completion of end tags.
         </li>
         <li>
           <anchor id="EclimDjangoStaticPaths"/>

@@ -283,9 +283,20 @@
         a configurable alternative to vim's :only command.
       </action>
 
+      <action dev="ervandew" type="add" context="Django">
+        Added <a href="vim/python/django.html#template">end tag completion</a>
+        support for django templates.
+      </action>
+
       <action dev="ervandew" type="update" context="Vcs">
         Removed <strong>:VcsAnnotateOff</strong> in favor of invoking
         <strong>:VcsAnnotate</strong> again to remove the annotations.
+      </action>
+
+      <action dev="ervandew" type="add" context="Vcs">
+        Added <a href="vim/common/vcs.html#editor">vcs editor</a> plugin which
+        allows you to view diff of a file by hitting &lt;enter&gt; on a file name
+        in the cvs, svn, or hg commit editor.
       </action>
     </release>
 
