@@ -26,8 +26,8 @@ runtime indent/html.vim
 runtime ftplugin/html/eclim.vim
 
 " Global Variables {{{
-if !exists('g:EclimDjangoTemplateCompleteEndTag')
-  let g:EclimDjangoTemplateCompleteEndTag = 1
+if !exists('g:HtmlDjangoCompleteEndTag')
+  let g:HtmlDjangoCompleteEndTag = 1
 endif
 if !exists('g:HtmlDjangoUserBodyElements')
   let g:HtmlDjangoUserBodyElements = []
@@ -35,7 +35,7 @@ endif
 " }}}
 
 " Mappings {{{
-if g:EclimDjangoTemplateCompleteEndTag
+if g:HtmlDjangoCompleteEndTag
   imap <buffer> <silent> % <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
 endif
 " }}}
