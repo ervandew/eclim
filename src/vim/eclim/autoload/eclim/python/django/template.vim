@@ -28,7 +28,7 @@ let s:endtag = '{%\s*end\w\+\s*%}'
 
 let s:body_tags = {}
 for elements in g:HtmlDjangoBodyElements
-  let s:body_tags[elements[0]] = elements[-1]
+  let s:body_tags[elements[0]] = elements[1:]
 endfor
 " }}}
 
@@ -37,13 +37,17 @@ endfor
 " Ex. imap <silent> % <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
 function eclim#python#django#template#CompleteEndTag ()
   let line = getline('.')
-  if line[col('.') - 2] == '{' && line !~ '\%' . col('.') . 'c\s*\w\+\s*%}'
+  if line =~ '.*{%\s*\%' . col('.') . 'c\(\s\|$\)'
     let tag = s:GetStartTag(line('.'))
-    if tag != ''
-      return '% ' . tag . ' %}'
+    echom 'result = ' . string(tag)
+    if len(tag) == 1
+      return tag[0] . ' %}'
+    elseif len(tag) > 1
+      call complete(col('.'), tag)
+      return ''
     endif
   endif
-  return '%'
+  return 'e'
 endfunction " }}}
 
 " s:GetStartTag(line) {{{
@@ -65,7 +69,7 @@ function s:GetStartTag (line)
         " see if the tag has a matching close tag
         let pos = searchpairpos(
           \ '{%\s*' . tag[0] . '\s*\([^}]\+\)\?\s*%}', '',
-          \ '{%\s*' . tag[1], 'nW')
+          \ '{%\s*' . tag[1][-1], 'nW')
           "\ '{%\s*' . tag[1] . '\s*%}', 'nW')
         if !pos[0] || pos[0] > a:line
           return tag[1]

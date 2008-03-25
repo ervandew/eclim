@@ -139,7 +139,7 @@
         </a>
         setting along with the pre-configured default list of body elements,
         eclim includes support for auto completion of ending template tags when
-        you type a '%' preceded by a '{':
+        you type an '{%e' or '{% e':
       </p>
 
       <anchor id="DjangoFind"/>

@@ -36,7 +36,7 @@ endif
 
 " Mappings {{{
 if g:HtmlDjangoCompleteEndTag
-  imap <buffer> <silent> % <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
+  imap <buffer> <silent> e <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
 endif
 " }}}
 
