@@ -1,16 +1,16 @@
 HIGH {{{
-  - https://sourceforge.net/forum/message.php?msg_id=4818569
+  - update license on sourceforge project page and freshmeat.
 
-  - javascript indent
-    var friendRequest = dataRequest.newFetchPeopleRequest(
-      opensocial.DataRequest.Group.VIEWER_FRIENDS, {
-        filter: opensocial.DataRequest.FilterType.HAS_APP
-      });
-      // this line indent one level too far
+  - Ubuntu and apt-get installed eclipse
+    https://sourceforge.net/forum/forum.php?thread_id=1961391&forum_id=487811
 
-  - :ProjectCreateWizard  use input()
+  - document :Todo, :ProjectTodo
 
-  - sql pretty print
+  - more installer requirements validation on linux
+    - gcc
+    - libc-dev (https://sourceforge.net/forum/message.php?msg_id=4837065)
+
+  - :ProjectCreateWizard - use input()
 
   - integrate w/ eclipse build/run system for at least simple programs.
 
@@ -34,10 +34,6 @@ HIGH {{{
     - maybe let the eclim server side manage this via a TimerTask.
       - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
 
-  - php support waiting on:
-    https://bugs.eclipse.org/bugs/show_bug.cgi?id=204977
-    https://bugs.eclipse.org/bugs/show_bug.cgi?id=205243 <-- duplicate of 204977
-
   - get working under cygwin
     if has('win32unix')
     - eclim command
@@ -54,6 +50,10 @@ TODO {{{
   Bugs {{{
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
+
+      <!DOCTYPE project [
+        <!ENTITY userlist SYSTEM "file:include/cvs-user-list.xml">
+      ]>
   }}}
 
   Tests {{{
@@ -127,6 +127,7 @@ TODO {{{
       :TracChangeSet
       :TracDiff
       :Buffers
+      :Only
   }}}
 
   Common {{{
@@ -197,6 +198,24 @@ TODO {{{
       header file included in the current source file.
   }}}
 
+  Css {{{
+    - for css validation, attempt to provide messages for errors that the validator does not.
+      - FIRST, try checking out latest css validation code and see if they have any messages.
+      - * ie hacks.
+        - ignore error immediately following this error report (if not another valid error).
+      - missing closing }
+      - font: 100%;
+      - trailing , on list of selectors
+  }}}
+
+  Html {{{
+    - look into using jericho instead of tidy as the html validator.
+
+    - add support for validation via the w3c online validator
+      (be sure to support configuration of the url to post to for local installs)
+      http://validator.w3.org/docs/install.html
+  }}}
+
   Java {{{
     - :JavaHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
@@ -241,6 +260,22 @@ TODO {{{
       - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
   }}}
 
+  Javascript {{{
+    - :JavascriptRegex (maybe use rhino or see if eclipse has something)
+    - javascript code completion
+
+    - javascript doc lookup for common libraries
+      - :JavascriptDocSearch
+      - yui
+        http://developer.yahoo.com/yui/docs/YAHOO.widget.Dialog.html#configButtons
+      - prototype
+      - jquery
+      - JsDoc generated docs
+        http://code.google.com/apis/opensocial/docs/0.7/reference/gadgets.views.html
+      ...
+      http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference
+  }}}
+
   Jdbc {{{
     - Create connection profiles
       - eclim_jdbc_profile_<name> (where to store these settings? ... .eclim/jdbc/<name>.properties)
@@ -256,12 +291,22 @@ TODO {{{
     - Support tree with database metadata
   }}}
 
-  Jst {{{
+  Jsp {{{
     jsp
       - <%%>, <%=%> code completion
       - <%@ page import="javax." %> completion
       - <jsp: completion, with attribute name completion
       - taglib completion (<core:<c-x><c-u>), including attribute name completion
+  }}}
+
+  Perl {{{
+    - add :PerlRegex
+
+    - static validation
+      Perl::Critic
+      http://search.cpan.org/~elliotjs/Perl-Critic-1.082/lib/Perl/Critic.pm
+
+    - doc search on cpan
   }}}
 
   Php {{{
@@ -270,69 +315,25 @@ TODO {{{
   }}}
 
   Python {{{
-
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
 
     - refactoring: http://rope.sourceforge.net/
       - this lib includes auto-completion and find definition!!!
-
   }}}
 
   SQL {{{
+    - sql pretty print
 
     - antlr grammers for sql dialects (mysql, postgreql, oracle)
       - http://www.antlr.org/grammar/list contains a couple oracle pl/sql
         grammers and an ansi sql grammer
-
-  }}}
-
-  Wst {{{
-    - :JavascriptRegex (maybe use rhino or see if eclipse has something)
-
-    - for css validation, attempt to provide messages for errors that the validator does not.
-      - FIRST, try checking out latest css validation code and see if they have any messages.
-      - * ie hacks.
-        - ignore error immediately following this error report (if not another valid error).
-      - missing closing }
-      - font: 100%;
-      - trailing , on list of selectors
-
-    - look into using jericho instead of tidy as the html validator.
-
-    - add support for validation via the w3c online validator
-      (be sure to support configuration of the url to post to for local installs)
-      http://validator.w3.org/docs/install.html
-
-    - javascript code completion
-
-    - javascript doc lookup for common libraries
-      - :JavascriptDocSearch
-      - yui
-        http://developer.yahoo.com/yui/docs/YAHOO.widget.Dialog.html#configButtons
-      - prototype
-      - jquery
-      ...
-      http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference
-
   }}}
 
 }}}
 
 NOTES {{{
-
-  Adding a new plugin {{{
-
-    Installer:
-      install.properties: add the following keys
-        - featureList.<plugin>
-        - featureList.<plugin>.html
-      dependencies.properties: add feature dependencies
-      EclipsePluginStep: add feature to FeatureNameComparator
-      excludes: add <plugin>.excludes file
-
-  }}}
 
   Steps for new releases {{{
     Note: make sure to do a quick test with sh (dash) instead of bash
@@ -345,7 +346,16 @@ NOTES {{{
                 https://eclim.svn.sourceforge.net/svnroot/eclim/tags/<version>
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
+  }}}
 
+  Adding a new plugin {{{
+    Installer:
+      install.properties: add the following keys
+        - featureList.<plugin>
+        - featureList.<plugin>.html
+      dependencies.properties: add feature dependencies
+      EclipsePluginStep: add feature to FeatureNameComparator
+      excludes: add <plugin>.excludes file
   }}}
 
   Troubleshooting {{{
@@ -356,7 +366,8 @@ NOTES {{{
     Windows:
       - starting eclim without spawning seperate console
         > java -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
-               -jar startup.jar -debug -consolelog -nosplash -clean -refresh
+               -jar plugins/org.eclipse.equinox.launcher_<version>.jar
+               -debug -consolelog -nosplash -clean -refresh
                -application org.eclim.application -vmargs
                -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
 
@@ -394,7 +405,6 @@ NOTES {{{
   }}}
 
   Benchmarks {{{
-
     Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
     1) start the application
     2) open and save org.eclim.Service
@@ -403,11 +413,9 @@ NOTES {{{
              Virtual  Resident  Shared  (in megs)
     eclim    360      132       54
     eclipse  500      143       59
-
   }}}
 
   Pydev, files modified to remove it: {{{
-
     build.xml
     status.xml
     src/ant/docs.xml
@@ -424,7 +432,6 @@ NOTES {{{
     src/vim/eclim/autoload/eclim/python/django.vim
     src/vim/eclim/ftplugin/python/eclim_complete.vim
     src/vim/eclim/ftplugin/python/eclim_definition.vim
-
   }}}
 
   Potential Contributors {{{
@@ -433,6 +440,20 @@ NOTES {{{
         https://sourceforge.net/tracker/index.php?func=detail&aid=1617060&group_id=145869&atid=763326
         https://sourceforge.net/tracker/index.php?func=detail&aid=1787180&group_id=145869&atid=763323
         https://sourceforge.net/tracker/index.php?func=detail&aid=1781687&group_id=145869&atid=763323
+  }}}
+
+  Licensing {{{
+    http://www.fsf.org/licensing/licenses/ (lists compatible, not-compatible licenses)
+    http://www.eclipse.org/legal/eplfaq.php
+
+    - GPLv3 and Apache are one way compatible (gpl code can link to apache code).
+    - GPL and EPL are not compatible
+      - But as copyright holder I can provide permission to link to eclipse:
+        http://www.fsf.org/licensing/licenses/gpl-faq.html#GPLIncompatibleLibs
+      - EPL also has different definition of "derivative work":
+        http://www.eclipse.org/legal/eplfaq.php#DERIV (#25 - 27)
+        - A few of my files may be considered derivative works and will need to
+          be licensed as EPL accordingly.
   }}}
 
   Running in true headless environment:
@@ -444,17 +465,23 @@ NOTES {{{
 DOCS (scratch) {{{
 
   Builing eclim {{{
-    Note: the ant scripts for building eclim are not setup to run on windows.
-
     Before building eclipse you will need to:
-      - set the environment variable ECLIPSE_HOME which points to your eclipse install
+      - set the following environment variables
+        - ECLIPSE_HOME: points to your eclipse install
+        - VIMFILES: points to the directory where you want all the vim files
+          deployed to (typically HOME/.vim or HOME/vimfiles)
       - make sure you install the required eclipse features
         - wst
         - pdt
 
-    Also note that the eclim build files assume that your vimfiles directory is located at ~/.vim
+    Once your environment is setup you should then just need to run '$ ant'
+    from the top level directory of the eclim code base.  From there, starting
+    and stopping eclim is the same as if you had installed it via the
+    installer.
 
-    Once your environment is setup you should then just need to run '$ ant' from the top level directory of the eclim code base.  From there, starting and stopping eclim is the same as if you had installed it via the installer.
+    Note: on windows, currently only building of eclim is supported.  Running
+    unit tests, generating docs, building the installer, etc. are not yet
+    supported.
   }}}
 
 }}}

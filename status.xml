@@ -278,6 +278,15 @@
         Various bug fixes.
       </action>
 
+      <action dev="ervandew" type="fix" context="Bug Fixes">
+        Fixed sign placement (used by all validation plugins) on non-english
+        vims.
+      </action>
+
+      <action dev="ervandew" type="update" context="License">
+        Eclim has switched from the Apache 2 license to the GPLv3.
+      </action>
+
       <action dev="ervandew" type="add" context="Vim">
         Added <a href="vim/common/util.html#Only"><strong>:Only</strong></a> as
         a configurable alternative to vim's :only command.
