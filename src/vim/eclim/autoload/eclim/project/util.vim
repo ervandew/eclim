@@ -432,13 +432,14 @@ function! eclim#project#util#GetProjects ()
               if isdirectory(dir)
                 let projects[name] = substitute(dir, '\', '/', 'g')
               endif
+              continue
             endif
-          else
-            let name = fnamemodify(dir, ':t')
-            let dir = eclim#eclipse#GetWorkspaceDir() . name
-            if isdirectory(dir)
-              let projects[name] = dir
-            endif
+          endif
+
+          let name = fnamemodify(dir, ':t')
+          let dir = eclim#eclipse#GetWorkspaceDir() . name
+          if isdirectory(dir)
+            let projects[name] = dir
           endif
         endfor
 
