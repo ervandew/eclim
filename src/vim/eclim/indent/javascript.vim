@@ -52,6 +52,7 @@ function! EclimGetJavascriptIndent (lnum)
       let col = col('.')
       call cursor(0, col('$'))
 
+      let matchstart = 0
       while search(')\|}\|\]', 'bcW', line('.')) && col('.') != 1
         let end = line[col('.') - 1]
         let start = ''
@@ -73,10 +74,13 @@ function! EclimGetJavascriptIndent (lnum)
       if matchstart > 0
         return indent(matchstart)
       endif
+    endif
+  endfor
 
+  for trio in b:indentTrios
     " if the previous line starts with any of the ending trios, then indent
     " one level to compensate for our adjustment above.
-    elseif prevline =~ '^\s*' . trio[2] && prevline !~ pattern_heads . '$'
+    if prevline =~ '^\s*' . trio[2] && prevline !~ pattern_heads . '$'
       let col = col('.')
       call cursor(a:lnum - 1, 1)
       let matchstart = searchpair(trio[0], '', trio[2], 'bnW', 'InCommentOrString()')
@@ -90,6 +94,7 @@ function! EclimGetJavascriptIndent (lnum)
       return indent(prevlnum)
     endif
   endfor
+
   return IndentAnything()
 endfunction " }}}
 

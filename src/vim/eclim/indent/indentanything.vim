@@ -398,7 +398,14 @@ function! s:EqualPairs(Line, LNum, Head, Tail)
     try
         let head_matches = search('\(' . a:Head . '\)', 'ncp', a:LNum)
         let tail_matches = search('\(' . a:Tail . '\)', 'ncp', a:LNum)
-        return head_matches == tail_matches
+        if head_matches == tail_matches
+          call cursor(a:LNum, col('$'))
+          let last_head = searchpos('\(' . a:Head . '\)', 'bcn', a:LNum)
+          call cursor(a:LNum, col('$'))
+          let last_tail = searchpos('\(' . a:Tail . '\)', 'bcn', a:LNum)
+          return last_tail[1] > last_head[1]
+        endif
+        return 0
     finally
         call cursor(lnum, cnum)
     endtry
