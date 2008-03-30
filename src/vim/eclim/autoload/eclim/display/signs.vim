@@ -47,7 +47,9 @@ endfunction " }}}
 " Places a sign in the current buffer.
 function! eclim#display#signs#Place (name, line)
   if a:line > 0
-    exec "sign place " . a:line . " line=" . a:line . " name=" . a:name .
+    let lastline = line('$')
+    let line = a:line <= lastline ? a:line : lastline
+    exec "sign place " . line . " line=" . line . " name=" . a:name .
       \ " buffer=" . bufnr('%')
   endif
 endfunction " }}}
@@ -55,8 +57,10 @@ endfunction " }}}
 " PlaceAll(name, list) {{{
 " Places a sign in the current buffer for each line in the list.
 function! eclim#display#signs#PlaceAll (name, list)
+  let lastline = line('$')
   for line in a:list
     if line > 0
+      let line = line <= lastline ? line : lastline
       exec "sign place " . line . " line=" . line . " name=" . a:name .
         \ " buffer=" . bufnr('%')
     endif

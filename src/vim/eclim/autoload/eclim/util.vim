@@ -325,9 +325,12 @@ function! eclim#util#GetLineError (line)
 
   let locerrors = getloclist(0)
   let qferrors = getqflist()
+  let bufname = expand('%')
+  let lastline = line('$')
   for error in qferrors + locerrors
     let index += 1
-    if bufname(error.bufnr) == expand("%") && error.lnum == line
+    if bufname(error.bufnr) == bufname &&
+        \ (error.lnum == line || (error.lnum > lastline && line == lastline))
       if errornum == 0 || (col >= error.col && error.col != errorcol)
         let errornum = index
         let errorcol = error.col
