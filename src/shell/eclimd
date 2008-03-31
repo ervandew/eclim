@@ -27,8 +27,8 @@ fi
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 
 #${eclipse.home}
-if [ -z "$ECLIPSE_HOME" ]; then
-  ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
+if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
+  ECLIM_ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
 fi
 ECLIM_ARGS="-Declim.home="$ECLIM_HOME" $ECLIMD_OPTS"
 
@@ -38,30 +38,42 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
 fi
 
+ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+
 # find eclipse executable
-ECLIPSE="$ECLIPSE_HOME/eclipse"
+ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
 if [ ! -e "$ECLIPSE" ]; then
   ECLIPSE=`which eclipse 2> /dev/null`
-  if [ ! -e "$ECLIPSE" ]; then
-    echo "No eclipse executable found." 1>&2
-    exit 1
-  fi
+fi
+if [ ! -e "$ECLIPSE" ]; then
+  ECLIPSE=`which eclipse-3.3 2> /dev/null`
+fi
+if [ ! -e "$ECLIPSE" ]; then
+  echo "No eclipse executable found." 1>&2
+  exit 1
 fi
 
-# handle eclipse 3.3 issue on gentoo
+# handle eclipse issues on gentoo
 IS_GENTOO=`which java-config 2> /dev/null`
 if [ -x "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
+
+  # handle emerged version of eclipse which has a bootstrap script
+  ECLIPSE_33=`which eclipse-3.3 2> /dev/null`
+  if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.3" -a -e "$ECLIPSE_33" ]; then
+    ECLIPSE="$ECLIPSE_33"
+    GENTOO_VMARGS="$ECLIM_ARGS"
+    ECLIM_VMARGS=""
+  fi
 fi
 
 ECLIM_COMMAND="$ECLIPSE
   -debug -nosplash -clean -refresh -application
-  org.eclim.application -vmargs $ECLIM_ARGS"
-#echo $ECLIM_COMMAND | sed 's/\s\(-[a-z]\)/\n \1/g'
+  org.eclim.application $ECLIM_VMARGS"
 
 if [ "$1" = "start" ]; then
   shift
-  CLASSPATH="" $ECLIM_COMMAND $@ > /dev/null &
+  CLASSPATH="" VM_ARGS="$GENTOO_VMARGS" $ECLIM_COMMAND $@ > /dev/null &
 else
-  CLASSPATH="" $ECLIM_COMMAND $@
+  CLASSPATH="" VM_ARGS="$GENTOO_VMARGS" $ECLIM_COMMAND $@
 fi
