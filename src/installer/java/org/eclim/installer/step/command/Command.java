@@ -79,7 +79,9 @@ public abstract class Command
                 new InputStreamReader(process.getInputStream()));
             String line = null;
             while((line = reader.readLine()) != null){
-              handler.process(line);
+              if (handler != null){
+                handler.process(line);
+              }
             }
           }catch(Exception e){
             e.printStackTrace();
