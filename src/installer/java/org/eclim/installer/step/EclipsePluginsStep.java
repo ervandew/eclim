@@ -67,6 +67,7 @@ import org.apache.tools.ant.taskdefs.Untar;
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.installer.step.command.Command;
+import org.eclim.installer.step.command.AddSiteCommand;
 import org.eclim.installer.step.command.EnableCommand;
 import org.eclim.installer.step.command.InstallCommand;
 import org.eclim.installer.step.command.ListCommand;
@@ -162,17 +163,30 @@ public class EclipsePluginsStep
     setBusy(true);
     try{
       overallLabel.setText("Analyzing installed features...");
-      dependencies = (List)Worker.post(new foxtrot.Task(){
+      EclipseInfo info = (EclipseInfo)Worker.post(new foxtrot.Task(){
         public Object run ()
           throws Exception
         {
           extractInstallerPlugin();
-          List dependencies = getDependencies();
-          filterDependencies(dependencies, getFeatures());
-          return dependencies;
+          EclipseInfo info = getEclipseInfo();
+          String home = (String)Installer.getContext().getValue("eclipse.home");
+          String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
+          if(plugins.indexOf(home) == -1){
+            if(plugins.endsWith("/")){
+              plugins = plugins.substring(0, plugins.length() - 1);
+            }
+            File site = new File(FilenameUtils.getFullPath(plugins));
+            if (!info.getSites().contains(site)){
+              overallLabel.setText("Add local site to eclipse sites...");
+              addSite(site.getAbsolutePath());
+            }
+          }
+          return info;
         }
       });
 
+      dependencies = info.getDependencies();
+      filterDependencies(dependencies, info.getFeatures());
       if(dependencies.size() == 0){
         overallProgress.setMaximum(1);
         overallProgress.setValue(1);
@@ -312,6 +326,43 @@ public class EclipsePluginsStep
   }
 
   /**
+   * Gets EclipseInfo instance containing available local plugins sites,
+   * installed features, and required dependencies.
+   *
+   * @return EclipseInfo
+   */
+  private EclipseInfo getEclipseInfo ()
+    throws Exception
+  {
+    final ArrayList features = new ArrayList();
+    final ArrayList sites = new ArrayList();
+    Command command = new ListCommand(new OutputHandler(){
+      File site = null;
+      public void process (String line){
+        if(line.startsWith(SITE)){
+          site = new File(line.substring(SITE.length()));
+          sites.add(site);
+        }else if(line.startsWith(FEATURE)){
+          String[] attrs = StringUtils.split(
+            line.substring(FEATURE.length() + 2));
+          features.add(new Feature(
+              attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
+        }
+      }
+    });
+    try{
+      command.start();
+      command.join();
+      if(command.getReturnCode() != 0){
+        throw new RuntimeException(command.getErrorMessage());
+      }
+    }finally{
+      command.destroy();
+    }
+    return new EclipseInfo(sites, features, getDependencies());
+  }
+
+  /**
    * Gets a list of required dependencies based on the chosen set of eclim
    * features to be installed.
    *
@@ -341,37 +392,6 @@ public class EclipsePluginsStep
       }
     }
     return dependencies;
-  }
-
-  /**
-   * Gets a list of already installed features.
-   *
-   * @return List of features.
-   */
-  private List getFeatures ()
-    throws Exception
-  {
-    final ArrayList features = new ArrayList();
-    Command command = new ListCommand(new OutputHandler(){
-      File site = null;
-      public void process (String line){
-        if(line.startsWith(SITE)){
-          site = new File(line.substring(SITE.length()));
-        }else if(line.startsWith(FEATURE)){
-          String[] attrs = StringUtils.split(
-            line.substring(FEATURE.length() + 2));
-          features.add(new Feature(
-              attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
-        }
-      }
-    });
-    try{
-      command.start();
-      command.join();
-    }finally{
-      command.destroy();
-    }
-    return features;
   }
 
   /**
@@ -413,6 +433,24 @@ public class EclipsePluginsStep
           dependency.setFeature(feature);
         }
       }
+    }
+  }
+
+  /**
+   * Adds the supplied directory as a local eclipse site.
+   */
+  private void addSite (String site)
+    throws Exception
+  {
+    Command command = new AddSiteCommand(site);
+    try{
+      command.start();
+      command.join();
+      if(command.getReturnCode() != 0){
+        throw new RuntimeException(command.getErrorMessage());
+      }
+    }finally{
+      command.destroy();
     }
   }
 
@@ -617,6 +655,35 @@ public class EclipsePluginsStep
       }else{
         setMessage(null);
       }
+    }
+  }
+
+  private static class EclipseInfo
+  {
+    private List sites;
+    private List features;
+    private List dependencies;
+
+    public EclipseInfo (List sites, List features, List dependencies)
+    {
+      this.sites = sites;
+      this.features = features;
+      this.dependencies = dependencies;
+    }
+
+    public List getSites ()
+    {
+      return sites;
+    }
+
+    public List getFeatures ()
+    {
+      return features;
+    }
+
+    public List getDependencies ()
+    {
+      return dependencies;
     }
   }
 

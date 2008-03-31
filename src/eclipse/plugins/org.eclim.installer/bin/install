@@ -19,19 +19,27 @@ CURPATH=`dirname $0`
 ECLIPSE_HOME=`cd "$CURPATH/../../.." ; pwd`
 
 # find eclipse executable
-ECLIPSE="$ECLIPSE_HOME/eclipse"
+ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
 if [ ! -e "$ECLIPSE" ]; then
   ECLIPSE=`which eclipse 2> /dev/null`
-  if [ ! -e "$ECLIPSE" ]; then
-    echo "No eclipse executable found." 1>&2
-    exit 1
-  fi
+fi
+if [ ! -e "$ECLIPSE" ]; then
+  ECLIPSE=`which eclipse-3.3 2> /dev/null`
 fi
 
-# handle eclipse 3.3 issue on gentoo
+if [ ! -e "$ECLIPSE" ]; then
+  echo "No eclipse executable found." 1>&2
+  exit 1
+fi
+
+# handle eclipse issue on gentoo
 IS_GENTOO=`which java-config 2> /dev/null`
 if [ -x "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 fi
 
-$ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.application $@
+if [ "$2" = "addSite" -o "$2" = "listFeatures" ]; then
+  $ECLIPSE -nosplash -clean -refresh -application org.eclipse.update.core.standaloneUpdate $@
+else
+  $ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.application $@
+fi

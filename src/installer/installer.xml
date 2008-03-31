@@ -50,11 +50,14 @@
         </formic:step>
         <formic:step name="summary"/>
         <formic:branch path="branch_eclipse_plugins">
-          <!--or>
-            <istrue value="featureList.pydev"/>
-            <istrue value="featureList.wst"/>
-          </or-->
-          <istrue value="featureList.wst"/>
+          <or>
+            <!-- seperate plugins dest may need to be added as a new site -->
+            <not>
+              <formic:contains string="eclipse.plugins" substring="eclipse.home"/>
+            </not>
+            <!--istrue value="featureList.pydev"/-->
+            <formic:istrue value="featureList.wst"/>
+          </or>
         </formic:branch>
         <!--formic:branch path="branch_python_interpreter">
           <and>
@@ -131,7 +134,7 @@
           <then>
             <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/eclimd"
                 token="#$${eclipse.home}"
-                value="ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
+                value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
           </then>
         </if>
 

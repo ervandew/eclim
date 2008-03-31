@@ -27,6 +27,8 @@ import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Properties;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -40,11 +42,14 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.io.FilenameUtils;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
+
+import org.formic.util.dialog.gui.GuiDialogs;
 
 import org.formic.wizard.form.GuiForm;
 import org.formic.wizard.form.Validator;
@@ -71,6 +76,8 @@ public class EclipseStep
 
   private static final String[] UNIX_ECLIPSES = {
     "/opt/eclipse",
+    "/usr/lib/eclipse",
+    "/usr/lib/eclipse-3.3",
     "/usr/local/eclipse",
     "/usr/share/eclipse",
     SystemUtils.USER_HOME + "/eclipse"
@@ -106,8 +113,8 @@ public class EclipseStep
         .validator(new EclipseHomeValidator()).validator());
     eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
-    // On some systems (notably fedora) the user may need to install the plugins
-    // in an alternate location.
+    // On systems where eclispe was installed via a package manger, the user may
+    // need to install the plugins in an alternate location.
     if(!Os.isFamily("windows")){
       String plugins = fieldName("plugins");
       String eclipsePluginsDefault = eclipseHomeDefault != null ?
@@ -143,8 +150,11 @@ public class EclipseStep
           new EclipseHomeListener(
             eclipseHomeField, eclipsePluginsField, overridePluginsCheckBox));
 
-      // for fedora (and possibly others) see if plugins are installed in user's
-      // home directory instead.
+      panel.add(overridePluginsCheckBox, "span");
+      panel.add(new JLabel(Installer.getString(plugins)));
+      panel.add(eclipsePluginsChooser);
+
+      // see if plugins are installed in user's home directory instead.
       File dotEclipse = new File(
           Installer.getProject().replaceProperties("${user.home}/.eclipse"));
       if(dotEclipse.exists()){
@@ -157,18 +167,34 @@ public class EclipseStep
           }
         });
         if(contents.length > 0){
+          String[] path = {"configuration", "eclipse", "plugins"};
           Arrays.sort(contents);
           File dir = contents[contents.length - 1];
           overridePluginsCheckBox.doClick();
           eclipsePluginsField.setText(
-              dir.getAbsolutePath() + "/configuration/eclipse/plugins");
+              dir.getAbsolutePath() + '/' + StringUtils.join(path, '/'));
           eclipsePluginsField.setCaretPosition(0);
+
+          // see if any of the path parts are missing on the filesystem
+          boolean missing = false;
+          String missingPath = dir.getAbsolutePath();
+          for (int ii = 0; ii < path.length; ii++){
+            if(!new File(missingPath + '/' + path[ii]).exists()){
+              missing = true;
+              missingPath = eclipsePluginsField.getText().substring(
+                  missingPath.length() + 1);
+              break;
+            }
+            missingPath += '/' + path[ii];
+          }
+
+          if(missing){
+            String label = Installer.getString("eclipse.createMissing", missingPath);
+            panel.add(new JLabel(label), "span, split 2");
+            panel.add(new JButton(new CreatePluginDirsActions(eclipsePluginsField)));
+          }
         }
       }
-
-      panel.add(overridePluginsCheckBox, "span");
-      panel.add(new JLabel(Installer.getString(plugins)));
-      panel.add(eclipsePluginsChooser);
     }
 
     return panel;
@@ -260,6 +286,32 @@ public class EclipseStep
           path += "plugins";
         }
         eclipsePlugins.setText(path);
+      }
+    }
+  }
+
+  private class CreatePluginDirsActions
+    extends AbstractAction
+  {
+    private JTextField eclipsePluginsField;
+
+    public CreatePluginDirsActions (JTextField eclipsePluginsField)
+    {
+      super("Create");
+      this.eclipsePluginsField = eclipsePluginsField;
+    }
+
+    public void actionPerformed (ActionEvent e){
+      try{
+        boolean created = new File(eclipsePluginsField.getText()).mkdirs();
+        if (created){
+          ((JButton)e.getSource()).setEnabled(false);
+          eclipsePluginsField.setText(eclipsePluginsField.getText());
+        }else{
+          GuiDialogs.showError("Unable to create missing directories.");
+        }
+      }catch(Exception ex){
+        GuiDialogs.showError("Error creating missing directories.", ex);
       }
     }
   }
