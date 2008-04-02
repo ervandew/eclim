@@ -35,7 +35,7 @@ augroup END
 
 augroup eclim_php
   autocmd!
-  autocmd BufWritePost *.php call eclim#php#util#UpdateSrcFile(0)
+  autocmd BufWritePost <buffer> call eclim#php#util#UpdateSrcFile(0)
 augroup END
 
 " Command Declarations {{{
