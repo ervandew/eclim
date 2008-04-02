@@ -282,17 +282,16 @@ function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
   endif
   let vcs_file = 'vcs_' . revision . '_' . fnamemodify(path, ':t')
 
-  "let saved = &eventignore
-  "let &eventignore = 'BufNewFile' " doing this causes issues for php files
-  "try
+  let g:EclimTemplateTempIgnore = 1
+  try
     let open_cmd = a:open_cmd != '' ? a:open_cmd : 'split'
     if has('win32') || has('win64')
       let vcs_file = substitute(vcs_file, ':', '_', 'g')
     endif
     call eclim#util#GoToBufferWindowOrOpen(vcs_file, open_cmd)
-  "finally
-  "  let &eventignore = saved
-  "endtry
+  finally
+    unlet g:EclimTemplateTempIgnore
+  endtry
 
   setlocal noreadonly
   setlocal modifiable

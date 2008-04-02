@@ -44,6 +44,11 @@ let s:tagname_regex = '.\{-}<vim:\([a-zA-Z]\+\).*'
 " Template() {{{
 " Main method for finding and executing the template.
 function! eclim#common#template#Template ()
+  " allow some plugins to disable templates temporarily
+  if exists('g:EclimTemplateTempIgnore') && g:EclimTemplateTempIgnore
+    return
+  endif
+
   " ignore certain file patterns
   for ignore in g:EclimTemplateIgnore
     if expand('%') =~ ignore
