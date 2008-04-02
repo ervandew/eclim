@@ -534,8 +534,7 @@ function! s:JumpToTag ()
     call cursor(lnum, 1)
     call s:ShowCurrentTag()
   else
-    let clnum = line('.')
-    let ccnum = col('.')
+    let pos = getpos('.')
 
     call cursor(lnum, 1)
 
@@ -564,7 +563,7 @@ function! s:JumpToTag ()
       let line = 0
     endif
 
-    call cursor(clnum, ccnum)
+    call setpos('.', pos)
     if line
       mark '
       call cursor(line, 1)
@@ -611,15 +610,14 @@ function! s:Window (types, tags, content)
     nnoremap <silent> <buffer> <cr> :call <SID>JumpToTag()<cr>
   endif
 
-  let clnum = line('.')
-  let ccnum = line('.')
+  let pos = getpos('.')
   setlocal modifiable
   silent 1,$delete _
   call append(1, a:content[1])
   silent retab
   silent 1,1delete _
   setlocal nomodifiable
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
 
   silent! syn clear TagListKeyword
   for value in values(a:types)

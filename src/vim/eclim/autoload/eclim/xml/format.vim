@@ -63,8 +63,7 @@ endfunction " }}}
 "    endif
 "  endif
 "
-"  let clnum = line('.')
-"  let ccnum = col('.')
+"  let pos = getpos('.')
 "
 "  let start = a:start
 "  let end = a:end
@@ -128,16 +127,15 @@ endfunction " }}}
 "    unlet b:root
 "  endif
 "
-"  call cursor(clnum, ccnum)
+"  call setpos('.', pos)
 "endfunction " }}}
 
 " SelectOuterTag (count) {{{
 function! s:SelectOuterTag (count)
-  let clnum = line('.')
-  let ccnum = col('.')
+  let pos = getpos('.')
 
   exec 'silent! normal v' . a:count . 'atv'
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
 
   return s:VisualSelectionMap()
 endfunction " }}}
@@ -179,8 +177,7 @@ endfunction " }}}
 
 " GetRootLine() {{{
 function! s:GetRootLine ()
-  let clnum = line('.')
-  let ccnum = col('.')
+  let pos = getpos('.')
 
   let line = 1
   call cursor(1, 1)
@@ -192,7 +189,7 @@ function! s:GetRootLine ()
     call cursor(line, 1)
   endwhile
 
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
   return line
 endfunction " }}}
 

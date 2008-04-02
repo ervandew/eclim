@@ -26,8 +26,7 @@
 " GetLoadList(project_dir) {{{
 " Returns a list of tag/filter files loaded by the current template.
 function eclim#python#django#util#GetLoadList (project_dir)
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
 
   call cursor(1, 1)
   let loaded = []
@@ -35,7 +34,7 @@ function eclim#python#django#util#GetLoadList (project_dir)
     call add(loaded, substitute(getline('.'), '.*{%\s*load\s\+\(\w\+\)\s*%}.*', '\1', ''))
     call cursor(line('.') + 1, 1)
   endwhile
-  call cursor(line, col)
+  call setpos('.', col)
 
   let file_names = []
   for load in loaded
@@ -87,8 +86,7 @@ function eclim#python#django#util#GetSetting (project_dir, name)
       let orig = winnr()
       exec winnr . 'winc w'
     endif
-    let clnum = line('.')
-    let ccnum = col('.')
+    let pos = getpos('.')
     call cursor(1, 1)
 
     " GET SETTING
@@ -108,7 +106,7 @@ function eclim#python#django#util#GetSetting (project_dir, name)
     endif
     let setting = substitute(setting, '^\s*\<'. a:name . '\>\s*=\s*', '', '')
 
-    cal cursor(clnum, ccnum)
+    cal setpos('.', pos)
     if winnr == -1
       bd
     else

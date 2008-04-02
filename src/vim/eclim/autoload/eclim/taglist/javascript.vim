@@ -25,8 +25,7 @@
 
 " FormatJavascript(types, tags) {{{
 function! eclim#taglist#javascript#FormatJavascript (types, tags)
-  let clnum = line('.')
-  let ccnum = col('.')
+  let post = getpos('.')
 
   let lines = []
   let content = []
@@ -83,7 +82,7 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
         \ a:tags, a:types['f'], object_content.functions, lines, content, "\t\t")
   endfor
 
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
 
   return [lines, content]
 endfunction " }}}

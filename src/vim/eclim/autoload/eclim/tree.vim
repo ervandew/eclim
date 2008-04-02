@@ -204,10 +204,9 @@ function eclim#tree#GetPath ()
   let line = getline('.')
   let node = substitute(line, s:nodevalue_regex, '\3', '')
 
-  let lnum = line('.')
-  let cnum = col('.')
+  let pos = getpos('.')
   let node = eclim#tree#GetParent() . node
-  call cursor(lnum, cnum)
+  call setpos('.', pos)
 
   let path = s:AliasToPath(node)
 
@@ -290,13 +289,12 @@ function eclim#tree#GetLastChildPosition ()
 
   " no sibling below, use parent's value
   if lnum == line('.') && getline(lnum + 1) !~ sibling
-    let clnum = line('.')
-    let ccnum = col('.')
+    let pos = getpos('.')
 
     call cursor(eclim#tree#GetParentPosition(), 1)
     let lnum = eclim#tree#GetLastChildPosition()
 
-    call cursor(clnum, ccnum)
+    call setpos('.', pos)
   endif
 
   return lnum

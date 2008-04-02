@@ -193,21 +193,21 @@ endfunction " }}}
 " Gets the directory of the main eclim eclipse plugin.
 function! eclim#GetEclimHome ()
   if !exists('g:EclimHome')
-    if !exists('$ECLIPSE_HOME')
-      let g:EclimErrorReason = 'ECLIPSE_HOME must be set.'
+    if !exists('$ECLIM_ECLIPSE_HOME')
+      let g:EclimErrorReason = 'ECLIM_ECLIPSE_HOME must be set.'
       return
     endif
 
-    let g:EclimHome = eclim#util#Glob('$ECLIPSE_HOME/plugins/org.eclim_*')
+    let g:EclimHome = eclim#util#Glob('$ECLIM_ECLIPSE_HOME/plugins/org.eclim_*')
     if g:EclimHome == ''
       let g:EclimErrorReason =
         \ "eclim plugin not found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
+        \ "ECLIM_ECLIPSE_HOME = '" .  expand('$ECLIM_ECLIPSE_HOME') . "'"
       return
     elseif g:EclimHome =~ "\n"
       let g:EclimErrorReason =
         \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
-        \ "ECLIPSE_HOME = '" .  expand('$ECLIPSE_HOME') . "'"
+        \ "ECLIM_ECLIPSE_HOME = '" .  expand('$ECLIM_ECLIPSE_HOME') . "'"
       return
     endif
   endif

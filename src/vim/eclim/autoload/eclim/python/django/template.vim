@@ -53,12 +53,11 @@ endfunction " }}}
 
 " s:GetStartTag(line) {{{
 function s:GetStartTag (line)
-  let pos = searchpairpos(s:starttag, '', '{%', 'bnW')
-  if pos[0]
-    let line = getline(pos[0])
-    let lnum = line('.')
-    let cnum = col('.')
-    call cursor(pos[0], pos[1])
+  let pairpos = searchpairpos(s:starttag, '', '{%', 'bnW')
+  if pairpos[0]
+    let line = getline(pairpos[0])
+    let pos = getpos('.')
+    call cursor(pairpos[0], pairpos[1])
     try
       let tags = s:ExtractTags(line)
       " place the cursor at the end of the line
@@ -68,18 +67,18 @@ function s:GetStartTag (line)
         call search('{%\s*' . tag[0] . '\s*\([^}]\+\)\?\s*%}', 'b', line('.'))
 
         " see if the tag has a matching close tag
-        let pos = searchpairpos(
+        let pairpos = searchpairpos(
           \ '{%\s*' . tag[0] . '\s*\([^}]\+\)\?\s*%}', '',
           \ '{%\s*' . tag[1][-1], 'nW')
           "\ '{%\s*' . tag[1] . '\s*%}', 'nW')
-        if !pos[0] || pos[0] > a:line
+        if !pairpos[0] || pairpos[0] > a:line
           return tag[1]
         endif
       endfor
       call cursor(line('.'), 1)
       return s:GetStartTag(a:line)
     finally
-      call cursor(lnum, cnum)
+      call setpos('.', pos)
     endtry
   endif
   return ''

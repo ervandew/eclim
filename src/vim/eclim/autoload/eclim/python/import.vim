@@ -33,8 +33,7 @@ endif
 
 " SortImports() {{{
 function! eclim#python#import#SortImports ()
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
 
   let import_data = eclim#python#import#GetImports()
   let imports = import_data.imports
@@ -94,7 +93,7 @@ function! eclim#python#import#SortImports ()
   silent put
 
   let @" = saved
-  call cursor(line, col)
+  call setpos('.', pos)
 endfunction " }}}
 
 " CompareImports() {{{
@@ -117,8 +116,7 @@ endfunction " }}}
 
 " CleanImports() {{{
 function! eclim#python#import#CleanImports ()
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
 
   let import_data = eclim#python#import#GetImports()
   let names = []
@@ -159,7 +157,7 @@ function! eclim#python#import#CleanImports ()
     endif
   endfor
 
-  call cursor(line, col)
+  call setpos('.', pos)
 endfunction " }}}
 
 " GetImports() {{{
@@ -168,8 +166,7 @@ endfunction " }}}
 "   - end: the line where the imports end (0 if none).
 "   - imports: list containing the import lines.
 function! eclim#python#import#GetImports ()
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
 
   call cursor(1, 1)
 
@@ -190,7 +187,7 @@ function! eclim#python#import#GetImports ()
     call cursor(line('.') + 1, 1)
   endwhile
 
-  call cursor(line, col)
+  call setpos('.', pos)
 
   return {'start': start, 'end': end, 'imports': imports}
 endfunction " }}}

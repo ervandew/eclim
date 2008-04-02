@@ -119,8 +119,7 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
 
   " visual mode
   else
-    let lnum = line('.')
-    let col = col('.')
+    let pos = getpos('.')
     let index = start
     while index <= end
       let line = getline(index)
@@ -143,7 +142,7 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
           let super = substitute(getline(ln), '.*\s\(.*\) {', '\1', '')
           if superType != "" && super != superType
             call eclim#util#EchoError(s:cross_type_selection)
-            call cursor(lnum, col)
+            call setpos('.', pos)
             return
           endif
           let superType = super
@@ -153,12 +152,12 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
         let super = substitute(line, '.*\s\(.*\) {', '\1', '')
         if superType != "" && super != superType
           call eclim#util#EchoError(s:cross_type_selection)
-          call cursor(lnum, col)
+          call setpos('.', pos)
           return
         endif
         let superType = super
       endif
-      call cursor(lnum, col)
+      call setpos('.', pos)
 
       let index += 1
     endwhile

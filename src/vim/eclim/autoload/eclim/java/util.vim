@@ -55,14 +55,13 @@ endfunction " }}}
 " GetClassDeclarationPosition(movecursor) {{{
 " Gets the line number of the current file's class declaration.
 function! eclim#java#util#GetClassDeclarationPosition (movecursor)
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
   call cursor(1,1)
 
   let position = search(s:class_declaration)
 
   if !a:movecursor || !position
-    call cursor(line, col)
+    call setpos('.', pos)
   endif
 
   return position
@@ -95,8 +94,7 @@ function! eclim#java#util#GetPackage (...)
     silent exec "sview " . a:1
   endif
 
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
 
   call cursor(1,1)
 
@@ -114,7 +112,7 @@ function! eclim#java#util#GetPackage (...)
     " not necessary and may screw up display (see autoload/project.vim)
     "redraw
   else
-    call cursor(line, col)
+    call setpos('.', pos)
   endif
 
   return package

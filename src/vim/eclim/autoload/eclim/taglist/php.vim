@@ -25,8 +25,7 @@
 
 " FormatPhp(types, tags) {{{
 function! eclim#taglist#php#FormatPhp (types, tags)
-  let clnum = line('.')
-  let ccnum = col('.')
+  let pos = getpos('.')
 
   let lines = []
   let content = []
@@ -121,7 +120,7 @@ function! eclim#taglist#php#FormatPhp (types, tags)
         \ a:tags, a:types['f'], interface_content.functions, lines, content, "\t\t")
   endfor
 
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
 
   return [lines, content]
 endfunction " }}}

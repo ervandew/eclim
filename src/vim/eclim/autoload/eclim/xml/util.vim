@@ -117,8 +117,7 @@ endfunction " }}}
 " Get the parent element name relative to the current cursor position.
 " Depends on 'at' visual selection ability.
 function! eclim#xml#util#GetParentElementName ()
-  let clnum = line('.')
-  let ccnum = col('.')
+  let pos = getpos('.')
 
   " select tags (best solution I can think of).
   silent! normal v2at
@@ -127,7 +126,7 @@ function! eclim#xml#util#GetParentElementName ()
   call cursor(line("'<"), col("'<"))
   let parent = eclim#xml#util#GetElementName()
 
-  call cursor(clnum, ccnum)
+  call setpos('.', pos)
 
   if eclim#xml#util#GetElementName() == parent
     return ''

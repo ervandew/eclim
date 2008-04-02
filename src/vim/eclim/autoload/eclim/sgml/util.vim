@@ -39,24 +39,22 @@ endfunction " }}}
 
 " s:GetStartTag(line) {{{
 function s:GetStartTag (line)
-  let pos = searchpairpos('<\w', '', '</\w', 'bnW')
-  if pos[0]
+  let pairpos = searchpairpos('<\w', '', '</\w', 'bnW')
+  if pairpos[0]
     " test if tag found is self closing
-    if search('\%' . pos[0] . 'l\%' . pos[1] . 'c\_[^>]*/>', 'bcnW')
-      let lnum = line('.')
-      let cnum = col('.')
-      call cursor(pos[0], pos[1])
+    if search('\%' . pairpos[0] . 'l\%' . pairpos[1] . 'c\_[^>]*/>', 'bcnW')
+      let pos = getpos('.')
+      call cursor(pairpos[0], pairpos[1])
       try
         return s:GetStartTag(a:line)
       finally
-        call cursor(lnum, cnum)
+        call setpos('.', pos)
       endtry
     endif
 
-    let line = getline(pos[0])
-    let lnum = line('.')
-    let cnum = col('.')
-    call cursor(pos[0], pos[1])
+    let line = getline(pairpos[0])
+    let pos = getpos('.')
+    call cursor(pairpos[0], pairpos[1])
     try
       let tags = s:ExtractTags(line)
       " place the cursor at the end of the line
@@ -66,15 +64,15 @@ function s:GetStartTag (line)
         call search('<' . tag . '\>\([^>]\{-}[^/]\)\?>', 'b', line('.'))
 
         " see if the tag has a matching close tag
-        let pos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
-        if !pos[0] || pos[0] > a:line
+        let pairpos = searchpairpos('<' . tag . '\>', '', '</' . tag . '\>', 'nW')
+        if !pairpos[0] || pairpos[0] > a:line
           return tag
         endif
       endfor
       call cursor(line('.'), 1)
       return s:GetStartTag(a:line)
     finally
-      call cursor(lnum, cnum)
+      call setpos('.', pos)
     endtry
   endif
   return ''

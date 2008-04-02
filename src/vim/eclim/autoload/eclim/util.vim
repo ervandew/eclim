@@ -219,8 +219,7 @@ endfunction " }}}
 " GetCharacterOffset() {{{
 " Gets the character offset for the current cursor position.
 function! eclim#util#GetCharacterOffset ()
-  let curline = line('.')
-  let curcol = col('.')
+  let pos = getpos('.')
   let lineend = 0
   if &fileformat == "dos"
     let lineend = 1
@@ -234,7 +233,7 @@ function! eclim#util#GetCharacterOffset ()
   endwhile
 
   " restore the cursor position.
-  call cursor(curline, curcol)
+  call setpos('.', pos)
 
   return offset
 endfunction " }}}
@@ -242,8 +241,7 @@ endfunction " }}}
 " GetCurrentElementColumn() {{{
 " Gets the column for the element under the cursor.
 function! eclim#util#GetCurrentElementColumn ()
-  let curline = line('.')
-  let curcol = col('.')
+  let pos = getpos('.')
 
   let line = getline('.')
   " cursor not on the word
@@ -258,7 +256,7 @@ function! eclim#util#GetCurrentElementColumn ()
   let col = col('.')
 
   " restore the cursor position.
-  call cursor(curline, curcol)
+  call setpos('.', pos)
 
   return col
 endfunction " }}}
@@ -275,8 +273,7 @@ endfunction " }}}
 " GetCurrentElementOffset() {{{
 " Gets the character offset for the element under the cursor.
 function! eclim#util#GetCurrentElementOffset ()
-  let curline = line('.')
-  let curcol = col('.')
+  let pos = getpos('.')
 
   let line = getline('.')
   " cursor not on the word
@@ -291,7 +288,7 @@ function! eclim#util#GetCurrentElementOffset ()
   let offset = eclim#util#GetCharacterOffset()
 
   " restore the cursor position.
-  call cursor(curline, curcol)
+  call setpos('.', pos)
 
   return offset
 endfunction " }}}
@@ -510,11 +507,10 @@ endfunction " }}}
 " MarkRestore(markLine) {{{
 " Restores the ' mark with the new line.
 function! eclim#util#MarkRestore (markLine)
-  let line = line('.')
-  let col = col('.')
+  let pos = getpos('.')
   call cursor(a:markLine, s:markCol)
   mark '
-  call cursor(line, col)
+  call setpos('.', pos)
 endfunction " }}}
 
 " MarkSave() {{{

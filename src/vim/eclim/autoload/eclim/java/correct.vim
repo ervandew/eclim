@@ -114,14 +114,13 @@ function! eclim#java#correct#CorrectApply ()
 
       let content = split(eclim#ExecuteEclim(command), '\n')
 
-      let line = line('.')
-      let col = col('.')
+      let pos = getpos('.')
 
       1,$delete _
       call append(1, content)
       1,1delete _
 
-      call cursor(line, col)
+      call setpos('.', pos)
       update
 
       exec winnr . "winc w"
