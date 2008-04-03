@@ -62,10 +62,11 @@ public class RequirementProvider
       requirements[0] = new EclipseRequirement();
       return requirements;
     }
-    Requirement[] requirements = new Requirement[3];
+    Requirement[] requirements = new Requirement[4];
     requirements[0] = new EclipseRequirement();
     requirements[1] = new VimRequirement();
-    requirements[2] = new MakeRequirement();
+    requirements[2] = new WhichRequirement("make");
+    requirements[3] = new WhichRequirement("gcc");
     return requirements;
   }
 
@@ -182,27 +183,30 @@ public class RequirementProvider
     }
   }
 
-  private class MakeRequirement
+  private class WhichRequirement
     extends ValidatingRequirement
   {
-    public MakeRequirement ()
+    private String program;
+
+    public WhichRequirement (String program)
     {
-      super("make");
+      super(program);
+      this.program = program;
     }
 
     public Status validate ()
     {
       try{
         int result = Runtime.getRuntime().exec(
-            new String[] {"which", "make"}).waitFor();
+            new String[] {"which", program}).waitFor();
         if (result != 0){
           return new Status(
-              FAIL, Installer.getString("make.not.found"));
+              FAIL, Installer.getString(program + ".not.found"));
         }
       }catch(Exception e){
-        logger.error("Error checking for 'make'", e);
+        logger.error("Error checking for '" + program + "'", e);
         return new Status(
-            WARN, Installer.getString("make.validation.failed"));
+            WARN, Installer.getString(program + ".validation.failed"));
       }
       return OK_STATUS;
     }
