@@ -25,7 +25,7 @@
 
 " FormatJavascript(types, tags) {{{
 function! eclim#taglist#javascript#FormatJavascript (types, tags)
-  let post = getpos('.')
+  let pos = getpos('.')
 
   let lines = []
   let content = []
