@@ -192,6 +192,18 @@
             available action for a file.
           </li>
           <li>
+            <strong>E</strong> -
+            Opens the current file using 'edit' in the content window.
+          </li>
+          <li>
+            <strong>S</strong> -
+            Opens the current file in a new split.
+          </li>
+          <li>
+            <strong>T</strong> -
+            Opens the current file in a new tab.
+          </li>
+          <li>
             <strong>o</strong> -
             Toggles folding / unfolding of a directory, or opens a window of
             available actions to be executed on the selected file.  Hitting
@@ -202,16 +214,6 @@
             <strong>s</strong> -
             Executes <strong>:shell</strong> for the directory under the cursor
             or the parent directory of the file under the cursor.
-          </li>
-          <li>
-            <strong>S</strong> -
-            Like <strong>s</strong> but opens an external shell.
-            Requires that you set the variable g:TreeExternalShell which will be
-            the command executed to open the external shell.<br/>
-            Example that opens an aterm window:
-            <source>
-              let g:TreeExternalShell = '!aterm -geometry 125x30 &amp;'
-            </source>
           </li>
           <li>
             <strong>R</strong> -

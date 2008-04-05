@@ -141,6 +141,8 @@ function! eclim#project#tree#ProjectTree (...)
   call s:OpenTree(names, dirs)
   normal zs
 
+  call s:Mappings()
+
   augroup project_tree
     autocmd!
     autocmd BufDelete * call eclim#project#tree#PreventCloseOnBufferDelete()
@@ -222,6 +224,27 @@ function! s:CloseTreeWindow ()
   endif
 endfunction " }}}
 
+" Mappings() " {{{
+function! s:Mappings ()
+  nnoremap <buffer> E :call <SID>OpenFile('edit')<cr>
+  nnoremap <buffer> S :call <SID>OpenFile('split')<cr>
+  nnoremap <buffer> T :call <SID>OpenFile('tablast \| tabnew')<cr>
+endfunction " }}}
+
+" OpenFile(action) " {{{
+function! s:OpenFile (action)
+  let path = eclim#tree#GetPath()
+  if path !~ '/$'
+    if !filereadable(path)
+      echo "File is not readable or has been deleted."
+      return
+    endif
+
+    call eclim#tree#ExecuteAction(path,
+      \ "call eclim#project#tree#OpenProjectFile('" . a:action . "', '<cwd>', '<file>')")
+  endif
+endfunction " }}}
+
 " OpenTreeWindow() " {{{
 function! s:OpenTreeWindow ()
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
@@ -250,6 +273,8 @@ function! s:OpenTreeWindow ()
   endif
 
   setlocal nonumber
+
+  let b:eclim_project_tree = 1
 endfunction " }}}
 
 " OpenTree(names, dirs) " {{{
