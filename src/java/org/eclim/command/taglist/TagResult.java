@@ -93,10 +93,21 @@ public class TagResult
     pattern = _pattern;
 
     if(pattern != null){
+      // limit pattern to one line (don't span lines)
+      if (pattern.indexOf('\n') != -1){
+        String[] lines = StringUtils.split(pattern, '\n');
+        for (int ii = 0; ii < lines.length; ii++){
+          if(lines[ii].indexOf(getName()) != -1){
+            pattern = lines[ii];
+            setLine(getLine() + ii);
+            break;
+          }
+        }
+      }
+
       // escape newlines, '\' and '/'
       pattern = StringUtils.replace(pattern, "\\", "\\\\");
       pattern = StringUtils.replace(pattern, "/", "\\/");
-      pattern = StringUtils.replace(pattern, "\n", "\\n");
       // remove ctrl-Ms
       pattern = StringUtils.replace(pattern, "\r", "");
     }
