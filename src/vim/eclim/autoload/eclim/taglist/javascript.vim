@@ -61,10 +61,13 @@ function! eclim#taglist#javascript#FormatJavascript (types, tags)
     "  call remove(members, i)
     "endfor
 
-    call add(object_contents, {'object': object, 'functions': functions})
+    if len(functions) > 0
+      call add(object_contents, {'object': object, 'functions': functions})
+    endif
   endfor
 
-  let top_functions = filter(copy(a:tags), 'v:val[3] == "f"')
+  let top_functions = filter(copy(a:tags),
+    \ 'v:val[3] == "f" && v:val[2] =~ "\\<function\\>"')
   if len(top_functions) > 0
     call add(content, "")
     call add(lines, -1)
