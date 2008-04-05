@@ -384,6 +384,7 @@ function! eclim#taglist#taglisttoo#Taglist ()
 
   augroup taglisttoo
     autocmd!
+    autocmd BufDelete * call s:PreventCloseOnBufferDelete()
     autocmd BufEnter __Tag_List__ nested call s:ExitOnlyWindow()
     autocmd BufUnload __Tag_List__ call s:Cleanup()
     autocmd CursorHold * call s:ShowCurrentTag()
@@ -691,6 +692,42 @@ function! s:ExitOnlyWindow()
         close
       endif
     endif
+  endif
+endfunction " }}}
+
+" PreventCloseOnBufferDelete() {{{
+function s:PreventCloseOnBufferDelete ()
+  let project_window = 0
+  let index = 1
+  let windows = winnr('$')
+  while index <= windows
+    let bufnum = bufwinnr(index)
+    if getbufvar(bufwinnr(index), 'eclim_project_tree') != ''
+      let project_window = index
+      break
+    endif
+    let index += 1
+  endwhile
+
+  if (winnr('$') == 1 && bufwinnr(g:TagList_title) != -1) ||
+      \  (winnr('$') == 2 &&
+      \   project_window &&
+      \   bufwinnr(g:TagList_title) != -1)
+    let saved = &splitright
+    set splitright
+    vnew
+    winc w
+    exec 'vertical resize ' . g:Tlist_WinWidth
+    winc w
+    let &splitright = saved
+    exec 'let bufnr = ' . expand('<abuf>')
+    silent! bprev
+    if bufnr('%') == bufnr
+      silent! bprev
+    endif
+    doautocmd BufEnter
+    doautocmd BufWinEnter
+    doautocmd BufReadPost
   endif
 endfunction " }}}
 
