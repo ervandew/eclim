@@ -150,6 +150,10 @@ if !exists(':TlistToo')
     let g:tlist_php_settings = 'php;i:interface;c:class;f:function'
   endif
 
+  if !exists("g:tlist_rst_settings")
+    let g:tlist_rst_settings = 'rst;s:section;a:anchor'
+  endif
+
   if !exists("g:tlist_spring_settings")
     let g:tlist_spring_settings = 'spring;i:import;a:alias;b:bean'
   endif
@@ -248,6 +252,10 @@ else
         \ 'c': 'class',
         \ 'f': 'function',
       \ }
+  endif
+
+  if !exists("g:tlist_rst_settings")
+    let g:tlist_rst_settings = {'s': 'section', 'a': 'anchor'}
   endif
 
   if !exists("g:tlist_spring_settings")
