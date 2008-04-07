@@ -34,6 +34,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
   def __init__ (self, *args, **kwargs):
     StandaloneHTMLBuilder.__init__(self, *args, **kwargs)
     self.toctrees = {}
+    self.index_node = nodes.list_item('', addnodes.compact_paragraph(''))
 
   def load_env(self):
     """
@@ -128,8 +129,17 @@ class EclimBuilder (StandaloneHTMLBuilder):
 
 # EV: genterate a 'main' toc for the current page.
     main_tocs = []
-    for toc in self.toctrees.get('index'):
+    for ii, toc in enumerate(self.toctrees.get('index')):
       entries = self._entries_from_toctree(docname, toc)
+
+      # add link to the root.
+      if ii == 0:
+        index_node = self.index_node.deepcopy()
+        index_node[0].append(
+          nodes.reference(text="Welcome", anchorname="", refuri="index")
+        )
+        entries[0].insert(0, index_node)
+
       for node in entries.traverse(nodes.reference):
         if node.hasattr('anchorname'):
           # a TOC reference
@@ -157,7 +167,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
     self.index_page(docname, doctree, title)
     self.handle_page(docname, ctx)
 
-  def _entries_from_toctree (self, docname, toctreenode):
+  def _entries_from_toctree (self, docname, toctreenode, top=True):
     """
     Copied from sphinx.environment.  Modified to utilize list items instead of
     the old version which had an independent bullet_list for each entry.
@@ -176,7 +186,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       else:
         for toctreenode in toc.traverse(addnodes.toctree):
           toctreenode.parent.replace_self(
-              self._entries_from_toctree(docname, toctreenode))
+              self._entries_from_toctree(docname, toctreenode, top=False))
 # EV: append each child as a list item in the bullet_list.
         for child in toc.children:
           entries.append(child)
