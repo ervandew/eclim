@@ -1,0 +1,191 @@
+-----------
+2006-10-09
+-----------
+
+**All Users**:  A bug made its way into the initial
+1.2.3 release which prevents you from adding methods via **:JavaImpl**.
+
+An updated `eclim_vim_1.2.3.jar`_ is now available to resolve this issue.  If
+you downloaded this file on October 8th or 9th you can either download the
+updated version or execute the following within vim:
+
+.. code-block:: vim
+
+  :PatchEclim eclim/autoload/eclim/util.vim 1.27
+
+-----------
+2006-10-08
+-----------
+
+| **Eclim 1.2.3** is now available.
+| This is primarily a bug fix release.
+
+Please view the :ref:`release notes <1.2.3>` for more info.
+
+-----------
+2006-09-08
+-----------
+
+| **Eclim 1.2.2** is now available.
+| The previous release introduced two new bugs that managed to slip through the
+  cracks.  These have now been fixed including a third that had been around for
+  some time but went previously unnoticed.
+
+To see a list of fixes you may view the :ref:`release notes <1.2.2>`.
+
+-----------
+2006-09-07
+-----------
+
+| **Eclim 1.2.1** is now available.
+| This is primarily a bug fix release, but some new functionality has been
+  added as well. This release should resolve all known issues.
+
+To see a list of what's new / changed, be sure to take a look at the
+:ref:`release notes <1.2.1>`.
+
+-----------
+2006-07-17
+-----------
+
+**Windows Users**:  Eclim 1.2.0 contained a couple issues that can potentially
+prevent eclim from functioning.  A new version of `eclim_vim_1.2.0.jar`_ is now
+available, which fixes these issues.
+
+Simply download the new file and extract it as explained in the
+<a href="guides/install.html#step3">installation guide</a>.  There is
+no need to download or re-install the Eclipse plugins.
+
+If any other issues are encountered please report them.
+
+-----------
+2006-07-16
+-----------
+
+| **Eclim 1.2.0** is now available.
+| This release requires `Eclipse 3.2 <http://eclipse.org/downloads>`_.
+
+To see a list of what's new / changed, be sure to take a look at the
+:ref:`release notes <1.2.0>`.
+
+.. warning::
+  The layout of eclim plugins within the Vim runtimepath has changed.  Please
+  read the <a href="changes.html#upgrade_1.2.0">details</a> in the release
+  notes and take the appropriate action prior to upgrading.
+
+-----------
+2006-05-07
+-----------
+
+| **Eclim 1.1.2** is now available.
+| Before upgrading, you should upgrade your Vim installation to the stable
+  release of Vim 7.0 or greater.
+
+To see a list of what's new / changed, be sure to take a look at the
+:ref:`release notes <1.1.2>`.
+
+-----------
+2006-02-19
+-----------
+
+| New version of eclim (1.1.1) is now available.
+| This is mostly a bug fix release will a few new additions.
+| Please note, that this latest version requires Eclipse version 3.1.2 for some
+  bug fixes and improvements.
+
+To see a list of what's new / changed, be sure to take a look at the
+:ref:`release notes <1.1.1>`.
+
+-----------
+2005-12-26
+-----------
+
+| New version of eclim (1.1.0) is now available.
+| All questions, issues, suggestions are welcome and encouraged.
+
+To see a list of what's new / changed, be sure to take a look at the
+:ref:`release notes <1.1.0>`.
+
+-----------
+2005-10-16
+-----------
+
+The first eclim release (1.0.0) is now available.
+All questions, issues, suggestions are welcome and encouraged.
+
+Be sure to read the docs to see what features are currently available,
+and take a look at the <a href="todo.html">todo</a> to see what's
+coming in future releases.
+
+-----------
+2005-09-11
+-----------
+
+Several new additions over the past couple weeks:
+
+* Java code completion: Integrated into Vim via Vim 7's new "User Defined
+  Completion".
+
+* Added eclim command line support for creating and updating projects,
+  including Vim support for editing Eclipse .classpath files and updating
+  Eclipse upon writing of those files.
+
+* Integrated nailgun_ to greatly improve the command line client performance.
+
+* Started documenting eclim and its features.
+
+With the addition of these features I'm going to stop adding new
+functionality for the time being and focus on testing and ensuring that
+everything works as expected on Windows.
+
+-----------
+2005-08-21
+-----------
+
+Code navigation / searching is done!  Most of the Vim integration for
+searching is done as well.  The only thing missing is viewing code for
+results that are found in a jar file that have no corresponding source
+attachment.  I may end up doing what Eclipse appears to do, which is
+to use javap to display the class and method signatures.  That or I'll
+use jad to decompile the whole source.  My only issue with jad, is
+that it is not up to date with the 1.5 byte code.
+
+I also have automated importing done as well.  The eclim server
+request just returns a list of possible results to import for a given
+request and the editor (Vim in this case) handles prompting the user
+and updating the code.
+
+.. note::
+  The Vim integration now requires Vim 7.  Even though Vim 7 is still
+  alpha, I haven't had any major issues with it and the new additions to
+  the Vim scripting language are just too good to pass up.
+
+My next step is to start documenting everything and testing on a
+Windows environment to ensure there aren't any compatibility issues.
+
+After that I should be ready to put out a preliminary release.
+I'm trying to be very careful about releasing anything too soon.  The
+last thing I want it to scare anyone off with a broken project that
+doesn't seem to work properly.
+
+-----------
+2005-08-11
+-----------
+
+Sourceforge site is up!  Now it's just a matter of getting the ball rolling
+again.
+
+I'm hoping to have source code navigation working by the end of next week.
+This includes the ability to simply hit <enter> on a class name, method
+name, method call, etc. to jump to its declaration.  Basically I want to
+replace my previous
+`Vim plug-in <http://www.vim.org/scripts/script.php?script_id=1106>`_ with the
+new Eclipse one.
+
+Before I put out any releases though, I want to have a comprehensive
+set of documentation.  For the first few releases, setup will probably
+be pretty manual, with most of it occurring through the Eclipse
+interface.  Going forward, I want to move more of that functionality
+into Vim.
+
+.. vim:ft=rst
