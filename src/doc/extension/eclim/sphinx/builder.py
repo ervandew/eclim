@@ -136,7 +136,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       if ii == 0:
         index_node = self.index_node.deepcopy()
         index_node[0].append(
-          nodes.reference(text="Welcome", anchorname="", refuri="index")
+          nodes.reference(text='About / News', anchorname='', refuri='index')
         )
         entries[0].insert(0, index_node)
 
