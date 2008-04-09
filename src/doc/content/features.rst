@@ -1,0 +1,127 @@
+.. Copyright (C) 2005 - 2008  Eric Van Dewoestine
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Features
+========
+
+| The following is a partial list of eclim features with much more still to
+  come.
+| For more details please see the detailed
+  <a href="vim/index.html">documentation</a>.
+| For a more comprehensive list you can also visit the
+  <a href="vim/cheatsheet.html">cheatsheet</a>.
+
+Eclipse Projects
+-------------------------
+- Create, update, and delete Eclipse projects.
+- Easily manage Eclipse .classpath files (support for maven and ivy).
+- Quickly and easily manage settings globally or on a project basis.
+
+Ant Integration
+-------------------------
+- Ant execution from any file.
+- Context sensitive code completion when editing build files.
+- Automatic validation of build files (w/ visual marking of errors and
+  warnings).
+- Quick access to ant documentation.
+
+Css Integration
+-------------------------
+- Context sensitive code completion.
+- Source code validation.
+
+Dtd Integration
+-------------------------
+- Automatic validation (w/ visual marking of errors and warnings).
+
+Html Integration
+-------------------------
+- Context sensitive code completion.
+- Automatic validation (w/ visual marking of errors and warnings).
+
+Java Integration
+-------------------------
+- Automatic source code validation (w/ visual marking of errors and
+  warnings).
+- Context sensitive code completion.
+- Code correction suggestions with option to apply a suggestion.
+- Class constructor generation.
+- Java Bean getter and setter generation.
+- Generation of delegate methods.
+- Java source and java doc searching capabilities.
+- Generate stub methods from implemented interfaces or super classes.
+- Generate stub methods for junit testing.
+- Quickly clean and sort imports and easily import new classes.
+- Automatic generation of logging initialization code, upon first usage
+  of a logger.
+- Javadoc generation for package, class, field, method, etc.
+- Java regular expression testing.
+
+Java Integration
+-------------------------
+- File validation using <a href="site:jsl">jsl</a>.
+- Improved taglist (outline) support.
+
+Log4j Integration
+-------------------------
+- Validation of log4j xml files.
+
+Maven Integration
+-------------------------
+- Maven execution from any file.
+- Maven repository searching and ability to add results to pom file.
+
+Php Integration
+-------------------------
+- Code completion.
+- Searching.
+- Source code validation.
+
+Python Integration
+-------------------------
+- Regular expression testing.
+- Django functionality.
+- Validation via python compiler, <a href="site:pyflakes">pyflakes</a>,
+  and <a href="site:pylint">pylint</a>.
+
+Vim Script Integration
+-------------------------
+- Find user defined command, function, or global variable declarations /
+  references.
+- Quickly lookup help topic for a keyword, functions, command, etc.
+
+Wsdl Integration
+-------------------------
+- Automatic validation (w/ visual marking of errors and warnings).
+
+Xml Integration
+-------------------------
+- Automatic validation (w/ visual marking of errors and warnings).
+- Quickly look up element definition from the current xml file's dtd or xsd.
+- Context sensitive code completion.
+
+Xsd Integration
+-------------------------
+- Automatic validation (w/ visual marking of errors and warnings).
+
+Common Vim Functionality
+-------------------------
+- :Split / :Tabnew supporting multiple files.
+- :SplitRelative / :EditRelative / :TabnewRelative / :ReadRelative for
+  opening / reading a file relative to the current one.
+- Commands to locate a project, workspace, or current file relative file and
+  open it (split, edit, or tabnew).
+- Enhanced taglist support.
+- Much more...
