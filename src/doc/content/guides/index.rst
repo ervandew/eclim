@@ -25,3 +25,25 @@ Guides
    java/maven/mvn/classpath
    php/project
    python/project
+
+Installing / Upgrading
+----------------------
+- :ref:`guides/install`
+
+
+Java
+----
+- :ref:`guides/java/project`
+- :ref:`guides/java/ivy/classpath`
+- :ref:`guides/java/maven/maven/classpath`
+- :ref:`guides/java/maven/mvn/classpath`
+
+
+Php
+----
+- :ref:`guides/php/project`
+
+
+Python
+------
+- :ref:`guides/python/project`

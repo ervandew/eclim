@@ -238,10 +238,14 @@ div.sidebar h4, div.sidebar h3 {
   padding: 0 0 0 5px;
 }
 
+div.sidebar .sidebaritem {
+  padding: 0 0 10px 0;
+}
+
 div.sidebar ul {
   line-height: 130%;
   list-style: none;
-  margin: 0 0 7px 0;
+  margin: 0 0 0;
   padding: 0;
 }
 
@@ -264,9 +268,15 @@ div.sidebar ul li {
 #left div.sidebar ul li a.closed,
 #left div.sidebar ul li a.open {
   cursor: pointer;
+  font-weight: bold;
   margin-left: -15px;
   *margin-left: -16px;
   padding-left: 15px;
+}
+
+div.sidebar ul li {
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 #left div.sidebar ul li a.closed {
@@ -401,6 +411,7 @@ div.section h4 {
 
 div.section h2 {
   padding: 5px;
+  font-size: 1.25em;
 }
 
 div.admonition, div.warning {

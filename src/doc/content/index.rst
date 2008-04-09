@@ -18,11 +18,16 @@ Welcome to Eclim
 
 .. toctree::
 
+   features
+
+.. toctree::
+
    changes
    contribute
 
 .. toctree::
 
+   documentation
    guides/index
 
 .. _overview:
@@ -158,11 +163,11 @@ You can view the :ref:`release notes <1.3.6>` for more info.
 
 View the :ref:`release notes <1.3.0>` for more info.
 
-.. _Eclipse: http://eclipse.org
-.. _Vim: http://vim.org
+.. _eclipse: http://eclipse.org
+.. _vim: http://vim.org
 .. _nailgun: http://www.martiansoftware.com/nailgun/
 .. _formic: http://sourceforge.net/projects/formic/
-.. _GPLv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
+.. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
 
 .. _eclipse wst: http://eclipse.org/webtools/
 
