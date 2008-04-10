@@ -51,7 +51,7 @@ endif
 
 let TagList_title = "__Tag_List__"
 
-if g:Tlist_Auto_Open
+if g:Tlist_Auto_Open && !exists('g:Tlist_Temp_Disable')
   autocmd VimEnter * nested call eclim#taglist#taglisttoo#AutoOpen()
   " Auto open on new tabs as well.
   if v:version >= 700
