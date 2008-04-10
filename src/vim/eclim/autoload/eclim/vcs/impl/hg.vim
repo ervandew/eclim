@@ -231,7 +231,7 @@ function! s:ParseHgLog (lines)
   let index = 0
   for line in a:lines
     let index += 1
-    if line =~ '^changeset:\s\+[0-9]:[0-9a-z]\+'
+    if line =~ '^changeset:\s\+[0-9]\+:[0-9a-z]\+'
       let entry = {'revision': substitute(line, 'changeset:\s\+', '', ''), 'comment': []}
       call add(log, entry)
       let section = 'header'
