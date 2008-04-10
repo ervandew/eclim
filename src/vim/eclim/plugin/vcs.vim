@@ -58,21 +58,20 @@ if !exists(":VcsInfo")
     \  endif
 endif
 
-if !exists(":Viewvc")
-  command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProjectRelative
-    \ Viewvc :call eclim#vcs#viewvc#Viewvc('<args>', 'view=log')
+if !exists(":VcsWebLog")
+  command -nargs=0 VcsWebLog :call eclim#vcs#web#VcsWebLog()
 endif
-if !exists(":ViewvcChangeSet")
+if !exists(":VcsWebChangeSet")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ ViewvcChangeSet :call eclim#vcs#viewvc#ViewvcChangeSet(<q-args>)
+    \ VcsWebChangeSet :call eclim#vcs#web#VcsWebChangeSet(<q-args>)
 endif
-if !exists(":ViewvcAnnotate")
+if !exists(":VcsWebAnnotate")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ ViewvcAnnotate :call eclim#vcs#viewvc#ViewvcAnnotate(<q-args>)
+    \ VcsWebAnnotate :call eclim#vcs#web#VcsWebAnnotate(<q-args>)
 endif
-if !exists(":ViewvcDiff")
+if !exists(":VcsWebDiff")
   command -nargs=* -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ ViewvcDiff :call eclim#vcs#viewvc#ViewvcDiff(<q-args>)
+    \ VcsWebDiff :call eclim#vcs#web#VcsWebDiff(<q-args>)
 endif
 
 function s:CheckWindow ()

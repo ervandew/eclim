@@ -51,9 +51,9 @@ endif
     \ ]
 " }}}
 
-" OpenUrl(url) {{{
+" OpenUrl(url, [no_vim]) {{{
 " Opens the supplied url in a web browser or opens the url under the cursor.
-function! eclim#web#OpenUrl (url)
+function! eclim#web#OpenUrl (url, ...)
   if !exists('s:browser') || s:browser == ''
     let s:browser = s:DetermineBrowser()
 
@@ -90,12 +90,14 @@ function! eclim#web#OpenUrl (url)
     endif
   endif
 
-  for pattern in g:EclimOpenUrlInVimPatterns
-    if url =~ pattern
-      exec g:EclimOpenUrlInVimAction . ' ' . url
-      return
-    endif
-  endfor
+  if len(a:000) == 0 || a:000[0] != 0
+    for pattern in g:EclimOpenUrlInVimPatterns
+      if url =~ pattern
+        exec g:EclimOpenUrlInVimAction . ' ' . url
+        return
+      endif
+    endfor
+  endif
 
   let url = substitute(url, '\', '/', 'g')
   let url = escape(url, '&%')

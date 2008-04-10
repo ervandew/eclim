@@ -115,6 +115,16 @@ function eclim#vcs#impl#hg#GetEditorFile ()
   return ''
 endfunction " }}}
 
+" GetVcsWebPath() {{{
+function eclim#vcs#impl#hg#GetVcsWebPath ()
+  let path = substitute(expand('%:p'), '\', '/', 'g')
+  let path = substitute(path, eclim#vcs#impl#hg#GetRoot(), '', '')
+  if path =~ '^/'
+    let path = path[1:]
+  endif
+  return path
+endfunction " }}}
+
 " ChangeSet(revision) {{{
 function eclim#vcs#impl#hg#ChangeSet (revision)
   let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision)

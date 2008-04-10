@@ -148,13 +148,6 @@ function eclim#vcs#impl#svn#GetRoot ()
   return dir
 endfunction " }}}
 
-" GetViewvcPath([file]) {{{
-function eclim#vcs#impl#svn#GetViewvcPath (...)
-  let file = len(a:000) > 0 ? a:000[0] : expand('%')
-  let url_root = s:GetUrlAndRoot(file)
-  return substitute(url_root.url, url_root.root, '', '')
-endfunction " }}}
-
 " GetEditorFile() {{{
 function eclim#vcs#impl#svn#GetEditorFile ()
   let line = getline('.')
@@ -162,6 +155,16 @@ function eclim#vcs#impl#svn#GetEditorFile ()
     return substitute(line, '^M\s\+\(.*\)\s*', '\1', '')
   endif
   return ''
+endfunction " }}}
+
+" GetVcsWebPath() {{{
+function eclim#vcs#impl#svn#GetVcsWebPath ()
+  let url_root = s:GetUrlAndRoot(expand('%'))
+  let path = substitute(url_root.url, url_root.root, '', '')
+  if path =~ '^/'
+    let path = path[1:]
+  endif
+  return path
 endfunction " }}}
 
 " ChangeSet(revision) {{{

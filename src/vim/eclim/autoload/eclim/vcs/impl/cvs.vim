@@ -129,6 +129,13 @@ function eclim#vcs#impl#cvs#GetEditorFile ()
   return ''
 endfunction " }}}
 
+" GetVcsWebPath() {{{
+function eclim#vcs#impl#cvs#GetVcsWebPath ()
+  let dir = substitute(getcwd(), '\', '/', 'g')
+  let lines = readfile(dir . '/CVS/Repository', '', 1)
+  return lines[0] . '/' . expand('%')
+endfunction " }}}
+
 " Info() {{{
 " Retrieves and echos info on the current file.
 function eclim#vcs#impl#cvs#Info ()
