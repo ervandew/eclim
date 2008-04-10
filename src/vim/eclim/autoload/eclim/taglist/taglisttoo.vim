@@ -174,7 +174,7 @@ let s:tlist_def_html_settings = {
   \ }
 
 " java language
-let s:tlist_format_java = 'eclim#taglist#java#FormatJava'
+let s:tlist_format_java = 'eclim#taglist#lang#java#FormatJava'
 let s:tlist_def_java_settings = {
     \ 'p': 'package',
     \ 'c': 'class',
@@ -183,7 +183,7 @@ let s:tlist_def_java_settings = {
     \ 'm': 'method'
   \ }
 
-let s:tlist_format_javascript = 'eclim#taglist#javascript#FormatJavascript'
+let s:tlist_format_javascript = 'eclim#taglist#lang#javascript#FormatJavascript'
 let s:tlist_def_javascript_settings = {
     \ 'o': 'object',
     \ 'm': 'member',
@@ -217,7 +217,7 @@ let s:tlist_def_perl_settings = {
   \ }
 
 " php language
-let s:tlist_format_php = 'eclim#taglist#php#FormatPhp'
+let s:tlist_format_php = 'eclim#taglist#lang#php#FormatPhp'
 let s:tlist_def_php_settings = {
     \ 'c': 'class',
     \ 'd': 'constant',
@@ -226,7 +226,7 @@ let s:tlist_def_php_settings = {
   \ }
 
 " python language
-let s:tlist_format_python = 'eclim#taglist#python#FormatPython'
+let s:tlist_format_python = 'eclim#taglist#lang#python#FormatPython'
 let s:tlist_def_python_settings = {
     \ 'c': 'class',
     \ 'm': 'member',

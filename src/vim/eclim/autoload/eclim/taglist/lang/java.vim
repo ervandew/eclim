@@ -24,7 +24,7 @@
 " }}}
 
 " FormatJava(types, tags) {{{
-function! eclim#taglist#java#FormatJava (types, tags)
+function! eclim#taglist#lang#java#FormatJava (types, tags)
   let lines = []
   let content = []
 

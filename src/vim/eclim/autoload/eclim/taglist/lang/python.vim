@@ -24,7 +24,7 @@
 " }}}
 
 " FormatPython(types, tags) {{{
-function! eclim#taglist#python#FormatPython (types, tags)
+function! eclim#taglist#lang#python#FormatPython (types, tags)
   let lines = []
   let content = []
 

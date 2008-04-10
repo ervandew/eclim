@@ -24,7 +24,7 @@
 " }}}
 
 " FormatPhp(types, tags) {{{
-function! eclim#taglist#php#FormatPhp (types, tags)
+function! eclim#taglist#lang#php#FormatPhp (types, tags)
   let pos = getpos('.')
 
   let lines = []

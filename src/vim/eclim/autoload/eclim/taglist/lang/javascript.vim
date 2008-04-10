@@ -24,7 +24,7 @@
 " }}}
 
 " FormatJavascript(types, tags) {{{
-function! eclim#taglist#javascript#FormatJavascript (types, tags)
+function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
   let pos = getpos('.')
 
   let lines = []
