@@ -17,3 +17,47 @@
 
 Maven: Maintain Classpath
 =========================
+
+<a href="ext:maven">Maven</a> 1.x comes bundled with an Eclipse plugin
+that allows you to easily maintain your .classpath file based on your
+project.xml.  This guide will walk you through the steps of setting this
+up for the first time and continual usage there after.
+
+.. note::
+
+  For additional information on the Eclipse plugin from maven, you may visit
+  their
+  <a href="http://maven.apache.org/maven-1.x/plugins/eclipse/">
+  online documentation
+  </a>.
+
+
+Initial Setup
+-------------
+
+To initialize maven's support for updating the eclipse classpath you first need
+to set the ``MAVEN_REPO`` variable in the Eclipse workspace by
+executing the following command which is made available when editing the
+project.xml file in vim:
+
+.. code-block:: vim
+
+  :MavenRepo
+
+
+Updating .classpath
+-------------------
+
+Once you have performed the <a href="#setup">initial setup</a>, updating the
+Eclipse ``.classpath`` file is as easy as executing the following at a command
+line\:
+
+::
+
+  maven eclipse
+
+or in Vim\:
+
+.. code-block:: vim
+
+  :Maven eclipse

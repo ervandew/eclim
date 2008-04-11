@@ -17,3 +17,67 @@
 
 Ivy: Maintain Classpath
 =======================
+
+For users of <a href="ext:ivy">ivy</a>, eclim provides support for auto
+updating the ``.classpath`` for your project every time you save
+your ivy.xml file.  Any entries found in the ivy.xml that are not in the
+``.classpath`` will be added, any entries that differ in
+version will be updated, and any stale entries deleted.
+
+
+Initial Setup
+-------------
+
+Before you can start utilizing this auto updating support, you must first set
+the location of your ivy repository (ivy cache).  This is the directory where
+ivy will download the dependencies to and where eclipse will then pick them up
+to be added to your project's classpath.
+
+To set the repository location you can use the **:IvyRepo** command which is
+made available when editing an ivy.xml file.
+
+.. code-block:: vim
+
+  :IvyRepo /path/to/ivy/repository
+
+
+If you fail to set this prior to writing the ivy.xml file, eclim will emit an
+error notifying you that you first need to set the IVY_REPO variable via this
+command.
+
+
+Updating .classpath
+-------------------
+
+Once you have performed the <a href="#setup">initial setup</a>, updating the
+Eclipse ``.classpath`` file is as easy as saving your ivy.xml file (:w) and
+letting eclim do the rest.
+
+
+Preserving manually added entries
+---------------------------------
+
+When utilizing the ivy support, eclim will attempt to remove any stale entries
+from your .classpath file.  If you have some manually added entries, these may
+be removed as well.  To prevent this you can add a classpath entry attribute
+notifying eclim that the entry should be preserved.
+
+Ex.
+
+.. code-block:: xml
+
+  <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
+    <attributes>
+      <attribute name="eclim.preserve" value="true"/>
+    </attributes>
+  </classpathentry>
+
+
+Search Online Maven Repository
+------------------------------
+
+Eclim also provides the command **:IvyDependencySearch** which allows you to
+search for dependencies in the online maven repository as described in the
+<a href="../../../vim/java/maven/dependency.html">
+maven documentation
+</a>.
