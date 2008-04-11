@@ -69,6 +69,31 @@ endif
 if !exists(":DiffLastSaved")
   command DiffLastSaved :call eclim#common#util#DiffLastSaved()
 endif
+
+if !exists(":OtherWorkingCopyDiff")
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectContainsThis
+    \ OtherWorkingCopyDiff :call eclim#common#util#OtherWorkingCopyDiff('<args>')
+endif
+if !exists(":OtherWorkingCopyEdit")
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectContainsThis
+    \ OtherWorkingCopyEdit
+    \ :call eclim#common#util#OtherWorkingCopy('<args>', 'edit')
+endif
+if !exists(":OtherWorkingCopySplit")
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectContainsThis
+    \ OtherWorkingCopySplit
+    \ :call eclim#common#util#OtherWorkingCopy('<args>', 'split')
+endif
+if !exists(":OtherWorkingCopyTabopen")
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectContainsThis
+    \ OtherWorkingCopyTabopen
+    \ :call eclim#common#util#OtherWorkingCopy('<args>', 'tablast | tabnew')
+endif
+
 if !exists(":SwapWords")
   command SwapWords :call eclim#common#util#SwapWords()
 endif

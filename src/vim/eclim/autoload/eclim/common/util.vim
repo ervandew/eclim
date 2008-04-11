@@ -215,6 +215,27 @@ function eclim#common#util#OpenFiles (command, arg)
   endfor
 endfunction " }}}
 
+" OtherWorkingCopy(project, action) {{{
+" Opens the same file from another project using the supplied action
+function! eclim#common#util#OtherWorkingCopy (project, action)
+  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let projects = eclim#project#util#GetProjects()
+  let project_path = projects[a:project] . '/' . path
+  call eclim#util#GoToBufferWindowOrOpen(project_path, a:action)
+endfunction " }}}
+
+" OtherWorkingCopyDiff(project) {{{
+" Diffs the current file against the same file from another project using the
+" supplied action
+function! eclim#common#util#OtherWorkingCopyDiff (project)
+  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let projects = eclim#project#util#GetProjects()
+  let project_path = projects[a:project] . '/' . path
+  diffthis
+  call eclim#util#GoToBufferWindowOrOpen(project_path, 'vertical split')
+  diffthis
+endfunction " }}}
+
 " SwapTypedArguments() {{{
 " Swaps typed method declaration arguments.
 function! eclim#common#util#SwapTypedArguments ()

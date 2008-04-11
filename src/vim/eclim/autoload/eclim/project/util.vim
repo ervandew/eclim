@@ -569,6 +569,22 @@ function! eclim#project#util#CommandCompleteProject (argLead, cmdLine, cursorPos
     \ a:argLead, a:cmdLine, a:cursorPos, '')
 endfunction " }}}
 
+" CommandCompleteProjectContainsThis(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names, filtering by those that contain
+" a file with the same path as the current file, excluding the current
+" project.
+function! eclim#project#util#CommandCompleteProjectContainsThis (
+  \ argLead, cmdLine, cursorPos)
+  let names = eclim#project#util#CommandCompleteProjectByNature(
+    \ a:argLead, a:cmdLine, a:cursorPos, '')
+
+  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let project = eclim#project#util#GetCurrentProjectName()
+  let projects = eclim#project#util#GetProjects()
+  call filter(names, 'v:val != project && filereadable(projects[v:val]. "/" . path)')
+  return names
+endfunction " }}}
+
 " CommandCompleteProjectByNature(argLead, cmdLine, cursorPos, nature) {{{
 " Custom command completion for project names.
 function! eclim#project#util#CommandCompleteProjectByNature (
