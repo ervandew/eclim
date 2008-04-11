@@ -43,7 +43,8 @@ function! eclim#vcs#impl#hg#GetAnnotations (revision)
 
   let cmd = 'annotate -udn'
   if a:revision != ''
-    let cmd .= ' -r ' . a:revision
+    let revision = substitute(a:revision, '.*:', '', '')
+    let cmd .= ' -r ' . revision
   endif
   let result = eclim#vcs#impl#hg#Hg(cmd . ' "' . file . '"')
   if type(result) == 0
