@@ -21,9 +21,10 @@ from os import path
 from docutils import nodes
 from docutils.io import StringOutput
 
+from eclim.pygments import GroovyLexer
 from eclim.sphinx.environment import EclimBuildEnvironment
 
-from sphinx import addnodes
+from sphinx import addnodes, highlighting
 from sphinx.builder import StandaloneHTMLBuilder, ENV_PICKLE_FILENAME
 from sphinx.util import relative_uri
 from sphinx.util.console import bold
@@ -195,6 +196,6 @@ class EclimBuilder (StandaloneHTMLBuilder):
       return addnodes.compact_paragraph('', '', entries)
     return None
 
-
 def setup (sphinx):
+  highlighting.lexers['groovy'] = GroovyLexer()
   sphinx.add_builder(EclimBuilder)
