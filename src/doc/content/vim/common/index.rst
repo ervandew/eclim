@@ -17,3 +17,16 @@
 
 Common
 ======
+
+.. toctree::
+
+   archive
+   maximize
+   project
+   taglist
+
+
+- :ref:`vim/common/archive`
+- :ref:`vim/common/maximize`
+- :ref:`vim/common/project`
+- :ref:`vim/common/taglist`
