@@ -1,7 +1,7 @@
 body {
   background-color: white;
   color: #444;
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
   letter-spacing: -0.01em;
   line-height: 150%;
@@ -23,10 +23,15 @@ a:hover {
 pre {
   background-color: #f8f8f8;
   border: 1px solid #ccc;
-  font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+  font-family: monospace;
   font-size: 0.95em;
   letter-spacing: 0.015em;
   padding: 5px;
+  overflow: auto;
+  *overflow-x: auto;
+  *overflow-y: hidden;
+  *padding-bottom: 20px;
+  width: 100%;
 }
 
 td.linenos pre {
@@ -272,6 +277,10 @@ div.sidebar ul li {
   margin-left: -15px;
   *margin-left: -16px;
   padding-left: 15px;
+}
+
+#left div.sidebar ul li.selected {
+  background-color: #ddd;
 }
 
 div.sidebar ul li {
