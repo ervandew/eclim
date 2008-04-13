@@ -17,3 +17,11 @@
 
 Css
 ======
+
+.. toctree::
+
+   complete
+   validate
+
+- :ref:`vim/css/complete`
+- :ref:`vim/css/validate`

@@ -13,26 +13,24 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/common/index:
+.. _vim/css/complete:
 
-Common
-======
+Css Code Completion
+===================
 
-.. toctree::
+Css code completion uses the standard <a href="../code_completion.html">Vim code
+completion mechanism</a> like so\:
 
-   project
-   taglist
-   util
-   vcs
-   web
-   maximize
-   archive
+::
 
+  bo<Ctrl-X><Ctrl-U>
 
-- :ref:`vim/common/project`
-- :ref:`vim/common/taglist`
-- :ref:`vim/common/util`
-- :ref:`vim/common/vcs`
-- :ref:`vim/common/web`
-- :ref:`vim/common/maximize`
-- :ref:`vim/common/archive`
+  body {
+    font-<Ctr-X><Ctrl-U>
+
+  body {
+    font-family: sa<Ctrl-X><Ctrl-U>
+
+  body {
+    font-family: sans-serif;
+  ...

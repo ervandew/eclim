@@ -17,3 +17,9 @@
 
 Dtd
 ======
+
+.. toctree::
+
+   validate
+
+- :ref:`vim/css/validate`
