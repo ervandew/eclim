@@ -17,3 +17,15 @@
 
 Php
 =====
+
+.. toctree::
+
+   include
+   complete
+   validate
+   search
+
+- :ref:`vim/php/include`
+- :ref:`vim/php/complete`
+- :ref:`vim/php/validate`
+- :ref:`vim/php/search`

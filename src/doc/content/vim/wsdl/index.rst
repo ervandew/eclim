@@ -17,3 +17,9 @@
 
 Wsdl
 ======
+
+.. toctree::
+
+   validate
+
+- :ref:`vim/wsdl/validate`

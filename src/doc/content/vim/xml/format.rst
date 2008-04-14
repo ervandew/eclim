@@ -13,13 +13,23 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/xml/format:
 
-Xsd
-======
+Xml Format
+==========
 
-.. toctree::
+On occasion you may encounter some xml content that is unformatted (like raw
+content from a web service).
 
-   validate
+.. code-block:: xml
 
-- :ref:`vim/xsd/validate`
+  <blah><foo>one</foo><bar>two</bar></blah>
+
+Executing **:XmlFormat** will reformat the current xml file like so\:
+
+.. code-block:: xml
+
+  <blah>
+    <foo>one</foo>
+    <bar>two</bar>
+  </blah>

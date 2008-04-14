@@ -17,3 +17,13 @@
 
 Html
 ======
+
+.. toctree::
+
+   complete
+   validate
+   util
+
+- :ref:`vim/html/complete`
+- :ref:`vim/html/validate`
+- :ref:`vim/html/util`

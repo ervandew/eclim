@@ -17,3 +17,9 @@
 
 Javascript
 ==========
+
+.. toctree::
+
+   validate
+
+- :ref:`vim/javascript/validate`

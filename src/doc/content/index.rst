@@ -150,6 +150,7 @@ You can view the :ref:`release notes <1.3.6>` for more info.
 * Eclim has been upgraded to support Eclipse 3.3.
 
   .. note::
+
     Eclim now **requires** Eclipse 3.3 and JDK 1.5.
 
 * A new

@@ -17,3 +17,15 @@
 
 Xml
 ======
+
+.. toctree::
+
+   complete
+   definition
+   validate
+   format
+
+- :ref:`vim/xml/complete`
+- :ref:`vim/xml/definition`
+- :ref:`vim/xml/validate`
+- :ref:`vim/xml/format`

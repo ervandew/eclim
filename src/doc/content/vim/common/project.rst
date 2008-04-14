@@ -51,7 +51,7 @@ projects from within Vim.
 
       :ProjectCreate ~/workspace/test -n none
 
-    Note that eclim support command completion of available nature
+    Note that eclim supports command completion of available nature
     names.
 
     .. code-block:: vim

@@ -13,13 +13,28 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/java/ant/complete:
 
-Xsd
-======
+Ant Code Completion
+===================
 
-.. toctree::
+Ant code completion uses the standard <a href="../../code_completion.html">Vim
+code completion mechanism</a> like so\:
 
-   validate
+::
 
-- :ref:`vim/xsd/validate`
+  <ja<Ctrl-X><Ctrl-U>
+  <jar de<Ctrl-X><Ctrl-U>
+  <jar destfile="${bas<Ctrl-X><Ctrl-U>
+  <jar destfile="${basdir
+  ...
+
+Screenshot of completion in action\:
+
+.. image:: ../../../images/screenshots/java/ant/completion.png
+
+.. warning::
+
+  If your ant file has a lot of imports, then the code completion may be slow as
+  Eclipse parses all the imports when creating the ant model.  You will notice
+  the same slow behavior when using Eclipse directly.

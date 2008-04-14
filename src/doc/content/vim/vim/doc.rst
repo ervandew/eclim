@@ -13,13 +13,22 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/vim/doc:
 
-Xsd
-======
+Vim Doc
+=======
 
-.. toctree::
+.. _VimDoc:
 
-   validate
+To facilitate quick access of Vim help for elements of a Vim script, eclim
+provides the command **:VimDoc**.  When executed it will open the help docs for
+the supplied argument or for the element under the cursor.  When mapped to a key
+binding of your choosing, this command can save you some repetitive typing and
+provides an internal map of some keywords to their help topic, which are not
+always as straight forward as :help word.
 
-- :ref:`vim/xsd/validate`
+.. note::
+
+  If you come across any instances where this command does not find the
+  expected Vim help topic, please report it so that it may be accounted for
+  in future revisions.

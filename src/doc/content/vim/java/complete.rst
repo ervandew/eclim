@@ -13,13 +13,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/java/complete:
 
-Xsd
-======
+Java Code Completion
+====================
 
-.. toctree::
+Java code completion uses the standard <a href="../code_completion.html">Vim
+code completion mechanism</a> like so\:
 
-   validate
+::
 
-- :ref:`vim/xsd/validate`
+  System.o<Ctrl-X><Ctrl-U>
+  System.out.pri<Ctrl-X><Ctrl-U>
+
+Screenshot of completion in action\:
+
+.. image:: ../../images/screenshots/java/completion.png

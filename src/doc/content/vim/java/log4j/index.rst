@@ -13,13 +13,13 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/java/log4j/index:
 
-Xsd
+Log4j
 ======
 
 .. toctree::
 
    validate
 
-- :ref:`vim/xsd/validate`
+- :ref:`vim/java/log4j/validate`

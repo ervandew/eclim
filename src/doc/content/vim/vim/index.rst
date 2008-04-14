@@ -17,3 +17,11 @@
 
 Vim
 ======
+
+.. toctree::
+
+   find
+   doc
+
+- :ref:`vim/vim/find`
+- :ref:`vim/vim/doc`

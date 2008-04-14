@@ -13,13 +13,19 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/java/ant/index:
 
-Xsd
+Ant
 ======
 
 .. toctree::
 
+   execute
+   complete
    validate
+   doc
 
-- :ref:`vim/xsd/validate`
+- :ref:`vim/java/ant/execute`
+- :ref:`vim/java/ant/complete`
+- :ref:`vim/java/ant/validate`
+- :ref:`vim/java/ant/doc`

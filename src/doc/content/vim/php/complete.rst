@@ -13,13 +13,26 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/php/complete:
 
-Xsd
-======
+Php Code Completion
+===================
 
-.. toctree::
+Php code completion uses the standard <a href="../code_completion.html">Vim code
+completion mechanism</a> like so\:
 
-   validate
+.. code-block:: php
 
-- :ref:`vim/xsd/validate`
+  <?php
+  class Test {
+    function getName () {
+    }
+    function getValue () {
+    }
+  }
+
+  $test = new Test();
+
+  $test->get<C-X><C-U>
+  $test->getName()
+  ?>

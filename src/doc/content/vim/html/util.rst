@@ -13,13 +13,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/html/util:
 
-Xsd
-======
+Html File Utils
+===============
 
-.. toctree::
+When editing html files eclim provides some utilility commands for your
+convience.
 
-   validate
+.. _BrowserOpen:
 
-- :ref:`vim/xsd/validate`
+**:BrowserOpen** - Opens the current html file in your configured browser.

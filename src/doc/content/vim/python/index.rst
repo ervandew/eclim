@@ -17,3 +17,13 @@
 
 Python
 ======
+
+.. toctree::
+
+   validate
+   regex
+   django
+
+- :ref:`vim/python/validate`
+- :ref:`vim/python/regex`
+- :ref:`vim/python/django`

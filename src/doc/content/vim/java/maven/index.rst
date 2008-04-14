@@ -13,13 +13,15 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
+.. _vim/java/maven/index:
 
-Xsd
+Maven
 ======
 
 .. toctree::
 
-   validate
+   execute
+   dependencies
 
-- :ref:`vim/xsd/validate`
+- :ref:`vim/java/maven/execute`
+- :ref:`vim/java/maven/dependencies`
