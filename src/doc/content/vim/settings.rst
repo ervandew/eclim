@@ -150,7 +150,8 @@ The following is a list of some of the common Vim variables available.
 
   Behaves just like **g:EclimLogLevel** except this applies
   to placing of Vim signs for displaying validation errors / warnings,
-  or marking :[vim]grep matches.<br/>
+  or marking :[vim]grep matches.
+
   The resulting signs also use the same highlighting variables above.
 
 .. _EclimEchoHighlight:

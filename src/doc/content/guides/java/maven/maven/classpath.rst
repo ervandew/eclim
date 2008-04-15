@@ -26,10 +26,7 @@ up for the first time and continual usage there after.
 .. note::
 
   For additional information on the Eclipse plugin from maven, you may visit
-  their
-  <a href="http://maven.apache.org/maven-1.x/plugins/eclipse/">
-  online documentation
-  </a>.
+  their `online documentation`_.
 
 
 Initial Setup
@@ -61,3 +58,5 @@ or in Vim\:
 .. code-block:: vim
 
   :Maven eclipse
+
+.. _online documentation: http://maven.apache.org/maven-1.x/plugins/eclipse/

@@ -62,7 +62,8 @@ Vim Variables
 
 - **b:EclimSgmlCompleteEndTagIgnore** -
   Buffer local variable that can be set to a list of tags to ignore when
-  searching for the start tag to complete.<br/>
+  searching for the start tag to complete.
+
   Example that can be added to an html ftplugin file:
 
   .. code-block:: vim

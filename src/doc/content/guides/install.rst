@@ -107,9 +107,8 @@ eclim server and verify that it is running properly.
 
 #.  Once you have started the server you can test it by opening a Vim
     window and issuing the command,
-    <a href="../vim/index.html#PingEclim">
-    **:PingEclim**
-    </a>.  The result of executing this command should be
+    <a href="../vim/index.html#PingEclim">**:PingEclim**</a>.
+    The result of executing this command should be
     "eclim *version*" echoed to the bottom of your
     Vim window.  If however, you receive
     ``unable to connect to eclimd - connect: Connection refused``,

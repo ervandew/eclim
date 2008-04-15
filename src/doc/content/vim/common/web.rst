@@ -74,9 +74,8 @@ phrases using some great online tools.
 .. _Google:
 
 - **:Google** [word ...] -
-  This command is used to look up a word or phrase on
-  <a href="http://google.com">google.com</a>.  You can invoke it one of
-  two ways.
+  This command is used to look up a word or phrase on google.com_.  You can
+  invoke it one of two ways.
 
   #.  First by supplying the word or words to search for as arguments to
       the command.
@@ -97,33 +96,31 @@ phrases using some great online tools.
 .. _Clusty:
 
 - **:Clusty** [word ...] -
-  This command works just like the **:Google** command except it uses <a
-  href="http://clusty.com">clusty.com</a> as the search engine.  For those of
-  you who have not heard of clusty, it is an excellent alternative to google
-  which groups results into clusters, allowing you to quickly filter search
-  results down to the topic you are looking for.  It is a great place to go when
-  google returns too many results that are difficult to sift through.
+  This command works just like the **:Google** command except it uses
+  clusty.com_ as the search engine.  For those of you who have not heard of
+  clusty, it is an excellent alternative to google which groups results into
+  clusters, allowing you to quickly filter search results down to the topic you
+  are looking for.  It is a great place to go when google returns too many
+  results that are difficult to sift through.
 
 .. _Wikipedia:
 
 - **:Wikipedia** [word ...] -
   Again this command behaves like the previous two, but instead looks up the
-  desired word or phrase on <a href="http://en.wikipedia.com">wikipedia</a>, the
-  great online encyclopedia.
+  desired word or phrase on wikipedia.org_, the great online encyclopedia.
 
 .. _Dictionary:
 
 - **:Dictionary** [word] -
-  This command is used to look up a word on <a
-  href="http://dictionary.reference.com">dictionary.reference.com</a>.  You can
+  This command is used to look up a word on dictionary.reference.com_.  You can
   either supply the word to lookup as an argument to the command or it will
   otherwise use the word under the cursor.
 
 .. _Thesaurus:
 
 - **:Thesaurus** [word] -
-  This command behaves the same as **:Dictionary** but looks up the word via <a
-  href="http://thesaurus.reference.com">thesaurus.reference.com</a>.
+  This command behaves the same as **:Dictionary** but looks up the word via
+  thesaurus.reference.com_.
 
 While these commands can be quite useful, you may notice one thing is absent.
 By default eclim does not provide any mappings that allow you to visually select
@@ -145,3 +142,9 @@ See :help mapleader for more info on using <leader> for command mappings.
 The above examples can be modified for clusty or wikipedia as well.  The
 dictionary and thesaurus commands don't support this feature as they both
 operate on single words.
+
+.. _google.com: http://google.com
+.. _clusty.com: http://clusty.com
+.. _wikipedia.org: http://en.wikipedia.com
+.. _dictionary.reference.com: http://dictionary.reference.com
+.. _thesaurus.reference.com: http://thesaurus.reference.com

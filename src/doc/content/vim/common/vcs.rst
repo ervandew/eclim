@@ -44,7 +44,7 @@ file versioned in cvs, subversion, or mercurial (where applicable).
 .. _VcsLog:
 
 - **:VcsLog** -
-  Opens a buffer with log information for the current file.<br/> In this buffer
+  Opens a buffer with log information for the current file. In this buffer
   you can perform various operations (diff, annotate, view log for another file,
   etc.) by hitting <Return> on any of the text links denoted by **|link name|**
   (ex.  **|annotate|**).

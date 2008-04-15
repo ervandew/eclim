@@ -42,9 +42,7 @@ and variables.
   <a href="../../guides/java/maven/mvn_classpath.html">2.x</a>) for
   maintaining the eclipse classpath.  For users who use
   <a href="ext:ivy">ivy</a>, eclim also provides a means to
-  <a href="../../guides/java/ivy/ivy_classpath.html">
-  auto update the eclipse classpath
-  </a>
+  <a href="../../guides/java/ivy/ivy_classpath.html">auto update the eclipse classpath</a>
   when saving changes to your ivy.xml.
 
 .. _NewSrcEntry:

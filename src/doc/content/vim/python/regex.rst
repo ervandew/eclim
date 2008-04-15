@@ -93,6 +93,7 @@ Vim Variables
 .. _eclim_regex_type:
 
 - **b:eclim_regex_type** (Default: 'file') -
-  Possible values: 'file' or 'line'<br/>
+  Possible values: 'file' or 'line'
+
   Determines if the supplied regex should be applied against the sample
   text all at once ('file') or on each line individually ('line').

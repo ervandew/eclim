@@ -118,8 +118,8 @@ allow proper matchit.vim support for django default and user defined tags.
 
 **End Tag Completion**
 
-Using the <a href="#HtmlDjangoUserBodyElements">
-**g:HtmlDjangoUserBodyElements** </a> setting along with the pre-configured
+Using the <a href="#HtmlDjangoUserBodyElements">**g:HtmlDjangoUserBodyElements**</a>
+setting along with the pre-configured
 default list of body elements, eclim includes support for auto completion of
 ending template tags when you type an '{%e' or '{% e'.
 

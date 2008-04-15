@@ -53,9 +53,7 @@ Editing project settings
 
 After creating a project, the next thing you'll probably want to do is edit your
 project's settings.  To do this you can use the
-<a href="../../vim/common/project.html#ProjectSettings">
-**:ProjectSettings**
-</a>
+<a href="../../vim/common/project.html#ProjectSettings">**:ProjectSettings**</a>
 command.  If your current Vim window's working directory is at or under the
 project's root directory then you can execute the **:ProjectSettings** with no
 arguments, otherwise you will need to supply the project name.
@@ -73,9 +71,7 @@ using **:ProjectSettings** to update them.
 
   If you have only one project or many projects that share the same settings you
   can use the
-  <a href="../../vim/index.html#EclimSettings">
-  **:EclimSettings**
-  </a>
+  <a href="../../vim/index.html#EclimSettings">**:EclimSettings**</a>
   command instead to edit the global settings.  These global settings will apply
   to any project that has not overridden them with values via
   **:ProjectSettings**.

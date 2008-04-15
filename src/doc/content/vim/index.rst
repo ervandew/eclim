@@ -55,6 +55,5 @@ the other categories.
 - **:EclimSettings** -
   Allows you to view / edit the global <a href="settings.html">settings</a>.
   For project level settings see the
-  <a href="common/project.html#ProjectSettings">
-  **:ProjectSettings**
-  </a> command on the <a href="common/project.html">project documentation page</a>.
+  <a href="common/project.html#ProjectSettings">**:ProjectSettings**</a>
+  command on the <a href="common/project.html">project documentation page</a>.

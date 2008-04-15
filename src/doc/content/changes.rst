@@ -63,26 +63,17 @@ Html:
 
 Vcs:
   - Added support for limiting the number of log entries returned by
-    <a href="vim/common/vcs.html#VcsLog">
-    **:VcsLog**
-    </a> (limits to 50 entries by default).
+    <a href="vim/common/vcs.html#VcsLog">**:VcsLog**</a>
+    (limits to 50 entries by default).
   - Updated **:VcsLog**, **:VcsChangeSet**, etc.
     to support cvs and hg where applicable.
 
 Trac:
   - Added
-    <a href="vim/common/trac.html#TracLog">
-    **:TracLog**
-    </a>,
-    <a href="vim/common/trac.html#TracAnnotate">
-    **:TracAnnotate**
-    </a>,
-    <a href="vim/common/trac.html#TracChangeSet">
-    **:TracChangeSet**
-    </a>, and
-    <a href="vim/common/trac.html#TracDiff">
-    **:TracDiff**
-    </a>.
+    <a href="vim/common/trac.html#TracLog">**:TracLog**</a>,
+    <a href="vim/common/trac.html#TracAnnotate">**:TracAnnotate**</a>,
+    <a href="vim/common/trac.html#TracChangeSet">**:TracChangeSet**</a>, and
+    <a href="vim/common/trac.html#TracDiff">**:TracDiff**</a>.
 
 .. _1.3.4:
 
@@ -95,9 +86,7 @@ Bug Fixes:
 
 Eclim:
   - Added
-    <a href="vim/common/project.html#ProjectInfo">
-    **:ProjectInfo**
-    </a>.
+    <a href="vim/common/project.html#ProjectInfo">**:ProjectInfo**</a>.
   - Added an eclim/after directory to vim's runtime path for any user scripts
     to be sourced after eclim.
 
@@ -131,15 +120,9 @@ Bug Fixes:
 
 Eclim:
   - Added commands to view or manipulate project natures:
-    <a href="vim/common/project.html#ProjectNatures">
-    **:ProjectNatures**
-    </a>,
-    <a href="vim/common/project.html#ProjectNatureAdd">
-    **:ProjectNatureAdd**
-    </a>, and
-    <a href="vim/common/project.html#ProjectNatureRemove">
-    **:ProjectNatureRemove**
-    </a>.
+    <a href="vim/common/project.html#ProjectNatures">**:ProjectNatures**</a>,
+    <a href="vim/common/project.html#ProjectNatureAdd">**:ProjectNatureAdd**</a>, and
+    <a href="vim/common/project.html#ProjectNatureRemove">**:ProjectNatureRemove**</a>.
 
 Css:
   - Added <a href="vim/css/validate.html">css validation</a>.
@@ -176,33 +159,17 @@ Python:
 
 Vcs:
   - Added
-    <a href="vim/common/vcs.html#VcsInfo">
-    **:VcsInfo**
-    </a>,
-    <a href="vim/common/vcs.html#ViewvcAnnotate">
-    **:ViewvcAnnotate**
-    </a>,
-    <a href="vim/common/vcs.html#ViewvcChangeSet">
-    **:ViewvcChangeSet**
-    </a>, and
-    <a href="vim/common/vcs.html#ViewvcDiff">
-    **:ViewvcDiff**
-    </a>.
+    <a href="vim/common/vcs.html#VcsInfo">**:VcsInfo**</a>,
+    <a href="vim/common/vcs.html#ViewvcAnnotate">**:ViewvcAnnotate**</a>,
+    <a href="vim/common/vcs.html#ViewvcChangeSet">**:ViewvcChangeSet**</a>, and
+    <a href="vim/common/vcs.html#ViewvcDiff">**:ViewvcDiff**</a>.
 
 Vcs (subversion):
   - Added
-    <a href="vim/common/vcs.html#VcsLog">
-    **:VcsLog**
-    </a>,
-    <a href="vim/common/vcs.html#VcsChangeSet">
-    **:VcsChangeSet**
-    </a>,
-    <a href="vim/common/vcs.html#VcsDiff">
-    **:VcsDiff**
-    </a>, and
-    <a href="vim/common/vcs.html#VcsCat">
-    **:VcsCat**
-    </a>.
+    <a href="vim/common/vcs.html#VcsLog">**:VcsLog**</a>,
+    <a href="vim/common/vcs.html#VcsChangeSet">**:VcsChangeSet**</a>,
+    <a href="vim/common/vcs.html#VcsDiff">**:VcsDiff**</a>, and
+    <a href="vim/common/vcs.html#VcsCat">**:VcsCat**</a>.
 
 Vim:
   - Added vim <a href="vim/common/maximize.html">window maximize and minimize</a>
@@ -253,38 +220,22 @@ Eclim:
     an automatic project refresh.  What this means for you is that any time
     you perform an action that results in any file additions, deletions, or
     changes, like a svn / cvs update, you should issue a
-    <a href="vim/common/project.html#ProjectRefresh">
-    **:ProjectRefresh**
-    </a>
+    <a href="vim/common/project.html#ProjectRefresh">**:ProjectRefresh**</a>
     to ensure that eclipse and eclim are updated with the latest version of
     the files on disk.
-  - <a href="vim/common/project.html#ProjectCreate">
-    **:ProjectCreate**
-    </a>
+  - <a href="vim/common/project.html#ProjectCreate">**:ProjectCreate**</a>
     now supports optional -p argument for specifying the project name to
     use.
   - Created new command
-    <a href="vim/common/project.html#ProjectRefreshAll">
-    **:ProjectRefreshAll**
-    </a>
+    <a href="vim/common/project.html#ProjectRefreshAll">**:ProjectRefreshAll**</a>
     to support refreshing all projects at once, and modified
-    <a href="vim/common/project.html#ProjectRefresh">
-    **:ProjectRefresh**
-    </a>
+    <a href="vim/common/project.html#ProjectRefresh">**:ProjectRefresh**</a>
     to only refresh the current project if no project names are supplied.
   - Added
-    <a href="vim/common/project.html#ProjectGrep">
-    **:ProjectGrep**
-    </a>,
-    <a href="vim/common/project.html#ProjectGrepAdd">
-    **:ProjectGrepAdd**
-    </a>,
-    <a href="vim/common/project.html#ProjectLGrep">
-    **:ProjectLGrep**
-    </a>, and
-    <a href="vim/common/project.html#ProjectLGrepAdd">
-    **:ProjectLGrepAdd**
-    </a>.
+    <a href="vim/common/project.html#ProjectGrep">**:ProjectGrep**</a>,
+    <a href="vim/common/project.html#ProjectGrepAdd">**:ProjectGrepAdd**</a>,
+    <a href="vim/common/project.html#ProjectLGrep">**:ProjectLGrep**</a>, and
+    <a href="vim/common/project.html#ProjectLGrepAdd">**:ProjectLGrepAdd**</a>.
   - Added support for buffer local variable
     **b:EclimLocationListFilter** which can contain a list of
     regular expression patterns used to filter location list entries with
@@ -324,21 +275,11 @@ Python:
 
 Django:
   - Added
-    <a href="vim/python/django.html#DjangoManage">
-    **:DjangoManage**
-    </a>,
-    <a href="vim/python/django.html#DjangoFind">
-    **:DjangoFind**
-    </a>,
-    <a href="vim/python/django.html#DjangoTemplateOpen">
-    **:DjangoTemplateOpen**
-    </a>,
-    <a href="vim/python/django.html#DjangoViewOpen">
-    **:DjangoViewOpen**
-    </a>, and
-    <a href="vim/python/django.html#DjangoContextOpen">
-    **:DjangoContextOpen**
-    </a>.
+    <a href="vim/python/django.html#DjangoManage">**:DjangoManage**</a>,
+    <a href="vim/python/django.html#DjangoFind">**:DjangoFind**</a>,
+    <a href="vim/python/django.html#DjangoTemplateOpen">**:DjangoTemplateOpen**</a>,
+    <a href="vim/python/django.html#DjangoViewOpen">**:DjangoViewOpen**</a>, and
+    <a href="vim/python/django.html#DjangoContextOpen">**:DjangoContextOpen**</a>.
 
 WebXml:
   - Added

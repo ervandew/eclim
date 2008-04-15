@@ -215,7 +215,7 @@ Configuration
 
 Vim Variables
 
-- **g:EclimTaglistEnabled** (Default: 1)<br/>
+- **g:EclimTaglistEnabled** (Default: 1) -
   If set to 0, disables usage of eclim's ctags implementation.
 
 

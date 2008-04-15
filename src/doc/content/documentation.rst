@@ -24,6 +24,7 @@ Documentation
   vim/issues
   vim/code_completion
   vim/mappings
+  vim/cheatsheet
   vim/common/index
   vim/css/index
   vim/dtd/index

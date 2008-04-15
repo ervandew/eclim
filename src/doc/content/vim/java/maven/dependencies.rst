@@ -25,8 +25,8 @@ Maven Dependencies
 Maven provides online repositories where it will download dependencies from at
 build time.  One problem is that finding all your dependencies and then adding
 them to your pom file can become labor intensive.  To help alleviate this, eclim
-provides commands for searching via the web service provided by <a
-href="http://maven.ozacc.com">maven.ozacc.com</a>.
+provides commands for searching via the web service provided by
+maven.ozacc.com_.
 
 - **:MavenDependencySearch** <artifact> -
   Available when editing a maven 1.x ``project.xml`` file.
@@ -40,3 +40,5 @@ your pom file by simply hitting <enter> on it.
 Example when calling ``:MvnDependencySearch junit``
 
 .. image:: ../../../images/screenshots/java/maven/dependency_search.png
+
+.. _maven.ozacc.com: http://maven.ozacc.com

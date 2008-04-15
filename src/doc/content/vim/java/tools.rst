@@ -27,9 +27,8 @@ command **:Jps**.
 
 .. note::
 
-  For more information on the jdk tools you may view the
-  <a href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage">
-  online documentation</a>.
+  For more information on the jdk tools you may view the `online
+  documentation`_.
 
 When invoked it will open a window containing information about the current
 processes and some links for viewing additional info (depending upon
@@ -47,3 +46,5 @@ Example content:
   passed to the main method of the process.
 - Lines 33 - 35 is a folded block which contains a list of all the arguments
   passed to the JVM.
+
+.. _online documentation: http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage

@@ -38,8 +38,7 @@ TestNG listener which must be installed into your build environment.
       <testng ... listener="org.eclim.misc.testng.TestNgListener">
         ...
 
-    See the <a href="http://testng.org/doc/ant.html">testng ant task docs</a>
-    for more information.
+    See the `testng ant task docs`_ for more information.
 
 Once you have completed that setup, you should then be able to run your ant
 target from vim and (as long as eclim is running) all failed test cases will be
@@ -50,3 +49,5 @@ Ex. Assuming your ant task is named 'test':
 .. code-block:: vim
 
   :Ant test
+
+.. _testng ant task docs: http://testng.org/doc/ant.html

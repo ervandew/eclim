@@ -58,7 +58,7 @@ mappings there (:help ftplugin-name).
 
     nnoremap <silent> <buffer> <tab> :call eclim#util#FillTemplate("${", "}")<cr>
 
-- Import the class under the cursor with <leader>i.<br/>
+- Import the class under the cursor with <leader>i.
 
   .. code-block:: vim
 

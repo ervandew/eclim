@@ -29,6 +29,7 @@ Welcome to Eclim
 
    documentation
    guides/index
+   translations/index
 
 .. _overview:
 
