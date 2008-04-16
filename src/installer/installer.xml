@@ -118,10 +118,10 @@
             dest="${eclipse.plugins}" compression="gzip">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
-        <replace dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin"
-            token="$${vim.files}" value="${vim.files}">
-          <include name="eclim"/>
-        </replace>
+        <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/eclim"
+            token="$${vim.files}" value="${vim.files}"/>
+        <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
+            token="$${eclim.home}" value="${eclipse.plugins}/org.eclim_${eclim.version}"/>
 
         <!--
           - hard code the eclipse home for people that install plugins outside
