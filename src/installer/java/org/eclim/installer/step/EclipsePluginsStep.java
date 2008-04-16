@@ -62,12 +62,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.Chmod;
+import org.apache.tools.ant.taskdefs.Replace;
 import org.apache.tools.ant.taskdefs.Untar;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
-import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.AddSiteCommand;
+import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.EnableCommand;
 import org.eclim.installer.step.command.InstallCommand;
 import org.eclim.installer.step.command.ListCommand;
@@ -276,10 +277,19 @@ public class EclipsePluginsStep
 
     // on unix based systems, chmod the install sh file.
     if (!Os.isFamily("windows")){
+      File installScript = new File(
+          Installer.getProject().replaceProperties(
+            "${eclipse.plugins}/org.eclim.installer/bin/install"));
+      Replace replace = new Replace();
+      replace.setTaskName("replace");
+      replace.setFile(installScript);
+      replace.setToken("${eclipse.home}");
+      replace.setValue((String)Installer.getContext().getValue("eclipse.home"));
+      replace.execute();
+
       Chmod chmod = new Chmod();
       chmod.setTaskName("chmod");
-      chmod.setFile(new File(Installer.getProject().replaceProperties(
-        "${eclipse.plugins}/org.eclim.installer/bin/install")));
+      chmod.setFile(installScript);
       chmod.setPerm("755");
       chmod.setProject(Installer.getProject());
       chmod.execute();
