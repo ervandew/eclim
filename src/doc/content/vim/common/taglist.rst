@@ -23,7 +23,7 @@ Taglist Enhancement
 
 Eclim provides a scripted ctags implementation that sits on top of the original
 ctags to provide an alternative approach to adding new languages for use by the
-excellent <a href="ext:taglist">taglist</a> plugin for Vim.
+excellent taglist_ plugin for Vim.
 
 The standard ctags, gives you two choices when you wish to add support for a new
 language.  First, you can define a new language via regular expression patterns
@@ -79,12 +79,11 @@ Adding a new language involves the following three steps\:
 
       let g:tlist_mylang_settings='mylang;t:mytype;f:myfield'
 
-    See the <a href="ext:taglist_extend">taglist documentation</a> for
-    more details.
+    See the `taglist documentation`_ for more details.
 
 The second step is self explanatory and the third step is well documented by the
-<a href="ext:taglist_extend">taglist documentation</a> so the rest of this
-document will concentrate on step one.
+`taglist documentation`_ so the rest of this document will
+concentrate on step one.
 
 .. note::
 
@@ -92,8 +91,7 @@ document will concentrate on step one.
   the directory noted above by looking for a file named filetype.groovy, where
   filetype is the case sensitive value of Vim's ``&amp;filetype`` option.  If no
   script is found for the file type, then eclim will delegate the call to your
-  system's ctags command as <a href="ext:taglist_ctags">configured</a> for
-  taglist.vim.
+  system's ctags command as configured_ for taglist.vim.
 
 
 Writing the Groovy Script
@@ -218,19 +216,20 @@ Vim Variables
 - **g:EclimTaglistEnabled** (Default: 1) -
   If set to 0, disables usage of eclim's ctags implementation.
 
+.. _taglisttoo:
 
 TaglistToo: Alternate taglist implementation
 --------------------------------------------
 
-The <a href="ext:taglist">taglist</a> plugin written by Yegappan Lakshmanan is
-an excellent enhancement to vim which provides an outline of the current file.
-However, in my usage I've found that there were enhancements that I wanted to
-make to it, but since the plugin was written to support vim prior to 7.0, the
-data structures used to hold and display the tags are very difficult to modify.
-So, I decide to implement an alternate version targeting vim 7.x which would be
-easier to enhance.  Please note though, that this new version does not duplicate
-**all** of the functionality provided by the original (although I may add more
-of those features if user feedback warrants it).
+The taglist_ plugin written by Yegappan Lakshmanan is an excellent enhancement
+to vim which provides an outline of the current file.  However, in my usage
+I've found that there were enhancements that I wanted to make to it, but since
+the plugin was written to support vim prior to 7.0, the data structures used to
+hold and display the tags are very difficult to modify.  So, I decide to
+implement an alternate version targeting vim 7.x which would be easier to
+enhance.  Please note though, that this new version does not duplicate **all**
+of the functionality provided by the original (although I may add more of those
+features if user feedback warrants it).
 
 .. note::
 
@@ -283,3 +282,8 @@ configuration variables\:
         \ 'r': 'property',
         \ 't': 'target'
       \ }
+
+
+.. _taglist: http://www.vim.org/scripts/script.php?script_id=273
+.. _taglist documentation: http://vim-taglist.sourceforge.net/manual.html#taglist-extend
+.. _configured: http://vim-taglist.sourceforge.net/manual.html#%27Tlist_Ctags_Cmd%27

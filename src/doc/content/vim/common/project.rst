@@ -89,8 +89,8 @@ projects from within Vim.
   In the resulting window you can modify the values and save the changes by
   simply writing the file in the usual Vim manner (:w). The format of the
   buffer is in the standard properties file format as supported by java, so all
-  the same rules apply when editing. You can refer to the <a
-  href="../settings.html">settings</a> documentation for a description of the
+  the same rules apply when editing. You can refer to the
+  :ref:`settings <vim/settings>` documentation for a description of the
   available settings.
 
 .. _ProjectDelete:
@@ -276,45 +276,42 @@ Vim Variables
 
 - **g:EclimProjectTreeTaglistRelation** (Default: 'below')
 
-  Used to define the relation to the <a href="ext:taglist">taglist</a>
-  window if the <a href="ext:taglist">taglist</a> plugin is present.
-  Valid values include 'below' and 'above'.
+  Used to define the relation to the taglist_ window if the taglist_ plugin is
+  present.  Valid values include 'below' and 'above'.
 
 .. _EclimProjectTreeWincmd:
 
 - **g:EclimProjectTreeWincmd**
 
-  (Default: Varies depending on presence of <a href="ext:taglist">taglist</a>
-  plugin and its settings.) Vim command prepended to the split command used to
-  open the project tree window (Ex. 'botright', 'botright vertical', etc.).
+  (Default: Varies depending on presence of taglist_ plugin and its settings.)
+  Vim command prepended to the split command used to open the project tree
+  window (Ex. 'botright', 'botright vertical', etc.).
 
 .. _EclimProjectTreeContentWincmd:
 
 - **g:EclimProjectTreeContentWincmd**
 
-  (Default: Varies depending on presence of <a href="ext:taglist">taglist</a>
-  plugin and its settings.) Vim command used to move focus to the nearest
-  content window where actions to open selected files will be executed from.
-  For instance, when issuing a split on a file from the project tree, you most
-  likely do not want to split that file relative to the project tree, but rather
-  split it relative to the file open in the window to the left or right of the
-  project tree (Ex. 'winc h', 'winc l', etc).
+  (Default: Varies depending on presence of taglist_ plugin and its settings.)
+  Vim command used to move focus to the nearest content window where actions to
+  open selected files will be executed from.  For instance, when issuing a
+  split on a file from the project tree, you most likely do not want to split
+  that file relative to the project tree, but rather split it relative to the
+  file open in the window to the left or right of the project tree (Ex. 'winc
+  h', 'winc l', etc).
 
 .. _EclimProjectTreeWidth:
 
 - **g:EclimProjectTreeWidth**
 
-  (Default: Defaults to same width as <a href="ext:taglist">taglist</a> if
-  present, otherwise defaults to 30.) Only used if the project tree is to be
-  opened in a vertical window.
+  (Default: Defaults to same width as taglist_ if present, otherwise defaults
+  to 30.) Only used if the project tree is to be opened in a vertical window.
 
 .. _EclimProjectTreeHeight:
 
 - **g:EclimProjectTreeHeight**
 
-  (Default: Defaults to same height as <a href="ext:taglist">taglist</a> if
-  present, otherwise defaults to 10.) Only used if the project tree is to be
-  opened in a horizontal window.
+  (Default: Defaults to same height as taglist_ if present, otherwise defaults
+  to 10.) Only used if the project tree is to be opened in a horizontal window.
 
 .. _EclimProjectTreeActions:
 
@@ -332,3 +329,5 @@ Vim Variables
 
   Map of file patterns to the available actions for opening files that match
   that pattern.
+
+.. _taglist: http://www.vim.org/scripts/script.php?script_id=273

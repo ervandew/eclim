@@ -247,10 +247,8 @@ Php .projectOption Commands
 Python Commands
 -----------------
 
-- :ref:`:Validate <validate>` -
-  Validates the current file using <a href="site:pyflakes">pyflakes</a>.
-- :ref:`:PyLint <pylint>` -
-  Runs <a href="site:pyflakes">pylint</a> on the current file.
+- :ref:`:Validate <validate>` - Validates the current file using pyflakes_.
+- :ref:`:PyLint <pylint>` - Runs pylint_ on the current file.
 - :ref:`:PythonRegex <pythonregex>` -
   Opens a window for testing python regular expressions.
 - :ref:`:DjangoManage <djangomanage>` -
@@ -446,3 +444,6 @@ Misc. Commands
 - :ref:`:Only <only>` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.
+
+.. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
+.. _pylint: http://www.logilab.org/857

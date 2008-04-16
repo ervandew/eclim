@@ -18,10 +18,10 @@
 Mvn: Maintain Classpath
 =======================
 
-<a href="ext:maven">Maven</a> 2.x comes bundled with an Eclipse plugin
-that allows you to easily maintain your .classpath file based on your
-pom.xml.  This guide will walk you through the steps of setting this
-up for the first time and continual usage there after.
+Maven_ 2.x comes bundled with an Eclipse plugin that allows you to easily
+maintain your .classpath file based on your pom.xml.  This guide will walk you
+through the steps of setting this up for the first time and continual usage
+there after.
 
 .. note::
 
@@ -46,7 +46,7 @@ following command which is made available when editing the pom.xml file in vim:
 Updating .classpath
 -------------------
 
-Once you have performed the <a href="#setup">initial setup</a>, updating the
+Once you have performed the :ref:`initial setup <mvnrepo>`, updating the
 Eclipse ``.classpath`` file is as easy as executing the following at a command
 line\:
 
@@ -61,3 +61,4 @@ or in Vim\:
   :Mvn eclipse:eclipse
 
 .. _online documentation: http://maven.apache.org/guides/mini/guide-ide-eclipse.html
+.. _maven: http://maven.apache.org

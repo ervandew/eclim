@@ -18,11 +18,10 @@
 Ivy: Maintain Classpath
 =======================
 
-For users of <a href="ext:ivy">ivy</a>, eclim provides support for auto
-updating the ``.classpath`` for your project every time you save
-your ivy.xml file.  Any entries found in the ivy.xml that are not in the
-``.classpath`` will be added, any entries that differ in
-version will be updated, and any stale entries deleted.
+For users of ivy_, eclim provides support for auto updating the ``.classpath``
+for your project every time you save your ivy.xml file.  Any entries found in
+the ivy.xml that are not in the ``.classpath`` will be added, any entries that
+differ in version will be updated, and any stale entries deleted.
 
 
 .. _IvyRepo:
@@ -51,7 +50,7 @@ command.
 Updating .classpath
 -------------------
 
-Once you have performed the <a href="#setup">initial setup</a>, updating the
+Once you have performed the :ref:`initial setup <ivyrepo>`, updating the
 Eclipse ``.classpath`` file is as easy as saving your ivy.xml file (:w) and
 letting eclim do the rest.
 
@@ -83,3 +82,5 @@ Search Online Maven Repository
 Eclim also provides the command **:IvyDependencySearch** which allows you to
 search for dependencies in the online maven repository as described in the
 :ref:`maven documentation <vim/java/maven/dependencies>`.
+
+.. _ivy: http://jayasoft.org/ivy

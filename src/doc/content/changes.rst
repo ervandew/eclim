@@ -93,7 +93,7 @@ Php:
     :ref:`code completion <vim/php/complete>`,
     :ref:`searching <vim/php/search>`, and
     :ref:`validation <vim/php/validate>`.
-    Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
+    Requires the `eclipse pdt`_ plugin.
 
 .. _1.3.3:
 
@@ -140,14 +140,12 @@ Java:
     a custom logger template.
 
 Javascript:
-  - Added :ref:`javascript validation <vim/javascript/validate>` using
-    <a href="site:jsl">jsl</a>.
+  - Added :ref:`javascript validation <vim/javascript/validate>` using jsl_.
 
 Python:
-  - Added basic :ref:`python validation <vim/python/validate>` using
-    <a href="site:pyflakes">pyflakes</a> and the python compiler.
-  - Added support for <a href="site:pylint">pylint</a> using new
-    :ref:`:PyLint <pylint>` command.
+  - Added basic :ref:`python validation <vim/python/validate>` using pyflakes_
+    and the python compiler.
+  - Added support for pylint_ using new :ref:`:PyLint <pylint>` command.
 
 Vcs:
   - Added
@@ -164,8 +162,7 @@ Vcs (subversion):
 Vim:
   - Added vim :ref:`window maximize and minimize <vim/common/maximize>`
     support.
-  - Added an alternate implementation of
-    <a href="vim/common/taglist.html#taglisttoo">taglist</a>.
+  - Added an alternate implementation of :ref:`taglist <taglisttoo>`.
   - Added command :ref:`:Buffers <buffers>`.
   - Added
     :ref:`VimgrepRelative <vimgreprelative>`,
@@ -239,18 +236,18 @@ Eclim:
         \ ]
 
 Css:
-  - | Added :ref:`css code completion <vim/css/complete>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`css code completion <vim/css/complete>`.  Requires the
+    `eclipse wst`_ plugin.
 
 Dtd:
-  - | Added :ref:`dtd validation <vim/dtd/validate>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`dtd validation <vim/dtd/validate>`.  Requires the
+    `eclipse wst`_ plugin.
 
 Html:
-  - | Added :ref:`html code completion <vim/html/complete>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
-  - | Added :ref:`html validation <vim/html/validate>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`html code completion <vim/html/complete>`.  Requires the
+    `eclipse wst`_ plugin.
+  - Added :ref:`html validation <vim/html/validate>`.  Requires the
+    `eclipse wst`_ plugin.
 
 Log4j:
   - Added :ref:`log4j xml file validation <vim/java/log4j/validate>`.
@@ -285,13 +282,19 @@ Vcs:
     :ref:`:VcsAnnotate <vcsannotate>` and :Viewvc.
 
 Wsdl:
-  - | Added :ref:`wsdl validation <vim/wsdl/validate>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`wsdl validation <vim/wsdl/validate>`.  Requires the
+    `eclipse wst`_ plugin.
 
 Xsd:
-  - | Added :ref:`xsd validation <vim/xsd/validate>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`xsd validation <vim/xsd/validate>`.  Requires the
+    `eclipse wst`_ plugin.
 
 Xml:
-  - | Added :ref:`xml code completion <vim/xml/complete>`.
-    | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
+  - Added :ref:`xml code completion <vim/xml/complete>`.  Requires the
+    `eclipse wst`_ plugin.
+
+.. _eclipse pdt: http://eclipse.org/pdt/
+.. _eclipse wst: http://eclipse.org/webtools/main.php
+.. _jsl: http://www.javascriptlint.com/
+.. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
+.. _pylint: http://www.logilab.org/857

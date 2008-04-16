@@ -68,9 +68,9 @@ Java Integration
 - Javadoc generation for package, class, field, method, etc.
 - Java regular expression testing.
 
-Java Integration
+JavaScript Integration
 -------------------------
-- File validation using <a href="site:jsl">jsl</a>.
+- File validation using jsl_.
 - Improved taglist (outline) support.
 
 Log4j Integration
@@ -92,8 +92,7 @@ Python Integration
 -------------------------
 - Regular expression testing.
 - Django functionality.
-- Validation via python compiler, <a href="site:pyflakes">pyflakes</a>,
-  and <a href="site:pylint">pylint</a>.
+- Validation via python compiler, pyflakes_, and pylint_.
 
 Vim Script Integration
 -------------------------
@@ -124,3 +123,7 @@ Common Vim Functionality
   open it (split, edit, or tabnew).
 - Enhanced taglist support.
 - Much more...
+
+.. _jsl: http://www.javascriptlint.com/
+.. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
+.. _pylint: http://www.logilab.org/857

@@ -31,11 +31,13 @@ Once you have started the completion you can use *Ctrl-N* to proceed to the
 next match and *Ctrl-P* to move to the previous match.
 
 If you are like me and you find those key strokes a bit cumbersome, then you
-can use the <a href="ext:supertab">SuperTab</a> plugin which allows you to use
-the Tab key for completion.
+can use the SuperTab_ plugin which allows you to use the Tab key for
+completion.
 
 To find out more about Vim's insert completion execute
 
   **:h ins-completion**
 
 from within Vim.
+
+.. _supertab: http://www.vim.org/scripts/script.php?script_id=1643
