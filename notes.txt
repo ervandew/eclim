@@ -1,14 +1,26 @@
 HIGH {{{
-  - update license on sourceforge project page and freshmeat.
+  - Document :VcsWeb* commands and removal of :Viewvc and :Trac
+  - Document :OtherWorkingCopy*
 
-  - Ubuntu and apt-get installed eclipse
-    https://sourceforge.net/forum/forum.php?thread_id=1961391&forum_id=487811
+  - django indent: issue indenting after single line if/else/end
+    users/templates/users/include/remoteRegisterForm.html
+
+  - eclipse 3.4
+    - http://download.eclipse.org/eclipse/downloads/drops/S-3.4M6-200803301350/eclipse-news-M6.html
+    - leverage equinox p2
+      - use dropins folder instead of plugins for eclim, or start treating
+        eclim plugin installs like true eclipse plugins (use eclipse install
+        apis).
+    - update eclimd script for gentoo
+
+  - support list of plugins to build for development.
+    - perhaps seperate their code bases
+
+  - update license on sourceforge project page and freshmeat.
 
   - document :Todo, :ProjectTodo
 
-  - more installer requirements validation on linux
-    - gcc
-    - libc-dev (https://sourceforge.net/forum/message.php?msg_id=4837065)
+  - Tree refresh, update executable, symlinks, etc when using ls
 
   - :ProjectCreateWizard - use input()
 
@@ -184,7 +196,8 @@ TODO {{{
   }}}
 
   C/C++ {{{
-    - http://wiki.eclipse.org/index.php/CDT
+    - http://www.eclipse.org/cdt/
+      http://wiki.eclipse.org/index.php/CDT
       http://download.eclipse.org/tools/cdt/releases/europa/site.xml
 
     - project creation
@@ -221,13 +234,28 @@ TODO {{{
       the current file.
 
     - look into code refactoring support.
+      - Safe deletes. Check for references before deleting.
+      - Convert anonymous class into inner/outer class.
+      - Convert inner class to outer class.
+      - Extract interface.
+      - Method / Class / Field renaming.
+      - Push methods / fields up to superclass or down to subclass.
+      - Move types, methods, fields.
+      - Code "Clean Up"
+        - Remove Unused Code (imports, private methods, private constructors,
+          private types).
+        - JSE 5.0 (add missing @Override, add missing @Deprecated)
 
     - create spring file validation of class names like w/ log4j.
 
-    - JUnit results in the browser.
-    - Integrate with eclipse junit execution env and provide user with option to
-      choice which to use (eclipse or current external version).
-      org.eclim.java.junit.engine=(eclipse|external)
+    - JUnit
+      - results in the browser.
+      - When viewing a junit result file allow linking from stack trace
+        elements.
+      - File type support of junit result files w/ search functionality.
+      - Integrate with eclipse junit execution env and provide user with option to
+        choice which to use (eclipse or current external version).
+        org.eclim.java.junit.engine=(eclipse|external)
 
     - :JavaImpl support anonymous classes.
 
@@ -258,9 +286,67 @@ TODO {{{
     - With :JavaRun, also have an input buffer that when saved pushes the text
       to stdin of the running app, and then clears the buffer for more input.
       - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
+
+    - logging
+      - Templates for generating logging statements:
+        Ex. logger.debug("${methodSignature} - ");
+      - Support for replacing System.out, System.err, and printStackTrace()
+        with logging statements.
+
+    - searching
+      - Expand searching from non java source files (spring xml, hibernate xml,
+        etc).
+      - Third party plugins may provide this functionality.
+
+    - content assist
+      - Generate anonymous class body, including all methods that need to be
+        implemented, from the start of defining one (new Runnable())<br/>
+        Eclipse Equiv: Ctrl+Space
+      - Create method from the call to one that does not yet exist or
+        change method signature (add/remove parameters/agruments).<br/>
+        Eclipse Equiv: Ctrl+1
+      - Create new field to hold constructor argument.<br/>
+        Eclipse Equiv: Ctrl+1
+      - Auto surround method call that throws an exception w/ try/catch
+        block or if surrounded and doesn't catch necessary exceptions,
+        add those catch statements.<br/>
+        Eclipse Equiv: Ctrl+1
+      - Wrap source block (selection) in do,if,for,try,while.<br/>
+        Eclipse Equiv: Ctrl+1
+      - many more provided by eclipse...
+
+    - code analysis
+      - http://pmd.sourceforge.net/ PMD
+      - http://www.jutils.com/ Lint4j
+      - http://coverlipse.sourceforge.net Coverclipse
+      - http://java-source.net/open-source/code-coverage Other code coverage tools
+      - http://java-source.net/open-source/code-analyzers Other code analyizers
+
+    - auto configure eclipse indent style
+
+      import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
+
+      (JavaCore|IJavaProject).setOption(
+        DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR :
+          DefaultCodeFormatterConstants.MIXED, JavaCore.TAB, JavaCore.SPACE
+        DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE
+        DefaultCodeFormatterConstants.FORMATTER_USE_TABS_ONLY_FOR_LEADING_INDENTATIONS :
+          DefaultCodeFormatterConstants.TRUE|FALSE
+      )
+
+    JDT Tips
+    http://help.eclipse.org/help31/index.jsp?topic=/org.eclipse.jdt.doc.user/tips/jdt_tips.html
+    JDT What's New
+    http://help.eclipse.org/help31/index.jsp?topic=/org.eclipse.jdt.doc.user/whatsNew/jdt_whatsnew.html
+
   }}}
 
   Javascript {{{
+    http://labs.adobe.com/technologies/jseclipse/
+    http://www.aptana.org/ aptana (owners of radrails)
+    http://wiki.eclipse.org/index.php/ATF/JSDT eclipse (not yet developed)
+    http://www.eclipse.org/dltk/ dltk (experimental)
+
     - :JavascriptRegex (maybe use rhino or see if eclipse has something)
     - javascript code completion
 
@@ -300,6 +386,8 @@ TODO {{{
   }}}
 
   Perl {{{
+    http://e-p-i-c.sourceforge.net/
+
     - add :PerlRegex
 
     - static validation
@@ -321,6 +409,12 @@ TODO {{{
 
     - refactoring: http://rope.sourceforge.net/
       - this lib includes auto-completion and find definition!!!
+  }}}
+
+  Ruby {{{
+    - http://www.eclipse.org/dltk/ dltk
+    - http://rubyeclipse.sourceforge.net/ rubyeclipse
+    - http://www.radrails.org/ rad rails
   }}}
 
   SQL {{{
@@ -456,6 +550,14 @@ NOTES {{{
           be licensed as EPL accordingly.
   }}}
 
+  Autostart {{{
+
+    Gnome (this may work for kde, enlightenment 17, and xfce4 as well)
+      $ mkdir -p ~/.config/autostart
+      $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd.desktop ~/.config/autostart
+
+  }}}
+
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
     - Xvfb is included with xorg-server
@@ -467,7 +569,7 @@ DOCS (scratch) {{{
   Builing eclim {{{
     Before building eclipse you will need to:
       - set the following environment variables
-        - ECLIPSE_HOME: points to your eclipse install
+        - ECLIM_ECLIPSE_HOME: points to your eclipse install
         - VIMFILES: points to the directory where you want all the vim files
           deployed to (typically HOME/.vim or HOME/vimfiles)
       - make sure you install the required eclipse features
