@@ -36,13 +36,21 @@
     - Runs forrest to generate the docs.
     -->
   <target name="docs" depends="init" description="Builds the documentation.">
-    <!-- generate forrest site -->
-    <exec executable="${forrest.home}/bin/forrest" failonerror="true" dir=".">
-      <arg line="site"/>
+    <property name="sphinx.args" value=""/>
+    <mkdir dir="build/doc/site"/>
+
+    <!-- generate site documention via sphinx -->
+    <exec executable="sphinx-build" failonerror="true" dir=".">
+      <arg line="${sphinx.args} -b eclim src/doc/content build/doc/site"/>
     </exec>
 
+    <!-- copy over any images that sphinx neglects to -->
+    <copy todir="build/doc/site/_images">
+      <fileset dir="src/doc/content/images" includes="**/*"/>
+    </copy>
+
     <!-- support for google sitemaps and analytics -->
-    <xslt in="src/forrest/content/xdocs/site.xml"
+    <!--xslt in="src/forrest/content/xdocs/site.xml"
         out="build/doc/forrest/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
     <gzip src="build/doc/forrest/sitemap.xml"
@@ -51,7 +59,7 @@
     <replace dir="build/doc/forrest/site" includes="**/*.html">
       <replacetoken><![CDATA[</body>]]></replacetoken>
       <replacevalue><![CDATA[
-      <!-- Google Analytics -->
+      <!- - Google Analytics - ->
           <script src="http://www.google-analytics.com/urchin.js"
             type="text/javascript">
           </script>
@@ -59,34 +67,14 @@
             _uacct = "UA-575508-1";
             urchinTracker();
           </script>
-      <!-- End Google Analytics -->
+      <!- - End Google Analytics - ->
       </body>
       ]]></replacevalue>
-    </replace>
-
-    <!-- extract pmwiki -->
-    <!--untar src="src/doc/forrest/wiki/pmwiki.tgz"
-        dest="build/doc/forrest/site" compression="gzip"/>
-    <mkdir dir="build/doc/forrest/site/wiki"/>
-    <move todir="build/doc/forrest/site">
-      <fileset dir="build/doc/forrest/site" includes="pmwiki-*/**/*"/>
-      <mapper type="regexp"
-          from="^pmwiki-[0-9]+\.[0-9]+\.[0-9]+(.*)" to="wiki\1"/>
-    </move>
-    <path id="pmwiki.dir">
-      <dirset dir="build/doc/forrest/site" includes="pmwiki*"/>
-    </path>
-    <property name="pmwiki" refid="pmwiki.dir"/>
-    <delete dir="${pmwiki}"/-->
-
-    <!-- copy over any pmwiki config files, etc. -->
-    <!--copy todir="build/doc/forrest/site/wiki">
-      <fileset dir="src/forrest/wiki" includes="**/*" excludes="pmwiki.tgz"/>
-    </copy-->
+    </replace-->
   </target>
 
   <!--
-    - Generates vim docs from forrest xml files.
+    - Generates vim docs from sphinx files.
     -->
   <!--target name="vimdocs" depends="init"
       description="Builds the vim documentation.">

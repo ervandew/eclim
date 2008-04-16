@@ -25,9 +25,7 @@
 
     <!-- docs archive -->
     <zip destfile="build/plugins/org.eclim_${eclim.version}/doc.zip">
-      <fileset dir="build/doc" includes="api/**/*"/>
-      <fileset dir="build/doc/forrest" includes="site/**/*"
-          excludes="site/wiki,site/wiki/**/*"/>
+      <fileset dir="build/doc" includes="**/*"/>
     </zip>
 
     <!-- src archive -->
