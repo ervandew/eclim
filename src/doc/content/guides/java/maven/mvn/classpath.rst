@@ -29,6 +29,8 @@ up for the first time and continual usage there after.
   their `online documentation`_.
 
 
+.. _MvnRepo:
+
 Initial Setup
 -------------
 

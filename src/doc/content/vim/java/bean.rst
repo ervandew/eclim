@@ -58,7 +58,7 @@ generate methods for a set of fields.
 .. note::
 
   The insertion of these methods is done externally with Eclipse and with
-  that comes a couple <a href="../external_editing.html">caveats</a>.
+  that comes a couple :ref:`caveats <vim/issues>`.
 
 
 Configuration

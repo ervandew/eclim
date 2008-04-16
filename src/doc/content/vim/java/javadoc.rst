@@ -29,7 +29,7 @@ javadoc comments for the element under the cursor.
 .. note::
 
   The insertion of javadoc comments is done externally with Eclipse and with
-  that comes a couple <a href="../external_editing.html">caveats</a>.
+  that comes a couple :ref:`caveats <vim/issues>`.
 
 
 Configuration
@@ -52,7 +52,7 @@ Searching
 .. _JavaDocSearch:
 
 Eclim supports searching of javadocs just like you would
-<a href="search.html">search the source code</a>.
+:ref:`search the source code <vim/java/search>`.
 
 The only difference is that you use **:JavaDocSearch** instead of
 **:JavaSearch**.

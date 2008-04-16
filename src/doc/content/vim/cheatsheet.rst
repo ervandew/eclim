@@ -25,65 +25,55 @@ reference.
 Global Commands
 ---------------
 
-- <a href="index.html#PingEclim">**:PingEclim**</a> -
-  Pings eclimd server.
-- <a href="index.html#ShutdownEclim">**:ShutdownEclim**</a> -
-  Shuts down eclimd server.
-- <a href="index.html#EclimSettings">**:EclimSettings**</a> -
-  View / edit global settings.
+- :ref:`:PingEclim <pingeclim>` - Pings eclimd server.
+- :ref:`:ShutdownEclim <shutdowneclim>` - Shuts down eclimd server.
+- :ref:`:EclimSettings <eclimsettings>` - View / edit global settings.
 
 
 Project Commands
 ----------------
 
-- <a href="common/project.html#ProjectCreate">**:ProjectCreate**</a>
+- :ref:`:ProjectCreate <projectcreate>`
   <folder> [-p <project_name>] -n <nature> ... [-d <project_dependency> ...]
   Create a new project.
-- <a href="common/project.html#ProjectList">**:ProjectList**</a> -
-  List current projects.
-- <a href="common/project.html#ProjectSettings">**:ProjectSettings**</a>
-  [<project>] - View / edit project settings.
-- <a href="common/project.html#ProjectDelete">**:ProjectDelete**</a>
-  <project> - Delete a project.
-- <a href="common/project.html#ProjectRefresh">**:ProjectRefresh**</a>
-  [<project> <project> ...] -
+- :ref:`:ProjectList <projectlist>` - List current projects.
+- :ref:`:ProjectSettings <projectsettings>` [<project>] -
+  View / edit project settings.
+- :ref:`:ProjectDelete <projectdelete>` <project> - Delete a project.
+- :ref:`:ProjectRefresh <projectrefresh>` [<project> <project> ...] -
   Refresh supplied list of projects against the current files on disk.  If
   no project names supplied, refresh the current project.
-- <a href="common/project.html#ProjectRefreshAll">**:ProjectRefreshAll**</a> -
-  Refresh all projects.
-- <a href="common/project.html#ProjectInfo">**:ProjectInfo**</a>
-  [<project>] - Echos info for the current or supplied project.
-- <a href="common/project.html#ProjectOpen">**:ProjectOpen**</a>
-  <project> - Opens a project.
-- <a href="common/project.html#ProjectClose">**:ProjectClose**</a>
-  <project> - Closes a project.
-- <a href="common/project.html#ProjectNatures">**:ProjectNatures**</a>
-  [<project>] - View the configured natures for one or all projects.
-- <a href="common/project.html#ProjectNatureAdd">**:ProjectNatureAdd**</a>
-  <project> [<nature> ...] - Add one or more natures to a project.
-- <a href="common/project.html#ProjectNatureRemove">**:ProjectNatureRemove**</a>
-  <project> [<nature> ...] - Remove one or more natures from a project.
-- <a href="common/project.html#ProjectCD">**:ProjectCD**</a> -
-  Changes the global current working directory to the root directory of
-  the current file's project (executes a :cd).
-- <a href="common/project.html#ProjectLCD">**:ProjectLCD**</a> -
-  Changes the current working directory of the current window to the
-  root directory of the current file's project (executes a :lcd).
-- <a href="common/project.html#ProjectTree">**:ProjectTree**</a>
-  [<project> <project> ...] - Opens navigable a tree for one
-  or more projects.
-- <a href="common/project.html#ProjectsTree">**:ProjectsTree**</a> -
-  Opens a tree containing all projects.
-- <a href="common/project.html#ProjectGrep">**:ProjectGrep**</a>
+- :ref:`:ProjectRefreshAll <projectrefreshall>` - Refresh all projects.
+- :ref:`:ProjectInfo <projectinfo>` [<project>] -
+  Echos info for the current or supplied project.
+- :ref:`:ProjectOpen <projectopen>` <project> -
+  Opens a project.
+- :ref:`:ProjectClose <projectclose>` <project> - Closes a project.
+- :ref:`:ProjectNatures <projectnatures>` [<project>] -
+  View the configured natures for one or all projects.
+- :ref:`:ProjectNatureAdd <projectnatureadd>` <project> [<nature> ...] -
+  Add one or more natures to a project.
+- :ref:`:ProjectNatureRemove <projectnatureremove>` <project> [<nature> ...] -
+  Remove one or more natures from a project.
+- :ref:`:ProjectCD <projectcd>` -
+  Changes the global current working directory to the root directory of the
+  current file's project (executes a :cd).
+- :ref:`:ProjectLCD <projectlcd>` -
+  Changes the current working directory of the current window to the root
+  directory of the current file's project (executes a :lcd).
+- :ref:`:ProjectTree <projecttree>` [<project> <project> ...] -
+  Opens navigable a tree for one or more projects.
+- :ref:`:ProjectsTree <projectstree>` - Opens a tree containing all projects.
+- :ref:`:ProjectGrep <projectgrep>`
   /<pattern>/ file_pattern [file_pattern ...] -
   Issues a vimgrep starting at the root of the current project.
-- <a href="common/project.html#ProjectGrepAdd">**:ProjectGrepAdd**</a>
+- :ref:`:ProjectGrepAdd <projectgrepadd>`
   /<pattern>/ file_pattern [file_pattern ...] -
   Issues a vimgrepadd starting at the root of the current project.
-- <a href="common/project.html#ProjectLGrep">**:ProjectLGrep**</a>
+- :ref:`:ProjectLGrep <projectlgrep>`
   /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrep starting at the root of the current project.
-- <a href="common/project.html#ProjectLGrepAdd">**:ProjectLGrepAdd**</a>
+- :ref:`:ProjectLGrepAdd <projectlgrepadd>`
   /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrepadd starting at the root of the current project.
 
@@ -91,161 +81,135 @@ Project Commands
 Ant Commands
 ------------
 
-- <a href="java/ant/run.html#Ant">**:Ant**</a>
-  [<target> ...] -
-  Execute ant from the current project.
-- <a href="java/ant/doc.html#AntDoc">**:AntDoc**</a>
-  [<element>] -
+- :ref:`:Ant <ant>` [<target> ...] - Execute ant from the current project.
+- :ref:`:AntDoc <antdoc>` [<element>] -
   Find and open the documentation for the element under the cursor or the
   element supplied as an argument.
-- <a href="java/ant/validate.html#Validate">**:Validate**</a> -
-  Validate the current ant build file.
+- :ref:`:Validate <validate>` - Validate the current ant build file.
 
 
 Css Commands
 -----------------
 
-- <a href="css/validate.html#Validate">**:Validate**</a> -
-  Validate the current file.
+- :ref:`:Validate <validate>` - Validate the current file.
 
 
 Dtd Commands
 -----------------
 
-- <a href="dtd/validate.html#Validate">**:Validate**</a> -
-  Validate the current file.
+- :ref:`:Validate <validate>` - Validate the current file.
 
 
 Html Commands
 -----------------
 
-- <a href="html/validate.html#Validate">**:Validate**</a> -
-  Validate the current file.
-- <a href="html/util.html#BrowserOpen">**:BrowserOpen**</a> -
+- :ref:`:Validate <validate>` - Validate the current file.
+- :ref:`:BrowserOpen <browseropen>` -
   Opens the current file in your configured browser.
 
 
 Ivy Commands
 -----------------
 
-- <a href="../guides/java/ivy/ivy_classpath.html#IvyRepo">**:IvyRepo**</a>
-  <path>-
-  Sets the necessary IVY_REPO classpath variable for supporting
-  automatic updates to .classpath files upon ivy.xml updates.
-- <a href="../guides/java/ivy/ivy_classpath.html#IvyDependencySearch">**:IvyDependencySearch**</a>
-  <artifact> -
-  Searches online repository and opens a window with results that can be
-  added to the current ivy file by hitting <Enter> on a result.
-  Available when editing an ``ivy.xml`` file.
+- :ref:`:IvyRepo <ivyrepo>` <path> -
+  Sets the necessary IVY_REPO classpath variable for supporting automatic
+  updates to .classpath files upon ivy.xml updates.
+- :ref:`:IvyDependencySearch <ivydependencysearch>` <artifact> -
+  Searches online repository and opens a window with results that can be added
+  to the current ivy file by hitting <Enter> on a result.  Available when
+  editing an ``ivy.xml`` file.
 
 
 Java Commands
 -----------------
 
-- <a href="java/bean.html#JavaGet">**:JavaGet**</a> -
-  Create a java bean getter method.
-- <a href="java/bean.html#JavaSet">**:JavaSet**</a> -
-  Create a java bean setter method.
-- <a href="java/bean.html#JavaGetSet">**:JavaGetSet**</a> -
+- :ref:`:JavaGet <javaget>` - Create a java bean getter method.
+- :ref:`:JavaSet <javaset>` - Create a java bean setter method.
+- :ref:`:JavaGetSet <javagetset>` -
   Create both a java bean getter and setter method.
-- <a href="java/constructor.html#JavaConstructor">**:JavaConstructor**</a> -
-  Creates class constructor, either empty or based on selected class
-  fields.
-- <a href="java/impl.html#JavaImpl">**:JavaImpl**</a> -
-  View implementable / overridable methods from super classes and
-  implemented interfaces.
-- <a href="java/delegate.html#JavaDelegate">**:JavaDelegate**</a> -
+- :ref:`:JavaConstructor <javaconstructor>` -
+  Creates class constructor, either empty or based on selected class fields.
+- :ref:`:JavaImpl <javaimpl>` -
+  View implementable / overridable methods from super classes and implemented
+  interfaces.
+- :ref:`:JavaDelegate <javadelegate>` -
   View list of methods that delegate to the field under the cursor.
-- <a href="java/junit.html#JUnitImpl">**:JUnitImpl**</a> -
+- :ref:`:JUnitImpl <junitimpl>` -
   Similar to **:JavaImpl**, but creates test methods.
-- <a href="java/junit.html#JUnitExecute">**:JUnitExecute**</a> - [testcase]
+- :ref:`:JUnitExecute <junitexecute>` - [testcase]
   Allows you to execute test cases in your favorite build tool.
-- <a href="java/junit.html#JUnitResult">**:JUnitResult**</a> - [testcase]
+- :ref:`:JUnitResult <junitresult>` - [testcase]
   Allows you to view the results of a test case.
-- <a href="java/import.html#JavaImport">**:JavaImport**</a> -
-  Import the class under the cursor.
-- <a href="java/search.html#JavaSearch">**:JavaSearch**</a>
-  [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>]-
-  Search for classes, methods, fields, etc.
-  (With pattern supplied, searches for the element under the cursor).
-- <a href="java/search.html#JavaSearchContext">**:JavaSearchContext**</a> -
+- :ref:`:JavaImport <javaimport>` - Import the class under the cursor.
+- :ref:`:JavaSearch <javasearch>`
+  [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>] -
+  Search for classes, methods, fields, etc.  (With pattern supplied, searches
+  for the element under the cursor).
+- :ref:`:JavaSearchContext <javasearchcontext>` -
   Perform a context sensitive search for the element under the cursor.
-- <a href="java/correct.html#JavaCorrect">**:JavaCorrect**</a> -
+- :ref:`:JavaCorrect <javacorrect>` -
   Suggest possible corrections for a source error.
-- <a href="java/regex.html#JavaRegex">**:JavaRegex**</a> -
+- :ref:`:JavaRegex <javaregex>` -
   Opens a window for testing java regular expressions.
-- <a href="java/doc.html#JavaDocSearch">**:JavaDocSearch**</a> -
+- :ref:`:JavaDocSearch <javadocsearch>` -
   Search for javadocs.  Same usage as **:JavaSearch**.
-- <a href="java/doc.html#JavaDocComment">**:JavaDocComment**</a> -
+- :ref:`:JavaDocComment <javadoccomment>` -
   Adds or updates the comments for the element under the cursor.
-- <a href="java/tools.html#Jps">**:Jps**</a> -
-  Opens window with information about the currently running java
-  processes.
-- <a href="java/source.html#Validate">**:Validate**</a> -
-  Manually runs source code validation.
+- :ref:`:Jps <jps>` -
+  Opens window with information about the currently running java processes.
+- :ref:`:Validate <validate>` - Manually runs source code validation.
 
 
 Java .classpath Commands
 ------------------------
 
-- <a href="java/classpath.html#NewSrcEntry">**:NewSrcEntry**</a>
-  <dir> [<dir> ...] -
+- :ref:`:NewSrcEntry <newsrcentry>` <dir> [<dir> ...] -
   Add a new source dir entry.
-- <a href="java/classpath.html#NewProjectEntry">**:NewProjectEntry**</a>
-  <project> [<project> ...] -
+- :ref:`:NewProjectEntry <newprojectentry>` <project> [<project> ...] -
   Add a new project entry.
-- <a href="java/classpath.html#NewJarEntry">**:NewJarEntry**</a>
-  <file> [<file> ...] -
+- :ref:`:NewJarEntry <newjarentry>` <file> [<file> ...] -
   Add a jar entry.
-- <a href="java/classpath.html#NewVarEntry">**:NewVarEntry**</a>
-  <VAR/file> [<VAR/file> ...] -
+- :ref:`:NewVarEntry <newvarentry>` <VAR/file> [<VAR/file> ...] -
   Add a new var entry.
-- <a href="java/classpath.html#VariableList">**:VariableList**</a>
+- :ref:`:VariableList <variablelist>`
   List available classpath variables and their corresponding values.
-- <a href="java/classpath.html#VariableCreate">**:VariableCreate**</a>
-  <name> <path> -
+- :ref:`:VariableCreate <variablecreate>` <name> <path> -
   Creates or updates the variable with the supplied name.
-- <a href="java/classpath.html#VariableDelete">**:VariableDelete**</a>
-  <name> -
+- :ref:`:VariableDelete <variabledelete>` <name> -
   Deletes the variable with the supplied name.
 
 
 Javascript Commands
 --------------------
 
-- <a href="javascript/validate.html#Validate">**:Validate**</a> -
-  Validate the current javascript file.
+- :ref:`:Validate <validate>` - Validate the current javascript file.
 
 
 Log4j Commands
 -----------------
 
-- <a href="java/log4j/validate.html#Validate">**:Validate**</a> -
+- :ref:`:Validate <validate>` -
   Validate the current log4j xml configuration file.
 
 
 Maven Commands
 -----------------
 
-- <a href="java/maven/run.html#Maven">**:Maven**</a>
-  [<goal> ...] -
+- :ref:`:Maven <maven>` [<goal> ...] -
   Execute maven 1.x from the current project.
-- <a href="java/maven/run.html#Mvn">**:Mvn**</a>
-  [<goal> ...] -
+- :ref:`:Mvn <mvn>` [<goal> ...] -
   Execute maven 2.x from the current project.
-- <a href="../guides/java/maven/maven_classpath.html#MavenRepo">**:MavenRepo**</a>
-  - Sets the necessary MAVEN_REPO classpath variable for maven's (1.x)
-  eclipse support.
-- <a href="../guides/java/maven/mvn_classpath.html#MvnRepo">**:MvnRepo**</a>
-  - Sets the necessary M2_REPO classpath variable for maven's (2.x)
-  eclipse support.
-- <a href="java/maven/dependency.html#MavenDependencySearch">**:MavenDependencySearch**</a>
-  <artifact> -
+- :ref:`:MavenRepo <mavenrepo>` -
+  Sets the necessary MAVEN_REPO classpath variable for maven's (1.x) eclipse
+  support.
+- :ref:`:MvnRepo <mvnrepo>` -
+  Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
+  support.
+- :ref:`:MavenDependencySearch <mavendependencysearch>` <artifact> -
   Searches online repository and opens a window with results that can be
   added to the current project file by hitting <Enter> on a result.
   Available when editing a maven 1.x ``project.xml`` file.
-- <a href="java/maven/dependency.html#MvnDependencySearch">**:MvnDependencySearch**</a>
-  <artifact> -
+- :ref:`:MvnDependencySearch <mvndependencysearch>` <artifact> -
   Searches online repository and opens a window with results that can be
   added to the current pom file by hitting <Enter> on a result.
   Available when editing a maven 2.x ``pom.xml`` file.
@@ -254,133 +218,110 @@ Maven Commands
 Php Commands
 -----------------
 
-- <a href="php/search.html#PhpSearch">**:PhpSearch**</a>
-  -p <pattern> -t <type> [-s <scope>]-
+- :ref:`:PhpSearch <phpsearch>` -p <pattern> -t <type> [-s <scope>]-
   Search for classes, methods, and constants.
-- <a href="php/search.html#PhpFindDefinition">**:PhpFindDefinition**</a>
+- :ref:`:PhpFindDefinition <phpfinddefinition>`
   Find the element under the cursor.
-- <a href="php/search.html#PhpSearchContext">**:PhpSearchContext**</a>
+- :ref:`:PhpSearchContext <phpsearchcontext>`
   Find the element under the cursor based on its context.
-- <a href="php/validate.html#Validate">**:Validate**</a> -
-  Manually runs source code validation.
+- :ref:`:Validate <validate>` - Manually runs source code validation.
 
 
 Php .projectOption Commands
 ---------------------------
 
-- <a href="php/includepath.html#NewLibEntry">**:NewLibEntry**</a>
-  <file> [<file> ...] -
+- :ref:`:NewLibEntry <newlibentry>` <file> [<file> ...] -
   Add a lib entry referencing an external folder.
-- <a href="php/includepath.html#NewProjectEntry">**:NewProjectEntry**</a>
-  <project> [<project> ...] -
+- :ref:`:NewProjectEntry <newprojectentry>` <project> [<project> ...] -
   Add a new project entry.
-- <a href="php/includepath.html#NewVarEntry">**:NewVarEntry**</a>
-  <VAR/file> [<VAR/file> ...] -
+- :ref:`:NewVarEntry <newvarentry>` <VAR/file> [<VAR/file> ...] -
   Add a new var entry.
-- <a href="php/includepath.html#VariableList">**:VariableList**</a>
+- :ref:`:VariableList <variablelist>`
   List available include path variables and their corresponding values.
-- <a href="php/includepath.html#VariableCreate">**:VariableCreate**</a>
-  <name> <path> -
+- :ref:`:VariableCreate <variablecreate>` <name> <path> -
   Creates or updates the variable with the supplied name.
-- <a href="php/includepath.html#VariableDelete">**:VariableDelete**</a>
-  <name> -
+- :ref:`:VariableDelete <variabledelete>` <name> -
   Deletes the variable with the supplied name.
 
 
 Python Commands
 -----------------
 
-- <a href="python/validate.html#Validate">**:Validate**</a> -
+- :ref:`:Validate <validate>` -
   Validates the current file using <a href="site:pyflakes">pyflakes</a>.
-- <a href="python/validate.html#PyLint">**:PyLint**</a> -
+- :ref:`:PyLint <pylint>` -
   Runs <a href="site:pyflakes">pylint</a> on the current file.
-- <a href="python/regex.html#PythonRegex">**:PythonRegex**</a> -
+- :ref:`:PythonRegex <pythonregex>` -
   Opens a window for testing python regular expressions.
-- <a href="python/django.html#DjangoManage">**:DjangoManage**</a> -
+- :ref:`:DjangoManage <djangomanage>` -
   Invokes django's manage.py from any file in the same directory as your
   manage.py or in any of the child directories.
-- <a href="python/django.html#DjangoFind">**:DjangoFind**</a> -
+- :ref:`:DjangoFind <djangofind>` -
   Available when editing a django html template file.  Finds tag/filter
   definition, other template files, and static files.
-- <a href="python/django.html#DjangoTemplateOpen">**:DjangoTemplateOpen**</a> -
-  Available when editing a python file.  Finds the template referenced
-  under the cursor.
-- <a href="python/django.html#DjangoViewOpen">**:DjangoViewOpen**</a> -
+- :ref:`:DjangoTemplateOpen <djangotemplateopen>` -
+  Available when editing a python file.  Finds the template referenced under
+  the cursor.
+- :ref:`:DjangoViewOpen <djangoviewopen>` -
   Available when editing a python file.  When within a django url patterns
   definition, finds the view referenced under the cursor.
-- <a href="python/django.html#DjangoContextOpen">**:DjangoContextOpen**</a> -
-  Available when editing a python file.  Executes
-  **:DjangoViewOpen**, **:DjangoTemplateOpen**,
-  or **:PythonFindDefinition** depending on the context of
-  the text under the cursor.
+- :ref:`:DjangoContextOpen <djangocontextopen>` -
+  Available when editing a python file.  Executes **:DjangoViewOpen**,
+  **:DjangoTemplateOpen**, or **:PythonFindDefinition** depending on the
+  context of the text under the cursor.
 
 
 Vim Commands
 -----------------
 
-- <a href="vim/find.html#FindCommandDef">**:FindCommandDef**</a>
-  [<command>] -
+- :ref:`:FindCommandDef <findcommanddef>` [<command>] -
   Finds a command definition.
-- <a href="vim/find.html#FindCommandRef">**:FindCommandRef**</a>
-  [<command>] -
+- :ref:`:FindCommandRef <findcommandref>` [<command>] -
   Finds references of a command.
-- <a href="vim/find.html#FindFunctionDef">**:FindFunctionDef**</a>
-  [<function>] -
+- :ref:`:FindFunctionDef <findfunctiondef>` [<function>] -
   Finds a function definition.
-- <a href="vim/find.html#FindFunctionRef">**:FindFunctionRef**</a>
-  [<function>] -
+- :ref:`:FindFunctionRef <findfunctionref>` [<function>] -
   Finds references of a function.
-- <a href="vim/find.html#FindVariableDef">**:FindVariableDef**</a>
-  [<variable>] -
+- :ref:`:FindVariableDef <findvariabledef>` [<variable>] -
   Finds the definition of a global variable.
-- <a href="vim/find.html#FindVariableRef">**:FindVariableRef**</a>
-  [<variable>] -
+- :ref:`:FindVariableRef <findvariableref>` [<variable>] -
   Finds references of a global variable.
-- <a href="vim/find.html#FindByContext">**:FindByContext**</a>
+- :ref:`:FindByContext <findbycontext>`
   Finds command, function, or variable based on the context of the element
   under the cursor.
-- <a href="vim/doc.html#VimDoc">**:VimDoc**</a>
-  [<keyword>] -
-  Opens the vim help for a keyword.
+- :ref:`:VimDoc <vimdoc>` [<keyword>] - Opens the vim help for a keyword.
 
 
 WebXml Commands
 -----------------
 
-- <a href="java/webxml/validate.html#Validate">**:Validate**</a> -
-  Validate the current web.xml file.
+- :ref:`:Validate <validate>` - Validate the current web.xml file.
 
 
 Wsdl Commands
 -----------------
 
-- <a href="dtd/validate.html#Validate">**:Validate**</a> -
-  Validate the current file.
+- :ref:`:Validate <validate>` - Validate the current file.
 
 
 Xml Commands
 -----------------
 
-- <a href="xml/definition.html#DtdDefinition">**:DtdDefinition**</a>
-  [<element>] -
+- :ref:`:DtdDefinition <dtddefinition>` [<element>] -
   Open the current xml file's dtd and jump to the element definition if
   supplied.
-- <a href="xml/definition.html#XsdDefinition">**:XsdDefinition**</a>
-  [<element>] -
+- :ref:`:XsdDefinition <xsddefinition>` [<element>] -
   Open the current xml file's xsd and jump to the element definition if
   supplied.
-- <a href="xml/validate.html#Validate">**:Validate**</a>
-  [<file>] -
+- :ref:`:Validate <validate>` [<file>] -
   Validates the supplied xml file or the current file if none supplied.
-- <a href="xml/format.html#XmlFormat">**:XmlFormat**</a>
-  Reformats the current xml file.
+- :ref:`:XmlFormat <xmlformat>` Reformats the current xml file.
 
 
 Xsd Commands
 -----------------
 
-- <a href="dtd/validate.html#Validate">**:Validate**</a> -
-  Validate the current file.
+- :ref:`:Validate <validate>` - Validate the current file.
 
 
 Version Control Commands
@@ -391,146 +332,117 @@ Version Control Commands
   Currently cvs, subversion, and mercurial are supported by the following
   commands where applicable.
 
-- <a href="common/vcs.html#Viewvc">**:Viewvc**</a> [file] -
-  Opens the <a href="site:viewvc">ViewVc</a> url to the supplied file or
-  directory, or to the current buffer if no argument supplied.
-- <a href="common/vcs.html#ViewvcAnnotate">**:ViewvcAnnotate**</a>
-  [revision] -
-  Opens the <a href="site:viewvc">ViewVc</a> url for the current file in
-  the annotation view for the last committed revision or the revision
-  supplied.
-- <a href="common/vcs.html#ViewvcChangeSet">**:ViewvcChangeSet**</a>
-  [revision] -
-  Opens the <a href="site:viewvc">ViewVc</a> url for the change set of
-  the last committed revision of the current file or the revision
-  supplied.
-- <a href="common/vcs.html#ViewvcDiff">**:ViewvcDiff**</a>
-  [revision, revision] -
-  Opens the <a href="site:viewvc">ViewVc</a> url for the current file's
-  revision diffed against the previous revision, the revision supplied,
-  or a diff of the two revision numbers supplied.
-- <a href="common/vcs.html#VcsAnnotate">**:VcsAnnotate**</a> -
+- :ref:`:VcsAnnotate <vcsannotate>` -
   Toggles annotation of the currently versioned file using vim signs.
-- <a href="common/vcs.html#VcsInfo">**:VcsInfo**</a> -
+- :ref:`:VcsInfo <vcsinfo>` -
   Echos vcs info about the current versioned file.
-- <a href="common/vcs.html#VcsLog">**:VcsLog**</a> -
+- :ref:`:VcsLog <vcslog>` -
   Opens a buffer with log information for the current file.
-- <a href="common/vcs.html#VcsChangeSet">**:VcsChangeSet**</a>
-  [revision] -
+- :ref:`:VcsChangeSet <vcschangeset>` [revision] -
   Opens a buffer with change set information for the supplied
   repository version or the current revision of the currently open file.
-- <a href="common/vcs.html#VcsDiff">**:VcsDiff**</a>
-  [revision] -
+- :ref:`:VcsDiff <vcsdiff>` [revision] -
   Performs a vertical diffsplit of the current file against the last
   committed revision of the current file or the revision supplied.
-- <a href="common/vcs.html#VcsCat">**:VcsCat**</a>
-  [revision] -
+- :ref:`:VcsCat <vcscat>` [revision] -
   Splits the current file with the contents of the last committed version
   of the current file or the supplied revision.
+- :ref:`:VcsWebLog <vcsweblog>` -
+  Opens the log for the currently versioned file in the configured vcs web app.
+- :ref:`:VcsWebAnnotate <vcswebannotate>` [revision] -
+  Opens the annotated view for the currently versioned file in the configured
+  vcs web app.
+- :ref:`:VcsWebChangeSet <vcswebchangeset>` [revision] -
+  Opens the change set for the currently versioned file in the configured vcs
+  web app.
+- :ref:`:VcsWebDiff <vcswebdiff>` [revision, revision] -
+  Opens a diff view for the currently versioned file in the configured in the
+  configured vcs web app.
 
 
 Web Lookup Commands
 --------------------
 
-- <a href="common/web.html#OpenUrl">**:OpenUrl**</a> [url] -
-  Opens a url in your configured web browser.
-- <a href="common/web.html#Google">**:Google**</a> [word ...] -
-  Looks up a word or phrase with google.
-- <a href="common/web.html#Clusty">**:Clusty**</a> [word ...] -
-  Looks up a word or phrase with clusty.
-- <a href="common/web.html#Wikipedia">**:Wikipedia**</a> [word ...] -
+- :ref:`:OpenUrl <openurl>` [url] - Opens a url in your configured web browser.
+- :ref:`:Google <google>` [word ...] - Looks up a word or phrase with google.
+- :ref:`:Clusty <clusty>` [word ...] - Looks up a word or phrase with clusty.
+- :ref:`:Wikipedia <wikipedia>` [word ...] -
   Looks up a word or phrase on wikipedia.
-- <a href="common/web.html#Dictionary">**:Dictionary**</a> [word] -
+- :ref:`:Dictionary <dictionary>` [word] -
   Looks up a word on dictionary.reference.com.
-- <a href="common/web.html#Thesaurus">**:Thesaurus**</a> [word] -
+- :ref:`:Thesaurus <thesaurus>` [word] -
   Looks up a word on thesaurus.reference.com.
 
 
 Misc. Commands
 -----------------
 
-- <a href="common/util.html#LocateFileEdit">**:LocateFileEdit**</a> [file] -
+- :ref:`:LocateFileEdit <locatefileedit>` [file] -
   Locates a relative file and opens it via :edit.
-- <a href="common/util.html#LocateFileSplit">**:LocateFileSplit**</a> [file] -
+- :ref:`:LocateFileSplit <locatefilesplit>` [file] -
   Locates a relative file and opens it via :split.
-- <a href="common/util.html#LocateFileTab">**:LocateFileTab**</a> [file] -
+- :ref:`:LocateFileTab <locatefiletab>` [file] -
   Locates a relative file and opens it via :tabnew.
-- <a href="common/util.html#Split">**:Split**</a>
-  file [file ...] -
-  Behaves like the 'split' command, but allows multiple files to be
-  supplied.
-- <a href="common/util.html#SplitRelative">**:SplitRelative**</a>
-  file [file ...] -
-  Like **:Split** this command provides splitting of multiple
-  files, but this command splits file relative to the file in the current
-  buffer.
-- <a href="common/util.html#Tabnew">**:Tabnew**</a>
-  file [file ...] -
+- :ref:`:Split <split>` file [file ...] -
+  Behaves like the 'split' command, but allows multiple files to be supplied.
+- :ref:`:SplitRelative <splitrelative>` file [file ...] -
+  Like **:Split** this command provides splitting of multiple files, but this
+  command splits file relative to the file in the current buffer.
+- :ref:`:Tabnew <tabnew>` file [file ...] -
   Behaves like **:Split**, but issues a :tabnew on each file.
-- <a href="common/util.html#TabnewRelative">**:TabnewRelative**</a> -
-  file [file ...] -
-  Behaves like **:SplitRelative**, but issues a :tabnew on
-  each file.
-- <a href="common/util.html#EditRelative">**:EditRelative**</a>
-  file -
-  Behaves like **:SplitRelative**, but issues an 'edit' and only
-  supports one file at a time.
-- <a href="common/util.html#ReadRelative">**:ReadRelative**</a>
-  file -
-  Behaves like **:SplitRelative**, but issues a 'read' and only
-  supports one file at a time.
-- <a href="common/util.html#ArgsRelative">**:ArgsRelative**</a>
-  file_pattern [ file_pattern ...] -
+- :ref:`:TabnewRelative <tabnewrelative>` - file [file ...] -
+  Behaves like **:SplitRelative**, but issues a :tabnew on each file.
+- :ref:`:EditRelative <editrelative>` file -
+  Behaves like **:SplitRelative**, but issues an 'edit' and only supports one
+  file at a time.
+- :ref:`:ReadRelative <readrelative>` file -
+  Behaves like **:SplitRelative**, but issues a 'read' and only supports one
+  file at a time.
+- :ref:`:ArgsRelative <argsrelative>` file_pattern [ file_pattern ...] -
   Behaves like **:SplitRelative**, but executes 'args'.
-- <a href="common/util.html#ArgAddRelative">**:ArgAddRelative**</a>
-  file_pattern [ file_pattern ...] -
+- :ref:`:ArgAddRelative <argaddrelative>` file_pattern [ file_pattern ...] -
   Behaves like **:SplitRelative**, but executes 'argadd'.
-- <a href="common/util.html#VimgrepRelative">**:VimgrepRelative**</a>
+- :ref:`:VimgrepRelative <vimgreprelative>`
   /regex/ file_pattern [ file_pattern ...] -
   Executes :vimgrep relative to the current file.
-- <a href="common/util.html#VimgrepAddRelative">**:VimgrepAddRelative**</a>
+- :ref:`:VimgrepAddRelative <vimgrepaddrelative>`
   /regex/ file_pattern [ file_pattern ...] -
   Executes :vimgrepadd relative to the current file.
-- <a href="common/util.html#LvimgrepRelative">**:LvimgrepRelative**</a>
+- :ref:`:LvimgrepRelative <lvimgreprelative>`
   /regex/ file_pattern [ file_pattern ...] -
   Executes :lvimgrep relative to the current file.
-- <a href="common/util.html#LvimgrepAddRelative">**:LvimgrepAddRelative**</a>
+- :ref:`:LvimgrepAddRelative <lvimgrepaddrelative>`
   /regex/ file_pattern [ file_pattern ...] -
   Executes :lvimgrepadd relative to the current file.
-- <a href="common/util.html#CdRelative">**:CdRelative**</a>
-  dir -
+- :ref:`:CdRelative <cdrelative>` dir -
   Executes :cd relative to the current file.
-- <a href="common/util.html#LcdRelative">**:LcdRelative**</a>
-  dir -
+- :ref:`:LcdRelative <lcdrelative>` dir -
   Executes :lcd relative to the current file.
-- <a href="common/util.html#DiffLastSaved">**:DiffLastSaved**</a> -
-  Performs a diffsplit with the last saved version of the currently
-  modifed file.
-- <a href="common/util.html#SwapWords">**:SwapWords**</a> -
-  Swaps two words (with cursor placed on the first word).
-  Supports swapping around non-word characters like commas, periods, etc.
-- <a href="common/util.html#Sign">**:Sign**</a> -
+- :ref:`:DiffLastSaved <difflastsaved>` -
+  Performs a diffsplit with the last saved version of the currently modifed
+  file.
+- :ref:`:SwapWords <swapwords>` -
+  Swaps two words (with cursor placed on the first word).  Supports swapping
+  around non-word characters like commas, periods, etc.
+- :ref:`:Sign <sign>` -
   Toggles adding or removing a vim sign on the current line.
-- <a href="common/util.html#Signs">**:Signs**</a> -
+- :ref:`:Signs <signs>` -
   Opens a new window containing a list of signs for the current buffer.
-- <a href="common/util.html#SignClearUser">**:SignClearUser**</a> -
-  Removes all vim signs added via :Sign.
-- <a href="common/util.html#SignClearAll">**:SignClearAll**</a> -
-  Removes all vim signs.
-- <a href="common/util.html#QuickFixClear">**:QuickFixClear**</a> -
+- :ref:`:SignClearUser <signclearuser>` - Removes all vim signs added via :Sign.
+- :ref:`:SignClearAll <signclearall>` - Removes all vim signs.
+- :ref:`:QuickFixClear <quickfixclear>` -
   Removes all entries from the quick fix window.
-- <a href="common/util.html#LocationListClear">**:LocationListClear**</a> -
+- :ref:`:LocationListClear <locationlistclear>` -
   Removes all entries from the location list window.
-- <a href="common/maximize.html#MaximizeWindow">**:MaximizeWindow**</a> -
+- :ref:`:MaximizeWindow <maximizewindow>` -
   Toggles maximization of the current window.
-- <a href="common/maximize.html#MinimizeWindow">**:MinimizeWindow**</a> [winnr ...] -
+- :ref:`:MinimizeWindow <minimizewindow>` [winnr ...] -
   Minimizes the current window or the windows corresponding to the window
   numbers supplied.
-- <a href="common/maximize.html#MinimizeRestore">**:MinimizeRestore**</a> -
-  Restore all minimized windows.
-- <a href="common/util.html#Buffers">**:Buffers**</a> -
+- :ref:`:MinimizeRestore <minimizerestore>` - Restore all minimized windows.
+- :ref:`:Buffers <buffers>` -
   Opens a temporary window with a list of all the currently listed
   buffers, allowing you to open or remove them.
-- <a href="common/util.html#Only">**:Only**</a> -
+- :ref:`:Only <only>` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.

@@ -22,4 +22,4 @@ Translations
 
   zh_TW/index
 
-.. - :ref:`translations/zh_TW/index`
+- :ref:`translations/zh_tw/index`

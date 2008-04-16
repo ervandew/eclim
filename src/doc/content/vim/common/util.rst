@@ -88,9 +88,9 @@ general purpose commands that are useful in and outside the scope of eclim.
 - **:ArgsRelative** file_pattern [file_pattern ...] -
   Like **:SplitRelative** except executes 'args'.
 
-.. _ArgsAddRelative:
+.. _ArgAddRelative:
 
-- **:ArgsAddRelative** file_pattern [file_pattern ...] -
+- **:ArgAddRelative** file_pattern [file_pattern ...] -
   Like **:SplitRelative** except executes 'argadd'.
 
 .. _VimgrepRelative:

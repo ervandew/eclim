@@ -18,10 +18,9 @@ Features
 
 | The following is a partial list of eclim features with much more still to
   come.
-| For more details please see the detailed
-  <a href="vim/index.html">documentation</a>.
+| For more details please see the detailed :ref:`documentation <vim/index>`.
 | For a more comprehensive list you can also visit the
-  <a href="vim/cheatsheet.html">cheatsheet</a>.
+  :ref:`cheatsheet <vim/cheatsheet>`.
 
 Eclipse Projects
 -------------------------

@@ -21,6 +21,8 @@ Web Lookup Commands
 Eclim provides a set of commands that allow you to open information in the web
 browser or your choice.
 
+.. _OpenUrl:
+
 OpenUrl
 -------
 

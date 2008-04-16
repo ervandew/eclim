@@ -37,8 +37,8 @@ href="../../xml/validate.html">xml validation</a> to validate that the ant file
 is well formed.
 
 If you do not want your ant files validated automatically when saved, you can
-set the <a href="#EclimAntValidate">g:EclimAntValidate</a> variable described in
-the configuration section below.
+set the :ref:`g:EclimAntValidate <eclimantvalidate>` variable described in the
+configuration section below.
 
 .. _Validate:
 

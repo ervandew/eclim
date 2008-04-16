@@ -77,7 +77,7 @@ delegate methods will be created for each method in that interface or class.
 .. note::
 
   The insertion of method stubs is done externally with Eclipse and with
-  that comes a couple <a href="../external_editing.html">caveats</a>.
+  that comes a couple :ref:`caveats <vim/issues>`.
 
 This functionality is currently supported for both outer and inner classes, but
 not for anonymous inner classes.

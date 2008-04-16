@@ -18,6 +18,8 @@
 Php Search
 ==========
 
+.. _PhpFindDefinition:
+
 Element Search
 --------------
 

@@ -31,19 +31,18 @@ Bug Fixes:
   - Various bug fixes.
 
 Vim:
-  - Added <a href="vim/common/util.html#Only">**:Only**</a> as
+  - Added :ref:`:Only <only>` as
     a configurable alternative to vim's :only command.
 
 Django:
-  - Added <a href="vim/python/django.html#template">end tag completion</a>
-    support for django templates.
+  - Added :ref:`end tag completion <htmldjango>` support for django templates.
 
 Vcs:
   - Removed **:VcsAnnotateOff** in favor of invoking
     **:VcsAnnotate** again to remove the annotations.
-  - Added <a href="vim/common/vcs.html#editor">vcs editor</a> plugin which
-    allows you to view diff of a file by hitting <enter> on a file name
-    in the cvs, svn, or hg commit editor.
+  - Added `vcs editor <vcseditor>` plugin which allows you to view diff of a
+    file by hitting <enter> on a file name in the cvs, svn, or hg commit
+    editor.
 
 .. _1.3.5:
 
@@ -55,7 +54,7 @@ Bug Fixes:
   - Various bug fixes.
 
 Eclim:
-  - Added an <a href="vim/common/archive.html">archive</a> (jar, tar, etc.)
+  - Added an :ref:`archive <vim/common/archive>` (jar, tar, etc.)
     viewer.
 
 Html:
@@ -63,17 +62,12 @@ Html:
 
 Vcs:
   - Added support for limiting the number of log entries returned by
-    <a href="vim/common/vcs.html#VcsLog">**:VcsLog**</a>
-    (limits to 50 entries by default).
+    :ref:`:VcsLog <vcslog>` (limits to 50 entries by default).
   - Updated **:VcsLog**, **:VcsChangeSet**, etc.
     to support cvs and hg where applicable.
 
 Trac:
-  - Added
-    <a href="vim/common/trac.html#TracLog">**:TracLog**</a>,
-    <a href="vim/common/trac.html#TracAnnotate">**:TracAnnotate**</a>,
-    <a href="vim/common/trac.html#TracChangeSet">**:TracChangeSet**</a>, and
-    <a href="vim/common/trac.html#TracDiff">**:TracDiff**</a>.
+  - Added :TracLog, :TracAnnotate, :TracChangeSet, and :TracDiff.
 
 .. _1.3.4:
 
@@ -85,8 +79,7 @@ Bug Fixes:
   - Various other bug fixes.
 
 Eclim:
-  - Added
-    <a href="vim/common/project.html#ProjectInfo">**:ProjectInfo**</a>.
+  - Added :ref:`:ProjectInfo <projectinfo>`.
   - Added an eclim/after directory to vim's runtime path for any user scripts
     to be sourced after eclim.
 
@@ -97,9 +90,9 @@ Installer:
 
 Php:
   - Added php support for
-    <a href="vim/php/complete.html">code completion</a>,
-    <a href="vim/php/search.html">searching</a>, and
-    <a href="vim/php/validate.html">validation</a>.
+    :ref:`code completion <vim/php/complete>`,
+    :ref:`searching <vim/php/search>`, and
+    :ref:`validation <vim/php/validate>`.
     Requires the <a href="site:eclipse_pdt">eclipse pdt plugin</a>.
 
 .. _1.3.3:
@@ -120,15 +113,15 @@ Bug Fixes:
 
 Eclim:
   - Added commands to view or manipulate project natures:
-    <a href="vim/common/project.html#ProjectNatures">**:ProjectNatures**</a>,
-    <a href="vim/common/project.html#ProjectNatureAdd">**:ProjectNatureAdd**</a>, and
-    <a href="vim/common/project.html#ProjectNatureRemove">**:ProjectNatureRemove**</a>.
+    :ref:`:ProjectNatures <projectnatures>`,
+    :ref:`:ProjectNatureAdd <projectnatureadd>`, and
+    :ref:`:ProjectNatureRemove <projectnatureremove>`.
 
 Css:
-  - Added <a href="vim/css/validate.html">css validation</a>.
+  - Added :ref:`css validation <vim/css/validate>`.
 
 Html:
-  - Added <a href="vim/html/util.html#BrowserOpen">**:BrowserOpen**</a>
+  - Added :ref:`:BrowserOpen <browseropen>`
 
 Html / Xml:
   - Added auto completion of end tags when typing '</'.
@@ -136,54 +129,51 @@ Html / Xml:
     **g:EclimSgmlCompleteEndTag** to 0.
 
 Java / Python:
-  - <a href="vim/java/regex.html">**:JavaRegex**</a> and
-    <a href="vim/python/regex.html">**:PythonRegex**</a>
+  - :ref:`**:JavaRegex** <vim/java/regex>` and
+    :ref:`**:PythonRegex** <vim/python/regex>`
     now support **b:eclim_regex_type** to determine if the
     regex should be applied to the whole sample text at once, or to each
     line individually.
 
 Java:
-  - Updated the <a href="vim/java/logging.html">java logger</a> functionality
-    to support a custom logger template.
+  - Updated the :ref:`java logger <vim/java/logging>` functionality to support
+    a custom logger template.
 
 Javascript:
-  - Added <a href="vim/javascript/validate.html">javascript validation</a>
-    using <a href="site:jsl">jsl</a>.
+  - Added :ref:`javascript validation <vim/javascript/validate>` using
+    <a href="site:jsl">jsl</a>.
 
 Python:
-  - Added basic <a href="vim/python/validate.html">python validation</a>
-    using <a href="site:pyflakes">pyflakes</a> and the python compiler.
+  - Added basic :ref:`python validation <vim/python/validate>` using
+    <a href="site:pyflakes">pyflakes</a> and the python compiler.
   - Added support for <a href="site:pylint">pylint</a> using new
-    <a href="vim/python/validate.html#PyLint">**:PyLint**</a>
-    command.
+    :ref:`:PyLint <pylint>` command.
 
 Vcs:
   - Added
-    <a href="vim/common/vcs.html#VcsInfo">**:VcsInfo**</a>,
-    <a href="vim/common/vcs.html#ViewvcAnnotate">**:ViewvcAnnotate**</a>,
-    <a href="vim/common/vcs.html#ViewvcChangeSet">**:ViewvcChangeSet**</a>, and
-    <a href="vim/common/vcs.html#ViewvcDiff">**:ViewvcDiff**</a>.
+    :ref:`:VcsInfo <vcsinfo>`,
+    :ViewvcAnnotate, :ViewvcChangeSet, and :ViewvcDiff.
 
 Vcs (subversion):
   - Added
-    <a href="vim/common/vcs.html#VcsLog">**:VcsLog**</a>,
-    <a href="vim/common/vcs.html#VcsChangeSet">**:VcsChangeSet**</a>,
-    <a href="vim/common/vcs.html#VcsDiff">**:VcsDiff**</a>, and
-    <a href="vim/common/vcs.html#VcsCat">**:VcsCat**</a>.
+    :ref:`:VcsLog <vcslog>`,
+    :ref:`:VcsChangeSet <vcschangeset>`,
+    :ref:`:VcsDiff <vcsdiff>`, and
+    :ref:`:VcsCat <vcscat>`.
 
 Vim:
-  - Added vim <a href="vim/common/maximize.html">window maximize and minimize</a>
+  - Added vim :ref:`window maximize and minimize <vim/common/maximize>`
     support.
   - Added an alternate implementation of
     <a href="vim/common/taglist.html#taglisttoo">taglist</a>.
-  - Added command <a href="vim/common/util.html#Buffers">**:Buffers**</a>.
+  - Added command :ref:`:Buffers <buffers>`.
   - Added
-    <a href="vim/common/util.html#VimgrepRelative">**VimgrepRelative**</a>,
-    <a href="vim/common/util.html#VimgrepAddRelative">**VimgrepAddRelative**</a>,
-    <a href="vim/common/util.html#LvimgrepRelative">**LvimgrepRelative**</a>,
-    <a href="vim/common/util.html#LvimgrepAddRelative">**LvimgrepAddRelative**</a>,
-    <a href="vim/common/util.html#CdRelative">**CdRelative**</a>, and
-    <a href="vim/common/util.html#LcdRelative">**LcdRelative**</a>.
+    :ref:`VimgrepRelative <vimgreprelative>`,
+    :ref:`VimgrepAddRelative <vimgrepaddrelative>`,
+    :ref:`LvimgrepRelative <lvimgreprelative>`,
+    :ref:`LvimgrepAddRelative <lvimgrepaddrelative>`,
+    :ref:`CdRelative <cdrelative>`, and
+    :ref:`LcdRelative <lcdrelative>`.
 
 .. _1.3.1:
 
@@ -220,22 +210,19 @@ Eclim:
     an automatic project refresh.  What this means for you is that any time
     you perform an action that results in any file additions, deletions, or
     changes, like a svn / cvs update, you should issue a
-    <a href="vim/common/project.html#ProjectRefresh">**:ProjectRefresh**</a>
-    to ensure that eclipse and eclim are updated with the latest version of
-    the files on disk.
-  - <a href="vim/common/project.html#ProjectCreate">**:ProjectCreate**</a>
-    now supports optional -p argument for specifying the project name to
-    use.
-  - Created new command
-    <a href="vim/common/project.html#ProjectRefreshAll">**:ProjectRefreshAll**</a>
-    to support refreshing all projects at once, and modified
-    <a href="vim/common/project.html#ProjectRefresh">**:ProjectRefresh**</a>
-    to only refresh the current project if no project names are supplied.
+    :ref:`:ProjectRefresh <projectrefresh>` to ensure that eclipse and eclim
+    are updated with the latest version of the files on disk.
+  - :ref:`:ProjectCreate <projectcreate>` now supports optional -p argument for
+    specifying the project name to use.
+  - Created new command :ref:`:ProjectRefreshAll <projectrefreshall>` to
+    support refreshing all projects at once, and modified
+    :ref:`:ProjectRefresh <projectrefresh>` to only refresh the current project
+    if no project names are supplied.
   - Added
-    <a href="vim/common/project.html#ProjectGrep">**:ProjectGrep**</a>,
-    <a href="vim/common/project.html#ProjectGrepAdd">**:ProjectGrepAdd**</a>,
-    <a href="vim/common/project.html#ProjectLGrep">**:ProjectLGrep**</a>, and
-    <a href="vim/common/project.html#ProjectLGrepAdd">**:ProjectLGrepAdd**</a>.
+    :ref:`:ProjectGrep <projectgrep>`,
+    :ref:`:ProjectGrepAdd <projectgrepadd>`,
+    :ref:`:ProjectLGrep <projectlgrep>`, and
+    :ref:`:ProjectLGrepAdd <projectlgrepadd>`.
   - Added support for buffer local variable
     **b:EclimLocationListFilter** which can contain a list of
     regular expression patterns used to filter location list entries with
@@ -252,63 +239,59 @@ Eclim:
         \ ]
 
 Css:
-  - | Added <a href="vim/css/complete.html">css code completion</a>.
+  - | Added :ref:`css code completion <vim/css/complete>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
 
 Dtd:
-  - | Added <a href="vim/dtd/validate.html">dtd validation</a>.
+  - | Added :ref:`dtd validation <vim/dtd/validate>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
 
 Html:
-  - | Added <a href="vim/html/complete.html">html code completion</a>.
+  - | Added :ref:`html code completion <vim/html/complete>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
-  - | Added <a href="vim/html/validate.html">html validation</a>.
+  - | Added :ref:`html validation <vim/html/validate>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
 
 Log4j:
-  - Added
-    <a href="vim/java/log4j/validate.html">log4j xml file validation</a>.
+  - Added :ref:`log4j xml file validation <vim/java/log4j/validate>`.
 
 Python:
-  - Added support for
-    <a href="vim/python/regex.html">testing regular expressions</a>.
+  - Added support for :ref:`testing regular expressions <vim/python/regex>`.
 
 Django:
   - Added
-    <a href="vim/python/django.html#DjangoManage">**:DjangoManage**</a>,
-    <a href="vim/python/django.html#DjangoFind">**:DjangoFind**</a>,
-    <a href="vim/python/django.html#DjangoTemplateOpen">**:DjangoTemplateOpen**</a>,
-    <a href="vim/python/django.html#DjangoViewOpen">**:DjangoViewOpen**</a>, and
-    <a href="vim/python/django.html#DjangoContextOpen">**:DjangoContextOpen**</a>.
+    :ref:`:DjangoManage <djangomanage>`,
+    :ref:`:DjangoFind <djangofind>`,
+    :ref:`:DjangoTemplateOpen <djangotemplateopen>`,
+    :ref:`:DjangoViewOpen <djangoviewopen>`, and
+    :ref:`:DjangoContextOpen <djangocontextopen>`.
 
 WebXml:
-  - Added
-    <a href="vim/java/webxml/validate.html">web.xml file validation</a>.
+  - Added :ref:`web.xml file validation <vim/java/webxml/validate>`.
 
 Vim:
   - Added
-    <a href="vim/common/util.html#ArgsRelative">**:ArgsRelative**</a>,
-    <a href="vim/common/util.html#ArgAddRelative">**:ArgAddRelative**</a>,
-    <a href="vim/common/util.html#ReadRelative">**:ReadRelative**</a>.
+    :ref:`:ArgsRelative <argsrelative>`,
+    :ref:`:ArgAddRelative <argaddrelative>`,
+    :ref:`:ReadRelative <readrelative>`.
   - Added
-    <a href="vim/common/util.html#Sign">**:Sign**</a>,
-    <a href="vim/common/util.html#Signs">**:Signs**</a>,
-    <a href="vim/common/util.html#SignClearUser">**:SignClearUser**</a>,
-    <a href="vim/common/util.html#SignClearAll">**:SignClearAll**</a>.
+    :ref:`:Sign <sign>`,
+    :ref:`:Signs <signs>`,
+    :ref:`:SignClearUser <signclearuser>`,
+    :ref:`:SignClearAll <signclearall>`.
 
 Vcs:
   - Added
-    <a href="vim/common/vcs.html#VcsAnnotate">**:VcsAnnotate**</a> and
-    <a href="vim/common/vcs.html#Viewvc">**:Viewvc**</a>.
+    :ref:`:VcsAnnotate <vcsannotate>` and :Viewvc.
 
 Wsdl:
-  - | Added <a href="vim/wsdl/validate.html">wsdl validation</a>.
+  - | Added :ref:`wsdl validation <vim/wsdl/validate>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
 
 Xsd:
-  - | Added <a href="vim/xsd/validate.html">xsd validation</a>.
+  - | Added :ref:`xsd validation <vim/xsd/validate>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.
 
 Xml:
-  - | Added <a href="vim/xml/complete.html">xml code completion</a>.
+  - | Added :ref:`xml code completion <vim/xml/complete>`.
     | Requires the <a href="site:eclipse_wst">eclipse wst plugin</a>.

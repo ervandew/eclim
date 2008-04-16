@@ -52,4 +52,4 @@ To apply the above change you would hit <enter> on the line\:
 .. note::
 
   The code correction is done externally with Eclipse and with that comes a
-  couple <a href="../external_editing.html">caveats</a>.
+  couple :ref:`caveats <vim/issues>`.

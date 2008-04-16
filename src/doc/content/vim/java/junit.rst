@@ -118,7 +118,7 @@ Generating test method stubs.
 -----------------------------
 
 While editing junit files, eclim provides functionality to generate test method
-stubs similar to the <a href="impl.html">method override / impl</a>
+stubs similar to the :ref:`method override / impl <vim/java/impl>`
 functionality provided for non-test-case classes.  The only difference is that
 instead of **:JavaImpl**, you use **:JUnitImpl** to open the window of possible
 methods to implement.
@@ -142,7 +142,7 @@ generated.
 .. note::
 
   The insertion of methods is done externally with Eclipse and with that
-  comes a couple <a href="../external_editing.html">caveats</a>.
+  comes a couple :ref:`caveats <vim/issues>`.
 
 .. note::
 

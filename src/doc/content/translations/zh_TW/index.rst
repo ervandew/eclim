@@ -22,4 +22,4 @@ Traditional Chinese
 
   vim/cheatsheet
 
-.. - :ref:`translations/zh_TW/vim/cheatsheet`
+- :ref:`translations/zh_tw/vim/cheatsheet`

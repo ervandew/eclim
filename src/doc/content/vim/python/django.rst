@@ -95,6 +95,7 @@ The command **:DjangoContextOpen** supports executing **:DjangoViewOpen**,
 **:DjangoTemplateOpen**, or **:PythonFindDefinition** depending on the context
 of the text under the cursor.
 
+.. _htmldjango:
 
 Django html template support
 ----------------------------
@@ -118,10 +119,10 @@ allow proper matchit.vim support for django default and user defined tags.
 
 **End Tag Completion**
 
-Using the <a href="#HtmlDjangoUserBodyElements">**g:HtmlDjangoUserBodyElements**</a>
-setting along with the pre-configured
-default list of body elements, eclim includes support for auto completion of
-ending template tags when you type an '{%e' or '{% e'.
+Using the :ref:`g:HtmlDjangoUserBodyElements <htmldjangouserbodyelements>`
+setting along with the pre-configured default list of body elements, eclim
+includes support for auto completion of ending template tags when you type an
+'{%e' or '{% e'.
 
 .. _DjangoFind:
 

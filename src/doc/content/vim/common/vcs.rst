@@ -76,6 +76,37 @@ file versioned in cvs, subversion, or mercurial (where applicable).
   current file or the supplied revision.
 
 
+Vcs Web Commands
+----------------
+
+The following list of commands are similar to those above, but instead of
+opening a local buffer, these commands all open a url in the browser so that
+you can use your favorite vcs web front end (viewvc, trace, etc.).
+
+.. _VcsWebLog:
+
+- **:VcsWebLog** -
+  Opens the log for the currently versioned file in the configured vcs web app.
+
+.. _VcsWebAnnotate:
+
+- **:VcsWebAnnotate** [revision] -
+  Opens the annotated view for the currently versioned file in the configured
+  vcs web app.
+
+.. _VcsWebChangeSet:
+
+- **:VcsWebChangeSet** [revision] -
+  Opens the change set for the currently versioned file in the configured vcs
+  web app.
+
+.. _VcsWebDiff:
+
+- **:VcsWebDiff** [revision] -
+  Opens a diff view for the currently versioned file in the configured in the
+  configured vcs web app.
+
+
 Configuration
 --------------
 
@@ -105,6 +136,49 @@ Eclim Settings\:
   **:VcsChangeSet** to enable linking of ticket ids of the form #ticket_id
   (#1234) found in user supplied commit comments.
 
+.. _org.eclim.project.vcs.web.viewer:
+
+- The web viewer to use. Possible values include\:
+
+  - viewvc
+  - trac
+  - hgcgi
+  - hgserve
+  - redmine
+
+    .. note::
+
+      Currenlty redmine is only partially supported with mercial since it uses
+      local revision numbers instead of the universal change set ids.
+
+  Ex. An example using viewvc.
+
+  ::
+
+    org.eclim.project.vcs.web.viewer=viewvc
+
+.. _org.eclim.project.vcs.web.url:
+
+- Base url used for the chosen web viewer.
+
+  Ex. An example using viewvc.
+
+  ::
+
+    org.eclim.project.vcs.web.url=http://eclim.svn.sourceforge.net/viewvc/eclim/
+
+  .. note::
+
+    | For redmine the url should take the form\:
+    | ``http://redmine.myhost/repositories/<cmd>/myrepos``
+
+    Note the literal <cmd> portion. Since redmine urls place the command name
+    (log, changes, etc) in front of the repository name, you must include the
+    <cmd> placeholder in your configured url so that the :VcsWeb commands can
+    replace it with the proper value.
+
+
+.. _VcsEditor:
 
 Vcs Editor Support
 ------------------

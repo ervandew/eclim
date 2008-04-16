@@ -18,8 +18,8 @@
 Ant Code Completion
 ===================
 
-Ant code completion uses the standard <a href="../../code_completion.html">Vim
-code completion mechanism</a> like so\:
+Ant code completion uses the standard
+:ref:`Vim code completion mechanism <vim/code_completion>` like so\:
 
 ::
 

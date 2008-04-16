@@ -15,6 +15,8 @@
 
 .. _vim/xml/format:
 
+.. _XmlFormat:
+
 Xml Format
 ==========
 

@@ -22,7 +22,7 @@ Maven Execution
 
 .. _Mvn:
 
-Much like the provided <a href="../ant/run.html">ant</a> execution
+Much like the provided :ref:`ant <vim/java/ant/execute>` execution
 functionality, eclim also provides commands for running maven 1.x or 2.x.
 
 Eclim provides the following commands\:
@@ -47,11 +47,10 @@ which perform the following steps\:
 - Execute :make.
 - Restore your previous 'makeprg' and 'errorformat' option settings.
 
-Additionally, if <a href="../../index.html#EclimMakeLCD">g:EclimMakeLCD</a> is
-enabled (which it is by default), then the execution of maven will be performed
-from the current buffer's local directory, ensuring that mavens's build file
-discovery method is performed from the buffer's working directory and not your
-own.
+Additionally, if :ref:`g:EclimMakeLCD <eclimmakelcd>` is enabled (which it is
+by default), then the execution of maven will be performed from the current
+buffer's local directory, ensuring that mavens's build file discovery method is
+performed from the buffer's working directory and not your own.
 
 Note that **:Mvn** MUST have this enabled since maven 2.x no
 longer has support for the ``--find`` option.

@@ -28,8 +28,8 @@ href="../../xml/validate.html">xml validation</a> to validate that the file is
 well formed.
 
 If you do not want your log4j files validated automatically when saved, you can
-set the <a href="#EclimLog4jValidate">g:EclimLog4jValidate</a> variable
-described in the configuration section below.
+set the :ref:`g:EclimLog4jValidate <eclimlog4jvalidate>` variable described in
+the configuration section below.
 
 .. _Validate:
 

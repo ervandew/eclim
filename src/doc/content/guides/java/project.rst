@@ -41,7 +41,7 @@ you need to worry about maintaining as it is purely for Eclipse.  The
 ``.classpath`` file on the other hand, is used to manage your project's
 dependencies, including dependencies on other projects, other libraries, and
 the location of your source directories.  For more on maintaining this file see
-the <a href="../../vim/java/classpath.html">classpath docs</a>.
+the :ref:`classpath docs <vim/java/classpath>`.
 
 Once you've created your project you can use the **:ProjectList** command to
 list the available projects and you should see your newly created one in the
@@ -64,10 +64,10 @@ Editing project settings
 
 After creating a project, the next thing you'll probably want to do is edit
 your project's settings.  To do this you can use the
-<a href="../../vim/common/project.html#ProjectSettings">**:ProjectSettings**</a>
-command.  If your current Vim window's working directory is at or under the
-project's root directory then you can execute the **:ProjectSettings** with no
-arguments, otherwise you will need to supply the project name.
+:ref:`:ProjectSettings <projectsettings>` command.  If your current Vim
+window's working directory is at or under the project's root directory then you
+can execute the **:ProjectSettings** with no arguments, otherwise you will need
+to supply the project name.
 
 .. code-block:: vim
 
@@ -82,11 +82,9 @@ using **:ProjectSettings** to update them.
 .. note::
 
   If you have only one project or many projects that share the same settings
-  you can use the
-  <a href="../../vim/index.html#EclimSettings">**:EclimSettings**</a>
-  command instead to edit the global settings.  These global settings will
-  apply to any project that has not overridden them with values via
-  **:ProjectSettings**.
+  you can use the :ref:`:EclimSettings <eclimsettings>` command instead to edit
+  the global settings.  These global settings will apply to any project that
+  has not overridden them with values via **:ProjectSettings**.
 
 
 Your project's classpath

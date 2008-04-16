@@ -25,6 +25,8 @@ your ivy.xml file.  Any entries found in the ivy.xml that are not in the
 version will be updated, and any stale entries deleted.
 
 
+.. _IvyRepo:
+
 Initial Setup
 -------------
 
@@ -73,9 +75,11 @@ Ex.
   </classpathentry>
 
 
+.. _IvyDependencySearch:
+
 Search Online Maven Repository
 ------------------------------
 
 Eclim also provides the command **:IvyDependencySearch** which allows you to
 search for dependencies in the online maven repository as described in the
-<a href="../../../vim/java/maven/dependency.html">maven documentation</a>.
+:ref:`maven documentation <vim/java/maven/dependencies>`.

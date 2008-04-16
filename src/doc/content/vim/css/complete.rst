@@ -18,8 +18,8 @@
 Css Code Completion
 ===================
 
-Css code completion uses the standard <a href="../code_completion.html">Vim code
-completion mechanism</a> like so\:
+Css code completion uses the standard
+:ref:`Vim code completion mechanism <vim/code_completion>` like so\:
 
 ::
 

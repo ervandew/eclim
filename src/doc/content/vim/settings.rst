@@ -29,8 +29,8 @@ There are two types of settings available:
   These are settings that reside in your Eclipse workspace and are used to
   control certain aspects of the eclim server's behavior.  These settings
   can be viewed and modified using one of the following commands\:
-  - <a href="index.html#commands">**:EclimSettings**</a>
-  - <a href="common/project.html">**:ProjectSettings**</a>
+  - :ref:`:EclimSettings <eclimsettings>`
+  - :ref:`:ProjectSettings <projectsettings>`
 
 - **Vim global variable settings.**
 
@@ -202,7 +202,7 @@ The following is a list of some of the common Vim variables available.
   :make.
 
   Enabling this has the benefit of allowing you to run :make or
-  <a href="java/ant/run.html">**:Ant**</a> from any file
+  :ref:`**:Ant** <vim/java/ant/execute>` from any file
   regardless of where it was opened from without having to worry about
   the directory it is executing from.  For example if you have a file
   open from project A and split a file from project B, you can execute

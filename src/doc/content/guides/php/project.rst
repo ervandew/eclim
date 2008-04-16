@@ -40,8 +40,7 @@ project is created two file will be added to the root directory of your project,
 nothing that you need to worry about maintaining as it is purely for Eclipse.
 The ``.projectOptions`` file on the other hand, is used to manage your project's
 dependencies, including dependencies on other projects and other libraries.  For
-more on maintaining this file see the
-<a href="../../vim/php/includepath.html">include path docs</a>.
+more on maintaining this file see the :ref:`include path docs <vim/php/include>`.
 
 Once you've created your project you can use the **:ProjectList** command to
 list the available projects and you should see your newly created one in the

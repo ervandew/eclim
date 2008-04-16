@@ -28,7 +28,7 @@ href="../../xml/validate.html">xml validation</a> to validate that the file is
 well formed.
 
 If you do not want your web.xml files validated automatically when saved, you
-can set the <a href="#EclimWebXmlValidate">g:EclimWebXmlValidate</a> variable
+can set the :ref:`g:EclimWebXmlValidate <eclimwebxmlvalidate>` variable
 described in the configuration section below.
 
 .. _Validate:

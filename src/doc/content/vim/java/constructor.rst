@@ -62,4 +62,4 @@ constructor is created.
 .. note::
 
   The insertion of constructors is done externally with Eclipse and with
-  that comes a couple <a href="../external_editing.html">caveats</a>.
+  that comes a couple :ref:`caveats <vim/issues>`.

@@ -52,7 +52,7 @@ of these mappings, simply create a ftplugin file for java and place your
 mappings there (:help ftplugin-name).
 
 - This mapping can be used to allow quick replacement of template variables when
-  utilizing the <a href="java/abbreviations.html">java abbreviations</a>.
+  utilizing the :ref:`java abbreviations <vim/java/abbreviations>`.
 
   .. code-block:: vim
 
@@ -114,7 +114,7 @@ mappings there (:help ftplugin-name).
 - Perform a context sensitive search for the element under the cursor
   using <enter>.
 
-  See <a href="vim/find.html#FindByContext">**:FindByContext**</a> for more info.
+  See :ref:`:FindByContext <findbycontext>` for more info.
 
   .. code-block:: vim
 
