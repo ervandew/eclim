@@ -103,8 +103,8 @@ Django html template support
 **Syntax**
 
 Vim ships with a syntax file for django html template files, but eclim builds on
-that base to support highlighting of user defined tags and filters (see the <a
-href="#configuration">configuration section</a> below.
+that base to support highlighting of user defined tags and filters (see the
+<a href="#configuration">configuration section</a> below.
 
 **Indent**
 

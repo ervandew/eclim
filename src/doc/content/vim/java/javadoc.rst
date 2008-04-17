@@ -38,12 +38,10 @@ Configuration
 Eclim Settings
 
 
-- **org.eclim.user.name** -
-  Used as the name portion of the author tag.  Consult the <a
-  href="../settings.html">settings page</a> for more info.
-- **org.eclim.user.email** -
-  Used as the email portion of the author tag.  Consult the <a
-  href="../settings.html">settings page</a> for more info.
+- **org.eclim.user.name** - Used as the name portion of the author tag.
+  Consult the :ref:`settings page <vim/settings>` for more info.
+- **org.eclim.user.email** - Used as the email portion of the author tag.
+  Consult the :ref:`settings page <vim/settings>` for more info.
 
 
 Searching
@@ -58,8 +56,8 @@ The only difference is that you use **:JavaDocSearch** instead of
 **:JavaSearch**.
 
 The results will be displayed in a window and you can simply hit <enter> on an
-entry to open it using the browser you configured via <a
-href="../index.html#EclimBrowser">**g:EclimBrowser**</a>.
+entry to open it using the browser you configured via
+:ref:`g:EclimBrowser <eclimbrowser>`.
 
 The locations of the javadocs are determined via your Eclipse project's
 .classpath file.  For each library entry you can define a javadoc attribute that

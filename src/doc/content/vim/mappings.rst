@@ -32,7 +32,11 @@ that you can use to define your own mappings.
   <leader> argument is mapped to a character of your choice.  Please see ":help
   mapleader" in Vim for more information.
 
-**Ant Mappings**
+
+.. _AntMappings:
+
+Ant Mappings
+-------------
 
 Here are some mappings for the ant funtionality provided by eclim.  To make use
 of these mappings, simply create a ftplugin file for ant and place your mappings
@@ -45,7 +49,11 @@ there (:help ftplugin-name).
 
     noremap <silent> <buffer> <cr> :AntDoc<cr>
 
-**Java Mappings**
+
+.. _JavaMappings:
+
+Java Mappings
+-------------
 
 Here are some mappings for the java funtionality provided by eclim.  To make use
 of these mappings, simply create a ftplugin file for java and place your
@@ -78,7 +86,11 @@ mappings there (:help ftplugin-name).
 
     nnoremap <silent> <buffer> <cr> :JavaSearchContext<cr>
 
-**Php Mappings**
+
+.. _PhpMappings:
+
+Php Mappings
+------------
 
 Here are some mappings for the php funtionality provided by eclim.  To make use
 of these mappings, simply create a ftplugin file for php and place your mappings
@@ -91,7 +103,11 @@ there (:help ftplugin-name).
 
     nnoremap <silent> <buffer> <cr> :PhpSearchContext<cr>
 
-**Python Mappings**
+
+.. _PythonMappings:
+
+Python Mappings
+---------------
 
 Here are some mappings for the python funtionality provided by eclim.  To make
 use of these mappings, simply create a ftplugin file for python and place your
@@ -105,7 +121,11 @@ mappings there (:help ftplugin-name).
 
     nnoremap <silent> <buffer> <cr> :DjangoContextOpen<cr>
 
-**Vim Script Mappings**
+
+.. _VimScriptMappings:
+
+Vim Script Mappings
+--------------------
 
 Here are some mappings for the Vim script funtionality provided by eclim.  To
 make use of these mappings, simply create a ftplugin file for Vim and place your

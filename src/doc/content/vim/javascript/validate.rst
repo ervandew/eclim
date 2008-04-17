@@ -23,15 +23,15 @@ is written.  Any errors will be added to the current window's location list
 (:help location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
-Javascript validation currently uses <a href="site:jsl">JavaScript Lint</a> to
+Javascript validation currently uses `JavaScript Lint`_ to
 perform the validation.  To use it you will need to first install JavaScript
 Lint and put it in your path.
 
 Installing on windows and the mac should be very straight forward since
-pre-compiled version for each are available for download on the <a
-href="site:jsl">JavaScript Lint</a> site.  For other unix based systems (linux,
-bsd, etc.) the installation procedure is not so obvious.  Here are the steps
-used to compile and install it on a linux machine (your paths may vary)\:
+pre-compiled version for each are available for download on the
+`JavaScript Lint`_ site.  For other unix based systems (linux, bsd, etc.) the
+installation procedure is not so obvious.  Here are the steps used to compile
+and install it on a linux machine (your paths may vary)\:
 
 .. code-block:: bash
 
@@ -65,3 +65,5 @@ Vim Variables
 
 - **g:EclimJavascriptLintConf** (Default: '~/.jslrc') -
   Used to set the location of your jsl config file.
+
+.. _javascript lint: http://www.javascriptlint.com/

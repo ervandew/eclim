@@ -18,9 +18,8 @@
 TestNG
 ======
 
-Currently eclim's support for <a href="ext:testng">TestNG</a> is limited to
-supporting Vim's :make in conjunction with ant to populate vim's quickfix
-results with failed test cases.
+Currently eclim's support for TestNG_ is limited to supporting Vim's :make in
+conjunction with ant to populate vim's quickfix results with failed test cases.
 
 By default TestNG's output to the console is very terse.  So in order to support
 monitoring of failed test cases via vim's error format, eclim provides a custom
@@ -50,4 +49,5 @@ Ex. Assuming your ant task is named 'test':
 
   :Ant test
 
+.. _testng: http://testng.org/doc
 .. _testng ant task docs: http://testng.org/doc/ant.html

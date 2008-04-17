@@ -23,9 +23,9 @@ written.  Any errors will be added to the current window's location list (:help
 location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
-Eclim also combines the above validation with <a
-href="../../xml/validate.html">xml validation</a> to validate that the file is
-well formed.
+Eclim also combines the above validation with
+:ref:`xml validation <vim/xml/validate>` to validate that the file is well
+formed.
 
 If you do not want your web.xml files validated automatically when saved, you
 can set the :ref:`g:EclimWebXmlValidate <eclimwebxmlvalidate>` variable

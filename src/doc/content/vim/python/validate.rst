@@ -24,9 +24,9 @@ location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
 Python validation currently uses both the python compiler to check for syntax
-errors and <a href="site:pyflakes">pyflakes</a> to perform some additional
-validation.  To make use of the pyflakes portion of the validation you will
-first need to install pyflakes and make sure it is in your path.
+errors and pyflakes_ to perform some additional validation.  To make use of the
+pyflakes portion of the validation you will first need to install pyflakes and
+make sure it is in your path.
 
 If you don't want python files validated when saving them, you can set the
 g:EclimPythonValidate variable described in the configuration section below.
@@ -39,9 +39,9 @@ command **:Validate** is available to manual validate the file.
 .. _PyLint:
 
 **:PyLint** -
-Runs <a href="site:pylint">pylint</a> on the current file, populates the
-quickfix list with the results (:h quickfix), and marks all the affected lines
-using vim's sign support.
+Runs the `pylint tool <http://www.logilab.org/857>`_ on the current file,
+populates the quickfix list with the results (:h quickfix), and marks all the
+affected lines using vim's sign support.
 
 
 Configuration
@@ -53,3 +53,5 @@ Vim Variables
 
 - **g:EclimPythonValidate** (Default 1) -
   If set to 0, disables python validation when saving the file.
+
+.. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes

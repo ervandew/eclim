@@ -40,10 +40,10 @@ and variables.
   also use maven's support
   (:ref:`1.x <guides/java/maven/maven/classpath>` or
   :ref:`2.x <guides/java/maven/mvn/classpath>`) for
-  maintaining the eclipse classpath.  For users who use
-  <a href="ext:ivy">ivy</a>, eclim also provides a means to
-  :ref:`auto update the eclipse classpath <guides/java/ivy/classpath>`
-  when saving changes to your ivy.xml.
+  maintaining the eclipse classpath.  For users who use ivy_, eclim also
+  provides a means to
+  :ref:`auto update the eclipse classpath <guides/java/ivy/classpath>` when
+  saving changes to your ivy.xml.
 
 .. _NewSrcEntry:
 
@@ -141,3 +141,5 @@ and variables.
 
   - **:VariableDelete** <name> -
     Deletes the variable with the supplied name.
+
+.. _ivy: http://jayasoft.org/ivy

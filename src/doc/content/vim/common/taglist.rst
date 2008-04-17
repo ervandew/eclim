@@ -56,10 +56,10 @@ C may not be a feasible solution for various reasons (unfamiliarity with C,
 portability, etc.).
 
 Taking into account these concerns, eclim provides a means to add new languages
-by writing a <a href="ext:groovy">groovy</a> script which can range from simple
-multi-line capable regular expression matching, to a full blown language parser
-using a scripting language that borrows many of its convenient language
-constructs from languages such as Python, Ruby, and Smalltalk.
+by writing a groovy_ script which can range from simple multi-line capable
+regular expression matching, to a full blown language parser using a scripting
+language that borrows many of its convenient language constructs from languages
+such as Python, Ruby, and Smalltalk.
 
 Adding a new language involves the following three steps\:
 
@@ -287,3 +287,4 @@ configuration variables\:
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273
 .. _taglist documentation: http://vim-taglist.sourceforge.net/manual.html#taglist-extend
 .. _configured: http://vim-taglist.sourceforge.net/manual.html#%27Tlist_Ctags_Cmd%27
+.. _groovy: http://groovy.codehaus.org

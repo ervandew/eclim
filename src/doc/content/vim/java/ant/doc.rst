@@ -21,15 +21,14 @@ Ant Documentation Lookup
 .. _AntDoc:
 
 When editing an ant build file eclim defines a command named **:AntDoc** which
-will attempt to lookup and open in your <a
-href="../../index.html#EclimBrowser">configured browser</a> the documentation
-for the element under the cursor or, if supplied, the element passed to it.
+will attempt to lookup and open in your
+:ref:`configured browser <eclimbrowser>` the documentation for the element
+under the cursor or, if supplied, the element passed to it.
 
 This command will only lookup element names, not attribute names or values.
 
 By default this plugin is configured to find all the standard ant tasks, types,
-etc, as well as those defined by the <a href="ext:antcontrib">antcontrib
-project</a>.
+etc, as well as those defined by the antcontrib_ project.
 
 .. _AntUserDoc:
 
@@ -53,3 +52,6 @@ The following is an example which adds the tasks from the apache cactus project.
       \  'runservertests' : s:cactus,
       \  'webxmlmerge'    : s:cactus,
     \ }
+
+
+.. _antcontrib: http://ant-contrib.sourceforge.net

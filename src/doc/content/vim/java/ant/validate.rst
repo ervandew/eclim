@@ -32,9 +32,9 @@ valid, etc., but it does perform the following\:
 - Check for missing dependencies.
 - Check for circular dependencies.
 
-Eclim also combines the above validation with <a
-href="../../xml/validate.html">xml validation</a> to validate that the ant file
-is well formed.
+Eclim also combines the above validation with
+:ref:`xml validation <vim/xml/validate>` to validate that the ant file is well
+formed.
 
 If you do not want your ant files validated automatically when saved, you can
 set the :ref:`g:EclimAntValidate <eclimantvalidate>` variable described in the

@@ -154,12 +154,10 @@ You can view the :ref:`release notes <1.3.6>` for more info.
 
     Eclim now **requires** Eclipse 3.3 and JDK 1.5.
 
-* A new
-  <a href="guides/install.html#installer">graphical installer</a>
-  built on the formic_ installer framework.
+* A new :ref:`graphical installer <installer>` built on the formic_ installer
+  framework.
 
-* New functionality based on and requiring the
-  `eclipse wst`_.
+* New functionality based on and requiring the `eclipse wst`_.
 
 * Many more :ref:`changes <1.3.0>`.
 

@@ -21,10 +21,10 @@ Java Code Correction
 .. _JavaCorrect:
 
 Code correction in eclim is equivalent to the quick fix functionality of
-Eclipse.  When you save a java source file, eclim <a
-href="source.html">validates</a> the file and notes which lines contain errors.
-To have eclim suggest possible corrections for an error, you simply place the
-cursor on the error line and issue **:JavaCorrect**.
+Eclipse. When you save a java source file, eclim
+:ref:`validates <vim/java/validate>` the file and notes which lines contain
+errors.  To have eclim suggest possible corrections for an error, you simply
+place the cursor on the error line and issue **:JavaCorrect**.
 
 The result will be a small window opened at the bottom of Vim where any
 correction proposals will be noted. To apply a suggested change, simply move the

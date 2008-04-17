@@ -49,10 +49,10 @@ You will also notice that the code above has replacement variables in the form
 of ${variable}.  When the abbreviation is expanded, eclim will remove the first
 variable and position the cursor at that position so that you can fill in the
 appropriate value.  Additional values, if any, can be replaced by using the
-``FillTemplate`` funtion (please see the <a
-href="../mappings.html#java">suggested mappings</a> for more information). The
-variable will be removed and the cursor placed in its position for you to again
-enter the appropriate value in its place.
+``FillTemplate`` funtion (please see the
+:ref:`suggested mappings <javamappings>` for more information). The variable
+will be removed and the cursor placed in its position for you to again enter
+the appropriate value in its place.
 
 For example, to use the for each (or enhanced for) abbreviation above to iterate
 over an array of Date objects stored in a variable "dates", you would simply

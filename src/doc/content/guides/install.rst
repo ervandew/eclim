@@ -53,6 +53,7 @@ following requirements.
     Which should output 'filetype detection:ON  plugin:ON indent:ON', showing
     at least 'ON' for 'detection' and 'plugin'.
 
+.. _installer:
 
 Eclim Graphical Installer
 -------------------------
@@ -113,8 +114,7 @@ eclim server and verify that it is running properly.
     or something similar, then your eclimd server is not running or something
     is preventing eclim from connecting to it.  If you receive this or any
     other errors and are unsure of what steps to take, please feel free to
-    visit the <a href="ext:forums">forums</a> so that someone can help resolve
-    your issue.
+    visit the forums_ so that someone can help resolve your issue.
 
     Example of successful ping\:
 
@@ -169,3 +169,4 @@ a couple things worth noting.
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5687
 .. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5685
+.. _forums: http://sourceforge.net/forum/?group_id=145869
