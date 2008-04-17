@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 
 import org.eclipse.update.standalone.CmdLineArgs;
 import org.eclipse.update.standalone.ScriptedCommand;
+import org.eclipse.update.standalone.UninstallCommand;
 
 /**
  * Entry point for installer application.
@@ -51,7 +52,7 @@ public class Application
       CmdLineArgs cmdLineArgs = new CmdLineArgs(params);
       ScriptedCommand cmd = cmdLineArgs.getCommand();
       boolean installed = cmd.run(new ProgressMonitor());
-      if(!installed){
+      if(!installed && !(cmd instanceof UninstallCommand)){
         throw new RuntimeException("Feature not installed.");
       }
     }catch(Throwable t){
