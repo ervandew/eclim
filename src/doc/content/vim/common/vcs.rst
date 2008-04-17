@@ -75,6 +75,7 @@ file versioned in cvs, subversion, or mercurial (where applicable).
   Splits the current file with the contents of the last committed version of the
   current file or the supplied revision.
 
+.. _VcsWeb:
 
 Vcs Web Commands
 ----------------

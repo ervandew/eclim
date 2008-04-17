@@ -38,11 +38,13 @@ Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
 
 Vcs:
-  - Removed **:VcsAnnotateOff** in favor of invoking
-    **:VcsAnnotate** again to remove the annotations.
-  - Added `vcs editor <vcseditor>` plugin which allows you to view diff of a
-    file by hitting <enter> on a file name in the cvs, svn, or hg commit
+  - Removed **:VcsAnnotateOff** in favor of invoking **:VcsAnnotate** again to
+    remove the annotations.
+  - Added :ref:`vcs editor <vcseditor>` plugin which allows you to view diff of
+    a file by hitting <enter> on a file name in the cvs, svn, or hg commit
     editor.
+  - Removed **:Trac\*** and **:Viewvc\*** commands and replaced them with
+    :ref:`:VcsWeb* <vcsweb>` commands
 
 .. _1.3.5:
 

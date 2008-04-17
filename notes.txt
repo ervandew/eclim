@@ -1,5 +1,8 @@
 HIGH {{{
-  - Document :VcsWeb* commands and removal of :Viewvc and :Trac
+  - detect gnome / kde and add installer step to auto start eclimd
+
+  - add eclipse version to output of :PingEclim
+
   - Document :OtherWorkingCopy*
 
   - django indent: issue indenting after single line if/else/end
@@ -552,9 +555,13 @@ NOTES {{{
 
   Autostart {{{
 
-    Gnome (this may work for kde, enlightenment 17, and xfce4 as well)
+    Gnome (this may work for enlightenment 17 and xfce4 as well)
       $ mkdir -p ~/.config/autostart
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd.desktop ~/.config/autostart
+
+    KDE (this may work for kde, enlightenment 17, and xfce4 as well)
+      $ mkdir -p ~/.kde/Autostart
+      $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd ~/.kde/Autostart
 
   }}}
 
