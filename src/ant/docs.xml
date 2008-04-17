@@ -49,28 +49,28 @@
       <fileset dir="src/doc/content/images" includes="**/*"/>
     </copy>
 
+    <touch file="build/doc/site/google4c368e38cc6ac62e.html"/>
+    <replace dir="build/doc/site"
+        includes="**/*.html" token="$${google.analytics}">
+      <replacevalue><![CDATA[
+      <!-- Google Analytics -->
+        <script src="http://www.google-analytics.com/urchin.js"
+          type="text/javascript">
+        </script>
+        <script type="text/javascript">
+          _uacct = "UA-575508-1";
+          urchinTracker();
+        </script>
+      <!-- End Google Analytics -->
+      ]]></replacevalue>
+    </replace>
+
     <!-- support for google sitemaps and analytics -->
     <!--xslt in="src/forrest/content/xdocs/site.xml"
         out="build/doc/forrest/sitemap.xml"
         style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
     <gzip src="build/doc/forrest/sitemap.xml"
-        destfile="build/doc/forrest/site/sitemap.xml.gz"/>
-    <touch file="build/doc/forrest/site/google4c368e38cc6ac62e.html"/>
-    <replace dir="build/doc/forrest/site" includes="**/*.html">
-      <replacetoken><![CDATA[</body>]]></replacetoken>
-      <replacevalue><![CDATA[
-      <!- - Google Analytics - ->
-          <script src="http://www.google-analytics.com/urchin.js"
-            type="text/javascript">
-          </script>
-          <script type="text/javascript">
-            _uacct = "UA-575508-1";
-            urchinTracker();
-          </script>
-      <!- - End Google Analytics - ->
-      </body>
-      ]]></replacevalue>
-    </replace-->
+        destfile="build/doc/forrest/site/sitemap.xml.gz"/-->
   </target>
 
   <!--
