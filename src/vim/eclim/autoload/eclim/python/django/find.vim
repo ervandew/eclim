@@ -48,7 +48,7 @@ function eclim#python#django#find#FindFilterOrTag (project_dir, element, type)
     call eclim#util#GoToBufferWindowOrOpen(
       \ bufname(results[0].bufnr), g:EclimDjangoFindAction)
     lfirst
-    return
+    return 1
   endif
   call eclim#util#EchoError(
     \ 'Unable to find the definition for tag/file "' . a:element . '"')
@@ -60,7 +60,7 @@ function eclim#python#django#find#FindFilterTagFile (project_dir, file)
   let file = findfile(a:file . '.py', a:project_dir . '*/templatetags/')
   if file != ''
     call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
-    return
+    return 1
   endif
   call eclim#util#EchoError('Could not find tag/filter file "' . a:file . '.py"')
 endfunction " }}}
@@ -81,7 +81,7 @@ function eclim#python#django#find#FindSettingDefinition (project_dir, value)
   if found != ''
     call eclim#util#GoToBufferWindowOrOpen(found, g:EclimDjangoFindAction)
     call search('\(def\|class\)\s\+' . def . '\>', 'cw')
-    return
+    return 1
   endif
   call eclim#util#EchoError('Could not definition of "' . a:value . '"')
 endfunction " }}}
@@ -102,7 +102,7 @@ function eclim#python#django#find#FindStaticFile (project_dir, file)
     let file = findfile(a:file, path)
     if file != ''
       call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
-      return
+      return 1
     endif
   endfor
   call eclim#util#EchoError('Could not find the static file "' . a:file . '"')
@@ -116,7 +116,7 @@ function eclim#python#django#find#FindTemplate (project_dir, template)
     let file = findfile(a:template, a:project_dir . '/' . dir)
     if file != ''
       call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
-      return
+      return 1
     endif
   endfor
   call eclim#util#EchoError('Could not find the template "' . a:template . '"')
@@ -157,7 +157,7 @@ function eclim#python#django#find#FindView (project_dir, view)
     if function != ''
       call search('def\s\+' . function . '\>', 'cw')
     endif
-    return
+    return 1
   endif
   call eclim#util#EchoError('Could not find the view "' . view . '"')
 endfunction " }}}
@@ -176,22 +176,21 @@ function eclim#python#django#find#TemplateFind ()
   let element = eclim#util#GrabUri()
   if element =~ '|'
     let element = substitute(element, '.\{-}|\(\w*\).*', '\1', 'g')
-    call eclim#python#django#find#FindFilterOrTag(project_dir, element, 'filter')
+    return eclim#python#django#find#FindFilterOrTag(project_dir, element, 'filter')
   elseif line =~ '{%\s*' . element . '\>'
-    call eclim#python#django#find#FindFilterOrTag(project_dir, element, 'tag')
+    return eclim#python#django#find#FindFilterOrTag(project_dir, element, 'tag')
   elseif line =~ '{%\s*load\s\+' . element . '\>'
-    call eclim#python#django#find#FindFilterTagFile(project_dir, element)
+    return eclim#python#django#find#FindFilterTagFile(project_dir, element)
   elseif line =~ "{%\\s*\\(extends\\|include\\)\\s\\+['\"]" . element . "['\"]"
-    call eclim#python#django#find#FindTemplate(project_dir, element)
+    return eclim#python#django#find#FindTemplate(project_dir, element)
   elseif line =~ "\\(src\\|href\\)\\s*=\\s*['\"]\\?\\s*" . element
     let element = substitute(element, '^/', '', '')
     let element = substitute(element, '?.*', '', '')
-    call eclim#python#django#find#FindStaticFile(project_dir, element)
-  else
-    call eclim#util#EchoError(
-      \ 'Element under the cursor does not appear to be a ' .
-      \ 'valid tag, filter, or template reference.')
+    return eclim#python#django#find#FindStaticFile(project_dir, element)
   endif
+  call eclim#util#EchoError(
+    \ 'Element under the cursor does not appear to be a ' .
+    \ 'valid tag, filter, or template reference.')
 endfunction " }}}
 
 " ContextFind() {{{
@@ -201,12 +200,14 @@ function! eclim#python#django#find#ContextFind ()
   if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
     if search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
         \ eclim#util#GrabUri() !~ '\.html'
-      DjangoViewOpen
+      return eclim#python#django#find#FindView(
+        \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     elseif expand('%:t') == 'settings.py'
-      call eclim#python#django#find#FindSettingDefinition(
+      return eclim#python#django#find#FindSettingDefinition(
         \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     else
-      DjangoTemplateOpen
+      return eclim#python#django#find#FindTemplate(
+        \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     endif
   "else
   "  PythonFindDefinition
