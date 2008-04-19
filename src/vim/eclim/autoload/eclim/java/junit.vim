@@ -42,7 +42,7 @@ function! eclim#java#junit#JUnitExecute (test)
   endif
 
   let command = eclim#project#util#GetProjectSetting("org.eclim.java.junit.command")
-  if command == '0'
+  if type(command) == 0
     return
   endif
 
@@ -167,7 +167,7 @@ endfunction " }}}
 " GetResultsDir() {{{
 function s:GetResultsDir ()
   let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
-  if path == '0'
+  if type(path) == 0
     return
   endif
 

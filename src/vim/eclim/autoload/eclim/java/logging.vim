@@ -60,6 +60,11 @@ endfunction " }}}
 function! s:InitLoggingSettings ()
   let s:EclimLoggingImpl =
     \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
+  if type(s:EclimLoggingImpl) == 0
+    unlet s:EclimLoggingImpl
+    return
+  endif
+
   if s:EclimLoggingImpl == "commons-logging"
     let s:logger = g:EclimIndent .
       \ "private static final Log ${var} = LogFactory.getLog(${class}.class);"
@@ -80,14 +85,14 @@ function! s:InitLoggingSettings ()
     let s:logger_imports = ["java.util.logging.Logger"]
   elseif s:EclimLoggingImpl == "custom"
     let name = eclim#project#util#GetProjectSetting("org.eclim.java.logging.template")
-    if name == '' || name == '0'
-      return 0
+    if type(name) == 0 || name == ''
+      return
     endif
     let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/' . name
     let template = substitute(template, '\\ ', ' ', 'g')
     if(!filereadable(template))
       echoe 'Custom logger template not found at "' . template . '"'
-      return 0
+      return
     endif
     let lines = readfile(template)
     let s:logger_imports = lines[:]
@@ -96,16 +101,13 @@ function! s:InitLoggingSettings ()
       \ "substitute(v:val, '^\\s*import\\>\\s*\\(.*\\);\\s*', '\\1', '')")
     call filter(lines, "v:val !~ '\\(^\\s*$\\|^\\s*import\\>\\)'")
     let s:logger = g:EclimIndent . join(lines, "\n" . g:EclimIndent)
-  elseif s:EclimLoggingImpl == ""
+  elseif s:EclimLoggingImpl == ''
     " no setting returned, probably not in a project, or user is attempting to
     " disable this functionality for the current project.
-    return 0
-  elseif s:EclimLoggingImpl == "0"
-    " GetProjectSetting call failed.
-    return 0
+    return
   else
     echoe "Invalid logging implementation '" . s:EclimLoggingImpl . "' configured."
-    return 0
+    return
   endif
   return 1
 endfunction " }}}

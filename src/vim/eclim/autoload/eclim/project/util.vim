@@ -520,11 +520,11 @@ function! eclim#project#util#GetProjectRoot (project)
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{
-" Gets a project setting from eclim.  Returns '' if not in a project.  Returns
-" '0' if an error occurs communicating with the server.
+" Gets a project setting from eclim.  Returns '' the setting does not exist,
+" 0 if not in a project or an error occurs communicating with the server.
 function! eclim#project#util#GetProjectSetting (setting)
   let project = eclim#project#util#GetCurrentProjectName()
-  if project != ""
+  if project != ''
     let command = s:command_project_setting
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<setting>', a:setting, '')
@@ -538,12 +538,12 @@ function! eclim#project#util#GetProjectSetting (setting)
 
     if len(result) == 0
       call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
-      return ""
+      return ''
     endif
 
     return substitute(result[0], '.\{-}=\(.*\)', '\1', '')
   endif
-  return ""
+  return
 endfunction " }}}
 
 " IsCurrentFileInProject(...) {{{

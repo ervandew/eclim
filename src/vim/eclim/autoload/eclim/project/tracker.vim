@@ -25,12 +25,10 @@
 " Ticket(ticket) {{{
 function eclim#project#tracker#Ticket (ticket)
   let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
-  if url == ''
+  if type(url) == 0 || url == ''
     call eclim#util#EchoWarning(
       \ "Viewing tickets requires project setting " .
       \ "'org.eclim.project.tracker'.")
-    return
-  elseif url == '0' || (type(url) == 0 && url == 0)
     return
   endif
 

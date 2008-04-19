@@ -514,7 +514,7 @@ function! s:FollowLink ()
       exec 'lcd ' . cwd
     endtry
 
-    if url == '0'
+    if type(url) == 0
       return
     endif
 
@@ -522,8 +522,6 @@ function! s:FollowLink ()
       call eclim#util#EchoWarning(
         \ "Link to bug report / feature request requires project setting " .
         \ "'org.eclim.project.tracker'.")
-      return
-    elseif type(url) == 0 && url == 0
       return
     endif
 

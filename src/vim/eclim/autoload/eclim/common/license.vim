@@ -30,14 +30,11 @@
 " Retrieves the file containing the license text.
 function! eclim#common#license#GetLicense ()
   let file = eclim#project#util#GetProjectSetting('org.eclim.project.copyright')
-  if file == '0'
+  if type(file) == 0
     return
-  endif
-  if file == ''
+  elseif file == ''
     call eclim#util#EchoWarning(
       \ "Project setting 'org.eclim.project.copyright' has not been supplied.")
-    return
-  elseif type(file) == 0 && file == 0
     return
   endif
 
@@ -75,12 +72,12 @@ function! eclim#common#license#License (pre, post, mid)
   call map(contents, "substitute(v:val, '${year}', s:year, 'g')")
 
   let author = eclim#project#util#GetProjectSetting('org.eclim.user.name')
-  if author != '0' && author != ''
+  if type(author) != 0 && author != ''
     call map(contents, "substitute(v:val, '${author}', author, 'g')")
   endif
 
   let email = eclim#project#util#GetProjectSetting('org.eclim.user.email')
-  if email != '0' && email != ''
+  if type(email) != 0 && email != ''
     call map(contents, "substitute(v:val, '${email}', email, 'g')")
   endif
   call map(contents, "substitute(v:val, '\\s\\+$', '', '')")

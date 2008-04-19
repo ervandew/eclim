@@ -232,6 +232,9 @@ endfunction " }}}
 " Process <vim:username/> tags.
 function! s:Process_username (line)
   let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
+  if type(username) == 0
+    let username = ''
+  endif
   return s:Out(a:line, '<vim:username\s*\/>', username)
 endfunction " }}}
 

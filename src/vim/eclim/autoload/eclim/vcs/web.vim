@@ -58,11 +58,7 @@ function eclim#vcs#web#VcsWeb (url_func, ...)
   let type = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.web.viewer')
   let root = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.web.url')
 
-  if type == '0' || root == '0'
-    return
-  endif
-
-  if type == '' || root == ''
+  if type(type) == 0 || type(root) == 0 || type == '' || root == ''
     call eclim#util#EchoWarning(
       \ "VcsWeb commands requires the following project settings\n" .
       \ "  org.eclim.project.vcs.web.viewer\n" .

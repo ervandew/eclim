@@ -77,7 +77,7 @@ endfunction " }}}
 function eclim#java#test#GetTestSrcDir (type)
   let setting = "org.eclim.java." . a:type . ".src_dir"
   let path = eclim#project#util#GetProjectSetting(setting)
-  if path == '0'
+  if type(path) == 0
     return
   endif
 
