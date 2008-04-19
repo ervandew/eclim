@@ -374,7 +374,7 @@ function! s:AnnotateOff ()
   if exists('b:vcs_annotations')
     let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
-      let user = substitute(annotation, '^.*)\s\+\(.*\)', '\1', '')
+      let user = substitute(annotation, '^.*)\s\+\(.\{-}\)\s*$', '\1', '')
       if index(defined, user) != -1
         let signs = eclim#display#signs#GetExisting(user)
         for sign in signs
@@ -509,7 +509,7 @@ function! s:FollowLink ()
     let dir = fnamemodify(b:filename, ':h')
     exec 'lcd ' . dir
     try
-      let url = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.tracker')
+      let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
     finally
       exec 'lcd ' . cwd
     endtry
@@ -521,7 +521,7 @@ function! s:FollowLink ()
     if url == ''
       call eclim#util#EchoWarning(
         \ "Link to bug report / feature request requires project setting " .
-        \ "'org.eclim.project.vcs.tracker'.")
+        \ "'org.eclim.project.tracker'.")
       return
     elseif type(url) == 0 && url == 0
       return
