@@ -223,8 +223,7 @@ projects from within Vim.
 
 .. _ProjectGrep:
 
-- **:ProjectGrep**
-  /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectGrep** /<pattern>/ file_pattern [file_pattern ...]
 
   Executes vimgrep using the supplied arguments from the root of the
   current project allowing you to run a project wide grep from any file
@@ -232,29 +231,38 @@ projects from within Vim.
 
 .. _ProjectGrepAdd:
 
-- **:ProjectGrepAdd**
-  /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
 
   Just like **:ProjectGrep** but using vimgrepadd instead.
 
 .. _ProjectLGrep:
 
-- **:ProjectLGrep**
-  /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectLGrep** /<pattern>/ file_pattern [file_pattern ...]
 
   Just like **:ProjectGrep** but using lvimgrep instead.
 
 .. _ProjectLGrepAdd:
 
-- **:ProjectLGrepAdd**
-  /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectLGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
+
   Just like **:ProjectGrep** but using lvimgrepadd instead.
+
+
+Tracker
+-------
+
+.. _TrackerTicket:
+
+- **:TrackerTicket** <ticket_id>
+
+  Opens the supplied ticket via your web browser for the configured tracking
+  system configureed via org.eclim.project.tracker_.
 
 
 Configuration
 -------------
 
-Vim Variables
+Vim Settings
 
 .. _EclimProjectTreeAutoOpen:
 
@@ -329,5 +337,24 @@ Vim Variables
 
   Map of file patterns to the available actions for opening files that match
   that pattern.
+
+Eclim Settings
+
+.. _org.eclim.project.tracker:
+
+- **org.eclim.project.tracker**
+  Url used to view tickets in your ticket tracking software. This url supports
+  the '<id>' placeholder which will be replaced with the ticket id.
+
+  Ex. An example setting for a Trac installation\:
+
+  ::
+
+    org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
+
+  In addition to being used by :TrackerTicket, this setting is also used in
+  conjunction with :ref:`:VcsLog <vcslog>` and
+  :ref:`:VcsChangeSet <vcschangeset>` to enable linking of ticket ids of the
+  form #ticket_id (#1234) found in user supplied commit comments.
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273

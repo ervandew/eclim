@@ -111,7 +111,7 @@ you can use your favorite vcs web front end (viewvc, trace, etc.).
 Configuration
 --------------
 
-Vim Settings\:
+Vim Settings
 
 .. _EclimVcsLogMaxEntries:
 
@@ -119,23 +119,7 @@ Vim Settings\:
   When greater than 0, limits the number of log entries retrieved by
   **:VcsLog**.
 
-Eclim Settings\:
-
-.. _org.eclim.project.vcs.tracker:
-
-- **org.eclim.project.vcs.tracker**
-  Url used to view tickets in your ticket tracking software. This url supports
-  the '<id>' placeholder which will be replaced with the ticket id.
-
-  Ex. An example setting for a Trac installation\:
-
-  ::
-
-    org.eclim.project.vcs.tracker=http://somedomain.com/trac/ticket/<id>
-
-  Currently this setting is only used in conjunction with **:VcsLog** and
-  **:VcsChangeSet** to enable linking of ticket ids of the form #ticket_id
-  (#1234) found in user supplied commit comments.
+Eclim Settings
 
 .. _org.eclim.project.vcs.web.viewer:
 

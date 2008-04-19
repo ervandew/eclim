@@ -3,7 +3,10 @@ HIGH {{{
 
   - add eclipse version to output of :PingEclim
 
-  - Document :OtherWorkingCopy*
+  - consider :UserProjectSettings for settings that are not common amongst developers working in a team
+    - username, email, etc.
+    - setting precedence would be: user > project > global
+    - unless eclipse supports this concept, only include eclim settings as 'user' configurable
 
   - django indent: issue indenting after single line if/else/end
     users/templates/users/include/remoteRegisterForm.html

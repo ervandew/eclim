@@ -205,3 +205,28 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   **g:EclimOnlyExclude** (defaults to
   '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
+
+.. _OtherWorkingCopyDiff:
+
+- **:OtherWorkingCopyDiff** <project> -
+  Diffs the current file against the same file in another project (one which
+  has the same project relative path). This is most useful if you find yourself
+  doing branch development and want to view the differences of the current file
+  against one of the other branches.  Supports command line tab completion of
+  project names which contain a file with the same relative path as the current
+  file: ``:OtherWorkingCopyDiff <tab>``.
+
+.. _OtherWorkingCopyEdit:
+
+- **:OtherWorkingCopyEdit** <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in the current window.
+
+.. _OtherWorkingCopySplit:
+
+- **:OtherWorkingCopySplit** <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in a new window.
+
+.. _OtherWorkingCopyTabopen:
+
+- **:OtherWorkingCopyTabopen** <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in a new tab.

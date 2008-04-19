@@ -30,12 +30,14 @@ Bug Fixes:
   - Fixed sign placement (used by all validation plugins) on non-english vims.
   - Various bug fixes.
 
-Vim:
-  - Added :ref:`:Only <only>` as
-    a configurable alternative to vim's :only command.
-
 Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
+
+Project:
+  - Added :ref:`:TrackerTicket <trackerticket>` for viewing tickets by id in
+    your web based tracking system.
+  - Renamed setting ``org.eclim.project.vcs.tracker`` to
+    ``org.eclim.project.tracker``.
 
 Vcs:
   - Removed **:VcsAnnotateOff** in favor of invoking **:VcsAnnotate** again to
@@ -45,6 +47,14 @@ Vcs:
     editor.
   - Removed **:Trac\*** and **:Viewvc\*** commands and replaced them with
     :ref:`:VcsWeb* <vcsweb>` commands
+
+Vim:
+  - Added :ref:`:Only <only>` as
+    a configurable alternative to vim's :only command.
+  - Added :ref:`:OtherWorkingCopyDiff <otherworkingcopydiff>`,
+    :ref:`:OtherWorkingCopyEdit <otherworkingcopyedit>`,
+    :ref:`:OtherWorkingCopySplit <otherworkingcopysplit>`, and
+    :ref:`:OtherWorkingCopyTabopen <otherworkingcopytabopen>`.
 
 .. _1.3.5:
 

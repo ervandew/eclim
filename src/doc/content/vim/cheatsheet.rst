@@ -76,6 +76,8 @@ Project Commands
 - :ref:`:ProjectLGrepAdd <projectlgrepadd>`
   /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrepadd starting at the root of the current project.
+- :ref:`:TrackerTicket <trackerticket>` <ticket_id> -
+  Opens the supplied ticket in your configured web based tracking tool.
 
 
 Ant Commands
@@ -444,6 +446,15 @@ Misc. Commands
 - :ref:`:Only <only>` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.
+- :ref:`:OtherWorkingCopyDiff <otherworkingcopydiff>` <project> -
+  Diffs the current file against the same file in another project (one which
+  has the same project relative path).
+- :ref:`:OtherWorkingCopyEdit <otherworkingcopyedit>` <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in the current window.
+- :ref:`:OtherWorkingCopySplit <otherworkingcopysplit>` <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in a new window.
+- :ref:`:OtherWorkingCopyTabopen <otherworkingcopytabopen>` <project> -
+  Like **:OtherWorkingCopyDiff**, except open the file in a new tab.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
 .. _pylint: http://www.logilab.org/857
