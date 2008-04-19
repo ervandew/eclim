@@ -299,20 +299,28 @@ function! eclim#display#signs#Update ()
   let &lazyredraw = save_lazy
 endfunction " }}}
 
-" SetPlaceholder() {{{
-" Set sign at line 1 to prevent sign column from collapsing (prevent screen
-" flash).
-function! eclim#display#signs#SetPlaceholder ()
+" SetPlaceholder([only_if_necessary]) {{{
+" Set sign at line 1 to prevent sign column from collapsing, and subsiquent
+" screen redraw.
+function! eclim#display#signs#SetPlaceholder (...)
   if !has("signs")
     return
   endif
+
+  if len(a:000) > 0 && a:000
+    let existing = eclim#display#signs#GetExisting()
+    if !len(existing)
+      return
+    endif
+  endif
+
   call eclim#display#signs#Define('placeholder', '_ ', g:EclimInfoHighlight)
   let existing = eclim#display#signs#GetExisting('placeholder')
   if len(existing) == 0 && eclim#display#signs#HasExisting()
     call eclim#display#signs#Place('placeholder', 1)
     return 1
   endif
-  return 0
+  return
 endfunction " }}}
 
 " RemovePlaceholder() {{{
