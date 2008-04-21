@@ -101,7 +101,7 @@
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
-        <pathelement path="build/classes"/>
+        <pathelement path="${build.classes}"/>
       </classpath>
     </javac>
 
@@ -115,7 +115,7 @@
     <junit printsummary="yes">
       <classpath>
         <path refid="classpath"/>
-        <pathelement path="build/classes"/>
+        <pathelement path="${build.classes}"/>
         <pathelement path="build/test/junit/classes"/>
       </classpath>
       <formatter type="xml"/>
@@ -134,7 +134,7 @@
       unless="vunit.skip">
     <taskdef name="vunit" classname="org.eclim.misc.ant.VUnitTask">
       <classpath>
-        <pathelement location="build/classes"/>
+        <pathelement location="${build.classes}"/>
         <pathelement location="build/dist/eclim-misc.jar"/>
         <path refid="classpath"/>
       </classpath>

@@ -50,8 +50,9 @@
     - Initialize the build.
     -->
   <target name="init">
-    <mkdir dir="build/classes"/>
-    <mkdir dir="build/plugins"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.features}"/>
+    <mkdir dir="${build.plugins}"/>
   </target>
 
   <!--
@@ -60,21 +61,23 @@
   <target name="build" depends="init" description="Builds the eclipse plugins.">
     <property name="deprecation" value="false"/>
     <property name="compilerargs" value=""/>
-    <javac destdir="build/classes" debug="on" optimize="false"
+
+    <!-- build shared source -->
+    <javac destdir="${build.classes}" debug="on" optimize="false"
         target="${javac.target}" source="${javac.target}"
         deprecation="${deprecation}">
       <compilerarg line="${compilerargs}"/>
       <src path="src/java"/>
       <include name="**/*.java"/>
-      <exclude name="**/pydev/**/*.java"/>
+      <exclude name="**/plugin/**/*.java"/>
       <classpath refid="classpath"/>
     </javac>
 
-    <mkdir dir="build/plugins/org.eclim_${eclim.version}/lib"/>
+    <mkdir dir="${build.plugins}/org.eclim_${eclim.version}/lib"/>
 
     <!-- eclim jar file -->
-    <jar jarfile="build/plugins/org.eclim_${eclim.version}/eclim.jar">
-      <fileset dir="build/classes">
+    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/eclim.jar">
+      <fileset dir="${build.classes}">
         <include name="org/eclim/**/*.class"/>
         <include name="org/eclipse/**/*.class"/>
         <exclude name="org/eclim/misc/**/*.class"/>
@@ -94,8 +97,8 @@
     </jar>
 
     <!-- eclim misc jar file -->
-    <jar jarfile="build/plugins/org.eclim_${eclim.version}/eclim-misc.jar">
-      <fileset dir="build/classes">
+    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/eclim-misc.jar">
+      <fileset dir="${build.classes}">
         <include name="org/eclim/misc/**/*.class"/>
       </fileset>
       <fileset dir="src/java">
@@ -105,12 +108,13 @@
       </fileset>
     </jar>
 
-    <copy todir="build/plugins/org.eclim_${eclim.version}">
+    <copy todir="${build.plugins}/org.eclim_${eclim.version}">
       <fileset dir="." includes="src/nailgun/**/*"/>
     </copy>
 
-    <touch mkdirs="true" file="build/plugins/org.eclim_${eclim.version}/log/.keep"/>
-    <copy todir="build/plugins/org.eclim_${eclim.version}/bin">
+    <touch mkdirs="true"
+        file="${build.plugins}/org.eclim_${eclim.version}/log/.keep"/>
+    <copy todir="${build.plugins}/org.eclim_${eclim.version}/bin">
       <fileset dir="src/shell" includes="**/*"/>
     </copy>
 
@@ -118,34 +122,22 @@
       <param name="plugin.name" value=""/>
     </antcall>
 
-    <!-- determine what plugins exist (other than the core) -->
-    <path id="plugin.dirs">
-      <dirset dir="build/classes/org/eclim/plugin" includes="*" excludes="pydev"/>
-    </path>
-    <property name="plugins" refid="plugin.dirs"/>
-    <propertyregex property="plugins" override="true"
-        input="${plugins}" regexp="\\" replace="/"/>
-    <propertyregex property="plugins" override="true"
-        input="${plugins}" regexp="([A-Z]:)?/*?[a-zA-Z0-9- ]*?/" replace=""/>
-    <propertyregex property="plugins" override="true"
-        input="${plugins}" regexp=";" replace=":"/>
-
     <!-- build non-core plugins -->
-    <foreach list="${plugins}" target="plugin" delimiter=":"
+    <foreach list="${plugins}" target="plugin" delimiter=","
         inheritAll="true" param="plugin.name" trim="true"/>
 
     <!-- patch nailgun jar file -->
-    <jar jarfile="build/plugins/org.eclim_${eclim.version}/lib/nailgun-0.7.1.jar"
+    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/lib/nailgun-0.7.1.jar"
         update="true">
-      <fileset dir="build/classes">
+      <fileset dir="${build.classes}">
         <include name="com/martiansoftware/nailgun/**/*.class"/>
       </fileset>
     </jar>
 
     <!-- patch tagsoup jar file -->
-    <jar jarfile="build/plugins/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar"
+    <jar jarfile="${build.plugins}/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar"
         update="true">
-      <fileset dir="build/classes">
+      <fileset dir="${build.classes}">
         <include name="org/ccil/cowan/tagsoup/**/*.class"/>
       </fileset>
     </jar>
@@ -158,7 +150,7 @@
       description="Deploy the eclipse and vim plugins.">
     <!-- deploy eclipse files -->
     <copy todir="${eclipse.home}/plugins">
-      <fileset dir="build/plugins" includes="**/*"/>
+      <fileset dir="${build.plugins}" includes="**/*"/>
     </copy>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
@@ -185,10 +177,20 @@
       <not><equals arg1="${plugin.name}" arg2=""/></not>
       <then>
         <property name="plugin.path"
-            value="build/plugins/org.eclim.${plugin.name}_${eclim.version}"/>
+            value="${build.plugins}/org.eclim.${plugin.name}_${eclim.version}"/>
         <mkdir dir="${plugin.path}"/>
+
+        <javac destdir="${build.classes}" debug="on" optimize="false"
+            target="${javac.target}" source="${javac.target}"
+            deprecation="${deprecation}">
+          <compilerarg line="${compilerargs}"/>
+          <src path="src/java"/>
+          <include name="**/plugin/${plugin.name}/**/*.java"/>
+          <classpath refid="classpath"/>
+        </javac>
+
         <jar jarfile="${plugin.path}/eclim.${plugin.name}.jar">
-          <fileset dir="build/classes">
+          <fileset dir="${build.classes}">
             <include name="**/plugin/${plugin.name}/**/*.class"/>
           </fileset>
           <fileset dir="src/java">
@@ -200,11 +202,11 @@
         <var name="plugin.name" value=".${plugin.name}"/>
       </then>
     </if>
-    <copy todir="build/plugins/org.eclim${plugin.name}_${eclim.version}">
+    <copy todir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}">
       <fileset dir="src/eclipse/plugins/org.eclim${plugin.name}" includes="**/*"/>
     </copy>
 
-    <replace dir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
+    <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
         includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
       <replacefilter token="$${vim.files}" value="${vim.files}"/>
@@ -222,10 +224,10 @@
   <target name="plugin.lib.jars">
     <!-- build list of jar files for main plugin's manifest. -->
     <if>
-      <available file="build/plugins/org.eclim${plugin.name}_${eclim.version}/lib"/>
+      <available file="${build.plugins}/org.eclim${plugin.name}_${eclim.version}/lib"/>
       <then>
         <path id="lib.jars">
-          <fileset dir="build/plugins/org.eclim${plugin.name}_${eclim.version}/lib"
+          <fileset dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}/lib"
               includes="*"/>
         </path>
         <property name="lib.jars" refid="lib.jars"/>
@@ -236,7 +238,7 @@
         <propertyregex property="lib.jars" override="true"
             input="${lib.jars}" regexp="(:|;)" replace=","/>
 
-        <replace dir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
+        <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
             includes="META-INF/MANIFEST.MF">
           <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
         </replace>
@@ -245,14 +247,14 @@
           - separates lib entries onto new lines since the single line length of
           - the classpath entry seems to be limited.
           -->
-        <replace dir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
+        <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
             includes="META-INF/MANIFEST.MF">
           <replacetoken>,lib</replacetoken>
           <replacevalue>,
   lib</replacevalue>
         </replace>
 
-        <fixcrlf srcdir="build/plugins/org.eclim${plugin.name}_${eclim.version}"
+        <fixcrlf srcdir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
             includes="META-INF/MANIFEST.MF" eol="unix"/>
       </then>
     </if>

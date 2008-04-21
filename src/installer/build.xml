@@ -44,11 +44,12 @@
 
   <target name="installer">
     <mkdir dir="build/dist"/>
-    <mkdir dir="build/installer/formic/dist"/>
-    <mkdir dir="build/installer/formic/classes"/>
+    <mkdir dir="${build.installer}/formic/dist"/>
+    <mkdir dir="${build.installer}/formic/classes"/>
 
     <!-- compile install steps and helper classes -->
-    <javac destdir="build/installer/formic/classes" debug="on" optimize="false"
+    <javac destdir="${build.installer}/formic/classes"
+        debug="on" optimize="false"
         target="${javac.target}" source="${javac.target}">
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
@@ -58,8 +59,8 @@
     </javac>
 
     <!-- create jar with installer classes -->
-    <jar jarfile="build/installer/formic/dist/eclim.jar">
-      <fileset dir="build/installer/formic/classes">
+    <jar jarfile="${build.installer}/formic/dist/eclim.jar">
+      <fileset dir="${build.installer}/formic/classes">
         <include name="**/*.class"/>
         <exclude name="org/eclim/plugin/**/*"/>
         <exclude name="org/eclim/plugin"/>
@@ -82,24 +83,25 @@
     </antcall-->
 
     <!-- prepare installer's build.properties -->
-    <copy file="src/installer/build.properties" todir="build/installer/formic"/>
-    <replace file="build/installer/formic/build.properties"
+    <copy file="src/installer/build.properties"
+        todir="${build.installer}/formic"/>
+    <replace file="${build.installer}/formic/build.properties"
         token="$${eclim.version}" value="${eclim.version}"/>
 
     <!-- build linux installer -->
     <formic:package os="linux"
         destfile="build/dist/eclim_${eclim.version}.sh" compression="gzip">
-      <formic:libset dir="build/installer/formic/dist">
+      <formic:libset dir="${build.installer}/formic/dist">
         <include name="eclim.jar"/>
       </formic:libset>
       <tarfileset dir="." includes="LICENSE"/>
-      <tarfileset dir="build/installer/formic" includes="build.properties"/>
+      <tarfileset dir="${build.installer}/formic" includes="build.properties"/>
       <tarfileset dir="src/installer">
         <include name="resources/**/*"/>
         <include name="*.xml"/>
         <exclude name="build.xml"/>
       </tarfileset>
-      <tarfileset dir="build/installer">
+      <tarfileset dir="${build.installer}">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.tar.gz"/>
         <include name="org.eclim.installer*.tar.gz"/>
@@ -109,17 +111,17 @@
     <!-- build windows installer -->
     <formic:package os="windows"
         destfile="build/dist/eclim_${eclim.version}.exe">
-      <formic:libset dir="build/installer/formic/dist">
+      <formic:libset dir="${build.installer}/formic/dist">
         <include name="eclim.jar"/>
       </formic:libset>
       <fileset dir="." includes="LICENSE"/>
-        <fileset dir="build/installer/formic" includes="build.properties"/>
+      <fileset dir="${build.installer}/formic" includes="build.properties"/>
       <fileset dir="src/installer">
         <include name="resources/**/*"/>
         <include name="*.xml"/>
         <exclude name="build.xml"/>
       </fileset>
-      <fileset dir="build/installer">
+      <fileset dir="${build.installer}">
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.zip"/>
         <include name="org.eclim.installer*.tar.gz"/>
@@ -131,15 +133,16 @@
     - Create the core jar file for a plugin
     -->
   <target name="plugin">
-    <jar jarfile="build/installer/eclim.${plugin.name}.jar">
-      <fileset dir="build/installer/formic/classes">
+    <jar jarfile="${build.installer}/eclim.${plugin.name}.jar">
+      <fileset dir="${build.installer}/formic/classes">
         <include name="${classes.include}"/>
       </fileset>
     </jar>
-    <tar compression="gzip" destfile="build/installer/org.eclim.${plugin.name}.tar.gz">
+    <tar compression="gzip"
+        destfile="${build.installer}/org.eclim.${plugin.name}.tar.gz">
       <tarfileset dir="src/eclipse/plugins/"
           includes="org.eclim.${plugin.name}/**/*"/>
-      <tarfileset dir="build/installer" prefix="org.eclim.${plugin.name}"
+      <tarfileset dir="${build.installer}" prefix="org.eclim.${plugin.name}"
           includes="eclim.${plugin.name}.jar"/>
     </tar>
   </target>

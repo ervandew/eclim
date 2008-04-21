@@ -49,7 +49,7 @@
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
-        <pathelement path="build/classes"/>
+        <pathelement path="${build.classes}"/>
       </classpath>
     </javac>
 

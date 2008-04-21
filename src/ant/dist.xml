@@ -21,21 +21,21 @@
     -->
   <target name="dist" depends="clean,build,javadoc,docs"
       description="Creates the distributable files.">
-    <mkdir dir="build/installer"/>
+    <mkdir dir="${build.installer}"/>
 
     <!-- docs archive -->
-    <zip destfile="build/plugins/org.eclim_${eclim.version}/doc.zip">
+    <zip destfile="${build.plugins}/org.eclim_${eclim.version}/doc.zip">
       <fileset dir="build/doc" includes="**/*"/>
     </zip>
 
     <!-- src archive -->
-    <zip destfile="build/plugins/org.eclim_${eclim.version}/src.zip">
+    <zip destfile="${build.plugins}/org.eclim_${eclim.version}/src.zip">
       <fileset dir="src/java" includes="**/*"/>
     </zip>
 
     <!-- eclipse plugin archives -->
-    <zip destfile="build/installer/org.eclim_${eclim.version}.zip">
-      <fileset dir="build/plugins/">
+    <zip destfile="${build.installer}/org.eclim_${eclim.version}.zip">
+      <fileset dir="${build.plugins}/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim.installer*_${eclim.version}/**/*"/>
@@ -50,9 +50,9 @@
         <include name="eclim*.cmd"/>
       </zipfileset>
     </zip>
-    <tar destfile="build/installer/org.eclim_${eclim.version}.tar.gz"
+    <tar destfile="${build.installer}/org.eclim_${eclim.version}.tar.gz"
         compression="gzip">
-      <tarfileset dir="build/plugins/">
+      <tarfileset dir="${build.plugins}/">
         <include name="org.eclim_${eclim.version}/**/*"/>
         <include name="org.eclim.*_${eclim.version}/**/*"/>
         <exclude name="org.eclim.installer*_${eclim.version}/**/*"/>
@@ -73,7 +73,7 @@
     </tar>
 
     <!-- vim plugins jar -->
-    <zip destfile="build/installer/eclim_vim_${eclim.version}.jar">
+    <zip destfile="${build.installer}/eclim_vim_${eclim.version}.jar">
       <fileset dir="src/vim">
         <include name="**/*.vim"/>
         <include name="**/*.example"/>

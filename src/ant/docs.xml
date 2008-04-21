@@ -49,6 +49,11 @@
       <fileset dir="src/doc/content/images" includes="**/*"/>
     </copy>
 
+    <!-- copy over eclipse update/site.xml -->
+    <copy todir="build/doc/site">
+      <fileset dir="src/doc/content" includes="updates/**/*"/>
+    </copy>
+
     <touch file="build/doc/site/google4c368e38cc6ac62e.html"/>
     <replace dir="build/doc/site"
         includes="**/*.html" token="$${google.analytics}">
