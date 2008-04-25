@@ -338,21 +338,26 @@ function eclim#tree#ExecuteAction (file, command)
   let path = substitute(path, '\', '/', 'g')
 
   let file = fnamemodify(a:file, ':t')
-  let file = escape(file, ' &')
-  let file = escape(file, ' &') " need to double escape
+  let file = escape(file, ' &()')
+  let file = escape(file, ' &()') " need to double escape
   let file = escape(file, '&') " '&' needs to be escaped 3 times.
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
   " not using lcd, because the executed command may change windows.
   silent exec 'cd ' . escape(path, ' &#')
+  try
+    let command = a:command
+    let command = substitute(command, '<file>', file, 'g')
+    let command = substitute(command, '<cwd>', cwd, 'g')
+    silent call eclim#util#Exec(command)
+    redraw!
+  finally
+    silent exec 'cd ' . escape(cwd, ' &')
+  endtry
 
-  let command = a:command
-  let command = substitute(command, '<file>', file, 'g')
-  let command = substitute(command, '<cwd>', cwd, 'g')
-  silent call eclim#util#Exec(command)
-
-  redraw!
-  silent exec 'cd ' . escape(cwd, ' &')
+  if v:shell_error
+    call eclim#util#EchoError('Error executing command: ' . command)
+  endif
 endfunction " }}}
 
 " RegisterFileAction(regex,name,action) {{{
