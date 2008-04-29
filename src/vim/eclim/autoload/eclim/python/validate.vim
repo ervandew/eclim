@@ -52,7 +52,7 @@ function! eclim#python#validate#Validate (on_save)
     else
       let command = 'pyflakes "' . expand('%:p') . '"'
       let result = eclim#util#System(command)
-      if v:shell_error
+      if v:shell_error > 1 " pyflakes returns 1 if there where warnings.
         call eclim#util#EchoError('Error running command: ' . command)
         return
       endif
