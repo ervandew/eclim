@@ -34,6 +34,7 @@ Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
 
 Project:
+  - Added :ref:`:Todo <todo>` and :ref:`ProjectTodo <projecttodo>`.
   - Added :ref:`:TrackerTicket <trackerticket>` for viewing tickets by id in
     your web based tracking system.
   - Renamed setting ``org.eclim.project.vcs.tracker`` to

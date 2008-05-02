@@ -19,6 +19,7 @@ Guides
 .. toctree::
 
    install
+   uninstall
    java/project
    java/ivy/classpath
    java/maven/maven/classpath

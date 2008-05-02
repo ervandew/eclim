@@ -247,6 +247,21 @@ projects from within Vim.
 
   Just like **:ProjectGrep** but using lvimgrepadd instead.
 
+.. _ProjectTodo:
+
+- **:ProjectTodo**
+
+  Searches all the source files in the project (those with extensions included
+  in :ref:`g:EclimTodoSearchExtensions <eclimtodosearchextensions>`) for the
+  fixme / todo pattern (defined by
+  :ref:`g:EclimTodoSearchPattern <eclimtodosearchpattern>`) and adds all
+  occurances to the current location list.
+
+.. _Todo:
+
+- **:Todo**
+
+  Just like :ProjectTodo, but limits the searching to the current file.
 
 Tracker
 -------
@@ -337,6 +352,32 @@ Vim Settings
 
   Map of file patterns to the available actions for opening files that match
   that pattern.
+
+.. _EclimTodoSearchPattern:
+
+- **g:EclimTodoSearchPattern**
+
+  Default\:
+
+  .. code-block:: vim
+
+    let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
+
+  Defines the regex pattern used to identify todo or fixme entries.
+
+.. _EclimTodoSearchExtensions:
+
+- **g:EclimTodoSearchExtensions**
+
+  Default\:
+
+  .. code-block:: vim
+
+    let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+
+  Defines a list of file extensions that will be searched for the todo / fixme
+  entries.
+
 
 Eclim Settings
 

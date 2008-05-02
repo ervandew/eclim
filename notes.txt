@@ -19,32 +19,12 @@ HIGH {{{
         apis).
     - update eclimd script for gentoo
 
-  - support list of plugins to build for development.
-    - perhaps seperate their code bases
-
   - update license on sourceforge project page and freshmeat.
-
-  - document :Todo, :ProjectTodo
 
   - Tree refresh, update executable, symlinks, etc when using ls
 
-  - :ProjectCreateWizard - use input()
-
-  - integrate w/ eclipse build/run system for at least simple programs.
-
-  - add/test proxy support to the installer.
-
   - generic support for java based xml config file validation
     - support list of xpaths to class name attributes / values to validate
-
-  - test installer w/ eclipse running
-    - may cause issues, if so, attempt to detect if eclipse is running and
-      display an intermediate step (or add to requirements steps as warning)
-      alerting the user to shut it down.
-
-  - create command :ProjectImport <dir>
-    - Eclipse equivalant:
-      File > Import... > General > Existing Projects Into Workspace
 
   - support max number of cache entries
     - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
@@ -91,6 +71,13 @@ TODO {{{
 
     - consider adding command line option to installer to specify temp dir to write to
       - or maybe just use ~/.tmp
+
+    - add/test proxy support to the installer.
+
+    - test installer w/ eclipse running
+      - may cause issues, if so, attempt to detect if eclipse is running and
+        display an intermediate step (or add to requirements steps as warning)
+        alerting the user to shut it down.
   }}}
 
   Documentation {{{
@@ -112,6 +99,8 @@ TODO {{{
       :ProjectNatures
       :ProjectNatureAdd
       :ProjectNatureRemove
+      :ProjectTodo
+      :Todo
       :DjangoFind
       :DjangoTemplateOpen
       :DjangoViewOpen
@@ -131,9 +120,10 @@ TODO {{{
       :CdRelative
       :LcdRelative
       :BrowserOpen
-      :ViewvcChangeSet
-      :ViewvcAnnotate
-      :ViewvcDiff
+      :VcsWebChangeSet
+      :VcsWebAnnotate
+      :VcsWebDiff
+      :VcsWebLog
       :VcsInfo
       :VcsLog
       :VcsCat
@@ -146,10 +136,22 @@ TODO {{{
       :TracDiff
       :Buffers
       :Only
+      :OtherWorkingCopyDiff
+      :OtherWorkingCopyEdit
+      :OtherWorkingCopySplit
+      :OtherWorkingCopyTabopen
   }}}
 
   Common {{{
-    - org.eclim.project.vcs.tracker
+    - create command :ProjectImport <dir>
+      - Eclipse equivalant:
+        File > Import... > General > Existing Projects Into Workspace
+
+    - :ProjectCreateWizard - use input()
+
+    - integrate w/ eclipse build/run system for at least simple programs.
+
+    - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
       but in the vcs log, how do you know which to use?
       ... maybe support something like '#F123' or '#123f'
@@ -483,10 +485,6 @@ NOTES {{{
       http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
       - Workspace Re-Builder (looks a bit old, may need some work).
 
-    fedora + eclipse + gcj/gnu classpath
-      - http://www.fedoraproject.org/wiki/Eclipse
-      - http://sourceware.org/eclipse/
-
     When using a project created from eclipse, may get errors in log when saving +
     closing a src file, complaining that the .swp file doesn't exist.  To fix this,
     you need to exclude the swp files from the eclipse build.
@@ -517,13 +515,7 @@ NOTES {{{
 
   Pydev, files modified to remove it: {{{
     build.xml
-    status.xml
     src/ant/docs.xml
-    src/forrest/content/xdocs/features.xml
-    src/forrest/content/xdocs/site.xml
-    src/forrest/content/xdocs/vim/cheatsheet.xml
-    src/forrest/content/xdocs/vim/cheatsheet_zh_TW.xml
-    src/forrest/content/xdocs/vim/mappings.xml
     src/installer/build.xml
     src/installer/installer.xml
     src/installer/java/org/eclim/installer/step/FeatureProvider.java
@@ -562,7 +554,7 @@ NOTES {{{
       $ mkdir -p ~/.config/autostart
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd.desktop ~/.config/autostart
 
-    KDE (this may work for kde, enlightenment 17, and xfce4 as well)
+    KDE
       $ mkdir -p ~/.kde/Autostart
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd ~/.kde/Autostart
 

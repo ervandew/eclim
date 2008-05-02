@@ -78,6 +78,12 @@ Project Commands
   Issues a lvimgrepadd starting at the root of the current project.
 - :ref:`:TrackerTicket <trackerticket>` <ticket_id> -
   Opens the supplied ticket in your configured web based tracking tool.
+- :ref:`:ProjectTodo <projecttodo>` -
+  Searches project files for todo / fixme patterns and adds them to the
+  location list.
+- :ref:`:Todo <todo>` -
+  Searches the current file for todo / fixme patterns and adds them to the
+  location list.
 
 
 Ant Commands
