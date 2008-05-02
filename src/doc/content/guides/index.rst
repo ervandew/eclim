@@ -31,6 +31,7 @@ Guides
 Installing / Upgrading
 ----------------------
 - :ref:`guides/install`
+- :ref:`guides/uninstall`
 
 
 Java
