@@ -17,9 +17,6 @@
 -->
 <project name="build" default="deploy" basedir=".">
 
-  <property environment="env"/>
-  <property file="src/ant/build.properties"/>
-
   <path id="ant-contrib-classpath">
     <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
   </path>
@@ -27,6 +24,25 @@
       classpathref="ant-contrib-classpath"/>
   <taskdef classname="net.sf.antcontrib.logic.For" name="for"
       classpathref="ant-contrib-classpath"/>
+
+  <property environment="env"/>
+  <property file="src/ant/build.properties"/>
+
+  <!-- determine if eclipse home is set -->
+  <if>
+    <or>
+      <equals arg1="${eclipse.home}" arg2=""/>
+      <equals arg1="${eclipse.home}" arg2="$${env.ECLIM_ECLIPSE_HOME}"/>
+    </or>
+    <then>
+      <echo>
+        $${eclipse.home} not set.
+        Please set via system arg (ant -Declipse.home=...) or
+        via environment variable (export ECLIM_ECLIPSE_HOME="...").
+      </echo>
+      <fail message="missing required property (see above)"/>
+    </then>
+  </if>
 
   <import file="src/ant/dist.xml"/>
   <import file="src/ant/docs.xml"/>
@@ -154,6 +170,18 @@
     </copy>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
+
+    <!-- determine location of vim files if not explicitly set -->
+    <if>
+      <not> <isset property="vim.files"/> </not>
+      <then>
+        <if>
+          <os family="windows"/>
+          <then> <property name="vim.files" value="${user.home}/vimfiles"/> </then>
+          <else> <property name="vim.files" value="${user.home}/.vim"/> </else>
+        </if>
+      </then>
+    </if>
 
     <!-- deploy vim files -->
     <mkdir dir="${vim.files}/eclim"/>
