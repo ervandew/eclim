@@ -91,13 +91,23 @@ function! s:GetRootElement ()
   " search for usage of root element (first occurence of <[a-zA-Z]).
   let numlines = line("$")
   let line = 1
-  while line <= numlines
-    if getline(line) =~ '<[a-zA-Z]'
-      let root = substitute(getline(line), element, '\1', '')
-      break
-    endif
-    let line = line + 1
-  endwhile
+  let pos = getpos('.')
+  try
+    while line <= numlines
+      call cursor(line, 1)
+      let found = searchpos('<[a-zA-Z]', 'cn', line)
+      if found[0]
+        let syntaxName = synIDattr(synID(found[0], found[1], 1), "name")
+        if syntaxName == 'xmlTag'
+          let root = substitute(getline(line), element, '\1', '')
+          break
+        endif
+      endif
+      let line = line + 1
+    endwhile
+  finally
+    call setpos('.', pos)
+  endtry
 
   " no usage, so look for doctype definition of root element
   if root == ''
