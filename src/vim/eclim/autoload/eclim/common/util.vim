@@ -61,7 +61,7 @@ endfunction " }}}
 " Find a file in the supplied path returning a list of results.
 function! eclim#common#util#FindInPath (file, path)
   let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
-  let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
+  "let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
   call map(results, "fnamemodify(v:val, ':p')")
   return results
 endfunction " }}}
