@@ -81,15 +81,16 @@ function! EclimGetHtmlIndent (lnum)
     call Settings()
     let adj = s:HtmlIndentAttributeWrap(a:lnum) * &sw
 
-    " handle case where previous line is a multi-line comment (<!-- -->) on one
-    " line, which IndentAnything doesn't handle properly.
     let prevlnum = prevnonblank(a:lnum - 1)
     let prevline = getline(prevlnum)
-    if prevline =~ '^\s\+<!--.\{-}-->'
-      let adj = indent(prevlnum)
+
+    " handle case where previous line is a multi-line comment (<!-- -->) on one
+    " line, which IndentAnything doesn't handle properly.
+    "if prevline =~ '^\s\+<!--.\{-}-->'
+    "  let adj = indent(prevlnum)
 
     " handle <br> tags without '/>'
-    elseif prevline =~ '<br\s*>'
+    if prevline =~ '<br\s*>'
       let line = prevline
       let occurrences = 0
       while line =~ '<br\s*>'
