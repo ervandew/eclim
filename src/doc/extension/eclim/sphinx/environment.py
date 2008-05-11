@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from docutils import nodes
 
 from sphinx import addnodes
-from sphinx.environment import BuildEnvironment, MyContentsFilter
+from sphinx.environment import BuildEnvironment, SphinxContentsFilter
 
 class EclimBuildEnvironment (BuildEnvironment):
 
@@ -38,7 +38,7 @@ class EclimBuildEnvironment (BuildEnvironment):
     self.resolve_references(doctree, docname, builder)
 
     # now, resolve all toctree nodes
-    def _entries_from_toctree(toctreenode):
+    def _entries_from_toctree(toctreenode, separate=False):
       """Return TOC entries for a toctree node."""
       includefiles = map(str, toctreenode['includefiles'])
 
@@ -51,22 +51,37 @@ class EclimBuildEnvironment (BuildEnvironment):
           self.warn(docname, 'toctree contains ref to nonexisting '
                     'file %r' % includefile)
         else:
+          # resolve all sub-toctrees
           for toctreenode in toc.traverse(addnodes.toctree):
-              toctreenode.parent.replace_self(
-                  _entries_from_toctree(toctreenode))
-          entries.append(toc)
-      if entries:
-        return addnodes.compact_paragraph('', '', *entries)
-      return None
+            i = toctreenode.parent.index(toctreenode) + 1
+            for item in _entries_from_toctree(toctreenode):
+              toctreenode.parent.insert(i, item)
+              i += 1
+            toctreenode.parent.remove(toctreenode)
+          if separate:
+            entries.append(toc)
+          else:
+            entries.extend(toc.children)
+      return entries
 
     for toctreenode in doctree.traverse(addnodes.toctree):
 # EV: remove inline site toc
       #maxdepth = toctreenode.get('maxdepth', -1)
-      #newnode = _entries_from_toctree(toctreenode)
-      #if newnode is not None:
-      #  # prune the tree to maxdepth
+      #titleoverrides = toctreenode.get('includetitles', {})
+      #tocentries = _entries_from_toctree(toctreenode, separate=True)
+      #if tocentries:
+      #  newnode = addnodes.compact_paragraph('', '', *tocentries)
+      #  # prune the tree to maxdepth and replace titles
       #  if maxdepth > 0:
-      #    walk_depth(newnode, 1, maxdepth)
+      #    _walk_depth(newnode, 1, maxdepth, titleoverrides)
+      #  # replace titles, if needed
+      #  if titleoverrides:
+      #    for refnode in newnode.traverse(nodes.reference):
+      #      if refnode.get('anchorname', None):
+      #        continue
+      #      if refnode['refuri'] in titleoverrides:
+      #        newtitle = titleoverrides[refnode['refuri']]
+      #        refnode.children = [nodes.Text(newtitle)]
       #  toctreenode.replace_self(newnode)
       #else:
       toctreenode.replace_self([])
@@ -97,15 +112,13 @@ class EclimBuildEnvironment (BuildEnvironment):
           # do the inventory stuff
           self.note_toctree(docname, subnode)
           continue
-
         if not isinstance(subnode, nodes.section) or (title_visited and main):
           continue
-
         title = subnode[0]
         title_visited = True
         # copy the contents of the section title, but without references
         # and unnecessary stuff
-        visitor = MyContentsFilter(document)
+        visitor = SphinxContentsFilter(document)
         title.walkabout(visitor)
         nodetext = visitor.get_entry_text()
         if not numentries[0]:
@@ -125,7 +138,7 @@ class EclimBuildEnvironment (BuildEnvironment):
         return nodes.bullet_list('', *entries)
       return []
 
-    # main toc
+    # EV: main toc
     main_toc = build_toc(document, main=True)
     if main_toc:
       self.main_tocs[docname] = main_toc
