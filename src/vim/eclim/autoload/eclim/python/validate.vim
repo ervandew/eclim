@@ -100,12 +100,12 @@ function eclim#python#validate#ValidateSyntax ()
   let syntax_error = ''
 
 python << EOF
-import vim
+import re, vim
 from compiler import parseFile
 try:
   parseFile(vim.eval('expand("%:p")'))
 except SyntaxError, se:
-  vim.command("let syntax_error = '%s'" % str(se))
+  vim.command("let syntax_error = \"%s\"" % re.sub(r'"', r'\"', str(se)))
 EOF
 
   return syntax_error
