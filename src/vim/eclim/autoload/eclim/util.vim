@@ -383,7 +383,7 @@ function! eclim#util#Glob (expr, ...)
 
   let paths = split(a:expr, '\n')
   if len(paths) == 1
-    let result = glob(expand(paths[0]))
+    let result = glob(paths[0])
   else
     let result = join(paths, "\n")
   endif
