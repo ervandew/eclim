@@ -504,6 +504,8 @@ function eclim#tree#SetRoot (path)
 endfunction " }}}
 
 " Refresh() {{{
+" FIXME: in need of a serious rewrite (probably need to rewrite the whole
+" plugin)
 function eclim#tree#Refresh ()
   let clnum = line('.')
   let ccnum = col('.')
@@ -566,7 +568,9 @@ function eclim#tree#Refresh ()
     let path = eclim#tree#GetPath()
 
     " delete files, and dirs that do not exist, or are hidden.
-    if (!isdirectory(path) && !filereadable(path)) || s:IsHidden(path)
+    if (path =~ '/$' && !isdirectory(path)) ||
+     \ (path !~ '/$' && !filereadable(path)) ||
+     \ s:IsHidden(path)
       let last = eclim#tree#GetLastChildPosition()
       silent exec lnum . ',' . last . 'delete _'
       let end -= (last - lnum) + 1
@@ -584,25 +588,37 @@ function eclim#tree#Refresh ()
   let indent = eclim#tree#GetChildIndent(start)
   let lnum = line('.')
   for entry in contents
-    let entry = substitute(entry, '\*$', '', '')
-    if eclim#tree#GetPath() != entry
-      if s:MatchesFilter(entry)
+    let norm_entry = substitute(entry, '[*@]$', '', '')
+    let path = eclim#tree#GetPath()
+    if path != norm_entry
+      if s:MatchesFilter(norm_entry)
         let rewrote = s:RewriteSpecial(entry)
-        if isdirectory(entry)
-          let entry = indent . s:node_prefix . s:dir_closed_prefix .
+        if isdirectory(norm_entry)
+          let norm_entry = indent . s:node_prefix . s:dir_closed_prefix .
             \ fnamemodify(rewrote, ':h:t') . '/'
         else
-          let entry = indent . s:node_prefix . s:file_prefix .
+          let norm_entry = indent . s:node_prefix . s:file_prefix .
             \ fnamemodify(rewrote, ':t')
         endif
         if lnum <= line('$')
-          call append(lnum - 1, entry)
+          call append(lnum - 1, norm_entry)
         else
-          call append(line('$'), entry)
+          call append(line('$'), norm_entry)
         endif
         let lnum += 1
       endif
     else
+      if s:has_ls && (path != entry || getline(lnum) =~ '\( -> \|\*$\)')
+        let rewrote = s:RewriteSpecial(entry)
+        if isdirectory(norm_entry)
+          let norm_entry = indent . s:node_prefix . s:dir_closed_prefix .
+            \ fnamemodify(rewrote, ':h:t') . '/'
+        else
+          let norm_entry = indent . s:node_prefix . s:file_prefix .
+            \ fnamemodify(rewrote, ':t')
+        endif
+        call setline(lnum, norm_entry)
+      endif
       if getline(lnum) =~ '\s*' . s:node_prefix . s:dir_opened_prefix
         call cursor(eclim#tree#GetLastChildPosition() + 1, 1)
         let lnum = line('.')
@@ -682,6 +698,9 @@ function eclim#tree#ExpandDir ()
   let contents = s:ListDir(dir)
   let contents = s:NormalizeDirs(contents)
 
+  if s:has_ls
+    call map(contents, 'substitute(v:val, "@$", "", "")')
+  endif
   let dirs = filter(copy(contents), 'isdirectory(v:val)')
   let files = filter(copy(contents), '!isdirectory(v:val)')
 
@@ -727,6 +746,7 @@ function s:RewriteSpecial (file)
   let file = a:file
   if s:has_ls
     let info = ''
+    let file = substitute(file, '@$', '', '')
 
     " symbolic links
     let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
@@ -792,7 +812,6 @@ function s:ListDir (dir)
     endif
     let contents = split(eclim#util#System(ls . ' "' . a:dir . '"'), '\n')
     call map(contents, 'a:dir . v:val')
-    call map(contents, 'substitute(v:val, "@$", "", "")')
   else
     if !b:view_hidden
       let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*', 1), '\n')
@@ -871,11 +890,11 @@ function s:NormalizeDirs (dirs)
   call map(a:dirs, 'substitute(v:val, "\\\\", "/", "g")')
 
   let dirs = filter(copy(a:dirs),
-    \ 'isdirectory(v:val) && v:val !~ "/\\(\\.\\|\\.\\.\\)$"')
-  let files = filter(copy(a:dirs), '!isdirectory(v:val)')
+    \ 'isdirectory(substitute(v:val, "@$", "", "")) && substitute(v:val, "@$", "", "") !~ "/\\(\\.\\|\\.\\.\\)$"')
+  let files = filter(copy(a:dirs), '!isdirectory(substitute(v:val, "@$", "", ""))')
 
   " append trailing '/' to dirs if necessary
-  call map(dirs, 'substitute(v:val, "\\(.\\{-}\\)\\(/$\\|$\\)", "\\1/", "")')
+  call map(dirs, 'substitute(v:val, "\\(.\\{-}\\)\\(@\\)\\?\\(/$\\|$\\)", "\\1/\\2", "")')
 
   return dirs + files
 endfunction " }}}
