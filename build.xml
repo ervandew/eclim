@@ -69,6 +69,18 @@
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.features}"/>
     <mkdir dir="${build.plugins}"/>
+
+    <!-- determine location of vim files if not explicitly set -->
+    <if>
+      <not> <isset property="vim.files"/> </not>
+      <then>
+        <if>
+          <os family="windows"/>
+          <then> <property name="vim.files" value="${user.home}/vimfiles"/> </then>
+          <else> <property name="vim.files" value="${user.home}/.vim"/> </else>
+        </if>
+      </then>
+    </if>
   </target>
 
   <!--
@@ -170,18 +182,6 @@
     </copy>
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
-
-    <!-- determine location of vim files if not explicitly set -->
-    <if>
-      <not> <isset property="vim.files"/> </not>
-      <then>
-        <if>
-          <os family="windows"/>
-          <then> <property name="vim.files" value="${user.home}/vimfiles"/> </then>
-          <else> <property name="vim.files" value="${user.home}/.vim"/> </else>
-        </if>
-      </then>
-    </if>
 
     <!-- deploy vim files -->
     <mkdir dir="${vim.files}/eclim"/>
