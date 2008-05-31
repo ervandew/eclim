@@ -87,6 +87,11 @@ public class EclimApplication
       // start nail gun
       logger.info("Eclim Server Started on port " + port + '.');
       server.run();
+    }catch(NumberFormatException nfe){
+      String p = Services.getPluginResources().getProperty("nailgun.server.port");
+      logger.error("Error starting eclim:",
+          new RuntimeException("Invalid port number: '" + p + "'"));
+      return new Integer(1);
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
       return new Integer(1);
