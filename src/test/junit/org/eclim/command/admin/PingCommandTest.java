@@ -16,6 +16,8 @@
  */
 package org.eclim.command.admin;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.Eclim;
 
 import org.junit.Test;
@@ -36,8 +38,9 @@ public class PingCommandTest
   @Test
   public void execute ()
   {
-    String result = Eclim.execute(new String[]{"ping"});
+    String[] result = StringUtils.split(Eclim.execute(new String[]{"ping"}), '\n');
     assertEquals("Unexpected result",
-        "eclim " + System.getProperty("eclim.version"), result);
+        "eclim   " + System.getProperty("eclim.version"), result[0]);
+    assertTrue("Unexpected result", result[1].startsWith("eclipse 3."));
   }
 }
