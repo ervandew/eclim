@@ -125,7 +125,7 @@ function! XmlIndentAnythingSettings ()
 
   " Indent another level for each non-closed element tag.
   let b:indentTrios = [
-      \ [ '<\w', '', '\(/>\|</\)' ],
+      \ [ '<\w', '', '\%(/>\|</\)' ],
     \ ]
 endfunction " }}}
 

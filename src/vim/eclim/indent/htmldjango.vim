@@ -48,14 +48,12 @@ endfor
 
 " HtmlDjangoIndentAnythingSettings() {{{
 function! HtmlDjangoIndentAnythingSettings ()
-  if exists('*HtmlSettings')
-    call HtmlIndentAnythingSettings()
-  endif
+  call HtmlIndentAnythingSettings()
 
   let b:indentTrios = [
       \ [ '<\w', '', '\(/>\|</\)' ],
-      \ [ '{%\s*\(' . g:HtmlDjangoIndentOpenElements . '\)\(\s\+.\{-}\)\?%}',
-        \ '{%\s*\(' . g:HtmlDjangoIndentMidElements . '\)\(\s\+.\{-}\)\?%}',
+      \ [ '{%\s*\%(' . g:HtmlDjangoIndentOpenElements . '\)\(\s\+.\{-}\)\?%}',
+        \ '{%\s*\%(' . g:HtmlDjangoIndentMidElements . '\)\(\s\+.\{-}\)\?%}',
         \ '{%\s*end\w\+\s*%}' ],
     \ ]
 endfunction " }}}
