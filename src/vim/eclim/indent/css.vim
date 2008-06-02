@@ -55,8 +55,6 @@ function! CssIndentAnythingSettings ()
   let b:lineCommentRE  = 'cssComment'
   let b:blockCommentRE = 'cssComment'
   let b:stringRE            = 'cssStringQ\(Q\)\?'
-  "let b:singleQuoteStringRE = 'javaScriptStringS'
-  "let b:doubleQuoteStringRE = 'javaScriptStringD'
 
   " Setup for C-style comment indentation.
   let b:blockCommentStartRE  = '/\*'
