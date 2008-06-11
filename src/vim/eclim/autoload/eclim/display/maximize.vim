@@ -37,6 +37,9 @@
   if !exists('g:MaximizeQuickfixHeight')
     let g:MaximizeQuickfixHeight = 10
   endif
+  if !exists('g:MaximizeUserSpecialtyWindowsRestore')
+    let g:MaximizeUserSpecialtyWindowsRestore = []
+  endif
   if !exists('g:MaximizeSpecialtyWindowsRestore')
     let g:MaximizeSpecialtyWindowsRestore = [
         \ ['g:TagList_title', '"vertical <window>resize " . g:Tlist_WinWidth'],
@@ -44,7 +47,7 @@
           \ 'g:EclimProjectTreeTitle',
           \ '"vertical <window>resize " . g:EclimProjectTreeWidth'
         \ ],
-      \ ]
+      \ ] + g:MaximizeUserSpecialtyWindowsRestore
   endif
 " }}}
 
