@@ -430,7 +430,7 @@ function! eclim#util#GoToBufferWindowOrOpen (filename, cmd)
   if winnr != -1
     exec winnr . "winc w"
   else
-    silent exec a:cmd . ' ' . a:filename
+    silent exec a:cmd . ' ' . eclim#util#Simplify(a:filename)
   endif
 endfunction " }}}
 
