@@ -16,7 +16,8 @@
  */
 package org.eclim.command.admin;
 
-import java.util.Dictionary;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -27,7 +28,9 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.PluginResources;
 
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Platform;
+
+import org.osgi.framework.Bundle;
 
 /**
  * Pings the server.
@@ -55,13 +58,43 @@ public class PingCommand
       String eclim_version = StringUtils.rightPad(eclim_name, pad) + ' ' +
         resources.getProperty("pluginVersion");
 
-      Dictionary headers = ResourcesPlugin.getPlugin().getBundle().getHeaders();
-      String eclipse_version = StringUtils.rightPad(eclipse_name, pad) + ' ' +
-        headers.get("Bundle-Version");
+      String eclipse_version = getVersion();
+      eclipse_version = StringUtils.rightPad(
+          eclipse_name, pad) + ' ' + eclipse_version;
 
       version = eclim_version + '\n' + eclipse_version;
     }
 
     return version;
+  }
+
+  private String getVersion ()
+  {
+    // I can't find a way to get a definitive eclipse version number, so try
+    // comparing the version numbers of some bundles and take the highest one as
+    // the current version.
+    ArrayList<String> versions = new ArrayList<String>();
+    String[] names = {"org.eclipse.osgi", "org.eclipse.swt"};
+    for (String name : names){
+      String version = getVersion(name);
+      if(version != null){
+        versions.add(version);
+      }
+    }
+    Collections.sort(versions);
+    return versions.get(versions.size() - 1);
+  }
+
+  private String getVersion (String bundleName)
+  {
+    Bundle bundle = Platform.getBundle(bundleName);
+    if(bundle != null){
+      String eclipse_version = (String)bundle.getHeaders().get("Bundle-Version");
+      if (eclipse_version != null){
+        eclipse_version = eclipse_version.replaceFirst("([0-9.]+).*", "$1");
+        return eclipse_version.replaceFirst("\\.$", "");
+      }
+    }
+    return null;
   }
 }
