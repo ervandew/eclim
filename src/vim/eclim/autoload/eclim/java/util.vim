@@ -230,11 +230,17 @@ endfunction " }}}
 " SilentUpdate() {{{
 " Silently updates the current source file w/out validation.
 function! eclim#java#util#SilentUpdate ()
+  " i couldn't reproduce the issue, but at least one person experienced the
+  " cursor moving on update and breaking code completion:
+  " http://sourceforge.net/tracker/index.php?func=detail&aid=1995319&group_id=145869&atid=763323
+  let pos = getpos('.')
+
   let saved = g:EclimJavaSrcValidate
   try
     let g:EclimJavaSrcValidate = 0
     silent update
   finally
+    call setpos('.', pos)
     let g:EclimJavaSrcValidate = saved
   endtry
 endfunction " }}}
