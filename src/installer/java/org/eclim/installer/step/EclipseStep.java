@@ -80,7 +80,8 @@ public class EclipseStep
     "/usr/lib/eclipse-3.3",
     "/usr/local/eclipse",
     "/usr/share/eclipse",
-    SystemUtils.USER_HOME + "/eclipse"
+    SystemUtils.USER_HOME + "/eclipse",
+    "/Applications/eclipse"
   };
 
   /**
