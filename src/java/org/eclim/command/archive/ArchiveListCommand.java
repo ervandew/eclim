@@ -56,6 +56,10 @@ public class ArchiveListCommand
     FileObject archive = manager.resolveFile(file);
     FileObject[] children = getFiles(archive);
     String[] results = processFiles(children);
+
+    // the vfs file cache isn't very intelligent, so clear it.
+    manager.getFilesCache().clear(archive.getFileSystem());
+
     return StringUtils.join(results, '\n');
   }
 

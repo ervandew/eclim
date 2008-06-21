@@ -63,10 +63,9 @@ public class ArchiveReadCommand
       FileObject tempFile = fsManager.resolveFile(
           SystemUtils.JAVA_IO_TMPDIR + fileObject.getName().getPath());
 
-      // disable caching (the cache seems to become invalid at some point
-      // causing vfs errors).
-      //fsManager.getFilesCache().clear(fileObject.getFileSystem());
-      //fsManager.getFilesCache().clear(tempFile.getFileSystem());
+      // the vfs file cache isn't very intelligent, so clear it.
+      fsManager.getFilesCache().clear(fileObject.getFileSystem());
+      fsManager.getFilesCache().clear(tempFile.getFileSystem());
 
       // NOTE: FileObject.getName().getPath() does not include the drive
       // information.
@@ -77,7 +76,7 @@ public class ArchiveReadCommand
         path = path.substring(1);
       }
 
-      if(!tempFile.exists()){
+      //if(!tempFile.exists()){
         tempFile.createFile();
 
         in = fileObject.getContent().getInputStream();
@@ -85,7 +84,7 @@ public class ArchiveReadCommand
         IOUtils.copy(in, out);
 
         new File(path).deleteOnExit();
-      }
+      //}
 
       return path;
     }finally{
