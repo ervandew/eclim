@@ -281,7 +281,7 @@ function s:Mappings ()
     nmap <buffer> <silent> I    :call <SID>FileInfo()<cr>
 
     silent! delcommand AsTree
-    command -nargs=0 AsList :call <SID>ChangeLayout('list')
+    command! -nargs=0 AsList :call <SID>ChangeLayout('list')
   else
     if exists('b:tree_mappings_active')
       unlet b:tree_mappings_active
