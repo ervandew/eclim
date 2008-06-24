@@ -133,17 +133,29 @@
     - Create the core jar file for a plugin
     -->
   <target name="plugin">
-    <jar jarfile="${build.installer}/eclim.${plugin.name}.jar">
+    <property name="build.installer.plugins"
+        value="${build.installer}/eclipse/plugins"/>
+    <mkdir dir="${build.installer.plugins}"/>
+
+    <copy todir="${build.installer.plugins}">
+      <fileset dir="src/eclipse/plugins/"
+          includes="org.eclim.${plugin.name}/**/*"/>
+    </copy>
+
+    <replace dir="${build.installer.plugins}/org.eclim.${plugin.name}"
+        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
+      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+    </replace>
+
+    <jar jarfile="${build.installer.plugins}/org.eclim.${plugin.name}/eclim.${plugin.name}.jar">
       <fileset dir="${build.installer}/formic/classes">
         <include name="${classes.include}"/>
       </fileset>
     </jar>
     <tar compression="gzip"
         destfile="${build.installer}/org.eclim.${plugin.name}.tar.gz">
-      <tarfileset dir="src/eclipse/plugins/"
+      <tarfileset dir="${build.installer.plugins}"
           includes="org.eclim.${plugin.name}/**/*"/>
-      <tarfileset dir="${build.installer}" prefix="org.eclim.${plugin.name}"
-          includes="eclim.${plugin.name}.jar"/>
     </tar>
   </target>
 

@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclim.installer; singleton:=true
+Bundle-Version: ${eclim.version}
 Bundle-ClassPath: .,
   eclim.installer.jar
 Bundle-Activator: org.eclim.plugin.Plugin
