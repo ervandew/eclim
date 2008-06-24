@@ -23,51 +23,6 @@
 " }}}
 
 " Global Variables {{{
-  " command used (minus the :split) to open the tree window.
-  if !exists('g:EclimProjectTreeWincmd')
-    if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
-      let g:EclimProjectTreeWincmd = 'botright'
-    elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
-      let g:EclimProjectTreeWincmd = 'botright vertical'
-    else
-      let g:EclimProjectTreeWincmd = 'topleft vertical'
-    endif
-  endif
-
-  " command used to navigate to a content window before executing a command.
-  if !exists('g:EclimProjectTreeContentWincmd')
-    if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
-      let g:EclimProjectTreeContentWincmd =
-        \ 'call eclim#project#tree#HorizontalContentWindow()'
-    elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
-      let g:EclimProjectTreeContentWincmd = 'winc h'
-      let g:EclimProjectTreePreventClose = 0
-    else
-      let g:EclimProjectTreeContentWincmd = 'winc l'
-      let g:EclimProjectTreePreventClose = 1
-    endif
-  endif
-
-  if !exists('g:EclimProjectTreeTaglistRelation')
-    let g:EclimProjectTreeTaglistRelation = 'below'
-  endif
-
-  if !exists('g:EclimProjectTreeWidth')
-    if exists('g:Tlist_WinWidth')
-      let g:EclimProjectTreeWidth = g:Tlist_WinWidth
-    else
-      let g:EclimProjectTreeWidth = 30
-    endif
-  endif
-
-  if !exists('g:EclimProjectTreeHeight')
-    if exists('g:Tlist_WinHeight')
-      let g:EclimProjectTreeHeight = g:Tlist_WinHeight
-    else
-      let g:EclimProjectTreeHeight = 10
-    endif
-  endif
-
   if !exists('g:EclimProjectTreeActions')
     let g:EclimProjectTreeActions = [
         \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
@@ -135,84 +90,21 @@ function! eclim#project#tree#ProjectTree (...)
   call s:CloseTreeWindow()
 
   if bufwinnr(s:GetTreeTitle()) == -1
-    call s:OpenTreeWindow()
+    call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
+    " command used to navigate to a content window before executing a command.
+    if !exists('g:EclimProjectTreeContentWincmd')
+      if g:VerticalToolWindowSide == 'right'
+        let g:EclimProjectTreeContentWincmd = 'winc h'
+      else
+        let g:EclimProjectTreeContentWincmd = 'winc l'
+      endif
+    endif
   endif
 
   call s:OpenTree(names, dirs)
   normal zs
 
   call s:Mappings()
-
-  augroup project_tree
-    autocmd!
-    autocmd BufDelete * call eclim#project#tree#PreventCloseOnBufferDelete()
-    autocmd BufEnter * call eclim#project#tree#CloseIfLastWindow()
-  augroup END
-  if exists('g:EclimProjectTreeTaglistRelation')
-    augroup project_tree
-      autocmd BufWinEnter __Tag_List__ call eclim#project#tree#ReopenTree()
-    augroup END
-  endif
-endfunction " }}}
-
-" CloseIfLastWindow() {{{
-function eclim#project#tree#CloseIfLastWindow ()
-  if histget(':', -1) !~ '^bd'
-    let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
-    if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
-        \  (winnr('$') == 2 &&
-        \   taglist_window != -1 &&
-        \   bufwinnr(s:GetTreeTitle()) != -1)
-      if tabpagenr('$') > 1
-        tabclose
-      else
-        quitall
-      endif
-    endif
-  endif
-endfunction " }}}
-
-" PreventCloseOnBufferDelete() {{{
-function eclim#project#tree#PreventCloseOnBufferDelete ()
-  if exists('g:EclimProjectTreePreventClose')
-    let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
-    if (winnr('$') == 1 && bufwinnr(s:GetTreeTitle()) != -1) ||
-        \  (winnr('$') == 2 &&
-        \   taglist_window != -1 &&
-        \   bufwinnr(s:GetTreeTitle()) != -1)
-      let saved = &splitright
-      let &splitright = g:EclimProjectTreePreventClose
-      vnew
-      winc w
-      exec 'vertical resize ' . g:EclimProjectTreeWidth
-      winc w
-      let &splitright = saved
-      exec 'let bufnr = ' . expand('<abuf>')
-      silent! bprev
-      if bufnr('%') == bufnr
-        silent! bprev
-      endif
-      doautocmd BufEnter
-      doautocmd BufWinEnter
-      doautocmd BufReadPost
-    endif
-  endif
-endfunction " }}}
-
-" ReopenTree() {{{
-function eclim#project#tree#ReopenTree ()
-  let projectwin = bufwinnr(s:GetTreeTitle())
-  if projectwin != -1
-    exec projectwin . 'winc w'
-    close
-    call s:OpenTreeWindow()
-
-    if g:EclimProjectTreeWincmd =~ 'vert'
-      exec 'vertical resize ' . g:EclimProjectTreeWidth
-    else
-      exec 'resize ' . g:EclimProjectTreeHeight
-    endif
-  endif
 endfunction " }}}
 
 " CloseTreeWindow() " {{{
@@ -243,38 +135,6 @@ function! s:OpenFile (action)
     call eclim#tree#ExecuteAction(path,
       \ "call eclim#project#tree#OpenProjectFile('" . a:action . "', '<cwd>', '<file>')")
   endif
-endfunction " }}}
-
-" OpenTreeWindow() " {{{
-function! s:OpenTreeWindow ()
-  let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
-  " taglist relative
-  if taglist_window != -1 && exists('g:EclimProjectTreeTaglistRelation')
-    let wincmd = taglist_window . 'winc w | ' . g:EclimProjectTreeTaglistRelation . ' '
-
-    if g:EclimProjectTreeWincmd !~ 'vert'
-      let wincmd .= g:EclimProjectTreeHeight
-    endif
-
-  " absolute location
-  else
-    if g:EclimProjectTreeWincmd =~ 'vert'
-      let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeWidth
-    else
-      let wincmd = g:EclimProjectTreeWincmd . ' ' . g:EclimProjectTreeHeight
-    endif
-  endif
-
-  silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . s:GetTreeTitle())
-  if g:EclimProjectTreeWincmd =~ 'vert'
-    set winfixwidth
-  else
-    set winfixheight
-  endif
-
-  setlocal nonumber
-
-  let b:eclim_project_tree = 1
 endfunction " }}}
 
 " OpenTree(names, dirs) " {{{

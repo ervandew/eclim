@@ -30,18 +30,6 @@ if !exists('Tlist_Sort_Type')
   let Tlist_Sort_Type = 'order'
 endif
 
-" Open the vertically split taglist window on the left or on the right
-" side.  This setting is relevant only if Tlist_Use_Horiz_Window is set to
-" zero (i.e.  only for vertically split windows)
-if !exists('Tlist_Use_Right_Window')
-  let Tlist_Use_Right_Window = 0
-endif
-
-" Vertically split taglist window width setting
-if !exists('Tlist_WinWidth')
-  let Tlist_WinWidth = 30
-endif
-
 " }}}
 
 " Script Variables {{{
@@ -384,8 +372,6 @@ function! eclim#taglist#taglisttoo#Taglist ()
 
   augroup taglisttoo
     autocmd!
-    autocmd BufDelete * call s:PreventCloseOnBufferDelete()
-    autocmd BufEnter __Tag_List__ nested call s:ExitOnlyWindow()
     autocmd BufUnload __Tag_List__ call s:Cleanup()
     autocmd CursorHold * call s:ShowCurrentTag()
   augroup END
@@ -582,25 +568,14 @@ function! s:Window (types, tags, content)
   if winnum != -1
     exe winnum . 'wincmd w'
   else
-    let bufnum = bufnr(g:TagList_title)
-    if bufnum == -1
-      let wcmd = g:TagList_title
-    else
-      let wcmd = '+buffer' . bufnum
-    endif
-
-    "botright vertical new
-    exec 'silent! topleft vertical ' . g:Tlist_WinWidth . 'split ' . wcmd
+    call eclim#display#window#VerticalToolWindowOpen(g:TagList_title, 10)
 
     setlocal filetype=taglist
-
     setlocal buftype=nofile
     setlocal bufhidden=delete
     setlocal noswapfile
     setlocal nobuflisted
-    setlocal nonumber
     setlocal nowrap
-    setlocal winfixwidth
     setlocal tabstop=2
 
     syn match TagListFileName "^.*\%1l.*"
@@ -668,66 +643,6 @@ function! s:ShowCurrentTag ()
 
       call eclim#util#ExecWithoutAutocmds(cwinnum . 'winc w')
     endif
-  endif
-endfunction " }}}
-
-" s:ExitOnlyWindow () {{{
-function! s:ExitOnlyWindow()
-  " Before quitting Vim, delete the taglist buffer so that
-  " the '0 mark is correctly set to the previous buffer.
-  if v:version < 700
-    if winbufnr(2) == -1
-      bdelete
-      quit
-    endif
-  else
-    if winbufnr(2) == -1
-      if tabpagenr('$') == 1
-        " Only one tag page is present
-        bdelete
-        quit
-      else
-        " More than one tab page is present. Close only the current
-        " tab page
-        close
-      endif
-    endif
-  endif
-endfunction " }}}
-
-" PreventCloseOnBufferDelete() {{{
-function s:PreventCloseOnBufferDelete ()
-  let project_window = 0
-  let index = 1
-  let windows = winnr('$')
-  while index <= windows
-    let bufnum = bufwinnr(index)
-    if getbufvar(bufwinnr(index), 'eclim_project_tree') != ''
-      let project_window = index
-      break
-    endif
-    let index += 1
-  endwhile
-
-  if (winnr('$') == 1 && bufwinnr(g:TagList_title) != -1) ||
-      \  (winnr('$') == 2 &&
-      \   project_window &&
-      \   bufwinnr(g:TagList_title) != -1)
-    let saved = &splitright
-    set splitright
-    vnew
-    winc w
-    exec 'vertical resize ' . g:Tlist_WinWidth
-    winc w
-    let &splitright = saved
-    exec 'let bufnr = ' . expand('<abuf>')
-    silent! bprev
-    if bufnr('%') == bufnr
-      silent! bprev
-    endif
-    doautocmd BufEnter
-    doautocmd BufWinEnter
-    doautocmd BufReadPost
   endif
 endfunction " }}}
 
