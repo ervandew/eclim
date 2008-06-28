@@ -40,15 +40,6 @@
   if !exists('g:MaximizeUserSpecialtyWindowsRestore')
     let g:MaximizeUserSpecialtyWindowsRestore = []
   endif
-  if !exists('g:MaximizeSpecialtyWindowsRestore')
-    let g:MaximizeSpecialtyWindowsRestore = [
-        \ ['g:TagList_title', '"vertical <window>resize " . g:Tlist_WinWidth'],
-        \ [
-          \ 'g:EclimProjectTreeTitle',
-          \ '"vertical <window>resize " . g:EclimProjectTreeWidth'
-        \ ],
-      \ ] + g:MaximizeUserSpecialtyWindowsRestore
-  endif
 " }}}
 
 " MaximizeWindow() {{{
@@ -323,7 +314,8 @@ endfunction " }}}
 
 " RestoreFixedWindows() {{{
 function! s:RestoreFixedWindows ()
-  for settings in g:MaximizeSpecialtyWindowsRestore
+  call eclim#display#window#VerticalToolWindowRestore()
+  for settings in g:MaximizeUserSpecialtyWindowsRestore
     if exists(settings[0]) || settings[0] =~ '^".*"$'
       exec 'let name = ' . settings[0]
       let winnr = bufwinnr('*' . name . '*')

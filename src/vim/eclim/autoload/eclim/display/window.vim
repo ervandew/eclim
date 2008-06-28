@@ -99,6 +99,18 @@ function eclim#display#window#VerticalToolWindowOpen (name, weight)
   augroup END
 endfunction " }}}
 
+" VerticalToolWindowRestore() {{{
+" Used to restore the tool windows to their proper width if some action
+" altered them.
+function eclim#display#window#VerticalToolWindowRestore ()
+  for toolbuf in keys(g:VerticalToolBuffers)
+    exec 'let toolbuf = ' . toolbuf
+    if bufwinnr(toolbuf) != -1
+      exec 'vertical ' . bufwinnr(toolbuf) . 'resize ' . g:VerticalToolWindowWidth
+    endif
+  endfor
+endfunction " }}}
+
 " PreventCloseOnBufferDelete() {{{
 function s:PreventCloseOnBufferDelete ()
   let numtoolwindows = 0
