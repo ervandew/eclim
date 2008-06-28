@@ -118,9 +118,9 @@ if !exists(':TlistToo')
     let g:tlist_forreststatus_settings = 'forreststatus;t:todo;r:release'
   endif
 
-  if !exists("g:tlist_help_settings")
-    let g:tlist_help_settings = 'help;a:anchor'
-  endif
+  "if !exists("g:tlist_help_settings")
+  "  let g:tlist_help_settings = 'help;a:anchor'
+  "endif
 
   if !exists("g:tlist_hibernate_settings")
     let g:tlist_hibernate_settings = 'hibernate;t:typedef;f:filter-def;i:import;q:query;s:sql-query;c:class;j:joined-subclass'
@@ -209,9 +209,9 @@ else
     let g:tlist_forreststatus_settings = {'t': 'todo', 'r': 'release'}
   endif
 
-  if !exists("g:tlist_help_settings")
-    let g:tlist_help_settings = {'a': 'anchor'}
-  endif
+  "if !exists("g:tlist_help_settings")
+  "  let g:tlist_help_settings = {'a': 'anchor'}
+  "endif
 
   if !exists("g:tlist_hibernate_settings")
     let g:tlist_hibernate_settings = {
