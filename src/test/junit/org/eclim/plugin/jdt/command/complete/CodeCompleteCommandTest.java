@@ -52,9 +52,9 @@ public class CodeCompleteCommandTest
     String[] results = StringUtils.split(result, '\n');
     assertEquals("Wrong number of results.", 32, results.length);
     assertEquals("Invalid First Result",
-        "f|add(|add(int index, Object element)  void - List|", results[0]);
+        "f|add(|add(int index, Object element) : void - List|", results[0]);
     assertEquals("Invalid Last Result",
-        "f|wait()|wait()  void - Object|", results[results.length - 1]);
+        "f|wait()|wait() : void - Object|", results[results.length - 1]);
   }
 
   @Test
@@ -72,9 +72,9 @@ public class CodeCompleteCommandTest
     String[] results = StringUtils.split(result, '\n');
     assertEquals("Wrong number of results.", 4, results.length);
     assertEquals("Invalid First Result",
-        "f|add(|add(int index, Object element)  void - List|", results[0]);
+        "f|add(|add(int index, Object element) : void - List|", results[0]);
     assertEquals("Invalid Last Result",
-        "f|addAll(|addAll(Collection c)  boolean - List|",
+        "f|addAll(|addAll(Collection c) : boolean - List|",
         results[results.length - 1]);
   }
 }

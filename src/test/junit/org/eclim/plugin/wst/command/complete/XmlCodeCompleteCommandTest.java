@@ -51,8 +51,9 @@ public class XmlCodeCompleteCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 1, results.length);
-    assertTrue("Wrong result.", results[0].indexOf("xs:unique,,Content Model") != -1);
+    assertEquals("Wrong number of results.", 1, results.length);
+    assertTrue("Wrong result.",
+        results[0].indexOf("xs:unique,,,,<p><b>Element : </b>unique") != -1);
   }
 
   @Test

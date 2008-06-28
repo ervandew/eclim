@@ -117,7 +117,7 @@ function! TestCommandCompleteVarPath()
   let results = eclim#java#classpath#CommandCompleteVarPath('', 'NewVarEntry ', 12)
   call VUAssertTrue(len(results) > 1, 'Not enough var results.')
   for result in results
-    if result !~ '^JRE'
+    if result !~ '^\(JRE\|JUNIT\)'
       call VUAssertTrue(result =~ '.*/$', 'Var path does not have trailing slash.')
     endif
   endfor
