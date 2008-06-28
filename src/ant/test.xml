@@ -101,11 +101,28 @@
         deprecation="${deprecation}">
       <src path="src/test/junit"/>
       <include name="**/*.java"/>
+      <exclude name="org/eclim/plugin/**/*.java"/>
       <classpath>
         <path refid="classpath"/>
         <pathelement path="${build.classes}"/>
       </classpath>
     </javac>
+
+    <for list="${plugins}" param="plugin">
+      <sequential>
+        <echo>Compile tests for @{plugin}...</echo>
+        <javac destdir="build/test/junit/classes" debug="on" optimize="false"
+            target="${test.javac.target}" source="${test.javac.target}"
+            deprecation="${deprecation}">
+          <src path="src/test/junit"/>
+          <include name="org/eclim/plugin/@{plugin}/**/*.java"/>
+          <classpath>
+            <path refid="classpath"/>
+            <pathelement path="${build.classes}"/>
+          </classpath>
+        </javac>
+      </sequential>
+    </for>
 
     <copy todir="build/test/junit/classes" includeEmptyDirs="false">
       <fileset dir="src/test/junit">
@@ -148,7 +165,9 @@
     </delete>
     <vunit plugin="src/ant/lib/vunit.vim" todir="build/test/vunit/results"
         haltonfailure="true" failureproperty="vunit.failed">
-      <fileset dir="src/test/vunit" includes="${test.include}.vim"/>
+      <fileset dir="src/test/vunit"
+          includes="${test.include}.vim"
+          excludes="${test.exclude}.vim"/>
       <sysproperty key="g:TestEclimWorkspace" value="${eclipse.workspace}"/>
     </vunit>
 
