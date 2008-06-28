@@ -575,8 +575,8 @@ endfunction " }}}
 " project.
 function! eclim#project#util#CommandCompleteProjectContainsThis (
   \ argLead, cmdLine, cursorPos)
-  let names = eclim#project#util#CommandCompleteProjectByNature(
-    \ a:argLead, a:cmdLine, a:cursorPos, '')
+  let names = eclim#project#util#CommandCompleteProject(
+    \ a:argLead, a:cmdLine, a:cursorPos)
 
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let project = eclim#project#util#GetCurrentProjectName()
