@@ -553,7 +553,7 @@ public class JavaUtils
       new IQuickFixProcessor[correctionProcessors.length];
     for(int ii = 0; ii < correctionProcessors.length; ii++){
       processors[ii] = (IQuickFixProcessor)
-        correctionProcessors[ii].getProcessor(_src);
+        correctionProcessors[ii].getProcessor(_src, IQuickFixProcessor.class);
     }
     return processors;
   }
@@ -577,7 +577,7 @@ public class JavaUtils
       new IQuickAssistProcessor[assistProcessors.length];
     for(int ii = 0; ii < assistProcessors.length; ii++){
       processors[ii] = (IQuickAssistProcessor)
-        assistProcessors[ii].getProcessor(_src);
+        assistProcessors[ii].getProcessor(_src, IQuickAssistProcessor.class);
     }
     return processors;
   }
