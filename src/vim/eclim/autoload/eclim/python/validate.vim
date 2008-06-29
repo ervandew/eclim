@@ -99,6 +99,8 @@ endfunction " }}}
 function eclim#python#validate#ValidateSyntax ()
   let syntax_error = ''
 
+  if has('python')
+
 python << EOF
 import re, vim
 from compiler import parseFile
@@ -107,6 +109,8 @@ try:
 except SyntaxError, se:
   vim.command("let syntax_error = \"%s\"" % re.sub(r'"', r'\"', str(se)))
 EOF
+
+  endif
 
   return syntax_error
 endfunction " }}}

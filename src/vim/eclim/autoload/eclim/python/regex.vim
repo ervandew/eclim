@@ -25,6 +25,12 @@
 
 " Evaluate(file) {{{
 function eclim#python#regex#Evaluate (file)
+  if !has('python')
+    call eclim#util#EchoError(
+      \ "This functionality requires 'python' support compiled into vim.")
+    return
+  endif
+
 python << EOF
 import StringIO, re, vim
 
