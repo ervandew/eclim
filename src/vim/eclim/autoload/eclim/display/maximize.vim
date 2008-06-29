@@ -26,7 +26,7 @@
 " Global Variables {{{
   if !exists('g:MaximizeExcludes')
     let g:MaximizeExcludes =
-      \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)'
+      \ '\(ProjectTree_*\|' . g:TagList_title . '\|-MiniBufExplorer-\|command-line\)'
   endif
   if !exists('g:MaximizeMinWinHeight')
     let g:MaximizeMinWinHeight = 0
@@ -39,6 +39,22 @@
   endif
   if !exists('g:MaximizeUserSpecialtyWindowsRestore')
     let g:MaximizeUserSpecialtyWindowsRestore = []
+  endif
+  if !exists('g:MaximizeSpecialtyWindowsRestore')
+    let g:MaximizeSpecialtyWindowsRestore = []
+    if !exists('g:TagListToo')
+      if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
+        let g:MaximizeSpecialtyWindowsRestore = [
+            \ ['g:TagList_title', '"<window>resize " . g:Tlist_WinHeight'],
+          \ ]
+      else
+        let g:MaximizeSpecialtyWindowsRestore = [
+            \ ['g:TagList_title', '"vertical <window>resize " . g:Tlist_WinWidth'],
+          \ ]
+      endif
+    endif
+    let g:MaximizeSpecialtyWindowsRestore =
+      \ g:MaximizeSpecialtyWindowsRestore + g:MaximizeUserSpecialtyWindowsRestore
   endif
 " }}}
 
@@ -315,7 +331,7 @@ endfunction " }}}
 " RestoreFixedWindows() {{{
 function! s:RestoreFixedWindows ()
   call eclim#display#window#VerticalToolWindowRestore()
-  for settings in g:MaximizeUserSpecialtyWindowsRestore
+  for settings in g:MaximizeSpecialtyWindowsRestore
     if exists(settings[0]) || settings[0] =~ '^".*"$'
       exec 'let name = ' . settings[0]
       let winnr = bufwinnr('*' . name . '*')
