@@ -74,7 +74,7 @@
 
     <!-- vim plugins jar -->
     <zip destfile="${build.installer}/eclim_vim_${eclim.version}.jar">
-      <fileset dir="src/vim">
+      <fileset dir="src/vim" excludes="${vimfiles.exclude}">
         <include name="**/*.vim"/>
         <include name="**/*.example"/>
       </fileset>
