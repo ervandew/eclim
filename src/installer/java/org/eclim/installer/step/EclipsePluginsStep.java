@@ -232,8 +232,8 @@ public class EclipsePluginsStep
         buttons.add(installButton);
         buttons.add(skipButton);
 
-        featuresPanel.add(buttons, BorderLayout.NORTH);
         featuresPanel.add(scrollPane, BorderLayout.CENTER);
+        featuresPanel.add(buttons, BorderLayout.SOUTH);
 
         stepPanel.add(featuresPanel);
         overallLabel.setText("");
