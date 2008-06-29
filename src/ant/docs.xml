@@ -23,12 +23,22 @@
       description="Generates the javadocs from the src.">
     <mkdir dir="build/doc/api"/>
 
+    <property name="javadoc.include" value=""/>
+    <for list="${plugins}" param="plugin">
+      <sequential>
+        <var name="javadoc.include"
+            value="org/eclim/plugin/@{plugin}/**/*.java,${javadoc.include}"/>
+      </sequential>
+    </for>
+
     <javadoc packagenames="org.eclim" destdir="build/doc/api">
       <classpath refid="classpath"/>
       <fileset dir="src/java">
         <include name="org/ec*/**/*.java"/>
-        <exclude name="**/pydev/**/*.java"/>
+        <include name="org/eclim/plugin/*.java"/>
+        <exclude name="org/eclim/plugin/*/**/*.java"/>
       </fileset>
+      <fileset dir="src/java" includes="${javadoc.include}"/>
     </javadoc>
   </target>
 
