@@ -122,6 +122,55 @@ function eclim#display#window#VerticalToolWindowRestore ()
   endfor
 endfunction " }}}
 
+" GetWindowOptions(winnum) {{{
+" Gets a dictionary containing all the localy set options for the specified
+" window.
+function eclim#display#window#GetWindowOptions (winnum)
+  let curwin = winnr()
+  try
+    exec a:winnum . 'winc w'
+    redir => list
+    silent exec 'setlocal'
+    redir END
+  finally
+    exec curwin . 'winc w'
+  endtry
+
+  let list = substitute(list, '---.\{-}---', '', '')
+  let winopts = {}
+  for wopt in split(list, '\_s\+')[1:]
+    if wopt =~ '^[a-z]'
+      if wopt =~ '='
+        let key = substitute(wopt, '\(.\{-}\)=.*', '\1', '')
+        let value = substitute(wopt, '.\{-}=\(.*\)', '\1', '')
+        let winopts[key] = value
+      else
+        let winopts[wopt] = ''
+      endif
+    endif
+  endfor
+  return winopts
+endfunction " }}}
+
+" SetWindowOptions() {{{
+" Given a dictionary of options, sets each as local options for the specified
+" window.
+function eclim#display#window#SetWindowOptions (winnum, options)
+  let curwin = winnr()
+  try
+    exec a:winnum . 'winc w'
+    for key in keys(a:options)
+      if key =~ '^no'
+        silent! exec 'setlocal ' . key
+      else
+        silent! exec 'setlocal ' . key . '=' . a:options[key]
+      endif
+    endfor
+  finally
+    exec curwin . 'winc w'
+  endtry
+endfunction " }}}
+
 " CloseIfLastWindow() {{{
 function s:CloseIfLastWindow ()
   if histget(':', -1) !~ '^bd'
@@ -148,8 +197,12 @@ function s:MoveRelativeTo (name)
     exec 'let toolbuf = ' . toolbuf
     if bufwinnr(toolbuf) != -1
       call setwinvar(bufwinnr(toolbuf), 'marked_for_removal', 1)
+      let winoptions = eclim#display#window#GetWindowOptions(bufwinnr(toolbuf))
+      call remove(winoptions, 'filetype')
+      call remove(winoptions, 'syntax')
       call eclim#display#window#VerticalToolWindowOpen(
         \ g:VerticalToolBuffers[toolbuf], getbufvar(toolbuf, 'weight'))
+      call eclim#display#window#SetWindowOptions(winnr(), winoptions)
     endif
   endfor
 
