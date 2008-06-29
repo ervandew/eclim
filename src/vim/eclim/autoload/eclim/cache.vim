@@ -67,7 +67,7 @@ function! eclim#cache#Get (key, ...)
 
   let file = s:GetCachedFilename(a:key)
   if filereadable(file . '.gz')
-    call eclim#util#System('gunzip "' . file . '.gz"')
+    call eclim#util#System('gzip -d "' . file . '.gz"')
     let contents = readfile(file)
     call eclim#util#System('gzip "' . file . '"')
   elseif filereadable(file)
