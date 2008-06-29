@@ -24,6 +24,7 @@
 " }}}
 
 " Global Variables {{{
+let g:TagListToo = 1
 
 " Tag listing sort type - 'name' or 'order'
 if !exists('Tlist_Sort_Type')

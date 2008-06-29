@@ -47,6 +47,9 @@ endif
 function eclim#display#window#VerticalToolWindowOpen (name, weight)
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
   let taglist_buffer = bufnr(g:TagList_title)
+  if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
+    let taglist_window = -1
+  endif
 
   let relative_window = 0
   let relative_window_loc = 'below'
@@ -94,6 +97,14 @@ function eclim#display#window#VerticalToolWindowOpen (name, weight)
     autocmd BufDelete * call s:PreventCloseOnBufferDelete()
     autocmd BufEnter * nested call s:CloseIfLastWindow()
   augroup END
+  if !exists('g:TagListToo') &&
+      \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
+    augroup eclim_vertical_tool_windows_move
+      autocmd!
+    augroup END
+    exec 'autocmd BufWinEnter ' . g:TagList_title .
+      \ ' call s:MoveRelativeTo(g:TagList_title)'
+  endif
   augroup eclim_vertical_tool_windows_buffer
     autocmd BufWinLeave <buffer> silent! call remove(g:VerticalToolBuffers, bufnr('%'))
   augroup END
@@ -109,38 +120,6 @@ function eclim#display#window#VerticalToolWindowRestore ()
       exec 'vertical ' . bufwinnr(toolbuf) . 'resize ' . g:VerticalToolWindowWidth
     endif
   endfor
-endfunction " }}}
-
-" PreventCloseOnBufferDelete() {{{
-function s:PreventCloseOnBufferDelete ()
-  let numtoolwindows = 0
-  for toolbuf in keys(g:VerticalToolBuffers)
-    exec 'let toolbuf = ' . toolbuf
-    if bufwinnr(toolbuf) != -1
-      let numtoolwindows += 1
-    endif
-  endfor
-
-  if winnr('$') == numtoolwindows
-    let toolsbuf = bufnr('%')
-    if g:VerticalToolWindowSide == 'right'
-      vertical topleft new
-    else
-      vertical botright new
-    endif
-    let winnum = winnr()
-    exec 'let bufnr = ' . expand('<abuf>')
-    silent! bprev
-    if bufnr('%') == bufnr
-      silent! bprev
-    endif
-    doautocmd BufEnter
-    doautocmd BufWinEnter
-    doautocmd BufReadPost
-    exec bufwinnr(toolsbuf) . 'winc w'
-    exec 'vertical resize ' . g:VerticalToolWindowWidth
-    exec winnum . 'winc w'
-  endif
 endfunction " }}}
 
 " CloseIfLastWindow() {{{
@@ -160,6 +139,61 @@ function s:CloseIfLastWindow ()
         quitall
       endif
     endif
+  endif
+endfunction " }}}
+
+" MoveRelativeTo(name) {{{
+function s:MoveRelativeTo (name)
+  for toolbuf in keys(g:VerticalToolBuffers)
+    exec 'let toolbuf = ' . toolbuf
+    if bufwinnr(toolbuf) != -1
+      call setwinvar(bufwinnr(toolbuf), 'marked_for_removal', 1)
+      call eclim#display#window#VerticalToolWindowOpen(
+        \ g:VerticalToolBuffers[toolbuf], getbufvar(toolbuf, 'weight'))
+    endif
+  endfor
+
+  let winnum = 1
+  while winnum <= winnr('$')
+    if getwinvar(winnum, 'marked_for_removal') == 1
+      exec winnum . 'winc w'
+      close
+    else
+      let winnum += 1
+    endif
+  endwhile
+  call eclim#display#window#VerticalToolWindowRestore()
+endfunction " }}}
+
+" PreventCloseOnBufferDelete() {{{
+function s:PreventCloseOnBufferDelete ()
+  let numtoolwindows = 0
+  for toolbuf in keys(g:VerticalToolBuffers)
+    exec 'let toolbuf = ' . toolbuf
+    if bufwinnr(toolbuf) != -1
+      let numtoolwindows += 1
+    endif
+  endfor
+
+  if winnr('$') == numtoolwindows
+    let toolbuf = bufnr('%')
+    if g:VerticalToolWindowSide == 'right'
+      vertical topleft new
+    else
+      vertical botright new
+    endif
+    let winnum = winnr()
+    exec 'let bufnr = ' . expand('<abuf>')
+    silent! bprev
+    if bufnr('%') == bufnr
+      silent! bprev
+    endif
+    doautocmd BufEnter
+    doautocmd BufWinEnter
+    doautocmd BufReadPost
+    exec bufwinnr(toolbuf) . 'winc w'
+    exec 'vertical resize ' . g:VerticalToolWindowWidth
+    exec winnum . 'winc w'
   endif
 endfunction " }}}
 
