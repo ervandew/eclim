@@ -171,7 +171,7 @@ function eclim#display#window#SetWindowOptions (winnum, options)
   endtry
 endfunction " }}}
 
-" CloseIfLastWindow() {{{
+" s:CloseIfLastWindow() {{{
 function s:CloseIfLastWindow ()
   if histget(':', -1) !~ '^bd'
     let numtoolwindows = 0
@@ -191,7 +191,7 @@ function s:CloseIfLastWindow ()
   endif
 endfunction " }}}
 
-" MoveRelativeTo(name) {{{
+" s:MoveRelativeTo(name) {{{
 function s:MoveRelativeTo (name)
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf
@@ -218,7 +218,7 @@ function s:MoveRelativeTo (name)
   call eclim#display#window#VerticalToolWindowRestore()
 endfunction " }}}
 
-" PreventCloseOnBufferDelete() {{{
+" s:PreventCloseOnBufferDelete() {{{
 function s:PreventCloseOnBufferDelete ()
   let numtoolwindows = 0
   for toolbuf in keys(g:VerticalToolBuffers)
