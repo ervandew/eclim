@@ -113,7 +113,7 @@ function! eclim#ExecuteEclim (args)
 
   " check for errors
   let error = ''
-  if result =~ 'Exception.*\s\+\<at\> '
+  if result =~ 'Exception:[^\n]*\n\s\+\<at\> '
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
   elseif v:shell_error
     let error = result
