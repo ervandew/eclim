@@ -184,7 +184,13 @@
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
     <!-- deploy vim files -->
-    <delete dir="${vim.files}/eclim"/>
+    <delete>
+      <fileset dir="${vim.files}/eclim">
+        <include name="**/*"/>
+        <exclude name="after/**/*"/>
+        <exclude name="resources/**/*"/>
+      </fileset>
+    </delete>
     <mkdir dir="${vim.files}/eclim"/>
     <copy todir="${vim.files}" overwrite="true">
       <fileset dir="src/vim" includes="**/*" excludes="${vimfiles.exclude}"/>
