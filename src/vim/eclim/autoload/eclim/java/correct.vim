@@ -114,6 +114,10 @@ function! eclim#java#correct#CorrectApply ()
 
       let content = split(eclim#ExecuteEclim(command), '\n')
 
+      if len(content) == 1 && content[0] == '0'
+        return
+      endif
+
       let pos = getpos('.')
 
       1,$delete _
