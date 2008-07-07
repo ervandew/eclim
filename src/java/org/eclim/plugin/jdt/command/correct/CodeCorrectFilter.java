@@ -42,7 +42,13 @@ public class CodeCorrectFilter
       for(CodeCorrectResult result : _result){
         // filter out corrections that have no preview, since they can't be
         // applied in the same fashion as those that have previews.
-        if(result.getPreview() != null){
+        String preview = result.getPreview();
+        if(preview != null &&
+            !preview.trim().equals("") &&
+            !preview.trim().startsWith("Opens") &&
+            !preview.trim().startsWith("Evaluates") &&
+            !preview.trim().startsWith("<p>Move"))
+        {
           if(buffer.length() == 0){
             buffer.append(result.getProblem().getMessage());
           }
@@ -50,10 +56,10 @@ public class CodeCorrectFilter
             .append('.').append(result.getProblem().getSourceStart())
             .append(":  ").append(result.getDescription());
 
-          String preview = result.getPreview()
+          preview = preview
               .replaceAll("<br>", "\n")
-              .replaceAll("<.+>", "")
-              .replaceAll("\\n\\s*", "\n\t");
+              .replaceAll("<.+?>", "")
+              .replaceAll("\\n", "\n\t");
           buffer.append("\n\t").append(preview.trim());
         }
       }
