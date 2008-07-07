@@ -19,5 +19,6 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.debug,
   org.eclipse.jdt.launching,
   org.eclipse.jdt.ui,
-  org.eclipse.jface.text
+  org.eclipse.jface.text,
+  org.eclipse.ltk.core.refactoring
 Eclipse-AutoStart: false

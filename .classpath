@@ -30,6 +30,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.ui_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.4.0.I20080606-1300.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.4.0.v20080603-2000.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.4.0.v20080605-1900.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php_1.1.0.HEAD.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_1.1.0.HEAD.jar"/>
