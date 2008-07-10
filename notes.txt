@@ -1,46 +1,31 @@
 HIGH {{{
-  - detect gnome / kde and add installer step to auto start eclimd
-
-  - add eclipse version to output of :PingEclim
-
-  - consider :UserProjectSettings for settings that are not common amongst developers working in a team
-    - username, email, etc.
-    - setting precedence would be: user > project > global
-    - unless eclipse supports this concept, only include eclim settings as 'user' configurable
-
-  - django indent: issue indenting after single line if/else/end
-    users/templates/users/include/remoteRegisterForm.html
-
-  - eclipse 3.4
-    - http://download.eclipse.org/eclipse/downloads/drops/S-3.4M6-200803301350/eclipse-news-M6.html
-    - leverage equinox p2
-      - use dropins folder instead of plugins for eclim, or start treating
-        eclim plugin installs like true eclipse plugins (use eclipse install
-        apis).
-    - update eclimd script for gentoo
-
   - update license on sourceforge project page and freshmeat.
 
-  - Tree refresh, update executable, symlinks, etc when using ls
+  - possible issue with :JavaDocSearch
 
-  - generic support for java based xml config file validation
-    - support list of xpaths to class name attributes / values to validate
+  - add/test proxy support to the installer
+    org.eclipse.update.core.proxy.enable=true
+    org.eclipse.update.core.proxy.port=8888
+    org.eclipse.update.core.proxy.host=proxy.host.net
 
-  - support max number of cache entries
-    - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
-    - exclude entries beginning w/ 'eclim_'
-    - maybe let the eclim server side manage this via a TimerTask.
-      - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
+  - add proxy support to eclim
+    https://sourceforge.net/forum/message.php?msg_id=5072641
+    http://java.sun.com/j2se/1.5.0/docs/guide/net/proxies.html
 
-  - get working under cygwin
-    if has('win32unix')
-    - eclim command
-    - file paths
-    - sh installer via cygwin
-      - https://sourceforge.net/forum/forum.php?thread_id=1931818&forum_id=487811
+  - handle connectivity issues on xml validate
+    https://sourceforge.net/forum/forum.php?thread_id=2105350&forum_id=487811
+
+  - eclipse 3.4
+    - http://archive.eclipse.org/eclipse/downloads/drops/R-3.3-200706251500/whatsnew/eclipse-news-all.html
+    - http://download.eclipse.org/eclipse/downloads/drops/S-3.4M6-200803301350/eclipse-news-M6.html
+    - leverage equinox p2
+
+  - Ubuntu Hardy (command completion may cause segfault)
+    - https://bugs.launchpad.net/ubuntu/+source/vim/+bug/219546
 
   - Unsolved
     - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
+    - https://sourceforge.net/forum/forum.php?thread_id=2085421&forum_id=487811
 }}}
 
 TODO {{{
@@ -64,6 +49,8 @@ TODO {{{
   }}}
 
   Installer {{{
+    - detect gnome / kde and add installer step to auto start eclimd
+
     - installer validation
       - java version
 
@@ -72,7 +59,6 @@ TODO {{{
     - consider adding command line option to installer to specify temp dir to write to
       - or maybe just use ~/.tmp
 
-    - add/test proxy support to the installer.
 
     - test installer w/ eclipse running
       - may cause issues, if so, attempt to detect if eclipse is running and
@@ -143,6 +129,20 @@ TODO {{{
   }}}
 
   Common {{{
+    - consider :UserProjectSettings for settings that are not common amongst developers working in a team
+      - username, email, etc.
+      - setting precedence would be: user > project > global
+      - unless eclipse supports this concept, only include eclim settings as 'user' configurable
+
+    - support max number of cache entries
+      - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
+      - exclude entries beginning w/ 'eclim_'
+      - maybe let the eclim server side manage this via a TimerTask.
+        - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
+
+    - alternate form of :LocateFile* that starts at the path of the current
+      file and walks up the tree globbing for the requested file.
+
     - create command :ProjectImport <dir>
       - Eclipse equivalant:
         File > Import... > General > Existing Projects Into Workspace
@@ -150,6 +150,14 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - integrate w/ eclipse build/run system for at least simple programs.
+
+    - add
+      :VcsPull
+        in git, 'fetch' is the analogous to hg's 'pull' and git's 'pull' is
+        analogous to hg's 'fetch' (confused yet?)
+      :VcsPush
+      :VcsUpdate (git equivalent?)
+      :VcsIn, :VcsOut (git equivalents?)
 
     - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
@@ -177,13 +185,6 @@ TODO {{{
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
       RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
 
-    - :ProjectTodo run vimgrep against all files using user defined pattern...
-      by default '\(\<fixme\>\|\<todo\>\)\c'
-      - create list of file extensions to search
-      - lvimgrep first item and lvimgrep add the rest
-      - don't jump to first file, just open location list window.
-    - :Todo run vimgrep on current file using user defined pattern.
-
     - for taglist, support universal marker tag:
       |-- marker_name --|
 
@@ -201,6 +202,13 @@ TODO {{{
 
     - implement means to highlight text and push it to the command prompt
       Ctrl-: or something similar.
+
+    - get working under cygwin
+      if has('win32unix')
+      - eclim command
+      - file paths
+      - sh installer via cygwin
+        - https://sourceforge.net/forum/forum.php?thread_id=1931818&forum_id=487811
   }}}
 
   C/C++ {{{
@@ -240,6 +248,9 @@ TODO {{{
   Java {{{
     - :JavaHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
+
+    - generic support for java based xml config file validation
+      - support list of xpaths to class name attributes / values to validate
 
     - look into code refactoring support.
       - Safe deletes. Check for references before deleting.
@@ -350,6 +361,7 @@ TODO {{{
   }}}
 
   Javascript {{{
+    http://wiki.eclipse.org/index.php/ATF/JSDT
     http://labs.adobe.com/technologies/jseclipse/
     http://www.aptana.org/ aptana (owners of radrails)
     http://wiki.eclipse.org/index.php/ATF/JSDT eclipse (not yet developed)
@@ -417,6 +429,10 @@ TODO {{{
 
     - refactoring: http://rope.sourceforge.net/
       - this lib includes auto-completion and find definition!!!
+
+    - debugger: http://pyclewn.wiki.sourceforge.net/
+      - seems to currently use netbeans support which means gvim only... look
+        into making it console vim compatible.
   }}}
 
   Ruby {{{

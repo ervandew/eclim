@@ -93,13 +93,22 @@ News
 2008
 -----------
 
-| **Eclim 1.3.6** is now available.
-| One major change worth noting, is that eclim is now licensed under the GPLv3.
-  This was done to give eclim the freedom to integrate with other GPL projects
-  in the future.  The documentation will remain under the Apache 2 license for
-  the time being.
+| **Eclim 1.4.0** is now available.
+| Please note that eclim now requires the latest version of `eclipse`_
+  (Ganymede, 3.4.x).
 
-You can view the :ref:`release notes <1.3.6>` for more info.
+Also note that the eclipse pdt plugin which serves as the
+base for eclim's php support has not yet been released for the latest version
+of eclipse.  For this reason php support has been temporarily removed from
+this release and will hopefully return soon after the pdt team releases a
+Ganymede (3.4) compatible version.
+
+Another major change worth noting, is that eclim is now licensed under the
+GPLv3.  This was done to give eclim the freedom to integrate with other GPL
+projects in the future.  The documentation will remain under the Apache 2
+license for the time being.
+
+You can view the :ref:`release notes <1.4.0>` for more info.
 
 -----------
 2008-03-11

@@ -16,10 +16,13 @@
 History of Changes
 ==================
 
-.. _1.3.6:
+.. _1.4.0:
 
-1.3.6 (2008)
+1.4.0 (2008)
 --------------------
+
+Eclipse:
+  - Eclim now requires the latest version of eclipse (Ganymede, 3.4.x).
 
 License:
   - Eclim has switched from the Apache 2 license to the GPLv3.
@@ -28,7 +31,7 @@ Bug Fixes:
   - Fixed possible issue on Windows determining workspace for users not using
     the default location.
   - Fixed sign placement (used by all validation plugins) on non-english vims.
-  - Various bug fixes.
+  - Various other bug fixes.
 
 Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
@@ -39,6 +42,10 @@ Project:
     your web based tracking system.
   - Renamed setting ``org.eclim.project.vcs.tracker`` to
     ``org.eclim.project.tracker``.
+
+Php:
+  - Support for php has been temporarily removed until the eclipse pdt team
+    releases a Ganymede (3.4) compatible version.
 
 Vcs:
   - Removed **:VcsAnnotateOff** in favor of invoking **:VcsAnnotate** again to
