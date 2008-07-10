@@ -21,7 +21,7 @@ if [ ! -e "$ECLIPSE" ]; then
   ECLIPSE=`which eclipse 2> /dev/null`
 fi
 if [ ! -e "$ECLIPSE" ]; then
-  ECLIPSE=`which eclipse-3.3 2> /dev/null`
+  ECLIPSE=`which eclipse-3.4 2> /dev/null`
 fi
 
 if [ ! -e "$ECLIPSE" ]; then
