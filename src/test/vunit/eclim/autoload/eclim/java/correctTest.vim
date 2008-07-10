@@ -50,15 +50,9 @@ function! TestCorrect ()
   call VUAssertTrue(search("Import 'ArrayList' (java.util)"),
     \ 'Required correction not found.')
 
-  call cursor(16, 1)
+  call cursor(11, 1)
   exec "normal \<cr>"
   call PeekRedir()
-
-  let lines = readfile(expand('%'))
-  call PeekRedir()
-  for line in lines
-    echom '|' . line
-  endfor
 
   call VUAssertTrue(search('^import java\.'),
     \ 'Correction not applied.')
