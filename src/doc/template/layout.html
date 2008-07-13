@@ -69,7 +69,7 @@
             </li>
           </ul>
         </div>
-        {#<div class="sidebaritem">
+        <div class="sidebaritem">
           {% if current_page_name != "search" %}
             <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} search</h3>
             <form class="search" action="{{ pathto('search') }}" method="get">
@@ -81,7 +81,7 @@
             <p style="font-size: 90%">Enter a module, class or function name.</p>
             {% endif %}
           {% endif %}
-        </div>#}
+        </div>
       </div>
     </div>
 {%- endmacro %}
@@ -130,6 +130,7 @@
           {%- if customsidebar %}
           {{ rendertemplate(customsidebar) }}
           {%- endif %}
+{#
           {%- block sidebarsearch %}
           {%- if pagename != "search" %}
             <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} search</h3>
@@ -143,6 +144,7 @@
             {%- endif %}
           {%- endif %}
           {%- endblock %}
+#}
         </div>
       </div>
       {%- endif %}
