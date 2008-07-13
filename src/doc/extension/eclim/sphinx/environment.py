@@ -27,7 +27,9 @@ class EclimBuildEnvironment (BuildEnvironment):
     self.main_tocs = {}
     BuildEnvironment.__init__(self, *args, **kwargs)
 
-  def get_and_resolve_doctree(self, docname, builder, doctree=None):
+
+  def get_and_resolve_doctree(self, docname, builder, doctree=None,
+                              prune_toctrees=True):
     """
     Copied from BuildEnvironment. Changes Noted.
     """
@@ -38,70 +40,32 @@ class EclimBuildEnvironment (BuildEnvironment):
     self.resolve_references(doctree, docname, builder)
 
     # now, resolve all toctree nodes
-    def _entries_from_toctree(toctreenode, separate=False):
-      """Return TOC entries for a toctree node."""
-      includefiles = map(str, toctreenode['includefiles'])
-
-      entries = []
-      for includefile in includefiles:
-        try:
-          toc = self.tocs[includefile].deepcopy()
-        except KeyError:
-          # this is raised if the included file does not exist
-          self.warn(docname, 'toctree contains ref to nonexisting '
-                    'file %r' % includefile)
-        else:
-          # resolve all sub-toctrees
-          for toctreenode in toc.traverse(addnodes.toctree):
-            i = toctreenode.parent.index(toctreenode) + 1
-            for item in _entries_from_toctree(toctreenode):
-              toctreenode.parent.insert(i, item)
-              i += 1
-            toctreenode.parent.remove(toctreenode)
-          if separate:
-            entries.append(toc)
-          else:
-            entries.extend(toc.children)
-      return entries
-
-    for toctreenode in doctree.traverse(addnodes.toctree):
 # EV: remove inline site toc
-      #maxdepth = toctreenode.get('maxdepth', -1)
-      #titleoverrides = toctreenode.get('includetitles', {})
-      #tocentries = _entries_from_toctree(toctreenode, separate=True)
-      #if tocentries:
-      #  newnode = addnodes.compact_paragraph('', '', *tocentries)
-      #  # prune the tree to maxdepth and replace titles
-      #  if maxdepth > 0:
-      #    _walk_depth(newnode, 1, maxdepth, titleoverrides)
-      #  # replace titles, if needed
-      #  if titleoverrides:
-      #    for refnode in newnode.traverse(nodes.reference):
-      #      if refnode.get('anchorname', None):
-      #        continue
-      #      if refnode['refuri'] in titleoverrides:
-      #        newtitle = titleoverrides[refnode['refuri']]
-      #        refnode.children = [nodes.Text(newtitle)]
-      #  toctreenode.replace_self(newnode)
-      #else:
-      toctreenode.replace_self([])
-
-    # set the target paths in the toctrees (they are not known
-    # at TOC generation time)
-    for node in doctree.traverse(nodes.reference):
-      if node.hasattr('anchorname'):
-        # a TOC reference
-        node['refuri'] = builder.get_relative_uri(
-            docname, node['refuri']) + node['anchorname']
+    #for toctreenode in doctree.traverse(addnodes.toctree):
+    #  result = self.resolve_toctree(docname, builder, toctreenode,
+    #                                prune=prune_toctrees)
+    #  if result is None:
+    #    toctreenode.replace_self([])
+    #  else:
+    #    toctreenode.replace_self(result)
+# EV: end remove inline site toc
 
     return doctree
 
 
   def build_toc_from(self, docname, document):
-    """Build a TOC from the doctree and store it in the inventory."""
+    """
+    Copied from BuildEnvironment. Changes Noted
+    """
     numentries = [0] # nonlocal again...
 
-    def build_toc (node, main=False, title_visited=False):
+    try:
+      maxdepth = int(self.metadata[docname].get('tocdepth', 0))
+    except ValueError:
+      maxdepth = 0
+
+# EV: added args 'main' and 'title_visited'
+    def build_toc(node, depth=1, main=False, title_visited=False):
       entries = []
       for subnode in node:
         if isinstance(subnode, addnodes.toctree):
@@ -112,10 +76,12 @@ class EclimBuildEnvironment (BuildEnvironment):
           # do the inventory stuff
           self.note_toctree(docname, subnode)
           continue
-        if not isinstance(subnode, nodes.section) or (title_visited and main):
+# EV: added or condition on 'main' and 'title_visited'
+        if not isinstance(subnode, nodes.section) or (main and title_visited):
           continue
         title = subnode[0]
-        title_visited = True
+# EV: set title_visited = True
+#        title_visited = True
         # copy the contents of the section title, but without references
         # and unnecessary stuff
         visitor = SphinxContentsFilter(document)
@@ -129,23 +95,26 @@ class EclimBuildEnvironment (BuildEnvironment):
           anchorname = '#' + subnode['ids'][0]
         numentries[0] += 1
         reference = nodes.reference('', '', refuri=docname,
-            anchorname=anchorname, *nodetext)
+                                    anchorname=anchorname,
+                                    *nodetext)
         para = addnodes.compact_paragraph('', '', reference)
         item = nodes.list_item('', para)
-        item += build_toc(subnode, main=main, title_visited=True)
+        if maxdepth == 0 or depth < maxdepth:
+# EV: set 'main' and 'title_visited' args
+          item += build_toc(subnode, depth+1, main=main, title_visited=True)
         entries.append(item)
       if entries:
         return nodes.bullet_list('', *entries)
       return []
 
-    # EV: main toc
+# EV: main toc
     main_toc = build_toc(document, main=True)
     if main_toc:
       self.main_tocs[docname] = main_toc
     else:
       self.main_tocs[docname] = nodes.bullet_list('')
+# EV: end main toc
 
-    # page toc
     toc = build_toc(document)
     if toc:
       self.tocs[docname] = toc

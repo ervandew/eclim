@@ -19,14 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from os import path
 
 from docutils import nodes
-from docutils.io import StringOutput
 
 from eclim.pygments import GroovyLexer
 from eclim.sphinx.environment import EclimBuildEnvironment
 
 from sphinx import addnodes, highlighting
 from sphinx.builder import StandaloneHTMLBuilder, ENV_PICKLE_FILENAME
-from sphinx.util import relative_uri
 from sphinx.util.console import bold
 
 class EclimBuilder (StandaloneHTMLBuilder):
@@ -46,17 +44,17 @@ class EclimBuilder (StandaloneHTMLBuilder):
       return
     if not self.freshenv:
       try:
-          self.info(bold('trying to load pickled env... '), nonl=True)
-          self.env = EclimBuildEnvironment.frompickle(
-              path.join(self.doctreedir, ENV_PICKLE_FILENAME))
-          self.info('done')
+        self.info(bold('trying to load pickled env... '), nonl=True)
+        self.env = EclimBuildEnvironment.frompickle(self.config,
+          path.join(self.doctreedir, ENV_PICKLE_FILENAME))
+        self.info('done')
       except Exception, err:
-          if type(err) is IOError and err.errno == 2:
-              self.info('not found')
-          else:
-              self.info('failed: %s' % err)
-          self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
-          self.env.find_files(self.config)
+        if type(err) is IOError and err.errno == 2:
+          self.info('not found')
+        else:
+          self.info('failed: %s' % err)
+        self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
+        self.env.find_files(self.config)
     else:
       self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
       self.env.find_files(self.config)
@@ -80,53 +78,51 @@ class EclimBuilder (StandaloneHTMLBuilder):
       self, build_docnames, updated_docnames, method=method
     )
 
-  def write_doc(self, docname, doctree):
-    """
-    Direct copy from StandaloneHTMLBuilder.  Changes noted.
-    """
-    destination = StringOutput(encoding='utf-8')
-    doctree.settings = self.docsettings
-
-    self.imgpath = relative_uri(self.get_target_uri(docname), '_images')
-    self.docwriter.write(doctree, destination)
-    self.docwriter.assemble_parts()
-
+  def get_doc_context(self, docname, body):
+    """Collect items for the template context of a page."""
+    # find out relations
     prev = next = None
     parents = []
-    related = self.env.toctree_relations.get(docname)
+    rellinks = self.globalcontext['rellinks'][:]
+    related = self.relations.get(docname)
     titles = self.env.titles
-    if related:
+# EV: don't include next/prev rellinks
+#    if related and related[2]:
+#      try:
+#        next = {'link': self.get_relative_uri(docname, related[2]),
+#                'title': self.render_partial(titles[related[2]])['title']}
+#        rellinks.append((related[2], next['title'], 'N', 'next'))
+#      except KeyError:
+#        next = None
+#    if related and related[1]:
+#      try:
+#        prev = {'link': self.get_relative_uri(docname, related[1]),
+#                'title': self.render_partial(titles[related[1]])['title']}
+#        rellinks.append((related[1], prev['title'], 'P', 'previous'))
+#      except KeyError:
+#        # the relation is (somehow) not in the TOC tree, handle that gracefully
+#        prev = None
+    while related and related[0]:
       try:
-        prev = {'link': self.get_relative_uri(docname, related[1]),
-                'title': self.render_partial(titles[related[1]])['title']}
+        parents.append(
+            {'link': self.get_relative_uri(docname, related[0]),
+             'title': self.render_partial(titles[related[0]])['title']})
       except KeyError:
-        # the relation is (somehow) not in the TOC tree, handle that gracefully
-        prev = None
-      try:
-        next = {'link': self.get_relative_uri(docname, related[2]),
-                'title': self.render_partial(titles[related[2]])['title']}
-      except KeyError:
-        next = None
-    while related:
-        try:
-          parents.append(
-              {'link': self.get_relative_uri(docname, related[0]),
-               'title': self.render_partial(titles[related[0]])['title']})
-        except KeyError:
-          pass
-        related = self.env.toctree_relations.get(related[0])
+        pass
+      related = self.relations.get(related[0])
     if parents:
       parents.pop() # remove link to the master file; we have a generic
-                    # "back to index" link already
+                      # "back to index" link already
     parents.reverse()
 
+    # title rendered as HTML
     title = titles.get(docname)
-    if title:
-      title = self.render_partial(title)['title']
-    else:
-      title = ''
-    self.globalcontext['titles'][docname] = title
+    title = title and self.render_partial(title)['title'] or ''
+    # the name for the copied source
     sourcename = self.config.html_copy_source and docname + '.txt' or ''
+
+    # metadata for the document
+    meta = self.env.metadata.get(docname)
 
 # EV: genterate a 'main' toc for the current page.
     main_tocs = []
@@ -149,24 +145,21 @@ class EclimBuilder (StandaloneHTMLBuilder):
       main_tocs.append(self.render_partial(entries)['fragment'])
 # EV: end main toc
 
-    ctx = dict(
-      title = title,
-      sourcename = sourcename,
-      body = self.docwriter.parts['fragment'],
-# EV: new main_toc
-      main_tocs = main_tocs,
-# EV: change 'toc' to 'page_toc'
-      page_toc = self.render_partial(self.env.get_toc_for(docname))['fragment'],
-      # only display a TOC if there's more than one item to show
-# EV: change 'display_toc' to 'display_page_toc'
-      display_page_toc = (self.env.toc_num_entries[docname] > 1),
+    return dict(
       parents = parents,
       prev = prev,
       next = next,
+      title = title,
+      meta = meta,
+      body = body,
+      rellinks = rellinks,
+      sourcename = sourcename,
+# EV: new main_toc
+      main_tocs = main_tocs,
+      toc = self.render_partial(self.env.get_toc_for(docname))['fragment'],
+      # only display a TOC if there's more than one item to show
+      display_toc = (self.env.toc_num_entries[docname] > 1),
     )
-
-    self.index_page(docname, doctree, title)
-    self.handle_page(docname, ctx)
 
   def _entries_from_toctree (self, docname, toctreenode, top=True):
     """
