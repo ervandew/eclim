@@ -135,27 +135,27 @@
   <target name="plugin">
     <property name="build.installer.plugins"
         value="${build.installer}/eclipse/plugins"/>
+    <property name="plugin" value="org.eclim.${plugin.name}_${eclim.version}"/>
     <mkdir dir="${build.installer.plugins}"/>
 
-    <copy todir="${build.installer.plugins}">
-      <fileset dir="src/eclipse/plugins/"
-          includes="org.eclim.${plugin.name}/**/*"/>
+    <copy todir="${build.installer.plugins}/${plugin}">
+      <fileset dir="src/eclipse/plugins/org.eclim.${plugin.name}"
+          includes="**/*"/>
     </copy>
 
-    <replace dir="${build.installer.plugins}/org.eclim.${plugin.name}"
+    <replace dir="${build.installer.plugins}/${plugin}"
         includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
     </replace>
 
-    <jar jarfile="${build.installer.plugins}/org.eclim.${plugin.name}/eclim.${plugin.name}.jar">
+    <jar jarfile="${build.installer.plugins}/${plugin}/eclim.${plugin.name}.jar">
       <fileset dir="${build.installer}/formic/classes">
         <include name="${classes.include}"/>
       </fileset>
     </jar>
     <tar compression="gzip"
         destfile="${build.installer}/org.eclim.${plugin.name}.tar.gz">
-      <tarfileset dir="${build.installer.plugins}"
-          includes="org.eclim.${plugin.name}/**/*"/>
+      <tarfileset dir="${build.installer.plugins}" includes="${plugin}/**/*"/>
     </tar>
   </target>
 

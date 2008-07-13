@@ -51,11 +51,11 @@ public abstract class Command
     if (Os.isFamily("windows")){
       this.cmd = new String[cmd.length + 1];
       this.cmd[0] = Installer.getProject().replaceProperties(
-          "${eclipse.home}/plugins/org.eclim.installer/bin/install.bat");
+          "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install.bat");
     }else{
       this.cmd = new String[cmd.length + (to != null ? 3 : 1)];
       this.cmd[0] = Installer.getProject().replaceProperties(
-          "${eclipse.plugins}/org.eclim.installer/bin/install");
+          "${eclipse.plugins}/org.eclim.installer_${eclim.version}/bin/install");
       this.cmd[this.cmd.length - 2] = "-to";
       this.cmd[this.cmd.length - 1] = to;
     }

@@ -170,16 +170,18 @@ public class EclipsePluginsStep
         {
           extractInstallerPlugin();
           EclipseInfo info = getEclipseInfo();
-          String home = (String)Installer.getContext().getValue("eclipse.home");
-          String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
-          if(plugins.indexOf(home) == -1){
-            if(plugins.endsWith("/")){
-              plugins = plugins.substring(0, plugins.length() - 1);
-            }
-            File site = new File(FilenameUtils.getFullPath(plugins));
-            if (!info.getSites().contains(site)){
-              overallLabel.setText("Add local site to eclipse sites...");
-              addSite(site.getAbsolutePath());
+          if (!Os.isFamily("windows")){
+            String home = (String)Installer.getContext().getValue("eclipse.home");
+            String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
+            if(plugins.indexOf(home) == -1){
+              if(plugins.endsWith("/")){
+                plugins = plugins.substring(0, plugins.length() - 1);
+              }
+              File site = new File(FilenameUtils.getFullPath(plugins));
+              if (!info.getSites().contains(site)){
+                overallLabel.setText("Add local site to eclipse sites...");
+                addSite(site.getAbsolutePath());
+              }
             }
           }
           return info;
@@ -275,11 +277,12 @@ public class EclipsePluginsStep
     untar.setProject(Installer.getProject());
     untar.execute();
 
-    // on unix based systems, chmod the install sh file.
+    // on unix based systems, set the eclipse home and chmod the install sh
+    // file.
     if (!Os.isFamily("windows")){
       File installScript = new File(
           Installer.getProject().replaceProperties(
-            "${eclipse.plugins}/org.eclim.installer/bin/install"));
+            "${eclipse.plugins}/org.eclim.installer_${eclim.version}/bin/install"));
       Replace replace = new Replace();
       replace.setTaskName("replace");
       replace.setFile(installScript);
