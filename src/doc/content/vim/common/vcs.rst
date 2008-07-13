@@ -82,7 +82,7 @@ Vcs Web Commands
 
 The following list of commands are similar to those above, but instead of
 opening a local buffer, these commands all open a url in the browser so that
-you can use your favorite vcs web front end (viewvc, trace, etc.).
+you can use your favorite vcs web front end (viewvc, trac, etc.).
 
 .. _VcsWebLog:
 
@@ -133,8 +133,9 @@ Eclim Settings
 
     .. note::
 
-      Currenlty redmine is only partially supported with mercial since it uses
-      local revision numbers instead of the universal change set ids.
+      Currenlty redmine is only partially supported with mercurial since
+      redmine uses local revision numbers instead of the universal change set
+      ids.
 
   Ex. An example using viewvc.
 
