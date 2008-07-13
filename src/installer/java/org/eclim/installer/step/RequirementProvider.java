@@ -19,6 +19,10 @@ package org.eclim.installer.step;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +37,9 @@ import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
 
-import org.formic.wizard.step.gui.RequirementsValidationStep;
 import org.formic.wizard.step.gui.RequirementsValidationStep.*;
+
+import org.formic.wizard.step.gui.RequirementsValidationStep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,12 +103,36 @@ public class RequirementProvider
       eclipseHome = eclipseHome.replace('\\', '/');
       // probably a better way
       File file = new File(eclipseHome + "/readme/readme_eclipse.html");
-      if (!file.exists()){
-        logger.error(
-            "Error checking eclipse version. File does not exist: ", file);
+      String version = null;
+      if (file.exists()){
+        version = versionFromReadme(file);
+      }
+
+      if (version == null){
+        version = versionFromPlugins(eclipseHome);
+      }
+
+      if (version == null){
         return new Status(
             WARN, Installer.getString("eclipse.validation.failed"));
       }
+
+      String[] parts = StringUtils.split(version, '.');
+      int major = Integer.parseInt(parts[0]);
+      int minor = Integer.parseInt(parts[1]);
+      int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+
+      if(major < 3 || minor < 4 || patch < 0){
+        return new Status(FAIL,
+            Installer.getString(
+              "eclipse.version.invalid", version, "3.4.x (Ganymede)"));
+      }
+
+      return OK_STATUS;
+    }
+
+    public String versionFromReadme (File file)
+    {
       BufferedReader reader = null;
       try{
         reader = new BufferedReader(new FileReader(file));
@@ -112,28 +141,48 @@ public class RequirementProvider
           line = reader.readLine();
           Matcher matcher = VERSION.matcher(line);
           if (matcher.matches()){
-            String version = matcher.group(1);
-            String[] parts = StringUtils.split(version, '.');
-            int major = Integer.parseInt(parts[0]);
-            int minor = Integer.parseInt(parts[1]);
-            int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-
-            if(major < 3 || minor < 4 || patch < 0){
-              return new Status(FAIL,
-                  Installer.getString(
-                    "eclipse.version.invalid", version, "3.4.x (Ganymede)"));
-            }
-            break;
+            return matcher.group(1);
           }
         }
       }catch(Exception e){
         logger.error("Error checking eclipse version.", e);
-        return new Status(
-            WARN, Installer.getString("eclipse.validation.failed"));
       }finally{
         IOUtils.closeQuietly(reader);
       }
-      return OK_STATUS;
+      logger.warn(
+          "Error checking eclipse version via readme. File does not exist: ", file);
+      return null;
+    }
+
+    public String versionFromPlugins (String eclipseHome)
+    {
+      final String[] plugins = {"org.eclipse.osgi", "org.eclipse.swt"};
+      File file = new File(eclipseHome + "/plugins");
+      String[] names = file.list(new FilenameFilter(){
+        public boolean accept (File dir, String name){
+          for (int ii = 0; ii < plugins.length; ii++){
+            if (name.contains(plugins[ii])){
+              return true;
+            }
+          }
+          return false;
+        }
+      });
+
+      ArrayList<String> versions = new ArrayList<String>();
+      for (int ii = 0; ii < names.length; ii++){
+        String version = StringUtils.split(names[ii], '_')[1];
+        version = version.replaceFirst("([0-9.]+).*", "$1");
+        version = version.replaceFirst("\\.$", "");
+        versions.add(version);
+      }
+      if (versions.size() > 0){
+        Collections.sort(versions);
+        return versions.get(versions.size() - 1);
+      }
+      logger.warn(
+          "Error checking eclipse version via plugins.");
+      return null;
     }
   }
 
