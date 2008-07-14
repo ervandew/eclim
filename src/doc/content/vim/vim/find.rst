@@ -21,43 +21,43 @@ Vim Find
 When working on Vim scripts, eclim provides a set of commands for finding user
 defined commands, functions, and global variables.
 
-.. _FindCommandDef:
+.. _\:FindCommandDef:
 
 - **:FindCommandDef [command]** -
   Finds the definition of the supplied command name or command name under the
   cursor.
 
-.. _FindCommandRef:
+.. _\:FindCommandRef:
 
 - **:FindCommandRef [command]** -
   Finds references of the supplied command name or command name under the
   cursor.
 
-.. _FindFunctionDef:
+.. _\:FindFunctionDef:
 
 - **:FindFunctionDef [function]** -
   Finds the definition of the supplied function name or function name under the
   cursor.
 
-.. _FindFunctionRef:
+.. _\:FindFunctionRef:
 
 - **:FindFunctionRef [function]** -
   Finds references of the supplied function name or function name under the
   cursor.
 
-.. _FindVariableDef:
+.. _\:FindVariableDef:
 
 - **:FindVariableDef [variable]** -
   Finds the definition of the supplied global variable name or variable name
   under the cursor.
 
-.. _FindVariableRef:
+.. _\:FindVariableRef:
 
 - **:FindVariableRef [variable]** -
   Finds references of the supplied global variable name or variable name under
   the cursor.
 
-.. _FindByContext:
+.. _\:FindByContext:
 
 - **:FindByContext** -
   Performs the appropriate search for the element under the cursor based on its
@@ -78,7 +78,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimVimFindSingleResult:
+.. _g\:EclimVimFindSingleResult:
 
 - **g:EclimVimFindSingleResult** (Default: 'split') -
   Determines what action to take when a only a single result is found.
@@ -89,7 +89,7 @@ Vim Variables
   - 'edit' - open the result in the current window.
   - 'lopen' - open the location list to display the result.
 
-.. _EclimVimPaths:
+.. _g\:EclimVimPaths:
 
 - **g:EclimVimPaths** (Default: &runtimepath) -
   Comma seperated list of paths to recursively search.  Defaults to your systems

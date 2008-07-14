@@ -18,7 +18,7 @@
 Regex Testing
 =============
 
-.. _JavaRegex:
+.. _\:JavaRegex:
 
 Eclim provides a means to test java regular expressions.  Simply execute
 **:JavaRegex** and a Vim window will open allowing you to test your regular
@@ -56,11 +56,11 @@ already defined by Vim.
 The regex window also provides two commands to jump to the next or previous
 match much like 'n' or 'N' for Vim searching\:
 
-.. _NextMatch:
+.. _\:NextMatch:
 
 - **:NextMatch** - Jump to the next match.
 
-.. _PreMatch:
+.. _\:PreMatch:
 
 - **:PrevMatch** - Jump to the previous match.
 
@@ -70,27 +70,27 @@ Configuration
 
 Vim Variables
 
-.. _EclimRegexHi_0:
+.. _g\:EclimRegexHi_0:
 
 - **g:EclimRegexHi{0}** (Default: 'Constant') -
   The first highlighting group used for full regex matches.
 
-.. _EclimRegexHi_1:
+.. _g\:EclimRegexHi_1:
 
 - **g:EclimRegexHi{1}** (Default: 'MoreMsg') -
   The second highlighting group used for full regex matches.
 
-.. _EclimRegexGroupHi_0:
+.. _g\:EclimRegexGroupHi_0:
 
 - **g:EclimRegexGroupHi{0}** (Default: 'Statement') -
   The first highlighting group used for group matches.
 
-.. _EclimRegexGroupHi_1:
+.. _g\:EclimRegexGroupHi_1:
 
 - **g:EclimRegexGroupHi{1}** (Default: 'Todo') -
   The second highlighting group used for group matches.
 
-.. _eclim_regex_type:
+.. _b\:eclim_regex_type:
 
 - **b:eclim_regex_type** (Default: 'file') -
   Possible values: 'file' or 'line'

@@ -28,10 +28,10 @@ Eclim also combines the above validation with
 formed.
 
 If you do not want your web.xml files validated automatically when saved, you
-can set the :ref:`g:EclimWebXmlValidate <eclimwebxmlvalidate>` variable
+can set the :ref:`g:EclimWebXmlValidate <g:eclimwebxmlvalidate>` variable
 described in the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Whether or not auto validation has been enabled, eclim also exposes the command
 **:Validate** to manually execute the validation of the file.
@@ -42,7 +42,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimWebXmlValidate:
+.. _g\:EclimWebXmlValidate:
 
 - **g:EclimWebXmlValidate** (Default: 1) -
   If set to 0, disables validation when saving the file.

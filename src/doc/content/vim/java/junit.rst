@@ -18,9 +18,9 @@
 JUnit
 ======
 
-.. _JUnitExecute:
+.. _\:JUnitExecute:
 
-.. _JUnitResult:
+.. _\:JUnitResult:
 
 Executing test cases and viewing the results.
 ---------------------------------------------
@@ -112,7 +112,7 @@ Eclim Settings
     org.eclim.java.junit.command=Maven -Dtestcase=<testcase_class> test:single
 
 
-.. _JUnitImpl:
+.. _\:JUnitImpl:
 
 Generating test method stubs.
 -----------------------------

@@ -32,7 +32,7 @@ projects from within Vim.
 
   ``:ProjectSettings a_project``
 
-.. _ProjectCreate:
+.. _\:ProjectCreate:
 
 - **:ProjectCreate**
   <folder> [-p <project_name>]
@@ -71,13 +71,13 @@ projects from within Vim.
     :ProjectCreate ~/projects/a_project -n java -d another_project yet_another_project
     :ProjectCreate ~/projects/a_project -n java php -p My\ Project\ Name
 
-.. _ProjectList:
+.. _\:ProjectList:
 
 - **:ProjectList**
 
   Simply echos a list of available projects.
 
-.. _ProjectSettings:
+.. _\:ProjectSettings:
 
 - **:ProjectSettings** [<project>]
 
@@ -93,13 +93,13 @@ projects from within Vim.
   :ref:`settings <vim/settings>` documentation for a description of the
   available settings.
 
-.. _ProjectDelete:
+.. _\:ProjectDelete:
 
 - **:ProjectDelete** <project>
 
   Deletes the project with the specified name.
 
-.. _ProjectRefresh:
+.. _\:ProjectRefresh:
 
 - **:ProjectRefresh** [<project> <project> ...]
 
@@ -109,25 +109,25 @@ projects from within Vim.
   updated by a secondary application, like a version control system (cvs,
   subversion, etc).
 
-.. _ProjectRefreshAll:
+.. _\:ProjectRefreshAll:
 
 - **:ProjectRefreshAll**
 
   Refreshes all projects.
 
-.. _ProjectInfo:
+.. _\:ProjectInfo:
 
 - **:ProjectInfo** [<project>]
 
   Echos info about the current or supplied project.
 
-.. _ProjectOpen:
+.. _\:ProjectOpen:
 
 - **:ProjectOpen** <project>
 
   Opens a closed project.
 
-.. _ProjectClose:
+.. _\:ProjectClose:
 
 - **:ProjectClose** <project>
 
@@ -135,42 +135,42 @@ projects from within Vim.
   projects can reduce the amount of memory used, and may improve performance
   when building projects.
 
-.. _ProjectNatures:
+.. _\:ProjectNatures:
 
 - **:ProjectNatures** [<project>]
 
   Echos list of natures for the supplied project name or for all projects if no
   project name specified.
 
-.. _ProjectNatureAdd:
+.. _\:ProjectNatureAdd:
 
 - **:ProjectNatureAdd** <project> [<nature> ...]
 
   Adds one or more natures to a project. Supports command line completion of
   nature names.
 
-.. _ProjectNatureRemove:
+.. _\:ProjectNatureRemove:
 
 - **:ProjectNatureRemove** <project> [<nature> ...]
 
   Removes one or more natures from a project. Supports command line
   completion of nature names.
 
-.. _ProjectCD:
+.. _\:ProjectCD:
 
 - **:ProjectCD**
 
   Changes the global current working directory to the root directory of the
   current file's project (executes a :cd).
 
-.. _ProjectLCD:
+.. _\:ProjectLCD:
 
 - **:ProjectLCD**
 
   Changes the current working directory of the current window to the root
   directory of the current file's project (executes a :lcd).
 
-.. _ProjectTree:
+.. _\:ProjectTree:
 
 - **:ProjectTree** [<project> <project> ...]
 
@@ -215,13 +215,13 @@ projects from within Vim.
   - **:CD** <dir> -
     Changes the root to the supplied directory.
 
-.. _ProjectsTree:
+.. _\:ProjectsTree:
 
 - **:ProjectsTree**
 
   Similar to **:ProjectTree** but opens a tree containing all projects.
 
-.. _ProjectGrep:
+.. _\:ProjectGrep:
 
 - **:ProjectGrep** /<pattern>/ file_pattern [file_pattern ...]
 
@@ -229,35 +229,35 @@ projects from within Vim.
   current project allowing you to run a project wide grep from any file
   within the project.
 
-.. _ProjectGrepAdd:
+.. _\:ProjectGrepAdd:
 
 - **:ProjectGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
 
   Just like **:ProjectGrep** but using vimgrepadd instead.
 
-.. _ProjectLGrep:
+.. _\:ProjectLGrep:
 
 - **:ProjectLGrep** /<pattern>/ file_pattern [file_pattern ...]
 
   Just like **:ProjectGrep** but using lvimgrep instead.
 
-.. _ProjectLGrepAdd:
+.. _\:ProjectLGrepAdd:
 
 - **:ProjectLGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
 
   Just like **:ProjectGrep** but using lvimgrepadd instead.
 
-.. _ProjectTodo:
+.. _\:ProjectTodo:
 
 - **:ProjectTodo**
 
   Searches all the source files in the project (those with extensions included
-  in :ref:`g:EclimTodoSearchExtensions <eclimtodosearchextensions>`) for the
+  in :ref:`g:EclimTodoSearchExtensions <g:eclimtodosearchextensions>`) for the
   fixme / todo pattern (defined by
-  :ref:`g:EclimTodoSearchPattern <eclimtodosearchpattern>`) and adds all
+  :ref:`g:EclimTodoSearchPattern <g:eclimtodosearchpattern>`) and adds all
   occurances to the current location list.
 
-.. _Todo:
+.. _\:Todo:
 
 - **:Todo**
 
@@ -266,7 +266,7 @@ projects from within Vim.
 Tracker
 -------
 
-.. _TrackerTicket:
+.. _\:TrackerTicket:
 
 - **:TrackerTicket** <ticket_id>
 
@@ -279,7 +279,7 @@ Configuration
 
 Vim Settings
 
-.. _EclimProjectTreeAutoOpen:
+.. _g\:EclimProjectTreeAutoOpen:
 
 - **g:EclimProjectTreeAutoOpen** (Default: 0)
 
@@ -287,7 +287,7 @@ Vim Settings
   sessions or new tabs in existing sessions if the current file is in a
   project.
 
-.. _EclimProjectTreeAutoOpenProjects:
+.. _g\:EclimProjectTreeAutoOpenProjects:
 
 - **g:EclimProjectTreeAutoOpenProjects** (Default: ['CURRENT'])
 
@@ -295,14 +295,14 @@ Vim Settings
   opened.  The special name 'CURRENT' represents the current project of
   the file being loaded in Vim when the tree is auto opened.
 
-.. _EclimProjectTreeTaglistRelation:
+.. _g\:EclimProjectTreeTaglistRelation:
 
 - **g:EclimProjectTreeTaglistRelation** (Default: 'below')
 
   Used to define the relation to the taglist_ window if the taglist_ plugin is
   present.  Valid values include 'below' and 'above'.
 
-.. _EclimProjectTreeWincmd:
+.. _g\:EclimProjectTreeWincmd:
 
 - **g:EclimProjectTreeWincmd**
 
@@ -310,7 +310,7 @@ Vim Settings
   Vim command prepended to the split command used to open the project tree
   window (Ex. 'botright', 'botright vertical', etc.).
 
-.. _EclimProjectTreeContentWincmd:
+.. _g\:EclimProjectTreeContentWincmd:
 
 - **g:EclimProjectTreeContentWincmd**
 
@@ -322,21 +322,21 @@ Vim Settings
   file open in the window to the left or right of the project tree (Ex. 'winc
   h', 'winc l', etc).
 
-.. _EclimProjectTreeWidth:
+.. _g\:EclimProjectTreeWidth:
 
 - **g:EclimProjectTreeWidth**
 
   (Default: Defaults to same width as taglist_ if present, otherwise defaults
   to 30.) Only used if the project tree is to be opened in a vertical window.
 
-.. _EclimProjectTreeHeight:
+.. _g\:EclimProjectTreeHeight:
 
 - **g:EclimProjectTreeHeight**
 
   (Default: Defaults to same height as taglist_ if present, otherwise defaults
   to 10.) Only used if the project tree is to be opened in a horizontal window.
 
-.. _EclimProjectTreeActions:
+.. _g\:EclimProjectTreeActions:
 
 - **g:EclimProjectTreeActions**
 
@@ -353,7 +353,7 @@ Vim Settings
   Map of file patterns to the available actions for opening files that match
   that pattern.
 
-.. _EclimTodoSearchPattern:
+.. _g\:EclimTodoSearchPattern:
 
 - **g:EclimTodoSearchPattern**
 
@@ -365,7 +365,7 @@ Vim Settings
 
   Defines the regex pattern used to identify todo or fixme entries.
 
-.. _EclimTodoSearchExtensions:
+.. _g\:EclimTodoSearchExtensions:
 
 - **g:EclimTodoSearchExtensions**
 
@@ -394,8 +394,8 @@ Eclim Settings
     org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
 
   In addition to being used by :TrackerTicket, this setting is also used in
-  conjunction with :ref:`:VcsLog <vcslog>` and
-  :ref:`:VcsChangeSet <vcschangeset>` to enable linking of ticket ids of the
+  conjunction with :ref:`:VcsLog <:vcslog>` and
+  :ref:`:VcsChangeSet <:vcschangeset>` to enable linking of ticket ids of the
   form #ticket_id (#1234) found in user supplied commit comments.
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273

@@ -18,8 +18,8 @@ History of Changes
 
 .. _1.4.0:
 
-1.4.0 (2008)
---------------------
+1.4.0 (July 13, 2008)
+---------------------
 
 Eclipse:
   - Eclim now requires the latest version of eclipse (Ganymede, 3.4.x).
@@ -37,8 +37,8 @@ Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
 
 Project:
-  - Added :ref:`:Todo <todo>` and :ref:`ProjectTodo <projecttodo>`.
-  - Added :ref:`:TrackerTicket <trackerticket>` for viewing tickets by id in
+  - Added :ref:`:Todo <:todo>` and :ref:`ProjectTodo <:projecttodo>`.
+  - Added :ref:`:TrackerTicket <:trackerticket>` for viewing tickets by id in
     your web based tracking system.
   - Renamed setting ``org.eclim.project.vcs.tracker`` to
     ``org.eclim.project.tracker``.
@@ -57,12 +57,12 @@ Vcs:
     :ref:`:VcsWeb* <vcsweb>` commands
 
 Vim:
-  - Added :ref:`:Only <only>` as
+  - Added :ref:`:Only <:only>` as
     a configurable alternative to vim's :only command.
-  - Added :ref:`:OtherWorkingCopyDiff <otherworkingcopydiff>`,
-    :ref:`:OtherWorkingCopyEdit <otherworkingcopyedit>`,
-    :ref:`:OtherWorkingCopySplit <otherworkingcopysplit>`, and
-    :ref:`:OtherWorkingCopyTabopen <otherworkingcopytabopen>`.
+  - Added :ref:`:OtherWorkingCopyDiff <:otherworkingcopydiff>`,
+    :ref:`:OtherWorkingCopyEdit <:otherworkingcopyedit>`,
+    :ref:`:OtherWorkingCopySplit <:otherworkingcopysplit>`, and
+    :ref:`:OtherWorkingCopyTabopen <:otherworkingcopytabopen>`.
 
 .. _1.3.5:
 
@@ -82,7 +82,7 @@ Html:
 
 Vcs:
   - Added support for limiting the number of log entries returned by
-    :ref:`:VcsLog <vcslog>` (limits to 50 entries by default).
+    :ref:`:VcsLog <:vcslog>` (limits to 50 entries by default).
   - Updated **:VcsLog**, **:VcsChangeSet**, etc.
     to support cvs and hg where applicable.
 
@@ -99,7 +99,7 @@ Bug Fixes:
   - Various other bug fixes.
 
 Eclim:
-  - Added :ref:`:ProjectInfo <projectinfo>`.
+  - Added :ref:`:ProjectInfo <:projectinfo>`.
   - Added an eclim/after directory to vim's runtime path for any user scripts
     to be sourced after eclim.
 
@@ -133,15 +133,15 @@ Bug Fixes:
 
 Eclim:
   - Added commands to view or manipulate project natures:
-    :ref:`:ProjectNatures <projectnatures>`,
-    :ref:`:ProjectNatureAdd <projectnatureadd>`, and
-    :ref:`:ProjectNatureRemove <projectnatureremove>`.
+    :ref:`:ProjectNatures <:projectnatures>`,
+    :ref:`:ProjectNatureAdd <:projectnatureadd>`, and
+    :ref:`:ProjectNatureRemove <:projectnatureremove>`.
 
 Css:
   - Added :ref:`css validation <vim/css/validate>`.
 
 Html:
-  - Added :ref:`:BrowserOpen <browseropen>`
+  - Added :ref:`:BrowserOpen <:browseropen>`
 
 Html / Xml:
   - Added auto completion of end tags when typing '</'.
@@ -149,8 +149,8 @@ Html / Xml:
     **g:EclimSgmlCompleteEndTag** to 0.
 
 Java / Python:
-  - :ref:`**:JavaRegex** <vim/java/regex>` and
-    :ref:`**:PythonRegex** <vim/python/regex>`
+  - :ref:`:JavaRegex <vim/java/regex>` and
+    :ref:`:PythonRegex <vim/python/regex>`
     now support **b:eclim_regex_type** to determine if the
     regex should be applied to the whole sample text at once, or to each
     line individually.
@@ -165,32 +165,32 @@ Javascript:
 Python:
   - Added basic :ref:`python validation <vim/python/validate>` using pyflakes_
     and the python compiler.
-  - Added support for pylint_ using new :ref:`:PyLint <pylint>` command.
+  - Added support for pylint_ using new :ref:`:PyLint <:pylint>` command.
 
 Vcs:
   - Added
-    :ref:`:VcsInfo <vcsinfo>`,
+    :ref:`:VcsInfo <:vcsinfo>`,
     :ViewvcAnnotate, :ViewvcChangeSet, and :ViewvcDiff.
 
 Vcs (subversion):
   - Added
-    :ref:`:VcsLog <vcslog>`,
-    :ref:`:VcsChangeSet <vcschangeset>`,
-    :ref:`:VcsDiff <vcsdiff>`, and
-    :ref:`:VcsCat <vcscat>`.
+    :ref:`:VcsLog <:vcslog>`,
+    :ref:`:VcsChangeSet <:vcschangeset>`,
+    :ref:`:VcsDiff <:vcsdiff>`, and
+    :ref:`:VcsCat <:vcscat>`.
 
 Vim:
   - Added vim :ref:`window maximize and minimize <vim/common/maximize>`
     support.
   - Added an alternate implementation of :ref:`taglist <taglisttoo>`.
-  - Added command :ref:`:Buffers <buffers>`.
+  - Added command :ref:`:Buffers <:buffers>`.
   - Added
-    :ref:`VimgrepRelative <vimgreprelative>`,
-    :ref:`VimgrepAddRelative <vimgrepaddrelative>`,
-    :ref:`LvimgrepRelative <lvimgreprelative>`,
-    :ref:`LvimgrepAddRelative <lvimgrepaddrelative>`,
-    :ref:`CdRelative <cdrelative>`, and
-    :ref:`LcdRelative <lcdrelative>`.
+    :ref:`:VimgrepRelative <:vimgreprelative>`,
+    :ref:`:VimgrepAddRelative <:vimgrepaddrelative>`,
+    :ref:`:LvimgrepRelative <:lvimgreprelative>`,
+    :ref:`:LvimgrepAddRelative <:lvimgrepaddrelative>`,
+    :ref:`:CdRelative <:cdrelative>`, and
+    :ref:`:LcdRelative <:lcdrelative>`.
 
 .. _1.3.1:
 
@@ -227,19 +227,19 @@ Eclim:
     an automatic project refresh.  What this means for you is that any time
     you perform an action that results in any file additions, deletions, or
     changes, like a svn / cvs update, you should issue a
-    :ref:`:ProjectRefresh <projectrefresh>` to ensure that eclipse and eclim
+    :ref:`:ProjectRefresh <:projectrefresh>` to ensure that eclipse and eclim
     are updated with the latest version of the files on disk.
-  - :ref:`:ProjectCreate <projectcreate>` now supports optional -p argument for
+  - :ref:`:ProjectCreate <:projectcreate>` now supports optional -p argument for
     specifying the project name to use.
-  - Created new command :ref:`:ProjectRefreshAll <projectrefreshall>` to
+  - Created new command :ref:`:ProjectRefreshAll <:projectrefreshall>` to
     support refreshing all projects at once, and modified
-    :ref:`:ProjectRefresh <projectrefresh>` to only refresh the current project
+    :ref:`:ProjectRefresh <:projectrefresh>` to only refresh the current project
     if no project names are supplied.
   - Added
-    :ref:`:ProjectGrep <projectgrep>`,
-    :ref:`:ProjectGrepAdd <projectgrepadd>`,
-    :ref:`:ProjectLGrep <projectlgrep>`, and
-    :ref:`:ProjectLGrepAdd <projectlgrepadd>`.
+    :ref:`:ProjectGrep <:projectgrep>`,
+    :ref:`:ProjectGrepAdd <:projectgrepadd>`,
+    :ref:`:ProjectLGrep <:projectlgrep>`, and
+    :ref:`:ProjectLGrepAdd <:projectlgrepadd>`.
   - Added support for buffer local variable
     **b:EclimLocationListFilter** which can contain a list of
     regular expression patterns used to filter location list entries with
@@ -277,29 +277,29 @@ Python:
 
 Django:
   - Added
-    :ref:`:DjangoManage <djangomanage>`,
-    :ref:`:DjangoFind <djangofind>`,
-    :ref:`:DjangoTemplateOpen <djangotemplateopen>`,
-    :ref:`:DjangoViewOpen <djangoviewopen>`, and
-    :ref:`:DjangoContextOpen <djangocontextopen>`.
+    :ref:`:DjangoManage <:djangomanage>`,
+    :ref:`:DjangoFind <:djangofind>`,
+    :ref:`:DjangoTemplateOpen <:djangotemplateopen>`,
+    :ref:`:DjangoViewOpen <:djangoviewopen>`, and
+    :ref:`:DjangoContextOpen <:djangocontextopen>`.
 
 WebXml:
   - Added :ref:`web.xml file validation <vim/java/webxml/validate>`.
 
 Vim:
   - Added
-    :ref:`:ArgsRelative <argsrelative>`,
-    :ref:`:ArgAddRelative <argaddrelative>`,
-    :ref:`:ReadRelative <readrelative>`.
+    :ref:`:ArgsRelative <:argsrelative>`,
+    :ref:`:ArgAddRelative <:argaddrelative>`,
+    :ref:`:ReadRelative <:readrelative>`.
   - Added
-    :ref:`:Sign <sign>`,
-    :ref:`:Signs <signs>`,
-    :ref:`:SignClearUser <signclearuser>`,
-    :ref:`:SignClearAll <signclearall>`.
+    :ref:`:Sign <:sign>`,
+    :ref:`:Signs <:signs>`,
+    :ref:`:SignClearUser <:signclearuser>`,
+    :ref:`:SignClearAll <:signclearall>`.
 
 Vcs:
   - Added
-    :ref:`:VcsAnnotate <vcsannotate>` and :Viewvc.
+    :ref:`:VcsAnnotate <:vcsannotate>` and :Viewvc.
 
 Wsdl:
   - Added :ref:`wsdl validation <vim/wsdl/validate>`.  Requires the

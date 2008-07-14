@@ -34,7 +34,7 @@ the project's include path, and will report any errors via vim's location list
 The following is a list of commands that eclim provides while editing your
 .projectOptions.
 
-.. _NewLibEntry:
+.. _\:NewLibEntry:
 
 - **:NewLibEntry** <dir> [<dir> ...] -
   Adds one or more new entries which reference external source
@@ -47,7 +47,7 @@ The following is a list of commands that eclim provides while editing your
 
   This command supports command completion of directories.
 
-.. _NewProjectEntry:
+.. _\:NewProjectEntry:
 
 - **:NewProjectEntry** <project> [<project> ...] -
   Adds one or more new entries which reference other projects.
@@ -59,7 +59,7 @@ The following is a list of commands that eclim provides while editing your
 
   This command supports command completion of project names.
 
-.. _NewVarEntry:
+.. _\:NewVarEntry:
 
 - **:NewVarEntry** <VAR/file> [<VAR/file> ...] -
   Just like NewLibEntry except an Eclipse "var" entry is created.  When adding
@@ -79,18 +79,18 @@ The following is a list of commands that eclim provides while editing your
   To manage the include path variables, eclim provides the following
   commands.
 
-  .. _VariableList:
+  .. _\:VariableList:
 
   - **:VariableList** -
     Lists all the currently available include path variables and their
     corresponding values.
 
-  .. _VariableCreate:
+  .. _\:VariableCreate:
 
   - **:VariableCreate** <name> <path> -
     Creates or updates the variable with the supplied name.
 
-  .. _VariableDelete:
+  .. _\:VariableDelete:
 
   - **:VariableDelete** <name> -
     Deletes the variable with the supplied name.

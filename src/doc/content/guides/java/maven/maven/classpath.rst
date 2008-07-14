@@ -29,7 +29,7 @@ there after.
   their `online documentation`_.
 
 
-.. _MavenRepo:
+.. _\:MavenRepo:
 
 Initial Setup
 -------------
@@ -47,7 +47,7 @@ project.xml file in vim:
 Updating .classpath
 -------------------
 
-Once you have performed the :ref:`initial setup <mavenrepo>`, updating the
+Once you have performed the :ref:`initial setup <:mavenrepo>`, updating the
 Eclipse ``.classpath`` file is as easy as executing the following at a command
 line\:
 

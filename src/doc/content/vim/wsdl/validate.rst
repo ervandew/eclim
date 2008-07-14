@@ -24,10 +24,10 @@ location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
 If you do not want your wsdl files validated automatically when saved, you can
-set the :ref:`g:EclimWsdlValidate <eclimwsdlvalidate>` variable described in
+set the :ref:`g:EclimWsdlValidate <g:eclimwsdlvalidate>` variable described in
 the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Whether or not auto validation has been enabled, eclim also exposes the command
 **:Validate** to manually execute the validation of the file.
@@ -38,7 +38,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimWsdlValidate:
+.. _g\:EclimWsdlValidate:
 
 - **g:EclimWsdlValidate** (Default: 1) -
   If set to 0, disables validation when saving the file.

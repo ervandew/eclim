@@ -37,10 +37,10 @@ Eclim also combines the above validation with
 formed.
 
 If you do not want your ant files validated automatically when saved, you can
-set the :ref:`g:EclimAntValidate <eclimantvalidate>` variable described in the
+set the :ref:`g:EclimAntValidate <g:eclimantvalidate>` variable described in the
 configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Whether or not auto validation has been enabled, eclim also exposes the command
 **:Validate** to manually execute the validation of the ant file.
@@ -51,7 +51,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimAntValidate:
+.. _g\:EclimAntValidate:
 
 - **g:EclimAntValidate** (Default: 1) -
   If set to 0, disables ant xml validation when saving the file.

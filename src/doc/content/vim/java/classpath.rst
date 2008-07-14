@@ -45,7 +45,7 @@ and variables.
   :ref:`auto update the eclipse classpath <guides/java/ivy/classpath>` when
   saving changes to your ivy.xml.
 
-.. _NewSrcEntry:
+.. _\:NewSrcEntry:
 
 - **:NewSrcEntry** <dir> [<dir> ...] -
   Adds a new entry for one or more source code directories relative to the
@@ -58,7 +58,7 @@ and variables.
   This command supports command completion of directories relative to the
   .classpath file.
 
-.. _NewProjectEntry:
+.. _\:NewProjectEntry:
 
 - **:NewProjectEntry** <project> [<project> ...] -
   Adds a new entry for one or more dependencies on other projects.
@@ -68,7 +68,7 @@ and variables.
 
   This command supports command completion of project names.
 
-.. _NewJarEntry:
+.. _\:NewJarEntry:
 
 - **:NewJarEntry** <file> [<file> ...] -
   Adds a new entry for one or more jar file dependencies.  If the jar file is
@@ -90,7 +90,7 @@ and variables.
       -->
     </classpath>
 
-.. _NewVarEntry:
+.. _\:NewVarEntry:
 
 - **:NewVarEntry** <VAR/file> [<VAR/file> ...] -
   Just like NewJarEntry except an Eclipse "var" entry is created.  When a jar
@@ -126,18 +126,18 @@ and variables.
   To manage the classpath variables, eclim also provides the following
   commands.
 
-  .. _VariableList:
+  .. _\:VariableList:
 
   - **:VariableList** -
     Lists all the currently available classpath variables and their
     corresponding values.
 
-  .. _VariableCreate:
+  .. _\:VariableCreate:
 
   - **:VariableCreate** <name> <path> -
     Creates or updates the variable with the supplied name.
 
-  .. _VariableDelete:
+  .. _\:VariableDelete:
 
   - **:VariableDelete** <name> -
     Deletes the variable with the supplied name.

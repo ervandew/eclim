@@ -29,7 +29,7 @@ there after.
   their `online documentation`_.
 
 
-.. _MvnRepo:
+.. _\:MvnRepo:
 
 Initial Setup
 -------------
@@ -46,7 +46,7 @@ following command which is made available when editing the pom.xml file in vim:
 Updating .classpath
 -------------------
 
-Once you have performed the :ref:`initial setup <mvnrepo>`, updating the
+Once you have performed the :ref:`initial setup <:mvnrepo>`, updating the
 Eclipse ``.classpath`` file is as easy as executing the following at a command
 line\:
 

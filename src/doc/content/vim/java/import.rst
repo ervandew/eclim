@@ -18,7 +18,7 @@
 Automated Imports
 =================
 
-.. _JavaImport:
+.. _\:JavaImport:
 
 The automated import functionality is pretty straightforward.  Simply
 place the cursor over the element to import and issue the command\:
@@ -39,13 +39,13 @@ and one of the following events will occur\:
 In addition to importing elements, the plugin provides two additional
 commands\:
 
-.. _JavaImportSort:
+.. _\:JavaImportSort:
 
 - **:JavaImportSort** -
   Sorts the import statements in alphabetical order with java and javax
   imports first.
 
-.. _JavaImportClean:
+.. _\:JavaImportClean:
 
 - **:JavaImportClean** -
   Removes any un-used import statements.  If the current file is not in an
@@ -59,7 +59,7 @@ Configuration
 
 Vim Variables
 
-.. _JavaImportExclude:
+.. _g\:JavaImportExclude:
 
 - **g:JavaImportExclude** -
   List of patterns to exclude from import results.

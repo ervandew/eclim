@@ -18,7 +18,7 @@
 Java Tools Integration
 ======================
 
-.. _Jps:
+.. _\:Jps:
 
 As of Java 1.5 (Java 5.0), the sun jdk started shipping with some useful tools
 for viewing information about running java processes.  To provide quick and easy

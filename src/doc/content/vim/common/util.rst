@@ -21,7 +21,7 @@ Utility Commands
 The following is a list of utility commands provided by eclim.  These are
 general purpose commands that are useful in and outside the scope of eclim.
 
-.. _LocateFileEdit:
+.. _\:LocateFileEdit:
 
 - **:LocateFileEdit** [file] -
   Locates a file via the following steps\:
@@ -36,138 +36,138 @@ general purpose commands that are useful in and outside the scope of eclim.
   will attempt to extract a file name from the cursor position of the current
   file.  When a file is located, an :edit is invoked to open it.
 
-.. _LocateFileSplit:
+.. _\:LocateFileSplit:
 
 - **:LocateFileSplit** [file] -
   Like **:LocateFileEdit** except open the file with :split.
 
-.. _LocateFileTab:
+.. _\:LocateFileTab:
 
 - **:LocateFileTab** [file] -
   Like **:LocateFileEdit** except open the file with :newtab.
 
-.. _Split:
+.. _\:Split:
 
 - **:Split** file [file ...] -
   Behaves like the 'split' command, but allows multiple files to be supplied.
   Supports '*' and '**' wildcards.
 
-.. _SplitRelative:
+.. _\:SplitRelative:
 
 - **:SplitRelative** file [file ...] -
   Like **:Split** this command provides splitting of multiple files, but this
   command splits files relative to the file in the current buffer. Supports '*'
   and '**' wildcards.
 
-.. _Tabnew:
+.. _\:Tabnew:
 
 - **:Tabnew** file [file ...] -
   Behaves like **:Split**, but issues a :tabnew on each file.  Supports '*' and
   '**' wildcards.
 
-.. _TabnewRelative:
+.. _\:TabnewRelative:
 
 - **:TabnewRelative** file [file ...] -
   Behaves like **:SplitRelative**, but issues a :tabnew on each file. Supports
   '*' and '**' wildcards.
 
-.. _EditRelative:
+.. _\:EditRelative:
 
 - **:EditRelative** file -
   Like **:SplitRelative** except issues an 'edit' and only supports one file at
   a time.
 
-.. _ReadRelative:
+.. _\:ReadRelative:
 
 - **:ReadRelative** file -
   Like **:SplitRelative** except issues a 'read' and only supports one file at a
   time.
 
-.. _ArgsRelative:
+.. _\:ArgsRelative:
 
 - **:ArgsRelative** file_pattern [file_pattern ...] -
   Like **:SplitRelative** except executes 'args'.
 
-.. _ArgAddRelative:
+.. _\:ArgAddRelative:
 
 - **:ArgAddRelative** file_pattern [file_pattern ...] -
   Like **:SplitRelative** except executes 'argadd'.
 
-.. _VimgrepRelative:
+.. _\:VimgrepRelative:
 
 - **:VimgrepRelative** /regex/ file_pattern [ file_pattern ...] -
   Executes :vimgrep relative to the current file.
 
-.. _VimgrepAddRelative:
+.. _\:VimgrepAddRelative:
 
 - **:VimgrepAddRelative** /regex/ file_pattern [ file_pattern ...] -
   Executes :vimgrepadd relative to the current file.
 
-.. _LvimgrepRelative:
+.. _\:LvimgrepRelative:
 
 - **:LvimgrepRelative** /regex/ file_pattern [ file_pattern ...] -
   Executes :lvimgrep relative to the current file.
 
-.. _LvimgrepAddRelative:
+.. _\:LvimgrepAddRelative:
 
 - **:LvimgrepAddRelative** /regex/ file_pattern [ file_pattern ...] -
   Executes :lvimgrepadd relative to the current file.
 
-.. _CdRelative:
+.. _\:CdRelative:
 
 - **:CdRelative** dir -
   Executes :cd relative to the current file.
 
-.. _LcdRelative:
+.. _\:LcdRelative:
 
 - **:LcdRelative** dir -
   Executes :lcd relative to the current file.
 
-.. _DiffLastSaved:
+.. _\:DiffLastSaved:
 
 - **:DiffLastSaved** -
   Performs a diffsplit with the last saved version of the currently modifed
   file.
 
-.. _SwapWords:
+.. _\:SwapWords:
 
 - **:SwapWords** -
   Swaps two words (with cursor placed on the first word).  Supports swapping
   around non-word characters like commas, periods, etc.
 
-.. _Sign:
+.. _\:Sign:
 
 - **:Sign** -
   Toggles adding or removing a vim sign on the current line.
 
-.. _Signs:
+.. _\:Signs:
 
 - **:Signs** -
   Opens a new window containing a list of signs for the current buffer.  Hitting
   <enter> on one of the signs in the list will take you to that sign in the
   corresponding buffer.
 
-.. _SignClearUser:
+.. _\:SignClearUser:
 
 - **:SignClearUser** -
   Removes all vim signs added via :Sign.
 
-.. _SignClearAll:
+.. _\:SignClearAll:
 
 - **:SignClearAll** -
   Removes all vim signs.
 
-.. _QuickFixClear:
+.. _\:QuickFixClear:
 
 - **:QuickFixClear** -
   Removes all entries from the quick fix window.
 
-.. _LocationListClear:
+.. _\:LocationListClear:
 
 - **:LocationListClear** -
   Removes all entries from the location list window.
 
-.. _Buffers:
+.. _\:Buffers:
 
 - **:Buffers** -
   Opens a temporary window with a list of all the currently listed buffers in
@@ -194,7 +194,7 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **g:EclimBuffersSortDirection** (defaults to 'asc')
     Supports one of 'asc' or 'desc'.
 
-.. _Only:
+.. _\:Only:
 
 - **:Only** -
   Alternative for vim's :only command.  The purpose of this command and the
@@ -206,7 +206,7 @@ general purpose commands that are useful in and outside the scope of eclim.
   **g:EclimOnlyExclude** (defaults to
   '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
 
-.. _OtherWorkingCopyDiff:
+.. _\:OtherWorkingCopyDiff:
 
 - **:OtherWorkingCopyDiff** <project> -
   Diffs the current file against the same file in another project (one which
@@ -216,17 +216,17 @@ general purpose commands that are useful in and outside the scope of eclim.
   project names which contain a file with the same relative path as the current
   file: ``:OtherWorkingCopyDiff <tab>``.
 
-.. _OtherWorkingCopyEdit:
+.. _\:OtherWorkingCopyEdit:
 
 - **:OtherWorkingCopyEdit** <project> -
   Like **:OtherWorkingCopyDiff**, except open the file in the current window.
 
-.. _OtherWorkingCopySplit:
+.. _\:OtherWorkingCopySplit:
 
 - **:OtherWorkingCopySplit** <project> -
   Like **:OtherWorkingCopyDiff**, except open the file in a new window.
 
-.. _OtherWorkingCopyTabopen:
+.. _\:OtherWorkingCopyTabopen:
 
 - **:OtherWorkingCopyTabopen** <project> -
   Like **:OtherWorkingCopyDiff**, except open the file in a new tab.

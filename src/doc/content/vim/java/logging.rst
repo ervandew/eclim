@@ -50,7 +50,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimLoggingDisabled:
+.. _g\:EclimLoggingDisabled:
 
 - **g:EclimLoggingDisabled** (Default: 0) -
   If set to a value greater than 0, then this plugin will be disabled.

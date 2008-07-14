@@ -26,7 +26,7 @@ definition of a particular element.
 
   When opening urls, these commands rely on netrw (:help netrw).
 
-.. _DtdDefinition:
+.. _\:DtdDefinition:
 
 - **:DtdDefinition** [<element>] -
   When invoked, this command will attempt to locate the dtd declaration in the
@@ -36,7 +36,7 @@ definition of a particular element.
   supplied, but the cursor is located on an element name when invoke, that
   element name will be used.
 
-.. _XsdDefinition:
+.. _\:XsdDefinition:
 
 - **:XsdDefinition** [<element>] -
   Behaves like **:DtdDefinition** except this command locates and opens the

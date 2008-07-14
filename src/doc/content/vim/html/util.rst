@@ -21,6 +21,6 @@ Html File Utils
 When editing html files eclim provides some utilility commands for your
 convience.
 
-.. _BrowserOpen:
+.. _\:BrowserOpen:
 
 **:BrowserOpen** - Opens the current html file in your configured browser.

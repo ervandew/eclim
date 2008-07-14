@@ -35,7 +35,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimJavaSrcValidate:
+.. _g\:EclimJavaSrcValidate:
 
 - **g:EclimJavaSrcValidate** (Default: 1) -
   If set to 0, disables source code validation.

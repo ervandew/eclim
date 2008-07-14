@@ -23,7 +23,7 @@ cluttered and focusing on a subset of the windows can become difficult.  To help
 solve this issue, eclim ships with a plugin which allows you to maximize one of
 the vim windows, or minimize one or more windows.
 
-.. _MaximizeWindow:
+.. _\:MaximizeWindow:
 
 Maximize
 --------
@@ -36,10 +36,10 @@ will be maximized and the previous window minimized.
 By default some specialty windows will not be minimized, namely the taglist
 window, quick list, location list, eclim project tree, and mini buf explorer.
 Window name patterns to exclude may be added or removed by explicitly setting
-the variable :ref:`g:MaximizeExcludes <maximizeexcludes>`.
+the variable :ref:`g:MaximizeExcludes <g:maximizeexcludes>`.
 
-.. _MinimizeWindow:
-.. _MinimizeRestore:
+.. _\:MinimizeWindow:
+.. _\:MinimizeRestore:
 
 Minimize
 --------
@@ -64,7 +64,7 @@ Configuration
 
 Vim Variables
 
-.. _MaximizeExcludes:
+.. _g\:MaximizeExcludes:
 
 - **g:MaximizeExcludes**
   (Default: '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
@@ -72,7 +72,7 @@ Vim Variables
   Regular expression used to match window buffer names to exclude from
   minimizing.
 
-.. _MaximizeSpecialtyWindowsRestore:
+.. _g\:MaximizeSpecialtyWindowsRestore:
 
 - **g:MaximizeSpecialtyWindowsRestore**
   Setting used to force specialty windows, other than the quickfix and
@@ -94,25 +94,25 @@ Vim Variables
         \ ],
       \ ]
 
-.. _MaximizeMinWinHeight:
+.. _g\:MaximizeMinWinHeight:
 
 - **g:MaximizeMinWinHeight** (Default: 0)
 
   Height that vertically minimized windows will be set to.
 
-.. _MaximizeMinWinWidth:
+.. _g\:MaximizeMinWinWidth:
 
 - **g:MaximizeMinWinWidth** (Default: 0)
 
   Height that horizontally minimized windows will be set to.
 
-.. _MaximizeQuickfixHeight:
+.. _g\:MaximizeQuickfixHeight:
 
 - **g:MaximizeQuickfixHeight** (Default: 10)
 
   Height that the quickfix and location list windows will be kept at.
 
-.. _MaximizeStatusLineEnabled:
+.. _g\:MaximizeStatusLineEnabled:
 
 - **g:MaximizeStatusLineEnabled** (Default: 0)
 

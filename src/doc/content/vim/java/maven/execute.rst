@@ -18,9 +18,9 @@
 Maven Execution
 ===============
 
-.. _Maven:
+.. _\:Maven:
 
-.. _Mvn:
+.. _\:Mvn:
 
 Much like the provided :ref:`ant <vim/java/ant/execute>` execution
 functionality, eclim also provides commands for running maven 1.x or 2.x.
@@ -47,7 +47,7 @@ which perform the following steps\:
 - Execute :make.
 - Restore your previous 'makeprg' and 'errorformat' option settings.
 
-Additionally, if :ref:`g:EclimMakeLCD <eclimmakelcd>` is enabled (which it is
+Additionally, if :ref:`g:EclimMakeLCD <g:eclimmakelcd>` is enabled (which it is
 by default), then the execution of maven will be performed from the current
 buffer's local directory, ensuring that mavens's build file discovery method is
 performed from the buffer's working directory and not your own.

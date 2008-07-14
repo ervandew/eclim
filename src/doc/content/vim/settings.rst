@@ -29,8 +29,8 @@ There are two types of settings available:
   These are settings that reside in your Eclipse workspace and are used to
   control certain aspects of the eclim server's behavior.  These settings
   can be viewed and modified using one of the following commands\:
-  - :ref:`:EclimSettings <eclimsettings>`
-  - :ref:`:ProjectSettings <projectsettings>`
+  - :ref:`:EclimSettings <:eclimsettings>`
+  - :ref:`:ProjectSettings <:projectsettings>`
 
 - **Vim global variable settings.**
 
@@ -102,7 +102,7 @@ Vim global variables
 
 The following is a list of some of the common Vim variables available.
 
-.. _EclimLogLevel:
+.. _g\:EclimLogLevel:
 
 - **g:EclimLogLevel** (Default: 5)
 
@@ -120,31 +120,31 @@ The following is a list of some of the common Vim variables available.
   Each level also has a corresponding variable to set the highlighting group
   used for the text.
 
-  .. _EclimFatalHighlight:
+  .. _g\:EclimFatalHighlight:
 
   - **g:EclimFatalHighlight** (Default: "Error")
 
-  .. _EclimErrorHighlight:
+  .. _g\:EclimErrorHighlight:
 
   - **g:EclimErrorHighlight** (Default: "Error")
 
-  .. _EclimWarningHighlight:
+  .. _g\:EclimWarningHighlight:
 
   - **g:EclimWarningHighlight** (Default: "WarningMsg")
 
-  .. _EclimInfoHighlight:
+  .. _g\:EclimInfoHighlight:
 
   - **g:EclimInfoHighlight** (Default: "Statement")
 
-  .. _EclimDebugHighlight:
+  .. _g\:EclimDebugHighlight:
 
   - **g:EclimDebugHighlight** (Default: "Normal")
 
-  .. _EclimTraceHighlight:
+  .. _g\:EclimTraceHighlight:
 
   - **g:EclimTraceHighlight** (Default: "Normal")
 
-.. _EclimSignLevel:
+.. _g\:EclimSignLevel:
 
 - **g:EclimSignLevel** (Default: 5)
 
@@ -154,14 +154,14 @@ The following is a list of some of the common Vim variables available.
 
   The resulting signs also use the same highlighting variables above.
 
-.. _EclimEchoHighlight:
+.. _g\:EclimEchoHighlight:
 
 - **g:EclimEchoHighlight** (Default: "Statement")
 
   Determines which highlight group will be used for informative
   messages.
 
-.. _EclimBrowser:
+.. _g\:EclimBrowser:
 
 - **g:EclimBrowser** (Default: Dependent on OS)
 
@@ -182,7 +182,7 @@ The following is a list of some of the common Vim variables available.
   Note: The above examples assume that the browser executable is in your path.
   On windows machines they won't be by default, so you will need to add them.
 
-.. _EclimShowCurrentError:
+.. _g\:EclimShowCurrentError:
 
 - **g:EclimShowCurrentError** (Default: 1)
 
@@ -190,7 +190,7 @@ The following is a list of some of the common Vim variables available.
   created that will echo the error associated with the current line if
   any error exists.  Setting this variable to 0 disables this feature.
 
-.. _EclimMakeLCD:
+.. _g\:EclimMakeLCD:
 
 - **g:EclimMakeLCD** (Default: 1)
 

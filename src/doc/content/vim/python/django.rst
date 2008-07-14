@@ -18,7 +18,7 @@
 Django
 ======
 
-.. _DjangoManage:
+.. _\:DjangoManage:
 
 Django manage.py
 ----------------
@@ -44,11 +44,11 @@ Configuration
 
 Vim Variables
 
-.. _EclimPythonInterpreter:
+.. _g\:EclimPythonInterpreter:
 
 - **g:EclimPythonInterpreter** = 'python'
 
-.. _EclimDjangoAdmin:
+.. _g\:EclimDjangoAdmin:
 
 - **g:EclimDjangoAdmin** = 'django-admin.py'
 
@@ -56,7 +56,7 @@ Vim Variables
 Django python support
 ---------------------
 
-.. _DjangoTemplateOpen:
+.. _\:DjangoTemplateOpen:
 
 **Locating templates**
 
@@ -71,7 +71,7 @@ Ex.
   return render_to_response('mytemplates/mytemplate.html', ...)
 
 
-.. _DjangoViewOpen:
+.. _\:DjangoViewOpen:
 
 **Locating views**
 
@@ -87,7 +87,7 @@ Ex.
         (r'^$', 'my_view'),
     )
 
-.. _DjangoContextOpen:
+.. _\:DjangoContextOpen:
 
 **Contextually locate file**
 
@@ -119,12 +119,12 @@ allow proper matchit.vim support for django default and user defined tags.
 
 **End Tag Completion**
 
-Using the :ref:`g:HtmlDjangoUserBodyElements <htmldjangouserbodyelements>`
+Using the :ref:`g:HtmlDjangoUserBodyElements <g:htmldjangouserbodyelements>`
 setting along with the pre-configured default list of body elements, eclim
 includes support for auto completion of ending template tags when you type an
 '{%e' or '{% e'.
 
-.. _DjangoFind:
+.. _\:DjangoFind:
 
 **Contextual Find**
 
@@ -198,7 +198,7 @@ Configuration
 
 Vim Variables
 
-.. _HtmlDjangoUserBodyElements:
+.. _g\:HtmlDjangoUserBodyElements:
 
 - **g:HtmlDjangoUserBodyElements** -
   List of lists, where each list contains the name of the start and end
@@ -218,25 +218,25 @@ Vim Variables
   as arguments for proper matchit support, end tag completion, and
   syntax highlighting.
 
-.. _HtmlDjangoUserTags:
+.. _g\:HtmlDjangoUserTags:
 
 - **g:HtmlDjangoUserTags** -
   This setting is a list of any non-body tags which don't require indentation or
   matchit support.  The items configured here will be used for syntax
   highlighting.
 
-.. _HtmlDjangoUserFilters:
+.. _g\:HtmlDjangoUserFilters:
 
 - **g:HtmlDjangoUserFilters** -
   This settings contains a list of any user defined django filters.  It is
   currently used for syntax highlighting.
 
-.. _HtmlDjangoCompleteEndTag:
+.. _g\:HtmlDjangoCompleteEndTag:
 
 - **g:HtmlDjangoCompleteEndTag** (Default: 1) -
   When set to 0, disables the auto completion of end tags.
 
-.. _EclimDjangoStaticPaths:
+.. _g\:EclimDjangoStaticPaths:
 
 - **g:EclimDjangoStaticPaths** -
   Used as a list of directories to search when looking for static files (js,
@@ -249,7 +249,7 @@ Vim Variables
 
     let g:EclimDjangoStaticPaths = ["../static/"]
 
-.. _EclimDjangoFindAction:
+.. _g\:EclimDjangoFindAction:
 
 - **g:EclimDjangoFindAction** (Default: "split") -
   For **:DjangoFind** and **:DjangoTemplateOpen**, used as the action to perform

@@ -18,7 +18,7 @@
 Vim Doc
 =======
 
-.. _VimDoc:
+.. _\:VimDoc:
 
 To facilitate quick access of Vim help for elements of a Vim script, eclim
 provides the command **:VimDoc**.  When executed it will open the help docs for

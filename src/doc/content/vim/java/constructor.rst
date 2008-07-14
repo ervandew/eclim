@@ -18,7 +18,7 @@
 Class Constructor Generation
 ============================
 
-.. _JavaConstructor:
+.. _\:JavaConstructor:
 
 **:JavaConstructor** is a command that will create either an empty constructor,
 or one that takes any selected fields as arguments.

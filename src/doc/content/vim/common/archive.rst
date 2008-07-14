@@ -53,14 +53,14 @@ Configuration
 
 Vim Variables
 
-.. _EclimArchiveViewerEnabled:
+.. _g\:EclimArchiveViewerEnabled:
 
 - **g:EclimArchiveViewerEnabled** (Default: 1)
 
   When greater than 0, enables the eclim archive viewer (disabling the default
   vim tar and zip plugins).
 
-.. _EclimArchiveLayout:
+.. _g\:EclimArchiveLayout:
 
 - **g:EclimArchiveLayout** (Default: none)
 

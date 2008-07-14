@@ -45,7 +45,7 @@ and install it on a linux machine (your paths may vary)\:
 If you don't want javascript files validated when saving them, you can set the
 g:EclimJavascriptValidate variable described in the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Regardless of whether you have validation enabled upon saving or not, the
 command **:Validate** is available to manually execute the validation.
@@ -56,12 +56,12 @@ Configuration
 
 Vim Variables
 
-.. _EclimJavascriptValidate:
+.. _g\:EclimJavascriptValidate:
 
 - **g:EclimJavascriptValidate** (Default: 1) -
   If set to 0, disables javascript validation when saving the file.
 
-.. _EclimJavascriptLintConf:
+.. _g\:EclimJavascriptLintConf:
 
 - **g:EclimJavascriptLintConf** (Default: '~/.jslrc') -
   Used to set the location of your jsl config file.

@@ -18,7 +18,7 @@
 Delegate Methods
 ================
 
-.. _JavaDelegate:
+.. _\:JavaDelegate:
 
 Eclim supports generation of delegate methods via the **:JavaDelegate** command.
 To utilize this functionality you must first place the cursor on a global field

@@ -25,7 +25,7 @@ errors via Vim's quickfix functionality.
 Eclim utilizes this same paradigm to provide users with ant execution
 functionality from any file without any of the setup required by Vim.
 
-.. _Ant:
+.. _\:Ant:
 
 Eclim provides the following command\:
 
@@ -47,7 +47,7 @@ which performs the following steps\:
 - Executes :make.
 - Restores your previous 'makeprg' and 'errorformat' option settings.
 
-Additionally, if :ref:`g:EclimMakeLCD <eclimmakelcd>` is enabled (which it is
+Additionally, if :ref:`g:EclimMakeLCD <g:eclimmakelcd>` is enabled (which it is
 by default), then the execution of ant will be performed from the current
 buffer's local directory, ensuring that ant's build file discovery method is
 performed from the buffer's working directory and not your own.
@@ -77,7 +77,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimAntCompilerAdditionalErrorFormat:
+.. _g\:EclimAntCompilerAdditionalErrorFormat:
 
 - **g:EclimAntCompilerAdditionalErrorFormat** (Default: '') -
   Since there are many more ant tasks beyond javac, javadoc, etc., eclim

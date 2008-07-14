@@ -35,7 +35,7 @@ Configuration
 
 Vim Variables:
 
-.. _EclimPhpValidate:
+.. _g\:EclimPhpValidate:
 
 - **g:EclimPhpValidate** (Default: 1) -
   If set to 0, disables source code validation.

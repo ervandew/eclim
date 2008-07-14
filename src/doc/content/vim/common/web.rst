@@ -21,7 +21,7 @@ Web Lookup Commands
 Eclim provides a set of commands that allow you to open information in the web
 browser or your choice.
 
-.. _OpenUrl:
+.. _\:OpenUrl:
 
 OpenUrl
 -------
@@ -56,12 +56,12 @@ Configuration
 
 Vim Variables
 
-.. _EclimOpenUrlInVimPatterns:
+.. _g\:EclimOpenUrlInVimPatterns:
 
 - **g:EclimOpenUrlInVimPatterns** (Default: []) -
   Defines a list of url patterns to open in Vim via netrw.
 
-.. _EclimOpenUrlInVimAction:
+.. _g\:EclimOpenUrlInVimAction:
 
 - **g:EclimOpenUrlInVimAction** (Default: 'split') -
   Defines the command used to open files matched by g:EclimOpenUrlInVimPatterns.
@@ -73,7 +73,7 @@ Web Search Commands
 The remaining web lookup commands provide a means for looking up words or
 phrases using some great online tools.
 
-.. _Google:
+.. _\:Google:
 
 - **:Google** [word ...] -
   This command is used to look up a word or phrase on google.com_.  You can
@@ -95,7 +95,7 @@ phrases using some great online tools.
   #.  The second method is to issue the command with no arguments. The
       command will then query google with the word under the cursor.
 
-.. _Clusty:
+.. _\:Clusty:
 
 - **:Clusty** [word ...] -
   This command works just like the **:Google** command except it uses
@@ -105,20 +105,20 @@ phrases using some great online tools.
   are looking for.  It is a great place to go when google returns too many
   results that are difficult to sift through.
 
-.. _Wikipedia:
+.. _\:Wikipedia:
 
 - **:Wikipedia** [word ...] -
   Again this command behaves like the previous two, but instead looks up the
   desired word or phrase on wikipedia.org_, the great online encyclopedia.
 
-.. _Dictionary:
+.. _\:Dictionary:
 
 - **:Dictionary** [word] -
   This command is used to look up a word on dictionary.reference.com_.  You can
   either supply the word to lookup as an argument to the command or it will
   otherwise use the word under the cursor.
 
-.. _Thesaurus:
+.. _\:Thesaurus:
 
 - **:Thesaurus** [word] -
   This command behaves the same as **:Dictionary** but looks up the word via

@@ -31,12 +31,12 @@ make sure it is in your path.
 If you don't want python files validated when saving them, you can set the
 g:EclimPythonValidate variable described in the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Regardless of whether you have validation enabled upon saving or not, the
 command **:Validate** is available to manual validate the file.
 
-.. _PyLint:
+.. _\:PyLint:
 
 **:PyLint** -
 Runs the `pylint tool <http://www.logilab.org/857>`_ on the current file,
@@ -49,7 +49,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimPythonValidate:
+.. _g\:EclimPythonValidate:
 
 - **g:EclimPythonValidate** (Default 1) -
   If set to 0, disables python validation when saving the file.

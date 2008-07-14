@@ -24,10 +24,10 @@ location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
 If you do not want your html files validated automatically when saved, you can
-set the :ref:`g:EclimHtmlValidate <eclimhtmlvalidate>` variable described
+set the :ref:`g:EclimHtmlValidate <g:eclimhtmlvalidate>` variable described
 in the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Whether or not auto validation has been enabled, eclim also exposes
 the command **:Validate** to manually execute the validation of the
@@ -38,7 +38,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimHtmlValidate:
+.. _g\:EclimHtmlValidate:
 
 - **g:EclimHtmlValidate** (Default: 1) -
   If set to 0, disables validation when saving the file.

@@ -21,7 +21,7 @@ Java Search
 Pattern Search
 --------------
 
-.. _JavaSearch:
+.. _\:JavaSearch:
 
 Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command
@@ -110,7 +110,7 @@ element under the cursor will be searched for instead.
 If only one result is found and that result is in the current source file, the
 cursor will be moved to the element found.
 
-.. _JavaSearchContext:
+.. _\:JavaSearchContext:
 
 As a convenience eclim also provides the command **:JavaSearchContext**.  This
 command accepts no arguments and will perform the appropriate search depending
@@ -205,7 +205,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimJavaSearchSingleResult:
+.. _g\:EclimJavaSearchSingleResult:
 
 - **g:EclimJavaSearchSingleResult** -
   Determines what action to take when a only a single result is
@@ -218,7 +218,7 @@ Vim Variables
     - 'tabnew' - open the result in a new tab.
     - 'lopen' - open the location list to display the result.
 
-.. _EclimJavaSearchMapping:
+.. _g\:EclimJavaSearchMapping:
 
 - **g:EclimJavaSearchMapping** -
   When set to 1, <enter> will be mapped to the java search functionality for the

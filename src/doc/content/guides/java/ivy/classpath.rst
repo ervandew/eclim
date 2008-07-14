@@ -24,7 +24,7 @@ the ivy.xml that are not in the ``.classpath`` will be added, any entries that
 differ in version will be updated, and any stale entries deleted.
 
 
-.. _IvyRepo:
+.. _\:IvyRepo:
 
 Initial Setup
 -------------
@@ -50,7 +50,7 @@ command.
 Updating .classpath
 -------------------
 
-Once you have performed the :ref:`initial setup <ivyrepo>`, updating the
+Once you have performed the :ref:`initial setup <:ivyrepo>`, updating the
 Eclipse ``.classpath`` file is as easy as saving your ivy.xml file (:w) and
 letting eclim do the rest.
 
@@ -74,7 +74,7 @@ Ex.
   </classpathentry>
 
 
-.. _IvyDependencySearch:
+.. _\:IvyDependencySearch:
 
 Search Online Maven Repository
 ------------------------------

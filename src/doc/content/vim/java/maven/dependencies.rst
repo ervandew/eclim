@@ -18,9 +18,9 @@
 Maven Dependencies
 ==================
 
-.. _MavenDependencySearch:
+.. _\:MavenDependencySearch:
 
-.. _MvnDependencySearch:
+.. _\:MvnDependencySearch:
 
 Maven provides online repositories where it will download dependencies from at
 build time.  One problem is that finding all your dependencies and then adding

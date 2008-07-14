@@ -134,7 +134,7 @@ mappings there (:help ftplugin-name).
 - Perform a context sensitive search for the element under the cursor
   using <enter>.
 
-  See :ref:`:FindByContext <findbycontext>` for more info.
+  See :ref:`:FindByContext <:findbycontext>` for more info.
 
   .. code-block:: vim
 

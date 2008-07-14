@@ -29,7 +29,7 @@ g:EclimXmlValidate variable described in the configuration section below.
 Regardless of whether you have validation enabled upon saving or not, the
 following command is still available for validating xml files on demand.
 
-.. _Validate:
+.. _\:Validate:
 
 **:Validate** [<file>] -
 Validate the supplied file or the current file if no file name provided.
@@ -44,7 +44,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimXmlValidate:
+.. _g\:EclimXmlValidate:
 
 - **g:EclimXmlValidate** (Defualt: 1) -
   If set to 0, disables xml validation when saving the file.

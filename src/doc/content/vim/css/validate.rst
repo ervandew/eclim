@@ -24,10 +24,10 @@ location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
 If you do not want your css files validated automatically when saved, you can
-set the :ref:`g:EclimCssValidate <eclimcssvalidate>` variable described in
+set the :ref:`g:EclimCssValidate <g:eclimcssvalidate>` variable described in
 the configuration section below.
 
-.. _Validate:
+.. _\:Validate:
 
 Whether or not auto validation has been enabled, eclim also exposes
 the command **:Validate** to manually execute the validation of the
@@ -38,7 +38,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimCssValidate:
+.. _g\:EclimCssValidate:
 
 - **g:EclimCssValidate** (Default: 1) -
   If set to 0, disables validation when saving the file.

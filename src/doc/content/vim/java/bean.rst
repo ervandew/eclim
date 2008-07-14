@@ -22,19 +22,19 @@ Eclim currently provides the ability to generate java bean getters and setters
 from one or more defined fields.
 
 
-.. _JavaGetSet:
+.. _\:JavaGetSet:
 
 - **:JavaGetSet** -
   Generates both getters and setters for the field under the cursor or for
   all fields in the specified range.
 
-.. _JavaGet:
+.. _\:JavaGet:
 
 - **:JavaGet** -
   Generates getters for the field under the cursor or for all fields in
   the specified range.
 
-.. _JavaSet:
+.. _\:JavaSet:
 
 - **:JavaSet** -
   Generates setters for the field under the cursor or for all fields in
@@ -66,7 +66,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimJavaBeanInsertIndexed:
+.. _g\:EclimJavaBeanInsertIndexed:
 
 - **g:EclimJavaBeanInsertIndexed** (Default: 1) -
   When set to a value greater than 0, eclim will insert indexed getters and

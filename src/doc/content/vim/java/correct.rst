@@ -18,7 +18,7 @@
 Java Code Correction
 ====================
 
-.. _JavaCorrect:
+.. _\:JavaCorrect:
 
 Code correction in eclim is equivalent to the quick fix functionality of
 Eclipse. When you save a java source file, eclim

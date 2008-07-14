@@ -18,11 +18,11 @@
 Ant Documentation Lookup
 ========================
 
-.. _AntDoc:
+.. _\:AntDoc:
 
 When editing an ant build file eclim defines a command named **:AntDoc** which
 will attempt to lookup and open in your
-:ref:`configured browser <eclimbrowser>` the documentation for the element
+:ref:`configured browser <g:eclimbrowser>` the documentation for the element
 under the cursor or, if supplied, the element passed to it.
 
 This command will only lookup element names, not attribute names or values.
@@ -30,7 +30,7 @@ This command will only lookup element names, not attribute names or values.
 By default this plugin is configured to find all the standard ant tasks, types,
 etc, as well as those defined by the antcontrib_ project.
 
-.. _AntUserDoc:
+.. _\:AntUserDoc:
 
 If you have other tasks that you wish to add to this plugin, you can do so by
 defining the global variable **g:AntUserDocs**.  The value of this variable is

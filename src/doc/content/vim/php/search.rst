@@ -18,7 +18,7 @@
 Php Search
 ==========
 
-.. _PhpFindDefinition:
+.. _\:PhpFindDefinition:
 
 Element Search
 --------------
@@ -30,7 +30,7 @@ element by issuing the command **:PhpFindDefinition**.
 If only one result is found and that result is in the current source file, the
 cursor will be moved to the element found.
 
-.. _PhpSearchContext:
+.. _\:PhpSearchContext:
 
 As a convenience eclim also provides the command **:PhpSearchContext**.  This
 command accepts no arguments and will perform the appropriate search depending
@@ -44,7 +44,7 @@ on the context of the element.
 Pattern Search
 --------------
 
-.. _PhpSearch:
+.. _\:PhpSearch:
 
 Pattern searching provides a means to widen a search beyond a single
 element.  A pattern search can be executed using the command
@@ -90,7 +90,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimPhpSearchSingleResult:
+.. _g\:EclimPhpSearchSingleResult:
 
 - **g:EclimPhpSearchSingleResult** -
   Determines what action to take when a only a single result is found.

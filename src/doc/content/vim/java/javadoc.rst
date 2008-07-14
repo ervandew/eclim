@@ -21,7 +21,7 @@ Javadoc Support
 Commenting
 ----------
 
-.. _JavaDocComment:
+.. _\:JavaDocComment:
 
 Eclim provides the **:JavaDocComment** command which will add or update the
 javadoc comments for the element under the cursor.
@@ -47,7 +47,7 @@ Eclim Settings
 Searching
 ---------
 
-.. _JavaDocSearch:
+.. _\:JavaDocSearch:
 
 Eclim supports searching of javadocs just like you would
 :ref:`search the source code <vim/java/search>`.
@@ -57,7 +57,7 @@ The only difference is that you use **:JavaDocSearch** instead of
 
 The results will be displayed in a window and you can simply hit <enter> on an
 entry to open it using the browser you configured via
-:ref:`g:EclimBrowser <eclimbrowser>`.
+:ref:`g:EclimBrowser <g:eclimbrowser>`.
 
 The locations of the javadocs are determined via your Eclipse project's
 .classpath file.  For each library entry you can define a javadoc attribute that
@@ -77,7 +77,7 @@ Configuration
 
 Vim Variables
 
-.. _EclimJavaDocSearchSingleResult:
+.. _g\:EclimJavaDocSearchSingleResult:
 
 - **g:EclimJavaDocSearchSingleResult** -
   Determines what action to take when only a singe result is found.

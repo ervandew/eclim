@@ -24,7 +24,7 @@ Vcs Commands
 The following is a list of commands that may be execute when viewing a
 file versioned in cvs, subversion, or mercurial (where applicable).
 
-.. _VcsAnnotate:
+.. _\:VcsAnnotate:
 
 - **:VcsAnnotate** -
   This command will run annotate / blame and visually annotate the current file
@@ -36,25 +36,25 @@ file versioned in cvs, subversion, or mercurial (where applicable).
   Running this command on an already annotated file removes all annotations and
   disables the CursorHold event.
 
-.. _VcsInfo:
+.. _\:VcsInfo:
 
 - **:VcsInfo** -
   Echos vcs info about the currently versioned file.
 
-.. _VcsLog:
+.. _\:VcsLog:
 
 - **:VcsLog** -
   Opens a buffer with log information for the current file. In this buffer
   you can perform various operations (diff, annotate, view log for another file,
-  etc.) by hitting <Return> on any of the text links denoted by **|link name|**
-  (ex.  **|annotate|**).
+  etc.) by hitting <Return> on any of the text links denoted by '\|link name\|'
+  (ex.  '\|annotate\|').
 
   By default the number of entries retrieved will be limited to 50 in an effort
   to reduce the latency of retrieving logs for files with a long revision
   history.  This value can be changed via the
-  :ref:`g:EclimVcsLogMaxEntries <eclimvcslogmaxentries>` variable.
+  :ref:`g:EclimVcsLogMaxEntries <g:eclimvcslogmaxentries>` variable.
 
-.. _VcsChangeSet:
+.. _\:VcsChangeSet:
 
 - **:VcsChangeSet** [revision] -
   Opens a buffer with change set information for the supplied repository version
@@ -63,13 +63,13 @@ file versioned in cvs, subversion, or mercurial (where applicable).
   Like **:VcsLog**, this buffer will contain text links which allow you to
   perform other operations.
 
-.. _VcsDiff:
+.. _\:VcsDiff:
 
 - **:VcsDiff** [revision] -
   Performs a vertical diffsplit of the current file against the last committed
   revision of the current file or the revision supplied.
 
-.. _VcsCat:
+.. _\:VcsCat:
 
 - **:VcsCat** [revision] -
   Splits the current file with the contents of the last committed version of the
@@ -84,24 +84,24 @@ The following list of commands are similar to those above, but instead of
 opening a local buffer, these commands all open a url in the browser so that
 you can use your favorite vcs web front end (viewvc, trac, etc.).
 
-.. _VcsWebLog:
+.. _\:VcsWebLog:
 
 - **:VcsWebLog** -
   Opens the log for the currently versioned file in the configured vcs web app.
 
-.. _VcsWebAnnotate:
+.. _\:VcsWebAnnotate:
 
 - **:VcsWebAnnotate** [revision] -
   Opens the annotated view for the currently versioned file in the configured
   vcs web app.
 
-.. _VcsWebChangeSet:
+.. _\:VcsWebChangeSet:
 
 - **:VcsWebChangeSet** [revision] -
   Opens the change set for the currently versioned file in the configured vcs
   web app.
 
-.. _VcsWebDiff:
+.. _\:VcsWebDiff:
 
 - **:VcsWebDiff** [revision] -
   Opens a diff view for the currently versioned file in the configured in the
@@ -113,7 +113,7 @@ Configuration
 
 Vim Settings
 
-.. _EclimVcsLogMaxEntries:
+.. _g\:EclimVcsLogMaxEntries:
 
 - **g:EclimVcsLogMaxEntries (Default: 50)**
   When greater than 0, limits the number of log entries retrieved by

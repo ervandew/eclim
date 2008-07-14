@@ -18,7 +18,7 @@
 Method Override / Impl
 ======================
 
-.. _JavaImpl:
+.. _\:JavaImpl:
 
 This functionality gives you the ability to view all the methods that the
 current source file can implement or override according to what interfaces it

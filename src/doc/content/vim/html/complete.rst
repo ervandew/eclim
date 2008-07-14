@@ -53,12 +53,12 @@ Configuration
 
 Vim Variables
 
-.. _EclimSgmlCompleteEndTag:
+.. _g\:EclimSgmlCompleteEndTag:
 
 - **g:EclimSgmlCompleteEndTag** -
   If set to 0, disables auto completion of end tags.
 
-.. _EclimSgmlCompleteEndTagIgnore:
+.. _g\:EclimSgmlCompleteEndTagIgnore:
 
 - **b:EclimSgmlCompleteEndTagIgnore** -
   Buffer local variable that can be set to a list of tags to ignore when

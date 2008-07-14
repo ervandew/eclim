@@ -39,19 +39,19 @@ commands.  After that, take a look at the docs for
 :ref:`managing projects <vim/common/project>`.  Then feel free to move onto
 the other categories.
 
-.. _PingEclim:
+.. _\:PingEclim:
 
 - **:PingEclim** -
   Pings eclimd to see if it is up and running.
 
-.. _ShutdownEclim:
+.. _\:ShutdownEclim:
 
 - **:ShutdownEclim** -
   Shuts down the current running eclimd instance.
 
-.. _EclimSettings:
+.. _\:EclimSettings:
 
 - **:EclimSettings** -
   Allows you to view / edit the global :ref:`settings <vim/settings>`.
-  For project level settings see the :ref:`:ProjectSettings <projectsettings>`
+  For project level settings see the :ref:`:ProjectSettings <:projectsettings>`
   command on the :ref:`project documentation page <vim/common/project>`.
