@@ -91,9 +91,16 @@
   <!--
     - Generates vim docs from sphinx files.
     -->
-  <!--target name="vimdocs" depends="init"
+  <target name="vimdocs" depends="init"
       description="Builds the vim documentation.">
-  </target-->
+    <property name="sphinx.args" value=""/>
+    <mkdir dir="build/doc/vimdocs"/>
+
+    <!-- generate site documention via sphinx -->
+    <exec executable="sphinx-build" failonerror="true" dir=".">
+      <arg line="${sphinx.args} -b vimdoc src/doc/content build/doc/vimdocs"/>
+    </exec>
+  </target>
 
   <!--
     - Extracts all eclipse doc jars.

@@ -16,6 +16,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @version: $Revision$
 """
+import re
+
 from os import path
 
 from docutils import nodes
@@ -24,7 +26,8 @@ from eclim.pygments import GroovyLexer
 from eclim.sphinx.environment import EclimBuildEnvironment
 
 from sphinx import addnodes, highlighting
-from sphinx.builder import StandaloneHTMLBuilder, ENV_PICKLE_FILENAME
+from sphinx.builder import StandaloneHTMLBuilder, TextBuilder, ENV_PICKLE_FILENAME
+from sphinx.textwriter import TextTranslator, TextWriter
 from sphinx.util.console import bold
 
 class EclimBuilder (StandaloneHTMLBuilder):
@@ -189,6 +192,120 @@ class EclimBuilder (StandaloneHTMLBuilder):
       return addnodes.compact_paragraph('', '', entries)
     return None
 
+
+class VimdocBuilder (TextBuilder):
+  name = 'vimdoc'
+
+  def prepare_writing (self, docnames):
+    """
+    Straight copy from TextBuilder, just using VimdocWriter instead of
+    TextWriter.
+    """
+    self.writer = VimdocWriter(self)
+
+
+class VimdocWriter (TextWriter):
+
+  def translate(self):
+    """
+    Straight copy from TextWriter, just using VimdocTranslator instead of
+    TextTranslator.
+    """
+    visitor = VimdocTranslator(self.document, self.builder)
+    self.document.walkabout(visitor)
+    self.output = visitor.body
+
+# EV: add vim modline
+    self.output = self.output.strip() + '\nvim:ft=help'
+
+
+class VimdocTranslator (TextTranslator):
+
+  TARGET = re.compile(r'(^\.\.\s+_|\\|:$)')
+
+  def depart_image (self, node):
+    """
+    Missing from sphinx's text translator and results in errors when ommitted.
+    """
+    pass
+
+  def depart_list_item(self, node):
+    """
+    Straight copy, just change the leading '*' to a '-'.
+    """
+    if self._list_counter == -1:
+      self.end_state(first='- ', end=None)
+    elif self._list_counter == -2:
+      pass
+    else:
+      self.end_state(first='%s. ' % self._list_counter, end=None)
+
+  def visit_reference(self, node):
+    if node.children and isinstance(node.children[0], nodes.emphasis):
+      em = node.children[0]
+      value = unicode(em.children[0].data)
+      if value.startswith(':') or value.startswith('g:') or value.startswith('org.'):
+        self.add_text('|')
+  def depart_reference(self, node):
+    if node.children and isinstance(node.children[0], nodes.emphasis):
+      em = node.children[0]
+      value = unicode(em.children[0].data)
+      if value.startswith(':') or value.startswith('g:') or value.startswith('org.'):
+        self.add_text('|')
+      else:
+        value = node.attributes.get('refuri')
+        if value:
+          if value.startswith('#'):
+            value = value[1:]
+          self.add_text(' (|%s|)' % value)
+
+  def visit_target(self, node):
+    refid = node.attributes.get('refid')
+    if refid:
+      value = VimdocTranslator.TARGET.sub('', node.rawsource)
+      self.add_text('*%s' % value)
+  def depart_target(self, node):
+    refid = node.attributes.get('refid')
+    if refid:
+      self.add_text('*')
+
+  #def visit_index(self, node):
+  #  raise nodes.SkipNode
+
+  def visit_literal_block(self, node):
+    self.add_text('\n>')
+    self.new_state()
+  def depart_literal_block(self, node):
+    self.end_state(wrap=False)
+    self.add_text('<\n')
+
+  def visit_emphasis(self, node):
+    pass
+  def depart_emphasis(self, node):
+    pass
+
+  def visit_literal_emphasis(self, node):
+    pass
+  def depart_literal_emphasis(self, node):
+    pass
+
+  def visit_strong(self, node):
+    pass
+  def depart_strong(self, node):
+    pass
+
+  def visit_title_reference(self, node):
+    pass
+  def depart_title_reference(self, node):
+    pass
+
+  def visit_literal(self, node):
+    pass
+  def depart_literal(self, node):
+    pass
+
+
 def setup (sphinx):
   highlighting.lexers['groovy'] = GroovyLexer()
   sphinx.add_builder(EclimBuilder)
+  sphinx.add_builder(VimdocBuilder)
