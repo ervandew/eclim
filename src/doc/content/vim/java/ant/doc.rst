@@ -22,7 +22,7 @@ Ant Documentation Lookup
 
 When editing an ant build file eclim defines a command named **:AntDoc** which
 will attempt to lookup and open in your
-:ref:`configured browser <g:eclimbrowser>` the documentation for the element
+:ref:`configured browser <g:EclimBrowser>` the documentation for the element
 under the cursor or, if supplied, the element passed to it.
 
 This command will only lookup element names, not attribute names or values.

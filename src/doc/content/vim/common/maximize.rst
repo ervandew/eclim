@@ -36,7 +36,7 @@ will be maximized and the previous window minimized.
 By default some specialty windows will not be minimized, namely the taglist
 window, quick list, location list, eclim project tree, and mini buf explorer.
 Window name patterns to exclude may be added or removed by explicitly setting
-the variable :ref:`g:MaximizeExcludes <g:maximizeexcludes>`.
+the variable :ref:`g:MaximizeExcludes`.
 
 .. _\:MinimizeWindow:
 .. _\:MinimizeRestore:

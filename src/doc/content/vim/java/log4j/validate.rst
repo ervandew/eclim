@@ -28,8 +28,8 @@ Eclim also combines the above validation with
 formed.
 
 If you do not want your log4j files validated automatically when saved, you can
-set the :ref:`g:EclimLog4jValidate <g:eclimlog4jvalidate>` variable described in
-the configuration section below.
+set the :ref:`g:EclimLog4jValidate` variable described in the configuration
+section below.
 
 .. _\:Validate:
 

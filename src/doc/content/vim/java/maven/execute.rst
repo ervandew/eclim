@@ -47,10 +47,10 @@ which perform the following steps\:
 - Execute :make.
 - Restore your previous 'makeprg' and 'errorformat' option settings.
 
-Additionally, if :ref:`g:EclimMakeLCD <g:eclimmakelcd>` is enabled (which it is
-by default), then the execution of maven will be performed from the current
-buffer's local directory, ensuring that mavens's build file discovery method is
-performed from the buffer's working directory and not your own.
+Additionally, if :ref:`g:EclimMakeLCD` is enabled (which it is by default),
+then the execution of maven will be performed from the current buffer's local
+directory, ensuring that mavens's build file discovery method is performed from
+the buffer's working directory and not your own.
 
 Note that **:Mvn** MUST have this enabled since maven 2.x no
 longer has support for the ``--find`` option.

@@ -29,8 +29,8 @@ There are two types of settings available:
   These are settings that reside in your Eclipse workspace and are used to
   control certain aspects of the eclim server's behavior.  These settings
   can be viewed and modified using one of the following commands\:
-  - :ref:`:EclimSettings <:eclimsettings>`
-  - :ref:`:ProjectSettings <:projectsettings>`
+  - :ref:`:EclimSettings`
+  - :ref:`:ProjectSettings`
 
 - **Vim global variable settings.**
 

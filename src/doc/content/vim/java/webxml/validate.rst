@@ -28,8 +28,8 @@ Eclim also combines the above validation with
 formed.
 
 If you do not want your web.xml files validated automatically when saved, you
-can set the :ref:`g:EclimWebXmlValidate <g:eclimwebxmlvalidate>` variable
-described in the configuration section below.
+can set the :ref:`g:EclimWebXmlValidate` variable described in the
+configuration section below.
 
 .. _\:Validate:
 

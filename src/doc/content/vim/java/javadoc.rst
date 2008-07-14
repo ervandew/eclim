@@ -56,8 +56,7 @@ The only difference is that you use **:JavaDocSearch** instead of
 **:JavaSearch**.
 
 The results will be displayed in a window and you can simply hit <enter> on an
-entry to open it using the browser you configured via
-:ref:`g:EclimBrowser <g:eclimbrowser>`.
+entry to open it using the browser you configured via :ref:`g:EclimBrowser`.
 
 The locations of the javadocs are determined via your Eclipse project's
 .classpath file.  For each library entry you can define a javadoc attribute that

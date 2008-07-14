@@ -252,10 +252,9 @@ projects from within Vim.
 - **:ProjectTodo**
 
   Searches all the source files in the project (those with extensions included
-  in :ref:`g:EclimTodoSearchExtensions <g:eclimtodosearchextensions>`) for the
-  fixme / todo pattern (defined by
-  :ref:`g:EclimTodoSearchPattern <g:eclimtodosearchpattern>`) and adds all
-  occurances to the current location list.
+  in :ref:`g:EclimTodoSearchExtensions`) for the fixme / todo pattern (defined
+  by :ref:`g:EclimTodoSearchPattern`) and adds all occurances to the current
+  location list.
 
 .. _\:Todo:
 
@@ -394,8 +393,8 @@ Eclim Settings
     org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
 
   In addition to being used by :TrackerTicket, this setting is also used in
-  conjunction with :ref:`:VcsLog <:vcslog>` and
-  :ref:`:VcsChangeSet <:vcschangeset>` to enable linking of ticket ids of the
-  form #ticket_id (#1234) found in user supplied commit comments.
+  conjunction with :ref:`:VcsLog` and :ref:`:VcsChangeSet` to enable linking of
+  ticket ids of the form #ticket_id (#1234) found in user supplied commit
+  comments.
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273

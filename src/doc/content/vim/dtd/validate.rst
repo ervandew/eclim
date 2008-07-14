@@ -24,8 +24,8 @@ location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
 If you do not want your dtd files validated automatically when saved, you can
-set the :ref:`g:EclimDtdValidate <g:eclimdtdvalidate>` variable described in
-the configuration section below.
+set the :ref:`g:EclimDtdValidate` variable described in the configuration
+section below.
 
 .. _\:Validate:
 

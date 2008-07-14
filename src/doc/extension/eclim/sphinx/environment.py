@@ -19,9 +19,147 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from docutils import nodes
 
 from sphinx import addnodes
-from sphinx.environment import BuildEnvironment, SphinxContentsFilter
+from sphinx.directives import additional_xref_types
+from sphinx.environment import BuildEnvironment, NoUri, SphinxContentsFilter
 
 class EclimBuildEnvironment (BuildEnvironment):
+
+  def resolve_references(self, doctree, fromdocname, builder):
+    """
+    Straight copy from BuildEnvironment. Changes noted.
+    """
+    for node in doctree.traverse(addnodes.pending_xref):
+      contnode = node[0].deepcopy()
+      newnode = None
+
+      typ = node['reftype']
+      target = node['reftarget']
+
+      reftarget_roles = set(('token', 'term', 'option'))
+      # add all custom xref types too
+      reftarget_roles.update(i[0] for i in additional_xref_types.values())
+
+      try:
+        if typ == 'ref':
+            if node['refcaption']:
+              # reference to anonymous label; the reference uses the supplied
+              # link caption
+              docname, labelid = self.anonlabels.get(target, ('',''))
+              sectname = node.astext()
+              if not docname:
+                newnode = doctree.reporter.system_message(
+                    2, 'undefined label: %s' % target)
+            else:
+              # reference to the named label; the final node will contain the
+              # section name after the label
+              docname, labelid, sectname = self.labels.get(target, ('','',''))
+
+# EV: check anonlabels as well so i can do this> :ref:`:VcsLog`
+              if not docname:
+                docname, labelid = self.anonlabels.get(target, ('',''))
+                sectname = node.astext()
+
+              if not docname:
+                newnode = doctree.reporter.system_message(
+                    2, 'undefined label: %s -- if you don\'t ' % target +
+                    'give a link caption the label must precede a section '
+                    'header.')
+            if docname:
+              newnode = nodes.reference('', '')
+              innernode = nodes.emphasis(sectname, sectname)
+              if docname == fromdocname:
+                newnode['refid'] = labelid
+              else:
+                # set more info in contnode in case the get_relative_uri call
+                # raises NoUri, the builder will then have to resolve these
+                contnode = addnodes.pending_xref('')
+                contnode['refdocname'] = docname
+                contnode['refsectname'] = sectname
+                newnode['refuri'] = builder.get_relative_uri(
+                    fromdocname, docname)
+                if labelid:
+                    newnode['refuri'] += '#' + labelid
+              newnode.append(innernode)
+        elif typ == 'keyword':
+          # keywords are referenced by named labels
+          docname, labelid, _ = self.labels.get(target, ('','',''))
+          if not docname:
+            #self.warn(fromdocname, 'unknown keyword: %s' % target)
+            newnode = contnode
+          else:
+            newnode = nodes.reference('', '')
+            if docname == fromdocname:
+              newnode['refid'] = labelid
+            else:
+              newnode['refuri'] = builder.get_relative_uri(
+                  fromdocname, docname) + '#' + labelid
+              newnode.append(contnode)
+        elif typ in reftarget_roles:
+          docname, labelid = self.reftargets.get((typ, target), ('', ''))
+          if not docname:
+            if typ == 'term':
+              self.warn(fromdocname, 'term not in glossary: %s' % target,
+                        node.line)
+            newnode = contnode
+          else:
+            newnode = nodes.reference('', '')
+            if docname == fromdocname:
+              newnode['refid'] = labelid
+            else:
+              newnode['refuri'] = builder.get_relative_uri(
+                  fromdocname, docname, typ) + '#' + labelid
+            newnode.append(contnode)
+        elif typ == 'mod':
+          docname, synopsis, platform, deprecated = \
+              self.modules.get(target, ('','','', ''))
+          # just link to an anchor if there are multiple modules in one file
+          # because the anchor is generally below the heading which is ugly
+          # but can't be helped easily
+          anchor = ''
+          if not docname or docname == fromdocname:
+            # don't link to self
+            newnode = contnode
+          else:
+            if len(self.filemodules[docname]) > 1:
+              anchor = '#' + 'module-' + target
+            newnode = nodes.reference('', '')
+            newnode['refuri'] = (
+                builder.get_relative_uri(fromdocname, docname) + anchor)
+            newnode['reftitle'] = '%s%s%s' % (
+                (platform and '(%s) ' % platform),
+                synopsis, (deprecated and ' (deprecated)' or ''))
+            newnode.append(contnode)
+        elif typ in self.descroles:
+          # "descrefs"
+          modname = node['modname']
+          clsname = node['classname']
+          searchorder = node.hasattr('refspecific') and 1 or 0
+          name, desc = self.find_desc(modname, clsname,
+                                      target, typ, searchorder)
+          if not desc:
+            newnode = contnode
+          else:
+            newnode = nodes.reference('', '')
+            if desc[0] == fromdocname:
+              newnode['refid'] = name
+            else:
+              newnode['refuri'] = (
+                  builder.get_relative_uri(fromdocname, desc[0])
+                  + '#' + name)
+            newnode['reftitle'] = name
+            newnode.append(contnode)
+        else:
+          raise RuntimeError('unknown xfileref node encountered: %s' % node)
+      except NoUri:
+        newnode = contnode
+      if newnode:
+        node.replace_self(newnode)
+
+    # allow custom references to be resolved
+    builder.app.emit('doctree-resolved', doctree, fromdocname)
+
+
+class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
 
   def __init__ (self, *args, **kwargs):
     self.main_tocs = {}

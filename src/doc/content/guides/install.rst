@@ -107,14 +107,14 @@ eclim server and verify that it is running properly.
       $ECLIPSE_HOME/plugins/org.eclim_version/bin.
 
 #.  Once you have started the server you can test it by opening a Vim
-    window and issuing the command, :ref:`:PingEclim <:pingeclim>`.
-    The result of executing this command should be "eclim *version*" echoed to
-    the bottom of your Vim window.  If however, you receive
-    ``unable to connect to eclimd - connect: Connection refused``,
-    or something similar, then your eclimd server is not running or something
-    is preventing eclim from connecting to it.  If you receive this or any
-    other errors and are unsure of what steps to take, please feel free to
-    visit the forums_ so that someone can help resolve your issue.
+    window and issuing the command, :ref:`:PingEclim`.  The result of executing
+    this command should be "eclim *version*" echoed to the bottom of your Vim
+    window.  If however, you receive ``unable to connect to eclimd - connect:
+    Connection refused``, or something similar, then your eclimd server is not
+    running or something is preventing eclim from connecting to it.  If you
+    receive this or any other errors and are unsure of what steps to take,
+    please feel free to visit the forums_ so that someone can help resolve your
+    issue.
 
     Example of successful ping\:
 

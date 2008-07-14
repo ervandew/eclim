@@ -23,7 +23,7 @@ from os import path
 from docutils import nodes
 
 from eclim.pygments import GroovyLexer
-from eclim.sphinx.environment import EclimBuildEnvironment
+from eclim.sphinx.environment import EclimBuildEnvironment, EclimHtmlBuildEnvironment
 
 from sphinx import addnodes, highlighting
 from sphinx.builder import StandaloneHTMLBuilder, TextBuilder, ENV_PICKLE_FILENAME
@@ -41,14 +41,14 @@ class EclimBuilder (StandaloneHTMLBuilder):
   def load_env(self):
     """
     Copied from sphinx.builder.Builder and just replaces 'BuildEnvironment' w/
-    'EclimBuildEnvironment'.
+    'EclimHtmlBuildEnvironment'.
     """
     if self.env:
       return
     if not self.freshenv:
       try:
         self.info(bold('trying to load pickled env... '), nonl=True)
-        self.env = EclimBuildEnvironment.frompickle(self.config,
+        self.env = EclimHtmlBuildEnvironment.frompickle(self.config,
           path.join(self.doctreedir, ENV_PICKLE_FILENAME))
         self.info('done')
       except Exception, err:
@@ -56,10 +56,10 @@ class EclimBuilder (StandaloneHTMLBuilder):
           self.info('not found')
         else:
           self.info('failed: %s' % err)
-        self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
+        self.env = EclimHtmlBuildEnvironment(self.srcdir, self.doctreedir, self.config)
         self.env.find_files(self.config)
     else:
-      self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
+      self.env = EclimHtmlBuildEnvironment(self.srcdir, self.doctreedir, self.config)
       self.env.find_files(self.config)
     self.env.set_warnfunc(self.warn)
 
@@ -192,9 +192,33 @@ class EclimBuilder (StandaloneHTMLBuilder):
       return addnodes.compact_paragraph('', '', entries)
     return None
 
-
 class VimdocBuilder (TextBuilder):
   name = 'vimdoc'
+
+  def load_env (self):
+    """
+    Copied from sphinx.builder.Builder and just replaces 'BuildEnvironment' w/
+    'EclimBuildEnvironment'.
+    """
+    if self.env:
+      return
+    if not self.freshenv:
+      try:
+        self.info(bold('trying to load pickled env... '), nonl=True)
+        self.env = EclimBuildEnvironment.frompickle(self.config,
+          path.join(self.doctreedir, ENV_PICKLE_FILENAME))
+        self.info('done')
+      except Exception, err:
+        if type(err) is IOError and err.errno == 2:
+          self.info('not found')
+        else:
+          self.info('failed: %s' % err)
+        self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
+        self.env.find_files(self.config)
+    else:
+      self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
+      self.env.find_files(self.config)
+    self.env.set_warnfunc(self.warn)
 
   def prepare_writing (self, docnames):
     """
@@ -202,6 +226,13 @@ class VimdocBuilder (TextBuilder):
     TextWriter.
     """
     self.writer = VimdocWriter(self)
+
+    # HACK
+    nodes.fully_normalize_name = VimdocBuilder.fully_normalize_name
+
+  def fully_normalize_name(name):
+    """Return a case- and whitespace-normalized name."""
+    return ' '.join(name.split())
 
 
 class VimdocWriter (TextWriter):
@@ -216,7 +247,7 @@ class VimdocWriter (TextWriter):
     self.output = visitor.body
 
 # EV: add vim modline
-    self.output = self.output.strip() + '\nvim:ft=help'
+    self.output = self.output.strip() + '\n\nvim:ft=help'
 
 
 class VimdocTranslator (TextTranslator):

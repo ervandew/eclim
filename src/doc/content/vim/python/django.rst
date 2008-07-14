@@ -119,10 +119,9 @@ allow proper matchit.vim support for django default and user defined tags.
 
 **End Tag Completion**
 
-Using the :ref:`g:HtmlDjangoUserBodyElements <g:htmldjangouserbodyelements>`
-setting along with the pre-configured default list of body elements, eclim
-includes support for auto completion of ending template tags when you type an
-'{%e' or '{% e'.
+Using the :ref:`g:HtmlDjangoUserBodyElements` setting along with the
+pre-configured default list of body elements, eclim includes support for auto
+completion of ending template tags when you type an '{%e' or '{% e'.
 
 .. _\:DjangoFind:
 

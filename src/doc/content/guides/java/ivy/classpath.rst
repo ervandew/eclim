@@ -50,7 +50,7 @@ command.
 Updating .classpath
 -------------------
 
-Once you have performed the :ref:`initial setup <:ivyrepo>`, updating the
+Once you have performed the :ref:`initial setup <:IvyRepo>`, updating the
 Eclipse ``.classpath`` file is as easy as saving your ivy.xml file (:w) and
 letting eclim do the rest.
 

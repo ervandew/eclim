@@ -37,8 +37,8 @@ Eclim also combines the above validation with
 formed.
 
 If you do not want your ant files validated automatically when saved, you can
-set the :ref:`g:EclimAntValidate <g:eclimantvalidate>` variable described in the
-configuration section below.
+set the :ref:`g:EclimAntValidate` variable described in the configuration
+section below.
 
 .. _\:Validate:
 

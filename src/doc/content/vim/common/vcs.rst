@@ -51,8 +51,8 @@ file versioned in cvs, subversion, or mercurial (where applicable).
 
   By default the number of entries retrieved will be limited to 50 in an effort
   to reduce the latency of retrieving logs for files with a long revision
-  history.  This value can be changed via the
-  :ref:`g:EclimVcsLogMaxEntries <g:eclimvcslogmaxentries>` variable.
+  history.  This value can be changed via the :ref:`g:EclimVcsLogMaxEntries`
+  variable.
 
 .. _\:VcsChangeSet:
 

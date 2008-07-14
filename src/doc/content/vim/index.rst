@@ -53,5 +53,5 @@ the other categories.
 
 - **:EclimSettings** -
   Allows you to view / edit the global :ref:`settings <vim/settings>`.
-  For project level settings see the :ref:`:ProjectSettings <:projectsettings>`
-  command on the :ref:`project documentation page <vim/common/project>`.
+  For project level settings see the :ref:`:ProjectSettings` command on the
+  :ref:`project documentation page <vim/common/project>`.

@@ -51,12 +51,11 @@ contains any spaces, these will be converted to underscores.
 Editing project settings
 ------------------------
 
-After creating a project, the next thing you'll probably want to do is edit your
-project's settings.  To do this you can use the
-:ref:`:ProjectSettings <:projectsettings>` command.  If your current Vim
-window's working directory is at or under the project's root directory then you
-can execute the **:ProjectSettings** with no arguments, otherwise you will need
-to supply the project name.
+After creating a project, the next thing you'll probably want to do is edit
+your project's settings.  To do this you can use the :ref:`:ProjectSettings`
+command.  If your current Vim window's working directory is at or under the
+project's root directory then you can execute the **:ProjectSettings** with no
+arguments, otherwise you will need to supply the project name.
 
 .. code-block:: vim
 
@@ -69,7 +68,7 @@ using **:ProjectSettings** to update them.
 
 .. note::
 
-  If you have only one project or many projects that share the same settings you
-  can use the :ref:`:EclimSettings <:eclimsettings>` command instead to edit the
-  global settings.  These global settings will apply to any project that has
-  not overridden them with values via **:ProjectSettings**.
+  If you have only one project or many projects that share the same settings
+  you can use the :ref:`:EclimSettings` command instead to edit the global
+  settings.  These global settings will apply to any project that has not
+  overridden them with values via **:ProjectSettings**.
