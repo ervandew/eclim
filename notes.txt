@@ -3,6 +3,9 @@ HIGH {{{
 
   - possible issue with :JavaDocSearch
 
+  - :JavaCorrect, need to get the eclipse apply version working
+    https://sourceforge.net/forum/message.php?msg_id=5087396
+
   - add/test proxy support to the installer
     org.eclipse.update.core.proxy.enable=true
     org.eclipse.update.core.proxy.port=8888
