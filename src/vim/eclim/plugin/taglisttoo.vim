@@ -24,7 +24,7 @@
 " }}}
 
 " TaglistToo {{{
-if exists('g:taglisttoo_loaded') || exists(":Tlist") ||
+if exists('g:taglisttoo_loaded') ||
    \ (exists('g:taglisttoo_disabled') && g:taglisttoo_disabled)
   finish
 endif
@@ -49,7 +49,9 @@ if !exists('g:Tlist_Ctags_Cmd')
   endif
 endif
 
-let TagList_title = "__Tag_List__"
+if !exists('g:TagList_title')
+  let g:TagList_title = "__Tag_List__"
+endif
 
 if g:Tlist_Auto_Open && !exists('g:Tlist_Temp_Disable')
   autocmd VimEnter * nested call eclim#taglist#taglisttoo#AutoOpen()
@@ -65,7 +67,7 @@ endif
 " }}}
 
 " Command Declarations {{{
-if !exists(":TlistToo")
+if !exists(":Tlist") && !exists(":TlistToo")
   command TlistToo :call eclim#taglist#taglisttoo#Taglist()
 endif
 " }}}
@@ -108,6 +110,10 @@ if !exists(':TlistToo')
 
   if !exists("g:tlist_dtd_settings")
     let g:tlist_dtd_settings = 'dtd;e:element'
+  endif
+
+  if !exists("g:tlist_eclimhelp_settings")
+    let g:tlist_eclimhelp_settings = 'eclimhelp;s:section;a:anchor'
   endif
 
   if !exists("g:tlist_forrestdocument_settings")
@@ -199,6 +205,10 @@ else
 
   if !exists("g:tlist_dtd_settings")
     let g:tlist_dtd_settings = {'e': 'element'}
+  endif
+
+  if !exists("g:tlist_eclimhelp_settings")
+    let g:tlist_eclimhelp_settings = {'s': 'section', 'a': 'anchor'}
   endif
 
   if !exists("g:tlist_forrestdocument_settings")
