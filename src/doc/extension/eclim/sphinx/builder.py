@@ -247,7 +247,7 @@ class VimdocWriter (TextWriter):
     self.output = visitor.body
 
 # EV: add vim modline
-    self.output = self.output.strip() + '\n\nvim:ft=help'
+    self.output = self.output.strip() + '\n\nvim:ft=eclimhelp'
 
 
 class VimdocTranslator (TextTranslator):
@@ -282,6 +282,9 @@ class VimdocTranslator (TextTranslator):
       em = node.children[0]
       value = unicode(em.children[0].data)
       if value.startswith(':') or value.startswith('g:') or value.startswith('org.'):
+        # lame edge case
+        if value.startswith(':Validate'):
+          self.add_text('_' + node.attributes.get('refuri').rsplit('-', 1)[-1])
         self.add_text('|')
       else:
         value = node.attributes.get('refuri')
@@ -294,6 +297,7 @@ class VimdocTranslator (TextTranslator):
     refid = node.attributes.get('refid')
     if refid:
       value = VimdocTranslator.TARGET.sub('', node.rawsource)
+      value = value.replace('/', '-')
       self.add_text('*%s' % value)
   def depart_target(self, node):
     refid = node.attributes.get('refid')
