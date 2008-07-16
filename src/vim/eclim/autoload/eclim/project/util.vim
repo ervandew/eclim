@@ -523,27 +523,28 @@ endfunction " }}}
 " Gets a project setting from eclim.  Returns '' the setting does not exist,
 " 0 if not in a project or an error occurs communicating with the server.
 function! eclim#project#util#GetProjectSetting (setting)
-  let project = eclim#project#util#GetCurrentProjectName()
-  if project != ''
-    let command = s:command_project_setting
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<setting>', a:setting, '')
-
-    let result = split(eclim#ExecuteEclim(command), '\n')
-    if len(result) == 1 && result[0] == '0'
-      return result[0]
-    endif
-
-    call filter(result, 'v:val !~ "^\\s*#"')
-
-    if len(result) == 0
-      call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
-      return ''
-    endif
-
-    return substitute(result[0], '.\{-}=\(.*\)', '\1', '')
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
   endif
-  return
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let command = s:command_project_setting
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<setting>', a:setting, '')
+
+  let result = split(eclim#ExecuteEclim(command), '\n')
+  if len(result) == 1 && result[0] == '0'
+    return result[0]
+  endif
+
+  call filter(result, 'v:val !~ "^\\s*#"')
+
+  if len(result) == 0
+    call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
+    return ''
+  endif
+
+  return substitute(result[0], '.\{-}=\(.*\)', '\1', '')
 endfunction " }}}
 
 " IsCurrentFileInProject(...) {{{
