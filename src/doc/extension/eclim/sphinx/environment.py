@@ -24,6 +24,31 @@ from sphinx.environment import BuildEnvironment, NoUri, SphinxContentsFilter
 
 class EclimBuildEnvironment (BuildEnvironment):
 
+  def get_and_resolve_doctree(self, docname, builder, doctree=None,
+                              prune_toctrees=True):
+    """
+    Copied from BuildEnvironment. Changes Noted.
+    """
+    if doctree is None:
+      doctree = self.get_doctree(docname)
+
+    # resolve all pending cross-references
+    self.resolve_references(doctree, docname, builder)
+
+    # now, resolve all toctree nodes
+# EV: remove inline site toc
+    for toctreenode in doctree.traverse(addnodes.toctree):
+    #  result = self.resolve_toctree(docname, builder, toctreenode,
+    #                                prune=prune_toctrees)
+    #  if result is None:
+    #    toctreenode.replace_self([])
+    #  else:
+    #    toctreenode.replace_self(result)
+       toctreenode.replace_self([])
+# EV: end remove inline site toc
+
+    return doctree
+
   def resolve_references(self, doctree, fromdocname, builder):
     """
     Straight copy from BuildEnvironment. Changes noted.
@@ -41,45 +66,45 @@ class EclimBuildEnvironment (BuildEnvironment):
 
       try:
         if typ == 'ref':
-            if node['refcaption']:
-              # reference to anonymous label; the reference uses the supplied
-              # link caption
-              docname, labelid = self.anonlabels.get(target, ('',''))
-              sectname = node.astext()
-              if not docname:
-                newnode = doctree.reporter.system_message(
-                    2, 'undefined label: %s' % target)
-            else:
-              # reference to the named label; the final node will contain the
-              # section name after the label
-              docname, labelid, sectname = self.labels.get(target, ('','',''))
+          if node['refcaption']:
+            # reference to anonymous label; the reference uses the supplied
+            # link caption
+            docname, labelid = self.anonlabels.get(target, ('',''))
+            sectname = node.astext()
+            if not docname:
+              newnode = doctree.reporter.system_message(
+                  2, 'undefined label: %s' % target)
+          else:
+            # reference to the named label; the final node will contain the
+            # section name after the label
+            docname, labelid, sectname = self.labels.get(target, ('','',''))
 
 # EV: check anonlabels as well so i can do this> :ref:`:VcsLog`
-              if not docname:
-                docname, labelid = self.anonlabels.get(target, ('',''))
-                sectname = node.astext()
+            if not docname:
+              docname, labelid = self.anonlabels.get(target, ('',''))
+              sectname = node.astext()
 
-              if not docname:
-                newnode = doctree.reporter.system_message(
-                    2, 'undefined label: %s -- if you don\'t ' % target +
-                    'give a link caption the label must precede a section '
-                    'header.')
-            if docname:
-              newnode = nodes.reference('', '')
-              innernode = nodes.emphasis(sectname, sectname)
-              if docname == fromdocname:
-                newnode['refid'] = labelid
-              else:
-                # set more info in contnode in case the get_relative_uri call
-                # raises NoUri, the builder will then have to resolve these
-                contnode = addnodes.pending_xref('')
-                contnode['refdocname'] = docname
-                contnode['refsectname'] = sectname
-                newnode['refuri'] = builder.get_relative_uri(
-                    fromdocname, docname)
-                if labelid:
-                    newnode['refuri'] += '#' + labelid
-              newnode.append(innernode)
+            if not docname:
+              newnode = doctree.reporter.system_message(
+                  2, 'undefined label: %s -- if you don\'t ' % target +
+                  'give a link caption the label must precede a section '
+                  'header.')
+          if docname:
+            newnode = nodes.reference('', '')
+            innernode = nodes.emphasis(sectname, sectname)
+            if docname == fromdocname:
+              newnode['refid'] = labelid
+            else:
+              # set more info in contnode in case the get_relative_uri call
+              # raises NoUri, the builder will then have to resolve these
+              contnode = addnodes.pending_xref('')
+              contnode['refdocname'] = docname
+              contnode['refsectname'] = sectname
+              newnode['refuri'] = builder.get_relative_uri(
+                  fromdocname, docname)
+              if labelid:
+                  newnode['refuri'] += '#' + labelid
+            newnode.append(innernode)
         elif typ == 'keyword':
           # keywords are referenced by named labels
           docname, labelid, _ = self.labels.get(target, ('','',''))
@@ -164,31 +189,6 @@ class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
   def __init__ (self, *args, **kwargs):
     self.main_tocs = {}
     BuildEnvironment.__init__(self, *args, **kwargs)
-
-
-  def get_and_resolve_doctree(self, docname, builder, doctree=None,
-                              prune_toctrees=True):
-    """
-    Copied from BuildEnvironment. Changes Noted.
-    """
-    if doctree is None:
-      doctree = self.get_doctree(docname)
-
-    # resolve all pending cross-references
-    self.resolve_references(doctree, docname, builder)
-
-    # now, resolve all toctree nodes
-# EV: remove inline site toc
-    #for toctreenode in doctree.traverse(addnodes.toctree):
-    #  result = self.resolve_toctree(docname, builder, toctreenode,
-    #                                prune=prune_toctrees)
-    #  if result is None:
-    #    toctreenode.replace_self([])
-    #  else:
-    #    toctreenode.replace_self(result)
-# EV: end remove inline site toc
-
-    return doctree
 
 
   def build_toc_from(self, docname, document):
