@@ -52,6 +52,9 @@ function! eclim#help#Help (tag)
       endif
     endif
     exec 'tag ' . tag
+
+    " needed to ensure taglist is updated if open
+    doautocmd BufEnter
   finally
     let &tags = savetags
   endtry
