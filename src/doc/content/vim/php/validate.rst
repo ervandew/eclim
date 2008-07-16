@@ -15,6 +15,8 @@
 
 .. _vim/php/validate:
 
+.. _\:Validate_php:
+
 Php Validation
 ==============
 

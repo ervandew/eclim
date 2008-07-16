@@ -45,7 +45,7 @@ and install it on a linux machine (your paths may vary)\:
 If you don't want javascript files validated when saving them, you can set the
 g:EclimJavascriptValidate variable described in the configuration section below.
 
-.. _\:Validate:
+.. _\:Validate_javascript:
 
 Regardless of whether you have validation enabled upon saving or not, the
 command **:Validate** is available to manually execute the validation.

@@ -87,19 +87,19 @@ Ant 指令集
 - :ref:`:Ant` [<目標> ...] - 在目前專案設定下，執行 ant.
 - :ref:`:AntDoc` [<元素>] -
   以目前游標位置的元素或指定元素尋找並開啟文件檔案.
-- :ref:`:Validate` - 驗證目前的 ant 檔案.
+- :ref:`:Validate <:Validate_ant>` - 驗證目前的 ant 檔案.
 
 
 DTD 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的 DTD 檔案.
+- :ref:`:Validate <:Validate_dtd>` - 驗證目前的 DTD 檔案.
 
 
 HTML 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的 HTML 檔案.
+- :ref:`:Validate <:Validate_html>` - 驗證目前的 HTML 檔案.
 
 
 Ivy Commands
@@ -145,7 +145,7 @@ Java 指令集
 Log4j 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的 log4j 組態設定檔案.
+- :ref:`:Validate <:Validate_log4j>` - 驗證目前的 log4j 組態設定檔案.
 
 
 Maven 指令集
@@ -196,13 +196,13 @@ Vim 指令集
 WebXml 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的 ``web.xml`` 檔案.
+- :ref:`:Validate <:Validate_webxml>` - 驗證目前的 ``web.xml`` 檔案.
 
 
 Wsdl 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的檔案.
+- :ref:`:Validate <:Validate_wsdl>` - 驗證目前的檔案.
 
 
 Xml 指令集
@@ -212,7 +212,7 @@ Xml 指令集
   開啟目前 XML 檔案的 dtd 檔案，並移置指定元素的定義.
 - :ref:`:XsdDefinition` [<元素>] -
   開啟目前 XML 檔案的 xsd 檔案，並移置指定元素的定義.
-- :ref:`:Validate` [<檔案>] -
+- :ref:`:Validate <:Validate_xml>` [<檔案>] -
   驗證指定的 XML 檔案或目前的 XML 檔案.
 - :ref:`:XmlFormat` 重新編排目前的 XML 檔案.
 
@@ -220,7 +220,7 @@ Xml 指令集
 Xsd 指令集
 --------------
 
-- :ref:`:Validate` - 驗證目前的檔案.
+- :ref:`:Validate <:Validate_xsd>` - 驗證目前的檔案.
 
 
 版本控制指令集

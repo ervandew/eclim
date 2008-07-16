@@ -15,6 +15,8 @@
 
 .. _vim/java/validate:
 
+.. _\:Validate_java:
+
 Java Validation
 ===============
 

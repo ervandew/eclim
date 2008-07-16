@@ -27,7 +27,7 @@ If you do not want your xsd files validated automatically when saved, you can
 set the :ref:`g:EclimXsdValidate` variable described in the configuration
 section below.
 
-.. _\:Validate:
+.. _\:Validate_xsd:
 
 Whether or not auto validation has been enabled, eclim also exposes
 the command **:Validate** to manually execute the validation of the

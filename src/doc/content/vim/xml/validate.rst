@@ -29,7 +29,7 @@ g:EclimXmlValidate variable described in the configuration section below.
 Regardless of whether you have validation enabled upon saving or not, the
 following command is still available for validating xml files on demand.
 
-.. _\:Validate:
+.. _\:Validate_xml:
 
 **:Validate** [<file>] -
 Validate the supplied file or the current file if no file name provided.

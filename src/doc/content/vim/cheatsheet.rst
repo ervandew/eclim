@@ -87,25 +87,25 @@ Ant Commands
 - :ref:`:AntDoc` [<element>] -
   Find and open the documentation for the element under the cursor or the
   element supplied as an argument.
-- :ref:`:Validate` - Validate the current ant build file.
+- :ref:`:Validate <:Validate_ant>` - Validate the current ant build file.
 
 
 Css Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current file.
+- :ref:`:Validate <:Validate_css>` - Validate the current file.
 
 
 Dtd Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current file.
+- :ref:`:Validate <:Validate_dtd>` - Validate the current file.
 
 
 Html Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current file.
+- :ref:`:Validate <:Validate_html>` - Validate the current file.
 - :ref:`:BrowserOpen` - Opens the current file in your configured browser.
 
 
@@ -154,7 +154,7 @@ Java Commands
   Adds or updates the comments for the element under the cursor.
 - :ref:`:Jps` -
   Opens window with information about the currently running java processes.
-- :ref:`:Validate` - Manually runs source code validation.
+- :ref:`:Validate <:Validate_java>` - Manually runs source code validation.
 
 
 Java .classpath Commands
@@ -175,13 +175,14 @@ Java .classpath Commands
 Javascript Commands
 --------------------
 
-- :ref:`:Validate` - Validate the current javascript file.
+- :ref:`:Validate <:Validate_javascript>` - Validate the current javascript file.
 
 
 Log4j Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current log4j xml configuration file.
+- :ref:`:Validate <:Validate_log4j>` -
+  Validate the current log4j xml configuration file.
 
 
 Maven Commands
@@ -213,7 +214,7 @@ Php Commands
 - :ref:`:PhpFindDefinition` - Find the element under the cursor.
 - :ref:`:PhpSearchContext` -
   Find the element under the cursor based on its context.
-- :ref:`:Validate` - Manually runs source code validation.
+- :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
 
 
 Php .projectOption Commands
@@ -233,7 +234,7 @@ Php .projectOption Commands
 Python Commands
 -----------------
 
-- :ref:`:Validate` - Validates the current file using pyflakes_.
+- :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
 - :ref:`:PyLint` - Runs pylint_ on the current file.
 - :ref:`:PythonRegex` - Opens a window for testing python regular expressions.
 - :ref:`:DjangoManage` -
@@ -273,13 +274,13 @@ Vim Commands
 WebXml Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current web.xml file.
+- :ref:`:Validate <:Validate_webxml>` - Validate the current web.xml file.
 
 
 Wsdl Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current file.
+- :ref:`:Validate <:Validate_wsdl>` - Validate the current file.
 
 
 Xml Commands
@@ -291,7 +292,7 @@ Xml Commands
 - :ref:`:XsdDefinition` [<element>] -
   Open the current xml file's xsd and jump to the element definition if
   supplied.
-- :ref:`:Validate` [<file>] -
+- :ref:`:Validate <:Validate_xml>` [<file>] -
   Validates the supplied xml file or the current file if none supplied.
 - :ref:`:XmlFormat` Reformats the current xml file.
 
@@ -299,7 +300,7 @@ Xml Commands
 Xsd Commands
 -----------------
 
-- :ref:`:Validate` - Validate the current file.
+- :ref:`:Validate <:Validate_xsd>` - Validate the current file.
 
 
 Version Control Commands

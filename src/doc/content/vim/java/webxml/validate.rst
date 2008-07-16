@@ -31,7 +31,7 @@ If you do not want your web.xml files validated automatically when saved, you
 can set the :ref:`g:EclimWebXmlValidate` variable described in the
 configuration section below.
 
-.. _\:Validate:
+.. _\:Validate_webxml:
 
 Whether or not auto validation has been enabled, eclim also exposes the command
 **:Validate** to manually execute the validation of the file.

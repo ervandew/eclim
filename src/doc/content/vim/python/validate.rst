@@ -31,7 +31,7 @@ make sure it is in your path.
 If you don't want python files validated when saving them, you can set the
 g:EclimPythonValidate variable described in the configuration section below.
 
-.. _\:Validate:
+.. _\:Validate_python:
 
 Regardless of whether you have validation enabled upon saving or not, the
 command **:Validate** is available to manual validate the file.
