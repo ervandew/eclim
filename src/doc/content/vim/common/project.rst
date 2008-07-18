@@ -23,14 +23,14 @@ different.  Since a project must exist before you can perform any of the more
 interesting tasks, eclim provides a set of commands to create and manage
 projects from within Vim.
 
-.. note::
+For the commands below that accept a project name as an argument, you may use
+Vim's command line completion to complete the project name.
 
-  For the commands below that accept a project name as an argument, you may use
-  Vim's command line completion to complete the project name.
+.. code-block:: vim
 
-  ``:ProjectSettings a_p<Tab>``
+  :ProjectSettings a_p<Tab>
+  :ProjectSettings a_project
 
-  ``:ProjectSettings a_project``
 
 .. _\:ProjectCreate:
 

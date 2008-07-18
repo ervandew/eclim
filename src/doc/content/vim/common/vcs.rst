@@ -155,8 +155,9 @@ Eclim Settings
 
   .. note::
 
-    | For redmine the url should take the form\:
-    | ``http://redmine.myhost/repositories/<cmd>/myrepos``
+    For redmine the url should take the form\:
+
+      http://redmine.myhost/repositories/<cmd>/myrepos
 
     Note the literal <cmd> portion. Since redmine urls place the command name
     (log, changes, etc) in front of the repository name, you must include the

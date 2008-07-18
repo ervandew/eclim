@@ -54,22 +54,27 @@ element.  A pattern search can be executed using the command
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
 
-.. note::
+Vim command completion is supported through out the command with the exception
+of the pattern to search for.
 
-  | Vim command completion is supported through out the command with the excption
-    of the pattern to search for.
-  | ``:PhpSearch <Tab>``
-  | ``:PhpSearch -p MyClass* <Tab>``
-  | ``:PhpSearch -p MyClass* -t <Tab>``
-  | ``:PhpSearch -p MyClass* -t class <Tab>``
-  | ``:PhpSearch -p MyClass* -t class -s <Tab>``
-  | ``:PhpSearch -p MyClass* -t class -s project``
+.. code-block:: vim
+
+  :PhpSearch <Tab>
+  :PhpSearch -p MyClass* <Tab>
+  :PhpSearch -p MyClass* -t <Tab>
+  :PhpSearch -p MyClass* -t class <Tab>
+  :PhpSearch -p MyClass* -t class -s <Tab>
+  :PhpSearch -p MyClass* -t class -s project
 
 - pattern: The pattern to search for.
-  | Ex.
-  |   MyClass
-  |   myFunction
-  |   my*
+
+  Ex.
+
+    MyClass
+
+    myFunction
+
+    my*
 
 - type: The type of element to search for where possible
   types include
