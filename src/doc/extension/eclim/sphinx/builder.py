@@ -249,6 +249,14 @@ class VimdocWriter (TextWriter):
 # EV: add vim modline
     self.output = self.output.strip() + '\n\nvim:ft=eclimhelp'
 
+# EV: don't wrap on '-' so we don't break some vimdoc links
+import textwrap
+new_wordsep_re = re.compile(
+        r'(\s+|'                                  # any whitespace
+        r'(?<=\s)(?::[a-z-]+:)?`\S+|'             # interpreted text start
+#        r'[^\s\w]*\w+[a-zA-Z]-(?=\w+[a-zA-Z])|'   # hyphenated words
+        r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
+textwrap.TextWrapper.wordsep_re = new_wordsep_re
 
 class VimdocTranslator (TextTranslator):
 
