@@ -51,10 +51,18 @@ function! eclim#help#Help (tag)
         return
       endif
     endif
+
+    call s:HelpWindow()
     exec 'tag ' . tag
+    let w:eclim_help = 1
 
     " needed to ensure taglist is updated if open
     doautocmd BufEnter
+  catch /^Vim\%((\a\+)\)\=:E426/
+    if !exists('w:eclim_help')
+      close
+    endif
+    call eclim#util#EchoError('Sorry no eclim help for ' . tag)
   finally
     let &tags = savetags
   endtry
@@ -63,6 +71,21 @@ endfunction " }}}
 " HelpGrep() {{{
 function! eclim#help#HelpGrep (args)
   exec 'vimgrep ' a:args . ' ' . g:EclimHelpDir . '/**/*.txt'
+endfunction " }}}
+
+" s:HelpWindow() {{{
+function s:HelpWindow ()
+  let max = winnr('$')
+  let index = 1
+  while index <= max
+    if getwinvar(index, 'eclim_help')
+      exec index . 'winc w'
+      return
+    endif
+    let index += 1
+  endwhile
+
+  below new
 endfunction " }}}
 
 " CommandComplete(argLead, cmdLine, cursorPos) {{{
