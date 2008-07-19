@@ -310,17 +310,22 @@ class VimdocTranslator (TextTranslator):
   def depart_target(self, node):
     refid = node.attributes.get('refid')
     if refid:
-      self.add_text('*')
+      self.add_text('* ')
 
   #def visit_index(self, node):
   #  raise nodes.SkipNode
 
   def visit_literal_block(self, node):
-    self.add_text('\n>')
+    self.add_text('>')
     self.new_state()
   def depart_literal_block(self, node):
+    self.add_text('\n')
     self.end_state(wrap=False)
-    self.add_text('<\n')
+    self.add_text('<')
+    # hack to ensure a newline after ending '<'
+    self.new_state()
+    self.add_text('')
+    self.end_state()
 
   def visit_emphasis(self, node):
     pass

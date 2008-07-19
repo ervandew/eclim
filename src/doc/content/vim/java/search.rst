@@ -31,25 +31,27 @@ pattern search can be executed using the command
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
 
-.. note::
+Vim command completion is supported through out the command with the excption
+of the pattern to search for.
 
-  Vim command completion is supported through out the command with the excption
-  of the pattern to search for.
+.. code-block:: vim
 
-  | ``:JavaSearch <Tab>``
-  | ``:JavaSearch -p MyClass* <Tab>``
-  | ``:JavaSearch -p MyClass* -t <Tab>``
-  | ``:JavaSearch -p MyClass* -t all <Tab>``
-  | ``:JavaSearch -p MyClass* -t all -x <Tab>``
-  | ``:JavaSearch -p MyClass* -t all -x declarations``
+  :JavaSearch <Tab>
+  :JavaSearch -p MyClass* <Tab>
+  :JavaSearch -p MyClass* -t <Tab>
+  :JavaSearch -p MyClass* -t all <Tab>
+  :JavaSearch -p MyClass* -t all -x <Tab>
+  :JavaSearch -p MyClass* -t all -x declarations
 
 
 - pattern: The pattern to search for.
 
   Ex.
 
-    | MyClass*
-    | MyClass.someMethod*
+  ::
+
+    MyClass*
+    MyClass.someMethod*
 
 - type (Default: type): The type of element to search for where possible types
   include

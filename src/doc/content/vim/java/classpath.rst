@@ -62,6 +62,7 @@ and variables.
 
 - **:NewProjectEntry** <project> [<project> ...] -
   Adds a new entry for one or more dependencies on other projects.
+
   .. code-block:: xml
 
     <classpathentry exported="true" kind="src" path="/a_project"/>

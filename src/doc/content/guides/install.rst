@@ -90,7 +90,7 @@ Step 3: Start the eclimd server and test it.
 
 See the documentation :ref:`below <start_test>`.
 
-.. _start_test :
+.. _start_test:
 
 Starting and testing eclim.
 ---------------------------
