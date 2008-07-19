@@ -25,4 +25,6 @@
 
 source $VIMRUNTIME/syntax/help.vim
 
+syn region helpExample matchgroup=helpIgnore start=" >$" start="^>$" end="^[^ \t]"me=e-1 end="^\s*<$"
+
 " vim:ft=vim:fdm=marker
