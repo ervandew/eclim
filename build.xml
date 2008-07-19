@@ -50,8 +50,9 @@
   <import file="src/ant/patch.xml"/>
   <import file="src/ant/test.xml"/>
 
-  <!-- exclude vim swap files -->
+  <!-- exclude vim swap files and backup files -->
   <defaultexcludes add="**/*.swp"/>
+  <defaultexcludes add="**/*.bak"/>
 
   <!-- classpath -->
   <path id="classpath">
