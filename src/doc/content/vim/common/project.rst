@@ -294,47 +294,6 @@ Vim Settings
   opened.  The special name 'CURRENT' represents the current project of
   the file being loaded in Vim when the tree is auto opened.
 
-.. _g\:EclimProjectTreeTaglistRelation:
-
-- **g:EclimProjectTreeTaglistRelation** (Default: 'below')
-
-  Used to define the relation to the taglist_ window if the taglist_ plugin is
-  present.  Valid values include 'below' and 'above'.
-
-.. _g\:EclimProjectTreeWincmd:
-
-- **g:EclimProjectTreeWincmd**
-
-  (Default: Varies depending on presence of taglist_ plugin and its settings.)
-  Vim command prepended to the split command used to open the project tree
-  window (Ex. 'botright', 'botright vertical', etc.).
-
-.. _g\:EclimProjectTreeContentWincmd:
-
-- **g:EclimProjectTreeContentWincmd**
-
-  (Default: Varies depending on presence of taglist_ plugin and its settings.)
-  Vim command used to move focus to the nearest content window where actions to
-  open selected files will be executed from.  For instance, when issuing a
-  split on a file from the project tree, you most likely do not want to split
-  that file relative to the project tree, but rather split it relative to the
-  file open in the window to the left or right of the project tree (Ex. 'winc
-  h', 'winc l', etc).
-
-.. _g\:EclimProjectTreeWidth:
-
-- **g:EclimProjectTreeWidth**
-
-  (Default: Defaults to same width as taglist_ if present, otherwise defaults
-  to 30.) Only used if the project tree is to be opened in a vertical window.
-
-.. _g\:EclimProjectTreeHeight:
-
-- **g:EclimProjectTreeHeight**
-
-  (Default: Defaults to same height as taglist_ if present, otherwise defaults
-  to 10.) Only used if the project tree is to be opened in a horizontal window.
-
 .. _g\:EclimProjectTreeActions:
 
 - **g:EclimProjectTreeActions**
@@ -349,8 +308,9 @@ Vim Settings
         \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
       \ ]
 
-  Map of file patterns to the available actions for opening files that match
-  that pattern.
+  List of mappings which link file patterns to the available actions for
+  opening files that match those patterns.  Note that the first mapping is the
+  list is used as the default (<cr>).
 
 .. _g\:EclimTodoSearchPattern:
 
