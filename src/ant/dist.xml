@@ -19,13 +19,16 @@
   <!--
     - Target for creating distributable files.
     -->
-  <target name="dist" depends="clean,build,javadoc,docs"
+  <target name="dist" depends="clean,build,javadoc,docs,vimdocs"
       description="Creates the distributable files.">
     <mkdir dir="${build.installer}"/>
 
     <!-- docs archive -->
     <zip destfile="${build.plugins}/org.eclim_${eclim.version}/doc.zip">
-      <fileset dir="build/doc" includes="**/*"/>
+      <fileset dir="build/doc">
+        <include name="api/**/*"/>
+        <include name="doc/**/*"/>
+      </fileset>
     </zip>
 
     <!-- src archive -->
@@ -78,6 +81,9 @@
         <include name="**/*.vim"/>
         <include name="**/*.example"/>
       </fileset>
+      <zipfileset dir="build/doc/vimdocs" prefix="eclim/doc">
+        <include name="**/*.txt"/>
+      </zipfileset>
     </zip>
 
     <antcall target="installer"/>
