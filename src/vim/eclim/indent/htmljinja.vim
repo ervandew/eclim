@@ -54,9 +54,9 @@ function! HtmlJinjaIndentAnythingSettings ()
 
   let b:indentTrios = [
       \ [ '<\w', '', '\(/>\|</\)' ],
-      \ [ '{%\s*\(' . g:HtmlJinjaIndentOpenElements . '\)\(\s\+.\{-}\)\?%}',
-        \ '{%\s*\(' . g:HtmlJinjaIndentMidElements . '\)\(\s\+.\{-}\)\?%}',
-        \ '{%\s*end\w\+\s*%}' ],
+      \ [ '{%-\?\s*\(' . g:HtmlJinjaIndentOpenElements . '\)\(\s\+.\{-}\)\?-\?%}',
+        \ '{%-\?\s*\(' . g:HtmlJinjaIndentMidElements . '\)\(\s\+.\{-}\)\?-\?%}',
+        \ '{%-\?\s*end\w\+\s*-\?%}' ],
     \ ]
 endfunction " }}}
 

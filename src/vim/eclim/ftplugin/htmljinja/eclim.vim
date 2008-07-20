@@ -30,10 +30,13 @@ let g:HtmlJinjaBodyElements = [
     \ ['block', 'endblock'],
     \ ['call', 'endcall'],
     \ ['filter', 'endfilter'],
-    \ ['for', 'else', 'endfor'],
+    \ ['for', 'endfor'],
     \ ['if', 'elif', 'else', 'endif'],
     \ ['macro', 'endmacro'],
   \ ]
+" excluding 'else' on for until matchit.vim can support a duplicate word
+" (doesn't break the matching of 'else' for 'if' statements.
+"    \ ['for', 'else', 'endfor'],
 
 " add matchit.vim support for jinja tags
 if exists("b:match_words")
@@ -43,9 +46,9 @@ if exists("b:match_words")
       if pattern != ''
         let pattern .= ':'
       endif
-      let pattern .= '{%\s*\<' . tag . '\>.\{-}%}'
+      let pattern .= '{%-\?\s*\<' . tag . '\>.\{-}-\?%}'
     endfor
-    let pattern .= ':{%\s*\<' . element[-1:][0] . '\>\s*%}'
+    let pattern .= ':{%-\?\s*\<' . element[-1:][0] . '\>\s*-\?%}'
     let b:match_words .= ',' . pattern
   endfor
 endif
