@@ -25,8 +25,8 @@
 
 " Command Declarations {{{
 if !exists(':EclimHelp')
-  command -nargs=1 -complete=customlist,eclim#help#CommandCompleteTag
-    \ EclimHelp :call eclim#help#Help('<args>')
+  command -nargs=? -complete=customlist,eclim#help#CommandCompleteTag
+    \ EclimHelp :call eclim#help#Help('<args>', 0)
 endif
 if !exists(':EclimHelpGrep')
   command -nargs=+ EclimHelpGrep :call eclim#help#HelpGrep(<q-args>)

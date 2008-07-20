@@ -24,7 +24,7 @@
 
 runtime ftplugin/help.vim
 
-nnoremap <silent> <buffer> <cr> :call eclim#help#Help('')<cr>
-nnoremap <silent> <buffer> <c-]> :call eclim#help#Help('')<cr>
+nnoremap <silent> <buffer> <cr> :call eclim#help#Help('', 1)<cr>
+nnoremap <silent> <buffer> <c-]> :call eclim#help#Help('', 1)<cr>
 
 " vim:ft=vim:fdm=marker

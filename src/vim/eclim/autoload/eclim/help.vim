@@ -38,12 +38,14 @@
 " }}}
 
 " Help(tag) {{{
-function! eclim#help#Help (tag)
+function! eclim#help#Help (tag, link)
   let savetags = &tags
   exec 'set tags=' . g:EclimHelpDir . '/**/tags'
   try
     let tag = a:tag
-    if tag == ''
+    if tag == '' && !a:link
+      let tag = 'vim-index'
+    elseif tag ==''
       let line = getline('.')
       let tag = substitute(
         \ line, '.*|\(\S\{-}\%' . col('.') . 'c\S\{-}\)|.*', '\1', '')
