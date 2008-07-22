@@ -185,7 +185,7 @@
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
     <!-- deploy vim files -->
-    <delete>
+    <delete includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
         <include name="**/*"/>
         <exclude name="after/**/*"/>
