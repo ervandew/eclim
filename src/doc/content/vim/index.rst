@@ -55,3 +55,20 @@ the other categories.
   Allows you to view / edit the global :ref:`settings <vim/settings>`.
   For project level settings see the :ref:`:ProjectSettings` command on the
   :ref:`project documentation page <vim/common/project>`.
+
+.. _\:EclimHelp:
+
+- **:EclimHelp** [<topic>] -
+  Similar to vim's :help command, with the exception that this command is
+  limited to opening topics for eclim.
+
+.. _\:EclimHelpGrep:
+
+- **:EclimHelp** /<pattern>/ -
+  Command which allows you to search the eclim help files via vimgrep.
+
+  Ex.
+
+  ::
+
+    :EclimHelpGrep /completion/
