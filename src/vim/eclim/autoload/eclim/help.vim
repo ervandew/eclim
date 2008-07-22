@@ -26,8 +26,9 @@
 " Global Variables {{{
   let g:EclimHelpDir = g:EclimBaseDir . '/eclim/doc'
 
-  if !filereadable(g:EclimHelpDir . '/tags')
+  if !filereadable(substitute(g:EclimHelpDir, '\\\s', ' ', 'g') . '/tags')
     call eclim#util#Echo('indexing eclim help files...')
+    silent! exec 'helptags ' . g:EclimHelpDir
     let paths = split(glob(g:EclimHelpDir . '/**/*'), '\n')
     call filter(paths, 'isdirectory(v:val)')
     for path in paths
@@ -40,7 +41,7 @@
 " Help(tag) {{{
 function! eclim#help#Help (tag, link)
   let savetags = &tags
-  exec 'set tags=' . g:EclimHelpDir . '/**/tags'
+  exec 'set tags=' . escape(escape(g:EclimHelpDir, ' '), ' ') . '/**/tags'
   try
     let tag = a:tag
     if tag == '' && !a:link
@@ -96,7 +97,7 @@ function! eclim#help#CommandCompleteTag (argLead, cmdLine, cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
   let savetags = &tags
-  exec 'set tags=' . g:EclimHelpDir . '/**/tags'
+  exec 'set tags=' . escape(escape(g:EclimHelpDir, ' '), ' ') . '/**/tags'
   try
     let results = taglist(argLead . '.*')
     call map(results, "v:val['name']")
