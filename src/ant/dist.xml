@@ -27,7 +27,7 @@
     <zip destfile="${build.plugins}/org.eclim_${eclim.version}/doc.zip">
       <fileset dir="build/doc">
         <include name="api/**/*"/>
-        <include name="doc/**/*"/>
+        <include name="site/**/*"/>
       </fileset>
     </zip>
 
