@@ -39,6 +39,9 @@ public class CorrectCommandTest
   private static final String TEST_FILE =
     "src/org/eclim/test/correct/TestCorrect.java";
 
+  private static final String TEST_FILE_PACKAGE =
+    "src/org/eclim/test/correct/TestCorrectPackage.java";
+
   @Test
   public void suggest ()
   {
@@ -77,5 +80,49 @@ public class CorrectCommandTest
 
     assertTrue("Import not found.",
         Pattern.compile("import java\\.").matcher(result).find());
+  }
+
+  @Test
+  public void suggestPackage ()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "java_correct", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE_PACKAGE,
+      "-l", "1", "-o", "0"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+
+    assertEquals("Wrong error.",
+        "The declared package \"org.test\" does not match the expected " +
+        "package \"org.eclim.test.correct\"",
+        results[0]);
+    assertTrue("Wrong suggestion description.",
+        results[1].indexOf("'org.eclim.test.correct'") != -1);
+    assertTrue("Wrong suggestion preview.",
+        results[3].indexOf("package org.eclim.test.correct;") != -1);
+  }
+
+  @Test
+  public void applyPackage ()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "java_correct", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE_PACKAGE,
+      "-l", "1", "-o", "0", "-a", "0"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+    assertEquals("Incorrect package", "package org.eclim.test.correct;", results[0]);
   }
 }
