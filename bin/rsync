@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2005 - 2008  Eric Van Dewoestine
 #
@@ -15,15 +15,47 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-BASEDIR=`dirname $0`
-BASEDIR="$BASEDIR/.."
+BASEDIR=`dirname $(dirname $(which $0))`
 
-rsync --recursive --compress --force --whole-file --delete --delete-after \
-  --stats -v --rsh="ssh -l ervandew" \
-  $BASEDIR/build/doc/forrest/site/* \
-  ervandew@shell.sf.net:/home/groups/e/ec/eclim/htdocs
+function usage () {
+  echo "Usage: rsync <target>"
+  echo "  supported targets:"
+  echo "    - site: website content"
+  echo "    - dist: distributable files"
+}
 
-rsync --recursive --compress --force --whole-file --delete --delete-after \
-  --stats -v --rsh="ssh -l ervandew" --exclude="CVS" \
-  $BASEDIR/bin/server/* \
-  ervandew@shell.sf.net:/home/groups/e/ec/eclim/scripts
+function site () {
+  echo "rsync site"
+  rsync --recursive --compress --force --whole-file --delete --delete-after \
+    --stats -v --rsh="ssh -l ervandew" \
+    $BASEDIR/build/doc/site/* \
+    ervandew@shell.sf.net:/home/groups/e/ec/eclim/htdocs
+
+  #rsync --recursive --compress --force --whole-file --delete --delete-after \
+  #  --stats -v --rsh="ssh -l ervandew" --exclude="CVS" \
+  #  $BASEDIR/bin/server/* \
+  #  ervandew@shell.sf.net:/home/groups/e/ec/eclim/scripts
+}
+
+function dist () {
+  echo "rsync dist"
+  rsync --progress --whole-file \
+    --stats -v --rsh="ssh -l ervandew" \
+    $BASEDIR/build/dist/* \
+    ervandew@frs.sourceforge.net:uploads
+}
+
+if [ $# != 1 ] ; then
+  usage
+  exit 1
+fi
+
+TARGET=$1
+
+if [ $TARGET != 'site' -a $TARGET != 'dist' ] ; then
+  echo "abort: unsuported target '$TARGET'"
+  usage
+  exit 1
+fi
+
+$TARGET
