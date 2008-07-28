@@ -18,7 +18,7 @@ History of Changes
 
 .. _1.4.0:
 
-1.4.0 (July 13, 2008)
+1.4.0 (July 27, 2008)
 ---------------------
 
 Eclipse:
@@ -32,6 +32,10 @@ Bug Fixes:
     the default location.
   - Fixed sign placement (used by all validation plugins) on non-english vims.
   - Various other bug fixes.
+
+Eclim:
+  - Added translation of html docs to vim doc format accessable via
+    :ref:`:EclimHelp` and :ref:`:EclimHelpGrep`.
 
 Django:
   - Added :ref:`end tag completion <htmldjango>` support for django templates.
