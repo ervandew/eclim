@@ -1,9 +1,8 @@
 HIGH {{{
-  - update license on sourceforge project page and freshmeat.
-
   - possible issue with :JavaDocSearch
 
-  - :JavaCorrect, need to get the eclipse apply version working
+  - :JavaCorrect, need to get the eclipse apply version working (but probably
+    should wait until :edit is a considered a change operation in vim).
     https://sourceforge.net/forum/message.php?msg_id=5087396
 
   - add/test proxy support to the installer
@@ -44,11 +43,51 @@ TODO {{{
 
   Tests {{{
     - line based matching via :JavaRegex and :PythonRegex
-    - util classes
+    - util classes and vim util functions
     - project nature add/remove
     - logger (custom logger)
     - indenting test cases
     - html validate: validation of nested javascript and css
+    - archive reading (tree and list)
+    - :Vcs*
+      - setup a local hg repos in test/resources/
+      - use eclim repos for svn testing
+      - cvs testing?
+    - various common vim commands
+      - :Split
+      - :Tabnew
+      - :EditRelative
+      - :SplitRelative
+      - :TabnewRelative
+      - :ReadRelative
+      - :ArgsRelative
+      - :ArgAddRelative
+      - :Buffers
+      - :Only
+      - :DiffLastSaved
+      - :OtherWorkingCopyDiff
+      - :OtherWorkingCopyEdit
+      - :OtherWorkingCopySplit
+      - :OtherWorkingCopyTabopen
+      - :LocateFileEdit
+      - :LocateFileSplit
+      - :LocateFileTab
+      - :Sign
+      - :Signs
+      - :SignClearUser
+      - :SignClearAll
+      - :QuickFixClear
+      - :LocationListClear
+      - :VimgrepRelative
+      - :VimgrepAddRelative
+      - :LvimgrepRelative
+      - :LvimgrepAddRelative
+      - :CdRelative
+      - :LcdRelative
+    - django functionality
+    - :EclimHelp, :EclimHelpGrep
+    - :Jps
+    - vim templating
   }}}
 
   Installer {{{
@@ -155,12 +194,28 @@ TODO {{{
     - integrate w/ eclipse build/run system for at least simple programs.
 
     - add
+      :VcsStatus
+        - temp window w/ list of files
+        - hitting <enter> on a file with:
+          - M shows the diff
+          - A opens the file
+          - R does nothing
+      :VcsOut (git equivalent?)
+        - open temp window w/ list of files grouped by changeset
+        - try to have <enter> on a file open a diff of remote version vs local
+        - ... figure out how to handle A and R files
+      :VcsIn (git equivalent?)
+        - open temp window w/ list of files grouped by changeset
+        - try to have <enter> on a file open a diff of remote version vs local
+        - ... figure out how to handle A and R files
+
+      - these would go against my view of not modifying local files via :Vcs
+        commands.
+      :VcsPush
+      :VcsUpdate (git equivalent?)
       :VcsPull
         in git, 'fetch' is the analogous to hg's 'pull' and git's 'pull' is
         analogous to hg's 'fetch' (confused yet?)
-      :VcsPush
-      :VcsUpdate (git equivalent?)
-      :VcsIn, :VcsOut (git equivalents?)
 
     - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
@@ -238,6 +293,12 @@ TODO {{{
       - missing closing }
       - font: 100%;
       - trailing , on list of selectors
+  }}}
+
+  Groovy {{{
+
+    - http://groovy.codehaus.org/Eclipse+Plugin
+
   }}}
 
   Html {{{
@@ -386,6 +447,9 @@ TODO {{{
   }}}
 
   Jdbc {{{
+    - dbext (http://www.vim.org/scripts/script.php?script_id=356)
+      - at a glance, seems to satify my requirements.
+
     - Create connection profiles
       - eclim_jdbc_profile_<name> (where to store these settings? ... .eclim/jdbc/<name>.properties)
         - Driver Class:
@@ -426,6 +490,8 @@ TODO {{{
   }}}
 
   Python {{{
+    - jython?
+
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
@@ -442,6 +508,7 @@ TODO {{{
     - http://www.eclipse.org/dltk/ dltk
     - http://rubyeclipse.sourceforge.net/ rubyeclipse
     - http://www.radrails.org/ rad rails
+    - jruby?
   }}}
 
   SQL {{{
