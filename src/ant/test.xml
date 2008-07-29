@@ -79,7 +79,7 @@
   <!--
     - Runs the junit tests after eclimd has been started.
     -->
-  <target name="tests.run" description="Runs the unit tests.">
+  <target name="tests.run">
     <mkdir dir="build/test/junit/results"/>
     <mkdir dir="build/test/vunit/results"/>
 
@@ -92,8 +92,7 @@
   <!--
     - Runs the junit tests after eclimd has been started.
     -->
-  <target name="tests.run.junit" description="Runs the junit tests"
-      unless="junit.skip">
+  <target name="tests.run.junit" unless="junit.skip">
     <mkdir dir="build/test/junit/classes"/>
 
     <javac destdir="build/test/junit/classes" debug="on" optimize="false"
@@ -149,8 +148,7 @@
   <!--
     - Runs vim script unit tests.
     -->
-  <target name="tests.run.vunit" description="Runs the vunit tests."
-      unless="vunit.skip">
+  <target name="tests.run.vunit" unless="vunit.skip">
     <taskdef name="vunit" classname="org.eclim.misc.ant.VUnitTask">
       <classpath>
         <pathelement location="${build.classes}"/>
