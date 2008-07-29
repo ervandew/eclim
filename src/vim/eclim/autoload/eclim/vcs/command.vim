@@ -40,6 +40,9 @@ function! eclim#vcs#command#Annotate (...)
 
   let path = exists('b:vcs_props') ? b:vcs_props.path : expand('%:p')
   let revision = len(a:000) > 0 ? a:000[0] : ''
+  if revision == ''
+    let revision = eclim#vcs#util#GetRevision()
+  endif
   let key = 'annotate_' . path . '_' . revision
   let cached = eclim#cache#Get(key)
   if has_key(cached, 'content')
