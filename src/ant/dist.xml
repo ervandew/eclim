@@ -86,13 +86,25 @@
       </zipfileset>
     </zip>
 
+    <!-- full source tar -->
+    <tar destfile="build/dist/eclim_${eclim.version}.tar.gz"
+        compression="gzip">
+      <tarfileset dir="." prefix="eclim_${eclim.version}">
+        <include name="**/*"/>
+        <exclude name="backup/**/*"/>
+        <exclude name="backup/"/>
+        <exclude name="build/**/*"/>
+        <exclude name="build/"/>
+      </tarfileset>
+    </tar>
+
     <antcall target="installer"/>
   </target>
 
   <!--
     - Target for creating installer files.
     -->
-  <target name="installer" description="Creates the installers.">
+  <target name="installer">
     <!-- run formic -->
     <exec executable="${formic.home}/bin/formic" failonerror="true" dir=".">
       <arg line="-buildfile src/installer/build.xml"/>
