@@ -86,6 +86,8 @@
       </zipfileset>
     </zip>
 
+    <antcall target="installer"/>
+
     <!-- full source tar -->
     <tar destfile="build/dist/eclim_${eclim.version}.tar.gz"
         compression="gzip">
@@ -97,8 +99,6 @@
         <exclude name="build/"/>
       </tarfileset>
     </tar>
-
-    <antcall target="installer"/>
   </target>
 
   <!--
