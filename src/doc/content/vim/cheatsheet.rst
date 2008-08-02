@@ -28,6 +28,8 @@ Global Commands
 - :ref:`:PingEclim` - Pings eclimd server.
 - :ref:`:ShutdownEclim` - Shuts down eclimd server.
 - :ref:`:EclimSettings` - View / edit global settings.
+- :ref:`:EclimHelp` [helptopic] - View eclim documentation in vim.
+- :ref:`:EclimHelpGrep` /regex/ - Search the eclim documentation in vim.
 
 
 Project Commands
