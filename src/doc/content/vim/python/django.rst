@@ -104,7 +104,7 @@ Django html template support
 
 Vim ships with a syntax file for django html template files, but eclim builds on
 that base to support highlighting of user defined tags and filters (see the
-<a href="#configuration">configuration section</a> below.
+configuration section below.
 
 **Indent**
 
@@ -114,7 +114,7 @@ and any user defined tags that have been configured.
 
 **Match It**
 
-Again, using the same set of variables, eclim set the necessary variables to
+Again, using the same set of variables, eclim sets the necessary variables to
 allow proper matchit.vim support for django default and user defined tags.
 
 **End Tag Completion**

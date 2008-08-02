@@ -44,7 +44,7 @@ instead have the regex matched against each line individually, then you can set
 the buffer local variable **b:eclim_regex_type** to 'line'.  To switch back to
 the default mode simply set the same variable to 'file' instead.
 
-By default eclim uses four different highlighting groups, two which are
+By default eclim uses four different highlighting groups, two of which are
 alternated between for the full matches, and two that are alternated between for
 the group matches.  Eclim alternates the highlighting so that you can
 distinguish one match from the next even if they occur one right after the
