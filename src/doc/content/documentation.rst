@@ -25,6 +25,7 @@ Documentation
   vim/code_completion
   vim/mappings
   vim/cheatsheet
+  vim/faq
   vim/common/index
   vim/css/index
   vim/dtd/index
@@ -39,11 +40,13 @@ Documentation
   vim/xsd/index
 
 - :ref:`vim/index`
+- :ref:`eclimd`
 - :ref:`vim/settings`
 - :ref:`vim/issues`
 - :ref:`vim/code_completion`
 - :ref:`vim/mappings`
-- :ref:`eclimd`
+- :ref:`vim/cheatsheet`
+- :ref:`vim/faq`
 - :ref:`vim/common/index`
 - :ref:`vim/css/index`
 - :ref:`vim/dtd/index`
