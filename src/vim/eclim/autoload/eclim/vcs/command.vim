@@ -250,9 +250,21 @@ function! eclim#vcs#command#Log (path)
       \ })
   endif
 
+  " if annotations are on, jump to the revision for the current line
+  let jumpto = ''
+  if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
+    let jumpto = split(b:vcs_annotations[line('.') - 1])[0]
+  endif
+
   call s:TempWindow(info.log)
   call s:LogSyntax()
   call s:LogMappings()
+
+  " continuation of annotation support
+  if jumpto != ''
+    call search('^Revision: |' . jumpto)
+    normal z
+  endif
 
   let b:vcs_props = info.props
   exec 'lcd ' . escape(info.props.root_dir, ' ')
