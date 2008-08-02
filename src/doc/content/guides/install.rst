@@ -66,6 +66,7 @@ Step 1: Download the eclim installer for your platform.
 - **Windows:**
   `eclim_version.exe`_
 
+
 Step 2: Run the installer.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -85,10 +86,29 @@ Step 2: Run the installer.
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
 
+.. note::
+
+  In some rare cases you might encounter the following error\:
+
+  ::
+
+    java.lang.IncompatibleClassChangeError
+      at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
+      ...
+
+  This is most likely caused by an incompatible version of log4j installed in
+  your jave ext.dirs.  To combat this you can run the installer like so\:
+
+  ::
+
+    $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
+
+
 Step 3: Start the eclimd server and test it.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See the documentation :ref:`below <start_test>`.
+
 
 .. _start_test:
 
@@ -141,9 +161,10 @@ Now that you have eclim installed, the next step is to familiarize yourself
 with at least the core set of commands that eclim provides, all of which are
 found at the index of the eclim :ref:`documentation <vim/index>`.
 
-After doing that you can then procede to create your first project\:
+After doing that you can then proceed to create your first project\:
 
 - :ref:`Java Project Guide <guides/java/project>`
+- :ref:`Python Project Guide <guides/python/project>`
 - :ref:`Php Project Guide <guides/php/project>`
 
 
