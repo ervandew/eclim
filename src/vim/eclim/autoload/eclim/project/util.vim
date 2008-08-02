@@ -405,8 +405,8 @@ endfunction " }}}
 
 " GetProjects([curfile]) {{{
 " Gets a map of project names to project locations.
-" If a file path is supplied, the result will be map containing just the
-" project the supllied file is in, or an empty map if no project found.
+" If a file path is supplied, the result will be a map containing just the
+" project the supplied file is located in, or an empty map if no project found.
 function! eclim#project#util#GetProjects (...)
   if !exists('s:projects')
     let cached = eclim#cache#Get('eclim_projects')
