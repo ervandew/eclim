@@ -30,6 +30,7 @@ syn keyword mysqlKeyword if elseif else loop leave while
 syn keyword mysqlKeyword before close cursor each fetch open set trigger
 syn keyword mysqlKeyword begin call declare return
 syn keyword mysqlKeyword delimiter
+syn keyword mysqlKeyword truncate
 syn keyword mysqlKeyword union
 
 syn keyword sqlTodo TODO FIXME NOTE
