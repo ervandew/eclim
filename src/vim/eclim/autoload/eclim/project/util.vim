@@ -381,18 +381,14 @@ endfunction " }}}
 " GetCurrentProjectName() {{{
 " Gets the project name that the current file is in.
 function! eclim#project#util#GetCurrentProjectName ()
-  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
-  let projects = filter(copy(eclim#project#util#GetProjects()),
-    \ 'dir =~ "^" . v:val ')
+  let projects = eclim#project#util#GetProjects(expand('%'))
   return len(projects) > 0 ? keys(projects)[0] : ''
 endfunction " }}}
 
 " GetCurrentProjectRoot() {{{
 " Gets the project root dir for the project that the current file is in.
 function! eclim#project#util#GetCurrentProjectRoot ()
-  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
-  let projects = filter(copy(eclim#project#util#GetProjects()),
-    \ 'dir =~ "^" . v:val ')
+  let projects = eclim#project#util#GetProjects(expand('%'))
   return len(projects) > 0 ? values(projects)[0] : ''
 endfunction " }}}
 
@@ -407,9 +403,11 @@ function! eclim#project#util#GetProjectRelativeFilePath (file)
   return result
 endfunction " }}}
 
-" GetProjects() {{{
+" GetProjects([curfile]) {{{
 " Gets a map of project names to project locations.
-function! eclim#project#util#GetProjects ()
+" If a file path is supplied, the result will be map containing just the
+" project the supllied file is in, or an empty map if no project found.
+function! eclim#project#util#GetProjects (...)
   if !exists('s:projects')
     let cached = eclim#cache#Get('eclim_projects')
     if has_key(cached, 'content') && len(cached.content) > 0
@@ -460,6 +458,11 @@ function! eclim#project#util#GetProjects ()
       call eclim#cache#Set('eclim_projects', [string(projects)])
     endif
     let s:projects = projects
+  endif
+
+  if len(a:000) == 1
+    let dir = substitute(fnamemodify(a:000[0], ':p:h'), '\', '/', 'g')
+    return filter(copy(s:projects), 'dir =~ "^" . v:val . "\\(/\\|$\\)"')
   endif
 
   return s:projects
