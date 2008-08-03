@@ -16,8 +16,11 @@
  */
 package org.eclim.command.archive;
 
+import java.text.Collator;
 import java.text.SimpleDateFormat;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -72,6 +75,15 @@ public class ArchiveListCommand
   protected String[] processFiles (FileObject[] files)
     throws Exception
   {
+    Arrays.sort(files, new Comparator<FileObject>(){
+      private Collator collator =  Collator.getInstance();
+      public int compare (FileObject o1, FileObject o2) {
+        return collator.compare(
+          o1.getName().getBaseName(),
+          o2.getName().getBaseName());
+      }
+    });
+
     String[] results = new String[files.length];
     for (int ii = 0; ii < files.length; ii++){
       FileObject file = files[ii];
