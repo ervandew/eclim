@@ -476,6 +476,8 @@ function! s:ProcessTags ()
   endif
 
   winc p
+
+  call s:ShowCurrentTag()
 endfunction " }}}
 
 " s:FormatDefault(types, tags) {{{
