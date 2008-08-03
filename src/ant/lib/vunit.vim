@@ -217,10 +217,14 @@ function! s:TearDown()
   " dispose of all buffers
   let lastbuf = bufnr('$')
   let curbuf = 1
+
+  " igore any error message from here by temporarily redirecting to black hole
+  call PushRedir('@_>')
   while curbuf <= lastbuf
     exec 'silent! bdelete! ' . curbuf
     let curbuf += 1
   endwhile
+  call PopRedir()
 endfunction " }}}
 
 " GetTestFunctionNames() " {{{
