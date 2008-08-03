@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_web'
 endfunction " }}}
 
 " TestValidate() {{{
@@ -51,8 +51,6 @@ function! TestValidate ()
   call VUAssertEquals(1, errors[1].col)
   call VUAssertEquals('e', errors[1].type)
   call VUAssertEquals("Property fnt-size doesn't exist", errors[1].text)
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

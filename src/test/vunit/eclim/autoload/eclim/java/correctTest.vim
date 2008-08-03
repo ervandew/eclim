@@ -56,8 +56,6 @@ function! TestCorrect ()
 
   call VUAssertTrue(search('^import java\.'),
     \ 'Correction not applied.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

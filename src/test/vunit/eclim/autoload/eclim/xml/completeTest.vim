@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_web'
 endfunction " }}}
 
 " TestCompleteXsd() {{{

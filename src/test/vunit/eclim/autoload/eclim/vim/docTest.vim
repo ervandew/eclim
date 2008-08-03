@@ -25,7 +25,7 @@
 
 " TestFindDoc() {{{
 function! TestFindDoc ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! vim/test.vim
   call PeekRedir()
 
@@ -74,7 +74,6 @@ function! TestFindDoc ()
   "call eclim#vim#doc#FindDoc('')
   "call VUAssertTrue(&ft == 'help', 'not help file: substitute()')
   "call VUAssertTrue(getline('.') =~ '\*substitute()\*', 'substitute()')
-  "bdelete
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

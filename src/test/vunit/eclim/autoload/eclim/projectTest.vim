@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test_java/src/org/eclim'
+  let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/files'
   exec 'cd ' . s:test_dir
 endfunction " }}}
 
@@ -34,14 +34,14 @@ function! TestProjectCD ()
   call VUAssertEquals(s:test_dir, getcwd(), "Setup failed.")
 
   call eclim#project#util#ProjectCD(0)
-  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java', getcwd(),
+  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test', getcwd(),
     \ "Project cd failed.")
 endfunction " }}}
 
 " TestProjectSettings() {{{
 function! TestProjectSettings ()
-  call eclim#project#util#ProjectSettings('eclim_unit_test_java')
-  call VUAssertEquals('eclim_unit_test_java_settings', expand('%'),
+  call eclim#project#util#ProjectSettings('eclim_unit_test')
+  call VUAssertEquals('eclim_unit_test_settings', expand('%'),
     \ "Didn't open settings window.")
   close
 endfunction " }}}
@@ -49,13 +49,13 @@ endfunction " }}}
 " TestGetCurrentProjectName() {{{
 function! TestGetCurrentProjectName ()
   let name = eclim#project#util#GetCurrentProjectName()
-  call VUAssertEquals('eclim_unit_test_java', name, "Wrong project name.")
+  call VUAssertEquals('eclim_unit_test', name, "Wrong project name.")
 endfunction " }}}
 
 " TestGetCurrentProjectRoot() {{{
 function! TestGetCurrentProjectRoot ()
   let dir = eclim#project#util#GetCurrentProjectRoot()
-  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java', dir,
+  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test', dir,
     \ "Wrong project dir.")
 endfunction " }}}
 
@@ -71,9 +71,11 @@ function! TestCommandCompleteProject ()
   let results = eclim#project#util#CommandCompleteProject(
     \ 'eclim_', 'ProjectRefresh eclim_', 21)
 
-  call VUAssertEquals(2, len(results), "Wrong number of results.")
-  call VUAssertEquals('eclim_unit_test_java', results[0], "Wrong result.")
-  call VUAssertEquals('eclim_unit_test_php', results[1], "Wrong result.")
+  call VUAssertEquals(4, len(results), "Wrong number of results.")
+  call VUAssertEquals('eclim_unit_test', results[0], "Wrong result.")
+  call VUAssertEquals('eclim_unit_test_java', results[1], "Wrong result.")
+  call VUAssertEquals('eclim_unit_test_php', results[2], "Wrong result.")
+  call VUAssertEquals('eclim_unit_test_web', results[3], "Wrong result.")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

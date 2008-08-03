@@ -50,8 +50,6 @@ function! TestJavaImpl ()
   call cursor(1, 1)
   call VUAssertTrue(search('public boolean equals (Object obj)', 'c'),
     \ 'Method no inserted.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

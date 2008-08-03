@@ -46,8 +46,6 @@ function! TestImport ()
   JavaImport
   call VUAssertTrue(search('^import java\.util\.ArrayList;'),
     \ 'ArrayList not imported.')
-
-  bdelete!
 endfunction " }}}
 
 " TestUnusedImport() {{{
@@ -66,8 +64,6 @@ function! TestUnusedImport ()
     \ 'ArrayList import still found.')
   call VUAssertFalse(search('^import java\.util\.List;$'),
     \ 'List import still found.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

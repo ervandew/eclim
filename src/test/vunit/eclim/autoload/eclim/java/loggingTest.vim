@@ -44,8 +44,6 @@ function! TestLoggerDefine ()
     \ 'Logger import not found.')
   call VUAssertTrue(search('^\s*private static final Log logger.*'),
     \ 'Logger declaration not found.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

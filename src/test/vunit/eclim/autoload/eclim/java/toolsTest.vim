@@ -28,8 +28,6 @@ function! TestJps ()
   Jps
 
   call VUAssertEquals('Java_Processes', bufname('%'), 'Jps window not opened.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

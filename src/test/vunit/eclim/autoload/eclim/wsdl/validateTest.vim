@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_web'
 endfunction " }}}
 
 " TestValidate() {{{
@@ -51,8 +51,6 @@ function! TestValidate ()
   call VUAssertEquals(48, errors[2].lnum)
   call VUAssertEquals(49, errors[2].col)
   call VUAssertEquals('e', errors[2].type)
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

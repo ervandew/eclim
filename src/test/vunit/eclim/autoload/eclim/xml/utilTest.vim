@@ -23,13 +23,9 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
-endfunction " }}}
-
 " TestGetDtd() {{{
 function! TestGetDtd ()
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! xml/test_nodtd.xml
   call PeekRedir()
   call VUAssertEquals('', eclim#xml#util#GetDtd())
@@ -39,26 +35,25 @@ function! TestGetDtd ()
   call VUAssertEquals(
     \ "http://www.springframework.org/dtd/spring-beans.dtd",
     \ eclim#xml#util#GetDtd())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetXsd() {{{
 function! TestGetXsd ()
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! xml/spring_test.xml
   call PeekRedir()
   call VUAssertEquals('', eclim#xml#util#GetXsd())
 
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   edit! pom.xml
   call PeekRedir()
   call VUAssertEquals(
     \ 'http://maven.apache.org/maven-v4_0_0.xsd', eclim#xml#util#GetXsd())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetElementName() {{{
 function! TestGetElementName ()
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   edit! pom.xml
   call PeekRedir()
 
@@ -79,12 +74,11 @@ function! TestGetElementName ()
 
   call cursor(23, 19)
   call VUAssertEquals('', eclim#xml#util#GetElementName())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetParentElementName() {{{
 function! TestGetParentElementName ()
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   edit! pom.xml
   call PeekRedir()
 
@@ -111,8 +105,6 @@ function! TestGetParentElementName ()
 
   call cursor(32, 54)
   call VUAssertEquals('resources', eclim#xml#util#GetParentElementName())
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

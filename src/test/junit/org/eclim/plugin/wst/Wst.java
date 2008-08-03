@@ -18,5 +18,5 @@ package org.eclim.plugin.wst;
 
 public class Wst
 {
-  public static final String TEST_PROJECT = "eclim_unit_test_java";
+  public static final String TEST_PROJECT = "eclim_unit_test_web";
 }

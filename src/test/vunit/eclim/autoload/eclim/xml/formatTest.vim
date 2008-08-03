@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
 endfunction " }}}
 
 " TestFormat() {{{
@@ -44,8 +44,6 @@ function! TestFormat()
   call VUAssertEquals('  <one>one</one>', getline(3))
   call VUAssertEquals('  <two/>', getline(4))
   call VUAssertEquals('</blah>', getline(5))
-
-  bdelete!
 endfunction " }}}
 
 " TestFormatFail() {{{
@@ -56,8 +54,6 @@ function! TestFormatFail()
   XmlFormat
 
   call VUAssertEquals(1, len(getloclist(0)))
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

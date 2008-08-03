@@ -40,7 +40,7 @@ public class ValidateCommandTest
     String file = TEST_FILE;
     String project = Eclim.TEST_PROJECT;
     String result = Eclim.execute(
-        new String[]{"xml_validate", "-p", project, "-f", file });
+        new String[]{"xml_validate", "-p", project, "-f", file});
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');

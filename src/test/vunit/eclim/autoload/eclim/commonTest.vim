@@ -26,45 +26,39 @@
 " TestOpenRelative() {{{
 function! TestOpenRelative ()
   exec 'cd ' . g:TestEclimWorkspace
-  edit! eclim_unit_test_java/build.xml
+  edit! eclim_unit_test/test_root_file.txt
 
-  call eclim#common#util#OpenRelative('edit', 'pom.xml', 1)
-  call VUAssertTrue(bufwinnr('eclim_unit_test_java/pom.xml') > -1,
-    \ 'Did not open pom.xml.')
-  bdelete
+  call eclim#common#util#OpenRelative('edit', 'files/test1.txt', 1)
+  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
+    \ 'Did not open test1.txt.')
 endfunction " }}}
 
 " TestOpenFiles() {{{
 function! TestOpenFiles ()
   exec 'cd ' . g:TestEclimWorkspace
   call eclim#common#util#OpenFiles('split',
-    \ 'eclim_unit_test_java/build.xml eclim_unit_test_java/pom.xml')
-  call VUAssertTrue(bufwinnr('eclim_unit_test_java/build.xml') > -1,
-    \ 'Did not open build.xml.')
-  call VUAssertTrue(bufwinnr('eclim_unit_test_java/pom.xml') > -1,
-    \ 'Did not open pom.xml.')
-  bdelete
-  bdelete
+    \ 'eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt')
+  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
+    \ 'Did not open test1.txt.')
+  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
+    \ 'Did not open test2.txt.')
 endfunction " }}}
 
 " TestSwapWords() {{{
 function! TestSwapWords ()
-  new
   call setline(1, 'one, two')
   call cursor(1, 1)
   call eclim#common#util#SwapWords()
   call VUAssertEquals('two, one', getline(1), "Words not swaped correctly.")
-  bdelete!
 endfunction " }}}
 
 " TestCommandCompleteRelative() {{{
 function! TestCommandCompleteRelative ()
   exec 'cd ' . g:TestEclimWorkspace
-  edit! eclim_unit_test_java/build.xml
-  let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative p', 15)
+  edit! eclim_unit_test/test_root_file.txt
+  let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative f', 15)
   call VUAssertEquals(1, len(results), "Wrong number of results.")
-  call VUAssertEquals('pom.xml', results[0], "Wrong result.")
-  bdelete
+  call VUAssertEquals('files/', results[0], "Wrong result.")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

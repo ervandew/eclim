@@ -26,7 +26,7 @@
 " TestFindByContextCommandRef() {{{
 " Cursor on a command ref.
 function! TestFindByContextCommandRef ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   call s:EditFile('vim/test.vim')
   call cursor(9, 34)
 
@@ -139,8 +139,6 @@ endfunction " }}}
 function s:FindByContext()
   let g:EclimVimPaths = '~/.vim'
   call eclim#vim#find#FindByContext('!')
-
-  bdelete!
   call PeekRedir()
 endfunction " }}}
 

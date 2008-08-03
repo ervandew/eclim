@@ -33,7 +33,7 @@ import org.eclim.util.IOUtils;
  */
 public class Eclim
 {
-  public static final String TEST_PROJECT = "eclim_unit_test_java";
+  public static final String TEST_PROJECT = "eclim_unit_test";
 
   private static final String ECLIM =
     System.getProperty("eclim.home") + "/bin/eclim";

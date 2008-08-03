@@ -25,7 +25,7 @@
 
 " SetUp() {{{
 function! SetUp ()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
 endfunction " }}}
 
 " TestValidate() {{{
@@ -58,8 +58,6 @@ function! TestValidate ()
   call VUAssertEquals(13, errors[1].lnum)
   call VUAssertEquals(9, errors[1].col)
   call VUAssertEquals('e', errors[1].type)
-
-  bdelete!
 endfunction " }}}
 
 " The following 2 tests appear to crash vim.
@@ -75,9 +73,6 @@ endfunction " }}}
 "  call VUAssertEquals(
 "    \ "http://www.springframework.org/dtd/spring-beans.dtd", expand('%'))
 "  call VUAssertEquals('<!ELEMENT description (#PCDATA)>', getline('.'))
-"
-"  bdelete!
-"  bdelete!
 "endfunction " }}}
 
 "TestXsdDefinition() {{{
@@ -93,9 +88,6 @@ endfunction " }}}
 "  call VUAssertEquals(
 "    \ '      <xs:element name="artifactId" minOccurs="0" type="xs:string">',
 "    \ getline('.'))
-"
-"  bdelete!
-"  bdelete!
 "endfunction " }}}
 
 " vim:ft=vim:fdm=marker

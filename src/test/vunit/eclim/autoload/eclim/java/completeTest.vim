@@ -70,8 +70,6 @@ function! TestCodeComplete ()
     call VUAssertTrue(string(result) =~ "'word': 'a",
       \ 'Narrowed results contains result not starting with "a"')
   endfor
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

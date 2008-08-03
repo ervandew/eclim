@@ -54,8 +54,6 @@ function! TestComment ()
   call VUAssertEquals('   *', getline(11), 'Wrong doc line 11.')
   call VUAssertEquals('   * @throws IOException', getline(12), 'Wrong doc line 12.')
   call VUAssertEquals('   */', getline(13), 'Wrong doc line 13.')
-
-  bdelete!
 endfunction " }}}
 
 " TestSearch() {{{
@@ -73,8 +71,6 @@ function! TestSearch ()
   call VUAssertEquals(1, line('$'), 'Wrong number of results.')
   call VUAssertEquals('http://java.sun.com/j2se/1.5.0/docs/api/java/awt/List.html',
     \ line('1'), 'Wrong result.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

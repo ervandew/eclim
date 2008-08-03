@@ -33,8 +33,6 @@ function! TestGetCharacterOffset ()
 
   call cursor(2, 7)
   call VUAssertEquals(14, eclim#util#GetCharacterOffset())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetCurrentElementColumn() {{{
@@ -50,8 +48,6 @@ function! TestGetCurrentElementColumn ()
 
   call cursor(1, 4)
   call VUAssertEquals(5, eclim#util#GetCurrentElementColumn())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetCurrentElementPosition() {{{
@@ -64,8 +60,6 @@ function! TestGetCurrentElementPosition ()
 
   call cursor(2, 9)
   call VUAssertEquals('14;4', eclim#util#GetCurrentElementPosition())
-
-  bdelete!
 endfunction " }}}
 
 " TestGetCurrentElementOffset() {{{
@@ -78,8 +72,6 @@ function! TestGetCurrentElementOffset ()
 
   call cursor(2, 9)
   call VUAssertEquals('14', eclim#util#GetCurrentElementOffset())
-
-  bdelete!
 endfunction " }}}
 
 " TestGrabUri() {{{
@@ -123,8 +115,6 @@ function! TestGrabUri ()
 
   call cursor(9, 11)
   call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
-
-  bdelete!
 endfunction " }}}
 
 " TestListContains() {{{
@@ -152,12 +142,8 @@ function! TestSimplify ()
 
   exec 'cd ' . g:TestEclimWorkspace
 
-  let file = g:TestEclimWorkspace . 'eclim_unit_test_java/build.xml'
-  call VUAssertEquals('eclim_unit_test_java/build.xml', eclim#util#Simplify(file))
-
-  "cd eclim_unit_test_java
-  "let file = '../eclim_unit_test_java/build.xml'
-  "call VUAssertEquals('build.xml', eclim#util#Simplify(file))
+  let file = g:TestEclimWorkspace . 'eclim_unit_test/test_root_file.txt'
+  call VUAssertEquals('eclim_unit_test/test_root_file.txt', eclim#util#Simplify(file))
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -46,8 +46,6 @@ function! TestSearch ()
   JavaSearch
   call VUAssertTrue(getline('.') =~ 'private List list',
     \ 'Not on variable declaration.')
-
-  bdelete!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
