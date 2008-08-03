@@ -208,6 +208,19 @@ function! s:RunTest(testcase, test)
   let time = strftime('%s') - now
   let result = {'testcase': a:testcase, 'test': a:test, 'time': time, 'fail': fail}
   call add(s:test_results, result)
+
+  call s:TearDown()
+endfunction " }}}
+
+" TearDown() {{{
+function! s:TearDown()
+  " dispose of all buffers
+  let lastbuf = bufnr('$')
+  let curbuf = 1
+  while curbuf <= lastbuf
+    exec 'silent! bdelete! ' . curbuf
+    let curbuf += 1
+  endwhile
 endfunction " }}}
 
 " GetTestFunctionNames() " {{{
@@ -231,7 +244,7 @@ function! s:GetTestFunctionNames ()
     endwhile
 
   finally
-    close
+    bdelete!
     exec winreset
   endtry
   return filter(results, 'v:val =~ "^Test"')
