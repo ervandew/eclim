@@ -61,6 +61,8 @@
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
     <fileset dir="${eclipse.home}/plugins"
         includes="**/*.jar" excludes="org.eclim*/**/*.jar"/>
+    <dirset dir="${eclipse.home}/plugins/"
+        includes="*" excludes="org.eclim*"/>
   </path>
 
   <!--
