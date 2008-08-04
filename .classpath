@@ -21,6 +21,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.4.0.v20080512.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.4.0.v20080604-1400.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.4.0.v20080512.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_0.95.0.v20080724.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_0.95.1.v20080724.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.1.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.4.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.preferences_3.2.200.v20080421-2006.jar"/>
@@ -32,8 +34,9 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.4.0.v20080605-1900.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php_1.1.0.HEAD.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_1.1.0.HEAD.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php_2.0.0.HEAD.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.HEAD"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.0.0.HEAD.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_3.4.0.v3448f.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.text_3.4.0.v20080605-1800.jar"/>
