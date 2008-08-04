@@ -17,6 +17,7 @@
 package org.eclim.plugin.pdt.command.src;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -27,11 +28,7 @@ import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
 
-import org.eclim.eclipse.EclimPlugin;
-
-import org.eclim.plugin.wst.command.validate.Reporter;
-import org.eclim.plugin.wst.command.validate.ValidationContext;
-
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
@@ -39,21 +36,10 @@ import org.eclim.util.file.FileOffsets;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
-import org.eclipse.jface.text.reconciler.DirtyRegion;
+import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
+import org.eclipse.dltk.compiler.problem.IProblem;
 
-import org.eclipse.php.internal.core.phpModel.parser.PHPWorkspaceModelManager;
-
-import org.eclipse.php.internal.ui.editor.PHPStructuredTextViewer;
-
-import org.eclipse.php.internal.ui.editor.validation.PHPValidator;
-
-import org.eclipse.wst.sse.core.StructuredModelManager;
-
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
-
-import org.eclipse.wst.validation.internal.provisional.core.IMessage;
+import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
 
 /**
  * Command to update and optionally validate a php src file.
@@ -64,8 +50,6 @@ import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
-  private static final PHPValidator VALIDATOR = new PHPValidator();
-
   /**
    * {@inheritDoc}
    */
@@ -79,45 +63,49 @@ public class SrcUpdateCommand
     IFile ifile = ProjectUtils.getFile(project, file);
 
     // ensure model is refreshed with latest version of the file.
-    PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
+//    PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
 
     // validate the src file.
     if(_commandLine.hasOption(Options.VALIDATE_OPTION)){
-      // force loading of PHPProjectModel
-      PHPWorkspaceModelManager.getInstance().getModelForProject(project, true);
+
+      PHPSourceParserFactory parser = new PHPSourceParserFactory();
+      Reporter reporter = new Reporter();
+      parser.parse(
+          file.toCharArray(),
+          IOUtils.toString(ifile.getContents()).toCharArray(),
+          reporter
+      );
 
       String filepath = ProjectUtils.getFilePath(project, file);
-      Reporter reporter = new Reporter();
-      IStructuredModel model =
-        StructuredModelManager.getModelManager().getModelForRead(ifile);
-      IStructuredDocument document = model.getStructuredDocument();
-
-      PHPStructuredTextViewer viewer = new PHPStructuredTextViewer(
-          EclimPlugin.getShell(), null, null, false, 0);
-      viewer.setDocument(document);
-      viewer.setSelectedRange(0, 20);
-      DirtyRegion region = new DirtyRegion(
-          0, document.getLength(), DirtyRegion.INSERT, "");
-      ValidationContext context = new ValidationContext(filepath);
-
-      VALIDATOR.connect(document);
-      VALIDATOR.validate(region, context, reporter);
-      VALIDATOR.disconnect(document);
-
       FileOffsets offsets = FileOffsets.compile(filepath);
       ArrayList<Error> errors = new ArrayList<Error>();
-      for(IMessage message : reporter.getMessages()){
-        int[] lineColumn = offsets.offsetToLineColumn(message.getOffset());
+      for(IProblem problem : reporter.getProblems()){
+        int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
         errors.add(new Error(
-            message.getText(),
+            problem.getMessage(),
             filepath,
             lineColumn[0],
             lineColumn[1],
-            message.getSeverity() != IMessage.HIGH_SEVERITY
+            problem.isWarning()
         ));
       }
       return ErrorFilter.instance.filter(_commandLine, errors);
     }
     return StringUtils.EMPTY;
+  }
+
+  private class Reporter
+    extends AbstractProblemReporter
+  {
+    private List<IProblem> problems = new ArrayList<IProblem>();
+
+    public void reportProblem (IProblem problem){
+      problems.add(problem);
+    }
+
+    public List<IProblem> getProblems ()
+    {
+      return problems;
+    }
   }
 }
