@@ -267,15 +267,15 @@ function! eclim#util#GetCharacterOffset ()
       let save_ve = &virtualedit
       let &virtualedit = 'onemore'
       try
-        let col = 1
+        let col = 0
         let prevcol = 0
-        while prevcol != col('$') - 1
-          let prevcol = col('.')
+        while prevcol != virtcol('$')
+          let prevcol = virtcol('.')
           let col += 1
           " same issue as above trying to move the cursor over one displayable
           " character.
           let step = 1
-          while prevcol == col('.') && prevcol != col('$') - 1
+          while prevcol == virtcol('.') && prevcol != virtcol('$')
             if step == 10 " don't loop forever, after 10, just concede
               break
             endif
