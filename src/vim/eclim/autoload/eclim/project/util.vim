@@ -427,6 +427,9 @@ function! eclim#project#util#GetProjects (...)
             if len(lines) > 0
               let name = fnamemodify(dir, ':t')
               let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
+              if dir =~ '^/[A-Z]:'
+                let dir = dir[1:]
+              endif
               if isdirectory(dir)
                 let projects[name] = substitute(dir, '\', '/', 'g')
               endif
