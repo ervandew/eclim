@@ -226,10 +226,65 @@ function! eclim#util#GetCharacterOffset ()
   endif
 
   " count back from the current position to the beginning of the file.
-  let offset = col('.') - 1
+  let offset = virtcol('.') - 1
+
+  " bit of a hack: if virtcol and col don't agree then we most likely have
+  " multi byte characters, but because some multi byte characters span more
+  " than one virtcol vim won't give us an accurate count of how many
+  " displayable characters there are.  as a hack we can count how many times
+  " the cursor can be moved one character to the right before reaching the
+  " point we started at.
+  if col('.') != virtcol('.')
+    " use the text prior to the completion offset to determine when to stop
+    " walking.
+    let match = getline('.')[:virtcol('.') - 1]
+    let end = virtcol('.')
+    call cursor(0, 1)
+    let col = 0
+    let prevcol = 0
+    while getline('.')[:prevcol] != match
+      let prevcol = virtcol('.')
+      let col += 1
+      " calling cursor with a col of virtcol + 1 won't actually advance
+      " the cursor if we are on a wide character, so attempt to detect
+      " that and increase the offset until vim moves the cursor off the
+      " character.
+      let step = 1
+      while prevcol == virtcol('.') && prevcol != end
+        call cursor(0, col('.') + step)
+        let step += 1
+      endwhile
+    endwhile
+    let offset = col
+  endif
+
   while line('.') != 1
     call cursor(line('.') - 1, 1)
-    let offset = offset + col('$') + lineend
+    let col = virtcol('$')
+
+    " same hack as above to account for multi byte characters
+    if col != col('$')
+      let save_ve = &virtualedit
+      let &virtualedit = 'onemore'
+      try
+        let col = 0
+        let prevcol = 0
+        while prevcol != virtcol('$')
+          let prevcol = virtcol('.')
+          let col += 1
+          " same issue as above trying to move the cursor over one displayable
+          " character.
+          let step = 1
+          while prevcol == virtcol('.') && prevcol != virtcol('$')
+            call cursor(0, col('.') + step)
+            let step += 1
+          endwhile
+        endwhile
+      finally
+        let &virtualedit = save_ve
+      endtry
+    endif
+    let offset = offset + col + lineend
   endwhile
 
   " restore the cursor position.

@@ -72,4 +72,39 @@ function! TestCodeComplete ()
   endfor
 endfunction " }}}
 
+" TestCodeCompleteUnicode() {{{
+function! TestCodeCompleteUnicode ()
+  edit! src/org/eclim/test/complete/TestUnicode.java
+  call PeekRedir()
+
+  call cursor(6, 17)
+  let start = eclim#java#complete#CodeComplete(1, '')
+  call VUAssertEquals(15, start, 'Wrong starting column.')
+
+  call cursor(6, 17)
+  let results = eclim#java#complete#CodeComplete(0, '')
+  call PeekRedir()
+  call VUAssertTrue(len(results) > 10, 'Not enough results.')
+  call VUAssertTrue(len(results) < 30, 'Too many results.')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'println('.*"),
+    \ 'Results does not contain println()')
+  call VUAssertFalse(eclim#util#ListContains(results, ".*'append('.*"),
+    \ 'Results contains print()')
+
+  " actually tests the unicode support of GetCharacterOffset
+  call cursor(16, 33)
+  let start = eclim#java#complete#CodeComplete(1, '')
+  call VUAssertEquals(31, start, 'Wrong starting column.')
+
+  call cursor(16, 33)
+  let results = eclim#java#complete#CodeComplete(0, '')
+  call PeekRedir()
+  call VUAssertTrue(len(results) > 10, 'Not enough results.')
+  call VUAssertTrue(len(results) < 30, 'Too many results.')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'println('.*"),
+    \ 'Results does not contain println()')
+  call VUAssertFalse(eclim#util#ListContains(results, ".*'append('.*"),
+    \ 'Results contains print()')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker
