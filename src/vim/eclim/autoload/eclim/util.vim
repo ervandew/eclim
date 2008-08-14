@@ -276,9 +276,15 @@ function! eclim#util#GetCharacterOffset ()
           " character.
           let step = 1
           while prevcol == col('.') && prevcol != col('$') - 1
+            if step == 10 " don't loop forever, after 10, just concede
+              break
+            endif
             call cursor(0, col('.') + step)
             let step += 1
           endwhile
+          if step == 10 " continuation of breaking out.
+            break
+          endif
         endwhile
       finally
         let &virtualedit = save_ve
