@@ -16,6 +16,20 @@
 History of Changes
 ==================
 
+.. _1.4.1:
+
+1.4.1 (2008)
+---------------------
+
+Bug Fixes:
+  - Fixed determining of project paths out side of the workspace on Windows.
+  - Fixed some issues with code completion, etc. in files containing multi byte
+    characters.
+  - Various other bug fixes.
+
+Java:
+  - Added :ref:`:JavaFormat` command contributed by Anton Sharonov.
+
 .. _1.4.0:
 
 1.4.0 (July 27, 2008)
