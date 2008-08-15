@@ -35,6 +35,7 @@ Java
    impl
    delegate
    bean
+   format
    junit
    testng
    logging
@@ -85,6 +86,7 @@ Java
 - :ref:`vim/java/impl`
 - :ref:`vim/java/delegate`
 - :ref:`vim/java/bean`
+- :ref:`vim/java/format`
 - :ref:`vim/java/junit`
 - :ref:`vim/java/testng`
 - :ref:`vim/java/logging`

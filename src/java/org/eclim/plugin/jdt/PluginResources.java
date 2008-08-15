@@ -167,6 +167,8 @@ public class PluginResources
         org.eclim.plugin.jdt.command.classpath.ClasspathVariableCreateCommand.class);
     registerCommand("java_classpath_variable_delete",
         org.eclim.plugin.jdt.command.classpath.ClasspathVariableDeleteCommand.class);
+    registerCommand("java_format",
+        org.eclim.plugin.jdt.command.format.FormatCommand.class);
     registerCommand("javadoc_comment",
         org.eclim.plugin.jdt.command.doc.CommentCommand.class);
     registerCommand("log4j_validate",
