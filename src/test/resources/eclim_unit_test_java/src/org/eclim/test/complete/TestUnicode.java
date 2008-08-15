@@ -3,7 +3,7 @@ package org.eclim.test.complete;
 public class TestUnicode
 {
   public void test () {
-    System.out.pr();
+    System.out.pr(); // 102
   }
 
   /*
@@ -13,6 +13,6 @@ public class TestUnicode
    */
   public static final void main (String[] _args)
   {
-    /* 會意字; */System.out.pr("test");
+    /* 會意字; */System.out.pr("test"); // 302
   }
 }
