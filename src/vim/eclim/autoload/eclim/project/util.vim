@@ -396,7 +396,11 @@ endfunction " }}}
 " Gets the project relative path for the given file.
 function! eclim#project#util#GetProjectRelativeFilePath (file)
   let file = substitute(a:file, '\', '/', 'g')
-  let result = substitute(file, eclim#project#util#GetCurrentProjectRoot(), '', '')
+  let pattern = eclim#project#util#GetCurrentProjectRoot()
+  if has('win32') || has('win64')
+    let pattern .= '\c'
+  endif
+  let result = substitute(file, pattern, '', '')
   if result =~ '^/'
     let result = result[1:]
   endif
@@ -465,7 +469,11 @@ function! eclim#project#util#GetProjects (...)
 
   if len(a:000) == 1
     let dir = substitute(fnamemodify(a:000[0], ':p:h'), '\', '/', 'g')
-    return filter(copy(s:projects), 'dir =~ "^" . v:val . "\\(/\\|$\\)"')
+    let pattern = '\(/\|%\)'
+    if has('win32') || has('win64')
+      let pattern .= '\c'
+    endif
+    return filter(copy(s:projects), 'dir =~ "^" . v:val . pattern')
   endif
 
   return s:projects
