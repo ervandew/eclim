@@ -243,6 +243,10 @@
 
 {%- block footer %}
     <div class="footer">
+      <div class="credit">
+        <a href="http://vim.org/"><img border="0" title="Created with Vim" alt="Created with Vim - logo" src="{{ pathto('_images/vim_created.gif', 1) }}" style="width: 90px;height: 36px;"/></a>
+        <a href="http://sourceforge.net"><img border="0" title="Sourceforge.net Logo" alt="Sourceforge.net Logo - logo" src="http://sourceforge.net/sflogo.php?group_id=145869&type=1" style="width: 88px;height: 31px;"/></a>
+      </div>
     {%- if hasdoc('copyright') %}
       &copy; <a href="{{ pathto('copyright') }}">Copyright</a> {{ copyright }}.
     {%- else %}
