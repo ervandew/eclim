@@ -28,10 +28,10 @@
     <mkdir dir="build/logger"/>
     <unjar dest="build/logger">
       <fileset dir="${log4j.dist.home}">
-        <include name="dist/lib/log4j-*.jar"/>
+        <include name="log4j-*.jar"/>
       </fileset>
       <fileset dir="${slf4j.dist.home}">
-        <include name="jcl104-over-slf4j-*.jar"/>
+        <include name="jcl-over-slf4j-*.jar"/>
         <include name="slf4j-api-*.jar"/>
         <include name="slf4j-log4j12-*.jar"/>
         <exclude name="*sources.jar"/>
