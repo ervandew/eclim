@@ -98,6 +98,15 @@
     <exec executable="sphinx-build" failonerror="true" dir=".">
       <arg line="${sphinx.args} -b vimdoc src/doc/content build/doc/vimdocs"/>
     </exec>
+
+    <delete dir="${vim.files}/eclim/doc"/>
+    <copy todir="${vim.files}/eclim/doc">
+      <fileset dir="build/doc/vimdocs">
+        <include name="**/*"/>
+        <exclude name=".doctrees/**/*"/>
+        <exclude name=".doctrees"/>
+      </fileset>
+    </copy>
   </target>
 
   <!--
