@@ -31,6 +31,7 @@ Export-Package: org.eclim,
   org.apache.commons.collections,
   org.apache.commons.lang,
   org.apache.commons.lang.builder,
+  org.apache.commons.logging,
   org.apache.commons.vfs,
   groovy.lang
 Require-Bundle: org.apache.ant,

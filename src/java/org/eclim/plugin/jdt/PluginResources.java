@@ -120,6 +120,8 @@ public class PluginResources
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
       "JDT org.eclim.java.logging.template logger.gst\n" +
       "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
+      "JDT org.eclim.java.checkstyle.config\n" +
+      "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT/Javadoc org.eclim.java.doc.version \\$Revision\\$\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
@@ -169,6 +171,8 @@ public class PluginResources
         org.eclim.plugin.jdt.command.classpath.ClasspathVariableDeleteCommand.class);
     registerCommand("java_format",
         org.eclim.plugin.jdt.command.format.FormatCommand.class);
+    registerCommand("java_checkstyle",
+        org.eclim.plugin.jdt.command.checkstyle.CheckstyleCommand.class);
     registerCommand("javadoc_comment",
         org.eclim.plugin.jdt.command.doc.CommentCommand.class);
     registerCommand("log4j_validate",

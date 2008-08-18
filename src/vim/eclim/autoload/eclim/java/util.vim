@@ -264,7 +264,22 @@ function! eclim#java#util#UpdateSrcFile (validate)
         let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
         call eclim#util#SetLocationList(errors)
       else
+        " prevent closing of sign column between validation methods
+        call eclim#display#signs#SetPlaceholder()
+
         call eclim#util#SetLocationList([], 'r')
+
+        " prevent closing of sign column between validation methods
+        call eclim#display#signs#SetPlaceholder()
+
+        " FIXME: if we start adding anything more here, may want to consider
+        " some sort of register process for plugins to listen for events
+        " during various stages of the save process.
+        if g:EclimJavaCheckstyleOnSave
+          call eclim#java#checkstyle#Checkstyle()
+        endif
+
+        call eclim#display#signs#RemovePlaceholder()
       endif
     endif
   endif

@@ -269,7 +269,8 @@ public class Services
       );
 
       registerCommand("ping", org.eclim.command.admin.PingCommand.class);
-      registerCommand("shutdown", org.eclim.command.admin.ShutdownCommand.class);
+      registerCommand("shutdown",
+          org.eclim.command.admin.ShutdownCommand.class);
       registerCommand("workspace_dir",
           org.eclim.command.eclipse.WorkspaceCommand.class);
 
@@ -301,9 +302,11 @@ public class Services
           org.eclim.command.project.ProjectNatureRemoveCommand.class);
       registerCommand("settings_update",
           org.eclim.command.admin.SettingsUpdateCommand.class);
-      registerCommand("settings", org.eclim.command.admin.SettingsCommand.class);
+      registerCommand("settings",
+          org.eclim.command.admin.SettingsCommand.class);
 
-      registerCommand("taglist", org.eclim.command.taglist.TaglistCommand.class);
+      registerCommand("taglist",
+          org.eclim.command.taglist.TaglistCommand.class);
 
       registerCommand("archive_list",
           org.eclim.command.archive.ArchiveListCommand.class);
