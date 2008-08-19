@@ -53,7 +53,7 @@ function! eclim#php#util#UpdateSrcFile (validate)
         let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
         call eclim#util#SetLocationList(errors)
       else
-        call eclim#util#SetLocationList([], 'r')
+        call eclim#util#ClearLocationList()
       endif
     endif
   endif

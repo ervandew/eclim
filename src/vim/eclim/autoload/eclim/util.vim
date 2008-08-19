@@ -688,7 +688,7 @@ function! eclim#util#RefreshFile ()
   silent write!
 endfunction " }}}
 
-" SetLocationList(list, ...) {{{
+" SetLocationList(list, [action]) {{{
 " Sets the contents of the location list for the current window.
 function! eclim#util#SetLocationList (list, ...)
   let loclist = a:list
@@ -717,6 +717,37 @@ function! eclim#util#SetLocationList (list, ...)
     call setloclist(0, loclist)
   else
     call setloclist(0, loclist, a:1)
+  endif
+  call eclim#display#signs#Update()
+endfunction " }}}
+
+" ClearLocationList([namespace, namespace, ...]) {{{
+" Clears the current location list.  Optionally 'namespace' arguments can be
+" supplied which will only clear items with text prefixed with '[namespace]'.
+" Also the special namespace 'global' may be supplied which will only remove
+" items with no namepace prefix.
+function! eclim#util#ClearLocationList (...)
+  if a:0 > 0
+    let loclist = getloclist(0)
+    if len(loclist) > 0
+      let pattern = ''
+      for ns in a:000
+        if pattern != ''
+          let pattern .= '\|'
+        endif
+        if ns == 'global'
+          let pattern .= '\(\[\w\+\]\)\@!'
+        else
+          let pattern .= '\[' . ns . '\]'
+        endif
+      endfor
+      let pattern = '^\(' . pattern . '\)'
+
+      call filter(loclist, 'v:val.text !~ pattern')
+      call setloclist(0, loclist, 'r')
+    endif
+  else
+    call setloclist(0, [], 'r')
   endif
   call eclim#display#signs#Update()
 endfunction " }}}
@@ -846,12 +877,24 @@ function! eclim#util#System (cmd, ...)
 
   let &shell = saveshell
   let &shellcmdflag = saveshellcmdflag
-  let &shellpipe = saveshellpipe
   let &shellquote = saveshellquote
-  let &shellredir = saveshellredir
   let &shellslash = saveshellslash
   let &shelltemp = saveshelltemp
   let &shellxquote = saveshellxquote
+
+  " weird bug where only at startup:
+  "   &shellpipe = '| tee'
+  "   &shellredir = '>'
+  " and if a System call is made at startup (like a PingEclim call during
+  " intiialization of a plugin, ie. taglisttoo), those settings are continued
+  " here resulting in possible issues.  One concrete example, is that running
+  " :make on a .c file no longer has errors added to the quickfix.  Probably
+  " because these shell options are incorrects.
+  " Note: there still may be issues w/ other shells!?
+  if &shell != '/bin/bash'
+    let &shellpipe = saveshellpipe
+    let &shellredir = saveshellredir
+  endif
 
   return result
 endfunction " }}}

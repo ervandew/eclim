@@ -262,12 +262,13 @@ function! eclim#java#util#UpdateSrcFile (validate)
     if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       if result =~ '|'
         let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
-        call eclim#util#SetLocationList(errors)
+        call eclim#util#ClearLocationList('global')
+        call eclim#util#SetLocationList(errors, 'a')
       else
         " prevent closing of sign column between validation methods
         call eclim#display#signs#SetPlaceholder()
 
-        call eclim#util#SetLocationList([], 'r')
+        call eclim#util#ClearLocationList('global')
 
         " prevent closing of sign column between validation methods
         call eclim#display#signs#SetPlaceholder()

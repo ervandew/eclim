@@ -370,7 +370,7 @@ function! s:SaveSettings ()
       call eclim#util#SetLocationList
         \ (eclim#util#ParseLocationEntries(split(result, '\n')))
     else
-      call eclim#util#SetLocationList([], 'r')
+      call eclim#util#ClearLocationList()
       call eclim#util#Echo(result)
     endif
 

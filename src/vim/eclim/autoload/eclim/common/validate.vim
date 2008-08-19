@@ -50,7 +50,7 @@ function! eclim#common#validate#Validate (type, on_save)
     let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
     call eclim#util#SetLocationList(errors)
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#ClearLocationList()
   endif
 endfunction " }}}
 

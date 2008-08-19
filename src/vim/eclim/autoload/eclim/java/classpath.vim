@@ -68,7 +68,7 @@ function! eclim#java#classpath#UpdateClasspath ()
     let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
     call eclim#util#SetLocationList(errors)
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#ClearLocationList()
     call eclim#util#Echo(result)
   endif
 endfunction " }}}

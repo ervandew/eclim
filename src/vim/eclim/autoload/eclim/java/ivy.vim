@@ -57,7 +57,7 @@ function! eclim#java#ivy#UpdateClasspath ()
     call eclim#util#EchoError
       \ ("Operation contained errors.  See location list for details (:lopen).")
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#ClearLocationList()
   endif
 endfunction " }}}
 

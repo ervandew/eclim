@@ -87,7 +87,7 @@ function! eclim#xml#validate#Validate (file, on_save, ...)
       endif
       return 1
     else
-      call eclim#util#SetLocationList([], 'r')
+      call eclim#util#ClearLocationList()
       return 0
     endif
   else

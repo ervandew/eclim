@@ -82,7 +82,7 @@ function! eclim#php#projectOptions#UpdateIncludePath ()
     endfor
     call eclim#util#SetLocationList(errors)
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#ClearLocationList()
     call eclim#util#Echo(result)
   endif
 endfunction " }}}

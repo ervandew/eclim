@@ -54,9 +54,12 @@ function! eclim#java#checkstyle#Checkstyle ()
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'
       let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+      for error in errors
+        let error["text"] = "[checkstyle] " . error.text
+      endfor
       call eclim#util#SetLocationList(errors)
     else
-      call eclim#util#SetLocationList([], 'r')
+      call eclim#util#ClearLocationList('checkstyle')
     endif
   endif
 endfunction " }}}

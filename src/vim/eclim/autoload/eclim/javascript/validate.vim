@@ -87,7 +87,7 @@ function! eclim#javascript#validate#Validate (on_save)
 
     call eclim#util#SetLocationList(errors)
   else
-    call eclim#util#SetLocationList([], 'r')
+    call eclim#util#ClearLocationList()
   endif
 endfunction " }}}
 
