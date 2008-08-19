@@ -73,7 +73,7 @@ public class CheckstyleCommand
     if (propsFile != null && !propsFile.equals(StringUtils.EMPTY)){
       FileInputStream fis = null;
       try{
-        fis = new FileInputStream(propsFile);
+        fis = new FileInputStream(ProjectUtils.getFilePath(project, propsFile));
         properties = new Properties();
         properties.load(fis);
       }finally{
@@ -81,7 +81,8 @@ public class CheckstyleCommand
       }
     }
     Configuration config = ConfigurationLoader.loadConfiguration(
-        configFile, new PropertiesExpander(properties));
+        ProjectUtils.getFilePath(project, configFile),
+        new PropertiesExpander(properties));
 
     CheckstyleListener listener = new CheckstyleListener();
 
