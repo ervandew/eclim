@@ -32,6 +32,9 @@
     \ '\d*w[nN]\|\d*wp\|' .
     \ 'ZZ' .
     \ '\)'
+
+  let s:bourne_shells = ['sh', 'bash', 'dash', 'ksh', 'zsh']
+  let s:c_shells = ['csh', 'tcsh']
 " }}}
 
 " Abbreviate(lhs, abbreviation) {{{
@@ -882,16 +885,25 @@ function! eclim#util#System (cmd, ...)
   let &shelltemp = saveshelltemp
   let &shellxquote = saveshellxquote
 
-  " weird bug where only at startup:
-  "   &shellpipe = '| tee'
-  "   &shellredir = '>'
-  " and if a System call is made at startup (like a PingEclim call during
-  " intiialization of a plugin, ie. taglisttoo), those settings are continued
-  " here resulting in possible issues.  One concrete example, is that running
-  " :make on a .c file no longer has errors added to the quickfix.  Probably
-  " because these shell options are incorrects.
-  " Note: there still may be issues w/ other shells!?
-  if &shell != '/bin/bash'
+  " If a System call is executed at startup, it appears to interfere with
+  " vim's setting of 'shellpipe' and 'shellredir' to their shell specific
+  " values.  So, if we detect that the values we are restoring look like
+  " uninitialized defaults, then attempt to mimic vim's documented
+  " (:h 'shellpipe' :h 'shellredir') logic for setting the proper values based
+  " on the shell.
+  " Note: still doesn't handle more obscure shells
+  if saveshellredir == '>'
+    if index(s:bourne_shells, fnamemodify(&shell, ':t')) != -1
+      set shellpipe=2>&1\|\ tee
+      set shellredir=>%s\ 2>&1
+    elseif index(s:c_shells, fnamemodify(&shell, ':t')) != -1
+      set shellpipe=\|&\ tee
+      set shellredir=>&
+    else
+      let &shellpipe = saveshellpipe
+      let &shellredir = saveshellredir
+    endif
+  else
     let &shellpipe = saveshellpipe
     let &shellredir = saveshellredir
   endif
