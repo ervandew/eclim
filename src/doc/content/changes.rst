@@ -29,6 +29,7 @@ Bug Fixes:
 
 Java:
   - Added :ref:`:JavaFormat` command contributed by Anton Sharonov.
+  - Added :ref:`:Checkstyle` support.
 
 .. _1.4.0:
 

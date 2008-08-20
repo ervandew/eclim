@@ -155,6 +155,7 @@ Java Commands
 - :ref:`:JavaDocComment` -
   Adds or updates the comments for the element under the cursor.
 - :ref:`:JavaFormat` - Formats java source code.
+- :ref:`:Checkstyle` - Invokes checkstyle on the current file.
 - :ref:`:Jps` -
   Opens window with information about the currently running java processes.
 - :ref:`:Validate <:Validate_java>` - Manually runs source code validation.

@@ -36,6 +36,7 @@ Java
    delegate
    bean
    format
+   checkstyle
    junit
    testng
    logging
@@ -87,6 +88,7 @@ Java
 - :ref:`vim/java/delegate`
 - :ref:`vim/java/bean`
 - :ref:`vim/java/format`
+- :ref:`vim/java/checkstyle`
 - :ref:`vim/java/junit`
 - :ref:`vim/java/testng`
 - :ref:`vim/java/logging`
