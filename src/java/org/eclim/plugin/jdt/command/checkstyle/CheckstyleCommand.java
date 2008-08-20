@@ -33,6 +33,8 @@ import com.puppycrawl.tools.checkstyle.api.AuditListener;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 
+import org.eclim.Services;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -73,16 +75,33 @@ public class CheckstyleCommand
     if (propsFile != null && !propsFile.equals(StringUtils.EMPTY)){
       FileInputStream fis = null;
       try{
-        fis = new FileInputStream(ProjectUtils.getFilePath(project, propsFile));
+        File pfile = new File(propsFile);
+        if(!pfile.exists()){
+          pfile = new File(ProjectUtils.getFilePath(project, propsFile));
+          if(!pfile.exists()){
+            throw new RuntimeException(
+                Services.getMessage("file.not.found", configFile));
+          }
+        }
+        fis = new FileInputStream(pfile);
         properties = new Properties();
         properties.load(fis);
       }finally{
         IOUtils.closeQuietly(fis);
       }
     }
+
+    if (!new File(configFile).exists()){
+      String projectConfigFile = ProjectUtils.getFilePath(project, configFile);
+      if (!new File(projectConfigFile).exists()){
+        throw new RuntimeException(
+            Services.getMessage("file.not.found", configFile));
+      }
+      configFile = projectConfigFile;
+    }
+
     Configuration config = ConfigurationLoader.loadConfiguration(
-        ProjectUtils.getFilePath(project, configFile),
-        new PropertiesExpander(properties));
+        configFile, new PropertiesExpander(properties));
 
     CheckstyleListener listener = new CheckstyleListener();
 
