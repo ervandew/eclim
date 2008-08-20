@@ -85,6 +85,9 @@ endfunction " }}}
 " GetRootElement() {{{
 " Get the root element name.
 function! s:GetRootElement ()
+  " handle case where file doesn't have the xml declaration
+  set filetype=xml
+
   let root = ''
   let element = '.\{-}<\([a-zA-Z].\{-}\)\(\s\|>\|$\).*'
 
