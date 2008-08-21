@@ -100,7 +100,7 @@
       <compilerarg line="${compilerargs}"/>
       <src path="src/java"/>
       <include name="**/*.java"/>
-      <exclude name="**/plugin/**/*.java"/>
+      <exclude name="**/plugin/*/**/*.java"/>
       <classpath refid="classpath"/>
     </javac>
 
