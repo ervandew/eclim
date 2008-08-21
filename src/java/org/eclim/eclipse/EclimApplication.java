@@ -223,7 +223,6 @@ public class EclimApplication
         if(resources instanceof AbstractPluginResources){
           ((AbstractPluginResources)resources).initialize(pluginName);
         }
-        Services.addPluginResources(resources);
       }catch(Exception e){
         throw new RuntimeException(e);
       }

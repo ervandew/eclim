@@ -87,10 +87,12 @@ public class Options
   public static final String VALIDATE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
 
+  public static final String OPTION_SUFFIX = ".options";
+  public static final String USAGE_SUFFIX = ".usage";
+
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";
   private static final String REQUIRED = "REQUIRED";
-  private static final String OPTION_SUFFIX = ".options";
 
   private static org.apache.commons.cli.Options coreOptions =
       new org.apache.commons.cli.Options();

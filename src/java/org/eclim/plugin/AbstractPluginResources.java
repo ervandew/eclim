@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 import org.eclim.Services;
 
 import org.eclim.command.Command;
+import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
@@ -60,9 +61,9 @@ public abstract class AbstractPluginResources
   private ResourceBundle bundle;
   private List<String> missingResources = new ArrayList<String>();
 
-  private HashMap<String,Class> commands =
-    new HashMap<String,Class>();
-  private HashMap<String,Command> instances = new HashMap<String,Command>();
+  private HashMap<String, Class<? extends Command>> commands =
+    new HashMap<String, Class<? extends Command>>();
+  private HashMap<String, Command> instances = new HashMap<String, Command>();
 
   /**
    * Initializes this instance.
@@ -74,6 +75,7 @@ public abstract class AbstractPluginResources
     name = _name;
     int index = name.lastIndexOf('.');
     pluginName = index != -1 ? _name.substring(index + 1) : name;
+    Services.addPluginResources(this);
   }
 
   /**
@@ -96,8 +98,8 @@ public abstract class AbstractPluginResources
         throw new RuntimeException(
             Services.getMessage("command.not.found", _name));
       }
-      Class cc = commands.get(_name);
-      command = (Command)cc.newInstance();
+      Class<? extends Command> cc = commands.get(_name);
+      command = cc.newInstance();
       instances.put(_name, command);
     }
     return command;
@@ -234,9 +236,23 @@ public abstract class AbstractPluginResources
    * @param _name The name of the command.
    * @param _command The command class.
    */
-  protected void registerCommand (String _name, Class _command)
+  protected void registerCommand (String _name, Class<? extends Command> _command)
   {
     commands.put(_name, _command);
+
+    String optionsKey = _name + Options.OPTION_SUFFIX;
+    String optionsString = Services.getMessage(optionsKey);
+    if(optionsKey.equals(optionsString)){
+      logger.error(
+          Services.getMessage("command.missing.options", _name));
+    }
+
+    String usageKey = _name + Options.USAGE_SUFFIX;
+    String usageString = Services.getMessage(usageKey);
+    if(usageKey.equals(usageString)){
+      logger.warn(
+          Services.getMessage("command.missing.usage", _name));
+    }
   }
 
   /**
