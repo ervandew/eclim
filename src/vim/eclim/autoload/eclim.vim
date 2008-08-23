@@ -214,6 +214,32 @@ function! eclim#GetEclimHome ()
   return g:EclimHome
 endfunction " }}}
 
+" Disable() {{{
+" Temporarily disables communication with eclimd.
+function! eclim#Disable ()
+  if !exists('g:EclimDisabled')
+    let g:EclimDisabled = 1
+
+    " if taglisttoo enabled, disable its communication w/ eclimd
+    if exists('g:Tlist_Ctags_Cmd_Orig')
+      let g:EclimTlistCtagsCmdSaved = g:Tlist_Ctags_Cmd
+      let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd_Orig
+    endif
+  endif
+endfunction " }}}
+
+" Enable() {{{
+" Re-enables communication with eclimd.
+function! eclim#Enable ()
+  if exists('g:EclimDisabled')
+    unlet g:EclimDisabled
+    if exists('g:EclimTlistCtagsCmdSaved')
+      let g:Tlist_Ctags_Cmd = g:EclimTlistCtagsCmdSaved
+      unlet g:EclimTlistCtagsCmdSaved
+    endif
+  endif
+endfunction " }}}
+
 " PatchEclim(file, revision) {{{
 " Patches an eclim vim script file.
 function! eclim#PatchEclim (file, revision)

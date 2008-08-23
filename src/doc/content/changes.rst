@@ -27,6 +27,10 @@ Bug Fixes:
     characters.
   - Various other bug fixes.
 
+Eclim:
+  - Added commands :ref:`:EclimDisable` and :ref:`:EclimEnable` to temporarily
+    disable, and then re-enable, communication with eclimd.
+
 Java:
   - Added :ref:`:JavaFormat` command contributed by Anton Sharonov.
   - Added :ref:`:Checkstyle` support.

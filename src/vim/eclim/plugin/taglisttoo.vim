@@ -88,6 +88,7 @@ if !exists("g:Tlist_Ctags_Cmd") || !g:EclimTaglistEnabled || !eclim#PingEclim(0)
 endif
 
 " set command for taglist.vim
+let g:Tlist_Ctags_Cmd_Orig = g:Tlist_Ctags_Cmd
 let g:Tlist_Ctags_Cmd =
   \ eclim#GetEclimCommand() . ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
 " for windows, need to add a trailing quote to complete the command.

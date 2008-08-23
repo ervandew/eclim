@@ -56,6 +56,19 @@ the other categories.
   For project level settings see the :ref:`:ProjectSettings` command on the
   :ref:`project documentation page <vim/common/project>`.
 
+.. _\:EclimDisable:
+
+- **:EclimDisable** -
+  Allows you to temporarily disable all communication with eclimd for the
+  current vim session.  Useful if you need to shutdown eclimd for one reason or
+  antoher, and would like to disable vim's attempts to communicate with the
+  non-existant server.
+
+.. _\:EclimEnable:
+
+- **:EclimEnable** -
+  Re-enables communication with eclimd (the converse of **:EclimDisable**).
+
 .. _\:EclimHelp:
 
 - **:EclimHelp** [<topic>] -

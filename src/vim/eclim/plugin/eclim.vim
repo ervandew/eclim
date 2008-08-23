@@ -128,6 +128,12 @@ if !exists(":PatchEclim")
   command -nargs=+ -complete=customlist,eclim#CommandCompleteScriptRevision
     \ PatchEclim :call eclim#PatchEclim(<f-args>)
 endif
+if !exists(":EclimDisable")
+  command EclimDisable :call eclim#Disable()
+endif
+if !exists(":EclimEnable")
+  command EclimEnable :call eclim#Enable()
+endif
 " }}}
 
 " Auto Commands{{{
