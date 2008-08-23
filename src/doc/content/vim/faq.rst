@@ -22,7 +22,7 @@ FAQ
 
 - **How to I tell eclim which eclipse workspace to use?**
 
-  If you are running windows, then you can start eclimd like so:
+  To configure the workspace you can start eclimd like so:
 
     ::
 
