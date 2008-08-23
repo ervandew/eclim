@@ -93,6 +93,13 @@
     <property name="deprecation" value="false"/>
     <property name="compilerargs" value=""/>
 
+    <delete includeemptydirs="true">
+      <fileset dir="${build.plugins}">
+        <include name="**/*"/>
+        <exclude name="org.eclim*_${eclim.version}/**/*"/>
+      </fileset>
+    </delete>
+
     <!-- build shared source -->
     <javac destdir="${build.classes}" debug="on" optimize="false"
         target="${javac.target}" source="${javac.target}"
@@ -180,6 +187,14 @@
   <target name="deploy" depends="build"
       description="Deploy the eclipse and vim plugins.">
     <!-- deploy eclipse files -->
+    <delete includeemptydirs="true">
+      <fileset dir="${eclipse.home}/plugins">
+        <include name="org.eclim*/**/*"/>
+      </fileset>
+      <dirset dir="${eclipse.home}/plugins">
+        <include name="org.eclim*"/>
+      </dirset>
+    </delete>
     <copy todir="${eclipse.home}/plugins">
       <fileset dir="${build.plugins}" includes="**/*"/>
     </copy>
