@@ -62,11 +62,11 @@ exec 'CompilerSet errorformat=' .
   \ '\%+A%.%#[cactus]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
-  \ '\%A%.%#\ ERROR\ %.%#\ line\ %l\ in\ file:\ %.%f%.:\ %m,' .
+  \ '\%.%#\ ERROR\ %.%#\ line\ %l\ in\ file:\ %.%f%.:\ %m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
-  \ '\%A%.%#[exec]\ %f:%l:%c:\ %m,' .
-  \ '\%A%.%#[exec]\ %f:%l:\ %m,' .
-  \ '\%A%f:%l:%c:\ %m,' .
+  \ '\%.%#[exec]\ %f:%l:%c:\ %m,' .
+  \ '\%.%#[exec]\ %f:%l:\ %m,' .
+  \ '\%f:%l:%c:\ %m,' .
   \ g:EclimAntErrorFormat .
   \ '\%-G%.%#'
 
