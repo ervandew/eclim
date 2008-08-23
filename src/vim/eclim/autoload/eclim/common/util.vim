@@ -220,20 +220,50 @@ endfunction " }}}
 function! eclim#common#util#OtherWorkingCopy (project, action)
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let projects = eclim#project#util#GetProjects()
-  let project_path = projects[a:project] . '/' . path
+  let project_path = s:OtherWorkingCopyPath(a:project)
+  if project_path == ''
+    return
+  endif
   call eclim#util#GoToBufferWindowOrOpen(project_path, a:action)
 endfunction " }}}
 
 " OtherWorkingCopyDiff(project) {{{
-" Diffs the current file against the same file from another project using the
-" supplied action
+" Diffs the current file against the same file from another project.
 function! eclim#common#util#OtherWorkingCopyDiff (project)
-  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
-  let projects = eclim#project#util#GetProjects()
-  let project_path = projects[a:project] . '/' . path
+  let project_path = s:OtherWorkingCopyPath(a:project)
+  if project_path == ''
+    return
+  endif
+
+  let filename = expand('%:p')
   diffthis
+
   call eclim#util#GoToBufferWindowOrOpen(project_path, 'vertical split')
   diffthis
+
+  let b:filename = filename
+  augroup other_diff
+    autocmd! BufUnload <buffer>
+    call eclim#util#GoToBufferWindowRegister(b:filename)
+    autocmd BufUnload <buffer> diffoff
+  augroup END
+endfunction " }}}
+
+" s:OtherWorkingCopyPath(project) {{{
+function s:OtherWorkingCopyPath (project)
+  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let projects = eclim#project#util#GetProjects()
+
+  let project_name = a:project
+  if project_name =~ '[\\/]$'
+    let project_name = project_name[:-2]
+  endif
+
+  if !has_key(projects, project_name)
+    call eclim#util#EchoWarning("Project '" . project_name . "' not found.")
+    return ''
+  endif
+  return projects[project_name] . '/' . path
 endfunction " }}}
 
 " SwapTypedArguments() {{{
