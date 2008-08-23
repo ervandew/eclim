@@ -60,7 +60,7 @@ endfunction " }}}
 function! s:InitLoggingSettings ()
   let s:EclimLoggingImpl =
     \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
-  if type(s:EclimLoggingImpl) == 0
+  if type(s:EclimLoggingImpl) == 0 || s:EclimLoggingImpl == '0'
     unlet s:EclimLoggingImpl
     return
   endif
