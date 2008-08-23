@@ -26,7 +26,7 @@ FAQ
 
     ::
 
-      eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+      $ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
 
   Note the system property ``osgi.instance.area.default``, which is used to
   specify the location of your workspace.  Also note the variable
@@ -39,3 +39,24 @@ FAQ
     ::
 
       $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
+
+.. _eclim_proxy:
+
+- **How can I configure eclim to use a proxy?**
+
+  The occasional eclim feature requires network access to function properly.
+  For example, xml validation may require validating the file against a dtd or
+  xsd located remotely.  If you are behind a proxy then you may need to provide
+  eclim with the necessary proxy settings.
+
+    ::
+
+      $ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+
+  If you are running a unix variant (linux, mac osx, bsd, etc.) then you
+  can specify the above system property in the .eclimrc file in your home
+  directory.
+
+    ::
+
+      $ echo -e "http.proxyHost=my.proxy\nhttp.proxyPort=8080" >> ~/.eclimrc
