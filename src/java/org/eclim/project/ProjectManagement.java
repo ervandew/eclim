@@ -151,6 +151,8 @@ public class ProjectManagement
       {
         String tmpName = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation)).toString();
+        // hack for windows... manually remove drive letter
+        tmpName = tmpName.replaceFirst("^[A-Z]:", "");
 
         project = ProjectUtils.getProject(tmpName, true);
         if(!project.exists()){
