@@ -23,6 +23,7 @@ History of Changes
 
 Bug Fixes:
   - Fixed determining of project paths out side of the workspace on Windows.
+  - Fixed creation of project inside of the workspace on Windows.
   - Fixed some issues with code completion, etc. in files containing multi byte
     characters.
   - Various other bug fixes.
