@@ -18,11 +18,11 @@ History of Changes
 
 .. _1.4.1:
 
-1.4.1 (2008)
----------------------
+1.4.1 (August 24, 2008)
+-----------------------
 
 Bug Fixes:
-  - Fixed determining of project paths out side of the workspace on Windows.
+  - Fixed determining of project paths outside of the workspace on Windows.
   - Fixed creation of project inside of the workspace on Windows.
   - Fixed some issues with code completion, etc. in files containing multi byte
     characters.
