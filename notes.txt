@@ -1,9 +1,14 @@
 HIGH {{{
-  - possible issue with :JavaDocSearch
+  - start developer docs
+    - document the eclim architecture
+    - document building eclim
+    - document adding commands to eclim
 
-  - :JavaCorrect, need to get the eclipse apply version working (but probably
-    should wait until :edit is a considered a change operation in vim).
-    https://sourceforge.net/forum/message.php?msg_id=5087396
+  - add menu of some sort in vimdocs
+  - consider a command to open topic in web docs
+
+  - possible issue with :JavaDocSearch
+    https://sourceforge.net/forum/forum.php?thread_id=2094237&forum_id=487811
 
   - add/test proxy support to the installer
     org.eclipse.update.core.proxy.enable=true
@@ -54,10 +59,6 @@ TODO {{{
       - use eclim repos for svn testing
       - cvs testing?
     - various common vim commands
-      - :ReadRelative
-      - :ArgsRelative
-      - :ArgAddRelative
-      - :Buffers
       - :DiffLastSaved
       - :OtherWorkingCopyDiff
       - :OtherWorkingCopyEdit
@@ -103,12 +104,8 @@ TODO {{{
   }}}
 
   Documentation {{{
-    - FAQs
-      - how to specify workspace dir.
-        https://sourceforge.net/forum/forum.php?thread_id=1932073&forum_id=487811
-        eclimd -Dosgi.instance.area.default=@user.home/another_workspace
-        or .eclimrc (non windows only)
-          osgi.instance.area.default=@user.home/another_workspace
+    - document eclim / eclipse interoperability:
+      https://sourceforge.net/forum/forum.php?thread_id=2144315&forum_id=487811
 
     - document python import functionality
 
@@ -117,6 +114,8 @@ TODO {{{
     - document qf/location list filtering support
 
     - Chinese cheatsheet
+      :EclimHelp
+      :EclimGrep
       :ProjectInfo
       :ProjectNatures
       :ProjectNatureAdd
@@ -169,6 +168,10 @@ TODO {{{
       - username, email, etc.
       - setting precedence would be: user > project > global
       - unless eclipse supports this concept, only include eclim settings as 'user' configurable
+
+    - alter :LocateFile* commands or create separate versions to use or mimic
+      eclipse's "find resource" functionality
+      https://sourceforge.net/forum/message.php?msg_id=5169338
 
     - support max number of cache entries
       - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
@@ -304,8 +307,18 @@ TODO {{{
   }}}
 
   Java {{{
+    - :JavaCorrect, need to get the eclipse apply version working (but probably
+      should wait until :edit is a considered a change operation in vim).
+      https://sourceforge.net/forum/message.php?msg_id=5087396
+      - also consider hooking into eclipse's change history support to allow the
+        user to undo changes made by eclipse.
+
     - :JavaHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
+
+    - :JavaImportAll? some sort of command to scan the file for missing imports
+      and import them.
+      - see 'Organize Imports' functionality in eclipse.
 
     - generic support for java based xml config file validation
       - support list of xpaths to class name attributes / values to validate
@@ -607,6 +620,9 @@ NOTES {{{
   }}}
 
   Potential Contributors {{{
+    Anton Sharonov (haron13)
+      - good work with :JavaFormat contribution
+
     fidlej
       - good patch work so far
         https://sourceforge.net/tracker/index.php?func=detail&aid=1617060&group_id=145869&atid=763326
