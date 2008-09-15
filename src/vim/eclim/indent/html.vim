@@ -110,7 +110,6 @@ endfunction " }}}
 
 " HtmlIndentAnythingSettings() {{{
 function! HtmlIndentAnythingSettings ()
-  echom 'HtmlIndentAnythingSettings (html)'
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'htmlComment'
   let b:commentRE      = b:blockCommentRE
