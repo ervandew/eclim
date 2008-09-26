@@ -16,6 +16,7 @@
  */
 package org.eclim.util.file;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -50,6 +51,7 @@ public class FileUtils
   public static final String ZIP_EXT = ".zip";
   public static final char UNIX_SEPARATOR = '/';
   public static final char WINDOWS_SEPARATOR = '\\';
+  public static final String UTF8 = "utf-8";
 
   /**
    * Gets a project relative file.
@@ -65,8 +67,40 @@ public class FileUtils
   }
 
   /**
-   * Converts the supplied offset into an int array where the first element is
-   * the line number and the second is the column number.
+   * Converts the supplied byte offset in the specified file to the
+   * corresponding char offset for that file using the supplied file encoding.
+   *
+   * @param _filename The absolute path to the file.
+   * @param _byteOffset The byte offset to be converted.
+   * @param _encoding The encoding of the file.  If null, defaults to utf-8.
+   *
+   * @return The char offset.
+   */
+  public static int byteOffsetToCharOffset (
+      String _filename, int _byteOffset, String _encoding)
+    throws Exception
+  {
+    String encoding = _encoding;
+    if (encoding == null){
+      encoding = UTF8;
+    }
+
+    BufferedInputStream in = null;
+    try{
+      byte[] bytes = new byte[_byteOffset];
+      in = new BufferedInputStream(new FileInputStream(_filename));
+      in.read(bytes, 0, bytes.length);
+      String value = new String(bytes, _encoding);
+
+      return value.toCharArray().length;
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+  }
+
+  /**
+   * Converts the supplied char offset into an int array where the first element
+   * is the line number and the second is the column number.
    *
    * @param _filename The file to translate the offset for.
    * @param _offset The offset.
