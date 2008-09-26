@@ -46,7 +46,7 @@ public class DelegateCommandTest
     String result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "124"
+      "-o", "124", "-e", "utf-8"
     });
 
     System.out.println(result);

@@ -186,6 +186,28 @@ function eclim#common#util#LocateFile (command, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
+" LocateProjectFile(command, file) {{{
+" Locates a file in the current project.
+function eclim#common#util#LocateProjectFile (command, file)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let file = a:file
+  if file == ''
+    let file = eclim#util#GrabUri()
+    " if grabbing a relative url, remove any anchor info or query parameters
+    let file = substitute(file, '[#?].*', '', '')
+  endif
+
+  let projectDir = eclim#project#util#GetCurrentProjectRoot()
+  let results = eclim#common#util#FindInPath(file, projectDir)
+
+  if len(results)
+    call eclim#util#GoToBufferWindowOrOpen(eclim#util#Simplify(results[0]), a:command)
+  endif
+endfunction " }}}
+
 " OpenRelative(command, arg [, open_existing]) {{{
 " Open one or more relative files.
 function eclim#common#util#OpenRelative (command, arg, ...)

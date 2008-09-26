@@ -32,7 +32,8 @@
 
 " Script Varables {{{
   let s:search_element =
-    \ '-command php_find_definition -p "<project>" -f "<file>" -o <offset>'
+    \ '-command php_find_definition -p "<project>" -f "<file>" ' .
+    \ '-o <offset> -e <encoding>'
   let s:search_pattern = '-command php_search -n "<project>" <args>'
   let s:include_paths = '-command php_include_paths -p "<project>"'
   let s:options = ['-p', '-t', '-s']
@@ -124,6 +125,7 @@ function eclim#php#search#FindDefinition ()
   let search_cmd = substitute(search_cmd, '<project>', project, '')
   let search_cmd = substitute(search_cmd, '<file>', file, '')
   let search_cmd = substitute(search_cmd, '<offset>', offset, '')
+  let search_cmd = substitute(search_cmd, '<encoding>', &encoding, '')
 
   let result =  eclim#ExecuteEclim(search_cmd)
   let results = split(result, '\n')

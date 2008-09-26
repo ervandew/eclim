@@ -43,7 +43,8 @@ public class CssCodeCompleteCommandTest
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE, "-o", "52"
+      "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "52", "-e", "utf-8"
     });
 
     System.out.println(result);

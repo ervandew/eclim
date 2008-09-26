@@ -46,7 +46,7 @@ public class ImplCommandTest
     String result = Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "83"
+      "-o", "83", "-e", "utf-8"
     });
 
     System.out.println(result);

@@ -43,7 +43,8 @@ public class HtmlCodeCompleteCommandTest
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE, "-o", "152"
+      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "152", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -60,7 +61,8 @@ public class HtmlCodeCompleteCommandTest
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE, "-o", "141"
+      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "141", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -78,7 +80,8 @@ public class HtmlCodeCompleteCommandTest
         Eclim.projectExists(Wst.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE, "-o", "131"
+      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "131", "-e", "utf-8"
     });
 
     System.out.println(result);

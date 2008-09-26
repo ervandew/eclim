@@ -51,7 +51,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-l", "5", "-o", "74"
+      "-l", "5", "-o", "74", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -73,7 +73,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-l", "5", "-o", "74", "-a", "1"
+      "-l", "5", "-o", "74", "-e", "utf-8", "-a", "1"
     });
 
     System.out.println(result);
@@ -91,7 +91,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
-      "-l", "1", "-o", "0"
+      "-l", "1", "-o", "0", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -117,7 +117,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
-      "-l", "1", "-o", "0", "-a", "0"
+      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "0"
     });
 
     System.out.println(result);

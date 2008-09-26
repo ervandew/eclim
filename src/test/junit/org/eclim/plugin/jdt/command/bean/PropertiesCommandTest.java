@@ -46,7 +46,7 @@ public class PropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-t", "getter", "-r", "name"
+      "-o", "1", "-e", "utf-8", "-t", "getter", "-r", "name"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -63,7 +63,7 @@ public class PropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-t", "setter", "-r", "name"
+      "-o", "1", "-e", "utf-8", "-t", "setter", "-r", "name"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -81,7 +81,7 @@ public class PropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-t", "getter_setter", "-r", "valid"
+      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "valid"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);

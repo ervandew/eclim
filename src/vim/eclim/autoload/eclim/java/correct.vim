@@ -29,7 +29,8 @@ hi Correction gui=underline,bold term=underline,bold cterm=underline,bold
 
 " Script Varables {{{
   let s:command_correct =
-    \ '-command java_correct -p "<project>" -f "<file>" -l <line> -o <offset>'
+    \ '-command java_correct -p "<project>" -f "<file>" ' .
+    \ '-l <line> -o <offset> -e <encoding>'
   let s:command_correct_apply = s:command_correct . ' -a <apply>'
 " }}}
 
@@ -49,6 +50,7 @@ function! eclim#java#correct#Correct ()
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<line>', line('.'), '')
   let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
+  let command = substitute(command, '<encoding>', &encoding, '')
 
   let window_name = filename . "_correct"
   let filename = expand('%:p')
@@ -110,6 +112,7 @@ function! eclim#java#correct#CorrectApply ()
       let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
       let command = substitute(command, '<line>', line('.'), '')
       let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
+      let command = substitute(command, '<encoding>', &encoding, '')
       let command = substitute(command, '<apply>', index, '')
 
       let content = split(eclim#ExecuteEclim(command), '\n')

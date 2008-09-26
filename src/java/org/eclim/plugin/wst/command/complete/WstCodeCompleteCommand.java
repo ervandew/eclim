@@ -56,7 +56,7 @@ public abstract class WstCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    int offset = Integer.parseInt(commandLine.getValue(Options.OFFSET_OPTION));
+    int offset = getOffset(commandLine);
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
 

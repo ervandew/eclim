@@ -44,7 +44,7 @@ public class DocSearchCommandTest
     String result = Eclim.execute(new String[]{
       "java_docsearch", "-n", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "68", "-l", "4", "-x", "declarations"
+      "-o", "68", "-e", "utf-8", "-l", "4", "-x", "declarations"
     });
 
     System.out.println(result);

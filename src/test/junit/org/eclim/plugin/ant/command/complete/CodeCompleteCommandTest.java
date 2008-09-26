@@ -44,7 +44,7 @@ public class CodeCompleteCommandTest
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "220"
+      "-o", "220", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -59,7 +59,7 @@ public class CodeCompleteCommandTest
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "234"
+      "-o", "234", "-e", "utf-8"
     });
 
     System.out.println(result);

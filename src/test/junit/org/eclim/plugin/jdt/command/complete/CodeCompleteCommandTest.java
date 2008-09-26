@@ -46,7 +46,7 @@ public class CodeCompleteCommandTest
     String result = Eclim.execute(new String[]{
       "java_complete", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "184", "-l", "standard"
+      "-o", "184", "-e", "utf-8", "-l", "standard"
     });
 
     String[] results = StringUtils.split(result, '\n');
@@ -66,7 +66,7 @@ public class CodeCompleteCommandTest
     String result = Eclim.execute(new String[]{
       "java_complete", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "266", "-l", "standard"
+      "-o", "266", "-e", "utf-8", "-l", "standard"
     });
 
     String[] results = StringUtils.split(result, '\n');

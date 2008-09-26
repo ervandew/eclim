@@ -25,7 +25,7 @@
 
 " Script Variables {{{
 let s:command_properties =
-  \ '-command java_constructor -p "<project>" -f "<file>" -o <offset>'
+  \ '-command java_constructor -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 " }}}
 
 " Constructor(first, last) {{{
@@ -44,6 +44,7 @@ function! eclim#java#constructor#Constructor (first, last)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
   let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
+  let command = substitute(command, '<encoding>', &encoding, '')
   if len(properties) > 0
     let command = command . ' -r ' . join(properties, ',')
   endif

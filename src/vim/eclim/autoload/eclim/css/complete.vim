@@ -25,7 +25,7 @@
 
 " Script Varables {{{
   let s:complete_command =
-    \ '-command css_complete -p "<project>" -f "<file>" -o <offset>'
+    \ '-command css_complete -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 " }}}
 
 " CodeComplete(findstart, base) {{{
@@ -57,6 +57,7 @@ function! eclim#css#complete#CodeComplete (findstart, base)
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', filename, '')
     let command = substitute(command, '<offset>', offset, '')
+    let command = substitute(command, '<encoding>', &encoding, '')
 
     let completions = []
     let results = split(eclim#ExecuteEclim(command), '\n')

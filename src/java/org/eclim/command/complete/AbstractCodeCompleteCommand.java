@@ -50,8 +50,7 @@ public abstract class AbstractCodeCompleteCommand
   {
     String project = _commandLine.getValue(Options.PROJECT_OPTION);
     String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = Integer.parseInt(
-        _commandLine.getValue(Options.OFFSET_OPTION));
+    int offset = getOffset(_commandLine);
 
     IContentAssistProcessor processor =
       getContentAssistProcessor(_commandLine, project, file);
@@ -105,7 +104,7 @@ public abstract class AbstractCodeCompleteCommand
       CommandLine _commandLine, String project, String file)
     throws Exception
   {
-    int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
+    int offset = getOffset(_commandLine);
     return new DummyTextViewer(
         ProjectUtils.getDocument(project, file), offset, 1);
   }

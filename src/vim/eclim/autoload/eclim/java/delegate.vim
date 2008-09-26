@@ -25,7 +25,7 @@
 
 " Script Variables {{{
 let s:command_delegate =
-  \ '-command java_delegate -p "<project>" -f "<file>" -o <offset>'
+  \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 let s:command_insert =
   \ '-command java_delegate -p "<project>" -f "<file>" -t "<type>" ' .
   \ '-s <superType> <methods>'
@@ -48,6 +48,7 @@ function! eclim#java#delegate#Delegate ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<offset>', offset, '')
+  let command = substitute(command, '<encoding>', &encoding, '')
 
   call eclim#java#delegate#DelegateWindow(command)
 endfunction " }}}

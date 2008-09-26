@@ -45,7 +45,7 @@ public class XmlCodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "xml_complete", "-p", Wst.TEST_PROJECT,
-      "-f", TEST_FILE_XSD, "-o", "584", "-d", ",,"
+      "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8", "-d", ",,"
     });
 
     System.out.println(result);
@@ -64,7 +64,7 @@ public class XmlCodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "xml_complete", "-p", Wst.TEST_PROJECT,
-      "-f", TEST_FILE_WSDL, "-o", "516"
+      "-f", TEST_FILE_WSDL, "-o", "516", "-e", "utf-8"
     });
 
     System.out.println(result);

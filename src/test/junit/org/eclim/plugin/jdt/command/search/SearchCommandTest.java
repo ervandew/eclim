@@ -68,7 +68,7 @@ public class SearchCommandTest
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "180", "-l", "4"
+      "-o", "180", "-e", "utf-8", "-l", "4"
     });
     System.out.println(result);
 

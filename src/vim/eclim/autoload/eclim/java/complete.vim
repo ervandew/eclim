@@ -35,7 +35,8 @@
 
 " Script Varables {{{
   let s:complete_command =
-    \ '-command java_complete -p "<project>" -f "<file>" -o <offset> -l <layout>'
+    \ '-command java_complete -p "<project>" -f "<file>" ' .
+    \ '-o <offset> -e <encoding> -l <layout>'
 " }}}
 
 " CodeComplete(findstart, base) {{{
@@ -73,6 +74,7 @@ function! eclim#java#complete#CodeComplete (findstart, base)
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', filename, '')
     let command = substitute(command, '<offset>', offset, '')
+    let command = substitute(command, '<encoding>', &encoding, '')
     let command = substitute(command, '<layout>', g:EclimJavaCompleteLayout, '')
 
     let completions = []

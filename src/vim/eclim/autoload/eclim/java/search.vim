@@ -39,7 +39,8 @@
   let s:search_src = "java_search"
   let s:search_doc = "java_docsearch"
   let s:search_element =
-    \ '-command <search> -n "<project>" -f "<file>" -o <offset> -l <length> <args>'
+    \ '-command <search> -n "<project>" -f "<file>" ' .
+    \ '-o <offset> -e <encoding> -l <length> <args>'
   let s:search_pattern = '-command <search> -n "<project>" -f "<file>" <args>'
   let s:options = ['-p', '-t', '-x', '-s']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
@@ -116,6 +117,7 @@ function! s:Search (command, ...)
     let search_cmd = substitute(search_cmd, '<search>', a:command, '')
     let search_cmd = substitute(search_cmd, '<file>', filename, '')
     let search_cmd = substitute(search_cmd, '<offset>', offset, '')
+    let search_cmd = substitute(search_cmd, '<encoding>', &encoding, '')
     let search_cmd = substitute(search_cmd, '<length>', length, '')
     let search_cmd = substitute(search_cmd, '<args>', argline, '')
 

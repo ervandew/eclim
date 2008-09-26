@@ -25,7 +25,7 @@
 
 " Script Variables {{{
 let s:command_comment =
-  \ '-command javadoc_comment -p "<project>" -f "<file>" -o <offset>'
+  \ '-command javadoc_comment -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 " }}}
 
 " Comment() {{{
@@ -45,6 +45,7 @@ function! eclim#java#doc#Comment ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', offset, '')
+  let command = substitute(command, '<encoding>', &encoding, '')
 
   let result =  eclim#ExecuteEclim(command)
 

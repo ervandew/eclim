@@ -32,7 +32,7 @@ endif
 " Script Variables {{{
 let s:command_properties =
   \ '-command java_bean_properties -p "<project>" -f "<file>" ' .
-  \ '-o <offset> -t <type> -r <properties> <indexed>'
+  \ '-o <offset> -e <encoding> -t <type> -r <properties> <indexed>'
 
 let s:no_properties =
   \ 'Unable to find property at current cursor position: ' .
@@ -61,6 +61,7 @@ function! eclim#java#bean#GetterSetter (first, last, type)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
   let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
+  let command = substitute(command, '<encoding>', &encoding, '')
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<properties>', join(properties, ','), '')
   let command = substitute(command, '<indexed>', indexed, '')

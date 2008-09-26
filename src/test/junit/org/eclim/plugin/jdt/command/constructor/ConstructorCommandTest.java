@@ -45,7 +45,7 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "1"
+      "-f", TEST_FILE, "-o", "1", "-e", "utf-8"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -63,7 +63,7 @@ public class ConstructorCommandTest
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-r", "id,name"
+      "-o", "1", "-e", "utf-8", "-r", "id,name"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
