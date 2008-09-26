@@ -32,6 +32,7 @@ syn keyword mysqlKeyword begin call declare return
 syn keyword mysqlKeyword delimiter
 syn keyword mysqlKeyword truncate
 syn keyword mysqlKeyword union
+syn keyword mysqlKeyword interval
 
 syn keyword sqlTodo TODO FIXME NOTE
 
