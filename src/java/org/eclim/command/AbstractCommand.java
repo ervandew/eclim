@@ -18,6 +18,10 @@ package org.eclim.command;
 
 import org.eclim.preference.Preferences;
 
+import org.eclim.util.ProjectUtils;
+
+import org.eclim.util.file.FileUtils;
+
 /**
  * Abstract implmentation of {@link Command}.
  *
@@ -35,5 +39,25 @@ public abstract class AbstractCommand
   public Preferences getPreferences ()
   {
     return Preferences.getInstance();
+  }
+
+  /**
+   * Convenience method which uses the standard project, file, offset, and
+   * encoding options to determine the character offset in the file.
+   *
+   * @param _commandLine The command line instance.
+   * @return The char offset.
+   */
+  public int getOffset (CommandLine _commandLine)
+    throws Exception
+  {
+    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String encoding = _commandLine.getValue(Options.ENCODING_OPTION);
+    int offset = Integer.parseInt(
+        _commandLine.getValue(Options.OFFSET_OPTION));
+    file = ProjectUtils.getFilePath(project, file);
+
+    return FileUtils.byteOffsetToCharOffset(file, offset, encoding);
   }
 }
