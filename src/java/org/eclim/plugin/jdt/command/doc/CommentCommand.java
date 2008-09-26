@@ -84,7 +84,7 @@ public class CommentCommand
   {
     String project = _commandLine.getValue(Options.PROJECT_OPTION);
     String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    int offset = getOffset(_commandLine);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IJavaElement element = src.getElementAt(offset);

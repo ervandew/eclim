@@ -66,7 +66,7 @@ public class ConstructorCommand
     if(propertiesOption != null){
       properties = StringUtils.split(propertiesOption, ',');
     }
-    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    int offset = getOffset(_commandLine);
 
     // validate supplied fields.
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);

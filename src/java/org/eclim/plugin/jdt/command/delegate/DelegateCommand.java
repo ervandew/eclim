@@ -69,6 +69,7 @@ public class DelegateCommand
 
     int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
     if(offset != -1){
+      offset = getOffset(_commandLine);
       IJavaElement element = src.getElementAt(offset);
       if(element.getElementType() != IJavaElement.FIELD){
         return Services.getMessage("not.a.field");

@@ -55,7 +55,7 @@ public class CodeCompleteCommand
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     String project = _commandLine.getValue(Options.PROJECT_OPTION);
     String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = Integer.parseInt(_commandLine.getValue(Options.OFFSET_OPTION));
+    int offset = getOffset(_commandLine);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 

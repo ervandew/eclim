@@ -96,6 +96,9 @@ public class ImplCommand
 
     if(type == null){
       int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+      if (offset != -1){
+        offset = getOffset(_commandLine);
+      }
       type = TypeUtils.getType(src, offset);
     }
     ImplResult result = executeGetMethods(_commandLine, type);

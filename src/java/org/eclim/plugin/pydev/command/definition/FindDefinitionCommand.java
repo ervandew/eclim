@@ -67,7 +67,7 @@ public class FindDefinitionCommand
   {
     String file = _commandLine.getValue(Options.FILE_OPTION);
     String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    int offset = getOffset(_commandLine);
 
     IProject project = ProjectUtils.getProject(projectName);
 

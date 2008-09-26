@@ -79,7 +79,7 @@ public class PropertiesCommand
     String methods = _commandLine.getValue(Options.TYPE_OPTION);
     String[] properties = StringUtils.split(
         _commandLine.getValue(Options.PROPERTIES_OPTION), ',');
-    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    int offset = getOffset(_commandLine);
     boolean indexed = _commandLine.hasOption(Options.INDEXED_OPTION);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);

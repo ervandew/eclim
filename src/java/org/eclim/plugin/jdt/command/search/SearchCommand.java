@@ -138,8 +138,13 @@ public class SearchCommand
 
     // element search
     if(file != null && offset != null && length != null){
+      String encoding = _commandLine.getValue(Options.ENCODING_OPTION);
+      String filepath = ProjectUtils.getFilePath(project, file);
+
+      int charOffset = FileUtils.byteOffsetToCharOffset(
+          filepath, Integer.parseInt(offset), encoding);
       Position position = new Position(
-          file, Integer.parseInt(offset), Integer.parseInt(length));
+          file, charOffset, Integer.parseInt(length));
       IJavaElement element = getElement(project, position);
       if(element != null){
         // user requested a contextual search.
