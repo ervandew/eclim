@@ -30,7 +30,7 @@ import org.eclim.Services;
 import org.eclim.util.IOUtils;
 
 /**
- * Compiles a list of offsets to line numbers and stores them for quick
+ * Compiles a list of char offsets to line numbers and stores them for quick
  * translation of offset to line number and column.
  *
  * @author Eric Van Dewoestine (ervandew@gmail.com)
