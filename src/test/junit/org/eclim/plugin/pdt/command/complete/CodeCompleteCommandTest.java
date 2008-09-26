@@ -43,7 +43,8 @@ public class CodeCompleteCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "213"
+      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "213", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -63,7 +64,8 @@ public class CodeCompleteCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "228"
+      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "228", "-e", "utf-8"
     });
 
     System.out.println(result);

@@ -41,7 +41,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "45"
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "45", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -57,7 +58,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "62"
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "62", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -73,7 +75,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "82"
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "82", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -89,7 +92,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "111"
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "111", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -105,7 +109,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-o", "94"
+      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "94", "-e", "utf-8"
     });
 
     System.out.println(result);
