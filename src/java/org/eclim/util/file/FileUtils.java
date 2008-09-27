@@ -92,7 +92,7 @@ public class FileUtils
       in.read(bytes, 0, bytes.length);
       String value = new String(bytes, _encoding);
 
-      return value.toCharArray().length;
+      return value.length();
     }finally{
       IOUtils.closeQuietly(in);
     }
