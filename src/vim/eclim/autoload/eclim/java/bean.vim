@@ -60,7 +60,7 @@ function! eclim#java#bean#GetterSetter (first, last, type)
   let command = s:command_properties
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
-  let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
+  let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', &fileencoding, '')
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<properties>', join(properties, ','), '')

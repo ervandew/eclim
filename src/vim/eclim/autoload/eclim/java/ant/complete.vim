@@ -62,7 +62,7 @@ function! eclim#java#ant#complete#CodeComplete (findstart, base)
 
     return start
   else
-    let offset = eclim#util#GetCharacterOffset() + len(a:base) - 1
+    let offset = eclim#util#GetOffset() + len(a:base) - 1
     let project = eclim#project#util#GetCurrentProjectName()
     if project == ''
       return []

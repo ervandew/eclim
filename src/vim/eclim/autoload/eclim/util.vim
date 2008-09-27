@@ -219,25 +219,11 @@ function! eclim#util#Findfile (name, ...)
   return result
 endfunction " }}}
 
-" GetCharacterOffset() {{{
-" Gets the character offset for the current cursor position.
-function! eclim#util#GetCharacterOffset ()
-  let pos = getpos('.')
-  let lineend = 0
-  if &fileformat == "dos"
-    let lineend = 1
-  endif
-
-  " count back from the current position to the beginning of the file.
-  let offset = col('.') - 1
-  while line('.') != 1
-    call cursor(line('.') - 1, 1)
-    let offset = offset + col('$') + lineend
-  endwhile
-
-  " restore the cursor position.
-  call setpos('.', pos)
-
+" GetOffset() {{{
+" Gets the byte offset for the current cursor position.
+function! eclim#util#GetOffset ()
+  let offset = line2byte(line('.')) - 1
+  let offset += col('.') - 1
   return offset
 endfunction " }}}
 
@@ -265,7 +251,7 @@ function! eclim#util#GetCurrentElementColumn ()
 endfunction " }}}
 
 " GetCurrentElementPosition() {{{
-" Gets the character offset and length for the element under the cursor.
+" Gets the byte offset and length for the element under the cursor.
 function! eclim#util#GetCurrentElementPosition ()
   let offset = eclim#util#GetCurrentElementOffset()
   let word = expand('<cword>')
@@ -274,7 +260,7 @@ function! eclim#util#GetCurrentElementPosition ()
 endfunction " }}}
 
 " GetCurrentElementOffset() {{{
-" Gets the character offset for the element under the cursor.
+" Gets the byte offset for the element under the cursor.
 function! eclim#util#GetCurrentElementOffset ()
   let pos = getpos('.')
 
@@ -288,7 +274,7 @@ function! eclim#util#GetCurrentElementOffset ()
     silent normal b
   endif
 
-  let offset = eclim#util#GetCharacterOffset()
+  let offset = eclim#util#GetOffset()
 
   " restore the cursor position.
   call setpos('.', pos)
