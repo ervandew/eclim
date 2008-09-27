@@ -50,7 +50,7 @@ function! eclim#java#correct#Correct ()
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<line>', line('.'), '')
   let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
-  let command = substitute(command, '<encoding>', &encoding, '')
+  let command = substitute(command, '<encoding>', &fileencoding, '')
 
   let window_name = filename . "_correct"
   let filename = expand('%:p')
@@ -112,7 +112,7 @@ function! eclim#java#correct#CorrectApply ()
       let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
       let command = substitute(command, '<line>', line('.'), '')
       let command = substitute(command, '<offset>', eclim#util#GetCharacterOffset(), '')
-      let command = substitute(command, '<encoding>', &encoding, '')
+      let command = substitute(command, '<encoding>', &fileencoding, '')
       let command = substitute(command, '<apply>', index, '')
 
       let content = split(eclim#ExecuteEclim(command), '\n')

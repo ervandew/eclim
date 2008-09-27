@@ -125,7 +125,7 @@ function eclim#php#search#FindDefinition ()
   let search_cmd = substitute(search_cmd, '<project>', project, '')
   let search_cmd = substitute(search_cmd, '<file>', file, '')
   let search_cmd = substitute(search_cmd, '<offset>', offset, '')
-  let search_cmd = substitute(search_cmd, '<encoding>', &encoding, '')
+  let search_cmd = substitute(search_cmd, '<encoding>', &fileencoding, '')
 
   let result =  eclim#ExecuteEclim(search_cmd)
   let results = split(result, '\n')

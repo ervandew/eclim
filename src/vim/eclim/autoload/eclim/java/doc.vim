@@ -45,7 +45,7 @@ function! eclim#java#doc#Comment ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', &encoding, '')
+  let command = substitute(command, '<encoding>', &fileencoding, '')
 
   let result =  eclim#ExecuteEclim(command)
 

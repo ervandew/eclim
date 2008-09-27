@@ -48,7 +48,7 @@ function! eclim#java#delegate#Delegate ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', &encoding, '')
+  let command = substitute(command, '<encoding>', &fileencoding, '')
 
   call eclim#java#delegate#DelegateWindow(command)
 endfunction " }}}
