@@ -106,8 +106,14 @@ public class VimStep
     panel.add(new JLabel(Installer.getString(files)), "split");
     panel.add(fileChooser, "skip");
 
-    form.bind(files, fileChooser.getTextField(),
-        new ValidatorBuilder().required().isDirectory().fileExists().validator());
+    form.bind(files,
+        fileChooser.getTextField(),
+        new ValidatorBuilder()
+          .required()
+          .isDirectory()
+          .fileExists()
+          .isWritable()
+          .validator());
 
     return panel;
   }
