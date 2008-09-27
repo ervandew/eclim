@@ -91,7 +91,7 @@ function! TestCodeCompleteUnicode ()
   call VUAssertFalse(eclim#util#ListContains(results, ".*'append('.*"),
     \ 'Results contains print()')
 
-  " actually tests the unicode support of GetCharacterOffset
+  " actually tests the unicode support of GetOffset
   call cursor(16, 33)
   let start = eclim#java#complete#CodeComplete(1, '')
   call VUAssertEquals(31, start, 'Wrong starting column.')

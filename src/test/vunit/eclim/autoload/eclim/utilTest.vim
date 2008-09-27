@@ -23,16 +23,16 @@
 "
 " }}}
 
-" TestGetCharacterOffset() {{{
-function! TestGetCharacterOffset ()
+" TestGetOffset() {{{
+function! TestGetOffset ()
   new
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 1)
-  call VUAssertEquals(0, eclim#util#GetCharacterOffset())
+  call VUAssertEquals(0, eclim#util#GetOffset())
 
   call cursor(2, 7)
-  call VUAssertEquals(14, eclim#util#GetCharacterOffset())
+  call VUAssertEquals(14, eclim#util#GetOffset())
 endfunction " }}}
 
 " TestGetCurrentElementColumn() {{{
