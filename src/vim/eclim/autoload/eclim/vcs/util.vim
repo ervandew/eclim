@@ -42,10 +42,19 @@ function eclim#vcs#util#GetVcsFunction (func_name)
     runtime autoload/eclim/vcs/impl/svn.vim
     let type = 'svn'
   else
-    let dir = finddir('.hg', getcwd() . ';')
-    if dir != ''
-      runtime autoload/eclim/vcs/impl/hg.vim
-      let type = 'hg'
+    let hgdir = finddir('.hg', getcwd() . ';')
+    let gitdir = finddir('.git', getcwd() . ';')
+    if gitdir != ''
+      let gitdir = fnamemodify(gitdir, ':p')
+    endif
+    if hgdir != '' || gitdir != ''
+      if len(hgdir) > len(gitdir)
+        runtime autoload/eclim/vcs/impl/hg.vim
+        let type = 'hg'
+      else
+        runtime autoload/eclim/vcs/impl/git.vim
+        let type = 'git'
+      endif
     endif
   endif
 

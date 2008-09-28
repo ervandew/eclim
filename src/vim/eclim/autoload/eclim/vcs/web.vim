@@ -43,6 +43,8 @@ function eclim#vcs#web#GetVcsWebFunction (type, func_name)
     runtime autoload/eclim/vcs/impl/hgcgi.vim
   elseif a:type == 'hgserve'
     runtime autoload/eclim/vcs/impl/hgserve.vim
+  elseif a:type == 'gitweb'
+    runtime autoload/eclim/vcs/impl/gitweb.vim
   endif
 
   try

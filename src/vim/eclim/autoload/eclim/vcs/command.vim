@@ -56,7 +56,8 @@ function! eclim#vcs#command#Annotate (...)
     try
       let Annotate = eclim#vcs#util#GetVcsFunction('GetAnnotations')
       if type(Annotate) != 2
-        call eclim#util#EchoError('Current file is not under cvs or svn version control.')
+        call eclim#util#EchoError(
+          \ 'Current file is not under cvs, svn, hg, or git version control.')
         return
       endif
       let annotations = Annotate(revision)
@@ -502,7 +503,7 @@ function! s:FollowLink ()
   elseif link == 'working copy'
     let file = s:GetBreadcrumbPath()
     let revision = substitute(
-      \ getline(line('.') - 2), 'Revision: |\?\([0-9.]\+\)|\?.*', '\1', '')
+      \ getline(line('.') - 2), 'Revision: |\?\([0-9a-z.]\+\)|\?.*', '\1', '')
 
     let filename = b:filename
     call eclim#vcs#command#ViewFileRevision(file, revision, 'bel vertical split')
