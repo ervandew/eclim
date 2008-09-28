@@ -174,6 +174,10 @@ endfunction " }}}
 function eclim#vcs#impl#hg#Log (...)
   if len(a:000) > 0
     let dir = fnamemodify(a:000[0], ':h')
+    let root = eclim#vcs#impl#hg#GetRoot()
+    if dir !~ '^' . root
+      let dir = eclim#vcs#impl#hg#GetRoot() . '/' . dir
+    endif
     let file = fnamemodify(a:000[0], ':t')
   else
     let dir = expand('%:h')

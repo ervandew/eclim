@@ -179,6 +179,7 @@
     <delete includeEmptyDirs="true">
       <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*/**/*"/>
       <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*"/>
+      <fileset dir="${user.home}/.eclim/cache" includes="**/*"/>
     </delete>
     <copy todir="${eclipse.workspace}">
       <fileset dir="src/test/resources" includes="eclim_unit_test*/**/*"/>
@@ -188,6 +189,16 @@
       <param name="project" value="eclim_unit_test"/>
       <param name="nature" value="none"/>
     </antcall>
+
+    <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
+      <arg line="-zxf git.tar.gz"/>
+    </exec>
+    <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
+      <arg line="-zxf mercurial.tar.gz"/>
+    </exec>
+    <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
+      <arg line="-zxf subversion.tar.gz"/>
+    </exec>
 
     <antcall target="test.create_project">
       <param name="project" value="eclim_unit_test_java"/>

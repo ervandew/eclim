@@ -465,7 +465,7 @@ function! s:FollowLink ()
       diffthis
       exec bufwinnr(buf1) . 'winc w'
       diffthis
-    else
+    elseif link !~ '^\s*$'
       call eclim#vcs#command#Log(link)
     endif
 

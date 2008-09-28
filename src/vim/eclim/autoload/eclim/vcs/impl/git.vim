@@ -68,9 +68,18 @@ function eclim#vcs#impl#git#GetRelativePath (dir, file)
   return substitute(a:dir, root, '', '') . '/' . a:file
 endfunction " }}}
 
-" GetPreviousRevision() {{{
-function eclim#vcs#impl#git#GetPreviousRevision ()
-  let log = eclim#vcs#impl#git#Git('log --pretty=oneline -2 "' . expand('%:t') . '"')
+" GetPreviousRevision([file, revision]) {{{
+function eclim#vcs#impl#git#GetPreviousRevision (...)
+  let revision = ''
+  if len(a:000)
+    let path = fnamemodify(a:000[0], ':t')
+    let revision = a:000[1]
+  else
+    let path = expand('%:t')
+  endif
+
+  let cmd = 'log --pretty=oneline -2 ' . revision . ' "' . path . '"'
+  let log = eclim#vcs#impl#git#Git(cmd)
   if type(log) == 0
     return
   endif
@@ -159,7 +168,10 @@ function eclim#vcs#impl#git#ChangeSet (revision)
         let in_comment = 0
         call remove(comment, -1)
       endif
-      call add(files, substitute(line, '^\([A-Z]\)\s\+\(.*\)', '\1 |\2|', ''))
+      let line = substitute(line, '^A\s\+\(.*\)', ' A  |\1|', '')
+      let line = substitute(line, '^D\s\+\(.*\)', ' D   \1', '')
+      let line = substitute(line, '^M\s\+\(.*\)', '|M| |\1|', '')
+      call add(files, line)
     elseif line =~ '^\s*$' && !in_comment
       continue
     else
