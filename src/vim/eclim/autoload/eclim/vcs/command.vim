@@ -329,6 +329,7 @@ function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
     endif
     if isdirectory(dir)
       exec 'lcd ' . dir
+      let path = fnamemodify(path, ':t')
     endif
     try
       let ViewFileRevision = eclim#vcs#util#GetVcsFunction('ViewFileRevision')
@@ -470,7 +471,7 @@ function! s:FollowLink ()
     endif
 
   " link to view a change set
-  elseif link =~ '^[0-9][0-9a-f.:]\+$'
+  elseif link =~ '^[0-9a-f.:]\+$'
     let file = s:GetBreadcrumbPath()
     call eclim#vcs#command#ChangeSet(b:vcs_props.path, link)
 

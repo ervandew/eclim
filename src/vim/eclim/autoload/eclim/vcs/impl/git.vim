@@ -65,7 +65,8 @@ function eclim#vcs#impl#git#GetRelativePath (dir, file)
   if type(root) == 0
     return
   endif
-  return substitute(a:dir, root, '', '') . '/' . a:file
+  let dir = substitute(a:dir, '\', '/', 'g')
+  return substitute(dir, root, '', '') . '/' . a:file
 endfunction " }}}
 
 " GetPreviousRevision([file, revision]) {{{
@@ -123,8 +124,8 @@ function eclim#vcs#impl#git#GetRoot ()
   if root == ''
     return
   endif
-  let root = substitute(root, '\', '/', 'g')
   let root = fnamemodify(root, ':p:h:h')
+  let root = substitute(root, '\', '/', 'g')
   return root
 endfunction " }}}
 
@@ -253,7 +254,7 @@ function! eclim#vcs#impl#git#ViewFileRevision (path, revision)
   " for some reason, in some contexts (git commit buffer), the git command
   " will fail if not run from root of the repos.
   let path = eclim#vcs#impl#git#GetRelativePath(
-    \ fnamemodify(a:path, ':p:h'), fnamemodify(a:path, ':p:t'))
+    \ fnamemodify(a:path, ':p:h'), fnamemodify(a:path, ':t'))
   let path = substitute(path, '^/', '', '')
   let root = eclim#vcs#impl#git#GetRoot()
   exec 'lcd ' . root
