@@ -115,7 +115,7 @@ Vim Settings
 
 .. _g\:EclimVcsLogMaxEntries:
 
-- **g:EclimVcsLogMaxEntries (Default: 50)**
+- **g:EclimVcsLogMaxEntries (Default: 50)** -
   When greater than 0, limits the number of log entries retrieved by
   **:VcsLog**.
 
@@ -123,12 +123,14 @@ Eclim Settings
 
 .. _org.eclim.project.vcs.web.viewer:
 
-- The web viewer to use. Possible values include\:
+- **org.eclim.project.vcs.web.viewer** -
+  The web viewer to use. Possible values include\:
 
   - viewvc
   - trac
   - hgcgi
   - hgserve
+  - gitweb
   - redmine
 
     .. note::
@@ -145,24 +147,28 @@ Eclim Settings
 
 .. _org.eclim.project.vcs.web.url:
 
-- Base url used for the chosen web viewer.
+- **org.eclim.project.vcs.web.url** -
+  Base url used for the chosen web viewer.
 
-  Ex. An example using viewvc.
+  Examples:
 
   ::
 
+    # viewvc
     org.eclim.project.vcs.web.url=http://eclim.svn.sourceforge.net/viewvc/eclim/
 
-  .. note::
+    # hgcgi
+    org.eclim.project.vcs.web.url=http://hg.myhost/myrepos
 
-    For redmine the url should take the form\:
+    # gitweb
+    org.eclim.project.vcs.web.url=http://localhost:1234?p=.git
 
-      http://redmine.myhost/repositories/<cmd>/myrepos
-
-    Note the literal <cmd> portion. Since redmine urls place the command name
-    (log, changes, etc) in front of the repository name, you must include the
-    <cmd> placeholder in your configured url so that the :VcsWeb commands can
-    replace it with the proper value.
+    # redmine
+    # Note the literal <cmd> portion. Since redmine urls place the command name
+    # (log, changes, etc) in front of the repository name, you must include the
+    # <cmd> placeholder in your configured url so that the :VcsWeb commands can
+    # replace it with the proper value.
+    org.eclim.project.vcs.web.url=http://redmine.myhost/repositories/<cmd>/myrepos
 
 
 .. _VcsEditor:
@@ -170,10 +176,10 @@ Eclim Settings
 Vcs Editor Support
 ------------------
 
-Subversion, mercurial, and cvs all support using vim as the default editor for
-composing commit messages.  When composing this message they all also include a
-list of files to be committed.  Eclim provides a plugin allowing you to hit
-<enter> on one of the files to view a diff of the version to be committed
-against the last committed version.
+Subversion, mercurial, git, and cvs all support using vim as the default editor
+for composing commit messages.  When composing this message they all also
+include a list of files to be committed.  Eclim provides a plugin allowing you
+to hit <enter> on one of the files to view a diff of the version to be
+committed against the last committed version.
 
 .. image:: ../../images/screenshots/vcs/editor.png

@@ -16,6 +16,18 @@
 History of Changes
 ==================
 
+.. _1.4.2:
+
+1.4.2 (2008)
+-----------------------
+
+Bug Fixes:
+  - Fixed obtaining of character offset used by code completion and various
+    other commands
+
+Vcs:
+  - Added support for git to :ref:`:Vcs <vim/common/vcs>` commands
+
 .. _1.4.1:
 
 1.4.1 (August 24, 2008)
