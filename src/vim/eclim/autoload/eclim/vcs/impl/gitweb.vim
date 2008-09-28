@@ -29,14 +29,16 @@ else
   finish
 endif
 
+" Example url: http://localhost:1234?p=.git
+
 " GetLogUrl(root, file, args) {{{
 function eclim#vcs#impl#gitweb#GetLogUrl (root, file, args)
-  return a:root . '?p=.git;a=history;f=' . a:file . ';h=' . a:args[0]
+  return a:root . ';a=history;f=' . a:file . ';h=' . a:args[0]
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
 function eclim#vcs#impl#gitweb#GetChangeSetUrl (root, file, args)
-  return a:root . '?p=.git;a=commitdiff;h=' . a:args[0]
+  return a:root . ';a=commitdiff;h=' . a:args[0]
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) Not supported by gitweb {{{
@@ -48,7 +50,7 @@ endfunction " }}}
 function eclim#vcs#impl#gitweb#GetDiffUrl (root, file, args)
   let r1 = a:args[0]
   let r2 = a:args[1]
-  return a:root . '?p=.git;a=blobdiff;f=' . a:file . ';hb=' . r1 . ';hpb=' . r2
+  return a:root . ';a=blobdiff;f=' . a:file . ';hb=' . r1 . ';hpb=' . r2
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
