@@ -75,7 +75,11 @@ public class CodeCorrectCommand
 
     IProblem problem = getProblem(src, line, offset);
     if(problem == null){
-      return Services.getMessage("error.not.found", file, line);
+      String message = Services.getMessage("error.not.found", file, line);
+      if(_commandLine.hasOption(Options.APPLY_OPTION)){
+        throw new RuntimeException(message);
+      }
+      return message;
     }
 
     List<IJavaCompletionProposal> proposals = getProposals(src, problem);
