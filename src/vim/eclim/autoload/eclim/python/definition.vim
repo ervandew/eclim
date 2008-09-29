@@ -49,7 +49,7 @@ function eclim#python#definition#Find ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', &fileencoding, '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
   let results = split(eclim#ExecuteEclim(command), '\n')
   if len(results) == 1 && results[0] == '0'

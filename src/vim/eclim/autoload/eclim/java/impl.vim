@@ -48,7 +48,7 @@ function! eclim#java#impl#Impl ()
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', filename, '')
   let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', &fileencoding, '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
   call eclim#java#impl#ImplWindow(command)
 endfunction " }}}

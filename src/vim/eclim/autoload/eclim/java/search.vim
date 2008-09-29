@@ -117,7 +117,7 @@ function! s:Search (command, ...)
     let search_cmd = substitute(search_cmd, '<search>', a:command, '')
     let search_cmd = substitute(search_cmd, '<file>', filename, '')
     let search_cmd = substitute(search_cmd, '<offset>', offset, '')
-    let search_cmd = substitute(search_cmd, '<encoding>', &fileencoding, '')
+    let search_cmd = substitute(search_cmd, '<encoding>', eclim#util#GetEncoding(), '')
     let search_cmd = substitute(search_cmd, '<length>', length, '')
     let search_cmd = substitute(search_cmd, '<args>', argline, '')
 

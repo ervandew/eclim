@@ -219,6 +219,16 @@ function! eclim#util#Findfile (name, ...)
   return result
 endfunction " }}}
 
+" GetEncoding() {{{
+" Gets the encoding of the current file.
+function! eclim#util#GetEncoding ()
+  let encoding = &fileencoding
+  if encoding == ''
+    let encoding = &encoding
+  endif
+  return encoding
+endfunction " }}}
+
 " GetOffset() {{{
 " Gets the byte offset for the current cursor position.
 function! eclim#util#GetOffset ()

@@ -44,7 +44,7 @@ function! eclim#java#constructor#Constructor (first, last)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
-  let command = substitute(command, '<encoding>', &fileencoding, '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
   if len(properties) > 0
     let command = command . ' -r ' . join(properties, ',')
   endif
