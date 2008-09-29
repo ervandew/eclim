@@ -106,6 +106,7 @@ public class EclipseStep
     final FileChooser eclipseHomeChooser =
        new FileChooser(JFileChooser.DIRECTORIES_ONLY);
 
+    panel.add(form.createMessagePanel(), "span");
     panel.add(new JLabel(Installer.getString(home)));
     panel.add(eclipseHomeChooser);
 
