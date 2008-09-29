@@ -42,21 +42,16 @@
           {% endfor %}
           <ul>
             <li>
-              <a>Support</a>
+              <a>Support / Mailing Lists</a>
               <ul>
                 <li>
-                  <a href="http://sourceforge.net/forum/?group_id=145869">Forums</a>
+                  <a href="http://groups.google.com/group/eclim-user">Users Mailing List</a>
+                </li>
+                <li>
+                  <a href="http://groups.google.com/group/eclim-dev">Developers Mailing List</a>
                 </li>
                 <li>
                   <a href="http://sourceforge.net/tracker/?group_id=145869">Bugs / Feature Requests</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Mailing Lists</a>
-              <ul>
-                <li>
-                  <a href="http://groups.google.com/group/eclim-dev">Developers</a>
                 </li>
               </ul>
             </li>
@@ -81,16 +76,29 @@
         </div>
         <div class="sidebaritem">
           {% if current_page_name != "search" %}
-            <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} search</h3>
+            <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} Search</h3>
             <form class="search" action="{{ pathto('search') }}" method="get">
-              <input type="text" name="q" size="18"> <input type="submit" value="Go">
-              <input type="hidden" name="check_keywords" value="yes">
-              <input type="hidden" name="area" value="default">
+              <input type="text" name="q" size="18"/>
+              <input type="submit" value="Search"/>
+              <input type="hidden" name="check_keywords" value="yes"/>
+              <input type="hidden" name="area" value="default"/>
             </form>
             {% if builder == 'web' %}
             <p style="font-size: 90%">Enter a module, class or function name.</p>
             {% endif %}
           {% endif %}
+        </div>
+        <div class="sidebaritem">
+          <h3>Google Search</h3>
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <div>
+              <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+              <input type="hidden" name="ie" value="UTF-8" />
+              <input type="text" name="q" size="18" />
+              <input type="submit" name="sa" value="Search" />
+            </div>
+          </form>
+          <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
         </div>
       </div>
     </div>
