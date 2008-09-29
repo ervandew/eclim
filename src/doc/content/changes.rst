@@ -24,6 +24,9 @@ History of Changes
 Bug Fixes:
   - Fixed obtaining of character offset used by code completion and various
     other commands
+  - Fixed possible bug with :JavaCorrect when modifying the file after
+    obtaining a list of suggestions, and then attempting to apply a suggestion
+    that is no longer valid.
 
 Vcs:
   - Added support for git to :ref:`:Vcs <vim/common/vcs>` commands
