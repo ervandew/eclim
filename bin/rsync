@@ -29,7 +29,7 @@ function site () {
   rsync --recursive --compress --force --whole-file --delete --delete-after \
     --stats -v --rsh="ssh -l ervandew" \
     $BASEDIR/build/doc/site/* \
-    ervandew@shell.sf.net:/home/groups/e/ec/eclim/htdocs
+    ervandew,eclim@web.sourceforge.net:/home/groups/e/ec/eclim/htdocs
 
   #rsync --recursive --compress --force --whole-file --delete --delete-after \
   #  --stats -v --rsh="ssh -l ervandew" --exclude="CVS" \
