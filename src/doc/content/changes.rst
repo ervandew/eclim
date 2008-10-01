@@ -18,8 +18,8 @@ History of Changes
 
 .. _1.4.2:
 
-1.4.2 (2008)
------------------------
+1.4.2 (September 30, 2008)
+--------------------------
 
 Bug Fixes:
   - Fixed obtaining of character offset used by code completion and various

@@ -90,11 +90,19 @@ News
 ==================
 
 -----------
+2008-09-30
+-----------
+
+| **Eclim 1.4.2** is now available.
+| This is primary a bug fix release.
+| You can view the :ref:`release notes <1.4.2>` for more info.
+
+-----------
 2008-08-24
 -----------
 
 | **Eclim 1.4.1** is now available.
-| This is  primary a bug fix release, but there are some new features included
+| This is primary a bug fix release, but there are some new features included
   as well.
 | You can view the :ref:`release notes <1.4.1>` for more info.
 
