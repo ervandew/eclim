@@ -1,4 +1,6 @@
 HIGH {{{
+  - add warnings regarding running eclim and eclipse concurrently
+
   - start developer docs
     - document the eclim architecture
     - document building eclim
@@ -7,8 +9,10 @@ HIGH {{{
   - add menu of some sort in vimdocs
   - consider a command to open topic in web docs
 
-  - possible issue with :JavaDocSearch
-    https://sourceforge.net/forum/forum.php?thread_id=2094237&forum_id=487811
+  - evaluate
+    - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
+    - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
+    - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
 
   - add/test proxy support to the installer
     org.eclipse.update.core.proxy.enable=true
@@ -21,14 +25,6 @@ HIGH {{{
 
   - handle connectivity issues on xml validate
     https://sourceforge.net/forum/forum.php?thread_id=2105350&forum_id=487811
-
-  - eclipse 3.4
-    - http://archive.eclipse.org/eclipse/downloads/drops/R-3.3-200706251500/whatsnew/eclipse-news-all.html
-    - http://download.eclipse.org/eclipse/downloads/drops/S-3.4M6-200803301350/eclipse-news-M6.html
-    - leverage equinox p2
-
-  - Ubuntu Hardy (command completion may cause segfault)
-    - https://bugs.launchpad.net/ubuntu/+source/vim/+bug/219546
 
   - Unsolved
     - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
@@ -44,6 +40,9 @@ TODO {{{
       <!DOCTYPE project [
         <!ENTITY userlist SYSTEM "file:include/cvs-user-list.xml">
       ]>
+
+    - Ubuntu Hardy (command completion may cause segfault)
+      - https://bugs.launchpad.net/ubuntu/+source/vim/+bug/219546
   }}}
 
   Tests {{{
@@ -55,9 +54,7 @@ TODO {{{
     - html validate: validation of nested javascript and css
     - archive reading (tree and list)
     - :Vcs*
-      - setup a local hg repos in test/resources/
-      - use eclim repos for svn testing
-      - cvs testing?
+      - svn test
     - various common vim commands
       - :DiffLastSaved
       - :OtherWorkingCopyDiff
@@ -169,9 +166,12 @@ TODO {{{
       - setting precedence would be: user > project > global
       - unless eclipse supports this concept, only include eclim settings as 'user' configurable
 
-    - alter :LocateFile* commands or create separate versions to use or mimic
+    - alter :LocateFile* commands, or create separate versions, to use or mimic
       eclipse's "find resource" functionality
       https://sourceforge.net/forum/message.php?msg_id=5169338
+
+    - add means to hook into and view all of eclipses build errors.
+      https://sourceforge.net/forum/forum.php?thread_id=2192184&forum_id=487811
 
     - support max number of cache entries
       - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
@@ -188,8 +188,6 @@ TODO {{{
 
     - :ProjectCreateWizard - use input()
 
-    - integrate w/ eclipse build/run system for at least simple programs.
-
     - add
       :VcsStatus
         - temp window w/ list of files
@@ -205,14 +203,6 @@ TODO {{{
         - open temp window w/ list of files grouped by changeset
         - try to have <enter> on a file open a diff of remote version vs local
         - ... figure out how to handle A and R files
-
-      - these would go against my view of not modifying local files via :Vcs
-        commands.
-      :VcsPush
-      :VcsUpdate (git equivalent?)
-      :VcsPull
-        in git, 'fetch' is the analogous to hg's 'pull' and git's 'pull' is
-        analogous to hg's 'fetch' (confused yet?)
 
     - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
@@ -234,17 +224,12 @@ TODO {{{
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
-    - gvim menu items.
-
     - determines the user's default workspace using (account for ~/.eclipse/org.eclipse.../configuration)
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
       RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
 
     - for taglist, support universal marker tag:
       |-- marker_name --|
-
-    - Integrate w/ google calendar
-      http://code.google.com/apis/gdata/client-java.html
 
     - Add support for using a running eclipse gui as the eclimd server.
       - add a menu item which starts up nailgun.
@@ -307,6 +292,9 @@ TODO {{{
   }}}
 
   Java {{{
+    - :JavaRun :JavaBuild
+    - integrate w/ eclipse build/run system for at least simple programs.
+
     - :JavaCorrect, need to get the eclipse apply version working (but probably
       should wait until :edit is a considered a change operation in vim).
       https://sourceforge.net/forum/message.php?msg_id=5087396
