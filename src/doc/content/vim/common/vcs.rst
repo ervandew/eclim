@@ -22,7 +22,7 @@ Vcs Commands
 ------------
 
 The following is a list of commands that may be execute when viewing a
-file versioned in cvs, subversion, or mercurial (where applicable).
+file versioned in cvs, subversion, mercurial, or git (where applicable).
 
 .. _\:VcsAnnotate:
 

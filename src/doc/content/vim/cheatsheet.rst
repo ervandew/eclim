@@ -314,7 +314,7 @@ Version Control Commands
 
 .. note::
 
-  Currently cvs, subversion, and mercurial are supported by the following
+  Currently cvs, subversion, mercurial, and git are supported by the following
   commands where applicable.
 
 - :ref:`:VcsAnnotate` -
