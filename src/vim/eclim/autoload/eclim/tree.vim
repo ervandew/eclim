@@ -664,7 +664,7 @@ function s:AliasToPath (alias)
   if exists('b:aliases')
     let alias = ''
     for alias in keys(b:aliases)
-      if alias != '' && a:alias =~ '^' . alias
+      if alias != '' && a:alias =~ '^' . alias . '/$'
         return substitute(a:alias, '^' . alias . '/', b:aliases[alias], '')
       endif
     endfor
