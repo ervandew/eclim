@@ -23,6 +23,28 @@
 "
 " }}}
 
+" TestDiffLastSaved() {{{
+function! TestDiffLastSaved ()
+  exec 'cd ' . g:TestEclimWorkspace
+  edit eclim_unit_test/test_root_file.txt
+  call append(1, 'some new content')
+  DiffLastSaved
+
+  call VUAssertEquals(&diff, 1)
+  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(getline(1), 'file in project root')
+  call VUAssertEquals(getline(2), 'some new content')
+
+  winc l
+
+  call VUAssertEquals(&diff, 1)
+  call VUAssertEquals(line('$'), 1)
+  call VUAssertEquals(getline(1), 'file in project root')
+
+  bdelete!
+  bdelete!
+endfunction " }}}
+
 " TestOpenRelative() {{{
 function! TestOpenRelative ()
   exec 'cd ' . g:TestEclimWorkspace
