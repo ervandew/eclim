@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   Test case for project.vim
+"   Test case for project/util.vim
 "
 " License:
 "
