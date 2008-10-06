@@ -69,7 +69,7 @@ fi
 
 ECLIM_COMMAND="$ECLIPSE
   -debug -nosplash -clean -refresh -application
-  org.eclim.application $ECLIM_VMARGS"
+  org.eclim.application_headless $ECLIM_VMARGS"
 
 if [ "$1" = "start" ]; then
   shift

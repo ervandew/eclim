@@ -14,37 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.command.admin;
-
-import org.eclim.command.AbstractCommand;
-import org.eclim.command.CommandLine;
-
-import org.eclim.eclipse.AbstractEclimApplication;
-
-import org.eclim.logging.Logger;
+package org.eclim.eclipse;
 
 /**
- * Command to shutdown the eclim server.
- *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * Eclim application implementation which is intended to be run within a running
+ * eclipse gui.
  */
-public class ShutdownCommand
-  extends AbstractCommand
+public class EclimApplicationHeaded
+  extends AbstractEclimApplication
 {
-  private static final Logger logger = Logger.getLogger(ShutdownCommand.class);
-
   /**
    * {@inheritDoc}
+   * @see AbstractEclimApplication#isHeaded()
    */
-  public String execute (CommandLine _commandLine)
-    throws Exception
+  @Override
+  public boolean isHeaded ()
   {
-    try{
-      AbstractEclimApplication.getInstance().stop();
-    }catch(Exception e){
-      logger.error("Error shutting down eclim:", e);
-    }
-    return null;
+    return true;
   }
 }

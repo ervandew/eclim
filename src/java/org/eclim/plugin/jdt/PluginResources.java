@@ -26,6 +26,8 @@ import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.Services;
 
+import org.eclim.eclipse.AbstractEclimApplication;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
@@ -191,7 +193,9 @@ public class PluginResources
   {
     logger.info("Shutting down java environment");
     super.close();
-    JavaCore.getJavaCore().stop(null);
+    if (!AbstractEclimApplication.getInstance().isHeaded()){
+      JavaCore.getJavaCore().stop(null);
+    }
   }
 
   /**

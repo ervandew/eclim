@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 
-import java.net.URL;
-
 import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
@@ -35,25 +33,23 @@ import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.IOUtils;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
-import org.eclipse.swt.widgets.EclimDisplay;
-
 import org.osgi.framework.Bundle;
 
 /**
- * This class controls all aspects of the application's execution
+ * Abstract base class containing shared functionality used by implementations
+ * of an eclim application.
  */
-public class EclimApplication
+public abstract class AbstractEclimApplication
   implements IApplication
 {
-  private static final Logger logger = Logger.getLogger(EclimApplication.class);
-  private static EclimApplication instance;
+  private static final Logger logger =
+    Logger.getLogger(AbstractEclimApplication.class);
+  private static AbstractEclimApplication instance;
 
   private NGServer server;
   private boolean shuttingDown = false;
@@ -68,10 +64,7 @@ public class EclimApplication
     logger.info("Starting eclim...");
     instance = this;
     try{
-      // create the eclipse workbench.
-      org.eclipse.ui.PlatformUI.createAndRunWorkbench(
-          new EclimDisplay(),//org.eclipse.ui.PlatformUI.createDisplay()),
-          new WorkbenchAdvisor());
+      onStart();
 
       // initialize nailgun
       int port = Integer.parseInt(
@@ -118,11 +111,36 @@ public class EclimApplication
   }
 
   /**
+   * Invoked during application startup, allowing subclasses to perform any
+   * necessary startup initialization.
+   */
+  public void onStart ()
+    throws Exception
+  {
+  }
+
+  /**
+   * Invoked during application shutdown, allowing subclasses to perform any
+   * necessary shutdown cleanup.
+   */
+  public void onStop ()
+    throws Exception
+  {
+  }
+
+  /**
+   * Test for "headed" environment.
+   *
+   * @return true if running in "headed" environment.
+   */
+  public abstract boolean isHeaded ();
+
+  /**
    * Gets the running instance of this application.
    *
-   * @return The EclimApplication instance.
+   * @return The AbstractEclimApplication instance.
    */
-  public static EclimApplication getInstance ()
+  public static AbstractEclimApplication getInstance ()
   {
     return instance;
   }
@@ -137,8 +155,7 @@ public class EclimApplication
       shuttingDown = true;
       logger.info("Shutting down eclim...");
 
-      // Saving workspace MUST be before closing of service contexts.
-      saveWorkspace();
+      onStop();
       Services.close();
 
       EclimPlugin plugin = EclimPlugin.getDefault();
@@ -146,28 +163,8 @@ public class EclimApplication
         plugin.stop(null);
       }
 
-      // when shutdown normally, eclipse will handle this.
-      /*ResourcesPlugin.getPlugin().shutdown();
-        ResourcesPlugin.getPlugin().stop(null);*/
-
       logger.info("Eclim stopped.");
     }
-  }
-
-  /**
-   * Save the workspace.
-   */
-  private void saveWorkspace ()
-    throws Exception
-  {
-    logger.info("Saving workspace...");
-
-    try{
-      ResourcesPlugin.getWorkspace().save(true, null);
-    }catch(Exception e){
-      logger.warn("Error saving workspace.", e);
-    }
-    logger.info("Workspace saved.");
   }
 
   /**

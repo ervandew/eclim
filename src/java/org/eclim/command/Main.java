@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.eclipse.AbstractEclimApplication;
+
 import org.eclim.logging.Logger;
 
 import org.eclipse.swt.widgets.EclimDisplay;
@@ -48,9 +50,11 @@ public class Main
     try{
       logger.debug("Main - enter");
 
-      // set dummy display's current thread
-      ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
-        .setThread(Thread.currentThread());
+      if (!AbstractEclimApplication.getInstance().isHeaded()){
+        // set dummy display's current thread
+        ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
+          .setThread(Thread.currentThread());
+      }
 
       ArrayList<String> args = new ArrayList<String>();
       for(String arg : _args){

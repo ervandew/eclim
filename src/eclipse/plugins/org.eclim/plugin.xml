@@ -17,9 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <plugin>
-  <extension id="application" point="org.eclipse.core.runtime.applications">
+  <extension id="application_headless" point="org.eclipse.core.runtime.applications">
     <application>
-      <run class="org.eclim.eclipse.EclimApplication"/>
+      <run class="org.eclim.eclipse.EclimApplicationHeadless"/>
     </application>
   </extension>
 </plugin>
