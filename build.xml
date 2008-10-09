@@ -214,6 +214,15 @@
     <copy todir="${vim.files}" overwrite="true">
       <fileset dir="src/vim" includes="**/*" excludes="${vimfiles.exclude}"/>
     </copy>
+
+    <!-- deploy rope for python support -->
+    <untar compression="gzip" dest="${vim.files}/eclim/autoload/eclim/python">
+      <fileset dir="lib" includes="rope-*.tar.gz"/>
+      <patternset>
+        <include name="rope-*/rope/**/*"/>
+      </patternset>
+      <mapper type="regexp" from="^.*?/(.*)" to="\1"/>
+    </untar>
   </target>
 
   <!--

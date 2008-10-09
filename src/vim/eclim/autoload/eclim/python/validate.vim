@@ -40,7 +40,7 @@ function! eclim#python#validate#Validate (on_save)
   "  return
   "endif
 
-  let result = ''
+  let results = []
   let syntax_error = eclim#python#validate#ValidateSyntax()
 
   if syntax_error == ''
@@ -51,16 +51,26 @@ function! eclim#python#validate#Validate (on_save)
       endif
     else
       let command = 'pyflakes "' . expand('%:p') . '"'
-      let result = eclim#util#System(command)
+      let results = split(eclim#util#System(command), '\n')
       if v:shell_error > 1 " pyflakes returns 1 if there where warnings.
         call eclim#util#EchoError('Error running command: ' . command)
-        return
+        let results = []
       endif
+    endif
+
+    " rope validation
+    " currently too slow for running on every save.
+    if eclim#project#util#IsCurrentFileInProject() && !a:on_save
+      let project = eclim#project#util#GetCurrentProjectRoot()
+      let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+      let rope_results = eclim#python#rope#Validate(project, filename)
+      " currently rope gets confused with iterator var on list comprehensions
+      let rope_results = filter(rope_results, "v:val !~ '^Unresolved variable'")
+      let results += rope_results
     endif
   endif
 
-  if result =~ ':' || syntax_error != ''
-    let results = split(result, '\n')
+  if !empty(results) || syntax_error != ''
     call filter(results, "v:val !~ 'unable to detect undefined names'")
 
     let errors = []

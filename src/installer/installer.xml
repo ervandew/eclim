@@ -58,16 +58,9 @@
                 <formic:contains string="eclipse.plugins" substring="eclipse.home"/>
               </not>
             </and>
-            <!--istrue value="featureList.pydev"/-->
             <formic:istrue value="featureList.wst"/>
           </or>
         </formic:branch>
-        <!--formic:branch path="branch_python_interpreter">
-          <and>
-            <istrue value="featureList.pydev"/>
-            <not><isset property="pydev.skipped"/></not>
-          </and>
-        </formic:branch-->
         <formic:step name="install"/>
         <formic:step name="finished"/>
       </formic:path>

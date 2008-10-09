@@ -30,44 +30,32 @@
   endif
 " }}}
 
-" Script Varables {{{
-  let s:find_command =
-    \ '-command python_find_definition -p "<project>" -f "<file>" ' .
-    \ '-o <offset> -e <encoding>'
-" }}}
-
 " Find() {{{
 function eclim#python#definition#Find ()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
   " update the file before vim makes any changes.
   call eclim#util#ExecWithoutAutocmds('silent update')
 
   let offset = eclim#util#GetOffset()
-  let project = eclim#project#util#GetCurrentProjectName()
+  let project = eclim#project#util#GetCurrentProjectRoot()
   let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
-  let command = s:find_command
-  let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', filename, '')
-  let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  let result = eclim#python#rope#FindDefinition(project, filename, offset)
 
-  let results = split(eclim#ExecuteEclim(command), '\n')
-  if len(results) == 1 && results[0] == '0'
-    return
-  endif
-  if !empty(results)
-    " filter out pydev output which occurs on first invocation.
-    call filter(results, 'v:val !~ "\\*sys-package-mgr\\*"')
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+  if result != ''
+    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
-    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
-      if results[0] !~ '|1 col 1|'
+    if result =~ escape(expand('%:p'), '\') . '|'
+      if result !~ '|1 col 1|'
         lfirst
       endif
 
     " single result in another file.
-    elseif len(results) == 1 && g:EclimPythonSearchSingleResult != "lopen"
+    elseif g:EclimPythonSearchSingleResult != "lopen"
       let entry = getloclist(0)[0]
       exec g:EclimPythonSearchSingleResult . ' ' . bufname(entry.bufnr)
 

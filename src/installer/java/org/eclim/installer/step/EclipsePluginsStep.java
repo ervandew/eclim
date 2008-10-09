@@ -595,28 +595,6 @@ public class EclipsePluginsStep
     public void actionPerformed (ActionEvent e){
       if(GuiDialogs.showConfirm(Installer.getString("eclipsePlugins.skip"))){
         setValid(true);
-
-        // determine if the python interpreter step should be skipped.
-        boolean pydevRequired = false;
-        boolean pydevInstalled = true;
-        for (int ii = 0; ii < dependencies.size(); ii++){
-          Dependency dependency = (Dependency)dependencies.get(ii);
-          if("org.python.pydev.feature".equals(dependency.getId())){
-            pydevRequired = true;
-            break;
-          }
-        }
-        for (int ii = 0; ii < tableModel.getRowCount(); ii++){
-          String feature = (String)tableModel.getValueAt(ii, 0);
-          if("org.python.pydev.feature".equals(feature)){
-            pydevInstalled = false;
-            break;
-          }
-        }
-
-        if (pydevRequired && !pydevInstalled){
-          Installer.getContext().setValue("pydev.skipped", "true");
-        }
       }
     }
   }
