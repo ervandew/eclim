@@ -72,6 +72,7 @@
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.features}"/>
     <mkdir dir="${build.plugins}"/>
+    <mkdir dir="${build.vimfiles}"/>
 
     <!-- determine location of vim files if not explicitly set -->
     <if>
@@ -179,6 +180,22 @@
         <include name="org/ccil/cowan/tagsoup/**/*.class"/>
       </fileset>
     </jar>
+
+    <!-- prepare vim files -->
+    <delete dir="${build.vimfiles}/eclim"/>
+    <delete dir="${build.vimfiles}/plugin"/>
+    <copy todir="${build.vimfiles}">
+      <fileset dir="src/vim" includes="**/*" excludes="${vimfiles.exclude}"/>
+    </copy>
+
+    <!-- rope for python support -->
+    <untar compression="gzip" dest="${build.vimfiles}/eclim/autoload/eclim/python">
+      <fileset dir="lib" includes="rope-*.tar.gz"/>
+      <patternset>
+        <include name="rope-*/rope/**/*"/>
+      </patternset>
+      <mapper type="regexp" from="^.*?/(.*)" to="\1"/>
+    </untar>
   </target>
 
   <!--
@@ -212,17 +229,8 @@
     </delete>
     <mkdir dir="${vim.files}/eclim"/>
     <copy todir="${vim.files}" overwrite="true">
-      <fileset dir="src/vim" includes="**/*" excludes="${vimfiles.exclude}"/>
+      <fileset dir="${build.vimfiles}" includes="**/*"/>
     </copy>
-
-    <!-- deploy rope for python support -->
-    <untar compression="gzip" dest="${vim.files}/eclim/autoload/eclim/python">
-      <fileset dir="lib" includes="rope-*.tar.gz"/>
-      <patternset>
-        <include name="rope-*/rope/**/*"/>
-      </patternset>
-      <mapper type="regexp" from="^.*?/(.*)" to="\1"/>
-    </untar>
   </target>
 
   <!--
