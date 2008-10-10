@@ -25,6 +25,12 @@
 
 " Init() {{{
 function eclim#python#rope#Init ()
+  if !has('python')
+    call eclim#util#EchoError(
+      \ "This functionality requires 'python' support compiled into vim.")
+    return 0
+  endif
+
   let ropepath = eclim#python#rope#RopePath()
   if ropepath == ''
     return 0
@@ -70,9 +76,11 @@ function eclim#python#rope#Completions (project, filename, offset)
   endif
 
   let results = []
+  let completion_error = ''
 
 python << EOF
 from rope.base import project
+from rope.base.exceptions import RopeError
 from rope.contrib import codeassist
 project = project.Project(vim.eval('a:project'))
 
@@ -80,11 +88,23 @@ resource = project.get_resource(vim.eval('a:filename'))
 code = resource.read()
 
 # code completion
-proposals = codeassist.code_assist(project, code, int(vim.eval('a:offset')))
-proposals = codeassist.sorted_proposals(proposals)
-proposals = [[p.name, p.kind] for p in proposals]
-vim.command("let results = %s" % repr(proposals))
+try:
+  proposals = codeassist.code_assist(project, code, int(vim.eval('a:offset')))
+  proposals = codeassist.sorted_proposals(proposals)
+  proposals = [[p.name, p.kind] for p in proposals]
+  vim.command("let results = %s" % repr(proposals))
+except IndentationError, e:
+  vim.command(
+    "let completion_error = 'Completion failed due to indentation error.'"
+  )
+except RopeError, e:
+  message = 'Completion failed due to rope error: %s' % type(e)
+  vim.command("let completion_error = %s" % repr(message))
 EOF
+
+  if completion_error != ''
+    call eclim#util#EchoError(completion_error)
+  endif
 
   return results
 
