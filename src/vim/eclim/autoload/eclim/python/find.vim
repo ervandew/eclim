@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/definition.html
+"   see http://eclim.sourceforge.net/vim/python/find.html
 "
 " License:
 "
@@ -30,8 +30,8 @@
   endif
 " }}}
 
-" Find() {{{
-function eclim#python#definition#Find ()
+" FindDefinition() {{{
+function eclim#python#find#FindDefinition ()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif

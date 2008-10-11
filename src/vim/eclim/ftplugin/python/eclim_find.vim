@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/definition.html
+"   see http://eclim.sourceforge.net/vim/python/find.html
 "
 " License:
 "
@@ -25,7 +25,7 @@
 
 " Command Declarations {{{
 if !exists(":PythonFindDefinition")
-  command -buffer PythonFindDefinition :call eclim#python#definition#Find()
+  command -buffer PythonFindDefinition :call eclim#python#find#FindDefinition()
 endif
 " }}}
 
