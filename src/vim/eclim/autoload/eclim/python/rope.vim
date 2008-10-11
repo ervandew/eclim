@@ -142,6 +142,33 @@ EOF
 
 endfunction " }}}
 
+" GetSourceDirs (project) {{{
+" Attempts to determine the source directories for the supplied project.
+function eclim#python#rope#GetSourceDirs (project)
+  if !eclim#python#rope#Init()
+    return []
+  endif
+
+  let dirs = []
+
+python << EOF
+from rope.base import project
+from rope.base.exceptions import ResourceNotFoundError
+prj = project.Project(vim.eval('a:project'))
+dirs = [d.real_path for d in prj.pycore.get_source_folders()]
+for src in prj.prefs.get('python_path', []):
+  try:
+    src_folder = project.get_no_project().get_resource(src)
+    dirs.append(src_folder.real_path)
+  except ResourceNotFoundError:
+    pass
+vim.command("let dirs = %s" % repr(dirs))
+EOF
+
+  return dirs
+
+endfunction " }}}
+
 " Validate (project, filename) {{{
 " Attempts to validate the supplied file.
 function eclim#python#rope#Validate (project, filename)

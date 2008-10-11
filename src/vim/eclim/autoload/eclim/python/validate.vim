@@ -60,7 +60,7 @@ function! eclim#python#validate#Validate (on_save)
 
     " rope validation
     " currently too slow for running on every save.
-    if eclim#project#util#IsCurrentFileInProject() && !a:on_save
+    if eclim#project#util#IsCurrentFileInProject(0) && !a:on_save
       let project = eclim#project#util#GetCurrentProjectRoot()
       let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
       let rope_results = eclim#python#rope#Validate(project, filename)
@@ -138,18 +138,31 @@ function eclim#python#validate#PyLint ()
   if exists('g:EclimPyLintEnv')
     let pylint_env = g:EclimPyLintEnv
   else
-    let django_dir = eclim#python#django#GetProjectPath()
+    let paths = []
+
+    let django_dir = eclim#python#django#util#GetProjectPath()
     if django_dir != ''
-      let path = fnamemodify(django_dir, ':h')
+      call add(paths, fnamemodify(django_dir, ':h'))
       let settings = fnamemodify(django_dir, ':t')
       if has('win32') || has('win64')
         let pylint_env =
-          \ 'set "PYTHONPATH=' . path . '" && ' .
-          \ 'set DJANGO_SETTINGS_MODULE='. settings . '.settings &&'
+          \ 'set DJANGO_SETTINGS_MODULE='. settings . '.settings && '
       else
         let pylint_env =
-          \ 'PYTHONPATH="$PYTHONPATH:' . path . '" ' .
-          \ 'DJANGO_SETTINGS_MODULE="'. settings . '.settings"'
+          \ 'DJANGO_SETTINGS_MODULE="'. settings . '.settings" '
+      endif
+    endif
+
+    if eclim#project#util#IsCurrentFileInProject(0)
+      let project = eclim#project#util#GetCurrentProjectRoot()
+      let paths += eclim#python#rope#GetSourceDirs(project)
+    endif
+
+    if !empty(paths)
+      if has('win32') || has('win64')
+        let pylint_env .= 'set "PYTHONPATH=' . join(paths, ';') . '" && '
+      else
+        let pylint_env .= 'PYTHONPATH="$PYTHONPATH:' . join(paths, ':') . '"'
       endif
     endif
   endif
