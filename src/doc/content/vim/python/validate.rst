@@ -39,9 +39,17 @@ command **:Validate** is available to manual validate the file.
 .. _\:PyLint:
 
 **:PyLint** -
-Runs the `pylint tool <http://www.logilab.org/857>`_ on the current file,
-populates the quickfix list with the results (:h quickfix), and marks all the
-affected lines using vim's sign support.
+Runs the pylint_ tool on the current file, populates the quickfix list with the
+results (:h quickfix), and marks all the affected lines using vim's sign
+support.
+
+.. note::
+
+  When running **:PyLint**, determining additional directories to be include on
+  the path for pylint_ is provided via eclim's integration with
+  :ref:`rope <vim/python/rope>`.
+
+  Please see the :ref:`rope <vim/python/rope>` docs for more information.
 
 
 Configuration
@@ -55,3 +63,4 @@ Vim Variables
   If set to 0, disables python validation when saving the file.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
+.. _pylint: http://www.logilab.org/857

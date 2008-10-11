@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _1.4.3:
+
+1.4.3 (October 2008)
+--------------------
+
+Python:
+  - Added support for :ref:`code completion <vim/python/complete>`.
+  - Added support for :ref:`finding an element definition <vim/python/find>`.
+  - Improved :ref:`:PyLint` support.
+
 .. _1.4.2:
 
 1.4.2 (September 30, 2008)

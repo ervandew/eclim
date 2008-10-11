@@ -66,6 +66,7 @@ Java Integration
   of a logger.
 - Javadoc generation for package, class, field, method, etc.
 - Java regular expression testing.
+- Support for Checkstyle.
 
 JavaScript Integration
 -------------------------
@@ -89,6 +90,8 @@ Php Integration
 
 Python Integration
 -------------------------
+- Context sensitive code completion.
+- Find element definition support.
 - Regular expression testing.
 - Django functionality.
 - Validation via python compiler, pyflakes_, and pylint_.

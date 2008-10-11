@@ -90,6 +90,14 @@ News
 ==================
 
 -----------
+2008-10
+-----------
+
+| **Eclim 1.4.3** is now available.
+| This primary focus of this release is additional python support.
+| You can view the :ref:`release notes <1.4.2>` for more info.
+
+-----------
 2008-09-30
 -----------
 

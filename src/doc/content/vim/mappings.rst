@@ -113,13 +113,27 @@ Here are some mappings for the python funtionality provided by eclim.  To make
 use of these mappings, simply create a ftplugin file for python and place your
 mappings there (:help ftplugin-name).
 
-- If you are doing django development you may want to use the following mapping
-  which will execute **:DjangoViewOpen**, or **:DjangoTemplateOpen** depending
-  on the context of the text under the cursor\:
+- The following mapping allows you to simply hit <enter> on an element to
+  perform a search to find its definition.
 
   .. code-block:: vim
 
-    nnoremap <silent> <buffer> <cr> :DjangoContextOpen<cr>
+    nnoremap <silent> <buffer> <cr> :PythonFindDefinition<cr>
+
+- If you are doing django development you may want to use the following mapping
+  which will execute **:DjangoViewOpen**, or **:DjangoTemplateOpen** depending
+  on the context of the text under the cursor and if no results were found from
+  either of those, it will issue **:PythonFindDefinition**.
+
+  .. code-block:: vim
+
+    function! s:MyFind ()
+      let found = eclim#python#django#find#ContextFind()
+      if !found
+        PythonFindDefinition
+      endif
+    endfunction
+    nnoremap <silent> <buffer> <cr> :call <SID>MyFind()<cr>
 
 
 .. _VimScriptMappings:

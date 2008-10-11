@@ -28,7 +28,10 @@ a source file (method call, class name, constant) and perform a search for that
 element by issuing the command **:PhpFindDefinition**.
 
 If only one result is found and that result is in the current source file, the
-cursor will be moved to the element found.
+cursor will be moved to the element found.  Otherwise, on single result
+matches, the value of :ref:`g:EclimPhpSearchSingleResult` will be consulted
+for the action to take.  If there are multiple results, the location list will
+be opened with the list of results.
 
 .. _\:PhpSearchContext:
 
@@ -97,7 +100,7 @@ Vim Variables
 
 .. _g\:EclimPhpSearchSingleResult:
 
-- **g:EclimPhpSearchSingleResult** -
+- **g:EclimPhpSearchSingleResult** (Default: 'split') -
   Determines what action to take when a only a single result is found.
 
   Possible values include\:

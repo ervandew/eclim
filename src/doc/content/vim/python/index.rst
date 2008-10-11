@@ -21,9 +21,54 @@ Python
 .. toctree::
 
    validate
+   complete
+   find
    regex
    django
 
 - :ref:`vim/python/validate`
+- :ref:`vim/python/complete`
+- :ref:`vim/python/find`
 - :ref:`vim/python/regex`
 - :ref:`vim/python/django`
+
+.. _vim/python/rope:
+
+Rope
+----
+
+Contrary to other languages supported by eclim, python support is not provided
+by an eclipse plugin.  When evaluating the currently available eclipse plugins
+for python, namely pydev and dltk, we found that they had downsides making them
+less than ideal candidates for inclusion in eclim.
+
+After evaluating the eclipse plugins, attention turned to pure python solutions, which then lead to the eventual choice: rope_
+
+**Minimum Requirements**:
+  - python 2.5 or greater
+  - vim compiled with python support
+
+**Functionality Utilizing Rope**
+  - :ref:`code completion <vim/python/complete>`
+  - :ref:`find element definition <vim/python/find>`
+  - :ref:`:PyLint`
+
+**Configuration**
+
+When using functionality that in turn utilizes rope, eclim attempt to make the
+usage of rope as transparent as possible.  Eclim will automatically create the
+rope project in the same directory as your rope project, resulting in a new
+directory and file (.ropeproject/config.py).  Once that file has been created
+you can then modify it suit your environment.
+
+For example, lets say you have another python project which is no on your
+python path, but you wish to have **:PyLint**, code completion, etc. recognize
+that project.  To do so you can open the .ropeproject/config.py file and inside
+the set_prefs method you will see a commented example of you you can add paths
+to the rope 'python_path'.  You can then add your project like so:
+
+.. code-block:: python
+
+  prefs.add('python_path', '~/myotherproject')
+
+.. _rope: http://rope.sourceforge.net/
