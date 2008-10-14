@@ -16,6 +16,10 @@
  */
 package org.eclim.plugin;
 
+import org.apache.commons.io.FilenameUtils;
+
+import org.eclipse.core.resources.ResourcesPlugin;
+
 import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -53,7 +57,11 @@ public class Application
       ScriptedCommand cmd = cmdLineArgs.getCommand();
       boolean installed = cmd.run(new ProgressMonitor());
       if(!installed && !(cmd instanceof UninstallCommand)){
-        throw new RuntimeException("Feature not installed.");
+        String workspace =
+          ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString();
+        String log = workspace + "/.metadata/.log";
+        throw new RuntimeException(
+            "Feature not installed. See '" + log + "' for additional info.");
       }
     }catch(Throwable t){
       t.printStackTrace();
