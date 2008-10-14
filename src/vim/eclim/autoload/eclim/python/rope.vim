@@ -61,7 +61,7 @@ function eclim#python#rope#RopePath ()
     endif
     let basedir = substitute(fnamemodify(file, ':p:h'), '\', '/', 'g')
 
-    let g:RopePath = escape(basedir, ' ')
+    let g:RopePath = basedir
   endif
 
   return g:RopePath
