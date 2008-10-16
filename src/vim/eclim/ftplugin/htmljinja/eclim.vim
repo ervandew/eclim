@@ -26,6 +26,18 @@ runtime ftplugin/html.vim
 runtime indent/html.vim
 runtime ftplugin/html/eclim.vim
 
+" Global Variables {{{
+if !exists('g:HtmlJinjaCompleteEndTag')
+  let g:HtmlJinjaCompleteEndTag = 1
+endif
+" }}}
+
+" Mappings {{{
+if g:HtmlJinjaCompleteEndTag
+  imap <buffer> <silent> e <c-r>=eclim#python#jinja#CompleteEndTag()<cr>
+endif
+" }}}
+
 let g:HtmlJinjaBodyElements = [
     \ ['block', 'endblock'],
     \ ['call', 'endcall'],
