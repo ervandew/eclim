@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/django.html
+"   see http://eclim.sourceforge.net/vim/python/jinja.html
 "
 " License:
 "
@@ -24,21 +24,21 @@
 " }}}
 
 " Script Variables {{{
-let s:starttag = '{%\s*\(end\)\@!\(\w\+\)\s*\([^}]\+\)\?\s*%}'
-let s:endtag = '{%\s*end\w\+\s*%}'
+let s:starttag = '{%-\?\s*\(end\)\@!\(\w\+\)\s*\([^}]\+\)\?\s*-\?%}'
+let s:endtag = '{%-\?\s*end\w\+\s*-\?%}'
 
 let s:body_tags = {}
-for elements in g:HtmlDjangoBodyElements
+for elements in g:HtmlJinjaBodyElements
   let s:body_tags[elements[0]] = elements[-1]
 endfor
 " }}}
 
 " CompleteEndTag() {{{
-" Function to complete a django template end tag.
-" Ex. imap <silent> % <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
-function eclim#python#django#template#CompleteEndTag ()
+" Function to complete a jinja template end tag.
+" Ex. imap <silent> % <c-r>=eclim#python#jinja#CompleteEndTag()<cr>
+function eclim#python#jinja#CompleteEndTag ()
   let line = getline('.')
-  if line =~ '.*{%\s*\%' . col('.') . 'c\(\s\|$\)'
+  if line =~ '.*{%-\?\s*\%' . col('.') . 'c\(\s\|$\)'
     let tag = s:GetStartTag(line('.'))
     if tag != '' && tag != 'endif'
       return tag . ' %}'
@@ -60,13 +60,13 @@ function s:GetStartTag (line)
       call cursor(line('.'), col('$'))
       for tag in reverse(tags)
         " find first tag searching backwards
-        call search('{%\s*' . tag[0] . '\s*\([^}]\+\)\?\s*%}', 'b', line('.'))
+        call search('{%-\?\s*' . tag[0] . '\s*\([^}]\+\)\?\s*-\?%}', 'b', line('.'))
 
         " see if the tag has a matching close tag
         let pairpos = searchpairpos(
-          \ '{%\s*' . tag[0] . '\s*\([^}]\+\)\?\s*%}', '',
-          \ '{%\s*' . tag[1], 'nW')
-          "\ '{%\s*' . tag[1] . '\s*%}', 'nW')
+          \ '{%-\?\s*' . tag[0] . '\s*\([^}]\+\)\?\s*-\?%}', '',
+          \ '{%-\?\s*' . tag[1], 'nW')
+          "\ '{%-\?\s*' . tag[1] . '\s*-\?%}', 'nW')
         if !pairpos[0] || pairpos[0] > a:line
           return tag[1]
         endif
@@ -87,10 +87,10 @@ function s:ExtractTags (line)
   let tags = []
   while line =~ s:starttag
     let tag = substitute(line, '.\{-}' . s:starttag . '.*', '\2', '')
-    if line !~ '{%\s*end' . tag . '\s*%}' && has_key(s:body_tags, tag)
+    if line !~ '{%-\?\s*end' . tag . '\s*-\?%}' && has_key(s:body_tags, tag)
       call add(tags, [tag, s:body_tags[tag]])
     endif
-    let line = substitute(line, '.\{-}{%\s*' . tag . '\>.\{-}%}', '\1', '')
+    let line = substitute(line, '.\{-}{%-\?\s*' . tag . '\>.\{-}-\?%}', '\1', '')
   endwhile
   return tags
 endfunction " }}}
