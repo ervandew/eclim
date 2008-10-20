@@ -1,4 +1,7 @@
 HIGH {{{
+  - during intall, if a $HOME/{.vim,vimfiles} not found prompt user to create
+    it?
+
   - add warnings regarding running eclim and eclipse concurrently
 
   - start developer docs
@@ -52,11 +55,7 @@ TODO {{{
     - logger (custom logger)
     - indenting test cases
     - html validate: validation of nested javascript and css
-    - archive reading (tree and list)
-    - :Vcs*
-      - svn test
     - various common vim commands
-      - :DiffLastSaved
       - :OtherWorkingCopyDiff
       - :OtherWorkingCopyEdit
       - :OtherWorkingCopySplit
@@ -165,10 +164,6 @@ TODO {{{
       - username, email, etc.
       - setting precedence would be: user > project > global
       - unless eclipse supports this concept, only include eclim settings as 'user' configurable
-
-    - alter :LocateFile* commands, or create separate versions, to use or mimic
-      eclipse's "find resource" functionality
-      https://sourceforge.net/forum/message.php?msg_id=5169338
 
     - add means to hook into and view all of eclipses build errors.
       https://sourceforge.net/forum/forum.php?thread_id=2192184&forum_id=487811
