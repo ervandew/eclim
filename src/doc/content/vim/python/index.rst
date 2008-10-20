@@ -42,11 +42,19 @@ by an eclipse plugin.  When evaluating the currently available eclipse plugins
 for python, namely pydev and dltk, we found that they had downsides making them
 less than ideal candidates for inclusion in eclim.
 
-After evaluating the eclipse plugins, attention turned to pure python solutions, which then lead to the eventual choice: rope_
+After evaluating the eclipse plugins, attention turned to pure python
+solutions, which then lead to the eventual choice: rope_
 
 **Minimum Requirements**:
   - python 2.5 or greater
   - vim compiled with python support
+
+    .. warning::
+
+      **Windows Users**: gvim for windows does have python support, but at the
+      time of this writing, it is compiled against python 2.4.  So if you want
+      to leverage eclim's rope support, you will need to recompile gvim against
+      python 2.5 or higher.
 
 **Functionality Utilizing Rope**
   - :ref:`code completion <vim/python/complete>`
@@ -59,12 +67,12 @@ When using functionality that in turn utilizes rope, eclim attempt to make the
 usage of rope as transparent as possible.  Eclim will automatically create the
 rope project in the same directory as your rope project, resulting in a new
 directory and file (.ropeproject/config.py).  Once that file has been created
-you can then modify it suit your environment.
+you can then modify it to suit your environment.
 
-For example, lets say you have another python project which is no on your
+For example, lets say you have another python project which is not on your
 python path, but you wish to have **:PyLint**, code completion, etc. recognize
 that project.  To do so you can open the .ropeproject/config.py file and inside
-the set_prefs method you will see a commented example of you you can add paths
+the set_prefs method you will see a commented example of how you can add paths
 to the rope 'python_path'.  You can then add your project like so:
 
 .. code-block:: python
