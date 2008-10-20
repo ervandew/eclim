@@ -75,10 +75,16 @@ function! eclim#python#validate#Validate (on_save)
 
     let errors = []
     if syntax_error != ''
+      let lnum = substitute(syntax_error, '.*(line \(\d\+\))', '\1', '')
+      let text = substitute(syntax_error, '\(.*\)\s\+(line .*', '\1', '')
+      if lnum == syntax_error
+        let lnum = 1
+        let text .= ' (unknown line)'
+      endif
       call add(errors, {
           \ 'filename': eclim#util#Simplify(expand('%')),
-          \ 'lnum': substitute(syntax_error, '.*(line \(\d\+\))', '\1', ''),
-          \ 'text': substitute(syntax_error, '\(.*\)\s\+(line .*', '\1', ''),
+          \ 'lnum': lnum,
+          \ 'text': text,
           \ 'type': 'e'
         \ })
     endif
