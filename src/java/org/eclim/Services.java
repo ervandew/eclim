@@ -315,6 +315,9 @@ public class Services
       registerCommand("archive_read",
           org.eclim.command.archive.ArchiveReadCommand.class);
 
+      registerCommand("locate_file",
+          org.eclim.command.search.LocateFileCommand.class);
+
       registerCommand("patch_revisions",
           org.eclim.command.patch.RevisionsCommand.class);
       registerCommand("patch_file",

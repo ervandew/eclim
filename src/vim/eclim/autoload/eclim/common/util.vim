@@ -23,6 +23,10 @@
 "
 " }}}
 
+" Script Variables {{{
+let s:command_locate = '-command locate_file -s <scope> -p "<pattern>"'
+" }}}
+
 " DiffLastSaved() {{{
 " Diff a modified file with the last saved version.
 function! eclim#common#util#DiffLastSaved ()
@@ -119,57 +123,73 @@ function! eclim#common#util#GrepRelative (command, args)
   endif
 endfunction " }}}
 
-" LocateFile(command, file) {{{
-" Locates a file using the following steps:
-" 1) First if current file is in a project, search that project.
-" 2) No results from #1, then search relative to current file.
-" 3) No results from #2, then search other projects.
-function eclim#common#util#LocateFile (command, file)
+" LocateFile(command, scope, file) {{{
+" Locates a file under the specified scope using the specified command for
+" opening the file when found.
+"   command - 'split', 'edit', etc.
+"   scope - 'project', 'workspace'
+"   file - 'somefile.txt',
+"          '', (kick off completion mode),
+"          '<cursor>' (locate the file under the cursor)
+function eclim#common#util#LocateFile (command, scope, file)
+  if a:scope == 'project' && !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
   let results = []
   let file = a:file
   if file == ''
+    call s:LocateFileCompletionInit(a:command, a:scope)
+    return
+  elseif file == '<cursor>'
     let file = eclim#util#GrabUri()
 
     " if grabbing a relative url, remove any anchor info or query parameters
     let file = substitute(file, '[#?].*', '', '')
   endif
 
-  " Step 1: Find in current project.
-  if eclim#project#util#IsCurrentFileInProject(0)
-    let projectDir = eclim#project#util#GetCurrentProjectRoot()
-    call eclim#util#Echo('Searching current project: ' . projectDir . ' ...')
-    let results = eclim#common#util#FindInPath(file, projectDir)
+  let path = fnamemodify(file, ':h')
+  let name = fnamemodify(file, ':t')
+  if name == ''
+    call eclim#util#Echo('Please supplie more than just a directory name.')
+    return
   endif
 
-  " Step 2: Find relative to current file.
-  if len(results) == 0
-    let dir = expand('%:p:h')
-    call eclim#util#Echo('Searching current file path: ' . dir . ' ...')
-    let results = eclim#common#util#FindInPath(file, dir)
+  let command = s:command_locate
+  let command = substitute(command, '<scope>', a:scope, '')
+  let command = substitute(command, '<pattern>', name, '')
+  if a:scope == 'project'
+    let command .= ' -n ' . eclim#project#util#GetCurrentProjectName()
   endif
 
-  " Step 3: Find in other projects.
-  if len(results) == 0
-    let currentProjectDir = eclim#project#util#GetCurrentProjectRoot()
-    let projectDirs = eclim#project#util#GetProjectDirs()
-    for dir in projectDirs
-      if dir != currentProjectDir
-        call eclim#util#Echo('Searching project: ' . dir . ' ...')
-        let results += eclim#common#util#FindInPath(file, dir)
+
+  let results = split(eclim#ExecuteEclim(command), '\n')
+  let message = ''
+  if path != '.'
+    let match = substitute(escape(file, '.'), '*', '.*', 'g')
+    let match = substitute(match, '?', '.', 'g')
+    if len(results) > 0
+      let orig_results = copy(results)
+      call filter(results, 'v:val =~ match')
+      if len(results) == 0
+        let message = 'File matching "' . file . '" not found. ' .
+          \ 'Did you mean one of the above?'
+        let results = orig_results
       endif
-    endfor
+    endif
   endif
 
   let result = ''
-
   " One result.
-  if len(results) == 1
+  if len(results) == 1 && message == ''
     let result = results[0]
 
   " More than one result.
-  elseif len(results) > 1
-    let response = eclim#util#PromptList
-      \ ("Multiple results, choose the file to open", results, g:EclimInfoHighlight)
+  elseif len(results) > 1 || message != ''
+    if message == ''
+      let message = "Multiple results, choose the file to open"
+    endif
+    let response = eclim#util#PromptList(message, results, g:EclimInfoHighlight)
     if response == -1
       return
     endif
@@ -182,30 +202,138 @@ function eclim#common#util#LocateFile (command, file)
     return
   endif
 
-  silent exec a:command . ' ' . escape(eclim#util#Simplify(result), ' ')
+  call eclim#util#GoToBufferWindowOrOpen(
+    \ escape(eclim#util#Simplify(result), ' '), a:command)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" LocateProjectFile(command, file) {{{
-" Locates a file in the current project.
-function eclim#common#util#LocateProjectFile (command, file)
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
+" s:LocateFileCompletionInit(command, scope) {{{
+function s:LocateFileCompletionInit (command, scope)
+  let file = expand('%')
+  let project = ''
+  if a:scope == 'project'
+    let project = eclim#project#util#GetCurrentProjectName()
   endif
 
-  let file = a:file
-  if file == ''
-    let file = eclim#util#GrabUri()
-    " if grabbing a relative url, remove any anchor info or query parameters
-    let file = substitute(file, '[#?].*', '', '')
+  topleft 10split [Locate\ Results]
+  set filetype=locate_results
+  setlocal nonumber nowrap
+  setlocal noswapfile nobuflisted
+  setlocal buftype=nofile bufhidden=delete
+
+  let results_bufnum = bufnr('%')
+
+  topleft 1split [Locate]
+  call setline(1, '> ')
+  call cursor(1, col('$'))
+  set winfixheight
+  setlocal nonumber
+  setlocal nolist
+  setlocal noswapfile nobuflisted
+  setlocal buftype=nofile bufhidden=delete
+
+  let b:file = file
+  let b:command = a:command
+  let b:scope = a:scope
+  let b:project = project
+  let b:results_bufnum = results_bufnum
+  let b:selection = 1
+
+  augroup locate_file
+    autocmd!
+    autocmd CursorMovedI <buffer> call eclim#common#util#LocateFileCompletion()
+    exec 'autocmd InsertLeave <buffer> bd | '
+      \ 'bd ' . b:results_bufnum . ' | '
+      \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
+  augroup END
+
+  imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection('n')<cr>
+  imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection('p')<cr>
+  imap <buffer> <silent> <cr> <c-r>=<SID>LocateFileSelect()<cr>
+
+  startinsert!
+endfunction " }}}
+
+" LocateFileCompletion() {{{
+function eclim#common#util#LocateFileCompletion ()
+  let completions = []
+  let display = []
+  let base = substitute(getline('.'), '^>\s*', '', '')
+  let path = fnamemodify(base, ':h')
+  let name = fnamemodify(base, ':t')
+  if name !~ '^\s*$'
+    let pattern = '*' . substitute(name, '\(.\)', '\1*', 'g')
+    let command = s:command_locate
+    let command = substitute(command, '<scope>', b:scope, '')
+    let command = substitute(command, '<pattern>', pattern, '')
+    if b:scope == 'project'
+      let command .= ' -n ' . b:project
+    endif
+    let results = split(eclim#ExecuteEclim(command), '\n')
+    if path != '.'
+      let match = substitute(escape(path, '.'), '*', '.*', 'g')
+      let match = substitute(path, '?', '.', 'g')
+      call filter(results, 'v:val =~ match')
+    endif
+    if !empty(results)
+      for result in results
+        let parts = split(result, '|')
+        let dict = {'word': parts[0], 'menu': parts[1], 'info': parts[2]}
+        call add(completions, dict)
+        call add(display, parts[0] . '  ' . parts[1])
+      endfor
+    endif
+  endif
+  let b:completions = completions
+  let winnr = winnr()
+  exec bufwinnr(b:results_bufnum) . 'winc w'
+  1,$delete _
+  call append(1, display)
+  1,1delete _
+  exec winnr . 'winc w'
+
+  call s:LocateFileSelection(1)
+endfunction " }}}
+
+" s:LocateFileSelection(sel) {{{
+function s:LocateFileSelection (sel)
+  let sel = a:sel
+  let prev_sel = b:selection
+
+  let winnr = winnr()
+  exec bufwinnr(b:results_bufnum) . 'winc w'
+
+  if sel == 'n'
+    let sel = prev_sel < line('$') ? prev_sel + 1 : 1
+  elseif sel == 'p'
+    let sel = prev_sel > 1 ? prev_sel - 1 : line('$')
   endif
 
-  let projectDir = eclim#project#util#GetCurrentProjectRoot()
-  let results = eclim#common#util#FindInPath(file, projectDir)
+  syntax clear
+  exec 'syntax match PmenuSel /\%' . sel . 'l.*/'
+  exec 'call cursor(' . sel . ', 1)'
+  normal zt
 
-  if len(results)
-    call eclim#util#GoToBufferWindowOrOpen(eclim#util#Simplify(results[0]), a:command)
+  exec winnr . 'winc w'
+
+  exec 'let b:selection = ' . sel
+
+  return ''
+endfunction " }}}
+
+" s:LocateFileSelect() {{{
+function s:LocateFileSelect ()
+  if exists('b:completions') && !empty(b:completions)
+    let winnr = winnr()
+    let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
+    let command = b:command
+    let bufnum = bufnr('%')
+    let results_bufnum = b:results_bufnum
+    call eclim#util#GoToBufferWindow(escape(b:file, '\'))
+    call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), command)
+    call feedkeys("\<esc>:bd " . bufnum . " | bd " . results_bufnum . "\<cr>", 'n')
   endif
+  return ''
 endfunction " }}}
 
 " OpenRelative(command, arg [, open_existing]) {{{

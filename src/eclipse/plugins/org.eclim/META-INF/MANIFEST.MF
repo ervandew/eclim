@@ -38,6 +38,7 @@ Require-Bundle: org.apache.ant,
   org.eclipse.core.filebuffers,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
+  org.eclipse.search,
   org.eclipse.text,
   org.eclipse.ui,
   org.eclipse.jface.text

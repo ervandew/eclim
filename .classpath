@@ -13,17 +13,19 @@
       <attribute value="file:///usr/local/java/java-src/nailgun-0.7.1/docs/api " name="javadoc_location"/>
       </attributes>
   </classpathentry>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/secondstring-20060615.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.0-beta01.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.3.0.v20080529.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.commands_3.4.0.I20080509-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.4.0.v20080512.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.4.0.v20080604-1400.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.4.0.v20080512.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_0.95.0.v20080724.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_0.95.1.v20080724.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_1.0.0.v20081001-2129.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_1.0.0.v20080930.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.1.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.4.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.preferences_3.2.200.v20080421-2006.jar"/>
@@ -36,7 +38,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.4.0.v20080605-1900.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php_2.0.0.HEAD.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.HEAD"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.HEAD.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.0.0.HEAD.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.4.0.v20080603-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_3.4.0.v3448f.jar"/>
@@ -62,7 +64,7 @@
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/looks-2.1.4.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/miglayout-3.5.0.jar"/>
-  <classpathentry kind="output" path="bin"/>
+  <classpathentry kind="output" path="build"/>
   <classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" path="src/installer/java"/>
   <classpathentry kind="src" path="src/test/junit"/>
