@@ -57,7 +57,8 @@ function eclim#python#find#FindDefinition ()
     " single result in another file.
     elseif g:EclimPythonSearchSingleResult != "lopen"
       let entry = getloclist(0)[0]
-      exec g:EclimPythonSearchSingleResult . ' ' . bufname(entry.bufnr)
+      call eclim#util#GoToBufferWindowOrOpen(
+        \ bufname(entry.bufnr), g:EclimPythonSearchSingleResult)
 
       call cursor(entry.lnum, entry.col)
     else
