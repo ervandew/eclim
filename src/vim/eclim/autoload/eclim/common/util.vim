@@ -226,6 +226,8 @@ function s:LocateFileCompletionInit (command, scope)
   topleft 1split [Locate]
   call setline(1, '> ')
   call cursor(1, col('$'))
+  set filetype=locate_prompt
+  syntax match Keyword /^>/
   set winfixheight
   setlocal nonumber
   setlocal nolist
@@ -270,6 +272,9 @@ function eclim#common#util#LocateFileCompletion ()
       let command .= ' -n ' . b:project
     endif
     let results = split(eclim#ExecuteEclim(command), '\n')
+    if len(results) == 1 && results[0] == '0'
+      return
+    endif
     if path != '.'
       let match = substitute(escape(path, '.'), '*', '.*', 'g')
       let match = substitute(path, '?', '.', 'g')
