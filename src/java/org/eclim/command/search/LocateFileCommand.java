@@ -77,8 +77,13 @@ public class LocateFileCommand
         throw new RuntimeException(
             Services.getMessage("required.options.missing", Options.NAME_OPTION));
       }
-      IProject project = ProjectUtils.getProject(projectName);
+      IProject project = ProjectUtils.getProject(projectName, true);
       IProject[] depends = project.getReferencedProjects();
+      for (IProject p : depends){
+        if(!p.isOpen()){
+          p.open(null);
+        }
+      }
       IProject[] projects = new IProject[depends.length + 1];
       projects[0] = project;
       System.arraycopy(depends, 0, projects, 1, depends.length);
