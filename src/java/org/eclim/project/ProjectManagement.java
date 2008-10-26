@@ -41,6 +41,7 @@ import org.eclim.util.XmlUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -247,7 +248,7 @@ public class ProjectManagement
    * the project if no other natures exist for the project.
    *
    * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param _commandLine The command line for the project delete command.
    */
   public static void delete (IProject _project, CommandLine _commandLine)
     throws Exception
@@ -276,12 +277,14 @@ public class ProjectManagement
    * Refreshes a project by synchronizing it against the files on disk.
    *
    * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param _commandLine The command line for the project refresh command.
    */
   public static void refresh (IProject _project, CommandLine _commandLine)
     throws Exception
   {
     ProjectUtils.assertExists(_project);
+
+    _project.refreshLocal(IResource.DEPTH_INFINITE, null);
 
     for (String nature : managers.keySet()){
       if(_project.hasNature(nature)){
