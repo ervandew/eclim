@@ -26,7 +26,8 @@
 
 " Command Declarations {{{
 if !exists(":OpenUrl")
-  command -nargs=? OpenUrl :call eclim#web#OpenUrl('<args>')
+  command -range -nargs=? OpenUrl
+    \ :call eclim#web#OpenUrl('<args>', 0, <line1>, <line2>)
 endif
 if !exists(":Google")
   command -nargs=* Google :call eclim#web#Google(<q-args>, 0, 0)

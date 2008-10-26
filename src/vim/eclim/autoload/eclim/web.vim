@@ -51,7 +51,7 @@ endif
     \ ]
 " }}}
 
-" OpenUrl(url, [no_vim]) {{{
+" OpenUrl(url, [no_vim, line1, line2]) {{{
 " Opens the supplied url in a web browser or opens the url under the cursor.
 function! eclim#web#OpenUrl (url, ...)
   if !exists('s:browser') || s:browser == ''
@@ -69,7 +69,17 @@ function! eclim#web#OpenUrl (url, ...)
 
   let url = a:url
   if url == ''
-    let url = eclim#util#GrabUri()
+    if len(a:000) >= 2
+      let start = a:000[1]
+      let end = a:000[2]
+      while start <= end
+        call eclim#web#OpenUrl(eclim#util#GrabUri(start, col('.')))
+        let start += 1
+      endwhile
+      return
+    else
+      let url = eclim#util#GrabUri()
+    endif
   endif
 
   if url == ''

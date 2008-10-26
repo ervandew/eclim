@@ -441,13 +441,20 @@ function! eclim#util#GoToBufferWindowRegister (bufname)
     \ escape(a:bufname, '\') . '")'
 endfunction " }}}
 
-" GrabUri() {{{
+" GrabUri([line, col]) {{{
 " Grabs an uri from the file's current cursor position.
-function! eclim#util#GrabUri ()
-  let line = getline('.')
+function! eclim#util#GrabUri (...)
+  if len(a:000) == 2
+    let lnum = a:000[0]
+    let cnum = a:000[1]
+  else
+    let lnum = line('.')
+    let cnum = col('.')
+  endif
+  let line = getline(lnum)
   let uri = substitute(line,
     \ "\\(.*[[:space:]\"',(\\[{><]\\|^\\)\\(.*\\%" .
-    \ col('.') . "c.\\{-}\\)\\([[:space:]\"',)\\]}<>].*\\|$\\)",
+    \ cnum . "c.\\{-}\\)\\([[:space:]\"',)\\]}<>].*\\|$\\)",
     \ '\2', '')
 
   return uri
