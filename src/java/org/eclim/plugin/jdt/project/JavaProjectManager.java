@@ -150,8 +150,6 @@ public class JavaProjectManager
   public void refresh (IProject _project, CommandLine _commandLine)
     throws Exception
   {
-    IJavaProject javaProject = JavaUtils.getJavaProject(_project);
-    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
   }
 
   /**
