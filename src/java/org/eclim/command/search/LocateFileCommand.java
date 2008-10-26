@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import java.util.regex.Matcher;
@@ -28,8 +29,6 @@ import java.util.regex.Pattern;
 import com.wcohen.ss.Levenstein;
 
 import com.wcohen.ss.api.StringDistance;
-
-import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -40,10 +39,12 @@ import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 
-import org.eclipse.search.ui.text.FileTextSearchScope;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * Given a file pattern, finds all files that match that pattern.
@@ -57,9 +58,6 @@ public class LocateFileCommand
   public static final String SCOPE_ALL = "all";
   public static final String SCOPE_PROJECT = "project";
 
-  private static final Pattern IGNORE =
-    Pattern.compile("(/(CVS|\\.svn|\\.hg|\\.git)/)");
-
   /**
    * {@inheritDoc}
    */
@@ -68,49 +66,110 @@ public class LocateFileCommand
   {
     String projectName = _commandLine.getValue(Options.NAME_OPTION);
     String pattern = _commandLine.getValue(Options.PATTERN_OPTION);
-    String scopeName = _commandLine.getValue(Options.SCOPE_OPTION);
 
-    FileTextSearchScope scope = null;
-
-    if(SCOPE_PROJECT.equals(scopeName)){
-      if (!_commandLine.hasOption(Options.NAME_OPTION)){
-        throw new RuntimeException(
-            Services.getMessage("required.options.missing", Options.NAME_OPTION));
+    ArrayList<IProject> projects = new ArrayList<IProject>();
+    IProject project = ProjectUtils.getProject(projectName, true);
+    projects.add(project);
+    IProject[] depends = project.getReferencedProjects();
+    for (IProject p : depends){
+      if(!p.isOpen()){
+        p.open(null);
       }
-      IProject project = ProjectUtils.getProject(projectName, true);
-      IProject[] depends = project.getReferencedProjects();
-      for (IProject p : depends){
-        if(!p.isOpen()){
-          p.open(null);
-        }
-      }
-      IProject[] projects = new IProject[depends.length + 1];
-      projects[0] = project;
-      System.arraycopy(depends, 0, projects, 1, depends.length);
-
-      scope = FileTextSearchScope.newSearchScope(
-          projects, new String[]{pattern}, false);
-    }else{
-      scope = FileTextSearchScope.newWorkspaceScope(new String[]{pattern}, false);
+      projects.add(p);
     }
 
-    IFile[] files = scope.evaluateFilesInScope(null);
-    ArrayList<String> paths = new ArrayList<String>();
-    for (IFile file : files){
-      String rel = file.getFullPath().toOSString();
-      String path = file.getRawLocation().toOSString();
-      Matcher matcher = IGNORE.matcher(path);
-      if (!matcher.find()){
+    FileMatcher matcher = new FileMatcher(pattern);
+    for (IProject resource : projects){
+      resource.accept(matcher, 0);
+    }
+
+    return StringUtils.join(matcher.getResults(), '\n');
+  }
+
+  private static class FileMatcher
+    implements IResourceProxyVisitor
+  {
+    private static final ArrayList<String> IGNORE_DIRS =
+      new ArrayList<String>();
+    static {
+      IGNORE_DIRS.add("CVS");
+      IGNORE_DIRS.add(".bzr");
+      IGNORE_DIRS.add(".git");
+      IGNORE_DIRS.add(".hg");
+      IGNORE_DIRS.add(".svn");
+    }
+
+    private String pattern;
+    private Matcher matcher;
+    private boolean includesPath;
+    private Matcher baseMatcher;
+    private ArrayList<String> paths = new ArrayList<String>();
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pattern The pattern for this instance.
+     */
+    public FileMatcher (String pattern)
+    {
+      this.pattern = pattern;
+      this.matcher = Pattern.compile(pattern).matcher("");
+      this.includesPath = pattern.indexOf('/') != -1;
+      if (this.includesPath){
+        this.baseMatcher =
+          Pattern.compile(FileUtils.getBaseName(pattern)).matcher("");
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see IResourceProxyVisitor#visit(IResourceProxy)
+     */
+    public boolean visit (IResourceProxy proxy)
+      throws CoreException
+    {
+      if (paths.size() >= 100){
+        return false;
+      }
+
+      int type = proxy.getType();
+      String name = proxy.getName();
+
+      if (type == IResource.FOLDER &&
+          IGNORE_DIRS.contains(name))
+      {
+        return false;
+      }else if (type == IResource.FOLDER){
+        return true;
+      }
+
+      IResource resource = null;
+      if (includesPath){
+        if (!baseMatcher.reset(name).matches()){
+          return true;
+        }
+        resource = proxy.requestResource();
+        name = resource.getFullPath().toOSString().replace('\\', '/');
+      }
+
+      if (matcher.reset(name).matches()){
+        if (resource == null){
+          resource = proxy.requestResource();
+        }
+        String rel = resource.getFullPath().toOSString().replace('\\', '/');
+        String path = resource.getRawLocation().toOSString().replace('\\', '/');
         paths.add(FileUtils.getBaseName(rel) + '|' + rel + '|' + path);
-        if (paths.size() > 99){
-          break;
-        }
       }
+
+      return true;
     }
 
-    FilePathComparator comparator = new FilePathComparator(pattern);
-    Collections.sort(paths, comparator);
-    return StringUtils.join(paths, '\n');
+    public List<String> getResults ()
+    {
+      FilePathComparator comparator = new FilePathComparator(pattern);
+      Collections.sort(paths, comparator);
+      return paths;
+    }
   }
 
   private static class FilePathComparator
@@ -129,7 +188,7 @@ public class LocateFileCommand
     {
       this.distance = new Levenstein();
       this.pattern = pattern;
-      this.pattern = this.pattern.replaceAll("[*?]", "");
+      this.pattern = this.pattern.replaceAll("\\.\\*\\??", "");
     }
 
     /**
@@ -138,8 +197,8 @@ public class LocateFileCommand
      */
     public int compare (String o1, String o2)
     {
-      double score1 = score(FileUtils.getBaseName(o1));
-      double score2 = score(FileUtils.getBaseName(o2));
+      double score1 = score(o1);
+      double score2 = score(o2);
 
       return (int)Math.round(score1 - score2);
     }

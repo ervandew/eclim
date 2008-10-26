@@ -24,7 +24,7 @@
 " }}}
 
 " Script Variables {{{
-let s:command_locate = '-command locate_file -s <scope> -p "<pattern>"'
+let s:command_locate = '-command locate_file -n "<project>" -p "<pattern>"'
 " }}}
 
 " DiffLastSaved() {{{
@@ -123,23 +123,21 @@ function! eclim#common#util#GrepRelative (command, args)
   endif
 endfunction " }}}
 
-" LocateFile(command, scope, file) {{{
-" Locates a file under the specified scope using the specified command for
-" opening the file when found.
+" LocateFile(command, file) {{{
+" Locates a file using the specified command for opening the file when found.
 "   command - 'split', 'edit', etc.
-"   scope - 'project', 'workspace'
 "   file - 'somefile.txt',
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
-function eclim#common#util#LocateFile (command, scope, file)
-  if a:scope == 'project' && !eclim#project#util#IsCurrentFileInProject()
+function eclim#common#util#LocateFile (command, file)
+  if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let results = []
   let file = a:file
   if file == ''
-    call s:LocateFileCompletionInit(a:command, a:scope)
+    call s:LocateFileCompletionInit(a:command)
     return
   elseif file == '<cursor>'
     let file = eclim#util#GrabUri()
@@ -148,47 +146,37 @@ function eclim#common#util#LocateFile (command, scope, file)
     let file = substitute(file, '[#?].*', '', '')
   endif
 
-  let path = fnamemodify(file, ':h')
   let name = fnamemodify(file, ':t')
   if name == ''
     call eclim#util#Echo('Please supplie more than just a directory name.')
     return
   endif
 
+  let pattern = '.*' . file . '.*'
+  let pattern = substitute(pattern, '\*\*', '*', 'g')
+  let pattern = substitute(pattern, '\([^.]\)\*', '\1.*', 'g')
+  let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
+  let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
+  let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_locate
-  let command = substitute(command, '<scope>', a:scope, '')
-  let command = substitute(command, '<pattern>', name, '')
-  if a:scope == 'project'
-    let command .= ' -n ' . eclim#project#util#GetCurrentProjectName()
-  endif
-
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<pattern>', pattern, '')
 
   let results = split(eclim#ExecuteEclim(command), '\n')
-  let message = ''
-  if path != '.'
-    let match = substitute(escape(file, '.'), '*', '.*', 'g')
-    let match = substitute(match, '?', '.', 'g')
-    if len(results) > 0
-      let orig_results = copy(results)
-      call filter(results, 'v:val =~ match')
-      if len(results) == 0
-        let message = 'File matching "' . file . '" not found. ' .
-          \ 'Did you mean one of the above?'
-        let results = orig_results
-      endif
-    endif
+  if len(results) == 1 && results[0] == '0'
+    return
   endif
+
+  call map(results, "split(v:val, '|')[2]")
 
   let result = ''
   " One result.
-  if len(results) == 1 && message == ''
+  if len(results) == 1
     let result = results[0]
 
   " More than one result.
-  elseif len(results) > 1 || message != ''
-    if message == ''
-      let message = "Multiple results, choose the file to open"
-    endif
+  elseif len(results) > 1
+    let message = "Multiple results, choose the file to open"
     let response = eclim#util#PromptList(message, results, g:EclimInfoHighlight)
     if response == -1
       return
@@ -207,13 +195,11 @@ function eclim#common#util#LocateFile (command, scope, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" s:LocateFileCompletionInit(command, scope) {{{
-function s:LocateFileCompletionInit (command, scope)
+" s:LocateFileCompletionInit(command) {{{
+function s:LocateFileCompletionInit (command)
   let file = expand('%')
   let project = ''
-  if a:scope == 'project'
-    let project = eclim#project#util#GetCurrentProjectName()
-  endif
+  let project = eclim#project#util#GetCurrentProjectName()
 
   topleft 10split [Locate\ Results]
   set filetype=locate_results
@@ -236,16 +222,18 @@ function s:LocateFileCompletionInit (command, scope)
 
   let b:file = file
   let b:command = a:command
-  let b:scope = a:scope
   let b:project = project
   let b:results_bufnum = results_bufnum
   let b:selection = 1
+  let b:updatetime = &updatetime
+
+  set updatetime=300
 
   augroup locate_file
     autocmd!
-    autocmd CursorMovedI <buffer> call eclim#common#util#LocateFileCompletion()
-    exec 'autocmd InsertLeave <buffer> bd | '
-      \ 'bd ' . b:results_bufnum . ' | '
+    autocmd CursorHoldI <buffer> call eclim#common#util#LocateFileCompletion()
+    exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
+      \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
       \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
   augroup END
 
@@ -260,25 +248,17 @@ endfunction " }}}
 function eclim#common#util#LocateFileCompletion ()
   let completions = []
   let display = []
-  let base = substitute(getline('.'), '^>\s*', '', '')
-  let path = fnamemodify(base, ':h')
-  let name = fnamemodify(base, ':t')
+  let name = substitute(getline('.'), '^>\s*', '', '')
   if name !~ '^\s*$'
-    let pattern = '*' . substitute(name, '\(.\)', '\1*', 'g')
+    let pattern = name
+    let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
+    let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
     let command = s:command_locate
-    let command = substitute(command, '<scope>', b:scope, '')
+    let command = substitute(command, '<project>', b:project, '')
     let command = substitute(command, '<pattern>', pattern, '')
-    if b:scope == 'project'
-      let command .= ' -n ' . b:project
-    endif
     let results = split(eclim#ExecuteEclim(command), '\n')
     if len(results) == 1 && results[0] == '0'
       return
-    endif
-    if path != '.'
-      let match = substitute(escape(path, '.'), '*', '.*', 'g')
-      let match = substitute(path, '?', '.', 'g')
-      call filter(results, 'v:val =~ match')
     endif
     if !empty(results)
       for result in results
