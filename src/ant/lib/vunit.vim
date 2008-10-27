@@ -52,6 +52,18 @@ function! VUAssertEquals(arg1, arg2, ...)
   endif
 endfunction " }}}
 
+" VUAssertNotEquals(arg1, arg2, ...) {{{
+" Compares the two arguments to determine if they are equal.
+function! VUAssertNotEquals(arg1, arg2, ...)
+  if a:arg1 == a:arg2
+    let message = '"' . string(a:arg1) . '" == "' . string(a:arg2) . '"'
+    if a:0 > 0
+      let message = a:1 . ' (' . message . ')'
+    endif
+    throw 'AssertNotEquals: ' . message
+  endif
+endfunction " }}}
+
 " VUAssertTrue(arg1, ...) {{{
 " Determines if the supplied argument is true.
 function! VUAssertTrue(arg1, ...)
