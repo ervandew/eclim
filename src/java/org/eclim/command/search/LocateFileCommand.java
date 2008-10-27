@@ -99,6 +99,14 @@ public class LocateFileCommand
       IGNORE_DIRS.add(".svn");
     }
 
+    private static final ArrayList<String> IGNORE_EXTS =
+      new ArrayList<String>();
+    static {
+      IGNORE_EXTS.add("class");
+      IGNORE_EXTS.add("pyc");
+      IGNORE_EXTS.add("swp");
+    }
+
     private String pattern;
     private Matcher matcher;
     private boolean includesPath;
@@ -141,6 +149,11 @@ public class LocateFileCommand
         return false;
       }else if (type == IResource.FOLDER){
         return true;
+      }else if (type == IResource.FILE){
+        String ext = FileUtils.getExtension(name);
+        if (IGNORE_EXTS.contains(ext)){
+          return false;
+        }
       }
 
       IResource resource = null;
