@@ -91,12 +91,14 @@ public class SearchCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, "\n");
-    assertEquals("Wrong number of results.", 2, results.length);
+    assertEquals("Wrong number of results.", 3, results.length);
 
-    assertTrue("EclimApplication not found.",
-        results[0].endsWith("org.eclim.eclipse.EclimApplication"));
+    assertTrue("EclimApplicationHeaded not found.",
+        results[0].endsWith("org.eclim.eclipse.EclimApplicationHeaded"));
+    assertTrue("EclimApplicationHeadless not found.",
+        results[1].endsWith("org.eclim.eclipse.EclimApplicationHeadless"));
     assertTrue("EclimPlugin not found.",
-        results[1].endsWith("org.eclim.eclipse.EclimPlugin"));
+        results[2].endsWith("org.eclim.eclipse.EclimPlugin"));
   }
 
   @Test
