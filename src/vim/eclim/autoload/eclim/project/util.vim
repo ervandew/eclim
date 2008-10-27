@@ -23,35 +23,37 @@
 " }}}
 
 " Global Variables {{{
-  if !exists('g:EclimTodoSearchPattern')
-    let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
-  endif
+if !exists('g:EclimTodoSearchPattern')
+  let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
+endif
 
-  if !exists('g:EclimTodoSearchExtensions')
-    let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
-  endif
+if !exists('g:EclimTodoSearchExtensions')
+  let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+endif
 " }}}
 
 " Script Variables {{{
-  let s:command_create = '-command project_create -f "<folder>"'
-  let s:command_create_name = ' -p "<name>"'
-  let s:command_create_natures = ' -n <natures>'
-  let s:command_create_depends = ' -d <depends>'
-  let s:command_delete = '-command project_delete -p "<project>"'
-  let s:command_refresh = '-command project_refresh -p "<project>"'
-  let s:command_projects = '-command project_list'
-  let s:command_project_info = '-command project_info -p "<project>"'
-  let s:command_project_settings = '-command project_settings -p "<project>"'
-  let s:command_project_setting = s:command_project_settings . ' -s <setting>'
-  let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
-  let s:command_open = '-command project_open -p "<project>"'
-  let s:command_close = '-command project_close -p "<project>"'
-  let s:command_nature_aliases = '-command project_nature_aliases'
-  let s:command_natures = '-command project_natures'
-  let s:command_nature_add =
-    \ '-command project_nature_add -p "<project>" -n "<natures>"'
-  let s:command_nature_remove =
-    \ '-command project_nature_remove -p "<project>" -n "<natures>"'
+let s:command_create = '-command project_create -f "<folder>"'
+let s:command_create_name = ' -p "<name>"'
+let s:command_create_natures = ' -n <natures>'
+let s:command_create_depends = ' -d <depends>'
+let s:command_delete = '-command project_delete -p "<project>"'
+let s:command_refresh = '-command project_refresh -p "<project>"'
+let s:command_refresh_file =
+  \ '-command project_refresh_file -p "<project>" -f "<file>"'
+let s:command_projects = '-command project_list'
+let s:command_project_info = '-command project_info -p "<project>"'
+let s:command_project_settings = '-command project_settings -p "<project>"'
+let s:command_project_setting = s:command_project_settings . ' -s <setting>'
+let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
+let s:command_open = '-command project_open -p "<project>"'
+let s:command_close = '-command project_close -p "<project>"'
+let s:command_nature_aliases = '-command project_nature_aliases'
+let s:command_natures = '-command project_natures'
+let s:command_nature_add =
+  \ '-command project_nature_add -p "<project>" -n "<natures>"'
+let s:command_nature_remove =
+  \ '-command project_nature_remove -p "<project>" -n "<natures>"'
 " }}}
 
 " ClearProjectsCache() {{{
@@ -572,6 +574,34 @@ function! eclim#project#util#IsCurrentFileInProject (...)
     return 0
   endif
   return 1
+endfunction " }}}
+
+" RefreshFileBootstrap() {{{
+" Boostraps a post write autocommand for new files, which forces a refresh by
+" the eclim project. The command should only be called as part of the a
+" BufWritePre autocmd.
+function! eclim#project#util#RefreshFileBootstrap ()
+  if !filereadable(expand('%:p')) &&
+   \ eclim#project#util#GetCurrentProjectName() != ''
+    augroup eclim_refresh_files_bootstrap
+      autocmd!
+      autocmd BufWritePost <buffer> call eclim#project#util#RefreshFile()
+    augroup END
+  endif
+endfunction " }}}
+
+" RefreshFile() {{{
+" Refreshes the current files in eclipse.
+function! eclim#project#util#RefreshFile ()
+  augroup eclim_refresh_files_bootstrap
+    autocmd! BufWritePost <buffer>
+  augroup END
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let command = s:command_refresh_file
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  call eclim#ExecuteEclim(command)
 endfunction " }}}
 
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{

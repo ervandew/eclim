@@ -23,32 +23,43 @@
 " }}}
 
 " Global Variables {{{
-  let g:EclimProjectTreeTitle = 'ProjectTree_'
+if !exists("g:EclimProjectRefreshFiles")
+  let g:EclimProjectRefreshFiles = 1
+endif
 
-  if !exists('g:EclimProjectTreeAutoOpen')
-    let g:EclimProjectTreeAutoOpen = 0
-  endif
+let g:EclimProjectTreeTitle = 'ProjectTree_'
 
-  if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')
-    let g:EclimProjectTreeAutoOpenProjects = ['CURRENT']
-  endif
+if !exists('g:EclimProjectTreeAutoOpen')
+  let g:EclimProjectTreeAutoOpen = 0
+endif
+
+if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')
+  let g:EclimProjectTreeAutoOpenProjects = ['CURRENT']
+endif
 " }}}
 
 " Auto Commands {{{
-  if g:EclimProjectTreeAutoOpen
-    autocmd VimEnter *
-      \ if eclim#project#util#GetCurrentProjectRoot() != '' |
-      \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
-      \   exec g:EclimProjectTreeContentWincmd |
-      \ endif
-    autocmd BufWinEnter *
-      \ if tabpagenr() > 1 &&
-      \     !exists('t:project_tree_auto_opened') &&
-      \     eclim#project#util#GetCurrentProjectRoot() != '' |
-      \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
-      \   let t:project_tree_auto_opened = 1 |
-      \ endif
-  endif
+if g:EclimProjectRefreshFiles
+  augroup eclim_refresh_files
+    autocmd!
+    autocmd BufWritePre * call eclim#project#util#RefreshFileBootstrap()
+  augroup END
+endif
+
+if g:EclimProjectTreeAutoOpen
+  autocmd VimEnter *
+    \ if eclim#project#util#GetCurrentProjectRoot() != '' |
+    \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
+    \   exec g:EclimProjectTreeContentWincmd |
+    \ endif
+  autocmd BufWinEnter *
+    \ if tabpagenr() > 1 &&
+    \     !exists('t:project_tree_auto_opened') &&
+    \     eclim#project#util#GetCurrentProjectRoot() != '' |
+    \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
+    \   let t:project_tree_auto_opened = 1 |
+    \ endif
+endif
 " }}}
 
 " Command Declarations {{{
