@@ -198,7 +198,6 @@ endfunction " }}}
 " s:LocateFileCompletionInit(command) {{{
 function s:LocateFileCompletionInit (command)
   let file = expand('%')
-  let project = ''
   let project = eclim#project#util#GetCurrentProjectName()
 
   topleft 10split [Locate\ Results]
@@ -229,13 +228,11 @@ function s:LocateFileCompletionInit (command)
 
   set updatetime=300
 
-  augroup locate_file
-    autocmd!
-    autocmd CursorHoldI <buffer> call eclim#common#util#LocateFileCompletion()
-    exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
-      \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
-      \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
-  augroup END
+  exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
+    \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
+    \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
+
+  call s:LocateFileCompletionAutocmd()
 
   imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection('n')<cr>
   imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection('p')<cr>
@@ -280,8 +277,21 @@ function eclim#common#util#LocateFileCompletion ()
   call s:LocateFileSelection(1)
 endfunction " }}}
 
+" s:LocateFileCompletionAutocmd() {{{
+function s:LocateFileCompletionAutocmd ()
+  augroup locate_file
+    autocmd!
+    autocmd CursorHoldI <buffer> call eclim#common#util#LocateFileCompletion()
+  augroup END
+endfunction " }}}
+
 " s:LocateFileSelection(sel) {{{
 function s:LocateFileSelection (sel)
+  " pause completion while tabbing though results
+  augroup locate_file
+    autocmd!
+  augroup END
+
   let sel = a:sel
   let prev_sel = b:selection
 
@@ -302,6 +312,11 @@ function s:LocateFileSelection (sel)
   exec winnr . 'winc w'
 
   exec 'let b:selection = ' . sel
+
+  " restore completion on the next key typed
+  augroup locate_file
+    autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmd()
+  augroup END
 
   return ''
 endfunction " }}}
