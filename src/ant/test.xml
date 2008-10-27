@@ -130,7 +130,7 @@
       </fileset>
     </copy>
 
-    <junit printsummary="yes">
+    <junit printsummary="yes" failureproperty="junit.failed">
       <classpath>
         <path refid="classpath"/>
         <pathelement path="${build.classes}"/>
@@ -143,6 +143,8 @@
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
     </junit>
+
+    <fail message="One or more junit tests failed." if="junit.failed"/>
   </target>
 
   <!--
@@ -169,7 +171,7 @@
       <sysproperty key="g:TestEclimWorkspace" value="${eclipse.workspace}"/>
     </vunit>
 
-    <!--fail message="VUnit tests failed." if="vunit.failed"/-->
+    <!--fail message="One or more vunit tests failed." if="vunit.failed"/-->
   </target>
 
   <!--
