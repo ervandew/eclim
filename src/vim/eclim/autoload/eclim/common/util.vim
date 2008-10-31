@@ -228,9 +228,12 @@ function s:LocateFileCompletionInit (command)
 
   set updatetime=300
 
-  exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
-    \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
-    \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
+  augroup locate_file_init
+    autocmd!
+    exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
+      \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
+      \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
+  augroup END
 
   call s:LocateFileCompletionAutocmd()
 
