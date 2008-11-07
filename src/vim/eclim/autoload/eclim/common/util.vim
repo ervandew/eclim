@@ -332,9 +332,13 @@ function s:LocateFileSelect ()
     let command = b:command
     let bufnum = bufnr('%')
     let results_bufnum = b:results_bufnum
+    let updatetime = b:updatetime
     call eclim#util#GoToBufferWindow(escape(b:file, '\'))
     call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), command)
-    call feedkeys("\<esc>:bd " . bufnum . " | bd " . results_bufnum . "\<cr>", 'n')
+    call feedkeys(
+      \ "\<esc>:let &updatetime = " . updatetime . " | " .
+      \ ":bd " . bufnum . " | " .
+      \ "bd " . results_bufnum . "\<cr>", 'n')
   endif
   return ''
 endfunction " }}}
