@@ -566,15 +566,10 @@ endfunction " }}}
 " user if the file is not in a project (defaults to 1, to display the
 " message).
 function! eclim#project#util#IsCurrentFileInProject (...)
-  if eclim#project#util#GetCurrentProjectName() == '' ||
-   \ !filereadable(expand('%'))
+  if eclim#project#util#GetCurrentProjectName() == ''
     if a:0 == 0 || a:1
-      if !filereadable(expand('%'))
-        call eclim#util#EchoError('Current buffer is not a file.')
-      else
-        call eclim#util#EchoError('Unable to determine project. ' .
-          \ 'Check that the current file is in a valid project.')
-      endif
+      call eclim#util#EchoError('Unable to determine project. ' .
+        \ 'Check that the current file is in a valid project.')
     endif
     return 0
   endif
