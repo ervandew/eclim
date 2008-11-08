@@ -117,6 +117,8 @@ public class CssValidateCommand
   @Override
   protected String toFile (String uri)
   {
-    return uri.startsWith(URI_PREFIX) ?  uri.substring(URI_PREFIX.length()) : uri;
+    uri = uri.startsWith(URI_PREFIX) ?  uri.substring(URI_PREFIX.length()) : uri;
+    uri = uri.replaceFirst("^/+", "/");
+    return uri;
   }
 }
