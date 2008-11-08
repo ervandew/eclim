@@ -32,7 +32,7 @@
 
 " FindDefinition() {{{
 function eclim#python#find#FindDefinition ()
-  if !eclim#project#util#IsCurrentFileInProject()
+  if !eclim#project#util#IsCurrentFileInProject() || !filereadable(expand('%'))
     return
   endif
 

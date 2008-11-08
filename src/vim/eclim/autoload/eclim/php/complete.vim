@@ -39,6 +39,10 @@ function! eclim#php#complete#CodeComplete (findstart, base)
   endif
 
   if a:findstart
+    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
+      return -1
+    endif
+
     " update the file before vim makes any changes.
     call eclim#util#ExecWithoutAutocmds('silent update')
 
@@ -58,7 +62,7 @@ function! eclim#php#complete#CodeComplete (findstart, base)
 
     return start
   else
-    if !eclim#project#util#IsCurrentFileInProject()
+    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
       return []
     endif
 
