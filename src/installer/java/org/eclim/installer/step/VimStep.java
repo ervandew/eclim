@@ -49,6 +49,8 @@ import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
 
+import org.formic.util.dialog.gui.GuiDialogs;
+
 import org.formic.wizard.form.GuiForm;
 
 import org.formic.wizard.form.gui.component.FileChooser;
@@ -81,6 +83,7 @@ public class VimStep
   private JPanel panel;
   private FileChooser fileChooser;
   private boolean rtpAttempted;
+  private boolean homeVimCreatePrompted;
 
   /**
    * Constructs the step.
@@ -135,7 +138,37 @@ public class VimStep
           }
         });
 
-        if(rtp != null && rtp.length > 0){
+        if(rtp == null || rtp.length == 0){
+          if(!homeVimCreatePrompted){
+            homeVimCreatePrompted = true;
+            File vimfiles = new File(
+                System.getProperty("user.home") + '/' +
+                (Os.isFamily("windows") ? "vimfiles" : ".vim"));
+            System.out.println(
+                "Checking for user vim files directory: " + vimfiles);
+            if(!vimfiles.exists()){
+              boolean create = GuiDialogs.showConfirm(
+                  "No suitable vim files directory found.\n" +
+                  "Would you like to create the standard\n" +
+                  "directory for your system?\n" +
+                  vimfiles);
+              if(create){
+                boolean created = vimfiles.mkdir();
+                if(created){
+                  rtpAttempted = false;
+                  displayed();
+                }else{
+                  GuiDialogs.showError("Unable to create directory: " + vimfiles);
+                }
+              }
+            }
+          }else{
+            GuiDialogs.showWarning(
+                "Your vim install is still reporting no\n" +
+                "suitable vim files directories.\n" +
+                "You will need to manually specify one.");
+          }
+        }else{
           if(rtp.length == 1){
             fileChooser.getTextField().setText(rtp[0]);
           }else{
