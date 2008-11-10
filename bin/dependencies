@@ -29,7 +29,11 @@ from xml.dom.minidom import parse
 def checkForUpdates ():
   dependencies = getDependencies()
   for dependency in dependencies:
-    versions = checkForUpdate(*dependency)
+    found, versions = checkForUpdate(*dependency)
+    if not found:
+      print 'WARN: %s current version not found: %s' % (
+        dependency[1], dependency[2]
+      )
     if versions:
       versions.sort()
       versions.reverse()
@@ -42,15 +46,18 @@ def checkForUpdate (url, feature, currentVersion):
   dom = parse(urlopen(url + 'site.xml'))
   versions = []
   try:
+    found = False
     for featureElement in dom.getElementsByTagName("feature"):
       name = featureElement.getAttribute("id")
       if name == feature:
         version = featureElement.getAttribute('version')
-        if version > currentVersion:
+        if version == currentVersion:
+          found = True
+        elif version > currentVersion:
           versions.append(version)
   finally:
     dom.unlink()
-  return versions
+  return (found, versions)
 
 def getDependencies ():
   ignore = re.compile(r'^(\s*[a-z.]+=|\s*#|\s*$)')
