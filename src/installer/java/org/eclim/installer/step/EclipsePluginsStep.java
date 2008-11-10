@@ -69,12 +69,9 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.installer.step.command.AddSiteCommand;
 import org.eclim.installer.step.command.Command;
-import org.eclim.installer.step.command.EnableCommand;
 import org.eclim.installer.step.command.InstallCommand;
 import org.eclim.installer.step.command.ListCommand;
 import org.eclim.installer.step.command.OutputHandler;
-import org.eclim.installer.step.command.UninstallCommand;
-import org.eclim.installer.step.command.UpdateCommand;
 
 import org.eclim.installer.theme.DesertBlue;
 
@@ -95,8 +92,9 @@ public class EclipsePluginsStep
   implements OutputHandler
 {
   private static final String BEGIN_TASK = "beginTask";
+  private static final String PREPARE_TASK = "prepare";
   private static final String SUB_TASK = "subTask";
-  private static final String INTERNAL_WORKED = "internalWorked";
+  private static final String INTERNAL_WORKED = "worked";
   private static final String SET_TASK_NAME = "setTaskName";
   private static final String FEATURE = "  Feature";
   private static final String SITE = "Site: file:";
@@ -179,7 +177,7 @@ public class EclipsePluginsStep
               }
               File site = new File(FilenameUtils.getFullPath(plugins));
               if (!info.getSites().contains(site)){
-                overallLabel.setText("Add local site to eclipse sites...");
+                overallLabel.setText("Adding local site to eclipse sites...");
                 addSite(site.getAbsolutePath());
               }
             }
@@ -300,16 +298,16 @@ public class EclipsePluginsStep
   }
 
   /**
-   * Gets a list of commands which need to be executed to install or upgrade the
+   * Gets the command which need to be executed to install or upgrade the
    * supplied dependency.
    *
    * @param dependency The dependency to install or upgrade.
-   * @return List of commands.
+   * @return Command to be run.
    */
-  private List getCommands (Dependency dependency)
+  private Command getCommand (Dependency dependency)
   {
     String to = null;
-    if (!Os.isFamily("windows")){
+    /*if (!Os.isFamily("windows")){
       String home = (String)Installer.getContext().getValue("eclipse.home");
       String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
       if(plugins.endsWith("/")){
@@ -319,23 +317,10 @@ public class EclipsePluginsStep
         to = plugins;
         to = FilenameUtils.getFullPath(to);
       }
-    }
+    }*/
 
-    ArrayList list = new ArrayList();
-    if(!dependency.isUpgrade()){
-      list.add(new InstallCommand(this,
-          dependency.getUrl(), dependency.getId(), dependency.getVersion(), to));
-    }else{
-      if(!dependency.getFeature().isEnabled()){
-        list.add(new EnableCommand(this,
-            dependency.getId(), dependency.getFeature().getVersion(), to));
-      }
-      list.add(new UpdateCommand(this,
-          dependency.getId(), dependency.getVersion()));
-      list.add(new UninstallCommand(this,
-          dependency.getId(), dependency.getFeature().getVersion(), to));
-    }
-    return list;
+    return new InstallCommand(this,
+        dependency.getUrl(), dependency.getId(), dependency.getVersion(), to);
   }
 
   /**
@@ -476,15 +461,17 @@ public class EclipsePluginsStep
           double work = Double.parseDouble(
               l.substring(l.indexOf('=') + 1, l.indexOf(' ')));
           taskProgress.setIndeterminate(false);
-          taskProgress.setMaximum((int)(work * 100d));
+          taskProgress.setMaximum((int)work);
           taskProgress.setValue(0);
+        }else if(line.startsWith(PREPARE_TASK)){
+          taskLabel.setText(line.substring(PREPARE_TASK.length() + 1).trim());
         }else if(line.startsWith(SUB_TASK)){
           taskLabel.setText(
               taskName + line.substring(SUB_TASK.length() + 1).trim());
         }else if(line.startsWith(INTERNAL_WORKED)){
           double worked = Double.parseDouble(
               line.substring(INTERNAL_WORKED.length() + 2));
-          taskProgress.setValue((int)(worked * 100d));
+          taskProgress.setValue((int)worked);
         }else if(line.startsWith(SET_TASK_NAME)){
           taskName = line.substring(SET_TASK_NAME.length() + 1).trim() + ' ';
         }
@@ -536,18 +523,17 @@ public class EclipsePluginsStep
                     dependency.getId() + '-' + dependency.getVersion());
               }
 
-              List commands = getCommands(dependency);
-              for (Iterator jj = commands.iterator(); jj.hasNext();){
-                Command command = (Command)jj.next();
-                try{
-                  command.start();
-                  command.join();
-                  if(command.getReturnCode() != 0){
-                    throw new RuntimeException(command.getErrorMessage());
-                  }
-                }finally{
-                  command.destroy();
+              taskProgress.setIndeterminate(true);
+
+              Command command = getCommand(dependency);
+              try{
+                command.start();
+                command.join();
+                if(command.getReturnCode() != 0){
+                  throw new RuntimeException(command.getErrorMessage());
                 }
+              }finally{
+                command.destroy();
               }
 
               try{

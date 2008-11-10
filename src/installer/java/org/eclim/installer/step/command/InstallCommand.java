@@ -29,9 +29,9 @@ public class InstallCommand
       OutputHandler handler, String url, String id, String version, String to)
   {
     super(handler, new String[]{
-      "-command", "install",
-      "-from", url,
-      "-featureId", id,
+      "-metadataRepository", url,
+      "-artifactRepository", url,
+      "-installIU", id + ".feature.group",
       "-version", version
     }, to);
   }
