@@ -176,12 +176,36 @@ class EclimBuilder (StandaloneHTMLBuilder):
     for includefile in includefiles:
       try:
         toc = self.env.main_tocs[includefile].deepcopy()
+        if not toc.children:
+          # empty toc means: no titles will show up in the toctree
+          self.warn(
+            docname,
+            'toctree contains reference to document '
+            '%r that doesn\'t have a title: no link will be '
+            'generated' % includefile
+          )
       except KeyError:
         # this is raised if the included file does not exist
-        self.env.warn(docname, 'toctree contains ref to nonexisting '
-                  'file %r' % includefile)
+        self.env.warn(
+          docname,
+          'toctree contains reference to nonexisting document %r' % includefile
+        )
       else:
+# EV: copied over from 0.4.3, but outside of Environment, we don't have the
+# titles_only argument.
+#        # if titles_only is given, only keep the main title and
+#        # sub-toctrees
+#        if titles_only:
+#          # delete everything but the toplevel title(s) and toctrees
+#          for toplevel in toc:
+#            # nodes with length 1 don't have any children anyway
+#            if len(toplevel) > 1:
+#              subtoctrees = toplevel.traverse(addnodes.toctree)
+#              toplevel[1][:] = subtoctrees
+        # resolve all sub-toctrees
         for toctreenode in toc.traverse(addnodes.toctree):
+# EV: differs from sphinx 0.4.3... not sure if it differs from previous
+# version.  Not sure if this should be synced with 0.4.3 or not.
           toctreenode.parent.replace_self(
               self._entries_from_toctree(docname, toctreenode, top=False))
 # EV: append each child as a list item in the bullet_list.
