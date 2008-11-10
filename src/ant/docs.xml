@@ -42,7 +42,7 @@
   </target>
 
   <!--
-    - Runs forrest to generate the docs.
+    - Generates the eclim docs.
     -->
   <target name="docs" depends="init">
     <property name="sphinx.args" value=""/>
@@ -131,10 +131,10 @@
   <target name="eclipse.src">
     <for param="src.zip" delimiter=":">
       <path id="eclipse.docs">
-        <fileset dir="${eclipse.home}/plugins" includes="**/src.zip"/>
+        <fileset dir="${eclipse.home}/plugins" includes="**/*.source_*.jar"/>
       </path>
       <sequential>
-        <unzip src="@{src.zip}" dest="${eclipse.home}/src"/>
+        <unjar src="@{src.zip}" dest="${eclipse.home}/src"/>
       </sequential>
     </for>
   </target>
