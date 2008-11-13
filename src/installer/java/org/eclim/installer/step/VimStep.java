@@ -161,6 +161,9 @@ public class VimStep
                   GuiDialogs.showError("Unable to create directory: " + vimfiles);
                 }
               }
+            }else{
+              fileChooser.getTextField().setText(
+                  vimfiles.getAbsolutePath().replace('\\', '/'));
             }
           }else{
             GuiDialogs.showWarning(
@@ -216,7 +219,7 @@ public class VimStep
         vims = UNIX_VIMS;
       }
 
-      String[] args = {null, "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
+      String[] args = {null, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
       for (int ii = 0; ii < vims.length; ii++){
         args[0] = vims[ii];
         CommandExecutor executor = CommandExecutor.execute(args, 5000);
