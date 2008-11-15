@@ -24,17 +24,25 @@ general purpose commands that are useful in and outside the scope of eclim.
 .. _\:LocateFileEdit:
 
 - **:LocateFileEdit** [file] -
-  Locates a file via the following steps\:
+  Attempts to locate the supplied file pattern or if no argument is supplied,
+  opens a temporary window where the text you type is turned into a pattern and
+  search results are presented as you type.
 
-  #.  If current file is in a project, locate the file relative to that project.
-  #.  If no results from step #1, then attempt to locate relative to the current
-      file.
-  #.  If no results from step #2, then attempt to locate relative to the other
-      projects.
+  .. image:: ../../images/screenshots/locate.png
 
-  If no file argument is supplied to the **:LocateFileEdit** command then it
-  will attempt to extract a file name from the cursor position of the current
-  file.  When a file is located, an :edit is invoked to open it.
+  While in this completion mode, <tab> will cycle forward through the results
+  and <shift><tab> will cycle backwards.  To open the selected file simply hit
+  <enter>.  If you want to close the search window without selecting a file,
+  hit <esc>.
+
+  .. note::
+
+    For performance reasons, this functionality depends on eclipse being aware
+    of all your project files.  For the most part this is handled automatically
+    as you create and edit files within vim.  However, actions you take outside
+    of vim or eclipse (moving/removing files, updates from a version control
+    system, etc.) will not be visible until you force a project refresh via
+    :ref:`:ProjectRefresh`.
 
 .. _\:LocateFileSplit:
 
