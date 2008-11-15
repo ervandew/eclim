@@ -23,8 +23,8 @@
 "
 " }}}
 
-" Init() {{{
-function eclim#python#rope#Init ()
+" Init(project) {{{
+function eclim#python#rope#Init (project)
   if !has('python')
     call eclim#util#EchoError(
       \ "This functionality requires 'python' support compiled into vim.")
@@ -37,10 +37,23 @@ function eclim#python#rope#Init ()
   endif
 
 python << EOF
-import sys, vim
+import os, sys, vim
 ropepath = vim.eval('ropepath')
 if ropepath not in sys.path:
   sys.path.insert(0, ropepath)
+
+  from contextlib import contextmanager
+  @contextmanager
+  def projectroot():
+    cwd = os.getcwd()
+    try:
+      # change working directory to the project root to prevent any modules in the
+      # same dir as the file we are working on from colliding with core python
+      # modules.
+      os.chdir(vim.eval('a:project'))
+      yield
+    finally:
+      os.chdir(cwd)
 EOF
 
   return 1
@@ -71,7 +84,7 @@ endfunction " }}}
 " Attempts to suggest code completions for a given project path, project
 " relative file path and offset.
 function eclim#python#rope#Completions (project, filename, offset)
-  if !eclim#python#rope#Init()
+  if !eclim#python#rope#Init(a:project)
     return []
   endif
 
@@ -79,27 +92,29 @@ function eclim#python#rope#Completions (project, filename, offset)
   let completion_error = ''
 
 python << EOF
-from rope.base import project
-from rope.base.exceptions import RopeError
-from rope.contrib import codeassist
-project = project.Project(vim.eval('a:project'))
+from __future__ import with_statement
+with(projectroot()):
+  from rope.base import project
+  from rope.base.exceptions import RopeError
+  from rope.contrib import codeassist
+  project = project.Project(vim.eval('a:project'))
 
-resource = project.get_resource(vim.eval('a:filename'))
-code = resource.read()
+  resource = project.get_resource(vim.eval('a:filename'))
+  code = resource.read()
 
-# code completion
-try:
-  proposals = codeassist.code_assist(project, code, int(vim.eval('a:offset')))
-  proposals = codeassist.sorted_proposals(proposals)
-  proposals = [[p.name, p.kind] for p in proposals]
-  vim.command("let results = %s" % repr(proposals))
-except IndentationError, e:
-  vim.command(
-    "let completion_error = 'Completion failed due to indentation error.'"
-  )
-except RopeError, e:
-  message = 'Completion failed due to rope error: %s' % type(e)
-  vim.command("let completion_error = %s" % repr(message))
+  # code completion
+  try:
+    proposals = codeassist.code_assist(project, code, int(vim.eval('a:offset')))
+    proposals = codeassist.sorted_proposals(proposals)
+    proposals = [[p.name, p.kind] for p in proposals]
+    vim.command("let results = %s" % repr(proposals))
+  except IndentationError, e:
+    vim.command(
+      "let completion_error = 'Completion failed due to indentation error.'"
+    )
+  except RopeError, e:
+    message = 'Completion failed due to rope error: %s' % type(e)
+    vim.command("let completion_error = %s" % repr(message))
 EOF
 
   if completion_error != ''
@@ -113,29 +128,31 @@ endfunction " }}}
 " FindDefinition (project, filename, offset) {{{
 " Attempts to find the definition of the element at the supplied offset.
 function eclim#python#rope#FindDefinition (project, filename, offset)
-  if !eclim#python#rope#Init()
+  if !eclim#python#rope#Init(a:project)
     return []
   endif
 
   let result = ''
 
 python << EOF
-from rope.base import project
-from rope.contrib import codeassist
-project = project.Project(vim.eval('a:project'))
+from __future__ import with_statement
+with(projectroot()):
+  from rope.base import project
+  from rope.contrib import codeassist
+  project = project.Project(vim.eval('a:project'))
 
-resource = project.get_resource(vim.eval('a:filename'))
-code = resource.read()
+  resource = project.get_resource(vim.eval('a:filename'))
+  code = resource.read()
 
-# code completion
-location = codeassist.get_definition_location(
-  project, code, int(vim.eval('a:offset'))
-)
-if location:
-  path = location[0] and \
-    location[0].real_path or \
-    '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
-  vim.command("let result = '%s|%s col 1|'" % (path, location[1]))
+  # code completion
+  location = codeassist.get_definition_location(
+    project, code, int(vim.eval('a:offset'))
+  )
+  if location:
+    path = location[0] and \
+      location[0].real_path or \
+      '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
+    vim.command("let result = '%s|%s col 1|'" % (path, location[1]))
 EOF
 
   return result
@@ -145,24 +162,26 @@ endfunction " }}}
 " GetSourceDirs (project) {{{
 " Attempts to determine the source directories for the supplied project.
 function eclim#python#rope#GetSourceDirs (project)
-  if !eclim#python#rope#Init()
+  if !eclim#python#rope#Init(a:project)
     return []
   endif
 
   let dirs = []
 
 python << EOF
-from rope.base import project
-from rope.base.exceptions import ResourceNotFoundError
-prj = project.Project(vim.eval('a:project'))
-dirs = [d.real_path for d in prj.pycore.get_source_folders()]
-for src in prj.prefs.get('python_path', []):
-  try:
-    src_folder = project.get_no_project().get_resource(src)
-    dirs.append(src_folder.real_path)
-  except ResourceNotFoundError:
-    pass
-vim.command("let dirs = %s" % repr(dirs))
+from __future__ import with_statement
+with(projectroot()):
+  from rope.base import project
+  from rope.base.exceptions import ResourceNotFoundError
+  prj = project.Project(vim.eval('a:project'))
+  dirs = [d.real_path for d in prj.pycore.get_source_folders()]
+  for src in prj.prefs.get('python_path', []):
+    try:
+      src_folder = project.get_no_project().get_resource(src)
+      dirs.append(src_folder.real_path)
+    except ResourceNotFoundError:
+      pass
+  vim.command("let dirs = %s" % repr(dirs))
 EOF
 
   return dirs
@@ -172,24 +191,26 @@ endfunction " }}}
 " Validate (project, filename) {{{
 " Attempts to validate the supplied file.
 function eclim#python#rope#Validate (project, filename)
-  if !eclim#python#rope#Init()
+  if !eclim#python#rope#Init(a:project)
     return []
   endif
 
   let results = []
 
 python << EOF
-from rope.base import project
-from rope.contrib import finderrors
-project = project.Project(vim.eval('a:project'))
+from __future__ import with_statement
+with(projectroot()):
+  from rope.base import project
+  from rope.contrib import finderrors
+  project = project.Project(vim.eval('a:project'))
 
-resource = project.get_resource(vim.eval('a:filename'))
-filepath = '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
+  resource = project.get_resource(vim.eval('a:filename'))
+  filepath = '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
 
-# code completion
-errors = finderrors.find_errors(project, resource)
-errors = ['%s:%s:%s' % (filepath, e.lineno, e.error) for e in errors]
-vim.command("let results = %s" % repr(errors))
+  # code completion
+  errors = finderrors.find_errors(project, resource)
+  errors = ['%s:%s:%s' % (filepath, e.lineno, e.error) for e in errors]
+  vim.command("let results = %s" % repr(errors))
 EOF
 
   return results
