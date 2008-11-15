@@ -18,8 +18,19 @@ History of Changes
 
 .. _1.4.3:
 
-1.4.3 (October 2008)
---------------------
+1.4.3 (Nov. 15, 2008)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Installer:
+  - Updated to make use of the new ganymede p2 provisioning system.
+
+Eclim:
+  - Rewrote :ref:`:LocateFile* <vim/common/util>` commands to provide
+    functionality similar to eclipse's "Open Resource" command or Textmate's
+    "Find in Project".
 
 Python:
   - Added support for :ref:`code completion <vim/python/complete>`.
@@ -28,12 +39,12 @@ Python:
 
 .. _1.4.2:
 
-1.4.2 (September 30, 2008)
---------------------------
+1.4.2 (Sep. 30, 2008)
+----------------------
 
 Bug Fixes:
   - Fixed obtaining of character offset used by code completion and various
-    other commands
+    other commands.
   - Fixed possible bug with :JavaCorrect when modifying the file after
     obtaining a list of suggestions, and then attempting to apply a suggestion
     that is no longer valid.
@@ -43,7 +54,7 @@ Vcs:
 
 .. _1.4.1:
 
-1.4.1 (August 24, 2008)
+1.4.1 (Aug. 24, 2008)
 -----------------------
 
 Bug Fixes:

@@ -90,12 +90,14 @@ News
 ==================
 
 -----------
-2008-10
+2008-11-15
 -----------
 
 | **Eclim 1.4.3** is now available.
-| This primary focus of this release is additional python support.
-| You can view the :ref:`release notes <1.4.2>` for more info.
+| This release focuses on updating the installer to support ganymede's p2 for
+  upgrading / installing external dependencies and adding additional python
+  support.
+| You can view the :ref:`release notes <1.4.3>` for more info.
 
 -----------
 2008-09-30
