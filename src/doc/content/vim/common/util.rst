@@ -35,6 +35,9 @@ general purpose commands that are useful in and outside the scope of eclim.
   <enter>.  If you want to close the search window without selecting a file,
   hit <esc>.
 
+  All searching by this command is limited to the current project and any
+  projects listed as dependencies.
+
   .. note::
 
     For performance reasons, this functionality depends on eclipse being aware
