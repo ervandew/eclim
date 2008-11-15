@@ -45,6 +45,7 @@ import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * Given a file pattern, finds all files that match that pattern.
@@ -169,9 +170,12 @@ public class LocateFileCommand
         if (resource == null){
           resource = proxy.requestResource();
         }
-        String rel = resource.getFullPath().toOSString().replace('\\', '/');
-        String path = resource.getRawLocation().toOSString().replace('\\', '/');
-        paths.add(FileUtils.getBaseName(rel) + '|' + rel + '|' + path);
+        IPath raw = resource.getRawLocation();
+        if (raw != null){
+          String rel = resource.getFullPath().toOSString().replace('\\', '/');
+          String path = raw.toOSString().replace('\\', '/');
+          paths.add(FileUtils.getBaseName(rel) + '|' + rel + '|' + path);
+        }
       }
 
       return true;
