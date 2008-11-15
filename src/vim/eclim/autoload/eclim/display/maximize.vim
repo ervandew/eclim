@@ -340,6 +340,15 @@ function! s:RestoreFixedWindows ()
       endif
     endif
   endfor
+
+  let last = winnr('$')
+  let index = 1
+  while index <= last
+    if getbufvar(winbufnr(index), 'eclim_temp_window') != ''
+      exec index . 'resize 10'
+    endif
+    let index += 1
+  endwhile
 endfunction " }}}
 
 " IsVerticalSplit(window) {{{
