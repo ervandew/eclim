@@ -63,12 +63,12 @@ function! TestCommandCompleteScriptRevision ()
   call VUAssertEquals('eclim/autoload/eclim.vim', results[1],
     \ "Wrong second completion.")
 
-  let results = eclim#CommandCompleteScriptRevision(
-    \ 'eclim/autoload/eclim.vim 59', 'PatchEclim eclim/autoload/eclim.vim 59', 38)
-  call VUAssertTrue(len(results) > 0, "Insuficient number of completions.")
-  for result in results
-    call VUAssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
-  endfor
+"  let results = eclim#CommandCompleteScriptRevision(
+"    \ 'eclim/autoload/eclim.vim 59', 'PatchEclim eclim/autoload/eclim.vim 59', 38)
+"  call VUAssertTrue(len(results) > 0, "Insuficient number of completions.")
+"  for result in results
+"    call VUAssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
+"  endfor
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
