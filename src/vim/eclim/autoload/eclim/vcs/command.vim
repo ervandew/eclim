@@ -155,11 +155,14 @@ function! eclim#vcs#command#Diff (path, revision)
   augroup vcs_diff
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
-    autocmd BufUnload <buffer> diffoff
+    autocmd BufUnload <buffer> diffoff |
+      \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
   augroup END
 
   exec bufwinnr(buf1) . 'winc w'
   diffthis
+
+  call eclim#display#maximize#RestoreWindows(0)
 endfunction " }}}
 
 " Info() {{{
@@ -466,6 +469,7 @@ function! s:FollowLink ()
       diffthis
       exec bufwinnr(buf1) . 'winc w'
       diffthis
+      call eclim#display#maximize#RestoreWindows(0)
     elseif link !~ '^\s*$'
       call eclim#vcs#command#Log(link)
     endif
@@ -499,6 +503,7 @@ function! s:FollowLink ()
     diffthis
     exec bufwinnr(buf1) . 'winc w'
     diffthis
+    call eclim#display#maximize#RestoreWindows(0)
 
   " link to diff against working copy
   elseif link == 'working copy'
@@ -514,11 +519,13 @@ function! s:FollowLink ()
     augroup vcs_diff
       autocmd! BufUnload <buffer>
       call eclim#util#GoToBufferWindowRegister(b:filename)
-      autocmd BufUnload <buffer> diffoff
+      autocmd BufUnload <buffer> diffoff |
+        \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
     augroup END
 
     call eclim#util#GoToBufferWindow(filename)
     diffthis
+    call eclim#display#maximize#RestoreWindows(0)
 
   " link to bug / feature report
   elseif link =~ '^#\d\+$'
