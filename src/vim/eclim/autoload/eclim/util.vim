@@ -438,7 +438,7 @@ endfunction " }}}
 " current buffer is closed.
 function! eclim#util#GoToBufferWindowRegister (bufname)
   exec 'autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow("' .
-    \ escape(a:bufname, '\') . '")'
+    \ escape(a:bufname, '\') . '") | doautocmd BufEnter'
 endfunction " }}}
 
 " GrabUri([line, col]) {{{
