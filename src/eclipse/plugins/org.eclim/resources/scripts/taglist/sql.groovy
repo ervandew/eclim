@@ -48,8 +48,8 @@ class SqlTags implements TaglistScript
       regex.addPattern('s', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+table\\s+[`]?([a-zA-Z0-9_.]+)[`]?", Pattern.CASE_INSENSITIVE);
-      regex.addPattern('t', pattern, "\$2");
+        "(s?)create\\s+table\\s+(if\\s+not\\s+exists\\s+)?[`]?([a-zA-Z0-9_.]+)[`]?", Pattern.CASE_INSENSITIVE);
+      regex.addPattern('t', pattern, "\$3");
 
       pattern = Pattern.compile(
         "(s?)create\\s+view\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
