@@ -28,15 +28,29 @@ class JavascriptTags implements TaglistScript
     def regex = null;
     try{
       regex = new RegexTaglist(file);
-      regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_.\$]+?)\s*\(/, "\$2");
-      //regex.addPattern('f', ~/(s?)(?<!var)\s+([a-zA-Z0-9_.\$]+?)\s*=\s*function\s*\(/, "\$2");
-      regex.addPattern('m', ~/(s?)\b([a-zA-Z0-9_.\$]+?)\s*:\s*function\s*\(/, "\$2");
+
+      /* Match Objects/Classes */
       //regex.addPattern('o', ~/(s?)(?<!var)\s*([A-Za-z0-9_.]+)\s*=\s*\{/, "\$2");
       regex.addPattern('o', ~/(s?)([A-Za-z0-9_.]+)\s*=\s*\{/, "\$2");
 
       // prototype.js has Object.extend to extend existing objects.
-      regex.addPattern('o', ~/(s?)(var\s\+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*Object\.extend\s*\(/, "\$3");
+      regex.addPattern('o', ~/(s?)(var\s+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*Object\.extend\s*\(/, "\$3");
       regex.addPattern('o', ~/(s?)\bObject\.extend\s*\(\b([A-Z][A-Za-z0-9_.]+)\s*,\s*\{/, "\$2");
+
+      // firebug uses extend
+      regex.addPattern('o', ~/(s?)(var\s+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*extend\s*\(/, "\$3");
+
+      // vimperator uses function MyClass ()
+      regex.addPattern('o', ~/(s?)function\s+\b([A-Z][A-Za-z0-9_.]+)\s*\(/, "\$2");
+      // vimperator uses var = (function()
+      regex.addPattern('o', ~/(s?)([A-Za-z0-9_.]+)\s*=\s*\(function\s*\(/, "\$2");
+
+      /* Match Functions */
+      regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_.\$]+?)\s*\(/, "\$2");
+      //regex.addPattern('f', ~/(s?)(?<!var)\s+([a-zA-Z0-9_.\$]+?)\s*=\s*function\s*\(/, "\$2");
+
+      /* Match Members */
+      regex.addPattern('m', ~/(s?)\b([a-zA-Z0-9_.\$]+?)\s*:\s*function\s*\(/, "\$2");
 
       return regex.execute();
     }finally{
