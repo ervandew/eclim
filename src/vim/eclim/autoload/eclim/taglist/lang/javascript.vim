@@ -37,10 +37,13 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
 
   let objects = filter(copy(a:tags), 'v:val[3] == "o"')
   let members = filter(copy(a:tags), 'v:val[3] == "m"')
+  let object_bounds = {}
   for object in objects
     exec 'let object_start = ' . split(object[4], ':')[1]
     call cursor(object_start, 1)
-    call search('{', 'W')
+    while search('{', 'W') && s:SkipComments()
+      " no op
+    endwhile
     let object_end = searchpair('{', '', '}', 'W', 's:SkipComments()')
 
     let functions = []
@@ -62,6 +65,13 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
     "endfor
 
     if len(functions) > 0
+      let parent_object = s:GetParentObject(
+        \ object_contents, object_bounds, object_start, object_end)
+      " remove functions from the parent if necessary
+      if len(parent_object)
+        call filter(parent_object.functions, 'index(functions, v:val) == -1')
+      endif
+      let object_bounds[string(object)] = [object_start, object_end]
       call add(object_contents, {'object': object, 'functions': functions})
     endif
   endfor
@@ -90,9 +100,26 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
   return [lines, content]
 endfunction " }}}
 
+" s:SkipComments() {{{
 function s:SkipComments ()
   let synname = synIDattr(synID(line('.'), col('.'), 1), "name")
   return synname =~ '\([Cc]omment\|[Ss]tring\)'
-endfunction
+endfunction " }}}
+
+" s:GetParentObject(objects, bounds, start, end) {{{
+function s:GetParentObject (objects, bounds, start, end)
+  for key in keys(a:bounds)
+    let range = a:bounds[key]
+    if range[0] < a:start && range[1] > a:end
+      for object_content in a:objects
+        if string(object_content.object) == key
+          return object_content
+        endif
+      endfor
+      break
+    endif
+  endfor
+  return {}
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker
