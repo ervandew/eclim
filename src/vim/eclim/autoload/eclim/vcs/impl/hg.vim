@@ -68,9 +68,14 @@ function eclim#vcs#impl#hg#GetRelativePath (dir, file)
   return substitute(a:dir, root, '', '') . '/' . a:file
 endfunction " }}}
 
-" GetPreviousRevision() {{{
-function eclim#vcs#impl#hg#GetPreviousRevision ()
-  let log = eclim#vcs#impl#hg#Hg('log -q --limit 2 "' . expand('%:t') . '"')
+" GetPreviousRevision([file, revision]) {{{
+function eclim#vcs#impl#hg#GetPreviousRevision (...)
+  let file = len(a:000) ? fnamemodify(a:000[0], ':t') : expand('%:t')
+  let cmd = 'log -q'
+  if len(a:000) > 1 && a:000[1] != ''
+    let cmd .= '-r' . a:000[1] . ':1'
+  endif
+  let log = eclim#vcs#impl#hg#Hg(cmd . ' --limit 2 "' . file . '"')
   if type(log) == 0
     return
   endif
