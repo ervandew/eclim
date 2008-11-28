@@ -87,6 +87,8 @@ function! eclim#vcs#command#ChangeSet (path, revision)
       call eclim#util#Echo('Unable to determine file revision.')
       return
     endif
+  elseif revision == 'prev'
+    let revision = eclim#vcs#util#GetPreviousRevision(path)
   endif
 
   let key = 'changeset_' . path . '_' . revision
@@ -142,6 +144,8 @@ function! eclim#vcs#command#Diff (path, revision)
       call eclim#util#Echo('Unable to determine file revision.')
       return
     endif
+  elseif revision == 'prev'
+    let revision = eclim#vcs#util#GetPreviousRevision(path)
   endif
 
   let filename = expand('%:p')
@@ -292,6 +296,8 @@ function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
       call eclim#util#Echo('Unable to determine file revision.')
       return
     endif
+  elseif revision == 'prev'
+    let revision = eclim#vcs#util#GetPreviousRevision(path)
   endif
 
   let props = exists('b:vcs_props') ? b:vcs_props : {}

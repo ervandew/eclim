@@ -57,8 +57,10 @@ file versioned in cvs, subversion, mercurial, or git (where applicable).
 .. _\:VcsChangeSet:
 
 - **:VcsChangeSet** [revision] -
-  Opens a buffer with change set information for the supplied repository version
-  or the current revision of the currently open file.
+  Opens a buffer with change set information for the supplied repository
+  version or the current revision of the currently open file. The special
+  revision "prev" can be used to see the changeset of the previous repository
+  version.
 
   Like **:VcsLog**, this buffer will contain text links which allow you to
   perform other operations.
@@ -67,13 +69,15 @@ file versioned in cvs, subversion, mercurial, or git (where applicable).
 
 - **:VcsDiff** [revision] -
   Performs a vertical diffsplit of the current file against the last committed
-  revision of the current file or the revision supplied.
+  revision of the current file or the revision supplied. The special revision
+  "prev" can be used to open a diff against the previous repository version.
 
 .. _\:VcsCat:
 
 - **:VcsCat** [revision] -
-  Splits the current file with the contents of the last committed version of the
-  current file or the supplied revision.
+  Splits the current file with the contents of the last committed version of
+  the current file or the supplied revision. The special revision "prev" can be
+  used to view the file contents from the previous repository version.
 
 .. _VcsWeb:
 
