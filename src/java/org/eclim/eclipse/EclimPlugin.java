@@ -61,6 +61,8 @@ public class EclimPlugin
     String home = url.toString();
     home = home.substring(
         FILE_PREFIX.length(), home.length() - PLUGIN_XML.length());
+    // handle windows edge case
+    home = home.replaceFirst("^/([A-Za-z]:)", "$1");
     System.setProperty("eclim.home", home);
   }
 
