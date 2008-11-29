@@ -16,6 +16,9 @@
  */
 package org.eclim.eclipse;
 
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Plugin;
 
 import org.eclipse.swt.widgets.Display;
@@ -34,6 +37,9 @@ public class EclimPlugin
 
   private static Shell shell;
 
+  private static final String FILE_PREFIX = "file:";
+  private static final String PLUGIN_XML = "plugin.xml";
+
   /**
    * The constructor.
    */
@@ -51,6 +57,11 @@ public class EclimPlugin
     throws Exception
   {
     super.start(_context);
+    URL url = FileLocator.toFileURL(getBundle().getResource(PLUGIN_XML));
+    String home = url.toString();
+    home = home.substring(
+        FILE_PREFIX.length(), home.length() - PLUGIN_XML.length());
+    System.setProperty("eclim.home", home);
   }
 
   /**

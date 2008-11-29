@@ -30,7 +30,7 @@ ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
   ECLIM_ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
 fi
-ECLIM_ARGS="-Declim.home="$ECLIM_HOME" $ECLIMD_OPTS"
+ECLIM_ARGS="$ECLIMD_OPTS"
 
 # attempt to grab properties from .eclimrc if available.
 SED=`which sed 2> /dev/null`
@@ -59,9 +59,9 @@ if [ -x "$IS_GENTOO" ]; then
   ECLIPSE="$ECLIPSE -vm $(java-config --java)"
 
   # handle emerged version of eclipse which has a bootstrap script
-  ECLIPSE_33=`which eclipse-3.3 2> /dev/null`
-  if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.3" -a -e "$ECLIPSE_33" ]; then
-    ECLIPSE="$ECLIPSE_33"
+  ECLIPSE_34=`which eclipse-3.4 2> /dev/null`
+  if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.4" -a -e "$ECLIPSE_34" ]; then
+    ECLIPSE="$ECLIPSE_34"
     GENTOO_VMARGS="$ECLIM_ARGS"
     ECLIM_VMARGS=""
   fi

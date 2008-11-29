@@ -16,9 +16,8 @@ rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 set ECLIPSE_HOME=%~dp0\..\..\..
-set ECLIM_HOME=%~dp0\..
 
 set CLASSPATH=
 
 rem ECLIMD_OPTS=-java.ext.dirs
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application_headless -vmargs -Declim.home="%ECLIM_HOME%" %ECLIMD_OPTS% %*
+start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application_headless -vmargs %ECLIMD_OPTS% %*
