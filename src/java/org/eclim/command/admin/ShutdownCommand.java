@@ -41,7 +41,10 @@ public class ShutdownCommand
     throws Exception
   {
     try{
-      AbstractEclimApplication.getInstance().stop();
+      AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+      if (app != null){
+        app.stop();
+      }
     }catch(Exception e){
       logger.error("Error shutting down eclim:", e);
     }
