@@ -271,7 +271,7 @@ function! eclim#vcs#command#Log (path)
   " continuation of annotation support
   if jumpto != ''
     call search('^Revision: |' . jumpto)
-    normal z
+    normal! z
   endif
 
   let b:vcs_props = info.props

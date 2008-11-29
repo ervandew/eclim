@@ -50,7 +50,7 @@ function! eclim#util#Abbreviate (lhs, abbreviation)
     let abbrev = substitute(a:abbreviation, '<indent>', indent, 'g')
 
     " insert the abbreviation text.
-    exec "normal i" . abbrev
+    exec "normal! i" . abbrev
 
     return "\<right>"
   endif
@@ -245,11 +245,11 @@ function! eclim#util#GetCurrentElementColumn ()
   let line = getline('.')
   " cursor not on the word
   if line[col('.') - 1] =~ '\W'
-    silent normal w
+    silent normal! w
 
   " cursor not at the beginning of the word
   elseif line[col('.') - 2] =~ '\w'
-    silent normal b
+    silent normal! b
   endif
 
   let col = col('.')
@@ -277,11 +277,11 @@ function! eclim#util#GetCurrentElementOffset ()
   let line = getline('.')
   " cursor not on the word
   if line[col('.') - 1] =~ '\W'
-    silent normal w
+    silent normal! w
 
   " cursor not at the beginning of the word
   elseif line[col('.') - 2] =~ '\w'
-    silent normal b
+    silent normal! b
   endif
 
   let offset = eclim#util#GetOffset()

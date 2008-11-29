@@ -436,15 +436,15 @@ function eclim#tree#Cursor (line)
 
     " attempt to keep the content in view when not wrapping
     "if !&wrap
-    "  normal zs
-    "  exec 'normal ' . (winwidth(winnr()) / 2). 'zh'
+    "  normal! zs
+    "  exec 'normal! ' . (winwidth(winnr()) / 2). 'zh'
     "endif
     let winwidth = winwidth(winnr())
     let wincol = wincol()
     let col = col('.')
     if (winwidth > 10 && wincol > (winwidth - 10)) || (col > 10 && wincol < 10)
-      normal zs
-      exec 'normal ' . (winwidth / 2). 'zh'
+      normal! zs
+      exec 'normal! ' . (winwidth / 2). 'zh'
     endif
 
     call cursor(lnum, col('.') - offset)

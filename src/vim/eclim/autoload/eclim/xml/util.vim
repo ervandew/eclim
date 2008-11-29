@@ -120,8 +120,8 @@ function! eclim#xml#util#GetParentElementName ()
   let pos = getpos('.')
 
   " select tags (best solution I can think of).
-  silent! normal v2at
-  normal v
+  silent! normal! v2at
+  normal! v
 
   call cursor(line("'<"), col("'<"))
   let parent = eclim#xml#util#GetElementName()

@@ -149,7 +149,7 @@ endfunction " }}}
 "function! eclim#java#complete#CompletionFilter (filter)
 "  let start = JavaCodeComplete(1, "")
 "  while col('.') > start + 1
-"    normal <BS>
+"    normal! <BS>
 "  endwhile
 "  echom " #### filter = " . a:filter . " start = " . start
 "  return "\<C-X>\<C-U>"

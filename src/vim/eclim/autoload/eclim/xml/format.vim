@@ -116,7 +116,7 @@ endfunction " }}}
 "
 "    " let vim re-indent
 "    call cursor(start, 1)
-"    normal ==
+"    normal! ==
 "  endif
 "
 "  " recurse.
@@ -134,7 +134,7 @@ endfunction " }}}
 function! s:SelectOuterTag (count)
   let pos = getpos('.')
 
-  exec 'silent! normal v' . a:count . 'atv'
+  exec 'silent! normal! v' . a:count . 'atv'
   call setpos('.', pos)
 
   return s:VisualSelectionMap()
@@ -142,8 +142,8 @@ endfunction " }}}
 
 " SelectInnerTag () {{{
 function! s:SelectInnerTag ()
-  silent! normal vit
-  normal v
+  silent! normal! vit
+  normal! v
   call cursor(line("'<"), col("'<"))
 
   return s:VisualSelectionMap()
@@ -172,7 +172,7 @@ endfunction " }}}
 " InsertCr(line, col) {{{
 function! s:InsertCr (line, col)
   call cursor(a:line, a:col)
-  exec "normal i\<cr>\<esc>"
+  exec "normal! i\<cr>\<esc>"
 endfunction " }}}
 
 " GetRootLine() {{{

@@ -310,7 +310,7 @@ function s:LocateFileSelection (sel)
   syntax clear
   exec 'syntax match PmenuSel /\%' . sel . 'l.*/'
   exec 'call cursor(' . sel . ', 1)'
-  normal zt
+  normal! zt
 
   exec winnr . 'winc w'
 
@@ -427,15 +427,15 @@ endfunction " }}}
 " Swaps typed method declaration arguments.
 function! eclim#common#util#SwapTypedArguments ()
   " FIXME: add validation to see if user is executing on a valid position.
-  normal w
+  normal! w
   SwapWords
-  normal b
+  normal! b
   SwapWords
-  normal www
+  normal! www
   SwapWords
-  normal bb
+  normal! bb
   SwapWords
-  normal b
+  normal! b
 endfunction " }}}
 
 " SwapWords() {{{
@@ -444,9 +444,9 @@ function! eclim#common#util#SwapWords ()
   " save the last search pattern
   let save_search = @/
 
-  normal "_yiw
+  normal! "_yiw
   s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/
-  exec "normal \<C-O>"
+  exec "normal! \<C-O>"
 
   " restore the last search pattern
   let @/ = save_search

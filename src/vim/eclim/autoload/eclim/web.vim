@@ -154,7 +154,7 @@ function! eclim#web#SearchEngine (url, args, quote, visual)
   if search_string == ''
     if a:visual
       let saved = @"
-      normal gvy
+      normal! gvy
       let search_string = substitute(@", '\n', '', '')
       let @" = saved
     else

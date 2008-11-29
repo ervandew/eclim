@@ -102,7 +102,7 @@ function! eclim#project#tree#ProjectTree (...)
   endif
 
   call s:OpenTree(names, dirs)
-  normal zs
+  normal! zs
 
   call s:Mappings()
 endfunction " }}}
