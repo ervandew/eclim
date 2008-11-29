@@ -33,10 +33,10 @@
   endif
 
   let g:java_fori = "for (int ii = 0; ii < ${array}.length; ii++){\<cr>}" .
-    \ "\<esc>\<up>\<tab>"
+    \ "\<esc>\<up>"
   let g:java_forI = "for (Iterator ii = ${col}.iterator(); ii.hasNext();){\<cr>}" .
-    \ "\<esc>\<up>\<tab>"
-  let g:java_fore = "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>\<tab>"
+    \ "\<esc>\<up>"
+  let g:java_fore = "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>"
 
   if !exists("g:EclimJavaCompilerAutoDetect")
     let g:EclimJavaCompilerAutoDetect = 1

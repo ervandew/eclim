@@ -52,7 +52,13 @@ function! eclim#util#Abbreviate (lhs, abbreviation)
     " insert the abbreviation text.
     exec "normal! i" . abbrev
 
-    return "\<right>"
+    call eclim#util#FillTemplate("${", "}")
+
+    if getline('.') =~ '^\s\+$'
+      return "\<right>"
+    endif
+
+    return ""
   endif
   return a:lhs
 endfunction " }}}
