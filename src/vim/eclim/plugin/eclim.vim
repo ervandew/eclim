@@ -156,7 +156,9 @@ if g:EclimMakeLCD
     autocmd QuickFixCmdPre make
       \ if g:EclimMakeLCD | call <SID>QuickFixLocalChangeDirectory() | endif
     autocmd QuickFixCmdPost make
-      \ if g:EclimMakeLCD | exec "lcd " . w:quickfix_dir | endif
+      \ if g:EclimMakeLCD && exists('w:quickfix_dir') |
+      \   exec "lcd " . w:quickfix_dir |
+      \ endif
   augroup END
 endif
 
@@ -173,13 +175,15 @@ endif
 
 " QuickFixLocalChangeDirectory() {{{
 function! s:QuickFixLocalChangeDirectory ()
-  let w:quickfix_dir = getcwd()
+  if g:EclimMakeLCD
+    let w:quickfix_dir = getcwd()
 
-  let dir = eclim#project#util#GetCurrentProjectRoot()
-  if dir == ''
-    let dir = substitute(expand('%:p:h'), '\', '/', 'g')
+    let dir = eclim#project#util#GetCurrentProjectRoot()
+    if dir == ''
+      let dir = substitute(expand('%:p:h'), '\', '/', 'g')
+    endif
+    exec 'lcd ' . dir
   endif
-  exec 'lcd ' . dir
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
