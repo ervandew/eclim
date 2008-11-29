@@ -42,6 +42,15 @@
     </layout>
   </appender>
 
+  <!--
+    - Eclipse view appender.
+    -->
+  <appender name="view" class="org.eclim.logging.log4j.ViewAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+    </layout>
+  </appender>
+
   <category name="org.apache.commons.vfs">
     <priority value="warn"/>
   </category>
@@ -54,6 +63,7 @@
     <priority value="info"/>
     <appender-ref ref="console"/>
     <appender-ref ref="file"/>
+    <appender-ref ref="view"/>
   </root>
 
 </log4j:configuration>

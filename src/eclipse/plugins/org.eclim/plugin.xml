@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.0"?>
+<?eclipse version="3.2"?>
 <!--
   Copyright (C) 2005 - 2008  Eric Van Dewoestine
 
@@ -17,9 +17,20 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <plugin>
-  <extension id="application_headless" point="org.eclipse.core.runtime.applications">
+  <extension id="application_headless"
+      point="org.eclipse.core.runtime.applications">
     <application>
       <run class="org.eclim.eclipse.EclimApplicationHeadless"/>
     </application>
+  </extension>
+
+  <extension point="org.eclipse.ui.views">
+    <category id="org.eclim.eclipse.headed" name="Eclim"/>
+    <view id="org.eclim.eclipse.headed.EclimdView"
+        class="org.eclim.eclipse.headed.EclimdView"
+        icon="resources/images/vim.gif"
+        category="org.eclim.eclipse.headed"
+        name="eclimd"
+        restorable="true"/>
   </extension>
 </plugin>
