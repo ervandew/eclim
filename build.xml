@@ -181,6 +181,9 @@
       </fileset>
     </jar>
 
+    <!-- build vimplugin -->
+    <antcall target="vimplugin"/>
+
     <!-- prepare vim files -->
     <delete dir="${build.vimfiles}/eclim"/>
     <delete dir="${build.vimfiles}/plugin"/>
@@ -323,6 +326,31 @@
             includes="META-INF/MANIFEST.MF" eol="unix"/>
       </then>
     </if>
+  </target>
+
+  <!--
+    - Builds vimplugin.
+    -->
+  <target name="vimplugin">
+    <copy todir="${build.plugins}/org.eclim.vimplugin_${eclim.version}">
+      <fileset dir="src/eclipse/plugins/org.eclim.vimplugin" includes="**/*"/>
+    </copy>
+
+    <replace dir="${build.plugins}/org.eclim.vimplugin_${eclim.version}"
+        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
+      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+    </replace>
+
+    <jar jarfile="${build.plugins}/org.eclim.vimplugin_${eclim.version}/eclim-vimplugin.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/vimplugin/**/*.class"/>
+      </fileset>
+      <fileset dir="src/java">
+        <include name="org/vimplugin/*/**/*"/>
+        <exclude name="**/package.html"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </jar>
   </target>
 
   <!--

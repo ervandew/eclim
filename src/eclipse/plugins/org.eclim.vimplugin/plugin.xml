@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin
+   id="org.vimplugin.vimplugin"
+   name="Vimplugin"
+   version="1.2"
+   provider-name="Vimplugin Project"
+   class="org.vimplugin.VimPlugin">
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.jdt"/>
+   </requires>
+   <extension
+         id="vimplugin.editors"
+         name="vimeditor"
+         point="org.eclipse.ui.editors">
+      <editor
+            id="org.vimplugin.editors.VimEditor"
+            name="Vim"
+            class="org.vimplugin.editors.VimEditor"
+            contributorClass="org.vimplugin.VimActionContributor"
+            icon="icons/vim16x16.gif">
+            <contentTypeBinding
+               contentTypeId="org.eclipse.core.runtime.text"
+            />
+      </editor>
+   </extension>
+   <extension
+         id="vimplugin.editorsNewWindow"
+         name="vimeditorNewWindow"
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.vimplugin.editors.VimEditorNewProcess"
+            contributorClass="org.vimplugin.VimActionContributor"
+            default="false"
+            icon="icons/vim16x16.gif"
+            id="org.vimplugin.editors.VimEditorNewProcess"
+            name="Vim (new process)"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.vimplugin.preferences.VimPreferences"
+            id="org.vimplugin.preferences.VimPreferences"
+            name="Vimplugin"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.vimplugin.preferences.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.vimplugin.view.category"
+            name="VimPlugin">
+      </category>
+      <view
+            allowMultiple="false"
+            category="org.vimplugin.view.category"
+            class="org.vimplugin.views.CommandView"
+            icon="icons/vim16x16.gif"
+            id="org.vimplugin.views.CommandView"
+            name="Vim Command View">
+         <description>
+            Allows you to send your own raw commands to the GVim server.
+         </description>
+      </view>
+   </extension>
+</plugin>
