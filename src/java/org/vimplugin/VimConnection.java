@@ -132,14 +132,6 @@ public class VimConnection implements Runnable {
         ve.printStackTrace();
       }
 
-      //Hotkeys
-      String key, command = null;
-      for (int i = 0; i < 5; i++) {
-        key = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_KEYS[i]);
-        command = VimPlugin.getDefault().getPreferenceStore().getString(PreferenceConstants.P_COMMANDS[i]);
-        registry.setEclipseCommandHandler(this, key, command,i);
-      }
-
       try {
         while ((serverRunning && (line = in.readLine()) != null)) {
           VimEvent ve = new VimEvent(line, this);

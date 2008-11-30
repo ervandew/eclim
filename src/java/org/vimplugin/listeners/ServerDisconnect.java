@@ -15,7 +15,7 @@ import java.io.IOException;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * Closes the editor window if the server was closed.
@@ -23,7 +23,7 @@ import org.vimplugin.editors.AbstractVimEditor;
 public class ServerDisconnect implements IVimListener {
 
   /**
-   * Disposes the {@link org.vimplugin.editors.AbstractVimEditor ViMEditor} on
+   * Disposes the {@link org.vimplugin.editors.VimEditor ViMEditor} on
    * "disconnect" or killed.
    *
    * @throws VimException when the VimConnection could not be closed (wraps IOException).
@@ -33,7 +33,7 @@ public class ServerDisconnect implements IVimListener {
 
     if (event.equals("disconnect") == true
         || event.equals("killed") == true) {
-      for (final AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (final VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor != null) {
           veditor.forceDispose();

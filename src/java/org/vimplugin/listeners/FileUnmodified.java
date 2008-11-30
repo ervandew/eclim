@@ -13,7 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * The File became unmodified.
@@ -28,7 +28,7 @@ public class FileUnmodified implements IVimListener {
   public void handleEvent(VimEvent ve) throws VimException {
     String event = ve.getEvent();
     if (event.equals("save") == true || event.equals("unmodified") == true) {
-      for (AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ve.getBufferID())
           veditor.setDirty(false);

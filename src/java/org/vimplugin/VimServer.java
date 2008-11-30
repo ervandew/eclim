@@ -10,18 +10,22 @@
  */
 package org.vimplugin;
 
+import java.io.File;
 import java.io.IOException;
+
 import java.util.HashSet;
 
 import org.eclipse.core.runtime.Platform;
-import org.vimplugin.editors.AbstractVimEditor;
+
+import org.vimplugin.editors.VimEditor;
+
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
- * Abstract class that implements as much as of the Vim Server functions as
- * possible so that VimServer and VimServerNewWindow can hopefully be combined
- * eventually to one class or at least reduced to very tiny class which just
- * extend this class in a trivial manner.
+ * Class that implements as much as of the Vim Server functions as possible so
+ * that VimServer and VimServerNewWindow can hopefully be combined eventually to
+ * one class or at least reduced to very tiny class which just extend this class
+ * in a trivial manner.
  */
 public class VimServer {
 
@@ -34,7 +38,7 @@ public class VimServer {
   /**
    * The editors associated with the vim instance. For same window opening.
    */
-  private HashSet<AbstractVimEditor> editors = new HashSet<AbstractVimEditor>();
+  private HashSet<VimEditor> editors = new HashSet<VimEditor>();
 
   /**
    * Initialise the class.
@@ -79,32 +83,31 @@ public class VimServer {
     int port = VimPlugin.getDefault().getPreferenceStore().getInt(
         PreferenceConstants.P_PORT)
         + portID;
-    String host = VimPlugin.getDefault().getPreferenceStore().getString(
-        PreferenceConstants.P_HOST);
-    String pass = VimPlugin.getDefault().getPreferenceStore().getString(
-        PreferenceConstants.P_PASS);
 
-    return "-nb:" + host + ":" + port + ":" + pass;
+    return "-nb::" + port;
   }
 
   /**
    * Get netbeans-port,host and pass and start vim with -nb option.
    *
+   * @param workingDir
    */
-  public void start() {
+  public void start(String workingDir) {
     String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
         PreferenceConstants.P_GVIM);
     String arg0 = getNetbeansString(ID);
 
-    start(gvim, arg0);
+    start(workingDir, gvim, arg0);
   }
 
   /**
-   * Start vim and embed it in the Window with the <code>wid</code> (platform-dependent!) given.
+   * Start vim and embed it in the Window with the <code>wid</code>
+   * (platform-dependent!) given.
    *
+   * @param workingDir
    * @param wid The id of the window to embed vim into
    */
-  public void start(long wid) {
+  public void start(String workingDir, long wid) {
 
     // gather Strings (nice names for readbility)
     String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
@@ -135,7 +138,7 @@ public class VimServer {
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 5, addopts.length);
 
-    start(args);
+    start(workingDir, args);
   }
 
   /**
@@ -144,7 +147,7 @@ public class VimServer {
    *
    * @param args
    */
-  public void start(String... args) {
+  public void start(String workingDir, String... args) {
     if (vc != null && vc.isServerRunning())
       return;
 
@@ -158,7 +161,11 @@ public class VimServer {
     // starting gvim with Netbeans interface
     try {
       System.out.println("Trying to start vim");
-      p = new ProcessBuilder(args).start();
+      ProcessBuilder builder = new ProcessBuilder(args);
+      if (workingDir != null){
+        builder.directory(new File(workingDir));
+      }
+      p = builder.start();
       System.out.println("Started vim");
     } catch (IOException e) {
       e.printStackTrace();
@@ -199,7 +206,7 @@ public class VimServer {
    *
    * @param editors the editors to set
    */
-  public void setEditors(HashSet<AbstractVimEditor> editors) {
+  public void setEditors(HashSet<VimEditor> editors) {
     this.editors = editors;
   }
 
@@ -208,18 +215,18 @@ public class VimServer {
    *
    * @return the editors
    */
-  public HashSet<AbstractVimEditor> getEditors() {
+  public HashSet<VimEditor> getEditors() {
     return editors;
   }
 
   /**
-   * Gets an {@link AbstractVimEditor} by the vim buffer-id.
+   * Gets an {@link VimEditor} by the vim buffer-id.
    *
    * @param bufid the id to lookup
    * @return the corresponding editor or null if none is found.
    */
-  public AbstractVimEditor getEditor(int bufid) {
-    for (AbstractVimEditor veditor : getEditors()) {
+  public VimEditor getEditor(int bufid) {
+    for (VimEditor veditor : getEditors()) {
       if (veditor.getBufferID() == bufid) {
         return veditor;
       }

@@ -13,7 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * Some text has been inserted, so modify document also.
@@ -30,7 +30,7 @@ public class TextInsert implements IVimListener {
       int length = Integer.parseInt(ve.getArgument(0));
       String text = ve.getArgument(1);
       text = text.substring(1, text.length() - 1);
-      for (AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ve.getBufferID()) {
           veditor.insertDocumentText(text, length);

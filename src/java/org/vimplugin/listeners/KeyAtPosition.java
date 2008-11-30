@@ -13,7 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 import org.vimplugin.handlers.IHandler;
 import org.vimplugin.handlers.Undefined;
 
@@ -45,7 +45,7 @@ public class KeyAtPosition implements IVimListener {
    *
    * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
    * @param the event contains information about the corresponding
-   *        {@link AbstractVimEditor} and the position in the file.
+   *        {@link VimEditor} and the position in the file.
    */
   public void handleEvent(VimEvent ve) throws VimException {
     String event = ve.getEvent();
@@ -54,7 +54,7 @@ public class KeyAtPosition implements IVimListener {
       String keySeq = ve.getArgument(0);
       keySeq = keySeq.substring(1, keySeq.length() - 1);
 
-      for (AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ve.getBufferID() && keySeq.equals(key)) {
           handler.handle(ve);

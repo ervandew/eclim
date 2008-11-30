@@ -34,18 +34,6 @@
       </editor>
    </extension>
    <extension
-         id="vimplugin.editorsNewWindow"
-         name="vimeditorNewWindow"
-         point="org.eclipse.ui.editors">
-      <editor
-            class="org.vimplugin.editors.VimEditorNewProcess"
-            contributorClass="org.vimplugin.VimActionContributor"
-            default="false"
-            icon="icons/vim16x16.gif"
-            id="org.vimplugin.editors.VimEditorNewProcess"
-            name="Vim (new process)"/>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="org.vimplugin.preferences.VimPreferences"

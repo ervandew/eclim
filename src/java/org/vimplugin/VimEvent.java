@@ -10,7 +10,7 @@
  */
 package org.vimplugin;
 
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * Resembles an event thrown by vim and caught by various listeners in vimplugin.
@@ -114,10 +114,10 @@ public class VimEvent {
   }
 
   /**
-   * shortcut to get the AbstractVimEditor (on eclipse side) of this Event
+   * shortcut to get the VimEditor (on eclipse side) of this Event
    * @return
    */
-  public AbstractVimEditor getEditor() throws VimException {
+  public VimEditor getEditor() throws VimException {
     return VimPlugin.getDefault().getVimserver(
         this.getConnection().getVimID()).getEditor(this.getBufferID());
   }

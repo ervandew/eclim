@@ -27,8 +27,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
   public void initializeDefaultPreferences() {
     IPreferenceStore store = VimPlugin.getDefault().getPreferenceStore();
     store.setDefault(PreferenceConstants.P_PORT, 3219);
-    store.setDefault(PreferenceConstants.P_HOST, "localhost");
-    store.setDefault(PreferenceConstants.P_PASS, "changeme");
 
     //Platform specific code
     if( Platform.getOS().equals(Platform.OS_WIN32) ) {

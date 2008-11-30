@@ -13,7 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * The File was opened, set Titles.
@@ -22,7 +22,7 @@ public class FileOpened implements IVimListener {
 
   /**
    * reacts to "fileOpened" by opening the file in the
-   * {@link org.vimplugin.editors.AbstractVimEditor VimEditor}.
+   * {@link org.vimplugin.editors.VimEditor VimEditor}.
    *
    * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
    */
@@ -32,7 +32,7 @@ public class FileOpened implements IVimListener {
       String filePath = ve.getArgument(0);
       filePath = filePath.substring(1, filePath.length() - 1);
       int ID = VimPlugin.getDefault().getNumberOfBuffers() - 1;
-      for (AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ID) {
           veditor.setTitleTo(filePath);

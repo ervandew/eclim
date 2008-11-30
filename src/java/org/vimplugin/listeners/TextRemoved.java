@@ -13,7 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
-import org.vimplugin.editors.AbstractVimEditor;
+import org.vimplugin.editors.VimEditor;
 
 /**
  * Some text has been removed.. so remove that text in document also.
@@ -29,7 +29,7 @@ public class TextRemoved implements IVimListener {
     if (event.equals("remove") == true) {
       int offset = Integer.parseInt(ve.getArgument(0));
       int length = Integer.parseInt(ve.getArgument(1));
-      for (AbstractVimEditor veditor : VimPlugin.getDefault()
+      for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ve.getBufferID()) {
           veditor.removeDocumentText(offset, length);
