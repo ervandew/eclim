@@ -221,6 +221,11 @@
     <chmod dir="${eclipse.home}/plugins/org.eclim_${eclim.version}/bin"
         includes="**/*" excludes="*.sed" perm="ugo+x"/>
 
+    <replace dir="${eclipse.home}/plugins/org.eclim.vimplugin_${eclim.version}"
+        includes="plugin.properties">
+      <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
+    </replace>
+
     <!-- deploy vim files -->
     <delete includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">

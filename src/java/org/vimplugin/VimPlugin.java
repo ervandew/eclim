@@ -11,11 +11,16 @@
 package org.vimplugin;
 
 import java.io.IOException;
+
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
@@ -73,13 +78,29 @@ public class VimPlugin extends AbstractUIPlugin {
   /**
    * Store all the vim instances using their id as the key.
    */
-  private final HashMap<Integer, VimServer> vimServers = new HashMap<Integer, VimServer>();
+  private final HashMap<Integer, VimServer> vimServers =
+    new HashMap<Integer, VimServer>();
+
+  /**
+   * Properties instance for plugin.properties
+   */
+  private Properties properties;
 
   /**
    * The constructor.
    */
   public VimPlugin() {
     plugin = this;
+
+    properties = new Properties();
+    try{
+      properties.load(getClass().getResourceAsStream("/plugin.properties"));
+    }catch(IOException ioe){
+      MessageDialog.openError(
+          getWorkbench().getActiveWorkbenchWindow().getShell(),
+          "Vimplugin", "Unable to load plugin.properties");
+      ioe.printStackTrace();
+    }
   }
 
   /**
@@ -127,7 +148,9 @@ public class VimPlugin extends AbstractUIPlugin {
       b = getVimserver(id).stop();
       vimServers.remove(id);
     } catch (IOException ioe) {
-      MessageDialog.openError(getWorkbench().getActiveWorkbenchWindow().getShell(), "Vimplugin", "VimServer to stop not found.");
+      MessageDialog.openError(
+          getWorkbench().getActiveWorkbenchWindow().getShell(),
+          "Vimplugin", "VimServer to stop not found.");
       ioe.printStackTrace();
     }
     return b;
@@ -189,5 +212,26 @@ public class VimPlugin extends AbstractUIPlugin {
    */
   public int getNumberOfBuffers() {
     return numberOfBuffers;
+  }
+
+  /**
+   * Gets the specified property from plugin.properties.
+   *
+   * @param name The property name.
+   * @return The property value or null if not found.
+   */
+  public String getProperty(String name){
+    return properties.getProperty(name);
+  }
+
+  /**
+   * Gets the specified property from plugin.properties.
+   *
+   * @param name The property name.
+   * @param def Default value if property is not found.
+   * @return The property value or def if not found.
+   */
+  public String getProperty(String name, String def){
+    return properties.getProperty(name, def);
   }
 }
