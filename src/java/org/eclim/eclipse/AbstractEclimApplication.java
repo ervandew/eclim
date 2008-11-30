@@ -180,7 +180,8 @@ public abstract class AbstractEclimApplication
     String[] plugins = root.list(new FilenameFilter(){
       public boolean accept (File _dir, String _name){
         if(_name.startsWith("org.eclim.") &&
-          _name.indexOf("installer") == -1)
+          _name.indexOf("installer") == -1 &&
+          _name.indexOf("vimplugin") == -1)
         {
           return true;
         }
