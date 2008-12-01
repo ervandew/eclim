@@ -69,10 +69,18 @@ public class VimStep
   extends AbstractGuiStep
 {
   private static final String[] WINDOWS_VIMS = {
+    "C:/Program Files/Vim/vim72/vim.exe",
+    "C:/Program Files/Vim/vim72/gvim.exe",
+    "C:/Program Files/Vim/vim71/vim.exe",
+    "C:/Program Files/Vim/vim71/gvim.exe",
     "C:/Program Files/Vim/vim70/vim.exe",
     "C:/Program Files/Vim/vim70/gvim.exe",
-    "C:/Program Files/Vim/vim71/vim.exe",
-    "C:/Program Files/Vim/vim71/gvim.exe"
+  };
+
+  private static final String[] WINDOWS_GVIMS = {
+    "C:/Program Files/Vim/vim72/gvim.exe",
+    "C:/Program Files/Vim/vim71/gvim.exe",
+    "C:/Program Files/Vim/vim70/gvim.exe",
   };
 
   private static final String[] UNIX_VIMS = {"vim", "gvim"};
@@ -134,6 +142,7 @@ public class VimStep
       try{
         String[] rtp = (String[])Worker.post(new Task(){
           public Object run () throws Exception {
+            setGvimProperty();
             return getVimRuntimePath();
           }
         });
@@ -197,6 +206,34 @@ public class VimStep
       }
       setBusy(false);
       fileChooser.getTextField().grabFocus();
+    }
+  }
+
+  /**
+   * Attempt to find where gvim is installed.
+   */
+  private void setGvimProperty ()
+  {
+    try{
+      String[] gvims = null;
+      if(Os.isFamily("windows")){
+        gvims = WINDOWS_GVIMS;
+        for (int ii = 0; ii < gvims.length; ii++){
+          if (new File(gvims[ii]).isFile()){
+            Installer.getProject().setProperty("eclim.gvim", gvims[ii]);
+            break;
+          }
+        }
+      }else{
+        CommandExecutor executor =
+          CommandExecutor.execute(new String[]{"which", "gvim"}, 1000);
+        if(executor.getReturnCode() == 0){
+          Installer.getProject().setProperty(
+              "eclim.gvim", executor.getResult().trim());
+        }
+      }
+    }catch(Exception e){
+      e.printStackTrace();
     }
   }
 

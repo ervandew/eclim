@@ -150,6 +150,10 @@
       </else>
     </if>
 
+    <replace dir="${eclipse.plugins}/org.eclim.vimplugin_${eclim.version}"
+        includes="plugin.properties"
+        token="$${eclim.gvim}" value="${eclim.gvim}"/>
+
     <!-- install vim plugins -->
     <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
       <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
