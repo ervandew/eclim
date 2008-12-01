@@ -47,7 +47,7 @@ class JavascriptTags implements TaglistScript
 
       /* Match Functions */
       regex.addPattern('f', ~/(s?)\bfunction\s+([a-zA-Z0-9_.\$]+?)\s*\(/, "\$2");
-      //regex.addPattern('f', ~/(s?)(?<!var)\s+([a-zA-Z0-9_.\$]+?)\s*=\s*function\s*\(/, "\$2");
+      regex.addPattern('f', ~/(s?)([a-zA-Z0-9_.\$]+?)\s*=\s*function\s*\(/, "\$2");
 
       /* Match Members */
       regex.addPattern('m', ~/(s?)\b([a-zA-Z0-9_.\$]+?)\s*:\s*function\s*\(/, "\$2");

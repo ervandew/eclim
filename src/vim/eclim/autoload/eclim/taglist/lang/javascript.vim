@@ -37,6 +37,8 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
 
   let objects = filter(copy(a:tags), 'v:val[3] == "o"')
   let members = filter(copy(a:tags), 'v:val[3] == "m"')
+  let functions = filter(copy(a:tags),
+    \ 'v:val[3] == "f" && v:val[2] =~ "\\<function\\>"')
   let object_bounds = {}
   for object in objects
     exec 'let object_start = ' . split(object[4], ':')[1]
@@ -46,43 +48,53 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
     endwhile
     let object_end = searchpair('{', '', '}', 'W', 's:SkipComments()')
 
-    let functions = []
-    let indexes = []
-    let index = 0
+    let methods = []
     for fct in members
       if len(fct) > 3
         exec 'let fct_line = ' . split(fct[4], ':')[1]
         if fct_line > object_start && fct_line < object_end
-          call add(functions, fct)
+          call add(methods, fct)
+        endif
+      endif
+    endfor
+
+    let indexes = []
+    let index = 0
+    for fct in functions
+      if len(fct) > 3
+        exec 'let fct_line = ' . split(fct[4], ':')[1]
+        if fct_line > object_start && fct_line < object_end
+          call add(methods, fct)
+          call add(indexes, index)
+        elseif fct_line == object_start
           call add(indexes, index)
         endif
       endif
       let index += 1
     endfor
-    "call reverse(indexes)
-    "for i in indexes
-    "  call remove(members, i)
-    "endfor
+    call reverse(indexes)
+    for i in indexes
+      call remove(functions, i)
+    endfor
 
-    if len(functions) > 0
+    if len(methods) > 0
       let parent_object = s:GetParentObject(
         \ object_contents, object_bounds, object_start, object_end)
-      " remove functions from the parent if necessary
+      " remove methods from the parent if necessary
       if len(parent_object)
-        call filter(parent_object.functions, 'index(functions, v:val) == -1')
+        call filter(parent_object.methods, 'index(methods, v:val) == -1')
       endif
       let object_bounds[string(object)] = [object_start, object_end]
-      call add(object_contents, {'object': object, 'functions': functions})
+      call sort(methods)
+      call add(object_contents, {'object': object, 'methods': methods})
     endif
   endfor
 
-  let top_functions = filter(copy(a:tags),
-    \ 'v:val[3] == "f" && v:val[2] =~ "\\<function\\>"')
-  if len(top_functions) > 0
+  if len(functions) > 0
     call add(content, "")
     call add(lines, -1)
     call eclim#taglist#util#FormatType(
-        \ a:tags, a:types['f'], top_functions, lines, content, "\t")
+        \ a:tags, a:types['f'], functions, lines, content, "\t")
   endif
 
   for object_content in object_contents
@@ -92,7 +104,7 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
     call add(lines, index(a:tags, object_content.object))
 
     call eclim#taglist#util#FormatType(
-        \ a:tags, a:types['f'], object_content.functions, lines, content, "\t\t")
+        \ a:tags, a:types['f'], object_content.methods, lines, content, "\t\t")
   endfor
 
   call setpos('.', pos)
