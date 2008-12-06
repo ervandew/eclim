@@ -58,10 +58,10 @@ drawbacks\:
   #. Open Eclipse.
   #. Under the "Window" menu choose "Preferences"
   #. Expand the "Java" node and then the "Code Style" node in the tree on
-  #. the left.
+     the left.
   #. Click on the "Formatter" item under the "Code Style" node.
   #. Click the "New" button to create a new formatter profile (I named
-  #. my "eclim") and then click "OK".
+     my "eclim") and then click "OK".
   #. When the "Edit Profile" window comes up, you should be on the
      "Indentation" tab where you can edit the tab policy.  Change it to match
      your Vim settings (note: using Mixed may or may not work all the time).
