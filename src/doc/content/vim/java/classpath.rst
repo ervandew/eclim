@@ -32,6 +32,9 @@ and variables.
 
 .. note::
 
+  All of the commands described below are only available while editing the
+  ``.classpath`` file in vim.
+
   When you write the ``.classpath`` file, Vim will issue a command to the eclim
   server to update the project's classpath, and will report any errors via vim's
   location list (:help location-list).
