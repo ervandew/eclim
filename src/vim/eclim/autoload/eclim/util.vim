@@ -232,6 +232,12 @@ function! eclim#util#GetEncoding ()
   if encoding == ''
     let encoding = &encoding
   endif
+
+  " handle vim's compiled without multi-byte support
+  if encoding == ''
+    let encoding = 'utf-8'
+  endif
+
   return encoding
 endfunction " }}}
 
