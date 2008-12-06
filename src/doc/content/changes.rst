@@ -16,6 +16,19 @@
 History of Changes
 ==================
 
+.. _1.4.4:
+
+1.4.4 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Vcs:
+  - Added option to set the split
+    :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)
+    used when executing diffs.
+
 .. _1.4.3:
 
 1.4.3 (Nov. 15, 2008)

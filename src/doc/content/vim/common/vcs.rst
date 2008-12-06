@@ -123,6 +123,13 @@ Vim Settings
   When greater than 0, limits the number of log entries retrieved by
   **:VcsLog**.
 
+.. _g\:EclimVcsDiffOrientation:
+
+- **g:EclimVcsDiffOrientation (Default: 'vertical')** -
+  When initiating diffs, this setting controls whether the diff window is
+  opened as a horizontal split or vertical.  Supported values include
+  'horizontal' and 'vertical'.
+
 Eclim Settings
 
 .. _org.eclim.project.vcs.web.viewer:

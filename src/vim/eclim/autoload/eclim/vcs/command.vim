@@ -29,6 +29,10 @@ runtime autoload/eclim/vcs/util.vim
   if !exists('g:EclimVcsLogMaxEntries')
     let g:EclimVcsLogMaxEntries = 50
   endif
+
+  if !exists('g:EclimVcsDiffOrientation')
+    let g:EclimVcsDiffOrientation = 'vertical'
+  endif
 " }}}
 
 " Annotate([revision]) {{{
@@ -151,7 +155,8 @@ function! eclim#vcs#command#Diff (path, revision)
   let filename = expand('%:p')
   let buf1 = bufnr('%')
 
-  call eclim#vcs#command#ViewFileRevision(path, revision, 'bel vertical split')
+  let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+  call eclim#vcs#command#ViewFileRevision(path, revision, 'bel ' . orien . ' split')
   diffthis
 
   let b:filename = filename
@@ -471,7 +476,8 @@ function! s:FollowLink ()
       call eclim#vcs#command#ViewFileRevision(file, revision, '')
       let buf1 = bufnr('%')
 
-      call eclim#vcs#command#ViewFileRevision(file, r2, 'bel vertical split')
+      let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+      call eclim#vcs#command#ViewFileRevision(file, r2, 'bel ' . orien . ' split')
       diffthis
       exec bufwinnr(buf1) . 'winc w'
       diffthis
@@ -505,7 +511,8 @@ function! s:FollowLink ()
 
     call eclim#vcs#command#ViewFileRevision(file, r1, '')
     let buf1 = bufnr('%')
-    call eclim#vcs#command#ViewFileRevision(file, r2, 'bel vertical split')
+    let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+    call eclim#vcs#command#ViewFileRevision(file, r2, 'bel ' . orien . ' split')
     diffthis
     exec bufwinnr(buf1) . 'winc w'
     diffthis
@@ -518,7 +525,8 @@ function! s:FollowLink ()
       \ getline(line('.') - 2), 'Revision: |\?\([0-9a-z.]\+\)|\?.*', '\1', '')
 
     let filename = b:filename
-    call eclim#vcs#command#ViewFileRevision(file, revision, 'bel vertical split')
+    let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+    call eclim#vcs#command#ViewFileRevision(file, revision, 'bel ' . orien . ' split')
     diffthis
 
     let b:filename = filename
