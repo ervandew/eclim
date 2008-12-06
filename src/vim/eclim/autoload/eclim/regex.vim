@@ -62,6 +62,7 @@ function! eclim#regex#OpenTestWindow (lang)
     let filename = expand('%:p')
 
     silent! exec "botright 10split " . file
+    setlocal ft=regex
     setlocal winfixheight
     setlocal bufhidden=delete
     setlocal nobackup
@@ -93,9 +94,8 @@ function! s:Evaluate (lang)
     call s:AddTestContent()
   endif
 
-  syntax off
-  syntax on
-  write
+  " forces reset of syntax
+  set ft=regex
 
   let file = substitute(s:regexfile, '<lang>', a:lang, '')
   let b:results = []
