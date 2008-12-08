@@ -127,7 +127,7 @@ Vcs:
     a file by hitting <enter> on a file name in the cvs, svn, or hg commit
     editor.
   - Removed **:Trac\*** and **:Viewvc\*** commands and replaced them with
-    :ref:`:VcsWeb* <VcsWeb>` commands
+    :ref:`:VcsWeb* <vcs-web>` commands
 
 Vim:
   - Added :ref:`:Only` as a configurable alternative to vim's :only command.

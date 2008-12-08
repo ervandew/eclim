@@ -79,7 +79,7 @@ file versioned in cvs, subversion, mercurial, or git (where applicable).
   the current file or the supplied revision. The special revision "prev" can be
   used to view the file contents from the previous repository version.
 
-.. _VcsWeb:
+.. _vcs-web:
 
 Vcs Web Commands
 ----------------

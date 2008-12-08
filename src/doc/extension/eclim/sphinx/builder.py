@@ -81,7 +81,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       self, build_docnames, updated_docnames, method=method
     )
 
-  def get_doc_context(self, docname, body):
+  def get_doc_context(self, docname, body, metatags):
     """Collect items for the template context of a page."""
     # find out relations
     prev = next = None
@@ -94,14 +94,14 @@ class EclimBuilder (StandaloneHTMLBuilder):
 #      try:
 #        next = {'link': self.get_relative_uri(docname, related[2]),
 #                'title': self.render_partial(titles[related[2]])['title']}
-#        rellinks.append((related[2], next['title'], 'N', 'next'))
+#        rellinks.append((related[2], next['title'], 'N', _('next')))
 #      except KeyError:
 #        next = None
 #    if related and related[1]:
 #      try:
 #        prev = {'link': self.get_relative_uri(docname, related[1]),
 #                'title': self.render_partial(titles[related[1]])['title']}
-#        rellinks.append((related[1], prev['title'], 'P', 'previous'))
+#        rellinks.append((related[1], prev['title'], 'P', _('previous')))
 #      except KeyError:
 #        # the relation is (somehow) not in the TOC tree, handle that gracefully
 #        prev = None
@@ -115,7 +115,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       related = self.relations.get(related[0])
     if parents:
       parents.pop() # remove link to the master file; we have a generic
-                      # "back to index" link already
+                    # "back to index" link already
     parents.reverse()
 
     # title rendered as HTML
@@ -155,6 +155,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       title = title,
       meta = meta,
       body = body,
+      metatags = metatags,
       rellinks = rellinks,
       sourcename = sourcename,
 # EV: new main_toc
@@ -204,10 +205,14 @@ class EclimBuilder (StandaloneHTMLBuilder):
 #              toplevel[1][:] = subtoctrees
         # resolve all sub-toctrees
         for toctreenode in toc.traverse(addnodes.toctree):
-# EV: differs from sphinx 0.4.3... not sure if it differs from previous
-# version.  Not sure if this should be synced with 0.4.3 or not.
+# EV: differs from sphinx 0.5... not sure if it differs from previous version.
+# Not sure if this should be synced with 0.5 or not.
           toctreenode.parent.replace_self(
               self._entries_from_toctree(docname, toctreenode, top=False))
+        #if separate:
+        #  entries.append(toc)
+        #else:
+        #  entries.extend(toc.children)
 # EV: append each child as a list item in the bullet_list.
         for child in toc.children:
           entries.append(child)
@@ -286,6 +291,15 @@ class VimdocTranslator (TextTranslator):
 
   TARGET = re.compile(r'(^\.\.\s+_|\\|:$)')
 
+  def _toRefUri (self, value):
+    """
+    EV: Helper function which emulates the docutils conversion of a string to a
+    refuri.
+    """
+    value = value.lower()
+    value = value.replace(':', '')
+    return value
+
   def depart_image (self, node):
     """
     Missing from sphinx's text translator and results in errors when ommitted.
@@ -307,23 +321,41 @@ class VimdocTranslator (TextTranslator):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
       value = unicode(em.children[0].data)
-      if value.startswith(':') or value.startswith('g:') or value.startswith('org.'):
+      refuri = node.attributes.get('refuri')
+      if refuri and refuri.startswith('#'):
+        refuri = refuri[1:]
+      if (
+        not refuri or
+        refuri == self._toRefUri(value) or
+        re.search(r'id\d+', refuri)
+      ) and (
+        value.startswith(':') or
+        value.startswith('g:') or
+        value.startswith('org.')
+      ):
         self.add_text('|')
   def depart_reference(self, node):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
       value = unicode(em.children[0].data)
-      if value.startswith(':') or value.startswith('g:') or value.startswith('org.'):
+      refuri = node.attributes.get('refuri')
+      if refuri and refuri.startswith('#'):
+        refuri = refuri[1:]
+      if (
+        not refuri or
+        refuri == self._toRefUri(value) or
+        re.search(r'id\d+', refuri)
+      ) and (
+        value.startswith(':') or
+        value.startswith('g:') or
+        value.startswith('org.')
+      ):
         # lame edge case
         if value.startswith(':Validate'):
           self.add_text('_' + node.attributes.get('refuri').rsplit('-', 1)[-1])
         self.add_text('|')
-      else:
-        value = node.attributes.get('refuri')
-        if value:
-          if value.startswith('#'):
-            value = value[1:]
-          self.add_text(' (|%s|)' % value)
+      elif refuri:
+        self.add_text(' (|%s|)' % refuri)
 
   def visit_target(self, node):
     refid = node.attributes.get('refid')

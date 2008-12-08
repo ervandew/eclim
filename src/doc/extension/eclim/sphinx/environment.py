@@ -16,6 +16,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @version: $Revision$
 """
+import re
+
 from docutils import nodes
 
 from sphinx import addnodes
@@ -53,16 +55,16 @@ class EclimBuildEnvironment (BuildEnvironment):
     """
     Straight copy from BuildEnvironment. Changes noted.
     """
+    reftarget_roles = set(('token', 'term', 'citation'))
+    # add all custom xref types too
+    reftarget_roles.update(i[0] for i in additional_xref_types.values())
+
     for node in doctree.traverse(addnodes.pending_xref):
       contnode = node[0].deepcopy()
       newnode = None
 
       typ = node['reftype']
       target = node['reftarget']
-
-      reftarget_roles = set(('token', 'term', 'option'))
-      # add all custom xref types too
-      reftarget_roles.update(i[0] for i in additional_xref_types.values())
 
       try:
         if typ == 'ref':
@@ -71,6 +73,12 @@ class EclimBuildEnvironment (BuildEnvironment):
             # link caption
             docname, labelid = self.anonlabels.get(target, ('',''))
             sectname = node.astext()
+
+            # EV: hack to support g:MyVar refuri in vim docs
+            if not isinstance(self, EclimHtmlBuildEnvironment) and\
+               labelid.startswith('g-'):
+              labelid = re.sub(r'.*<(.*)>.*', r'\1', node.rawsource)
+
             if not docname:
               newnode = doctree.reporter.system_message(
                   2, 'undefined label: %s' % target)
@@ -119,11 +127,27 @@ class EclimBuildEnvironment (BuildEnvironment):
               newnode['refuri'] = builder.get_relative_uri(
                   fromdocname, docname) + '#' + labelid
               newnode.append(contnode)
+        elif typ == 'option':
+          progname = node['refprogram']
+          docname, labelid = self.progoptions.get((progname, target), ('', ''))
+          if not docname:
+            newnode = contnode
+          else:
+            newnode = nodes.reference('', '')
+            if docname == fromdocname:
+              newnode['refid'] = labelid
+            else:
+              newnode['refuri'] = builder.get_relative_uri(
+                fromdocname, docname) + '#' + labelid
+            newnode.append(contnode)
         elif typ in reftarget_roles:
           docname, labelid = self.reftargets.get((typ, target), ('', ''))
           if not docname:
             if typ == 'term':
               self.warn(fromdocname, 'term not in glossary: %s' % target,
+                        node.line)
+            elif typ == 'citation':
+              self.warn(fromdocname, 'citation not found: %s' % target,
                         node.line)
             newnode = contnode
           else:
@@ -137,19 +161,18 @@ class EclimBuildEnvironment (BuildEnvironment):
         elif typ == 'mod':
           docname, synopsis, platform, deprecated = \
               self.modules.get(target, ('','','', ''))
-          # just link to an anchor if there are multiple modules in one file
-          # because the anchor is generally below the heading which is ugly
-          # but can't be helped easily
-          anchor = ''
-          if not docname or docname == fromdocname:
+          if not docname:
+            newnode = builder.app.emit_firstresult('missing-reference',
+                                                   self, node, contnode)
+            if not newnode:
+              newnode = contnode
+          elif docname == fromdocname:
             # don't link to self
             newnode = contnode
           else:
-            if len(self.filemodules[docname]) > 1:
-              anchor = '#' + 'module-' + target
             newnode = nodes.reference('', '')
-            newnode['refuri'] = (
-                builder.get_relative_uri(fromdocname, docname) + anchor)
+            newnode['refuri'] = builder.get_relative_uri(
+                fromdocname, docname) + '#module-' + target
             newnode['reftitle'] = '%s%s%s' % (
                 (platform and '(%s) ' % platform),
                 synopsis, (deprecated and ' (deprecated)' or ''))
@@ -162,7 +185,10 @@ class EclimBuildEnvironment (BuildEnvironment):
           name, desc = self.find_desc(modname, clsname,
                                       target, typ, searchorder)
           if not desc:
-            newnode = contnode
+            newnode = builder.app.emit_firstresult('missing-reference',
+                                                   self, node, contnode)
+            if not newnode:
+              newnode = contnode
           else:
             newnode = nodes.reference('', '')
             if desc[0] == fromdocname:
