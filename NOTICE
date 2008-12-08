@@ -1,8 +1,4 @@
-This product includes software developed by
-  - The Apache Software Foundation (http://www.apache.org/).
-  - The Codehaus (http://groovy.codehaus.org).
-
------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 Additional permission under GNU GPL version 3 section 7
 
@@ -13,5 +9,21 @@ the EPL, the licensors of this Program grant you additional permission to
 convey the resulting work.
 
 Permission is granted to link this work with:
-- Eclipse (jdt, pdt, wst, and any other eclipse extension produced by the
-  Eclipse Foundation under the terms of the EPL).
+  - Eclipse (jdt, pdt, wst, and any other eclipse extension produced by the
+    Eclipse Foundation under the terms of the EPL).
+
+--------------------------------------------------------------------------------
+
+This product includes software developed by
+  - The Apache Software Foundation (http://www.apache.org/).
+  - The Codehaus (http://groovy.codehaus.org).
+
+--------------------------------------------------------------------------------
+
+In accordance with GNU GPL version 2, eclim includes an altered version of
+vimplugin (http://vimplugin.org) with changes including, but not limited to:
+  - Removed extraneous preferences.
+  - Retrieval of default gvim location from plugin.properties.
+  - Modified eclipse vim editor to always spawn a new gvim process.
+
+--------------------------------------------------------------------------------
