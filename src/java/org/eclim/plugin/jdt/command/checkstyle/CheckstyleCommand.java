@@ -19,10 +19,15 @@ package org.eclim.plugin.jdt.command.checkstyle;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
@@ -42,11 +47,22 @@ import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
 
+import org.eclim.logging.Logger;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
+
 import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.core.runtime.IPath;
+
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * Command which invokes checkstyle on the specified file.
@@ -57,6 +73,9 @@ import org.eclipse.core.resources.IProject;
 public class CheckstyleCommand
   extends AbstractCommand
 {
+  private static final Logger logger =
+    Logger.getLogger(CheckstyleCommand.class);
+
   /**
    * {@inheritDoc}
    */
@@ -109,8 +128,9 @@ public class CheckstyleCommand
     files.add(new File(ProjectUtils.getFilePath(project, file)));
 
     Checker checker = new Checker();
-    ClassLoader cl = Checker.class.getClassLoader();
-    checker.setModuleClassLoader(cl);
+    checker.setModuleClassLoader(Checker.class.getClassLoader());
+    checker.setClassloader(
+        new ProjectClassLoader(JavaUtils.getJavaProject(project)));
     checker.configure(config);
     checker.addListener(listener);
     checker.process(files);
@@ -118,7 +138,7 @@ public class CheckstyleCommand
     return ErrorFilter.instance.filter(_commandLine, listener.getErrors());
   }
 
-  private class CheckstyleListener
+  private static class CheckstyleListener
     implements AuditListener
   {
     private ArrayList<Error> errors;
@@ -197,6 +217,91 @@ public class CheckstyleCommand
     public ArrayList<Error> getErrors ()
     {
       return this.errors;
+    }
+  }
+
+  private static class ProjectClassLoader
+    extends URLClassLoader
+  {
+    public ProjectClassLoader (IJavaProject project)
+      throws Exception
+    {
+      super(ProjectClassLoader.classpath(project));
+    }
+
+    private static URL[] classpath (IJavaProject project)
+      throws Exception
+    {
+      Set<IJavaProject> visited = new HashSet<IJavaProject>();
+      List<URL> urls = new ArrayList<URL>();
+      collect(project, urls, visited, true);
+      //logger.info(StringUtils.join(urls, "\n"));
+      return urls.toArray(new URL[urls.size()]);
+    }
+
+    private static void collect (
+        IJavaProject javaProject,
+        List<URL> urls,
+        Set<IJavaProject> visited,
+        boolean isFirstProject)
+      throws Exception
+    {
+      if(visited.contains(javaProject)){
+        return;
+      }
+      visited.add(javaProject);
+
+      try{
+        IPath out = javaProject.getOutputLocation();
+        out = out.addTrailingSeparator();
+        String path = ProjectUtils.getFilePath(
+            javaProject.getProject(), out.toOSString());
+        urls.add(new URL("file://" + path));
+      }catch(JavaModelException ignore){
+        // ignore... just signals that no output dir was configured.
+      }
+
+      IProject project = javaProject.getProject();
+      String name = project.getName();
+
+      IClasspathEntry[] entries = null;
+      try {
+        entries = javaProject.getResolvedClasspath(true);
+      }catch(JavaModelException jme){
+        // this may or may not be a problem.
+        logger.warn(
+            "Unable to retreive resolved classpath for project: " + name, jme);
+        return;
+      }
+
+      for(IClasspathEntry entry : entries) {
+        switch (entry.getEntryKind()) {
+          case IClasspathEntry.CPE_LIBRARY :
+          case IClasspathEntry.CPE_CONTAINER :
+          case IClasspathEntry.CPE_VARIABLE :
+            String path = entry.getPath().toOSString();
+            if(path.startsWith("/" + name + "/")){
+              path = ProjectUtils.getFilePath(project, path);
+            }
+            urls.add(new URL("file://" + path));
+            break;
+          case IClasspathEntry.CPE_PROJECT :
+            if (isFirstProject || entry.isExported()){
+              collect(getJavaProject(entry), urls, visited, false);
+            }
+            break;
+        }
+      }
+    }
+
+    private static IJavaProject getJavaProject (IClasspathEntry entry)
+      throws Exception
+    {
+      IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
+          entry.getPath().segment(0));
+      if (project != null)
+        return JavaUtils.getJavaProject(project);
+      return null;
     }
   }
 }
