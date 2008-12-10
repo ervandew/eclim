@@ -156,6 +156,14 @@
     <copy todir="${build.plugins}/org.eclim_${eclim.version}/bin">
       <fileset dir="src/shell" includes="**/*"/>
     </copy>
+    <if>
+      <not> <os family="windows"/> </not>
+      <then>
+        <exec executable="make" dir="src/nailgun"/>
+        <move file="src/nailgun/ng"
+            todir="${build.plugins}/org.eclim_${eclim.version}/bin"/>
+      </then>
+    </if>
 
     <antcall target="plugin">
       <param name="plugin.name" value=""/>
