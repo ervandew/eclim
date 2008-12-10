@@ -24,6 +24,11 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+Java:
+  - :ref:`:Checkstyle <vim/java/checkstyle>` command now creates a project
+    classloader giving checkstyle access to any classes reachable via your
+    project's .classpath file.
+
 Vcs:
   - Added option to set the split
     :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)
