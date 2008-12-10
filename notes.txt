@@ -1,42 +1,30 @@
 HIGH {{{
-  - during intall, if a $HOME/{.vim,vimfiles} not found prompt user to create
-    it?
+  - restore php support
+  - reorganize php docs to better convey dependence on pdt
 
-  - add warnings regarding running eclim and eclipse concurrently
+  - ant failure + quickfix on windows
+    http://groups.google.com/group/eclim-user/browse_thread/thread/e321849947e8326?hl=en
 
-  - start developer docs
-    - document the eclim architecture
-    - document building eclim
-    - document adding commands to eclim
-
-  - add menu of some sort in vimdocs
-  - consider a command to open topic in web docs
+  - look into using pyflakes fork, and possibly including it in vim like rope
+    http://github.com/kevinw/pyflakes/tree/master
 
   - evaluate
     - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
     - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
     - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
 
-  - add/test proxy support to the installer
-    org.eclipse.update.core.proxy.enable=true
-    org.eclipse.update.core.proxy.port=8888
-    org.eclipse.update.core.proxy.host=proxy.host.net
-
   - add proxy support to eclim
     https://sourceforge.net/forum/message.php?msg_id=5072641
     http://java.sun.com/j2se/1.5.0/docs/guide/net/proxies.html
-
-  - handle connectivity issues on xml validate
-    https://sourceforge.net/forum/forum.php?thread_id=2105350&forum_id=487811
-
-  - Unsolved
-    - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
-    - https://sourceforge.net/forum/forum.php?thread_id=2085421&forum_id=487811
 }}}
 
 TODO {{{
 
   Bugs {{{
+    - Unsolved
+      - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
+      - https://sourceforge.net/forum/forum.php?thread_id=2085421&forum_id=487811
+
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
 
@@ -82,6 +70,16 @@ TODO {{{
   }}}
 
   Installer {{{
+    - update installer eclipse plugins step to support as list of possible update
+      sites per feature.
+      - would need to loop through urls and examine the site.xml to see if the
+        version to install exists.
+
+    - add/test proxy support to the installer
+      org.eclipse.update.core.proxy.enable=true
+      org.eclipse.update.core.proxy.port=8888
+      org.eclipse.update.core.proxy.host=proxy.host.net
+
     - detect gnome / kde and add installer step to auto start eclimd
 
     - installer validation
@@ -92,7 +90,6 @@ TODO {{{
     - consider adding command line option to installer to specify temp dir to write to
       - or maybe just use ~/.tmp
 
-
     - test installer w/ eclipse running
       - may cause issues, if so, attempt to detect if eclipse is running and
         display an intermediate step (or add to requirements steps as warning)
@@ -100,6 +97,16 @@ TODO {{{
   }}}
 
   Documentation {{{
+    - add warnings regarding running eclim and eclipse concurrently
+
+    - start developer docs
+      - document the eclim architecture
+      - document building eclim
+      - document adding commands to eclim
+
+    - add menu of some sort in vimdocs
+    - consider a command to open topic in web docs
+
     - document eclim / eclipse interoperability:
       https://sourceforge.net/forum/forum.php?thread_id=2144315&forum_id=487811
 
@@ -160,6 +167,8 @@ TODO {{{
   }}}
 
   Common {{{
+    - templating system (convert to groovy)?
+
     - consider :UserProjectSettings for settings that are not common amongst developers working in a team
       - username, email, etc.
       - setting precedence would be: user > project > global
@@ -174,30 +183,33 @@ TODO {{{
       - maybe let the eclim server side manage this via a TimerTask.
         - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
 
-    - alternate form of :LocateFile* that starts at the path of the current
-      file and walks up the tree globbing for the requested file.
-
     - create command :ProjectImport <dir>
       - Eclipse equivalant:
         File > Import... > General > Existing Projects Into Workspace
 
     - :ProjectCreateWizard - use input()
 
-    - add
-      :VcsStatus
-        - temp window w/ list of files
-        - hitting <enter> on a file with:
-          - M shows the diff
-          - A opens the file
-          - R does nothing
-      :VcsOut (git equivalent?)
-        - open temp window w/ list of files grouped by changeset
-        - try to have <enter> on a file open a diff of remote version vs local
-        - ... figure out how to handle A and R files
-      :VcsIn (git equivalent?)
-        - open temp window w/ list of files grouped by changeset
-        - try to have <enter> on a file open a diff of remote version vs local
-        - ... figure out how to handle A and R files
+    - Vcs
+      - diff orientation: allow horizontal diffs
+      - add support for a special revision 'prev' for :VcsDiff, :VcsChangeSet,
+        and :VcsCat
+      - add
+        :VcsStatus
+          - temp window w/ list of files
+          - hitting <enter> on a file with:
+            - M shows the diff
+            - A opens the file
+            - R does nothing
+        :VcsOut (git equivalent?)
+          - open temp window w/ list of files grouped by changeset
+          - try to have <enter> on a file open a diff of remote version vs local
+            - A opens the file
+            - ... R files?
+        :VcsIn (git equivalent?)
+          - open temp window w/ list of files grouped by changeset
+          - try to have <enter> on a file open a diff of remote version vs local
+            - A try to cat the remote file
+            - ... R files?
 
     - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
@@ -246,6 +258,11 @@ TODO {{{
         - https://sourceforge.net/forum/forum.php?thread_id=1931818&forum_id=487811
   }}}
 
+  Vimplugin {{{
+    - on save from vim, notify eclipse
+    - when opening a file from eclipse, can gvim be given focus?
+  }}}
+
   C/C++ {{{
     - http://www.eclipse.org/cdt/
       http://wiki.eclipse.org/index.php/CDT
@@ -276,6 +293,11 @@ TODO {{{
 
     - http://groovy.codehaus.org/Eclipse+Plugin
 
+    - can we leverage the groovy ast to provide some simple functionality (like
+      rudimentary validation)?
+
+    - taglist support
+
   }}}
 
   Html {{{
@@ -302,6 +324,11 @@ TODO {{{
     - :JavaImportAll? some sort of command to scan the file for missing imports
       and import them.
       - see 'Organize Imports' functionality in eclipse.
+
+    - :JavaClassCreate create a new class
+      - handle locating the src dir, or prompting user if more than one
+      - handle creation of package dirs if necessary
+      - open new class in a split window
 
     - generic support for java based xml config file validation
       - support list of xpaths to class name attributes / values to validate
@@ -389,6 +416,7 @@ TODO {{{
       - many more provided by eclipse...
 
     - code analysis
+      - http://findbugs.sourceforge.net/
       - http://pmd.sourceforge.net/ PMD
       - http://www.jutils.com/ Lint4j
       - http://coverlipse.sourceforge.net Coverclipse
@@ -467,11 +495,17 @@ TODO {{{
 
     - add :PerlRegex
 
+    - syntax validation
+      perl -c [-W or -w] <file>
+
     - static validation
       Perl::Critic
       http://search.cpan.org/~elliotjs/Perl-Critic-1.082/lib/Perl/Critic.pm
 
     - doc search on cpan
+
+    - format
+      http://perltidy.sourceforge.net/
   }}}
 
   Php {{{
@@ -481,6 +515,11 @@ TODO {{{
 
   Python {{{
     - jython?
+
+    - rope code completion enhancements
+      - self.<field> completion inside of __init__
+        - look at __init__ params
+        - look at super class self.<field> values
 
     - modify :DjangoFind to account for django provided tags and filters.
 
@@ -509,9 +548,41 @@ TODO {{{
         grammers and an ansi sql grammer
   }}}
 
+  Xml {{{
+    - handle connectivity issues on xml validate
+      https://sourceforge.net/forum/forum.php?thread_id=2105350&forum_id=487811
+  }}}
+
 }}}
 
 NOTES {{{
+
+  Eclipse Docs {{{
+
+    p2
+      http://wiki.eclipse.org/Equinox_p2_Getting_Started
+      http://wiki.eclipse.org/Equinox_p2_Admin_UI_Users_Guide
+      http://wiki.eclipse.org/Starting_Eclipse_Commandline_With_Equinox_Launcher/p2_Admin_UI
+
+    p2 director (install / upgrade)
+      http://wiki.eclipse.org/Equinox_p2_director_application
+
+      Example: install feature org.eclipse.wst
+        ./eclipse -nosplash -consolelog
+          -application org.eclipse.equinox.p2.director.app.application
+          -metadataRepository http://download.eclipse.org/releases/ganymede
+          -artifactRepository http://download.eclipse.org/releases/ganymede
+          -installIU org.eclipse.wst.feature.group
+          -version 3.0.2.v200808250510-7A-8f8QqVJLTFUkFahb1QIq2z0t8
+
+      Example: uninstall feature org.eclipse.wst (not fully tested yet)
+        ./eclipse -nosplash -consolelog
+          -application org.eclipse.equinox.p2.director.app.application
+          -metadataRepository http://download.eclipse.org/releases/ganymede
+          -artifactRepository http://download.eclipse.org/releases/ganymede
+          -uninstallIU org.eclipse.wst.feature.group
+
+  }}}
 
   Steps for new releases {{{
     Note: make sure to do a quick test with sh (dash) instead of bash
