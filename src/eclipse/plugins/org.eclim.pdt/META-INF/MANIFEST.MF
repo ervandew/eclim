@@ -20,6 +20,7 @@ Require-Bundle: org.eclim,
   org.eclipse.php.ui,
   org.eclipse.search,
   org.eclipse.ui,
+  org.eclipse.ui.ide,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
   org.eclipse.wst.validation

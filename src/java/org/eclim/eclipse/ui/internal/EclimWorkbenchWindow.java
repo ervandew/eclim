@@ -16,7 +16,11 @@
  */
 package org.eclim.eclipse.ui.internal;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import org.eclipse.swt.SWT;
 
@@ -69,6 +73,19 @@ public class EclimWorkbenchWindow
   public Shell getShell ()
   {
     return shell;
+  }
+
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclipse.ui.IWorkbenchWindow#run(boolean,boolean,IRunnableWithProgress)
+   */
+  public void run (
+      boolean fork, boolean cancelable, IRunnableWithProgress runnable)
+    throws InvocationTargetException,
+           InterruptedException
+  {
+    // no-op to prevent super class from running.
   }
 
   /**

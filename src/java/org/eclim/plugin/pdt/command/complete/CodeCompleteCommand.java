@@ -16,21 +16,51 @@
  */
 package org.eclim.plugin.pdt.command.complete;
 
-import java.lang.reflect.Field;
-
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
-import org.eclim.plugin.wst.command.complete.WstCodeCompleteCommand;
+import org.eclim.eclipse.EclimPlugin;
 
+import org.eclim.eclipse.ui.EclimEditorSite;
+
+import org.eclim.util.ProjectUtils;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+
+import org.eclipse.jface.text.ITextViewer;
+
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
-import org.eclipse.php.internal.ui.editor.contentassist.CodeDataCompletionProposal;
-import org.eclipse.php.internal.ui.editor.contentassist.PHPContentAssistProcessor;
+import org.eclipse.php.internal.core.documentModel.partitioner.PHPPartitionTypes;
+
+import org.eclipse.php.internal.ui.editor.PHPStructuredEditor;
+import org.eclipse.php.internal.ui.editor.PHPStructuredTextViewer;
+
+import org.eclipse.php.internal.ui.editor.configuration.PHPStructuredTextViewerConfiguration;
+
+import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProcessor;
+
+import org.eclipse.php.internal.ui.editor.templates.PhpTemplateProposal;
+
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+
+import org.eclipse.ui.part.FileEditorInput;
+
+import org.eclipse.ui.texteditor.ITextEditor;
+
+import org.eclipse.wst.sse.core.StructuredModelManager;
+
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 
 /**
  * Command to perform php code completion.
@@ -39,61 +69,117 @@ import org.eclipse.php.internal.ui.editor.contentassist.PHPContentAssistProcesso
  * @version $Revision$
  */
 public class CodeCompleteCommand
-  extends WstCodeCompleteCommand
+  extends AbstractCodeCompleteCommand
 {
   private static final Pattern METHOD_WITH_ARGS =
-    Pattern.compile("^\\w+\\s*\\(.+\\).*$");
-  private static PHPContentAssistProcessor processor;
+    Pattern.compile("^(\\w+\\s*\\().+\\)\\s*$");
+  private static final Pattern REMOVE_HEAD =
+    Pattern.compile("(s?)<head>.*</head>", Pattern.MULTILINE | Pattern.DOTALL);
+
+  private static PHPStructuredTextViewer viewer;
 
   /**
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
   protected IContentAssistProcessor getContentAssistProcessor (
-      CommandLine commandLine, String project, String file)
+      CommandLine commandLine, String projectName, String file)
     throws Exception
   {
-    if (processor == null){
-      processor = new PHPContentAssistProcessor();
-    }
-    return processor;
+    PHPStructuredTextViewerConfiguration config =
+      new PHPStructuredTextViewerConfiguration();
+
+    IProject project = ProjectUtils.getProject(projectName, true);
+    IFile ifile = ProjectUtils.getFile(project, file);
+
+    IStructuredModel model =
+      StructuredModelManager.getModelManager().getModelForRead(ifile);
+    IStructuredDocument document = model.getStructuredDocument();
+
+    IEditorSite site = new EclimEditorSite();
+    IEditorInput input = new FileEditorInput(ifile);
+    PHPStructuredEditor editor = new PHPStructuredEditor(){
+      public void update(){
+        // no-op to prevent StructuredTextEditor from running it.
+      }
+
+      protected void installOverrideIndicator(boolean provideAST) {
+        // no-op to prevent PHPStructuredEditor from running it.
+      }
+    };
+    editor.init(site, input);
+    editor.setInput(input);
+
+    viewer = new PHPStructuredTextViewer(
+        (ITextEditor)editor, EclimPlugin.getShell(), null, null, false, 0);
+    viewer.setDocument(document);
+
+    return new PHPCompletionProcessor(
+      viewer.getTextEditor(),
+      (ContentAssistant)config.getPHPContentAssistant(viewer),
+      PHPPartitionTypes.PHP_DEFAULT
+    );
   }
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
+   */
+  protected ITextViewer getTextViewer (
+      CommandLine commandLine, String project, String file)
+    throws Exception
+  {
+    return viewer;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   */
+  @Override
+  protected boolean acceptProposal (ICompletionProposal proposal)
+  {
+    // filter out template proposals for now
+    return !(proposal instanceof PhpTemplateProposal);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
    */
   @Override
   protected String getCompletion (ICompletionProposal proposal)
   {
-    CodeDataCompletionProposal phpProposal = (CodeDataCompletionProposal)proposal;
-    String prefix = (String)phpProposal.getPrefixCompletionText(null, 0);
-    try {
-      Field suffixField = CodeDataCompletionProposal.class.getDeclaredField("suffix");
-      suffixField.setAccessible(true);
-      String suffix = (String)suffixField.get(phpProposal);
-      if (suffix.endsWith(";")){
-        suffix = suffix.substring(0, suffix.length() - 1);
-      }
-      if (suffix.endsWith(")") &&
-          METHOD_WITH_ARGS.matcher(proposal.getDisplayString()).matches())
-      {
-        suffix = suffix.substring(0, suffix.length() - 1);
-      }
-
-      return prefix + phpProposal.getCodeData().getName() + suffix;
-    }catch(Exception e){
-      throw new RuntimeException(e);
+    String completion = proposal.getDisplayString();
+    Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
+    if (matcher.find()){
+      completion = matcher.group(1);
     }
+    return completion.trim();
   }
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getDescription(ICompletionProposal)
+   */
+  @Override
+  protected String getDescription (ICompletionProposal proposal)
+  {
+    String description = super.getDescription(proposal);
+    description = REMOVE_HEAD.matcher(description).replaceFirst("");
+    description = description.replaceAll("</dt>", ": ");
+    description = description.replaceAll("</dd>", " ");
+    description = description.replaceAll("</?[^>]+>", "");
+    return description.trim();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
    */
   @Override
   protected String getShortDescription (ICompletionProposal proposal)
   {
-    return proposal.getDisplayString();
+    return proposal.getDisplayString().trim();
   }
 }
