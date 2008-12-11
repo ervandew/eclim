@@ -32,22 +32,31 @@
 
 " Script Varables {{{
   let s:search_element =
-    \ '-command php_find_definition -p "<project>" -f "<file>" ' .
-    \ '-o <offset> -e <encoding>'
+    \ '-command php_search -n "<project>" -f "<file>" ' .
+    \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command php_search -n "<project>" <args>'
   let s:include_paths = '-command php_include_paths -p "<project>"'
-  let s:options = ['-p', '-t', '-s']
+  let s:options = ['-p', '-t', '-s', '-x']
   let s:scopes = ['all', 'project']
   let s:types = [
       \ 'class',
       \ 'function',
       \ 'constant'
     \ ]
+  let s:contexts = [
+      \ 'all',
+      \ 'declarations',
+      \ 'references'
+    \ ]
 " }}}
 
 " Search (...) {{{
 " Executes a search.
 function! eclim#php#search#Search (...)
+  if !eclim#project#util#IsCurrentFileInProject(1)
+    return
+  endif
+
   let argline = ""
   let index = 1
   while index <= a:0
@@ -58,8 +67,9 @@ function! eclim#php#search#Search (...)
     let index = index + 1
   endwhile
 
-  if !eclim#project#util#IsCurrentFileInProject(1)
-    return
+  " check if just a pattern was supplied.
+  if argline =~ '^\s*\w'
+    let argline = '-p ' . argline
   endif
   "let in_project = eclim#project#util#IsCurrentFileInProject(0)
   "if !in_project
@@ -107,9 +117,9 @@ function! eclim#php#search#Search (...)
 
 endfunction " }}}
 
-" FindDefinition () {{{
+" FindDefinition (context) {{{
 " Finds the defintion of the element under the cursor.
-function eclim#php#search#FindDefinition ()
+function eclim#php#search#FindDefinition (context)
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -119,12 +129,16 @@ function eclim#php#search#FindDefinition ()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
-  let offset = eclim#util#GetCurrentElementOffset()
+  let position = eclim#util#GetCurrentElementPosition()
+  let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
+  let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
 
   let search_cmd = s:search_element
   let search_cmd = substitute(search_cmd, '<project>', project, '')
   let search_cmd = substitute(search_cmd, '<file>', file, '')
   let search_cmd = substitute(search_cmd, '<offset>', offset, '')
+  let search_cmd = substitute(search_cmd, '<length>', length, '')
+  let search_cmd = substitute(search_cmd, '<context>', a:context, '')
   let search_cmd = substitute(search_cmd, '<encoding>', eclim#util#GetEncoding(), '')
 
   let result =  eclim#ExecuteEclim(search_cmd)
@@ -206,11 +220,8 @@ function! eclim#php#search#SearchContext ()
   if getline('.') =~ "\\<\\(require\\|include\\)\\(_once\\)\\?\\s*[(]\\?['\"][^'\"]*\\%" . cnum . "c"
     call eclim#php#search#FindInclude()
     return
-  elseif getline('.') =~ '\<class\s\+\%' . cnum . 'c'
-    call eclim#util#EchoInfo("TODO: Search class references")
-    return
-  elseif getline('.') =~ '\<function\s\+\%' . cnum . 'c'
-    call eclim#util#EchoInfo("TODO: Search function references")
+  elseif getline('.') =~ '\<\(class\|function\)\s\+\%' . cnum . 'c'
+    call eclim#php#search#FindDefinition('references')
     return
   elseif getline('.') =~ "\\<define\\s*(['\"]\\%" . cnum . "c"
     call eclim#util#EchoInfo("TODO: Search constant references")
@@ -220,7 +231,7 @@ function! eclim#php#search#SearchContext ()
   "  return
   endif
 
-  call eclim#php#search#FindDefinition()
+  call eclim#php#search#FindDefinition('declarations')
 
 endfunction " }}}
 
@@ -238,6 +249,10 @@ function! eclim#php#search#CommandCompletePhpSearch (argLead, cmdLine, cursorPos
     let types = deepcopy(s:types)
     call filter(types, 'v:val =~ "^' . argLead . '"')
     return types
+  elseif cmdLine =~ '-x\s\+[a-z]*$'
+    let contexts = deepcopy(s:contexts)
+    call filter(contexts, 'v:val =~ "^' . argLead . '"')
+    return contexts
   elseif cmdLine =~ '\s\+[-]\?$'
     let options = deepcopy(s:options)
     let index = 0

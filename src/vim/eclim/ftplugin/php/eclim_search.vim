@@ -24,8 +24,8 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(":PhpSearch")
-  command -buffer PhpFindDefinition :call eclim#php#search#FindDefinition()
+if !exists(":PhpFindDefinition")
+  command -buffer PhpFindDefinition :call eclim#php#search#FindByContext('declarations')
 endif
 if !exists(":PhpSearch")
   command -buffer -nargs=*
