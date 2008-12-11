@@ -24,8 +24,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.4.0.v20080512.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.4.1.R34x_v20080902.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.4.0.v20080512.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_1.0.0.v20081001-2129.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_1.0.0.v20080930.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_1.0.0.v20081208.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_1.0.0.v20081208.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.1.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.4.0.v20080421-2006.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.console_1.0.0.v20080514-1900.jar"/>
@@ -43,9 +43,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.4.1.r341_v20080827-1100.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.4.1.r341_v20080716-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.4.2.R34x_v20080826-1230.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php_2.0.0.HEAD.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.HEAD.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.0.0.HEAD.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.v20081209-1728"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.0.0.v20081209-1728.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_3.4.1.v3449c.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.text_3.4.0.v20080605-1800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.editors_3.4.0.v20080603-2000.jar"/>
