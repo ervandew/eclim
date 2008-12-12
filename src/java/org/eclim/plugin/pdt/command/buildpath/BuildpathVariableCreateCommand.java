@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.includepath;
+package org.eclim.plugin.pdt.command.buildpath;
 
 import org.eclim.Services;
 
@@ -22,22 +22,17 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.php.internal.core.project.options.PHPProjectOptions;
+import org.eclipse.dltk.core.DLTKCore;
 
 /**
- * Command to create an include path variable.
+ * Command to create an build path variable.
  *
  * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class IncludePathVariableCreateCommand
+public class BuildpathVariableCreateCommand
   extends AbstractCommand
 {
   /**
@@ -49,23 +44,8 @@ public class IncludePathVariableCreateCommand
     String name = _commandLine.getValue(Options.NAME_OPTION);
     String path = _commandLine.getValue(Options.PATH_OPTION);
 
-    String[] existing = PHPProjectOptions.getIncludePathVariableNames();
-    String[] names = new String[existing.length + 1];
-    IPath[] paths = new IPath[existing.length + 1];
+    DLTKCore.setBuildpathVariable(name, new Path(path), null);
 
-    for (int ii = 0; ii < existing.length; ii++){
-      names[ii] = existing[ii];
-      paths[ii] = PHPProjectOptions.getIncludePathVariable(names[ii]);
-    }
-    names[names.length - 1] = name;
-    paths[paths.length - 1] = new Path(path);
-
-    PHPProjectOptions.setIncludePathVariables(names, paths, null);
-
-    IScopeContext context = new InstanceScope();
-    IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
-    preferences.flush();
-
-    return Services.getMessage("includepath.variable.created", name);
+    return Services.getMessage("buildpath.variable.created", name);
   }
 }

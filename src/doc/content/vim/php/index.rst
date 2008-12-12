@@ -20,12 +20,12 @@ Php
 
 .. toctree::
 
-   include
+   buildpath
    complete
    validate
    search
 
-- :ref:`vim/php/include`
+- :ref:`vim/php/buildpath`
 - :ref:`vim/php/complete`
 - :ref:`vim/php/validate`
 - :ref:`vim/php/search`

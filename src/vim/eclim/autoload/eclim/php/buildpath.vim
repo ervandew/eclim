@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/php/includepath.html
+"   see http://eclim.sourceforge.net/vim/php/buildpath.html
 "
 " License:
 "
@@ -24,17 +24,17 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_variables = '-command php_includepath_variables'
   let s:command_update = '-command project_update -p "<project>"'
+  let s:command_variables = '-command php_buildpath_variables'
   let s:command_variable_create =
-    \ '-command php_includepath_variable_create -n "<name>" -p "<path>"'
+    \ '-command php_buildpath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
-    \ '-command php_includepath_variable_delete -n "<name>"'
+    \ '-command php_buildpath_variable_delete -n "<name>"'
 " }}}
 
-" NewIncludePathEntry(template) {{{
-" Adds a new entry to the current .projectOptions file.
-function! eclim#php#projectOptions#NewIncludePathEntry (arg, template)
+" NewBuildPathEntry(template) {{{
+" Adds a new entry to the current .buildpath file.
+function! eclim#php#buildpath#NewBuildPathEntry (arg, template)
   let args = split(a:arg)
   let cline = line('.')
   let ccol = col('.')
@@ -50,22 +50,22 @@ endfunction " }}}
 " MoveToInsertPosition() {{{
 " If necessary moves the cursor to a valid insert position.
 function! s:MoveToInsertPosition ()
-  let start = search('<includepath\s*>', 'wn')
-  let end = search('</includepath\s*>', 'wn')
+  let start = search('<buildpath\s*>', 'wn')
+  let end = search('</buildpath\s*>', 'wn')
   if line('.') < start || line('.') >= end
     call cursor(end - 1, 1)
   else
-    let start = search('<includepathentry\s*>', 'n')
-    let end = search('</includepathentry\s*>', 'cn')
+    let start = search('<buildpathentry\s*>', 'n')
+    let end = search('</buildpathentry\s*>', 'cn')
     if end > start
       call cursor(end, 1)
     endif
   endif
 endfunction " }}}
 
-" UpdateIncludePath() {{{
-" Updates the include path on the server w/ the changes made to the current file.
-function! eclim#php#projectOptions#UpdateIncludePath ()
+" UpdateBuildPath() {{{
+" Updates the build path on the server w/ the changes made to the current file.
+function! eclim#php#buildpath#UpdateBuildPath ()
   let name = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:command_update, '<project>', name, '')
 
@@ -89,14 +89,14 @@ endfunction " }}}
 
 " GetVariableNames() {{{
 " Gets a list of all variable names.
-function! eclim#php#projectOptions#GetVariableNames ()
+function! eclim#php#buildpath#GetVariableNames ()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   return map(variables, "substitute(v:val, '\\(.\\{-}\\)\\s.*', '\\1', '')")
 endfunction " }}}
 
 " VariableList() {{{
 " Lists all the variables currently available.
-function! eclim#php#projectOptions#VariableList ()
+function! eclim#php#buildpath#VariableList ()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   if len(variables) == 0
     call eclim#util#Echo("No variables.")
@@ -114,7 +114,7 @@ endfunction " }}}
 
 " VariableCreate(name, path) {{{
 " Create or update a variable.
-function! eclim#php#projectOptions#VariableCreate (name, path)
+function! eclim#php#buildpath#VariableCreate (name, path)
   let command = s:command_variable_create
   let command = substitute(command, '<name>', a:name, '')
   let command = substitute(command, '<path>', fnamemodify(a:path, ':p'), '')
@@ -127,7 +127,7 @@ endfunction " }}}
 
 " VariableDelete(name) {{{
 " Delete a variable.
-function! eclim#php#projectOptions#VariableDelete (name)
+function! eclim#php#buildpath#VariableDelete (name)
   let command = s:command_variable_delete
   let command = substitute(command, '<name>', a:name, '')
 
@@ -139,11 +139,11 @@ endfunction " }}}
 
 " CommandCompleteVar(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#projectOptions#CommandCompleteVar (argLead, cmdLine, cursorPos)
+function! eclim#php#buildpath#CommandCompleteVar (argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
-  let vars = eclim#php#projectOptions#GetVariableNames()
+  let vars = eclim#php#buildpath#GetVariableNames()
   call filter(vars, 'v:val =~ "^' . argLead . '"')
 
   return vars
@@ -151,7 +151,7 @@ endfunction " }}}
 
 " CommandCompleteVarPath(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#projectOptions#CommandCompleteVarPath (argLead, cmdLine, cursorPos)
+function! eclim#php#buildpath#CommandCompleteVarPath (argLead, cmdLine, cursorPos)
   let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
@@ -185,14 +185,14 @@ endfunction " }}}
 
 " CommandCompleteVarAndDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#projectOptions#CommandCompleteVarAndDir (argLead, cmdLine, cursorPos)
+function! eclim#php#buildpath#CommandCompleteVarAndDir (argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'
-    return eclim#php#projectOptions#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
+    return eclim#php#buildpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
   endif
 
   return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)

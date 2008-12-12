@@ -36,8 +36,8 @@ let xmltypes = {
 
 autocmd BufRead .classpath
   \ call <SID>SetXmlFileType({'classpath': 'eclipse_classpath'})
-autocmd BufRead .projectOptions
-  \ call <SID>SetXmlFileType({'phpProjectOptions': 'eclipse_projectOptions'})
+autocmd BufRead .buildpath
+  \ call <SID>SetXmlFileType({'buildpath': 'eclipse_buildpath'})
 autocmd BufRead ivy.xml
   \ call <SID>SetXmlFileType({'ivy-module': 'ivy'})
 autocmd BufRead pom.xml

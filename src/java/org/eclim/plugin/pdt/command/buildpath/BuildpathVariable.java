@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.includepath;
+package org.eclim.plugin.pdt.command.buildpath;
 
 /**
- * Represents a pdt include path variable.
+ * Represents a pdt build path variable.
  *
  * @author Eric Van Dewoestine (ervandew@gmail.com)
  * @version $Revision$
  */
-public class IncludePathVariable
-  implements Comparable<IncludePathVariable>
+public class BuildpathVariable
+  implements Comparable<BuildpathVariable>
 {
   private String name;
   private String path;
@@ -72,7 +72,7 @@ public class IncludePathVariable
    * {@inheritDoc}
    * @see Comparable#compareTo(Object)
    */
-  public int compareTo (IncludePathVariable obj)
+  public int compareTo (BuildpathVariable obj)
   {
     if (obj == this){
       return 0;

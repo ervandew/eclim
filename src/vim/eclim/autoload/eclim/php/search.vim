@@ -35,7 +35,7 @@
     \ '-command php_search -n "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command php_search -n "<project>" <args>'
-  let s:include_paths = '-command php_include_paths -p "<project>"'
+  let s:buildpaths = '-command php_buildpaths -p "<project>"'
   let s:options = ['-p', '-t', '-s', '-x']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -183,7 +183,7 @@ function eclim#php#search#FindInclude ()
     \ ".*\\<\\(require\\|include\\)\\(_once\\)\\?\\s*[(]\\?['\"]\\([^'\"]*\\)['\"].*", '\3', '')
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let command = s:include_paths
+  let command = s:buildpaths
   let command = substitute(command, '<project>', project, '')
   let result =  eclim#ExecuteEclim(command)
   let paths = split(result, '\n')

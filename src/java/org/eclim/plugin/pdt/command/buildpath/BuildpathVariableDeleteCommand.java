@@ -14,24 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.includepath;
+package org.eclim.plugin.pdt.command.buildpath;
 
-import java.util.ArrayList;
+import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
-import org.eclipse.core.runtime.IPath;
-
-import org.eclipse.php.internal.core.project.options.PHPProjectOptions;
+import org.eclipse.dltk.core.DLTKCore;
 
 /**
- * Command to list defined include path variables.
+ * Command to delete an build path variable.
  *
  * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class IncludePathVariablesCommand
+public class BuildpathVariableDeleteCommand
   extends AbstractCommand
 {
   /**
@@ -40,18 +39,10 @@ public class IncludePathVariablesCommand
   public String execute (CommandLine _commandLine)
     throws Exception
   {
-    ArrayList<IncludePathVariable> results =
-      new ArrayList<IncludePathVariable>();
-    String[] names = PHPProjectOptions.getIncludePathVariableNames();
-    for(String name : names){
-      IPath path = PHPProjectOptions.getIncludePathVariable(name);
-      if(path != null){
-        IncludePathVariable variable = new IncludePathVariable();
-        variable.setName(name);
-        variable.setPath(path.toOSString());
-        results.add(variable);
-      }
-    }
-    return IncludePathVariablesFilter.instance.filter(_commandLine, results);
+    String name = _commandLine.getValue(Options.NAME_OPTION);
+
+    DLTKCore.removeBuildpathVariable(name, null);
+
+    return Services.getMessage("buildpath.variable.deleted", name);
   }
 }

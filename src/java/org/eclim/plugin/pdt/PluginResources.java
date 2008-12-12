@@ -67,18 +67,16 @@ public class PluginResources
         org.eclim.plugin.pdt.command.src.SrcUpdateCommand.class);
     registerCommand("php_complete",
         org.eclim.plugin.pdt.command.complete.CodeCompleteCommand.class);
-    registerCommand("php_find_definition",
-        org.eclim.plugin.pdt.command.search.FindDefinitionCommand.class);
     registerCommand("php_search",
         org.eclim.plugin.pdt.command.search.SearchCommand.class);
-    registerCommand("php_include_paths",
-        org.eclim.plugin.pdt.command.includepath.IncludePathsCommand.class);
-    registerCommand("php_includepath_variables",
-        org.eclim.plugin.pdt.command.includepath.IncludePathVariablesCommand.class);
-    registerCommand("php_includepath_variable_create",
-        org.eclim.plugin.pdt.command.includepath.IncludePathVariableCreateCommand.class);
-    registerCommand("php_includepath_variable_delete",
-        org.eclim.plugin.pdt.command.includepath.IncludePathVariableDeleteCommand.class);
+    registerCommand("php_buildpaths",
+        org.eclim.plugin.pdt.command.buildpath.BuildpathsCommand.class);
+    registerCommand("php_buildpath_variables",
+        org.eclim.plugin.pdt.command.buildpath.BuildpathVariablesCommand.class);
+    registerCommand("php_buildpath_variable_create",
+        org.eclim.plugin.pdt.command.buildpath.BuildpathVariableCreateCommand.class);
+    registerCommand("php_buildpath_variable_delete",
+        org.eclim.plugin.pdt.command.buildpath.BuildpathVariableDeleteCommand.class);
   }
 
   /**
