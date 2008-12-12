@@ -182,7 +182,7 @@ public class SearchCommand
   protected IDLTKSearchScope getScope (String _scope, int _type, IProject _project)
     throws Exception
   {
-    boolean includeInterpreterEnvironment = true;
+    boolean includeInterpreterEnvironment = false;
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
 
     IDLTKLanguageToolkit toolkit = PHPLanguageToolkit.getDefault();
