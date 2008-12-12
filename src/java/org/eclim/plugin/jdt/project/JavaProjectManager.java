@@ -190,7 +190,7 @@ public class JavaProjectManager
   }
 
   /**
-   * Creates or updates the projects dependecies other other projects.
+   * Creates or updates the projects dependencies on other projects.
    *
    * @param _project The project.
    * @param _depends The comma seperated list of project names.
