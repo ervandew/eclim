@@ -137,6 +137,8 @@ public class ProjectUtils
   {
     if(_file.startsWith("/" + _project.getName() + "/")){
       _file = _file.substring(2 + _project.getName().length());
+    }else if(_file.endsWith("/" + _project.getName())){
+      _file = _file.substring(1 + _project.getName().length());
     }
     return FileUtils.concat(getPath(_project), _file);
   }
