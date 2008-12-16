@@ -76,12 +76,13 @@ function eclim#java#tools#Jps ()
     let content = content + args_main
     call add(content, "\t}")
 
-    call add(content, "")
-
-    call add(content, "\t" . s:args_vm . " {")
-    let args_vm = map(split(process.args_vm), '"\t\t" . v:val')
-    let content = content + args_vm
-    call add(content, "\t}")
+    if has_key(process, 'args_vm')
+      call add(content, "")
+      call add(content, "\t" . s:args_vm . " {")
+      let args_vm = map(split(process.args_vm), '"\t\t" . v:val')
+      let content = content + args_vm
+      call add(content, "\t}")
+    endif
   endfor
 
   if len(content) == 0
