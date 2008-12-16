@@ -34,7 +34,7 @@ Vcs:
     :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)
     used when executing diffs.
   - Added option to allow users to change the
-    :ref:`pattern <g:EclimVcsTrackerIdPattern>` used to match tracker ticket
+    :ref:`pattern <g:EclimVcsTrackerIdPatterns>` used to match tracker ticket
     numbers in :VcsLog.
 
 .. _1.4.3:

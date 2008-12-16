@@ -29,6 +29,10 @@ else
   finish
 endif
 
+" Script Variables {{{
+  let s:trackerIdPattern = join(g:EclimVcsTrackerIdPatterns, '\|')
+" }}}
+
 " GetAnnotations (revision) {{{
 function! eclim#vcs#impl#svn#GetAnnotations (revision)
   let cmd = 'annotate -v'
@@ -406,7 +410,7 @@ function! s:ParseSvnLog (lines)
         continue
       endif
       let line = substitute(
-        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
+        \ line, '\(' . s:trackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

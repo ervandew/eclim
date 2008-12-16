@@ -29,6 +29,10 @@ else
   finish
 endif
 
+" Script Variables {{{
+  let s:trackerIdPattern = join(g:EclimVcsTrackerIdPatterns, '\|')
+" }}}
+
 " GetAnnotations (revision) {{{
 function! eclim#vcs#impl#git#GetAnnotations (revision)
   if exists('b:vcs_props')
@@ -293,7 +297,7 @@ function! s:ParseGitLog (lines)
     elseif section == 'comment'
       let line = substitute(line, '^\s\{4}', '', '')
       let line = substitute(
-        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
+        \ line, '\(' . s:trackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

@@ -34,9 +34,13 @@ runtime autoload/eclim/vcs/util.vim
     let g:EclimVcsDiffOrientation = 'vertical'
   endif
 
-  if !exists('g:EclimVcsTrackerIdPattern')
-    let g:EclimVcsTrackerIdPattern = '#\(\d\+\)'
+  if !exists('g:EclimVcsTrackerIdPatterns')
+    let g:EclimVcsTrackerIdPatterns = ['#\(\d\+\)']
   endif
+" }}}
+
+" Script Variables {{{
+  let s:trackerIdPattern = join(g:EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
 " Annotate([revision]) {{{
@@ -546,7 +550,14 @@ function! s:FollowLink ()
     call eclim#display#maximize#RestoreWindows(0)
 
   " link to bug / feature report
-  elseif link =~ '^' . g:EclimVcsTrackerIdPattern . '$'
+  elseif link =~ '^' . s:trackerIdPattern . '$'
+    for pattern in g:EclimVcsTrackerIdPatterns
+      if link =~ pattern
+        let id = substitute(link, pattern, '\1', '')
+        break
+      endif
+    endfor
+echom 'id = ' . id
     let cwd = getcwd()
     let dir = fnamemodify(b:filename, ':h')
     exec 'lcd ' . dir
@@ -567,7 +578,12 @@ function! s:FollowLink ()
       return
     endif
 
-    let id = substitute(link, g:EclimVcsTrackerIdPattern, '\1', '')
+    for pattern in g:EclimVcsTrackerIdPatterns
+      if link =~ pattern
+        let id = substitute(link, pattern, '\1', '')
+        break
+      endif
+    endfor
     let url = substitute(url, '<id>', id, 'g')
     call eclim#web#OpenUrl(url)
   endif
