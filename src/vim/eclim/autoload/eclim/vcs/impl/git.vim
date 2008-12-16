@@ -292,7 +292,8 @@ function! s:ParseGitLog (lines)
       let section = 'comment'
     elseif section == 'comment'
       let line = substitute(line, '^\s\{4}', '', '')
-      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
+      let line = substitute(
+        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

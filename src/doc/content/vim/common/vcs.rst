@@ -130,6 +130,13 @@ Vim Settings
   opened as a horizontal split or vertical.  Supported values include
   'horizontal' and 'vertical'.
 
+.. _g\:EclimVcsTrackerIdPattern:
+
+- **g:EclimVcsTrackerIdPattern (Default: '#\\(\\d\\+\\)')** -
+  Specifies the regular expression used to match tracker ids inside of vcs log
+  comments.  Please note that the first group in the pattern must correspond to
+  the tracker ticket id.
+
 Eclim Settings
 
 .. _org.eclim.project.vcs.web.viewer:

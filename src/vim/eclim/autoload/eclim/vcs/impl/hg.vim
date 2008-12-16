@@ -262,7 +262,8 @@ function! s:ParseHgLog (lines)
     elseif line =~ '^description:'
       let section = 'comment'
     elseif section == 'comment'
-      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
+      let line = substitute(
+        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

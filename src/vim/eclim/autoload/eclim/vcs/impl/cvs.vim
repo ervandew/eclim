@@ -267,7 +267,8 @@ function! s:ParseCvsLog (lines)
       let entry.author = substitute(line, '.*author: \(.\{-}\);.*', '\1', '')
       let section = 'comment'
     elseif section == 'comment'
-      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
+      let line = substitute(
+        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

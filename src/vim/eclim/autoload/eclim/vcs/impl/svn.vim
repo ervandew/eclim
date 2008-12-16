@@ -405,7 +405,8 @@ function! s:ParseSvnLog (lines)
       if len(entry.comment) == 0 && line =~ '^\s*$'
         continue
       endif
-      let line = substitute(line, '\(#\d\+\)', '|\1|', 'g')
+      let line = substitute(
+        \ line, '\(' . g:EclimVcsTrackerIdPattern . '\)', '|\1|', 'g')
       call add(entry.comment, line)
     endif
   endfor

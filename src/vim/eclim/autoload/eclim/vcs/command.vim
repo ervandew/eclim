@@ -33,6 +33,10 @@ runtime autoload/eclim/vcs/util.vim
   if !exists('g:EclimVcsDiffOrientation')
     let g:EclimVcsDiffOrientation = 'vertical'
   endif
+
+  if !exists('g:EclimVcsTrackerIdPattern')
+    let g:EclimVcsTrackerIdPattern = '#\(\d\+\)'
+  endif
 " }}}
 
 " Annotate([revision]) {{{
@@ -542,7 +546,7 @@ function! s:FollowLink ()
     call eclim#display#maximize#RestoreWindows(0)
 
   " link to bug / feature report
-  elseif link =~ '^#\d\+$'
+  elseif link =~ '^' . g:EclimVcsTrackerIdPattern . '$'
     let cwd = getcwd()
     let dir = fnamemodify(b:filename, ':h')
     exec 'lcd ' . dir
@@ -563,7 +567,8 @@ function! s:FollowLink ()
       return
     endif
 
-    let url = substitute(url, '<id>', link[1:], 'g')
+    let id = substitute(link, g:EclimVcsTrackerIdPattern, '\1', '')
+    let url = substitute(url, '<id>', id, 'g')
     call eclim#web#OpenUrl(url)
   endif
 endfunction " }}}
