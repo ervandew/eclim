@@ -30,7 +30,7 @@ else
 endif
 
 " Script Variables {{{
-  let s:trackerIdPattern = join(g:EclimVcsTrackerIdPatterns, '\|')
+  let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
 " GetAnnotations (revision) {{{

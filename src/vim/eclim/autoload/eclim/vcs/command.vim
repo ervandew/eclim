@@ -40,7 +40,8 @@ runtime autoload/eclim/vcs/util.vim
 " }}}
 
 " Script Variables {{{
-  let s:trackerIdPattern = join(g:EclimVcsTrackerIdPatterns, '\|')
+  let eclim#vcs#command#EclimVcsTrackerIdPatterns = g:EclimVcsTrackerIdPatterns
+  let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
 " Annotate([revision]) {{{
@@ -551,13 +552,6 @@ function! s:FollowLink ()
 
   " link to bug / feature report
   elseif link =~ '^' . s:trackerIdPattern . '$'
-    for pattern in g:EclimVcsTrackerIdPatterns
-      if link =~ pattern
-        let id = substitute(link, pattern, '\1', '')
-        break
-      endif
-    endfor
-echom 'id = ' . id
     let cwd = getcwd()
     let dir = fnamemodify(b:filename, ':h')
     exec 'lcd ' . dir
