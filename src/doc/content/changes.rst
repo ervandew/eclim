@@ -29,6 +29,12 @@ Java:
     classloader giving checkstyle access to any classes reachable via your
     project's .classpath file.
 
+Eclim:
+  - Consolidated the various **:LocateFile\*** commands into a single
+    :ref:`:LocateFile <vim/common/util>` command with a new setting to specify
+    the default means to open a result and various key bindings for opening via
+    other means.
+
 Vcs:
   - Added option to set the split
     :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)

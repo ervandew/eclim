@@ -21,19 +21,24 @@ Utility Commands
 The following is a list of utility commands provided by eclim.  These are
 general purpose commands that are useful in and outside the scope of eclim.
 
-.. _\:LocateFileEdit:
+.. _\:LocateFile:
 
-- **:LocateFileEdit** [file] -
+- **:LocateFile** [file] -
   Attempts to locate the supplied file pattern or if no argument is supplied,
   opens a temporary window where the text you type is turned into a pattern and
   search results are presented as you type.
 
   .. image:: ../../images/screenshots/locate.png
 
-  While in this completion mode, <tab> will cycle forward through the results
-  and <shift><tab> will cycle backwards.  To open the selected file simply hit
-  <enter>.  If you want to close the search window without selecting a file,
-  hit <esc>.
+  While in this completion mode the following key bindings are available:
+    - <tab> - cycle forward through the results.
+    - <shift><tab> - cycle backwards through the results.
+    - <enter> - open the selected file using the
+      :ref:`default action <g:EclimLocatFileDefaultAction>`.
+    - <ctrl>e - open the selected file via :edit
+    - <ctrl>s - open the selected file via :split
+    - <ctrl>t - open the selected file via :tabnew
+    - <esc> - close the search window without selecting a file.
 
   All searching by this command is limited to the current project and any
   projects listed as dependencies.
@@ -47,15 +52,11 @@ general purpose commands that are useful in and outside the scope of eclim.
     system, etc.) will not be visible until you force a project refresh via
     :ref:`:ProjectRefresh`.
 
-.. _\:LocateFileSplit:
+.. _g\:EclimLocatFileDefaultAction:
 
-- **:LocateFileSplit** [file] -
-  Like **:LocateFileEdit** except open the file with :split.
-
-.. _\:LocateFileTab:
-
-- **:LocateFileTab** [file] -
-  Like **:LocateFileEdit** except open the file with :newtab.
+  **g:EclimLocatFileDefaultAction** (defaults to 'split') -
+  Determines the command used to open the file when hitting <enter> on an entry
+  in the locate file results.
 
 .. _\:Split:
 

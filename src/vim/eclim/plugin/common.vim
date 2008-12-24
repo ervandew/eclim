@@ -100,13 +100,8 @@ endif
 if !exists(":SwapTypedArguments")
   command SwapTypedArguments :call eclim#common#util#SwapTypedArguments()
 endif
-if !exists(":LocateFileSplit")
-  command -nargs=? LocateFileEdit
-    \ :call eclim#common#util#LocateFile('edit', '<args>')
-  command -nargs=? LocateFileSplit
-    \ :call eclim#common#util#LocateFile('split', '<args>')
-  command -nargs=? LocateFileTab
-    \ :call eclim#common#util#LocateFile('tablast | tabnew', '<args>')
+if !exists(":LocateFile")
+  command -nargs=? LocateFile :call eclim#common#util#LocateFile('', '<args>')
 endif
 
 if has('signs')
