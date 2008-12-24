@@ -8,11 +8,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-all-1.5.6.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar">
-    <attributes>
-      <attribute value="file:///usr/local/java/java-src/nailgun-0.7.1/docs/api " name="javadoc_location"/>
-      </attributes>
-  </classpathentry>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/secondstring-20060615.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.0-beta01.jar"/>
