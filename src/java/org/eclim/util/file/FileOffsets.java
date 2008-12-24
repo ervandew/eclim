@@ -91,7 +91,7 @@ public class FileOffsets
       while((line = reader.readLine()) != null){
         offset += line.length() + 1;
         lines.add(new Integer(offset));
-        if (line.length() != line.getBytes().length + 1){
+        if (line.length() != line.getBytes().length){
           byteLines.add(line);
         }else{
           byteLines.add(null);
