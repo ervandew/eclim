@@ -6,6 +6,6 @@ if v:version >= 700
   let blah = substitute('', '', '', '')
 endif
 
-nnoremap <silent> <buffer> <cr> :FindByContext<cr>
+nnoremap <silent> <buffer> <cr> :Buffers<cr>
 
 " vim:ft=vim:fdm=marker
