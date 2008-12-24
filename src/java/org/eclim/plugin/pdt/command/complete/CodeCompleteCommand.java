@@ -154,6 +154,8 @@ public class CodeCompleteCommand
     Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
     if (matcher.find()){
       completion = matcher.group(1);
+    }else if(completion.startsWith("$")){
+      completion = completion.substring(1);
     }
     return completion.trim();
   }
