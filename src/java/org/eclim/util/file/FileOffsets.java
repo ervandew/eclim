@@ -39,6 +39,7 @@ import org.eclim.util.IOUtils;
 public class FileOffsets
 {
   private Integer[] offsets;
+  private String[] multiByteLines;
 
   private FileOffsets ()
   {
@@ -82,22 +83,23 @@ public class FileOffsets
 
       ArrayList<Integer> lines = new ArrayList<Integer>();
       lines.add(new Integer(0));
+      ArrayList<String> byteLines = new ArrayList<String>();
+      byteLines.add(null);
 
       int offset = 0;
-      int count = 0;
-      char[] buffer = new char[1024];
-      while((count = reader.read(buffer, 0, buffer.length)) != -1){
-        for(int ii = 0; ii < count; ii++){
-          if(buffer[ii] == '\n'){
-            offset++;
-            lines.add(new Integer(offset));
-          }else{
-            offset++;
-          }
+      String line = null;
+      while((line = reader.readLine()) != null){
+        offset += line.length() + 1;
+        lines.add(new Integer(offset));
+        if (line.length() != line.getBytes().length + 1){
+          byteLines.add(line);
+        }else{
+          byteLines.add(null);
         }
       }
 
       offsets = (Integer[])lines.toArray(new Integer[lines.size()]);
+      multiByteLines = (String[])byteLines.toArray(new String[byteLines.size()]);
     }catch(Exception e){
       throw new RuntimeException(e);
     }finally{
@@ -133,6 +135,10 @@ public class FileOffsets
     }
     int line = top + 1;
     int column = 1 + _offset - offsets[top].intValue();
+    String value = multiByteLines[line];
+    if (value != null){
+      column = value.substring(0, column).getBytes().length;
+    }
     return new int[]{line, column};
   }
 
