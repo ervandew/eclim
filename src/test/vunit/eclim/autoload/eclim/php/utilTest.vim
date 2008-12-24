@@ -43,7 +43,9 @@ function! TestValidate()
 
   call VUAssertEquals(5, results[0].lnum, 'Wrong line num.')
   call VUAssertEquals(5, results[0].col, 'Wrong col num.')
-  call VUAssertEquals("Syntax Error: expecting: ',' or ';'", results[0].text, 'Wrong result.')
+  call VUAssertEquals(
+    \ "syntax error, unexpected 'echo', expecting ',' or ';'",
+    \ results[0].text, 'Wrong result.')
 
   call VUAssertEquals(7, results[1].lnum, 'Wrong line num.')
   call VUAssertEquals(3, results[1].col, 'Wrong col num.')

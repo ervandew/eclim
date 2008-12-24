@@ -35,9 +35,8 @@ function! TestFindByContextCommandRef ()
   let results = getloclist(0)
   call VUAssertEquals(1, len(results), "Wrong number of results.")
 
-  call VUAssertTrue(bufname(results[0].bufnr) =~ 'eclim_find.vim', "Wrong file.")
-  call VUAssertTrue(results[0].text =~ 'command -buffer .* FindByContext$',
-    \ "Wrong result.")
+  call VUAssertTrue(bufname(results[0].bufnr) =~ 'common.vim', "Wrong file.")
+  call VUAssertTrue(results[0].text =~ 'command Buffers\>', "Wrong result.")
 endfunction " }}}
 
 " TestFindByContextCommandDef() {{{

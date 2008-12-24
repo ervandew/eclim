@@ -39,7 +39,7 @@ function! TestFindDefinition()
   call VUAssertEquals(
     \ g:TestEclimWorkspace . 'eclim_unit_test_php/php/models.php', expand('%:p'), 'Wrong file.')
   call VUAssertEquals(6, line('.'), 'Wrong line.')
-  call VUAssertEquals(1, col('.'), 'Wrong col.')
+  call VUAssertEquals(7, col('.'), 'Wrong col.')
 
   quit
 
@@ -49,7 +49,7 @@ function! TestFindDefinition()
   call VUAssertEquals(
     \ g:TestEclimWorkspace . 'eclim_unit_test_php/php/models.php', expand('%:p'), 'Wrong file.')
   call VUAssertEquals(13, line('.'), 'Wrong line.')
-  call VUAssertEquals(3, col('.'), 'Wrong col.')
+  call VUAssertEquals(19, col('.'), 'Wrong col.')
 
   quit
 
@@ -59,7 +59,7 @@ function! TestFindDefinition()
   call VUAssertEquals(
     \ g:TestEclimWorkspace . 'eclim_unit_test_php/php/models.php', expand('%:p'), 'Wrong file.')
   call VUAssertEquals(8, line('.'), 'Wrong line.')
-  call VUAssertEquals(3, col('.'), 'Wrong col.')
+  call VUAssertEquals(7, col('.'), 'Wrong col.')
 
   quit
 
@@ -69,7 +69,7 @@ function! TestFindDefinition()
   call VUAssertEquals(
     \ g:TestEclimWorkspace . 'eclim_unit_test_php/php/models.php', expand('%:p'), 'Wrong file.')
   call VUAssertEquals(3, line('.'), 'Wrong line.')
-  call VUAssertEquals(1, col('.'), 'Wrong col.')
+  call VUAssertEquals(10, col('.'), 'Wrong col.')
 
   quit
 
@@ -117,11 +117,11 @@ function! TestSearchExact()
   quit
 
   " find constant
-  :PhpSearch -p CONSTANT1 -t constant
+  :PhpSearch -p CONSTANT1 -t field
   call VUAssertEquals(
     \ g:TestEclimWorkspace . 'eclim_unit_test_php/php/models.php', expand('%:p'), 'Wrong file.')
   call VUAssertEquals(29, line('.'), 'Wrong line.')
-  call VUAssertEquals(10, col('.'), 'Wrong col.')
+  call VUAssertEquals(1, col('.'), 'Wrong col.')
 
   quit
 endfunction " }}}
