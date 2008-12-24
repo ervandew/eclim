@@ -17,7 +17,10 @@
 package org.eclim.plugin.pdt.preference;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
+
+import org.eclim.Services;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -28,7 +31,10 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 
 import org.eclipse.php.internal.core.PHPCoreConstants;
-import org.eclipse.php.internal.core.PHPCorePlugin;
+
+import org.eclipse.php.internal.core.project.properties.handlers.PhpVersionProjectPropertyHandler;
+
+import org.eclipse.php.internal.ui.PHPUiPlugin;
 
 /**
  * Option handler for pdt/php options.
@@ -40,8 +46,9 @@ public class OptionHandler
   implements org.eclim.preference.OptionHandler
 {
   private static final String NATURE = "org.eclipse.php.core.PHPNature";
-  private static final String PREFIX = PHPCorePlugin.ID + ".";
-  private static final String VERSION = PREFIX + "phpVersion";
+  private static final String PREFIX = "org.eclipse.php.core.";
+  private static final String VERSION =
+    PREFIX + PHPCoreConstants.PHP_OPTIONS_PHP_VERSION;
 
   private IPersistentPreferenceStore store;
   private Map<String,String> options;
@@ -69,6 +76,7 @@ public class OptionHandler
       );
     }
     return options;
+    //return DLTKCore.getOptions();
   }
 
   /**
@@ -77,6 +85,13 @@ public class OptionHandler
   public Map<String,String> getOptionsAsMap (IProject _project)
     throws Exception
   {
+    /*IScriptProject scriptProject = DLTKCore.create(_project);
+    if(!scriptProject.exists()){
+      throw new IllegalArgumentException(Services.getMessage(
+            "project.not.found", _project.getName()));
+    }
+
+    return scriptProject.getOptions(true);*/
     IEclipsePreferences preferences = getPreferences(_project);
     Map<String,String> map = getOptionsAsMap();
     for(String key : preferences.keys()){
@@ -92,6 +107,14 @@ public class OptionHandler
   public void setOption (String _name, String _value)
     throws Exception
   {
+    /*Map<String,String> options = DLTKCore.getOptions();
+
+    if(_name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
+      // not supported accross projects?
+    }else{
+      options.put(_name, _value);
+      DLTKCore.setOptions((Hashtable)options);
+    }*/
     if(VERSION.equals(_name)){
       getOptionsAsMap().put(VERSION, _value);
       IPersistentPreferenceStore store = getPreferences();
@@ -106,6 +129,23 @@ public class OptionHandler
   public void setOption (IProject _project, String _name, String _value)
     throws Exception
   {
+    /*IScriptProject scriptProject = DLTKCore.create(_project);
+    if(!scriptProject.exists()){
+      throw new IllegalArgumentException(
+          Services.getMessage("project.not.found", _project.getName()));
+    }
+    Map<String,String> global = scriptProject.getOptions(true);
+    Map<String,String> options = scriptProject.getOptions(false);
+
+    Object current = global.get(_name);
+    if(current == null || !current.equals(_value)){
+      if(_name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
+        PhpVersionProjectPropertyHandler.setVersion(_value, _project);
+      }else{
+        options.put(_name, _value);
+        scriptProject.setOptions(options);
+      }
+    }*/
     IEclipsePreferences preferences = getPreferences(_project);
 
     String name = _name;
@@ -120,7 +160,7 @@ public class OptionHandler
   {
     if (store == null){
       store = (IPersistentPreferenceStore)
-        PHPCorePlugin.getDefault().getPreferenceStore();
+        PHPUiPlugin.getDefault().getPreferenceStore();
     }
     return store;
   }
@@ -128,7 +168,7 @@ public class OptionHandler
   private IEclipsePreferences getPreferences (IProject _project)
   {
     IScopeContext context = new ProjectScope(_project);
-    IEclipsePreferences preferences = context.getNode(PHPCorePlugin.ID);
+    IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
     return preferences;
   }
 }
