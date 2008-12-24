@@ -46,6 +46,7 @@
 
   <import file="src/ant/dist.xml"/>
   <import file="src/ant/docs.xml"/>
+  <import file="src/ant/groovy.xml"/>
   <import file="src/ant/logger.xml"/>
   <import file="src/ant/patch.xml"/>
   <import file="src/ant/test.xml"/>
