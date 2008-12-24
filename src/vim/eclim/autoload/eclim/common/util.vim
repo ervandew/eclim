@@ -129,26 +129,26 @@ function! eclim#common#util#GrepRelative (command, args)
   endif
 endfunction " }}}
 
-" LocateFile(command, file) {{{
-" Locates a file using the specified command for opening the file when found.
-"   command - '' (use user default), 'split', 'edit', etc.
+" LocateFile(action, file) {{{
+" Locates a file using the specified action for opening the file when found.
+"   action - '' (use user default), 'split', 'edit', etc.
 "   file - 'somefile.txt',
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
-function eclim#common#util#LocateFile (command, file)
+function eclim#common#util#LocateFile (action, file)
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let results = []
-  let command = a:command
-  if command == ''
-    let command = g:EclimLocateFileDefaultAction
+  let action = a:action
+  if action == ''
+    let action = g:EclimLocateFileDefaultAction
   endif
 
   let file = a:file
   if file == ''
-    call s:LocateFileCompletionInit(command)
+    call s:LocateFileCompletionInit(action)
     return
   elseif file == '<cursor>'
     let file = eclim#util#GrabUri()
@@ -202,12 +202,12 @@ function eclim#common#util#LocateFile (command, file)
   endif
 
   call eclim#util#GoToBufferWindowOrOpen(
-    \ escape(eclim#util#Simplify(result), ' '), command)
+    \ escape(eclim#util#Simplify(result), ' '), action)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" s:LocateFileCompletionInit(command) {{{
-function s:LocateFileCompletionInit (command)
+" s:LocateFileCompletionInit(action) {{{
+function s:LocateFileCompletionInit (action)
   let file = expand('%')
   let project = eclim#project#util#GetCurrentProjectName()
 
@@ -249,7 +249,7 @@ function s:LocateFileCompletionInit (command)
 
   imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection('n')<cr>
   imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection('p')<cr>
-  exec 'imap <buffer> <silent> <cr> <c-r>=<SID>LocateFileSelect("' . a:command . '")<cr>'
+  exec 'imap <buffer> <silent> <cr> <c-r>=<SID>LocateFileSelect("' . a:action . '")<cr>'
   imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
   imap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
   imap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
@@ -337,8 +337,8 @@ function s:LocateFileSelection (sel)
   return ''
 endfunction " }}}
 
-" s:LocateFileSelect(command) {{{
-function s:LocateFileSelect (command)
+" s:LocateFileSelect(action) {{{
+function s:LocateFileSelect (action)
   if exists('b:completions') && !empty(b:completions)
     let winnr = winnr()
     let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
@@ -346,7 +346,7 @@ function s:LocateFileSelect (command)
     let results_bufnum = b:results_bufnum
     let updatetime = b:updatetime
     call eclim#util#GoToBufferWindow(escape(b:file, '\'))
-    call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), a:command)
+    call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), a:action)
     call feedkeys(
       \ "\<esc>:let &updatetime = " . updatetime . " | " .
       \ ":bd " . bufnum . " | " .
