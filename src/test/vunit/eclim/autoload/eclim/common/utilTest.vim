@@ -50,18 +50,18 @@ function! TestLocateFile ()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
-  LocateFileSplit test.vim
+  LocateFile test.vim
   call PeekRedir()
   call VUAssertEquals(expand('%'), 'eclim_unit_test/vim/test.vim')
   bdelete
 
-  LocateFileSplit vcs/merc*/*/file1.txt
+  LocateFile vcs/merc*/*/file1.txt
   call PeekRedir()
   call VUAssertEquals(
     \ expand('%'), 'eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
   bdelete
 
-  LocateFileSplit
+  LocateFile
   call PeekRedir()
   call VUAssertEquals(expand('%'), '[Locate]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
@@ -79,7 +79,7 @@ function! TestLocateFile ()
   doautocmd InsertLeave <buffer>
   call VUAssertNotEquals(expand('%'), '[Locate]')
 
-  LocateFileSplit
+  LocateFile
   call PeekRedir()
   call VUAssertEquals(expand('%'), '[Locate]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
