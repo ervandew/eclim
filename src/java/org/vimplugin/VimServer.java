@@ -193,11 +193,19 @@ public class VimServer {
   public boolean stop() throws IOException {
     boolean result = false; // If error raised
 
-    result = vc.close();
+    if (vc != null){
+      result = vc.close();
+      vc = null;
+    }
 
-    vc = null;
-    t.interrupt();
-    p.destroy();
+    if (t != null){
+      t.interrupt();
+    }
+
+    if (p != null){
+      p.destroy();
+    }
+
     return result;
   }
 

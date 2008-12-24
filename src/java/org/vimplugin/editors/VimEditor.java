@@ -27,7 +27,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+
+import org.eclipse.jface.preference.PreferenceDialog;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -48,11 +51,15 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 
+import org.eclipse.ui.dialogs.PreferencesUtil;
+
 import org.eclipse.ui.editors.text.TextEditor;
 
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import org.vimplugin.VimConnection;
 import org.vimplugin.VimPlugin;
+import org.vimplugin.VimServer;
 
 import org.vimplugin.preferences.PreferenceConstants;
 
@@ -69,9 +76,6 @@ public class VimEditor extends TextEditor {
 
   protected Canvas editorGUI;
 
-  /**
-   * Document Instances
-   */
   protected IDocument document;
 
   protected VimDocumentProvider documentProvider;
@@ -114,14 +118,28 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void createPartControl(Composite parent) {
-    //shell for messages
-    shell = parent.getShell();
-
     if (!gvimAvailable()) {
-      message("The gvim executable seems to be not available. Please check the path in Vimplugin-References.");
-      // TODO: handle nicer. move to another place...
-      close(false);
-      return;
+      shell = parent.getShell();
+      MessageDialog dialog = new MessageDialog(
+          shell, "Vimplugin", null, "The gvim executable is not available. Please check the 'Path to gvim' in your Vimplugin preferences.\n\nPress 'OK' to open your preferences.", MessageDialog.ERROR,
+          new String[]{IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 0)
+      {
+        protected void buttonPressed(int buttonId) {
+          super.buttonPressed(buttonId);
+          if (buttonId == IDialogConstants.OK_ID){
+            PreferenceDialog prefs = PreferencesUtil.createPreferenceDialogOn(
+                shell, "org.vimplugin.preferences.VimPreferences", null, null);
+            if (prefs != null){
+              prefs.open();
+            }
+          }
+        }
+      };
+      dialog.open();
+
+      if (!gvimAvailable()) {
+        throw new RuntimeException("The gvim executable is not available.");
+      }
     }
 
     //set some flags
@@ -250,8 +268,9 @@ public class VimEditor extends TextEditor {
     String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
         PreferenceConstants.P_GVIM);
     File file = new File(gvim);
-    if (file.exists())
+    if (file.exists()){
       return true;
+    }
     return false;
   }
 
@@ -314,26 +333,26 @@ public class VimEditor extends TextEditor {
     }
 
     alreadyClosed = true;
-    VimPlugin.getDefault().getVimserver(serverID).getEditors().remove(this);
+    VimServer server = VimPlugin.getDefault().getVimserver(serverID);
+    server.getEditors().remove(this);
 
     if (save && dirty) {
-      VimPlugin.getDefault().getVimserver(serverID).getVc().command(
-          bufferID, "save", "");
+      server.getVc().command(bufferID, "save", "");
       dirty = false;
       firePropertyChange(PROP_DIRTY);
     }
 
     if (VimPlugin.getDefault().getVimserver(serverID).getEditors().size() > 0) {
-      VimPlugin.getDefault().getVimserver(serverID).getVc().command(
-          bufferID, "close", "");
+      server.getVc().command(bufferID, "close", "");
     } else {
       try {
-        VimPlugin.getDefault().getVimserver(serverID).getVc().function(
-            bufferID, "saveAndExit", "");
+        VimConnection conn = server.getVc();
+        if (conn != null){
+          server.getVc().function(bufferID, "saveAndExit", "");
+        }
         VimPlugin.getDefault().stopVimServer(serverID);
       } catch (IOException e) {
-        message("Could not stop Server: ",e);
-
+        message("Could not stop Server: ", e);
       }
     }
 
@@ -363,8 +382,8 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void doSave(IProgressMonitor monitor) {
-    VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
-        "save", "");
+    VimPlugin.getDefault().getVimserver(serverID).getVc()
+      .command(bufferID, "save", "");
     dirty = false;
     firePropertyChange(PROP_DIRTY);
   }
@@ -383,7 +402,8 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void init(IEditorSite site, IEditorInput input)
-      throws PartInitException {
+    throws PartInitException
+  {
     setSite(site);
     setInput(input);
     try {
@@ -399,8 +419,9 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public boolean isDirty() {
-    if (alreadyClosed)
+    if (alreadyClosed){
       getSite().getPage().closeEditor(this, false);
+    }
     return dirty;
   }
 
@@ -441,7 +462,6 @@ public class VimEditor extends TextEditor {
     super.firePropertyChange(prop);
   }
 
-
   /**
    * Sets focus (brings to top in Vim) to the buffer.. this function will be
    * called when user activates this editor window
@@ -452,12 +472,11 @@ public class VimEditor extends TextEditor {
       getSite().getPage().closeEditor(this, false);
       return;
     }
+    VimConnection conn = VimPlugin.getDefault().getVimserver(serverID).getVc();
     // Brings the corresponding buffer to top
-    VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
-        "setDot", "off");
+    conn.command(bufferID, "setDot", "off");
     // Brings the vim editor window to top
-    VimPlugin.getDefault().getVimserver(serverID).getVc().command(bufferID,
-        "raise", "");
+    conn.command(bufferID, "raise", "");
   }
 
   /**
@@ -565,7 +584,7 @@ public class VimEditor extends TextEditor {
       document.set(first);
       setDirty(true);
     } catch (BadLocationException e) {
-      message("Could not remove text from document: ",e);
+      message("Could not remove text from document: ", e);
     }
   }
 
@@ -579,16 +598,6 @@ public class VimEditor extends TextEditor {
     super.createActions();
   }
 
-  // ///// Code Completion and error reporting Engine Implementation ////////
-  /**
-   * Gives the possible code suggestions to the requester class.. This strings
-   * will be send back to vim to display.
-   *
-   * @param position Position in the buffer
-   */
-  public void possibleCompletions(int position) {
-  }
-
   /**
    * @return the bufferID
    */
@@ -600,7 +609,7 @@ public class VimEditor extends TextEditor {
    * simple one-liner to display error-messages using {@link MessageDialog}.
    * @param message the string to display
    */
-  private void message(String message,Throwable e) {
+  private void message(String message, Throwable e) {
 
     //convert stacktrace to string
     String stacktrace;
@@ -622,10 +631,10 @@ public class VimEditor extends TextEditor {
     }
 
 
-    MessageDialog.openError(shell,"Vimplugin",message+stacktrace);
+    MessageDialog.openError(shell, "Vimplugin", message + stacktrace);
   }
 
   private void message(String s) {
-    MessageDialog.openError(shell,"Vimplugin",s);
+    MessageDialog.openError(shell, "Vimplugin", s);
   }
 }

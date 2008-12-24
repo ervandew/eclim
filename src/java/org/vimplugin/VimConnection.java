@@ -62,8 +62,6 @@ public class VimConnection implements Runnable {
 
   private final int port;
 
-  private KeyAtPositionRegistry registry;
-
   private ServerSocket socket;
 
   /** the socket the vim instance runs on */
@@ -98,14 +96,10 @@ public class VimConnection implements Runnable {
       System.out.println("Connection established");
 
       // Add Listeners
-
-      registry = new KeyAtPositionRegistry();
-
       if (VimPlugin.getDefault().getPreferenceStore().getBoolean(
           PreferenceConstants.P_DEBUG)) {
         listeners.add(new Logger());
       }
-
       listeners.add(new ServerStarted());
       listeners.add(new ServerDisconnect());
       listeners.add(new TextInsert());
@@ -275,9 +269,5 @@ public class VimConnection implements Runnable {
    */
   public boolean isServerRunning() {
     return serverRunning;
-  }
-
-  public KeyAtPositionRegistry getRegistry() {
-    return registry;
   }
 }
