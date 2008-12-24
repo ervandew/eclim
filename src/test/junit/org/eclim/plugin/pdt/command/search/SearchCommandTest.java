@@ -39,7 +39,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|6 col 7|TestA", result);
+    assertEquals("Wrong Result", file + "|6 col 7|class TestA", result);
   }
 
   @Test
@@ -55,7 +55,8 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|9 col 19|methodA1", result);
+    assertEquals("Wrong Result",
+        file + "|9 col 19|class TestA -> function methodA1", result);
   }
 
   @Test
@@ -65,13 +66,13 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "constant"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "field"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|29 col 10|CONSTANT1", result);
+    assertEquals("Wrong Result", file + "|29 col 1|CONSTANT1", result);
   }
 
   @Test
@@ -87,6 +88,6 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|3 col 10|functionA", result);
+    assertEquals("Wrong Result", file + "|3 col 10|function functionA", result);
   }
 }

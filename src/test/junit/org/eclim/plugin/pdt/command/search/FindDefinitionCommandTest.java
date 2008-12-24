@@ -41,14 +41,14 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "45", "-e", "utf-8"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "45", "-l", "5", "-e", "utf-8"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|6 col 1|TestA", result);
+    assertEquals("Wrong Result", file + "|6 col 7|class TestA", result);
   }
 
   @Test
@@ -58,14 +58,15 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "62", "-e", "utf-8"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "62", "-l", "8", "-e", "utf-8"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|13 col 3|methodA2", result);
+    assertEquals("Wrong Result",
+        file + "|13 col 19|class TestA -> function methodA2", result);
   }
 
   @Test
@@ -75,14 +76,14 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "82", "-e", "utf-8"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "82", "-l", "9", "-e", "utf-8"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|8 col 3|variable1", result);
+    assertEquals("Wrong Result", file + "|8 col 7|class TestA -> $variable1", result);
   }
 
   @Test
@@ -92,8 +93,8 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "111", "-e", "utf-8"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "111", "-l", "9", "-e", "utf-8"
     });
 
     System.out.println(result);
@@ -109,13 +110,13 @@ public class FindDefinitionCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_find_definition", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "94", "-e", "utf-8"
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "94", "-l", "9", "-e", "utf-8"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|3 col 1|functionA", result);
+    assertEquals("Wrong Result", file + "|3 col 10|function functionA", result);
   }
 }
