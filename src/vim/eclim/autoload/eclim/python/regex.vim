@@ -96,17 +96,21 @@ def linecol (lnum, offset):
 type = vim.eval('exists("b:eclim_regex_type") ? b:eclim_regex_type : "file"')
 file = open(vim.eval('a:file'))
 try:
-  regex, text = file.read().split('\n', 1)
-  if not type or type == 'file':
-    offsets = compileOffsets(text)
-    vim.command("let results = '%s'" % '\n'.join(run(regex, text, 0)))
+  regex_text = file.read().split('\n', 1)
+  if len(regex_text) == 2:
+    regex, text = regex_text
+    if not type or type == 'file':
+      offsets = compileOffsets(text)
+      vim.command("let results = '%s'" % '\n'.join(run(regex, text, 0)))
+    else:
+      results = []
+      lnum = 1
+      for line in text.split('\n'):
+        lnum += 1
+        results += run(regex, line, lnum)
+      vim.command("let results = '%s'" % '\n'.join(results))
   else:
-    results = []
-    lnum = 1
-    for line in text.split('\n'):
-      lnum += 1
-      results += run(regex, line, lnum)
-    vim.command("let results = '%s'" % '\n'.join(results))
+    vim.command("let results = ''")
 finally:
   file.close()
 EOF
