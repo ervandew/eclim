@@ -18,7 +18,7 @@
 <project name="build" default="deploy" basedir=".">
 
   <path id="ant-contrib-classpath">
-    <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
+    <fileset dir="src/ant/lib/" includes="ant-contrib-*.jar"/>
   </path>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"
       classpathref="ant-contrib-classpath"/>
@@ -372,6 +372,25 @@
     -->
   <target name="clean" description="Deletes the build directory.">
     <delete dir="build"/>
+  </target>
+
+  <!--
+    - Run checkstyle on eclim source files.
+    -->
+  <target name="checkstyle" description="Runs checkstyle on the eclim source files.">
+    <path id="checkstyle-classpath">
+      <fileset dir="src/ant/lib/" includes="checkstyle-all-*.jar"/>
+    </path>
+    <taskdef resource="checkstyletask.properties"
+        classpathref="checkstyle-classpath"/>
+    <checkstyle config="src/java/checkstyle.xml">
+      <fileset dir="src/java">
+        <include name="org/eclim/**/*.java"/>
+        <exclude name="org/eclim/util/file/BufferedReader.java"/>
+      </fileset>
+      <!--property key="checkstyle.cache.file"
+          file="build/temp/checkstyle/cache"/-->
+    </checkstyle>
   </target>
 
 </project>
