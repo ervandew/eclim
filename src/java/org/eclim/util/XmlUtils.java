@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ public class XmlUtils
    * @param xpath The xpath string.
    * @return An XPathExpression.
    */
-  public static XPathExpression createXPathExpression (String xpath)
+  public static XPathExpression createXPathExpression(String xpath)
     throws Exception
   {
     if(XPATH == null){
@@ -88,53 +88,53 @@ public class XmlUtils
   /**
    * Validate the supplied xml file.
    *
-   * @param _project The project name.
-   * @param _filename The file path to the xml file.
+   * @param project The project name.
+   * @param filename The file path to the xml file.
    * @return A possibly empty array of errors.
    */
-  public static List<Error> validateXml (String _project, String _filename)
+  public static List<Error> validateXml(String project, String filename)
     throws Exception
   {
-    return validateXml(_project, _filename, false, null);
+    return validateXml(project, filename, false, null);
   }
 
   /**
    * Validate the supplied xml file.
    *
-   * @param _project The project name.
-   * @param _filename The file path to the xml file.
-   * @param _schema True to use schema validation relying on the
+   * @param project The project name.
+   * @param filename The file path to the xml file.
+   * @param schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
    * @return A possibly empty array of errors.
    */
-  public static List<Error> validateXml (
-      String _project, String _filename, boolean _schema)
+  public static List<Error> validateXml(
+      String project, String filename, boolean schema)
     throws Exception
   {
-    return validateXml(_project, _filename, _schema, null);
+    return validateXml(project, filename, schema, null);
   }
 
   /**
    * Validate the supplied xml file.
    *
-   * @param _project The project name.
-   * @param _filename The file path to the xml file.
-   * @param _schema True to use schema validation relying on the
+   * @param project The project name.
+   * @param filename The file path to the xml file.
+   * @param schema True to use schema validation relying on the
    * xsi:schemaLocation attribute of the document.
-   * @param _handler The content handler to use while parsing the file.
+   * @param handler The content handler to use while parsing the file.
    * @return A possibly empty list of errors.
    */
-  public static List<Error> validateXml (
-      String _project,
-      String _filename,
-      boolean _schema,
-      DefaultHandler _handler)
+  public static List<Error> validateXml(
+      String project,
+      String filename,
+      boolean schema,
+      DefaultHandler handler)
     throws Exception
   {
     SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setNamespaceAware(true);
     factory.setValidating(true);
-    if(_schema){
+    if(schema){
       factory.setFeature("http://apache.org/xml/features/validation/schema", true);
       factory.setFeature(
           "http://apache.org/xml/features/validation/schema-full-checking", true);
@@ -142,8 +142,7 @@ public class XmlUtils
 
     SAXParser parser = factory.newSAXParser();
 
-    String filename = FileUtils.concat(
-        ProjectUtils.getPath(_project), _filename);
+    filename = FileUtils.concat(ProjectUtils.getPath(project), filename);
     filename = filename.replace('\\', '/');
 
     ErrorAggregator errorHandler = new ErrorAggregator(filename);
@@ -151,7 +150,7 @@ public class XmlUtils
         FileUtils.getFullPath(filename));
     try{
       parser.parse(new File(filename),
-          getHandler(_handler, errorHandler, entityResolver));
+          getHandler(handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
@@ -171,13 +170,13 @@ public class XmlUtils
   /**
    * Validate the supplied xml file against the specified xsd.
    *
-   * @param _project The project name.
-   * @param _filename The file path to the xml file.
-   * @param _schema The file path to the xsd.
+   * @param project The project name.
+   * @param filename The file path to the xml file.
+   * @param schema The file path to the xsd.
    * @return A possibly empty array of errors.
    */
-  public static List<Error> validateXml (
-      String _project, String _filename, String _schema)
+  public static List<Error> validateXml(
+      String project, String filename, String schema)
     throws Exception
   {
     SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -191,17 +190,16 @@ public class XmlUtils
     parser.setProperty(
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
         "http://www.w3.org/2001/XMLSchema");
-    if(!_schema.startsWith("file:")){
-      _schema = "file://" + _schema;
+    if(!schema.startsWith("file:")){
+      schema = "file://" + schema;
     }
     parser.setProperty(
-        "http://java.sun.com/xml/jaxp/properties/schemaSource", _schema);
+        "http://java.sun.com/xml/jaxp/properties/schemaSource", schema);
     parser.setProperty(
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-        _schema.replace('\\', '/'));
+        schema.replace('\\', '/'));
 
-    String filename = FileUtils.concat(
-        ProjectUtils.getPath(_project), _filename);
+    filename = FileUtils.concat(ProjectUtils.getPath(project), filename);
     filename = filename.replace('\\', '/');
 
     ErrorAggregator errorHandler = new ErrorAggregator(filename);
@@ -233,7 +231,7 @@ public class XmlUtils
    * @param name The name of the child element to retrieve the value from.
    * @return The text value of the child element.
    */
-  public static String getElementValue (Element element, String name)
+  public static String getElementValue(Element element, String name)
   {
     return ((Element)element.getElementsByTagName(name).item(0))
       .getFirstChild().getNodeValue();
@@ -243,18 +241,18 @@ public class XmlUtils
    * Gets an aggregate handler which delegates accordingly to the supplied
    * handlers.
    *
-   * @param _handler Main DefaultHandler to delegate to (may be null).
-   * @param _errorHandler DefaultHandler to delegate errors to (may be null).
-   * @param _entityResolver EntityResolver to delegate to (may be null).
+   * @param handler Main DefaultHandler to delegate to (may be null).
+   * @param errorHandler DefaultHandler to delegate errors to (may be null).
+   * @param entityResolver EntityResolver to delegate to (may be null).
    * @return
    */
-  private static DefaultHandler getHandler (
-      DefaultHandler _handler,
-      DefaultHandler _errorHandler,
-      EntityResolver _entityResolver)
+  private static DefaultHandler getHandler(
+      DefaultHandler handler,
+      DefaultHandler errorHandler,
+      EntityResolver entityResolver)
   {
-    DefaultHandler handler = _handler != null ? _handler : new DefaultHandler();
-    return new AggregateHandler(handler, _errorHandler, _entityResolver);
+    DefaultHandler hdlr = handler != null ? handler : new DefaultHandler();
+    return new AggregateHandler(hdlr, errorHandler, entityResolver);
   }
 
   /**
@@ -287,7 +285,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#resolveEntity(String,String)
      */
-    public InputSource resolveEntity (String publicId, String systemId)
+    public InputSource resolveEntity(String publicId, String systemId)
       throws IOException, SAXException
     {
       return entityResolver.resolveEntity(publicId, systemId);
@@ -296,7 +294,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#notationDecl(String,String,String)
      */
-    public void notationDecl (String name, String publicId, String systemId)
+    public void notationDecl(String name, String publicId, String systemId)
       throws SAXException
     {
       handler.notationDecl(name, publicId, systemId);
@@ -305,7 +303,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#unparsedEntityDecl(String,String,String,String)
      */
-    public void unparsedEntityDecl (
+    public void unparsedEntityDecl(
         String name, String publicId, String systemId, String notationName)
       throws SAXException
     {
@@ -315,7 +313,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#setDocumentLocator(Locator)
      */
-    public void setDocumentLocator (Locator locator)
+    public void setDocumentLocator(Locator locator)
     {
       handler.setDocumentLocator(locator);
     }
@@ -323,7 +321,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#startDocument()
      */
-    public void startDocument ()
+    public void startDocument()
       throws SAXException
     {
       handler.startDocument();
@@ -332,7 +330,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#endDocument()
      */
-    public void endDocument ()
+    public void endDocument()
       throws SAXException
     {
       handler.endDocument();
@@ -341,7 +339,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#startPrefixMapping(String,String)
      */
-    public void startPrefixMapping (String prefix, String uri)
+    public void startPrefixMapping(String prefix, String uri)
       throws SAXException
     {
       handler.startPrefixMapping(prefix, uri);
@@ -350,7 +348,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#endPrefixMapping(String)
      */
-    public void endPrefixMapping (String prefix)
+    public void endPrefixMapping(String prefix)
       throws SAXException
     {
       handler.endPrefixMapping(prefix);
@@ -359,7 +357,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#startElement(String,String,String,Attributes)
      */
-    public void startElement (
+    public void startElement(
         String uri, String localName, String qName, Attributes attributes)
       throws SAXException
     {
@@ -369,7 +367,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#endElement(String,String,String)
      */
-    public void endElement (String uri, String localName, String qName)
+    public void endElement(String uri, String localName, String qName)
       throws SAXException
     {
       handler.endElement(uri, localName, qName);
@@ -378,7 +376,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#characters(char[],int,int)
      */
-    public void characters (char[] ch, int start, int length)
+    public void characters(char[] ch, int start, int length)
       throws SAXException
     {
       handler.characters(ch, start, length);
@@ -387,7 +385,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#ignorableWhitespace(char[],int,int)
      */
-    public void ignorableWhitespace (char[] ch, int start, int length)
+    public void ignorableWhitespace(char[] ch, int start, int length)
       throws SAXException
     {
       handler.ignorableWhitespace(ch, start, length);
@@ -396,7 +394,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#processingInstruction(String,String)
      */
-    public void processingInstruction (String target, String data)
+    public void processingInstruction(String target, String data)
       throws SAXException
     {
       handler.processingInstruction(target, data);
@@ -405,7 +403,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#skippedEntity(String)
      */
-    public void skippedEntity (String name)
+    public void skippedEntity(String name)
       throws SAXException
     {
       handler.skippedEntity(name);
@@ -414,7 +412,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#warning(SAXParseException)
      */
-    public void warning (SAXParseException e)
+    public void warning(SAXParseException e)
       throws SAXException
     {
       errorHandler.warning(e);
@@ -423,7 +421,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#error(SAXParseException)
      */
-    public void error (SAXParseException e)
+    public void error(SAXParseException e)
       throws SAXException
     {
       errorHandler.error(e);
@@ -432,7 +430,7 @@ public class XmlUtils
     /**
      * @see DefaultHandler#fatalError(SAXParseException)
      */
-    public void fatalError (SAXParseException e)
+    public void fatalError(SAXParseException e)
       throws SAXException
     {
       errorHandler.fatalError(e);
@@ -462,38 +460,38 @@ public class XmlUtils
     /**
      * {@inheritDoc}
      */
-    public void warning (SAXParseException _ex)
+    public void warning(SAXParseException ex)
       throws SAXException
     {
-      addError(_ex, true);
+      addError(ex, true);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void error (SAXParseException _ex)
+    public void error(SAXParseException ex)
       throws SAXException
     {
-      addError(_ex, false);
+      addError(ex, false);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void fatalError (SAXParseException _ex)
+    public void fatalError(SAXParseException ex)
       throws SAXException
     {
-      addError(_ex, false);
+      addError(ex, false);
     }
 
     /**
      * Adds the supplied SAXException as an Error.
      *
-     * @param _ex The SAXException.
+     * @param ex The SAXException.
      */
-    private void addError (SAXParseException _ex, boolean _warning)
+    private void addError(SAXParseException ex, boolean warning)
     {
-      String location = _ex.getSystemId();
+      String location = ex.getSystemId();
       if(location != null){
         if(location.startsWith("file://")){
           location = location.substring("file://".length());
@@ -510,11 +508,11 @@ public class XmlUtils
       }
       try{
         errors.add(new Error(
-              _ex.getMessage(),
+              ex.getMessage(),
               URLDecoder.decode(location, "utf-8"),
-              _ex.getLineNumber(),
-              _ex.getColumnNumber(),
-              _warning));
+              ex.getLineNumber(),
+              ex.getColumnNumber(),
+              warning));
       }catch(Exception e){
         throw new RuntimeException(e);
       }
@@ -525,7 +523,7 @@ public class XmlUtils
      *
      * @return Array of Error.
      */
-    public List<Error> getErrors ()
+    public List<Error> getErrors()
     {
       return errors;
     }
@@ -551,20 +549,20 @@ public class XmlUtils
     /**
      * Constructs a new instance.
      *
-     * @param _path The path for all relative entities to be relative to.
+     * @param path The path for all relative entities to be relative to.
      */
-    public EntityResolver (String _path)
+    public EntityResolver (String path)
     {
-      path = _path;
+      this.path = path;
     }
 
     /**
      * {@inheritDoc}
      */
-    public InputSource resolveEntity (String _publicId, String _systemId)
+    public InputSource resolveEntity(String publicId, String systemId)
       throws SAXException, IOException
     {
-      String location = _systemId;
+      String location = systemId;
       // rolling the dice to fix windows issue where parser, or something, is
       // turning C:/... into C/.  This would cause problems if someone acutally
       // has a single letter directory, but that is doubtful.
@@ -572,7 +570,7 @@ public class XmlUtils
 
       if(location.startsWith(TEMP_PREFIX)){
         location = location.substring(TEMP_PREFIX.length());
-        return resolveEntity(_publicId, lastPath + location);
+        return resolveEntity(publicId, lastPath + location);
       }else if(location.startsWith("http://")){
         int index = location.indexOf('/', 8);
         lastPath = location.substring(0, index + 1);
@@ -593,7 +591,7 @@ public class XmlUtils
             }
 
             // download and save remote file.
-            URL remote = new URL(_systemId);
+            URL remote = new URL(systemId);
             in = remote.openStream();
             out = tempFile.getContent().getOutputStream();
             IOUtils.copy(in, out);
@@ -623,9 +621,8 @@ public class XmlUtils
         if(location.startsWith("//")){
           location = location.substring(2);
         }
-        if(FileUtils.getFullPath(location).equals(
-              FileUtils.getPath(location)))
-        {
+        if (FileUtils.getFullPath(location).equals(
+              FileUtils.getPath(location))){
           location = FileUtils.concat(path, location);
         }
 
@@ -645,7 +642,7 @@ public class XmlUtils
         return new InputSource(location);
       }
 
-      return new InputSource(_systemId);
+      return new InputSource(systemId);
     }
   }
 }

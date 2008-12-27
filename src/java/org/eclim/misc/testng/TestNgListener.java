@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ public class TestNgListener
    * {@inheritDoc}
    * @see org.testng.ITestListener#onTestFailure(ITestResult)
    */
-  public void onTestFailure (ITestResult _result)
+  public void onTestFailure(ITestResult result)
   {
     System.out.println("eclim testng: " +
-        _result.getTestClass().getName() + ':' +
-        _result.getMethod().getMethodName());
+        result.getTestClass().getName() + ':' +
+        result.getMethod().getMethodName());
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class VUnitTask
   /**
    * Executes this task.
    */
-  public void execute ()
+  public void execute()
     throws BuildException
   {
     validateAttributes();
@@ -162,8 +162,7 @@ public class VUnitTask
 
           if(failed){
             if (failureProperty != null &&
-                getProject().getProperty(failureProperty) == null)
-            {
+                getProject().getProperty(failureProperty) == null){
               getProject().setNewProperty(failureProperty, "true");
             }
 
@@ -183,7 +182,7 @@ public class VUnitTask
   /**
    * Validates the supplied attributes.
    */
-  private void validateAttributes ()
+  private void validateAttributes()
     throws BuildException
   {
     if(plugin == null){
@@ -213,7 +212,7 @@ public class VUnitTask
    * Adds a set of test files to execute.
    * @param set Set of test files.
    */
-  public void addFileset (FileSet set)
+  public void addFileset(FileSet set)
   {
     filesets.add(set);
   }
@@ -222,7 +221,7 @@ public class VUnitTask
    * Adds a property to be set when running the tests.
    * @param prop The property.
    */
-  public void addSysproperty (Environment.Variable prop)
+  public void addSysproperty(Environment.Variable prop)
   {
     properties.add(prop);
   }
@@ -232,7 +231,7 @@ public class VUnitTask
    *
    * @param plugin The plugin.
    */
-  public void setPlugin (File plugin)
+  public void setPlugin(File plugin)
   {
     this.plugin = plugin;
   }
@@ -242,7 +241,7 @@ public class VUnitTask
    *
    * @param todir The todir.
    */
-  public void setTodir (File todir)
+  public void setTodir(File todir)
   {
     this.todir = todir;
   }
@@ -252,7 +251,7 @@ public class VUnitTask
    *
    * @param failureProperty The failureProperty.
    */
-  public void setFailureproperty (String failureProperty)
+  public void setFailureproperty(String failureProperty)
   {
     this.failureProperty = failureProperty;
   }
@@ -262,7 +261,7 @@ public class VUnitTask
    *
    * @param haltOnFailure The haltOnFailure.
    */
-  public void setHaltonfailure (boolean haltOnFailure)
+  public void setHaltonfailure(boolean haltOnFailure)
   {
     this.haltOnFailure = haltOnFailure;
   }
@@ -277,7 +276,7 @@ public class VUnitTask
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
-    public void startElement (
+    public void startElement(
         String uri, String localName, String qName, Attributes atts)
       throws SAXException
     {

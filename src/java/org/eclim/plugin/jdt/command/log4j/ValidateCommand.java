@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,11 +54,11 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
 
     Log4jHandler handler = new Log4jHandler(
         JavaUtils.getJavaProject(project), file);
@@ -66,7 +66,7 @@ public class ValidateCommand
     List<Error> errors = super.validate(project, file, false, handler);
     errors.addAll(handler.getErrors());
 
-    return ErrorFilter.instance.filter(_commandLine, errors);
+    return ErrorFilter.instance.filter(commandLine, errors);
   }
 
   private static class Log4jHandler
@@ -115,7 +115,7 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(Locator)
      */
-    public void setDocumentLocator (Locator locator)
+    public void setDocumentLocator(Locator locator)
     {
       super.setDocumentLocator(locator);
       this.locator = locator;
@@ -125,7 +125,7 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
-    public void startElement (
+    public void startElement(
         String uri, String localName, String qName, Attributes atts)
       throws SAXException
     {
@@ -194,12 +194,12 @@ public class ValidateCommand
      *
      * @return List of errors.
      */
-    public List<Error> getErrors ()
+    public List<Error> getErrors()
     {
       return errors;
     }
 
-    private IPackageFragment getPackage (String name)
+    private IPackageFragment getPackage(String name)
       throws Exception
     {
       IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();

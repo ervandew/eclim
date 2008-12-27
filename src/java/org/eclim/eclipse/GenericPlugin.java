@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,30 +43,30 @@ public class GenericPlugin
   /**
    * This method is called upon plug-in activation
    *
-   * @param _context The bundle context.
+   * @param context The bundle context.
    */
-  public void start (BundleContext _context)
+  public void start(BundleContext context)
     throws Exception
   {
-    super.start(_context);
+    super.start(context);
   }
 
   /**
    * This method is called when the plug-in is stopped
    *
-   * @param _context The bundle context.
+   * @param context The bundle context.
    */
-  public void stop (BundleContext _context)
+  public void stop(BundleContext context)
     throws Exception
   {
-    super.stop(_context);
+    super.stop(context);
     plugin = null;
   }
 
   /**
    * Returns the shared instance.
    */
-  public static GenericPlugin getDefault ()
+  public static GenericPlugin getDefault()
   {
     return plugin;
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ public interface Command
   /**
    * Executes the command with the supplied options.
    *
-   * @param _commandLine The commandLine options supplied.
+   * @param commandLine The commandLine options supplied.
    * @return The result.
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception;
 }

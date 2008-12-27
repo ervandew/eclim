@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 " }}}
 
 " Help(tag) {{{
-function! eclim#help#Help (tag, link)
+function! eclim#help#Help(tag, link)
   let savetags = &tags
   exec 'set tags=' . escape(escape(g:EclimHelpDir, ' '), ' ') . '/**/tags'
   try
@@ -72,12 +72,12 @@ function! eclim#help#Help (tag, link)
 endfunction " }}}
 
 " HelpGrep() {{{
-function! eclim#help#HelpGrep (args)
+function! eclim#help#HelpGrep(args)
   exec 'vimgrep ' a:args . ' ' . g:EclimHelpDir . '/**/*.txt'
 endfunction " }}}
 
 " s:HelpWindow() {{{
-function s:HelpWindow ()
+function s:HelpWindow()
   let max = winnr('$')
   let index = 1
   while index <= max
@@ -92,7 +92,7 @@ function s:HelpWindow ()
 endfunction " }}}
 
 " CommandComplete(argLead, cmdLine, cursorPos) {{{
-function! eclim#help#CommandCompleteTag (argLead, cmdLine, cursorPos)
+function! eclim#help#CommandCompleteTag(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 

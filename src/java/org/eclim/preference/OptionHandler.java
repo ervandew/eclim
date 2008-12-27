@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,41 +33,41 @@ public interface OptionHandler
    *
    * @return The project nature id.
    */
-  public String getNature ();
+  public String getNature();
 
   /**
    * Gets the manage options as a Map.
    *
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String,String> getOptionsAsMap ()
+  public Map<String, String> getOptionsAsMap()
     throws Exception;
 
   /**
    * Gets the manage options as a Map for the supplied project.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String,String> getOptionsAsMap (IProject _project)
+  public Map<String, String> getOptionsAsMap(IProject project)
     throws Exception;
 
   /**
    * Sets the supplied option.
    *
-   * @param _name The option name.
-   * @param _value The option value.
+   * @param name The option name.
+   * @param value The option value.
    */
-  public void setOption (String _name, String _value)
+  public void setOption(String name, String value)
     throws Exception;
 
   /**
    * Sets the supplied option for the specified project.
    *
-   * @param _project The project.
-   * @param _name The option name.
-   * @param _value The option value.
+   * @param project The project.
+   * @param name The option name.
+   * @param value The option value.
    */
-  public void setOption (IProject _project, String _name, String _value)
+  public void setOption(IProject project, String name, String value)
     throws Exception;
 }

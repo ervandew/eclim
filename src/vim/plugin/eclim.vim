@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ endif
 
 " EclimBaseDir() {{{
 " Gets the base directory where the eclim vim scripts are located.
-function EclimBaseDir ()
+function EclimBaseDir()
   if !exists("g:EclimBaseDir")
     let savewig = &wildignore
     set wildignore=""
@@ -51,7 +51,7 @@ endfunction " }}}
 
 " Init() {{{
 " Initializes eclim.
-function s:Init ()
+function s:Init()
   " on windows, this eclim plugin gets called first, so force taglist to be
   " called prior.
   runtime! plugin/taglist.vim
@@ -68,7 +68,7 @@ endfunction " }}}
 
 " Validate() {{{
 " Validates some settings and environment values required by eclim.
-function s:Validate ()
+function s:Validate()
   let errors = []
 
   " Check vim version.

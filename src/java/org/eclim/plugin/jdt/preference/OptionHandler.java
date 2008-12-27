@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class OptionHandler
    * {@inheritDoc}
    * @see org.eclim.preference.OptionHandler#getNature()
    */
-  public String getNature ()
+  public String getNature()
   {
     return NATURE;
   }
@@ -51,7 +51,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String,String> getOptionsAsMap ()
+  public Map<String, String> getOptionsAsMap()
     throws Exception
   {
     return JavaCore.getOptions();
@@ -60,13 +60,13 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String,String> getOptionsAsMap (IProject _project)
+  public Map<String, String> getOptionsAsMap(IProject project)
     throws Exception
   {
-    IJavaProject javaProject = JavaCore.create(_project);
+    IJavaProject javaProject = JavaCore.create(project);
     if(!javaProject.exists()){
       throw new IllegalArgumentException(Services.getMessage(
-            "project.not.found", _project.getName()));
+            "project.not.found", project.getName()));
     }
 
     return javaProject.getOptions(true);
@@ -75,15 +75,15 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public void setOption (String _name, String _value)
+  public void setOption(String name, String value)
     throws Exception
   {
-    Map<String,String> options = JavaCore.getOptions();
+    Map<String, String> options = JavaCore.getOptions();
 
-    if(_name.equals(JavaCore.COMPILER_SOURCE)){
-      JavaUtils.setCompilerSourceCompliance((String)_value);
+    if(name.equals(JavaCore.COMPILER_SOURCE)){
+      JavaUtils.setCompilerSourceCompliance(value);
     }else{
-      options.put(_name, _value);
+      options.put(name, value);
       JavaCore.setOptions((Hashtable)options);
     }
   }
@@ -91,23 +91,23 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public void setOption (IProject _project, String _name, String _value)
+  public void setOption(IProject project, String name, String value)
     throws Exception
   {
-    IJavaProject javaProject = JavaCore.create(_project);
+    IJavaProject javaProject = JavaCore.create(project);
     if(!javaProject.exists()){
       throw new IllegalArgumentException(
-          Services.getMessage("project.not.found", _project.getName()));
+          Services.getMessage("project.not.found", project.getName()));
     }
-    Map<String,String> global = javaProject.getOptions(true);
-    Map<String,String> options = javaProject.getOptions(false);
+    Map<String, String> global = javaProject.getOptions(true);
+    Map<String, String> options = javaProject.getOptions(false);
 
-    Object current = global.get(_name);
-    if(current == null || !current.equals(_value)){
-      if(_name.equals(JavaCore.COMPILER_SOURCE)){
-        JavaUtils.setCompilerSourceCompliance(javaProject, (String)_value);
+    Object current = global.get(name);
+    if(current == null || !current.equals(value)){
+      if(name.equals(JavaCore.COMPILER_SOURCE)){
+        JavaUtils.setCompilerSourceCompliance(javaProject, value);
       }else{
-        options.put(_name, _value);
+        options.put(name, value);
         javaProject.setOptions(options);
       }
     }

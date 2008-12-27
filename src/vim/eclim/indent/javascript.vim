@@ -10,7 +10,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ setlocal indentexpr=EclimGetJavascriptIndent(v:lnum)
 setlocal indentkeys+=0),0},),;
 
 " EclimGetJavascriptIndent(lnum) {{{
-function! EclimGetJavascriptIndent (lnum)
+function! EclimGetJavascriptIndent(lnum)
   let line = getline(a:lnum)
   let prevlnum = prevnonblank(a:lnum - 1)
   let prevline = getline(prevlnum)
@@ -99,7 +99,7 @@ function! EclimGetJavascriptIndent (lnum)
 endfunction " }}}
 
 " JavascriptIndentAnythingSettings() {{{
-function! JavascriptIndentAnythingSettings ()
+function! JavascriptIndentAnythingSettings()
   " Syntax name REs for comments and strings.
   let b:commentRE      = 'javaScript\(Line\)\?Comment'
   let b:lineCommentRE  = 'javaScriptLineComment'

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ augroup END
 " }}}
 
 " s:InitSettings() {{{
-function! s:InitSettings ()
+function! s:InitSettings()
   let file = expand("<afile>")
   let size = getfsize(file)
   if size >= s:file_size || size == -2
@@ -66,7 +66,7 @@ function! s:InitSettings ()
 endfunction " }}}
 
 " s:ApplySettings() {{{
-function! s:ApplySettings ()
+function! s:ApplySettings()
   set undolevels=-1
   if !exists('b:largefile_notified')
     let b:largefile_notified = 1
@@ -75,7 +75,7 @@ function! s:ApplySettings ()
 endfunction " }}}
 
 " s:RevertSettings() {{{
-function! s:RevertSettings ()
+function! s:RevertSettings()
   let &undolevels=b:save_undo
   let &eventignore=b:save_events
 endfunction " }}}

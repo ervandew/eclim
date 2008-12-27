@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ public class TaglistFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, TagResult[] _result)
+  public String filter(CommandLine commandLine, TagResult[] results)
   {
     StringBuffer buffer = new StringBuffer();
 
-    for (TagResult result : _result){
+    for (TagResult result : results){
       if(buffer.length() > 0){
         buffer.append('\n');
       }

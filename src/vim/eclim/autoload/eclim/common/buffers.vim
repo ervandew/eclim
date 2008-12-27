@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ endif
 
 " Buffers() {{{
 " Like, :buffers, but opens a temporary buffer.
-function! eclim#common#buffers#Buffers ()
+function! eclim#common#buffers#Buffers()
   redir => list
   silent exec 'buffers'
   redir END
@@ -99,7 +99,7 @@ function! eclim#common#buffers#Buffers ()
 endfunction " }}}
 
 " BufferCompare(buffer1, buffer2) {{{
-function! eclim#common#buffers#BufferCompare (buffer1, buffer2)
+function! eclim#common#buffers#BufferCompare(buffer1, buffer2)
   exec 'let attr1 = a:buffer1.' . g:EclimBuffersSort
   exec 'let attr2 = a:buffer2.' . g:EclimBuffersSort
   let compare = attr1 == attr2 ? 0 : attr1 > attr2 ? 1 : -1
@@ -110,7 +110,7 @@ function! eclim#common#buffers#BufferCompare (buffer1, buffer2)
 endfunction " }}}
 
 " Only() {{{
-function! eclim#common#buffers#Only ()
+function! eclim#common#buffers#Only()
   let curwin = winnr()
   let winnum = 1
   while winnum <= winnr('$')
@@ -130,7 +130,7 @@ function! eclim#common#buffers#Only ()
 endfunction " }}}
 
 " s:BufferDelete() {{{
-function! s:BufferDelete ()
+function! s:BufferDelete()
   let line = line('.')
   let index = line - 1
   exec 'bd ' . b:eclim_buffers[index].bufnr
@@ -143,7 +143,7 @@ function! s:BufferDelete ()
 endfunction " }}}
 
 " s:BufferEntryToLine(buffer, filelength) {{{
-function! s:BufferEntryToLine (buffer, filelength)
+function! s:BufferEntryToLine(buffer, filelength)
   let line = ''
   let line .= a:buffer.status =~ '+' ? '+' : ' '
   let line .= a:buffer.status =~ 'a' ? 'active' : 'hidden'
@@ -161,7 +161,7 @@ function! s:BufferEntryToLine (buffer, filelength)
 endfunction " }}}
 
 " s:BufferOpen(cmd) {{{
-function! s:BufferOpen (cmd)
+function! s:BufferOpen(cmd)
   let file = bufname(b:eclim_buffers[line('.') - 1].bufnr)
   let winnr = b:winnr
   close

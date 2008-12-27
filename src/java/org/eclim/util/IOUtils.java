@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class IOUtils
    *
    * @param stream The InputStream to close.
    */
-  public static void closeQuietly (InputStream stream)
+  public static void closeQuietly(InputStream stream)
   {
     try{
       if(stream != null){
@@ -59,7 +59,7 @@ public class IOUtils
    *
    * @param stream The OutputStream to close.
    */
-  public static void closeQuietly (OutputStream stream)
+  public static void closeQuietly(OutputStream stream)
   {
     try{
       if(stream != null){
@@ -75,7 +75,7 @@ public class IOUtils
    *
    * @param stream The Reader to close.
    */
-  public static void closeQuietly (Reader stream)
+  public static void closeQuietly(Reader stream)
   {
     try{
       if(stream != null){
@@ -91,7 +91,7 @@ public class IOUtils
    *
    * @param stream The Writer to close.
    */
-  public static void closeQuietly (Writer stream)
+  public static void closeQuietly(Writer stream)
   {
     try{
       if(stream != null){
@@ -108,7 +108,7 @@ public class IOUtils
    * @param in The InputStream.
    * @param out The OutputStream.
    */
-  public static void copy (InputStream in, OutputStream out)
+  public static void copy(InputStream in, OutputStream out)
     throws IOException
   {
     byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
@@ -124,7 +124,7 @@ public class IOUtils
    * @param in The Reader.
    * @param out The Writer.
    */
-  public static void copy (Reader in, Writer out)
+  public static void copy(Reader in, Writer out)
     throws IOException
   {
     char[] buffer = new char[DEFAULT_BUFFER_SIZE];
@@ -141,7 +141,7 @@ public class IOUtils
    * @param in The InputStream to read.
    * @return The InputStream contents.
    */
-  public static String toString (InputStream in)
+  public static String toString(InputStream in)
     throws IOException
   {
     return toString(new InputStreamReader(in));
@@ -154,7 +154,7 @@ public class IOUtils
    * @param in The Reader to read.
    * @return The Reader contents.
    */
-  public static String toString (Reader in)
+  public static String toString(Reader in)
     throws IOException
   {
     StringWriter out = new StringWriter();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,11 +64,11 @@ public class ClassPrototypeCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String className = _commandLine.getValue(Options.CLASSNAME_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String className = commandLine.getValue(Options.CLASSNAME_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
 
     File file = new File(
       SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
@@ -98,19 +98,19 @@ public class ClassPrototypeCommand
   /**
    * Top level method for generating a prototype of the supplied type.
    *
-   * @param _type The type.
+   * @param type The type.
    * @return The resulting prototype.
    */
-  protected String prototype (IType _type)
+  protected String prototype(IType type)
     throws Exception
   {
     Set<String> imports = new TreeSet<String>();
     StringBuffer buffer = new StringBuffer();
     buffer.append(Services.getMessage("prototype.header"));
     buffer.append("package ")
-      .append(_type.getPackageFragment().getElementName())
+      .append(type.getPackageFragment().getElementName())
       .append(";\n");
-    prototype(buffer, _type, "", imports);
+    prototype(buffer, type, "", imports);
 
     // insert the imports
     StringBuffer importClauses = new StringBuffer().append("\n\n");
@@ -126,250 +126,249 @@ public class ClassPrototypeCommand
   /**
    * Prototype the supplied type.
    *
-   * @param _buffer The buffer to append to.
-   * @param _type The type.
-   * @param _indent The indent.
-   * @param _imports Keep track of imports.
+   * @param buffer The buffer to append to.
+   * @param type The type.
+   * @param indent The indent.
+   * @param imports Keep track of imports.
    */
-  protected void prototype (
-      StringBuffer _buffer, IType _type, String _indent, Set<String> _imports)
+  protected void prototype(
+      StringBuffer buffer, IType type, String indent, Set<String> imports)
     throws Exception
   {
-    _buffer.append(_indent);
-    prototypeFlags(_buffer, _type);
+    buffer.append(indent);
+    prototypeFlags(buffer, type);
 
-    int flags = _type.getFlags();
+    int flags = type.getFlags();
     if(Flags.isEnum(flags)){
-      _buffer.append("enum ");
+      buffer.append("enum ");
     }else if(Flags.isInterface(flags)){
-      _buffer.append("interface ");
+      buffer.append("interface ");
     }else if(Flags.isAnnotation(flags)){
-      _buffer.append("@interface ");
+      buffer.append("@interface ");
     }else{
-      _buffer.append("class ");
+      buffer.append("class ");
     }
-    _buffer.append(_type.getElementName());
+    buffer.append(type.getElementName());
 
     // extends
-    String superclass = _type.getSuperclassName();
+    String superclass = type.getSuperclassName();
     if(superclass != null){
-      _buffer.append('\n').append(_indent).append(INDENT)
+      buffer.append('\n').append(indent).append(INDENT)
         .append("extends ").append(superclass);
     }
 
     // implements
-    String[] interfaces = _type.getSuperInterfaceNames();
+    String[] interfaces = type.getSuperInterfaceNames();
     if(interfaces != null && interfaces.length > 0){
-      _buffer.append('\n').append(_indent).append(INDENT).append("implements ");
+      buffer.append('\n').append(indent).append(INDENT).append("implements ");
       for(int ii = 0; ii < interfaces.length; ii++){
         if(ii != 0){
-          _buffer.append(", ");
+          buffer.append(", ");
         }
-        _buffer.append(interfaces[ii]);
+        buffer.append(interfaces[ii]);
       }
     }
 
-    _buffer.append('\n').append(_indent).append("{\n");
+    buffer.append('\n').append(indent).append("{\n");
 
-    int length = _buffer.length();
+    int length = buffer.length();
 
     // fields
-    IField[] fields = _type.getFields();
+    IField[] fields = type.getFields();
     for(int ii = 0; ii < fields.length; ii++){
-      prototypeField(_buffer, fields[ii], _indent + INDENT, _imports);
+      prototypeField(buffer, fields[ii], indent + INDENT, imports);
     }
 
     // methods
-    IMethod[] methods = _type.getMethods();
+    IMethod[] methods = type.getMethods();
     if(methods != null && methods.length > 0){
       for(int ii = 0; ii < methods.length; ii++){
-        if(length != _buffer.length()){
-          _buffer.append('\n');
+        if(length != buffer.length()){
+          buffer.append('\n');
         }
-        length = _buffer.length();
-        prototypeMethod(_buffer, methods[ii], _indent + INDENT, _imports);
+        length = buffer.length();
+        prototypeMethod(buffer, methods[ii], indent + INDENT, imports);
       }
     }
 
     // inner classes, enums, etc.
-    IType[] types = _type.getTypes();
+    IType[] types = type.getTypes();
     if(types != null && types.length > 0){
-      if(length != _buffer.length()){
-        _buffer.append('\n');
+      if(length != buffer.length()){
+        buffer.append('\n');
       }
       for(int ii = 0; ii < types.length; ii++){
         if(ii > 0){
-          _buffer.append('\n');
+          buffer.append('\n');
         }
-        prototype(_buffer, types[ii], _indent + INDENT, _imports);
-        _buffer.append('\n');
+        prototype(buffer, types[ii], indent + INDENT, imports);
+        buffer.append('\n');
       }
     }
 
-    _buffer.append(_indent).append("}");
+    buffer.append(indent).append("}");
   }
 
   /**
    * Prototypes the supplied field.
    *
-   * @param _buffer The buffer to append to.
-   * @param _field The field.
-   * @param _indent The current indentation.
-   * @param _imports Keep track of imports.
+   * @param buffer The buffer to append to.
+   * @param field The field.
+   * @param indent The current indentation.
+   * @param imports Keep track of imports.
    */
-  protected void prototypeField (
-      StringBuffer _buffer, IField _field, String _indent, Set<String> _imports)
+  protected void prototypeField(
+      StringBuffer buffer, IField field, String indent, Set<String> imports)
     throws Exception
   {
-    String fieldName = _field.getElementName();
+    String fieldName = field.getElementName();
     if(fieldName.indexOf("$") == -1){
-      _buffer.append(_indent);
-      prototypeFlags(_buffer, _field);
+      buffer.append(indent);
+      prototypeFlags(buffer, field);
 
-      String type = _field.getTypeSignature();
+      String type = field.getTypeSignature();
       String typeName = Signature.getSignatureSimpleName(type);
-      _buffer.append(typeName).append(' ').append(_field.getElementName());
+      buffer.append(typeName).append(' ').append(field.getElementName());
 
-      addImport(_imports, type);
+      addImport(imports, type);
 
-      Object defaultValue = _field.getConstant();
+      Object defaultValue = field.getConstant();
       if(defaultValue != null){
-        _buffer.append(" = ");
+        buffer.append(" = ");
         if(typeName.equals("char")){
-          _buffer.append('\'').append(defaultValue).append('\'');
+          buffer.append('\'').append(defaultValue).append('\'');
         }else if(typeName.equals("int") ||
             typeName.equals("long") ||
             typeName.equals("short") ||
             typeName.equals("double") ||
             typeName.equals("float") ||
             typeName.equals("boolean") ||
-            typeName.equals("byte"))
-        {
-          _buffer.append(defaultValue);
+            typeName.equals("byte")){
+          buffer.append(defaultValue);
         }else if(defaultValue instanceof String){
-          _buffer.append('"').append(defaultValue).append('"');
+          buffer.append('"').append(defaultValue).append('"');
         }else{
           logger.warn("Unhandled constant value: '{}' '{}'",
               defaultValue.getClass().getName(), defaultValue);
         }
       }
-      _buffer.append(";\n");
+      buffer.append(";\n");
     }
   }
 
   /**
    * Prototypes the supplied method.
    *
-   * @param _buffer The buffer to append to.
-   * @param _method The method.
-   * @param _indent The current indentation.
-   * @param _imports Keep track of imports.
+   * @param buffer The buffer to append to.
+   * @param method The method.
+   * @param indent The current indentation.
+   * @param imports Keep track of imports.
    */
-  protected void prototypeMethod (
-      StringBuffer _buffer, IMethod _method, String _indent, Set<String> _imports)
+  protected void prototypeMethod(
+      StringBuffer buffer, IMethod method, String indent, Set<String> imports)
     throws Exception
   {
-    String methodName = _method.getElementName();
+    String methodName = method.getElementName();
     if(methodName.indexOf("$") == -1 && !methodName.equals("<clinit>")){
-      _buffer.append(_indent);
-      prototypeFlags(_buffer, _method);
-      String returnType = _method.getReturnType();
+      buffer.append(indent);
+      prototypeFlags(buffer, method);
+      String returnType = method.getReturnType();
       String returnTypeName = Signature.getSignatureSimpleName(returnType);
 
-      addImport(_imports, returnType);
+      addImport(imports, returnType);
 
-      _buffer.append(returnTypeName)
+      buffer.append(returnTypeName)
         .append(' ').append(methodName).append(" (");
 
       // parameters
-      String[] paramNames = _method.getParameterNames();
-      String[] paramTypes = _method.getParameterTypes();
+      String[] paramNames = method.getParameterNames();
+      String[] paramTypes = method.getParameterTypes();
       if(paramNames.length > 0){
         for(int ii = 0; ii < paramNames.length; ii++){
           if(ii != 0){
-            _buffer.append(", ");
+            buffer.append(", ");
           }
-          addImport(_imports, paramTypes[ii]);
+          addImport(imports, paramTypes[ii]);
 
           String typeName = Signature.getSignatureSimpleName(paramTypes[ii]);
-          _buffer.append(typeName).append(' ').append(paramNames[ii]);
+          buffer.append(typeName).append(' ').append(paramNames[ii]);
         }
       }
 
-      _buffer.append(")");
+      buffer.append(")");
 
       // throws
-      String[] exceptions = _method.getExceptionTypes();
+      String[] exceptions = method.getExceptionTypes();
       if(exceptions.length > 0){
-        _buffer.append('\n').append(_indent).append(INDENT).append("throws ");
+        buffer.append('\n').append(indent).append(INDENT).append("throws ");
         for(int ii = 0; ii < exceptions.length; ii++){
           if(ii != 0){
-            _buffer.append(", ");
+            buffer.append(", ");
           }
-          _buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
+          buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
         }
       }
 
-      _buffer.append(";\n");
+      buffer.append(";\n");
     }
   }
 
   /**
    * Prototypes the given member's flags.
    *
-   * @param _buffer The buffer to append to.
-   * @param _member The member instance.
+   * @param buffer The buffer to append to.
+   * @param member The member instance.
    */
-  protected void prototypeFlags (StringBuffer _buffer, IMember _member)
+  protected void prototypeFlags(StringBuffer buffer, IMember member)
     throws Exception
   {
-    int flags = _member.getFlags();
+    int flags = member.getFlags();
 
     if(Flags.isPublic(flags)){
-      _buffer.append("public ");
+      buffer.append("public ");
     }else if(Flags.isProtected(flags)){
-      _buffer.append("protected ");
+      buffer.append("protected ");
     }else if(Flags.isPrivate(flags)){
-      _buffer.append("private ");
+      buffer.append("private ");
     }
 
     if(Flags.isStatic(flags)){
-      _buffer.append("static ");
+      buffer.append("static ");
     }
     if(Flags.isFinal(flags)){
-      _buffer.append("final ");
+      buffer.append("final ");
     }
     if(Flags.isAbstract(flags)){
-      _buffer.append("abstract ");
+      buffer.append("abstract ");
     }
     if(Flags.isNative(flags)){
-      _buffer.append("native ");
+      buffer.append("native ");
     }
     if(Flags.isTransient(flags)){
-      _buffer.append("transient ");
+      buffer.append("transient ");
     }
     if(Flags.isVolatile(flags)){
-      _buffer.append("volatile ");
+      buffer.append("volatile ");
     }
     if(Flags.isSynchronized(flags)){
-      _buffer.append("synchronized ");
+      buffer.append("synchronized ");
     }
   }
 
   /**
    * Adds the supplied signature to the specified set of imports.
    *
-   * @param _imports The imports.
-   * @param _signature The signature of the type to add.
+   * @param imports The imports.
+   * @param signature The signature of the type to add.
    */
-  protected void addImport (Set<String> _imports, String _signature)
+  protected void addImport(Set<String> imports, String signature)
   {
-    String name = Signature.getSignatureSimpleName(_signature);
+    String name = Signature.getSignatureSimpleName(signature);
     if(name.length() > 1 && !name.equals("void")){
-      String pckg = Signature.getSignatureQualifier(_signature);
+      String pckg = Signature.getSignatureQualifier(signature);
       if(pckg != null && pckg.length() > 0){
         name = pckg + '.' + name;
-        _imports.add(name.replaceFirst(IMPORT_PATTERN, ""));
+        imports.add(name.replaceFirst(IMPORT_PATTERN, ""));
       }
     }
   }

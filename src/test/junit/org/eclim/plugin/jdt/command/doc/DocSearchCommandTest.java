@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class DocSearchCommandTest
     "src/org/eclim/test/doc/TestDocSearch.java";
 
   @Test
-  public void elementSearch ()
+  public void elementSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -54,7 +54,7 @@ public class DocSearchCommandTest
   }
 
   @Test
-  public void patternSearch ()
+  public void patternSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -74,7 +74,7 @@ public class DocSearchCommandTest
   }
 
   @Test
-  public void methodSearch ()
+  public void methodSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));

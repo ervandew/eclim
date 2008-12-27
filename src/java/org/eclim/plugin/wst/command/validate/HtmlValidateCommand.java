@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,13 +66,13 @@ public class HtmlValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
     final String file = FileUtils.concat(
         ProjectUtils.getPath(project),
-        _commandLine.getValue(Options.FILE_OPTION));
+        commandLine.getValue(Options.FILE_OPTION));
 
     // eclipse wst html valiation... currently not very good.
     /*IProject iproject = ProjectUtils.getProject(project, true);
@@ -136,7 +136,7 @@ public class HtmlValidateCommand
       }
     }
 
-    return ErrorFilter.instance.filter(_commandLine, results);
+    return ErrorFilter.instance.filter(commandLine, results);
   }
 
   /**
@@ -145,7 +145,7 @@ public class HtmlValidateCommand
    * @param line The error line.
    * @return True if the line is accepted, false otherwise.
    */
-  private boolean accept (String line)
+  private boolean accept(String line)
   {
     return
       line.indexOf(": inserting") == -1 &&
@@ -159,7 +159,7 @@ public class HtmlValidateCommand
    * @param line The error line.
    * @return The Error result.
    */
-  private Error parseError (String file, String line)
+  private Error parseError(String file, String line)
     throws Exception
   {
     String[] parts = StringUtils.split(line, ':');

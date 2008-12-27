@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ public interface Parser
    * Parses the supplied file name and returns an array of Dependency defined in
    * that fila.
    *
-   * @param _filename The file to parse.
+   * @param filename The file to parse.
    * @return The array of Dependency.
    */
-  public Dependency[] parse (String _filename)
+  public Dependency[] parse(String filename)
     throws Exception;
 }

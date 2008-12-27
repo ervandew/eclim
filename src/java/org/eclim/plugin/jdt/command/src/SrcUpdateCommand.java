@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,14 +49,14 @@ public class SrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
 
     // only refresh the file.
-    if(!_commandLine.hasOption(Options.VALIDATE_OPTION)){
+    if(!commandLine.hasOption(Options.VALIDATE_OPTION)){
       // getting the file will refresh it.
       ProjectUtils.getFile(projectName, file);
 
@@ -86,7 +86,7 @@ public class SrcUpdateCommand
             problems[ii].isWarning()));
       }
 
-      return ErrorFilter.instance.filter(_commandLine, errors);
+      return ErrorFilter.instance.filter(commandLine, errors);
     }
     return StringUtils.EMPTY;
   }

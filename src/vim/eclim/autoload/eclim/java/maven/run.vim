@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,13 +25,13 @@
 
 " Maven(bang, args) {{{
 " Executes maven 1.x using the supplied arguments.
-function! eclim#java#maven#run#Maven (bang, args)
+function! eclim#java#maven#run#Maven(bang, args)
   call eclim#util#MakeWithCompiler('eclim_maven', a:bang, a:args)
 endfunction " }}}
 
 " Mvn(bang, args) {{{
 " Executes maven 2.x using the supplied arguments.
-function! eclim#java#maven#run#Mvn (bang, args)
+function! eclim#java#maven#run#Mvn(bang, args)
   call eclim#util#MakeWithCompiler('eclim_mvn', a:bang, a:args)
 endfunction " }}}
 

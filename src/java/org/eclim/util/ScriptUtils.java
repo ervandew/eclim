@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,24 +45,24 @@ public class ScriptUtils
   /**
    * Evaluates the specified script and returns the result.
    *
-   * @param _resources The plugin resources.
-   * @param _script The script path relative to the scripts directory.
-   * @param _values Any variable name / value pairs for the script.
+   * @param resources The plugin resources.
+   * @param script The script path relative to the scripts directory.
+   * @param values Any variable name / value pairs for the script.
    * @return The result of evaluating the supplied script.
    */
-  public static Object evaluateScript (
-      PluginResources _resources, String _script, Map<String,Object> _values)
+  public static Object evaluateScript(
+      PluginResources resources, String script, Map<String, Object> values)
     throws Exception
   {
-    Binding binding = new Binding(_values);
+    Binding binding = new Binding(values);
     GroovyShell shell = new GroovyShell(binding);
 
-    String script = FileUtils.separatorsToUnix(
-        FileUtils.concat(SCRIPT_PATH, _script));
-    InputStream stream = _resources.getResourceAsStream(script);
+    String path = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, script));
+    InputStream stream = resources.getResourceAsStream(path);
     if (stream == null){
       throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", script));
+          Services.getMessage("script.not.found", path));
     }
     return shell.evaluate(stream);
   }
@@ -71,18 +71,18 @@ public class ScriptUtils
    * Searches all plugin resources for and parses the names script and returns
    * the Class that can be used to create instances to invoke methods on.
    *
-   * @param _script The script path relative to the scripts directory.
+   * @param script The script path relative to the scripts directory.
    * @return The resulting class.
    */
-  public static Class parseClass (String _script)
+  public static Class parseClass(String script)
     throws Exception
   {
-    String script = FileUtils.separatorsToUnix(
-        FileUtils.concat(SCRIPT_PATH, _script));
-    InputStream stream = Services.getResourceAsStream(script);
+    String path = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, script));
+    InputStream stream = Services.getResourceAsStream(path);
     if (stream == null){
       throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", script));
+          Services.getMessage("script.not.found", path));
     }
     return parseClass(stream);
   }
@@ -91,19 +91,19 @@ public class ScriptUtils
    * Parses the named script from the supplied PluginResources and returns the
    * Class that can be used to create instances to invoke methods on.
    *
-   * @param _resources The plugin resources.
-   * @param _script The script path relative to the scripts directory.
+   * @param resources The plugin resources.
+   * @param script The script path relative to the scripts directory.
    * @return The resulting class.
    */
-  public static Class parseClass (PluginResources _resources, String _script)
+  public static Class parseClass(PluginResources resources, String script)
     throws Exception
   {
-    String script = FileUtils.separatorsToUnix(
-        FileUtils.concat(SCRIPT_PATH, _script));
-    InputStream stream = _resources.getResourceAsStream(script);
+    String path = FileUtils.separatorsToUnix(
+        FileUtils.concat(SCRIPT_PATH, script));
+    InputStream stream = resources.getResourceAsStream(path);
     if (stream == null){
       throw new IllegalArgumentException(
-          Services.getMessage("script.not.found", script));
+          Services.getMessage("script.not.found", path));
     }
     return parseClass(stream);
   }
@@ -112,13 +112,13 @@ public class ScriptUtils
    * Parses the supplied script stream and returns the Class that can be used to
    * create instances to invoke methods on.
    *
-   * @param _stream The stream for the script.
+   * @param stream The stream for the script.
    * @return The resulting class.
    */
-  private static Class parseClass (InputStream _stream)
+  private static Class parseClass(InputStream stream)
     throws Exception
   {
     GroovyClassLoader gcl = new GroovyClassLoader();
-    return gcl.parseClass(_stream);
+    return gcl.parseClass(stream);
   }
 }

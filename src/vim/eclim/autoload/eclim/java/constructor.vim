@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ let s:command_properties =
 " }}}
 
 " Constructor(first, last) {{{
-function! eclim#java#constructor#Constructor (first, last)
+function! eclim#java#constructor#Constructor(first, last)
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif

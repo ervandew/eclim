@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 " Set(key, content, metadata) {{{
 " Adds the supplied content (list of lines) along with the supplied metadata
 " (dictionary of key / value pairs) to the cache under the specified key.
-function! eclim#cache#Set (key, content, ...)
+function! eclim#cache#Set(key, content, ...)
   if !s:InitCache()
     return
   endif
@@ -60,7 +60,7 @@ endfunction " }}}
 " returning 1 for valid and 0 for invalid.
 " Returns a dictionary containing keys 'metadata' and 'content' or an empty
 " dictionary if no valid cache value found.
-function! eclim#cache#Get (key, ...)
+function! eclim#cache#Get(key, ...)
   if !s:InitCache()
     return
   endif
@@ -90,7 +90,7 @@ endfunction " }}}
 
 " Delete(key) {{{
 " Delete any cached content under the specified key.
-function! eclim#cache#Delete (key)
+function! eclim#cache#Delete(key)
   if !s:InitCache()
     return
   endif
@@ -106,13 +106,13 @@ function! eclim#cache#Delete (key)
 endfunction " }}}
 
 " s:GetCachedFilename(key) {{{
-function! s:GetCachedFilename (key)
+function! s:GetCachedFilename(key)
   return g:EclimCacheDir . '/' . substitute(a:key, '\W\+', '_', 'g') . '.cache'
 endfunction " }}}
 
 " s:InitCache() {{{
 " Initializes the cache.
-function! s:InitCache ()
+function! s:InitCache()
   if !isdirectory(g:EclimCacheDir)
     call mkdir(g:EclimCacheDir, 'p')
   endif

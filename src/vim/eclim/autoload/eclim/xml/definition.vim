@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ let s:element_def{'xsd'} =
 " DtdDefinition(element) {{{
 " Opens the current xml file's dtd definition and optionally jumps to an
 " element if an element name supplied.
-function! eclim#xml#definition#DtdDefinition (element)
+function! eclim#xml#definition#DtdDefinition(element)
   let dtd = eclim#xml#util#GetDtd()
   let element = a:element == '' ? eclim#xml#util#GetElementName() : a:element
   call s:OpenDefinition(dtd, element, 'dtd')
@@ -42,7 +42,7 @@ endfunction " }}}
 " XsdDefinition(element) {{{
 " Opens the current xml file's xsd definition and optionally jumps to an
 " element if an element name supplied.
-function! eclim#xml#definition#XsdDefinition (element)
+function! eclim#xml#definition#XsdDefinition(element)
   let element = a:element == '' ? eclim#xml#util#GetElementName() : a:element
   if element =~ ':'
     let namespace = substitute(element, ':.*', '', '')
@@ -56,7 +56,7 @@ endfunction " }}}
 
 " OpenDefinition(file, element, type) {{{
 " Open the supplied definition file and jump to the element if supplied.
-function! s:OpenDefinition (file, element, type)
+function! s:OpenDefinition(file, element, type)
   if a:file == ''
     call eclim#util#EchoWarning('Unable to locate ' . a:type . ' in current file.')
     return

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,39 +35,39 @@ public interface ProjectManager
    * Creates a new project, or if a project already exists, updates it to add
    * the necessary nature(s) for the type of project being created.
    *
-   * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param project The project.
+   * @param commandLine The command line for the project create command.
    */
-  public void create (IProject _project, CommandLine _commandLine)
+  public void create(IProject project, CommandLine commandLine)
     throws Exception;
 
   /**
    * Updates a project.
    *
-   * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param project The project.
+   * @param commandLine The command line for the project create command.
    *
    * @return Array of Error if any errors encountered during update.
    */
-  public List<Error> update (IProject _project, CommandLine _commandLine)
+  public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception;
 
   /**
    * Removes the nature(s) from a project that this manager manages, or deletes
    * the project if no other natures exist for the project.
    *
-   * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param project The project.
+   * @param commandLine The command line for the project create command.
    */
-  public void delete (IProject _project, CommandLine _commandLine)
+  public void delete(IProject project, CommandLine commandLine)
     throws Exception;
 
   /**
    * Refreshes a project by synchronizing it against the files on disk.
    *
-   * @param _project The project.
-   * @param _commandLine The command line for the project create command.
+   * @param project The project.
+   * @param commandLine The command line for the project create command.
    */
-  public void refresh (IProject _project, CommandLine _commandLine)
+  public void refresh(IProject project, CommandLine commandLine)
     throws Exception;
 }

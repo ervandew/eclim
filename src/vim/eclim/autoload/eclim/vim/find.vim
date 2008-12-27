@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ endif
 " FindByContext(bang) {{{
 " Contextual find that determines the type of element under the cursor and
 " executes the appropriate find.
-function! eclim#vim#find#FindByContext (bang)
+function! eclim#vim#find#FindByContext(bang)
   let line = getline('.')
 
   let element = substitute(line,
@@ -134,42 +134,42 @@ endfunction " }}}
 
 " FindCommandDef(name, bang) {{{
 " Finds the definition of the supplied user defined command.
-function! eclim#vim#find#FindCommandDef (name, bang)
+function! eclim#vim#find#FindCommandDef(name, bang)
   call s:Find(a:name, a:bang, 'cmd_def')
 endfunction " }}}
 
 " FindCommandRef(name, bang) {{{
 " Finds the definition of the supplied user defined command.
-function! eclim#vim#find#FindCommandRef (name, bang)
+function! eclim#vim#find#FindCommandRef(name, bang)
   call s:Find(a:name, a:bang, 'cmd_ref')
 endfunction " }}}
 
 " FindFunctionDef(name, bang) {{{
 " Finds the definition of the supplied user defined function.
-function! eclim#vim#find#FindFunctionDef (name, bang)
+function! eclim#vim#find#FindFunctionDef(name, bang)
   call s:Find(a:name, a:bang, 'func_def')
 endfunction " }}}
 
 " FindFunctionRef(name, bang) {{{
 " Finds the definition of the supplied user defined function.
-function! eclim#vim#find#FindFunctionRef (name, bang)
+function! eclim#vim#find#FindFunctionRef(name, bang)
   call s:Find(a:name, a:bang, 'func_ref')
 endfunction " }}}
 
 " FindVariableDef(name, bang) {{{
 " Finds the definition of the supplied variable.
-function! eclim#vim#find#FindVariableDef (name, bang)
+function! eclim#vim#find#FindVariableDef(name, bang)
   call s:Find(a:name, a:bang, 'var_def')
 endfunction " }}}
 
 " FindVariableRef(name, bang) {{{
 " Finds the definition of the supplied variable.
-function! eclim#vim#find#FindVariableRef (name, bang)
+function! eclim#vim#find#FindVariableRef(name, bang)
   call s:Find(a:name, a:bang, 'var_ref')
 endfunction " }}}
 
 " Find(name, bang, context) {{{
-function! s:Find (name, bang, context)
+function! s:Find(name, bang, context)
   let name = a:name
   if name == ''
     let line = getline('.')

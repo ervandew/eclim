@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public class ClasspathVariable
    *
    * @return name as String.
    */
-  public String getName ()
+  public String getName()
   {
     return this.name;
   }
@@ -41,11 +41,11 @@ public class ClasspathVariable
   /**
    * Set name.
    *
-   * @param _name the value to set.
+   * @param name the value to set.
    */
-  public void setName (String _name)
+  public void setName(String name)
   {
-    this.name = _name;
+    this.name = name;
   }
 
   /**
@@ -53,7 +53,7 @@ public class ClasspathVariable
    *
    * @return path as String.
    */
-  public String getPath ()
+  public String getPath()
   {
     return this.path;
   }
@@ -61,18 +61,18 @@ public class ClasspathVariable
   /**
    * Set path.
    *
-   * @param _path the value to set.
+   * @param path the value to set.
    */
-  public void setPath (String _path)
+  public void setPath(String path)
   {
-    this.path = _path;
+    this.path = path;
   }
 
   /**
    * {@inheritDoc}
    * @see Comparable#compareTo(Object)
    */
-  public int compareTo (ClasspathVariable obj)
+  public int compareTo(ClasspathVariable obj)
   {
     if(obj == this){
       return 0;

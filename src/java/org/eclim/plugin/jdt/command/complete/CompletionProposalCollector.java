@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ public class CompletionProposalCollector
     super(cu);
   }
 
-  public void accept (CompletionProposal proposal) {
+  public void accept(CompletionProposal proposal)
+  {
     try {
       if (isFiltered(proposal)){
         return;
@@ -83,7 +84,7 @@ public class CompletionProposalCollector
     }
   }
 
-  public CompletionProposal getProposal (int index)
+  public CompletionProposal getProposal(int index)
   {
     return (CompletionProposal)proposals.get(index);
   }

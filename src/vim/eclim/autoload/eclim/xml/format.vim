@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 " }}}
 
 " Format() {{{
-function! eclim#xml#format#Format ()
+function! eclim#xml#format#Format()
   " first save the file and validate to ensure no errors
   call eclim#util#ExecWithoutAutocmds('update')
   call eclim#xml#validate#Validate('', 1)
@@ -54,7 +54,7 @@ function! eclim#xml#format#Format ()
 endfunction " }}}
 
 " Format(start, end) {{{
-"function! eclim#xml#format#Format (start, end)
+"function! eclim#xml#format#Format(start, end)
 "  if !exists('b:root')
 "    let b:root = s:GetRootLine()
 "
@@ -130,8 +130,8 @@ endfunction " }}}
 "  call setpos('.', pos)
 "endfunction " }}}
 
-" SelectOuterTag (count) {{{
-function! s:SelectOuterTag (count)
+" SelectOuterTag(count) {{{
+function! s:SelectOuterTag(count)
   let pos = getpos('.')
 
   exec 'silent! normal! v' . a:count . 'atv'
@@ -140,8 +140,8 @@ function! s:SelectOuterTag (count)
   return s:VisualSelectionMap()
 endfunction " }}}
 
-" SelectInnerTag () {{{
-function! s:SelectInnerTag ()
+" SelectInnerTag() {{{
+function! s:SelectInnerTag()
   silent! normal! vit
   normal! v
   call cursor(line("'<"), col("'<"))
@@ -149,8 +149,8 @@ function! s:SelectInnerTag ()
   return s:VisualSelectionMap()
 endfunction " }}}
 
-" VisualSelectionMap () {{{
-function! s:VisualSelectionMap ()
+" VisualSelectionMap() {{{
+function! s:VisualSelectionMap()
   let lstart = line("'<")
   let cstart = col("'<")
   let lend = line("'>")
@@ -170,13 +170,13 @@ function! s:VisualSelectionMap ()
 endfunction " }}}
 
 " InsertCr(line, col) {{{
-function! s:InsertCr (line, col)
+function! s:InsertCr(line, col)
   call cursor(a:line, a:col)
   exec "normal! i\<cr>\<esc>"
 endfunction " }}}
 
 " GetRootLine() {{{
-function! s:GetRootLine ()
+function! s:GetRootLine()
   let pos = getpos('.')
 
   let line = 1

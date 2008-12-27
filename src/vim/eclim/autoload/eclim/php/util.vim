@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 
 " UpdateSrcFile(validate) {{{
 " Updates the src file on the server w/ the changes made to the current file.
-function! eclim#php#util#UpdateSrcFile (validate)
+function! eclim#php#util#UpdateSrcFile(validate)
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
@@ -61,7 +61,7 @@ endfunction " }}}
 
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
-function! eclim#php#util#CommandCompleteProject (argLead, cmdLine, cursorPos)
+function! eclim#php#util#CommandCompleteProject(argLead, cmdLine, cursorPos)
   return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'php')
 endfunction " }}}

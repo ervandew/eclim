@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,16 +34,16 @@ public class Position
   /**
    * Constructs a new instance.
    *
-   * @param _filename The file name.
-   * @param _offset The character offset within the file.
-   * @param _length The length of this position (number of characters from the
+   * @param filename The file name.
+   * @param offset The character offset within the file.
+   * @param length The length of this position (number of characters from the
    *   offset).
    */
-  public Position (String _filename, int _offset, int _length)
+  public Position (String filename, int offset, int length)
   {
-    filename = _filename;
-    offset = _offset;
-    length = _length;
+    this.filename = filename;
+    this.offset = offset;
+    this.length = length;
   }
 
   /**
@@ -51,7 +51,7 @@ public class Position
    *
    * @return filename as String.
    */
-  public String getFilename ()
+  public String getFilename()
   {
     return this.filename;
   }
@@ -61,7 +61,7 @@ public class Position
    *
    * @return offset as int.
    */
-  public int getOffset ()
+  public int getOffset()
   {
     return this.offset;
   }
@@ -69,11 +69,11 @@ public class Position
   /**
    * Set offset.
    *
-   * @param _offset offset as int.
+   * @param offset offset as int.
    */
-  public void setOffset (int _offset)
+  public void setOffset(int offset)
   {
-    this.offset = _offset;
+    this.offset = offset;
   }
 
   /**
@@ -81,7 +81,7 @@ public class Position
    *
    * @return length as int.
    */
-  public int getLength ()
+  public int getLength()
   {
     return this.length;
   }
@@ -89,11 +89,11 @@ public class Position
   /**
    * Set length.
    *
-   * @param _length length as int.
+   * @param length length as int.
    */
-  public void setLength (int _length)
+  public void setLength(int length)
   {
-    this.length = _length;
+    this.length = length;
   }
 
   /**
@@ -101,7 +101,7 @@ public class Position
    *
    * @return The message.
    */
-  public String getMessage ()
+  public String getMessage()
   {
     return this.message;
   }
@@ -111,7 +111,7 @@ public class Position
    *
    * @param message The message.
    */
-  public void setMessage (String message)
+  public void setMessage(String message)
   {
     this.message = message;
   }
@@ -121,7 +121,7 @@ public class Position
    * @see Object#equals(Object)
    */
   @Override
-  public boolean equals (Object obj)
+  public boolean equals(Object obj)
   {
     if(!(obj instanceof Position)){
       return false;

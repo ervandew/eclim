@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,23 +36,23 @@ public abstract class AbstractXmlParser
   /**
    * {@inheritDoc}
    */
-  public Dependency[] parse (String _filename)
+  public Dependency[] parse(String filename)
     throws Exception
   {
     if(factory == null){
       factory = DocumentBuilderFactory.newInstance();
     }
 
-    Document document = factory.newDocumentBuilder().parse(new File(_filename));
+    Document document = factory.newDocumentBuilder().parse(new File(filename));
     return parse(document);
   }
 
   /**
    * Parse the dependencies from the supplied document.
    *
-   * @param _document The document.
+   * @param document The document.
    * @return The array of Dependency.
    */
-  public abstract Dependency[] parse (Document _document)
+  public abstract Dependency[] parse(Document document)
     throws Exception;
 }

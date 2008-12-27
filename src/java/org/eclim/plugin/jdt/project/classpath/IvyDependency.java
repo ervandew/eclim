@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,16 +34,16 @@ public class IvyDependency
   /**
    * @see Dependency#Dependency(String,String,String,IPath)
    */
-  public IvyDependency (String _org, String _name, String _version, IPath _path)
+  public IvyDependency (String org, String name, String version, IPath path)
   {
-    super(_org, _name, _version, _path);
+    super(org, name, version, path);
   }
 
   /**
    * {@inheritDoc}
    * @see Dependency#resolveArtifact()
    */
-  public String resolveArtifact ()
+  public String resolveArtifact()
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append(getOrganization()).append(SEPARATOR)

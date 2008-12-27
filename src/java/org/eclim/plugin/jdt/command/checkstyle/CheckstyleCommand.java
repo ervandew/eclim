@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,14 +79,14 @@ public class CheckstyleCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
 
     IProject project = ProjectUtils.getProject(name, true);
-    Map<String,String> options = getPreferences().getOptionsAsMap(project);
+    Map<String, String> options = getPreferences().getOptionsAsMap(project);
 
     String configFile = options.get("org.eclim.java.checkstyle.config");
     String propsFile = options.get("org.eclim.java.checkstyle.properties");
@@ -135,7 +135,7 @@ public class CheckstyleCommand
     checker.addListener(listener);
     checker.process(files);
 
-    return ErrorFilter.instance.filter(_commandLine, listener.getErrors());
+    return ErrorFilter.instance.filter(commandLine, listener.getErrors());
   }
 
   private static class CheckstyleListener
@@ -152,7 +152,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#auditStarted(AuditEvent)
      */
-    public void auditStarted (AuditEvent event)
+    public void auditStarted(AuditEvent event)
     {
       // ignore
     }
@@ -161,7 +161,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#auditFinished(AuditEvent)
      */
-    public void auditFinished (AuditEvent event)
+    public void auditFinished(AuditEvent event)
     {
       // ignore
     }
@@ -170,7 +170,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#fileStarted(AuditEvent)
      */
-    public void fileStarted (AuditEvent event)
+    public void fileStarted(AuditEvent event)
     {
       // ignore
     }
@@ -179,7 +179,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#fileFinished(AuditEvent)
      */
-    public void fileFinished (AuditEvent event)
+    public void fileFinished(AuditEvent event)
     {
       // ignore
     }
@@ -188,7 +188,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#addError(AuditEvent)
      */
-    public void addError (AuditEvent event)
+    public void addError(AuditEvent event)
     {
       errors.add(
           new Error(
@@ -204,7 +204,7 @@ public class CheckstyleCommand
      * {@inheritDoc}
      * @see AuditListener#addException(AuditEvent,Throwable)
      */
-    public void addException (AuditEvent event, Throwable throwable)
+    public void addException(AuditEvent event, Throwable throwable)
     {
       throw new RuntimeException(throwable);
     }
@@ -214,7 +214,7 @@ public class CheckstyleCommand
      *
      * @return The errors.
      */
-    public ArrayList<Error> getErrors ()
+    public ArrayList<Error> getErrors()
     {
       return this.errors;
     }
@@ -229,7 +229,7 @@ public class CheckstyleCommand
       super(ProjectClassLoader.classpath(project));
     }
 
-    private static URL[] classpath (IJavaProject project)
+    private static URL[] classpath(IJavaProject project)
       throws Exception
     {
       Set<IJavaProject> visited = new HashSet<IJavaProject>();
@@ -239,7 +239,7 @@ public class CheckstyleCommand
       return urls.toArray(new URL[urls.size()]);
     }
 
-    private static void collect (
+    private static void collect(
         IJavaProject javaProject,
         List<URL> urls,
         Set<IJavaProject> visited,
@@ -294,13 +294,14 @@ public class CheckstyleCommand
       }
     }
 
-    private static IJavaProject getJavaProject (IClasspathEntry entry)
+    private static IJavaProject getJavaProject(IClasspathEntry entry)
       throws Exception
     {
       IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
           entry.getPath().segment(0));
-      if (project != null)
+      if (project != null){
         return JavaUtils.getJavaProject(project);
+      }
       return null;
     }
   }

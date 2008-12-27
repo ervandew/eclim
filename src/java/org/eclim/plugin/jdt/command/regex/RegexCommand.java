@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,22 +50,22 @@ public class RegexCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String type = _commandLine.getValue(Options.TYPE_OPTION);
-    return RegexFilter.instance.filter(_commandLine, evaluate(file, type));
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String type = commandLine.getValue(Options.TYPE_OPTION);
+    return RegexFilter.instance.filter(commandLine, evaluate(file, type));
   }
 
   /**
    * Evaluates the supplied test regex file.
    *
-   * @param _file The file name.
-   * @param _type The regex evaluation type to use.
+   * @param file The file name.
+   * @param type The regex evaluation type to use.
    * @return The results.
    */
-  private List<MatcherResult> evaluate (String _file, String _type)
+  private List<MatcherResult> evaluate(String file, String type)
     throws Exception
   {
     ArrayList<MatcherResult> results = new ArrayList<MatcherResult>();
@@ -73,16 +73,16 @@ public class RegexCommand
     String regex = null;
     FileInputStream fis = null;
     try{
-      fis = new FileInputStream(_file);
+      fis = new FileInputStream(file);
       BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 
       // read the pattern from the first line of the file.
       regex = reader.readLine();
       Pattern pattern = Pattern.compile(regex.trim());
 
-      if (_type == null || FILE.equals(_type)){
-        FileOffsets offsets = FileOffsets.compile(_file);
-        Matcher matcher = FileUtils.matcher(pattern, _file);
+      if (type == null || FILE.equals(type)){
+        FileOffsets offsets = FileOffsets.compile(file);
+        Matcher matcher = FileUtils.matcher(pattern, file);
 
         // force matching to start past the first line.
         if(matcher.find(regex.length() + 1)){
@@ -114,68 +114,68 @@ public class RegexCommand
   /**
    * Process the current regex finding.
    *
-   * @param _offsets The FileOffsets.
-   * @param _matcher The Matcher.
-   * @param _results The list of results to add to.
+   * @param offsets The FileOffsets.
+   * @param matcher The Matcher.
+   * @param results The list of results to add to.
    */
-  private void processFinding (
-      FileOffsets _offsets, Matcher _matcher, List<MatcherResult> _results)
+  private void processFinding(
+      FileOffsets offsets, Matcher matcher, List<MatcherResult> results)
   {
     MatcherResult result = new MatcherResult();
 
-    int[] lineColumn = _offsets.offsetToLineColumn(_matcher.start());
+    int[] lineColumn = offsets.offsetToLineColumn(matcher.start());
     result.setStartLine(lineColumn[0]);
     result.setStartColumn(lineColumn[1]);
 
-    lineColumn = _offsets.offsetToLineColumn(_matcher.end() - 1);
+    lineColumn = offsets.offsetToLineColumn(matcher.end() - 1);
     result.setEndLine(lineColumn[0]);
     result.setEndColumn(lineColumn[1]);
 
-    for (int ii = 1; ii <= _matcher.groupCount(); ii++){
+    for (int ii = 1; ii <= matcher.groupCount(); ii++){
       MatcherResult group = new MatcherResult();
 
-      lineColumn = _offsets.offsetToLineColumn(_matcher.start(ii));
+      lineColumn = offsets.offsetToLineColumn(matcher.start(ii));
       group.setStartLine(lineColumn[0]);
       group.setStartColumn(lineColumn[1]);
 
-      lineColumn = _offsets.offsetToLineColumn(_matcher.end(ii) - 1);
+      lineColumn = offsets.offsetToLineColumn(matcher.end(ii) - 1);
       group.setEndLine(lineColumn[0]);
       group.setEndColumn(lineColumn[1]);
 
       result.addGroupMatch(group);
     }
-    _results.add(result);
+    results.add(result);
   }
 
   /**
    * Process the current regex finding.
    *
-   * @param _line The current line number being processed.
-   * @param _matcher The Matcher.
-   * @param _results The list of results to add to.
+   * @param line The current line number being processed.
+   * @param matcher The Matcher.
+   * @param results The list of results to add to.
    */
-  private void processFinding (
-      int _line, Matcher _matcher, List<MatcherResult> _results)
+  private void processFinding(
+      int line, Matcher matcher, List<MatcherResult> results)
   {
     MatcherResult result = new MatcherResult();
 
-    result.setStartLine(_line);
-    result.setStartColumn(_matcher.start() + 1);
+    result.setStartLine(line);
+    result.setStartColumn(matcher.start() + 1);
 
-    result.setEndLine(_line);
-    result.setEndColumn(_matcher.end());
+    result.setEndLine(line);
+    result.setEndColumn(matcher.end());
 
-    for (int ii = 1; ii <= _matcher.groupCount(); ii++){
+    for (int ii = 1; ii <= matcher.groupCount(); ii++){
       MatcherResult group = new MatcherResult();
 
-      group.setStartLine(_line);
-      group.setStartColumn(_matcher.start(ii) + 1);
+      group.setStartLine(line);
+      group.setStartColumn(matcher.start(ii) + 1);
 
-      group.setEndLine(_line);
-      group.setEndColumn(_matcher.end(ii));
+      group.setEndLine(line);
+      group.setEndColumn(matcher.end(ii));
 
       result.addGroupMatch(group);
     }
-    _results.add(result);
+    results.add(result);
   }
 }

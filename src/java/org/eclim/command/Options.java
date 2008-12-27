@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,20 +130,20 @@ public class Options
   /**
    * Print usage information.
    *
-   * @param _plugin The plugin to print the usage for (ant, jdt, etc).
+   * @param plugin The plugin to print the usage for (ant, jdt, etc).
    */
-  public void usage (String _plugin)
+  public void usage(String plugin)
   {
     usageSummary();
-    if(_plugin != null){
-      System.out.println(buildFooter(_plugin));
+    if(plugin != null){
+      System.out.println(buildFooter(plugin));
     }
   }
 
   /**
    * Print summary usage information.
    */
-  public void usageSummary ()
+  public void usageSummary()
   {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp(Services.getMessage("usage"), "", coreOptions, null);
@@ -152,20 +152,20 @@ public class Options
   /**
    * Parses the supplied command line options.
    *
-   * @param _args The arguments.
+   * @param args The arguments.
    *
    * @return The command line.
    */
-  public CommandLine parse (String[] _args)
+  public CommandLine parse(String[] args)
     throws ParseException
   {
     // manually parse out the command option value so that the command specific
     // options can be added before running the automated parse.
     String command = null;
-    for (int ii = 0; ii < _args.length; ii++){
-      if(_args[ii].equals('-' + COMMAND_OPTION)){
-        if(_args.length > ii + 1){
-          command = _args[ii + 1].trim();
+    for (int ii = 0; ii < args.length; ii++){
+      if(args[ii].equals('-' + COMMAND_OPTION)){
+        if(args.length > ii + 1){
+          command = args[ii + 1].trim();
         }
         break;
       }
@@ -184,22 +184,22 @@ public class Options
     }
 
     CommandLineParser parser = new GnuParser();
-    return new CommandLine(parser.parse(options, _args), _args);
+    return new CommandLine(parser.parse(options, args), args);
   }
 
   /**
    * Builds the usage footer.
    *
-   * @param _plugin The plugin to build the footer for (ant, jdt, etc).
+   * @param plugin The plugin to build the footer for (ant, jdt, etc).
    * @return The footer.
    */
-  protected String buildFooter (String _plugin)
+  protected String buildFooter(String plugin)
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append(Services.getMessage("command.usage.header"));
 
     TreeSet<String> set = new TreeSet<String>();
-    ResourceBundle resources = Services.getResourceBundle(_plugin);
+    ResourceBundle resources = Services.getResourceBundle(plugin);
     for(Enumeration keys = resources.getKeys(); keys.hasMoreElements();){
       String key = (String)keys.nextElement();
       if(key.endsWith(".usage")){
@@ -217,14 +217,14 @@ public class Options
   /**
    * Parses the String representation of the options to a Collection of Options.
    *
-   * @param _options The options String.
+   * @param optionsString The options String.
    * @return The Collection of Option instances.
    */
-  protected Collection<Option> parseOptions (String _options)
+  protected Collection<Option> parseOptions(String optionsString)
   {
     ArrayList<Option> options = new ArrayList<Option>();
-    if(_options != null && _options.trim().length() > 0){
-      String[] lines = StringUtils.split(_options, ',');
+    if(optionsString != null && optionsString.trim().length() > 0){
+      String[] lines = StringUtils.split(optionsString, ',');
       for(int ii = 0; ii < lines.length; ii++){
         if(lines[ii].trim().length() > 0){
           options.add(parseOption(lines[ii].trim()));
@@ -238,16 +238,16 @@ public class Options
   /**
    * Parses the String representation of an Option to an Option instance.
    *
-   * @param _option The option String.
+   * @param option The option String.
    * @return The Option.
    */
-  protected Option parseOption (String _option)
+  protected Option parseOption(String option)
   {
-    String[] parts = StringUtils.split(_option);
+    String[] parts = StringUtils.split(option);
 
     // command can have any additional arguments.
-    if(parts.length == 1 && ANY.equals(parts[0])){
-    }
+    //if(parts.length == 1 && ANY.equals(parts[0])){
+    //}
 
     if(REQUIRED.equals(parts[0])){
       OptionBuilder.isRequired();

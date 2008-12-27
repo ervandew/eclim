@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,13 +42,13 @@ public class ImplFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, ImplResult _result)
+  public String filter(CommandLine commandLine, ImplResult result)
   {
-    if(_result != null){
+    if(result != null){
       StringBuffer buffer = new StringBuffer();
-      buffer.append(_result.getType());
+      buffer.append(result.getType());
 
-      List<ImplType> results = _result.getSuperTypes();
+      List<ImplType> results = result.getSuperTypes();
       if(results != null){
         ArrayList<ImplType> notFound = new ArrayList<ImplType>();
         for(ImplType type : results){

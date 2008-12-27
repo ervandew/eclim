@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,12 +46,12 @@ public class Eclim
    * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
-   * @param _args The arguments to pass to eclim.
+   * @param args The arguments to pass to eclim.
    * @return The result of the command execution as a string.
    */
-  public static String execute (String[] _args)
+  public static String execute(String[] args)
   {
-    return execute(_args, -1);
+    return execute(args, -1);
   }
 
   /**
@@ -59,22 +59,22 @@ public class Eclim
    * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
-   * @param _args The arguments to pass to eclim.
-   * @param _timeout Timeout in milliseconds.
+   * @param args The arguments to pass to eclim.
+   * @param timeout Timeout in milliseconds.
    * @return The result of the command execution as a string.
    */
-  public static String execute (String[] _args, long _timeout)
+  public static String execute(String[] args, long timeout)
   {
-    String[] args = new String[_args.length + 2];
-    System.arraycopy(_args, 0, args, 2, _args.length);
-    args[0] = ECLIM;
-    args[1] = COMMAND;
+    String[] arguments = new String[args.length + 2];
+    System.arraycopy(args, 0, arguments, 2, args.length);
+    arguments[0] = ECLIM;
+    arguments[1] = COMMAND;
 
-    System.out.println("Command: " + StringUtils.join(args, ' '));
+    System.out.println("Command: " + StringUtils.join(arguments, ' '));
 
     CommandExecutor process = null;
     try{
-      process = CommandExecutor.execute(args, _timeout);
+      process = CommandExecutor.execute(arguments, timeout);
     }catch(Exception e){
       throw new RuntimeException(e);
     }
@@ -101,11 +101,11 @@ public class Eclim
    *
    * @return true if the project exists, false otherwise.
    */
-  public static boolean projectExists (String _name)
+  public static boolean projectExists(String name)
   {
     String list = Eclim.execute(new String[]{"project_list"});
 
-    return Pattern.compile(_name + "\\s+-").matcher(list).find();
+    return Pattern.compile(name + "\\s+-").matcher(list).find();
   }
 
   /**
@@ -113,7 +113,7 @@ public class Eclim
    *
    * @return The workspace path.
    */
-  public static String getWorkspace ()
+  public static String getWorkspace()
   {
     if(workspace == null){
       workspace = execute(new String[]{"workspace_dir"});
@@ -124,47 +124,47 @@ public class Eclim
   /**
    * Constructs a full path for the given project relative file.
    *
-   * @param _file The project relative file path.
+   * @param file The project relative file path.
    * @return The absolute path to the file.
    */
-  public static String resolveFile (String _file)
+  public static String resolveFile(String file)
   {
     return new StringBuffer()
       .append(getWorkspace()).append('/')
       .append(TEST_PROJECT).append('/')
-      .append(_file)
+      .append(file)
       .toString();
   }
 
   /**
    * Constructs a full path for the given project relative file.
    *
-   * @param _project The name of the project the file belongs to.
-   * @param _file The project relative file path.
+   * @param project The name of the project the file belongs to.
+   * @param file The project relative file path.
    * @return The absolute path to the file.
    */
-  public static String resolveFile (String _project, String _file)
+  public static String resolveFile(String project, String file)
   {
     return new StringBuffer()
       .append(getWorkspace()).append('/')
-      .append(_project).append('/')
-      .append(_file)
+      .append(project).append('/')
+      .append(file)
       .toString();
   }
 
   /**
    * Reads the project relative file into a string which is then returned.
    *
-   * @param _project The name of the project the file belongs to.
-   * @param _file The project relative file path.
+   * @param project The name of the project the file belongs to.
+   * @param file The project relative file path.
    * @return The file contents as a string.
    */
-  public static String fileToString (String _project, String _file)
+  public static String fileToString(String project, String file)
   {
-    String file = resolveFile(_project, _file);
+    String path = resolveFile(project, file);
     FileInputStream fin = null;
     try{
-      fin = new FileInputStream(file);
+      fin = new FileInputStream(path);
       return IOUtils.toString(fin);
     }catch(Exception e){
       throw new RuntimeException(e);

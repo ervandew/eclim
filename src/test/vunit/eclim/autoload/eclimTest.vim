@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 " }}}
 
 " TestGetEclimCommand() {{{
-function! TestGetEclimCommand ()
+function! TestGetEclimCommand()
   let result = eclim#GetEclimCommand()
   call VUAssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
 endfunction " }}}
 
 " TestPing() {{{
-function! TestPing ()
+function! TestPing()
   let result = eclim#PingEclim(0)
   call VUAssertTrue(result, "Ping did not return true.")
 
@@ -46,7 +46,7 @@ function! TestPing ()
 endfunction " }}}
 
 " TestSettings() {{{
-function! TestSettings ()
+function! TestSettings()
   :EclimSettings
   call VUAssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")
@@ -54,7 +54,7 @@ function! TestSettings ()
 endfunction " }}}
 
 " TestCommandCompleteScriptRevision() {{{
-function! TestCommandCompleteScriptRevision ()
+function! TestCommandCompleteScriptRevision()
   let results = eclim#CommandCompleteScriptRevision(
     \ 'eclim/autoload/ec', 'PatchEclim eclim/autoload/ec', 28)
   call VUAssertEquals(2, len(results), "Wrong number of completions.")

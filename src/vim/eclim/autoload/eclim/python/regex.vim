@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " Evaluate(file) {{{
-function eclim#python#regex#Evaluate (file)
+function eclim#python#regex#Evaluate(file)
   if !has('python')
     call eclim#util#EchoError(
       \ "This functionality requires 'python' support compiled into vim.")
@@ -34,7 +34,7 @@ function eclim#python#regex#Evaluate (file)
 python << EOF
 import StringIO, re, vim
 
-def run (regex, text, lnum):
+def run(regex, text, lnum):
   """
   Run the regular expression against the supplied text and return list of
   matches and corresponding groups.
@@ -63,7 +63,7 @@ def run (regex, text, lnum):
   return results
 
 
-def compileOffsets (text):
+def compileOffsets(text):
   """
   Compile a list of ending offsets for each line.
   """
@@ -75,7 +75,7 @@ def compileOffsets (text):
   return offsets
 
 
-def linecol (lnum, offset):
+def linecol(lnum, offset):
   """
   Translate the supplied offset to a line column string.
   """

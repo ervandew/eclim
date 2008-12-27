@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,39 +45,39 @@ public class ProblemLocation
   /**
    * Default Constructor.
    */
-  public ProblemLocation (IProblem _problem)
+  public ProblemLocation (IProblem problem)
   {
-    id = _problem.getID();
-    offset = _problem.getSourceStart();
-    length = _problem.getSourceEnd() - offset;
-    arguments = _problem.getArguments();
-    error = _problem.isError();
+    id = problem.getID();
+    offset = problem.getSourceStart();
+    length = problem.getSourceEnd() - offset;
+    arguments = problem.getArguments();
+    error = problem.isError();
   }
 
   /**
    * {@inheritDoc}
    */
-  public ASTNode getCoveredNode (CompilationUnit _astRoot)
+  public ASTNode getCoveredNode(CompilationUnit astRoot)
   {
-    NodeFinder finder= new NodeFinder(offset, length);
-    _astRoot.accept(finder);
+    NodeFinder finder = new NodeFinder(offset, length);
+    astRoot.accept(finder);
     return finder.getCoveredNode();
   }
 
   /**
    * {@inheritDoc}
    */
-  public ASTNode getCoveringNode (CompilationUnit _astRoot)
+  public ASTNode getCoveringNode(CompilationUnit astRoot)
   {
-    NodeFinder finder= new NodeFinder(offset, length);
-    _astRoot.accept(finder);
+    NodeFinder finder = new NodeFinder(offset, length);
+    astRoot.accept(finder);
     return finder.getCoveringNode();
   }
 
   /**
    * {@inheritDoc}
    */
-  public int getLength ()
+  public int getLength()
   {
     return length;
   }
@@ -85,7 +85,7 @@ public class ProblemLocation
   /**
    * {@inheritDoc}
    */
-  public int getOffset ()
+  public int getOffset()
   {
     return offset;
   }
@@ -93,7 +93,7 @@ public class ProblemLocation
   /**
    * {@inheritDoc}
    */
-  public String[] getProblemArguments ()
+  public String[] getProblemArguments()
   {
     return arguments;
   }
@@ -101,7 +101,7 @@ public class ProblemLocation
   /**
    * {@inheritDoc}
    */
-  public int getProblemId ()
+  public int getProblemId()
   {
     return id;
   }
@@ -109,7 +109,7 @@ public class ProblemLocation
   /**
    * {@inheritDoc}
    */
-  public boolean isError ()
+  public boolean isError()
   {
     return error;
   }
@@ -117,7 +117,7 @@ public class ProblemLocation
   /**
    * {@inheritDoc}
    */
-  public String getMarkerType ()
+  public String getMarkerType()
   {
     return IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER;
   }

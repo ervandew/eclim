@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,13 +49,13 @@ public class CodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = getOffset(_commandLine);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    int offset = getOffset(commandLine);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
@@ -70,55 +70,55 @@ public class CodeCompleteCommand
           createCompletionResult(collector, ii, proposals[ii]));
     }
     Collections.sort(results, COMPLETION_COMPARATOR);
-    return CodeCompleteFilter.instance.filter(_commandLine, results);
+    return CodeCompleteFilter.instance.filter(commandLine, results);
   }
 
   /**
    * Create a CodeCompleteResult from the supplied CompletionProposal.
    *
-   * @param _collector The completion collector.
-   * @param _proposal The proposal.
+   * @param collector The completion collector.
+   * @param index The index of the proposal in the results.
+   * @param proposal The proposal.
    *
    * @return The result.
    */
-  protected CodeCompleteResult createCompletionResult (
-      CompletionProposalCollector _collector,
-      int _index,
-      IJavaCompletionProposal _proposal)
+  protected CodeCompleteResult createCompletionResult(
+      CompletionProposalCollector collector,
+      int index,
+      IJavaCompletionProposal proposal)
   {
     int offset = 0;
     int length = 0;
     String completion = null;
-    String displayString = _proposal.getDisplayString();
+    String displayString = proposal.getDisplayString();
 
-    if(_proposal instanceof JavaCompletionProposal){
-      JavaCompletionProposal lazy = (JavaCompletionProposal)_proposal;
+    if(proposal instanceof JavaCompletionProposal){
+      JavaCompletionProposal lazy = (JavaCompletionProposal)proposal;
       offset = lazy.getReplacementOffset();
       length = lazy.getReplacementLength();
       completion = lazy.getReplacementString();
-    }else if(_proposal instanceof LazyJavaCompletionProposal){
-      LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)_proposal;
+    }else if(proposal instanceof LazyJavaCompletionProposal){
+      LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
       offset = lazy.getReplacementOffset();
       length = lazy.getReplacementLength();
       completion = lazy.getReplacementString();
     }
 
-    int kind = _collector.getProposal(_index).getKind();
+    int kind = collector.getProposal(index).getKind();
     switch(kind){
       case CompletionProposal.METHOD_REF:
         // trim off the trailing paren if the method takes any arguments.
         if (displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1 &&
             (completion.length() > 0 &&
-             completion.charAt(completion.length() - 1) == ')'))
-        {
+             completion.charAt(completion.length() - 1) == ')')){
           completion = completion.substring(0, completion.length() - 1);
         }
         break;
       case CompletionProposal.TYPE_REF:
         // trim off package info.
-        int index = completion.lastIndexOf('.');
-        if(index != -1){
-          completion = completion.substring(index + 1);
+        int idx = completion.lastIndexOf('.');
+        if(idx != -1){
+          completion = completion.substring(idx + 1);
         }
         break;
     }
@@ -130,7 +130,7 @@ public class CodeCompleteCommand
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
         kind, completion,
-        _proposal.getAdditionalProposalInfo(), displayString,
+        proposal.getAdditionalProposalInfo(), displayString,
         offset, offset + length);*/
     if("class".equals(completion)){
       kind = CompletionProposal.KEYWORD;

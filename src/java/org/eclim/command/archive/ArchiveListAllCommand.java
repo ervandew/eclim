@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,24 +57,22 @@ public class ArchiveListAllCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
     Object[] results = null;
     if (file.endsWith(".jar") ||
         file.endsWith(".ear") ||
         file.endsWith(".war") ||
         file.endsWith(".egg") ||
-        file.endsWith(".zip"))
-    {
+        file.endsWith(".zip")){
       results = expand(file);
     } else if (file.endsWith(".tar") ||
         file.endsWith(".tar.gz") ||
         file.endsWith(".tar.bz2") ||
         file.endsWith(".tgz") ||
-        file.endsWith(".tbz2"))
-    {
+        file.endsWith(".tbz2")){
       results = expandTar(file);
     }
 
@@ -101,7 +99,7 @@ public class ArchiveListAllCommand
     return tmp.getAbsolutePath();
   }
 
-  private Object[] expand (String file)
+  private Object[] expand(String file)
     throws Exception
   {
     ArrayList<String[]> results = new ArrayList<String[]>();
@@ -130,7 +128,7 @@ public class ArchiveListAllCommand
     return new Object[]{results, maxName, maxSize};
   }
 
-  private Object[] expandTar (String file)
+  private Object[] expandTar(String file)
     throws Exception
   {
     ArrayList<String[]> results = new ArrayList<String[]>();
@@ -203,7 +201,7 @@ public class ArchiveListAllCommand
      * {@inheritDoc}
      * @see Comparator#compare(T,T)
      */
-    public int compare (String[] o1, String[] o2)
+    public int compare(String[] o1, String[] o2)
     {
       return COLLATOR.compare(o1[0], o2[0]);
     }
@@ -212,7 +210,7 @@ public class ArchiveListAllCommand
      * {@inheritDoc}
      * @see Comparator#equals(Object)
      */
-    public boolean equals (Object obj)
+    public boolean equals(Object obj)
     {
       if(obj instanceof EntryComparator){
         return true;

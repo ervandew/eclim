@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,13 +50,13 @@ public class ProjectNatureAddCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(name);
     String[] aliases = StringUtils.split(
-        _commandLine.getValue(Options.NATURE_OPTION), ',');
+        commandLine.getValue(Options.NATURE_OPTION), ',');
 
     IProjectDescription desc = project.getDescription();
     String[] natureIds = desc.getNatureIds();
@@ -77,7 +77,7 @@ public class ProjectNatureAddCommand
     for (String nature : newNatures){
       ProjectManager manager = ProjectManagement.getProjectManager(nature);
       if (manager != null) {
-        manager.create(project, _commandLine);
+        manager.create(project, commandLine);
       }
     }
 

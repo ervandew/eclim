@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " TestDiffLastSaved() {{{
-function! TestDiffLastSaved ()
+function! TestDiffLastSaved()
   exec 'cd ' . g:TestEclimWorkspace
   edit eclim_unit_test/test_root_file.txt
   call append(1, 'some new content')
@@ -46,7 +46,7 @@ function! TestDiffLastSaved ()
 endfunction " }}}
 
 " TestLocateFile() {{{
-function! TestLocateFile ()
+function! TestLocateFile()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -95,7 +95,7 @@ function! TestLocateFile ()
 endfunction " }}}
 
 " TestOpenRelative() {{{
-function! TestOpenRelative ()
+function! TestOpenRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -105,7 +105,7 @@ function! TestOpenRelative ()
 endfunction " }}}
 
 " TestOpenFiles() {{{
-function! TestOpenFiles ()
+function! TestOpenFiles()
   exec 'cd ' . g:TestEclimWorkspace
   call eclim#common#util#OpenFiles('split',
     \ 'eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt')
@@ -116,7 +116,7 @@ function! TestOpenFiles ()
 endfunction " }}}
 
 " TestSwapWords() {{{
-function! TestSwapWords ()
+function! TestSwapWords()
   call setline(1, 'one, two')
   call cursor(1, 1)
   call eclim#common#util#SwapWords()
@@ -124,7 +124,7 @@ function! TestSwapWords ()
 endfunction " }}}
 
 " TestCommandCompleteRelative() {{{
-function! TestCommandCompleteRelative ()
+function! TestCommandCompleteRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
   let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative f', 15)

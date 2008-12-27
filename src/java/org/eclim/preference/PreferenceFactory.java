@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,20 +32,20 @@ public class PreferenceFactory
    * Adds options via the supplied options string that contains new line
    * separated options in the form <code>name defaultValue regex</code>.
    *
-   * @param _nature The project nature the options belong to.
-   * @param _optionsString The options string.
+   * @param nature The project nature the options belong to.
+   * @param optionsString The options string.
    *
    * @return The Preferences instance the options were added to.
    */
-  public static Preferences addOptions (String _nature, String _optionsString)
+  public static Preferences addOptions(String nature, String optionsString)
   {
     Preferences preferences = Preferences.getInstance();
-    String[] strings = StringUtils.split(_optionsString, '\n');
+    String[] strings = StringUtils.split(optionsString, '\n');
     for(int ii = 0; ii < strings.length; ii++){
       if(strings[ii].trim().length() > 0){
         String[] attrs = parseOptionAttributes(strings[ii]);
         Option option = new Option();
-        option.setNature(_nature);
+        option.setNature(nature);
         option.setPath(attrs[0]);
         option.setName(attrs[1]);
         if (attrs.length > 2){
@@ -63,21 +63,21 @@ public class PreferenceFactory
    * Adds preferences via the supplied preferences string that contains new line
    * separated preferences in the form <code>name defaultValue regex</code>.
    *
-   * @param _nature The project nature the preferences belong to.
-   * @param _preferencesString The preferences string.
+   * @param nature The project nature the preferences belong to.
+   * @param preferencesString The preferences string.
    *
    * @return The Preferences instance the preferences were added to.
    */
-  public static Preferences addPreferences (
-      String _nature, String _preferencesString)
+  public static Preferences addPreferences(
+      String nature, String preferencesString)
   {
     Preferences preferences = Preferences.getInstance();
-    String[] strings = StringUtils.split(_preferencesString, '\n');
+    String[] strings = StringUtils.split(preferencesString, '\n');
     for(int ii = 0; ii < strings.length; ii++){
       if(strings[ii].trim().length() > 0){
         String[] attrs = parsePreferenceAttributes(strings[ii]);
         Preference preference = new Preference();
-        preference.setNature(_nature);
+        preference.setNature(nature);
         preference.setPath(attrs[0]);
         preference.setName(attrs[1]);
         preference.setDefaultValue(attrs[2]);
@@ -99,33 +99,33 @@ public class PreferenceFactory
    *   <li>index 2: validation regex</li>
    * </ul>
    *
-   * @param _attrString The attributes string.
+   * @param attrString The attributes string.
    * @return Array of attributes.
    */
-  private static String[] parsePreferenceAttributes (String _attrString)
+  private static String[] parsePreferenceAttributes(String attrString)
   {
-    _attrString = _attrString.trim();
+    attrString = attrString.trim();
 
     String[] attrs = new String[4];
 
-    int index = _attrString.indexOf(' ');
-    attrs[0] = _attrString.substring(0, index);
+    int index = attrString.indexOf(' ');
+    attrs[0] = attrString.substring(0, index);
 
-    _attrString = _attrString.substring(index + 1);
-    index = _attrString.indexOf(' ');
+    attrString = attrString.substring(index + 1);
+    index = attrString.indexOf(' ');
     if(index == -1){
-      attrs[1] = _attrString;
+      attrs[1] = attrString;
     }else{
-      attrs[1] = _attrString.substring(0, index);
+      attrs[1] = attrString.substring(0, index);
 
-      _attrString = _attrString.substring(index + 1);
+      attrString = attrString.substring(index + 1);
 
-      index = _attrString.indexOf(' ');
+      index = attrString.indexOf(' ');
       if(index != -1){
-        attrs[2] = _attrString.substring(0, index);
-        attrs[3] = _attrString.substring(index + 1);
+        attrs[2] = attrString.substring(0, index);
+        attrs[3] = attrString.substring(index + 1);
       }else{
-        attrs[2] = _attrString;
+        attrs[2] = attrString;
       }
     }
 
@@ -140,25 +140,25 @@ public class PreferenceFactory
    *   <li>index 1: validation regex</li>
    * </ul>
    *
-   * @param _attrString The attributes string.
+   * @param attrString The attributes string.
    * @return Array of attributes.
    */
-  private static String[] parseOptionAttributes (String _attrString)
+  private static String[] parseOptionAttributes(String attrString)
   {
-    _attrString = _attrString.trim();
+    attrString = attrString.trim();
 
     String[] attrs = new String[3];
 
-    int index = _attrString.indexOf(' ');
-    attrs[0] = _attrString.substring(0, index);
+    int index = attrString.indexOf(' ');
+    attrs[0] = attrString.substring(0, index);
 
-    _attrString = _attrString.substring(index + 1);
-    index = _attrString.indexOf(' ');
+    attrString = attrString.substring(index + 1);
+    index = attrString.indexOf(' ');
     if(index != -1){
-      attrs[1] = _attrString.substring(0, index);
-      attrs[2] = _attrString.substring(index + 1);
+      attrs[1] = attrString.substring(0, index);
+      attrs[2] = attrString.substring(index + 1);
     }else{
-      attrs[1] = _attrString;
+      attrs[1] = attrString;
     }
 
     return attrs;

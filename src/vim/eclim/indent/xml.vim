@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ setlocal indentexpr=EclimGetXmlIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,}
 
 " EclimGetXmlIndent(lnum) {{{
-function! EclimGetXmlIndent (lnum)
+function! EclimGetXmlIndent(lnum)
   let line = line('.')
   let col = line('.')
 
@@ -108,7 +108,7 @@ function! EclimGetXmlIndent (lnum)
 endfunction " }}}
 
 " XmlIndentAnythingSettings() {{{
-function! XmlIndentAnythingSettings ()
+function! XmlIndentAnythingSettings()
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'xmlComment'
   let b:commentRE      = b:blockCommentRE
@@ -132,7 +132,7 @@ endfunction " }}}
 " XmlIndentAttributeWrap(lnum) {{{
 " Function which indents line continued attributes an extra level for
 " readability.
-function! <SID>XmlIndentAttributeWrap (lnum)
+function! <SID>XmlIndentAttributeWrap(lnum)
   let line = line('.')
   let col = col('.')
   let adj = 0

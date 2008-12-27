@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ setlocal indentexpr=EclimGetPhpHtmlIndent(v:lnum)
 setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 
 " EclimGetPhpHtmlIndent(lnum) {{{
-function! EclimGetPhpHtmlIndent (lnum)
+function! EclimGetPhpHtmlIndent(lnum)
   " FIXME: may get confused if either of these occur in a comment.
   "        can fix with searchpos and checking syntax name on result.
   let phpstart = search('<?php', 'bcnW')

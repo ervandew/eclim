@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,12 @@ public class SearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<SearchMatch> _result)
+  public String filter(CommandLine commandLine, List<SearchMatch> results)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      if(_result != null){
-        for(SearchMatch result : _result){
+      if(results != null){
+        for(SearchMatch result : results){
           IModelElement element = (IModelElement)result.getElement();
           ArrayList<IModelElement> lineage = new ArrayList<IModelElement>();
           while (element.getElementType() != IModelElement.SOURCE_MODULE){

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 
 " ProjectTree(...) {{{
 " Open a tree view of the current or specified projects.
-function! eclim#project#tree#ProjectTree (...)
+function! eclim#project#tree#ProjectTree(...)
   " no project dirs supplied, use current project
   if len(a:000) == 0
     let name = eclim#project#util#GetCurrentProjectName()
@@ -108,7 +108,7 @@ function! eclim#project#tree#ProjectTree (...)
 endfunction " }}}
 
 " CloseTreeWindow() " {{{
-function! s:CloseTreeWindow ()
+function! s:CloseTreeWindow()
   let winnr = bufwinnr(s:GetTreeTitle())
   if winnr != -1
     exec winnr . 'winc w'
@@ -117,14 +117,14 @@ function! s:CloseTreeWindow ()
 endfunction " }}}
 
 " Mappings() " {{{
-function! s:Mappings ()
+function! s:Mappings()
   nnoremap <buffer> E :call <SID>OpenFile('edit')<cr>
   nnoremap <buffer> S :call <SID>OpenFile('split')<cr>
   nnoremap <buffer> T :call <SID>OpenFile('tablast \| tabnew')<cr>
 endfunction " }}}
 
 " OpenFile(action) " {{{
-function! s:OpenFile (action)
+function! s:OpenFile(action)
   let path = eclim#tree#GetPath()
   if path !~ '/$'
     if !filereadable(path)
@@ -138,7 +138,7 @@ function! s:OpenFile (action)
 endfunction " }}}
 
 " OpenTree(names, dirs) " {{{
-function! s:OpenTree (names, dirs)
+function! s:OpenTree(names, dirs)
   if !s:project_tree_loaded
     " remove any settings related to usage of tree as an external filesystem
     " explorer.
@@ -163,7 +163,7 @@ endfunction " }}}
 
 " OpenProjectFile(cmd, cwd, file) {{{
 " Execute the supplied command in one of the main content windows.
-function! eclim#project#tree#OpenProjectFile (cmd, cwd, file)
+function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   let cmd = a:cmd
   let cwd = substitute(getcwd(), '\', '/', 'g')
   let cwd = escape(cwd, ' &')
@@ -182,7 +182,7 @@ endfunction " }}}
 " HorizontalContentWindow() {{{
 " Command for g:EclimProjectTreeContentWincmd used when relative to a
 " horizontal taglist window.
-function! eclim#project#tree#HorizontalContentWindow ()
+function! eclim#project#tree#HorizontalContentWindow()
   winc k
   if exists('g:TagList_title') && bufname(bufnr('%')) == g:TagList_title
     winc k
@@ -190,7 +190,7 @@ function! eclim#project#tree#HorizontalContentWindow ()
 endfunction " }}}
 
 " GetTreeTitle() {{{
-function! s:GetTreeTitle ()
+function! s:GetTreeTitle()
   if !exists('t:project_tree_id')
     let t:project_tree_id = s:project_tree_ids + 1
     let s:project_tree_ids += 1

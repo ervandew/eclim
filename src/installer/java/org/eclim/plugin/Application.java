@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * Portions of this class that are copied from the eclipse source are the
  * copyright (c) of IBM Corporation and others, and released under the Eclipse

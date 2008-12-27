@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class JUnitImplCommandTest
     "src/org/eclim/test/junit/SomeClassTest.java";
 
   @Test
-  public void execute ()
+  public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -56,20 +56,20 @@ public class JUnitImplCommandTest
       "\n" +
       "package org.eclim.test.junit;\n" +
       "public class SomeClass {\n" +
-      "\tpublic void aMethod ()\n" +
-      "\tpublic void aMethod (String name)\n" +
-      "\tpublic void anotherMethod (int id)\n" +
+      "\tpublic void aMethod()\n" +
+      "\tpublic void aMethod(String name)\n" +
+      "\tpublic void anotherMethod(int id)\n" +
       "}\n" +
       "\n" +
       "package java.lang;\n" +
       "public class Object {\n" +
-      "\tpublic Object ()\n" +
-      "\tpublic int hashCode ()\n" +
-      "\tpublic boolean equals (Object obj)\n" +
-      "\tprotected Object clone ()\n" +
+      "\tpublic Object()\n" +
+      "\tpublic int hashCode()\n" +
+      "\tpublic boolean equals(Object obj)\n" +
+      "\tprotected Object clone()\n" +
       "\t\tthrows CloneNotSupportedException\n" +
-      "\tpublic String toString ()\n" +
-      "\tprotected void finalize ()\n" +
+      "\tpublic String toString()\n" +
+      "\tprotected void finalize()\n" +
       "\t\tthrows Throwable\n" +
       "}";
 
@@ -88,7 +88,7 @@ public class JUnitImplCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public void testAMethod \\(\\)")
+        Pattern.compile("public void testAMethod\\(\\)")
         .matcher(contents).find());
 
     valid =
@@ -96,20 +96,20 @@ public class JUnitImplCommandTest
       "\n" +
       "package org.eclim.test.junit;\n" +
       "public class SomeClass {\n" +
-      "\t//public void aMethod ()\n" +
-      "\t//public void aMethod (String name)\n" +
-      "\tpublic void anotherMethod (int id)\n" +
+      "\t//public void aMethod()\n" +
+      "\t//public void aMethod(String name)\n" +
+      "\tpublic void anotherMethod(int id)\n" +
       "}\n" +
       "\n" +
       "package java.lang;\n" +
       "public class Object {\n" +
-      "\tpublic Object ()\n" +
-      "\tpublic int hashCode ()\n" +
-      "\tpublic boolean equals (Object obj)\n" +
-      "\tprotected Object clone ()\n" +
+      "\tpublic Object()\n" +
+      "\tpublic int hashCode()\n" +
+      "\tpublic boolean equals(Object obj)\n" +
+      "\tprotected Object clone()\n" +
       "\t\tthrows CloneNotSupportedException\n" +
-      "\tpublic String toString ()\n" +
-      "\tprotected void finalize ()\n" +
+      "\tpublic String toString()\n" +
+      "\tprotected void finalize()\n" +
       "\t\tthrows Throwable\n" +
       "}";
 

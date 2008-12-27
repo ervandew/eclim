@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ public class EclimWorkbenchWindow
   private IWorkbenchPage page;
   private Composite composite;
 
-  public EclimWorkbenchWindow (Shell shell){
+  public EclimWorkbenchWindow (Shell shell)
+  {
     super(1);
     this.shell = shell;
   }
@@ -53,7 +54,7 @@ public class EclimWorkbenchWindow
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchWindow#getActivePage()
    */
-  public IWorkbenchPage getActivePage ()
+  public IWorkbenchPage getActivePage()
   {
     try{
       if(page == null){
@@ -70,7 +71,7 @@ public class EclimWorkbenchWindow
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchWindow#getShell()
    */
-  public Shell getShell ()
+  public Shell getShell()
   {
     return shell;
   }
@@ -80,7 +81,7 @@ public class EclimWorkbenchWindow
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchWindow#run(boolean,boolean,IRunnableWithProgress)
    */
-  public void run (
+  public void run(
       boolean fork, boolean cancelable, IRunnableWithProgress runnable)
     throws InvocationTargetException,
            InterruptedException
@@ -93,7 +94,7 @@ public class EclimWorkbenchWindow
    * @see WorkbenchWindow#getPageComposite()
    */
   @Override
-  protected Composite getPageComposite ()
+  protected Composite getPageComposite()
   {
     if(composite == null){
       composite = new Composite(shell, SWT.NONE);

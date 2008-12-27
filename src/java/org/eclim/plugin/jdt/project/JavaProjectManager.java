@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@ public class JavaProjectManager
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
 
-  private static final HashMap<String,Parser> PARSERS =
-    new HashMap<String,Parser>();
+  private static final HashMap<String, Parser> PARSERS =
+    new HashMap<String, Parser>();
   static{
     PARSERS.put("ivy.xml", new IvyParser());
   }
@@ -93,22 +93,22 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public void create (IProject _project, CommandLine _commandLine)
+  public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
-    String depends = _commandLine.getValue(Options.DEPENDS_OPTION);
-    create(_project, depends);
+    String depends = commandLine.getValue(Options.DEPENDS_OPTION);
+    create(project, depends);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<Error> update (IProject _project, CommandLine _commandLine)
+  public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
-    String buildfile = _commandLine.getValue(Options.BUILD_FILE_OPTION);
+    String buildfile = commandLine.getValue(Options.BUILD_FILE_OPTION);
 
-    IJavaProject javaProject = JavaUtils.getJavaProject(_project);
+    IJavaProject javaProject = JavaUtils.getJavaProject(project);
     javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     // validate that .classpath xml is well formed and valid.
@@ -147,7 +147,7 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public void refresh (IProject _project, CommandLine _commandLine)
+  public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
@@ -155,7 +155,7 @@ public class JavaProjectManager
   /**
    * {@inheritDoc}
    */
-  public void delete (IProject _project, CommandLine _commandLine)
+  public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
@@ -165,17 +165,17 @@ public class JavaProjectManager
   /**
    * Creates a new project.
    *
-   * @param _project The project.
-   * @param _depends Comma seperated project names this project depends on.
+   * @param project The project.
+   * @param dependsString Comma seperated project names this project depends on.
    */
-  protected void create (IProject _project, String _depends)
+  protected void create(IProject project, String dependsString)
     throws Exception
   {
-    IJavaProject javaProject = JavaCore.create(_project);
-    ClassPathDetector detector = new ClassPathDetector(_project, null);
+    IJavaProject javaProject = JavaCore.create(project);
+    ClassPathDetector detector = new ClassPathDetector(project, null);
     IClasspathEntry[] detected = detector.getClasspath();
     IClasspathEntry[] depends =
-      createOrUpdateDependencies(javaProject, _depends);
+      createOrUpdateDependencies(javaProject, dependsString);
     IClasspathEntry[] container = new IClasspathEntry[]{
       JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))
     };
@@ -192,15 +192,15 @@ public class JavaProjectManager
   /**
    * Creates or updates the projects dependencies on other projects.
    *
-   * @param _project The project.
-   * @param _depends The comma seperated list of project names.
+   * @param project The project.
+   * @param depends The comma seperated list of project names.
    */
-  protected IClasspathEntry[] createOrUpdateDependencies (
-      IJavaProject _project, String _depends)
+  protected IClasspathEntry[] createOrUpdateDependencies(
+      IJavaProject project, String depends)
     throws Exception
   {
-    if(_depends != null){
-      String[] dependPaths = StringUtils.split(_depends, ',');
+    if(depends != null){
+      String[] dependPaths = StringUtils.split(depends, ',');
       IClasspathEntry[] entries = new IClasspathEntry[dependPaths.length];
       for(int ii = 0; ii < dependPaths.length; ii++){
         IProject theProject = ProjectUtils.getProject(dependPaths[ii]);
@@ -219,17 +219,17 @@ public class JavaProjectManager
   /**
    * Merges the supplied classpath entries into one.
    *
-   * @param _entries The array of classpath entry arrays to merge.
+   * @param entries The array of classpath entry arrays to merge.
    *
    * @return The union of all entry arrays.
    */
-  protected IClasspathEntry[] merge (IClasspathEntry[][] _entries)
+  protected IClasspathEntry[] merge(IClasspathEntry[][] entries)
   {
     ArrayList<IClasspathEntry> union = new ArrayList<IClasspathEntry>();
-    if(_entries != null){
-      for(IClasspathEntry[] entries : _entries){
-        if(entries != null){
-          for(IClasspathEntry entry : entries){
+    if(entries != null){
+      for(IClasspathEntry[] values : entries){
+        if(values != null){
+          for(IClasspathEntry entry : values){
             if(!union.contains(entry)){
              union.add(entry);
             }
@@ -245,37 +245,40 @@ public class JavaProjectManager
   /**
    * Sets the classpath for the supplied project.
    *
-   * @param _javaProject The project.
-   * @param _entries The classpath entries.
-   * @param _classpath The file path of the .classpath file.
+   * @param javaProject The project.
+   * @param entries The classpath entries.
+   * @param classpath The file path of the .classpath file.
    * @return Array of Error or null if no errors reported.
    */
-  protected List<Error> setClasspath (
-      IJavaProject _javaProject, IClasspathEntry[] _entries, String _classpath)
+  protected List<Error> setClasspath(
+      IJavaProject javaProject, IClasspathEntry[] entries, String classpath)
     throws Exception
   {
-    FileOffsets offsets = FileOffsets.compile(_classpath);
-    String classpath = IOUtils.toString(new FileInputStream(_classpath));
+    FileOffsets offsets = FileOffsets.compile(classpath);
+    String classpathValue = IOUtils.toString(new FileInputStream(classpath));
     ArrayList<Error> errors = new ArrayList<Error>();
-    for(int ii = 0; ii < _entries.length; ii++){
+    for(int ii = 0; ii < entries.length; ii++){
       IJavaModelStatus status = JavaConventions.validateClasspathEntry(
-          _javaProject, _entries[ii], true);
+          javaProject, entries[ii], true);
       if(!status.isOK()){
-        errors.add(createErrorFromStatus(offsets, _classpath, classpath, status));
+        errors.add(
+            createErrorFromStatus(offsets, classpath, classpathValue, status));
       }
     }
 
     IJavaModelStatus status = JavaConventions.validateClasspath(
-        _javaProject, _entries, _javaProject.getOutputLocation());
+        javaProject, entries, javaProject.getOutputLocation());
 
-    // always set the classpath anyways, so that the user can correct the file.
+    // always set the classpathValue anyways, so that the user can correct the
+    // file.
     //if(status.isOK() && errors.isEmpty()){
-      _javaProject.setRawClasspath(_entries, null);
-      _javaProject.makeConsistent(null);
+      javaProject.setRawClasspath(entries, null);
+      javaProject.makeConsistent(null);
     //}
 
     if(!status.isOK()){
-      errors.add(createErrorFromStatus(offsets, _classpath, classpath, status));
+      errors.add(
+          createErrorFromStatus(offsets, classpath, classpathValue, status));
     }
     return errors;
   }
@@ -283,54 +286,56 @@ public class JavaProjectManager
   /**
    * Creates an Error from the supplied IJavaModelStatus.
    *
-   * @param _offsets File offsets for the classpath file.
-   * @param _filename The filename of the error.
-   * @param _contents The contents of the file as a String.
-   * @param _status The IJavaModelStatus.
+   * @param offsets File offsets for the classpath file.
+   * @param filename The filename of the error.
+   * @param contents The contents of the file as a String.
+   * @param status The IJavaModelStatus.
    * @return The Error.
    */
-  protected Error createErrorFromStatus (
-      FileOffsets _offsets, String _filename, String _contents, IJavaModelStatus _status)
+  protected Error createErrorFromStatus(
+      FileOffsets offsets,
+      String filename,
+      String contents,
+      IJavaModelStatus status)
     throws Exception
   {
     int line = 0;
     int col = 0;
 
     // get the pattern to search for from the status message.
-    Matcher matcher = STATUS_PATTERN.matcher(_status.getMessage());
+    Matcher matcher = STATUS_PATTERN.matcher(status.getMessage());
     String pattern = matcher.replaceFirst("$1");
 
     // find the pattern in the classpath file.
-    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(_contents);
+    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(contents);
     if(matcher.find()){
-      int[] position = _offsets.offsetToLineColumn(matcher.start());
+      int[] position = offsets.offsetToLineColumn(matcher.start());
       line = position[0];
       col = position[1];
     }
 
-    return new Error(_status.getMessage(), _filename, line, col, false);
+    return new Error(status.getMessage(), filename, line, col, false);
   }
 
   /**
    * Merges the supplied project's classpath with the specified dependencies.
    *
-   * @param _project The project.
-   * @param _dependencies The dependencies.
+   * @param project The project.
+   * @param dependencies The dependencies.
    * @return The classpath entries.
    */
-  protected IClasspathEntry[] merge (
-      IJavaProject _project, Dependency[] _dependencies)
+  protected IClasspathEntry[] merge(
+      IJavaProject project, Dependency[] dependencies)
     throws Exception
   {
-    IWorkspaceRoot root = _project.getProject().getWorkspace().getRoot();
+    IWorkspaceRoot root = project.getProject().getWorkspace().getRoot();
     ArrayList<IClasspathEntry> results = new ArrayList<IClasspathEntry>();
 
     // load the results with all the non library entries.
-    IClasspathEntry[] entries = _project.getRawClasspath();
+    IClasspathEntry[] entries = project.getRawClasspath();
     for(int ii = 0; ii < entries.length; ii++){
       if (entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
-          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE)
-      {
+          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE){
         results.add(entries[ii]);
       } else if (preserve(entries[ii])){
         results.add(entries[ii]);
@@ -338,18 +343,17 @@ public class JavaProjectManager
     }
 
     // merge the dependencies with the classpath entires.
-    for(int ii = 0; ii < _dependencies.length; ii++){
+    for(int ii = 0; ii < dependencies.length; ii++){
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
         if (entries[jj].getEntryKind() == IClasspathEntry.CPE_LIBRARY ||
-            entries[jj].getEntryKind() == IClasspathEntry.CPE_VARIABLE)
-        {
+            entries[jj].getEntryKind() == IClasspathEntry.CPE_VARIABLE){
           String path = entries[jj].getPath().toOSString();
-          String pattern = _dependencies[ii].getName() +
+          String pattern = dependencies[ii].getName() +
             Dependency.VERSION_SEPARATOR;
 
           // exact match
-          if(path.endsWith(_dependencies[ii].toString())){
+          if(path.endsWith(dependencies[ii].toString())){
             match = entries[jj];
             results.add(entries[jj]);
             break;
@@ -360,7 +364,7 @@ public class JavaProjectManager
           }
         }else if(entries[jj].getEntryKind() == IClasspathEntry.CPE_PROJECT){
           String path = entries[jj].getPath().toOSString();
-          if(path.endsWith(_dependencies[ii].getName())){
+          if(path.endsWith(dependencies[ii].getName())){
             match = entries[jj];
             break;
           }
@@ -368,7 +372,7 @@ public class JavaProjectManager
       }
 
       if(match == null){
-        IClasspathEntry entry = createEntry(root, _project, _dependencies[ii]);
+        IClasspathEntry entry = createEntry(root, project, dependencies[ii]);
         results.add(entry);
       }else{
         match = null;
@@ -386,7 +390,7 @@ public class JavaProjectManager
    * @param entry The IClasspathEntry
    * @return true to preserve the entry, false otherwise.
    */
-  protected boolean preserve (IClasspathEntry entry)
+  protected boolean preserve(IClasspathEntry entry)
   {
     IClasspathAttribute[] attributes = entry.getExtraAttributes();
     for(int ii = 0; ii < attributes.length; ii++){
@@ -401,33 +405,33 @@ public class JavaProjectManager
   /**
    * Creates the classpath entry.
    *
-   * @param _root The workspace root.
-   * @param _project The project to create the dependency in.
-   * @param _dependency The dependency to create the entry for.
+   * @param root The workspace root.
+   * @param project The project to create the dependency in.
+   * @param dependency The dependency to create the entry for.
    * @return The classpath entry.
    */
-  protected IClasspathEntry createEntry (
-      IWorkspaceRoot _root, IJavaProject _project, Dependency _dependency)
+  protected IClasspathEntry createEntry(
+      IWorkspaceRoot root, IJavaProject project, Dependency dependency)
     throws Exception
   {
-    if(_dependency.isVariable()){
-      return JavaCore.newVariableEntry(_dependency.getPath(), null, null, true);
+    if(dependency.isVariable()){
+      return JavaCore.newVariableEntry(dependency.getPath(), null, null, true);
     }
 
-    return JavaCore.newLibraryEntry(_dependency.getPath(), null, null, true);
+    return JavaCore.newLibraryEntry(dependency.getPath(), null, null, true);
   }
 
   /**
    * Determines if the supplied path starts with a variable name.
    *
-   * @param _path The path to test.
+   * @param path The path to test.
    * @return True if the path starts with a variable name, false otherwise.
    */
-  protected boolean startsWithVariable (String _path)
+  protected boolean startsWithVariable(String path)
   {
     String[] variables = JavaCore.getClasspathVariableNames();
     for(int ii = 0; ii < variables.length; ii++){
-      if(_path.startsWith(variables[ii])){
+      if(path.startsWith(variables[ii])){
         return true;
       }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,59 +48,59 @@ public class Services
 
   private static PluginResources defaultPluginResources;
 
-  private static HashMap<String,PluginResources> pluginResources =
-    new HashMap<String,PluginResources>();
-  private static HashMap<String,String> serviceCache =
-    new HashMap<String,String>();
-  private static HashMap<String,String> messageCache =
-    new HashMap<String,String>();
+  private static HashMap<String, PluginResources> pluginResources =
+    new HashMap<String, PluginResources>();
+  private static HashMap<String, String> serviceCache =
+    new HashMap<String, String>();
+  private static HashMap<String, String> messageCache =
+    new HashMap<String, String>();
 
   /**
    * Gets a command by name.
    *
-   * @param _name The command name.
+   * @param name The command name.
    *
    * @return The command implementation.
    */
-  public static Command getCommand (String _name)
+  public static Command getCommand(String name)
     throws Exception
   {
-    String name = (String)serviceCache.get(_name);
-    if(name == null){
+    String value = (String)serviceCache.get(name);
+    if(value == null){
       for(PluginResources resources : pluginResources.values()){
-        if(resources.containsCommand(_name)){
-          serviceCache.put(_name, resources.getName());
-          return resources.getCommand(_name);
+        if(resources.containsCommand(name)){
+          serviceCache.put(name, resources.getName());
+          return resources.getCommand(name);
         }
       }
     }else{
-      if(!MAIN.equals(name)){
-        PluginResources resources = pluginResources.get(name);
-        return resources.getCommand(_name);
+      if(!MAIN.equals(value)){
+        PluginResources resources = pluginResources.get(value);
+        return resources.getCommand(name);
       }
-      return getPluginResources().getCommand(_name);
+      return getPluginResources().getCommand(name);
     }
-    serviceCache.put(_name, MAIN);
-    return getPluginResources().getCommand(_name);
+    serviceCache.put(name, MAIN);
+    return getPluginResources().getCommand(name);
   }
 
   /**
    * Retrieves and optionally formats a message for the supplied message key.
    *
-   * @param _key The message key.
-   * @param _args Optional message args used when formatting the message.
+   * @param key The message key.
+   * @param args Optional message args used when formatting the message.
    *
    * @return The formatted message.
    */
-  public static String getMessage (String _key, Object... _args)
+  public static String getMessage(String key, Object... args)
   {
     try{
-      String name = (String)messageCache.get(_key);
+      String name = (String)messageCache.get(key);
       if(name == null){
         for(PluginResources resources : pluginResources.values()){
           try{
-            String message = resources.getMessage(_key, _args);
-            messageCache.put(_key, resources.getName());
+            String message = resources.getMessage(key, args);
+            messageCache.put(key, resources.getName());
             return message;
           }catch(MissingResourceException nsme){
             // message not found in this plugin.
@@ -110,28 +110,28 @@ public class Services
         if(!MAIN.equals(name)){
           PluginResources resources =
             (PluginResources)pluginResources.get(name);
-          return resources.getMessage(_key, _args);
+          return resources.getMessage(key, args);
         }
-        return getPluginResources().getMessage(_key, _args);
+        return getPluginResources().getMessage(key, args);
       }
-      messageCache.put(_key, MAIN);
-      return getPluginResources().getMessage(_key, _args);
+      messageCache.put(key, MAIN);
+      return getPluginResources().getMessage(key, args);
     }catch(MissingResourceException nsme){
-      return _key;
+      return key;
     }
   }
 
   /**
    * Gets the underlying resource bundle used for messages.
    *
-   * @param _plugin The plugin to get the resources for (ant, jdt, etc.).
+   * @param plugin The plugin to get the resources for (ant, jdt, etc.).
    *
    * @return The ResourceBundle.
    */
-  public static ResourceBundle getResourceBundle (String _plugin)
+  public static ResourceBundle getResourceBundle(String plugin)
   {
-    if(_plugin != null){
-      PluginResources resources = (PluginResources)pluginResources.get(_plugin);
+    if(plugin != null){
+      PluginResources resources = (PluginResources)pluginResources.get(plugin);
       if(resources != null){
         return resources.getResourceBundle();
       }
@@ -146,7 +146,7 @@ public class Services
    *
    * @return The ResourceBundle.
    */
-  public static ResourceBundle getResourceBundle ()
+  public static ResourceBundle getResourceBundle()
   {
     return getPluginResources().getResourceBundle();
   }
@@ -154,35 +154,35 @@ public class Services
   /**
    * Gets a resource by searching the available plugins for it.
    *
-   * @param _resource The resource to find.
+   * @param resource The resource to find.
    * @return The URL of the resource or null if not found.
    */
-  public static URL getResource (String _resource)
+  public static URL getResource(String resource)
   {
     for(PluginResources resources : pluginResources.values()){
-      URL url = resources.getResource(_resource);
+      URL url = resources.getResource(resource);
       if(url != null){
         return url;
       }
     }
-    return getPluginResources().getResource(_resource);
+    return getPluginResources().getResource(resource);
   }
 
   /**
    * Gets a resource stream by searching the available plugins for it.
    *
-   * @param _resource The resource to find.
+   * @param resource The resource to find.
    * @return The resource stream or null if not found.
    */
-  public static InputStream getResourceAsStream (String _resource)
+  public static InputStream getResourceAsStream(String resource)
   {
     for(PluginResources resources : pluginResources.values()){
-      InputStream stream = resources.getResourceAsStream(_resource);
+      InputStream stream = resources.getResourceAsStream(resource);
       if(stream != null){
         return stream;
       }
     }
-    return getPluginResources().getResourceAsStream(_resource);
+    return getPluginResources().getResourceAsStream(resource);
   }
 
   /**
@@ -190,7 +190,7 @@ public class Services
    *
    * @return The PluginResources.
    */
-  public static PluginResources getPluginResources ()
+  public static PluginResources getPluginResources()
   {
     if(defaultPluginResources == null){
       defaultPluginResources = new DefaultPluginResources();
@@ -202,15 +202,15 @@ public class Services
   /**
    * Gets the PluginResources for the plugin with the specified name.
    *
-   * @param _plugin The plugin name.
+   * @param plugin The plugin name.
    * @return The PluginResources or null if none found.
    */
-  public static PluginResources getPluginResources (String _plugin)
+  public static PluginResources getPluginResources(String plugin)
   {
-    PluginResources resources = (PluginResources)pluginResources.get(_plugin);
+    PluginResources resources = (PluginResources)pluginResources.get(plugin);
     if(resources == null){
       throw new IllegalArgumentException(
-          Services.getMessage("plugin.resources.not.found", _plugin));
+          Services.getMessage("plugin.resources.not.found", plugin));
     }
     return resources;
   }
@@ -218,7 +218,7 @@ public class Services
   /**
    * Closes and disposes of all services.
    */
-  public static void close ()
+  public static void close()
   {
     for(PluginResources resources : pluginResources.values()){
       try{
@@ -236,11 +236,11 @@ public class Services
    * Adds the supplied PluginResources instance to the list of instances that
    * are used to locate services, messages, etc.
    *
-   * @param _resources The PluginResources to add.
+   * @param resources The PluginResources to add.
    */
-  public static void addPluginResources (PluginResources _resources)
+  public static void addPluginResources(PluginResources resources)
   {
-    pluginResources.put(_resources.getName(), _resources);
+    pluginResources.put(resources.getName(), resources);
   }
 
   /**
@@ -254,9 +254,9 @@ public class Services
      * @see AbstractPluginResources#initialize(String)
      */
     @Override
-    public void initialize (String _name)
+    public void initialize(String name)
     {
-      super.initialize(_name);
+      super.initialize(name);
 
       PreferenceFactory.addPreferences("core",
         "General org.eclim.user.name\n" +
@@ -335,7 +335,7 @@ public class Services
      * {@inheritDoc}
      * @see AbstractPluginResources#getBundleBaseName()
      */
-    protected String getBundleBaseName ()
+    protected String getBundleBaseName()
     {
       return "org/eclim/messages";
     }

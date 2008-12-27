@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.ant.command.complete;
-
-import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -39,7 +37,7 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE = "build.xml";
 
   @Test
-  public void completeProperty ()
+  public void completeProperty()
   {
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,
@@ -54,7 +52,7 @@ public class CodeCompleteCommandTest
   }
 
   @Test
-  public void completeTarget ()
+  public void completeTarget()
   {
     String result = Eclim.execute(new String[]{
       "ant_complete", "-p", Ant.TEST_PROJECT,

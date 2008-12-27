@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ setlocal indentexpr=EclimGetCssIndent(v:lnum)
 setlocal indentkeys=0{,0},!^F,o,O
 
 " EclimGetCssIndent(lnum) {{{
-function! EclimGetCssIndent (lnum)
+function! EclimGetCssIndent(lnum)
   let adj = 0
   let prevline = prevnonblank(a:lnum - 1)
 
@@ -49,7 +49,7 @@ function! EclimGetCssIndent (lnum)
 endfunction " }}}
 
 " CssIndentAnythingSettings() {{{
-function! CssIndentAnythingSettings ()
+function! CssIndentAnythingSettings()
   " Syntax name REs for comments and strings.
   let b:commentRE      = 'cssComment'
   let b:lineCommentRE  = 'cssComment'

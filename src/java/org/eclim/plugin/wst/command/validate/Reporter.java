@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,34 +36,34 @@ public class Reporter
    *
    * @return List of messages.
    */
-  public List<IMessage> getMessages ()
+  public List<IMessage> getMessages()
   {
     return messages;
   }
 
-  public void addMessage (IValidator origin, IMessage message)
+  public void addMessage(IValidator origin, IMessage message)
   {
     messages.add(message);
   }
 
-  public void displaySubtask (IValidator validator, IMessage message)
+  public void displaySubtask(IValidator validator, IMessage message)
   {
   }
 
-  public boolean isCancelled ()
+  public boolean isCancelled()
   {
     return false;
   }
 
-  public void removeAllMessages (IValidator origin)
+  public void removeAllMessages(IValidator origin)
   {
   }
 
-  public void removeAllMessages (IValidator origin, Object object)
+  public void removeAllMessages(IValidator origin, Object object)
   {
   }
 
-  public void removeMessageSubset (IValidator validator, Object obj, String groupName)
+  public void removeMessageSubset(IValidator validator, Object obj, String groupName)
   {
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class ImplType
    *
    * @return package as String.
    */
-  public String getPackage ()
+  public String getPackage()
   {
     return this.packageName;
   }
@@ -43,11 +43,11 @@ public class ImplType
   /**
    * Set package.
    *
-   * @param _package the value to set.
+   * @param packageName the value to set.
    */
-  public void setPackage (String _package)
+  public void setPackage(String packageName)
   {
-    this.packageName = _package;
+    this.packageName = packageName;
   }
 
   /**
@@ -55,7 +55,7 @@ public class ImplType
    *
    * @return signature as String.
    */
-  public String getSignature ()
+  public String getSignature()
   {
     return this.signature;
   }
@@ -63,11 +63,11 @@ public class ImplType
   /**
    * Set signature.
    *
-   * @param _signature the value to set.
+   * @param signature the value to set.
    */
-  public void setSignature (String _signature)
+  public void setSignature(String signature)
   {
-    this.signature = _signature;
+    this.signature = signature;
   }
 
   /**
@@ -75,7 +75,7 @@ public class ImplType
    *
    * @return true if the type exists, false otherwise.
    */
-  public boolean getExists ()
+  public boolean getExists()
   {
     return exists;
   }
@@ -83,11 +83,11 @@ public class ImplType
   /**
    * Sets whether or not the type exists (if it was found in the project).
    *
-   * @param _exists true if the type exists, false otherwise.
+   * @param exists true if the type exists, false otherwise.
    */
-  public void setExists (boolean _exists)
+  public void setExists(boolean exists)
   {
-    exists = _exists;
+    this.exists = exists;
   }
 
   /**
@@ -95,7 +95,7 @@ public class ImplType
    *
    * @return methods as ImplMethod[].
    */
-  public ImplMethod[] getMethods ()
+  public ImplMethod[] getMethods()
   {
     return this.methods;
   }
@@ -103,22 +103,22 @@ public class ImplType
   /**
    * Set methods.
    *
-   * @param _methods the value to set.
+   * @param methods the value to set.
    */
-  public void setMethods (ImplMethod[] _methods)
+  public void setMethods(ImplMethod[] methods)
   {
-    this.methods = _methods;
+    this.methods = methods;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean equals (Object _other)
+  public boolean equals(Object other)
   {
-    if(_other instanceof ImplType){
-      ImplType other = (ImplType)_other;
-      return (other.getSignature().equals(getSignature()) &&
-          other.getPackage().equals(getPackage()));
+    if(other instanceof ImplType){
+      ImplType type = (ImplType)other;
+      return (type.getSignature().equals(getSignature()) &&
+          type.getPackage().equals(getPackage()));
     }
     return false;
   }

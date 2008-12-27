@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,31 +36,31 @@ public interface PluginResources
   /**
    * Gets a command by name.
    *
-   * @param _name The name of the service.
+   * @param name The name of the service.
    *
    * @return The command instance.
    */
-  public Command getCommand (String _name)
+  public Command getCommand(String name)
     throws Exception;
 
   /**
    * Determines if this instance contains the command with the supplied name.
    *
-   * @param _name The name of the command.
+   * @param name The name of the command.
    * @return true if this instance contains the command, false otherwise.
    */
-  public boolean containsCommand (String _name);
+  public boolean containsCommand(String name);
 
   /**
    * Gets a message that can be formated with the optional array of arguments
    * provided.
    *
-   * @param _key The key of the message to retrieve.
-   * @param _args The (possibly null) array of argument to format the message
+   * @param key The key of the message to retrieve.
+   * @param args The (possibly null) array of argument to format the message
    *  with.
    * @return The message.
    */
-  public String getMessage (String _key, Object... _args);
+  public String getMessage(String key, Object... args);
 
   /**
    * Gets the underlying resource bundle.
@@ -70,49 +70,49 @@ public interface PluginResources
    *
    * @return The ResourceBundle.
    */
-  public ResourceBundle getResourceBundle ();
+  public ResourceBundle getResourceBundle();
 
   /**
    * Gets a property by name.
    * <p/>
    * Properties defined by plugin.properties at the root of the plugin.
    *
-   * @param _name The property name.
+   * @param name The property name.
    * @return The property or null if not found.
    */
-  public String getProperty (String _name);
+  public String getProperty(String name);
 
   /**
    * Gets a property by name.
    * <p/>
    * Properties defined by plugin.properties at the root of the plugin.
    *
-   * @param _name The property name.
-   * @param _default The value to return if no value found.
+   * @param name The property name.
+   * @param defaultValue The value to return if no value found.
    * @return The property value or the supplied default value.
    */
-  public String getProperty (String _name, String _default);
+  public String getProperty(String name, String defaultValue);
 
   /**
    * Gets the url to a plugin resource.
    *
-   * @param _resource The plugin resource to get.
+   * @param resource The plugin resource to get.
    * @return The url or null if resource not found.
    */
-  public URL getResource (String _resource);
+  public URL getResource(String resource);
 
   /**
    * Gets an input stream to read a plugin resource.
    *
-   * @param _resource The plugin resource to get an input stream for.
+   * @param resource The plugin resource to get an input stream for.
    * @return The input stream or null if the resource was not found.
    */
-  public InputStream getResourceAsStream (String _resource);
+  public InputStream getResourceAsStream(String resource);
 
   /**
    * Closes this resource instance and releases any held resources.
    */
-  public void close ()
+  public void close()
     throws Exception;
 
   /**
@@ -120,5 +120,5 @@ public interface PluginResources
    *
    * @return The name.
    */
-  public String getName ();
+  public String getName();
 }

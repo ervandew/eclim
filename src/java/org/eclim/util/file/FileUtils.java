@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,41 +56,40 @@ public class FileUtils
   /**
    * Gets a project relative file.
    *
-   * @param _project The project.
-   * @param _file The file.
+   * @param project The project.
+   * @param file The file.
    * @return The File.
    */
-  public static File getProjectRelativeFile (IProject _project, String _file)
+  public static File getProjectRelativeFile(IProject project, String file)
     throws Exception
   {
-    return new File(concat(ProjectUtils.getPath(_project), _file));
+    return new File(concat(ProjectUtils.getPath(project), file));
   }
 
   /**
    * Converts the supplied byte offset in the specified file to the
    * corresponding char offset for that file using the supplied file encoding.
    *
-   * @param _filename The absolute path to the file.
-   * @param _byteOffset The byte offset to be converted.
-   * @param _encoding The encoding of the file.  If null, defaults to utf-8.
+   * @param filename The absolute path to the file.
+   * @param byteOffset The byte offset to be converted.
+   * @param encoding The encoding of the file.  If null, defaults to utf-8.
    *
    * @return The char offset.
    */
-  public static int byteOffsetToCharOffset (
-      String _filename, int _byteOffset, String _encoding)
+  public static int byteOffsetToCharOffset(
+      String filename, int byteOffset, String encoding)
     throws Exception
   {
-    String encoding = _encoding;
     if (encoding == null){
       encoding = UTF8;
     }
 
     BufferedInputStream in = null;
     try{
-      byte[] bytes = new byte[_byteOffset];
-      in = new BufferedInputStream(new FileInputStream(_filename));
+      byte[] bytes = new byte[byteOffset];
+      in = new BufferedInputStream(new FileInputStream(filename));
       in.read(bytes, 0, bytes.length);
-      String value = new String(bytes, _encoding);
+      String value = new String(bytes, encoding);
 
       return value.length();
     }finally{
@@ -102,32 +101,32 @@ public class FileUtils
    * Converts the supplied char offset into an int array where the first element
    * is the line number and the second is the column number.
    *
-   * @param _filename The file to translate the offset for.
-   * @param _offset The offset.
+   * @param filename The file to translate the offset for.
+   * @param offset The offset.
    * @return The line and column int array.
    */
-  public static int[] offsetToLineColumn (String _filename, int _offset)
+  public static int[] offsetToLineColumn(String filename, int offset)
     throws Exception
   {
-    FileOffsets offsets = FileOffsets.compile(_filename);
-    return offsets.offsetToLineColumn(_offset);
+    FileOffsets offsets = FileOffsets.compile(filename);
+    return offsets.offsetToLineColumn(offset);
   }
 
   /**
    * Obtains a matcher to run the supplied pattern on the specified file.
    *
-   * @param _pattern The regex pattern
-   * @param _file The path to the file.
+   * @param pattern The regex pattern
+   * @param file The path to the file.
    * @return The Matcher.
    */
-  public static Matcher matcher (Pattern _pattern, String _file)
+  public static Matcher matcher(Pattern pattern, String file)
     throws Exception
   {
     FileInputStream is = null;
     try{
-      is = new FileInputStream(_file);
+      is = new FileInputStream(file);
       String contents = IOUtils.toString(is);
-      return _pattern.matcher(contents);
+      return pattern.matcher(contents);
     }finally{
       IOUtils.closeQuietly(is);
     }
@@ -142,12 +141,12 @@ public class FileUtils
    * to<br/>
    * <code>zip:file:///opt/sun-jdk-1.5.0.05/src.zip!/javax/swing/Spring.java</code>
    *
-   * @param _file The file to translate.
+   * @param file The file to translate.
    * @return The translated file.
    */
-  public static String toUrl (String _file)
+  public static String toUrl(String file)
   {
-    String file = _file.replace('\\', '/');
+    file = file.replace('\\', '/');
 
     // if the path points to a real file, return it.
     if(new File(file).exists()){
@@ -202,7 +201,7 @@ public class FileUtils
    * @param parts The path parts to concat.
    * @return The concatenated paths.
    */
-  public static String concat (String head, String... parts)
+  public static String concat(String head, String... parts)
   {
     IPath path = Path.fromOSString(head);
     for (String part : parts){
@@ -222,7 +221,7 @@ public class FileUtils
    * @param path The path.
    * @return The base name of the path.
    */
-  public static String getBaseName (String path)
+  public static String getBaseName(String path)
   {
     IPath p = Path.fromOSString(path);
     return p.segment(p.segmentCount() - 1);
@@ -239,7 +238,7 @@ public class FileUtils
    * @param path The path.
    * @return The file extension.
    */
-  public static String getExtension (String path)
+  public static String getExtension(String path)
   {
     String ext = Path.fromOSString(path).getFileExtension();
     if (ext == null){
@@ -251,7 +250,7 @@ public class FileUtils
   /**
    *
    */
-  public static String getPath (String path)
+  public static String getPath(String path)
   {
     IPath p = null;
     int index = path.indexOf(':');
@@ -278,7 +277,7 @@ public class FileUtils
    * @param path The path.
    * @return The full path.
    */
-  public static String getFullPath (String path)
+  public static String getFullPath(String path)
   {
     IPath p = Path.fromOSString(path);
     if (!p.hasTrailingSeparator()){
@@ -298,7 +297,7 @@ public class FileUtils
    * @param path The path.
    * @return The file name without the extension.
    */
-  public static String getFileName (String path)
+  public static String getFileName(String path)
   {
     IPath p = Path.fromOSString(path);
     if (p.hasTrailingSeparator()){
@@ -318,7 +317,7 @@ public class FileUtils
    * @param path The path.
    * @return The path with the extension removed.
    */
-  public static String removeExtension (String path)
+  public static String removeExtension(String path)
   {
     return Path.fromOSString(path).removeFileExtension().toOSString();
   }
@@ -329,7 +328,7 @@ public class FileUtils
    * @param path The path.
    * @return The updated path.
    */
-  public static String separatorsToUnix (String path)
+  public static String separatorsToUnix(String path)
   {
     if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
       return path;
@@ -342,7 +341,7 @@ public class FileUtils
    *
    * @param dir The directory to delete.
    */
-  public static void deleteDirectory (File dir)
+  public static void deleteDirectory(File dir)
   {
     if(!dir.exists()){
       return;

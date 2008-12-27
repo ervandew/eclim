@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace
 endfunction " }}}
 
 " TestArchiveList() {{{
-function! TestArchiveList ()
+function! TestArchiveList()
   edit eclim_unit_test/vcs/git.tar.gz
   call VUAssertEquals(line('$'), 2)
   call VUAssertEquals(getline(1), 'git.tar.gz/')
@@ -55,7 +55,7 @@ function! TestArchiveList ()
 endfunction " }}}
 
 " TestArchiveTree() {{{
-function! TestArchiveTree ()
+function! TestArchiveTree()
   edit eclim_unit_test/vcs/git.tar.gz
   call VUAssertEquals(line('$'), 2)
   call VUAssertEquals(getline(1), 'git.tar.gz/')

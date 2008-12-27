@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class ConstructorCommandTest
     "src/org/eclim/test/constructor/TestConstructor.java";
 
   @Test
-  public void emptyConstructor ()
+  public void emptyConstructor()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -50,12 +50,12 @@ public class ConstructorCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Constructor not found.",
-        Pattern.compile("public TestConstructor \\(\\)")
+        Pattern.compile("public TestConstructor\\(\\)")
         .matcher(contents).find());
   }
 
   @Test
-  public void argConstructor ()
+  public void argConstructor()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -68,7 +68,7 @@ public class ConstructorCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Constructor not found.",
-        Pattern.compile("public TestConstructor \\(int id, String name\\)")
+        Pattern.compile("public TestConstructor\\(int id, String name\\)")
         .matcher(contents).find());
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,44 +35,41 @@ public class CompletionComparator
   /**
    * {@inheritDoc}
    */
-  public int compare (CodeCompleteResult _o1, CodeCompleteResult _o2)
+  public int compare(CodeCompleteResult o1, CodeCompleteResult o2)
   {
-    if(_o1 == null && _o2 == null){
+    if(o1 == null && o2 == null){
       return 0;
-    }else if(_o2 == null){
+    }else if(o2 == null){
       return -1;
-    }else if(_o1 == null){
+    }else if(o1 == null){
       return 1;
     }
 
     // push keywords to the end.
-    if (_o1.getType() != CompletionProposal.KEYWORD &&
-        _o2.getType() != CompletionProposal.KEYWORD)
-    {
-      int kind = _o1.getType() - _o2.getType();
+    if (o1.getType() != CompletionProposal.KEYWORD &&
+        o2.getType() != CompletionProposal.KEYWORD){
+      int kind = o1.getType() - o2.getType();
       if(kind != 0){
         return kind;
       }
-    }else if(_o1.getType() == CompletionProposal.KEYWORD &&
-        _o2.getType() != CompletionProposal.KEYWORD)
-    {
+    }else if(o1.getType() == CompletionProposal.KEYWORD &&
+        o2.getType() != CompletionProposal.KEYWORD){
       return 1;
-    }else if(_o2.getType() == CompletionProposal.KEYWORD &&
-        _o1.getType() != CompletionProposal.KEYWORD)
-    {
+    }else if(o2.getType() == CompletionProposal.KEYWORD &&
+        o1.getType() != CompletionProposal.KEYWORD){
       return -1;
     }
 
     return Collator.getInstance(Locale.US).compare(
-        new String(_o1.getCompletion()), new String(_o2.getCompletion()));
+        new String(o1.getCompletion()), new String(o2.getCompletion()));
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean equals (Object _obj)
+  public boolean equals(Object obj)
   {
-    if(_obj instanceof CompletionComparator){
+    if(obj instanceof CompletionComparator){
       return true;
     }
     return false;

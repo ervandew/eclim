@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,29 +49,29 @@ public class ProjectUtils
   /**
    * Gets the path on disk to the directory of the supplied project.
    *
-   * @param _project The project name.
+   * @param project The project name.
    * @return The path or null if not found.
    */
-  public static String getPath (String _project)
+  public static String getPath(String project)
     throws Exception
   {
-    return getPath(getProject(_project));
+    return getPath(getProject(project));
   }
 
   /**
    * Gets the path on disk to the directory of the supplied project.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return The path or null if not found.
    */
-  public static String getPath (IProject _project)
+  public static String getPath(IProject project)
     throws Exception
   {
-     IPath path = _project.getRawLocation();
+     IPath path = project.getRawLocation();
 
     // eclipse returns null for raw location if project is under the workspace.
     if(path == null){
-      String name = _project.getName();
+      String name = project.getName();
       path = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
       path = path.append(name);
     }
@@ -82,30 +82,30 @@ public class ProjectUtils
   /**
    * Gets a project by name.
    *
-   * @param _name The name of the project.
+   * @param name The name of the project.
    * @return The project which may or may not exist.
    */
-  public static IProject getProject (String _name)
+  public static IProject getProject(String name)
     throws Exception
   {
-    return getProject(_name, false);
+    return getProject(name, false);
   }
 
   /**
    * Gets a project by name.
    *
-   * @param _name The name of the project.
-   * @param _open true to open the project if not already open, or false to do
+   * @param name The name of the project.
+   * @param open true to open the project if not already open, or false to do
    * nothing.
    * @return The project which may or may not exist.
    */
-  public static IProject getProject (String _name, boolean _open)
+  public static IProject getProject(String name, boolean open)
     throws Exception
   {
     IProject project =
-      ResourcesPlugin.getWorkspace().getRoot().getProject(_name);
+      ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 
-    if(_open && project.exists() && !project.isOpen()){
+    if(open && project.exists() && !project.isOpen()){
       project.open(null);
     }
 
@@ -115,69 +115,69 @@ public class ProjectUtils
   /**
    * Gets the absolute file path.
    *
-   * @param _project The file's project.
-   * @param _file The file.
+   * @param project The file's project.
+   * @param file The file.
    * @return The absolute file path.
    */
-  public static String getFilePath (String _project, String _file)
+  public static String getFilePath(String project, String file)
     throws Exception
   {
-    return getFilePath(getProject(_project), _file);
+    return getFilePath(getProject(project), file);
   }
 
   /**
    * Gets the absolute file path.
    *
-   * @param _project The file's project.
-   * @param _file The file.
+   * @param project The file's project.
+   * @param file The file.
    * @return The absolute file path.
    */
-  public static String getFilePath (IProject _project, String _file)
+  public static String getFilePath(IProject project, String file)
     throws Exception
   {
-    if(_file.startsWith("/" + _project.getName() + "/")){
-      _file = _file.substring(2 + _project.getName().length());
-    }else if(_file.endsWith("/" + _project.getName())){
-      _file = _file.substring(1 + _project.getName().length());
+    if(file.startsWith("/" + project.getName() + "/")){
+      file = file.substring(2 + project.getName().length());
+    }else if(file.endsWith("/" + project.getName())){
+      file = file.substring(1 + project.getName().length());
     }
-    return FileUtils.concat(getPath(_project), _file);
+    return FileUtils.concat(getPath(project), file);
   }
 
   /**
    * Gets the IFile instance for the specified file located in the supplied
    * project.
    *
-   * @param _project The file's project.
-   * @param _file The file.
+   * @param project The file's project.
+   * @param file The file.
    * @return The IFile.
    */
-  public static IFile getFile (String _project, String _file)
+  public static IFile getFile(String project, String file)
     throws Exception
   {
-    return getFile(getProject(_project), _file);
+    return getFile(getProject(project), file);
   }
 
   /**
    * Gets the IFile instance for the specified file located in the supplied
    * project.
    *
-   * @param _project The file's project.
-   * @param _file The file.
+   * @param project The file's project.
+   * @param file The file.
    * @return The IFile.
    */
-  public static IFile getFile (IProject _project, String _file)
+  public static IFile getFile(IProject project, String file)
     throws Exception
   {
-    _project.open(null);
-    String path = getPath(_project);
+    project.open(null);
+    String path = getPath(project);
     path = path.replace('\\', '/');
-    /*if(!_file.startsWith(path)){
+    /*if(!file.startsWith(path)){
       throw new RuntimeException(
-          Services.getMessage("project.file.mismatch", _file, path));
+          Services.getMessage("project.file.mismatch", file, path));
     }*/
-    //String file = _file.substring(path.length());
+    //String file = file.substring(path.length());
 
-    IFile ifile = _project.getFile(_file);
+    IFile ifile = project.getFile(file);
     ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
     return ifile;
   }
@@ -187,14 +187,14 @@ public class ProjectUtils
    * <p/>
    * Borrowed from org.eclipse.ant.internal.ui.AntUtil
    *
-   * @param _project The project name.
-   * @param _file The file.
+   * @param project The project name.
+   * @param file The file.
    * @return The IDocument.
    */
-  public static IDocument getDocument (String _project, String _file)
+  public static IDocument getDocument(String project, String file)
     throws Exception
   {
-    return getDocument(getProject(_project), _file);
+    return getDocument(getProject(project), file);
   }
 
   /**
@@ -202,26 +202,26 @@ public class ProjectUtils
    * <p/>
    * Borrowed from org.eclipse.ant.internal.ui.AntUtil
    *
-   * @param _project The project.
-   * @param _file The file.
+   * @param project The project.
+   * @param file The file.
    * @return The IDocument.
    */
-  public static IDocument getDocument (IProject _project, String _file)
+  public static IDocument getDocument(IProject project, String file)
     throws Exception
   {
     // using IFile would ensure that ifile.getProject() (used by at least pdt
     // internally) would result in the proper project reference, but seems to
     // break ant code completion and validation.
-    //IFile file = getFile(_project, _file);
-    File file = new File(FileUtils.concat(getPath(_project), _file));
-    if(!file.exists()){
+    //IFile thefile = getFile(project, file);
+    File thefile = new File(FileUtils.concat(getPath(project), file));
+    if(!thefile.exists()){
       return null;
     }
 
-    ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
-    //IPath location = file.getFullPath();
-    IPath location= new Path(file.getAbsolutePath());
-    boolean connected= false;
+    ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
+    //IPath location = thefile.getFullPath();
+    IPath location = new Path(thefile.getAbsolutePath());
+    boolean connected = false;
     try {
       ITextFileBuffer buffer =
         manager.getTextFileBuffer(location, LocationKind.LOCATION);
@@ -240,7 +240,7 @@ public class ProjectUtils
         try {
           manager.disconnect(
               location, LocationKind.LOCATION, new NullProgressMonitor());
-        } catch (Exception e) {
+        }catch(Exception e){
         }
       }
     }
@@ -249,13 +249,13 @@ public class ProjectUtils
   /**
    * Closes the supplied project and suppresses any exceptions thrown.
    *
-   * @param _project The project.
+   * @param project The project.
    */
-  public static void closeQuietly (IProject _project)
+  public static void closeQuietly(IProject project)
   {
     try{
-      if(_project != null){
-        _project.close(null);
+      if(project != null){
+        project.close(null);
       }
     }catch(Exception ignore){
     }
@@ -264,15 +264,15 @@ public class ProjectUtils
   /**
    * Assertion that the supplied project exists.
    *
-   * @param _project The project.
+   * @param project The project.
    */
-  public static void assertExists (IProject _project)
+  public static void assertExists(IProject project)
     throws Exception
   {
-    if(_project == null || !_project.exists()){
+    if(project == null || !project.exists()){
       throw new IllegalArgumentException(
           Services.getMessage("project.not.found",
-            _project != null ? _project.getName() : null));
+            project != null ? project.getName() : null));
     }
   }
 }

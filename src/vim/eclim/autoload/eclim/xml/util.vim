@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ let s:element = '.\{-}<\([a-zA-Z].\{-}\)\(\s\|>\|$\).*'
 
 " GetDtd() {{{
 " Get the dtd defined in the current file.
-function! eclim#xml#util#GetDtd ()
+function! eclim#xml#util#GetDtd()
   let linenum = search('<!DOCTYPE\s\+\_.\{-}>', 'bcnw')
   if linenum > 0
     let line = ''
@@ -56,7 +56,7 @@ endfunction " }}}
 " GetXsd() {{{
 " Get the schema defined in the current file, for the optionally provided
 " namespace prefix, or the default namespace.
-function! eclim#xml#util#GetXsd (...)
+function! eclim#xml#util#GetXsd(...)
   let namespace = ''
   if len(a:000) > 0
     let namespace = a:000[0]
@@ -91,7 +91,7 @@ endfunction " }}}
 
 " GetElementName() {{{
 " Get name of the element that the cursor is currently on.
-function! eclim#xml#util#GetElementName ()
+function! eclim#xml#util#GetElementName()
   let line = getline('.')
   let cnum = col('.')
   if line[cnum - 1] == '<'
@@ -116,7 +116,7 @@ endfunction " }}}
 " GetParentElementName() {{{
 " Get the parent element name relative to the current cursor position.
 " Depends on 'at' visual selection ability.
-function! eclim#xml#util#GetParentElementName ()
+function! eclim#xml#util#GetParentElementName()
   let pos = getpos('.')
 
   " select tags (best solution I can think of).

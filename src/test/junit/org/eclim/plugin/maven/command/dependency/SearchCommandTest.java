@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class SearchCommandTest
   private static final String TEST_FILE = "pom.xml";
 
   @Test
-  public void execute ()
+  public void execute()
   {
     String result = Eclim.execute(new String[]{
       "maven_dependency_search", "-p", Maven.TEST_PROJECT,

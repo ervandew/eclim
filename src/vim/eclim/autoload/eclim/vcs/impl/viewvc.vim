@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,22 +30,22 @@ else
 endif
 
 " GetLogUrl(root, file, args) {{{
-function eclim#vcs#impl#viewvc#GetLogUrl (root, file, args)
+function eclim#vcs#impl#viewvc#GetLogUrl(root, file, args)
   return a:root . '/' . a:file . '?view=log'
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
-function eclim#vcs#impl#viewvc#GetChangeSetUrl (root, file, args)
+function eclim#vcs#impl#viewvc#GetChangeSetUrl(root, file, args)
   return a:root . '/' . a:file . '?view=rev&revision=' . a:args[0]
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) {{{
-function eclim#vcs#impl#viewvc#GetAnnotateUrl (root, file, args)
+function eclim#vcs#impl#viewvc#GetAnnotateUrl(root, file, args)
   return a:root . '/' . a:file . '?annotate=' . a:args[0]
 endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
-function eclim#vcs#impl#viewvc#GetDiffUrl (root, file, args)
+function eclim#vcs#impl#viewvc#GetDiffUrl(root, file, args)
   return a:root . '/' . a:file . '?r1=' . a:args[0] . '&r2=' . a:args[1]
 endfunction " }}}
 

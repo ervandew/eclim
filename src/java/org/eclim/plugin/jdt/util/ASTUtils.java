@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,72 +55,72 @@ public class ASTUtils
   /**
    * Gets the AST CompilationUnit for the supplied ICompilationUnit.
    * <p/>
-   * Equivalent of getCompilationUnit(_src, false).
+   * Equivalent of getCompilationUnit(src, false).
    *
-   * @param _src The ICompilationUnit.
+   * @param src The ICompilationUnit.
    * @return The CompilationUnit.
    */
-  public static CompilationUnit getCompilationUnit (ICompilationUnit _src)
+  public static CompilationUnit getCompilationUnit(ICompilationUnit src)
     throws Exception
   {
-    return getCompilationUnit(_src, false);
+    return getCompilationUnit(src, false);
   }
 
   /**
    * Gets the AST CompilationUnit for the supplied ICompilationUnit.
    *
-   * @param _src The ICompilationUnit.
-   * @param _recordModifications true to record any modifications, false
+   * @param src The ICompilationUnit.
+   * @param recordModifications true to record any modifications, false
    * otherwise.
    * @return The CompilationUnit.
    */
-  public static CompilationUnit getCompilationUnit (
-      ICompilationUnit _src, boolean _recordModifications)
+  public static CompilationUnit getCompilationUnit(
+      ICompilationUnit src, boolean recordModifications)
     throws Exception
   {
     ASTParser parser = ASTParser.newParser(AST.JLS3);
-    parser.setSource(_src);
-    CompilationUnit src = (CompilationUnit)parser.createAST(null);
-    if(_recordModifications){
-      src.recordModifications();
+    parser.setSource(src);
+    CompilationUnit cu = (CompilationUnit)parser.createAST(null);
+    if(recordModifications){
+      cu.recordModifications();
     }
 
-    return src;
+    return cu;
   }
 
   /**
    * Commits any changes made to the supplied CompilationUnit.
    * <p/>
    * Note: The method expects that the CompilationUnit is recording the
-   * modifications (getCompilationUnit(_src, true) was used).
+   * modifications (getCompilationUnit(src, true) was used).
    *
-   * @param _src The original ICompilationUnit.
-   * @param _node The CompilationUnit ast node.
+   * @param src The original ICompilationUnit.
+   * @param node The CompilationUnit ast node.
    */
-  public static void commitCompilationUnit (
-      ICompilationUnit _src, CompilationUnit _node)
+  public static void commitCompilationUnit(
+      ICompilationUnit src, CompilationUnit node)
     throws Exception
   {
-    Document document = new Document(_src.getBuffer().getContents());
-    TextEdit edits = _node.rewrite(
-        document, _src.getJavaProject().getOptions(true));
+    Document document = new Document(src.getBuffer().getContents());
+    TextEdit edits = node.rewrite(
+        document, src.getJavaProject().getOptions(true));
     edits.apply(document);
-    _src.getBuffer().setContents(document.get());
-    _src.save(null, false);
+    src.getBuffer().setContents(document.get());
+    src.save(null, false);
   }
 
   /**
    * Finds the node at the specified offset.
    *
-   * @param _cu The CompilationUnit.
-   * @param _offset The node offset in the compilation unit.
+   * @param cu The CompilationUnit.
+   * @param offset The node offset in the compilation unit.
    * @return The node at the specified offset.
    */
-  public static ASTNode findNode (CompilationUnit _cu, int _offset)
+  public static ASTNode findNode(CompilationUnit cu, int offset)
     throws Exception
   {
-    NodeFinder finder= new NodeFinder(_offset, 1);
-    _cu.accept(finder);
+    NodeFinder finder = new NodeFinder(offset, 1);
+    cu.accept(finder);
     //return finder.getCoveredNode();
     return finder.getCoveringNode();
   }
@@ -129,25 +129,25 @@ public class ASTUtils
    * Finds the node at the specified offset that matches up with the supplied
    * IJavaElement.
    *
-   * @param _cu The CompilationUnit.
-   * @param _offset The node offset in the compilation unit.
-   * @param _element The IJavaElement to match.
+   * @param cu The CompilationUnit.
+   * @param offset The node offset in the compilation unit.
+   * @param element The IJavaElement to match.
    * @return The node at the specified offset.
    */
-  public static ASTNode findNode (
-      CompilationUnit _cu, int _offset, IJavaElement _element)
+  public static ASTNode findNode(
+      CompilationUnit cu, int offset, IJavaElement element)
     throws Exception
   {
-    ASTNode node = findNode(_cu, _offset);
+    ASTNode node = findNode(cu, offset);
     if(node == null){
       return null;
     }
 
-    if(_element.getElementType() == IJavaElement.TYPE_PARAMETER){
-      _element = _element.getParent();
+    if(element.getElementType() == IJavaElement.TYPE_PARAMETER){
+      element = element.getParent();
     }
 
-    switch(_element.getElementType()){
+    switch(element.getElementType()){
       case IJavaElement.PACKAGE_DECLARATION:
         node = resolveNode(node, PackageDeclaration.class);
         break;
@@ -168,7 +168,7 @@ public class ASTUtils
         break;
       default:
         logger.info("findNode(CompilationUnit,int,IJavaElement) - " +
-            "unrecognized element type " + _element.getElementType());
+            "unrecognized element type " + element.getElementType());
     }
     return node;
   }
@@ -176,21 +176,21 @@ public class ASTUtils
   /**
    * Walk up the node tree until a node of the specified type is reached.
    *
-   * @param _node The starting node.
-   * @param _type The type to resolve.
+   * @param node The starting node.
+   * @param type The type to resolve.
    * @return The resulting node.
    */
-  private static ASTNode resolveNode (ASTNode _node, Class _type)
+  private static ASTNode resolveNode(ASTNode node, Class type)
     throws Exception
   {
-    if(_node == null){
+    if(node == null){
       return null;
     }
 
-    if(_type.isAssignableFrom(_node.getClass())){
-      return _node;
+    if(type.isAssignableFrom(node.getClass())){
+      return node;
     }
 
-    return resolveNode(_node.getParent(), _type);
+    return resolveNode(node.getParent(), type);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,17 +45,17 @@ public abstract class AbstractCodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = getOffset(_commandLine);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    int offset = getOffset(commandLine);
 
     IContentAssistProcessor processor =
-      getContentAssistProcessor(_commandLine, project, file);
+      getContentAssistProcessor(commandLine, project, file);
 
-    ITextViewer viewer = getTextViewer(_commandLine, project, file);
+    ITextViewer viewer = getTextViewer(commandLine, project, file);
 
     ICompletionProposal[] proposals =
       processor.computeCompletionProposals(viewer, offset);
@@ -77,34 +77,34 @@ public abstract class AbstractCodeCompleteCommand
       }
     }
 
-    return CodeCompleteFilter.instance.filter(_commandLine, results);
+    return CodeCompleteFilter.instance.filter(commandLine, results);
   }
 
   /**
    * Gets the IContentAssistProcessor to use.
    *
-   * @param _commandLine The current command line.
+   * @param commandLine The current command line.
    * @param project The project where the file is located.
    * @param file The file to be processed.
    * @return The IContentAssistProcessor.
    */
-  protected abstract IContentAssistProcessor getContentAssistProcessor (
-      CommandLine _commandLine, String project, String file)
+  protected abstract IContentAssistProcessor getContentAssistProcessor(
+      CommandLine commandLine, String project, String file)
     throws Exception;
 
   /**
    * Gets the text viewer passed to the content assist processor.
    *
-   * @param _commandLine The current command line.
+   * @param commandLine The current command line.
    * @param project The project the file is in.
    * @param file The file.
    * @return The ITextViewer.
    */
-  protected ITextViewer getTextViewer (
-      CommandLine _commandLine, String project, String file)
+  protected ITextViewer getTextViewer(
+      CommandLine commandLine, String project, String file)
     throws Exception
   {
-    int offset = getOffset(_commandLine);
+    int offset = getOffset(commandLine);
     return new DummyTextViewer(
         ProjectUtils.getDocument(project, file), offset, 1);
   }
@@ -115,7 +115,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param proposal The ICompletionProposal.
    * @return true if the proposal is accepted, false otherwise.
    */
-  protected boolean acceptProposal (ICompletionProposal proposal)
+  protected boolean acceptProposal(ICompletionProposal proposal)
   {
     return true;
   }
@@ -126,7 +126,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param proposal The ICompletionProposal.
    * @return The completion.
    */
-  protected String getCompletion (ICompletionProposal proposal)
+  protected String getCompletion(ICompletionProposal proposal)
   {
     return proposal.getDisplayString();
   }
@@ -137,7 +137,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param proposal The ICompletionProposal.
    * @return The description.
    */
-  protected String getDescription (ICompletionProposal proposal)
+  protected String getDescription(ICompletionProposal proposal)
   {
     String description = proposal.getAdditionalProposalInfo();
     if(description != null){
@@ -152,7 +152,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param proposal The ICompletionProposal.
    * @return The short description.
    */
-  protected String getShortDescription (ICompletionProposal proposal)
+  protected String getShortDescription(ICompletionProposal proposal)
   {
     return null;
   }

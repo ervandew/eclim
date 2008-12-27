@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,39 +45,38 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    boolean schema = _commandLine.hasOption(Options.SCHEMA_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    boolean schema = commandLine.hasOption(Options.SCHEMA_OPTION);
 
     List<Error> list = validate(project, file, schema, null);
 
-    return ErrorFilter.instance.filter(_commandLine, list);
+    return ErrorFilter.instance.filter(commandLine, list);
   }
 
   /**
    * Validate the supplied file.
    *
-   * @param _project The project name.
-   * @param _file The file to validate.
-   * @param _schema true to use declared schema, false otherwise.
-   * @param _handler The DefaultHandler to use while parsing the xml file.
+   * @param project The project name.
+   * @param file The file to validate.
+   * @param schema true to use declared schema, false otherwise.
+   * @param handler The DefaultHandler to use while parsing the xml file.
    * @return The list of errors.
    */
-  protected List<Error> validate (
-      String _project, String _file, boolean _schema, DefaultHandler _handler)
+  protected List<Error> validate(
+      String project, String file, boolean schema, DefaultHandler handler)
     throws Exception
   {
-    List<Error> errors = XmlUtils.validateXml(_project, _file, _schema, _handler);
+    List<Error> errors = XmlUtils.validateXml(project, file, schema, handler);
     for(Iterator<Error> ii = errors.iterator(); ii.hasNext();){
       Error error = ii.next();
       // FIXME: hack to ignore errors regarding no defined dtd.
       // When 1.4 no longer needs to be supported, this can be scrapped.
       if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
-          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
-      {
+          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1){
         ii.remove();
       }
     }

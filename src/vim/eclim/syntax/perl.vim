@@ -7,7 +7,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 source $VIMRUNTIME/syntax/perl.vim
 
-syn match  perlComment		"#.*" contains=perlTodo,@Spell
+syn match perlComment "#.*" contains=perlTodo,@Spell
 
 if !exists("perl_include_pod")
   if exists("perl_fold")

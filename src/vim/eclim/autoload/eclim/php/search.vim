@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -50,9 +50,9 @@
     \ ]
 " }}}
 
-" Search (...) {{{
+" Search(...) {{{
 " Executes a search.
-function! eclim#php#search#Search (...)
+function! eclim#php#search#Search(...)
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -117,9 +117,9 @@ function! eclim#php#search#Search (...)
 
 endfunction " }}}
 
-" FindDefinition (context) {{{
+" FindDefinition(context) {{{
 " Finds the defintion of the element under the cursor.
-function eclim#php#search#FindDefinition (context)
+function eclim#php#search#FindDefinition(context)
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -172,9 +172,9 @@ function eclim#php#search#FindDefinition (context)
   endif
 endfunction " }}}
 
-" FindInclude () {{{
+" FindInclude() {{{
 " Finds the include file under the cursor
-function eclim#php#search#FindInclude ()
+function eclim#php#search#FindInclude()
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -206,9 +206,9 @@ function eclim#php#search#FindInclude ()
   endif
 endfunction " }}}
 
-" SearchContext () {{{
+" SearchContext() {{{
 " Executes a contextual search.
-function! eclim#php#search#SearchContext ()
+function! eclim#php#search#SearchContext()
   if getline('.')[col('.') - 1] == '$'
     call cursor(line('.'), col('.') + 1)
     let cnum = eclim#util#GetCurrentElementColumn()
@@ -237,7 +237,7 @@ endfunction " }}}
 
 " CommandCompletePhpSearch(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for PhpSearch
-function! eclim#php#search#CommandCompletePhpSearch (argLead, cmdLine, cursorPos)
+function! eclim#php#search#CommandCompletePhpSearch(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')

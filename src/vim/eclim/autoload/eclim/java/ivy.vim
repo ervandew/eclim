@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,13 +29,13 @@
 
 " SetRepo(path) {{{
 " Sets the location of the ivy repository.
-function! eclim#java#ivy#SetRepo (path)
+function! eclim#java#ivy#SetRepo(path)
   call eclim#java#classpath#VariableCreate('IVY_REPO', a:path)
 endfunction " }}}
 
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
-function! eclim#java#ivy#UpdateClasspath ()
+function! eclim#java#ivy#UpdateClasspath()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif

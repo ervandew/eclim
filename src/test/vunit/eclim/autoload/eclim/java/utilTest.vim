@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestFileExists() {{{
-function! TestFileExists ()
+function! TestFileExists()
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call PeekRedir()
 
@@ -40,7 +40,7 @@ function! TestFileExists ()
 endfunction " }}}
 
 " TestGetClassname() {{{
-function! TestGetClassname ()
+function! TestGetClassname()
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call PeekRedir()
 
@@ -51,7 +51,7 @@ function! TestGetClassname ()
 endfunction " }}}
 
 " TestGetClassDeclarationPosition() {{{
-function! TestGetClassDeclarationPosition ()
+function! TestGetClassDeclarationPosition()
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call PeekRedir()
 
@@ -59,7 +59,7 @@ function! TestGetClassDeclarationPosition ()
 endfunction " }}}
 
 " TestGetFullyQualifiedClassname() {{{
-function! TestGetFullyQualifiedClassname ()
+function! TestGetFullyQualifiedClassname()
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call PeekRedir()
 
@@ -71,7 +71,7 @@ function! TestGetFullyQualifiedClassname ()
 endfunction " }}}
 
 " TestGetPackage() {{{
-function! TestGetPackage ()
+function! TestGetPackage()
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call PeekRedir()
 
@@ -81,7 +81,7 @@ function! TestGetPackage ()
 endfunction " }}}
 
 " TestGetPackageFromImport() {{{
-function! TestGetPackageFromImport ()
+function! TestGetPackageFromImport()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call PeekRedir()
 
@@ -90,7 +90,7 @@ function! TestGetPackageFromImport ()
 endfunction " }}}
 
 " TestGetSelectedFields() {{{
-function! TestGetSelectedFields ()
+function! TestGetSelectedFields()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call PeekRedir()
 
@@ -99,7 +99,7 @@ function! TestGetSelectedFields ()
 endfunction " }}}
 
 " TestIsImported() {{{
-function! TestIsImported ()
+function! TestIsImported()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call PeekRedir()
 

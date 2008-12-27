@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " Init(project) {{{
-function eclim#python#rope#Init (project)
+function eclim#python#rope#Init(project)
   if !has('python')
     call eclim#util#EchoError(
       \ "This functionality requires 'python' support compiled into vim.")
@@ -59,9 +59,9 @@ EOF
   return 1
 endfunction " }}}
 
-" RopePath () {{{
+" RopePath() {{{
 " Gets the base directory where the rope code is located.
-function eclim#python#rope#RopePath ()
+function eclim#python#rope#RopePath()
   if !exists("g:RopePath")
     let savewig = &wildignore
     set wildignore=""
@@ -80,10 +80,10 @@ function eclim#python#rope#RopePath ()
   return g:RopePath
 endfunction " }}}
 
-" Completions (project, filename, offset) {{{
+" Completions(project, filename, offset) {{{
 " Attempts to suggest code completions for a given project path, project
 " relative file path and offset.
-function eclim#python#rope#Completions (project, filename, offset)
+function eclim#python#rope#Completions(project, filename, offset)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -125,9 +125,9 @@ EOF
 
 endfunction " }}}
 
-" FindDefinition (project, filename, offset) {{{
+" FindDefinition(project, filename, offset) {{{
 " Attempts to find the definition of the element at the supplied offset.
-function eclim#python#rope#FindDefinition (project, filename, offset)
+function eclim#python#rope#FindDefinition(project, filename, offset)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -159,9 +159,9 @@ EOF
 
 endfunction " }}}
 
-" GetSourceDirs (project) {{{
+" GetSourceDirs(project) {{{
 " Attempts to determine the source directories for the supplied project.
-function eclim#python#rope#GetSourceDirs (project)
+function eclim#python#rope#GetSourceDirs(project)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -188,9 +188,9 @@ EOF
 
 endfunction " }}}
 
-" Validate (project, filename) {{{
+" Validate(project, filename) {{{
 " Attempts to validate the supplied file.
-function eclim#python#rope#Validate (project, filename)
+function eclim#python#rope#Validate(project, filename)
   if !eclim#python#rope#Init(a:project)
     return []
   endif

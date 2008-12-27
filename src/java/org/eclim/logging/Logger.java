@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,23 +34,23 @@ public class Logger
   /**
    * Gets the logger for the specified class.
    *
-   * @param _class The class to get the Logger for.
+   * @param theClass The class to get the Logger for.
    * @return The Logger instance.
    */
-  public static Logger getLogger (Class _class)
+  public static Logger getLogger(Class theClass)
   {
-    return getLogger(_class.getName());
+    return getLogger(theClass.getName());
   }
 
   /**
    * Gets the logger with the specified name.
    *
-   * @param _name The name of the Logger to get.
+   * @param name The name of the Logger to get.
    * @return The Logger instance.
    */
-  public static Logger getLogger (String _name)
+  public static Logger getLogger(String name)
   {
-    return new Logger(org.slf4j.LoggerFactory.getLogger(_name));
+    return new Logger(org.slf4j.LoggerFactory.getLogger(name));
   }
 
   /**
@@ -59,7 +59,7 @@ public class Logger
    * @param message The message to log.
    * @param t The associated exception.
    */
-  public void debug (String message, Throwable t)
+  public void debug(String message, Throwable t)
   {
     logger.debug(message, t);
   }
@@ -70,7 +70,7 @@ public class Logger
    * @param message The message to log.
    * @param args Optional arguments for the message.
    */
-  public void debug (String message, Object... args)
+  public void debug(String message, Object... args)
   {
     logger.debug(message, args);
   }
@@ -81,7 +81,7 @@ public class Logger
    * @param message The message to log.
    * @param t The associated exception.
    */
-  public void info (String message, Throwable t)
+  public void info(String message, Throwable t)
   {
     logger.info(message, t);
   }
@@ -92,7 +92,7 @@ public class Logger
    * @param message The message to log.
    * @param args Optional arguments for the message.
    */
-  public void info (String message, Object... args)
+  public void info(String message, Object... args)
   {
     logger.info(message, args);
   }
@@ -103,7 +103,7 @@ public class Logger
    * @param message The message to log.
    * @param t The associated exception.
    */
-  public void warn (String message, Throwable t)
+  public void warn(String message, Throwable t)
   {
     logger.warn(message, t);
   }
@@ -114,7 +114,7 @@ public class Logger
    * @param message The message to log.
    * @param args Optional arguments for the message.
    */
-  public void warn (String message, Object... args)
+  public void warn(String message, Object... args)
   {
     logger.warn(message, args);
   }
@@ -125,7 +125,7 @@ public class Logger
    * @param message The message to log.
    * @param t The associated exception.
    */
-  public void error (String message, Throwable t)
+  public void error(String message, Throwable t)
   {
     logger.error(message, t);
   }
@@ -136,7 +136,7 @@ public class Logger
    * @param message The message to log.
    * @param args Optional arguments for the message.
    */
-  public void error (String message, Object... args)
+  public void error(String message, Object... args)
   {
     logger.error(message, args);
   }
@@ -146,7 +146,7 @@ public class Logger
    *
    * @return true if debug enabled, false otherwise.
    */
-  public boolean isDebugEnabled ()
+  public boolean isDebugEnabled()
   {
     return logger.isDebugEnabled();
   }
@@ -156,7 +156,7 @@ public class Logger
    *
    * @return true if info enabled, false otherwise.
    */
-  public boolean isInfoEnabled ()
+  public boolean isInfoEnabled()
   {
     return logger.isInfoEnabled();
   }
@@ -166,7 +166,7 @@ public class Logger
    *
    * @return true if warning enabled, false otherwise.
    */
-  public boolean isWarnEnabled ()
+  public boolean isWarnEnabled()
   {
     return logger.isWarnEnabled();
   }
@@ -176,7 +176,7 @@ public class Logger
    *
    * @return true if error enabled, false otherwise.
    */
-  public boolean isErrorEnabled ()
+  public boolean isErrorEnabled()
   {
     return logger.isErrorEnabled();
   }

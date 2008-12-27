@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " TestSplit() {{{
-function! TestSplit ()
+function! TestSplit()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -38,7 +38,7 @@ function! TestSplit ()
 endfunction " }}}
 
 " TestTabnew() {{{
-function! TestTabnew ()
+function! TestTabnew()
   exec 'cd ' . g:TestEclimWorkspace
 
   Tabnew eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt
@@ -53,7 +53,7 @@ function! TestTabnew ()
 endfunction " }}}
 
 " TestEditRelative() {{{
-function! TestEditRelative ()
+function! TestEditRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -66,7 +66,7 @@ function! TestEditRelative ()
 endfunction " }}}
 
 " TestSplitRelative() {{{
-function! TestSplitRelative ()
+function! TestSplitRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -79,7 +79,7 @@ function! TestSplitRelative ()
 endfunction " }}}
 
 " TestTabnewRelative() {{{
-function! TestTabnewRelative ()
+function! TestTabnewRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -98,7 +98,7 @@ function! TestTabnewRelative ()
 endfunction " }}}
 
 " TestReadRelative() {{{
-function! TestReadRelative ()
+function! TestReadRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
   call cursor(line('$'), 1)
@@ -109,7 +109,7 @@ function! TestReadRelative ()
 endfunction " }}}
 
 " TestArgsRelative() {{{
-function! TestArgsRelative ()
+function! TestArgsRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -124,7 +124,7 @@ function! TestArgsRelative ()
 endfunction " }}}
 
 " TestOnly() {{{
-function! TestOnly ()
+function! TestOnly()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
   Tlist
@@ -145,7 +145,7 @@ function! TestOnly ()
 endfunction " }}}
 
 " TestBuffers() {{{
-function! TestBuffers ()
+function! TestBuffers()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 

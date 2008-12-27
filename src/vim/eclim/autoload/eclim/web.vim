@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ endif
 
 " OpenUrl(url, [no_vim, line1, line2]) {{{
 " Opens the supplied url in a web browser or opens the url under the cursor.
-function! eclim#web#OpenUrl (url, ...)
+function! eclim#web#OpenUrl(url, ...)
   if !exists('s:browser') || s:browser == ''
     let s:browser = s:DetermineBrowser()
 
@@ -124,32 +124,32 @@ function! eclim#web#OpenUrl (url, ...)
 endfunction " }}}
 
 " Google(args, quote, visual) {{{
-function! eclim#web#Google (args, quote, visual)
+function! eclim#web#Google(args, quote, visual)
   call eclim#web#SearchEngine(s:google, a:args, a:quote, a:visual)
 endfunction " }}}
 
 " Clusty(args, quote, visual) {{{
-function! eclim#web#Clusty (args, quote, visual)
+function! eclim#web#Clusty(args, quote, visual)
   call eclim#web#SearchEngine(s:clusty, a:args, a:quote, a:visual)
 endfunction " }}}
 
 " Wikipedia(args, quote, visual) {{{
-function! eclim#web#Wikipedia (args, quote, visual)
+function! eclim#web#Wikipedia(args, quote, visual)
   call eclim#web#SearchEngine(s:wikipedia, a:args, a:quote, a:visual)
 endfunction " }}}
 
 " Dictionary(word) {{{
-function! eclim#web#Dictionary (word)
+function! eclim#web#Dictionary(word)
   call eclim#web#WordLookup(s:dictionary, a:word)
 endfunction " }}}
 
 " Thesaurus(word) {{{
-function! eclim#web#Thesaurus (word)
+function! eclim#web#Thesaurus(word)
   call eclim#web#WordLookup(s:thesaurus, a:word)
 endfunction " }}}
 
 " SearchEngine(url, args, quote, visual) {{{
-function! eclim#web#SearchEngine (url, args, quote, visual)
+function! eclim#web#SearchEngine(url, args, quote, visual)
   let search_string = a:args
   if search_string == ''
     if a:visual
@@ -172,8 +172,8 @@ function! eclim#web#SearchEngine (url, args, quote, visual)
   call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-" WordLookup (url, word) {{{
-function! eclim#web#WordLookup (url, word)
+" WordLookup(url, word) {{{
+function! eclim#web#WordLookup(url, word)
   let word = a:word
   if word == ''
     let word = expand('<cword>')
@@ -185,7 +185,7 @@ function! eclim#web#WordLookup (url, word)
 endfunction " }}}
 
 " DetermineBrowser() {{{
-function! s:DetermineBrowser ()
+function! s:DetermineBrowser()
   let browser = ''
 
   " user specified a browser, we just need to fill in any gaps if necessary.

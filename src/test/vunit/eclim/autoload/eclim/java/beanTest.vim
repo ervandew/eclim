@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestJavaGet() {{{
-function! TestJavaGet ()
+function! TestJavaGet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call PeekRedir()
 
@@ -46,8 +46,8 @@ function! TestJavaGet ()
   call PeekRedir()
 
   " validate
-  let dateLine = search('public Date getDate ()', 'wc')
-  let enabledLine = search('public boolean isEnabled ()', 'wc')
+  let dateLine = search('public Date getDate()', 'wc')
+  let enabledLine = search('public boolean isEnabled()', 'wc')
 
   call VUAssertTrue(dateLine > 0, 'getDate() not found.')
   call VUAssertTrue(enabledLine > 0, 'isEnabled() not found.')
@@ -56,7 +56,7 @@ function! TestJavaGet ()
 endfunction " }}}
 
 " TestJavaSet() {{{
-function! TestJavaSet ()
+function! TestJavaSet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call PeekRedir()
 
@@ -73,10 +73,10 @@ function! TestJavaSet ()
   call PeekRedir()
 
   " validate
-  let getDateLine = search('public Date getDate ()', 'wc')
-  let setDateLine = search('public void setDate (Date date)', 'wc')
-  let setValidLine = search('public void setValid (boolean valid)', 'wc')
-  let isEnabledLine = search('public boolean isEnabled ()', 'wc')
+  let getDateLine = search('public Date getDate()', 'wc')
+  let setDateLine = search('public void setDate(Date date)', 'wc')
+  let setValidLine = search('public void setValid(boolean valid)', 'wc')
+  let isEnabledLine = search('public boolean isEnabled()', 'wc')
 
   call VUAssertTrue(getDateLine > 0, 'getDate() not found.')
   call VUAssertTrue(setDateLine > 0, 'setDate() not found.')
@@ -89,7 +89,7 @@ function! TestJavaSet ()
 endfunction " }}}
 
 " TestJavaGetSet() {{{
-function! TestJavaGetSet ()
+function! TestJavaGetSet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call PeekRedir()
 
@@ -101,16 +101,16 @@ function! TestJavaGetSet ()
   call PeekRedir()
 
   " validate
-  let getNameLine = search('public String getName ()', 'wc')
-  let setNameLine = search('public void setName (String name)', 'wc')
-  let getDescriptionLine = search('public String getDescription ()', 'wc')
-  let setDescriptionLine = search('public void setDescription (String description)', 'wc')
-  let getDateLine = search('public Date getDate ()', 'wc')
-  let setDateLine = search('public void setDate (Date date)', 'wc')
-  let isValidLine = search('public boolean isValid ()', 'wc')
-  let setValidLine = search('public void setValid (boolean valid)', 'wc')
-  let isEnabledLine = search('public boolean isEnabled ()', 'wc')
-  let setEnabledLine = search('public void setEnabled (boolean enabled)', 'wc')
+  let getNameLine = search('public String getName()', 'wc')
+  let setNameLine = search('public void setName(String name)', 'wc')
+  let getDescriptionLine = search('public String getDescription()', 'wc')
+  let setDescriptionLine = search('public void setDescription(String description)', 'wc')
+  let getDateLine = search('public Date getDate()', 'wc')
+  let setDateLine = search('public void setDate(Date date)', 'wc')
+  let isValidLine = search('public boolean isValid()', 'wc')
+  let setValidLine = search('public void setValid(boolean valid)', 'wc')
+  let isEnabledLine = search('public boolean isEnabled()', 'wc')
+  let setEnabledLine = search('public void setEnabled(boolean enabled)', 'wc')
 
   call VUAssertTrue(getNameLine > 0, 'getName() not found.')
   call VUAssertTrue(setNameLine > 0, 'setName() not found.')

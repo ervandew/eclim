@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ endif
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
-" GetAnnotations (revision) {{{
-function! eclim#vcs#impl#hg#GetAnnotations (revision)
+" GetAnnotations(revision) {{{
+function! eclim#vcs#impl#hg#GetAnnotations(revision)
   if exists('b:vcs_props')
     if filereadable(b:vcs_props.path)
       let file = fnamemodify(b:vcs_props.path, ':t')
@@ -63,7 +63,7 @@ function! eclim#vcs#impl#hg#GetAnnotations (revision)
 endfunction " }}}
 
 " GetRelativePath(dir, file) {{{
-function eclim#vcs#impl#hg#GetRelativePath (dir, file)
+function eclim#vcs#impl#hg#GetRelativePath(dir, file)
   let root = eclim#vcs#impl#hg#GetRoot()
   if type(root) == 0
     return
@@ -73,7 +73,7 @@ function eclim#vcs#impl#hg#GetRelativePath (dir, file)
 endfunction " }}}
 
 " GetPreviousRevision([file, revision]) {{{
-function eclim#vcs#impl#hg#GetPreviousRevision (...)
+function eclim#vcs#impl#hg#GetPreviousRevision(...)
   let file = len(a:000) ? fnamemodify(a:000[0], ':t') : expand('%:t')
   let cmd = 'log -q'
   if len(a:000) > 1 && a:000[1] != ''
@@ -88,7 +88,7 @@ function eclim#vcs#impl#hg#GetPreviousRevision (...)
 endfunction " }}}
 
 " GetRevision(file) {{{
-function eclim#vcs#impl#hg#GetRevision (file)
+function eclim#vcs#impl#hg#GetRevision(file)
   let log = eclim#vcs#impl#hg#Hg('log -q --limit 1 "' . a:file . '"')
   if type(log) == 0
     return
@@ -97,7 +97,7 @@ function eclim#vcs#impl#hg#GetRevision (file)
 endfunction " }}}
 
 " GetRevisions() {{{
-function eclim#vcs#impl#hg#GetRevisions ()
+function eclim#vcs#impl#hg#GetRevisions()
   let log = eclim#vcs#impl#hg#Hg('log -q "' . expand('%:t') . '"')
   if type(log) == 0
     return
@@ -106,7 +106,7 @@ function eclim#vcs#impl#hg#GetRevisions ()
 endfunction " }}}
 
 " GetRoot() {{{
-function eclim#vcs#impl#hg#GetRoot ()
+function eclim#vcs#impl#hg#GetRoot()
   let root = eclim#vcs#impl#hg#Hg('root')
   if type(root) == 0
     return
@@ -117,7 +117,7 @@ function eclim#vcs#impl#hg#GetRoot ()
 endfunction " }}}
 
 " GetEditorFile() {{{
-function eclim#vcs#impl#hg#GetEditorFile ()
+function eclim#vcs#impl#hg#GetEditorFile()
   let line = getline('.')
   if line =~ '^HG: changed .*'
     return substitute(line, '^HG: changed\s\+\(.*\)\s*', '\1', '')
@@ -126,7 +126,7 @@ function eclim#vcs#impl#hg#GetEditorFile ()
 endfunction " }}}
 
 " GetVcsWebPath() {{{
-function eclim#vcs#impl#hg#GetVcsWebPath ()
+function eclim#vcs#impl#hg#GetVcsWebPath()
   let path = substitute(expand('%:p'), '\', '/', 'g')
   let path = substitute(path, eclim#vcs#impl#hg#GetRoot(), '', '')
   if path =~ '^/'
@@ -136,7 +136,7 @@ function eclim#vcs#impl#hg#GetVcsWebPath ()
 endfunction " }}}
 
 " ChangeSet(revision) {{{
-function eclim#vcs#impl#hg#ChangeSet (revision)
+function eclim#vcs#impl#hg#ChangeSet(revision)
   let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision)
   if type(result) == 0
     return
@@ -171,7 +171,7 @@ function eclim#vcs#impl#hg#ChangeSet (revision)
 endfunction " }}}
 
 " Info() {{{
-function eclim#vcs#impl#hg#Info ()
+function eclim#vcs#impl#hg#Info()
   let result = eclim#vcs#impl#hg#Hg('log --limit 1 "' . expand('%:t') . '"')
   if type(result) == 0
     return
@@ -180,7 +180,7 @@ function eclim#vcs#impl#hg#Info ()
 endfunction " }}}
 
 " Log([file]) {{{
-function eclim#vcs#impl#hg#Log (...)
+function eclim#vcs#impl#hg#Log(...)
   if len(a:000) > 0
     let dir = fnamemodify(a:000[0], ':h')
     let root = eclim#vcs#impl#hg#GetRoot()
@@ -229,7 +229,7 @@ function eclim#vcs#impl#hg#Log (...)
 endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
-function! eclim#vcs#impl#hg#ViewFileRevision (path, revision)
+function! eclim#vcs#impl#hg#ViewFileRevision(path, revision)
   let revision = substitute(a:revision, '.\{-}:', '', '')
   let path = fnamemodify(a:path, ':t')
   let result = eclim#vcs#impl#hg#Hg('cat -r ' . revision . ' "' . path . '"')
@@ -238,18 +238,18 @@ endfunction " }}}
 
 " Hg(args) {{{
 " Executes 'hg' with the supplied args.
-function eclim#vcs#impl#hg#Hg (args)
+function eclim#vcs#impl#hg#Hg(args)
   return eclim#vcs#util#Vcs('hg', a:args)
 endfunction " }}}
 
 " s:Breadcrumb(dir, file) {{{
-function! s:Breadcrumb (dir, file)
+function! s:Breadcrumb(dir, file)
   let path = split(eclim#vcs#impl#hg#GetRelativePath(a:dir, a:file), '/')
   return join(path, ' / ' )
 endfunction " }}}
 
 " s:ParseHgLog(lines) {{{
-function! s:ParseHgLog (lines)
+function! s:ParseHgLog(lines)
   let log = []
   let section = 'header'
   let index = 0

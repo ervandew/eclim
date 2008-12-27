@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@
 
 " Search(query, type) {{{
 " Searches online maven repository.
-function! eclim#java#maven#dependency#Search (query, type)
+function! eclim#java#maven#dependency#Search(query, type)
   update
 
   let filename = substitute(expand('%:p'), '\', '/', 'g')
@@ -75,7 +75,7 @@ function! eclim#java#maven#dependency#Search (query, type)
 endfunction " }}}
 
 " AddDependency(type) {{{
-function! s:AddDependency (type)
+function! s:AddDependency(type)
   let line = getline('.')
   if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
     let artifact = substitute(line, '\s\+\(.*\)\.\w\+ (.*)$', '\1', '')
@@ -100,7 +100,7 @@ function! s:AddDependency (type)
 endfunction " }}}
 
 " InsertDependency(group, artifact, vrsn) {{{
-function! s:InsertDependency (type, group, artifact, vrsn)
+function! s:InsertDependency(type, group, artifact, vrsn)
   let depend = deepcopy(s:dependency_template{a:type})
   let depend = substitute(depend, '\${groupId}', a:group, '')
   let depend = substitute(depend, '\${artifactId}', a:artifact, '')

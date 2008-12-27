@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class HtmlCodeCompleteCommand
    * {@inheritDoc}
    * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
-  protected IContentAssistProcessor getContentAssistProcessor (
+  protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -47,7 +47,7 @@ public class HtmlCodeCompleteCommand
    * {@inheritDoc}
    * @see org.eclim.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
    */
-  protected boolean acceptProposal (ICompletionProposal proposal)
+  protected boolean acceptProposal(ICompletionProposal proposal)
   {
     String display = proposal.getDisplayString();
     return !display.toLowerCase().startsWith("close with");

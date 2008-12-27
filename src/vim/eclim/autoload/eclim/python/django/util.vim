@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 " GetLoadList(project_dir) {{{
 " Returns a list of tag/filter files loaded by the current template.
-function eclim#python#django#util#GetLoadList (project_dir)
+function eclim#python#django#util#GetLoadList(project_dir)
   let pos = getpos('.')
 
   call cursor(1, 1)
@@ -74,7 +74,7 @@ function eclim#python#django#util#GetProjectApps(project_dir)
 endfunction " }}}
 
 " GetSetting(project_dir, name) {{{
-function eclim#python#django#util#GetSetting (project_dir, name)
+function eclim#python#django#util#GetSetting(project_dir, name)
   let setting = ''
   let restore = winrestcmd()
   try
@@ -120,7 +120,7 @@ endfunction " }}}
 
 " GetSqlEngine(project_dir) {{{
 " Gets the configured sql engine for the project at the supplied project directory.
-function eclim#python#django#util#GetSqlEngine (project_dir)
+function eclim#python#django#util#GetSqlEngine(project_dir)
   let engine = 'postgresql'
   let setting = eclim#python#django#util#GetSetting(a:project_dir, 'DATABASE_ENGINE')
   let setting = substitute(setting, "^['\"]\\(.\\{-}\\)['\"]$", '\1', '')
@@ -133,7 +133,7 @@ endfunction " }}}
 " GetTemplateDirs(project_dir) {{{
 " Gets the configured list of template directories relative to the project
 " dir.
-function eclim#python#django#util#GetTemplateDirs (project_dir)
+function eclim#python#django#util#GetTemplateDirs(project_dir)
   let setting = eclim#python#django#util#GetSetting(a:project_dir, 'TEMPLATE_DIRS')
   let setting = substitute(setting, '^[\[(]\(.\{-}\)[\])]$', '\1', '')
   let dirs = split(setting, ',')

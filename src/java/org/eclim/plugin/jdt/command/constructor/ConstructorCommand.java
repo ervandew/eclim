@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,17 +56,17 @@ public class ConstructorCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String propertiesOption = _commandLine.getValue(Options.PROPERTIES_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String propertiesOption = commandLine.getValue(Options.PROPERTIES_OPTION);
     String[] properties = {};
     if(propertiesOption != null){
       properties = StringUtils.split(propertiesOption, ',');
     }
-    int offset = getOffset(_commandLine);
+    int offset = getOffset(commandLine);
 
     // validate supplied fields.
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
@@ -114,7 +114,7 @@ public class ConstructorCommand
       }
     }
 
-    HashMap<String,Object> values = new HashMap<String,Object>();
+    HashMap<String, Object> values = new HashMap<String, Object>();
     values.put("type", type.getElementName());
     boolean hasProperties = properties != null && properties.length > 0;
     values.put("fields", hasProperties ? properties : null);
@@ -133,19 +133,19 @@ public class ConstructorCommand
   /**
    * Builds a string of the constructor parameters.
    *
-   * @param _type The type containing the fields.
-   * @param _fields The array of fields.
+   * @param type The type containing the fields.
+   * @param fields The array of fields.
    * @return The parameters string.
    */
-  protected String buildParams (IType _type, String[] _fields)
+  protected String buildParams(IType type, String[] fields)
     throws Exception
   {
     StringBuffer params = new StringBuffer();
-    for (int ii = 0; ii < _fields.length; ii++){
+    for (int ii = 0; ii < fields.length; ii++){
       if(ii != 0){
         params.append(", ");
       }
-      IField field = _type.getField(_fields[ii]);
+      IField field = type.getField(fields[ii]);
       params.append(Signature.getSignatureSimpleName(field.getTypeSignature()))
         .append(' ').append(field.getElementName());
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2008  Eric Van Dewoestine
+  Copyright (C) 2005 - 2009  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -387,6 +387,9 @@
       <fileset dir="src/java">
         <include name="org/eclim/**/*.java"/>
         <exclude name="org/eclim/util/file/BufferedReader.java"/>
+      </fileset>
+      <fileset dir="src/test/junit">
+        <include name="**/*.java"/>
       </fileset>
       <!--property key="checkstyle.cache.file"
           file="build/temp/checkstyle/cache"/-->

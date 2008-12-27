@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " FormatType(tags, type, values, lines, content, indent) {{{
-function! eclim#taglist#util#FormatType (tags, type, values, lines, content, indent)
+function! eclim#taglist#util#FormatType(tags, type, values, lines, content, indent)
   if len(a:values) > 0
     call add(a:content, a:indent . a:type)
     call add(a:lines, -1)
@@ -37,13 +37,13 @@ function! eclim#taglist#util#FormatType (tags, type, values, lines, content, ind
 endfunction " }}}
 
 " GetTagPattern(tag) {{{
-function! eclim#taglist#util#GetTagPattern (tag)
+function! eclim#taglist#util#GetTagPattern(tag)
   return strpart(a:tag[2], 1, len(a:tag[2]) - 4)
 endfunction " }}}
 
 " GetVisibility(tag) {{{
 " Gets the visibility string for the supplied tag.
-function! eclim#taglist#util#GetVisibility (tag)
+function! eclim#taglist#util#GetVisibility(tag)
   let pattern = eclim#taglist#util#GetTagPattern(a:tag)
   if pattern =~ '\<public\>'
     if pattern =~ '\<static\>'

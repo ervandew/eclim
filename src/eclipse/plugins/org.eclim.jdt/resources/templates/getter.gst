@@ -18,7 +18,7 @@
 <% if (org_eclipse_jdt_core_compiler_source == "1.5" && overrides) { %>
 @Override
 <% } %>
-public ${propertyType} ${name} (<% if(array) { %>int index<% } %>)<% if(isinterface){ %>;<% } %>
+public ${propertyType} ${name}(<% if(array) { %>int index<% } %>)<% if(isinterface){ %>;<% } %>
 
 <% if(!isinterface) { %>
 {

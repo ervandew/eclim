@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class FormatCommandTest
     "src/org/eclim/test/format/TestFormat.java";
 
   @Test
-  public void oneLine ()
+  public void oneLine()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -61,7 +61,7 @@ public class FormatCommandTest
   }
 
   @Test
-  public void range ()
+  public void range()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -88,7 +88,7 @@ public class FormatCommandTest
   }
 
   @Test
-  public void wholeFile ()
+  public void wholeFile()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));

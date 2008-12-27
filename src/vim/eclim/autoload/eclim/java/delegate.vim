@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ let s:command_insert =
 
 " Delegate() {{{
 " Opens a window that allows the user to choose delegate methods to implement.
-function! eclim#java#delegate#Delegate ()
+function! eclim#java#delegate#Delegate()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -54,7 +54,7 @@ function! eclim#java#delegate#Delegate ()
 endfunction " }}}
 
 " DelegateWindow(command) {{{
-function! eclim#java#delegate#DelegateWindow (command)
+function! eclim#java#delegate#DelegateWindow(command)
   let name = eclim#java#util#GetFilename() . "_delegate"
   if eclim#util#TempWindowCommand(a:command, name)
     setlocal ft=java
@@ -71,7 +71,7 @@ function! eclim#java#delegate#DelegateWindow (command)
 endfunction " }}}
 
 " AddDelegate(visual) {{{
-function! s:AddDelegate (visual)
+function! s:AddDelegate(visual)
   call eclim#java#impl#ImplAdd
     \ (s:command_insert, function("eclim#java#delegate#DelegateWindow"), a:visual)
 endfunction " }}}

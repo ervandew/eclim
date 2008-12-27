@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class HtmlCodeCompleteCommandTest
   private static final String TEST_FILE = "html/test.html";
 
   @Test
-  public void completeAttribute ()
+  public void completeAttribute()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
@@ -55,7 +55,7 @@ public class HtmlCodeCompleteCommandTest
   }
 
   @Test
-  public void completeElement ()
+  public void completeElement()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
@@ -74,7 +74,7 @@ public class HtmlCodeCompleteCommandTest
   }
 
   @Test
-  public void completeCss ()
+  public void completeCss()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));

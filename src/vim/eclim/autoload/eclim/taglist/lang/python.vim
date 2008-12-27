@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " FormatPython(types, tags) {{{
-function! eclim#taglist#lang#python#FormatPython (types, tags)
+function! eclim#taglist#lang#python#FormatPython(types, tags)
   let lines = []
   let content = []
 

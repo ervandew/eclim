@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ public class ImplResult
   /**
    * Default constructor.
    */
-  public ImplResult (String _type, List<ImplType> _superTypes)
+  public ImplResult (String type, List<ImplType> superTypes)
   {
-    type = _type;
-    superTypes = _superTypes;
+    this.type = type;
+    this.superTypes = superTypes;
   }
 
   /**
@@ -43,7 +43,7 @@ public class ImplResult
    *
    * @return The type.
    */
-  public String getType ()
+  public String getType()
   {
     return type;
   }
@@ -53,7 +53,7 @@ public class ImplResult
    *
    * @return The results.
    */
-  public List<ImplType> getSuperTypes ()
+  public List<ImplType> getSuperTypes()
   {
     return superTypes;
   }

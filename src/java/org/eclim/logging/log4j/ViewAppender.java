@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,19 +40,21 @@ public class ViewAppender
    * @see AppenderSkeleton#append(LoggingEvent)
    */
   @Override
-  protected void append (final LoggingEvent event)
+  protected void append(final LoggingEvent event)
   {
     final Text log = EclimdView.getLog();
     if (log != null && !log.isDisposed()){
       Display.getDefault().asyncExec(new Runnable(){
-        public void run (){
+        public void run()
+        {
           write(log, event);
         }
       });
     }
   }
 
-  private void write (Text log, LoggingEvent event){
+  private void write(Text log, LoggingEvent event)
+  {
     log.append(layout.format(event));
 
     if(layout.ignoresThrowable()) {
@@ -71,7 +73,7 @@ public class ViewAppender
    * {@inheritDoc}
    * @see AppenderSkeleton#requiresLayout()
    */
-  public boolean requiresLayout ()
+  public boolean requiresLayout()
   {
     return true;
   }
@@ -80,7 +82,7 @@ public class ViewAppender
    * {@inheritDoc}
    * @see org.apache.log4j.Appender#close()
    */
-  public void close ()
+  public void close()
   {
   }
 }

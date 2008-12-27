@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@ public interface OutputFilter<T>
   /**
    * Filters the output.
    *
-   * @param _commandLine The command line arguments.
-   * @param _result The result from the server.
+   * @param commandLine The command line arguments.
+   * @param result The result from the server.
    * @return The filtered output.
    */
-  public String filter (CommandLine _commandLine, T _result);
+  public String filter(CommandLine commandLine, T result);
 }

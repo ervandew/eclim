@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ endif
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
-" GetAnnotations (revision) {{{
-function! eclim#vcs#impl#git#GetAnnotations (revision)
+" GetAnnotations(revision) {{{
+function! eclim#vcs#impl#git#GetAnnotations(revision)
   if exists('b:vcs_props')
     if filereadable(b:vcs_props.path)
       let file = fnamemodify(b:vcs_props.path, ':t')
@@ -64,7 +64,7 @@ function! eclim#vcs#impl#git#GetAnnotations (revision)
 endfunction " }}}
 
 " GetRelativePath(dir, file) {{{
-function eclim#vcs#impl#git#GetRelativePath (dir, file)
+function eclim#vcs#impl#git#GetRelativePath(dir, file)
   let root = eclim#vcs#impl#git#GetRoot()
   if type(root) == 0
     return
@@ -74,7 +74,7 @@ function eclim#vcs#impl#git#GetRelativePath (dir, file)
 endfunction " }}}
 
 " GetPreviousRevision([file, revision]) {{{
-function eclim#vcs#impl#git#GetPreviousRevision (...)
+function eclim#vcs#impl#git#GetPreviousRevision(...)
   let revision = ''
   if len(a:000)
     let path = fnamemodify(a:000[0], ':t')
@@ -96,7 +96,7 @@ function eclim#vcs#impl#git#GetPreviousRevision (...)
 endfunction " }}}
 
 " GetRevision(file) {{{
-function eclim#vcs#impl#git#GetRevision (file)
+function eclim#vcs#impl#git#GetRevision(file)
   " for some reason, in some contexts (git commit buffer), the git command
   " will fail if not run from root of the repos.
   let root = eclim#vcs#impl#git#GetRoot()
@@ -112,7 +112,7 @@ function eclim#vcs#impl#git#GetRevision (file)
 endfunction " }}}
 
 " GetRevisions() {{{
-function eclim#vcs#impl#git#GetRevisions ()
+function eclim#vcs#impl#git#GetRevisions()
   let log = eclim#vcs#impl#git#Git('log --pretty=oneline "' . expand('%:t') . '"')
   if type(log) == 0
     return
@@ -123,7 +123,7 @@ function eclim#vcs#impl#git#GetRevisions ()
 endfunction " }}}
 
 " GetRoot() {{{
-function eclim#vcs#impl#git#GetRoot ()
+function eclim#vcs#impl#git#GetRoot()
   let root = finddir('.git', getcwd() . ';')
   if root == ''
     return
@@ -134,7 +134,7 @@ function eclim#vcs#impl#git#GetRoot ()
 endfunction " }}}
 
 " GetEditorFile() {{{
-function eclim#vcs#impl#git#GetEditorFile ()
+function eclim#vcs#impl#git#GetEditorFile()
   let line = getline('.')
   if line =~ '^#\s*modified:.*'
     return substitute(line, '^#\s*modified:\s\+\(.*\)\s*', '\1', '')
@@ -143,7 +143,7 @@ function eclim#vcs#impl#git#GetEditorFile ()
 endfunction " }}}
 
 " GetVcsWebPath() {{{
-function eclim#vcs#impl#git#GetVcsWebPath ()
+function eclim#vcs#impl#git#GetVcsWebPath()
   let path = substitute(expand('%:p'), '\', '/', 'g')
   let path = substitute(path, eclim#vcs#impl#git#GetRoot(), '', '')
   if path =~ '^/'
@@ -153,7 +153,7 @@ function eclim#vcs#impl#git#GetVcsWebPath ()
 endfunction " }}}
 
 " ChangeSet(revision) {{{
-function eclim#vcs#impl#git#ChangeSet (revision)
+function eclim#vcs#impl#git#ChangeSet(revision)
   let result = eclim#vcs#impl#git#Git('log -1 --name-status ' . a:revision)
   if type(result) == 0
     return
@@ -200,7 +200,7 @@ function eclim#vcs#impl#git#ChangeSet (revision)
 endfunction " }}}
 
 " Info() {{{
-function eclim#vcs#impl#git#Info ()
+function eclim#vcs#impl#git#Info()
   let result = eclim#vcs#impl#git#Git('log -1 "' . expand('%:t') . '"')
   if type(result) == 0
     return
@@ -209,7 +209,7 @@ function eclim#vcs#impl#git#Info ()
 endfunction " }}}
 
 " Log([file]) {{{
-function eclim#vcs#impl#git#Log (...)
+function eclim#vcs#impl#git#Log(...)
   if len(a:000) > 0
     let dir = fnamemodify(a:000[0], ':h')
     let file = fnamemodify(a:000[0], ':t')
@@ -254,7 +254,7 @@ function eclim#vcs#impl#git#Log (...)
 endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
-function! eclim#vcs#impl#git#ViewFileRevision (path, revision)
+function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
   " for some reason, in some contexts (git commit buffer), the git command
   " will fail if not run from root of the repos.
   let path = eclim#vcs#impl#git#GetRelativePath(
@@ -268,19 +268,19 @@ endfunction " }}}
 
 " Git(args) {{{
 " Executes 'git' with the supplied args.
-function eclim#vcs#impl#git#Git (args)
+function eclim#vcs#impl#git#Git(args)
   return eclim#vcs#util#Vcs('git', '--no-pager ' . a:args)
 endfunction " }}}
 
 " s:Breadcrumb(dir, file) {{{
-function! s:Breadcrumb (dir, file)
+function! s:Breadcrumb(dir, file)
   let path = split(eclim#vcs#impl#git#GetRelativePath(a:dir, a:file), '/')
   call insert(path, fnamemodify(eclim#vcs#impl#git#GetRoot(), ':t'), 0)
   return join(path, ' / ' )
 endfunction " }}}
 
 " s:ParseGitLog(lines) {{{
-function! s:ParseGitLog (lines)
+function! s:ParseGitLog(lines)
   let log = []
   let section = 'header'
   for line in a:lines

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@
 
 " OpenTestWindow(lang) {{{
 " Opens a buffer where the user can test regex expressions.
-function! eclim#regex#OpenTestWindow (lang)
+function! eclim#regex#OpenTestWindow(lang)
   let file = substitute(s:regexfile, '<lang>', a:lang, '')
   if bufwinnr(file) == -1
     let filename = expand('%:p')
@@ -88,7 +88,7 @@ endfunction " }}}
 
 " Evaluate(lang) {{{
 " Evaluates the test regex file.
-function! s:Evaluate (lang)
+function! s:Evaluate(lang)
   let lines = getline('.', '$')
   if len(lines) == 1 && lines[0] == ''
     call s:AddTestContent()
@@ -137,7 +137,7 @@ endfunction "}}}
 
 " NextMatch() {{{
 " Moves the cursor to the next match.
-function! s:NextMatch ()
+function! s:NextMatch()
   if exists("b:results")
     let curline = line('.')
     let curcolumn = col('.')
@@ -164,7 +164,7 @@ endfunction " }}}
 
 " PrevMatch() {{{
 " Moves the cursor to the previous match.
-function! s:PrevMatch ()
+function! s:PrevMatch()
   if exists("b:results")
     let curline = line('.')
     let curcolumn = col('.')
@@ -194,7 +194,7 @@ endfunction " }}}
 
 " AddTestContent() {{{
 " Add the test content to the current regex test file.
-function! s:AddTestContent ()
+function! s:AddTestContent()
   call append(1, s:test_content)
   1,1delete _
 
@@ -211,7 +211,7 @@ endfunction " }}}
 
 " BuildPatterns(match) {{{
 " Builds the regex patterns for the supplied match.
-function! s:BuildPatterns (match)
+function! s:BuildPatterns(match)
   " vim (as of 7 beta 2) doesn't seem to be handling multiline matches very
   " well (highlighting can get lost while scrolling), so here we break them up.
   let startLine = substitute(a:match, '\([0-9]\+\):.*', '\1', '') + 0

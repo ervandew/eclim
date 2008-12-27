@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 " TestFindByContextCommandRef() {{{
 " Cursor on a command ref.
-function! TestFindByContextCommandRef ()
+function! TestFindByContextCommandRef()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   call s:EditFile('vim/test.vim')
   call cursor(9, 34)
@@ -41,7 +41,7 @@ endfunction " }}}
 
 " TestFindByContextCommandDef() {{{
 " Cursor on a command def.
-function! TestFindByContextCommandDef ()
+function! TestFindByContextCommandDef()
   call s:EditFile('~/.vim/eclim/ftplugin/vim/eclim_find.vim')
   call cursor(28, 34)
 
@@ -59,7 +59,7 @@ endfunction " }}}
 
 " TestFindByContextFunctionRef() {{{
 " Cursor on function ref
-function! TestFindByContextFunctionRef ()
+function! TestFindByContextFunctionRef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
   call cursor(127, 12)
 
@@ -73,7 +73,7 @@ endfunction " }}}
 
 " TestFindByContextFunctionDef() {{{
 " Cursor on function def
-function! TestFindByContextFunctionDef ()
+function! TestFindByContextFunctionDef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
   call cursor(137, 26)
 
@@ -91,7 +91,7 @@ endfunction " }}}
 
 " TestFindByContextVariableRef() {{{
 " Cursor on variable ref
-function! TestFindByContextVariableRef ()
+function! TestFindByContextVariableRef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
   call cursor(228, 10)
 
@@ -106,7 +106,7 @@ endfunction " }}}
 
 " TestFindByContextVariableDef() {{{
 " Cursor on variable def
-function! TestFindByContextVariableDef ()
+function! TestFindByContextVariableDef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
   call cursor(32, 9)
 
@@ -129,7 +129,7 @@ function! TestFindByContextVariableDef ()
 endfunction " }}}
 
 " EditFile {{{
-function s:EditFile (file)
+function s:EditFile(file)
   exec 'edit! ' . a:file
   call PeekRedir()
 endfunction " }}}

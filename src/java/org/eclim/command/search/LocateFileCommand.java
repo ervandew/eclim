@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,11 +62,11 @@ public class LocateFileCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String projectName = _commandLine.getValue(Options.NAME_OPTION);
-    String pattern = _commandLine.getValue(Options.PATTERN_OPTION);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
+    String pattern = commandLine.getValue(Options.PATTERN_OPTION);
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
     IProject project = ProjectUtils.getProject(projectName, true);
@@ -134,7 +134,7 @@ public class LocateFileCommand
      * {@inheritDoc}
      * @see IResourceProxyVisitor#visit(IResourceProxy)
      */
-    public boolean visit (IResourceProxy proxy)
+    public boolean visit(IResourceProxy proxy)
       throws CoreException
     {
       if (paths.size() >= 100){
@@ -144,9 +144,7 @@ public class LocateFileCommand
       int type = proxy.getType();
       String name = proxy.getName();
 
-      if (type == IResource.FOLDER &&
-          IGNORE_DIRS.contains(name))
-      {
+      if (type == IResource.FOLDER && IGNORE_DIRS.contains(name)){
         return false;
       }else if (type == IResource.FOLDER){
         return true;
@@ -181,7 +179,7 @@ public class LocateFileCommand
       return true;
     }
 
-    public List<String> getResults ()
+    public List<String> getResults()
     {
       FilePathComparator comparator = new FilePathComparator(pattern);
       Collections.sort(paths, comparator);
@@ -194,7 +192,7 @@ public class LocateFileCommand
   {
     private StringDistance distance;
     private String pattern;
-    private Map<String,Double> scores = new HashMap<String,Double>();
+    private Map<String, Double> scores = new HashMap<String, Double>();
 
     /**
      * Constructs a new instance.
@@ -212,7 +210,7 @@ public class LocateFileCommand
      * {@inheritDoc}
      * @see Comparator#compare(T,T)
      */
-    public int compare (String o1, String o2)
+    public int compare(String o1, String o2)
     {
       double score1 = score(o1);
       double score2 = score(o2);
@@ -220,7 +218,7 @@ public class LocateFileCommand
       return (int)Math.round(score1 - score2);
     }
 
-    public double score (String path)
+    public double score(String path)
     {
       if (this.scores.containsKey(path)){
         return this.scores.get(path);
@@ -234,7 +232,7 @@ public class LocateFileCommand
      * {@inheritDoc}
      * @see Comparator#equals(Object)
      */
-    public boolean equals (Object obj)
+    public boolean equals(Object obj)
     {
       return super.equals(obj);
     }

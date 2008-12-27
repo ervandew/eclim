@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ endif
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
-" GetAnnotations (revision) {{{
-function! eclim#vcs#impl#cvs#GetAnnotations (revision)
+" GetAnnotations(revision) {{{
+function! eclim#vcs#impl#cvs#GetAnnotations(revision)
   if exists('b:vcs_props')
     if filereadable(b:vcs_props.path)
       let file = fnamemodify(b:vcs_props.path, ':t')
@@ -65,13 +65,13 @@ function! eclim#vcs#impl#cvs#GetAnnotations (revision)
 endfunction " }}}
 
 " GetRelativePath(dir, file) {{{
-function eclim#vcs#impl#cvs#GetRelativePath (dir, file)
+function eclim#vcs#impl#cvs#GetRelativePath(dir, file)
   let lines = readfile(escape(a:dir . '/CVS/Repository', ' '), '', 1)
   return '/' . lines[0] . '/' . a:file
 endfunction " }}}
 
 " GetPreviousRevision() {{{
-function eclim#vcs#impl#cvs#GetPreviousRevision ()
+function eclim#vcs#impl#cvs#GetPreviousRevision()
   let log = eclim#vcs#impl#cvs#Cvs('log ' . expand('%:t'))
   let lines = split(log, '\n')
   call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
@@ -83,7 +83,7 @@ function eclim#vcs#impl#cvs#GetPreviousRevision ()
 endfunction " }}}
 
 " GetRevision(file) {{{
-function eclim#vcs#impl#cvs#GetRevision (file)
+function eclim#vcs#impl#cvs#GetRevision(file)
   let status = eclim#vcs#impl#cvs#Cvs('status ' . fnamemodify(a:file, ':t'))
   let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
   if status =~ pattern
@@ -94,7 +94,7 @@ function eclim#vcs#impl#cvs#GetRevision (file)
 endfunction " }}}
 
 " GetRevisions() {{{
-function eclim#vcs#impl#cvs#GetRevisions ()
+function eclim#vcs#impl#cvs#GetRevisions()
   let log = eclim#vcs#impl#cvs#Cvs('log ' . expand('%:t'))
   let lines = split(log, '\n')
   call filter(lines, 'v:val =~ "^revision [0-9.]\\+\\s*$"')
@@ -103,7 +103,7 @@ function eclim#vcs#impl#cvs#GetRevisions ()
 endfunction " }}}
 
 " GetRoot() {{{
-function eclim#vcs#impl#cvs#GetRoot ()
+function eclim#vcs#impl#cvs#GetRoot()
   let dir = substitute(getcwd(), '\', '/', 'g')
   let lines = readfile(dir . '/CVS/Repository', '', 1)
   let remove = len(split(lines[0], '/'))
@@ -115,7 +115,7 @@ function eclim#vcs#impl#cvs#GetRoot ()
 endfunction " }}}
 
 " GetEditorFile() {{{
-function eclim#vcs#impl#cvs#GetEditorFile ()
+function eclim#vcs#impl#cvs#GetEditorFile()
   let line = getline('.')
   if line =~ '^CVS:\s\+.*'
     " FIXME: cvs will put more than one file on a line if they fit
@@ -134,7 +134,7 @@ function eclim#vcs#impl#cvs#GetEditorFile ()
 endfunction " }}}
 
 " GetVcsWebPath() {{{
-function eclim#vcs#impl#cvs#GetVcsWebPath ()
+function eclim#vcs#impl#cvs#GetVcsWebPath()
   let dir = substitute(getcwd(), '\', '/', 'g')
   let lines = readfile(dir . '/CVS/Repository', '', 1)
   return lines[0] . '/' . expand('%')
@@ -142,7 +142,7 @@ endfunction " }}}
 
 " Info() {{{
 " Retrieves and echos info on the current file.
-function eclim#vcs#impl#cvs#Info ()
+function eclim#vcs#impl#cvs#Info()
   let result = eclim#vcs#impl#cvs#Cvs('status "' . expand('%:t') . '"')
   if type(result) == 0
     return
@@ -155,7 +155,7 @@ function eclim#vcs#impl#cvs#Info ()
 endfunction " }}}
 
 " ListDir([path]) {{{
-function eclim#vcs#impl#cvs#ListDir (...)
+function eclim#vcs#impl#cvs#ListDir(...)
   let lines = [s:Breadcrumb(a:000[0]), '']
   " alternate solution if Entries doesn't have dirs in it
   "let dirs = split(globpath('.', '*/CVS'), '\n')
@@ -178,7 +178,7 @@ function eclim#vcs#impl#cvs#ListDir (...)
 endfunction " }}}
 
 " Log([file]) {{{
-function eclim#vcs#impl#cvs#Log (...)
+function eclim#vcs#impl#cvs#Log(...)
   if len(a:000) > 0
     let path = fnamemodify(a:000[0], ':t')
   else
@@ -220,7 +220,7 @@ function eclim#vcs#impl#cvs#Log (...)
 endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
-function! eclim#vcs#impl#cvs#ViewFileRevision (path, revision)
+function! eclim#vcs#impl#cvs#ViewFileRevision(path, revision)
   let path = fnamemodify(a:path, ':t')
   let result = eclim#vcs#impl#cvs#Cvs('annotate -r ' . a:revision . ' "' . path . '"')
   let content = split(result, '\n')
@@ -230,12 +230,12 @@ endfunction " }}}
 
 " Cvs(args) {{{
 " Executes 'cvs' with the supplied args.
-function eclim#vcs#impl#cvs#Cvs (args)
+function eclim#vcs#impl#cvs#Cvs(args)
   return eclim#vcs#util#Vcs('cvs', a:args)
 endfunction " }}}
 
 " s:Breadcrumb(path) {{{
-function! s:Breadcrumb (path)
+function! s:Breadcrumb(path)
   if a:path == ''
     return '/'
   endif
@@ -248,7 +248,7 @@ function! s:Breadcrumb (path)
 endfunction " }}}
 
 " s:ParseCvsLog(lines) {{{
-function! s:ParseCvsLog (lines)
+function! s:ParseCvsLog(lines)
   let log = []
   let section = 'head'
   let index = 0

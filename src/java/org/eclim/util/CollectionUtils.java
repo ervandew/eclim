@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public class CollectionUtils
    * @param collection The collection to add to.
    * @param array The elements to add.
    */
-  public static void addAll (Collection collection, Object[] array)
+  public static void addAll(Collection collection, Object[] array)
   {
     for (Object obj : array){
       collection.add(obj);

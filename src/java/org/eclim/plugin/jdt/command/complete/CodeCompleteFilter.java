@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,18 +47,18 @@ public class CodeCompleteFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<CodeCompleteResult> _result)
+  public String filter(CommandLine commandLine, List<CodeCompleteResult> results)
   {
-    if(_result != null){
+    if(results != null){
       try{
-        String layout = _commandLine.getValue(Options.LAYOUT_OPTION);
+        String layout = commandLine.getValue(Options.LAYOUT_OPTION);
         if(COMPACT.equals(layout)){
-          return compactFormat(_result);
+          return compactFormat(results);
         }
       }catch(Exception e){
         logger.warn("Failed to get layout option.", e);
       }
-      return standardFormat(_result);
+      return standardFormat(results);
     }
     return "";
   }
@@ -66,14 +66,14 @@ public class CodeCompleteFilter
   /**
    * Print the results in standard format.
    *
-   * @param _results The results in standard format.
+   * @param results The results in standard format.
    * @return The formatted results.
    */
-  private String standardFormat (List<CodeCompleteResult> _results)
+  private String standardFormat(List<CodeCompleteResult> results)
   {
     StringBuffer buffer = new StringBuffer();
-    for(int ii = 0; ii < _results.size(); ii++){
-      CodeCompleteResult result = (CodeCompleteResult)_results.get(ii);
+    for(int ii = 0; ii < results.size(); ii++){
+      CodeCompleteResult result = (CodeCompleteResult)results.get(ii);
       if(buffer.length() > 0){
         buffer.append('\n');
       }
@@ -97,20 +97,20 @@ public class CodeCompleteFilter
   /**
    * Print the results in a compact format.
    *
-   * @param _results The results in compact format.
+   * @param results The results in compact format.
    * @return The formatted results.
    */
-  private String compactFormat (List<CodeCompleteResult> _results)
+  private String compactFormat(List<CodeCompleteResult> results)
   {
     StringBuffer buffer = new StringBuffer();
-    if(_results.size() > 0){
-      CodeCompleteResult result = (CodeCompleteResult)_results.get(0);
+    if(results.size() > 0){
+      CodeCompleteResult result = (CodeCompleteResult)results.get(0);
       String lastWord = result.getCompletion();
       Overload overload = new Overload();
       overload.add(result);
 
-      for(int ii = 1; ii < _results.size(); ii++){
-        result = (CodeCompleteResult)_results.get(ii);
+      for(int ii = 1; ii < results.size(); ii++){
+        result = (CodeCompleteResult)results.get(ii);
         if(result.getCompletion().equals(lastWord)){
           overload.add(result);
         }else{
@@ -134,12 +134,12 @@ public class CodeCompleteFilter
   /**
    * Converts the result type into the vim 'kind' equivalent string.
    *
-   * @param _result The completion result.
+   * @param result The completion result.
    * @return The type string.
    */
-  private String getTypeString (CodeCompleteResult _result)
+  private String getTypeString(CodeCompleteResult result)
   {
-    switch(_result.getType()){
+    switch(result.getType()){
       case CompletionProposal.TYPE_REF:
         return "c|";
       case CompletionProposal.FIELD_REF:
@@ -161,22 +161,22 @@ public class CodeCompleteFilter
     private ArrayList<CodeCompleteResult> list =
       new ArrayList<CodeCompleteResult>();
 
-    public void add (CodeCompleteResult _result)
+    public void add(CodeCompleteResult result)
     {
       if(list.size() == 0){
-        word = _result.getCompletion();
-        type = getTypeString(_result);
-        menu = _result.getShortDescription();
+        word = result.getCompletion();
+        type = getTypeString(result);
+        menu = result.getShortDescription();
       }
-      list.add(_result);
+      list.add(result);
     }
 
-    public void clear ()
+    public void clear()
     {
       list.clear();
     }
 
-    public String toString ()
+    public String toString()
     {
       StringBuffer buffer = new StringBuffer();
       buffer.append(type).append(word).append('|');

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,14 +74,14 @@ public class PhpProjectManager
   /**
    * {@inheritDoc}
    */
-  public void create (IProject _project, CommandLine _commandLine)
+  public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
-    String dependsString = _commandLine.getValue(Options.DEPENDS_OPTION);
+    String dependsString = commandLine.getValue(Options.DEPENDS_OPTION);
 
-    IScriptProject scriptProject = DLTKCore.create(_project);
+    IScriptProject scriptProject = DLTKCore.create(project);
     IDLTKLanguageToolkit toolkit = PHPLanguageToolkit.getDefault();
-    BuildpathDetector detector = new BuildpathDetector(_project, toolkit);
+    BuildpathDetector detector = new BuildpathDetector(project, toolkit);
     detector.detectBuildpath(null);
     IBuildpathEntry[] detected = detector.getBuildpath();
     IBuildpathEntry[] depends =
@@ -99,10 +99,10 @@ public class PhpProjectManager
   /**
    * {@inheritDoc}
    */
-  public List<Error> update (IProject _project, CommandLine _commandLine)
+  public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
-    IScriptProject scriptProject = DLTKCore.create(_project);
+    IScriptProject scriptProject = DLTKCore.create(project);
     scriptProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
     // validate that .buildpath xml is well formed and valid.
@@ -146,7 +146,7 @@ public class PhpProjectManager
   /**
    * {@inheritDoc}
    */
-  public void refresh (IProject _project, CommandLine _commandLine)
+  public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
@@ -154,7 +154,7 @@ public class PhpProjectManager
   /**
    * {@inheritDoc}
    */
-  public void delete (IProject _project, CommandLine _commandLine)
+  public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
@@ -162,46 +162,46 @@ public class PhpProjectManager
   /**
    * Creates an Error from the supplied IModelStatus.
    *
-   * @param _offsets File offsets for the buildpath file.
-   * @param _filename The filename of the error.
-   * @param _contents The contents of the file as a String.
-   * @param _status The IModelStatus.
+   * @param offsets File offsets for the buildpath file.
+   * @param filename The filename of the error.
+   * @param contents The contents of the file as a String.
+   * @param status The IModelStatus.
    * @return The Error.
    */
-  protected Error createErrorFromStatus (
-      FileOffsets _offsets, String _filename, String _contents, IModelStatus _status)
+  protected Error createErrorFromStatus(
+      FileOffsets offsets, String filename, String contents, IModelStatus status)
     throws Exception
   {
     int line = 1;
     int col = 1;
 
     // get the pattern to search for from the status message.
-    Matcher matcher = STATUS_PATTERN.matcher(_status.getMessage());
+    Matcher matcher = STATUS_PATTERN.matcher(status.getMessage());
     String pattern = matcher.replaceFirst("$1");
 
     // find the pattern in the buildpath file.
-    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(_contents);
+    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(contents);
     if(matcher.find()){
-      int[] position = _offsets.offsetToLineColumn(matcher.start());
+      int[] position = offsets.offsetToLineColumn(matcher.start());
       line = position[0];
       col = position[1];
     }
 
-    return new Error(_status.getMessage(), _filename, line, col, false);
+    return new Error(status.getMessage(), filename, line, col, false);
   }
 
   /**
    * Creates or updates the projects dependencies on other projects.
    *
-   * @param _project The project.
-   * @param _depends The comma seperated list of project names.
+   * @param project The project.
+   * @param depends The comma seperated list of project names.
    */
-  protected IBuildpathEntry[] createOrUpdateDependencies (
-      IScriptProject _project, String _depends)
+  protected IBuildpathEntry[] createOrUpdateDependencies(
+      IScriptProject project, String depends)
     throws Exception
   {
-    if(_depends != null){
-      String[] dependPaths = StringUtils.split(_depends, ',');
+    if(depends != null){
+      String[] dependPaths = StringUtils.split(depends, ',');
       IBuildpathEntry[] entries = new IBuildpathEntry[dependPaths.length];
       for(int ii = 0; ii < dependPaths.length; ii++){
         IProject theProject = ProjectUtils.getProject(dependPaths[ii]);
@@ -220,17 +220,17 @@ public class PhpProjectManager
   /**
    * Merges the supplied buildpath entries into one.
    *
-   * @param _entries The array of buildpath entry arrays to merge.
+   * @param entries The array of buildpath entry arrays to merge.
    *
    * @return The union of all entry arrays.
    */
-  protected IBuildpathEntry[] merge (IBuildpathEntry[][] _entries)
+  protected IBuildpathEntry[] merge(IBuildpathEntry[][] entries)
   {
     ArrayList<IBuildpathEntry> union = new ArrayList<IBuildpathEntry>();
-    if(_entries != null){
-      for(IBuildpathEntry[] entries : _entries){
-        if(entries != null){
-          for(IBuildpathEntry entry : entries){
+    if(entries != null){
+      for(IBuildpathEntry[] values : entries){
+        if(values != null){
+          for(IBuildpathEntry entry : values){
             if(!union.contains(entry)){
               union.add(entry);
             }

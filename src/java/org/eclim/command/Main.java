@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,9 @@ public class Main
   /**
    * Main method for executing the client.
    *
-   * @param _args The command line args.
+   * @param args The command line args.
    */
-  public static final void main (String[] _args)
+  public static final void main(String[] args)
   {
     try{
       logger.debug("Main - enter");
@@ -56,20 +56,21 @@ public class Main
           .setThread(Thread.currentThread());
       }
 
-      ArrayList<String> args = new ArrayList<String>();
-      for(String arg : _args){
+      ArrayList<String> arguments = new ArrayList<String>();
+      for(String arg : args){
         if(arg.startsWith("-D")){
           String[] prop = StringUtils.split(arg.substring(2), '=');
           System.setProperty(prop[0], prop[1]);
         }else{
-          args.add(arg);
+          arguments.add(arg);
         }
       }
 
       CommandLine commandLine = null;
       Options options = new Options();
       try{
-        commandLine = options.parse((String[])args.toArray(new String[args.size()]));
+        commandLine = options.parse(
+            (String[])arguments.toArray(new String[arguments.size()]));
       }catch(ParseException e){
         System.out.println(
             Services.getMessage(e.getClass().getName(), e.getMessage()));

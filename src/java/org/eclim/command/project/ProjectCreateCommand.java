@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,20 +43,20 @@ public class ProjectCreateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String folder = _commandLine.getValue(Options.FOLDER_OPTION);
+    String folder = commandLine.getValue(Options.FOLDER_OPTION);
     if(folder.endsWith("/") || folder.endsWith("\\")){
       folder = folder.substring(0, folder.length() - 1);
     }
 
-    String name = _commandLine.hasOption(Options.PROJECT_OPTION) ?
-      _commandLine.getValue(Options.PROJECT_OPTION) :
+    String name = commandLine.hasOption(Options.PROJECT_OPTION) ?
+      commandLine.getValue(Options.PROJECT_OPTION) :
       FileUtils.getBaseName(folder).replace(' ', '_');
     logger.debug("Creating project '{}' at folder '{}'", name, folder);
 
-    ProjectManagement.create(name, folder, _commandLine);
+    ProjectManagement.create(name, folder, commandLine);
 
     return Services.getMessage("project.created", name);
   }

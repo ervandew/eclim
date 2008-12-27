@@ -10,7 +10,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@
 
 " ExecuteEclim(args) {{{
 " Executes eclim using the supplied argument string.
-function! eclim#ExecuteEclim (args)
+function! eclim#ExecuteEclim(args)
   if exists('g:EclimDisabled')
     return
   endif
@@ -140,7 +140,7 @@ endfunction " }}}
 
 " ExecuteTempFile(command) {{{
 " Exectue the supplied command piping results to a temp file.
-function! eclim#ExecuteTempFile (command)
+function! eclim#ExecuteTempFile(command)
   let tempfile = tempname()
 
   let command = '!' . a:command . ' > ' . tempfile . ' 2>&1'
@@ -155,7 +155,7 @@ endfunction " }}}
 
 " GetEclimCommand() {{{
 " Gets the command to exexute eclim.
-function! eclim#GetEclimCommand ()
+function! eclim#GetEclimCommand()
   if !exists('g:EclimPath')
     let eclim_home = eclim#GetEclimHome()
     if eclim_home == '' || string(eclim_home) == '0'
@@ -192,7 +192,7 @@ endfunction " }}}
 
 " GetEclimHome() {{{
 " Gets the directory of the main eclim eclipse plugin.
-function! eclim#GetEclimHome ()
+function! eclim#GetEclimHome()
   if !exists('g:EclimHome')
     if !exists('$ECLIM_ECLIPSE_HOME')
       let g:EclimErrorReason = 'ECLIM_ECLIPSE_HOME must be set.'
@@ -217,7 +217,7 @@ endfunction " }}}
 
 " Disable() {{{
 " Temporarily disables communication with eclimd.
-function! eclim#Disable ()
+function! eclim#Disable()
   if !exists('g:EclimDisabled')
     let g:EclimDisabled = 1
 
@@ -231,7 +231,7 @@ endfunction " }}}
 
 " Enable() {{{
 " Re-enables communication with eclimd.
-function! eclim#Enable ()
+function! eclim#Enable()
   if exists('g:EclimDisabled')
     unlet g:EclimDisabled
     if exists('g:EclimTlistCtagsCmdSaved')
@@ -243,7 +243,7 @@ endfunction " }}}
 
 " PatchEclim(file, revision) {{{
 " Patches an eclim vim script file.
-function! eclim#PatchEclim (file, revision)
+function! eclim#PatchEclim(file, revision)
   let command = s:command_patch_file
   let command = substitute(command, '<file>', a:file, '')
   let command = substitute(command, '<revision>', a:revision, '')
@@ -258,7 +258,7 @@ endfunction " }}}
 " PingEclim(echo) {{{
 " Pings the eclimd server.
 " If echo is non 0, then the result is echoed to the user.
-function! eclim#PingEclim (echo)
+function! eclim#PingEclim(echo)
   if a:echo
     let result = eclim#ExecuteEclim(s:command_ping)
     if result != '0'
@@ -280,7 +280,7 @@ function! eclim#PingEclim (echo)
 endfunction " }}}
 
 " SaveSettings() {{{
-function! s:SaveSettings ()
+function! s:SaveSettings()
   " don't check modified since undo seems to not set the modified flag
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
@@ -296,7 +296,7 @@ endfunction " }}}
 
 " Settings() {{{
 " Opens a window that can be used to edit the global settings.
-function! eclim#Settings ()
+function! eclim#Settings()
   if eclim#util#TempWindowCommand(s:command_settings, "Eclim_Global_Settings")
     setlocal buftype=acwrite
     setlocal filetype=jproperties
@@ -314,13 +314,13 @@ endfunction " }}}
 
 " ShutdownEclim() {{{
 " Shuts down the eclimd server.
-function! eclim#ShutdownEclim ()
+function! eclim#ShutdownEclim()
   call eclim#ExecuteEclim(s:command_shutdown)
 endfunction " }}}
 
 " CommandCompleteScriptRevision(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for vim script names and revision numbers.
-function! eclim#CommandCompleteScriptRevision (argLead, cmdLine, cursorPos)
+function! eclim#CommandCompleteScriptRevision(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]

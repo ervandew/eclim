@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ public class EclimApplicationHeaded
    * @see AbstractEclimApplication#isHeaded()
    */
   @Override
-  public boolean isHeaded ()
+  public boolean isHeaded()
   {
     return true;
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,15 +45,15 @@ public class ProjectListCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     ArrayList<String> results = new ArrayList<String>();
 
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
     String natureId = null;
-    if(_commandLine.hasOption(Options.NATURE_OPTION)){
-      String alias = _commandLine.getValue(Options.NATURE_OPTION);
+    if(commandLine.hasOption(Options.NATURE_OPTION)){
+      String alias = commandLine.getValue(Options.NATURE_OPTION);
       natureId = ProjectNatureFactory.getNatureForAlias(alias);
       ArrayList<IProject> filtered = new ArrayList<IProject>();
       for (IProject project : projects){

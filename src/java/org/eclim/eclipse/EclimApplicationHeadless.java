@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,12 @@ public class EclimApplicationHeadless
    * @see AbstractEclimApplication#onStart()
    */
   @Override
-  public void onStart ()
+  public void onStart()
     throws Exception
   {
     // create the eclipse workbench.
     org.eclipse.ui.PlatformUI.createAndRunWorkbench(
-        new EclimDisplay(),//org.eclipse.ui.PlatformUI.createDisplay()),
+        new EclimDisplay(), //org.eclipse.ui.PlatformUI.createDisplay()),
         new WorkbenchAdvisor());
   }
 
@@ -51,7 +51,7 @@ public class EclimApplicationHeadless
    * @see AbstractEclimApplication#onStop()
    */
   @Override
-  public void onStop ()
+  public void onStop()
     throws Exception
   {
     logger.info("Saving workspace...");
@@ -69,7 +69,7 @@ public class EclimApplicationHeadless
    * @see AbstractEclimApplication#isHeaded()
    */
   @Override
-  public boolean isHeaded ()
+  public boolean isHeaded()
   {
     return false;
   }

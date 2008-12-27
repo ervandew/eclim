@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ public class DocSearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<String> _result)
+  public String filter(CommandLine commandLine, List<String> result)
   {
     StringBuffer buffer = new StringBuffer();
-    if(_result != null){
-      for(String doc : _result){
+    if(result != null){
+      for(String doc : result){
         if(buffer.length() > 0){
           buffer.append('\n');
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ public class WsdlValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
 
     ArrayList<Error> results = new ArrayList<Error>();
     WSDLValidator validator = WSDLValidator.getInstance();
@@ -68,6 +68,6 @@ public class WsdlValidateCommand
       ));
     }
 
-    return ErrorFilter.instance.filter(_commandLine, results);
+    return ErrorFilter.instance.filter(commandLine, results);
   }
 }

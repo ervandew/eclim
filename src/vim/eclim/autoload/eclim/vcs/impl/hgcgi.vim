@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,22 +30,22 @@ else
 endif
 
 " GetLogUrl(root, file, args) {{{
-function eclim#vcs#impl#hgcgi#GetLogUrl (root, file, args)
+function eclim#vcs#impl#hgcgi#GetLogUrl(root, file, args)
   return a:root . '/log/' . split(a:args[0], ':')[1] . '/' . a:file
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
-function eclim#vcs#impl#hgcgi#GetChangeSetUrl (root, file, args)
+function eclim#vcs#impl#hgcgi#GetChangeSetUrl(root, file, args)
   return a:root . '/rev/' . split(a:args[0], ':')[1]
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) {{{
-function eclim#vcs#impl#hgcgi#GetAnnotateUrl (root, file, args)
+function eclim#vcs#impl#hgcgi#GetAnnotateUrl(root, file, args)
   return a:root . '/annotate/' . split(a:args[0], ':')[1] . '/' . a:file
 endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
-function eclim#vcs#impl#hgcgi#GetDiffUrl (root, file, args)
+function eclim#vcs#impl#hgcgi#GetDiffUrl(root, file, args)
   let r1 = split(a:args[0], ':')[1]
   " hgcgi doesn't support diffing arbitrary revisions
   "let r2 = split(a:args[1], ':')[1]

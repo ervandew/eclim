@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,11 +43,11 @@ public class UnusedImportsCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
 
@@ -59,6 +59,6 @@ public class UnusedImportsCommand
         results.add(element.getElementName());
       }
     }
-    return UnusedImportsFilter.instance.filter(_commandLine, results);
+    return UnusedImportsFilter.instance.filter(commandLine, results);
   }
 }

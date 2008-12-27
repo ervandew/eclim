@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 " CompleteEndTag() {{{
 " Function to complete an sgml end tag name.
 " Ex. imap <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
-function eclim#sgml#util#CompleteEndTag ()
+function eclim#sgml#util#CompleteEndTag()
   let line = getline('.')
   if line[col('.') - 2] == '<' && line[col('.') - 1] !~ '\w'
     let tag = s:GetStartTag(line('.'))
@@ -38,7 +38,7 @@ function eclim#sgml#util#CompleteEndTag ()
 endfunction " }}}
 
 " s:GetStartTag(line) {{{
-function s:GetStartTag (line)
+function s:GetStartTag(line)
   let pairpos = searchpairpos('<\w', '', '</\w', 'bnW')
   if pairpos[0]
     " test if tag found is self closing
@@ -80,7 +80,7 @@ endfunction " }}}
 
 " s:ExtractTags() {{{
 " Extracts a list of open tag names from the current line.
-function s:ExtractTags (line)
+function s:ExtractTags(line)
   let line = a:line
   let tags = []
   while line =~ '<\w\+'
@@ -95,7 +95,7 @@ endfunction " }}}
 
 " s:IgnoreTag(tag) {{{
 " Determines if a tag should be ignored.
-function s:IgnoreTag (tag)
+function s:IgnoreTag(tag)
   if exists('b:EclimSgmlCompleteEndTagIgnore')
     for ignore in b:EclimSgmlCompleteEndTagIgnore
       if a:tag == ignore

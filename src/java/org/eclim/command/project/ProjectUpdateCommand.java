@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,20 +55,20 @@ public class ProjectUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = _commandLine.getValue(Options.PROJECT_OPTION);
-    String settings = _commandLine.getValue(Options.SETTINGS_OPTION);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
+    String settings = commandLine.getValue(Options.SETTINGS_OPTION);
 
     IProject project = ProjectUtils.getProject(name);
 
     if(settings != null){
       updateSettings(project, settings);
     }else{
-      List<Error> errors = ProjectManagement.update(project, _commandLine);
+      List<Error> errors = ProjectManagement.update(project, commandLine);
       if(errors.size() > 0){
-        return ErrorFilter.instance.filter(_commandLine, errors);
+        return ErrorFilter.instance.filter(commandLine, errors);
       }
     }
 
@@ -78,15 +78,15 @@ public class ProjectUpdateCommand
   /**
    * Updates the projects settings.
    *
-   * @param _project The project.
-   * @param _settings The temp settings file.
+   * @param project The project.
+   * @param settings The temp settings file.
    */
-  private void updateSettings (IProject _project, String _settings)
+  private void updateSettings(IProject project, String settings)
     throws Exception
   {
     Properties properties = new Properties();
     FileInputStream in = null;
-    File file = new File(_settings);
+    File file = new File(settings);
     try{
       in = new FileInputStream(file);
       properties.load(in);
@@ -94,7 +94,7 @@ public class ProjectUpdateCommand
       for(Object key : properties.keySet()){
         String name = (String)key;
         String value = properties.getProperty(name);
-        getPreferences().setOption(_project, name, value);
+        getPreferences().setOption(project, name, value);
       }
     }finally{
       IOUtils.closeQuietly(in);

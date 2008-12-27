@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
-  protected IContentAssistProcessor getContentAssistProcessor (
+  protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String projectName, String file)
     throws Exception
   {
@@ -99,11 +99,13 @@ public class CodeCompleteCommand
     IEditorSite site = new EclimEditorSite();
     IEditorInput input = new FileEditorInput(ifile);
     PHPStructuredEditor editor = new PHPStructuredEditor(){
-      public void update(){
+      public void update()
+      {
         // no-op to prevent StructuredTextEditor from running it.
       }
 
-      protected void installOverrideIndicator(boolean provideAST) {
+      protected void installOverrideIndicator(boolean provideAST)
+      {
         // no-op to prevent PHPStructuredEditor from running it.
       }
     };
@@ -125,7 +127,7 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
    */
-  protected ITextViewer getTextViewer (
+  protected ITextViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -137,7 +139,7 @@ public class CodeCompleteCommand
    * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
    */
   @Override
-  protected boolean acceptProposal (ICompletionProposal proposal)
+  protected boolean acceptProposal(ICompletionProposal proposal)
   {
     // filter out template proposals for now
     return !(proposal instanceof PhpTemplateProposal);
@@ -148,7 +150,7 @@ public class CodeCompleteCommand
    * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
    */
   @Override
-  protected String getCompletion (ICompletionProposal proposal)
+  protected String getCompletion(ICompletionProposal proposal)
   {
     String completion = proposal.getDisplayString();
     Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
@@ -165,7 +167,7 @@ public class CodeCompleteCommand
    * @see AbstractCodeCompleteCommand#getDescription(ICompletionProposal)
    */
   @Override
-  protected String getDescription (ICompletionProposal proposal)
+  protected String getDescription(ICompletionProposal proposal)
   {
     String description = super.getDescription(proposal);
     description = REMOVE_HEAD.matcher(description).replaceFirst("");
@@ -180,7 +182,7 @@ public class CodeCompleteCommand
    * @see AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
    */
   @Override
-  protected String getShortDescription (ICompletionProposal proposal)
+  protected String getShortDescription(ICompletionProposal proposal)
   {
     return proposal.getDisplayString().trim();
   }

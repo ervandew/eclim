@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,23 +27,23 @@ import org.eclipse.jdt.core.IJavaElement;
  * @version $Revision$
  */
 public class IJavaElementComparator
-  implements Comparator
+  implements Comparator<IJavaElement>
 {
   /**
    * {@inheritDoc}
    */
-  public int compare (Object _o1, Object _o2)
+  public int compare(IJavaElement o1, IJavaElement o2)
   {
-    if(_o1 == null && _o2 == null){
+    if(o1 == null && o2 == null){
       return 0;
-    }else if(_o2 == null){
+    }else if(o2 == null){
       return -1;
-    }else if(_o1 == null){
+    }else if(o1 == null){
       return 1;
     }
 
-    IJavaElement p1 = JavaUtils.getPrimaryElement((IJavaElement)_o1);
-    IJavaElement p2 = JavaUtils.getPrimaryElement((IJavaElement)_o2);
+    IJavaElement p1 = JavaUtils.getPrimaryElement(o1);
+    IJavaElement p2 = JavaUtils.getPrimaryElement(o2);
 
     return p1.getElementType() - p2.getElementType();
   }
@@ -51,9 +51,9 @@ public class IJavaElementComparator
   /**
    * {@inheritDoc}
    */
-  public boolean equals (Object _obj)
+  public boolean equals(Object obj)
   {
-    if(_obj instanceof IJavaElementComparator){
+    if(obj instanceof IJavaElementComparator){
       return true;
     }
     return false;

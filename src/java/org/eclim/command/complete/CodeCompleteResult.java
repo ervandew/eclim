@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,25 +43,28 @@ public class CodeCompleteResult
   /**
    * Constructs a new instance.
    *
-   * @param _completion The completion string.
-   * @param _description Description of the completion.
-   * @param _shortDescription Short descriptoin of the completion.
+   * @param completion The completion string.
+   * @param description Description of the completion.
+   * @param shortDescription Short descriptoin of the completion.
    */
   public CodeCompleteResult (
-      String _completion, String _description, String _shortDescription)
+      String completion, String description, String shortDescription)
   {
-    completion = _completion;
-    description = _description;
-    if(description != null){
-      description = StringUtils.replace(description, "\n", "<br/>");
-    }
-    shortDescription = _shortDescription;
-    if(shortDescription != null){
-      shortDescription = StringUtils.replace(shortDescription, "\n", "<br/>");
+    this.completion = completion;
+    this.description = description;
+    this.shortDescription = shortDescription;
+
+    if(this.description != null){
+      this.description = StringUtils.replace(this.description, "\n", "<br/>");
     }
 
-    if(description != null && shortDescription == null){
-      shortDescription = createShortDescription(description);
+    if(this.shortDescription != null){
+      this.shortDescription =
+        StringUtils.replace(this.shortDescription, "\n", "<br/>");
+    }
+
+    if(this.description != null && this.shortDescription == null){
+      this.shortDescription = createShortDescription(this.description);
     }
   }
 
@@ -70,7 +73,7 @@ public class CodeCompleteResult
    *
    * @return The completion.
    */
-  public String getCompletion ()
+  public String getCompletion()
   {
     return completion;
   }
@@ -80,7 +83,7 @@ public class CodeCompleteResult
    *
    * @param completion The completion.
    */
-  protected void setCompletion (String completion)
+  protected void setCompletion(String completion)
   {
     this.completion = completion;
   }
@@ -90,7 +93,7 @@ public class CodeCompleteResult
    *
    * @return The completion description.
    */
-  public String getDescription ()
+  public String getDescription()
   {
     return description;
   }
@@ -100,7 +103,7 @@ public class CodeCompleteResult
    *
    * @param description The description.
    */
-  protected void setDescription (String description)
+  protected void setDescription(String description)
   {
     this.description = description;
   }
@@ -110,7 +113,7 @@ public class CodeCompleteResult
    *
    * @return The short description.
    */
-  public String getShortDescription ()
+  public String getShortDescription()
   {
     return shortDescription;
   }
@@ -120,7 +123,7 @@ public class CodeCompleteResult
    *
    * @param shortDescription The shortDescription.
    */
-  protected void setShortDescription (String shortDescription)
+  protected void setShortDescription(String shortDescription)
   {
     this.shortDescription = shortDescription;
   }
@@ -128,21 +131,21 @@ public class CodeCompleteResult
   /**
    * Creates a short description based on the supplied full description.
    *
-   * @param _description The description.
+   * @param description The description.
    * @return The short description.
    */
-  public static String createShortDescription (String _description)
+  public static String createShortDescription(String description)
   {
-    if(_description == null){
+    if(description == null){
       return null;
     }
 
-    String shortDesc = _description;
+    String shortDesc = description;
     Matcher matcher = FIRST_LINE.matcher(shortDesc);
     if(shortDesc.length() > 1 && matcher.find(1)){
       shortDesc = shortDesc.substring(0, matcher.start() + 1);
       if(shortDesc.endsWith("<")){
-        shortDesc= shortDesc.substring(0, shortDesc.length() - 1);
+        shortDesc = shortDesc.substring(0, shortDesc.length() - 1);
       }
     }
     shortDesc = shortDesc.replaceAll("\n", StringUtils.EMPTY);
@@ -153,18 +156,18 @@ public class CodeCompleteResult
   /**
    * Determines if this object is equal to the supplied object.
    *
-   * @param _other The object to test equality with.
+   * @param other The object to test equality with.
    * @return true if the objects are equal, false otherwise.
    */
-  public boolean equals (Object _other)
+  public boolean equals(Object other)
   {
-    if (!(_other instanceof CodeCompleteResult)) {
+    if (!(other instanceof CodeCompleteResult)) {
       return false;
     }
-    if (this == _other) {
+    if (this == other) {
       return true;
     }
-    CodeCompleteResult result = (CodeCompleteResult)_other;
+    CodeCompleteResult result = (CodeCompleteResult)other;
     boolean equal = new EqualsBuilder()
       .append(getCompletion(), result.getCompletion())
       .isEquals();
@@ -177,7 +180,7 @@ public class CodeCompleteResult
    *
    * @return The hash code for this object.
    */
-  public int hashCode ()
+  public int hashCode()
   {
     return new HashCodeBuilder(18, 38)
       .append(completion)

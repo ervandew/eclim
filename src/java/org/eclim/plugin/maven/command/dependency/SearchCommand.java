@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,11 +50,11 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String search = _commandLine.getValue(Options.SEARCH_OPTION);
-    return SearchFilter.instance.filter(_commandLine, searchRepositories(search));
+    String search = commandLine.getValue(Options.SEARCH_OPTION);
+    return SearchFilter.instance.filter(commandLine, searchRepositories(search));
   }
 
   /**
@@ -63,7 +63,7 @@ public class SearchCommand
    * @param query The search query.
    * @return Possibly empty List of results.
    */
-  private List<Dependency> searchRepositories (String query)
+  private List<Dependency> searchRepositories(String query)
     throws Exception
   {
     ArrayList<Dependency> dependencies = new ArrayList<Dependency>();

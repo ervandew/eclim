@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,18 +45,18 @@ public class RegexTaglist
   /**
    * Constructs a new instance.
    *
-   * @param _file The file to be processed.
+   * @param file The file to be processed.
    */
-  public RegexTaglist (String _file)
+  public RegexTaglist (String file)
     throws Exception
   {
     FileInputStream is = null;
     try{
-      is = new FileInputStream(_file);
+      is = new FileInputStream(file);
 
-      file = _file;
+      this.file = file;
       contents = IOUtils.toString(is);
-      offsets = FileOffsets.compile(_file);
+      offsets = FileOffsets.compile(file);
     }finally{
       IOUtils.closeQuietly(is);
     }
@@ -65,32 +65,32 @@ public class RegexTaglist
   /**
    * Adds the supplied tag matching pattern.
    *
-   * @param _kind Character kind for the tag.
-   * @param _pattern Regex pattern for matching this tag.
-   * @param _replace The replacement that represents the tag value.
+   * @param kind Character kind for the tag.
+   * @param pattern Regex pattern for matching this tag.
+   * @param replace The replacement that represents the tag value.
    */
-  public void addPattern (String _kind, String _pattern, String _replace)
+  public void addPattern(String kind, String pattern, String replace)
     throws Exception
   {
-    addPattern(_kind, _pattern, _replace);
+    addPattern(kind, pattern, replace);
   }
 
   /**
    * Adds the supplied tag matching pattern.
    *
-   * @param _kind Character kind for the tag.
-   * @param _pattern Regex pattern for matching this tag.
-   * @param _replace The replacement that represents the tag value.
+   * @param kind Character kind for the tag.
+   * @param pattern Regex pattern for matching this tag.
+   * @param replace The replacement that represents the tag value.
    */
-  public void addPattern (String _kind, Pattern _pattern, String _replace)
+  public void addPattern(String kind, Pattern pattern, String replace)
     throws Exception
   {
-    if(_kind.length() != 1){
+    if(kind.length() != 1){
       throw new IllegalArgumentException(
-          Services.getMessage("taglist.kind.invalid", _kind));
+          Services.getMessage("taglist.kind.invalid", kind));
     }
 
-    Matcher matcher = _pattern.matcher(contents);
+    Matcher matcher = pattern.matcher(contents);
     while(matcher.find()){
       int start = matcher.start();
       int end = matcher.end();
@@ -102,8 +102,8 @@ public class RegexTaglist
 
       TagResult result = new TagResult();
       result.setFile(file);
-      result.setName(_pattern.matcher(matched).replaceFirst(_replace));
-      result.setKind(_kind.toCharArray()[0]);
+      result.setName(pattern.matcher(matched).replaceFirst(replace));
+      result.setKind(kind.toCharArray()[0]);
       result.setLine(offsets.offsetToLineColumn(start)[0]);
       result.setPattern(lines);
 
@@ -116,7 +116,7 @@ public class RegexTaglist
    *
    * @return Array of TagResult.
    */
-  public TagResult[] execute ()
+  public TagResult[] execute()
   {
     return (TagResult[])results.toArray(new TagResult[results.size()]);
   }
@@ -124,7 +124,7 @@ public class RegexTaglist
   /**
    * Cleans of this instance by releasing any held resources.
    */
-  public void close ()
+  public void close()
   {
     contents = null;
   }

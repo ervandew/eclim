@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,23 +30,23 @@ else
 endif
 
 " GetLogUrl(root, file, args) {{{
-function eclim#vcs#impl#trac#GetLogUrl (root, file, args)
+function eclim#vcs#impl#trac#GetLogUrl(root, file, args)
   return a:root . '/log/' . a:file . '?verbose=on'
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
-function eclim#vcs#impl#trac#GetChangeSetUrl (root, file, args)
+function eclim#vcs#impl#trac#GetChangeSetUrl(root, file, args)
   return a:root . '/changeset/' . a:args[0]
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) {{{
-function eclim#vcs#impl#trac#GetAnnotateUrl (root, file, args)
+function eclim#vcs#impl#trac#GetAnnotateUrl(root, file, args)
   let path = substitute(a:file, '/', '%2F', 'g')
   return a:root . '/' . a:file . '?annotate=1&rev=' . a:args[0]
 endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
-function eclim#vcs#impl#trac#GetDiffUrl (root, file, args)
+function eclim#vcs#impl#trac#GetDiffUrl(root, file, args)
   let path = substitute(a:file, '/', '%2F', 'g')
   let r1 = path . '%40' . a:args[0]
   let r2 = path . '%40' . a:args[1]

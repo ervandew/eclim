@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 
 " CodeComplete(findstart, base) {{{
 " Handles html code completion.
-function! eclim#html#complete#CodeComplete (findstart, base)
+function! eclim#html#complete#CodeComplete(findstart, base)
   "if eclim#html#util#InJavascriptBlock()
   "  return eclim#javascript#complete#CodeComplete(a:findstart, a:base)
   "endif

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ public class BuildpathsCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     IScriptProject scriptProject = DLTKCore.create(project);
 
@@ -65,7 +65,7 @@ public class BuildpathsCommand
     return StringUtils.join(paths.iterator(), "\n");
   }
 
-  private void collect (
+  private void collect(
       IScriptProject scriptProject,
       List<String> paths,
       Set<IScriptProject> visited)

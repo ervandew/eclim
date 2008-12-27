@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ endif
 
 " FindFilterOrTag(project_dir, element, type) {{{
 " Finds and opens the supplied filter or tag definition.
-function eclim#python#django#find#FindFilterOrTag (project_dir, element, type)
+function eclim#python#django#find#FindFilterOrTag(project_dir, element, type)
   let loaded = eclim#python#django#util#GetLoadList(a:project_dir)
   let cmd = 'lvimgrep /\<def\s\+' . a:element . '\>/j '
   for file in loaded
@@ -56,7 +56,7 @@ endfunction " }}}
 
 " FindFilterTagFile(project_dir, file) {{{
 " Finds and opens the supplied tag/file definition file.
-function eclim#python#django#find#FindFilterTagFile (project_dir, file)
+function eclim#python#django#find#FindFilterTagFile(project_dir, file)
   let file = findfile(a:file . '.py', a:project_dir . '*/templatetags/')
   if file != ''
     call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
@@ -68,7 +68,7 @@ endfunction " }}}
 " FindSettingDefinition(project_dir, value) {{{
 " Finds and opens the definition for the supplied setting middleware, context
 " processor or template loader.
-function eclim#python#django#find#FindSettingDefinition (project_dir, value)
+function eclim#python#django#find#FindSettingDefinition(project_dir, value)
   let file = substitute(a:value, '\(.*\)\..*', '\1', '')
   let def = substitute(a:value, '.*\.\(.*\)', '\1', '')
   let file = substitute(file, '\.', '/', 'g') . '.py'
@@ -88,7 +88,7 @@ endfunction " }}}
 
 " FindStaticFile(project_dir, file) {{{
 " Finds and opens the supplied static file name.
-function eclim#python#django#find#FindStaticFile (project_dir, file)
+function eclim#python#django#find#FindStaticFile(project_dir, file)
   if !len(g:EclimDjangoStaticPaths)
     call eclim#util#EchoWarning(
       \ 'Attemping to find static file but your g:EclimDjangoStaticPaths is not set.')
@@ -110,7 +110,7 @@ endfunction " }}}
 
 " FindTemplate(project_dir, template) {{{
 " Finds and opens the supplied template definition.
-function eclim#python#django#find#FindTemplate (project_dir, template)
+function eclim#python#django#find#FindTemplate(project_dir, template)
   let dirs = eclim#python#django#util#GetTemplateDirs(a:project_dir)
   for dir in dirs
     let file = findfile(a:template, a:project_dir . '/' . dir)
@@ -124,7 +124,7 @@ endfunction " }}}
 
 " FindView(project_dir, template) {{{
 " Finds and opens the supplied view.
-function eclim#python#django#find#FindView (project_dir, view)
+function eclim#python#django#find#FindView(project_dir, view)
   let view = a:view
   let function = ''
 
@@ -164,7 +164,7 @@ endfunction " }}}
 
 " TemplateFind() {{{
 " Find the template, tag, or filter under the cursor.
-function eclim#python#django#find#TemplateFind ()
+function eclim#python#django#find#TemplateFind()
   let project_dir = eclim#python#django#util#GetProjectPath()
   if project_dir == ''
     call eclim#util#EchoError(
@@ -196,7 +196,7 @@ endfunction " }}}
 " ContextFind() {{{
 " Execute DjangoViewOpen, DjangoTemplateOpen, or PythonFindDefinition based on
 " the context of the text under the cursor.
-function! eclim#python#django#find#ContextFind ()
+function! eclim#python#django#find#ContextFind()
   if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
     if search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
         \ eclim#util#GrabUri() !~ '\.html'

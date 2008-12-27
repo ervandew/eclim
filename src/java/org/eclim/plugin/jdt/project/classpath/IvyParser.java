@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class IvyParser
   /**
    * {@inheritDoc}
    */
-  public Dependency[] parse (Document _document)
+  public Dependency[] parse(Document document)
     throws Exception
   {
     try{
@@ -68,7 +68,7 @@ public class IvyParser
       IPath path = new Path(IVY_REPO);
 
       NodeList results = (NodeList)
-        xpath.evaluate(_document, XPathConstants.NODESET);
+        xpath.evaluate(document, XPathConstants.NODESET);
       Dependency[] dependencies = new Dependency[results.getLength()];
       for(int ii = 0; ii < results.getLength(); ii++){
         Element element = (Element)results.item(ii);

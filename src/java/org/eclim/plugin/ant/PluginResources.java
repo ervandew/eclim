@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,9 +40,9 @@ public class PluginResources
    * @see AbstractPluginResources#initialize(String)
    */
   @Override
-  public void initialize (String _name)
+  public void initialize(String name)
   {
-    super.initialize(_name);
+    super.initialize(name);
 
     registerCommand("ant_complete",
         org.eclim.plugin.ant.command.complete.CodeCompleteCommand.class);
@@ -56,7 +56,7 @@ public class PluginResources
    * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
-  protected String getBundleBaseName ()
+  protected String getBundleBaseName()
   {
     return "org/eclim/plugin/ant/messages";
   }

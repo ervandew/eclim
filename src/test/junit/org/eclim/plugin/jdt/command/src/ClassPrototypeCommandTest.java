@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
 public class ClassPrototypeCommandTest
 {
   @Test
-  public void execute ()
+  public void execute()
     throws Exception
   {
     assertTrue("Java project doesn't exist.",

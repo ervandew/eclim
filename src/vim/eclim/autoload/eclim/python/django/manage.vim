@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ let s:sql_dialects = {
 " }}}
 
 " DjangoManage(args) {{{
-function! eclim#python#django#manage#Manage (args)
+function! eclim#python#django#manage#Manage(args)
   let cwd = getcwd()
   if a:args =~ '^startproject\s'
     if !executable(g:EclimDjangoAdmin)
@@ -171,7 +171,7 @@ function! eclim#python#django#manage#Manage (args)
 endfunction " }}}
 
 " CommandCompleteManage(argLead, cmdLine, cursorPos) {{{
-function! eclim#python#django#manage#CommandCompleteManage (argLead, cmdLine, cursorPos)
+function! eclim#python#django#manage#CommandCompleteManage(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]

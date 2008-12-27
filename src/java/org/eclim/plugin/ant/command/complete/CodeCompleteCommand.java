@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
-  protected IContentAssistProcessor getContentAssistProcessor (
+  protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -60,7 +60,7 @@ public class CodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
    */
-  protected String getCompletion (ICompletionProposal proposal)
+  protected String getCompletion(ICompletionProposal proposal)
   {
     String completion = super.getCompletion(proposal);
     int index = completion.indexOf(" - ");

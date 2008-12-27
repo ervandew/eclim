@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,14 +58,14 @@ public class FormatCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     int bByteOffset = commandLine.getIntValue(Options.BOFFSET_OPTION);
     int eByteOffset = commandLine.getIntValue(Options.EOFFSET_OPTION);
-    ICompilationUnit _src = JavaUtils.getCompilationUnit(project, file);
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
     DefaultCodeFormatter formatter =
       new DefaultCodeFormatter(JavaCore.getOptions());
     int kind = CodeFormatter.K_COMPILATION_UNIT |
       CodeFormatter.F_INCLUDE_COMMENTS;
 
-    String source = _src.getBuffer().getContents();
+    String source = src.getBuffer().getContents();
     String vimEncoding = "UTF-8";
     byte[] byteSource = source.getBytes(vimEncoding);
     ByteArrayOutputStream outStream = null;
@@ -90,10 +90,10 @@ public class FormatCommand
     if (edits == null) {
       return "edits are null on attempt to SourceFormat...";
     }
-    Document document = new Document(_src.getBuffer ().getContents ());
+    Document document = new Document(src.getBuffer().getContents());
     edits.apply(document);
-    _src.getBuffer().setContents(document.get());
-    _src.save(null, false);
+    src.getBuffer().setContents(document.get());
+    src.save(null, false);
 
     return StringUtils.EMPTY;
   }

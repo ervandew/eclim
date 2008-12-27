@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ let s:command_insert =
 
 " JUnitExecute(test) {{{
 " Execute the supplied test, or if none supplied, the current test.
-function! eclim#java#junit#JUnitExecute (test)
+function! eclim#java#junit#JUnitExecute(test)
   let test = a:test
   if test == ''
     let class = eclim#java#util#GetFullyQualifiedClassname()
@@ -64,7 +64,7 @@ endfunction " }}}
 "   Empty string: Use the current file to determine the test result file.
 "   Class name of a test: Locate the results for class (ex. 'TestMe').
 "   The results dir relative results file name: TEST-org.foo.TestMe.xml
-function! eclim#java#junit#JUnitResult (test)
+function! eclim#java#junit#JUnitResult(test)
   let path = s:GetResultsDir()
   if path == '' || path == '/'
     call eclim#util#EchoWarning(
@@ -112,7 +112,7 @@ endfunction " }}}
 " JUnitImpl() {{{
 " Opens a window that allows the user to choose methods to implement tests
 " for.
-function! eclim#java#junit#JUnitImpl ()
+function! eclim#java#junit#JUnitImpl()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -140,7 +140,7 @@ function! eclim#java#junit#JUnitImpl ()
 endfunction " }}}
 
 " JUnitImplWindow(command) {{{
-function! eclim#java#junit#JUnitImplWindow (command)
+function! eclim#java#junit#JUnitImplWindow(command)
   let name = eclim#java#util#GetFilename() . "_impl"
   if eclim#util#TempWindowCommand(a:command, name)
     setlocal ft=java
@@ -152,7 +152,7 @@ function! eclim#java#junit#JUnitImplWindow (command)
 endfunction " }}}
 
 " AddTestImpl(visual) {{{
-function! s:AddTestImpl (visual)
+function! s:AddTestImpl(visual)
   let command = s:command_insert
   if b:base != ""
     let command = substitute(command, '<base>', '-b ' . b:base, '')
@@ -165,7 +165,7 @@ function! s:AddTestImpl (visual)
 endfunction " }}}
 
 " GetResultsDir() {{{
-function s:GetResultsDir ()
+function s:GetResultsDir()
   let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
   if type(path) == 0
     return
@@ -179,13 +179,13 @@ endfunction " }}}
 
 " CommandCompleteTest(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for junit test cases.
-function eclim#java#junit#CommandCompleteTest (argLead, cmdLine, cursorPos)
+function eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos)
   return eclim#java#test#CommandCompleteTest('junit', a:argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
 " CommandCompleteResult(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for test case results.
-function! eclim#java#junit#CommandCompleteResult (argLead, cmdLine, cursorPos)
+function! eclim#java#junit#CommandCompleteResult(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 

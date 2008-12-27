@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,16 +54,16 @@ public class CssValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     if (!project.exists()){
       throw new RuntimeException(
           Services.getMessage("project.not.found", projectName));
     }
-    String uri = toUri(projectName, _commandLine.getValue(Options.FILE_OPTION));
+    String uri = toUri(projectName, commandLine.getValue(Options.FILE_OPTION));
 
     ApplContext context = new ApplContext("en");
     // possible values: css1, css2, css21, css3, svg, svgbasic, svgtiny
@@ -107,7 +107,7 @@ public class CssValidateCommand
       ));
     }
 
-    return ErrorFilter.instance.filter(_commandLine, errors);
+    return ErrorFilter.instance.filter(commandLine, errors);
   }
 
   /**
@@ -115,7 +115,7 @@ public class CssValidateCommand
    * @see WstValidateCommand#toFile(String)
    */
   @Override
-  protected String toFile (String uri)
+  protected String toFile(String uri)
   {
     uri = uri.startsWith(URI_PREFIX) ?  uri.substring(URI_PREFIX.length()) : uri;
     uri = uri.replaceFirst("^/+", "/");

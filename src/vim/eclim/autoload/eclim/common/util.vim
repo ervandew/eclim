@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ let s:command_locate = '-command locate_file -n "<project>" -p "<pattern>"'
 
 " DiffLastSaved() {{{
 " Diff a modified file with the last saved version.
-function! eclim#common#util#DiffLastSaved ()
+function! eclim#common#util#DiffLastSaved()
   if &modified
     let winnum = winnr()
     let filetype=&ft
@@ -69,7 +69,7 @@ endfunction " }}}
 
 " FindInPath(file, path) {{{
 " Find a file in the supplied path returning a list of results.
-function! eclim#common#util#FindInPath (file, path)
+function! eclim#common#util#FindInPath(file, path)
   let results = split(eclim#util#Globpath(a:path . '/**', a:file, 1), '\n')
   "let results = split(eclim#util#Globpath(a:path, a:file, 1), '\n') + results
   call map(results, "fnamemodify(v:val, ':p')")
@@ -79,7 +79,7 @@ endfunction " }}}
 " GetFiles(dir, arg) {{{
 " Parses the supplied arg to obtain a list of files based in the supplied
 " directory.
-function eclim#common#util#GetFiles (dir, arg)
+function eclim#common#util#GetFiles(dir, arg)
   let dir = a:dir
   if dir != '' && dir !~ '[/\]$'
     let dir .= '/'
@@ -107,7 +107,7 @@ endfunction " }}}
 " GrepRelative(command, args) {{{
 " Executes the supplied vim grep command with the specified pattern against
 " one or more file patterns.
-function! eclim#common#util#GrepRelative (command, args)
+function! eclim#common#util#GrepRelative(command, args)
   let rel_dir = expand('%:p:h')
   let cwd = getcwd()
   try
@@ -135,7 +135,7 @@ endfunction " }}}
 "   file - 'somefile.txt',
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
-function eclim#common#util#LocateFile (action, file)
+function eclim#common#util#LocateFile(action, file)
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -207,7 +207,7 @@ function eclim#common#util#LocateFile (action, file)
 endfunction " }}}
 
 " s:LocateFileCompletionInit(action) {{{
-function s:LocateFileCompletionInit (action)
+function s:LocateFileCompletionInit(action)
   let file = expand('%')
   let project = eclim#project#util#GetCurrentProjectName()
 
@@ -258,7 +258,7 @@ function s:LocateFileCompletionInit (action)
 endfunction " }}}
 
 " LocateFileCompletion() {{{
-function eclim#common#util#LocateFileCompletion ()
+function eclim#common#util#LocateFileCompletion()
   let completions = []
   let display = []
   let name = substitute(getline('.'), '^>\s*', '', '')
@@ -294,7 +294,7 @@ function eclim#common#util#LocateFileCompletion ()
 endfunction " }}}
 
 " s:LocateFileCompletionAutocmd() {{{
-function s:LocateFileCompletionAutocmd ()
+function s:LocateFileCompletionAutocmd()
   augroup locate_file
     autocmd!
     autocmd CursorHoldI <buffer> call eclim#common#util#LocateFileCompletion()
@@ -302,7 +302,7 @@ function s:LocateFileCompletionAutocmd ()
 endfunction " }}}
 
 " s:LocateFileSelection(sel) {{{
-function s:LocateFileSelection (sel)
+function s:LocateFileSelection(sel)
   " pause completion while tabbing though results
   augroup locate_file
     autocmd!
@@ -338,7 +338,7 @@ function s:LocateFileSelection (sel)
 endfunction " }}}
 
 " s:LocateFileSelect(action) {{{
-function s:LocateFileSelect (action)
+function s:LocateFileSelect(action)
   if exists('b:completions') && !empty(b:completions)
     let winnr = winnr()
     let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
@@ -357,7 +357,7 @@ endfunction " }}}
 
 " OpenRelative(command, arg [, open_existing]) {{{
 " Open one or more relative files.
-function eclim#common#util#OpenRelative (command, arg, ...)
+function eclim#common#util#OpenRelative(command, arg, ...)
   if a:arg =~ '\*' && a:command == 'edit'
     call eclim#util#EchoError(':EditRelative does not support wildcard characters.')
     return
@@ -377,7 +377,7 @@ endfunction " }}}
 
 " OpenFiles(arg) {{{
 " Opens one or more files using the supplied command.
-function eclim#common#util#OpenFiles (command, arg)
+function eclim#common#util#OpenFiles(command, arg)
   let files = eclim#common#util#GetFiles('', a:arg)
   for file in files
     exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
@@ -386,7 +386,7 @@ endfunction " }}}
 
 " OtherWorkingCopy(project, action) {{{
 " Opens the same file from another project using the supplied action
-function! eclim#common#util#OtherWorkingCopy (project, action)
+function! eclim#common#util#OtherWorkingCopy(project, action)
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let projects = eclim#project#util#GetProjects()
   let project_path = s:OtherWorkingCopyPath(a:project)
@@ -398,7 +398,7 @@ endfunction " }}}
 
 " OtherWorkingCopyDiff(project) {{{
 " Diffs the current file against the same file from another project.
-function! eclim#common#util#OtherWorkingCopyDiff (project)
+function! eclim#common#util#OtherWorkingCopyDiff(project)
   let project_path = s:OtherWorkingCopyPath(a:project)
   if project_path == ''
     return
@@ -419,7 +419,7 @@ function! eclim#common#util#OtherWorkingCopyDiff (project)
 endfunction " }}}
 
 " s:OtherWorkingCopyPath(project) {{{
-function s:OtherWorkingCopyPath (project)
+function s:OtherWorkingCopyPath(project)
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let projects = eclim#project#util#GetProjects()
 
@@ -437,7 +437,7 @@ endfunction " }}}
 
 " SwapTypedArguments() {{{
 " Swaps typed method declaration arguments.
-function! eclim#common#util#SwapTypedArguments ()
+function! eclim#common#util#SwapTypedArguments()
   " FIXME: add validation to see if user is executing on a valid position.
   normal! w
   SwapWords
@@ -452,7 +452,7 @@ endfunction " }}}
 
 " SwapWords() {{{
 " Initially based on http://www.vim.org/tips/tip.php?tip_id=329
-function! eclim#common#util#SwapWords ()
+function! eclim#common#util#SwapWords()
   " save the last search pattern
   let save_search = @/
 
@@ -466,7 +466,7 @@ endfunction " }}}
 
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for relative files and directories.
-function! eclim#common#util#CommandCompleteRelative (argLead, cmdLine, cursorPos)
+function! eclim#common#util#CommandCompleteRelative(argLead, cmdLine, cursorPos)
   let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
@@ -485,7 +485,7 @@ endfunction " }}}
 
 " CommandCompleteRelativeDirs(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for relative directories.
-function! eclim#common#util#CommandCompleteRelativeDirs (argLead, cmdLine, cursorPos)
+function! eclim#common#util#CommandCompleteRelativeDirs(argLead, cmdLine, cursorPos)
   let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)

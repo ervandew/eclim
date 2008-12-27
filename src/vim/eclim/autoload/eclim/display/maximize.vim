@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@
 " }}}
 
 " MaximizeWindow() {{{
-function! eclim#display#maximize#MaximizeWindow ()
+function! eclim#display#maximize#MaximizeWindow()
   " disable any minimize settings
   call eclim#display#maximize#ResetMinimized()
 
@@ -76,7 +76,7 @@ function! eclim#display#maximize#MaximizeWindow ()
 endfunction " }}}
 
 " MinimizeWindow() {{{
-function! eclim#display#maximize#MinimizeWindow (...)
+function! eclim#display#maximize#MinimizeWindow(...)
   let curwinnum = winnr()
 
   exec "set winminheight=" . g:MaximizeMinWinHeight
@@ -105,7 +105,7 @@ function! eclim#display#maximize#MinimizeWindow (...)
 endfunction " }}}
 
 " MaximizeUpdate() {{{
-function! eclim#display#maximize#MaximizeUpdate ()
+function! eclim#display#maximize#MaximizeUpdate()
   if expand('%') !~ g:MaximizeExcludes && !exists('b:eclim_temp_window') && &ft != 'qf'
     call s:DisableMaximizeAutoCommands()
 
@@ -143,7 +143,7 @@ function! eclim#display#maximize#MaximizeUpdate ()
 endfunction " }}}
 
 " GetMaximizedWindow() {{{
-function! eclim#display#maximize#GetMaximizedWindow ()
+function! eclim#display#maximize#GetMaximizedWindow()
   let winend = winnr('$')
   let winnum = 1
   while winnum <= winend
@@ -158,7 +158,7 @@ function! eclim#display#maximize#GetMaximizedWindow ()
 endfunction " }}}
 
 " ResetMinimized() {{{
-function! eclim#display#maximize#ResetMinimized ()
+function! eclim#display#maximize#ResetMinimized()
   call s:DisableMinimizeAutoCommands()
   let winend = winnr('$')
   let winnum = 1
@@ -171,14 +171,14 @@ function! eclim#display#maximize#ResetMinimized ()
 endfunction " }}}
 
 " DisableMaximizeAutoCommands() {{{
-function! s:DisableMaximizeAutoCommands ()
+function! s:DisableMaximizeAutoCommands()
   augroup maximize
     autocmd!
   augroup END
 endfunction " }}}
 
 " EnableMaximizeAutoCommands() {{{
-function! s:EnableMaximizeAutoCommands ()
+function! s:EnableMaximizeAutoCommands()
   call s:DisableMaximizeAutoCommands()
   call s:DisableMinimizeAutoCommands()
   augroup maximize
@@ -191,14 +191,14 @@ function! s:EnableMaximizeAutoCommands ()
 endfunction " }}}
 
 " DisableMinimizeAutoCommands() {{{
-function! s:DisableMinimizeAutoCommands ()
+function! s:DisableMinimizeAutoCommands()
   augroup minimize
     autocmd!
   augroup END
 endfunction " }}}
 
 " EnableMinimizeAutoCommands() {{{
-function! s:EnableMinimizeAutoCommands ()
+function! s:EnableMinimizeAutoCommands()
   call s:DisableMaximizeAutoCommands()
   augroup minimize
     autocmd!
@@ -209,7 +209,7 @@ function! s:EnableMinimizeAutoCommands ()
 endfunction " }}}
 
 " AdjustFixedWindow(height, maximize) {{{
-function! eclim#display#maximize#AdjustFixedWindow (height, maximize)
+function! eclim#display#maximize#AdjustFixedWindow(height, maximize)
   exec "resize " . a:height
   set winfixheight
 
@@ -223,7 +223,7 @@ function! eclim#display#maximize#AdjustFixedWindow (height, maximize)
 endfunction " }}}
 
 " CloseFixedWindow() {{{
-function! s:CloseFixedWindow ()
+function! s:CloseFixedWindow()
   if expand('<afile>') == "" || exists('b:eclim_temp_window')
     let maximized = eclim#display#maximize#GetMaximizedWindow()
     if maximized
@@ -235,7 +235,7 @@ endfunction " }}}
 " Reminimize() {{{
 " Invoked when changing windows to ensure that any minimized windows are
 " returned to their minimized state.
-function s:Reminimize ()
+function s:Reminimize()
   call s:DisableMinimizeAutoCommands()
   let curwinnum = winnr()
   let winend = winnr('$')
@@ -307,7 +307,7 @@ function s:Reminimize ()
 endfunction " }}}
 
 " RestoreWindows(maximized) {{{
-function! eclim#display#maximize#RestoreWindows (maximized)
+function! eclim#display#maximize#RestoreWindows(maximized)
   " reset the maximized var.
   if a:maximized
     call setwinvar(a:maximized, "maximized", 0)
@@ -329,7 +329,7 @@ function! eclim#display#maximize#RestoreWindows (maximized)
 endfunction " }}}
 
 " RestoreFixedWindows() {{{
-function! s:RestoreFixedWindows ()
+function! s:RestoreFixedWindows()
   call eclim#display#window#VerticalToolWindowRestore()
   for settings in g:MaximizeSpecialtyWindowsRestore
     if exists(settings[0]) || settings[0] =~ '^".*"$'
@@ -353,7 +353,7 @@ endfunction " }}}
 
 " IsVerticalSplit(window) {{{
 " Determines if the current window is vertically split.
-"function! s:IsVerticalSplit (window)
+"function! s:IsVerticalSplit(window)
 "  let origwinnr = winnr()
 "
 "  exec a:window . 'winc w'
@@ -379,7 +379,7 @@ endfunction " }}}
 
 " IsInRow(window) {{{
 " Determines if the supplied window is in a row of equally sized windows.
-function! s:IsInRow (window)
+function! s:IsInRow(window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
 
@@ -416,7 +416,7 @@ endfunction " }}}
 
 " IsInColumn(window) {{{
 " Determines is the supplied window is in a column of equally sized windows.
-function! s:IsInColumn (window)
+function! s:IsInColumn(window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
 
@@ -454,7 +454,7 @@ endfunction " }}}
 
 " RowMinimized(window) {{{
 " Determines all windows on a row are minimized.
-function! s:RowMinimized (window)
+function! s:RowMinimized(window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
 
@@ -504,7 +504,7 @@ endfunction " }}}
 
 " ColumnMinimized(window) {{{
 " Determines all windows in column are minimized.
-function! s:ColumnMinimized (window)
+function! s:ColumnMinimized(window)
   let origwinnr = winnr()
   exec a:window . 'winc w'
 
@@ -554,7 +554,7 @@ endfunction " }}}
 
 " NavigateWindows(cmd) {{{
 " Used navigate windows by skipping minimized windows.
-function! eclim#display#maximize#NavigateWindows (wincmd)
+function! eclim#display#maximize#NavigateWindows(wincmd)
   let start = winnr()
   let lastwindow = start
 

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,25 +24,25 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestConstructor() {{{
-function! TestConstructor ()
+function! TestConstructor()
   edit! src/org/eclim/test/constructor/TestConstructorVUnit.java
   call PeekRedir()
 
-  call VUAssertFalse(search('public TestConstructorVUnit ()$'),
+  call VUAssertFalse(search('public TestConstructorVUnit()$'),
     \ 'Empty constructor already exists.')
   JavaConstructor
-  call VUAssertTrue(search('public TestConstructorVUnit ()$'),
+  call VUAssertTrue(search('public TestConstructorVUnit()$'),
     \ 'Empty constructor not added.')
 
-  call VUAssertFalse(search('public TestConstructorVUnit (int id, String name)$'),
+  call VUAssertFalse(search('public TestConstructorVUnit(int id, String name)$'),
     \ 'Two arg constructor already exists.')
   5,6JavaConstructor
-  call VUAssertTrue(search('public TestConstructorVUnit (int id, String name)$'),
+  call VUAssertTrue(search('public TestConstructorVUnit(int id, String name)$'),
     \ 'Two arg constructor not added.')
 endfunction " }}}
 

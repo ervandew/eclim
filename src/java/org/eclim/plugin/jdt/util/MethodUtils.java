@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,27 +35,27 @@ public class MethodUtils
   /**
    * Determines if the supplied types contains the specified method.
    *
-   * @param _type The type.
-   * @param _method The method.
+   * @param type The type.
+   * @param method The method.
    * @return true if the type contains the method, false otherwise.
    */
-  public static boolean containsMethod (IType _type, IMethod _method)
+  public static boolean containsMethod(IType type, IMethod method)
     throws Exception
   {
-    /*IMethod[] methods = _type.getMethods();
+    /*IMethod[] methods = type.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
-      if(methods[ii].isSimilar(_method)){
+      if(methods[ii].isSimilar(method)){
         return true;
       }
     }
     return false;*/
 
-    String signature = getMinimalMethodSignature(_method);
-    if(_method.isConstructor()){
+    String signature = getMinimalMethodSignature(method);
+    if(method.isConstructor()){
       signature = signature.replaceFirst(
-          _method.getDeclaringType().getElementName(), _type.getElementName());
+          method.getDeclaringType().getElementName(), type.getElementName());
     }
-    IMethod[] methods = _type.getMethods();
+    IMethod[] methods = type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
       String methodSig = getMinimalMethodSignature(methods[ii]);
       if(methodSig.equals(signature)){
@@ -69,19 +69,19 @@ public class MethodUtils
    * Gets the method from the supplied type that matches the signature of the
    * specified method.
    *
-   * @param _type The type.
-   * @param _method The method.
+   * @param type The type.
+   * @param method The method.
    * @return The method or null if none found.
    */
-  public static IMethod getMethod (IType _type, IMethod _method)
+  public static IMethod getMethod(IType type, IMethod method)
     throws Exception
   {
-    String signature = getMinimalMethodSignature(_method);
-    if(_method.isConstructor()){
+    String signature = getMinimalMethodSignature(method);
+    if(method.isConstructor()){
       signature = signature.replaceFirst(
-          _method.getDeclaringType().getElementName(), _type.getElementName());
+          method.getDeclaringType().getElementName(), type.getElementName());
     }
-    IMethod[] methods = _type.getMethods();
+    IMethod[] methods = type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
       String methodSig = getMinimalMethodSignature(methods[ii]);
       if(methodSig.equals(signature)){
@@ -95,21 +95,21 @@ public class MethodUtils
    * Retrieves the method which follows the supplied method in the specified
    * type.
    *
-   * @param _type The type.
-   * @param _method The method.
+   * @param type The type.
+   * @param method The method.
    * @return The method declared after the supplied method.
    */
-  public static IMethod getMethodAfter (IType _type, IMethod _method)
+  public static IMethod getMethodAfter(IType type, IMethod method)
     throws Exception
   {
-    if(_type == null || _method == null){
+    if(type == null || method == null){
       return null;
     }
 
     // get the method after the sibling.
-    IMethod[] all = _type.getMethods();
+    IMethod[] all = type.getMethods();
     for (int ii = 0; ii < all.length; ii++){
-      if(all[ii].equals(_method) && ii < all.length - 1){
+      if(all[ii].equals(method) && ii < all.length - 1){
         return all[ii + 1];
       }
     }
@@ -119,33 +119,33 @@ public class MethodUtils
   /**
    * Gets a String representation of the supplied method's signature.
    *
-   * @param _method The method.
+   * @param method The method.
    * @return The signature.
    */
-  public static String getMethodSignature (IMethod _method)
+  public static String getMethodSignature(IMethod method)
     throws Exception
   {
-    int flags = _method.getFlags();
+    int flags = method.getFlags();
     StringBuffer buffer = new StringBuffer();
-    if(_method.getDeclaringType().isInterface()){
+    if(method.getDeclaringType().isInterface()){
       buffer.append("public ");
     }else{
       buffer.append(
-          Flags.isPublic(_method.getFlags()) ? "public " : "protected ");
+          Flags.isPublic(method.getFlags()) ? "public " : "protected ");
     }
     buffer.append(Flags.isAbstract(flags) ? "abstract " : "");
-    if(!_method.isConstructor()){
-      buffer.append(Signature.getSignatureSimpleName(_method.getReturnType()))
+    if(!method.isConstructor()){
+      buffer.append(Signature.getSignatureSimpleName(method.getReturnType()))
       .append(' ');
     }
-    buffer.append(_method.getElementName())
-      .append(" (")
-      .append(getMethodParameters(_method, true))
+    buffer.append(method.getElementName())
+      .append("(")
+      .append(getMethodParameters(method, true))
       .append(')');
 
-    String[] exceptions = _method.getExceptionTypes();
+    String[] exceptions = method.getExceptionTypes();
     if(exceptions.length > 0){
-      buffer.append("\n\tthrows ").append(getMethodThrows(_method));
+      buffer.append("\n\tthrows ").append(getMethodThrows(method));
     }
     return buffer.toString();
   }
@@ -154,16 +154,16 @@ public class MethodUtils
    * Gets just enough of a method's signature that it can be distiguished from
    * the other methods.
    *
-   * @param _method The method.
+   * @param method The method.
    * @return The signature.
    */
-  public static String getMinimalMethodSignature (IMethod _method)
+  public static String getMinimalMethodSignature(IMethod method)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
-    buffer.append(_method.getElementName())
+    buffer.append(method.getElementName())
       .append('(')
-      .append(getMethodParameters(_method, false))
+      .append(getMethodParameters(method, false))
       .append(')');
 
     return buffer.toString();
@@ -173,23 +173,23 @@ public class MethodUtils
    * Gets the supplied method's parameter types and optoinally names, in a comma
    * separated string.
    *
-   * @param _method The method.
-   * @param _includeNames true to include the paramter names in the string.
+   * @param method The method.
+   * @param includeNames true to include the paramter names in the string.
    * @return The parameters as a string.
    */
-  public static String getMethodParameters (IMethod _method, boolean _includeNames)
+  public static String getMethodParameters(IMethod method, boolean includeNames)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
-    String[] paramTypes = _method.getParameterTypes();
+    String[] paramTypes = method.getParameterTypes();
     String[] paramNames = null;
-    if(_includeNames){
-      paramNames = _method.getParameterNames();
+    if(includeNames){
+      paramNames = method.getParameterNames();
     }
     boolean varargs = false;
     for(int ii = 0; ii < paramTypes.length; ii++){
       if(ii != 0){
-        buffer.append(_includeNames ? ", " : ",");
+        buffer.append(includeNames ? ", " : ",");
       }
 
       String type = paramTypes[ii];
@@ -197,8 +197,7 @@ public class MethodUtils
       // check for varargs
       if (ii == paramTypes.length - 1 &&
           Signature.getTypeSignatureKind(type) == Signature.ARRAY_TYPE_SIGNATURE &&
-          Flags.isVarargs(_method.getFlags()))
-      {
+          Flags.isVarargs(method.getFlags())){
         type = Signature.getElementType(paramTypes[ii]);
         varargs = true;
       }
@@ -219,7 +218,7 @@ public class MethodUtils
         buffer.append(VARARGS);
       }
 
-      if(_includeNames){
+      if(includeNames){
         buffer.append(' ').append(paramNames[ii]);
       }
     }
@@ -229,13 +228,13 @@ public class MethodUtils
   /**
    * Gets the list of thrown exceptions as a comma separated string.
    *
-   * @param _method The method.
+   * @param method The method.
    * @return The thrown exceptions or null if none.
    */
-  public static String getMethodThrows (IMethod _method)
+  public static String getMethodThrows(IMethod method)
     throws Exception
   {
-    String[] exceptions = _method.getExceptionTypes();
+    String[] exceptions = method.getExceptionTypes();
     if(exceptions.length > 0){
       StringBuffer buffer = new StringBuffer();
       for(int ii = 0; ii < exceptions.length; ii++){

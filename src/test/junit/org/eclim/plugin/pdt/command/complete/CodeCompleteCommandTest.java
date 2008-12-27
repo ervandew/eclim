@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE = "php/complete/test.php";
 
   @Test
-  public void completeAll ()
+  public void completeAll()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -58,7 +58,7 @@ public class CodeCompleteCommandTest
   }
 
   @Test
-  public void completePrefix ()
+  public void completePrefix()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));

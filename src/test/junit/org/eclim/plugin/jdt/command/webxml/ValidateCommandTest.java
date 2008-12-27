@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class ValidateCommandTest
   private static final String TEST_FILE = "webxml/web.xml";
 
   @Test
-  public void validateXmlErrors ()
+  public void validateXmlErrors()
   {
     String result = Eclim.execute(new String[]{
       "webxml_validate", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE

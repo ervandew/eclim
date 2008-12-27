@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ endif
 " VerticalToolWindow(name, weight) {{{
 " Handles opening wiindows in the vertical tool window on the left (taglist,
 " project tree, etc.)
-function eclim#display#window#VerticalToolWindowOpen (name, weight)
+function eclim#display#window#VerticalToolWindowOpen(name, weight)
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
   let taglist_buffer = bufnr(g:TagList_title)
   if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
@@ -113,7 +113,7 @@ endfunction " }}}
 " VerticalToolWindowRestore() {{{
 " Used to restore the tool windows to their proper width if some action
 " altered them.
-function eclim#display#window#VerticalToolWindowRestore ()
+function eclim#display#window#VerticalToolWindowRestore()
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf
     if bufwinnr(toolbuf) != -1
@@ -125,7 +125,7 @@ endfunction " }}}
 " GetWindowOptions(winnum) {{{
 " Gets a dictionary containing all the localy set options for the specified
 " window.
-function eclim#display#window#GetWindowOptions (winnum)
+function eclim#display#window#GetWindowOptions(winnum)
   let curwin = winnr()
   try
     exec a:winnum . 'winc w'
@@ -155,7 +155,7 @@ endfunction " }}}
 " SetWindowOptions() {{{
 " Given a dictionary of options, sets each as local options for the specified
 " window.
-function eclim#display#window#SetWindowOptions (winnum, options)
+function eclim#display#window#SetWindowOptions(winnum, options)
   let curwin = winnr()
   try
     exec a:winnum . 'winc w'
@@ -172,7 +172,7 @@ function eclim#display#window#SetWindowOptions (winnum, options)
 endfunction " }}}
 
 " s:CloseIfLastWindow() {{{
-function s:CloseIfLastWindow ()
+function s:CloseIfLastWindow()
   if histget(':', -1) !~ '^bd'
     let numtoolwindows = 0
     for toolbuf in keys(g:VerticalToolBuffers)
@@ -192,7 +192,7 @@ function s:CloseIfLastWindow ()
 endfunction " }}}
 
 " s:MoveRelativeTo(name) {{{
-function s:MoveRelativeTo (name)
+function s:MoveRelativeTo(name)
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf
     if bufwinnr(toolbuf) != -1
@@ -219,7 +219,7 @@ function s:MoveRelativeTo (name)
 endfunction " }}}
 
 " s:PreventCloseOnBufferDelete() {{{
-function s:PreventCloseOnBufferDelete ()
+function s:PreventCloseOnBufferDelete()
   let numtoolwindows = 0
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf

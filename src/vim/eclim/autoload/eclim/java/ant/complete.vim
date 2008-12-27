@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 
 " CodeComplete(findstart, base) {{{
 " Handles ant code completion.
-function! eclim#java#ant#complete#CodeComplete (findstart, base)
+function! eclim#java#ant#complete#CodeComplete(findstart, base)
   if a:findstart
     " update the file before vim makes any changes.
     call eclim#java#ant#util#SilentUpdate()

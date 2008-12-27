@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,10 +50,10 @@ public class ConsoleAppender
   /**
    * {@inheritDoc}
    */
-  public synchronized void setWriter (Writer _writer)
+  public synchronized void setWriter(Writer writer)
   {
     if(!writerSet){
-      super.setWriter(_writer);
+      super.setWriter(writer);
       writerSet = true;
     }
   }
@@ -70,17 +70,17 @@ public class ConsoleAppender
     /**
      * Wraps the supplied stream, System.out or System.err.
      *
-     * @param _out The stream to wrap.
+     * @param out The stream to wrap.
      */
-    public SystemStream (OutputStream _out)
+    public SystemStream (OutputStream out)
     {
-      out = _out;
+      this.out = out;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void close ()
+    public void close()
     {
       // don't close System.out or System.err
     }
@@ -88,7 +88,7 @@ public class ConsoleAppender
     /**
      * {@inheritDoc}
      */
-    public void flush ()
+    public void flush()
       throws IOException
     {
       out.flush();
@@ -97,28 +97,28 @@ public class ConsoleAppender
     /**
      * {@inheritDoc}
      */
-    public void write (final byte[] _b)
+    public void write(final byte[] bytes)
       throws IOException
     {
-      out.write(_b);
+      out.write(bytes);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void write (final byte[] _b, final int _off, final int _len)
+    public void write(final byte[] bytes, final int offset, final int length)
       throws IOException
     {
-      out.write(_b, _off, _len);
+      out.write(bytes, offset, length);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void write (final int _b)
+    public void write(final int bytes)
       throws IOException
     {
-      out.write(_b);
+      out.write(bytes);
     }
   }
 }

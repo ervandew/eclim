@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,20 +35,20 @@ public class CodeCompleteResult
    * Constructs a new instance.
    */
   public CodeCompleteResult (
-      int _type,
-      String _completion,
-      String _description,
-      String _shortDescription,
-      int _replaceStart,
-      int _replaceEnd)
+      int type,
+      String completion,
+      String description,
+      String shortDescription,
+      int replaceStart,
+      int replaceEnd)
   {
-    super(_completion, _description, _shortDescription);
+    super(completion, description, shortDescription);
 
-    setDescription(StringUtils.replace(_description, "\n", "<br/>"));
+    setDescription(StringUtils.replace(description, "\n", "<br/>"));
 
-    type = _type;
-    replaceStart = _replaceStart;
-    replaceEnd = _replaceEnd;
+    this.type = type;
+    this.replaceStart = replaceStart;
+    this.replaceEnd = replaceEnd;
   }
 
   /**
@@ -56,7 +56,7 @@ public class CodeCompleteResult
    *
    * @return The completion element type.
    */
-  public int getType ()
+  public int getType()
   {
     return this.type;
   }
@@ -66,7 +66,7 @@ public class CodeCompleteResult
    *
    * @return replaceStart as int.
    */
-  public int getReplaceStart ()
+  public int getReplaceStart()
   {
     return this.replaceStart;
   }
@@ -76,7 +76,7 @@ public class CodeCompleteResult
    *
    * @return replaceEnd as int.
    */
-  public int getReplaceEnd ()
+  public int getReplaceEnd()
   {
     return this.replaceEnd;
   }

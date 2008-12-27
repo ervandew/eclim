@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,11 +39,11 @@ public class SearchRequestor
    * @see org.eclipse.dltk.core.search.SearchRequestor#acceptSearchMatch(SearchMatch)
    */
   @Override
-  public void acceptSearchMatch (SearchMatch _match)
+  public void acceptSearchMatch(SearchMatch match)
     throws CoreException
   {
-    if(_match.getAccuracy() == SearchMatch.A_ACCURATE){
-      matches.add(_match);
+    if(match.getAccuracy() == SearchMatch.A_ACCURATE){
+      matches.add(match);
     }
   }
 
@@ -52,7 +52,7 @@ public class SearchRequestor
    *
    * @return List of SearchMatch.
    */
-  public List<SearchMatch> getMatches ()
+  public List<SearchMatch> getMatches()
   {
     //Collections.sort(matches, MATCH_COMPARATOR);
     return matches;

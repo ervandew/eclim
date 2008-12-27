@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ let s:no_properties =
 " }}}
 
 " GetterSetter(first, last, type) {{{
-function! eclim#java#bean#GetterSetter (first, last, type)
+function! eclim#java#bean#GetterSetter(first, last, type)
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -51,7 +51,7 @@ function! eclim#java#bean#GetterSetter (first, last, type)
   let properties = eclim#java#util#GetSelectedFields(a:first, a:last)
 
   if len(properties) == 0
-    call eclim#util#EchoError (s:no_properties)
+    call eclim#util#EchoError(s:no_properties)
     return
   endif
 

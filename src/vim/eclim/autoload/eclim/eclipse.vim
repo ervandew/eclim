@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 " Gets the path to the workspace.  Ensures the path uses cross platform '/'
 " separators and includes a trailing '/'.  If the workspace could not be
 " determined, the empty string is returned.
-function! eclim#eclipse#GetWorkspaceDir ()
+function! eclim#eclipse#GetWorkspaceDir()
   if !exists('g:EclimWorkspace')
     let result = ''
 

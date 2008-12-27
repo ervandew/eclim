@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public class Preference
    *
    * @return defaultValue as String.
    */
-  public String getDefaultValue ()
+  public String getDefaultValue()
   {
     return this.defaultValue != null ? this.defaultValue : "";
   }
@@ -41,10 +41,10 @@ public class Preference
   /**
    * Set defaultValue.
    *
-   * @param _defaultValue the value to set.
+   * @param defaultValue the value to set.
    */
-  public void setDefaultValue (String _defaultValue)
+  public void setDefaultValue(String defaultValue)
   {
-    this.defaultValue = _defaultValue;
+    this.defaultValue = defaultValue;
   }
 }

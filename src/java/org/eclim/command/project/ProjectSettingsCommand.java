@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,14 +43,14 @@ public class ProjectSettingsCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = _commandLine.getValue(Options.PROJECT_OPTION);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
     ArrayList<Option> results = new ArrayList<Option>();
 
     IProject project = ProjectUtils.getProject(name, true);
-    String setting = _commandLine.getValue(Options.SETTING_OPTION);
+    String setting = commandLine.getValue(Options.SETTING_OPTION);
     Option[] options = getPreferences().getOptions(project);
 
     // only retrieving the requested setting.
@@ -66,6 +66,6 @@ public class ProjectSettingsCommand
     }else{
       results.addAll(Arrays.asList(options));
     }
-   return SettingsFilter.instance.filter(_commandLine, results);
+   return SettingsFilter.instance.filter(commandLine, results);
   }
 }

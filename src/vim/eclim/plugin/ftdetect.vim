@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ autocmd BufRead COMMIT_EDITMSG set ft=gitcommit
 " SetXmlFileType(map) {{{
 " Sets the filetype of the current xml file to the if its root element is in the
 " supplied map.
-function! s:SetXmlFileType (map)
+function! s:SetXmlFileType(map)
   if !exists("b:eclim_xml_filetype")
     " cache the root element so that subsiquent calls don't need to re-examine
     " the file.
@@ -85,7 +85,7 @@ endfunction " }}}
 
 " GetRootElement() {{{
 " Get the root element name.
-function! s:GetRootElement ()
+function! s:GetRootElement()
   " handle case where file doesn't have the xml declaration
   set filetype=xml
 

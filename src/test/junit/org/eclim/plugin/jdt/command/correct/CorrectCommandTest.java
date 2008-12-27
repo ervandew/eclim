@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class CorrectCommandTest
     "src/org/eclim/test/correct/TestCorrectPackage.java";
 
   @Test
-  public void suggest ()
+  public void suggest()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -65,7 +65,7 @@ public class CorrectCommandTest
   }
 
   @Test
-  public void apply ()
+  public void apply()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -83,7 +83,7 @@ public class CorrectCommandTest
   }
 
   @Test
-  public void suggestPackage ()
+  public void suggestPackage()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -109,7 +109,7 @@ public class CorrectCommandTest
   }
 
   @Test
-  public void applyPackage ()
+  public void applyPackage()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));

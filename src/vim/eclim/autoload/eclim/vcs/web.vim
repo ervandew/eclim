@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ endif
 " GetVcsWebFunction(type, func_name) {{{
 " Gets a reference to the proper vcs web function.
 " Ex. let GetLogUrl = eclim#vcs#web#GetVcsWebFunction('viewvc', 'GetLogUrl')
-function eclim#vcs#web#GetVcsWebFunction (type, func_name)
+function eclim#vcs#web#GetVcsWebFunction(type, func_name)
   if a:type == 'viewvc'
     runtime autoload/eclim/vcs/impl/viewvc.vim
   elseif a:type == 'trac'
@@ -55,8 +55,8 @@ function eclim#vcs#web#GetVcsWebFunction (type, func_name)
   endtry
 endfunction " }}}
 
-" VcsWeb (url_func, ...) {{{
-function eclim#vcs#web#VcsWeb (url_func, ...)
+" VcsWeb(url_func, ...) {{{
+function eclim#vcs#web#VcsWeb(url_func, ...)
   let type = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.web.viewer')
   let root = eclim#project#util#GetProjectSetting('org.eclim.project.vcs.web.url')
 
@@ -102,14 +102,14 @@ endfunction " }}}
 
 " VcsWebLog() {{{
 " View the vcs web log.
-function eclim#vcs#web#VcsWebLog ()
+function eclim#vcs#web#VcsWebLog()
   call eclim#vcs#web#VcsWeb('GetLogUrl', eclim#vcs#util#GetRevision())
 endfunction " }}}
 
 " VcsWebChangeSet(revision) {{{
 " View the revision info for the supplied or current revision of the
 " current file.
-function eclim#vcs#web#VcsWebChangeSet (revision)
+function eclim#vcs#web#VcsWebChangeSet(revision)
   let revision = a:revision
   if revision == ''
     let revision = eclim#vcs#util#GetRevision()
@@ -120,7 +120,7 @@ endfunction " }}}
 
 " VcsWebAnnotate(revision) {{{
 " View annotated version of the file.
-function eclim#vcs#web#VcsWebAnnotate (revision)
+function eclim#vcs#web#VcsWebAnnotate(revision)
   let revision = a:revision
   if revision == ''
     let revision = eclim#vcs#util#GetRevision()
@@ -131,7 +131,7 @@ endfunction " }}}
 
 " VcsWebDiff(revision1, revision2) {{{
 " View diff between two revisions.
-function eclim#vcs#web#VcsWebDiff (...)
+function eclim#vcs#web#VcsWebDiff(...)
   let args = a:000
   if len(args) == 1
     let args = split(args[0])

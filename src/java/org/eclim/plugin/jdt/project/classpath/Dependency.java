@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,19 +38,19 @@ public class Dependency
   /**
    * Constructs a new instance.
    *
-   * @param _org The organization the dependency originates from.
-   * @param _name The name.
-   * @param _version The version.
-   * @param _path The root IPath where the dependecy is located.  Construtor
-   * will call _path.append() with the constructed dependency file name.
+   * @param org The organization the dependency originates from.
+   * @param name The name.
+   * @param version The version.
+   * @param path The root IPath where the dependecy is located.  Construtor
+   * will call path.append() with the constructed dependency file name.
    */
-  public Dependency (String _org, String _name, String _version, IPath _path)
+  public Dependency (String org, String name, String version, IPath path)
   {
-    this.organization = _org;
-    this.name = _name;
-    this.version = _version;
+    this.organization = org;
+    this.name = name;
+    this.version = version;
 
-    this.path = _path.append(resolveArtifact());
+    this.path = path.append(resolveArtifact());
   }
 
   /**
@@ -58,7 +58,7 @@ public class Dependency
    *
    * @return The organization.
    */
-  public String getOrganization ()
+  public String getOrganization()
   {
     return this.organization;
   }
@@ -68,7 +68,7 @@ public class Dependency
    *
    * @param organization The organization.
    */
-  public void setOrganization (String organization)
+  public void setOrganization(String organization)
   {
     this.organization = organization;
   }
@@ -78,7 +78,7 @@ public class Dependency
    *
    * @return name as String.
    */
-  public String getName ()
+  public String getName()
   {
     return this.name;
   }
@@ -86,11 +86,11 @@ public class Dependency
   /**
    * Set name.
    *
-   * @param _name the value to set.
+   * @param name the value to set.
    */
-  public void setName (String _name)
+  public void setName(String name)
   {
-    this.name = _name;
+    this.name = name;
   }
 
   /**
@@ -98,7 +98,7 @@ public class Dependency
    *
    * @return version as String.
    */
-  public String getVersion ()
+  public String getVersion()
   {
     return this.version;
   }
@@ -106,11 +106,11 @@ public class Dependency
   /**
    * Set version.
    *
-   * @param _version the value to set.
+   * @param version the value to set.
    */
-  public void setVersion (String _version)
+  public void setVersion(String version)
   {
-    this.version = _version;
+    this.version = version;
   }
 
   /**
@@ -118,7 +118,7 @@ public class Dependency
    *
    * @return The path.
    */
-  public IPath getPath ()
+  public IPath getPath()
   {
     return this.path;
   }
@@ -128,7 +128,7 @@ public class Dependency
    *
    * @param path The path.
    */
-  public void setPath (IPath path)
+  public void setPath(IPath path)
   {
     this.path = path;
   }
@@ -138,7 +138,7 @@ public class Dependency
    *
    * @return true if relative to a variable, false otherwise.
    */
-  public boolean isVariable ()
+  public boolean isVariable()
   {
     return this.variable;
   }
@@ -148,7 +148,7 @@ public class Dependency
    *
    * @param variable true if relative to a variable, false otherwise.
    */
-  public void setVariable (boolean variable)
+  public void setVariable(boolean variable)
   {
     this.variable = variable;
   }
@@ -158,7 +158,7 @@ public class Dependency
    *
    * @return The resolved artifact path.
    */
-  public String resolveArtifact ()
+  public String resolveArtifact()
   {
     return toString();
   }
@@ -174,7 +174,7 @@ public class Dependency
    *
    * @return The string representation.
    */
-  public String toString ()
+  public String toString()
   {
     StringBuffer buffer = new StringBuffer(getName());
     if(getVersion() != null && getVersion().trim().length() > 0){

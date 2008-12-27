@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ public class ClasspathVariableCreateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = _commandLine.getValue(Options.NAME_OPTION);
-    String path = _commandLine.getValue(Options.PATH_OPTION);
+    String name = commandLine.getValue(Options.NAME_OPTION);
+    String path = commandLine.getValue(Options.PATH_OPTION);
 
     JavaCore.setClasspathVariable(name, new Path(path), null);
 

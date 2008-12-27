@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " LoggingInit(var) {{{
-function! eclim#java#logging#LoggingInit (var)
+function! eclim#java#logging#LoggingInit(var)
   let char = nr2char(getchar())
   " only execute if the user types a '.' for a method call and if the logger
   " is not already present.
@@ -58,7 +58,7 @@ endfunction " }}}
 
 " InitLoggingSettings() {{{
 " Initializes the necessary logging settings.
-function! s:InitLoggingSettings ()
+function! s:InitLoggingSettings()
   let s:EclimLoggingImpl =
     \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
   if type(s:EclimLoggingImpl) == 0 || s:EclimLoggingImpl == '0'

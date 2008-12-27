@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,13 +62,13 @@ public class CodeCorrectCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String projectName = _commandLine.getValue(Options.PROJECT_OPTION);
-    int line = _commandLine.getIntValue(Options.LINE_OPTION);
-    int offset = getOffset(_commandLine);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    int line = commandLine.getIntValue(Options.LINE_OPTION);
+    int offset = getOffset(commandLine);
 
     // JavaUtils refreshes the file when getting it.
     ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
@@ -76,16 +76,16 @@ public class CodeCorrectCommand
     IProblem problem = getProblem(src, line, offset);
     if(problem == null){
       String message = Services.getMessage("error.not.found", file, line);
-      if(_commandLine.hasOption(Options.APPLY_OPTION)){
+      if(commandLine.hasOption(Options.APPLY_OPTION)){
         throw new RuntimeException(message);
       }
       return message;
     }
 
     List<IJavaCompletionProposal> proposals = getProposals(src, problem);
-    if(_commandLine.hasOption(Options.APPLY_OPTION)){
+    if(commandLine.hasOption(Options.APPLY_OPTION)){
       IJavaCompletionProposal proposal = (IJavaCompletionProposal)
-        proposals.get(_commandLine.getIntValue(Options.APPLY_OPTION));
+        proposals.get(commandLine.getIntValue(Options.APPLY_OPTION));
 
       // not working for some reason (silently does nothing).
       // probably because it's so heavily dependent on the ui.
@@ -93,24 +93,24 @@ public class CodeCorrectCommand
       return proposal.toString();
     }
     List<CodeCorrectResult> corrections = getCorrections(proposals, problem);
-    return CodeCorrectFilter.instance.filter(_commandLine, corrections);
+    return CodeCorrectFilter.instance.filter(commandLine, corrections);
   }
 
   /**
    * Gets the requested problem.
    *
-   * @param _src The source file.
-   * @param _line The line number of the error.
-   * @param _offset The offset of the error.
+   * @param src The source file.
+   * @param line The line number of the error.
+   * @param offset The offset of the error.
    * @return The IProblem or null if none found.
    */
-  protected IProblem getProblem (ICompilationUnit _src, int _line, int _offset)
+  protected IProblem getProblem(ICompilationUnit src, int line, int offset)
     throws Exception
   {
-    IProblem[] problems = JavaUtils.getProblems(_src);
+    IProblem[] problems = JavaUtils.getProblems(src);
     ArrayList<IProblem> errors = new ArrayList<IProblem>();
     for(int ii = 0; ii < problems.length; ii++){
-      if(problems[ii].getSourceLineNumber() == _line){
+      if(problems[ii].getSourceLineNumber() == line){
         errors.add(problems[ii]);
       }
     }
@@ -120,7 +120,7 @@ public class CodeCorrectCommand
       return null;
     }else if(errors.size() > 0){
       for (IProblem p : errors){
-        if(_offset < p.getSourceStart() && _offset <= p.getSourceEnd()){
+        if(offset < p.getSourceStart() && offset <= p.getSourceEnd()){
           problem = p;
         }
       }
@@ -135,25 +135,25 @@ public class CodeCorrectCommand
   /**
    * Gets possible corrections for the supplied problem.
    *
-   * @param _src The src file.
-   * @param _problem The problem.
+   * @param src The src file.
+   * @param problem The problem.
    * @return Returns a List of IJavaCompletionProposal.
    */
-  protected List<IJavaCompletionProposal> getProposals (
-      ICompilationUnit _src, IProblem _problem)
+  protected List<IJavaCompletionProposal> getProposals(
+      ICompilationUnit src, IProblem problem)
     throws Exception
   {
     ArrayList<IJavaCompletionProposal> results =
       new ArrayList<IJavaCompletionProposal>();
-    int length = _problem.getSourceEnd() - _problem.getSourceStart();
+    int length = problem.getSourceEnd() - problem.getSourceStart();
     AssistContext context = new AssistContext(
-        _src, _problem.getSourceStart(), length);
+        src, problem.getSourceStart(), length);
 
     IProblemLocation[] locations = new IProblemLocation[]{
-      new ProblemLocation(_problem)};
-    IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(_src);
+      new ProblemLocation(problem)};
+    IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(src);
     for(int ii = 0; ii < processors.length; ii++){
-      if(processors[ii].hasCorrections(_src, _problem.getID())){
+      if(processors[ii].hasCorrections(src, problem.getID())){
         IJavaCompletionProposal[] proposals =
           processors[ii].getCorrections(context, locations);
         if(proposals != null){
@@ -184,16 +184,16 @@ public class CodeCorrectCommand
    * Converts the supplied list of IJavaCompletionProposal(s) to array of
    * CodeCorrectResult.
    *
-   * @param _proposals List of IJavaCompletionProposal.
-   * @param _problem The problem the proposals are associated w/.
+   * @param proposals List of IJavaCompletionProposal.
+   * @param problem The problem the proposals are associated w/.
    * @return Array of CodeCorrectResult.
    */
-  protected List<CodeCorrectResult> getCorrections (
-      List<IJavaCompletionProposal> _proposals, IProblem _problem)
+  protected List<CodeCorrectResult> getCorrections(
+      List<IJavaCompletionProposal> proposals, IProblem problem)
     throws Exception
   {
     ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
-    Iterator<IJavaCompletionProposal> iterator = _proposals.iterator();
+    Iterator<IJavaCompletionProposal> iterator = proposals.iterator();
     for(int ii = 0; iterator.hasNext(); ii++){
       IJavaCompletionProposal proposal = iterator.next();
       String info = null;
@@ -203,7 +203,7 @@ public class CodeCorrectCommand
         info = proposal.getAdditionalProposalInfo();
       //}
       corrections.add(new CodeCorrectResult(
-            ii, _problem, proposal.getDisplayString(), info));
+            ii, problem, proposal.getDisplayString(), info));
     }
     return corrections;
   }

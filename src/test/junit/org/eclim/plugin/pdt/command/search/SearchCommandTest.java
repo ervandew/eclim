@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class SearchCommandTest
 {
   @Test
-  public void searchClass ()
+  public void searchClass()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -43,7 +43,7 @@ public class SearchCommandTest
   }
 
   @Test
-  public void searchMethod ()
+  public void searchMethod()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -60,7 +60,7 @@ public class SearchCommandTest
   }
 
   @Test
-  public void searchConstant ()
+  public void searchConstant()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -76,7 +76,7 @@ public class SearchCommandTest
   }
 
   @Test
-  public void searchFunction ()
+  public void searchFunction()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));

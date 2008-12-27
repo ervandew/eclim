@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ let s:command_unused_imports =
 
 " Import() {{{
 " Import the element under the cursor.
-function! eclim#java#import#Import ()
+function! eclim#java#import#Import()
   let classname = expand('<cword>')
 
   if !eclim#project#util#IsCurrentFileInProject()
@@ -97,7 +97,7 @@ endfunction " }}}
 
 " InsertImport(class) {{{
 " Inserts the import for the fullyqualified classname supplied.
-function! eclim#java#import#InsertImport (class)
+function! eclim#java#import#InsertImport(class)
   " insert the import statement.
   let position =  search('^\s*package\s\+', 'nw')
 
@@ -119,7 +119,7 @@ endfunction " }}}
 
 " SortImports() {{{
 " Sorts the import statements for the current file.
-function! eclim#java#import#SortImports ()
+function! eclim#java#import#SortImports()
   let line = line('.')
   let col = col('.')
 
@@ -181,7 +181,7 @@ endfunction " }}}
 
 " CleanImports() {{{
 " Removes unused import statements for the current file.
-function! eclim#java#import#CleanImports ()
+function! eclim#java#import#CleanImports()
   let line = line('.')
   let col = col('.')
 

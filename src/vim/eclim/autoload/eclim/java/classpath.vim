@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 
 " NewClasspathEntry(template) {{{
 " Adds a new entry to the current .classpath file.
-function! eclim#java#classpath#NewClasspathEntry (arg, template)
+function! eclim#java#classpath#NewClasspathEntry(arg, template)
   let args = split(a:arg)
   let cline = line('.')
   let ccol = col('.')
@@ -49,7 +49,7 @@ endfunction " }}}
 
 " MoveToInsertPosition() {{{
 " If necessary moves the cursor to a valid insert position.
-function! s:MoveToInsertPosition ()
+function! s:MoveToInsertPosition()
   let start = search('<classpath\s*>', 'wn')
   let end = search('</classpath\s*>', 'wn')
   if line('.') < start || line('.') >= end
@@ -59,7 +59,7 @@ endfunction " }}}
 
 " UpdateClasspath() {{{
 " Updates the classpath on the server w/ the changes made to the current file.
-function! eclim#java#classpath#UpdateClasspath ()
+function! eclim#java#classpath#UpdateClasspath()
   let name = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:command_update, '<project>', name, '')
 
@@ -75,14 +75,14 @@ endfunction " }}}
 
 " GetVariableNames() {{{
 " Gets a list of all variable names.
-function! eclim#java#classpath#GetVariableNames ()
+function! eclim#java#classpath#GetVariableNames()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   return map(variables, "substitute(v:val, '\\(.\\{-}\\)\\s.*', '\\1', '')")
 endfunction " }}}
 
 " VariableList() {{{
 " Lists all the variables currently available.
-function! eclim#java#classpath#VariableList ()
+function! eclim#java#classpath#VariableList()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   if len(variables) == 0
     call eclim#util#Echo("No variables.")
@@ -100,7 +100,7 @@ endfunction " }}}
 
 " VariableCreate(name, path) {{{
 " Create or update a variable.
-function! eclim#java#classpath#VariableCreate (name, path)
+function! eclim#java#classpath#VariableCreate(name, path)
   let command = s:command_variable_create
   let command = substitute(command, '<name>', a:name, '')
   let command = substitute(command, '<path>', fnamemodify(a:path, ':p'), '')
@@ -113,7 +113,7 @@ endfunction " }}}
 
 " VariableDelete(name) {{{
 " Delete a variable.
-function! eclim#java#classpath#VariableDelete (name)
+function! eclim#java#classpath#VariableDelete(name)
   let command = s:command_variable_delete
   let command = substitute(command, '<name>', a:name, '')
 
@@ -125,7 +125,7 @@ endfunction " }}}
 
 " CommandCompleteVar(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#java#classpath#CommandCompleteVar (argLead, cmdLine, cursorPos)
+function! eclim#java#classpath#CommandCompleteVar(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
@@ -137,7 +137,7 @@ endfunction " }}}
 
 " CommandCompleteVarPath(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#java#classpath#CommandCompleteVarPath (argLead, cmdLine, cursorPos)
+function! eclim#java#classpath#CommandCompleteVarPath(argLead, cmdLine, cursorPos)
   let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
@@ -171,7 +171,7 @@ endfunction " }}}
 
 " CommandCompleteVarAndDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#java#classpath#CommandCompleteVarAndDir (argLead, cmdLine, cursorPos)
+function! eclim#java#classpath#CommandCompleteVarAndDir(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]

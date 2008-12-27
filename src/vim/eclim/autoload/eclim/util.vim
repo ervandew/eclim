@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 " }}}
 
 " Abbreviate(lhs, abbreviation) {{{
-function! eclim#util#Abbreviate (lhs, abbreviation)
+function! eclim#util#Abbreviate(lhs, abbreviation)
   " ensure that the abbreviation never kicks off while in a word.
   if getline('.') =~ '\(^\|.*\s\)\%' . col('.') . 'c'
     " gobble up the space char used to kick off the abbreviation
@@ -65,7 +65,7 @@ endfunction " }}}
 
 " Balloon(message) {{{
 " Function for use as a vim balloonexpr expression.
-function! eclim#util#Balloon (message)
+function! eclim#util#Balloon(message)
   let message = a:message
   if !has('balloon_multiline')
     " remove any new lines
@@ -78,7 +78,7 @@ endfunction " }}}
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
 " command to execute after other autocommands have finished.
-function! eclim#util#DelayedCommand (command, ...)
+function! eclim#util#DelayedCommand(command, ...)
   " hack since WinEnter doesn't fire on :close of qf or temp window
   let g:eclim_updatetime_save = &updatetime
   let g:eclim_delayed_command = a:command
@@ -93,39 +93,39 @@ function! eclim#util#DelayedCommand (command, ...)
 endfunction " }}}
 
 " EchoTrace(message) {{{
-function! eclim#util#EchoTrace (message)
+function! eclim#util#EchoTrace(message)
   call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
 endfunction " }}}
 
 " EchoDebug(message) {{{
-function! eclim#util#EchoDebug (message)
+function! eclim#util#EchoDebug(message)
   call s:EchoLevel(a:message, 5, g:EclimDebugHighlight)
 endfunction " }}}
 
 " EchoInfo(message) {{{
-function! eclim#util#EchoInfo (message)
+function! eclim#util#EchoInfo(message)
   call s:EchoLevel(a:message, 4, g:EclimInfoHighlight)
 endfunction " }}}
 
 " EchoWarning(message) {{{
-function! eclim#util#EchoWarning (message)
+function! eclim#util#EchoWarning(message)
   call s:EchoLevel(a:message, 3, g:EclimWarningHighlight)
 endfunction " }}}
 
 " EchoError(message) {{{
-function! eclim#util#EchoError (message)
+function! eclim#util#EchoError(message)
   call s:EchoLevel(a:message, 2, g:EclimErrorHighlight)
 endfunction " }}}
 
 " EchoFatal(message) {{{
-function! eclim#util#EchoFatal (message)
+function! eclim#util#EchoFatal(message)
   call s:EchoLevel(a:message, 1, g:EclimFatalHighlight)
 endfunction " }}}
 
 " EchoLevel(message) {{{
 " Echos the supplied message at the supplied level with the specified
 " highlight.
-function! s:EchoLevel (message, level, highlight)
+function! s:EchoLevel(message, level, highlight)
   " only echo if the result is not 0, which signals that ExecuteEclim failed.
   if a:message != "0" && g:EclimLogLevel >= a:level
     exec "echohl " . a:highlight
@@ -143,7 +143,7 @@ endfunction " }}}
 
 " Echo(message) {{{
 " Echos a message using the info highlight regardless of what log level is set.
-function! eclim#util#Echo (message)
+function! eclim#util#Echo(message)
   if a:message != "0" && g:EclimLogLevel > 0
     exec "echohl " . g:EclimInfoHighlight
     redraw
@@ -161,13 +161,13 @@ endfunction " }}}
 " Exec(cmd) {{{
 " Used when executing ! commands that may be disrupted by non default vim
 " options.
-function! eclim#util#Exec (cmd)
+function! eclim#util#Exec(cmd)
   call eclim#util#System(a:cmd, 1)
 endfunction " }}}
 
 " ExecWithoutAutocmds(cmd) {{{
 " Execute a command after disabling all autocommands (borrowed from taglist.vim)
-function! eclim#util#ExecWithoutAutocmds (cmd)
+function! eclim#util#ExecWithoutAutocmds(cmd)
   let save_opt = &eventignore
   set eventignore=all
   try
@@ -180,7 +180,7 @@ endfunction " }}}
 " FillTemplate(prefix, suffix) {{{
 " Used as part of a vim normal map to allow the user to fill in values for
 " variables in a newly added template of code.
-function! eclim#util#FillTemplate (prefix, suffix)
+function! eclim#util#FillTemplate(prefix, suffix)
   let line = getline('.')
   let prefixCol = stridx(line, a:prefix)
   let suffixCol = stridx(line, a:suffix, prefixCol)
@@ -196,7 +196,7 @@ endfunction " }}}
 " Searches for the supplied file in the &path.
 " If exclude_relative supplied is 1, then relative &path entries ('.' and '')
 " are not searched).
-function! eclim#util#FindFileInPath (file, exclude_relative)
+function! eclim#util#FindFileInPath(file, exclude_relative)
   let path = &path
   if a:exclude_relative
     " remove '' path entry
@@ -210,7 +210,7 @@ endfunction " }}}
 " Findfile(name, [, path [, count]]) {{{
 " Used to issue a findfile() handling any vim options that may otherwise
 " disrupt it.
-function! eclim#util#Findfile (name, ...)
+function! eclim#util#Findfile(name, ...)
   let savewig = &wildignore
   set wildignore=""
   if len(a:000) == 0
@@ -227,7 +227,7 @@ endfunction " }}}
 
 " GetEncoding() {{{
 " Gets the encoding of the current file.
-function! eclim#util#GetEncoding ()
+function! eclim#util#GetEncoding()
   let encoding = &fileencoding
   if encoding == ''
     let encoding = &encoding
@@ -243,7 +243,7 @@ endfunction " }}}
 
 " GetOffset() {{{
 " Gets the byte offset for the current cursor position.
-function! eclim#util#GetOffset ()
+function! eclim#util#GetOffset()
   let offset = line2byte(line('.')) - 1
   let offset += col('.') - 1
   return offset
@@ -251,7 +251,7 @@ endfunction " }}}
 
 " GetCurrentElementColumn() {{{
 " Gets the column for the element under the cursor.
-function! eclim#util#GetCurrentElementColumn ()
+function! eclim#util#GetCurrentElementColumn()
   let pos = getpos('.')
 
   let line = getline('.')
@@ -274,7 +274,7 @@ endfunction " }}}
 
 " GetCurrentElementPosition() {{{
 " Gets the byte offset and length for the element under the cursor.
-function! eclim#util#GetCurrentElementPosition ()
+function! eclim#util#GetCurrentElementPosition()
   let offset = eclim#util#GetCurrentElementOffset()
   let word = expand('<cword>')
 
@@ -283,7 +283,7 @@ endfunction " }}}
 
 " GetCurrentElementOffset() {{{
 " Gets the byte offset for the element under the cursor.
-function! eclim#util#GetCurrentElementOffset ()
+function! eclim#util#GetCurrentElementOffset()
   let pos = getpos('.')
 
   let line = getline('.')
@@ -307,7 +307,7 @@ endfunction " }}}
 " GetIndent(indent) {{{
 " Gets an indentation string for the supplied number of spaces the indent
 " consists of.  Ex. eclim#util#GetIndent(indent(line('.')))
-function! eclim#util#GetIndent (indent)
+function! eclim#util#GetIndent(indent)
   let result = ''
 
   if a:indent
@@ -323,7 +323,7 @@ endfunction " }}}
 
 " GetLineError(line) {{{
 " Gets the error (or message) for the supplie line number if one.
-function! eclim#util#GetLineError (line)
+function! eclim#util#GetLineError(line)
   let line = line('.')
   let col = col('.')
 
@@ -369,7 +369,7 @@ endfunction " }}}
 " The argument must be an absolute path to the file.
 " &path is expected to be using commas for path delineation.
 " Returns 0 if no path found.
-function! eclim#util#GetPathEntry (file)
+function! eclim#util#GetPathEntry(file)
   let paths = split(&path, ',')
   for path in paths
     if path != "" && path != "."
@@ -386,7 +386,7 @@ endfunction " }}}
 " Glob(expr, [honor_wildignore]) {{{
 " Used to issue a glob() handling any vim options that may otherwise disrupt
 " it.
-function! eclim#util#Glob (expr, ...)
+function! eclim#util#Glob(expr, ...)
   if len(a:000) == 0
     let savewig = &wildignore
     set wildignore=""
@@ -409,7 +409,7 @@ endfunction " }}}
 " Globpath(path, expr, [honor_wildignore]) {{{
 " Used to issue a globpath() handling any vim options that may otherwise disrupt
 " it.
-function! eclim#util#Globpath (path, expr, ...)
+function! eclim#util#Globpath(path, expr, ...)
   if len(a:000) == 0
     let savewig = &wildignore
     set wildignore=""
@@ -426,7 +426,7 @@ endfunction " }}}
 
 " GoToBufferWindow(bufname) {{{
 " Returns to the window containing the supplied buffer name.
-function! eclim#util#GoToBufferWindow (bufname)
+function! eclim#util#GoToBufferWindow(bufname)
   let winnr = bufwinnr(bufnr('^' . a:bufname))
   if winnr != -1
     exec winnr . "winc w"
@@ -436,7 +436,7 @@ endfunction " }}}
 " GoToBufferWindowOrOpen(filename, cmd) {{{
 " Gives focus to the window containing the buffer for the supplied file, or if
 " none, opens the file using the supplied command.
-function! eclim#util#GoToBufferWindowOrOpen (filename, cmd)
+function! eclim#util#GoToBufferWindowOrOpen(filename, cmd)
   let winnr = bufwinnr(bufnr('^' . a:filename))
   if winnr != -1
     exec winnr . "winc w"
@@ -448,14 +448,14 @@ endfunction " }}}
 " GoToBufferWindowRegister(bufname) {{{
 " Registers the autocmd for returning the user to the supplied buffer when the
 " current buffer is closed.
-function! eclim#util#GoToBufferWindowRegister (bufname)
+function! eclim#util#GoToBufferWindowRegister(bufname)
   exec 'autocmd BufUnload <buffer> call eclim#util#GoToBufferWindow("' .
     \ escape(a:bufname, '\') . '") | doautocmd BufEnter'
 endfunction " }}}
 
 " GrabUri([line, col]) {{{
 " Grabs an uri from the file's current cursor position.
-function! eclim#util#GrabUri (...)
+function! eclim#util#GrabUri(...)
   if len(a:000) == 2
     let lnum = a:000[0]
     let cnum = a:000[1]
@@ -476,7 +476,7 @@ endfunction " }}}
 " Returns 1 if the supplied list contains the specified element, 0 otherwise.
 " To determine element equality both '==' and 'is' are tried as well as
 " ^element$ to support a regex supplied element string.
-function! eclim#util#ListContains (list, element)
+function! eclim#util#ListContains(list, element)
   let string = type(a:element) == 1 ? a:element : escape(string(a:element), '\')
   for element in a:list
     if element is a:element ||
@@ -494,7 +494,7 @@ endfunction " }}}
 
 " MakeWithCompiler(compiler, bang, args) {{{
 " Executes :make using the supplied compiler.
-function! eclim#util#MakeWithCompiler (compiler, bang, args)
+function! eclim#util#MakeWithCompiler(compiler, bang, args)
   if exists('g:current_compiler')
     let saved_compiler = g:current_compiler
   endif
@@ -524,7 +524,7 @@ endfunction " }}}
 
 " MarkRestore(markLine) {{{
 " Restores the ' mark with the new line.
-function! eclim#util#MarkRestore (markLine)
+function! eclim#util#MarkRestore(markLine)
   let pos = getpos('.')
   call cursor(a:markLine, s:markCol)
   mark '
@@ -533,14 +533,14 @@ endfunction " }}}
 
 " MarkSave() {{{
 " Saves the ' mark and returns the line.
-function! eclim#util#MarkSave ()
+function! eclim#util#MarkSave()
   let s:markCol = col("'`")
   return line("''")
 endfunction " }}}
 
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args.
-function! eclim#util#ParseArgs (args)
+function! eclim#util#ParseArgs(args)
   let args = split(a:args, '[^\\]\s\zs')
   call map(args, 'substitute(v:val, "\\([^\\\\]\\)\\s\\+$", "\\1", "")')
 
@@ -554,7 +554,7 @@ endfunction " }}}
 " In addition to the above line format, this function also supports
 " %f|%l col %c|%m|%s, where %s is the type of the entry.  The value will
 " be placed in the dictionary under the 'type' key.
-function! eclim#util#ParseLocationEntries (entries)
+function! eclim#util#ParseLocationEntries(entries)
   let entries = []
 
   for entry in a:entries
@@ -585,7 +585,7 @@ endfunction " }}}
 " Creates a prompt for the user using the supplied prompt string and list of
 " items to choose from.  Returns -1 if the list is empty or if the user
 " canceled, and 0 if the list contains only one item.
-function! eclim#util#PromptList (prompt, list, highlight)
+function! eclim#util#PromptList(prompt, list, highlight)
   " no elements, no prompt
   if empty(a:list)
     return -1
@@ -629,7 +629,7 @@ function! eclim#util#PromptList (prompt, list, highlight)
 endfunction " }}}
 
 " RefreshFile() {{{
-function! eclim#util#RefreshFile ()
+function! eclim#util#RefreshFile()
   "FIXME: doing an :edit clears the undo tree, but the code commented out below
   "       causes a user prompt on the write.  Need to pose this senario on the
   "       vim mailing lists.
@@ -647,7 +647,7 @@ endfunction " }}}
 
 " SetLocationList(list, [action]) {{{
 " Sets the contents of the location list for the current window.
-function! eclim#util#SetLocationList (list, ...)
+function! eclim#util#SetLocationList(list, ...)
   let loclist = a:list
 
   " filter the list if the current buffer defines a list of filters.
@@ -683,7 +683,7 @@ endfunction " }}}
 " supplied which will only clear items with text prefixed with '[namespace]'.
 " Also the special namespace 'global' may be supplied which will only remove
 " items with no namepace prefix.
-function! eclim#util#ClearLocationList (...)
+function! eclim#util#ClearLocationList(...)
   if a:0 > 0
     let loclist = getloclist(0)
     if len(loclist) > 0
@@ -711,7 +711,7 @@ endfunction " }}}
 
 " SetQuickfixList(list, ...) {{{
 " Sets the contents of the quickfix list.
-function! eclim#util#SetQuickfixList (list, ...)
+function! eclim#util#SetQuickfixList(list, ...)
   let qflist = a:list
   if exists('b:EclimQuickfixFilter')
     let newlist = []
@@ -741,7 +741,7 @@ endfunction " }}}
 
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
-function! eclim#util#ShowCurrentError ()
+function! eclim#util#ShowCurrentError()
   if !exists('b:eclim_last_message_line') || line('.') != b:eclim_last_message_line
     let message = eclim#util#GetLineError(line('.'))
     if message != ''
@@ -764,7 +764,7 @@ endfunction " }}}
 
 " Simplify(file) {{{
 " Simply the supplied file to the shortest valid name.
-function! eclim#util#Simplify (file)
+function! eclim#util#Simplify(file)
   let file = a:file
 
   " Don't run simplify on url files, it will screw them up.
@@ -788,7 +788,7 @@ endfunction " }}}
 
 " System(cmd [, exec]) {{{
 " Executes system() accounting for possibly disruptive vim options.
-function! eclim#util#System (cmd, ...)
+function! eclim#util#System(cmd, ...)
   let saveshell = &shell
   let saveshellcmdflag = &shellcmdflag
   let saveshellpipe = &shellpipe
@@ -867,7 +867,7 @@ endfunction " }}}
 
 " TempWindow(name, lines [, readonly]) {{{
 " Opens a temp window w/ the given name and contents.
-function! eclim#util#TempWindow (name, lines, ...)
+function! eclim#util#TempWindow(name, lines, ...)
   let filename = expand('%:p')
   let winnr = winnr()
 
@@ -922,7 +922,7 @@ endfunction " }}}
 
 " TempWindowClear(name) {{{
 " Opens a temp window w/ the given name and contents.
-function! eclim#util#TempWindowClear (name)
+function! eclim#util#TempWindowClear(name)
   "let name = escape(a:name, ' []')
   " hack for windows
   let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
@@ -939,7 +939,7 @@ endfunction " }}}
 " TempWindowCommand(command, name) {{{
 " Opens a temp window w/ the given name and contents from the result of the
 " supplied command.
-function! eclim#util#TempWindowCommand (command, name)
+function! eclim#util#TempWindowCommand(command, name)
   "let name = escape(a:name, ' []')
   " hack for windows
   let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
@@ -969,7 +969,7 @@ endfunction " }}}
 " Executes the supplied echo command and forces vim to display as much as
 " possible without the "Press Enter" prompt.
 " Thanks to vimtip #1289
-function! eclim#util#WideMessage (command, message)
+function! eclim#util#WideMessage(command, message)
   let saved_ruler = &ruler
   let saved_showcmd = &showcmd
 
@@ -992,13 +992,13 @@ endfunction " }}}
 " Note: This function only detects command typed by the user at the
 " command (:) prompt, not any normal mappings which may hide/close/delete the
 " buffer.
-function! eclim#util#WillWrittenBufferClose ()
+function! eclim#util#WillWrittenBufferClose()
   return histget("cmd") =~ s:buffing_write_closing_commands
 endfunction " }}}
 
 " CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for files.
-function! eclim#util#CommandCompleteFile (argLead, cmdLine, cursorPos)
+function! eclim#util#CommandCompleteFile(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
   let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
@@ -1011,7 +1011,7 @@ endfunction " }}}
 
 " CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for directories.
-function! eclim#util#CommandCompleteDir (argLead, cmdLine, cursorPos)
+function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
   let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
@@ -1033,7 +1033,7 @@ endfunction " }}}
 " ParseCommandCompletionResults(args) {{{
 " Bit of a hack for vim's lack of support for escaped spaces in custom
 " completion.
-function! eclim#util#ParseCommandCompletionResults (argLead, results)
+function! eclim#util#ParseCommandCompletionResults(argLead, results)
   let results = a:results
   if stridx(a:argLead, ' ') != -1
     let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')

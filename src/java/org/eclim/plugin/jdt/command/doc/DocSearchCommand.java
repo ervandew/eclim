@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,8 +54,8 @@ public class DocSearchCommand
 {
   private static final Pattern LOCAL_URL =
     Pattern.compile("^file://(/|[A-Z]).*");
-  private static final HashMap<String,String> JRE_DOCS =
-    new HashMap<String,String>();
+  private static final HashMap<String, String> JRE_DOCS =
+    new HashMap<String, String>();
   static{
     JRE_DOCS.put(JavaCore.VERSION_1_3,
         "http://java.sun.com/j2se/1.3/docs/api/");
@@ -70,18 +70,17 @@ public class DocSearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    List<SearchMatch> matches = executeSearch(_commandLine);
+    List<SearchMatch> matches = executeSearch(commandLine);
 
     ArrayList<String> results = new ArrayList<String>();
     for(SearchMatch match : matches){
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
-        {
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
           String result = createDocSearchResult(match);
           if(result != null){
             results.add(result);
@@ -89,19 +88,19 @@ public class DocSearchCommand
         }
       }
     }
-    return DocSearchFilter.instance.filter(_commandLine, results);
+    return DocSearchFilter.instance.filter(commandLine, results);
   }
 
   /**
    * Creates a javadoc url from the supplied SearchMatch.
    *
-   * @param _match The SearchMatch.
+   * @param match The SearchMatch.
    * @return The javadoc url.
    */
-  private String createDocSearchResult (SearchMatch _match)
+  private String createDocSearchResult(SearchMatch match)
     throws Exception
   {
-    IJavaElement element = (IJavaElement)_match.getElement();
+    IJavaElement element = (IJavaElement)match.getElement();
 
     IJavaElement parent = element;
     while(parent.getElementType() != IJavaElement.PACKAGE_FRAGMENT_ROOT){
@@ -144,10 +143,10 @@ public class DocSearchCommand
     return null;
   }
 
-  private String buildUrl (String _baseUrl, IJavaElement _element)
+  private String buildUrl(String baseUrl, IJavaElement element)
     throws Exception
   {
-    String qualifiedName = JavaUtils.getFullyQualifiedName(_element);
+    String qualifiedName = JavaUtils.getFullyQualifiedName(element);
 
     // split up the class from the field/method
     String className = qualifiedName;
@@ -158,7 +157,7 @@ public class DocSearchCommand
       className = className.substring(0, index);
     }
 
-    String base = _baseUrl.trim();
+    String base = baseUrl.trim();
     if(base.startsWith("file:") && !LOCAL_URL.matcher(base).matches()){
       base = base.replaceFirst("file:/*(/|[A-Z])", "file://$1");
     }

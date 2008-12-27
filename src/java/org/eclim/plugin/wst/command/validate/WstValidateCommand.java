@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public abstract class WstValidateCommand
    * @param filename The file.
    * @return The uri.
    */
-  protected String toUri (String project, String filename)
+  protected String toUri(String project, String filename)
     throws Exception
   {
     if (filename.indexOf("://") == -1){
@@ -59,7 +59,7 @@ public abstract class WstValidateCommand
    * @param uri The uri.
    * @return The file name.
    */
-  protected String toFile (String uri)
+  protected String toFile(String uri)
   {
     String file = uri.startsWith(URI_PREFIX) ? uri.substring(URI_PREFIX.length()) : uri;
     try{

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_python'
 endfunction " }}}
 
@@ -60,7 +60,7 @@ function! TestPylint()
   edit! test/validate/test_validate_pylint.py
   PyLint
 
-  function CompareQf (i1, i2)
+  function CompareQf(i1, i2)
     return a:i1.lnum == a:i2.lnum ? 0 : a:i1.lnum > a:i2.lnum ? 1 : -1
   endfunction
 

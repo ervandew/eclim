@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public abstract class AbstractCommand
    *
    * @return Preferences.
    */
-  public Preferences getPreferences ()
+  public Preferences getPreferences()
   {
     return Preferences.getInstance();
   }
@@ -45,17 +45,17 @@ public abstract class AbstractCommand
    * Convenience method which uses the standard project, file, offset, and
    * encoding options to determine the character offset in the file.
    *
-   * @param _commandLine The command line instance.
+   * @param commandLine The command line instance.
    * @return The char offset.
    */
-  public int getOffset (CommandLine _commandLine)
+  public int getOffset(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String encoding = _commandLine.getValue(Options.ENCODING_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String encoding = commandLine.getValue(Options.ENCODING_OPTION);
     int offset = Integer.parseInt(
-        _commandLine.getValue(Options.OFFSET_OPTION));
+        commandLine.getValue(Options.OFFSET_OPTION));
     file = ProjectUtils.getFilePath(project, file);
 
     return FileUtils.byteOffsetToCharOffset(file, offset, encoding);

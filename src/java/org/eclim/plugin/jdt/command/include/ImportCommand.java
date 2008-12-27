@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,12 +50,12 @@ public class ImportCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     ArrayList<ImportResult> results = new ArrayList<ImportResult>();
-    String project = _commandLine.getValue(Options.NAME_OPTION);
-    String pat = _commandLine.getValue(Options.PATTERN_OPTION);
+    String project = commandLine.getValue(Options.NAME_OPTION);
+    String pat = commandLine.getValue(Options.PATTERN_OPTION);
 
     SearchPattern pattern =
       SearchPattern.createPattern(pat,
@@ -79,6 +79,6 @@ public class ImportCommand
         }
       }
     }
-    return ImportFilter.instance.filter(_commandLine, results);
+    return ImportFilter.instance.filter(commandLine, results);
   }
 }

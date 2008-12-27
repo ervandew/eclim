@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@
 
 " CodeComplete(findstart, base) {{{
 " Handles java code completion.
-function! eclim#java#complete#CodeComplete (findstart, base)
+function! eclim#java#complete#CodeComplete(findstart, base)
   if a:findstart
     if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
       return -1
@@ -146,7 +146,7 @@ endfunction " }}}
 
 " CompletionFilter(filter) {{{
 " Filter current completions.
-"function! eclim#java#complete#CompletionFilter (filter)
+"function! eclim#java#complete#CompletionFilter(filter)
 "  let start = JavaCodeComplete(1, "")
 "  while col('.') > start + 1
 "    normal! <BS>

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ endif
 " }}}
 
 " SortImports() {{{
-function! eclim#python#import#SortImports ()
+function! eclim#python#import#SortImports()
   let pos = getpos('.')
 
   let import_data = eclim#python#import#GetImports()
@@ -97,7 +97,7 @@ function! eclim#python#import#SortImports ()
 endfunction " }}}
 
 " CompareImports() {{{
-function! eclim#python#import#CompareImports (i1, i2)
+function! eclim#python#import#CompareImports(i1, i2)
   if (a:i1 =~ '^from' && a:i2 =~ '^from') ||
     \ (a:i1 =~ '^import' && a:i2 =~ '^import')
     return a:i1 == a:i2 ? 0 : a:i1 > a:i2 ? 1 : -1
@@ -115,7 +115,7 @@ function! eclim#python#import#CompareImports (i1, i2)
 endfunction " }}}
 
 " CleanImports() {{{
-function! eclim#python#import#CleanImports ()
+function! eclim#python#import#CleanImports()
   let pos = getpos('.')
 
   let import_data = eclim#python#import#GetImports()
@@ -165,7 +165,7 @@ endfunction " }}}
 "   - start: the line where the imports start (0 if none).
 "   - end: the line where the imports end (0 if none).
 "   - imports: list containing the import lines.
-function! eclim#python#import#GetImports ()
+function! eclim#python#import#GetImports()
   let pos = getpos('.')
 
   call cursor(1, 1)

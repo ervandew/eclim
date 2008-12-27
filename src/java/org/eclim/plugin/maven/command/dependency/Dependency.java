@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class Dependency
    *
    * @return The groupId.
    */
-  public String getGroupId ()
+  public String getGroupId()
   {
     return groupId;
   }
@@ -63,7 +63,7 @@ public class Dependency
    *
    * @param groupId The groupId.
    */
-  public void setGroupId (String groupId)
+  public void setGroupId(String groupId)
   {
     this.groupId = groupId;
   }
@@ -73,7 +73,7 @@ public class Dependency
    *
    * @return The artifactId.
    */
-  public String getArtifactId ()
+  public String getArtifactId()
   {
     return artifactId;
   }
@@ -83,7 +83,7 @@ public class Dependency
    *
    * @param artifactId The artifactId.
    */
-  public void setArtifactId (String artifactId)
+  public void setArtifactId(String artifactId)
   {
     this.artifactId = artifactId;
   }
@@ -93,7 +93,7 @@ public class Dependency
    *
    * @return The version.
    */
-  public String getVersion ()
+  public String getVersion()
   {
     return version;
   }
@@ -103,7 +103,7 @@ public class Dependency
    *
    * @param version The version.
    */
-  public void setVersion (String version)
+  public void setVersion(String version)
   {
     this.version = version;
   }
@@ -113,7 +113,7 @@ public class Dependency
    *
    * @return The type.
    */
-  public String getType ()
+  public String getType()
   {
     return type;
   }
@@ -123,7 +123,7 @@ public class Dependency
    *
    * @param type The type.
    */
-  public void setType (String type)
+  public void setType(String type)
   {
     this.type = type;
   }
@@ -133,7 +133,7 @@ public class Dependency
    *
    * @return The repository.
    */
-  public String getRepository ()
+  public String getRepository()
   {
     return repository;
   }
@@ -143,7 +143,7 @@ public class Dependency
    *
    * @param repository The repository.
    */
-  public void setRepository (String repository)
+  public void setRepository(String repository)
   {
     this.repository = repository;
   }
@@ -152,7 +152,7 @@ public class Dependency
    * {@inheritDoc}
    * @see Object#hashCode()
    */
-  public int hashCode ()
+  public int hashCode()
   {
     return new HashCodeBuilder()
       .append(groupId)
@@ -166,7 +166,7 @@ public class Dependency
    * {@inheritDoc}
    * @see Object#equals(Object)
    */
-  public boolean equals (Object obj)
+  public boolean equals(Object obj)
   {
     if (!(obj instanceof Dependency)){
       return false;
@@ -189,7 +189,7 @@ public class Dependency
    * {@inheritDoc}
    * @see Object#toString()
    */
-  public String toString ()
+  public String toString()
   {
     return new ToStringBuilder(this)
       .append(GROUP_ID, getGroupId())

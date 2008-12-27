@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,41 +113,40 @@ public class JavaUtils
   /**
    * Gets a java project by name.
    *
-   * @param _project The name of the project.
+   * @param project The name of the project.
    * @return The project.
    */
-  public static IJavaProject getJavaProject (String _project)
+  public static IJavaProject getJavaProject(String project)
     throws Exception
   {
-    IProject project = ProjectUtils.getProject(_project, true);
-    return getJavaProject(project);
+    return getJavaProject(ProjectUtils.getProject(project, true));
   }
 
   /**
    * Gets a java project from the supplied IProject.
    *
-   * @param _project The IProject.
+   * @param project The IProject.
    * @return The java project.
    */
-  public static IJavaProject getJavaProject (IProject _project)
+  public static IJavaProject getJavaProject(IProject project)
     throws Exception
   {
-    if(ProjectUtils.getPath(_project) == null){
+    if(ProjectUtils.getPath(project) == null){
       throw new IllegalArgumentException(
-          Services.getMessage("project.location.null", _project.getName()));
+          Services.getMessage("project.location.null", project.getName()));
     }
 
-    if(!_project.hasNature(PluginResources.NATURE)){
+    if(!project.hasNature(PluginResources.NATURE)){
       throw new IllegalArgumentException(Services.getMessage(
             "project.missing.nature",
-            _project.getName(),
+            project.getName(),
             ProjectNatureFactory.getAliasForNature(PluginResources.NATURE)));
     }
 
-    IJavaProject javaProject = JavaCore.create(_project);
+    IJavaProject javaProject = JavaCore.create(project);
     if(javaProject == null || !javaProject.exists()){
       throw new IllegalArgumentException(
-          Services.getMessage("project.not.found", _project));
+          Services.getMessage("project.not.found", project));
     }
 
     return javaProject;
@@ -157,18 +156,18 @@ public class JavaUtils
    * Finds a compilation unit by looking in all the java project of the supplied
    * name.
    *
-   * @param _project The name of the project to locate the file in.
-   * @param _file The file to find.
+   * @param project The name of the project to locate the file in.
+   * @param file The file to find.
    * @return The compilation unit.
    */
-  public static ICompilationUnit getCompilationUnit (String _project, String _file)
+  public static ICompilationUnit getCompilationUnit(String project, String file)
     throws Exception
   {
-    IJavaProject javaProject = getJavaProject(_project);
-    ICompilationUnit src = getCompilationUnit(javaProject, _file);
+    IJavaProject javaProject = getJavaProject(project);
+    ICompilationUnit src = getCompilationUnit(javaProject, file);
     if(src == null || !src.exists()){
       throw new IllegalArgumentException(
-          Services.getMessage("src.file.not.found", _file));
+          Services.getMessage("src.file.not.found", file));
     }
     return src;
   }
@@ -176,12 +175,12 @@ public class JavaUtils
   /**
    * Finds a compilation unit by looking in all the available java projects.
    *
-   * @param _file The absolute file path to find.
+   * @param file The absolute file path to find.
    * @return The compilation unit.
    *
    * @throws IllegalArgumentException If the file is not found.
    */
-  public static ICompilationUnit getCompilationUnit (String _file)
+  public static ICompilationUnit getCompilationUnit(String file)
     throws Exception
   {
     IProject[] projects =
@@ -189,45 +188,45 @@ public class JavaUtils
     for(int ii = 0; ii < projects.length; ii++){
       IJavaProject javaProject = getJavaProject(projects[ii]);
 
-      ICompilationUnit src = getCompilationUnit(javaProject, _file);
+      ICompilationUnit src = getCompilationUnit(javaProject, file);
       if(src != null && src.exists()){
         return src;
       }
     }
     throw new IllegalArgumentException(
-        Services.getMessage("src.file.not.found", _file));
+        Services.getMessage("src.file.not.found", file));
   }
 
   /**
    * Gets the compilation unit from the supplied project.
    *
-   * @param _project The project.
-   * @param _file The absolute path to the file.
+   * @param project The project.
+   * @param file The absolute path to the file.
    * @return The compilation unit or null if not found.
    */
-  private static ICompilationUnit getCompilationUnit (
-      IJavaProject _project, String _file)
+  private static ICompilationUnit getCompilationUnit(
+      IJavaProject project, String file)
     throws Exception
   {
     return JavaCore.createCompilationUnitFrom(
-        ProjectUtils.getFile(_project.getProject(), _file));
+        ProjectUtils.getFile(project.getProject(), file));
   }
 
   /**
    * Finds a compilation unit by looking in all the java project of the supplied
    * name.
    *
-   * @param _project The name of the project to locate the file in.
-   * @param _file The src dir relative file path to find.
+   * @param project The name of the project to locate the file in.
+   * @param file The src dir relative file path to find.
    * @return The compilation unit or null if not found.
    */
-  public static ICompilationUnit findCompilationUnit (
-      String _project, String _file)
+  public static ICompilationUnit findCompilationUnit(
+      String project, String file)
     throws Exception
   {
-    IPath path = Path.fromOSString(_file);
+    IPath path = Path.fromOSString(file);
 
-    IJavaProject javaProject = getJavaProject(_project);
+    IJavaProject javaProject = getJavaProject(project);
     javaProject.open(null);
     //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
@@ -239,13 +238,13 @@ public class JavaUtils
   /**
    * Finds a compilation unit by looking in all the available java projects.
    *
-   * @param _file The src directory relative file to find.
+   * @param file The src directory relative file to find.
    * @return The compilation unit or null if not found.
    */
-  public static ICompilationUnit findCompilationUnit (String _file)
+  public static ICompilationUnit findCompilationUnit(String file)
     throws Exception
   {
-    IPath path = Path.fromOSString(_file);
+    IPath path = Path.fromOSString(file);
     IProject[] projects =
       ResourcesPlugin.getWorkspace().getRoot().getProjects();
     for(int ii = 0; ii < projects.length; ii++){
@@ -265,12 +264,12 @@ public class JavaUtils
    * Gets the primary element (compilation unit or class file) for the supplied
    * element.
    *
-   * @param _element The element.
+   * @param element The element.
    * @return The primary element.
    */
-  public static IJavaElement getPrimaryElement (IJavaElement _element)
+  public static IJavaElement getPrimaryElement(IJavaElement element)
   {
-    IJavaElement parent = _element;
+    IJavaElement parent = element;
     while(parent.getElementType() != IJavaElement.COMPILATION_UNIT &&
         parent.getElementType() != IJavaElement.CLASS_FILE){
       parent = parent.getParent();
@@ -283,13 +282,13 @@ public class JavaUtils
    * <p/>
    * Code borrowed from org.eclipse.jdt.internal.core.JavaModelOperation.
    *
-   * @param _src The src file.
+   * @param src The src file.
    * @return The IDocument.
    */
-  public static IDocument getDocument (ICompilationUnit _src)
+  public static IDocument getDocument(ICompilationUnit src)
     throws Exception
   {
-    IBuffer buffer = _src.getBuffer();
+    IBuffer buffer = src.getBuffer();
     if(buffer instanceof IDocument){
       return (IDocument)buffer;
     }
@@ -302,13 +301,13 @@ public class JavaUtils
    * NOTE: For easy of determining fields and method segments, they are appended
    * with a javadoc style '#' instead of the normal '.'.
    *
-   * @param _element The IJavaElement.
+   * @param element The IJavaElement.
    *
    * @return The fully qualified name.
    */
-  public static String getFullyQualifiedName (IJavaElement _element)
+  public static String getFullyQualifiedName(IJavaElement element)
   {
-    IJavaElement parent = _element;
+    IJavaElement parent = element;
     while(parent.getElementType() != IJavaElement.COMPILATION_UNIT &&
         parent.getElementType() != IJavaElement.CLASS_FILE){
       parent = parent.getParent();
@@ -319,13 +318,13 @@ public class JavaUtils
       .append('.')
       .append(FileUtils.getFileName(parent.getElementName()));
 
-    switch(_element.getElementType()){
+    switch(element.getElementType()){
       case IJavaElement.FIELD:
-        IField field = (IField)_element;
+        IField field = (IField)element;
         elementName.append('#').append(field.getElementName());
         break;
       case IJavaElement.METHOD:
-        IMethod method = (IMethod)_element;
+        IMethod method = (IMethod)element;
         elementName.append('#')
           .append(method.getElementName())
           .append('(');
@@ -351,24 +350,24 @@ public class JavaUtils
    * file, then the type name returned is unqualified, otherwise the name
    * returned is the fully qualified type name.
    *
-   * @param _src The compilation unit.
-   * @param _type The type.
+   * @param src The compilation unit.
+   * @param type The type.
    *
    * @return The relative type name.
    */
-  public static String getCompilationUnitRelativeTypeName (
-      ICompilationUnit _src, IType _type)
+  public static String getCompilationUnitRelativeTypeName(
+      ICompilationUnit src, IType type)
     throws Exception
   {
-    String typeName = _type.getFullyQualifiedName().replace('$', '.');
-    if(JavaUtils.containsImport(_src, _type)){
-      typeName = _type.getElementName();
+    String typeName = type.getFullyQualifiedName().replace('$', '.');
+    if(JavaUtils.containsImport(src, type)){
+      typeName = type.getElementName();
 
-      int parentType = _type.getParent().getElementType();
+      int parentType = type.getParent().getElementType();
       if (parentType == IJavaElement.TYPE){
-        typeName = _type.getParent().getElementName() + '.' + typeName;
+        typeName = type.getParent().getElementName() + '.' + typeName;
       }else if (parentType == IJavaElement.CLASS_FILE){
-        String parentName = _type.getParent().getElementName();
+        String parentName = type.getParent().getElementName();
         int index = parentName.indexOf('$');
         if (index != -1){
           parentName = parentName.substring(0, index);
@@ -376,7 +375,7 @@ public class JavaUtils
         }
       }
     }else{
-      typeName = _type.getFullyQualifiedName().replace('$', '.');
+      typeName = type.getFullyQualifiedName().replace('$', '.');
     }
 
     return typeName;
@@ -386,36 +385,35 @@ public class JavaUtils
    * Determines if the supplied src file contains an import for the
    * supplied type (including wildcard .* imports).
    *
-   * @param _src The compilation unit.
-   * @param _type The type.
+   * @param src The compilation unit.
+   * @param type The type.
    * @return true if the src file has a qualifying import.
    */
-  public static boolean containsImport (ICompilationUnit _src, String _type)
+  public static boolean containsImport(ICompilationUnit src, String type)
     throws Exception
   {
-    return containsImport(_src, _src.getType(_type));
+    return containsImport(src, src.getType(type));
   }
 
   /**
    * Determines if the supplied src file contains an import for the
    * supplied type (including wildcard .* imports).
    *
-   * @param _src The compilation unit.
-   * @param _type The type.
+   * @param src The compilation unit.
+   * @param type The type.
    * @return true if the src file has a qualifying import.
    */
-  public static boolean containsImport (ICompilationUnit _src, IType _type)
+  public static boolean containsImport(ICompilationUnit src, IType type)
     throws Exception
   {
-    String typePkg = _type.getPackageFragment().getElementName();
+    String typePkg = type.getPackageFragment().getElementName();
 
-    IPackageDeclaration[] packages = _src.getPackageDeclarations();
+    IPackageDeclaration[] packages = src.getPackageDeclarations();
     String pkg = packages.length > 0 ? packages[0].getElementName() : null;
 
     // classes in same package are auto imported.
-    if( (pkg == null && typePkg == null) ||
-        (pkg != null && pkg.equals(typePkg)))
-    {
+    if ((pkg == null && typePkg == null) ||
+        (pkg != null && pkg.equals(typePkg))){
       return true;
     }
 
@@ -425,9 +423,9 @@ public class JavaUtils
     }
 
     typePkg = typePkg + ".*";
-    String typeName = _type.getFullyQualifiedName().replace('$', '.');
+    String typeName = type.getFullyQualifiedName().replace('$', '.');
 
-    IImportDeclaration[] imports = _src.getImports();
+    IImportDeclaration[] imports = src.getImports();
     for (int ii = 0; ii < imports.length; ii++){
       String name = imports[ii].getElementName();
       if(name.equals(typeName) || name.equals(typePkg)){
@@ -440,26 +438,26 @@ public class JavaUtils
   /**
    * Gets the java version for which all source is to be compatable with.
    *
-   * @param _project The java project.
+   * @param project The java project.
    * @return The source compliance version.
    */
-  public static String getCompilerSourceCompliance (IJavaProject _project)
+  public static String getCompilerSourceCompliance(IJavaProject project)
   {
-    return (String)_project.getOptions(true).get(JavaCore.COMPILER_SOURCE);
+    return (String)project.getOptions(true).get(JavaCore.COMPILER_SOURCE);
   }
 
   /**
    * Sets the java version for which all source is to be compatable with.
    *
-   * @param _version The java version.
+   * @param version The java version.
    */
-  public static void setCompilerSourceCompliance (String _version)
+  public static void setCompilerSourceCompliance(String version)
     throws Exception
   {
-    Map<String,String> options = JavaCore.getOptions();
-    options.put(JavaCore.COMPILER_SOURCE, _version);
-    options.put(JavaCore.COMPILER_COMPLIANCE, _version);
-    options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, _version);
+    Map<String, String> options = JavaCore.getOptions();
+    options.put(JavaCore.COMPILER_SOURCE, version);
+    options.put(JavaCore.COMPILER_COMPLIANCE, version);
+    options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, version);
 
     JavaCore.setOptions((Hashtable)options);
   }
@@ -467,68 +465,68 @@ public class JavaUtils
   /**
    * Sets the java version for which all source is to be compatable with.
    *
-   * @param _project The java project.
-   * @param _version The java version.
+   * @param project The java project.
+   * @param version The java version.
    */
-  public static void setCompilerSourceCompliance (
-      IJavaProject _project, String _version)
+  public static void setCompilerSourceCompliance(
+      IJavaProject project, String version)
     throws Exception
   {
-    // using _project.setOption(String,String) doesn't save the setting.
-    Map<String,String> options = _project.getOptions(false);
-    options.put(JavaCore.COMPILER_SOURCE, _version);
-    options.put(JavaCore.COMPILER_COMPLIANCE, _version);
-    options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, _version);
+    // using project.setOption(String,String) doesn't save the setting.
+    Map<String, String> options = project.getOptions(false);
+    options.put(JavaCore.COMPILER_SOURCE, version);
+    options.put(JavaCore.COMPILER_COMPLIANCE, version);
+    options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, version);
 
-    _project.setOptions(options);
+    project.setOptions(options);
   }
 
   /**
    * Loads the supplied map to be used in a template with the available
    * preferences.
    *
-   * @param _project The current project.
-   * @param _preferences The eclim preferences.
-   * @param _values The values to populate.
+   * @param project The current project.
+   * @param preferences The eclim preferences.
+   * @param values The values to populate.
    */
-  public static void loadPreferencesForTemplate (
-      IProject _project, Preferences _preferences, Map<String,Object> _values)
+  public static void loadPreferencesForTemplate(
+      IProject project, Preferences preferences, Map<String, Object> values)
     throws Exception
   {
-    Map<String,String> options = _preferences.getOptionsAsMap(_project);
+    Map<String, String> options = preferences.getOptionsAsMap(project);
     for(String key : options.keySet()){
       String value = options.get(key);
-      _values.put(key.replace('.', '_'), value);
+      values.put(key.replace('.', '_'), value);
     }
   }
 
   /**
    * Gets the problems for a given src file.
    *
-   * @param _src The src file.
+   * @param src The src file.
    * @return The problems.
    */
-  public static IProblem[] getProblems (ICompilationUnit _src)
+  public static IProblem[] getProblems(ICompilationUnit src)
     throws Exception
   {
-    return getProblems(_src, null);
+    return getProblems(src, null);
   }
 
   /**
    * Gets the problems for a given src file.
    *
-   * @param _src The src file.
-   * @param _ids Array of problem ids to accept.
+   * @param src The src file.
+   * @param ids Array of problem ids to accept.
    * @return The problems.
    */
-  public static IProblem[] getProblems (ICompilationUnit _src, int[] _ids)
+  public static IProblem[] getProblems(ICompilationUnit src, int[] ids)
     throws Exception
   {
-    ProblemRequestor requestor = new ProblemRequestor(_ids);
+    ProblemRequestor requestor = new ProblemRequestor(ids);
     try{
-      _src.becomeWorkingCopy(requestor, null);
+      src.becomeWorkingCopy(requestor, null);
     }finally{
-      _src.discardWorkingCopy();
+      src.discardWorkingCopy();
     }
     List<IProblem> problems = requestor.getProblems();
     return (IProblem[])problems.toArray(new IProblem[problems.size()]);
@@ -540,10 +538,10 @@ public class JavaUtils
    * Based on
    * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getCorrectionProcessors()
    *
-   * @param _src The src file to get processors for.
+   * @param src The src file to get processors for.
    * @return quick fix processors.
    */
-  public static IQuickFixProcessor[] getQuickFixProcessors (ICompilationUnit _src)
+  public static IQuickFixProcessor[] getQuickFixProcessors(ICompilationUnit src)
     throws Exception
   {
     if (correctionProcessors == null) {
@@ -553,7 +551,7 @@ public class JavaUtils
       new IQuickFixProcessor[correctionProcessors.length];
     for(int ii = 0; ii < correctionProcessors.length; ii++){
       processors[ii] = (IQuickFixProcessor)
-        correctionProcessors[ii].getProcessor(_src, IQuickFixProcessor.class);
+        correctionProcessors[ii].getProcessor(src, IQuickFixProcessor.class);
     }
     return processors;
   }
@@ -564,10 +562,11 @@ public class JavaUtils
    * Based on
    * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getAssistProcessors()
    *
-   * @param _src The src file to get processors for.
+   * @param src The src file to get processors for.
    * @return quick assist processors.
    */
-  public static IQuickAssistProcessor[] getQuickAssistProcessors (ICompilationUnit _src)
+  public static IQuickAssistProcessor[] getQuickAssistProcessors(
+      ICompilationUnit src)
     throws Exception
   {
     if (assistProcessors == null) {
@@ -577,24 +576,24 @@ public class JavaUtils
       new IQuickAssistProcessor[assistProcessors.length];
     for(int ii = 0; ii < assistProcessors.length; ii++){
       processors[ii] = (IQuickAssistProcessor)
-        assistProcessors[ii].getProcessor(_src, IQuickAssistProcessor.class);
+        assistProcessors[ii].getProcessor(src, IQuickAssistProcessor.class);
     }
     return processors;
   }
 
-  private static ContributedProcessorDescriptor[] getProcessorDescriptors (
-      String _id, boolean _testMarkerTypes)
+  private static ContributedProcessorDescriptor[] getProcessorDescriptors(
+      String id, boolean testMarkerTypes)
     throws Exception
   {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
-      .getConfigurationElementsFor(JavaUI.ID_PLUGIN, _id);
+      .getConfigurationElementsFor(JavaUI.ID_PLUGIN, id);
     ArrayList<ContributedProcessorDescriptor> res =
       new ArrayList<ContributedProcessorDescriptor>(elements.length);
 
     for(int ii = 0; ii < elements.length; ii++){
       ContributedProcessorDescriptor desc =
-        new ContributedProcessorDescriptor(elements[ii], _testMarkerTypes);
-      IStatus status= desc.checkSyntax();
+        new ContributedProcessorDescriptor(elements[ii], testMarkerTypes);
+      IStatus status = desc.checkSyntax();
       if(status.isOK()){
         res.add(desc);
       }else{
@@ -617,11 +616,11 @@ public class JavaUtils
     /**
      * Constructs a new instance.
      *
-     * @param _ids Array of problem ids to accept.
+     * @param ids Array of problem ids to accept.
      */
-    public ProblemRequestor (int[] _ids)
+    public ProblemRequestor (int[] ids)
     {
-      ids = _ids;
+      this.ids = ids;
     }
 
     /**
@@ -629,7 +628,7 @@ public class JavaUtils
      *
      * @return The list of problems.
      */
-    public List<IProblem> getProblems ()
+    public List<IProblem> getProblems()
     {
       return problems;
     }
@@ -637,17 +636,17 @@ public class JavaUtils
     /**
      * {@inheritDoc}
      */
-    public void acceptProblem (IProblem _problem)
+    public void acceptProblem(IProblem problem)
     {
       if(ids != null){
         for (int ii = 0; ii < ids.length; ii++){
-          if(_problem.getID() == ids[ii]){
-            problems.add(_problem);
+          if(problem.getID() == ids[ii]){
+            problems.add(problem);
             break;
           }
         }
       }else{
-        problems.add(_problem);
+        problems.add(problem);
       }
     }
 

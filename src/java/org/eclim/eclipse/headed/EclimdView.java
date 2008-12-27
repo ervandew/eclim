@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,8 @@ public class EclimdView
    * @see ViewPart#createPartControl(Composite)
    */
   @Override
-  public void createPartControl (Composite parent) {
+  public void createPartControl(Composite parent)
+  {
     log = new Text(
         parent,
         SWT.LEFT | SWT.MULTI | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -75,7 +76,8 @@ public class EclimdView
    * @see ViewPart#dispose()
    */
   @Override
-  public void dispose () {
+  public void dispose()
+  {
     if (eclimThread != null) {
       try{
         // TODO: what about thread safety in access to Services singleton and it's
@@ -93,11 +95,13 @@ public class EclimdView
    * @see ViewPart#setFocus()
    */
   @Override
-  public void setFocus () {
+  public void setFocus()
+  {
     log.setFocus();
   }
 
-  public static Text getLog (){
+  public static Text getLog()
+  {
     return log;
   }
 
@@ -106,11 +110,13 @@ public class EclimdView
   {
     IApplication app;
 
-    public EclimThread (IApplication app) {
+    public EclimThread (IApplication app)
+    {
       this.app = app;
     }
 
-    public void run () {
+    public void run()
+    {
       try {
         app.start(null);
       } catch (Exception e) {

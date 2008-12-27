@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestJavaFormatOneLine() {{{
-function! TestJavaFormatOneLine ()
+function! TestJavaFormatOneLine()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
   call PeekRedir()
 
@@ -47,7 +47,7 @@ function! TestJavaFormatOneLine ()
 endfunction " }}}
 
 " TestJavaFormatRange() {{{
-function! TestJavaFormatRange ()
+function! TestJavaFormatRange()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
   call PeekRedir()
 
@@ -80,7 +80,7 @@ function! TestJavaFormatRange ()
 endfunction " }}}
 
 " TestJavaFormatWholeFile() {{{
-function! TestJavaFormatWholeFile ()
+function! TestJavaFormatWholeFile()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
   call PeekRedir()
 

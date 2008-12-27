@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ public class DummySelectionProvider
 {
   private ISelection selection;
 
-  public DummySelectionProvider (ISelection _selection)
+  public DummySelectionProvider (ISelection selection)
   {
-    selection = _selection;
+    this.selection = selection;
   }
 
   public void addSelectionChangedListener(ISelectionChangedListener listener)

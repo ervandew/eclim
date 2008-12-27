@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,11 +54,12 @@ public class Preferences
   private static final String CORE = "core";
 
   private static Preferences instance = new Preferences();
-  private static HashMap<String,OptionHandler> optionHandlers =
-    new HashMap<String,OptionHandler>();
+  private static HashMap<String, OptionHandler> optionHandlers =
+    new HashMap<String, OptionHandler>();
 
-  private HashMap<String,Preference> preferences = new HashMap<String,Preference>();
-  private HashMap<String,Option> options = new HashMap<String,Option>();
+  private HashMap<String, Preference> preferences =
+    new HashMap<String, Preference>();
+  private HashMap<String, Option> options = new HashMap<String, Option>();
 
   private Preferences () {}
 
@@ -67,7 +68,7 @@ public class Preferences
    *
    * @return The Preferences singleton.
    */
-  public static Preferences getInstance ()
+  public static Preferences getInstance()
   {
     return instance;
   }
@@ -77,11 +78,11 @@ public class Preferences
    *
    * @return The preferences in a Map.
    */
-  public Map<String,String> getPreferencesAsMap ()
+  public Map<String, String> getPreferencesAsMap()
     throws Exception
   {
     IEclipsePreferences preferences = getPreferences();
-    HashMap<String,String> map = new HashMap<String,String>();
+    HashMap<String, String> map = new HashMap<String, String>();
     for(String key : preferences.keys()){
       map.put(key, preferences.get(key, null));
     }
@@ -92,17 +93,17 @@ public class Preferences
   /**
    * Gets the preferences as a Map.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return The preferences in a Map.
    */
-  public Map<String,String> getPreferencesAsMap (IProject _project)
+  public Map<String, String> getPreferencesAsMap(IProject project)
     throws Exception
   {
     IEclipsePreferences globalPrefs = getPreferences();
-    IEclipsePreferences projectPrefs = getPreferences(_project);
+    IEclipsePreferences projectPrefs = getPreferences(project);
 
     String[] keys = globalPrefs.keys();
-    HashMap<String,String> map = new HashMap<String,String>();
+    HashMap<String, String> map = new HashMap<String, String>();
     for(String key : keys){
       map.put(key, globalPrefs.get(key, null));
     }
@@ -120,18 +121,18 @@ public class Preferences
    *
    * @return The options in a Map.
    */
-  public Map<String,String> getOptionsAsMap ()
+  public Map<String, String> getOptionsAsMap()
     throws Exception
   {
-    HashMap<String,String> allOptions = new HashMap<String,String>();
+    HashMap<String, String> allOptions = new HashMap<String, String>();
     for(OptionHandler handler : optionHandlers.values()){
-      Map<String,String> options = handler.getOptionsAsMap();
+      Map<String, String> options = handler.getOptionsAsMap();
       if (options != null){
         allOptions.putAll(options);
       }
     }
 
-    Map<String,String> preferences = getPreferencesAsMap();
+    Map<String, String> preferences = getPreferencesAsMap();
     for (Option option : options.values()){
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
@@ -142,21 +143,21 @@ public class Preferences
   /**
    * Gets all the options and preferences as a Map.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return The options in a Map.
    */
-  public Map<String,String> getOptionsAsMap (IProject _project)
+  public Map<String, String> getOptionsAsMap(IProject project)
     throws Exception
   {
-    HashMap<String,String> allOptions = new HashMap<String,String>();
+    HashMap<String, String> allOptions = new HashMap<String, String>();
     for(OptionHandler handler : optionHandlers.values()){
       String nature = handler.getNature();
-      if(CORE.equals(nature) || _project.getNature(nature) != null){
-        allOptions.putAll(handler.getOptionsAsMap(_project));
+      if(CORE.equals(nature) || project.getNature(nature) != null){
+        allOptions.putAll(handler.getOptionsAsMap(project));
       }
     }
 
-    Map<String,String> preferences = getPreferencesAsMap(_project);
+    Map<String, String> preferences = getPreferencesAsMap(project);
     for (Option option : options.values()){
       preferences.put(option.getName(), allOptions.get(option.getName()));
     }
@@ -169,7 +170,7 @@ public class Preferences
    *
    * @return The options.
    */
-  public Option[] getOptions ()
+  public Option[] getOptions()
     throws Exception
   {
     return getOptions(null);
@@ -178,15 +179,15 @@ public class Preferences
   /**
    * Gets all the options and preferencs for the supplied project.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return The options.
    */
-  public Option[] getOptions (IProject _project)
+  public Option[] getOptions(IProject project)
     throws Exception
   {
     ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
-    Map<String,String> options = _project == null ?
-      getOptionsAsMap() : getOptionsAsMap(_project);
+    Map<String, String> options = project == null ?
+      getOptionsAsMap() : getOptionsAsMap(project);
     for(Object key : options.keySet()){
       String value = (String)options.get(key);
       Option option = (Option)this.options.get(key);
@@ -197,9 +198,8 @@ public class Preferences
       if(option != null && value != null){
         String nature = option.getNature();
         if (CORE.equals(nature) ||
-            _project == null ||
-            _project.getNature(nature) != null)
-        {
+            project == null ||
+            project.getNature(nature) != null){
           OptionInstance instance = new OptionInstance(option, value);
           results.add(instance);
         }
@@ -212,39 +212,39 @@ public class Preferences
   /**
    * Sets the supplied preference.
    *
-   * @param _name The preference name.
-   * @param _value The preference value.
+   * @param name The preference name.
+   * @param value The preference value.
    */
-  public void setPreference (String _name, String _value)
+  public void setPreference(String name, String value)
     throws Exception
   {
     IEclipsePreferences preferences = getPreferences();
-    validatePreference(_name, _value);
-    preferences.put(_name, _value);
+    validatePreference(name, value);
+    preferences.put(name, value);
     preferences.flush();
   }
 
   /**
    * Sets the supplied preference for the specified project.
    *
-   * @param _project The project.
-   * @param _name The preference name.
-   * @param _value The preference value.
+   * @param project The project.
+   * @param name The preference name.
+   * @param value The preference value.
    */
-  public void setPreference (IProject _project, String _name, String _value)
+  public void setPreference(IProject project, String name, String value)
     throws Exception
   {
     IEclipsePreferences global = getPreferences();
-    IEclipsePreferences preferences = getPreferences(_project);
+    IEclipsePreferences preferences = getPreferences(project);
 
     // if project value is the same as the global, then remove it.
-    if(_value.equals(global.get(_name, null))){
-      removePreference(_project, _name);
+    if(value.equals(global.get(name, null))){
+      removePreference(project, name);
 
     // if project value differs from global, then persist it.
     }else{
-      validatePreference(_name, _value);
-      preferences.put(_name, _value);
+      validatePreference(name, value);
+      preferences.put(name, value);
       preferences.flush();
     }
   }
@@ -252,44 +252,44 @@ public class Preferences
   /**
    * Removes the supplied preference from the specified project.
    *
-   * @param _project The project.
-   * @param _name The preference name.
+   * @param project The project.
+   * @param name The preference name.
    */
-  public void removePreference (IProject _project, String _name)
+  public void removePreference(IProject project, String name)
     throws Exception
   {
-    IEclipsePreferences preferences = getPreferences(_project);
-    preferences.remove(_name);
+    IEclipsePreferences preferences = getPreferences(project);
+    preferences.remove(name);
     preferences.flush();
   }
 
   /**
    * Sets the supplied option.
    *
-   * @param _name The preference name.
-   * @param _value The preference value.
+   * @param name The preference name.
+   * @param value The preference value.
    */
-  public void setOption (String _name, String _value)
+  public void setOption(String name, String value)
     throws Exception
   {
-    if(_name.startsWith(ECLIM_PREFIX)){
-      setPreference(_name, _value);
+    if(name.startsWith(ECLIM_PREFIX)){
+      setPreference(name, value);
     }else{
-      validateOption(_name, _value);
+      validateOption(name, value);
 
       OptionHandler handler = null;
       for(Object k : optionHandlers.keySet()){
         String key = (String)k;
-        if(_name.startsWith(key)){
+        if(name.startsWith(key)){
           handler = (OptionHandler)optionHandlers.get(key);
           break;
         }
       }
 
       if(handler != null){
-        handler.setOption(_name, _value);
+        handler.setOption(name, value);
       }else{
-        logger.warn("No handler found for option '{}'", _name);
+        logger.warn("No handler found for option '{}'", name);
       }
     }
   }
@@ -297,31 +297,31 @@ public class Preferences
   /**
    * Sets the supplied option for the specified project.
    *
-   * @param _project The project.
-   * @param _name The preference name.
-   * @param _value The preference value.
+   * @param project The project.
+   * @param name The preference name.
+   * @param value The preference value.
    */
-  public void setOption (IProject _project, String _name, String _value)
+  public void setOption(IProject project, String name, String value)
     throws Exception
   {
-    if(_name.startsWith(ECLIM_PREFIX)){
-      setPreference(_project.getProject(), _name, _value);
+    if(name.startsWith(ECLIM_PREFIX)){
+      setPreference(project.getProject(), name, value);
     }else{
-      validateOption(_name, _value);
+      validateOption(name, value);
 
       OptionHandler handler = null;
       for(Object k : optionHandlers.keySet()){
         String key = (String)k;
-        if(_name.startsWith(key)){
+        if(name.startsWith(key)){
           handler = (OptionHandler)optionHandlers.get(key);
           break;
         }
       }
 
       if(handler != null){
-        handler.setOption(_project, _name, _value);
+        handler.setOption(project, name, value);
       }else{
-        logger.warn("No handler found for option '{}'", _name);
+        logger.warn("No handler found for option '{}'", name);
       }
     }
   }
@@ -329,26 +329,25 @@ public class Preferences
   /**
    * Gets the supplied preference for the specified project.
    *
-   * @param _project The project.
-   * @param _name The preference name.
+   * @param project The project.
+   * @param name The preference name.
    */
-  public String getPreference (String _project, String _name)
+  public String getPreference(String project, String name)
     throws Exception
   {
-    IProject project = ProjectUtils.getProject(_project, true);
-    return getPreference(project, _name);
+    return getPreference(ProjectUtils.getProject(project, true), name);
   }
 
   /**
    * Gets the supplied preference for the specified project.
    *
-   * @param _project The project.
-   * @param _name The preference name.
+   * @param project The project.
+   * @param name The preference name.
    */
-  public String getPreference (IProject _project, String _name)
+  public String getPreference(IProject project, String name)
     throws Exception
   {
-    return (String)getPreferencesAsMap(_project).get(_name);
+    return (String)getPreferencesAsMap(project).get(name);
   }
 
   /**
@@ -356,7 +355,7 @@ public class Preferences
    *
    * @return The preferences.
    */
-  protected IEclipsePreferences getPreferences ()
+  protected IEclipsePreferences getPreferences()
     throws Exception
   {
     IScopeContext context = new InstanceScope();
@@ -370,13 +369,13 @@ public class Preferences
   /**
    * Get the preferences instance for the supplied project under eclim.
    *
-   * @param _project The project.
+   * @param project The project.
    * @return The preferences.
    */
-  protected IEclipsePreferences getPreferences (IProject _project)
+  protected IEclipsePreferences getPreferences(IProject project)
     throws Exception
   {
-    IScopeContext context = new ProjectScope(_project);
+    IScopeContext context = new ProjectScope(project);
     IEclipsePreferences preferences = context.getNode(NODE_NAME);
 
     return preferences;
@@ -385,105 +384,103 @@ public class Preferences
   /**
    * Initializes the default preferences.
    *
-   * @param _preferences The eclipse preferences.
+   * @param preferences The eclipse preferences.
    */
-  protected void initializeDefaultPreferences (IEclipsePreferences _preferences)
+  protected void initializeDefaultPreferences(IEclipsePreferences preferences)
     throws Exception
   {
-    for(Preference preference : preferences.values()){
-      if(_preferences.get(preference.getName(), null) == null){
-        _preferences.put(preference.getName(), preference.getDefaultValue());
+    for(Preference preference : this.preferences.values()){
+      if(preferences.get(preference.getName(), null) == null){
+        preferences.put(preference.getName(), preference.getDefaultValue());
       }
     }
-    _preferences.flush();
+    preferences.flush();
   }
 
   /**
    * Validates that the supplied value is valid for the specified preference.
    *
-   * @param _name The name of the preference.
-   * @param _value The value of the preference.
+   * @param name The name of the preference.
+   * @param value The value of the preference.
    */
-  public void validatePreference (String _name, String _value)
+  public void validatePreference(String name, String value)
     throws Exception
   {
-    Preference preference = (Preference)preferences.get(_name);
+    Preference preference = (Preference)preferences.get(name);
     if(preference != null){
-      if(preference.getName().equals(_name)){
-        if(preference.getPattern() == null ||
-            preference.getPattern().matcher(_value).matches())
-        {
+      if(preference.getName().equals(name)){
+        if (preference.getPattern() == null ||
+            preference.getPattern().matcher(value).matches()){
           return;
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("preference.invalid",
-                _name, _value, preference.getRegex()));
+                name, value, preference.getRegex()));
         }
       }
     }
     throw new IllegalArgumentException(
-        Services.getMessage("preference.not.found", _name));
+        Services.getMessage("preference.not.found", name));
   }
 
   /**
    * Validates that the supplied value is valid for the specified option.
    *
-   * @param _name The name of the option.
-   * @param _value The value of the option.
+   * @param name The name of the option.
+   * @param value The value of the option.
    */
-  public void validateOption (String _name, String _value)
+  public void validateOption(String name, String value)
     throws Exception
   {
-    Option option = (Option)options.get(_name);
+    Option option = (Option)options.get(name);
     if(option != null){
-      if(option.getName().equals(_name)){
+      if(option.getName().equals(name)){
         if (option.getPattern() == null ||
-            option.getPattern().matcher(_value).matches())
-        {
+            option.getPattern().matcher(value).matches()){
           return;
         }else{
           throw new IllegalArgumentException(
               Services.getMessage("option.invalid",
-                _name, _value, option.getRegex()));
+                name, value, option.getRegex()));
         }
       }
     }
     throw new IllegalArgumentException(
-        Services.getMessage("option.not.found", _name));
+        Services.getMessage("option.not.found", name));
   }
 
   /**
    * Adds the supplied OptionHandler to manage options with
    * the specified prefix.
    *
-   * @param _prefix The prefix.
-   * @param _handler The OptionHandler.
+   * @param prefix The prefix.
+   * @param handler The OptionHandler.
    * @return The OptionHandler.
    */
-  public static OptionHandler addOptionHandler (
-      String _prefix, OptionHandler _handler)
+  public static OptionHandler addOptionHandler(
+      String prefix, OptionHandler handler)
   {
-    optionHandlers.put(_prefix, _handler);
-    return _handler;
+    optionHandlers.put(prefix, handler);
+    return handler;
   }
 
   /**
    * Adds a preference to be made available.
    *
-   * @param _preference The preference to add.
+   * @param preference The preference to add.
    */
-  public void addPreference (Preference _preference)
+  public void addPreference(Preference preference)
   {
-    preferences.put(_preference.getName(), _preference);
+    preferences.put(preference.getName(), preference);
   }
 
   /**
    * Adds a preference to be made available.
    *
-   * @param _option The option.
+   * @param option The option.
    */
-  public void addOption (Option _option)
+  public void addOption(Option option)
   {
-    options.put(_option.getName(), _option);
+    options.put(option.getName(), option);
   }
 }

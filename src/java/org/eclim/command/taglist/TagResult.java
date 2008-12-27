@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class TagResult
    *
    * @return The tag name.
    */
-  public String getName ()
+  public String getName()
   {
     return name;
   }
@@ -46,11 +46,11 @@ public class TagResult
   /**
    * Sets the name of the tag.
    *
-   * @param _name The tag name.
+   * @param name The tag name.
    */
-  public void setName (String _name)
+  public void setName(String name)
   {
-    name = _name;
+    this.name = name;
   }
 
   /**
@@ -58,7 +58,7 @@ public class TagResult
    *
    * @return The file name.
    */
-  public String getFile ()
+  public String getFile()
   {
     return file;
   }
@@ -66,11 +66,11 @@ public class TagResult
   /**
    * Sets the name of the processed file.
    *
-   * @param _file The file name.
+   * @param file The file name.
    */
-  public void setFile (String _file)
+  public void setFile(String file)
   {
-    file = _file;
+    this.file = file;
   }
 
   /**
@@ -78,7 +78,7 @@ public class TagResult
    *
    * @return The pattern.
    */
-  public String getPattern ()
+  public String getPattern()
   {
     return pattern;
   }
@@ -86,12 +86,10 @@ public class TagResult
   /**
    * Sets the pattern used to locate the tag within the file.
    *
-   * @param _pattern The pattern.
+   * @param pattern The pattern.
    */
-  public void setPattern (String _pattern)
+  public void setPattern(String pattern)
   {
-    pattern = _pattern;
-
     if(pattern != null){
       // limit pattern to one line (don't span lines)
       if (pattern.indexOf('\n') != -1){
@@ -118,7 +116,7 @@ public class TagResult
    *
    * @return The tag kind.
    */
-  public char getKind ()
+  public char getKind()
   {
     return kind;
   }
@@ -126,11 +124,11 @@ public class TagResult
   /**
    * Sets the character that identifies the kind of tag.
    *
-   * @param _kind The tag kind.
+   * @param kind The tag kind.
    */
-  public void setKind (char _kind)
+  public void setKind(char kind)
   {
-    kind = _kind;
+    this.kind = kind;
   }
 
   /**
@@ -138,7 +136,7 @@ public class TagResult
    *
    * @return The line number.
    */
-  public int getLine ()
+  public int getLine()
   {
     return line;
   }
@@ -146,18 +144,18 @@ public class TagResult
   /**
    * Sets the line number where the tag was found.
    *
-   * @param _line The line number.
+   * @param line The line number.
    */
-  public void setLine (int _line)
+  public void setLine(int line)
   {
-    line = _line;
+    this.line = line;
   }
 
   /**
    * {@inheritDoc}
    * @see Comparable#compareTo(Object)
    */
-  public int compareTo (TagResult obj)
+  public int compareTo(TagResult obj)
   {
     if(obj == this){
       return 0;

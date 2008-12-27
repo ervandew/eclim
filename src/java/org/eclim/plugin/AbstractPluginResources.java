@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,20 +68,20 @@ public abstract class AbstractPluginResources
   /**
    * Initializes this instance.
    *
-   * @param _name The plugin name.
+   * @param name The plugin name.
    */
-  public void initialize (String _name)
+  public void initialize(String name)
   {
-    name = _name;
+    this.name = name;
     int index = name.lastIndexOf('.');
-    pluginName = index != -1 ? _name.substring(index + 1) : name;
+    pluginName = index != -1 ? name.substring(index + 1) : name;
     Services.addPluginResources(this);
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getName ()
+  public String getName()
   {
     return name;
   }
@@ -89,18 +89,18 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public Command getCommand (String _name)
+  public Command getCommand(String name)
     throws Exception
   {
-    Command command = instances.get(_name);
+    Command command = instances.get(name);
     if(command == null){
-      if(!containsCommand(_name)){
+      if(!containsCommand(name)){
         throw new RuntimeException(
-            Services.getMessage("command.not.found", _name));
+            Services.getMessage("command.not.found", name));
       }
-      Class<? extends Command> cc = commands.get(_name);
+      Class<? extends Command> cc = commands.get(name);
       command = cc.newInstance();
-      instances.put(_name, command);
+      instances.put(name, command);
     }
     return command;
   }
@@ -108,25 +108,25 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public boolean containsCommand (String _name)
+  public boolean containsCommand(String name)
   {
-    return commands.containsKey(_name);
+    return commands.containsKey(name);
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getMessage (String _key, Object... _args)
+  public String getMessage(String key, Object... args)
   {
     ResourceBundle bundle = getResourceBundle();
-    String message = bundle.getString(_key);
-    return MessageFormat.format(message, _args);
+    String message = bundle.getString(key);
+    return MessageFormat.format(message, args);
   }
 
   /**
    * {@inheritDoc}
    */
-  public ResourceBundle getResourceBundle ()
+  public ResourceBundle getResourceBundle()
   {
     if (bundle == null){
       bundle = ResourceBundle.getBundle(
@@ -138,15 +138,15 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public String getProperty (String _name)
+  public String getProperty(String name)
   {
-    return getProperty(_name, null);
+    return getProperty(name, null);
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getProperty (String _name, String _default)
+  public String getProperty(String name, String defaultValue)
   {
     if (properties == null){
       properties = new Properties();
@@ -157,16 +157,16 @@ public abstract class AbstractPluginResources
             "Error loading plugin.properties for plugin '" + getName() + "'", e);
       }
     }
-    return System.getProperty(_name, properties.getProperty(_name, _default));
+    return System.getProperty(name, properties.getProperty(name, defaultValue));
   }
 
   /**
    * {@inheritDoc}
    */
-  public URL getResource (String _resource)
+  public URL getResource(String resource)
   {
     // short circuit resources we know are missing
-    if (missingResources.contains(_resource)){
+    if (missingResources.contains(resource)){
       return null;
     }
 
@@ -175,7 +175,7 @@ public abstract class AbstractPluginResources
     // Ex: /home/ervandew/.vim/eclim/resources/jdt/templates/logger.gst
 
       // inject the pluginName ("jdt", "wst", etc)
-      String vimResource = _resource;
+      String vimResource = resource;
       int index = vimResource.indexOf("resources");
       if(index != -1){
         vimResource = FileUtils.concat(
@@ -190,16 +190,16 @@ public abstract class AbstractPluginResources
       }
 
     // next try plugin resources
-      URL resource = getClass().getResource(_resource);
-      if (resource != null){
+      URL url = getClass().getResource(resource);
+      if (url != null){
         // convert any eclipse specific url to a native java one.
-        return FileLocator.resolve(resource);
+        return FileLocator.resolve(url);
       }
 
       // not found
-      missingResources.add(_resource);
+      missingResources.add(resource);
       logger.debug(
-          "Unable to locate resource in '" + getName() + "': " + _resource);
+          "Unable to locate resource in '" + getName() + "': " + resource);
       return null;
     }catch(Exception e){
       throw new RuntimeException(e);
@@ -209,12 +209,12 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public InputStream getResourceAsStream (String _resource)
+  public InputStream getResourceAsStream(String resource)
   {
     try{
-      URL resource = getResource(_resource);
-      if (resource != null){
-        return resource.openStream();
+      URL url = getResource(resource);
+      if (url != null){
+        return url.openStream();
       }
       return null;
     }catch(Exception e){
@@ -225,7 +225,7 @@ public abstract class AbstractPluginResources
   /**
    * {@inheritDoc}
    */
-  public void close ()
+  public void close()
     throws Exception
   {
   }
@@ -233,25 +233,25 @@ public abstract class AbstractPluginResources
   /**
    * Registers the supplied command under the specified name.
    *
-   * @param _name The name of the command.
-   * @param _command The command class.
+   * @param name The name of the command.
+   * @param command The command class.
    */
-  protected void registerCommand (String _name, Class<? extends Command> _command)
+  protected void registerCommand(String name, Class<? extends Command> command)
   {
-    commands.put(_name, _command);
+    commands.put(name, command);
 
-    String optionsKey = _name + Options.OPTION_SUFFIX;
+    String optionsKey = name + Options.OPTION_SUFFIX;
     String optionsString = Services.getMessage(optionsKey);
     if(optionsKey.equals(optionsString)){
       logger.error(
-          Services.getMessage("command.missing.options", _name));
+          Services.getMessage("command.missing.options", name));
     }
 
-    String usageKey = _name + Options.USAGE_SUFFIX;
+    String usageKey = name + Options.USAGE_SUFFIX;
     String usageString = Services.getMessage(usageKey);
     if(usageKey.equals(usageString)){
       logger.warn(
-          Services.getMessage("command.missing.usage", _name));
+          Services.getMessage("command.missing.usage", name));
     }
   }
 
@@ -260,5 +260,23 @@ public abstract class AbstractPluginResources
    *
    * @return The ResourceBundle base name.
    */
-  protected abstract String getBundleBaseName ();
+  protected abstract String getBundleBaseName();
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object other)
+  {
+    return ((PluginResources)other).getName().equals(getName());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode()
+  {
+    return getName().hashCode();
+  }
 }

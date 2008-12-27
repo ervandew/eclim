@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 " }}}
 
 " Ticket(ticket) {{{
-function eclim#project#tracker#Ticket (ticket)
+function eclim#project#tracker#Ticket(ticket)
   let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
   if type(url) == 0 || url == ''
     call eclim#util#EchoWarning(

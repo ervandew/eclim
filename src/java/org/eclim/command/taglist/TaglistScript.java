@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ public interface TaglistScript
   /**
    * Executes this script on the supplied file.
    *
-   * @param _file The name of the file to process tags on.
+   * @param file The name of the file to process tags on.
    * @return Array of TagResult.
    */
-  public TagResult[] execute (String _file)
+  public TagResult[] execute(String file)
     throws Exception;
 }

@@ -5,7 +5,7 @@
  * @see ${superType}#${methodSignature}
 <% } %>
  */
-public void ${name} ()
+public void ${name}()
 	throws Exception
 {
 <% if (methodBody) { %>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,17 +33,17 @@ public class VimUtils
   /**
    * Converts the position into a vim compatible line / column string.
    *
-   * @param _position The position instance.
+   * @param position The position instance.
    * @return The vim compatable string.
    */
-  public static String translateLineColumn (Position _position)
+  public static String translateLineColumn(Position position)
     throws Exception
   {
-    if(_position.getOffset() != -1){
-      int[] position = FileUtils.offsetToLineColumn(
-          _position.getFilename(), _position.getOffset());
-      if(position != null){
-        return position[0] + " col " + position[1];
+    if(position.getOffset() != -1){
+      int[] pos = FileUtils.offsetToLineColumn(
+          position.getFilename(), position.getOffset());
+      if(pos != null){
+        return pos[0] + " col " + pos[1];
       }
     }
     return "1 col 1";
@@ -52,14 +52,14 @@ public class VimUtils
   /**
    * Converts the location into a vim compatible line / column string.
    *
-   * @param _location The location instance.
+   * @param location The location instance.
    * @return The vim compatable string.
    */
-  public static String translateLineColumn (Location _location)
+  public static String translateLineColumn(Location location)
     throws Exception
   {
-    if(_location != null){
-      return _location.getLine() + " col " + _location.getColumn();
+    if(location != null){
+      return location.getLine() + " col " + location.getColumn();
     }
     return "1 col 1";
   }

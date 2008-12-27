@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,13 +51,13 @@ public class OptionHandler
     PREFIX + PHPCoreConstants.PHP_OPTIONS_PHP_VERSION;
 
   private IPersistentPreferenceStore store;
-  private Map<String,String> options;
+  private Map<String, String> options;
 
   /**
    * {@inheritDoc}
    * @see org.eclim.preference.OptionHandler#getNature()
    */
-  public String getNature ()
+  public String getNature()
   {
     return NATURE;
   }
@@ -65,11 +65,11 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String,String> getOptionsAsMap ()
+  public Map<String, String> getOptionsAsMap()
     throws Exception
   {
     if(options == null){
-      options = new HashMap<String,String>();
+      options = new HashMap<String, String>();
       options.put(VERSION,
           getPreferences().getString(
             PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)
@@ -82,18 +82,18 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String,String> getOptionsAsMap (IProject _project)
+  public Map<String, String> getOptionsAsMap(IProject project)
     throws Exception
   {
-    /*IScriptProject scriptProject = DLTKCore.create(_project);
+    /*IScriptProject scriptProject = DLTKCore.create(project);
     if(!scriptProject.exists()){
       throw new IllegalArgumentException(Services.getMessage(
-            "project.not.found", _project.getName()));
+            "project.not.found", project.getName()));
     }
 
     return scriptProject.getOptions(true);*/
-    IEclipsePreferences preferences = getPreferences(_project);
-    Map<String,String> map = getOptionsAsMap();
+    IEclipsePreferences preferences = getPreferences(project);
+    Map<String, String> map = getOptionsAsMap();
     for(String key : preferences.keys()){
       map.put(PREFIX + key, preferences.get(key, null));
     }
@@ -104,21 +104,21 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public void setOption (String _name, String _value)
+  public void setOption(String name, String value)
     throws Exception
   {
     /*Map<String,String> options = DLTKCore.getOptions();
 
-    if(_name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
+    if(name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
       // not supported accross projects?
     }else{
-      options.put(_name, _value);
+      options.put(name, value);
       DLTKCore.setOptions((Hashtable)options);
     }*/
-    if(VERSION.equals(_name)){
-      getOptionsAsMap().put(VERSION, _value);
+    if(VERSION.equals(name)){
+      getOptionsAsMap().put(VERSION, value);
       IPersistentPreferenceStore store = getPreferences();
-      store.setValue(_name.substring(PREFIX.length()), _value);
+      store.setValue(name.substring(PREFIX.length()), value);
       store.save();
     }
   }
@@ -126,37 +126,36 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public void setOption (IProject _project, String _name, String _value)
+  public void setOption(IProject project, String name, String value)
     throws Exception
   {
-    /*IScriptProject scriptProject = DLTKCore.create(_project);
+    /*IScriptProject scriptProject = DLTKCore.create(project);
     if(!scriptProject.exists()){
       throw new IllegalArgumentException(
-          Services.getMessage("project.not.found", _project.getName()));
+          Services.getMessage("project.not.found", project.getName()));
     }
     Map<String,String> global = scriptProject.getOptions(true);
     Map<String,String> options = scriptProject.getOptions(false);
 
-    Object current = global.get(_name);
-    if(current == null || !current.equals(_value)){
-      if(_name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
-        PhpVersionProjectPropertyHandler.setVersion(_value, _project);
+    Object current = global.get(name);
+    if(current == null || !current.equals(value)){
+      if(name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
+        PhpVersionProjectPropertyHandler.setVersion(value, project);
       }else{
-        options.put(_name, _value);
+        options.put(name, value);
         scriptProject.setOptions(options);
       }
     }*/
-    IEclipsePreferences preferences = getPreferences(_project);
+    IEclipsePreferences preferences = getPreferences(project);
 
-    String name = _name;
     if(name.startsWith(PREFIX)){
       name = name.substring(PREFIX.length());
     }
-    preferences.put(name, _value);
+    preferences.put(name, value);
     preferences.flush();
   }
 
-  private IPersistentPreferenceStore getPreferences ()
+  private IPersistentPreferenceStore getPreferences()
   {
     if (store == null){
       store = (IPersistentPreferenceStore)
@@ -165,9 +164,9 @@ public class OptionHandler
     return store;
   }
 
-  private IEclipsePreferences getPreferences (IProject _project)
+  private IEclipsePreferences getPreferences(IProject project)
   {
-    IScopeContext context = new ProjectScope(_project);
+    IScopeContext context = new ProjectScope(project);
     IEclipsePreferences preferences = context.getNode("org.eclipse.php.core");
     return preferences;
   }

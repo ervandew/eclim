@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public abstract class WstCodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
    */
-  protected ITextViewer getTextViewer (
+  protected ITextViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -67,10 +67,12 @@ public abstract class WstCodeCompleteCommand
       viewer = new StructuredTextViewer(
           EclimPlugin.getShell(), null, null, false, 0){
         private Point point;
-        public Point getSelectedRange (){
+        public Point getSelectedRange()
+        {
           return point;
         }
-        public void setSelectedRange (int x, int y){
+        public void setSelectedRange(int x, int y)
+        {
           point = new Point(x, y);
         }
       };

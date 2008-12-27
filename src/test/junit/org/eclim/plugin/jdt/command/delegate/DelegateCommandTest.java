@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class DelegateCommandTest
     "src/org/eclim/test/delegate/TestDelegate.java";
 
   @Test
-  public void execute ()
+  public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -56,7 +56,7 @@ public class DelegateCommandTest
     assertTrue("Interface not in results.",
         result.indexOf("package java.util;\npublic interface List {") != -1);
     assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract boolean remove (Object o)") != -1);
+        result.indexOf("\tpublic abstract boolean remove(Object o)") != -1);
 
     result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
@@ -69,11 +69,11 @@ public class DelegateCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public boolean remove \\(Object o\\)\n  \\{\n  " +
+        Pattern.compile("public boolean remove\\(Object o\\)\n  \\{\n  " +
           "\treturn list.remove\\(o\\);")
         .matcher(contents).find());
 
     assertTrue("Method not commented out in results.",
-        result.indexOf("//public abstract boolean remove (Object o)") != -1);
+        result.indexOf("//public abstract boolean remove(Object o)") != -1);
   }
 }

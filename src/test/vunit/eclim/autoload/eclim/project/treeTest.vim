@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace
 endfunction " }}}
 
 " TestProjectTree() {{{
-function! TestProjectTree ()
+function! TestProjectTree()
   ProjectTree eclim_unit_test
   call VUAssertEquals(expand('%'), 'ProjectTree_1')
   call VUAssertEquals(getline(1), 'eclim_unit_test/')
@@ -86,7 +86,7 @@ function! TestProjectTree ()
 endfunction " }}}
 
 " TestProjectTreeMultiple() {{{
-function! TestProjectTreeMultiple ()
+function! TestProjectTreeMultiple()
   ProjectTree eclim_unit_test eclim_unit_test_java eclim_unit_test_web
   call VUAssertEquals(expand('%'), 'ProjectTree_1')
   call VUAssertEquals(getline(1), 'eclim_unit_test/')

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class ValidationContext
    * {@inheritDoc}
    * @see IValidationContext#loadModel(String)
    */
-  public Object loadModel (String name)
+  public Object loadModel(String name)
   {
     return null;
   }
@@ -56,7 +56,7 @@ public class ValidationContext
    * {@inheritDoc}
    * @see IValidationContext#loadModel(String,Object[])
    */
-  public Object loadModel (String name, Object[] params)
+  public Object loadModel(String name, Object[] params)
   {
     return null;
   }

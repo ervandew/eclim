@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class ClasspathVariablesCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     ArrayList<ClasspathVariable> results = new ArrayList<ClasspathVariable>();
@@ -51,6 +51,6 @@ public class ClasspathVariablesCommand
         results.add(variable);
       }
     }
-    return ClasspathVariablesFilter.instance.filter(_commandLine, results);
+    return ClasspathVariablesFilter.instance.filter(commandLine, results);
   }
 }

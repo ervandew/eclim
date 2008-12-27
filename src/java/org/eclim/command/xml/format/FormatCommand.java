@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,17 +49,17 @@ public class FormatCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     FileInputStream in = null;
     try{
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      //int lineWidth = _commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
-      int indent = _commandLine.getIntValue(Options.INDENT_OPTION);
+      String file = commandLine.getValue(Options.FILE_OPTION);
+      //int lineWidth = commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
+      int indent = commandLine.getIntValue(Options.INDENT_OPTION);
 
       // javax.xml.transform (indentation issues)
-      TransformerFactory factory =TransformerFactory.newInstance();
+      TransformerFactory factory = TransformerFactory.newInstance();
       factory.setAttribute("indent-number", Integer.valueOf(indent));
       Transformer serializer = factory.newTransformer();
       serializer.setOutputProperty(OutputKeys.INDENT, "yes");

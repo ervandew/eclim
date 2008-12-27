@@ -14,7 +14,6 @@
     <module name="AvoidStarImport"/>
     <module name="TabCharacter"/>
     <module name="ModifierOrder"/>
-    <module name="EmptyBlock"/>
     <module name="EmptyStatement"/>
 
     <module name="WhitespaceAfter">
@@ -25,9 +24,11 @@
       <property name="tokens" value="ASSIGN"/>
     </module>
 
+    <module name="ParameterName"/>
+
     <module name="MethodParamPad">
       <property name="tokens" value="METHOD_DEF"/>
-      <property name="option" value="space"/>
+      <property name="option" value="nospace"/>
       <property name="allowLineBreaks" value="true"/>
     </module>
     <module name="MethodParamPad">
@@ -47,6 +48,11 @@
     </module>
     <module name="RightCurly">
       <property name="option" value="same"/>
+    </module>
+
+    <module name="EmptyBlock">
+      <property name="option" value="text"/>
+      <property name="tokens" value="LITERAL_IF,LITERAL_ELSE,LITERAL_FOR,LITERAL_DO,LITERAL_TRY,LITERAL_FINALLY"/>
     </module>
 
   </module>

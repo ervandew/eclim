@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ public class ImportResult
   /**
    * Constructs a new instance.
    *
-   * @param _element The resulting element.
-   * @param _type The element type.
+   * @param element The resulting element.
+   * @param type The element type.
    */
-  public ImportResult (String _element, int _type)
+  public ImportResult (String element, int type)
   {
-    element = _element;
-    type = _type;
+    this.element = element;
+    this.type = type;
   }
 
   /**
@@ -46,7 +46,7 @@ public class ImportResult
    *
    * @return element as String.
    */
-  public String getElement ()
+  public String getElement()
   {
     return this.element;
   }
@@ -56,12 +56,12 @@ public class ImportResult
    *
    * @return type as int.
    */
-  public int getType ()
+  public int getType()
   {
     return this.type;
   }
 
-  public boolean equals (Object obj)
+  public boolean equals(Object obj)
   {
     if (obj instanceof ImportResult == false) {
       return false;

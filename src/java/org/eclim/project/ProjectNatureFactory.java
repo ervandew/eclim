@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,16 +34,17 @@ public class ProjectNatureFactory
 {
   public static String NONE = "none";
 
-  private static Map<String,String> natureAliases = new HashMap<String,String>();
+  private static Map<String, String> natureAliases =
+    new HashMap<String, String>();
 
   /**
    * Registers a project nature.
-   * @param _alias The nature alias for users.
-   * @param _nature The actual nature name the alias maps to.
+   * @param alias The nature alias for users.
+   * @param nature The actual nature name the alias maps to.
    */
-  public static void addNature (String _alias, String _nature)
+  public static void addNature(String alias, String nature)
   {
-    natureAliases.put(_alias, _nature);
+    natureAliases.put(alias, nature);
   }
 
   /**
@@ -51,7 +52,7 @@ public class ProjectNatureFactory
    *
    * @return Array of aliases.
    */
-  public static String[] getNatureAliases ()
+  public static String[] getNatureAliases()
   {
     return natureAliases.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
   }
@@ -59,24 +60,24 @@ public class ProjectNatureFactory
   /**
    * Gets the nature string for the supplied alias.
    *
-   * @param _alias The nature alias.
+   * @param alias The nature alias.
    * @return The nature or null if not found.
    */
-  public static String getNatureForAlias (String _alias)
+  public static String getNatureForAlias(String alias)
   {
-    return natureAliases.get(_alias);
+    return natureAliases.get(alias);
   }
 
   /**
    * Gets the alias for a given nature id.
    *
-   * @param _natureId The nature id.
+   * @param natureId The nature id.
    * @return The alias.
    */
-  public static String getAliasForNature (String _natureId)
+  public static String getAliasForNature(String natureId)
   {
     for(String key : natureAliases.keySet()){
-      if(_natureId.equals(natureAliases.get(key))){
+      if(natureId.equals(natureAliases.get(key))){
         return key;
       }
     }
@@ -87,15 +88,15 @@ public class ProjectNatureFactory
    * Gets an array of natures aliases which are associated with the supplied
    * project.
    *
-   * @param _project The project to get the aliases for.
+   * @param project The project to get the aliases for.
    * @return Array of aliases.
    */
-  public static String[] getProjectNatureAliases (IProject _project)
+  public static String[] getProjectNatureAliases(IProject project)
     throws Exception
   {
     ArrayList<String> aliases = new ArrayList<String>();
     for(String key : natureAliases.keySet()){
-      if(_project.hasNature(natureAliases.get(key))){
+      if(project.hasNature(natureAliases.get(key))){
         aliases.add(key);
       }
     }

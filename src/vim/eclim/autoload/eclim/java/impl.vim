@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 " }}}
 
 " Impl() {{{
-function! eclim#java#impl#Impl ()
+function! eclim#java#impl#Impl()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -54,7 +54,7 @@ function! eclim#java#impl#Impl ()
 endfunction " }}}
 
 " ImplWindow(command) {{{
-function! eclim#java#impl#ImplWindow (command)
+function! eclim#java#impl#ImplWindow(command)
   let name = eclim#java#util#GetFilename() . "_impl"
   if eclim#util#TempWindowCommand(a:command, name)
     setlocal ft=java
@@ -70,13 +70,13 @@ function! eclim#java#impl#ImplWindow (command)
 endfunction " }}}
 
 " ImplWindowFolding() {{{
-function! eclim#java#impl#ImplWindowFolding ()
+function! eclim#java#impl#ImplWindowFolding()
   setlocal foldmethod=syntax
   setlocal foldlevel=99
 endfunction " }}}
 
 " ImplAdd(command, function) {{{
-function! eclim#java#impl#ImplAdd (command, function, visual)
+function! eclim#java#impl#ImplAdd(command, function, visual)
   let winnr = bufwinnr(bufnr('^' . b:filename))
   " src window is not longer open.
   if winnr == -1
@@ -104,9 +104,8 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
     endif
     " on a method line
     if line =~ '^\s\+'
-      let methods = substitute(line, '.*\s\(\w\+\s(.*\)', '\1', '')
+      let methods = substitute(line, '.*\s\(\w\+(.*\)', '\1', '')
       let methods = substitute(methods, '\s\w\+\(,\|)\)', '\1', 'g')
-      let methods = substitute(methods, '\s(', '(', 'g')
       let methods = substitute(methods, ',\s', ',', 'g')
       let methods = substitute(methods, '<.\{-}>', '', 'g')
       let ln = search('^\w', 'bWn')
@@ -131,9 +130,8 @@ function! eclim#java#impl#ImplAdd (command, function, visual)
         if methods != ""
           let methods = methods . ",,"
         endif
-        let method = substitute(line, '.*\s\(\w\+\s(.*\)', '\1', '')
+        let method = substitute(line, '.*\s\(\w\+(.*\)', '\1', '')
         let method = substitute(method, '\s\w\+\(,\|)\)', '\1', 'g')
-        let method = substitute(method, '\s(', '(', 'g')
         let method = substitute(method, ',\s', ',', 'g')
         let method = substitute(method, '<.\{-}>', '', 'g')
         let methods = methods . method

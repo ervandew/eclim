@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,11 @@ public class ErrorFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<Error> _result)
+  public String filter(CommandLine commandLine, List<Error> results)
   {
     StringBuffer buffer = new StringBuffer();
-    if (_result != null){
-      for(Error error : _result){
+    if (results != null){
+      for(Error error : results){
         if(buffer.length() > 0){
           buffer.append('\n');
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,12 +79,12 @@ public class CommentCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    int offset = getOffset(_commandLine);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    int offset = getOffset(commandLine);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IJavaElement element = src.getElementAt(offset);
@@ -108,60 +108,60 @@ public class CommentCommand
   /**
    * Comment the supplied node.
    *
-   * @param _src The source file.
-   * @param _node The node to comment.
-   * @param _element The IJavaElement this node corresponds to.
+   * @param src The source file.
+   * @param node The node to comment.
+   * @param element The IJavaElement this node corresponds to.
    */
-  private void comment (ICompilationUnit _src, ASTNode _node, IJavaElement _element)
+  private void comment(ICompilationUnit src, ASTNode node, IJavaElement element)
     throws Exception
   {
     Javadoc javadoc = null;
     boolean isNew = false;
-    if (_node instanceof PackageDeclaration){
-      javadoc = ((PackageDeclaration)_node).getJavadoc();
+    if (node instanceof PackageDeclaration){
+      javadoc = ((PackageDeclaration)node).getJavadoc();
       if(javadoc == null){
         isNew = true;
-        javadoc = _node.getAST().newJavadoc();
-        ((PackageDeclaration)_node).setJavadoc(javadoc);
+        javadoc = node.getAST().newJavadoc();
+        ((PackageDeclaration)node).setJavadoc(javadoc);
       }
     }else{
-      javadoc = ((BodyDeclaration)_node).getJavadoc();
+      javadoc = ((BodyDeclaration)node).getJavadoc();
       if(javadoc == null){
         isNew = true;
-        javadoc = _node.getAST().newJavadoc();
-        ((BodyDeclaration)_node).setJavadoc(javadoc);
+        javadoc = node.getAST().newJavadoc();
+        ((BodyDeclaration)node).setJavadoc(javadoc);
       }
     }
 
-    switch(_node.getNodeType()){
+    switch(node.getNodeType()){
       case ASTNode.PACKAGE_DECLARATION:
-        commentPackage(_src, javadoc, _element, isNew);
+        commentPackage(src, javadoc, element, isNew);
         break;
       case ASTNode.ENUM_DECLARATION:
       case ASTNode.TYPE_DECLARATION:
-        commentType(_src, javadoc, _element, isNew);
+        commentType(src, javadoc, element, isNew);
         break;
       case ASTNode.METHOD_DECLARATION:
-        commentMethod(_src, javadoc, _element, isNew);
+        commentMethod(src, javadoc, element, isNew);
         break;
       default:
-        commentOther(_src, javadoc, _element, isNew);
+        commentOther(src, javadoc, element, isNew);
     }
   }
 
   /**
    * Comment a package declaration.
    *
-   * @param _src The source file.
-   * @param _javadoc The Javadoc.
-   * @param _element The IJavaElement.
-   * @param _isNew true if there was no previous javadoc for this element.
+   * @param src The source file.
+   * @param javadoc The Javadoc.
+   * @param element The IJavaElement.
+   * @param isNew true if there was no previous javadoc for this element.
    */
-  private void commentPackage (
-      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+  private void commentPackage(
+      ICompilationUnit src, Javadoc javadoc, IJavaElement element, boolean isNew)
     throws Exception
   {
-    IProject project = _element.getJavaProject().getProject();
+    IProject project = element.getJavaProject().getProject();
     String copyright = getPreferences().getPreference(
       project, Preferences.PROJECT_COPYRIGHT_PREFERENCE);
     if(copyright != null && copyright.trim().length() > 0){
@@ -171,7 +171,7 @@ public class CommentCommand
             Services.getMessage("project.copyright.not.found", file));
       }
 
-      List<TagElement> tags = _javadoc.tags();
+      List<TagElement> tags = javadoc.tags();
       tags.clear();
 
       BufferedReader reader = null;
@@ -179,39 +179,39 @@ public class CommentCommand
         reader = new BufferedReader(new FileReader(file));
         String line = null;
         while ((line = reader.readLine()) != null){
-          addTag(_javadoc, tags.size(), null, line);
+          addTag(javadoc, tags.size(), null, line);
         }
       }finally{
         IOUtils.closeQuietly(reader);
       }
     }else{
-      commentOther(_src, _javadoc, _element, _isNew);
+      commentOther(src, javadoc, element, isNew);
     }
   }
 
   /**
    * Comment a type declaration.
    *
-   * @param _src The source file.
-   * @param _javadoc The Javadoc.
-   * @param _element The IJavaElement.
-   * @param _isNew true if there was no previous javadoc for this element.
+   * @param src The source file.
+   * @param javadoc The Javadoc.
+   * @param element The IJavaElement.
+   * @param isNew true if there was no previous javadoc for this element.
    */
-  private void commentType (
-      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+  private void commentType(
+      ICompilationUnit src, Javadoc javadoc, IJavaElement element, boolean isNew)
     throws Exception
   {
-    if(_element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
-      List<TagElement> tags = _javadoc.tags();
-      IProject project = _element.getJavaProject().getProject();
-      if(_isNew){
-        addTag(_javadoc, tags.size(), null, null);
-        addTag(_javadoc, tags.size(), null, null);
-        addTag(_javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
+    if(element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
+      List<TagElement> tags = javadoc.tags();
+      IProject project = element.getJavaProject().getProject();
+      if(isNew){
+        addTag(javadoc, tags.size(), null, null);
+        addTag(javadoc, tags.size(), null, null);
+        addTag(javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
         String version = getPreferences().getPreference(
             project, "org.eclim.java.doc.version");
         version = StringUtils.replace(version, "\\$", "$");
-        addTag(_javadoc, tags.size(), TagElement.TAG_VERSION, version);
+        addTag(javadoc, tags.size(), TagElement.TAG_VERSION, version);
       }else{
         // check if author tag exists.
         int index = -1;
@@ -236,8 +236,8 @@ public class CommentCommand
 
         // insert author tag if it doesn't exist.
         if(index > -1){
-          TagElement authorTag = _javadoc.getAST().newTagElement();
-          TextElement authorText = _javadoc.getAST().newTextElement();
+          TagElement authorTag = javadoc.getAST().newTagElement();
+          TextElement authorText = javadoc.getAST().newTextElement();
           authorText.setText(author);
           authorTag.setTagName(TagElement.TAG_AUTHOR);
           authorTag.fragments().add(authorText);
@@ -257,30 +257,30 @@ public class CommentCommand
           String version = getPreferences().getPreference(
               project, "org.eclim.java.doc.version");
           version = StringUtils.replace(version, "\\$", "$");
-          addTag(_javadoc, tags.size(), TagElement.TAG_VERSION, version);
+          addTag(javadoc, tags.size(), TagElement.TAG_VERSION, version);
         }
       }
     }else{
-      commentOther(_src, _javadoc, _element, _isNew);
+      commentOther(src, javadoc, element, isNew);
     }
   }
 
   /**
    * Comment a method declaration.
    *
-   * @param _src The source file.
-   * @param _javadoc The Javadoc.
-   * @param _element The IJavaElement.
-   * @param _isNew true if there was no previous javadoc for this element.
+   * @param src The source file.
+   * @param javadoc The Javadoc.
+   * @param element The IJavaElement.
+   * @param isNew true if there was no previous javadoc for this element.
    */
-  private void commentMethod (
-      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+  private void commentMethod(
+      ICompilationUnit src, Javadoc javadoc, IJavaElement element, boolean isNew)
     throws Exception
   {
-    IMethod method = (IMethod)_element;
-    List<TagElement> tags = _javadoc.tags();
+    IMethod method = (IMethod)element;
+    List<TagElement> tags = javadoc.tags();
 
-    if(_isNew){
+    if(isNew){
       // see if method is overriding / implementing method from superclass
       IType parentType = null;
       IType[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
@@ -293,19 +293,19 @@ public class CommentCommand
 
       // if an inherited method, add inheritDoc and @see
       if(parentType != null){
-        addTag(_javadoc, tags.size(), null, INHERIT_DOC);
+        addTag(javadoc, tags.size(), null, INHERIT_DOC);
 
         String typeName =
-          JavaUtils.getCompilationUnitRelativeTypeName(_src, parentType);
+          JavaUtils.getCompilationUnitRelativeTypeName(src, parentType);
 
         StringBuffer signature = new StringBuffer();
         signature.append(typeName)
           .append('#').append(MethodUtils.getMinimalMethodSignature(method));
-        addTag(_javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
+        addTag(javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
       }else{
-        addTag(_javadoc, tags.size(), null, null);
-        addTag(_javadoc, tags.size(), null, null);
+        addTag(javadoc, tags.size(), null, null);
+        addTag(javadoc, tags.size(), null, null);
       }
     }
 
@@ -322,50 +322,50 @@ public class CommentCommand
     }
 
     if(update){
-      addUpdateParamTags(_javadoc, method, _isNew);
-      addUpdateReturnTag(_javadoc, method, _isNew);
-      addUpdateThrowsTags(_javadoc, method, _isNew);
+      addUpdateParamTags(javadoc, method, isNew);
+      addUpdateReturnTag(javadoc, method, isNew);
+      addUpdateThrowsTags(javadoc, method, isNew);
     }
   }
 
   /**
    * Comment everything else.
    *
-   * @param _src The source file.
-   * @param _javadoc The Javadoc.
-   * @param _element The IJavaElement.
-   * @param _isNew true if there was no previous javadoc for this element.
+   * @param src The source file.
+   * @param javadoc The Javadoc.
+   * @param element The IJavaElement.
+   * @param isNew true if there was no previous javadoc for this element.
    */
-  private void commentOther (
-      ICompilationUnit _src, Javadoc _javadoc, IJavaElement _element, boolean _isNew)
+  private void commentOther(
+      ICompilationUnit src, Javadoc javadoc, IJavaElement element, boolean isNew)
     throws Exception
   {
-    if(_isNew){
-      addTag(_javadoc, 0, null, null);
+    if(isNew){
+      addTag(javadoc, 0, null, null);
     }
   }
 
   /**
    * Add or update the param tags for the given method.
    *
-   * @param _javadoc The Javadoc instance.
-   * @param _method The method.
-   * @param _isNew true if we're adding to brand new javadocs.
+   * @param javadoc The Javadoc instance.
+   * @param method The method.
+   * @param isNew true if we're adding to brand new javadocs.
    */
-  private void addUpdateParamTags (
-      Javadoc _javadoc, IMethod _method, boolean _isNew)
+  private void addUpdateParamTags(
+      Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
-    List<TagElement> tags = _javadoc.tags();
-    String[] params = _method.getParameterNames();
-    if(_isNew){
+    List<TagElement> tags = javadoc.tags();
+    String[] params = method.getParameterNames();
+    if(isNew){
       for (int ii = 0; ii < params.length; ii++){
-        addTag(_javadoc, tags.size(), TagElement.TAG_PARAM, params[ii]);
+        addTag(javadoc, tags.size(), TagElement.TAG_PARAM, params[ii]);
       }
     }else{
       // find current params.
       int index = 0;
-      HashMap<String,TagElement> current = new HashMap<String,TagElement>();
+      HashMap<String, TagElement> current = new HashMap<String, TagElement>();
       for (int ii = 0; ii < tags.size(); ii++){
         TagElement tag = (TagElement)tags.get(ii);
         if(TagElement.TAG_PARAM.equals(tag.getTagName())){
@@ -401,7 +401,7 @@ public class CommentCommand
             }
             current.remove(params[ii]);
           }else{
-            addTag(_javadoc, index + ii, TagElement.TAG_PARAM, params[ii]);
+            addTag(javadoc, index + ii, TagElement.TAG_PARAM, params[ii]);
           }
         }
 
@@ -411,7 +411,7 @@ public class CommentCommand
         }
       }else{
         for (int ii = 0; ii < params.length; ii++){
-          addTag(_javadoc, index + ii, TagElement.TAG_PARAM, params[ii]);
+          addTag(javadoc, index + ii, TagElement.TAG_PARAM, params[ii]);
         }
       }
     }
@@ -420,22 +420,22 @@ public class CommentCommand
   /**
    * Add or update the return tag for the given method.
    *
-   * @param _javadoc The Javadoc instance.
-   * @param _method The method.
-   * @param _isNew true if we're adding to brand new javadocs.
+   * @param javadoc The Javadoc instance.
+   * @param method The method.
+   * @param isNew true if we're adding to brand new javadocs.
    */
-  private void addUpdateReturnTag (
-      Javadoc _javadoc, IMethod _method, boolean _isNew)
+  private void addUpdateReturnTag(
+      Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
-    List<TagElement> tags = _javadoc.tags();
+    List<TagElement> tags = javadoc.tags();
     // get return type from element.
-    if(!_method.isConstructor()){
+    if(!method.isConstructor()){
       String returnType =
-        Signature.getSignatureSimpleName(_method.getReturnType());
+        Signature.getSignatureSimpleName(method.getReturnType());
       if (!"void".equals(returnType)){
-        if(_isNew){
-          addTag(_javadoc, tags.size(), TagElement.TAG_RETURN, null);
+        if(isNew){
+          addTag(javadoc, tags.size(), TagElement.TAG_RETURN, null);
         }else{
           // search starting from the bottom since @return should be near the
           // end.
@@ -449,15 +449,14 @@ public class CommentCommand
             }
             // if we hit the param tags, or the main text, insert below them.
             if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
-                tag.getTagName() == null)
-            {
+                tag.getTagName() == null){
               index = ii + 1;
               break;
             }
             index = ii;
           }
           if(index > -1){
-            addTag(_javadoc, index, TagElement.TAG_RETURN, null);
+            addTag(javadoc, index, TagElement.TAG_RETURN, null);
           }
         }
       }else{
@@ -470,8 +469,7 @@ public class CommentCommand
           }
           // if we hit the param tags, or the main text we can stop.
           if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
-              tag.getTagName() == null)
-          {
+              tag.getTagName() == null){
             break;
           }
         }
@@ -482,27 +480,27 @@ public class CommentCommand
   /**
    * Add or update the throws tags for the given method.
    *
-   * @param _javadoc The Javadoc instance.
-   * @param _method The method.
-   * @param _isNew true if we're adding to brand new javadocs.
+   * @param javadoc The Javadoc instance.
+   * @param method The method.
+   * @param isNew true if we're adding to brand new javadocs.
    */
-  private void addUpdateThrowsTags (
-      Javadoc _javadoc, IMethod _method, boolean _isNew)
+  private void addUpdateThrowsTags(
+      Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
-    List<TagElement> tags = _javadoc.tags();
+    List<TagElement> tags = javadoc.tags();
 
     // get thrown exceptions from element.
-    String[] exceptions = _method.getExceptionTypes();
-    if(_isNew && exceptions.length > 0){
-      addTag(_javadoc, tags.size(), null, null);
+    String[] exceptions = method.getExceptionTypes();
+    if(isNew && exceptions.length > 0){
+      addTag(javadoc, tags.size(), null, null);
       for (int ii = 0; ii < exceptions.length; ii++){
-        addTag(_javadoc, tags.size(), TagElement.TAG_THROWS,
+        addTag(javadoc, tags.size(), TagElement.TAG_THROWS,
             Signature.getSignatureSimpleName(exceptions[ii]));
       }
     }else{
       // get current throws tags
-      HashMap<String,TagElement> current = new HashMap<String,TagElement>();
+      HashMap<String, TagElement> current = new HashMap<String, TagElement>();
       int index = tags.size();
       for (int ii = tags.size() - 1; ii >= 0; ii--){
         TagElement tag = (TagElement)tags.get(ii);
@@ -521,8 +519,7 @@ public class CommentCommand
         // if we hit the return tag, a param tag, or the main text we can stop.
         if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
             TagElement.TAG_RETURN.equals(tag.getTagName()) ||
-            tag.getTagName() == null)
-        {
+            tag.getTagName() == null){
           break;
         }
       }
@@ -531,7 +528,7 @@ public class CommentCommand
       for (int ii = 0; ii < exceptions.length; ii++){
         String name = Signature.getSignatureSimpleName(exceptions[ii]);
         if(!current.containsKey(name)){
-          addTag(_javadoc, index, TagElement.TAG_THROWS, name);
+          addTag(javadoc, index, TagElement.TAG_THROWS, name);
         }else{
           current.remove(name);
         }
@@ -549,13 +546,13 @@ public class CommentCommand
    *
    * @return The author.
    */
-  private String getAuthor (IProject _project)
+  private String getAuthor(IProject project)
     throws Exception
   {
     String username = getPreferences().getPreference(
-        _project.getProject(), Preferences.USERNAME_PREFERENCE);
+        project.getProject(), Preferences.USERNAME_PREFERENCE);
     String email = getPreferences().getPreference(
-        _project.getProject(), Preferences.USEREMAIL_PREFERENCE);
+        project.getProject(), Preferences.USEREMAIL_PREFERENCE);
 
     // build the author string.
     StringBuffer author = new StringBuffer();
@@ -575,24 +572,24 @@ public class CommentCommand
   /**
    * Adds a tag to the supplied list of tags.
    *
-   * @param _javadoc The Javadoc instance.
-   * @param _index The index to insert the new tag at.
-   * @param _name The tag name.
-   * @param _text The tag text.
+   * @param javadoc The Javadoc instance.
+   * @param index The index to insert the new tag at.
+   * @param name The tag name.
+   * @param text The tag text.
    */
-  private void addTag (
-      Javadoc _javadoc, int _index, String _name, String _text)
+  private void addTag(
+      Javadoc javadoc, int index, String name, String text)
     throws Exception
   {
-    TagElement tag = _javadoc.getAST().newTagElement();
-    tag.setTagName(_name);
+    TagElement tag = javadoc.getAST().newTagElement();
+    tag.setTagName(name);
 
-    if(_text != null){
-      TextElement text = _javadoc.getAST().newTextElement();
-      text.setText(_text);
-      tag.fragments().add(text);
+    if(text != null){
+      TextElement textElement = javadoc.getAST().newTextElement();
+      textElement.setText(text);
+      tag.fragments().add(textElement);
     }
 
-    _javadoc.tags().add(_index, tag);
+    javadoc.tags().add(index, tag);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,11 +52,11 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
 
     WebXmlHandler handler = new WebXmlHandler(
         JavaUtils.getJavaProject(project), file);
@@ -64,7 +64,7 @@ public class ValidateCommand
     List<Error> errors = super.validate(project, file, false, handler);
     errors.addAll(handler.getErrors());
 
-    return ErrorFilter.instance.filter(_commandLine, errors);
+    return ErrorFilter.instance.filter(commandLine, errors);
   }
 
   private static class WebXmlHandler
@@ -106,7 +106,7 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(Locator)
      */
-    public void setDocumentLocator (Locator locator)
+    public void setDocumentLocator(Locator locator)
     {
       super.setDocumentLocator(locator);
       this.locator = locator;
@@ -116,15 +116,14 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
      */
-    public void startElement (
+    public void startElement(
         String uri, String localName, String qName, Attributes attributes)
       throws SAXException
     {
       if(SERVLET.equals(localName) || FILTER.equals(localName)){
         mapping = false;
       }else if(SERVLET_MAPPING.equals(localName) ||
-        FILTER_MAPPING.equals(localName))
-      {
+          FILTER_MAPPING.equals(localName)){
         mapping = true;
       }
     }
@@ -133,7 +132,7 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#endElement(String,String,String)
      */
-    public void endElement (String uri, String localName, String qName)
+    public void endElement(String uri, String localName, String qName)
       throws SAXException
     {
       try{
@@ -179,7 +178,7 @@ public class ValidateCommand
      * {@inheritDoc}
      * @see org.xml.sax.helpers.DefaultHandler#characters(char[],int,int)
      */
-    public void characters (char[] ch, int start, int length)
+    public void characters(char[] ch, int start, int length)
       throws SAXException
     {
       for (int ii = start; ii < start + length; ii++){
@@ -192,7 +191,7 @@ public class ValidateCommand
      *
      * @return List of errors.
      */
-    public List<Error> getErrors ()
+    public List<Error> getErrors()
     {
       return errors;
     }

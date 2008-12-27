@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,23 +30,23 @@ public class OptionInstance
   /**
    * Constructs a new instance.
    *
-   * @param _option The option.
-   * @param _value The option value.
+   * @param option The option.
+   * @param value The option value.
    */
-  public OptionInstance (Option _option, String _value)
+  public OptionInstance (Option option, String value)
   {
-    this.value = _value;
-    setPath(_option.getPath());
-    setName(_option.getName());
+    this.value = value;
+    setPath(option.getPath());
+    setName(option.getName());
   }
 
   /**
    * {@inheritDoc}
    */
-  public void setName (String _name)
+  public void setName(String name)
   {
-    super.setName(_name);
-    super.setDescription(_name);
+    super.setName(name);
+    super.setDescription(name);
   }
 
   /**
@@ -54,7 +54,7 @@ public class OptionInstance
    *
    * @return value as String.
    */
-  public String getValue ()
+  public String getValue()
   {
     return this.value;
   }
@@ -62,10 +62,10 @@ public class OptionInstance
   /**
    * Set value.
    *
-   * @param _value the value to set.
+   * @param value the value to set.
    */
-  public void setValue (String _value)
+  public void setValue(String value)
   {
-    this.value = _value;
+    this.value = value;
   }
 }

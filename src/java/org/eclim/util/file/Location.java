@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public class Location
    *
    * @return The filename.
    */
-  public String getFilename ()
+  public String getFilename()
   {
     return this.filename;
   }
@@ -72,7 +72,7 @@ public class Location
    *
    * @return The line.
    */
-  public int getLine ()
+  public int getLine()
   {
     return this.line;
   }
@@ -82,7 +82,7 @@ public class Location
    *
    * @return The column.
    */
-  public int getColumn ()
+  public int getColumn()
   {
     return this.column;
   }
@@ -92,7 +92,7 @@ public class Location
    *
    * @return The message.
    */
-  public String getMessage ()
+  public String getMessage()
   {
     return this.message;
   }

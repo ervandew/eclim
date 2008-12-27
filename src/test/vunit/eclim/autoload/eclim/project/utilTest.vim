@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/files'
   exec 'cd ' . s:test_dir
 endfunction " }}}
 
 " TestProjectCD() {{{
-function! TestProjectCD ()
+function! TestProjectCD()
   call VUAssertEquals(s:test_dir, getcwd(), "Setup failed.")
 
   call eclim#project#util#ProjectCD(0)
@@ -39,7 +39,7 @@ function! TestProjectCD ()
 endfunction " }}}
 
 " TestProjectSettings() {{{
-function! TestProjectSettings ()
+function! TestProjectSettings()
   call eclim#project#util#ProjectSettings('eclim_unit_test')
   call VUAssertEquals('eclim_unit_test_settings', expand('%'),
     \ "Didn't open settings window.")
@@ -47,27 +47,27 @@ function! TestProjectSettings ()
 endfunction " }}}
 
 " TestGetCurrentProjectName() {{{
-function! TestGetCurrentProjectName ()
+function! TestGetCurrentProjectName()
   let name = eclim#project#util#GetCurrentProjectName()
   call VUAssertEquals('eclim_unit_test', name, "Wrong project name.")
 endfunction " }}}
 
 " TestGetCurrentProjectRoot() {{{
-function! TestGetCurrentProjectRoot ()
+function! TestGetCurrentProjectRoot()
   let dir = eclim#project#util#GetCurrentProjectRoot()
   call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test', dir,
     \ "Wrong project dir.")
 endfunction " }}}
 
 " TestIsCurrentFileInProject() {{{
-function! TestIsCurrentFileInProject ()
+function! TestIsCurrentFileInProject()
   call VUAssertTrue(eclim#project#util#IsCurrentFileInProject(0), "Wrong result.")
   cd ~
   call VUAssertFalse(eclim#project#util#IsCurrentFileInProject(0), "Wrong result.")
 endfunction " }}}
 
 " TestCommandCompleteProject() {{{
-function! TestCommandCompleteProject ()
+function! TestCommandCompleteProject()
   let results = eclim#project#util#CommandCompleteProject(
     \ 'eclim_', 'ProjectRefresh eclim_', 21)
 

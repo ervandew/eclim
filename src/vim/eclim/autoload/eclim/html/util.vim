@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 " HtmlToText() {{{
 " Converts the supplied basic html to text.
-function! eclim#html#util#HtmlToText (html)
+function! eclim#html#util#HtmlToText(html)
   let text = a:html
   let text = substitute(text, '<br/\?>\c', '\n', 'g')
   let text = substitute(text, '</\?b>\c', '', 'g')
@@ -47,7 +47,7 @@ endfunction " }}}
 
 " InCssBlock() {{{
 " Determines if the cusor is inside of <style> tags.
-function! eclim#html#util#InCssBlock ()
+function! eclim#html#util#InCssBlock()
   let line = line('.')
 
   let stylestart = search('<style\>', 'bcWn')
@@ -64,7 +64,7 @@ endfunction " }}}
 
 " InJavascriptBlock() {{{
 " Determines if the cursor is inside of <script> tags.
-function! eclim#html#util#InJavascriptBlock ()
+function! eclim#html#util#InJavascriptBlock()
   let line = line('.')
 
   let scriptstart = search('<script\>', 'bcWn')
@@ -80,7 +80,7 @@ function! eclim#html#util#InJavascriptBlock ()
 endfunction " }}}
 
 " OpenInBrowser(file) {{{
-function! eclim#html#util#OpenInBrowser (file)
+function! eclim#html#util#OpenInBrowser(file)
   let file = a:file
   if file == ''
     let file = expand('%:p')
@@ -92,7 +92,7 @@ function! eclim#html#util#OpenInBrowser (file)
 endfunction " }}}
 
 " UrlEncode(string) {{{
-function! eclim#html#util#UrlEncode (string)
+function! eclim#html#util#UrlEncode(string)
   let result = a:string
 
   " must be first

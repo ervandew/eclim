@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,14 +46,14 @@ public class AntUtils
   /**
    * Gets an ant model for the given file.
    *
-   * @param _project The project name.
-   * @param _antFile The ant file.
+   * @param project The project name.
+   * @param antFile The ant file.
    * @return The ant model.
    */
-  public static IAntModel getAntModel (String _project, String _antFile)
+  public static IAntModel getAntModel(String project, String antFile)
     throws Exception
   {
-    return getAntModel(_project, _antFile, null);
+    return getAntModel(project, antFile, null);
   }
 
   /**
@@ -61,33 +61,35 @@ public class AntUtils
    * <p/>
    * Based on similar method in org.eclipse.ant.internal.ui.AntUtil
    *
-   * @param _project The project name.
-   * @param _antFile The ant file.
-   * @param _requestor Optional IProblemRequestor to be notified of errors in
+   * @param project The project name.
+   * @param antFile The ant file.
+   * @param requestor Optional IProblemRequestor to be notified of errors in
    * the ant file.
    * @return The ant model.
    */
-  public static IAntModel getAntModel (
-      String _project, String _antFile, IProblemRequestor _requestor)
+  public static IAntModel getAntModel(
+      String project, String antFile, IProblemRequestor requestor)
     throws Exception
   {
     // must refres the file before grabbing the document.
     final IFile file = AntUtil.getFileForLocation(
-        ProjectUtils.getFilePath(_project, _antFile), null);
+        ProjectUtils.getFilePath(project, antFile), null);
     if (file == null) {
       throw new RuntimeException("Invalid project or file location");
     }
     file.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    IDocument doc = ProjectUtils.getDocument(_project, _antFile);
+    IDocument doc = ProjectUtils.getDocument(project, antFile);
     final String filepath = FileUtils.concat(
-        ProjectUtils.getPath(_project), _antFile);
+        ProjectUtils.getPath(project), antFile);
 
     LocationProvider provider = new LocationProvider(null) {
-      public IFile getFile() {
+      public IFile getFile()
+      {
         return file;
       }
-      public IPath getLocation() {
+      public IPath getLocation()
+      {
         if (file == null) {
           return new Path(filepath);
         }
@@ -95,6 +97,6 @@ public class AntUtils
       }
     };
 
-    return new AntModel(doc, _requestor, provider, true, true, true);
+    return new AntModel(doc, requestor, provider, true, true, true);
   }
 }

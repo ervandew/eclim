@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 " }}}
 
 " Script Variables {{{
-  let s:year = exists('*strftime') ? strftime('%Y') : '2008'
+  let s:year = exists('*strftime') ? strftime('%Y') : '2009'
 " }}}
 
-" GetLicense () {{{
+" GetLicense() {{{
 " Retrieves the file containing the license text.
-function! eclim#common#license#GetLicense ()
+function! eclim#common#license#GetLicense()
   let file = eclim#project#util#GetProjectSetting('org.eclim.project.copyright')
   if type(file) == 0
     return
@@ -45,12 +45,12 @@ function! eclim#common#license#GetLicense ()
   return file
 endfunction " }}}
 
-" License (pre, post, mid) {{{
+" License(pre, post, mid) {{{
 " Retrieves the license configured license and applies the specified prefix
 " and postfix as the lines before and after the license and uses 'mid' as the
 " prefix for every line.
 " Returns the license as a list of strings.
-function! eclim#common#license#License (pre, post, mid)
+function! eclim#common#license#License(pre, post, mid)
   let file = eclim#common#license#GetLicense()
   if type(file) == 0 && file == 0
     return ''

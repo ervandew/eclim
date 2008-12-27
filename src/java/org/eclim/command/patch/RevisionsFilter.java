@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ public class RevisionsFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<String> _result)
+  public String filter(CommandLine commandLine, List<String> results)
   {
-    if (_result != null && _result instanceof List) {
+    if (results != null && results instanceof List) {
       StringBuffer buffer = new StringBuffer();
-      for (String revision : _result){
+      for (String revision : results){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
@@ -47,6 +47,6 @@ public class RevisionsFilter
       }
       return buffer.toString();
     }
-    return _result.toString();
+    return results.toString();
   }
 }

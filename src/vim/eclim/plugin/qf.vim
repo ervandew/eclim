@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ augroup END
 " Show(type,list) {{{
 " Set the type on each entry in the specified list and mark any matches in the
 " current file.
-function! s:Show (type, list)
+function! s:Show(type, list)
   if a:type != ''
     if a:list == 'qf'
       let list = getqflist()

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ let s:command_comment =
 
 " Comment() {{{
 " Add / update the comments for the element under the cursor.
-function! eclim#java#doc#Comment ()
+function! eclim#java#doc#Comment()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif

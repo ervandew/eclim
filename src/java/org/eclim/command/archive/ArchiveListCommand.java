@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ public class ArchiveListCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
     FileSystemManager manager = VFS.getManager();
     FileObject archive = manager.resolveFile(file);
     FileObject[] children = getFiles(archive);
@@ -66,18 +66,19 @@ public class ArchiveListCommand
     return StringUtils.join(results, '\n');
   }
 
-  protected FileObject[] getFiles (FileObject archive)
+  protected FileObject[] getFiles(FileObject archive)
     throws Exception
   {
     return archive.getChildren();
   }
 
-  protected String[] processFiles (FileObject[] files)
+  protected String[] processFiles(FileObject[] files)
     throws Exception
   {
     Arrays.sort(files, new Comparator<FileObject>(){
       private Collator collator =  Collator.getInstance();
-      public int compare (FileObject o1, FileObject o2) {
+      public int compare(FileObject o1, FileObject o2)
+      {
         return collator.compare(
           o1.getName().getBaseName(),
           o2.getName().getBaseName());
@@ -103,13 +104,13 @@ public class ArchiveListCommand
     return results;
   }
 
-  protected String formatTime (long time)
+  protected String formatTime(long time)
     throws Exception
   {
     return DATE_FORMAT.format(new Date(time));
   }
 
-  protected String formatTime (Date time)
+  protected String formatTime(Date time)
     throws Exception
   {
     return DATE_FORMAT.format(time);

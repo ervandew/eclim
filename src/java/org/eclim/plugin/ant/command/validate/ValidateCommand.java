@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,11 +48,11 @@ public class ValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
 
     List<Error> errors = super.validate(project, file, false, null);
 
@@ -74,7 +74,7 @@ public class ValidateCommand
         errors.add(error);
       }
     }
-    return ErrorFilter.instance.filter(_commandLine, errors);
+    return ErrorFilter.instance.filter(commandLine, errors);
   }
 
   /**
@@ -86,12 +86,12 @@ public class ValidateCommand
   {
     private ArrayList<IProblem> problems = new ArrayList<IProblem>();
 
-    public List<IProblem> getProblems ()
+    public List<IProblem> getProblems()
     {
       return problems;
     }
 
-    public void acceptProblem (IProblem problem)
+    public void acceptProblem(IProblem problem)
     {
       problems.add(problem);
     }

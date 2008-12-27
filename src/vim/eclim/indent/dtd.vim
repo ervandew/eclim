@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ setlocal indentexpr=EclimGetDtdIndent(v:lnum)
 setlocal indentkeys=o,O,*<Return>,<>>,<<>
 
 " EclimGetDtdIndent(lnum) {{{
-function! EclimGetDtdIndent (lnum)
+function! EclimGetDtdIndent(lnum)
   let adj = 0
   " handle case where previous line is a multi-line comment (<!-- -->) on one
   " line, which IndentAnything doesn't handle properly.
@@ -47,7 +47,7 @@ function! EclimGetDtdIndent (lnum)
 endfunction " }}}
 
 " DtdIndentAnythingSettings() {{{
-function! DtdIndentAnythingSettings ()
+function! DtdIndentAnythingSettings()
   " Syntax name REs for comments and strings.
   let b:blockCommentRE = 'dtdComment\|xmlComment'
   let b:commentRE      = b:blockCommentRE

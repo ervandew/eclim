@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 
 " Validate(on_save) {{{
 " Validates the current file.
-function! eclim#python#validate#Validate (on_save)
+function! eclim#python#validate#Validate(on_save)
   if eclim#util#WillWrittenBufferClose()
     return
   endif
@@ -112,7 +112,7 @@ function! eclim#python#validate#Validate (on_save)
 endfunction " }}}
 
 " ValidateSyntax() {{{
-function eclim#python#validate#ValidateSyntax ()
+function eclim#python#validate#ValidateSyntax()
   let syntax_error = ''
 
   if has('python')
@@ -132,7 +132,7 @@ EOF
 endfunction " }}}
 
 " PyLint() {{{
-function eclim#python#validate#PyLint ()
+function eclim#python#validate#PyLint()
   let file = expand('%:p')
 
   if !executable('pylint')

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@
 "
 " }}}
 
-" FindBuildFile () {{{
+" FindBuildFile() {{{
 " Finds the build file relative to the current file (like ant -find).
-function! eclim#java#ant#util#FindBuildFile ()
+function! eclim#java#ant#util#FindBuildFile()
   let buildFile = eclim#util#Findfile('build.xml', fnamemodify(expand('%:p'), ':h') . ';')
   if filereadable(buildFile)
     return substitute(fnamemodify(buildFile, ':p'), '\', '/', 'g')
@@ -36,7 +36,7 @@ endfunction " }}}
 
 " SilentUpdate() {{{
 " Silently updates the current source file w/out validation.
-function! eclim#java#ant#util#SilentUpdate ()
+function! eclim#java#ant#util#SilentUpdate()
   try
     let saved_ant = g:EclimAntValidate
     let saved_xml = g:EclimXmlValidate

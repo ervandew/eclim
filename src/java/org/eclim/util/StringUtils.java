@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,16 +35,17 @@ public class StringUtils
    * Replaces placeholders of the form ${key} in the supplied string using
    * key / value pairs from the Map provided.
    *
-   * @param _string the String to evaluate.
+   * @param string the String to evaluate.
+   * @param values the values to use in the string.
    * @return The evaluation result.
    */
-  public static String replacePlaceholders (String _string, Map _values)
+  public static String replacePlaceholders(String string, Map values)
   {
-    if(_string == null || _values == null){
-      return _string;
+    if(string == null || values == null){
+      return string;
     }
 
-    StringBuffer buffer = new StringBuffer(_string);
+    StringBuffer buffer = new StringBuffer(string);
 
     int start = buffer.indexOf(PLACEHOLDER_PREFIX);
     int end = buffer.indexOf(PLACEHOLDER_SUFFIX);
@@ -52,7 +53,7 @@ public class StringUtils
       String placeholder =
         buffer.substring(start + PLACEHOLDER_PREFIX.length(), end);
 
-      Object value = _values.get(placeholder);
+      Object value = values.get(placeholder);
       if(value != null){
         buffer.replace(start, end + 1, value.toString());
       }

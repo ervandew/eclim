@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ public class SearchResult
    * Constructs a new instance.
    */
   public SearchResult (
-      String _archive, String _element, String _file, int _offset, int _length)
+      String archive, String element, String file, int offset, int length)
   {
-    super(_file, _offset, _length);
-    archive = _archive;
-    element = _element;
+    super(file, offset, length);
+    this.archive = archive;
+    this.element = element;
   }
 
   /**
@@ -46,7 +46,7 @@ public class SearchResult
    *
    * @return archive as String.
    */
-  public String getArchive ()
+  public String getArchive()
   {
     return this.archive;
   }
@@ -56,7 +56,7 @@ public class SearchResult
    *
    * @return element as String.
    */
-  public String getElement ()
+  public String getElement()
   {
     return this.element;
   }

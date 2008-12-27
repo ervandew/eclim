@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/vcs/mercurial/unittest'
   exec 'cd ' . s:test_dir
 endfunction " }}}
 
-" TestInfo () {{{
-function! TestInfo  ()
+" TestInfo() {{{
+function! TestInfo()
   view test/file1.txt
   call PushRedir('@"')
   VcsInfo
@@ -43,8 +43,8 @@ function! TestInfo  ()
   call VUAssertEquals(info[4], 'summary:     test a multi line comment')
 endfunction " }}}
 
-" TestAnnotate () {{{
-function! TestAnnotate  ()
+" TestAnnotate() {{{
+function! TestAnnotate()
   view test/file1.txt
   call PeekRedir()
   call PushRedir('@"')
@@ -67,8 +67,8 @@ function! TestAnnotate  ()
   call VUAssertEquals(len(existing), 0)
 endfunction " }}}
 
-" TestChangeSet () {{{
-function! TestChangeSet  ()
+" TestChangeSet() {{{
+function! TestChangeSet()
   view test/file1.txt
   call PeekRedir()
   VcsChangeSet
@@ -85,8 +85,8 @@ function! TestChangeSet  ()
   call VUAssertEquals(getline(1), 'unittest / test / file2.txt')
 endfunction " }}}
 
-" TestDiff () {{{
-function! TestDiff  ()
+" TestDiff() {{{
+function! TestDiff()
   view test/file1.txt
   call PeekRedir()
   VcsDiff
@@ -99,8 +99,8 @@ function! TestDiff  ()
   call VUAssertEquals(line('$'), 4)
 endfunction " }}}
 
-" TestLog () {{{
-function! TestLog  ()
+" TestLog() {{{
+function! TestLog()
   view test/file1.txt
   call PeekRedir()
   VcsLog

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class XmlCodeCompleteCommandTest
   private static final String TEST_FILE_WSDL = "wsdl/GoogleSearch.wsdl";
 
   @Test
-  public void completeXsd ()
+  public void completeXsd()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
@@ -57,7 +57,7 @@ public class XmlCodeCompleteCommandTest
   }
 
   @Test
-  public void completeWsdl ()
+  public void completeWsdl()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));

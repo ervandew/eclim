@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " TestGetOffset() {{{
-function! TestGetOffset ()
+function! TestGetOffset()
   new
   call setline(1, ['one two', 'three four'])
 
@@ -36,7 +36,7 @@ function! TestGetOffset ()
 endfunction " }}}
 
 " TestGetCurrentElementColumn() {{{
-function! TestGetCurrentElementColumn ()
+function! TestGetCurrentElementColumn()
   new
   call setline(1, 'one two')
 
@@ -51,7 +51,7 @@ function! TestGetCurrentElementColumn ()
 endfunction " }}}
 
 " TestGetCurrentElementPosition() {{{
-function! TestGetCurrentElementPosition ()
+function! TestGetCurrentElementPosition()
   new
   call setline(1, ['one two', 'three four'])
 
@@ -63,7 +63,7 @@ function! TestGetCurrentElementPosition ()
 endfunction " }}}
 
 " TestGetCurrentElementOffset() {{{
-function! TestGetCurrentElementOffset ()
+function! TestGetCurrentElementOffset()
   new
   call setline(1, ['one two', 'three four'])
 
@@ -75,7 +75,7 @@ function! TestGetCurrentElementOffset ()
 endfunction " }}}
 
 " TestGrabUri() {{{
-function! TestGrabUri ()
+function! TestGrabUri()
   new
   call setline(1, [
       \ '"http://www.google.com?q=blah"',
@@ -118,7 +118,7 @@ function! TestGrabUri ()
 endfunction " }}}
 
 " TestListContains() {{{
-function! TestListContains ()
+function! TestListContains()
   let list = ['one', 'two', 'three']
 
   call VUAssertTrue(eclim#util#ListContains(list, 'two'))
@@ -128,7 +128,7 @@ function! TestListContains ()
 endfunction " }}}
 
 " TestParseArgs() {{{
-function! TestParseArgs ()
+function! TestParseArgs()
   call VUAssertEquals(['one', 'two', 'three'],
     \ eclim#util#ParseArgs('one two three'))
   call VUAssertEquals(['one\ two', 'three'],
@@ -136,7 +136,7 @@ function! TestParseArgs ()
 endfunction " }}}
 
 " TestSimplify() {{{
-function! TestSimplify ()
+function! TestSimplify()
   let file = 'file:///blah\duh\ foo\bar'
   call VUAssertEquals('file:///blah/duh\ foo/bar', eclim#util#Simplify(file))
 

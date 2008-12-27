@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,16 +60,16 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = _commandLine.getValue(Options.PROJECT_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
-    int offset = _commandLine.getIntValue(Options.OFFSET_OPTION);
+    int offset = commandLine.getIntValue(Options.OFFSET_OPTION);
     if(offset != -1){
-      offset = getOffset(_commandLine);
+      offset = getOffset(commandLine);
       IJavaElement element = src.getElementAt(offset);
       if(element.getElementType() != IJavaElement.FIELD){
         return Services.getMessage("not.a.field");
@@ -89,16 +89,16 @@ public class DelegateCommand
       }
     }
 
-    return super.execute(_commandLine);
+    return super.execute(commandLine);
   }
 
   /**
    * {@inheritDoc}
    */
-  protected IType[] getSuperTypes (CommandLine _commandLine, IType _type)
+  protected IType[] getSuperTypes(CommandLine commandLine, IType type)
     throws Exception
   {
-    IType[] types = super.getSuperTypes(_commandLine, delegateType);
+    IType[] types = super.getSuperTypes(commandLine, delegateType);
     IType[] results = new IType[types.length + 1];
     results[0] = delegateType;
     System.arraycopy(types, 0, results, 1, types.length);
@@ -109,18 +109,18 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  protected boolean isValidMethod (IMethod _method)
+  protected boolean isValidMethod(IMethod method)
     throws Exception
   {
-    int flags = _method.getFlags();
-    return (!_method.isConstructor() &&
-        (Flags.isPublic(flags) || _method.getDeclaringType().isInterface()));
+    int flags = method.getFlags();
+    return (!method.isConstructor() &&
+        (Flags.isPublic(flags) || method.getDeclaringType().isInterface()));
   }
 
   /**
    * {@inheritDoc}
    */
-  protected boolean isValidType (IType _type)
+  protected boolean isValidType(IType type)
     throws Exception
   {
     return true;
@@ -129,31 +129,31 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  protected Position insertMethod (
-      CommandLine _commandLine,
-      ICompilationUnit _src,
-      IType _type,
-      IType _superType,
-      IMethod _method,
-      IJavaElement _sibling)
+  protected Position insertMethod(
+      CommandLine commandLine,
+      ICompilationUnit src,
+      IType type,
+      IType superType,
+      IMethod method,
+      IJavaElement sibling)
     throws Exception
   {
-    HashMap<String,Object> values = new HashMap<String,Object>();
+    HashMap<String, Object> values = new HashMap<String, Object>();
     JavaUtils.loadPreferencesForTemplate(
-        _type.getJavaProject().getProject(), getPreferences(), values);
+        type.getJavaProject().getProject(), getPreferences(), values);
 
-    if(_superType.isInterface()){
+    if(superType.isInterface()){
       values.put("modifier", "public");
     }else{
       values.put("modifier",
-          Flags.isPublic(_method.getFlags()) ? "public" : "protected");
+          Flags.isPublic(method.getFlags()) ? "public" : "protected");
     }
-    values.put("name", _method.getElementName());
+    values.put("name", method.getElementName());
     String returnType = Signature.getSignatureSimpleName(
-        _method.getReturnType());
+        method.getReturnType());
     values.put("returnType", returnType);
-    values.put("params", MethodUtils.getMethodParameters(_method, true));
-    String thrown = MethodUtils.getMethodThrows(_method);
+    values.put("params", MethodUtils.getMethodParameters(method, true));
+    String thrown = MethodUtils.getMethodThrows(method);
     values.put("throwsType", thrown != null ? thrown : null);
     values.put("overrides", Boolean.FALSE);
 
@@ -162,8 +162,8 @@ public class DelegateCommand
       methodBody.append("return ");
     }
     methodBody.append(field.getElementName())
-      .append('.').append(_method.getElementName()).append('(');
-    String[] paramNames = _method.getParameterNames();
+      .append('.').append(method.getElementName()).append('(');
+    String[] paramNames = method.getParameterNames();
     for(int ii = 0; ii < paramNames.length; ii++){
       if(ii != 0){
         methodBody.append(", ");
@@ -174,17 +174,17 @@ public class DelegateCommand
     values.put("methodBody", methodBody.toString());
 
     String typeName =
-      JavaUtils.getCompilationUnitRelativeTypeName(_src, _superType);
+      JavaUtils.getCompilationUnitRelativeTypeName(src, superType);
     values.put("superType", typeName);
     values.put("implementof", Boolean.TRUE);
     values.put("delegate", Boolean.TRUE);
-    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(_method));
+    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(method));
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
-    String method = TemplateUtils.evaluate(resources, TEMPLATE, values);
-    Position position = TypeUtils.getPosition(_type,
-        _type.createMethod(method, _sibling, false, null));
+    String result = TemplateUtils.evaluate(resources, TEMPLATE, values);
+    Position position = TypeUtils.getPosition(type,
+        type.createMethod(result, sibling, false, null));
 
     return position;
   }

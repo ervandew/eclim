@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,13 +29,13 @@
 
 " Ant(bang, args) {{{
 " Executes ant using the supplied arguments.
-function! eclim#java#ant#run#Ant (bang, args)
+function! eclim#java#ant#run#Ant(bang, args)
   call eclim#util#MakeWithCompiler('eclim_ant', a:bang, a:args)
 endfunction " }}}
 
 " CommandCompleteTarget(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for ant targets.
-function! eclim#java#ant#run#CommandCompleteTarget (argLead, cmdLine, cursorPos)
+function! eclim#java#ant#run#CommandCompleteTarget(argLead, cmdLine, cursorPos)
   let project = eclim#project#util#GetCurrentProjectName()
   if project == ''
     return []

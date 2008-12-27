@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,49 +40,49 @@ public class Error
   /**
    * Constructs a new instance from the supplied values.
    *
-   * @param _message The error message.
-   * @param _filename The file containing the error.
-   * @param _lineNumber The line where the error occured.
-   * @param _columnNumber The column where the error occured.
-   * @param _warning true if this error is just a warning, false otherwise.
+   * @param message The error message.
+   * @param filename The file containing the error.
+   * @param lineNumber The line where the error occured.
+   * @param columnNumber The column where the error occured.
+   * @param warning true if this error is just a warning, false otherwise.
    */
   public Error (
-      String _message,
-      String _filename,
-      int _lineNumber,
-      int _columnNumber,
-      boolean _warning)
+      String message,
+      String filename,
+      int lineNumber,
+      int columnNumber,
+      boolean warning)
   {
-    this(_message, _filename, _lineNumber, _columnNumber, -1, -1, _warning);
+    this(message, filename, lineNumber, columnNumber, -1, -1, warning);
   }
 
   /**
    * Constructs a new instance from the supplied values.
    *
-   * @param _message The error message.
-   * @param _filename The file containing the error.
-   * @param _lineNumber The line where the error occured.
-   * @param _columnNumber The column where the error occured.
-   * @param _endLineNumber The line where the error ends.
-   * @param _endColumnNumber The column where the error ends.
-   * @param _warning true if this error is just a warning, false otherwise.
+   * @param message The error message.
+   * @param filename The file containing the error.
+   * @param lineNumber The line where the error occured.
+   * @param columnNumber The column where the error occured.
+   * @param endLineNumber The line where the error ends.
+   * @param endColumnNumber The column where the error ends.
+   * @param warning true if this error is just a warning, false otherwise.
    */
   public Error (
-      String _message,
-      String _filename,
-      int _lineNumber,
-      int _columnNumber,
-      int _endLineNumber,
-      int _endColumnNumber,
-      boolean _warning)
+      String message,
+      String filename,
+      int lineNumber,
+      int columnNumber,
+      int endLineNumber,
+      int endColumnNumber,
+      boolean warning)
   {
-    this.message = _message;
-    this.filename = _filename;
-    this.lineNumber = _lineNumber > 0 ? _lineNumber : 1;
-    this.columnNumber = _columnNumber > 0 ? _columnNumber : 1;
-    this.endLineNumber = _endLineNumber;
-    this.endColumnNumber = _endColumnNumber;
-    this.warning = _warning;
+    this.message = message;
+    this.filename = filename;
+    this.lineNumber = lineNumber > 0 ? lineNumber : 1;
+    this.columnNumber = columnNumber > 0 ? columnNumber : 1;
+    this.endLineNumber = endLineNumber;
+    this.endColumnNumber = endColumnNumber;
+    this.warning = warning;
   }
 
   /**
@@ -90,7 +90,7 @@ public class Error
    *
    * @return The error message.
    */
-  public String getMessage ()
+  public String getMessage()
   {
     return message != null ? message : StringUtils.EMPTY;
   }
@@ -100,7 +100,7 @@ public class Error
    *
    * @return The file name.
    */
-  public String getFilename ()
+  public String getFilename()
   {
     return filename;
   }
@@ -110,7 +110,7 @@ public class Error
    *
    * @return The line number.
    */
-  public int getLineNumber ()
+  public int getLineNumber()
   {
     return lineNumber;
   }
@@ -120,7 +120,7 @@ public class Error
    *
    * @return The columnNumber.
    */
-  public int getColumnNumber ()
+  public int getColumnNumber()
   {
     return this.columnNumber;
   }
@@ -130,7 +130,7 @@ public class Error
    *
    * @return The endLineNumber.
    */
-  public int getEndLineNumber ()
+  public int getEndLineNumber()
   {
     return this.endLineNumber;
   }
@@ -140,7 +140,7 @@ public class Error
    *
    * @return The endColumnNumber.
    */
-  public int getEndColumnNumber ()
+  public int getEndColumnNumber()
   {
     return this.endColumnNumber;
   }
@@ -150,7 +150,7 @@ public class Error
    *
    * @return true if a warning, false otherwise.
    */
-  public boolean isWarning ()
+  public boolean isWarning()
   {
     return warning;
   }
@@ -158,18 +158,18 @@ public class Error
   /**
    * Determines if this object is equal to the supplied object.
    *
-   * @param _other The object to test equality with.
+   * @param other The object to test equality with.
    * @return true if the objects are equal, false otherwise.
    */
-  public boolean equals (Object _other)
+  public boolean equals(Object other)
   {
-    if (!(_other instanceof Error)) {
+    if (!(other instanceof Error)) {
       return false;
     }
-    if (this == _other) {
+    if (this == other) {
       return true;
     }
-    Error error = (Error)_other;
+    Error error = (Error)other;
     boolean equal = new EqualsBuilder()
       .append(getFilename(), error.getFilename())
       .append(getLineNumber(), error.getLineNumber())
@@ -187,7 +187,7 @@ public class Error
    *
    * @return The hash code for this object.
    */
-  public int hashCode ()
+  public int hashCode()
   {
     return new HashCodeBuilder(17, 37)
       .append(filename)

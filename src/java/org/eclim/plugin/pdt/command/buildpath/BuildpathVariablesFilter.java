@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,19 +39,19 @@ public class BuildpathVariablesFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<BuildpathVariable> _result)
+  public String filter(CommandLine commandLine, List<BuildpathVariable> results)
   {
     StringBuffer buffer = new StringBuffer();
 
-    Collections.sort(_result);
+    Collections.sort(results);
 
     int length = 0;
-    for(BuildpathVariable variable : _result){
+    for(BuildpathVariable variable : results){
       length = variable.getName().length() > length ?
         variable.getName().length() : length;
     }
 
-    for(BuildpathVariable variable : _result){
+    for(BuildpathVariable variable : results){
       if(buffer.length() > 0){
         buffer.append('\n');
       }

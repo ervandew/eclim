@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,9 +91,9 @@ public class PluginResources
    * @see AbstractPluginResources#initialize(String)
    */
   @Override
-  public void initialize (String _name)
+  public void initialize(String name)
   {
-    super.initialize(_name);
+    super.initialize(name);
 
     logger.info("Initializing java environment");
 
@@ -188,7 +188,7 @@ public class PluginResources
    * @see AbstractPluginResources#close()
    */
   @Override
-  public void close ()
+  public void close()
     throws Exception
   {
     logger.info("Shutting down java environment");
@@ -202,7 +202,7 @@ public class PluginResources
    * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
-  protected String getBundleBaseName ()
+  protected String getBundleBaseName()
   {
     return "org/eclim/plugin/jdt/messages";
   }
@@ -211,7 +211,7 @@ public class PluginResources
    * Performs additional logic to locate jre src zip file in alternate locations
    * not checked by eclipse.
    */
-  protected void initializeJreSrc ()
+  protected void initializeJreSrc()
   {
     // doing a straight JavaCore.setClasspathVariable() doesn't work, so we need
     // to modify the library path of the default vm install.
@@ -225,8 +225,7 @@ public class PluginResources
         // eclipse didn't find src.zip, so search other known locations.
         if (libraryPath.lastSegment().equals("rt.jar") &&
             (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
-             !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
-        {
+             !locations[ii].getSystemLibrarySourcePath().toFile().exists())){
           IPath jreSrc = null;
 
           logger.debug("Attempting to locate jre src.zip for JAVA_HOME: {}",
@@ -236,8 +235,7 @@ public class PluginResources
 
             // absolute path
             if (location.startsWith("/") ||
-                location.indexOf(':') != -1)
-            {
+                location.indexOf(':') != -1){
               jreSrc = new Path(location);
 
             // relative path
@@ -280,18 +278,18 @@ public class PluginResources
   /**
    * Loads variables from property file.
    *
-   * @param _variable The prefix of the property file.
+   * @param variable The prefix of the property file.
    */
-  protected void initializeVars (String _variable)
+  protected void initializeVars(String variable)
   {
-    String file = "/" + _variable + ".properties";
+    String file = "/" + variable + ".properties";
     logger.info("Loading classpath variables from '{}'.", file);
     InputStream in = null;
     try{
       in = getClass().getResourceAsStream(file);
       String propertiesString = IOUtils.toString(in);
 
-      HashMap<Object,String> values = new HashMap<Object,String>();
+      HashMap<Object, String> values = new HashMap<Object, String>();
       for(Object key : System.getProperties().keySet()){
         values.put(key, System.getProperty((String)key).replace('\\', '/'));
       }

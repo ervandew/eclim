@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 " }}}
 
 " Evaluate(file) {{{
-function eclim#java#regex#Evaluate (file)
+function eclim#java#regex#Evaluate(file)
   let command = s:command_regex
   let command = substitute(command, '<file>', a:file, '')
   if exists('b:eclim_regex_type')

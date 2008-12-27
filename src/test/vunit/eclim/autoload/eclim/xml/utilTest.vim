@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " TestGetDtd() {{{
-function! TestGetDtd ()
+function! TestGetDtd()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! xml/test_nodtd.xml
   call PeekRedir()
@@ -38,7 +38,7 @@ function! TestGetDtd ()
 endfunction " }}}
 
 " TestGetXsd() {{{
-function! TestGetXsd ()
+function! TestGetXsd()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! xml/spring_test.xml
   call PeekRedir()
@@ -52,7 +52,7 @@ function! TestGetXsd ()
 endfunction " }}}
 
 " TestGetElementName() {{{
-function! TestGetElementName ()
+function! TestGetElementName()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   edit! pom.xml
   call PeekRedir()
@@ -77,7 +77,7 @@ function! TestGetElementName ()
 endfunction " }}}
 
 " TestGetParentElementName() {{{
-function! TestGetParentElementName ()
+function! TestGetParentElementName()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   edit! pom.xml
   call PeekRedir()

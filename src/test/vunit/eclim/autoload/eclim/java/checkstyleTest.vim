@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestManual() {{{
-function! TestManual ()
+function! TestManual()
   let g:EclimJavaCheckstyleOnSave = 0
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
   call PeekRedir()
@@ -50,7 +50,7 @@ function! TestManual ()
 endfunction " }}}
 
 " TestAuto() {{{
-function! TestAuto ()
+function! TestAuto()
   let g:EclimJavaCheckstyleOnSave = 1
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
   call PeekRedir()

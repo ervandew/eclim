@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,18 +92,17 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    List<SearchMatch> matches = executeSearch(_commandLine);
+    List<SearchMatch> matches = executeSearch(commandLine);
 
     ArrayList<SearchResult> results = new ArrayList<SearchResult>();
     for(SearchMatch match : matches){
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
-        {
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
           SearchResult result = createSearchResult(match);
           if(result != null){
             results.add(result);
@@ -111,34 +110,34 @@ public class SearchCommand
         }
       }
     }
-    return SearchFilter.instance.filter(_commandLine, results);
+    return SearchFilter.instance.filter(commandLine, results);
   }
 
   /**
    * Executes the search.
    *
-   * @param _commandLine The command line for the search.
+   * @param commandLine The command line for the search.
    * @return The search results.
    */
-  public List<SearchMatch> executeSearch (CommandLine _commandLine)
+  public List<SearchMatch> executeSearch(CommandLine commandLine)
     throws Exception
   {
     int context = -1;
-    if(_commandLine.hasOption(Options.CONTEXT_OPTION)){
-      context = getContext(_commandLine.getValue(Options.CONTEXT_OPTION));
+    if(commandLine.hasOption(Options.CONTEXT_OPTION)){
+      context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
     }
-    String project = _commandLine.getValue(Options.NAME_OPTION);
-    String scope = _commandLine.getValue(Options.SCOPE_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String offset = _commandLine.getValue(Options.OFFSET_OPTION);
-    String length = _commandLine.getValue(Options.LENGTH_OPTION);
-    String pat = _commandLine.getValue(Options.PATTERN_OPTION);
+    String project = commandLine.getValue(Options.NAME_OPTION);
+    String scope = commandLine.getValue(Options.SCOPE_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String offset = commandLine.getValue(Options.OFFSET_OPTION);
+    String length = commandLine.getValue(Options.LENGTH_OPTION);
+    String pat = commandLine.getValue(Options.PATTERN_OPTION);
 
     SearchPattern pattern = null;
 
     // element search
     if(file != null && offset != null && length != null){
-      String encoding = _commandLine.getValue(Options.ENCODING_OPTION);
+      String encoding = commandLine.getValue(Options.ENCODING_OPTION);
       String filepath = ProjectUtils.getFilePath(project, file);
 
       int charOffset = FileUtils.byteOffsetToCharOffset(
@@ -159,7 +158,7 @@ public class SearchCommand
       if(context == -1){
         context = IJavaSearchConstants.DECLARATIONS;
       }
-      int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
+      int type = getType(commandLine.getValue(Options.TYPE_OPTION));
 
       int matchType = SearchPattern.R_EXACT_MATCH;
 
@@ -195,20 +194,21 @@ public class SearchCommand
   /**
    * Executes the search.
    *
-   * @param _pattern The search pattern.
-   * @param _scope The scope of the search (file, project, all, etc).
+   * @param pattern The search pattern.
+   * @param scope The scope of the search (file, project, all, etc).
    *
    * @return List of matches.
    */
-  protected List<SearchMatch> search (SearchPattern _pattern, IJavaSearchScope _scope)
+  protected List<SearchMatch> search(
+      SearchPattern pattern, IJavaSearchScope scope)
     throws CoreException
   {
     SearchRequestor requestor = new SearchRequestor();
-    if(_pattern != null){
+    if(pattern != null){
       SearchEngine engine = new SearchEngine();
       SearchParticipant[] participants = new SearchParticipant[]{
         SearchEngine.getDefaultSearchParticipant()};
-      engine.search(_pattern, participants, _scope, requestor, null);
+      engine.search(pattern, participants, scope, requestor, null);
     }
     return requestor.getMatches();
   }
@@ -217,16 +217,16 @@ public class SearchCommand
    * Gets a IJavaElement by its position.
    *
    * @param project The project the file is in.
-   * @param _position The element's position.
+   * @param position The element's position.
    * @return The element.
    */
-  protected IJavaElement getElement (String project, Position _position)
+  protected IJavaElement getElement(String project, Position position)
     throws Exception
   {
     ICompilationUnit src = JavaUtils.getCompilationUnit(project,
-        _position.getFilename());
+        position.getFilename());
     IJavaElement[] elements = src.codeSelect(
-        _position.getOffset(), _position.getLength());
+        position.getOffset(), position.getLength());
     if(elements != null && elements.length > 0){
       return elements[0];
     }
@@ -236,13 +236,13 @@ public class SearchCommand
   /**
    * Creates a SearchResult from the supplied SearchMatch.
    *
-   * @param _match The SearchMatch.
+   * @param match The SearchMatch.
    * @return The SearchResult.
    */
-  protected SearchResult createSearchResult (SearchMatch _match)
+  protected SearchResult createSearchResult(SearchMatch match)
     throws Exception
   {
-    IJavaElement element = (IJavaElement)_match.getElement();
+    IJavaElement element = (IJavaElement)match.getElement();
     IJavaElement parent = JavaUtils.getPrimaryElement(element);
 
     String archive = null;
@@ -264,8 +264,7 @@ public class SearchCommand
 
         // determine if src path is project relative or file system absolute.
         if(srcPath.isAbsolute() &&
-           elementProject.getName().equals(srcPath.segment(0)))
-        {
+           elementProject.getName().equals(srcPath.segment(0))){
           rootPath = ProjectUtils.getFilePath(elementProject,
               srcPath.toString());
         }else{
@@ -282,32 +281,32 @@ public class SearchCommand
         }
       }
     }else{
-      IPath location = _match.getResource().getLocation();
+      IPath location = match.getResource().getLocation();
       file = location != null ? location.toOSString() : null;
     }
 
     elementName = JavaUtils.getFullyQualifiedName(element);
     return new SearchResult(
-        archive, elementName, file, _match.getOffset(), _match.getLength());
+        archive, elementName, file, match.getOffset(), match.getLength());
   }
 
   /**
    * Gets the search scope to use.
    *
-   * @param _scope The string name of the scope.
-   * @param _project The current project.
-   * @param _type The current type.
+   * @param scope The string name of the scope.
+   * @param project The current project.
+   * @param type The current type.
    *
    * @return The IJavaSearchScope equivalent.
    */
-  protected IJavaSearchScope getScope (
-      String _scope, IJavaProject _project, IType _type)
+  protected IJavaSearchScope getScope(
+      String scope, IJavaProject project, IType type)
     throws Exception
   {
-    if(SCOPE_PROJECT.equals(_scope)){
-      return SearchEngine.createJavaSearchScope(new IJavaElement[]{_project});
-    }else if(SCOPE_TYPE.equals(_scope)){
-      return SearchEngine.createJavaSearchScope(new IJavaElement[]{_type});
+    if(SCOPE_PROJECT.equals(scope)){
+      return SearchEngine.createJavaSearchScope(new IJavaElement[]{project});
+    }else if(SCOPE_TYPE.equals(scope)){
+      return SearchEngine.createJavaSearchScope(new IJavaElement[]{type});
     }
     return SearchEngine.createWorkspaceScope();
   }
@@ -315,12 +314,12 @@ public class SearchCommand
   /**
    * Determines the appropriate context to used base on the elements context.
    *
-   * @param _element The IJavaElement.
+   * @param element The IJavaElement.
    * @return The int context
    */
-  protected int getElementContextualContext (IJavaElement _element)
+  protected int getElementContextualContext(IJavaElement element)
   {
-    Class theClass = _element.getClass();
+    Class theClass = element.getClass();
 
     // type declaration
     if(theClass.equals(org.eclipse.jdt.internal.core.SourceType.class)){
@@ -329,8 +328,7 @@ public class SearchCommand
 
     // field / method declaration
     if (theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
-        theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class))
-    {
+        theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class)){
       return IJavaSearchConstants.ALL_OCCURRENCES;
     }
 
@@ -340,16 +338,16 @@ public class SearchCommand
   /**
    * Translates the string context to the int equivalent.
    *
-   * @param _context The String context.
+   * @param context The String context.
    * @return The int context
    */
-  protected int getContext (String _context)
+  protected int getContext(String context)
   {
-    if(CONTEXT_ALL.equals(_context)){
+    if(CONTEXT_ALL.equals(context)){
       return IJavaSearchConstants.ALL_OCCURRENCES;
-    }else if(CONTEXT_IMPLEMENTORS.equals(_context)){
+    }else if(CONTEXT_IMPLEMENTORS.equals(context)){
       return IJavaSearchConstants.IMPLEMENTORS;
-    }else if(CONTEXT_REFERENCES.equals(_context)){
+    }else if(CONTEXT_REFERENCES.equals(context)){
       return IJavaSearchConstants.REFERENCES;
     }
     return IJavaSearchConstants.DECLARATIONS;
@@ -358,30 +356,30 @@ public class SearchCommand
   /**
    * Translates the string type to the int equivalent.
    *
-   * @param _type The String type.
+   * @param type The String type.
    * @return The int type.
    */
-  protected int getType (String _type)
+  protected int getType(String type)
   {
-    if(TYPE_ANNOTATION.equals(_type)){
+    if(TYPE_ANNOTATION.equals(type)){
       return IJavaSearchConstants.ANNOTATION_TYPE;
-    }else if(TYPE_CLASS.equals(_type)){
+    }else if(TYPE_CLASS.equals(type)){
       return IJavaSearchConstants.CLASS;
-    }else if(TYPE_CLASS_OR_ENUM.equals(_type)){
+    }else if(TYPE_CLASS_OR_ENUM.equals(type)){
       return IJavaSearchConstants.CLASS_AND_ENUM;
-    }else if(TYPE_CLASS_OR_INTERFACE.equals(_type)){
+    }else if(TYPE_CLASS_OR_INTERFACE.equals(type)){
       return IJavaSearchConstants.CLASS_AND_INTERFACE;
-    }else if(TYPE_CONSTRUCTOR.equals(_type)){
+    }else if(TYPE_CONSTRUCTOR.equals(type)){
       return IJavaSearchConstants.CONSTRUCTOR;
-    }else if(TYPE_ENUM.equals(_type)){
+    }else if(TYPE_ENUM.equals(type)){
       return IJavaSearchConstants.ENUM;
-    }else if(TYPE_FIELD.equals(_type)){
+    }else if(TYPE_FIELD.equals(type)){
       return IJavaSearchConstants.FIELD;
-    }else if(TYPE_INTERFACE.equals(_type)){
+    }else if(TYPE_INTERFACE.equals(type)){
       return IJavaSearchConstants.INTERFACE;
-    }else if(TYPE_METHOD.equals(_type)){
+    }else if(TYPE_METHOD.equals(type)){
       return IJavaSearchConstants.METHOD;
-    }else if(TYPE_PACKAGE.equals(_type)){
+    }else if(TYPE_PACKAGE.equals(type)){
       return IJavaSearchConstants.PACKAGE;
     }
     return IJavaSearchConstants.TYPE;

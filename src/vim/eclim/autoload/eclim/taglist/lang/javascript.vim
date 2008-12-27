@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 " }}}
 
 " FormatJavascript(types, tags) {{{
-function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
+function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
   let pos = getpos('.')
 
   let lines = []
@@ -113,13 +113,13 @@ function! eclim#taglist#lang#javascript#FormatJavascript (types, tags)
 endfunction " }}}
 
 " s:SkipComments() {{{
-function s:SkipComments ()
+function s:SkipComments()
   let synname = synIDattr(synID(line('.'), col('.'), 1), "name")
   return synname =~ '\([Cc]omment\|[Ss]tring\)'
 endfunction " }}}
 
 " s:GetParentObject(objects, bounds, start, end) {{{
-function s:GetParentObject (objects, bounds, start, end)
+function s:GetParentObject(objects, bounds, start, end)
   for key in keys(a:bounds)
     let range = a:bounds[key]
     if range[0] < a:start && range[1] > a:end

@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,13 +39,13 @@ endif
 
 " Define(name, text, highlight) {{{
 " Defines a new sign name or updates an existing one.
-function! eclim#display#signs#Define (name, text, highlight)
+function! eclim#display#signs#Define(name, text, highlight)
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
 endfunction " }}}
 
 " Place(name, line) {{{
 " Places a sign in the current buffer.
-function! eclim#display#signs#Place (name, line)
+function! eclim#display#signs#Place(name, line)
   if a:line > 0
     let lastline = line('$')
     let line = a:line <= lastline ? a:line : lastline
@@ -56,7 +56,7 @@ endfunction " }}}
 
 " PlaceAll(name, list) {{{
 " Places a sign in the current buffer for each line in the list.
-function! eclim#display#signs#PlaceAll (name, list)
+function! eclim#display#signs#PlaceAll(name, list)
   let lastline = line('$')
   for line in a:list
     if line > 0
@@ -69,13 +69,13 @@ endfunction " }}}
 
 " Undefine(name) {{{
 " Undefines a sign name.
-function! eclim#display#signs#Undefine (name)
+function! eclim#display#signs#Undefine(name)
   exec "sign undefine " . a:name
 endfunction " }}}
 
 " Unplace(id) {{{
 " Un-places a sign in the current buffer.
-function! eclim#display#signs#Unplace (id)
+function! eclim#display#signs#Unplace(id)
   exec 'sign unplace ' . a:id . ' buffer=' . bufnr('%')
 endfunction " }}}
 
@@ -83,7 +83,7 @@ endfunction " }}}
 " Un-places all signs in the supplied list from the current buffer.
 " The list may be a list of ids or a list of dictionaries as returned by
 " GetExisting()
-function! eclim#display#signs#UnplaceAll (list)
+function! eclim#display#signs#UnplaceAll(list)
   for sign in a:list
     if type(sign) == 4
       call eclim#display#signs#Unplace(sign['id'])
@@ -95,7 +95,7 @@ endfunction " }}}
 
 " Toggle(name, line) {{{
 " Toggle a sign on the current line.
-function! eclim#display#signs#Toggle (name, line)
+function! eclim#display#signs#Toggle(name, line)
   if a:line > 0
     let existing = eclim#display#signs#GetExisting(a:name)
     let exists = len(filter(existing, "v:val['line'] == a:line"))
@@ -109,7 +109,7 @@ endfunction " }}}
 
 " CompareSigns(s1, s2) {{{
 " Used by ViewSigns to sort list of sign dictionaries.
-function! s:CompareSigns (s1, s2)
+function! s:CompareSigns(s1, s2)
   if a:s1.line == a:s2.line
     return 0
   endif
@@ -122,7 +122,7 @@ endfunction " }}}
 " ViewSigns(name) {{{
 " Open a window to view all placed signs with the given name in the current
 " buffer.
-function! eclim#display#signs#ViewSigns (name)
+function! eclim#display#signs#ViewSigns(name)
   let filename = expand('%:p')
   let signs = eclim#display#signs#GetExisting(a:name)
   call sort(signs, 's:CompareSigns')
@@ -141,8 +141,8 @@ function! eclim#display#signs#ViewSigns (name)
   augroup END
 endfunction " }}}
 
-" JumpToSign () {{{
-function! s:JumpToSign ()
+" JumpToSign() {{{
+function! s:JumpToSign()
   let winnr = bufwinnr(bufnr('^' . b:filename))
   if winnr != -1
     let line = substitute(getline('.'), '^\(\d\+\)|.*', '\1', '')
@@ -153,7 +153,7 @@ endfunction " }}}
 
 " GetDefined() {{{
 " Gets a list of defined sign names.
-function! eclim#display#signs#GetDefined ()
+function! eclim#display#signs#GetDefined()
   redir => list
   silent exec 'sign list'
   redir END
@@ -174,7 +174,7 @@ endfunction " }}}
 "   name: The sign name (erorr, warning, etc.)
 "
 " Optionally a sign name may be supplied to only retrieve signs of that name.
-function! eclim#display#signs#GetExisting (...)
+function! eclim#display#signs#GetExisting(...)
   let bufnr = bufnr('%')
 
   redir => signs
@@ -203,7 +203,7 @@ endfunction " }}}
 " HasExisting(...) {{{
 " Determines if there are an existing signs.
 " Optionally a sign name may be supplied to only test for signs of that name.
-function! eclim#display#signs#HasExisting (...)
+function! eclim#display#signs#HasExisting(...)
   let bufnr = bufnr('%')
 
   redir => results
@@ -232,7 +232,7 @@ endfunction " }}}
 " This function supports a severity level by examining the 'type' key of the
 " dictionaries in the location or quickfix list.  It supports 'i' (info), 'w'
 " (warning), and 'e' (error).
-function! eclim#display#signs#Update ()
+function! eclim#display#signs#Update()
   if !has("signs")
     return
   endif
@@ -302,7 +302,7 @@ endfunction " }}}
 " SetPlaceholder([only_if_necessary]) {{{
 " Set sign at line 1 to prevent sign column from collapsing, and subsiquent
 " screen redraw.
-function! eclim#display#signs#SetPlaceholder (...)
+function! eclim#display#signs#SetPlaceholder(...)
   if !has("signs")
     return
   endif
@@ -324,7 +324,7 @@ function! eclim#display#signs#SetPlaceholder (...)
 endfunction " }}}
 
 " RemovePlaceholder() {{{
-function! eclim#display#signs#RemovePlaceholder ()
+function! eclim#display#signs#RemovePlaceholder()
   let existing = eclim#display#signs#GetExisting('placeholder')
   for exists in existing
     call eclim#display#signs#Unplace(exists.id)

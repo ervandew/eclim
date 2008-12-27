@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public abstract class AbstractEclimApplication
    * {@inheritDoc}
    * @see IApplication#start(IApplicationContext)
    */
-  public Object start (IApplicationContext _context)
+  public Object start(IApplicationContext context)
     throws Exception
   {
     logger.info("Starting eclim...");
@@ -98,7 +98,7 @@ public abstract class AbstractEclimApplication
    * {@inheritDoc}
    * @see IApplication#stop()
    */
-  public void stop ()
+  public void stop()
   {
     try{
       shutdown();
@@ -114,7 +114,7 @@ public abstract class AbstractEclimApplication
    * Invoked during application startup, allowing subclasses to perform any
    * necessary startup initialization.
    */
-  public void onStart ()
+  public void onStart()
     throws Exception
   {
   }
@@ -123,7 +123,7 @@ public abstract class AbstractEclimApplication
    * Invoked during application shutdown, allowing subclasses to perform any
    * necessary shutdown cleanup.
    */
-  public void onStop ()
+  public void onStop()
     throws Exception
   {
   }
@@ -133,14 +133,14 @@ public abstract class AbstractEclimApplication
    *
    * @return true if running in "headed" environment.
    */
-  public abstract boolean isHeaded ();
+  public abstract boolean isHeaded();
 
   /**
    * Gets the running instance of this application.
    *
    * @return The AbstractEclimApplication instance.
    */
-  public static AbstractEclimApplication getInstance ()
+  public static AbstractEclimApplication getInstance()
   {
     return instance;
   }
@@ -148,7 +148,7 @@ public abstract class AbstractEclimApplication
   /**
    * Shuts down the eclim server.
    */
-  private synchronized void shutdown ()
+  private synchronized void shutdown()
     throws Exception
   {
     if(!shuttingDown){
@@ -170,7 +170,7 @@ public abstract class AbstractEclimApplication
   /**
    * Loads any eclim plugins found.
    */
-  private void loadPlugins ()
+  private void loadPlugins()
   {
     logger.info("Loading eclim plugins...");
     String pluginsDir =
@@ -178,11 +178,11 @@ public abstract class AbstractEclimApplication
 
     File root = new File(pluginsDir);
     String[] plugins = root.list(new FilenameFilter(){
-      public boolean accept (File _dir, String _name){
-        if(_name.startsWith("org.eclim.") &&
-          _name.indexOf("installer") == -1 &&
-          _name.indexOf("vimplugin") == -1)
-        {
+      public boolean accept(File dir, String name)
+      {
+        if(name.startsWith("org.eclim.") &&
+          name.indexOf("installer") == -1 &&
+          name.indexOf("vimplugin") == -1){
           return true;
         }
         return false;
@@ -237,7 +237,7 @@ public abstract class AbstractEclimApplication
     /**
      * Runs the shutdown hook.
      */
-    public void run ()
+    public void run()
     {
       try{
         shutdown();

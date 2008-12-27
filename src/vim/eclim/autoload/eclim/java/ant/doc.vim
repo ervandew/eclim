@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ let s:element_docs = {
 " FindDoc(element) {{{
 " Open the url to the documentation for the supplied element name or if not
 " provided, the element name under the cursor.
-function! eclim#java#ant#doc#FindDoc (element)
+function! eclim#java#ant#doc#FindDoc(element)
   let element = a:element
   if element == ''
     let col = eclim#util#GetCurrentElementColumn()

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,13 +59,13 @@ public class SearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<Dependency> _result)
+  public String filter(CommandLine commandLine, List<Dependency> results)
   {
     List<Dependency> dependencies = null;
     try{
-      String project = _commandLine.getValue(Options.PROJECT_OPTION);
-      String file = _commandLine.getValue(Options.FILE_OPTION);
-      String type = _commandLine.getValue(Options.TYPE_OPTION);
+      String project = commandLine.getValue(Options.PROJECT_OPTION);
+      String file = commandLine.getValue(Options.FILE_OPTION);
+      String type = commandLine.getValue(Options.TYPE_OPTION);
       dependencies = getDependencies(project, file, type);
     }catch(Exception e){
       logger.warn("Unable to get dependencies.", e);
@@ -74,7 +74,7 @@ public class SearchFilter
 
     StringBuffer buffer = new StringBuffer();
     String groupId = null;
-    for (Dependency dependency : _result){
+    for (Dependency dependency : results){
       if(!dependency.getGroupId().equals(groupId)){
         if(buffer.length() != 0){
           buffer.append('\n');
@@ -100,19 +100,19 @@ public class SearchFilter
   /**
    * Get the project file's current dependencies.
    *
-   * @param _project The eclipse project name.
-   * @param _file The project file.
-   * @param _type The file type (ivy, maven, mvn).
+   * @param project The eclipse project name.
+   * @param filename The project file.
+   * @param type The file type (ivy, maven, mvn).
    * @return List of dependencies.
    */
-  private List<Dependency> getDependencies (
-      String _project, String _file, String _type)
+  private List<Dependency> getDependencies(
+      String project, String filename, String type)
     throws Exception
   {
     ArrayList<Dependency> list = new ArrayList<Dependency>();
     InputStream in = null;
     try{
-      String file = FileUtils.concat(ProjectUtils.getPath(_project), _file);
+      String file = FileUtils.concat(ProjectUtils.getPath(project), filename);
       Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         .parse(in = new FileInputStream(file)).getDocumentElement();
       NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))
@@ -122,7 +122,7 @@ public class SearchFilter
         Element element = (Element)nodes.item(ii);
 
         Dependency dependency = new Dependency();
-        if(IVY.equals(_type)){
+        if(IVY.equals(type)){
           dependency.setGroupId(element.getAttribute(Dependency.ORG));
           dependency.setArtifactId(element.getAttribute(Dependency.NAME));
           dependency.setVersion(element.getAttribute(Dependency.REV));

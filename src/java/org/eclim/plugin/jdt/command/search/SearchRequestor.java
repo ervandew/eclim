@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ import org.eclim.plugin.jdt.util.IJavaElementComparator;
 
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.jdt.core.IJavaElement;
+
 import org.eclipse.jdt.core.search.SearchMatch;
 
 /**
@@ -44,11 +46,11 @@ public class SearchRequestor
   /**
    * {@inheritDoc}
    */
-  public void acceptSearchMatch (SearchMatch _match)
+  public void acceptSearchMatch(SearchMatch match)
     throws CoreException
   {
-    if(_match.getAccuracy() == SearchMatch.A_ACCURATE){
-      matches.add(_match);
+    if(match.getAccuracy() == SearchMatch.A_ACCURATE){
+      matches.add(match);
     }
   }
 
@@ -57,7 +59,7 @@ public class SearchRequestor
    *
    * @return List of SearchMatch.
    */
-  public List<SearchMatch> getMatches ()
+  public List<SearchMatch> getMatches()
   {
     Collections.sort(matches, MATCH_COMPARATOR);
     return matches;
@@ -75,17 +77,18 @@ public class SearchRequestor
     /**
      * {@inheritDoc}
      */
-    public int compare (SearchMatch _o1, SearchMatch _o2)
+    public int compare(SearchMatch o1, SearchMatch o2)
     {
-      return ELEMENT_COMPATATOR.compare(_o1.getElement(), _o2.getElement());
+      return ELEMENT_COMPATATOR.compare(
+          (IJavaElement)o1.getElement(), (IJavaElement)o2.getElement());
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean equals (Object _obj)
+    public boolean equals(Object obj)
     {
-      if(_obj instanceof SearchMatchComparator){
+      if(obj instanceof SearchMatchComparator){
         return true;
       }
       return false;

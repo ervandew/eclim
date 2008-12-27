@@ -7,7 +7,7 @@
 <% } %>
 <% } %>
  */
-public ${type} (${params})
+public ${type}(${params})
 {
 <% for (field in fields) { %>
 	this.${field} = ${field};

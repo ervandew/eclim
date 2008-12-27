@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class CodeCompleteCommandTest
     "src/org/eclim/test/complete/TestCompletion.java";
 
   @Test
-  public void completion1 ()
+  public void completion1()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -58,7 +58,7 @@ public class CodeCompleteCommandTest
   }
 
   @Test
-  public void completion2 ()
+  public void completion2()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));

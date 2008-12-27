@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,18 +34,18 @@ public class CodeCorrectResult
   /**
    * Default constructor.
    *
-   * @param _index The index of this result in relation to other proposals.
-   * @param _problem The associated problem.
-   * @param _description The description of the proposed correction.
-   * @param _preview A preview of the code after applying the correction.
+   * @param index The index of this result in relation to other proposals.
+   * @param problem The associated problem.
+   * @param description The description of the proposed correction.
+   * @param preview A preview of the code after applying the correction.
    */
   public CodeCorrectResult (
-      int _index, IProblem _problem, String _description, String _preview)
+      int index, IProblem problem, String description, String preview)
   {
-    index = _index;
-    problem = _problem;
-    description = _description;
-    preview = _preview;
+    this.index = index;
+    this.problem = problem;
+    this.description = description;
+    this.preview = preview;
   }
 
   /**
@@ -53,7 +53,7 @@ public class CodeCorrectResult
    *
    * @return The index.
    */
-  public int getIndex ()
+  public int getIndex()
   {
     return index;
   }
@@ -63,7 +63,7 @@ public class CodeCorrectResult
    *
    * @return The problem.
    */
-  public IProblem getProblem ()
+  public IProblem getProblem()
   {
     return problem;
   }
@@ -73,7 +73,7 @@ public class CodeCorrectResult
    *
    * @return The description.
    */
-  public String getDescription ()
+  public String getDescription()
   {
     return description;
   }
@@ -84,7 +84,7 @@ public class CodeCorrectResult
    *
    * @return A preview.
    */
-  public String getPreview ()
+  public String getPreview()
   {
     return preview;
   }

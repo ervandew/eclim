@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,27 +47,27 @@ public class FileOffsets
   /**
    * Reads the supplied file and compiles a list of offsets.
    *
-   * @param _filename The file to compile a list of offsets for.
+   * @param filename The file to compile a list of offsets for.
    * @return The FileOffsets instance.
    */
-  public static FileOffsets compile (String _filename)
+  public static FileOffsets compile(String filename)
   {
     FileOffsets offsets = new FileOffsets();
-    offsets.compileOffsets(_filename);
+    offsets.compileOffsets(filename);
     return offsets;
   }
 
   /**
    * Reads the supplied file and compiles a list of offsets.
    *
-   * @param _filename The file to compile a list of offsets for.
+   * @param filename The file to compile a list of offsets for.
    */
-  private void compileOffsets (String _filename)
+  private void compileOffsets(String filename)
   {
     BufferedReader reader = null;
     try{
       FileSystemManager fsManager = VFS.getManager();
-      FileObject file = fsManager.resolveFile(_filename);
+      FileObject file = fsManager.resolveFile(filename);
 
       // disable caching (the cache seems to become invalid at some point
       // causing vfs errors).
@@ -75,7 +75,7 @@ public class FileOffsets
 
       if(!file.exists()){
         throw new IllegalArgumentException(
-            Services.getMessage("file.not.found", _filename));
+            Services.getMessage("file.not.found", filename));
       }
       reader = new BufferedReader(
           new InputStreamReader(file.getContent().getInputStream()));
@@ -110,30 +110,30 @@ public class FileOffsets
    * Converts the supplied offset into an int array where the first element is
    * the line number and the second is the column number.
    *
-   * @param _offset The offset.
+   * @param offset The offset.
    * @return The line and column int array.
    */
-  public int[] offsetToLineColumn (int _offset)
+  public int[] offsetToLineColumn(int offset)
   {
-    if(_offset <= 0){
-      return new int[]{1,1};
+    if(offset <= 0){
+      return new int[]{1, 1};
     }
 
     int bot = -1;
     int top = offsets.length - 1;
     while (top - bot > 1) {
       int mid = (top + bot) / 2;
-      if (offsets[mid].intValue() <  _offset){
+      if (offsets[mid].intValue() <  offset){
         bot = mid;
       }else{
         top = mid;
       }
     }
-    if(offsets[top].intValue() > _offset){
+    if(offsets[top].intValue() > offset){
       top--;
     }
     int line = top + 1;
-    int column = 1 + _offset - offsets[top].intValue();
+    int column = 1 + offset - offsets[top].intValue();
     String value = multiByteLines[line];
     if (value != null){
       column = value.substring(0, column).getBytes().length;
@@ -144,22 +144,22 @@ public class FileOffsets
   /**
    * Gets the offset where the supplied line starts.
    *
-   * @param _line The line.
+   * @param line The line.
    * @return The starting offset.
    */
-  public int getLineStart (int _line)
+  public int getLineStart(int line)
   {
-    return offsets[_line - 1].intValue();
+    return offsets[line - 1].intValue();
   }
 
   /**
    * Gets the offset where the supplied line ends.
    *
-   * @param _line The line.
+   * @param line The line.
    * @return The ending offset.
    */
-  public int getLineEnd (int _line)
+  public int getLineEnd(int line)
   {
-    return offsets[_line].intValue() - 1;
+    return offsets[line].intValue() - 1;
   }
 }

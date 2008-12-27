@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ let s:entry_text_with{'testng'} = ''
 
 " ResolveQuickfixResults(framework) {{{
 " Invoked after a :make to resolve any junit results in the quickfix entries.
-function! eclim#java#test#ResolveQuickfixResults (framework)
+function! eclim#java#test#ResolveQuickfixResults(framework)
   let entries = getqflist()
   let newentries = []
   for entry in entries
@@ -74,7 +74,7 @@ endfunction " }}}
 
 " GetTestSrcDir(type) {{{
 " Where type is 'junit', etc.
-function eclim#java#test#GetTestSrcDir (type)
+function eclim#java#test#GetTestSrcDir(type)
   let setting = "org.eclim.java." . a:type . ".src_dir"
   let path = eclim#project#util#GetProjectSetting(setting)
   if type(path) == 0
@@ -89,7 +89,7 @@ endfunction " }}}
 
 " CommandCompleteTest(type, argLead, cmdLine, cursorPos) {{{
 " Custom command completion for test cases.
-function eclim#java#test#CommandCompleteTest (type, argLead, cmdLine, cursorPos)
+function eclim#java#test#CommandCompleteTest(type, argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 

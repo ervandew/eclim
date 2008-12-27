@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public class PingCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
     if(version == null){
@@ -68,7 +68,7 @@ public class PingCommand
     return version;
   }
 
-  private String getVersion ()
+  private String getVersion()
   {
     // I can't find a way to get a definitive eclipse version number, so try
     // comparing the version numbers of some bundles and take the highest one as
@@ -85,7 +85,7 @@ public class PingCommand
     return versions.get(versions.size() - 1);
   }
 
-  private String getVersion (String bundleName)
+  private String getVersion(String bundleName)
   {
     Bundle bundle = Platform.getBundle(bundleName);
     if(bundle != null){

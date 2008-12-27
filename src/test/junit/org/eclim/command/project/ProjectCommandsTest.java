@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class ProjectCommandsTest
     Pattern.compile(TEST_PROJECT + "\\s+- open");
 
   @Test
-  public void createProject ()
+  public void createProject()
   {
     assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
 
@@ -52,7 +52,7 @@ public class ProjectCommandsTest
   }
 
   @Test
-  public void closeProject ()
+  public void closeProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
@@ -64,7 +64,7 @@ public class ProjectCommandsTest
   }
 
   @Test
-  public void openProject ()
+  public void openProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
@@ -76,7 +76,7 @@ public class ProjectCommandsTest
   }
 
   @Test
-  public void deleteProject ()
+  public void deleteProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
@@ -92,7 +92,7 @@ public class ProjectCommandsTest
    *
    * @return true if the project is open, false otherwise.
    */
-  private boolean projectOpen ()
+  private boolean projectOpen()
   {
     String list = Eclim.execute(new String[]{"project_list"});
 

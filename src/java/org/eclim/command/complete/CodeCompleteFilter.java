@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,19 +38,19 @@ public class CodeCompleteFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<CodeCompleteResult> _result)
+  public String filter(CommandLine commandLine, List<CodeCompleteResult> results)
   {
     String delimeter = null;
     try{
-      delimeter = _commandLine.hasOption(Options.DELIMETER_OPTION) ?
-        _commandLine.getValue(Options.DELIMETER_OPTION) : DELIMETER;
+      delimeter = commandLine.hasOption(Options.DELIMETER_OPTION) ?
+        commandLine.getValue(Options.DELIMETER_OPTION) : DELIMETER;
     }catch(Exception e){
       throw new RuntimeException(e);
     }
 
     StringBuffer buffer = new StringBuffer();
-    if(_result != null){
-      for(CodeCompleteResult result : _result){
+    if(results != null){
+      for(CodeCompleteResult result : results){
         if(buffer.length() > 0){
           buffer.append('\n');
         }

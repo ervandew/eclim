@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ public class SettingsFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<Option> _result)
+  public String filter(CommandLine commandLine, List<Option> results)
   {
-    if(_result.size() > 0){
-      return printOptions(_result);
+    if(results.size() > 0){
+      return printOptions(results);
     }
     return StringUtils.EMPTY;
   }
@@ -54,18 +54,18 @@ public class SettingsFilter
   /**
    * Print supplied list of options.
    *
-   * @param _options The option list.
+   * @param options The option list.
    * @return The result.
    */
-  public String printOptions (List<Option> _options)
+  public String printOptions(List<Option> options)
   {
     StringBuffer buffer = new StringBuffer();
 
     // sort the list
-    Collections.sort(_options);
-    String lastPath = ((Option)_options.get(0)).getPath();
+    Collections.sort(options);
+    String lastPath = ((Option)options.get(0)).getPath();
     buffer.append(comment(lastPath, StringUtils.EMPTY)).append(" {");
-    for(Option option : _options){
+    for(Option option : options){
       OptionInstance instance = (OptionInstance)option;
       if(!option.getPath().equals(lastPath)){
         lastPath = option.getPath();
@@ -90,7 +90,7 @@ public class SettingsFilter
    * @param indent The indentation.
    * @return The comment.
    */
-  private String comment (String text, String indent)
+  private String comment(String text, String indent)
   {
     return new StringBuffer()
       .append(indent)

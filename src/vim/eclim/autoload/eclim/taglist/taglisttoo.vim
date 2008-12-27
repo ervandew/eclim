@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -350,7 +350,7 @@ function! eclim#taglist#taglisttoo#AutoOpen()
 endfunction " }}}
 
 " Taglist() {{{
-function! eclim#taglist#taglisttoo#Taglist ()
+function! eclim#taglist#taglisttoo#Taglist()
   if !exists('g:Tlist_Ctags_Cmd')
     call eclim#util#EchoError('Unable to find a version of ctags installed.')
     return
@@ -379,7 +379,7 @@ function! eclim#taglist#taglisttoo#Taglist ()
 endfunction " }}}
 
 " s:StartAutocmds() {{{
-function! s:StartAutocmds ()
+function! s:StartAutocmds()
   augroup taglisttoo_file
     autocmd!
     autocmd BufEnter,BufWritePost *
@@ -390,20 +390,20 @@ function! s:StartAutocmds ()
 endfunction " }}}
 
 " s:StopAutocmds() {{{
-function! s:StopAutocmds ()
+function! s:StopAutocmds()
   augroup taglisttoo_file
     autocmd!
   augroup END
 endfunction " }}}
 
 " s:CloseTaglist() {{{
-function! s:CloseTaglist ()
+function! s:CloseTaglist()
   close
   call s:Cleanup()
 endfunction " }}}
 
 " s:Cleanup() {{{
-function! s:Cleanup ()
+function! s:Cleanup()
   augroup taglisttoo_file
     autocmd!
   augroup END
@@ -414,7 +414,7 @@ function! s:Cleanup ()
 endfunction " }}}
 
 " s:ProcessTags() {{{
-function! s:ProcessTags ()
+function! s:ProcessTags()
   let file = expand('%')
   if file =~ s:taglisttoo_ignore || file == ''
     return
@@ -488,7 +488,7 @@ endfunction " }}}
 "             For content lines that do no map to a tag, use -1 as the value.
 " result[1] - A list of lines to be inserted as content into the taglist
 "             window.
-function! s:FormatDefault (types, tags)
+function! s:FormatDefault(types, tags)
   let lines = []
   let content = []
 
@@ -504,7 +504,7 @@ function! s:FormatDefault (types, tags)
 endfunction " }}}
 
 " s:JumpToTag() {{{
-function! s:JumpToTag ()
+function! s:JumpToTag()
   let index = b:taglisttoo_content[0][line('.') - 1]
   if index == -1
     return
@@ -563,7 +563,7 @@ function! s:JumpToTag ()
 endfunction " }}}
 
 " s:Window(types, tags, content) {{{
-function! s:Window (types, tags, content)
+function! s:Window(types, tags, content)
   let filename = expand('%:t')
   let file_bufnr = bufnr('%')
 
@@ -609,7 +609,7 @@ function! s:Window (types, tags, content)
 endfunction " }}}
 
 " s:ShowCurrentTag() {{{
-function! s:ShowCurrentTag ()
+function! s:ShowCurrentTag()
   if s:FileSupported(expand('%:p'), &ft) && bufwinnr(g:TagList_title) != -1
     let tags = getbufvar(g:TagList_title, 'taglisttoo_tags')
     let content = getbufvar(g:TagList_title, 'taglisttoo_content')
@@ -680,7 +680,7 @@ function! s:FileSupported(filename, ftype)
 endfunction " }}}
 
 " s:GetTagLineNumber(tag) {{{
-function! s:GetTagLineNumber (tag)
+function! s:GetTagLineNumber(tag)
   if len(a:tag) > 4
     return substitute(a:tag[4], '.*:\(.*\)', '\1', '')
   endif

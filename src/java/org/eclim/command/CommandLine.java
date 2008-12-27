@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package org.eclim.command;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
@@ -31,50 +30,50 @@ import org.apache.commons.lang.StringUtils;
  */
 public class CommandLine
 {
-  private HashMap<String,String> options = new HashMap<String,String>();
+  private HashMap<String, String> options = new HashMap<String, String>();
   private String[] args;
   private String[] unrecognized;
 
   /**
    * Constructs a new instance from the supplied command line.
    *
-   * @param _commandLine The command line.
-   * @param _args The orginal command line args.
+   * @param commandLine The command line.
+   * @param args The orginal command line args.
    */
   public CommandLine (
-      org.apache.commons.cli.CommandLine _commandLine, String[] _args)
+      org.apache.commons.cli.CommandLine commandLine, String[] args)
   {
-    args = _args;
-    Option[] options = _commandLine.getOptions();
+    this.args = args;
+    Option[] options = commandLine.getOptions();
     for (int ii = 0; ii < options.length; ii++){
-      String value = _commandLine.getOptionValue(options[ii].getOpt());
+      String value = commandLine.getOptionValue(options[ii].getOpt());
       this.options.put(options[ii].getOpt(), value);
     }
-    unrecognized = _commandLine.getArgs();
+    unrecognized = commandLine.getArgs();
   }
 
   /**
    * Test to see if a command line option what supplied.
    *
-   * @param _name The name of theo option to test for.
+   * @param name The name of theo option to test for.
    *
    * @return true if present, false otherwise.
    */
-  public boolean hasOption (String _name)
+  public boolean hasOption(String name)
   {
-    return options.containsKey(_name);
+    return options.containsKey(name);
   }
 
   /**
    * Get the value of an arg supplied with the command line option.
    *
-   * @param _name The name of the option to get the arg for.
+   * @param name The name of the option to get the arg for.
    * @return The argument supplied to the option.
    */
-  public String getValue (String _name)
+  public String getValue(String name)
     throws Exception
   {
-    String value = (String)options.get(_name);
+    String value = (String)options.get(name);
     // decoded special characters encoded by eclim#ExecuteEclim
     value = StringUtils.replace(value, "%2A", "*");
     value = StringUtils.replace(value, "%24", "$");
@@ -84,13 +83,13 @@ public class CommandLine
   /**
    * Gets a command line argument as an int.
    *
-   * @param _name The name of the option.
+   * @param name The name of the option.
    * @return The option as an int value, or -1 if option not supplied.
    */
-  public int getIntValue (String _name)
+  public int getIntValue(String name)
     throws Exception
   {
-    String arg = getValue(_name);
+    String arg = getValue(name);
     return arg != null ? Integer.parseInt(arg) : -1;
   }
 
@@ -99,7 +98,7 @@ public class CommandLine
    *
    * @return Array of unrecognized args, or null if none.
    */
-  public String[] getUnrecognizedArgs ()
+  public String[] getUnrecognizedArgs()
   {
     return unrecognized;
   }
@@ -109,7 +108,7 @@ public class CommandLine
    *
    * @return The original array of arguments.
    */
-  public String[] getArgs ()
+  public String[] getArgs()
   {
     return args;
   }
@@ -117,11 +116,11 @@ public class CommandLine
   /**
    * Adds another option to this command line.
    *
-   * @param _option The option.
-   * @param _value The option value.
+   * @param option The option.
+   * @param value The option value.
    */
-  public void addOption (String _option, String _value)
+  public void addOption(String option, String value)
   {
-    options.put(_option, _value);
+    options.put(option, value);
   }
 }

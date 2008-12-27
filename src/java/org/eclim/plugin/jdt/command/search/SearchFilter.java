@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,12 @@ public class SearchFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<SearchResult> _result)
+  public String filter(CommandLine commandLine, List<SearchResult> results)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      if(_result != null){
-        for(SearchResult result : _result){
+      if(results != null){
+        for(SearchResult result : results){
           String lineColumn = VimUtils.DEFAULT_LINE_COL;
           if(result.getFilename().toLowerCase().endsWith(".java")){
             lineColumn = VimUtils.translateLineColumn(result);

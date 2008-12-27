@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ hi Correction gui=underline,bold term=underline,bold cterm=underline,bold
 " }}}
 
 " Correct() {{{
-function! eclim#java#correct#Correct ()
+function! eclim#java#correct#Correct()
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -93,7 +93,7 @@ function! eclim#java#correct#Correct ()
 endfunction " }}}
 
 " CorrectApply() {{{
-function! eclim#java#correct#CorrectApply ()
+function! eclim#java#correct#CorrectApply()
   let line = getline('.')
   if line =~ '^[0-9]\+\.[0-9]\+:'
     let winnr = bufwinnr('%')

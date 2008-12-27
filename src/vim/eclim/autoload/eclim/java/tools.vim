@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@
 " Jps() {{{
 " Function to execute jps and push the results into a new window where the
 " user can perform additional commands.
-function eclim#java#tools#Jps ()
+function eclim#java#tools#Jps()
   call eclim#util#Echo('Executing...')
 
   let content = []
@@ -113,7 +113,7 @@ endfunction " }}}
 " name - The classname or jar file the process was started from.
 " args_main - Any arguments passed to the main method.
 " args_vm - Any arguments passed to the vm.
-function eclim#java#tools#GetJavaProcesses ()
+function eclim#java#tools#GetJavaProcesses()
   let java_processes = []
   let result = eclim#util#System('jps -vV')
   if v:shell_error
@@ -155,7 +155,7 @@ endfunction " }}}
 " GetJavaProcessInfo(id) {{{
 " Gets content returned by jinfo for the given process id as a list.
 " Returns empty list if jinfo not supported on this platform.
-function eclim#java#tools#GetJavaProcessInfo (id)
+function eclim#java#tools#GetJavaProcessInfo(id)
   if executable('jinfo')
     let output = split(eclim#util#System('jinfo ' . a:id), '\n')
     if v:shell_error
@@ -179,7 +179,7 @@ endfunction " }}}
 " Gets a list of lists where each entry in the outer list is a list of thread
 " stacks.
 " Returns empty list if jstack not supported on this platform.
-function eclim#java#tools#GetJavaProcessStacks (id)
+function eclim#java#tools#GetJavaProcessStacks(id)
   if executable('jstack')
     let output = split(eclim#util#System('jstack ' . a:id), '\n')
 
@@ -212,7 +212,7 @@ endfunction " }}}
 " GetJavaProcessMap(id) {{{
 " Gets content returned by jmap for the given process id as a list.
 " Returns empty list if jmap not supported on this platform.
-function eclim#java#tools#GetJavaProcessMap (id)
+function eclim#java#tools#GetJavaProcessMap(id)
   if executable('jmap')
     let output = split(eclim#util#System('jmap ' . a:id), '\n')
 
@@ -235,7 +235,7 @@ endfunction " }}}
 
 " ViewAdditionalInfo() {{{
 " Invoked by mapping on jps window.
-function s:ViewAdditionalInfo ()
+function s:ViewAdditionalInfo()
   let line = getline('.')
   if line =~ '^\s*' . s:supported_command . '$'
     " get the process id.
@@ -254,7 +254,7 @@ endfunction " }}}
 
 " ViewInfo(id) {{{
 " Open a window with extended info for the process with the given id.
-function s:ViewInfo (id)
+function s:ViewInfo(id)
   call eclim#util#Echo('Executing...')
 
   call eclim#util#TempWindow('Java_Process_Info_' . a:id,
@@ -266,7 +266,7 @@ endfunction " }}}
 
 " ViewStacks(id) {{{
 " Open a window containing thread stacks for the process with the given id.
-function s:ViewStacks (id)
+function s:ViewStacks(id)
   call eclim#util#Echo('Executing...')
 
   let content = []
@@ -288,7 +288,7 @@ endfunction " }}}
 
 " ViewMap(id) {{{
 " Open a window containing memory map for the process with the supplied id.
-function s:ViewMap (id)
+function s:ViewMap(id)
   call eclim#util#Echo('Executing...')
 
   call eclim#util#TempWindow('Java_Process_Map_' . a:id,

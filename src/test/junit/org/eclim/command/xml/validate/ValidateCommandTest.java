@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class ValidateCommandTest
   private static final String TEST_FILE = "xml/test_dtd.xml";
 
   @Test
-  public void execute ()
+  public void execute()
   {
     String file = TEST_FILE;
     String project = Eclim.TEST_PROJECT;

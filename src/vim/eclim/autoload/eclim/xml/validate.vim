@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ let s:command_validate = '-command xml_validate -p "<project>" -f "<file>"'
 
 " Validate(file, on_save, ...) {{{
 " Validate the supplied file.
-function! eclim#xml#validate#Validate (file, on_save, ...)
+function! eclim#xml#validate#Validate(file, on_save, ...)
   if a:on_save && (!g:EclimXmlValidate || eclim#util#WillWrittenBufferClose())
     return
   endif

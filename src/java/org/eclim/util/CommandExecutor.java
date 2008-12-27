@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class CommandExecutor
    * @return The CommandExecutor instance containing the ending state of the
    * process.
    */
-  public static CommandExecutor execute (String[] cmd)
+  public static CommandExecutor execute(String[] cmd)
     throws Exception
   {
     return execute(cmd, -1);
@@ -63,7 +63,7 @@ public class CommandExecutor
    * @return The CommandExecutor instance containing the ending state of the
    * process.
    */
-  public static CommandExecutor execute (String[] cmd, long timeout)
+  public static CommandExecutor execute(String[] cmd, long timeout)
     throws Exception
   {
     CommandExecutor executor = new CommandExecutor(cmd);
@@ -83,7 +83,7 @@ public class CommandExecutor
   /**
    * Run the thread.
    */
-  public void run ()
+  public void run()
   {
     try{
       Runtime runtime = Runtime.getRuntime();
@@ -93,7 +93,8 @@ public class CommandExecutor
       final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
       Thread outThread = new Thread(){
-        public void run (){
+        public void run()
+        {
           try{
             IOUtils.copy(process.getInputStream(), out);
           }catch(IOException ioe){
@@ -104,7 +105,8 @@ public class CommandExecutor
       outThread.start();
 
       Thread errThread = new Thread(){
-        public void run (){
+        public void run()
+        {
           try{
             IOUtils.copy(process.getErrorStream(), err);
           }catch(IOException ioe){
@@ -130,7 +132,7 @@ public class CommandExecutor
   /**
    * Destroy this process.
    */
-  public void destroy ()
+  public void destroy()
   {
     if(process != null){
       process.destroy();
@@ -142,7 +144,7 @@ public class CommandExecutor
    *
    * @return The command result.
    */
-  public String getResult ()
+  public String getResult()
   {
     return result;
   }
@@ -152,7 +154,7 @@ public class CommandExecutor
    *
    * @return The return code.
    */
-  public int getReturnCode ()
+  public int getReturnCode()
   {
     return returnCode;
   }
@@ -162,7 +164,7 @@ public class CommandExecutor
    *
    * @return The possibly empty error message.
    */
-  public String getErrorMessage ()
+  public String getErrorMessage()
   {
     return error;
   }

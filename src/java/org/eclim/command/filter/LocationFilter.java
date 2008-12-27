@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,12 +39,12 @@ public class LocationFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<Location> _result)
+  public String filter(CommandLine commandLine, List<Location> results)
   {
     try{
       StringBuffer buffer = new StringBuffer();
-      if(_result != null){
-        for(Location result : _result){
+      if(results != null){
+        for(Location result : results){
           String lineColumn = VimUtils.translateLineColumn(result);
 
           if(buffer.length() > 0){

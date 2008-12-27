@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ if !exists(":VcsWebDiff")
     \ VcsWebDiff :call eclim#vcs#web#VcsWebDiff(<q-args>)
 endif
 
-function s:CheckWindow ()
+function s:CheckWindow()
   return !exists('b:vcs_props')
 endfunction
 

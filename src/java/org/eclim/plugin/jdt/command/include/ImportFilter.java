@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,11 +39,11 @@ public class ImportFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<ImportResult> _result)
+  public String filter(CommandLine commandLine, List<ImportResult> results)
   {
-    if(_result != null){
-      ArrayList<String> elements = new ArrayList<String>(_result.size());
-      for(ImportResult result : _result){
+    if(results != null){
+      ArrayList<String> elements = new ArrayList<String>(results.size());
+      for(ImportResult result : results){
         elements.add(result.getElement());
       }
       Collections.sort(elements);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,11 +57,11 @@ public class Option
   /**
    * Sets this option's scope.
    *
-   * @param _scope The scope.
+   * @param scope The scope.
    */
-  /*public void setScope (int _scope)
+  /*public void setScope (int scope)
   {
-    scope = _scope;
+    this.scope = scope;
   }*/
 
   /**
@@ -69,7 +69,7 @@ public class Option
    *
    * @return The nature.
    */
-  public String getNature ()
+  public String getNature()
   {
     return this.nature;
   }
@@ -79,7 +79,7 @@ public class Option
    *
    * @param nature The nature.
    */
-  public void setNature (String nature)
+  public void setNature(String nature)
   {
     this.nature = nature;
   }
@@ -89,7 +89,7 @@ public class Option
    *
    * @return path as String.
    */
-  public String getPath ()
+  public String getPath()
   {
     return this.path;
   }
@@ -97,11 +97,11 @@ public class Option
   /**
    * Set path.
    *
-   * @param _path the value to set.
+   * @param path the value to set.
    */
-  public void setPath (String _path)
+  public void setPath(String path)
   {
-    this.path = _path;
+    this.path = path;
   }
 
   /**
@@ -109,7 +109,7 @@ public class Option
    *
    * @return name as String.
    */
-  public String getName ()
+  public String getName()
   {
     return this.name;
   }
@@ -117,11 +117,11 @@ public class Option
   /**
    * Set name.
    *
-   * @param _name the value to set.
+   * @param name the value to set.
    */
-  public void setName (String _name)
+  public void setName(String name)
   {
-    this.name = _name;
+    this.name = name;
   }
 
   /**
@@ -129,7 +129,7 @@ public class Option
    *
    * @return regex as String.
    */
-  public String getRegex ()
+  public String getRegex()
   {
     return this.regex;
   }
@@ -137,13 +137,13 @@ public class Option
   /**
    * Set regex.
    *
-   * @param _regex the value to set.
+   * @param regex the value to set.
    */
-  public void setRegex (String _regex)
+  public void setRegex(String regex)
   {
-    this.regex = _regex;
+    this.regex = regex;
     if(regex != null && regex.trim().length() > 0){
-      this.pattern = Pattern.compile(_regex);
+      this.pattern = Pattern.compile(regex);
     }
   }
 
@@ -152,7 +152,7 @@ public class Option
    *
    * @return pattern as Pattern.
    */
-  public Pattern getPattern ()
+  public Pattern getPattern()
   {
     return this.pattern;
   }
@@ -162,7 +162,7 @@ public class Option
    *
    * @return description as String.
    */
-  public String getDescription ()
+  public String getDescription()
   {
     return this.description;
   }
@@ -170,18 +170,18 @@ public class Option
   /**
    * Set description.
    *
-   * @param _description the value to set.
+   * @param description the value to set.
    */
-  public void setDescription (String _description)
+  public void setDescription(String description)
   {
-    this.description = Services.getMessage(_description);
+    this.description = Services.getMessage(description);
   }
 
   /**
    * {@inheritDoc}
    * @see Comparable#compareTo(Object)
    */
-  public int compareTo (Option obj)
+  public int compareTo(Option obj)
   {
     if(obj == this){
       return 0;
@@ -193,14 +193,12 @@ public class Option
     }
 
     if (this.getPath().startsWith(GENERAL) &&
-        !obj.getPath().startsWith(GENERAL))
-    {
+        !obj.getPath().startsWith(GENERAL)){
       return -1;
     }
 
     if (obj.getPath().startsWith(GENERAL) &&
-        !this.getPath().startsWith(GENERAL))
-    {
+        !this.getPath().startsWith(GENERAL)){
       return 1;
     }
 

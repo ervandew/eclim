@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,22 +32,22 @@ endif
 " Example url: http://localhost:1234?p=.git
 
 " GetLogUrl(root, file, args) {{{
-function eclim#vcs#impl#gitweb#GetLogUrl (root, file, args)
+function eclim#vcs#impl#gitweb#GetLogUrl(root, file, args)
   return a:root . ';a=history;f=' . a:file . ';h=' . a:args[0]
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
-function eclim#vcs#impl#gitweb#GetChangeSetUrl (root, file, args)
+function eclim#vcs#impl#gitweb#GetChangeSetUrl(root, file, args)
   return a:root . ';a=commitdiff;h=' . a:args[0]
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) Not supported by gitweb {{{
-"function eclim#vcs#impl#gitweb#GetAnnotateUrl (root, file, args)
+"function eclim#vcs#impl#gitweb#GetAnnotateUrl(root, file, args)
 "  "return a:root . '/annotate/' . a:args[0] . '/' . a:file
 "endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
-function eclim#vcs#impl#gitweb#GetDiffUrl (root, file, args)
+function eclim#vcs#impl#gitweb#GetDiffUrl(root, file, args)
   let r1 = a:args[0]
   let r2 = a:args[1]
   return a:root . ';a=blobdiff;f=' . a:file . ';hb=' . r1 . ';hpb=' . r2

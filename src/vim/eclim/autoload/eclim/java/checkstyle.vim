@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 " Checkstyle() {{{
 " Executes checkstyle on the current java source file.
-function! eclim#java#checkstyle#Checkstyle ()
+function! eclim#java#checkstyle#Checkstyle()
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let config =

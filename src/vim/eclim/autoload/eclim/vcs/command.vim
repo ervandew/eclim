@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ runtime autoload/eclim/vcs/util.vim
 " }}}
 
 " Annotate([revision]) {{{
-function! eclim#vcs#command#Annotate (...)
+function! eclim#vcs#command#Annotate(...)
   if exists('b:vcs_annotations')
     call s:AnnotateOff()
     return
@@ -86,7 +86,7 @@ endfunction " }}}
 
 " ChangeSet(path, revision) {{{
 " Opens a buffer with change set info for the supplied revision.
-function! eclim#vcs#command#ChangeSet (path, revision)
+function! eclim#vcs#command#ChangeSet(path, revision)
   if a:path == ''
     call eclim#util#EchoError('File is not under version control.')
     return
@@ -143,7 +143,7 @@ endfunction " }}}
 
 " Diff(path, revision) {{{
 " Diffs the current file against the current or supplied revision.
-function! eclim#vcs#command#Diff (path, revision)
+function! eclim#vcs#command#Diff(path, revision)
   if a:path == ''
     call eclim#util#EchoError('File is not under version control.')
     return
@@ -185,7 +185,7 @@ endfunction " }}}
 
 " Info() {{{
 " Retrieves and echos info on the current file.
-function eclim#vcs#command#Info ()
+function eclim#vcs#command#Info()
   let cwd = getcwd()
   let dir = expand('%:p:h')
   exec 'lcd ' . dir
@@ -201,7 +201,7 @@ endfunction " }}}
 
 " ListDir(path) {{{
 " Opens a buffer with a directory listing of versioned files.
-function! eclim#vcs#command#ListDir (path)
+function! eclim#vcs#command#ListDir(path)
   let cwd = getcwd()
   let path = substitute(a:path, '\', '/', 'g')
   if isdirectory(path)
@@ -231,7 +231,7 @@ endfunction " }}}
 
 " Log(path) {{{
 " Opens a buffer with the contents of the log for the supplied url.
-function! eclim#vcs#command#Log (path)
+function! eclim#vcs#command#Log(path)
   if a:path == ''
     call eclim#util#EchoError('File is not under version control.')
     return
@@ -296,7 +296,7 @@ endfunction " }}}
 
 " ViewFileRevision(path, revision, open_cmd) {{{
 " Open a read only view for the revision of the supplied version file.
-function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
+function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
   if a:path == ''
     call eclim#util#EchoError('File is not under version control.')
     return
@@ -381,7 +381,7 @@ function! eclim#vcs#command#ViewFileRevision (path, revision, open_cmd)
 endfunction " }}}
 
 " s:ApplyAnnotations(annotations) {{{
-function! s:ApplyAnnotations (annotations)
+function! s:ApplyAnnotations(annotations)
   let defined = eclim#display#signs#GetDefined()
   let index = 1
   for annotation in a:annotations
@@ -403,14 +403,14 @@ function! s:ApplyAnnotations (annotations)
 endfunction " }}}
 
 " s:AnnotateInfo() {{{
-function! s:AnnotateInfo ()
+function! s:AnnotateInfo()
   if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
     call eclim#util#WideMessage('echo', b:vcs_annotations[line('.') - 1])
   endif
 endfunction " }}}
 
 " s:AnnotateOff() {{{
-function! s:AnnotateOff ()
+function! s:AnnotateOff()
   if exists('b:vcs_annotations')
     let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
@@ -431,8 +431,8 @@ function! s:AnnotateOff ()
   augroup END
 endfunction " }}}
 
-" s:FollowLink () {{{
-function! s:FollowLink ()
+" s:FollowLink() {{{
+function! s:FollowLink()
   let line = getline('.')
   let link = substitute(
     \ getline('.'), '.*|\(.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
@@ -584,7 +584,7 @@ function! s:FollowLink ()
 endfunction " }}}
 
 " s:GetBreadcrumbPath() {{{
-function! s:GetBreadcrumbPath ()
+function! s:GetBreadcrumbPath()
   let path = substitute(getline(1), ' / ', '/', 'g')
   let path = substitute(path, '.\{-}/\(.*\)', '\1', '')
   let path = substitute(path, '^|', '', 'g')
@@ -593,7 +593,7 @@ function! s:GetBreadcrumbPath ()
 endfunction " }}}
 
 " s:HistoryPop() {{{
-function! s:HistoryPop ()
+function! s:HistoryPop()
   if exists('w:vcs_history') && len(w:vcs_history) > 1
     call remove(w:vcs_history, -1) " remove current page entry
     exec w:vcs_history[-1]
@@ -602,7 +602,7 @@ function! s:HistoryPop ()
 endfunction " }}}
 
 " s:HistoryPush(command) {{{
-function! s:HistoryPush (name, args)
+function! s:HistoryPush(name, args)
   if !exists('w:vcs_history')
     let w:vcs_history = []
   endif
@@ -621,13 +621,13 @@ function! s:HistoryPush (name, args)
 endfunction " }}}
 
 " s:LogMappings() {{{
-function! s:LogMappings ()
+function! s:LogMappings()
   nnoremap <silent> <buffer> <cr> :call <SID>FollowLink()<cr>
   nnoremap <silent> <buffer> <c-o> :call <SID>HistoryPop()<cr>
 endfunction " }}}
 
 " s:LogSyntax() {{{
-function! s:LogSyntax ()
+function! s:LogSyntax()
   set ft=vcs_log
   hi link VcsDivider Constant
   hi link VcsHeader Identifier
@@ -637,8 +637,8 @@ function! s:LogSyntax ()
   syntax match VcsHeader /^\(Revision\|Modified\|Diff\|Changed paths\):/
 endfunction " }}}
 
-" s:TempWindow (lines) {{{
-function! s:TempWindow (lines)
+" s:TempWindow(lines) {{{
+function! s:TempWindow(lines)
   let filename = expand('%:p')
   if expand('%') == '[vcs_log]' && exists('b:filename')
     let filename = b:filename

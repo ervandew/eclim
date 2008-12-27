@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class FindDefinitionCommandTest
   private static final String TEST_FILE = "php/search/find.php";
 
   @Test
-  public void findClass ()
+  public void findClass()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -52,7 +52,7 @@ public class FindDefinitionCommandTest
   }
 
   @Test
-  public void findMethod ()
+  public void findMethod()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -70,7 +70,7 @@ public class FindDefinitionCommandTest
   }
 
   @Test
-  public void findVariable ()
+  public void findVariable()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -87,7 +87,7 @@ public class FindDefinitionCommandTest
   }
 
   @Test
-  public void findConstant ()
+  public void findConstant()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
@@ -104,7 +104,7 @@ public class FindDefinitionCommandTest
   }
 
   @Test
-  public void findFunction ()
+  public void findFunction()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));

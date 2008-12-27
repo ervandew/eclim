@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,16 +46,16 @@ public class TaglistCommand
   private static final String CTAGS_OPTION = "c";
   private static final long MAX_FILE_SIZE = 500 * 1024;
 
-  private static final Map<String,TaglistScript> scriptCache =
-    new HashMap<String,TaglistScript>();
+  private static final Map<String, TaglistScript> scriptCache =
+    new HashMap<String, TaglistScript>();
 
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String[] args = _commandLine.getArgs();
+    String[] args = commandLine.getArgs();
     String file = args[args.length - 1];
 
     // check file first
@@ -67,7 +67,7 @@ public class TaglistCommand
       return "";
     }
 
-    String ctags = _commandLine.getValue(CTAGS_OPTION);
+    String ctags = commandLine.getValue(CTAGS_OPTION);
     String lang = null;
     boolean sort = false;
 
@@ -110,7 +110,7 @@ public class TaglistCommand
       if(sort){
         Arrays.sort(results);
       }
-      return TaglistFilter.instance.filter(_commandLine, results);
+      return TaglistFilter.instance.filter(commandLine, results);
     }
     return executeCtags(ctagArgs);
   }
@@ -118,13 +118,13 @@ public class TaglistCommand
   /**
    * Executes the ctags command and returns the result.
    *
-   * @param _args The arguments for the command.
+   * @param args The arguments for the command.
    * @return The result.
    */
-  private String executeCtags (String[] _args)
+  private String executeCtags(String[] args)
     throws Exception
   {
-    CommandExecutor process = CommandExecutor.execute(_args, 10000);
+    CommandExecutor process = CommandExecutor.execute(args, 10000);
     if(process.getReturnCode() == -1){
       process.destroy();
       throw new RuntimeException("ctags command timed out.");

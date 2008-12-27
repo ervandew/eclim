@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,11 +52,11 @@ public class DummyTextViewer
   public IDocument document;
   public ISelectionProvider selectionProvider;
 
-  public DummyTextViewer (IDocument _document, int _offset, int _length)
+  public DummyTextViewer (IDocument document, int offset, int length)
   {
-    document = _document;
+    this.document = document;
     selectionProvider = new DummySelectionProvider(
-        new TextSelection(_document, _offset, _length));
+        new TextSelection(document, offset, length));
   }
 
   public StyledText getTextWidget()
@@ -73,7 +73,8 @@ public class DummyTextViewer
   {
   }
 
-  public void setAutoIndentStrategy(IAutoIndentStrategy strategy, String contentType)
+  public void setAutoIndentStrategy(
+      IAutoIndentStrategy strategy, String contentType)
   {
   }
 

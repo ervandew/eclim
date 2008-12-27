@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getId()
    */
-  public String getId ()
+  public String getId()
   {
     return StringUtils.EMPTY;
   }
@@ -66,7 +66,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getPluginId()
    */
-  public String getPluginId ()
+  public String getPluginId()
   {
     return "org.eclim";
   }
@@ -75,7 +75,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getRegisteredName()
    */
-  public String getRegisteredName ()
+  public String getRegisteredName()
   {
     return StringUtils.EMPTY;
   }
@@ -84,7 +84,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#registerContextMenu(String,MenuManager,ISelectionProvider)
    */
-  public void registerContextMenu (String arg0, MenuManager arg1, ISelectionProvider arg2)
+  public void registerContextMenu(String arg0, MenuManager arg1, ISelectionProvider arg2)
   {
   }
 
@@ -92,7 +92,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#registerContextMenu(MenuManager,ISelectionProvider)
    */
-  public void registerContextMenu (MenuManager arg0, ISelectionProvider arg1)
+  public void registerContextMenu(MenuManager arg0, ISelectionProvider arg1)
   {
   }
 
@@ -100,7 +100,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getKeyBindingService()
    */
-  public IKeyBindingService getKeyBindingService ()
+  public IKeyBindingService getKeyBindingService()
   {
     return null;
   }
@@ -109,7 +109,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getPart()
    */
-  public IWorkbenchPart getPart ()
+  public IWorkbenchPart getPart()
   {
     return null;
   }
@@ -118,7 +118,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchSite#getPage()
    */
-  public IWorkbenchPage getPage ()
+  public IWorkbenchPage getPage()
   {
     return window.getActivePage();
   }
@@ -127,7 +127,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchSite#getSelectionProvider()
    */
-  public ISelectionProvider getSelectionProvider ()
+  public ISelectionProvider getSelectionProvider()
   {
     return selectionProvider;
   }
@@ -136,7 +136,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchSite#getShell()
    */
-  public Shell getShell ()
+  public Shell getShell()
   {
     return EclimPlugin.getShell();
   }
@@ -145,7 +145,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchSite#getWorkbenchWindow()
    */
-  public IWorkbenchWindow getWorkbenchWindow ()
+  public IWorkbenchWindow getWorkbenchWindow()
   {
     return window;
   }
@@ -154,7 +154,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchSite#setSelectionProvider(ISelectionProvider)
    */
-  public void setSelectionProvider (ISelectionProvider provider)
+  public void setSelectionProvider(ISelectionProvider provider)
   {
     this.selectionProvider = provider;
   }
@@ -163,7 +163,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(Class)
    */
-  public Object getAdapter (Class arg0)
+  public Object getAdapter(Class arg0)
   {
     return null;
   }
@@ -172,7 +172,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.services.IServiceLocator#getService(Class)
    */
-  public Object getService (Class arg0)
+  public Object getService(Class arg0)
   {
     return null;
   }
@@ -181,7 +181,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.services.IServiceLocator#hasService(Class)
    */
-  public boolean hasService (Class arg0)
+  public boolean hasService(Class arg0)
   {
     return false;
   }
@@ -190,7 +190,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#getActionBarContributor()
    */
-  public IEditorActionBarContributor getActionBarContributor ()
+  public IEditorActionBarContributor getActionBarContributor()
   {
     return null;
   }
@@ -199,7 +199,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#getActionBars()
    */
-  public IActionBars getActionBars ()
+  public IActionBars getActionBars()
   {
     return null;
   }
@@ -208,7 +208,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#registerContextMenu(MenuManager,ISelectionProvider,boolean)
    */
-  public void registerContextMenu (MenuManager arg0, ISelectionProvider arg1, boolean arg2)
+  public void registerContextMenu(MenuManager arg0, ISelectionProvider arg1, boolean arg2)
   {
   }
 
@@ -216,7 +216,7 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#registerContextMenu(String,MenuManager,ISelectionProvider,boolean)
    */
-  public void registerContextMenu (String arg0, MenuManager arg1, ISelectionProvider arg2, boolean arg3)
+  public void registerContextMenu(String arg0, MenuManager arg1, ISelectionProvider arg2, boolean arg3)
   {
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public class ImplMethod
    *
    * @return signature as String.
    */
-  public String getSignature ()
+  public String getSignature()
   {
     return this.signature;
   }
@@ -41,11 +41,11 @@ public class ImplMethod
   /**
    * Set signature.
    *
-   * @param _signature the value to set.
+   * @param signature the value to set.
    */
-  public void setSignature (String _signature)
+  public void setSignature(String signature)
   {
-    this.signature = _signature;
+    this.signature = signature;
   }
 
   /**
@@ -53,7 +53,7 @@ public class ImplMethod
    *
    * @return implemented as boolean.
    */
-  public boolean isImplemented ()
+  public boolean isImplemented()
   {
     return this.implemented;
   }
@@ -61,10 +61,10 @@ public class ImplMethod
   /**
    * Set implemented.
    *
-   * @param _implemented the value to set.
+   * @param implemented the value to set.
    */
-  public void setImplemented (boolean _implemented)
+  public void setImplemented(boolean implemented)
   {
-    this.implemented = _implemented;
+    this.implemented = implemented;
   }
 }

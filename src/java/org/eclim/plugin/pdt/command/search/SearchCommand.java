@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,22 +82,22 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute (CommandLine _commandLine)
+  public String execute(CommandLine commandLine)
     throws Exception
   {
-    String projectName = _commandLine.getValue(Options.NAME_OPTION);
-    String file = _commandLine.getValue(Options.FILE_OPTION);
-    String offset = _commandLine.getValue(Options.OFFSET_OPTION);
-    String length = _commandLine.getValue(Options.LENGTH_OPTION);
-    String pattern = _commandLine.getValue(Options.PATTERN_OPTION);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    String offset = commandLine.getValue(Options.OFFSET_OPTION);
+    String length = commandLine.getValue(Options.LENGTH_OPTION);
+    String pattern = commandLine.getValue(Options.PATTERN_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
-    int type = getType(_commandLine.getValue(Options.TYPE_OPTION));
-    int context = getContext(_commandLine.getValue(Options.TYPE_OPTION));
+    int type = getType(commandLine.getValue(Options.TYPE_OPTION));
+    int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
 
     IDLTKSearchScope scope = getScope(
-        _commandLine.getValue(Options.SCOPE_OPTION), type, project);
+        commandLine.getValue(Options.SCOPE_OPTION), type, project);
 
-    SearchEngine engine= new SearchEngine();
+    SearchEngine engine = new SearchEngine();
     IProject[] projects = DLTKSearchScopeFactory.getInstance().getProjects(scope);
 
     IDLTKLanguageToolkit toolkit = scope.getLanguageToolkit();
@@ -112,11 +112,13 @@ public class SearchCommand
       IEditorSite site = new EclimEditorSite();
       IEditorInput input = new FileEditorInput(ifile);
       PHPStructuredEditor editor = new PHPStructuredEditor(){
-        public void update(){
+        public void update()
+        {
           // no-op to prevent StructuredTextEditor from running it.
         }
 
-        protected void installOverrideIndicator(boolean provideAST) {
+        protected void installOverrideIndicator(boolean provideAST)
+        {
           // no-op to prevent PHPStructuredEditor from running it.
         }
       };
@@ -165,7 +167,7 @@ public class SearchCommand
           requestor,
           new NullProgressMonitor());
 
-      return SearchFilter.instance.filter(_commandLine, requestor.getMatches());
+      return SearchFilter.instance.filter(commandLine, requestor.getMatches());
     }
     return StringUtils.EMPTY;
   }
@@ -173,45 +175,45 @@ public class SearchCommand
   /**
    * Gets the search scope to use.
    *
-   * @param _scope The string name of the scope.
-   * @param _type The type to search for.
-   * @param _project The current project.
+   * @param scope The string name of the scope.
+   * @param type The type to search for.
+   * @param project The current project.
    *
    * @return The IDLTKSearchScope.
    */
-  protected IDLTKSearchScope getScope (String _scope, int _type, IProject _project)
+  protected IDLTKSearchScope getScope(String scope, int type, IProject project)
     throws Exception
   {
     boolean includeInterpreterEnvironment = false;
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
 
     IDLTKLanguageToolkit toolkit = PHPLanguageToolkit.getDefault();
-    IDLTKSearchScope scope = null;
+    IDLTKSearchScope searchScope = null;
 
-    if (SCOPE_PROJECT.equals(_scope)){
-      String[] names = new String[]{_project.getName()};
-      scope = factory.createProjectSearchScope(
+    if (SCOPE_PROJECT.equals(scope)){
+      String[] names = new String[]{project.getName()};
+      searchScope = factory.createProjectSearchScope(
           names, includeInterpreterEnvironment, toolkit);
     }else{ // workspace
-      scope = factory.createWorkspaceScope(includeInterpreterEnvironment,
+      searchScope = factory.createWorkspaceScope(includeInterpreterEnvironment,
           toolkit);
     }
-    return scope;
+    return searchScope;
   }
 
   /**
    * Translates the string context to the int equivalent.
    *
-   * @param _context The String context.
+   * @param context The String context.
    * @return The int context
    */
-  protected int getContext (String _context)
+  protected int getContext(String context)
   {
-    if(CONTEXT_ALL.equals(_context)){
+    if(CONTEXT_ALL.equals(context)){
       return IDLTKSearchConstants.ALL_OCCURRENCES;
-    //}else if(CONTEXT_IMPLEMENTORS.equals(_context)){
+    //}else if(CONTEXT_IMPLEMENTORS.equals(context)){
     //  return IDLTKSearchConstants.IMPLEMENTORS;
-    }else if(CONTEXT_REFERENCES.equals(_context)){
+    }else if(CONTEXT_REFERENCES.equals(context)){
       return IDLTKSearchConstants.REFERENCES;
     }
     return IDLTKSearchConstants.DECLARATIONS;
@@ -220,16 +222,16 @@ public class SearchCommand
   /**
    * Translates the string type to the int equivalent.
    *
-   * @param _type The String type.
+   * @param type The String type.
    * @return The int type.
    */
-  protected int getType (String _type)
+  protected int getType(String type)
   {
-    if(TYPE_CLASS.equals(_type)){
+    if(TYPE_CLASS.equals(type)){
       return IDLTKSearchConstants.TYPE;
-    }else if(TYPE_METHOD.equals(_type)){
+    }else if(TYPE_METHOD.equals(type)){
       return IDLTKSearchConstants.METHOD;
-    }else if(TYPE_FIELD.equals(_type)){
+    }else if(TYPE_FIELD.equals(type)){
       return IDLTKSearchConstants.FIELD;
     }
     return IDLTKSearchConstants.UNKNOWN;
@@ -241,7 +243,8 @@ public class SearchCommand
    * @param pattern The search pattern
    * @return The pattern matching mode.
    */
-  private int getMode (String pattern) {
+  private int getMode(String pattern)
+  {
     if (pattern.indexOf('*') != -1 || pattern.indexOf('?') != -1) {
       return SearchPattern.R_PATTERN_MATCH;
     }

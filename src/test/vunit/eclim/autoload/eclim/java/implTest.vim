@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 " }}}
 
 " SetUp() {{{
-function! SetUp ()
+function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
 " TestJavaImpl() {{{
-function! TestJavaImpl ()
+function! TestJavaImpl()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call PeekRedir()
 
@@ -38,17 +38,17 @@ function! TestJavaImpl ()
   call VUAssertTrue(bufname('%') =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
 
   call cursor(line('$'), 1)
-  let line = search('public boolean equals (Object obj)', 'bc')
+  let line = search('public boolean equals(Object obj)', 'bc')
 
   call VUAssertTrue(line > 0, 'Equals method not found.')
-  call VUAssertEquals(getline(line), '  public boolean equals (Object obj)')
+  call VUAssertEquals(getline(line), '  public boolean equals(Object obj)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertEquals(getline(line), '  //public boolean equals (Object obj)')
+  call VUAssertEquals(getline(line), '  //public boolean equals(Object obj)')
   quit
   call cursor(1, 1)
-  call VUAssertTrue(search('public boolean equals (Object obj)', 'c'),
+  call VUAssertTrue(search('public boolean equals(Object obj)', 'c'),
     \ 'Method no inserted.')
 endfunction " }}}
 

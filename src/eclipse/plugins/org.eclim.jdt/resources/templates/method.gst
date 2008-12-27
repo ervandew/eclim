@@ -9,7 +9,7 @@
 <% if (org_eclipse_jdt_core_compiler_source == "1.5" && overrides && !constructor) { %>
 @Override
 <% } %>
-<% if(modifier) { %>${modifier} <% } %><% if(returnType) { %>${returnType} <% } %>${name} (${params})
+<% if(modifier) { %>${modifier} <% } %><% if(returnType) { %>${returnType} <% } %>${name}(${params})
 <% if(throwsType) { %>
 
 	throws ${throwsType}

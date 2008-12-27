@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,12 +45,12 @@ public class EclimWorkbenchPage
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPage#getActiveEditor()
    */
-  public IEditorPart getActiveEditor ()
+  public IEditorPart getActiveEditor()
   {
     return editor;
   }
 
-  public void setActiveEditor (IEditorPart editor)
+  public void setActiveEditor(IEditorPart editor)
   {
     this.editor = editor;
   }

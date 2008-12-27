@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ public class RegexFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<MatcherResult> _result)
+  public String filter(CommandLine commandLine, List<MatcherResult> results)
   {
     StringBuffer buffer = new StringBuffer();
-    if(_result != null){
-      for (MatcherResult result : _result){
+    if(results != null){
+      for (MatcherResult result : results){
         if(buffer.length() > 0){
           buffer.append('\n');
         }
@@ -57,16 +57,16 @@ public class RegexFilter
   /**
    * Converts the supplied match result to a string.
    *
-   * @param _result The match result.
+   * @param result The match result.
    * @return The string form of the match result.
    */
-  private String matchToString (MatcherResult _result)
+  private String matchToString(MatcherResult result)
   {
     return new StringBuffer()
-      .append(_result.getStartLine()).append(':')
-      .append(_result.getStartColumn()).append('-')
-      .append(_result.getEndLine()).append(':')
-      .append(_result.getEndColumn())
+      .append(result.getStartLine()).append(':')
+      .append(result.getStartColumn()).append('-')
+      .append(result.getEndLine()).append(':')
+      .append(result.getEndColumn())
       .toString();
   }
 }

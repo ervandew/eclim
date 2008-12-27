@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@
     \ '\(implements\|extends\)\_[0-9A-Za-z,[:space:]]*\<<element>\>\_[0-9A-Za-z,[:space:]]*{'
 " }}}
 
-" Search (command, ...) {{{
+" Search(command, ...) {{{
 " Executes a search.
 " Usage closely resebles eclim command line client usage.
 " When doing a non-pattern search the element under the cursor is searched for.
@@ -74,7 +74,7 @@
 "     call s:Search("-p", "HashM*", "-t", "class", "-x", "references")
 " Or all the arguments can be passed in at once:
 "   call s:Search("-p 'HashM*' -t class -x references")
-function! s:Search (command, ...)
+function! s:Search(command, ...)
   let argline = ""
   let index = 1
   while index <= a:0
@@ -149,7 +149,7 @@ endfunction " }}}
 
 " SearchAlternate(argline, element) {{{
 " Alternate search for non-project src files using vimgrep and &path.
-function! s:SearchAlternate (argline, element)
+function! s:SearchAlternate(argline, element)
   call eclim#util#EchoInfo
     \ ("Unable to determine file's project. Executing alternate search...")
   if a:argline =~ '-t'
@@ -238,7 +238,7 @@ endfunction " }}}
 
 " BuildPattern() {{{
 " Builds a pattern based on the cursors current position in the file.
-function! s:BuildPattern ()
+function! s:BuildPattern()
   let class = expand('<cword>')
   " see if the classname element selected is fully qualified.
   let line = getline('.')
@@ -265,7 +265,7 @@ endfunction " }}}
 
 " SearchAndDisplay(type, ...) {{{
 " Execute a search and displays the results via quickfix.
-function! eclim#java#search#SearchAndDisplay (type, args)
+function! eclim#java#search#SearchAndDisplay(type, args)
   " if running from a non java source file, no SilentUpdate needed.
   if &ft == 'java'
     call eclim#java#util#SilentUpdate()
@@ -339,7 +339,7 @@ endfunction " }}}
 " ViewDoc(...) {{{
 " View the supplied file in a browser, or if none proved, the file under the
 " cursor.
-function! s:ViewDoc (...)
+function! s:ViewDoc(...)
   if a:0 > 0
     call eclim#web#OpenUrl(a:1)
   else
@@ -350,7 +350,7 @@ endfunction " }}}
 
 " CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for JavaSearch
-function! eclim#java#search#CommandCompleteJavaSearch (argLead, cmdLine, cursorPos)
+function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
@@ -384,7 +384,7 @@ endfunction " }}}
 " FindClassDeclaration() {{{
 " Used by non java source files to find the declaration of a classname under
 " the cursor.
-function! eclim#java#search#FindClassDeclaration ()
+function! eclim#java#search#FindClassDeclaration()
   exec "JavaSearch -t classOrInterface -p " . expand('<cword>')
 endfunction " }}}
 

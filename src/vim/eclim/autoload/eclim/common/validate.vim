@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 " Validate(type, on_save) {{{
 " Validates the current file.
-function! eclim#common#validate#Validate (type, on_save)
+function! eclim#common#validate#Validate(type, on_save)
   if eclim#util#WillWrittenBufferClose()
     return
   endif

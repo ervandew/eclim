@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ let s:tagname_regex = '.\{-}<vim:\([a-zA-Z]\+\).*'
 
 " Template() {{{
 " Main method for finding and executing the template.
-function! eclim#common#template#Template ()
+function! eclim#common#template#Template()
   " allow some plugins to disable templates temporarily
   if exists('g:EclimTemplateTempIgnore') && g:EclimTemplateTempIgnore
     return
@@ -68,7 +68,7 @@ endfunction " }}}
 
 " s:FindTemplate() {{{
 " Finds the template file and returns the location.
-function! s:FindTemplate ()
+function! s:FindTemplate()
   let templatesDir = expand(g:EclimTemplateDir)
   if !isdirectory(templatesDir)
     call eclim#util#EchoError("No such directory: " . templatesDir)
@@ -123,7 +123,7 @@ endfunction " }}}
 
 " s:ExecuteTemplate() {{{
 " Executes any logic in the template.
-function! s:ExecuteTemplate ()
+function! s:ExecuteTemplate()
   let line = 1
   while line <= line('$')
     let currentLine = getline(line)
@@ -138,13 +138,13 @@ endfunction " }}}
 
 " s:EvaluateExpression(expression) {{{
 " Evaluates the supplied expression.
-function! s:EvaluateExpression (expression)
+function! s:EvaluateExpression(expression)
   exec "return " . a:expression
 endfunction " }}}
 
 " s:GetAttribute(line, tag, attribute, fail) {{{
 " Gets the an attribute value.
-function! s:GetAttribute (line, tag, attribute, fail)
+function! s:GetAttribute(line, tag, attribute, fail)
   let attribute = substitute(a:line,
     \ '.\{-}<vim:' . a:tag . '.\{-}\s\+' . a:attribute .
       \ '\s*=\s*\(' . s:quote . '\)\(.\{-}\)\1.*/>.*',
@@ -160,15 +160,15 @@ function! s:GetAttribute (line, tag, attribute, fail)
   return attribute
 endfunction " }}}
 
-" s:TemplateError (line, message) {{{
+" s:TemplateError(line, message) {{{
 " Echos an error message to the user.
-function! s:TemplateError (line, message)
+function! s:TemplateError(line, message)
   call eclim#util#EchoError("Template error, line " . a:line . ": " . a:message)
 endfunction " }}}
 
 " s:Process_var(line) {{{
 " Process <vim:var/> tags.
-function! s:Process_var (line)
+function! s:Process_var(line)
   let currentLine = getline(a:line)
 
   let name = expand(s:GetAttribute(currentLine, 'var', 'name', 1))
@@ -183,7 +183,7 @@ endfunction " }}}
 
 " s:Process_import(line) {{{
 " Process <vim:import/> tags.
-function! s:Process_import (line)
+function! s:Process_import(line)
   let currentLine = getline(a:line)
 
   let resource = expand(s:GetAttribute(currentLine, 'import', 'resource', 1))
@@ -203,7 +203,7 @@ endfunction " }}}
 
 " s:Process_out(line) {{{
 " Process <vim:out/> tags.
-function! s:Process_out (line)
+function! s:Process_out(line)
   let currentLine = getline(a:line)
   let value = s:GetAttribute(currentLine, 'out', 'value', 1)
   let result = s:EvaluateExpression(value)
@@ -212,7 +212,7 @@ endfunction " }}}
 
 " s:Process_include(line) {{{
 " Process <vim:include/> tags.
-function! s:Process_include (line)
+function! s:Process_include(line)
   let currentLine = getline(a:line)
   let template = expand(
     \ g:EclimTemplateDir . '/' . s:GetAttribute(currentLine, 'include', 'template', 1))
@@ -230,7 +230,7 @@ endfunction " }}}
 
 " s:Process_username(line) {{{
 " Process <vim:username/> tags.
-function! s:Process_username (line)
+function! s:Process_username(line)
   let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
   if type(username) == 0
     let username = ''
@@ -239,7 +239,7 @@ function! s:Process_username (line)
 endfunction " }}}
 
 " s:Out(line, pattern, value) {{{
-function! s:Out (line, pattern, value)
+function! s:Out(line, pattern, value)
   let currentLine = getline(a:line)
 
   let results = type(a:value) == 3 ? a:value : [a:value]

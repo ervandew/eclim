@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class PropertiesCommandTest
     "src/org/eclim/test/bean/TestBean.java";
 
   @Test
-  public void executeGet ()
+  public void executeGet()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -51,11 +51,11 @@ public class PropertiesCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Getter not found.",
-        Pattern.compile("public String getName \\(\\)").matcher(contents).find());
+        Pattern.compile("public String getName\\(\\)").matcher(contents).find());
   }
 
   @Test
-  public void executeSet ()
+  public void executeSet()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -68,12 +68,12 @@ public class PropertiesCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Setter not found.",
-        Pattern.compile("public void setName \\(String name\\)")
+        Pattern.compile("public void setName\\(String name\\)")
         .matcher(contents).find());
   }
 
   @Test
-  public void executeGetSet ()
+  public void executeGetSet()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -86,9 +86,9 @@ public class PropertiesCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Getter not found.",
-        Pattern.compile("public boolean isValid \\(\\)").matcher(contents).find());
+        Pattern.compile("public boolean isValid\\(\\)").matcher(contents).find());
     assertTrue("Setter not found.",
-        Pattern.compile("public void setValid \\(boolean valid\\)")
+        Pattern.compile("public void setValid\\(boolean valid\\)")
         .matcher(contents).find());
   }
 }

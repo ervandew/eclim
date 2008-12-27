@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ public class JavascriptCodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
-  protected IContentAssistProcessor getContentAssistProcessor (
+  protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -72,7 +72,7 @@ public class JavascriptCodeCompleteCommand
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
    */
-  protected ITextViewer getTextViewer (
+  protected ITextViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception
   {
@@ -98,7 +98,7 @@ debug(ifile);
     return viewer;
   }
 
-  private void debug (IFile file)
+  private void debug(IFile file)
     throws Exception
   {
     IStructuredModel model = null;

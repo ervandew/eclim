@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,53 +34,53 @@ public class MatcherResult
 
   private ArrayList<MatcherResult> groups = new ArrayList<MatcherResult>();
 
-  public int getStartLine ()
+  public int getStartLine()
   {
     return startLine;
   }
 
-  public void setStartLine (int _startLine)
+  public void setStartLine(int startLine)
   {
-    startLine = _startLine;
+    this.startLine = startLine;
   }
 
-  public int getStartColumn ()
+  public int getStartColumn()
   {
     return startColumn;
   }
 
-  public void setStartColumn (int _startColumn)
+  public void setStartColumn(int startColumn)
   {
-    startColumn = _startColumn;
+    this.startColumn = startColumn;
   }
 
-  public int getEndLine ()
+  public int getEndLine()
   {
     return endLine;
   }
 
-  public void setEndLine (int _endLine)
+  public void setEndLine(int endLine)
   {
-    endLine = _endLine;
+    this.endLine = endLine;
   }
 
-  public int getEndColumn ()
+  public int getEndColumn()
   {
     return endColumn;
   }
 
-  public void setEndColumn (int _endColumn)
+  public void setEndColumn(int endColumn)
   {
-    endColumn = _endColumn;
+    this.endColumn = endColumn;
   }
 
-  public List<MatcherResult> getGroupMatches ()
+  public List<MatcherResult> getGroupMatches()
   {
     return groups;
   }
 
-  public void addGroupMatch (MatcherResult _match)
+  public void addGroupMatch(MatcherResult match)
   {
-    groups.add(_match);
+    this.groups.add(match);
   }
 }

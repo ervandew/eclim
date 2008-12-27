@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2009  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ public class CodeCorrectFilter
   /**
    * {@inheritDoc}
    */
-  public String filter (CommandLine _commandLine, List<CodeCorrectResult> _result)
+  public String filter(CommandLine commandLine, List<CodeCorrectResult> results)
   {
     StringBuffer buffer = new StringBuffer();
-    if(_result != null){
-      for(CodeCorrectResult result : _result){
+    if(results != null){
+      for(CodeCorrectResult result : results){
         // filter out corrections that have no preview, since they can't be
         // applied in the same fashion as those that have previews.
         String preview = result.getPreview();
@@ -47,8 +47,7 @@ public class CodeCorrectFilter
             !preview.trim().equals("") &&
             !preview.trim().startsWith("Opens") &&
             !preview.trim().startsWith("Evaluates") &&
-            !preview.trim().startsWith("<p>Move"))
-        {
+            !preview.trim().startsWith("<p>Move")){
           if(buffer.length() == 0){
             buffer.append(result.getProblem().getMessage());
           }
