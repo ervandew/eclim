@@ -237,20 +237,20 @@ class NGSession extends Thread {
 
             // EV: added by Anton for persistant connections
             case NGConstants.CHUNKTYPE_KEEP_ALIVE:
-                  // allow the client to specify each time, either this shot is
-                  // "not last shot". If server sees, that this is not last
-                  // shot, server doesn't close client session socket and waits
-                  // for next "shot" (default is still "one shot", this allows
-                  // old clients to operate normally as usual - see
-                  // src/xdocs/nailgun-protocol.txt for details)
+                  // allow the client to specify each time if the socket should
+                  // be kept alive (open).  If server receives this chunk then
+                  // the client session socket is left open and waits for next
+                  // request (default is still to close the connection after
+                  // each request, this allows old clients to operate normally
+                  // as usual
                   keepAlive = true;
                   break;
 
             case NGConstants.CHUNKTYPE_BYE:
                   // Client can use optional "bye" chunk. It tells server to
-                  // close the connection after the sequence of "not last shot"
+                  // close the connection after the sequence of "keep alive"
                   // commands (alternatively client can: [a] close clients
-                  // socket or [b] send one dummy "one shot" command).
+                  // socket or [b] send one dummy single request command).
                   byeChunk = true;
                   keepAlive = false;
                   break;
