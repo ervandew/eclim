@@ -177,6 +177,10 @@ class NGSession extends Thread {
 
     Socket socket = nextSocket();
     while (socket != null) {
+      // EV: added by Anton for persistant connections
+      boolean keepAlive = false;
+      boolean byeChunk = false;
+      // END CHANGE
       try {
         // buffer for reading headers
         byte[] lbuf = new byte[5];
@@ -191,7 +195,10 @@ class NGSession extends Thread {
         String command = null;    // alias or class name
 
         // read everything from the client up to and including the command
-        while (command == null) {
+        // EV: change by Anton for persistant connections
+        //while (command == null) {
+        while (command == null && !byeChunk) {
+        // END CHANGE
           sockin.readFully(lbuf);
           long bytesToRead = LongUtils.fromArray(lbuf, 0);
           char chunkType = (char) lbuf[4];
@@ -228,6 +235,27 @@ class NGSession extends Thread {
                   cwd = line;
                   break;
 
+            // EV: added by Anton for persistant connections
+            case NGConstants.CHUNKTYPE_KEEP_ALIVE:
+                  // allow the client to specify each time, either this shot is
+                  // "not last shot". If server sees, that this is not last
+                  // shot, server doesn't close client session socket and waits
+                  // for next "shot" (default is still "one shot", this allows
+                  // old clients to operate normally as usual - see
+                  // src/xdocs/nailgun-protocol.txt for details)
+                  keepAlive = true;
+                  break;
+
+            case NGConstants.CHUNKTYPE_BYE:
+                  // Client can use optional "bye" chunk. It tells server to
+                  // close the connection after the sequence of "not last shot"
+                  // commands (alternatively client can: [a] close clients
+                  // socket or [b] send one dummy "one shot" command).
+                  byeChunk = true;
+                  keepAlive = false;
+                  break;
+            // END CHANGE
+
             default:  // freakout?
           }
         }
@@ -247,70 +275,85 @@ class NGSession extends Thread {
         ((ThreadLocalPrintStream) System.out).init(out);
         ((ThreadLocalPrintStream) System.err).init(err);
 
-        try {
-          Alias alias = server.getAliasManager().getAlias(command);
-          Class cmdclass = null;
-          if (alias != null) {
-            cmdclass = alias.getAliasedClass();
-          } else if (server.allowsNailsByClassName()) {
-            cmdclass = Class.forName(command);
-          } else {
-            cmdclass = server.getDefaultNailClass();
-          }
-
-          Object[] methodArgs = new Object[1];
-          Method mainMethod = null; // will be either main(String[]) or nailMain(NGContext)
-          String[] cmdlineArgs = (String[]) remoteArgs.toArray(new String[remoteArgs.size()]);
-
+        // EV: if condition added by Anton for persistant connections.
+        if (!byeChunk){
           try {
-            mainMethod = cmdclass.getMethod("nailMain", nailMainSignature);
-            NGContext context = new NGContext();
-            context.setArgs(cmdlineArgs);
-            context.in = in;
-            context.out = out;
-            context.err = err;
-            context.setCommand(command);
-            context.setExitStream(exit);
-            context.setNGServer(server);
-            context.setEnv(remoteEnv);
-            context.setInetAddress(socket.getInetAddress());
-            context.setPort(socket.getPort());
-            context.setWorkingDirectory(cwd);
-            methodArgs[0] = context;
-          } catch (NoSuchMethodException toDiscard) {
-            // that's ok - we'll just try main(String[]) next.
-          }
+            Alias alias = server.getAliasManager().getAlias(command);
+            Class cmdclass = null;
+            if (alias != null) {
+              cmdclass = alias.getAliasedClass();
+            } else if (server.allowsNailsByClassName()) {
+              cmdclass = Class.forName(command);
+            } else {
+              cmdclass = server.getDefaultNailClass();
+            }
 
-          if (mainMethod == null) {
-            mainMethod = cmdclass.getMethod("main", mainSignature);
-            methodArgs[0] = cmdlineArgs;
-          }
-
-          if (mainMethod != null) {
-            server.nailStarted(cmdclass);
-                        NGSecurityManager.setExit(exit);
+            Object[] methodArgs = new Object[1];
+            Method mainMethod = null; // will be either main(String[]) or nailMain(NGContext)
+            String[] cmdlineArgs = (String[]) remoteArgs.toArray(new String[remoteArgs.size()]);
 
             try {
-              mainMethod.invoke(null, methodArgs);
-            } catch (InvocationTargetException ite) {
-              throw(ite.getCause());
-            } catch (Throwable t) {
-              throw(t);
-            } finally {
-              server.nailFinished(cmdclass);
+              mainMethod = cmdclass.getMethod("nailMain", nailMainSignature);
+              NGContext context = new NGContext();
+              context.setArgs(cmdlineArgs);
+              context.in = in;
+              context.out = out;
+              context.err = err;
+              context.setCommand(command);
+              context.setExitStream(exit);
+              context.setNGServer(server);
+              context.setEnv(remoteEnv);
+              context.setInetAddress(socket.getInetAddress());
+              context.setPort(socket.getPort());
+              context.setWorkingDirectory(cwd);
+              methodArgs[0] = context;
+            } catch (NoSuchMethodException toDiscard) {
+              // that's ok - we'll just try main(String[]) next.
             }
-            exit.println(0);
-          }
 
-        } catch (ExitException exitEx) {
-                    exit.println(exitEx.getStatus());
-                    server.out.println(Thread.currentThread().getName() + " exited with status " + exitEx.getStatus());
-        } catch (Throwable t) {
-          t.printStackTrace();
-          exit.println(NGConstants.EXIT_EXCEPTION); // remote exception constant
+            if (mainMethod == null) {
+              mainMethod = cmdclass.getMethod("main", mainSignature);
+              methodArgs[0] = cmdlineArgs;
+            }
+
+            if (mainMethod != null) {
+              server.nailStarted(cmdclass);
+                          NGSecurityManager.setExit(exit);
+
+              try {
+                mainMethod.invoke(null, methodArgs);
+              } catch (InvocationTargetException ite) {
+                throw(ite.getCause());
+              } catch (Throwable t) {
+                throw(t);
+              } finally {
+                server.nailFinished(cmdclass);
+              }
+              // EV: change by Anton
+              //exit.println(0);
+              exit.print(0);
+            }
+
+          } catch (ExitException exitEx) {
+            // EV: change by Anton
+            //exit.println(exitEx.getStatus());
+            exit.print(exitEx.getStatus());
+
+            server.out.println(Thread.currentThread().getName() + " exited with status " + exitEx.getStatus());
+          } catch (Throwable t) {
+            t.printStackTrace();
+            // EV: change by Anton
+            //exit.println(NGConstants.EXIT_EXCEPTION); // remote exception constant
+            exit.print(NGConstants.EXIT_EXCEPTION); // remote exception constant
+          }
         }
 
-        socket.close();
+        // EV: change by Anton for persistant connections.
+        //socket.close();
+        if (!keepAlive) {
+          socket.close();
+        }
+        // END CHANGE
 
       } catch (Throwable t) {
         t.printStackTrace();
@@ -322,20 +365,23 @@ class NGSession extends Thread {
       ((ThreadLocalPrintStream) System.out).init(null);
       ((ThreadLocalPrintStream) System.err).init(null);
 // NEW */
-      if(System.in instanceof ThreadLocalInputStream){
-        ((ThreadLocalInputStream) System.in).init(null);
-      }
-      if(System.out instanceof ThreadLocalPrintStream){
-        ((ThreadLocalPrintStream) System.out).init(null);
-      }
-      if(System.out instanceof ThreadLocalPrintStream){
-        ((ThreadLocalPrintStream) System.err).init(null);
-      }
+      // EV: if condition added by Anton for persistant connections.
+      if (!keepAlive) {
+        if(System.in instanceof ThreadLocalInputStream){
+          ((ThreadLocalInputStream) System.in).init(null);
+        }
+        if(System.out instanceof ThreadLocalPrintStream){
+          ((ThreadLocalPrintStream) System.out).init(null);
+        }
+        if(System.out instanceof ThreadLocalPrintStream){
+          ((ThreadLocalPrintStream) System.err).init(null);
+        }
 // END CHANGE
 
-      updateThreadName(null);
-      sessionPool.give(this);
-      socket = nextSocket();
+        updateThreadName(null);
+        sessionPool.give(this);
+        socket = nextSocket();
+      }
     }
 
 //    server.out.println("Shutdown NGSession " + instanceNumber);
