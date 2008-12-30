@@ -67,8 +67,13 @@ function! eclim#php#search#Search(...)
     let index = index + 1
   endwhile
 
-  " check if just a pattern was supplied.
-  if argline =~ '^\s*\w'
+  if argline == ''
+    call eclim#util#EchoError('You must supply a search pattern.')
+    return
+  endif
+
+  " check if pattern supplied without -p.
+  if argline !~ '^\s*-[a-z]'
     let argline = '-p ' . argline
   endif
   "let in_project = eclim#project#util#IsCurrentFileInProject(0)
