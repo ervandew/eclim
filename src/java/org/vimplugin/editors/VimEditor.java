@@ -68,9 +68,10 @@ import org.vimplugin.preferences.PreferenceConstants;
 /**
  * Provides an Editor to Eclipse which is backed by a Vim instance.
  */
-public class VimEditor extends TextEditor {
+public class VimEditor
+  extends TextEditor
+{
   private static final Logger logger = Logger.getLogger(VimEditor.class);
-
 
   /** ID of the VimServer. */
   protected int serverID;
@@ -122,10 +123,14 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void createPartControl(Composite parent) {
-    if (!gvimAvailable()) {
+    VimPlugin plugin = VimPlugin.getDefault();
+
+    if (!plugin.gvimAvailable()) {
       shell = parent.getShell();
       MessageDialog dialog = new MessageDialog(
-          shell, "Vimplugin", null, "The gvim executable is not available. Please check the 'Path to gvim' in your Vimplugin preferences.\n\nPress 'OK' to open your preferences.", MessageDialog.ERROR,
+          shell, "Vimplugin", null,
+          plugin.getMessage("gvim.not.found.dialog"),
+          MessageDialog.ERROR,
           new String[]{IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 0)
       {
         protected void buttonPressed(int buttonId) {
@@ -141,9 +146,15 @@ public class VimEditor extends TextEditor {
       };
       dialog.open();
 
-      if (!gvimAvailable()) {
-        throw new RuntimeException("The gvim executable is not available.");
+      if (!plugin.gvimAvailable()) {
+        throw new RuntimeException(plugin.getMessage("gvim.not.found"));
       }
+    }
+
+    boolean embed = plugin.getPreferenceStore()
+      .getBoolean(PreferenceConstants.P_EMBED);
+    if (embed && !plugin.gvimNbSupported()){
+      throw new RuntimeException(plugin.getMessage("gvim.nb.not.enabled"));
     }
 
     //set some flags
@@ -203,14 +214,15 @@ public class VimEditor extends TextEditor {
    * @param parent
    */
   private void createVim(String workingDir, Composite parent) {
-    boolean embd = VimPlugin.getDefault().getPreferenceStore()
-      .getBoolean(PreferenceConstants.P_EMBD);
+    VimPlugin plugin = VimPlugin.getDefault();
+    boolean embed = plugin.getPreferenceStore()
+      .getBoolean(PreferenceConstants.P_EMBED);
 
-    if (embd) {
+    if (embed) {
       try {
         createEmbeddedVim(workingDir, parent);
       } catch (Exception e) {
-        message("Could not create embedded Widget. Falling back to ExternalVim. ",e);
+        message(plugin.getMessage("embed.fallback"), e);
         createExternalVim(workingDir, parent);
       }
     } else {
@@ -262,20 +274,6 @@ public class VimEditor extends TextEditor {
     VimPlugin.getDefault().getVimserver(serverID).start(workingDir, wid);
     VimPlugin.getDefault().getVimserver(serverID).getVc()
       .command(bufferID, "setLocAndSize", h + " " + w);
-  }
-
-  /**
-   * @return If gvim exists and is executable.
-   */
-  //TODO: Move to another place
-  protected boolean gvimAvailable() {
-    String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
-        PreferenceConstants.P_GVIM);
-    File file = new File(gvim);
-    if (file.exists()){
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -338,8 +336,10 @@ public class VimEditor extends TextEditor {
       return;
     }
 
+    VimPlugin plugin = VimPlugin.getDefault();
+
     alreadyClosed = true;
-    VimServer server = VimPlugin.getDefault().getVimserver(serverID);
+    VimServer server = plugin.getVimserver(serverID);
     server.getEditors().remove(this);
 
     if (save && dirty) {
@@ -348,7 +348,7 @@ public class VimEditor extends TextEditor {
       firePropertyChange(PROP_DIRTY);
     }
 
-    if (VimPlugin.getDefault().getVimserver(serverID).getEditors().size() > 0) {
+    if (plugin.getVimserver(serverID).getEditors().size() > 0) {
       server.getVc().command(bufferID, "close", "");
     } else {
       try {
@@ -356,9 +356,9 @@ public class VimEditor extends TextEditor {
         if (conn != null){
           server.getVc().function(bufferID, "saveAndExit", "");
         }
-        VimPlugin.getDefault().stopVimServer(serverID);
+        plugin.stopVimServer(serverID);
       } catch (IOException e) {
-        message("Could not stop Server: ", e);
+        message(plugin.getMessage("server.stop.failed"), e);
       }
     }
 
@@ -415,7 +415,8 @@ public class VimEditor extends TextEditor {
     try {
       document = documentProvider.createDocument(input);
     } catch (Exception e) {
-      message("Could not create Document: ",e);
+      VimPlugin plugin = VimPlugin.getDefault();
+      message(plugin.getMessage("document.create.failed"), e);
     }
   }
 
@@ -566,7 +567,8 @@ public class VimEditor extends TextEditor {
       setDirty(true);
       //System.out.println(first);
     } catch (BadLocationException e) {
-      message("Could not insert text into document:",e);
+      VimPlugin plugin = VimPlugin.getDefault();
+      message(plugin.getMessage("document.insert.failed"), e);
     }
   }
 
@@ -587,7 +589,8 @@ public class VimEditor extends TextEditor {
       document.set(first);
       setDirty(true);
     } catch (BadLocationException e) {
-      message("Could not remove text from document: ", e);
+      VimPlugin plugin = VimPlugin.getDefault();
+      message(plugin.getMessage("document.remove.failed"), e);
     }
   }
 
@@ -632,7 +635,6 @@ public class VimEditor extends TextEditor {
       } catch (IOException ignore) {
       }
     }
-
 
     MessageDialog.openError(shell, "Vimplugin", message + stacktrace);
   }

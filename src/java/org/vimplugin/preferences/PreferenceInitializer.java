@@ -26,7 +26,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
   public void initializeDefaultPreferences() {
     IPreferenceStore store = VimPlugin.getDefault().getPreferenceStore();
     store.setDefault(PreferenceConstants.P_PORT, 3219);
-    store.setDefault(PreferenceConstants.P_EMBD, true);
+    store.setDefault(PreferenceConstants.P_EMBED, true);
     store.setDefault(PreferenceConstants.P_DEBUG, true);
     store.setDefault(PreferenceConstants.P_GVIM,
         VimPlugin.getDefault().getProperty("gvim.default"));

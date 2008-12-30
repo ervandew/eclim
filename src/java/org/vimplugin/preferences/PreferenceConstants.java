@@ -28,5 +28,5 @@ public class PreferenceConstants {
   public static final String P_DEBUG = "debug";
 
   /** embed vim into eclipse */
-  public static final String P_EMBD = "embedded";
+  public static final String P_EMBED = "embedded";
 }

@@ -10,10 +10,22 @@
  */
 package org.vimplugin;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import java.text.MessageFormat;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
+
+import org.eclim.logging.Logger;
+
+import org.eclim.util.CommandExecutor;
+import org.eclim.util.IOUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 
@@ -23,10 +35,18 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import org.osgi.framework.BundleContext;
 
+import org.vimplugin.preferences.PreferenceConstants;
+
 /**
  * The main plugin class to be used in the desktop.
  */
-public class VimPlugin extends AbstractUIPlugin {
+public class VimPlugin
+  extends AbstractUIPlugin
+{
+  private static final Logger logger = Logger.getLogger(VimPlugin.class);
+
+  private static final String NB_COMMAND =
+    "redir! > <file> | silent! echo has('netbeans_intg') | quit";
 
   /**
    * The shared instance.
@@ -37,6 +57,8 @@ public class VimPlugin extends AbstractUIPlugin {
    * ID of the default Vim instance.
    */
   public static final int DEFAULT_VIMSERVER_ID = 0;
+
+  private Boolean nbSupported;
 
   /**
    * Returns the shared instance.
@@ -87,6 +109,11 @@ public class VimPlugin extends AbstractUIPlugin {
   private Properties properties;
 
   /**
+   * ResourceBundle containing vimplugin messages.
+   */
+  private ResourceBundle messages;
+
+  /**
    * The constructor.
    */
   public VimPlugin() {
@@ -101,6 +128,11 @@ public class VimPlugin extends AbstractUIPlugin {
           "Vimplugin", "Unable to load plugin.properties");
       ioe.printStackTrace();
     }
+
+    messages = ResourceBundle.getBundle(
+        "org/vimplugin/messages",
+        Locale.getDefault(),
+        getClass().getClassLoader());
   }
 
   /**
@@ -215,6 +247,66 @@ public class VimPlugin extends AbstractUIPlugin {
   }
 
   /**
+   * Determines if the configured gvim path exists.
+   *
+   * @return true if the configured gvim path exists, false otherwise.
+   */
+  public boolean gvimAvailable() {
+    String gvim = VimPlugin.getDefault().getPreferenceStore()
+      .getString(PreferenceConstants.P_GVIM);
+    File file = new File(gvim);
+    if (file.exists()){
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Determines if the configured gvim instance supports the required netbeans
+   * interface.
+   *
+   * @return true if netbeans supported, false otherwise.
+   */
+  public boolean gvimNbSupported() {
+    if (nbSupported == null){
+      logger.debug("Checking gvim for netbeans support.");
+      String gvim = VimPlugin.getDefault().getPreferenceStore()
+        .getString(PreferenceConstants.P_GVIM);
+      try{
+        File tempFile = File.createTempFile("eclim_gvim", null);
+        String command = NB_COMMAND.replaceFirst("<file>",
+            tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
+
+        String[] cmd = {
+          gvim, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
+        logger.debug(Arrays.toString(cmd));
+        CommandExecutor process = CommandExecutor.execute(cmd, 5000);
+        if(process.getReturnCode() != 0){
+          logger.error("Failed to execute gvim: " + process.getErrorMessage());
+          return false;
+        }
+
+        FileInputStream in = null;
+        try{
+          String result = IOUtils.toString(in = new FileInputStream(tempFile));
+          result = result.trim();
+          logger.debug("gvim nb enabled: " + result);
+
+          nbSupported = new Boolean(result.equals("1"));
+        }catch(IOException ioe){
+          logger.error("Unable to read temp file.", ioe);
+          IOUtils.closeQuietly(in);
+          return false;
+        }
+      }catch(Exception e){
+        logger.error("Unable to execute gvim.", e);
+        return false;
+      }
+    }
+    return nbSupported.booleanValue();
+  }
+
+  /**
    * Gets the specified property from plugin.properties.
    *
    * @param name The property name.
@@ -233,5 +325,24 @@ public class VimPlugin extends AbstractUIPlugin {
    */
   public String getProperty(String name, String def){
     return properties.getProperty(name, def);
+  }
+
+  /**
+   * Used to obtain a message from the plugin's resource bundle.
+   *
+   * Supports optional var args which will be used to format the message via
+   * MessageFormat.
+   *
+   * @param key The message key.
+   * @param args Optional arguments to format the message with.
+   * @return The message.
+   */
+  public String getMessage(String key, Object... args)
+  {
+    String message = messages.getString(key);
+    if (args != null && args.length > 0){
+      return MessageFormat.format(message, args);
+    }
+    return message;
   }
 }

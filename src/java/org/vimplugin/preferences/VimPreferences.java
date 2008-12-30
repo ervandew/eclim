@@ -51,7 +51,7 @@ public class VimPreferences
    */
   @Override
   public void createFieldEditors() {
-    addField(new BooleanFieldEditor(PreferenceConstants.P_EMBD,
+    addField(new BooleanFieldEditor(PreferenceConstants.P_EMBED,
         "Embed Vim: (Vim 7.1 on Linux and Windows only)",
         getFieldEditorParent()));
     addField(new StringFieldEditor(PreferenceConstants.P_PORT, "Port:",
