@@ -43,14 +43,15 @@ but support for various other languages (php, python, css, html, xml, etc.)
 have been added and several more are planned.
 
 Eclim is less of an application and more of an integration of two great
-projects.  The first, Vim, is `arguably
-<http://en.wikipedia.org/wiki/Editor_wars>`_ one of the best text editors in
-existence.  The second, Eclipse, provides many great tools for development in
-various languages.  Each provides many features that can increase developer
-productivity, but both still leave something to be desired.  Vim lacks native
-Java support and many of the advanced features available in Eclipse. Eclipse,
-on the other hand, still requires the use of the mouse for many things, and
-when compared to Vim, provides a less than ideal interface for editing text.
+projects.
+The first, Vim, is `arguably <http://en.wikipedia.org/wiki/Editor_wars>`_
+one of the best text editors in existence.  The second, Eclipse, provides many
+great tools for development in various languages.  Each provides many features
+that can increase developer productivity, but both still leave something to be
+desired.  Vim lacks native Java support and many of the advanced features
+available in Eclipse. Eclipse, on the other hand, still requires the use of the
+mouse for many things, and when compared to Vim, provides a less than ideal
+interface for editing text.
 
 That is where eclim comes into play.  Instead of trying to write an IDE in Vim
 or a Vim editor in Eclipse, eclim provides an Eclipse plug-in that exposes
