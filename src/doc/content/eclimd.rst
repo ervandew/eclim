@@ -18,8 +18,21 @@
 Eclimd
 ======
 
-Starting eclimd
----------------
+.. _eclimd_headless:
+
+Headless eclipse server
+-----------------------
+
+The most mature usage scenario that eclim provides, is the running of a
+headless eclipse server and communicating with that server inside of vim.
+Starting and stopping of the headless eclipse instance is detailed below.
+
+.. warning::
+  While the headless server is running, opening an eclipse gui is **strongly**
+  discouraged.  Doing so has the potential to corrupt eclipse's persisted
+  state, leading to errors on the next headless startup.
+
+**Starting eclimd**
 
 **Linux**:  To start eclimd from linux, simply execute the eclimd script found
 in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
@@ -28,8 +41,7 @@ in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
 the eclimd.bat file found in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
 
 
-Stopping eclimd
----------------
+**Stopping eclimd**
 
 To cleanly shutdown eclim use any one of the following.
 
@@ -59,6 +71,66 @@ To cleanly shutdown eclim use any one of the following.
   reserve this as a last resort. Also note that when killing the java process
   eclipse will pop up an alert dialog notifying you that the java process was
   terminated underneath it.  This is nothing to be alarmed about.
+
+
+.. _eclimd_headed:
+
+Headed eclipse server
+---------------------
+
+For users that find themselves periodically needing the eclipse gui, or
+otherwise wanting to keep the gui open while using eclim, there is support for
+running the eclim server inside of a headed eclipse instance.
+
+**Starting eclimd**
+
+The eclim daemon inside of eclipse is implemented as an eclipse view.  To open
+the view, go to the Window menu and select:
+
+  Show View -> Other -> Eclim -> eclimd
+
+The view will be opened in a new tab in the same pane as the "Problems" tab, as
+shown below.
+
+.. image:: images/screenshots/eclipse/java_editor_eclim_view.png
+
+**Stopping eclimd**
+
+As long as the eclimd tab is open then the eclim daemon will be running.
+Stopping the eclim daemon is just a matter of closing the eclimd tab.  Also
+note that leaving the tab open and closing eclipse will shutdown the daemon as
+well, and on the next start of eclipse the tab will be opened, but the eclim
+daemon will not start until the tab is forced to display itself. In other
+words, the daemon will not start until the eclimd tab is the active tab in that
+group.
+
+
+.. _gvim_embedded:
+
+Embedded gvim
+-------------
+
+.. note::
+  Please note that this feature is currently considered alpha.  Please post any
+  issues on the `eclim user`_ mailing list.
+
+Another feature provided by eclim for those who prefer to work inside of the
+eclipse gui, is the embedding of gvim inside of eclipse.  This feature is
+provided by an eclim local fork of `vimplugin`_.  The feature adds a new editor
+to eclipse which allows you to open files in gvim by right clicking the file
+name in the eclipse tree and then selecting:
+
+  Open With -> Vim
+
+.. image:: images/screenshots/eclipse/gvim_eclim_view.png
+
+The eclim installer should take care of locating your gvim installation for use inside of eclipse, but in the event that it could not locate it, you can set the location and other settings via the vimplugin preferences located under the Windows menu at:
+
+  Preferences -> Vimplugin
+
+.. note::
+  If you have vimplugin installed you should remove it prior to using the eclim
+  version.
 
 
 ~/.eclimrc
@@ -98,3 +170,6 @@ $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
 By default, eclimd writes all logging info to both the console and
 $ECLIPSE_HOME/plugins/org.eclim_version/log/eclimd.log.
+
+.. _eclim user: http://groups.google.com/group/eclim-user
+.. _vimplugin: http://vimplugin.org

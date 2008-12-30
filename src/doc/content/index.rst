@@ -56,25 +56,27 @@ interface for editing text.
 That is where eclim comes into play.  Instead of trying to write an IDE in Vim
 or a Vim editor in Eclipse, eclim provides an Eclipse plug-in that exposes
 Eclipse features through a server interface, and a set of Vim plug-ins that
-communicate with Eclipse over that interface (as illustrated below).
+communicate with Eclipse over that interface.  This functionality can be
+leveraged in three primary ways, as illustrated below.
 
-.. image:: images/diagram.gif
+.. image:: images/diagram.png
 
-There are several benefits to this approach:
+#. The :ref:`first scenario <eclimd_headless>` is for those for which vim is
+   their primary editing interface.  In this scenario you run a headless
+   instance of eclipse which all vim instances can then communicate with to
+   provide the various eclipse features.
 
-* Easily migrate from using the Eclipse gui to using the lighter and more
-  productive Vim interface to work on new or existing projects, while still
-  having the option to open the Eclipse gui for any tasks or third party
-  plug-ins not yet exposed in Vim.
+#. The :ref:`second scenario <eclimd_headed>` is for those who prefer using vim
+   as their main interface, but frequently end up jumping back to eclipse for
+   any features not provided by eclim inside of vim.  In this case you can run
+   the eclim server inside of the eclipse gui and then interact with it via
+   external vim instance just like the first scenario.
 
-* Spawn many instances of Vim all sharing a single background instance of
-  Eclipse.
-
-* Seamlessly work in a group of developers who use Eclipse, giving you the
-  freedom to work in an environment that makes you most productive.
-
-* Utilize the full power of Vim's scripting capabilities with support for
-  running more advanced functions in the Eclipse jvm.
+#. The :ref:`last scenario <gvim_embedded>` is for those who wish to use the
+   eclipse interface full time, but want to use gvim as an embedded eclipse
+   editor. Just like the previous use case, the eclim server is run inside of
+   the eclipse gui and the embedded gvim will interact with it just like any
+   external vim instances.
 
 .. _license:
 
