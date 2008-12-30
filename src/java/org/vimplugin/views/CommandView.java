@@ -14,14 +14,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.util.Arrays;
 
+import org.eclim.logging.Logger;
+
 import org.eclipse.swt.SWT;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+
 import org.eclipse.ui.part.ViewPart;
+
 import org.vimplugin.VimPlugin;
 
 /**
@@ -33,6 +39,7 @@ import org.vimplugin.VimPlugin;
  * </pre>
  */
 public class CommandView extends ViewPart {
+  private static final Logger logger = Logger.getLogger(CommandView.class);
 
   private Text input;
 
@@ -43,17 +50,15 @@ public class CommandView extends ViewPart {
 
       //TODO: cleanup launching of commands inside vim.
       public void handleEvent(Event e) {
-        //System.out.println("Command View: " + e.character);
         if (e.character == 0x0D) {
-
           String line1 = input.getText().substring(3);
           if (input.getText().startsWith("vr:")) {
             //TODO set and lookup --servername from VimServer instance.
-            String[] args = { "vim", "--servername", "GVIM",
-                "--remote-send", line1 };
+            String[] args = {
+              "vim", "--servername", "GVIM", "--remote-send", line1
+            };
             try {
-              System.out.printf("running %s :", Arrays
-                  .toString(args));
+              logger.debug("running: " + Arrays.toString(args));
               Process process = new ProcessBuilder(args).start();
 
               InputStream is = process.getInputStream();
@@ -62,18 +67,17 @@ public class CommandView extends ViewPart {
               String line;
 
               while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                logger.debug(line);
               }
               process.waitFor();
 
-              System.out
-                  .println("result: " + process.exitValue());
-            } catch (IOException e1) {
-              // TODO Auto-generated catch block
-              e1.printStackTrace();
-            } catch (InterruptedException e2) {
-              // TODO Auto-generated catch block
-              e2.printStackTrace();
+              logger.debug("result: " + process.exitValue());
+            } catch (IOException ioe) {
+              // FIXME: open error dialog
+              logger.error("Error sending command.", ioe);
+            } catch (InterruptedException ie) {
+              // FIXME: open error dialog
+              logger.error("Error sending command.", ie);
             }
           } else if (input.getText().startsWith("nb:")) {
             VimPlugin.getDefault().getVimserver(0).getVc().plain(line1);
@@ -81,7 +85,6 @@ public class CommandView extends ViewPart {
 
           input.setText("");
         }
-
       }
     });
   }

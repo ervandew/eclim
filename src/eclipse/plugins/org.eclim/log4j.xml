@@ -43,21 +43,37 @@
   </appender>
 
   <!--
-    - Eclipse view appender.
+    - Eclimd view appender.
     -->
   <appender name="view" class="org.eclim.logging.log4j.ViewAppender">
+    <param name="View" value="org.eclim.eclipse.headed.EclimdView"/>
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
     </layout>
   </appender>
 
-  <category name="org.apache.commons.vfs">
-    <priority value="warn"/>
-  </category>
+  <!--
+    - Vimplugin debug view appender.
+    -->
+  <appender name="vimplugin_console" class="org.eclim.logging.log4j.ViewAppender">
+    <param name="View" value="org.eclim.eclipse.headed.VimpluginDebugView"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+    </layout>
+  </appender>
 
-  <category name="org.eclim">
-    <priority value="info"/>
-  </category>
+  <logger name="org.apache.commons.vfs">
+    <level value="warn"/>
+  </logger>
+
+  <logger name="org.eclim">
+    <level value="info"/>
+  </logger>
+
+  <logger name="org.vimplugin" additivity="false">
+    <level value="debug"/>
+    <appender-ref ref="vimplugin_console"/>
+  </logger>
 
   <root>
     <priority value="info"/>

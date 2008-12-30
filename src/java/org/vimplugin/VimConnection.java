@@ -14,8 +14,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.util.HashSet;
 
 import org.vimplugin.listeners.FileOpened;
@@ -26,6 +28,7 @@ import org.vimplugin.listeners.ServerDisconnect;
 import org.vimplugin.listeners.ServerStarted;
 import org.vimplugin.listeners.TextInsert;
 import org.vimplugin.listeners.TextRemoved;
+
 import org.vimplugin.preferences.PreferenceConstants;
 
 /**
@@ -40,7 +43,10 @@ import org.vimplugin.preferences.PreferenceConstants;
  *      specification</a>
  *
  */
-public class VimConnection implements Runnable {
+public class VimConnection implements Runnable
+{
+  private static final org.eclim.logging.Logger logger =
+    org.eclim.logging.Logger.getLogger(VimConnection.class);
 
   /** is a vim instance running? */
   private boolean serverRunning = false;
@@ -86,14 +92,14 @@ public class VimConnection implements Runnable {
     try {
       // start server
       socket = new ServerSocket(port + vimID);
-      System.out.println("Server started and listening");
+      logger.debug("Server started and listening");
 
       // accept client
       vimSocket = socket.accept();
       out = new PrintWriter(vimSocket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(vimSocket
           .getInputStream()));
-      System.out.println("Connection established");
+      logger.debug("Connection established");
 
       // Add Listeners
       if (VimPlugin.getDefault().getPreferenceStore().getBoolean(
@@ -168,8 +174,9 @@ public class VimConnection implements Runnable {
    */
   public void command(int bufID, String name, String param) {
     int seqno = VimPlugin.getDefault().nextSeqNo();
-    String tmp = bufID + ":" + name + "!" + seqno + " " + param;
-    out.println(tmp);
+    String cmd = bufID + ":" + name + "!" + seqno + " " + param;
+    logger.debug("command: " + cmd);
+    out.println(cmd);
   }
 
   /**
@@ -188,6 +195,7 @@ public class VimConnection implements Runnable {
       throws IOException {
     int seqno = VimPlugin.getDefault().nextSeqNo();
     String tmp = bufID + ":" + name + "/" + seqno + " " + param;
+    logger.debug("function: " + tmp);
     out.println(tmp);
     try {
       tmp = in.readLine();
@@ -199,6 +207,7 @@ public class VimConnection implements Runnable {
     // the function might be saveAndExit.. in such case we wont get any
     // response
 
+    logger.debug("result: " + tmp);
     return tmp;
   }
 
@@ -212,9 +221,9 @@ public class VimConnection implements Runnable {
    *      specification</a>
    */
   public void plain(String s) {
+    logger.debug("plain: " + s);
     out.println(s);
   }
-
 
   /**
    * Adds a Listener to the list of observers. On each event all listeners are

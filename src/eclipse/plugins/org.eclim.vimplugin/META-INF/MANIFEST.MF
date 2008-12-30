@@ -7,7 +7,8 @@ Bundle-Activator: org.vimplugin.VimPlugin
 Bundle-Localization: plugin
 Bundle-ClassPath: .,
   eclim-vimplugin.jar
-Require-Bundle: org.eclipse.core.resources,
+Require-Bundle: org.eclim,
+ org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui,

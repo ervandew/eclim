@@ -22,12 +22,11 @@ public class RedoAction extends Action {
     update();
   }
 
-
   /* (non-Javadoc)
    * @see org.eclipse.jface.action.Action#run()
    */
   public void run() {
-    System.out.println("Redo Pressed\n");
+    //System.out.println("Redo Pressed\n");
   }
 
   public void update() {

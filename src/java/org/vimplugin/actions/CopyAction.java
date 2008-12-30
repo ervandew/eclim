@@ -26,13 +26,12 @@ public class CopyAction extends Action {
    * (non-Javadoc) Method declared on IAction
    */
   public void run() {
-    System.out.println("Copy Pressed\n");
+    //System.out.println("Copy Pressed\n");
   }
 
   /*
    * (non-Javadoc) Method declared on TextEditorAction
    */
-
   public void update() {
     // setChecked(getTextEditor() != null &&
     // getTextEditor().showsHighlightRangeOnly());

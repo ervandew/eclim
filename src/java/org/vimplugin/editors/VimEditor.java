@@ -19,6 +19,8 @@ import java.lang.reflect.Field;
 
 import java.net.URI;
 
+import org.eclim.logging.Logger;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -67,6 +69,8 @@ import org.vimplugin.preferences.PreferenceConstants;
  * Provides an Editor to Eclipse which is backed by a Vim instance.
  */
 public class VimEditor extends TextEditor {
+  private static final Logger logger = Logger.getLogger(VimEditor.class);
+
 
   /** ID of the VimServer. */
   protected int serverID;
@@ -186,11 +190,11 @@ public class VimEditor extends TextEditor {
       VimPlugin.getDefault().setNumberOfBuffers(bufferID);
 
       //let vim edit the file.
-      VimPlugin.getDefault().getVimserver(serverID).getVc()
-        .command(bufferID, "editFile", "\"" + filePath + "\"");
+      VimConnection vc = VimPlugin.getDefault().getVimserver(serverID).getVc();
+      vc.command(bufferID, "editFile", "\"" + filePath + "\"");
+      vc.command(bufferID, "startDocumentListen", "");
     }
   }
-
 
   /**
    * Create a vim instance figuring out if it should be external or embedded.
@@ -302,7 +306,8 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void dispose() {
-    System.out.println("dispose()");
+    logger.debug("dispose()");
+
     // TODO: calling close ourselves here doesn't seem right.
     // Note: this close raises NPE if gvim is not available. why is it
     // needed?
@@ -326,7 +331,8 @@ public class VimEditor extends TextEditor {
    */
   @Override
   public void close(boolean save) {
-    System.out.println("close( " + save + " );");
+    logger.debug("close( " + save + " );");
+
     if (this.alreadyClosed) {
       super.close(false);
       return;
@@ -521,11 +527,9 @@ public class VimEditor extends TextEditor {
     if (text.length() <= 2)
       return text;
     int offset = 0, length = text.length(), offset1 = 0;
-    // System.out.println("Initial-->"+text);
     String newText = "";
     while (offset < length) {
       offset1 = text.indexOf('\\', offset);
-      // System.out.println(newText+"--> "+offset+" ->"+offset1);
       if (offset1 < 0) {
         newText = newText + text.substring(offset);
         break;
@@ -534,7 +538,6 @@ public class VimEditor extends TextEditor {
           + text.substring(offset1 + 1, offset1 + 2);
       offset = offset1 + 2;
     }
-    // System.out.println(newText+"-->Final");
     return newText;
   }
 
@@ -549,19 +552,19 @@ public class VimEditor extends TextEditor {
   public void insertDocumentText(String text, int offset) {
     text = removeBackSlashes(text);
 
-    System.out.println(text + " INSERT " + offset);
+    //System.out.println(text + " INSERT " + offset);
 
     try {
       String first = document.get(0, offset);
       String last = document.get(offset, document.getLength() - offset);
       if (text.equals(new String("\\n"))) {
-        System.out.println("Insert new Line");
+        //System.out.println("Insert new Line");
         first = first + System.getProperty("line.separator") + last;
       } else
         first = first + text + last;
       document.set(first);
       setDirty(true);
-      System.out.println(first);
+      //System.out.println(first);
     } catch (BadLocationException e) {
       message("Could not insert text into document:",e);
     }
@@ -574,13 +577,13 @@ public class VimEditor extends TextEditor {
    * @param length The amount of text to remove.
    */
   public void removeDocumentText(int offset, int length) {
-    System.out.println(offset + " REMOVE " + length);
+    //System.out.println(offset + " REMOVE " + length);
     try {
       String first = document.get(0, offset);
       String last = document.get(offset + length, document.getLength()
           - offset - length);
       first = first + last;
-      System.out.println(first);
+      //System.out.println(first);
       document.set(first);
       setDirty(true);
     } catch (BadLocationException e) {

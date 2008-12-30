@@ -26,7 +26,7 @@ public class PasteAction extends Action {
    * @see org.eclipse.jface.action.Action#run()
    */
   public void run() {
-    System.out.println("Paste Pressed\n");
+    //System.out.println("Paste Pressed\n");
   }
 
   /**

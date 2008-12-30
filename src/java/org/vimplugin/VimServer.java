@@ -15,6 +15,8 @@ import java.io.IOException;
 
 import java.util.HashSet;
 
+import org.eclim.logging.Logger;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.vimplugin.editors.VimEditor;
@@ -27,7 +29,9 @@ import org.vimplugin.preferences.PreferenceConstants;
  * one class or at least reduced to very tiny class which just extend this class
  * in a trivial manner.
  */
-public class VimServer {
+public class VimServer
+{
+  private static final Logger logger = Logger.getLogger(VimServer.class);
 
   /**
    * the id of this instance. IDs are counted in
@@ -160,13 +164,13 @@ public class VimServer {
 
     // starting gvim with Netbeans interface
     try {
-      System.out.println("Trying to start vim");
+      logger.debug("Trying to start vim");
       ProcessBuilder builder = new ProcessBuilder(args);
       if (workingDir != null){
         builder.directory(new File(workingDir));
       }
       p = builder.start();
-      System.out.println("Started vim");
+      logger.debug("Started vim");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -176,7 +180,7 @@ public class VimServer {
       // sleep so that we don't have a messy cpu-hogging infinite loop
       // here
       Long stoptime = 2000L; // 2 Seconds
-      System.out.println("Waiting to connect to vim server…");
+      logger.debug("Waiting to connect to vim server");
       try {
         Thread.sleep(stoptime);
       } catch (InterruptedException e) {

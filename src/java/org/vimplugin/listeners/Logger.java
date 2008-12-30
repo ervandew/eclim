@@ -13,16 +13,16 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 
 /**
- * Writes all events to standard out.
+ * Writes all events to the debug console.
  */
 public class Logger implements IVimListener {
+  private static final org.eclim.logging.Logger logger =
+    org.eclim.logging.Logger.getLogger(Logger.class);
 
   /**
-   * System.out.println(ve.getLine());
-   *
    * @see org.vimplugin.listeners.IVimListener#handleEvent(org.vimplugin.VimEvent)
    */
   public void handleEvent(VimEvent ve) {
-    System.out.println(ve.getLine());
+    logger.debug(ve.getLine());
   }
 }

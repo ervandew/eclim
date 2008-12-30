@@ -27,7 +27,7 @@ public class FileUnmodified implements IVimListener {
    */
   public void handleEvent(VimEvent ve) throws VimException {
     String event = ve.getEvent();
-    if (event.equals("save") == true || event.equals("unmodified") == true) {
+    if (event.equals("save") || event.equals("unmodified")) {
       for (VimEditor veditor : VimPlugin.getDefault()
           .getVimserver(ve.getConnection().getVimID()).getEditors()) {
         if (veditor.getBufferID() == ve.getBufferID())

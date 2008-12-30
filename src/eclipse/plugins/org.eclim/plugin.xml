@@ -25,12 +25,27 @@
   </extension>
 
   <extension point="org.eclipse.ui.views">
-    <category id="org.eclim.eclipse.headed" name="Eclim"/>
+    <category id="org.eclim.category" name="Eclim"/>
     <view id="org.eclim.eclipse.headed.EclimdView"
         class="org.eclim.eclipse.headed.EclimdView"
         icon="resources/images/vim.gif"
-        category="org.eclim.eclipse.headed"
+        category="org.eclim.category"
         name="eclimd"
-        restorable="true"/>
+        restorable="true"
+        allowMultiple="false">
+      <description>
+        Starts the eclim daemon and displays its logging output.
+      </description>
+    </view>
+    <view id="org.eclim.eclipse.headed.VimpluginDebugView"
+        allowMultiple="false"
+        category="org.eclim.category"
+        class="org.eclim.eclipse.headed.VimpluginDebugView"
+        icon="resources/images/vim.gif"
+        name="Vimplugin Debug Console">
+      <description>
+        Allows you to view debugging output from vimplugin.
+      </description>
+    </view>
   </extension>
 </plugin>

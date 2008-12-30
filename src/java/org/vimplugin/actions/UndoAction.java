@@ -26,7 +26,7 @@ public class UndoAction extends Action {
    * @see org.eclipse.jface.action.Action#run()
    */
   public void run() {
-    System.out.println("Undo Pressed\n");
+    //System.out.println("Undo Pressed\n");
   }
 
   public void update() {
