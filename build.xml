@@ -360,7 +360,7 @@
         <include name="org/vimplugin/**/*.class"/>
       </fileset>
       <fileset dir="src/java">
-        <include name="org/vimplugin/*/**/*"/>
+        <include name="org/vimplugin/**/*"/>
         <exclude name="**/package.html"/>
         <exclude name="**/*.java"/>
       </fileset>
