@@ -10,6 +10,7 @@
  */
 package org.vimplugin.listeners;
 
+import org.vimplugin.VimConnection;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
@@ -27,11 +28,18 @@ public class FileUnmodified implements IVimListener {
    */
   public void handleEvent(VimEvent ve) throws VimException {
     String event = ve.getEvent();
-    if (event.equals("save") || event.equals("unmodified")) {
-      for (VimEditor veditor : VimPlugin.getDefault()
-          .getVimserver(ve.getConnection().getVimID()).getEditors()) {
-        if (veditor.getBufferID() == ve.getBufferID())
+    // for some reason the "unmodified" event is commented out in the vim code.
+    // since that event, and not the "save" event, is the one we need, as a
+    // workaround eclim includes an autocommand which sends an equivalent
+    // keyCommand.
+    if (event.equals("unmodified") ||
+        (event.equals("keyCommand") && ve.getArgument(0).equals("\"unmodified\""))){
+      VimPlugin plugin = VimPlugin.getDefault();
+      VimConnection conn = ve.getConnection();
+      for (VimEditor veditor : plugin.getVimserver(conn.getVimID()).getEditors()){
+        if (veditor.getBufferID() == ve.getBufferID()){
           veditor.setDirty(false);
+        }
       }
     }
   }

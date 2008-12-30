@@ -86,7 +86,6 @@ public class VimEvent {
     } catch (IndexOutOfBoundsException iobe) {
       throw new VimException("Could not parse line.",iobe);
     }
-
   }
 
   /**

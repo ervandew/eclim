@@ -29,5 +29,6 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - Removed extraneous preferences.
   - Removed unused classes or those that don't fit within the eclim paradigm.
   - Added a debug console utilizing log4j instead of System.out
+  - When a files is saved in gvim, notify eclipse of the save.
 
 --------------------------------------------------------------------------------

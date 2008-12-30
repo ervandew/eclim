@@ -166,9 +166,13 @@ public class VimServer
     try {
       logger.debug("Trying to start vim");
       ProcessBuilder builder = new ProcessBuilder(args);
+      /*java.util.Map<String, String> env = builder.environment();
+      env.put("SPRO_GVIM_DEBUG", "/tmp/netbeans.log");
+      env.put("SPRO_GVIM_DLEVEL", "0xffffffff");*/
       if (workingDir != null){
         builder.directory(new File(workingDir));
       }
+
       p = builder.start();
       logger.debug("Started vim");
     } catch (IOException e) {
