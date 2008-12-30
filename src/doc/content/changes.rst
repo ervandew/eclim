@@ -35,6 +35,10 @@ Eclim:
     the default means to open a result and various key bindings for opening via
     other means.
 
+Php:
+  - Restored :ref:`php support <vim/php/index>`  via the new `eclipse pdt`_
+    2.0.
+
 Vcs:
   - Added option to set the split
     :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)
