@@ -16,18 +16,20 @@
  */
 package org.eclim.logging.log4j;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 
 import org.apache.log4j.spi.LoggingEvent;
 
-import org.eclim.eclipse.headed.EclimdView;
-
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * Appender for logging messages to the EclimdView log if the view is open.
+ * Appender for logging messages to an eclipse view if the view is open and has
+ * a static accessor (getLog) for a Text widget.
  *
  * @author Eric Van Dewoestine
  * @version $Revision$
@@ -35,6 +37,21 @@ import org.eclipse.swt.widgets.Text;
 public class ViewAppender
   extends AppenderSkeleton
 {
+  private Method logAccessor;
+
+  /**
+   * Sets the class name of the view to log to.
+   *
+   * @param view The fully qualified class name.
+   */
+  public void setView(String view)
+    throws ClassNotFoundException,
+           NoSuchMethodException
+  {
+    Class viewClass = Class.forName(view);
+    logAccessor = viewClass.getMethod("getLog");
+  }
+
   /**
    * {@inheritDoc}
    * @see AppenderSkeleton#append(LoggingEvent)
@@ -42,14 +59,20 @@ public class ViewAppender
   @Override
   protected void append(final LoggingEvent event)
   {
-    final Text log = EclimdView.getLog();
-    if (log != null && !log.isDisposed()){
-      Display.getDefault().asyncExec(new Runnable(){
-        public void run()
-        {
-          write(log, event);
-        }
-      });
+    try{
+      final Text log = (Text)logAccessor.invoke(null);
+      if (log != null && !log.isDisposed()){
+        Display.getDefault().asyncExec(new Runnable(){
+          public void run()
+          {
+            write(log, event);
+          }
+        });
+      }
+    }catch(IllegalAccessException iae){
+      throw new RuntimeException(iae);
+    }catch(InvocationTargetException ite){
+      throw new RuntimeException(ite);
     }
   }
 
