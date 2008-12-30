@@ -18,6 +18,10 @@
 Php Search
 ==========
 
+.. note::
+  Search support depends on the eclipse pdt_ which should be installed for you
+  when choosing php support in the eclim installer.
+
 .. _\:PhpFindDefinition:
 
 Element Search
@@ -108,3 +112,5 @@ Vim Variables
   - 'split' - open the result in a new window via "split".
   - 'edit' - open the result in the current window.
   - 'lopen' - open the location list to display the result.
+
+.. _pdt: http://eclipse.org/pdt

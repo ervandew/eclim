@@ -18,11 +18,16 @@
 PDT Build Path
 ================
 
-Source code completion, searching, and other features make use of the pdt's
-.buildpath to locate php resources.  When you first create a project, a
-``.buildpath`` file is created in the project's root directory.  If your
-project depends on any php files located outside your project or in another
-project, then you'll need to edit your .buildpath accordingly.
+Source code completion, searching, and other features make use of the
+`eclipse pdt's <http://eclipse.org/pdt/>`_ .buildpath to locate php resources.
+When you first create a project, a ``.buildpath`` file is created in the
+project's root directory.  If your project depends on any php files located
+outside your project or in another project, then you'll need to edit your
+.buildpath accordingly.
+
+.. note::
+  Php project support depends on the eclipse pdt_ which should be
+  installed for you when choosing php support in the eclim installer.
 
 To help you do this, eclim provides several commands to ease the creation of
 new build path entries and variables, all of which are made available when
@@ -104,3 +109,5 @@ The following is a list of commands that eclim provides while editing your
 
     - **:VariableDelete** <name> -
       Deletes the variable with the supplied name.
+
+.. _pdt: http://eclipse.org/pdt

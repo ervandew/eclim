@@ -29,3 +29,9 @@ Php
 - :ref:`vim/php/complete`
 - :ref:`vim/php/validate`
 - :ref:`vim/php/search`
+
+.. note::
+  This feature depends on the eclipse pdt_ which should be installed for you
+  when choosing php support in the eclim installer.
+
+.. _pdt: http://eclipse.org/pdt

@@ -36,3 +36,9 @@ Php code completion uses the standard
   $test->get<C-X><C-U>
   $test->getName()
   ?>
+
+.. note::
+  This feature depends on the eclipse pdt_ which should be installed for you
+  when choosing php support in the eclim installer.
+
+.. _pdt: http://eclipse.org/pdt

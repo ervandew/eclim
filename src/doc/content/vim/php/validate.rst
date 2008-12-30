@@ -31,6 +31,10 @@ Automatic validation of php source files can be disabled via the
 automatic validation, you can still use the **:Validate** command to manually
 validate the current file.
 
+.. note::
+  This feature depends on the eclipse pdt_ which should be installed for you
+  when choosing php support in the eclim installer.
+
 
 Configuration
 -------------
@@ -41,3 +45,5 @@ Vim Variables:
 
 - **g:EclimPhpValidate** (Default: 1) -
   If set to 0, disables source code validation.
+
+.. _pdt: http://eclipse.org/pdt
