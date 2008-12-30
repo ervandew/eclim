@@ -84,7 +84,7 @@ of the pattern to search for.
 
   - class
   - function
-  - constant
+  - field
 
 - scope (Default: all): The scope of the search where possible context
   values include
