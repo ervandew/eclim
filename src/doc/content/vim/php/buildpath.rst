@@ -26,8 +26,8 @@ outside your project or in another project, then you'll need to edit your
 .buildpath accordingly.
 
 .. note::
-  Php project support depends on the eclipse pdt_ which should be
-  installed for you when choosing php support in the eclim installer.
+  Php project support depends on the eclipse pdt_ which should be installed for
+  you when choosing php support in the eclim installer.
 
 To help you do this, eclim provides several commands to ease the creation of
 new build path entries and variables, all of which are made available when
