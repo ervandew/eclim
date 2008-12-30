@@ -357,12 +357,8 @@ Web Lookup Commands
 Misc. Commands
 -----------------
 
-- :ref:`:LocateFileEdit` [file] -
-  Locates a relative file and opens it via :edit.
-- :ref:`:LocateFileSplit` [file] -
-  Locates a relative file and opens it via :split.
-- :ref:`:LocateFileTab` [file] -
-  Locates a relative file and opens it via :tabnew.
+- :ref:`:LocateFile` [file] -
+  Locates a relative file and opens it.
 - :ref:`:Split` file [file ...] -
   Behaves like the 'split' command, but allows multiple files to be supplied.
 - :ref:`:SplitRelative` file [file ...] -

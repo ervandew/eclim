@@ -248,9 +248,6 @@ Xsd 指令集
 其他指令集
 --------------
 
-- :ref:`:LocateFileEdit` [檔案] - 尋找檔案並以 :edit 開啟.
-- :ref:`:LocateFileSplit` [檔案] - 尋找檔案並以 :split 開啟.
-- :ref:`:LocateFileTab` [檔案] - 尋找檔案並以 :tabnew 開啟.
 - :ref:`:Split` 檔案 [檔案 ...] -
   類似 :split 指令, 但允許同時開啟多個檔案.
 - :ref:`:SplitRelative` 檔案 [檔案 ...] -
