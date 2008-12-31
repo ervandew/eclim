@@ -40,7 +40,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -59,6 +61,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import org.vimplugin.DisplayUtils;
 import org.vimplugin.VimConnection;
 import org.vimplugin.VimPlugin;
 import org.vimplugin.VimServer;
@@ -501,6 +504,18 @@ public class VimEditor
     conn.command(bufferID, "setDot", offset);
     // Brings the vim editor window to top
     conn.command(bufferID, "raise", "");
+
+    // to fully focus gvim, we need to simulate a mouse click.
+    // Should this be optional, via a preference? There is the potential for
+    // weirdness here.
+    Rectangle bounds = parent.getBounds();
+    final Point point = parent.toDisplay(bounds.x + 5, bounds.y + bounds.height - 25);
+    new Thread(){
+      public void run()
+      {
+        DisplayUtils.doClick(parent.getDisplay(), point.x, point.y);
+      }
+    }.start();
   }
 
   /**
