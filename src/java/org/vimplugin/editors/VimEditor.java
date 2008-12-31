@@ -91,6 +91,8 @@ public class VimEditor
 
   private IFile selectedFile;
 
+  private Composite parent;
+
   /**
    * The field to grab for Windows/Win32.
    */
@@ -123,6 +125,8 @@ public class VimEditor
    */
   @Override
   public void createPartControl(Composite parent) {
+    this.parent = parent;
+
     VimPlugin plugin = VimPlugin.getDefault();
 
     if (!plugin.gvimAvailable()) {
@@ -479,6 +483,10 @@ public class VimEditor
       getSite().getPage().closeEditor(this, false);
       return;
     }
+
+    // let the parent composite handle setting the focus on the tab first.
+    parent.setFocus();
+
     VimConnection conn = VimPlugin.getDefault().getVimserver(serverID).getVc();
     // Brings the corresponding buffer to top
     conn.command(bufferID, "setDot", "off");
