@@ -27,6 +27,8 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.ui.PlatformUI;
+
 /**
  * Appender for logging messages to an eclipse view if the view is open and has
  * a static accessor (getLog) for a Text widget.
@@ -61,8 +63,9 @@ public class ViewAppender
   {
     try{
       final Text log = (Text)logAccessor.invoke(null);
-      if (log != null && !log.isDisposed()){
-        Display.getDefault().asyncExec(new Runnable(){
+      Display display = PlatformUI.getWorkbench().getDisplay();
+      if (log != null && !log.isDisposed() && !display.isDisposed()){
+        display.asyncExec(new Runnable(){
           public void run()
           {
             write(log, event);

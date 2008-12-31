@@ -311,8 +311,6 @@ public class VimEditor
    */
   @Override
   public void dispose() {
-    logger.debug("dispose()");
-
     // TODO: calling close ourselves here doesn't seem right.
     // Note: this close raises NPE if gvim is not available. why is it
     // needed?
@@ -336,8 +334,6 @@ public class VimEditor
    */
   @Override
   public void close(boolean save) {
-    logger.debug("close( " + save + " );");
-
     if (this.alreadyClosed) {
       super.close(false);
       return;

@@ -37,6 +37,7 @@ public class VimpluginDebugView
   @Override
   public void dispose()
   {
+    log.dispose();
     log = null;
   }
 
