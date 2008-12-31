@@ -15,7 +15,10 @@ import org.vimplugin.editors.VimEditor;
 /**
  * Resembles an event thrown by vim and caught by various listeners in vimplugin.
  */
-public class VimEvent {
+public class VimEvent
+{
+  private static final org.eclim.logging.Logger logger =
+    org.eclim.logging.Logger.getLogger(VimEvent.class);
 
   /** The complete line vim threw.  */
   private final String line;
@@ -51,8 +54,9 @@ public class VimEvent {
     try {
       return line.substring(beginIndex + 1, endIndex);
     } catch (IndexOutOfBoundsException iobe) {
-      throw new VimException("Could not parse line \""+line+"\"",iobe);
+      logger.debug("Could not parse event name from line: " + line, iobe);
     }
+    return "";
   }
 
   /**
@@ -77,15 +81,18 @@ public class VimEvent {
             || (line.charAt(endIndex - 1) == '"' && beginIndex != endIndex - 2))
           break;
       }
-    } else
+    } else {
       endIndex = line.indexOf(" ", beginIndex + 1);
-    if (endIndex == -1)
+    }
+    if (endIndex == -1){
       endIndex = line.length();
+    }
     try {
       return line.substring(beginIndex + 1, endIndex);
     } catch (IndexOutOfBoundsException iobe) {
-      throw new VimException("Could not parse line.",iobe);
+      logger.debug("Could not parse argument " + index + " from line:" + line, iobe);
     }
+    return "";
   }
 
   /**
