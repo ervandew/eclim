@@ -20,6 +20,8 @@ import java.net.Socket;
 
 import java.util.HashSet;
 
+import java.util.regex.Pattern;
+
 import org.vimplugin.listeners.FileOpened;
 import org.vimplugin.listeners.FileUnmodified;
 import org.vimplugin.listeners.IVimListener;
@@ -48,6 +50,10 @@ public class VimConnection implements Runnable
   private static final org.eclim.logging.Logger logger =
     org.eclim.logging.Logger.getLogger(VimConnection.class);
 
+  /* pattern to match events lines to differencient from function response while
+     waiting on function response */
+  private static final Pattern EVENT = Pattern.compile("^\\d+:\\w+=\\d+.*");
+
   /** is a vim instance running? */
   private boolean serverRunning = false;
 
@@ -72,6 +78,10 @@ public class VimConnection implements Runnable
 
   /** the socket the vim instance runs on */
   private Socket vimSocket;
+
+  private volatile boolean functionCalled = false;
+  private Object functionMonitor = new Object();
+  private String functionResult;
 
   /** creates a connection object (but does not start the connection ..). */
   public VimConnection(int instanceID) {
@@ -118,7 +128,6 @@ public class VimConnection implements Runnable
 
       try {
         while (!startupDone && (line = in.readLine()) != null) {
-
           //ignore "special messages" (see :help nb-special)
           if (!line.startsWith("AUTH")) {
             VimEvent ve = new VimEvent(line, this);
@@ -134,9 +143,16 @@ public class VimConnection implements Runnable
 
       try {
         while ((serverRunning && (line = in.readLine()) != null)) {
-          VimEvent ve = new VimEvent(line, this);
-          for (IVimListener listener : listeners) {
-            listener.handleEvent(ve);
+          if(functionCalled && !EVENT.matcher(line).matches()){
+            synchronized(functionMonitor){
+              functionResult = line;
+              functionMonitor.notify();
+            }
+          }else{
+            VimEvent ve = new VimEvent(line, this);
+            for (IVimListener listener : listeners) {
+              listener.handleEvent(ve);
+            }
           }
         }
       } catch (VimException ve) {
@@ -192,23 +208,35 @@ public class VimConnection implements Runnable
    *      specification</a>
    */
   public String function(int bufID, String name, String param)
-      throws IOException {
+    throws IOException
+  {
     int seqno = VimPlugin.getDefault().nextSeqNo();
     String tmp = bufID + ":" + name + "/" + seqno + " " + param;
     logger.debug("function: " + tmp);
-    out.println(tmp);
-    try {
-      tmp = in.readLine();
-    } catch (IOException e) {
-      //TODO: Is this really intended?
-      //If yes, invent meaningful result:
-      tmp ="goodbye";
-    }
-    // the function might be saveAndExit.. in such case we wont get any
-    // response
 
-    logger.debug("result: " + tmp);
-    return tmp;
+    if ("saveAndExit".equals(name)){
+      out.println(tmp);
+      return null;
+    }
+
+    // FIXME: need to find a better way to handle reading of function result
+    // while run() is continously reading _all_ input from gvim.
+    // FIXME: make use of the seqno for recognizing a function response.
+    synchronized(functionMonitor){
+      functionCalled = true;
+      out.println(tmp);
+      try{
+        functionMonitor.wait(1000);
+      }catch(InterruptedException ie){
+        logger.error("Interrupted while waiting for function result.");
+        return null;
+      }
+    }
+
+    String result = functionResult;
+    functionResult = null;
+    logger.debug("result: " + result);
+    return result;
   }
 
   /**
