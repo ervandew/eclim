@@ -488,8 +488,17 @@ public class VimEditor
     parent.setFocus();
 
     VimConnection conn = VimPlugin.getDefault().getVimserver(serverID).getVc();
+
+    // get the current offset which "setDot" requires.
+    String offset = "0";
+    try{
+      String cursor = conn.function(bufferID, "getCursor", "");
+      offset = cursor.substring(cursor.lastIndexOf(' ') + 1);
+    }catch(IOException ioe){
+      logger.error("Unable to get cursor position.", ioe);
+    }
     // Brings the corresponding buffer to top
-    conn.command(bufferID, "setDot", "off");
+    conn.command(bufferID, "setDot", offset);
     // Brings the vim editor window to top
     conn.command(bufferID, "raise", "");
   }
