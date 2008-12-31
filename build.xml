@@ -365,6 +365,10 @@
         <exclude name="**/*.java"/>
       </fileset>
     </jar>
+
+    <!--antcall target="plugin.lib.jars">
+      <param name="plugin.name" value=".vimplugin"/>
+    </antcall-->
   </target>
 
   <!--
