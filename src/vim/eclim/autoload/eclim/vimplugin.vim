@@ -32,4 +32,13 @@ function eclim#vimplugin#BufferWritten()
   endif
 endfunction " }}}
 
+" FeedKeys(keys) {{{
+" Feeds eclipse compatible key string to eclipse if current gvim instance is
+" attached via the netbeans protocol.
+function eclim#vimplugin#FeedKeys(keys)
+  if has('netbeans_enabled')
+    silent exec 'nbkey feedkeys ' . a:keys
+  endif
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

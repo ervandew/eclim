@@ -132,6 +132,33 @@ The eclim installer should take care of locating your gvim installation for use 
   If you have vimplugin installed you should remove it prior to using the eclim
   version.
 
+**Eclipse key shortcuts in embedded gvim**
+
+While the embedded gvim has focus, all the eclipse keyboard shortcuts you would
+normally use to perform eclipse specific commands will be intercepted by gvim.
+Since gvim has its own set of key bindings, the eclipse ones will be either
+ignored or perform whatever action they have been mapped to in gvim.
+
+To remedy this situation, eclim provides a means to map eclipse shortcuts
+inside of gvim.  To register a shortcut, simply add your mappings to your
+vimrc, gvimrc, or other standard gvim file like so:
+
+  .. code-block:: vim
+
+    " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
+    nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
+
+    " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
+    nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
+
+    " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
+    nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
+
+The value supplied to the `FeedKeys` function must be an eclipse compatible key
+binding string as found in:
+
+  Windows -> Preferences -> General -> Keys
+
 
 ~/.eclimrc
 ----------
