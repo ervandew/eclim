@@ -509,7 +509,7 @@ public class VimEditor
     new Thread(){
       public void run()
       {
-        DisplayUtils.doClick(parent.getDisplay(), point.x, point.y);
+        DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
       }
     }.start();
   }

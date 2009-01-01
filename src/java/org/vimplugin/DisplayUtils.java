@@ -23,19 +23,24 @@ public class DisplayUtils
    * @param display The Display instance.
    * @param x The x coordinate.
    * @param y The y coordinate.
+   * @param restore boolean indicating whether or not the cursor should be
+   * restored to its original position after the click is performed.
    */
-  public static void doClick(final Display display, final int x, final int y)
+  public static void doClick(
+      final Display display, final int x, final int y, boolean restore)
   {
     // save the original cursor location.
     final int[] orig = {0, 0};
-    display.syncExec(new Runnable(){
-      public void run()
-      {
-        Point point = display.getCursorLocation();
-        orig[0] = point.x;
-        orig[1] = point.y;
-      }
-    });
+    if (restore){
+      display.syncExec(new Runnable(){
+        public void run()
+        {
+          Point point = display.getCursorLocation();
+          orig[0] = point.x;
+          orig[1] = point.y;
+        }
+      });
+    }
 
     Event event = new Event();
     event.x = x;
@@ -87,11 +92,13 @@ public class DisplayUtils
     }
 
     // restore cursor to original position.
-    event = new Event();
-    event.x = orig[0];
-    event.y = orig[1];
-    event.type = SWT.MouseMove;
-    post(display, event);
+    if (restore){
+      event = new Event();
+      event.x = orig[0];
+      event.y = orig[1];
+      event.type = SWT.MouseMove;
+      post(display, event);
+    }
   }
 
   /**
