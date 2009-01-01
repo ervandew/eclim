@@ -22,6 +22,7 @@ import java.util.HashSet;
 
 import java.util.regex.Pattern;
 
+import org.vimplugin.listeners.FeedKeys;
 import org.vimplugin.listeners.FileOpened;
 import org.vimplugin.listeners.FileUnmodified;
 import org.vimplugin.listeners.IVimListener;
@@ -122,6 +123,7 @@ public class VimConnection implements Runnable
       listeners.add(new TextRemoved());
       listeners.add(new FileOpened());
       listeners.add(new FileUnmodified());
+      listeners.add(new FeedKeys());
 
       // handle Events
       String line;
