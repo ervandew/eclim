@@ -50,6 +50,7 @@
   <import file="src/ant/logger.xml"/>
   <import file="src/ant/patch.xml"/>
   <import file="src/ant/test.xml"/>
+  <import file="src/ant/vimplugin.xml"/>
 
   <!-- exclude vim swap files and backup files -->
   <defaultexcludes add="**/*.swp"/>
@@ -338,35 +339,6 @@
             includes="META-INF/MANIFEST.MF" eol="unix"/>
       </then>
     </if>
-  </target>
-
-  <!--
-    - Builds vimplugin.
-    -->
-  <target name="vimplugin">
-    <copy todir="${build.plugins}/org.eclim.vimplugin_${eclim.version}">
-      <fileset dir="src/eclipse/plugins/org.eclim.vimplugin" includes="**/*"/>
-    </copy>
-
-    <replace dir="${build.plugins}/org.eclim.vimplugin_${eclim.version}"
-        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
-      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-    </replace>
-
-    <jar jarfile="${build.plugins}/org.eclim.vimplugin_${eclim.version}/eclim-vimplugin.jar">
-      <fileset dir="${build.classes}">
-        <include name="org/vimplugin/**/*.class"/>
-      </fileset>
-      <fileset dir="src/java">
-        <include name="org/vimplugin/**/*"/>
-        <exclude name="**/package.html"/>
-        <exclude name="**/*.java"/>
-      </fileset>
-    </jar>
-
-    <!--antcall target="plugin.lib.jars">
-      <param name="plugin.name" value=".vimplugin"/>
-    </antcall-->
   </target>
 
   <!--

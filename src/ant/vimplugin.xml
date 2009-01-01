@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (C) 2005 - 2008  Eric Van Dewoestine
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  Author: Eric Van Dewoestine
+-->
+<project name="vimplugin" default="vimplugin" basedir="../..">
+
+  <!--
+    - Builds vimplugin.
+    -->
+  <target name="vimplugin" description="build vimplugin">
+    <copy todir="${build.plugins}/org.eclim.vimplugin_${eclim.version}">
+      <fileset dir="src/eclipse/plugins/org.eclim.vimplugin" includes="**/*"/>
+    </copy>
+
+    <replace dir="${build.plugins}/org.eclim.vimplugin_${eclim.version}"
+        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
+      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+    </replace>
+
+    <jar jarfile="${build.plugins}/org.eclim.vimplugin_${eclim.version}/eclim-vimplugin.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/vimplugin/**/*.class"/>
+      </fileset>
+      <fileset dir="src/java">
+        <include name="org/vimplugin/**/*"/>
+        <exclude name="**/package.html"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </jar>
+
+    <!--antcall target="plugin.lib.jars">
+      <param name="plugin.name" value=".vimplugin"/>
+    </antcall-->
+  </target>
+
+  <!--
+    - Start eclipse for testing vimplugin.
+    -->
+  <target name="eclipse.vimplugin"
+      description="start eclipse for testing vimplugin">
+    <exec executable="${eclipse.home}/eclipse">
+      <arg value="-debug"/>
+      <arg value="-console-debug"/>
+      <arg value="-clean"/>
+      <arg line="-data ${user.home}/workspace.vimplugin"/>
+    </exec>
+  </target>
+
+</project>
