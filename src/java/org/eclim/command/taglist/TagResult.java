@@ -109,6 +109,7 @@ public class TagResult
       // remove ctrl-Ms
       pattern = StringUtils.replace(pattern, "\r", "");
     }
+    this.pattern = pattern;
   }
 
   /**
