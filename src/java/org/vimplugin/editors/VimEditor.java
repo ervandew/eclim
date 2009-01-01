@@ -504,14 +504,17 @@ public class VimEditor
     // to fully focus gvim, we need to simulate a mouse click.
     // Should this be optional, via a preference? There is the potential for
     // weirdness here.
-    Rectangle bounds = parent.getBounds();
-    final Point point = parent.toDisplay(bounds.x + 5, bounds.y + bounds.height - 25);
-    new Thread(){
-      public void run()
-      {
-        DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
-      }
-    }.start();
+    if (parent.getDisplay().getActiveShell() != null){
+      Rectangle bounds = parent.getBounds();
+      final Point point = parent.toDisplay(
+          bounds.x + 5, bounds.y + bounds.height - 25);
+      new Thread(){
+        public void run()
+        {
+          DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
+        }
+      }.start();
+    }
   }
 
   /**
