@@ -22,7 +22,7 @@ This product includes software developed by
 
 In accordance with GNU GPL version 2, eclim includes an altered version of
 vimplugin (http://vimplugin.org) with changes including, but not limited to:
-  - Retrieval of default gvim location from plugin.properties.
+  - Retrieval of default gvim location and embed value from plugin.properties.
   - Improved handling of invalid gvim path.
   - Graceful handling of gvim without netbeans integration enabled.
   - Modified eclipse vim editor to always spawn a new gvim process.
