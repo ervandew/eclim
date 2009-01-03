@@ -185,6 +185,46 @@ a couple things worth noting.
   installed.  In a future version, the installer will attempt to auto select
   them for you.
 
+
+Building from source
+--------------------
+
+If you would like to use the bleeding edge development version of eclim or you
+would like to contribute code, then you can checkout and build eclim from
+source.
+
+1. Check out the code:
+
+  ::
+
+    $ svn co https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
+
+2. Build eclim:
+
+  ::
+
+    $ cd eclim
+    $ ant -Declipse.home=<your eclipse home dir>
+
+  This will build and deploy eclim to your eclipse and vim directories.  If you
+  don't want to supply the eclipse home directory every time, you can set the
+  environment variable ECLIM_ECLIPSE_HOME which the build script will then
+  utilize.
+
+  By default the above ant call will build all the eclim plugins, requiring you
+  to have all the related dependencies already installed in your eclipse
+  distribution.  However, if you only want a subset of the eclim plugins to be
+  built, you can specify so using the 'plugins' system property:
+
+  ::
+
+    # build only ant and jdt (java) support
+    $ ant -Dplugins=ant,jdt
+
+    # build only pdt (php) support
+    $ ant -Dplugins=pdt
+
+
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse sdk 3.3.x: http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
