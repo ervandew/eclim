@@ -260,6 +260,10 @@
     <copy todir="${vim.files}" overwrite="true">
       <fileset dir="${build.vimfiles}" includes="**/*"/>
     </copy>
+
+    <replace file="${vim.files}/eclim/autoload/eclim.vim"
+        token="&quot;$${vim.eclim.home}&quot;"
+        value="let g:EclimHome = '${eclim.home}'"/>
   </target>
 
   <!--
