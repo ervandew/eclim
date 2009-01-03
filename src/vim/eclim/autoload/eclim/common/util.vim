@@ -214,6 +214,7 @@ endfunction " }}}
 " s:LocateFileCompletionInit(action) {{{
 function s:LocateFileCompletionInit(action)
   let file = expand('%')
+  let bufnum = bufnr('%')
   let project = eclim#project#util#GetCurrentProjectName()
 
   topleft 10split [Locate\ Results]
@@ -235,7 +236,7 @@ function s:LocateFileCompletionInit(action)
   setlocal noswapfile nobuflisted
   setlocal buftype=nofile bufhidden=delete
 
-  let b:file = file
+  let b:bufnum = bufnum
   let b:project = project
   let b:results_bufnum = results_bufnum
   let b:selection = 1
@@ -247,7 +248,7 @@ function s:LocateFileCompletionInit(action)
     autocmd!
     exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
       \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
-      \ 'call eclim#util#GoToBufferWindow("' .  escape(b:file, '\') . '")'
+      \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ')'
   augroup END
 
   call s:LocateFileCompletionAutocmd()
@@ -350,7 +351,7 @@ function s:LocateFileSelect(action)
     let bufnum = bufnr('%')
     let results_bufnum = b:results_bufnum
     let updatetime = b:updatetime
-    call eclim#util#GoToBufferWindow(escape(b:file, '\'))
+    call eclim#util#GoToBufferWindow(b:bufnum)
     call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), a:action)
     call feedkeys(
       \ "\<esc>:let &updatetime = " . updatetime . " | " .
