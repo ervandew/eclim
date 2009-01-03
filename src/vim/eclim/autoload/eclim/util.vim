@@ -424,10 +424,10 @@ function! eclim#util#Globpath(path, expr, ...)
   return result
 endfunction " }}}
 
-" GoToBufferWindow(bufname) {{{
-" Returns to the window containing the supplied buffer name.
-function! eclim#util#GoToBufferWindow(bufname)
-  let winnr = bufwinnr(bufnr('^' . a:bufname))
+" GoToBufferWindow(buf) {{{
+" Returns to the window containing the supplied buffer name or buffer number.
+function! eclim#util#GoToBufferWindow(buf)
+  let winnr = type(a:buf) == 0 ? bufwinnr(a:buf) : bufwinnr(bufnr('^' . a:buf))
   if winnr != -1
     exec winnr . "winc w"
   endif
