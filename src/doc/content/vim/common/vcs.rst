@@ -135,7 +135,9 @@ Vim Settings
 - **g:EclimVcsTrackerIdPatterns (Default: ['#\\(\\d\\+\\)'])** -
   Specifies a list of regular expression used to match tracker ids inside of
   vcs log comments.  Please note that the first group in each pattern must
-  correspond to the tracker ticket id.
+  correspond to the tracker ticket id.  That portion of the match will be
+  substituted into the '<id>' placeholder of the
+  :ref:`tracker url <org.eclim.project.tracker>`.
 
 Eclim Settings
 
