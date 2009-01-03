@@ -238,6 +238,7 @@
     <replace dir="${eclipse.home}/plugins/org.eclim.vimplugin_${eclim.version}"
         includes="plugin.properties">
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
+      <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
     </replace>
 
     <!-- deploy vim files -->

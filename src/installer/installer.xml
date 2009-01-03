@@ -150,9 +150,18 @@
       </else>
     </if>
 
+    <!-- determine if current os supports emebedding gvim. -->
+    <if>
+      <os family="mac"/>
+      <then> <property name="eclim.gvim.embed" value="false"/> </then>
+      <else> <property name="eclim.gvim.embed" value="true"/> </else>
+    </if>
+
     <replace dir="${eclipse.plugins}/org.eclim.vimplugin_${eclim.version}"
-        includes="plugin.properties"
-        token="$${eclim.gvim}" value="${eclim.gvim}"/>
+        includes="plugin.properties">
+      <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
+      <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
+    </replace>
 
     <!-- install vim plugins -->
     <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
