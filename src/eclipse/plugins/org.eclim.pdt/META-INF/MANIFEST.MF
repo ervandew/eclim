@@ -10,7 +10,6 @@ Bundle-ClassPath: .,
 Bundle-Activator: org.eclim.eclipse.GenericPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
-  org.eclim.wst,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
   org.eclipse.dltk.core,
