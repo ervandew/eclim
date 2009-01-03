@@ -1,7 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Bundle-Vendor: Vimplugin Project
 Bundle-Name: Eclim Vimplugin
 Bundle-SymbolicName: org.eclim.vimplugin;singleton:=true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
 Bundle-Activator: org.vimplugin.VimPlugin
 Bundle-Localization: plugin
@@ -15,9 +17,6 @@ Require-Bundle: org.eclim,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench.texteditor
-Eclipse-AutoStart: true
-Bundle-Vendor: Vimplugin Project
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.vimplugin,
  org.vimplugin.actions,
  org.vimplugin.editors,
@@ -25,3 +24,4 @@ Export-Package: org.vimplugin,
  org.vimplugin.preferences,
  org.vimplugin.utils,
  org.vimplugin.views
+Eclipse-AutoStart: true
