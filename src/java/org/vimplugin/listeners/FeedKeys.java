@@ -62,6 +62,9 @@ public class FeedKeys
         public void run()
         {
           Shell shell = display.getActiveShell();
+          if (shell == null){ // happens on windows
+            shell = display.getShells()[0];
+          }
           Point point = shell.toDisplay(1, 1);
           bounds[0] = point.x;
           bounds[1] = point.y;
