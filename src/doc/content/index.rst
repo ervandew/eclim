@@ -68,15 +68,15 @@ leveraged in three primary ways, as illustrated below.
 
 #. The :ref:`second scenario <eclimd_headed>` is for those who prefer using vim
    as their main interface, but frequently end up jumping back to eclipse for
-   any features not provided by eclim inside of vim.  In this case you can run
-   the eclim server inside of the eclipse gui and then interact with it via
-   external vim instance just like the first scenario.
+   any features not provided by eclim.  In this case you can run the eclim
+   server inside of the eclipse gui and then interact with it via external vim
+   instances just like the first scenario.
 
 #. The :ref:`last scenario <gvim_embedded>` is for those who wish to use the
    eclipse interface full time, but want to use gvim as an embedded eclipse
    editor. Just like the previous use case, the eclim server is run inside of
-   the eclipse gui and the embedded gvim will interact with it just like any
-   external vim instances.
+   the eclipse gui and the embedded gvim will interact with it just like
+   external vim instances would.
 
 .. _license:
 
