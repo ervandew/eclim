@@ -136,6 +136,11 @@ endfunction " }}}
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
 function eclim#common#util#LocateFile(action, file)
+  if !eclim#PingEclim(0)
+    call eclim#util#EchoError('Unable to connect to eclimd.')
+    return
+  endif
+
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
