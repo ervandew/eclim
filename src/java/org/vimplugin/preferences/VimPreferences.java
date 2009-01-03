@@ -16,33 +16,25 @@ import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.vimplugin.VimConnection;
 import org.vimplugin.VimPlugin;
 
 /**
  * Vimplugin Preference Page. The fields are explained in
- * {@link org.vimplugin.preferences.PreferenceConstants PreferenceConstants}. The
- * preferecences have to be adjusted to the settings vim was started with (e.g.
- *
- * <pre>
- * vim -nb:{hostname}:{addr}:{password}
- * </pre> ).
+ * {@link org.vimplugin.preferences.PreferenceConstants PreferenceConstants}.
  */
-
-// TODO: Move all strings to a properties file.
 public class VimPreferences
   extends FieldEditorPreferencePage
   implements IWorkbenchPreferencePage
 {
-
   /**
    * Initializes the preference store and sets a description for the dialog.
    */
   public VimPreferences() {
     super(FieldEditorPreferencePage.GRID);
 
-    setPreferenceStore(VimPlugin.getDefault().getPreferenceStore());
-    setDescription("General Settings");
+    VimPlugin plugin = VimPlugin.getDefault();
+    setPreferenceStore(plugin.getPreferenceStore());
+    setDescription(plugin.getMessage("preferences.description"));
   }
 
   /**
@@ -51,17 +43,24 @@ public class VimPreferences
    */
   @Override
   public void createFieldEditors() {
-    addField(new BooleanFieldEditor(PreferenceConstants.P_EMBED,
-        "Embed Vim: (Vim 7.1 on Linux and Windows only)",
-        getFieldEditorParent()));
-    addField(new StringFieldEditor(PreferenceConstants.P_PORT, "Port:",
-        getFieldEditorParent()));
-    addField(new FileFieldEditor(PreferenceConstants.P_GVIM,
-        "Path to gvim:", true, getFieldEditorParent()));
-    addField(new StringFieldEditor(PreferenceConstants.P_OPTS,
-        "Additional gvim args:", getFieldEditorParent()));
-    addField(new BooleanFieldEditor(PreferenceConstants.P_DEBUG,
-        "Debug to stdout:", getFieldEditorParent()));
+    VimPlugin plugin = VimPlugin.getDefault();
+    addField(new BooleanFieldEditor(
+          PreferenceConstants.P_EMBED,
+          plugin.getMessage("preference.embed"),
+          getFieldEditorParent()));
+    addField(new StringFieldEditor(
+          PreferenceConstants.P_PORT,
+          plugin.getMessage("preference.port"),
+          getFieldEditorParent()));
+    addField(new FileFieldEditor(
+          PreferenceConstants.P_GVIM,
+          plugin.getMessage("preference.gvim"),
+          true,
+          getFieldEditorParent()));
+    addField(new StringFieldEditor(
+          PreferenceConstants.P_OPTS,
+          plugin.getMessage("preference.gvim.args"),
+          getFieldEditorParent()));
   }
 
   /**

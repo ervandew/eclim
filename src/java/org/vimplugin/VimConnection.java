@@ -113,10 +113,7 @@ public class VimConnection implements Runnable
       logger.debug("Connection established");
 
       // Add Listeners
-      if (VimPlugin.getDefault().getPreferenceStore().getBoolean(
-          PreferenceConstants.P_DEBUG)) {
-        listeners.add(new Logger());
-      }
+      listeners.add(new Logger());
       listeners.add(new ServerStarted());
       listeners.add(new ServerDisconnect());
       listeners.add(new TextInsert());

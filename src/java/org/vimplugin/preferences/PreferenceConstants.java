@@ -24,9 +24,6 @@ public class PreferenceConstants {
   /** additional startup options */
   public static final String P_OPTS = "opts";
 
-  /** turn on debug to std-out */
-  public static final String P_DEBUG = "debug";
-
   /** embed vim into eclipse */
   public static final String P_EMBED = "embedded";
 }
