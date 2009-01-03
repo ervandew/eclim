@@ -483,10 +483,16 @@ public class VimEditor
       return;
     }
 
-    // let the parent composite handle setting the focus on the tab first.
-    parent.setFocus();
+    VimPlugin plugin = VimPlugin.getDefault();
+    boolean embed = plugin.getPreferenceStore()
+      .getBoolean(PreferenceConstants.P_EMBED);
 
-    VimConnection conn = VimPlugin.getDefault().getVimserver(serverID).getVc();
+    // let the parent composite handle setting the focus on the tab first.
+    if (embed){
+      parent.setFocus();
+    }
+
+    VimConnection conn = plugin.getVimserver(serverID).getVc();
 
     // get the current offset which "setDot" requires.
     String offset = "0";
@@ -504,7 +510,7 @@ public class VimEditor
     // to fully focus gvim, we need to simulate a mouse click.
     // Should this be optional, via a preference? There is the potential for
     // weirdness here.
-    if (parent.getDisplay().getActiveShell() != null){
+    if (embed && parent.getDisplay().getActiveShell() != null){
       Rectangle bounds = parent.getBounds();
       final Point point = parent.toDisplay(
           bounds.x + 5, bounds.y + bounds.height - 25);
