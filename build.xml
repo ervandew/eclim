@@ -188,12 +188,18 @@
     </jar>
 
     <!-- patch tagsoup jar file -->
-    <jar jarfile="${build.plugins}/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar"
-        update="true">
-      <fileset dir="${build.classes}">
-        <include name="org/ccil/cowan/tagsoup/**/*.class"/>
-      </fileset>
-    </jar>
+    <property name="tagsoup.jar"
+        value="${build.plugins}/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar"/>
+    <if>
+      <available file="${tagsoup.jar}"/>
+      <then>
+        <jar jarfile="${tagsoup.jar}" update="true">
+          <fileset dir="${build.classes}">
+            <include name="org/ccil/cowan/tagsoup/**/*.class"/>
+          </fileset>
+        </jar>
+      </then>
+    </if>
 
     <!-- build vimplugin -->
     <antcall target="vimplugin"/>
