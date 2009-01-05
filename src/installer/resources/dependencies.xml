@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dependencies SYSTEM "dependencies.dtd">
+<dependencies>
+  <feature id="jdt">
+    <dependency id="org.eclipse.jdt" version="3.4.0">
+      <site url="http://download.eclipse.org/releases/ganymede/"/>
+    </dependency>
+  </feature>
+
+  <feature id="pdt">
+    <dependency id="org.eclipse.php_feature" version="2.0.0" manual="true">
+      <site url="http://download.eclipse.org/tools/pdt/updates/"/>
+    </dependency>
+  </feature>
+
+  <feature id="wst">
+    <dependency id="org.eclipse.wst" version="3.0.2">
+      <site url="http://download.eclipse.org/releases/ganymede/"/>
+      <site url="http://download.eclipse.org/webtools/updates/"/>
+    </dependency>
+  </feature>
+</dependencies>

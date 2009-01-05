@@ -24,16 +24,22 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 
-import java.text.Collator;
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -53,11 +59,15 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -81,6 +91,10 @@ import org.formic.util.dialog.gui.GuiDialogs;
 
 import org.formic.wizard.step.gui.InstallStep;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 /**
  * Step which installs necessary third party eclipse plugins.
  *
@@ -99,6 +113,7 @@ public class EclipsePluginsStep
   private static final String FEATURE = "  Feature";
   private static final String SITE = "Site: file:";
   private static final String ENABLED = "enabled";
+  private static final String DEPENDENCIES = "/resources/dependencies.xml";
 
   private static final Color ERROR_COLOR = new Color(255, 201, 201);
 
@@ -114,7 +129,7 @@ public class EclipsePluginsStep
   /**
    * Constructs this step.
    */
-  public EclipsePluginsStep (String name, Properties properties)
+  public EclipsePluginsStep(String name, Properties properties)
   {
     super(name, properties);
   }
@@ -123,7 +138,7 @@ public class EclipsePluginsStep
    * {@inheritDoc}
    * @see org.formic.wizard.step.GuiStep#init()
    */
-  public Component init ()
+  public Component init()
   {
     theme = new DesertBlue();
     stepPanel = (JPanel)super.init();
@@ -140,7 +155,7 @@ public class EclipsePluginsStep
     return panel;
   }
 
-  private void setMessage (String message)
+  private void setMessage(String message)
   {
     if(errorIcon == null){
       errorIcon = new ImageIcon(Installer.getImage("form.error.icon"));
@@ -157,20 +172,22 @@ public class EclipsePluginsStep
   /**
    * Invoked when this step is displayed in the gui.
    */
-  public void displayed ()
+  public void displayed()
   {
     setBusy(true);
     try{
       overallLabel.setText("Analyzing installed features...");
       EclipseInfo info = (EclipseInfo)Worker.post(new foxtrot.Task(){
-        public Object run ()
+        public Object run()
           throws Exception
         {
           extractInstallerPlugin();
-          EclipseInfo info = getEclipseInfo();
+          EclipseInfo info = EclipseInfo.getInfo(getDependencies());
           if (!Os.isFamily("windows")){
-            String home = (String)Installer.getContext().getValue("eclipse.home");
-            String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
+            String home = (String)
+              Installer.getContext().getValue("eclipse.home");
+            String plugins = (String)
+              Installer.getContext().getValue("eclipse.plugins");
             if(plugins.indexOf(home) == -1){
               if(plugins.endsWith("/")){
                 plugins = plugins.substring(0, plugins.length() - 1);
@@ -187,7 +204,6 @@ public class EclipsePluginsStep
       });
 
       dependencies = info.getDependencies();
-      filterDependencies(dependencies, info.getFeatures());
       if(dependencies.size() == 0){
         overallProgress.setMaximum(1);
         overallProgress.setValue(1);
@@ -215,10 +231,16 @@ public class EclipsePluginsStep
 
         for (int ii = 0; ii < dependencies.size(); ii++){
           Dependency dependency = (Dependency)dependencies.get(ii);
+          String version = dependency.getFeatureVersion();
+          String manual = "";
+          if (version == null){
+            manual = " (Manual)";
+            version = dependency.getVersion();
+          }
           tableModel.addRow(new Object[]{
             dependency.getId(),
-            dependency.getVersion(),
-            dependency.isUpgrade() ? "Upgrade" : "Install"
+            version,
+            (dependency.isUpgrade() ? "Upgrade" : "Install") + manual
           });
         }
 
@@ -250,7 +272,7 @@ public class EclipsePluginsStep
   /**
    * Extracts the eclipse plugin used to install eclipse features.
    */
-  private void extractInstallerPlugin ()
+  private void extractInstallerPlugin()
     throws Exception
   {
     String plugins = null;
@@ -304,7 +326,7 @@ public class EclipsePluginsStep
    * @param dependency The dependency to install or upgrade.
    * @return Command to be run.
    */
-  private Command getCommand (Dependency dependency)
+  private Command getCommand(Dependency dependency)
   {
     String to = null;
     /*if (!Os.isFamily("windows")){
@@ -320,44 +342,10 @@ public class EclipsePluginsStep
     }*/
 
     return new InstallCommand(this,
-        dependency.getUrl(), dependency.getId(), dependency.getVersion(), to);
-  }
-
-  /**
-   * Gets EclipseInfo instance containing available local plugins sites,
-   * installed features, and required dependencies.
-   *
-   * @return EclipseInfo
-   */
-  private EclipseInfo getEclipseInfo ()
-    throws Exception
-  {
-    final ArrayList features = new ArrayList();
-    final ArrayList sites = new ArrayList();
-    Command command = new ListCommand(new OutputHandler(){
-      File site = null;
-      public void process (String line){
-        if(line.startsWith(SITE)){
-          site = new File(line.substring(SITE.length()));
-          sites.add(site);
-        }else if(line.startsWith(FEATURE)){
-          String[] attrs = StringUtils.split(
-            line.substring(FEATURE.length() + 2));
-          features.add(new Feature(
-              attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
-        }
-      }
-    });
-    try{
-      command.start();
-      command.join();
-      if(command.getReturnCode() != 0){
-        throw new RuntimeException(command.getErrorMessage());
-      }
-    }finally{
-      command.destroy();
-    }
-    return new EclipseInfo(sites, features, getDependencies());
+        dependency.getFeatureUrl(),
+        dependency.getId(),
+        dependency.getFeatureVersion(),
+        to);
   }
 
   /**
@@ -366,13 +354,15 @@ public class EclipsePluginsStep
    *
    * @return List of dependencies.
    */
-  private List getDependencies ()
+  private List getDependencies()
     throws Exception
   {
+    Document document = DocumentBuilderFactory.newInstance()
+      .newDocumentBuilder().parse(
+          EclipsePluginsStep.class.getResource(DEPENDENCIES).toString());
+
+    // determine which dependencies are required
     ArrayList dependencies = new ArrayList();
-    Properties properties = new Properties();
-    properties.load(EclipsePluginsStep.class.getResourceAsStream(
-          "/resources/dependencies.properties"));
     String[] features = Installer.getContext().getKeysByPrefix("featureList");
     Arrays.sort(features, new FeatureNameComparator());
     for (int ii = 0; ii < features.length; ii++){
@@ -380,12 +370,26 @@ public class EclipsePluginsStep
       String name = features[ii].substring(features[ii].indexOf('.') + 1);
 
       // check if the enabled eclim feature has any dependencies.
-      if(enabled.booleanValue() && properties.containsKey(name + ".features")){
-        String[] depends = StringUtils.split(
-            properties.getProperty(name + ".features"), ',');
-        for (int jj = 0; jj < depends.length; jj++){
-          String[] dependency = StringUtils.split(depends[jj]);
-          dependencies.add(new Dependency(dependency));
+      if(enabled.booleanValue()){
+        Element featureNode = document.getElementById(name);
+        if(featureNode != null){
+          NodeList nodes = featureNode.getElementsByTagName("dependency");
+
+          // parse out all the possible dependencies
+          for(int jj = 0; jj < nodes.getLength(); jj++){
+            Element node = (Element)nodes.item(jj);
+            ArrayList sites = new ArrayList();
+            NodeList siteList = node.getElementsByTagName("site");
+            for(int kk = 0; kk < siteList.getLength(); kk++){
+              Element site = (Element)siteList.item(kk);
+              sites.add(site.getAttribute("url"));
+            }
+
+            dependencies.add(new Dependency(
+                  node.getAttribute("id"),
+                  node.getAttribute("version"),
+                  (String[])sites.toArray(new String[sites.size()])));
+          }
         }
       }
     }
@@ -393,51 +397,9 @@ public class EclipsePluginsStep
   }
 
   /**
-   * Filters the supplied list of dependencies to determine which are already
-   * installed or need to be upgraded.
-   *
-   * @param dependencies The original list of dependencies.
-   * @param features The list of already installed features.
-   */
-  private void filterDependencies (final List dependencies, final List features)
-    throws Exception
-  {
-    Collator collator = Collator.getInstance();
-
-    for (Iterator ii = features.iterator(); ii.hasNext();){
-      Feature feature = (Feature)ii.next();
-      boolean installed = false;
-      Dependency dependency = null;
-      for (Iterator jj = dependencies.iterator(); jj.hasNext();){
-        dependency = (Dependency)jj.next();
-        if(feature.getId().equals(dependency.getId())){
-          installed = true;
-          break;
-        }
-      }
-
-      // compare installed in dependency
-      if (installed){
-        int order = collator.compare(
-            feature.getVersion(), dependency.getVersion());
-
-        // if required or newer version installed, remove dependency.
-        if(order >= 0){
-          dependencies.remove(dependency);
-
-        // need to upgrade the dependency
-        }else{
-          dependency.setUpgrade(true);
-          dependency.setFeature(feature);
-        }
-      }
-    }
-  }
-
-  /**
    * Adds the supplied directory as a local eclipse site.
    */
-  private void addSite (String site)
+  private void addSite(String site)
     throws Exception
   {
     Command command = new AddSiteCommand(site);
@@ -452,10 +414,10 @@ public class EclipsePluginsStep
     }
   }
 
-  public void process (final String line)
+  public void process(final String line)
   {
     SwingUtilities.invokeLater(new Runnable(){
-      public void run (){
+      public void run(){
         if (line.startsWith(BEGIN_TASK)){
           String l = line.substring(BEGIN_TASK.length() + 2);
           double work = Double.parseDouble(
@@ -484,24 +446,22 @@ public class EclipsePluginsStep
   {
     private JButton skipButton;
 
-    public InstallPluginsAction (JButton skipButton)
+    public InstallPluginsAction(JButton skipButton)
     {
       super("Install Features");
       this.skipButton = skipButton;
     }
 
-    public void actionPerformed (ActionEvent e)
+    public void actionPerformed(ActionEvent e)
     {
       ((JButton)e.getSource()).setEnabled(false);
       try{
         Boolean successful = (Boolean)Worker.post(new foxtrot.Task(){
-          public Object run ()
+          public Object run()
             throws Exception
           {
-            int index = 0;
-
             // check if any of the features cannot be installed.
-            for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
+            for (Iterator ii = dependencies.iterator(); ii.hasNext();){
               Feature feature = ((Dependency)ii.next()).getFeature();
               if (feature != null && !feature.getSite().canWrite()){
                 GuiDialogs.showWarning(Installer.getString(
@@ -513,39 +473,49 @@ public class EclipsePluginsStep
             overallProgress.setMaximum(dependencies.size());
             overallProgress.setValue(0);
 
-            for (Iterator ii = dependencies.iterator(); ii.hasNext(); index++){
+            int removeIndex = 0;
+            for (Iterator ii = dependencies.iterator(); ii.hasNext();){
               Dependency dependency = (Dependency)ii.next();
-              if(!dependency.isUpgrade()){
-                overallLabel.setText("Installing feature: " +
-                    dependency.getId() + '-' + dependency.getVersion());
-              }else{
-                overallLabel.setText("Updating feature: " +
-                    dependency.getId() + '-' + dependency.getVersion());
-              }
-
-              taskProgress.setIndeterminate(true);
-
-              Command command = getCommand(dependency);
-              try{
-                command.start();
-                command.join();
-                if(command.getReturnCode() != 0){
-                  throw new RuntimeException(command.getErrorMessage());
+              if (dependency.getFeatureUrl() != null){
+                if(!dependency.isUpgrade()){
+                  overallLabel.setText("Installing feature: " +
+                      dependency.getId() + '-' + dependency.getVersion());
+                }else{
+                  overallLabel.setText("Updating feature: " +
+                      dependency.getId() + '-' + dependency.getVersion());
                 }
-              }finally{
-                command.destroy();
-              }
 
-              try{
-                Thread.sleep(1000);
-              }catch(Exception ex){
+                taskProgress.setIndeterminate(true);
+
+                Command command = getCommand(dependency);
+                try{
+                  command.start();
+                  command.join();
+                  if(command.getReturnCode() != 0){
+                    throw new RuntimeException(command.getErrorMessage());
+                  }
+                }finally{
+                  command.destroy();
+                }
+
+                /*try{
+                  Thread.sleep(1000);
+                }catch(Exception ex){
+                }*/
+                ii.remove();
+                tableModel.removeRow(removeIndex);
+              }else{
+                removeIndex++;
               }
-              tableModel.removeRow(0);
               overallProgress.setValue(overallProgress.getValue() + 1);
             }
             taskLabel.setText("");
             taskProgress.setValue(taskProgress.getMaximum());
             overallProgress.setValue(overallProgress.getMaximum());
+
+            if(dependencies.size() > 0){
+              GuiDialogs.showWarning(Installer.getString("eclipsePlugins.manual"));
+            }
 
             return Boolean.TRUE;
           }
@@ -573,12 +543,12 @@ public class EclipsePluginsStep
   private class SkipPluginsAction
     extends AbstractAction
   {
-    public SkipPluginsAction ()
+    public SkipPluginsAction()
     {
       super("Skip");
     }
 
-    public void actionPerformed (ActionEvent e){
+    public void actionPerformed(ActionEvent e){
       if(GuiDialogs.showConfirm(Installer.getString("eclipsePlugins.skip"))){
         setValid(true);
       }
@@ -588,7 +558,7 @@ public class EclipsePluginsStep
   private class DependencyCellRenderer
     extends DefaultTableCellRenderer
   {
-    public Component getTableCellRendererComponent (
+    public Component getTableCellRendererComponent(
         JTable table, Object value,
         boolean isSelected, boolean hasFocus,
         int row, int column)
@@ -620,7 +590,7 @@ public class EclipsePluginsStep
      * {@inheritDoc}
      * @see ListSelectionListener#valueChanged(ListSelectionEvent)
      */
-    public void valueChanged (ListSelectionEvent e)
+    public void valueChanged(ListSelectionEvent e)
     {
       ListSelectionModel model = (ListSelectionModel)e.getSource();
       int index = model.getMinSelectionIndex();
@@ -638,102 +608,236 @@ public class EclipsePluginsStep
   private static class EclipseInfo
   {
     private List sites;
-    private List features;
+    private Map features;
     private List dependencies;
 
-    public EclipseInfo (List sites, List features, List dependencies)
+    private EclipseInfo(List sites, Map features, List dependencies)
+      throws Exception
     {
       this.sites = sites;
       this.features = features;
       this.dependencies = dependencies;
+      filterDependencies();
     }
 
-    public List getSites ()
+    /**
+     * Gets EclipseInfo instance containing available local plugins sites,
+     * installed features, and required dependencies.
+     *
+     * @return EclipseInfo
+     */
+    public static EclipseInfo getInfo(List dependencies)
+      throws Exception
+    {
+      final HashMap features = new HashMap();
+      final ArrayList sites = new ArrayList();
+      Command command = new ListCommand(new OutputHandler(){
+        File site = null;
+        public void process(String line){
+          if(line.startsWith(SITE)){
+            site = new File(line.substring(SITE.length()));
+            sites.add(site);
+          }else if(line.startsWith(FEATURE)){
+            String[] attrs = StringUtils.split(
+              line.substring(FEATURE.length() + 2));
+            features.put(attrs[0], new Feature(
+                attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
+          }
+        }
+      });
+      try{
+        command.start();
+        command.join();
+        if(command.getReturnCode() != 0){
+          throw new RuntimeException(command.getErrorMessage());
+        }
+      }finally{
+        command.destroy();
+      }
+      return new EclipseInfo(sites, features, dependencies);
+    }
+
+    public List getSites()
     {
       return sites;
     }
 
-    public List getFeatures ()
-    {
-      return features;
-    }
-
-    public List getDependencies ()
+    public List getDependencies()
     {
       return dependencies;
+    }
+
+    /**
+     * Filters the supplied list of dependencies to determine which are already
+     * installed or need to be upgraded.
+     */
+    private void filterDependencies()
+      throws Exception
+    {
+      for (Iterator ii = dependencies.iterator(); ii.hasNext();){
+        Dependency dependency = (Dependency)ii.next();
+        boolean include = dependency.eval(
+            (Feature)features.get(dependency.getId()));
+        if (!include){
+          ii.remove();
+        }
+      }
     }
   }
 
   private static class Dependency
   {
-    private String url;
     private String id;
-    private String version;
+    private String[] sites;
     private boolean upgrade;
     private Feature feature;
+    private String version;
+    private String featureUrl;
+    private String featureVersion;
 
-    public Dependency (String[] attrs) {
-      url = attrs[0];
-      id = attrs[1];
-      version = attrs[2];
+    public Dependency(String id, String version, String[] sites) {
+      this.id = id;
+      this.version = version;
+      this.sites = sites;
     }
 
-    public String getUrl () {
-      return url;
+    public String[] getSites() {
+      return sites;
     }
 
-    public String getId () {
+    public String getId() {
       return id;
     }
 
-    public String getVersion () {
+    public String getVersion() {
       return version;
     }
 
-    public boolean isUpgrade () {
+    public boolean isUpgrade() {
       return upgrade;
     }
 
-    public void setUpgrade (boolean upgrade) {
-      this.upgrade = upgrade;
-    }
-
-    public Feature getFeature () {
+    public Feature getFeature() {
       return feature;
     }
 
-    public void setFeature (Feature feature) {
+    public String getFeatureUrl() {
+      return featureUrl;
+    }
+
+    public String getFeatureVersion() {
+      return featureVersion;
+    }
+
+    public boolean eval(Feature feature)
+      throws Exception
+    {
       this.feature = feature;
+      if(feature != null){
+        int result = compareVersions(this.version, feature.getVersion());
+        if (result >= 0){
+          return false;
+        }
+        this.upgrade = true;
+      }
+      String[] urlVersion = findUrlVersion();
+      this.featureUrl = urlVersion[0];
+      this.featureVersion = urlVersion[1];
+      return true;
+    }
+
+    private int compareVersions(String v1, String v2){
+      String[] dv = StringUtils.split(v1, ".");
+      String[] fv = StringUtils.split(v2, ".");
+      for (int ii = 0; ii < dv.length; ii++){
+        int dp = Integer.parseInt(dv[ii]);
+        int fp = Integer.parseInt(fv[ii]);
+        if(dp != fp){
+          return fp - dp;
+        }
+      }
+      return 0;
+    }
+
+    private String[] findUrlVersion()
+      throws Exception
+    {
+      DocumentBuilder builder =
+        DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      String resolvedUrl = null;
+      String resolvedVersion = null;
+      for(int ii = 0; ii < sites.length; ii++){
+        BufferedInputStream in = null;
+        try{
+          in = new BufferedInputStream(
+              new URL(sites[ii] + "site.xml").openStream());
+          Document document = builder.parse(in);
+          NodeList nodes = document.getElementsByTagName("feature");
+          for(int jj = 0; jj < nodes.getLength(); jj++){
+            Element feature = (Element)nodes.item(jj);
+            if (this.id.equals(feature.getAttribute("id"))){
+              String fv = feature.getAttribute("version");
+              Matcher matcher = Feature.VERSION.matcher(fv);
+              matcher.find();
+              fv = matcher.group(1);
+
+              int result = -1;
+              if(resolvedVersion == null){
+                result = compareVersions(this.version, fv);
+              }else{
+                result = compareVersions(resolvedVersion, fv);
+              }
+              if (result >= 0){
+                resolvedUrl = sites[ii];
+                resolvedVersion = feature.getAttribute("version");
+              }
+            }
+          }
+
+          if(resolvedUrl != null){
+            return new String[]{resolvedUrl, resolvedVersion};
+          }
+        }finally{
+          IOUtils.closeQuietly(in);
+        }
+      }
+      return new String[]{null, null};
     }
   }
 
   private static class Feature
   {
+    public static final Pattern VERSION =
+      Pattern.compile("^(\\d+\\.\\d+\\.\\d+)\\..*");
+
     private String id;
     private String version;
     private File site;
     private boolean enabled;
 
-    public Feature (String id, String version, File site, boolean enabled) {
+    public Feature(String id, String version, File site, boolean enabled) {
       this.id = id;
-      this.version = version;
       this.site = site;
       this.enabled = enabled;
+
+      Matcher matcher = VERSION.matcher(version);
+      matcher.find();
+      this.version = matcher.group(1);
     }
 
-    public String getId () {
+    public String getId() {
       return id;
     }
 
-    public String getVersion () {
+    public String getVersion() {
       return version;
     }
 
-    public File getSite () {
+    public File getSite() {
       return this.site;
     }
 
-    public boolean isEnabled () {
+    public boolean isEnabled() {
       return enabled;
     }
   }
@@ -751,7 +855,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.python");
     }
 
-    public int compare (Object ob1, Object ob2) {
+    public int compare(Object ob1, Object ob2) {
       return NAMES.indexOf(ob1) - NAMES.indexOf(ob2);
     }
   }
