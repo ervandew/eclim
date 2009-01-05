@@ -35,23 +35,14 @@ import org.formic.wizard.step.shared.Feature;
 public class FeatureProvider
   implements org.formic.wizard.step.shared.FeatureProvider, PropertyChangeListener
 {
-  /*private static final String[] FEATURES =
+  private static final String[] FEATURES =
     {"ant", "maven", "jdt", "wst", "pdt", "python"};
 
   private static final boolean[] FEATURES_ENABLED =
     {true, true, true, false, false, false};
 
   private static final String[][] FEATURES_DEPENDS =
-    {{"jdt"}, null, null, null, {"wst"}, null};*/
-
-  private static final String[] FEATURES =
-    {"ant", "maven", "jdt", "wst", "python"};
-
-  private static final boolean[] FEATURES_ENABLED =
-    {true, true, true, false, false};
-
-  private static final String[][] FEATURES_DEPENDS =
-    {{"jdt"}, null, null, null, null};
+    {{"jdt"}, null, null, null, {"wst"}, null};
 
   /**
    * {@inheritDoc}
