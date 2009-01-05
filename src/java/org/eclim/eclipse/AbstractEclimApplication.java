@@ -33,6 +33,9 @@ import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.IOUtils;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
@@ -209,8 +212,11 @@ public abstract class AbstractEclimApplication
 
       Bundle bundle = Platform.getBundle(pluginName);
       if(bundle == null){
+        IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
+          .append(".metadata").append(".log");
         throw new RuntimeException(
-            "Could not load bundle for plugin '" + plugins[ii] + "'");
+            "Could not load bundle for plugin '" + plugins[ii] + "'\n" +
+            "Please see " + log.toOSString() + " for more info.");
       }
 
       try{
