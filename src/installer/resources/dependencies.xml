@@ -8,7 +8,7 @@
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php_feature" version="2.0.0" manual="true">
+    <dependency id="org.eclipse.php_feature" version="2.0.0">
       <site url="http://download.eclipse.org/tools/pdt/updates/"/>
     </dependency>
   </feature>

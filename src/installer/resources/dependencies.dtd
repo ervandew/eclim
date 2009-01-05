@@ -6,7 +6,6 @@
 <!ELEMENT dependency (site+)>
 <!ATTLIST dependency id ID #REQUIRED>
 <!ATTLIST dependency version CDATA #REQUIRED>
-<!ATTLIST dependency manual (true|false) #IMPLIED>
 
 <!ELEMENT site EMPTY>
 <!ATTLIST site url CDATA #REQUIRED>
