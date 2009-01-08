@@ -23,7 +23,7 @@
     <initializer class="org.vimplugin.preferences.PreferenceInitializer"/>
   </extension>
 
-  <extension point="org.eclipse.ui.views">
+  <!--extension point="org.eclipse.ui.views">
     <view id="org.vimplugin.views.CommandView"
         allowMultiple="false"
         category="org.eclim.category"
@@ -34,5 +34,5 @@
         Allows you to send your own raw commands to the GVim server.
       </description>
     </view>
-  </extension>
+  </extension-->
 </plugin>
