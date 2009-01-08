@@ -73,7 +73,25 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-l", "5", "-o", "74", "-e", "utf-8", "-a", "1"
+      "-l", "5", "-o", "74", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+    int apply = -1;
+    for(String r : results){
+      if (r.indexOf("Import 'ArrayList' (java.util)") != -1){
+        apply = Integer.valueOf(r.substring(0, 1));
+        break;
+      }
+    }
+    assertTrue("Missing expected suggestion.", apply > -1);
+
+    result = Eclim.execute(new String[]{
+      "java_correct", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE,
+      "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply)
     });
 
     System.out.println(result);
