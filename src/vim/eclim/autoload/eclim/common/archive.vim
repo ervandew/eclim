@@ -227,7 +227,7 @@ function! s:FileUrl(file)
   endif
   for key in keys(s:urls)
     for ext in s:urls[key]
-      if url =~ ext . '$'
+      if url =~ escape(ext, '.') . '$'
         let url = key . url
         break
       endif
@@ -241,7 +241,7 @@ function! s:IsArchive(file)
   let url = a:file
   for key in keys(s:urls)
     for ext in s:urls[key]
-      if url =~ ext . '$'
+      if url =~ escape(ext, '.') . '$'
         return 1
       endif
     endfor
