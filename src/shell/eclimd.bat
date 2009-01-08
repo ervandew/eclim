@@ -15,7 +15,7 @@ rem
 rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-set ECLIPSE_HOME=%~dp0\..\..\..
+set ECLIPSE_HOME=%~dp0
 
 set CLASSPATH=
 

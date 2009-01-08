@@ -5,10 +5,10 @@
     You can now start the eclimd server by
     #if($os.isFamily("windows"))
       double clicking the file:<br>
-      $installer.context.getValue("eclipse.home")/plugins/org.eclim_${installer.project.getProperty("eclim.version")}/bin/eclimd.bat
+      $installer.context.getValue("eclipse.home")/eclimd.bat
     #else
       executing the script:<br>
-      $installer.context.getValue("eclipse.plugins")/org.eclim_${installer.project.getProperty("eclim.version")}/bin/eclimd
+      $installer.context.getValue("eclipse.local")/eclimd
     #end
     <p>
     For more information please see the

@@ -23,13 +23,9 @@ if [ -h $0 ] ; then
   CURPATH=`dirname $RESOLVED`
 fi
 
-#ECLIMD_OPTS="-Djava.ext.dirs"
 ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
 
-#${eclipse.home}
-if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
-  ECLIM_ECLIPSE_HOME=`dirname \`dirname "$ECLIM_HOME"\``
-fi
+#ECLIMD_OPTS="-Djava.ext.dirs"
 ECLIM_ARGS="$ECLIMD_OPTS"
 
 # attempt to grab properties from .eclimrc if available.
@@ -39,6 +35,11 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
 fi
 
 ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+
+#${eclipse.home}
+if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
+  ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
+fi
 
 # find eclipse executable
 ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"

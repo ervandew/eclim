@@ -103,8 +103,9 @@ public class EclipseStep
 
     String home = fieldName("home");
     String eclipseHomeDefault = getDefaultEclipseHome();
+
     final FileChooser eclipseHomeChooser =
-       new FileChooser(JFileChooser.DIRECTORIES_ONLY);
+      new FileChooser(JFileChooser.DIRECTORIES_ONLY);
 
     panel.add(form.createMessagePanel(), "span");
     panel.add(new JLabel(Installer.getString(home)));
@@ -118,31 +119,30 @@ public class EclipseStep
     // On systems where eclispe was installed via a package manger, the user may
     // need to install the plugins in an alternate location.
     if(!Os.isFamily("windows")){
-      String plugins = fieldName("plugins");
-      String eclipsePluginsDefault = eclipseHomeDefault != null ?
-        eclipseHomeDefault + "/plugins" : null;
-      final FileChooser eclipsePluginsChooser =
+      String local = fieldName("local");
+      String eclipseLocalDefault = eclipseHomeDefault;
+      final FileChooser eclipseLocalChooser =
          new FileChooser(JFileChooser.DIRECTORIES_ONLY);
-      form.bind(plugins, eclipsePluginsChooser.getTextField(),
+      form.bind(local, eclipseLocalChooser.getTextField(),
         new ValidatorBuilder().required().isDirectory().validator());
 
       JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
-      JTextField eclipsePluginsField = eclipsePluginsChooser.getTextField();
-      eclipsePluginsField.setText(eclipsePluginsDefault);
-      eclipsePluginsChooser.getButton().setEnabled(false);
+      JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
+      eclipseLocalField.setText(eclipseLocalDefault);
+      eclipseLocalChooser.getButton().setEnabled(false);
 
-      String overridePlugins = fieldName("overridePlugins");
+      String hasLocal = fieldName("hasLocal");
       JCheckBox overridePluginsCheckBox =
-        new JCheckBox(Installer.getString(overridePlugins));
+        new JCheckBox(Installer.getString(hasLocal));
 
-      eclipsePluginsField.setEnabled(false);
+      eclipseLocalField.setEnabled(false);
       overridePluginsCheckBox.addActionListener(new ActionListener(){
         public void actionPerformed (ActionEvent e){
           boolean selected = ((JCheckBox)e.getSource()).isSelected();
-          eclipsePluginsChooser.getTextField().setEnabled(selected);
-          eclipsePluginsChooser.getButton().setEnabled(selected);
+          eclipseLocalChooser.getTextField().setEnabled(selected);
+          eclipseLocalChooser.getButton().setEnabled(selected);
           if(!selected){
-            // force eclipse plugins text field to update itself
+            // force eclipse local text field to update itself
             JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
             eclipseHomeField.setText(eclipseHomeField.getText());
           }
@@ -150,11 +150,11 @@ public class EclipseStep
       });
       eclipseHomeField.getDocument().addDocumentListener(
           new EclipseHomeListener(
-            eclipseHomeField, eclipsePluginsField, overridePluginsCheckBox));
+            eclipseHomeField, eclipseLocalField, overridePluginsCheckBox));
 
       panel.add(overridePluginsCheckBox, "span");
-      panel.add(new JLabel(Installer.getString(plugins)));
-      panel.add(eclipsePluginsChooser);
+      panel.add(new JLabel(Installer.getString(local)));
+      panel.add(eclipseLocalChooser);
 
       // see if plugins are installed in user's home directory instead.
       File dotEclipse = new File(
@@ -169,13 +169,13 @@ public class EclipseStep
           }
         });
         if(contents.length > 0){
-          String[] path = {"configuration", "eclipse", "plugins"};
+          String[] path = {"configuration", "eclipse"};
           Arrays.sort(contents);
           File dir = contents[contents.length - 1];
           overridePluginsCheckBox.doClick();
-          eclipsePluginsField.setText(
+          eclipseLocalField.setText(
               dir.getAbsolutePath() + '/' + StringUtils.join(path, '/'));
-          eclipsePluginsField.setCaretPosition(0);
+          eclipseLocalField.setCaretPosition(0);
 
           // see if any of the path parts are missing on the filesystem
           boolean missing = false;
@@ -183,7 +183,7 @@ public class EclipseStep
           for (int ii = 0; ii < path.length; ii++){
             if(!new File(missingPath + '/' + path[ii]).exists()){
               missing = true;
-              missingPath = eclipsePluginsField.getText().substring(
+              missingPath = eclipseLocalField.getText().substring(
                   missingPath.length() + 1);
               break;
             }
@@ -193,13 +193,36 @@ public class EclipseStep
           if(missing){
             String label = Installer.getString("eclipse.createMissing", missingPath);
             panel.add(new JLabel(label), "span, split 2");
-            panel.add(new JButton(new CreatePluginDirsActions(eclipsePluginsField)));
+            panel.add(new JButton(new CreatePluginDirsActions(eclipseLocalField)));
           }
         }
       }
     }
 
     return panel;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.formic.wizard.WizardStep#proceed()
+   */
+  public void proceed()
+  {
+    super.proceed();
+    String home = (String)Installer.getContext().getValue("eclipse.home");
+    home = FilenameUtils.normalizeNoEndSeparator(home);
+    Installer.getContext().setValue("eclipse.home", home.replace('\\', '/'));
+
+    String plugins = null;
+    if (Os.isFamily("windows")){
+      plugins = home + "/plugins";
+    }else{
+      String local = (String)Installer.getContext().getValue("eclipse.local");
+      local = FilenameUtils.normalizeNoEndSeparator(local);
+      Installer.getContext().setValue("eclipse.local", local);
+      plugins = local + "/plugins";
+    }
+    Installer.getContext().setValue("eclim.plugins", plugins);
   }
 
   /**
@@ -252,17 +275,17 @@ public class EclipseStep
     implements DocumentListener
   {
     private JTextField eclipseHome;
-    private JTextField eclipsePlugins;
-    private JCheckBox overridePlugins;
+    private JTextField eclipseLocal;
+    private JCheckBox hasLocal;
 
     public EclipseHomeListener (
         JTextField eclipseHome,
-        JTextField eclipsePlugins,
-        JCheckBox overridePlugins)
+        JTextField eclipseLocal,
+        JCheckBox hasLocal)
     {
       this.eclipseHome = eclipseHome;
-      this.eclipsePlugins = eclipsePlugins;
-      this.overridePlugins = overridePlugins;
+      this.eclipseLocal = eclipseLocal;
+      this.hasLocal = hasLocal;
     }
 
     public void insertUpdate (DocumentEvent e) {
@@ -279,15 +302,9 @@ public class EclipseStep
 
     private void pathUpdated (DocumentEvent e)
     {
-      if(!overridePlugins.isSelected()){
+      if(!hasLocal.isSelected()){
         String path = eclipseHome.getText();
-        if (path.length() > 0){
-          if(!path.endsWith("/")){
-            path += '/';
-          }
-          path += "plugins";
-        }
-        eclipsePlugins.setText(path);
+        eclipseLocal.setText(path);
       }
     }
   }
@@ -295,20 +312,20 @@ public class EclipseStep
   private class CreatePluginDirsActions
     extends AbstractAction
   {
-    private JTextField eclipsePluginsField;
+    private JTextField eclipseLocalField;
 
-    public CreatePluginDirsActions (JTextField eclipsePluginsField)
+    public CreatePluginDirsActions (JTextField eclipseLocalField)
     {
       super("Create");
-      this.eclipsePluginsField = eclipsePluginsField;
+      this.eclipseLocalField = eclipseLocalField;
     }
 
     public void actionPerformed (ActionEvent e){
       try{
-        boolean created = new File(eclipsePluginsField.getText()).mkdirs();
+        boolean created = new File(eclipseLocalField.getText()).mkdirs();
         if (created){
           ((JButton)e.getSource()).setEnabled(false);
-          eclipsePluginsField.setText(eclipsePluginsField.getText());
+          eclipseLocalField.setText(eclipseLocalField.getText());
         }else{
           GuiDialogs.showError("Unable to create missing directories.");
         }

@@ -35,10 +35,11 @@ Starting and stopping of the headless eclipse instance is detailed below.
 **Starting eclimd**
 
 **Linux**:  To start eclimd from linux, simply execute the eclimd script found
-in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
+in your eclipse root directory: $ECLIPSE_HOME/eclimd
 
 **Windows**: The easiest way to start eclimd in windows is to double click on
-the eclimd.bat file found in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
+the eclimd.bat file found in your eclipse root directory:
+%ECLIPSE_HOME%/eclimd.bat
 
 
 **Stopping eclimd**
@@ -196,7 +197,7 @@ configured via the
 $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
 By default, eclimd writes all logging info to both the console and
-$ECLIPSE_HOME/plugins/org.eclim_version/log/eclimd.log.
+$ECLIPSE_HOME/plugins/org.eclim_<version>/log/eclimd.log.
 
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _vimplugin: http://vimplugin.org

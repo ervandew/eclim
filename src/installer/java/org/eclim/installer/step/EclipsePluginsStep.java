@@ -66,7 +66,6 @@ import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -120,9 +119,10 @@ public class EclipsePluginsStep
   private String taskName = "";
 
   private JPanel stepPanel;
+  private JPanel featuresPanel;
   private JLabel messageLabel;
   private ImageIcon errorIcon;
-  private DefaultTableModel tableModel = new DefaultTableModel();
+  private DefaultTableModel tableModel;
   private List dependencies;
   private PlasticTheme theme;
 
@@ -175,8 +175,17 @@ public class EclipsePluginsStep
   public void displayed()
   {
     setBusy(true);
+    setPreviousEnabled(false);
+
     try{
       overallLabel.setText("Analyzing installed features...");
+
+      // handle step re-entry.
+      taskProgress.setIndeterminate(true);
+      if (featuresPanel != null){
+        stepPanel.remove(featuresPanel);
+      }
+
       EclipseInfo info = (EclipseInfo)Worker.post(new foxtrot.Task(){
         public Object run()
           throws Exception
@@ -186,13 +195,10 @@ public class EclipsePluginsStep
           if (!Os.isFamily("windows")){
             String home = (String)
               Installer.getContext().getValue("eclipse.home");
-            String plugins = (String)
-              Installer.getContext().getValue("eclipse.plugins");
-            if(plugins.indexOf(home) == -1){
-              if(plugins.endsWith("/")){
-                plugins = plugins.substring(0, plugins.length() - 1);
-              }
-              File site = new File(FilenameUtils.getFullPath(plugins));
+            String local = (String)
+              Installer.getContext().getValue("eclipse.local");
+            if(!home.equals(local)){
+              File site = new File(local);
               if (!info.getSites().contains(site)){
                 overallLabel.setText("Adding local site to eclipse sites...");
                 addSite(site.getAbsolutePath());
@@ -211,6 +217,7 @@ public class EclipsePluginsStep
         taskProgress.setValue(1);
         overallLabel.setText("All third party plugins are up to date.");
       }else{
+        tableModel = new DefaultTableModel();
         tableModel.addColumn("Feature");
         tableModel.addColumn("Version");
         tableModel.addColumn("Install / Upgrade");
@@ -220,7 +227,7 @@ public class EclipsePluginsStep
         table.getSelectionModel().addListSelectionListener(
             new DependencySelectionListener());
 
-        JPanel featuresPanel = new JPanel(new BorderLayout());
+        featuresPanel = new JPanel(new BorderLayout());
         featuresPanel.setAlignmentX(0.0f);
 
         JPanel container = new JPanel(new BorderLayout());
@@ -265,6 +272,7 @@ public class EclipsePluginsStep
     }finally{
       setValid(dependencies.size() == 0);
       setBusy(false);
+      setPreviousEnabled(true);
       taskProgress.setIndeterminate(false);
     }
   }
@@ -275,13 +283,7 @@ public class EclipsePluginsStep
   private void extractInstallerPlugin()
     throws Exception
   {
-    String plugins = null;
-    if (Os.isFamily("windows")){
-      String home = (String)Installer.getContext().getValue("eclipse.home");
-      plugins = FilenameUtils.concat(home, "plugins");
-    }else{
-      plugins = (String)Installer.getContext().getValue("eclipse.plugins");
-    }
+    String plugins = (String)Installer.getContext().getValue("eclim.plugins");
 
     String tar = Installer.getProject().replaceProperties(
         "${basedir}/org.eclim.installer.tar.gz");
@@ -302,7 +304,7 @@ public class EclipsePluginsStep
     if (!Os.isFamily("windows")){
       File installScript = new File(
           Installer.getProject().replaceProperties(
-            "${eclipse.plugins}/org.eclim.installer_${eclim.version}/bin/install"));
+            "${eclim.plugins}/org.eclim.installer_${eclim.version}/bin/install"));
       Replace replace = new Replace();
       replace.setTaskName("replace");
       replace.setFile(installScript);
@@ -331,13 +333,9 @@ public class EclipsePluginsStep
     String to = null;
     /*if (!Os.isFamily("windows")){
       String home = (String)Installer.getContext().getValue("eclipse.home");
-      String plugins = (String)Installer.getContext().getValue("eclipse.plugins");
-      if(plugins.endsWith("/")){
-        plugins.substring(0, plugins.length() - 1);
-      }
-      if (!plugins.equals(FilenameUtils.concat(home, "plugins"))){
-        to = plugins;
-        to = FilenameUtils.getFullPath(to);
+      String local = (String)Installer.getContext().getValue("eclipse.local");
+      if (local != null && !home.equals(local)){
+        to = local;
       }
     }*/
 
@@ -455,6 +453,7 @@ public class EclipsePluginsStep
     public void actionPerformed(ActionEvent e)
     {
       ((JButton)e.getSource()).setEnabled(false);
+      setPreviousEnabled(true);
       try{
         Boolean successful = (Boolean)Worker.post(new foxtrot.Task(){
           public Object run()
@@ -808,7 +807,7 @@ public class EclipsePluginsStep
   private static class Feature
   {
     public static final Pattern VERSION =
-      Pattern.compile("^(\\d+\\.\\d+\\.\\d+)\\..*");
+      Pattern.compile("^(\\d+\\.\\d+\\.\\d+)(\\..*)?");
 
     private String id;
     private String version;

@@ -55,9 +55,10 @@
             <and>
               <not> <os family="windows"/> </not>
               <not>
-                <formic:contains string="eclipse.plugins" substring="eclipse.home"/>
+                <formic:equals arg1="eclipse.local" arg2="eclipse.home"/>
               </not>
             </and>
+            <formic:istrue value="featureList.jdt"/>
             <formic:istrue value="featureList.wst"/>
           </or>
         </formic:branch>
@@ -81,12 +82,13 @@
     - Note: Must be named "install".
     -->
   <target name="install">
-    <property name="eclipse.plugins" value="${eclipse.home}/plugins"/>
     <property name="eclim.home"
-        value="${eclipse.plugins}/org.eclim_${eclim.version}"/>
+        value="${eclim.plugins}/org.eclim_${eclim.version}"/>
 
     <!-- shutdown any running instance of eclimd -->
     <eclim:shutdown/>
+
+    <mkdir dir="${eclim.plugins}"/>
 
     <!-- remove old files -->
     <antcall target="clean"/>
@@ -100,26 +102,30 @@
       <os family="windows"/>
       <then>
         <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclipse.plugins}">
+            dest="${eclim.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
-        <replace dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin"
+        <replace dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
             token="$${vim.files}" value="${vim.files}">
           <include name="eclim"/>
           <include name="eclim.*"/>
         </replace>
+        <move todir="${eclipse.home}">
+          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
+              includes="eclimd.bat,eclimd.cmd"/>
+        </move>
       </then>
       <else>
         <untar src="${basedir}/org.eclim_${eclim.version}.tar.gz"
-            dest="${eclipse.plugins}" compression="gzip">
+            dest="${eclim.plugins}" compression="gzip">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
-        <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/eclim"
+        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim"
             token="$${vim.files}" value="${vim.files}"/>
-        <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
-            token="$${eclim.home}" value="${eclipse.plugins}/org.eclim_${eclim.version}"/>
-        <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
-            token="$${eclim.home}" value="${eclipse.plugins}/org.eclim_${eclim.version}"/>
+        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
+            token="$${eclim.home}" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
+        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
+            token="$${eclim.home}" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
 
         <!--
           - hard code the eclipse home for people that install plugins outside
@@ -127,17 +133,17 @@
           -->
         <if>
           <not>
-            <contains string="${eclipse.plugins}" substring="${eclipse.home}"/>
+            <contains string="${eclim.plugins}" substring="${eclipse.home}"/>
           </not>
           <then>
-            <replace file="${eclipse.plugins}/org.eclim_${eclim.version}/bin/eclimd"
+            <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"
                 token="#$${eclipse.home}"
                 value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
           </then>
         </if>
 
         <chmod perm="755">
-          <fileset dir="${eclipse.plugins}/org.eclim_${eclim.version}/bin">
+          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin">
             <include name="eclim"/>
             <include name="eclimd"/>
             <include name="native/**/*"/>
@@ -146,6 +152,10 @@
 
         <exec executable="make" failonerror="true"
             dir="${eclim.home}/src/nailgun"/>
+        <delete file="${eclipse.local}/eclimd"/>
+        <exec executable="ln" dir="${eclipse.local}">
+          <arg line="-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd ."/>
+        </exec>
         <move file="${eclim.home}/src/nailgun/ng" todir="${eclim.home}/bin"/>
       </else>
     </if>
@@ -157,7 +167,7 @@
       <else> <property name="eclim.gvim.embed" value="true"/> </else>
     </if>
 
-    <replace dir="${eclipse.plugins}/org.eclim.vimplugin_${eclim.version}"
+    <replace dir="${eclim.plugins}/org.eclim.vimplugin_${eclim.version}"
         includes="plugin.properties">
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
       <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
@@ -179,16 +189,10 @@
     -->
   <target name="clean">
     <!-- remove eclipse plugins -->
-    <path id="eclim.plugins">
-      <dirset dir="${eclipse.plugins}" includes="org.eclim*"/>
-    </path>
-    <property name="eclim.plugins" refid="eclim.plugins"/>
-    <for list="${eclim.plugins}" param="eclim.plugin"
-        delimiter="${path.separator}">
-      <sequential>
-        <delete dir="@{eclim.plugin}"/>
-      </sequential>
-    </for>
+    <delete includeemptydirs="true">
+      <fileset dir="${eclim.plugins}" includes="org.eclim*/**/*"/>
+      <dirset dir="${eclim.plugins}" includes="org.eclim*"/>
+    </delete>
 
     <!-- remove vim files -->
     <delete failonerror="false">
@@ -214,7 +218,7 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <delete dir="${eclipse.plugins}/org.eclim.installer_${eclim.version}"/>
+    <delete dir="${eclim.plugins}/org.eclim.installer_${eclim.version}"/>
   </target>
 
 </project>

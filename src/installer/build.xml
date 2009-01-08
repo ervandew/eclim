@@ -29,8 +29,9 @@
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
-    <fileset dir="${eclipse.home}/plugins"
-        includes="**/*.jar" excludes="org.eclim*/*.jar"/>
+    <fileset dir="${eclipse.home}">
+      <include name="plugins/org.eclipse.*.jar"/>
+    </fileset>
   </path>
   <path id="ant-contrib-classpath">
     <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>

@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,16 +48,14 @@ public abstract class Command
     this.handler = handler;
     this.cmd = new String[cmd.length + 1];
 
+    this.cmd[0] = Installer.getProject().replaceProperties(
+        "${eclim.plugins}/org.eclim.installer_${eclim.version}/bin/install");
     if (Os.isFamily("windows")){
-      this.cmd[0] = Installer.getProject().replaceProperties(
-          "${eclipse.home}/plugins/org.eclim.installer_${eclim.version}/bin/install.bat");
-    }else{
-      //this.cmd = new String[cmd.length + (to != null ? 3 : 1)];
-      this.cmd[0] = Installer.getProject().replaceProperties(
-          "${eclipse.plugins}/org.eclim.installer_${eclim.version}/bin/install");
-      //this.cmd[this.cmd.length - 2] = "-to";
-      //this.cmd[this.cmd.length - 1] = to;
+      this.cmd[0] += ".bat";
     }
+    //this.cmd = new String[cmd.length + (to != null ? 3 : 1)];
+    //this.cmd[this.cmd.length - 2] = "-to";
+    //this.cmd[this.cmd.length - 1] = to;
 
     System.arraycopy(cmd, 0, this.cmd, 1, cmd.length);
   }

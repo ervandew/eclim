@@ -18,8 +18,9 @@
 <project name="test" default="test" basedir="../..">
 
   <property name="eclim.home"
-      value="${eclipse.home}/plugins/org.eclim_${eclim.version}"/>
+      value="${eclim.plugins}/org.eclim_${eclim.version}"/>
   <property name="test.include" value="**/*Test"/>
+
   <if>
     <os family="windows"/>
     <then>

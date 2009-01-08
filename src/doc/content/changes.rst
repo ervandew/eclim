@@ -30,6 +30,7 @@ Java:
     project's .classpath file.
 
 Eclim:
+  - eclimd start scripts now available in the eclipse home.
   - Consolidated the various **:LocateFile\*** commands into a single
     :ref:`:LocateFile <vim/common/util>` command with a new setting to specify
     the default means to open a result and various key bindings for opening via
