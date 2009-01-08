@@ -121,10 +121,11 @@ eclim server and verify that it is running properly.
 #.  The first step is to start the eclimd server.
 
     - **Linux**:  To start eclimd from linux, simply execute the eclimd script
-      found in $ECLIPSE_HOME/plugins/org.eclim_version/bin.
+      found in your eclipse root directory: $ECLIPSE_HOME/eclimd
+
     - **Windows**: The easiest way to start eclimd in windows is to double
-      click on the eclimd.bat file found in
-      $ECLIPSE_HOME/plugins/org.eclim_version/bin.
+      click on the eclimd.bat file found in your eclipse root directory:
+      %ECLIPSE_HOME%/eclimd.bat
 
 #.  Once you have started the server you can test it by opening a Vim
     window and issuing the command, :ref:`:PingEclim`.  The result of executing
@@ -191,45 +192,8 @@ Building from source
 
 If you would like to use the bleeding edge development version of eclim or you
 would like to contribute code, then you can checkout and build eclim from
-source.
-
-1. Check out the code:
-
-  ::
-
-    $ svn co https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
-
-2. Build eclim:
-
-  ::
-
-    $ cd eclim
-    $ ant -Declipse.home=<your eclipse home dir>
-
-  This will build and deploy eclim to your eclipse and vim directories.  If you
-  don't want to supply the eclipse home directory every time, you can set the
-  environment variable ECLIM_ECLIPSE_HOME which the build script will then
-  utilize.
-
-  By default the above ant call will build all the eclim plugins, requiring you
-  to have all the related dependencies already installed in your eclipse
-  distribution.  However, if you only want a subset of the eclim plugins to be
-  built, you can specify so using the 'plugins' system property:
-
-  ::
-
-    # build only ant and jdt (java) support
-    $ ant -Dplugins=ant,jdt
-
-    # build only pdt (php) support (requires wst)
-    $ ant -Dplugins=wst,pdt
-
-  .. note::
-
-    On windows you will need to quote the plugins argument if you are building
-    more than one plugin:
-
-      > ant "-Dplugins=ant,jdt"
+source.  Instructions on doing so can be found in the
+:ref:`developers guide <development-build>`.
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html

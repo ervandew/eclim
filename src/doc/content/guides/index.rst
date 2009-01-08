@@ -26,6 +26,7 @@ Guides
    java/maven/mvn/classpath
    php/project
    python/project
+   development
 
 
 Installing / Upgrading
@@ -50,3 +51,8 @@ Php
 Python
 ------
 - :ref:`guides/python/project`
+
+
+Eclim Developers
+----------------
+- :ref:`guides/development`
