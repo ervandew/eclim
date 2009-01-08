@@ -221,8 +221,15 @@ source.
     # build only ant and jdt (java) support
     $ ant -Dplugins=ant,jdt
 
-    # build only pdt (php) support
-    $ ant -Dplugins=pdt
+    # build only pdt (php) support (requires wst)
+    $ ant -Dplugins=wst,pdt
+
+  .. note::
+
+    On windows you will need to quote the plugins argument if you are building
+    more than one plugin:
+
+      > ant "-Dplugins=ant,jdt"
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
