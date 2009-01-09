@@ -175,7 +175,7 @@ public class Options
       String optionsString = Services.getMessage(messageKey);
       if(messageKey.equals(optionsString)){
         throw new IllegalArgumentException(
-            Services.getMessage("command.not.found", command));
+            Services.getMessage("command.missing.options", command));
       }
       Collection<Option> commandOptions = parseOptions(optionsString);
       for(Option option : commandOptions){
