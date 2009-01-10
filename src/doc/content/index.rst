@@ -30,6 +30,7 @@ Welcome to Eclim
    documentation
    guides/index
    translations/index
+   development/index
 
 .. _overview:
 
@@ -59,7 +60,7 @@ Eclipse features through a server interface, and a set of Vim plug-ins that
 communicate with Eclipse over that interface.  This functionality can be
 leveraged in three primary ways, as illustrated below.
 
-.. image:: images/diagram.png
+.. image:: images/diagrams/use_cases.png
 
 #. The :ref:`first scenario <eclimd_headless>` is for those for which vim is
    their primary editing interface.  In this scenario you run a headless
