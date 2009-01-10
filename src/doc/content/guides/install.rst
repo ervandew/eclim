@@ -70,6 +70,11 @@ Step 1: Download the eclim installer for your platform.
 Step 2: Run the installer.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. note::
+
+  If you have eclipse running, please close it prior to starting the
+  installation procedure.
+
 - **Linux (and other unix based systems):**
   You can start the installer by running the script you downloaded
   (note: you may have to make it executable first).
@@ -104,55 +109,59 @@ to install the application.
     $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
 
 
-Step 3: Start the eclimd server and test it.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 3: Testing the installation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-See the documentation :ref:`below <start_test>`.
+To test eclim you first need to start the eclim daemon.  How you start the
+daemon will depend on how you intend to use eclim.
 
+If you plan on using eclim along with the eclipse gui, then:
 
-.. _start_test:
+- start eclipse
+- open the eclimd view
 
-Starting and testing eclim.
----------------------------
+  Window -> Show View -> Other -> Eclim -> eclimd
 
-Once you have finished the installation process, you can then start up the
-eclim server and verify that it is running properly.
+If you plan on using eclim without the eclipse gui, then:
 
-#.  The first step is to start the eclimd server.
+- start the eclimd server.
 
-    - **Linux**:  To start eclimd from linux, simply execute the eclimd script
-      found in your eclipse root directory: $ECLIPSE_HOME/eclimd
+  - **Linux**:  To start eclimd from linux, simply execute the eclimd script
+    found in your eclipse root directory: $ECLIPSE_HOME/eclimd
 
-    - **Windows**: The easiest way to start eclimd in windows is to double
-      click on the eclimd.bat file found in your eclipse root directory:
-      %ECLIPSE_HOME%/eclimd.bat
+  - **Windows**: The easiest way to start eclimd in windows is to double
+    click on the eclimd.bat file found in your eclipse root directory:
+    %ECLIPSE_HOME%/eclimd.bat
 
-#.  Once you have started the server you can test it by opening a Vim
-    window and issuing the command, :ref:`:PingEclim`.  The result of executing
-    this command should be "eclim *version*" echoed to the bottom of your Vim
-    window.  If however, you receive ``unable to connect to eclimd - connect:
-    Connection refused``, or something similar, then your eclimd server is not
-    running or something is preventing eclim from connecting to it.  If you
-    receive this or any other errors and are unsure of what steps to take,
-    please feel free to visit the forums_ so that someone can help resolve your
-    issue.
+Once you have the eclim daemon (headed or headless) running, you can then test
+eclim:
 
-    Example of successful ping\:
+- open a vim window and issuing the command, :ref:`:PingEclim`.  The result of
+  executing this command should be the eclim and eclipse version echoed to the
+  bottom of your Vim window.  If however, you receive ``unable to connect to
+  eclimd - connect: Connection refused``, or something similar, then your
+  eclimd server is not running or something is preventing eclim from connecting
+  to it.  If you receive this or any other errors you can start by first
+  examining the eclimd output to see if it gives any info as to what went
+  wrong.  If at this point you are unsure how to proceed, feel free to post
+  your issue on the `eclim user`_ mailing list.
+
+    Example of successful ping:
 
     .. image:: ../images/screenshots/ping_success.png
 
-    Example of failed ping\:
+    Example of failed ping:
 
     .. image:: ../images/screenshots/ping_failed.png
 
-#.  Regardless of the ping result, you can also verify your vim settings
-    using the command **:EclimValidate**.  This will check
-    various settings and options and report any problems. If all is ok
-    you will receive the following message\:
+- Regardless of the ping result, you can also verify your vim settings
+  using the command **:EclimValidate**.  This will check
+  various settings and options and report any problems. If all is ok
+  you will receive the following message\:
 
-    ::
+  ::
 
-      Result: OK, required settings are valid.
+    Result: OK, required settings are valid.
 
 
 What's Next
@@ -201,4 +210,4 @@ source.  Instructions on doing so can be found in the
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5687
 .. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5685
-.. _forums: http://sourceforge.net/forum/?group_id=145869
+.. _eclim user: http://groups.google.com/group/eclim-user
