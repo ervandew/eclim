@@ -18,14 +18,10 @@ package org.eclim.command;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.ResourceBundle;
-import java.util.TreeSet;
 
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
@@ -57,7 +53,6 @@ public class Options
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
-  public static final String HELP_OPTION = "?";
   public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
@@ -89,7 +84,6 @@ public class Options
   public static final String VALUES_OPTION = "v";
 
   public static final String OPTION_SUFFIX = ".options";
-  public static final String USAGE_SUFFIX = ".usage";
 
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";
@@ -98,11 +92,6 @@ public class Options
   private static org.apache.commons.cli.Options coreOptions =
       new org.apache.commons.cli.Options();
   static {
-    coreOptions.addOption(OptionBuilder.withArgName(HELP)
-        .hasOptionalArg()
-        .withLongOpt(HELP)
-        .withDescription(Services.getMessage("help.description"))
-        .create(HELP_OPTION));
     coreOptions.addOption(OptionBuilder.withArgName(COMMAND_OPTION)
         .hasArg()
         .withDescription(Services.getMessage("command.description"))
@@ -125,28 +114,6 @@ public class Options
     for(Iterator ii = coreOptions.getOptions().iterator(); ii.hasNext();){
       options.addOption((Option)ii.next());
     }
-  }
-
-  /**
-   * Print usage information.
-   *
-   * @param plugin The plugin to print the usage for (ant, jdt, etc).
-   */
-  public void usage(String plugin)
-  {
-    usageSummary();
-    if(plugin != null){
-      System.out.println(buildFooter(plugin));
-    }
-  }
-
-  /**
-   * Print summary usage information.
-   */
-  public void usageSummary()
-  {
-    HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp(Services.getMessage("usage"), "", coreOptions, null);
   }
 
   /**
@@ -185,33 +152,6 @@ public class Options
 
     CommandLineParser parser = new GnuParser();
     return new CommandLine(parser.parse(options, args), args);
-  }
-
-  /**
-   * Builds the usage footer.
-   *
-   * @param plugin The plugin to build the footer for (ant, jdt, etc).
-   * @return The footer.
-   */
-  protected String buildFooter(String plugin)
-  {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append(Services.getMessage("command.usage.header"));
-
-    TreeSet<String> set = new TreeSet<String>();
-    ResourceBundle resources = Services.getResourceBundle(plugin);
-    for(Enumeration keys = resources.getKeys(); keys.hasMoreElements();){
-      String key = (String)keys.nextElement();
-      if(key.endsWith(".usage")){
-        set.add(resources.getString(key));
-      }
-    }
-
-    for(String string : set){
-      buffer.append("\n").append(string).append("\n");
-    }
-
-    return buffer.toString();
   }
 
   /**

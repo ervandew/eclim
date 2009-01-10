@@ -78,21 +78,16 @@ public class Main
         System.exit(1);
       }
 
-      if(commandLine.hasOption(Options.HELP_OPTION)){
-        options.usage(commandLine.getValue(Options.HELP_OPTION));
-        logger.debug("Main - exit");
-      }else{
-        String commandName = commandLine.getValue(Options.COMMAND_OPTION);
-        logger.debug("Main - command: {}", commandName);
-        if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
-          throw new IllegalArgumentException(
-              Services.getMessage("command.required"));
-        }
-        Command command = Services.getCommand(commandName);
-
-        String result = command.execute(commandLine);
-        System.out.println(result);
+      String commandName = commandLine.getValue(Options.COMMAND_OPTION);
+      logger.debug("Main - command: {}", commandName);
+      if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
+        throw new IllegalArgumentException(
+            Services.getMessage("command.required"));
       }
+      Command command = Services.getCommand(commandName);
+
+      String result = command.execute(commandLine);
+      System.out.println(result);
     }catch(Exception e){
       e.printStackTrace();
 

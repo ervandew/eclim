@@ -64,9 +64,6 @@ public interface PluginResources
 
   /**
    * Gets the underlying resource bundle.
-   * <p/>
-   * Used for obtaining the usage strings of every command, but may be used for
-   * more in the future.
    *
    * @return The ResourceBundle.
    */

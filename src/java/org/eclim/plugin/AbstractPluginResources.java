@@ -245,12 +245,6 @@ public abstract class AbstractPluginResources
     if(optionsKey.equals(optionsString)){
       logger.error(Services.getMessage("command.missing.options", name));
     }
-
-    String usageKey = name + Options.USAGE_SUFFIX;
-    String usageString = Services.getMessage(usageKey);
-    if(usageKey.equals(usageString)){
-      logger.warn(Services.getMessage("command.missing.usage", name));
-    }
   }
 
   /**
