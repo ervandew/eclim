@@ -1,12 +1,12 @@
 HIGH {{{
-  - restore php support
-  - reorganize php docs to better convey dependence on pdt
+  June 26th
+  http://wiki.eclipse.org/Galileo_Simultaneous_Release
+
+  - validation issue when file open in eclipse and vim
+    http://groups.google.com/group/eclim-user/msg/5da5cf04cc88a407
 
   - ant failure + quickfix on windows
     http://groups.google.com/group/eclim-user/browse_thread/thread/e321849947e8326?hl=en
-
-  - look into using pyflakes fork, and possibly including it in vim like rope
-    http://github.com/kevinw/pyflakes/tree/master
 
   - evaluate
     - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
@@ -37,6 +37,14 @@ TODO {{{
   }}}
 
   Tests {{{
+    - taglist
+      - ant
+      - javascript
+      - sql
+      - properties
+      - log4j
+      - webxml
+      - php
     - line based matching via :JavaRegex and :PythonRegex
     - util classes and vim util functions
     - project nature add/remove
@@ -48,9 +56,6 @@ TODO {{{
       - :OtherWorkingCopyEdit
       - :OtherWorkingCopySplit
       - :OtherWorkingCopyTabopen
-      - :LocateFileEdit
-      - :LocateFileSplit
-      - :LocateFileTab
       - :Sign
       - :Signs
       - :SignClearUser
@@ -70,11 +75,6 @@ TODO {{{
   }}}
 
   Installer {{{
-    - update installer eclipse plugins step to support as list of possible update
-      sites per feature.
-      - would need to loop through urls and examine the site.xml to see if the
-        version to install exists.
-
     - add/test proxy support to the installer
       org.eclipse.update.core.proxy.enable=true
       org.eclipse.update.core.proxy.port=8888
@@ -97,13 +97,6 @@ TODO {{{
   }}}
 
   Documentation {{{
-    - add warnings regarding running eclim and eclipse concurrently
-
-    - start developer docs
-      - document the eclim architecture
-      - document building eclim
-      - document adding commands to eclim
-
     - add menu of some sort in vimdocs
     - consider a command to open topic in web docs
 
@@ -115,55 +108,6 @@ TODO {{{
     - document template plugin
 
     - document qf/location list filtering support
-
-    - Chinese cheatsheet
-      :EclimHelp
-      :EclimGrep
-      :ProjectInfo
-      :ProjectNatures
-      :ProjectNatureAdd
-      :ProjectNatureRemove
-      :ProjectTodo
-      :Todo
-      :DjangoFind
-      :DjangoTemplateOpen
-      :DjangoViewOpen
-      :DjangoContextOpen
-      :PhpFindDefinition
-      :PhpSearch
-      :PhpSearchContext
-      :Validate (css, php, python, java, and javascript)
-      :PyLint
-      :MaximizeWindow
-      :MinimizeWindow
-      :MinimizeRestore
-      :VimgrepRelative
-      :VimgrepAddRelative
-      :LvimgrepRelative
-      :LvimgrepAddRelative
-      :CdRelative
-      :LcdRelative
-      :BrowserOpen
-      :VcsWebChangeSet
-      :VcsWebAnnotate
-      :VcsWebDiff
-      :VcsWebLog
-      :VcsInfo
-      :VcsLog
-      :VcsCat
-      :VcsChangeSet
-      :VcsDiff
-      :VcsLog
-      :TracLog
-      :TracAnnotate
-      :TracChangeSet
-      :TracDiff
-      :Buffers
-      :Only
-      :OtherWorkingCopyDiff
-      :OtherWorkingCopyEdit
-      :OtherWorkingCopySplit
-      :OtherWorkingCopyTabopen
   }}}
 
   Common {{{
@@ -173,6 +117,7 @@ TODO {{{
       - username, email, etc.
       - setting precedence would be: user > project > global
       - unless eclipse supports this concept, only include eclim settings as 'user' configurable
+      - store in .eclim/user.prefs ??
 
     - add means to hook into and view all of eclipses build errors.
       https://sourceforge.net/forum/forum.php?thread_id=2192184&forum_id=487811
@@ -190,9 +135,6 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - Vcs
-      - diff orientation: allow horizontal diffs
-      - add support for a special revision 'prev' for :VcsDiff, :VcsChangeSet,
-        and :VcsCat
       - add
         :VcsStatus
           - temp window w/ list of files
@@ -200,12 +142,12 @@ TODO {{{
             - M shows the diff
             - A opens the file
             - R does nothing
-        :VcsOut (git equivalent?)
+        :VcsOut (git equivalent? requires git fetch first)
           - open temp window w/ list of files grouped by changeset
           - try to have <enter> on a file open a diff of remote version vs local
             - A opens the file
             - ... R files?
-        :VcsIn (git equivalent?)
+        :VcsIn (git equivalent? requires git fetch first)
           - open temp window w/ list of files grouped by changeset
           - try to have <enter> on a file open a diff of remote version vs local
             - A try to cat the remote file
@@ -238,11 +180,6 @@ TODO {{{
     - for taglist, support universal marker tag:
       |-- marker_name --|
 
-    - Add support for using a running eclipse gui as the eclimd server.
-      - add a menu item which starts up nailgun.
-        - ping first to see if one is running.
-      - combine w/ vimplugin to allow vim in eclipse w/ eclipse funtionality.
-
     - In addition to marking lines w/ errors/warnings, highlight the offending text.
     - CursorHold validation of files.
       - via temp file?
@@ -259,8 +196,6 @@ TODO {{{
   }}}
 
   Vimplugin {{{
-    - on save from vim, notify eclipse
-    - when opening a file from eclipse, can gvim be given focus?
   }}}
 
   C/C++ {{{
@@ -273,9 +208,9 @@ TODO {{{
       - ibm xl toolchain:
         http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.cdt.doc.user/concepts/cdt_c_whatsnew.htm
 
-    - :CHierarchy command which opens a buffer showing the class hierarchy for
+    - :CppHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
-    - :CIncludeHierarchy command which opens a buffer showing hierarchy of each
+    - :C[pp]IncludeHierarchy command which opens a buffer showing hierarchy of each
       header file included in the current source file.
   }}}
 
@@ -514,6 +449,9 @@ TODO {{{
   }}}
 
   Python {{{
+    - look into using pyflakes fork, and possibly including it in vim like rope
+      http://github.com/kevinw/pyflakes/tree/master
+
     - jython?
 
     - rope code completion enhancements
@@ -524,9 +462,6 @@ TODO {{{
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
-
-    - refactoring: http://rope.sourceforge.net/
-      - this lib includes auto-completion and find definition!!!
 
     - debugger: http://pyclewn.wiki.sourceforge.net/
       - seems to currently use netbeans support which means gvim only... look
@@ -585,8 +520,6 @@ NOTES {{{
   }}}
 
   Steps for new releases {{{
-    Note: make sure to do a quick test with sh (dash) instead of bash
-
     1) create sourceforge release
        - update windows and linux download pages with latest file to download.
     2) update documentation website
@@ -609,21 +542,16 @@ NOTES {{{
 
   Troubleshooting {{{
 
-    Update manager from command line:
-      http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
-
     Windows:
-      - starting eclim without spawning seperate console
-        > java -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
-               -jar plugins/org.eclipse.equinox.launcher_<version>.jar
+      - starting eclim without spawning separate console
+        > java -jar plugins/org.eclipse.equinox.launcher_<version>.jar
                -debug -consolelog -nosplash -clean -refresh
-               -application org.eclim.application -vmargs
-               -Declim.home="C:/Program Files/eclipse/plugins/org.eclim_1.2.4/"
+               -application org.eclim.application
 
     Minimum execution of vim w/ eclim support
-      echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > _vimrc.minimum
-      vim -u _vimrc.minimum
-      gvim -u _vimrc.minimum -U none
+      echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > .vimrc.minimum
+      vim -u .vimrc.minimum
+      gvim -u .vimrc.minimum -U none
 
     Helpful link for debugging plugin errors.
       http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
@@ -640,7 +568,7 @@ NOTES {{{
         Expand Source folder node
         Select "Excluded"
         Hit "Edit"
-        Add exclusion pattern: **/*.swp
+        Add exclusion pattern: "**/*.swp"
     Or
       Edit .classpath
         Add attribute to src classpathentry
@@ -660,22 +588,9 @@ NOTES {{{
     eclipse  500      143       59
   }}}
 
-  Pydev, files modified to remove it: {{{
-    build.xml
-    src/ant/docs.xml
-    src/installer/build.xml
-    src/installer/installer.xml
-    src/installer/java/org/eclim/installer/step/FeatureProvider.java
-    src/installer/resources/dependencies.properties
-    src/installer/resources/install.properties
-    src/vim/eclim/autoload/eclim/python/django.vim
-    src/vim/eclim/ftplugin/python/eclim_complete.vim
-    src/vim/eclim/ftplugin/python/eclim_definition.vim
-  }}}
-
   Potential Contributors {{{
     Anton Sharonov (haron13)
-      - good work with :JavaFormat contribution
+      - good work with :JavaFormat and headed eclim view contributions
 
     fidlej
       - good patch work so far
@@ -692,7 +607,7 @@ NOTES {{{
     - GPL and EPL are not compatible
       - But as copyright holder I can provide permission to link to eclipse:
         http://www.fsf.org/licensing/licenses/gpl-faq.html#GPLIncompatibleLibs
-      - EPL also has different definition of "derivative work":
+      - EPL also has a different definition of "derivative work":
         http://www.eclipse.org/legal/eplfaq.php#DERIV (#25 - 27)
         - A few of my files may be considered derivative works and will need to
           be licensed as EPL accordingly.
@@ -713,30 +628,6 @@ NOTES {{{
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
     - Xvfb is included with xorg-server
-
-}}}
-
-DOCS (scratch) {{{
-
-  Builing eclim {{{
-    Before building eclipse you will need to:
-      - set the following environment variables
-        - ECLIM_ECLIPSE_HOME: points to your eclipse install
-        - VIMFILES: points to the directory where you want all the vim files
-          deployed to (typically HOME/.vim or HOME/vimfiles)
-      - make sure you install the required eclipse features
-        - wst
-        - pdt
-
-    Once your environment is setup you should then just need to run '$ ant'
-    from the top level directory of the eclim code base.  From there, starting
-    and stopping eclim is the same as if you had installed it via the
-    installer.
-
-    Note: on windows, currently only building of eclim is supported.  Running
-    unit tests, generating docs, building the installer, etc. are not yet
-    supported.
-  }}}
 
 }}}
 
