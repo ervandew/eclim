@@ -94,6 +94,19 @@ News
 ==================
 
 -----------
+2009-01-10
+-----------
+
+| **Eclim 1.4.4** is now available.
+| Highlights of this release include:
+
+- re-enabled php support
+- added ability to run eclimd inside of eclipse gui
+- added support for embedding gvim in eclipse
+
+You can view the :ref:`release notes <1.4.4>` for more info.
+
+-----------
 2008-11-15
 -----------
 
