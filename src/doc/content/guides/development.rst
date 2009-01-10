@@ -19,7 +19,8 @@ Eclim Developers Guide
 ======================
 
 This guide is intended mostly for those who wish to contribute to eclim by
-fixing bugs or adding new functionality.
+fixing bugs or adding new functionality, but the first section is also useful
+for users who would like to use the latest development version of eclim.
 
 .. _development-build:
 
@@ -32,13 +33,19 @@ Checking out the code and building it.
 
     $ svn co https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
 
-  If your planning on contibuting code beyond small bug fixes, then it is
+  If your planning on contributing code beyond small bug fixes, then it is
   highly recommend to check the code out using git_, specifically using
   git-svn_:
 
   ::
 
     $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
+
+  .. note::
+
+    Depending on the version of svn you have installed, the clone may end in a
+    segmentation fault, but as long as all the revisions were cloned, this
+    error can be safely ignored.
 
   Once you have a local git repository you can utilize the extensive local git
   functionality allowing you to commit code locally, create local branches,
@@ -89,11 +96,11 @@ anything non-trivial, the preferred means of managing those patches.
 
 .. _development-patches-submitting:
 
-**Submitted Patches**
+**Submitting Patches**
 
 Any patches you submit should be in the form of an svn diff (if you chose to
 use svn) or as a git formatted patch (for those using git).  For svn users,
-simply redirecting `svn diff` to a file will suffice.  For git users, the
+simply redirecting ``svn diff`` to a file will suffice.  For git users, the
 preferred method is to use git-format-patch:
 
   ::
@@ -141,6 +148,12 @@ This example will use the recommend tools, git_ and stgit_.
   ::
 
     $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
+
+  .. note::
+
+    Depending on the version of svn you have installed, the clone may end in a
+    segmentation fault, but as long as all the revisions were cloned, this
+    error can be safely ignored.
 
 2. Initialize stgit for the eclim repository:
 
@@ -213,6 +226,60 @@ This example will use the recommend tools, git_ and stgit_.
 
 At this point all that is left is submitting the patch to the
 `eclim development group`_.
+
+
+**Pulling Updates**
+
+  As some point you'll need to pull updates from the remote svn repository.
+  For svn users it's a simple ``svn up``, but for git/stgit users the process
+  is not as obvious.
+
+  If you're using just git-svn, without stgit, then you can pull updates like
+  so:
+
+    ::
+
+      $ git svn rebase
+
+  If you're using stgit on top of git, then the preferred method is to first
+  run the following commands:
+
+    ::
+
+      $ git config stgit.pull-policy rebase
+      $ git config stgit.rebasecmd "git svn rebase"
+      $ git config branch.master.stgit.parentbranch remotes/trunk
+
+  Once you've got that part setup you can then use stgit to pull the latest
+  changes from the remote repository:
+
+    ::
+
+      $ stg pull -m
+
+  .. note::
+
+    Depending on the version of svn you have installed, stg may report a
+    failure by git and won't push your changes back on the stack.  This is due
+    to the same bug as noted above when cloning the repository.  As long as the
+    changes were pulled, you can ignore the error and manually push your
+    changes onto the stgit stack:
+
+      ::
+
+        $ stg push
+
+
+What's Next
+------------
+
+Now that you're familiar with the basics of building and patching eclim, the
+next step is to familiarize yourself with the eclim architecture and to review
+the detailed docs on how new features are added.
+
+All of that and more can be found in the
+:ref:`eclim development docs <development/index>`.
+
 
 .. _git: http://git-scm.com/
 .. _git-svn: http://www.kernel.org/pub/software/scm/git/docs/git-svn.html
