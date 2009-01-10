@@ -29,9 +29,8 @@ Here is a diagram showing the sequence in a bit more detail:
 
 The commands which are executed on the eclimd side are also fairly simply.
 They accept an object containing the command line parameters passed into the
-eclimd invocation and then return a string representing the resulting output.
-Below is a simple class diagram showing the hierarchy of a couple typical
-commands.
+eclimd invocation and then return a string representing the output.  Below is a
+simple class diagram showing the hierarchy of a couple typical commands.
 
 .. image:: ../images/diagrams/command_class.png
 
