@@ -251,7 +251,8 @@ function s:LocateFileCompletionInit(action)
       \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ')'
   augroup END
 
-  call s:LocateFileCompletionAutocmd()
+  " enable completion after user starts typing
+  call s:LocateFileCompletionAutocmdDeferred()
 
   imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection('n')<cr>
   imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection('p')<cr>
@@ -296,6 +297,9 @@ function eclim#common#util#LocateFileCompletion()
   1,1delete _
   exec winnr . 'winc w'
 
+  " part of bad hack for gvim on windows
+  let b:start_selection = 1
+
   call s:LocateFileSelection(1)
 endfunction " }}}
 
@@ -304,6 +308,14 @@ function s:LocateFileCompletionAutocmd()
   augroup locate_file
     autocmd!
     autocmd CursorHoldI <buffer> call eclim#common#util#LocateFileCompletion()
+  augroup END
+endfunction " }}}
+
+" s:LocateFileCompletionAutocmdDeferred() {{{
+function s:LocateFileCompletionAutocmdDeferred()
+  augroup locate_file
+    autocmd!
+    autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmd()
   augroup END
 endfunction " }}}
 
@@ -316,6 +328,14 @@ function s:LocateFileSelection(sel)
 
   let sel = a:sel
   let prev_sel = b:selection
+
+  " bad hack for gvim on windows
+  let start_sel = b:start_selection
+  let double_defer = 0
+  if sel =~ '^[np]$' && (has('win32') || has('win64'))
+    let double_defer = b:start_selection == 1
+    let b:start_selection = 0
+  endif
 
   let winnr = winnr()
   exec bufwinnr(b:results_bufnum) . 'winc w'
@@ -335,10 +355,14 @@ function s:LocateFileSelection(sel)
 
   exec 'let b:selection = ' . sel
 
-  " restore completion on the next key typed
-  augroup locate_file
-    autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmd()
-  augroup END
+  if double_defer
+    augroup locate_file
+      autocmd!
+      autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmdDeferred()
+    augroup END
+  else
+    call s:LocateFileCompletionAutocmdDeferred()
+  endif
 
   return ''
 endfunction " }}}
