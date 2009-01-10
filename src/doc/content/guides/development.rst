@@ -41,12 +41,6 @@ Checking out the code and building it.
 
     $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
 
-  .. note::
-
-    Depending on the version of svn you have installed, the clone may end in a
-    segmentation fault, but as long as all the revisions were cloned, this
-    error can be safely ignored.
-
   Once you have a local git repository you can utilize the extensive local git
   functionality allowing you to commit code locally, create local branches,
   etc.  For guidelines on managing patches and submitting them, please see the
@@ -149,12 +143,6 @@ This example will use the recommend tools, git_ and stgit_.
 
     $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
 
-  .. note::
-
-    Depending on the version of svn you have installed, the clone may end in a
-    segmentation fault, but as long as all the revisions were cloned, this
-    error can be safely ignored.
-
 2. Initialize stgit for the eclim repository:
 
   ::
@@ -256,18 +244,6 @@ At this point all that is left is submitting the patch to the
     ::
 
       $ stg pull -m
-
-  .. note::
-
-    Depending on the version of svn you have installed, stg may report a
-    failure by git and won't push your changes back on the stack.  This is due
-    to the same bug as noted above when cloning the repository.  As long as the
-    changes were pulled, you can ignore the error and manually push your
-    changes onto the stgit stack:
-
-      ::
-
-        $ stg push
 
 
 What's Next
