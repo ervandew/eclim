@@ -117,7 +117,17 @@ daemon will depend on how you intend to use eclim.
 
 If you plan on using eclim along with the eclipse gui, then:
 
-- start eclipse
+- start eclipse with the -clean option
+
+  ::
+
+    $ eclipse -clean
+
+  .. note::
+
+    You should only need to start eclipse with the -clean option the first time
+    after installing or upgrading eclim.
+
 - open the eclimd view
 
   Window -> Show View -> Other -> Eclim -> eclimd
@@ -127,7 +137,11 @@ If you plan on using eclim without the eclipse gui, then:
 - start the eclimd server.
 
   - **Linux**:  To start eclimd from linux, simply execute the eclimd script
-    found in your eclipse root directory: $ECLIPSE_HOME/eclimd
+    found in your eclipse root directory:
+
+    ::
+
+      $ $ECLIPSE_HOME/eclimd
 
   - **Windows**: The easiest way to start eclimd in windows is to double
     click on the eclimd.bat file found in your eclipse root directory:
