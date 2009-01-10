@@ -25,8 +25,8 @@ are several ways in which you can contribute:
     areas as it should.  What the documentation could really use is some help
     from its users:
 
-    - Point out any grammar or spelling errors, since some always manage to slip
-      through.
+    - Point out any grammar or spelling errors, since some always manage to
+      slip through.
     - Point out areas of the documentation that are vague and could use
       elaboration.
     - Write new guides to be included in the "Guides" section of the site.
@@ -61,7 +61,9 @@ are several ways in which you can contribute:
     work.  That way I can keep a small list of who is working on what to avoid
     any duplication of effort and link people together that wish to work on the
     same feature.  The list would also afford me the ability to contact you
-    should a change to eclim possibly affect what you are working on.
+    should a change to eclim possibly affect what you are working on.  If you
+    plan on making any code contributes, please read the
+    :ref:`developer guide <guides/development>` first.
 
 #.  **Monetary Contributions**: I am not currently accepting any donations.  My
     day job pays well, and I work on eclim for the love of it.  If you have
