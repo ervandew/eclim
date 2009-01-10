@@ -30,6 +30,8 @@ Java:
     project's .classpath file.
 
 Eclim:
+  - Added the ability to run :ref:`eclimd inside of eclipse <eclimd_headed>`.
+  - Added support for :ref:`embedding gvim inside of eclipse <gvim_embedded>`.
   - eclimd start scripts now available in the eclipse home.
   - Consolidated the various **:LocateFile\*** commands into a single
     :ref:`:LocateFile <vim/common/util>` command with a new setting to specify
@@ -37,7 +39,7 @@ Eclim:
     other means.
 
 Php:
-  - Restored :ref:`php support <vim/php/index>`  via the new `eclipse pdt`_
+  - Restored :ref:`php support <vim/php/index>` via the new `eclipse pdt`_
     2.0.
 
 Vcs:
