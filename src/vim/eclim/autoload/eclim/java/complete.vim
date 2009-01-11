@@ -31,6 +31,9 @@
       let g:EclimJavaCompleteLayout = 'compact'
     endif
   endif
+  if !exists("g:EclimJavaCompleteCaseSensitive")
+    let g:EclimJavaCompleteCaseSensitive = !&ignorecase
+  endif
 " }}}
 
 " Script Varables {{{
@@ -127,6 +130,14 @@ function! eclim#java#complete#CodeComplete(findstart, base)
       " strip off semicolon if necessary.
       if word =~ ';$' && semicolon
         let word = strpart(word, 0, strlen(word) - 1)
+      endif
+
+      " if user wants case sensitivity, then filter out completions that don't
+      " match
+      if g:EclimJavaCompleteCaseSensitive && a:base != ''
+        if word !~ '^' . a:base . '\C'
+          continue
+        endif
       endif
 
       let dict = {

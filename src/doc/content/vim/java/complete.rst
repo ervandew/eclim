@@ -29,3 +29,16 @@ Java code completion uses the standard
 Screenshot of completion in action\:
 
 .. image:: ../../images/screenshots/java/completion.png
+
+
+Configuration
+-------------
+
+Vim Variables
+
+.. _g\:EclimJavaCompleteCaseSensitive:
+
+- **g:EclimJavaCompleteCaseSensitive** (Default: !&ignorecase) -
+  When set to a value greater than 0, eclim will filter out completions that
+  don't start with the same case base that you are attempting to complete (the
+  base and the suggested completion must have the same case).
