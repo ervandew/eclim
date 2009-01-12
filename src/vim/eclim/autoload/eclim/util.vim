@@ -921,7 +921,7 @@ function! eclim#util#TempWindow(name, lines, ...)
 endfunction " }}}
 
 " TempWindowClear(name) {{{
-" Opens a temp window w/ the given name and contents.
+" Clears the contents of the temp window with the given name.
 function! eclim#util#TempWindowClear(name)
   "let name = escape(a:name, ' []')
   " hack for windows
