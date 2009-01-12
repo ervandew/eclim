@@ -35,6 +35,7 @@ Java
    impl
    delegate
    bean
+   hierarchy
    format
    checkstyle
    junit
@@ -87,6 +88,7 @@ Java
 - :ref:`vim/java/impl`
 - :ref:`vim/java/delegate`
 - :ref:`vim/java/bean`
+- :ref:`vim/java/hierarchy`
 - :ref:`vim/java/format`
 - :ref:`vim/java/checkstyle`
 - :ref:`vim/java/junit`

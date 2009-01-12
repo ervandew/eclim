@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _1.4.5:
+
+1.4.5 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Java:
+  - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
+
 .. _1.4.4:
 
 1.4.4 (Jan. 1, 2009)

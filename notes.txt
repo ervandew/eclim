@@ -253,9 +253,6 @@ TODO {{{
       - also consider hooking into eclipse's change history support to allow the
         user to undo changes made by eclipse.
 
-    - :JavaHierarchy command which opens a buffer showing the class hierarchy for
-      the current file.
-
     - :JavaImportAll? some sort of command to scan the file for missing imports
       and import them.
       - see 'Organize Imports' functionality in eclipse.

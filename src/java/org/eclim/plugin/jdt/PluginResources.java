@@ -175,6 +175,8 @@ public class PluginResources
         org.eclim.plugin.jdt.command.format.FormatCommand.class);
     registerCommand("java_checkstyle",
         org.eclim.plugin.jdt.command.checkstyle.CheckstyleCommand.class);
+    registerCommand("java_hierarchy",
+        org.eclim.plugin.jdt.command.hierarchy.HierarchyCommand.class);
     registerCommand("javadoc_comment",
         org.eclim.plugin.jdt.command.doc.CommentCommand.class);
     registerCommand("log4j_validate",
