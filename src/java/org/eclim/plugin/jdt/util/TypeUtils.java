@@ -402,7 +402,7 @@ public class TypeUtils
    * @param type The type to get the superclass of.
    * @return The superclass type or null if none.
    */
-  private static IType getSuperClass(IType type)
+  public static IType getSuperClass(IType type)
     throws Exception
   {
     String superclass = type.getSuperclassName();
@@ -420,6 +420,38 @@ public class TypeUtils
       }
     }
     return null;
+  }
+
+  /**
+   * Gets an array of directly implemented interfaces for the supplied type, if
+   * any.
+   *
+   * @param type The type to get the interfaces of.
+   * @return Array of interface types.
+   */
+  public static IType[] getSuperInterfaces(IType type)
+    throws Exception
+  {
+    String[] parents = type.getSuperInterfaceNames();
+    ArrayList<IType> interfaces = new ArrayList<IType>(parents.length);
+    for(int ii = 0; ii < parents.length; ii++){
+      String[][] types = type.resolveType(parents[ii]);
+      if(types != null){
+        for(int jj = 0; jj < types.length; jj++){
+          String typeName = types[jj][0] + "." + types[jj][1];
+          IType found = type.getJavaProject().findType(typeName);
+          if(found != null){
+            interfaces.add(found);
+          }
+        }
+      }else{
+        IType found = type.getJavaProject().findType(parents[ii]);
+        if(found != null){
+          interfaces.add(found);
+        }
+      }
+    }
+    return interfaces.toArray(new IType[interfaces.size()]);
   }
 
   /**
