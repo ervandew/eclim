@@ -204,7 +204,7 @@ public class JavaUtils
    * @param file The absolute path to the file.
    * @return The compilation unit or null if not found.
    */
-  private static ICompilationUnit getCompilationUnit(
+  public static ICompilationUnit getCompilationUnit(
       IJavaProject project, String file)
     throws Exception
   {
