@@ -145,6 +145,8 @@ public class PluginResources
         org.eclim.plugin.jdt.command.doc.DocSearchCommand.class);
     registerCommand("java_import",
         org.eclim.plugin.jdt.command.include.ImportCommand.class);
+    registerCommand("java_import_missing",
+        org.eclim.plugin.jdt.command.include.ImportMissingCommand.class);
     registerCommand("java_imports_unused",
         org.eclim.plugin.jdt.command.include.UnusedImportsCommand.class);
     registerCommand("java_complete",

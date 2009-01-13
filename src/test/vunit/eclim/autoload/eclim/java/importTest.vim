@@ -48,6 +48,23 @@ function! TestImport()
     \ 'ArrayList not imported.')
 endfunction " }}}
 
+" TestImportMissing() {{{
+function! TestImportMissing()
+  edit! src/org/eclim/test/include/TestImportMissingVUnit.java
+  call PeekRedir()
+
+  call VUAssertFalse(search('^import java\.util\.ArrayList;'),
+    \ 'ArrayList already imported.')
+  call VUAssertFalse(search('^import java\.util\.HashMap;'),
+    \ 'HashMap already imported.')
+
+  JavaImportMissing
+  call VUAssertTrue(search('^import java\.util\.ArrayList;'),
+    \ 'ArrayList not imported.')
+  call VUAssertTrue(search('^import java\.util\.HashMap;'),
+    \ 'HashMap not imported.')
+endfunction " }}}
+
 " TestUnusedImport() {{{
 function! TestUnusedImport()
   edit! src/org/eclim/test/include/TestUnusedImportVUnit.java

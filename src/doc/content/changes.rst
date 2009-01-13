@@ -26,6 +26,7 @@ Bug Fixes:
 
 Java:
   - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
+  - Added command to :ref:`import all undefined types <:JavaImportMissing>`.
 
 .. _1.4.4:
 

@@ -53,19 +53,27 @@ public class ImportCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<ImportResult> results = new ArrayList<ImportResult>();
     String project = commandLine.getValue(Options.NAME_OPTION);
-    String pat = commandLine.getValue(Options.PATTERN_OPTION);
+    String pattern = commandLine.getValue(Options.PATTERN_OPTION);
 
-    SearchPattern pattern =
-      SearchPattern.createPattern(pat,
+    List<ImportResult> results =
+      findImport(JavaUtils.getJavaProject(project), pattern);
+
+    return ImportFilter.instance.filter(commandLine, results);
+  }
+
+  protected List<ImportResult> findImport(IJavaProject project, String pattern)
+    throws Exception
+  {
+    ArrayList<ImportResult> results = new ArrayList<ImportResult>();
+    SearchPattern searchPattern =
+      SearchPattern.createPattern(pattern,
           IJavaSearchConstants.TYPE,
           IJavaSearchConstants.DECLARATIONS,
           SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-    IJavaProject javaProject = JavaUtils.getJavaProject(project);
     IJavaSearchScope scope =
-      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
-    List<SearchMatch> matches = super.search(pattern, scope);
+      SearchEngine.createJavaSearchScope(new IJavaElement[]{project});
+    List<SearchMatch> matches = super.search(searchPattern, scope);
     for(SearchMatch match : matches){
       if(match.getAccuracy() == SearchMatch.A_ACCURATE){
         SearchResult result = createSearchResult(match);
@@ -79,6 +87,6 @@ public class ImportCommand
         }
       }
     }
-    return ImportFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

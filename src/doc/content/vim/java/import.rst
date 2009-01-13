@@ -21,12 +21,11 @@ Automated Imports
 .. _\:JavaImport:
 
 The automated import functionality is pretty straightforward.  Simply
-place the cursor over the element to import and issue the command\:
+place the cursor over the element to import and issue the command:
 
   **:JavaImport**
 
-and one of the following events will occur\:
-
+and one of the following events will occur:
 
 - If only one matching element is found, its import statement will be placed in
   the file.
@@ -36,8 +35,19 @@ and one of the following events will occur\:
   java.lang, or the element is in the same package as the current src file, then
   a simple prompt will alert you that the element does not need to be imported.
 
-In addition to importing elements, the plugin provides two additional
-commands\:
+.. _\:JavaImportMissing:
+
+If you have numerous elements that you wish to import, you can also use:
+
+  **:JavaImportMissing**
+
+which will look for all undefined types and attempt to find possible imports
+for them.  If there is a single result then that result will be imported.  In
+the event of multiple results for a given type, then you will be prompted to
+choose the result to import, just like when using **:JavaImport**.
+
+In addition to importing elements, this plugin provides two additional
+commands:
 
 .. _\:JavaImportSort:
 
@@ -48,7 +58,7 @@ commands\:
 .. _\:JavaImportClean:
 
 - **:JavaImportClean** -
-  Removes any un-used import statements.  If the current file is not in an
+  Removes any unused import statements.  If the current file is not in an
   Eclipse project, then a Vim only implementation is invoked, that behaves the
   same as the server side version, except it does not take into account object
   names that are commented out.

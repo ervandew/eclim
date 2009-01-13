@@ -33,6 +33,9 @@ endif
 if !exists(":JavaImportClean")
   command -buffer JavaImportClean :call eclim#java#import#CleanImports()
 endif
+if !exists(":JavaImportMissing")
+  command -buffer JavaImportMissing :call eclim#java#import#ImportMissing()
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

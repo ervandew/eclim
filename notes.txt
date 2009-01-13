@@ -113,6 +113,8 @@ TODO {{{
   Common {{{
     - templating system (convert to groovy)?
 
+    - hook into eclipse local history support.
+
     - consider :UserProjectSettings for settings that are not common amongst developers working in a team
       - username, email, etc.
       - setting precedence would be: user > project > global
@@ -250,12 +252,6 @@ TODO {{{
     - :JavaCorrect, need to get the eclipse apply version working (but probably
       should wait until :edit is a considered a change operation in vim).
       https://sourceforge.net/forum/message.php?msg_id=5087396
-      - also consider hooking into eclipse's change history support to allow the
-        user to undo changes made by eclipse.
-
-    - :JavaImportAll? some sort of command to scan the file for missing imports
-      and import them.
-      - see 'Organize Imports' functionality in eclipse.
 
     - :JavaClassCreate create a new class
       - handle locating the src dir, or prompting user if more than one

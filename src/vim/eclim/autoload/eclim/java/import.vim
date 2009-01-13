@@ -2,7 +2,7 @@
 " Version: $Revision$
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/complete.html
+"   see http://eclim.sourceforge.net/vim/java/import.html
 "
 " License:
 "
@@ -25,6 +25,8 @@
 
 " Script Variables {{{
 let s:command_import = '-command java_import -n "<project>" -p <classname>'
+let s:command_import_missing =
+  \ '-command java_import_missing -p "<project>" -f "<file>"'
 let s:command_unused_imports =
   \ '-command java_imports_unused -p "<project>" -f "<file>"'
 " }}}
@@ -95,9 +97,70 @@ function! eclim#java#import#Import()
   endif
 endfunction " }}}
 
-" InsertImport(class) {{{
-" Inserts the import for the fullyqualified classname supplied.
-function! eclim#java#import#InsertImport(class)
+" ImportMissing() {{{
+" Add imports for any undefined types.
+function! eclim#java#import#ImportMissing()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#java#util#GetFilename()
+  let command = s:command_import_missing
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let result = eclim#ExecuteEclim(command)
+  if result == "0"
+    return
+  endif
+
+  let results = eval(result)
+  "let notfound = []
+  let clean_sort = 0
+  for info in results
+    let type = info.type
+    let imports = info.imports
+
+    " filter the list if the user has any exclude patterns
+    if exists("g:JavaImportExclude")
+      for exclude in g:JavaImportExclude
+        call filter(imports, " v:val !~ '" . exclude . "'")
+      endfor
+    endif
+
+    if len(imports) == 0
+      "call add(notfound, "  " . type)
+      continue
+    endif
+
+    " prompt the user to choose the class to import.
+    let response = eclim#util#PromptList
+      \ ("Choose the class to import", imports, g:EclimInfoHighlight)
+    if response == -1
+      return
+    endif
+
+    let class = get(imports, response)
+    if class != '0'
+      let clean_sort = 1
+      call eclim#java#import#InsertImport(class, 0)
+    endif
+  endfor
+
+  if clean_sort
+    call eclim#java#import#CleanImports()
+    call eclim#java#import#SortImports()
+  endif
+
+  "if len(notfound) > 0
+  "  call eclim#util#EchoError(
+  "    \ "No classes found for the following types:\n" . join(notfound, "\n"))
+  "endif
+endfunction " }}}
+
+" InsertImport(class, [clean_sort]) {{{
+" Inserts the import for the fully qualified classname supplied.
+function! eclim#java#import#InsertImport(class, ...)
   " insert the import statement.
   let position =  search('^\s*package\s\+', 'nw')
 
@@ -111,8 +174,10 @@ function! eclim#java#import#InsertImport(class)
   " restore mark
   call eclim#util#MarkRestore(markLine + 2)
 
-  call eclim#java#import#CleanImports()
-  call eclim#java#import#SortImports()
+  if len(a:000) == 0 || a:000[0]
+    call eclim#java#import#CleanImports()
+    call eclim#java#import#SortImports()
+  endif
 
   return 1
 endfunction " }}}
