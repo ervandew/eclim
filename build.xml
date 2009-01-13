@@ -69,6 +69,10 @@
       <include name="dropins/eclipse/plugins/org.eclipse.*"/>
       <include name="plugins/org.eclipse.*"/>
     </dirset>
+    <!-- for gentoo -->
+    <fileset dir="/usr/share/">
+      <include name="swt-*/lib/*.jar"/>
+    </fileset>
   </path>
 
   <!--
