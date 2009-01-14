@@ -94,6 +94,19 @@ public class CommandLine
   }
 
   /**
+   * Gets a command line argument as a long.
+   *
+   * @param name The name of the option.
+   * @return The option as a long value, or -1 if option not supplied.
+   */
+  public long getLongValue(String name)
+    throws Exception
+  {
+    String arg = getValue(name);
+    return arg != null ? Long.parseLong(arg) : -1;
+  }
+
+  /**
    * Gets any unrecognized arguments provided by the user.
    *
    * @return Array of unrecognized args, or null if none.
