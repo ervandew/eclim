@@ -92,11 +92,17 @@ function! s:Open(action)
     runtime autoload/eclim/java/search.vim
   endif
 
+  let filename = expand('%:p')
+  if exists('b:filename')
+    let filename = b:filename
+    silent exec 'edit ' . b:filename
+  endif
   let saved = g:EclimJavaSearchSingleResult
   try
     let g:EclimJavaSearchSingleResult = a:action
-    call eclim#java#search#SearchAndDisplay(
-      \ 'java_search', '-x declarations -p ' . type)
+    if eclim#java#search#SearchAndDisplay('java_search', '-x declarations -p ' . type)
+      let b:filename = filename
+    endif
   finally
     let g:EclimJavaSearchSingleResult = saved
   endtry

@@ -48,25 +48,31 @@ function! TestJavaHierarchy()
 
   let winnr = winnr()
 
+  echom 'test opening of Comparable'
   call cursor(6, 1)
   silent! exec "normal \<cr>"
   call VUAssertEquals(bufname('%'), '/tmp/java/lang/Comparable.java')
   call VUAssertEquals(winnr('$'), 3)
   bdelete
   exec winnr . 'winc w'
+  call PeekRedir()
 
+  echom 'test opening of PropertyChangeListener'
   call cursor(7, 1)
   silent! exec "normal \<c-e>"
   call VUAssertEquals(bufname('%'), '/tmp/java/beans/PropertyChangeListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
+  call PeekRedir()
 
+  echom 'test opening of EventListener'
   call cursor(8, 1)
   silent! exec "normal \<c-e>"
   call VUAssertEquals(bufname('%'), '/tmp/java/util/EventListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   bdelete
+  call PeekRedir()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
