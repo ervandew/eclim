@@ -321,6 +321,7 @@ function! eclim#java#search#SearchAndDisplay(type, args)
         augroup END
       endif
     endif
+    return 1
   else
     if argline =~ '-p '
       let searchedFor = substitute(argline, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
