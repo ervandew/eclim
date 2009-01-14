@@ -113,9 +113,8 @@ TODO {{{
   Common {{{
     - templating system (convert to groovy)?
 
-    - hook into eclipse local history support.
-
-    - consider :UserProjectSettings for settings that are not common amongst developers working in a team
+    - consider :UserProjectSettings for settings that are not common amongst
+      developers working in a team
       - username, email, etc.
       - setting precedence would be: user > project > global
       - unless eclipse supports this concept, only include eclim settings as 'user' configurable

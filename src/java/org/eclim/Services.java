@@ -320,6 +320,13 @@ public class Services
       registerCommand("locate_file",
           org.eclim.command.search.LocateFileCommand.class);
 
+      registerCommand("history_list",
+          org.eclim.command.history.HistoryListCommand.class);
+      registerCommand("history_revision",
+          org.eclim.command.history.HistoryRevisionCommand.class);
+      registerCommand("history_clear",
+          org.eclim.command.history.HistoryClearCommand.class);
+
       registerCommand("patch_revisions",
           org.eclim.command.patch.RevisionsCommand.class);
       registerCommand("patch_file",

@@ -425,12 +425,15 @@ function! eclim#util#Globpath(path, expr, ...)
 endfunction " }}}
 
 " GoToBufferWindow(buf) {{{
-" Returns to the window containing the supplied buffer name or buffer number.
+" Focuses the window containing the supplied buffer name or buffer number.
+" Returns 1 if the window was found, 0 otherwise.
 function! eclim#util#GoToBufferWindow(buf)
   let winnr = type(a:buf) == 0 ? bufwinnr(a:buf) : bufwinnr(bufnr('^' . a:buf))
   if winnr != -1
     exec winnr . "winc w"
+    return 1
   endif
+  return 0
 endfunction " }}}
 
 " GoToBufferWindowOrOpen(filename, cmd) {{{
@@ -910,10 +913,11 @@ function! eclim#util#TempWindow(name, lines, ...)
   doautocmd BufEnter
 
   " Store filename and window number so that plugins can use it if necessary.
-  if !exists('b:filename')
+  if filename != expand('%:p')
     let b:filename = filename
     let b:winnr = winnr
   endif
+
   augroup eclim_temp_window
     autocmd! BufUnload <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)

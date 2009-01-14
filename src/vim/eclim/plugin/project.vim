@@ -39,7 +39,7 @@ endif
 " }}}
 
 " Auto Commands {{{
-if g:EclimProjectRefreshFiles
+if g:EclimProjectRefreshFiles && !has('netbeans_intg')
   augroup eclim_refresh_files
     autocmd!
     autocmd BufWritePre * call eclim#project#util#RefreshFileBootstrap()

@@ -36,8 +36,10 @@ Export-Package: org.eclim,
   org.apache.commons.vfs,
   groovy.lang
 Require-Bundle: org.eclipse.core.filebuffers,
+  org.eclipse.core.filesystem,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
+  org.eclipse.team.core,
   org.eclipse.text,
   org.eclipse.ui,
   org.eclipse.jface.text

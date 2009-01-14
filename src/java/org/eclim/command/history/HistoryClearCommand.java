@@ -14,52 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.command.project;
+package org.eclim.command.history;
+
+import org.eclim.Services;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.util.ProjectUtils;
-import org.eclim.util.StringUtils;
-
-import org.eclipse.core.filesystem.IFileInfo;
-import org.eclipse.core.filesystem.IFileStore;
-
-import org.eclipse.core.internal.localstore.FileSystemResourceManager;
 
 import org.eclipse.core.internal.resources.File;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 /**
- * Command to refresh a file in a project.
+ * Command to clear the local history for a file.
  *
  * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class ProjectRefreshFileCommand
+public class HistoryClearCommand
   extends AbstractCommand
 {
   /**
    * {@inheritDoc}
+   * @see org.eclim.command.Command#execute(CommandLine)
    */
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = commandLine.getValue(Options.PROJECT_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
     String filename = commandLine.getValue(Options.FILE_OPTION);
 
-    // the act of getting the file refreshes it.
-    File file = (File)ProjectUtils.getFile(name, filename);
-
-    // update local history
-    if (file.exists()){
-      FileSystemResourceManager localManager = file.getLocalManager();
-      IFileStore store = localManager.getStore(file);
-      IFileInfo fileInfo = store.fetchInfo();
-      localManager.getHistoryStore()
-        .addState(file.getFullPath(), store, fileInfo, false);
-    }
-
-    return StringUtils.EMPTY;
+    File file = (File)ProjectUtils.getFile(project, filename);
+    file.getLocalManager().getHistoryStore()
+      .remove(file.getFullPath(), new NullProgressMonitor());
+    return Services.getMessage("history.cleared");
   }
 }

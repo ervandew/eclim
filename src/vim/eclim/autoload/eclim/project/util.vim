@@ -577,12 +577,11 @@ function! eclim#project#util#IsCurrentFileInProject(...)
 endfunction " }}}
 
 " RefreshFileBootstrap() {{{
-" Boostraps a post write autocommand for new files, which forces a refresh by
-" the eclim project. The command should only be called as part of the a
-" BufWritePre autocmd.
+" Boostraps a post write autocommand for updating files, which forces a
+" refresh by the eclim project. The command should only be called as part of
+" the a BufWritePre autocmd.
 function! eclim#project#util#RefreshFileBootstrap()
-  if !filereadable(expand('%:p')) &&
-   \ eclim#project#util#GetCurrentProjectName() != ''
+  if eclim#project#util#GetCurrentProjectName() != '' && &modified
     augroup eclim_refresh_files_bootstrap
       autocmd!
       autocmd BufWritePost <buffer> call eclim#project#util#RefreshFile()

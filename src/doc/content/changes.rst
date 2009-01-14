@@ -24,6 +24,10 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+Eclim:
+  - Added integration with the eclipse
+    :ref:`local history <vim/common/history>` support.
+
 Java:
   - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
   - Added command to :ref:`import all undefined types <:JavaImportMissing>`.

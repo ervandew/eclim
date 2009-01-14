@@ -21,24 +21,25 @@ Issues / Quirks
 Some portions of eclim make use of the editing APIs provided by Eclipse.  While
 this makes for much cleaner code and far fewer chances of errors while trying
 to accomodate everyone's coding style, or other issues, it does have its
-drawbacks\:
+drawbacks:
 
 - **Undo:**
 
   When changes to the source file are made outside of Vim, the plugin must
-  issue a :edit on the file to force Vim to re-read the now updated file.  The
-  downside is that Vim clears the undo tree when the file is re-read.  I'll be
-  looking into ways to remedy this situation and also talking with the Vim
-  developers to see if perhaps some changes to Vim 7 may facilitate a solution
-  as well.
+  issue an :edit on the file to force Vim to re-read the now updated file.  The
+  downside is that Vim clears the undo tree when the file is re-read.
 
-  .. note::
+  I have had an email exchange with Bram regarding this issue and he has added
+  an entry to the vim todo list to as a result:
 
-    I had some email correspondence with Bram on this issue and it has
-    made it into the Vim todo list (**:h todo**).
+  ::
 
-      "See ":e" as a change operation, find the changes and add them to the
-      undo info.  Needed for when an external tool changes the file."
+    See ":e" as a change operation, find the changes and add them to the
+    undo info.  Needed for when an external tool changes the file.
+
+  Until that change is made to vim, you can still revert your file using the
+  :ref:`local history <vim/common/history>` support.
+
 
 - **Formatting (tabs vs. spaces):**
 

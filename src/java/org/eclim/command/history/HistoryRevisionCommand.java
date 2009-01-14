@@ -14,52 +14,55 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.command.project;
+package org.eclim.command.history;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
-import org.eclim.util.StringUtils;
-
-import org.eclipse.core.filesystem.IFileInfo;
-import org.eclipse.core.filesystem.IFileStore;
-
-import org.eclipse.core.internal.localstore.FileSystemResourceManager;
 
 import org.eclipse.core.internal.resources.File;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
+import org.eclipse.team.core.history.IFileRevision;
+
+import org.eclipse.team.internal.core.history.LocalFileHistory;
+
 /**
- * Command to refresh a file in a project.
+ * Command which outputs the contents of a specific revision.
  *
  * @author Eric Van Dewoestine
  * @version $Revision$
  */
-public class ProjectRefreshFileCommand
+public class HistoryRevisionCommand
   extends AbstractCommand
 {
   /**
    * {@inheritDoc}
+   * @see org.eclim.command.Command#execute(CommandLine)
    */
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = commandLine.getValue(Options.PROJECT_OPTION);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
     String filename = commandLine.getValue(Options.FILE_OPTION);
+    long revision = commandLine.getLongValue(Options.REVISION_OPTION);
 
-    // the act of getting the file refreshes it.
-    File file = (File)ProjectUtils.getFile(name, filename);
-
-    // update local history
-    if (file.exists()){
-      FileSystemResourceManager localManager = file.getLocalManager();
-      IFileStore store = localManager.getStore(file);
-      IFileInfo fileInfo = store.fetchInfo();
-      localManager.getHistoryStore()
-        .addState(file.getFullPath(), store, fileInfo, false);
+    File file = (File)ProjectUtils.getFile(project, filename);
+    LocalFileHistory history = new LocalFileHistory(file, false);
+    history.refresh(new NullProgressMonitor());
+    IFileRevision[] revisions = history.getFileRevisions();
+    for(IFileRevision rev : revisions){
+      if (rev.getTimestamp() == revision){
+        return IOUtils.toString(
+            rev.getStorage(new NullProgressMonitor()).getContents());
+      }
     }
-
     return StringUtils.EMPTY;
   }
 }

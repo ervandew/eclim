@@ -154,6 +154,11 @@ if !exists(":LcdRelative")
   command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
     \ LcdRelative :exec 'lcd ' . expand('%:p:h') . '/<args>'
 endif
+
+if !exists(":History")
+  command History call eclim#common#history#History()
+  command -bang HistoryClear call eclim#common#history#HistoryClear('<bang>')
+endif
 " }}}
 
 " vim:ft=vim:fdm=marker

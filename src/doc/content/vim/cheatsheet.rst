@@ -432,6 +432,8 @@ Misc. Commands
   Like **:OtherWorkingCopyDiff**, except open the file in a new window.
 - :ref:`:OtherWorkingCopyTabopen` <project> -
   Like **:OtherWorkingCopyDiff**, except open the file in a new tab.
+- :ref:`:History` -
+  View the local history entries for the current file.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
 .. _pylint: http://www.logilab.org/857

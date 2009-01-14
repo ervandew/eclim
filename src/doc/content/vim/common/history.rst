@@ -1,0 +1,54 @@
+.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+.. _vim/common/history:
+
+
+Local History
+=============
+
+When editing files, vim provides great undo support.  However, the undo
+information is lost when you close a file or utilize one of the few eclim
+features that require a reload of the current file.
+
+Eclipse provides a nice feature which can help combat both of these
+deficiencies.  It includes support for a local history, which is basically a
+simplistic version control system that is updated every time you save a file.
+Using this local history, you can view diffs against previously saved versions
+of your file or revert to one of those revisions.
+
+.. _\:History:
+
+**:History** - Opens a temporary buffer showing the local history for the
+current file.  In this buffer you can perform the following actions using the
+specified key bindings:
+
+- v - view the contents of the revision under the cursor.
+- d - diff the revision under the cursor against the current contents.
+- r - revert the current file to the revision under the cursor.
+- c - clear the local history for the file.
+
+
+Configuration
+--------------
+
+Vim Settings
+
+.. _g\:EclimHistoryDiffOrientation:
+
+- **g:EclimHistoryDiffOrientation (Default: 'vertical')** -
+  When initiating diffs, this setting controls whether the diff window is
+  opened as a horizontal split or vertical.  Supported values include
+  'horizontal' and 'vertical'.

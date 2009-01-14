@@ -24,6 +24,7 @@ Common
    taglist
    util
    vcs
+   history
    web
    maximize
    archive
@@ -33,6 +34,7 @@ Common
 - :ref:`vim/common/taglist`
 - :ref:`vim/common/util`
 - :ref:`vim/common/vcs`
+- :ref:`vim/common/history`
 - :ref:`vim/common/web`
 - :ref:`vim/common/maximize`
 - :ref:`vim/common/archive`
