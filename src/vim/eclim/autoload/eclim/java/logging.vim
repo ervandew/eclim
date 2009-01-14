@@ -49,7 +49,7 @@ function! eclim#java#logging#LoggingInit(var)
       call append(position, lines)
       call cursor(line + offset, col)
       for import in s:logger_imports
-        call eclim#java#import#InsertImport(import)
+        call eclim#java#import#InsertImports([import])
       endfor
     endif
   endif

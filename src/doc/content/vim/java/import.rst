@@ -79,3 +79,23 @@ Vim Variables
   .. code-block:: vim
 
     let g:JavaImportExclude = [ "^com\.sun\..*", "^sun\..*", "^sunw\..*" ]
+
+.. _g\:EclimJavaImportPackageSeparationLevel:
+
+- **g:EclimJavaImportPackageSeparationLevel** (Default: -1) -
+  Used to determine how imports are grouped togther (or spaced apart).  The
+  number represents how many segments of the package name to use to determine
+  equality, where equal imports are grouped together and separated from other
+  groups with a blank line.
+
+  - -1: Use the entire package name. Only imports from the same full package
+    are grouped together.
+  - 0: Don't look at any package segments. All imports are grouped together
+    with no spacing..
+  - n: Look at `n` segments of the package name.
+
+    Ex.
+
+    .. code-block:: vim
+
+      let g:EclimJavaImportPackageSeparationLevel = 2
