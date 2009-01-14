@@ -38,13 +38,15 @@ There are also various mappings depending on the view\:
 
   - **<enter>** - View the file under the cursor in a new split window, or
     in the case of a directory, expand / collapse it.
-  - **o** - For files, this has the same behavior as **&lt;Enter&gt;**. For
+  - **o** - For files, this has the same behavior as **<enter>**. For
     directories, it will fold / unfold open directories preserving the state of
     all the sub directories.
   - **p** - Jumps to the nearest parent directory.
   - **P** - Jumps to the furthest child in the currect branch of directories.
   - **i** - Prints the size and date for the file under the cursor.
+
 - **List**
+
   - **<enter>** - View the file under the cursor in a new split window.
 
 
