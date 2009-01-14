@@ -133,6 +133,7 @@ Java Commands
 - :ref:`:JavaGetSet` - Create both a java bean getter and setter method.
 - :ref:`:JavaConstructor` -
   Creates class constructor, either empty or based on selected class fields.
+- :ref:`:JavaHierarchy` - View the type hierarchy tree.
 - :ref:`:JavaImpl` -
   View implementable / overridable methods from super classes and implemented
   interfaces.
@@ -145,6 +146,7 @@ Java Commands
 - :ref:`:JUnitResult` - [testcase]
   Allows you to view the results of a test case.
 - :ref:`:JavaImport` - Import the class under the cursor.
+- :ref:`:JavaImportMissing` - Import all undefined types.
 - :ref:`:JavaSearch`
   [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>] -
   Search for classes, methods, fields, etc.  (With pattern supplied, searches
