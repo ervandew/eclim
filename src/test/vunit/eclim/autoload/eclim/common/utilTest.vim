@@ -66,6 +66,7 @@ function! TestLocateFile()
   call VUAssertEquals(expand('%'), '[Locate]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> file.txt")
+  doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = getbufline(b:results_bufnum, 1, '$')
   call VUAssertEquals(len(results), 7)
@@ -84,6 +85,7 @@ function! TestLocateFile()
   call VUAssertEquals(expand('%'), '[Locate]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> vcs/merc/file.txt")
+  doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = getbufline(b:results_bufnum, 1, '$')
   call VUAssertEquals(len(results), 2)
