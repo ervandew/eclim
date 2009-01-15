@@ -202,7 +202,8 @@ TODO {{{
   C/C++ {{{
     - http://www.eclipse.org/cdt/
       http://wiki.eclipse.org/index.php/CDT
-      http://download.eclipse.org/tools/cdt/releases/europa/site.xml
+      http://download.eclipse.org/tools/cdt/releases/ganymede/site.xml
+      http://cdt-devel-faq.wikidot.com/
 
     - project creation
       - windows: select which toolchain to use, cygwin or mingw
@@ -247,6 +248,9 @@ TODO {{{
   Java {{{
     - :JavaRun :JavaBuild
     - integrate w/ eclipse build/run system for at least simple programs.
+
+    - :JavaDocBuild
+      - org.eclipse.jdt.internal.ui.javadocexport.JavadocWizard.performFinish()
 
     - :JavaCorrect, need to get the eclipse apply version working (but probably
       should wait until :edit is a considered a change operation in vim).
