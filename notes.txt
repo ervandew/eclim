@@ -5,11 +5,6 @@ HIGH {{{
   - validation issue when file open in eclipse and vim
     http://groups.google.com/group/eclim-user/msg/5da5cf04cc88a407
 
-  - evaluate
-    - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
-    - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
-    - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
-
   - add proxy support to eclim
     https://sourceforge.net/forum/message.php?msg_id=5072641
     http://java.sun.com/j2se/1.5.0/docs/guide/net/proxies.html
@@ -18,6 +13,9 @@ HIGH {{{
 TODO {{{
 
   Bugs {{{
+    - after external change by eclipse, all view info is lost (manual folds, etc).
+      - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
+
     - Unsolved
       - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
       - https://sourceforge.net/forum/forum.php?thread_id=2085421&forum_id=487811
@@ -73,9 +71,7 @@ TODO {{{
 
   Installer {{{
     - add/test proxy support to the installer
-      org.eclipse.update.core.proxy.enable=true
-      org.eclipse.update.core.proxy.port=8888
-      org.eclipse.update.core.proxy.host=proxy.host.net
+      - new p2 provisioning system may handle this transparently
 
     - detect gnome / kde and add installer step to auto start eclimd
 
@@ -150,6 +146,9 @@ TODO {{{
           - try to have <enter> on a file open a diff of remote version vs local
             - A try to cat the remote file
             - ... R files?
+
+    - eclim console log
+      - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
 
     - org.eclim.project.tracker
       for sourceforge we need n urls, one for bugs, one for features, etc.
@@ -247,6 +246,7 @@ TODO {{{
     - integrate w/ eclipse build/run system for at least simple programs.
 
     - :JavaDocBuild
+      - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
       - org.eclipse.jdt.internal.ui.javadocexport.JavadocWizard.performFinish()
 
     - :JavaCorrect, need to get the eclipse apply version working (but probably
