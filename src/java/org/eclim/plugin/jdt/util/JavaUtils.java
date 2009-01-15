@@ -522,11 +522,14 @@ public class JavaUtils
   public static IProblem[] getProblems(ICompilationUnit src, int[] ids)
     throws Exception
   {
+    ICompilationUnit workingCopy = src.getWorkingCopy(null);
+
     ProblemRequestor requestor = new ProblemRequestor(ids);
     try{
-      src.becomeWorkingCopy(requestor, null);
+      workingCopy.discardWorkingCopy();
+      workingCopy.becomeWorkingCopy(requestor, null);
     }finally{
-      src.discardWorkingCopy();
+      workingCopy.discardWorkingCopy();
     }
     List<IProblem> problems = requestor.getProblems();
     return (IProblem[])problems.toArray(new IProblem[problems.size()]);

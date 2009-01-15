@@ -2,9 +2,6 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - validation issue when file open in eclipse and vim
-    http://groups.google.com/group/eclim-user/msg/5da5cf04cc88a407
-
   - add proxy support to eclim
     https://sourceforge.net/forum/message.php?msg_id=5072641
     http://java.sun.com/j2se/1.5.0/docs/guide/net/proxies.html
