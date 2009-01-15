@@ -210,8 +210,10 @@ public class CommentCommand
         addTag(javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
         String version = getPreferences().getPreference(
             project, "org.eclim.java.doc.version");
-        version = StringUtils.replace(version, "\\$", "$");
-        addTag(javadoc, tags.size(), TagElement.TAG_VERSION, version);
+        if(version != null && !StringUtils.EMPTY.equals(version.trim())){
+          version = StringUtils.replace(version, "\\$", "$");
+          addTag(javadoc, tags.size(), TagElement.TAG_VERSION, version);
+        }
       }else{
         // check if author tag exists.
         int index = -1;
