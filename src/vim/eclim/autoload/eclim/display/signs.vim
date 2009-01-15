@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Functions for working with vim signs.

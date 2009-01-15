@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Initially based on vimscript 1506

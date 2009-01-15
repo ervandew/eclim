@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Commands view / search eclim help files.

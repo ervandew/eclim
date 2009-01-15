@@ -38,8 +38,7 @@ import org.w3c.dom.NodeList;
 /**
  * Command for searching online maven repository.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchCommand
   extends AbstractCommand

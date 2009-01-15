@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Plugin which bootstraps the eclim environment.

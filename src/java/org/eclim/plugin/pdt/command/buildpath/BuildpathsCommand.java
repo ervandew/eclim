@@ -40,7 +40,6 @@ import org.eclipse.dltk.core.IScriptProject;
  * Command to retrieve list of build paths for the given project.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class BuildpathsCommand
   extends AbstractCommand

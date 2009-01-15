@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision: 1155 $
 "
 " Description: {{{
 "   See http://eclim.sourceforge.net/vim/python/django.html

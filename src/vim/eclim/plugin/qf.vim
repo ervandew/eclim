@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Defines some quickfix specific funtionality.

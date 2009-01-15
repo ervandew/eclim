@@ -21,8 +21,7 @@ import org.osgi.framework.BundleContext;
 /**
  * Installer plugin.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Plugin
   extends org.eclipse.core.runtime.Plugin

@@ -37,8 +37,7 @@ import org.eclim.util.IOUtils;
 /**
  * Command to fetch available revisions for a give vim script file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class RevisionsCommand
   extends AbstractCommand

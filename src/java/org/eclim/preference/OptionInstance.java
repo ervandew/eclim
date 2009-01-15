@@ -19,8 +19,7 @@ package org.eclim.preference;
 /**
  * Represents an instance of an Option with a value.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class OptionInstance
   extends Option

@@ -34,8 +34,7 @@ import org.eclim.Services;
  * Class for defining and working with all the eclim command
  * line options.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Options
 {

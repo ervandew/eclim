@@ -30,7 +30,6 @@ import static org.junit.Assert.*;
  * Test case for SrcUpdateCommand.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class SrcUpdateCommandTest
 {

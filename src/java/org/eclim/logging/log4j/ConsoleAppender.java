@@ -25,8 +25,7 @@ import java.io.Writer;
  * instead of continuously grabbing it, preventing calls to System.setOut() or
  * System.setErr() from resulting in undesired behavior.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ConsoleAppender
   extends org.apache.log4j.ConsoleAppender

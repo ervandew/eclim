@@ -24,8 +24,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for command to get ant targets.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TargetsFilter
   implements OutputFilter<List<String>>

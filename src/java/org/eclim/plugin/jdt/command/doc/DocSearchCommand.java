@@ -46,8 +46,7 @@ import org.eclipse.jdt.internal.launching.JREContainer;
 /**
  * Command to search for javadocs.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class DocSearchCommand
   extends SearchCommand

@@ -21,8 +21,7 @@ import org.eclim.command.CommandLine;
 /**
  * Defines a command that can be exected.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface Command
 {

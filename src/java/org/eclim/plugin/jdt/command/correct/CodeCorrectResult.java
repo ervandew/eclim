@@ -21,8 +21,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 /**
  * Holds information about a correction proposal.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCorrectResult
 {

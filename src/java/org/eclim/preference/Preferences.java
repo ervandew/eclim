@@ -36,8 +36,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 /**
  * Class for handling preferences for eclim.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Preferences
 {

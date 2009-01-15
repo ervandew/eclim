@@ -20,8 +20,7 @@ package org.eclim.plugin.jdt.command.impl;
  * Represents a super class/interface method that can be
  * overridden/implemented.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImplMethod
 {

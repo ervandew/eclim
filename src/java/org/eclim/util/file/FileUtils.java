@@ -40,8 +40,7 @@ import org.eclipse.core.runtime.Path;
 /**
  * Utilities for working w/ files and commons vfs.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class FileUtils
 {

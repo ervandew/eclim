@@ -23,8 +23,7 @@ import org.apache.commons.lang.StringUtils;
  * that are then added to the Preferences instance as available preferences /
  * options.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PreferenceFactory
 {

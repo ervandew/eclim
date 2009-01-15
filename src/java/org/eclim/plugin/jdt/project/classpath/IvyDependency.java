@@ -22,8 +22,7 @@ import org.eclipse.core.runtime.IPath;
  * Extension to {@link Dependency} which resolves the dependency artifact
  * according to the ivy cache layout.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class IvyDependency
   extends Dependency

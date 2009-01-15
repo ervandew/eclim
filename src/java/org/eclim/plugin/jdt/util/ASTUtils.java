@@ -41,8 +41,7 @@ import org.eclipse.text.edits.TextEdit;
 /**
  * Utility class for working with the eclipse java dom model.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ASTUtils
 {

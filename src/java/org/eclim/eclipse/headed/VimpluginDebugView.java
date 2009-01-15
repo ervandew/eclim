@@ -11,7 +11,6 @@ import org.eclipse.ui.part.ViewPart;
  * View used as a debug console for vipmlugin debugging output.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class VimpluginDebugView
   extends ViewPart

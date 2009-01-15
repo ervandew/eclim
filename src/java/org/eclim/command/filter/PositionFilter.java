@@ -28,8 +28,7 @@ import org.eclim.util.vim.VimUtils;
 /**
  * Filter for Position.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PositionFilter
   implements OutputFilter<List<Position>>

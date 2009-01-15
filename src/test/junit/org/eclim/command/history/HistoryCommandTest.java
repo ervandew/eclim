@@ -33,7 +33,6 @@ import static org.junit.Assert.*;
  * Test case for history commands
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HistoryCommandTest
 {

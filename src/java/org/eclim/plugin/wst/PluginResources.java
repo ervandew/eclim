@@ -23,8 +23,7 @@ import org.eclim.plugin.AbstractPluginResources;
 /**
  * Implementation of AbstractPluginResources.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PluginResources
   extends AbstractPluginResources

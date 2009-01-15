@@ -35,7 +35,6 @@ import org.eclipse.ui.internal.WorkbenchWindow;
  * Extension to eclipse WorkbenchWindow.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class EclimWorkbenchWindow
   extends WorkbenchWindow

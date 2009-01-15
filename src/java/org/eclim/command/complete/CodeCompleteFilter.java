@@ -25,8 +25,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for code completion results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteFilter
   implements OutputFilter<List<CodeCompleteResult>>

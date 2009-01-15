@@ -72,8 +72,7 @@ import org.eclipse.jface.text.IDocument;
 /**
  * Utility methods for working with java files / projects.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class JavaUtils
 {

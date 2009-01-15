@@ -47,7 +47,6 @@ import org.eclim.util.StringUtils;
  * Command to list all contents of an archive.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ArchiveListAllCommand
   extends ArchiveListCommand

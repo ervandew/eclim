@@ -34,7 +34,6 @@ import org.joda.time.Period;
  * Filter for formatting array of file revision results.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HistoryListFilter
   implements OutputFilter<IFileRevision[]>

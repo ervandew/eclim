@@ -57,8 +57,7 @@ import org.w3c.tidy.Tidy;
 /**
  * Command to validate html files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class HtmlValidateCommand
   extends WstValidateCommand

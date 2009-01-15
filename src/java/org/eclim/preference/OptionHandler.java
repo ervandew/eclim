@@ -23,8 +23,7 @@ import org.eclipse.core.resources.IProject;
 /**
  * Defines methods for persisting and retrieving preferences / options.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface OptionHandler
 {

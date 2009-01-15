@@ -39,7 +39,6 @@ import org.eclipse.ui.part.ViewPart;
  *
  * @author Anton Sharonov
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class EclimdView
   extends ViewPart

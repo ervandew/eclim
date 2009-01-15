@@ -47,8 +47,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <p/>
  * Currently only runs on unix systems.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class VUnitTask
   extends Task

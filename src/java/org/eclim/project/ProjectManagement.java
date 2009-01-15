@@ -53,8 +53,7 @@ import org.w3c.dom.Document;
 /**
  * Class that handles registering and retrieving of {@link ProjectManager}s.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectManagement
 {

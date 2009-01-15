@@ -19,8 +19,7 @@ package org.eclim.command.taglist;
 /**
  * Defines a script for processing tags in a file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface TaglistScript
 {

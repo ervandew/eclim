@@ -28,8 +28,7 @@ import org.eclipse.jdt.core.JavaCore;
 /**
  * Command to work with classpath variables.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ClasspathVariablesCommand
   extends AbstractCommand

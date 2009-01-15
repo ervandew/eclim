@@ -22,8 +22,7 @@ import java.io.IOException;
 /**
  * Runs an external process.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CommandExecutor
   implements Runnable

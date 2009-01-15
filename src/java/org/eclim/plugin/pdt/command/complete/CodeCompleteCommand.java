@@ -65,8 +65,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 /**
  * Command to perform php code completion.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand

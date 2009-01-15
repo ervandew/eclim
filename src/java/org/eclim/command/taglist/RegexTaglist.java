@@ -32,8 +32,7 @@ import org.eclim.util.file.FileOffsets;
 /**
  * Handles processing tags from a file using a series of regex patterns.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class RegexTaglist
 {

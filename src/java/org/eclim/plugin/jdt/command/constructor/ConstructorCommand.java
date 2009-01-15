@@ -45,8 +45,7 @@ import org.eclipse.jdt.core.Signature;
 /**
  * Command used to generate class constructors.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ConstructorCommand
   extends AbstractCommand

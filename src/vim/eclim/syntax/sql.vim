@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Replacement of vim's sql.vim which ensures that ALL db specific syntax

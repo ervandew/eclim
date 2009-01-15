@@ -24,8 +24,7 @@ import org.eclim.Services;
  * Represents an eclipse project option.  Eclipse options are pre-defined and
  * only their values may be changed and any new options are silently ignored.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Option
   implements Comparable<Option>

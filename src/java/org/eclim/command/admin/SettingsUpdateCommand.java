@@ -34,8 +34,7 @@ import org.eclim.util.IOUtils;
 /**
  * Command to update global settings.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SettingsUpdateCommand
   extends AbstractCommand

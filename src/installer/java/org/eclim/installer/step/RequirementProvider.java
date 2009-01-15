@@ -47,8 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Provides requirements to validate for RequirementsValidationStep.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class RequirementProvider
   implements RequirementsValidationStep.RequirementProvider

@@ -37,8 +37,7 @@ import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
 /**
  * Command to handle java code completion requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteCommand
   extends AbstractCommand

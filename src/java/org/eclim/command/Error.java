@@ -24,8 +24,7 @@ import org.eclim.util.StringUtils;
 /**
  * Represents an error to be reported to the user.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Error
 {

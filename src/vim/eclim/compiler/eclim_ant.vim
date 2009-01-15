@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Compiler for ant (enhancement to default ant compiler provided w/ vim).

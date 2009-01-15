@@ -27,8 +27,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 /**
  * Command to determines if the specified src file exists.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SrcFileExistsCommand
   extends AbstractCommand

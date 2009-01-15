@@ -41,8 +41,7 @@ import org.eclipse.jdt.core.search.SearchPattern;
 /**
  * Command to retrieve possible imports for a given pattern.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImportCommand
   extends SearchCommand

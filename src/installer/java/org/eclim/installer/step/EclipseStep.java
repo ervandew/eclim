@@ -63,8 +63,7 @@ import org.formic.wizard.step.AbstractGuiStep;
 /**
  * Step for specifying location of eclipse installation.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class EclipseStep
   extends AbstractGuiStep

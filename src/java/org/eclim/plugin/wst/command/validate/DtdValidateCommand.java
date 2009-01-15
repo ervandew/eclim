@@ -35,8 +35,7 @@ import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
 /**
  * Command to validate dtd files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class DtdValidateCommand
   extends WstValidateCommand

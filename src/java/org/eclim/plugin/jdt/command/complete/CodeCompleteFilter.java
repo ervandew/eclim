@@ -30,8 +30,7 @@ import org.eclipse.jdt.core.CompletionProposal;
 /**
  * Output filter for code completion results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteFilter
   implements OutputFilter<List<CodeCompleteResult>>

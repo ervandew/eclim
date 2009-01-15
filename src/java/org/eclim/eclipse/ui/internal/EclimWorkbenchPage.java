@@ -28,7 +28,6 @@ import org.eclipse.ui.internal.WorkbenchWindow;
  * Extension to eclipse WorkbenchPage.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class EclimWorkbenchPage
   extends WorkbenchPage

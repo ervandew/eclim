@@ -33,8 +33,7 @@ import org.eclim.util.ScriptUtils;
 /**
  * Command to generate taglist from a file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TaglistCommand
   extends AbstractCommand

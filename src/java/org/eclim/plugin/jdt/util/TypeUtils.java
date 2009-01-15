@@ -40,8 +40,7 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
 /**
  * Utility methods for working with IType.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TypeUtils
 {

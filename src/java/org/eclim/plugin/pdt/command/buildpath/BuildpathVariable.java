@@ -19,8 +19,7 @@ package org.eclim.plugin.pdt.command.buildpath;
 /**
  * Represents a pdt build path variable.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class BuildpathVariable
   implements Comparable<BuildpathVariable>

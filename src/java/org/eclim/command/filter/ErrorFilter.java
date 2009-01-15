@@ -25,8 +25,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for generating vim output for an array of Error.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ErrorFilter
   implements OutputFilter<List<Error>>

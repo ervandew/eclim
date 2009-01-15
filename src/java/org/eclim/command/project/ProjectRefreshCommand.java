@@ -30,8 +30,7 @@ import org.eclim.util.ProjectUtils;
  * Command to refresh / synchronize the in memory project with the files on
  * disk.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectRefreshCommand
   extends AbstractCommand

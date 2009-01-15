@@ -41,8 +41,7 @@ import org.eclipse.text.edits.TextEdit;
  * Command used to format source code in the way Source / Format menu does it.
  *
  * @author Anton Sharonov
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision: 1803 $
+ * @author Eric Van Dewoestine
  */
 public class FormatCommand
   extends AbstractCommand

@@ -34,7 +34,6 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblem;
  * Command to attempt to find the proper import for any undefined types.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ImportMissingCommand
   extends ImportCommand

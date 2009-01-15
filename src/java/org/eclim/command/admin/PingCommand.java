@@ -35,8 +35,7 @@ import org.osgi.framework.Bundle;
 /**
  * Pings the server.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PingCommand
   extends AbstractCommand

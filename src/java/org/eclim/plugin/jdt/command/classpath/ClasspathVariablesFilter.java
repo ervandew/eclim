@@ -27,8 +27,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for ClasspathVariablesCommand.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ClasspathVariablesFilter
   implements OutputFilter<List<ClasspathVariable>>

@@ -28,8 +28,7 @@ import org.eclim.util.vim.VimUtils;
 /**
  * Output filter for location results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision: 798 $
+ * @author Eric Van Dewoestine
  */
 public class LocationFilter
   implements OutputFilter<List<Location>>

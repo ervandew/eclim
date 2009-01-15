@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
  * a static accessor (getLog) for a Text widget.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ViewAppender
   extends AppenderSkeleton

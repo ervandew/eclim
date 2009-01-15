@@ -33,7 +33,6 @@ import org.eclipse.jdt.core.IType;
  * Command to retrieve the hierarchy of a class or interface.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HierarchyCommand
   extends AbstractCommand

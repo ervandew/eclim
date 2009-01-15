@@ -22,7 +22,6 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
  * Simple implementation of IValidationContext.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ValidationContext
   implements IValidationContext

@@ -21,8 +21,7 @@ import org.eclim.util.file.Position;
 /**
  * Extension to Position for search results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchResult
   extends Position

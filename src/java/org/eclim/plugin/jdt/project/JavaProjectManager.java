@@ -70,8 +70,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 /**
  * Implementation of {@link ProjectManager} for java projects.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class JavaProjectManager
   implements ProjectManager

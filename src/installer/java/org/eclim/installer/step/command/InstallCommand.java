@@ -20,7 +20,6 @@ package org.eclim.installer.step.command;
  * Command to install a feature.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class InstallCommand
   extends Command

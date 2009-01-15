@@ -26,8 +26,7 @@ import org.eclipse.jdt.core.CompletionProposal;
 /**
  * Comparator for sorting completion results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CompletionComparator
   implements Comparator<CodeCompleteResult>

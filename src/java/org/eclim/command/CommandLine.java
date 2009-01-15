@@ -25,8 +25,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Container for the supplied command line options.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CommandLine
 {

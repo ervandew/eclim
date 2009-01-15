@@ -38,7 +38,6 @@ import org.eclim.util.IOUtils;
  * Command to read a file from a commons vfs compatable path.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ArchiveReadCommand
   extends AbstractCommand

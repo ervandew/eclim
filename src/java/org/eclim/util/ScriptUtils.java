@@ -35,8 +35,7 @@ import org.eclim.util.file.FileUtils;
  * <p/>
  * Currently all scripts are expected to be implemented in groovy.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ScriptUtils
 {

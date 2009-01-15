@@ -21,8 +21,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 /**
  * Represents a position within a file as denoted by an offset and length.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Position
 {

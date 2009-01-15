@@ -28,7 +28,6 @@ import static org.junit.Assert.*;
  * Test case for FindDefinitionCommand.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class FindDefinitionCommandTest
 {

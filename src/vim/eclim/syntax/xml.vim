@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Default xml.vim only defines the xmlRegion if xml folding is enabled, but

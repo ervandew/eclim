@@ -51,7 +51,6 @@ import org.eclipse.core.runtime.IPath;
  * Given a file pattern, finds all files that match that pattern.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class LocateFileCommand
   extends AbstractCommand

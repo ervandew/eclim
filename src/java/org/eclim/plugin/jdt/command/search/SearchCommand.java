@@ -61,8 +61,7 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
 /**
  * Command to handle java search requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchCommand
   extends AbstractCommand

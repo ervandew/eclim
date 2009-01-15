@@ -27,8 +27,7 @@ import org.eclim.util.file.FileUtils;
 /**
  * Abstract super class for wst based validators.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class WstValidateCommand
   extends AbstractCommand

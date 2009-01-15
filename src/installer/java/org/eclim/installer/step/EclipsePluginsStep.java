@@ -98,7 +98,6 @@ import org.w3c.dom.NodeList;
  * Step which installs necessary third party eclipse plugins.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class EclipsePluginsStep
   extends InstallStep

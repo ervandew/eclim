@@ -25,8 +25,7 @@ import org.w3c.dom.Document;
 /**
  * Abstract base class for parsers that work with xml files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class AbstractXmlParser
   implements Parser

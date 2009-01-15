@@ -37,8 +37,7 @@ import org.eclipse.ant.internal.ui.model.AntProjectNode;
 /**
  * Command to handle request for available tasks in an ant build file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TargetsCommand
   extends AbstractCommand

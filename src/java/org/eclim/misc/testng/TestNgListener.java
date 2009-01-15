@@ -25,8 +25,7 @@ import org.testng.TestListenerAdapter;
  * its :make support) can obtain enough failure information to help populate an
  * error list and possibly locate the corresponding source files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TestNgListener
   extends TestListenerAdapter

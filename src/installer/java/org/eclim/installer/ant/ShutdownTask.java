@@ -32,8 +32,7 @@ import org.formic.util.CommandExecutor;
 /**
  * Task for shutting down eclimd.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ShutdownTask
   extends Task

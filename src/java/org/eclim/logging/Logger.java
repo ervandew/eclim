@@ -20,7 +20,6 @@ package org.eclim.logging;
  * Facade over the logger used by eclim.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class Logger
 {

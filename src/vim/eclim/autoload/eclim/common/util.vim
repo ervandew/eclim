@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision: 1197 $
 "
 " Description: {{{
 "   Various functions that are useful in and out of eclim.

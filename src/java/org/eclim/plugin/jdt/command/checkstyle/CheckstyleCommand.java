@@ -68,7 +68,6 @@ import org.eclipse.jdt.core.JavaModelException;
  * Command which invokes checkstyle on the specified file.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class CheckstyleCommand
   extends AbstractCommand

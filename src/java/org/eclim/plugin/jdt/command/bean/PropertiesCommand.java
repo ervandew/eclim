@@ -47,8 +47,7 @@ import org.eclipse.jdt.core.Signature;
 /**
  * Command used to generate java bean property methods (getters / setters).
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PropertiesCommand
   extends AbstractCommand

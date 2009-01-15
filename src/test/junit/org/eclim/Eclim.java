@@ -28,8 +28,7 @@ import org.eclim.util.IOUtils;
 /**
  * Utility class to executing eclim commands and returning the results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Eclim
 {

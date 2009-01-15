@@ -22,8 +22,7 @@ import java.util.Map;
  * Extension to commons lang StringUtils that adds some additional useful
  * utility methods.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class StringUtils
   extends org.apache.commons.lang.StringUtils

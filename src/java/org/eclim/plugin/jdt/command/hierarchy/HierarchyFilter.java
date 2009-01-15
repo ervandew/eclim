@@ -30,7 +30,6 @@ import org.eclipse.jdt.core.IType;
  * Filter for outputting a type hierarchy.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HierarchyFilter
   implements OutputFilter<HierarchyNode>

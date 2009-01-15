@@ -26,8 +26,7 @@ import org.eclipse.core.resources.IProject;
 /**
  * Defines methods for managing a project.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface ProjectManager
 {

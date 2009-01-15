@@ -42,7 +42,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * Command to remove one or more natures from a project.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ProjectNatureRemoveCommand
   extends AbstractCommand

@@ -32,8 +32,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 /**
  * Command which reports all unused imports for the specified file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class UnusedImportsCommand
   extends AbstractCommand

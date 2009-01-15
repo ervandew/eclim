@@ -22,8 +22,7 @@ import java.util.List;
 /**
  * Represents matched result.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class MatcherResult
 {

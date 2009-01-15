@@ -27,8 +27,7 @@ import org.eclipse.jdt.core.JavaCore;
 /**
  * Command to remove a classpath variable.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ClasspathVariableDeleteCommand
   extends AbstractCommand

@@ -19,8 +19,7 @@ package org.eclim.plugin.ant;
 /**
  * Constants and helper methods for ant functionality testing.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Ant
 {

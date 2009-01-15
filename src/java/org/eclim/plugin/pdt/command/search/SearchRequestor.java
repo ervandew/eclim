@@ -27,7 +27,6 @@ import org.eclipse.dltk.core.search.SearchMatch;
  * SearchRequestor used to collect search results.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class SearchRequestor
   extends org.eclipse.dltk.core.search.SearchRequestor

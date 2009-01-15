@@ -23,8 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * Represents a maven dependency.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Dependency
 {

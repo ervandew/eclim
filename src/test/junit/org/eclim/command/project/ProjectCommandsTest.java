@@ -27,8 +27,7 @@ import static org.junit.Assert.*;
 /**
  * Tests the project commands.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectCommandsTest
 {

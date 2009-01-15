@@ -20,8 +20,7 @@ package org.eclim.plugin.jdt.project.classpath;
  * Defines a parse capable of parsing some external build file that defines the
  * dependencies for the project.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface Parser
 {

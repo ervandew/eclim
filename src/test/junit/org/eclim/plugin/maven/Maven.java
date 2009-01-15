@@ -19,8 +19,7 @@ package org.eclim.plugin.maven;
 /**
  * Constants and helper methods for maven functionality testing.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Maven
 {

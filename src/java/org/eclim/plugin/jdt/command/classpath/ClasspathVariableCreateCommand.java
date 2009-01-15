@@ -29,8 +29,7 @@ import org.eclipse.jdt.core.JavaCore;
 /**
  * Command to add a classpath variable.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ClasspathVariableCreateCommand
   extends AbstractCommand

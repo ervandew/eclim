@@ -36,7 +36,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
  * requested project, or a list of all projects if no project name specified.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ProjectNaturesCommand
   extends AbstractCommand

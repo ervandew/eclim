@@ -27,8 +27,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Output filter for impl results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImplFilter
   implements OutputFilter<ImplResult>

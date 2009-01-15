@@ -30,8 +30,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
 /**
  * Command to handle xml code completion requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class XmlCodeCompleteCommand
   extends WstCodeCompleteCommand

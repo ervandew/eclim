@@ -48,8 +48,7 @@ import org.eclipse.jdt.core.IType;
 /**
  * Command to handle creation of junit test stubs.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class JUnitImplCommand
   extends ImplCommand

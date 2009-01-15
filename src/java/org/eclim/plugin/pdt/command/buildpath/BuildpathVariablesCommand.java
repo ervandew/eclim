@@ -29,7 +29,6 @@ import org.eclipse.dltk.core.DLTKCore;
  * Command to list defined build path variables.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class BuildpathVariablesCommand
   extends AbstractCommand

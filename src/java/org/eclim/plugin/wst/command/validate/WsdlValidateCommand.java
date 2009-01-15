@@ -33,8 +33,7 @@ import org.eclipse.wst.wsdl.validation.internal.eclipse.WSDLValidator;
 /**
  * Command for wsdl validation requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class WsdlValidateCommand
   extends WstValidateCommand

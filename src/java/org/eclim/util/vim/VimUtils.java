@@ -23,8 +23,7 @@ import org.eclim.util.file.Position;
 /**
  * Utility functions for vim filters.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class VimUtils
 {

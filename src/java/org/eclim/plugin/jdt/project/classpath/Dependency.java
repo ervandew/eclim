@@ -21,8 +21,7 @@ import org.eclipse.core.runtime.IPath;
 /**
  * Represents a dependecy from a build file or other external source.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Dependency
 {

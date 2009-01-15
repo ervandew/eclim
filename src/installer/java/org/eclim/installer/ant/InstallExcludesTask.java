@@ -32,8 +32,7 @@ import org.formic.Installer;
  * Task for creating an excludes file based on the features the user chose not
  * to install.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class InstallExcludesTask
   extends Task

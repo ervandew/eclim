@@ -24,7 +24,6 @@ import org.eclipse.jdt.core.IType;
  * Represents a node in the class/interface hierarchy of a type.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HierarchyNode
 {

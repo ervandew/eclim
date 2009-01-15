@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * Command to clear the local history for a file.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HistoryClearCommand
   extends AbstractCommand

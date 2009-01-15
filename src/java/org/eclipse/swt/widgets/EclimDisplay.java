@@ -28,8 +28,7 @@ import org.eclipse.swt.widgets.Display;
  * Giant hack to get some of the eclipse features that are too closely tied to
  * the ui to work in a headless environment.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class EclimDisplay
   extends Display

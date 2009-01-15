@@ -33,8 +33,7 @@ import org.eclim.project.ProjectNatureFactory;
 /**
  * Implementation of AbstractPluginResources.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision: 940 $
+ * @author Eric Van Dewoestine
  */
 public class PluginResources
   extends AbstractPluginResources

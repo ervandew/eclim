@@ -57,8 +57,7 @@ import org.eclipse.jdt.launching.LibraryLocation;
 /**
  * Implementation of AbstractPluginResources.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PluginResources
   extends AbstractPluginResources
@@ -124,7 +123,7 @@ public class PluginResources
       "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
-      "JDT/Javadoc org.eclim.java.doc.version \\$Revision\\$\n" +
+      "JDT/Javadoc org.eclim.java.doc.version\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
       "JDT/JUnit org.eclim.java.junit.src_dir"

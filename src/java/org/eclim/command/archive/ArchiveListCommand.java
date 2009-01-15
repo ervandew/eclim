@@ -40,7 +40,6 @@ import org.eclim.command.Options;
  * Command to list the contents of an archive file.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ArchiveListCommand
   extends AbstractCommand

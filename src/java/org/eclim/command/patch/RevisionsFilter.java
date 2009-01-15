@@ -24,8 +24,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for RevisionsCommand results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class RevisionsFilter
   implements OutputFilter<List<String>>

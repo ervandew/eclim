@@ -21,8 +21,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Represents a proposed java code completion result.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteResult
   extends org.eclim.command.complete.CodeCompleteResult

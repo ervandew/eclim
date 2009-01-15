@@ -58,7 +58,6 @@ import org.osgi.framework.Version;
  * Entry point for installer application.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class Application
   extends org.eclipse.equinox.internal.p2.director.app.Application

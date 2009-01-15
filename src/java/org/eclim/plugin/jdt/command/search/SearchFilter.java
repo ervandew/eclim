@@ -26,8 +26,7 @@ import org.eclim.util.vim.VimUtils;
 /**
  * Output filter for search results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchFilter
   implements OutputFilter<List<SearchResult>>

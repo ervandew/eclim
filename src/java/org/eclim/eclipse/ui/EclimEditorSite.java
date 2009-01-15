@@ -40,7 +40,6 @@ import org.eclipse.ui.IWorkbenchWindow;
  * IEditorSite implementation for eclim.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class EclimEditorSite
   implements IEditorSite

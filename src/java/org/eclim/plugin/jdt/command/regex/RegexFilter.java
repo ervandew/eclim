@@ -24,8 +24,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filters regex result into a string.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class RegexFilter
   implements OutputFilter<List<MatcherResult>>

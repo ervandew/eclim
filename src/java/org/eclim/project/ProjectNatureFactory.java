@@ -27,8 +27,7 @@ import org.eclipse.core.resources.IProject;
 /**
  * Factory for registering project natures.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectNatureFactory
 {

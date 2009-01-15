@@ -26,8 +26,7 @@ import org.eclim.project.ProjectNatureFactory;
 /**
  * Command to get available project nature aliases.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectNatureAliasesCommand
   extends AbstractCommand

@@ -26,8 +26,7 @@ import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor
 /**
  * Command to handle html code completion requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class HtmlCodeCompleteCommand
   extends WstCodeCompleteCommand

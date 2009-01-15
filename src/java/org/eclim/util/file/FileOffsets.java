@@ -32,8 +32,7 @@ import org.eclim.util.IOUtils;
  * Compiles a list of char offsets to line numbers and stores them for quick
  * translation of offset to line number and column.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class FileOffsets
 {

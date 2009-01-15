@@ -1,6 +1,5 @@
 " Author:  Anton Sharonov
 " Author:  Eric Van Dewoestine
-" Version: $Revision: 1803 $
 "
 " Description: {{{
 "   see http://eclim.sourceforge.net/vim/java/format.html

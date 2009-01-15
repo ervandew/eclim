@@ -20,7 +20,6 @@ package org.eclim.installer.step.command;
  * Used to process output from commands.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public interface OutputHandler
 {

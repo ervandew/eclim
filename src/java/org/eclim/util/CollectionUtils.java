@@ -21,8 +21,7 @@ import java.util.Collection;
 /**
  * Utility methods for working with collections.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CollectionUtils
 {

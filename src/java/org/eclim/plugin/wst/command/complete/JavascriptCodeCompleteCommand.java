@@ -51,8 +51,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 /**
  * Command to handle css code completion requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class JavascriptCodeCompleteCommand
   extends AbstractCodeCompleteCommand

@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "  Enhancement to default ant syntax file to add support for ant-contrib and

@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Plugin that integrates vim with the eclipse plugin eclim (ECLipse

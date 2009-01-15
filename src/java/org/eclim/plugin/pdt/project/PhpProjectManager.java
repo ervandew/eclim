@@ -60,8 +60,7 @@ import org.eclipse.php.internal.core.PHPLanguageToolkit;
 /**
  * Implementation of {@link ProjectManager} for php projects.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class PhpProjectManager
   implements ProjectManager

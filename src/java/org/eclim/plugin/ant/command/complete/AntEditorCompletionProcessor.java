@@ -24,8 +24,7 @@ import org.eclipse.ant.internal.ui.model.AntModel;
  * Extension to AntEditorCompletionProcessor to combat issues setting the
  * content assistant.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class AntEditorCompletionProcessor
   extends org.eclipse.ant.internal.ui.editor.AntEditorCompletionProcessor

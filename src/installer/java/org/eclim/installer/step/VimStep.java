@@ -62,8 +62,7 @@ import org.formic.wizard.step.AbstractGuiStep;
 /**
  * Step for choosing the vimfiles directory to install vim scripts in.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class VimStep
   extends AbstractGuiStep

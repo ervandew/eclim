@@ -19,8 +19,7 @@ package org.eclim.plugin.jdt.command.classpath;
 /**
  * Represents an eclipse classpath variable.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ClasspathVariable
   implements Comparable<ClasspathVariable>

@@ -25,8 +25,7 @@ import org.eclim.util.file.FileUtils;
 /**
  * Abstract implmentation of {@link Command}.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class AbstractCommand
   implements Command

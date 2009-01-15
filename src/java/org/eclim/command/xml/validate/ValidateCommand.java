@@ -33,8 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Command to validate a xml file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ValidateCommand
   extends AbstractCommand

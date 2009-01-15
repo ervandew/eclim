@@ -30,8 +30,7 @@ import org.eclipse.jdt.ui.text.java.IProblemLocation;
 /**
  * Implementation of IProblemLocation.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProblemLocation
   implements IProblemLocation

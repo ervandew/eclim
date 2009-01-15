@@ -27,8 +27,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for BuildpathVariablesCommand.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class BuildpathVariablesFilter
   implements OutputFilter<List<BuildpathVariable>>

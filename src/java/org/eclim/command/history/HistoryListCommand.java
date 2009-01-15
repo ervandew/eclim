@@ -34,7 +34,6 @@ import org.eclipse.team.internal.core.history.LocalFileHistory;
  * Command to list available local history revisions for a given file.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HistoryListCommand
   extends AbstractCommand

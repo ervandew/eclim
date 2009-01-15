@@ -32,7 +32,6 @@ import org.formic.Installer;
  * Abstract class encapsulating logic to execute an eclipse feature command.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public abstract class Command
   extends Thread

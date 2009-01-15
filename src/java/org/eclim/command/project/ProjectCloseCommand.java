@@ -29,8 +29,7 @@ import org.eclipse.core.resources.IProject;
 /**
  * Command to close a project.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectCloseCommand
   extends AbstractCommand

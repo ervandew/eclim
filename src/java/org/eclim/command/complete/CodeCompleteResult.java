@@ -27,8 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
  * Represents a code completion result.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteResult
 {

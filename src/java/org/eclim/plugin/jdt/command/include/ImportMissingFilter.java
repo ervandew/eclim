@@ -25,7 +25,6 @@ import org.eclim.command.OutputFilter;
  * Filter to format results from ImportMissingCommand.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ImportMissingFilter
   implements OutputFilter<List<ImportMissingResult>>

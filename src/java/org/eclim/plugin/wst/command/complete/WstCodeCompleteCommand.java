@@ -40,8 +40,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 /**
  * Abstract base for code completion using the wst.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class WstCodeCompleteCommand
   extends AbstractCodeCompleteCommand

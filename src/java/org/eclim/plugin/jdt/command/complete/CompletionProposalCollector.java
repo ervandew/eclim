@@ -30,8 +30,7 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
  * Extension to eclipse CompletionProposalCollector that saves reference to
  * original CompletionProposals.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CompletionProposalCollector
   extends org.eclipse.jdt.ui.text.java.CompletionProposalCollector

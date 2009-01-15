@@ -21,8 +21,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 /**
  * Represents an import request result.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImportResult
 {

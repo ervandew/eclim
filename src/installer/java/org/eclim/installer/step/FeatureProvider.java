@@ -29,8 +29,7 @@ import org.formic.wizard.step.shared.Feature;
 /**
  * Provider to supply avaiable features to FeatureListStep.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class FeatureProvider
   implements org.formic.wizard.step.shared.FeatureProvider, PropertyChangeListener

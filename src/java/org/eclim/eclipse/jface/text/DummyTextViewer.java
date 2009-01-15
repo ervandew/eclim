@@ -43,8 +43,7 @@ import org.eclipse.swt.graphics.Point;
  * Dummy ITextViewer implementation that provides basic functionality for
  * eclipse classes that require an ITextViewer.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class DummyTextViewer
   implements ITextViewer

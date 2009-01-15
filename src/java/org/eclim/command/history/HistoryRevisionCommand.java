@@ -37,7 +37,6 @@ import org.eclipse.team.internal.core.history.LocalFileHistory;
  * Command which outputs the contents of a specific revision.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class HistoryRevisionCommand
   extends AbstractCommand

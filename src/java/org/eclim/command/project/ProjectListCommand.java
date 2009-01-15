@@ -37,7 +37,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
  * Command which lists all projects and their status.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ProjectListCommand
   extends AbstractCommand

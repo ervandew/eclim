@@ -39,8 +39,7 @@ import org.eclipse.ant.internal.ui.model.IProblemRequestor;
 /**
  * Command to handle ant file validation requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ValidateCommand
   extends org.eclim.command.xml.validate.ValidateCommand

@@ -20,7 +20,6 @@ package org.eclim.installer.step.command;
  * Command to list installed features.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class AddSiteCommand
   extends Command

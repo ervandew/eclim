@@ -23,7 +23,6 @@ import java.util.List;
  * define it.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ImportMissingResult
 {

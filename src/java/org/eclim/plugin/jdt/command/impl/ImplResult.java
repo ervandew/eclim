@@ -21,8 +21,7 @@ import java.util.List;
 /**
  * Container for impl command result.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImplResult
 {

@@ -34,7 +34,6 @@ import org.eclipse.core.internal.resources.File;
  * Command to refresh a file in a project.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ProjectRefreshFileCommand
   extends AbstractCommand

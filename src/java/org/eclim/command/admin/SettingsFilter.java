@@ -30,8 +30,7 @@ import org.eclim.preference.OptionInstance;
 /**
  * Output filter for global settings.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SettingsFilter
   implements OutputFilter<List<Option>>

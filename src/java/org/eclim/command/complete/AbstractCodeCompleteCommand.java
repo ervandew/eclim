@@ -36,8 +36,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 /**
  * Abstract command for code completion.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class AbstractCodeCompleteCommand
   extends AbstractCommand

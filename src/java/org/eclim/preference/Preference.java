@@ -20,8 +20,7 @@ package org.eclim.preference;
  * Represents a preference which is similar to an option, except under non
  * eclipse node keys, new preference keys may be created.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class Preference
   extends Option

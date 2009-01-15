@@ -42,8 +42,7 @@ import org.w3c.dom.NodeList;
 /**
  * Filter for repository search results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchFilter
   implements OutputFilter<List<Dependency>>

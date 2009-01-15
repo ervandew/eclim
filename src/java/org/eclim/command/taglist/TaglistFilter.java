@@ -22,8 +22,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for tag list results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TaglistFilter
   implements OutputFilter<TagResult[]>

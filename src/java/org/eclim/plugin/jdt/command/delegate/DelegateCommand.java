@@ -46,8 +46,7 @@ import org.eclipse.jdt.core.Signature;
 /**
  * Command to handle creation of delegate methods.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class DelegateCommand
   extends ImplCommand

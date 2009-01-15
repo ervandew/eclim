@@ -33,8 +33,7 @@ import org.eclipse.wst.xsd.core.internal.validation.eclipse.XSDValidator;
 /**
  * Command to validate dtd files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class XsdValidateCommand
   extends WstValidateCommand

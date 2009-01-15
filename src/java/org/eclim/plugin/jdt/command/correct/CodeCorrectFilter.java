@@ -24,8 +24,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Output filter for code correction results.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCorrectFilter
   implements OutputFilter<List<CodeCorrectResult>>

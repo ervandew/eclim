@@ -20,7 +20,6 @@ package org.eclim.util.file;
  * File location as denoted by line and column.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class Location
 {

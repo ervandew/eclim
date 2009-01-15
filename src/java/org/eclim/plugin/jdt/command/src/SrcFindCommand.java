@@ -28,8 +28,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
  * Attempts to find the source file for the specified class name in one of the
  * user's projects.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SrcFindCommand
   extends AbstractCommand

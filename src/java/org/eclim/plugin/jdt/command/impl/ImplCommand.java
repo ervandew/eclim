@@ -52,8 +52,7 @@ import org.eclipse.jdt.core.Signature;
  * implemented/overriden by the supplied file according the interfaces/parent
  * class it implements/extends.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ImplCommand
   extends AbstractCommand

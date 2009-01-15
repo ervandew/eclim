@@ -30,7 +30,6 @@ import static org.junit.Assert.*;
  * Test case for ValidateCommand.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ValidateCommandTest
 {

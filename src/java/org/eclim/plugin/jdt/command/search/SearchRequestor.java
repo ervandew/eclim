@@ -32,8 +32,7 @@ import org.eclipse.jdt.core.search.SearchMatch;
 /**
  * Extension to SearchRequestor that adds getMatches().
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SearchRequestor
   extends org.eclipse.jdt.core.search.SearchRequestor

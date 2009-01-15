@@ -30,7 +30,6 @@ import org.eclipse.dltk.core.DLTKCore;
  * Command to create an build path variable.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class BuildpathVariableCreateCommand
   extends AbstractCommand

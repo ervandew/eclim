@@ -44,8 +44,7 @@ import org.eclipse.core.runtime.FileLocator;
 /**
  * Abstract implementation of {@link PluginResources}.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public abstract class AbstractPluginResources
   implements PluginResources

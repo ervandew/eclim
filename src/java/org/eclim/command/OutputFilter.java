@@ -20,8 +20,7 @@ package org.eclim.command;
  * An OutputFilter is used to tranform the output before returning it to the
  * client.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface OutputFilter<T>
 {

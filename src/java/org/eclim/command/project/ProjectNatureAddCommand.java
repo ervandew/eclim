@@ -42,7 +42,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * Command to add one or more natures to a project.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class ProjectNatureAddCommand
   extends AbstractCommand

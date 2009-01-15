@@ -28,8 +28,7 @@ import org.eclim.preference.Option;
 /**
  * Command to obtain global settings.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class SettingsCommand
   extends AbstractCommand

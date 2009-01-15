@@ -20,8 +20,7 @@ package org.eclim.eclipse;
  * Dummy workbench advisor that allows the workbench to be created, but never
  * shown.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class WorkbenchAdvisor
   extends org.eclipse.ui.application.WorkbenchAdvisor

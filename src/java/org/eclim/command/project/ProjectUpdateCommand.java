@@ -43,8 +43,7 @@ import org.eclipse.core.resources.IProject;
 /**
  * Command to update a project.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ProjectUpdateCommand
   extends AbstractCommand

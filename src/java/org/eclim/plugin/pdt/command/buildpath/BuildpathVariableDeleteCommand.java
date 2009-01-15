@@ -28,7 +28,6 @@ import org.eclipse.dltk.core.DLTKCore;
  * Command to delete an build path variable.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class BuildpathVariableDeleteCommand
   extends AbstractCommand

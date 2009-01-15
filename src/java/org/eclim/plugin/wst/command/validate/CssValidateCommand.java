@@ -44,7 +44,6 @@ import org.w3c.css.util.Warning;
  * Command to validate a css file.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class CssValidateCommand
   extends WstValidateCommand

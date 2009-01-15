@@ -21,8 +21,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Represents a result from processing a file for tags.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class TagResult
   implements Comparable<TagResult>

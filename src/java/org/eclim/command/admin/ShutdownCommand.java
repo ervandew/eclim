@@ -26,8 +26,7 @@ import org.eclim.logging.Logger;
 /**
  * Command to shutdown the eclim server.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class ShutdownCommand
   extends AbstractCommand

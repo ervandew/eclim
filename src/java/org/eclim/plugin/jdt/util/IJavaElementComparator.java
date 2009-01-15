@@ -23,8 +23,7 @@ import org.eclipse.jdt.core.IJavaElement;
 /**
  * Comparator for sorting IJavaElement(s).
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class IJavaElementComparator
   implements Comparator<IJavaElement>

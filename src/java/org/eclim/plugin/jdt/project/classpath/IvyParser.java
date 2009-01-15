@@ -36,8 +36,7 @@ import org.w3c.dom.NodeList;
  * Implementation of {@link Parser} for parsing an
  * <a href="http://jayasoft.org/ivy/doc/ivyfile">ivy.xml</a> file.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class IvyParser
   extends AbstractXmlParser

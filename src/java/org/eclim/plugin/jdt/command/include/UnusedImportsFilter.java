@@ -26,8 +26,7 @@ import org.eclim.command.OutputFilter;
 /**
  * Filter for outputing results of UnusedImportsCommand.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class UnusedImportsFilter
   implements OutputFilter<List<String>>

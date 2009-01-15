@@ -61,8 +61,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Some xml utility methods.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class XmlUtils
 {

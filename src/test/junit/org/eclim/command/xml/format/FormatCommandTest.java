@@ -27,8 +27,7 @@ import static org.junit.Assert.*;
 /**
  * Test FormatCommand.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class FormatCommandTest
 {

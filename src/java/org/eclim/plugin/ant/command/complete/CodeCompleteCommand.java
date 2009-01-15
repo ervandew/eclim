@@ -36,8 +36,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 /**
  * Command to handle ant file code completion requests.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand

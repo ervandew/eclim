@@ -28,8 +28,7 @@ import org.eclim.command.Command;
  * Interface that every plugin must provide an implemtation of, which will be
  * used to locate services, messages, etc, that the plugin provides.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public interface PluginResources
 {

@@ -1,5 +1,4 @@
 " Author:  Eric Van Dewoestine
-" Version: $Revision$
 "
 " Description: {{{
 "   Test case for find.vim
@@ -43,7 +42,7 @@ endfunction " }}}
 " Cursor on a command def.
 function! TestFindByContextCommandDef()
   call s:EditFile('~/.vim/eclim/ftplugin/vim/eclim_find.vim')
-  call cursor(28, 34)
+  call cursor(27, 34)
 
   call s:FindByContext()
 
@@ -61,7 +60,7 @@ endfunction " }}}
 " Cursor on function ref
 function! TestFindByContextFunctionRef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
-  call cursor(127, 12)
+  call cursor(126, 12)
 
   call s:FindByContext()
 
@@ -75,7 +74,7 @@ endfunction " }}}
 " Cursor on function def
 function! TestFindByContextFunctionDef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
-  call cursor(137, 26)
+  call cursor(136, 26)
 
   call s:FindByContext()
 
@@ -93,7 +92,7 @@ endfunction " }}}
 " Cursor on variable ref
 function! TestFindByContextVariableRef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
-  call cursor(228, 10)
+  call cursor(227, 10)
 
   call s:FindByContext()
 
@@ -108,7 +107,7 @@ endfunction " }}}
 " Cursor on variable def
 function! TestFindByContextVariableDef()
   call s:EditFile('~/.vim/eclim/autoload/eclim/vim/find.vim')
-  call cursor(32, 9)
+  call cursor(31, 9)
 
   call s:FindByContext()
 

@@ -38,8 +38,7 @@ import org.eclipse.jface.text.IDocument;
 /**
  * Utility methods for working with ant files.
  *
- * @author Eric Van Dewoestine (ervandew@gmail.com)
- * @version $Revision$
+ * @author Eric Van Dewoestine
  */
 public class AntUtils
 {

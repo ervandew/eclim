@@ -62,7 +62,6 @@ import org.eclipse.ui.part.FileEditorInput;
  * Command to search php code.
  *
  * @author Eric Van Dewoestine
- * @version $Revision$
  */
 public class SearchCommand
   extends AbstractCommand
