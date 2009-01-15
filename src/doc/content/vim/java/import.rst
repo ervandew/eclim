@@ -83,7 +83,7 @@ Vim Variables
 .. _g\:EclimJavaImportPackageSeparationLevel:
 
 - **g:EclimJavaImportPackageSeparationLevel** (Default: -1) -
-  Used to determine how imports are grouped togther (or spaced apart).  The
+  Used to determine how imports are grouped together (or spaced apart).  The
   number represents how many segments of the package name to use to determine
   equality, where equal imports are grouped together and separated from other
   groups with a blank line.
@@ -91,8 +91,8 @@ Vim Variables
   - -1: Use the entire package name. Only imports from the same full package
     are grouped together.
   - 0: Don't look at any package segments. All imports are grouped together
-    with no spacing..
-  - n: Look at `n` segments of the package name.
+    with no spacing.
+  - n: Look at the first `n` segments of the package name.
 
     Ex.
 
