@@ -508,6 +508,10 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args)
     let saved_makeprg = &makeprg
     let saved_errorformat = &errorformat
   endif
+  if has('win32') || has('win64')
+    let saved_shellpipe = &shellpipe
+    set shellpipe=>\ %s\ 2<&1
+  endif
 
   try
     unlet! g:current_compiler b:current_compiler
@@ -521,6 +525,9 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args)
     else
       let &makeprg = saved_makeprg
       let &errorformat = saved_errorformat
+    endif
+    if has('win32') || has('win64')
+      let &shellpipe = saved_shellpipe
     endif
   endtry
 endfunction " }}}

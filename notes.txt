@@ -5,9 +5,6 @@ HIGH {{{
   - validation issue when file open in eclipse and vim
     http://groups.google.com/group/eclim-user/msg/5da5cf04cc88a407
 
-  - ant failure + quickfix on windows
-    http://groups.google.com/group/eclim-user/browse_thread/thread/e321849947e8326?hl=en
-
   - evaluate
     - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
     - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
