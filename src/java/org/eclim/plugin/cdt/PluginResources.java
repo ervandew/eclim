@@ -56,6 +56,8 @@ public class PluginResources
 
     registerCommand("c_src_update",
         org.eclim.plugin.cdt.command.src.SrcUpdateCommand.class);
+    registerCommand("c_complete",
+        org.eclim.plugin.cdt.command.complete.CodeCompleteCommand.class);
   }
 
   /**

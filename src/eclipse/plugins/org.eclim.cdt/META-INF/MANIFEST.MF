@@ -13,5 +13,9 @@ Require-Bundle: org.eclim,
   org.eclipse.cdt.core,
   org.eclipse.cdt.ui,
   org.eclipse.core.resources,
-  org.eclipse.core.runtime
+  org.eclipse.core.runtime,
+  org.eclipse.jface.text,
+  org.eclipse.ui,
+  org.eclipse.ui.ide,
+  org.eclipse.ui.workbench.texteditor
 Eclipse-AutoStart: false

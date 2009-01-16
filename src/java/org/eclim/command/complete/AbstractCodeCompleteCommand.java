@@ -58,11 +58,7 @@ public abstract class AbstractCodeCompleteCommand
       public void run()
       {
         try{
-          IContentAssistProcessor processor =
-            getContentAssistProcessor(commandLine, project, file);
-
-          ITextViewer viewer = getTextViewer(commandLine, project, file);
-          result[0] = processor.computeCompletionProposals(viewer, offset);
+          result[0] = getCompletionProposals(commandLine, project, file, offset);
         }catch(Exception e){
           throw new RuntimeException(e);
         }
@@ -92,6 +88,27 @@ public abstract class AbstractCodeCompleteCommand
   }
 
   /**
+   * Gets the ICompletionProposal results.
+   *
+   * @param commandLine The current command line.
+   * @param project The project name.
+   * @param file  The project relative file name.
+   * @param offset The offset in the file.
+   * @return The completion results.
+   */
+  protected ICompletionProposal[] getCompletionProposals(
+      CommandLine commandLine, String project, String file, int offset)
+    throws Exception
+  {
+    IContentAssistProcessor processor =
+      getContentAssistProcessor(commandLine, project, file);
+
+    ITextViewer viewer = getTextViewer(commandLine, project, file);
+
+    return processor.computeCompletionProposals(viewer, offset);
+  }
+
+  /**
    * Gets the IContentAssistProcessor to use.
    *
    * @param commandLine The current command line.
@@ -99,9 +116,12 @@ public abstract class AbstractCodeCompleteCommand
    * @param file The file to be processed.
    * @return The IContentAssistProcessor.
    */
-  protected abstract IContentAssistProcessor getContentAssistProcessor(
+  protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
-    throws Exception;
+    throws Exception
+  {
+    throw new UnsupportedOperationException();
+  }
 
   /**
    * Gets the text viewer passed to the content assist processor.
