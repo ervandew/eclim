@@ -9,8 +9,8 @@ the EPL, the licensors of this Program grant you additional permission to
 convey the resulting work.
 
 Permission is granted to link this work with:
-  - Eclipse (jdt, pdt, wst, and any other eclipse extension produced by the
-    Eclipse Foundation under the terms of the EPL).
+  - Eclipse (cdt, jdt, pdt, wst, and any other eclipse extension produced by
+    the Eclipse Foundation under the terms of the EPL).
 
 --------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - Removed extraneous preferences.
   - Removed unused classes or those that don't fit within the eclim paradigm.
   - Added a debug console utilizing log4j instead of System.out
-  - When a files is saved in gvim, notify eclipse of the save.
+  - When a file is saved in gvim, notify eclipse of the save.
   - Fixed netbeans "function" calls to work properly.
   - Fixed cursor location restoration when re-focusing gvim editor.
   - Added support for feeding keys from gvim to eclipse to support user mapped
