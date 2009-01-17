@@ -176,10 +176,14 @@ function! eclim#java#import#InsertImports(classes)
         call insert(imports, 'import ' . class . ';', lastimport + 1)
         call remove(classes, 0)
         if prevclass != '' && !s:CompareClasses(prevclass, class)
-          let line += 1
           call insert(imports, '', lastimport + 1)
+          let line += 1
           let index += 1
           let lastimport += 1
+        elseif prevclass == '' && !s:CompareClasses(prevclass, class)
+          call insert(imports, '', 1)
+          let line += 1
+          let index += 1
         endif
         if len(classes) == 0
           break
@@ -373,7 +377,7 @@ function! s:CutImports()
   call cursor(line('$'),1)
   let lastImport = search('^\s*import\s\+.*;', 'bW')
 
-  if firstImport == 0 || firstImport == lastImport
+  if firstImport == 0
     return []
   endif
 
