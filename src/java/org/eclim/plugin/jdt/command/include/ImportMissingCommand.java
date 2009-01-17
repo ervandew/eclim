@@ -18,6 +18,9 @@ package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -38,6 +41,8 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblem;
 public class ImportMissingCommand
   extends ImportCommand
 {
+  private static final Pattern GENERIC = Pattern.compile("^(.*)<.*>$");
+
   /**
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
@@ -56,10 +61,19 @@ public class ImportMissingCommand
     for(IProblem problem : problems){
       if(problem instanceof DefaultProblem){
         DefaultProblem p = (DefaultProblem)problem;
-        if (p.getCategoryID() == DefaultProblem.CAT_TYPE){
+        if (p.getCategoryID() == DefaultProblem.CAT_TYPE ||
+            p.getCategoryID() == DefaultProblem.CAT_MEMBER)
+        {
           String[] args = p.getArguments();
-          if (args.length > 0){
-            missing.add(p.getArguments()[0]);
+          if (args.length == 1){
+            String cls = args[0];
+            Matcher matcher = GENERIC.matcher(cls);
+            if(matcher.matches()){
+              cls = matcher.replaceFirst("$1");
+            }
+            if(!missing.contains(cls)){
+              missing.add(cls);
+            }
           }
         }
       }
