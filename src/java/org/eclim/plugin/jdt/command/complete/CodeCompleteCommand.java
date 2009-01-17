@@ -51,7 +51,6 @@ public class CodeCompleteCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
     int offset = getOffset(commandLine);
@@ -64,6 +63,7 @@ public class CodeCompleteCommand
 
     IJavaCompletionProposal[] proposals =
       collector.getJavaCompletionProposals();
+    ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for(int ii = 0; ii < proposals.length; ii++){
       results.add(
           createCompletionResult(collector, ii, proposals[ii]));
