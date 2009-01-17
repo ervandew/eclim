@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   Plugin to support running checkstyle on a java source file.
+"   see http://eclim.sourceforge.net/vim/css/index.html
 "
 " License:
 "
@@ -23,15 +23,36 @@
 " }}}
 
 " Global Variables {{{
-  if !exists("g:EclimJavaCheckstyleOnSave")
-    let g:EclimJavaCheckstyleOnSave = 0
-  endif
+
+if !exists("g:EclimCssValidate")
+  let g:EclimCssValidate = 1
+endif
+
+" }}}
+
+" Options {{{
+
+setlocal completefunc=eclim#css#complete#CodeComplete
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimCssValidate
+  augroup eclim_css_validate
+    autocmd!
+    autocmd BufWritePost *.css call eclim#common#validate#Validate('css', 1)
+  augroup END
+endif
+
 " }}}
 
 " Command Declarations {{{
-if !exists(":Checkstyle")
-  command -nargs=0 -buffer Checkstyle :call eclim#java#checkstyle#Checkstyle()
+
+if !exists(":Validate")
+  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('css', 0)
 endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

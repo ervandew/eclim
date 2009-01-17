@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/validate.html
+"   see http://eclim.sourceforge.net/vim/python/index.html
 "
 " License:
 "
@@ -23,10 +23,20 @@
 " }}}
 
 " Global Variables {{{
+
 if !exists("g:EclimPythonValidate")
   let g:EclimPythonValidate = 1
 endif
+
 " }}}
+
+" Options {{{
+
+setlocal completefunc=eclim#python#complete#CodeComplete
+
+" }}}
+
+" Autocmds {{{
 
 if g:EclimPythonValidate
   augroup eclim_python_validate
@@ -35,13 +45,44 @@ if g:EclimPythonValidate
   augroup END
 endif
 
+" }}}
+
 " Command Declarations {{{
+
+if !exists(":PythonFindDefinition")
+  command -buffer PythonFindDefinition :call eclim#python#find#FindDefinition()
+endif
+
+if !exists(':PythonImportClean')
+  command -buffer PythonImportClean :call eclim#python#import#CleanImports()
+endif
+if !exists(':PythonImportSort')
+  command -buffer PythonImportSort :call eclim#python#import#SortImports()
+endif
+
+if !exists(":PythonRegex")
+  command -buffer PythonRegex :call eclim#regex#OpenTestWindow('python')
+endif
+
 if !exists(":Validate")
   command -nargs=0 -buffer Validate :call eclim#python#validate#Validate(0)
 endif
 if !exists(":PyLint")
   command -nargs=0 -buffer PyLint :call eclim#python#validate#PyLint()
 endif
+
+if !exists(':DjangoTemplateOpen')
+  command -buffer DjangoTemplateOpen :call eclim#python#django#find#FindTemplate(
+    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+endif
+if !exists(':DjangoViewOpen')
+  command -buffer DjangoViewOpen :call eclim#python#django#find#FindView(
+    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+endif
+if !exists(':DjangoContextOpen')
+  command -buffer DjangoContextOpen :call eclim#python#django#find#ContextFind()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

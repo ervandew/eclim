@@ -65,7 +65,7 @@ function! TestImportMissing()
 endfunction " }}}
 
 " TestImportMissing2() {{{
-function! TestImportMissing()
+function! TestImportMissing2()
   edit! src/org/eclim/test/include/TestImportMissing2VUnit.java
   call PeekRedir()
 

@@ -24,4 +24,34 @@
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
 
+" Global Variables {{{
+
+if !exists("g:EclimWsdlValidate")
+  let g:EclimWsdlValidate = 1
+endif
+
+" }}}
+
+" Autocmd {{{
+
+if g:EclimWsdlValidate
+  augroup eclim_wsdl_validate
+    autocmd!
+    autocmd BufWritePost *.wsdl call eclim#common#validate#Validate('wsdl', 1)
+  augroup END
+endif
+
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
+" }}}
+
+" Command Declarations {{{
+
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('wsdl', 0)
+
+" }}}
+
 " vim:ft=vim:fdm=marker

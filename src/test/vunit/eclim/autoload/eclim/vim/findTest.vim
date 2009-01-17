@@ -41,15 +41,15 @@ endfunction " }}}
 " TestFindByContextCommandDef() {{{
 " Cursor on a command def.
 function! TestFindByContextCommandDef()
-  call s:EditFile('~/.vim/eclim/ftplugin/vim/eclim_find.vim')
-  call cursor(27, 34)
+  call s:EditFile('~/.vim/eclim/ftplugin/vim/eclim.vim')
+  call cursor(32, 34)
 
   call s:FindByContext()
 
   let results = getloclist(0)
   call VUAssertEquals(2, len(results), "Wrong number of results.")
 
-  call VUAssertTrue(bufname(results[0].bufnr) =~ 'eclim_find.vim', "Wrong file.")
+  call VUAssertTrue(bufname(results[0].bufnr) =~ 'eclim.vim', "Wrong file.")
   call VUAssertTrue(results[0].text =~ '\<FindByContext\>', "Wrong result.")
   call VUAssertTrue(bufname(results[1].bufnr) =~ '\.vim/ftplugin/vim/vim\.vim',
     \ "Wrong file.")
@@ -84,7 +84,7 @@ function! TestFindByContextFunctionDef()
   call VUAssertTrue(bufname(results[0].bufnr) =~ '\<find.vim', "Wrong file.")
   call VUAssertTrue(results[0].text =~ 'eclim#vim#find#FindCommandDef', "Wrong result.")
 
-  call VUAssertTrue(bufname(results[1].bufnr) =~ '\<eclim_find.vim', "Wrong file.")
+  call VUAssertTrue(bufname(results[1].bufnr) =~ '\<eclim.vim', "Wrong file.")
   call VUAssertTrue(results[1].text =~ 'eclim#vim#find#FindCommandDef', "Wrong result.")
 endfunction " }}}
 
@@ -136,7 +136,7 @@ endfunction " }}}
 " FindByContext() {{{
 function s:FindByContext()
   let g:EclimVimPaths = '~/.vim'
-  call eclim#vim#find#FindByContext('!')
+  FindByContext!
   call PeekRedir()
 endfunction " }}}
 

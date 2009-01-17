@@ -1,6 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
+"   see http://eclim.sourceforge.net/vim/java/log4j/index.html
 "
 " License:
 "
@@ -23,11 +24,44 @@
 
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
-runtime ftplugin/java/eclim_search.vim
-runtime ftplugin/java/eclim_util.vim
+runtime ftplugin/java/eclim.vim
+
+" Global Variables {{{
+
+if !exists("g:EclimLog4jValidate")
+  let g:EclimLog4jValidate = 1
+endif
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimLog4jValidate
+  augroup eclim_log4j_validate
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('log4j', 1)
+  augroup END
+endif
+
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
+" }}}
+
+" Mappings {{{
 
 if g:EclimJavaSearchMapping
   noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
 endif
+
+" }}}
+
+" Command Declarations {{{
+
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('log4j', 0)
+
+" }}}
 
 " vim:ft=vim:fdm=marker

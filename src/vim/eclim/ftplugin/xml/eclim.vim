@@ -23,13 +23,23 @@
 " }}}
 
 " Global Variables {{{
+
 if !exists("g:EclimXmlValidate")
   let g:EclimXmlValidate = 1
 endif
 if !exists('g:EclimSgmlCompleteEndTag')
   let g:EclimSgmlCompleteEndTag = 1
 endif
+
 " }}}
+
+" Options {{{
+
+setlocal completefunc=eclim#xml#complete#CodeComplete
+
+" }}}
+
+" Autocmds {{{
 
 if g:EclimXmlValidate
   augroup eclim_xml
@@ -38,13 +48,18 @@ if g:EclimXmlValidate
   augroup END
 endif
 
+" }}}
+
 " Mappings {{{
+
 if g:EclimSgmlCompleteEndTag
   imap <buffer> <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
 endif
+
 " }}}
 
 " Command Declarations {{{
+
 if !exists(":Validate")
   command -nargs=? -complete=file -bang -buffer Validate
     \ :call eclim#xml#validate#Validate('<args>', 0, '<bang>')
@@ -54,6 +69,12 @@ if !exists(":Validate")
   command -nargs=? -buffer XsdDefinition
     \ :call eclim#xml#definition#XsdDefinition('<args>')
 endif
+
+if !exists(":XmlFormat")
+  "command -buffer -range XmlFormat :call eclim#xml#format#Format(<line1>, <line2>)
+  command -buffer XmlFormat :call eclim#xml#format#Format()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

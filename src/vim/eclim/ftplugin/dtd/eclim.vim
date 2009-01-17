@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/html/complete.html
+"   see http://eclim.sourceforge.net/vim/dtd/index.html
 "
 " License:
 "
@@ -22,6 +22,31 @@
 "
 " }}}
 
-setlocal completefunc=eclim#html#complete#CodeComplete
+" Global Variables {{{
+
+if !exists("g:EclimDtdValidate")
+  let g:EclimDtdValidate = 1
+endif
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimDtdValidate
+  augroup eclim_css_validate
+    autocmd!
+    autocmd BufWritePost *.dtd call eclim#common#validate#Validate('dtd', 1)
+  augroup END
+endif
+
+" }}}
+
+" Command Declarations {{{
+
+if !exists(":Validate")
+  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('dtd', 0)
+endif
+
+" }}}
 
 " vim:ft=vim:fdm=marker

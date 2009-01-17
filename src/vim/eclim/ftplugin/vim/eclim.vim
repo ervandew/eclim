@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/vim/find.html
+"   see http://eclim.sourceforge.net/vim/vim/index.html
 "
 " License:
 "
@@ -23,6 +23,11 @@
 " }}}
 
 " Command Declarations {{{
+
+if !exists(":VimDoc")
+  command -buffer -nargs=? VimDoc :call eclim#vim#doc#FindDoc('<args>')
+endif
+
 if !exists(":FindByContext")
   command -buffer -nargs=0 -bang FindByContext
     \ :call eclim#vim#find#FindByContext('<bang>')
@@ -51,6 +56,7 @@ if !exists(":FindVariableRef")
   command -buffer -nargs=? -bang FindVariableRef
     \ :call eclim#vim#find#FindVariableRef('<args>', '<bang>')
 endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

@@ -1,6 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
+"   see http://eclim.sourceforge.net/vim/html/index.html
 "
 " License:
 "
@@ -22,22 +23,54 @@
 " }}}
 
 " Global Variables {{{
+
+if !exists("g:EclimHtmlValidate")
+  let g:EclimHtmlValidate = 1
+endif
+
 if !exists('g:EclimSgmlCompleteEndTag')
   let g:EclimSgmlCompleteEndTag = 1
 endif
+
+" }}}
+
+" Options {{{
+
+setlocal completefunc=eclim#html#complete#CodeComplete
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimHtmlValidate
+  augroup eclim_html_validate
+    autocmd!
+    autocmd BufWritePost *.html call eclim#html#validate#Validate(1)
+  augroup END
+endif
+
 " }}}
 
 " Mappings {{{
+
 if g:EclimSgmlCompleteEndTag
   imap <buffer> <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
 endif
+
 " }}}
 
 " Command Declarations {{{
+
+if !exists(":Validate")
+  command -nargs=0 -buffer Validate
+    \ :call eclim#common#validate#Validate('html', 0)
+endif
+
 if !exists(":BrowserOpen")
   command -nargs=? -complete=file -buffer BrowserOpen
     \ :call eclim#html#util#OpenInBrowser(<q-args>)
 endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

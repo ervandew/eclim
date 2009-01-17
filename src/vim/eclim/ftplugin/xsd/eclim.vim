@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/bean.html
+"   see http://eclim.sourceforge.net/vim/xsd/index.html
 "
 " License:
 "
@@ -22,19 +22,34 @@
 "
 " }}}
 
+" Global Variables {{{
+
+if !exists("g:EclimXsdValidate")
+  let g:EclimXsdValidate = 1
+endif
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimXsdValidate
+  augroup eclim_xsd_validate
+    autocmd!
+    autocmd BufWritePost *.xsd call eclim#common#validate#Validate('xsd', 1)
+  augroup END
+endif
+
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
+" }}}
+
 " Command Declarations {{{
-if !exists(":JavaGet")
-  command -buffer -range JavaGet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "getter")
-endif
-if !exists(":JavaSet")
-  command -buffer -range JavaSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "setter")
-endif
-if !exists(":JavaGetSet")
-  command -buffer -range JavaGetSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "getter_setter")
-endif
+
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('xsd', 0)
+
 " }}}
 
 " vim:ft=vim:fdm=marker

@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/complete.html
+"   see http://eclim.sourceforge.net/vim/javascript/index.html
 "
 " License:
 "
@@ -22,10 +22,31 @@
 "
 " }}}
 
-setlocal completefunc=eclim#java#complete#CodeComplete
+" Global Variables {{{
 
-"inoremap <C-T> <C-R>=eclim#java#complete#CompletionFilter('t')<CR>
-"inoremap <C-M> <C-R>=eclim#java#complete#CompletionFilter('m')<CR>
-"inoremap <C-F> <C-R>=eclim#java#complete#CompletionFilter('f')<CR>
+if !exists("g:EclimJavascriptValidate")
+  let g:EclimJavascriptValidate = 1
+endif
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimJavascriptValidate
+  augroup eclim_javascript_validate
+    autocmd!
+    autocmd BufWritePost *.js call eclim#javascript#validate#Validate(1)
+  augroup END
+endif
+
+" }}}
+
+" Command Declarations {{{
+
+if !exists(":Validate")
+  command -nargs=0 -buffer Validate :call eclim#javascript#validate#Validate(0)
+endif
+
+" }}}
 
 " vim:ft=vim:fdm=marker

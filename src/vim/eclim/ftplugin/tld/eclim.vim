@@ -23,8 +23,7 @@
 
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
-runtime ftplugin/java/eclim_search.vim
-runtime ftplugin/java/eclim_util.vim
+runtime ftplugin/java/eclim.vim
 
 if g:EclimJavaSearchMapping
   noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>

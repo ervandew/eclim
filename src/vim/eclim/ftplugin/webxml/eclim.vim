@@ -23,11 +23,44 @@
 
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
-runtime ftplugin/java/eclim_search.vim
-runtime ftplugin/java/eclim_util.vim
+runtime ftplugin/java/eclim.vim
+
+" Global Variables {{{
+
+if !exists("g:EclimWebXmlValidate")
+  let g:EclimWebXmlValidate = 1
+endif
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimWebXmlValidate
+  augroup eclim_webxml_validate
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('webxml', 1)
+  augroup END
+endif
+
+" disable plain xml validation.
+augroup eclim_xml
+  autocmd!
+augroup END
+
+" }}}
+
+" Mappings {{{
 
 if g:EclimJavaSearchMapping
   noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
 endif
+
+" }}}
+
+" Command Declarations {{{
+
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('webxml', 0)
+
+" }}}
 
 " vim:ft=vim:fdm=marker

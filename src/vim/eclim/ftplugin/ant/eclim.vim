@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/search.html
+"   see http://eclim.sourceforge.net/vim/java/ant/index.html
 "
 " License:
 "
@@ -23,26 +23,38 @@
 " }}}
 
 " Global Variables {{{
-if !exists("g:EclimJavaSearchMapping")
-  let g:EclimJavaSearchMapping = 1
+
+if !exists("g:EclimAntValidate")
+  let g:EclimAntValidate = 1
 endif
+
+" }}}
+
+" Options {{{
+
+setlocal completefunc=eclim#java#ant#complete#CodeComplete
+
+" }}}
+
+" Autocmds {{{
+
+if g:EclimAntValidate
+  augroup eclim_xml
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('ant', 1)
+  augroup END
+endif
+
 " }}}
 
 " Command Declarations {{{
-if !exists(":JavaSearch")
-  command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
-    \ JavaSearch :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
+
+if !exists(":AntDoc")
+  command -buffer -nargs=? AntDoc :call eclim#java#ant#doc#FindDoc('<args>')
 endif
-if !exists(":JavaSearchContext")
-  command -buffer JavaSearchContext
-    \ :call eclim#java#search#SearchAndDisplay('java_search', '')
-endif
-if !exists(":JavaDocSearch")
-  command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
-    \ JavaDocSearch :call eclim#java#search#SearchAndDisplay('java_docsearch', '<args>')
-endif
+
+command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('ant', 0)
+
 " }}}
 
 " vim:ft=vim:fdm=marker

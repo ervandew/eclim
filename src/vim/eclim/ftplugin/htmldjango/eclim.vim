@@ -26,19 +26,13 @@ runtime indent/html.vim
 runtime ftplugin/html/eclim.vim
 
 " Global Variables {{{
+
 if !exists('g:HtmlDjangoCompleteEndTag')
   let g:HtmlDjangoCompleteEndTag = 1
 endif
 if !exists('g:HtmlDjangoUserBodyElements')
   let g:HtmlDjangoUserBodyElements = []
 endif
-" }}}
-
-" Mappings {{{
-if g:HtmlDjangoCompleteEndTag
-  imap <buffer> <silent> e <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
-endif
-" }}}
 
 let g:HtmlDjangoBodyElements = [
     \ ['block', 'endblock'],
@@ -66,5 +60,23 @@ if exists("b:match_words")
     let b:match_words .= ',' . pattern
   endfor
 endif
+
+" }}}
+
+" Mappings {{{
+
+if g:HtmlDjangoCompleteEndTag
+  imap <buffer> <silent> e <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
+endif
+
+" }}}
+
+" Command Declarations {{{
+
+if !exists(':DjangoFind')
+  command -buffer DjangoFind :call eclim#python#django#find#TemplateFind()
+endif
+
+" }}}
 
 " vim:ft=vim:fdm=marker
