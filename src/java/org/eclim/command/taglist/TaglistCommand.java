@@ -126,8 +126,10 @@ public class TaglistCommand
     CommandExecutor process = CommandExecutor.execute(args, 10000);
     if(process.getReturnCode() == -1){
       process.destroy();
+      logger.error("ctags command timed out.");
       throw new RuntimeException("ctags command timed out.");
     }else if(process.getReturnCode() > 0){
+      logger.error("ctags error: " + process.getErrorMessage());
       throw new RuntimeException("ctags error: " + process.getErrorMessage());
     }
 

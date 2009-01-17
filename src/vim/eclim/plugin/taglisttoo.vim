@@ -192,138 +192,176 @@ if !exists(':TlistToo')
 else
   if !exists("g:tlist_ant_settings")
     let g:tlist_ant_settings = {
-        \ 'p': 'project',
-        \ 'i': 'import',
-        \ 'r': 'property',
-        \ 't': 'target'
+        \ 'lang': 'ant', 'tags': {
+          \ 'p': 'project',
+          \ 'i': 'import',
+          \ 'r': 'property',
+          \ 't': 'target'
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_commonsvalidator_settings")
-    let g:tlist_commonsvalidator_settings = {'c': 'constant', 'f': 'form'}
+    let g:tlist_commonsvalidator_settings = {
+        \ 'lang': 'commonsvalidator', 'tags': {'c': 'constant', 'f': 'form'}
+      \ }
   endif
 
   if !exists("g:tlist_dtd_settings")
-    let g:tlist_dtd_settings = {'e': 'element'}
+    let g:tlist_dtd_settings = {'lang': 'dtd', 'tags': {'e': 'element'}}
   endif
 
   if !exists("g:tlist_eclimhelp_settings")
-    let g:tlist_eclimhelp_settings = {'s': 'section', 'a': 'anchor'}
+    let g:tlist_eclimhelp_settings = {
+        \ 'lang': 'eclimhelp', 'tags': {'s': 'section', 'a': 'anchor'}
+      \ }
   endif
 
   if !exists("g:tlist_forrestdocument_settings")
-    let g:tlist_forrestdocument_settings = {'s': 'section'}
+    let g:tlist_forrestdocument_settings = {
+        \ 'lang': 'forrestdocument', 'tags': {'s': 'section'}
+      \ }
   endif
 
   if !exists("g:tlist_forreststatus_settings")
-    let g:tlist_forreststatus_settings = {'t': 'todo', 'r': 'release'}
+    let g:tlist_forreststatus_settings = {
+        \ 'lang': 'forreststatus', 'tags': {'t': 'todo', 'r': 'release'}
+      \ }
   endif
 
   "if !exists("g:tlist_help_settings")
-  "  let g:tlist_help_settings = {'a': 'anchor'}
+  "  let g:tlist_help_settings = {'lang': 'help', 'tags': {'a': 'anchor'}}
   "endif
 
   if !exists("g:tlist_hibernate_settings")
     let g:tlist_hibernate_settings = {
-        \ 't': 'typedef',
-        \ 'f': 'filter-def',
-        \ 'i': 'import',
-        \ 'q': 'query',
-        \ 's': 'sql-query',
-        \ 'c': 'class',
-        \ 'j': 'joined-subclass'
+        \ 'lang': 'hibernate', 'tags': {
+          \ 't': 'typedef',
+          \ 'f': 'filter-def',
+          \ 'i': 'import',
+          \ 'q': 'query',
+          \ 's': 'sql-query',
+          \ 'c': 'class',
+          \ 'j': 'joined-subclass'
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_html_settings")
-    let g:tlist_html_settings = {'a': 'anchor', 'i': 'id', 'f': 'function'}
+    let g:tlist_html_settings = {
+        \ 'lang': 'html', 'tags': {'a': 'anchor', 'i': 'id', 'f': 'function'}
+      \ }
   endif
 
   if !exists("g:tlist_htmldjango_settings")
-    let g:tlist_htmldjango_settings = {'a': 'anchor', 'i': 'id', 'f': 'function'}
+    let g:tlist_htmldjango_settings = {
+        \ 'lang': 'htmldjango', 'tags': {'a': 'anchor', 'i': 'id', 'f': 'function'}
+      \ }
   endif
 
   if !exists("g:tlist_javascript_settings")
-    let g:tlist_javascript_settings = {'o': 'object', 'f': 'function'}
+    let g:tlist_javascript_settings = {
+        \ 'lang': 'javascript', 'tags': {'o': 'object', 'f': 'function'}
+      \ }
   endif
 
   if !exists("g:tlist_junitresult_settings")
-    let g:tlist_junitresult_settings = {'t': 'testcase', 'o': 'output'}
+    let g:tlist_junitresult_settings = {
+        \ 'lang': 'junitresult', 'tags': {'t': 'testcase', 'o': 'output'}
+      \ }
   endif
 
   if !exists("g:tlist_jproperties_settings")
-    let g:tlist_jproperties_settings = {'p': 'property'}
+    let g:tlist_jproperties_settings = {
+        \ 'lang': 'jproperties', 'tags': {'p': 'property'}
+      \ }
   endif
 
   if !exists("g:tlist_log4j_settings")
     let g:tlist_log4j_settings = {
-        \ 'a': 'appender',
-        \ 'c': 'category',
-        \ 'l': 'logger',
-        \ 'r': 'root',
+        \ 'lang': 'log4j', 'tags': {
+          \ 'a': 'appender',
+          \ 'c': 'category',
+          \ 'l': 'logger',
+          \ 'r': 'root',
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_php_settings")
     let g:tlist_php_settings = {
-        \ 'i': 'interface',
-        \ 'c': 'class',
-        \ 'f': 'function',
+        \ 'lang': 'php', 'tags': {
+          \ 'i': 'interface',
+          \ 'c': 'class',
+          \ 'f': 'function',
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_rst_settings")
-    let g:tlist_rst_settings = {'s': 'section', 'a': 'anchor'}
+    let g:tlist_rst_settings = {
+        \ 'lang': 'rst', 'tags': {'s': 'section', 'a': 'anchor'}
+      \ }
   endif
 
   if !exists("g:tlist_spring_settings")
-    let g:tlist_spring_settings = {'i': 'import', 'a': 'alias', 'b': 'bean'}
+    let g:tlist_spring_settings = {
+        \ 'lang': 'spring', 'tags': {'i': 'import', 'a': 'alias', 'b': 'bean'}
+      \ }
   endif
 
   if !exists("g:tlist_sql_settings")
     let g:tlist_sql_settings = {
-        \ 'g': 'group / role',
-        \ 'r': 'role',
-        \ 'u': 'user',
-        \ 'm': 'user',
-        \ 'p': 'tablespace',
-        \ 'z': 'tablespace',
-        \ 's': 'schema',
-        \ 't': 'table',
-        \ 'v': 'view',
-        \ 'q': 'sequence',
-        \ 'x': 'trigger',
-        \ 'f': 'function',
-        \ 'c': 'procedure'
+        \ 'lang': 'sql', 'tags': {
+          \ 'g': 'group / role',
+          \ 'r': 'role',
+          \ 'u': 'user',
+          \ 'm': 'user',
+          \ 'p': 'tablespace',
+          \ 'z': 'tablespace',
+          \ 's': 'schema',
+          \ 't': 'table',
+          \ 'v': 'view',
+          \ 'q': 'sequence',
+          \ 'x': 'trigger',
+          \ 'f': 'function',
+          \ 'c': 'procedure'
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_tld_settings")
-    let g:tlist_tld_settings = {'t': 'tag'}
+    let g:tlist_tld_settings = {'lang': 'tld', 'tags': {'t': 'tag'}}
   endif
 
   if !exists("g:tlist_webxml_settings")
     let g:tlist_webxml_settings = {
-        \ 'p': 'context-param',
-        \ 'f': 'filter',
-        \ 'i': 'filter-mapping',
-        \ 'l': 'listener',
-        \ 's': 'servlet',
-        \ 'v': 'servlet-mapping'
+        \ 'lang': 'webxml', 'tags': {
+          \ 'p': 'context-param',
+          \ 'f': 'filter',
+          \ 'i': 'filter-mapping',
+          \ 'l': 'listener',
+          \ 's': 'servlet',
+          \ 'v': 'servlet-mapping'
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_wsdl_settings")
     let g:tlist_wsdl_settings = {
-        \ 't': 'types',
-        \ 'm': 'messages',
-        \ 'p': 'ports',
-        \ 'b': 'bindings'
+        \ 'lang': 'wsdl', 'tags': {
+          \ 't': 'types',
+          \ 'm': 'messages',
+          \ 'p': 'ports',
+          \ 'b': 'bindings'
+        \ }
       \ }
   endif
 
   if !exists("g:tlist_xsd_settings")
-    let g:tlist_xsd_settings = {'e': 'elements', 't': 'types'}
+    let g:tlist_xsd_settings = {
+        \ 'lang': 'xsd', 'tags': {'e': 'elements', 't': 'types'}
+      \ }
   endif
 endif
 " }}}

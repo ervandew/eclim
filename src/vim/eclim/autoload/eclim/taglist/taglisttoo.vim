@@ -39,292 +39,345 @@ endif
 " Language Settings {{{
 " assembly language
 let s:tlist_def_asm_settings = {
-    \ 'd': 'define',
-    \ 'l': 'label',
-    \ 'm': 'macro',
-    \ 't': 'type'
+    \ 'lang': 'asm', 'tags': {
+      \ 'd': 'define',
+      \ 'l': 'label',
+      \ 'm': 'macro',
+      \ 't': 'type'
+    \ }
   \ }
 
 " aspperl language
 let s:tlist_def_aspperl_settings = {
-    \ 'f': 'function',
-    \ 's': 'sub',
-    \ 'v': 'variable'
+    \ 'lang': 'asp', 'tags': {
+      \ 'f': 'function',
+      \ 's': 'sub',
+      \ 'v': 'variable'
+    \ }
   \ }
 
 " aspvbs language
 let s:tlist_def_aspvbs_settings = {
-    \ 'f': 'function',
-    \ 's': 'sub',
-    \ 'v': 'variable'
+    \ 'lang': 'asp', 'tags': {
+      \ 'f': 'function',
+      \ 's': 'sub',
+      \ 'v': 'variable'
+    \ }
   \ }
 
 " awk language
-let s:tlist_def_awk_settings = {'f': 'function'}
+let s:tlist_def_awk_settings = {'lang': 'awk', 'tags': {'f': 'function'}}
 
 " beta language
 let s:tlist_def_beta_settings = {
-    \ 'f': 'fragment',
-    \ 's': 'slot',
-    \ 'v': 'pattern'
+    \ 'lang': 'beta', 'tags': {
+      \ 'f': 'fragment',
+      \ 's': 'slot',
+      \ 'v': 'pattern'
+    \ }
   \ }
 
 " c language
 let s:tlist_def_c_settings = {
-    \ 'd': 'macro',
-    \ 'g': 'enum',
-    \ 's': 'struct',
-    \ 'u': 'union',
-    \ 't': 'typedef',
-    \ 'v': 'variable',
-    \ 'f': 'function'
+    \ 'lang': 'c', 'tags': {
+      \ 'd': 'macro',
+      \ 'g': 'enum',
+      \ 's': 'struct',
+      \ 'u': 'union',
+      \ 't': 'typedef',
+      \ 'v': 'variable',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " c++ language
 let s:tlist_def_cpp_settings = {
-    \ 'n': 'namespace',
-    \ 'v': 'variable',
-    \ 'd': 'macro',
-    \ 't': 'typedef',
-    \ 'c': 'class',
-    \ 'g': 'enum',
-    \ 's': 'struct',
-    \ 'u': 'union',
-    \ 'f': 'function'
+    \ 'lang': 'c++', 'tags': {
+      \ 'n': 'namespace',
+      \ 'v': 'variable',
+      \ 'd': 'macro',
+      \ 't': 'typedef',
+      \ 'c': 'class',
+      \ 'g': 'enum',
+      \ 's': 'struct',
+      \ 'u': 'union',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " c# language
 let s:tlist_def_cs_settings = {
-    \ 'd': 'macro',
-    \ 't': 'typedef',
-    \ 'n': 'namespace',
-    \ 'c': 'class',
-    \ 'E': 'event',
-    \ 'g': 'enum',
-    \ 's': 'struct',
-    \ 'i': 'interface',
-    \ 'p': 'properties',
-    \ 'm': 'method'
+    \ 'lang': 'c#', 'tags': {
+      \ 'd': 'macro',
+      \ 't': 'typedef',
+      \ 'n': 'namespace',
+      \ 'c': 'class',
+      \ 'E': 'event',
+      \ 'g': 'enum',
+      \ 's': 'struct',
+      \ 'i': 'interface',
+      \ 'p': 'properties',
+      \ 'm': 'method'
+    \ }
   \ }
 
 " cobol language
 let s:tlist_def_cobol_settings = {
-    \ 'd': 'data',
-    \ 'f': 'file',
-    \ 'g': 'group',
-    \ 'p': 'paragraph',
-    \ 'P': 'program',
-    \ 's': 'section'
+    \ 'lang': 'cobol', 'tags': {
+      \ 'd': 'data',
+      \ 'f': 'file',
+      \ 'g': 'group',
+      \ 'p': 'paragraph',
+      \ 'P': 'program',
+      \ 's': 'section'
+    \ }
   \ }
 
 " eiffel language
 let s:tlist_def_eiffel_settings = {
-    \ 'c': 'class',
-    \ 'f': 'feature'
+    \ 'lang': 'eiffel', 'tags': {
+      \ 'c': 'class',
+      \ 'f': 'feature'
+    \ }
   \ }
 
 " erlang language
 let s:tlist_def_erlang_settings = {
-    \ 'd': 'macro',
-    \ 'r': 'record',
-    \ 'm': 'module',
-    \ 'f': 'function'
+    \ 'lang': 'erlang', 'tags': {
+      \ 'd': 'macro',
+      \ 'r': 'record',
+      \ 'm': 'module',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " expect (same as tcl) language
 let s:tlist_def_expect_settings = {
-    \ 'c': 'class',
-    \ 'f': 'method',
-    \ 'p': 'procedure'
+    \ 'lang': 'tcl', 'tags': {
+      \ 'c': 'class',
+      \ 'f': 'method',
+      \ 'p': 'procedure'
+    \ }
   \ }
 
 " fortran language
 let s:tlist_def_fortran_settings = {
-    \ 'p': 'program',
-    \ 'b': 'block data',
-    \ 'c': 'common',
-    \ 'e': 'entry',
-    \ 'i': 'interface',
-    \ 'k': 'type',
-    \ 'l': 'label',
-    \ 'm': 'module',
-    \ 'n': 'namelist',
-    \ 't': 'derived',
-    \ 'v': 'variable',
-    \ 'f': 'function',
-    \ 's': 'subroutine'
+    \ 'lang': 'fortran', 'tags': {
+      \ 'p': 'program',
+      \ 'b': 'block data',
+      \ 'c': 'common',
+      \ 'e': 'entry',
+      \ 'i': 'interface',
+      \ 'k': 'type',
+      \ 'l': 'label',
+      \ 'm': 'module',
+      \ 'n': 'namelist',
+      \ 't': 'derived',
+      \ 'v': 'variable',
+      \ 'f': 'function',
+      \ 's': 'subroutine'
+    \ }
   \ }
 
 " HTML language
 let s:tlist_def_html_settings = {
-    \ 'a': 'anchor',
-    \ 'f': 'javascript function'
+    \ 'lang': 'html', 'tags': {
+      \ 'a': 'anchor',
+      \ 'f': 'javascript function'
+    \ }
   \ }
 
 " java language
 let s:tlist_format_java = 'eclim#taglist#lang#java#FormatJava'
 let s:tlist_def_java_settings = {
-    \ 'p': 'package',
-    \ 'c': 'class',
-    \ 'i': 'interface',
-    \ 'f': 'field',
-    \ 'm': 'method'
+    \ 'lang': 'java', 'tags': {
+      \ 'p': 'package',
+      \ 'c': 'class',
+      \ 'i': 'interface',
+      \ 'f': 'field',
+      \ 'm': 'method'
+    \ }
   \ }
 
 let s:tlist_format_javascript = 'eclim#taglist#lang#javascript#FormatJavascript'
 let s:tlist_def_javascript_settings = {
-    \ 'o': 'object',
-    \ 'm': 'member',
-    \ 'f': 'function',
+    \ 'lang': 'javascript', 'tags': {
+      \ 'o': 'object',
+      \ 'm': 'member',
+      \ 'f': 'function',
+    \ }
   \ }
 
-" javascript language
-let s:tlist_def_javascript_settings = {'f': 'function'}
-
 " lisp language
-let s:tlist_def_lisp_settings = {'f': 'function'}
+let s:tlist_def_lisp_settings = {'lang': 'lisp', 'tags': {'f': 'function'}}
 
 " lua language
-let s:tlist_def_lua_settings = {'f': 'function'}
+let s:tlist_def_lua_settings = {'lang': 'lua', 'tags': {'f': 'function'}}
 
 " makefiles
-let s:tlist_def_make_settings = {'m': 'macro'}
+let s:tlist_def_make_settings = {'lang': 'make', 'tags': {'m': 'macro'}}
 
 " pascal language
 let s:tlist_def_pascal_settings = {
-    \ 'f': 'function',
-    \ 'p': 'procedure'
+    \ 'lang': 'pascal', 'tags': {
+      \ 'f': 'function',
+      \ 'p': 'procedure'
+    \ }
   \ }
 
 " perl language
 let s:tlist_def_perl_settings = {
-    \ 'c': 'constant',
-    \ 'l': 'label',
-    \ 'p': 'package',
-    \ 's': 'subroutine'
+    \ 'lang': 'perl', 'tags': {
+      \ 'c': 'constant',
+      \ 'l': 'label',
+      \ 'p': 'package',
+      \ 's': 'subroutine'
+    \ }
   \ }
 
 " php language
 let s:tlist_format_php = 'eclim#taglist#lang#php#FormatPhp'
 let s:tlist_def_php_settings = {
-    \ 'c': 'class',
-    \ 'd': 'constant',
-    \ 'v': 'variable',
-    \ 'f': 'function'
+    \ 'lang': 'php', 'tags': {
+      \ 'c': 'class',
+      \ 'd': 'constant',
+      \ 'v': 'variable',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " python language
 let s:tlist_format_python = 'eclim#taglist#lang#python#FormatPython'
 let s:tlist_def_python_settings = {
-    \ 'c': 'class',
-    \ 'm': 'member',
-    \ 'f': 'function'
+    \ 'lang': 'python', 'tags': {
+      \ 'c': 'class',
+      \ 'm': 'member',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " rexx language
-let s:tlist_def_rexx_settings = {'s': 'subroutine'}
+let s:tlist_def_rexx_settings = {'lang': 'rexx', 'tags': {'s': 'subroutine'}}
 
 " ruby language
 let s:tlist_def_ruby_settings = {
-    \ 'c': 'class',
-    \ 'f': 'method',
-    \ 'F': 'function',
-    \ 'm': 'singleton method'
+    \ 'lang': 'ruby', 'tags': {
+      \ 'c': 'class',
+      \ 'f': 'method',
+      \ 'F': 'function',
+      \ 'm': 'singleton method'
+    \ }
   \ }
 
 " scheme language
 let s:tlist_def_scheme_settings = {
-    \ 's': 'set',
-    \ 'f': 'function'
+    \ 'lang': 'scheme', 'tags': {
+      \ 's': 'set',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " shell language
-let s:tlist_def_sh_settings = {'f': 'function'}
+let s:tlist_def_sh_settings = {'lang': 'sh', 'tags': {'f': 'function'}}
 
 " C shell language
-let s:tlist_def_csh_settings = {'f': 'function'}
+let s:tlist_def_csh_settings = {'lang': 'sh', 'tags': {'f': 'function'}}
 
 " Z shell language
-let s:tlist_def_zsh_settings = {'f': 'function'}
+let s:tlist_def_zsh_settings = {'lang': 'sh', 'tags': {'f': 'function'}}
 
 " slang language
 let s:tlist_def_slang_settings = {
-    \ 'n': 'namespace',
-    \ 'f': 'function'
+    \ 'lang': 'slang', 'tags': {
+      \ 'n': 'namespace',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " sml language
 let s:tlist_def_sml_settings = {
-    \ 'e': 'exception',
-    \ 'c': 'functor',
-    \ 's': 'signature',
-    \ 'r': 'structure',
-    \ 't': 'type',
-    \ 'v': 'value',
-    \ 'f': 'function'
+    \ 'lang': 'sml', 'tags': {
+      \ 'e': 'exception',
+      \ 'c': 'functor',
+      \ 's': 'signature',
+      \ 'r': 'structure',
+      \ 't': 'type',
+      \ 'v': 'value',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " sql language
 let s:tlist_def_sql_settings = {
-    \ 'c': 'cursor',
-    \ 'F': 'field',
-    \ 'P': 'package',
-    \ 'r': 'record',
-    \ 's': 'subtype',
-    \ 't': 'table',
-    \ 'T': 'trigger',
-    \ 'v': 'variable',
-    \ 'f': 'function',
-    \ 'p': 'procedure'
+    \ 'lang': 'sql', 'tags': {
+      \ 'c': 'cursor',
+      \ 'F': 'field',
+      \ 'P': 'package',
+      \ 'r': 'record',
+      \ 's': 'subtype',
+      \ 't': 'table',
+      \ 'T': 'trigger',
+      \ 'v': 'variable',
+      \ 'f': 'function',
+      \ 'p': 'procedure'
+    \ }
   \ }
 
 " tcl language
 let s:tlist_def_tcl_settings = {
-    \ 'c': 'class',
-    \ 'f': 'method',
-    \ 'm': 'method',
-    \ 'p': 'procedure'
+    \ 'lang': 'tcl', 'tags': {
+      \ 'c': 'class',
+      \ 'f': 'method',
+      \ 'm': 'method',
+      \ 'p': 'procedure'
+    \ }
   \ }
 
 " vera language
 let s:tlist_def_vera_settings = {
-    \ 'c': 'class',
-    \ 'd': 'macro',
-    \ 'e': 'enumerator',
-    \ 'f': 'function',
-    \ 'g': 'enum',
-    \ 'm': 'member',
-    \ 'p': 'program',
-    \ 'P': 'prototype',
-    \ 't': 'task',
-    \ 'T': 'typedef',
-    \ 'v': 'variable',
-    \ 'x': 'externvar'
+    \ 'lang': 'vera', 'tags': {
+      \ 'c': 'class',
+      \ 'd': 'macro',
+      \ 'e': 'enumerator',
+      \ 'f': 'function',
+      \ 'g': 'enum',
+      \ 'm': 'member',
+      \ 'p': 'program',
+      \ 'P': 'prototype',
+      \ 't': 'task',
+      \ 'T': 'typedef',
+      \ 'v': 'variable',
+      \ 'x': 'externvar'
+    \ }
   \ }
 
 "verilog language
 let s:tlist_def_verilog_settings = {
-    \ 'm': 'module',
-    \ 'c': 'constant',
-    \ 'P': 'parameter',
-    \ 'e': 'event',
-    \ 'r': 'register',
-    \ 't': 'task',
-    \ 'w': 'write',
-    \ 'p': 'port',
-    \ 'v': 'variable',
-    \ 'f': 'function'
+    \ 'lang': 'verilog', 'tags': {
+      \ 'm': 'module',
+      \ 'c': 'constant',
+      \ 'P': 'parameter',
+      \ 'e': 'event',
+      \ 'r': 'register',
+      \ 't': 'task',
+      \ 'w': 'write',
+      \ 'p': 'port',
+      \ 'v': 'variable',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " vim language
 let s:tlist_def_vim_settings = {
-    \ 'a': 'autocmds',
-    \ 'v': 'variable',
-    \ 'f': 'function'
+    \ 'lang': 'vim', 'tags': {
+      \ 'a': 'autocmds',
+      \ 'v': 'variable',
+      \ 'f': 'function'
+    \ }
   \ }
 
 " yacc language
-let s:tlist_def_yacc_settings = {'l': 'label'}
+let s:tlist_def_yacc_settings = {'lang': 'yacc', 'tags': {'l': 'label'}}
 " }}}
 
 " AutoOpen() {{{
@@ -423,17 +476,17 @@ function! s:ProcessTags()
   if s:FileSupported(expand('%:p'), &ft)
     if exists('g:tlist_{&ft}_settings')
       let settings = g:tlist_{&ft}_settings
-      let types = join(keys(g:tlist_{&ft}_settings), '')
+      let types = join(keys(settings.tags), '')
     else
       let settings = s:tlist_def_{&ft}_settings
-      let types = join(keys(s:tlist_def_{&ft}_settings), '')
+      let types = join(keys(settings.tags), '')
     endif
 
     let file = substitute(expand('%:p'), '\', '/', 'g')
     let command = g:Tlist_Ctags_Cmd . ' -f - --format=2 --excmd=pattern ' .
         \ '--fields=nks --sort=no --language-force=<lang> ' .
         \ '--<lang>-types=<types> "<file>"'
-    let command = substitute(command, '<lang>', &ft, 'g')
+    let command = substitute(command, '<lang>', settings.lang, 'g')
     let command = substitute(command, '<types>', types, 'g')
     let command = substitute(command, '<file>', file, '')
 
@@ -466,9 +519,10 @@ function! s:ProcessTags()
     endfor
 
     if exists('s:tlist_format_{&ft}')
-      exec 'call s:Window(settings, tags, ' . s:tlist_format_{&ft} . '(settings, tags))'
+      exec 'call s:Window(settings.tags, tags, ' .
+        \ s:tlist_format_{&ft} . '(settings.tags, tags))'
     else
-      call s:Window(settings, tags, s:FormatDefault(settings, tags))
+      call s:Window(settings.tags, tags, s:FormatDefault(settings.tags, tags))
     endif
   else
     call s:Window({}, tags, [[],[]])
