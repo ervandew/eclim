@@ -174,7 +174,7 @@ function! eclim#java#import#InsertImports(classes)
       while class < ic
         let line += 1
         if s:CompareClasses(ic, class)
-          call insert(imports, 'import ' . class . ';', index)
+          call insert(imports, 'import ' . class . ';', lastimport + 1)
         else
           call insert(imports, 'import ' . class . ';', lastimport + 1)
           if prevclass != '' && !s:CompareClasses(prevclass, class)
