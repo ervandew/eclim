@@ -173,18 +173,23 @@ function! eclim#java#import#InsertImports(classes)
       let ic = substitute(import, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
       while class < ic
         let line += 1
-        call insert(imports, 'import ' . class . ';', lastimport + 1)
-        call remove(classes, 0)
-        if prevclass != '' && !s:CompareClasses(prevclass, class)
-          call insert(imports, '', lastimport + 1)
-          let line += 1
-          let index += 1
-          let lastimport += 1
-        elseif prevclass == '' && !s:CompareClasses(prevclass, class)
-          call insert(imports, '', 1)
-          let line += 1
-          let index += 1
+        if s:CompareClasses(ic, class)
+          call insert(imports, 'import ' . class . ';', index)
+        else
+          call insert(imports, 'import ' . class . ';', lastimport + 1)
+          if prevclass != '' && !s:CompareClasses(prevclass, class)
+            call insert(imports, '', lastimport + 1)
+            let line += 1
+            let index += 1
+            let lastimport += 1
+          elseif prevclass == '' && !s:CompareClasses(prevclass, class)
+            call insert(imports, '', 1)
+            let line += 1
+            let index += 1
+          endif
         endif
+
+        call remove(classes, 0)
         if len(classes) == 0
           break
         endif
