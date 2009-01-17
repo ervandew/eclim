@@ -39,8 +39,8 @@ Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.core.filesystem,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
+  org.eclipse.jface.text,
   org.eclipse.team.core,
   org.eclipse.text,
-  org.eclipse.ui,
-  org.eclipse.jface.text
+  org.eclipse.ui
 Eclipse-AutoStart: true
