@@ -216,6 +216,21 @@ TODO {{{
       the current file.
     - :C[pp]IncludeHierarchy command which opens a buffer showing hierarchy of each
       header file included in the current source file.
+
+    - :CCorrect
+
+    - make file validation
+    - make code completion
+
+    Notes:
+      For .cproject support, since the file is so damn big, may want to provide
+      a simplier interface for adding src dirs, include paths, etc.
+      - setting / validating
+        ICProject.setRawPathEntries
+        ICModelStatus: CoreModel.validatePathEntry(ICProject, IPathEntry, boolean, boolean)
+
+      Searching
+      - org.eclipse.cdt.internal.ui.search.actions.FindAction
   }}}
 
   Css {{{
