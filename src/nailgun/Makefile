@@ -6,7 +6,8 @@
 # Marty Lamb
 
 CC=gcc
-WIN32_CC=/usr/local/mingw32/bin/mingw32-gcc
+#WIN32_CC=/usr/local/mingw32/bin/mingw32-gcc
+WIN32_CC=mingw32-gcc
 CFLAGS=-Wall -pedantic -s -O3
 
 ng: src/c/ng.c
@@ -17,7 +18,7 @@ ng.exe: src/c/ng.c
 	# any idea why the command line is so sensitive to the order of
 	# the arguments?  If CFLAGS is at the beginning, it won't link.
 	${WIN32_CC} -o ng.exe src/c/ng.c -lwsock32 -O3 ${CFLAGS}
-	
+
 clean:
 	@echo "If you have a Windows binary, 'make clean' won't delete it."
 	@echo "You must remove this manually.  Most users won't have MinGW"
