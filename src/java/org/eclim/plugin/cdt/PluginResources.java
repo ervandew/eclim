@@ -20,8 +20,13 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.cdt.project.CProjectManager;
+
 import org.eclim.project.ProjectManagement;
 import org.eclim.project.ProjectNatureFactory;
+import org.eclipse.cdt.core.CCProjectNature;
+
+import org.eclipse.cdt.core.CProjectNature;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -46,13 +51,14 @@ public class PluginResources
   {
     super.initialize(name);
 
-    ProjectNatureFactory.addNature("c", "org.eclipse.cdt.core.cnature");
-    ProjectNatureFactory.addNature("cpp", "org.eclipse.cdt.core.ccnature");
+    ProjectNatureFactory.addNature("c", CProjectNature.C_NATURE_ID);
+    ProjectNatureFactory.addNature("c++", CCProjectNature.CC_NATURE_ID);
+    ProjectNatureFactory.addNature("cpp", CCProjectNature.CC_NATURE_ID);
 
-    //ProjectManagement.addProjectManager(
-    //    "org.eclipse.cdt.core.cnature", new CProjectManager());
-    //ProjectManagement.addProjectManager(
-    //    "org.eclipse.cdt.core.ccnature", new CppProjectManager());
+    ProjectManagement.addProjectManager(
+        CProjectNature.C_NATURE_ID, new CProjectManager());
+    ProjectManagement.addProjectManager(
+        CCProjectNature.CC_NATURE_ID, new CProjectManager());
 
     registerCommand("c_src_update",
         org.eclim.plugin.cdt.command.src.SrcUpdateCommand.class);

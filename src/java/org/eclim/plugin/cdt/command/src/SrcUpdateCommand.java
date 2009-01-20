@@ -79,27 +79,29 @@ public class SrcUpdateCommand
     }else{
       IProject project = ProjectUtils.getProject(projectName);
       ICProject cproject = CoreModel.getDefault().create(project);
-      Path path = new Path(ProjectUtils.getFilePath(project, file));
-      ITranslationUnit src =
-        CoreModelUtil.findTranslationUnitForLocation(path, cproject);
+      if(cproject.exists()){
+        Path path = new Path(ProjectUtils.getFilePath(project, file));
+        ITranslationUnit src =
+          CoreModelUtil.findTranslationUnitForLocation(path, cproject);
 
-      List<IProblem> problems = getProblems(src);
-      ArrayList<Error> errors = new ArrayList<Error>();
-      String filename = src.getResource().getRawLocation().toOSString();
-      FileOffsets offsets = FileOffsets.compile(filename);
-      for(IProblem problem : problems){
-        int[] lineColumn =
-          offsets.offsetToLineColumn(problem.getSourceStart());
+        List<IProblem> problems = getProblems(src);
+        ArrayList<Error> errors = new ArrayList<Error>();
+        String filename = src.getResource().getRawLocation().toOSString();
+        FileOffsets offsets = FileOffsets.compile(filename);
+        for(IProblem problem : problems){
+          int[] lineColumn =
+            offsets.offsetToLineColumn(problem.getSourceStart());
 
-        errors.add(new Error(
-            problem.getMessage(),
-            filename,
-            lineColumn[0],
-            lineColumn[1],
-            problem.isWarning()));
+          errors.add(new Error(
+              problem.getMessage(),
+              filename,
+              lineColumn[0],
+              lineColumn[1],
+              problem.isWarning()));
+        }
+
+        return ErrorFilter.instance.filter(commandLine, errors);
       }
-
-      return ErrorFilter.instance.filter(commandLine, errors);
     }
     return StringUtils.EMPTY;
   }
