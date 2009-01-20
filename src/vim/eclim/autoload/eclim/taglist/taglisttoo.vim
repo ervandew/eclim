@@ -401,8 +401,12 @@ function! eclim#taglist#taglisttoo#AutoOpen()
   endif
 endfunction " }}}
 
-" Taglist() {{{
-function! eclim#taglist#taglisttoo#Taglist()
+" Taglist([action]) {{{
+" action
+"   - not supplied (or -1): toggle
+"   - 1: open
+"   - 0: close
+function! eclim#taglist#taglisttoo#Taglist(...)
   if !exists('g:Tlist_Ctags_Cmd')
     call eclim#util#EchoError('Unable to find a version of ctags installed.')
     return
@@ -413,28 +417,34 @@ function! eclim#taglist#taglisttoo#Taglist()
     return
   endif
 
-  let winnum = bufwinnr(g:TagList_title)
-  if winnum != -1
-    exe winnum . 'wincmd w'
-    call s:CloseTaglist()
-    return
+  let action = len(a:000) ? a:000[0] : -1
+
+  if action == -1 || action == 0
+    let winnum = bufwinnr(g:TagList_title)
+    if winnum != -1
+      exe winnum . 'wincmd w'
+      call s:CloseTaglist()
+      return
+    endif
   endif
 
-  call s:ProcessTags()
-  call s:StartAutocmds()
+  if action == -1 || action == 1
+    call s:ProcessTags()
+    call s:StartAutocmds()
 
-  augroup taglisttoo
-    autocmd!
-    autocmd BufUnload __Tag_List__ call s:Cleanup()
-    autocmd CursorHold * call s:ShowCurrentTag()
-  augroup END
+    augroup taglisttoo
+      autocmd!
+      autocmd BufUnload __Tag_List__ call s:Cleanup()
+      autocmd CursorHold * call s:ShowCurrentTag()
+    augroup END
+  endif
 endfunction " }}}
 
 " s:StartAutocmds() {{{
 function! s:StartAutocmds()
   augroup taglisttoo_file
     autocmd!
-    autocmd BufEnter,BufWritePost *
+    autocmd BufEnter,BufWritePost,FileType *
       \ if bufwinnr(g:TagList_title) != -1 |
       \   call s:ProcessTags() |
       \ endif
