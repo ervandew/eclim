@@ -181,11 +181,19 @@ class NGSession extends Thread {
       boolean keepAlive = false;
       boolean byeChunk = false;
       // END CHANGE
+
+      // EV: defining streams here so they can be cleaned up in finally block.
+      java.io.DataInputStream sockin = null;
+      java.io.OutputStream sockout = null;
+      // END CHANGE
       try {
         // buffer for reading headers
         byte[] lbuf = new byte[5];
-        java.io.DataInputStream sockin = new java.io.DataInputStream(socket.getInputStream());
-        java.io.OutputStream sockout = socket.getOutputStream();
+
+        // EV: defined outside of try to permit cleanup in finally.
+        sockin = new java.io.DataInputStream(socket.getInputStream());
+        sockout = socket.getOutputStream();
+        // END CHANGE
 
         // client info - command line arguments and environment
         List remoteArgs = new java.util.ArrayList();
@@ -348,15 +356,42 @@ class NGSession extends Thread {
           }
         }
 
-        // EV: change by Anton for persistant connections.
+        // EV: moved to finally clause
         //socket.close();
-        if (!keepAlive) {
-          socket.close();
-        }
-        // END CHANGE
 
       } catch (Throwable t) {
         t.printStackTrace();
+
+      // EV: adding a finally clause to cleanup properly.
+      } finally {
+        if (!keepAlive) {
+
+          // EV: handle odd case where, when executed from vim, extra byte(s)
+          // are sent (a '.' being the culprit so far), which if unread, will
+          // result in a ECONNRESET on the client side.
+          try{
+            byte[] leftovers = new byte[8];
+            while(sockin.read(leftovers) > 0){
+              // noop
+            }
+          }catch(Exception ignore){
+          }
+
+          try{
+            sockout.close();
+          }catch(Exception ignore){
+          }
+          try{
+            sockin.close();
+          }catch(Exception ignore){
+          }
+
+          try{
+            socket.close();
+          }catch(Exception ex){
+            ex.printStackTrace();
+          }
+        }
       }
 
 // EV: CHANGE
