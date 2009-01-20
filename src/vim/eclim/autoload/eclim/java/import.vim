@@ -173,20 +173,35 @@ function! eclim#java#import#InsertImports(classes)
       let ic = substitute(import, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
       while class < ic
         let line += 1
-        if s:CompareClasses(ic, class)
+        " grouped with the previous import, insert just after it.
+        if prevclass != '' && s:CompareClasses(prevclass, class)
           call insert(imports, 'import ' . class . ';', lastimport + 1)
+
+        " grouped with the current import, insert just before it
+        elseif s:CompareClasses(ic, class)
+          " edge case for 0 package level comparison, insert after the
+          " previous import.
+          if g:EclimJavaImportPackageSeparationLevel == 0
+            call insert(imports, 'import ' . class . ';', lastimport + 1)
+          else
+            call insert(imports, 'import ' . class . ';', index)
+          endif
+
+        " not grouped with others.
         else
           call insert(imports, 'import ' . class . ';', lastimport + 1)
-          if prevclass != '' && !s:CompareClasses(prevclass, class)
-            call insert(imports, '', lastimport + 1)
-            let line += 1
-            let index += 1
-            let lastimport += 1
-          elseif prevclass == '' && !s:CompareClasses(prevclass, class)
+
+          " first import insert at the top, create the separator below
+          if prevclass == ''
             call insert(imports, '', 1)
-            let line += 1
-            let index += 1
+
+          " separator above
+          else
+            call insert(imports, '', lastimport + 1)
+            let lastimport += 1
           endif
+          let line += 1
+          let index += 1
         endif
 
         call remove(classes, 0)
@@ -199,9 +214,11 @@ function! eclim#java#import#InsertImports(classes)
         let prevclass = class
         let class = classes[0]
       endwhile
+
       if len(classes) == 0
         break
       endif
+
       let lastimport = index
       let prevclass = ic
     endif
