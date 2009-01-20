@@ -444,7 +444,7 @@ endfunction " }}}
 function! s:StartAutocmds()
   augroup taglisttoo_file
     autocmd!
-    autocmd BufEnter,BufWritePost,FileType *
+    autocmd BufEnter,BufWritePost *
       \ if bufwinnr(g:TagList_title) != -1 |
       \   call s:ProcessTags() |
       \ endif
@@ -500,9 +500,19 @@ function! s:ProcessTags()
     let command = substitute(command, '<types>', types, 'g')
     let command = substitute(command, '<file>', file, '')
 
-    let results = split(eclim#util#System(command), '\n')
+    let response = eclim#util#System(command)
+    let results = split(response, '\n')
     if v:shell_error
+      call eclim#util#EchoError('taglist failed with error code: ' . v:shell_error)
       return
+    endif
+
+    " for some reason, vim may truncate the output of system, leading to only
+    " a partial taglist.
+    let truncated = 0
+    let values = s:ParseOutputLine(results[-1])
+    if len(values) < 5
+      let truncated = 1
     endif
 
     if g:Tlist_Sort_Type == 'name'
@@ -510,10 +520,7 @@ function! s:ProcessTags()
     endif
 
     for result in results
-      let pre = substitute(result, '\(.\{-}\)\t\/\^.*', '\1', '')
-      let pattern = substitute(result, '.\{-}\(\/\^.*\$\/;"\).*', '\1', '')
-      let post = substitute(result, '.*\$\/;"\t', '\1', '')
-      let values = split(pre, '\t') + [pattern] + split(post, '\t')
+      let values = s:ParseOutputLine(result)
 
       " filter false positives found in comments.
       if values[-1] =~ 'line:[0-9]\+'
@@ -525,6 +532,12 @@ function! s:ProcessTags()
         endif
       endif
 
+      " exit if we run into apparent bug in vim that truncates the response
+      " from system()
+      if len(values) < 5
+        break
+      endif
+
       call add(tags, values)
     endfor
 
@@ -534,6 +547,15 @@ function! s:ProcessTags()
     else
       call s:Window(settings.tags, tags, s:FormatDefault(settings.tags, tags))
     endif
+
+    " if vim truncated the output, then add a note in the taglist indicating
+    " the the list has been truncated.
+    if truncated
+      setlocal modifiable
+      call append(line('$'), '')
+      call append(line('$'), 'Warning: taglist truncated.')
+      setlocal nomodifiable
+    endif
   else
     call s:Window({}, tags, [[],[]])
   endif
@@ -541,6 +563,14 @@ function! s:ProcessTags()
   winc p
 
   call s:ShowCurrentTag()
+endfunction " }}}
+
+" s:ParseOutputLine(line) {{{
+function! s:ParseOutputLine(line)
+  let pre = substitute(a:line, '\(.\{-}\)\t\/\^.*', '\1', '')
+  let pattern = substitute(a:line, '.\{-}\(\/\^.*\$\/;"\).*', '\1', '')
+  let post = substitute(a:line, '.*\$\/;"\t', '', '')
+  return split(pre, '\t') + [pattern] + split(post, '\t')
 endfunction " }}}
 
 " s:FormatDefault(types, tags) {{{
@@ -568,6 +598,10 @@ endfunction " }}}
 
 " s:JumpToTag() {{{
 function! s:JumpToTag()
+  if line('.') > len(b:taglisttoo_content[0])
+    return
+  endif
+
   let index = b:taglisttoo_content[0][line('.') - 1]
   if index == -1
     return
@@ -665,6 +699,7 @@ function! s:Window(types, tags, content)
   for value in values(a:types)
     exec 'syn keyword TagListKeyword ' . value
   endfor
+  syn match TagListKeyword /^Warning:/
 
   let b:taglisttoo_content = a:content
   let b:taglisttoo_tags = a:tags
