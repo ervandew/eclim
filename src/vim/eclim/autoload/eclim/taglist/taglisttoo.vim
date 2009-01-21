@@ -507,39 +507,41 @@ function! s:ProcessTags()
       return
     endif
 
-    " for some reason, vim may truncate the output of system, leading to only
-    " a partial taglist.
     let truncated = 0
-    let values = s:ParseOutputLine(results[-1])
-    if len(values) < 5
-      let truncated = 1
-    endif
-
-    if g:Tlist_Sort_Type == 'name'
-      call sort(results)
-    endif
-
-    for result in results
-      let values = s:ParseOutputLine(result)
-
-      " filter false positives found in comments.
-      if values[-1] =~ 'line:[0-9]\+'
-        exec 'let lnum = ' . substitute(values[-1], 'line:\([0-9]\+\).*', '\1', '')
-        let line = getline(lnum)
-        let col = len(line) - len(substitute(line, '^\s*', '', '')) + 1
-        if synIDattr(synID(lnum, col, 1), "name") =~ '\([Cc]omment\|[Ss]tring\)'
-          continue
-        endif
-      endif
-
-      " exit if we run into apparent bug in vim that truncates the response
-      " from system()
+    if len(results)
+      " for some reason, vim may truncate the output of system, leading to only
+      " a partial taglist.
+      let values = s:ParseOutputLine(results[-1])
       if len(values) < 5
-        break
+        let truncated = 1
       endif
 
-      call add(tags, values)
-    endfor
+      if g:Tlist_Sort_Type == 'name'
+        call sort(results)
+      endif
+
+      for result in results
+        let values = s:ParseOutputLine(result)
+
+        " filter false positives found in comments.
+        if values[-1] =~ 'line:[0-9]\+'
+          exec 'let lnum = ' . substitute(values[-1], 'line:\([0-9]\+\).*', '\1', '')
+          let line = getline(lnum)
+          let col = len(line) - len(substitute(line, '^\s*', '', '')) + 1
+          if synIDattr(synID(lnum, col, 1), "name") =~ '\([Cc]omment\|[Ss]tring\)'
+            continue
+          endif
+        endif
+
+        " exit if we run into apparent bug in vim that truncates the response
+        " from system()
+        if len(values) < 5
+          break
+        endif
+
+        call add(tags, values)
+      endfor
+    endif
 
     if exists('s:tlist_format_{&ft}')
       exec 'call s:Window(settings.tags, tags, ' .
