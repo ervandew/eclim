@@ -97,10 +97,17 @@ function! eclim#display#maximize#MinimizeWindow(...)
 
   " first loop through and mark the buffers
   for winnum in args
-    call setwinvar(winnum, "minimized", 1)
+    let val = getwinvar(winnum, 'minimized')
+    let minimized = type(val) == 0 ? !val : 1
+    if !minimized
+      call setwinvar(winnum, '&winfixheight', 0)
+      call setwinvar(winnum, '&winfixwidth', 1)
+    endif
+    call setwinvar(winnum, 'minimized', minimized)
   endfor
 
-  call s:Reminimize()
+  call eclim#util#ExecWithoutAutocmds('call eclim#display#maximize#Reminimize()')
+  call s:EnableMinimizeAutoCommands()
 endfunction " }}}
 
 " MaximizeUpdate() {{{
@@ -203,7 +210,8 @@ function! s:EnableMinimizeAutoCommands()
     autocmd!
     autocmd BufReadPost quickfix
       \ call eclim#display#maximize#AdjustFixedWindow(g:MaximizeQuickfixHeight, 0)
-    autocmd BufWinEnter,WinEnter * nested call s:Reminimize()
+    autocmd BufWinEnter,WinEnter * nested
+      \ call eclim#util#ExecWithoutAutocmds('call eclim#display#maximize#Reminimize()')
   augroup END
 endfunction " }}}
 
@@ -234,8 +242,7 @@ endfunction " }}}
 " Reminimize() {{{
 " Invoked when changing windows to ensure that any minimized windows are
 " returned to their minimized state.
-function s:Reminimize()
-  call s:DisableMinimizeAutoCommands()
+function eclim#display#maximize#Reminimize()
   let curwinnum = winnr()
   let winend = winnr('$')
   let winnum = 1
@@ -302,7 +309,6 @@ function s:Reminimize()
   winc =
 
   call s:RestoreFixedWindows()
-  call s:EnableMinimizeAutoCommands()
 endfunction " }}}
 
 " RestoreWindows(maximized) {{{
@@ -560,10 +566,11 @@ function! eclim#display#maximize#NavigateWindows(wincmd)
   exec a:wincmd
   while exists('w:minimized') && w:minimized && winnr() != lastwindow
     let lastwindow = winnr()
+    let lastfile = expand('%')
     exec a:wincmd
   endwhile
 
-  if exists('w:minimized') && w:minimized
+  if exists('w:minimized') && w:minimized && winnr() != start
     exec start . 'wincmd w'
   endif
 endfunction " }}}
