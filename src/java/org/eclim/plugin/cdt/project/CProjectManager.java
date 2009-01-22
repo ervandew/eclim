@@ -26,13 +26,10 @@ import org.eclim.project.ProjectManager;
 
 import org.eclipse.cdt.core.model.CoreModel;
 
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescriptionManager;
 
 import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
-
-import org.eclipse.cdt.managedbuilder.buildproperties.IBuildProperty;
 
 import org.eclipse.cdt.managedbuilder.core.IBuilder;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
@@ -42,6 +39,7 @@ import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.internal.core.Configuration;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
+import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
 
 import org.eclipse.core.resources.IProject;
 
@@ -65,8 +63,9 @@ public class CProjectManager
     ICProjectDescription desc = manager.createProjectDescription(project, false);
     ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
 
+    // FIXME: handle user specified toolchain alias
     Map toolChains = ManagedBuildManager.getExtensionToolChainMap();
-    IToolChain toolChain = null;
+    IToolChain toolchain = null;
     for (Object key : toolChains.keySet()){
       IToolChain tc = (IToolChain)toolChains.get(key);
       if (tc.isAbstract() ||
@@ -77,37 +76,43 @@ public class CProjectManager
         continue;
       }
       if (tc.getId().endsWith(".base")){
-        toolChain = tc;
+        toolchain = tc;
       }
     }
 
-    IConfiguration[] configs = ManagedBuildManager.getExtensionConfigurations(
-        toolChain,
-        "org.eclipse.cdt.build.core.buildArtefactType",
-        "org.eclipse.cdt.build.core.buildArtefactType.exe");
-
-    ManagedProject mproject =
-      new ManagedProject(project, configs[0].getProjectType());
+    ManagedProject mproject = new ManagedProject(desc);
     info.setManagedProject(mproject);
 
-    for(IConfiguration cf : configs){
-      String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
-      Configuration config =
-        new Configuration(mproject, (Configuration)cf, id, false, true);
-      CConfigurationData data = config.getConfigurationData();
-      ICConfigurationDescription cfgDes =
-        desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
-      config.setConfigurationDescription(cfgDes);
-      config.exportArtifactInfo();
+    // TODO: support other project types:
+    //       executable, shared library, static library
 
-      IBuilder builder = config.getEditableBuilder();
-      if (builder != null) {
-        builder.setManagedBuildOn(true);
+    String tcId = (toolchain == null) ? "0" : toolchain.getId();
+    String cfgName = (toolchain == null) ? "Default" : toolchain.getName();
+    Configuration cfg = new Configuration(
+        mproject,
+        (ToolChain)toolchain,
+        ManagedBuildManager.calculateChildId(tcId, null),
+        cfgName);
+
+    IBuilder builder = cfg.getEditableBuilder();
+    if (builder != null) {
+      if(builder.isInternalBuilder()){
+        IConfiguration prefCfg =
+          ManagedBuildManager.getPreferenceConfiguration(false);
+        IBuilder prefBuilder = prefCfg.getBuilder();
+        cfg.changeBuilder(
+            prefBuilder,
+            ManagedBuildManager.calculateChildId(cfg.getId(), null),
+            prefBuilder.getName());
+        builder = cfg.getEditableBuilder();
+        builder.setBuildPath(null);
       }
-
-      config.setName(cf.getName());
-      config.setArtifactName(project.getName());
+      builder.setManagedBuildOn(false);
     }
+    cfg.setArtifactName(project.getName());
+    CConfigurationData data = cfg.getConfigurationData();
+    desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
+
     manager.setProjectDescription(project, desc);
   }
 
