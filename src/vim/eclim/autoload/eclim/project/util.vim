@@ -44,6 +44,7 @@ let s:command_projects = '-command project_list'
 let s:command_project_info = '-command project_info -p "<project>"'
 let s:command_project_settings = '-command project_settings -p "<project>"'
 let s:command_project_setting = s:command_project_settings . ' -s <setting>'
+let s:command_project_update = '-command project_update -p "<project>"'
 let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
 let s:command_open = '-command project_open -p "<project>"'
 let s:command_close = '-command project_close -p "<project>"'
@@ -277,6 +278,23 @@ function! eclim#project#util#ProjectSettings(project)
       autocmd! BufWriteCmd <buffer>
       autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
     augroup END
+  endif
+endfunction " }}}
+
+" ProjectUpdate() {{{
+" Executes a project update which may also validate nature specific resource
+" file.
+function! eclim#project#util#ProjectUpdate()
+  let name = eclim#project#util#GetCurrentProjectName()
+  let command = substitute(s:command_project_update, '<project>', name, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result =~ '|'
+    let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+    call eclim#util#SetLocationList(errors)
+  else
+    call eclim#util#ClearLocationList()
+    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 

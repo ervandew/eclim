@@ -48,7 +48,7 @@ runtime indent/xml.vim
 
 augroup eclim_xml
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#classpath#UpdateClasspath()
+  autocmd BufWritePost <buffer> call eclim#project#util#ProjectUpdate()
 augroup END
 
 " Command Declarations {{{

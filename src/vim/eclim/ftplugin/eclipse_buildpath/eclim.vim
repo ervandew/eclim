@@ -39,7 +39,7 @@ runtime indent/xml.vim
 
 augroup eclim_xml
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#php#buildpath#UpdateBuildPath()
+  autocmd BufWritePost <buffer> call eclim#project#util#ProjectUpdate()
 augroup END
 
 " Command Declarations {{{

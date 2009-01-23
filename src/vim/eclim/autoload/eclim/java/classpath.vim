@@ -24,7 +24,6 @@
 
 " Script Variables {{{
   let s:command_variables = '-command java_classpath_variables'
-  let s:command_update = '-command project_update -p "<project>"'
   let s:command_variable_create =
     \ '-command java_classpath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
@@ -53,22 +52,6 @@ function! s:MoveToInsertPosition()
   let end = search('</classpath\s*>', 'wn')
   if line('.') < start || line('.') >= end
     call cursor(end - 1, 1)
-  endif
-endfunction " }}}
-
-" UpdateClasspath() {{{
-" Updates the classpath on the server w/ the changes made to the current file.
-function! eclim#java#classpath#UpdateClasspath()
-  let name = eclim#project#util#GetCurrentProjectName()
-  let command = substitute(s:command_update, '<project>', name, '')
-
-  let result = eclim#ExecuteEclim(command)
-  if result =~ '|'
-    let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
-    call eclim#util#SetLocationList(errors)
-  else
-    call eclim#util#ClearLocationList()
-    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 

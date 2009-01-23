@@ -23,7 +23,6 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_update = '-command project_update -p "<project>"'
   let s:command_variables = '-command php_buildpath_variables'
   let s:command_variable_create =
     \ '-command php_buildpath_variable_create -n "<name>" -p "<path>"'
@@ -59,30 +58,6 @@ function! s:MoveToInsertPosition()
     if end > start
       call cursor(end, 1)
     endif
-  endif
-endfunction " }}}
-
-" UpdateBuildPath() {{{
-" Updates the build path on the server w/ the changes made to the current file.
-function! eclim#php#buildpath#UpdateBuildPath()
-  let name = eclim#project#util#GetCurrentProjectName()
-  let command = substitute(s:command_update, '<project>', name, '')
-
-  let result = eclim#ExecuteEclim(command)
-  if result =~ '|'
-    let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
-    for error in errors
-      let path = error.filename
-      let error.filename = expand('%')
-      let lnum = search("['\"]" . path . "['\"]", 'nw')
-      if lnum > 0
-        let error.lnum = lnum
-      endif
-    endfor
-    call eclim#util#SetLocationList(errors)
-  else
-    call eclim#util#ClearLocationList()
-    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 
