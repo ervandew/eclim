@@ -45,7 +45,7 @@ endif
 
 " disable plain xml validation.
 augroup eclim_xml
-  autocmd!
+  autocmd! BufWritePost <buffer>
 augroup END
 
 " }}}

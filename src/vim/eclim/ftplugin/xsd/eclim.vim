@@ -34,14 +34,14 @@ endif
 
 if g:EclimXsdValidate
   augroup eclim_xsd_validate
-    autocmd!
-    autocmd BufWritePost *.xsd call eclim#common#validate#Validate('xsd', 1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('xsd', 1)
   augroup END
 endif
 
 " disable plain xml validation.
 augroup eclim_xml
-  autocmd!
+  autocmd! BufWritePost <buffer>
 augroup END
 
 " }}}
