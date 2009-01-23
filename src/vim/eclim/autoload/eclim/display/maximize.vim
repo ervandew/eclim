@@ -101,7 +101,7 @@ function! eclim#display#maximize#MinimizeWindow(...)
     let minimized = type(val) == 0 ? !val : 1
     if !minimized
       call setwinvar(winnum, '&winfixheight', 0)
-      call setwinvar(winnum, '&winfixwidth', 1)
+      call setwinvar(winnum, '&winfixwidth', 0)
     endif
     call setwinvar(winnum, 'minimized', minimized)
   endfor
