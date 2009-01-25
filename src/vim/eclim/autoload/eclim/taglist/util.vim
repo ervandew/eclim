@@ -23,13 +23,20 @@
 " }}}
 
 " FormatType(tags, type, values, lines, content, indent) {{{
+" tags: The list of tag results from eclim/ctags.
+" type: The display name of the tag type we are formatting.
+" values: List of tag results for the type.
+" lines: The list representing the mapping of content entries to tag info.
+" content: The list representing the display that we will add to.
+" indent: The indentation to use on the display (string).
 function! eclim#taglist#util#FormatType(tags, type, values, lines, content, indent)
   if len(a:values) > 0
     call add(a:content, a:indent . a:type)
     call add(a:lines, -1)
 
     for value in a:values
-      call add(a:content, "\t" . a:indent . eclim#taglist#util#GetVisibility(value) . value[0])
+      let visibility = eclim#taglist#util#GetVisibility(value)
+      call add(a:content, "\t" . a:indent . visibility . value[0])
       call add(a:lines, index(a:tags, value))
     endfor
   endif

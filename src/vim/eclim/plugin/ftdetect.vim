@@ -37,6 +37,8 @@ autocmd BufRead .classpath
   \ call <SID>SetXmlFileType({'classpath': 'eclipse_classpath'})
 autocmd BufRead .buildpath
   \ call <SID>SetXmlFileType({'buildpath': 'eclipse_buildpath'})
+autocmd BufRead .cproject
+  \ call <SID>SetXmlFileType({'cproject': 'eclipse_cproject'})
 autocmd BufRead ivy.xml
   \ call <SID>SetXmlFileType({'ivy-module': 'ivy'})
 autocmd BufRead pom.xml

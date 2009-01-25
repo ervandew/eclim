@@ -64,6 +64,12 @@ public class PluginResources
         org.eclim.plugin.cdt.command.src.SrcUpdateCommand.class);
     registerCommand("c_complete",
         org.eclim.plugin.cdt.command.complete.CodeCompleteCommand.class);
+    registerCommand("c_project_configs",
+        org.eclim.plugin.cdt.command.project.ConfigurationsCommand.class);
+    registerCommand("c_project_src",
+        org.eclim.plugin.cdt.command.project.SourceEntryCommand.class);
+    registerCommand("c_project_paths",
+        org.eclim.plugin.cdt.command.project.PathsCommand.class);
   }
 
   /**

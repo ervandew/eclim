@@ -109,6 +109,19 @@ let s:tlist_def_cpp_settings = {
     \ }
   \ }
 
+" cdt cproject files
+let s:tlist_format_eclipse_cproject = 'eclim#taglist#lang#cproject#FormatCProject'
+let s:tlist_def_eclipse_cproject_settings = {
+    \ 'lang': 'cproject', 'tags': {
+      \ 'c': 'configuration',
+      \ 'e': 'entry',
+      \ 't': 'toolchain',
+      \ 'l': 'tool',
+      \ 'i': 'include',
+      \ 's': 'symbol',
+    \ }
+  \ }
+
 " c# language
 let s:tlist_def_cs_settings = {
     \ 'lang': 'c#', 'tags': {

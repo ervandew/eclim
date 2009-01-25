@@ -39,6 +39,7 @@ public class Options
 {
   public static final String COMMAND_OPTION = "command";
 
+  public static final String ACTION_OPTION = "a";
   public static final String APPLY_OPTION = "a";
   public static final String BASEDIR_OPTION = "b";
   public static final String BASETYPE_OPTION = "b";
@@ -47,7 +48,9 @@ public class Options
   public static final String CONTEXT_OPTION = "x";
   public static final String DELIMETER_OPTION = "d";
   public static final String DEPENDS_OPTION = "d";
+  public static final String DIR_OPTION = "d";
   public static final String ENCODING_OPTION = "e";
+  public static final String EXCLUDES_OPTION = "e";
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
