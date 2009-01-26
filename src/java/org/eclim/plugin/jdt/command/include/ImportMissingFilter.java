@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -47,6 +48,7 @@ public class ImportMissingFilter
       out.append("{'type': '").append(result.getType()).append("',");
       out.append("'imports': [");
       List<ImportResult> imports = result.getImports();
+      Collections.sort(imports);
       for(int jj = 0; jj < imports.size(); jj++){
         ImportResult ir = imports.get(jj);
         if(jj > 0){

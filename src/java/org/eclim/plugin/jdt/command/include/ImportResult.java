@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  * @author Eric Van Dewoestine
  */
 public class ImportResult
+  implements Comparable<ImportResult>
 {
   private String element;
   private int type;
@@ -73,5 +74,14 @@ public class ImportResult
       .append(getElement(), other.getElement())
       .append(getType(), other.getType())
       .isEquals();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Comparable#compareTo(T)
+   */
+  public int compareTo(ImportResult other)
+  {
+    return getElement().compareTo(other.getElement());
   }
 }
