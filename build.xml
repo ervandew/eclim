@@ -28,6 +28,17 @@
   <property environment="env"/>
   <property file="src/ant/build.properties"/>
 
+  <!-- require ant 1.7.1 or greater -->
+  <if>
+    <not> <antversion atleast="1.7.1"/> </not>
+    <then>
+      <echo>
+        To build eclim, you must have ant 1.7.1 or greater.
+      </echo>
+      <fail message="incompatible ant version."/>
+    </then>
+  </if>
+
   <!-- determine if eclipse home is set -->
   <if>
     <or>
@@ -70,7 +81,7 @@
       <include name="plugins/org.eclipse.*"/>
     </dirset>
     <!-- for gentoo -->
-    <fileset dir="/usr/share/">
+    <fileset dir="/usr/share/" erroronmissingdir="false">
       <include name="swt-*/lib/*.jar"/>
     </fileset>
   </path>
