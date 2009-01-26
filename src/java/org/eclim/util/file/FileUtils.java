@@ -322,6 +322,24 @@ public class FileUtils
   }
 
   /**
+   * Removes the trailing slash if it exists.
+   * <pre>
+   * FileUtils.removeTrailingSlash("/a/b/c/") :  "/a/b/c"
+   * FileUtils.removeTrailingSlash("/a/b/c") :  "/a/b/c"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The path with any trialing slash removed.
+   */
+  public static String removeTrailingSlash(String path)
+  {
+    if (path.endsWith("/")){
+      return path.substring(0, path.length() - 1);
+    }
+    return path;
+  }
+
+  /**
    * Convert all path separators for the given path to unix style separators.
    *
    * @param path The path.
