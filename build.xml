@@ -109,9 +109,11 @@
   </target>
 
   <!--
-    - Main target for building the eclipse plugins.
+    - Only builds the eclipse and vim plugins.
     -->
-  <target name="build" depends="init" description="Builds the eclipse plugins.">
+  <target name="build" depends="build.eclipse, build.vim"/>
+
+  <target name="build.eclipse" depends="init">
     <property name="deprecation" value="false"/>
     <property name="compilerargs" value=""/>
 
@@ -217,7 +219,9 @@
 
     <!-- build vimplugin -->
     <antcall target="vimplugin"/>
+  </target>
 
+  <target name="build.vim" depends="init">
     <!-- prepare vim files -->
     <delete dir="${build.vimfiles}/eclim"/>
     <delete dir="${build.vimfiles}/plugin"/>
@@ -238,9 +242,11 @@
   <!--
     - Target to deploy eclipse and vim plugins.
     -->
-  <target name="deploy" depends="build"
-      description="Deploy the eclipse and vim plugins.">
+  <target name="deploy" depends="deploy.eclipse, deploy.vim"
+      description="(Default) Build and deploy the eclipse and vim plugins."/>
 
+  <target name="deploy.eclipse" depends="build.eclipse"
+      description="Build and deploy the eclipse plugins.">
     <delete includeemptydirs="true">
       <fileset dir="${eclipse.home}">
         <include name="plugins/org.eclim*/**/*"/>
@@ -277,7 +283,10 @@
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
       <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
     </replace>
+  </target>
 
+  <target name="deploy.vim" depends="build.vim"
+      description="Build and deploy the vim plugins.">
     <!-- deploy vim files -->
     <delete includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
