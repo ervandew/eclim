@@ -29,6 +29,9 @@ simplistic version control system that is updated every time you save a file.
 Using this local history, you can view diffs against previously saved versions
 of your file or revert to one of those revisions.
 
+By default, as long as eclimd is running, any writes you make to a file inside
+of a project will automatically be saved as a local history revision.
+
 .. _\:History:
 
 **:History** - Opens a temporary buffer showing the local history for the
@@ -43,6 +46,20 @@ specified key bindings:
 
 Configuration
 --------------
+
+Eclipse Settings
+
+- When writing to the local history, eclim simply proxies the request to
+  eclipse, so all eclipse settings are honored.  To modify these settings you
+  currently have to do so inside of the eclipse gui.  First shut down eclimd if
+  you are running a headless version, then open the eclipse gui and navigate
+  to:
+
+  ::
+
+    Window > Preferences > General > Workspace > Local History
+
+  And there you can edit your settings as necessary.
 
 Vim Settings
 
