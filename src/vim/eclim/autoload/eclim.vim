@@ -34,10 +34,6 @@
     let g:EclimShowErrors = 1
   endif
 
-  if !exists("g:EclimSystemWorkaround")
-    let g:EclimSystemWorkaround = 0
-  endif
-
   if !exists("g:EclimHome")
     " set via installer
     "${vim.eclim.home}"
@@ -89,24 +85,9 @@ function! eclim#ExecuteEclim(args)
 
   call eclim#util#EchoDebug("eclim: executing (Ctrl-C to cancel)...")
 
-  " determine whether to use system call or exec with a temp file
-  let use_exec = 0
-  if g:EclimSystemWorkaround
-    for cmd in s:exec_commands
-      if command =~ '-command\s\+' . cmd
-        let use_exec = 1
-        break
-      endif
-    endfor
-  endif
-
   " execute the command.
-  if use_exec
-    let result = eclim#ExecuteTempFile(command)
-  else
-    let result = eclim#util#System(command)
-    let result = substitute(result, '\(.*\)\n$', '\1', '')
-  endif
+  let result = eclim#util#System(command)
+  let result = substitute(result, '\(.*\)\n$', '\1', '')
 
   call eclim#util#Echo(' ')
 
@@ -133,21 +114,6 @@ function! eclim#ExecuteEclim(args)
     endif
     return 0
   endif
-
-  return result
-endfunction " }}}
-
-" ExecuteTempFile(command) {{{
-" Exectue the supplied command piping results to a temp file.
-function! eclim#ExecuteTempFile(command)
-  let tempfile = tempname()
-
-  let command = '!' . a:command . ' > ' . tempfile . ' 2>&1'
-  call eclim#util#Exec(command)
-  let result = join(readfile(tempfile), "\n")
-
-  call delete(tempfile)
-  redraw!
 
   return result
 endfunction " }}}
