@@ -16,10 +16,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project name="logger" default="logger" basedir="../..">
+
   <!--
-    - Target for creating distributable files.
+    - Target for creating logger jar file.
     -->
-  <target name="logger" description="Creates the logger jar file.">
+  <target name="logger">
     <property file="src/ant/logger.properties"/>
 
     <delete>
@@ -59,4 +60,5 @@
       <exclude name="org/apache/log4j/or/sax"/>
     </jar>
   </target>
+
 </project>

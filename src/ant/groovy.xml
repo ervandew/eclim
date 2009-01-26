@@ -18,7 +18,11 @@
   Author: Eric Van Dewoestine
 -->
 <project name="groovy" default="groovy" basedir="../..">
-  <target name="groovy" description="Creates the groovy jar files.">
+
+  <!--
+    - Target for creating groovy jar.
+    -->
+  <target name="groovy">
     <property file="src/ant/groovy.properties"/>
 
     <delete>
@@ -36,4 +40,5 @@
       <exclude name="META-INF"/>
     </jar>
   </target>
+
 </project>

@@ -37,7 +37,7 @@
     - Task for starting eclimd and running unit tests.
     -->
   <target name="test" depends="deploy"
-      description="Starts the eclim server and runs the junit tests">
+      description="Run the junit and vunit tests">
     <path id="junit">
       <pathelement location="lib/junit-4.1.jar"/>
     </path>
