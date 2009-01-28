@@ -23,11 +23,18 @@ import org.eclim.command.Options;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
+import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.CProjectNature;
 
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
+
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IOption;
+import org.eclipse.cdt.managedbuilder.core.ITool;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
 import org.eclipse.core.resources.IProject;
 
@@ -54,31 +61,108 @@ public class ConfigurationsCommand
     IProject project = ProjectUtils.getProject(projectName);
     ICProjectDescription desc =
       CCorePlugin.getDefault().getProjectDescription(project, false);
-    ICConfigurationDescription[] configs = desc.getConfigurations();
+    ICConfigurationDescription[] cconfigs = desc.getConfigurations();
 
     StringBuffer out = new StringBuffer();
-    for(ICConfigurationDescription config : configs){
-      out.append("Config: ").append(config.getName()).append('\n');
+    for(ICConfigurationDescription cconfig : cconfigs){
+      out.append("Config: ").append(cconfig.getName()).append('\n');
 
-      ICSourceEntry[] sources = config.getSourceEntries();
+      // source entries
+      ICSourceEntry[] sources = cconfig.getSourceEntries();
       if (sources.length > 0){
-        out.append("\tSources:\n");
+        out.append("\n\tSources: |add|\n");
         for(ICSourceEntry entry : sources){
+          String dirname = entry.getFullPath().removeFirstSegments(1).toString();
+          if (dirname.length() == 0){
+            dirname = "/";
+          }
           out.append("\t\tdir:      ")
-            .append(entry.getFullPath().removeFirstSegments(1));
+            .append(dirname)
+            .append('\n');
           IPath[] excludes = entry.getExclusionPatterns();
           if (excludes.length > 0){
-            out.append('\n');
             String[] patterns = new String[excludes.length];
             for (int ii = 0; ii < excludes.length; ii++){
               patterns[ii] = excludes[ii].toString();
             }
-            out.append("\t\texcludes: ").append(StringUtils.join(patterns, ','));
+            out.append("\t\texcludes: ")
+              .append(StringUtils.join(patterns, ','))
+              .append('\n');
+          }
+        }
+      }
+
+      IConfiguration config =
+        ManagedBuildManager.getConfigurationForDescription(cconfig);
+      ITool[] tools = config.getTools();
+      if(tools.length > 0){
+        for(ITool tool : tools){
+          if (!tool.isEnabled() || !acceptTool(project, tool)){
+            continue;
+          }
+          out.append("\n\tTool: ").append(tool.getName()).append('\n');
+
+          // includes
+          IOption option = getOptionByType(tool, IOption.INCLUDE_PATH);
+          if(option != null){
+            String[] includes = option.getIncludePaths();
+            if(includes.length > 0){
+              out.append("\n\t\tIncludes: |add|\n");
+              for(String include : includes){
+                out.append("\t\t\t").append(include).append('\n');
+              }
+            }
+          }
+
+          // symbols
+          option = getOptionByType(tool, IOption.PREPROCESSOR_SYMBOLS);
+          if(option != null){
+            String[] symbols = option.getDefinedSymbols();
+            if(symbols.length > 0){
+              out.append("\n\t\tSymbols: |add|\n");
+              for(String symbol : symbols){
+                out.append("\t\t\t").append(symbol).append('\n');
+              }
+            }
           }
         }
       }
     }
 
     return out.toString();
+  }
+
+  private boolean acceptTool(IProject project, ITool tool)
+    throws Exception
+  {
+    switch (tool.getNatureFilter()) {
+      case ITool.FILTER_C:
+        if (project.hasNature(CProjectNature.C_NATURE_ID) &&
+            !project.hasNature(CCProjectNature.CC_NATURE_ID))
+        {
+          return true;
+        }
+        break;
+      case ITool.FILTER_CC:
+        if (project.hasNature(CCProjectNature.CC_NATURE_ID)) {
+          return true;
+        }
+        break;
+      case ITool.FILTER_BOTH:
+        return true;
+    }
+    return false;
+  }
+
+  private IOption getOptionByType(ITool tool, int type)
+    throws Exception
+  {
+    IOption[] options = tool.getOptions();
+    for(IOption option : options){
+      if(option.getValueType() == type){
+        return option;
+      }
+    }
+    return null;
   }
 }
