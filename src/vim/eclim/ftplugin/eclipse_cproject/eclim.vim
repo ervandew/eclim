@@ -52,6 +52,11 @@ augroup eclim_xml
 augroup END
 
 " Command Declarations {{{
+
+if !exists(":CProjectConfigs")
+  command -nargs=0 -buffer CProjectConfigs :call eclim#c#project#Configs()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker
