@@ -22,33 +22,6 @@
 "
 " }}}
 
-" Global Variables {{{
-
-if !exists("g:EclimCValidate")
-  let g:EclimCValidate = 1
-endif
-
-" }}}
-
-" Options {{{
-
-setlocal completefunc=eclim#c#complete#CodeComplete
-
-" }}}
-
-" Autocmds {{{
-
-augroup eclim_c
-  autocmd!
-  autocmd BufWritePost <buffer> call eclim#c#util#UpdateSrcFile(0)
-augroup END
-
-" }}}
-
-" Command Declarations {{{
-
-command! -nargs=0 -buffer Validate :call eclim#c#util#UpdateSrcFile(1)
-
-" }}}
+runtime ftplugin/c/eclim.vim
 
 " vim:ft=vim:fdm=marker
