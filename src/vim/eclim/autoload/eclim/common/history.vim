@@ -28,11 +28,28 @@
 " }}}
 
 " Script Variables {{{
+let s:command_add = '-command history_add -p "<project>" -f "<file>"'
 let s:command_list = '-command history_list -p "<project>" -f "<file>"'
 let s:command_revision =
   \ '-command history_revision -p "<project>" -f "<file>" -r <revision>'
 let s:command_clear = '-command history_clear -p "<project>" -f "<file>"'
 " }}}
+
+" AddHistory() {{{
+" Adds the current state of the file to the eclipse local history (should be
+" invoked prior to saving to disk).
+function! eclim#common#history#AddHistory()
+  if filereadable(expand('%')) && !eclim#project#util#IsCurrentFileInProject(0)
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#java#util#GetFilename()
+  let command = s:command_add
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  call eclim#ExecuteEclim(command)
+endfunction " }}}
 
 " History() {{{
 " Opens a temporary buffer with a list of local history revisions.

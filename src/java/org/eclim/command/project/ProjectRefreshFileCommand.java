@@ -23,13 +23,6 @@ import org.eclim.command.Options;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclipse.core.filesystem.IFileInfo;
-import org.eclipse.core.filesystem.IFileStore;
-
-import org.eclipse.core.internal.localstore.FileSystemResourceManager;
-
-import org.eclipse.core.internal.resources.File;
-
 /**
  * Command to refresh a file in a project.
  *
@@ -48,16 +41,7 @@ public class ProjectRefreshFileCommand
     String filename = commandLine.getValue(Options.FILE_OPTION);
 
     // the act of getting the file refreshes it.
-    File file = (File)ProjectUtils.getFile(name, filename);
-
-    // update local history
-    if (file.exists()){
-      FileSystemResourceManager localManager = file.getLocalManager();
-      IFileStore store = localManager.getStore(file);
-      IFileInfo fileInfo = store.fetchInfo();
-      localManager.getHistoryStore()
-        .addState(file.getFullPath(), store, fileInfo, false);
-    }
+    ProjectUtils.getFile(name, filename);
 
     return StringUtils.EMPTY;
   }

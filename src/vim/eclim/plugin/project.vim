@@ -26,6 +26,10 @@ if !exists("g:EclimProjectRefreshFiles")
   let g:EclimProjectRefreshFiles = 1
 endif
 
+if !exists("g:EclimProjectKeepLocalHistory")
+  let g:EclimProjectKeepLocalHistory = 1
+endif
+
 let g:EclimProjectTreeTitle = 'ProjectTree_'
 
 if !exists('g:EclimProjectTreeAutoOpen')
@@ -38,10 +42,20 @@ endif
 " }}}
 
 " Auto Commands {{{
-if g:EclimProjectRefreshFiles && !has('netbeans_intg')
+
+" w/ external vim refresh is optional, w/ embedded gvim it is mandatory
+" disabling at all though is discouraged.
+if g:EclimProjectRefreshFiles || has('netbeans_intg')
   augroup eclim_refresh_files
     autocmd!
     autocmd BufWritePre * call eclim#project#util#RefreshFileBootstrap()
+  augroup END
+endif
+
+if g:EclimProjectKeepLocalHistory
+  augroup eclim_history_add
+    autocmd!
+    autocmd BufWritePre * call eclim#common#history#AddHistory()
   augroup END
 endif
 

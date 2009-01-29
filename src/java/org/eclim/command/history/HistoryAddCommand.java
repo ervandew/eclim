@@ -16,8 +16,7 @@
  */
 package org.eclim.command.history;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -25,20 +24,19 @@ import org.eclim.command.Options;
 
 import org.eclim.util.ProjectUtils;
 
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
+
+import org.eclipse.core.internal.localstore.FileSystemResourceManager;
+
 import org.eclipse.core.internal.resources.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.team.core.history.IFileRevision;
-
-import org.eclipse.team.internal.core.history.LocalFileHistory;
-
 /**
- * Command to list available local history revisions for a given file.
+ * Command to add current file state to the eclipse local history.
  *
  * @author Eric Van Dewoestine
  */
-public class HistoryListCommand
+public class HistoryAddCommand
   extends AbstractCommand
 {
   /**
@@ -48,20 +46,19 @@ public class HistoryListCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
     String filename = commandLine.getValue(Options.FILE_OPTION);
 
-    File file = (File)ProjectUtils.getFile(project, filename);
-    LocalFileHistory history =
-      new LocalFileHistory(file, false /* include current */);
-    history.refresh(new NullProgressMonitor());
-    IFileRevision[] revisions = history.getFileRevisions();
-    Arrays.sort(revisions, new Comparator<IFileRevision>(){
-      public int compare(IFileRevision r1, IFileRevision r2){
-        return (int)(r2.getTimestamp() - r1.getTimestamp());
-      }
-    });
+    File file = (File)ProjectUtils.getFile(name, filename);
 
-    return HistoryListFilter.instance.filter(commandLine, revisions);
+    // update local history
+    if (file.exists()){
+      FileSystemResourceManager localManager = file.getLocalManager();
+      IFileStore store = localManager.getStore(file);
+      IFileInfo fileInfo = store.fetchInfo();
+      localManager.getHistoryStore()
+        .addState(file.getFullPath(), store, fileInfo, false);
+    }
+    return StringUtils.EMPTY;
   }
 }

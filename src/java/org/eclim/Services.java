@@ -319,6 +319,8 @@ public class Services
       registerCommand("locate_file",
           org.eclim.command.search.LocateFileCommand.class);
 
+      registerCommand("history_add",
+          org.eclim.command.history.HistoryAddCommand.class);
       registerCommand("history_list",
           org.eclim.command.history.HistoryListCommand.class);
       registerCommand("history_revision",
