@@ -34,6 +34,10 @@ endif
 
 " Script Variables {{{
   let s:taglisttoo_ignore = g:TagList_title . '\|ProjectTree'
+
+  " used to prefer one window over another if a buffer is open in more than
+  " one window.
+  let s:taglisttoo_prevwinnr = 0
 " }}}
 
 " Language Settings {{{
@@ -448,6 +452,10 @@ function! s:StartAutocmds()
       \ if bufwinnr(g:TagList_title) != -1 |
       \   call s:ProcessTags() |
       \ endif
+    autocmd WinLeave *
+      \ if bufwinnr(g:TagList_title) != -1 |
+      \   let s:taglisttoo_prevwinnr = winnr() |
+      \ endif
   augroup END
 endfunction " }}}
 
@@ -612,7 +620,15 @@ function! s:JumpToTag()
   let tag_info = b:taglisttoo_tags[index]
 
   call s:StopAutocmds()
-  exec bufwinnr(b:taglisttoo_file_bufnr) . 'winc w'
+
+  " handle case of buffer open in multiple windows.
+  if s:taglisttoo_prevwinnr &&
+   \ winbufnr(s:taglisttoo_prevwinnr) == b:taglisttoo_file_bufnr
+    exec s:taglisttoo_prevwinnr . 'winc w'
+  else
+    exec bufwinnr(b:taglisttoo_file_bufnr) . 'winc w'
+  endif
+
   call s:StartAutocmds()
 
   let lnum = s:GetTagLineNumber(tag_info)
