@@ -71,7 +71,7 @@ public class RegexTaglist
   public void addPattern(String kind, String pattern, String replace)
     throws Exception
   {
-    addPattern(kind, pattern, replace);
+    addPattern(kind, Pattern.compile(pattern), replace);
   }
 
   /**
@@ -87,6 +87,10 @@ public class RegexTaglist
     if(kind.length() != 1){
       throw new IllegalArgumentException(
           Services.getMessage("taglist.kind.invalid", kind));
+    }
+
+    if(!pattern.pattern().endsWith("\\n")){
+      pattern = Pattern.compile(pattern.pattern() + ".*?\\n");
     }
 
     Matcher matcher = pattern.matcher(contents);
