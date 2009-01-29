@@ -75,6 +75,7 @@
     <fileset dir="${eclipse.home}">
       <include name="dropins/eclipse/plugins/org.eclipse.*.jar"/>
       <include name="plugins/org.eclipse.*.jar"/>
+      <include name="plugins/com.ibm.*.jar"/>
     </fileset>
     <dirset dir="${eclipse.home}">
       <include name="dropins/eclipse/plugins/org.eclipse.*"/>
