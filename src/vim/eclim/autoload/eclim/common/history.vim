@@ -39,7 +39,7 @@ let s:command_clear = '-command history_clear -p "<project>" -f "<file>"'
 " Adds the current state of the file to the eclipse local history (should be
 " invoked prior to saving to disk).
 function! eclim#common#history#AddHistory()
-  if filereadable(expand('%')) && !eclim#project#util#IsCurrentFileInProject(0)
+  if !filereadable(expand('%')) || !eclim#project#util#IsCurrentFileInProject(0)
     return
   endif
 
