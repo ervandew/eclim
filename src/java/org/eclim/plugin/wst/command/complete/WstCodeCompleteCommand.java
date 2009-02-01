@@ -17,7 +17,6 @@
 package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
@@ -77,7 +76,8 @@ public abstract class WstCodeCompleteCommand
       };
     }
     viewer.setDocument(model.getStructuredDocument());
-    viewer.setSelectedRange(offset, 10);
+    // note: non-zero length can break html completion.
+    viewer.setSelectedRange(offset, 0);
     return viewer;
   }
 }
