@@ -71,7 +71,13 @@ function! eclim#ExecuteEclim(command)
 
   " execute the command.
   let [retcode, result] = eclim#client#nailgun#Execute(command)
-  let result = substitute(result, '\(.*\)\n$', '\1', '')
+  let result = substitute(result, '\n$', '', '')
+
+  " not sure this is the best place handle this, but when using the python
+  " client, the result has a trailing ctrl-m on windows.
+  if has('win32') || has('win64')
+    let result = substitute(result, "\<c-m>$", '', '')
+  endif
 
   call eclim#util#Echo(' ')
 
