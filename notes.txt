@@ -2,9 +2,11 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - add proxy support to eclim
-    https://sourceforge.net/forum/message.php?msg_id=5072641
-    http://java.sun.com/j2se/1.5.0/docs/guide/net/proxies.html
+  - docs
+    - installer + proxy faq
+    - list of feature -> dependencies
+    - how to report bugs
+    - list of plugin incompatibilities
 }}}
 
 TODO {{{
@@ -539,9 +541,10 @@ NOTES {{{
                -application org.eclim.application
 
     Minimum execution of vim w/ eclim support
-      echo -c "set nocompatible\nsyntax on\nfiletype plugin on" > .vimrc.minimum
-      vim -u .vimrc.minimum
-      gvim -u .vimrc.minimum -U none
+      $ vim -u NONE -U NONE -c "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+
+      Windows
+      > "C:\Program Files\Vim\vim72\gvim" -u NONE -U NONE -c "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
 
     Helpful link for debugging plugin errors.
       http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
