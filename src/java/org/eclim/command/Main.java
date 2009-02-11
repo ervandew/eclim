@@ -17,6 +17,7 @@
 package org.eclim.command;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.commons.cli.ParseException;
 
@@ -47,7 +48,7 @@ public class Main
   public static final void main(String[] args)
   {
     try{
-      logger.debug("Main - enter");
+      logger.debug("args: " + Arrays.toString(args));
 
       if (!AbstractEclimApplication.getInstance().isHeaded()){
         // set dummy display's current thread
@@ -93,6 +94,5 @@ public class Main
       logger.debug("Main - exit on error");
       System.exit(1);
     }
-    logger.debug("Main - exit");
   }
 }
