@@ -518,7 +518,9 @@ function! eclim#project#util#GetProjectNames(...)
 
     return projects
   endif
-  return keys(eclim#project#util#GetProjects())
+  let names = keys(eclim#project#util#GetProjects())
+  call sort(names)
+  return names
 endfunction " }}}
 
 " GetProjectNatureAliases(...) {{{
