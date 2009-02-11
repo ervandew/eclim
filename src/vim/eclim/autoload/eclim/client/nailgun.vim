@@ -38,7 +38,7 @@ function eclim#client#nailgun#Execute(command)
   endif
 
   if g:EclimNailgunClient == 'python'
-    return eclim#client#python#Execute(a:command)
+    return eclim#client#python#nailgun#Execute(a:command)
   endif
 
   let command = eclim#client#nailgun#GetEclimCommand()

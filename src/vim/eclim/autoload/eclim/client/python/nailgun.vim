@@ -29,7 +29,7 @@
 " Execute(command) {{{
 " Sends to the eclimd server command, supplied as argument string.
 " Returns server's respond.
-function! eclim#client#python#Execute(command)
+function! eclim#client#python#nailgun#Execute(command)
   call s:InitClient()
   let result_viml = ""
   let retcode = 0
@@ -47,7 +47,7 @@ endfunction " }}}
 " Reconnect() {{{
 " Does unconditional reconnect of the python_if
 " (useful to manual recover from errors in the python_if)
-function! eclim#client#python#Reconnect()
+function! eclim#client#python#nailgun#Reconnect()
   call s:InitClient()
 python << PYTHONEOF
 client.reconnect()
@@ -56,7 +56,7 @@ endfunction " }}}
 
 " SetKeepAlive(value) {{{
 " Updates the in runtime value of the keepAlive flag.
-function! eclim#client#python#SetKeepAlive(value)
+function! eclim#client#python#nailgun#SetKeepAlive(value)
   call s:InitClient()
 python << PYTHONEOF
 client.keepAlive = int(vim.eval('a:value'))
@@ -65,7 +65,7 @@ endfunction " }}}
 
 " GetKeepAlive() {{{
 " Retrieves the value of the keepAlive flag.
-function! eclim#client#python#GetKeepAlive()
+function! eclim#client#python#nailgun#GetKeepAlive()
   call s:InitClient()
   let result = 0
 python << PYTHONEOF
@@ -76,7 +76,7 @@ endfunction " }}}
 
 " GetReconnectCounter() {{{
 " Retrieves the value of the reconnect counter.
-function! eclim#client#python#GetReconnectCounter()
+function! eclim#client#python#nailgun#GetReconnectCounter()
   call s:InitClient()
   let result = 0
 python << PYTHONEOF
@@ -96,7 +96,7 @@ function! s:InitClient()
 
 python << PYTHONEOF
 import sys, vim
-sys.path.append(vim.eval('s:python_dir') + '/python')
+sys.path.append(vim.eval('s:python_dir'))
 import nailgun
 
 client = nailgun.Nailgun(
