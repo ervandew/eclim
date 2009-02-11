@@ -193,11 +193,10 @@ class Nailgun(object):
     Receives until all data is read - necessary because usual recv sometimes
     returns with number of bytes read less then asked.
     """
-    thisPass = ""
-    number = 0
-    while (len(thisPass) < lenPayload):
-      thisPass = thisPass + self.socket.recv(lenPayload - len(thisPass))
-    return thisPass
+    received = ""
+    while (len(received) < lenPayload):
+      received = received + self.socket.recv(lenPayload - len(received))
+    return received
 
   def recvToFD(self, destFD, buf, lenPayload):
     """
@@ -206,5 +205,5 @@ class Nailgun(object):
     write to - STDOUT and STDERR are the same on VIM side (see eclim.bat,
     "2>&1" at the end of command).
     """
-    thisPass = self.recvBlocked(lenPayload)
-    return thisPass
+    received = self.recvBlocked(lenPayload)
+    return received
