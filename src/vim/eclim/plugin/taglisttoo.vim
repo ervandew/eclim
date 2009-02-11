@@ -88,8 +88,7 @@ endif
 
 " set command for taglist.vim
 let g:Tlist_Ctags_Cmd_Orig = g:Tlist_Ctags_Cmd
-let g:Tlist_Ctags_Cmd =
-  \ eclim#GetEclimCommand() . ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+let g:Tlist_Ctags_Cmd = '-command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
 " for windows, need to add a trailing quote to complete the command.
 if g:Tlist_Ctags_Cmd =~ '^"[a-zA-Z]:'
   let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd . '"'

@@ -24,7 +24,7 @@
 
 " TestGetEclimCommand() {{{
 function! TestGetEclimCommand()
-  let result = eclim#GetEclimCommand()
+  let result = eclim#client#nailgun#GetEclimCommand()
   call VUAssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
 endfunction " }}}
 

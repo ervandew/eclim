@@ -1,0 +1,210 @@
+"""
+Copyright (C) 2005 - 2009  Eric Van Dewoestine
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+@author: Anton Sharonov
+@author: Eric Van Dewoestine
+"""
+import os, re, socket
+
+try:
+  from cStringIO import StringIO
+except:
+  from StringIO import StringIO
+
+class Nailgun(object):
+  """
+  Client used to communicate with a nailgun server.
+  """
+
+  def __init__(self, **kwargs):
+    self.socket = None
+    self.keepAlive = int(kwargs.get('keepAlive', 0))
+    self.vimFiles = kwargs.get('vimFiles', '~/.vim')
+    self.reconnectCounter = 0
+    self.port = 9091
+
+    # check ~/.eclimrc for alternate port
+    eclimrc = os.path.expanduser('~/.eclimrc')
+    if os.path.exists(eclimrc):
+      rcfile = open(eclimrc)
+      try:
+        line = rcfile.readline()
+        while line:
+          line = line.strip()
+          if line.startswith('nailgun.server.port'):
+            self.port = int(re.sub(r'.*=\s*(.*)', r'\1', line))
+            break
+          line = rcfile.readline()
+      finally:
+        rcfile.close()
+
+  def send(self, cmdline):
+    """
+    Sends a complete command to the nailgun server.  Handles connecting to the
+    server if not currently connected.
+    @param cmdline command, which is sent to server, for instance
+      "-command ping".
+    @return tuple consisting of:
+      - retcode from server (0 for success, non-0 for failure)
+      - string response from server
+    """
+    if not self.isConnected():
+      (retcode, result) = self.reconnect()
+      if retcode:
+        return (retcode, result)
+
+    try: # outer try for pre python 2.5 support.
+      try:
+        self.sendChunk("A", "-Dvim.files=%s" % self.vimFiles)
+
+        for arg in self.parseArgs(cmdline):
+          self.sendChunk("A", arg)
+
+        if self.keepAlive:
+          self.sendChunk("K")
+
+        self.sendChunk("C", "org.eclim.command.Main")
+
+        (retcode, result) = self.processResponse()
+        if self.keepAlive and retcode:
+          # force reconnect on error (may not be necessary)
+          self.reconnect()
+
+        return (retcode, result)
+      except socket.error, ex:
+        return ex.args
+    finally:
+      if not self.keepAlive:
+        self.close()
+
+  def connect(self, port=None):
+    """
+    Establishes the connection to specified port or if not supplied,
+    uses the default.
+    """
+    port = port or self.port
+    try:
+      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      sock.connect(('localhost', port))
+    except socket.error, ex:
+      return (ex.args[0], 'connect: %s' % ex.args[1])
+
+    self.socket = sock
+    return (0, '')
+
+  def reconnect(self):
+    if self.socket != None:
+      self.close()
+    self.reconnectCounter += 1
+    return self.connect()
+
+  def close(self):
+    self.socket.close()
+    self.socket = None
+
+  def isConnected(self):
+    return self.socket != None
+
+  def parseArgs(self, cmdline):
+    # FIXME: doesn't handle escaping of spaces/quotes yet (may never need to)
+    args = []
+    arg = ''
+    quote = ''
+    for char in cmdline:
+      if char == ' ' and not quote:
+        if arg:
+          args.append(arg)
+          arg = ''
+      elif char == '"' or char == "'":
+        if quote and char == quote:
+          quote = ''
+        elif not quote:
+          quote = char
+        else:
+          arg += char
+      else:
+        arg += char
+
+    if arg:
+      args.append(arg)
+
+    return args
+
+  def sendChunk(self, chunkType, text=''):
+    """
+    Sends a nailgun 'chunk' to the server.
+    """
+    #print "sendChunk " + chunkType + " " + text
+    length = len(text)
+    str = "%c%c%c%c%c" % (
+        (length / (65536*256)) % 256,
+        (length / 65536) % 256,
+        (length / 256) % 256,
+        length % 256,
+        chunkType)
+    nbytes = self.socket.sendall(str)
+    nbytes = self.socket.sendall(text)
+
+  def processResponse(self):
+    result = StringIO()
+    exit = 0
+    exitFlag = 1 # expecting 1 times exit chunk
+    while exitFlag > 0:
+      answer = self.recvBlocked(5)
+      if len(answer) < 5:
+        print "error: socket closed unexpectedly\n"
+        return None
+      lenPayload = ord(answer[0]) * 65536 * 256 \
+        + ord(answer[1]) * 65536 \
+        + ord(answer[2]) * 256 \
+        + ord(answer[3])
+      #print "lenPayload detected : %d" % lenPayload
+      chunkType = answer[4]
+      if chunkType == "1":
+        # STDOUT
+        result.write(self.recvToFD(1, answer, lenPayload))
+      elif chunkType == "2":
+        # STDERR
+        result.write(self.recvToFD(2, answer, lenPayload))
+      elif chunkType == "X":
+        exitFlag = exitFlag - 1
+        exit = int(self.recvToFD(2, answer, lenPayload))
+      else:
+        print "error: unknown chunk type = %d\n" % chunkType
+        exitFlag = 0
+
+    return [exit, result.getvalue()]
+
+  def recvBlocked(self, lenPayload):
+    """
+    Receives until all data is read - necessary because usual recv sometimes
+    returns with number of bytes read less then asked.
+    """
+    thisPass = ""
+    number = 0
+    while (len(thisPass) < lenPayload):
+      thisPass = thisPass + self.socket.recv(lenPayload - len(thisPass))
+    return thisPass
+
+  def recvToFD(self, destFD, buf, lenPayload):
+    """
+    This function just mimics the function with the same name from the C
+    client.  We don't really care which file descriptor the server tells us to
+    write to - STDOUT and STDERR are the same on VIM side (see eclim.bat,
+    "2>&1" at the end of command).
+    """
+    thisPass = self.recvBlocked(lenPayload)
+    return thisPass

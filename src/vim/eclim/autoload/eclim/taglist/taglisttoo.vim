@@ -508,7 +508,12 @@ function! s:ProcessTags()
     let command = substitute(command, '<types>', types, 'g')
     let command = substitute(command, '<file>', file, '')
 
-    let response = eclim#util#System(command)
+    if command =~ '^-command'
+      let response = eclim#ExecuteEclim(command)
+    else
+      let response = eclim#util#System(command)
+    endif
+
     let results = split(response, '\n')
     if v:shell_error
       call eclim#util#EchoError('taglist failed with error code: ' . v:shell_error)

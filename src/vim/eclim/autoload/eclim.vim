@@ -55,38 +55,22 @@
   let s:exec_commands = ['java_complete']
 " }}}
 
-" ExecuteEclim(args) {{{
-" Executes eclim using the supplied argument string.
-function! eclim#ExecuteEclim(args)
+" ExecuteEclim(command) {{{
+" Executes the supplied eclim command.
+function! eclim#ExecuteEclim(command)
   if exists('g:EclimDisabled')
     return
   endif
 
-  let args = a:args
+  let command = a:command
 
   " encode special characters
   " http://www.cs.net/lucid/ascii.htm
-  let args = substitute(args, '*', '%2A', 'g')
-  let args = substitute(args, '\$', '%24', 'g')
-  let command = eclim#GetEclimCommand()
-  if string(command) == '0'
-    "let g:EclimDisabled = 1
-    if expand('<amatch>') == '' && exists('g:EclimErrorReason')
-      call eclim#util#EchoError(g:EclimErrorReason)
-    endif
-    return 0
-  endif
-  let command = command . ' ' . args
-
-  " for windows, need to add a trailing quote to complete the command.
-  if command =~ '^"[a-zA-Z]:'
-    let command = command . '"'
-  endif
-
-  call eclim#util#EchoDebug("eclim: executing (Ctrl-C to cancel)...")
+  let command = substitute(command, '*', '%2A', 'g')
+  let command = substitute(command, '\$', '%24', 'g')
 
   " execute the command.
-  let result = eclim#util#System(command)
+  let [retcode, result] = eclim#client#nailgun#Execute(command)
   let result = substitute(result, '\(.*\)\n$', '\1', '')
 
   call eclim#util#Echo(' ')
@@ -96,11 +80,11 @@ function! eclim#ExecuteEclim(args)
   if result =~ '^[^\n]*Exception:\?[^\n]*\n\s\+\<at\> ' ||
    \ result =~ '^[^\n]*ResourceException(.\{-})\[[0-9]\+\]:[^\n]*\n\s\+\<at\> '
     let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
-  elseif v:shell_error
+  elseif retcode
     let error = result
   endif
 
-  if v:shell_error || error != ''
+  if retcode || error != ''
     if g:EclimShowErrors
       if error =~ s:connect
         " eclimd is not running and we appear to not be in an autocmd
@@ -116,43 +100,6 @@ function! eclim#ExecuteEclim(args)
   endif
 
   return result
-endfunction " }}}
-
-" GetEclimCommand() {{{
-" Gets the command to exexute eclim.
-function! eclim#GetEclimCommand()
-  if !exists('g:EclimPath')
-    let eclim_home = eclim#GetEclimHome()
-    if eclim_home == '' || string(eclim_home) == '0'
-      return
-    endif
-
-    let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
-      \ '/bin/' . g:EclimCommand
-
-    if has("win32") || has("win64")
-      let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
-    elseif has("win32unix")
-      let g:EclimPath = system('cygpath "' . g:EclimPath . '"')
-      let g:EclimPath = substitute(g:EclimPath, '\n.*', '', '')
-    endif
-
-    if !filereadable(g:EclimPath)
-      let g:EclimErrorReason = 'Could not locate file: ' . g:EclimPath
-      return
-    endif
-
-    " on windows, the command must be executed on the drive where eclipse is
-    " installed.
-    if has("win32") || has("win64")
-      let g:EclimPath =
-        \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
-        \ ' && "' . g:EclimPath . '"'
-    else
-      let g:EclimPath = '"' . g:EclimPath . '"'
-    endif
-  endif
-  return g:EclimPath
 endfunction " }}}
 
 " GetEclimHome() {{{
