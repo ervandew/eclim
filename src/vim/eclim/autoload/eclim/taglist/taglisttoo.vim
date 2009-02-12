@@ -512,11 +512,14 @@ function! s:ProcessTags()
       let response = eclim#ExecuteEclim(command)
     else
       let response = eclim#util#System(command)
+      if v:shell_error
+        call eclim#util#EchoError('taglist failed with error code: ' . v:shell_error)
+        return
+      endif
     endif
 
     let results = split(response, '\n')
-    if v:shell_error
-      call eclim#util#EchoError('taglist failed with error code: ' . v:shell_error)
+    if len(response) == 1 && response[0] == '0'
       return
     endif
 
