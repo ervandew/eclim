@@ -139,6 +139,10 @@ if !exists(':TlistToo')
     let g:tlist_htmldjango_settings = 'htmldjango;a:anchor;i:id;f:function'
   endif
 
+  if !exists("g:tlist_htmljinja_settings")
+    let g:tlist_htmljinja_settings = 'htmljinja;a:anchor;i:id;f:function;m:macro'
+  endif
+
   if !exists("g:tlist_javascript_settings")
     let g:tlist_javascript_settings = 'javascript;f:function'
   endif
@@ -255,6 +259,17 @@ else
   if !exists("g:tlist_htmldjango_settings")
     let g:tlist_htmldjango_settings = {
         \ 'lang': 'htmldjango', 'tags': {'a': 'anchor', 'i': 'id', 'f': 'function'}
+      \ }
+  endif
+
+  if !exists("g:tlist_htmljinja_settings")
+    let g:tlist_htmljinja_settings = {
+        \ 'lang': 'htmljinja', 'tags': {
+          \ 'a': 'anchor',
+          \ 'i': 'id',
+          \ 'f': 'function',
+          \ 'm': 'macro'
+        \ }
       \ }
   endif
 
