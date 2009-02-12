@@ -100,6 +100,11 @@ public class TagResult
             break;
           }
         }
+
+        // still multi line, then just use the first line.
+        if (pattern.indexOf('\n') != -1){
+          pattern = lines[0];
+        }
       }
 
       // escape newlines, '\' and '/'
