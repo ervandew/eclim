@@ -536,9 +536,14 @@ public class BufferedReader extends Reader
         break;
       }
       i = lineEnd(limit);
-      // eclim: include the \n char in the result.
+      // eclim: include the \n char in the result, but account for case where no
+      // newline was encountered in the buffer (really long lines).
       //sbuf.append(buffer, pos - 1, i - (pos - 1));
-      sbuf.append(buffer, pos - 1, i - (pos - 2));
+      int end = i - (pos - 2);
+      if (end > buffer.length)
+        end = i - (pos - 1);
+      sbuf.append(buffer, pos - 1, end);
+
       pos = i;
     }
     return (sbuf.length() == 0 && eof) ? null : sbuf.toString();
