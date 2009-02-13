@@ -33,6 +33,7 @@ class HtmlDjangoTags implements TaglistScript
 
       regex.addPattern('a', ~/(s?)<a\s+[^>]*?name=['"](.*?)['"]/, "\$2");
       regex.addPattern('i', ~/(s?)<([a-z]*?)\s+[^>]*?id=['"](.*?)['"]/, "\$2 \$3");
+      regex.addPattern('b', ~/(s?)\{%?\s*block\s+(\w+)/, "\$2");
       // TODO: javascript function
       //regex.addPattern('f', ~/(s?), "\$2");
 
