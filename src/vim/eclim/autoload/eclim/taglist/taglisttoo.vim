@@ -452,6 +452,18 @@ function! s:StartAutocmds()
       \ if bufwinnr(g:TagList_title) != -1 |
       \   call s:ProcessTags() |
       \ endif
+    " bit of a hack to re-process tags if the filetype changes after the tags
+    " have been processed.
+    autocmd FileType *
+      \ if exists('b:ft') |
+      \   if b:ft != &ft |
+      \     if bufwinnr(g:TagList_title) != -1 |
+      \       call s:ProcessTags() |
+      \     endif |
+      \   endif |
+      \ else |
+      \   let b:ft = &ft |
+      \ endif
     autocmd WinLeave *
       \ if bufwinnr(g:TagList_title) != -1 |
       \   let s:taglisttoo_prevwinnr = winnr() |
