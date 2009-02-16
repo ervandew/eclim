@@ -25,7 +25,7 @@ Before beginning the installation, first confirm that you have met the
 following requirements.
 
 - `Java Development Kit`_ 1.5 or greater
-- `Eclipse SDK 3.3.x`_
+- `Eclipse SDK 3.4.x`_
 - `Vim 7.1.x`_
 
   **Minimum Vim Settings**: In order for eclim to function properly, there is a
