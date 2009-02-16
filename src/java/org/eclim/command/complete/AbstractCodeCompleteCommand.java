@@ -33,6 +33,8 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
+import org.eclipse.swt.widgets.Display;
+
 /**
  * Abstract command for code completion.
  *
@@ -44,33 +46,43 @@ public abstract class AbstractCodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public String execute(final CommandLine commandLine)
     throws Exception
   {
-    String project = commandLine.getValue(Options.PROJECT_OPTION);
-    String file = commandLine.getValue(Options.FILE_OPTION);
-    int offset = getOffset(commandLine);
+    final String project = commandLine.getValue(Options.PROJECT_OPTION);
+    final String file = commandLine.getValue(Options.FILE_OPTION);
+    final int offset = getOffset(commandLine);
 
-    IContentAssistProcessor processor =
-      getContentAssistProcessor(commandLine, project, file);
+    final ICompletionProposal[][] result = new ICompletionProposal[1][];
+    Display.getDefault().syncExec(new Runnable(){
+      public void run()
+      {
+        try{
+          IContentAssistProcessor processor =
+            getContentAssistProcessor(commandLine, project, file);
 
-    ITextViewer viewer = getTextViewer(commandLine, project, file);
+          ITextViewer viewer = getTextViewer(commandLine, project, file);
+          result[0] = processor.computeCompletionProposals(viewer, offset);
+        }catch(Exception e){
+          throw new RuntimeException(e);
+        }
+      }
+    });
 
-    ICompletionProposal[] proposals =
-      processor.computeCompletionProposals(viewer, offset);
+    ICompletionProposal[] proposals = result[0];
 
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
     if(proposals != null){
       for (int ii = 0; ii < proposals.length; ii++){
         if(acceptProposal(proposals[ii])){
-          CodeCompleteResult result = new CodeCompleteResult(
+          CodeCompleteResult ccresult = new CodeCompleteResult(
               getCompletion(proposals[ii]),
               getDescription(proposals[ii]),
               getShortDescription(proposals[ii]));
 
-          if(!results.contains(result)){
-            results.add(result);
+          if(!results.contains(ccresult)){
+            results.add(ccresult);
           }
         }
       }
