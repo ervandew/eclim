@@ -94,7 +94,16 @@ public class EclimPlugin
   public static Shell getShell()
   {
     if(shell == null){
-      shell = new Shell(Display.getDefault());
+      final Display display = Display.getDefault();
+      final Shell[] result = new Shell[1];
+      // obtaining via synExec required when running inside of headed eclipse.
+      display.syncExec(new Runnable(){
+        public void run()
+        {
+          result[0] = new Shell(display);
+        }
+      });
+      shell = result[0];
     }
     return shell;
   }
