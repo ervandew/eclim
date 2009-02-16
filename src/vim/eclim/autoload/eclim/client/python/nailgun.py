@@ -62,9 +62,14 @@ class Nailgun(object):
       - string response from server
     """
     if not self.isConnected():
-      (retcode, result) = self.reconnect()
-      if retcode:
-        return (retcode, result)
+      # with keepAlive do only first reconnect
+      if not self.keepAlive or self.reconnectCounter == 0:
+        (retcode, result) = self.reconnect()
+        if retcode:
+          return (retcode, result)
+
+    if not self.isConnected(): # Only for keepAlive
+      return (-1, "connect: ERROR - socket is not connected (nailgun.py)")
 
     try: # outer try for pre python 2.5 support.
       try:
