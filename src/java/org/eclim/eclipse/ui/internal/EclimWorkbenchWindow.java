@@ -18,6 +18,8 @@ package org.eclim.eclipse.ui.internal;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclim.eclipse.EclimPlugin;
+
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -39,14 +41,12 @@ import org.eclipse.ui.internal.WorkbenchWindow;
 public class EclimWorkbenchWindow
   extends WorkbenchWindow
 {
-  private Shell shell;
   private IWorkbenchPage page;
   private Composite composite;
 
-  public EclimWorkbenchWindow (Shell shell)
+  public EclimWorkbenchWindow()
   {
     super(1);
-    this.shell = shell;
   }
 
   /**
@@ -72,7 +72,7 @@ public class EclimWorkbenchWindow
    */
   public Shell getShell()
   {
-    return shell;
+    return EclimPlugin.getShell();
   }
 
 
@@ -90,13 +90,23 @@ public class EclimWorkbenchWindow
 
   /**
    * {@inheritDoc}
+   * @see WorkbenchWindow#fillActionBars(int)
+   */
+  @Override
+  public void fillActionBars(int flags)
+  {
+    // no-op, needed for running inside of headed eclipse.
+  }
+
+  /**
+   * {@inheritDoc}
    * @see WorkbenchWindow#getPageComposite()
    */
   @Override
   protected Composite getPageComposite()
   {
     if(composite == null){
-      composite = new Composite(shell, SWT.NONE);
+      composite = new Composite(getShell(), SWT.NONE);
     }
     return composite;
   }

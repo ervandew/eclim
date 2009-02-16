@@ -49,7 +49,7 @@ public class EclimEditorSite
 
   public EclimEditorSite ()
   {
-    window = new EclimWorkbenchWindow(EclimPlugin.getShell());
+    window = new EclimWorkbenchWindow();
   }
 
   /**
