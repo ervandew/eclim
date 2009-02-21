@@ -535,6 +535,10 @@ function! s:ProcessTags()
       return
     endif
 
+    while len(results) && results[0] =~ 'ctags.*: Warning:'
+      call remove(results, 0)
+    endwhile
+
     let truncated = 0
     if len(results)
       " for some reason, vim may truncate the output of system, leading to only
