@@ -13,6 +13,8 @@ package org.vimplugin;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.eclim.logging.Logger;
@@ -99,9 +101,14 @@ public class VimServer
   public void start(String workingDir) {
     String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
         PreferenceConstants.P_GVIM);
-    String arg0 = getNetbeansString(ID);
+    String[] addopts = getUserArgs();
+    String[] args = new String[2 + addopts.length];
+    args[0] = gvim;
+    args[1] = getNetbeansString(ID);
 
-    start(workingDir, gvim, arg0);
+    System.arraycopy(addopts, 0, args, 2, addopts.length);
+
+    start(workingDir, args);
   }
 
   /**
@@ -128,8 +135,7 @@ public class VimServer
     }
 
     String stringwid = String.valueOf(wid);
-    String[] addopts = VimPlugin.getDefault().getPreferenceStore()
-        .getString(PreferenceConstants.P_OPTS).split("\\s");
+    String[] addopts = getUserArgs();
 
     // build args-array (dynamic size due to addopts.split)
     String[] args = new String[5 + addopts.length];
@@ -165,6 +171,7 @@ public class VimServer
     // starting gvim with Netbeans interface
     try {
       logger.debug("Trying to start vim");
+      logger.debug(Arrays.toString(args));
       ProcessBuilder builder = new ProcessBuilder(args);
       /*java.util.Map<String, String> env = builder.environment();
       env.put("SPRO_GVIM_DEBUG", "/tmp/netbeans.log");
@@ -176,7 +183,7 @@ public class VimServer
       p = builder.start();
       logger.debug("Started vim");
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error("error:", e);
     }
 
     // Waits until server starts.. vim should return startupDone
@@ -248,5 +255,45 @@ public class VimServer
       }
     }
     return null;
+  }
+
+  /**
+   * Gets the user supplied gvim arguments from the preferences.
+   *
+   * @return Array of arguments to be passed to gvim.
+   */
+  protected String[] getUserArgs(){
+    String opts = VimPlugin.getDefault().getPreferenceStore()
+      .getString(PreferenceConstants.P_OPTS);
+
+    // FIXME: doesn't currently handle escaped spaces/quotes
+    char[] chars = opts.toCharArray();
+    char quote = ' ';
+    StringBuffer arg = new StringBuffer();
+    ArrayList<String> args = new ArrayList<String>();
+    for(char c : chars){
+      if (c == ' ' && quote == ' '){
+        if (arg.length() > 0){
+          args.add(arg.toString());
+          arg = new StringBuffer();
+        }
+      }else if (c == '"' || c == '\''){
+        if (quote != ' ' && c == quote){
+          quote = ' ';
+        }else if (quote == ' '){
+          quote = c;
+        }else{
+          arg.append(c);
+        }
+      }else{
+        arg.append(c);
+      }
+    }
+
+    if (arg.length() > 0){
+      args.add(arg.toString());
+    }
+
+    return args.toArray(new String[args.size()]);
   }
 }
