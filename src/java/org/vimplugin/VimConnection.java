@@ -137,7 +137,7 @@ public class VimConnection implements Runnable
         }
       } catch (VimException ve) {
         // TODO : better ErrorHandling (Connection Thread)
-        ve.printStackTrace();
+        logger.error("error:", ve);
       }
 
       try {
@@ -156,11 +156,11 @@ public class VimConnection implements Runnable
         }
       } catch (VimException ve) {
         // TODO : better ErrorHandling (Connection Thread)
-        ve.printStackTrace();
+        logger.error("error:", ve);
       }
     } catch (IOException e) {
       // TODO: better ErrorHandling (Connection Thread)
-      e.printStackTrace();
+      logger.error("error:", e);
     }
   }
 
@@ -201,10 +201,8 @@ public class VimConnection implements Runnable
    * @param bufID the vim buffer that is adressed
    * @param name the "name" of the command
    * @param param possible parameters
-   * @return the return value of the (vim)function or "goodbye" if the function was "saveAndExit".
-   * @see <a
-   *      href="http://www.vim.org/htmldoc/netbeans.html#netbeans-protocol">Protocol
-   *      specification</a>
+   * @return the return value of the (vim)function or null if the function was
+   * "saveAndExit".
    */
   public String function(int bufID, String name, String param)
     throws IOException
@@ -213,17 +211,17 @@ public class VimConnection implements Runnable
     String tmp = bufID + ":" + name + "/" + seqno + " " + param;
     logger.debug("function: " + tmp);
 
-    if ("saveAndExit".equals(name)){
-      out.println(tmp);
-      return null;
-    }
-
     // FIXME: need to find a better way to handle reading of function result
     // while run() is continously reading _all_ input from gvim.
     // FIXME: make use of the seqno for recognizing a function response.
     synchronized(functionMonitor){
       functionCalled = true;
       out.println(tmp);
+
+      if ("saveAndExit".equals(name)){
+        return null;
+      }
+
       try{
         functionMonitor.wait(1000);
       }catch(InterruptedException ie){
