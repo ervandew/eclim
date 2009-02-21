@@ -27,7 +27,11 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IOpenable;
+import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 
@@ -81,13 +85,11 @@ public class FormatCommand
     int eCharOffset = bCharOffset + sourceRoot.length();
     int charLength = eCharOffset - bCharOffset;
 
-    //logger.info ("resulting string is :");
-    //logger.info (source.substring (bCharOffset, eCharOffset));
-
+    String lineDelimiter = getLineDelimiterUsed(src);
     TextEdit edits = formatter.format(
-        kind, source, bCharOffset, charLength, 0, null);
+        kind, source, bCharOffset, charLength, 0, lineDelimiter);
     if (edits == null) {
-      return "edits are null on attempt to SourceFormat...";
+      return "no edits returned on attempt to format the source.";
     }
     Document document = new Document(src.getBuffer().getContents());
     edits.apply(document);
@@ -95,5 +97,26 @@ public class FormatCommand
     src.save(null, false);
 
     return StringUtils.EMPTY;
+  }
+
+  /**
+   * Examines a string and returns the first line delimiter found.
+   * @param elem the element
+   * @return the line delimiter used for the element
+   * (Copied from
+   *    org/eclipse/jdt/internal/corext/codemanipulation/StubUtility.java
+   * )
+   */
+  private String getLineDelimiterUsed(IJavaElement elem)
+  {
+    IOpenable openable = elem.getOpenable();
+    if (openable instanceof ITypeRoot) {
+      try {
+        return openable.findRecommendedLineSeparator();
+      } catch (JavaModelException exception) {
+        // Use project setting
+      }
+    }
+    return null;
   }
 }
