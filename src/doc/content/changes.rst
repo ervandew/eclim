@@ -22,6 +22,7 @@ History of Changes
 ----------------------
 
 Bug Fixes:
+  - Fixed pdt and wst code completion when invoked from headed eclimd.
   - Various bug fixes.
 
 Eclim:
