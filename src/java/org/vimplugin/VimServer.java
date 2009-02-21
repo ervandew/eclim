@@ -208,6 +208,29 @@ public class VimServer
   public boolean stop() throws IOException {
     boolean result = false; // If error raised
 
+    if (p != null){
+      // give the process some time to finish up before destroying it.
+      Thread waiter = new Thread(){
+        public void run(){
+          try{
+            logger.debug("Waiting on vim to exit normally...");
+            p.waitFor();
+          }catch(InterruptedException ie){
+            // ignore
+          }
+        }
+      };
+      waiter.start();
+
+      try{
+        waiter.join(10000); // wait up to 10 seconds.
+      }catch(InterruptedException ie){
+        // ignore
+      }
+      p.destroy();
+      logger.debug("Vim closed.");
+    }
+
     if (vc != null){
       result = vc.close();
       vc = null;
@@ -215,10 +238,6 @@ public class VimServer
 
     if (t != null){
       t.interrupt();
-    }
-
-    if (p != null){
-      p.destroy();
     }
 
     return result;

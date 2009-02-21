@@ -37,5 +37,7 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - fixed passing of user preference args to gvim when spawning external (non
     embedded) instance.
   - fixed parsing of user preference args to handle quoted arguments.
+  - fixed closing of gvim from eclipse to wait on gvim to exit normally before
+    forcibly destroying it.
 
 --------------------------------------------------------------------------------
