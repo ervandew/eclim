@@ -133,7 +133,7 @@ public class FileOffsets
     }
     int line = top + 1;
     int column = 1 + offset - offsets[top].intValue();
-    String value = multiByteLines[line];
+    String value = multiByteLines.length > line ? multiByteLines[line] : null;
     if (value != null){
       column = value.substring(0, column).getBytes().length;
     }
@@ -159,6 +159,9 @@ public class FileOffsets
    */
   public int getLineEnd(int line)
   {
+    if (offsets.length == line){
+      return offsets[offsets.length - 1].intValue();
+    }
     return offsets[line].intValue() - 1;
   }
 }
