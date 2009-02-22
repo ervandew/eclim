@@ -53,7 +53,7 @@ function! eclim#python#complete#CodeComplete(findstart, base)
       return []
     endif
 
-    let offset = eclim#util#GetOffset() + len(a:base)
+    let offset = eclim#python#rope#GetOffset() + len(a:base)
     let project = eclim#project#util#GetCurrentProjectRoot()
     let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 

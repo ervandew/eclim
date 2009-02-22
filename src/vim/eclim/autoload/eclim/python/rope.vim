@@ -158,6 +158,28 @@ EOF
 
 endfunction " }}}
 
+" GetOffset() {{{
+" Gets the character offset for the current cursor position.
+function eclim#python#rope#GetOffset()
+  " NOTE: rope doesn't recognize dos line endings as 2 characters, so just
+  " handle as a single character.  It uses true character offsets, vs eclipse
+  " which uses bytes.
+  " FIXME: validate support with multibyte characters.
+  let pos = getpos('.')
+
+  " count back from the current position to the beginning of the file.
+  let offset = col('.') - 1
+  while line('.') != 1
+    call cursor(line('.') - 1, 1)
+    let offset = offset + col('$')
+  endwhile
+
+  " restore the cursor position.
+  call setpos('.', pos)
+
+  return offset
+endfunction " }}}
+
 " GetSourceDirs(project) {{{
 " Attempts to determine the source directories for the supplied project.
 function eclim#python#rope#GetSourceDirs(project)

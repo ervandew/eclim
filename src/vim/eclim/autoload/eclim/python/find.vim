@@ -38,7 +38,7 @@ function eclim#python#find#FindDefinition()
   " update the file before vim makes any changes.
   call eclim#util#ExecWithoutAutocmds('silent update')
 
-  let offset = eclim#util#GetOffset()
+  let offset = eclim#python#rope#GetOffset()
   let project = eclim#project#util#GetCurrentProjectRoot()
   let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
