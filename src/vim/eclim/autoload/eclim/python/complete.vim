@@ -54,11 +54,12 @@ function! eclim#python#complete#CodeComplete(findstart, base)
     endif
 
     let offset = eclim#python#rope#GetOffset() + len(a:base)
+    let encoding = eclim#util#GetEncoding()
     let project = eclim#project#util#GetCurrentProjectRoot()
     let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
     let completions = []
-    let results = eclim#python#rope#Completions(project, filename, offset)
+    let results = eclim#python#rope#Completions(project, filename, offset, encoding)
 
     for result in results
       let dict = {

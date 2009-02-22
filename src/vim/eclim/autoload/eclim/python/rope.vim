@@ -36,6 +36,7 @@ function eclim#python#rope#Init(project)
   endif
 
 python << EOF
+from __future__ import with_statement
 import os, sys, vim
 ropepath = vim.eval('ropepath')
 if ropepath not in sys.path:
@@ -53,6 +54,14 @@ if ropepath not in sys.path:
       yield
     finally:
       os.chdir(cwd)
+
+  def byteOffsetToCharOffset(filename, offset, encoding):
+    with(projectroot()):
+      f = file(filename)
+      ba = f.read(offset)
+      u = unicode(ba, encoding or 'utf8')
+      u = u.replace('\r\n', '\n') # rope ignore \r, so don't count them.
+      return len(u)
 EOF
 
   return 1
@@ -79,10 +88,10 @@ function eclim#python#rope#RopePath()
   return g:RopePath
 endfunction " }}}
 
-" Completions(project, filename, offset) {{{
+" Completions(project, filename, offset, encoding) {{{
 " Attempts to suggest code completions for a given project path, project
 " relative file path and offset.
-function eclim#python#rope#Completions(project, filename, offset)
+function eclim#python#rope#Completions(project, filename, offset, encoding)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -98,12 +107,18 @@ with(projectroot()):
   from rope.contrib import codeassist
   project = project.Project(vim.eval('a:project'))
 
-  resource = project.get_resource(vim.eval('a:filename'))
+  filename = vim.eval('a:filename')
+  offset = int(vim.eval('a:offset'))
+  encoding = vim.eval('a:encoding')
+
+  resource = project.get_resource(filename)
   code = resource.read()
+
+  offset = byteOffsetToCharOffset(filename, offset, encoding)
 
   # code completion
   try:
-    proposals = codeassist.code_assist(project, code, int(vim.eval('a:offset')))
+    proposals = codeassist.code_assist(project, code, offset)
     proposals = codeassist.sorted_proposals(proposals)
     proposals = [[p.name, p.kind] for p in proposals]
     vim.command("let results = %s" % repr(proposals))
@@ -124,9 +139,9 @@ EOF
 
 endfunction " }}}
 
-" FindDefinition(project, filename, offset) {{{
+" FindDefinition(project, filename, offset, encoding) {{{
 " Attempts to find the definition of the element at the supplied offset.
-function eclim#python#rope#FindDefinition(project, filename, offset)
+function eclim#python#rope#FindDefinition(project, filename, offset, encoding)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -140,13 +155,17 @@ with(projectroot()):
   from rope.contrib import codeassist
   project = project.Project(vim.eval('a:project'))
 
-  resource = project.get_resource(vim.eval('a:filename'))
+  filename = vim.eval('a:filename')
+  offset = int(vim.eval('a:offset'))
+  encoding = vim.eval('a:encoding')
+
+  resource = project.get_resource(filename)
   code = resource.read()
 
+  offset = byteOffsetToCharOffset(filename, offset, encoding)
+
   # code completion
-  location = codeassist.get_definition_location(
-    project, code, int(vim.eval('a:offset'))
-  )
+  location = codeassist.get_definition_location(project, code, offset)
   if location:
     path = location[0] and \
       location[0].real_path or \
@@ -162,54 +181,15 @@ endfunction " }}}
 " Gets the character offset for the current cursor position.
 function eclim#python#rope#GetOffset()
   " NOTE: rope doesn't recognize dos line endings as 2 characters, so just
-  " handle as a single character.  Rope also uses true character offsets, vs
-  " eclipse which uses byte offsets.
-
+  " handle as a single character.  It uses true character offsets, vs eclipse
+  " which uses bytes.
   let pos = getpos('.')
 
   " count back from the current position to the beginning of the file.
-  let offset = col('.') - (line('.') != 1 ? 1 : 0)
-
-  " bit of a hack: if virtcol and col don't agree then we most likely have
-  " multi byte characters, but because some multi byte characters span more
-  " than one virtcol vim won't give us an accurate count of how many
-  " displayable characters there are.  as a hack we can count how many times
-  " the cursor can be moved one character to the right before reaching the
-  " point we started at.
-  if col('.') != virtcol('.')
-    let end = col('.')
-    call cursor(0, 1)
-    let col = 0
-    while col('.') != end
-      let col += 1
-      normal! l
-    endwhile
-    let offset = col + (line('.') != 1 ? 0 : 1)
-  endif
-
+  let offset = col('.') - 1
   while line('.') != 1
     call cursor(line('.') - 1, 1)
-    let col = col('$')
-
-    " same hack as above to account for multi byte characters
-    if col != virtcol('$')
-      let save_ve = &virtualedit
-      let &virtualedit = 'onemore'
-      try
-        let col = 1
-        let prevcol = 0
-        while prevcol != col('.')
-          let prevcol = col('.')
-          normal! l
-          if prevcol != col('.')
-            let col += 1
-          endif
-        endwhile
-      finally
-        let &virtualedit = save_ve
-      endtry
-    endif
-    let offset = offset + col
+    let offset = offset + col('$')
   endwhile
 
   " restore the cursor position.

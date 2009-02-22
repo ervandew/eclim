@@ -39,10 +39,11 @@ function eclim#python#find#FindDefinition()
   call eclim#util#ExecWithoutAutocmds('silent update')
 
   let offset = eclim#python#rope#GetOffset()
+  let encoding = eclim#util#GetEncoding()
   let project = eclim#project#util#GetCurrentProjectRoot()
   let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
-  let result = eclim#python#rope#FindDefinition(project, filename, offset)
+  let result = eclim#python#rope#FindDefinition(project, filename, offset, encoding)
 
   if result != ''
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
