@@ -162,16 +162,54 @@ endfunction " }}}
 " Gets the character offset for the current cursor position.
 function eclim#python#rope#GetOffset()
   " NOTE: rope doesn't recognize dos line endings as 2 characters, so just
-  " handle as a single character.  It uses true character offsets, vs eclipse
-  " which uses bytes.
-  " FIXME: validate support with multibyte characters.
+  " handle as a single character.  Rope also uses true character offsets, vs
+  " eclipse which uses byte offsets.
+
   let pos = getpos('.')
 
   " count back from the current position to the beginning of the file.
-  let offset = col('.') - 1
+  let offset = col('.') - (line('.') != 1 ? 1 : 0)
+
+  " bit of a hack: if virtcol and col don't agree then we most likely have
+  " multi byte characters, but because some multi byte characters span more
+  " than one virtcol vim won't give us an accurate count of how many
+  " displayable characters there are.  as a hack we can count how many times
+  " the cursor can be moved one character to the right before reaching the
+  " point we started at.
+  if col('.') != virtcol('.')
+    let end = col('.')
+    call cursor(0, 1)
+    let col = 0
+    while col('.') != end
+      let col += 1
+      normal! l
+    endwhile
+    let offset = col + (line('.') != 1 ? 0 : 1)
+  endif
+
   while line('.') != 1
     call cursor(line('.') - 1, 1)
-    let offset = offset + col('$')
+    let col = col('$')
+
+    " same hack as above to account for multi byte characters
+    if col != virtcol('$')
+      let save_ve = &virtualedit
+      let &virtualedit = 'onemore'
+      try
+        let col = 1
+        let prevcol = 0
+        while prevcol != col('.')
+          let prevcol = col('.')
+          normal! l
+          if prevcol != col('.')
+            let col += 1
+          endif
+        endwhile
+      finally
+        let &virtualedit = save_ve
+      endtry
+    endif
+    let offset = offset + col
   endwhile
 
   " restore the cursor position.
