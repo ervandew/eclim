@@ -34,6 +34,8 @@ function! eclim#client#python#nailgun#Execute(command)
   let result_viml = ""
   let retcode = 0
 
+  call eclim#util#EchoTrace('nailgun.py: ' . a:command)
+
 python << PYTHONEOF
 command = vim.eval('a:command')
 (retcode, result) = client.send(command)
