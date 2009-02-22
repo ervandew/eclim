@@ -40,6 +40,32 @@ FAQ
 
       $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
 
+  For Windows users there are a couple alternatives to the unsupported
+  .eclimrc:
+
+    1. Your first option is to add a new environment variable:
+
+       - | Windows 2000: Control Panel > System > Advanced > Environment Variables
+         | Windows XP: Control Panel > Performance And Maintenance > System >
+           Advanced > Environment Variables
+       - | Under "User variables..." click "New..."
+         | Variable Name: ECLIMD_OPTS
+         | Variable Value: -Dosgi.instance.area.default=\@user.home/another_workspace
+
+       - Then you can start eclimd as normal (via the eclimd.bat file).
+
+    2. The second option is to create a shortcut to the eclimd.bat file:
+
+       - In Windows Explorer, open your eclipse folder.
+       - Hold down the right mouse button and drag the eclimd.bat file to where
+         you want the shortcut to exist (like your desktop) and release the
+         right mouse button.
+       - Choose "Create Shortcut(s) Here"
+       - Right click the shortcut and choose "Properties"
+       - | On the "Shortcut" tab edit the "Target:" field and append:
+         | -Dosgi.instance.area.default=\@user.home/another_workspace
+
+
 .. _eclim_proxy:
 
 - **How can I configure eclim to use a proxy?**
@@ -60,3 +86,6 @@ FAQ
     ::
 
       $ echo -e "http.proxyHost=my.proxy\nhttp.proxyPort=8080" >> ~/.eclimrc
+
+  On Windows systems you can use the same steps described above, for setting
+  the workspace location, to also set the proxy settings.
