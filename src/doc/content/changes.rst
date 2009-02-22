@@ -23,6 +23,7 @@ History of Changes
 
 Bug Fixes:
   - Fixed pdt and wst code completion when invoked from headed eclimd.
+  - Fixed closing of gvim from eclipse to cleanup swap files.
   - Various bug fixes.
 
 Eclim:
