@@ -13,6 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+.. _guides:
+
 Guides
 ==========
 
@@ -20,6 +22,7 @@ Guides
 
    install
    uninstall
+   troubleshoot
    java/project
    java/ivy/classpath
    java/maven/maven/classpath
@@ -29,10 +32,11 @@ Guides
    development
 
 
-Installing / Upgrading
-----------------------
+Installing / Upgrading / Troubleshooting
+----------------------------------------
 - :ref:`guides/install`
 - :ref:`guides/uninstall`
+- :ref:`guides/troubleshoot`
 
 
 Java
