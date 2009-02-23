@@ -89,7 +89,7 @@ concentrate on step one.
 
   When opening the taglist window, eclim will search for the taglist script in
   the directory noted above by looking for a file named filetype.groovy, where
-  filetype is the case sensitive value of Vim's ``&amp;filetype`` option.  If no
+  filetype is the case sensitive value of Vim's ``&filetype`` option.  If no
   script is found for the file type, then eclim will delegate the call to your
   system's ctags command as configured_ for taglist.vim.
 
@@ -279,10 +279,12 @@ configuration variables\:
   .. code-block:: vim
 
     let g:tlist_ant_settings = {
-        \ 'p': 'project',
-        \ 'i': 'import',
-        \ 'r': 'property',
-        \ 't': 'target'
+        \ 'lang': 'ant', 'tags': {
+          \ 'p': 'project',
+          \ 'i': 'import',
+          \ 'r': 'property',
+          \ 't': 'target'
+        \ }
       \ }
 
 
