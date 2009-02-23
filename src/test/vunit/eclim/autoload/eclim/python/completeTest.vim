@@ -55,4 +55,32 @@ function! TestComplete()
   call VUAssertEquals('test3', results[2].word, 'Wrong result.')
 endfunction " }}}
 
+" TestCompleteUnicode() {{{
+function! TestCompleteUnicode()
+  edit! test/complete/test_complete_unicode.py
+  call PeekRedir()
+
+  call cursor(6, 8)
+  let start = eclim#python#complete#CodeComplete(1, '')
+  call VUAssertEquals(7, start, 'Wrong starting column.')
+
+  let results = eclim#python#complete#CodeComplete(0, '')
+  call PeekRedir()
+  call VUAssertTrue(len(results) == 10, 'Wrong number of results.')
+  call VUAssertEquals('Test1', results[0].word, 'Wrong result.')
+  call VUAssertEquals('Test2', results[1].word, 'Wrong result.')
+  call VUAssertEquals('Test3', results[2].word, 'Wrong result.')
+
+  call cursor(8, 9)
+  let start = eclim#python#complete#CodeComplete(1, '')
+  call VUAssertEquals(7, start, 'Wrong starting column.')
+
+  let results = eclim#python#complete#CodeComplete(0, '')
+  call PeekRedir()
+  call VUAssertTrue(len(results) == 3, 'Wrong number of results.')
+  call VUAssertEquals('test1', results[0].word, 'Wrong result.')
+  call VUAssertEquals('test2', results[1].word, 'Wrong result.')
+  call VUAssertEquals('test3', results[2].word, 'Wrong result.')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker
