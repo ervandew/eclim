@@ -416,11 +416,11 @@ div.section h3,
 div.section h4 {
   padding: 2px;
   background-color: #e9e9d0;
+  font-size: 1em;
 }
 
 div.section h2 {
   padding: 5px;
-  font-size: 1.25em;
 }
 
 div.admonition, div.warning {
