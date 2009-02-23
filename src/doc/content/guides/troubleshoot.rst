@@ -136,7 +136,7 @@ emitted.  To gather these details you will need to:
 
    - Windows:
 
-     - open a dos prompt and make sure you are one the same drive as you
+     - open a dos prompt and make sure you are on the same drive as your
        eclipse installation (if it's on your D: drive, then type "D:" at the
        prompt and hit enter.
      - Then type out the path to your eclim script and append the command you
