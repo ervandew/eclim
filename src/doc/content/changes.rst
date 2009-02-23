@@ -24,8 +24,8 @@ History of Changes
 Bug Fixes:
   - Fixed pdt and wst code completion when invoked from headed eclimd.
   - Fixed closing of gvim from eclipse to cleanup swap files.
-  - Fixed python code completion and find when editing files with dos line
-    endings.
+  - Fixed python code completion and find support when editing files with dos
+    line endings or multi-byte unicode characters.
   - Various bug fixes.
 
 Eclim:
