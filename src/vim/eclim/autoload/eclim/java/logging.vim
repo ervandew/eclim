@@ -28,7 +28,7 @@ function! eclim#java#logging#LoggingInit(var)
   " only execute if the user types a '.' for a method call and if the logger
   " is not already present.
   if char == '.' && s:InitLoggingSettings() &&
-    \ !search('\(final\|static\) Log\(ger\)\?\s', 'n')
+    \ !search('\(final\|static\)\>.\{-}\<Log\(ger\)\?\s', 'n')
     let line = line('.')
     let col = col('.')
     let position = eclim#java#util#GetClassDeclarationPosition(1)
