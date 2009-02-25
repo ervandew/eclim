@@ -220,7 +220,7 @@ source.  Instructions on doing so can be found in the
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
-.. _eclipse sdk 3.3.x: http://eclipse.org/downloads/index.php
+.. _eclipse sdk 3.4.x: http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5687
 .. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5685
