@@ -108,6 +108,9 @@ html_use_modindex = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'eclimdoc'
 
+# suffix used in html title tags
+html_title = 'eclim (eclipse + vim)'
+
 
 # Options for LaTeX output
 # ------------------------
