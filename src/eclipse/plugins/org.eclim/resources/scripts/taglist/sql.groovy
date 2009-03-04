@@ -32,55 +32,55 @@ class SqlTags implements TaglistScript
       regex = new RegexTaglist(file);
 
       def pattern = Pattern.compile(
-        "(s?)create\\s+(group|role)\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+(group|role)\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('g', pattern, "\$3");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+user\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+user\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('u', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+(tablespace|dbspace)\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+(tablespace|dbspace)\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('p', pattern, "\$3");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+schema\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+schema\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('s', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+table\\s+(if\\s+not\\s+exists\\s+)?[`]?([a-zA-Z0-9_.]+)[`]?", Pattern.CASE_INSENSITIVE);
-      regex.addPattern('t', pattern, "\$3");
+        "(s?)(?i)create\\s+(temporary\\s+)table\\s+(if\\s+not\\s+exists\\s+)?[`]?([a-zA-Z0-9_.]+)[`]?");
+      regex.addPattern('t', pattern, "\$4");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+view\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
-      regex.addPattern('v', pattern, "\$2");
+        "(s?)(?i)create\\s+(or\\s+replace\\s+)view\\s+([a-zA-Z0-9_.]+)");
+      regex.addPattern('v', pattern, "\$3");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+sequence\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+sequence\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('q', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(x?)create\\s+trigger\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+trigger\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('x', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)create(\\s+or\\s+replace)?\\s+function\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create(\\s+or\\s+replace)?\\s+function\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('f', pattern, "\$3");
 
       pattern = Pattern.compile(
-        "(s?)create\\s+procedure\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)create\\s+procedure\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('c', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)exec\\s+sp_addrole\\s+['\"]([a-zA-Z0-9_.]+)['\"]", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)exec\\s+sp_addrole\\s+['\"]([a-zA-Z0-9_.]+)['\"]");
       regex.addPattern('r', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)exec\\s+sp_addlogin\\s+@loginname=['\"](.*?)['\"]", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)exec\\s+sp_addlogin\\s+@loginname=['\"](.*?)['\"]");
       regex.addPattern('m', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)alter\\s+database.*add\\s+filegroup\\s+([a-zA-Z0-9_.]+)", Pattern.CASE_INSENSITIVE);
+        "(s?)(?i)alter\\s+database.*add\\s+filegroup\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('z', pattern, "\$2");
 
       return regex.execute();
