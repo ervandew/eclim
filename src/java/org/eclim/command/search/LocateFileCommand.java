@@ -43,6 +43,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -64,18 +65,29 @@ public class LocateFileCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    String projectName = commandLine.getValue(Options.NAME_OPTION);
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
+    String scope = commandLine.getValue(Options.SCOPE_OPTION);
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
-    IProject project = ProjectUtils.getProject(projectName, true);
-    projects.add(project);
-    IProject[] depends = project.getReferencedProjects();
-    for (IProject p : depends){
-      if(!p.isOpen()){
-        p.open(null);
+
+    if (SCOPE_PROJECT.equals(scope)){
+      String projectName = commandLine.getValue(Options.NAME_OPTION);
+      IProject project = ProjectUtils.getProject(projectName, true);
+      projects.add(project);
+      IProject[] depends = project.getReferencedProjects();
+      for (IProject p : depends){
+        if(!p.isOpen()){
+          p.open(null);
+        }
+        projects.add(p);
       }
-      projects.add(p);
+    }else{
+      IProject[] all = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      for (IProject p : all){
+        if(p.isOpen()){
+          projects.add(p);
+        }
+      }
     }
 
     FileMatcher matcher = new FileMatcher(pattern);

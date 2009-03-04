@@ -40,8 +40,10 @@ general purpose commands that are useful in and outside the scope of eclim.
     - <ctrl>t - open the selected file via :tabnew
     - <esc> - close the search window without selecting a file.
 
-  All searching by this command is limited to the current project and any
-  projects listed as dependencies.
+  By default, all searching by this command is limited to the current project
+  and any projects listed as dependencies, but you can widen the search scope
+  to include the entire workspace by setting **g:EclimLocateFileScope** to
+  'workspace'.
 
   .. note::
 
@@ -57,6 +59,14 @@ general purpose commands that are useful in and outside the scope of eclim.
   **g:EclimLocatFileDefaultAction** (defaults to 'split') -
   Determines the command used to open the file when hitting <enter> on an entry
   in the locate file results.
+
+.. _g\:EclimLocatFileScope:
+
+  **g:EclimLocatFileScope** (defaults to 'project') -
+  Determines the scope for which to search for files.
+
+  - 'project': search only the current project and its dependencies.
+  - 'workspace': search the entire workspace (all open projects).
 
 .. _\:Split:
 

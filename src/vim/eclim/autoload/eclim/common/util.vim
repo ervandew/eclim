@@ -26,10 +26,14 @@
 if !exists('g:EclimLocateFileDefaultAction')
   let g:EclimLocateFileDefaultAction = 'split'
 endif
+
+if !exists('g:EclimLocateFileScope')
+  let g:EclimLocateFileScope = 'project'
+endif
 " }}}
 
 " Script Variables {{{
-let s:command_locate = '-command locate_file -n "<project>" -p "<pattern>"'
+let s:command_locate = '-command locate_file -p "<pattern>" -s "<scope>"'
 " }}}
 
 " DiffLastSaved() {{{
@@ -140,7 +144,8 @@ function eclim#common#util#LocateFile(action, file)
     return
   endif
 
-  if !eclim#project#util#IsCurrentFileInProject()
+  let scope = s:GetLocateScope()
+  if scope == 'project' && !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
@@ -174,8 +179,11 @@ function eclim#common#util#LocateFile(action, file)
   let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_locate
-  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<scope>', scope, '')
   let command = substitute(command, '<pattern>', pattern, '')
+  if scope == 'project'
+    let command .= ' -n "' . project . '"'
+  endif
 
   let results = split(eclim#ExecuteEclim(command), '\n')
   if len(results) == 1 && results[0] == '0'
@@ -271,12 +279,16 @@ function eclim#common#util#LocateFileCompletion()
   let display = []
   let name = substitute(getline('.'), '^>\s*', '', '')
   if name !~ '^\s*$'
+    let scope = s:GetLocateScope()
     let pattern = name
     let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
     let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
     let command = s:command_locate
-    let command = substitute(command, '<project>', b:project, '')
+    let command = substitute(command, '<scope>', scope, '')
     let command = substitute(command, '<pattern>', pattern, '')
+    if scope == 'project'
+      let command .= ' -n "' . b:project . '"'
+    endif
     let results = split(eclim#ExecuteEclim(command), '\n')
     if len(results) == 1 && results[0] == '0'
       return
@@ -384,6 +396,11 @@ function s:LocateFileSelect(action)
       \ "bd " . results_bufnum . "\<cr>", 'n')
   endif
   return ''
+endfunction " }}}
+
+" s:GetLocateScope() {{{
+function s:GetLocateScope()
+  return g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project'
 endfunction " }}}
 
 " OpenRelative(command, arg [, open_existing]) {{{
