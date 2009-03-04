@@ -94,7 +94,7 @@ public class PluginResources
   {
     super.initialize(name);
 
-    logger.info("Initializing java environment");
+    logger.debug("Initializing java environment");
 
     // initialize variables.
     initializeJreSrc();
@@ -194,7 +194,7 @@ public class PluginResources
   public void close()
     throws Exception
   {
-    logger.info("Shutting down java environment");
+    logger.debug("Shutting down java environment");
     super.close();
     if (!AbstractEclimApplication.getInstance().isHeaded()){
       JavaCore.getJavaCore().stop(null);
@@ -286,7 +286,7 @@ public class PluginResources
   protected void initializeVars(String variable)
   {
     String file = "/" + variable + ".properties";
-    logger.info("Loading classpath variables from '{}'.", file);
+    logger.debug("Loading classpath variables from '{}'.", file);
     InputStream in = null;
     try{
       in = getClass().getResourceAsStream(file);
