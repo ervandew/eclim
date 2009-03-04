@@ -144,9 +144,15 @@ function eclim#common#util#LocateFile(action, file)
     return
   endif
 
-  let scope = s:GetLocateScope()
-  if scope == 'project' && !eclim#project#util#IsCurrentFileInProject()
-    return
+  let scope = (g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project')
+  if scope == 'project' && !eclim#project#util#IsCurrentFileInProject(0)
+    let response =  eclim#util#PromptConfirm(
+      \ 'Unable to determine the current project.  Search all projects?',
+      \ g:EclimInfoHighlight)
+    if response < 1
+      return
+    endif
+    let scope = 'workspace'
   endif
 
   let results = []
@@ -157,7 +163,7 @@ function eclim#common#util#LocateFile(action, file)
 
   let file = a:file
   if file == ''
-    call s:LocateFileCompletionInit(action)
+    call s:LocateFileCompletionInit(action, scope)
     return
   elseif file == '<cursor>'
     let file = eclim#util#GrabUri()
@@ -218,8 +224,8 @@ function eclim#common#util#LocateFile(action, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" s:LocateFileCompletionInit(action) {{{
-function s:LocateFileCompletionInit(action)
+" s:LocateFileCompletionInit(action, scope) {{{
+function s:LocateFileCompletionInit(action, scope)
   let file = expand('%')
   let bufnum = bufnr('%')
   let project = eclim#project#util#GetCurrentProjectName()
@@ -245,6 +251,7 @@ function s:LocateFileCompletionInit(action)
 
   let b:bufnum = bufnum
   let b:project = project
+  let b:scope = a:scope
   let b:results_bufnum = results_bufnum
   let b:selection = 1
   let b:updatetime = &updatetime
@@ -279,14 +286,13 @@ function eclim#common#util#LocateFileCompletion()
   let display = []
   let name = substitute(getline('.'), '^>\s*', '', '')
   if name !~ '^\s*$'
-    let scope = s:GetLocateScope()
     let pattern = name
     let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
     let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
     let command = s:command_locate
-    let command = substitute(command, '<scope>', scope, '')
+    let command = substitute(command, '<scope>', b:scope, '')
     let command = substitute(command, '<pattern>', pattern, '')
-    if scope == 'project'
+    if b:scope == 'project'
       let command .= ' -n "' . b:project . '"'
     endif
     let results = split(eclim#ExecuteEclim(command), '\n')
@@ -396,11 +402,6 @@ function s:LocateFileSelect(action)
       \ "bd " . results_bufnum . "\<cr>", 'n')
   endif
   return ''
-endfunction " }}}
-
-" s:GetLocateScope() {{{
-function s:GetLocateScope()
-  return g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project'
 endfunction " }}}
 
 " OpenRelative(command, arg [, open_existing]) {{{
