@@ -123,17 +123,17 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectOpen:
 
-- **:ProjectOpen** <project>
+- **:ProjectOpen** [<project>]
 
   Opens a closed project.
 
 .. _\:ProjectClose:
 
-- **:ProjectClose** <project>
+- **:ProjectClose** [<project>]
 
-  Closes a project. According to the Eclipse documentation, closing unused
-  projects can reduce the amount of memory used, and may improve performance
-  when building projects.
+  Closes the current or supplied project. According to the Eclipse
+  documentation, closing unused projects can reduce the amount of memory used,
+  and may improve performance when building projects.
 
 .. _\:ProjectNatures:
 

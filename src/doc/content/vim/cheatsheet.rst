@@ -49,8 +49,8 @@ Project Commands
 - :ref:`:ProjectRefreshAll` - Refresh all projects.
 - :ref:`:ProjectInfo` [<project>] -
   Echos info for the current or supplied project.
-- :ref:`:ProjectOpen` <project> - Opens a project.
-- :ref:`:ProjectClose` <project> - Closes a project.
+- :ref:`:ProjectOpen` [<project>] - Opens a project.
+- :ref:`:ProjectClose` [<project>] - Closes a project.
 - :ref:`:ProjectNatures` [<project>] -
   View the configured natures for one or all projects.
 - :ref:`:ProjectNatureAdd` <project> [<nature> ...] -
