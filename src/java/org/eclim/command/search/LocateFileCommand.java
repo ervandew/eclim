@@ -101,6 +101,8 @@ public class LocateFileCommand
   private static class FileMatcher
     implements IResourceProxyVisitor
   {
+    private static final Pattern FIND_BASE = Pattern.compile("^.*/([^\\]].*)");
+
     private static final ArrayList<String> IGNORE_DIRS =
       new ArrayList<String>();
     static {
@@ -134,10 +136,12 @@ public class LocateFileCommand
     {
       this.pattern = pattern;
       this.matcher = Pattern.compile(pattern).matcher("");
-      this.includesPath = pattern.indexOf('/') != -1;
-      if (this.includesPath){
-        this.baseMatcher =
-          Pattern.compile(FileUtils.getBaseName(pattern)).matcher("");
+
+      Matcher baseMatcher = FIND_BASE.matcher(pattern);
+      if (baseMatcher.find()){
+        String base = baseMatcher.group(1);
+        this.baseMatcher = Pattern.compile(base).matcher("");
+        this.includesPath = true;
       }
     }
 

@@ -33,7 +33,7 @@ endif
 " }}}
 
 " Script Variables {{{
-let s:command_locate = '-command locate_file -p "<pattern>" -s "<scope>"'
+let s:command_locate = '-command locate_file -s "<scope>"'
 " }}}
 
 " DiffLastSaved() {{{
@@ -178,15 +178,20 @@ function eclim#common#util#LocateFile(action, file)
     return
   endif
 
-  let pattern = '.*' . file . '.*'
-  let pattern = substitute(pattern, '\*\*', '*', 'g')
-  let pattern = substitute(pattern, '\([^.]\)\*', '\1.*', 'g')
-  let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
+  let pattern = file
+   " if starts with a word char, expand the search, otherwise assume the user
+   " knows what they are doing
+  if file =~ '^\w'
+    let pattern = '.*' . file . '.*'
+  endif
+  let pattern = substitute(pattern, '\*\*', '.*', 'g')
+  let pattern = substitute(pattern, '\(^\|\([^.]\)\)\*', '\1[^/]*?', 'g')
+  "let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
   let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_locate
   let command = substitute(command, '<scope>', scope, '')
-  let command = substitute(command, '<pattern>', pattern, '')
+  let command .= ' -p "' . pattern . '"'
   if scope == 'project'
     let command .= ' -n "' . project . '"'
   endif
@@ -291,7 +296,7 @@ function eclim#common#util#LocateFileCompletion()
     let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
     let command = s:command_locate
     let command = substitute(command, '<scope>', b:scope, '')
-    let command = substitute(command, '<pattern>', pattern, '')
+    let command .= ' -p "' . pattern . '"'
     if b:scope == 'project'
       let command .= ' -n "' . b:project . '"'
     endif
