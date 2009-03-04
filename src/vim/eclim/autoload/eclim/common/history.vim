@@ -198,21 +198,13 @@ endfunction " }}}
 " s:Clear(prompt, [filename]) {{{
 " Clear the history.
 function s:Clear(prompt, ...)
-  let response = 'y'
+  let response = 1
   if a:prompt
-    exec "echohl " . g:EclimInfoHighlight
-    try
-      let response = input("Clear local history? (y/n) ")
-      while response !~ '\(^$\|^[ynYN]$\)'
-        let response =
-          \ input("You must choose either 'y' or 'n' (Ctrl-C to cancel): ")
-      endwhile
-    finally
-      echohl None
-    endtry
+    let response = eclim#util#PromptConfirm(
+      \ 'Clear local history?', g:EclimInfoHighlight)
   endif
 
-  if response =~ '^[yY]'
+  if response == 1
     let filename = len(a:000) > 0 ? a:000[0] : b:filename
     let current = eclim#project#util#GetProjectRelativeFilePath(filename)
     let project = eclim#project#util#GetCurrentProjectName()
