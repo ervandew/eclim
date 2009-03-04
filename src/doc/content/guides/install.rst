@@ -93,20 +93,34 @@ to install the application.
 
 .. note::
 
-  In some rare cases you might encounter the following error\:
+  In some rare cases you might encounter one of the following errors\:
 
-  ::
+  1. Any exception which denotes usage of gcj.
+     ::
 
-    java.lang.IncompatibleClassChangeError
-      at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
-      ...
+       java.lang.NullPointerException
+         at org.pietschy.wizard.HTMLPane.updateEditorColor(Unknown Source)
+         at org.pietschy.wizard.HTMLPane.setEditorKit(Unknown Source)
+         at javax.swing.JEditorPane.getEditorKit(libgcj.so.90)
+         ...
 
-  This is most likely caused by an incompatible version of log4j installed in
-  your jave ext.dirs.  To combat this you can run the installer like so\:
+     Gcj (GNU Compile for Java), is not currently supported.  If you receive any
+     error which references libgcj, then gcj is your current default jvm. So,
+     you'll need to install a sun jvm to resolve the installation error.
 
-  ::
+  2.
+    ::
 
-    $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
+      java.lang.IncompatibleClassChangeError
+        at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
+        ...
+
+    This is most likely caused by an incompatible version of log4j installed in
+    your jave ext.dirs.  To combat this you can run the installer like so\:
+
+    ::
+
+      $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
 
 
 Step 3: Testing the installation
