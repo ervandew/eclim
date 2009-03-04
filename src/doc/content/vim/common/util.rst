@@ -31,8 +31,8 @@ general purpose commands that are useful in and outside the scope of eclim.
   .. image:: ../../images/screenshots/locate.png
 
   While in this completion mode the following key bindings are available:
-    - <tab> - cycle forward through the results.
-    - <shift><tab> - cycle backwards through the results.
+    - <tab> or <down> - cycle forward through the results.
+    - <shift><tab> or <up> - cycle backwards through the results.
     - <enter> - open the selected file using the
       :ref:`default action <g:EclimLocatFileDefaultAction>`.
     - <ctrl>e - open the selected file via :edit
