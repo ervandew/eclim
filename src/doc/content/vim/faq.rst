@@ -92,6 +92,25 @@ directory.
 On Windows systems you can use the same steps described above, for setting
 the workspace location, to also set the proxy settings.
 
+.. _eclim_memory:
+
+How to I increase the java heap size that eclim uses.
+-----------------------------------------------------
+
+If you are using the headless version of eclimd, then you have two options:
+  1. pass the necessary jvm args to eclimd which control the heap size:
+
+     ::
+
+       $ eclimd -Xmx256M
+
+  2. specify the jvm args inside of your eclipse.ini as explained on the
+     `eclipse wiki`_.
+
+If you are using the headed version of eclimd, then increasing the jvm heap
+size for eclim is the same procedure as increasing the heap for eclipse.
+Details can be found on the `eclipse wiki`_.
+
 
 .. _eclim_troubleshoot:
 
@@ -100,3 +119,6 @@ How do I troubleshoot features not functioning, or errors encountered?
 
 For troubleshooting eclim, please see the dedicated
 :ref:`troubleshooting guide <guides/troubleshoot>`.
+
+
+.. _eclipse wiki: http://wiki.eclipse.org/Eclipse.ini
