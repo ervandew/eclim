@@ -636,6 +636,30 @@ function! eclim#util#PromptList(prompt, list, highlight)
   return response
 endfunction " }}}
 
+" PromptConfirm(prompt, highlight) {{{
+" Creates a yes/no prompt for the user using the supplied prompt string.
+" Returns -1 if the user canceled, otherwise 1 for yes, and 0 for no.
+function! eclim#util#PromptConfirm(prompt, highlight)
+  exec "echohl " . a:highlight
+  try
+    " clear any previous messages
+    redraw
+    echo a:prompt . "\n"
+    let response = input("(y/n): ")
+    while response != '' && response !~ '^\c\s*\(y\(es\)\?\|no\?\|\)\s*$'
+      let response = input("You must choose either y or n. (Ctrl-C to cancel): ")
+    endwhile
+  finally
+    echohl None
+  endtry
+
+  if response == ''
+    return -1
+  endif
+
+  return response =~ '\c\s*\(y\(es\)\?\)\s*'
+endfunction " }}}
+
 " RefreshFile() {{{
 function! eclim#util#RefreshFile()
   "FIXME: doing an :edit clears the undo tree, but the code commented out below
