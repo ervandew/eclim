@@ -139,7 +139,9 @@
       </classpath>
       <formatter type="xml"/>
       <batchtest fork="yes" todir="build/test/junit/results">
-        <fileset dir="build/test/junit/classes" includes="${test.include}.class"/>
+        <fileset dir="build/test/junit/classes"
+            includes="${test.include}.class"
+            excludes="${test.exclude}.class"/>
       </batchtest>
       <sysproperty key="eclim.home" value="${eclim.home}"/>
       <sysproperty key="eclim.version" value="${eclim.version}"/>
