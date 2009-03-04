@@ -65,6 +65,9 @@ public class HistoryCommandTest
         Eclim.fileToString(Eclim.TEST_PROJECT, TEST_FILE), "line 1\n");
 
     Eclim.execute(new String[]{
+      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+    });
+    Eclim.execute(new String[]{
       "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
 
@@ -80,6 +83,9 @@ public class HistoryCommandTest
       }
     }
 
+    Eclim.execute(new String[]{
+      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+    });
     Eclim.execute(new String[]{
       "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
