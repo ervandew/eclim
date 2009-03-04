@@ -53,10 +53,25 @@ Checking out the code and building it.
     $ cd eclim
     $ ant -Declipse.home=<your eclipse home dir>
 
+  .. note::
+
+    If your eclipse home path contains a space, be sure to quote it:
+
+      > ant "-Declipse.home=C:/Program Files/eclipse"
+
   This will build and deploy eclim to your eclipse and vim directories.  If you
   don't want to supply the eclipse home directory every time, you can set the
   environment variable ECLIM_ECLIPSE_HOME which the build script will then
   utilize.
+
+  .. note::
+
+    If your vimfiles directory is not located at the default location for your
+    OS, then you can specify the location using the "vim.files" property:
+
+      ::
+
+        $ ant -Dvim.files=<your vimfiles dir>
 
   By default the above ant call will build all the eclim plugins, requiring you
   to have all the related dependencies already installed in your eclipse
@@ -77,6 +92,14 @@ Checking out the code and building it.
     more than one plugin:
 
       > ant "-Dplugins=ant,jdt"
+
+  The currently available list of plugin names include:
+
+  - **jdt**: java support using the eclipse jdt.
+  - **ant**: ant support.
+  - **maven**: maven support.
+  - **wst**: web development support using the eclipse wst.
+  - **pdt**: php support using the eclipse pdt.
 
 
 .. _development-patches:
