@@ -26,6 +26,8 @@ import org.eclim.project.ProjectManagement;
 
 import org.eclim.util.ProjectUtils;
 
+import org.eclipse.core.resources.IProject;
+
 /**
  * Command to refresh / synchronize the in memory project with the files on
  * disk.
@@ -43,7 +45,8 @@ public class ProjectRefreshCommand
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
 
-    ProjectManagement.refresh(ProjectUtils.getProject(name), commandLine);
+    IProject project = ProjectUtils.getProject(name, true);
+    ProjectManagement.refresh(project, commandLine);
 
     return Services.getMessage("project.refreshed", name);
   }
