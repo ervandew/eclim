@@ -182,7 +182,15 @@ endfunction " }}}
 " ProjectOpen(name) {{{
 " Open the requested project.
 function! eclim#project#util#ProjectOpen(name)
-  let command = substitute(s:command_open, '<project>', a:name, '')
+  let name = a:name
+  if name == ''
+    if !eclim#project#util#IsCurrentFileInProject()
+      return
+    endif
+    let name = eclim#project#util#GetCurrentProjectName()
+  endif
+
+  let command = substitute(s:command_open, '<project>', name, '')
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)
@@ -192,7 +200,15 @@ endfunction " }}}
 " ProjectClose(name) {{{
 " Close the requested project.
 function! eclim#project#util#ProjectClose(name)
-  let command = substitute(s:command_close, '<project>', a:name, '')
+  let name = a:name
+  if name == ''
+    if !eclim#project#util#IsCurrentFileInProject()
+      return
+    endif
+    let name = eclim#project#util#GetCurrentProjectName()
+  endif
+
+  let command = substitute(s:command_close, '<project>', name, '')
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)

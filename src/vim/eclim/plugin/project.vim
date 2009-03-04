@@ -103,11 +103,11 @@ if !exists(":ProjectInfo")
     \ ProjectInfo :call eclim#project#util#ProjectInfo('<args>')
 endif
 if !exists(":ProjectOpen")
-  command -nargs=1 -complete=customlist,eclim#project#util#CommandCompleteProject
+  command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectOpen :call eclim#project#util#ProjectOpen('<args>')
 endif
 if !exists(":ProjectClose")
-  command -nargs=1 -complete=customlist,eclim#project#util#CommandCompleteProject
+  command -nargs=? -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectClose :call eclim#project#util#ProjectClose('<args>')
 endif
 if !exists(":ProjectNatures")
