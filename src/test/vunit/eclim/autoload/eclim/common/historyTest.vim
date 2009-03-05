@@ -56,8 +56,8 @@ function! TestHistory()
 
   call VUAssertEquals(expand('%'), '[History]', 'Wrong history buffer name.')
   call VUAssertEquals(line('$'), 5, 'Wrong number of history lines.')
-  call VUAssertTrue(getline(2) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ \(millis\|seconds\?\) ago)', 'Invalid entry.')
-  call VUAssertTrue(getline(3) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ \(millis\|seconds\?\) ago)', 'Invalid entry.')
+  call VUAssertTrue(getline(2) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ \(millis\|seconds\?\) ago)', 'Invalid entry 1.')
+  call VUAssertTrue(getline(3) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ .* ago)', 'Invalid entry 2.')
   call VUAssertEquals(getline(4), '')
   call VUAssertEquals(getline(5), 'v: view  d: diff  r: revert  c: clear')
 
