@@ -54,7 +54,7 @@ function! TestLocateFile()
   call VUAssertEquals(expand('%'), 'eclim_unit_test/vim/test.vim')
   bdelete
 
-  LocateFile vcs/merc*/*/file1.txt
+  LocateFile vcs/merc*/**/file1.txt
   call PeekRedir()
   call VUAssertEquals(
     \ expand('%'), 'eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
