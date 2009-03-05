@@ -53,6 +53,9 @@
   " list of commands that may fail using system() call, so using a temp file
   " instead.
   let s:exec_commands = ['java_complete']
+
+  let s:eclimd_running = 1
+  let s:eclimd_available_file = expand('~/.eclim/.eclimd.available')
 " }}}
 
 " ExecuteEclim(command) {{{
@@ -61,6 +64,16 @@ function! eclim#ExecuteEclim(command)
   if exists('g:EclimDisabled')
     return
   endif
+
+  " eclimd appears to be down, so exit early if in an autocmd
+  if !s:eclimd_running && expand('<amatch>') != ''
+    " check for file created by eclimd to signal that it is back up.
+    if !filereadable(s:eclimd_available_file)
+      return
+    endif
+  endif
+
+  let s:eclimd_running = 1
 
   let command = a:command
 
@@ -73,7 +86,7 @@ function! eclim#ExecuteEclim(command)
   let [retcode, result] = eclim#client#nailgun#Execute(command)
   let result = substitute(result, '\n$', '', '')
 
-  " not sure this is the best place handle this, but when using the python
+  " not sure this is the best place to handle this, but when using the python
   " client, the result has a trailing ctrl-m on windows.
   if has('win32') || has('win64')
     let result = substitute(result, "\<c-m>$", '', '')
@@ -93,7 +106,11 @@ function! eclim#ExecuteEclim(command)
   if retcode || error != ''
     if g:EclimShowErrors
       if error =~ s:connect
-        " eclimd is not running and we appear to not be in an autocmd
+        " eclimd is not running, disable further eclimd calls
+        let s:eclimd_running = 0
+
+        " if we are not in an autocmd, alert the user that eclimd is not
+        " running.
         if expand('<amatch>') == ''
           call eclim#util#EchoWarning("unable to connect to eclimd - " . error)
         endif
@@ -102,7 +119,7 @@ function! eclim#ExecuteEclim(command)
         call eclim#util#EchoError(error)
       endif
     endif
-    return 0
+    return
   endif
 
   return result

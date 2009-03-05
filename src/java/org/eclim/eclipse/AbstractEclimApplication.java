@@ -24,6 +24,8 @@ import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
+import org.apache.commons.lang.SystemUtils;
+
 import org.eclim.Services;
 
 import org.eclim.logging.Logger;
@@ -32,6 +34,8 @@ import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.IOUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -79,6 +83,12 @@ public abstract class AbstractEclimApplication
 
       // add shutdown hook.
       Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+
+      // create marker file indicating that eclimd is up
+      File marker = new File(FileUtils.concat(
+            SystemUtils.USER_HOME, ".eclim/.eclimd.available"));
+      marker.createNewFile();
+      marker.deleteOnExit();
 
       // start nail gun
       logger.info("Eclim Server Started on port " + port + '.');
