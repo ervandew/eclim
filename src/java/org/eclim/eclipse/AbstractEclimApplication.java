@@ -87,8 +87,10 @@ public abstract class AbstractEclimApplication
       // create marker file indicating that eclimd is up
       File marker = new File(FileUtils.concat(
             SystemUtils.USER_HOME, ".eclim/.eclimd.available"));
-      marker.createNewFile();
-      marker.deleteOnExit();
+      if(marker.getParentFile().mkdirs()){
+        marker.createNewFile();
+        marker.deleteOnExit();
+      }
 
       // start nail gun
       logger.info("Eclim Server Started on port " + port + '.');
