@@ -42,7 +42,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   By default, all searching by this command is limited to the current project
   and any projects listed as dependencies, but you can widen the search scope
-  to include the entire workspace by setting **g:EclimLocateFileScope** to
+  to include all open projects by setting **g:EclimLocateFileScope** to
   'workspace'.
 
   .. note::
@@ -56,17 +56,23 @@ general purpose commands that are useful in and outside the scope of eclim.
 
 .. _g\:EclimLocatFileDefaultAction:
 
-  **g:EclimLocatFileDefaultAction** (defaults to 'split') -
+  **g:EclimLocatFileDefaultAction** (Default: 'split') -
   Determines the command used to open the file when hitting <enter> on an entry
   in the locate file results.
 
 .. _g\:EclimLocatFileScope:
 
-  **g:EclimLocatFileScope** (defaults to 'project') -
+  **g:EclimLocatFileScope** (Default: 'project') -
   Determines the scope for which to search for files.
 
   - 'project': search only the current project and its dependencies.
   - 'workspace': search the entire workspace (all open projects).
+
+.. _g\:EclimLocatFileFuzzy:
+
+  **g:EclimLocatFileFuzzy** (Default: 1) -
+  Determines whether or not 'fuzzy' searching will be used on the no arugment
+  version of :LocateFile.
 
 .. _\:Split:
 

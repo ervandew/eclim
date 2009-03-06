@@ -100,7 +100,7 @@ if !exists(":SwapTypedArguments")
   command SwapTypedArguments :call eclim#common#util#SwapTypedArguments()
 endif
 if !exists(":LocateFile")
-  command -nargs=? LocateFile :call eclim#common#util#LocateFile('', '<args>')
+  command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
 endif
 
 if has('signs')
