@@ -19,6 +19,7 @@ package org.eclim.eclipse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 import java.util.Properties;
 
@@ -85,8 +86,14 @@ public abstract class AbstractEclimApplication
       // create marker file indicating that eclimd is up
       File marker = new File(
           FileUtils.concat(System.getProperty("eclim.home"), ".available"));
-      marker.createNewFile();
-      marker.deleteOnExit();
+      try{
+        marker.createNewFile();
+        marker.deleteOnExit();
+      }catch(IOException ioe){
+        logger.error(
+            "\nError creating eclimd marker file: " + ioe.getMessage() +
+            "\n" + marker);
+      }
 
       // start nailgun
       logger.info("Eclim Server Started on port " + port + '.');
