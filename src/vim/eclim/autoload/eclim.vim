@@ -55,7 +55,7 @@
   let s:exec_commands = ['java_complete']
 
   let s:eclimd_running = 1
-  let s:eclimd_available_file = expand('~/.eclim/.eclimd.available')
+  let s:eclimd_available_file = g:EclimHome . '/.available'
 " }}}
 
 " ExecuteEclim(command) {{{

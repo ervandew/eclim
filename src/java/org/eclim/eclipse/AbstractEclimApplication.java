@@ -24,8 +24,6 @@ import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
-import org.apache.commons.lang.SystemUtils;
-
 import org.eclim.Services;
 
 import org.eclim.logging.Logger;
@@ -85,14 +83,12 @@ public abstract class AbstractEclimApplication
       Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
       // create marker file indicating that eclimd is up
-      File marker = new File(FileUtils.concat(
-            SystemUtils.USER_HOME, ".eclim/.eclimd.available"));
-      if(marker.getParentFile().mkdirs()){
-        marker.createNewFile();
-        marker.deleteOnExit();
-      }
+      File marker = new File(
+          FileUtils.concat(System.getProperty("eclim.home"), ".available"));
+      marker.createNewFile();
+      marker.deleteOnExit();
 
-      // start nail gun
+      // start nailgun
       logger.info("Eclim Server Started on port " + port + '.');
       server.run();
     }catch(NumberFormatException nfe){
