@@ -153,6 +153,10 @@ function eclim#common#locate#LocateFileCompletion()
     endif
     let results = split(eclim#ExecuteEclim(command), '\n')
     if len(results) == 1 && results[0] == '0'
+      let winnr = winnr()
+      exec bufwinnr(b:results_bufnum) . 'winc w'
+      1,$delete _
+      exec winnr . 'winc w'
       return
     endif
     if !empty(results)
@@ -320,10 +324,10 @@ endfunction " }}}
 function s:LocateFileConvertPattern(pattern)
   let pattern = a:pattern
 
-   " if starts with a word char, expand the search, otherwise assume the user
-   " knows what they are doing
-  if pattern =~ '^\w'
-    let pattern = '.*' . pattern
+  " if the user supplied a path, prepend a '.*/' to it so that they don't need
+  " to type full paths to match.
+  if pattern =~ '.\+/'
+    let pattern = '.*/' . pattern
   endif
   let pattern = substitute(pattern, '\*\*', '.*', 'g')
   let pattern = substitute(pattern, '\(^\|\([^.]\)\)\*', '\1[^/]*?', 'g')
