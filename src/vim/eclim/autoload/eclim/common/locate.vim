@@ -145,12 +145,14 @@ function eclim#common#locate#LocateFileCompletion()
     else
       let pattern = s:LocateFileConvertPattern(pattern)
     endif
+
     let command = s:command_locate
     let command = substitute(command, '<scope>', b:scope, '')
     let command .= ' -p "' . pattern . '"'
-    if b:scope == 'project'
+    if b:project != ''
       let command .= ' -n "' . b:project . '"'
     endif
+
     let results = split(eclim#ExecuteEclim(command), '\n')
     if len(results) == 1 && results[0] == '0'
       let winnr = winnr()

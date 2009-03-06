@@ -56,8 +56,8 @@ import org.eclipse.core.runtime.IPath;
 public class LocateFileCommand
   extends AbstractCommand
 {
-  public static final String SCOPE_ALL = "all";
   public static final String SCOPE_PROJECT = "project";
+  public static final String SCOPE_WORKSPACE = "workspace";
 
   /**
    * {@inheritDoc}
@@ -66,12 +66,12 @@ public class LocateFileCommand
     throws Exception
   {
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
     String scope = commandLine.getValue(Options.SCOPE_OPTION);
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
 
-    if (SCOPE_PROJECT.equals(scope)){
-      String projectName = commandLine.getValue(Options.NAME_OPTION);
+    if (projectName != null){
       IProject project = ProjectUtils.getProject(projectName, true);
       projects.add(project);
       IProject[] depends = project.getReferencedProjects();
@@ -81,21 +81,60 @@ public class LocateFileCommand
         }
         projects.add(p);
       }
-    }else{
+    }
+
+    if (SCOPE_WORKSPACE.equals(scope)){
       IProject[] all = ResourcesPlugin.getWorkspace().getRoot().getProjects();
       for (IProject p : all){
-        if(p.isOpen()){
+        if(p.isOpen() && !projects.contains(p)){
           projects.add(p);
         }
       }
     }
 
-    FileMatcher matcher = new FileMatcher(pattern);
+    FileMatcher matcher = new FileMatcher(pattern, projectName);
     for (IProject resource : projects){
       resource.accept(matcher, 0);
     }
 
     return StringUtils.join(matcher.getResults(), '\n');
+  }
+
+  private static class Result
+  {
+    public String name;
+    public String projectPath;
+    public String realPath;
+    public String projectName;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param name The name for this instance.
+     * @param projectPath The projectPath for this instance.
+     * @param realPath The realPath for this instance.
+     * @param projectName The projectName for this instance.
+     */
+    public Result(
+        String name,
+        String projectPath,
+        String realPath,
+        String projectName)
+    {
+      this.name = name;
+      this.projectPath = projectPath;
+      this.realPath = realPath;
+      this.projectName = projectName;
+    }
+
+    public String toString()
+    {
+      return new StringBuffer()
+        .append(name).append('|')
+        .append(projectPath).append('|')
+        .append(realPath)
+        .toString();
+    }
   }
 
   private static class FileMatcher
@@ -117,25 +156,32 @@ public class LocateFileCommand
       new ArrayList<String>();
     static {
       IGNORE_EXTS.add("class");
+      IGNORE_EXTS.add("gif");
+      IGNORE_EXTS.add("jpeg");
+      IGNORE_EXTS.add("jpg");
+      IGNORE_EXTS.add("png");
       IGNORE_EXTS.add("pyc");
       IGNORE_EXTS.add("swp");
     }
 
     private String pattern;
+    private String projectName;
     private Matcher matcher;
     private boolean includesPath;
     private Matcher baseMatcher;
-    private ArrayList<String> paths = new ArrayList<String>();
+    private ArrayList<Result> results = new ArrayList<Result>();
     private ArrayList<String> seen = new ArrayList<String>();
 
     /**
      * Constructs a new instance.
      *
      * @param pattern The pattern for this instance.
+     * @param projectName The possibly null current project name.
      */
-    public FileMatcher (String pattern)
+    public FileMatcher (String pattern, String projectName)
     {
       this.pattern = pattern;
+      this.projectName = projectName;
       this.matcher = Pattern.compile(pattern).matcher("");
 
       Matcher baseMatcher = FIND_BASE.matcher(pattern);
@@ -153,7 +199,7 @@ public class LocateFileCommand
     public boolean visit(IResourceProxy proxy)
       throws CoreException
     {
-      if (paths.size() >= 100){
+      if (results.size() >= 100){
         return false;
       }
 
@@ -167,7 +213,7 @@ public class LocateFileCommand
       }else if (type == IResource.FOLDER){
         return true;
       }else if (type == IResource.FILE){
-        String ext = FileUtils.getExtension(name);
+        String ext = FileUtils.getExtension(name).toLowerCase();
         if (IGNORE_EXTS.contains(ext)){
           return false;
         }
@@ -190,9 +236,11 @@ public class LocateFileCommand
         if (raw != null){
           String rel = resource.getFullPath().toOSString().replace('\\', '/');
           String path = raw.toOSString().replace('\\', '/');
-          String entry = FileUtils.getBaseName(rel) + '|' + rel + '|' + path;
+          Result entry = new Result(
+              FileUtils.getBaseName(rel),
+              rel, path, resource.getProject().getName());
           if (!seen.contains(path)){
-            paths.add(entry);
+            results.add(entry);
             seen.add(path);
           }
         }
@@ -201,38 +249,42 @@ public class LocateFileCommand
       return true;
     }
 
-    public List<String> getResults()
+    public List<Result> getResults()
     {
-      FilePathComparator comparator = new FilePathComparator(pattern);
-      Collections.sort(paths, comparator);
-      return paths;
+      FilePathComparator comparator =
+        new FilePathComparator(pattern, projectName);
+      Collections.sort(results, comparator);
+      return results;
     }
   }
 
   private static class FilePathComparator
-    implements Comparator<String>
+    implements Comparator<Result>
   {
     private StringDistance distance;
     private String pattern;
+    private String projectName;
     private Map<String, Double> scores = new HashMap<String, Double>();
 
     /**
      * Constructs a new instance.
      *
      * @param pattern The pattern for this instance.
+     * @param projectName The possibly null current project name.
      */
-    public FilePathComparator (String pattern)
+    public FilePathComparator(String pattern, String projectName)
     {
       this.distance = new Levenstein();
       this.pattern = pattern;
       this.pattern = this.pattern.replaceAll("\\.\\*\\??", "");
+      this.projectName = projectName;
     }
 
     /**
      * {@inheritDoc}
      * @see Comparator#compare(T,T)
      */
-    public int compare(String o1, String o2)
+    public int compare(Result o1, Result o2)
     {
       double score1 = score(o1);
       double score2 = score(o2);
@@ -240,12 +292,21 @@ public class LocateFileCommand
       return (int)Math.round(score1 - score2);
     }
 
-    public double score(String path)
+    public double score(Result result)
     {
+      String path = result.projectPath;
       if (this.scores.containsKey(path)){
         return this.scores.get(path);
       }
       double score = 0 - this.distance.score(this.pattern, path);
+
+      // weight files in the current project more favorably
+      if (projectName != null){
+        if (result.projectName.equals(projectName)){
+          score -= score * .1;
+        }
+      }
+
       this.scores.put(path, score);
       return score;
     }
