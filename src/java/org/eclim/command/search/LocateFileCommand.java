@@ -159,7 +159,9 @@ public class LocateFileCommand
       int type = proxy.getType();
       String name = proxy.getName();
 
-      if (type == IResource.FOLDER && IGNORE_DIRS.contains(name)){
+      if (type == IResource.PROJECT){
+        return true;
+      }else if (type == IResource.FOLDER && IGNORE_DIRS.contains(name)){
         return false;
       }else if (type == IResource.FOLDER){
         return true;
