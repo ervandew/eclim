@@ -126,6 +126,7 @@ public class LocateFileCommand
     private boolean includesPath;
     private Matcher baseMatcher;
     private ArrayList<String> paths = new ArrayList<String>();
+    private ArrayList<String> seen = new ArrayList<String>();
 
     /**
      * Constructs a new instance.
@@ -189,7 +190,11 @@ public class LocateFileCommand
         if (raw != null){
           String rel = resource.getFullPath().toOSString().replace('\\', '/');
           String path = raw.toOSString().replace('\\', '/');
-          paths.add(FileUtils.getBaseName(rel) + '|' + rel + '|' + path);
+          String entry = FileUtils.getBaseName(rel) + '|' + rel + '|' + path;
+          if (!seen.contains(path)){
+            paths.add(entry);
+            seen.add(path);
+          }
         }
       }
 
