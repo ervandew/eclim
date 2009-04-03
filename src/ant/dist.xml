@@ -16,11 +16,19 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project name="dist" default="dist" basedir="../..">
+
   <!--
     - Target for creating distributable files.
     -->
   <target name="dist" depends="clean,build,javadoc,docs,vimdocs"
       description="Creates the distributable files.">
+
+    <condition property="valid.jvm">
+      <equals arg1="${ant.java.version}" arg2="${javac.target}"/>
+    </condition>
+    <fail unless="valid.jvm"
+        message="Distribution must be built with jdk ${javac.target}"/>
+
     <mkdir dir="${build.installer}"/>
 
     <!-- docs archive -->
