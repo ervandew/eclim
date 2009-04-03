@@ -24,11 +24,13 @@
 
 source $VIMRUNTIME/syntax/java.vim
 
-" annotations can be fully qualified.
-syn match   javaAnnotation      "@[_$a-zA-Z][_$a-zA-Z0-9_.]*\>"
+" syntax now found in the latest version of java.vim
+if hlID('javaFold') == 0
+  syn region javaFold start="{" end="}" transparent fold
+  syn match javaAnnotation "@\([_$a-zA-Z][_$a-zA-Z0-9]*\.\)*[_$a-zA-Z][_$a-zA-Z0-9]*\>"
+endif
 
-" allow folding of blocks and java doc comments.
-syn region javaBlockFold start="{" end="}" transparent fold
+" allow folding of java doc comments.
 syn region javaDocComment start="/\*\*" end="\*/" keepend contains=javaCommentTitle,@javaHtml,javaDocTags,javaDocSeeTag,javaTodo,@Spell fold
 
 " vim:ft=vim:fdm=marker
