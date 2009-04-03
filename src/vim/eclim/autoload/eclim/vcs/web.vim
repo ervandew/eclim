@@ -96,7 +96,7 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
   if type(GetUrl) != 2
     return
   endif
-  call eclim#web#OpenUrl(GetUrl(root, path, a:000), 0)
+  call eclim#web#OpenUrl(GetUrl(root, path, a:000))
 endfunction " }}}
 
 " VcsWebLog() {{{

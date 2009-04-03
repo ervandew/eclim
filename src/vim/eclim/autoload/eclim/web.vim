@@ -68,11 +68,11 @@ function! eclim#web#OpenUrl(url, ...)
 
   let url = a:url
   if url == ''
-    if len(a:000) >= 2
+    if len(a:000) > 2
       let start = a:000[1]
       let end = a:000[2]
       while start <= end
-        call eclim#web#OpenUrl(eclim#util#GrabUri(start, col('.')))
+        call eclim#web#OpenUrl(eclim#util#GrabUri(start, col('.')), a:000[0])
         let start += 1
       endwhile
       return
@@ -99,7 +99,7 @@ function! eclim#web#OpenUrl(url, ...)
     endif
   endif
 
-  if len(a:000) == 0 || a:000[0] != 0
+  if len(a:000) == 0 || a:000[0] == ''
     for pattern in g:EclimOpenUrlInVimPatterns
       if url =~ pattern
         exec g:EclimOpenUrlInVimAction . ' ' . url

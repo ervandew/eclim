@@ -29,7 +29,6 @@ OpenUrl
 The first of these commands is **:OpenUrl** which opens a url in your web
 browser, or optionally in Vim via netrw (:help netrw).
 
-
 When executing the command you may supply the url to open, or if ommitted, it
 will open the url under the cursor.  By default all urls will open in your web
 browser, but you may optionally configure a list of url patterns to be opened
@@ -50,6 +49,15 @@ to be opened in Vim (split, edit, etc.).
 .. code-block:: vim
 
   let g:EclimOpenUrlInVimAction = 'split'
+
+If a url you want to open matches one
+of these patterns, but you want to force it to be opened in your browser, you
+can supply a bang (!) to force it to do so:
+
+::
+
+  :OpenUrl!
+
 
 Configuration
 -------------
