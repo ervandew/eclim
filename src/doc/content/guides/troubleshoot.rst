@@ -153,4 +153,20 @@ eclim-user_ mailing list along with a description of what you were doing when
 the error occurred, as well as the OS you are on, and whether you were using
 eclimd headless or headed (inside of the eclipse gui).
 
+
+.. _ts_incompatible_plugins:
+
+Incompatible Plugins
+--------------------
+
+There are some third party eclipse plugins which currently may interfere with
+eclim.  Below is a list of these known plugin incompatibilities.
+
+- **Spring IDE**: At least one user has reported that eclim's java validation
+  no longer works after installing the Spring IDE.
+- **viPlugin**: Attempting to open a file using the embedded gvim support
+  fails if viPlugin is installed.  This issue has been reported on the
+  viPlugin site.
+
+
 .. _eclim-user: http://groups.google.com/group/eclim-user
