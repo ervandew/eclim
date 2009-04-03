@@ -23,7 +23,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
 .. _\:LocateFile:
 
-- **:LocateFile** [file] -
+- **:LocateFile** [file_pattern] -
   Attempts to locate the supplied file pattern or if no argument is supplied,
   opens a temporary window where the text you type is turned into a pattern and
   search results are presented as you type.
@@ -40,10 +40,26 @@ general purpose commands that are useful in and outside the scope of eclim.
     - <ctrl>t - open the selected file via :tabnew
     - <esc> - close the search window without selecting a file.
 
-  By default, all searching by this command is limited to the current project
-  and any projects listed as dependencies, but you can widen the search scope
-  to include all open projects by setting **g:EclimLocateFileScope** to
-  'workspace'.
+  By default, the search string accepted by the completion mode is intended to
+  be just portions of the file name you are looking for, which is then
+  automatically expanded in an effort to help you find the file with the fewest
+  keystrokes possible.
+
+  The argument version of **:LocateFile** on the other hand, accepts a hybrid
+  glob/regex pattern.  The glob portion allows you to use * and ** to match
+  portions of a path or traverse multiple directories.  You can mix * and **
+  with standard perl compatible regex operators to construct your search
+  pattern.
+
+  If you prefer the more explicit patterns supported by the argument version of
+  **:LocateFile** over the default "fuzzy" pattern supported by the completion
+  version of **:LocateFile**, then you can turn off the fuzzy matching support
+  using the **g:EclimLocateFileFuzzy** variable described below.
+
+  By default, all searching by both variants of this command is limited to the
+  current project and any projects listed as dependencies, but you can widen
+  the search scope to include all open projects by setting
+  **g:EclimLocateFileScope** to 'workspace'.
 
   .. note::
 
