@@ -33,7 +33,7 @@ at the root.
         public class AbstractCommand
           public interface Command
 
-Inner classes / interface are also supported.  Just place the cursor on the
+Inner classes / interfaces are also supported.  Just place the cursor on the
 inner class / interface before calling **:JavaHierarchy**.
 
 While you are in the hierarchy tree buffer, you can jump to the type under the
