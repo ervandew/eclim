@@ -295,9 +295,8 @@ function! eclim#java#search#SearchAndDisplay(type, args)
       " single result in another file.
       elseif len(results) == 1 && g:EclimJavaSearchSingleResult != "lopen"
         let entry = getloclist(0)[0]
-        call eclim#util#GoToBufferWindowOrOpen
-          \ (bufname(entry.bufnr), g:EclimJavaSearchSingleResult)
-
+        let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+        call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
         call cursor(entry.lnum, entry.col)
       else
         lopen
