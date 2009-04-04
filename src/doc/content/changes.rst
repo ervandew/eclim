@@ -18,7 +18,7 @@ History of Changes
 
 .. _1.4.5:
 
-1.4.5 (2009)
+1.4.5 (Apr. 04, 2009)
 ----------------------
 
 Bug Fixes:
@@ -26,10 +26,10 @@ Bug Fixes:
   - Fixed closing of gvim from eclipse to cleanup swap files.
   - Fixed python code completion and find support when editing files with dos
     line endings or multi-byte unicode characters.
-  - Various bug fixes.
+  - Various other bug fixes.
 
 Eclim:
-  - Added integration with the eclipse
+  - Added integration with eclipse's
     :ref:`local history <vim/common/history>` support.
 
 Java:
@@ -38,7 +38,7 @@ Java:
 
 .. _1.4.4:
 
-1.4.4 (Jan. 1, 2009)
+1.4.4 (Jan. 10, 2009)
 ----------------------
 
 Bug Fixes:
