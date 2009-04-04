@@ -2,11 +2,16 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - docs
-    - installer + proxy faq
-    - list of feature -> dependencies
-    - how to report bugs
-    - list of plugin incompatibilities
+  - Keeping checking pdt update site to re-enable auto install in installer.
+
+  - :Jps updates
+    - open jconsole (handle errors)
+
+  - :LocateFile
+    - eclipse setting to filter out results
+
+  - possible rendering issue (cannot reproduce)
+    http://groups.google.com/group/eclim-user/browse_thread/thread/7d8824b342019150
 }}}
 
 TODO {{{
@@ -219,6 +224,12 @@ TODO {{{
       - missing closing }
       - font: 100%;
       - trailing , on list of selectors
+  }}}
+
+  D {{{
+
+    http://www.dsource.org/projects/descent
+
   }}}
 
   Groovy {{{
@@ -446,10 +457,16 @@ TODO {{{
 
     - jython?
 
-    - rope code completion enhancements
-      - self.<field> completion inside of __init__
-        - look at __init__ params
-        - look at super class self.<field> values
+    - rope
+      - other rope provided features
+        - organize imports
+        - fix imports
+        - get pydoc
+      - code completion enhancements
+        - proposal.parameters (as of 0.9.2)
+        - self.<field> completion inside of __init__
+          - look at __init__ params
+          - look at super class self.<field> values
 
     - modify :DjangoFind to account for django provided tags and filters.
 
@@ -465,6 +482,10 @@ TODO {{{
     - http://rubyeclipse.sourceforge.net/ rubyeclipse
     - http://www.radrails.org/ rad rails
     - jruby?
+  }}}
+
+  Scala {{{
+    - http://www.scala-lang.org/node/94
   }}}
 
   SQL {{{
@@ -538,13 +559,14 @@ NOTES {{{
       - starting eclim without spawning separate console
         > java -jar plugins/org.eclipse.equinox.launcher_<version>.jar
                -debug -consolelog -nosplash -clean -refresh
-               -application org.eclim.application
+               -application org.eclim.application_headless
 
     Minimum execution of vim w/ eclim support
-      $ vim -u NONE -U NONE -c "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+      $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
 
       Windows
-      > "C:\Program Files\Vim\vim72\gvim" -u NONE -U NONE -c "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+      > "C:\Program Files\Vim\vim72\gvim"
+            -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
 
     Helpful link for debugging plugin errors.
       http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
@@ -617,6 +639,9 @@ NOTES {{{
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd ~/.kde/Autostart
 
   }}}
+
+  Git repos for vim:
+  http://repo.or.cz/w/vim_mainline.git
 
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
