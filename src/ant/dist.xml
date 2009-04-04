@@ -18,17 +18,21 @@
 <project name="dist" default="dist" basedir="../..">
 
   <!--
-    - Target for creating distributable files.
+    - Target to validate the jvm version before building distributables
     -->
-  <target name="dist" depends="clean,build,javadoc,docs,vimdocs"
-      description="Creates the distributable files.">
-
+  <target name="validate">
     <condition property="valid.jvm">
       <equals arg1="${ant.java.version}" arg2="${javac.target}"/>
     </condition>
     <fail unless="valid.jvm"
         message="Distribution must be built with jdk ${javac.target}"/>
+  </target>
 
+  <!--
+    - Target for creating distributable files.
+    -->
+  <target name="dist" depends="validate,clean,build,javadoc,docs,vimdocs"
+      description="Creates the distributable files.">
     <mkdir dir="${build.installer}"/>
 
     <!-- docs archive -->
