@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Sed script which processes the file ~/.eclimrc, transforming it into a set of
-# -D arguments to be passed to eclipse at startup.
+# -D and other vm arguments to be passed to eclipse at startup.
 # Usage: sed -n -f eclimd.sed ~/.eclimrc
 
 # delete blank and comment lines.
@@ -30,6 +30,8 @@ ${
   # remove line continuation chars.
   s/\\\s*//g
   # remove all new line characters and add -D for each property
-  s/\n/ -D/g
+  s/\n\(\w\)/ -D\1/g
+  # remove any remaining new line characters
+  s/\n/ /g
   p
 }

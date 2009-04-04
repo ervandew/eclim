@@ -94,22 +94,37 @@ the workspace location, to also set the proxy settings.
 
 .. _eclim_memory:
 
-How to I increase the java heap size that eclim uses.
------------------------------------------------------
+How to I specify jvm memory arguments for eclim (fix OutOfMemory errors).
+-------------------------------------------------------------------------
 
-If you are using the headless version of eclimd, then you have two options:
-  1. pass the necessary jvm args to eclimd which control the heap size:
+If you are using the headless version of eclimd, then you have a couple
+options:
 
-     ::
+1. pass the necessary jvm args to eclimd. For example, to increase the heap
+   size:
 
-       $ eclimd -Xmx256M
+   ::
 
-  2. specify the jvm args inside of your eclipse.ini as explained on the
-     `eclipse wiki`_.
+     $ eclimd -Xmx256M
 
-If you are using the headed version of eclimd, then increasing the jvm heap
-size for eclim is the same procedure as increasing the heap for eclipse.
-Details can be found on the `eclipse wiki`_.
+2. if you are using a unix variant, then you can add the necessary vm args to
+   a .eclimrc file in your home directory.
+
+   ::
+
+      # increase heap size
+      -Xmx256M
+
+      # increase perm gen size
+      -XX:PermSize=64m
+      -XX:MaxPermSize=128m
+
+   On Windows systems you can use the same steps described above, for setting
+   the workspace location, to also specify the jvm memory args.
+
+If you are using the headed version of eclimd, then setting the jvm memory
+arguments for eclim is the same procedure as setting them for eclipse.  Details
+can be found on the `eclipse wiki`_.
 
 
 .. _eclim_troubleshoot:

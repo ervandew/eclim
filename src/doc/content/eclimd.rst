@@ -164,10 +164,11 @@ binding string as found in:
 ~/.eclimrc
 ----------
 
-On unix platforms eclim supports an optional .eclimrc file located in your home
-directory.  In this file you may supply any system properties which you would
-like passed to eclimd at startup.  The format of this file is the same as the
-standard java properties file format.
+On unix platforms (linux, mac, bsd) eclim supports an optional .eclimrc file
+located in your home directory.  In this file you may supply any system
+properties or vm args which you would like passed to eclimd at startup.  The
+format of this file is the same as the standard java properties file format
+with the exception of any vm args which you would like to include.
 
 Ex.
 
@@ -179,6 +180,13 @@ Ex.
   # Specifies the workspace directory to use
   # See $ECLIPSE_HOME/configuration/config.ini for other osgi properties.
   osgi.instance.area.default=@user.home/myworkspace
+
+  # increase heap size
+  -Xmx256M
+
+  # increase perm gen size
+  -XX:PermSize=64m
+  -XX:MaxPermSize=128m
 
 The eclim client will also utilize this file, but only to determine the
 nailgun server port should you choose to change the default.
