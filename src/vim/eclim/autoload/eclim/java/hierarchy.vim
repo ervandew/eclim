@@ -94,7 +94,10 @@ function! s:Open(action)
   let filename = expand('%:p')
   if exists('b:filename')
     let filename = b:filename
-    silent exec 'edit ' . b:filename
+    if !eclim#util#GoToBufferWindow(b:filename)
+      call eclim#util#EchoError('File is no longer open: ' . b:filename)
+      return
+    endif
   endif
   let saved = g:EclimJavaSearchSingleResult
   try
