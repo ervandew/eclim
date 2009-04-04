@@ -38,6 +38,10 @@ public class ProjectCommandsTest
   @Test
   public void createProject()
   {
+    // delete the test project if it exists
+    if (Eclim.projectExists(TEST_PROJECT)){
+      Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT});
+    }
     assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
