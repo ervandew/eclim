@@ -28,6 +28,7 @@ Checking out the code and building it.
 --------------------------------------
 
 1. Check out the code:
+
   ::
 
     $ git clone git://eclim.git.sourceforge.net/gitroot/eclim
