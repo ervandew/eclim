@@ -1,13 +1,13 @@
-#Wed Jan 14 20:49:26 PST 2009
+#Sat Apr 04 19:19:53 PDT 2009
 eclipse.preferences.version=1
 org.eclim.java.checkstyle.config=src/java/checkstyle.xml
-org.eclim.java.doc.version=
 org.eclim.java.junit.command=Ant -Dtest.include\=<testcase> test
 org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.junit.src_dir=<project>/src/test/junit
 org.eclim.java.logging.impl=custom
 org.eclim.java.logging.template=eclim.logger.gst
 org.eclim.project.copyright=src/copyright
-org.eclim.project.vcs.web.url=http\://eclim.svn.sourceforge.net/viewvc/eclim/
+org.eclim.project.vcs.web.url=http\://eclim.git.sourceforge.net/git/gitweb.cgi?p\=eclim
+org.eclim.project.vcs.web.viewer=gitweb
 org.eclim.user.email=ervandew@gmail.com
 org.eclim.user.name=Eric Van Dewoestine

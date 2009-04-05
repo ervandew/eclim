@@ -72,4 +72,4 @@ are several ways in which you can contribute:
     is used to help children in Uganda.  Feel free to mention your referral
     from eclim if appropriate.
 
-.. _todo list: http://eclim.svn.sourceforge.net/viewvc/eclim/trunk/notes.txt?view=log
+.. _todo list: http://eclim.git.sourceforge.net/git/gitweb.cgi?p=eclim;a=blob_plain;f=notes.txt;hb=HEAD

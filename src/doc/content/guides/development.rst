@@ -28,18 +28,9 @@ Checking out the code and building it.
 --------------------------------------
 
 1. Check out the code:
-
   ::
 
-    $ svn co https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
-
-  If your planning on contributing code beyond small bug fixes, then it is
-  highly recommend to check the code out using git_, specifically using
-  git-svn_:
-
-  ::
-
-    $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
+    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim
 
   Once you have a local git repository you can utilize the extensive local git
   functionality allowing you to commit code locally, create local branches,
@@ -115,10 +106,7 @@ anything non-trivial, the preferred means of managing those patches.
 
 **Submitting Patches**
 
-Any patches you submit should be in the form of an svn diff (if you chose to
-use svn) or as a git formatted patch (for those using git).  For svn users,
-simply redirecting ``svn diff`` to a file will suffice.  For git users, the
-preferred method is to use git-format-patch:
+Any patches you submit should be in the form of a git formatted patch:
 
   ::
 
@@ -164,7 +152,7 @@ This example will use the recommend tools, git_ and stgit_.
 
   ::
 
-    $ git svn clone https://eclim.svn.sourceforge.net/svnroot/eclim/trunk eclim
+    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim
 
 2. Initialize stgit for the eclim repository:
 
@@ -241,28 +229,16 @@ At this point all that is left is submitting the patch to the
 
 **Pulling Updates**
 
-  As some point you'll need to pull updates from the remote svn repository.
-  For svn users it's a simple ``svn up``, but for git/stgit users the process
-  is not as obvious.
-
-  If you're using just git-svn, without stgit, then you can pull updates like
-  so:
+  As some point you'll need to pull updates from the remote git repository.  If
+  you're using git without stgit, then you can pull updates in the standard git
+  fashion:
 
     ::
 
-      $ git svn rebase
+      $ git pull
 
-  If you're using stgit on top of git, then the preferred method is to first
-  run the following commands:
-
-    ::
-
-      $ git config stgit.pull-policy rebase
-      $ git config stgit.rebasecmd "git svn rebase"
-      $ git config branch.master.stgit.parentbranch remotes/trunk
-
-  Once you've got that part setup you can then use stgit to pull the latest
-  changes from the remote repository:
+  If you're using stgit on top of git, then the preferred method is to pull via
+  stgit:
 
     ::
 
@@ -281,7 +257,6 @@ All of that and more can be found in the
 
 
 .. _git: http://git-scm.com/
-.. _git-svn: http://www.kernel.org/pub/software/scm/git/docs/git-svn.html
 .. _git-format-patch: http://www.kernel.org/pub/software/scm/git/docs/git-format-patch.html
 .. _managing of patch series: http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#cleaning-up-history
 .. _Stacked Git: http://procode.org/stgit/

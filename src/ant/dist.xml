@@ -104,8 +104,6 @@
         <include name="**/*"/>
         <exclude name=".git/**/*"/>
         <exclude name=".git/"/>
-        <exclude name=".svn/**/*"/>
-        <exclude name=".svn/"/>
         <exclude name=".ropeproject/**/*"/>
         <exclude name=".ropeproject/"/>
         <exclude name="backup/**/*"/>

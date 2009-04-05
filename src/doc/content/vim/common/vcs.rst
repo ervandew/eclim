@@ -175,7 +175,7 @@ Eclim Settings
   ::
 
     # viewvc
-    org.eclim.project.vcs.web.url=http://eclim.svn.sourceforge.net/viewvc/eclim/
+    org.eclim.project.vcs.web.url=http://myhost/viewvc/myrepos/
 
     # hgcgi
     org.eclim.project.vcs.web.url=http://hg.myhost/myrepos

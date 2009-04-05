@@ -2,6 +2,9 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
+  - fix org.eclim.command.patch.{Revisions,PatchFile}Command to use new eclim
+    git repos
+
   - Keeping checking pdt update site to re-enable auto install in installer.
 
   - :Jps updates
@@ -536,9 +539,9 @@ NOTES {{{
     1) create sourceforge release
        - update windows and linux download pages with latest file to download.
     2) update documentation website
-    3) tag svn
-       $ svn cp https://eclim.svn.sourceforge.net/svnroot/eclim/trunk \
-                https://eclim.svn.sourceforge.net/svnroot/eclim/tags/<version>
+    3) tag git
+       $ git tag -a -m "<version>" <version>
+       $ git push --tags
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
   }}}
@@ -639,6 +642,9 @@ NOTES {{{
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd ~/.kde/Autostart
 
   }}}
+
+  Sourceforget shell access:
+  ssh -t USER,PROJECT@shell.sourceforge.net create
 
   Git repos for vim:
   http://repo.or.cz/w/vim_mainline.git
