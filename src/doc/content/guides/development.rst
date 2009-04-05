@@ -107,11 +107,12 @@ anything non-trivial, the preferred means of managing those patches.
 
 **Submitting Patches**
 
-Any patches you submit should be in the form of a git formatted patch:
+Any patches you submit should be in the form of full diff against the current
+git head:
 
   ::
 
-    $ git format-patch --stdout origin > myfeature.patch
+    $ git diff origin > myfeature.patch
 
 Or using StGit (:ref:`described below <development-patches-managing>`):
 
@@ -119,13 +120,13 @@ Or using StGit (:ref:`described below <development-patches-managing>`):
 
     $ stg show myfeature > myfeature.patch
 
-If you use git-format-patch please be aware that it will generate a patch entry
-for every commit you've made. So unless each commit represents a change that
-you are willing to submit independently of the others, please consolidate all
-your commits for a given patch into a single commit prior to generating the
-patch file.  If you don't do so then the patch file will contain all your trial
-and errors, dead ends, etc. and evaluating a patch with an entire history like
-that can be very difficult.
+If you use git, without stgit, please be aware that the diff will generate a
+patch entry for every commit you've made. So unless each commit represents a
+change that you are willing to submit independently of the others, please
+consolidate all your commits for a given patch into a single commit prior to
+generating the patch file (using git rebase -i for instance).  If you don't do
+so then the patch file will contain all your trial and errors, dead ends, etc.
+and evaluating a patch with an entire history like that can be very difficult.
 
 .. _development-patches-managing:
 
