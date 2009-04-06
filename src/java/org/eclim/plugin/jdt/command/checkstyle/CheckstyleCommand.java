@@ -56,7 +56,6 @@ import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
 
@@ -296,8 +295,7 @@ public class CheckstyleCommand
     private static IJavaProject getJavaProject(IClasspathEntry entry)
       throws Exception
     {
-      IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
-          entry.getPath().segment(0));
+      IProject project = ProjectUtils.getProject(entry.getPath().segment(0));
       if (project != null){
         return JavaUtils.getJavaProject(project);
       }
