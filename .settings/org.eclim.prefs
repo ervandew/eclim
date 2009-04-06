@@ -1,6 +1,8 @@
-#Sat Apr 04 19:19:53 PDT 2009
+#Sun Apr 05 21:22:57 PDT 2009
 eclipse.preferences.version=1
 org.eclim.java.checkstyle.config=src/java/checkstyle.xml
+org.eclim.java.doc.packagenames=org.eclim
+org.eclim.java.doc.sourcepath=src/java
 org.eclim.java.junit.command=Ant -Dtest.include\=<testcase> test
 org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.junit.src_dir=<project>/src/test/junit

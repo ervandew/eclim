@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _1.4.6:
+
+1.4.6 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Java:
+  - Added command to generate :ref:`javadocs <:Javadoc>`.
+
 .. _1.4.5:
 
 1.4.5 (Apr. 04, 2009)

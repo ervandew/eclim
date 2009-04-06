@@ -72,4 +72,16 @@ function! TestSearch()
     \ line('1'), 'Wrong result.')
 endfunction " }}}
 
+" TestJavadoc() {{{
+function! TestJavadoc()
+  edit! src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
+  call PeekRedir()
+
+  Javadoc src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
+
+  call VUAssertTrue(filereadable(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java/doc/org/eclim/test/doc/javadoc/TestJavadocVUnit.html'))
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

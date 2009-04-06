@@ -18,10 +18,10 @@
 Javadoc Support
 ===============
 
+.. _\:JavaDocComment:
+
 Commenting
 ----------
-
-.. _\:JavaDocComment:
 
 Eclim provides the **:JavaDocComment** command which will add or update the
 javadoc comments for the element under the cursor.
@@ -44,10 +44,10 @@ Eclim Settings
   Consult the :ref:`settings page <vim/settings>` for more info.
 
 
+.. _\:JavaDocSearch:
+
 Searching
 ---------
-
-.. _\:JavaDocSearch:
 
 Eclim supports searching of javadocs just like you would
 :ref:`search the source code <vim/java/search>`.
@@ -85,3 +85,37 @@ Vim Variables
 
   - 'open' - open the result in a browser.
   - 'lopen' - open the temp window to display the result.
+
+
+.. _\:Javadoc:
+
+Executing javadoc
+-----------------
+
+To run the javadoc utility on your source code, you may use the **:Javadoc**
+command, which with no arguments will execute javadoc against all your source
+code (as specified by any optional settings described below).
+
+If you wish to run javadoc only against one or more files, you can supply the
+project relative paths as arguments to the **:Javadoc** command and only those
+files will be used.
+
+.. note::
+
+  Please note that this command is not intended to be a full replacement for
+  javadoc support provided by more comprehensive build tools like ant or maven.
+
+Configuration
+-------------
+
+Eclim Settings
+
+- **org.eclim.java.doc.dest** (Default: doc) -
+  The project relative directory where the javadocs with be written to.
+- **org.eclim.java.doc.packagenames** -
+  Optional space separated list of package names to run javadoc against.
+- **org.eclim.java.doc.sourcepath** -
+  The project relative javadoc sourcepath to use.  This should be a colon (on
+  non-windows machines) or semi-colon (on windows machines) separated list of
+  project relative source directories which you want javadoc to be executed
+  against.  When unset, all your configured source directories will be used.

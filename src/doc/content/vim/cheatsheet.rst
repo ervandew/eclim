@@ -116,10 +116,10 @@ Html Commands
 Ivy Commands
 -----------------
 
-- :ref:`:IvyRepo` <path> -
+- :ref:`:IvyRepo <:IvyRepo>` <path> -
   Sets the necessary IVY_REPO classpath variable for supporting automatic
   updates to .classpath files upon ivy.xml updates.
-- :ref:`:IvyDependencySearch` <artifact> -
+- :ref:`:IvyDependencySearch <:IvyDependencySearch>` <artifact> -
   Searches online repository and opens a window with results that can be added
   to the current ivy file by hitting <Enter> on a result.  Available when
   editing an ``ivy.xml`` file.
@@ -139,11 +139,11 @@ Java Commands
   interfaces.
 - :ref:`:JavaDelegate` -
   View list of methods that delegate to the field under the cursor.
-- :ref:`:JUnitImpl` -
+- :ref:`:JUnitImpl <:JUnitImpl>` -
   Similar to **:JavaImpl**, but creates test methods.
-- :ref:`:JUnitExecute` - [testcase]
+- :ref:`:JUnitExecute <:JUnitExecute>` [testcase] -
   Allows you to execute test cases in your favorite build tool.
-- :ref:`:JUnitResult` - [testcase]
+- :ref:`:JUnitResult <:JUnitResult>` [testcase] -
   Allows you to view the results of a test case.
 - :ref:`:JavaImport` - Import the class under the cursor.
 - :ref:`:JavaImportMissing` - Import all undefined types.
@@ -155,9 +155,12 @@ Java Commands
   Perform a context sensitive search for the element under the cursor.
 - :ref:`:JavaCorrect` - Suggest possible corrections for a source error.
 - :ref:`:JavaRegex` - Opens a window for testing java regular expressions.
-- :ref:`:JavaDocSearch` - Search for javadocs.  Same usage as **:JavaSearch**.
-- :ref:`:JavaDocComment` -
+- :ref:`:JavaDocSearch <:JavaDocSearch>` -
+  Search for javadocs.  Same usage as **:JavaSearch**.
+- :ref:`:JavaDocComment <:JavaDocComment>` -
   Adds or updates the comments for the element under the cursor.
+- :ref:`:Javadoc <:Javadoc>` [file, file, ...] -
+  Executes the javadoc utility against all or just the supplied source files.
 - :ref:`:JavaFormat` - Formats java source code.
 - :ref:`:Checkstyle` - Invokes checkstyle on the current file.
 - :ref:`:Jps` -
@@ -198,10 +201,10 @@ Maven Commands
 
 - :ref:`:Maven` [<goal> ...] - Execute maven 1.x from the current project.
 - :ref:`:Mvn` [<goal> ...] - Execute maven 2.x from the current project.
-- :ref:`:MavenRepo` -
+- :ref:`:MavenRepo <:MavenRepo>` -
   Sets the necessary MAVEN_REPO classpath variable for maven's (1.x) eclipse
   support.
-- :ref:`:MvnRepo` -
+- :ref:`:MvnRepo <:MvnRepo>` -
   Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
   support.
 - :ref:`:MavenDependencySearch` <artifact> -
@@ -219,7 +222,8 @@ Php Commands
 
 - :ref:`:PhpSearch` -p <pattern> -t <type> [-s <scope>] -
   Search for classes, methods, and constants.
-- :ref:`:PhpFindDefinition` - Find the element under the cursor.
+- :ref:`:PhpFindDefinition <:PhpFindDefinition>` -
+  Find the element under the cursor.
 - :ref:`:PhpSearchContext` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
@@ -245,7 +249,7 @@ Python Commands
 - :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
 - :ref:`:PyLint` - Runs pylint_ on the current file.
 - :ref:`:PythonRegex` - Opens a window for testing python regular expressions.
-- :ref:`:DjangoManage` -
+- :ref:`:DjangoManage <:DjangoManage>` -
   Invokes django's manage.py from any file in the same directory as your
   manage.py or in any of the child directories.
 - :ref:`:DjangoFind` -
@@ -302,7 +306,7 @@ Xml Commands
   supplied.
 - :ref:`:Validate <:Validate_xml>` [<file>] -
   Validates the supplied xml file or the current file if none supplied.
-- :ref:`:XmlFormat` Reformats the current xml file.
+- :ref:`:XmlFormat <:XmlFormat>` - Reformats the current xml file.
 
 
 Xsd Commands
@@ -348,7 +352,7 @@ Version Control Commands
 Web Lookup Commands
 --------------------
 
-- :ref:`:OpenUrl` [url] - Opens a url in your configured web browser.
+- :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 - :ref:`:Google` [word ...] - Looks up a word or phrase with google.
 - :ref:`:Clusty` [word ...] - Looks up a word or phrase with clusty.
 - :ref:`:Wikipedia` [word ...] - Looks up a word or phrase on wikipedia.
@@ -411,12 +415,12 @@ Misc. Commands
   Removes all entries from the quick fix window.
 - :ref:`:LocationListClear` -
   Removes all entries from the location list window.
-- :ref:`:MaximizeWindow` -
+- :ref:`:MaximizeWindow <:MaximizeWindow>` -
   Toggles maximization of the current window.
-- :ref:`:MinimizeWindow` [winnr ...] -
+- :ref:`:MinimizeWindow <:MinimizeWindow>` [winnr ...] -
   Minimizes the current window or the windows corresponding to the window
   numbers supplied.
-- :ref:`:MinimizeRestore` - Restore all minimized windows.
+- :ref:`:MinimizeRestore <:MinimizeRestore>` - Restore all minimized windows.
 - :ref:`:Buffers` -
   Opens a temporary window with a list of all the currently listed
   buffers, allowing you to open or remove them.

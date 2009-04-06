@@ -124,6 +124,9 @@ public class PluginResources
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT/Javadoc org.eclim.java.doc.version\n" +
+      "JDT/Javadoc org.eclim.java.doc.dest doc\n" +
+      "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +
+      "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
       "JDT/JUnit org.eclim.java.junit.src_dir"
@@ -138,6 +141,10 @@ public class PluginResources
         org.eclim.plugin.jdt.command.src.SrcFileExistsCommand.class);
     registerCommand("java_src_find",
         org.eclim.plugin.jdt.command.src.SrcFindCommand.class);
+    registerCommand("java_src_dirs",
+        org.eclim.plugin.jdt.command.src.SrcDirsCommand.class);
+    registerCommand("java_package_names",
+        org.eclim.plugin.jdt.command.src.PackageNamesCommand.class);
     registerCommand("java_search",
         org.eclim.plugin.jdt.command.search.SearchCommand.class);
     registerCommand("java_docsearch",
@@ -166,6 +173,8 @@ public class PluginResources
         org.eclim.plugin.jdt.command.regex.RegexCommand.class);
     registerCommand("java_class_prototype",
         org.eclim.plugin.jdt.command.src.ClassPrototypeCommand.class);
+    registerCommand("java_classpath",
+        org.eclim.plugin.jdt.command.classpath.ClasspathCommand.class);
     registerCommand("java_classpath_variables",
         org.eclim.plugin.jdt.command.classpath.ClasspathVariablesCommand.class);
     registerCommand("java_classpath_variable_create",
