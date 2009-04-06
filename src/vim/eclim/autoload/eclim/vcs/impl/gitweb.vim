@@ -32,7 +32,8 @@ endif
 
 " GetLogUrl(root, file, args) {{{
 function eclim#vcs#impl#gitweb#GetLogUrl(root, file, args)
-  return a:root . ';a=history;f=' . a:file . ';h=' . a:args[0]
+  "return a:root . ';a=history;f=' . a:file . ';h=' . a:args[0]
+  return a:root . ';a=history;f=' . a:file . ';h=HEAD'
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{

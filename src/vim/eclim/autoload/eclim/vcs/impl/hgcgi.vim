@@ -30,7 +30,8 @@ endif
 
 " GetLogUrl(root, file, args) {{{
 function eclim#vcs#impl#hgcgi#GetLogUrl(root, file, args)
-  return a:root . '/log/' . split(a:args[0], ':')[1] . '/' . a:file
+  "return a:root . '/log/' . split(a:args[0], ':')[1] . '/' . a:file
+  return a:root . '/log/tip/' . a:file
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
