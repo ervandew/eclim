@@ -439,7 +439,7 @@ function! eclim#project#util#GetProjectRelativeFilePath(file)
     let pattern .= '\c'
   endif
   let result = substitute(file, pattern, '', '')
-  if result =~ '^/'
+  if result != file && result =~ '^/'
     let result = result[1:]
   endif
   return result
@@ -568,8 +568,9 @@ function! eclim#project#util#GetProjectRoot(project)
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{
-" Gets a project setting from eclim.  Returns '' the setting does not exist,
-" 0 if not in a project or an error occurs communicating with the server.
+" Gets a project setting from eclim.  Returns '' if the setting does not
+" exist, 0 if not in a project or an error occurs communicating with the
+" server.
 function! eclim#project#util#GetProjectSetting(setting)
   if !eclim#project#util#IsCurrentFileInProject()
     return
