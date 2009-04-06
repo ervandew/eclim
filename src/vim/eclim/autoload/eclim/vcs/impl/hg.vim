@@ -34,12 +34,8 @@ endif
 
 " GetAnnotations(revision) {{{
 function! eclim#vcs#impl#hg#GetAnnotations(revision)
-  if exists('b:vcs_props')
-    if filereadable(b:vcs_props.path)
-      let file = fnamemodify(b:vcs_props.path, ':t')
-    else
-      let file = b:vcs_props.svn_root_url . b:vcs_props.path
-    endif
+  if exists('b:vcs_props') && filereadable(b:vcs_props.path)
+    let file = fnamemodify(b:vcs_props.path, ':t')
   else
     let file = expand('%')
   endif
