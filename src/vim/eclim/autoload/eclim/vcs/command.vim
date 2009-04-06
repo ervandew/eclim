@@ -442,144 +442,148 @@ function! s:FollowLink()
   let view = exists('b:vcs_props') && has_key(b:vcs_props, 'view') ?
     \ b:vcs_props.view : ''
 
-  " link to folder
-  if line('.') == 1
-    let line = getline('.')
-    let path = substitute(
-      \ line, '.\{-}/\(.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
-    if path == line
-      let path = ''
-    else
-      let path = substitute(path, '| / |', '/', 'g')
-      let path = substitute(path, '\(^\s\+\||\)', '', 'g')
-    endif
+  try
+    " link to folder
+    if line('.') == 1
+      let line = getline('.')
+      let path = substitute(
+        \ line, '.\{-}/\(.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
+      if path == line
+        let path = ''
+      else
+        let path = substitute(path, '| / |', '/', 'g')
+        let path = substitute(path, '\(^\s\+\||\)', '', 'g')
+      endif
 
-    call eclim#vcs#command#ListDir(path)
-
-  " link to file or dir in directory listing view.
-  elseif view == 'dir'
-    let line = getline(1)
-
-    let path = ''
-    if line != '/'
-      let path = substitute(line, '.\{-}/ |\?\(.*\)', '\1', '')
-      let path = substitute(path, '\(| / |\|| / \)', '/', 'g')
-      let path = substitute(path, '\(^\s\+\||\)', '', 'g')
-      let path .= '/'
-    endif
-    let path .= link
-
-    if path =~ '/$'
       call eclim#vcs#command#ListDir(path)
-    else
-      call eclim#vcs#command#Log(path)
-    endif
 
-  " link to file or dir in change set view.
-  elseif link !~ '^#' && view == 'changeset'
-    let revision = b:vcs_props.revision
-    if link == 'M'
-      let file = substitute(line, '\s*|M|\s*|\(.\{-}\)|.*', '\1', '')
-      let r2 = eclim#vcs#util#GetPreviousRevision(file, revision)
+    " link to file or dir in directory listing view.
+    elseif view == 'dir'
+      let line = getline(1)
+
+      let path = ''
+      if line != '/'
+        let path = substitute(line, '.\{-}/ |\?\(.*\)', '\1', '')
+        let path = substitute(path, '\(| / |\|| / \)', '/', 'g')
+        let path = substitute(path, '\(^\s\+\||\)', '', 'g')
+        let path .= '/'
+      endif
+      let path .= link
+
+      if path =~ '/$'
+        call eclim#vcs#command#ListDir(path)
+      else
+        call eclim#vcs#command#Log(path)
+      endif
+
+    " link to file or dir in change set view.
+    elseif link !~ '^#' && view == 'changeset'
+      let revision = b:vcs_props.revision
+      if link == 'M'
+        let file = substitute(line, '\s*|M|\s*|\(.\{-}\)|.*', '\1', '')
+        let r2 = eclim#vcs#util#GetPreviousRevision(file, revision)
+        call eclim#vcs#command#ViewFileRevision(file, revision, '')
+        let buf1 = bufnr('%')
+
+        let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+        call eclim#vcs#command#ViewFileRevision(file, r2, 'bel ' . orien . ' split')
+        diffthis
+        exec bufwinnr(buf1) . 'winc w'
+        diffthis
+        call eclim#display#maximize#RestoreWindows(0)
+      elseif link !~ '^\s*$'
+        call eclim#vcs#command#Log(link)
+      endif
+
+    " link to view a change set
+    elseif link =~ '^[0-9a-f.:]\+$'
+      let file = s:GetBreadcrumbPath()
+      call eclim#vcs#command#ChangeSet(b:vcs_props.path, link)
+
+    " link to view / annotate a file
+    elseif link == 'view' || link == 'annotate'
+      let file = s:GetBreadcrumbPath()
+      let revision = substitute(getline('.'), 'Revision: \(.\{-}\) .*', '\1', '')
+      let revision = substitute(revision, '\(^|\||$\)', '', 'g')
+
       call eclim#vcs#command#ViewFileRevision(file, revision, '')
-      let buf1 = bufnr('%')
+      if link == 'annotate'
+        call eclim#vcs#command#Annotate(revision)
+      endif
 
+    " link to diff one version against previous
+    elseif link =~ '^previous .*$'
+      let file = s:GetBreadcrumbPath()
+      let r1 = substitute(getline(line('.') - 2), 'Revision: \(.\{-}\) .*', '\1', '')
+      let r1 = substitute(r1, '\(^|\||$\)', '', 'g')
+      let r2 = substitute(link, 'previous \(.*\)', '\1', '')
+
+      call eclim#vcs#command#ViewFileRevision(file, r1, '')
+      let buf1 = bufnr('%')
       let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
       call eclim#vcs#command#ViewFileRevision(file, r2, 'bel ' . orien . ' split')
       diffthis
       exec bufwinnr(buf1) . 'winc w'
       diffthis
       call eclim#display#maximize#RestoreWindows(0)
-    elseif link !~ '^\s*$'
-      call eclim#vcs#command#Log(link)
-    endif
 
-  " link to view a change set
-  elseif link =~ '^[0-9a-f.:]\+$'
-    let file = s:GetBreadcrumbPath()
-    call eclim#vcs#command#ChangeSet(b:vcs_props.path, link)
+    " link to diff against working copy
+    elseif link == 'working copy'
+      let file = s:GetBreadcrumbPath()
+      let revision = substitute(
+        \ getline(line('.') - 2), 'Revision: |\?\([0-9a-z.]\+\)|\?.*', '\1', '')
 
-  " link to view / annotate a file
-  elseif link == 'view' || link == 'annotate'
-    let file = s:GetBreadcrumbPath()
-    let revision = substitute(getline('.'), 'Revision: \(.\{-}\) .*', '\1', '')
-    let revision = substitute(revision, '\(^|\||$\)', '', 'g')
+      let filename = b:filename
+      let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
+      call eclim#vcs#command#ViewFileRevision(file, revision, 'bel ' . orien . ' split')
+      diffthis
 
-    call eclim#vcs#command#ViewFileRevision(file, revision, '')
-    if link == 'annotate'
-      call eclim#vcs#command#Annotate(revision)
-    endif
+      let b:filename = filename
+      augroup vcs_diff
+        autocmd! BufUnload <buffer>
+        call eclim#util#GoToBufferWindowRegister(b:filename)
+        autocmd BufUnload <buffer> diffoff |
+          \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
+      augroup END
 
-  " link to diff one version against previous
-  elseif link =~ '^previous .*$'
-    let file = s:GetBreadcrumbPath()
-    let r1 = substitute(getline(line('.') - 2), 'Revision: \(.\{-}\) .*', '\1', '')
-    let r1 = substitute(r1, '\(^|\||$\)', '', 'g')
-    let r2 = substitute(link, 'previous \(.*\)', '\1', '')
+      call eclim#util#GoToBufferWindow(filename)
+      diffthis
+      call eclim#display#maximize#RestoreWindows(0)
 
-    call eclim#vcs#command#ViewFileRevision(file, r1, '')
-    let buf1 = bufnr('%')
-    let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
-    call eclim#vcs#command#ViewFileRevision(file, r2, 'bel ' . orien . ' split')
-    diffthis
-    exec bufwinnr(buf1) . 'winc w'
-    diffthis
-    call eclim#display#maximize#RestoreWindows(0)
+    " link to bug / feature report
+    elseif link =~ '^' . s:trackerIdPattern . '$'
+      let cwd = getcwd()
+      let dir = fnamemodify(b:filename, ':h')
+      exec 'lcd ' . dir
+      try
+        let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
+      finally
+        exec 'lcd ' . cwd
+      endtry
 
-  " link to diff against working copy
-  elseif link == 'working copy'
-    let file = s:GetBreadcrumbPath()
-    let revision = substitute(
-      \ getline(line('.') - 2), 'Revision: |\?\([0-9a-z.]\+\)|\?.*', '\1', '')
-
-    let filename = b:filename
-    let orien = g:EclimVcsDiffOrientation == 'horizontal' ? '' : 'vertical'
-    call eclim#vcs#command#ViewFileRevision(file, revision, 'bel ' . orien . ' split')
-    diffthis
-
-    let b:filename = filename
-    augroup vcs_diff
-      autocmd! BufUnload <buffer>
-      call eclim#util#GoToBufferWindowRegister(b:filename)
-      autocmd BufUnload <buffer> diffoff |
-        \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
-    augroup END
-
-    call eclim#util#GoToBufferWindow(filename)
-    diffthis
-    call eclim#display#maximize#RestoreWindows(0)
-
-  " link to bug / feature report
-  elseif link =~ '^' . s:trackerIdPattern . '$'
-    let cwd = getcwd()
-    let dir = fnamemodify(b:filename, ':h')
-    exec 'lcd ' . dir
-    try
-      let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
-    finally
-      exec 'lcd ' . cwd
-    endtry
-
-    if type(url) == 0
-      return
-    endif
-
-    if url == ''
-      call eclim#util#EchoWarning(
-        \ "Link to bug report / feature request requires project setting " .
-        \ "'org.eclim.project.tracker'.")
-      return
-    endif
-
-    for pattern in g:EclimVcsTrackerIdPatterns
-      if link =~ pattern
-        let id = substitute(link, pattern, '\1', '')
-        break
+      if type(url) == 0
+        return
       endif
-    endfor
-    let url = substitute(url, '<id>', id, 'g')
-    call eclim#web#OpenUrl(url)
-  endif
+
+      if url == ''
+        call eclim#util#EchoWarning(
+          \ "Link to bug report / feature request requires project setting " .
+          \ "'org.eclim.project.tracker'.")
+        return
+      endif
+
+      for pattern in g:EclimVcsTrackerIdPatterns
+        if link =~ pattern
+          let id = substitute(link, pattern, '\1', '')
+          break
+        endif
+      endfor
+      let url = substitute(url, '<id>', id, 'g')
+      call eclim#web#OpenUrl(url)
+    endif
+  catch /vcs error/
+    " the error message is printed by eclim#vcs#util#Vcs
+  endtry
 endfunction " }}}
 
 " s:GetBreadcrumbPath() {{{
