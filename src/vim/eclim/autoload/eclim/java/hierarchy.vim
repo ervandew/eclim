@@ -82,7 +82,8 @@ endfunction " }}}
 
 " s:Open(action) {{{
 function! s:Open(action)
-  let type = b:hierarchy_info[line('.') - 1]
+  let line = line('.')
+  let type = b:hierarchy_info[line - 1]
   " go to the buffer that initiated the hierarchy
   exec b:winnr . 'winc w'
 
@@ -91,23 +92,28 @@ function! s:Open(action)
     runtime autoload/eclim/java/search.vim
   endif
 
+  let action = a:action
   let filename = expand('%:p')
   if exists('b:filename')
     let filename = b:filename
     if !eclim#util#GoToBufferWindow(b:filename)
-      call eclim#util#EchoError('File is no longer open: ' . b:filename)
-      return
+      " if the file is no longer open, open it
+      silent! exec action . ' ' . b:filename
+      let action = 'edit'
     endif
   endif
-  let saved = g:EclimJavaSearchSingleResult
-  try
-    let g:EclimJavaSearchSingleResult = a:action
-    if eclim#java#search#SearchAndDisplay('java_search', '-x declarations -p ' . type)
-      let b:filename = filename
-    endif
-  finally
-    let g:EclimJavaSearchSingleResult = saved
-  endtry
+
+  if line != 1
+    let saved = g:EclimJavaSearchSingleResult
+    try
+      let g:EclimJavaSearchSingleResult = action
+      if eclim#java#search#SearchAndDisplay('java_search', '-x declarations -p ' . type)
+        let b:filename = filename
+      endif
+    finally
+      let g:EclimJavaSearchSingleResult = saved
+    endtry
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
