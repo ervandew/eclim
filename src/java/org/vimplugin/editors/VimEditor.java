@@ -173,11 +173,11 @@ public class VimEditor
     Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
     editorGUI.setBackground(color);
 
-    IEditorInput input = getEditorInput();
     String projectPath = null;
     String filePath = null;
+    IEditorInput input = getEditorInput();
     if (input instanceof IFileEditorInput){
-      selectedFile = ((IFileEditorInput)getEditorInput()).getFile();
+      selectedFile = ((IFileEditorInput)input).getFile();
 
       IProject project = selectedFile.getProject();
       IPath path = project.getRawLocation();
@@ -193,7 +193,7 @@ public class VimEditor
         filePath = filePath.substring(projectPath.length() + 1);
       }
     }else{
-      URI uri = ((IURIEditorInput)getEditorInput()).getURI();
+      URI uri = ((IURIEditorInput)input).getURI();
       filePath = uri.toString().substring("file:".length());
       filePath = filePath.replaceFirst("^/([A-Za-z]:)", "$1");
     }
