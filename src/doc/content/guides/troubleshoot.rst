@@ -116,7 +116,7 @@ emitted.  To gather these details you will need to:
 
      while executing command: -command ...
 
-   If there are a lot of messages, you may have to page through them to then
+   If there are a lot of messages, you may have to page through them to the
    end to find the most recent command.  Once you've found the command, copy
    the command text from "-command" to the end of the command arguments.
 

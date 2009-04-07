@@ -20,7 +20,7 @@ FAQ
 
 .. _eclim_workspace:
 
-How to I tell eclim which eclipse workspace to use?
+How do I tell eclim which eclipse workspace to use?
 ---------------------------------------------------
 
 To configure the workspace you can start eclimd like so:
@@ -94,7 +94,7 @@ the workspace location, to also set the proxy settings.
 
 .. _eclim_memory:
 
-How to I specify jvm memory arguments for eclim (fix OutOfMemory errors).
+How do I specify jvm memory arguments for eclim (fix OutOfMemory errors).
 -------------------------------------------------------------------------
 
 If you are using the headless version of eclimd, then you have a couple
