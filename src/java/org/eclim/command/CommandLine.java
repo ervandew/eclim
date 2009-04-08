@@ -30,18 +30,23 @@ import org.apache.commons.lang.StringUtils;
 public class CommandLine
 {
   private HashMap<String, String> options = new HashMap<String, String>();
+  private Command command;
   private String[] args;
   private String[] unrecognized;
 
   /**
    * Constructs a new instance from the supplied command line.
    *
+   * @param command The command.
    * @param commandLine The command line.
    * @param args The orginal command line args.
    */
   public CommandLine (
-      org.apache.commons.cli.CommandLine commandLine, String[] args)
+      Command command,
+      org.apache.commons.cli.CommandLine commandLine,
+      String[] args)
   {
+    this.command = command;
     this.args = args;
     Option[] options = commandLine.getOptions();
     for (int ii = 0; ii < options.length; ii++){
@@ -49,6 +54,16 @@ public class CommandLine
       this.options.put(options[ii].getOpt(), value);
     }
     unrecognized = commandLine.getArgs();
+  }
+
+  /**
+   * The command to execute.
+   *
+   * @return The command.
+   */
+  public Command getCommand()
+  {
+    return this.command;
   }
 
   /**

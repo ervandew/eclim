@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -39,6 +41,10 @@ import org.eclim.util.IOUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "patch_revisions",
+  options = "REQUIRED f file ARG"
+)
 public class RevisionsCommand
   extends AbstractCommand
 {

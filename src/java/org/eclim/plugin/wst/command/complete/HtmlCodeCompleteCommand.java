@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -28,6 +30,14 @@ import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "html_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class HtmlCodeCompleteCommand
   extends WstCodeCompleteCommand
 {

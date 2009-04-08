@@ -11,6 +11,7 @@ Bundle-ClassPath: .,
 Bundle-Activator: org.eclim.eclipse.EclimPlugin
 Bundle-Localization: plugin
 Export-Package: org.eclim,
+  org.eclim.annotation,
   org.eclim.command,
   org.eclim.command.complete,
   org.eclim.command.filter,

@@ -23,6 +23,8 @@ import java.net.URL;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -36,6 +38,13 @@ import org.eclim.util.file.FileUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "patch_file",
+  options =
+    "REQUIRED f file ARG," +
+    "REQUIRED r revision ARG," +
+    "REQUIRED b basedir ARG"
+)
 public class PatchFileCommand
   extends AbstractCommand
 {

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -59,6 +61,12 @@ import org.w3c.tidy.Tidy;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "html_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class HtmlValidateCommand
   extends WstValidateCommand
 {

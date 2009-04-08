@@ -43,10 +43,6 @@ public class Services
 {
   private static Logger logger = Logger.getLogger(Services.class);
 
-  private static final String MAIN = "main";
-
-  private static PluginResources defaultPluginResources;
-
   private static HashMap<String, PluginResources> pluginResources =
     new HashMap<String, PluginResources>();
   private static HashMap<String, String> serviceCache =
@@ -64,7 +60,7 @@ public class Services
   public static Command getCommand(String name)
     throws Exception
   {
-    String value = (String)serviceCache.get(name);
+    String value = serviceCache.get(name);
     if(value == null){
       for(PluginResources resources : pluginResources.values()){
         if(resources.containsCommand(name)){
@@ -73,14 +69,10 @@ public class Services
         }
       }
     }else{
-      if(!MAIN.equals(value)){
-        PluginResources resources = pluginResources.get(value);
-        return resources.getCommand(name);
-      }
-      return getPluginResources().getCommand(name);
+      PluginResources resources = pluginResources.get(value);
+      return resources.getCommand(name);
     }
-    serviceCache.put(name, MAIN);
-    return getPluginResources().getCommand(name);
+    return null;
   }
 
   /**
@@ -106,24 +98,21 @@ public class Services
           }
         }
       }else{
-        if(!MAIN.equals(name)){
-          PluginResources resources =
-            (PluginResources)pluginResources.get(name);
-          return resources.getMessage(key, args);
-        }
-        return getPluginResources().getMessage(key, args);
+        PluginResources resources =
+          (PluginResources)pluginResources.get(name);
+        return resources.getMessage(key, args);
       }
-      messageCache.put(key, MAIN);
-      return getPluginResources().getMessage(key, args);
     }catch(MissingResourceException nsme){
       return key;
     }
+    return key;
   }
 
   /**
    * Gets the underlying resource bundle used for messages.
    *
-   * @param plugin The plugin to get the resources for (ant, jdt, etc.).
+   * @param plugin The plugin to get the resources for (org.eclim,
+   * org.eclim.jdt, etc.).
    *
    * @return The ResourceBundle.
    */
@@ -135,19 +124,7 @@ public class Services
         return resources.getResourceBundle();
       }
     }
-    return getResourceBundle();
-  }
-
-  /**
-   * Gets the underlying resource bundle used for messages.
-   * <p/>
-   * Gets the resource bundle for the main eclim plugin.
-   *
-   * @return The ResourceBundle.
-   */
-  public static ResourceBundle getResourceBundle()
-  {
-    return getPluginResources().getResourceBundle();
+    return null;
   }
 
   /**
@@ -164,7 +141,7 @@ public class Services
         return url;
       }
     }
-    return getPluginResources().getResource(resource);
+    return null;
   }
 
   /**
@@ -181,21 +158,7 @@ public class Services
         return stream;
       }
     }
-    return getPluginResources().getResourceAsStream(resource);
-  }
-
-  /**
-   * Gets the PluginResources for the main eclim plugin.
-   *
-   * @return The PluginResources.
-   */
-  public static PluginResources getPluginResources()
-  {
-    if(defaultPluginResources == null){
-      defaultPluginResources = new DefaultPluginResources();
-      ((DefaultPluginResources)defaultPluginResources).initialize("org.eclim");
-    }
-    return defaultPluginResources;
+    return null;
   }
 
   /**
@@ -245,9 +208,15 @@ public class Services
   /**
    * Implementation of PluginResources for the main eclim plugin.
    */
-  private static class DefaultPluginResources
+  public static class DefaultPluginResources
     extends AbstractPluginResources
   {
+    /**
+     * Name that can be used to lookup this PluginResources from
+     * {@link Services#getPluginResources(String)}.
+     */
+    public static final String NAME = "org.eclim";
+
     /**
      * {@inheritDoc}
      * @see AbstractPluginResources#initialize(String)
@@ -266,77 +235,6 @@ public class Services
         "General/Project org.eclim.project.vcs.web.viewer viewvc (viewvc|trac|redmine|hgcgi|hgserve|gitweb)\n" +
         "General/Project org.eclim.project.vcs.web.url"
       );
-
-      registerCommand("ping", org.eclim.command.admin.PingCommand.class);
-      registerCommand("shutdown",
-          org.eclim.command.admin.ShutdownCommand.class);
-      registerCommand("workspace_dir",
-          org.eclim.command.eclipse.WorkspaceCommand.class);
-
-      registerCommand("project_create",
-          org.eclim.command.project.ProjectCreateCommand.class);
-      registerCommand("project_delete",
-          org.eclim.command.project.ProjectDeleteCommand.class);
-      registerCommand("project_refresh",
-          org.eclim.command.project.ProjectRefreshCommand.class);
-      registerCommand("project_refresh_file",
-          org.eclim.command.project.ProjectRefreshFileCommand.class);
-      registerCommand("project_info",
-          org.eclim.command.project.ProjectInfoCommand.class);
-      registerCommand("project_open",
-          org.eclim.command.project.ProjectOpenCommand.class);
-      registerCommand("project_close",
-          org.eclim.command.project.ProjectCloseCommand.class);
-      registerCommand("project_nature_aliases",
-          org.eclim.command.project.ProjectNatureAliasesCommand.class);
-      registerCommand("project_update",
-          org.eclim.command.project.ProjectUpdateCommand.class);
-      registerCommand("project_list",
-          org.eclim.command.project.ProjectListCommand.class);
-      registerCommand("project_settings",
-          org.eclim.command.project.ProjectSettingsCommand.class);
-      registerCommand("project_natures",
-          org.eclim.command.project.ProjectNaturesCommand.class);
-      registerCommand("project_nature_add",
-          org.eclim.command.project.ProjectNatureAddCommand.class);
-      registerCommand("project_nature_remove",
-          org.eclim.command.project.ProjectNatureRemoveCommand.class);
-      registerCommand("settings_update",
-          org.eclim.command.admin.SettingsUpdateCommand.class);
-      registerCommand("settings",
-          org.eclim.command.admin.SettingsCommand.class);
-
-      registerCommand("taglist",
-          org.eclim.command.taglist.TaglistCommand.class);
-
-      registerCommand("archive_list",
-          org.eclim.command.archive.ArchiveListCommand.class);
-      registerCommand("archive_list_all",
-          org.eclim.command.archive.ArchiveListAllCommand.class);
-      registerCommand("archive_read",
-          org.eclim.command.archive.ArchiveReadCommand.class);
-
-      registerCommand("locate_file",
-          org.eclim.command.search.LocateFileCommand.class);
-
-      registerCommand("history_add",
-          org.eclim.command.history.HistoryAddCommand.class);
-      registerCommand("history_list",
-          org.eclim.command.history.HistoryListCommand.class);
-      registerCommand("history_revision",
-          org.eclim.command.history.HistoryRevisionCommand.class);
-      registerCommand("history_clear",
-          org.eclim.command.history.HistoryClearCommand.class);
-
-      registerCommand("patch_revisions",
-          org.eclim.command.patch.RevisionsCommand.class);
-      registerCommand("patch_file",
-          org.eclim.command.patch.PatchFileCommand.class);
-
-      registerCommand("xml_format",
-          org.eclim.command.xml.format.FormatCommand.class);
-      registerCommand("xml_validate",
-          org.eclim.command.xml.validate.ValidateCommand.class);
     }
 
     /**

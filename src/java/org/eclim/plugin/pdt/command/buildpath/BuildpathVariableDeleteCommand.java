@@ -18,6 +18,8 @@ package org.eclim.plugin.pdt.command.buildpath;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -29,6 +31,10 @@ import org.eclipse.dltk.core.DLTKCore;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "php_buildpath_variable_delete",
+  options = "REQUIRED n name ARG"
+)
 public class BuildpathVariableDeleteCommand
   extends AbstractCommand
 {

@@ -16,6 +16,8 @@
  */
 package org.eclim.command.project;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -28,6 +30,12 @@ import org.eclim.util.StringUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_refresh_file",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class ProjectRefreshFileCommand
   extends AbstractCommand
 {

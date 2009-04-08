@@ -32,6 +32,8 @@ import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.FileType;
 import org.apache.commons.vfs.VFS;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -41,6 +43,10 @@ import org.eclim.command.Options;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "archive_list",
+  options = "REQUIRED f file ARG"
+)
 public class ArchiveListCommand
   extends AbstractCommand
 {

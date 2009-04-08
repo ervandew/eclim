@@ -16,17 +16,13 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclim.plugin.ant.util.AntUtils;
-
-import org.eclipse.ant.internal.ui.editor.TaskDescriptionProvider;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 
@@ -38,6 +34,14 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "ant_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {

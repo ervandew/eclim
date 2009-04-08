@@ -18,6 +18,8 @@ package org.eclim.command.project;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -31,6 +33,10 @@ import org.eclim.util.ProjectUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_delete",
+  options = "REQUIRED p project ARG"
+)
 public class ProjectDeleteCommand
   extends AbstractCommand
 {

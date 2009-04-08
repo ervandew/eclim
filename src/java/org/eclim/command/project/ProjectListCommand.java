@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -38,6 +40,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_list",
+  options = "OPTIONAL n nature ARG"
+)
 public class ProjectListCommand
   extends AbstractCommand
 {

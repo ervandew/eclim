@@ -21,11 +21,17 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import java.net.URL;
+
 import java.util.Properties;
 
 import com.martiansoftware.nailgun.NGServer;
 
+import java.util.Set;
+
 import org.eclim.Services;
+
+import org.eclim.annotation.Command;
 
 import org.eclim.logging.Logger;
 
@@ -38,7 +44,9 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
@@ -46,9 +54,13 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import org.osgi.framework.Bundle;
 
+import org.scannotation.AnnotationDB;
+
 /**
  * Abstract base class containing shared functionality used by implementations
  * of an eclim application.
+ *
+ * @author Eric Van Dewoestine
  */
 public abstract class AbstractEclimApplication
   implements IApplication
@@ -72,11 +84,6 @@ public abstract class AbstractEclimApplication
     try{
       onStart();
 
-      // initialize nailgun
-      int port = Integer.parseInt(
-          Services.getPluginResources().getProperty("nailgun.server.port"));
-      server = new NGServer(null, port);
-
       // load plugins.
       loadPlugins();
 
@@ -96,10 +103,15 @@ public abstract class AbstractEclimApplication
       }
 
       // start nailgun
+      String portString = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
+      int port = Integer.parseInt(portString);
       logger.info("Eclim Server Started on port " + port + '.');
+      server = new NGServer(null, port);
       server.run();
     }catch(NumberFormatException nfe){
-      String p = Services.getPluginResources().getProperty("nailgun.server.port");
+      String p = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
       logger.error("Error starting eclim:",
           new RuntimeException("Invalid port number: '" + p + "'"));
       return new Integer(1);
@@ -190,6 +202,12 @@ public abstract class AbstractEclimApplication
    */
   private void loadPlugins()
   {
+    logger.info("Loading plugin org.eclim");
+    Services.DefaultPluginResources defaultResources =
+      new Services.DefaultPluginResources();
+    defaultResources.initialize("org.eclim");
+    loadCommands(EclimPlugin.getDefault().getBundle(), defaultResources);
+
     logger.info("Loading eclim plugins...");
     String pluginsDir =
       System.getProperty("eclim.home") + File.separator + ".." + File.separator;
@@ -242,10 +260,51 @@ public abstract class AbstractEclimApplication
         if(resources instanceof AbstractPluginResources){
           ((AbstractPluginResources)resources).initialize(pluginName);
         }
+
+        loadCommands(bundle, resources);
       }catch(Exception e){
         throw new RuntimeException(e);
       }
       logger.info("Loaded plugin {}.", plugins[ii]);
+    }
+  }
+
+  /**
+   * Given plugin resources instance, finds and loads all commands.
+   *
+   * @param bundle The Bundle.
+   * @param resources The PluginResources.
+   */
+  private void loadCommands(Bundle bundle, PluginResources resources)
+  {
+    try{
+      Class<?> rclass = resources.getClass();
+      ClassLoader classloader = rclass.getClassLoader();
+      String name = rclass.getName().replace('.', '/') + ".class";
+      URL resource = classloader.getResource(name);
+      String url = resource.toString();
+      url = url.substring(0, url.indexOf(name));
+
+      String jarName = resources.getName().substring("org.".length()) + ".jar";
+      URL jarUrl = FileLocator.toFileURL(
+          FileLocator.find(bundle, new Path(jarName), null));
+
+      AnnotationDB db = new AnnotationDB();
+      db.setScanClassAnnotations(true);
+      db.setScanFieldAnnotations(false);
+      db.setScanMethodAnnotations(false);
+      db.setScanParameterAnnotations(false);
+      db.scanArchives(jarUrl);
+      Set<String> commandClasses =
+        db.getAnnotationIndex().get(Command.class.getName());
+      if(commandClasses != null){
+        for (String commandClass : commandClasses){
+          Class cclass = classloader.loadClass(commandClass);
+          resources.registerCommand(cclass);
+        }
+      }
+    }catch(Exception e){
+      logger.error("Unable to load commands.", e);
     }
   }
 

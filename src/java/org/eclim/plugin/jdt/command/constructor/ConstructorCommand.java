@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -32,8 +34,6 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.TemplateUtils;
-
-import org.eclim.util.file.Position;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -47,6 +47,15 @@ import org.eclipse.jdt.core.Signature;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_constructor",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL r properties ARG"
+)
 public class ConstructorCommand
   extends AbstractCommand
 {
@@ -123,8 +132,8 @@ public class ConstructorCommand
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     String constructor = TemplateUtils.evaluate(resources, TEMPLATE, values);
-    Position position = TypeUtils.getPosition(type,
-        type.createMethod(constructor, sibling, false, null));
+    TypeUtils.getPosition(
+        type, type.createMethod(constructor, sibling, false, null));
 
     return StringUtils.EMPTY;
   }

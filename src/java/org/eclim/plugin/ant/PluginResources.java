@@ -36,23 +36,6 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String)
-   */
-  @Override
-  public void initialize(String name)
-  {
-    super.initialize(name);
-
-    registerCommand("ant_complete",
-        org.eclim.plugin.ant.command.complete.CodeCompleteCommand.class);
-    registerCommand("ant_targets",
-        org.eclim.plugin.ant.command.run.TargetsCommand.class);
-    registerCommand("ant_validate",
-        org.eclim.plugin.ant.command.validate.ValidateCommand.class);
-  }
-
-  /**
-   * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
   protected String getBundleBaseName()

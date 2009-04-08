@@ -19,6 +19,8 @@ package org.eclim.plugin.jdt.command.include;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -43,6 +45,13 @@ import org.eclipse.jdt.core.search.SearchPattern;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_import",
+  options =
+    "REQUIRED n project ARG," +
+    "REQUIRED p pattern ARG," +
+    "OPTIONAL t type ARG"
+)
 public class ImportCommand
   extends SearchCommand
 {

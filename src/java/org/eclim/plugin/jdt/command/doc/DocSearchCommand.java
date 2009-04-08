@@ -22,6 +22,8 @@ import java.util.List;
 
 import java.util.regex.Pattern;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
@@ -48,6 +50,19 @@ import org.eclipse.jdt.internal.launching.JREContainer;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_docsearch",
+  options =
+    "REQUIRED n project ARG," +
+    "OPTIONAL f file ARG," +
+    "OPTIONAL o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL l length ARG," +
+    "OPTIONAL p pattern ARG," +
+    "OPTIONAL t type ARG," +
+    "OPTIONAL x context ARG," +
+    "OPTIONAL s scope ARG"
+)
 public class DocSearchCommand
   extends SearchCommand
 {

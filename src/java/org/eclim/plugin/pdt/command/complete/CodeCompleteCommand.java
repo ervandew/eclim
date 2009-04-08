@@ -19,6 +19,8 @@ package org.eclim.plugin.pdt.command.complete;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
@@ -67,6 +69,14 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "php_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {

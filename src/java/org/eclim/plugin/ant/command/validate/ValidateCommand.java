@@ -19,6 +19,8 @@ package org.eclim.plugin.ant.command.validate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -41,6 +43,12 @@ import org.eclipse.ant.internal.ui.model.IProblemRequestor;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "ant_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class ValidateCommand
   extends org.eclim.command.xml.validate.ValidateCommand
 {

@@ -25,6 +25,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -49,6 +51,17 @@ import org.eclipse.jdt.core.Signature;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_bean_properties",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "REQUIRED r properties ARG," +
+    "REQUIRED t type ARG," +
+    "OPTIONAL i indexed NOARG"
+)
 public class PropertiesCommand
   extends AbstractCommand
 {

@@ -19,6 +19,8 @@ package org.eclim.plugin.jdt.command.hierarchy;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -34,6 +36,14 @@ import org.eclipse.jdt.core.IType;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_hierarchy",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class HierarchyCommand
   extends AbstractCommand
 {

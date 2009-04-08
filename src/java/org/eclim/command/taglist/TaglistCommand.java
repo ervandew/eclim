@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -35,6 +37,10 @@ import org.eclim.util.ScriptUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "taglist",
+  options = "REQUIRED c ctags ANY"
+)
 public class TaglistCommand
   extends AbstractCommand
 {
@@ -90,7 +96,7 @@ public class TaglistCommand
     TaglistScript script = (TaglistScript)scriptCache.get(lang);
     if(!scriptCache.containsKey(lang) && script == null){
       try{
-        Class scriptClass = ScriptUtils.parseClass(
+        Class<?> scriptClass = ScriptUtils.parseClass(
             "taglist/" + lang + ".groovy");
         script = (TaglistScript)scriptClass.newInstance();
 // After some extended period of time groovy starts losing the ability to

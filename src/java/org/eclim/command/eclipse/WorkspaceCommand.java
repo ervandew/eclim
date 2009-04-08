@@ -16,6 +16,8 @@
  */
 package org.eclim.command.eclipse;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -26,6 +28,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "workspace_dir")
 public class WorkspaceCommand
   extends AbstractCommand
 {

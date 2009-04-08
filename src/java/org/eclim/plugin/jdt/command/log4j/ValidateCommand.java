@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -47,6 +49,12 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "log4j_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class ValidateCommand
   extends org.eclim.command.xml.validate.ValidateCommand
 {

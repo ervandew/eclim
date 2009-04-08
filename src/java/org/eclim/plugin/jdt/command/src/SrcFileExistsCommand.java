@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -29,6 +31,12 @@ import org.eclipse.jdt.core.ICompilationUnit;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_src_exists",
+  options =
+    "REQUIRED f file ARG," +
+    "OPTIONAL p project ARG"
+)
 public class SrcFileExistsCommand
   extends AbstractCommand
 {

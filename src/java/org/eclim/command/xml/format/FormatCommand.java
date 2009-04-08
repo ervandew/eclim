@@ -29,6 +29,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -42,6 +44,13 @@ import org.xml.sax.InputSource;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "xml_format",
+  options =
+    "REQUIRED f file ARG," +
+    "REQUIRED w linewidth ARG," +
+    "REQUIRED i indent ARG"
+)
 public class FormatCommand
   extends AbstractCommand
 {

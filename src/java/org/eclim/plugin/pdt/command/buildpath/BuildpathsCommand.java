@@ -23,6 +23,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -41,6 +43,10 @@ import org.eclipse.dltk.core.IScriptProject;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "php_buildpaths",
+  options = "REQUIRED p project ARG"
+)
 public class BuildpathsCommand
   extends AbstractCommand
 {

@@ -18,6 +18,8 @@ package org.eclim.plugin.pdt.command.buildpath;
 
 import java.util.ArrayList;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -30,6 +32,7 @@ import org.eclipse.dltk.core.DLTKCore;
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "php_buildpath_variables")
 public class BuildpathVariablesCommand
   extends AbstractCommand
 {

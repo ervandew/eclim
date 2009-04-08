@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -63,6 +65,19 @@ import org.eclipse.ui.part.FileEditorInput;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "php_search",
+  options =
+    "REQUIRED n project ARG," +
+    "OPTIONAL f file ARG," +
+    "OPTIONAL o offset ARG," +
+    "OPTIONAL l length ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL p pattern ARG," +
+    "OPTIONAL x context ARG," +
+    "OPTIONAL t type ARG," +
+    "OPTIONAL s scope ARG"
+)
 public class SearchCommand
   extends AbstractCommand
 {

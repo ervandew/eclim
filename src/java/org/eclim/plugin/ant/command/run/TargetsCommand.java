@@ -25,6 +25,8 @@ import java.util.Map;
 
 import org.apache.tools.ant.Project;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -39,6 +41,12 @@ import org.eclipse.ant.internal.ui.model.AntProjectNode;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "ant_targets",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class TargetsCommand
   extends AbstractCommand
 {

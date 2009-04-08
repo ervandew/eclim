@@ -23,6 +23,8 @@ import java.util.Properties;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.command.AbstractCommand;
@@ -36,6 +38,10 @@ import org.eclim.util.IOUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "settings_update",
+  options = "OPTIONAL s settings ARG"
+)
 public class SettingsUpdateCommand
   extends AbstractCommand
 {

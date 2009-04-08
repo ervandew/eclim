@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.classpath;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -31,6 +33,12 @@ import org.eclipse.jdt.core.JavaCore;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_classpath_variable_create",
+  options =
+    "REQUIRED n name ARG," +
+    "REQUIRED p path ARG"
+)
 public class ClasspathVariableCreateCommand
   extends AbstractCommand
 {

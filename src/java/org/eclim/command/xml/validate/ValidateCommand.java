@@ -19,6 +19,8 @@ package org.eclim.command.xml.validate;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -35,6 +37,13 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "xml_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "OPTIONAL s schema NOARG"
+)
 public class ValidateCommand
   extends AbstractCommand
 {

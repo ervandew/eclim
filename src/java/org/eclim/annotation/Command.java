@@ -14,32 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.maven;
+package org.eclim.annotation;
 
-import org.eclim.Services;
-
-import org.eclim.plugin.AbstractPluginResources;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Implementation of AbstractPluginResources.
+ * Annotation for command implementations.
  *
  * @author Eric Van Dewoestine
  */
-public class PluginResources
-  extends AbstractPluginResources
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Command
 {
-  /**
-   * Name that can be used to lookup this PluginResources from
-   * {@link Services#getPluginResources(String)}.
-   */
-  public static final String NAME = "org.eclim.maven";
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
-  protected String getBundleBaseName()
-  {
-    return "org/eclim/plugin/maven/messages";
-  }
+  String name();
+  String options() default "";
 }

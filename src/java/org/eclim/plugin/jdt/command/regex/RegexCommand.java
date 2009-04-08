@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -40,6 +42,12 @@ import org.eclim.util.file.FileUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_regex",
+  options =
+    "REQUIRED f file ARG," +
+    "OPTIONAL t type ARG"
+)
 public class RegexCommand
   extends AbstractCommand
 {

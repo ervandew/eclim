@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.util.ArrayList;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -37,6 +39,10 @@ import org.eclipse.jdt.core.IJavaProject;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_src_dirs",
+  options = "REQUIRED p project ARG"
+)
 public class SrcDirsCommand
   extends AbstractCommand
 {

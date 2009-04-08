@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
@@ -53,6 +55,14 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "javascript_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class JavascriptCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {

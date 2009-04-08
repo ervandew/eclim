@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
 import org.eclim.Services;
 
 import org.eclim.command.Command;
-import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
@@ -230,19 +229,17 @@ public abstract class AbstractPluginResources
   }
 
   /**
-   * Registers the supplied command under the specified name.
-   *
-   * @param name The name of the command.
-   * @param command The command class.
+   * {@inheritDoc}
+   * @see PluginResources#registerCommand(Class)
    */
-  protected void registerCommand(String name, Class<? extends Command> command)
+  public void registerCommand(Class<? extends Command> command)
   {
-    commands.put(name, command);
-
-    String optionsKey = name + Options.OPTION_SUFFIX;
-    String optionsString = Services.getMessage(optionsKey);
-    if(optionsKey.equals(optionsString)){
-      logger.error(Services.getMessage("command.missing.options", name));
+    org.eclim.annotation.Command info = (org.eclim.annotation.Command)
+      command.getAnnotation(org.eclim.annotation.Command.class);
+    if(info != null){
+      commands.put(info.name(), command);
+    }else{
+      logger.error(Services.getMessage("command.missing.annotation", command));
     }
   }
 

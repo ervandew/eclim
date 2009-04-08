@@ -16,6 +16,8 @@
  */
 package org.eclim.command.project;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -28,6 +30,7 @@ import org.eclim.project.ProjectNatureFactory;
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "project_nature_aliases")
 public class ProjectNatureAliasesCommand
   extends AbstractCommand
 {

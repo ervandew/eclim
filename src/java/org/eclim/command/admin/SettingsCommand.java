@@ -19,6 +19,8 @@ package org.eclim.command.admin;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -30,6 +32,10 @@ import org.eclim.preference.Option;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "settings",
+  options = "OPTIONAL s settings ARG"
+)
 public class SettingsCommand
   extends AbstractCommand
 {

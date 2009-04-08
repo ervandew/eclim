@@ -33,6 +33,13 @@ import org.eclim.command.Command;
 public interface PluginResources
 {
   /**
+   * Registers the supplied command.
+   *
+   * @param command The command class.
+   */
+  public void registerCommand(Class<? extends Command> command);
+
+  /**
    * Gets a command by name.
    *
    * @param name The name of the service.

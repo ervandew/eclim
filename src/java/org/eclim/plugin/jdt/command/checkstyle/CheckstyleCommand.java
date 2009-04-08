@@ -40,6 +40,8 @@ import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -68,6 +70,12 @@ import org.eclipse.jdt.core.JavaModelException;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_checkstyle",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class CheckstyleCommand
   extends AbstractCommand
 {

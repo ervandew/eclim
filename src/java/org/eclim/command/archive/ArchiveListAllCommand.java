@@ -37,6 +37,8 @@ import org.apache.tools.tar.TarInputStream;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -48,6 +50,10 @@ import org.eclim.util.StringUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "archive_list_all",
+  options = "REQUIRED f file ARG"
+)
 public class ArchiveListAllCommand
   extends ArchiveListCommand
 {

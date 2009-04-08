@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -45,6 +47,10 @@ import org.eclipse.jdt.core.JavaModelException;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_classpath",
+  options = "REQUIRED p project ARG"
+)
 public class ClasspathCommand
   extends AbstractCommand
 {

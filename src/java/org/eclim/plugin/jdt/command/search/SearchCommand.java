@@ -27,6 +27,8 @@ import org.apache.commons.vfs.VFS;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -63,6 +65,19 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_search",
+  options =
+    "REQUIRED n project ARG," +
+    "OPTIONAL f file ARG," +
+    "OPTIONAL o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL l length ARG," +
+    "OPTIONAL p pattern ARG," +
+    "OPTIONAL t type ARG," +
+    "OPTIONAL x context ARG," +
+    "OPTIONAL s scope ARG"
+)
 public class SearchCommand
   extends AbstractCommand
 {
@@ -318,7 +333,7 @@ public class SearchCommand
    */
   protected int getElementContextualContext(IJavaElement element)
   {
-    Class theClass = element.getClass();
+    Class<?> theClass = element.getClass();
 
     // type declaration
     if(theClass.equals(org.eclipse.jdt.internal.core.SourceType.class)){

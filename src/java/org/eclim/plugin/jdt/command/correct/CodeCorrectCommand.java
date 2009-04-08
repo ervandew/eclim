@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -55,6 +57,16 @@ import org.eclipse.text.edits.TextEdit;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_correct",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED l line ARG," +
+    "REQUIRED o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL a apply ARG"
+)
 public class CodeCorrectCommand
   extends AbstractCommand
 {

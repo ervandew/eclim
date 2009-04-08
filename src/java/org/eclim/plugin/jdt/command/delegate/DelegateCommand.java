@@ -20,6 +20,8 @@ import java.util.HashMap;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -48,6 +50,17 @@ import org.eclipse.jdt.core.Signature;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_delegate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "OPTIONAL o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL t type ARG," +
+    "OPTIONAL s superType ARG," +
+    "OPTIONAL m methods ARG"
+)
 public class DelegateCommand
   extends ImplCommand
 {

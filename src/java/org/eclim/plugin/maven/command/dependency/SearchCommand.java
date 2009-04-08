@@ -25,6 +25,8 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -40,6 +42,14 @@ import org.w3c.dom.NodeList;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "maven_dependency_search",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED t type ARG," +
+    "REQUIRED s search ARG"
+)
 public class SearchCommand
   extends AbstractCommand
 {

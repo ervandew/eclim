@@ -23,6 +23,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -33,10 +35,12 @@ import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
 /**
- * Pings the server.
+ * Command which responds to ping requests, returning the eclim and eclipse
+ * version numbers.
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "ping")
 public class PingCommand
   extends AbstractCommand
 {
@@ -49,7 +53,7 @@ public class PingCommand
     throws Exception
   {
     if(version == null){
-      PluginResources resources = Services.getPluginResources();
+      PluginResources resources = Services.getPluginResources("org.eclim");
       String eclim_name = resources.getProperty("pluginName");
       String eclipse_name = "eclipse";
       int pad = Math.max(eclim_name.length(), eclipse_name.length());

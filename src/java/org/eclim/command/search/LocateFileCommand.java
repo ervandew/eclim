@@ -30,6 +30,8 @@ import com.wcohen.ss.Levenstein;
 
 import com.wcohen.ss.api.StringDistance;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -53,6 +55,13 @@ import org.eclipse.core.runtime.IPath;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "locate_file",
+  options =
+    "REQUIRED p pattern ARG," +
+    "REQUIRED s scope ARG," +
+    "OPTIONAL n project ARG"
+)
 public class LocateFileCommand
   extends AbstractCommand
 {

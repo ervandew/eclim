@@ -18,6 +18,8 @@ package org.eclim.plugin.wst.command.complete;
 
 import java.util.ArrayList;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.CodeCompleteResult;
@@ -32,6 +34,15 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "xml_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG," +
+    "OPTIONAL d delimeter ARG"
+)
 public class XmlCodeCompleteCommand
   extends WstCodeCompleteCommand
 {

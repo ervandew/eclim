@@ -26,6 +26,8 @@ import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -51,6 +53,12 @@ import org.eclipse.jdt.core.Signature;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_class_prototype",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED c classname ARG"
+)
 public class ClassPrototypeCommand
   extends AbstractCommand
 {

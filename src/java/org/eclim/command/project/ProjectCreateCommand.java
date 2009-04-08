@@ -18,6 +18,8 @@ package org.eclim.command.project;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -33,6 +35,14 @@ import org.eclim.util.file.FileUtils;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_create",
+  options =
+    "REQUIRED f folder ARG," +
+    "OPTIONAL p name ARG," +
+    "REQUIRED n natures ARG," +
+    "OPTIONAL d depends ARG"
+)
 public class ProjectCreateCommand
   extends AbstractCommand
 {

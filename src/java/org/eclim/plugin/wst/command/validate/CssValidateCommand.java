@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -45,6 +47,12 @@ import org.w3c.css.util.Warning;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "css_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class CssValidateCommand
   extends WstValidateCommand
 {

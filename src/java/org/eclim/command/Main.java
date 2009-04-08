@@ -84,7 +84,7 @@ public class Main
         throw new IllegalArgumentException(
             Services.getMessage("command.required"));
       }
-      Command command = Services.getCommand(commandName);
+      Command command = commandLine.getCommand();
 
       String result = command.execute(commandLine);
       System.out.println(result);

@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -43,6 +45,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_nature_add",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED n nature ARG"
+)
 public class ProjectNatureAddCommand
   extends AbstractCommand
 {

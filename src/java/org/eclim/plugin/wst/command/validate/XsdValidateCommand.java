@@ -19,6 +19,8 @@ package org.eclim.plugin.wst.command.validate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
@@ -35,6 +37,12 @@ import org.eclipse.wst.xsd.core.internal.validation.eclipse.XSDValidator;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "xsd_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class XsdValidateCommand
   extends WstValidateCommand
 {

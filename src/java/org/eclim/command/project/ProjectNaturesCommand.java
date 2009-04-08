@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -37,6 +39,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_natures",
+  options = "OPTIONAL p project ARG"
+)
 public class ProjectNaturesCommand
   extends AbstractCommand
 {

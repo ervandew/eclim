@@ -19,6 +19,8 @@ package org.eclim.command.project;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -36,6 +38,12 @@ import org.eclipse.core.resources.IProject;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_settings",
+  options =
+    "OPTIONAL p project ARG," +
+    "OPTIONAL s setting ARG"
+)
 public class ProjectSettingsCommand
   extends AbstractCommand
 {

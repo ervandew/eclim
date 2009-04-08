@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -34,6 +36,12 @@ import org.eclipse.jdt.core.compiler.IProblem;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_imports_unused",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class UnusedImportsCommand
   extends AbstractCommand
 {

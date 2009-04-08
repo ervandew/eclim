@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -50,6 +52,18 @@ import org.eclipse.jdt.core.IType;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_junit_impl",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "OPTIONAL o offset ARG," +
+    "OPTIONAL e encoding ARG," +
+    "OPTIONAL t type ARG," +
+    "OPTIONAL b baseType ARG," +
+    "OPTIONAL s superType ARG," +
+    "OPTIONAL m methods ARG"
+)
 public class JUnitImplCommand
   extends ImplCommand
 {

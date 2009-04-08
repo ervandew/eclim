@@ -20,6 +20,8 @@ import java.io.ByteArrayOutputStream;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -45,6 +47,14 @@ import org.eclipse.text.edits.TextEdit;
  * @author Anton Sharonov
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_format",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED b boffset ARG," +
+    "REQUIRED e eoffset ARG"
+)
 public class FormatCommand
   extends AbstractCommand
 {

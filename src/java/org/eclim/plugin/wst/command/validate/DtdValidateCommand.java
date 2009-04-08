@@ -19,6 +19,8 @@ package org.eclim.plugin.wst.command.validate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclim.annotation.Command;
+
 //import org.eclipse.wst.dtd.core.internal.validation.DTDValidator;
 
 import org.eclim.command.CommandLine;
@@ -37,6 +39,12 @@ import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "dtd_validate",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class DtdValidateCommand
   extends WstValidateCommand
 {

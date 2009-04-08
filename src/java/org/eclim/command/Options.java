@@ -24,7 +24,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -123,34 +122,32 @@ public class Options
    * @return The command line.
    */
   public CommandLine parse(String[] args)
-    throws ParseException
+    throws Exception
   {
     // manually parse out the command option value so that the command specific
     // options can be added before running the automated parse.
-    String command = null;
+    String commandName = null;
     for (int ii = 0; ii < args.length; ii++){
       if(args[ii].equals('-' + COMMAND_OPTION)){
         if(args.length > ii + 1){
-          command = args[ii + 1].trim();
+          commandName = args[ii + 1].trim();
         }
         break;
       }
     }
-    if(command != null){
-      String messageKey = command + OPTION_SUFFIX;
-      String optionsString = Services.getMessage(messageKey);
-      if(messageKey.equals(optionsString)){
-        throw new IllegalArgumentException(
-            Services.getMessage("command.missing.options", command));
-      }
-      Collection<Option> commandOptions = parseOptions(optionsString);
+    Command command = null;
+    if(commandName != null){
+      command = Services.getCommand(commandName);
+      org.eclim.annotation.Command info = (org.eclim.annotation.Command)
+        command.getClass().getAnnotation(org.eclim.annotation.Command.class);
+      Collection<Option> commandOptions = parseOptions(info.options());
       for(Option option : commandOptions){
         options.addOption(option);
       }
     }
 
     CommandLineParser parser = new GnuParser();
-    return new CommandLine(parser.parse(options, args), args);
+    return new CommandLine(command, parser.parse(options, args), args);
   }
 
   /**

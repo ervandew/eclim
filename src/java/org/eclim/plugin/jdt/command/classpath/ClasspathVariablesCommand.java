@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.classpath;
 
 import java.util.ArrayList;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -30,6 +32,7 @@ import org.eclipse.jdt.core.JavaCore;
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "java_classpath_variables")
 public class ClasspathVariablesCommand
   extends AbstractCommand
 {

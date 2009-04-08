@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -38,6 +40,12 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblem;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "java_import_missing",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
+)
 public class ImportMissingCommand
   extends ImportCommand
 {

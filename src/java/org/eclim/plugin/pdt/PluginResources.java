@@ -61,21 +61,6 @@ public class PluginResources
     PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",
       "PDT org.eclipse.php.core.phpVersion php[45]"
     );
-
-    registerCommand("php_src_update",
-        org.eclim.plugin.pdt.command.src.SrcUpdateCommand.class);
-    registerCommand("php_complete",
-        org.eclim.plugin.pdt.command.complete.CodeCompleteCommand.class);
-    registerCommand("php_search",
-        org.eclim.plugin.pdt.command.search.SearchCommand.class);
-    registerCommand("php_buildpaths",
-        org.eclim.plugin.pdt.command.buildpath.BuildpathsCommand.class);
-    registerCommand("php_buildpath_variables",
-        org.eclim.plugin.pdt.command.buildpath.BuildpathVariablesCommand.class);
-    registerCommand("php_buildpath_variable_create",
-        org.eclim.plugin.pdt.command.buildpath.BuildpathVariableCreateCommand.class);
-    registerCommand("php_buildpath_variable_delete",
-        org.eclim.plugin.pdt.command.buildpath.BuildpathVariableDeleteCommand.class);
   }
 
   /**

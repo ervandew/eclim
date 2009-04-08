@@ -29,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -66,6 +68,14 @@ import org.eclipse.jdt.core.dom.TextElement;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "javadoc_comment",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "OPTIONAL e encoding ARG"
+)
 public class CommentCommand
   extends AbstractCommand
 {

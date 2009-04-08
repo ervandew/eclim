@@ -24,6 +24,8 @@ import java.util.Properties;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -45,6 +47,13 @@ import org.eclipse.core.resources.IProject;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_update",
+  options =
+    "REQUIRED p project ARG," +
+    "OPTIONAL b buildfile ARG," +
+    "OPTIONAL s settings ARG"
+)
 public class ProjectUpdateCommand
   extends AbstractCommand
 {

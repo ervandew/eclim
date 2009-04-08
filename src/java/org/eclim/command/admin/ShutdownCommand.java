@@ -16,6 +16,8 @@
  */
 package org.eclim.command.admin;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 
@@ -28,6 +30,7 @@ import org.eclim.logging.Logger;
  *
  * @author Eric Van Dewoestine
  */
+@Command(name = "shutdown")
 public class ShutdownCommand
   extends AbstractCommand
 {

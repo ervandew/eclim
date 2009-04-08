@@ -18,6 +18,8 @@ package org.eclim.command.project;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -34,6 +36,10 @@ import org.eclipse.core.resources.IProject;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "project_info",
+  options = "REQUIRED p project ARG"
+)
 public class ProjectInfoCommand
   extends AbstractCommand
 {
