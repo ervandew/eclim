@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -57,6 +59,13 @@ import org.eclipse.core.runtime.Path;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "c_src_update",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "OPTIONAL v validate NOARG"
+)
 public class SrcUpdateCommand
   extends AbstractCommand
 {

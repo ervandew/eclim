@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import org.eclim.Services;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -46,6 +48,14 @@ import org.eclipse.core.runtime.Path;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "c_project_src",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED a action ARG," +
+    "REQUIRED d dir ARG," +
+    "OPTIONAL e excludes ARG"
+)
 public class SourceEntryCommand
   extends AbstractCommand
 {

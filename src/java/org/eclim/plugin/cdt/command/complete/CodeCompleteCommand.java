@@ -18,6 +18,8 @@ package org.eclim.plugin.cdt.command.complete;
 
 import java.lang.reflect.Method;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.command.complete.AbstractCodeCompleteCommand;
@@ -58,6 +60,14 @@ import org.eclipse.ui.part.FileEditorInput;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "c_complete",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG"
+)
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {

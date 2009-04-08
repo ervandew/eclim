@@ -59,17 +59,6 @@ public class PluginResources
         CProjectNature.C_NATURE_ID, new CProjectManager());
     ProjectManagement.addProjectManager(
         CCProjectNature.CC_NATURE_ID, new CProjectManager());
-
-    registerCommand("c_src_update",
-        org.eclim.plugin.cdt.command.src.SrcUpdateCommand.class);
-    registerCommand("c_complete",
-        org.eclim.plugin.cdt.command.complete.CodeCompleteCommand.class);
-    registerCommand("c_project_configs",
-        org.eclim.plugin.cdt.command.project.ConfigurationsCommand.class);
-    registerCommand("c_project_src",
-        org.eclim.plugin.cdt.command.project.SourceEntryCommand.class);
-    registerCommand("c_project_paths",
-        org.eclim.plugin.cdt.command.project.PathsCommand.class);
   }
 
   /**

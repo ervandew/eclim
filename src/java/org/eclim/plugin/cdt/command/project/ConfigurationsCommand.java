@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.project;
 
+import org.eclim.annotation.Command;
+
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -46,6 +48,10 @@ import org.eclipse.core.runtime.IPath;
  *
  * @author Eric Van Dewoestine
  */
+@Command(
+  name = "c_project_configs",
+  options = "REQUIRED p project ARG"
+)
 public class ConfigurationsCommand
   extends AbstractCommand
 {
