@@ -62,9 +62,16 @@ function! eclim#python#complete#CodeComplete(findstart, base)
     let results = eclim#python#rope#Completions(project, filename, offset, encoding)
 
     for result in results
+      let menu = result[1]
+      let info = ''
+      if result[2] != ''
+        let info = result[0] . '(' . result[2] . ')'
+        let menu = info
+      endif
       let dict = {
           \ 'word': result[0],
-          \ 'menu': result[1],
+          \ 'menu': menu,
+          \ 'info': info,
         \ }
 
       call add(completions, dict)
