@@ -49,9 +49,9 @@ public class RevisionsCommand
   extends AbstractCommand
 {
   private static final String URL =
-    "http://eclim.svn.sourceforge.net/viewvc/eclim/trunk/src/vim/<file>?view=log";
+    "http://eclim.git.sourceforge.net/git/gitweb.cgi?p=eclim;a=rss;f=src/vim/<file>";
   private static final Pattern REVISION_REGEX =
-    Pattern.compile("Revision\\s+<a\\s+.*?><strong>\\s*(.*?)\\s*</strong>");
+    Pattern.compile("<link>.*a=commitdiff;h=(\\w+)</link>");
   private static int TIMEOUT = 5 * 1000;
 
   /**
@@ -78,7 +78,7 @@ public class RevisionsCommand
       ArrayList<String> revisions = new ArrayList<String>();
       Matcher matcher = REVISION_REGEX.matcher(out.toString());
       while(matcher.find()){
-        revisions.add(matcher.group(1));
+        revisions.add(matcher.group(1).substring(0, 10));
       }
 
       return RevisionsFilter.instance.filter(commandLine, revisions);
