@@ -141,7 +141,7 @@ public class SearchCommand
 
       ISourceModule src = (ISourceModule)editor.getModelElement();
       IModelElement[] elements = src.codeSelect(
-          Integer.parseInt(offset), Integer.parseInt(length));
+          getOffset(commandLine), Integer.parseInt(length));
       IModelElement element = null;
       if(elements != null && elements.length > 0){
         element = elements[0];

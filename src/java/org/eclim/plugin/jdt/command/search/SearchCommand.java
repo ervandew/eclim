@@ -155,7 +155,7 @@ public class SearchCommand
       String filepath = ProjectUtils.getFilePath(project, file);
 
       int charOffset = FileUtils.byteOffsetToCharOffset(
-          filepath, Integer.parseInt(offset), encoding);
+          filepath, getOffset(commandLine), encoding);
       Position position = new Position(
           file, charOffset, Integer.parseInt(length));
       IJavaElement element = getElement(project, position);
