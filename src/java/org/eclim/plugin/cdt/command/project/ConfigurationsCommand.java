@@ -71,6 +71,9 @@ public class ConfigurationsCommand
 
     StringBuffer out = new StringBuffer();
     for(ICConfigurationDescription cconfig : cconfigs){
+      if (out.length() > 0){
+        out.append('\n');
+      }
       out.append("Config: ").append(cconfig.getName()).append('\n');
 
       // source entries
@@ -82,7 +85,7 @@ public class ConfigurationsCommand
           if (dirname.length() == 0){
             dirname = "/";
           }
-          out.append("\t\tdir:      ")
+          out.append("\t\tdir:    ")
             .append(dirname)
             .append('\n');
           IPath[] excludes = entry.getExclusionPatterns();
@@ -91,7 +94,7 @@ public class ConfigurationsCommand
             for (int ii = 0; ii < excludes.length; ii++){
               patterns[ii] = excludes[ii].toString();
             }
-            out.append("\t\texcludes: ")
+            out.append("\t\t\texcludes: ")
               .append(StringUtils.join(patterns, ','))
               .append('\n');
           }
@@ -106,26 +109,31 @@ public class ConfigurationsCommand
           if (!tool.isEnabled() || !acceptTool(project, tool)){
             continue;
           }
+
+          IOption ioption = getOptionByType(tool, IOption.INCLUDE_PATH);
+          IOption soption = getOptionByType(tool, IOption.PREPROCESSOR_SYMBOLS);
+          if (ioption == null && soption == null){
+            continue;
+          }
+
           out.append("\n\tTool: ").append(tool.getName()).append('\n');
 
           // includes
-          IOption option = getOptionByType(tool, IOption.INCLUDE_PATH);
-          if(option != null){
-            String[] includes = option.getIncludePaths();
+          if(ioption != null){
+            out.append("\t\tIncludes: |add|\n");
+            String[] includes = ioption.getIncludePaths();
             if(includes.length > 0){
-              out.append("\n\t\tIncludes: |add|\n");
               for(String include : includes){
-                out.append("\t\t\t").append(include).append('\n');
+                out.append("\t\t\tpath:    ").append(include).append('\n');
               }
             }
           }
 
           // symbols
-          option = getOptionByType(tool, IOption.PREPROCESSOR_SYMBOLS);
-          if(option != null){
-            String[] symbols = option.getDefinedSymbols();
+          if(soption != null){
+            out.append("\t\tSymbols:  |add|\n");
+            String[] symbols = soption.getDefinedSymbols();
             if(symbols.length > 0){
-              out.append("\n\t\tSymbols: |add|\n");
               for(String symbol : symbols){
                 out.append("\t\t\t").append(symbol).append('\n');
               }

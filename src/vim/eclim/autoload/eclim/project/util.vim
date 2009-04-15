@@ -759,6 +759,20 @@ function! eclim#project#util#CommandCompleteProjectRelative(
   return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
+" CommandCompleteAbsoluteOrProjectRelative(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project relative files and directories.
+function! eclim#project#util#CommandCompleteAbsoluteOrProjectRelative(
+    \ argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseArgs(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+  if argLead =~ '^\(/\|[a-zA-Z]:\)'
+    return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+  endif
+  return eclim#project#util#CommandCompleteProjectRelative(
+    \ a:argLead, a:cmdLine, a:cursorPos)
+endfunction " }}}
+
 " CommandCompleteProjectNatureAdd(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names and natures.
 function! eclim#project#util#CommandCompleteProjectNatureAdd(
