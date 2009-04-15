@@ -47,6 +47,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.4.2.R34x_v20080826-1230.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.0.0.v20081229-1135"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.0.0.v20081229-1135.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.4.1.r341_v20080813-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_3.4.1.v3449c.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.team.core_3.4.1.r34x_20080827.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.text_3.4.0.v20080605-1800.jar"/>

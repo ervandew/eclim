@@ -51,6 +51,10 @@ public abstract class AbstractCommand
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
+    if (project == null){
+      // some commands use -n for the project name (like all the search commands)
+      project = commandLine.getValue(Options.NAME_OPTION);
+    }
     String file = commandLine.getValue(Options.FILE_OPTION);
     String encoding = commandLine.getValue(Options.ENCODING_OPTION);
     int offset = Integer.parseInt(

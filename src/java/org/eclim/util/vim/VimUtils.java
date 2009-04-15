@@ -30,6 +30,25 @@ public class VimUtils
   public static final String DEFAULT_LINE_COL = "1 col 1";
 
   /**
+   * Converts the given offset into a vim compatible line / column string.
+   *
+   * @param filename The absolute path to the file.
+   * @param offset The offset in the file.
+   * @return The vim compatable string.
+   */
+  public static String translateLineColumn(String filename, int offset)
+    throws Exception
+  {
+    if(offset >= 0){
+      int[] pos = FileUtils.offsetToLineColumn(filename, offset);
+      if(pos != null){
+        return pos[0] + " col " + pos[1];
+      }
+    }
+    return "1 col 1";
+  }
+
+  /**
    * Converts the position into a vim compatible line / column string.
    *
    * @param position The position instance.
