@@ -46,10 +46,6 @@ augroup END
 
 " Command Declarations {{{
 
-if !exists(":CProjectConfigs")
-  command -nargs=0 -buffer CProjectConfigs :call eclim#c#project#Configs()
-endif
-
 command! -nargs=0 -buffer Validate :call eclim#c#util#UpdateSrcFile(1)
 
 if !exists(":CFindDefinition")

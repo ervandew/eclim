@@ -30,14 +30,20 @@
     \ '-command c_project_include -p "<project>" -a <action> -d "<dir>" -l <lang>'
 " }}}
 
-" Configs() {{{
+" Configs([project]) {{{
 " Open a buffer with current project configs info.
-function! eclim#c#project#Configs()
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
+function! eclim#c#project#Configs(...)
+  if len(a:000) > 0 && a:000[0] != ''
+    let project = a:000[0]
+  else
+    let project = eclim#project#util#GetCurrentProjectName()
   endif
 
-  let project = eclim#project#util#GetCurrentProjectName()
+  if project == ''
+    " force printing of project error message
+    call eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
 
   let command = s:configs_command
   let command = substitute(command, '<project>', project, '')
@@ -207,6 +213,18 @@ function s:Delete()
       call eclim#util#Echo(message)
     endif
   endif
+endfunction " }}}
+
+" CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project names.
+function! eclim#c#project#CommandCompleteProject(argLead, cmdLine, cursorPos)
+  let c_projects = eclim#project#util#CommandCompleteProjectByNature(
+    \ a:argLead, a:cmdLine, a:cursorPos, 'c')
+  let cpp_projects = eclim#project#util#CommandCompleteProjectByNature(
+    \ a:argLead, a:cmdLine, a:cursorPos, 'cpp')
+  let projects = c_projects + cpp_projects
+  call sort(projects)
+  return projects
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

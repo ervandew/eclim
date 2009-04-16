@@ -167,6 +167,11 @@ endif
 if !exists(":TrackerTicket")
   command -nargs=1 TrackerTicket :call eclim#project#tracker#Ticket('<args>')
 endif
+
+if !exists(":CProjectConfigs")
+  command -nargs=? -complete=customlist,eclim#c#project#CommandCompleteProject
+    \ CProjectConfigs :call eclim#c#project#Configs('<args>')
+endif
 " }}}
 
 " Menu Items {{{
