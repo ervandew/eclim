@@ -85,6 +85,10 @@ public class RegexCommand
 
       // read the pattern from the first line of the file.
       regex = reader.readLine();
+      if (regex == null){
+        return null;
+      }
+
       Pattern pattern = Pattern.compile(regex.trim());
 
       if (type == null || FILE.equals(type)){
