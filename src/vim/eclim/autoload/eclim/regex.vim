@@ -60,7 +60,7 @@ function! eclim#regex#OpenTestWindow(lang)
   if bufwinnr(file) == -1
     let filename = expand('%:p')
 
-    silent! exec "botright 10split " . file
+    exec "botright 10split " . file
     setlocal ft=regex
     setlocal winfixheight
     setlocal bufhidden=delete
@@ -88,8 +88,7 @@ endfunction " }}}
 " Evaluate(lang) {{{
 " Evaluates the test regex file.
 function! s:Evaluate(lang)
-  let lines = getline('.', '$')
-  if len(lines) == 1 && lines[0] == ''
+  if line('$') == 1 && getline('$') == ''
     call s:AddTestContent()
   endif
 
