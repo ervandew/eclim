@@ -2,9 +2,6 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - fix org.eclim.command.patch.{Revisions,PatchFile}Command to use new eclim
-    git repos
-
   - Keeping checking pdt update site to re-enable auto install in installer.
 
   - :Jps updates
