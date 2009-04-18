@@ -744,10 +744,17 @@ endfunction " }}}
 function! eclim#project#util#CommandCompleteProjectRelative(
     \ argLead, cmdLine, cursorPos)
   let dir = eclim#project#util#GetCurrentProjectRoot()
+  if dir == '' && exists('b:project')
+    let dir = eclim#project#util#GetProjectRoot(b:project)
+  endif
+
+  if dir == ''
+    return []
+  endif
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseArgs(cmdLine)
-  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+  let argLead = cmdLine =~ '\s$' ? '' : (len(args) > 0 ? args[len(args) - 1] : '')
 
   let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
   call map(results, "substitute(v:val, '\\', '/', 'g')")
