@@ -35,10 +35,10 @@ The first step is to open a Vim window and create the project by executing\:
 
 The path supplied will be the path to the root of your project.  This path may
 or may not exist.  If it does not exist it will be created for you. When the
-project is created two file will be added to the root directory of your project,
-``.project`` and ``.buildpath`` At this time, the ``.project`` file is nothing
-that you need to worry about maintaining as it is purely for Eclipse.  The
-``.buildpath`` file on the other hand, is used to manage your project's
+project is created two files will be added to the root directory of your
+project, ``.project`` and ``.buildpath`` At this time, the ``.project`` file is
+nothing that you need to worry about maintaining as it is purely for Eclipse.
+The ``.buildpath`` file on the other hand, is used to manage your project's
 dependencies, including dependencies on other projects and other libraries.
 For more on maintaining this file see the
 :ref:`build path docs <vim/php/buildpath>`.

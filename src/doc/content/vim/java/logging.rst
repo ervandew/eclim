@@ -33,7 +33,7 @@ Two variables will be supplied to your template: ``var``, which is the logger
 instance variable, and ``class``, which is the class name of the current class
 you are implementing.
 
-Here is an example for the new eclim logger implementation\:
+Here is an example which eclim uses for its logger implementation\:
 
 .. code-block:: java
 

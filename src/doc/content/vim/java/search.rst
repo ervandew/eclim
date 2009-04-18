@@ -18,10 +18,10 @@
 Java Search
 ===========
 
+.. _\:JavaSearch:
+
 Pattern Search
 --------------
-
-.. _\:JavaSearch:
 
 Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command
