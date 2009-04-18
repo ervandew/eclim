@@ -2,7 +2,7 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - Keeping checking pdt update site to re-enable auto install in installer.
+  - Keep checking pdt update site to re-enable auto install in installer.
 
   - :Jps updates
     - open jconsole (handle errors)
@@ -550,6 +550,7 @@ NOTES {{{
         - featureList.<plugin>
         - featureList.<plugin>.html
       dependencies.properties: add feature dependencies
+      FeatureProvider: add feature name, etc to constants
       EclipsePluginStep: add feature to FeatureNameComparator
       excludes: add <plugin>.excludes file
   }}}
