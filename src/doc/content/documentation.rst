@@ -27,6 +27,7 @@ Documentation
   vim/cheatsheet
   vim/faq
   vim/common/index
+  vim/c/index
   vim/css/index
   vim/dtd/index
   vim/html/index
@@ -48,6 +49,7 @@ Documentation
 - :ref:`vim/cheatsheet`
 - :ref:`vim/faq`
 - :ref:`vim/common/index`
+- :ref:`vim/c/index`
 - :ref:`vim/css/index`
 - :ref:`vim/dtd/index`
 - :ref:`vim/html/index`

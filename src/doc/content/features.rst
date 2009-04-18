@@ -35,6 +35,12 @@ Ant Integration
   warnings).
 - Quick access to ant documentation.
 
+C/C++ Integration
+-------------------------
+- Context sensitive code completion.
+- Searching.
+- Source code validation.
+
 Css Integration
 -------------------------
 - Context sensitive code completion.

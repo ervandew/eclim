@@ -13,51 +13,25 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides:
+.. _vim/c/index:
 
-Guides
-==========
+C/C++
+=====
 
 .. toctree::
 
-   install
-   uninstall
-   troubleshoot
-   c/project
-   java/project
-   php/project
-   python/project
-   java/ivy/classpath
-   java/maven/maven/classpath
-   java/maven/mvn/classpath
-   development
+   project
+   complete
+   validate
+   search
 
+- :ref:`vim/c/project`
+- :ref:`vim/c/complete`
+- :ref:`vim/c/validate`
+- :ref:`vim/c/search`
 
-Installing / Upgrading / Troubleshooting
-----------------------------------------
-- :ref:`guides/install`
-- :ref:`guides/uninstall`
-- :ref:`guides/troubleshoot`
+.. note::
+  These features depends on the eclipse cdt_ which should be installed for you
+  when choosing c/c++ support in the eclim installer.
 
-
-Java
-----
-- :ref:`guides/java/project`
-- :ref:`guides/java/ivy/classpath`
-- :ref:`guides/java/maven/maven/classpath`
-- :ref:`guides/java/maven/mvn/classpath`
-
-
-Php
-----
-- :ref:`guides/php/project`
-
-
-Python
-------
-- :ref:`guides/python/project`
-
-
-Eclim Developers
-----------------
-- :ref:`guides/development`
+.. _cdt: http://eclipse.org/cdt

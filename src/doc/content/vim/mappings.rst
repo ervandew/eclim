@@ -33,6 +33,23 @@ that you can use to define your own mappings.
   mapleader" in Vim for more information.
 
 
+.. _CMappings:
+
+C/C++ Mappings
+--------------
+
+Here are some mappings for the c/c++ funtionality provided by eclim.  To make use
+of these mappings, simply create a ftplugin file for ant and place your mappings
+there (:help ftplugin-name).
+
+- The following mapping allows you to simply hit <enter> on an element to
+  perform a search to find it.
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <cr> :CSearchContext<cr>
+
+
 .. _AntMappings:
 
 Ant Mappings

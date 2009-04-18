@@ -24,6 +24,13 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+C/C++:
+  - Added c/c++ support for
+    :ref:`code completion <vim/c/complete>`,
+    :ref:`searching <vim/c/search>`, and
+    :ref:`validation <vim/c/validate>`.
+    Requires the `eclipse cdt`_ plugin.
+
 Java:
   - Added command to generate :ref:`javadocs <:Javadoc>`.
 
@@ -436,6 +443,7 @@ Xml:
   - Added :ref:`xml code completion <vim/xml/complete>`.  Requires the
     `eclipse wst`_ plugin.
 
+.. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse pdt: http://eclipse.org/pdt/
 .. _eclipse wst: http://eclipse.org/webtools/main.php
 .. _jsl: http://www.javascriptlint.com/

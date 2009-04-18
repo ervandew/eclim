@@ -94,6 +94,20 @@ Ant Commands
 - :ref:`:Validate <:Validate_ant>` - Validate the current ant build file.
 
 
+C/C++ Commands
+-----------------
+
+- :ref:`:Validate <:Validate_c>` - Validate the current file.
+- :ref:`:CSearch <:CSearch>` -p <pattern> -t <type> [-s <scope> -x <context>] -
+  Search for classes, functions, methods, macros, etc.
+- :ref:`:CFindDefinition <:CFindDefinition>` -
+  Find the element under the cursor.
+- :ref:`:CSearchContext` -
+  Find the element under the cursor based on its context.
+- :ref:`:CProjectConfigs <:CProjectConfigs>` [project] -
+  Open a temp buffer to view/modify the current projects cdt configurations.
+
+
 Css Commands
 -----------------
 
@@ -147,7 +161,7 @@ Java Commands
   Allows you to view the results of a test case.
 - :ref:`:JavaImport` - Import the class under the cursor.
 - :ref:`:JavaImportMissing` - Import all undefined types.
-- :ref:`:JavaSearch`
+- :ref:`:JavaSearch <:JavaSearch>`
   [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>] -
   Search for classes, methods, fields, etc.  (With pattern supplied, searches
   for the element under the cursor).
@@ -220,7 +234,7 @@ Maven Commands
 Php Commands
 -----------------
 
-- :ref:`:PhpSearch` -p <pattern> -t <type> [-s <scope>] -
+- :ref:`:PhpSearch <:PhpSearch>` -p <pattern> -t <type> [-s <scope>] -
   Search for classes, methods, and constants.
 - :ref:`:PhpFindDefinition <:PhpFindDefinition>` -
   Find the element under the cursor.

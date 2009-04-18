@@ -40,8 +40,8 @@ Overview
 
 The primary goal of eclim is to bring Eclipse_ functionality to the Vim_
 editor.  The initial goal was to provide Eclipse's java functionality in vim,
-but support for various other languages (php, python, css, html, xml, etc.)
-have been added and several more are planned.
+but support for various other languages (c/c++, php, python, css, html, xml,
+etc.) have been added and several more are planned.
 
 Eclim is less of an application and more of an integration of two great
 projects.
@@ -92,6 +92,16 @@ Eclim is released under the GPLv3_ license.
 ==================
 News
 ==================
+
+-----------
+2009
+-----------
+
+| **Eclim 1.4.6** is now available.
+| The major highlight of this release is support for c/c++ using the
+  `eclipse cdt`_ plugin.
+
+You can view the :ref:`release notes <1.4.6>` for more info.
 
 -----------
 2009-04-04
@@ -230,6 +240,7 @@ View the :ref:`release notes <1.3.0>` for more info.
 .. _formic: http://sourceforge.net/projects/formic/
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
 
+.. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse wst: http://eclipse.org/webtools/
 
 .. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
