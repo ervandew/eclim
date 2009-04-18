@@ -13,6 +13,25 @@ HIGH {{{
   - possible rendering issue (cannot reproduce)
     http://groups.google.com/group/eclim-user/browse_thread/thread/7d8824b342019150
 
+  - cdt
+    - project create
+      - handle dependant projects
+      - specify toolchain
+      - specify project type (executable, shared library, static library, makefile project)
+    - edit project config
+      - modify toolchain
+      - add/remove paths
+        - references (projects), source, output
+        - includes, symbols (macros?), library paths
+          - all of these support using environment variables in the path (or
+            value in the case of symbols): ${MY_VAR}.  support variable
+            completion
+              ICConfigurationDescription cfgDes =
+                ManagedBuildManager.getDescriptionForConfiguration(cfg);
+              IEnvironmentVariableManager mngr =
+                CCorePlugin.getDefault().getBuildEnvironmentManager();
+              IEnvironmentVariable[] vars = mngr.getVariables(cfgDes, true);
+
   http://conservancy.softwarefreedom.org/
 }}}
 
@@ -207,10 +226,8 @@ TODO {{{
       http://download.eclipse.org/tools/cdt/releases/ganymede/site.xml
       http://cdt-devel-faq.wikidot.com/
 
-    - project creation
-      - windows: select which toolchain to use, cygwin or mingw
-      - ibm xl toolchain:
-        http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.cdt.doc.user/concepts/cdt_c_whatsnew.htm
+    - ibm xl toolchain:
+      http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.cdt.doc.user/concepts/cdt_c_whatsnew.htm
 
     - :CppHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
@@ -221,16 +238,6 @@ TODO {{{
 
     - make file validation
     - make code completion
-
-    Notes:
-      For .cproject support, since the file is so damn big, may want to provide
-      a simplier interface for adding src dirs, include paths, etc.
-      - setting / validating
-        ICProject.setRawPathEntries
-        ICModelStatus: CoreModel.validatePathEntry(ICProject, IPathEntry, boolean, boolean)
-
-      Searching
-      - org.eclipse.cdt.internal.ui.search.actions.FindAction
   }}}
 
   Css {{{
