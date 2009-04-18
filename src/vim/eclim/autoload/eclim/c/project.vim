@@ -27,7 +27,9 @@
   let s:src_command =
     \ '-command c_project_src -p "<project>" -a <action> -d "<dir>"'
   let s:include_command =
-    \ '-command c_project_include -p "<project>" -a <action> -d "<dir>" -l <lang>'
+    \ '-command c_project_include -p "<project>" -a <action> -l <lang> -d "<dir>"'
+  let s:symbol_command =
+    \ '-command c_project_symbol -p "<project>" -a <action> -l <lang> -n "<name>"'
 " }}}
 
 " Configs([project]) {{{
@@ -63,7 +65,7 @@ endfunction " }}}
 " s:Syntax() {{{
 function s:Syntax()
   syntax match CProjectConfigLabel /^\s*[A-Z]\w\+:/
-  syntax match CProjectConfigSubLabel /^\s*[a-z]\w\+:/
+  syntax match CProjectConfigSubLabel /^\s*[a-z][a-z\/]\+:/
   syntax match CProjectConfigLink /|\S.\{-}\S|/
   hi link CProjectConfigLabel Statement
   hi link CProjectConfigSubLabel Identifier
@@ -84,8 +86,7 @@ function s:FollowLink()
   elseif line =~ '^\s*Includes:'
     call s:AddInclude()
   elseif line =~ '^\s*Symbols:'
-    echom 'add symbol'
-    "call s:AddSymbol()
+    call s:AddSymbol()
   endif
 endfunction " }}}
 
@@ -115,7 +116,7 @@ function s:AddSource()
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'
-    call eclim#c#project#Configs()
+    call eclim#c#project#Configs(b:project)
     call eclim#util#Echo(result)
   endif
 endfunction " }}}
@@ -130,23 +131,42 @@ function s:AddInclude()
     return
   endif
 
-  " get the lang
-  let lang_line = getline(search('^\s\+Tool:', 'bnW'))
-  if lang_line =~ 'assembl\c'
-    let lang = 'assembly'
-  else
-    let lang = 'c'
-  endif
-
   let command = s:include_command
   let command = substitute(command, '<project>', b:project, '')
   let command = substitute(command, '<action>', 'add', '')
+  let command = substitute(command, '<lang>', s:GetLang(), '')
   let command = substitute(command, '<dir>', dir, '')
-  let command = substitute(command, '<lang>', lang, '')
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'
-    call eclim#c#project#Configs()
+    call eclim#c#project#Configs(b:project)
+    call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
+" s:AddSymbol() {{{
+function s:AddSymbol()
+  let project_root = eclim#project#util#GetProjectRoot(b:project)
+  let name = input('name: ', '')
+  if name == ''
+    return
+  endif
+
+  let value = input('value: ')
+  if value == ''
+    return
+  endif
+
+  let command = s:symbol_command
+  let command = substitute(command, '<project>', b:project, '')
+  let command = substitute(command, '<action>', 'add', '')
+  let command = substitute(command, '<lang>', s:GetLang(), '')
+  let command = substitute(command, '<name>', name, '')
+  let command .= ' -v "' . value . '"'
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#c#project#Configs(b:project)
     call eclim#util#Echo(result)
   endif
 endfunction " }}}
@@ -156,63 +176,101 @@ function s:Delete()
   let reload = 0
   let message = ''
   let pos = getpos('.')
-  let line = getline('.')
+  let lnum = line('.')
+  let line = getline(lnum)
 
   " source entry excludes
   if line =~ '^\s*excludes:\s\+'
-    let line = getline(line('.') - 1)
+    let lnum -= 1
+    let line = getline(lnum)
   endif
 
   " source entry dir
   if line =~ '^\s*dir:\s\+'
     let reload = 1
-    let dir = substitute(line, '^\s*dir:\s\+\(.*\)', '\1', '')
-    let command = s:src_command
-    let command = substitute(command, '<project>', b:project, '')
-    let command = substitute(command, '<action>', 'delete', '')
-    let command = substitute(command, '<dir>', dir, '')
-
-    let result = eclim#ExecuteEclim(command)
-    if result != '0'
-      let message = result
-    endif
+    let message = s:DeleteSource(lnum)
 
   " include path entry
   elseif line =~ '^\s*path:\s\+'
     let reload = 1
-    let dir = substitute(line, '^\s*path:\s\+\(.*\)', '\1', '')
-    let dir = substitute(dir, '\(^"\|"$\)', '', 'g')
-    let dir = substitute(dir, '^\$', '', '')
-    let dir = substitute(dir, '\(^{\|}$\)', '', 'g')
-    let dir = substitute(dir, '^workspace_loc:', '', '')
+    let message = s:DeleteInclude(lnum)
 
-    " get the lang
-    let lang_line = getline(search('^\s\+Tool:', 'bnW'))
-    if lang_line =~ 'assembl\c'
-      let lang = 'assembly'
-    else
-      let lang = 'c'
-    endif
-
-    let command = s:include_command
-    let command = substitute(command, '<project>', b:project, '')
-    let command = substitute(command, '<action>', 'delete', '')
-    let command = substitute(command, '<dir>', dir, '')
-    let command = substitute(command, '<lang>', lang, '')
-
-    let result = eclim#ExecuteEclim(command)
-    if result != '0'
-      let message = result
-    endif
+  " symbol entry
+  elseif line =~ '^\s*name/value:\s\+'
+    let reload = 1
+    let message = s:DeleteSymbol(lnum)
   endif
 
   if reload
-    call eclim#c#project#Configs()
+    call eclim#c#project#Configs(b:project)
     call setpos('.', pos)
     if message != ''
       call eclim#util#Echo(message)
     endif
   endif
+endfunction " }}}
+
+" s:DeleteSource(lnum) {{{
+function s:DeleteSource(lnum)
+  let dir = substitute(getline(a:lnum), '^\s*dir:\s\+\(.*\)', '\1', '')
+  let command = s:src_command
+  let command = substitute(command, '<project>', b:project, '')
+  let command = substitute(command, '<action>', 'delete', '')
+  let command = substitute(command, '<dir>', dir, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    return result
+  endif
+  return ''
+endfunction " }}}
+
+" s:DeleteInclude(lnum) {{{
+function s:DeleteInclude(lnum)
+  let dir = substitute(getline(a:lnum), '^\s*path:\s\+\(.*\)', '\1', '')
+  let dir = substitute(dir, '\(^"\|"$\)', '', 'g')
+  let dir = substitute(dir, '^\$', '', '')
+  let dir = substitute(dir, '\(^{\|}$\)', '', 'g')
+  let dir = substitute(dir, '^workspace_loc:', '', '')
+
+  let command = s:include_command
+  let command = substitute(command, '<project>', b:project, '')
+  let command = substitute(command, '<action>', 'delete', '')
+  let command = substitute(command, '<lang>', s:GetLang(), '')
+  let command = substitute(command, '<dir>', dir, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    return result
+  endif
+  return ''
+endfunction " }}}
+
+" s:DeleteSymbol(lnum) {{{
+function s:DeleteSymbol(lnum)
+  let name = substitute(
+    \ getline(a:lnum), '^\s*name/value:\s\+\(.\{-}\)=.*', '\1', '')
+
+  let command = s:symbol_command
+  let command = substitute(command, '<project>', b:project, '')
+  let command = substitute(command, '<action>', 'delete', '')
+  let command = substitute(command, '<lang>', s:GetLang(), '')
+  let command = substitute(command, '<name>', name, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    return result
+  endif
+  return ''
+endfunction " }}}
+
+" s:GetLang() {{{
+function s:GetLang()
+  let lang_line = getline(search('^\s\+Tool:', 'bnW'))
+  if lang_line =~ 'assembl\c'
+    return 'assembly'
+  endif
+  return 'c'
 endfunction " }}}
 
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{

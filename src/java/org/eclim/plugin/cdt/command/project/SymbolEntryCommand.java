@@ -21,27 +21,24 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.file.FileUtils;
-
-import org.eclipse.cdt.core.settings.model.CIncludePathEntry;
+import org.eclipse.cdt.core.settings.model.CMacroEntry;
 import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
 
-import org.eclipse.core.runtime.Path;
-
 /**
- * Command to add/delete an include entry to/from the specified project.
+ * Command to add/delete symbols from the specified project.
  *
  * @author Eric Van Dewoestine
  */
 @Command(
-  name = "c_project_include",
+  name = "c_project_symbol",
   options =
     "REQUIRED p project ARG," +
     "REQUIRED a action ARG," +
     "REQUIRED l lang ARG," +
-    "REQUIRED d dir ARG"
+    "REQUIRED n name ARG," +
+    "OPTIONAL v value ARG"
 )
-public class IncludeEntryCommand
+public class SymbolEntryCommand
   extends AbstractSettingEntryCommand
 {
   /**
@@ -52,9 +49,8 @@ public class IncludeEntryCommand
   protected ICLanguageSettingEntry createEntry(CommandLine commandLine)
     throws Exception
   {
-    String dir = commandLine.getValue(Options.DIR_OPTION);
-    dir = FileUtils.removeTrailingSlash(dir);
-    return new CIncludePathEntry(
-        new Path(dir), CIncludePathEntry.VALUE_WORKSPACE_PATH);
+    String name = commandLine.getValue(Options.NAME_OPTION);
+    String value = commandLine.getValue(Options.VALUE_OPTION);
+    return new CMacroEntry(name, value, 0);
   }
 }

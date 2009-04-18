@@ -16,11 +16,10 @@
  */
 package org.eclim.plugin.cdt.command.project;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclim.Services;
-
-import org.eclim.annotation.Command;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
@@ -29,34 +28,22 @@ import org.eclim.command.Options;
 import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclim.util.file.FileUtils;
-
 import org.eclipse.cdt.core.CCorePlugin;
 
-import org.eclipse.cdt.core.settings.model.CSourceEntry;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+import org.eclipse.cdt.core.settings.model.ICFolderDescription;
+import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
+import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 
 import org.eclipse.core.resources.IProject;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-
 /**
- * Command to add/delete a source entry to/from the specified project.
+ * Abstract super class for commands which add or delete c setting entries.
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "c_project_src",
-  options =
-    "REQUIRED p project ARG," +
-    "REQUIRED a action ARG," +
-    "REQUIRED d dir ARG," +
-    "OPTIONAL e excludes ARG"
-)
-public class SourceEntryCommand
+public abstract class AbstractSettingEntryCommand
   extends AbstractCommand
 {
   private static final String ADD = "add";
@@ -81,46 +68,35 @@ public class SourceEntryCommand
   }
 
   /**
-   * Add a new source entry.
+   * Add a new include entry.
    *
    * @param commandLine The command line args.
    * @return The result.
    */
-  private String add(CommandLine commandLine)
+  protected String add(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    String dir = commandLine.getValue(Options.DIR_OPTION);
-    String excludes = commandLine.getValue(Options.EXCLUDES_OPTION);
-    dir = FileUtils.removeTrailingSlash(dir);
+    String lang = commandLine.getValue(Options.LANG_OPTION);
 
     IProject project = ProjectUtils.getProject(projectName);
     ICProjectDescription desc =
       CCorePlugin.getDefault().getProjectDescription(project, true);
     ICConfigurationDescription[] configs = desc.getConfigurations();
-
-    ArrayList<IPath> excludePaths = new ArrayList<IPath>();
-    if(excludes != null){
-      for(String exclude : StringUtils.split(excludes, ',')){
-        excludePaths.add(new Path(exclude));
-      }
-    }
-    ICSourceEntry source = new CSourceEntry(
-        new Path(dir),
-        excludePaths.toArray(new IPath[excludePaths.size()]),
-        CSourceEntry.VALUE_WORKSPACE_PATH);
+    ICLanguageSettingEntry entry = createEntry(commandLine);
 
     for(ICConfigurationDescription config : configs){
-      ICSourceEntry[] sources = config.getSourceEntries();
-      ArrayList<ICSourceEntry> keep = new ArrayList<ICSourceEntry>();
-      for(ICSourceEntry entry : sources){
-        String name = entry.getFullPath().removeFirstSegments(1).toString();
-        if(!name.equals(dir)){
-          keep.add(entry);
+      ICFolderDescription fdesc = config.getRootFolderDescription();
+      ICLanguageSetting[] ls = fdesc.getLanguageSettings();
+      for (ICLanguageSetting l : ls){
+        String name = StringUtils.split(l.getName())[0].toLowerCase();
+        if (name.equals(lang)){
+          List<ICLanguageSettingEntry> lst =
+            l.getSettingEntriesList(entry.getKind());
+          lst.add(entry);
+          l.setSettingEntries(entry.getKind(), lst);
         }
       }
-      keep.add(source);
-      config.setSourceEntries(keep.toArray(new ICSourceEntry[keep.size()]));
     }
 
     CCorePlugin.getDefault().setProjectDescription(project, desc);
@@ -129,35 +105,41 @@ public class SourceEntryCommand
   }
 
   /**
-   * Delete a source entry.
+   * Delete a include entry.
    *
    * @param commandLine The command line args.
    * @return The result.
    */
-  private String delete(CommandLine commandLine)
+  protected String delete(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    String dir = commandLine.getValue(Options.DIR_OPTION);
-    dir = FileUtils.removeTrailingSlash(dir);
+    String lang = commandLine.getValue(Options.LANG_OPTION);
 
     IProject project = ProjectUtils.getProject(projectName);
     ICProjectDescription desc =
       CCorePlugin.getDefault().getProjectDescription(project, true);
     ICConfigurationDescription[] configs = desc.getConfigurations();
+    ICLanguageSettingEntry entry = createEntry(commandLine);
+
     boolean deleted = false;
     for(ICConfigurationDescription config : configs){
-      ICSourceEntry[] sources = config.getSourceEntries();
-      ArrayList<ICSourceEntry> keep = new ArrayList<ICSourceEntry>();
-      for(ICSourceEntry entry : sources){
-        String name = entry.getFullPath().removeFirstSegments(1).toString();
-        if(!name.equals(dir)){
-          keep.add(entry);
+      ICFolderDescription fdesc = config.getRootFolderDescription();
+      ICLanguageSetting[] ls = fdesc.getLanguageSettings();
+      for (ICLanguageSetting l : ls){
+        String name = StringUtils.split(l.getName())[0].toLowerCase();
+        if (name.equals(lang)){
+          List<ICLanguageSettingEntry> lst =
+            l.getSettingEntriesList(entry.getKind());
+          Iterator<ICLanguageSettingEntry> iterator = lst.iterator();
+          while (iterator.hasNext()){
+            if (iterator.next().getName().equals(entry.getName())){
+              iterator.remove();
+            }
+          }
+          l.setSettingEntries(entry.getKind(), lst);
+          deleted = true;
         }
-      }
-      if(sources.length != keep.size()){
-        deleted = true;
-        config.setSourceEntries(keep.toArray(new ICSourceEntry[keep.size()]));
       }
     }
 
@@ -165,6 +147,15 @@ public class SourceEntryCommand
       CCorePlugin.getDefault().setProjectDescription(project, desc);
       return Services.getMessage("entry.deleted");
     }
-    return Services.getMessage("entry.not.found", dir);
+    return Services.getMessage("entry.not.found", entry.getName());
   }
+
+  /**
+   * Creates the language setting entry.
+   *
+   * @param commandLine The command line instance.
+   * @return The ICLanguageSettingEntry.
+   */
+  protected abstract ICLanguageSettingEntry createEntry(CommandLine commandLine)
+    throws Exception;
 }

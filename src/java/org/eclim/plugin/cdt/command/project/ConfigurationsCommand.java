@@ -124,7 +124,7 @@ public class ConfigurationsCommand
             String[] includes = ioption.getIncludePaths();
             if(includes.length > 0){
               for(String include : includes){
-                out.append("\t\t\tpath:    ").append(include).append('\n');
+                out.append("\t\t\tpath:       ").append(include).append('\n');
               }
             }
           }
@@ -135,7 +135,7 @@ public class ConfigurationsCommand
             String[] symbols = soption.getDefinedSymbols();
             if(symbols.length > 0){
               for(String symbol : symbols){
-                out.append("\t\t\t").append(symbol).append('\n');
+                out.append("\t\t\tname/value: ").append(symbol).append('\n');
               }
             }
           }

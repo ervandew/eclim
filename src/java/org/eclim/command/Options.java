@@ -83,6 +83,7 @@ public class Options
   public static final String TEMPLATE_OPTION = "t";
   public static final String TYPE_OPTION = "t";
   public static final String VALIDATE_OPTION = "v";
+  public static final String VALUE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
 
   public static final String OPTION_SUFFIX = ".options";
