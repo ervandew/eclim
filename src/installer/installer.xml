@@ -58,7 +58,9 @@
                 <formic:equals arg1="eclipse.local" arg2="eclipse.home"/>
               </not>
             </and>
+            <formic:istrue value="featureList.cdt"/>
             <formic:istrue value="featureList.jdt"/>
+            <formic:istrue value="featureList.pdt"/>
             <formic:istrue value="featureList.wst"/>
           </or>
         </formic:branch>
@@ -177,6 +179,7 @@
     <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
       <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
     </unjar>
+
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;"
         value="let g:EclimHome = '${eclim.home}'"/>
@@ -195,7 +198,7 @@
     </delete>
 
     <!-- remove vim files -->
-    <delete failonerror="false">
+    <delete failonerror="false" includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
         <include name="**/*"/>
         <exclude name="after/**/*"/>
