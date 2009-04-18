@@ -1,7 +1,6 @@
-org.eclim.pdt_${eclim.version}/**/*
-org.eclim.pdt_${eclim.version}
-eclim/autoload/eclim/php/*.vim
-eclim/autoload/eclim/php
-eclim/ftplugin/php/*.vim
-eclim/ftplugin/php
+org.eclim.pdt_${eclim.version}/**
+eclim/autoload/eclim/php/**
+eclim/ftplugin/php/**
+eclim/ftplugin/eclipse_buildpath/**
 eclim/indent/php.vim
+eclim/syntax/eclipse_buildpath.vim
