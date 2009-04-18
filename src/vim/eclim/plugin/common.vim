@@ -22,6 +22,68 @@
 "
 " }}}
 
+" Global Variables {{{
+if !exists('g:MaximizeStatusLine')
+  let g:MaximizeStatusLine = '%<%f\ %M\ %h%r%=%-10.(%l,%c%V\ b=%n,w=%{winnr()}%)\ %P'
+endif
+
+if exists('g:MaximizeStatusLineEnabled') && g:MaximizeStatusLineEnabled
+  exec "set statusline=" . g:MaximizeStatusLine
+endif
+
+if !exists("g:EclimTemplatesDisabled")
+  " Disabled for now.
+  let g:EclimTemplatesDisabled = 1
+endif
+
+if !exists('g:EclimArchiveViewerEnabled')
+  let g:EclimArchiveViewerEnabled = 1
+endif
+
+if g:EclimArchiveViewerEnabled
+  " disable tar.vim autocmds... tar.vim is now included w/ vim7
+  let g:loaded_tarPlugin = 1
+
+  " disable zipPlugin.vim autocmds... zipPlugin.vim is now included w/ vim7
+  let g:loaded_zipPlugin = 1
+endif
+" }}}
+
+" Auto Commands {{{
+if !g:EclimTemplatesDisabled
+  augroup eclim_template
+    autocmd!
+    autocmd BufNewFile * call eclim#common#template#Template()
+  augroup END
+endif
+
+augroup eclim_archive_read
+  autocmd!
+  autocmd BufReadCmd
+    \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
+    \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
+    \tbz2:/*,tgz:\*,tbz2:file:/*,tbz2:file:\*,
+    \tgz:/*,tgz:\*,tgz:file:/*,tgz:file:\*,
+    \zip:/*,zip:\*,zip:file:/*,zip:file:\*
+    \ call eclim#common#archive#ReadFile()
+augroup END
+
+if g:EclimArchiveViewerEnabled
+  augroup eclim_archive
+    autocmd!
+    autocmd BufReadCmd *.egg     call eclim#common#archive#List()
+    autocmd BufReadCmd *.jar     call eclim#common#archive#List()
+    autocmd BufReadCmd *.war     call eclim#common#archive#List()
+    autocmd BufReadCmd *.ear     call eclim#common#archive#List()
+    autocmd BufReadCmd *.zip     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tgz     call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar.gz  call eclim#common#archive#List()
+    autocmd BufReadCmd *.tar.bz2 call eclim#common#archive#List()
+  augroup END
+endif
+" }}}
+
 " Command Declarations {{{
 if !exists(":Split")
   command -nargs=+ -complete=file
@@ -103,23 +165,6 @@ if !exists(":LocateFile")
   command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
 endif
 
-if has('signs')
-  if !exists(":Sign")
-    command Sign :call eclim#display#signs#Toggle('user', line('.'))
-  endif
-  if !exists(":Signs")
-    command Signs :call eclim#display#signs#ViewSigns('user')
-  endif
-  if !exists(":SignClearUser")
-    command SignClearUser :call eclim#display#signs#UnplaceAll(
-      \ eclim#display#signs#GetExisting('user'))
-  endif
-  if !exists(":SignClearAll")
-    command SignClearAll :call eclim#display#signs#UnplaceAll(
-      \ eclim#display#signs#GetExisting())
-  endif
-endif
-
 if !exists(":QuickFixClear")
   command QuickFixClear :call setqflist([]) | call eclim#display#signs#Update()
 endif
@@ -157,6 +202,55 @@ endif
 if !exists(":History")
   command History call eclim#common#history#History()
   command -bang HistoryClear call eclim#common#history#HistoryClear('<bang>')
+endif
+
+if has('signs')
+  if !exists(":Sign")
+    command Sign :call eclim#display#signs#Toggle('user', line('.'))
+  endif
+  if !exists(":Signs")
+    command Signs :call eclim#display#signs#ViewSigns('user')
+  endif
+  if !exists(":SignClearUser")
+    command SignClearUser :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting('user'))
+  endif
+  if !exists(":SignClearAll")
+    command SignClearAll :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting())
+  endif
+endif
+
+if !exists(":MaximizeWindow")
+  command MaximizeWindow :call eclim#display#maximize#MaximizeWindow()
+endif
+if !exists(":MinimizeWindow")
+  command -nargs=* MinimizeWindow :call eclim#display#maximize#MinimizeWindow(<f-args>)
+endif
+if !exists(":MinimizeRestore")
+  command MinimizeRestore
+      \ :call eclim#display#maximize#ResetMinimized() |
+      \ call eclim#display#maximize#RestoreWindows(0)
+endif
+
+if !exists(":OpenUrl")
+  command -bang -range -nargs=? OpenUrl
+    \ :call eclim#web#OpenUrl('<args>', '<bang>', <line1>, <line2>)
+endif
+if !exists(":Google")
+  command -nargs=* Google :call eclim#web#Google(<q-args>, 0, 0)
+endif
+if !exists(":Clusty")
+  command -nargs=* Clusty :call eclim#web#Clusty(<q-args>, 0, 0)
+endif
+if !exists(":Dictionary")
+  command -nargs=? Dictionary :call eclim#web#Dictionary('<args>')
+endif
+if !exists(":Thesaurus")
+  command -nargs=? Thesaurus :call eclim#web#Thesaurus('<args>')
+endif
+if !exists(":Wikipedia")
+  command -nargs=* Wikipedia :call eclim#web#Wikipedia('<args>', 0, 0)
 endif
 " }}}
 

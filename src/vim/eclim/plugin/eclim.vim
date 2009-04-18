@@ -133,6 +133,13 @@ endif
 if !exists(":EclimEnable")
   command EclimEnable :call eclim#Enable()
 endif
+if !exists(':EclimHelp')
+  command -nargs=? -complete=customlist,eclim#help#CommandCompleteTag
+    \ EclimHelp :call eclim#help#Help('<args>', 0)
+endif
+if !exists(':EclimHelpGrep')
+  command -nargs=+ EclimHelpGrep :call eclim#help#HelpGrep(<q-args>)
+endif
 " }}}
 
 " Auto Commands{{{
@@ -170,6 +177,21 @@ if g:EclimMakeQfFilter
       \ endif
   augroup END
 endif
+
+augroup eclim_qf
+  autocmd QuickFixCmdPost *make* call <SID>Show('', 'qf')
+  autocmd QuickFixCmdPost grep*,vimgrep* call <SID>Show('i', 'qf')
+  autocmd QuickFixCmdPost lgrep*,lvimgrep* call <SID>Show('i', 'loc')
+  autocmd BufWinEnter * call eclim#display#signs#Update()
+augroup END
+
+if has('netbeans_intg')
+  augroup eclim_vimplugin
+    " autocommand used to work around the fact that the "unmodified" event
+    " in vim's netbean support is commentted out for some reason.
+    autocmd BufWritePost * call eclim#vimplugin#BufferWritten()
+  augroup END
+endif
 " }}}
 
 " QuickFixLocalChangeDirectory() {{{
@@ -183,6 +205,41 @@ function! s:QuickFixLocalChangeDirectory()
     endif
     exec 'lcd ' . dir
   endif
+endfunction " }}}
+
+" Show(type,list) {{{
+" Set the type on each entry in the specified list and mark any matches in the
+" current file.
+function! s:Show(type, list)
+  if a:type != ''
+    if a:list == 'qf'
+      let list = getqflist()
+    else
+      let list = getloclist(0)
+    endif
+
+    let newentries = []
+    for entry in list
+      let newentry = {
+          \ 'filename': bufname(entry.bufnr),
+          \ 'lnum': entry.lnum,
+          \ 'col': entry.col,
+          \ 'text': entry.text,
+          \ 'type': a:type
+        \ }
+      call add(newentries, newentry)
+    endfor
+
+    if a:list == 'qf'
+      call setqflist(newentries, 'r')
+    else
+      call setloclist(0, newentries, 'r')
+    endif
+  endif
+
+  call eclim#display#signs#Update()
+
+  redraw!
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
