@@ -44,7 +44,7 @@ function! eclim#common#history#AddHistory()
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#java#util#GetFilename()
+  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let command = s:command_add
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -59,7 +59,7 @@ function! eclim#common#history#History()
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#java#util#GetFilename()
+  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let command = s:command_list
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -109,7 +109,7 @@ function s:View(...)
   if eclim#util#GoToBufferWindow(current)
     let filetype = &ft
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#java#util#GetFilename()
+    let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
     let command = s:command_revision
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
@@ -176,7 +176,7 @@ function s:Revert()
   let revision = b:history_revisions[line('.') - 1]
   if eclim#util#GoToBufferWindow(current)
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#java#util#GetFilename()
+    let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
     let command = s:command_revision
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
