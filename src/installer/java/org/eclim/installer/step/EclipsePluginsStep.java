@@ -849,6 +849,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.ant");
       NAMES.add("featureList.maven");
       NAMES.add("featureList.wst");
+      NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
       NAMES.add("featureList.python");
     }

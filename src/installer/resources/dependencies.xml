@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies>
+  <feature id="cdt">
+    <dependency id="org.eclipse.cdt" version="5.0.1">
+      <site url="http://download.eclipse.org/tools/cdt/releases/ganymede/"/>
+      <site url="http://download.eclipse.org/releases/ganymede/"/>
+    </dependency>
+  </feature>
+
   <feature id="jdt">
     <dependency id="org.eclipse.jdt" version="3.4.0">
       <site url="http://download.eclipse.org/releases/ganymede/"/>

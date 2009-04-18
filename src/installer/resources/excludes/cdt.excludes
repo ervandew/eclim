@@ -1,0 +1,8 @@
+org.eclim.cdt_${eclim.version}/**
+org.eclim.cdt_${eclim.version}
+eclim/autoload/eclim/c/**
+eclim/ftplugin/c/**
+eclim/ftplugin/cpp/**
+eclim/ftplugin/eclipse_cproject/**
+eclim/plugin/cproject.vim
+eclim/syntax/eclipse_cproject.vim
