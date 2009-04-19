@@ -91,6 +91,7 @@ Checking out the code and building it.
   - **ant**: ant support.
   - **maven**: maven support.
   - **wst**: web development support using the eclipse wst.
+  - **cdt**: c/c++ support using the eclipse cdt.
   - **pdt**: php support using the eclipse pdt.
 
 
