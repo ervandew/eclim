@@ -15,67 +15,95 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CURPATH=`dirname $0`
+##
+# Determines eclim's home directory and sets the ECLIM_HOME var to that path.
+#
+resolve_eclim_home(){
+  CURPATH=`dirname "$0"`
 
-# handle symlink to eclimd script
-if [ -h $0 ] ; then
-  RESOLVED=`readlink -f $0`
-  CURPATH=`dirname $RESOLVED`
-fi
-
-ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
-
-#ECLIMD_OPTS="-Djava.ext.dirs"
-ECLIM_ARGS="$ECLIMD_OPTS"
-
-# attempt to grab properties from .eclimrc if available.
-SED=`which sed 2> /dev/null`
-if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
-  ECLIM_ARGS="$ECLIM_ARGS `sed -n -f $CURPATH/eclimd.sed $HOME/.eclimrc`"
-fi
-
-ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
-
-#${eclipse.home}
-if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
-  ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
-fi
-
-# find eclipse executable
-ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
-if [ ! -e "$ECLIPSE" ]; then
-  ECLIPSE=`which eclipse 2> /dev/null`
-fi
-if [ ! -e "$ECLIPSE" ]; then
-  ECLIPSE=`which eclipse-3.4 2> /dev/null`
-fi
-if [ ! -e "$ECLIPSE" ]; then
-  echo "No eclipse executable found." 1>&2
-  exit 1
-fi
-
-# handle eclipse issues on gentoo
-IS_GENTOO=`which java-config 2> /dev/null`
-if [ -x "$IS_GENTOO" ]; then
-  ECLIPSE="$ECLIPSE -vm $(java-config --java)"
-
-  # handle emerged version of eclipse which has a bootstrap script
-  ECLIPSE_34=`which eclipse-3.4 2> /dev/null`
-  if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.4" -a -e "$ECLIPSE_34" ]; then
-    ECLIPSE="$ECLIPSE_34"
-    GENTOO_VMARGS="$ECLIM_ARGS"
-    ECLIM_VMARGS=""
+  # handle symlink to eclimd script
+  if [ -h "$0" ] ; then
+    RESOLVED=`readlink -f "$0"`
+    CURPATH=`dirname "$RESOLVED"`
   fi
-fi
 
-ECLIM_COMMAND="$ECLIPSE
-  -debug -nosplash -clean -refresh -application
-  org.eclim.application_headless $ECLIM_VMARGS"
+  ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
+}
+
+##
+# Determines the eclipse home path and eclipse executable and sets
+# ECLIM_ECLIPSE_HOME and ECLIPSE to those results.
+#
+resolve_eclipse(){
+  #${eclipse.home}
+  if [ -z "$ECLIM_ECLIPSE_HOME" ]; then
+    ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
+  fi
+
+  ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
+  if [ ! -e "$ECLIPSE" ]; then
+    ECLIPSE=`which eclipse 2> /dev/null`
+  fi
+  if [ ! -e "$ECLIPSE" ]; then
+    ECLIPSE=`which eclipse-3.4 2> /dev/null`
+  fi
+  if [ ! -e "$ECLIPSE" ]; then
+    echo "No eclipse executable found." 1>&2
+    exit 1
+  fi
+}
+
+##
+# Builds a list of vm args to be passed to eclipse and sets ECLIM_VMARGS
+# accordingly.
+#
+build_vmargs(){
+  #ECLIMD_OPTS="-Djava.ext.dirs"
+  ECLIM_ARGS="$ECLIMD_OPTS"
+
+  # attempt to grab properties from .eclimrc if available.
+  SED=`which sed 2> /dev/null`
+  if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
+    ECLIM_ARGS="$ECLIM_ARGS `
+      sed -n -f \"$ECLIM_HOME/bin/eclimd.sed\" \"$HOME/.eclimrc\"
+    `"
+  fi
+  ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+}
+
+##
+# Handles any gentoo specific issues.
+#
+handle_gentoo(){
+  # handle eclipse issues on gentoo
+  IS_GENTOO=`which java-config 2> /dev/null`
+  if [ -x "$IS_GENTOO" ]; then
+    # handle emerged version of eclipse which has a bootstrap script
+    ECLIPSE_34=`which eclipse-3.4 2> /dev/null`
+    if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.4" -a -e "$ECLIPSE_34" ]; then
+      ECLIPSE="$ECLIPSE_34"
+      PLATFORM_VMARGS="$ECLIM_ARGS"
+      ECLIM_VMARGS=""
+    fi
+  fi
+}
+
+resolve_eclim_home
+build_vmargs
+resolve_eclipse
+
+# run platform specific setup
+handle_gentoo
+
+ECLIPSE_ARGS="
+  -debug -nosplash -clean -refresh
+  -application org.eclim.application_headless
+  $ECLIM_VMARGS"
 
 if [ "$1" = "start" ]; then
   shift
-  CLASSPATH="" VM_ARGS="$GENTOO_VMARGS" $ECLIM_COMMAND $@ > /dev/null &
+  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" "$ECLIPSE" $ECLIPSE_ARGS $@ > /dev/null &
 else
-  echo $ECLIM_COMMAND
-  CLASSPATH="" VM_ARGS="$GENTOO_VMARGS" $ECLIM_COMMAND $@
+  echo "\"$ECLIPSE\" $ECLIPSE_ARGS $@"
+  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" "$ECLIPSE" $ECLIPSE_ARGS $@
 fi
