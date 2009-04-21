@@ -16,6 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CURPATH=`dirname "$0"`
+# handle symlink to eclimd script
+if [ -h "$0" ] ; then
+  RESOLVED=`readlink -f "$0"`
+  CURPATH=`dirname "$RESOLVED"`
+fi
+
 SED=`which sed 2> /dev/null`
 NAILGUN_ARGS="--nailgun-port 9091"
 
