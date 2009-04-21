@@ -216,6 +216,11 @@
     </antcall>
 
     <antcall target="test.create_project">
+      <param name="project" value="eclim_unit_test_c"/>
+      <param name="nature" value="c"/>
+    </antcall>
+
+    <antcall target="test.create_project">
       <param name="project" value="eclim_unit_test_php"/>
       <param name="nature" value="php"/>
     </antcall>
