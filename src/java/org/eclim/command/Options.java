@@ -143,6 +143,10 @@ public class Options
     Command command = null;
     if(commandName != null){
       command = Services.getCommand(commandName);
+      if (command == null){
+        throw new RuntimeException(
+            Services.getMessage("command.not.found", commandName));
+      }
       org.eclim.annotation.Command info = (org.eclim.annotation.Command)
         command.getClass().getAnnotation(org.eclim.annotation.Command.class);
       Collection<Option> commandOptions = parseOptions(info.options());
