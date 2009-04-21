@@ -99,7 +99,7 @@ function! eclim#java#junit#JUnitResult(test)
     exec "botright split " . found
 
     augroup temp_window
-      autocmd! BufUnload <buffer>
+      autocmd! BufWinLeave <buffer>
       call eclim#util#GoToBufferWindowRegister(filename)
     augroup END
 

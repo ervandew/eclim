@@ -175,9 +175,9 @@ function! eclim#common#util#OtherWorkingCopyDiff(project)
 
   let b:filename = filename
   augroup other_diff
-    autocmd! BufUnload <buffer>
+    autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
-    autocmd BufUnload <buffer> diffoff
+    autocmd BufWinLeave <buffer> diffoff
   augroup END
 endfunction " }}}
 

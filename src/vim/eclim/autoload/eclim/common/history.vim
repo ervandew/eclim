@@ -155,9 +155,9 @@ function s:Diff()
   if s:View(orien . 'split')
     diffthis
     augroup history_diff
-      autocmd! BufUnload <buffer>
+      autocmd! BufWinLeave <buffer>
       call eclim#util#GoToBufferWindowRegister(current)
-      autocmd BufUnload <buffer> diffoff
+      autocmd BufWinLeave <buffer> diffoff
     augroup END
 
     call eclim#util#GoToBufferWindow(current)

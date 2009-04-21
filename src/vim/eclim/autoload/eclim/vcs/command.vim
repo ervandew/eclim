@@ -170,9 +170,9 @@ function! eclim#vcs#command#Diff(path, revision)
   let b:filename = filename
   let b:vcs_diff_temp = 1
   augroup vcs_diff
-    autocmd! BufUnload <buffer>
+    autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
-    autocmd BufUnload <buffer> diffoff |
+    autocmd BufWinLeave <buffer> diffoff |
       \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
   augroup END
 
@@ -540,9 +540,9 @@ function! s:FollowLink()
 
       let b:filename = filename
       augroup vcs_diff
-        autocmd! BufUnload <buffer>
+        autocmd! BufWinLeave <buffer>
         call eclim#util#GoToBufferWindowRegister(b:filename)
-        autocmd BufUnload <buffer> diffoff |
+        autocmd BufWinLeave <buffer> diffoff |
           \ call eclim#util#DelayedCommand('call eclim#display#maximize#RestoreWindows(0)')
       augroup END
 
@@ -651,7 +651,7 @@ function! s:TempWindow(lines)
 
   let b:filename = filename
   augroup eclim_temp_window
-    autocmd! BufUnload <buffer>
+    autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(b:filename)
   augroup END
 endfunction " }}}

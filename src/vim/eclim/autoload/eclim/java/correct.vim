@@ -76,7 +76,7 @@ function! eclim#java#correct#Correct()
 
   let b:filename = filename
   augroup temp_window
-    autocmd! BufUnload <buffer>
+    autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(filename)
   augroup END
 
