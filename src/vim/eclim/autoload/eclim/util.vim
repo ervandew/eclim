@@ -514,6 +514,8 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args)
   try
     unlet! g:current_compiler b:current_compiler
     exec 'compiler ' . a:compiler
+    let make_cmd = substitute(&makeprg, '\$\*', '', '')
+    call eclim#util#EchoTrace('make: ' . make_cmd . ' ' . a:args)
     exec 'make' . a:bang . ' ' . a:args
   finally
     if exists('saved_compiler')
