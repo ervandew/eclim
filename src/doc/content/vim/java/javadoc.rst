@@ -115,7 +115,7 @@ Eclim Settings
 - **org.eclim.java.doc.packagenames** -
   Optional space separated list of package names to run javadoc against.
 - **org.eclim.java.doc.sourcepath** -
-  The project relative javadoc sourcepath to use.  This should be a colon (on
-  non-windows machines) or semi-colon (on windows machines) separated list of
-  project relative source directories which you want javadoc to be executed
-  against.  When unset, all your configured source directories will be used.
+  The project relative javadoc sourcepath to use.  This should be a space
+  separated list of project relative source directories which you want javadoc
+  to be executed against.  When unset, all your configured source directories
+  will be used.

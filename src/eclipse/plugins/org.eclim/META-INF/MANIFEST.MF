@@ -10,7 +10,10 @@ Bundle-ClassPath: .,
   ${eclim.lib.jars}
 Bundle-Activator: org.eclim.eclipse.EclimPlugin
 Bundle-Localization: plugin
-Export-Package: org.eclim,
+Export-Package: org.apache.tools.ant,
+  org.apache.tools.ant.taskdefs,
+  org.apache.tools.ant.types,
+  org.eclim,
   org.eclim.annotation,
   org.eclim.command,
   org.eclim.command.complete,

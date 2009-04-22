@@ -77,6 +77,10 @@ function! TestJavadoc()
   edit! src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
   call PeekRedir()
 
+  call VUAssertFalse(filereadable(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java/doc/org/eclim/test/doc/javadoc/TestJavadocVUnit.html'))
+
   Javadoc src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
 
   call VUAssertTrue(filereadable(

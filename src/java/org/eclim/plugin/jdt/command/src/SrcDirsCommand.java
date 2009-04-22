@@ -16,22 +16,17 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
-import java.util.ArrayList;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.jdt.util.ClasspathUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 
 /**
@@ -55,15 +50,8 @@ public class SrcDirsCommand
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
-    IProject project = javaProject.getProject();
 
-    ArrayList<String> paths = new ArrayList<String>();
-    IClasspathEntry[] entries = javaProject.getResolvedClasspath(true);
-    for (IClasspathEntry entry : entries){
-      if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
-        paths.add(ProjectUtils.getFilePath(project, entry.getPath().toOSString()));
-      }
-    }
+    String[] paths = ClasspathUtils.getSrcPaths(javaProject);
 
     return StringUtils.join(paths, "\n");
   }

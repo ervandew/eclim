@@ -27,11 +27,15 @@ if exists("current_compiler")
 endif
 let current_compiler = "eclim_javadoc"
 
-CompilerSet makeprg=javadoc\ $*
+let command = eclim#client#nailgun#GetEclimCommand()
+let command = substitute(command, '"', '', 'g')
+let command = escape(command, ' ')
+exec 'CompilerSet makeprg=' . command . '\ -command\ javadoc\ $*'
 
 exec 'CompilerSet errorformat=' .
-  \ '\%A%f:%l:\ %m,' .
-  \ '\%-Z%p^,' .
+  \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .
+  \ '\%-Z%.%#[javadoc]\ %p^,' .
+  \ '\%-G%.%#[javadoc]%.%#,' .
   \ '\%-G%.%#'
 
 " vim:ft=vim:fdm=marker
