@@ -27,6 +27,7 @@ Java
    classpath
    validate
    search
+   javac
    javadoc
    import
    complete

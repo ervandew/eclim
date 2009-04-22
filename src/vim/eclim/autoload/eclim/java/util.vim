@@ -287,6 +287,26 @@ function! eclim#java#util#UpdateSrcFile(validate)
   endif
 endfunction " }}}
 
+" Javac(bang) {{{
+" Run javac.
+function! eclim#java#util#Javac(bang)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project_path = eclim#project#util#GetCurrentProjectRoot()
+  let project = eclim#project#util#GetCurrentProjectName()
+  let args = '-p "' . project . '"'
+
+  let cwd = getcwd()
+  try
+    exec 'lcd ' . escape(project_path, ' ')
+    call eclim#util#MakeWithCompiler('eclim_javac', a:bang, args)
+  finally
+    exec 'lcd ' . escape(cwd, ' ')
+  endtry
+endfunction " }}}
+
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#java#util#CommandCompleteProject(argLead, cmdLine, cursorPos)

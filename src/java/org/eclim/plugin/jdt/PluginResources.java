@@ -127,6 +127,7 @@ public class PluginResources
       "JDT/Javadoc org.eclim.java.doc.dest doc\n" +
       "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +
       "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
+      "JDT/Javac org.eclim.java.compile.sourcepath\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
       "JDT/JUnit org.eclim.java.junit.src_dir"

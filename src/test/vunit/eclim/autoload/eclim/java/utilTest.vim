@@ -110,4 +110,20 @@ function! TestIsImported()
     \ 'File imported.')
 endfunction " }}}
 
+" TestJavac() {{{
+function! TestJavac()
+  edit! src-javac/org/eclim/test/Test.java
+  call PeekRedir()
+
+  call VUAssertFalse(filereadable(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
+
+  Javac
+
+  call VUAssertTrue(filereadable(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

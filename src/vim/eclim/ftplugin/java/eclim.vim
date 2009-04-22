@@ -172,6 +172,9 @@ if !exists(":Javadoc")
     \ -complete=customlist,eclim#java#doc#CommandCompleteJavadoc
     \ Javadoc :call eclim#java#doc#Javadoc('<bang>', <q-args>)
 endif
+if !exists(":Javac")
+  command -buffer -bang Javac :call eclim#java#util#Javac('<bang>')
+endif
 
 if !exists(":JavaRegex")
   command -buffer JavaRegex :call eclim#regex#OpenTestWindow('java')
