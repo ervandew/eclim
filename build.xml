@@ -274,7 +274,10 @@
         <chmod dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
             includes="**/*" excludes="*.sed" perm="ugo+x"/>
         <!-- java symlink support sucks, especially if the link is broken -->
+        <exec executable="rm"> <arg line="${eclipse.home}/eclim"/> </exec>
         <exec executable="rm"> <arg line="${eclipse.home}/eclimd"/> </exec>
+        <symlink link="${eclipse.home}/eclim"
+            resource="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim"/>
         <symlink link="${eclipse.home}/eclimd"
             resource="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"/>
       </else>

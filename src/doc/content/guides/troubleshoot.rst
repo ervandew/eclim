@@ -129,7 +129,7 @@ emitted.  To gather these details you will need to:
 
        ::
 
-         $ /opt/eclipse/plugins/org.eclim_1.4.5/bin/eclim -command ...
+         $ /opt/eclipse/eclim -command ...
 
        Run that and you should see the entire stack trace for the error.
 

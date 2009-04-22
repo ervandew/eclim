@@ -56,7 +56,7 @@ To cleanly shutdown eclim use any one of the following.
 
   .. code-block:: bash
 
-    $ $ECLIPSE_HOME/plugins/org.eclim_version/bin/eclim -command shutdown
+    $ $ECLIPSE_HOME/eclim -command shutdown
 
 - Lastly you can use Ctrl-C at the console if you are running eclimd in the
   foreground, or issue a kill to the eclimd java process.
