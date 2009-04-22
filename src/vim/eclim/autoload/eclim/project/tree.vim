@@ -167,7 +167,7 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   let cwd = substitute(getcwd(), '\', '/', 'g')
   let cwd = escape(cwd, ' &')
 
-  "exec 'cd ' . a:cwd
+  "exec 'cd ' . escape(a:cwd, ' ')
   exec g:EclimProjectTreeContentWincmd
 
   " if the buffer is a no name and action is split, use edit instead.

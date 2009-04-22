@@ -76,7 +76,7 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
   let file = expand('%:p')
   let dir = fnamemodify(file, ':h')
   let cwd = getcwd()
-  exec 'lcd ' . dir
+  exec 'lcd ' . escape(dir, ' ')
   try
     let GetVcsWebPath = eclim#vcs#util#GetVcsFunction('GetVcsWebPath')
     if type(GetVcsWebPath) != 2
@@ -84,7 +84,7 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
     endif
     let path = GetVcsWebPath()
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   if path == ''

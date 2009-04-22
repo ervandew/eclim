@@ -97,14 +97,14 @@ function eclim#vcs#util#GetRelativePath(dir, file)
   let path = ''
 
   let cwd = getcwd()
-  exec 'lcd ' . a:dir
+  exec 'lcd ' . escape(a:dir, ' ')
   try
     let GetRelativePath = eclim#vcs#util#GetVcsFunction('GetRelativePath')
     if type(GetRelativePath) == 2
       let path = GetRelativePath(a:dir, a:file)
     endif
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   return path
@@ -116,7 +116,7 @@ function eclim#vcs#util#GetPreviousRevision(...)
   let cwd = getcwd()
   let dir = len(a:000) > 0 ? fnamemodify(a:000[0], ':p:h') : expand('%:p:h')
   if isdirectory(dir)
-    exec 'lcd ' . dir
+    exec 'lcd ' . escape(dir, ' ')
   endif
   try
     let GetPreviousRevision =
@@ -130,7 +130,7 @@ function eclim#vcs#util#GetPreviousRevision(...)
       let revision = GetPreviousRevision()
     endif
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   return revision
@@ -144,7 +144,7 @@ function eclim#vcs#util#GetRevision(...)
   if filereadable(path)
     let file = fnamemodify(path, ':t')
     let dir = fnamemodify(path, ':h')
-    exec 'lcd ' . dir
+    exec 'lcd ' . escape(dir, ' ')
   else
     let file = path
   endif
@@ -155,7 +155,7 @@ function eclim#vcs#util#GetRevision(...)
     endif
     let revision = GetRevision(file)
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
   return revision
 endfunction " }}}
@@ -167,14 +167,14 @@ function eclim#vcs#util#GetRevisions()
 
   let cwd = getcwd()
   let dir = expand('%:p:h')
-  exec 'lcd ' . dir
+  exec 'lcd ' . escape(dir, ' ')
   try
     let GetRevisions = eclim#vcs#util#GetVcsFunction('GetRevisions')
     if type(GetRevisions) == 2
       let revisions = GetRevisions()
     endif
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   return revisions
@@ -187,14 +187,14 @@ function eclim#vcs#util#GetRoot(dir)
 
   let cwd = getcwd()
   let dir = a:dir == '' ? expand('%:p:h') : a:dir
-  exec 'lcd ' . dir
+  exec 'lcd ' . escape(dir, ' ')
   try
     let GetRoot = eclim#vcs#util#GetVcsFunction('GetRoot')
     if type(GetRoot) == 2
       let root = GetRoot()
     endif
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   return root

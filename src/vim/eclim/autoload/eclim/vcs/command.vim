@@ -63,7 +63,7 @@ function! eclim#vcs#command#Annotate(...)
     let dir = fnamemodify(path, ':h')
     let cwd = getcwd()
     if isdirectory(dir)
-      exec 'lcd ' . dir
+      exec 'lcd ' . escape(dir, ' ')
     endif
     try
       let Annotate = eclim#vcs#util#GetVcsFunction('GetAnnotations')
@@ -76,7 +76,7 @@ function! eclim#vcs#command#Annotate(...)
       call eclim#cache#Set(key, annotations,
         \ {'path': path, 'revision': revision})
     finally
-      exec 'lcd ' . cwd
+      exec 'lcd ' . escape(cwd, ' ')
     endtry
   endif
 
@@ -111,7 +111,7 @@ function! eclim#vcs#command#ChangeSet(path, revision)
     let cwd = getcwd()
     let dir = fnamemodify(path, ':h')
     if isdirectory(dir)
-      exec 'lcd ' . dir
+      exec 'lcd ' . escape(dir, ' ')
     endif
     try
       let ChangeSet = eclim#vcs#util#GetVcsFunction('ChangeSet')
@@ -120,7 +120,7 @@ function! eclim#vcs#command#ChangeSet(path, revision)
       endif
       let info = ChangeSet(revision)
     finally
-      exec 'lcd ' . cwd
+      exec 'lcd ' . escape(cwd, ' ')
     endtry
     let info.props = has_key(info, 'props') ? info.props : {}
     let info.props.view = 'changeset'
@@ -187,14 +187,14 @@ endfunction " }}}
 function eclim#vcs#command#Info()
   let cwd = getcwd()
   let dir = expand('%:p:h')
-  exec 'lcd ' . dir
+  exec 'lcd ' . escape(dir, ' ')
   try
     let Info = eclim#vcs#util#GetVcsFunction('Info')
     if type(Info) == 2
       call Info()
     endif
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 endfunction " }}}
 
@@ -204,7 +204,7 @@ function! eclim#vcs#command#ListDir(path)
   let cwd = getcwd()
   let path = substitute(a:path, '\', '/', 'g')
   if isdirectory(path)
-    exec 'lcd ' . path
+    exec 'lcd ' . escape(path, ' ')
   endif
   try
     let ListDir = eclim#vcs#util#GetVcsFunction('ListDir')
@@ -213,7 +213,7 @@ function! eclim#vcs#command#ListDir(path)
     endif
     let info = ListDir(path)
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
   endtry
 
   call s:TempWindow(info.list)
@@ -245,7 +245,7 @@ function! eclim#vcs#command#Log(path)
     let cwd = getcwd()
     let dir = fnamemodify(path, ':h')
     if isdirectory(dir)
-      exec 'lcd ' . dir
+      exec 'lcd ' . escape(dir, ' ')
     endif
     try
       let Log = eclim#vcs#util#GetVcsFunction('Log')
@@ -254,7 +254,7 @@ function! eclim#vcs#command#Log(path)
       endif
       let info = Log(path)
     finally
-      exec 'lcd ' . cwd
+      exec 'lcd ' . escape(cwd, ' ')
     endtry
     if g:EclimVcsLogMaxEntries > 0 && len(info.log) == g:EclimVcsLogMaxEntries
       call add(info.log, '------------------------------------------')
@@ -350,7 +350,7 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
       let dir = b:vcs_props.root_dir . '/' . dir
     endif
     if isdirectory(dir)
-      exec 'lcd ' . dir
+      exec 'lcd ' . escape(dir, ' ')
       let path = fnamemodify(path, ':t')
     endif
     try
@@ -361,7 +361,7 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
       let lines = ViewFileRevision(path, revision)
       call eclim#cache#Set(key, lines, {'path': path, 'revision': revision})
     finally
-      exec 'lcd ' . cwd
+      exec 'lcd ' . escape(cwd, ' ')
     endtry
   endif
 
@@ -554,11 +554,11 @@ function! s:FollowLink()
     elseif link =~ '^' . s:trackerIdPattern . '$'
       let cwd = getcwd()
       let dir = fnamemodify(b:filename, ':h')
-      exec 'lcd ' . dir
+      exec 'lcd ' . escape(dir, ' ')
       try
         let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
       finally
-        exec 'lcd ' . cwd
+        exec 'lcd ' . escape(cwd, ' ')
       endtry
 
       if type(url) == 0

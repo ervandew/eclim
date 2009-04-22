@@ -120,7 +120,7 @@ function! eclim#python#django#manage#Manage(args)
       call eclim#util#EchoError('Current file not in a django project.')
       return
     endif
-    exec 'cd ' . path
+    exec 'cd ' . escape(path, ' ')
   endif
 
   try
@@ -165,7 +165,7 @@ function! eclim#python#django#manage#Manage(args)
     endif
   finally
     " change back to original directory if necessary.
-    exec 'cd ' . cwd
+    exec 'cd ' . escape(cwd, ' ')
   endtry
 endfunction " }}}
 

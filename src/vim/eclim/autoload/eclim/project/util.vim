@@ -73,9 +73,9 @@ endfunction " }}}
 function! eclim#project#util#ProjectCD(scope)
   let dir = eclim#project#util#GetCurrentProjectRoot()
   if a:scope == 0
-    exec 'cd ' . dir
+    exec 'cd ' . escape(dir, ' ')
   elseif a:scope == 1
-    exec 'lcd ' . dir
+    exec 'lcd ' . escape(dir, ' ')
   endif
 endfunction " }}}
 
@@ -280,7 +280,7 @@ function! eclim#project#util#ProjectSettings(project)
 
   let command = substitute(s:command_project_settings, '<project>', project, '')
   if eclim#util#TempWindowCommand(command, project . "_settings")
-    exec "lcd " . eclim#project#util#GetProjectRoot(project)
+    exec "lcd " . escape(eclim#project#util#GetProjectRoot(project), ' ')
     setlocal buftype=acwrite
     setlocal filetype=jproperties
     setlocal noreadonly
@@ -328,11 +328,11 @@ function! eclim#project#util#ProjectGrep(command, args)
 "  let save_opt = &eventignore
 "  set eventignore=all
   try
-    silent exec 'lcd ' . project_dir
+    silent exec 'lcd ' . escape(project_dir, ' ')
     silent! exec a:command . ' ' . a:args
   finally
 "    let &eventignore = save_opt
-    silent exec 'lcd ' . cwd
+    silent exec 'lcd ' . escape(cwd, ' ')
     " force quickfix / location list signs to update.
     call eclim#display#signs#Update()
   endtry

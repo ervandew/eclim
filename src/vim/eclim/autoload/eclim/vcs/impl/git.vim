@@ -98,7 +98,7 @@ function eclim#vcs#impl#git#GetRevision(file)
   let path = eclim#vcs#impl#git#GetRelativePath(
     \ fnamemodify(a:file, ':p:h'), fnamemodify(a:file, ':p:t'))
   let path = substitute(path, '^/', '', '')
-  exec 'lcd ' . root
+  exec 'lcd ' . escape(root, ' ')
   let log = eclim#vcs#impl#git#Git('log --pretty=oneline -1 "' . path . '"')
   if type(log) == 0
     return
@@ -256,7 +256,7 @@ function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
     \ fnamemodify(a:path, ':p:h'), fnamemodify(a:path, ':t'))
   let path = substitute(path, '^/', '', '')
   let root = eclim#vcs#impl#git#GetRoot()
-  exec 'lcd ' . root
+  exec 'lcd ' . escape(root, ' ')
   let result = eclim#vcs#impl#git#Git('show "' . a:revision . ':' . path . '"')
   return split(result, '\n')
 endfunction " }}}

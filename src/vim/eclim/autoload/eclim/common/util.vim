@@ -100,10 +100,10 @@ function! eclim#common#util#GrepRelative(command, args)
   let rel_dir = expand('%:p:h')
   let cwd = getcwd()
   try
-    silent exec 'lcd ' . rel_dir
+    silent exec 'lcd ' . escape(rel_dir, ' ')
     silent! exec a:command . ' ' . a:args
   finally
-    silent exec 'lcd ' . cwd
+    silent exec 'lcd ' . escape(cwd, ' ')
     " force quickfix / location list signs to update.
     call eclim#display#signs#Update()
   endtry
