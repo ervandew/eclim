@@ -498,7 +498,12 @@ public class VimEditor
     String offset = "0";
     try{
       String cursor = conn.function(bufferID, "getCursor", "");
-      offset = cursor.substring(cursor.lastIndexOf(' ') + 1);
+      if (cursor == null){
+        // the only case that i know of where this happens is if the file is
+        // open somewhere else and gvim is prompting the user as to how to
+        // proceed.  Exit now or the gvim prompt will be sent to the background.
+        return;
+      }
     }catch(IOException ioe){
       logger.error("Unable to get cursor position.", ioe);
     }
