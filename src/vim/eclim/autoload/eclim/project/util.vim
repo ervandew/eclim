@@ -82,7 +82,7 @@ endfunction " }}}
 " ProjectCreate(args) {{{
 " Creates a project at the supplied folder
 function! eclim#project#util#ProjectCreate(args)
-  let args = eclim#util#ParseArgs(a:args)
+  let args = eclim#util#ParseCmdLine(a:args)
 
   let folder = fnamemodify(expand(args[0]), ':p')
   let folder = substitute(folder, '\', '/', 'g')
@@ -139,7 +139,7 @@ endfunction " }}}
 function! eclim#project#util#ProjectRefresh(args)
   call eclim#project#util#ClearProjectsCache()
   if a:args != ''
-    let projects = eclim#util#ParseArgs(a:args)
+    let projects = eclim#util#ParseCmdLine(a:args)
   else
     if !eclim#project#util#IsCurrentFileInProject()
       return
@@ -249,7 +249,7 @@ endfunction " }}}
 " ProjectNatureModify(project) {{{
 " Modifies one or more natures for the specified project.
 function! eclim#project#util#ProjectNatureModify(command, args)
-  let args = eclim#util#ParseArgs(a:args)
+  let args = eclim#util#ParseCmdLine(a:args)
 
   let project = args[0]
   let natures = join(args[1:], ',')
@@ -682,7 +682,7 @@ endfunction " }}}
 " Custom command completion for ProjectCreate
 function! eclim#project#util#CommandCompleteProjectCreate(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
@@ -753,7 +753,7 @@ function! eclim#project#util#CommandCompleteProjectRelative(
   endif
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : (len(args) > 0 ? args[len(args) - 1] : '')
 
   let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
@@ -771,7 +771,7 @@ endfunction " }}}
 function! eclim#project#util#CommandCompleteAbsoluteOrProjectRelative(
     \ argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
   if argLead =~ '^\(/\|[a-zA-Z]:\)'
     return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
@@ -809,7 +809,7 @@ endfunction " }}}
 function! s:CommandCompleteProjectNatureModify(
     \ argLead, cmdLine, cursorPos, aliasesFunc)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg

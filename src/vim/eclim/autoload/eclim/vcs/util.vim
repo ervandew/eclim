@@ -229,7 +229,7 @@ endfunction " }}}
 " Custom command completion for revision numbers out of viewvc.
 function! eclim#vcs#util#CommandCompleteRevision(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   let revisions = eclim#vcs#util#GetRevisions()

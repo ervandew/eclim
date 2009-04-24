@@ -549,10 +549,48 @@ function! eclim#util#MarkSave()
 endfunction " }}}
 
 " ParseArgs(args) {{{
-" Parses the supplied argument line into a list of args.
+" Parses the supplied argument line into a list of args, handling quoted
+" strings, escaped spaces, etc.
 function! eclim#util#ParseArgs(args)
-  let args = split(a:args, '[^\\]\s\zs')
-  call map(args, 'substitute(v:val, "\\([^\\\\]\\)\\s\\+$", "\\1", "")')
+  let args = []
+  let arg = ''
+  let quote = ''
+  let escape = 0
+  let index = 0
+  while index < len(a:args)
+    let char = a:args[index]
+    let index += 1
+    if char == ' ' && quote == '' && !escape
+      if arg != ''
+        call add(args, arg)
+        let arg = ''
+      endif
+    elseif char == '\'
+      if escape
+        let arg .= char
+      endif
+      let escape = !escape
+    elseif char == '"' || char == "'"
+      if !escape
+        if quote != '' && char == quote
+          let quote = ''
+        elseif quote == ''
+          let quote = char
+        else
+          let arg .= char
+        endif
+      else
+        let arg .= char
+        let escape = 0
+      endif
+    else
+      let arg .= char
+    endif
+  endwhile
+
+  if arg != ''
+    call add(args, arg)
+  endif
 
   return args
 endfunction " }}}
@@ -1063,6 +1101,15 @@ function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
     endif
   endfor
   return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+" ParseCmdLine(args) {{{
+" Parses the supplied argument line into a list of args.
+function! eclim#util#ParseCmdLine(args)
+  let args = split(a:args, '[^\\]\s\zs')
+  call map(args, 'substitute(v:val, "\\([^\\\\]\\)\\s\\+$", "\\1", "")')
+
+  return args
 endfunction " }}}
 
 " ParseCommandCompletionResults(args) {{{

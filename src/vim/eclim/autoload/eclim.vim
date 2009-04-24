@@ -257,7 +257,7 @@ endfunction " }}}
 " Custom command completion for vim script names and revision numbers.
 function! eclim#CommandCompleteScriptRevision(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete script name for first arg.

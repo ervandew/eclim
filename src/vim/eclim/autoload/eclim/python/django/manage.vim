@@ -172,7 +172,7 @@ endfunction " }}}
 " CommandCompleteManage(argLead, cmdLine, cursorPos) {{{
 function! eclim#python#django#manage#CommandCompleteManage(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'

@@ -233,7 +233,7 @@ function! eclim#common#util#CommandCompleteRelative(argLead, cmdLine, cursorPos)
   let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
@@ -252,7 +252,7 @@ function! eclim#common#util#CommandCompleteRelativeDirs(argLead, cmdLine, cursor
   let dir = substitute(expand('%:p:h'), '\', '/', 'g')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseArgs(cmdLine)
+  let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
