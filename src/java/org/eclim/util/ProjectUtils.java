@@ -138,6 +138,7 @@ public class ProjectUtils
   public static String getFilePath(IProject project, String file)
     throws Exception
   {
+    file = file.replace('\\', '/');
     if(file.startsWith("/" + project.getName() + "/")){
       file = file.substring(2 + project.getName().length());
     }else if(file.endsWith("/" + project.getName())){
