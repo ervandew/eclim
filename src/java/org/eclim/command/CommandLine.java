@@ -29,7 +29,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class CommandLine
 {
-  private HashMap<String, String> options = new HashMap<String, String>();
+  private HashMap<String, Object> options = new HashMap<String, Object>();
   private Command command;
   private String[] args;
   private String[] unrecognized;
@@ -49,9 +49,14 @@ public class CommandLine
     this.command = command;
     this.args = args;
     Option[] options = commandLine.getOptions();
-    for (int ii = 0; ii < options.length; ii++){
-      String value = commandLine.getOptionValue(options[ii].getOpt());
-      this.options.put(options[ii].getOpt(), value);
+    for (Option option : options){
+      if (option.hasArgs()){
+        this.options.put(option.getOpt(),
+            commandLine.getOptionValues(option.getOpt()));
+      }else{ //if(option.hasArg() || option.hasOptionalArg()){
+        this.options.put(option.getOpt(),
+            commandLine.getOptionValue(option.getOpt()));
+      }
     }
     unrecognized = commandLine.getArgs();
   }
@@ -87,11 +92,49 @@ public class CommandLine
   public String getValue(String name)
     throws Exception
   {
-    String value = (String)options.get(name);
-    // decoded special characters encoded by eclim#ExecuteEclim
-    value = StringUtils.replace(value, "%2A", "*");
-    value = StringUtils.replace(value, "%24", "$");
-    return value;
+    String value = null;
+    Object val = options.get(name);
+    if(val != null){
+      if (val.getClass().isArray()){
+        value = ((String[])val)[0];
+      }else{
+        value = (String)val;
+      }
+      // decoded special characters encoded by eclim#ExecuteEclim
+      value = StringUtils.replace(value, "%2A", "*");
+      value = StringUtils.replace(value, "%24", "$");
+      return value;
+    }
+    return null;
+  }
+
+  /**
+   * Get the values of an arg supplied with the command line option.
+   *
+   * @param name The name of the option to get the arg for.
+   * @return The arguments supplied to the option.
+   */
+  public String[] getValues(String name)
+    throws Exception
+  {
+    String[] values = null;
+    Object val = options.get(name);
+    if(val != null){
+      if (!val.getClass().isArray()){
+        values = new String[]{(String)val};
+      }else{
+        values = (String[])val;
+      }
+
+      for (int ii = 0; ii < values.length; ii++){
+        // decoded special characters encoded by eclim#ExecuteEclim
+        values[ii] = StringUtils.replace(values[ii], "%2A", "*");
+        values[ii] = StringUtils.replace(values[ii], "%24", "$");
+      }
+
+      return values;
+    }
+    return null;
   }
 
   /**
