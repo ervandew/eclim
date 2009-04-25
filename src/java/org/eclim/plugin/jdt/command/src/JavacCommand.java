@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.io.File;
 
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
@@ -78,7 +79,8 @@ public class JavacCommand
     javac.setFork(true);
     File outputDir = new File(
         ProjectUtils.getFilePath(
-          project, javaProject.getOutputLocation().toOSString()));
+          project,
+          javaProject.getOutputLocation().toOSString()));
     outputDir.mkdirs();
     javac.setDestdir(outputDir);
 
@@ -105,7 +107,12 @@ public class JavacCommand
     }
     javac.setIncludes("**/*.java");
 
-    javac.execute();
+    try{
+      javac.execute();
+    }catch(BuildException be){
+      // just print the message: should just indicate that something didn't compile.
+      System.out.println(be.getMessage());
+    }
 
     return StringUtils.EMPTY;
   }
