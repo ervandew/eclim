@@ -28,8 +28,10 @@ endif
 let current_compiler = "eclim_javadoc"
 
 let command = eclim#client#nailgun#GetEclimCommand()
-let command = substitute(command, '"', '', 'g')
-let command = escape(command, ' ')
+if !(has('win32') || has('win64'))
+  let command = substitute(command, '"', '', 'g')
+endif
+let command = escape(command, ' "')
 exec 'CompilerSet makeprg=' . command . '\ -command\ javadoc\ $*'
 
 exec 'CompilerSet errorformat=' .

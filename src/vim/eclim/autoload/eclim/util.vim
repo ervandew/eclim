@@ -493,9 +493,12 @@ function! eclim#util#ListContains(list, element)
   return 0
 endfunction " }}}
 
-" MakeWithCompiler(compiler, bang, args) {{{
+" MakeWithCompiler(compiler, bang, args, [exec]) {{{
 " Executes :make using the supplied compiler.
-function! eclim#util#MakeWithCompiler(compiler, bang, args)
+" If the 'exec' arg is > 0, then instead of using :make, this function will
+" execute the make program using exec (useful if the make program doesn't
+" behave on windows).
+function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
   if exists('g:current_compiler')
     let saved_compiler = g:current_compiler
   endif
@@ -514,9 +517,37 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args)
   try
     unlet! g:current_compiler b:current_compiler
     exec 'compiler ' . a:compiler
-    let make_cmd = substitute(&makeprg, '\$\*', '', '')
-    call eclim#util#EchoTrace('make: ' . make_cmd . ' ' . a:args)
-    exec 'make' . a:bang . ' ' . a:args
+    let make_cmd = substitute(&makeprg, '\$\*', a:args, '')
+
+    let exec = len(a:000) > 0 ? a:000[0] : 0
+    if !exec
+      call eclim#util#EchoTrace('make: ' . make_cmd)
+      exec 'make' . a:bang . ' ' . a:args
+    else
+      let command = '!' . make_cmd
+      let outfile = g:EclimTempDir . '/eclim_make_output.txt'
+      if has("win32") || has("win64")
+        if executable("tee")
+          let command .= ' | tee "' . outfile . '" 2>&1"'
+        else
+          let command .= ' >"' . outfile . '" 2>&1"'
+        endif
+      else
+        let command .= ' 2>&1| tee "' . outfile . '"'
+      endif
+
+      doautocmd QuickFixCmdPre make
+      call eclim#util#Exec(command)
+      if filereadable(outfile)
+        if a:bang == ''
+          exec 'cfile ' . escape(outfile, ' ')
+        else
+          exec 'cgetfile ' . escape(outfile, ' ')
+        endif
+        call delete(outfile)
+      endif
+      doautocmd QuickFixCmdPost make
+    endif
   finally
     if exists('saved_compiler')
       unlet! g:current_compiler b:current_compiler
