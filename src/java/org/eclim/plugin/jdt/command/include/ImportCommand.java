@@ -88,7 +88,8 @@ public class ImportCommand
         IType element = (IType)match.getElement();
         if(Flags.isPublic(element.getFlags())){
           ImportResult ir = new ImportResult(
-                result.getElement(), element.getElementType());
+              result.getElement().replace('$', '.'),
+              element.getElementType());
           if(!results.contains(ir)){
             results.add(ir);
           }
