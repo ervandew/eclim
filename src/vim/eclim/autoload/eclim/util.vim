@@ -616,6 +616,7 @@ function! eclim#util#ParseArgs(args)
       endif
     else
       let arg .= char
+      let escape = 0
     endif
   endwhile
 
