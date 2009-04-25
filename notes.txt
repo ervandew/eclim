@@ -2,22 +2,14 @@ HIGH {{{
   June 26th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - Keep checking pdt update site to re-enable auto install in installer.
-
-  - :Jps updates
-    - open jconsole (handle errors)
-
-  - :LocateFile
-    - eclipse setting to filter out results
-
-  - possible rendering issue (cannot reproduce)
-    http://groups.google.com/group/eclim-user/browse_thread/thread/7d8824b342019150
+  - :Jps handle errors when opening jconsole
 
   - cdt
     - project create
       - handle dependant projects
       - specify toolchain
       - specify project type (executable, shared library, static library, makefile project)
+      - makefile creation
     - edit project config
       - modify toolchain
       - add/remove paths
@@ -129,6 +121,9 @@ TODO {{{
   }}}
 
   Common {{{
+    - :LocateFile
+      - eclipse setting to filter out results
+
     - templating system (convert to groovy)?
 
     - consider :UserProjectSettings for settings that are not common amongst
@@ -278,8 +273,11 @@ TODO {{{
   Java {{{
     - :JavaRun :JavaBuild
     - integrate w/ eclipse build/run system for at least simple programs.
+    - with :JavaRun, also have an input buffer that when saved pushes the text
+      to stdin of the running app, and then clears the buffer for more input.
+      - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
-    - :JavaDocBuild
+    - :Javadoc
       - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
       - org.eclipse.jdt.internal.ui.javadocexport.JavadocWizard.performFinish()
 
@@ -345,9 +343,6 @@ TODO {{{
         - logging
     - push method to interface... create method in interface from method in
       implementation.
-    - With :JavaRun, also have an input buffer that when saved pushes the text
-      to stdin of the running app, and then clears the buffer for more input.
-      - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
 
     - logging
       - Templates for generating logging statements:
@@ -669,6 +664,9 @@ NOTES {{{
 
   Git repos for vim:
   http://repo.or.cz/w/vim_mainline.git
+
+  Generate list of all command names:
+    $ ack --java -hA 1 "@Command" | grep "name =" | sed 's/.*name = "\(\w\+\)".*/\1/' | sort
 
   Running in true headless environment:
   http://en.wikipedia.org/wiki/Xvfb
