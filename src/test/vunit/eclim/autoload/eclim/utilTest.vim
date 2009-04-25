@@ -130,8 +130,20 @@ endfunction " }}}
 function! TestParseArgs()
   call VUAssertEquals(['one', 'two', 'three'],
     \ eclim#util#ParseArgs('one two three'))
-  call VUAssertEquals(['one\ two', 'three'],
+  call VUAssertEquals(['one two', 'three'],
+    \ eclim#util#ParseArgs('"one two" three'))
+  call VUAssertEquals(['one two', 'three'],
     \ eclim#util#ParseArgs('one\ two three'))
+  call VUAssertEquals(['"one two"', 'three'],
+    \ eclim#util#ParseArgs("'\"one two\"' three"))
+endfunction " }}}
+
+" TestParseCmdLine() {{{
+function! TestParseCmdLine()
+  call VUAssertEquals(['one', 'two', 'three'],
+    \ eclim#util#ParseCmdLine('one two three'))
+  call VUAssertEquals(['one\ two', 'three'],
+    \ eclim#util#ParseCmdLine('one\ two three'))
 endfunction " }}}
 
 " TestSimplify() {{{
