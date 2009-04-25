@@ -79,7 +79,7 @@ public class ProjectUtils
       path = path.append(name);
     }
 
-    return path != null ? path.toOSString() : null;
+    return path != null ? path.toOSString().replace('\\', '/') : null;
   }
 
   /**
@@ -144,7 +144,12 @@ public class ProjectUtils
     }else if(file.endsWith("/" + project.getName())){
       file = file.substring(1 + project.getName().length());
     }
-    return FileUtils.concat(getPath(project), file);
+
+    String projectPath = getPath(project);
+    if(file.toLowerCase().startsWith(projectPath.toLowerCase())){
+      return file;
+    }
+    return FileUtils.concat(projectPath, file);
   }
 
   /**

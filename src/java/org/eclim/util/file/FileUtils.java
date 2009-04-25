@@ -206,7 +206,7 @@ public class FileUtils
     for (String part : parts){
       path = path.append(part);
     }
-    return path.toOSString();
+    return path.toOSString().replace('\\', '/');
   }
 
   /**

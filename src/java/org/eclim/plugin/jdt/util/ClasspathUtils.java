@@ -122,7 +122,7 @@ public class ClasspathUtils
         case IClasspathEntry.CPE_LIBRARY :
         case IClasspathEntry.CPE_CONTAINER :
         case IClasspathEntry.CPE_VARIABLE :
-          String path = entry.getPath().toOSString();
+          String path = entry.getPath().toOSString().replace('\\', '/');
           if(path.startsWith("/" + name + "/")){
             path = ProjectUtils.getFilePath(project, path);
           }
