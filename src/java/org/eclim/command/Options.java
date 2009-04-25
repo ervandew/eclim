@@ -41,6 +41,7 @@ public class Options
 
   public static final String ACTION_OPTION = "a";
   public static final String APPLY_OPTION = "a";
+  public static final String ARGS_OPTION = "a";
   public static final String BASEDIR_OPTION = "b";
   public static final String BASETYPE_OPTION = "b";
   public static final String BUILD_FILE_OPTION = "b";

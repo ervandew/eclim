@@ -25,5 +25,13 @@ public class Test
 {
   public static final void main(String[] args)
   {
+    System.out.println("Hello Unit Testing World.");
+    if (args.length > 0){
+      System.out.println("----- args -----");
+      for(String arg : args){
+        System.out.println(arg);
+      }
+      System.out.println("----- end  -----");
+    }
   }
 }

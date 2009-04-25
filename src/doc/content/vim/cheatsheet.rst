@@ -173,6 +173,8 @@ Java Commands
   Search for javadocs.  Same usage as **:JavaSearch**.
 - :ref:`:JavaDocComment <:JavaDocComment>` -
   Adds or updates the comments for the element under the cursor.
+- :ref:`:Java <:Java>` -
+  Executes the java using your project's main class.
 - :ref:`:Javac <:Javac>` -
   Executes the javac utility against all source files.
 - :ref:`:Javadoc <:Javadoc>` [file, file, ...] -

@@ -32,6 +32,7 @@ C/C++:
     Requires the `eclipse cdt`_ plugin.
 
 Java:
+  - Added command to run :ref:`java <:Java>`.
   - Added command to run :ref:`javac <:Javac>`.
   - Added command to run :ref:`javadoc <:Javadoc>`.
 

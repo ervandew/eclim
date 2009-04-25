@@ -13,10 +13,31 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/javac:
+.. _vim/java/java:
 
-Javac Support
-===============
+Java / Javac Support
+====================
+
+.. _\:Java:
+
+Executing java
+-----------------
+
+To run the configured main class for your project, you may use the **:Java**
+command, which executes java and displays the results in a temporary buffer.
+
+.. note::
+
+  Please note that this command is not intended to be a full replacement for
+  the more advance support provided by eclipse, ant, or maven.
+
+Configuration
+-------------
+
+Eclim Settings
+
+- **org.eclim.java.run.mainclass** -
+  Fully qualified name of the class containing the main method.
 
 .. _\:Javac:
 
@@ -24,7 +45,7 @@ Executing javac
 -----------------
 
 To run the javac command on your source code, you may use the **:Javac**
-command, which execute javac against all your source code.
+command, which executes javac against all your source code.
 
 .. note::
 

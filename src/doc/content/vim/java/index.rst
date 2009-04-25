@@ -27,7 +27,7 @@ Java
    classpath
    validate
    search
-   javac
+   java
    javadoc
    import
    complete
@@ -81,6 +81,7 @@ Java
 - :ref:`vim/java/classpath`
 - :ref:`vim/java/validate`
 - :ref:`vim/java/search`
+- :ref:`vim/java/java`
 - :ref:`vim/java/javadoc`
 - :ref:`vim/java/import`
 - :ref:`vim/java/complete`
