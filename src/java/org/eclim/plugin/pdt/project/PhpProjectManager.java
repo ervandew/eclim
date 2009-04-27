@@ -55,7 +55,7 @@ import org.eclipse.dltk.internal.core.BuildpathEntry;
 
 import org.eclipse.dltk.internal.ui.wizards.BuildpathDetector;
 
-import org.eclipse.php.internal.core.PHPLanguageToolkit;
+import org.eclipse.php.internal.ui.PHPUILanguageToolkit;
 
 /**
  * Implementation of {@link ProjectManager} for php projects.
@@ -79,7 +79,8 @@ public class PhpProjectManager
     String dependsString = commandLine.getValue(Options.DEPENDS_OPTION);
 
     IScriptProject scriptProject = DLTKCore.create(project);
-    IDLTKLanguageToolkit toolkit = PHPLanguageToolkit.getDefault();
+    IDLTKLanguageToolkit toolkit =
+      PHPUILanguageToolkit.getInstance().getCoreToolkit();
     BuildpathDetector detector = new BuildpathDetector(project, toolkit);
     detector.detectBuildpath(null);
     IBuildpathEntry[] detected = detector.getBuildpath();

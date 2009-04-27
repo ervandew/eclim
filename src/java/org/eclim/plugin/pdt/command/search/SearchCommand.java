@@ -16,9 +16,6 @@
  */
 package org.eclim.plugin.pdt.command.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
@@ -48,10 +45,9 @@ import org.eclipse.dltk.core.search.SearchPattern;
 
 import org.eclipse.dltk.internal.corext.util.SearchUtils;
 
-import org.eclipse.dltk.internal.ui.search.DLTKSearchQuery;
 import org.eclipse.dltk.internal.ui.search.DLTKSearchScopeFactory;
 
-import org.eclipse.php.internal.core.PHPLanguageToolkit;
+import org.eclipse.php.internal.ui.PHPUILanguageToolkit;
 
 import org.eclipse.php.internal.ui.editor.PHPStructuredEditor;
 
@@ -201,7 +197,8 @@ public class SearchCommand
     boolean includeInterpreterEnvironment = false;
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
 
-    IDLTKLanguageToolkit toolkit = PHPLanguageToolkit.getDefault();
+    IDLTKLanguageToolkit toolkit =
+      PHPUILanguageToolkit.getInstance().getCoreToolkit();
     IDLTKSearchScope searchScope = null;
 
     if (SCOPE_PROJECT.equals(scope)){
