@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.format;
 
 import java.io.ByteArrayOutputStream;
 
+import java.lang.reflect.Field;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
@@ -73,8 +75,17 @@ public class FormatCommand
 
     DefaultCodeFormatter formatter =
       new DefaultCodeFormatter(JavaCore.getOptions());
-    int kind = CodeFormatter.K_COMPILATION_UNIT |
-      CodeFormatter.F_INCLUDE_COMMENTS;
+    int kind = CodeFormatter.K_COMPILATION_UNIT;
+
+    // to remain compatible with older jdt versions, use reflection to see if
+    // F_INCLUDE_COMMENTS exists.
+    try{
+      Field field =
+        CodeFormatter.class.getDeclaredField("F_INCLUDE_COMMENTS");
+      kind |= field.getInt(null);
+    }catch(NoSuchFieldException nsfe){
+      // ignore
+    }
 
     String source = src.getBuffer().getContents();
     String vimEncoding = "UTF-8";
