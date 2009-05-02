@@ -72,3 +72,6 @@ using **:ProjectSettings** to update them.
   you can use the :ref:`:EclimSettings` command instead to edit the global
   settings.  These global settings will apply to any project that has not
   overridden them with values via **:ProjectSettings**.
+
+Now that you have a project created, you can now leverage the various
+:ref:`python features <vim/python/index>` that eclim provides.

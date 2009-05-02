@@ -56,3 +56,6 @@ The **:ProjectList** result is in the form of ``projectName - (open|closed) -
 /project/root/path``.  When you create projects, the last path element will be
 used for the project name.  If that element contains any spaces, these will be
 converted to underscores.
+
+Now that you have a php project created, you can now leverage the various
+:ref:`php features <vim/php/index>` that eclim provides.

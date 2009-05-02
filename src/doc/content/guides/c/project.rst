@@ -96,3 +96,6 @@ If you have any include paths you wish to add, you can follow a similar
 procedure to add them by moving your cursor over the relevant "\|add\|" link
 and supply the proper project relative or absolute path to the include path you
 wish to add.
+
+Now that you have a c/c++ project created, you can now leverage the various
+:ref:`c/c++ features <vim/c/index>` that eclim provides.

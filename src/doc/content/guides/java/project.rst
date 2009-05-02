@@ -129,4 +129,5 @@ contents of this file should now look something like this\:
   </classpath>
 
 Now that your source directory is setup, you can proceed to edit java files in
-that directory and make use of the java functionality provided by eclim.
+that directory and make use of the :ref:`java functionality <vim/java/index>`
+provided by eclim.
