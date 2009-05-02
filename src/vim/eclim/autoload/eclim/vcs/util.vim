@@ -41,8 +41,9 @@ function eclim#vcs#util#GetVcsFunction(func_name)
     runtime autoload/eclim/vcs/impl/svn.vim
     let type = 'svn'
   else
-    let hgdir = finddir('.hg', getcwd() . ';')
-    let gitdir = finddir('.git', getcwd() . ';')
+    let cwd = escape(getcwd(), ' ')
+    let hgdir = finddir('.hg', cwd . ';')
+    let gitdir = finddir('.git', cwd . ';')
     if gitdir != ''
       let gitdir = fnamemodify(gitdir, ':p')
     endif

@@ -119,7 +119,7 @@ endfunction " }}}
 
 " GetRoot() {{{
 function eclim#vcs#impl#git#GetRoot()
-  let root = finddir('.git', getcwd() . ';')
+  let root = finddir('.git', escape(getcwd(), ' ') . ';')
   if root == ''
     return
   endif
