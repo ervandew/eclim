@@ -85,7 +85,7 @@ leveraged in three primary ways, as illustrated below.
 License
 ==================
 
-Eclim is released under the GPLv3_ license.
+Eclim is released under the GPLv3_.
 
 .. _news:
 
@@ -94,7 +94,7 @@ News
 ==================
 
 -----------
-2009
+2009-05-02
 -----------
 
 | **Eclim 1.4.6** is now available.
