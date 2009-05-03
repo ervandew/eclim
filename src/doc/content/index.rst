@@ -97,6 +97,14 @@ News
 2009-05-02
 -----------
 
+| **Eclim 1.4.7** is now available.
+| This is a bug fix release which resolves an installation on unix based
+  operating systems.
+
+-----------
+2009-05-02
+-----------
+
 | **Eclim 1.4.6** is now available.
 | The major highlight of this release is support for c/c++ using the
   `eclipse cdt`_ plugin.

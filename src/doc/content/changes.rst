@@ -16,6 +16,14 @@
 History of Changes
 ==================
 
+.. _1.4.7:
+
+1.4.7 (May 02, 2009)
+----------------------
+
+Bug Fixes:
+  - Fixed installation error on unix based operating systems.
+
 .. _1.4.6:
 
 1.4.6 (May 02, 2009)
