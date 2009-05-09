@@ -110,9 +110,10 @@ function! eclim#c#search#Search(...)
     " single result in another file.
     elseif len(results) == 1 && g:EclimCSearchSingleResult != "lopen"
       let entry = getloclist(0)[0]
-      exec g:EclimCSearchSingleResult . ' ' . bufname(entry.bufnr)
       call eclim#util#GoToBufferWindowOrOpen
         \ (bufname(entry.bufnr), g:EclimCSearchSingleResult)
+      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+      call eclim#display#signs#Update()
 
       call cursor(entry.lnum, entry.col)
     else
@@ -170,6 +171,8 @@ function eclim#c#search#FindDefinition(context)
       let entry = getloclist(0)[0]
       call eclim#util#GoToBufferWindowOrOpen
         \ (bufname(entry.bufnr), g:EclimCSearchSingleResult)
+      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+      call eclim#display#signs#Update()
 
       call cursor(entry.lnum, entry.col)
     else
@@ -204,6 +207,7 @@ function eclim#c#search#FindInclude()
       let entry = getloclist(0)[0]
       call eclim#util#GoToBufferWindowOrOpen
         \ (bufname(entry.bufnr), g:EclimCSearchSingleResult)
+      call eclim#display#signs#Update()
     else
       lopen
     endif

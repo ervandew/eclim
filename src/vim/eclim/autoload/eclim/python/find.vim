@@ -59,6 +59,8 @@ function eclim#python#find#FindDefinition()
       let entry = getloclist(0)[0]
       call eclim#util#GoToBufferWindowOrOpen(
         \ bufname(entry.bufnr), g:EclimPythonSearchSingleResult)
+      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
+      call eclim#display#signs#Update()
 
       call cursor(entry.lnum, entry.col)
     else

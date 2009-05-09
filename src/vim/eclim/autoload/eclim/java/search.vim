@@ -297,6 +297,8 @@ function! eclim#java#search#SearchAndDisplay(type, args)
         let entry = getloclist(0)[0]
         let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
         call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
+        call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+        call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)
       else
         lopen
