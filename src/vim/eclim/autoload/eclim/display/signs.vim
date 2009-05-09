@@ -324,6 +324,10 @@ endfunction " }}}
 
 " RemovePlaceholder() {{{
 function! eclim#display#signs#RemovePlaceholder()
+  if !has("signs")
+    return
+  endif
+
   let existing = eclim#display#signs#GetExisting('placeholder')
   for exists in existing
     call eclim#display#signs#Unplace(exists.id)
