@@ -15,12 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CURPATH=`dirname "$0"`
-# handle symlink to eclimd script
-if [ -h "$0" ] ; then
-  RESOLVED=`readlink -f "$0"`
-  CURPATH=`dirname "$RESOLVED"`
-fi
+FILEPATH="$0"
+# handle symlink to eclim script
+# readlink -f is easier, but not supported on mac or bsd
+while [ -h "$FILEPATH" ] ; do
+  PREV=$FILEPATH
+  FILEPATH=`readlink "$FILEPATH"`
+  if [ -z "$FILEPATH" -o "$FILEPATH" = "$PREV" ] ; then
+    FILEPATH=$PREV
+    break
+  fi
+done
+CURPATH=`dirname "$FILEPATH"`
 
 SED=`which sed 2> /dev/null`
 NAILGUN_ARGS="--nailgun-port 9091"
