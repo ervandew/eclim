@@ -165,15 +165,16 @@ If you plan on using eclim without the eclipse gui, then:
 Once you have the eclim daemon (headed or headless) running, you can then test
 eclim:
 
-- open a vim window and issuing the command, :ref:`:PingEclim`.  The result of
+- open a vim window and issue the command, :ref:`:PingEclim`.  The result of
   executing this command should be the eclim and eclipse version echoed to the
   bottom of your Vim window.  If however, you receive ``unable to connect to
   eclimd - connect: Connection refused``, or something similar, then your
   eclimd server is not running or something is preventing eclim from connecting
   to it.  If you receive this or any other errors you can start by first
   examining the eclimd output to see if it gives any info as to what went
-  wrong.  If at this point you are unsure how to proceed, feel free to post
-  your issue on the `eclim user`_ mailing list.
+  wrong.  If at this point you are unsure how to proceed you can view the
+  :ref:`troubleshooting guide <guides/troubleshoot>` or feel free to post your
+  issue on the `eclim user`_ mailing list.
 
     Example of successful ping:
 
@@ -210,19 +211,12 @@ After doing that you can then proceed to create your first project\:
 Upgrading
 ---------
 
-The upgrading procedure is the same as the installation procedure but there are
-a couple things worth noting.
-
-- The installer will remove the previous version of eclim and install the new
-  one.  This includes all the files in the eclim eclipse plugins and the files
-  eclim adds to your .vim or vimfiles directory.  So if you made any
-  alterations to any of these files, be sure to back them up prior to
-  upgrading.
-- Since the previous version is removed any time you run the installer, whether
-  upgrading or reinstalling the current version, you will need to always select
-  the features you want installed regardless of whether they are already
-  installed.  In a future version, the installer will attempt to auto select
-  them for you.
+The upgrading procedure is the same as the installation procedure but please be
+aware that the installer will remove the previous version of eclim prior to
+installing the new one.  The installer will delete all the files in the eclim
+eclipse plugins and the files eclim adds to your .vim or vimfiles directory.
+So if you made any alterations to any of these files, be sure to back them up
+prior to upgrading.
 
 
 Building from source
@@ -237,6 +231,6 @@ source.  Instructions on doing so can be found in the
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse sdk 3.4.x: http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
-.. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5687
-.. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=5685
+.. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15823
+.. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15821
 .. _eclim user: http://groups.google.com/group/eclim-user
