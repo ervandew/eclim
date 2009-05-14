@@ -28,6 +28,11 @@ PLUGINS=`grep "path=\"ECLIPSE_HOME" $ECLIM_DIR/.classpath | sed "$REGEX"`
 
 for PLUGIN in $PLUGINS ; do
   PLUGIN_LOC=`find $ECLIM_ECLIPSE_HOME/plugins -maxdepth 1 -name "${PLUGIN}_*"`
-  VERSION=`echo $PLUGIN_LOC | sed "s/.*\/${PLUGIN}_\(.*\)\?/\1/" | sed "s/\.jar//"`
-  sed -i "s/${PLUGIN}_[^\"]*/${PLUGIN}_${VERSION}.jar/" $ECLIM_DIR/.classpath
+  VERSION=`echo $PLUGIN_LOC | sed "s/.*\/${PLUGIN}_\(.*\)\?/\1/"`
+
+  NESTED=`
+    grep "${PLUGIN}_[^\"]*/" .classpath | \
+    sed "s/.*\/${PLUGIN}_[^\/]*\(.*\)\"\/>/\1/"
+  `
+  sed -i "s|${PLUGIN}_[^\"]*|${PLUGIN}_${VERSION}${NESTED}|" $ECLIM_DIR/.classpath
 done
