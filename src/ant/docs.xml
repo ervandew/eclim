@@ -64,8 +64,9 @@
     </copy>
 
     <touch file="build/doc/site/google4c368e38cc6ac62e.html"/>
-    <replace dir="build/doc/site"
-        includes="**/*.html" token="$${google.analytics}">
+    <replace dir="build/doc/site" includes="**/*.html">
+      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
+      <replacefilter token="$${google.analytics}"/>
       <replacevalue><![CDATA[
       <!-- Google Analytics -->
         <script src="http://www.google-analytics.com/urchin.js"
