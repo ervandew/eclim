@@ -61,7 +61,7 @@ Eclim Graphical Installer
 Step 1: Download the eclim installer for your platform.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- **Linux (and other unix based systems):**
+- **Linux / Mac / BSD (and other unix based systems)**:
   `eclim_version.sh`_
 - **Windows:**
   `eclim_version.exe`_
@@ -75,7 +75,7 @@ Step 2: Run the installer.
   If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- **Linux (and other unix based systems):**
+- **Linux / Mac / BSD (and other unix based systems)**:
   You can start the installer by running the script you downloaded
   (note: you may have to make it executable first).
 
@@ -150,8 +150,9 @@ If you plan on using eclim without the eclipse gui, then:
 
 - start the eclimd server.
 
-  - **Linux**:  To start eclimd from linux, simply execute the eclimd script
-    found in your eclipse root directory:
+  - **Linux / Mac / BSD (and other unix based systems)**:
+    To start eclimd from linux, simply execute the eclimd script found in your
+    eclipse root directory:
 
     ::
 

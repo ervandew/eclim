@@ -34,8 +34,9 @@ Starting and stopping of the headless eclipse instance is detailed below.
 
 **Starting eclimd**
 
-**Linux**:  To start eclimd from linux, simply execute the eclimd script found
-in your eclipse root directory: $ECLIPSE_HOME/eclimd
+**Linux / Mac / BSD (and other unix based systems)**:
+To start eclimd from linux, simply execute the eclimd script found in your
+eclipse root directory: $ECLIPSE_HOME/eclimd
 
 **Windows**: The easiest way to start eclimd in windows is to double click on
 the eclimd.bat file found in your eclipse root directory:
