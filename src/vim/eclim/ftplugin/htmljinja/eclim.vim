@@ -57,7 +57,7 @@ if exists("b:match_words")
       if pattern != ''
         let pattern .= ':'
       endif
-      let pattern .= '{%-\?\s*\<' . tag . '\>.\{-}-\?%}'
+      let pattern .= '{%-\?\s*\<' . tag . '\>' "\_.\{-}-\?%}'
     endfor
     let pattern .= ':{%-\?\s*\<' . element[-1:][0] . '\>\s*-\?%}'
     let b:match_words .= ',' . pattern
