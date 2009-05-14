@@ -503,7 +503,20 @@ TODO {{{
   }}}
 
   Scala {{{
+    - vim files for scala
+      https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src/vim
+
     - http://www.scala-lang.org/node/94
+      Note: Wait on 2.8.0 to be release, since according to the developer
+      wiki[1], the code is undergoing a large refactoring.
+      [1] http://lampsvn.epfl.ch/trac/scala/wiki/EclipsePlugin
+
+    <feature id="sdt">
+      <dependency id="ch.epfl.lamp.sdt" version="2.7.4">
+        <site url="http://www.scala-lang.org/scala-eclipse-plugin/"/>
+      </dependency>
+    </feature>
+
   }}}
 
   SQL {{{
