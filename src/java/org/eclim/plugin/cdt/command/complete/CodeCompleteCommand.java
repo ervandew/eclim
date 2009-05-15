@@ -33,12 +33,13 @@ import org.eclim.util.ProjectUtils;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.internal.ui.editor.CSourceViewer;
 
-import org.eclipse.cdt.internal.ui.text.CSourceViewerConfiguration;
 import org.eclipse.cdt.internal.ui.text.CTextTools;
 
 import org.eclipse.cdt.internal.ui.text.contentassist.CCompletionProposal;
 
 import org.eclipse.cdt.ui.CUIPlugin;
+
+import org.eclipse.cdt.ui.text.CSourceViewerConfiguration;
 
 import org.eclipse.core.resources.IProject;
 
