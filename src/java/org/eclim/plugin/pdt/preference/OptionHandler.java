@@ -32,8 +32,6 @@ import org.eclipse.jface.preference.IPersistentPreferenceStore;
 
 import org.eclipse.php.internal.core.PHPCoreConstants;
 
-import org.eclipse.php.internal.core.project.properties.handlers.PhpVersionProjectPropertyHandler;
-
 import org.eclipse.php.internal.ui.PHPUiPlugin;
 
 /**
@@ -128,23 +126,6 @@ public class OptionHandler
   public void setOption(IProject project, String name, String value)
     throws Exception
   {
-    /*IScriptProject scriptProject = DLTKCore.create(project);
-    if(!scriptProject.exists()){
-      throw new IllegalArgumentException(
-          Services.getMessage("project.not.found", project.getName()));
-    }
-    Map<String,String> global = scriptProject.getOptions(true);
-    Map<String,String> options = scriptProject.getOptions(false);
-
-    Object current = global.get(name);
-    if(current == null || !current.equals(value)){
-      if(name.equals(PHPCoreConstants.PHP_OPTIONS_PHP_VERSION)){
-        PhpVersionProjectPropertyHandler.setVersion(value, project);
-      }else{
-        options.put(name, value);
-        scriptProject.setOptions(options);
-      }
-    }*/
     IEclipsePreferences preferences = getPreferences(project);
 
     if(name.startsWith(PREFIX)){
