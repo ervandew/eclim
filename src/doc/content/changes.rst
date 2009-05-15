@@ -16,6 +16,14 @@
 History of Changes
 ==================
 
+.. _1.5.0:
+
+1.5.0 (2009)
+----------------------
+
+Eclipse:
+  - Eclim now requires the latest version of eclipse (Galileo, 3.5.x).
+
 .. _1.4.8:
 
 1.4.8 (May 30, 2009)

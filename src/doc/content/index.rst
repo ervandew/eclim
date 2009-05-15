@@ -94,6 +94,14 @@ News
 ==================
 
 -----------
+2009
+-----------
+
+| **Eclim 1.5.0** is now available.
+| Please note that eclim now requires the latest version of `eclipse`_
+  (Galileo, 3.5.x).
+
+-----------
 2009-05-30
 -----------
 

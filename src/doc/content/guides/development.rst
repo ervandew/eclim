@@ -208,7 +208,7 @@ This example will use the recommend tools, git_ and stgit_.
     ...
     Pong!
     eclim   1.4.4
-    eclipse 3.4.2
+    eclipse 3.5.0
     Press ENTER or type command to continue
 
 

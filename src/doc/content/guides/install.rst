@@ -25,7 +25,7 @@ Before beginning the installation, first confirm that you have met the
 following requirements.
 
 - `Java Development Kit`_ 1.5 or greater
-- `Eclipse SDK 3.4.x`_
+- `Eclipse 3.5.x (Galileo)`_
 - `Vim 7.1.x`_
 
   **Minimum Vim Settings**: In order for eclim to function properly, there is a
@@ -229,7 +229,7 @@ source.  Instructions on doing so can be found in the
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
-.. _eclipse sdk 3.4.x: http://eclipse.org/downloads/index.php
+.. _eclipse 3.5.x (galileo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15823
 .. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15821
