@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2005 - 2009  Eric Van Dewoestine
 #
@@ -23,16 +23,16 @@
 ECLIM_DIR=`dirname $0`
 ECLIM_DIR=`cd $ECLIM_DIR/.. && pwd`
 
-REGEX="s/.*path=\"ECLIPSE_HOME\/plugins\/\([^_]*\)_.*/\1/"
-PLUGINS=`grep "path=\"ECLIPSE_HOME" $ECLIM_DIR/.classpath | sed "$REGEX"`
+PLUGINS=`
+  grep "path=\"ECLIPSE_HOME" $ECLIM_DIR/.classpath | \
+  sed "s|.*path=\"ECLIPSE_HOME/.*[/]\?plugins/\([^_]*\)_.*|\1|"
+`
 
 for PLUGIN in $PLUGINS ; do
-  PLUGIN_LOC=`find $ECLIM_ECLIPSE_HOME/plugins -maxdepth 1 -name "${PLUGIN}_*"`
-  VERSION=`echo $PLUGIN_LOC | sed "s/.*\/${PLUGIN}_\(.*\)\?/\1/"`
-
-  NESTED=`
-    grep "${PLUGIN}_[^\"]*/" .classpath | \
-    sed "s/.*\/${PLUGIN}_[^\/]*\(.*\)\"\/>/\1/"
+  PLUGIN_LOC=`
+    cd $ECLIM_ECLIPSE_HOME ;
+    find {dropins/*/eclipse/,}plugins -maxdepth 1 -name "${PLUGIN}_*"
   `
-  sed -i "s|${PLUGIN}_[^\"]*|${PLUGIN}_${VERSION}${NESTED}|" $ECLIM_DIR/.classpath
+  sed -i "s|ECLIPSE_HOME/.*/${PLUGIN}_.[^\"]*|ECLIPSE_HOME/${PLUGIN_LOC}|" \
+    $ECLIM_DIR/.classpath
 done
