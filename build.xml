@@ -73,12 +73,12 @@
     <fileset dir="src/eclipse/plugins/" includes="*/lib/*.jar"/>
     <fileset dir="${eclipse.home}" includes="startup.jar"/>
     <fileset dir="${eclipse.home}">
-      <include name="dropins/eclipse/plugins/org.eclipse.*.jar"/>
+      <include name="dropins/**/plugins/org.eclipse.*.jar"/>
       <include name="plugins/org.eclipse.*.jar"/>
       <include name="plugins/com.ibm.*.jar"/>
     </fileset>
     <dirset dir="${eclipse.home}">
-      <include name="dropins/eclipse/plugins/org.eclipse.*"/>
+      <include name="dropins/**/plugins/org.eclipse.*"/>
       <include name="plugins/org.eclipse.*"/>
     </dirset>
     <!-- for gentoo -->
