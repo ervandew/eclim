@@ -24,8 +24,6 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.eclipse.ui.EclimEditorSite;
-
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -33,9 +31,11 @@ import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ScriptModelUtil;
 
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
@@ -48,13 +48,6 @@ import org.eclipse.dltk.internal.corext.util.SearchUtils;
 import org.eclipse.dltk.internal.ui.search.DLTKSearchScopeFactory;
 
 import org.eclipse.php.internal.ui.PHPUILanguageToolkit;
-
-import org.eclipse.php.internal.ui.editor.PHPStructuredEditor;
-
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-
-import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * Command to search php code.
@@ -102,13 +95,13 @@ public class SearchCommand
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     int type = getType(commandLine.getValue(Options.TYPE_OPTION));
-    int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
+    int context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
 
     IDLTKSearchScope scope = getScope(
         commandLine.getValue(Options.SCOPE_OPTION), type, project);
 
     SearchEngine engine = new SearchEngine();
-    IProject[] projects = DLTKSearchScopeFactory.getInstance().getProjects(scope);
+    //IProject[] projects = DLTKSearchScopeFactory.getInstance().getProjects(scope);
 
     IDLTKLanguageToolkit toolkit = scope.getLanguageToolkit();
 
@@ -117,41 +110,23 @@ public class SearchCommand
     // element search
     if(file != null && offset != null && length != null){
       IFile ifile = ProjectUtils.getFile(project, file);
-
-      // FIXME: find an easier way to get an ISourceModule
-      IEditorSite site = new EclimEditorSite();
-      IEditorInput input = new FileEditorInput(ifile);
-      PHPStructuredEditor editor = new PHPStructuredEditor(){
-        public void update()
-        {
-          // no-op to prevent StructuredTextEditor from running it.
-        }
-
-        protected void installOverrideIndicator(boolean provideAST)
-        {
-          // no-op to prevent PHPStructuredEditor from running it.
-        }
-      };
-      editor.init(site, input);
-      editor.setInput(input);
-
-      ISourceModule src = (ISourceModule)editor.getModelElement();
+      ISourceModule src = DLTKCore.createSourceModuleFrom(ifile);
       IModelElement[] elements = src.codeSelect(
           getOffset(commandLine), Integer.parseInt(length));
       IModelElement element = null;
       if(elements != null && elements.length > 0){
         element = elements[0];
       }
-      //ScriptModelUtil.reconcile(unit);
+      ScriptModelUtil.reconcile(src);
       if (element != null && element.exists()) {
         searchPattern = SearchPattern.createPattern(
             element, context, SearchUtils.GENERICS_AGNOSTIC_MATCH_RULE, toolkit);
       }
     }else{
       int mode = getMode(pattern) | SearchPattern.R_ERASURE_MATCH;
-      if (false /* case sensitive */){
-        mode  |= SearchPattern.R_CASE_SENSITIVE;
-      }
+      //if (false /* case sensitive */){
+      //  mode  |= SearchPattern.R_CASE_SENSITIVE;
+      //}
 
       if (type == IDLTKSearchConstants.UNKNOWN){
         SearchPattern byType = SearchPattern.createPattern(
