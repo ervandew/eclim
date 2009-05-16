@@ -177,7 +177,9 @@ public class ProjectUtils
   public static IFile getFile(IProject project, String file)
     throws Exception
   {
-    project.open(null);
+    if (!project.isOpen()){
+      project.open(null);
+    }
     String path = getPath(project);
     path = path.replace('\\', '/');
     /*if(!file.startsWith(path)){
