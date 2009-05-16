@@ -21,25 +21,74 @@
     <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch"/>
   </target>
 
-  <target name="patch.revert.validate" unless="plugin">
-    <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch.revert"/>
-  </target>
-
   <!--
     - Target to patch an eclipse plugin jar.
     -->
   <target name="patch" depends="patch.validate" if="plugin">
-    <antcallback target="plugin.jar.resolve" return="plugin_jar"/>
-    <echo>Patching plugin: ${plugin_jar}</echo>
-
-    <!-- backup plugin file if necessary -->
+    <antcallback target="plugin.resolve" return="plugin_jar, plugin_dir"/>
+    <!-- patch jar -->
     <if>
-      <not><available file="${plugin_jar}.bak"/></not>
+      <not> <equals arg1="" arg2="${plugin_jar}"/> </not>
       <then>
-        <copy file="${plugin_jar}" tofile="${plugin_jar}.bak"/>
+        <echo>Patching plugin: ${plugin_jar}</echo>
+
+        <antcall target="patch.compile"/>
+
+        <!-- backup plugin file if necessary -->
+        <if>
+          <not><available file="${plugin_jar}.bak"/></not>
+          <then>
+            <copy file="${plugin_jar}" tofile="${plugin_jar}.bak"/>
+          </then>
+        </if>
+
+        <jar jarfile="${plugin_jar}" update="true">
+          <fileset dir="build/patch/${plugin}/classes">
+            <include name="**/*.class"/>
+          </fileset>
+        </jar>
       </then>
     </if>
 
+    <!-- patch dir -->
+    <if>
+      <not> <equals arg1="" arg2="${plugin_dir}"/> </not>
+      <then>
+        <echo>Patching plugin: ${plugin_dir}</echo>
+
+        <antcall target="patch.compile"/>
+
+        <!-- backup plugin dir if necessary -->
+        <basename file="${plugin_dir}" property="plugin_dir.name"/>
+        <if>
+          <not>
+            <available file="${eclipse.home}/patch.backup/${plugin_dir.name}"/>
+          </not>
+          <then>
+            <mkdir dir="${eclipse.home}/patch.backup"/>
+            <exec executable="cp" failonerror="true">
+              <arg line="-pr ${plugin_dir} ${eclipse.home}/patch.backup/"/>
+            </exec>
+          </then>
+        </if>
+
+        <copy todir="${plugin_dir}">
+          <fileset dir="build/patch/${plugin}/classes">
+            <include name="**/*.class"/>
+          </fileset>
+        </copy>
+      </then>
+    </if>
+  </target>
+
+  <target name="patch.compile.validate" unless="plugin">
+    <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch.compile"/>
+  </target>
+
+  <!--
+    - Task to just compile the patch sources.
+    -->
+  <target name="patch.compile" depends="patch.validate" if="plugin">
     <mkdir dir="build/patch/${plugin}/classes"/>
     <javac destdir="build/patch/${plugin}/classes"
         debug="on" optimize="false"
@@ -52,12 +101,6 @@
         <pathelement path="${build.classes}"/>
       </classpath>
     </javac>
-
-    <jar jarfile="${plugin_jar}" update="true">
-      <fileset dir="build/patch/${plugin}/classes">
-        <include name="**/*.class"/>
-      </fileset>
-    </jar>
   </target>
 
   <!--
@@ -69,18 +112,46 @@
         target="patch" param="plugin"/>
   </target>
 
+  <target name="patch.revert.validate" unless="plugin">
+    <fail message="Usage: ant -Dplugin=&lt;plugin-name&gt; patch.revert"/>
+  </target>
+
   <!--
     - Target to revert a patched jar to its original version.
     -->
   <target name="patch.revert">
-    <antcallback target="plugin.jar.resolve" return="plugin_jar"/>
-    <echo>Reverting patch for plugin: ${plugin_jar}</echo>
+    <antcallback target="plugin.resolve" return="plugin_jar, plugin_dir"/>
+
+    <!-- revert plugin jar -->
     <if>
-      <available file="${plugin_jar}.bak"/>
+      <and>
+        <not> <equals arg1="" arg2="${plugin_jar}"/> </not>
+        <available file="${plugin_jar}.bak"/>
+      </and>
       <then>
+        <echo>Reverting patch for plugin: ${plugin_jar}</echo>
         <move file="${plugin_jar}.bak" tofile="${plugin_jar}"/>
       </then>
     </if>
+
+    <!-- revert plugin dir -->
+    <basename file="${plugin_dir}" property="plugin_dir.name"/>
+    <if>
+      <and>
+        <not> <equals arg1="" arg2="${plugin_dir}"/> </not>
+        <available file="${eclipse.home}/patch.backup/${plugin_dir.name}"/>
+      </and>
+      <then>
+        <echo>Reverting patch for plugin: ${plugin_dir}</echo>
+        <exec executable="rm" failonerror="true">
+          <arg line="-r ${plugin_dir}"/>
+        </exec>
+        <exec executable="mv" failonerror="true">
+          <arg line="${eclipse.home}/patch.backup/${plugin_dir.name} ${plugin_dir}"/>
+        </exec>
+      </then>
+    </if>
+
     <delete dir="build/patch/${plugin}/classes"/>
   </target>
 
@@ -96,7 +167,7 @@
   <!--
     - Target which resolves the location of the plugin jar file.
     -->
-  <target name="plugin.jar.resolve">
+  <target name="plugin.resolve">
     <path id="plugin_jar">
       <fileset dir="${eclipse.home}">
         <include name="plugins/${plugin}_*.jar"/>
@@ -104,14 +175,29 @@
       </fileset>
     </path>
     <property name="plugin_jar" refid="plugin_jar"/>
+
+    <path id="plugin_dir">
+      <dirset dir="${eclipse.home}">
+        <include name="plugins/${plugin}_*"/>
+        <include name="dropins/**/plugins/${plugin}_*"/>
+      </dirset>
+    </path>
+    <property name="plugin_dir" refid="plugin_dir"/>
+
     <if>
-      <or>
-        <equals arg1="" arg2="${plugin_jar}"/>
-        <not><available file="${plugin_jar}"/></not>
-      </or>
+      <and>
+        <or>
+          <equals arg1="" arg2="${plugin_jar}"/>
+          <not><available file="${plugin_jar}"/></not>
+        </or>
+        <or>
+          <equals arg1="" arg2="${plugin_dir}"/>
+          <not><available file="${plugin_dir}"/></not>
+        </or>
+      </and>
       <then>
         <fail>
-          No plugin jar file found for '${plugin}' in '${eclipse.home}'.
+          No plugin jar file or dir found for '${plugin}' in '${eclipse.home}'.
         </fail>
       </then>
     </if>
