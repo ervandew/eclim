@@ -42,6 +42,9 @@ public class PluginResources
    */
   public static final String NAME = "org.eclim.cdt";
 
+  public static final String NATURE_C = CProjectNature.C_NATURE_ID;
+  public static final String NATURE_CPP = CCProjectNature.CC_NATURE_ID;
+
   /**
    * {@inheritDoc}
    * @see AbstractPluginResources#initialize(String)

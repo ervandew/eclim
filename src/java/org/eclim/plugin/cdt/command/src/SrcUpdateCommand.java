@@ -30,6 +30,8 @@ import org.eclim.command.Options;
 
 import org.eclim.command.filter.ErrorFilter;
 
+import org.eclim.plugin.cdt.util.CUtils;
+
 import org.eclim.util.CollectionUtils;
 
 import org.eclim.util.ProjectUtils;
@@ -37,9 +39,6 @@ import org.eclim.util.ProjectUtils;
 import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.CoreModelUtil;
 
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
@@ -51,8 +50,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 import org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper;
 
 import org.eclipse.core.resources.IProject;
-
-import org.eclipse.core.runtime.Path;
 
 /**
  * Command to update the file on the eclipse side and optionally validate it.
@@ -87,11 +84,9 @@ public class SrcUpdateCommand
     // validate the src file.
     }else{
       IProject project = ProjectUtils.getProject(projectName);
-      ICProject cproject = CoreModel.getDefault().create(project);
+      ICProject cproject = CUtils.getCProject(project);
       if(cproject.exists()){
-        Path path = new Path(ProjectUtils.getFilePath(project, file));
-        ITranslationUnit src =
-          CoreModelUtil.findTranslationUnitForLocation(path, cproject);
+        ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
 
         List<IProblem> problems = getProblems(src);
         ArrayList<Error> errors = new ArrayList<Error>();

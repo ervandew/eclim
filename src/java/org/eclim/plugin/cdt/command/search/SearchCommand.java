@@ -24,15 +24,31 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.cdt.PluginResources;
+
+import org.eclim.plugin.cdt.util.ASTUtils;
+import org.eclim.plugin.cdt.util.CUtils;
+
+import org.eclim.util.CollectionUtils;
 import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.vim.VimUtils;
 
+import org.eclipse.cdt.core.CCorePlugin;
+
 import org.eclipse.cdt.core.browser.ITypeReference;
 
+import org.eclipse.cdt.core.dom.IName;
+
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.index.IIndexManager;
+
 import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.CoreModelUtil;
-import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 
@@ -41,16 +57,12 @@ import org.eclipse.cdt.internal.ui.search.PDOMSearchMatch;
 import org.eclipse.cdt.internal.ui.search.PDOMSearchPatternQuery;
 import org.eclipse.cdt.internal.ui.search.PDOMSearchQuery;
 import org.eclipse.cdt.internal.ui.search.PDOMSearchResult;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchTextSelectionQuery;
 import org.eclipse.cdt.internal.ui.search.TypeInfoSearchElement;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
-
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextSelection;
 
 import org.eclipse.search.ui.text.Match;
 
@@ -108,41 +120,114 @@ public class SearchCommand
     String length = commandLine.getValue(Options.LENGTH_OPTION);
 
     IProject project = ProjectUtils.getProject(projectName);
-    ICProject cproject = CoreModel.getDefault().create(project);
-    int type = getType(commandLine.getValue(Options.TYPE_OPTION));
-    int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
-
-    PDOMSearchQuery query = null;
+    ICProject cproject = CUtils.getCProject(project);
 
     // element search
     if(file != null && offset != null && length != null){
-      Path path = new Path(ProjectUtils.getFilePath(project, file));
-      ITranslationUnit src =
-        CoreModelUtil.findTranslationUnitForLocation(path, cproject);
-      if (src != null){
-        ICElement[] scope = getScope(
-            commandLine.getValue(Options.SCOPE_OPTION), cproject);
-        IDocument document = ProjectUtils.getDocument(project, file);
-        TextSelection selection = new TextSelection(
-            document, getOffset(commandLine), Integer.parseInt(length));
-        query = new PDOMSearchTextSelectionQuery(scope, src, selection, context);
-      }
+      return executeElementSearch(commandLine, cproject);
+    }
 
     // pattern search
-    }else{
-      ICElement[] scope = getScope(
-          commandLine.getValue(Options.SCOPE_OPTION), cproject);
-      String scopeDesc = null;
-      if (SCOPE_ALL.equals(scope)){
-        scopeDesc = CSearchMessages.WorkspaceScope;
-      }else if (SCOPE_PROJECT.equals(scope)){
-        scopeDesc = CSearchMessages.ProjectScope;
+    return executePatternSearch(commandLine, cproject);
+  }
+
+  private String executeElementSearch(
+      CommandLine commandLine, ICProject cproject)
+    throws Exception
+  {
+    StringBuffer buffer = new StringBuffer();
+
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
+    if(src != null){
+      int context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
+
+      ICProject[] scope = new ICProject[]{cproject};
+      if (SCOPE_ALL.equals(commandLine.getValue(Options.SCOPE_OPTION))){
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        ArrayList<ICProject> cprojects = new ArrayList<ICProject>();
+        for (IProject project : projects){
+          if (project.isOpen() && (
+              project.hasNature(PluginResources.NATURE_C) ||
+              project.hasNature(PluginResources.NATURE_CPP)))
+          {
+            cprojects.add(CUtils.getCProject(project));
+          }
+        }
+        scope = cprojects.toArray(new ICProject[cprojects.size()]);
       }
 
-      String pattern = commandLine.getValue(Options.PATTERN_OPTION);
-      query = new PDOMSearchPatternQuery(
-          scope, scopeDesc, pattern, true, type | context);
+      IIndex index = CCorePlugin.getIndexManager().getIndex(
+          scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
+      index.acquireReadLock();
+      try{
+        IASTTranslationUnit ast = ASTUtils.getTranslationUnit(src);
+        IASTName node = ast.getNodeSelector(null)
+          .findEnclosingName(
+              getOffset(commandLine),
+              commandLine.getIntValue(Options.LENGTH_OPTION));
+        IBinding binding = node.resolveBinding();
+
+        ArrayList<IName> names = new ArrayList<IName>();
+
+        if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES ||
+            context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS)
+        {
+          CollectionUtils.addAll(names, ast.getDefinitions(binding));
+          IName[] decs = ast.getDeclarations(binding);
+          for (IName n : decs){
+            if (!names.contains(n)){
+              names.add(n);
+            }
+          }
+        }
+
+        if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES ||
+            context == PDOMSearchQuery.FIND_REFERENCES)
+        {
+          CollectionUtils.addAll(names, ast.getReferences(binding));
+        }
+
+        for (IName name : names){
+          if(buffer.length() > 0){
+            buffer.append('\n');
+          }
+          IASTFileLocation loc = name.getFileLocation();
+          String filename = loc.getFileName();
+          String lineColumn =
+            VimUtils.translateLineColumn(filename, loc.getNodeOffset());
+          buffer.append(filename)
+            .append('|')
+            .append(lineColumn)
+            .append('|')
+            .append("");
+        }
+      }finally{
+        index.releaseReadLock();
+      }
     }
+
+    return buffer.toString();
+  }
+
+  private String executePatternSearch(
+      CommandLine commandLine, ICProject cproject)
+    throws Exception
+  {
+    ICProject[] scope = getScope(
+        commandLine.getValue(Options.SCOPE_OPTION), cproject);
+    String scopeDesc = null;
+    if (SCOPE_ALL.equals(scope)){
+      scopeDesc = CSearchMessages.WorkspaceScope;
+    }else if (SCOPE_PROJECT.equals(scope)){
+      scopeDesc = CSearchMessages.ProjectScope;
+    }
+
+    int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
+    int type = getType(commandLine.getValue(Options.TYPE_OPTION));
+    String pattern = commandLine.getValue(Options.PATTERN_OPTION);
+    PDOMSearchQuery query = new PDOMSearchPatternQuery(
+        scope, scopeDesc, pattern, true, type | context);
 
     StringBuffer buffer = new StringBuffer();
     if (query != null){
@@ -180,16 +265,16 @@ public class SearchCommand
    * @param scope The string name of the scope.
    * @param project The current project.
    *
-   * @return The ICElement array representing the scope.
+   * @return The ICProject array representing the scope.
    */
-  protected ICElement[] getScope(String scope, ICProject project)
+  protected ICProject[] getScope(String scope, ICProject project)
     throws Exception
   {
     if (SCOPE_ALL.equals(scope)){
       return null;
     }
 
-    ArrayList<ICElement> elements = new ArrayList<ICElement>();
+    ArrayList<ICProject> elements = new ArrayList<ICProject>();
     elements.add(project);
     IProject[] depends = project.getProject().getReferencedProjects();
     for (IProject p : depends){
@@ -198,7 +283,7 @@ public class SearchCommand
       }
       elements.add(CoreModel.getDefault().create(p));
     }
-    return elements.toArray(new ICElement[elements.size()]);
+    return elements.toArray(new ICProject[elements.size()]);
   }
 
   /**
