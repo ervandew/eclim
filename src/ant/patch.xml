@@ -98,7 +98,10 @@
     -->
   <target name="plugin.jar.resolve">
     <path id="plugin_jar">
-      <fileset dir="${eclipse.home}/plugins/" includes="${plugin}_*.jar"/>
+      <fileset dir="${eclipse.home}">
+        <include name="plugins/${plugin}_*.jar"/>
+        <include name="dropins/**/plugins/${plugin}_*.jar"/>
+      </fileset>
     </path>
     <property name="plugin_jar" refid="plugin_jar"/>
     <if>
@@ -108,7 +111,7 @@
       </or>
       <then>
         <fail>
-          No plugin jar file found for '${plugin}' in '${eclipse.home}/plugins'.
+          No plugin jar file found for '${plugin}' in '${eclipse.home}'.
         </fail>
       </then>
     </if>
