@@ -28,6 +28,8 @@ import org.eclim.project.ProjectManagement;
 
 import org.eclim.util.ProjectUtils;
 
+import org.eclipse.core.resources.IProject;
+
 /**
  * Command to delete a project.
  *
@@ -48,7 +50,11 @@ public class ProjectDeleteCommand
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
 
-    ProjectManagement.delete(ProjectUtils.getProject(name), commandLine);
+    IProject project = ProjectUtils.getProject(name);
+    if (!project.exists()){
+      return Services.getMessage("project.not.found", name);
+    }
+    ProjectManagement.delete(project, commandLine);
 
     return Services.getMessage("project.deleted", name);
   }
