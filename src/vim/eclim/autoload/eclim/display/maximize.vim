@@ -324,12 +324,12 @@ function! eclim#display#maximize#RestoreWindows(maximized)
   call s:RestoreFixedWindows()
 
   let curwinnr = winnr()
-  winc w
+  call eclim#util#ExecWithoutAutocmds('winc w')
   while winnr() != curwinnr
     if &ft == 'qf'
       exec "resize " . g:MaximizeQuickfixHeight
     endif
-    winc w
+    call eclim#util#ExecWithoutAutocmds('winc w')
   endwhile
 endfunction " }}}
 
