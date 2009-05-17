@@ -167,7 +167,7 @@ python << EOF
 from __future__ import with_statement
 with(projectroot()):
   from rope.base import project
-  from rope.base.exceptions import RopeError
+  from rope.base.exceptions import ModuleSyntaxError, RopeError
   from rope.contrib import codeassist
   project = project.Project(vim.eval('a:project'))
 
@@ -182,7 +182,7 @@ with(projectroot()):
 
   # code completion
   try:
-    proposals = codeassist.code_assist(project, code, offset)
+    proposals = codeassist.code_assist(project, code, offset, maxfixes=3)
     proposals = codeassist.sorted_proposals(proposals)
     for ii, p in enumerate(proposals):
       proposals[ii] = [p.name, p.kind, parameters(p)]
@@ -191,6 +191,9 @@ with(projectroot()):
     vim.command(
       "let completion_error = 'Completion failed due to indentation error.'"
     )
+  except ModuleSyntaxError, e:
+    message = 'Completion failed due to syntax error: %s' % e.message
+    vim.command("let completion_error = %s" % repr(message))
   except RopeError, e:
     message = 'Completion failed due to rope error: %s' % type(e)
     vim.command("let completion_error = %s" % repr(message))
@@ -230,7 +233,7 @@ with(projectroot()):
   offset = byteOffsetToCharOffset(filename, offset, encoding)
 
   # code completion
-  location = codeassist.get_definition_location(project, code, offset)
+  location = codeassist.get_definition_location(project, code, offset, maxfixes=3)
   if location:
     path = location[0] and \
       location[0].real_path or \
