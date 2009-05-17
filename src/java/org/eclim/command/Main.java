@@ -89,6 +89,7 @@ public class Main
       String result = command.execute(commandLine);
       System.out.println(result);
     }catch(Exception e){
+      logger.debug("Command triggered exception: " + Arrays.toString(args), e);
       e.printStackTrace();
 
       logger.debug("Main - exit on error");
