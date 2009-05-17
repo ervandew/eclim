@@ -29,6 +29,8 @@ import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.eclipse.ui.EclimEditorSite;
 
+import org.eclim.plugin.pdt.util.PhpUtils;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -80,6 +82,8 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  private static final Pattern DISPALY_TO_COMPLETION =
+    Pattern.compile("^(.*)\\s+-\\s+.*");
   private static final Pattern METHOD_WITH_ARGS =
     Pattern.compile("^(\\w+\\s*\\().+\\)\\s*$");
   private static final Pattern REMOVE_HEAD =
@@ -100,6 +104,9 @@ public class CodeCompleteCommand
 
     IProject project = ProjectUtils.getProject(projectName, true);
     IFile ifile = ProjectUtils.getFile(project, file);
+
+    // I really hate this hack
+    PhpUtils.waitOnBuild();
 
     IStructuredModel model =
       StructuredModelManager.getModelManager().getModelForRead(ifile);
@@ -161,14 +168,16 @@ public class CodeCompleteCommand
   @Override
   protected String getCompletion(ICompletionProposal proposal)
   {
-    String completion = proposal.getDisplayString();
+    String completion = proposal.getDisplayString().trim();
+    completion = DISPALY_TO_COMPLETION.matcher(completion).replaceFirst("$1");
+
     Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
     if (matcher.find()){
       completion = matcher.group(1);
     }else if(completion.startsWith("$")){
       completion = completion.substring(1);
     }
-    return completion.trim();
+    return completion;
   }
 
   /**
