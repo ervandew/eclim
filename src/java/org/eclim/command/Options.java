@@ -52,6 +52,7 @@ public class Options
   public static final String DIR_OPTION = "d";
   public static final String ENCODING_OPTION = "e";
   public static final String EXCLUDES_OPTION = "e";
+  public static final String FAMILY_OPTION = "f";
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
