@@ -119,7 +119,8 @@ public class ProjectManagement
     // calling refresh for those project created against an existing code base.
     // performing a preemptive refresh prevents ProjectUtils.getFile
     // (IFile.refreshLocal) from kicking off a rebuild workspace job, which in
-    // turn can cause issues with pdt codeSelect.
+    // turn can cause issues with pdt select and completion engines
+    // (See PhpUtils.waitOnBuild).
     refresh(project, commandLine);
 
     for (int ii = 0; ii < natures.size(); ii++){
