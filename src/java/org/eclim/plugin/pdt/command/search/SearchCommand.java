@@ -24,6 +24,8 @@ import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.pdt.util.PhpUtils;
+
 import org.eclim.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -111,6 +113,10 @@ public class SearchCommand
     // element search
     if(file != null && offset != null && length != null){
       IFile ifile = ProjectUtils.getFile(project, file);
+
+      // I really hate this hack
+      PhpUtils.waitOnBuild();
+
       ISourceModule src = DLTKCore.createSourceModuleFrom(ifile);
       IModelElement[] elements = src.codeSelect(
           getOffset(commandLine), Integer.parseInt(length));
