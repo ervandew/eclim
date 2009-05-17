@@ -199,6 +199,10 @@
     <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
       <arg line="-zxf subversion.tar.gz"/>
     </exec>
+    <exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
+        output="build/test/junit/eclim.log" append="false">
+      <arg line='-command project_refresh -p eclim_unit_test'/>
+    </exec>
 
     <antcall target="test.create_project">
       <param name="project" value="eclim_unit_test_java"/>
