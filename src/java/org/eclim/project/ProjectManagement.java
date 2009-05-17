@@ -116,6 +116,11 @@ public class ProjectManagement
     IProject project = createProject(
         name, folder, (String[])natures.toArray(new String[natures.size()]));
     project.open(null);
+    // calling refresh for those project created against an existing code base.
+    // performing a preemptive refresh prevents ProjectUtils.getFile
+    // (IFile.refreshLocal) from kicking off a rebuild workspace job, which in
+    // turn can cause issues with pdt codeSelect.
+    refresh(project, commandLine);
 
     for (int ii = 0; ii < natures.size(); ii++){
       ProjectManager manager = getProjectManager((String)natures.get(ii));
