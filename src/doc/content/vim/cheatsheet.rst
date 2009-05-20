@@ -264,6 +264,10 @@ Php .projectOption Commands
 Python Commands
 -----------------
 
+- :ref:`:PythonFindDefinition <:PythonFindDefinition>` -
+  Find the element under the cursor.
+- :ref:`:PythonSearchContext` -
+  Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
 - :ref:`:PyLint` - Runs pylint_ on the current file.
 - :ref:`:PythonRegex` - Opens a window for testing python regular expressions.
@@ -281,7 +285,7 @@ Python Commands
   definition, finds the view referenced under the cursor.
 - :ref:`:DjangoContextOpen` -
   Available when editing a python file.  Executes **:DjangoViewOpen**,
-  **:DjangoTemplateOpen**, or **:PythonFindDefinition** depending on the
+  **:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the
   context of the text under the cursor.
 
 

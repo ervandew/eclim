@@ -13,7 +13,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/python/find:
+.. _vim/python/search:
 
 Python Search
 =============
@@ -39,6 +39,16 @@ be opened with the list of results.
   :ref:`rope <vim/python/rope>`.
 
   Please see the :ref:`rope <vim/python/rope>` docs for more information.
+
+.. _\:PythonSearchContext:
+
+As a convenience eclim also provides the command **:PythonSearchContext**.
+This command accepts no arguments and will perform the appropriate search
+depending on the context of the element.
+
+- If the cursor is on the declaration of a class, function, or method then it
+  will search for all occurrences.
+- Otherwise, it will search for the declaration of the element.
 
 
 Configuration

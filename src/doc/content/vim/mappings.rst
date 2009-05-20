@@ -131,11 +131,12 @@ use of these mappings, simply create a ftplugin file for python and place your
 mappings there (:help ftplugin-name).
 
 - The following mapping allows you to simply hit <enter> on an element to
-  perform a search to find its definition.
+  perform a search to find its definition or occurrences depending on the
+  context.
 
   .. code-block:: vim
 
-    nnoremap <silent> <buffer> <cr> :PythonFindDefinition<cr>
+    nnoremap <silent> <buffer> <cr> :PythonSearchContext<cr>
 
 - If you are doing django development you may want to use the following mapping
   which will execute **:DjangoViewOpen**, or **:DjangoTemplateOpen** depending

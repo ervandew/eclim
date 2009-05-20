@@ -29,8 +29,8 @@
   endif
 " }}}
 
-" FindDefinition() {{{
-function eclim#python#find#FindDefinition()
+" Find(context) {{{
+function eclim#python#search#Find(context)
   if !eclim#project#util#IsCurrentFileInProject() || !filereadable(expand('%'))
     return
   endif
@@ -43,30 +43,58 @@ function eclim#python#find#FindDefinition()
   let project = eclim#project#util#GetCurrentProjectRoot()
   let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
 
-  let result = eclim#python#rope#FindDefinition(project, filename, offset, encoding)
+  let results =
+    \ eclim#python#rope#Find(project, filename, offset, encoding, a:context)
+  if type(results) == 0 && results == 0
+    call eclim#util#SetLocationList([])
+    return
+  endif
 
-  if result != ''
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
+  if !empty(results)
+    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
+
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
-    if result =~ escape(expand('%:p'), '\') . '|'
-      if result !~ '|1 col 1|'
+    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
+      if results[0] !~ '|1 col 1|'
         lfirst
       endif
 
     " single result in another file.
-    elseif g:EclimPythonSearchSingleResult != "lopen"
+    elseif len(results) == 1 && g:EclimPythonSearchSingleResult != "lopen"
       let entry = getloclist(0)[0]
       call eclim#util#GoToBufferWindowOrOpen(
         \ bufname(entry.bufnr), g:EclimPythonSearchSingleResult)
-      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
+      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
       call eclim#display#signs#Update()
 
       call cursor(entry.lnum, entry.col)
     else
       lopen
     endif
+  else
+    call eclim#util#EchoInfo("Element not found.")
   endif
+endfunction " }}}
+
+" SearchContext() {{{
+" Executes a contextual search.
+function! eclim#python#search#SearchContext()
+  if getline('.')[col('.') - 1] == '$'
+    call cursor(line('.'), col('.') + 1)
+    let cnum = eclim#util#GetCurrentElementColumn()
+    call cursor(line('.'), col('.') - 1)
+  else
+    let cnum = eclim#util#GetCurrentElementColumn()
+  endif
+
+  if getline('.') =~ '\<\(class\|def\)\s\+\%' . cnum . 'c'
+    call eclim#python#search#Find('occurrences')
+    return
+  endif
+
+  call eclim#python#search#Find('definition')
+
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

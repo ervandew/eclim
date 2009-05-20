@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _1.4.8:
+
+1.4.8 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Python:
+  - Added :ref:`:PythonSearchContext`.
+
 .. _1.4.7:
 
 1.4.7 (May 02, 2009)
@@ -116,7 +127,7 @@ Eclim:
 
 Python:
   - Added support for :ref:`code completion <vim/python/complete>`.
-  - Added support for :ref:`finding an element definition <vim/python/find>`.
+  - Added support for :ref:`finding an element definition <vim/python/search>`.
   - Improved :ref:`:PyLint` support.
 
 .. _1.4.2:

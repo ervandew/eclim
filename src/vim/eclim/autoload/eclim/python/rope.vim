@@ -182,7 +182,8 @@ with(projectroot()):
 
   # code completion
   try:
-    proposals = codeassist.code_assist(project, code, offset, maxfixes=3)
+    proposals = codeassist.code_assist(
+      project, code, offset, resource=resource, maxfixes=3)
     proposals = codeassist.sorted_proposals(proposals)
     for ii, p in enumerate(proposals):
       proposals[ii] = [p.name, p.kind, parameters(p)]
@@ -207,42 +208,68 @@ EOF
 
 endfunction " }}}
 
-" FindDefinition(project, filename, offset, encoding) {{{
-" Attempts to find the definition of the element at the supplied offset.
-function eclim#python#rope#FindDefinition(project, filename, offset, encoding)
+" Find(project, filename, offset, encoding, context) {{{
+function eclim#python#rope#Find(project, filename, offset, encoding, context)
   if !eclim#python#rope#Init(a:project)
     return []
   endif
 
-  let result = ''
+  let results = []
+  let search_error = ''
 
 python << EOF
 from __future__ import with_statement
 with(projectroot()):
   from rope.base import project
-  from rope.contrib import codeassist
+  from rope.base.exceptions import ModuleSyntaxError, RopeError
+  from rope.contrib import findit
   project = project.Project(vim.eval('a:project'))
 
   filename = vim.eval('a:filename')
   offset = int(vim.eval('a:offset'))
   encoding = vim.eval('a:encoding')
+  context = vim.eval('a:context')
 
   resource = project.get_resource(filename)
-  code = resource.read()
 
   offset = byteOffsetToCharOffset(filename, offset, encoding)
 
   # code completion
-  location = codeassist.get_definition_location(project, code, offset, maxfixes=3)
-  if location:
-    path = location[0] and \
-      location[0].real_path or \
-      '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
-    vim.command("let result = '%s|%s col 1|'" % (path, location[1]))
+  try:
+    if context == 'implementations':
+      locations = findit.find_implementations(project, resource, offset)
+    elif context == 'occurrences':
+      locations = findit.find_occurrences(project, resource, offset)
+    else:
+      code = resource.read()
+      location = findit.find_definition(
+        project, code, offset, resource=resource, maxfixes=3)
+      locations = location and [location]
+
+    results = []
+    for location in locations:
+      # TODO: use location.offset
+      results.append('%s|%s col 1|' % (location.resource.real_path, location.lineno))
+
+    vim.command("let results = %s" % repr(results))
+  except IndentationError, e:
+    vim.command(
+      "let search_error = 'Completion failed due to indentation error.'"
+    )
+  except ModuleSyntaxError, e:
+    message = 'Completion failed due to syntax error: %s' % e.message
+    vim.command("let search_error = %s" % repr(message))
+  except RopeError, e:
+    message = 'Completion failed due to rope error: %s' % type(e)
+    vim.command("let search_error = %s" % repr(message))
 EOF
 
-  return result
+  if search_error != ''
+    call eclim#util#EchoError(search_error)
+    return
+  endif
 
+  return results
 endfunction " }}}
 
 " GetOffset() {{{

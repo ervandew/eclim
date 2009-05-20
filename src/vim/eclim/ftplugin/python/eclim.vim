@@ -50,7 +50,10 @@ endif
 " Command Declarations {{{
 
 if !exists(":PythonFindDefinition")
-  command -buffer PythonFindDefinition :call eclim#python#find#FindDefinition()
+  command -buffer PythonFindDefinition :call eclim#python#search#Find('definition')
+endif
+if !exists(":PythonSearchContext")
+  command -buffer PythonSearchContext :call eclim#python#search#SearchContext()
 endif
 
 if !exists(':PythonImportClean')

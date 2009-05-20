@@ -22,13 +22,13 @@ Python
 
    validate
    complete
-   find
+   search
    regex
    django
 
 - :ref:`vim/python/validate`
 - :ref:`vim/python/complete`
-- :ref:`vim/python/find`
+- :ref:`vim/python/search`
 - :ref:`vim/python/regex`
 - :ref:`vim/python/django`
 
@@ -58,7 +58,7 @@ solutions, which then lead to the eventual choice: rope_
 
 **Functionality Utilizing Rope**
   - :ref:`code completion <vim/python/complete>`
-  - :ref:`find element definition <vim/python/find>`
+  - :ref:`find element definition <vim/python/search>`
   - :ref:`:PyLint`
 
 **Configuration**
