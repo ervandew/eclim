@@ -26,11 +26,22 @@ if exists("b:current_syntax")
   finish
 endif
 
-syn match hgModified '^HG: changed .*$'
-syn match hgProperty '^HG: \(user:\|branch\) .*$'
+if has("spell")
+  syn spell toplevel
+endif
+syn match hgComment '^HG:.*' contains=@NoSpell
+syn match hgModified '^HG: changed .*$' contained containedin=hgComment contains=@NoSpell
+syn match hgProperty '^HG: \(user:\|branch\|added\|changed\|removed\)'hs=s+3 contained containedin=hgComment nextgroup=hgPropertyValue contains=@NoSpell
+syn match hgPropertyValue '.*' contained contains=@NoSpell
+syn match hgAction '^HG: \(added\|changed\|removed\)'hs=s+3 contained containedin=hgComment contains=@NoSpell nextgroup=hgFile
+syn match hgFile '.*' contained contains=@NoSpell
 
+hi link hgComment Comment
 hi link hgModified Special
 hi link hgProperty Special
+hi link hgPropertyValue Special
+hi link hgAction Special
+hi link hgFile Constant
 
 let b:current_syntax = "hg"
 
