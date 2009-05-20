@@ -60,6 +60,34 @@ function s:Init()
     \ EclimBaseDir() . '/eclim,' .
     \ EclimBaseDir() . '/eclim/after'
 
+  " Alternate version which inserts the eclim path just after the currently
+  " executing runtime path element and puts the eclim/after path at the very
+  " end.
+  "let basedir = EclimBaseDir()
+
+  "let paths = split(&rtp, ',')
+  "let index = 0
+  "for path in paths
+  "  let index += 1
+  "  if tolower(path) == tolower(basedir)
+  "    break
+  "  endif
+  "endfor
+
+  "let tail = paths[index :]
+
+  "for path in tail
+  "  exec 'set runtimepath-=' . escape(path, ' ')
+  "endfor
+
+  "exec 'set runtimepath+=' .  basedir . '/eclim'
+
+  "for path in tail
+  "  exec 'set runtimepath+=' . escape(path, ' ')
+  "endfor
+
+  "exec 'set runtimepath+=' .  basedir . '/eclim/after'
+
   " need to be manually sourced
   runtime! eclim/plugin/*.vim
   runtime! eclim/after/plugin/*.vim
