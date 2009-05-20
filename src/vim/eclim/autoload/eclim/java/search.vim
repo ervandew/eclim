@@ -283,7 +283,6 @@ function! eclim#java#search#SearchAndDisplay(type, args)
   endif
   if !empty(results)
     if a:type == 'java_search'
-      let g:EclimLastProject = eclim#project#util#GetCurrentProjectName()
       call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
       " if only one result and it's for the current file, just jump to it.
       " note: on windows the expand result must be escaped
