@@ -526,14 +526,33 @@ function! s:ProcessTags()
     endif
 
     let file = substitute(expand('%:p'), '\', '/', 'g')
-    let command = g:Tlist_Ctags_Cmd . ' -f - --format=2 --excmd=pattern ' .
-        \ '--fields=nks --sort=no --language-force=<lang> ' .
-        \ '--<lang>-types=<types> "<file>"'
-    let command = substitute(command, '<lang>', settings.lang, 'g')
-    let command = substitute(command, '<types>', types, 'g')
-    let command = substitute(command, '<file>', file, '')
 
-    let response = eclim#util#System(command)
+    " support generated file contents (like viewing a .class file via jad)
+    let tempfile = ''
+    if !filereadable(file) || &buftype == 'nofile'
+      let tempfile = g:EclimTempDir . '/' . fnamemodify(file, ':t')
+      if tolower(file) != tolower(tempfile)
+        let tempfile = escape(tempfile, ' ')
+        exec 'write! ' . tempfile
+        let file = tempfile
+      endif
+    endif
+
+    try
+      let command = g:Tlist_Ctags_Cmd . ' -f - --format=2 --excmd=pattern ' .
+          \ '--fields=nks --sort=no --language-force=<lang> ' .
+          \ '--<lang>-types=<types> "<file>"'
+      let command = substitute(command, '<lang>', settings.lang, 'g')
+      let command = substitute(command, '<types>', types, 'g')
+      let command = substitute(command, '<file>', file, '')
+
+      let response = eclim#util#System(command)
+    finally
+      if tempfile != ''
+        call delete(tempfile)
+      endif
+    endtry
+
     if v:shell_error
       call eclim#util#EchoError('taglist failed with error code: ' . v:shell_error)
       return
