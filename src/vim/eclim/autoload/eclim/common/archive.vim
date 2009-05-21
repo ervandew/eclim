@@ -26,8 +26,7 @@
 let s:command_list = '-command archive_list -f "<file>"'
 let s:command_list_all = '-command archive_list_all -f "<file>"'
 let s:command_read = '-command archive_read -f "<file>"'
-let s:command_read_class =
-  \ '-command java_class_prototype -p "<project>" -c <class>'
+let s:command_read_class = '-command java_class_prototype -c <class>'
 
 let s:urls = {
     \ 'jar:': ['.jar', '.ear', '.war'],
@@ -75,23 +74,27 @@ endfunction " }}}
 " Reads the contents of an archived file.
 function! eclim#common#archive#ReadFile()
   let file = substitute(expand('%'), '\', '/', 'g')
-  echom 'file = ' . file
   if file =~ '.class$'
-    let class = substitute(file, '.*!\(.*\)\.class', '\1', '')
+    let class = substitute(file, '.*![/]\?\(.*\)\.class', '\1', '')
     let class = substitute(class, '/', '.', 'g')
 
-    let project = exists('g:EclimLastProject') ?
-      \ g:EclimLastProject : eclim#project#util#GetCurrentProjectName()
-
-    if project == ''
-      call eclim#util#EchoError(
-        \ 'Could not open archive file: Unable to determine project.')
-      return
-    endif
+    let archive = substitute(file, '^\w\+:file://\(.\{-}\)!.*', '\1', '')
+    let projects = eclim#project#util#GetProjects(archive)
+    let project = len(projects) > 0 ? keys(projects)[0] : ''
 
     let command = s:command_read_class
-    let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<class>', class, '')
+
+    if project != ''
+      let command .= ' -p "' . project . '"'
+    else
+      let read = substitute(s:command_read, '<file>', file, '')
+      let file = eclim#ExecuteEclim(read)
+      if string(file) == '0'
+        return
+      endif
+      let command .= ' -f "' . file . '"'
+    endif
   else
     let command = substitute(s:command_read, '<file>', file, '')
   endif
