@@ -17,7 +17,10 @@
 package org.eclim.plugin.jdt.command.src;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,6 +40,7 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.IOUtils;
+import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -48,6 +52,15 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
 
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
 /**
  * Command that creates a source prototype of the specified class.
  *
@@ -56,8 +69,9 @@ import org.eclipse.jdt.core.Signature;
 @Command(
   name = "java_class_prototype",
   options =
-    "REQUIRED p project ARG," +
-    "REQUIRED c classname ARG"
+    "REQUIRED c classname ARG," +
+    "OPTIONAL p project ARG," +
+    "OPTIONAL f file ARG"
 )
 public class ClassPrototypeCommand
   extends AbstractCommand
@@ -68,6 +82,9 @@ public class ClassPrototypeCommand
   private static final String INDENT = "\t";
   private static final String IMPORT_PATTERN = "(<.*>|\\[\\]|\\.[0-9])$";
 
+  private static final String OBJECT = "java/lang/Object";
+  private static final String ANNOTATION = "java/lang/annotation/Annotation";
+
   /**
    * {@inheritDoc}
    */
@@ -75,31 +92,63 @@ public class ClassPrototypeCommand
     throws Exception
   {
     String className = commandLine.getValue(Options.CLASSNAME_OPTION);
-    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+
+    if (!commandLine.hasOption(Options.PROJECT_OPTION) &&
+        !commandLine.hasOption(Options.FILE_OPTION))
+    {
+      throw new RuntimeException(
+          Services.getMessage("prototype.missing.argument"));
+    }
 
     File file = new File(
       SystemUtils.JAVA_IO_TMPDIR + '/' + className.replace('.', '/') + ".java");
-    if(!file.exists()){
-      new File(FileUtils.getFullPath(file.getAbsolutePath())).mkdirs();
-      file.deleteOnExit();
-      FileWriter out = null;
-      try{
-        IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+    new File(FileUtils.getFullPath(file.getAbsolutePath())).mkdirs();
+    file.deleteOnExit();
+    FileWriter out = null;
+    try{
 
+      out = new FileWriter(file);
+
+      if(commandLine.hasOption(Options.FILE_OPTION)){
+        prototype(commandLine.getValue(Options.FILE_OPTION), out);
+      }else{
+        String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+        IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
         IType type = javaProject.findType(className);
+
         if(type == null){
           throw new IllegalArgumentException(
               Services.getMessage("type.not.found", projectName, className));
         }
 
         String prototype = prototype(type);
-        out = new FileWriter(file);
         out.write(prototype);
-      }finally{
-        IOUtils.closeQuietly(out);
       }
+
+    }finally{
+      IOUtils.closeQuietly(out);
     }
     return file.getAbsolutePath();
+  }
+
+  /**
+   * Generate a prototype for the supplied file path.
+   *
+   * @param file The path to the class file.
+   * @param writer The writer to output the prototype to.
+   * @return The prototype.
+   */
+  protected void prototype(String file, Writer writer)
+    throws Exception
+  {
+    FileInputStream in = null;
+    try{
+      in = new FileInputStream(file);
+      ClassReader reader = new ClassReader(in);
+      reader.accept(new AsmClassVisitor(new PrintWriter(writer)), false);
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
   }
 
   /**
@@ -376,6 +425,725 @@ public class ClassPrototypeCommand
       if(pckg != null && pckg.length() > 0){
         name = pckg + '.' + name;
         imports.add(name.replaceFirst(IMPORT_PATTERN, ""));
+      }
+    }
+  }
+
+  private static class AsmClassVisitor
+    implements ClassVisitor
+  {
+    private PrintWriter writer;
+    private StringBuffer classBuffer;
+    private String name;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param writer The writer for this instance.
+     */
+    public AsmClassVisitor(PrintWriter writer)
+    {
+      super();
+      this.writer = writer;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visit(int,int,String,String,String,String[])
+     */
+    public void visit(
+        int version, int access,
+        String name, String signature,
+        String superName, String[] interfaces)
+    {
+      writer.print(Services.getMessage("prototype.header.asm"));
+
+      int index = name.lastIndexOf('/');
+      if(index != -1){
+        String pack = name.substring(0, index).replace('/', '.');
+        name = name.substring(index + 1);
+        writer.print("package ");
+        writer.print(pack);
+        writer.println(";\n");
+      }
+      this.name = name;
+
+      classBuffer = new StringBuffer()
+        .append(getAccess(access));
+      if((access & Opcodes.ACC_INTERFACE) == 1){
+        classBuffer.append("interface ");
+      }else if((access & Opcodes.ACC_ENUM) == 1){
+        classBuffer.append("enum ");
+      }else{
+        if (interfaces.length > 0 && interfaces[0].equals(ANNOTATION)){
+          classBuffer.append("@interface ");
+        }else{
+          classBuffer.append("class ");
+        }
+      }
+      classBuffer.append(name).append('\n');
+
+      if (!OBJECT.equals(superName)){
+        classBuffer.append(INDENT)
+          .append("extends ")
+          .append(superName.replace('/', '.'))
+          .append('\n');
+      }
+
+      StringBuffer ifaces = new StringBuffer();
+      for(String iface : interfaces){
+        if(!ANNOTATION.equals(iface)){
+          if(ifaces.length() > 0){
+            ifaces.append(", ");
+          }
+          ifaces.append(iface.replace('/', '.'));
+        }
+      }
+
+      if(ifaces.length() > 0){
+        classBuffer.append(INDENT)
+          .append("implements ")
+          .append(ifaces)
+          .append('\n');
+      }
+
+      classBuffer.append("{\n");
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitSource(String,String)
+     */
+    public void visitSource(String source, String debug)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitOuterClass(String,String,String)
+     */
+    public void visitOuterClass(String owner, String name, String desc)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitAnnotation(String,boolean)
+     */
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible)
+    {
+      writer.print('@');
+      writer.print(getDescName(desc));
+      return new AsmAnnotationVisitor();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitAttribute(Attribute)
+     */
+    public void visitAttribute(Attribute attr)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitInnerClass(String,String,String,int)
+     */
+    public void visitInnerClass(
+        String name, String outerName, String innerName, int access)
+    {
+      flushClassDeclaration();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitField(int,String,String,String,Object)
+     */
+    public FieldVisitor visitField(
+        int access, String name, String desc, String signature, Object value)
+    {
+      flushClassDeclaration();
+      return new AsmFieldVisitor(access, name, desc, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitMethod(int,String,String,String,String[])
+     */
+    public MethodVisitor visitMethod(
+        int access, String name, String desc, String signature, String[] exceptions)
+    {
+      flushClassDeclaration();
+      return new AsmMethodVisitor(
+          access, name, signature != null ? signature : desc, exceptions);
+    }
+
+    private void flushClassDeclaration()
+    {
+      if (classBuffer != null){
+        writer.write(classBuffer.toString());
+        classBuffer = null;
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ClassVisitor#visitEnd()
+     */
+    public void visitEnd()
+    {
+      flushClassDeclaration();
+      writer.print('}');
+    }
+
+    private String getDescName(String desc)
+    {
+      if (desc != null){
+        // genrics
+        int index = desc.indexOf('<');
+        if (index != -1){
+          String outer = desc.substring(0, index);
+          String inner = desc.substring(index + 1, desc.lastIndexOf('>'));
+          return getDescName(outer) + '<' + getDescName(inner) + '>';
+        }
+
+        index = desc.lastIndexOf('/');
+        if (index != -1){
+          String name = desc.substring(index + 1);
+          if(name.endsWith(";")){
+            name = name.substring(0, name.length() - 1);
+          }
+          while (desc.startsWith("[")){
+            desc = desc.substring(1);
+            name += "[]";
+          }
+          return name;
+        }
+
+        String primitive = null;
+        if ("V".equals(desc)){
+          return "void";
+        }else if (desc.endsWith("I")){
+          primitive = "int";
+        }else if (desc.endsWith("J")){
+          primitive = "long";
+        }else if (desc.endsWith("S")){
+          primitive = "short";
+        }else if (desc.endsWith("C")){
+          primitive = "char";
+        }else if (desc.endsWith("B")){
+          primitive = "byte";
+        }else if (desc.endsWith("Z")){
+          primitive = "boolean";
+        }
+        if (primitive != null){
+          for (int ii = 0; ii < desc.length() - 1; ii++){
+            primitive += "[]";
+          }
+          return primitive;
+        }
+      }
+      return StringUtils.EMPTY;
+    }
+
+    private String getAccess(int access)
+    {
+      StringBuffer buffer = new StringBuffer();
+      if((access & Opcodes.ACC_PUBLIC) != 0){
+        buffer.append("public ");
+      }
+
+      if((access & Opcodes.ACC_PRIVATE) != 0){
+        buffer.append("private ");
+      }
+
+      if((access & Opcodes.ACC_PROTECTED) != 0){
+        buffer.append("protected ");
+      }
+
+      if((access & Opcodes.ACC_STATIC) != 0){
+        buffer.append("static ");
+      }
+
+      if((access & Opcodes.ACC_FINAL) != 0){
+        buffer.append("final ");
+      }
+
+      if((access & Opcodes.ACC_TRANSIENT) != 0){
+        buffer.append("transient ");
+      }
+
+      if((access & Opcodes.ACC_NATIVE) != 0){
+        buffer.append("native ");
+      }
+
+      if((access & Opcodes.ACC_SYNCHRONIZED) != 0){
+        buffer.append("synchronized ");
+      }
+
+      if((access & Opcodes.ACC_ABSTRACT) != 0){
+        buffer.append("abstract ");
+      }
+
+      return buffer.toString();
+    }
+
+    private String getValueString(Object value)
+    {
+      if(value instanceof String){
+        return new StringBuffer()
+          .append('"').append(value).append('"').toString();
+      }else if(value instanceof Character){
+        return new StringBuffer()
+          .append('\'').append(value).append('\'').toString();
+      }
+      return String.valueOf(value);
+    }
+
+    private class AsmAnnotationVisitor
+      implements AnnotationVisitor
+    {
+      private boolean wrote = false;
+      private boolean wroteOpenParen = false;
+
+      /**
+       * {@inheritDoc}
+       * @see AnnotationVisitor#visit(String,Object)
+       */
+      public void visit(String name, Object value)
+      {
+        if(name != null){
+          writeOpenParen();
+          writer.print(name);
+          writer.print(" = ");
+          writer.print(getValueString(value));
+          wrote = true;
+        }
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see AnnotationVisitor#visitEnum(String,String,String)
+       */
+      public void visitEnum(String name, String desc, String value)
+      {
+        writeOpenParen();
+        writer.print(getDescName(desc));
+        writer.print('.');
+        writer.print(value);
+        wrote = true;
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see AnnotationVisitor#visitAnnotation(String,String)
+       */
+      public AnnotationVisitor visitAnnotation(String name, String desc)
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see AnnotationVisitor#visitArray(String)
+       */
+      public AnnotationVisitor visitArray(String name)
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see AnnotationVisitor#visitEnd()
+       */
+      public void visitEnd()
+      {
+        if (wrote){
+          if(wroteOpenParen){
+            writer.print(')');
+          }
+          writer.println();
+          wrote = false;
+        }
+      }
+
+      private void writeOpenParen()
+      {
+        if (!wroteOpenParen){
+          writer.print('(');
+          wroteOpenParen = true;
+        }else{
+          writer.print(", ");
+        }
+      }
+    }
+
+    private class AsmMethodVisitor
+      implements MethodVisitor
+    {
+      private int access;
+      private String name;
+      private String desc;
+      private String[] exceptions;
+
+      /**
+       * Constructs a new instance.
+       *
+       * @param access The access for this instance.
+       * @param name The name for this instance.
+       * @param desc The desc for this instance.
+       * @param exceptions The exceptions for this instance.
+       */
+      public AsmMethodVisitor(
+          int access, String name, String desc, String[] exceptions)
+      {
+        this.access = access;
+        this.name = name;
+        this.desc = desc;
+        this.exceptions = exceptions;
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitAnnotationDefault()
+       */
+      public AnnotationVisitor visitAnnotationDefault()
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitAnnotation(String,boolean)
+       */
+      public AnnotationVisitor visitAnnotation(String desc, boolean visible)
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitParameterAnnotation(int,String,boolean)
+       */
+      public AnnotationVisitor visitParameterAnnotation(
+          int parameter, String desc, boolean visible)
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitAttribute(Attribute)
+       */
+      public void visitAttribute(Attribute attr)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitCode()
+       */
+      public void visitCode()
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitInsn(int)
+       */
+      public void visitInsn(int opcode)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitIntInsn(int,int)
+       */
+      public void visitIntInsn(int opcode, int operand)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitVarInsn(int,int)
+       */
+      public void visitVarInsn(int opcode, int var)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitTypeInsn(int,String)
+       */
+      public void visitTypeInsn(int opcode, String desc)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitFieldInsn(int,String,String,String)
+       */
+      public void visitFieldInsn(
+          int opcode, String owner, String name, String desc)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitMethodInsn(int,String,String,String)
+       */
+      public void visitMethodInsn(
+          int opcode, String owner, String name, String desc)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitJumpInsn(int,Label)
+       */
+      public void visitJumpInsn(int opcode, Label operand)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitLabel(Label)
+       */
+      public void visitLabel(Label label)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitLdcInsn(Object)
+       */
+      public void visitLdcInsn(Object cst)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitIincInsn(int,int)
+       */
+      public void visitIincInsn(int var, int increment)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitTableSwitchInsn(int,int,Label,Label[])
+       */
+      public void visitTableSwitchInsn(
+          int min, int max, Label dflt, Label[] labels)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitLookupSwitchInsn(Label,int[],Label[])
+       */
+      public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitMultiANewArrayInsn(String,int)
+       */
+      public void visitMultiANewArrayInsn(String desc, int dims)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitTryCatchBlock(Label,Label,Label,String)
+       */
+      public void visitTryCatchBlock(
+          Label start, Label end, Label handler, String type)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitLocalVariable(String,String,String,Label,Label,int)
+       */
+      public void visitLocalVariable(
+          String name, String desc, String signature,
+          Label start, Label end, int index)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitLineNumber(int,Label)
+       */
+      public void visitLineNumber(int line, Label start)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitMaxs(int,int)
+       */
+      public void visitMaxs(int maxStack, int maxLocal)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitEnd()
+       */
+      public void visitEnd()
+      {
+        // skip static initializers
+        if ("<clinit>".equals(name)){
+          return;
+        }
+
+        if ("<init>".equals(name)){
+          name = AsmClassVisitor.this.name;
+        }
+
+        String ret = "void";
+        int index = desc.lastIndexOf(')');
+        if(index != -1){
+          ret = getDescName(desc.substring(index + 1, desc.length()));
+        }
+
+        StringBuffer params = new StringBuffer();
+        int openParen = desc.indexOf('(');
+        int closeParen = desc.indexOf(')');
+        if (closeParen > (openParen + 1)){
+          String args = desc.substring(openParen + 1, closeParen);
+          StringBuffer buffer = new StringBuffer();
+          int paramIndex = 0;
+          int typeLevel = 0;
+          boolean inType = false;
+          for(char c : args.toCharArray()){
+            // arrays, generic type
+            if (c == '[' || c == '<'){
+              inType = false;
+              buffer.append(c);
+              continue;
+            }
+
+            // end of non-primitive or primitive type
+            if (c == ';' || (
+                  !inType &&
+                  Character.isLetter(c) &&
+                  Character.isUpperCase(c) &&
+                  c != 'L'))
+            {
+              buffer.append(c);
+
+              // edge case for generics
+              if (c == ';'){
+                typeLevel -= 1;
+                inType = false;
+              }
+
+              if (typeLevel > 0){
+                continue;
+              }
+
+              if(params.length() != 0){
+                params.append(", ");
+              }
+              params.append(getDescName(buffer.toString()));
+              params.append(" arg").append(paramIndex++);
+              buffer = new StringBuffer();
+              continue;
+            }
+
+            if ((!inType && c == 'L') || c == '<'){
+              typeLevel += 1;
+              inType = true;
+            }
+            buffer.append(c);
+          }
+        }
+
+        writer.print(INDENT);
+        writer.print(getAccess(access));
+        writer.print(ret);
+        writer.print(' ');
+        writer.print(name);
+        writer.print('(');
+        writer.print(params);
+        writer.print(')');
+        if(exceptions != null && exceptions.length > 0){
+          writer.println();
+          writer.print(INDENT);
+          writer.print(INDENT);
+          writer.print("throws ");
+          for(int ii = 0; ii < exceptions.length; ii++){
+            if(ii > 0){
+              writer.print(", ");
+            }
+            writer.print(getDescName(exceptions[ii]));
+          }
+        }
+        writer.print(";\n");
+      }
+    }
+
+    private class AsmFieldVisitor
+      implements FieldVisitor
+    {
+      private int access;
+      private String name;
+      private String desc;
+      private Object value;
+
+      /**
+       * Constructs a new instance.
+       *
+       * @param access The access for this instance.
+       * @param name The name for this instance.
+       * @param desc The desc for this instance.
+       * @param value The value for this instance.
+       */
+      public AsmFieldVisitor(int access, String name, String desc, Object value)
+      {
+        this.access = access;
+        this.name = name;
+        this.desc = desc;
+        this.value = value;
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see MethodVisitor#visitAnnotation(String,boolean)
+       */
+      public AnnotationVisitor visitAnnotation(String desc, boolean visible)
+      {
+        return new AsmAnnotationVisitor();
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see FieldVisitor#visitAttribute(Attribute)
+       */
+      public void visitAttribute(Attribute attr)
+      {
+      }
+
+      /**
+       * {@inheritDoc}
+       * @see FieldVisitor#visitEnd()
+       */
+      public void visitEnd()
+      {
+        writer.print(INDENT);
+        writer.print(getAccess(access));
+        writer.print(getDescName(desc));
+        writer.print(' ');
+        writer.print(name);
+        if(value != null){
+          writer.print(" = ");
+          writer.print(getValueString(value));
+        }
+        writer.print(";\n");
       }
     }
   }
