@@ -35,7 +35,7 @@ endif
 if g:EclimDtdValidate
   augroup eclim_css_validate
     autocmd!
-    autocmd BufWritePost *.dtd call eclim#common#validate#Validate('dtd', 1)
+    autocmd BufWritePost *.dtd call eclim#lang#Validate('dtd', 1)
   augroup END
 endif
 
@@ -44,7 +44,7 @@ endif
 " Command Declarations {{{
 
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('dtd', 0)
+  command -nargs=0 -buffer Validate :call eclim#lang#Validate('dtd', 0)
 endif
 
 " }}}

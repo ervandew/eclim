@@ -35,7 +35,7 @@ endif
 if g:EclimXsdValidate
   augroup eclim_xsd_validate
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('xsd', 1)
+    autocmd BufWritePost <buffer> call eclim#lang#Validate('xsd', 1)
   augroup END
 endif
 
@@ -48,7 +48,7 @@ augroup END
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('xsd', 0)
+command! -nargs=0 -buffer Validate :call eclim#lang#Validate('xsd', 0)
 
 " }}}
 

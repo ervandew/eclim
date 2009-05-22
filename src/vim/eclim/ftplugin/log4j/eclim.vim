@@ -39,7 +39,7 @@ endif
 if g:EclimLog4jValidate
   augroup eclim_log4j_validate
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('log4j', 1)
+    autocmd BufWritePost <buffer> call eclim#lang#Validate('log4j', 1)
   augroup END
 endif
 
@@ -60,7 +60,7 @@ endif
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('log4j', 0)
+command! -nargs=0 -buffer Validate :call eclim#lang#Validate('log4j', 0)
 
 " }}}
 

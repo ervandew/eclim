@@ -36,7 +36,7 @@ function! eclim#html#validate#Validate(on_save)
   " prevent closing of sign column between validation methods
   call eclim#display#signs#SetPlaceholder()
 
-  call eclim#common#validate#Validate('html', a:on_save)
+  call eclim#lang#Validate('html', a:on_save)
 
   " prevent closing of sign column between validation methods
   call eclim#display#signs#SetPlaceholder()
@@ -54,7 +54,7 @@ function! eclim#html#validate#Validate(on_save)
   call eclim#display#signs#SetPlaceholder()
 
   if search('<style', 'cnw')
-    call eclim#common#validate#Validate('css', a:on_save)
+    call eclim#lang#Validate('css', a:on_save)
     let css_errors = getloclist(0)
   endif
 

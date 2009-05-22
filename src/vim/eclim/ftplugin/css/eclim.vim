@@ -41,7 +41,7 @@ setlocal completefunc=eclim#css#complete#CodeComplete
 if g:EclimCssValidate
   augroup eclim_css_validate
     autocmd!
-    autocmd BufWritePost *.css call eclim#common#validate#Validate('css', 1)
+    autocmd BufWritePost *.css call eclim#lang#Validate('css', 1)
   augroup END
 endif
 
@@ -50,7 +50,7 @@ endif
 " Command Declarations {{{
 
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#common#validate#Validate('css', 0)
+  command -nargs=0 -buffer Validate :call eclim#lang#Validate('css', 0)
 endif
 
 " }}}

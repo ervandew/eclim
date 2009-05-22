@@ -38,7 +38,7 @@ endif
 if g:EclimWebXmlValidate
   augroup eclim_webxml_validate
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('webxml', 1)
+    autocmd BufWritePost <buffer> call eclim#lang#Validate('webxml', 1)
   augroup END
 endif
 
@@ -59,7 +59,7 @@ endif
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('webxml', 0)
+command! -nargs=0 -buffer Validate :call eclim#lang#Validate('webxml', 0)
 
 " }}}
 

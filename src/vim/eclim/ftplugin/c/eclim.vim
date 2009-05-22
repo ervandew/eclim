@@ -39,14 +39,15 @@ setlocal completefunc=eclim#c#complete#CodeComplete
 
 augroup eclim_c
   autocmd!
-  autocmd BufWritePost <buffer> call eclim#c#util#UpdateSrcFile(0)
+  autocmd BufWritePost <buffer>
+    \ call eclim#lang#UpdateSrcFile('c', g:EclimCValidate)
 augroup END
 
 " }}}
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#c#util#UpdateSrcFile(1)
+command! -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('c', 1)
 
 if !exists(":CFindDefinition")
   command -buffer CFindDefinition :call eclim#c#search#FindDefinition('declarations')

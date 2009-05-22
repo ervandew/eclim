@@ -37,7 +37,7 @@ endif
 if g:EclimWsdlValidate
   augroup eclim_wsdl_validate
     autocmd!
-    autocmd BufWritePost *.wsdl call eclim#common#validate#Validate('wsdl', 1)
+    autocmd BufWritePost *.wsdl call eclim#lang#Validate('wsdl', 1)
   augroup END
 endif
 
@@ -50,7 +50,7 @@ augroup END
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('wsdl', 0)
+command! -nargs=0 -buffer Validate :call eclim#lang#Validate('wsdl', 0)
 
 " }}}
 

@@ -41,7 +41,7 @@ setlocal completefunc=eclim#java#ant#complete#CodeComplete
 if g:EclimAntValidate
   augroup eclim_xml
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#common#validate#Validate('ant', 1)
+    autocmd BufWritePost <buffer> call eclim#lang#Validate('ant', 1)
   augroup END
 endif
 
@@ -53,7 +53,7 @@ if !exists(":AntDoc")
   command -buffer -nargs=? AntDoc :call eclim#java#ant#doc#FindDoc('<args>')
 endif
 
-command! -nargs=0 -buffer Validate :call eclim#common#validate#Validate('ant', 0)
+command! -nargs=0 -buffer Validate :call eclim#lang#Validate('ant', 0)
 
 " }}}
 

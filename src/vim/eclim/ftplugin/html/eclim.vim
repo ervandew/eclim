@@ -63,7 +63,7 @@ endif
 
 if !exists(":Validate")
   command -nargs=0 -buffer Validate
-    \ :call eclim#common#validate#Validate('html', 0)
+    \ :call eclim#lang#Validate('html', 0)
 endif
 
 if !exists(":BrowserOpen")
