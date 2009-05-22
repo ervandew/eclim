@@ -349,8 +349,11 @@ function! s:RestoreFixedWindows()
   let last = winnr('$')
   let index = 1
   while index <= last
-    if getbufvar(winbufnr(index), 'eclim_temp_window') != ''
-      exec index . 'resize 10'
+    let bufnr = winbufnr(index)
+    if getbufvar(bufnr, 'eclim_temp_window') != ''
+      let height = getbufvar(bufnr, 'eclim_temp_window_height')
+      let height = height != '' ? height : '10'
+      exec index . 'resize ' . height
     endif
     let index += 1
   endwhile
@@ -468,40 +471,56 @@ function! s:RowMinimized(window)
   " check windows to the right
   let curwinnr = winnr()
   winc l
-  while winnr() != curwinnr
-    let buffer = bufnr('%')
-    let curwinnr = winnr()
-    if winheight(curwinnr) == winheight(a:window) &&
-        \ expand('%') !~ g:MaximizeExcludes
-      if getwinvar(curwinnr, 'minimized') == ''
-        exec origwinnr . 'winc w'
-        return []
-      else
-        call add(windows, curwinnr)
+  if winnr() == a:window
+    let right = 0
+  else
+    let right = 1
+    while winnr() != curwinnr
+      let buffer = bufnr('%')
+      let curwinnr = winnr()
+      if winheight(curwinnr) == winheight(a:window) &&
+          \ expand('%') !~ g:MaximizeExcludes
+        if getwinvar(curwinnr, 'minimized') == ''
+          exec origwinnr . 'winc w'
+          return []
+        else
+          call add(windows, curwinnr)
+        endif
       endif
-    endif
-    winc l
-  endwhile
+      winc l
+    endwhile
+  endif
 
   exec a:window . 'winc w'
 
   " check windows to the left
   let curwinnr = winnr()
   winc h
-  while winnr() != curwinnr
-    let buffer = bufnr('%')
-    let curwinnr = winnr()
-    if winheight(curwinnr) == winheight(a:window) &&
-        \ expand('%') !~ g:MaximizeExcludes
-      if getwinvar(curwinnr, 'minimized') == ''
-        exec origwinnr . 'winc w'
-        return []
-      else
-        call add(windows, curwinnr)
+  if winnr() == a:window
+    let left = 0
+  else
+    let left = 1
+    while winnr() != curwinnr
+      let buffer = bufnr('%')
+      let curwinnr = winnr()
+      if winheight(curwinnr) == winheight(a:window) &&
+          \ expand('%') !~ g:MaximizeExcludes
+        if getwinvar(curwinnr, 'minimized') == ''
+          exec origwinnr . 'winc w'
+          return []
+        else
+          call add(windows, curwinnr)
+        endif
       endif
-    endif
-    winc h
-  endwhile
+      winc h
+    endwhile
+  endif
+
+  " if the window had none to the left or right, then it is in a row all by
+  " itself.
+  if !right && !left
+    call add(windows, a:window)
+  endif
 
   exec origwinnr . 'winc w'
   return windows
@@ -518,40 +537,56 @@ function! s:ColumnMinimized(window)
   " check windows above
   let curwinnr = winnr()
   winc k
-  while winnr() != curwinnr
-    let buffer = bufnr('%')
-    let curwinnr = winnr()
-    if winwidth(curwinnr) == winwidth(a:window) &&
-        \ expand('%') !~ g:MaximizeExcludes
-      if getwinvar(curwinnr, 'minimized') == ''
-        exec origwinnr . 'winc w'
-        return []
-      else
-        call add(windows, curwinnr)
+  if winnr() == a:window
+    let above = 0
+  else
+    let above = 1
+    while winnr() != curwinnr
+      let buffer = bufnr('%')
+      let curwinnr = winnr()
+      if winwidth(curwinnr) == winwidth(a:window) &&
+          \ expand('%') !~ g:MaximizeExcludes
+        if getwinvar(curwinnr, 'minimized') == ''
+          exec origwinnr . 'winc w'
+          return []
+        else
+          call add(windows, curwinnr)
+        endif
       endif
-    endif
-    winc k
-  endwhile
+      winc k
+    endwhile
+  endif
 
   exec a:window . 'winc w'
 
   " check windows below
   let curwinnr = winnr()
   winc j
-  while winnr() != curwinnr
-    let buffer = bufnr('%')
-    let curwinnr = winnr()
-    if winwidth(curwinnr) == winwidth(a:window) &&
-        \ expand('%') !~ g:MaximizeExcludes
-      if getwinvar(curwinnr, 'minimized') == ''
-        exec origwinnr . 'winc w'
-        return []
-      else
-        call add(windows, curwinnr)
+  if winnr() == a:window
+    let below = 0
+  else
+    let below = 1
+    while winnr() != curwinnr
+      let buffer = bufnr('%')
+      let curwinnr = winnr()
+      if winwidth(curwinnr) == winwidth(a:window) &&
+          \ expand('%') !~ g:MaximizeExcludes
+        if getwinvar(curwinnr, 'minimized') == ''
+          exec origwinnr . 'winc w'
+          return []
+        else
+          call add(windows, curwinnr)
+        endif
       endif
-    endif
-    winc j
-  endwhile
+      winc j
+    endwhile
+  endif
+
+  " if the window had none above or below, then it is in a column all by
+  " itself.
+  if !above && !below
+    call add(windows, a:window)
+  endif
 
   exec origwinnr . 'winc w'
   return windows
