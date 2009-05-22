@@ -913,7 +913,13 @@ endfunction " }}}
 " DisplayActionChooser(file, actions) {{{
 function s:DisplayActionChooser(file, actions)
   new
-  exec "resize " . (len(a:actions) + 1)
+  let height = len(a:actions) + 1
+
+  " for maximize.vim
+  let b:eclim_temp_window = 1
+  let b:eclim_temp_window_height = height
+
+  exec 'resize ' . height
 
   setlocal noreadonly modifiable
   let b:actions = a:actions
