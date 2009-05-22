@@ -154,15 +154,4 @@ function! eclim#java#complete#CodeComplete(findstart, base)
   endif
 endfunction " }}}
 
-" CompletionFilter(filter) {{{
-" Filter current completions.
-"function! eclim#java#complete#CompletionFilter(filter)
-"  let start = JavaCodeComplete(1, "")
-"  while col('.') > start + 1
-"    normal! <BS>
-"  endwhile
-"  echom " #### filter = " . a:filter . " start = " . start
-"  return "\<C-X>\<C-U>"
-"endfunction " }}}
-
 " vim:ft=vim:fdm=marker
