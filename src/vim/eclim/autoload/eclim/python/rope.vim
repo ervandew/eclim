@@ -247,9 +247,11 @@ with(projectroot()):
       locations = location and [location]
 
     results = []
-    for location in locations:
-      # TODO: use location.offset
-      results.append('%s|%s col 1|' % (location.resource.real_path, location.lineno))
+    if locations:
+      for location in locations:
+        # TODO: use location.offset
+        results.append(
+          '%s|%s col 1|' % (location.resource.real_path, location.lineno))
 
     vim.command("let results = %s" % repr(results))
   except IndentationError, e:
