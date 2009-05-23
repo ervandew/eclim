@@ -14,30 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.project;
+package org.eclim.plugin.dltk;
 
-import org.eclim.plugin.dltk.project.DltkProjectManager;
+import org.eclim.Services;
 
-import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.IDLTKLanguageToolkit;
-
-import org.eclipse.php.internal.core.project.PHPNature;
+import org.eclim.plugin.AbstractPluginResources;
 
 /**
- * Implementation of {@link ProjectManager} for php projects.
+ * Implementation of AbstractPluginResources.
  *
  * @author Eric Van Dewoestine
  */
-public class PhpProjectManager
-  extends DltkProjectManager
+public class PluginResources
+  extends AbstractPluginResources
 {
   /**
+   * Name that can be used to lookup this PluginResources from
+   * {@link Services#getPluginResources(String)}.
+   */
+  public static final String NAME = "org.eclim.dltk";
+
+  /**
    * {@inheritDoc}
-   * @see DltkProjectManager#getLanguageToolkit()
+   * @see AbstractPluginResources#initialize(String)
    */
   @Override
-  public IDLTKLanguageToolkit getLanguageToolkit()
+  public void initialize(String name)
   {
-    return DLTKLanguageManager.getLanguageToolkit(PHPNature.ID);
+    super.initialize(name);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see AbstractPluginResources#getBundleBaseName()
+   */
+  protected String getBundleBaseName()
+  {
+    return "org/eclim/plugin/dltk/messages";
   }
 }

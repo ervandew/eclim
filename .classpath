@@ -55,6 +55,8 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.5.0.v20090429-1800b.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/dropins/dltk-core/eclipse/plugins/org.eclipse.dltk.core_1.0.0.v20090505.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/dropins/dltk-core/eclipse/plugins/org.eclipse.dltk.ui_1.0.0.v20090505.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/dropins/dltk-ruby/eclipse/plugins/org.eclipse.dltk.ruby.core_1.0.0.v20090505.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/dropins/dltk-ruby/eclipse/plugins/org.eclipse.dltk.ruby.ui_1.0.0.v20090415-2327.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/dropins/pdt/eclipse/plugins/org.eclipse.php.core_2.1.0.v20090506-2235"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/dropins/pdt/eclipse/plugins/org.eclipse.php.ui_2.1.0.v20090506-2235.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/dropins/wst/eclipse/plugins/org.eclipse.wst.css.ui_1.0.400.v200904292008.jar"/>

@@ -14,23 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt;
+package org.eclim.plugin.dltkruby;
 
 import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
-import org.eclim.plugin.core.preference.PreferenceFactory;
-import org.eclim.plugin.core.preference.Preferences;
+import org.eclim.plugin.dltkruby.project.RubyProjectManager;
 
-import org.eclim.plugin.core.project.ProjectManagement;
-import org.eclim.plugin.core.project.ProjectNatureFactory;
+import org.eclim.project.ProjectManagement;
+import org.eclim.project.ProjectNatureFactory;
 
-import org.eclim.plugin.pdt.preference.OptionHandler;
-
-import org.eclim.plugin.pdt.project.PhpProjectManager;
-
-import org.eclipse.php.internal.core.project.PHPNature;
+import org.eclipse.dltk.ruby.core.RubyNature;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -44,7 +39,7 @@ public class PluginResources
    * Name that can be used to lookup this PluginResources from
    * {@link Services#getPluginResources(String)}.
    */
-  public static final String NAME = "org.eclim.pdt";
+  public static final String NAME = "org.eclim.dltkruby";
 
   /**
    * {@inheritDoc}
@@ -55,13 +50,9 @@ public class PluginResources
   {
     super.initialize(name);
 
-    ProjectNatureFactory.addNature("php", PHPNature.ID);
-    ProjectManagement.addProjectManager(PHPNature.ID, new PhpProjectManager());
-
-    Preferences.addOptionHandler("org.eclipse.php", new OptionHandler());
-    PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",
-      "PDT org.eclipse.php.core.phpVersion php[45]"
-    );
+    ProjectNatureFactory.addNature("ruby", RubyNature.NATURE_ID);
+    ProjectManagement.addProjectManager(
+        RubyNature.NATURE_ID, new RubyProjectManager());
   }
 
   /**
@@ -70,6 +61,6 @@ public class PluginResources
    */
   protected String getBundleBaseName()
   {
-    return "org/eclim/plugin/pdt/messages";
+    return "org/eclim/plugin/dltkruby/messages";
   }
 }

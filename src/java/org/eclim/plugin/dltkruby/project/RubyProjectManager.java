@@ -14,41 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.buildpath;
+package org.eclim.plugin.dltkruby.project;
 
-import org.eclim.Services;
+import org.eclim.plugin.dltk.project.DltkProjectManager;
 
-import org.eclim.annotation.Command;
+import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 
-import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
-
-import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.ruby.core.RubyNature;
 
 /**
- * Command to delete an build path variable.
+ * Implementation of {@link ProjectManager} for php projects.
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "php_buildpath_variable_delete",
-  options = "REQUIRED n name ARG"
-)
-public class BuildpathVariableDeleteCommand
-  extends AbstractCommand
+public class RubyProjectManager
+  extends DltkProjectManager
 {
   /**
    * {@inheritDoc}
+   * @see DltkProjectManager#getLanguageToolkit()
    */
-  public String execute(CommandLine commandLine)
-    throws Exception
+  @Override
+  public IDLTKLanguageToolkit getLanguageToolkit()
   {
-    String name = commandLine.getValue(Options.NAME_OPTION);
-
-    DLTKCore.removeBuildpathVariable(name, null);
-
-    return Services.getMessage("buildpath.variable.deleted", name);
+    return DLTKLanguageManager.getLanguageToolkit(RubyNature.NATURE_ID);
   }
 }

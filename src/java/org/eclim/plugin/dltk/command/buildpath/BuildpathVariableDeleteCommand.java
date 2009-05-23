@@ -14,30 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.project;
+package org.eclim.plugin.dltk.command.buildpath;
 
-import org.eclim.plugin.dltk.project.DltkProjectManager;
+import org.eclim.Services;
 
-import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+import org.eclim.annotation.Command;
 
-import org.eclipse.php.internal.core.project.PHPNature;
+import org.eclim.command.AbstractCommand;
+import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
+
+import org.eclipse.dltk.core.DLTKCore;
 
 /**
- * Implementation of {@link ProjectManager} for php projects.
+ * Command to delete an build path variable.
  *
  * @author Eric Van Dewoestine
  */
-public class PhpProjectManager
-  extends DltkProjectManager
+@Command(
+  name = "dltk_buildpath_variable_delete",
+  options = "REQUIRED n name ARG"
+)
+public class BuildpathVariableDeleteCommand
+  extends AbstractCommand
 {
   /**
    * {@inheritDoc}
-   * @see DltkProjectManager#getLanguageToolkit()
    */
-  @Override
-  public IDLTKLanguageToolkit getLanguageToolkit()
+  public String execute(CommandLine commandLine)
+    throws Exception
   {
-    return DLTKLanguageManager.getLanguageToolkit(PHPNature.ID);
+    String name = commandLine.getValue(Options.NAME_OPTION);
+
+    DLTKCore.removeBuildpathVariable(name, null);
+
+    return Services.getMessage("buildpath.variable.deleted", name);
   }
 }

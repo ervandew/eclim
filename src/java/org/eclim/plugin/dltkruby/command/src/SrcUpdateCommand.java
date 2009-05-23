@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.src;
+package org.eclim.plugin.dltkruby.command.src;
+
+import java.io.InputStreamReader;
 
 import org.eclim.annotation.Command;
 
@@ -24,15 +26,15 @@ import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.IFile;
 
-import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
+import org.eclipse.dltk.ruby.internal.parsers.jruby.DLTKRubyParser;
 
 /**
- * Command to update and optionally validate a php src file.
+ * Command to update and optionally validate a ruby src file.
  *
  * @author Eric Van Dewoestine
  */
 @Command(
-  name = "php_src_update",
+  name = "ruby_src_update",
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
@@ -50,11 +52,13 @@ public class SrcUpdateCommand
       String filename, IFile file, AbstractSrcUpdateCommand.Reporter reporter)
     throws Exception
   {
-    PHPSourceParserFactory parser = new PHPSourceParserFactory();
-    parser.parse(
-        filename.toCharArray(),
-        IOUtils.toString(file.getContents()).toCharArray(),
-        reporter
-    );
+    DLTKRubyParser parser = new DLTKRubyParser();
+    InputStreamReader reader = null;
+    try{
+      reader = new InputStreamReader(file.getContents());
+      parser.parse(filename, reader, reporter);
+    }finally{
+      IOUtils.closeQuietly(reader);
+    }
   }
 }

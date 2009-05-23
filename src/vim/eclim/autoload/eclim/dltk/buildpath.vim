@@ -23,16 +23,16 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_variables = '-command php_buildpath_variables'
+  let s:command_variables = '-command dltk_buildpath_variables'
   let s:command_variable_create =
-    \ '-command php_buildpath_variable_create -n "<name>" -p "<path>"'
+    \ '-command dltk_buildpath_variable_create -n "<name>" -p "<path>"'
   let s:command_variable_delete =
-    \ '-command php_buildpath_variable_delete -n "<name>"'
+    \ '-command dltk_buildpath_variable_delete -n "<name>"'
 " }}}
 
 " NewBuildPathEntry(template) {{{
 " Adds a new entry to the current .buildpath file.
-function! eclim#php#buildpath#NewBuildPathEntry(arg, template)
+function! eclim#dltk#buildpath#NewBuildPathEntry(arg, template)
   let args = split(a:arg)
   let cline = line('.')
   let ccol = col('.')
@@ -63,14 +63,14 @@ endfunction " }}}
 
 " GetVariableNames() {{{
 " Gets a list of all variable names.
-function! eclim#php#buildpath#GetVariableNames()
+function! eclim#dltk#buildpath#GetVariableNames()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   return map(variables, "substitute(v:val, '\\(.\\{-}\\)\\s.*', '\\1', '')")
 endfunction " }}}
 
 " VariableList() {{{
 " Lists all the variables currently available.
-function! eclim#php#buildpath#VariableList()
+function! eclim#dltk#buildpath#VariableList()
   let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
   if len(variables) == 0
     call eclim#util#Echo("No variables.")
@@ -88,7 +88,7 @@ endfunction " }}}
 
 " VariableCreate(name, path) {{{
 " Create or update a variable.
-function! eclim#php#buildpath#VariableCreate(name, path)
+function! eclim#dltk#buildpath#VariableCreate(name, path)
   let command = s:command_variable_create
   let command = substitute(command, '<name>', a:name, '')
   let command = substitute(command, '<path>', fnamemodify(a:path, ':p'), '')
@@ -101,7 +101,7 @@ endfunction " }}}
 
 " VariableDelete(name) {{{
 " Delete a variable.
-function! eclim#php#buildpath#VariableDelete(name)
+function! eclim#dltk#buildpath#VariableDelete(name)
   let command = s:command_variable_delete
   let command = substitute(command, '<name>', a:name, '')
 
@@ -113,11 +113,11 @@ endfunction " }}}
 
 " CommandCompleteVar(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#buildpath#CommandCompleteVar(argLead, cmdLine, cursorPos)
+function! eclim#dltk#buildpath#CommandCompleteVar(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
-  let vars = eclim#php#buildpath#GetVariableNames()
+  let vars = eclim#dltk#buildpath#GetVariableNames()
   call filter(vars, 'v:val =~ "^' . argLead . '"')
 
   return vars
@@ -125,7 +125,7 @@ endfunction " }}}
 
 " CommandCompleteVarPath(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#buildpath#CommandCompleteVarPath(argLead, cmdLine, cursorPos)
+function! eclim#dltk#buildpath#CommandCompleteVarPath(argLead, cmdLine, cursorPos)
   let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
@@ -159,14 +159,14 @@ endfunction " }}}
 
 " CommandCompleteVarAndDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
-function! eclim#php#buildpath#CommandCompleteVarAndDir(argLead, cmdLine, cursorPos)
+function! eclim#dltk#buildpath#CommandCompleteVarAndDir(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'
-    return eclim#php#buildpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
+    return eclim#dltk#buildpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
   endif
 
   return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)

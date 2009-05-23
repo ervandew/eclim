@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.buildpath;
+package org.eclim.plugin.dltk.command.buildpath;
 
 import org.eclim.Services;
 
@@ -35,7 +35,7 @@ import org.eclipse.dltk.core.DLTKCore;
  * @author Eric Van Dewoestine
  */
 @Command(
-  name = "php_buildpath_variable_create",
+  name = "dltk_buildpath_variable_create",
   options =
     "REQUIRED n name ARG," +
     "REQUIRED p path ARG"

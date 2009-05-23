@@ -22,6 +22,8 @@ import org.eclim.eclipse.EclimPlugin;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.jface.action.MenuManager;
+
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import org.eclipse.swt.SWT;
@@ -43,6 +45,7 @@ public class EclimWorkbenchWindow
 {
   private IWorkbenchPage page;
   private Composite composite;
+  private MenuManager manager;
 
   public EclimWorkbenchWindow()
   {
@@ -75,6 +78,19 @@ public class EclimWorkbenchWindow
     return EclimPlugin.getShell();
   }
 
+
+  /**
+   * {@inheritDoc}
+   * @see WorkbenchWindow#getMenuManager()
+   */
+  @Override
+  public MenuManager getMenuManager()
+  {
+    if (manager == null){
+      manager = super.createMenuManager();
+    }
+    return manager;
+  }
 
   /**
    * {@inheritDoc}
