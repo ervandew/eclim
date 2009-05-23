@@ -62,6 +62,7 @@ import org.eclipse.dltk.internal.ui.wizards.BuildpathDetector;
 public abstract class DltkProjectManager
   implements ProjectManager
 {
+  private static final String BUILDPATH = ".buildpath";
   private static final String BUILDPATH_XSD =
     "/resources/schema/eclipse/buildpath.xsd";
 
@@ -77,18 +78,21 @@ public abstract class DltkProjectManager
     String dependsString = commandLine.getValue(Options.DEPENDS_OPTION);
 
     IScriptProject scriptProject = DLTKCore.create(project);
-    IDLTKLanguageToolkit toolkit = getLanguageToolkit();
-    BuildpathDetector detector = new BuildpathDetector(project, toolkit);
-    detector.detectBuildpath(null);
-    IBuildpathEntry[] detected = detector.getBuildpath();
-    IBuildpathEntry[] depends =
-      createOrUpdateDependencies(scriptProject, dependsString);
 
-    IBuildpathEntry[] buildpath = merge(
-        new IBuildpathEntry[][]{detected, depends});
-          //scriptProject.readRawClasspath(), detected, depends, container
+    if (!project.getFile(BUILDPATH).exists()) {
+      IDLTKLanguageToolkit toolkit = getLanguageToolkit();
+      BuildpathDetector detector = new BuildpathDetector(project, toolkit);
+      detector.detectBuildpath(null);
+      IBuildpathEntry[] detected = detector.getBuildpath();
+      IBuildpathEntry[] depends =
+        createOrUpdateDependencies(scriptProject, dependsString);
 
-    scriptProject.setRawBuildpath(buildpath, null);
+      IBuildpathEntry[] buildpath = merge(
+          new IBuildpathEntry[][]{detected, depends});
+            //scriptProject.readRawClasspath(), detected, depends, container
+
+      scriptProject.setRawBuildpath(buildpath, null);
+    }
     scriptProject.makeConsistent(null);
     scriptProject.save(null, false);
   }
@@ -108,13 +112,13 @@ public abstract class DltkProjectManager
       Services.getPluginResources(PluginResources.NAME);
     List<Error> errors = XmlUtils.validateXml(
         scriptProject.getProject().getName(),
-        ".buildpath",
+        BUILDPATH,
         resources.getResource(BUILDPATH_XSD).toString());
     if(errors.size() > 0){
       return errors;
     }
 
-    String dotbuildpath = scriptProject.getProject().getFile(".buildpath")
+    String dotbuildpath = scriptProject.getProject().getFile(BUILDPATH)
       .getRawLocation().toOSString();
 
     IBuildpathEntry[] entries = scriptProject.readRawBuildpath();
