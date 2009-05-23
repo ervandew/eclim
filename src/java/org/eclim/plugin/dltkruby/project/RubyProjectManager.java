@@ -16,10 +16,17 @@
  */
 package org.eclim.plugin.dltkruby.project;
 
+import org.eclim.command.CommandLine;
+
 import org.eclim.plugin.dltk.project.DltkProjectManager;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectNature;
+
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+import org.eclipse.dltk.core.IScriptProject;
 
 import org.eclipse.dltk.ruby.core.RubyNature;
 
@@ -31,6 +38,25 @@ import org.eclipse.dltk.ruby.core.RubyNature;
 public class RubyProjectManager
   extends DltkProjectManager
 {
+  /**
+   * {@inheritDoc}
+   * @see ProjectManager#create(IProject,CommandLine)
+   */
+  public void create(IProject project, CommandLine commandLine)
+    throws Exception
+  {
+    super.create(project, commandLine);
+
+    // for some reason, when creating a dltk ruby project, the dltk script
+    // builder is not added to the .project, so here we force it to be added.
+    IProjectNature nature = project.getNature(RubyNature.NATURE_ID);
+    nature.configure();
+
+    IScriptProject scriptProject = DLTKCore.create(project);
+    scriptProject.makeConsistent(null);
+    scriptProject.save(null, false);
+  }
+
   /**
    * {@inheritDoc}
    * @see DltkProjectManager#getLanguageToolkit()
