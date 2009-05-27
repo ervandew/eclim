@@ -403,7 +403,6 @@ TODO {{{
     http://wiki.eclipse.org/index.php/ATF/JSDT
     http://labs.adobe.com/technologies/jseclipse/
     http://www.aptana.org/ aptana (owners of radrails)
-    http://wiki.eclipse.org/index.php/ATF/JSDT eclipse (not yet developed)
     http://www.eclipse.org/dltk/ dltk (experimental)
 
     - :JavascriptRegex (maybe use rhino or see if eclipse has something)
