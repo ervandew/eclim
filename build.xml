@@ -325,12 +325,34 @@
 
         <javac destdir="${build.classes}" debug="on" optimize="false"
             target="${javac.target}" source="${javac.target}"
-            deprecation="${deprecation}">
+            deprecation="${deprecation}"
+            failonerror="false"
+            errorproperty="javac.failed">
           <compilerarg line="${compilerargs}"/>
           <src path="src/java"/>
           <include name="**/plugin/${plugin.name}/**/*.java"/>
           <classpath refid="classpath"/>
         </javac>
+
+        <if>
+          <isset property="javac.failed"/>
+          <then>
+            <fail>Failure:
+
+  Failed to compile eclim plugin '${plugin.name}'.
+  Check that your eclipse install has the necessary dependencies,
+  or only compile eclim with the features that your eclipse version
+  supports.
+
+  For example:
+
+  $ ant -Dplugins=ant,jdt
+
+  Please see the developer guide for more details:
+  http://eclim.sourceforge.net/guides/development.html
+            </fail>
+          </then>
+        </if>
 
         <jar jarfile="${plugin.path}/eclim.${plugin.name}.jar">
           <fileset dir="${build.classes}">
