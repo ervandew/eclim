@@ -312,6 +312,13 @@ Vim Settings
   opening files that match those patterns.  Note that the first mapping is the
   list is used as the default (<cr>).
 
+.. _g\:EclimProjectTreeExpandPathOnOpen:
+
+- **g:EclimProjectTreeExpandPathOnOpen** (Default: 0)
+
+  When non 0, the path of the current file will be expanded in the project tree
+  when the project tree window is opened.
+
 .. _g\:EclimTodoSearchPattern:
 
 - **g:EclimTodoSearchPattern**

@@ -95,6 +95,7 @@ function eclim#tree#Tree(name, roots, aliases, expand, filters)
   setlocal modifiable
 
   let roots = s:NormalizeDirs(a:roots)
+  let b:roots = copy(roots)
   let b:filters = a:filters
   let b:view_hidden = 0
 
@@ -717,6 +718,46 @@ function eclim#tree#ExpandDir()
   call map(files, 's:RewriteSpecial(v:val)')
 
   call eclim#tree#WriteContents(dir, dirs, files)
+endfunction " }}}
+
+" ExpandPath(path) {{{
+" Given a full tree path, either with an alias or real root path at the
+" beginning, expand the tree node to reveal that path.
+function! eclim#tree#ExpandPath(path)
+  let path = a:path
+  let root = ''
+  for r in b:roots
+    let r = substitute(r, '/$', '', '')
+    if path =~ '^' . r . '\>'
+      let root = r
+      break
+    endif
+  endfor
+
+  " try aliases
+  if root == ''
+    let path = substitute(path, '^/', '', '')
+    for r in keys(b:aliases)
+      if path =~ '^' . r . '\>'
+        let root = r
+        break
+      endif
+    endfor
+  endif
+
+  if root != ''
+    let path = substitute(path, '^' . root, '', '')
+
+    for dir in split(path, '/')
+      let line = search('+ \<' . dir . '\>/', 'n')
+      if line
+        call eclim#tree#Cursor(line)
+        call eclim#tree#Execute(1)
+      else
+        break
+      endif
+    endfor
+  endif
 endfunction " }}}
 
 " WriteContents(dir, dirs, files) {{{

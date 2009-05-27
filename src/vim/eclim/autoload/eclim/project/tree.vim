@@ -146,7 +146,13 @@ function! s:OpenTree(names, dirs)
     endif
   endif
 
-  call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, len(a:dirs) == 1, [])
+  let expandDir = ''
+  if g:EclimProjectTreeExpandPathOnOpen
+    let expandDir = substitute(expand('%:p:h'), '\', '/', 'g')
+  endif
+
+  let expand = len(a:dirs) == 1
+  call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
 
   if !s:project_tree_loaded
     for action in g:EclimProjectTreeActions
@@ -158,6 +164,10 @@ function! s:OpenTree(names, dirs)
   endif
 
   setlocal bufhidden=hide
+
+  if expand && expandDir != ''
+    call eclim#util#DelayedCommand('call eclim#tree#ExpandPath("' . expandDir . '")')
+  endif
 endfunction " }}}
 
 " OpenProjectFile(cmd, cwd, file) {{{
