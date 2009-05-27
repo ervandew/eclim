@@ -76,7 +76,8 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
     "OPTIONAL p pattern ARG," +
     "OPTIONAL t type ARG," +
     "OPTIONAL x context ARG," +
-    "OPTIONAL s scope ARG"
+    "OPTIONAL s scope ARG," +
+    "OPTIONAL i case_insensitive NOARG"
 )
 public class SearchCommand
   extends AbstractCommand
@@ -172,7 +173,6 @@ public class SearchCommand
       if(context == -1){
         context = IJavaSearchConstants.DECLARATIONS;
       }
-      int type = getType(commandLine.getValue(Options.TYPE_OPTION));
 
       int matchType = SearchPattern.R_EXACT_MATCH;
 
@@ -182,9 +182,16 @@ public class SearchCommand
 
       // all upper case, add camel case support.
       }else if(pat.equals(pat.toUpperCase())){
-        matchType =
-          SearchPattern.R_EXACT_MATCH | SearchPattern.R_CAMELCASE_MATCH;
+        matchType |= SearchPattern.R_CAMELCASE_MATCH;
       }
+
+      boolean caseSensitive =
+        !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
+      if(caseSensitive){
+        matchType |= SearchPattern.R_CASE_SENSITIVE;
+      }
+
+      int type = getType(commandLine.getValue(Options.TYPE_OPTION));
 
       pattern = SearchPattern.createPattern(pat, type, context, matchType);
 

@@ -63,9 +63,10 @@ import org.eclipse.php.internal.ui.PHPUILanguageToolkit;
     "OPTIONAL l length ARG," +
     "OPTIONAL e encoding ARG," +
     "OPTIONAL p pattern ARG," +
-    "OPTIONAL x context ARG," +
     "OPTIONAL t type ARG," +
-    "OPTIONAL s scope ARG"
+    "OPTIONAL x context ARG," +
+    "OPTIONAL s scope ARG," +
+    "OPTIONAL i case_insensitive NOARG"
 )
 public class SearchCommand
   extends AbstractCommand
@@ -124,9 +125,12 @@ public class SearchCommand
       }
     }else{
       int mode = getMode(pattern) | SearchPattern.R_ERASURE_MATCH;
-      //if (false /* case sensitive */){
-      //  mode  |= SearchPattern.R_CASE_SENSITIVE;
-      //}
+
+      boolean caseSensitive =
+        !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
+      if(caseSensitive){
+        mode  |= SearchPattern.R_CASE_SENSITIVE;
+      }
 
       if (type == IDLTKSearchConstants.UNKNOWN){
         SearchPattern byType = SearchPattern.createPattern(

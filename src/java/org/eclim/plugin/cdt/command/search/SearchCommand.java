@@ -80,9 +80,10 @@ import org.eclipse.search.ui.text.Match;
     "OPTIONAL l length ARG," +
     "OPTIONAL e encoding ARG," +
     "OPTIONAL p pattern ARG," +
+    "OPTIONAL t type ARG," +
     "OPTIONAL x context ARG," +
     "OPTIONAL s scope ARG," +
-    "OPTIONAL t type ARG"
+    "OPTIONAL i case_insensitive NOARG"
 )
 public class SearchCommand
   extends AbstractCommand
@@ -226,8 +227,10 @@ public class SearchCommand
     int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
     int type = getType(commandLine.getValue(Options.TYPE_OPTION));
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
+    boolean caseSensitive =
+      !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
     PDOMSearchQuery query = new PDOMSearchPatternQuery(
-        scope, scopeDesc, pattern, true, type | context);
+        scope, scopeDesc, pattern, caseSensitive, type | context);
 
     StringBuffer buffer = new StringBuffer();
     if (query != null){

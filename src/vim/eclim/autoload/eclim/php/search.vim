@@ -35,7 +35,7 @@
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command php_search -n "<project>" <args>'
   let s:buildpaths = '-command php_buildpaths -p "<project>"'
-  let s:options = ['-p', '-t', '-s', '-x']
+  let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']
   let s:types = [
       \ 'class',

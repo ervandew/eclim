@@ -45,6 +45,7 @@ public class Options
   public static final String BASEDIR_OPTION = "b";
   public static final String BASETYPE_OPTION = "b";
   public static final String BUILD_FILE_OPTION = "b";
+  public static final String CASE_INSENSITIVE_OPTION = "i";
   public static final String CLASSNAME_OPTION = "c";
   public static final String CONTEXT_OPTION = "x";
   public static final String DELIMETER_OPTION = "d";
