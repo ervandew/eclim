@@ -228,6 +228,11 @@
       <param name="project" value="eclim_unit_test_python"/>
       <param name="nature" value="python"/>
     </antcall>
+
+    <antcall target="test.create_project">
+      <param name="project" value="eclim_unit_test_ruby"/>
+      <param name="nature" value="ruby"/>
+    </antcall>
   </target>
 
   <!--
