@@ -139,8 +139,8 @@ public class SearchCommand
 
       boolean caseSensitive =
         !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
-      if(caseSensitive){
-        mode  |= SearchPattern.R_CASE_SENSITIVE;
+      if (caseSensitive){
+        mode |= SearchPattern.R_CASE_SENSITIVE;
       }
 
       if (type == IDLTKSearchConstants.UNKNOWN){

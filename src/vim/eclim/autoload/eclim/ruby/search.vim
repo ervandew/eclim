@@ -34,7 +34,7 @@
     \ '-command dltk_search -n "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command dltk_search -n "<project>" <args>'
-  let s:options = ['-p', '-t', '-s', '-x']
+  let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']
   let s:types = [
       \ 'class',
