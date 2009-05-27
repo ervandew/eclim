@@ -86,7 +86,7 @@ public class CodeCompleteCommand
   private static final Pattern DISPALY_TO_COMPLETION =
     Pattern.compile("^(.*)\\s+-\\s+.*");
   private static final Pattern METHOD_WITH_ARGS =
-    Pattern.compile("^([a-zA-Z_?!=`<>]+\\s*\\().+\\)\\s*$");
+    Pattern.compile("^([a-zA-Z_?!=`<>~]+\\s*\\().+\\)\\s*$");
 
   private static final RubyTextTools textTools = new RubyTextTools(true);
   private static ISourceViewer viewer;
