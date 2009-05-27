@@ -52,7 +52,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single
 element.  A pattern search can be executed using the command
 
-  **:CSearch** -p <pattern> -t <type> -s <scope> -x <context>
+  **:CSearch** -p <pattern> [-t <type> -s <scope> -x <context> -i]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
@@ -72,7 +72,7 @@ of the pattern to search for.
   :CSearch -p MyClass* -t class -s project -x <Tab>
   :CSearch -p MyClass* -t class -s project -x declarations
 
-- pattern: The pattern to search for.
+- -p <pattern>: The pattern to search for.
 
   Ex.
 
@@ -82,8 +82,8 @@ of the pattern to search for.
 
     my*
 
-- type (Default: all): The type of element to search for where possible types
-  include
+- -t <type> (Default: all): The type of element to search for where possible
+  types include
 
   - class_struct
   - function
@@ -97,18 +97,20 @@ of the pattern to search for.
   - typedef
   - macro
 
-- scope (Default: all): The scope of the search where possible scope values
-  include
+- -s <scope> (Default: all): The scope of the search where possible scope
+  values include
 
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and include paths.
 
-- context (Default: declarations): The context of the search where possible
-  context values include
+- -x <context> (Default: declarations): The context of the search where
+  possible context values include
 
   - all - Search for declarations and references.
   - declarations - Search for declarations only.
   - references - Search for all references.
+
+- -i: Ignore case when searching.
 
 
 Configuration

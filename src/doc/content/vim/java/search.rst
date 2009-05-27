@@ -26,7 +26,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command
 
-  **:JavaSearch** -p <pattern> -t <type> -x <context> -s <scope>
+  **:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
@@ -44,7 +44,7 @@ of the pattern to search for.
   :JavaSearch -p MyClass* -t all -x declarations
 
 
-- pattern: The pattern to search for.
+- -p <pattern>: The pattern to search for.
 
   Ex.
 
@@ -53,8 +53,8 @@ of the pattern to search for.
     MyClass*
     MyClass.someMethod*
 
-- type (Default: type): The type of element to search for where possible types
-  include
+- -t <type> (Default: type): The type of element to search for where possible
+  types include
 
   - annotation
   - class
@@ -68,20 +68,22 @@ of the pattern to search for.
   - package
   - type
 
-- context (Default: declarations): The context to search under where possible
-  context values include
+- -x <context> (Default: declarations): The context to search under where
+  possible context values include
 
   - all - All occurances.
   - declarations - Declarations matching the pattern or element.
   - implementors - Implementors of the pattern or element.
   - references - References of the pattern or element.
 
-- scope (Default: all): The scope of the search where possible context values
-  include
+- -s <scope> (Default: all): The scope of the search where possible context
+  values include
 
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and libraries.
   - type - Search only in the current type (source file).
+
+- -i: Ignore case when searching.
 
 Eclim also provides a shortcut when issuing a pattern search for a type.  You
 may simply invoke **:JavaSearch** supplying only the pattern.
