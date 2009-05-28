@@ -22,6 +22,7 @@ History of Changes
 ----------------------
 
 Bug Fixes:
+  - Fixed C/C++ element search.
   - Various bug fixes.
 
 Maven
