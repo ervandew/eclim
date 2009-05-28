@@ -150,8 +150,9 @@ function eclim#vcs#impl#hg#ChangeSet(revision)
   endfor
   let author = substitute(log.user, '^user:\s\+', '', '')
   let date = substitute(log.date, '^date:\s\+', '', '')
+  let root = eclim#vcs#impl#hg#GetRoot()
   let files = split(substitute(log.files, '^files:\s\+', '', ''))
-  call map(files, 'filereadable(fnamemodify(v:val, ":t")) ? "  A/M |" . v:val . "|" : "  R   |" . v:val . "|"')
+  call map(files, 'filereadable(root . "/" . v:val) ? "  A/M |" . v:val . "|" : "  R   |" . v:val . "|"')
   let lines = []
   call add(lines, 'Revision: ' . a:revision)
   call add(lines, 'Modified: ' . date . ' by ' . author)
