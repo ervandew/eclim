@@ -26,7 +26,7 @@ Maven provides online repositories where it will download dependencies from at
 build time.  One problem is that finding all your dependencies and then adding
 them to your pom file can become labor intensive.  To help alleviate this, eclim
 provides commands for searching via the web service provided by
-maven.ozacc.com_.
+jarvana.com_.
 
 - **:MavenDependencySearch** <artifact> -
   Available when editing a maven 1.x ``project.xml`` file.
@@ -34,11 +34,11 @@ maven.ozacc.com_.
   Available when editing a maven 2.x ``pom.xml`` file.
 
 These two commands will search for the specified artifact and open a window
-containing the results.  You can then add one the results as a dependency to
+containing the results.  You can then add one of the results as a dependency to
 your pom file by simply hitting <enter> on it.
 
 Example when calling ``:MvnDependencySearch junit``
 
 .. image:: ../../../images/screenshots/java/maven/dependency_search.png
 
-.. _maven.ozacc.com: http://maven.ozacc.com
+.. _jarvana.com: http://www.jarvana.com/jarvana/

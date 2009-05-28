@@ -47,8 +47,8 @@ public class SearchCommandTest
     assertTrue("Ant section not found.", result.startsWith("ant\n"));
     assertTrue("JUnit section not found.", result.indexOf("\njunit\n") != -1);
     assertTrue("JUnit dependency not found.",
-        result.indexOf("\n\tjunit.jar (3.8)\n") != -1);
+        result.indexOf("\n\tjunit (3.8)\n") != -1);
     assertTrue("JUnit dependency not commented out.",
-        result.indexOf("\n\t//junit.jar (3.8.1)\n") != -1);
+        result.indexOf("\n\t//junit (3.8.1)\n") != -1);
   }
 }

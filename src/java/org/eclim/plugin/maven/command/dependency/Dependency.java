@@ -37,15 +37,9 @@ public class Dependency
   public static final String NAME = "name";
   public static final String REV = "rev";
 
-  public static final String TYPE = "type";
-  public static final String REPOSITORY = "repository";
-  public static final String JAR = "jar";
-
   private String groupId;
   private String artifactId;
   private String version;
-  private String type;
-  private String repository;
 
   /**
    * Gets the groupId.
@@ -108,46 +102,6 @@ public class Dependency
   }
 
   /**
-   * Gets the type.
-   *
-   * @return The type.
-   */
-  public String getType()
-  {
-    return type;
-  }
-
-  /**
-   * Sets the type.
-   *
-   * @param type The type.
-   */
-  public void setType(String type)
-  {
-    this.type = type;
-  }
-
-  /**
-   * Gets the repository.
-   *
-   * @return The repository.
-   */
-  public String getRepository()
-  {
-    return repository;
-  }
-
-  /**
-   * Sets the repository.
-   *
-   * @param repository The repository.
-   */
-  public void setRepository(String repository)
-  {
-    this.repository = repository;
-  }
-
-  /**
    * {@inheritDoc}
    * @see Object#hashCode()
    */
@@ -157,7 +111,6 @@ public class Dependency
       .append(groupId)
       .append(artifactId)
       .append(version)
-      .append(type)
       .toHashCode();
   }
 
@@ -180,7 +133,6 @@ public class Dependency
       .append(groupId, other.getGroupId())
       .append(artifactId, other.getArtifactId())
       .append(version, other.getVersion())
-      .append(type, other.getType())
       .isEquals();
   }
 
@@ -194,7 +146,6 @@ public class Dependency
       .append(GROUP_ID, getGroupId())
       .append(ARTIFACT_ID, getArtifactId())
       .append(VERSION, getVersion())
-      .append(TYPE, getType())
       .toString();
   }
 }

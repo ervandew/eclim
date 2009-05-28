@@ -56,7 +56,7 @@ function! eclim#java#maven#dependency#Search(query, type)
 
   let command = s:command_search
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', filename, '')
+  let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<query>', a:query, '')
 
@@ -77,7 +77,7 @@ endfunction " }}}
 function! s:AddDependency(type)
   let line = getline('.')
   if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
-    let artifact = substitute(line, '\s\+\(.*\)\.\w\+ (.*)$', '\1', '')
+    let artifact = substitute(line, '\s\+\(.*\) (.*)$', '\1', '')
     let vrsn = substitute(line, '.*(\(.*\))$', '\1', '')
     let group = getline(search('^\w\+', 'bnW'))
 
@@ -109,6 +109,7 @@ function! s:InsertDependency(type, group, artifact, vrsn)
   let lnum = search('</dependencies>', 'cnw')
   if !lnum
     call eclim#util#EchoError('No <dependencies> node found.')
+    return
   endif
 
   let indent = substitute(getline(lnum), '^\(\s*\).*', '\1', '')

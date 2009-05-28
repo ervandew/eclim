@@ -16,26 +16,20 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
-import java.io.InputStream;
-
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Source;
 
 import org.eclim.annotation.Command;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
-
-import org.eclim.util.IOUtils;
-import org.eclim.util.XmlUtils;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * Command for searching online maven repository.
@@ -54,7 +48,11 @@ public class SearchCommand
   extends AbstractCommand
 {
   private static final String URL =
-    "http://maven.ozacc.com/search?type=jar&format=xml&keyword=";
+    "http://www.jarvana.com/jarvana/search?search_type=project&project=";
+
+  private static final String GROUP_ID = "Group Id";
+  private static final String ARTIFACT_ID = "Artifact Id";
+  private static final String VERSION = "Version";
 
   /**
    * {@inheritDoc}
@@ -75,35 +73,48 @@ public class SearchCommand
   private List<Dependency> searchRepositories(String query)
     throws Exception
   {
-    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+    Source source = new Source(new URL(URL + query));
+    Element table = source.getElementById("resulttable");
 
-    URL url = new URL(URL + query);
-    InputStream in = null;
-    try{
-      in = url.openConnection().getInputStream();
+    // get header column indexes
+    int groupIndex = -1;
+    int artifactIndex = -1;
+    int versionIndex = -1;
 
-      Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        .parse(in).getDocumentElement();
-      NodeList nodes = root.getChildNodes();
-      for (int ii = 0; ii < nodes.getLength(); ii++){
-        Element element = (Element)nodes.item(ii);
-
-        Dependency dependency = new Dependency();
-        dependency.setGroupId(
-            XmlUtils.getElementValue(element, Dependency.GROUP_ID));
-        dependency.setArtifactId(
-            XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
-        dependency.setVersion(
-            XmlUtils.getElementValue(element, Dependency.VERSION));
-        dependency.setType(
-            XmlUtils.getElementValue(element, Dependency.TYPE));
-        dependency.setRepository(
-            XmlUtils.getElementValue(element, Dependency.REPOSITORY));
-
-        dependencies.add(dependency);
+    List<Element> ths = table.getAllElements("th");
+    for (int ii = 0; ii < ths.size(); ii++){
+      Element th = ths.get(ii);
+      String text = th.getTextExtractor().toString().trim();
+      if(groupIndex == -1 && GROUP_ID.equals(text)){
+        groupIndex = ii;
+      }else if(artifactIndex == -1 && ARTIFACT_ID.equals(text)){
+        artifactIndex = ii;
+      }else if(versionIndex == -1 && VERSION.equals(text)){
+        versionIndex = ii;
       }
-    }finally{
-      IOUtils.closeQuietly(in);
+
+      if(groupIndex >= 0 && artifactIndex >= 0 && versionIndex >= 0){
+        break;
+      }
+    }
+
+    Iterator<Element> rows = table.getAllElements("tr").iterator();
+    // skip header row
+    rows.next();
+
+    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+    while (rows.hasNext()){
+      Element row = rows.next();
+      List<Element> cells = row.getAllElements("td");
+
+      Dependency dependency = new Dependency();
+      dependency.setGroupId(
+          cells.get(groupIndex).getTextExtractor().toString().trim());
+      dependency.setArtifactId(
+          cells.get(artifactIndex).getTextExtractor().toString().trim());
+      dependency.setVersion(
+          cells.get(versionIndex).getTextExtractor().toString().trim());
+      dependencies.add(dependency);
     }
 
     return dependencies;

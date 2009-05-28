@@ -87,8 +87,6 @@ public class SearchFilter
       }
 
       buffer.append(dependency.getArtifactId())
-        .append('.')
-        .append(dependency.getType())
         .append(" (")
         .append(dependency.getVersion())
         .append(')');
@@ -125,7 +123,6 @@ public class SearchFilter
           dependency.setGroupId(element.getAttribute(Dependency.ORG));
           dependency.setArtifactId(element.getAttribute(Dependency.NAME));
           dependency.setVersion(element.getAttribute(Dependency.REV));
-          dependency.setType(Dependency.JAR);
         }else{
           dependency.setGroupId(
               XmlUtils.getElementValue(element, Dependency.GROUP_ID));
@@ -133,7 +130,6 @@ public class SearchFilter
               XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
           dependency.setVersion(
               XmlUtils.getElementValue(element, Dependency.VERSION));
-          dependency.setType(Dependency.JAR);
         }
 
         list.add(dependency);

@@ -38,6 +38,7 @@ Export-Package: org.apache.tools.ant,
   org.apache.commons.lang.builder,
   org.apache.commons.logging,
   org.apache.commons.vfs,
+  net.htmlparser.jericho,
   groovy.lang
 Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.core.filesystem,

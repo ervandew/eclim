@@ -24,6 +24,9 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+Maven
+  - Switched repository searching to a new (hopefully more dependable) site.
+
 Python:
   - Added :ref:`:PythonSearchContext`.
 
