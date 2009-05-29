@@ -720,10 +720,19 @@ function eclim#tree#ExpandDir()
   call eclim#tree#WriteContents(dir, dirs, files)
 endfunction " }}}
 
-" ExpandPath(path) {{{
-" Given a full tree path, either with an alias or real root path at the
-" beginning, expand the tree node to reveal that path.
-function! eclim#tree#ExpandPath(path)
+" ExpandPath(name, path) {{{
+" Given the buffer name of a tree and a full path in that tree, either with an
+" alias or real root path at the beginning, expand the tree node to reveal
+" that path.
+function! eclim#tree#ExpandPath(name, path)
+  let winnr = winnr()
+  let treewin = bufwinnr(a:name)
+  if treewin == -1
+    return
+  endif
+
+  exec treewin . 'winc w'
+
   let path = a:path
   let root = ''
   for r in b:roots
@@ -758,6 +767,8 @@ function! eclim#tree#ExpandPath(path)
       endif
     endfor
   endif
+
+  exec winnr . 'winc w'
 endfunction " }}}
 
 " WriteContents(dir, dirs, files) {{{
