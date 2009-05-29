@@ -1,28 +1,8 @@
 HIGH {{{
-  June 26th
+  June 24th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
   - :Jps handle errors when opening jconsole
-
-  - cdt
-    - project create
-      - handle dependant projects
-      - specify toolchain
-      - specify project type (executable, shared library, static library, makefile project)
-      - makefile creation
-    - edit project config
-      - modify toolchain
-      - add/remove paths
-        - references (projects), source, output
-        - includes, symbols (macros?), library paths
-          - all of these support using environment variables in the path (or
-            value in the case of symbols): ${MY_VAR}.  support variable
-            completion
-              ICConfigurationDescription cfgDes =
-                ManagedBuildManager.getDescriptionForConfiguration(cfg);
-              IEnvironmentVariableManager mngr =
-                CCorePlugin.getDefault().getBuildEnvironmentManager();
-              IEnvironmentVariable[] vars = mngr.getVariables(cfgDes, true);
 
   http://conservancy.softwarefreedom.org/
 }}}
@@ -145,6 +125,8 @@ TODO {{{
     - create command :ProjectImport <dir>
       - Eclipse equivalant:
         File > Import... > General > Existing Projects Into Workspace
+      - org.eclipse.ui.internal.wizards.datatransfer.WizardProjectsImportPage.java
+        - createProjects - called by ExternalProjectImportWizard.performFinish()
 
     - :ProjectCreateWizard - use input()
 
@@ -155,7 +137,7 @@ TODO {{{
           - hitting <enter> on a file with:
             - M shows the diff
             - A opens the file
-            - R does nothing
+            - R open last revision
         :VcsOut (git equivalent? requires git fetch first)
           - open temp window w/ list of files grouped by changeset
           - try to have <enter> on a file open a diff of remote version vs local
@@ -216,6 +198,26 @@ TODO {{{
   }}}
 
   C/C++ {{{
+    - cdt
+      - project create
+        - handle dependant projects
+        - specify toolchain
+        - specify project type (executable, shared library, static library, makefile project)
+        - makefile creation
+      - edit project config
+        - modify toolchain
+        - add/remove paths
+          - references (projects), source, output
+          - includes, symbols (macros?), library paths
+            - all of these support using environment variables in the path (or
+              value in the case of symbols): ${MY_VAR}.  support variable
+              completion
+                ICConfigurationDescription cfgDes =
+                  ManagedBuildManager.getDescriptionForConfiguration(cfg);
+                IEnvironmentVariableManager mngr =
+                  CCorePlugin.getDefault().getBuildEnvironmentManager();
+                IEnvironmentVariable[] vars = mngr.getVariables(cfgDes, true);
+
     - http://www.eclipse.org/cdt/
       http://wiki.eclipse.org/index.php/CDT
       http://download.eclipse.org/tools/cdt/releases/ganymede/site.xml
