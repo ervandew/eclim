@@ -77,6 +77,8 @@ endfunction " }}}
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
 " command to execute after other autocommands have finished.
+" Note: Nesting is not supported.  A delayed command cannot invoke off another
+" delayed command.
 function! eclim#util#DelayedCommand(command, ...)
   let g:eclim_updatetime_save = &updatetime
   let g:eclim_delayed_command = a:command
@@ -1017,12 +1019,12 @@ function! eclim#util#TempWindow(name, lines, ...)
   if filename != expand('%:p')
     let b:filename = filename
     let b:winnr = winnr
-  endif
 
-  augroup eclim_temp_window
-    autocmd! BufWinLeave <buffer>
-    call eclim#util#GoToBufferWindowRegister(b:filename)
-  augroup END
+    augroup eclim_temp_window
+      autocmd! BufWinLeave <buffer>
+      call eclim#util#GoToBufferWindowRegister(b:filename)
+    augroup END
+  endif
 endfunction " }}}
 
 " TempWindowClear(name) {{{
