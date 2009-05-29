@@ -30,7 +30,7 @@ class RstTags implements TaglistScript
     def regex = null;
     try{
       regex = new RegexTaglist(file);
-      regex.addPattern('a', ~/(s?)\n\.\.\s_([^:]+):\s*\n/, "\$2");
+      regex.addPattern('a', ~/(s?)\n\s*\.\.\s_((\\:|[^:])+):\s*\n/, "\$2");
       regex.addPattern('s', ~/(s?)\n([^\n]+)\n[=^-]{4,}/, "\$2");
 
       return regex.execute();
