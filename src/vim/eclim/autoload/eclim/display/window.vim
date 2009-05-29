@@ -40,7 +40,7 @@ if !exists('g:VerticalToolWindowWidth')
 endif
 " }}}
 
-" VerticalToolWindow(name, weight) {{{
+" VerticalToolWindowOpen(name, weight) {{{
 " Handles opening wiindows in the vertical tool window on the left (taglist,
 " project tree, etc.)
 function eclim#display#window#VerticalToolWindowOpen(name, weight)
