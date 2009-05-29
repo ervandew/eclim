@@ -160,8 +160,19 @@ public class VimEditor
 
     boolean embed = plugin.getPreferenceStore()
       .getBoolean(PreferenceConstants.P_EMBED);
-    if (embed && !plugin.gvimNbSupported()){
-      throw new RuntimeException(plugin.getMessage("gvim.nb.not.enabled"));
+    if (embed){
+      if (!plugin.gvimEmbedSupported()){
+        String message = plugin.getMessage(
+            "gvim.not.supported",
+            plugin.getMessage("gvim.embed.not.supported"));
+        throw new RuntimeException(message);
+      }
+    }
+    if (!plugin.gvimNbSupported()){
+      String message = plugin.getMessage(
+          "gvim.not.supported",
+          plugin.getMessage("gvim.nb.not.enabled"));
+      throw new RuntimeException(message);
     }
 
     //set some flags

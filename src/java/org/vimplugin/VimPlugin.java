@@ -27,6 +27,8 @@ import org.eclim.logging.Logger;
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
 
+import org.eclipse.core.runtime.Platform;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -45,8 +47,12 @@ public class VimPlugin
 {
   private static final Logger logger = Logger.getLogger(VimPlugin.class);
 
-  private static final String NB_COMMAND =
-    "redir! > <file> | silent! echo has('netbeans_intg') | quit";
+  private static final String GVIM_FEATURE_TEST =
+    "redir! > <file> | silent! <command> | quit";
+  private static final String EMBED_COMMAND_UNIX = "echo v:version >= 700";
+  private static final String EMBED_COMMAND_WINDOWS =
+    "echo v:version > 701 || (v:version == 701 && has('patch091'))";
+  private static final String NB_COMMAND = "echo has('netbeans_intg')";
 
   /**
    * The shared instance.
@@ -59,6 +65,7 @@ public class VimPlugin
   public static final int DEFAULT_VIMSERVER_ID = 0;
 
   private Boolean nbSupported;
+  private Boolean embedSupported;
 
   /**
    * Returns the shared instance.
@@ -262,6 +269,23 @@ public class VimPlugin
   }
 
   /**
+   * Determines if the configured gvim instance supports embedding.
+   *
+   * @return true if embedding is supported, false otherwise.
+   */
+  public boolean gvimEmbedSupported() {
+    if (embedSupported == null){
+      logger.debug("Checking gvim for embed support.");
+      String command = EMBED_COMMAND_UNIX;
+      if (Platform.getOS().equals(Platform.OS_WIN32)) {
+        command = EMBED_COMMAND_WINDOWS;
+      }
+      embedSupported = new Boolean(testGvimFeature(command));
+    }
+    return embedSupported.booleanValue();
+  }
+
+  /**
    * Determines if the configured gvim instance supports the required netbeans
    * interface.
    *
@@ -270,40 +294,50 @@ public class VimPlugin
   public boolean gvimNbSupported() {
     if (nbSupported == null){
       logger.debug("Checking gvim for netbeans support.");
-      String gvim = VimPlugin.getDefault().getPreferenceStore()
-        .getString(PreferenceConstants.P_GVIM);
-      try{
-        File tempFile = File.createTempFile("eclim_gvim", null);
-        String command = NB_COMMAND.replaceFirst("<file>",
-            tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
-
-        String[] cmd = {
-          gvim, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
-        logger.debug(Arrays.toString(cmd));
-        CommandExecutor process = CommandExecutor.execute(cmd, 5000);
-        if(process.getReturnCode() != 0){
-          logger.error("Failed to execute gvim: " + process.getErrorMessage());
-          return false;
-        }
-
-        FileInputStream in = null;
-        try{
-          String result = IOUtils.toString(in = new FileInputStream(tempFile));
-          result = result.trim();
-          logger.debug("gvim nb enabled: " + result);
-
-          nbSupported = new Boolean(result.equals("1"));
-        }catch(IOException ioe){
-          logger.error("Unable to read temp file.", ioe);
-          IOUtils.closeQuietly(in);
-          return false;
-        }
-      }catch(Exception e){
-        logger.error("Unable to execute gvim.", e);
-        return false;
-      }
+      nbSupported = new Boolean(testGvimFeature(NB_COMMAND));
     }
     return nbSupported.booleanValue();
+  }
+
+  public void resetGvimState() {
+    embedSupported = null;
+    nbSupported = null;
+  }
+
+  private boolean testGvimFeature(String command) {
+    String gvim = VimPlugin.getDefault().getPreferenceStore()
+      .getString(PreferenceConstants.P_GVIM);
+    try{
+      File tempFile = File.createTempFile("eclim_gvim", null);
+      command = GVIM_FEATURE_TEST.replaceFirst("<command>", command);
+      command = command.replaceFirst("<file>",
+          tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
+
+      String[] cmd = {
+        gvim, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
+      logger.debug(Arrays.toString(cmd));
+      CommandExecutor process = CommandExecutor.execute(cmd, 5000);
+      if(process.getReturnCode() != 0){
+        logger.error("Failed to execute gvim: " + process.getErrorMessage());
+        return false;
+      }
+
+      FileInputStream in = null;
+      try{
+        String result = IOUtils.toString(in = new FileInputStream(tempFile));
+        result = result.trim();
+        logger.debug("gvim feature supported: " + result);
+
+        return result.equals("1");
+      }catch(IOException ioe){
+        logger.error("Unable to read temp file.", ioe);
+        IOUtils.closeQuietly(in);
+        return false;
+      }
+    }catch(Exception e){
+      logger.error("Unable to execute gvim.", e);
+      return false;
+    }
   }
 
   /**

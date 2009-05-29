@@ -70,4 +70,15 @@ public class VimPreferences
    */
   public void init(IWorkbench workbench) {
   }
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclipse.jface.preference.IPreferencePage#performOk()
+   */
+  public boolean performOk()
+  {
+    boolean result = super.performOk();
+    VimPlugin.getDefault().resetGvimState();
+    return result;
+  }
 }
