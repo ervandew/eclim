@@ -61,7 +61,17 @@ public class FeatureProvider
         }
       });
 
-      enabled[ii] = list.length > 0 ? true : FEATURES_ENABLED[ii];
+      enabled[ii] = FEATURES_ENABLED[ii];
+      if (list.length > 0){
+        enabled[ii] = true;
+      }else if (FEATURES[ii].equals("python")){
+        path = Installer.getProject()
+          .replaceProperties("${vim.files}/eclim/ftplugin/python");
+
+        if(new File(path).exists()){
+          enabled[ii] = true;
+        }
+      }
     }
 
     Feature[] features = new Feature[FEATURES.length];
