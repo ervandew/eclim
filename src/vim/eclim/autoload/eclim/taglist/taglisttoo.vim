@@ -510,8 +510,8 @@ endfunction " }}}
 
 " s:ProcessTags() {{{
 function! s:ProcessTags()
-  let file = expand('%')
-  if file =~ s:taglisttoo_ignore || file == ''
+  let filename = expand('%')
+  if filename =~ s:taglisttoo_ignore || filename == ''
     return
   endif
 
@@ -618,11 +618,15 @@ function! s:ProcessTags()
       call append(line('$'), 'Warning: taglist truncated.')
       setlocal nomodifiable
     endif
+
+    let filewin = bufwinnr(filename)
+    if filewin != -1
+      exec filewin . 'winc w'
+    endif
   else
     call s:Window({}, tags, [[],[]])
+    winc p
   endif
-
-  winc p
 
   call s:ShowCurrentTag()
 endfunction " }}}
