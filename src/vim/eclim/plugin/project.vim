@@ -73,7 +73,8 @@ if g:EclimProjectTreeAutoOpen
     \ if tabpagenr() > 1 &&
     \     !exists('t:project_tree_auto_opened') &&
     \     eclim#project#util#GetCurrentProjectRoot() != '' |
-    \   call eclim#util#DelayedCommand('call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) | winc w') |
+    \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
+    \   exec g:EclimProjectTreeContentWincmd |
     \   let t:project_tree_auto_opened = 1 |
     \ endif
 endif
