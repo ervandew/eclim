@@ -234,7 +234,6 @@ with(projectroot()):
 
   offset = byteOffsetToCharOffset(filename, offset, encoding)
 
-  # code completion
   try:
     if context == 'implementations':
       locations = findit.find_implementations(project, resource, offset)
@@ -249,9 +248,9 @@ with(projectroot()):
     results = []
     if locations:
       for location in locations:
+        path = location.resource.real_path.replace('\\', '/')
         # TODO: use location.offset
-        results.append(
-          '%s|%s col 1|' % (location.resource.real_path, location.lineno))
+        results.append('%s|%s col 1|' % (path, location.lineno))
 
     vim.command("let results = %s" % repr(results))
   except IndentationError, e:
