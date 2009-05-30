@@ -54,7 +54,10 @@ solutions, which then lead to the eventual choice: rope_
       **Windows Users**: gvim for windows does have python support, but at the
       time of this writing, it is compiled against python 2.4.  So if you want
       to leverage eclim's rope support, you will need to recompile gvim against
-      python 2.5 or higher.
+      python 2.5 or higher or find a site which provides a pre-compiled version
+      for you.  Here are is one such site providing binaries for python 2.5 and
+      2.6: gooli.org_
+
 
 **Functionality Utilizing Rope**
   - :ref:`code completion <vim/python/complete>`
@@ -80,3 +83,4 @@ to the rope 'python_path'.  You can then add your project like so:
   prefs.add('python_path', '~/myotherproject')
 
 .. _rope: http://rope.sourceforge.net/
+.. _gooli.org: http://www.gooli.org/blog/gvim-72-with-python-2526-support-windows-binaries/
