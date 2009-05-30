@@ -38,10 +38,7 @@ import org.eclim.util.IOUtils;
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "settings_update",
-  options = "OPTIONAL s settings ARG"
-)
+@Command(name = "settings_update", options = "OPTIONAL s settings ARG")
 public class SettingsUpdateCommand
   extends AbstractCommand
 {
@@ -66,7 +63,7 @@ public class SettingsUpdateCommand
       for(Object key : properties.keySet()){
         String name = (String)key;
         String value = properties.getProperty(name);
-        getPreferences().setOption(name, value);
+        getPreferences().setValue(name, value);
       }
     }finally{
       IOUtils.closeQuietly(in);

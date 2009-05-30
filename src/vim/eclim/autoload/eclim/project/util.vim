@@ -44,7 +44,7 @@ let s:command_refresh_file =
 let s:command_projects = '-command project_list'
 let s:command_project_info = '-command project_info -p "<project>"'
 let s:command_project_settings = '-command project_settings -p "<project>"'
-let s:command_project_setting = s:command_project_settings . ' -s <setting>'
+let s:command_project_setting = '-command project_setting -p "<project>" -s <setting>'
 let s:command_project_update = '-command project_update -p "<project>"'
 let s:command_update = '-command project_update -p "<project>" -s "<settings>"'
 let s:command_open = '-command project_open -p "<project>"'
@@ -596,19 +596,15 @@ function! eclim#project#util#GetProjectSetting(setting)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<setting>', a:setting, '')
 
-  let result = split(eclim#ExecuteEclim(command), '\n')
-  if len(result) == 1 && result[0] == '0'
-    return result[0]
+  let result = eclim#ExecuteEclim(command)
+  if result == '0'
+    return result
   endif
 
-  call filter(result, 'v:val !~ "^\\s*#"')
-
-  if len(result) == 0
+  if result == ''
     call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
-    return ''
   endif
-
-  return substitute(result[0], '.\{-}=\(.*\)', '\1', '')
+  return result
 endfunction " }}}
 
 " IsCurrentFileInProject(...) {{{

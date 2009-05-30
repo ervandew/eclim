@@ -34,6 +34,8 @@ import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.preference.Preferences;
+
 import org.eclim.project.ProjectNatureFactory;
 
 import org.eclim.util.ProjectUtils;
@@ -129,6 +131,8 @@ public class ProjectManagement
         manager.create(project, commandLine);
       }
     }
+
+    Preferences.getInstance().clearProjectValueCache(project);
   }
 
   /**
@@ -264,6 +268,8 @@ public class ProjectManagement
         project.open(null);
       }
 
+      Preferences.getInstance().clearProjectValueCache(project);
+
       for (String nature : managers.keySet()){
         if(project.hasNature(nature)){
           ProjectManager manager = ProjectManagement.getProjectManager(nature);
@@ -296,5 +302,7 @@ public class ProjectManagement
         manager.refresh(project, commandLine);
       }
     }
+
+    Preferences.getInstance().clearProjectValueCache(project);
   }
 }

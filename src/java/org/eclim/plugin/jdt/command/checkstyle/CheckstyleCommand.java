@@ -25,7 +25,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -52,6 +51,8 @@ import org.eclim.command.filter.ErrorFilter;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.preference.Preferences;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.ProjectUtils;
@@ -92,10 +93,13 @@ public class CheckstyleCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
 
     IProject project = ProjectUtils.getProject(name, true);
-    Map<String, String> options = getPreferences().getOptionsAsMap(project);
+    Preferences prefs = getPreferences();
 
-    String configFile = options.get("org.eclim.java.checkstyle.config");
-    String propsFile = options.get("org.eclim.java.checkstyle.properties");
+    String configFile =
+      prefs.getValue(project, "org.eclim.java.checkstyle.config");
+    String propsFile =
+      prefs.getValue(project, "org.eclim.java.checkstyle.properties");
+
     Properties properties = System.getProperties();
     if (propsFile != null && !propsFile.equals(StringUtils.EMPTY)){
       FileInputStream fis = null;

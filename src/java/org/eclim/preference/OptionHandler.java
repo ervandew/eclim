@@ -39,7 +39,7 @@ public interface OptionHandler
    *
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String, String> getOptionsAsMap()
+  public Map<String, String> getValues()
     throws Exception;
 
   /**
@@ -48,7 +48,7 @@ public interface OptionHandler
    * @param project The project.
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String, String> getOptionsAsMap(IProject project)
+  public Map<String, String> getValues(IProject project)
     throws Exception;
 
   /**

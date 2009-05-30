@@ -171,7 +171,7 @@ public class CommentCommand
     throws Exception
   {
     IProject project = element.getJavaProject().getProject();
-    String copyright = getPreferences().getPreference(
+    String copyright = getPreferences().getValue(
       project, Preferences.PROJECT_COPYRIGHT_PREFERENCE);
     if(copyright != null && copyright.trim().length() > 0){
       File file = FileUtils.getProjectRelativeFile(project, copyright);
@@ -217,7 +217,7 @@ public class CommentCommand
         addTag(javadoc, tags.size(), null, null);
         addTag(javadoc, tags.size(), null, null);
         addTag(javadoc, tags.size(), TagElement.TAG_AUTHOR, getAuthor(project));
-        String version = getPreferences().getPreference(
+        String version = getPreferences().getValue(
             project, "org.eclim.java.doc.version");
         if(version != null && !StringUtils.EMPTY.equals(version.trim())){
           version = StringUtils.replace(version, "\\$", "$");
@@ -265,7 +265,7 @@ public class CommentCommand
           }
         }
         if (!versionExists){
-          String version = getPreferences().getPreference(
+          String version = getPreferences().getValue(
               project, "org.eclim.java.doc.version");
           version = StringUtils.replace(version, "\\$", "$");
           addTag(javadoc, tags.size(), TagElement.TAG_VERSION, version);
@@ -560,9 +560,9 @@ public class CommentCommand
   private String getAuthor(IProject project)
     throws Exception
   {
-    String username = getPreferences().getPreference(
+    String username = getPreferences().getValue(
         project.getProject(), Preferences.USERNAME_PREFERENCE);
-    String email = getPreferences().getPreference(
+    String email = getPreferences().getValue(
         project.getProject(), Preferences.USEREMAIL_PREFERENCE);
 
     // build the author string.

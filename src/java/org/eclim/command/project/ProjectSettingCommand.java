@@ -14,22 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.command.admin;
+package org.eclim.command.project;
 
 import org.eclim.annotation.Command;
 
 import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
-import org.eclim.preference.Option;
+import org.eclim.util.ProjectUtils;
+import org.eclim.util.StringUtils;
+
+import org.eclipse.core.resources.IProject;
 
 /**
- * Command to obtain global settings.
+ * Command to obtain project info.
  *
  * @author Eric Van Dewoestine
  */
-@Command(name = "settings")
-public class SettingsCommand
+@Command(
+  name = "project_setting",
+  options =
+    "OPTIONAL p project ARG," +
+    "OPTIONAL s setting ARG"
+)
+public class ProjectSettingCommand
   extends AbstractCommand
 {
   /**
@@ -38,7 +47,11 @@ public class SettingsCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    Option[] options = getPreferences().getOptions();
-    return SettingsFilter.instance.filter(commandLine, options);
+    String name = commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(name, true);
+    String setting = commandLine.getValue(Options.SETTING_OPTION);
+
+    String value = getPreferences().getValue(project, setting);
+    return value != null ? value : StringUtils.EMPTY;
   }
 }

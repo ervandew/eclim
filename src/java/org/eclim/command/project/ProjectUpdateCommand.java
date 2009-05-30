@@ -35,6 +35,8 @@ import org.eclim.command.filter.ErrorFilter;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.preference.Preferences;
+
 import org.eclim.project.ProjectManagement;
 
 import org.eclim.util.IOUtils;
@@ -99,10 +101,11 @@ public class ProjectUpdateCommand
       in = new FileInputStream(file);
       properties.load(in);
 
+      Preferences preferences = getPreferences();
       for(Object key : properties.keySet()){
         String name = (String)key;
         String value = properties.getProperty(name);
-        getPreferences().setOption(project, name, value);
+        preferences.setValue(project, name, value);
       }
     }finally{
       IOUtils.closeQuietly(in);

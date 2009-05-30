@@ -492,7 +492,7 @@ public class JavaUtils
       IProject project, Preferences preferences, Map<String, Object> values)
     throws Exception
   {
-    Map<String, String> options = preferences.getOptionsAsMap(project);
+    Map<String, String> options = preferences.getValues(project);
     for(String key : options.keySet()){
       String value = options.get(key);
       values.put(key.replace('.', '_'), value);

@@ -24,8 +24,6 @@ import org.eclim.Services;
 
 import org.eclim.logging.Logger;
 
-import org.eclim.util.ProjectUtils;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 
@@ -35,6 +33,10 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 
 /**
  * Class for handling preferences for eclim.
+ *
+ * This class uses the word 'option' for a built in eclipse options (like the
+ * jdt compiler source version), and the word 'preference' for eclim provided
+ * key values.
  *
  * @author Eric Van Dewoestine
  */
@@ -48,19 +50,24 @@ public class Preferences
   public static final String PROJECT_COPYRIGHT_PREFERENCE =
     "org.eclim.project.copyright";
 
-  private static final String ECLIM_PREFIX = "org.eclim";
   private static final String NODE_NAME = "org.eclim";
   private static final String CORE = "core";
 
   private static Preferences instance = new Preferences();
-  private static HashMap<String, OptionHandler> optionHandlers =
+  private static Map<String, OptionHandler> optionHandlers =
     new HashMap<String, OptionHandler>();
 
-  private HashMap<String, Preference> preferences =
-    new HashMap<String, Preference>();
-  private HashMap<String, Option> options = new HashMap<String, Option>();
+  private Map<String, Preference> preferences = new HashMap<String, Preference>();
+  private Map<String, Option> options = new HashMap<String, Option>();
 
-  private Preferences () {}
+  // cache preference values
+  private Map<String, Map<String, String>> preferenceValues =
+    new HashMap<String, Map<String, String>>();
+  // cache option values
+  private Map<String, Map<String, String>> optionValues =
+    new HashMap<String, Map<String, String>>();
+
+  private Preferences() {}
 
   /**
    * Gets the Preferences instance.
@@ -73,384 +80,8 @@ public class Preferences
   }
 
   /**
-   * Gets the preferences as a Map.
-   *
-   * @return The preferences in a Map.
-   */
-  public Map<String, String> getPreferencesAsMap()
-    throws Exception
-  {
-    IEclipsePreferences preferences = getPreferences();
-    HashMap<String, String> map = new HashMap<String, String>();
-    for(String key : preferences.keys()){
-      map.put(key, preferences.get(key, null));
-    }
-
-    return map;
-  }
-
-  /**
-   * Gets the preferences as a Map.
-   *
-   * @param project The project.
-   * @return The preferences in a Map.
-   */
-  public Map<String, String> getPreferencesAsMap(IProject project)
-    throws Exception
-  {
-    IEclipsePreferences globalPrefs = getPreferences();
-    IEclipsePreferences projectPrefs = getPreferences(project);
-
-    String[] keys = globalPrefs.keys();
-    HashMap<String, String> map = new HashMap<String, String>();
-    for(String key : keys){
-      map.put(key, globalPrefs.get(key, null));
-    }
-
-    keys = projectPrefs.keys();
-    for(String key : keys){
-      map.put(key, projectPrefs.get(key, null));
-    }
-
-    return map;
-  }
-
-  /**
-   * Gets all the options and preferences as a Map.
-   *
-   * @return The options in a Map.
-   */
-  public Map<String, String> getOptionsAsMap()
-    throws Exception
-  {
-    HashMap<String, String> allOptions = new HashMap<String, String>();
-    for(OptionHandler handler : optionHandlers.values()){
-      Map<String, String> options = handler.getOptionsAsMap();
-      if (options != null){
-        allOptions.putAll(options);
-      }
-    }
-
-    Map<String, String> preferences = getPreferencesAsMap();
-    for (Option option : options.values()){
-      preferences.put(option.getName(), allOptions.get(option.getName()));
-    }
-
-    return preferences;
-  }
-
-  /**
-   * Gets all the options and preferences as a Map.
-   *
-   * @param project The project.
-   * @return The options in a Map.
-   */
-  public Map<String, String> getOptionsAsMap(IProject project)
-    throws Exception
-  {
-    HashMap<String, String> allOptions = new HashMap<String, String>();
-    for(OptionHandler handler : optionHandlers.values()){
-      String nature = handler.getNature();
-      if(CORE.equals(nature) || project.getNature(nature) != null){
-        allOptions.putAll(handler.getOptionsAsMap(project));
-      }
-    }
-
-    Map<String, String> preferences = getPreferencesAsMap(project);
-    for (Option option : options.values()){
-      preferences.put(option.getName(), allOptions.get(option.getName()));
-    }
-
-    return preferences;
-  }
-
-  /**
-   * Gets all the global options and preferencs.
-   *
-   * @return The options.
-   */
-  public Option[] getOptions()
-    throws Exception
-  {
-    return getOptions(null);
-  }
-
-  /**
-   * Gets all the options and preferencs for the supplied project.
-   *
-   * @param project The project.
-   * @return The options.
-   */
-  public Option[] getOptions(IProject project)
-    throws Exception
-  {
-    ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
-    Map<String, String> options = project == null ?
-      getOptionsAsMap() : getOptionsAsMap(project);
-    for(Object key : options.keySet()){
-      String value = (String)options.get(key);
-      Option option = (Option)this.options.get(key);
-      if(option == null){
-        option = (Option)this.preferences.get(key);
-      }
-
-      if(option != null && value != null){
-        String nature = option.getNature();
-        if (CORE.equals(nature) ||
-            project == null ||
-            project.getNature(nature) != null){
-          OptionInstance instance = new OptionInstance(option, value);
-          results.add(instance);
-        }
-      }
-    }
-
-    return (Option[])results.toArray(new Option[results.size()]);
-  }
-
-  /**
-   * Sets the supplied preference.
-   *
-   * @param name The preference name.
-   * @param value The preference value.
-   */
-  public void setPreference(String name, String value)
-    throws Exception
-  {
-    IEclipsePreferences preferences = getPreferences();
-    validatePreference(name, value);
-    preferences.put(name, value);
-    preferences.flush();
-  }
-
-  /**
-   * Sets the supplied preference for the specified project.
-   *
-   * @param project The project.
-   * @param name The preference name.
-   * @param value The preference value.
-   */
-  public void setPreference(IProject project, String name, String value)
-    throws Exception
-  {
-    IEclipsePreferences global = getPreferences();
-    IEclipsePreferences preferences = getPreferences(project);
-
-    // if project value is the same as the global, then remove it.
-    if(value.equals(global.get(name, null))){
-      removePreference(project, name);
-
-    // if project value differs from global, then persist it.
-    }else{
-      validatePreference(name, value);
-      preferences.put(name, value);
-      preferences.flush();
-    }
-  }
-
-  /**
-   * Removes the supplied preference from the specified project.
-   *
-   * @param project The project.
-   * @param name The preference name.
-   */
-  public void removePreference(IProject project, String name)
-    throws Exception
-  {
-    IEclipsePreferences preferences = getPreferences(project);
-    preferences.remove(name);
-    preferences.flush();
-  }
-
-  /**
-   * Sets the supplied option.
-   *
-   * @param name The preference name.
-   * @param value The preference value.
-   */
-  public void setOption(String name, String value)
-    throws Exception
-  {
-    if(name.startsWith(ECLIM_PREFIX)){
-      setPreference(name, value);
-    }else{
-      validateOption(name, value);
-
-      OptionHandler handler = null;
-      for(Object k : optionHandlers.keySet()){
-        String key = (String)k;
-        if(name.startsWith(key)){
-          handler = (OptionHandler)optionHandlers.get(key);
-          break;
-        }
-      }
-
-      if(handler != null){
-        handler.setOption(name, value);
-      }else{
-        logger.warn("No handler found for option '{}'", name);
-      }
-    }
-  }
-
-  /**
-   * Sets the supplied option for the specified project.
-   *
-   * @param project The project.
-   * @param name The preference name.
-   * @param value The preference value.
-   */
-  public void setOption(IProject project, String name, String value)
-    throws Exception
-  {
-    if(name.startsWith(ECLIM_PREFIX)){
-      setPreference(project.getProject(), name, value);
-    }else{
-      validateOption(name, value);
-
-      OptionHandler handler = null;
-      for(Object k : optionHandlers.keySet()){
-        String key = (String)k;
-        if(name.startsWith(key)){
-          handler = (OptionHandler)optionHandlers.get(key);
-          break;
-        }
-      }
-
-      if(handler != null){
-        handler.setOption(project, name, value);
-      }else{
-        logger.warn("No handler found for option '{}'", name);
-      }
-    }
-  }
-
-  /**
-   * Gets the supplied preference for the specified project.
-   *
-   * @param project The project.
-   * @param name The preference name.
-   */
-  public String getPreference(String project, String name)
-    throws Exception
-  {
-    return getPreference(ProjectUtils.getProject(project, true), name);
-  }
-
-  /**
-   * Gets the supplied preference for the specified project.
-   *
-   * @param project The project.
-   * @param name The preference name.
-   */
-  public String getPreference(IProject project, String name)
-    throws Exception
-  {
-    return (String)getPreferencesAsMap(project).get(name);
-  }
-
-  /**
-   * Get the preferences instance.
-   *
-   * @return The preferences.
-   */
-  protected IEclipsePreferences getPreferences()
-    throws Exception
-  {
-    IScopeContext context = new InstanceScope();
-    IEclipsePreferences preferences = context.getNode(NODE_NAME);
-
-    initializeDefaultPreferences(preferences);
-
-    return preferences;
-  }
-
-  /**
-   * Get the preferences instance for the supplied project under eclim.
-   *
-   * @param project The project.
-   * @return The preferences.
-   */
-  protected IEclipsePreferences getPreferences(IProject project)
-    throws Exception
-  {
-    IScopeContext context = new ProjectScope(project);
-    IEclipsePreferences preferences = context.getNode(NODE_NAME);
-
-    return preferences;
-  }
-
-  /**
-   * Initializes the default preferences.
-   *
-   * @param preferences The eclipse preferences.
-   */
-  protected void initializeDefaultPreferences(IEclipsePreferences preferences)
-    throws Exception
-  {
-    for(Preference preference : this.preferences.values()){
-      if(preferences.get(preference.getName(), null) == null){
-        preferences.put(preference.getName(), preference.getDefaultValue());
-      }
-    }
-    preferences.flush();
-  }
-
-  /**
-   * Validates that the supplied value is valid for the specified preference.
-   *
-   * @param name The name of the preference.
-   * @param value The value of the preference.
-   */
-  public void validatePreference(String name, String value)
-    throws Exception
-  {
-    Preference preference = (Preference)preferences.get(name);
-    if(preference != null){
-      if(preference.getName().equals(name)){
-        if (preference.getPattern() == null ||
-            preference.getPattern().matcher(value).matches()){
-          return;
-        }else{
-          throw new IllegalArgumentException(
-              Services.getMessage("preference.invalid",
-                name, value, preference.getRegex()));
-        }
-      }
-    }
-    throw new IllegalArgumentException(
-        Services.getMessage("preference.not.found", name));
-  }
-
-  /**
-   * Validates that the supplied value is valid for the specified option.
-   *
-   * @param name The name of the option.
-   * @param value The value of the option.
-   */
-  public void validateOption(String name, String value)
-    throws Exception
-  {
-    Option option = (Option)options.get(name);
-    if(option != null){
-      if(option.getName().equals(name)){
-        if (option.getPattern() == null ||
-            option.getPattern().matcher(value).matches()){
-          return;
-        }else{
-          throw new IllegalArgumentException(
-              Services.getMessage("option.invalid",
-                name, value, option.getRegex()));
-        }
-      }
-    }
-    throw new IllegalArgumentException(
-        Services.getMessage("option.not.found", name));
-  }
-
-  /**
-   * Adds the supplied OptionHandler to manage options with
-   * the specified prefix.
+   * Adds the supplied OptionHandler to manage eclipse options with the
+   * specified prefix.
    *
    * @param prefix The prefix.
    * @param handler The OptionHandler.
@@ -464,22 +95,309 @@ public class Preferences
   }
 
   /**
-   * Adds a preference to be made available.
+   * Adds an eclim preference to be made available.
    *
    * @param preference The preference to add.
    */
   public void addPreference(Preference preference)
   {
     preferences.put(preference.getName(), preference);
+    preferenceValues.clear();
   }
 
   /**
-   * Adds a preference to be made available.
+   * Adds an eclipse option to be configurable via eclim.
    *
    * @param option The option.
    */
   public void addOption(Option option)
   {
     options.put(option.getName(), option);
+    optionValues.clear();
+  }
+
+  /**
+   * Clear cached option/preference values.
+   *
+   * @param project The project.
+   */
+  public void clearProjectValueCache(IProject project)
+  {
+    preferenceValues.remove(project.getName());
+    optionValues.remove(project.getName());
+  }
+
+  /**
+   * Gets a map of all options/preferences.
+   *
+   * @param project The current project.
+   * @return A map of key values.
+   */
+  public Map<String, String> getValues(IProject project)
+    throws Exception
+  {
+    // eclim preferences
+    Map<String, String> prefVals = preferenceValues.get(project.getName());
+    if(prefVals == null){
+      prefVals = new HashMap<String, String>();
+      preferenceValues.put(project.getName(), prefVals);
+
+      IScopeContext context = new InstanceScope();
+
+      // global
+      IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
+      initializeDefaultPreferences(globalPrefs);
+      for(String key : globalPrefs.keys()){
+        prefVals.put(key, globalPrefs.get(key, null));
+      }
+
+      context = new ProjectScope(project);
+
+      // project
+      IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+      for(String key : projectPrefs.keys()){
+        prefVals.put(key, projectPrefs.get(key, null));
+      }
+    }
+
+    // eclipse option
+    Map<String, String> optVals = optionValues.get(project.getName());
+    if(optVals == null){
+      optVals = new HashMap<String, String>();
+      optionValues.put(project.getName(), optVals);
+      for(OptionHandler handler : optionHandlers.values()){
+        String nature = handler.getNature();
+        if(CORE.equals(nature) || project.getNature(nature) != null){
+          optVals.putAll(handler.getValues(project));
+        }
+      }
+    }
+
+    Map<String, String> all =
+      new HashMap<String, String>(preferenceValues.size() + optionValues.size());
+    all.putAll(optVals);
+    all.putAll(prefVals);
+    return all;
+  }
+
+  /**
+   * Gets the value of a project option/preference.
+   *
+   * @param project The project.
+   * @param name The name of the option/preference.
+   * @return The value or null if not found.
+   */
+  public String getValue(IProject project, String name)
+    throws Exception
+  {
+    return getValues(project).get(name);
+  }
+
+  /**
+   * Gets the global Option/Preference objects.
+   *
+   * @return Array of Option.
+   */
+  public Option[] getOptions()
+    throws Exception
+  {
+    return getOptions(null);
+  }
+
+  /**
+   * Gets the Option/Preference objects.
+   *
+   * @param project The project scope or null for global.
+   * @return Array of Option.
+   */
+  public Option[] getOptions(IProject project)
+    throws Exception
+  {
+    ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
+    Map<String, String> options = new HashMap<String, String>();
+
+    // global
+    IScopeContext context = new InstanceScope();
+    IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
+    initializeDefaultPreferences(globalPrefs);
+    for(String key : globalPrefs.keys()){
+      options.put(key, globalPrefs.get(key, null));
+    }
+
+    // project
+    if (project != null){
+      context = new ProjectScope(project);
+      IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+      for(String key : projectPrefs.keys()){
+        options.put(key, projectPrefs.get(key, null));
+      }
+    }
+
+    for(OptionHandler handler : optionHandlers.values()){
+      String nature = handler.getNature();
+      if (CORE.equals(nature) ||
+          project == null ||
+          project.getNature(nature) != null)
+      {
+        Map<String, String> ops = project == null ?
+          handler.getValues() : handler.getValues(project);
+        if (ops != null){
+          options.putAll(ops);
+        }
+      }
+    }
+
+    for(String key : options.keySet()){
+      String value = options.get(key);
+      Option option = this.options.get(key);
+      if(option == null){
+        option = this.preferences.get(key);
+      }
+
+      if(option != null && value != null){
+        String nature = option.getNature();
+        if (CORE.equals(nature) ||
+            project == null ||
+            project.getNature(nature) != null){
+          OptionInstance instance = new OptionInstance(option, value);
+          results.add(instance);
+        }
+      }
+    }
+
+    return results.toArray(new Option[results.size()]);
+  }
+
+  /**
+   * Sets the supplied option/preference value.
+   *
+   * @param name The option/preference name.
+   * @param value The option/preference value.
+   */
+  public void setValue(String name, String value)
+    throws Exception
+  {
+    setValue(null, name, value);
+  }
+
+  /**
+   * Set the supplied value.
+   *
+   * @param project The project to set the value for or null for global.
+   * @param name The name of the option/preference.
+   * @param value The value of the option/preference.
+   */
+  public void setValue(IProject project, String name, String value)
+    throws Exception
+  {
+    if(name.startsWith(NODE_NAME)){
+      setPreference(project, name, value);
+    }else{
+      validateValue(options.get(name), name, value);
+
+      OptionHandler handler = null;
+      for(Object k : optionHandlers.keySet()){
+        String key = (String)k;
+        if(name.startsWith(key)){
+          handler = (OptionHandler)optionHandlers.get(key);
+          break;
+        }
+      }
+
+      if(handler != null){
+        if (project == null){
+          handler.setOption(name, value);
+        }else{
+          handler.setOption(project, name, value);
+        }
+        optionValues.clear();
+      }else{
+        logger.warn("No handler found for option '{}'", name);
+      }
+    }
+  }
+
+  /**
+   * Sets an eclim preference value.
+   *
+   * @param project The project to set the value for or null to set globally.
+   * @param name The name of the preference.
+   * @param value The value of the preference.
+   */
+  private void setPreference(IProject project, String name, String value)
+    throws Exception
+  {
+    IScopeContext context = new InstanceScope();
+
+    IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
+    initializeDefaultPreferences(globalPrefs);
+
+    Preference pref = preferences.get(name);
+
+    // set global
+    if (project == null){
+      validateValue(pref, name, value);
+      globalPrefs.put(name, value);
+      globalPrefs.flush();
+
+    }else{
+      context = new ProjectScope(project);
+      IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+
+      // if project value is the same as the global, then remove it.
+      if(value.equals(globalPrefs.get(name, null))){
+        projectPrefs.remove(name);
+        projectPrefs.flush();
+
+      // if project value differs from global, then persist it.
+      }else{
+        validateValue(pref, name, value);
+        projectPrefs.put(name, value);
+        projectPrefs.flush();
+      }
+    }
+    preferenceValues.clear();
+  }
+
+  /**
+   * Initializes the default preferences.
+   * Note: should only be run against the global preferences (not project, etc.).
+   *
+   * @param preferences The eclipse preferences.
+   */
+  private void initializeDefaultPreferences(IEclipsePreferences preferences)
+    throws Exception
+  {
+    for(Preference preference : this.preferences.values()){
+      if(preferences.get(preference.getName(), null) == null){
+        preferences.put(preference.getName(), preference.getDefaultValue());
+      }
+    }
+    preferences.flush();
+  }
+
+  /**
+   * Validates that the supplied value is valid for the specified
+   * option/preference.
+   *
+   * @param option The option/preference instance.
+   * @param name The name of the option/preference.
+   * @param value The value of the option/preference.
+   */
+  private void validateValue(Option option, String name, String value)
+    throws Exception
+  {
+    if(option != null){
+      if (option.getPattern() == null ||
+          option.getPattern().matcher(value).matches()){
+        return;
+      }else{
+        throw new IllegalArgumentException(
+            Services.getMessage("setting.invalid",
+              name, value, option.getRegex()));
+      }
+    }
+    throw new IllegalArgumentException(
+        Services.getMessage("setting.not.found", name));
   }
 }

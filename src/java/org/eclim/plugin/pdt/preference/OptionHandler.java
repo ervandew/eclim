@@ -62,7 +62,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String, String> getOptionsAsMap()
+  public Map<String, String> getValues()
     throws Exception
   {
     if(options == null){
@@ -79,7 +79,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String, String> getOptionsAsMap(IProject project)
+  public Map<String, String> getValues(IProject project)
     throws Exception
   {
     /*IScriptProject scriptProject = DLTKCore.create(project);
@@ -90,7 +90,7 @@ public class OptionHandler
 
     return scriptProject.getOptions(true);*/
     IEclipsePreferences preferences = getPreferences(project);
-    Map<String, String> map = getOptionsAsMap();
+    Map<String, String> map = getValues();
     for(String key : preferences.keys()){
       map.put(PREFIX + key, preferences.get(key, null));
     }
@@ -113,7 +113,7 @@ public class OptionHandler
       DLTKCore.setOptions((Hashtable)options);
     }*/
     if(VERSION.equals(name)){
-      getOptionsAsMap().put(VERSION, value);
+      getValues().put(VERSION, value);
       IPersistentPreferenceStore store = getPreferences();
       store.setValue(name.substring(PREFIX.length()), value);
       store.save();

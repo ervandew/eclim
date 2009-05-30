@@ -50,7 +50,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String, String> getOptionsAsMap()
+  public Map<String, String> getValues()
     throws Exception
   {
     return JavaCore.getOptions();
@@ -59,7 +59,7 @@ public class OptionHandler
   /**
    * {@inheritDoc}
    */
-  public Map<String, String> getOptionsAsMap(IProject project)
+  public Map<String, String> getValues(IProject project)
     throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);

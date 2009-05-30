@@ -16,9 +16,6 @@
  */
 package org.eclim.command.project;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.AbstractCommand;
@@ -34,16 +31,11 @@ import org.eclim.util.ProjectUtils;
 import org.eclipse.core.resources.IProject;
 
 /**
- * Command to obtain project info.
+ * Command to obtain project settings.
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "project_settings",
-  options =
-    "OPTIONAL p project ARG," +
-    "OPTIONAL s setting ARG"
-)
+@Command(name = "project_settings", options = "OPTIONAL p project ARG")
 public class ProjectSettingsCommand
   extends AbstractCommand
 {
@@ -54,25 +46,11 @@ public class ProjectSettingsCommand
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
-    ArrayList<Option> results = new ArrayList<Option>();
 
     IProject project = ProjectUtils.getProject(name, true);
-    String setting = commandLine.getValue(Options.SETTING_OPTION);
+
     Option[] options = getPreferences().getOptions(project);
 
-    // only retrieving the requested setting.
-    if(setting != null){
-      for(int ii = 0; ii < options.length; ii++){
-        if(options[ii].getName().equals(setting)){
-          results.add(options[ii]);
-          break;
-        }
-      }
-
-    // retrieve all settings.
-    }else{
-      results.addAll(Arrays.asList(options));
-    }
-   return SettingsFilter.instance.filter(commandLine, results);
+   return SettingsFilter.instance.filter(commandLine, options);
   }
 }

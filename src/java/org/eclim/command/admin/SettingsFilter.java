@@ -16,8 +16,7 @@
  */
 package org.eclim.command.admin;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -33,7 +32,7 @@ import org.eclim.preference.OptionInstance;
  * @author Eric Van Dewoestine
  */
 public class SettingsFilter
-  implements OutputFilter<List<Option>>
+  implements OutputFilter<Option[]>
 {
   public static final SettingsFilter instance = new SettingsFilter();
 
@@ -42,27 +41,27 @@ public class SettingsFilter
   /**
    * {@inheritDoc}
    */
-  public String filter(CommandLine commandLine, List<Option> results)
+  public String filter(CommandLine commandLine, Option[] results)
   {
-    if(results.size() > 0){
+    if(results.length > 0){
       return printOptions(results);
     }
     return StringUtils.EMPTY;
   }
 
   /**
-   * Print supplied list of options.
+   * Print supplied array of options.
    *
-   * @param options The option list.
+   * @param options The option array.
    * @return The result.
    */
-  public String printOptions(List<Option> options)
+  public String printOptions(Option[] options)
   {
     StringBuffer buffer = new StringBuffer();
 
     // sort the list
-    Collections.sort(options);
-    String lastPath = ((Option)options.get(0)).getPath();
+    Arrays.sort(options);
+    String lastPath = ((Option)options[0]).getPath();
     buffer.append(comment(lastPath, StringUtils.EMPTY)).append(" {");
     for(Option option : options){
       OptionInstance instance = (OptionInstance)option;

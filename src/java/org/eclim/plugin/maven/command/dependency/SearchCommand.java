@@ -47,6 +47,10 @@ import org.eclim.command.Options;
 public class SearchCommand
   extends AbstractCommand
 {
+  // Note: Experienced connections issues not long after switching to jarvana.
+  // If these continue, consider switching to another alternate or possibly
+  // implement primary secondary support.
+  //   http://www.mavensearch.net/search?q=junit
   private static final String URL =
     "http://www.jarvana.com/jarvana/search?search_type=project&project=";
 
