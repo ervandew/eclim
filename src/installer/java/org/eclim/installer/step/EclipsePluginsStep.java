@@ -177,6 +177,11 @@ public class EclipsePluginsStep
     setPreviousEnabled(false);
 
     try{
+      // reset these two to account for re-entry into this step.
+      overallProgress.setValue(0);
+      taskLabel.setText("");
+      taskProgress.setValue(0);
+
       overallLabel.setText("Analyzing installed features...");
 
       // handle step re-entry.
