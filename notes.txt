@@ -2,8 +2,6 @@ HIGH {{{
   June 24th
   http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
-  - :Jps handle errors when opening jconsole
-
   http://conservancy.softwarefreedom.org/
 }}}
 
@@ -12,10 +10,6 @@ TODO {{{
   Bugs {{{
     - after external change by eclipse, all view info is lost (manual folds, etc).
       - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
-
-    - Unsolved
-      - https://sourceforge.net/forum/forum.php?thread_id=1902694&forum_id=487811
-      - https://sourceforge.net/forum/forum.php?thread_id=2085421&forum_id=487811
 
     - xml validate, if a doctype exists, but no dtd, then there is an error for
       every element since they are "not declared" (ex. ant/cvs.xml).
@@ -90,9 +84,6 @@ TODO {{{
     - add menu of some sort in vimdocs
     - consider a command to open topic in web docs
 
-    - document eclim / eclipse interoperability:
-      https://sourceforge.net/forum/forum.php?thread_id=2144315&forum_id=487811
-
     - document python import functionality
 
     - document template plugin
@@ -106,15 +97,7 @@ TODO {{{
 
     - templating system (convert to groovy)?
 
-    - consider :UserProjectSettings for settings that are not common amongst
-      developers working in a team
-      - username, email, etc.
-      - setting precedence would be: user > project > global
-      - unless eclipse supports this concept, only include eclim settings as 'user' configurable
-      - store in .eclim/user.prefs ??
-
     - add means to hook into and view all of eclipses build errors.
-      https://sourceforge.net/forum/forum.php?thread_id=2192184&forum_id=487811
 
     - support max number of cache entries
       - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
@@ -185,7 +168,6 @@ TODO {{{
       - eclim command
       - file paths
       - sh installer via cygwin
-        - https://sourceforge.net/forum/forum.php?thread_id=1931818&forum_id=487811
   }}}
 
   Vimplugin {{{
@@ -267,19 +249,10 @@ TODO {{{
   }}}
 
   Java {{{
-    - :JavaRun :JavaBuild
-    - integrate w/ eclipse build/run system for at least simple programs.
-    - with :JavaRun, also have an input buffer that when saved pushes the text
-      to stdin of the running app, and then clears the buffer for more input.
-      - java version of http://www.vim.org/scripts/script.php?script_id=165 ?
-
-    - :Javadoc
-      - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123381&group_id=145869
-      - org.eclipse.jdt.internal.ui.javadocexport.JavadocWizard.performFinish()
+    - :Jps handle errors when opening jconsole
 
     - :JavaCorrect, need to get the eclipse apply version working (but probably
       should wait until :edit is a considered a change operation in vim).
-      https://sourceforge.net/forum/message.php?msg_id=5087396
 
     - :JavaClassCreate create a new class
       - handle locating the src dir, or prompting user if more than one
@@ -524,7 +497,6 @@ TODO {{{
 
   Xml {{{
     - handle connectivity issues on xml validate
-      https://sourceforge.net/forum/forum.php?thread_id=2105350&forum_id=487811
   }}}
 
 }}}
