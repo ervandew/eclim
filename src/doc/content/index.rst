@@ -94,6 +94,15 @@ News
 ==================
 
 -----------
+2009-05-30
+-----------
+
+| **Eclim 1.4.8** is now available.
+| This is primarily a bug fix release with a few enhancements.
+
+You can view the :ref:`release notes <1.4.8>` for more info.
+
+-----------
 2009-05-02
 -----------
 

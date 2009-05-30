@@ -18,12 +18,13 @@ History of Changes
 
 .. _1.4.8:
 
-1.4.8 (2009)
+1.4.8 (May 30, 2009)
 ----------------------
 
 Bug Fixes:
   - Fixed C/C++ element search.
-  - Various bug fixes.
+  - Fixed possible issue with secondary python element search on Windows.
+  - Various other bug fixes.
 
 Eclim:
   - Added :ref:`:ProjectImport` command.
