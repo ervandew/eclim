@@ -24,7 +24,7 @@
       <tr>
         <td nowrap="nowrap"><b>Features:</b></td>
         <td>
-        #foreach($feature in $installer.context.getKeysByPrefix("featureList"))
+        #foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
           #if($installer.context.getValue("${feature}"))
             $installer.getString("${feature}")<br>
           #end
