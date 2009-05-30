@@ -141,7 +141,8 @@ public class ProjectCommandsTest
     assertEquals("Project missing java nature.", result,
         TEST_PROJECT_IMPORT + " - java");
 
-    // delete the project files + dir
+    // delete the project and the project files + dir
+    Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_IMPORT});
     File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT);
     for(File f : dir.listFiles()){
       f.delete();
