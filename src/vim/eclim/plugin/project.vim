@@ -85,6 +85,10 @@ if !exists(":ProjectCreate")
   command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectCreate
     \ ProjectCreate :call eclim#project#util#ProjectCreate('<args>')
 endif
+if !exists(":ProjectImport")
+  command -nargs=1 -complete=dir
+    \ ProjectImport :call eclim#project#util#ProjectImport('<args>')
+endif
 if !exists(":ProjectDelete")
   command -nargs=1 -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectDelete :call eclim#project#util#ProjectDelete('<args>')

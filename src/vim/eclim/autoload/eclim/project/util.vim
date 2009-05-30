@@ -36,6 +36,7 @@ let s:command_create = '-command project_create -f "<folder>"'
 let s:command_create_name = ' -p "<name>"'
 let s:command_create_natures = ' -n <natures>'
 let s:command_create_depends = ' -d <depends>'
+let s:command_import = '-command project_import -f "<folder>"'
 let s:command_delete = '-command project_delete -p "<project>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_refresh_file =
@@ -104,6 +105,20 @@ function! eclim#project#util#ProjectCreate(args)
     let depends = substitute(depends, '\s\+', ',', 'g')
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
+
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+    call eclim#project#util#ClearProjectsCache()
+  endif
+endfunction " }}}
+
+" ProjectImport(arg) {{{
+" Import a project from the supplied folder
+function! eclim#project#util#ProjectImport(arg)
+  let folder = fnamemodify(expand(a:arg), ':p')
+  let folder = substitute(folder, '\', '/', 'g')
+  let command = substitute(s:command_import, '<folder>', folder, '')
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'

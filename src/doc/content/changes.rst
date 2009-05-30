@@ -25,6 +25,9 @@ Bug Fixes:
   - Fixed C/C++ element search.
   - Various bug fixes.
 
+Eclim:
+  - Added :ref:`:ProjectImport` command.
+
 Maven
   - Switched repository searching to a new (hopefully more dependable) site.
 
@@ -189,16 +192,14 @@ Bug Fixes:
 Eclim:
   - Added translation of html docs to vim doc format accessable via
     :ref:`:EclimHelp` and :ref:`:EclimHelpGrep`.
-
-Django:
-  - Added :ref:`end tag completion <htmldjango>` support for django templates.
-
-Project:
   - Added :ref:`:Todo` and :ref:`:ProjectTodo`.
   - Added :ref:`:TrackerTicket` for viewing tickets by id in your web based
     tracking system.
   - Renamed setting ``org.eclim.project.vcs.tracker`` to
     ``org.eclim.project.tracker``.
+
+Django:
+  - Added :ref:`end tag completion <htmldjango>` support for django templates.
 
 Php:
   - Support for php has been temporarily removed until the eclipse pdt team

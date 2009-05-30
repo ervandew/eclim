@@ -16,6 +16,8 @@
  */
 package org.eclim.command.project;
 
+import java.io.File;
+
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
@@ -31,7 +33,8 @@ import static org.junit.Assert.*;
  */
 public class ProjectCommandsTest
 {
-  private static final String TEST_PROJECT = "unit_test_created";
+  private static final String TEST_PROJECT = "unit_test_create";
+  private static final String TEST_PROJECT_IMPORT = "unit_test_import";
   private static final Pattern PROJECT_OPEN_PATTERN =
     Pattern.compile(TEST_PROJECT + "\\s+- open");
 
@@ -88,6 +91,62 @@ public class ProjectCommandsTest
     System.out.println(result);
 
     assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT));
+
+    // delete the project files + dir
+    File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT);
+    for(File f : dir.listFiles()){
+      f.delete();
+    }
+    dir.delete();
+  }
+
+  @Test
+  public void importProject()
+  {
+    // delete the test project if it exists
+    if (Eclim.projectExists(TEST_PROJECT_IMPORT)){
+      Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_IMPORT});
+    }
+    assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT_IMPORT));
+
+    // first create a project
+    String result = Eclim.execute(new String[]{
+      "project_create",
+      "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
+      "-n", "java"
+    });
+    System.out.println(result);
+
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT_IMPORT));
+
+    // then delete it
+    result = Eclim.execute(new String[]{
+      "project_delete", "-p", TEST_PROJECT_IMPORT});
+    System.out.println(result);
+
+    assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT_IMPORT));
+
+    // now import it
+    result = Eclim.execute(new String[]{
+      "project_import", "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
+    });
+    System.out.println(result);
+
+    assertTrue("Project not imported.", Eclim.projectExists(TEST_PROJECT_IMPORT));
+
+    result = Eclim.execute(new String[]{
+      "project_natures", "-p", TEST_PROJECT_IMPORT,
+    });
+    System.out.println(result);
+    assertEquals("Project missing java nature.", result,
+        TEST_PROJECT_IMPORT + " - java");
+
+    // delete the project files + dir
+    File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT);
+    for(File f : dir.listFiles()){
+      f.delete();
+    }
+    dir.delete();
   }
 
   /**

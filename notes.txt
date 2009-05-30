@@ -122,12 +122,6 @@ TODO {{{
       - maybe let the eclim server side manage this via a TimerTask.
         - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
 
-    - create command :ProjectImport <dir>
-      - Eclipse equivalant:
-        File > Import... > General > Existing Projects Into Workspace
-      - org.eclipse.ui.internal.wizards.datatransfer.WizardProjectsImportPage.java
-        - createProjects - called by ExternalProjectImportWizard.performFinish()
-
     - :ProjectCreateWizard - use input()
 
     - Vcs

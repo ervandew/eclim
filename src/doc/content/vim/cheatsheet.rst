@@ -38,8 +38,10 @@ Project Commands
 ----------------
 
 - :ref:`:ProjectCreate`
-  <folder> [-p <project_name>] -n <nature> ... [-d <project_dependency> ...]
+  <folder> [-p <project_name>] -n <nature> ... [-d <project_dependency> ...] -
   Create a new project.
+- :ref:`:ProjectImport` <folder> -
+  Import a project from an existing eclipse project folder.
 - :ref:`:ProjectList` - List current projects.
 - :ref:`:ProjectSettings` [<project>] - View / edit project settings.
 - :ref:`:ProjectDelete` <project> - Delete a project.

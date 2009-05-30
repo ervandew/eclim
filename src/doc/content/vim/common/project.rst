@@ -71,6 +71,18 @@ Vim's command line completion to complete the project name.
     :ProjectCreate ~/projects/a_project -n java -d another_project yet_another_project
     :ProjectCreate ~/projects/a_project -n java php -p My\ Project\ Name
 
+.. _\:ProjectImport:
+
+- **:ProjectImport** <folder>
+
+  If you have an existing eclipse project folder which does not exist as a
+  project in your current workspace, you can import that project using this
+  command:
+
+  .. code-block:: vim
+
+    :ProjectImport ~/workspace/some_project
+
 .. _\:ProjectList:
 
 - **:ProjectList**
