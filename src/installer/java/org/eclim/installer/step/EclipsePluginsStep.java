@@ -674,8 +674,17 @@ public class EclipsePluginsStep
     {
       for (Iterator ii = dependencies.iterator(); ii.hasNext();){
         Dependency dependency = (Dependency)ii.next();
-        boolean include = dependency.eval(
-            (Feature)features.get(dependency.getId()));
+        Feature feature = (Feature)features.get(dependency.getId());
+
+        // temp hack, should be able to remove this starting at galileo (pdt
+        // 2.1.0)
+        if (feature == null &&
+            "org.eclipse.php".equals(dependency.getId()))
+        {
+          feature = (Feature)features.get("org.eclipse.php_feature");
+        }
+
+        boolean include = dependency.eval(feature);
         if (!include){
           ii.remove();
         }
