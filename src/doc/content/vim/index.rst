@@ -22,6 +22,11 @@ As stated in the project description, eclim's main goal is to bring Eclipse
 functionality to the Vim editor.  Here you will find documentation on the
 functionality that eclim provides.
 
+.. note::
+
+  For installation instructions please see the
+  :ref:`install guide <guides/install>`.
+
 The eclim documentation is broken up into two parts.  The first is the
 comprehensive documentation which details the usage and purpose of every
 command and setting.  This portion is found under the "Documentation" sub-menu
@@ -36,7 +41,7 @@ written to help you perform specific tasks.  These guides are located under the
 
 Before diving in, you should first familiarize yourself with the following
 commands.  After that, take a look at the docs for
-:ref:`managing projects <vim/common/project>`.  Then feel free to move onto
+:ref:`managing projects <vim/common/project>`.  Then feel free to move on to
 the other categories.
 
 .. _\:PingEclim:
