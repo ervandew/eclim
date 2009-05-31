@@ -20,6 +20,8 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.dltk.util.DltkUtils;
+
 import org.eclim.plugin.dltkruby.project.RubyProjectManager;
 
 import org.eclim.project.ProjectManagement;
@@ -53,6 +55,8 @@ public class PluginResources
     ProjectNatureFactory.addNature("ruby", RubyNature.NATURE_ID);
     ProjectManagement.addProjectManager(
         RubyNature.NATURE_ID, new RubyProjectManager());
+
+    DltkUtils.addDltkNature(RubyNature.NATURE_ID);
   }
 
   /**
