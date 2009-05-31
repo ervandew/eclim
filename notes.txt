@@ -541,6 +541,18 @@ NOTES {{{
        - http://freshmeat.net/projects/eclim/
   }}}
 
+  Running two eclim instance concurrently {{{
+
+    Starting secondary instance:
+      $ eclimd -Dosgi.instance.area.default=@user.home/workspace_other -Dnailgun.server.port=9092
+
+    Running eclim script against secondary instance:
+      $ eclim -Dnailgun.server.port=9092 -command project_list
+
+    TODO: find easy way to force vim to send requests to secondary port.
+
+  }}}
+
   Adding a new plugin {{{
     Installer:
       install.properties: add the following keys

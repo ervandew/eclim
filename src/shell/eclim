@@ -29,7 +29,6 @@ done
 CURPATH=`dirname "$FILEPATH"`
 
 SED=`which sed 2> /dev/null`
-NAILGUN_ARGS="--nailgun-port 9091"
 
 # attempt to grab port number from .eclimrc file if available.
 if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
@@ -37,6 +36,23 @@ if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
   if [ "$ARGS" != "" ] ; then
     NAILGUN_ARGS=$ARGS
   fi
+fi
+
+# allow nailgun port to be supplied on the command line like eclimd
+# ex. eclim -Dnailgun.server.port=9092 -command ping
+if [ -n "$SED" -a -n "$1" ] ; then
+  ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
+  if [ -n "$ARG" ] ; then
+    shift
+    NAILGUN_ARGS=`
+      echo $ARG | \
+      sed 's/-Dnailgun.server.\(\w*\)\s*=\s*\(\w*\)\s*/ --nailgun-\1 \2/g'
+    `
+  fi
+fi
+
+if [ -z "$NAILGUN_ARGS" ] ; then
+  NAILGUN_ARGS="--nailgun-port 9091"
 fi
 
 "$CURPATH/ng" $NAILGUN_ARGS org.eclim.command.Main \
