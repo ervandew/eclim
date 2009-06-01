@@ -4,17 +4,17 @@
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="lib" path="lib/junit-4.1.jar"/>
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/asm-2.2.3.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/groovy-1.6.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/jericho-html-3.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/joda-time-1.6.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/scannotation-1.0.2.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/secondstring-20060615.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/asm-2.2.3.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/groovy-1.6.0.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/jericho-html-3.0.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/joda-time-1.6.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/secondstring-20060615.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.0-beta01.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
