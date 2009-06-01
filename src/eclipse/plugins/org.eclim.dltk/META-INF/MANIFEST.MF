@@ -7,7 +7,7 @@ Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.dltk.jar
-Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.dltk,
   org.eclim.plugin.dltk.command.buildpath,
@@ -16,6 +16,7 @@ Export-Package: org.eclim.plugin.dltk,
   org.eclim.plugin.dltk.project,
   org.eclim.plugin.dltk.util
 Require-Bundle: org.eclim,
+  org.eclim.core,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
   org.eclipse.dltk.core,

@@ -24,8 +24,8 @@ import org.eclim.plugin.dltk.util.DltkUtils;
 
 import org.eclim.plugin.dltkruby.project.RubyProjectManager;
 
-import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectNatureFactory;
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclipse.dltk.ruby.core.RubyNature;
 

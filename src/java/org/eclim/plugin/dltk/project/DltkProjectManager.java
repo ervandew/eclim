@@ -30,14 +30,15 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.core.project.ProjectManager;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
+
 import org.eclim.plugin.dltk.PluginResources;
 
-import org.eclim.project.ProjectManager;
-
 import org.eclim.util.IOUtils;
-import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
-import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileOffsets;
 

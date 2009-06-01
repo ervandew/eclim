@@ -22,15 +22,17 @@ import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclim.plugin.dltk.util.DltkUtils;
 
-import org.eclim.project.ProjectNatureFactory;
-
-import org.eclim.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;

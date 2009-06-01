@@ -23,13 +23,14 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.command.complete.AbstractCodeCompleteCommand;
-
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.eclipse.ui.EclimEditorSite;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IFile;
