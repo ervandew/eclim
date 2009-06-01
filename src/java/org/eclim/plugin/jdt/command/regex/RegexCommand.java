@@ -28,9 +28,10 @@ import java.util.regex.Pattern;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.util.IOUtils;
 

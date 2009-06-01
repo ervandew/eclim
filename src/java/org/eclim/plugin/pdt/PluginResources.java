@@ -20,15 +20,15 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.core.preference.PreferenceFactory;
+import org.eclim.plugin.core.preference.Preferences;
+
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
 import org.eclim.plugin.pdt.preference.OptionHandler;
 
 import org.eclim.plugin.pdt.project.PhpProjectManager;
-
-import org.eclim.preference.PreferenceFactory;
-import org.eclim.preference.Preferences;
-
-import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectNatureFactory;
 
 /**
  * Implementation of AbstractPluginResources.

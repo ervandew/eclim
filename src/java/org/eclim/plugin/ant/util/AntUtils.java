@@ -16,7 +16,7 @@
  */
 package org.eclim.plugin.ant.util;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
 

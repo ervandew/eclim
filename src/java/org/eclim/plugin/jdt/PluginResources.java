@@ -36,11 +36,11 @@ import org.eclim.plugin.jdt.preference.OptionHandler;
 
 import org.eclim.plugin.jdt.project.JavaProjectManager;
 
-import org.eclim.preference.PreferenceFactory;
-import org.eclim.preference.Preferences;
+import org.eclim.plugin.core.preference.PreferenceFactory;
+import org.eclim.plugin.core.preference.Preferences;
 
-import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectNatureFactory;
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;

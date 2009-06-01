@@ -17,36 +17,23 @@
 package org.eclim.eclipse;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
-import java.net.URL;
-
-import java.util.Properties;
-
 import com.martiansoftware.nailgun.NGServer;
-
-import java.util.Set;
 
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
+import org.eclim.command.CommandLine;
+
 import org.eclim.logging.Logger;
-
-import org.eclim.plugin.AbstractPluginResources;
-import org.eclim.plugin.PluginResources;
-
-import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
@@ -54,8 +41,6 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-
-import org.scannotation.AnnotationDB;
 
 /**
  * Abstract base class containing shared functionality used by implementations
@@ -87,6 +72,9 @@ public abstract class AbstractEclimApplication
 
       // load plugins.
       loadPlugins();
+
+      Services.getPluginResources("org.eclim")
+        .registerCommand(ReloadCommand.class);
 
       // add shutdown hook.
       Runtime.getRuntime().addShutdownHook(new ShutdownHook());
@@ -221,106 +209,25 @@ public abstract class AbstractEclimApplication
     Services.DefaultPluginResources defaultResources =
       new Services.DefaultPluginResources();
     defaultResources.initialize("org.eclim");
-    loadCommands(bundle, defaultResources);
+    //loadCommands(bundle, defaultResources);
 
-    logger.info("Loading eclim plugins...");
-    String pluginsDir =
-      System.getProperty("eclim.home") + File.separator + ".." + File.separator;
+    logger.info("Loading plugin org.eclim.core");
 
-    File root = new File(pluginsDir);
-    String[] plugins = root.list(new FilenameFilter(){
-      public boolean accept(File dir, String name)
-      {
-        if(name.startsWith("org.eclim.") &&
-          name.indexOf("installer") == -1 &&
-          name.indexOf("vimplugin") == -1){
-          return true;
-        }
-        return false;
-      }
-    });
-
-    for(int ii = 0; ii < plugins.length; ii++){
-      Properties properties = new Properties();
-      FileInputStream in = null;
-      try{
-        in = new FileInputStream(
-            pluginsDir + plugins[ii] + File.separator + "plugin.properties");
-        properties.load(in);
-      }catch(Exception e){
-        throw new RuntimeException(e);
-      }finally{
-        IOUtils.closeQuietly(in);
-      }
-
-      String resourceClass = properties.getProperty("eclim.plugin.resources");
-      String pluginName = plugins[ii].substring(0, plugins[ii].lastIndexOf('_'));
-
-      logger.info("Loading plugin " + pluginName);
-
-      bundle = Platform.getBundle(pluginName);
-      if(bundle == null){
-        IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-          .append(".metadata").append(".log");
-        throw new RuntimeException(
-            "Could not load bundle for plugin '" + plugins[ii] + "'\n" +
-            "Please see " + log.toOSString() + " for more info.");
-      }
-
-      try{
-        bundle.start();
-
-        PluginResources resources = (PluginResources)
-          bundle.loadClass(resourceClass).newInstance();
-        if(resources instanceof AbstractPluginResources){
-          ((AbstractPluginResources)resources).initialize(pluginName);
-        }
-
-        loadCommands(bundle, resources);
-      }catch(Exception e){
-        throw new RuntimeException(e);
-      }
-      logger.info("Loaded plugin {}.", plugins[ii]);
+    Bundle bundle = Platform.getBundle("org.eclim.core");
+    if(bundle == null){
+      IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
+        .append(".metadata").append(".log");
+      throw new RuntimeException(
+          "Could not load bundle for plugin 'org.eclim.core'\n" +
+          "Please see " + log.toOSString() + " for more info.");
     }
-  }
 
-  /**
-   * Given plugin resources instance, finds and loads all commands.
-   *
-   * @param bundle The Bundle.
-   * @param resources The PluginResources.
-   */
-  private void loadCommands(Bundle bundle, PluginResources resources)
-  {
     try{
-      Class<?> rclass = resources.getClass();
-      ClassLoader classloader = rclass.getClassLoader();
-      String name = rclass.getName().replace('.', '/') + ".class";
-      URL resource = classloader.getResource(name);
-      String url = resource.toString();
-      url = url.substring(0, url.indexOf(name));
-
-      String jarName = resources.getName().substring("org.".length()) + ".jar";
-      URL jarUrl = FileLocator.toFileURL(
-          FileLocator.find(bundle, new Path(jarName), null));
-
-      AnnotationDB db = new AnnotationDB();
-      db.setScanClassAnnotations(true);
-      db.setScanFieldAnnotations(false);
-      db.setScanMethodAnnotations(false);
-      db.setScanParameterAnnotations(false);
-      db.scanArchives(jarUrl);
-      Set<String> commandClasses =
-        db.getAnnotationIndex().get(Command.class.getName());
-      if(commandClasses != null){
-        for (String commandClass : commandClasses){
-          Class cclass = classloader.loadClass(commandClass);
-          resources.registerCommand(cclass);
-        }
-      }
+      bundle.start();
     }catch(Exception e){
-      logger.error("Unable to load commands.", e);
+      throw new RuntimeException(e);
     }
+    logger.info("Loaded plugin org.eclim.core");
   }
 
   /**
@@ -339,6 +246,24 @@ public abstract class AbstractEclimApplication
       }catch(Exception e){
         logger.error("Error running shutdown hook.", e);
       }
+    }
+  }
+
+  @Command(name = "reload")
+  public static class ReloadCommand
+    implements org.eclim.command.Command
+  {
+    /**
+     * {@inheritDoc}
+     * @see org.eclim.command.Command#execute(CommandLine)
+     */
+    public String execute(CommandLine commandLine)
+      throws Exception
+    {
+      Bundle bundle = Platform.getBundle("org.eclim.core");
+      bundle.update();
+      bundle.start();
+      return "";
     }
   }
 }

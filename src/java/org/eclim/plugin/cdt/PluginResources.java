@@ -22,10 +22,10 @@ import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.cdt.project.CProjectManager;
 
-import org.eclim.project.ProjectManagement;
-import org.eclim.project.ProjectNatureFactory;
-import org.eclipse.cdt.core.CCProjectNature;
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
+import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CProjectNature;
 
 /**

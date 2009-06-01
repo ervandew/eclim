@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -29,10 +28,12 @@ import org.eclim.plugin.cdt.PluginResources;
 import org.eclim.plugin.cdt.util.ASTUtils;
 import org.eclim.plugin.cdt.util.CUtils;
 
-import org.eclim.util.CollectionUtils;
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.util.vim.VimUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.VimUtils;
+
+import org.eclim.util.CollectionUtils;
 
 import org.eclipse.cdt.core.CCorePlugin;
 

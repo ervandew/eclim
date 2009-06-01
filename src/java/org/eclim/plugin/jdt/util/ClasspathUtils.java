@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.eclim.logging.Logger;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 

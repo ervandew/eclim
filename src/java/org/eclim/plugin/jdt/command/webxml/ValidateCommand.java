@@ -27,11 +27,11 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.command.filter.ErrorFilter;
+import org.eclim.plugin.core.command.filter.ErrorFilter;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
-
-import org.eclim.util.ProjectUtils;
 
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -54,7 +54,7 @@ import org.xml.sax.helpers.DefaultHandler;
     "REQUIRED f file ARG"
 )
 public class ValidateCommand
-  extends org.eclim.command.xml.validate.ValidateCommand
+  extends org.eclim.plugin.core.command.xml.ValidateCommand
 {
   /**
    * {@inheritDoc}

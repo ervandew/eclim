@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: Vimplugin Project
-Bundle-Name: Eclim Vimplugin
-Bundle-SymbolicName: org.eclim.vimplugin;singleton:=true
+Bundle-Vendor: eclim.sourceforge.net
+Bundle-SymbolicName: org.eclim.vimplugin; singleton:=true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
 Bundle-Activator: org.vimplugin.VimPlugin

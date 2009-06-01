@@ -17,10 +17,7 @@
 package org.eclim.plugin.pdt.preference;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-
-import org.eclim.Services;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -40,7 +37,7 @@ import org.eclipse.php.internal.ui.PHPUiPlugin;
  * @author Eric Van Dewoestine
  */
 public class OptionHandler
-  implements org.eclim.preference.OptionHandler
+  implements org.eclim.plugin.core.preference.OptionHandler
 {
   private static final String NATURE = "org.eclipse.php.core.PHPNature";
   private static final String PREFIX = "org.eclipse.php.core.";

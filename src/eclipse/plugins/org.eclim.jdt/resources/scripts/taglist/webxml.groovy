@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import org.eclim.command.taglist.RegexTaglist;
-import org.eclim.command.taglist.TaglistScript;
-import org.eclim.command.taglist.TagResult;
+import org.eclim.plugin.core.command.taglist.RegexTaglist;
+import org.eclim.plugin.core.command.taglist.TaglistScript;
+import org.eclim.plugin.core.command.taglist.TagResult;
 
 /**
  * Processes tags for web.xml files.

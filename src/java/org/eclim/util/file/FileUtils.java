@@ -30,9 +30,6 @@ import javax.naming.CompositeName;
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.util.IOUtils;
-import org.eclim.util.ProjectUtils;
-
-import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -51,19 +48,6 @@ public class FileUtils
   public static final char UNIX_SEPARATOR = '/';
   public static final char WINDOWS_SEPARATOR = '\\';
   public static final String UTF8 = "utf-8";
-
-  /**
-   * Gets a project relative file.
-   *
-   * @param project The project.
-   * @param file The file.
-   * @return The File.
-   */
-  public static File getProjectRelativeFile(IProject project, String file)
-    throws Exception
-  {
-    return new File(concat(ProjectUtils.getPath(project), file));
-  }
 
   /**
    * Converts the supplied byte offset in the specified file to the

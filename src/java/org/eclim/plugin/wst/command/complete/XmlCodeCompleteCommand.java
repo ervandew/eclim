@@ -22,7 +22,7 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.command.complete.CodeCompleteResult;
+import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;

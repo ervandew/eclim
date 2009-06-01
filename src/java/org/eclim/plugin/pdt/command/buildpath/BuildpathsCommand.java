@@ -25,11 +25,12 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;

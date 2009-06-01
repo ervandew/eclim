@@ -25,11 +25,11 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.command.filter.ErrorFilter;
-
 import org.eclim.plugin.ant.util.AntUtils;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.filter.ErrorFilter;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
 import org.eclim.util.file.FileUtils;
@@ -50,7 +50,7 @@ import org.eclipse.ant.internal.ui.model.IProblemRequestor;
     "REQUIRED f file ARG"
 )
 public class ValidateCommand
-  extends org.eclim.command.xml.validate.ValidateCommand
+  extends org.eclim.plugin.core.command.xml.ValidateCommand
 {
   /**
    * {@inheritDoc}

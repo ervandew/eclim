@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: %providerName
-Bundle-Name: %pluginName
+Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim; singleton:=true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
@@ -13,6 +12,7 @@ Bundle-Localization: plugin
 Export-Package: org.apache.tools.ant,
   org.apache.tools.ant.taskdefs,
   org.apache.tools.ant.types,
+  org.apache.tools.tar,
   org.eclim,
   org.eclim.annotation,
   org.eclim.command,
@@ -38,9 +38,7 @@ Export-Package: org.apache.tools.ant,
   org.apache.commons.lang.builder,
   org.apache.commons.logging,
   org.apache.commons.vfs,
-  org.objectweb.asm,
-  net.htmlparser.jericho,
-  groovy.lang
+  org.scannotation
 Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.core.filesystem,
   org.eclipse.core.resources,
@@ -48,6 +46,5 @@ Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.jface.text,
   org.eclipse.team.core,
   org.eclipse.text,
-  org.eclipse.ui,
-  org.eclipse.ui.ide
+  org.eclipse.ui
 Eclipse-AutoStart: true

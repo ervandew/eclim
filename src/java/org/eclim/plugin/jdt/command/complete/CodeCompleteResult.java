@@ -24,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Eric Van Dewoestine
  */
 public class CodeCompleteResult
-  extends org.eclim.command.complete.CodeCompleteResult
+  extends org.eclim.plugin.core.command.complete.CodeCompleteResult
 {
   private int type;
   private int replaceStart;

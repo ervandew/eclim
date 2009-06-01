@@ -30,9 +30,10 @@ import org.eclim.command.OutputFilter;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
+
 import org.eclim.util.IOUtils;
-import org.eclim.util.ProjectUtils;
-import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileUtils;
 

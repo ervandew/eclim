@@ -1,16 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: %providerName
-Bundle-Name: %pluginName
+Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.jdt; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.jdt.jar,
   ${eclim.lib.jars}
-Bundle-Activator: org.eclim.eclipse.GenericPlugin
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
+  org.eclim.core,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,
   org.eclipse.text,

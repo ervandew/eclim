@@ -26,19 +26,20 @@ import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
+
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.util.TemplateUtils;
 
 import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
-
-import org.eclim.util.TemplateUtils;
 
 import org.eclim.util.file.Position;
 

@@ -18,11 +18,12 @@ package org.eclim.plugin.cdt.command.project;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;

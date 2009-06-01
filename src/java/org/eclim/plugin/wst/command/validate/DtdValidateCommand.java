@@ -27,7 +27,7 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.command.filter.ErrorFilter;
+import org.eclim.plugin.core.command.filter.ErrorFilter;
 
 import org.eclipse.wst.dtd.core.internal.validation.eclipse.DTDValidator;
 

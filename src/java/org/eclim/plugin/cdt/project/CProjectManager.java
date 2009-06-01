@@ -31,14 +31,13 @@ import org.eclim.command.Error;
 
 import org.eclim.plugin.cdt.PluginResources;
 
-import org.eclim.project.ProjectManager;
+import org.eclim.plugin.core.project.ProjectManager;
+
+import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclim.util.IOUtils;
-import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileOffsets;
-
-import org.eclipse.cdt.core.CCorePlugin;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICModelStatus;

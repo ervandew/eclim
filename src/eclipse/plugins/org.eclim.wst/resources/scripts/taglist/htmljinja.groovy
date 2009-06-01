@@ -16,9 +16,9 @@
  */
 import java.util.regex.Pattern;
 
-import org.eclim.command.taglist.RegexTaglist;
-import org.eclim.command.taglist.TaglistScript;
-import org.eclim.command.taglist.TagResult;
+import org.eclim.plugin.core.command.taglist.RegexTaglist;
+import org.eclim.plugin.core.command.taglist.TaglistScript;
+import org.eclim.plugin.core.command.taglist.TagResult;
 
 /**
  * Processes tags for jinja html files.

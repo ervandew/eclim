@@ -31,7 +31,6 @@ import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
@@ -40,11 +39,13 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.preference.Preferences;
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.preference.Preferences;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
-
-import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -174,7 +175,7 @@ public class CommentCommand
     String copyright = getPreferences().getValue(
       project, Preferences.PROJECT_COPYRIGHT_PREFERENCE);
     if(copyright != null && copyright.trim().length() > 0){
-      File file = FileUtils.getProjectRelativeFile(project, copyright);
+      File file = new File(ProjectUtils.getFilePath(project, copyright));
       if(!file.exists()){
         throw new IllegalArgumentException(
             Services.getMessage("project.copyright.not.found", file));

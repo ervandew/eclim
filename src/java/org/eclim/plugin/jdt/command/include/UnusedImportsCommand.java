@@ -20,9 +20,10 @@ import java.util.ArrayList;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 

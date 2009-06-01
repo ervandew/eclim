@@ -18,9 +18,9 @@ package org.eclim.plugin.wst.command.validate;
 
 import java.net.URLDecoder;
 
-import org.eclim.command.AbstractCommand;
+import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
 
