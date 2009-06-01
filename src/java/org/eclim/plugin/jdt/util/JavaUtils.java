@@ -25,11 +25,11 @@ import org.eclim.Services;
 
 import org.eclim.plugin.jdt.PluginResources;
 
-import org.eclim.preference.Preferences;
+import org.eclim.plugin.core.preference.Preferences;
 
-import org.eclim.project.ProjectNatureFactory;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
 

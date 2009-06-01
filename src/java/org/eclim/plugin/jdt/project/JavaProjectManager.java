@@ -41,11 +41,12 @@ import org.eclim.plugin.jdt.project.classpath.Parser;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.project.ProjectManager;
+import org.eclim.plugin.core.project.ProjectManager;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclim.util.IOUtils;
-import org.eclim.util.ProjectUtils;
-import org.eclim.util.XmlUtils;
 
 import org.eclim.util.file.FileOffsets;
 import org.eclim.util.file.FileUtils;

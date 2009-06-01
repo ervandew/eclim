@@ -20,9 +20,9 @@ import org.eclim.Services;
 
 import org.eclim.plugin.cdt.PluginResources;
 
-import org.eclim.project.ProjectNatureFactory;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.CoreModelUtil;

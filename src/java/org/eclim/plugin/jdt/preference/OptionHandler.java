@@ -34,7 +34,7 @@ import org.eclipse.jdt.core.JavaCore;
  * @author Eric Van Dewoestine
  */
 public class OptionHandler
-  implements org.eclim.preference.OptionHandler
+  implements org.eclim.plugin.core.preference.OptionHandler
 {
   private static final String NATURE = "org.eclipse.jdt.core.javanature";
 

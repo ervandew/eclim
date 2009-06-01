@@ -22,9 +22,9 @@ import java.util.List;
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 
-import org.eclim.util.file.Position;
+import org.eclim.plugin.core.util.VimUtils;
 
-import org.eclim.util.vim.VimUtils;
+import org.eclim.util.file.Position;
 
 import org.eclipse.dltk.core.IModelElement;
 

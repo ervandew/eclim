@@ -21,11 +21,13 @@ import java.util.List;
 
 import org.eclim.Services;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclim.util.StringUtils;
 
 import org.eclipse.cdt.core.CCorePlugin;

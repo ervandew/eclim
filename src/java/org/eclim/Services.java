@@ -31,8 +31,6 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
-import org.eclim.preference.PreferenceFactory;
-
 /**
  * Class responsible for retrieving service implementations and provides access
  * to localized messages.
@@ -45,10 +43,10 @@ public class Services
 
   private static HashMap<String, PluginResources> pluginResources =
     new HashMap<String, PluginResources>();
-  private static HashMap<String, String> serviceCache =
-    new HashMap<String, String>();
-  private static HashMap<String, String> messageCache =
-    new HashMap<String, String>();
+
+  static {
+    addPluginResources(new DefaultPluginResources());
+  }
 
   /**
    * Gets a command by name.
@@ -60,17 +58,10 @@ public class Services
   public static Command getCommand(String name)
     throws Exception
   {
-    String value = serviceCache.get(name);
-    if(value == null){
-      for(PluginResources resources : pluginResources.values()){
-        if(resources.containsCommand(name)){
-          serviceCache.put(name, resources.getName());
-          return resources.getCommand(name);
-        }
+    for(PluginResources resources : pluginResources.values()){
+      if(resources.containsCommand(name)){
+        return resources.getCommand(name);
       }
-    }else{
-      PluginResources resources = pluginResources.get(value);
-      return resources.getCommand(name);
     }
     return null;
   }
@@ -85,25 +76,13 @@ public class Services
    */
   public static String getMessage(String key, Object... args)
   {
-    try{
-      String name = (String)messageCache.get(key);
-      if(name == null){
-        for(PluginResources resources : pluginResources.values()){
-          try{
-            String message = resources.getMessage(key, args);
-            messageCache.put(key, resources.getName());
-            return message;
-          }catch(MissingResourceException nsme){
-            // message not found in this plugin.
-          }
-        }
-      }else{
-        PluginResources resources =
-          (PluginResources)pluginResources.get(name);
-        return resources.getMessage(key, args);
+    for(PluginResources resources : pluginResources.values()){
+      try{
+        String message = resources.getMessage(key, args);
+        return message;
+      }catch(MissingResourceException nsme){
+        // message not found in this plugin.
       }
-    }catch(MissingResourceException nsme){
-      return key;
     }
     return key;
   }
@@ -206,6 +185,16 @@ public class Services
   }
 
   /**
+   * Remove the supplied PluginResources.
+   *
+   * @param resources The PluginResources to remove.
+   */
+  public static void removePluginResources(PluginResources resources)
+  {
+    pluginResources.remove(resources.getName());
+  }
+
+  /**
    * Implementation of PluginResources for the main eclim plugin.
    */
   public static class DefaultPluginResources
@@ -219,31 +208,20 @@ public class Services
 
     /**
      * {@inheritDoc}
-     * @see AbstractPluginResources#initialize(String)
-     */
-    @Override
-    public void initialize(String name)
-    {
-      super.initialize(name);
-
-      PreferenceFactory.addPreferences("core",
-        "General org.eclim.user.name\n" +
-        "General org.eclim.user.email\n" +
-        "General/Project org.eclim.project.version 1.0\n" +
-        "General/Project org.eclim.project.copyright\n" +
-        "General/Project org.eclim.project.tracker\n" +
-        "General/Project org.eclim.project.vcs.web.viewer viewvc (viewvc|trac|redmine|hgcgi|hgserve|gitweb)\n" +
-        "General/Project org.eclim.project.vcs.web.url"
-      );
-    }
-
-    /**
-     * {@inheritDoc}
      * @see AbstractPluginResources#getBundleBaseName()
      */
     protected String getBundleBaseName()
     {
       return "org/eclim/messages";
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PluginResources#getName()
+     */
+    public String getName()
+    {
+      return NAME;
     }
   }
 }

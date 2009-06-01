@@ -20,9 +20,9 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.command.complete.AbstractCodeCompleteCommand;
-
 import org.eclim.plugin.ant.util.AntUtils;
+
+import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 

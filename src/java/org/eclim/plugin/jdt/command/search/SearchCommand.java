@@ -29,13 +29,14 @@ import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
@@ -203,7 +204,7 @@ public class SearchCommand
 
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
     IType type = null;
-    if(file.endsWith(".java")){
+    if(file != null && file.endsWith(".java")){
       type = ((CompilationUnit)JavaUtils.getCompilationUnit(project, file))
         .getTypeRoot().findPrimaryType();
     }

@@ -73,7 +73,6 @@ public abstract class AbstractPluginResources
     this.name = name;
     int index = name.lastIndexOf('.');
     pluginName = index != -1 ? name.substring(index + 1) : name;
-    Services.addPluginResources(this);
   }
 
   /**
@@ -178,7 +177,7 @@ public abstract class AbstractPluginResources
       if(index != -1){
         vimResource = FileUtils.concat(
             vimResource.substring(0, index + 9),
-            pluginName,
+            getName(),
             vimResource.substring(index + 9));
       }
       String file = FileUtils.concat(

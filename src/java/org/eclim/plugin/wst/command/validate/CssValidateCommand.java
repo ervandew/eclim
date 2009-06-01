@@ -26,9 +26,9 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.command.filter.ErrorFilter;
+import org.eclim.plugin.core.command.filter.ErrorFilter;
 
-import org.eclim.util.ProjectUtils;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 

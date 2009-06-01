@@ -27,11 +27,12 @@ import org.apache.tools.ant.Project;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.ant.util.AntUtils;
+
+import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 import org.eclipse.ant.internal.ui.model.AntProjectNode;

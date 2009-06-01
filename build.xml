@@ -193,7 +193,7 @@
     </antcall>
 
     <!-- build non-core plugins -->
-    <foreach list="${plugins}" target="plugin" delimiter=","
+    <foreach list="core,${plugins}" target="plugin" delimiter=","
         inheritAll="true" param="plugin.name" trim="true"/>
 
     <!-- patch nailgun jar file -->

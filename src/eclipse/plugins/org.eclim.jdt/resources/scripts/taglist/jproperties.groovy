@@ -16,8 +16,8 @@
  */
 import java.io.File;
 
-import org.eclim.command.taglist.TaglistScript;
-import org.eclim.command.taglist.TagResult;
+import org.eclim.plugin.core.command.taglist.TaglistScript;
+import org.eclim.plugin.core.command.taglist.TagResult;
 
 /**
  * Processes tags for java property files.

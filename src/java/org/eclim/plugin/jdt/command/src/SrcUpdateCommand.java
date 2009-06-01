@@ -22,16 +22,17 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.AbstractCommand;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
-import org.eclim.command.filter.ErrorFilter;
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.command.filter.ErrorFilter;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
-
-import org.eclim.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
 

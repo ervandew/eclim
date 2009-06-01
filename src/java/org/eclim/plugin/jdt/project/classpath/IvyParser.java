@@ -21,7 +21,7 @@ import javax.xml.xpath.XPathExpression;
 
 import org.eclim.Services;
 
-import org.eclim.util.XmlUtils;
+import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
