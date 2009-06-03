@@ -514,6 +514,7 @@ function! s:ProcessTags()
   if filename =~ s:taglisttoo_ignore || filename == ''
     return
   endif
+  let filewin = winnr()
 
   let tags = []
   if s:FileSupported(expand('%:p'), &ft)
@@ -619,7 +620,12 @@ function! s:ProcessTags()
       setlocal nomodifiable
     endif
 
-    let filewin = bufwinnr(filename)
+    " if the file buffer is not longer in the same window it was, then find
+    " its new location.  Occurs when taglist first opens.
+    if winbufnr(filewin) != bufnr(filename)
+      let filewin = bufwinnr(filename)
+    endif
+
     if filewin != -1
       exec filewin . 'winc w'
     endif
