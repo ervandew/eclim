@@ -19,13 +19,14 @@ package org.eclim.plugin.core;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.eclim.Services;
+
+import org.eclim.eclipse.EclimPlugin;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.Plugin;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
@@ -79,14 +80,12 @@ public class CorePlugin
 
       Bundle bundle = Platform.getBundle(plugin);
       if(bundle == null){
-        IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-          .append(".metadata").append(".log");
+        String diagnoses = EclimPlugin.getDefault().diagnose(plugin);
         throw new RuntimeException(
-            "Could not load bundle for plugin '" + plugin + "'\n" +
-            "Please see " + log.toOSString() + " for more info.");
+            Services.getMessage("plugin.load.failed", plugin, diagnoses));
+      }else{
+        bundle.start();
       }
-
-      bundle.start();
     }
   }
 

@@ -31,9 +31,6 @@ import org.eclim.logging.Logger;
 
 import org.eclim.util.file.FileUtils;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
@@ -67,37 +64,39 @@ public abstract class AbstractEclimApplication
   {
     logger.info("Starting eclim...");
     instance = this;
+    int exitCode = 0;
     try{
       onStart();
 
       // load plugins.
-      loadPlugins();
+      boolean pluginsLoaded = load();
 
-      Services.getPluginResources("org.eclim")
-        .registerCommand(ReloadCommand.class);
+      if (pluginsLoaded){
+        // add shutdown hook.
+        Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
-      // add shutdown hook.
-      Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+        // create marker file indicating that eclimd is up
+        File marker = new File(
+            FileUtils.concat(System.getProperty("eclim.home"), ".available"));
+        try{
+          marker.createNewFile();
+          marker.deleteOnExit();
+        }catch(IOException ioe){
+          logger.error(
+              "\nError creating eclimd marker file: " + ioe.getMessage() +
+              "\n" + marker);
+        }
 
-      // create marker file indicating that eclimd is up
-      File marker = new File(
-          FileUtils.concat(System.getProperty("eclim.home"), ".available"));
-      try{
-        marker.createNewFile();
-        marker.deleteOnExit();
-      }catch(IOException ioe){
-        logger.error(
-            "\nError creating eclimd marker file: " + ioe.getMessage() +
-            "\n" + marker);
+        // start nailgun
+        String portString = Services.getPluginResources("org.eclim")
+          .getProperty("nailgun.server.port");
+        int port = Integer.parseInt(portString);
+        logger.info("Eclim Server Started on port " + port + '.');
+        server = new NGServer(null, port);
+        server.run();
+      }else{
+        exitCode = 1;
       }
-
-      // start nailgun
-      String portString = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      int port = Integer.parseInt(portString);
-      logger.info("Eclim Server Started on port " + port + '.');
-      server = new NGServer(null, port);
-      server.run();
     }catch(NumberFormatException nfe){
       String p = Services.getPluginResources("org.eclim")
         .getProperty("nailgun.server.port");
@@ -110,7 +109,7 @@ public abstract class AbstractEclimApplication
     }
 
     shutdown();
-    return new Integer(0);
+    return new Integer(exitCode);
   }
 
   /**
@@ -165,6 +164,34 @@ public abstract class AbstractEclimApplication
   }
 
   /**
+   * Loads the core bundle which in turn loads the eclim plugins.
+   */
+  private boolean load()
+    throws Exception
+  {
+    logger.info("Loading plugin org.eclim");
+    Services.DefaultPluginResources defaultResources =
+      new Services.DefaultPluginResources();
+    defaultResources.initialize("org.eclim");
+    defaultResources.registerCommand(ReloadCommand.class);
+
+    logger.info("Loading plugin org.eclim.core");
+
+    Bundle bundle = Platform.getBundle("org.eclim.core");
+    if(bundle == null){
+      String diagnoses = EclimPlugin.getDefault().diagnose("org.eclim.core");
+      logger.error(Services.getMessage(
+            "plugin.load.failed", "org.eclim.core", diagnoses));
+      return false;
+    }
+
+    bundle.start();
+
+    logger.info("Loaded plugin org.eclim.core");
+    return true;
+  }
+
+  /**
    * Shuts down the eclim server.
    */
   private synchronized void shutdown()
@@ -184,50 +211,6 @@ public abstract class AbstractEclimApplication
 
       logger.info("Eclim stopped.");
     }
-  }
-
-  /**
-   * Loads any eclim plugins found.
-   */
-  private void loadPlugins()
-  {
-    logger.info("Loading plugin org.eclim");
-
-    Bundle bundle = Platform.getBundle("org.eclim");
-
-    // should only happen when restarting eclimd inside of eclipse.
-    if (bundle.getState() != Bundle.STARTING ||
-        bundle.getState() != Bundle.ACTIVE)
-    {
-      try{
-        bundle.start();
-      }catch(BundleException be){
-        logger.error("Error loading org.eclim bundle.", be);
-      }
-    }
-
-    Services.DefaultPluginResources defaultResources =
-      new Services.DefaultPluginResources();
-    defaultResources.initialize("org.eclim");
-    //loadCommands(bundle, defaultResources);
-
-    logger.info("Loading plugin org.eclim.core");
-
-    Bundle bundle = Platform.getBundle("org.eclim.core");
-    if(bundle == null){
-      IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-        .append(".metadata").append(".log");
-      throw new RuntimeException(
-          "Could not load bundle for plugin 'org.eclim.core'\n" +
-          "Please see " + log.toOSString() + " for more info.");
-    }
-
-    try{
-      bundle.start();
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }
-    logger.info("Loaded plugin org.eclim.core");
   }
 
   /**

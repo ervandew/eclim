@@ -16,15 +16,30 @@
  */
 package org.eclim.eclipse;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Plugin;
 
+import org.eclipse.core.runtime.internal.adaptor.EclipseAdaptorMsg;
+import org.eclipse.core.runtime.internal.adaptor.MessageHelper;
+
+import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.service.resolver.PlatformAdmin;
+import org.eclipse.osgi.service.resolver.ResolverError;
+import org.eclipse.osgi.service.resolver.State;
+import org.eclipse.osgi.service.resolver.VersionConstraint;
+
+import org.eclipse.osgi.util.NLS;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The main plugin class.
@@ -106,5 +121,86 @@ public class EclimPlugin
       shell = result[0];
     }
     return shell;
+  }
+
+  /**
+   * Diagnose loading of the bundle with the supplied name (ex. org.eclim.core).
+   *
+   * Gleaned from org.eclipse.core.runtime.internal.adaptor.EclipseCommandProvider
+   *
+   * @param bundleName
+   * @return
+   */
+  public String diagnose(String bundleName)
+  {
+    StringWriter out = new StringWriter();
+    PrintWriter writer = new PrintWriter(out);
+
+    BundleContext context = getDefault().getBundle().getBundleContext();
+    ServiceReference platformAdminRef =
+      context.getServiceReference(PlatformAdmin.class.getName());
+    PlatformAdmin platformAdmin =
+      (PlatformAdmin)context.getService(platformAdminRef);
+    State state = platformAdmin.getState(false);
+
+    BundleDescription bundle = null;
+    BundleDescription[] allBundles = state.getBundles(bundleName);
+    if (allBundles.length == 0){
+      writer.println(NLS.bind(
+            EclipseAdaptorMsg.ECLIPSE_CONSOLE_CANNOT_FIND_BUNDLE_ERROR, bundleName));
+    }else{
+      bundle = allBundles[0];
+
+      VersionConstraint[] unsatisfied =
+        platformAdmin.getStateHelper().getUnsatisfiedConstraints(bundle);
+      ResolverError[] resolverErrors =
+        platformAdmin.getState(false).getResolverErrors(bundle);
+
+      for (int i = 0; i < resolverErrors.length; i++) {
+        if ((resolverErrors[i].getType() &
+              (ResolverError.MISSING_FRAGMENT_HOST |
+               ResolverError.MISSING_GENERIC_CAPABILITY |
+               ResolverError.MISSING_IMPORT_PACKAGE |
+               ResolverError.MISSING_REQUIRE_BUNDLE)) != 0)
+        {
+          continue;
+        }
+        writer.print("  ");
+        writer.println(resolverErrors[i].toString());
+      }
+
+      if (unsatisfied.length == 0 && resolverErrors.length == 0) {
+        writer.print("  ");
+        writer.println(EclipseAdaptorMsg.ECLIPSE_CONSOLE_NO_CONSTRAINTS);
+      }
+      if (unsatisfied.length > 0) {
+        writer.print("  ");
+        writer.println(EclipseAdaptorMsg.ECLIPSE_CONSOLE_DIRECT_CONSTRAINTS);
+      }
+      for (int i = 0; i < unsatisfied.length; i++) {
+        writer.print("    ");
+        writer.println(MessageHelper.getResolutionFailureMessage(unsatisfied[i]));
+      }
+
+      VersionConstraint[] unsatisfiedLeaves =
+        platformAdmin.getStateHelper().getUnsatisfiedLeaves(
+            new BundleDescription[] {bundle});
+      boolean foundLeaf = false;
+      for (int i = 0; i < unsatisfiedLeaves.length; i++) {
+        if (unsatisfiedLeaves[i].getBundle() == bundle)
+          continue;
+        if (!foundLeaf) {
+          foundLeaf = true;
+          writer.print("  ");
+          writer.println(EclipseAdaptorMsg.ECLIPSE_CONSOLE_LEAF_CONSTRAINTS);
+        }
+        writer.print("    ");
+        writer.println(unsatisfiedLeaves[i].getBundle().getLocation() +
+            " [" + unsatisfiedLeaves[i].getBundle().getBundleId() + "]");
+        writer.print("      ");
+        writer.println(MessageHelper.getResolutionFailureMessage(unsatisfiedLeaves[i]));
+      }
+    }
+    return out.toString();
   }
 }
