@@ -25,6 +25,7 @@
 " Script Variables {{{
   let s:warnings = '\(' . join([
       \ 'imported but unused',
+      \ 'local variable .* assigned to but never used',
     \ ], '\|') . '\)'
 " }}}
 
