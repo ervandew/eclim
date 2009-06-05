@@ -222,6 +222,7 @@ from __future__ import with_statement
 with(projectroot()):
   from rope.base import project
   from rope.base.exceptions import ModuleSyntaxError, RopeError
+  from rope.contrib import codeassist
   from rope.contrib import findit
   project = project.Project(vim.eval('a:project'))
 
@@ -241,16 +242,29 @@ with(projectroot()):
       locations = findit.find_occurrences(project, resource, offset)
     else:
       code = resource.read()
-      location = findit.find_definition(
-        project, code, offset, resource=resource, maxfixes=3)
+      location = codeassist.get_definition_location(
+        project, code, offset, maxfixes=3)
+      # using codeassist instead since it seems able to find some things that
+      # findit cannot.
+      #location = findit.find_definition(
+      #  project, code, offset, resource=resource, maxfixes=3)
       locations = location and [location]
 
     results = []
     if locations:
       for location in locations:
-        path = location.resource.real_path.replace('\\', '/')
+        if hasattr(location, 'resource'): # findit result
+          path = location.resource.real_path.replace('\\', '/')
+          lineno = location.lineno
+        else: # codeassist result
+          path = location[0] and \
+            location[0].real_path or \
+            '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
+          path = path.replace('\\', '/')
+          lineno = location[1]
+
         # TODO: use location.offset
-        results.append('%s|%s col 1|' % (path, location.lineno))
+        results.append('%s|%s col 1|' % (path, lineno))
 
     vim.command("let results = %s" % repr(results))
   except IndentationError, e:
