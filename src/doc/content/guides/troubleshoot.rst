@@ -56,7 +56,7 @@ I'm editing a [java, python, php, etc] file and code completion doesn't work.
 
   ::
 
-    :EclimInfo
+    :ProjectInfo
 
   If that returns an error that it is unable to determine the project, then see
   the :ref:`workspace section above <ts_workspace>` or one of the
