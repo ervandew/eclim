@@ -18,7 +18,6 @@ package org.eclim.command;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -35,6 +34,7 @@ import org.eclim.Services;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("static-access")
 public class Options
 {
   public static final String COMMAND_OPTION = "command";
@@ -89,8 +89,6 @@ public class Options
   public static final String VALUE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
 
-  public static final String OPTION_SUFFIX = ".options";
-
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";
   private static final String REQUIRED = "REQUIRED";
@@ -117,8 +115,10 @@ public class Options
    */
   public Options ()
   {
-    for(Iterator ii = coreOptions.getOptions().iterator(); ii.hasNext();){
-      options.addOption((Option)ii.next());
+    @SuppressWarnings("unchecked")
+    Collection<Option> opts = coreOptions.getOptions();
+    for(Option option : opts){
+      options.addOption(option);
     }
   }
 

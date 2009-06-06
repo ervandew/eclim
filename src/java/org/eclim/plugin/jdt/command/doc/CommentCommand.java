@@ -181,6 +181,7 @@ public class CommentCommand
             Services.getMessage("project.copyright.not.found", file));
       }
 
+      @SuppressWarnings("unchecked")
       List<TagElement> tags = javadoc.tags();
       tags.clear();
 
@@ -212,6 +213,7 @@ public class CommentCommand
     throws Exception
   {
     if(element.getParent().getElementType() == IJavaElement.COMPILATION_UNIT){
+      @SuppressWarnings("unchecked")
       List<TagElement> tags = javadoc.tags();
       IProject project = element.getJavaProject().getProject();
       if(isNew){
@@ -252,7 +254,10 @@ public class CommentCommand
           TextElement authorText = javadoc.getAST().newTextElement();
           authorText.setText(author);
           authorTag.setTagName(TagElement.TAG_AUTHOR);
-          authorTag.fragments().add(authorText);
+
+          @SuppressWarnings("unchecked")
+          List<ASTNode> fragments = authorTag.fragments();
+          fragments.add(authorText);
           tags.add(index, authorTag);
         }
 
@@ -289,8 +294,9 @@ public class CommentCommand
       ICompilationUnit src, Javadoc javadoc, IJavaElement element, boolean isNew)
     throws Exception
   {
-    IMethod method = (IMethod)element;
+    @SuppressWarnings("unchecked")
     List<TagElement> tags = javadoc.tags();
+    IMethod method = (IMethod)element;
 
     if(isNew){
       // see if method is overriding / implementing method from superclass
@@ -368,6 +374,7 @@ public class CommentCommand
       Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
+    @SuppressWarnings("unchecked")
     List<TagElement> tags = javadoc.tags();
     String[] params = method.getParameterNames();
     if(isNew){
@@ -440,6 +447,7 @@ public class CommentCommand
       Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
+    @SuppressWarnings("unchecked")
     List<TagElement> tags = javadoc.tags();
     // get return type from element.
     if(!method.isConstructor()){
@@ -500,6 +508,7 @@ public class CommentCommand
       Javadoc javadoc, IMethod method, boolean isNew)
     throws Exception
   {
+    @SuppressWarnings("unchecked")
     List<TagElement> tags = javadoc.tags();
 
     // get thrown exceptions from element.
@@ -599,9 +608,14 @@ public class CommentCommand
     if(text != null){
       TextElement textElement = javadoc.getAST().newTextElement();
       textElement.setText(text);
-      tag.fragments().add(textElement);
+
+      @SuppressWarnings("unchecked")
+      List<ASTNode> fragments = tag.fragments();
+      fragments.add(textElement);
     }
 
-    javadoc.tags().add(index, tag);
+    @SuppressWarnings("unchecked")
+    List<TagElement> tags = javadoc.tags();
+    tags.add(index, tag);
   }
 }
