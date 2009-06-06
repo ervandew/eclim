@@ -46,6 +46,11 @@ if !exists('g:Tlist_Ctags_Cmd')
   endif
 endif
 
+" no ctags found, no need to continue.
+if !exists('g:Tlist_Ctags_Cmd')
+  finish
+endif
+
 let g:EclimAvailable = eclim#PingEclim(0)
 
 " set eclim command for taglist if user wants it and eclim is running.
