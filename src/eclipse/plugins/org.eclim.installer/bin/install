@@ -29,14 +29,10 @@ if [ ! -e "$ECLIPSE" ]; then
   exit 1
 fi
 
-# handle eclipse issue on gentoo
-IS_GENTOO=`which java-config 2> /dev/null`
-if [ -x "$IS_GENTOO" ]; then
-  ECLIPSE="$ECLIPSE -vm $(java-config --java)"
-fi
-
 if [ "$2" = "addSite" -o "$2" = "listFeatures" ]; then
-  $ECLIPSE -nosplash -clean -refresh -application org.eclipse.update.core.standaloneUpdate $@
+  "$ECLIPSE" -nosplash -clean -refresh \
+    -application org.eclipse.update.core.standaloneUpdate $@
 else
-  $ECLIPSE -nosplash -clean -refresh -application org.eclim.installer.application $@
+  "$ECLIPSE" -nosplash -clean -refresh \
+    -application org.eclim.installer.application $@
 fi
