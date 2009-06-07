@@ -274,7 +274,7 @@ public class EclipsePluginsStep
     }catch(Exception e){
       setError(e);
     }finally{
-      setValid(dependencies.size() == 0);
+      setValid(dependencies != null && dependencies.size() == 0);
       setBusy(false);
       setPreviousEnabled(true);
       taskProgress.setIndeterminate(false);
