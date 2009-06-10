@@ -134,6 +134,7 @@ function eclim#tree#Tree(name, roots, aliases, expand, filters)
   setlocal nobuflisted
   setlocal buftype=nofile
   setlocal bufhidden=delete
+  setlocal foldmethod=manual
   setlocal foldtext=getline(v:foldstart)
   setlocal nomodifiable
 
