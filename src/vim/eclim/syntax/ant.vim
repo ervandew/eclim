@@ -33,6 +33,8 @@ syn keyword antElement pathtofileset sortlist urlencode compilewithwalls
 syn keyword antElement forget assert bool limit math post stopwatch
 syn keyword antElement inifile antclipse antserver remoteant
 
+" ant 1.7 tasks
+syn keyword antversion echoxml
 " ant 1.7 resources and resource collections
 syn keyword antElement bzip2resource file gzipresource javaresource
 syn keyword antElement propertyresource string tarentry zipentry
@@ -43,7 +45,7 @@ syn keyword antElement date depend depth different filename present containsrege
 syn keyword antElement size type modified signedselector scriptselector
 syn match antElement 'contains'
 " ant 1.7 conditions
-syn keyword antElement antversion hasfreespace hasmethod isfailure matches
+syn keyword antElement hasfreespace hasmethod isfailure matches
 syn keyword antElement resourcecount resourcesmatch
 " ant 1.7 misc elements
 syn keyword antElement preserveintarget service
