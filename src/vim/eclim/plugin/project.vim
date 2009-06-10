@@ -64,20 +64,27 @@ if g:EclimProjectKeepLocalHistory
 endif
 
 if g:EclimProjectTreeAutoOpen
-  autocmd VimEnter *
-    \ if eclim#project#util#GetCurrentProjectRoot() != '' |
-    \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
-    \   exec g:EclimProjectTreeContentWincmd |
-    \ endif
+  augroup project_tree_autoopen
+    autocmd!
+    autocmd VimEnter *
+      \ if eclim#project#util#GetCurrentProjectRoot() != '' |
+      \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
+      \   exec g:EclimProjectTreeContentWincmd |
+      \ endif
+  augroup END
+
   autocmd BufWinEnter *
     \ if tabpagenr() > 1 &&
     \     !exists('t:project_tree_auto_opened') &&
+    \     !exists('g:SessionLoad') &&
     \     eclim#project#util#GetCurrentProjectRoot() != '' |
     \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
     \   exec g:EclimProjectTreeContentWincmd |
     \   let t:project_tree_auto_opened = 1 |
     \ endif
 endif
+
+autocmd SessionLoadPost * call eclim#project#tree#Restore()
 " }}}
 
 " Command Declarations {{{
