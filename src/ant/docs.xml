@@ -80,12 +80,25 @@
       ]]></replacevalue>
     </replace>
 
-    <!-- support for google sitemaps and analytics -->
-    <!--xslt in="src/forrest/content/xdocs/site.xml"
-        out="build/doc/forrest/sitemap.xml"
-        style="src/ant/xsl/forrest_site-google_sitemap.xsl"/>
-    <gzip src="build/doc/forrest/sitemap.xml"
-        destfile="build/doc/forrest/site/sitemap.xml.gz"/-->
+    <!-- support for google sitemap -->
+    <echo file="build/doc/site/sitemap.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">]]></echo>
+    <for param="file">
+      <path>
+        <fileset dir="build/doc/site" includes="**/*.html"/>
+      </path>
+      <sequential>
+        <propertyregex property="file" override="true" input="@{file}"
+            regexp="${basedir}/build/doc/site/" replace=""/>
+        <echo file="build/doc/site/sitemap.xml" append="true"><![CDATA[
+<url><loc>http://eclim.sourceforge.net/${file}</loc></url>]]></echo>
+      </sequential>
+    </for>
+    <echo file="build/doc/site/sitemap.xml" append="true"><![CDATA[
+</urlset>]]></echo>
+    <gzip src="build/doc/site/sitemap.xml"
+        destfile="build/doc/site/sitemap.xml.gz"/>
+    <delete file="build/doc/site/sitemap.xml"/>
   </target>
 
   <!--
