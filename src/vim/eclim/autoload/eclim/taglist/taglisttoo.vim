@@ -439,8 +439,10 @@ function! eclim#taglist#taglisttoo#Taglist(...)
   if action == -1 || action == 0
     let winnum = bufwinnr(g:TagList_title)
     if winnum != -1
+      let prevbuf = bufnr('%')
       exe winnum . 'wincmd w'
       call s:CloseTaglist()
+      exec bufwinnr(prevbuf) . 'wincmd w'
       return
     endif
   endif
@@ -455,6 +457,28 @@ function! eclim#taglist#taglisttoo#Taglist(...)
       autocmd CursorHold * call s:ShowCurrentTag()
     augroup END
   endif
+endfunction " }}}
+
+" Restore() {{{
+" Restore the taglist, typically after loading from a session file.
+function! eclim#taglist#taglisttoo#Restore()
+  if exists('t:taglistoo_restoring')
+    return
+  endif
+  let t:taglistoo_restoring = 1
+
+  " prevent auto open from firing after session is loaded.
+  augroup taglisttoo_autoopen
+    autocmd!
+  augroup END
+
+  call eclim#util#DelayedCommand(
+    \ 'let winnum = bufwinnr(g:TagList_title) | ' .
+    \ 'if winnum != -1 | ' .
+    \ '  exec "TlistToo" | ' .
+    \ '  exec "TlistToo" | ' .
+    \ '  unlet t:taglistoo_restoring | ' .
+    \ 'endif')
 endfunction " }}}
 
 " s:StartAutocmds() {{{

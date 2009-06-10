@@ -77,16 +77,27 @@ if !exists('loaded_taglist')
   endif
 
   if g:Tlist_Auto_Open && !exists('g:Tlist_Temp_Disable')
-    autocmd VimEnter * nested call eclim#taglist#taglisttoo#AutoOpen()
+    augroup taglisttoo_autoopen
+      autocmd!
+      autocmd VimEnter * nested call eclim#taglist#taglisttoo#AutoOpen()
+    augroup END
+
     " Auto open on new tabs as well.
     if v:version >= 700
       autocmd BufWinEnter *
-        \ if tabpagenr() > 1 && !exists('t:Tlist_Auto_Opened') |
+        \ if tabpagenr() > 1 &&
+        \     !exists('t:Tlist_Auto_Opened') &&
+        \     !exists('g:SessionLoad') |
         \   call eclim#taglist#taglisttoo#AutoOpen() |
         \   let t:Tlist_Auto_Opened = 1 |
         \ endif
     endif
   endif
+
+  augroup taglisttoo_file_session
+    autocmd!
+    autocmd SessionLoadPost * call eclim#taglist#taglisttoo#Restore()
+  augroup END
 endif
 " }}}
 
