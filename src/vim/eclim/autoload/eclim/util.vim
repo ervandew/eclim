@@ -80,16 +80,18 @@ endfunction " }}}
 " Note: Nesting is not supported.  A delayed command cannot invoke off another
 " delayed command.
 function! eclim#util#DelayedCommand(command, ...)
-  let g:eclim_updatetime_save = &updatetime
-  let g:eclim_delayed_command = a:command
+  let uid = fnamemodify(tempname(), ':t:r')
+  exec 'let g:eclim_updatetime_save' . uid . ' = &updatetime'
+  exec 'let g:eclim_delayed_command' . uid . ' = a:command'
   let &updatetime = len(a:000) ? a:000[0] : 1
-  augroup delayed_command
-    autocmd CursorHold *
-      \ let &updatetime = g:eclim_updatetime_save |
-      \ exec g:eclim_delayed_command |
-      \ unlet g:eclim_updatetime_save g:eclim_delayed_command |
-      \ autocmd! delayed_command
-  augroup END
+  exec 'augroup delayed_command' . uid
+    exec 'autocmd CursorHold * ' .
+      \ '  let &updatetime = g:eclim_updatetime_save' . uid . ' | ' .
+      \ '  exec g:eclim_delayed_command' . uid . ' | ' .
+      \ '  unlet g:eclim_updatetime_save' . uid . ' | ' .
+      \ '  unlet g:eclim_delayed_command' . uid . ' | ' .
+      \ '  autocmd! delayed_command' . uid
+  exec 'augroup END'
 endfunction " }}}
 
 " EchoTrace(message) {{{
