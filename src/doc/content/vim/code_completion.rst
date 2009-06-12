@@ -40,4 +40,22 @@ To find out more about Vim's insert completion execute
 
 from within Vim.
 
+.. note::
+
+  If you are using the embedded gvim inside of eclipse and after hitting ctrl-x
+  ctrl-u you still see the text
+
+  ::
+
+    -- ^X mode (^]^D^E^F^I^K^L^N^O^Ps^U^V^Y)
+
+  in the vim status bar, then eclipse has a command mapped to ctrl-u which is
+  preventing gvim from receiving that keystroke.  To resolve the issue:
+
+  1. open the key preferences page: Window -> Preferences -> General -> Keys
+  2. find the eclipse command bound to Ctrl+U (it should be the "Execute"
+     command).
+  3. select that command and either unbind it or change the key combination
+     that it is bound to.
+
 .. _supertab: http://www.vim.org/scripts/script.php?script_id=1643
