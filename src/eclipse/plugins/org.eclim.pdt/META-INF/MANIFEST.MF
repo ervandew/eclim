@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
   eclim.pdt.jar
 Bundle-Activator: org.eclim.plugin.Plugin
+Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
   org.eclim.core,
@@ -23,4 +24,3 @@ Require-Bundle: org.eclim,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
   org.eclipse.wst.validation
-Eclipse-AutoStart: false

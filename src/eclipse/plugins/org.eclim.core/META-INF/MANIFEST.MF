@@ -8,6 +8,7 @@ Bundle-ClassPath: .,
   eclim.core.jar,
   ${eclim.lib.jars}
 Bundle-Activator: org.eclim.plugin.core.CorePlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.core.command,
   org.eclim.plugin.core.command.complete,
@@ -30,4 +31,3 @@ Require-Bundle: org.eclim,
   org.eclipse.text,
   org.eclipse.ui,
   org.eclipse.ui.ide
-Eclipse-AutoStart: false

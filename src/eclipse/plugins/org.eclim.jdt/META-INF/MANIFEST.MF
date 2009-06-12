@@ -8,6 +8,7 @@ Bundle-ClassPath: .,
   eclim.jdt.jar,
   ${eclim.lib.jars}
 Bundle-Activator: org.eclim.plugin.Plugin
+Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Require-Bundle: org.eclim,
   org.eclim.core,
@@ -22,4 +23,3 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.ui,
   org.eclipse.jface.text,
   org.eclipse.ltk.core.refactoring
-Eclipse-AutoStart: false
