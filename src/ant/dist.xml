@@ -120,7 +120,9 @@
   <target name="installer">
     <!-- run formic -->
     <exec executable="${formic.home}/bin/formic" failonerror="true" dir=".">
-      <arg line="-buildfile src/installer/build.xml"/>
+      <arg value="-Declipse.home=${eclipse.home}"/>
+      <arg value="-buildfile"/>
+      <arg value="src/installer/build.xml"/>
     </exec>
   </target>
 
