@@ -36,6 +36,8 @@ import org.eclipse.core.runtime.Path;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 
 import org.scannotation.AnnotationDB;
 
@@ -46,6 +48,7 @@ import org.scannotation.AnnotationDB;
  */
 public class Plugin
   extends org.eclipse.core.runtime.Plugin
+  implements BundleListener
 {
   private static final Logger logger = Logger.getLogger(Plugin.class);
 
@@ -58,6 +61,22 @@ public class Plugin
   {
     super.start(context);
 
+    // start is called at startup regardless of whether Bundle-ActivationPolicy
+    // is lazy or not, but the bundle remains in the STARTING state and isn't
+    // activated until needed.  So, to avoid loading eclim resouces at eclipse
+    // startup, we listen for the bundle to be activated and then load our
+    // resources.
+    context.addBundleListener(this);
+  }
+
+  /**
+   * Invoked when the bundle is activated by the bundle listener registered
+   * during start(BundleContext).
+   *
+   * @param context the BundleContext.
+   */
+  public void activate(BundleContext context)
+  {
     Properties properties = new Properties();
     InputStream in = null;
     try{
@@ -72,14 +91,19 @@ public class Plugin
     String resourceClass = properties.getProperty("eclim.plugin.resources");
 
     Bundle bundle = this.getBundle();
-    PluginResources resources = (PluginResources)
-      bundle.loadClass(resourceClass).newInstance();
-    if(resources instanceof AbstractPluginResources){
-      ((AbstractPluginResources)resources).initialize(bundle.getSymbolicName());
-    }
-    Services.addPluginResources(resources);
+    try{
+      PluginResources resources = (PluginResources)
+        bundle.loadClass(resourceClass).newInstance();
+      if(resources instanceof AbstractPluginResources){
+        ((AbstractPluginResources)resources).initialize(bundle.getSymbolicName());
+      }
+      Services.addPluginResources(resources);
 
-    loadCommands(bundle, resources);
+      loadCommands(bundle, resources);
+    }catch(Exception e){
+      logger.error(
+          "Error starting plugin: " + this.getBundle().getSymbolicName(), e);
+    }
   }
 
   /**
@@ -125,6 +149,7 @@ public class Plugin
         .get(org.eclim.annotation.Command.class.getName());
       if(commandClasses != null){
         for (String commandClass : commandClasses){
+          @SuppressWarnings("unchecked")
           Class<? extends Command> cclass = (Class<? extends Command>)
             classloader.loadClass(commandClass);
           resources.registerCommand(cclass);
@@ -132,6 +157,20 @@ public class Plugin
       }
     }catch(Exception e){
       logger.error("Unable to load commands.", e);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see BundleListener#bundleChanged(BundleEvent)
+   */
+  public void bundleChanged(BundleEvent event)
+  {
+    Bundle bundle = event.getBundle();
+    if (bundle.getState() == Bundle.ACTIVE &&
+        this.getBundle().getSymbolicName().equals(bundle.getSymbolicName()))
+    {
+      this.activate(bundle.getBundleContext());
     }
   }
 }

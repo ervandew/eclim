@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * Plugin to load eclim core.
@@ -46,12 +47,11 @@ public class CorePlugin
 
   /**
    * {@inheritDoc}
-   * @see org.osgi.framework.BundleActivator#start(BundleContext)
+   * @see Plugin#activate(BundleContext)
    */
-  public void start(BundleContext context)
-    throws Exception
+  public void activate(BundleContext context)
   {
-    super.start(context);
+    super.activate(context);
 
     logger.info("Loading eclim plugins...");
     String pluginsDir =
@@ -84,7 +84,11 @@ public class CorePlugin
         throw new RuntimeException(
             Services.getMessage("plugin.load.failed", plugin, diagnoses));
       }else{
-        bundle.start();
+        try{
+          bundle.start();
+        }catch(BundleException be){
+          logger.error("Failed to load plugin: " + bundle.getSymbolicName(), be);
+        }
       }
     }
   }
