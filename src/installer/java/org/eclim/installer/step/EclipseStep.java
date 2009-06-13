@@ -205,9 +205,9 @@ public class EclipseStep
    * {@inheritDoc}
    * @see org.formic.wizard.WizardStep#proceed()
    */
-  public void proceed()
+  public boolean proceed()
   {
-    super.proceed();
+    boolean proceed = super.proceed();
     String home = (String)Installer.getContext().getValue("eclipse.home");
     home = FilenameUtils.normalizeNoEndSeparator(home);
     Installer.getContext().setValue("eclipse.home", home.replace('\\', '/'));
@@ -222,6 +222,7 @@ public class EclipseStep
       plugins = local + "/plugins";
     }
     Installer.getContext().setValue("eclim.plugins", plugins);
+    return proceed;
   }
 
   /**
