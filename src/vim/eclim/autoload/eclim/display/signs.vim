@@ -245,7 +245,7 @@ function! eclim#display#signs#Update()
   " remove all existing signs
   let existing = eclim#display#signs#GetExisting()
   for exists in existing
-    if exists.name !~ 'placeholder'
+    if exists.name =~ '^\(error\|info\|warning\|qf_error\|qf_warning\)$'
       call eclim#display#signs#Unplace(exists.id)
     endif
   endfor
