@@ -52,14 +52,21 @@ function! eclim#vcs#command#Annotate(...)
 
   let path = exists('b:vcs_props') ? b:vcs_props.path : expand('%:p')
   let revision = len(a:000) > 0 ? a:000[0] : ''
-  if revision == ''
-    let revision = eclim#vcs#util#GetRevision()
-  endif
-  let key = 'annotate_' . path . '_' . revision
-  let cached = eclim#cache#Get(key)
-  if has_key(cached, 'content')
-    let annotations = cached.content
-  else
+
+  " let the vcs annotate the current working version so that the results line
+  " up with the contents (assuming the underlying vcs supports it).
+  "if revision == ''
+  "  let revision = eclim#vcs#util#GetRevision()
+  "endif
+
+  " don't cache annotations since we won't see local changes in the results if
+  " the underlying vcs supports reporting them in the annotation output (git
+  " does, cvs, svn, and mercurial seem not to).
+  "let key = 'annotate_' . path . '_' . revision
+  "let cached = eclim#cache#Get(key)
+  "if has_key(cached, 'content')
+  "  let annotations = cached.content
+  "else
     let dir = fnamemodify(path, ':h')
     let cwd = getcwd()
     if isdirectory(dir)
@@ -73,12 +80,12 @@ function! eclim#vcs#command#Annotate(...)
         return
       endif
       let annotations = Annotate(revision)
-      call eclim#cache#Set(key, annotations,
-        \ {'path': path, 'revision': revision})
+      "call eclim#cache#Set(key, annotations,
+      "  \ {'path': path, 'revision': revision})
     finally
       exec 'lcd ' . escape(cwd, ' ')
     endtry
-  endif
+  "endif
 
   call s:ApplyAnnotations(annotations)
 endfunction " }}}
@@ -381,16 +388,40 @@ endfunction " }}}
 
 " s:ApplyAnnotations(annotations) {{{
 function! s:ApplyAnnotations(annotations)
+  let existing = {}
+  let existing_annotations = {}
+  for exists in eclim#display#signs#GetExisting()
+    if exists.name !~ '^\(vcs_annotate_\|placeholder\)'
+      let existing[exists.line] = exists
+    else
+      let existing_annotations[exists.line] = exists
+    endif
+  endfor
+
   let defined = eclim#display#signs#GetDefined()
   let index = 1
   for annotation in a:annotations
+    if annotation == 'uncommitted'
+      if has_key(existing_annotations, index)
+        call eclim#display#signs#Unplace(existing_annotations[index].id)
+      endif
+      let index += 1
+      continue
+    endif
+
+    if has_key(existing, index)
+      let index += 1
+      continue
+    endif
+
     let user = substitute(annotation, '^.\{-})\s\+\(.*\)', '\1', '')
     let user_abbrv = user[:1]
-    if index(defined, user) == -1
-      call eclim#display#signs#Define(user, user_abbrv, g:EclimInfoHighlight)
-      call add(defined, user_abbrv)
+    let sign_name = 'vcs_annotate_' . substitute(user[:5], ' ', '_', 'g')
+    if index(defined, sign_name) == -1
+      call eclim#display#signs#Define(sign_name, user_abbrv, g:EclimInfoHighlight)
+      call add(defined, sign_name)
     endif
-    call eclim#display#signs#Place(user, index)
+    call eclim#display#signs#Place(sign_name, index)
     let index += 1
   endfor
   let b:vcs_annotations = a:annotations
@@ -398,6 +429,13 @@ function! s:ApplyAnnotations(annotations)
   augroup vcs_annotate
     autocmd!
     autocmd CursorHold <buffer> call <SID>AnnotateInfo()
+    autocmd BufWritePost <buffer>
+      \ if !eclim#util#WillWrittenBufferClose() |
+      \   if exists('b:vcs_annotations') |
+      \     unlet b:vcs_annotations |
+      \   endif |
+      \   call eclim#vcs#command#Annotate() |
+      \ endif
   augroup END
 endfunction " }}}
 
@@ -414,13 +452,14 @@ function! s:AnnotateOff()
     let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
       let user = substitute(annotation, '^.*)\s\+\(.\{-}\)\s*$', '\1', '')
-      if index(defined, user) != -1
-        let signs = eclim#display#signs#GetExisting(user)
+      let sign_name = 'vcs_annotate_' . substitute(user[:5], ' ', '_', 'g')
+      if index(defined, sign_name) != -1
+        let signs = eclim#display#signs#GetExisting(sign_name)
         for sign in signs
           call eclim#display#signs#Unplace(sign.id)
         endfor
-        call eclim#display#signs#Undefine(user)
-        call remove(defined, index(defined, user))
+        call eclim#display#signs#Undefine(sign_name)
+        call remove(defined, index(defined, sign_name))
       endif
     endfor
     unlet b:vcs_annotations
