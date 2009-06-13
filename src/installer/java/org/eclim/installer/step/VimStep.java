@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
+import org.formic.InstallContext;
 import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
@@ -206,6 +207,18 @@ public class VimStep
       setBusy(false);
       fileChooser.getTextField().grabFocus();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.formic.wizard.WizardStep#proceed()
+   */
+  public void proceed()
+  {
+    super.proceed();
+    InstallContext context = Installer.getContext();
+    context.setValue("vim.files",
+        ((String)context.getValue("vim.files")).replace('\\', '/'));
   }
 
   /**
