@@ -52,8 +52,9 @@ function! eclim#vcs#impl#git#GetAnnotations(revision)
 
   let annotations = split(result, '\n')
   call map(annotations,
-      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+(\\s*\\(.\\{-}\\)\\s\\+\\(.\\{-}\\)\\s\\+[0-9]\\+).*', '\\1 (\\3) \\2', '')")
+      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+(\\s*\\(.\\{-}\\)\\s\\+\\(\\d\\{4}-\\d\\{2}\-\\d\\{2}\\s.\\{-}\\)\\s\\+[0-9]\\+).*', '\\1 (\\3) \\2', '')")
   " substitute(v:val, '\\(.\\{-}\\)\\s\\+(.*', '\\2 (\\3) \\1', '')")
+  call map(annotations, "v:val =~ '^0\\{5,}' ? 'uncommitted' : v:val")
 
   return annotations
 endfunction " }}}
