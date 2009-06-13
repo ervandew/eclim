@@ -149,31 +149,7 @@ public class VimStep
 
         if(rtp == null || rtp.length == 0){
           if(!homeVimCreatePrompted){
-            homeVimCreatePrompted = true;
-            File vimfiles = new File(
-                System.getProperty("user.home") + '/' +
-                (Os.isFamily("windows") ? "vimfiles" : ".vim"));
-            System.out.println(
-                "Checking for user vim files directory: " + vimfiles);
-            if(!vimfiles.exists()){
-              boolean create = GuiDialogs.showConfirm(
-                  "No suitable vim files directory found.\n" +
-                  "Would you like to create the standard\n" +
-                  "directory for your system?\n" +
-                  vimfiles);
-              if(create){
-                boolean created = vimfiles.mkdir();
-                if(created){
-                  rtpAttempted = false;
-                  displayed();
-                }else{
-                  GuiDialogs.showError("Unable to create directory: " + vimfiles);
-                }
-              }
-            }else{
-              fileChooser.getTextField().setText(
-                  vimfiles.getAbsolutePath().replace('\\', '/'));
-            }
+            createUserVimFiles("No suitable vim files directory found.");
           }else{
             GuiDialogs.showWarning(
                 "Your vim install is still reporting no\n" +
@@ -183,6 +159,12 @@ public class VimStep
         }else{
           if(rtp.length == 1){
             fileChooser.getTextField().setText(rtp[0]);
+
+            // try to discourage windows users from installing eclim files in
+            // their vim installation.
+            if(new File(rtp[0] + "/gvim.exe").exists()){
+              createUserVimFiles("No user vim files directory found.");
+            }
           }else{
             final JList list = new JList(rtp);
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -246,6 +228,41 @@ public class VimStep
       }
     }catch(Exception e){
       e.printStackTrace();
+    }
+  }
+
+  /**
+   * Prompt the user to create the standard user local vim files directory.
+   *
+   * @param message The message indicating the primary reason we're asking them
+   * if they want to create the user local directory.
+   */
+  private void createUserVimFiles(String message)
+  {
+    homeVimCreatePrompted = true;
+    File vimfiles = new File(
+        System.getProperty("user.home") + '/' +
+        (Os.isFamily("windows") ? "vimfiles" : ".vim"));
+    System.out.println(
+        "Checking for user vim files directory: " + vimfiles);
+    if(!vimfiles.exists()){
+      boolean create = GuiDialogs.showConfirm(
+          message + "\n" +
+          "Would you like to create the standard\n" +
+          "directory for your system?\n" +
+          vimfiles);
+      if(create){
+        boolean created = vimfiles.mkdir();
+        if(created){
+          rtpAttempted = false;
+          displayed();
+        }else{
+          GuiDialogs.showError("Unable to create directory: " + vimfiles);
+        }
+      }
+    }else{
+      fileChooser.getTextField().setText(
+          vimfiles.getAbsolutePath().replace('\\', '/'));
     }
   }
 
