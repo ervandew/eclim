@@ -17,6 +17,7 @@
 package org.eclim.installer.step;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,6 +84,8 @@ public class EclipseStep
     "/Applications/eclipse"
   };
 
+  private boolean createMissingPanelAdded = false;
+
   /**
    * Constructs the welcome step.
    */
@@ -97,11 +100,11 @@ public class EclipseStep
    */
   public Component init ()
   {
-    JPanel panel = new JPanel(new MigLayout("wrap 2, fillx", "[growprio 0] [fill]"));
+    final JPanel panel =
+      new JPanel(new MigLayout("wrap 2, fillx", "[growprio 0] [fill]"));
     GuiForm form = createForm();
 
     String home = fieldName("home");
-    String eclipseHomeDefault = getDefaultEclipseHome();
 
     final FileChooser eclipseHomeChooser =
       new FileChooser(JFileChooser.DIRECTORIES_ONLY);
@@ -113,6 +116,7 @@ public class EclipseStep
     form.bind(home, eclipseHomeChooser.getTextField(),
         new ValidatorBuilder().required()
         .validator(new EclipseHomeValidator()).validator());
+    String eclipseHomeDefault = getDefaultEclipseHome();
     eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
     // On systems where eclispe was installed via a package manger, the user may
@@ -125,14 +129,21 @@ public class EclipseStep
       form.bind(local, eclipseLocalChooser.getTextField(),
         new ValidatorBuilder().required().isDirectory().validator());
 
-      JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
-      JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
+      final JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
+      final JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
       eclipseLocalField.setText(eclipseLocalDefault);
       eclipseLocalChooser.getButton().setEnabled(false);
 
       String hasLocal = fieldName("hasLocal");
       JCheckBox overridePluginsCheckBox =
         new JCheckBox(Installer.getString(hasLocal));
+
+      final JPanel createMissingPanel = new JPanel(new FlowLayout());
+      final JButton createMissingButton =
+        new JButton(new CreatePluginDirsActions(eclipseLocalField));
+      String label = Installer.getString("eclipse.createMissing");
+      createMissingPanel.add(new JLabel(label));
+      createMissingPanel.add(createMissingButton);
 
       eclipseLocalField.setEnabled(false);
       overridePluginsCheckBox.addActionListener(new ActionListener(){
@@ -144,6 +155,39 @@ public class EclipseStep
             // force eclipse local text field to update itself
             JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
             eclipseHomeField.setText(eclipseHomeField.getText());
+            createMissingButton.setEnabled(false);
+          }else{
+            final File eclipseLocalPath = getDefaultEclipseLocalPath();
+            if(eclipseLocalPath != null){
+              final String[] path = {"configuration", "eclipse"};
+
+              final String eclipseLocalFieldText =
+                eclipseLocalPath.getAbsolutePath() + '/' +
+              StringUtils.join(path, '/');
+                eclipseLocalField.setText(eclipseLocalFieldText);
+                eclipseLocalField.setCaretPosition(0);
+
+              // see if any of the path parts are missing on the filesystem
+              boolean missing = false;
+              String missingPath = eclipseLocalPath.getAbsolutePath();
+              for (int ii = 0; ii < path.length; ii++){
+                if(!new File(missingPath + '/' + path[ii]).exists()){
+                  missing = true;
+                  missingPath =
+                    eclipseLocalFieldText.substring(missingPath.length() + 1);
+                  break;
+                }
+                missingPath += '/' + path[ii];
+              }
+
+              if(missing){
+                if(!createMissingPanelAdded){
+                  createMissingPanelAdded = true;
+                  panel.add(createMissingPanel, "span");
+                }
+                createMissingButton.setEnabled(true);
+              }
+            }
           }
         }
       });
@@ -156,45 +200,9 @@ public class EclipseStep
       panel.add(eclipseLocalChooser);
 
       // see if plugins are installed in user's home directory instead.
-      File dotEclipse = new File(
-          Installer.getProject().replaceProperties("${user.home}/.eclipse"));
-      if(dotEclipse.exists()){
-        File[] contents = dotEclipse.listFiles(new FilenameFilter(){
-          public boolean accept (File dir, String name){
-            if(name.startsWith("org.eclipse.platform_")){
-              return true;
-            }
-            return false;
-          }
-        });
-        if(contents.length > 0){
-          String[] path = {"configuration", "eclipse"};
-          Arrays.sort(contents);
-          File dir = contents[contents.length - 1];
-          overridePluginsCheckBox.doClick();
-          eclipseLocalField.setText(
-              dir.getAbsolutePath() + '/' + StringUtils.join(path, '/'));
-          eclipseLocalField.setCaretPosition(0);
-
-          // see if any of the path parts are missing on the filesystem
-          boolean missing = false;
-          String missingPath = dir.getAbsolutePath();
-          for (int ii = 0; ii < path.length; ii++){
-            if(!new File(missingPath + '/' + path[ii]).exists()){
-              missing = true;
-              missingPath = eclipseLocalField.getText().substring(
-                  missingPath.length() + 1);
-              break;
-            }
-            missingPath += '/' + path[ii];
-          }
-
-          if(missing){
-            String label = Installer.getString("eclipse.createMissing", missingPath);
-            panel.add(new JLabel(label), "span, split 2");
-            panel.add(new JButton(new CreatePluginDirsActions(eclipseLocalField)));
-          }
-        }
+      File eclipseLocalPath = getDefaultEclipseLocalPath();
+      if(eclipseLocalPath != null){
+        overridePluginsCheckBox.doClick();
       }
     }
 
@@ -220,6 +228,13 @@ public class EclipseStep
       local = FilenameUtils.normalizeNoEndSeparator(local);
       Installer.getContext().setValue("eclipse.local", local);
       plugins = local + "/plugins";
+
+      if (!new File(local).canWrite()){
+        proceed = false;
+        GuiDialogs.showWarning(
+            "You do not have write permissions on the directory:\n" +
+            "  " + local + "");
+      }
     }
     Installer.getContext().setValue("eclim.plugins", plugins);
     return proceed;
@@ -251,6 +266,33 @@ public class EclipseStep
       }
     }
     return home;
+  }
+
+  /**
+   * Gets the default default user local eclipse path if one can be found.
+   *
+   * @return The default user local eclipse path (~/.eclipse/org.eclipse...).
+   */
+  private File getDefaultEclipseLocalPath()
+  {
+    File dotEclipse = new File(
+        Installer.getProject().replaceProperties("${user.home}/.eclipse"));
+    if(dotEclipse.exists()){
+      File[] contents = dotEclipse.listFiles(new FilenameFilter(){
+        public boolean accept (File dir, String name){
+          if(name.startsWith("org.eclipse.platform_")){
+            return true;
+          }
+          return false;
+        }
+      });
+      if(contents.length > 0){
+        Arrays.sort(contents);
+        File dir = contents[contents.length - 1];
+        return dir;
+      }
+    }
+    return null;
   }
 
   private class EclipseHomeValidator
