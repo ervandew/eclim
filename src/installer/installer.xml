@@ -205,7 +205,8 @@
       <dirset dir="${eclim.plugins}" includes="org.eclim*"/>
     </delete>
 
-    <!-- remove vim files -->
+    <!-- remove old vim files
+         (when altering includes/excludes, update VimStep.proceed) -->
     <delete failonerror="false" includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
         <include name="**/*"/>

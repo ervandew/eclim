@@ -43,7 +43,13 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.tools.ant.BuildException;
+
+import org.apache.tools.ant.taskdefs.Delete;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
+
+import org.apache.tools.ant.types.FileSet;
 
 import org.formic.InstallContext;
 import org.formic.Installer;
@@ -92,6 +98,7 @@ public class VimStep
   private FileChooser fileChooser;
   private boolean rtpAttempted;
   private boolean homeVimCreatePrompted;
+  private String[] runtimePath;
 
   /**
    * Constructs the step.
@@ -140,12 +147,21 @@ public class VimStep
 
       setBusy(true);
       try{
-        String[] rtp = (String[])Worker.post(new Task(){
+        runtimePath = (String[])Worker.post(new Task(){
           public Object run () throws Exception {
             setGvimProperty();
             return getVimRuntimePath();
           }
         });
+
+        // filter out dirs the user doesn't have permission write to.
+        ArrayList filtered = new ArrayList();
+        for (int ii = 0; ii < runtimePath.length; ii++){
+          if (new File(runtimePath[ii]).canWrite()){
+            filtered.add(runtimePath[ii]);
+          }
+        }
+        String[] rtp = (String[])filtered.toArray(new String[filtered.size()]);
 
         if(rtp == null || rtp.length == 0){
           if(!homeVimCreatePrompted){
@@ -195,12 +211,93 @@ public class VimStep
    * {@inheritDoc}
    * @see org.formic.wizard.WizardStep#proceed()
    */
-  public void proceed()
+  public boolean proceed()
   {
-    super.proceed();
-    InstallContext context = Installer.getContext();
-    context.setValue("vim.files",
-        ((String)context.getValue("vim.files")).replace('\\', '/'));
+    boolean proceed = super.proceed();
+    if (proceed){
+      InstallContext context = Installer.getContext();
+      String vimfiles =
+        ((String)context.getValue("vim.files")).replace('\\', '/');
+      context.setValue("vim.files", vimfiles);
+
+      // Check if the user has the eclim vim files already installed in another
+      // directory in their vim's runtime path.
+
+      // on windows, since case is insensitive, lower the path.
+      if (Os.isFamily("windows")){
+        vimfiles = vimfiles.toLowerCase();
+      }
+
+      if(runtimePath != null && runtimePath.length > 0){
+        for (int ii = 0; ii < runtimePath.length; ii++){
+          String rpath = runtimePath[ii];
+          String path = rpath;
+          if (Os.isFamily("windows")){
+            path = path.toLowerCase();
+          }
+          if (vimfiles.equals(path)){
+            continue;
+          }
+
+          File fpath = new File(path + "/plugin/eclim.vim");
+          if (!fpath.exists()){
+            continue;
+          }
+
+          if (fpath.canWrite()){
+            boolean remove = GuiDialogs.showConfirm(
+                "You appear to have one or more of the eclim vim files\n" +
+                "installed in another directory:\n" +
+                "  " + rpath + "\n" +
+                "Would you like the installer to remove those files now?");
+            if (remove){
+              Delete delete = new Delete();
+              delete.setProject(Installer.getProject());
+              delete.setTaskName("delete");
+              delete.setIncludeEmptyDirs(true);
+              delete.setFailOnError(true);
+
+              FileSet set = new FileSet();
+              set.setDir(new File(path + "/eclim"));
+              set.createInclude().setName("**/*");
+              set.createExclude().setName("after/**/*");
+              set.createExclude().setName("resources/**/*");
+              delete.addFileset(set);
+
+              try{
+                boolean deleted = fpath.delete();
+                if (!deleted){
+                  throw new BuildException("Failed to delete file: plugin/eclim.vim");
+                }
+                delete.execute();
+              }catch(BuildException be){
+                GuiDialogs.showError(
+                    "Failed to delete old eclim vim files:\n" +
+                    "  " + be.getMessage() + "\n" +
+                    "You may continue with the installation, but if old eclim\n" +
+                    "vim files remain, chances are that you will receive\n" +
+                    "errors upon starting (g)vim and the older version of\n" +
+                    "the files may take precedence over the ones you are\n" +
+                    "installing now, leading to indeterminate behavior.");
+              }
+            }
+            proceed = remove;
+          }else{
+            GuiDialogs.showWarning(
+                "You appear to have one or more of the eclim vim files\n" +
+                "installed in another directory:\n" +
+                "  " + rpath + "\n" +
+                "Unfortunately it seems you do not have write access to\n" +
+                "that directory. You may continue with the installation,\n" +
+                "but chances are that you will receive errors upon starting\n" +
+                "(g)vim and the older version of the files may take precedence\n" +
+                "over the ones you are installing now, leading to indeterminate\n" +
+                "behavior.");
+          }
+        }
+      }
+    }
+    return proceed;
   }
 
   /**
@@ -316,7 +413,7 @@ public class VimStep
       ArrayList results = new ArrayList();
       for (int ii = 0; ii < paths.length; ii++){
         File path = new File(paths[ii]);
-        if(path.isDirectory() && path.canWrite()){
+        if(path.isDirectory()){
           results.add(paths[ii].replace('\\', '/'));
         }
       }
