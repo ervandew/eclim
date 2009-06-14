@@ -16,6 +16,21 @@
 History of Changes
 ==================
 
+.. _1.4.9:
+
+1.4.9 (Jun. 13, 2009)
+----------------------
+
+Bug Fixes:
+  - Fixed possible installation issue on Windows.
+  - Various other bug fixes.
+
+Eclim:
+  - Vimplugin now supports auto starting eclimd view when gvim editor is opened
+    from eclipse.
+  - Handle possible key binding conflicts when using embedded gvim for two
+    common gvim bindings (ctrl-w, ctrl-u).
+
 .. _1.4.8:
 
 1.4.8 (May 30, 2009)
