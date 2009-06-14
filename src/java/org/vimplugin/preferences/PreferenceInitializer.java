@@ -30,6 +30,7 @@ public class PreferenceInitializer
     store.setDefault(PreferenceConstants.P_PORT, 3219);
     store.setDefault(PreferenceConstants.P_EMBED,
         "true".equals(VimPlugin.getDefault().getProperty("gvim.embed.default")));
+    store.setDefault(PreferenceConstants.P_START_ECLIMD, true);
     store.setDefault(PreferenceConstants.P_GVIM,
         VimPlugin.getDefault().getProperty("gvim.default"));
   }

@@ -96,6 +96,12 @@ shown below.
 
 .. image:: images/screenshots/eclipse/java_editor_eclim_view.png
 
+.. note::
+
+  By default, if you open an instance of gvim from within eclipse, the eclimd
+  view will be opened for you if necessary.  This behavior is configuration via
+  the Vimplugin preferences.
+
 **Stopping eclimd**
 
 As long as the eclimd tab is open then the eclim daemon will be running.
@@ -126,7 +132,10 @@ name in the eclipse tree and then selecting:
 
 .. image:: images/screenshots/eclipse/gvim_eclim_view.png
 
-The eclim installer should take care of locating your gvim installation for use inside of eclipse, but in the event that it could not locate it, you can set the location and other settings via the vimplugin preferences located under the Windows menu at:
+The eclim installer should take care of locating your gvim installation for use
+inside of eclipse, but in the event that it could not locate it, you can set
+the location and other settings via the vimplugin preferences located under the
+Windows menu at:
 
   Preferences -> Vimplugin
 

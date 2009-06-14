@@ -26,4 +26,7 @@ public class PreferenceConstants {
 
   /** embed vim into eclipse */
   public static final String P_EMBED = "embedded";
+
+  /** open eclimd view automatically */
+  public static final String P_START_ECLIMD = "eclimd.start";
 }

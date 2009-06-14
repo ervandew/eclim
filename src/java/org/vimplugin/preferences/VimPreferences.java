@@ -48,6 +48,10 @@ public class VimPreferences
           PreferenceConstants.P_EMBED,
           plugin.getMessage("preference.embed"),
           getFieldEditorParent()));
+    addField(new BooleanFieldEditor(
+          PreferenceConstants.P_START_ECLIMD,
+          plugin.getMessage("preference.eclimd.start"),
+          getFieldEditorParent()));
     addField(new StringFieldEditor(
           PreferenceConstants.P_PORT,
           plugin.getMessage("preference.port"),

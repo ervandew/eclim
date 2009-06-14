@@ -53,7 +53,9 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
@@ -224,6 +226,19 @@ public class VimEditor
       VimConnection vc = VimPlugin.getDefault().getVimserver(serverID).getVc();
       vc.command(bufferID, "editFile", "\"" + filePath + "\"");
       vc.command(bufferID, "startDocumentListen", "");
+
+      // open eclimd view if necessary
+      boolean startEclimd = plugin.getPreferenceStore()
+        .getBoolean(PreferenceConstants.P_START_ECLIMD);
+      if (startEclimd){
+        IWorkbenchPage page = PlatformUI.getWorkbench()
+          .getActiveWorkbenchWindow().getActivePage();
+        try{
+          page.showView("org.eclim.eclipse.headed.EclimdView");
+        }catch(PartInitException pie){
+          logger.error("Unable to open eclimd view.", pie);
+        }
+      }
 
       // on initial open, our part listener isn't firing for some reason.
       if(embedded){
