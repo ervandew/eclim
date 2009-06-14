@@ -54,7 +54,7 @@ function! TestAnnotate()
   let existing = eclim#display#signs#GetExisting()
   call PeekRedir()
   call VUAssertEquals(len(existing), 4)
-  call VUAssertEquals(existing[0].name, 'ervandew')
+  call VUAssertEquals(existing[0].name, 'vcs_annotate_ervand')
 
   call VUAssertEquals(
     \ b:vcs_annotations[0],
