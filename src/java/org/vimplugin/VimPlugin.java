@@ -33,9 +33,16 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import org.eclipse.swt.widgets.Display;
+
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import org.osgi.framework.BundleContext;
+
+import org.vimplugin.editors.VimEditorPartListener;
 
 import org.vimplugin.preferences.PreferenceConstants;
 
@@ -66,6 +73,8 @@ public class VimPlugin
 
   private Boolean nbSupported;
   private Boolean embedSupported;
+
+  private VimEditorPartListener partListener;
 
   /**
    * Returns the shared instance.
@@ -216,6 +225,16 @@ public class VimPlugin
     nextServerID = 1; // 0 is for the DEFAULT VimServer
     numberOfBuffers = 1; // Vim starts buffer count from 1
     seqNo = 0;
+
+    partListener = new VimEditorPartListener();
+    Display.getDefault().asyncExec(new Runnable(){
+      public void run()
+      {
+        IWorkbench workbench = PlatformUI.getWorkbench();
+        workbench.getActiveWorkbenchWindow()
+          .getActivePage().addPartListener(partListener);
+      }
+    });
   }
 
   /**
@@ -227,6 +246,10 @@ public class VimPlugin
   public void stop(BundleContext context) throws Exception {
     super.stop(context);
     plugin = null;
+
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    workbench.getActiveWorkbenchWindow()
+      .getActivePage().removePartListener(partListener);
   }
 
   /**
@@ -302,6 +325,16 @@ public class VimPlugin
   public void resetGvimState() {
     embedSupported = null;
     nbSupported = null;
+  }
+
+  /**
+   * Gets the partListener used to monitor (un)focus of vim editors.
+   *
+   * @return The partListener.
+   */
+  public VimEditorPartListener getPartListener()
+  {
+    return this.partListener;
   }
 
   private boolean testGvimFeature(String command) {

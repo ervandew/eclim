@@ -111,6 +111,8 @@ public class VimEditor
    */
   private Shell shell;
 
+  private boolean embedded;
+
   /**
    * The constructor.
    */
@@ -158,9 +160,9 @@ public class VimEditor
       }
     }
 
-    boolean embed = plugin.getPreferenceStore()
+    embedded = plugin.getPreferenceStore()
       .getBoolean(PreferenceConstants.P_EMBED);
-    if (embed){
+    if (embedded){
       if (!plugin.gvimEmbedSupported()){
         String message = plugin.getMessage(
             "gvim.not.supported",
@@ -222,6 +224,13 @@ public class VimEditor
       VimConnection vc = VimPlugin.getDefault().getVimserver(serverID).getVc();
       vc.command(bufferID, "editFile", "\"" + filePath + "\"");
       vc.command(bufferID, "startDocumentListen", "");
+
+      // on initial open, our part listener isn't firing for some reason.
+      if(embedded){
+        plugin.getPartListener().partOpened(this);
+        plugin.getPartListener().partBroughtToTop(this);
+        plugin.getPartListener().partActivated(this);
+      }
     }
   }
 
@@ -233,14 +242,13 @@ public class VimEditor
    */
   private void createVim(String workingDir, Composite parent) {
     VimPlugin plugin = VimPlugin.getDefault();
-    boolean embed = plugin.getPreferenceStore()
-      .getBoolean(PreferenceConstants.P_EMBED);
 
-    if (embed) {
+    if (embedded) {
       try {
         createEmbeddedVim(workingDir, parent);
       } catch (Exception e) {
         message(plugin.getMessage("embed.fallback"), e);
+        embedded = false;
         createExternalVim(workingDir, parent);
       }
     } else {
@@ -494,15 +502,12 @@ public class VimEditor
       return;
     }
 
-    VimPlugin plugin = VimPlugin.getDefault();
-    boolean embed = plugin.getPreferenceStore()
-      .getBoolean(PreferenceConstants.P_EMBED);
-
     // let the parent composite handle setting the focus on the tab first.
-    if (embed){
+    if (embedded){
       parent.setFocus();
     }
 
+    VimPlugin plugin = VimPlugin.getDefault();
     VimConnection conn = plugin.getVimserver(serverID).getVc();
 
     // get the current offset which "setDot" requires.
@@ -526,7 +531,7 @@ public class VimEditor
     // to fully focus gvim, we need to simulate a mouse click.
     // Should this be optional, via a preference? There is the potential for
     // weirdness here.
-    if (embed && parent.getDisplay().getActiveShell() != null){
+    if (embedded && parent.getDisplay().getActiveShell() != null){
       Rectangle bounds = parent.getBounds();
       final Point point = parent.toDisplay(
           bounds.x + 5, bounds.y + bounds.height - 25);
@@ -662,6 +667,15 @@ public class VimEditor
    */
   public int getBufferID() {
     return bufferID;
+  }
+
+  /**
+   * Determines if this editor is running an embedded gvim instance or not.
+   *
+   * @return True if the gvim instance is embedded, false otherwise.
+   */
+  public boolean isEmbedded() {
+    return embedded;
   }
 
   /**

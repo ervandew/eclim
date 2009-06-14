@@ -134,32 +134,67 @@ The eclim installer should take care of locating your gvim installation for use 
   If you have vimplugin installed you should remove it prior to using the eclim
   version.
 
-**Eclipse key shortcuts in embedded gvim**
+**Eclipse/Vim key shortcuts in embedded gvim**
 
-While the embedded gvim has focus, all the eclipse keyboard shortcuts you would
-normally use to perform eclipse specific commands will be intercepted by gvim.
-Since gvim has its own set of key bindings, the eclipse ones will be either
-ignored or perform whatever action they have been mapped to in gvim.
+Depending on your OS and windowing system, when the embedded gvim has focus,
+you will fall into one of two groups:
 
-To remedy this situation, eclim provides a means to map eclipse shortcuts
-inside of gvim.  To register a shortcut, simply add your mappings to your
-vimrc, gvimrc, or other standard gvim file like so:
+1. In the first group of users, all key presses are received by eclipse prior
+   to sending them to gvim.
 
-  .. code-block:: vim
+  For this group, when typing a possible key shortcut (ctrl-n for example),
+  eclipse will first evaluate that key stroke to see if there are any eclipse
+  key bindings registered.  If there are, then eclipse will run the associated
+  command and the key stroke is never sent to gvim.  If no key binding is
+  found, then eclipse will pass the key stroke through to gvim.  What this
+  means for you is that for any gvim key mappings that you use that have an
+  eclipse key binding, they will not be evaluated inside of gvim.  So, if you
+  encounter this issue, you'll need to remap the keys in vim or eclipse.  To
+  remove the key binding from the eclipse side, simply open the "Keys"
+  preferences page:
 
-    " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
-    nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
+  ::
 
-    " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
-    nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
+    Window -> Preferences -> General -> Keys
 
-    " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
-    nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
+  Then find the entry in the list that corresponds with the key binding you
+  want to remove, select it, and hit the "Unbind Command" button.
 
-The value supplied to the `FeedKeys` function must be an eclipse compatible key
-binding string as found in:
+  .. note::
+    By default eclim will auto-remove a couple of the standard eclipse
+    bindings whenever an embedded gvim editor has focus and then restore them
+    with a non-gvim editor gains focus:
 
-  Windows -> Preferences -> General -> Keys
+    - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
+      switch windows (ex. ctrl-w j).
+    - Ctrl+U: in eclipse this run "Execute", but in gvim this is needed to
+      run code completion (ex. ctrl-x ctrl-u).
+
+2. In the second group, all key presses are received by gvim and not evaluated
+   at all by eclipse.
+
+  For this group of users, you may have an eclipse key shortcut that you like
+  to use (Shift+Ctrl+R for example), but when you hit that key combination, it
+  will be evaluated by gvim instead of eclipse.  To remedy this situation,
+  eclim provides a means to map eclipse shortcuts inside of gvim.  To register
+  a shortcut, simply add your mappings to your vimrc, gvimrc, or other standard
+  gvim file like so:
+
+    .. code-block:: vim
+
+      " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
+      nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
+
+      " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
+      nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
+
+      " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
+      nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
+
+  The value supplied to the `FeedKeys` function must be an eclipse compatible key
+  binding string as found in:
+
+    Windows -> Preferences -> General -> Keys
 
 
 ~/.eclimrc

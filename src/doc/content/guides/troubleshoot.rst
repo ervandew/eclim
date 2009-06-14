@@ -50,22 +50,6 @@ I'm editing a [java, python, php, etc] file and code completion doesn't work.
 - If you receive the message "E764: Option 'completefunc' is not set", please
   see the :ref:`file type section below <ts_ftplugin>`.
 
-- If you are using the embedded gvim inside of eclipse and after hitting ctrl-x
-  ctrl-u you still see the text
-
-  ::
-
-    -- ^X mode (^]^D^E^F^I^K^L^N^O^Ps^U^V^Y)
-
-  in the vim status bar, then eclipse has a command mapped to ctrl-u which is
-  preventing gvim from receiving that keystroke.  To resolve the issue:
-
-  1. open the key preferences page: Window -> Preferences -> General -> Keys
-  2. find the eclipse command bound to Ctrl+U (it should be the "Execute"
-     command).
-  3. select that command and either unbind it or change the key combination
-     that it is bound to.
-
 - Next step is to make sure that the current file is in an eclipse project by
   running the following command in the vim windows containing the file you are
   working on.

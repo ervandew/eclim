@@ -35,6 +35,8 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - Fixed cursor location restoration when re-focusing gvim editor.
   - Added support for feeding keys from gvim to eclipse to support user mapped
     eclipse shortcuts inside of gvim.
+  - fixed possible key binding conflicts between eclipse and gvim when an
+    embedded gvim editor has focus (Ctrl+W, Ctrl+U, etc.).
   - fixed passing of user preference args to gvim when spawning external (non
     embedded) instance.
   - fixed parsing of user preference args to handle quoted arguments.
