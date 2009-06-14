@@ -53,6 +53,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 import org.scannotation.AnnotationDB;
 
@@ -203,10 +204,24 @@ public abstract class AbstractEclimApplication
   private void loadPlugins()
   {
     logger.info("Loading plugin org.eclim");
+
+    Bundle bundle = Platform.getBundle("org.eclim");
+
+    // should only happen when restarting eclimd inside of eclipse.
+    if (bundle.getState() != Bundle.STARTING ||
+        bundle.getState() != Bundle.ACTIVE)
+    {
+      try{
+        bundle.start();
+      }catch(BundleException be){
+        logger.error("Error loading org.eclim bundle.", be);
+      }
+    }
+
     Services.DefaultPluginResources defaultResources =
       new Services.DefaultPluginResources();
     defaultResources.initialize("org.eclim");
-    loadCommands(EclimPlugin.getDefault().getBundle(), defaultResources);
+    loadCommands(bundle, defaultResources);
 
     logger.info("Loading eclim plugins...");
     String pluginsDir =
@@ -243,7 +258,7 @@ public abstract class AbstractEclimApplication
 
       logger.info("Loading plugin " + pluginName);
 
-      Bundle bundle = Platform.getBundle(pluginName);
+      bundle = Platform.getBundle(pluginName);
       if(bundle == null){
         IPath log = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
           .append(".metadata").append(".log");
