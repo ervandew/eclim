@@ -34,6 +34,10 @@ pre {
   /*width: 100%;*/
 }
 
+.body img {
+  padding: 10px 0 15px 0;
+}
+
 td.linenos pre {
   background-color: transparent;
   border: 0;
