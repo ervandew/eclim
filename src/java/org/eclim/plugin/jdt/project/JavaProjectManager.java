@@ -81,6 +81,7 @@ public class JavaProjectManager
 
   private static final String PRESERVE = "eclim.preserve";
 
+  private static final String CLASSPATH = ".classpath";
   private static final String CLASSPATH_XSD =
     "/resources/schema/eclipse/classpath.xsd";
 
@@ -116,13 +117,13 @@ public class JavaProjectManager
       Services.getPluginResources(PluginResources.NAME);
     List<Error> errors = XmlUtils.validateXml(
         javaProject.getProject().getName(),
-        ".classpath",
+        CLASSPATH,
         resources.getResource(CLASSPATH_XSD).toString());
     if(errors.size() > 0){
       return errors;
     }
 
-    String dotclasspath = javaProject.getProject().getFile(".classpath")
+    String dotclasspath = javaProject.getProject().getFile(CLASSPATH)
       .getRawLocation().toOSString();
 
     // ivy.xml, etc updated.
@@ -172,19 +173,22 @@ public class JavaProjectManager
     throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);
-    ClassPathDetector detector = new ClassPathDetector(project, null);
-    IClasspathEntry[] detected = detector.getClasspath();
-    IClasspathEntry[] depends =
-      createOrUpdateDependencies(javaProject, dependsString);
-    IClasspathEntry[] container = new IClasspathEntry[]{
-      JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))
-    };
 
-    IClasspathEntry[] classpath = merge(
-        new IClasspathEntry[][]{detected, depends, container});
-          //javaProject.readRawClasspath(), detected, depends, container
+    if (!project.getFile(CLASSPATH).exists()) {
+      ClassPathDetector detector = new ClassPathDetector(project, null);
+      IClasspathEntry[] detected = detector.getClasspath();
+      IClasspathEntry[] depends =
+        createOrUpdateDependencies(javaProject, dependsString);
+      IClasspathEntry[] container = new IClasspathEntry[]{
+        JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))
+      };
 
-    javaProject.setRawClasspath(classpath, null);
+      IClasspathEntry[] classpath = merge(
+          new IClasspathEntry[][]{detected, depends, container});
+            //javaProject.readRawClasspath(), detected, depends, container
+
+      javaProject.setRawClasspath(classpath, null);
+    }
     javaProject.makeConsistent(null);
     javaProject.save(null, false);
   }

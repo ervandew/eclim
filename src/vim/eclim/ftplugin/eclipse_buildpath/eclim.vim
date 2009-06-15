@@ -45,36 +45,36 @@ augroup END
 " Command Declarations {{{
 if !exists(":NewSrcEntry")
   command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative -buffer
-    \ NewSrcEntry :call eclim#php#buildpath#NewBuildPathEntry
+    \ NewSrcEntry :call eclim#dltk#buildpath#NewBuildPathEntry
     \     (substitute('<args>', '\', '/', 'g') , s:entry_src)
 endif
 if !exists(":NewLibEntry")
   command -nargs=+ -complete=dir -buffer
-    \ NewLibEntry :call eclim#php#buildpath#NewBuildPathEntry
+    \ NewLibEntry :call eclim#dltk#buildpath#NewBuildPathEntry
     \     (substitute('<args>', '\', '/', 'g') , s:entry_lib)
 endif
 if !exists(":NewProjectEntry")
-  command -nargs=+ -complete=customlist,eclim#php#util#CommandCompleteProject -buffer
-    \ NewProjectEntry :call eclim#php#buildpath#NewBuildPathEntry('<args>', s:entry_project)
+  command -nargs=+ -complete=customlist,eclim#dltk#util#CommandCompleteProject -buffer
+    \ NewProjectEntry :call eclim#dltk#buildpath#NewBuildPathEntry('<args>', s:entry_project)
 endif
 
 " Disabled until org.eclipse.dltk.internal.core.BuildpathEntry.elementDecode
 " starts supporting kind="var"
 "if !exists(":NewVarEntry")
-"  command -nargs=+ -complete=customlist,eclim#php#buildpath#CommandCompleteVarPath -buffer
+"  command -nargs=+ -complete=customlist,eclim#dltk#buildpath#CommandCompleteVarPath -buffer
 "    \ NewVarEntry
-"    \ :call eclim#php#buildpath#NewBuildPathEntry('<args>', s:entry_var)
+"    \ :call eclim#dltk#buildpath#NewBuildPathEntry('<args>', s:entry_var)
 "endif
 "if !exists(":VariableList")
-"  command -buffer VariableList :call eclim#php#buildpath#VariableList()
+"  command -buffer VariableList :call eclim#dltk#buildpath#VariableList()
 "endif
 "if !exists(":VariableCreate")
-"  command -nargs=+ -buffer -complete=customlist,eclim#php#buildpath#CommandCompleteVarAndDir
-"    \ VariableCreate :call eclim#php#buildpath#VariableCreate(<f-args>)
+"  command -nargs=+ -buffer -complete=customlist,eclim#dltk#buildpath#CommandCompleteVarAndDir
+"    \ VariableCreate :call eclim#dltk#buildpath#VariableCreate(<f-args>)
 "endif
 "if !exists(":VariableDelete")
-"  command -nargs=1 -buffer -complete=customlist,eclim#php#buildpath#CommandCompleteVar
-"    \ VariableDelete :call eclim#php#buildpath#VariableDelete('<args>')
+"  command -nargs=1 -buffer -complete=customlist,eclim#dltk#buildpath#CommandCompleteVar
+"    \ VariableDelete :call eclim#dltk#buildpath#VariableDelete('<args>')
 "endif
 
 " }}}

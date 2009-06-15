@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.search;
+package org.eclim.plugin.dltk.command.search;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,11 @@ import org.eclipse.dltk.core.IModelElement;
 
 import org.eclipse.dltk.core.search.SearchMatch;
 
+/**
+ * Output filter for a list of search matches.
+ *
+ * @author Eric Van Dewoestine
+ */
 public class SearchFilter
   implements OutputFilter<List<SearchMatch>>
 {
@@ -56,17 +63,18 @@ public class SearchFilter
               fullyQualified.append(" -> ");
             }
             if (el.getElementType() == IModelElement.TYPE){
-              fullyQualified.append("class ");
+              fullyQualified.append("type ");
             }
             if (el.getElementType() == IModelElement.METHOD){
-              fullyQualified.append("function ");
+              fullyQualified.append("method ");
             }
             fullyQualified.append(el.getElementName());
           }
 
           String filename = result.getResource().getLocation().toOSString();
-          if (!filename.endsWith(".php")){
-            // currently ignoring results that don't have a php file to view.
+          File file = new File(filename);
+          if (!file.exists() || !file.isFile()){
+            // ignoring results that don't have a file that exists.
             continue;
           }
           Position position = new Position(

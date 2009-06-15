@@ -19,8 +19,10 @@ package org.eclim.plugin.core.project;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -90,7 +92,29 @@ public class ProjectManagement
    */
   public static ProjectManager getProjectManager(String nature)
   {
-    return (ProjectManager)managers.get(nature);
+    return managers.get(nature);
+  }
+
+  /**
+   * Gets an array of all register project manager nature names.
+   *
+   * @return Array of nature names.
+   */
+  public static String[] getProjectManagerNatures()
+  {
+    Set<String> registered = managers.keySet();
+    return registered.toArray(new String[registered.size()]);
+  }
+
+  /**
+   * Gets an array of all register project managers.
+   *
+   * @return Array of ProjectManager.
+   */
+  public static ProjectManager[] getProjectManagers()
+  {
+    Collection<ProjectManager> registered = managers.values();
+    return registered.toArray(new ProjectManager[registered.size()]);
   }
 
   /**

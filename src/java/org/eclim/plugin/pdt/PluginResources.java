@@ -30,6 +30,8 @@ import org.eclim.plugin.pdt.preference.OptionHandler;
 
 import org.eclim.plugin.pdt.project.PhpProjectManager;
 
+import org.eclipse.php.internal.core.project.PHPNature;
+
 /**
  * Implementation of AbstractPluginResources.
  *
@@ -53,9 +55,8 @@ public class PluginResources
   {
     super.initialize(name);
 
-    ProjectNatureFactory.addNature("php", "org.eclipse.php.core.PHPNature");
-    ProjectManagement.addProjectManager(
-        "org.eclipse.php.core.PHPNature", new PhpProjectManager());
+    ProjectNatureFactory.addNature("php", PHPNature.ID);
+    ProjectManagement.addProjectManager(PHPNature.ID, new PhpProjectManager());
 
     Preferences.addOptionHandler("org.eclipse.php", new OptionHandler());
     PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",

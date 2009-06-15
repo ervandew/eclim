@@ -14,27 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.buildpath;
+package org.eclim.plugin.dltk.command.buildpath;
 
-import java.util.ArrayList;
+import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.dltk.core.DLTKCore;
 
 /**
- * Command to list defined build path variables.
+ * Command to delete an build path variable.
  *
  * @author Eric Van Dewoestine
  */
-@Command(name = "php_buildpath_variables")
-public class BuildpathVariablesCommand
+@Command(
+  name = "dltk_buildpath_variable_delete",
+  options = "REQUIRED n name ARG"
+)
+public class BuildpathVariableDeleteCommand
   extends AbstractCommand
 {
   /**
@@ -43,17 +45,10 @@ public class BuildpathVariablesCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<BuildpathVariable> results = new ArrayList<BuildpathVariable>();
-    String[] names = DLTKCore.getBuildpathVariableNames();
-    for(int ii = 0; ii < names.length; ii++){
-      IPath path = DLTKCore.getBuildpathVariable(names[ii]);
-      if(path != null){
-        BuildpathVariable variable = new BuildpathVariable();
-        variable.setName(names[ii]);
-        variable.setPath(path.toOSString());
-        results.add(variable);
-      }
-    }
-    return BuildpathVariablesFilter.instance.filter(commandLine, results);
+    String name = commandLine.getValue(Options.NAME_OPTION);
+
+    DLTKCore.removeBuildpathVariable(name, null);
+
+    return Services.getMessage("buildpath.variable.deleted", name);
   }
 }

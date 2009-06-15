@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.search;
+package org.eclim.plugin.dltk.command.search;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -25,24 +28,28 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectManager;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.plugin.pdt.util.PhpUtils;
+import org.eclim.plugin.dltk.project.DltkProjectManager;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.core.ScriptModelUtil;
 
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
 import org.eclipse.dltk.core.search.SearchEngine;
+import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.SearchPattern;
 
@@ -50,15 +57,13 @@ import org.eclipse.dltk.internal.corext.util.SearchUtils;
 
 import org.eclipse.dltk.internal.ui.search.DLTKSearchScopeFactory;
 
-import org.eclipse.php.internal.ui.PHPUILanguageToolkit;
-
 /**
- * Command to search php code.
+ * Command for dltk project search requests.
  *
  * @author Eric Van Dewoestine
  */
 @Command(
-  name = "php_search",
+  name = "dltk_search",
   options =
     "REQUIRED n project ARG," +
     "OPTIONAL f file ARG," +
@@ -83,7 +88,8 @@ public class SearchCommand
   public static final String SCOPE_PROJECT = "project";
 
   public static final String TYPE_CLASS = "class";
-  public static final String TYPE_METHOD = "function";
+  public static final String TYPE_METHOD = "method";
+  public static final String TYPE_FUNCTION = "function";
   public static final String TYPE_FIELD = "field";
 
   /**
@@ -115,9 +121,6 @@ public class SearchCommand
     if(file != null && offset != null && length != null){
       IFile ifile = ProjectUtils.getFile(project, file);
 
-      // I really hate this hack
-      PhpUtils.waitOnBuild();
-
       ISourceModule src = DLTKCore.createSourceModuleFrom(ifile);
       IModelElement[] elements = src.codeSelect(
           getOffset(commandLine), Integer.parseInt(length));
@@ -125,7 +128,8 @@ public class SearchCommand
       if(elements != null && elements.length > 0){
         element = elements[0];
       }
-      ScriptModelUtil.reconcile(src);
+
+      //ScriptModelUtil.reconcile(src);
       if (element != null && element.exists()) {
         searchPattern = SearchPattern.createPattern(
             element, context, SearchUtils.GENERICS_AGNOSTIC_MATCH_RULE, toolkit);
@@ -135,8 +139,8 @@ public class SearchCommand
 
       boolean caseSensitive =
         !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
-      if(caseSensitive){
-        mode  |= SearchPattern.R_CASE_SENSITIVE;
+      if (caseSensitive){
+        mode |= SearchPattern.R_CASE_SENSITIVE;
       }
 
       if (type == IDLTKSearchConstants.UNKNOWN){
@@ -183,8 +187,16 @@ public class SearchCommand
     boolean includeInterpreterEnvironment = false;
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
 
-    IDLTKLanguageToolkit toolkit =
-      PHPUILanguageToolkit.getInstance().getCoreToolkit();
+    IDLTKLanguageToolkit toolkit = null;
+    for(String nature : ProjectManagement.getProjectManagerNatures()){
+      if(project.hasNature(nature)){
+        ProjectManager manager = ProjectManagement.getProjectManager(nature);
+        if(manager instanceof DltkProjectManager){
+          toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
+          break;
+        }
+      }
+    }
     IDLTKSearchScope searchScope = null;
 
     if (SCOPE_PROJECT.equals(scope)){
@@ -192,8 +204,8 @@ public class SearchCommand
       searchScope = factory.createProjectSearchScope(
           names, includeInterpreterEnvironment, toolkit);
     }else{ // workspace
-      searchScope = factory.createWorkspaceScope(includeInterpreterEnvironment,
-          toolkit);
+      searchScope = factory.createWorkspaceScope(
+          includeInterpreterEnvironment, toolkit);
     }
     return searchScope;
   }
@@ -226,7 +238,7 @@ public class SearchCommand
   {
     if(TYPE_CLASS.equals(type)){
       return IDLTKSearchConstants.TYPE;
-    }else if(TYPE_METHOD.equals(type)){
+    }else if(TYPE_METHOD.equals(type) || TYPE_FUNCTION.equals(type)){
       return IDLTKSearchConstants.METHOD;
     }else if(TYPE_FIELD.equals(type)){
       return IDLTKSearchConstants.FIELD;
@@ -249,5 +261,35 @@ public class SearchCommand
       return SearchPattern.R_CAMELCASE_MATCH;
     }
     return SearchPattern.R_EXACT_MATCH;
+  }
+
+  private static class SearchRequestor
+    extends org.eclipse.dltk.core.search.SearchRequestor
+  {
+    private ArrayList<SearchMatch> matches = new ArrayList<SearchMatch>();
+
+    /**
+     * {@inheritDoc}
+     * @see org.eclipse.dltk.core.search.SearchRequestor#acceptSearchMatch(SearchMatch)
+     */
+    @Override
+    public void acceptSearchMatch(SearchMatch match)
+      throws CoreException
+    {
+      if(match.getAccuracy() == SearchMatch.A_ACCURATE){
+        matches.add(match);
+      }
+    }
+
+    /**
+     * Gets a list of all the matches found.
+     *
+     * @return List of SearchMatch.
+     */
+    public List<SearchMatch> getMatches()
+    {
+      //Collections.sort(matches, MATCH_COMPARATOR);
+      return matches;
+    }
   }
 }

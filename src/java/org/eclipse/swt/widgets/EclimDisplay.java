@@ -18,9 +18,15 @@ package org.eclipse.swt.widgets;
 
 import java.lang.reflect.Field;
 
+import org.eclim.eclipse.EclimPlugin;
+
+import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
+
 //import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
 import org.eclipse.swt.widgets.Display;
+
+import org.eclipse.ui.internal.WorkbenchWindow;
 
 //import org.eclipse.ui.internal.WorkbenchWindow;
 
@@ -34,7 +40,7 @@ public class EclimDisplay
   extends Display
 {
   private static final String THREAD = "thread";
-  //private static Shell shell;
+  private static Shell shell;
 
   /**
    * Force the display to think that it's tied to the supplied thread.
@@ -47,11 +53,11 @@ public class EclimDisplay
       thread.set(this, _thread);
 
       // set up some default workspace environment components.
-      /*if (shell == null){
-        shell = new Shell();
-        WorkbenchWindow window = new EclimWorkbenchWindow(shell);
+      if (shell == null){
+        shell = EclimPlugin.getShell();
+        WorkbenchWindow window = new EclimWorkbenchWindow();
         shell.setData(window);
-      }*/
+      }
     }catch(Exception e){
       throw new RuntimeException(e);
     }
@@ -61,15 +67,15 @@ public class EclimDisplay
    * {@inheritDoc}
    * @see Display#getActiveShell()
    */
-  /*@Override
+  @Override
   public Shell getActiveShell ()
   {
     return shell;
-  }*/
+  }
 
   /**
    * {@inheritDoc}
-   * @see Display#getActiveShell()
+   * @see Display#setSynchronizer()
    */
   @Override
   public void setSynchronizer (Synchronizer synchronizer) {

@@ -16,32 +16,13 @@
  */
 package org.eclim.plugin.pdt.command.src;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.annotation.Command;
 
-import org.eclim.command.CommandLine;
-import org.eclim.command.Error;
-import org.eclim.command.Options;
-
-import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclim.plugin.core.command.filter.ErrorFilter;
-
-import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.dltk.command.src.AbstractSrcUpdateCommand;
 
 import org.eclim.util.IOUtils;
 
-import org.eclim.util.file.FileOffsets;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
-import org.eclipse.dltk.compiler.problem.IProblem;
 
 import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
 
@@ -58,65 +39,22 @@ import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
     "OPTIONAL v validate NOARG"
 )
 public class SrcUpdateCommand
-  extends AbstractCommand
+  extends AbstractSrcUpdateCommand
 {
   /**
    * {@inheritDoc}
+   * @see AbstractSrcUpdateCommand#parse(String,IFile,Reporter)
    */
-  public String execute(CommandLine commandLine)
+  @Override
+  protected void parse(
+      String filename, IFile file, AbstractSrcUpdateCommand.Reporter reporter)
     throws Exception
   {
-    String file = commandLine.getValue(Options.FILE_OPTION);
-    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-
-    IProject project = ProjectUtils.getProject(projectName, true);
-    IFile ifile = ProjectUtils.getFile(project, file);
-
-    // ensure model is refreshed with latest version of the file.
-//    PHPWorkspaceModelManager.getInstance().addFileToModel(ifile);
-
-    // validate the src file.
-    if(commandLine.hasOption(Options.VALIDATE_OPTION)){
-
-      PHPSourceParserFactory parser = new PHPSourceParserFactory();
-      Reporter reporter = new Reporter();
-      parser.parse(
-          file.toCharArray(),
-          IOUtils.toString(ifile.getContents()).toCharArray(),
-          reporter
-      );
-
-      String filepath = ProjectUtils.getFilePath(project, file);
-      FileOffsets offsets = FileOffsets.compile(filepath);
-      ArrayList<Error> errors = new ArrayList<Error>();
-      for(IProblem problem : reporter.getProblems()){
-        int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
-        errors.add(new Error(
-            problem.getMessage(),
-            filepath,
-            lineColumn[0],
-            lineColumn[1],
-            problem.isWarning()
-        ));
-      }
-      return ErrorFilter.instance.filter(commandLine, errors);
-    }
-    return StringUtils.EMPTY;
-  }
-
-  private class Reporter
-    extends AbstractProblemReporter
-  {
-    private List<IProblem> problems = new ArrayList<IProblem>();
-
-    public void reportProblem(IProblem problem)
-    {
-      problems.add(problem);
-    }
-
-    public List<IProblem> getProblems()
-    {
-      return problems;
-    }
+    PHPSourceParserFactory parser = new PHPSourceParserFactory();
+    parser.parse(
+        filename.toCharArray(),
+        IOUtils.toString(file.getContents()).toCharArray(),
+        reporter
+    );
   }
 }

@@ -37,7 +37,6 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
 
 /**
  * Abstract base class containing shared functionality used by implementations

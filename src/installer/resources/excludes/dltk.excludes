@@ -1,0 +1,4 @@
+org.eclim.dltk_${eclim.version}/**
+eclim/autoload/eclim/dltk/**
+eclim/ftplugin/eclipse_buildpath/**
+eclim/syntax/eclipse_buildpath.vim

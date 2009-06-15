@@ -14,41 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.buildpath;
+package org.eclim.plugin.dltk.util;
 
-import org.eclim.Services;
-
-import org.eclim.annotation.Command;
-
-import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
-
-import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclipse.dltk.core.DLTKCore;
+import java.util.ArrayList;
 
 /**
- * Command to delete an build path variable.
+ * Utility methods for working with dltk projects.
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "php_buildpath_variable_delete",
-  options = "REQUIRED n name ARG"
-)
-public class BuildpathVariableDeleteCommand
-  extends AbstractCommand
+public class DltkUtils
 {
+  private static ArrayList<String> natures = new ArrayList<String>();
+
   /**
-   * {@inheritDoc}
+   * Add the supplied nature to the list of known dltk based natures.
+   *
+   * @param nature The nature id.
    */
-  public String execute(CommandLine commandLine)
-    throws Exception
+  public static void addDltkNature(String nature)
   {
-    String name = commandLine.getValue(Options.NAME_OPTION);
+    if (!natures.contains(nature)){
+      natures.add(nature);
+    }
+  }
 
-    DLTKCore.removeBuildpathVariable(name, null);
-
-    return Services.getMessage("buildpath.variable.deleted", name);
+  /**
+   * Gets an array of registered dltk natures.
+   *
+   * @return An array of natures ids.
+   */
+  public static String[] getDltkNatures()
+  {
+    return natures.toArray(new String[natures.size()]);
   }
 }

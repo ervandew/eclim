@@ -33,13 +33,13 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "TestA", "-t", "class"
+      "dltk_search", "-n", Pdt.TEST_PROJECT, "-p", "TestA", "-t", "class"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|6 col 7|class TestA", result);
+    assertEquals("Wrong Result", file + "|6 col 7|type TestA", result);
   }
 
   @Test
@@ -49,14 +49,14 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "methodA1", "-t", "function"
+      "dltk_search", "-n", Pdt.TEST_PROJECT, "-p", "methodA1", "-t", "function"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
     assertEquals("Wrong Result",
-        file + "|9 col 19|class TestA -> function methodA1", result);
+        file + "|9 col 19|type TestA -> method methodA1", result);
   }
 
   @Test
@@ -66,7 +66,7 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "field"
+      "dltk_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "field"
     });
 
     System.out.println(result);
@@ -82,12 +82,12 @@ public class SearchCommandTest
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "php_search", "-n", Pdt.TEST_PROJECT, "-p", "functionA", "-t", "function"
+      "dltk_search", "-n", Pdt.TEST_PROJECT, "-p", "functionA", "-t", "function"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|3 col 10|function functionA", result);
+    assertEquals("Wrong Result", file + "|3 col 10|method functionA", result);
   }
 }

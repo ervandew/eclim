@@ -14,33 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.pdt.command.buildpath;
+package org.eclim.plugin.dltk.command.buildpath;
 
-import org.eclim.Services;
+import java.util.ArrayList;
 
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.dltk.core.DLTKCore;
 
 /**
- * Command to create an build path variable.
+ * Command to list defined build path variables.
  *
  * @author Eric Van Dewoestine
  */
-@Command(
-  name = "php_buildpath_variable_create",
-  options =
-    "REQUIRED n name ARG," +
-    "REQUIRED p path ARG"
-)
-public class BuildpathVariableCreateCommand
+@Command(name = "dltk_buildpath_variables")
+public class BuildpathVariablesCommand
   extends AbstractCommand
 {
   /**
@@ -49,11 +43,17 @@ public class BuildpathVariableCreateCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
-    String name = commandLine.getValue(Options.NAME_OPTION);
-    String path = commandLine.getValue(Options.PATH_OPTION);
-
-    DLTKCore.setBuildpathVariable(name, new Path(path), null);
-
-    return Services.getMessage("buildpath.variable.created", name);
+    ArrayList<BuildpathVariable> results = new ArrayList<BuildpathVariable>();
+    String[] names = DLTKCore.getBuildpathVariableNames();
+    for(int ii = 0; ii < names.length; ii++){
+      IPath path = DLTKCore.getBuildpathVariable(names[ii]);
+      if(path != null){
+        BuildpathVariable variable = new BuildpathVariable();
+        variable.setName(names[ii]);
+        variable.setPath(path.toOSString());
+        results.add(variable);
+      }
+    }
+    return BuildpathVariablesFilter.instance.filter(commandLine, results);
   }
 }
