@@ -45,7 +45,9 @@ public class Services
     new HashMap<String, PluginResources>();
 
   static {
-    addPluginResources(new DefaultPluginResources());
+    PluginResources defaultResources = new DefaultPluginResources();
+    defaultResources.initialize("org.eclim");
+    addPluginResources(defaultResources);
   }
 
   /**

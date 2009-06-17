@@ -29,6 +29,8 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.plugin.PluginResources;
+
 import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.runtime.Platform;
@@ -173,9 +175,7 @@ public abstract class AbstractEclimApplication
     throws Exception
   {
     logger.info("Loading plugin org.eclim");
-    Services.DefaultPluginResources defaultResources =
-      new Services.DefaultPluginResources();
-    defaultResources.initialize("org.eclim");
+    PluginResources defaultResources = Services.getPluginResources("org.eclim");
     defaultResources.registerCommand(ReloadCommand.class);
 
     logger.info("Loading plugin org.eclim.core");
