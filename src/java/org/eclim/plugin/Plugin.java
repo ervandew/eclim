@@ -94,9 +94,7 @@ public class Plugin
     try{
       PluginResources resources = (PluginResources)
         bundle.loadClass(resourceClass).newInstance();
-      if(resources instanceof AbstractPluginResources){
-        ((AbstractPluginResources)resources).initialize(bundle.getSymbolicName());
-      }
+      resources.initialize(bundle.getSymbolicName());
       Services.addPluginResources(resources);
 
       loadCommands(bundle, resources);

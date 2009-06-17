@@ -33,6 +33,13 @@ import org.eclim.command.Command;
 public interface PluginResources
 {
   /**
+   * Initialize the plugin resources.
+   *
+   * @param name The plugin name.
+   */
+  public void initialize(String name);
+
+  /**
    * Registers the supplied command.
    *
    * @param command The command class.
