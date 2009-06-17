@@ -269,7 +269,7 @@ public abstract class AbstractEclimApplication
       Bundle bundle = Platform.getBundle(CORE);
       bundle.update();
       bundle.start();
-      return "";
+      return Services.getMessage("plugins.reloaded");
     }
   }
 }
