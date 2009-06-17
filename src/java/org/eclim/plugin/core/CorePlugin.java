@@ -21,6 +21,7 @@ import java.io.FilenameFilter;
 
 import org.eclim.Services;
 
+import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.logging.Logger;
@@ -32,6 +33,7 @@ import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 
 /**
  * Plugin to load eclim core.
@@ -80,9 +82,9 @@ public class CorePlugin
 
       Bundle bundle = Platform.getBundle(plugin);
       if(bundle == null){
-        String diagnoses = EclimPlugin.getDefault().diagnose(plugin);
+        String diagnosis = EclimPlugin.getDefault().diagnose(plugin);
         throw new RuntimeException(
-            Services.getMessage("plugin.load.failed", plugin, diagnoses));
+            Services.getMessage("plugin.load.failed", plugin, diagnosis));
       }else{
         try{
           bundle.start();
@@ -91,6 +93,10 @@ public class CorePlugin
         }
       }
     }
+
+    logger.info("Plugins loaded.");
+    AbstractEclimApplication.getInstance().frameworkEvent(
+        new FrameworkEvent(FrameworkEvent.INFO, getBundle(), null));
   }
 
   /**

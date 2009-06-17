@@ -37,6 +37,8 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 
 /**
  * Abstract base class containing shared functionality used by implementations
@@ -45,10 +47,12 @@ import org.osgi.framework.Bundle;
  * @author Eric Van Dewoestine
  */
 public abstract class AbstractEclimApplication
-  implements IApplication
+  implements IApplication, FrameworkListener
 {
   private static final Logger logger =
     Logger.getLogger(AbstractEclimApplication.class);
+
+  private static final String CORE = "org.eclim.core";
   private static AbstractEclimApplication instance;
 
   private NGServer server;
@@ -165,7 +169,7 @@ public abstract class AbstractEclimApplication
   /**
    * Loads the core bundle which in turn loads the eclim plugins.
    */
-  private boolean load()
+  private synchronized boolean load()
     throws Exception
   {
     logger.info("Loading plugin org.eclim");
@@ -176,17 +180,21 @@ public abstract class AbstractEclimApplication
 
     logger.info("Loading plugin org.eclim.core");
 
-    Bundle bundle = Platform.getBundle("org.eclim.core");
+    Bundle bundle = Platform.getBundle(CORE);
     if(bundle == null){
-      String diagnoses = EclimPlugin.getDefault().diagnose("org.eclim.core");
-      logger.error(Services.getMessage(
-            "plugin.load.failed", "org.eclim.core", diagnoses));
+      String diagnosis = EclimPlugin.getDefault().diagnose(CORE);
+      logger.error(Services.getMessage("plugin.load.failed", CORE, diagnosis));
       return false;
     }
 
     bundle.start();
+    bundle.getBundleContext().addFrameworkListener(this);
+
+    // wait up to 10 seconds for bundles to activate.
+    wait(10000);
 
     logger.info("Loaded plugin org.eclim.core");
+
     return true;
   }
 
@@ -209,6 +217,22 @@ public abstract class AbstractEclimApplication
       }
 
       logger.info("Eclim stopped.");
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see FrameworkListener#frameworkEvent(FrameworkEvent)
+   */
+  public synchronized void frameworkEvent(FrameworkEvent event)
+  {
+    // We are using a framework INFO event to announce when all the eclim
+    // plugins bundles have been started (but not necessarily activated yet).
+    Bundle bundle = event.getBundle();
+    if (event.getType() == FrameworkEvent.INFO &&
+        CORE.equals(bundle.getSymbolicName()))
+    {
+      notify();
     }
   }
 
@@ -242,7 +266,7 @@ public abstract class AbstractEclimApplication
     public String execute(CommandLine commandLine)
       throws Exception
     {
-      Bundle bundle = Platform.getBundle("org.eclim.core");
+      Bundle bundle = Platform.getBundle(CORE);
       bundle.update();
       bundle.start();
       return "";
