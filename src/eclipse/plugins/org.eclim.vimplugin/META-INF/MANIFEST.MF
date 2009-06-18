@@ -23,3 +23,4 @@ Export-Package: org.vimplugin,
  org.vimplugin.preferences,
  org.vimplugin.utils,
  org.vimplugin.views
+Eclipse-AutoStart: true
