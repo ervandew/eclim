@@ -78,6 +78,9 @@ public class VimEditor
 {
   private static final Logger logger = Logger.getLogger(VimEditor.class);
 
+  private static final String ECLIMD_VIEW_ID =
+    "org.eclim.eclipse.headed.EclimdView";
+
   /** ID of the VimServer. */
   protected int serverID;
 
@@ -234,7 +237,9 @@ public class VimEditor
         IWorkbenchPage page = PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow().getActivePage();
         try{
-          page.showView("org.eclim.eclipse.headed.EclimdView");
+          if (page.findView(ECLIMD_VIEW_ID) == null){
+            page.showView(ECLIMD_VIEW_ID);
+          }
         }catch(PartInitException pie){
           logger.error("Unable to open eclimd view.", pie);
         }
