@@ -171,6 +171,6 @@ mappings there (:help ftplugin-name).
   .. code-block:: vim
 
     " avoid overwriting <cr> mapping in 'command-line' buffer (:h cmdwin).
-    if bufname('%') != 'command-line'
+    if bufname('%') !~ '^\(command-line\|\[Command Line\]\)$'
       nnoremap <silent> <buffer> <cr> :FindByContext<cr>
     endif
