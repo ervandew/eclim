@@ -36,13 +36,13 @@ public class FeatureProvider
              PropertyChangeListener
 {
   private static final String[] FEATURES =
-    {"ant", "maven", "jdt", "wst", "cdt", "pdt", "python"};
+    {"ant", "maven", "jdt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python"};
 
   private static final boolean[] FEATURES_ENABLED =
-    {true, true, true, false, false, false, false};
+    {true,  true, true, false, false, false, false, false, false};
 
   private static final String[][] FEATURES_DEPENDS =
-    {{"jdt"}, null, null, null, null, {"wst"}, null};
+    {{"jdt"}, null, null, null, null, null, {"dltk"}, {"dltk", "wst"}, null};
 
   /**
    * {@inheritDoc}
