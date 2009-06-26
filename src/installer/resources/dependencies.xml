@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
-<dependencies>
+<dependencies primary="http://download.eclipse.org/releases/galileo/">
   <feature id="cdt">
     <dependency id="org.eclipse.cdt" version="6.0.0">
-      <site url="http://download.eclipse.org/tools/cdt/releases/galileo/"/>
+      <site url="http://download.eclipse.org/releases/galileo/"/>
+      <!--site url="http://download.eclipse.org/tools/cdt/releases/galileo/"/-->
+    </dependency>
+  </feature>
+
+  <feature id="dltk">
+    <dependency id="org.eclipse.dltk.core" version="1.0.0">
+      <site url="http://download.eclipse.org/releases/galileo/"/>
+    </dependency>
+  </feature>
+
+  <feature id="dltkruby">
+    <dependency id="org.eclipse.dltk.ruby" version="1.0.0">
       <site url="http://download.eclipse.org/releases/galileo/"/>
     </dependency>
   </feature>
@@ -16,14 +28,14 @@
 
   <feature id="pdt">
     <dependency id="org.eclipse.php" version="2.1.0">
-      <site url="http://download.eclipse.org/tools/pdt/updates/"/>
+      <site url="http://download.eclipse.org/releases/galileo/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst" version="3.1.0">
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.1.0">
       <site url="http://download.eclipse.org/releases/galileo/"/>
-      <site url="http://download.eclipse.org/webtools/updates/"/>
+      <!--site url="http://download.eclipse.org/webtools/updates/"/-->
     </dependency>
   </feature>
 </dependencies>

@@ -1,4 +1,5 @@
 <!ELEMENT dependencies (feature+)>
+<!ATTLIST dependencies primary CDATA #REQUIRED>
 
 <!ELEMENT feature (dependency+)>
 <!ATTLIST feature id ID #REQUIRED>
