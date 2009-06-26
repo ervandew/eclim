@@ -33,6 +33,6 @@ if [ "$2" = "addSite" -o "$2" = "listFeatures" ]; then
   "$ECLIPSE" -nosplash -clean -refresh \
     -application org.eclipse.update.core.standaloneUpdate $@
 else
-  "$ECLIPSE" -nosplash -clean -refresh \
+  "$ECLIPSE" -nosplash -clean \
     -application org.eclim.installer.application $@
 fi

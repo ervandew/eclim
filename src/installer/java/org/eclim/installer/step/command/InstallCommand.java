@@ -31,7 +31,8 @@ public class InstallCommand
       "-metadataRepository", url,
       "-artifactRepository", url,
       "-installIU", id + ".feature.group",
-      "-version", version
+      // starting w/ galileo, the version arg is not supported.
+      //"-version", version
     }, to);
   }
 }
