@@ -30,30 +30,33 @@ endif
 
 " GetLogUrl(root, file, args) {{{
 function eclim#vcs#impl#redmine#GetLogUrl(root, file, args)
+  let revision = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
   let root = substitute(a:root, '<cmd>', 'changes', '')
-  return root . '/' . a:file . '?rev=' . split(a:args[0], ':')[1]
+  return root . '/' . a:file . '?rev=' . revision
 endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
 function eclim#vcs#impl#redmine#GetChangeSetUrl(root, file, args)
+  let revision = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
 " redmine uses a local revision number... how do we handle that?
   let root = substitute(a:root, '<cmd>', 'revision', '')
-  return root . '?rev=' . split(a:args[0], ':')[1]
+  return root . '?rev=' . revision
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) {{{
 function eclim#vcs#impl#redmine#GetAnnotateUrl(root, file, args)
+  let revision = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
 " redmine uses a local revision number... how do we handle that?
   let root = substitute(a:root, '<cmd>', 'annotate', '')
-  return root . '/' . a:file . '?rev=' . split(a:args[0], ':')[1]
+  return root . '/' . a:file . '?rev=' . revision
 endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
 function eclim#vcs#impl#redmine#GetDiffUrl(root, file, args)
 " redmine uses a local revision number... how do we handle that?
   let root = substitute(a:root, '<cmd>', 'diff', '')
-  let r1 = split(a:args[0], ':')[1]
-  let r2 = split(a:args[1], ':')[1]
+  let r1 = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
+  let r2 = a:args[1] =~ ':' ? split(a:args[1], ':')[1] : a:args[1]
   return root . '/' . a:file '?rev=' . r1 . '&rev_to' . r2
 endfunction " }}}
 

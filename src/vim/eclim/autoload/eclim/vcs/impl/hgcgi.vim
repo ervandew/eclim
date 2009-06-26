@@ -36,19 +36,21 @@ endfunction " }}}
 
 " GetChangeSetUrl(root, file, args) {{{
 function eclim#vcs#impl#hgcgi#GetChangeSetUrl(root, file, args)
-  return a:root . '/rev/' . split(a:args[0], ':')[1]
+  let revision = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
+  return a:root . '/rev/' . revision
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) {{{
 function eclim#vcs#impl#hgcgi#GetAnnotateUrl(root, file, args)
-  return a:root . '/annotate/' . split(a:args[0], ':')[1] . '/' . a:file
+  let revision = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
+  return a:root . '/annotate/' . revision . '/' . a:file
 endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
 function eclim#vcs#impl#hgcgi#GetDiffUrl(root, file, args)
-  let r1 = split(a:args[0], ':')[1]
+  let r1 = a:args[0] =~ ':' ? split(a:args[0], ':')[1] : a:args[0]
   " hgcgi doesn't support diffing arbitrary revisions
-  "let r2 = split(a:args[1], ':')[1]
+  "let r2 = a:args[1] =~ ':' ? split(a:args[1], ':')[1] : a:args[1]
   return a:root . '/diff/' . r1 . '/' . a:file
 endfunction " }}}
 
