@@ -40,8 +40,8 @@ Overview
 
 The primary goal of eclim is to bring Eclipse_ functionality to the Vim_
 editor.  The initial goal was to provide Eclipse's java functionality in vim,
-but support for various other languages (c/c++, php, python, css, html, xml,
-etc.) have been added and several more are planned.
+but support for various other languages (c/c++, php, python, ruby, css, html,
+xml, etc.) have been added and several more are planned.
 
 Eclim is less of an application and more of an integration of two great
 projects.
