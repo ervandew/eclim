@@ -236,6 +236,10 @@ public abstract class AbstractEclimApplication
       onStop();
       Services.close();
 
+      logger.info("Stopping plugin " + CORE);
+      Bundle bundle = Platform.getBundle(CORE);
+      bundle.stop();
+
       EclimPlugin plugin = EclimPlugin.getDefault();
       if(plugin != null){
         plugin.stop(null);
