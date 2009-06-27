@@ -20,5 +20,5 @@ set ECLIPSE_HOME=%~dp0\..\..\..
 if %2 == listFeatures (
   "%ECLIPSE_HOME%\eclipse" -nosplash -clean -refresh -application org.eclipse.update.core.standaloneUpdate %*
 ) else (
-  "%ECLIPSE_HOME%\eclipse" -nosplash -clean -refresh -application org.eclim.installer.application %*
+  "%ECLIPSE_HOME%\eclipse" -nosplash -clean -application org.eclim.installer.application %*
 )
