@@ -61,6 +61,10 @@ public abstract class WstCodeCompleteCommand
     IStructuredModel model =
       StructuredModelManager.getModelManager().getModelForRead(ifile);
 
+    if (model == null){
+      return null;
+    }
+
     if (viewer == null) {
       viewer = new StructuredTextViewer(
           EclimPlugin.getShell(), null, null, false, 0){
