@@ -106,7 +106,10 @@ public abstract class AbstractCodeCompleteCommand
 
     ITextViewer viewer = getTextViewer(commandLine, project, file);
 
-    return processor.computeCompletionProposals(viewer, offset);
+    if (processor != null && viewer != null){
+      return processor.computeCompletionProposals(viewer, offset);
+    }
+    return new ICompletionProposal[0];
   }
 
   /**
