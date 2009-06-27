@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim; singleton:=true
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-Activator: org.eclim.eclipse.EclimPlugin
 Bundle-ClassPath: .,
   eclim.jar,
   ${eclim.lib.jars}
-Bundle-Activator: org.eclim.eclipse.EclimPlugin
-Bundle-Localization: plugin
 Export-Package: org.apache.tools.ant,
   org.apache.tools.ant.taskdefs,
   org.apache.tools.ant.types,

@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: %providerName
-Bundle-Name: %pluginName
+Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.dltkruby; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.dltkruby.jar
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-Localization: plugin
 Require-Bundle: org.eclim,
   org.eclim.core,
   org.eclim.dltk,
@@ -22,4 +22,3 @@ Require-Bundle: org.eclim,
   org.eclipse.ui,
   org.eclipse.ui.ide,
   org.eclipse.ui.workbench.texteditor
-Eclipse-AutoStart: false

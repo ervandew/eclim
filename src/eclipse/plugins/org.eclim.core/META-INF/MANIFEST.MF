@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.core; singleton:=true
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.core.CorePlugin
 Bundle-ClassPath: .,
   eclim.core.jar,
   ${eclim.lib.jars}
-Bundle-Activator: org.eclim.plugin.core.CorePlugin
-Bundle-ActivationPolicy: lazy
-Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.core.command,
   org.eclim.plugin.core.command.complete,
   org.eclim.plugin.core.command.filter,

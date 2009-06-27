@@ -4,12 +4,12 @@ Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.wst; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.wst.jar,
   ${eclim.lib.jars}
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-ActivationPolicy: lazy
-Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.wst.command.complete,
   org.eclim.plugin.wst.command.validate
 Require-Bundle: org.eclim,

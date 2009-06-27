@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.installer; singleton:=true
 Bundle-Version: ${eclim.version}
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.installer.jar
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-ActivationPolicy: lazy
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.resources,
   org.eclipse.core.runtime,
   org.eclipse.equinox.app,

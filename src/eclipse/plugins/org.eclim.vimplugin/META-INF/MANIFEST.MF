@@ -4,8 +4,8 @@ Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.vimplugin; singleton:=true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Version: ${eclim.version}
-Bundle-Activator: org.vimplugin.VimPlugin
 Bundle-Localization: plugin
+Bundle-Activator: org.vimplugin.VimPlugin
 Bundle-ClassPath: .,
   eclim-vimplugin.jar
 Require-Bundle: org.eclim,

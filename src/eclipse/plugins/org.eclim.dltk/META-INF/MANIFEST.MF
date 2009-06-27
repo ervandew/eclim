@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: %providerName
-Bundle-Name: %pluginName
+Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.dltk; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.dltk.jar
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-Localization: plugin
 Export-Package: org.eclim.plugin.dltk,
   org.eclim.plugin.dltk.command.buildpath,
   org.eclim.plugin.dltk.command.search,
@@ -22,4 +22,3 @@ Require-Bundle: org.eclim,
   org.eclipse.dltk.core,
   org.eclipse.dltk.launching,
   org.eclipse.dltk.ui
-Eclipse-AutoStart: false

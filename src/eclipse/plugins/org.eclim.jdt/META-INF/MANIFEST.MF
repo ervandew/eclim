@@ -4,12 +4,12 @@ Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.jdt; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.jdt.jar,
   ${eclim.lib.jars}
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-ActivationPolicy: lazy
-Bundle-Localization: plugin
 Require-Bundle: org.eclim,
   org.eclim.core,
   org.eclipse.core.resources,

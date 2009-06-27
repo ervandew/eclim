@@ -4,11 +4,11 @@ Bundle-Vendor: eclim.sourceforge.net
 Bundle-SymbolicName: org.eclim.ant; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.ant.jar
-Bundle-Activator: org.eclim.plugin.Plugin
-Bundle-ActivationPolicy: lazy
-Bundle-Localization: plugin
 Require-Bundle: org.apache.ant,
   org.eclim,
   org.eclim.core,
