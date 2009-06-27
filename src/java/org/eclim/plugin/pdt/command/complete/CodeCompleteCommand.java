@@ -53,6 +53,8 @@ import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProcessor;
 
 import org.eclipse.php.internal.ui.editor.templates.PhpTemplateProposal;
 
+import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 
@@ -129,7 +131,12 @@ public class CodeCompleteCommand
     editor.setInput(input);
 
     viewer = new PHPStructuredTextViewer(
-        (ITextEditor)editor, EclimPlugin.getShell(), null, null, false, 0);
+        (ITextEditor)editor, EclimPlugin.getShell(), null, null, false, 0){
+      protected void createControl(Composite parent, int styles)
+      {
+        // no-op to prevent possible deadlock in native method on windows.
+      }
+    };
     viewer.setDocument(document);
 
     return new PHPCompletionProcessor(

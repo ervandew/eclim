@@ -63,6 +63,8 @@ import org.eclipse.jface.text.source.ISourceViewer;
 
 import org.eclipse.swt.SWT;
 
+import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 
@@ -116,7 +118,16 @@ public class CodeCompleteCommand
       DLTKUILanguageManager.getLanguageToolkit(RubyNature.NATURE_ID);
     IPreferenceStore store = toolkit.getCombinedPreferenceStore();
     viewer = new ScriptSourceViewer(
-        EclimPlugin.getShell(), null, null, false, SWT.NONE, store);
+        EclimPlugin.getShell(), null, null, false, SWT.NONE, store){
+      protected void createControl(Composite parent, int styles)
+      {
+        // no-op to prevent possible deadlock in native method on windows.
+      }
+      public void initializeViewerColors()
+      {
+        // no-op, continuation of createControl
+      }
+    };
 
     String partioning = IDocument.DEFAULT_CONTENT_TYPE;
     //String partioning = IRubyPartitions.RUBY_PARTITIONING;
