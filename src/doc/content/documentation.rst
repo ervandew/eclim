@@ -29,6 +29,7 @@ Documentation
   vim/common/index
   vim/c/index
   vim/css/index
+  vim/dltk/index
   vim/dtd/index
   vim/html/index
   vim/java/index
@@ -51,6 +52,7 @@ Documentation
 - :ref:`vim/common/index`
 - :ref:`vim/c/index`
 - :ref:`vim/css/index`
+- :ref:`vim/dltk/index`
 - :ref:`vim/dtd/index`
 - :ref:`vim/html/index`
 - :ref:`vim/java/index`

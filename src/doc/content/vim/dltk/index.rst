@@ -13,14 +13,17 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/php/buildpath:
+.. _vim/dltk/index:
 
-PDT Build Path
-================
+Dltk (Dynamic Languages Toolkit)
+================================
 
-The php build path is used by eclipse to determine the location of your
-project's source files, external libraries, etc.  Management of your build path
-is provided by the eclim dltk plugin.
+.. toctree::
 
-Please see the :ref:`dltk buildpath <vim/dltk/buildpath>` docs for information
-on editing and maintaining your project's build path file.
+   buildpath
+
+The dltk plugin in eclipse is used to provide shared functionality for those
+languages which eclim supports that are based on the dltk platform.  Currently,
+these languages include :ref:`vim/php/index` and :ref:`vim/ruby/index`.
+
+- :ref:`vim/dltk/buildpath`
