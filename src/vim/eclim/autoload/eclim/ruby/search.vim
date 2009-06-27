@@ -82,9 +82,9 @@ function! eclim#ruby#search#SearchContext()
 
 endfunction " }}}
 
-" CommandCompletePhpSearch(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for PhpSearch
-function! eclim#ruby#search#CommandCompletePhpSearch(argLead, cmdLine, cursorPos)
+" CommandCompleteRubySearch(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for RubySearch
+function! eclim#ruby#search#CommandCompleteRubySearch(argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
