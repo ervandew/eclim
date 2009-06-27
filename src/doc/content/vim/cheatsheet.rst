@@ -249,20 +249,6 @@ Php Commands
 - :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
 
 
-Php .projectOption Commands
----------------------------
-
-- :ref:`:NewLibEntry` <file> [<file> ...] -
-  Add a lib entry referencing an external folder.
-- :ref:`:NewProjectEntry` <project> [<project> ...] - Add a new project entry.
-- :ref:`:NewVarEntry` <VAR/file> [<VAR/file> ...] - Add a new var entry.
-- :ref:`:VariableList`
-  List available include path variables and their corresponding values.
-- :ref:`:VariableCreate` <name> <path> -
-  Creates or updates the variable with the supplied name.
-- :ref:`:VariableDelete` <name> - Deletes the variable with the supplied name.
-
-
 Python Commands
 -----------------
 
@@ -289,6 +275,18 @@ Python Commands
   Available when editing a python file.  Executes **:DjangoViewOpen**,
   **:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the
   context of the text under the cursor.
+
+
+Ruby Commands
+-----------------
+
+- :ref:`:RubySearch <:RubySearch>` -p <pattern> -t <type> [-s <scope>] -
+  Search for modules, classes, methods, etc.
+- :ref:`:RubyFindDefinition <:RubyFindDefinition>` -
+  Find the element under the cursor.
+- :ref:`:RubySearchContext` -
+  Find the element under the cursor based on its context.
+- :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
 
 
 Vim Commands

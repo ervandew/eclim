@@ -36,6 +36,7 @@ Documentation
   vim/javascript/index
   vim/php/index
   vim/python/index
+  vim/ruby/index
   vim/vim/index
   vim/wsdl/index
   vim/xml/index
@@ -59,6 +60,7 @@ Documentation
 - :ref:`vim/javascript/index`
 - :ref:`vim/php/index`
 - :ref:`vim/python/index`
+- :ref:`vim/ruby/index`
 - :ref:`vim/vim/index`
 - :ref:`vim/wsdl/index`
 - :ref:`vim/xml/index`

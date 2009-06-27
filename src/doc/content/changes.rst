@@ -24,6 +24,12 @@ History of Changes
 Eclipse:
   - Eclim now requires the latest version of eclipse (Galileo, 3.5.x).
 
+Ruby:
+  - Added ruby support for
+    :ref:`code completion <vim/ruby/complete>`,
+    :ref:`searching <vim/ruby/search>`, and
+    :ref:`validation <vim/ruby/validate>`.
+
 .. _1.4.9:
 
 1.4.9 (Jun. 14, 2009)

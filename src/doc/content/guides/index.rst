@@ -27,6 +27,7 @@ Guides
    java/project
    php/project
    python/project
+   ruby/project
    java/ivy/classpath
    java/maven/maven/classpath
    java/maven/mvn/classpath
@@ -56,6 +57,11 @@ Php
 Python
 ------
 - :ref:`guides/python/project`
+
+
+Ruby
+------
+- :ref:`guides/ruby/project`
 
 
 Eclim Developers

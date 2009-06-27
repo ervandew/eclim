@@ -102,6 +102,12 @@ Python Integration
 - Django functionality.
 - Validation via python compiler, pyflakes_, and pylint_.
 
+Ruby Integration
+-------------------------
+- Context sensitive code completion.
+- Searching.
+- Source code validation.
+
 Vim Script Integration
 -------------------------
 - Find user defined command, function, or global variable declarations /
