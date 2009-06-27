@@ -16,10 +16,7 @@
  */
 package org.eclim.eclipse.headed;
 
-import org.eclim.Services;
-
-import org.eclim.command.Command;
-
+import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimApplicationHeaded;
 
 import org.eclim.logging.Logger;
@@ -48,7 +45,8 @@ public class EclimdView
 
   private static Text log;
 
-  private EclimThread eclimThread = null;
+  private EclimThread eclimThread;
+  private AbstractEclimApplication application;
 
   /**
    * {@inheritDoc}
@@ -62,8 +60,8 @@ public class EclimdView
         SWT.LEFT | SWT.MULTI | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
 
     try {
-      IApplication app = EclimApplicationHeaded.class.newInstance();
-      eclimThread = new EclimThread(app);
+      application = EclimApplicationHeaded.class.newInstance();
+      eclimThread = new EclimThread(application);
       eclimThread.start();
     }catch(Exception ex) {
       logger.error("Error starting eclimd.", ex);
@@ -79,10 +77,18 @@ public class EclimdView
   {
     if (eclimThread != null) {
       try{
-        // TODO: what about thread safety in access to Services singleton and it's
-        // HashMap's serviceCache, pluginResources ?
-        Command command = Services.getCommand("shutdown");
-        command.execute(null);
+        new Thread(){
+          public void run(){
+            try{
+              while(application.isStarting()){
+                Thread.sleep(500);
+              }
+            }catch(Exception e){
+              e.printStackTrace();
+            }
+            application.stop();
+          }
+        }.start();
       }catch(Exception ex){
         logger.error("Failed to shutdown eclimd.", ex);
       }
@@ -107,17 +113,17 @@ public class EclimdView
   private class EclimThread
     extends Thread
   {
-    IApplication app;
+    IApplication application;
 
-    public EclimThread (IApplication app)
+    public EclimThread (IApplication application)
     {
-      this.app = app;
+      this.application = application;
     }
 
     public void run()
     {
       try {
-        app.start(null);
+        application.start(null);
       } catch (Exception e) {
         logger.error("Error starting eclimd", e);
       }

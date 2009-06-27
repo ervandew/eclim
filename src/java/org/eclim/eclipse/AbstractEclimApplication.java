@@ -58,7 +58,8 @@ public abstract class AbstractEclimApplication
   private static AbstractEclimApplication instance;
 
   private NGServer server;
-  private boolean shuttingDown = false;
+  private boolean starting;
+  private boolean stopping;
 
   /**
    * {@inheritDoc}
@@ -67,6 +68,7 @@ public abstract class AbstractEclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
+    starting = true;
     logger.info("Starting eclim...");
     instance = this;
     int exitCode = 0;
@@ -98,6 +100,7 @@ public abstract class AbstractEclimApplication
         int port = Integer.parseInt(portString);
         logger.info("Eclim Server Started on port " + port + '.');
         server = new NGServer(null, port);
+        starting = false;
         server.run();
       }else{
         exitCode = 1;
@@ -111,6 +114,8 @@ public abstract class AbstractEclimApplication
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
       return new Integer(1);
+    }finally{
+      starting = false;
     }
 
     shutdown();
@@ -125,7 +130,7 @@ public abstract class AbstractEclimApplication
   {
     try{
       shutdown();
-      if(server.isRunning()){
+      if(server != null && server.isRunning()){
         server.shutdown(false /* exit vm */);
       }
     }catch(Exception e){
@@ -157,6 +162,26 @@ public abstract class AbstractEclimApplication
    * @return true if running in "headed" environment.
    */
   public abstract boolean isHeaded();
+
+  /**
+   * Determines if this application is in the process of starting.
+   *
+   * @return True if starting, false if stopped or finished starting.
+   */
+  public boolean isStarting()
+  {
+    return starting;
+  }
+
+  /**
+   * Determines if the underlying nailgun server is running or not.
+   *
+   * @return True if the nailgun server is running, false otherwise.
+   */
+  public boolean isRunning()
+  {
+    return server != null && server.isRunning();
+  }
 
   /**
    * Gets the running instance of this application.
@@ -204,8 +229,8 @@ public abstract class AbstractEclimApplication
   private synchronized void shutdown()
     throws Exception
   {
-    if(!shuttingDown){
-      shuttingDown = true;
+    if(!stopping){
+      stopping = true;
       logger.info("Shutting down eclim...");
 
       onStop();
