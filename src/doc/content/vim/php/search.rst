@@ -86,8 +86,8 @@ of the pattern to search for.
   - function
   - field
 
-- -s <scope> (Default: all): The scope of the search where possible context
-  values include
+- -s <scope> (Default: all): The scope of the search where possible values
+  include
 
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and libraries.

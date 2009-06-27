@@ -68,7 +68,7 @@ of the pattern to search for.
   - package
   - type
 
-- -x <context> (Default: declarations): The context to search under where
+- -x <context> (Default: declarations): The context of the search, where
   possible context values include
 
   - all - All occurances.
@@ -76,8 +76,8 @@ of the pattern to search for.
   - implementors - Implementors of the pattern or element.
   - references - References of the pattern or element.
 
-- -s <scope> (Default: all): The scope of the search where possible context
-  values include
+- -s <scope> (Default: all): The scope of the search where possible values
+  include
 
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and libraries.

@@ -103,7 +103,7 @@ of the pattern to search for.
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and include paths.
 
-- -x <context> (Default: declarations): The context of the search where
+- -x <context> (Default: declarations): The context of the search, where
   possible context values include
 
   - all - Search for declarations and references.
