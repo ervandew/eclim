@@ -83,8 +83,10 @@ public class CorePlugin
       Bundle bundle = Platform.getBundle(plugin);
       if(bundle == null){
         String diagnosis = EclimPlugin.getDefault().diagnose(plugin);
-        throw new RuntimeException(
-            Services.getMessage("plugin.load.failed", plugin, diagnosis));
+        String message =
+          Services.getMessage("plugin.load.failed", plugin, diagnosis);
+        logger.error(message);
+        //throw new RuntimeException(message);
       }else{
         try{
           bundle.start();

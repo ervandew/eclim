@@ -83,7 +83,8 @@ public class Plugin
       in = context.getBundle().getResource("plugin.properties").openStream();
       properties.load(in);
     }catch(Exception e){
-      throw new RuntimeException(e);
+      logger.error("Unable to load plugin.properties.", e);
+      //throw new RuntimeException(e);
     }finally{
       IOUtils.closeQuietly(in);
     }
