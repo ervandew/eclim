@@ -45,7 +45,7 @@ public class EclimDisplay
   /**
    * Force the display to think that it's tied to the supplied thread.
    */
-  public void setThread (Thread _thread)
+  public void setThread(Thread _thread)
   {
     try{
       Field thread = Display.class.getDeclaredField(THREAD);
@@ -68,7 +68,7 @@ public class EclimDisplay
    * @see Display#getActiveShell()
    */
   @Override
-  public Shell getActiveShell ()
+  public Shell getActiveShell()
   {
     return shell;
   }
@@ -78,7 +78,7 @@ public class EclimDisplay
    * @see Display#setSynchronizer()
    */
   @Override
-  public void setSynchronizer (Synchronizer synchronizer) {
+  public void setSynchronizer(Synchronizer synchronizer) {
     // don't let eclipse set its UISynchronizer.
   }
 }
