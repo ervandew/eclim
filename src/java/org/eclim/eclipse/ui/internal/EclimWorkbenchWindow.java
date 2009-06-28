@@ -29,6 +29,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.EclimComposite;
 import org.eclipse.swt.widgets.Shell;
 
 import org.eclipse.ui.IWorkbenchPage;
@@ -122,7 +123,7 @@ public class EclimWorkbenchWindow
   protected Composite getPageComposite()
   {
     if(composite == null){
-      composite = new Composite(getShell(), SWT.NONE);
+      composite = new EclimComposite(getShell(), SWT.NONE);
     }
     return composite;
   }
