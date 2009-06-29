@@ -30,7 +30,7 @@ public class EclimComposite
     super (parent, checkStyle (style));
   }
 
-  void createWidget (int index)
+  void createWidget(int index)
   {
     // no-op to prevent deadlock on windows
   }
