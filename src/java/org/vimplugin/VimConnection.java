@@ -17,10 +17,13 @@ import java.io.PrintWriter;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import java.util.HashSet;
 
 import java.util.regex.Pattern;
+
+import org.vimplugin.editors.VimEditor;
 
 import org.vimplugin.listeners.FeedKeys;
 import org.vimplugin.listeners.FileOpened;
@@ -154,6 +157,15 @@ public class VimConnection implements Runnable
             }
           }
         }
+      } catch (SocketException se) {
+        // the connection to vim was closed, so close the editor.
+        VimPlugin plugin = VimPlugin.getDefault();
+        for (VimEditor editor : plugin.getVimserver(getVimID()).getEditors()){
+          if (editor != null) {
+            editor.forceDispose();
+          }
+        }
+        close();
       } catch (VimException ve) {
         // TODO : better ErrorHandling (Connection Thread)
         logger.error("error:", ve);
