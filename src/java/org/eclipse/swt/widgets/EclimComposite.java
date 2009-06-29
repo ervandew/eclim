@@ -27,7 +27,7 @@ public class EclimComposite
 {
   public EclimComposite(Composite parent, int style)
   {
-    super (parent, checkStyle (style));
+    super(parent, style);
   }
 
   void createWidget(int index)
