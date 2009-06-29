@@ -43,7 +43,7 @@ public class ServerDisconnect implements IVimListener {
       try {
         ve.getConnection().close();
       } catch (IOException e) {
-        throw new VimException("could not close the vimconnection",e);
+        throw new VimException("could not close the vimconnection", e);
       }
     }
   }
