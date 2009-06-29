@@ -33,6 +33,8 @@ import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
+import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -87,7 +89,12 @@ public class CssCodeCompleteCommand
 
     if (viewer == null) {
       viewer = new StructuredTextViewer(
-          EclimPlugin.getShell(), null, null, false, 0);
+          EclimPlugin.getShell(), null, null, false, 0){
+        protected void createControl(Composite parent, int styles)
+        {
+          // no-op to prevent possible deadlock in native method on windows.
+        }
+      };
     }
     viewer.setDocument(model.getStructuredDocument());
     return viewer;
