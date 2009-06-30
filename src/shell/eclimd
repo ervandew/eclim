@@ -51,8 +51,13 @@ resolve_eclipse(){
     ECLIPSE=`which eclipse 2> /dev/null`
   fi
   if [ ! -e "$ECLIPSE" ]; then
-    ECLIPSE=`which eclipse-3.4 2> /dev/null`
+    ECLIPSE=`which eclipse-3.5 2> /dev/null`
   fi
+  # mac osx default location
+  if [ ! -e "$ECLIPSE" ]; then
+    ECLIPSE="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/MacOS/eclipse"
+  fi
+
   if [ ! -e "$ECLIPSE" ]; then
     echo "No eclipse executable found." 1>&2
     exit 1
