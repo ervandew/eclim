@@ -11,6 +11,7 @@ Bundle-ClassPath: .,
   ${eclim.lib.jars}
 Export-Package: org.apache.tools.ant,
   org.apache.tools.ant.taskdefs,
+  org.apache.tools.ant.taskdefs.condition,
   org.apache.tools.ant.types,
   org.apache.tools.bzip2,
   org.apache.tools.tar,
