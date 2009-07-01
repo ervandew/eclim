@@ -36,6 +36,7 @@ import org.eclipse.osgi.service.resolver.VersionConstraint;
 import org.eclipse.osgi.util.NLS;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.EclimShell;
 import org.eclipse.swt.widgets.Shell;
 
 import org.osgi.framework.BundleContext;
@@ -115,7 +116,7 @@ public class EclimPlugin
       display.syncExec(new Runnable(){
         public void run()
         {
-          result[0] = new Shell(display);
+          result[0] = new EclimShell(display);
         }
       });
       shell = result[0];

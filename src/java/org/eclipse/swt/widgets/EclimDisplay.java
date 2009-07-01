@@ -18,6 +18,7 @@ package org.eclipse.swt.widgets;
 
 import java.lang.reflect.Field;
 
+import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
@@ -61,6 +62,19 @@ public class EclimDisplay
     }catch(Exception e){
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Display#getShells()
+   */
+  @Override
+  public Shell[] getShells()
+  {
+    if (AbstractEclimApplication.getInstance().isHeaded()){
+      return super.getShells();
+    }
+    return new Shell[]{EclimPlugin.getShell()};
   }
 
   /**
