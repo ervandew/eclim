@@ -40,8 +40,8 @@ setlocal completefunc=eclim#python#complete#CodeComplete
 
 if g:EclimPythonValidate
   augroup eclim_python_validate
-    autocmd!
-    autocmd BufWritePost *.py call eclim#python#validate#Validate(1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#python#validate#Validate(1)
   augroup END
 endif
 

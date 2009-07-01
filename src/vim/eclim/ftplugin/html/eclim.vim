@@ -44,8 +44,8 @@ setlocal completefunc=eclim#html#complete#CodeComplete
 
 if g:EclimHtmlValidate
   augroup eclim_html_validate
-    autocmd!
-    autocmd BufWritePost *.html call eclim#html#validate#Validate(1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#html#validate#Validate(1)
   augroup END
 endif
 

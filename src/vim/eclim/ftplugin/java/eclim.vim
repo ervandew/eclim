@@ -129,8 +129,8 @@ endif
 " Autocmds {{{
 
 augroup eclim_java
-  autocmd!
-  autocmd BufWritePost *.java call eclim#java#util#UpdateSrcFile(0)
+  autocmd! BufWritePost <buffer>
+  autocmd BufWritePost <buffer> call eclim#java#util#UpdateSrcFile(0)
 augroup END
 
 " }}}

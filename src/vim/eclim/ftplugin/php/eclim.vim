@@ -43,7 +43,7 @@ augroup eclim_html_validate
 augroup END
 
 augroup eclim_php
-  autocmd!
+  autocmd! BufWritePost <buffer>
   autocmd BufWritePost <buffer> call eclim#php#util#UpdateSrcFile(0)
 augroup END
 

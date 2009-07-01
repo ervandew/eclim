@@ -36,8 +36,8 @@ endif
 
 if g:EclimWsdlValidate
   augroup eclim_wsdl_validate
-    autocmd!
-    autocmd BufWritePost *.wsdl call eclim#lang#Validate('wsdl', 1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#lang#Validate('wsdl', 1)
   augroup END
 endif
 

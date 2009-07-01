@@ -39,7 +39,7 @@ setlocal completefunc=eclim#ruby#complete#CodeComplete
 " Autocmds {{{
 
 augroup eclim_ruby
-  autocmd!
+  autocmd! BufWritePost <buffer>
   autocmd BufWritePost <buffer>
     \ call eclim#lang#UpdateSrcFile('ruby', g:EclimRubyValidate)
 augroup END

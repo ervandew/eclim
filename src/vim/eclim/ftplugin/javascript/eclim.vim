@@ -34,8 +34,8 @@ endif
 
 if g:EclimJavascriptValidate
   augroup eclim_javascript_validate
-    autocmd!
-    autocmd BufWritePost *.js call eclim#javascript#validate#Validate(1)
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#javascript#validate#Validate(1)
   augroup END
 endif
 
