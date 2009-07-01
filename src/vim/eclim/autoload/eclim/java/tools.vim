@@ -131,7 +131,7 @@ function eclim#java#tools#GetJavaProcesses()
   endif
   let vm_args = split(result, '\n')
   for process in split(eclim#util#System('jps -lm'), '\n')
-    if process =~ 'sun.tools.jps.Jps' || process =~ '^[0-9]\+\s*$'
+    if process =~ 'sun.tools.jps.Jps' "|| process =~ '^[0-9]\+\s*$'
       continue
     endif
 
