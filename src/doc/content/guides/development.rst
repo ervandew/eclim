@@ -75,8 +75,14 @@ Checking out the code and building it.
     # build only ant and jdt (java) support
     $ ant -Dplugins=ant,jdt
 
-    # build only pdt (php) support (requires wst)
-    $ ant -Dplugins=wst,pdt
+    # build only cdt (c/c++) support
+    $ ant -Dplugins=cdt
+
+    # build only pdt (php) support (requires wst and dltk)
+    $ ant -Dplugins=wst,dltk,pdt
+
+    # build only ruby support (requires dltk)
+    $ ant -Dplugins=dltk,dltkruby
 
   .. note::
 
@@ -92,7 +98,9 @@ Checking out the code and building it.
   - **maven**: maven support.
   - **wst**: web development support using the eclipse wst.
   - **cdt**: c/c++ support using the eclipse cdt.
+  - **dltk**: base support for dltk based lanugages (currently php and ruby).
   - **pdt**: php support using the eclipse pdt.
+  - **dltkruby**: ruby support using the eclipse dltk-ruby.
 
 
 .. _development-patches:
