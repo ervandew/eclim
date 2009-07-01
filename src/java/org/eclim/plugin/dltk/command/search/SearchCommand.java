@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.dltk.command.search;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +30,16 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.command.filter.PositionFilter;
+
 import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectManager;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.dltk.project.DltkProjectManager;
+
+import org.eclim.util.file.Position;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -65,7 +71,7 @@ import org.eclipse.dltk.internal.ui.search.DLTKSearchScopeFactory;
 @Command(
   name = "dltk_search",
   options =
-    "REQUIRED n project ARG," +
+    "OPTIONAL n project ARG," +
     "OPTIONAL f file ARG," +
     "OPTIONAL o offset ARG," +
     "OPTIONAL l length ARG," +
@@ -103,10 +109,11 @@ public class SearchCommand
     String offset = commandLine.getValue(Options.OFFSET_OPTION);
     String length = commandLine.getValue(Options.LENGTH_OPTION);
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
-    IProject project = ProjectUtils.getProject(projectName);
     int type = getType(commandLine.getValue(Options.TYPE_OPTION));
     int context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
 
+    IProject project = projectName != null ?
+      ProjectUtils.getProject(projectName) : null;
     IDLTKSearchScope scope = getScope(
         commandLine.getValue(Options.SCOPE_OPTION), type, project);
 
@@ -167,7 +174,7 @@ public class SearchCommand
           requestor,
           new NullProgressMonitor());
 
-      return SearchFilter.instance.filter(commandLine, requestor.getMatches());
+      return PositionFilter.instance.filter(commandLine, requestor.getMatches());
     }
     return StringUtils.EMPTY;
   }
@@ -188,12 +195,18 @@ public class SearchCommand
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
 
     IDLTKLanguageToolkit toolkit = null;
-    for(String nature : ProjectManagement.getProjectManagerNatures()){
-      if(project.hasNature(nature)){
-        ProjectManager manager = ProjectManagement.getProjectManager(nature);
-        if(manager instanceof DltkProjectManager){
-          toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
-          break;
+    ProjectManager manager = ProjectManagement.getProjectManager(getNature());
+    if(manager instanceof DltkProjectManager){
+      toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
+    }
+    if (toolkit == null && project != null){
+      for(String nature : ProjectManagement.getProjectManagerNatures()){
+        if(project.hasNature(nature)){
+          manager = ProjectManagement.getProjectManager(nature);
+          if(manager instanceof DltkProjectManager){
+            toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
+            break;
+          }
         }
       }
     }
@@ -208,6 +221,16 @@ public class SearchCommand
           includeInterpreterEnvironment, toolkit);
     }
     return searchScope;
+  }
+
+  /**
+   * Gets the nature to use for the current search.
+   *
+   * @return The eclipse nature.
+   */
+  protected String getNature()
+  {
+    return null;
   }
 
   /**
@@ -266,7 +289,7 @@ public class SearchCommand
   private static class SearchRequestor
     extends org.eclipse.dltk.core.search.SearchRequestor
   {
-    private ArrayList<SearchMatch> matches = new ArrayList<SearchMatch>();
+    private ArrayList<Position> matches = new ArrayList<Position>();
 
     /**
      * {@inheritDoc}
@@ -276,8 +299,39 @@ public class SearchCommand
     public void acceptSearchMatch(SearchMatch match)
       throws CoreException
     {
-      if(match.getAccuracy() == SearchMatch.A_ACCURATE){
-        matches.add(match);
+      if (match.getAccuracy() == SearchMatch.A_ACCURATE){
+        IModelElement element = (IModelElement)match.getElement();
+        ArrayList<IModelElement> lineage = new ArrayList<IModelElement>();
+        while (element.getElementType() != IModelElement.SOURCE_MODULE){
+          lineage.add(0, element);
+          element = element.getParent();
+        }
+        StringBuffer fullyQualified = new StringBuffer();
+        for(IModelElement el : lineage){
+          if (fullyQualified.length() != 0){
+            fullyQualified.append(" -> ");
+          }
+          if (el.getElementType() == IModelElement.TYPE){
+            fullyQualified.append("type ");
+          }
+          if (el.getElementType() == IModelElement.METHOD){
+            fullyQualified.append("method ");
+          }
+          fullyQualified.append(el.getElementName());
+        }
+
+        String filename = match.getResource().getLocation().toOSString();
+        File file = new File(filename);
+        if (!file.exists() || !file.isFile()){
+          // ignoring results that don't have a file that exists.
+          return;
+        }
+        Position position = new Position(
+            filename, match.getOffset(), match.getLength());
+
+        if(!matches.contains(position)){
+          matches.add(position);
+        }
       }
     }
 
@@ -286,7 +340,7 @@ public class SearchCommand
      *
      * @return List of SearchMatch.
      */
-    public List<SearchMatch> getMatches()
+    public List<Position> getMatches()
     {
       //Collections.sort(matches, MATCH_COMPARATOR);
       return matches;

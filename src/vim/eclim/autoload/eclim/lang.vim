@@ -167,10 +167,6 @@ endfunction " }}}
 " Search(command, singleResultAction, argline) {{{
 " Executes a search.
 function! eclim#lang#Search(command, singleResultAction, argline)
-  if !eclim#project#util#IsCurrentFileInProject(1)
-    return
-  endif
-
   let argline = a:argline
   if argline == ''
     call eclim#util#EchoError('You must supply a search pattern.')
@@ -182,11 +178,22 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     let argline = '-p ' . argline
   endif
 
-  let project = eclim#project#util#GetCurrentProjectName()
+  if !eclim#project#util#IsCurrentFileInProject(0)
+    let args = eclim#util#ParseArgs(argline)
+    let index = index(args, '-s') + 1
+    if index && len(args) > index && args[index] != 'all'
+      return
+    endif
+    let argline .= ' -s all'
+  endif
+
 
   let search_cmd = a:command
-  let search_cmd = substitute(search_cmd, '<project>', project, '')
-  let search_cmd = substitute(search_cmd, '<args>', argline, '')
+  let project = eclim#project#util#GetCurrentProjectName()
+  if project != ''
+    let search_cmd .= ' -n "' . project . '"'
+  endif
+  let search_cmd .= ' ' . argline
   " quote the search pattern
   let search_cmd =
     \ substitute(search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')

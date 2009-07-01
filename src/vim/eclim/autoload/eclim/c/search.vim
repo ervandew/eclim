@@ -33,7 +33,7 @@
   let s:search_element =
     \ '-command c_search -n "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
-  let s:search_pattern = '-command c_search -n "<project>" <args>'
+  let s:search_pattern = '-command c_search'
   let s:includepaths = '-command c_includepaths -p "<project>"'
   let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']

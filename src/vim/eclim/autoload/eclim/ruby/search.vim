@@ -33,7 +33,7 @@
   let s:search_element =
     \ '-command dltk_search -n "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
-  let s:search_pattern = '-command dltk_search -n "<project>" <args>'
+  let s:search_pattern = '-command ruby_search'
   let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']
   let s:types = [

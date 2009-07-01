@@ -35,7 +35,9 @@ import org.eclim.plugin.core.util.VimUtils;
 
 import org.eclim.util.CollectionUtils;
 
+import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.CProjectNature;
 
 import org.eclipse.cdt.core.browser.ITypeReference;
 
@@ -75,7 +77,7 @@ import org.eclipse.search.ui.text.Match;
 @Command(
   name = "c_search",
   options =
-    "REQUIRED n project ARG," +
+    "OPTIONAL n project ARG," +
     "OPTIONAL f file ARG," +
     "OPTIONAL o offset ARG," +
     "OPTIONAL l length ARG," +
@@ -121,8 +123,12 @@ public class SearchCommand
     String offset = commandLine.getValue(Options.OFFSET_OPTION);
     String length = commandLine.getValue(Options.LENGTH_OPTION);
 
-    IProject project = ProjectUtils.getProject(projectName);
-    ICProject cproject = CUtils.getCProject(project);
+    IProject project = projectName != null ?
+      ProjectUtils.getProject(projectName) : null;
+    ICProject cproject = null;
+    if (project != null){
+      cproject = CUtils.getCProject(project);
+    }
 
     // element search
     if(file != null && offset != null && length != null){
@@ -216,12 +222,12 @@ public class SearchCommand
       CommandLine commandLine, ICProject cproject)
     throws Exception
   {
-    ICProject[] scope = getScope(
-        commandLine.getValue(Options.SCOPE_OPTION), cproject);
+    String scopeName = commandLine.getValue(Options.SCOPE_OPTION);
+    ICProject[] scope = getScope(scopeName, cproject);
     String scopeDesc = null;
-    if (SCOPE_ALL.equals(scope)){
+    if (cproject == null || SCOPE_ALL.equals(scopeName)){
       scopeDesc = CSearchMessages.WorkspaceScope;
-    }else if (SCOPE_PROJECT.equals(scope)){
+    }else if (SCOPE_PROJECT.equals(scopeName)){
       scopeDesc = CSearchMessages.ProjectScope;
     }
 
@@ -237,13 +243,15 @@ public class SearchCommand
     if (query != null){
       query.run(new NullProgressMonitor());
       PDOMSearchResult result = (PDOMSearchResult)query.getSearchResult();
+      ArrayList<ITypeReference> seen = new ArrayList<ITypeReference>();
       for (Object e : result.getElements()){
         for (Match m : result.getMatches(e)){
           PDOMSearchMatch match = (PDOMSearchMatch)m;
           TypeInfoSearchElement element =
             (TypeInfoSearchElement)match.getElement();
           ITypeReference ref = element.getTypeInfo().getResolvedReference();
-          if(ref != null){
+          if(ref != null && !seen.contains(ref)){
+            seen.add(ref);
             if(buffer.length() > 0){
               buffer.append('\n');
             }
@@ -274,8 +282,18 @@ public class SearchCommand
   protected ICProject[] getScope(String scope, ICProject project)
     throws Exception
   {
-    if (SCOPE_ALL.equals(scope)){
-      return null;
+    if (project == null || SCOPE_ALL.equals(scope)){
+      ArrayList<ICProject> elements = new ArrayList<ICProject>();
+      IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      for (IProject p : projects){
+        if(p.isOpen() && (
+              p.hasNature(CProjectNature.C_NATURE_ID) ||
+              p.hasNature(CCProjectNature.CC_NATURE_ID)))
+        {
+          elements.add(CoreModel.getDefault().create(p));
+        }
+      }
+      return elements.toArray(new ICProject[elements.size()]);
     }
 
     ArrayList<ICProject> elements = new ArrayList<ICProject>();

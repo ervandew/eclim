@@ -81,7 +81,6 @@ of the pattern to search for.
 
   - all - Search the whole workspace.
   - project - Search the current project, dependent projects, and libraries.
-  - type - Search only in the current type (source file).
 
 - -i: Ignore case when searching.
 

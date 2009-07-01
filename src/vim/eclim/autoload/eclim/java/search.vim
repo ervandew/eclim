@@ -40,10 +40,10 @@
   let s:search_element =
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
-  let s:search_pattern = '-command <search> -n "<project>" -f "<file>" <args>'
+  let s:search_pattern = '-command <search>'
   let s:options = ['-p', '-t', '-x', '-s', '-i']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
-  let s:scopes = ['all', 'project', 'type']
+  let s:scopes = ['all', 'project']
   let s:types = [
     \ 'annotation',
     \ 'class',
@@ -83,6 +83,11 @@ function! s:Search(command, ...)
     let argline = argline . a:{index}
     let index = index + 1
   endwhile
+
+  " check if pattern supplied without -p.
+  if argline !~ '^\s*-[a-z]' && argline !~ '^\s*$'
+    let argline = '-p ' . argline
+  endif
 
   let in_project = eclim#project#util#IsCurrentFileInProject(0)
 
@@ -124,19 +129,17 @@ function! s:Search(command, ...)
 
   " pattern search
   else
-    if !in_project
-      return s:SearchAlternate(argline, 0)
-    endif
-
     let project = eclim#project#util#GetCurrentProjectName()
     let filename = eclim#java#util#GetFilename()
 
     " pattern search
     let search_cmd = s:search_pattern
-    let search_cmd = substitute(search_cmd, '<project>', project, '')
-    let search_cmd = substitute(search_cmd, '<file>', filename, '')
     let search_cmd = substitute(search_cmd, '<search>', a:command, '')
-    let search_cmd = substitute(search_cmd, '<args>', argline, '')
+    if project != ''
+      let search_cmd .= ' -n "' . project . '"'
+    endif
+    let search_cmd .= ' -f "' . filename . '"'
+    let search_cmd .= ' ' . argline
     " quote the search pattern
     let search_cmd =
       \ substitute(search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')

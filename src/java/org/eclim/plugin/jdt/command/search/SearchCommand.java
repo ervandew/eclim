@@ -69,7 +69,7 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
 @Command(
   name = "java_search",
   options =
-    "REQUIRED n project ARG," +
+    "OPTIONAL n project ARG," +
     "OPTIONAL f file ARG," +
     "OPTIONAL o offset ARG," +
     "OPTIONAL e encoding ARG," +
@@ -202,14 +202,9 @@ public class SearchCommand
           Services.getMessage("java_search.indeterminate"));
     }
 
-    IJavaProject javaProject = JavaUtils.getJavaProject(project);
-    IType type = null;
-    if(file != null && file.endsWith(".java")){
-      type = ((CompilationUnit)JavaUtils.getCompilationUnit(project, file))
-        .getTypeRoot().findPrimaryType();
-    }
-    List<SearchMatch> matches =
-      search(pattern, getScope(scope, javaProject, type));
+    IJavaProject javaProject = project != null ?
+      JavaUtils.getJavaProject(project) : null;
+    List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
     return matches;
   }
 
@@ -317,18 +312,16 @@ public class SearchCommand
    *
    * @param scope The string name of the scope.
    * @param project The current project.
-   * @param type The current type.
    *
    * @return The IJavaSearchScope equivalent.
    */
-  protected IJavaSearchScope getScope(
-      String scope, IJavaProject project, IType type)
+  protected IJavaSearchScope getScope(String scope, IJavaProject project)
     throws Exception
   {
-    if(SCOPE_PROJECT.equals(scope)){
+    if(project == null){
+      return SearchEngine.createWorkspaceScope();
+    }else if(SCOPE_PROJECT.equals(scope)){
       return SearchEngine.createJavaSearchScope(new IJavaElement[]{project});
-    }else if(SCOPE_TYPE.equals(scope)){
-      return SearchEngine.createJavaSearchScope(new IJavaElement[]{type});
     }
     return SearchEngine.createWorkspaceScope();
   }
