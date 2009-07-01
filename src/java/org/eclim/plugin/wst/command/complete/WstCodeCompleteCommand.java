@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.eclipse.EclimPlugin;
@@ -29,6 +31,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.swt.graphics.Point;
+
+import org.eclipse.swt.widgets.Composite;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
@@ -76,6 +80,13 @@ public abstract class WstCodeCompleteCommand
         public void setSelectedRange(int x, int y)
         {
           point = new Point(x, y);
+        }
+        protected void createControl(Composite parent, int styles)
+        {
+          // no-op on windows to prevent possible deadlock in native method.
+          if (!Os.isFamily("windows")){
+            super.createControl(parent, styles);
+          }
         }
       };
     }
