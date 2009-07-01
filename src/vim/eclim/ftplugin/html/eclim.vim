@@ -36,7 +36,9 @@ endif
 
 " Options {{{
 
-setlocal completefunc=eclim#html#complete#CodeComplete
+if !has('win32') && !has('win64')
+  setlocal completefunc=eclim#html#complete#CodeComplete
+endif
 
 " }}}
 

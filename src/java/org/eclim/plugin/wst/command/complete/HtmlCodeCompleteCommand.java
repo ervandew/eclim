@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -49,6 +51,10 @@ public class HtmlCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
+    if (Os.isFamily("windows")){
+      throw new RuntimeException(
+          "Html completion disabled on windows due to native blocking issue.");
+    }
     return new HTMLContentAssistProcessor();
   }
 

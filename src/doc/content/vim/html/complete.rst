@@ -47,6 +47,12 @@ of end tags. When you type '</' eclim will attempt to determine which element
 you are closing and complete it for you.  If you wish to disable this feature
 you can simply set g:EclimSgmlCompleteEndTag to 0.
 
+.. warning::
+
+  Html completion has been disabled on Windows because of a native call which
+  blocks indefinitely.  Hopefully in the future this issue will be resolved or
+  worked around.
+
 
 Configuration
 -------------
