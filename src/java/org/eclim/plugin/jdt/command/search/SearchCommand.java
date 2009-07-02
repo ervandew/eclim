@@ -42,6 +42,7 @@ import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -50,7 +51,6 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.IType;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -58,8 +58,6 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
-
-import org.eclipse.jdt.internal.core.CompilationUnit;
 
 /**
  * Command to handle java search requests.
@@ -268,7 +266,12 @@ public class SearchCommand
     if(parent.getElementType() == IJavaElement.CLASS_FILE){
       IPackageFragmentRoot root = (IPackageFragmentRoot)
         parent.getParent().getParent();
-      archive = root.getPath().toOSString();
+      IResource resource = root.getResource();
+      if (resource != null){
+        archive = root.getResource().getRawLocation().toOSString();
+      }else{
+        archive = root.getPath().toOSString();
+      }
 
       String classFile = elementName.replace('.', File.separatorChar);
       file = "jar:file://" + archive + '!' + classFile + ".class";
