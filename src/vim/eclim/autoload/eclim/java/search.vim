@@ -388,7 +388,12 @@ endfunction " }}}
 " Used by non java source files to find the declaration of a classname under
 " the cursor.
 function! eclim#java#search#FindClassDeclaration()
-  exec "JavaSearch -t classOrInterface -p " . expand('<cword>')
+  let line = getline('.')
+  let class = substitute(line,
+    \ '.\{-}\([0-9a-zA-Z_.]*\%' . col('.') . 'c[0-9a-zA-Z_.]*\).*', '\1', '')
+  if class != line && class != '' && class =~ '^[a-zA-Z]'
+    exec "JavaSearch -t classOrInterface -p " . class
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
