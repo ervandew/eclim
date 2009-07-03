@@ -1,0 +1,5 @@
+#Thu Jul 02 21:47:16 PDT 2009
+eclipse.preferences.version=1
+org.eclipse.jdt.core.formatter.tabulation.char=space
+org.eclipse.jdt.core.formatter.tabulation.size=2
+org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations=false

@@ -349,18 +349,6 @@ TODO {{{
       - http://java-source.net/open-source/code-coverage Other code coverage tools
       - http://java-source.net/open-source/code-analyzers Other code analyizers
 
-    - auto configure eclipse indent style
-
-      import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
-
-      (JavaCore|IJavaProject).setOption(
-        DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR :
-          DefaultCodeFormatterConstants.MIXED, JavaCore.TAB, JavaCore.SPACE
-        DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE
-        DefaultCodeFormatterConstants.FORMATTER_USE_TABS_ONLY_FOR_LEADING_INDENTATIONS :
-          DefaultCodeFormatterConstants.TRUE|FALSE
-      )
-
     JDT Tips
     http://help.eclipse.org/help31/index.jsp?topic=/org.eclipse.jdt.doc.user/tips/jdt_tips.html
     JDT What's New

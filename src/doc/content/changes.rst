@@ -30,6 +30,10 @@ Ruby:
     :ref:`searching <vim/ruby/search>`, and
     :ref:`validation <vim/ruby/validate>`.
 
+Java:
+  - Added ability to configure java indentation globally via
+    :ref:`:EclimSettings` or per project using :ref:`:ProjectSettings`.
+
 .. _1.4.9:
 
 1.4.9 (Jun. 14, 2009)

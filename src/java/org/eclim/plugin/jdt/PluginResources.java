@@ -133,8 +133,12 @@ public class PluginResources
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
       "JDT/JUnit org.eclim.java.junit.src_dir"
     );
+    // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions("org.eclipse.jdt.core.javanature",
-      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]"
+      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
+      "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
+      "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
+      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)"
     );
   }
 

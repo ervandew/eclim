@@ -53,7 +53,17 @@ drawbacks:
   If you instead have Vim setup to expand tabs to spaces, then you may
   encounter times when Eclipse will insert the code with no indentation.
 
-  To resolve this you will need to edit some settings in Eclipse:
+  To resolve this you will need to edit some eclipse settings:
+
+  Using vim:
+
+  #. Open the eclim settings
+     (global: :ref:`:EclimSettings` or project level: :ref:`:ProjectSettings`)
+  #. Edit the indentation settings to match your vim options\:
+
+     JDT -> org.eclipse.jdt.core.formatter.*
+
+  Using Eclipse:
 
   #. Shutdown eclimd.
   #. Open Eclipse.
