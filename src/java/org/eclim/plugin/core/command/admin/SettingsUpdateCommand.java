@@ -19,6 +19,7 @@ package org.eclim.plugin.core.command.admin;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.eclim.Services;
@@ -33,6 +34,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.util.IOUtils;
+import org.eclim.util.StringUtils;
 
 /**
  * Command to update global settings.
@@ -57,6 +59,7 @@ public class SettingsUpdateCommand
     Properties properties = new Properties();
     FileInputStream in = null;
     File file = new File(settings);
+    ArrayList<String> errors = new ArrayList<String>();
     try{
       in = new FileInputStream(file);
       properties.load(in);
@@ -64,7 +67,11 @@ public class SettingsUpdateCommand
       for(Object key : properties.keySet()){
         String name = (String)key;
         String value = properties.getProperty(name);
-        getPreferences().setValue(name, value);
+        try{
+          getPreferences().setValue(name, value);
+        }catch(IllegalArgumentException iae){
+          errors.add(iae.getMessage());
+        }
       }
     }finally{
       IOUtils.closeQuietly(in);
@@ -75,6 +82,9 @@ public class SettingsUpdateCommand
       }
     }
 
+    if (errors.size() > 0){
+      return StringUtils.join(errors, '\n');
+    }
     return Services.getMessage("settings.updated");
   }
 }

@@ -214,16 +214,43 @@ function! eclim#PingEclim(echo)
   endif
 endfunction " }}}
 
+" ParseSettingErrors() {{{
+function! eclim#ParseSettingErrors(errors)
+  let errors = []
+  for error in a:errors
+    let setting = substitute(error, '^\(.\{-}\): .*', '\1', '')
+    let message = substitute(error, '^.\{-}: \(.*\)', '\1', '')
+    let line = search('^\s*' . setting . '\s*=', 'cnw')
+    call add(errors, {
+        \ 'bufnr': bufnr('%'),
+        \ 'lnum': line > 0 ? line : 1,
+        \ 'text': message,
+        \ 'type': 'e'
+      \ })
+  endfor
+  return errors
+endfunction " }}}
+
 " SaveSettings() {{{
-function! s:SaveSettings()
+function! eclim#SaveSettings(command, project)
   " don't check modified since undo seems to not set the modified flag
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
     silent exec 'write! ' . escape(tempfile, ' ')
 
-    let command = substitute(s:command_settings_update, '<settings>', tempfile, '')
+    let command = a:command
+    let command = substitute(command, '<project>', a:project, '')
+    let command = substitute(command, '<settings>', tempfile, '')
     let result = eclim#ExecuteEclim(command)
-    call eclim#util#Echo(result)
+    if result =~ ':'
+      call eclim#util#EchoError
+        \ ("Operation contained errors.  See location list for details.")
+      call eclim#util#SetLocationList
+        \ (eclim#ParseSettingErrors(split(result, '\n')))
+    else
+      call eclim#util#ClearLocationList()
+      call eclim#util#Echo(result)
+    endif
 
     setlocal nomodified
   "endif
@@ -242,7 +269,8 @@ function! eclim#Settings()
 
     augroup eclim_settings
       autocmd! BufWriteCmd <buffer>
-      autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
+      autocmd BufWriteCmd <buffer>
+        \ call eclim#SaveSettings(s:command_settings_update, '')
     augroup END
   endif
 endfunction " }}}

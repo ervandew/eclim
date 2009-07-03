@@ -408,27 +408,7 @@ endfunction " }}}
 
 " SaveSettings() {{{
 function! s:SaveSettings()
-  " don't check modified since undo seems to not set the modified flag
-  "if &modified
-    let tempfile = substitute(tempname(), '\', '/', 'g')
-    silent exec 'write! ' . escape(tempfile, ' ')
-    let command = s:command_update
-    let command = substitute(command, '<project>', b:project, '')
-    let command = substitute(command, '<settings>', tempfile, '')
-
-    let result = eclim#ExecuteEclim(command)
-    if result =~ '|'
-      call eclim#util#EchoError
-        \ ("Operation contained errors.  See quickfix for details.")
-      call eclim#util#SetLocationList
-        \ (eclim#util#ParseLocationEntries(split(result, '\n')))
-    else
-      call eclim#util#ClearLocationList()
-      call eclim#util#Echo(result)
-    endif
-
-    setlocal nomodified
-  "endif
+  call eclim#SaveSettings(s:command_update, b:project)
 endfunction " }}}
 
 " GetCurrentProjectName() {{{

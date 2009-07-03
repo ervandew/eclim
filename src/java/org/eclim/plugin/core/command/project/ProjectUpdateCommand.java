@@ -19,6 +19,7 @@ package org.eclim.plugin.core.command.project;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,6 +44,7 @@ import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
+import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -76,7 +78,10 @@ public class ProjectUpdateCommand
     IProject project = ProjectUtils.getProject(name);
 
     if(settings != null){
-      updateSettings(project, settings);
+      List<String> errors = updateSettings(project, settings);
+      if (errors.size() > 0){
+        return StringUtils.join(errors, '\n');
+      }
     }else{
       List<Error> errors = ProjectManagement.update(project, commandLine);
       if(errors.size() > 0){
@@ -92,13 +97,15 @@ public class ProjectUpdateCommand
    *
    * @param project The project.
    * @param settings The temp settings file.
+   * @return List of errors or an empty List if none.
    */
-  private void updateSettings(IProject project, String settings)
+  private List<String> updateSettings(IProject project, String settings)
     throws Exception
   {
     Properties properties = new Properties();
     FileInputStream in = null;
     File file = new File(settings);
+    ArrayList<String> errors = new ArrayList<String>();
     try{
       in = new FileInputStream(file);
       properties.load(in);
@@ -107,7 +114,11 @@ public class ProjectUpdateCommand
       for(Object key : properties.keySet()){
         String name = (String)key;
         String value = properties.getProperty(name);
-        preferences.setValue(project, name, value);
+        try{
+          preferences.setValue(project, name, value);
+        }catch(IllegalArgumentException iae){
+          errors.add(iae.getMessage());
+        }
       }
     }finally{
       IOUtils.closeQuietly(in);
@@ -117,5 +128,6 @@ public class ProjectUpdateCommand
         logger.warn("Error deleting project settings temp file: " + file, e);
       }
     }
+    return errors;
   }
 }

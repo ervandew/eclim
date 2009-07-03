@@ -288,7 +288,7 @@ public class Preferences
    * @param value The value of the option/preference.
    */
   public void setValue(IProject project, String name, String value)
-    throws Exception
+    throws IllegalArgumentException, Exception
   {
     if(name.startsWith(NODE_NAME)){
       setPreference(project, name, value);
@@ -325,7 +325,7 @@ public class Preferences
    * @param value The value of the preference.
    */
   private void setPreference(IProject project, String name, String value)
-    throws Exception
+    throws IllegalArgumentException, Exception
   {
     IScopeContext context = new InstanceScope();
 
@@ -385,7 +385,7 @@ public class Preferences
    * @param value The value of the option/preference.
    */
   private void validateValue(Option option, String name, String value)
-    throws Exception
+    throws IllegalArgumentException
   {
     if(option != null){
       if (option.getPattern() == null ||
