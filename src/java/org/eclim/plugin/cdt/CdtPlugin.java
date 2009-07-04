@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.cdt;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.Plugin;
 
 import org.eclipse.core.runtime.Platform;
@@ -31,6 +33,8 @@ import org.osgi.framework.BundleContext;
 public class CdtPlugin
   extends Plugin
 {
+  private static final Logger logger = Logger.getLogger(CdtPlugin.class);
+
   /**
    * {@inheritDoc}
    * @see Plugin#start(BundleContext)
@@ -44,6 +48,10 @@ public class CdtPlugin
     // classes.  This seems to only be necessary on the non-classic eclipse
     // distributions.
     Bundle bundle = Platform.getBundle("org.eclipse.cdt.ui");
-    bundle.start();
+    try{
+      bundle.start();
+    }catch(Exception e){
+      logger.warn("Failed to start org.eclipse.cdt.ui");
+    }
   }
 }
