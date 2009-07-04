@@ -41,6 +41,13 @@ dependencies, including dependencies on other projects and other libraries.
 For more on maintaining this file see the
 :ref:`build path docs <vim/ruby/buildpath>`.
 
+.. note::
+
+  When creating your first project you may be prompted to supply the path to your
+  ruby interpreter.  You must provide the full path to your ruby executable
+  before the project will be created.  Tab based file completion is supported
+  at the prompt.
+
 Once you've created your project you can use the **:ProjectList** command to
 list the available projects and you should see your newly created one in the
 list.

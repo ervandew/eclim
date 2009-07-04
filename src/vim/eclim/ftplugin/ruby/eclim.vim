@@ -62,6 +62,10 @@ endif
 if !exists(":RubySearchContext")
   command -buffer RubySearchContext :call eclim#ruby#search#SearchContext()
 endif
+if !exists(":RubyInterpreters")
+  command -buffer RubyInterpreters
+    \ :call eclim#dltk#interpreters#ListInterpreters('ruby')
+endif
 
 " }}}
 

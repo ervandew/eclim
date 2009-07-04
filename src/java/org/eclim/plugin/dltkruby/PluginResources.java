@@ -20,6 +20,8 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.dltk.preference.DltkInterpreterTypeManager;
+
 import org.eclim.plugin.dltk.util.DltkUtils;
 
 import org.eclim.plugin.dltkruby.project.RubyProjectManager;
@@ -57,6 +59,14 @@ public class PluginResources
         RubyNature.NATURE_ID, new RubyProjectManager());
 
     DltkUtils.addDltkNature(RubyNature.NATURE_ID);
+    DltkInterpreterTypeManager.addInterpreterType(
+        "ruby",
+        RubyNature.NATURE_ID,
+        "org.eclipse.dltk.internal.debug.ui.launcher.GenericRubyInstallType");
+    DltkInterpreterTypeManager.addInterpreterType(
+        "jruby",
+        RubyNature.NATURE_ID,
+        "org.eclipse.dltk.ruby.internal.launching.JRubyInstallType");
   }
 
   /**
