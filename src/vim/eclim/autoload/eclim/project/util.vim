@@ -94,9 +94,11 @@ function! eclim#project#util#ProjectCreate(args)
     let command .= substitute(s:command_create_name, '<name>', name, '')
   endif
 
+  let natureIds = []
   let natures = substitute(a:args, '.* -n\s\+\(.\{-}\)\(\s\+-\(d\|p\)\>.*\|$\)', '\1', '')
   if natures != a:args
     let natures = substitute(natures, '\s\+', ',', 'g')
+    let natureIds = split(natures, ',')
     let command .= substitute(s:command_create_natures, '<natures>', natures, '')
   endif
 
@@ -106,11 +108,34 @@ function! eclim#project#util#ProjectCreate(args)
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
+  " execute any pre-project creation hooks
+  for nature in natureIds
+    exec 'runtime autoload/eclim/' . nature . '/project.vim'
+    try
+      let ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
+      if !ProjectPre(folder)
+        return
+      endif
+    catch /E\(117\|700\):.*/
+      " ignore
+    endtry
+  endfor
+
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
   endif
+
+  " execute any post-project creation hooks
+  for nature in natureIds
+    try
+      let ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
+      call ProjectPost(folder)
+    catch /E\(117\|700\):.*/
+      " ignore
+    endtry
+  endfor
 endfunction " }}}
 
 " ProjectImport(arg) {{{
