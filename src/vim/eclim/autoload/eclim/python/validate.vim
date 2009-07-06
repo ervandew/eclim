@@ -124,6 +124,10 @@ try:
   parseFile(vim.eval('expand("%:p")'))
 except SyntaxError, se:
   vim.command("let syntax_error = \"%s\"" % re.sub(r'"', r'\"', str(se)))
+except IndentationError, ie:
+  vim.command("let syntax_error = \"%s (line %s)\"" % (
+    re.sub(r'"', r'\"', ie.msg), ie.lineno)
+  )
 EOF
 
   endif
