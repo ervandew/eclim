@@ -38,7 +38,7 @@ function eclim#dltk#interpreter#GetInterpreters(nature)
   endif
 
   call filter(interpreters, 'v:val =~ ".* - "')
-  call map(interpreters, 'substitute(v:val, ".\\{-} - \\(.*\\)", "\\1", "")')
+  call map(interpreters, 'substitute(v:val, "\s*.\\{-} - \\(.*\\)", "\\1", "")')
   return interpreters
 endfunction " }}}
 
@@ -53,7 +53,8 @@ function eclim#dltk#interpreter#ListInterpreters(nature)
   if len(interpreters) == 1 && interpreters[0] == '0'
     return
   endif
-  call eclim#util#Echo(join(interpreters, "\n"))
+  let result = substitute(join(interpreters, "\n"), "\t", g:EclimIndent, 'g')
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 " AddInterpreter(nature, type, path) {{{
