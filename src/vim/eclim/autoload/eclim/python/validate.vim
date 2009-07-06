@@ -22,6 +22,15 @@
 "
 " }}}
 
+" Global Variables {{{
+  " if the user has the pyflakes plugin from vim.org, then disable our
+  " validation since the two overlap and may result in errors
+  let s:pyflakes_enabled = 1
+  if exists('g:pyflakes_builtins')
+    let s:pyflakes_enabled = 0
+  endif
+" }}}
+
 " Script Variables {{{
   let s:warnings = '\(' . join([
       \ 'imported but unused',
@@ -44,17 +53,19 @@ function! eclim#python#validate#Validate(on_save)
   let syntax_error = eclim#python#validate#ValidateSyntax()
 
   if syntax_error == ''
-    if !executable('pyflakes')
-      if !exists('g:eclim_python_pyflakes_warn')
-        call eclim#util#EchoWarning("Unable to find 'pyflakes' command.")
-        let g:eclim_python_pyflakes_warn = 1
-      endif
-    else
-      let command = 'pyflakes "' . expand('%:p') . '"'
-      let results = split(eclim#util#System(command), '\n')
-      if v:shell_error > 1 " pyflakes returns 1 if there where warnings.
-        call eclim#util#EchoError('Error running command: ' . command)
-        let results = []
+    if s:pyflakes_enabled
+      if !executable('pyflakes')
+        if !exists('g:eclim_python_pyflakes_warn')
+          call eclim#util#EchoWarning("Unable to find 'pyflakes' command.")
+          let g:eclim_python_pyflakes_warn = 1
+        endif
+      else
+        let command = 'pyflakes "' . expand('%:p') . '"'
+        let results = split(eclim#util#System(command), '\n')
+        if v:shell_error > 1 " pyflakes returns 1 if there where warnings.
+          call eclim#util#EchoError('Error running command: ' . command)
+          let results = []
+        endif
       endif
     endif
 
