@@ -25,7 +25,7 @@
 " Script Variables {{{
   let s:command_interpreters = '-command dltk_interpreters -n <nature>'
   let s:command_interpreter_addremove =
-    \ '-command dltk_<action>_interpreter -n <nature> -t <type> -i "<path>"'
+    \ '-command dltk_<action>_interpreter -n <nature> -i "<path>"'
 " }}}
 
 " GetInterpreters(nature) {{{
@@ -61,9 +61,9 @@ function eclim#dltk#interpreter#AddInterpreter(nature, type, path)
   return s:InterpreterAddRemove(a:nature, a:type, a:path, 'add')
 endfunction " }}}
 
-" RemoveInterpreter(nature, type, path) {{{
-function eclim#dltk#interpreter#RemoveInterpreter(nature, type, path)
-  return s:InterpreterAddRemove(a:nature, a:type, a:path, 'remove')
+" RemoveInterpreter(nature, path) {{{
+function eclim#dltk#interpreter#RemoveInterpreter(nature, path)
+  return s:InterpreterAddRemove(a:nature, '', a:path, 'remove')
 endfunction " }}}
 
 " s:InterpreterAddRemove(nature, type, path, action) {{{
@@ -71,8 +71,10 @@ function s:InterpreterAddRemove(nature, type, path, action)
   let command = s:command_interpreter_addremove
   let command = substitute(command, '<action>', a:action, '')
   let command = substitute(command, '<nature>', a:nature, '')
-  let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<path>', a:path, '')
+  if a:action == 'add'
+    let command .= ' -t ' . a:type
+  endif
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)

@@ -29,8 +29,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.project.ProjectNatureFactory;
 
-import org.eclim.plugin.dltk.preference.DltkInterpreterTypeManager;
-
 import org.eclipse.core.runtime.Path;
 
 import org.eclipse.dltk.core.environment.EnvironmentManager;
@@ -54,7 +52,6 @@ import org.eclipse.dltk.utils.PlatformFileUtils;
   name = "dltk_remove_interpreter",
   options =
     "REQUIRED n nature ARG," +
-    "REQUIRED t type ARG," +
     "REQUIRED i interpreter ARG"
 )
 public class DeleteInterpreterCommand
@@ -76,15 +73,6 @@ public class DeleteInterpreterCommand
     }
 
     String interpreterPath = commandLine.getValue("i");
-    String interpreterType = commandLine.getValue(Options.TYPE_OPTION);
-
-    IInterpreterInstallType type = DltkInterpreterTypeManager
-      .getInterpreterInstallType(interpreterType, nature);
-
-    if (type == null){
-      throw new RuntimeException(
-          Services.getMessage("interpreter.type.not.found", interpreterType));
-    }
 
     IEnvironment env = EnvironmentManager.getLocalEnvironment();
     IFileHandle file = PlatformFileUtils
