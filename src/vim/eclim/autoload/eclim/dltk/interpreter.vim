@@ -29,7 +29,7 @@
 " }}}
 
 " GetInterpreters(nature) {{{
-function eclim#dltk#interpreters#GetInterpreters(nature)
+function eclim#dltk#interpreter#GetInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
   let interpreters = split(eclim#ExecuteEclim(command), '\n')
@@ -43,7 +43,7 @@ function eclim#dltk#interpreters#GetInterpreters(nature)
 endfunction " }}}
 
 " ListInterpreters(nature) {{{
-function eclim#dltk#interpreters#ListInterpreters(nature)
+function eclim#dltk#interpreter#ListInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
   let interpreters = split(eclim#ExecuteEclim(command), '\n')
@@ -57,12 +57,12 @@ function eclim#dltk#interpreters#ListInterpreters(nature)
 endfunction " }}}
 
 " AddInterpreter(nature, type, path) {{{
-function eclim#dltk#interpreters#AddInterpreter(nature, type, path)
+function eclim#dltk#interpreter#AddInterpreter(nature, type, path)
   return s:InterpreterAddRemove(a:nature, a:type, a:path, 'add')
 endfunction " }}}
 
 " RemoveInterpreter(nature, type, path) {{{
-function eclim#dltk#interpreters#RemoveInterpreter(nature, type, path)
+function eclim#dltk#interpreter#RemoveInterpreter(nature, type, path)
   return s:InterpreterAddRemove(a:nature, a:type, a:path, 'remove')
 endfunction " }}}
 

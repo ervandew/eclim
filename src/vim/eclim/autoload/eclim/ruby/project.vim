@@ -29,7 +29,7 @@ endif
 
 " ProjectPre(folder) {{{
 function eclim#ruby#project#ProjectCreatePre(folder)
-  let interpreters = eclim#dltk#interpreters#GetInterpreters('ruby')
+  let interpreters = eclim#dltk#interpreter#GetInterpreters('ruby')
   if len(interpreters) == 0
     let path = ''
     if !has('win32') && !has('win64')
@@ -47,7 +47,7 @@ function eclim#ruby#project#ProjectCreatePre(folder)
       endif
 
       if answer == 1
-        return eclim#dltk#interpreters#AddInterpreter('ruby', 'ruby', path)
+        return eclim#dltk#interpreter#AddInterpreter('ruby', 'ruby', path)
       endif
     endif
 
@@ -74,7 +74,7 @@ function eclim#ruby#project#ProjectCreatePre(folder)
             return 0
           endif
 
-          let valid = eclim#dltk#interpreters#AddInterpreter('ruby', 'ruby', path)
+          let valid = eclim#dltk#interpreter#AddInterpreter('ruby', 'ruby', path)
           if valid
             break
           else
