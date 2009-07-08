@@ -286,7 +286,18 @@ public class SearchCommand
     return SearchPattern.R_EXACT_MATCH;
   }
 
-  private static class SearchRequestor
+  /**
+   * Get the search result message for the given element.
+   *
+   * @param element The search result element.
+   * @return The message.
+   */
+  protected String getMessage(Object element)
+  {
+    return StringUtils.EMPTY;
+  }
+
+  private class SearchRequestor
     extends org.eclipse.dltk.core.search.SearchRequestor
   {
     private ArrayList<Position> matches = new ArrayList<Position>();
@@ -326,11 +337,23 @@ public class SearchCommand
           // ignoring results that don't have a file that exists.
           return;
         }
+
         Position position = new Position(
             filename, match.getOffset(), match.getLength());
 
-        if(!matches.contains(position)){
+        // setting to empty string to match entries with no message, which dltk
+        // tends to have in addition to ones with a message.
+        position.setMessage(StringUtils.EMPTY);
+
+        int index = matches.indexOf(position);
+        String message = SearchCommand.this.getMessage(match.getElement());
+        if(index == -1){
           matches.add(position);
+          position.setMessage(message);
+        }else if (!StringUtils.EMPTY.equals(message)){
+          // the second occurrence should be the one with the message.
+          position = matches.get(index);
+          position.setMessage(message);
         }
       }
     }
