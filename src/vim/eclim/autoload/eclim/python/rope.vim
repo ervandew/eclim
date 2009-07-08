@@ -264,7 +264,7 @@ with(projectroot()):
           lineno = location[1]
 
         # TODO: use location.offset
-        results.append('%s|%s col 1|' % (path, lineno))
+        results.append(str('%s|%s col 1|' % (path, lineno)))
 
     vim.command("let results = %s" % repr(results))
   except IndentationError, e:
