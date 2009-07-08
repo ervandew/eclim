@@ -47,7 +47,7 @@ function eclim#ruby#project#ProjectCreatePre(folder)
       endif
 
       if answer == 1
-        return eclim#dltk#interpreter#AddInterpreter('ruby', 'ruby', path)
+        return eclim#ruby#interpreter#AddInterpreter(path)
       endif
     endif
 
@@ -74,7 +74,7 @@ function eclim#ruby#project#ProjectCreatePre(folder)
             return 0
           endif
 
-          let valid = eclim#dltk#interpreter#AddInterpreter('ruby', 'ruby', path)
+          let valid = eclim#ruby#interpreter#AddInterpreter(path)
           if valid
             break
           else

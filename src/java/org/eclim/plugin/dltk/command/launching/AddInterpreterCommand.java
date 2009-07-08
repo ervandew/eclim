@@ -89,14 +89,11 @@ public class AddInterpreterCommand
     }
 
     String interpreterPath = commandLine.getValue("i");
-    String interpreterType = commandLine.getValue(Options.TYPE_OPTION);
 
-    IInterpreterInstallType type = DltkInterpreterTypeManager
-      .getInterpreterInstallType(interpreterType, nature);
-
+    IInterpreterInstallType type = getInterpreterInstallType(nature, commandLine);
     if (type == null){
       throw new RuntimeException(
-          Services.getMessage("interpreter.type.not.found", interpreterType));
+          Services.getMessage("interpreter.type.not.found"));
     }
 
     IEnvironment env = EnvironmentManager.getLocalEnvironment();
@@ -169,6 +166,15 @@ public class AddInterpreterCommand
     updater.updateInterpreterSettings(nature, installs, defaults);
 
     return Services.getMessage("interpreter.added");
+  }
+
+  protected IInterpreterInstallType getInterpreterInstallType(
+      String nature, CommandLine commandLine)
+    throws Exception
+  {
+    String interpreterType = commandLine.getValue(Options.TYPE_OPTION);
+    return DltkInterpreterTypeManager
+      .getInterpreterInstallType(interpreterType, nature);
   }
 
   // mostly ripped off from eclipse.

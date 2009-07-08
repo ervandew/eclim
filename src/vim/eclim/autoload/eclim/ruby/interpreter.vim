@@ -22,6 +22,22 @@
 "
 " }}}
 
+" Script Variables {{{
+  let s:command_add = '-command ruby_add_interpreter -n ruby -i "<path>"'
+" }}}
+
+" AddInterpreter(path) {{{
+function eclim#ruby#interpreter#AddInterpreter(path)
+  let command = s:command_add
+  let command = substitute(command, '<path>', a:path, '')
+  let result = eclim#ExecuteEclim(command)
+  if result != '0'
+    call eclim#util#Echo(result)
+    return 1
+  endif
+  return 0
+endfunction " }}}
+
 " CommandCompleteInterpreterPath(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for ruby interpreter paths.
 function! eclim#ruby#interpreter#CommandCompleteInterpreterPath(
