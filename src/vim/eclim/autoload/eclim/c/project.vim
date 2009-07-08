@@ -63,7 +63,7 @@ function! eclim#c#project#Configs(...)
 endfunction " }}}
 
 " s:Syntax() {{{
-function s:Syntax()
+function! s:Syntax()
   syntax match CProjectConfigLabel /^\s*[A-Z]\w\+:/
   syntax match CProjectConfigSubLabel /^\s*[a-z][a-z\/]\+:/
   syntax match CProjectConfigLink /|\S.\{-}\S|/
@@ -73,7 +73,7 @@ function s:Syntax()
 endfunction " }}}
 
 " s:FollowLink() {{{
-function s:FollowLink()
+function! s:FollowLink()
   let line = getline('.')
   let link = substitute(
     \ getline('.'), '.*|\(.\{-}\%' . col('.') . 'c.\{-}\)|.*', '\1', '')
@@ -91,7 +91,7 @@ function s:FollowLink()
 endfunction " }}}
 
 " s:AddSource() {{{
-function s:AddSource()
+function! s:AddSource()
   let project_root = eclim#project#util#GetProjectRoot(b:project)
   let complete = 'customlist,eclim#project#util#CommandCompleteProjectRelative'
   let dir = input('dir: ', '', complete)
@@ -122,7 +122,7 @@ function s:AddSource()
 endfunction " }}}
 
 " s:AddInclude() {{{
-function s:AddInclude()
+function! s:AddInclude()
   let project_root = eclim#project#util#GetProjectRoot(b:project)
   let complete = 'customlist,eclim#project#util#CommandCompleteAbsoluteOrProjectRelative'
   let dir = input('dir: ', '', complete)
@@ -145,7 +145,7 @@ function s:AddInclude()
 endfunction " }}}
 
 " s:AddSymbol() {{{
-function s:AddSymbol()
+function! s:AddSymbol()
   let project_root = eclim#project#util#GetProjectRoot(b:project)
   let name = input('name: ', '')
   if name == ''
@@ -172,7 +172,7 @@ function s:AddSymbol()
 endfunction " }}}
 
 " s:Delete() {{{
-function s:Delete()
+function! s:Delete()
   let reload = 0
   let message = ''
   let pos = getpos('.')
@@ -211,7 +211,7 @@ function s:Delete()
 endfunction " }}}
 
 " s:DeleteSource(lnum) {{{
-function s:DeleteSource(lnum)
+function! s:DeleteSource(lnum)
   let dir = substitute(getline(a:lnum), '^\s*dir:\s\+\(.*\)', '\1', '')
   let command = s:src_command
   let command = substitute(command, '<project>', b:project, '')
@@ -226,7 +226,7 @@ function s:DeleteSource(lnum)
 endfunction " }}}
 
 " s:DeleteInclude(lnum) {{{
-function s:DeleteInclude(lnum)
+function! s:DeleteInclude(lnum)
   let dir = substitute(getline(a:lnum), '^\s*path:\s\+\(.*\)', '\1', '')
   let dir = substitute(dir, '\(^"\|"$\)', '', 'g')
   let dir = substitute(dir, '^\$', '', '')
@@ -247,7 +247,7 @@ function s:DeleteInclude(lnum)
 endfunction " }}}
 
 " s:DeleteSymbol(lnum) {{{
-function s:DeleteSymbol(lnum)
+function! s:DeleteSymbol(lnum)
   let name = substitute(
     \ getline(a:lnum), '^\s*name/value:\s\+\(.\{-}\)=.*', '\1', '')
 
@@ -265,7 +265,7 @@ function s:DeleteSymbol(lnum)
 endfunction " }}}
 
 " s:GetLang() {{{
-function s:GetLang()
+function! s:GetLang()
   let lang_line = getline(search('^\s\+Tool:', 'bnW'))
   if lang_line =~ 'assembl\c'
     return 'assembly'

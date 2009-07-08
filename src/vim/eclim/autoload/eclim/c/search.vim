@@ -35,6 +35,7 @@
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command c_search'
   let s:includepaths = '-command c_includepaths -p "<project>"'
+  let s:sourcepaths = '-command c_sourcepaths -p "<project>"'
   let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -53,6 +54,7 @@
   let s:contexts = [
       \ 'all',
       \ 'declarations',
+      \ 'definitions',
       \ 'references'
     \ ]
 " }}}
@@ -78,14 +80,22 @@ function eclim#c#search#FindInclude()
     return
   endif
 
-  let file = substitute(getline('.'), '.*#include\s\+<\(.*\)>.*', '\1', '')
+  let file = substitute(getline('.'), '.*#include\s\+[<"]\(.*\)[>"].*', '\1', '')
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:includepaths, '<project>', project, '')
   let result =  eclim#ExecuteEclim(command)
   let paths = split(result, '\n')
 
-  let results = split(globpath(expand('%:h') . ',' . join(paths, ','), file), '\n')
+  let command = substitute(s:sourcepaths, '<project>', project, '')
+  let result =  eclim#ExecuteEclim(command)
+  let paths += split(result, '\n')
+
+  let dir = expand('%:p:h')
+  if index(paths, dir) == -1
+    call add(paths, dir)
+  endif
+  let results = split(globpath(join(paths, ','), file), '\n')
 
   if !empty(results)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
@@ -115,7 +125,7 @@ function! eclim#c#search#SearchContext()
     let cnum = eclim#util#GetCurrentElementColumn()
   endif
 
-  if getline('.') =~ '#include\s\+<[A-Za-z0-9.]*\%' . cnum . 'c'
+  if getline('.') =~ '#include\s\+[<"][A-Za-z0-9.]*\%' . cnum . 'c'
     call eclim#c#search#FindInclude()
     return
   "elseif getline('.') =~ '\<\(class\|????\)\s\+\%' . cnum . 'c'
@@ -123,7 +133,9 @@ function! eclim#c#search#SearchContext()
     return
   endif
 
-  call eclim#c#search#FindDefinition('declarations')
+  if !eclim#c#search#FindDefinition('definitions')
+    call eclim#c#search#FindDefinition('declarations')
+  endif
 
 endfunction " }}}
 
