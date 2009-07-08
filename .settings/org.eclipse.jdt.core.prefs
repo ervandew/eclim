@@ -1,5 +1,7 @@
-#Mon Jul 02 20:51:26 PDT 2007
+#Tue Jul 07 14:31:58 PDT 2009
 eclipse.preferences.version=1
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
 org.eclipse.jdt.core.compiler.compliance=1.5
 org.eclipse.jdt.core.compiler.source=1.5
+org.eclipse.jdt.core.formatter.tabulation.char=space
+org.eclipse.jdt.core.formatter.tabulation.size=2
