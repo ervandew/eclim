@@ -28,6 +28,14 @@ else
   finish
 endif
 
+" Autocmds {{{
+
+augroup vcs_git
+  autocmd BufReadCmd index_blob_* call <SID>ReadIndex()
+augroup END
+
+" }}}
+
 " Script Variables {{{
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
@@ -100,6 +108,12 @@ function eclim#vcs#impl#git#GetRevision(file)
     \ fnamemodify(a:file, ':p:h'), fnamemodify(a:file, ':p:t'))
   let path = substitute(path, '^/', '', '')
   exec 'lcd ' . escape(root, ' ')
+
+  " kind of a hack to support diffs against git's staging (index) area.
+  if path =~ '\<index_blob_[a-z0-9]\{40}_'
+    let path = substitute(path, '\<index_blob_[a-z0-9]\{40}_', '', '')
+  endif
+
   let log = eclim#vcs#impl#git#Git('log --pretty=oneline -1 "' . path . '"')
   if type(log) == 0
     return
@@ -133,7 +147,23 @@ endfunction " }}}
 function eclim#vcs#impl#git#GetEditorFile()
   let line = getline('.')
   if line =~ '^#\s*modified:.*'
-    return substitute(line, '^#\s*modified:\s\+\(.*\)\s*', '\1', '')
+    let file = substitute(line, '^#\s*modified:\s\+\(.*\)\s*', '\1', '')
+    if search('#\s\+Changed but not updated:', 'nw') > line('.')
+      let result = eclim#vcs#impl#git#Git('diff --full-index --cached "' . file . '"')
+      let lines = split(result, "\n")[:5]
+      call filter(lines, 'v:val =~ "^index \\w\\+\\.\\.\\w\\+"')
+      if len(lines)
+        let index = substitute(lines[0], 'index \w\+\.\.\(\w\+\)\s.*', '\1', '')
+
+        " kind of hacky but so far only git has a staging area, so return a
+        " filename indicating the index blob version of the file which will
+        " trigger an autocmd above that will populate the contents.
+        let path = fnamemodify(file, ':h')
+        let path .= path != '' ? '/' : ''
+        return path . 'index_blob_' . index . '_' . fnamemodify(file, ':t')
+      endif
+    endif
+    return file
   endif
   return ''
 endfunction " }}}
@@ -258,6 +288,12 @@ function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
   let path = substitute(path, '^/', '', '')
   let root = eclim#vcs#impl#git#GetRoot()
   exec 'lcd ' . escape(root, ' ')
+
+  " kind of a hack to support diffs against git's staging (index) area.
+  if path =~ '\<index_blob_[a-z0-9]\{40}_'
+    let path = substitute(path, '\<index_blob_[a-z0-9]\{40}_', '', '')
+  endif
+
   let result = eclim#vcs#impl#git#Git('show "' . a:revision . ':' . path . '"')
   return split(result, '\n')
 endfunction " }}}
@@ -298,6 +334,25 @@ function! s:ParseGitLog(lines)
     endif
   endfor
   return log
+endfunction " }}}
+
+" s:ReadIndex() {{{
+" Used to read a file with the name index_blob_<index hash>_<filename>, for
+" use by the git editor diff support.
+function! s:ReadIndex()
+  if !filereadable(expand('%'))
+    let path = eclim#vcs#impl#git#GetRelativePath(expand('%:p:h'), expand('%:t'))
+    let path = substitute(path, '^/', '', '')
+    let root = eclim#vcs#impl#git#GetRoot()
+    exec 'lcd ' . escape(root, ' ')
+    let index = substitute(path, '.*\<index_blob_\([a-z0-9]\{40}\)_.*', '\1', '')
+    let path = substitute(path, '\<index_blob_[a-z0-9]\{40}_', '', '')
+    let result = eclim#vcs#impl#git#Git('show ' . index)
+    call append(1, split(result, "\n"))
+  else
+    read %
+  endif
+  1,1delete _
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
