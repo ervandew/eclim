@@ -159,6 +159,7 @@ function eclim#lang#FindDefinition(command, singleResultAction, context)
     else
       lopen
     endif
+    return 1
   else
     call eclim#util#EchoInfo("Element not found.")
   endif
@@ -168,13 +169,13 @@ endfunction " }}}
 " Executes a search.
 function! eclim#lang#Search(command, singleResultAction, argline)
   let argline = a:argline
-  if argline == ''
-    call eclim#util#EchoError('You must supply a search pattern.')
-    return
-  endif
+  "if argline == ''
+  "  call eclim#util#EchoError('You must supply a search pattern.')
+  "  return
+  "endif
 
   " check if pattern supplied without -p.
-  if argline !~ '^\s*-[a-z]'
+  if argline !~ '^\s*-[a-z]' && argline !~ '^\s*$'
     let argline = '-p ' . argline
   endif
 
@@ -187,16 +188,29 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     let argline .= ' -s all'
   endif
 
-
   let search_cmd = a:command
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ''
     let search_cmd .= ' -n "' . project . '"'
   endif
+
+  " no pattern supplied, use element search.
+  if argline !~ '-p\>'
+    if !eclim#project#util#IsCurrentFileInProject(1)
+      return
+    endif
+    let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
+    let position = eclim#util#GetCurrentElementPosition()
+    let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
+    let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
+    let search_cmd .= ' -f "' . file . '" -o ' . offset . ' -l ' . length
+  else
+    " quote the search pattern
+    let search_cmd = substitute(
+      \ search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')
+  endif
+
   let search_cmd .= ' ' . argline
-  " quote the search pattern
-  let search_cmd =
-    \ substitute(search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')
   let result =  eclim#ExecuteEclim(search_cmd)
   let results = split(result, '\n')
   if len(results) == 1 && results[0] == '0'
@@ -224,9 +238,14 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     else
       lopen
     endif
+    return 1
   else
-    let searchedFor = substitute(argline, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
-    call eclim#util#EchoInfo("Pattern '" . searchedFor . "' not found.")
+    if argline !~ '-p\>'
+      call eclim#util#EchoInfo("Element not found.")
+    else
+      let searchedFor = substitute(argline, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
+      call eclim#util#EchoInfo("Pattern '" . searchedFor . "' not found.")
+    endif
   endif
 
 endfunction " }}}
