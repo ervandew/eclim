@@ -39,7 +39,7 @@ function! TestComplete()
   let results = eclim#css#complete#CodeComplete(0, '')
   call PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertTrue(len(results) == 8, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 8, 'Wrong number of results.')
   call VUAssertTrue(eclim#util#ListContains(results, ".*font.*"),
     \ 'Results does not contain font')
   call VUAssertTrue(eclim#util#ListContains(results, ".*font-family.*"),

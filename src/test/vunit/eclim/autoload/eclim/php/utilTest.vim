@@ -38,7 +38,7 @@ function! TestValidate()
   let results = getloclist(0)
   echo 'results = ' . string(results)
 
-  call VUAssertTrue(len(results) == 2, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
 
   call VUAssertEquals(5, results[0].lnum, 'Wrong line num.')
   call VUAssertEquals(5, results[0].col, 'Wrong col num.')

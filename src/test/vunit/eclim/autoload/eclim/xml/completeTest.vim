@@ -39,7 +39,7 @@ function! TestCompleteXsd()
   let results = eclim#xml#complete#CodeComplete(0, '')
   call PeekRedir()
   echo string(results)
-  call VUAssertTrue(len(results) == 1, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 1, 'Wrong number of results.')
   call VUAssertTrue(eclim#util#ListContains(results, ".*'unique'.*"),
     \ 'Results does not contain xs:unique')
 endfunction " }}}

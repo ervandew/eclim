@@ -39,7 +39,7 @@ function! TestCompleteAttribute()
   let results = eclim#html#complete#CodeComplete(0, '')
   call PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertTrue(len(results) == 2, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
   call VUAssertTrue(eclim#util#ListContains(results, ".*href.*"),
     \ 'Results does not contain href')
 endfunction " }}}
@@ -56,7 +56,7 @@ function! TestCompleteElement()
   let results = eclim#html#complete#CodeComplete(0, '')
   call PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertTrue(len(results) == 7, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 7, 'Wrong number of results.')
   call VUAssertTrue(eclim#util#ListContains(results, ".*h1.*"),
     \ 'Results does not contain h1')
   call VUAssertTrue(eclim#util#ListContains(results, ".*h2.*"),
@@ -75,7 +75,7 @@ function! TestCompleteCss()
   let results = eclim#html#complete#CodeComplete(0, '')
   call PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertTrue(len(results) == 8, 'Wrong number of results.')
+  call VUAssertEquals(len(results), 8, 'Wrong number of results.')
   call VUAssertTrue(eclim#util#ListContains(results, ".*font.*"),
     \ 'Results does not contain font')
   call VUAssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
