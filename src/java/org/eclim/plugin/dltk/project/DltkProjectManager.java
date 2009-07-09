@@ -85,6 +85,20 @@ public abstract class DltkProjectManager
       BuildpathDetector detector = new BuildpathDetector(project, toolkit);
       detector.detectBuildpath(null);
       IBuildpathEntry[] detected = detector.getBuildpath();
+
+      // remove any entries the detector may have added that are not valid for
+      // this project (currently happens on php projects with the
+      // org.eclipse.dltk.launching.INTERPRETER_CONTAINER entry).
+      ArrayList<IBuildpathEntry> entries = new ArrayList<IBuildpathEntry>();
+      for (IBuildpathEntry entry : detected){
+        IModelStatus status = BuildpathEntry
+          .validateBuildpathEntry(scriptProject, entry, true);
+        if(status.isOK()){
+          entries.add(entry);
+        }
+      }
+      detected = entries.toArray(new IBuildpathEntry[entries.size()]);
+
       IBuildpathEntry[] depends =
         createOrUpdateDependencies(scriptProject, dependsString);
 
