@@ -144,6 +144,10 @@ function! s:Search(command, ...)
     let search_cmd =
       \ substitute(search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')
     let result =  eclim#ExecuteEclim(search_cmd)
+
+    if !in_project && filereadable(expand('%'))
+      return result . "\n" . s:SearchAlternate(argline, 0)
+    endif
   endif
 
   return result
@@ -152,8 +156,7 @@ endfunction " }}}
 " SearchAlternate(argline, element) {{{
 " Alternate search for non-project src files using vimgrep and &path.
 function! s:SearchAlternate(argline, element)
-  call eclim#util#EchoInfo
-    \ ("Unable to determine file's project. Executing alternate search...")
+  call eclim#util#EchoInfo("Executing alternate search...")
   if a:argline =~ '-t'
     call eclim#util#EchoError
       \ ("Alternate search doesn't support the type (-t) option yet.")
