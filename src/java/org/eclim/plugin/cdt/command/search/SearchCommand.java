@@ -176,6 +176,8 @@ public class SearchCommand
         int flags = IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
         if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES){
           flags |= IIndex.FIND_ALL_OCCURRENCES;
+        } else if (context == PDOMSearchQuery.FIND_REFERENCES){
+          flags |= IIndex.FIND_REFERENCES;
         } else if (context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
           flags |= IIndex.FIND_DECLARATIONS_DEFINITIONS;
         } else if (context == PDOMSearchQuery.FIND_DECLARATIONS) {
