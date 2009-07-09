@@ -17,3 +17,7 @@ class TestClass
     puts "testB"
   end
 end
+
+def testFunction()
+  puts "testFunction"
+end

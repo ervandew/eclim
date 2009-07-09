@@ -6,3 +6,5 @@ TestClass::CONSTANT
 
 TestModule::ID
 TestModule.methodA
+
+testFunction()
