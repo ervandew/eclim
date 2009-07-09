@@ -35,7 +35,7 @@ function eclim#python#search#Find(context)
     return
   endif
 
-  " update the file before vim makes any changes.
+  " update the file
   call eclim#util#ExecWithoutAutocmds('silent update')
 
   let offset = eclim#python#rope#GetOffset()
