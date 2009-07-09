@@ -289,12 +289,65 @@ public class SearchCommand
   /**
    * Get the search result message for the given element.
    *
-   * @param element The search result element.
+   * @param el The search result element.
    * @return The message.
    */
-  protected String getMessage(Object element)
+  protected String getMessage(Object el)
   {
-    return StringUtils.EMPTY;
+    IModelElement element = (IModelElement)el;
+    ArrayList<IModelElement> lineage = new ArrayList<IModelElement>();
+    while (element.getElementType() != IModelElement.SOURCE_MODULE){
+      lineage.add(0, element);
+      element = element.getParent();
+    }
+
+    StringBuffer fullyQualified = new StringBuffer();
+    for(IModelElement e : lineage){
+      if (fullyQualified.length() != 0){
+        fullyQualified.append(getElementSeparator());
+      }
+      if (e.getElementType() == IModelElement.TYPE){
+        fullyQualified.append(getElementTypeName()).append(' ');
+      }
+      if (e.getElementType() == IModelElement.FIELD){
+        fullyQualified.append(getElementFieldName()).append(' ');
+      }
+      if (e.getElementType() == IModelElement.METHOD){
+        if (e.getParent().getElementType() == IModelElement.TYPE){
+          fullyQualified.append(getElementMethodName()).append(' ');
+        }else{
+          fullyQualified.append(getElementFunctionName()).append(' ');
+        }
+      }
+      fullyQualified.append(e.getElementName());
+    }
+
+    return fullyQualified.toString();
+  }
+
+  protected String getElementSeparator()
+  {
+    return " ";
+  }
+
+  protected String getElementTypeName()
+  {
+    return "type";
+  }
+
+  protected String getElementFieldName()
+  {
+    return "field";
+  }
+
+  protected String getElementMethodName()
+  {
+    return "method";
+  }
+
+  protected String getElementFunctionName()
+  {
+    return "function";
   }
 
   private class SearchRequestor
@@ -348,8 +401,8 @@ public class SearchCommand
         int index = matches.indexOf(position);
         String message = SearchCommand.this.getMessage(match.getElement());
         if(index == -1){
-          matches.add(position);
           position.setMessage(message);
+          matches.add(position);
         }else if (!StringUtils.EMPTY.equals(message)){
           // the second occurrence should be the one with the message.
           position = matches.get(index);

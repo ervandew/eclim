@@ -16,13 +16,9 @@
  */
 package org.eclim.plugin.pdt.command.search;
 
-import java.util.ArrayList;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.plugin.core.project.ProjectNatureFactory;
-
-import org.eclipse.dltk.core.IModelElement;
 
 /**
  * Command for php project search requests.
@@ -58,32 +54,21 @@ public class SearchCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getMessage(Object)
+   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator(Object)
    */
   @Override
-  protected String getMessage(Object e)
+  protected String getElementSeparator()
   {
-    IModelElement element = (IModelElement)e;
-    ArrayList<IModelElement> lineage = new ArrayList<IModelElement>();
-    while (element.getElementType() != IModelElement.SOURCE_MODULE){
-      lineage.add(0, element);
-      element = element.getParent();
-    }
+    return " -> ";
+  }
 
-    StringBuffer fullyQualified = new StringBuffer();
-    for(IModelElement el : lineage){
-      if (fullyQualified.length() != 0){
-        fullyQualified.append(" -> ");
-      }
-      if (el.getElementType() == IModelElement.TYPE){
-        fullyQualified.append("class ");
-      }
-      if (el.getElementType() == IModelElement.METHOD){
-        fullyQualified.append("function ");
-      }
-      fullyQualified.append(el.getElementName());
-    }
-
-    return fullyQualified.toString();
+  /**
+   * {@inheritDoc}
+   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator(Object)
+   */
+  @Override
+  protected String getElementTypeName()
+  {
+    return "class";
   }
 }

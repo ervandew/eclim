@@ -35,7 +35,7 @@ public class SearchCommandTest
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestClass", "-t", "class"
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestClass", "-t", "class"
     });
 
     System.out.println(result);
@@ -44,7 +44,7 @@ public class SearchCommandTest
     assertEquals("Wrong Result", file + "|11 col 7|type TestClass", result);
 
     result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "23", "-l", "9", "-e", "utf-8", "-x", "declarations"
     });
 
@@ -61,7 +61,7 @@ public class SearchCommandTest
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestModule",
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestModule",
     });
 
     System.out.println(result);
@@ -70,7 +70,7 @@ public class SearchCommandTest
     assertEquals("Wrong Result", file + "|1 col 8|type TestModule", result);
 
     result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "69", "-l", "10", "-e", "utf-8", "-x", "declarations"
     });
 
@@ -87,17 +87,17 @@ public class SearchCommandTest
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testA", "-t", "method"
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testA", "-t", "method"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
     assertEquals("Wrong Result",
-        file + "|13 col 7|type TestClass -> method testA", result);
+        file + "|13 col 7|type TestClass : method testA", result);
 
     result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "42", "-l", "5", "-e", "utf-8", "-x", "declarations"
     });
 
@@ -105,7 +105,35 @@ public class SearchCommandTest
 
     file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
     assertEquals("Wrong Result",
-        file + "|13 col 7|type TestClass -> method testA", result);
+        file + "|13 col 7|type TestClass : method testA", result);
+  }
+
+  @Test
+  public void searchFunction()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(DltkRuby.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testFunction", "-t", "function"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
+    assertEquals("Wrong Result",
+        file + "|21 col 5|function testFunction", result);
+
+    result = Eclim.execute(new String[]{
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "104", "-l", "12", "-e", "utf-8", "-x", "declarations"
+    });
+
+    System.out.println(result);
+
+    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
+    assertEquals("Wrong Result",
+        file + "|21 col 5|function testFunction", result);
   }
 
   @Test
@@ -115,17 +143,17 @@ public class SearchCommandTest
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-p", "CONSTANT", "-t", "field"
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "CONSTANT", "-t", "field"
     });
 
     System.out.println(result);
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
     assertEquals("Wrong Result",
-        file + "|12 col 3|type TestClass -> CONSTANT", result);
+        file + "|12 col 3|type TestClass : field CONSTANT", result);
 
     result = Eclim.execute(new String[]{
-      "dltk_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "59", "-l", "8", "-e", "utf-8", "-x", "declarations"
     });
 
@@ -133,6 +161,6 @@ public class SearchCommandTest
 
     file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
     assertEquals("Wrong Result",
-        file + "|12 col 3|type TestClass -> CONSTANT", result);
+        file + "|12 col 3|type TestClass : field CONSTANT", result);
   }
 }
