@@ -644,8 +644,8 @@ function! s:ProcessTags()
       setlocal nomodifiable
     endif
 
-    " if the file buffer is not longer in the same window it was, then find
-    " its new location.  Occurs when taglist first opens.
+    " if the file buffer is no longer in the same window it was, then find its
+    " new location. Occurs when taglist first opens.
     if winbufnr(filewin) != bufnr(filename)
       let filewin = bufwinnr(filename)
     endif
