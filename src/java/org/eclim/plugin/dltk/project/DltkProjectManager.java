@@ -67,8 +67,6 @@ public abstract class DltkProjectManager
   private static final String BUILDPATH_XSD =
     "/resources/schema/eclipse/buildpath.xsd";
 
-  private static final Pattern STATUS_PATTERN = Pattern.compile(".*: '(.*)'.*");
-
   /**
    * {@inheritDoc}
    * @see ProjectManager#create(IProject,CommandLine)
@@ -144,8 +142,8 @@ public abstract class DltkProjectManager
       IModelStatus status = BuildpathEntry.validateBuildpathEntry(
           scriptProject, entry, true);
       if(!status.isOK()){
-        errors.add(
-            createErrorFromStatus(offsets, dotbuildpath, buildpath, status));
+        errors.add(createErrorForEntry(
+              entry, status, offsets, dotbuildpath, buildpath));
       }
     }
 
@@ -190,25 +188,28 @@ public abstract class DltkProjectManager
   /**
    * Creates an Error from the supplied IModelStatus.
    *
+   * @param entry The build path entry.
+   * @param status The IModelStatus.
    * @param offsets File offsets for the buildpath file.
    * @param filename The filename of the error.
    * @param contents The contents of the file as a String.
-   * @param status The IModelStatus.
    * @return The Error.
    */
-  protected Error createErrorFromStatus(
-      FileOffsets offsets, String filename, String contents, IModelStatus status)
+  protected Error createErrorForEntry(
+      IBuildpathEntry entry,
+      IModelStatus status,
+      FileOffsets offsets,
+      String filename,
+      String contents)
     throws Exception
   {
     int line = 1;
     int col = 1;
 
-    // get the pattern to search for from the status message.
-    Matcher matcher = STATUS_PATTERN.matcher(status.getMessage());
-    String pattern = matcher.replaceFirst("$1");
-
-    // find the pattern in the buildpath file.
-    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(contents);
+    String path = entry.getPath().toOSString();
+    Matcher matcher =
+      Pattern.compile("path\\s*=(['\"])\\s*\\Q" + path + "\\E\\s*\\1")
+        .matcher(contents);
     if(matcher.find()){
       int[] position = offsets.offsetToLineColumn(matcher.start());
       line = position[0];

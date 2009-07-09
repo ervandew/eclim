@@ -76,9 +76,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
 public class JavaProjectManager
   implements ProjectManager
 {
-  private static final Pattern STATUS_PATTERN =
-    Pattern.compile(".*[\\\\/](.*)'.*");
-
   private static final String PRESERVE = "eclim.preserve";
 
   private static final String CLASSPATH = ".classpath";
@@ -261,12 +258,12 @@ public class JavaProjectManager
     FileOffsets offsets = FileOffsets.compile(classpath);
     String classpathValue = IOUtils.toString(new FileInputStream(classpath));
     ArrayList<Error> errors = new ArrayList<Error>();
-    for(int ii = 0; ii < entries.length; ii++){
-      IJavaModelStatus status = JavaConventions.validateClasspathEntry(
-          javaProject, entries[ii], true);
+    for(IClasspathEntry entry : entries){
+      IJavaModelStatus status = JavaConventions
+        .validateClasspathEntry(javaProject, entry, true);
       if(!status.isOK()){
-        errors.add(
-            createErrorFromStatus(offsets, classpath, classpathValue, status));
+        errors.add(createErrorForEntry(
+              javaProject, entry, status, offsets, classpath, classpathValue));
       }
     }
 
@@ -281,8 +278,7 @@ public class JavaProjectManager
     //}
 
     if(!status.isOK()){
-      errors.add(
-          createErrorFromStatus(offsets, classpath, classpathValue, status));
+      errors.add(new Error(status.getMessage(), classpath, 1, 1, false));
     }
     return errors;
   }
@@ -290,28 +286,31 @@ public class JavaProjectManager
   /**
    * Creates an Error from the supplied IJavaModelStatus.
    *
+   * @param project The java project.
+   * @param entry The classpath entry.
+   * @param status The IJavaModelStatus.
    * @param offsets File offsets for the classpath file.
    * @param filename The filename of the error.
    * @param contents The contents of the file as a String.
-   * @param status The IJavaModelStatus.
    * @return The Error.
    */
-  protected Error createErrorFromStatus(
+  protected Error createErrorForEntry(
+      IJavaProject project,
+      IClasspathEntry entry,
+      IJavaModelStatus status,
       FileOffsets offsets,
       String filename,
-      String contents,
-      IJavaModelStatus status)
+      String contents)
     throws Exception
   {
     int line = 0;
     int col = 0;
 
-    // get the pattern to search for from the status message.
-    Matcher matcher = STATUS_PATTERN.matcher(status.getMessage());
-    String pattern = matcher.replaceFirst("$1");
-
-    // find the pattern in the classpath file.
-    matcher = Pattern.compile("\\Q" + pattern + "\\E").matcher(contents);
+    String path = entry.getPath().toOSString();
+    path = path.replaceFirst("^/" + project.getProject().getName() + "/", "");
+    Matcher matcher =
+      Pattern.compile("path\\s*=(['\"])\\s*\\Q" + path + "\\E\\s*\\1")
+        .matcher(contents);
     if(matcher.find()){
       int[] position = offsets.offsetToLineColumn(matcher.start());
       line = position[0];
