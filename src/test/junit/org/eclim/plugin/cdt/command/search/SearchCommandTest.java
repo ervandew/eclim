@@ -20,6 +20,8 @@ import org.eclim.Eclim;
 
 import org.eclim.plugin.cdt.Cdt;
 
+import org.eclim.util.StringUtils;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -32,6 +34,8 @@ import static org.junit.Assert.*;
 public class SearchCommandTest
 {
   private static final String TEST_FILE = "src/test_search.c";
+  private static final String TEST_FILE_C = "src/test.c";
+  private static final String TEST_FILE_H = "src/test.h";
 
   @Test
   public void searchElement()
@@ -39,9 +43,65 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
+    // testFunction definition (c file result)
     String result = Eclim.execute(new String[]{
       "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "150", "-l", "12", "-e", "utf-8", "-x", "declarations"
+      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "definitions"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
+    assertEquals("Wrong Result", file + "|1 col 6|", result);
+
+    // testFunction declarations (header file result)
+    result = Eclim.execute(new String[]{
+      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "declarations"
+    });
+
+    System.out.println(result);
+
+    file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_H);
+    assertEquals("Wrong Result", file + "|4 col 6|", result);
+
+    // testFunction references
+    result = Eclim.execute(new String[]{
+      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "references"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+    assertEquals("Wrong number of results", results.length, 2);
+    String file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
+    String file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
+    assertEquals("Wrong Result", file1 + "|11 col 3|", results[0]);
+    assertEquals("Wrong Result", file2 + "|11 col 3|", results[1]);
+
+    // testFunction all
+    result = Eclim.execute(new String[]{
+      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "all"
+    });
+
+    System.out.println(result);
+
+    results = StringUtils.split(result, '\n');
+    assertEquals("Wrong number of results", results.length, 4);
+
+    file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_H);
+    file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
+    String file3 = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
+    String file4 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
+    assertEquals("Wrong Result", file3 + "|11 col 3|", results[2]);
+    assertEquals("Wrong Result", file4 + "|11 col 3|", results[3]);
+
+    // EXIT_SUCCESS
+    result = Eclim.execute(new String[]{
+      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "186", "-l", "12", "-e", "utf-8", "-x", "declarations"
     });
 
     System.out.println(result);
@@ -63,7 +123,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file + "|14 col 5|", result);
+    assertEquals("Wrong Result", file + "|16 col 5|", result);
   }
 
   @Test
@@ -95,6 +155,6 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file + "|4 col 8|", result);
+    assertEquals("Wrong Result", file + "|5 col 8|", result);
   }
 }

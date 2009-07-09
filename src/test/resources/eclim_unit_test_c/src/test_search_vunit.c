@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "test.h"
 
 struct test_search_vunit_struct {
   int test_a;
@@ -7,6 +8,7 @@ struct test_search_vunit_struct {
 }
 
 int main(void) {
+  testFunction();
   puts("Hellow World!");
   return EXIT_SUCCESS;
 }
