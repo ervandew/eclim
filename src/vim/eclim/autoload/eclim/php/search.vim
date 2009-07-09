@@ -49,18 +49,11 @@
     \ ]
 " }}}
 
-" Search(argline {{{
+" Search(argline) {{{
 " Executes a search.
 function! eclim#php#search#Search(argline)
   return eclim#lang#Search(
     \ s:search_pattern, g:EclimPhpSearchSingleResult, a:argline)
-endfunction " }}}
-
-" FindDefinition(context) {{{
-" Finds the defintion of the element under the cursor.
-function eclim#php#search#FindDefinition(context)
-  return eclim#lang#FindDefinition(
-    \ s:search_element, g:EclimPhpSearchSingleResult, a:context)
 endfunction " }}}
 
 " FindInclude() {{{
@@ -113,7 +106,7 @@ function! eclim#php#search#SearchContext()
     call eclim#php#search#FindInclude()
     return
   elseif getline('.') =~ '\<\(class\|function\)\s\+\%' . cnum . 'c'
-    call eclim#php#search#FindDefinition('references')
+    call eclim#php#search#Search('-x references')
     return
   elseif getline('.') =~ "\\<define\\s*(['\"]\\%" . cnum . "c"
     call eclim#util#EchoInfo("TODO: Search constant references")
@@ -123,8 +116,7 @@ function! eclim#php#search#SearchContext()
   "  return
   endif
 
-  call eclim#php#search#FindDefinition('declarations')
-
+  call eclim#php#search#Search('-x declarations')
 endfunction " }}}
 
 " CommandCompletePhpSearch(argLead, cmdLine, cursorPos) {{{

@@ -107,64 +107,6 @@ function! eclim#lang#CodeComplete(command, findstart, base)
   endif
 endfunction " }}}
 
-" FindDefinition(command, singleResultAction, context) {{{
-" Finds the defintion of the element under the cursor.
-function eclim#lang#FindDefinition(command, singleResultAction, context)
-  if !eclim#project#util#IsCurrentFileInProject(1)
-    return
-  endif
-
-  " update the file.
-  call eclim#util#ExecWithoutAutocmds('silent update')
-
-  let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
-  let position = eclim#util#GetCurrentElementPosition()
-  let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
-  let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
-
-  let search_cmd = a:command
-  let search_cmd = substitute(search_cmd, '<project>', project, '')
-  let search_cmd = substitute(search_cmd, '<file>', file, '')
-  let search_cmd = substitute(search_cmd, '<offset>', offset, '')
-  let search_cmd = substitute(search_cmd, '<length>', length, '')
-  let search_cmd = substitute(search_cmd, '<context>', a:context, '')
-  let search_cmd = substitute(search_cmd, '<encoding>', eclim#util#GetEncoding(), '')
-
-  let result =  eclim#ExecuteEclim(search_cmd)
-  let results = split(result, '\n')
-  if len(results) == 1 && results[0] == '0'
-    return
-  endif
-
-  if !empty(results)
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-
-    " if only one result and it's for the current file, just jump to it.
-    " note: on windows the expand result must be escaped
-    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
-      if results[0] !~ '|1 col 1|'
-        lfirst
-      endif
-
-    " single result in another file.
-    elseif len(results) == 1 && a:singleResultAction != "lopen"
-      let entry = getloclist(0)[0]
-      call eclim#util#GoToBufferWindowOrOpen
-        \ (bufname(entry.bufnr), a:singleResultAction)
-      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-      call eclim#display#signs#Update()
-
-      call cursor(entry.lnum, entry.col)
-    else
-      lopen
-    endif
-    return 1
-  else
-    call eclim#util#EchoInfo("Element not found.")
-  endif
-endfunction " }}}
-
 " Search(command, singleResultAction, argline) {{{
 " Executes a search.
 function! eclim#lang#Search(command, singleResultAction, argline)
@@ -199,6 +141,9 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     if !eclim#project#util#IsCurrentFileInProject(1)
       return
     endif
+    " update the file.
+    call eclim#util#ExecWithoutAutocmds('silent update')
+
     let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')

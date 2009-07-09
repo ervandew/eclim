@@ -39,6 +39,7 @@
   let s:types = [
       \ 'class',
       \ 'method',
+      \ 'function',
       \ 'field'
     \ ]
   let s:contexts = [
@@ -48,18 +49,11 @@
     \ ]
 " }}}
 
-" Search(argline {{{
+" Search(argline) {{{
 " Executes a search.
 function! eclim#ruby#search#Search(argline)
   return eclim#lang#Search(
     \ s:search_pattern, g:EclimRubySearchSingleResult, a:argline)
-endfunction " }}}
-
-" FindDefinition(context) {{{
-" Finds the defintion of the element under the cursor.
-function eclim#ruby#search#FindDefinition(context)
-  return eclim#lang#FindDefinition(
-    \ s:search_element, g:EclimRubySearchSingleResult, a:context)
 endfunction " }}}
 
 " SearchContext() {{{
@@ -74,12 +68,11 @@ function! eclim#ruby#search#SearchContext()
   endif
 
   if getline('.') =~ '\<\(module\|class\|def\)\s\+\%' . cnum . 'c'
-    call eclim#ruby#search#FindDefinition('references')
+    call eclim#ruby#search#Search('-x references')
     return
   endif
 
-  call eclim#ruby#search#FindDefinition('declarations')
-
+  call eclim#ruby#search#Search('-x declarations')
 endfunction " }}}
 
 " CommandCompleteRubySearch(argLead, cmdLine, cursorPos) {{{

@@ -53,14 +53,12 @@ augroup END
 
 command! -nargs=0 -buffer Validate :call eclim#php#util#UpdateSrcFile(1)
 
-if !exists(":PhpFindDefinition")
-  command -buffer PhpFindDefinition :call eclim#php#search#FindDefinition('declarations')
-endif
 if !exists(":PhpSearch")
   command -buffer -nargs=*
     \ -complete=customlist,eclim#php#search#CommandCompletePhpSearch
     \ PhpSearch :call eclim#php#search#Search('<args>')
 endif
+
 if !exists(":PhpSearchContext")
   command -buffer PhpSearchContext :call eclim#php#search#SearchContext()
 endif

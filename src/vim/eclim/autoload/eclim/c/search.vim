@@ -66,13 +66,6 @@ function! eclim#c#search#Search(argline)
     \ s:search_pattern, g:EclimCSearchSingleResult, a:argline)
 endfunction " }}}
 
-" FindDefinition(context) {{{
-" Finds the defintion of the element under the cursor.
-function eclim#c#search#FindDefinition(context)
-  return eclim#lang#FindDefinition(
-    \ s:search_element, g:EclimCSearchSingleResult, a:context)
-endfunction " }}}
-
 " FindInclude() {{{
 " Finds the include file under the cursor
 function eclim#c#search#FindInclude()
@@ -129,12 +122,12 @@ function! eclim#c#search#SearchContext()
     call eclim#c#search#FindInclude()
     return
   "elseif getline('.') =~ '\<\(class\|????\)\s\+\%' . cnum . 'c'
-  "  call eclim#c#search#FindDefinition('references')
+  "  call eclim#c#search#Search('-x references')
     return
   endif
 
-  if !eclim#c#search#FindDefinition('definitions')
-    call eclim#c#search#FindDefinition('declarations')
+  if !eclim#c#search#Search('-x definitions')
+    call eclim#c#search#Search('-x declarations')
   endif
 
 endfunction " }}}

@@ -50,18 +50,16 @@ augroup END
 
 command! -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('ruby', 1)
 
-if !exists(":RubyFindDefinition")
-  command -buffer RubyFindDefinition
-    \ :call eclim#ruby#search#FindDefinition('declarations')
-endif
 if !exists(":RubySearch")
   command -buffer -nargs=*
     \ -complete=customlist,eclim#ruby#search#CommandCompleteRubySearch
     \ RubySearch :call eclim#ruby#search#Search('<args>')
 endif
+
 if !exists(":RubySearchContext")
   command -buffer RubySearchContext :call eclim#ruby#search#SearchContext()
 endif
+
 if !exists(":RubyInterpreters")
   command -buffer RubyInterpreters
     \ :call eclim#dltk#interpreter#ListInterpreters('ruby')

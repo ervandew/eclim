@@ -18,32 +18,6 @@
 Ruby Search
 ===========
 
-.. _\:RubyFindDefinition:
-
-Element Search
---------------
-
-Element searching allows you to place the cursor over just about any element in
-a source file (method call, class name, constant) and perform a search for that
-element by issuing the command **:RubyFindDefinition**.
-
-If only one result is found and that result is in the current source file, the
-cursor will be moved to the element found.  Otherwise, on single result
-matches, the value of :ref:`g:EclimRubySearchSingleResult` will be consulted
-for the action to take.  If there are multiple results, the location list will
-be opened with the list of results.
-
-.. _\:RubySearchContext:
-
-As a convenience eclim also provides the command **:RubySearchContext**.  This
-command accepts no arguments and will perform the appropriate search depending
-on the context of the element.
-
-- If the cursor is on a the definition of a method, class, module, etc. then a
-  search will be performed for all uses of that element.
-- Otherwise, it will search for the declaration of the element.
-
-
 .. _\:RubySearch:
 
 Pattern Search
@@ -100,6 +74,32 @@ of the pattern to search for.
   - project - Search the current project, dependent projects, and libraries.
 
 - -i: Ignore case when searching.
+
+
+Element Search
+--------------
+
+Element searching allows you to place the cursor over just about any element in
+a source file (method call, class name, constant) and perform a search for that
+element.  Performing an element search is the same as performing a pattern
+search with the exception that you do not specify the -p option since the
+element under the cursor will be searched for instead.
+
+If only one result is found and that result is in the current source file, the
+cursor will be moved to the element found.  Otherwise, on single result
+matches, the value of :ref:`g:EclimRubySearchSingleResult` will be consulted
+for the action to take.  If there are multiple results, the location list will
+be opened with the list of results.
+
+.. _\:RubySearchContext:
+
+As a convenience eclim also provides the command **:RubySearchContext**.  This
+command accepts no arguments and will perform the appropriate search depending
+on the context of the element.
+
+- If the cursor is on a the definition of a method, class, module, etc. then a
+  search will be performed for all uses of that element.
+- Otherwise, it will search for the declaration of the element.
 
 
 Configuration

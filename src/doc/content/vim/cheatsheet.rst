@@ -100,10 +100,8 @@ C/C++ Commands
 -----------------
 
 - :ref:`:Validate <:Validate_c>` - Validate the current file.
-- :ref:`:CSearch <:CSearch>` -p <pattern> -t <type> [-s <scope> -x <context>] -
+- :ref:`:CSearch <:CSearch>` [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for classes, functions, methods, macros, etc.
-- :ref:`:CFindDefinition <:CFindDefinition>` -
-  Find the element under the cursor.
 - :ref:`:CSearchContext` -
   Find the element under the cursor based on its context.
 - :ref:`:CProjectConfigs <:CProjectConfigs>` [project] -
@@ -240,10 +238,9 @@ Maven Commands
 Php Commands
 -----------------
 
-- :ref:`:PhpSearch <:PhpSearch>` -p <pattern> -t <type> [-s <scope>] -
+- :ref:`:PhpSearch <:PhpSearch>`
+  [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for classes, methods, and constants.
-- :ref:`:PhpFindDefinition <:PhpFindDefinition>` -
-  Find the element under the cursor.
 - :ref:`:PhpSearchContext` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
@@ -280,10 +277,9 @@ Python Commands
 Ruby Commands
 -----------------
 
-- :ref:`:RubySearch <:RubySearch>` -p <pattern> -t <type> [-s <scope>] -
+- :ref:`:RubySearch <:RubySearch>`
+  [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for modules, classes, methods, etc.
-- :ref:`:RubyFindDefinition <:RubyFindDefinition>` -
-  Find the element under the cursor.
 - :ref:`:RubySearchContext` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
