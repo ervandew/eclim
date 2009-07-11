@@ -44,6 +44,7 @@ public class CodeCorrectFilter
         String preview = result.getPreview();
         if(preview != null &&
             !preview.trim().equals("") &&
+            !preview.trim().startsWith("Start the") &&
             !preview.trim().startsWith("Opens") &&
             !preview.trim().startsWith("Evaluates") &&
             !preview.trim().startsWith("<p>Move")){
