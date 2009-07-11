@@ -83,7 +83,7 @@ endfunction " }}}
 
 " GetRevision(file) {{{
 function eclim#vcs#impl#cvs#GetRevision(file)
-  let status = eclim#vcs#impl#cvs#Cvs('status ' . fnamemodify(a:file, ':t'))
+  let status = eclim#vcs#impl#cvs#Cvs('status ' . a:file)
   let pattern = '.*Working revision:\s*\([0-9.]\+\)\s*.*'
   if status =~ pattern
     return substitute(status, pattern, '\1', '')
@@ -125,6 +125,13 @@ function eclim#vcs#impl#cvs#GetEditorFile()
         \ line, '^.*\s\+\(.*\%' . col('.') . 'c.\{-}\)\(\s.*\|$\)', '\1', '')
     endif
 
+    let dirfound = search('^CVS:\s\+Committing in', 'nw')
+    if dirfound && eclim#vcs#impl#cvs#GetRoot() == getcwd()
+      let line = getline(dirfound)
+      let dir = substitute(line, '^CVS:\s\+Committing in\s\+\(.*\)', '\1', '')
+      let file = dir . '/' . file
+    endif
+
     if filereadable(file)
       return file
     endif
@@ -146,7 +153,8 @@ function eclim#vcs#impl#cvs#Info()
   if type(result) == 0
     return
   endif
-  let info = split(result, "\n")[1:]
+  let info = split(result, "\n")
+  call filter(info, 'v:val =~ "^\\(File\\|\\s\\+\\)"')
   call map(info, "substitute(v:val, '^\\s\\+', '', '')")
   call map(info, "substitute(v:val, '\\t', ' ', 'g')")
   let info[0] = substitute(info[0], '.\{-}\(Status:.*\)', '\1', '')
@@ -223,14 +231,18 @@ function! eclim#vcs#impl#cvs#ViewFileRevision(path, revision)
   let path = fnamemodify(a:path, ':t')
   let result = eclim#vcs#impl#cvs#Cvs('annotate -r ' . a:revision . ' "' . path . '"')
   let content = split(result, '\n')
-  let content = map(content[2:], 'substitute(v:val, "^.\\{-}):\\s", "", "")')
+  call filter(content, 'v:val =~ "^[0-9]"')
+  call map(content, 'substitute(v:val, "^.\\{-}):\\s", "", "")')
   return content
 endfunction " }}}
 
 " Cvs(args) {{{
 " Executes 'cvs' with the supplied args.
 function eclim#vcs#impl#cvs#Cvs(args)
-  return eclim#vcs#util#Vcs('cvs', a:args)
+  " Note: using -R which pretends that the repos is read only, which avoid
+  " waiting on locks, which we don't need to since we only run read only
+  " operations.
+  return eclim#vcs#util#Vcs('cvs', '-R ' . a:args)
 endfunction " }}}
 
 " s:Breadcrumb(path) {{{
