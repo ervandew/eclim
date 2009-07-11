@@ -99,8 +99,8 @@ public class CodeCorrectCommand
       IJavaCompletionProposal proposal = (IJavaCompletionProposal)
         proposals.get(commandLine.getIntValue(Options.APPLY_OPTION));
 
-      // not working for some reason (silently does nothing).
-      // probably because it's so heavily dependent on the ui.
+      // does not work since it it so deeply tied to the ui (grabbing the
+      // editor, opening dialogs, etc.).
       //proposal.apply(JavaUtils.getDocument(src));
       return proposal.toString();
     }
