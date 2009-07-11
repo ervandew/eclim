@@ -22,7 +22,7 @@
   <target name="javadoc" depends="init">
     <mkdir dir="build/doc/api"/>
 
-    <property name="javadoc.include" value=""/>
+    <property name="javadoc.include" value="org/eclim/plugin/core/**/*.java"/>
     <for list="${plugins}" param="plugin">
       <sequential>
         <var name="javadoc.include"
