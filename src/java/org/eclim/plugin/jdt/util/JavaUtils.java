@@ -246,14 +246,16 @@ public class JavaUtils
     IPath path = Path.fromOSString(file);
     IProject[] projects =
       ResourcesPlugin.getWorkspace().getRoot().getProjects();
-    for(int ii = 0; ii < projects.length; ii++){
-      IJavaProject javaProject = getJavaProject(projects[ii]);
-      javaProject.open(null);
-      //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+    for(IProject project : projects){
+      if (project.hasNature(JavaCore.NATURE_ID)){
+        IJavaProject javaProject = getJavaProject(project);
+        javaProject.open(null);
+        //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
-      ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
-      if(src != null){
-        return src;
+        ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
+        if(src != null){
+          return src;
+        }
       }
     }
     return null;
