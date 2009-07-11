@@ -188,9 +188,10 @@ endfunction " }}}
 function s:LocateFileCompletionInit(action, scope)
   let file = expand('%')
   let bufnum = bufnr('%')
+  let winrestcmd = winrestcmd()
   let project = eclim#project#util#GetCurrentProjectName()
 
-  topleft 10split [Locate\ Results]
+  topleft 10split \[Locate\ Results\]
   set filetype=locate_results
   setlocal nonumber nowrap
   setlocal noswapfile nobuflisted
@@ -198,7 +199,7 @@ function s:LocateFileCompletionInit(action, scope)
 
   let results_bufnum = bufnr('%')
 
-  topleft 1split [Locate]
+  topleft 1split \[Locate\]
   call setline(1, '> ')
   call cursor(1, col('$'))
   set filetype=locate_prompt
@@ -222,7 +223,10 @@ function s:LocateFileCompletionInit(action, scope)
     autocmd!
     exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
       \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
-      \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ')'
+      \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ') | ' .
+      \ 'doautocmd BufEnter | ' .
+      \ 'doautocmd WinEnter | ' .
+      \ winrestcmd
   augroup END
 
   " enable completion after user starts typing
@@ -317,7 +321,8 @@ function s:LocateFileSelect(action)
     call feedkeys(
       \ "\<esc>:let &updatetime = " . updatetime . " | " .
       \ ":bd " . bufnum . " | " .
-      \ "bd " . results_bufnum . "\<cr>", 'n')
+      \ "bd " . results_bufnum . " | " .
+      \ "doautocmd WinEnter\<cr>", 'n')
   endif
   return ''
 endfunction " }}}
