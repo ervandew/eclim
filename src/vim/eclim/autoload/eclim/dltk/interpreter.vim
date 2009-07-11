@@ -53,7 +53,7 @@ function eclim#dltk#interpreter#ListInterpreters(nature)
   if len(interpreters) == 1 && interpreters[0] == '0'
     return
   endif
-  let result = substitute(join(interpreters, "\n"), "\t", g:EclimIndent, 'g')
+  let result = substitute(join(interpreters, "\n"), "\t", '  ', 'g')
   call eclim#util#Echo(result)
 endfunction " }}}
 
