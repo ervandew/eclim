@@ -129,8 +129,8 @@ public class EclimPlugin
    *
    * Gleaned from org.eclipse.core.runtime.internal.adaptor.EclipseCommandProvider
    *
-   * @param bundleName
-   * @return
+   * @param bundleName The bundle name to diagnose the loading of.
+   * @return The diagnoses.
    */
   public String diagnose(String bundleName)
   {

@@ -40,7 +40,7 @@ public class OptionHandler
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.preference.OptionHandler#getNature()
+   * @see org.eclim.plugin.core.preference.OptionHandler#getNature()
    */
   public String getNature()
   {

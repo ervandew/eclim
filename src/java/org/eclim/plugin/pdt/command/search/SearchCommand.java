@@ -54,7 +54,7 @@ public class SearchCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator(Object)
+   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator()
    */
   @Override
   protected String getElementSeparator()
@@ -64,7 +64,7 @@ public class SearchCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator(Object)
+   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator()
    */
   @Override
   protected String getElementTypeName()

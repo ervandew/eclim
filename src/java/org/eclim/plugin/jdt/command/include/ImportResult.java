@@ -78,7 +78,7 @@ public class ImportResult
 
   /**
    * {@inheritDoc}
-   * @see Comparable#compareTo(T)
+   * @see Comparable#compareTo(Object)
    */
   public int compareTo(ImportResult other)
   {

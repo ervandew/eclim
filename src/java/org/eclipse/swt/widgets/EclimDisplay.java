@@ -89,7 +89,7 @@ public class EclimDisplay
 
   /**
    * {@inheritDoc}
-   * @see Display#setSynchronizer()
+   * @see Display#setSynchronizer(Synchronizer)
    */
   @Override
   public void setSynchronizer(Synchronizer synchronizer) {

@@ -45,7 +45,7 @@ public class HistoryListFilter
 
   /**
    * {@inheritDoc}
-   * @see OutputFilter#filter(CommandLine,T)
+   * @see OutputFilter#filter(CommandLine,Object)
    */
   public String filter(CommandLine commandLine, IFileRevision[] results)
   {

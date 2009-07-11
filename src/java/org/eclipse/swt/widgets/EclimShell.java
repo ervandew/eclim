@@ -27,7 +27,7 @@ public class EclimShell
   private boolean enabled;
 
   /**
-   * @see Shell#Shell(Display)
+   * @see org.eclipse.swt.widgets.Shell#Shell(Display)
    */
   public EclimShell(Display display)
   {
@@ -36,7 +36,7 @@ public class EclimShell
 
   /**
    * {@inheritDoc}
-   * @see Shell#isEnabled()
+   * @see org.eclipse.swt.widgets.Shell#isEnabled()
    */
   @Override
   public boolean isEnabled()
@@ -46,7 +46,7 @@ public class EclimShell
 
   /**
    * {@inheritDoc}
-   * @see Shell#setEnabled(boolean)
+   * @see org.eclipse.swt.widgets.Shell#setEnabled(boolean)
    */
   @Override
   public void setEnabled(boolean enabled)

@@ -137,7 +137,6 @@ public class ClassPrototypeCommand
    *
    * @param file The path to the class file.
    * @param writer The writer to output the prototype to.
-   * @return The prototype.
    */
   protected void prototype(String file, Writer writer)
     throws Exception

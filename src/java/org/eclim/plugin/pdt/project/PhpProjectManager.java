@@ -24,7 +24,8 @@ import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.php.internal.core.project.PHPNature;
 
 /**
- * Implementation of {@link ProjectManager} for php projects.
+ * Implementation of {@link org.eclim.plugin.core.project.ProjectManager} for
+ * php projects.
  *
  * @author Eric Van Dewoestine
  */

@@ -54,7 +54,7 @@ public class XmlCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
+   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
    */
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
@@ -65,7 +65,7 @@ public class XmlCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
    */
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
@@ -76,7 +76,7 @@ public class XmlCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.complete.AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
    */
   protected String getShortDescription(ICompletionProposal proposal)
   {

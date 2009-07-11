@@ -38,7 +38,7 @@ public class HierarchyFilter
 
   /**
    * {@inheritDoc}
-   * @see OutputFilter#filter(CommandLine,T)
+   * @see OutputFilter#filter(CommandLine,Object)
    */
   public String filter(CommandLine commandLine, HierarchyNode hierarchy)
   {

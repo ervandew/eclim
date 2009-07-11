@@ -31,7 +31,8 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.ruby.core.RubyNature;
 
 /**
- * Implementation of {@link ProjectManager} for php projects.
+ * Implementation of {@link org.eclim.plugin.core.project.ProjectManager} for
+ * php projects.
  *
  * @author Eric Van Dewoestine
  */
@@ -40,7 +41,7 @@ public class RubyProjectManager
 {
   /**
    * {@inheritDoc}
-   * @see ProjectManager#create(IProject,CommandLine)
+   * @see org.eclim.plugin.core.project.ProjectManager#create(IProject,CommandLine)
    */
   public void create(IProject project, CommandLine commandLine)
     throws Exception
