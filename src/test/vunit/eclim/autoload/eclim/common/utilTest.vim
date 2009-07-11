@@ -68,13 +68,13 @@ function! TestLocateFile()
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = getbufline(b:results_bufnum, 1, '$')
-  call VUAssertEquals(len(results), 7)
+  call VUAssertEquals(len(results), 14)
   call VUAssertEquals(results[0],
     \ 'test_root_file.txt  /eclim_unit_test/test_root_file.txt')
   call VUAssertEquals(results[1],
-    \ 'file2.txt  /eclim_unit_test/vcs/git/unittest/test/file2.txt')
+    \ 'file.txt  /eclim_unit_test/vcs/cvs/unittest/file.txt')
   call VUAssertEquals(results[2],
-    \ 'file1.txt  /eclim_unit_test/vcs/git/unittest/test/file1.txt')
+    \ 'file2.txt  /eclim_unit_test/vcs/git/unittest/test/file2.txt')
   exec "normal \<esc>"
   doautocmd InsertLeave <buffer>
   call VUAssertNotEquals(expand('%'), '[Locate]')
