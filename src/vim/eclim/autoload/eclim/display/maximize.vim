@@ -24,8 +24,13 @@
 
 " Global Variables {{{
   if !exists('g:MaximizeExcludes')
-    let g:MaximizeExcludes =
-      \ '\(ProjectTree_*\|' . g:TagList_title . '\|-MiniBufExplorer-\|command-line\)'
+    let g:MaximizeExcludes = '\(' .
+      \ 'ProjectTree_*\|' .
+      \ '^[\[]\|' .
+      \ g:TagList_title . '\|' .
+      \ '-MiniBufExplorer-\|' .
+      \ 'command-line' .
+    \ '\)'
   endif
   if !exists('g:MaximizeMinWinHeight')
     let g:MaximizeMinWinHeight = 0
@@ -112,7 +117,9 @@ endfunction " }}}
 
 " MaximizeUpdate() {{{
 function! eclim#display#maximize#MaximizeUpdate()
-  if expand('%') !~ g:MaximizeExcludes && !exists('b:eclim_temp_window') && &ft != 'qf'
+  if expand('%') !~ g:MaximizeExcludes &&
+   \ !exists('b:eclim_temp_window') &&
+   \ &ft != 'qf'
     call s:DisableMaximizeAutoCommands()
 
     let w:maximized = 1
