@@ -154,10 +154,13 @@ endfunction " }}}
 " GetEditorFile() {{{
 function eclim#vcs#impl#svn#GetEditorFile()
   let line = getline('.')
+  let file = ''
   if line =~ '^M\s\+.*'
-    return substitute(line, '^M\s\+\(.*\)\s*', '\1', '')
+    let file = substitute(line, '^M\s\+\(.*\)\s*', '\1', '')
+  elseif line =~ '^A\s\+.*'
+    let file = substitute(line, '^A\s\+\(.*\)\s*', '\1', '')
   endif
-  return ''
+  return file
 endfunction " }}}
 
 " GetVcsWebPath() {{{

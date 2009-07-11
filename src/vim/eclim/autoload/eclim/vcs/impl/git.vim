@@ -164,6 +164,8 @@ function eclim#vcs#impl#git#GetEditorFile()
       endif
     endif
     return file
+  elseif line =~ '^#\s*new file:.*'
+    return substitute(line, '^#\s*new file:\s\+\(.*\)\s*', '\1', '')
   endif
   return ''
 endfunction " }}}

@@ -198,8 +198,9 @@ Vcs Editor Support
 
 Subversion, mercurial, git, and cvs all support using vim as the default editor
 for composing commit messages.  When composing this message they all also
-include a list of files to be committed.  Eclim provides a plugin allowing you
-to hit <enter> on one of the files to view a diff of the version to be
-committed against the last committed version.
+include a list of files to be committed.  Eclim allows you to hit <enter> on
+one of the files to view a diff of the version to be committed against the last
+committed version, or in the case of newly added files, view the file to be
+added.
 
 .. image:: ../../images/screenshots/vcs/editor.png

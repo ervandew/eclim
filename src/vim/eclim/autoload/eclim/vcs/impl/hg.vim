@@ -114,10 +114,13 @@ endfunction " }}}
 " GetEditorFile() {{{
 function eclim#vcs#impl#hg#GetEditorFile()
   let line = getline('.')
+  let file = ''
   if line =~ '^HG: changed .*'
-    return substitute(line, '^HG: changed\s\+\(.*\)\s*', '\1', '')
+    let file = substitute(line, '^HG: changed\s\+\(.*\)\s*', '\1', '')
+  elseif line =~ '^HG: added .*'
+    let file = substitute(line, '^HG: added\s\+\(.*\)\s*', '\1', '')
   endif
-  return ''
+  return file
 endfunction " }}}
 
 " GetVcsWebPath() {{{
