@@ -385,6 +385,33 @@ function! eclim#util#GetPathEntry(file)
   return 0
 endfunction " }}}
 
+" GetVisualSelection(line1, line2, default) {{{
+" Returns the contents of, and then clears, the last visual selection.
+" If default is set, the default range will be honor.
+function! eclim#util#GetVisualSelection(line1, line2, default)
+  let lines = a:default ? getline(a:line1, a:line2) : []
+  let mode = visualmode(1)
+  if mode != '' && line("'<") == a:line1
+    if len(lines) == 0
+      let lines = getline(a:line1, a:line2)
+    endif
+    if mode == "v"
+      let start = col("'<") - 1
+      let end = col("'>")
+      let lines[0] = lines[0][start :]
+      let lines[-1] = lines[-1][: end]
+    elseif mode == "\<c-v>"
+      let start = col("'<")
+      if col("'>") < start
+        let start = col("'>")
+      endif
+      let start = start - 1
+      call map(lines, 'v:val[start :]')
+    endif
+  endif
+  return join(lines, "\n")
+endfunction " }}}
+
 " Glob(expr, [honor_wildignore]) {{{
 " Used to issue a glob() handling any vim options that may otherwise disrupt
 " it.
