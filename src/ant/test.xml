@@ -171,7 +171,7 @@
       <fileset dir="src/test/vunit"
           includes="${test.include}.vim"
           excludes="${test.exclude}.vim"/>
-      <sysproperty key="g:TestEclimWorkspace" value="${eclipse.workspace}"/>
+      <sysproperty key="g:TestEclimWorkspace" value="${eclipse.workspace}/"/>
     </vunit>
 
     <!--fail message="One or more vunit tests failed." if="vunit.failed"/-->
@@ -190,6 +190,15 @@
       <param name="nature" value="none"/>
     </antcall>
 
+    <delete dir="${user.home}/.eclim/cache"/>
+    <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
+      <arg line="-zxf cvs.tar.gz"/>
+    </exec>
+    <replace dir="${eclipse.workspace}/eclim_unit_test/vcs/cvs/unittest"
+        defaultexcludes="false"
+        includes="**/CVS/Root"
+        token="$${vcs.dir}"
+        value="${eclipse.workspace}/eclim_unit_test/vcs"/>
     <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
       <arg line="-zxf git.tar.gz"/>
     </exec>
