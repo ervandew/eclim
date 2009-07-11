@@ -26,6 +26,95 @@ import static org.junit.Assert.*;
 
 public class SearchCommandTest
 {
+  private static final String TEST_FILE = "php/search/find.php";
+
+  @Test
+  public void searchElementClass()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "45", "-l", "5", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result", file + "|6 col 7|class TestA", result);
+  }
+
+  @Test
+  public void searchElementMethod()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "62", "-l", "8", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result",
+        file + "|13 col 19|class TestA -> method methodA2", result);
+  }
+
+  @Test
+  public void searchElementVariable()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "82", "-l", "9", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result",
+        file + "|8 col 7|class TestA -> field $variable1", result);
+  }
+
+  @Test
+  public void searchElementConstant()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "111", "-l", "9", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result", file + "|29 col 1|field CONSTANT1", result);
+  }
+
+  @Test
+  public void searchElementFunction()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "94", "-l", "9", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
+    assertEquals("Wrong Result", file + "|3 col 10|function functionA", result);
+  }
+
   @Test
   public void searchClass()
   {
