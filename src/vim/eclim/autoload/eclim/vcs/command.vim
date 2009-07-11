@@ -126,6 +126,10 @@ function! eclim#vcs#command#ChangeSet(path, revision)
         return
       endif
       let info = ChangeSet(revision)
+    catch /E117:.*/
+      let type = eclim#vcs#util#GetVcsType()
+      call eclim#util#EchoError('This function is not supported by "' . type . '".')
+      return
     finally
       exec 'lcd ' . escape(cwd, ' ')
     endtry
