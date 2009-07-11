@@ -88,6 +88,7 @@ public class DeleteInterpreterCommand
     IInterpreterInstallType[] types =
       ScriptRuntime.getInterpreterInstallTypes(nature);
 
+    boolean removed = false;
     ArrayList<IInterpreterInstall> interpreters =
       new ArrayList<IInterpreterInstall>();
     for (IInterpreterInstallType iit : types){
@@ -95,6 +96,8 @@ public class DeleteInterpreterCommand
       for (IInterpreterInstall install : installs){
         if (!install.getInstallLocation().equals(file)){
           interpreters.add(install);
+        }else{
+          removed = true;
         }
       }
     }
@@ -106,6 +109,9 @@ public class DeleteInterpreterCommand
     InterpretersUpdater updater = new InterpretersUpdater();
     updater.updateInterpreterSettings(nature, installs, defaults);
 
-    return Services.getMessage("interpreter.removed");
+    if (removed){
+      return Services.getMessage("interpreter.removed");
+    }
+    return Services.getMessage("interpreter.not.found");
   }
 }
