@@ -32,12 +32,6 @@ endif
 " }}}
 
 " Script Variables {{{
-  let s:google = 'http://www.google.com/search?q=<query>'
-  let s:clusty = 'http://www.clusty.com/search?query=<query>'
-  let s:wikipedia = 'http://en.wikipedia.org/wiki/Special:Search?search=<query>'
-  let s:dictionary = 'http://dictionary.reference.com/search?q=<query>'
-  let s:thesaurus = 'http://thesaurus.reference.com/search?q=<query>'
-
   let s:win_browsers = [
       \ 'C:/Program Files/Opera/Opera.exe',
       \ 'C:/Program Files/Mozilla Firefox/firefox.exe',
@@ -122,47 +116,15 @@ function! eclim#web#OpenUrl(url, ...)
   endif
 endfunction " }}}
 
-" Google(args, quote, visual) {{{
-function! eclim#web#Google(args, quote, visual)
-  call eclim#web#SearchEngine(s:google, a:args, a:quote, a:visual)
-endfunction " }}}
-
-" Clusty(args, quote, visual) {{{
-function! eclim#web#Clusty(args, quote, visual)
-  call eclim#web#SearchEngine(s:clusty, a:args, a:quote, a:visual)
-endfunction " }}}
-
-" Wikipedia(args, quote, visual) {{{
-function! eclim#web#Wikipedia(args, quote, visual)
-  call eclim#web#SearchEngine(s:wikipedia, a:args, a:quote, a:visual)
-endfunction " }}}
-
-" Dictionary(word) {{{
-function! eclim#web#Dictionary(word)
-  call eclim#web#WordLookup(s:dictionary, a:word)
-endfunction " }}}
-
-" Thesaurus(word) {{{
-function! eclim#web#Thesaurus(word)
-  call eclim#web#WordLookup(s:thesaurus, a:word)
-endfunction " }}}
-
-" SearchEngine(url, args, quote, visual) {{{
-function! eclim#web#SearchEngine(url, args, quote, visual)
+" SearchEngine(url, args) {{{
+" Function to use a search engine to search for a word or phrase.
+function! eclim#web#SearchEngine(url, args, line1, line2)
   let search_string = a:args
   if search_string == ''
-    if a:visual
-      let saved = @"
-      normal! gvy
-      let search_string = substitute(@", '\n', '', '')
-      let @" = saved
-    else
+    let search_string = eclim#util#GetVisualSelection(a:line1, a:line2, 0)
+    if search_string == ''
       let search_string = expand('<cword>')
     endif
-  endif
-
-  if a:quote
-    let search_string = '"' . search_string . '"'
   endif
 
   let search_string = eclim#html#util#UrlEncode(search_string)
@@ -172,6 +134,7 @@ function! eclim#web#SearchEngine(url, args, quote, visual)
 endfunction " }}}
 
 " WordLookup(url, word) {{{
+" Function to lookup a word on an online dictionary, thesaurus, etc.
 function! eclim#web#WordLookup(url, word)
   let word = a:word
   if word == ''

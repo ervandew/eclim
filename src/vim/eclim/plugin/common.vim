@@ -237,21 +237,6 @@ if !exists(":OpenUrl")
   command -bang -range -nargs=? OpenUrl
     \ :call eclim#web#OpenUrl('<args>', '<bang>', <line1>, <line2>)
 endif
-if !exists(":Google")
-  command -nargs=* Google :call eclim#web#Google(<q-args>, 0, 0)
-endif
-if !exists(":Clusty")
-  command -nargs=* Clusty :call eclim#web#Clusty(<q-args>, 0, 0)
-endif
-if !exists(":Dictionary")
-  command -nargs=? Dictionary :call eclim#web#Dictionary('<args>')
-endif
-if !exists(":Thesaurus")
-  command -nargs=? Thesaurus :call eclim#web#Thesaurus('<args>')
-endif
-if !exists(":Wikipedia")
-  command -nargs=* Wikipedia :call eclim#web#Wikipedia('<args>', 0, 0)
-endif
 " }}}
 
 " vim:ft=vim:fdm=marker

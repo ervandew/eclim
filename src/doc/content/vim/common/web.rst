@@ -78,17 +78,28 @@ Vim Variables
 Web Search Commands
 -------------------
 
-The remaining web lookup commands provide a means for looking up words or
-phrases using some great online tools.
+In addition to simply opening a url, eclim also provides a couple helper
+functions which allow you to create simple commands or mappings to search the
+web using your favorite search engine or to lookup a word via an online
+reference.
 
-.. _\:Google:
+.. _eclim#web#SearchEngine:
 
-- **:Google** [word ...] -
-  This command is used to look up a word or phrase on google.com_.  You can
-  invoke it one of two ways.
+- **eclim#web#SearchEngine**
+  This function provides the functionality needed to create search engine
+  commands or mappings.
 
-  #.  First by supplying the word or words to search for as arguments to
-      the command.
+  .. code-block:: vim
+
+    command -range -nargs=* Google call eclim#web#SearchEngine(
+      \ 'http://www.google.com/search?q=<query>', <q-args>, <line1>, <line2>)
+
+  Adding the above command to your vimrc or similar provides you with a new
+  :Google command allowing you to start a search on google.com_ in your browser
+  from vim.  This command can be invoked in a few ways.
+
+  #. First by supplying the word or words to search for as arguments to
+     the command.
 
       .. code-block:: vim
 
@@ -100,61 +111,27 @@ phrases using some great online tools.
     using the search input via google's homepage, allowing you to utilize the
     full querying capabilities of google.
 
-  #.  The second method is to issue the command with no arguments. The
-      command will then query google with the word under the cursor.
+  #. The second method is to issue the command with no arguments. The
+     command will then query google with the word under the cursor.
 
-.. _\:Clusty:
+  #. The last method is to visually select the text you want to search for and
+     then execute the command.
 
-- **:Clusty** [word ...] -
-  This command works just like the **:Google** command except it uses
-  clusty.com_ as the search engine.  For those of you who have not heard of
-  clusty, it is an excellent alternative to google which groups results into
-  clusters, allowing you to quickly filter search results down to the topic you
-  are looking for.  It is a great place to go when google returns too many
-  results that are difficult to sift through.
+.. _eclim#web#WordLookup:
 
-.. _\:Wikipedia:
+- **eclim#web#WordLookup**
+  This function can be used to create commands or mappings which lookup a word
+  using an online reference like a dictionary or thesaurus.
 
-- **:Wikipedia** [word ...] -
-  Again this command behaves like the previous two, but instead looks up the
-  desired word or phrase on wikipedia.org_, the great online encyclopedia.
+  .. code-block:: vim
 
-.. _\:Dictionary:
+    command -nargs=? Dictionary call eclim#web#WordLookup(
+      \ 'http://dictionary.reference.com/search?q=<query>', '<args>')
 
-- **:Dictionary** [word] -
-  This command is used to look up a word on dictionary.reference.com_.  You can
-  either supply the word to lookup as an argument to the command or it will
-  otherwise use the word under the cursor.
-
-.. _\:Thesaurus:
-
-- **:Thesaurus** [word] -
-  This command behaves the same as **:Dictionary** but looks up the word via
-  thesaurus.reference.com_.
-
-While these commands can be quite useful, you may notice one thing is absent.
-By default eclim does not provide any mappings that allow you to visually select
-the text to lookup.  However the functions that the above commands rely upon
-have been built to support this.  All you need to do is define mappings like the
-following.
-
-.. code-block:: vim
-
-  vmap <leader>gn :call eclim#web#Google('', 0, 1)<cr>
-  vmap <leader>gq :call eclim#web#Google('', 1, 1)<cr>
-
-This example creates mappings to allow you to visually select some text and
-submit that text as a query to google.  In this example <leader>gn will submit
-the text unquoted, and <leader>gq will submit the text in quoted form.
-
-See :help mapleader for more info on using <leader> for command mappings.
-
-The above examples can be modified for clusty or wikipedia as well.  The
-dictionary and thesaurus commands don't support this feature as they both
-operate on single words.
+  Adding the above command to your vimrc or similar provides you with a new
+  :Dictionary command which can be used to look up a word on
+  dictionary.reference.com_.  You can either supply the word to lookup as an
+  argument to the command or it will otherwise use the word under the cursor.
 
 .. _google.com: http://google.com
-.. _clusty.com: http://clusty.com
-.. _wikipedia.org: http://en.wikipedia.com
 .. _dictionary.reference.com: http://dictionary.reference.com
-.. _thesaurus.reference.com: http://thesaurus.reference.com

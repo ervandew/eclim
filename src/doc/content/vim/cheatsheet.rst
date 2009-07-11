@@ -367,17 +367,6 @@ Version Control Commands
   configured vcs web app.
 
 
-Web Lookup Commands
---------------------
-
-- :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
-- :ref:`:Google` [word ...] - Looks up a word or phrase with google.
-- :ref:`:Clusty` [word ...] - Looks up a word or phrase with clusty.
-- :ref:`:Wikipedia` [word ...] - Looks up a word or phrase on wikipedia.
-- :ref:`:Dictionary` [word] - Looks up a word on dictionary.reference.com.
-- :ref:`:Thesaurus` [word] - Looks up a word on thesaurus.reference.com.
-
-
 Misc. Commands
 -----------------
 
@@ -456,6 +445,7 @@ Misc. Commands
   Like **:OtherWorkingCopyDiff**, except open the file in a new tab.
 - :ref:`:History` -
   View the local history entries for the current file.
+- :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
 .. _pylint: http://www.logilab.org/857
