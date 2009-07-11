@@ -177,7 +177,7 @@ public abstract class AbstractPluginResources
       if(index != -1){
         vimResource = FileUtils.concat(
             vimResource.substring(0, index + 9),
-            getName(),
+            pluginName,
             vimResource.substring(index + 9));
       }
       String file = FileUtils.concat(
