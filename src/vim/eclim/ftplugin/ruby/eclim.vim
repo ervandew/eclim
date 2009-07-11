@@ -63,6 +63,9 @@ endif
 if !exists(":RubyInterpreters")
   command -buffer RubyInterpreters
     \ :call eclim#dltk#interpreter#ListInterpreters('ruby')
+  command -buffer -nargs=1 -complete=file
+    \ RubyInterpreterAdd
+    \ :call eclim#ruby#interpreter#AddInterpreter('<args>')
   command -buffer -nargs=1
     \ -complete=customlist,eclim#ruby#interpreter#CommandCompleteInterpreterPath
     \ RubyInterpreterRemove
