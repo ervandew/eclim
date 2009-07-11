@@ -181,7 +181,7 @@
     - Sets up the test projects.
     -->
   <target name="test.setup_projects">
-    <delete includeEmptyDirs="true">
+    <delete includeEmptyDirs="true" failonerror="false">
       <fileset dir="${user.home}/.eclim/cache" includes="**/*"/>
     </delete>
 
@@ -190,7 +190,6 @@
       <param name="nature" value="none"/>
     </antcall>
 
-    <delete dir="${user.home}/.eclim/cache"/>
     <exec executable="tar" dir="${eclipse.workspace}/eclim_unit_test/vcs">
       <arg line="-zxf cvs.tar.gz"/>
     </exec>
