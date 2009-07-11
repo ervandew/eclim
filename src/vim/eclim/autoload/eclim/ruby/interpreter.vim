@@ -28,8 +28,11 @@
 
 " AddInterpreter(path) {{{
 function eclim#ruby#interpreter#AddInterpreter(path)
+  let path = a:path
+  let path = substitute(path, '\ ', ' ', 'g')
+  let path = substitute(path, '\', '/', 'g')
   let command = s:command_add
-  let command = substitute(command, '<path>', a:path, '')
+  let command = substitute(command, '<path>', path, '')
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     call eclim#util#Echo(result)

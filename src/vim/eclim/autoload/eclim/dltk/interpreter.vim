@@ -69,10 +69,13 @@ endfunction " }}}
 
 " s:InterpreterAddRemove(nature, type, path, action) {{{
 function s:InterpreterAddRemove(nature, type, path, action)
+  let path = a:path
+  let path = substitute(path, '\ ', ' ', 'g')
+  let path = substitute(path, '\', '/', 'g')
   let command = s:command_interpreter_addremove
   let command = substitute(command, '<action>', a:action, '')
   let command = substitute(command, '<nature>', a:nature, '')
-  let command = substitute(command, '<path>', a:path, '')
+  let command = substitute(command, '<path>', path, '')
   if a:action == 'add'
     let command .= ' -t ' . a:type
   endif

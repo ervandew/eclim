@@ -94,7 +94,7 @@ public class DeleteInterpreterCommand
     for (IInterpreterInstallType iit : types){
       IInterpreterInstall[] installs = iit.getInterpreterInstalls();
       for (IInterpreterInstall install : installs){
-        if (!install.getInstallLocation().equals(file)){
+        if (!install.getInstallLocation().toOSString().equals(file.toOSString())){
           interpreters.add(install);
         }else{
           removed = true;
