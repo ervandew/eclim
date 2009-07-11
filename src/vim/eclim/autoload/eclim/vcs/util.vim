@@ -43,6 +43,9 @@ function eclim#vcs#util#GetVcsFunction(func_name)
   else
     let cwd = escape(getcwd(), ' ')
     let hgdir = finddir('.hg', cwd . ';')
+    if hgdir != ''
+      let hgdir = fnamemodify(hgdir, ':p')
+    endif
     let gitdir = finddir('.git', cwd . ';')
     if gitdir != ''
       let gitdir = fnamemodify(gitdir, ':p')
