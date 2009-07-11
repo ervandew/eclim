@@ -21,6 +21,8 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
@@ -41,6 +43,9 @@ import org.eclipse.jdt.core.ICompilationUnit;
 public class SrcFileExistsCommand
   extends AbstractCommand
 {
+  private static final Logger logger =
+    Logger.getLogger(SrcFileExistsCommand.class);
+
   /**
    * {@inheritDoc}
    */
@@ -60,6 +65,7 @@ public class SrcFileExistsCommand
       return src != null && src.exists() ?
         Boolean.TRUE.toString() : Boolean.FALSE.toString();
     }catch(IllegalArgumentException iae){
+      logger.error("Error locating java source file.", iae);
       return Boolean.FALSE.toString();
     }
   }
