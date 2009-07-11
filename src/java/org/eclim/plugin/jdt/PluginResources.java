@@ -71,7 +71,7 @@ public class PluginResources
   /**
    * The eclipse nature id for this plugin.
    */
-  public static final String NATURE = "org.eclipse.jdt.core.javanature";
+  public static final String NATURE = JavaCore.NATURE_ID;
 
   private static final Logger logger = Logger.getLogger(PluginResources.class);
 
@@ -112,11 +112,10 @@ public class PluginResources
     JavaCore.setOptions(options);*/
 
     Preferences.addOptionHandler("org.eclipse.jdt", new OptionHandler());
-    ProjectNatureFactory.addNature("java", "org.eclipse.jdt.core.javanature");
-    ProjectManagement.addProjectManager(
-        "org.eclipse.jdt.core.javanature", new JavaProjectManager());
+    ProjectNatureFactory.addNature("java", NATURE);
+    ProjectManagement.addProjectManager(NATURE, new JavaProjectManager());
 
-    PreferenceFactory.addPreferences("org.eclipse.jdt.core.javanature",
+    PreferenceFactory.addPreferences(NATURE,
       "JDT org.eclim.java.logging.impl commons-logging " +
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
       "JDT org.eclim.java.logging.template logger.gst\n" +
@@ -134,7 +133,7 @@ public class PluginResources
       "JDT/JUnit org.eclim.java.junit.src_dir"
     );
     // Indentation settings found in DefaultCodeFormatterConstants
-    PreferenceFactory.addOptions("org.eclipse.jdt.core.javanature",
+    PreferenceFactory.addOptions(NATURE,
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
