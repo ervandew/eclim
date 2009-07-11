@@ -24,7 +24,6 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import groovy.lang.Binding;
@@ -56,8 +55,6 @@ public class TemplateUtils
     new SimpleTemplateEngine();
 
   private static final String TEMPLATE_ROOT = "/resources/templates/";
-  private static final HashMap<String, Template> TEMPLATE_CACHE =
-    new HashMap<String, Template>();
 
   /**
    * Evaluates the template supplied via the specfied reader into the supplied
@@ -72,24 +69,19 @@ public class TemplateUtils
       PluginResources resources, String template, Map<String, Object> values)
     throws Exception
   {
-    String key = resources.getName() + '_' + template;
-    Template templ = TEMPLATE_CACHE.get(key);
-    if(templ == null){
-      String path = TEMPLATE_ROOT + template;
-      BufferedReader reader = null;
-      try{
-        reader = new BufferedReader(new InputStreamReader(
-              resources.getResourceAsStream(path)));
-      }catch(NullPointerException npe){
-        IllegalArgumentException iae = new IllegalArgumentException(
-            Services.getMessage("template.not.found", path));
-        iae.initCause(npe);
-        throw iae;
-      }
-      templ = TEMPLATE_ENGINE.createTemplate(reader);
-      TEMPLATE_CACHE.put(key, templ);
+    String path = TEMPLATE_ROOT + template;
+    BufferedReader reader = null;
+    try{
+      reader = new BufferedReader(new InputStreamReader(
+            resources.getResourceAsStream(path)));
+    }catch(NullPointerException npe){
+      IllegalArgumentException iae = new IllegalArgumentException(
+          Services.getMessage("template.not.found", path));
+      iae.initCause(npe);
+      throw iae;
     }
 
+    Template templ = TEMPLATE_ENGINE.createTemplate(reader);
     return templ.make(values).toString();
   }
 
