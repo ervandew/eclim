@@ -35,6 +35,9 @@ function eclim#ruby#project#ProjectCreatePre(folder)
     if !has('win32') && !has('win64')
       silent! let path =
         \ substitute(eclim#util#System('which ruby 2> /dev/null'), '\n$', '', '')
+    else
+      let paths = escape(substitute(expand('$PATH'), ';', ',', 'g'), ' ')
+      let path = substitute(findfile('ruby.exe', paths, ';'), '\', '/', 'g')
     endif
     let answer = 0
     if path != ''
