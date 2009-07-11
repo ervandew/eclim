@@ -204,3 +204,17 @@ committed version, or in the case of newly added files, view the file to be
 added.
 
 .. image:: ../../images/screenshots/vcs/editor.png
+
+.. note::
+
+  **Git users:** Issuing a ``git commit`` from any directory other than the
+  root of your working copy may lead to errors when attempting to view a diff
+  or file in the editor.  This is due to git changing the working directory to
+  the root but leaving the displayed file paths as relative, preventing eclim
+  from being able to determine where those files reside.  To resolve this issue
+  you will need to run the following to configure git to always display the
+  full path (like mercurial does by default):
+
+  ::
+
+    $ git config --global status.relativePaths false
