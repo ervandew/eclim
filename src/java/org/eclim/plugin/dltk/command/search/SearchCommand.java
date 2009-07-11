@@ -402,7 +402,9 @@ public class SearchCommand
         String message = SearchCommand.this.getMessage(match.getElement());
         if(index == -1){
           position.setMessage(message);
-          matches.add(position);
+          if(!matches.contains(position)){
+            matches.add(position);
+          }
         }else if (!StringUtils.EMPTY.equals(message)){
           // the second occurrence should be the one with the message.
           position = matches.get(index);
