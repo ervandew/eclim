@@ -56,7 +56,7 @@ public class FormatCommandTest
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents, '\n');
     assertEquals("Result line format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[22]);
+        "\t\tSystem.out.println(\"test formatting\");", lines[22]);
   }
 
   @Test
@@ -80,10 +80,10 @@ public class FormatCommandTest
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents, '\n');
-    assertEquals("Result line 1 format incorrect.", "    if (true) {", lines[23]);
+    assertEquals("Result line 1 format incorrect.", "\t\tif (true) {", lines[23]);
     assertEquals("Result line 2 format incorrect.",
-        "      System.out.println(\"test format if\");", lines[24]);
-    assertEquals("Result line 3 format incorrect.", "    }", lines[25]);
+        "\t\t\tSystem.out.println(\"test format if\");", lines[24]);
+    assertEquals("Result line 3 format incorrect.", "\t\t}", lines[25]);
   }
 
   @Test
@@ -109,8 +109,8 @@ public class FormatCommandTest
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents, '\n');
     assertEquals("Result line 1 format incorrect.",
-        "  public void main(String[] args) throws Exception {", lines[18]);
+        "\tpublic void main(String[] args) throws Exception {", lines[18]);
     assertEquals("Result line 1 format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[19]);
+        "\t\tSystem.out.println(\"test formatting\");", lines[19]);
   }
 }
