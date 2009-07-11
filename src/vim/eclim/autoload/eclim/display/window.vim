@@ -45,7 +45,6 @@ endif
 " project tree, etc.)
 function eclim#display#window#VerticalToolWindowOpen(name, weight)
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
-  let taglist_buffer = bufnr(g:TagList_title)
   if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
     let taglist_window = -1
   endif
@@ -96,8 +95,9 @@ function eclim#display#window#VerticalToolWindowOpen(name, weight)
     autocmd BufDelete * call s:PreventCloseOnBufferDelete()
     autocmd BufEnter * nested call s:CloseIfLastWindow()
   augroup END
-  if !exists('g:TagListToo') &&
-      \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
+  if exists('g:TagList_title') &&
+   \ !exists('g:TagListToo') &&
+   \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
     augroup eclim_vertical_tool_windows_move
       autocmd!
     augroup END
