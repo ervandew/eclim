@@ -516,6 +516,14 @@ NOTES {{{
           -artifactRepository http://download.eclipse.org/releases/ganymede
           -uninstallIU org.eclipse.wst.feature.group
 
+    Old update manager:
+      http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
+
+      Listing installed features:
+        ./eclipse -nosplash -consolelog
+          -application org.eclipse.update.core.standaloneUpdate
+          -command listFeatures
+
   }}}
 
   Steps for new releases {{{
