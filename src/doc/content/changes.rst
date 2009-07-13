@@ -18,8 +18,11 @@ History of Changes
 
 .. _1.5.0:
 
-1.5.0 (2009)
+1.5.0 (Jul. 12, 2009)
 ----------------------
+
+Bug Fixes:
+  - Many bug fixes and refinements.
 
 Eclipse:
   - Eclim now requires the latest version of eclipse (Galileo, 3.5.x).

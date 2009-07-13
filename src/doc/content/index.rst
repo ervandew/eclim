@@ -94,12 +94,21 @@ News
 ==================
 
 -----------
-2009
+2009-07-12
 -----------
 
 | **Eclim 1.5.0** is now available.
-| Please note that eclim now requires the latest version of `eclipse`_
-  (Galileo, 3.5.x).
+| The most notable changes are:
+
+* Eclim has been upgraded to support Eclipse 3.5 (Galileo).
+
+  .. note::
+
+    Eclim now **requires** Eclipse 3.5.
+
+* Ruby support has been added using the `eclipse dltk`_.
+
+You can view the :ref:`release notes <1.5.0>` for more info.
 
 -----------
 2009-06-14
@@ -275,6 +284,7 @@ View the :ref:`release notes <1.3.0>` for more info.
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
 
 .. _eclipse cdt: http://eclipse.org/cdt/
+.. _eclipse dltk: http://eclipse.org/dltk/
 .. _eclipse wst: http://eclipse.org/webtools/
 
 .. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
