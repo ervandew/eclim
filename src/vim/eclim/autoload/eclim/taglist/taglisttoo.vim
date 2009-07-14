@@ -790,7 +790,13 @@ function! s:Window(types, tags, content)
     nnoremap <silent> <buffer> <cr> :call <SID>JumpToTag()<cr>
   endif
 
-  let pos = getpos('.')
+  let pos = [0, 1, 1, 0]
+  " if we are updating the taglist for the same file, then preserve the
+  " cursor position.
+  if len(a:content[1]) > 0 && getline(1) == a:content[1][0]
+    let pos = getpos('.')
+  endif
+
   setlocal modifiable
   silent 1,$delete _
   call append(1, a:content[1])
