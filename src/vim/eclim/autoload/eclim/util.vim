@@ -481,8 +481,10 @@ endfunction " }}}
 " Registers the autocmd for returning the user to the supplied buffer when the
 " current buffer is closed.
 function! eclim#util#GoToBufferWindowRegister(bufname)
-  exec 'autocmd BufWinLeave <buffer> call eclim#util#GoToBufferWindow("' .
-    \ escape(a:bufname, '\') . '") | doautocmd BufEnter'
+  exec 'autocmd BufWinLeave <buffer> ' .
+    \ 'call eclim#util#GoToBufferWindow("' . escape(a:bufname, '\') . '") | ' .
+    \ 'doautocmd BufEnter | ' .
+    \ 'call eclim#util#DelayedCommand("doautocmd WinEnter")'
 endfunction " }}}
 
 " GrabUri([line, col]) {{{
