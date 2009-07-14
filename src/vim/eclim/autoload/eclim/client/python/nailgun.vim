@@ -90,21 +90,16 @@ endfunction " }}}
 " s:InitClient() {{{
 " Initializes the python interface to the nailgun server.
 function! s:InitClient()
-  if exists('s:client_initialized') && s:client_initialized
-    return
-  endif
-
-  let s:client_initialized = 1
-
 python << PYTHONEOF
-import sys, vim
-sys.path.append(vim.eval('s:python_dir'))
-import nailgun
+if not vars().has_key('client'):
+  import sys, vim
+  sys.path.append(vim.eval('s:python_dir'))
+  import nailgun
 
-client = nailgun.Nailgun(
-  keepAlive=vim.eval('g:EclimNailgunKeepAlive'),
-  vimFiles=vim.eval('g:EclimBaseDir'),
-)
+  client = nailgun.Nailgun(
+    keepAlive=vim.eval('g:EclimNailgunKeepAlive'),
+    vimFiles=vim.eval('g:EclimBaseDir'),
+  )
 PYTHONEOF
 endfunction " }}}
 
