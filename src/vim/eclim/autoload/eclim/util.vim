@@ -26,7 +26,7 @@
 " }}}
 
 " Script Variables {{{
-  let s:buffing_write_closing_commands = '^\s*\(' .
+  let s:buffer_write_closing_commands = '^\s*\(' .
     \ 'wq\|xa\|' .
     \ '\d*w[nN]\|\d*wp\|' .
     \ 'ZZ' .
@@ -1129,7 +1129,7 @@ endfunction " }}}
 " command (:) prompt, not any normal mappings which may hide/close/delete the
 " buffer.
 function! eclim#util#WillWrittenBufferClose()
-  return histget("cmd") =~ s:buffing_write_closing_commands
+  return histget("cmd") =~ s:buffer_write_closing_commands
 endfunction " }}}
 
 " CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
