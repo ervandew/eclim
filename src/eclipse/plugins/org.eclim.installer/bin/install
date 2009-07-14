@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ECLIPSE_HOME="${eclipse.home}"
-ECLIPSE="$ECLIPSE_HOME/eclipse"
+ECLIM_ECLIPSE_HOME="${eclipse.home}"
+ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
 if [ ! -e "$ECLIPSE" ]; then
   ECLIPSE=`which eclipse 2> /dev/null`
 fi
