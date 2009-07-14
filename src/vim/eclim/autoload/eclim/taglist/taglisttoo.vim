@@ -803,7 +803,15 @@ function! s:Window(types, tags, content)
   silent retab
   silent 1,1delete _
   setlocal nomodifiable
+
   call setpos('.', pos)
+
+  " if the entire taglist can fit in the window, then reposition the content
+  " just in case the previous contents result in the current contents being
+  " scrolled up a bit.
+  if len(a:content[1]) < winheight(winnr())
+    normal! zb
+  endif
 
   silent! syn clear TagListKeyword
   for value in values(a:types)
