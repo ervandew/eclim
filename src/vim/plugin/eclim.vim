@@ -43,7 +43,7 @@ function s:Validate()
   if v:version < 700
     let version = strpart(v:version, 0, 1) . '.' . strpart(v:version, 1)
     echom "Error: Your vim version is " . v:version . "."
-    echom "       Eclim requires version 7.xx."
+    echom "       Eclim requires version 7.x.x"
     return
   endif
 
