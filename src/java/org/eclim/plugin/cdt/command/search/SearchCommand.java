@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -263,7 +265,10 @@ public class SearchCommand
         Method method = PDOMSearchElement.class.getDeclaredMethod("getLocation");
         method.setAccessible(true);
         IIndexFileLocation location = (IIndexFileLocation)method.invoke(e);
-        String filename = location.getURI().getRawPath();
+        String filename = location.getURI().getPath();
+        if (Os.isFamily("windows") && filename.startsWith("/")){
+          filename = filename.substring(1);
+        }
         for (Match m : result.getMatches(e)){
           PDOMSearchMatch match = (PDOMSearchMatch)m;
           if(buffer.length() > 0){
