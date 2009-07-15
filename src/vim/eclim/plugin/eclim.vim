@@ -31,12 +31,12 @@ if !exists("g:EclimLogLevel")
   let g:EclimLogLevel = 4
 endif
 
-if !exists("g:EclimSignLevel")
-  if has("signs")
+if has("signs")
+  if !exists("g:EclimSignLevel")
     let g:EclimSignLevel = 5
-  else
-    let g:EclimSignLevel = 0
   endif
+else
+  let g:EclimSignLevel = 0
 endif
 
 if !exists("g:EclimShowCurrentError")
@@ -144,7 +144,7 @@ endif
 
 " Auto Commands{{{
 
-if g:EclimShowCurrentError && has('signs')
+if g:EclimShowCurrentError
   augroup eclim_show_error
     autocmd!
     autocmd CursorHold * call eclim#util#ShowCurrentError()
@@ -178,12 +178,14 @@ if g:EclimMakeQfFilter
   augroup END
 endif
 
-augroup eclim_qf
-  autocmd QuickFixCmdPost *make* call eclim#display#signs#Show('', 'qf')
-  autocmd QuickFixCmdPost grep*,vimgrep* call eclim#display#signs#Show('i', 'qf')
-  autocmd QuickFixCmdPost lgrep*,lvimgrep* call eclim#display#signs#Show('i', 'loc')
-  autocmd BufWinEnter * call eclim#display#signs#Update()
-augroup END
+if g:EclimSignLevel
+  augroup eclim_qf
+    autocmd QuickFixCmdPost *make* call eclim#display#signs#Show('', 'qf')
+    autocmd QuickFixCmdPost grep*,vimgrep* call eclim#display#signs#Show('i', 'qf')
+    autocmd QuickFixCmdPost lgrep*,lvimgrep* call eclim#display#signs#Show('i', 'loc')
+    autocmd BufWinEnter * call eclim#display#signs#Update()
+  augroup END
+endif
 
 if has('netbeans_intg')
   augroup eclim_vimplugin

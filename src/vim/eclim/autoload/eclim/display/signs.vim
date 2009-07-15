@@ -232,7 +232,7 @@ endfunction " }}}
 " dictionaries in the location or quickfix list.  It supports 'i' (info), 'w'
 " (warning), and 'e' (error).
 function! eclim#display#signs#Update()
-  if !has("signs")
+  if !has('signs') || !g:EclimSignLevel
     return
   endif
 
@@ -337,7 +337,7 @@ endfunction " }}}
 " Set sign at line 1 to prevent sign column from collapsing, and subsiquent
 " screen redraw.
 function! eclim#display#signs#SetPlaceholder(...)
-  if !has("signs")
+  if !has('signs') || !g:EclimSignLevel
     return
   endif
 
@@ -359,7 +359,7 @@ endfunction " }}}
 
 " RemovePlaceholder() {{{
 function! eclim#display#signs#RemovePlaceholder()
-  if !has("signs")
+  if !has('signs') || !g:EclimSignLevel
     return
   endif
 
