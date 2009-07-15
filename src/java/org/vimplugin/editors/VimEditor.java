@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -237,7 +238,7 @@ public class VimEditor
         IWorkbenchPage page = PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow().getActivePage();
         try{
-          if (page.findView(ECLIMD_VIEW_ID) == null){
+          if (page != null && page.findView(ECLIMD_VIEW_ID) == null){
             page.showView(ECLIMD_VIEW_ID);
           }
         }catch(PartInitException pie){
@@ -680,6 +681,16 @@ public class VimEditor
   @Override
   protected void createActions() {
     super.createActions();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclipse.ui.IPersistable#saveState(IMemento)
+   */
+  @Override
+  public void saveState(IMemento arg0) {
+    // no-op for now.  prevents error on closing of eclipse while a VimEditor
+    // instance is open.
   }
 
   /**
