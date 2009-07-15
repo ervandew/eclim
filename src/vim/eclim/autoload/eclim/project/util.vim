@@ -506,7 +506,7 @@ function! eclim#project#util#GetProjects(...)
     else
       let result = split(eclim#ExecuteEclim(s:command_projects), '\n')
       if len(result) == 1 && result[0] == '0'
-        return []
+        return {}
       endif
 
       for line in result
@@ -584,7 +584,7 @@ endfunction " }}}
 " GetProjectRoot(project) {{{
 " Gets the project root dir for the supplied project name.
 function! eclim#project#util#GetProjectRoot(project)
-  return eclim#project#util#GetProjects()[a:project]
+  return get(eclim#project#util#GetProjects(), a:project, '')
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{
