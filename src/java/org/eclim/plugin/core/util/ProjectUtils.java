@@ -149,7 +149,9 @@ public class ProjectUtils
     if(file.toLowerCase().startsWith(projectPath.toLowerCase())){
       return file;
     }
-    return FileUtils.concat(projectPath, file);
+
+    IFile ifile = project.getFile(file);
+    return ifile.getRawLocation().toOSString();
   }
 
   /**

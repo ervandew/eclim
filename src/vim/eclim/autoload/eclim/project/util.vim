@@ -42,6 +42,8 @@ let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
 let s:command_projects = '-command project_list'
+let s:command_project_link_resource = '-command project_link_resource -f "<file>"'
+let s:command_project_by_resource = '-command project_by_resource -f "<file>"'
 let s:command_project_info = '-command project_info -p "<project>"'
 let s:command_project_settings = '-command project_settings -p "<project>"'
 let s:command_project_setting = '-command project_setting -p "<project>" -s <setting>'
@@ -459,6 +461,17 @@ function! eclim#project#util#GetProjectRelativeFilePath(file)
     let pattern .= '\c'
   endif
   let result = substitute(file, pattern, '', '')
+
+  " handle file in linked folder
+  if result == file
+    let command = s:command_project_link_resource
+    let command = substitute(command, '<file>', file, '')
+    let result = eclim#ExecuteEclim(command)
+    if result != '0'
+      return result
+    endif
+  endif
+
   if result != file && result =~ '^/'
     let result = result[1:]
   endif
@@ -520,12 +533,25 @@ function! eclim#project#util#GetProjects(...)
   endif
 
   if len(a:000) == 1
-    let dir = substitute(fnamemodify(a:000[0], ':p:h'), '\', '/', 'g')
+    let path = fnamemodify(a:000[0], ':p')
+    let dir = substitute(fnamemodify(path, ':h'), '\', '/', 'g')
     let pattern = '\(/\|$\)'
     if has('win32') || has('win64')
       let pattern .= '\c'
     endif
-    return filter(copy(s:projects), 'dir =~ "^" . v:val . pattern')
+    let projects = filter(copy(s:projects), 'dir =~ "^" . v:val . pattern')
+
+    " file may be in a linked folder in the project
+    if len(projects) == 0
+      let command = s:command_project_by_resource
+      let command = substitute(command, '<file>', path, '')
+      let result = eclim#ExecuteEclim(command)
+      if result != '0'
+        let projects = filter(copy(s:projects), 'v:key == result')
+      endif
+    endif
+
+    return projects
   endif
 
   return s:projects
