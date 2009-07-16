@@ -106,4 +106,47 @@ function! TestCodeCompleteUnicode()
     \ 'Results contains print()')
 endfunction " }}}
 
+" TestCodeCompleteLinkedResource() {{{
+function! TestCodeCompleteLinkedResource()
+  edit! ../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
+  call PeekRedir()
+
+  call cursor(10, 10)
+  let start = eclim#java#complete#CodeComplete(1, '')
+  call PeekRedir()
+  call VUAssertEquals(9, start, 'Wrong starting column.')
+
+  call cursor(10, 10)
+  let results = eclim#java#complete#CodeComplete(0, '')
+  call PeekRedir()
+  call VUAssertTrue(len(results) > 10, 'Not enough results.')
+  call VUAssertTrue(len(results) < 50, 'Too many results.')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
+    \ 'Results does not contain add()')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
+    \ 'Results does not contain addAll()')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'clear()'.*"),
+    \ 'Results does not contain clear()')
+
+  call cursor(10, 10)
+  exec "normal ia\<esc>"
+
+  call cursor(10, 11)
+  let start = eclim#java#complete#CodeComplete(1, '')
+  call PeekRedir()
+  call VUAssertEquals(9, start, 'Wrong starting column.')
+
+  call cursor(10, 10)
+  let results = eclim#java#complete#CodeComplete(0, 'a')
+  call PeekRedir()
+  call VUAssertTrue(len(results) > 2, 'Not enough results.')
+  call VUAssertTrue(len(results) < 10, 'Too many results.')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
+    \ 'Results does not contain add()')
+  call VUAssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
+    \ 'Results does not contain addAll()')
+  call VUAssertFalse(eclim#util#ListContains(results, ".*'clear()'.*"),
+    \ 'Results contain clear()')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

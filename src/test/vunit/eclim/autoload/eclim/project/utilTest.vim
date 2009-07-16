@@ -49,6 +49,11 @@ endfunction " }}}
 function! TestGetCurrentProjectName()
   let name = eclim#project#util#GetCurrentProjectName()
   call VUAssertEquals('eclim_unit_test', name, "Wrong project name.")
+
+  view ../../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
+  let name = eclim#project#util#GetCurrentProjectName()
+  call VUAssertEquals(
+    \ 'eclim_unit_test_java', name, "Wrong project name for linked resource.")
 endfunction " }}}
 
 " TestGetCurrentProjectRoot() {{{
@@ -56,6 +61,25 @@ function! TestGetCurrentProjectRoot()
   let dir = eclim#project#util#GetCurrentProjectRoot()
   call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test', dir,
     \ "Wrong project dir.")
+
+  view ../../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
+  let dir = eclim#project#util#GetCurrentProjectRoot()
+  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test_java', dir,
+    \ "Wrong project dir for linked resource.")
+endfunction " }}}
+
+" TestGetProjectRelativeFilePath() {{{
+function! TestGetProjectRelativeFilePath()
+  let path = eclim#project#util#GetProjectRelativeFilePath(
+    \ g:TestEclimWorkspace . 'eclim_unit_test/files/test1.txt')
+  call VUAssertEquals('files/test1.txt', path, "Wrong project file path.")
+
+  let path = eclim#project#util#GetProjectRelativeFilePath(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java')
+  call VUAssertEquals(
+    \ 'src-linked/org/eclim/test/TestLinked.java', path,
+    \ "Wrong project file path for linked resource.")
 endfunction " }}}
 
 " TestIsCurrentFileInProject() {{{

@@ -126,4 +126,43 @@ function! TestJavac()
     \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
 endfunction " }}}
 
+" TestValidate() {{{
+function! TestValidate()
+  edit! src/org/eclim/test/src/TestSrcWarningVUnit.java
+  call PeekRedir()
+
+  write
+  call PeekRedir()
+
+  let results = getloclist(0)
+  echo 'results = ' . string(results)
+
+  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
+  call VUAssertEquals(3, results[0].lnum, 'Wrong line num.')
+  call VUAssertEquals(8, results[0].col, 'Wrong col num.')
+  call VUAssertEquals(
+    \ "The import java.util.ArrayList is never used",
+    \ results[0].text, 'Wrong result.')
+  call VUAssertEquals(4, results[1].lnum, 'Wrong line num.')
+  call VUAssertEquals(8, results[1].col, 'Wrong col num.')
+  call VUAssertEquals(
+    \ "The import java.util.List is never used",
+    \ results[1].text, 'Wrong result.')
+
+
+  edit! ../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
+  write
+  call PeekRedir()
+
+  let results = getloclist(0)
+  echo 'results = ' . string(results)
+
+  call VUAssertEquals(len(results), 1, 'Wrong number of results for linked resource.')
+  call VUAssertEquals(10, results[0].lnum, 'Wrong line num for linked resource.')
+  call VUAssertEquals(9, results[0].col, 'Wrong col num for linked resource.')
+  call VUAssertEquals(
+    \ 'Syntax error on token ".", invalid VariableDeclarator',
+    \ results[0].text, 'Wrong result for linked resource.')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker
