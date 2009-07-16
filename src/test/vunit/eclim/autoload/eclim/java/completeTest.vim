@@ -128,15 +128,7 @@ function! TestCodeCompleteLinkedResource()
   call VUAssertTrue(eclim#util#ListContains(results, ".*'clear()'.*"),
     \ 'Results does not contain clear()')
 
-  call cursor(10, 10)
-  exec "normal ia\<esc>"
-
-  call cursor(10, 11)
-  let start = eclim#java#complete#CodeComplete(1, '')
-  call PeekRedir()
-  call VUAssertEquals(9, start, 'Wrong starting column.')
-
-  call cursor(10, 10)
+  call cursor(16, 10)
   let results = eclim#java#complete#CodeComplete(0, 'a')
   call PeekRedir()
   call VUAssertTrue(len(results) > 2, 'Not enough results.')
