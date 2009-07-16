@@ -139,10 +139,17 @@ public class ProjectUtils
     throws Exception
   {
     file = file.replace('\\', '/');
-    if(file.startsWith("/" + project.getName() + "/")){
-      file = file.substring(2 + project.getName().length());
-    }else if(file.endsWith("/" + project.getName())){
-      file = file.substring(1 + project.getName().length());
+    if(file.startsWith("/" + project.getName())){
+      if(file.startsWith("/" + project.getName() + "/")){
+        file = file.substring(2 + project.getName().length());
+      }else if(file.endsWith("/" + project.getName())){
+        file = file.substring(1 + project.getName().length());
+      }
+
+      // path is the project root
+      if (file.length() == 0){
+        return getPath(project);
+      }
     }
 
     String projectPath = getPath(project);
