@@ -55,6 +55,12 @@ public class CorePlugin
   {
     super.activate(context);
 
+    // handle case where eclipse starts this bundle from some saved state.
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (app == null){
+      return;
+    }
+
     logger.info("Loading eclim plugins...");
     String pluginsDir =
       System.getProperty("eclim.home") + File.separator + ".." + File.separator;
@@ -109,6 +115,12 @@ public class CorePlugin
     throws Exception
   {
     super.stop(context);
+
+    // handle stop on eclipse starting from saved state.
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (app == null){
+      return;
+    }
 
     for(String plugin : plugins){
       logger.info("Stopping plugin " + plugin);

@@ -27,6 +27,8 @@ import org.eclim.Services;
 
 import org.eclim.command.Command;
 
+import org.eclim.eclipse.AbstractEclimApplication;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.util.IOUtils;
@@ -77,6 +79,18 @@ public class Plugin
    */
   public void activate(BundleContext context)
   {
+    // handle case where eclipse starts this bundle from some saved state.
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (app == null){
+      try{
+        this.getBundle().stop();
+      }catch(Exception e){
+        logger.error(
+            "Error stopping core plugin when eclim application not found.", e);
+      }
+      return;
+    }
+
     Properties properties = new Properties();
     InputStream in = null;
     try{
@@ -114,8 +128,15 @@ public class Plugin
   {
     super.stop(context);
 
-    Services.removePluginResources(
+    // handle stop call from activate method above.
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (app == null){
+      return;
+    }
+
+    PluginResources resources = Services.removePluginResources(
         Services.getPluginResources(context.getBundle().getSymbolicName()));
+    resources.close();
   }
 
   /**

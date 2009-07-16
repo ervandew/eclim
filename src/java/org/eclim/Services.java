@@ -26,8 +26,6 @@ import java.util.ResourceBundle;
 
 import org.eclim.command.Command;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.plugin.AbstractPluginResources;
 import org.eclim.plugin.PluginResources;
 
@@ -39,8 +37,6 @@ import org.eclim.plugin.PluginResources;
  */
 public class Services
 {
-  private static Logger logger = Logger.getLogger(Services.class);
-
   private static HashMap<String, PluginResources> pluginResources =
     new HashMap<String, PluginResources>();
 
@@ -159,23 +155,6 @@ public class Services
   }
 
   /**
-   * Closes and disposes of all services.
-   */
-  public static void close()
-  {
-    for(PluginResources resources : pluginResources.values()){
-      try{
-        resources.close();
-      }catch(Exception e){
-        logger.error(
-            "Error closing plugin: " + resources.getClass().getName(), e);
-      }
-      logger.info("{} closed.", resources.getClass().getName());
-    }
-    logger.info("{} closed.", Services.class.getName());
-  }
-
-  /**
    * Adds the supplied PluginResources instance to the list of instances that
    * are used to locate services, messages, etc.
    *
@@ -191,9 +170,9 @@ public class Services
    *
    * @param resources The PluginResources to remove.
    */
-  public static void removePluginResources(PluginResources resources)
+  public static PluginResources removePluginResources(PluginResources resources)
   {
-    pluginResources.remove(resources.getName());
+    return pluginResources.remove(resources.getName());
   }
 
   /**

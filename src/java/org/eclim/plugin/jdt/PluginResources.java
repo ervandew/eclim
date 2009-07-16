@@ -143,21 +143,6 @@ public class PluginResources
 
   /**
    * {@inheritDoc}
-   * @see AbstractPluginResources#close()
-   */
-  @Override
-  public void close()
-    throws Exception
-  {
-    logger.debug("Shutting down java environment");
-    super.close();
-    if (!AbstractEclimApplication.getInstance().isHeaded()){
-      JavaCore.getJavaCore().stop(null);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
    * @see AbstractPluginResources#getBundleBaseName()
    */
   protected String getBundleBaseName()
