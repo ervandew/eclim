@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.cdt;
 
+import org.eclim.eclipse.AbstractEclimApplication;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.Plugin;
@@ -44,14 +46,22 @@ public class CdtPlugin
     throws Exception
   {
     super.start(context);
-    // force the cdt ui plugin to start so that we can access its internal
-    // classes.  This seems to only be necessary on the non-classic eclipse
-    // distributions.
-    Bundle bundle = Platform.getBundle("org.eclipse.cdt.ui");
-    try{
-      bundle.start();
-    }catch(Exception e){
-      logger.warn("Failed to start org.eclipse.cdt.ui");
+
+    // force a couple cdt ui plugins to start so that we can access their
+    // internal classes.  This seems to only be necessary on the non-classic
+    // eclipse distributions.
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (app != null && !app.isHeaded()){
+      String[] names =
+        {"org.eclipse.cdt.ui", "org.eclipse.cdt.managedbuilder.ui"};
+      for (String name : names){
+        Bundle bundle = Platform.getBundle(name);
+        try{
+          bundle.start();
+        }catch(Exception e){
+          logger.warn("Failed to start " + name);
+        }
+      }
     }
   }
 }
