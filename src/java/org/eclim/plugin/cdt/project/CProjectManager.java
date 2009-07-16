@@ -19,7 +19,6 @@ package org.eclim.plugin.cdt.project;
 import java.io.FileInputStream;
 
 import java.util.List;
-import java.util.Map;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +27,8 @@ import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
+
+import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.plugin.cdt.PluginResources;
 
@@ -48,21 +49,19 @@ import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescriptionManager;
 
-import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
-
 import org.eclipse.cdt.core.settings.model.util.PathEntryTranslator;
 
-import org.eclipse.cdt.managedbuilder.core.IBuilder;
-import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyManager;
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyValue;
+
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
-import org.eclipse.cdt.managedbuilder.internal.core.Configuration;
-import org.eclipse.cdt.managedbuilder.internal.core.ManagedBuildInfo;
-import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
-import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
+import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 
 import org.eclipse.core.resources.IProject;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * Manager for c/c++ projects.
@@ -88,62 +87,44 @@ public class CProjectManager
   public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
-    ICProjectDescriptionManager manager =
-      CoreModel.getDefault().getProjectDescriptionManager();
-    ICProjectDescription desc = manager.createProjectDescription(project, false);
-    ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+    // TODO: - support other project types:
+    //         executable, shared library, static library
+    //       - support specifying the toolchain to use.
+    //       - post project create hooks both of these (like on ruby project
+    //         create)?
 
-    // FIXME: handle user specified toolchain alias
-    Map toolChains = ManagedBuildManager.getExtensionToolChainMap();
-    IToolChain toolchain = null;
-    for (Object key : toolChains.keySet()){
-      IToolChain tc = (IToolChain)toolChains.get(key);
-      if (tc.isAbstract() ||
-          tc.isSystemObject() ||
-          !tc.isSupported() ||
-          !ManagedBuildManager.isPlatformOk(tc))
-      {
-        continue;
-      }
-      if (tc.getId().endsWith(".base")){
-        toolchain = tc;
+    IBuildPropertyManager buildManager =
+      ManagedBuildManager.getBuildPropertyManager();
+    IBuildPropertyValue[] vs = buildManager
+      .getPropertyType(MBSWizardHandler.ARTIFACT).getSupportedValues();
+
+    MBSWizardHandler handler = null;
+    for (IBuildPropertyValue value : vs){
+      final IToolChain[] toolChains = ManagedBuildManager
+        .getExtensionsToolChains(MBSWizardHandler.ARTIFACT, value.getId(), false);
+      if (toolChains != null && toolChains.length > 0){
+        handler = new MBSWizardHandler(value, EclimPlugin.getShell(), null){
+          public IToolChain[] getSelectedToolChains(){
+            for (IToolChain tc : toolChains){
+              if (!tc.isAbstract() &&
+                  !tc.isSystemObject() &&
+                  tc.isSupported() &&
+                  ManagedBuildManager.isPlatformOk(tc))
+              {
+                return new IToolChain[]{tc};
+              }
+            }
+            return new IToolChain[0];
+          }
+
+
+          protected void doCustom(IProject project) {
+            // no-op
+          }
+        };
       }
     }
-
-    ManagedProject mproject = new ManagedProject(desc);
-    info.setManagedProject(mproject);
-
-    // TODO: support other project types:
-    //       executable, shared library, static library
-
-    String tcId = (toolchain == null) ? "0" : toolchain.getId();
-    String cfgName = (toolchain == null) ? "Default" : toolchain.getName();
-    Configuration cfg = new Configuration(
-        mproject,
-        (ToolChain)toolchain,
-        ManagedBuildManager.calculateChildId(tcId, null),
-        cfgName);
-
-    IBuilder builder = cfg.getEditableBuilder();
-    if (builder != null) {
-      if(builder.isInternalBuilder()){
-        IConfiguration prefCfg =
-          ManagedBuildManager.getPreferenceConfiguration(false);
-        IBuilder prefBuilder = prefCfg.getBuilder();
-        cfg.changeBuilder(
-            prefBuilder,
-            ManagedBuildManager.calculateChildId(cfg.getId(), null),
-            prefBuilder.getName());
-        builder = cfg.getEditableBuilder();
-        builder.setBuildPath(null);
-      }
-      builder.setManagedBuildOn(false);
-    }
-    cfg.setArtifactName(project.getName());
-    CConfigurationData data = cfg.getConfigurationData();
-    desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
-
-    manager.setProjectDescription(project, desc);
+    handler.createProject(project, true, true, new NullProgressMonitor());
   }
 
   /**
