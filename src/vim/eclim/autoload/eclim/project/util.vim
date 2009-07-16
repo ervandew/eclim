@@ -456,7 +456,7 @@ endfunction " }}}
 " Gets the project relative path for the given file.
 function! eclim#project#util#GetProjectRelativeFilePath(file)
   let file = substitute(a:file, '\', '/', 'g')
-  let pattern = eclim#project#util#GetCurrentProjectRoot()
+  let pattern = eclim#project#util#GetCurrentProjectRoot() . '\>'
   if has('win32') || has('win64')
     let pattern .= '\c'
   endif
