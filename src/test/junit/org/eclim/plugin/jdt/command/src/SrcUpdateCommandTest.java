@@ -33,61 +33,37 @@ import static org.junit.Assert.*;
  */
 public class SrcUpdateCommandTest
 {
-  private static final String TEST_FILE_ERRORS =
-    "src/org/eclim/test/src/TestSrcError.java";
-  private static final String TEST_FILE_WARNINGS =
-    "src/org/eclim/test/src/TestSrcWarning.java";
+  private static final String TEST_FILE=
+    "src/org/eclim/test/src/TestSrc.java";
 
   @Test
-  public void errors()
+  public void update()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     String result = Eclim.execute(new String[]{
-      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_ERRORS, "-v"
+      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
     });
 
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
 
-    assertEquals("Wrong number of errors.", 1, results.length);
+    assertEquals("Wrong number of errors.", 3, results.length);
 
-    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_ERRORS);
-    for(int ii = 0; ii < results.length; ii++){
-      assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
-      assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|e"));
-    }
-
-    assertTrue("Wrong error.", results[0].indexOf("Syntax error,") != -1);
-  }
-
-  @Test
-  public void warnings()
-  {
-    assertTrue("Java project doesn't exist.",
-        Eclim.projectExists(Jdt.TEST_PROJECT));
-
-    String result = Eclim.execute(new String[]{
-      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_WARNINGS, "-v"
-    });
-
-    System.out.println(result);
-
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of warnings.", 2, results.length);
-
-    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_WARNINGS);
-    for(int ii = 0; ii < results.length; ii++){
-      assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
-      assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|w"));
-    }
-
-    assertTrue("Wrong first warning.",
-        results[0].indexOf("The import java.util.ArrayList is never used") != -1);
-    assertTrue("Wrong second warning.",
-        results[1].indexOf("The import java.util.List is never used") != -1);
+    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
+    assertTrue("Wrong filename [0].", results[0].startsWith(file));
+    assertTrue("Wrong level [0].", results[0].endsWith("|w"));
+    assertTrue("Wrong message [0].",
+        results[0].indexOf("List is a raw type") != -1);
+    assertTrue("Wrong filename [1].", results[1].startsWith(file));
+    assertTrue("Wrong level [1].", results[1].endsWith("|w"));
+    assertTrue("Wrong message [1].",
+        results[1].indexOf("ArrayList is a raw type") != -1);
+    assertTrue("Wrong filename [2].", results[2].startsWith(file));
+    assertTrue("Wrong level [2].", results[2].endsWith("|e"));
+    assertTrue("Wrong message [2].",
+        results[2].indexOf("The method a() is undefined") != -1);
   }
 }

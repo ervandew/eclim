@@ -128,7 +128,7 @@ endfunction " }}}
 
 " TestValidate() {{{
 function! TestValidate()
-  edit! src/org/eclim/test/src/TestSrcWarningVUnit.java
+  edit! src/org/eclim/test/src/TestSrcVUnit.java
   call PeekRedir()
 
   write
@@ -137,19 +137,57 @@ function! TestValidate()
   let results = getloclist(0)
   echo 'results = ' . string(results)
 
-  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
-  call VUAssertEquals(3, results[0].lnum, 'Wrong line num.')
-  call VUAssertEquals(8, results[0].col, 'Wrong col num.')
+  call VUAssertEquals(len(results), 3, 'Wrong number of results.')
+  call VUAssertEquals(10, results[0].lnum, 'Wrong line num.')
+  call VUAssertEquals(5, results[0].col, 'Wrong col num.')
   call VUAssertEquals(
-    \ "The import java.util.ArrayList is never used",
+    \ "List is a raw type. " .
+    \ "References to generic type List<E> should be parameterized",
     \ results[0].text, 'Wrong result.')
-  call VUAssertEquals(4, results[1].lnum, 'Wrong line num.')
-  call VUAssertEquals(8, results[1].col, 'Wrong col num.')
+  call VUAssertEquals(10, results[1].lnum, 'Wrong line num.')
+  call VUAssertEquals(21, results[1].col, 'Wrong col num.')
   call VUAssertEquals(
-    \ "The import java.util.List is never used",
+    \ "ArrayList is a raw type. " .
+    \ "References to generic type ArrayList<E> should be parameterized",
     \ results[1].text, 'Wrong result.')
+  call VUAssertEquals(11, results[2].lnum, 'Wrong line num.')
+  call VUAssertEquals(10, results[2].col, 'Wrong col num.')
+  call VUAssertEquals(
+    \ "The method a() is undefined for the type List",
+    \ results[2].text, 'Wrong result.')
 
+  " test sorting results by severity
+  let g:EclimValidateSortResults = 'severity'
+  try
+    write
+    call PeekRedir()
 
+    let results = getloclist(0)
+    echo 'results = ' . string(results)
+
+    call VUAssertEquals(len(results), 3, 'Wrong number of results.')
+    call VUAssertEquals(11, results[0].lnum, 'Wrong line num.')
+    call VUAssertEquals(10, results[0].col, 'Wrong col num.')
+    call VUAssertEquals(
+      \ "The method a() is undefined for the type List",
+      \ results[0].text, 'Wrong result.')
+    call VUAssertEquals(10, results[1].lnum, 'Wrong line num.')
+    call VUAssertEquals(5, results[1].col, 'Wrong col num.')
+    call VUAssertEquals(
+      \ "List is a raw type. " .
+      \ "References to generic type List<E> should be parameterized",
+      \ results[1].text, 'Wrong result.')
+    call VUAssertEquals(10, results[2].lnum, 'Wrong line num.')
+    call VUAssertEquals(21, results[2].col, 'Wrong col num.')
+    call VUAssertEquals(
+      \ "ArrayList is a raw type. " .
+      \ "References to generic type ArrayList<E> should be parameterized",
+      \ results[2].text, 'Wrong result.')
+  finally
+    let g:EclimValidateSortResults = 'occurrence'
+  endtry
+
+  " test linked file
   edit! ../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
   write
   call PeekRedir()
