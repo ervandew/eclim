@@ -46,4 +46,8 @@ Vim Variables:
 - **g:EclimRubyValidate** (Default: 1) -
   If set to 0, disables source code validation.
 
+- **g:EclimValidateSortResults** (Default: 'occurrence') -
+  If set to 'severity', the validation results will be sorted by severity
+  (errors > warnings > info > etc.)
+
 .. _dltk: http://eclipse.org/dltk

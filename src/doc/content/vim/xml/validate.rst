@@ -48,3 +48,7 @@ Vim Variables
 
 - **g:EclimXmlValidate** (Defualt: 1) -
   If set to 0, disables xml validation when saving the file.
+
+- **g:EclimValidateSortResults** (Default: 'occurrence') -
+  If set to 'severity', the validation results will be sorted by severity
+  (errors > warnings > info > etc.)

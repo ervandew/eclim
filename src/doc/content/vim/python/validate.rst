@@ -62,5 +62,9 @@ Vim Variables
 - **g:EclimPythonValidate** (Default 1) -
   If set to 0, disables python validation when saving the file.
 
+- **g:EclimValidateSortResults** (Default: 'occurrence') -
+  If set to 'severity', the validation results will be sorted by severity
+  (errors > warnings > info > etc.)
+
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
 .. _pylint: http://www.logilab.org/857
