@@ -110,6 +110,8 @@
         <exclude name="backup/"/>
         <exclude name="build/**/*"/>
         <exclude name="build/"/>
+        <exclude name="src/patch/**/*"/>
+        <exclude name="src/patch/"/>
       </tarfileset>
     </tar>
   </target>
