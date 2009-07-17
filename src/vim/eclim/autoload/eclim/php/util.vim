@@ -49,7 +49,8 @@ function! eclim#php#util#UpdateSrcFile(validate)
       let result .= "\n" . eclim#ExecuteEclim(command)
 
       if result =~ '|'
-        let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+        let errors = eclim#util#ParseLocationEntries(
+          \ split(result, '\n'), g:EclimValidateSortResults)
         call eclim#util#SetLocationList(errors)
       else
         call eclim#util#ClearLocationList()

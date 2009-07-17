@@ -51,10 +51,11 @@ function! eclim#java#ivy#UpdateClasspath()
   let result = eclim#ExecuteEclim(command)
 
   if result =~ '|'
-    call eclim#util#SetLocationList
-      \ (eclim#util#ParseLocationEntries(split(result, '\n')), 'r')
-    call eclim#util#EchoError
-      \ ("Operation contained errors.  See location list for details (:lopen).")
+    let errors = eclim#util#ParseLocationEntries(
+      \ split(result, '\n'), g:EclimValidateSortResults)
+    call eclim#util#SetLocationList(errors, 'r')
+    call eclim#util#EchoError(
+      \ "Operation contained errors.  See location list for details (:lopen).")
   else
     call eclim#util#ClearLocationList()
   endif

@@ -655,38 +655,86 @@ function! eclim#util#ParseArgs(args)
   return args
 endfunction " }}}
 
-" ParseLocationEntries(entries) {{{
+" ParseLocationEntries(entries, [sort]) {{{
 " Parses the supplied list of location entry lines (%f|%l col %c|%m) into a
 " vim compatable list of dictionaries that can be passed to setqflist() or
 " setloclist().
 " In addition to the above line format, this function also supports
 " %f|%l col %c|%m|%s, where %s is the type of the entry.  The value will
 " be placed in the dictionary under the 'type' key.
-function! eclim#util#ParseLocationEntries(entries)
-  let entries = []
+" The optional 'sort' parameter currently only supports 'severity' as an
+" argument.
+function! eclim#util#ParseLocationEntries(entries, ...)
+  if len(a:000) > 0 && a:1 == 'severity'
+    let entries = {}
+  else
+    let entries = []
+  endif
 
   for entry in a:entries
-    let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
-    let line = substitute(entry, '.*|\([0-9]\+\) col.*', '\1', '')
-    let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
-    let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
-    let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
-    if type == entry
-      let type = ''
+    let dict = s:ParseLocationEntry(entry)
+
+    " partition by severity
+    if type(entries) == 4 " dictionary
+      " empty key not allowed
+      let type = dict.type == '' ? ' ' : tolower(dict.type)
+      if !has_key(entries, type)
+        let entries[type] = []
+      endif
+      call add(entries[type], dict)
+
+    " default sort
+    else
+      call add(entries, dict)
     endif
-
-    let dict = {
-        \ 'filename': eclim#util#Simplify(file),
-        \ 'lnum': line,
-        \ 'col': col,
-        \ 'text': message,
-        \ 'type': type
-      \ }
-
-    call add(entries, dict)
   endfor
 
+  " re-assemble severity partitioned results
+  if type(entries) == 4 " dictionary
+    let results = []
+    if has_key(entries, 'e')
+      let results += remove(entries, 'e')
+    endif
+    if has_key(entries, 'w')
+      let results += remove(entries, 'w')
+    endif
+    if has_key(entries, 'i')
+      let results += remove(entries, 'i')
+    endif
+    " should only be key '' (no type), but we don't want to accidentally
+    " filter out other possible types.
+    let keys = keys(entries)
+    call reverse(sort(keys))
+    for key in keys
+      let results += entries[key]
+    endfor
+    return results
+  endif
+
   return entries
+endfunction " }}}
+
+" s:ParseLocationEntry(entry) {{{
+function! s:ParseLocationEntry(entry)
+  let entry = a:entry
+  let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
+  let line = substitute(entry, '.*|\([0-9]\+\) col.*', '\1', '')
+  let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
+  let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
+  let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
+  if type == entry
+    let type = ''
+  endif
+
+  let dict = {
+      \ 'filename': eclim#util#Simplify(file),
+      \ 'lnum': line,
+      \ 'col': col,
+      \ 'text': message,
+      \ 'type': type
+    \ }
+
+  return dict
 endfunction " }}}
 
 " PromptList(prompt, list, highlight) {{{
@@ -844,7 +892,7 @@ function! eclim#util#ClearLocationList(...)
   call eclim#display#signs#Update()
 endfunction " }}}
 
-" SetQuickfixList(list, ...) {{{
+" SetQuickfixList(list, [action]) {{{
 " Sets the contents of the quickfix list.
 function! eclim#util#SetQuickfixList(list, ...)
   let qflist = a:list

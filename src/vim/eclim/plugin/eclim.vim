@@ -47,6 +47,10 @@ if !exists("g:EclimShowCurrentErrorBalloon")
   let g:EclimShowCurrentErrorBalloon = 1
 endif
 
+if !exists("g:EclimValidateSortResults")
+  let g:EclimValidateSortResults = 'occurrence'
+endif
+
 if !exists("g:EclimMakeLCD")
   let g:EclimMakeLCD = 1
 endif

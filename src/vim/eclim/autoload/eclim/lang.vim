@@ -211,7 +211,8 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
 
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'
-      let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+      let errors = eclim#util#ParseLocationEntries(
+        \ split(result, '\n'), g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)
     else
       call eclim#util#ClearLocationList()
@@ -240,7 +241,8 @@ function! eclim#lang#Validate(type, on_save)
 
   let result = eclim#ExecuteEclim(command)
   if result =~ '|'
-    let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+    let errors = eclim#util#ParseLocationEntries(
+      \ split(result, '\n'), g:EclimValidateSortResults)
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#ClearLocationList()

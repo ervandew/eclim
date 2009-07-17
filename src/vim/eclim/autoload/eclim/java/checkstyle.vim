@@ -52,7 +52,8 @@ function! eclim#java#checkstyle#Checkstyle()
 
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'
-      let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+      let errors = eclim#util#ParseLocationEntries(
+        \ split(result, '\n'), g:EclimValidateSortResults)
       for error in errors
         let error["text"] = "[checkstyle] " . error.text
       endfor

@@ -78,7 +78,8 @@ function! eclim#xml#validate#Validate(file, on_save, ...)
 
     let result = eclim#ExecuteEclim(command)
     if result =~ '|'
-      let errors = eclim#util#ParseLocationEntries(split(result, '\n'))
+      let errors = eclim#util#ParseLocationEntries(
+        \ split(result, '\n'), g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)
       " bang arg supplied, but no bang, so jump to first error.
       if len(a:000) > 0 && a:000[0] == ''
