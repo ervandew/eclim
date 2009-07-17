@@ -59,9 +59,12 @@ function! eclim#java#hierarchy#Hierarchy()
 
   set ft=java
   let b:hierarchy_info = info
+  call eclim#util#Echo(b:hierarchy_info[line('.') - 1])
+
   augroup eclim_java_hierarchy
     autocmd!
-    autocmd CursorHold <buffer> call eclim#util#Echo(b:hierarchy_info[line('.') - 1])
+    autocmd CursorMoved <buffer>
+      \ call eclim#util#Echo(b:hierarchy_info[line('.') - 1])
   augroup END
 
   noremap <buffer> <silent> <cr>
