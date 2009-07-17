@@ -34,6 +34,8 @@
 
   let s:bourne_shells = ['sh', 'bash', 'dash', 'ksh', 'zsh']
   let s:c_shells = ['csh', 'tcsh']
+
+  let s:show_current_error_displaying = 0
 " }}}
 
 " Abbreviate(lhs, abbreviation) {{{
@@ -77,8 +79,8 @@ endfunction " }}}
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
 " command to execute after other autocommands have finished.
-" Note: Nesting is not supported.  A delayed command cannot invoke off another
-" delayed command.
+" Note: Nesting is not supported.  A delayed command cannot be invoke off
+" another delayed command.
 function! eclim#util#DelayedCommand(command, ...)
   let uid = fnamemodify(tempname(), ':t:r')
   exec 'let g:eclim_updatetime_save' . uid . ' = &updatetime'
@@ -124,7 +126,7 @@ function! eclim#util#EchoFatal(message)
   call s:EchoLevel(a:message, 1, g:EclimFatalHighlight)
 endfunction " }}}
 
-" EchoLevel(message) {{{
+" s:EchoLevel(message) {{{
 " Echos the supplied message at the supplied level with the specified
 " highlight.
 function! s:EchoLevel(message, level, highlight)
@@ -136,10 +138,6 @@ function! s:EchoLevel(message, level, highlight)
       echom line
     endfor
     echohl None
-    " prevent ShowCurrentError from overriding the displayed message.
-    if a:message !~ '^\s*$'
-      let b:eclim_last_message_line = line('.')
-    endif
   endif
 endfunction " }}}
 
@@ -153,10 +151,6 @@ function! eclim#util#Echo(message)
       echom line
     endfor
     echohl None
-    " prevent ShowCurrentError from overriding the displayed message.
-    if a:message !~ '^\s*$'
-      let b:eclim_last_message_line = line('.')
-    endif
   endif
 endfunction " }}}
 
@@ -812,6 +806,9 @@ function! eclim#util#SetLocationList(list, ...)
   else
     call setloclist(0, loclist, a:1)
   endif
+  if g:EclimShowCurrentError && len(loclist) > 0
+    call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
+  endif
   call eclim#display#signs#Update()
 endfunction " }}}
 
@@ -873,29 +870,32 @@ function! eclim#util#SetQuickfixList(list, ...)
   else
     call setqflist(qflist, a:1)
   endif
+  if g:EclimShowCurrentError && len(qflist) > 0
+    call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
+  endif
   call eclim#display#signs#Update()
 endfunction " }}}
 
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError()
-  if !exists('b:eclim_last_message_line') || line('.') != b:eclim_last_message_line
-    let message = eclim#util#GetLineError(line('.'))
-    if message != ''
-      " remove any new lines
-      let message = substitute(message, '\n', ' ', 'g')
+  let message = eclim#util#GetLineError(line('.'))
+  if message != ''
+    " remove any new lines
+    let message = substitute(message, '\n', ' ', 'g')
 
-      if len(message) > (&columns - 1)
-        let message = strpart(message, 0, &columns - 4) . '...'
-      endif
-
-      call eclim#util#WideMessage('echo', message)
+    if len(message) > (&columns - 1)
+      let message = strpart(message, 0, &columns - 4) . '...'
     endif
+
     call eclim#util#WideMessage('echo', message)
+    let s:show_current_error_displaying = 1
   else
-    " reset the value so next time cursor on this line, the message will be
-    " shown.
-    let b:eclim_last_message_line = 0
+    " clear the message if one of our error messages was displaying
+    if s:show_current_error_displaying
+      call eclim#util#WideMessage('echo', message)
+      let s:show_current_error_displaying = 0
+    endif
   endif
 endfunction " }}}
 

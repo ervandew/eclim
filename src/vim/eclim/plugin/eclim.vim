@@ -147,7 +147,7 @@ endif
 if g:EclimShowCurrentError
   augroup eclim_show_error
     autocmd!
-    autocmd CursorHold * call eclim#util#ShowCurrentError()
+    autocmd CursorMoved * call eclim#util#ShowCurrentError()
   augroup END
 endif
 

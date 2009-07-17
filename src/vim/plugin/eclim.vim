@@ -84,8 +84,6 @@ function s:Validate()
   echohl Statement
   if len(errors) == 0
     echom "Result: OK, required settings are valid."
-    " prevent ShowCurrentError from overriding the displayed message.
-    let b:eclim_last_message_line = line('.')
   else
     for error in errors
       echom error
