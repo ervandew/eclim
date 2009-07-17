@@ -50,7 +50,10 @@ public class ProjectLinkResource
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
 
-    URI uri = new URI("file://" + file);
+    // can't use URLEncoder on the full file since the color in 'C:' gets
+    // encoded as well.
+    //URI uri = new URI("file://" + URLEncoder.encode(file, "UTF-8"));
+    URI uri = new URI("file://" + file.replaceAll(" ", "%20"));
     IFile[] files = ResourcesPlugin
       .getWorkspace().getRoot().findFilesForLocationURI(uri);
 
