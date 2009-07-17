@@ -16,6 +16,47 @@
 History of Changes
 ==================
 
+.. _1.5.1:
+
+1.5.1 (2009)
+----------------------
+
+Bug Fixes:
+  - Several minor bug fixes.
+
+Install:
+  - Installation on Mac OSX should hopefully work now without manually creating
+    a symlink to your eclipse executable.
+
+Eclipse:
+  - Fixed possible NPE when exiting or starting eclipse if a gvim tab was left
+    open.
+
+Eclim:
+  - Added initial support for linked folders in eclipse projects.
+  - Added new g:EclimValidateSortResults setting to support sorting
+    validation results (:ref:`java <vim/java/validate>`, :ref:`c/c++
+    <vim/c/validate>`, :ref:`php <vim/php/validate>`, etc.) by priority
+    (errors > warnings > etc.).
+
+C/C++:
+  - Fixed :CSearch results on Windows platforms.
+  - Re-implemented c/c++ project creation.
+
+    .. note::
+
+      If you created any c or c++ projects via eclim (as opposed to creating
+      the project via the eclipse project wizard), then you are strongly
+      encouraged to recreate those projects using the following steps:
+
+      1. Delete the project using ``:ProjectDelete project_name``
+      2. Remove the .cproject file at the root of your project.
+      3. Re-create the the project using
+         ``:ProjectCreate /project/path/ -n c`` (or cpp)
+
+      After that you will need to re-configure any src or include folders you
+      may have added.
+
 .. _1.5.0:
 
 1.5.0 (Jul. 12, 2009)
