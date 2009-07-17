@@ -454,6 +454,7 @@ function! eclim#util#GoToBufferWindow(buf)
   let winnr = type(a:buf) == 0 ? bufwinnr(a:buf) : bufwinnr(bufnr('^' . a:buf))
   if winnr != -1
     exec winnr . "winc w"
+    call eclim#util#DelayedCommand('doautocmd WinEnter')
     return 1
   endif
   return 0
@@ -466,6 +467,7 @@ function! eclim#util#GoToBufferWindowOrOpen(filename, cmd)
   let winnr = bufwinnr(bufnr('^' . a:filename))
   if winnr != -1
     exec winnr . "winc w"
+    call eclim#util#DelayedCommand('doautocmd WinEnter')
   else
     silent exec a:cmd . ' ' . eclim#util#Simplify(a:filename)
   endif
@@ -477,8 +479,7 @@ endfunction " }}}
 function! eclim#util#GoToBufferWindowRegister(bufname)
   exec 'autocmd BufWinLeave <buffer> ' .
     \ 'call eclim#util#GoToBufferWindow("' . escape(a:bufname, '\') . '") | ' .
-    \ 'doautocmd BufEnter | ' .
-    \ 'call eclim#util#DelayedCommand("doautocmd WinEnter")'
+    \ 'doautocmd BufEnter'
 endfunction " }}}
 
 " GrabUri([line, col]) {{{
