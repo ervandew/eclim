@@ -534,8 +534,8 @@ function! eclim#project#util#GetProjects(...)
   endif
 
   if len(a:000) == 1
-    let path = fnamemodify(a:000[0], ':p')
-    let dir = substitute(fnamemodify(path, ':h'), '\', '/', 'g')
+    let path = substitute(fnamemodify(a:000[0], ':p'), '\', '/', 'g')
+    let dir = fnamemodify(path, ':h')
     let pattern = '\(/\|$\)'
     if has('win32') || has('win64')
       let pattern .= '\c'
