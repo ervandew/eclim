@@ -108,6 +108,8 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - Vcs
+      - update :Vcs commands to only cache remote calls (move caching to svn
+        and cvs impls)
       - add
         :VcsStatus
           - temp window w/ list of files
@@ -115,7 +117,8 @@ TODO {{{
             - M shows the diff
             - A opens the file
             - R open last revision
-        :VcsOut (git equivalent? requires git fetch first)
+        :VcsOut (git equivalent? requires git fetch first, only if another user
+                 check in your changes)
           - open temp window w/ list of files grouped by changeset
           - try to have <enter> on a file open a diff of remote version vs local
             - A opens the file
@@ -125,6 +128,11 @@ TODO {{{
           - try to have <enter> on a file open a diff of remote version vs local
             - A try to cat the remote file
             - ... R files?
+        :VcsLogGrep (git)
+          - git: $ git log --grep=""
+        :VcsGrep (supported by hg and git)
+          - git: http://book.git-scm.com/4_finding_with_git_grep.html
+          - hg:  $ hg help grep
 
     - eclim console log
       - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
