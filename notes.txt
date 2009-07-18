@@ -202,6 +202,12 @@ TODO {{{
                   CCorePlugin.getDefault().getBuildEnvironmentManager();
                 IEnvironmentVariable[] vars = mngr.getVariables(cfgDes, true);
 
+    - completion outside of a project
+      - a user says eclipse supports this
+
+    - show function signature while typing parameters
+    - show function docs
+
     - http://www.eclipse.org/cdt/
       http://wiki.eclipse.org/index.php/CDT
       http://download.eclipse.org/tools/cdt/releases/ganymede/site.xml
@@ -257,6 +263,9 @@ TODO {{{
   }}}
 
   Java {{{
+    - get/set, construtor, etc. templates
+      - consider using the eclipse templates or giving the user that option
+
     - :Jps handle errors when opening jconsole
 
     - :JavaCorrect, need to get the eclipse apply version working (but probably
@@ -295,6 +304,16 @@ TODO {{{
         org.eclim.java.junit.engine=(eclipse|external)
 
     - :JavaImpl support anonymous classes.
+
+    - validation, look into grabbing additional message that eclipse displays that is not picked up by eclim
+      - Code:
+        List<String> hi = new ArrayList<String>();
+        hi[0];
+      - Messages:
+        1. not picked up by eclim: The type of the expression must be an array
+           type but it resolved to List<String>
+        2. picked up by eclim: Syntax error, insert "AssignmentOperator
+           Expression" to complete Expression"
 
     - For commands that spawn temp buffer, assign a b:currentfile var to the
       file that opened the buffer so that other commands can still be invoked
