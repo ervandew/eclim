@@ -83,14 +83,18 @@ endfunction " }}}
 " another delayed command.
 function! eclim#util#DelayedCommand(command, ...)
   let uid = fnamemodify(tempname(), ':t:r')
-  exec 'let g:eclim_updatetime_save' . uid . ' = &updatetime'
+  if &updatetime > 1
+    exec 'let g:eclim_updatetime_save' . uid . ' = &updatetime'
+  endif
   exec 'let g:eclim_delayed_command' . uid . ' = a:command'
   let &updatetime = len(a:000) ? a:000[0] : 1
   exec 'augroup delayed_command' . uid
     exec 'autocmd CursorHold * ' .
-      \ '  let &updatetime = g:eclim_updatetime_save' . uid . ' | ' .
+      \ '  if exists("g:eclim_updatetime_save' . uid . '") | ' .
+      \ '    let &updatetime = g:eclim_updatetime_save' . uid . ' | ' .
+      \ '    unlet g:eclim_updatetime_save' . uid . ' | ' .
+      \ '  endif | ' .
       \ '  exec g:eclim_delayed_command' . uid . ' | ' .
-      \ '  unlet g:eclim_updatetime_save' . uid . ' | ' .
       \ '  unlet g:eclim_delayed_command' . uid . ' | ' .
       \ '  autocmd! delayed_command' . uid
   exec 'augroup END'
