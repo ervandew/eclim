@@ -96,7 +96,10 @@ endfunction " }}}
 
 " s:DetermineClient() {{{
 function s:DetermineClient()
-  if has('python')
+  " at least one ubuntu user had serious performance issues using the python
+  " client, so we are only going to default to python on windows machines
+  " where there is an actual potential benefit to using it.
+  if has('python') && (has('win32') || has('win64'))
     let g:EclimNailgunClient = 'python'
   else
     let g:EclimNailgunClient = 'external'
