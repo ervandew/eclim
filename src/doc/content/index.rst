@@ -94,6 +94,15 @@ News
 ==================
 
 -----------
+2009-07-18
+-----------
+
+| **Eclim 1.5.1** is now available.
+| This is primarily a bug fix release
+
+You can view the :ref:`release notes <1.5.1>` for more info.
+
+-----------
 2009-07-12
 -----------
 
