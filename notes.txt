@@ -452,10 +452,8 @@ TODO {{{
   }}}
 
   Ruby {{{
-    - http://www.eclipse.org/dltk/ dltk
-    - http://rubyeclipse.sourceforge.net/ rubyeclipse
-    - http://www.radrails.org/ rad rails
-    - jruby?
+    - ruby interpreter
+      - add command to set default interpreter
   }}}
 
   Scala {{{
