@@ -130,7 +130,6 @@ function! s:Search(command, ...)
   " pattern search
   else
     let project = eclim#project#util#GetCurrentProjectName()
-    let filename = eclim#java#util#GetFilename()
 
     " pattern search
     let search_cmd = s:search_pattern
@@ -138,7 +137,10 @@ function! s:Search(command, ...)
     if project != ''
       let search_cmd .= ' -n "' . project . '"'
     endif
-    let search_cmd .= ' -f "' . filename . '"'
+    let filename = eclim#java#util#GetFilename()
+    if filename != ''
+      let search_cmd .= ' -f "' . filename . '"'
+    endif
     let search_cmd .= ' ' . argline
     " quote the search pattern
     let search_cmd =
