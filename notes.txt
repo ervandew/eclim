@@ -601,17 +601,6 @@ NOTES {{{
           excluding="**/*.swp|**/*.tmp"
   }}}
 
-  Benchmarks {{{
-    Trivial memory benchmark of vanilla eclipse vs eclim headless eclipse.
-    1) start the application
-    2) open and save org.eclim.Service
-    2) open and save build.xml
-
-             Virtual  Resident  Shared  (in megs)
-    eclim    360      132       54
-    eclipse  500      143       59
-  }}}
-
   Potential Contributors {{{
     Anton Sharonov (haron13)
       - good work with :JavaFormat and headed eclim view contributions
@@ -649,18 +638,22 @@ NOTES {{{
 
   }}}
 
-  Sourceforget shell access:
-  ssh -t USER,PROJECT@shell.sourceforge.net create
+  Misc {{{
 
-  Git repos for vim:
-  http://repo.or.cz/w/vim_mainline.git
+    Sourceforget shell access:
+    ssh -t USER,PROJECT@shell.sourceforge.net create
 
-  Generate list of all command names:
-    $ ack --java -hA 1 "@Command" | grep "name =" | sed 's/.*name = "\(\w\+\)".*/\1/' | sort
+    Git repos for vim:
+    http://repo.or.cz/w/vim_mainline.git
 
-  Running in true headless environment:
-  http://en.wikipedia.org/wiki/Xvfb
-    - Xvfb is included with xorg-server
+    Generate list of all command names:
+      $ ack --java -hA 1 "@Command" | grep "name =" | sed 's/.*name = "\(\w\+\)".*/\1/' | sort
+
+    Running in true headless environment:
+    http://en.wikipedia.org/wiki/Xvfb
+      - Xvfb is included with xorg-server
+
+  }}}
 
 }}}
 
