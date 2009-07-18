@@ -233,18 +233,6 @@ Xsd 指令集
 - :ref:`:VcsAnnotate` - 使用 vim 簽名對目前版本檔案作注釋.
 
 
-網際網路搜尋指令集
-------------------
-
-- :ref:`:OpenUrl` [超連結] - 以定義好的瀏覽器開啟超連結.
-- :ref:`:Google` [關鍵字 ...] - 在 Google 搜尋關鍵字.
-- :ref:`:Clusty` [關鍵字 ...] - 在 Clusty 搜尋關鍵字.
-- :ref:`:Wikipedia` [關鍵字 ...] - 在 wikipedia 搜尋關鍵字.
-- :ref:`:Dictionary` [word] -
-  在 dictionary.reference.com 尋找字典內容.
-- :ref:`:Thesaurus` [word] - 在 thesaurus.reference.com 尋找內容.
-
-
 其他指令集
 --------------
 
@@ -275,5 +263,6 @@ Xsd 指令集
 - :ref:`:SignClearAll` - 移除所有 vim 簽名
 - :ref:`:QuickFixClear` - 移除所有 QuickFix 視窗的連接點.
 - :ref:`:LocationListClear` - 移除所有在位置視窗的連接點.
+- :ref:`:OpenUrl` [超連結] - 以定義好的瀏覽器開啟超連結.
 
 .. vim:fileencoding=utf-8:encoding=utf-8
