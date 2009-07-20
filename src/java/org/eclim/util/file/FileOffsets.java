@@ -16,6 +16,7 @@
  */
 package org.eclim.util.file;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
@@ -51,19 +52,6 @@ public class FileOffsets
    */
   public static FileOffsets compile(String filename)
   {
-    FileOffsets offsets = new FileOffsets();
-    offsets.compileOffsets(filename);
-    return offsets;
-  }
-
-  /**
-   * Reads the supplied file and compiles a list of offsets.
-   *
-   * @param filename The file to compile a list of offsets for.
-   */
-  private void compileOffsets(String filename)
-  {
-    BufferedReader reader = null;
     try{
       FileSystemManager fsManager = VFS.getManager();
       FileObject file = fsManager.resolveFile(filename);
@@ -76,8 +64,35 @@ public class FileOffsets
         throw new IllegalArgumentException(
             Services.getMessage("file.not.found", filename));
       }
-      reader = new BufferedReader(
-          new InputStreamReader(file.getContent().getInputStream()));
+      return compile(file.getContent().getInputStream());
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Reads the supplied input stream and compiles a list of offsets.
+   *
+   * @param in The InputStream to compile a list of offsets for.
+   * @return The FileOffsets instance.
+   */
+  public static FileOffsets compile(InputStream in)
+  {
+    FileOffsets offsets = new FileOffsets();
+    offsets.compileOffsets(in);
+    return offsets;
+  }
+
+  /**
+   * Reads the supplied input stream and compiles a list of offsets.
+   *
+   * @param in The InputStream to compile a list of offsets for.
+   */
+  private void compileOffsets(InputStream in)
+  {
+    BufferedReader reader = null;
+    try{
+      reader = new BufferedReader(new InputStreamReader(in));
 
       ArrayList<Integer> lines = new ArrayList<Integer>();
       lines.add(new Integer(0));

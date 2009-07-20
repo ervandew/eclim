@@ -19,6 +19,7 @@ package org.eclim.util.file;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import java.util.Enumeration;
 
@@ -63,20 +64,38 @@ public class FileUtils
       String filename, int byteOffset, String encoding)
     throws Exception
   {
+    return byteOffsetToCharOffset(
+        new FileInputStream(filename), byteOffset, encoding);
+  }
+
+  /**
+   * Converts the supplied byte offset in the specified file to the
+   * corresponding char offset for that file using the supplied file encoding.
+   *
+   * @param in InputStream for the file contents.
+   * @param byteOffset The byte offset to be converted.
+   * @param encoding The encoding of the file.  If null, defaults to utf-8.
+   *
+   * @return The char offset.
+   */
+  public static int byteOffsetToCharOffset(
+      InputStream in, int byteOffset, String encoding)
+    throws Exception
+  {
     if (encoding == null){
       encoding = UTF8;
     }
 
-    BufferedInputStream in = null;
+    BufferedInputStream bin = null;
     try{
       byte[] bytes = new byte[byteOffset];
-      in = new BufferedInputStream(new FileInputStream(filename));
-      in.read(bytes, 0, bytes.length);
+      bin = new BufferedInputStream(in);
+      bin.read(bytes, 0, bytes.length);
       String value = new String(bytes, encoding);
 
       return value.length();
     }finally{
-      IOUtils.closeQuietly(in);
+      IOUtils.closeQuietly(bin);
     }
   }
 
@@ -92,6 +111,21 @@ public class FileUtils
     throws Exception
   {
     FileOffsets offsets = FileOffsets.compile(filename);
+    return offsets.offsetToLineColumn(offset);
+  }
+
+  /**
+   * Converts the supplied char offset into an int array where the first element
+   * is the line number and the second is the column number.
+   *
+   * @param in The InputStream to compile a list of offsets for.
+   * @param offset The offset.
+   * @return The line and column int array.
+   */
+  public static int[] offsetToLineColumn(InputStream in, int offset)
+    throws Exception
+  {
+    FileOffsets offsets = FileOffsets.compile(in);
     return offsets.offsetToLineColumn(offset);
   }
 
