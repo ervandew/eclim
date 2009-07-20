@@ -10,6 +10,7 @@
  */
 package org.vimplugin.editors;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +21,8 @@ import java.lang.reflect.Field;
 import java.net.URI;
 
 import org.eclim.logging.Logger;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -34,7 +37,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import org.eclipse.jface.preference.PreferenceDialog;
 
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
 import org.eclipse.swt.SWT;
@@ -622,9 +624,7 @@ public class VimEditor
   }
 
   /**
-   * Inserts text into document FIXME Not working properly.. both
-   * insertDocument and removeDocument have some implementation problems..
-   * TODO: More details please?
+   * Inserts text into document.
    *
    * @param text The text to insert.
    * @param offset The offset to insert it at.
@@ -635,19 +635,23 @@ public class VimEditor
     //System.out.println(text + " INSERT " + offset);
 
     try {
-      String first = document.get(0, offset);
-      String last = document.get(offset, document.getLength() - offset);
+      String contents = document.get();
+      // FIXME: determine file encoding.
+      offset = FileUtils.byteOffsetToCharOffset(
+          new ByteArrayInputStream(contents.getBytes()), offset, null);
+      String first = contents.substring(0, offset);
+      String last = contents.substring(offset);
       if (text.equals(new String("\\n"))) {
         //System.out.println("Insert new Line");
         first = first + System.getProperty("line.separator") + last;
-      } else
+      } else {
         first = first + text + last;
+      }
       document.set(first);
       setDirty(true);
-      //System.out.println(first);
-    } catch (BadLocationException e) {
+    } catch(Exception e) {
       VimPlugin plugin = VimPlugin.getDefault();
-      message(plugin.getMessage("document.insert.failed"), e);
+      logger.error(plugin.getMessage("document.insert.failed"), e);
     }
   }
 
@@ -658,18 +662,22 @@ public class VimEditor
    * @param length The amount of text to remove.
    */
   public void removeDocumentText(int offset, int length) {
-    //System.out.println(offset + " REMOVE " + length);
     try {
-      String first = document.get(0, offset);
-      String last = document.get(offset + length, document.getLength()
-          - offset - length);
+      String contents = document.get();
+      // FIXME: determine file encoding.
+      int loffset = FileUtils.byteOffsetToCharOffset(
+          new ByteArrayInputStream(contents.getBytes()), offset + length, null);
+      offset = FileUtils.byteOffsetToCharOffset(
+          new ByteArrayInputStream(contents.getBytes()), offset, null);
+      length = loffset - offset;
+      String first = contents.substring(0, offset);
+      String last = contents.substring(offset + length);
       first = first + last;
-      //System.out.println(first);
       document.set(first);
       setDirty(true);
-    } catch (BadLocationException e) {
+    } catch(Exception e) {
       VimPlugin plugin = VimPlugin.getDefault();
-      message(plugin.getMessage("document.remove.failed"), e);
+      logger.error(plugin.getMessage("document.remove.failed"), e);
     }
   }
 

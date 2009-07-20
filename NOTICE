@@ -33,6 +33,8 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - When a file is saved in gvim, notify eclipse of the save.
   - Fixed netbeans "function" calls to work properly.
   - Fixed cursor location restoration when re-focusing gvim editor.
+  - Fixed insert/remove text on internal document to handle disjunct between
+    vim byte offsets and java character offsets.
   - Added support for feeding keys from gvim to eclipse to support user mapped
     eclipse shortcuts inside of gvim.
   - Fixed possible key binding conflicts between eclipse and gvim when an
