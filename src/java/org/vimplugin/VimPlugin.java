@@ -247,9 +247,13 @@ public class VimPlugin
     super.stop(context);
     plugin = null;
 
-    IWorkbench workbench = PlatformUI.getWorkbench();
-    workbench.getActiveWorkbenchWindow()
-      .getActivePage().removePartListener(partListener);
+    if (PlatformUI.isWorkbenchRunning()){
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      if (workbench != null){
+        workbench.getActiveWorkbenchWindow()
+          .getActivePage().removePartListener(partListener);
+      }
+    }
   }
 
   /**
