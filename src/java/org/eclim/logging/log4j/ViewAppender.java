@@ -77,15 +77,17 @@ public class ViewAppender
 
   private void write(Text log, LoggingEvent event)
   {
-    log.append(layout.format(event));
+    if (!log.isDisposed()){
+      log.append(layout.format(event));
 
-    if(layout.ignoresThrowable()) {
-      String[] s = event.getThrowableStrRep();
-      if (s != null) {
-        int len = s.length;
-        for(int i = 0; i < len; i++) {
-          log.append(s[i]);
-          log.append(Layout.LINE_SEP);
+      if(layout.ignoresThrowable()) {
+        String[] s = event.getThrowableStrRep();
+        if (s != null) {
+          int len = s.length;
+          for(int i = 0; i < len; i++) {
+            log.append(s[i]);
+            log.append(Layout.LINE_SEP);
+          }
         }
       }
     }
