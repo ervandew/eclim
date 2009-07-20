@@ -193,9 +193,10 @@ endif
 
 if has('netbeans_intg')
   augroup eclim_vimplugin
-    " autocommand used to work around the fact that the "unmodified" event
-    " in vim's netbean support is commentted out for some reason.
+    " autocommands used to work around the fact that the "unmodified" event in
+    " vim's netbean support is commentted out for some reason.
     autocmd BufWritePost * call eclim#vimplugin#BufferWritten()
+    autocmd CursorHold * call eclim#vimplugin#BufferUnmodified()
   augroup END
 endif
 " }}}

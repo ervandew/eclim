@@ -27,7 +27,26 @@
 " the save.
 function eclim#vimplugin#BufferWritten()
   if has('netbeans_enabled')
+    unlet b:eclim_file_modified
     nbkey unmodified
+  endif
+endfunction " }}}
+
+" BufferUnmodified() {{{
+" Invoked on cursor hold to check if a previously modified buffer is now
+" unmodified, so that eclipse can be notified.
+function eclim#vimplugin#BufferUnmodified()
+  if has('netbeans_enabled')
+    if !exists('b:eclim_file_modified')
+      let b:eclim_file_modified = &modified
+    endif
+
+    if !&modified && b:eclim_file_modified
+      unlet b:eclim_file_modified
+      nbkey unmodified
+    else
+      let b:eclim_file_modified = &modified
+    endif
   endif
 endfunction " }}}
 
