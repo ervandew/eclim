@@ -12,6 +12,7 @@ package org.vimplugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
@@ -92,7 +93,6 @@ public class VimConnection implements Runnable
     port = VimPlugin.getDefault().getPreferenceStore().getInt(
         PreferenceConstants.P_PORT);
     vimID = instanceID;
-
   }
 
   /**
@@ -260,6 +260,36 @@ public class VimConnection implements Runnable
   public void plain(String s) {
     logger.debug("plain: " + s);
     out.println(s);
+  }
+
+  /**
+   * Executes a --remote-send to the gvim instance.
+   *
+   * @param s The string to supply to the remote-send call.
+   */
+  public void remotesend(String s) {
+    String[] args = {
+      "vim", "--servername", String.valueOf(vimID), "--remote-send", s
+    };
+    try {
+      logger.debug("remote-send: " + s);
+      Process process = new ProcessBuilder(args).start();
+
+      InputStream is = process.getInputStream();
+      InputStreamReader isr = new InputStreamReader(is);
+      BufferedReader br = new BufferedReader(isr);
+      String line;
+      while ((line = br.readLine()) != null) {
+        logger.debug(line);
+      }
+      process.waitFor();
+
+      logger.debug("result: " + process.exitValue());
+    } catch (IOException ioe) {
+      logger.error("Error sending command.", ioe);
+    } catch (InterruptedException ie) {
+      logger.error("Error sending command.", ie);
+    }
   }
 
   /**

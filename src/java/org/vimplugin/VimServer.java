@@ -138,12 +138,14 @@ public class VimServer
     String[] addopts = getUserArgs();
 
     // build args-array (dynamic size due to addopts.split)
-    String[] args = new String[5 + addopts.length];
+    String[] args = new String[7 + addopts.length];
     args[0] = gvim;
     args[1] = netbeans;
     args[2] = dontfork;
     args[3] = socketid;
     args[4] = stringwid;
+    args[5] = "--servername";
+    args[6] = String.valueOf(ID);
 
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 5, addopts.length);
