@@ -20,6 +20,9 @@ TODO {{{
 
     - Ubuntu Hardy (command completion may cause segfault)
       - https://bugs.launchpad.net/ubuntu/+source/vim/+bug/219546
+
+    - vrapper patch to prevent error when vimplugin editor is opened.
+      - https://sourceforge.net/apps/trac/vrapper/ticket/30
   }}}
 
   Tests {{{
