@@ -35,6 +35,8 @@ vimplugin (http://vimplugin.org) with changes including, but not limited to:
   - Fixed cursor location restoration when re-focusing gvim editor.
   - Fixed insert/remove text on internal document to handle disjunct between
     vim byte offsets and java character offsets.
+  - Added an ISourceViewer implementation allowing more eclipse features to act
+    upon the gvim editor.
   - Added support for feeding keys from gvim to eclipse to support user mapped
     eclipse shortcuts inside of gvim.
   - Fixed possible key binding conflicts between eclipse and gvim when an

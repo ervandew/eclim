@@ -48,6 +48,7 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -64,6 +65,7 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import org.vimplugin.DisplayUtils;
@@ -85,22 +87,19 @@ public class VimEditor
     "org.eclim.eclipse.headed.EclimdView";
 
   /** ID of the VimServer. */
-  protected int serverID;
+  private int serverID;
 
   /** Buffer ID in Vim instance. */
   private int bufferID;
 
-  protected Canvas editorGUI;
-
-  protected IDocument document;
-
-  protected VimDocumentProvider documentProvider;
-
-  protected boolean dirty;
-
-  protected boolean alreadyClosed = false;
-
+  private Canvas editorGUI;
   private IFile selectedFile;
+  private IDocument document;
+  private VimViewer viewer;
+  private VimDocumentProvider documentProvider;
+
+  private boolean dirty;
+  private boolean alreadyClosed = false;
 
   private Composite parent;
 
@@ -139,11 +138,11 @@ public class VimEditor
   @Override
   public void createPartControl(Composite parent) {
     this.parent = parent;
+    this.shell = parent.getShell();
 
     VimPlugin plugin = VimPlugin.getDefault();
 
     if (!plugin.gvimAvailable()) {
-      shell = parent.getShell();
       MessageDialog dialog = new MessageDialog(
           shell, "Vimplugin", null,
           plugin.getMessage("gvim.not.found.dialog"),
@@ -189,11 +188,6 @@ public class VimEditor
     alreadyClosed = false;
     dirty = false;
 
-    // nice background (only needed for external)
-    editorGUI = new Canvas(parent, SWT.EMBEDDED);
-    Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
-    editorGUI.setBackground(color);
-
     String projectPath = null;
     String filePath = null;
     IEditorInput input = getEditorInput();
@@ -220,6 +214,11 @@ public class VimEditor
     }
 
     if (filePath != null){
+      // nice background (only needed for external)
+      editorGUI = new Canvas(parent, SWT.EMBEDDED);
+      Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
+      editorGUI.setBackground(color);
+
       //create a vim instance
       createVim(projectPath, editorGUI);
 
@@ -232,6 +231,18 @@ public class VimEditor
       VimConnection vc = VimPlugin.getDefault().getVimserver(serverID).getVc();
       vc.command(bufferID, "editFile", "\"" + filePath + "\"");
       vc.command(bufferID, "startDocumentListen", "");
+
+      viewer = new VimViewer(bufferID, vc, editorGUI, SWT.EMBEDDED);
+      viewer.setDocument(document);
+      viewer.setEditable(isEditable());
+      try{
+        Field fSourceViewer =
+          AbstractTextEditor.class.getDeclaredField("fSourceViewer");
+        fSourceViewer.setAccessible(true);
+        fSourceViewer.set(this, viewer);
+      }catch(Exception e){
+        logger.error("Unable to access source viewer field.", e);
+      }
 
       // open eclimd view if necessary
       boolean startEclimd = plugin.getPreferenceStore()
@@ -305,15 +316,13 @@ public class VimEditor
   {
     long wid = 0;
 
-    Class<?> c = parent.getClass();
     Field f = null;
-
     if (Platform.getOS().equals(Platform.OS_LINUX)) {
-      f = c.getField(VimEditor.linuxWID);
+      f = Composite.class.getField(VimEditor.linuxWID);
     } else if (Platform.getOS().equals(Platform.OS_WIN32)) {
-      f = c.getField(VimEditor.win32WID);
+      f = Control.class.getField(VimEditor.win32WID);
     } else {
-      f = c.getField(VimEditor.win32WID);
+      f = Control.class.getField(VimEditor.win32WID);
     }
 
     wid = f.getLong(parent);
@@ -357,6 +366,11 @@ public class VimEditor
     // Note: this close raises NPE if gvim is not available. why is it
     // needed?
     close(true);
+
+    if (viewer != null) {
+      viewer.getTextWidget().dispose();
+      viewer = null;
+    }
 
     if (editorGUI != null) {
       editorGUI.dispose();
@@ -534,7 +548,7 @@ public class VimEditor
     VimConnection conn = plugin.getVimserver(serverID).getVc();
 
     // get the current offset which "setDot" requires.
-    String offset = "0";
+    //String offset = "0";
     try{
       String cursor = conn.function(bufferID, "getCursor", "");
       if (cursor == null){
@@ -547,7 +561,7 @@ public class VimEditor
       logger.error("Unable to get cursor position.", ioe);
     }
     // Brings the corresponding buffer to top
-    conn.command(bufferID, "setDot", offset);
+    //conn.command(bufferID, "setDot", offset);
     // Brings the vim editor window to top
     conn.command(bufferID, "raise", "");
 
@@ -743,9 +757,5 @@ public class VimEditor
     }
 
     MessageDialog.openError(shell, "Vimplugin", message + stacktrace);
-  }
-
-  private void message(String s) {
-    MessageDialog.openError(shell, "Vimplugin", s);
   }
 }
