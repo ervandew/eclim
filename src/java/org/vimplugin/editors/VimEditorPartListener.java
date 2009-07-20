@@ -20,6 +20,8 @@ import org.eclim.logging.Logger;
 
 import org.eclipse.core.commands.CommandManager;
 
+import org.eclipse.core.commands.common.NotDefinedException;
+
 import org.eclipse.core.commands.contexts.ContextManager;
 
 import org.eclipse.jface.bindings.Binding;
@@ -79,7 +81,11 @@ public class VimEditorPartListener
     Scheme scheme = bindingService.getScheme(
         IBindingService.DEFAULT_DEFAULT_ACTIVE_SCHEME_ID);
     try{
-      localChangeManager.setActiveScheme(scheme);
+      try{
+        localChangeManager.setActiveScheme(scheme);
+      }catch(NotDefinedException nde){
+        // KeysPreferencePage ignores this error as well... hmmm
+      }
       localChangeManager.setLocale(bindingService.getLocale());
       localChangeManager.setPlatform(bindingService.getPlatform());
       localChangeManager.setBindings(bindingService.getBindings());
