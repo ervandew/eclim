@@ -346,6 +346,7 @@ public class VimPlugin
       .getString(PreferenceConstants.P_GVIM);
     try{
       File tempFile = File.createTempFile("eclim_gvim", null);
+      tempFile.deleteOnExit();
       command = GVIM_FEATURE_TEST.replaceFirst("<command>", command);
       command = command.replaceFirst("<file>",
           tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
@@ -370,6 +371,12 @@ public class VimPlugin
         logger.error("Unable to read temp file.", ioe);
         IOUtils.closeQuietly(in);
         return false;
+      }finally{
+        IOUtils.closeQuietly(in);
+        try{
+          tempFile.delete();
+        }catch(Exception ignore){
+        }
       }
     }catch(Exception e){
       logger.error("Unable to execute gvim.", e);
