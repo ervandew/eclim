@@ -22,9 +22,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.regex.Pattern;
@@ -549,6 +551,10 @@ public class XmlUtils
     private String path;
     private String lastPath;
 
+    // cache missing sources to avoiding hitting the same url repeatedly
+    private HashMap<String,IOException> missingSources =
+      new HashMap<String,IOException>();
+
     /**
      * Constructs a new instance.
      *
@@ -575,6 +581,10 @@ public class XmlUtils
         location = location.substring(TEMP_PREFIX.length());
         return resolveEntity(publicId, lastPath + location);
       }else if(location.startsWith("http://")){
+        if (missingSources.containsKey(systemId)){
+          throw missingSources.get(systemId);
+        }
+
         int index = location.indexOf('/', 8);
         lastPath = location.substring(0, index + 1);
         location = location.substring(index);
@@ -595,7 +605,11 @@ public class XmlUtils
 
             // download and save remote file.
             URL remote = new URL(systemId);
-            in = remote.openStream();
+            URLConnection conn = remote.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
+            conn.connect();
+            in = conn.getInputStream();
             out = tempFile.getContent().getOutputStream();
             IOUtils.copy(in, out);
           }catch(Exception e){
@@ -607,6 +621,7 @@ public class XmlUtils
 
             IOException ex = new IOException(e.getMessage());
             ex.initCause(e);
+            missingSources.put(systemId, ex);
             throw ex;
           }finally{
             IOUtils.closeQuietly(in);
@@ -614,8 +629,8 @@ public class XmlUtils
           }
         }
 
-        InputSource source =  new InputSource(
-            tempFile.getContent().getInputStream());
+        InputSource source =
+          new InputSource(tempFile.getContent().getInputStream());
         source.setSystemId(location);
         return source;
 
