@@ -454,6 +454,9 @@ TODO {{{
   }}}
 
   Python {{{
+    - rope + python completion improvements to watch
+      http://groups.google.com/group/rope-dev/browse_thread/thread/f33ce5855e2fe5bf?hl=en
+
     - look into using pyflakes fork, and possibly including it in vim like rope
       http://github.com/kevinw/pyflakes/tree/master
 
