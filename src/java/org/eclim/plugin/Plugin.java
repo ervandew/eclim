@@ -61,6 +61,7 @@ public class Plugin
   public void start(BundleContext context)
     throws Exception
   {
+    logger.debug("enter: start - " + context.getBundle().getSymbolicName());
     super.start(context);
 
     // start is called at startup regardless of whether Bundle-ActivationPolicy
@@ -79,9 +80,14 @@ public class Plugin
    */
   public void activate(BundleContext context)
   {
+    logger.debug("enter: activate - " + context.getBundle().getSymbolicName());
+
     // handle case where eclipse starts this bundle from some saved state.
     AbstractEclimApplication app = AbstractEclimApplication.getInstance();
     if (app == null){
+      logger.debug(
+          "eclim app not found, stopping bundle: " +
+          context.getBundle().getSymbolicName());
       try{
         this.getBundle().stop();
       }catch(Exception e){
@@ -187,10 +193,36 @@ public class Plugin
   public void bundleChanged(BundleEvent event)
   {
     Bundle bundle = event.getBundle();
-    if (bundle.getState() == Bundle.ACTIVE &&
-        this.getBundle().getSymbolicName().equals(bundle.getSymbolicName()))
-    {
-      this.activate(bundle.getBundleContext());
+    if (this.getBundle().getSymbolicName().equals(bundle.getSymbolicName())){
+      if (logger.isDebugEnabled()){
+        String state = "unknown";
+        switch(bundle.getState()){
+          case Bundle.ACTIVE:
+            state = "active";
+            break;
+          case Bundle.INSTALLED:
+            state = "installed";
+            break;
+          case Bundle.RESOLVED:
+            state = "resolved";
+            break;
+          case Bundle.STARTING:
+            state = "starting";
+            break;
+          case Bundle.STOPPING:
+            state = "starting";
+            break;
+          case Bundle.UNINSTALLED:
+            state = "starting";
+            break;
+        }
+        logger.debug(
+            "bundleChanged: " + state + " - " + bundle.getSymbolicName());
+      }
+
+      if (bundle.getState() == Bundle.ACTIVE) {
+        this.activate(bundle.getBundleContext());
+      }
     }
   }
 }

@@ -33,6 +33,8 @@ import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.file.FileUtils;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
@@ -68,6 +70,15 @@ public abstract class AbstractEclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
+    if (logger.isDebugEnabled()){
+      try{
+        String workspace = ResourcesPlugin
+          .getWorkspace().getRoot().getRawLocation().toOSString();
+        logger.debug("workspace: " + workspace);
+      }catch(Exception ignore){
+      }
+    }
+
     starting = true;
     logger.info("Starting eclim...");
     instance = this;
@@ -218,8 +229,6 @@ public abstract class AbstractEclimApplication
     // wait up to 10 seconds for bundles to activate.
     wait(10000);
 
-    logger.info("Loaded plugin org.eclim.core");
-
     return true;
   }
 
@@ -260,6 +269,7 @@ public abstract class AbstractEclimApplication
     if (event.getType() == FrameworkEvent.INFO &&
         CORE.equals(bundle.getSymbolicName()))
     {
+      logger.info("Loaded plugin org.eclim.core");
       notify();
     }
   }
