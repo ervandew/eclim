@@ -152,7 +152,7 @@ public class JavaUtils
   }
 
   /**
-   * Finds a compilation unit by looking in all the java project of the supplied
+   * Finds a compilation unit by looking in the java project of the supplied
    * name.
    *
    * @param project The name of the project to locate the file in.
@@ -622,7 +622,7 @@ public class JavaUtils
      *
      * @param ids Array of problem ids to accept.
      */
-    public ProblemRequestor (int[] ids)
+    public ProblemRequestor(int[] ids)
     {
       this.ids = ids;
     }
