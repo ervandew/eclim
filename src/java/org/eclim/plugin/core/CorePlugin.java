@@ -68,10 +68,10 @@ public class CorePlugin
     String[] pluginDirs = new File(pluginsDir).list(new FilenameFilter(){
       public boolean accept(File dir, String name)
       {
-        if(name.startsWith("org.eclim.") &&
-          name.indexOf("core") == -1 &&
-          name.indexOf("installer") == -1 &&
-          name.indexOf("vimplugin") == -1){
+        if (name.startsWith("org.eclim.") &&
+            name.indexOf("core") == -1 &&
+            name.indexOf("installer") == -1 &&
+            name.indexOf("vimplugin") == -1){
           return true;
         }
         return false;
