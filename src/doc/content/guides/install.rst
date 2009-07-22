@@ -84,9 +84,31 @@ Step 2: Run the installer.
     $ chmod 755 eclim_version.sh
     $ ./eclim_version.sh
 
+  If you are behind a proxy, you may need to run the installer like so (be sure
+  to take a look at the related :ref:`faq <eclim_proxy>` as well):
+
+  .. code-block:: bash
+
+    $ FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080" ./eclim_version.sh
+
+  If your proxy requires authentication, you'll need to supply the
+  ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+
 - **Windows:**
   On Windows systems, simply double click the eclim_version.exe file you
   downloaded.
+
+  If you are behind a proxy, you may need to run the installer from a dos
+  prompt like so (be sure to take a look at the related
+  :ref:`faq <eclim_proxy>` as well):
+
+  .. code-block:: bash
+
+    C:\...> set FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080"
+    C:\...> eclim_version.exe
+
+  If your proxy requires authentication, you'll need to supply the
+  ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.

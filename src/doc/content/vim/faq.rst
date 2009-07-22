@@ -89,6 +89,9 @@ directory.
 
     $ echo -e "http.proxyHost=my.proxy\nhttp.proxyPort=8080" >> ~/.eclimrc
 
+If your proxy requires authentication, you'll need to supply the
+``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+
 On Windows systems you can use the same steps described above, for setting
 the workspace location, to also set the proxy settings.
 
