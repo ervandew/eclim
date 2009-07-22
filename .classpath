@@ -65,6 +65,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.css.ui_1.0.400.v200904292008.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.dtd.core_1.1.300.v200904181727.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.html.ui_1.0.400.v200904292008.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.jsdt.core_1.0.200.v200905201910.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.validation_1.2.102.v200905201610.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.wsdl.validation_1.1.401.v200902271605.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.core_1.1.400.v200904300540.jar"/>
@@ -77,7 +78,7 @@
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/looks-2.1.4.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/miglayout-3.5.0.jar"/>
-  <classpathentry kind="output" path="build"/>
+  <classpathentry kind="output" path="build/bin"/>
   <classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" path="src/installer/java"/>
   <classpathentry kind="src" path="src/test/junit"/>
