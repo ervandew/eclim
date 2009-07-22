@@ -25,6 +25,9 @@ you've discovered a possible bug.
 Below are a series of sections broken up by the behavior (or lack of)
 experienced and the steps for diagnosing the cause of that behavior.
 
+If you can't find the answer to your question here, be sure to take a look at
+the :ref:`faq <vim/faq>` to see if your question is answered there.
+
 
 .. _ts_workspace:
 
@@ -33,7 +36,7 @@ Eclim does not recognize any of my existing projects.
 
 A fairly common occurrence for users new to eclim, is that after starting
 eclimd and then attempting to execute some project dependent functionality,
-and the functionality appears to do nothing or eclim complains that the project
+the functionality appears to do nothing or eclim complains that the project
 could not be determined.  If you have existing projects created in eclipse and
 eclim is not finding them, then the likely cause is that your projects are
 located in a non-default workspace location.
