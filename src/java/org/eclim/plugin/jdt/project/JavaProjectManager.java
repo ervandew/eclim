@@ -64,6 +64,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 
+import org.eclipse.jdt.internal.core.JavaProject;
+
 import org.eclipse.jdt.internal.ui.wizards.ClassPathDetector;
 
 import org.eclipse.jdt.launching.JavaRuntime;
@@ -170,6 +172,7 @@ public class JavaProjectManager
     throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);
+    ((JavaProject)javaProject).configure();
 
     if (!project.getFile(CLASSPATH).exists()) {
       ClassPathDetector detector = new ClassPathDetector(project, null);
