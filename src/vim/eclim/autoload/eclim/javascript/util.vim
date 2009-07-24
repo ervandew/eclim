@@ -1,7 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/javascript/validate.html
 "
 " License:
 "
@@ -23,6 +22,12 @@
 " }}}
 
 " Global Variables {{{
+  if !exists("g:EclimJavascriptLintEnabled")
+    " enabling by default until jsdt validation is mature enough to use.
+    "let g:EclimJavascriptLintEnabled = 0
+    let g:EclimJavascriptLintEnabled = 1
+  endif
+
   if !exists('g:EclimJavascriptLintConf')
     let g:EclimJavascriptLintConf = '~/.jslrc'
   endif
@@ -34,16 +39,22 @@
     \ ], '\|') . '\)'
 " }}}
 
-" Validate(on_save) {{{
-" Validates the current file.
-function! eclim#javascript#validate#Validate(on_save)
+" UpdateSrcFile(validate) {{{
+function! eclim#javascript#util#UpdateSrcFile(validate)
+  " Disabled until the jsdt matures.
+  "call eclim#lang#UpdateSrcFile('javascript', a:validate)
+
+  if g:EclimJavascriptLintEnabled
+    call eclim#javascript#util#Jsl()
+  endif
+endfunction " }}}
+
+" Jsl() {{{
+" Runs jsl (javascript lint) on the current file.
+function! eclim#javascript#util#Jsl()
   if eclim#util#WillWrittenBufferClose()
     return
   endif
-
-  "if !eclim#project#util#IsCurrentFileInProject(!a:on_save)
-  "  return
-  "endif
 
   let result = ''
 
@@ -76,7 +87,7 @@ function! eclim#javascript#validate#Validate(on_save)
         let dict = {
             \ 'filename': eclim#util#Simplify(file),
             \ 'lnum': line,
-            \ 'text': message,
+            \ 'text': "[jsl] " . message,
             \ 'type': error =~ ': \(lint \)\?warning:' ? 'w' : 'e',
           \ }
 
@@ -84,9 +95,12 @@ function! eclim#javascript#validate#Validate(on_save)
       endif
     endfor
 
-    call eclim#util#SetLocationList(errors)
+    call eclim#display#signs#SetPlaceholder()
+    call eclim#util#ClearLocationList('jsl')
+    call eclim#util#SetLocationList(errors, 'a')
+    call eclim#display#signs#RemovePlaceholder()
   else
-    call eclim#util#ClearLocationList()
+    call eclim#util#ClearLocationList('jsl')
   endif
 endfunction " }}}
 

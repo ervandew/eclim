@@ -46,7 +46,7 @@ function! eclim#html#validate#Validate(on_save)
   let js_errors = []
 
   if search('<script', 'cnw')
-    call eclim#javascript#validate#Validate(a:on_save)
+    call eclim#javascript#util#UpdateSrcFile(a:on_save)
     let js_errors = getloclist(0)
   endif
 

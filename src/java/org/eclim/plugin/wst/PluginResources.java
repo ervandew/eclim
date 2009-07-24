@@ -20,6 +20,10 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
+import org.eclipse.wst.jsdt.core.JavaScriptCore;
+
 /**
  * Implementation of AbstractPluginResources.
  *
@@ -33,6 +37,22 @@ public class PluginResources
    * {@link Services#getPluginResources(String)}.
    */
   public static final String NAME = "org.eclim.wst";
+
+  /**
+   * Constant representing the javascript nature id.
+   */
+  public static final String JAVASCRIPT_NATURE = JavaScriptCore.NATURE_ID;
+
+  /**
+   * {@inheritDoc}
+   * @see org.eclim.plugin.PluginResources#initialize(String)
+   */
+  public void initialize(String name)
+  {
+    super.initialize(name);
+
+    ProjectNatureFactory.addNature("javascript", JAVASCRIPT_NATURE);
+  }
 
   /**
    * {@inheritDoc}
