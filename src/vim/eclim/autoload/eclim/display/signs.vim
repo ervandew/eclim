@@ -341,7 +341,7 @@ function! eclim#display#signs#SetPlaceholder(...)
     return
   endif
 
-  if len(a:000) > 0 && a:000
+  if len(a:000) > 0 && a:000[0]
     let existing = eclim#display#signs#GetExisting()
     if !len(existing)
       return
