@@ -215,7 +215,7 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
         \ split(result, '\n'), g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)
     else
-      call eclim#util#ClearLocationList()
+      call eclim#util#ClearLocationList('global')
     endif
   endif
 endfunction " }}}
