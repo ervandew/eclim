@@ -32,7 +32,6 @@ import org.eclim.plugin.core.command.filter.ErrorFilter;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileOffsets;
-import org.eclim.util.file.FileUtils;
 
 import org.eclipse.ant.internal.ui.model.IAntModel;
 import org.eclipse.ant.internal.ui.model.IProblem;
@@ -67,7 +66,7 @@ public class ValidateCommand
     IAntModel model = AntUtils.getAntModel(project, file, requestor);
     model.reconcile();
 
-    String filepath = FileUtils.concat(ProjectUtils.getPath(project), file);
+    String filepath = ProjectUtils.getFilePath(project, file);
 
     List<IProblem> problems = requestor.getProblems();
     FileOffsets offsets = FileOffsets.compile(filepath);

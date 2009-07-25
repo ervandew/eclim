@@ -36,8 +36,6 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
 
-import org.eclim.util.file.FileUtils;
-
 /*import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IProject;
@@ -78,9 +76,8 @@ public class HtmlValidateCommand
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
-    final String file = FileUtils.concat(
-        ProjectUtils.getPath(project),
-        commandLine.getValue(Options.FILE_OPTION));
+    final String file = ProjectUtils.getFilePath(
+        project, commandLine.getValue(Options.FILE_OPTION));
 
     // eclipse wst html valiation... currently not very good.
     /*IProject iproject = ProjectUtils.getProject(project, true);

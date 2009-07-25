@@ -24,8 +24,6 @@ import org.eclim.plugin.core.preference.Option;
 import org.eclim.plugin.core.preference.OptionInstance;
 import org.eclim.plugin.core.preference.Preferences;
 
-import org.eclim.util.file.FileUtils;
-
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -233,7 +231,7 @@ public class ProjectUtils
     // internally) would result in the proper project reference, but seems to
     // break ant code completion and validation.
     //IFile thefile = getFile(project, file);
-    File thefile = new File(FileUtils.concat(getPath(project), file));
+    File thefile = new File(getFilePath(project, file));
     if(!thefile.exists()){
       return null;
     }

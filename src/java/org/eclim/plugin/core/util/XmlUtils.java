@@ -147,7 +147,7 @@ public class XmlUtils
 
     SAXParser parser = factory.newSAXParser();
 
-    filename = FileUtils.concat(ProjectUtils.getPath(project), filename);
+    filename = ProjectUtils.getFilePath(project, filename);
     filename = filename.replace('\\', '/');
 
     ErrorAggregator errorHandler = new ErrorAggregator(filename);
@@ -204,7 +204,7 @@ public class XmlUtils
         "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
         schema.replace('\\', '/'));
 
-    filename = FileUtils.concat(ProjectUtils.getPath(project), filename);
+    filename = ProjectUtils.getFilePath(project, filename);
     filename = filename.replace('\\', '/');
 
     ErrorAggregator errorHandler = new ErrorAggregator(filename);

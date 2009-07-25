@@ -22,8 +22,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.util.file.FileUtils;
-
 /**
  * Abstract super class for wst based validators.
  *
@@ -46,8 +44,7 @@ public abstract class WstValidateCommand
     throws Exception
   {
     if (filename.indexOf("://") == -1){
-      filename = URI_PREFIX + FileUtils.concat(
-          ProjectUtils.getPath(project), filename);
+      filename = URI_PREFIX + ProjectUtils.getFilePath(project, filename);
     }
     return filename.replace('\\', '/');
   }

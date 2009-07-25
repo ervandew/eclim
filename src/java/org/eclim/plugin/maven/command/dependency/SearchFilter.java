@@ -35,8 +35,6 @@ import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclim.util.IOUtils;
 
-import org.eclim.util.file.FileUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -110,7 +108,7 @@ public class SearchFilter
     ArrayList<Dependency> list = new ArrayList<Dependency>();
     InputStream in = null;
     try{
-      String file = FileUtils.concat(ProjectUtils.getPath(project), filename);
+      String file = ProjectUtils.getFilePath(project, filename);
       Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         .parse(in = new FileInputStream(file)).getDocumentElement();
       NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))
