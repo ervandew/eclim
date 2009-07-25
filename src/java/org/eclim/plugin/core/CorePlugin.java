@@ -47,6 +47,22 @@ public class CorePlugin
 
   private String[] plugins;
 
+  //The shared instance.
+  private static CorePlugin plugin;
+
+  public CorePlugin ()
+  {
+    plugin = this;
+  }
+
+  /**
+   * Returns the shared instance.
+   */
+  public static CorePlugin getDefault()
+  {
+    return plugin;
+  }
+
   /**
    * {@inheritDoc}
    * @see Plugin#activate(BundleContext)

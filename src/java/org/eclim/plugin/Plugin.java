@@ -54,6 +54,22 @@ public class Plugin
 {
   private static final Logger logger = Logger.getLogger(Plugin.class);
 
+  //The shared instance.
+  private static Plugin plugin;
+
+  public Plugin ()
+  {
+    plugin = this;
+  }
+
+  /**
+   * Returns the shared instance.
+   */
+  public static Plugin getDefault()
+  {
+    return plugin;
+  }
+
   /**
    * {@inheritDoc}
    * @see org.osgi.framework.BundleActivator#start(BundleContext)
