@@ -115,6 +115,10 @@ function! TestJavac()
   edit! src-javac/org/eclim/test/Test.java
   call PeekRedir()
 
+  call delete(
+    \ g:TestEclimWorkspace .
+    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class')
+
   call VUAssertFalse(filereadable(
     \ g:TestEclimWorkspace .
     \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
