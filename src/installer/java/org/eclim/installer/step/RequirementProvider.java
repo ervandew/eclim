@@ -170,8 +170,8 @@ public class RequirementProvider
 
       ArrayList<String> versions = new ArrayList<String>();
       for (int ii = 0; ii < names.length; ii++){
-        String version = StringUtils.split(names[ii], '_')[1];
-        version = version.replaceFirst("([0-9.]+).*", "$1");
+        String version = names[ii];
+        version = version.replaceFirst(".*?_(\\d+\\.\\d+).*", "$1");
         version = version.replaceFirst("\\.$", "");
         versions.add(version);
       }
