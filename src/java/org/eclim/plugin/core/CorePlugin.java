@@ -28,6 +28,10 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.Plugin;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
@@ -42,10 +46,12 @@ import org.osgi.framework.FrameworkEvent;
  */
 public class CorePlugin
   extends Plugin
+  implements IResourceChangeListener
 {
   private static final Logger logger = Logger.getLogger(CorePlugin.class);
 
   private String[] plugins;
+  private boolean building;
 
   //The shared instance.
   private static CorePlugin plugin;
@@ -118,6 +124,9 @@ public class CorePlugin
       }
     }
 
+    ResourcesPlugin.getWorkspace().addResourceChangeListener(
+        this, IResourceChangeEvent.PRE_BUILD | IResourceChangeEvent.POST_BUILD);
+
     logger.info("Plugins loaded.");
     AbstractEclimApplication.getInstance().frameworkEvent(
         new FrameworkEvent(FrameworkEvent.INFO, getBundle(), null));
@@ -146,5 +155,28 @@ public class CorePlugin
         bundle.stop();
       }
     }
+
+    ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see IResourceChangeListener#resourceChanged(IResourceChangeEvent)
+   */
+  public void resourceChanged(IResourceChangeEvent event)
+  {
+    int type = event.getType();
+    if (type == IResourceChangeEvent.PRE_BUILD){
+      logger.debug("Received PRE_BUILD event.");
+      building = true;
+    }else if (type == IResourceChangeEvent.POST_BUILD){
+      logger.debug("Received POST_BUILD event.");
+      building = false;
+    }
+  }
+
+  public boolean isBuildRunning()
+  {
+    return building;
   }
 }
