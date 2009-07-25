@@ -217,6 +217,8 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     else
       call eclim#util#ClearLocationList('global')
     endif
+
+    call eclim#project#problems#ProblemsUpdate()
   endif
 endfunction " }}}
 

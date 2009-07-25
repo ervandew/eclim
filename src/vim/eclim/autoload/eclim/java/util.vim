@@ -284,6 +284,8 @@ function! eclim#java#util#UpdateSrcFile(validate)
 
         call eclim#display#signs#RemovePlaceholder()
       endif
+
+      call eclim#project#problems#ProblemsUpdate()
     endif
   endif
 endfunction " }}}

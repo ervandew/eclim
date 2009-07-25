@@ -30,6 +30,10 @@ if !exists("g:EclimProjectKeepLocalHistory")
   let g:EclimProjectKeepLocalHistory = 1
 endif
 
+if !exists("g:EclimProjectProblemsUpdateOnSave")
+  let g:EclimProjectProblemsUpdateOnSave = 1
+endif
+
 let g:EclimProjectTreeTitle = 'ProjectTree_'
 
 if !exists('g:EclimProjectTreeAutoOpen')
@@ -143,6 +147,12 @@ if !exists(":ProjectNatures")
     \ -complete=customlist,eclim#project#util#CommandCompleteProjectNatureRemove
     \ ProjectNatureRemove
     \ :call eclim#project#util#ProjectNatureModify('remove', '<args>')
+endif
+
+if !exists(":ProjectProblems")
+  command -nargs=?
+    \ -complete=customlist,eclim#project#util#CommandCompleteProject
+    \ ProjectProblems :call eclim#project#problems#Problems('<args>', 1)
 endif
 
 if !exists(":ProjectTree")

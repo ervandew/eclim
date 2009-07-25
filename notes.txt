@@ -100,8 +100,6 @@ TODO {{{
 
     - templating system (convert to groovy)?
 
-    - add means to hook into and view all of eclipses build errors.
-
     - support max number of cache entries
       - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
       - exclude entries beginning w/ 'eclim_'

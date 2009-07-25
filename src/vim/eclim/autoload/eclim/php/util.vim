@@ -55,6 +55,8 @@ function! eclim#php#util#UpdateSrcFile(validate)
       else
         call eclim#util#ClearLocationList()
       endif
+
+      call eclim#project#problems#ProblemsUpdate()
     endif
   endif
 endfunction " }}}
