@@ -19,7 +19,7 @@
 <plugin>
   <extension id="application" point="org.eclipse.core.runtime.applications">
     <application>
-      <run class="org.eclim.plugin.Application"/>
+      <run class="org.eclim.installer.eclipse.Application"/>
     </application>
   </extension>
 </plugin>

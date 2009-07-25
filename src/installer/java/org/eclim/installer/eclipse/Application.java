@@ -5,7 +5,7 @@
  * copyright (c) of IBM Corporation and others, and released under the Eclipse
  * Public License v1.0: http://www.eclipse.org/legal/epl-v10.html
  */
-package org.eclim.plugin;
+package org.eclim.installer.eclipse;
 
 import java.io.PrintStream;
 

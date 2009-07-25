@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclim.installer; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclim.plugin.Plugin
+Bundle-Activator: org.eclim.installer.eclipse.Plugin
 Bundle-ClassPath: .,
   eclim.installer.jar
 Require-Bundle: org.eclipse.core.resources,
