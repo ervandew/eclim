@@ -148,15 +148,21 @@ public class ProblemsCommand
           IMarker.SEVERITY_WARNING;
         int offset = attributes.containsKey("charStart") ?
           ((Integer)attributes.get("charStart")).intValue() : 1;
+        int line = attributes.containsKey("lineNumber") ?
+          ((Integer)attributes.get("lineNumber")).intValue() : 1;
         int[] pos = {1, 1};
 
         String path = resource.getRawLocation().toOSString();
         File file = new File(path);
-        if (file.isFile() && file.exists()){
+        if (file.isFile() && file.exists() && offset > 0){
           pos = FileUtils.offsetToLineColumn(path, offset);
         }
         problems.add(new Error(
-              message, path, pos[0], pos[1], severity != IMarker.SEVERITY_ERROR));
+              message,
+              path,
+              Math.max(pos[0], line),
+              pos[1],
+              severity != IMarker.SEVERITY_ERROR));
       }catch(ResourceException ignore){
         // race condition, i think, where we are attempting to obtain a
         // marker that has been removed since obtaining our list.
