@@ -58,13 +58,7 @@ function! eclim#project#problems#Problems(project, open)
 
   " generate a 'signature' to distinguish the problems list from other qf
   " lists.
-  let qflist = getqflist()
-  let len = len(qflist)
-  let s:eclim_problems_sig = {
-      \ 'len': len,
-      \ 'first': len > 0 ? qflist[0] : '',
-      \ 'last': len > 0 ? qflist[-1] : ''
-    \ }
+  let s:eclim_problems_sig = s:QuickfixSignature()
 
   if a:open
     exec g:EclimProblemsQuickFixOpen
@@ -85,44 +79,20 @@ function! eclim#project#problems#IsProblemsList()
   " the current list to see if we are now on the problems list, probably via
   " :colder or :cnewer.
   if exists('s:eclim_problems_sig')
-    let qflist = getqflist()
-    let len = len(qflist)
-    let sig = {
-        \ 'len': len,
-        \ 'first': len > 0 ? qflist[0] : '',
-        \ 'last': len > 0 ? qflist[-1] : ''
-      \ }
-    return sig == s:eclim_problems_sig
+    return s:QuickfixSignature() == s:eclim_problems_sig
   endif
   return 0
 endfunction " }}}
 
-"augroup eclim_problems
-"  autocmd!
-"  autocmd BufReadPost quickfix call <SID>TrackProblems()
-"augroup END
-
-" s:TrackProblems() {{{
-" Function which is executed on BufReadPost autocmd to track whether the
-" current contents represent the eclim problems list or some other qf list.
-"function! s:TrackProblems()
-"  if exists('g:eclim_problems_setqflist')
-"    let b:eclim_problems = 1
-"
-"    " generate a 'signature' to distinguish the problems list from other qf
-"    " lists.
-"    let qflist = getqflist()
-"    let len = len(qflist)
-"    let s:eclim_problems_sig = {
-"        \ 'len': len,
-"        \ 'first': len > 0 ? qflist[0] : '',
-"        \ 'last': len > 0 ? qflist[-1] : ''
-"      \ }
-"
-"    unlet g:eclim_problems_setqflist
-"  else
-"    let b:eclim_problems = eclim#project#problems#IsProblemsList()
-"  endif
-"endfunction " }}}
+" s:QuickfixSignature() {{{
+function! s:QuickfixSignature()
+  let qflist = getqflist()
+  let len = len(qflist)
+  return {
+      \ 'len': len,
+      \ 'first': len > 0 ? (qflist[0]['bufnr'] . ':' . qflist[0]['text']) : '',
+      \ 'last': len > 0 ? (qflist[-1]['bufnr'] . ':' . qflist[-1]['text']) : ''
+    \ }
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker
