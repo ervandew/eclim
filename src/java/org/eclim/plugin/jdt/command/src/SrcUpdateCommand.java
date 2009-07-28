@@ -36,7 +36,13 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.FileOffsets;
 
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.IProject;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
@@ -50,7 +56,8 @@ import org.eclipse.jdt.core.compiler.IProblem;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "OPTIONAL v validate NOARG"
+    "OPTIONAL v validate NOARG," +
+    "OPTIONAL b build NOARG"
 )
 public class SrcUpdateCommand
   extends AbstractCommand
@@ -63,16 +70,18 @@ public class SrcUpdateCommand
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
 
     // only refresh the file.
     if(!commandLine.hasOption(Options.VALIDATE_OPTION)){
       // getting the file will refresh it.
-      ProjectUtils.getFile(projectName, file);
+      ProjectUtils.getFile(project, file);
 
     // validate the src file.
     }else{
       // JavaUtils refreshes the file when getting it.
-      ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
+      IJavaProject javaProject = JavaUtils.getJavaProject(project);
+      ICompilationUnit src = JavaUtils.getCompilationUnit(javaProject, file);
 
       IProblem[] problems = JavaUtils.getProblems(src);
 
@@ -95,6 +104,11 @@ public class SrcUpdateCommand
             problems[ii].isWarning()));
       }
 
+      if(commandLine.hasOption(Options.BUILD_OPTION)){
+        project.build(
+            IncrementalProjectBuilder.INCREMENTAL_BUILD,
+            new NullProgressMonitor());
+      }
       return ErrorFilter.instance.filter(commandLine, errors);
     }
     return StringUtils.EMPTY;

@@ -37,7 +37,10 @@ function! eclim#php#util#UpdateSrcFile(validate)
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
     if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
-      let command = command . " -v"
+      let command = command . ' -v'
+      if eclim#project#problems#IsProblemsList()
+        let command = command . ' -b'
+      endif
     endif
     let result = eclim#ExecuteEclim(command)
 

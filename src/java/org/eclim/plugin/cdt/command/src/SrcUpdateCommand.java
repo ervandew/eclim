@@ -51,6 +51,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 import org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * Command to update the file on the eclipse side and optionally validate it.
@@ -62,7 +65,8 @@ import org.eclipse.core.resources.IProject;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "OPTIONAL v validate NOARG"
+    "OPTIONAL v validate NOARG," +
+    "OPTIONAL b build NOARG"
 )
 public class SrcUpdateCommand
   extends AbstractCommand
@@ -105,6 +109,11 @@ public class SrcUpdateCommand
               problem.isWarning()));
         }
 
+        if(commandLine.hasOption(Options.BUILD_OPTION)){
+          project.build(
+              IncrementalProjectBuilder.INCREMENTAL_BUILD,
+              new NullProgressMonitor());
+        }
         return ErrorFilter.instance.filter(commandLine, errors);
       }
     }

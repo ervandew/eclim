@@ -38,7 +38,8 @@ import org.eclipse.dltk.ruby.internal.parsers.jruby.DLTKRubyParser;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "OPTIONAL v validate NOARG"
+    "OPTIONAL v validate NOARG," +
+    "OPTIONAL b build NOARG"
 )
 public class SrcUpdateCommand
   extends AbstractSrcUpdateCommand

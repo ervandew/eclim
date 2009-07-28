@@ -35,6 +35,9 @@ import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -77,6 +80,12 @@ public abstract class AbstractSrcUpdateCommand
             lineColumn[1],
             problem.isWarning()
         ));
+      }
+
+      if(commandLine.hasOption(Options.BUILD_OPTION)){
+        project.build(
+            IncrementalProjectBuilder.INCREMENTAL_BUILD,
+            new NullProgressMonitor());
       }
       return ErrorFilter.instance.filter(commandLine, errors);
     }

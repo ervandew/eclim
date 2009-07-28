@@ -36,7 +36,8 @@ import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "OPTIONAL v validate NOARG"
+    "OPTIONAL v validate NOARG," +
+    "OPTIONAL b build NOARG"
 )
 public class SrcUpdateCommand
   extends AbstractSrcUpdateCommand
