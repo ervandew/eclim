@@ -27,8 +27,8 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestCorrect() {{{
-function! TestCorrect()
+" TestJavaDelegate() {{{
+function! TestJavaDelegate()
   edit! src/org/eclim/test/delegate/TestDelegateVUnit.java
   call PeekRedir()
 
@@ -39,23 +39,24 @@ function! TestCorrect()
   call VUAssertEquals('org.eclim.test.delegate.TestDelegateVUnit', getline(1),
     \ 'Wrong type in delegate window.')
 
-  call VUAssertTrue(search('^\s*public abstract int size()'),
-    \ 'Super method size() not found')
+  call VUAssertTrue(search('^\s*public abstract Iterator<Double> iterator()'),
+    \ 'Super method iterator() not found')
+  call VUAssertTrue(search('^\s*public abstract boolean add(Double o)'),
+    \ 'Super method add() not found')
 
-  exec "normal Vjj\<cr>"
+  exec "normal Vkkk\<cr>"
 
-  call VUAssertTrue(search('^\s*//public abstract int size()'),
-    \ 'Super method size() not commented out after add.')
+  call VUAssertTrue(search('^\s*//public abstract Iterator<Double> iterator()'),
+    \ 'Super method add() not commented out after add.')
+  call VUAssertTrue(search('^\s*//public abstract boolean add(Double o)'),
+    \ 'Super method add() not commented out after add.')
   bdelete
 
-  call VUAssertTrue(search('public int size()$'), 'size() not added.')
-  call VUAssertTrue(search('return list\.size();$'), 'size() not delegating.')
-  call VUAssertTrue(search('public boolean isEmpty()$'), 'isEmpty() not added.')
-  call VUAssertTrue(search('return list\.isEmpty();$'), 'isEmpty() not delegating.')
-  call VUAssertTrue(search('public boolean contains(Object o)$'),
-    \ 'contains(Object) not added.')
-  call VUAssertTrue(search('return list\.contains(o);$'),
-    \ 'contains(Object) not delegating.')
+  call VUAssertTrue(search('public Iterator<Double> iterator()$'),
+    \ 'iterator() not added.')
+  call VUAssertTrue(search('return list\.iterator();$'), 'iterator() not delegating.')
+  call VUAssertTrue(search('public boolean add(Double o)$'), 'add() not added.')
+  call VUAssertTrue(search('return list\.add(o);$'), 'add() not delegating.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

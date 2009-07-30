@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.delegate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclim.Services;
@@ -33,6 +34,7 @@ import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.file.Position;
@@ -43,6 +45,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.Signature;
 
 /**
@@ -67,7 +70,7 @@ public class DelegateCommand
   private static final String TEMPLATE = "method.gst";
 
   private IField field;
-  private IType delegateType;
+  private TypeInfo delegateTypeInfo;
 
   /**
    * {@inheritDoc}
@@ -90,7 +93,7 @@ public class DelegateCommand
       field = (IField)element;
 
       String signature = field.getTypeSignature();
-      delegateType = TypeUtils.findUnqualifiedType(
+      IType delegateType = TypeUtils.findUnqualifiedType(
           src, Signature.getSignatureSimpleName(signature));
 
       if(delegateType == null){
@@ -99,6 +102,20 @@ public class DelegateCommand
             Signature.getSignatureSimpleName(signature)) + "  " +
           Services.getMessage("check.import");
       }
+
+      ITypeParameter[] params = delegateType.getTypeParameters();
+      String[] typeParams = new String[params.length];
+      for (int ii = 0; ii < params.length; ii++){
+        typeParams[ii] = params[ii].getElementName();
+      }
+
+      String[] args = Signature.getTypeArguments(signature);
+      String[] typeArgs = new String[args.length];
+      for (int ii = 0; ii < args.length; ii++){
+        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
+      }
+
+      delegateTypeInfo = new TypeInfo(delegateType, typeParams, typeArgs);
     }
 
     return super.execute(commandLine);
@@ -107,20 +124,23 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  protected IType[] getSuperTypes(CommandLine commandLine, IType type)
+  @Override
+  protected TypeInfo[] getSuperTypes(CommandLine commandLine, IType type)
     throws Exception
   {
-    IType[] types = super.getSuperTypes(commandLine, delegateType);
-    IType[] results = new IType[types.length + 1];
-    results[0] = delegateType;
-    System.arraycopy(types, 0, results, 1, types.length);
+    IType delegateType = delegateTypeInfo.getType();
+    ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
+    types.add(delegateTypeInfo);
+    TypeUtils.getInterfaces(delegateType, types, false, delegateTypeInfo);
+    TypeUtils.getSuperClasses(delegateType, types, false, delegateTypeInfo);
 
-    return results;
+    return types.toArray(new TypeInfo[types.size()]);
   }
 
   /**
    * {@inheritDoc}
    */
+  @Override
   protected boolean isValidMethod(IMethod method)
     throws Exception
   {
@@ -132,6 +152,7 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
+  @Override
   protected boolean isValidType(IType type)
     throws Exception
   {
@@ -141,11 +162,12 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
+  @Override
   protected Position insertMethod(
       CommandLine commandLine,
       ICompilationUnit src,
       IType type,
-      IType superType,
+      TypeInfo superTypeInfo,
       IMethod method,
       IJavaElement sibling)
     throws Exception
@@ -154,6 +176,7 @@ public class DelegateCommand
     JavaUtils.loadPreferencesForTemplate(
         type.getJavaProject().getProject(), getPreferences(), values);
 
+    IType superType = superTypeInfo.getType();
     if(superType.isInterface()){
       values.put("modifier", "public");
     }else{
@@ -163,8 +186,10 @@ public class DelegateCommand
     values.put("name", method.getElementName());
     String returnType = Signature.getSignatureSimpleName(
         method.getReturnType());
-    values.put("returnType", returnType);
-    values.put("params", MethodUtils.getMethodParameters(method, true));
+    values.put("returnType",
+        TypeUtils.replaceTypeParams(returnType, superTypeInfo));
+    values.put("params",
+        MethodUtils.getMethodParameters(method, superTypeInfo, true));
     String thrown = MethodUtils.getMethodThrows(method);
     values.put("throwsType", thrown != null ? thrown : null);
     values.put("overrides", Boolean.FALSE);
@@ -190,7 +215,8 @@ public class DelegateCommand
     values.put("superType", typeName);
     values.put("implementof", Boolean.TRUE);
     values.put("delegate", Boolean.TRUE);
-    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(method));
+    values.put("methodSignature",
+        MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

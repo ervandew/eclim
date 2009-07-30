@@ -29,16 +29,15 @@ import org.eclipse.jdt.core.Signature;
 public class MethodUtils
 {
   private static final String VARARGS = "...";
-  private static final String TYPE_REGEX = "\\bQ(.*?);";
 
   /**
    * Determines if the supplied types contains the specified method.
    *
-   * @param type The type.
+   * @param typeInfo The type info.
    * @param method The method.
    * @return true if the type contains the method, false otherwise.
    */
-  public static boolean containsMethod(IType type, IMethod method)
+  public static boolean containsMethod(TypeInfo typeInfo, IMethod method)
     throws Exception
   {
     /*IMethod[] methods = type.getMethods();
@@ -49,14 +48,15 @@ public class MethodUtils
     }
     return false;*/
 
-    String signature = getMinimalMethodSignature(method);
+    IType type = typeInfo.getType();
+    String signature = getMinimalMethodSignature(method, typeInfo);
     if(method.isConstructor()){
       signature = signature.replaceFirst(
           method.getDeclaringType().getElementName(), type.getElementName());
     }
     IMethod[] methods = type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
-      String methodSig = getMinimalMethodSignature(methods[ii]);
+      String methodSig = getMinimalMethodSignature(methods[ii], typeInfo);
       if(methodSig.equals(signature)){
         return true;
       }
@@ -68,21 +68,22 @@ public class MethodUtils
    * Gets the method from the supplied type that matches the signature of the
    * specified method.
    *
-   * @param type The type.
+   * @param typeInfo The type info.
    * @param method The method.
    * @return The method or null if none found.
    */
-  public static IMethod getMethod(IType type, IMethod method)
+  public static IMethod getMethod(TypeInfo typeInfo, IMethod method)
     throws Exception
   {
-    String signature = getMinimalMethodSignature(method);
+    IType type = typeInfo.getType();
+    String signature = getMinimalMethodSignature(method, typeInfo);
     if(method.isConstructor()){
       signature = signature.replaceFirst(
           method.getDeclaringType().getElementName(), type.getElementName());
     }
     IMethod[] methods = type.getMethods();
     for (int ii = 0; ii < methods.length; ii++){
-      String methodSig = getMinimalMethodSignature(methods[ii]);
+      String methodSig = getMinimalMethodSignature(methods[ii], typeInfo);
       if(methodSig.equals(signature)){
         return methods[ii];
       }
@@ -119,9 +120,10 @@ public class MethodUtils
    * Gets a String representation of the supplied method's signature.
    *
    * @param method The method.
+   * @param typeInfo The type info.
    * @return The signature.
    */
-  public static String getMethodSignature(IMethod method)
+  public static String getMethodSignature(IMethod method, TypeInfo typeInfo)
     throws Exception
   {
     int flags = method.getFlags();
@@ -134,12 +136,12 @@ public class MethodUtils
     }
     buffer.append(Flags.isAbstract(flags) ? "abstract " : "");
     if(!method.isConstructor()){
-      buffer.append(Signature.getSignatureSimpleName(method.getReturnType()))
-      .append(' ');
+      String name = Signature.getSignatureSimpleName(method.getReturnType());
+      buffer.append(TypeUtils.replaceTypeParams(name, typeInfo)).append(' ');
     }
     buffer.append(method.getElementName())
       .append("(")
-      .append(getMethodParameters(method, true))
+      .append(getMethodParameters(method, typeInfo, true))
       .append(')');
 
     String[] exceptions = method.getExceptionTypes();
@@ -156,13 +158,14 @@ public class MethodUtils
    * @param method The method.
    * @return The signature.
    */
-  public static String getMinimalMethodSignature(IMethod method)
+  public static String getMinimalMethodSignature(
+      IMethod method, TypeInfo typeInfo)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append(method.getElementName())
       .append('(')
-      .append(getMethodParameters(method, false))
+      .append(getMethodParameters(method, typeInfo, false))
       .append(')');
 
     return buffer.toString();
@@ -173,10 +176,12 @@ public class MethodUtils
    * separated string.
    *
    * @param method The method.
+   * @param typeInfo The type info.
    * @param includeNames true to include the paramter names in the string.
    * @return The parameters as a string.
    */
-  public static String getMethodParameters(IMethod method, boolean includeNames)
+  public static String getMethodParameters(
+      IMethod method, TypeInfo typeInfo, boolean includeNames)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
@@ -201,17 +206,10 @@ public class MethodUtils
         varargs = true;
       }
 
-      // check for unresolved types first.
-      if(type.startsWith("Q")){
-        type = type.replaceAll(TYPE_REGEX, "$1");
-      }else{
-        type = Signature.getSignatureSimpleName(type);
-      }
+      type = Signature.getSignatureSimpleName(type);
+      type = type.replaceAll("\\?\\s+extends\\s+", "");
+      type = TypeUtils.replaceTypeParams(type, typeInfo);
 
-      int genericStart = type.indexOf("<");
-      if(genericStart != -1){
-        type = type.substring(0, genericStart);
-      }
       buffer.append(type);
       if(varargs){
         buffer.append(VARARGS);

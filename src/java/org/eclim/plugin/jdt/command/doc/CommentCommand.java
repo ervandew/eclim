@@ -37,6 +37,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.plugin.core.command.AbstractCommand;
@@ -301,10 +302,10 @@ public class CommentCommand
     if(isNew){
       // see if method is overriding / implementing method from superclass
       IType parentType = null;
-      IType[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
-      for (int ii = 0; ii < types.length; ii++){
-        if(MethodUtils.containsMethod(types[ii], method)){
-          parentType = types[ii];
+      TypeInfo[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
+      for (TypeInfo info : types){
+        if(MethodUtils.containsMethod(info, method)){
+          parentType = info.getType();
           break;
         }
       }
@@ -318,7 +319,7 @@ public class CommentCommand
 
         StringBuffer signature = new StringBuffer();
         signature.append(typeName)
-          .append('#').append(MethodUtils.getMinimalMethodSignature(method));
+          .append('#').append(MethodUtils.getMinimalMethodSignature(method, null));
         addTag(javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
         return;
       }else{

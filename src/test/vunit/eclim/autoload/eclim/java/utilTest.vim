@@ -84,7 +84,7 @@ function! TestGetPackageFromImport()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call PeekRedir()
 
-  call VUAssertEquals('java.util', eclim#java#util#GetPackageFromImport('ArrayList'))
+  call VUAssertEquals('java.util', eclim#java#util#GetPackageFromImport('HashMap'))
   call VUAssertEquals('', eclim#java#util#GetPackageFromImport('Blah'))
 endfunction " }}}
 
@@ -102,7 +102,7 @@ function! TestIsImported()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call PeekRedir()
 
-  call VUAssertTrue(eclim#java#util#IsImported('java.util.ArrayList'),
+  call VUAssertTrue(eclim#java#util#IsImported('java.util.HashMap'),
     \ 'ArrayList not imported.')
   call VUAssertTrue(eclim#java#util#IsImported('org.eclim.test.impl.TestImpl'),
     \ 'TestImpl not imported.')

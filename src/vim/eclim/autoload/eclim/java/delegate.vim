@@ -27,7 +27,7 @@ let s:command_delegate =
   \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 let s:command_insert =
   \ '-command java_delegate -p "<project>" -f "<file>" -t "<type>" ' .
-  \ '-s <superType> <methods>'
+  \ '-s "<superType>" <methods>'
 " }}}
 
 " Delegate() {{{

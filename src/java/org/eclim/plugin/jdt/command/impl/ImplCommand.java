@@ -39,6 +39,7 @@ import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.file.Position;
@@ -48,6 +49,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.Signature;
 
 /**
@@ -91,7 +93,44 @@ public class ImplCommand
     if(superTypeName != null){
       type = src.getJavaProject().findType(
           commandLine.getValue(Options.TYPE_OPTION).replace('$', '.'));
+
+      int index = superTypeName.indexOf('<');
+      String[] typeArgs = null;
+      if (index != -1){
+        String superTypeArgs = superTypeName.substring(index);
+        superTypeName = superTypeName.substring(0, index);
+        ArrayList<String> args = new ArrayList<String>();
+        char[] argsArray = superTypeArgs
+          .substring(1, superTypeArgs.length() - 1).toCharArray();
+        int typeDepth = 0;
+        StringBuffer arg = new StringBuffer();
+        for (char c : argsArray){
+          if (c == '<'){
+            typeDepth++;
+            arg.append(c);
+          }else if (c == '>'){
+            typeDepth--;
+            arg.append(c);
+          }else if (c == ',' && typeDepth == 0){
+            args.add(arg.toString());
+            arg = new StringBuffer();
+          }else{
+            arg.append(c);
+          }
+        }
+        if (arg.length() > 0){
+          args.add(arg.toString());
+        }
+        typeArgs = args.toArray(new String[args.size()]);
+      }
+
       IType superType = type.getJavaProject().findType(superTypeName);
+      ITypeParameter[] params = superType.getTypeParameters();
+      String[] typeParams = new String[params.length];
+      for (int ii = 0; ii < params.length; ii++){
+        typeParams[ii] = params[ii].getElementName();
+      }
+      TypeInfo superTypeInfo = new TypeInfo(superType, typeParams, typeArgs);
 
       String methodsOption = commandLine.getValue(Options.METHOD_OPTION);
 
@@ -99,11 +138,11 @@ public class ImplCommand
       if(methodsOption != null){
         methods = StringUtils.splitByWholeSeparator(methodsOption, ",,");
       }else{
-        methods = getUnimplementedMethods(type, superType);
+        methods = getUnimplementedMethods(type, superTypeInfo);
       }
 
       for(int ii = 0; ii < methods.length; ii++){
-        executeInsertMethod(commandLine, src, type, superType, methods[ii]);
+        executeInsertMethod(commandLine, src, type, superTypeInfo, methods[ii]);
       }
     }
 
@@ -132,16 +171,17 @@ public class ImplCommand
     if(isValidType(type)){
       Map<String, IMethod> implementedMethods = getImplementedMethods(type);
 
-      IType[] types = getSuperTypes(commandLine, type);
-      for(int ii = 0; ii < types.length; ii++){
+      TypeInfo[] types = getSuperTypes(commandLine, type);
+      for(TypeInfo info : types){
+        IType superType = info.getType();
         ImplType implType = new ImplType();
-        implType.setPackage(types[ii].getPackageFragment().getElementName());
-        implType.setExists(types[ii].exists());
-        if(types[ii].exists()){
-          implType.setSignature(TypeUtils.getTypeSignature(types[ii]));
-          implType.setMethods(getMethods(type, implementedMethods, types[ii]));
+        implType.setPackage(superType.getPackageFragment().getElementName());
+        implType.setExists(superType.exists());
+        if(superType.exists()){
+          implType.setSignature(TypeUtils.getTypeSignature(info));
+          implType.setMethods(getMethods(type, implementedMethods, info));
         }else{
-          implType.setSignature(types[ii].getElementName());
+          implType.setSignature(superType.getElementName());
         }
 
         results.add(implType);
@@ -161,7 +201,7 @@ public class ImplCommand
    * @param commandLine The original command line.
    * @param src The compilation unit.
    * @param type The type to insert the method(s) into.
-   * @param superType The super type to insert methods from.
+   * @param superTypeInfo The super type to insert methods from.
    * @param methodName The super type to insert methods from.
    *
    * @return The Position where the method(s) where inserted.
@@ -170,16 +210,19 @@ public class ImplCommand
       CommandLine commandLine,
       ICompilationUnit src,
       IType type,
-      IType superType,
+      TypeInfo superTypeInfo,
       String methodName)
     throws Exception
   {
+    IType superType = superTypeInfo.getType();
     IMethod[] methods = superType.getMethods();
     Map<String, IMethod> implementedMethods = getImplementedMethods(type);
 
     IMethod method = null;
     for(int ii = 0; ii < methods.length; ii++){
-      if(MethodUtils.getMinimalMethodSignature(methods[ii]).equals(methodName)){
+      String sig =
+        MethodUtils.getMinimalMethodSignature(methods[ii], superTypeInfo);
+      if(sig.equals(methodName)){
         method = methods[ii];
         break;
       }
@@ -190,7 +233,7 @@ public class ImplCommand
           superType.getFullyQualifiedName(), methodName));
       return null;
     }
-    if(getImplemented(type, implementedMethods, method) != null){
+    if(getImplemented(type, implementedMethods, superTypeInfo, method) != null){
       logger.warn(Services.getMessage("method.already.implemented",
             type.getFullyQualifiedName(),
             superType.getFullyQualifiedName(),
@@ -200,8 +243,8 @@ public class ImplCommand
     }
 
     IJavaElement sibling =
-      getSibling(type, implementedMethods, methods, method);
-    insertMethod(commandLine, src, type, superType, method, sibling);
+      getSibling(type, implementedMethods, superTypeInfo, methods, method);
+    insertMethod(commandLine, src, type, superTypeInfo, method, sibling);
 
     return null;
   }
@@ -213,24 +256,27 @@ public class ImplCommand
    * @param superType The super type to add methods from.
    * @return Array of minimal method signatures.
    */
-  protected String[] getUnimplementedMethods(IType type, IType superType)
+  protected String[] getUnimplementedMethods(IType type, TypeInfo superTypeInfo)
     throws Exception
   {
     ArrayList<String> names = new ArrayList<String>();
 
+    IType superType = superTypeInfo.getType();
     IMethod[] methods = superType.getMethods();
     Map<String, IMethod> implementedMethods = getImplementedMethods(type);
 
     for(int ii = 0; ii < methods.length; ii++){
       int flags = methods[ii].getFlags();
       IMethod implemented =
-        getImplemented(type, implementedMethods, methods[ii]);
+        getImplemented(type, implementedMethods, superTypeInfo, methods[ii]);
       if (!Flags.isStatic(flags) &&
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags) &&
           !methods[ii].isConstructor() &&
           implemented == null){
-        names.add(MethodUtils.getMinimalMethodSignature(methods[ii]));
+        String sig =
+          MethodUtils.getMinimalMethodSignature(methods[ii], superTypeInfo);
+        names.add(sig);
       }
     }
 
@@ -244,7 +290,7 @@ public class ImplCommand
    * @param type The type.
    * @return The super types.
    */
-  protected IType[] getSuperTypes(CommandLine commandLine, IType type)
+  protected TypeInfo[] getSuperTypes(CommandLine commandLine, IType type)
     throws Exception
   {
     return TypeUtils.getSuperTypes(type, true);
@@ -260,6 +306,7 @@ public class ImplCommand
   protected Map<String, IMethod> getImplementedMethods(IType type)
     throws Exception
   {
+    TypeInfo typeInfo = new TypeInfo(type, null, null);
     HashMap<String, IMethod> implementedMethods = new HashMap<String, IMethod>();
     IMethod[] methods = type.getMethods();
     for(int ii = 0; ii < methods.length; ii++){
@@ -268,7 +315,7 @@ public class ImplCommand
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags)){
         implementedMethods.put(
-            MethodUtils.getMinimalMethodSignature(methods[ii]),
+            MethodUtils.getMinimalMethodSignature(methods[ii], typeInfo),
             methods[ii]);
       }
     }
@@ -281,7 +328,7 @@ public class ImplCommand
    * @param commandLine The original command line.
    * @param src The compilation unit.
    * @param type The type to insert the method into.
-   * @param superType The super type the method is defined in.
+   * @param superTypeInfo The super type the method is defined in.
    * @param method The method to insert.
    * @param sibling The element to insert the new method before, or null to
    *  append to the end.
@@ -291,7 +338,7 @@ public class ImplCommand
       CommandLine commandLine,
       ICompilationUnit src,
       IType type,
-      IType superType,
+      TypeInfo superTypeInfo,
       IMethod method,
       IJavaElement sibling)
     throws Exception
@@ -301,10 +348,11 @@ public class ImplCommand
         type.getJavaProject().getProject(), getPreferences(), values);
 
     if(!method.isConstructor()){
+      String rtype = Signature.getSignatureSimpleName(method.getReturnType());
       values.put("constructor", Boolean.FALSE);
       values.put("name", method.getElementName());
       values.put("returnType",
-          Signature.getSignatureSimpleName(method.getReturnType()));
+          TypeUtils.replaceTypeParams(rtype, superTypeInfo));
       values.put("methodBody", null);
     }else{
       values.put("constructor", Boolean.TRUE);
@@ -322,6 +370,7 @@ public class ImplCommand
       values.put("returnType", null);
     }
 
+    IType superType = superTypeInfo.getType();
     if(superType.isInterface()){
       values.put("modifier", "public");
     }else{
@@ -330,12 +379,14 @@ public class ImplCommand
     }
     values.put("superType",
       JavaUtils.getCompilationUnitRelativeTypeName(src, superType));
-    values.put("params", MethodUtils.getMethodParameters(method, true));
+    values.put("params",
+        MethodUtils.getMethodParameters(method, superTypeInfo, true));
     values.put("overrides",
         superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
     values.put("implementof",
         superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
-    values.put("methodSignature", MethodUtils.getMinimalMethodSignature(method));
+    values.put("methodSignature",
+        MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
     String thrown = MethodUtils.getMethodThrows(method);
     values.put("throwsType", thrown != null ? thrown : null);
     values.put("delegate", Boolean.FALSE);
@@ -354,24 +405,24 @@ public class ImplCommand
    *
    * @param type The type to be modified.
    * @param baseMethods The base methods from the base type.
-   * @param superType The super type.
+   * @param superTypeInfo The super type info.
    *
    * @return Array of methods.
    */
   protected ImplMethod[] getMethods(
-      IType type, Map<String, IMethod> baseMethods, IType superType)
+      IType type, Map<String, IMethod> baseMethods, TypeInfo superTypeInfo)
     throws Exception
   {
     ArrayList<ImplMethod> results = new ArrayList<ImplMethod>();
-    IMethod[] methods = superType.getMethods();
+    IMethod[] methods = superTypeInfo.getType().getMethods();
     for(int ii = 0; ii < methods.length; ii++){
       IMethod method = methods[ii];
       if(isValidMethod(method)){
-        String signature = MethodUtils.getMethodSignature(method);
+        String signature = MethodUtils.getMethodSignature(method, superTypeInfo);
         ImplMethod implMethod = new ImplMethod();
         implMethod.setSignature(signature);
         implMethod.setImplemented(
-            getImplemented(type, baseMethods, method) != null);
+            getImplemented(type, baseMethods, superTypeInfo, method) != null);
 
         results.add(implMethod);
       }
@@ -418,10 +469,13 @@ public class ImplCommand
    * @return The implemented method or null if none.
    */
   protected IMethod getImplemented(
-      IType type, Map<String, IMethod> baseMethods, IMethod method)
+      IType type,
+      Map<String, IMethod> baseMethods,
+      TypeInfo superTypeInfo,
+      IMethod method)
     throws Exception
   {
-    String signature = MethodUtils.getMinimalMethodSignature(method);
+    String signature = MethodUtils.getMinimalMethodSignature(method, superTypeInfo);
     if(method.isConstructor()){
       signature = signature.replaceFirst(
           method.getDeclaringType().getElementName(),
@@ -435,6 +489,7 @@ public class ImplCommand
    *
    * @param type The type to insert into.
    * @param baseMethods The currently implemented methods.
+   * @param superTypeInfo The super type info.
    * @param methods The super types methods.
    * @param method The method to be added.
    * @return The sibling, or null if none.
@@ -442,6 +497,7 @@ public class ImplCommand
   protected IJavaElement getSibling(
       IType type,
       Map<String, IMethod> baseMethods,
+      TypeInfo superTypeInfo,
       IMethod[] methods,
       IMethod method)
     throws Exception
@@ -455,7 +511,8 @@ public class ImplCommand
       if(methods[ii].equals(method)){
         index = ii;
       }else{
-        IMethod implemented = getImplemented(type, baseMethods, methods[ii]);
+        IMethod implemented =
+          getImplemented(type, baseMethods, superTypeInfo, methods[ii]);
         if(implemented != null){
           implementedIndex = ii;
           sibling = implemented;

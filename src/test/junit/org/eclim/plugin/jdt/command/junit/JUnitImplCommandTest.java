@@ -60,6 +60,12 @@ public class JUnitImplCommandTest
       "\tpublic void anotherMethod(int id)\n" +
       "}\n" +
       "\n" +
+      "package java.util;\n" +
+      "public interface Comparator<String> {\n" +
+      "\tpublic abstract int compare(String o1, String o2)\n" +
+      "\tpublic abstract boolean equals(Object obj)\n" +
+      "}\n" +
+      "\n" +
       "package java.lang;\n" +
       "public class Object {\n" +
       "\tpublic Object()\n" +
@@ -85,11 +91,6 @@ public class JUnitImplCommandTest
 
     System.out.println(result);
 
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertTrue("Method not found or invalid.",
-        Pattern.compile("public void testAMethod\\(\\)")
-        .matcher(contents).find());
-
     valid =
       "org.eclim.test.junit.SomeClassTest\n" +
       "\n" +
@@ -98,6 +99,12 @@ public class JUnitImplCommandTest
       "\t//public void aMethod()\n" +
       "\t//public void aMethod(String name)\n" +
       "\tpublic void anotherMethod(int id)\n" +
+      "}\n" +
+      "\n" +
+      "package java.util;\n" +
+      "public interface Comparator<String> {\n" +
+      "\tpublic abstract int compare(String o1, String o2)\n" +
+      "\tpublic abstract boolean equals(Object obj)\n" +
       "}\n" +
       "\n" +
       "package java.lang;\n" +
@@ -111,6 +118,57 @@ public class JUnitImplCommandTest
       "\tprotected void finalize()\n" +
       "\t\tthrows Throwable\n" +
       "}";
+
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    assertTrue("Method not found or invalid.",
+        Pattern.compile("public void testAMethod\\(\\)")
+        .matcher(contents).find());
+
+    assertEquals("Wrong results.", valid, result);
+
+    result = Eclim.execute(new String[]{
+      "java_junit_impl", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE,
+      "-b", "org.eclim.test.junit.SomeClass",
+      "-t", "org.eclim.test.junit.SomeClassTest",
+      "-s", "java.util.Comparator<String>",
+      "-m", "compare(String,String)"
+    });
+
+    System.out.println(result);
+
+    valid =
+      "org.eclim.test.junit.SomeClassTest\n" +
+      "\n" +
+      "package org.eclim.test.junit;\n" +
+      "public class SomeClass {\n" +
+      "\t//public void aMethod()\n" +
+      "\t//public void aMethod(String name)\n" +
+      "\tpublic void anotherMethod(int id)\n" +
+      "}\n" +
+      "\n" +
+      "package java.util;\n" +
+      "public interface Comparator<String> {\n" +
+      "\t//public abstract int compare(String o1, String o2)\n" +
+      "\tpublic abstract boolean equals(Object obj)\n" +
+      "}\n" +
+      "\n" +
+      "package java.lang;\n" +
+      "public class Object {\n" +
+      "\tpublic Object()\n" +
+      "\tpublic int hashCode()\n" +
+      "\tpublic boolean equals(Object obj)\n" +
+      "\tprotected Object clone()\n" +
+      "\t\tthrows CloneNotSupportedException\n" +
+      "\tpublic String toString()\n" +
+      "\tprotected void finalize()\n" +
+      "\t\tthrows Throwable\n" +
+      "}";
+
+    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    assertTrue("Method not found or invalid.",
+        Pattern.compile("public void testCompare\\(\\)")
+        .matcher(contents).find());
 
     assertEquals("Wrong results.", valid, result);
   }

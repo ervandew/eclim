@@ -38,6 +38,7 @@ import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -258,8 +259,10 @@ public class PropertiesCommand
     JavaUtils.loadPreferencesForTemplate(
         type.getJavaProject().getProject(), getPreferences(), values);
 
-    IType superType = TypeUtils.getSuperTypeContainingMethod(type, method);
-    if(superType != null){
+    TypeInfo superTypeInfo =
+      TypeUtils.getSuperTypeContainingMethod(type, method);
+    if(superTypeInfo != null){
+      IType superType = superTypeInfo.getType();
       values.put("superType",
         JavaUtils.getCompilationUnitRelativeTypeName(src, superType));
       values.put("overrides",
@@ -267,7 +270,7 @@ public class PropertiesCommand
       values.put("implementof",
           superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
       values.put("methodSignature",
-          MethodUtils.getMinimalMethodSignature(method));
+          MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
     }else{
       values.put("superType", null);
       values.put("overrides", null);
@@ -401,7 +404,8 @@ public class PropertiesCommand
     if(signature != null){
       IMethod[] methods = type.getMethods();
       for(int ii = 0; ii < methods.length; ii++){
-        if(MethodUtils.getMinimalMethodSignature(methods[ii]).equals(signature)){
+        String sig = MethodUtils.getMinimalMethodSignature(methods[ii], null);
+        if(sig.equals(signature)){
           return methods[ii];
         }
       }

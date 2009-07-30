@@ -22,6 +22,7 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.jdt.core.IType;
@@ -55,8 +56,9 @@ public class HierarchyFilter
     throws Exception
   {
     IType type = hierarchy.getType();
+    TypeInfo info = new TypeInfo(type, null, null);
     out.append('{');
-    out.append("'name':'").append(TypeUtils.getTypeSignature(type)).append("',");
+    out.append("'name':'").append(TypeUtils.getTypeSignature(info)).append("',");
     out.append("'qualified':'")
       .append(JavaUtils.getFullyQualifiedName(type)).append("',");
     out.append("'children':[");

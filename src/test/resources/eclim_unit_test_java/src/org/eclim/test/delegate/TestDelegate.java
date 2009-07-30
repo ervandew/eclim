@@ -5,5 +5,5 @@ import java.util.List;
 
 public class TestDelegate
 {
-  private List list = new ArrayList();
+  private List<Double> list = new ArrayList<Double>();
 }

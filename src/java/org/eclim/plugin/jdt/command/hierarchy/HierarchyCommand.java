@@ -27,6 +27,7 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -75,11 +76,13 @@ public class HierarchyCommand
   {
     ArrayList<HierarchyNode> nodes = new ArrayList<HierarchyNode>();
 
-    IType parentClass = TypeUtils.getSuperClass(type);
+    TypeInfo parentClassInfo = TypeUtils.getSuperClass(type);
     String jlo = "java.lang.Object";
-    if (parentClass != null &&
-        !jlo.equals(JavaUtils.getFullyQualifiedName(parentClass))){
-      nodes.add(new HierarchyNode(parentClass, createChildNodes(parentClass)));
+    if (parentClassInfo != null){
+      IType parentClass = parentClassInfo.getType();
+      if(!jlo.equals(JavaUtils.getFullyQualifiedName(parentClass))){
+        nodes.add(new HierarchyNode(parentClass, createChildNodes(parentClass)));
+      }
     }
 
     IType[] parentInterfaces = TypeUtils.getSuperInterfaces(type);

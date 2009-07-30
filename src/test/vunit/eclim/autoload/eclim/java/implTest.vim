@@ -37,18 +37,61 @@ function! TestJavaImpl()
   call VUAssertTrue(bufname('%') =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
 
   call cursor(line('$'), 1)
-  let line = search('public boolean equals(Object obj)', 'bc')
+  let line = search('public abstract String put(Integer key, String value)', 'bc')
 
-  call VUAssertTrue(line > 0, 'Equals method not found.')
-  call VUAssertEquals(getline(line), '  public boolean equals(Object obj)')
+  call VUAssertTrue(line > 0, 'put method not found.')
+  call VUAssertEquals(getline(line),
+    \ '  public abstract String put(Integer key, String value)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertEquals(getline(line), '  //public boolean equals(Object obj)')
+  call VUAssertEquals(getline(line),
+    \ '  //public abstract String put(Integer key, String value)')
   quit
   call cursor(1, 1)
-  call VUAssertTrue(search('public boolean equals(Object obj)', 'c'),
-    \ 'Method no inserted.')
+  call VUAssertTrue(search('public String put(Integer key, String value)', 'c'),
+    \ 'Method not inserted.')
+endfunction " }}}
+
+" TestJavaImplSub() {{{
+function! TestJavaImplSub()
+  edit! src/org/eclim/test/impl/TestSubImplVUnit.java
+  call PeekRedir()
+
+  JavaImpl
+
+  call VUAssertTrue(bufname('%') =~
+    \ 'src/org/eclim/test/impl/TestSubImplVUnit\.java_impl$')
+
+  let compareLine = search('public abstract int compare(String o1, String o2)')
+
+  call VUAssertTrue(compareLine > 0, 'compare method not found.')
+  call VUAssertEquals(getline(compareLine),
+    \ '  public abstract int compare(String o1, String o2)')
+
+  silent! exec "normal \<cr>"
+
+  call VUAssertEquals(getline(compareLine),
+    \ '  //public abstract int compare(String o1, String o2)')
+
+  let putLine = search('public abstract String put(Integer key, String value)')
+
+  call VUAssertTrue(putLine > 0, 'put method not found.')
+  call VUAssertEquals(getline(putLine),
+    \ '  public abstract String put(Integer key, String value)')
+
+  silent! exec "normal \<cr>"
+
+  call VUAssertEquals(getline(putLine),
+    \ '  //public abstract String put(Integer key, String value)')
+
+  bdelete
+
+  call cursor(1, 1)
+  call VUAssertTrue(search('public int compare(String o1, String o2)'),
+    \ 'put method not inserted.')
+  call VUAssertTrue(search('public String put(Integer key, String value)'),
+    \ 'compare method not inserted.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

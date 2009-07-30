@@ -53,26 +53,28 @@ public class DelegateCommandTest
     assertTrue("Wrong first line.",
         result.startsWith("org.eclim.test.delegate.TestDelegate"));
     assertTrue("Interface not in results.",
-        result.indexOf("package java.util;\npublic interface List {") != -1);
+        result.indexOf("package java.util;\npublic interface List<Double> {") != -1);
     assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract boolean remove(Object o)") != -1);
+        result.indexOf("\tpublic abstract Iterator<Double> iterator()") != -1);
+    assertTrue("Method not in results.",
+        result.indexOf("\tpublic abstract boolean add(Double o)") != -1);
 
     result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "org.eclim.test.delegate.TestDelegate",
-      "-s", "java.util.List", "-m", "remove(Object)"
+      "-s", "java.util.List<Double>", "-m", "add(Double)"
     });
 
     System.out.println(result);
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public boolean remove\\(Object o\\)\n  \\{\n  " +
-          "\treturn list.remove\\(o\\);")
+        Pattern.compile("public boolean add\\(Double o\\)\n  \\{\n  " +
+          "\treturn list.add\\(o\\);")
         .matcher(contents).find());
 
     assertTrue("Method not commented out in results.",
-        result.indexOf("//public abstract boolean remove(Object o)") != -1);
+        result.indexOf("//public abstract boolean add(Double o)") != -1);
   }
 }

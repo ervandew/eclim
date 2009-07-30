@@ -37,7 +37,10 @@ import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
+
+import org.eclim.util.CollectionUtils;
 
 import org.eclim.util.file.Position;
 
@@ -72,35 +75,35 @@ public class JUnitImplCommand
   /**
    * {@inheritDoc}
    */
-  protected IType[] getSuperTypes(CommandLine commandLine, IType type)
+  @Override
+  protected TypeInfo[] getSuperTypes(CommandLine commandLine, IType type)
     throws Exception
   {
-    ArrayList<IType> types = new ArrayList<IType>();
+    ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
 
     String baseType = commandLine.getValue(Options.BASETYPE_OPTION);
     if(baseType != null){
       IType base = type.getJavaProject().findType(baseType);
-      types.add(base);
+      types.add(new TypeInfo(base, null, null));
 
-      IType[] baseTypes = super.getSuperTypes(commandLine, base);
-      for(int ii = 0; ii < baseTypes.length; ii ++){
-        types.add(baseTypes[ii]);
-      }
+      TypeInfo[] baseTypes = super.getSuperTypes(commandLine, base);
+      CollectionUtils.addAll(types, baseTypes);
     }
 
-    IType[] testTypes = super.getSuperTypes(commandLine, type);
+    TypeInfo[] testTypes = super.getSuperTypes(commandLine, type);
     for(int ii = 0; ii <testTypes.length; ii ++){
       if(!types.contains(testTypes[ii])){
         types.add(testTypes[ii]);
       }
     }
 
-    return (IType[])types.toArray(new IType[types.size()]);
+    return (TypeInfo[])types.toArray(new TypeInfo[types.size()]);
   }
 
   /**
    * {@inheritDoc}
    */
+  @Override
   protected boolean isValidMethod(IMethod method)
     throws Exception
   {
@@ -117,6 +120,7 @@ public class JUnitImplCommand
   /**
    * {@inheritDoc}
    */
+  @Override
   protected boolean isValidType(IType type)
     throws Exception
   {
@@ -126,12 +130,17 @@ public class JUnitImplCommand
   /**
    * {@inheritDoc}
    */
+  @Override
   protected IMethod getImplemented(
-      IType type, Map<String, IMethod> baseMethods, IMethod method)
+      IType type,
+      Map<String, IMethod>
+      baseMethods,
+      TypeInfo superTypeInfo,
+      IMethod method)
     throws Exception
   {
     IMethod base = (IMethod)baseMethods.get(
-        MethodUtils.getMinimalMethodSignature(method));
+        MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
     if(base != null){
       return base;
     }
@@ -158,46 +167,48 @@ public class JUnitImplCommand
   /**
    * {@inheritDoc}
    */
+  @Override
   protected Position insertMethod(
       CommandLine commandLine,
       ICompilationUnit src,
       IType type,
-      IType superType,
+      TypeInfo superTypeInfo,
       IMethod method,
       IJavaElement sibling)
     throws Exception
   {
+    IType superType = superTypeInfo.getType();
     String baseType = commandLine.getValue(Options.BASETYPE_OPTION);
     if(baseType != null){
       IType base = type.getJavaProject().findType(baseType);
       if(base.equals(superType)){
-        return insertTestMethod(type, superType, method, sibling);
+        return insertTestMethod(type, superTypeInfo, method, sibling);
       }else{
-        IType[] superTypes = TypeUtils.getSuperTypes(base);
-        for (int ii = 0; ii < superTypes.length; ii++){
-          if(superTypes[ii].equals(superType)){
-            return insertTestMethod(type, superType, method, sibling);
+        TypeInfo[] superTypesInfo = TypeUtils.getSuperTypes(base);
+        for (TypeInfo info : superTypesInfo){
+          if(info.getType().equals(superType)){
+            return insertTestMethod(type, superTypeInfo, method, sibling);
           }
         }
       }
     }
 
     return super.insertMethod(
-        commandLine, src, type, superType, method, sibling);
+        commandLine, src, type, superTypeInfo, method, sibling);
   }
 
   /**
    * Inserts a test method stub for the supplied method.
    *
    * @param type The type to insert the method into.
-   * @param superType The super type the method is defined in.
+   * @param superTypeInfo The super type the method is defined in.
    * @param method The method to insert.
    * @param sibling The element to insert the new method before, or null to
    *  append to the end.
    * @return The position the method was inserted at.
    */
   protected Position insertTestMethod(
-      IType type, IType superType, IMethod method, IJavaElement sibling)
+      IType type, TypeInfo superTypeInfo, IMethod method, IJavaElement sibling)
     throws Exception
   {
     HashMap<String, Object> values = new HashMap<String, Object>();
@@ -207,8 +218,8 @@ public class JUnitImplCommand
     values.put("name",
         "test" + StringUtils.capitalize(method.getElementName()));
     values.put("methodName", method.getElementName());
-    values.put("superType", superType.getFullyQualifiedName());
-    values.put("methodSignatures", getMethodSignatures(superType, method));
+    values.put("superType", superTypeInfo.getType().getFullyQualifiedName());
+    values.put("methodSignatures", getMethodSignatures(superTypeInfo, method));
     values.put("methodBody", null);
 
     PluginResources resources = (PluginResources)
@@ -223,19 +234,20 @@ public class JUnitImplCommand
   /**
    * Constructs an array of method signatures.
    *
-   * @param type The type to grab the methods from.
+   * @param typeInfo The type to grab the methods from.
    * @param method The method or one of the overloaded methods to construct an
    * array from.
    * @return Array of method signatures.
    */
-  protected String[] getMethodSignatures(IType type, IMethod method)
+  protected String[] getMethodSignatures(TypeInfo typeInfo, IMethod method)
     throws Exception
   {
     ArrayList<String> signatures = new ArrayList<String>();
-    IMethod[] methods = type.getMethods();
+    IMethod[] methods = typeInfo.getType().getMethods();
     for (int ii = 0; ii < methods.length; ii++){
       if(methods[ii].getElementName().equals(method.getElementName())){
-        signatures.add(MethodUtils.getMinimalMethodSignature(methods[ii]));
+        String sig = MethodUtils.getMinimalMethodSignature(methods[ii], typeInfo);
+        signatures.add(sig);
       }
     }
     return (String[])signatures.toArray(new String[signatures.size()]);

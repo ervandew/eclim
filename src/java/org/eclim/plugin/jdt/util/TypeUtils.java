@@ -104,13 +104,14 @@ public class TypeUtils
   /**
    * Gets the signature for the supplied type.
    *
-   * @param type The type.
+   * @param typeInfo The typeInfo.
    * @return The signature.
    */
-  public static String getTypeSignature(IType type)
+  public static String getTypeSignature(TypeInfo typeInfo)
     throws Exception
   {
     StringBuffer buffer = new StringBuffer();
+    IType type = typeInfo.getType();
     int flags = type.getFlags();
     if(Flags.isPublic(flags)){
       buffer.append("public ");
@@ -127,6 +128,18 @@ public class TypeUtils
       }
     }
     buffer.append(type.getElementName());
+    String[] params = typeInfo.getTypeParameters();
+    String[] args = typeInfo.getTypeArguments();
+    if (params != null && params.length > 0 && args != null && args.length > 0){
+      buffer.append('<');
+      for (int ii = 0; ii < args.length; ii++){
+        if (ii > 0){
+          buffer.append(',');
+        }
+        buffer.append(args[ii]);
+      }
+      buffer.append('>');
+    }
     return buffer.toString();
   }
 
@@ -138,15 +151,15 @@ public class TypeUtils
    * @param method The method.
    * @return The super type that contains the method, or null if none.
    */
-  public static IType getSuperTypeContainingMethod(IType type, IMethod method)
+  public static TypeInfo getSuperTypeContainingMethod(IType type, IMethod method)
     throws Exception
   {
-    IType[] types = getSuperTypes(type);
-    for(int ii = 0; ii < types.length; ii++){
-      IMethod[] methods = types[ii].getMethods();
-      for (int jj = 0; jj < methods.length; jj++){
-        if(methods[jj].isSimilar(method)){
-          return types[ii];
+    TypeInfo[] types = getSuperTypes(type);
+    for(TypeInfo info : types){
+      IMethod[] methods = info.getType().getMethods();
+      for (IMethod m : methods){
+        if(m.isSimilar(method)){
+          return info;
         }
       }
     }
@@ -165,12 +178,13 @@ public class TypeUtils
       IType type, String signature)
     throws Exception
   {
-    IType[] types = getSuperTypes(type);
-    for(int ii = 0; ii < types.length; ii++){
-      IMethod[] methods = types[ii].getMethods();
-      for (int jj = 0; jj < methods.length; jj++){
-        if(MethodUtils.getMinimalMethodSignature(methods[jj]).equals(signature)){
-          return new Object[]{types[ii], methods[jj]};
+    TypeInfo[] types = getSuperTypes(type);
+    for(TypeInfo info : types){
+      IMethod[] methods = info.getType().getMethods();
+      for (IMethod method : methods){
+        String sig = MethodUtils.getMinimalMethodSignature(method, info);
+        if(sig.equals(signature)){
+          return new Object[]{info, method};
         }
       }
     }
@@ -237,9 +251,9 @@ public class TypeUtils
 
     // search imports
     IImportDeclaration[] imports = src.getImports();
-    for(int ii = 0; ii < imports.length; ii++){
-      if(imports[ii].getElementName().endsWith(name)){
-        return src.getJavaProject().findType(imports[ii].getElementName());
+    for(IImportDeclaration decl : imports){
+      if(decl.getElementName().endsWith(name)){
+        return src.getJavaProject().findType(decl.getElementName());
       }
     }
 
@@ -267,7 +281,7 @@ public class TypeUtils
    * @param type The type.
    * @return Array of types.
    */
-  public static IType[] getSuperTypes(IType type)
+  public static TypeInfo[] getSuperTypes(IType type)
     throws Exception
   {
     return getSuperTypes(type, false);
@@ -282,12 +296,12 @@ public class TypeUtils
    *  super types that could not be found in the project.
    * @return Array of types.
    */
-  public static IType[] getSuperTypes(IType type, boolean returnNotFound)
+  public static TypeInfo[] getSuperTypes(IType type, boolean returnNotFound)
     throws Exception
   {
-    IType[] interfaces = getInterfaces(type, returnNotFound);
-    IType[] superClasses = getSuperClasses(type, returnNotFound);
-    IType[] types = new IType[interfaces.length + superClasses.length];
+    TypeInfo[] interfaces = getInterfaces(type, returnNotFound);
+    TypeInfo[] superClasses = getSuperClasses(type, returnNotFound);
+    TypeInfo[] types = new TypeInfo[interfaces.length + superClasses.length];
 
     System.arraycopy(interfaces, 0, types, 0, interfaces.length);
     System.arraycopy(
@@ -302,7 +316,7 @@ public class TypeUtils
    * @param type The type.
    * @return Array of superclass types.
    */
-  public static IType[] getSuperClasses(IType type)
+  public static TypeInfo[] getSuperClasses(IType type)
     throws Exception
   {
     return getSuperClasses(type, false);
@@ -316,20 +330,21 @@ public class TypeUtils
    *  super class types that could not be found in the project.
    * @return Array of superclass types.
    */
-  public static IType[] getSuperClasses(IType type, boolean returnNotFound)
+  public static TypeInfo[] getSuperClasses(IType type, boolean returnNotFound)
     throws Exception
   {
-    ArrayList<IType> types = new ArrayList<IType>();
+    ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
 
-    getSuperClasses(type, types, returnNotFound);
+    getSuperClasses(type, types, returnNotFound, null);
 
     // add java.lang.Object if not already added
     IType objectType = type.getJavaProject().findType("java.lang.Object");
-    if(!types.contains(objectType)){
-      types.add(objectType);
+    TypeInfo objectTypeInfo = new TypeInfo(objectType, null, null);
+    if(!types.contains(objectTypeInfo)){
+      types.add(objectTypeInfo);
     }
 
-    return (IType[])types.toArray(new IType[types.size()]);
+    return (TypeInfo[])types.toArray(new TypeInfo[types.size()]);
   }
 
   /**
@@ -338,7 +353,7 @@ public class TypeUtils
    * @param type The type.
    * @return Array of interface types.
    */
-  public static IType[] getInterfaces(IType type)
+  public static TypeInfo[] getInterfaces(IType type)
     throws Exception
   {
     return getInterfaces(type, false);
@@ -352,13 +367,13 @@ public class TypeUtils
    *  super interface types that could not be found in the project.
    * @return Array of interface types.
    */
-  public static IType[] getInterfaces(IType type, boolean returnNotFound)
+  public static TypeInfo[] getInterfaces(IType type, boolean returnNotFound)
     throws Exception
   {
-    ArrayList<IType> types = new ArrayList<IType>();
-    getInterfaces(type, types, returnNotFound);
+    ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
+    getInterfaces(type, types, returnNotFound, null);
 
-    return (IType[])types.toArray(new IType[types.size()]);
+    return (TypeInfo[])types.toArray(new TypeInfo[types.size()]);
   }
 
   /**
@@ -368,23 +383,38 @@ public class TypeUtils
    * @param superclasses The list to add results to.
    * @param includeNotFound Whether or not to include types that were not found
    * (adds them as handle only IType instances).
+   * @param baseType The first type in the recursion stack.
    */
-  private static void getSuperClasses(
-      IType type, List<IType> superclasses, boolean includeNotFound)
+  public static void getSuperClasses(
+      IType type,
+      List<TypeInfo> superclasses,
+      boolean includeNotFound,
+      TypeInfo baseType)
     throws Exception
   {
-    IType superclass = getSuperClass(type);
-    if(superclass != null && !superclasses.contains(superclass)){
-      superclasses.add(superclass);
-      getSuperClasses(superclass, superclasses, includeNotFound);
-    }else if(superclass == null && includeNotFound){
+    TypeInfo superclassInfo = getSuperClass(type, baseType);
+    if (superclassInfo != null){
+      if (baseType == null ||
+          baseType.getTypeArguments().length !=
+            superclassInfo.getTypeArguments().length)
+      {
+        baseType = superclassInfo;
+      }
+    }
+
+    if(superclassInfo != null && !superclasses.contains(superclassInfo)){
+      superclasses.add(superclassInfo);
+      getSuperClasses(
+          superclassInfo.getType(), superclasses, includeNotFound, baseType);
+    }else if(superclassInfo == null && includeNotFound){
       String typeName = type.getSuperclassName();
       if(typeName != null){
         // get a handle only reference to the super class that wasn't found.
         try{
-          superclass = type.getType(typeName);
-          if(!superclasses.contains(superclass)){
-            superclasses.add(superclass);
+          IType superclass = type.getType(typeName);
+          superclassInfo = new TypeInfo(superclass, null, null);
+          if(!superclasses.contains(superclassInfo)){
+            superclasses.add(superclassInfo);
           }
         }catch(Exception e){
           // don't let the error cause the command to fail.
@@ -401,21 +431,53 @@ public class TypeUtils
    * @param type The type to get the superclass of.
    * @return The superclass type or null if none.
    */
-  public static IType getSuperClass(IType type)
+  public static TypeInfo getSuperClass(IType type)
     throws Exception
   {
-    String superclass = type.getSuperclassName();
-    if(superclass != null){
+    return getSuperClass(type, null);
+  }
+
+  /**
+   * Gets the super type of the supplied type, if any.
+   *
+   * @param type The type to get the superclass of.
+   * @return The superclass type or null if none.
+   */
+  private static TypeInfo getSuperClass(IType type, TypeInfo baseType)
+    throws Exception
+  {
+    String superclassSig = type.getSuperclassTypeSignature();
+    if(superclassSig != null){
+      String superclass = Signature.getSignatureSimpleName(superclassSig);
+      String[] args = Signature.getTypeArguments(superclassSig);
+      String[] typeArgs = new String[args.length];
+      for (int ii = 0; ii < args.length; ii++){
+        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
+      }
+      if (baseType != null &&
+          baseType.getTypeArguments().length == typeArgs.length){
+        typeArgs = baseType.getTypeArguments();
+      }
+
       String[][] types = type.resolveType(superclass);
       if(types != null){
-        for(int ii = 0; ii < types.length; ii++){
-          String typeName = types[ii][0] + "." + types[ii][1];
+        for(String[] typeInfo : types){
+          String typeName = typeInfo[0] + "." + typeInfo[1];
           IType found = type.getJavaProject().findType(typeName);
-          return found;
+          if (found != null){
+            ITypeParameter[] params = found.getTypeParameters();
+            String[] typeParams = new String[params.length];
+            for (int ii = 0; ii < params.length; ii++){
+              typeParams[ii] = params[ii].getElementName();
+            }
+            return new TypeInfo(found, typeParams, typeArgs);
+          }
         }
       }else{
         IType found = type.getJavaProject().findType(superclass);
-        return found;
+        if (found != null){
+          return new TypeInfo(found, null, typeArgs);
+        }
       }
     }
     return null;
@@ -433,18 +495,18 @@ public class TypeUtils
   {
     String[] parents = type.getSuperInterfaceNames();
     ArrayList<IType> interfaces = new ArrayList<IType>(parents.length);
-    for(int ii = 0; ii < parents.length; ii++){
-      String[][] types = type.resolveType(parents[ii]);
+    for(String parent : parents){
+      String[][] types = type.resolveType(parent);
       if(types != null){
-        for(int jj = 0; jj < types.length; jj++){
-          String typeName = types[jj][0] + "." + types[jj][1];
+        for(String[] typeInfo : types){
+          String typeName = typeInfo[0] + "." + typeInfo[1];
           IType found = type.getJavaProject().findType(typeName);
           if(found != null){
             interfaces.add(found);
           }
         }
       }else{
-        IType found = type.getJavaProject().findType(parents[ii]);
+        IType found = type.getJavaProject().findType(parent);
         if(found != null){
           interfaces.add(found);
         }
@@ -460,55 +522,107 @@ public class TypeUtils
    * @param interfaces The list to add results to.
    * @param includeNotFound Whether or not to include types that were not found
    *  (adds them as handle only IType instances).
+   * @param baseType The first type in the recursion stack.
    */
-  private static void getInterfaces(
-      IType type, List<IType> interfaces, boolean includeNotFound)
+  public static void getInterfaces(
+      IType type,
+      List<TypeInfo> interfaces,
+      boolean includeNotFound,
+      TypeInfo baseType)
     throws Exception
   {
     // directly implemented interfaces.
-    String[] parents = type.getSuperInterfaceNames();
-    for(int ii = 0; ii < parents.length; ii++){
-      String[][] types = type.resolveType(parents[ii]);
+    String[] parentSigs = type.getSuperInterfaceTypeSignatures();
+    for(String parentSig : parentSigs){
+      String parent = Signature.getSignatureSimpleName(parentSig);
+
+      String[] args = Signature.getTypeArguments(parentSig);
+      String[] typeArgs = new String[args.length];
+      for (int ii = 0; ii < args.length; ii++){
+        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
+      }
+      if (baseType != null &&
+          baseType.getTypeArguments().length == typeArgs.length){
+        typeArgs = baseType.getTypeArguments();
+      }
+
+      IType found = null;
+      String[][] types = type.resolveType(parent);
       if(types != null){
-        for(int jj = 0; jj < types.length; jj++){
-          String typeName = types[jj][0] + "." + types[jj][1];
-          IType found = type.getJavaProject().findType(typeName);
-          if(found != null && !interfaces.contains(found)){
-            interfaces.add(found);
-            getInterfaces(found, interfaces, includeNotFound);
-          }
+        for(String[] typeInfo : types){
+          String typeName = typeInfo[0] + "." + typeInfo[1];
+          found = type.getJavaProject().findType(typeName);
         }
       }else{
-        IType found = type.getJavaProject().findType(parents[ii]);
-        if(found != null && !interfaces.contains(found)){
-          interfaces.add(found);
-          getInterfaces(found, interfaces, includeNotFound);
-        }else if(found == null && includeNotFound){
-          String typeName = parents[ii];
-          if(typeName != null){
-            // get a handle only reference to the super class that wasn't found.
-            try{
-              found = type.getType(typeName);
-              if(!interfaces.contains(found)){
-                interfaces.add(found);
-              }
-            }catch(Exception e){
-              // don't let the error cause the command to fail.
-              logger.warn("Unable to get a handle to interface not found: '" +
-                  typeName + "'", e);
-            }
-          }
-        }else if(found == null){
-          logger.warn("Unable to resolve implmented interface '{}' for '{}'",
-              parents[ii], type.getFullyQualifiedName());
+        found = type.getJavaProject().findType(parent);
+      }
+
+      if(found != null){
+        ITypeParameter[] params = found.getTypeParameters();
+        String[] typeParams = new String[params.length];
+        for (int ii = 0; ii < params.length; ii++){
+          typeParams[ii] = params[ii].getElementName();
         }
+        TypeInfo typeInfo = new TypeInfo(found, typeParams, typeArgs);
+        if (!interfaces.contains(typeInfo)){
+          interfaces.add(typeInfo);
+          if (baseType == null ||
+              baseType.getTypeArguments().length !=
+                typeInfo.getTypeArguments().length)
+          {
+            baseType = typeInfo;
+          }
+          getInterfaces(found, interfaces, includeNotFound, baseType);
+        }
+      }else if(found == null && includeNotFound){
+        String typeName = parent;
+        if(typeName != null){
+          // get a handle only reference to the super class that wasn't found.
+          try{
+            found = type.getType(typeName);
+            TypeInfo typeInfo = new TypeInfo(found, null, typeArgs);
+            if(!interfaces.contains(typeInfo)){
+              interfaces.add(typeInfo);
+            }
+          }catch(Exception e){
+            // don't let the error cause the command to fail.
+            logger.warn("Unable to get a handle to interface not found: '" +
+                typeName + "'", e);
+          }
+        }
+      }else if(found == null){
+        logger.warn("Unable to resolve implmented interface '{}' for '{}'",
+            parent, type.getFullyQualifiedName());
       }
     }
 
     // indirectly implemented parents
-    IType superclass = getSuperClass(type);
-    if(superclass != null){
-      getInterfaces(superclass, interfaces, includeNotFound);
+    TypeInfo superclassInfo = getSuperClass(type);
+    if(superclassInfo != null){
+      getInterfaces(
+          superclassInfo.getType(), interfaces, includeNotFound, superclassInfo);
     }
+  }
+
+  /**
+   * If the supplied type represents a generic param type, then replace it with
+   * the properly concrete type from the supplied type info.
+   *
+   * @param type The possibly generic param type.
+   * @param typeInfo The type info.
+   * @return The concrete type.
+   */
+  public static String replaceTypeParams(String type, TypeInfo typeInfo)
+  {
+    if(typeInfo != null){
+      String[] params = typeInfo.getTypeParameters();
+      String[] args = typeInfo.getTypeArguments();
+      if (params != null && params.length == args.length){
+        for (int ii = 0; ii < params.length; ii++){
+          type = type.replaceAll("\\b" + params[ii] + "\\b", args[ii]);
+        }
+      }
+    }
+    return type;
   }
 }

@@ -106,7 +106,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
       let methods = substitute(line, '.*\s\(\w\+(.*\)', '\1', '')
       let methods = substitute(methods, '\s\w\+\(,\|)\)', '\1', 'g')
       let methods = substitute(methods, ',\s', ',', 'g')
-      let methods = substitute(methods, '<.\{-}>', '', 'g')
+      "let methods = substitute(methods, '<.\{-}>', '', 'g')
       let ln = search('^\w', 'bWn')
       if ln > 0
         let superType = substitute(getline(ln), '.*\s\(.*\) {', '\1', '')

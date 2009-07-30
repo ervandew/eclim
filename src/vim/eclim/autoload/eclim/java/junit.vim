@@ -26,7 +26,7 @@
 let s:command_impl = '-command java_junit_impl -p "<project>" -f "<file>" <base>'
 let s:command_insert =
   \ '-command java_junit_impl -p "<project>" -f "<file>" <base> ' .
-  \ '-t "<type>" -s <superType> <methods>'
+  \ '-t "<type>" -s "<superType>" <methods>'
 " }}}
 
 " JUnitExecute(test) {{{
