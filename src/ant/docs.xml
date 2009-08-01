@@ -23,7 +23,7 @@
     <mkdir dir="build/doc/api"/>
 
     <property name="javadoc.include" value="org/eclim/plugin/core/**/*.java"/>
-    <for list="${plugins}" param="plugin">
+    <for list="core,${plugins}" param="plugin">
       <sequential>
         <var name="javadoc.include"
             value="org/eclim/plugin/@{plugin}/**/*.java,${javadoc.include}"/>

@@ -108,7 +108,7 @@
       </classpath>
     </javac>
 
-    <for list="${plugins}" param="plugin">
+    <for list="core,${plugins}" param="plugin">
       <sequential>
         <echo>Compile tests for @{plugin}...</echo>
         <javac destdir="build/test/junit/classes" debug="on" optimize="false"
