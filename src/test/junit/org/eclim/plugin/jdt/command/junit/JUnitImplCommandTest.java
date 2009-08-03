@@ -121,7 +121,7 @@ public class JUnitImplCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public void testAMethod\\(\\)")
+        Pattern.compile("@Test\n\\s+public void aMethod\\(\\)")
         .matcher(contents).find());
 
     assertEquals("Wrong results.", valid, result);
@@ -167,7 +167,7 @@ public class JUnitImplCommandTest
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public void testCompare\\(\\)")
+        Pattern.compile("@Test\n\\s+public void compare\\(\\)")
         .matcher(contents).find());
 
     assertEquals("Wrong results.", valid, result);

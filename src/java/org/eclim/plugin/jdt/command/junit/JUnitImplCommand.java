@@ -29,6 +29,7 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclim.plugin.core.util.TemplateUtils;
 
 import org.eclim.plugin.jdt.PluginResources;
@@ -43,6 +44,8 @@ import org.eclim.plugin.jdt.util.TypeUtils;
 import org.eclim.util.CollectionUtils;
 
 import org.eclim.util.file.Position;
+
+import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -70,7 +73,7 @@ import org.eclipse.jdt.core.IType;
 public class JUnitImplCommand
   extends ImplCommand
 {
-  private static final String JUNIT3_TEMPLATE = "junit3_method.gst";
+  private static final String JUNIT_TEMPLATE = "junit<version>_method.gst";
 
   /**
    * {@inheritDoc}
@@ -157,10 +160,16 @@ public class JUnitImplCommand
   protected String getTestMethodSignature(IMethod method)
     throws Exception
   {
+    String version = ProjectUtils.getSetting(
+        method.getJavaProject().getProject(), "org.eclim.java.junit.version");
+
+    String name = method.getElementName();
+    if (version.equals("3")){
+      name = "test" + StringUtils.capitalize(name);
+    }
+
     StringBuffer buffer = new StringBuffer();
-    buffer.append("test")
-      .append(StringUtils.capitalize(method.getElementName()))
-      .append("()");
+    buffer.append(name).append("()");
     return buffer.toString();
   }
 
@@ -211,12 +220,18 @@ public class JUnitImplCommand
       IType type, TypeInfo superTypeInfo, IMethod method, IJavaElement sibling)
     throws Exception
   {
+    IProject project = type.getJavaProject().getProject();
     HashMap<String, Object> values = new HashMap<String, Object>();
-    JavaUtils.loadPreferencesForTemplate(
-        type.getJavaProject().getProject(), getPreferences(), values);
+    JavaUtils.loadPreferencesForTemplate(project, getPreferences(), values);
 
-    values.put("name",
-        "test" + StringUtils.capitalize(method.getElementName()));
+    String version =
+      ProjectUtils.getSetting(project, "org.eclim.java.junit.version");
+
+    String name = method.getElementName();
+    if (version.equals("3")){
+      name = "test" + StringUtils.capitalize(name);
+    }
+    values.put("name", name);
     values.put("methodName", method.getElementName());
     values.put("superType", superTypeInfo.getType().getFullyQualifiedName());
     values.put("methodSignatures", getMethodSignatures(superTypeInfo, method));
@@ -224,7 +239,8 @@ public class JUnitImplCommand
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
-    String result = TemplateUtils.evaluate(resources, JUNIT3_TEMPLATE, values);
+    String template = JUNIT_TEMPLATE.replace("<version>", version);
+    String result = TemplateUtils.evaluate(resources, template, values);
     Position position = TypeUtils.getPosition(type,
         type.createMethod(result, sibling, false, null));
 

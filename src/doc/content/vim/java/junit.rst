@@ -135,9 +135,8 @@ look for the class ``org.foo.bar.Baz`` and generate a list of methods to test
 from it.
 
 When you hit <enter> on the method to add, if that method belongs to a type in
-the hierarchy for the class being tested, then the corresponding
-``testMethodName`` will be inserted, otherwise a regular overriding stub will be
-generated.
+the hierarchy for the class being tested, then the corresponding test method
+stub will be inserted, otherwise a regular overriding stub will be generated.
 
 .. note::
 
@@ -148,3 +147,15 @@ generated.
 
   The junit.jar file must be in your project's classpath for eclim to
   display possible methods to override in the junit test-case hierarchy.
+
+
+Configuration
+-------------
+
+Eclim Settings
+
+.. _org.eclim.java.junit.version:
+
+- **org.eclim.java.junit.version** (Default: 4) -
+  Specifies the primary junit version being used, which determines which junit
+  test method template will be used to generated the test method stubs.

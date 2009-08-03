@@ -26,8 +26,6 @@ import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.Services;
 
-import org.eclim.eclipse.AbstractEclimApplication;
-
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
@@ -130,7 +128,8 @@ public class PluginResources
       "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
-      "JDT/JUnit org.eclim.java.junit.src_dir"
+      "JDT/JUnit org.eclim.java.junit.src_dir\n" +
+      "JDT/JUnit org.eclim.java.junit.version 4 (3|4)"
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,

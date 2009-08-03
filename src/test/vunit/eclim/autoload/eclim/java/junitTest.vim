@@ -27,10 +27,57 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestJUnitImpl() {{{
-function! TestJUnitImpl()
-  edit! src/org/eclim/test/junit/SomeClassTestVUnit.java
-  call PeekRedir()
+" TestJUnitImpl4() {{{
+function! TestJUnitImpl4()
+  call s:InitFile('4')
+
+  call cursor(3, 1)
+  JUnitImpl
+  call VUAssertTrue(bufname('%') =~ 'SomeClassTestVUnit.java_impl$',
+    \ 'JUnit impl window not opened.')
+  call VUAssertEquals('org.eclim.test.junit.SomeClassTestVUnit', getline(1),
+    \ 'Wrong type in junit imple window.')
+
+  call VUAssertTrue(search('^\s*public void aMethod()'),
+    \ 'Super method aMethod() not found')
+  call VUAssertTrue(search('^\s*public void aMethod(String name)'),
+    \ 'Super method aMethod(String) not found')
+  call VUAssertTrue(search('^\s*public abstract int compare(String o1, String o2)'),
+    \ 'Super method compare() not found')
+
+  call cursor(6, 1)
+  exec "normal \<cr>"
+
+  call cursor(12, 1)
+  exec "normal Vj\<cr>"
+
+  call VUAssertTrue(search('^\s*//public void aMethod()'),
+    \ 'Super method aMethod() not commented out after add.')
+  call VUAssertTrue(search('^\s*//public void aMethod(String name)'),
+    \ 'Super method aMethod(String) not commented out after add.')
+  call VUAssertTrue(search('^\s*//public abstract int compare(String o1, String o2)'),
+    \ 'Super method compare() not commented out after add.')
+  call VUAssertTrue(search('^\s*//public abstract boolean equals(Object obj)'),
+    \ 'Super method equals() not commented out after add.')
+  bdelete
+
+  call VUAssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()$'),
+    \ 'see testAMethod() not added.')
+  call VUAssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)$'),
+    \ 'see testAMethod(String) not added.')
+  call VUAssertTrue(search('@Test\_s\+public void aMethod()$'),
+    \ 'testAMethod() not added.')
+  call VUAssertTrue(search('* @see java.util.Comparator#compare(String,String)$'),
+    \ 'see compare() not added.')
+  call VUAssertTrue(search('@Test\_s\+public void compare()$'),
+    \ 'testCompare() not added.')
+  call VUAssertTrue(search('@Test\_s\+public void equals()$'),
+    \ 'testEquals() not added.')
+endfunction " }}}
+
+" TestJUnitImpl3() {{{
+function! TestJUnitImpl3()
+  call s:InitFile('3')
 
   call cursor(3, 1)
   JUnitImpl
@@ -74,6 +121,32 @@ function! TestJUnitImpl()
     \ 'testCompare() not added.')
   call VUAssertTrue(search('public void testEquals()$'),
     \ 'testEquals() not added.')
+endfunction " }}}
+
+" s:InitFile(version) {{{
+function s:InitFile(version)
+  edit! src/org/eclim/test/junit/SomeClassTestVUnit.java
+  call PeekRedir()
+
+  1,$delete _
+  call append(1, [
+      \ 'package org.eclim.test.junit;',
+      \ '',
+      \ 'public class SomeClassTestVUnit',
+      \ '{',
+      \ '}',
+    \ ])
+  1,1delete _
+  write
+
+  ProjectSettings
+
+  call search('junit\.version=', 'w')
+  let setting = getline('.')
+  let setting = substitute(setting, '\(.*junit\.version=\).*', '\1' . a:version, '')
+  call setline(line('.'), setting)
+  write
+  bdelete
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
