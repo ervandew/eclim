@@ -16,6 +16,25 @@
 History of Changes
 ==================
 
+.. _1.5.2:
+
+1.5.2 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Eclim:
+  - Added :ref:`:ProjectProblems` command to populate vim's quickfix with a
+    list of all eclipse build errors and warnings for the current and all
+    related projects.
+
+Java:
+  - Updated :ref:`:JavaImpl`, :ref:`:JavaDelegate`, and
+    :ref:`:JUnitImpl <:JUnitImpl>` to better support generics.
+  - Updated :ref:`:JUnitImpl <:JUnitImpl>` to support a junit 4 method
+    templates.
+
 .. _1.5.1:
 
 1.5.1 (Jul. 18, 2009)
