@@ -59,6 +59,9 @@ Project Commands
   Add one or more natures to a project.
 - :ref:`:ProjectNatureRemove` <project> [<nature> ...] -
   Remove one or more natures from a project.
+- :ref:`:ProjectProblems` [<project>] -
+  Populates vim's quickfix with all eclipse build errors and warnings for the
+  current, or specified project, and all related projects.
 - :ref:`:ProjectCD` -
   Changes the global current working directory to the root directory of the
   current file's project (executes a :cd).

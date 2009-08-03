@@ -168,6 +168,15 @@ Vim's command line completion to complete the project name.
   Removes one or more natures from a project. Supports command line
   completion of nature names.
 
+.. _\:ProjectProblems:
+
+- **:ProjectProblems** [<project>]
+  Populates vim's quickfix with a list of all eclipse build errors and warnings
+  for the current, or specifice project, and all related projects.  Very
+  similar to eclipse's "Problems" view.  By default, if the current quickfix
+  list represents a problems list, then as you save source files this list will
+  be updated accordingly.
+
 .. _\:ProjectCD:
 
 - **:ProjectCD**
@@ -289,6 +298,21 @@ Configuration
 -------------
 
 Vim Settings
+
+.. _g\:EclimProblemsQuickFixOpen:
+
+- **g:EclimProblemsQuickFixOpen** (Default: 'botright copen')
+
+  Specified the command used to open the quickfix window when executing the
+  :ref`:ProjectProblems` command.
+
+.. _g\:EclimProjectProblemsUpdateOnSave:
+
+- **g:EclimProjectProblemsUpdateOnSave** (Default: 1)
+
+  When non 0, indicates that the problems list should be updated when saving
+  source files, but only if the quickfix list currently represents a problems
+  list.
 
 .. _g\:EclimProjectTreeAutoOpen:
 
