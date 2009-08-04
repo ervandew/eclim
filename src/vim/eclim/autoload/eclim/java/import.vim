@@ -37,6 +37,7 @@ let s:command_import_missing =
   \ '-command java_import_missing -p "<project>" -f "<file>"'
 let s:command_unused_imports =
   \ '-command java_imports_unused -p "<project>" -f "<file>"'
+let s:command_import_order = '-command java_import_order -p "<project>"'
 " }}}
 
 " Import() {{{
@@ -157,6 +158,12 @@ endfunction " }}}
 " InsertImports(classes) {{{
 " Inserts list of fully qualified class names.
 function! eclim#java#import#InsertImports(classes)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  call s:InitImportOrder()
+
   let line = line('.')
   let col = col('.')
 
@@ -171,14 +178,14 @@ function! eclim#java#import#InsertImports(classes)
   for import in imports[:]
     if import =~ '^\s*import\s'
       let ic = substitute(import, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
-      while class < ic
+      while s:CompareClasses(class, ic) < 0
         let line += 1
         " grouped with the previous import, insert just after it.
-        if prevclass != '' && s:CompareClasses(prevclass, class)
+        if prevclass != '' && s:CompareClassGroups(prevclass, class)
           call insert(imports, 'import ' . class . ';', lastimport + 1)
 
         " grouped with the current import, insert just before it
-        elseif s:CompareClasses(ic, class)
+        elseif s:CompareClassGroups(ic, class)
           " edge case for 0 package level comparison, insert after the
           " previous import.
           if g:EclimJavaImportPackageSeparationLevel == 0
@@ -228,7 +235,7 @@ function! eclim#java#import#InsertImports(classes)
   for class in classes
     let line += 1
     call add(imports, 'import ' . class . ';')
-    if prevclass != '' && !s:CompareClasses(prevclass, class)
+    if prevclass != '' && !s:CompareClassGroups(prevclass, class)
       let line += 1
       call insert(imports, '', -1)
     endif
@@ -244,6 +251,10 @@ endfunction " }}}
 " SortImports() {{{
 " Sorts the import statements for the current file.
 function! eclim#java#import#SortImports()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
   let line = line('.')
   let col = col('.')
 
@@ -253,37 +264,17 @@ function! eclim#java#import#SortImports()
   let line -= prevlen - len(imports)
 
   if len(imports) > 0
+    call s:InitImportOrder()
+
     " sort the imports and put them back in the file
-    call sort(imports)
-
-    " find section of java imports
-    let jf = -1
-    let jl = -1
-    let index = 0
-    for import in imports
-      if import =~ '^\s*import\s\+java[x]\?\..*;'
-        if jf == -1
-          let jf = index
-          let jl = index
-        else
-          let jl = index
-        endif
-      elseif jf != -1
-        break
-      endif
-      let index += 1
-    endfor
-
-    " move java imports to the top.
-    let java_imports = remove(imports, jf, jl)
-    let imports = java_imports + imports
+    call sort(imports, function('s:CompareImports'))
 
     " separate imports by package name
     let package = substitute(imports[0], '.*import\s\+\(.*\)\..*\s*;.*', '\1', '')
     let index = 0
     for import in imports[:]
       let next = substitute(import, '.*import\s\+\(.*\)\..*\s*;.*', '\1', '')
-      if !s:ComparePackages(package, next)
+      if !s:ComparePackageGroups(package, next)
         let package = next
         call insert(imports, '', index)
         let index += 1
@@ -391,6 +382,20 @@ function! eclim#java#import#CleanImports()
   call cursor(line, col)
 endfunction " }}}
 
+" s:InitImportOrder() {{{
+" Should only be called once per import command (not in a loop).
+function! s:InitImportOrder()
+  let project = eclim#project#util#GetCurrentProjectName()
+  let command = s:command_import_order
+  let command = substitute(command, '<project>', project, '')
+  let result = eclim#ExecuteEclim(command)
+  if result == "0"
+    return
+  endif
+  let s:import_order = split(result, "\n")
+echom 'import_order: ' . string(s:import_order)
+endfunction " }}}
+
 " s:CutImports() {{{
 " Cuts the imports from the current file and returns the lines as a list.
 function! s:CutImports()
@@ -445,21 +450,61 @@ function! s:PasteImports(imports)
   return 0
 endfunction " }}}
 
-" s:CompareClasses() {{{
+" s:CompareImports(i1, i2) {{{
+" Compares two import statements to determine which should come first.
+function! s:CompareImports(i1, i2)
+  let c1 = substitute(a:i1, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
+  let c2 = substitute(a:i2, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
+  return s:CompareClasses(c1, c2)
+endfunction " }}}
+
+" s:CompareClasses(c1, c2) {{{
+" Compares two classes to determine which should come first.
+function! s:CompareClasses(c1, c2)
+  let max = len(s:import_order)
+  let c1index = max
+  let c2index = max
+  let index = 0
+  for p in s:import_order
+    if c1index == max && a:c1 =~ '^' . escape(p, '.') . '\>'
+      let c1index = index
+    endif
+    if c2index == max && a:c2 =~ '^' . escape(p, '.') . '\>'
+      let c2index = index
+    endif
+
+    if c1index != max && c2index != max
+      break
+    endif
+    let index += 1
+  endfor
+
+  if c1index < c2index || (c1index == c2index && a:c1 < a:c2)
+    return -1
+  endif
+
+  if c1index > c2index || (c1index == c2index && a:c1 > a:c2)
+    return 1
+  endif
+
+  return 0
+endfunction " }}}
+
+" s:CompareClassGroups(c1, c2) {{{
 " Compares the two classes to determine if they should be separated from each
 " other in the import block of the class.  Returns 1 if they should be grouped
 " together, 0 otherwise.
-function! s:CompareClasses(c1, c2)
+function! s:CompareClassGroups(c1, c2)
   let p1 = substitute(a:c1, '\(.*\)\..*', '\1', '')
   let p2 = substitute(a:c2, '\(.*\)\..*', '\1', '')
-  return s:ComparePackages(p1, p2)
+  return s:ComparePackageGroups(p1, p2)
 endfunction " }}}
 
-" s:ComparePackages() {{{
+" s:ComparePackageGroups(p1, p2) {{{
 " Compares the two packages to determine if they should be separated from each
 " other in the import block of the class.  Returns 1 if they should be grouped
 " together, 0 otherwise.
-function! s:ComparePackages(p1, p2)
+function! s:ComparePackageGroups(p1, p2)
   let level = g:EclimJavaImportPackageSeparationLevel
 
   if level == 0
