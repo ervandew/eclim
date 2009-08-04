@@ -38,6 +38,7 @@ let s:command_import_missing =
 let s:command_unused_imports =
   \ '-command java_imports_unused -p "<project>" -f "<file>"'
 let s:command_import_order = '-command java_import_order -p "<project>"'
+let s:import_regex = '^\s*import\s\+\(static\s\+\)\?\(.\{-}\)\s*;\s*'
 " }}}
 
 " Import() {{{
@@ -177,7 +178,7 @@ function! eclim#java#import#InsertImports(classes)
   let prevclass = ''
   for import in imports[:]
     if import =~ '^\s*import\s'
-      let ic = substitute(import, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
+      let ic = substitute(import, s:import_regex, '\2', '')
       while s:CompareClasses(class, ic) < 0
         let line += 1
         " grouped with the previous import, insert just after it.
@@ -270,12 +271,14 @@ function! eclim#java#import#SortImports()
     call sort(imports, function('s:CompareImports'))
 
     " separate imports by package name
-    let package = substitute(imports[0], '.*import\s\+\(.*\)\..*\s*;.*', '\1', '')
+    let class = substitute(imports[0], s:import_regex, '\2', '')
+    let package = substitute(class, '\(.*\)\..*', '\1', '')
     let index = 0
     for import in imports[:]
-      let next = substitute(import, '.*import\s\+\(.*\)\..*\s*;.*', '\1', '')
-      if !s:ComparePackageGroups(package, next)
-        let package = next
+      let nextclass = substitute(import, s:import_regex, '\2', '')
+      let nextpackage = substitute(nextclass, '\(.*\)\..*', '\1', '')
+      if !s:ComparePackageGroups(package, nextpackage)
+        let package = nextpackage
         call insert(imports, '', index)
         let index += 1
         let line += 1
@@ -355,8 +358,7 @@ function! eclim#java#import#CleanImports()
   while line('.') <= lastImport
     let curline = line('.')
     if getline(line('.')) !~ '^\s*$'
-      let classname =
-        \ substitute(getline(line('.')), '.*import\s\+.*\.\(.*\)\s*;.*', '\1', '')
+      let classname = substitute(getline(line('.')), s:import_regex, '\2', '')
       call cursor(curline + 1, 1)
       if classname != '*' && search('\<' . classname . '\>', 'W') == 0
         silent exec curline . 'delete'
@@ -393,7 +395,6 @@ function! s:InitImportOrder()
     return
   endif
   let s:import_order = split(result, "\n")
-echom 'import_order: ' . string(s:import_order)
 endfunction " }}}
 
 " s:CutImports() {{{
@@ -453,8 +454,8 @@ endfunction " }}}
 " s:CompareImports(i1, i2) {{{
 " Compares two import statements to determine which should come first.
 function! s:CompareImports(i1, i2)
-  let c1 = substitute(a:i1, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
-  let c2 = substitute(a:i2, '^\s*import\s\+\(.\{-}\)\s*;\s*', '\1', '')
+  let c1 = substitute(a:i1, s:import_regex, '\2', '')
+  let c2 = substitute(a:i2, s:import_regex, '\2', '')
   return s:CompareClasses(c1, c2)
 endfunction " }}}
 
