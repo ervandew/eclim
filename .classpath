@@ -80,9 +80,8 @@
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/looks-2.1.4.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/ant/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
-  <classpathentry kind="src" path="src/java"/>
+  <classpathentry kind="src" path="src/java" excluding="org/ccil/**"/>
   <classpathentry kind="src" path="src/installer/java"/>
   <classpathentry kind="src" path="src/test/junit"/>
-  <classpathentry kind="src" path="src/test/resources/eclim_unit_test_java/src"/>
   <classpathentry exported="true" kind="src" path="/formic"/>
 </classpath>
