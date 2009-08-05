@@ -137,7 +137,11 @@ function s:InitFile(version)
       \ '}',
     \ ])
   1,1delete _
+  " i think eclipse may ignore subisiquent saves if they occur too fast, so
+  " add some human time.
+  sleep 1
   write
+  call PeekRedir()
 
   ProjectSettings
 
