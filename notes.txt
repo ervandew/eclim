@@ -22,7 +22,7 @@ TODO {{{
       - https://bugs.launchpad.net/ubuntu/+source/vim/+bug/219546
 
     - vrapper patch to prevent error when vimplugin editor is opened.
-      - https://sourceforge.net/apps/trac/vrapper/ticket/30
+      - http://sourceforge.net/apps/trac/vrapper/ticket/30
   }}}
 
   Tests {{{
@@ -560,6 +560,7 @@ NOTES {{{
        - update windows and linux download pages with latest file to download.
     2) update documentation website
     3) tag git
+       $ git push
        $ git tag -a -m "<version>" <version>
        $ git push --tags
     4) announce on freshmeat
