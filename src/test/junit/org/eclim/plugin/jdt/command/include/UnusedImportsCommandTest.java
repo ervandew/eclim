@@ -47,6 +47,7 @@ public class UnusedImportsCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong results", "java.util.ArrayList\njava.util.List", result);
+    assertEquals("Wrong results",
+        "java.lang.Math.PI\njava.util.ArrayList\njava.util.List", result);
   }
 }

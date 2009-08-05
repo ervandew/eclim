@@ -185,10 +185,14 @@ function! TestImportSort()
   call VUAssertEquals(getline(5), 'import org.apache.commons.lang.StringUtils;', 'line 5')
   call VUAssertEquals(getline(6), 'import java.util.List;', 'line 6')
   call VUAssertEquals(getline(7), 'import java.awt.Component;', 'line 7')
-  call VUAssertEquals(getline(8), 'import javax.swing.JComponent;', 'line 8')
-  call VUAssertEquals(getline(9), 'import java.util.regex.Pattern;', 'line 9')
-  call VUAssertEquals(getline(10), 'import javax.swing.JTree;', 'line 10')
-  call VUAssertEquals(getline(12), 'public class TestImportSortVUnit', 'line 12')
+  call VUAssertEquals(getline(8), 'import com.eclim.test.TestCom;', 'line 8')
+  call VUAssertEquals(getline(9), 'import static net.eclim.test.TestNet.FOO;', 'line 9')
+  call VUAssertEquals(getline(10), 'import javax.swing.JComponent;', 'line 10')
+  call VUAssertEquals(getline(11), 'import java.util.regex.Pattern;', 'line 11')
+  call VUAssertEquals(getline(12), 'import net.eclim.test.TestNet;', 'line 12')
+  call VUAssertEquals(getline(13), 'import javax.swing.JTree;', 'line 13')
+  call VUAssertEquals(getline(14), 'import static net.eclim.test.TestNet.BAR;', 'line 14')
+  call VUAssertEquals(getline(16), 'public class TestImportSortVUnit', 'line 16')
 
   let g:EclimJavaImportPackageSeparationLevel = 0
   JavaImportSort
@@ -202,7 +206,11 @@ function! TestImportSort()
   call VUAssertEquals(getline(8), 'import javax.swing.JTree;', 'line 8')
   call VUAssertEquals(getline(9), 'import org.apache.commons.io.IOUtils;', 'line 9')
   call VUAssertEquals(getline(10), 'import org.apache.commons.lang.StringUtils;', 'line 10')
-  call VUAssertEquals(getline(12), 'public class TestImportSortVUnit', 'line 12')
+  call VUAssertEquals(getline(11), 'import com.eclim.test.TestCom;', 'line 11')
+  call VUAssertEquals(getline(12), 'import net.eclim.test.TestNet;', 'line 12')
+  call VUAssertEquals(getline(13), 'import static net.eclim.test.TestNet.BAR;', 'line 13')
+  call VUAssertEquals(getline(14), 'import static net.eclim.test.TestNet.FOO;', 'line 14')
+  call VUAssertEquals(getline(16), 'public class TestImportSortVUnit', 'line 16')
 
   undo
   let g:EclimJavaImportPackageSeparationLevel = -1
@@ -222,7 +230,13 @@ function! TestImportSort()
   call VUAssertEquals(getline(13), 'import org.apache.commons.io.IOUtils;', 'line 13')
   call VUAssertEquals(getline(14), '', 'line 14')
   call VUAssertEquals(getline(15), 'import org.apache.commons.lang.StringUtils;', 'line 15')
-  call VUAssertEquals(getline(17), 'public class TestImportSortVUnit', 'line 17')
+  call VUAssertEquals(getline(16), '', 'line 16')
+  call VUAssertEquals(getline(17), 'import com.eclim.test.TestCom;', 'line 17')
+  call VUAssertEquals(getline(18), '', 'line 18')
+  call VUAssertEquals(getline(19), 'import net.eclim.test.TestNet;', 'line 19')
+  call VUAssertEquals(getline(20), 'import static net.eclim.test.TestNet.BAR;', 'line 20')
+  call VUAssertEquals(getline(21), 'import static net.eclim.test.TestNet.FOO;', 'line 21')
+  call VUAssertEquals(getline(23), 'public class TestImportSortVUnit', 'line 23')
 
   undo
   let g:EclimJavaImportPackageSeparationLevel = 2
@@ -240,7 +254,47 @@ function! TestImportSort()
   call VUAssertEquals(getline(11), '', 'line 11')
   call VUAssertEquals(getline(12), 'import org.apache.commons.io.IOUtils;', 'line 12')
   call VUAssertEquals(getline(13), 'import org.apache.commons.lang.StringUtils;', 'line 13')
-  call VUAssertEquals(getline(15), 'public class TestImportSortVUnit', 'line 15')
+  call VUAssertEquals(getline(14), '', 'line 14')
+  call VUAssertEquals(getline(15), 'import com.eclim.test.TestCom;', 'line 15')
+  call VUAssertEquals(getline(16), '', 'line 16')
+  call VUAssertEquals(getline(17), 'import net.eclim.test.TestNet;', 'line 17')
+  call VUAssertEquals(getline(18), 'import static net.eclim.test.TestNet.BAR;', 'line 18')
+  call VUAssertEquals(getline(19), 'import static net.eclim.test.TestNet.FOO;', 'line 19')
+  call VUAssertEquals(getline(21), 'public class TestImportSortVUnit', 'line 21')
+endfunction " }}}
+
+" TestImportOrder() {{{
+function! TestImportOrder()
+  edit! src/org/eclim/test/include/TestImportSortVUnit.java
+  call PeekRedir()
+
+  ProjectSettings
+
+  call search('jdt\.ui\.importorder=', 'w')
+  let setting = getline('.')
+  let setting = substitute(
+    \ setting, '\(.*jdt\.ui\.importorder=\).*', '\1java;javax;net;org;com', '')
+  call setline(line('.'), setting)
+  write
+  bdelete
+
+  let g:EclimJavaImportPackageSeparationLevel = 0
+  JavaImportSort
+
+  call VUAssertEquals(getline(1), 'package org.eclim.test.include;', 'line 1')
+  call VUAssertEquals(getline(3), 'import java.awt.Component;', 'line 3')
+  call VUAssertEquals(getline(4), 'import java.util.ArrayList;', 'line 4')
+  call VUAssertEquals(getline(5), 'import java.util.List;', 'line 5')
+  call VUAssertEquals(getline(6), 'import java.util.regex.Pattern;', 'line 6')
+  call VUAssertEquals(getline(7), 'import javax.swing.JComponent;', 'line 7')
+  call VUAssertEquals(getline(8), 'import javax.swing.JTree;', 'line 8')
+  call VUAssertEquals(getline(9), 'import net.eclim.test.TestNet;', 'line 9')
+  call VUAssertEquals(getline(10), 'import static net.eclim.test.TestNet.BAR;', 'line 10')
+  call VUAssertEquals(getline(11), 'import static net.eclim.test.TestNet.FOO;', 'line 11')
+  call VUAssertEquals(getline(12), 'import org.apache.commons.io.IOUtils;', 'line 12')
+  call VUAssertEquals(getline(13), 'import org.apache.commons.lang.StringUtils;', 'line 13')
+  call VUAssertEquals(getline(14), 'import com.eclim.test.TestCom;', 'line 14')
+  call VUAssertEquals(getline(16), 'public class TestImportSortVUnit', 'line 16')
 endfunction " }}}
 
 " TestUnusedImport() {{{
@@ -248,6 +302,10 @@ function! TestUnusedImport()
   edit! src/org/eclim/test/include/TestUnusedImportVUnit.java
   call PeekRedir()
 
+  call VUAssertTrue(search('^import java\.lang\.Math;$'),
+    \ 'Math import not found.')
+  call VUAssertTrue(search('^import static java\.lang\.Math\.PI;$'),
+    \ 'Math.PI import not found.')
   call VUAssertTrue(search('^import java\.util\.ArrayList;$'),
     \ 'ArrayList import not found.')
   call VUAssertTrue(search('^import java\.util\.List;$'),
@@ -255,10 +313,18 @@ function! TestUnusedImport()
 
   JavaImportClean
 
+  call VUAssertFalse(search('^import java\.lang\.Math.PI;$'),
+    \ 'Math.PI import still found.')
   call VUAssertFalse(search('^import java\.util\.ArrayList;$'),
     \ 'ArrayList import still found.')
   call VUAssertFalse(search('^import java\.util\.List;$'),
     \ 'List import still found.')
+  call VUAssertTrue(search('^import java\.lang\.Math;$'),
+    \ 'Math import not found.')
+  call VUAssertTrue(search('^import java\.util\.Map;$'),
+    \ 'Map import not found.')
+  call VUAssertTrue(search('^import java\.util\.HashMap;$'),
+    \ 'HashMap import not found.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
