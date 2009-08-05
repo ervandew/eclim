@@ -106,6 +106,16 @@ public class Preferences
   }
 
   /**
+   * Gets an array of configured preference names.
+   *
+   * @return Array of preference names.
+   */
+  public String[] getPreferenceNames()
+  {
+    return preferences.keySet().toArray(new String[0]);
+  }
+
+  /**
    * Adds an eclipse option to be configurable via eclim.
    *
    * @param option The option.
@@ -114,6 +124,16 @@ public class Preferences
   {
     options.put(option.getName(), option);
     optionValues.clear();
+  }
+
+  /**
+   * Gets an array of configured option names.
+   *
+   * @return Array of option names.
+   */
+  public String[] getOptionNames()
+  {
+    return options.keySet().toArray(new String[0]);
   }
 
   /**
