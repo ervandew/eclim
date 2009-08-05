@@ -69,8 +69,8 @@ function! eclim#java#import#Import()
   let results = split(eclim#ExecuteEclim(command), '\n')
 
   " filter the list if the user has any exclude patterns
-  if exists("g:JavaImportExclude")
-    for exclude in g:JavaImportExclude
+  if exists("g:EclimJavaImportExclude")
+    for exclude in g:EclimJavaImportExclude
       call filter(results, " v:val !~ '" . exclude . "'")
     endfor
   endif
@@ -132,8 +132,8 @@ function! eclim#java#import#ImportMissing()
     let imports = info.imports
 
     " filter the list if the user has any exclude patterns
-    if exists("g:JavaImportExclude")
-      for exclude in g:JavaImportExclude
+    if exists("g:EclimJavaImportExclude")
+      for exclude in g:EclimJavaImportExclude
         call filter(imports, " v:val !~ '" . exclude . "'")
       endfor
     endif
@@ -175,29 +175,30 @@ function! eclim#java#import#InsertImports(classes)
   let index = 0
   let lastimport = -1
   let class = classes[0]
+  let newimport = 'import ' . class . ';'
   let prevclass = ''
   for import in imports[:]
     if import =~ '^\s*import\s'
-      let ic = substitute(import, s:import_regex, '\2', '')
-      while s:CompareClasses(class, ic) < 0
+      let ic = s:GetImportClass(import)
+      while s:CompareImports(newimport, import) < 0
         let line += 1
         " grouped with the previous import, insert just after it.
         if prevclass != '' && s:CompareClassGroups(prevclass, class)
-          call insert(imports, 'import ' . class . ';', lastimport + 1)
+          call insert(imports, newimport, lastimport + 1)
 
         " grouped with the current import, insert just before it
         elseif s:CompareClassGroups(ic, class)
           " edge case for 0 package level comparison, insert after the
           " previous import.
           if g:EclimJavaImportPackageSeparationLevel == 0
-            call insert(imports, 'import ' . class . ';', lastimport + 1)
+            call insert(imports, newimport, lastimport + 1)
           else
-            call insert(imports, 'import ' . class . ';', index)
+            call insert(imports, newimport, index)
           endif
 
         " not grouped with others.
         else
-          call insert(imports, 'import ' . class . ';', lastimport + 1)
+          call insert(imports, newimport, lastimport + 1)
 
           " first import insert at the top, create the separator below
           if prevclass == ''
@@ -271,11 +272,11 @@ function! eclim#java#import#SortImports()
     call sort(imports, function('s:CompareImports'))
 
     " separate imports by package name
-    let class = substitute(imports[0], s:import_regex, '\2', '')
+    let class = s:GetImportClass(imports[0])
     let package = substitute(class, '\(.*\)\..*', '\1', '')
     let index = 0
     for import in imports[:]
-      let nextclass = substitute(import, s:import_regex, '\2', '')
+      let nextclass = s:GetImportClass(import)
       let nextpackage = substitute(nextclass, '\(.*\)\..*', '\1', '')
       if !s:ComparePackageGroups(package, nextpackage)
         let package = nextpackage
@@ -318,7 +319,9 @@ function! eclim#java#import#CleanImports()
     let markLine = eclim#util#MarkSave()
 
     for result in results
-      let importLine = search('^\s*import\s\+' . result . '\s*;\s*$', 'nw')
+      let importPattern =
+        \ '^\s*import\s\+\(static\s\+\)\?' . escape(result, '.*') . '\s*;\s*$'
+      let importLine = search(importPattern, 'nw')
       if importLine > 0
         silent exec importLine . ',' . importLine . 'delete _'
         let markLine = markLine - 1
@@ -341,12 +344,12 @@ function! eclim#java#import#CleanImports()
   " Vim only method.  Doesn't handle ignoring of comments when deciding if an
   " import is unused.
 
-  call cursor(1,1)
-  let firstImport = search('^\s*import\s\+.*;')
+  call cursor(1, 1)
+  let firstImport = search('^\s*import\s\+.*;', 'c')
   call cursor(line('$'), 1)
   let lastImport = search('^\s*import\s\+.*;', 'bW')
 
-  if firstImport == 0 || firstImport == lastImport
+  if firstImport == 0
     call cursor(line, col)
     return
   endif
@@ -359,6 +362,7 @@ function! eclim#java#import#CleanImports()
     let curline = line('.')
     if getline(line('.')) !~ '^\s*$'
       let classname = substitute(getline(line('.')), s:import_regex, '\2', '')
+      let classname = substitute(classname, '.*\.\(.*\)', '\1', '')
       call cursor(curline + 1, 1)
       if classname != '*' && search('\<' . classname . '\>', 'W') == 0
         silent exec curline . 'delete'
@@ -454,9 +458,18 @@ endfunction " }}}
 " s:CompareImports(i1, i2) {{{
 " Compares two import statements to determine which should come first.
 function! s:CompareImports(i1, i2)
-  let c1 = substitute(a:i1, s:import_regex, '\2', '')
-  let c2 = substitute(a:i2, s:import_regex, '\2', '')
-  return s:CompareClasses(c1, c2)
+  let c1 = s:GetImportClass(a:i1)
+  let c2 = s:GetImportClass(a:i2)
+  let result = s:CompareClasses(c1, c2)
+  " sort static after regular import if both from the same class. also honor
+  " sorting by the static field name if more than one static import.
+  if result == 0
+    " normalize the text
+    let n1 = substitute(a:i1, '\s', '', 'g')
+    let n2 = substitute(a:i2, '\s', '', 'g')
+    return n1 < n2 ? -1 : 1
+  endif
+  return result
 endfunction " }}}
 
 " s:CompareClasses(c1, c2) {{{
@@ -520,6 +533,25 @@ function! s:ComparePackageGroups(p1, p2)
   let p2 = split(a:p2, '\.')[:level - 1]
 
   return p1 == p2
+endfunction " }}}
+
+" s:GetImportClass(import) {{{
+function! s:GetImportClass(import)
+  let class = substitute(a:import, s:import_regex, '\2', '')
+  if a:import =~ '^\s*import\s\+static\>'
+    let class = substitute(class, '\(.*\)\..*', '\1', '')
+  endif
+
+  if class == a:import
+    return ''
+  endif
+  return class
+endfunction " }}}
+
+" s:GetImportPackage(import) {{{
+function! s:GetImportPackage(import)
+  let class = s:GetImportClass(a:import)
+  return s:GetClassPackage(class)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
