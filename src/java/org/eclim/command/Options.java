@@ -74,6 +74,7 @@ public class Options
   public static final String EOFFSET_OPTION = "e";
   public static final String PATH_OPTION = "p";
   public static final String PATTERN_OPTION = "p";
+  public static final String PEEK_OPTION = "p";
   public static final String PROJECT_OPTION = "p";
   public static final String PROPERTIES_OPTION = "r";
   public static final String REVISION_OPTION = "r";

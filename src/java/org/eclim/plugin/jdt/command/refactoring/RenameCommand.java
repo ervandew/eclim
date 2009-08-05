@@ -16,6 +16,10 @@
  */
 package org.eclim.plugin.jdt.command.refactoring;
 
+import java.lang.reflect.Method;
+
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -27,6 +31,8 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.StringUtils;
 
+import org.eclipse.core.resources.IFile;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -34,6 +40,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
@@ -104,6 +111,63 @@ public class RenameCommand
     }
 
     IJavaElement element = elements[0];
+
+    // check for element outside any user project
+    if (element instanceof IMember){
+      ICompilationUnit cu = ((IMember)element).getCompilationUnit();
+      if (cu == null){
+        return Services.getMessage(
+            "rename.element.unable", element.getElementName());
+      }
+    }
+
+    JavaRenameProcessor processor = getProcessor(element, name, flags);
+
+    RenameRefactoring refactoring = new RenameRefactoring(processor);
+
+    NullProgressMonitor monitor = new NullProgressMonitor();
+    RefactoringStatus status = refactoring.checkAllConditions(
+        new SubProgressMonitor(monitor, 4));
+    int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
+    if (status.getSeverity() >= stopSeverity) {
+      return status.getEntryWithHighestSeverity().getMessage();
+    }
+
+    Method getChangedFiles =
+      processor.getClass().getDeclaredMethod("getChangedFiles");
+    getChangedFiles.setAccessible(true);
+    IFile[] files = (IFile[])getChangedFiles.invoke(processor);
+    StringBuffer changed = new StringBuffer();
+    for (IFile f : files){
+      if (changed.length() > 0){
+        changed.append('\n');
+      }
+      changed.append(f.getRawLocation().toOSString());
+    }
+
+    Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
+    change.initializeValidationData(new SubProgressMonitor(monitor, 1));
+
+    PerformChangeOperation changeOperation = new PerformChangeOperation(change);
+    changeOperation.setUndoManager(
+        RefactoringCore.getUndoManager(), refactoring.getName());
+
+    changeOperation.run(new SubProgressMonitor(monitor, 4));
+    return "files:\n" + changed.toString();
+  }
+
+  /**
+   * Get the JavaRenameProcessor for the given element.
+   *
+   * @param element The IJavaElement
+   * @param name The new name for the element.
+   * @param flags Rename operation flags.
+   * @return The JavaRenameProcessor or null if the element is unsupported.
+   */
+  private static JavaRenameProcessor getProcessor(
+      IJavaElement element, String name, int flags)
+    throws Exception
+  {
     JavaRenameProcessor processor;
     if (element instanceof IType){
       processor = new RenameTypeProcessor((IType)element);
@@ -119,6 +183,8 @@ public class RenameCommand
       if (JdtFlags.isEnum(field)){
         processor = new RenameEnumConstProcessor(field);
       }else {
+        flags |= RenameSupport.UPDATE_GETTER_METHOD;
+        flags |= RenameSupport.UPDATE_SETTER_METHOD;
         RenameFieldProcessor renameField = new RenameFieldProcessor(field);
         renameField.setRenameGetter(
             (flags & RenameSupport.UPDATE_GETTER_METHOD) != 0);
@@ -131,34 +197,10 @@ public class RenameCommand
     }else if (element instanceof ILocalVariable){
       processor = new RenameLocalVariableProcessor((ILocalVariable)element);
     }else{
-      throw new RuntimeException("Rename of element current unsupported: " + element);
-    }
-    initialize(processor, name, flags);
-
-    RenameRefactoring refactoring = new RenameRefactoring(processor);
-
-    NullProgressMonitor monitor = new NullProgressMonitor();
-    RefactoringStatus status = refactoring.checkAllConditions(
-        new SubProgressMonitor(monitor, 4));
-    int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
-    if (status.getSeverity() >= stopSeverity) {
-      throw new RuntimeException(status.toString());
+      return null;
     }
 
-    Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
-    change.initializeValidationData(new SubProgressMonitor(monitor, 1));
-
-    PerformChangeOperation changeOperation = new PerformChangeOperation(change);
-    changeOperation.setUndoManager(
-        RefactoringCore.getUndoManager(), refactoring.getName());
-    changeOperation.run(new SubProgressMonitor(monitor, 4));
-    return "Rename completed.";
-  }
-
-  private static void initialize(
-      JavaRenameProcessor processor, String newName, int flags)
-  {
-    processor.setNewElementName(newName);
+    processor.setNewElementName(name);
     if (processor instanceof IReferenceUpdating) {
       IReferenceUpdating reference = (IReferenceUpdating)processor;
       reference.setUpdateReferences((flags & RenameSupport.UPDATE_REFERENCES) != 0);
@@ -166,11 +208,14 @@ public class RenameCommand
 
     if (processor instanceof ITextUpdating) {
       ITextUpdating text = (ITextUpdating)processor;
+      @SuppressWarnings("deprecation")
       int TEXT_UPDATES =
         RenameSupport.UPDATE_TEXTUAL_MATCHES |
         RenameSupport.UPDATE_REGULAR_COMMENTS |
         RenameSupport.UPDATE_STRING_LITERALS;
       text.setUpdateTextualMatches((flags & TEXT_UPDATES) != 0);
     }
+
+    return processor;
   }
 }
