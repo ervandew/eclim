@@ -136,7 +136,8 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
-      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)"
+      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)\n" +
+      "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
     );
   }
 
