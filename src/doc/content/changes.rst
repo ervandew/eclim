@@ -34,6 +34,9 @@ Java:
     :ref:`:JUnitImpl <:JUnitImpl>` to better support generics.
   - Updated :ref:`:JUnitImpl <:JUnitImpl>` to support a junit 4 method
     templates.
+  - Updated :ref:`:JavaImport` and :ref:`:JavaImportSort` to honor eclipse's
+    import order preference and added the ability to edit that preference via
+    :ref:`:ProjectSettings` and :ref:`:EclimSettings`.
 
 .. _1.5.1:
 

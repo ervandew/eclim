@@ -69,16 +69,16 @@ Configuration
 
 Vim Variables
 
-.. _g\:JavaImportExclude:
+.. _g\:EclimJavaImportExclude:
 
-- **g:JavaImportExclude** -
+- **g:EclimJavaImportExclude** -
   List of patterns to exclude from import results.
 
   Ex.
 
   .. code-block:: vim
 
-    let g:JavaImportExclude = [ "^com\.sun\..*", "^sun\..*", "^sunw\..*" ]
+    let g:EclimJavaImportExclude = [ "^com\.sun\..*", "^sun\..*", "^sunw\..*" ]
 
 .. _g\:EclimJavaImportPackageSeparationLevel:
 
@@ -99,3 +99,12 @@ Vim Variables
     .. code-block:: vim
 
       let g:EclimJavaImportPackageSeparationLevel = 2
+
+Eclim Settings
+
+.. _org.eclipse.jdt.ui.importorder:
+
+- **org.eclipse.jdt.ui.importorder** (Default: java;javax;org;com) -
+  Semicolon separated list of package names which specify the sorting order for
+  import statements.  This settings is the same setting used by the eclipse gui
+  in the "Organize Imports" preference dialog.
