@@ -24,6 +24,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.ui_5.1.0.200906161748.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.ui_5.1.0.200906161748.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.commands_3.5.0.I20090525-2000.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.contenttype_3.4.0.v20090429-1800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.5.0.v20090526-2000.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filesystem_1.2.0.v20090507.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.4.100.v20090429-1800.jar"/>
