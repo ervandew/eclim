@@ -354,18 +354,18 @@ TODO {{{
 
     - content assist
       - Generate anonymous class body, including all methods that need to be
-        implemented, from the start of defining one (new Runnable())<br/>
+        implemented, from the start of defining one (new Runnable())
         Eclipse Equiv: Ctrl+Space
       - Create method from the call to one that does not yet exist or
-        change method signature (add/remove parameters/agruments).<br/>
+        change method signature (add/remove parameters/agruments).
         Eclipse Equiv: Ctrl+1
-      - Create new field to hold constructor argument.<br/>
+      - Create new field to hold constructor argument.
         Eclipse Equiv: Ctrl+1
       - Auto surround method call that throws an exception w/ try/catch
         block or if surrounded and doesn't catch necessary exceptions,
-        add those catch statements.<br/>
+        add those catch statements.
         Eclipse Equiv: Ctrl+1
-      - Wrap source block (selection) in do,if,for,try,while.<br/>
+      - Wrap source block (selection) in do,if,for,try,while.
         Eclipse Equiv: Ctrl+1
       - many more provided by eclipse...
 
