@@ -21,12 +21,22 @@ import java.util.Map;
 
 import org.eclim.Services;
 
+import org.eclim.plugin.core.preference.Preferences;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+
+import org.eclipse.jdt.ui.JavaUI;
 
 /**
  * Option handler for jdt/java options.
@@ -53,7 +63,12 @@ public class OptionHandler
   public Map<String, String> getValues()
     throws Exception
   {
-    return JavaCore.getOptions();
+    @SuppressWarnings("unchecked")
+    Map<String, String> coreOptions = JavaCore.getOptions();
+    Map<String, String> options = new Hashtable<String, String>();
+    options.putAll(coreOptions);
+    options.putAll(getUIValues(null));
+    return options;
   }
 
   /**
@@ -68,7 +83,49 @@ public class OptionHandler
             "project.not.found", project.getName()));
     }
 
-    return javaProject.getOptions(true);
+    @SuppressWarnings("unchecked")
+    Map<String, String> coreOptions = javaProject.getOptions(true);
+    Map<String, String> options = new Hashtable<String, String>();
+    options.putAll(coreOptions);
+    options.putAll(getUIValues(project));
+
+    return options;
+  }
+
+  private Map<String, String> getUIValues(IProject project)
+    throws Exception
+  {
+    Hashtable<String, String> options = new Hashtable<String, String>();
+
+    IScopeContext[] contexts = null;
+    if (project != null){
+      contexts = new IScopeContext[]{
+        new ProjectScope(project),
+        new InstanceScope(),
+        new DefaultScope(),
+      };
+    }else{
+      contexts = new IScopeContext[]{
+        new InstanceScope(),
+        new DefaultScope(),
+      };
+    }
+
+    String[] names = Preferences.getInstance().getOptionNames();
+    for (String name : names){
+      if (name.startsWith(JavaUI.ID_PLUGIN)){
+        for (IScopeContext context : contexts){
+          IEclipsePreferences node = context.getNode(JavaUI.ID_PLUGIN);
+          String value = node.get(name, null);
+          if (value != null){
+            options.put(name, value);
+            break;
+          }
+        }
+      }
+    }
+
+    return options;
   }
 
   /**
@@ -77,13 +134,17 @@ public class OptionHandler
   public void setOption(String name, String value)
     throws Exception
   {
+    @SuppressWarnings("unchecked")
     Map<String, String> options = JavaCore.getOptions();
 
     if(name.equals(JavaCore.COMPILER_SOURCE)){
       JavaUtils.setCompilerSourceCompliance(value);
+    }else if (name.startsWith(JavaUI.ID_PLUGIN)){
+      Preferences.getInstance()
+        .setPreference(JavaUI.ID_PLUGIN, null, name, value);
     }else{
       options.put(name, value);
-      JavaCore.setOptions((Hashtable)options);
+      JavaCore.setOptions((Hashtable<String, String>)options);
     }
   }
 
@@ -98,13 +159,19 @@ public class OptionHandler
       throw new IllegalArgumentException(
           Services.getMessage("project.not.found", project.getName()));
     }
+
+    @SuppressWarnings("unchecked")
     Map<String, String> global = javaProject.getOptions(true);
+    @SuppressWarnings("unchecked")
     Map<String, String> options = javaProject.getOptions(false);
 
     Object current = global.get(name);
     if(current == null || !current.equals(value)){
       if(name.equals(JavaCore.COMPILER_SOURCE)){
         JavaUtils.setCompilerSourceCompliance(javaProject, value);
+      }else if (name.startsWith(JavaUI.ID_PLUGIN)){
+        Preferences.getInstance()
+          .setPreference(JavaUI.ID_PLUGIN, project, name, value);
       }else{
         options.put(name, value);
         javaProject.setOptions(options);

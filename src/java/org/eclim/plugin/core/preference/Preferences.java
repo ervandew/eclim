@@ -311,7 +311,7 @@ public class Preferences
     throws IllegalArgumentException, Exception
   {
     if(name.startsWith(NODE_NAME)){
-      setPreference(project, name, value);
+      setPreference(NODE_NAME, project, name, value);
     }else{
       validateValue(options.get(name), name, value);
 
@@ -340,19 +340,25 @@ public class Preferences
   /**
    * Sets an eclim preference value.
    *
+   * @param nodeName The name of the preferences node to write the preference
+   * to.
    * @param project The project to set the value for or null to set globally.
    * @param name The name of the preference.
    * @param value The value of the preference.
    */
-  private void setPreference(IProject project, String name, String value)
+  public void setPreference(
+      String nodeName, IProject project, String name, String value)
     throws IllegalArgumentException, Exception
   {
     IScopeContext context = new InstanceScope();
 
-    IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
+    IEclipsePreferences globalPrefs = context.getNode(nodeName);
     initializeDefaultPreferences(globalPrefs);
 
-    Preference pref = preferences.get(name);
+    Option pref = preferences.get(name);
+    if (pref == null){
+      pref = options.get(name);
+    }
 
     // set global
     if (project == null){
@@ -362,7 +368,7 @@ public class Preferences
 
     }else{
       context = new ProjectScope(project);
-      IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+      IEclipsePreferences projectPrefs = context.getNode(nodeName);
 
       // if project value is the same as the global, then remove it.
       if(value.equals(globalPrefs.get(name, null))){
