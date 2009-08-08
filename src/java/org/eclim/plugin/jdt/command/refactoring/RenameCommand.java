@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.refactoring;
 
-import java.lang.reflect.Method;
-
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -25,16 +23,7 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.core.command.AbstractCommand;
-
 import org.eclim.plugin.jdt.util.JavaUtils;
-
-import org.eclim.util.StringUtils;
-
-import org.eclipse.core.resources.IFile;
-
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -62,10 +51,7 @@ import org.eclipse.jdt.internal.corext.util.JdtFlags;
 
 import org.eclipse.jdt.ui.refactoring.RenameSupport;
 
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
-import org.eclipse.ltk.core.refactoring.RefactoringCore;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 
@@ -84,16 +70,18 @@ import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
     "REQUIRED n name ARG," +
     "REQUIRED o offset ARG," +
     "REQUIRED l length ARG," +
-    "REQUIRED e encoding ARG"
+    "REQUIRED e encoding ARG," +
+    "OPTIONAL v preview NOARG," +
+    "OPTIONAL d diff ARG"
 )
 public class RenameCommand
-  extends AbstractCommand
+  extends AbstractRefactorCommand
 {
   /**
    * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
+   * @see AbstractRefactorCommand#createRefactoring(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Refactoring createRefactoring(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -107,7 +95,7 @@ public class RenameCommand
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IJavaElement[] elements = src.codeSelect(offset, length);
     if(elements == null || elements.length == 0){
-      return StringUtils.EMPTY;
+      throw new RefactorException();
     }
 
     IJavaElement element = elements[0];
@@ -116,44 +104,13 @@ public class RenameCommand
     if (element instanceof IMember){
       ICompilationUnit cu = ((IMember)element).getCompilationUnit();
       if (cu == null){
-        return Services.getMessage(
-            "rename.element.unable", element.getElementName());
+        throw new RefactorException(Services.getMessage(
+              "rename.element.unable", element.getElementName()));
       }
     }
 
     JavaRenameProcessor processor = getProcessor(element, name, flags);
-
-    RenameRefactoring refactoring = new RenameRefactoring(processor);
-
-    NullProgressMonitor monitor = new NullProgressMonitor();
-    RefactoringStatus status = refactoring.checkAllConditions(
-        new SubProgressMonitor(monitor, 4));
-    int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
-    if (status.getSeverity() >= stopSeverity) {
-      return status.getEntryWithHighestSeverity().getMessage();
-    }
-
-    Method getChangedFiles =
-      processor.getClass().getDeclaredMethod("getChangedFiles");
-    getChangedFiles.setAccessible(true);
-    IFile[] files = (IFile[])getChangedFiles.invoke(processor);
-    StringBuffer changed = new StringBuffer();
-    for (IFile f : files){
-      if (changed.length() > 0){
-        changed.append('\n');
-      }
-      changed.append(f.getRawLocation().toOSString());
-    }
-
-    Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
-    change.initializeValidationData(new SubProgressMonitor(monitor, 1));
-
-    PerformChangeOperation changeOperation = new PerformChangeOperation(change);
-    changeOperation.setUndoManager(
-        RefactoringCore.getUndoManager(), refactoring.getName());
-
-    changeOperation.run(new SubProgressMonitor(monitor, 4));
-    return "files:\n" + changed.toString();
+    return new RenameRefactoring(processor);
   }
 
   /**

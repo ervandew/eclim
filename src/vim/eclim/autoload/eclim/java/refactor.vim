@@ -41,6 +41,12 @@ function eclim#java#refactor#Rename(name)
     return
   endif
 
+  let prompt = printf('Rename "%s" to "%s"', element, a:name)
+  let result = s:Prompt(prompt)
+  if result <= 0
+    return
+  endif
+
   " update the file before vim makes any changes.
   call eclim#java#util#SilentUpdate()
   wall
@@ -58,41 +64,14 @@ function eclim#java#refactor#Rename(name)
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
   let command = substitute(command, '<name>', a:name, '')
-
-  let result = eclim#ExecuteEclim(command)
-  if result == "0"
+  " user chose preview at the prompt
+  if result == 2
+    let command .= ' -v'
+    call s:Preview(command)
     return
   endif
 
-  if result !~ '^files:'
-    call eclim#util#Echo(result)
-    return
-  endif
-
-  " handle rename of the current file type
-  if element == eclim#java#util#GetClassname() && !filereadable(expand('%'))
-    let file = expand('%:h') . '/' . a:name . '.java'
-    if file =~ '\./'
-      let file = file[2:]
-    endif
-    let bufnr = bufnr('%')
-    exec 'edit ' . escape(eclim#util#Simplify(file), ' ')
-    exec 'bdelete ' . bufnr
-  endif
-
-  let files = split(result, "\n")[1:]
-  let curwin = winnr()
-  try
-    for file in files
-      let winnr = bufwinnr(file)
-      if winnr > -1
-        exec winnr . 'winc w'
-        edit
-      endif
-    endfor
-  finally
-    exec curwin . 'winc w'
-  endtry
+  call s:Refactor(command)
 endfunction " }}}
 
 " UndoRedo(operation, peek) {{{
@@ -111,12 +90,169 @@ function eclim#java#refactor#UndoRedo(operation, peek)
     let command .= ' -p'
   endif
 
-  let result = eclim#ExecuteEclim(command)
+  call s:Refactor(command)
+endfunction " }}}
+
+" s:Prompt(prompt) {{{
+function s:Prompt(prompt)
+  exec "echohl " . g:EclimInfoHighlight
+  try
+    " clear any previous messages
+    redraw
+    echo a:prompt . "\n"
+    let response = input("([e]xecute / [p]review / [c]ancel): ")
+    while response != '' &&
+        \ response !~ '^\c\s*\(e\(xecute\)\?\|p\(review\)\?\|c\(ancel\)\?\)\s*$'
+      let response = input("You must choose either e, p, or c. (Ctrl-C to cancel): ")
+    endwhile
+  finally
+    echohl None
+  endtry
+
+  if response == ''
+    return -1
+  endif
+
+  if response =~ '\c\s*\(c\(ancel\)\?\)\s*'
+    return 0
+  endif
+
+  return response =~ '\c\s*\(e\(execute\)\?\)\s*' ? 1 : 2 " preview
+endfunction " }}}
+
+" s:Preview(command) {{{
+function s:Preview(command)
+  let result = eclim#ExecuteEclim(a:command)
   if result == "0"
     return
   endif
 
-  call eclim#util#Echo(result)
+  if result !~ '^-command'
+    call eclim#util#Echo(result)
+    return
+  endif
+
+  let lines = split(result, "\n")
+  let command = lines[0]
+  let lines = lines[1:]
+
+  " normalize the lines a bit
+  call map(lines, 'substitute(v:val, "^other:", " other:", "")')
+  call map(lines, 'substitute(v:val, "^diff:", "|diff|:", "")')
+  call add(lines, '')
+  call add(lines, '|Execute Refactoring|')
+  call eclim#util#TempWindow('[Refactor Preview]', lines)
+  let b:refactor_command = command
+
+  set ft=refactor_preview
+  hi link RefactorLabel Identifier
+  hi link RefactorLink Label
+  syntax match RefactorLabel /^\s*\w\+:/
+  syntax match RefactorLink /|\S.\{-}\S|/
+
+  nnoremap <silent> <buffer> <cr> :call <SID>PreviewLink()<cr>
+endfunction " }}}
+
+" s:PreviewLink() {{{
+function s:PreviewLink()
+  let line = getline('.')
+  if line =~ '^|'
+    let args = split(b:refactor_command, ',')
+    call map(args, 'substitute(v:val, "^\\([^-].*\\)", "\"\\1\"", "")')
+    let command = join(args)
+
+    let winend = winnr('$')
+    let winnum = 1
+    while winnum <= winend
+      let bufnr = winbufnr(winnum)
+      if getbufvar(bufnr, 'refactor_preview_diff') != ''
+        exec bufnr . 'bd'
+        continue
+      endif
+      let winnum += 1
+    endwhile
+
+    if line == '|Execute Refactoring|'
+      let command = substitute(command, '\s*-v', '', '')
+      call s:Refactor(command)
+      close
+
+    elseif line =~ '^|diff|'
+      let file = substitute(line, '^|diff|:\s*', '', '')
+      let command .= ' -d "' . file . '"'
+
+      let result = eclim#ExecuteEclim(command)
+      if result == "0"
+        return
+      endif
+
+      " split relative to the original window
+      exec b:winnr . 'winc w'
+
+      silent new %:t:r.current.%:e
+      silent 1,$delete _ " counter-act any templating plugin
+      exec 'read ' . escape(file, ' ')
+      silent 1,1delete _
+      let winnr = winnr()
+      let b:refactor_preview_diff = 1
+      setlocal readonly nomodifiable
+      setlocal noswapfile nobuflisted
+      setlocal buftype=nofile bufhidden=delete
+      diffthis
+
+      silent vertical split %:t:r.current.%:e
+      silent 1,$delete _ " counter-act any templating plugin
+      call append(1, split(result, "\n"))
+      let b:refactor_preview_diff = 1
+      silent 1,1delete _
+      setlocal readonly nomodifiable
+      setlocal noswapfile nobuflisted
+      setlocal buftype=nofile bufhidden=delete
+      diffthis
+      exec winnr . 'winc w'
+    endif
+  endif
+endfunction " }}}
+
+" s:Refactor(command) {{{
+function s:Refactor(command)
+  let result = eclim#ExecuteEclim(a:command)
+  if result == "0"
+    return
+  endif
+
+  if result !~ '^files:'
+    call eclim#util#Echo(result)
+    return
+  endif
+
+  " reload affected files.
+  let files = split(result, "\n")[1:]
+  let curwin = winnr()
+  try
+    for file in files
+      let newfile = ''
+      " handle file renames
+      if file =~ '\s->\s'
+        let newfile = escape(substitute(file, '.*->\s*', '', ''), ' ')
+        let file = substitute(file, '\s*->.*', '', '')
+      endif
+
+      let winnr = bufwinnr(file)
+      if winnr > -1
+        exec winnr . 'winc w'
+        if newfile != ''
+          let bufnr = bufnr('%')
+          exec 'edit ' . escape(eclim#util#Simplify(newfile), ' ')
+          exec 'bdelete ' . bufnr
+        else
+          edit
+        endif
+      endif
+    endfor
+  finally
+    exec curwin . 'winc w'
+  endtry
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
