@@ -1056,7 +1056,8 @@ function! eclim#util#System(cmd, ...)
 endfunction " }}}
 
 " TempWindow(name, lines [, readonly]) {{{
-" Opens a temp window w/ the given name and contents.
+" Opens a temp window w/ the given name and contents which is readonly unless
+" specified otherwise.
 function! eclim#util#TempWindow(name, lines, ...)
   let filename = expand('%:p')
   let winnr = winnr()
