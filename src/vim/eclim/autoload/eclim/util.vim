@@ -165,11 +165,12 @@ function! eclim#util#Exec(cmd)
   call eclim#util#System(a:cmd, 1)
 endfunction " }}}
 
-" ExecWithoutAutocmds(cmd) {{{
+" ExecWithoutAutocmds(cmd, [events]) {{{
 " Execute a command after disabling all autocommands (borrowed from taglist.vim)
-function! eclim#util#ExecWithoutAutocmds(cmd)
+function! eclim#util#ExecWithoutAutocmds(cmd, ...)
   let save_opt = &eventignore
-  set eventignore=all
+  let events = len(a:000) == 0 ? 'all' : a:000[0]
+  exec 'set eventignore=' . events
   try
     exec a:cmd
   finally
