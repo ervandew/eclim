@@ -1,6 +1,4 @@
 HIGH {{{
-  June 24th
-  http://wiki.eclipse.org/Galileo_Simultaneous_Release
 
   http://conservancy.softwarefreedom.org/
 }}}
