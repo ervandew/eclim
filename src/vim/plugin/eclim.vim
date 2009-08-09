@@ -22,10 +22,6 @@
 "
 " }}}
 
-if v:version < 700 || exists("g:EclimDisabled")
-  finish
-endif
-
 " Command Declarations {{{
 if !exists(":EclimValidate")
   command EclimValidate :call <SID>Validate()
@@ -37,15 +33,15 @@ endif
 " NOTE: don't add command-line continuation characters anywhere in the
 " function, just in case the user has &compatible set.
 function s:Validate()
-  let errors = []
-
   " Check vim version.
   if v:version < 700
-    let version = strpart(v:version, 0, 1) . '.' . strpart(v:version, 1)
-    echom "Error: Your vim version is " . v:version . "."
+    let ver = strpart(v:version, 0, 1) . '.' . strpart(v:version, 2)
+    echom "Error: Your vim version is " . ver . "."
     echom "       Eclim requires version 7.x.x"
     return
   endif
+
+  let errors = []
 
   " Check 'compatible' option.
   if &compatible
@@ -73,8 +69,8 @@ function s:Validate()
       let chose = input("Please Choose (1 or 2): ")
     endwhile
     if chose != 1
-      call add(errors, "Error: Eclim requires filetype detection and plugins to be enabled.")
-      call add(errors, "       Please add 'filetype plugin on' or 'filetype plugin indent on' to your vimrc.")
+      call add(errors, "Error: Eclim requires filetype plugins to be enabled.")
+      call add(errors, "       Please add 'filetype plugin indent on' to your vimrc.")
       call add(errors, "       Type \":help filetype-plugin-on\" for more details.")
     endif
   endif
@@ -92,8 +88,9 @@ function s:Validate()
   echohl None
 endfunction " }}}
 
-" exit early if compatible is set.
-if &compatible
+" exit early if unsupported vim version, compatible is set, or eclim is
+" disabled.
+if v:version < 700 || &compatible || exists("g:EclimDisabled")
   finish
 endif
 
