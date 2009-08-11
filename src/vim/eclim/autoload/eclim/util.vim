@@ -1064,9 +1064,9 @@ function! eclim#util#TempWindow(name, lines, ...)
   let winnr = winnr()
 
   call eclim#util#TempWindowClear(a:name)
-  "let name = escape(a:name, ' []')
+  let name = escape(a:name, ' ')
   " hack for windows
-  let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 
   if bufwinnr(name) == -1
     silent! noautocmd exec "botright 10sview " . escape(a:name, ' ')
@@ -1116,9 +1116,9 @@ endfunction " }}}
 " TempWindowClear(name) {{{
 " Clears the contents of the temp window with the given name.
 function! eclim#util#TempWindowClear(name)
-  "let name = escape(a:name, ' []')
+  let name = escape(a:name, ' ')
   " hack for windows
-  let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
   if bufwinnr(name) != -1
     let curwinnr = winnr()
     exec bufwinnr(name) . "winc w"
@@ -1133,9 +1133,9 @@ endfunction " }}}
 " Opens a temp window w/ the given name and contents from the result of the
 " supplied command.
 function! eclim#util#TempWindowCommand(command, name)
-  "let name = escape(a:name, ' []')
+  let name = escape(a:name, ' ')
   " hack for windows
-  let name = substitute(a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 
   let line = 1
   let col = 1
