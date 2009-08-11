@@ -41,6 +41,12 @@ function eclim#java#refactor#Rename(name)
     return
   endif
 
+  let line = getline('.')
+  let package_pattern = '^\s*package\s\+\(.*\%' . col('.') . 'c\w*\).*;'
+  if line =~ package_pattern
+    let element = substitute(line, package_pattern, '\1', '')
+  endif
+
   let prompt = printf('Rename "%s" to "%s"', element, a:name)
   let result = s:Prompt(prompt)
   if result <= 0
@@ -175,7 +181,11 @@ function s:PreviewLink()
     if line == '|Execute Refactoring|'
       let command = substitute(command, '\s*-v', '', '')
       call s:Refactor(command)
+      let winnr = b:winnr
       close
+      " the filename might change, so we have to use the winnr to get back to
+      " where we were.
+      exec winnr . 'winc w'
 
     elseif line =~ '^|diff|'
       let file = substitute(line, '^|diff|:\s*', '', '')
@@ -216,42 +226,84 @@ endfunction " }}}
 
 " s:Refactor(command) {{{
 function s:Refactor(command)
-  let result = eclim#ExecuteEclim(a:command)
-  if result == "0"
-    return
-  endif
-
-  if result !~ '^files:'
-    call eclim#util#Echo(result)
-    return
-  endif
-
-  " reload affected files.
-  let files = split(result, "\n")[1:]
-  let curwin = winnr()
   try
-    for file in files
-      let newfile = ''
-      " handle file renames
-      if file =~ '\s->\s'
-        let newfile = escape(substitute(file, '.*->\s*', '', ''), ' ')
-        let file = substitute(file, '\s*->.*', '', '')
+    " turn off swap files temporarily to avoid issues with folder/file
+    " renaming.
+    let bufend = bufnr('$')
+    let bufnum = 1
+    while bufnum <= bufend
+      if bufnr(bufnum) != -1
+        call setbufvar(bufnum, 'save_swapfile', getbufvar(bufnum, '&swapfile'))
+        call setbufvar(bufnum, '&swapfile', 0)
       endif
+      let bufnum = bufnum + 1
+    endwhile
+    let cwd = getcwd()
 
-      let winnr = bufwinnr(file)
-      if winnr > -1
-        exec winnr . 'winc w'
-        if newfile != ''
-          let bufnr = bufnr('%')
-          exec 'edit ' . escape(eclim#util#Simplify(newfile), ' ')
-          exec 'bdelete ' . bufnr
-        else
-          edit
+    let result = eclim#ExecuteEclim(a:command)
+    if result == "0"
+      return
+    endif
+
+    if result !~ '^files:'
+      call eclim#util#Echo(result)
+      return
+    endif
+
+    " reload affected files.
+    let files = split(result, "\n")[1:]
+    let curwin = winnr()
+    try
+      for file in files
+        let newfile = ''
+        " handle file renames
+        if file =~ '\s->\s'
+          let newfile = escape(substitute(file, '.*->\s*', '', ''), ' ')
+          let file = substitute(file, '\s*->.*', '', '')
+        endif
+
+        " ignore unchanged directories
+        if isdirectory(file)
+          continue
+        endif
+
+        " handle current working directory moved.
+        if newfile != '' && isdirectory(newfile)
+          if cwd =~ '^' . file . '\(/\|$\)'
+            let dir = substitute(cwd, file, newfile, '')
+            exec 'cd ' . escape(dir, ' ')
+          endif
+          continue
+        endif
+
+        let winnr = bufwinnr(file)
+        if winnr > -1
+          exec winnr . 'winc w'
+          if newfile != ''
+            let bufnr = bufnr('%')
+            enew
+            exec 'bdelete ' . bufnr
+            exec 'edit ' . escape(eclim#util#Simplify(newfile), ' ')
+          else
+            edit
+          endif
+        endif
+      endfor
+    finally
+      exec curwin . 'winc w'
+    endtry
+  finally
+    " re-enable swap files
+    let bufnum = 1
+    while bufnum <= bufend
+      if bufnr(bufnum) != -1
+        let save_swapfile = getbufvar(bufnum, 'save_swapfile')
+        if save_swapfile != ''
+          call setbufvar(bufnum, '&swapfile', save_swapfile)
         endif
       endif
-    endfor
-  finally
-    exec curwin . 'winc w'
+      let bufnum = bufnum + 1
+    endwhile
   endtry
 endfunction " }}}
 

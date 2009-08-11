@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.refactoring;
 
+import java.lang.reflect.Field;
+
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -31,6 +33,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 
@@ -40,6 +43,7 @@ import org.eclipse.jdt.internal.corext.refactoring.rename.RenameEnumConstProcess
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameFieldProcessor;
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameLocalVariableProcessor;
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameNonVirtualMethodProcessor;
+import org.eclipse.jdt.internal.corext.refactoring.rename.RenamePackageProcessor;
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameTypeParameterProcessor;
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameTypeProcessor;
 import org.eclipse.jdt.internal.corext.refactoring.rename.RenameVirtualMethodProcessor;
@@ -121,12 +125,19 @@ public class RenameCommand
    * @param flags Rename operation flags.
    * @return The JavaRenameProcessor or null if the element is unsupported.
    */
-  private static JavaRenameProcessor getProcessor(
+  private JavaRenameProcessor getProcessor(
       IJavaElement element, String name, int flags)
     throws Exception
   {
     JavaRenameProcessor processor;
-    if (element instanceof IType){
+    if (element instanceof IPackageFragment){
+      processor = new RenamePackageProcessor((IPackageFragment)element);
+      // hack to force renaming of sub packages.
+      Field renameSubpackages =
+        RenamePackageProcessor.class.getDeclaredField("fRenameSubpackages");
+      renameSubpackages.setAccessible(true);
+      renameSubpackages.setBoolean(processor, true);
+    }else if (element instanceof IType){
       processor = new RenameTypeProcessor((IType)element);
     }else if (element instanceof IMethod){
       IMethod method = (IMethod)element;

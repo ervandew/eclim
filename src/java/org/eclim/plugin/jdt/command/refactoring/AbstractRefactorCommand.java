@@ -254,9 +254,11 @@ public abstract class AbstractRefactorCommand
       throws CoreException
     {
       IResource resource = delta.getResource();
-      if (resource.getType() == IResource.FILE){
+      if (delta.getKind() != IResourceDelta.NO_CHANGE && (
+            resource.getType() == IResource.FILE ||
+            resource.getType() == IResource.FOLDER))
+      {
         deltas.add(delta);
-        return false;
       }
       return true;
     }
