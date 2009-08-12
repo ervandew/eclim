@@ -28,6 +28,8 @@ Eclim:
   - Added :ref:`:ProjectProblems` command to populate vim's quickfix with a
     list of all eclipse build errors and warnings for the current and all
     related projects.
+  - Abbreviation support removed in favor of any one of the third party
+    snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
 
 Java:
   - Updated :ref:`:JavaImpl`, :ref:`:JavaDelegate`, and

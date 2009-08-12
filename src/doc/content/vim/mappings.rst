@@ -76,13 +76,6 @@ Here are some mappings for the java funtionality provided by eclim.  To make use
 of these mappings, simply create a ftplugin file for java and place your
 mappings there (:help ftplugin-name).
 
-- This mapping can be used to allow quick replacement of template variables when
-  utilizing the :ref:`java abbreviations <vim/java/abbreviations>`.
-
-  .. code-block:: vim
-
-    nnoremap <silent> <buffer> <tab> :call eclim#util#FillTemplate("${", "}")<cr>
-
 - Import the class under the cursor with <leader>i.
 
   .. code-block:: vim

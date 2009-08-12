@@ -38,32 +38,6 @@
   let s:show_current_error_displaying = 0
 " }}}
 
-" Abbreviate(lhs, abbreviation) {{{
-function! eclim#util#Abbreviate(lhs, abbreviation)
-  " ensure that the abbreviation never kicks off while in a word.
-  if getline('.') =~ '\(^\|.*\s\)\%' . col('.') . 'c'
-    " gobble up the space char used to kick off the abbreviation
-    let char = nr2char(getchar())
-
-    " support <indent> placemark to combat indenting issues when attempting to
-    " start the cursor on a blank line, and possibly else where.
-    let indent = eclim#util#GetIndent(indent(line('.')))
-    let abbrev = substitute(a:abbreviation, '<indent>', indent, 'g')
-
-    " insert the abbreviation text.
-    exec "normal! i" . abbrev
-
-    call eclim#util#FillTemplate("${", "}")
-
-    if getline('.') =~ '^\s\+$'
-      return "\<right>"
-    endif
-
-    return ""
-  endif
-  return a:lhs
-endfunction " }}}
-
 " Balloon(message) {{{
 " Function for use as a vim balloonexpr expression.
 function! eclim#util#Balloon(message)
@@ -176,21 +150,6 @@ function! eclim#util#ExecWithoutAutocmds(cmd, ...)
   finally
     let &eventignore = save_opt
   endtry
-endfunction " }}}
-
-" FillTemplate(prefix, suffix) {{{
-" Used as part of a vim normal map to allow the user to fill in values for
-" variables in a newly added template of code.
-function! eclim#util#FillTemplate(prefix, suffix)
-  let line = getline('.')
-  let prefixCol = stridx(line, a:prefix)
-  let suffixCol = stridx(line, a:suffix, prefixCol)
-  if prefixCol != -1 && suffixCol != -1
-    let line = strpart(line, 0, prefixCol) . strpart(line, suffixCol + 1)
-    call setline(line('.'), line)
-    call cursor(line('.'), prefixCol + 1)
-    startinsert
-  endif
 endfunction " }}}
 
 " FindFileInPath(file, exclude_relative) {{{

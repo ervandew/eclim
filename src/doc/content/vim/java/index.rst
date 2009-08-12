@@ -42,7 +42,6 @@ Java
    junit
    testng
    logging
-   abbreviations
    regex
    tools
 
@@ -96,6 +95,5 @@ Java
 - :ref:`vim/java/junit`
 - :ref:`vim/java/testng`
 - :ref:`vim/java/logging`
-- :ref:`vim/java/abbreviations`
 - :ref:`vim/java/regex`
 - :ref:`vim/java/tools`

@@ -32,12 +32,6 @@ if !exists("g:EclimJavaSetCommonOptions")
   let g:EclimJavaSetCommonOptions = 1
 endif
 
-let g:java_fori = "for (int ii = 0; ii < ${array}.length; ii++){\<cr>}" .
-  \ "\<esc>\<up>"
-let g:java_forI = "for (Iterator ii = ${col}.iterator(); ii.hasNext();){\<cr>}" .
-  \ "\<esc>\<up>"
-let g:java_fore = "for (${object} ${var} : ${col}){\<cr>}\<esc>\<up>"
-
 if !exists("g:EclimJavaCompilerAutoDetect")
   let g:EclimJavaCompilerAutoDetect = 1
 endif
@@ -103,21 +97,6 @@ endif
 " }}}
 
 " Abbreviations {{{
-
-" the vim latex plugin (http://vim-latex.sourceforge.net) prevents the
-" normal abbreviations from working properly if the user has any IMAP calls
-" with a rhs value that ends in a space:
-"   au VimEnter * call IMAP(' . ', ' <++> ', 'tex')
-" So, if we can't beat 'em, join 'em
-if exists('*IMAP')
-  call IMAP('fori', "\<c-r>=eclim#util#Abbreviate('fori', g:java_fori)\<cr>", 'java')
-  call IMAP('forI', "\<c-r>=eclim#util#Abbreviate('forI', g:java_forI)\<cr>", 'java')
-  call IMAP('fore', "\<c-r>=eclim#util#Abbreviate('fore', g:java_fore)\<cr>", 'java')
-else
-  inoreabbrev <buffer> fori <c-r>=eclim#util#Abbreviate('fori', g:java_fori)<cr>
-  inoreabbrev <buffer> forI <c-r>=eclim#util#Abbreviate('forI', g:java_forI)<cr>
-  inoreabbrev <buffer> fore <c-r>=eclim#util#Abbreviate('fore', g:java_fore)<cr>
-endif
 
 if !exists("g:EclimLoggingDisabled") || !g:EclimLoggingDisabled
   inoreabbrev <buffer> log log<c-r>=eclim#java#logging#LoggingInit("log")<cr>
