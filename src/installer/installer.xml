@@ -59,8 +59,8 @@
               </not>
             </and>
             <formic:istrue value="featureList.cdt"/>
+            <formic:istrue value="featureList.dltk"/>
             <formic:istrue value="featureList.jdt"/>
-            <formic:istrue value="featureList.pdt"/>
             <formic:istrue value="featureList.wst"/>
           </or>
         </formic:branch>
