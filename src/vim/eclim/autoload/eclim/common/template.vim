@@ -57,11 +57,9 @@ function! eclim#common#template#Template()
 
   let template = s:FindTemplate()
   if template != ''
-    silent exec "read " . template
-    call cursor(1, 1)
-    delete _
-
-    call s:ExecuteTemplate()
+    let lines = readfile(template)
+    call s:ExecuteTemplate(lines)
+    1,1delete _
   endif
 endfunction " }}}
 
@@ -120,19 +118,18 @@ function! s:FindTemplate()
   return ''
 endfunction " }}}
 
-" s:ExecuteTemplate() {{{
-" Executes any logic in the template.
-function! s:ExecuteTemplate()
-  let line = 1
-  while line <= line('$')
-    let currentLine = getline(line)
-    while currentLine =~ s:tag_regex
-      let tag = substitute(currentLine, s:tagname_regex, '\1', '')
-      let line = s:Process_{tag}(line)
-      let currentLine = getline(line)
-    endwhile
-    let line = line + 1
-  endwhile
+" s:ExecuteTemplate(lines) {{{
+" Executes any logic in the supplied lines and appends those lines to the
+" current file.
+function! s:ExecuteTemplate(lines)
+  for line in a:lines
+    if line =~ s:tag_regex
+      let tag = substitute(line, s:tagname_regex, '\1', '')
+      call s:ExecuteTemplate(s:Process_{tag}(line))
+    else
+      call append(line('$'), line)
+    endif
+  endfor
 endfunction " }}}
 
 " s:EvaluateExpression(expression) {{{
@@ -168,24 +165,18 @@ endfunction " }}}
 " s:Process_var(line) {{{
 " Process <vim:var/> tags.
 function! s:Process_var(line)
-  let currentLine = getline(a:line)
-
-  let name = expand(s:GetAttribute(currentLine, 'var', 'name', 1))
-  let value = expand(s:GetAttribute(currentLine, 'var', 'value', 1))
+  let name = expand(s:GetAttribute(a:line, 'var', 'name', 1))
+  let value = expand(s:GetAttribute(a:line, 'var', 'value', 1))
 
   exec "let " . name . " = \"" .  s:EvaluateExpression(value) . "\""
 
-  silent exec a:line . "delete _"
-
-  return a:line - 1
+  return []
 endfunction " }}}
 
 " s:Process_import(line) {{{
 " Process <vim:import/> tags.
 function! s:Process_import(line)
-  let currentLine = getline(a:line)
-
-  let resource = expand(s:GetAttribute(currentLine, 'import', 'resource', 1))
+  let resource = expand(s:GetAttribute(a:line, 'import', 'resource', 1))
   if resource !~ '^/\'
     let resource = expand(g:EclimTemplateDir . '/' . resource)
   endif
@@ -195,16 +186,14 @@ function! s:Process_import(line)
   endif
 
   exec "source " . resource
-  silent exec a:line . "delete _"
 
-  return a:line - 1
+  return []
 endfunction " }}}
 
 " s:Process_out(line) {{{
 " Process <vim:out/> tags.
 function! s:Process_out(line)
-  let currentLine = getline(a:line)
-  let value = s:GetAttribute(currentLine, 'out', 'value', 1)
+  let value = s:GetAttribute(a:line, 'out', 'value', 1)
   let result = s:EvaluateExpression(value)
   return s:Out(a:line, '<vim:out\s\+.\{-}\s*\/>', result)
 endfunction " }}}
@@ -212,25 +201,21 @@ endfunction " }}}
 " s:Process_include(line) {{{
 " Process <vim:include/> tags.
 function! s:Process_include(line)
-  let currentLine = getline(a:line)
   let template = expand(
-    \ g:EclimTemplateDir . '/' . s:GetAttribute(currentLine, 'include', 'template', 1))
+    \ g:EclimTemplateDir . '/' . s:GetAttribute(a:line, 'include', 'template', 1))
 
   if !filereadable(template)
     call s:TemplateError(a:line, "template not found '" . template . "'")
+    return []
   endif
 
-  exec "read " . template
-  call cursor(a:line, 1)
-  silent exec a:line . "delete _"
-
-  return a:line
+  return readfile(template)
 endfunction " }}}
 
 " s:Process_username(line) {{{
 " Process <vim:username/> tags.
 function! s:Process_username(line)
-  let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
+  silent! let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
   if type(username) == 0
     let username = ''
   endif
@@ -239,18 +224,13 @@ endfunction " }}}
 
 " s:Out(line, pattern, value) {{{
 function! s:Out(line, pattern, value)
-  let currentLine = getline(a:line)
-
   let results = type(a:value) == 3 ? a:value : [a:value]
-  if results[0] == '' && currentLine =~ '^\s*' . a:pattern . '\s*$'
-    exec a:line . 'delete _'
-    return a:line - 1
+  if results[0] == '' && a:line =~ '^\s*' . a:pattern . '\s*$'
+    return []
   endif
 
-  exec a:line . 'substitute/' . a:pattern . '/' . escape(results[0], '/') . '/'
-  call append(a:line, results[1:])
-
-  return a:line
+  let line = substitute(a:line, a:pattern, results[0], '')
+  return [line] + (len(results) > 1 ? results[1:] : [])
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
