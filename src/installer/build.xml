@@ -62,20 +62,20 @@
     <jar jarfile="${build.installer}/formic/dist/eclim.jar">
       <fileset dir="${build.installer}/formic/classes">
         <include name="**/*.class"/>
-        <exclude name="org/eclim/plugin/**/*"/>
-        <exclude name="org/eclim/plugin"/>
+        <exclude name="org/eclim/installer/eclipse/**/*"/>
+        <exclude name="org/eclim/installer/eclipse"/>
       </fileset>
       <fileset dir="src/installer/java">
         <include name="**/*.xml"/>
-        <exclude name="org/eclim/plugin/**/*"/>
-        <exclude name="org/eclim/plugin"/>
+        <exclude name="org/eclim/installer/eclipse/**/*"/>
+        <exclude name="org/eclim/installer/eclipse"/>
       </fileset>
     </jar>
 
     <!-- build installer plugins -->
     <antcall target="plugin">
       <param name="plugin.name" value="installer"/>
-      <param name="classes.include" value="**/plugin/*.class"/>
+      <param name="classes.include" value="**/installer/eclipse/*.class"/>
     </antcall>
 
     <!-- prepare installer's build.properties -->
