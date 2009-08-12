@@ -65,6 +65,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclim.installer.URLProgressInputStream;
+
 import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
@@ -228,9 +230,10 @@ public class EclipsePluginsStep
       if(dependencies.size() == 0){
         overallProgress.setMaximum(1);
         overallProgress.setValue(1);
+        overallLabel.setText("All third party plugins are up to date.");
         taskProgress.setMaximum(1);
         taskProgress.setValue(1);
-        overallLabel.setText("All third party plugins are up to date.");
+        taskLabel.setText("");
       }else{
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Feature");
@@ -281,6 +284,8 @@ public class EclipsePluginsStep
         stepPanel.add(featuresPanel);
         overallProgress.setValue(0);
         overallLabel.setText("");
+        taskProgress.setValue(0);
+        taskLabel.setText("");
       }
     }catch(Exception e){
       setError(e);
@@ -676,8 +681,12 @@ public class EclipsePluginsStep
       overallProgress.setValue(1);
       BufferedInputStream in = null;
       try{
+        taskLabel.setText("Downloading content.jar");
         in = new BufferedInputStream(
-            new URL(primaryUpdateSite + "content.jar").openStream());
+            new URLProgressInputStream(
+              taskProgress,
+              new URL(primaryUpdateSite + "content.jar").openConnection()));
+
         JarInputStream jin = new JarInputStream(in);
         JarEntry entry = jin.getNextJarEntry();
         while (!entry.getName().equals("content.xml")){
