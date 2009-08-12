@@ -71,10 +71,6 @@
       <formic:path name="branch_eclipse_plugins">
         <formic:step name="eclipsePlugins"/>
       </formic:path>
-
-      <formic:path name="branch_python_interpreter">
-        <formic:step name="pythonInterpreter"/>
-      </formic:path>
     </formic:installer>
   </target>
 
