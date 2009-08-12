@@ -49,6 +49,7 @@ import org.osgi.framework.ServiceReference;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("unchecked")
 public class Application
   extends org.eclipse.equinox.internal.p2.director.app.DirectorApplication
 {
