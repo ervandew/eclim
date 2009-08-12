@@ -133,7 +133,7 @@ public class EclipsePluginsStep
   private JLabel messageLabel;
   private ImageIcon errorIcon;
   private DefaultTableModel tableModel;
-  private List dependencies;
+  private List<Dependency> dependencies;
   private PlasticTheme theme;
 
   private String primaryUpdateSite;
@@ -251,8 +251,7 @@ public class EclipsePluginsStep
         JScrollPane scrollPane = new JScrollPane(container);
         scrollPane.setAlignmentX(0.0f);
 
-        for (int ii = 0; ii < dependencies.size(); ii++){
-          Dependency dependency = (Dependency)dependencies.get(ii);
+        for (Dependency dependency : dependencies){
           String version = dependency.getFeatureVersion();
           String manual = "";
           if (version == null){
@@ -368,7 +367,7 @@ public class EclipsePluginsStep
    *
    * @return List of dependencies.
    */
-  private List getDependencies()
+  private List<Dependency> getDependencies()
     throws Exception
   {
     Document document = DocumentBuilderFactory.newInstance()
@@ -378,7 +377,7 @@ public class EclipsePluginsStep
     primaryUpdateSite = document.getDocumentElement().getAttribute("primary");
 
     // determine which dependencies are required
-    ArrayList dependencies = new ArrayList();
+    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
     String[] features = Installer.getContext().getKeysByPrefix("featureList");
     Arrays.sort(features, new FeatureNameComparator());
     for (int ii = 0; ii < features.length; ii++){
@@ -394,7 +393,7 @@ public class EclipsePluginsStep
           // parse out all the possible dependencies
           for(int jj = 0; jj < nodes.getLength(); jj++){
             Element node = (Element)nodes.item(jj);
-            ArrayList sites = new ArrayList();
+            ArrayList<String> sites = new ArrayList<String>();
             NodeList siteList = node.getElementsByTagName("site");
             for(int kk = 0; kk < siteList.getLength(); kk++){
               Element site = (Element)siteList.item(kk);
@@ -404,7 +403,7 @@ public class EclipsePluginsStep
             dependencies.add(new Dependency(
                   node.getAttribute("id"),
                   node.getAttribute("version"),
-                  (String[])sites.toArray(new String[sites.size()])));
+                  sites.toArray(new String[sites.size()])));
           }
         }
       }
@@ -478,8 +477,8 @@ public class EclipsePluginsStep
             throws Exception
           {
             // check if any of the features cannot be installed.
-            for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-              Feature feature = ((Dependency)ii.next()).getFeature();
+            for (Dependency dependency : dependencies){
+              Feature feature = dependency.getFeature();
               if (feature != null && !feature.getSite().canWrite()){
                 GuiDialogs.showWarning(Installer.getString(
                     "eclipsePlugins.install.features.permission.denied"));
@@ -491,8 +490,8 @@ public class EclipsePluginsStep
             overallProgress.setValue(0);
 
             int removeIndex = 0;
-            for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-              Dependency dependency = (Dependency)ii.next();
+            for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
+              Dependency dependency = ii.next();
               if (dependency.getFeatureUrl() != null){
                 if(!dependency.isUpgrade()){
                   overallLabel.setText("Installing feature: " +
@@ -624,10 +623,10 @@ public class EclipsePluginsStep
 
   private class EclipseInfo
   {
-    private List sites;
-    private Map features;
-    private List dependencies;
-    private Map availableFeatures;
+    private List<File> sites;
+    private Map<String,Feature> features;
+    private List<Dependency> dependencies;
+    private Map<String,String> availableFeatures;
 
     /**
      * Contstruct a new EclipseInfo instance containing available local plugins
@@ -635,13 +634,13 @@ public class EclipsePluginsStep
      *
      * @param List of dependencies.
      */
-    public EclipseInfo(List dependencies)
+    public EclipseInfo(List<Dependency> dependencies)
       throws Exception
     {
       this.dependencies = dependencies;
-      this.features = new HashMap();
-      this.sites = new ArrayList();
-      this.availableFeatures = new HashMap();
+      this.features = new HashMap<String,Feature>();
+      this.sites = new ArrayList<File>();
+      this.availableFeatures = new HashMap<String,String>();
 
       overallProgress.setMaximum(2);
 
@@ -708,12 +707,12 @@ public class EclipsePluginsStep
       filterDependencies();
     }
 
-    public List getSites()
+    public List<File> getSites()
     {
       return sites;
     }
 
-    public List getDependencies()
+    public List<Dependency> getDependencies()
     {
       return dependencies;
     }
@@ -725,8 +724,8 @@ public class EclipsePluginsStep
     private void filterDependencies()
       throws Exception
     {
-      for (Iterator ii = dependencies.iterator(); ii.hasNext();){
-        Dependency dependency = (Dependency)ii.next();
+      for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
+        Dependency dependency = ii.next();
         Feature feature = (Feature)features.get(dependency.getId());
         boolean include = dependency.eval(feature, availableFeatures);
         if (!include){
@@ -780,7 +779,7 @@ public class EclipsePluginsStep
       return featureVersion;
     }
 
-    public boolean eval(Feature feature, Map availableFeatures)
+    public boolean eval(Feature feature, Map<String,String> availableFeatures)
       throws Exception
     {
       this.feature = feature;
@@ -810,7 +809,7 @@ public class EclipsePluginsStep
       return 0;
     }
 
-    private String[] findUrlVersion(Map availableFeatures)
+    private String[] findUrlVersion(Map<String,String> availableFeatures)
       throws Exception
     {
       DocumentBuilder builder =
@@ -901,9 +900,9 @@ public class EclipsePluginsStep
   }
 
   private static class FeatureNameComparator
-    implements Comparator
+    implements Comparator<String>
   {
-    private static ArrayList NAMES = new ArrayList();
+    private static ArrayList<String> NAMES = new ArrayList<String>();
     static{
       NAMES.add("featureList.jdt");
       NAMES.add("featureList.ant");
@@ -914,7 +913,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.python");
     }
 
-    public int compare(Object ob1, Object ob2) {
+    public int compare(String ob1, String ob2) {
       return NAMES.indexOf(ob1) - NAMES.indexOf(ob2);
     }
   }
