@@ -2,7 +2,7 @@ import re
 from pygments.lexer import RegexLexer, bygroups, this, using
 from pygments.token import Comment, Keyword, Name, Number, Operator, String, Text
 
-class GroovyLexer (RegexLexer):
+class GroovyLexer(RegexLexer):
   name = 'Groovy'
   aliases = ['java']
   filenames = ['*.java']

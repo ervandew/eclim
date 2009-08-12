@@ -28,10 +28,10 @@ from sphinx.builder import StandaloneHTMLBuilder, TextBuilder, ENV_PICKLE_FILENA
 from sphinx.textwriter import TextTranslator, TextWriter
 from sphinx.util.console import bold
 
-class EclimBuilder (StandaloneHTMLBuilder):
+class EclimBuilder(StandaloneHTMLBuilder):
   name = 'eclim'
 
-  def __init__ (self, *args, **kwargs):
+  def __init__(self, *args, **kwargs):
     StandaloneHTMLBuilder.__init__(self, *args, **kwargs)
     self.toctrees = {}
     self.index_node = nodes.list_item('', addnodes.compact_paragraph(''))
@@ -61,7 +61,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       self.env.find_files(self.config)
     self.env.set_warnfunc(self.warn)
 
-  def write (self, build_docnames, updated_docnames, method='update'):
+  def write(self, build_docnames, updated_docnames, method='update'):
     names = build_docnames and updated_docnames and \
         build_docnames + updated_docnames or \
         build_docnames or updated_docnames
@@ -163,7 +163,7 @@ class EclimBuilder (StandaloneHTMLBuilder):
       display_toc = (self.env.toc_num_entries[docname] > 1),
     )
 
-  def _entries_from_toctree (self, docname, toctreenode, top=True):
+  def _entries_from_toctree(self, docname, toctreenode, top=True):
     """
     Copied from sphinx.environment.  Modified to utilize list items instead of
     the old version which had an independent bullet_list for each entry.
@@ -219,10 +219,10 @@ class EclimBuilder (StandaloneHTMLBuilder):
       return addnodes.compact_paragraph('', '', entries)
     return None
 
-class VimdocBuilder (TextBuilder):
+class VimdocBuilder(TextBuilder):
   name = 'vimdoc'
 
-  def load_env (self):
+  def load_env(self):
     """
     Copied from sphinx.builder.Builder and just replaces 'BuildEnvironment' w/
     'EclimBuildEnvironment'.
@@ -247,7 +247,7 @@ class VimdocBuilder (TextBuilder):
       self.env.find_files(self.config)
     self.env.set_warnfunc(self.warn)
 
-  def prepare_writing (self, docnames):
+  def prepare_writing(self, docnames):
     """
     Straight copy from TextBuilder, just using VimdocWriter instead of
     TextWriter.
@@ -262,7 +262,7 @@ class VimdocBuilder (TextBuilder):
     return ' '.join(name.split())
 
 
-class VimdocWriter (TextWriter):
+class VimdocWriter(TextWriter):
 
   def translate(self):
     """
@@ -276,6 +276,7 @@ class VimdocWriter (TextWriter):
 # EV: add vim modline
     self.output = self.output.strip() + '\n\nvim:ft=eclimhelp'
 
+
 # EV: don't wrap on '-' so we don't break some vimdoc links
 import textwrap
 new_wordsep_re = re.compile(
@@ -285,11 +286,12 @@ new_wordsep_re = re.compile(
         r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
 textwrap.TextWrapper.wordsep_re = new_wordsep_re
 
-class VimdocTranslator (TextTranslator):
+
+class VimdocTranslator(TextTranslator):
 
   TARGET = re.compile(r'(^\.\.\s+_|\\|:$)')
 
-  def _toRefUri (self, value):
+  def _toRefUri(self, value):
     """
     EV: Helper function which emulates the docutils conversion of a string to a
     refuri.
@@ -298,7 +300,7 @@ class VimdocTranslator (TextTranslator):
     value = value.replace(':', '')
     return value
 
-  def depart_image (self, node):
+  def depart_image(self, node):
     """
     Missing from sphinx's text translator and results in errors when ommitted.
     """
@@ -332,6 +334,7 @@ class VimdocTranslator (TextTranslator):
         value.startswith('org.')
       ):
         self.add_text('|')
+
   def depart_reference(self, node):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
@@ -361,6 +364,7 @@ class VimdocTranslator (TextTranslator):
       value = VimdocTranslator.TARGET.sub('', node.rawsource)
       value = value.replace('/', '-')
       self.add_text('*%s' % value)
+
   def depart_target(self, node):
     refid = node.attributes.get('refid')
     if refid:
@@ -372,6 +376,7 @@ class VimdocTranslator (TextTranslator):
   def visit_literal_block(self, node):
     self.add_text('>')
     self.new_state()
+
   def depart_literal_block(self, node):
     self.add_text('\n')
     self.end_state(wrap=False)
@@ -383,31 +388,36 @@ class VimdocTranslator (TextTranslator):
 
   def visit_emphasis(self, node):
     pass
+
   def depart_emphasis(self, node):
     pass
 
   def visit_literal_emphasis(self, node):
     pass
+
   def depart_literal_emphasis(self, node):
     pass
 
   def visit_strong(self, node):
     pass
+
   def depart_strong(self, node):
     pass
 
   def visit_title_reference(self, node):
     pass
+
   def depart_title_reference(self, node):
     pass
 
   def visit_literal(self, node):
     pass
+
   def depart_literal(self, node):
     pass
 
 
-def setup (sphinx):
+def setup(sphinx):
   highlighting.lexers['groovy'] = GroovyLexer()
   sphinx.add_builder(EclimBuilder)
   sphinx.add_builder(VimdocBuilder)

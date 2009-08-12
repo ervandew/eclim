@@ -22,7 +22,7 @@ from sphinx import addnodes
 from sphinx.directives import additional_xref_types
 from sphinx.environment import BuildEnvironment, NoUri, SphinxContentsFilter
 
-class EclimBuildEnvironment (BuildEnvironment):
+class EclimBuildEnvironment(BuildEnvironment):
 
   def get_and_resolve_doctree(self, docname, builder, doctree=None,
                               prune_toctrees=True):
@@ -78,8 +78,8 @@ class EclimBuildEnvironment (BuildEnvironment):
               labelid = re.sub(r'.*<(.*)>.*', r'\1', node.rawsource)
 
             if not docname:
-              newnode = doctree.reporter.system_message(
-                  2, 'undefined label: %s' % target)
+              self.warn(fromdocname, 'undefined label: %s' % target,
+                        node.line)
           else:
             # reference to the named label; the final node will contain the
             # section name after the label
@@ -91,10 +91,11 @@ class EclimBuildEnvironment (BuildEnvironment):
               sectname = node.astext()
 
             if not docname:
-              newnode = doctree.reporter.system_message(
-                  2, 'undefined label: %s -- if you don\'t ' % target +
+              self.warn(
+                  fromdocname,
+                  'undefined label: %s -- if you don\'t ' % target +
                   'give a link caption the label must precede a section '
-                  'header.')
+                  'header.', node.line)
           if docname:
             newnode = nodes.reference('', '')
             innernode = nodes.emphasis(sectname, sectname)
@@ -111,6 +112,8 @@ class EclimBuildEnvironment (BuildEnvironment):
               if labelid:
                   newnode['refuri'] += '#' + labelid
             newnode.append(innernode)
+          else:
+            newnode = contnode
         elif typ == 'keyword':
           # keywords are referenced by named labels
           docname, labelid, _ = self.labels.get(target, ('','',''))
@@ -208,12 +211,11 @@ class EclimBuildEnvironment (BuildEnvironment):
     builder.app.emit('doctree-resolved', doctree, fromdocname)
 
 
-class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
+class EclimHtmlBuildEnvironment(EclimBuildEnvironment):
 
-  def __init__ (self, *args, **kwargs):
+  def __init__(self, *args, **kwargs):
     self.main_tocs = {}
     BuildEnvironment.__init__(self, *args, **kwargs)
-
 
   def build_toc_from(self, docname, document):
     """
@@ -226,22 +228,35 @@ class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
     except ValueError:
       maxdepth = 0
 
+    def traverse_in_section(node, cls):
+      """Like traverse(), but stay within the same section."""
+      result = []
+      if isinstance(node, cls):
+        result.append(node)
+      for child in node.children:
+        if isinstance(child, nodes.section):
+          continue
+        result.extend(traverse_in_section(child, cls))
+      return result
+
 # EV: added args 'main' and 'title_visited'
     def build_toc(node, depth=1, main=False, title_visited=False):
       entries = []
-      for subnode in node:
-        if isinstance(subnode, addnodes.toctree):
-          # just copy the toctree node which is then resolved
-          # in self.get_and_resolve_doctree
-          item = subnode.copy()
-          entries.append(item)
-          # do the inventory stuff
-          self.note_toctree(docname, subnode)
-          continue
+      for sectionnode in node:
 # EV: added or condition on 'main' and 'title_visited'
-        if not isinstance(subnode, nodes.section) or (main and title_visited):
+        # find all toctree nodes in this section and add them
+        # to the toc (just copying the toctree node which is then
+        # resolved in self.get_and_resolve_doctree)
+        if not isinstance(sectionnode, nodes.section) or (main and title_visited):
+          for toctreenode in traverse_in_section(sectionnode,
+                                                 addnodes.toctree):
+            item = toctreenode.copy()
+            entries.append(item)
+            # important: do the inventory stuff
+            self.note_toctree(docname, toctreenode)
           continue
-        title = subnode[0]
+
+        title = sectionnode[0]
 # EV: set title_visited = True
 #        title_visited = True
         # copy the contents of the section title, but without references
@@ -254,7 +269,7 @@ class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
           # as it is the file's title anyway
           anchorname = ''
         else:
-          anchorname = '#' + subnode['ids'][0]
+          anchorname = '#' + sectionnode['ids'][0]
         numentries[0] += 1
         reference = nodes.reference('', '', refuri=docname,
                                     anchorname=anchorname,
@@ -263,7 +278,7 @@ class EclimHtmlBuildEnvironment (EclimBuildEnvironment):
         item = nodes.list_item('', para)
         if maxdepth == 0 or depth < maxdepth:
 # EV: set 'main' and 'title_visited' args
-          item += build_toc(subnode, depth+1, main=main, title_visited=True)
+          item += build_toc(sectionnode, depth+1, main=main, title_visited=True)
         entries.append(item)
       if entries:
         return nodes.bullet_list('', *entries)
