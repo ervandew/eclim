@@ -121,9 +121,9 @@
         <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim"
             token="$${vim.files}" value="${vim.files}"/>
         <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
-            token="$${eclim.home}" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
+            token="$${eclipse.home}" value="${eclipse.local}"/>
         <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
-            token="$${eclim.home}" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
+            token="$${eclipse.home}" value="${eclipse.local}"/>
 
         <!--
           - hard code the eclipse home for people that install plugins outside

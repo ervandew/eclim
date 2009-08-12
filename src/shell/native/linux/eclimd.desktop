@@ -2,6 +2,6 @@
 Type=Application
 Encoding=UTF-8
 Name=eclimd
-Exec=${eclim.home}/bin/eclimd start
+Exec=${eclipse.home}/eclimd start
 StartupNotify=false
 X-GNOME-Autostart-enabled=true
