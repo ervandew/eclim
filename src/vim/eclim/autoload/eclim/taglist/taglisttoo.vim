@@ -534,7 +534,7 @@ endfunction " }}}
 
 " s:ProcessTags() {{{
 function! s:ProcessTags()
-  let filename = expand('%')
+  let filename = expand('%:p')
   if filename =~ s:taglisttoo_ignore || filename == ''
     return
   endif
