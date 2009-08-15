@@ -132,6 +132,14 @@ function! eclim#util#Echo(message)
   endif
 endfunction " }}}
 
+" EscapeBufferName(name) {{{
+" Escapes the supplied buffer name so that it can be safely used by buf*
+" functions.
+function! eclim#util#EscapeBufferName(name)
+  let name = escape(a:name, ' ')
+  return substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+endfunction " }}}
+
 " Exec(cmd) {{{
 " Used when executing ! commands that may be disrupted by non default vim
 " options.
@@ -415,7 +423,12 @@ endfunction " }}}
 " Focuses the window containing the supplied buffer name or buffer number.
 " Returns 1 if the window was found, 0 otherwise.
 function! eclim#util#GoToBufferWindow(buf)
-  let winnr = type(a:buf) == 0 ? bufwinnr(a:buf) : bufwinnr(bufnr('^' . a:buf))
+  if type(a:buf) == 0
+    let winnr = bufwinnr(a:buf)
+  else
+    let name = eclim#util#EscapeBufferName(a:buf)
+    let winnr = bufwinnr(bufnr('^' . name))
+  endif
   if winnr != -1
     exec winnr . "winc w"
     call eclim#util#DelayedCommand('doautocmd WinEnter')
@@ -424,16 +437,17 @@ function! eclim#util#GoToBufferWindow(buf)
   return 0
 endfunction " }}}
 
-" GoToBufferWindowOrOpen(filename, cmd) {{{
+" GoToBufferWindowOrOpen(name, cmd) {{{
 " Gives focus to the window containing the buffer for the supplied file, or if
 " none, opens the file using the supplied command.
-function! eclim#util#GoToBufferWindowOrOpen(filename, cmd)
-  let winnr = bufwinnr(bufnr('^' . a:filename))
+function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
+  let name = eclim#util#EscapeBufferName(a:name)
+  let winnr = bufwinnr(bufnr('^' . name))
   if winnr != -1
     exec winnr . "winc w"
     call eclim#util#DelayedCommand('doautocmd WinEnter')
   else
-    silent exec a:cmd . ' ' . eclim#util#Simplify(a:filename)
+    silent exec a:cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
   endif
 endfunction " }}}
 
@@ -1023,9 +1037,7 @@ function! eclim#util#TempWindow(name, lines, ...)
   let winnr = winnr()
 
   call eclim#util#TempWindowClear(a:name)
-  let name = escape(a:name, ' ')
-  " hack for windows
-  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = eclim#util#EscapeBufferName(a:name)
 
   if bufwinnr(name) == -1
     silent! noautocmd exec "botright 10sview " . escape(a:name, ' ')
@@ -1075,9 +1087,7 @@ endfunction " }}}
 " TempWindowClear(name) {{{
 " Clears the contents of the temp window with the given name.
 function! eclim#util#TempWindowClear(name)
-  let name = escape(a:name, ' ')
-  " hack for windows
-  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = eclim#util#EscapeBufferName(a:name)
   if bufwinnr(name) != -1
     let curwinnr = winnr()
     exec bufwinnr(name) . "winc w"
@@ -1092,9 +1102,7 @@ endfunction " }}}
 " Opens a temp window w/ the given name and contents from the result of the
 " supplied command.
 function! eclim#util#TempWindowCommand(command, name)
-  let name = escape(a:name, ' ')
-  " hack for windows
-  let name = substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
+  let name = eclim#util#EscapeBufferName(a:name)
 
   let line = 1
   let col = 1
