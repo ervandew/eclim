@@ -22,6 +22,10 @@
 "
 " }}}
 
+" Global Varables {{{
+  let g:EclimRefactorDiffOrientation = 'vertical'
+" }}}
+
 " Script Varables {{{
   let s:command_rename = '-command java_refactor_rename ' .
     \ '-p "<project>" -f "<file>" -o <offset> -e <encoding> -l <length> -n <name>'
@@ -199,7 +203,9 @@ function s:PreviewLink()
       " split relative to the original window
       exec b:winnr . 'winc w'
 
-      silent new %:t:r.current.%:e
+      let name = expand('%:t:r')
+      let ext = expand('%:e')
+      exec printf('silent new %s.current.%s', name, ext)
       silent 1,$delete _ " counter-act any templating plugin
       exec 'read ' . escape(file, ' ')
       silent 1,1delete _
@@ -210,7 +216,8 @@ function s:PreviewLink()
       setlocal buftype=nofile bufhidden=delete
       diffthis
 
-      silent vertical split %:t:r.current.%:e
+      let orien = g:EclimRefactorDiffOrientation == 'horizontal' ? '' : 'vertical'
+      exec printf('silent below %s split %s.new.%s', orien, name, ext)
       silent 1,$delete _ " counter-act any templating plugin
       call append(1, split(result, "\n"))
       let b:refactor_preview_diff = 1
