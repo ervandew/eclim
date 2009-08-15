@@ -30,6 +30,8 @@ Eclim:
     related projects.
   - Abbreviation support removed in favor of any one of the third party
     snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
+  - Added :ref:`:HistoryDiffNext` and :ref:`:HistoryDiffPrev` commands to view
+    history diffs while navigating the history stack.
 
 Java:
   - Updated :ref:`:JavaImpl`, :ref:`:JavaDelegate`, and

@@ -80,7 +80,16 @@ function! eclim#common#history#History()
   call eclim#util#TempWindow('[History]', lines)
 
   let b:history_revisions = revisions
+  call s:Syntax()
 
+  command! -count=1 HistoryDiffNext call s:DiffNextPrev(1, <count>)
+  command! -count=1 HistoryDiffPrev call s:DiffNextPrev(-1, <count>)
+  augroup eclim_history_window
+    autocmd! BufWinLeave <buffer>
+    autocmd BufWinLeave <buffer>
+      \ delcommand HistoryDiffNext |
+      \ delcommand HistoryDiffPrev
+  augroup END
   noremap <buffer> <silent> v :call <SID>View()<cr>
   noremap <buffer> <silent> d :call <SID>Diff()<cr>
   noremap <buffer> <silent> r :call <SID>Revert()<cr>
@@ -105,7 +114,8 @@ function s:View(...)
   endif
 
   let current = b:filename
-  let revision = b:history_revisions[line('.') - 1]
+  let entry = line('.') - 1
+  let revision = b:history_revisions[entry]
   if eclim#util#GoToBufferWindow(current)
     let filetype = &ft
     let project = eclim#project#util#GetCurrentProjectName()
@@ -142,7 +152,11 @@ function s:View(...)
     setlocal bufhidden=delete
     doautocmd BufReadPost
 
+    call s:HighlightEntry(entry)
+
     return 1
+  else
+    call eclim#util#EchoWarning('Target file is no longer open.')
   endif
 endfunction " }}}
 
@@ -150,9 +164,23 @@ endfunction " }}}
 " Diff the contents of the revision under the cursor against the current
 " contents.
 function s:Diff()
+  let hist_buf = bufnr('%')
+  let winend = winnr('$')
+  let winnum = 1
+  while winnum <= winend
+    let bufnr = winbufnr(winnum)
+    if getbufvar(bufnr, 'history_diff') != ''
+      exec bufnr . 'bd'
+      continue
+    endif
+    let winnum += 1
+  endwhile
+  call eclim#util#GoToBufferWindow(hist_buf)
+
   let current = b:filename
-  let orien = g:EclimHistoryDiffOrientation == 'horizontal' ? '' : 'vertical '
-  if s:View(orien . 'split')
+  let orien = g:EclimHistoryDiffOrientation == 'horizontal' ? '' : 'vertical'
+  if s:View(orien . ' below split')
+    let b:history_diff = 1
     diffthis
     augroup history_diff
       autocmd! BufWinLeave <buffer>
@@ -162,6 +190,23 @@ function s:Diff()
 
     call eclim#util#GoToBufferWindow(current)
     diffthis
+  endif
+endfunction " }}}
+
+" s:DiffNextPrev(dir, count) {{{
+function s:DiffNextPrev(dir, count)
+  let winnr = winnr()
+  if eclim#util#GoToBufferWindow('[History]')
+    let num = v:count > 0 ? v:count : a:count
+    let cur = exists('b:history_current_entry') ? b:history_current_entry : 0
+    let index = cur + (a:dir * num)
+    if index < 0 || index > len(b:history_revisions)
+      call eclim#util#EchoError('Operation exceeds history stack range.')
+      exec winnr . 'winc w'
+      return
+    endif
+    call cursor(index + 1, 0)
+    call s:Diff()
   endif
 endfunction " }}}
 
@@ -220,6 +265,29 @@ function s:Clear(prompt, ...)
       quit
     endif
     call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
+" s:Syntax() {{{
+function! s:Syntax()
+  set ft=eclim_history
+  hi link HistoryFile Identifier
+  hi link HistoryCurrentEntry Constant
+  syntax match HistoryFile /.*\%1l.*/
+endfunction " }}}
+
+" s:HighlightEntry(index) {{{
+function s:HighlightEntry(index)
+  let winnr = winnr()
+  if eclim#util#GoToBufferWindow('[History]')
+    let b:history_current_entry = a:index
+    try
+      " forces reset of syntax
+      call s:Syntax()
+      exec 'syntax match HistoryCurrentEntry /.*\%' . (a:index + 1) . 'l.*/'
+    finally
+      exec winnr . 'winc w'
+    endtry
   endif
 endfunction " }}}
 

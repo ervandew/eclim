@@ -43,6 +43,21 @@ specified key bindings:
 - r - revert the current file to the revision under the cursor.
 - c - clear the local history for the file.
 
+.. _\:HistoryClear:
+
+**:HistoryClear[!]** - Clears the local history for the current file.  When the
+bang (!) is supplied, you are not prompted before clearing the history.
+
+.. _\:HistoryDiffNext:
+
+**:HistoryDiffNext** - While the history buffer is open, this command allows
+you to diff the current file against the next entry in the history stack.
+
+.. _\:HistoryDiffPrev:
+
+**:HistoryDiffPrev** - Just like **:HistoryDiffNext** but diffs against the
+previous entry in the stack.
+
 
 Configuration
 --------------

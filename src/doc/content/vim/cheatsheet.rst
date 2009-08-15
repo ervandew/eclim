@@ -448,6 +448,12 @@ Misc. Commands
   Like **:OtherWorkingCopyDiff**, except open the file in a new tab.
 - :ref:`:History` -
   View the local history entries for the current file.
+- :ref:`:HistoryClear` -
+  Clear the local history entries for the current file.
+- :ref:`:HistoryDiffNext` -
+  Diff the current file against the next entry in the history stack.
+- :ref:`:HistoryDiffPrev` -
+  Diff the current file against the previous entry in the history stack.
 - :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
