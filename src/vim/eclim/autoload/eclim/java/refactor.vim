@@ -203,8 +203,8 @@ function s:PreviewLink()
       " split relative to the original window
       exec b:winnr . 'winc w'
 
-      let name = expand('%:t:r')
-      let ext = expand('%:e')
+      let name = fnamemodify(file, ':t:r')
+      let ext = fnamemodify(file, ':e')
       exec printf('silent new %s.current.%s', name, ext)
       silent 1,$delete _ " counter-act any templating plugin
       exec 'read ' . escape(file, ' ')
