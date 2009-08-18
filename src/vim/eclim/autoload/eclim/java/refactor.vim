@@ -52,7 +52,8 @@ function eclim#java#refactor#Rename(name)
   endif
 
   let prompt = printf('Rename "%s" to "%s"', element, a:name)
-  let result = s:Prompt(prompt)
+  let result = exists('g:EclimRefactorPromptDefault') ?
+    \ g:EclimRefactorPromptDefault : s:Prompt(prompt)
   if result <= 0
     return
   endif
