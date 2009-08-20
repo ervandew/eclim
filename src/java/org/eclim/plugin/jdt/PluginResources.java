@@ -121,7 +121,7 @@ public class PluginResources
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT org.eclim.java.compile.sourcepath\n" +
-      "JDT org.eclim.java.run.mainclass\n" +
+      "JDT org.eclim.java.run.mainclass none ^[a-zA-Z0-9_.]*$\n" +
       "JDT/Javadoc org.eclim.java.doc.version\n" +
       "JDT/Javadoc org.eclim.java.doc.dest doc\n" +
       "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +

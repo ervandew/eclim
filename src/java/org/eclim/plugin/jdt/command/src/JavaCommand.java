@@ -81,9 +81,16 @@ public class JavaCommand
     String mainClass =
       ProjectUtils.getSetting(project, "org.eclim.java.run.mainclass");
 
-    if (mainClass == null || mainClass.trim().equals(StringUtils.EMPTY)){
+    if (mainClass == null ||
+        mainClass.trim().equals(StringUtils.EMPTY) ||
+        mainClass.trim().equals("none"))
+    {
       throw new RuntimeException(Services.getMessage(
             "setting.not.set", "org.eclim.java.run.mainclass"));
+    }
+
+    if (mainClass.endsWith(".java") || mainClass.endsWith(".class")){
+      mainClass = mainClass.substring(0, mainClass.lastIndexOf('.'));
     }
 
     Java java = new Java();
