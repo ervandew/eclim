@@ -47,9 +47,7 @@ public class PreferenceFactory
         option.setNature(nature);
         option.setPath(attrs[0]);
         option.setName(attrs[1]);
-        if (attrs.length > 2){
-          option.setRegex(attrs[2]);
-        }
+        option.setRegex(attrs[2]);
 
         preferences.addOption(option);
       }
