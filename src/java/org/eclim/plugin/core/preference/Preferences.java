@@ -394,8 +394,10 @@ public class Preferences
   private void initializeDefaultPreferences(IEclipsePreferences preferences)
     throws Exception
   {
+    String node = preferences.name();
     for(Preference preference : this.preferences.values()){
-      if(preferences.get(preference.getName(), null) == null){
+      String name = preference.getName();
+      if (name.startsWith(node) && preferences.get(name, null) == null){
         preferences.put(preference.getName(), preference.getDefaultValue());
       }
     }
