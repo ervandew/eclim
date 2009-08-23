@@ -31,7 +31,7 @@ Checking out the code and building it.
 
   ::
 
-    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim
+    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim/eclim
 
   Once you have a local git repository you can utilize the extensive local git
   functionality allowing you to commit code locally, create local branches,
