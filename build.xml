@@ -90,7 +90,21 @@
   <!--
     - Initialize the build.
     -->
-  <target name="init">
+  <target name="init" unless="eclim.version">
+    <!-- set eclim version based on current repos state (most recent tag w/
+      possible suffix including number of revisions since that tag + last
+      commit id, if last tag is not at the head) -->
+    <exec executable="git" outputproperty="eclim.version">
+      <arg line="describe"/>
+    </exec>
+    <!-- ensure version is a valid osgi version -->
+    <propertyregex property="eclim.version" override="true"
+        input="${eclim.version}"
+        regexp="^(\d+\.\d+\.\d+)-(\d+-\w+)$" replace="\1.\2"/>
+    <property name="eclim.home" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
+
+    <echo>eclim.version: ${eclim.version}</echo>
+
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.features}"/>
     <mkdir dir="${build.plugins}"/>
@@ -248,6 +262,27 @@
 
   <target name="deploy.eclipse" depends="build.eclipse"
       description="Build and deploy the eclipse plugins.">
+    <!-- if the eclim version has changed, stop eclimd before deploying -->
+    <path id="existing">
+      <dirset dir="${eclim.plugins}" includes="org.eclim_*"/>
+    </path>
+    <property name="existing" refid="existing"/>
+    <if>
+      <and>
+        <not> <length string="${existing}" length="0"/> </not>
+        <not>
+          <equals arg1="${existing}"
+              arg2="${eclim.plugins}/org.eclim_${eclim.version}"/>
+        </not>
+      </and>
+      <then>
+        <echo>eclim version updated, stopping eclimd...</echo>
+        <exec executable="${existing}/bin/eclim">
+          <arg line="-command shutdown"/>
+        </exec>
+      </then>
+    </if>
+
     <delete includeemptydirs="true">
       <fileset dir="${eclipse.home}">
         <include name="plugins/org.eclim*/**/*"/>

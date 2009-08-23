@@ -99,7 +99,7 @@
 
     <!-- full source tar -->
     <tar destfile="build/dist/eclim_${eclim.version}.tar.gz"
-        compression="gzip">
+        compression="gzip" longfile="gnu">
       <tarfileset dir="." prefix="eclim_${eclim.version}">
         <include name="**/*"/>
         <exclude name=".git/**/*"/>
@@ -119,10 +119,11 @@
   <!--
     - Target for creating installer files.
     -->
-  <target name="installer">
+  <target name="installer" depends="init">
     <!-- run formic -->
     <exec executable="${formic.home}/bin/formic" failonerror="true" dir=".">
       <arg value="-Declipse.home=${eclipse.home}"/>
+      <arg value="-Declim.version=${eclim.version}"/>
       <arg value="-buildfile"/>
       <arg value="src/installer/build.xml"/>
     </exec>
