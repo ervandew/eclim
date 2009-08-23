@@ -23,7 +23,9 @@
 " }}}
 
 " Global Varables {{{
-  let g:EclimRefactorDiffOrientation = 'vertical'
+  if !exists('g:EclimRefactorDiffOrientation')
+    let g:EclimRefactorDiffOrientation = 'vertical'
+  endif
 " }}}
 
 " Script Varables {{{
