@@ -236,7 +236,13 @@ endfunction " }}}
 
 " s:Refactor(command) {{{
 function s:Refactor(command)
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  let cwd_return = 1
+
   try
+    " cd to the project root to avoid folder renaming issues on windows.
+    exec 'cd ' . eclim#project#util#GetCurrentProjectRoot()
+
     " turn off swap files temporarily to avoid issues with folder/file
     " renaming.
     let bufend = bufnr('$')
@@ -248,7 +254,6 @@ function s:Refactor(command)
       endif
       let bufnum = bufnum + 1
     endwhile
-    let cwd = getcwd()
 
     let result = eclim#ExecuteEclim(a:command)
     if result == "0"
@@ -265,10 +270,11 @@ function s:Refactor(command)
     let curwin = winnr()
     try
       for file in files
+        let file = substitute(file, '\', '/', 'g')
         let newfile = ''
         " handle file renames
         if file =~ '\s->\s'
-          let newfile = escape(substitute(file, '.*->\s*', '', ''), ' ')
+          let newfile = substitute(file, '.*->\s*', '', '')
           let file = substitute(file, '\s*->.*', '', '')
         endif
 
@@ -279,9 +285,16 @@ function s:Refactor(command)
 
         " handle current working directory moved.
         if newfile != '' && isdirectory(newfile)
+          if file =~ '^' . cwd . '\(/\|$\)'
+            while cwd !~ '^' . file . '\(/\|$\)'
+              let file = fnamemodify(file, ':h')
+            endwhile
+          endif
+
           if cwd =~ '^' . file . '\(/\|$\)'
             let dir = substitute(cwd, file, newfile, '')
             exec 'cd ' . escape(dir, ' ')
+            let cwd_return = 0
           endif
           continue
         endif
@@ -301,6 +314,9 @@ function s:Refactor(command)
       endfor
     finally
       exec curwin . 'winc w'
+      if cwd_return
+        exec 'cd ' . escape(cwd, ' ')
+      endif
     endtry
   finally
     " re-enable swap files
