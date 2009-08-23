@@ -430,7 +430,7 @@ div.section h2 {
 div.admonition, div.warning {
   background-color: #e9e9d0;
   font-size: 0.9em;
-  margin: 0;
+  margin: 0 0 5px 0;
 }
 
 div.admonition p, div.warning p {
