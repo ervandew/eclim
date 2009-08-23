@@ -102,13 +102,15 @@ function! eclim#display#maximize#MinimizeWindow(...)
 
   " first loop through and mark the buffers
   for winnum in args
-    let val = getwinvar(winnum, 'minimized')
-    let minimized = type(val) == 0 ? !val : 1
-    if !minimized
-      call setwinvar(winnum, '&winfixheight', 0)
-      call setwinvar(winnum, '&winfixwidth', 0)
+    if bufname(winbufnr(winnum)) !~ g:MaximizeExcludes
+      let val = getwinvar(winnum, 'minimized')
+      let minimized = type(val) == 0 ? !val : 1
+      if !minimized
+        call setwinvar(winnum, '&winfixheight', 0)
+        call setwinvar(winnum, '&winfixwidth', 0)
+      endif
+      call setwinvar(winnum, 'minimized', minimized)
     endif
-    call setwinvar(winnum, 'minimized', minimized)
   endfor
 
   call eclim#util#ExecWithoutAutocmds('call eclim#display#maximize#Reminimize()')
@@ -176,9 +178,11 @@ function! eclim#display#maximize#ResetMinimized()
   let winend = winnr('$')
   let winnum = 1
   while winnum <= winend
-    call setwinvar(winnum, "minimized", 0)
-    call setwinvar(winnum, "&winfixheight", 0)
-    call setwinvar(winnum, "&winfixwidth", 0)
+    if bufname(winbufnr(winnum)) !~ g:MaximizeExcludes
+      call setwinvar(winnum, "minimized", 0)
+      call setwinvar(winnum, "&winfixheight", 0)
+      call setwinvar(winnum, "&winfixwidth", 0)
+    endif
     let winnum = winnum + 1
   endwhile
 endfunction " }}}
