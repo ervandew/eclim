@@ -38,6 +38,7 @@ Java
    bean
    hierarchy
    format
+   refactor
    checkstyle
    junit
    testng

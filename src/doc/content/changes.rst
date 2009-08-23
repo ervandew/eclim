@@ -28,19 +28,20 @@ Eclim:
   - Added :ref:`:ProjectProblems` command to populate vim's quickfix with a
     list of all eclipse build errors and warnings for the current and all
     related projects.
-  - Abbreviation support removed in favor of any one of the third party
-    snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
   - Added :ref:`:HistoryDiffNext` and :ref:`:HistoryDiffPrev` commands to view
     history diffs while navigating the history stack.
+  - Abbreviation support removed in favor of any one of the third party
+    snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
 
 Java:
   - Updated :ref:`:JavaImpl`, :ref:`:JavaDelegate`, and
     :ref:`:JUnitImpl <:JUnitImpl>` to better support generics.
-  - Updated :ref:`:JUnitImpl <:JUnitImpl>` to support a junit 4 method
-    templates.
+  - Updated :ref:`:JUnitImpl <:JUnitImpl>` to support junit 4 method
+    signatures.
   - Updated :ref:`:JavaImport` and :ref:`:JavaImportSort` to honor eclipse's
     import order preference and added the ability to edit that preference via
     :ref:`:ProjectSettings` and :ref:`:EclimSettings`.
+  - Added initial :ref:`refactoring <vim/java/refactor>` support.
 
 .. _1.5.1:
 
