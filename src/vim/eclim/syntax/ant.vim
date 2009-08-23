@@ -45,7 +45,7 @@ syn keyword antElement date depend depth different filename present containsrege
 syn keyword antElement size type modified signedselector scriptselector
 syn match antElement 'contains'
 " ant 1.7 conditions
-syn keyword antElement hasfreespace hasmethod isfailure matches
+syn keyword antElement hasfreespace hasmethod isfailure length matches
 syn keyword antElement resourcecount resourcesmatch
 " ant 1.7 misc elements
 syn keyword antElement preserveintarget service
