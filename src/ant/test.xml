@@ -260,6 +260,9 @@
       <arg line='-command project_delete -p ${project}'/>
     </exec>
     <delete dir="${eclipse.workspace}/${project}" includeEmptyDirs="true"/>
+    <!-- hack for apparent race condition on delete of files, eclipse syncing
+         and project resource creation -->
+    <sleep seconds="1"/>
 
     <copy todir="${eclipse.workspace}">
       <fileset dir="src/test/resources" includes="${project}/**/*"/>
