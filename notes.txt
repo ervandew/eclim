@@ -554,13 +554,14 @@ NOTES {{{
   }}}
 
   Steps for new releases {{{
-    1) create sourceforge release
-       - update windows and linux download pages with latest file to download.
-    2) update documentation website
-    3) tag git
+    1) tag git and then build the distribution
        $ git push
        $ git tag -a -m "<version>" <version>
+       $ ant dist
        $ git push --tags
+    2) create sourceforge release
+       - update windows and linux download pages with latest file to download.
+    3) update documentation website
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
   }}}
