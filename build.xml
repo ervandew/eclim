@@ -344,6 +344,14 @@
     <replace file="${vim.files}/eclim/autoload/eclim.vim"
         token="&quot;$${vim.eclim.home}&quot;"
         value="let g:EclimHome = '${eclim.home}'"/>
+    <if>
+      <not> <os family="windows"/> </not>
+      <then>
+        <replace file="${vim.files}/eclim/autoload/eclim/client/nailgun.vim"
+            token="&quot;$${vim.eclim.path}&quot;"
+            value="let g:EclimPath = '${eclipse.home}/eclim'"/>
+      </then>
+    </if>
   </target>
 
   <!--

@@ -28,6 +28,9 @@
     " this flag in run-time has no effect.
     let g:EclimNailgunKeepAlive = 0
   endif
+
+  " used during development only.
+  "${vim.eclim.path}"
 " }}}
 
 " Execute(command) {{{
