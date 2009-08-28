@@ -116,18 +116,15 @@ anything non-trivial, the preferred means of managing those patches.
 
 **Submitting Patches**
 
-Any patches you submit should be in the form of full diff against the current
-git head:
+Any patches you submit should be in the form of diff against the current git
+head using git's format-patch command:
 
   ::
 
-    $ git diff origin > myfeature.patch
+    $ git format-patch -M origin/master
 
-Or using StGit (:ref:`described below <development-patches-managing>`):
-
-  ::
-
-    $ stg show myfeature > myfeature.patch
+Running the above command will generate a series of patch files which can be
+submitted to the `eclim development group`_.
 
 If you use git, without stgit, please be aware that the diff will generate a
 patch entry for every commit you've made. So unless each commit represents a
@@ -142,11 +139,12 @@ and evaluating a patch with an entire history like that can be very difficult.
 **Managing Patch Development**
 
 Although you can manage patches and format "clean" patch files by manually
-rewriting git's history or juggling some local branches, the recommended tool
-for managing patches is `Stacked Git`_ (StGit).  StGit makes creating,
-managing, and submitting patches a lot easier than doing so manually.  If you
-decide to not use StGit, then you might want to read the section in the git
-manual regarding `managing of patch series`_.
+rewriting git's history, you might find it easier to manage your patches using
+an external patch management tool like `Stacked Git`_ (StGit).  StGit can make
+creating, managing, and submitting patches easier for some users.  If you
+decide to not use StGit, then you should read the section in the git manual
+regarding `managing of patch series`_ which provides some very nice guidelines
+and useful tips.
 
 .. _development-patch-example:
 
@@ -157,13 +155,14 @@ a small change, from start to finish.  In this example we will modify the
 :PingEclim command to print "Pong" along with the version numbers normally
 returned.
 
-This example will use the recommend tools, git_ and stgit_.
+This example will use stgit_, but the same result can be accomplished with git
+alone.
 
 1. First clone the eclim repository:
 
   ::
 
-    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim
+    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim/eclim
 
 2. Initialize stgit for the eclim repository:
 
@@ -183,11 +182,11 @@ This example will use the recommend tools, git_ and stgit_.
 
   ::
 
-    $ vim src/java/org/eclim/command/admin/PingCommand.java
+    $ vim src/java/org/eclim/plugin/core/command/admin/PingCommand.java
     ...
 
     $ git diff
-    diff --git a/src/java/org/eclim/command/admin/PingCommand.java b/src/java/org/eclim/command/admin/PingCommand.java
+    diff --git a/src/java/org/eclim/plugin/core/command/admin/PingCommand.java b/src/java/org/eclim/plugin/core/command/admin/PingCommand.java
     index bb5c569..b2f2ebc 100644
     --- a/src/java/org/eclim/command/admin/PingCommand.java
     +++ b/src/java/org/eclim/command/admin/PingCommand.java
@@ -232,7 +231,7 @@ This example will use the recommend tools, git_ and stgit_.
 
   ::
 
-    $ stg show > pong.patch
+    $ git format-patch -M origin/master
 
 At this point all that is left is submitting the patch to the
 `eclim development group`_.
@@ -240,13 +239,13 @@ At this point all that is left is submitting the patch to the
 
 **Pulling Updates**
 
-  As some point you'll need to pull updates from the remote git repository.  If
+  At some point you'll need to pull updates from the remote git repository.  If
   you're using git without stgit, then you can pull updates in the standard git
-  fashion:
+  fashion (using rebase in this example to help keep the history cleaner):
 
     ::
 
-      $ git pull
+      $ git pull --rebase
 
   If you're using stgit on top of git, then the preferred method is to pull via
   stgit:
