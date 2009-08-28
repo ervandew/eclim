@@ -597,6 +597,12 @@ NOTES {{{
                -debug -consolelog -nosplash -clean -refresh
                -application org.eclim.application_headless
 
+      - list features
+        > java -jar plugins\org.eclipse.equinox.launcher_<version>.jar
+               -debug -consolelog -nosplash -clean -refresh
+               -application org.eclipse.update.core.standaloneUpdate
+               -command listFeatures
+
     Minimum execution of vim w/ eclim support:
       $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
 
