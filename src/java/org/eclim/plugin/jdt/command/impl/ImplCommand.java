@@ -253,7 +253,7 @@ public class ImplCommand
    * Gets the names of the unimplemented methods from the super type.
    *
    * @param type The type to add the methods to.
-   * @param superType The super type to add methods from.
+   * @param superTypeInfo The super type to add methods from.
    * @return Array of minimal method signatures.
    */
   protected String[] getUnimplementedMethods(IType type, TypeInfo superTypeInfo)
