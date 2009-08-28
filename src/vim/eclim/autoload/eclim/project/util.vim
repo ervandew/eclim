@@ -38,6 +38,7 @@ let s:command_create_natures = ' -n <natures>'
 let s:command_create_depends = ' -d <depends>'
 let s:command_import = '-command project_import -f "<folder>"'
 let s:command_delete = '-command project_delete -p "<project>"'
+let s:command_rename = '-command project_rename -p "<project>" -n "<name>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
@@ -162,6 +163,97 @@ function! eclim#project#util#ProjectDelete(name)
   if result != '0'
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
+  endif
+endfunction " }}}
+
+" ProjectDelete(args) {{{
+" Renames a project.
+function! eclim#project#util#ProjectRename(args)
+  let args = eclim#util#ParseCmdLine(a:args)
+  if len(args) == 1
+    if !eclim#project#util#IsCurrentFileInProject()
+      return
+    endif
+    let project = eclim#project#util#GetCurrentProjectName()
+    let name = args[0]
+  else
+    let project = args[0]
+    let name = args[1]
+  endif
+
+  let response = eclim#util#PromptConfirm(
+    \ printf("Rename project '%s' to '%s'", project, name),
+    \ g:EclimInfoHighlight)
+
+  if response == 1
+    let cwd = getcwd()
+    let oldpath = eclim#project#util#GetProjectRoot(project)
+
+    let curwin = winnr()
+    try
+      " turn off swap files temporarily to avoid issues with folder renaming.
+      let bufend = bufnr('$')
+      let bufnum = 1
+      while bufnum <= bufend
+        if bufnr(bufnum) != -1
+          call setbufvar(bufnum, 'save_swapfile', getbufvar(bufnum, '&swapfile'))
+          call setbufvar(bufnum, '&swapfile', 0)
+        endif
+        let bufnum = bufnum + 1
+      endwhile
+
+      " write all changes before moving
+      wall
+
+      let command = s:command_rename
+      let command = substitute(command, '<project>', project, '')
+      let command = substitute(command, '<name>', name, '')
+      let result = eclim#ExecuteEclim(command)
+      if result == "0"
+        return
+      endif
+      call eclim#project#util#ClearProjectsCache()
+      let newpath = eclim#project#util#GetProjectRoot(name)
+      if cwd =~ '^' . oldpath
+        exec 'cd ' . substitute(cwd, oldpath, newpath, '')
+      endif
+
+      " reload files affected by the project renaming
+      let bufnum = 1
+      while bufnum <= bufend
+        if bufnr(bufnum) != -1
+          let path = fnamemodify(bufname(bufnum), ':p')
+          if path =~ '^' . oldpath
+            let path = substitute(path, oldpath, newpath, '')
+            if filereadable(path)
+              let winnr = bufwinnr(bufnum)
+              if winnr != -1
+                exec winnr . 'winc w'
+                exec 'edit ' . eclim#util#Simplify(path)
+              endif
+              exec 'bdelete ' . bufnum
+            endif
+          endif
+        endif
+        let bufnum = bufnum + 1
+      endwhile
+
+    finally
+      exec curwin 'winc w'
+      " re-enable swap files
+      let bufnum = 1
+      while bufnum <= bufend
+        if bufnr(bufnum) != -1
+          let save_swapfile = getbufvar(bufnum, 'save_swapfile')
+          if save_swapfile != ''
+            call setbufvar(bufnum, '&swapfile', save_swapfile)
+          endif
+        endif
+        let bufnum = bufnum + 1
+      endwhile
+    endtry
+
+    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 

@@ -96,46 +96,31 @@ if !exists(":ProjectCreate")
   command -nargs=+
     \ -complete=customlist,eclim#project#util#CommandCompleteProjectCreate
     \ ProjectCreate :call eclim#project#util#ProjectCreate('<args>')
-endif
-if !exists(":ProjectImport")
   command -nargs=1 -complete=dir
     \ ProjectImport :call eclim#project#util#ProjectImport('<args>')
-endif
-if !exists(":ProjectDelete")
   command -nargs=1
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectDelete :call eclim#project#util#ProjectDelete('<args>')
-endif
-if !exists(":ProjectRefresh")
+  command -nargs=+
+    \ -complete=customlist,eclim#project#util#CommandCompleteProject
+    \ ProjectRename :call eclim#project#util#ProjectRename('<args>')
   command -nargs=*
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectRefresh :call eclim#project#util#ProjectRefresh('<args>')
   command ProjectRefreshAll :call eclim#project#util#ProjectRefreshAll()
-endif
-if !exists(":ProjectList")
   command ProjectList :call eclim#project#util#ProjectList()
-endif
-if !exists(":ProjectSettings")
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectSettings :call eclim#project#util#ProjectSettings('<args>')
-endif
-if !exists(":ProjectInfo")
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectInfo :call eclim#project#util#ProjectInfo('<args>')
-endif
-if !exists(":ProjectOpen")
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectOpen :call eclim#project#util#ProjectOpen('<args>')
-endif
-if !exists(":ProjectClose")
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectClose :call eclim#project#util#ProjectClose('<args>')
-endif
-if !exists(":ProjectNatures")
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectNatures :call eclim#project#util#ProjectNatures('<args>')

@@ -111,6 +111,16 @@ Vim's command line completion to complete the project name.
 
   Deletes the project with the specified name.
 
+.. _\:ProjectRename:
+
+- **:ProjectRename** [<project>] <name>
+
+  Renames a project.  If two arguments are supplied then the first argument is
+  interpreted as the name of the project to rename and the second argument as
+  the new name for the project.  When only a single argument is supplied, then
+  that argument is used as the new name for the project which the current file
+  belongs to.
+
 .. _\:ProjectRefresh:
 
 - **:ProjectRefresh** [<project> <project> ...]

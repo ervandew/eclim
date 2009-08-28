@@ -82,6 +82,31 @@ public class ProjectCommandsTest
   }
 
   @Test
+  public void renameProject()
+  {
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
+
+    String renamed = TEST_PROJECT + "_renamed";
+    String result = Eclim.execute(new String[]{
+      "project_rename", "-p", TEST_PROJECT, "-n", renamed});
+    System.out.println(result);
+
+    assertFalse("Previous project name still exists.",
+        Eclim.projectExists(TEST_PROJECT));
+    assertTrue("New project name doesn't exist.",
+        Eclim.projectExists(renamed));
+
+    result = Eclim.execute(new String[]{
+      "project_rename", "-p", renamed, "-n", TEST_PROJECT});
+    System.out.println(result);
+
+    assertFalse("Previous project name still exists.",
+        Eclim.projectExists(renamed));
+    assertTrue("New project name doesn't exist.",
+        Eclim.projectExists(TEST_PROJECT));
+  }
+
+  @Test
   public void deleteProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));

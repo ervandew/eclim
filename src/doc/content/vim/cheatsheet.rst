@@ -45,6 +45,7 @@ Project Commands
 - :ref:`:ProjectList` - List current projects.
 - :ref:`:ProjectSettings` [<project>] - View / edit project settings.
 - :ref:`:ProjectDelete` <project> - Delete a project.
+- :ref:`:ProjectRename` [<project>] <name> - Rename a project.
 - :ref:`:ProjectRefresh` [<project> <project> ...] -
   Refresh supplied list of projects against the current files on disk.  If
   no project names supplied, refresh the current project.
