@@ -192,7 +192,7 @@ endfunction " }}}
 
 " Info() {{{
 " Retrieves and echos info on the current file.
-function eclim#vcs#command#Info()
+function! eclim#vcs#command#Info()
   let cwd = getcwd()
   let dir = expand('%:p:h')
   exec 'lcd ' . escape(dir, ' ')
@@ -415,7 +415,7 @@ function! s:ApplyAnnotations(annotations)
       continue
     endif
 
-    let user = substitute(annotation, '^.\{-})\s\+\(.*\)', '\1', '')
+    let user = substitute(annotation, '^.\{-})\s\+\(.\{-}\)\s*$', '\1', '')
     let user_abbrv = user[:1]
     let sign_name = 'vcs_annotate_' . substitute(user[:5], ' ', '_', 'g')
     if index(defined, sign_name) == -1
@@ -454,7 +454,7 @@ function! s:AnnotateOff()
   if exists('b:vcs_annotations')
     let defined = eclim#display#signs#GetDefined()
     for annotation in b:vcs_annotations
-      let user = substitute(annotation, '^.*)\s\+\(.\{-}\)\s*$', '\1', '')
+      let user = substitute(annotation, '^.\{-})\s\+\(.\{-}\)\s*$', '\1', '')
       let sign_name = 'vcs_annotate_' . substitute(user[:5], ' ', '_', 'g')
       if index(defined, sign_name) != -1
         let signs = eclim#display#signs#GetExisting(sign_name)
