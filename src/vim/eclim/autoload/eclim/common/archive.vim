@@ -43,6 +43,11 @@ let s:file_regex =
 " List() {{{
 " Lists the contents of the archive.
 function! eclim#common#archive#List()
+  if !eclim#PingEclim(0)
+    call s:DefaultList()
+    return
+  endif
+
   let b:file_info = {}
   let file = substitute(expand('%:p'), '\', '/', 'g')
   let root = fnamemodify(file, ':t') . '/'
@@ -298,6 +303,27 @@ function s:Mappings()
     command! -nargs=0 AsTree :call <SID>ChangeLayout('tree')
   endif
 
+endfunction " }}}
+
+" s:DefaultList() {{{
+function s:DefaultList()
+  " once the tar and zip plugins are loaded, we must disable the eclim viewer
+  " since they will conflict.
+  let g:EclimArchiveViewerEnabled = 0
+  augroup eclim_archive
+    autocmd!
+  augroup END
+
+  if exists('g:loaded_tarPlugin') && g:loaded_tarPlugin == '1'
+    unlet g:loaded_tarPlugin
+    runtime plugin/tarPlugin.vim
+  endif
+  if exists('g:loaded_zipPlugin') && g:loaded_zipPlugin == '1'
+    unlet g:loaded_zipPlugin
+    runtime plugin/zipPlugin.vim
+  endif
+  silent doautocmd tar BufReadCmd
+  silent doautocmd zip BufReadCmd
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
