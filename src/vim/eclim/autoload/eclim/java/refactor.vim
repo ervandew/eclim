@@ -248,7 +248,7 @@ function s:Refactor(command)
     let bufend = bufnr('$')
     let bufnum = 1
     while bufnum <= bufend
-      if bufnr(bufnum) != -1
+      if bufexists(bufnum)
         call setbufvar(bufnum, 'save_swapfile', getbufvar(bufnum, '&swapfile'))
         call setbufvar(bufnum, '&swapfile', 0)
       endif
@@ -322,7 +322,7 @@ function s:Refactor(command)
     " re-enable swap files
     let bufnum = 1
     while bufnum <= bufend
-      if bufnr(bufnum) != -1
+      if bufexists(bufnum)
         let save_swapfile = getbufvar(bufnum, 'save_swapfile')
         if save_swapfile != ''
           call setbufvar(bufnum, '&swapfile', save_swapfile)
