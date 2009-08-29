@@ -291,7 +291,9 @@ class NGSession extends Thread {
             if (alias != null) {
               cmdclass = alias.getAliasedClass();
             } else if (server.allowsNailsByClassName()) {
-              cmdclass = Class.forName(command);
+              // EV: use configurable classloader from server
+              //cmdclass = Class.forName(command);
+              cmdclass = Class.forName(command, true, server.getClassLoader());
             } else {
               cmdclass = server.getDefaultNailClass();
             }

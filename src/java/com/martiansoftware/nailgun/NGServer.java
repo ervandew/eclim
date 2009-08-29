@@ -52,6 +52,9 @@ public class NGServer implements Runnable {
    */
   private int port = 0;
 
+  // EV: added classloader
+  private ClassLoader classLoader;
+
   /**
    * The socket doing the listening
    */
@@ -123,8 +126,10 @@ public class NGServer implements Runnable {
    * to all local addresses
    * @param port the port on which to listen.
    */
-  public NGServer(InetAddress addr, int port) {
-    init(addr, port);
+  // EV: added classloader arg
+  //public NGServer(InetAddress addr, int port) {
+  public NGServer(InetAddress addr, int port, ClassLoader classloader) {
+    init(addr, port, classloader);
   }
 
   /**
@@ -135,7 +140,7 @@ public class NGServer implements Runnable {
    * and start it.
    */
   public NGServer() {
-    init(null, NGConstants.DEFAULT_PORT);
+    init(null, NGConstants.DEFAULT_PORT, null);
   }
 
   /**
@@ -143,15 +148,24 @@ public class NGServer implements Runnable {
    * @param addr the InetAddress to bind to
    * @param port the port on which to listen
    */
-  private void init(InetAddress addr, int port) {
+  // EV: added classloader arg
+  //private void init(InetAddress addr, int port) {
+  private void init(InetAddress addr, int port, ClassLoader classLoader) {
     this.addr = addr;
     this.port = port;
+    this.classLoader = classLoader;
 
     this.aliasManager = new AliasManager();
     allNailStats = new java.util.HashMap();
     // allow a maximum of 10 idle threads.  probably too high a number
     // and definitely should be configurable in the future
     sessionPool = new NGSessionPool(this, 10);
+  }
+
+  // EV: new method to access the classloader
+  public ClassLoader getClassLoader() {
+    return this.classLoader != null ?
+      this.classLoader : this.getClass().getClassLoader();
   }
 
   /**
@@ -447,7 +461,8 @@ public class NGServer implements Runnable {
       }
     }
 
-    NGServer server = new NGServer(serverAddress, port);
+    // EV: handle new classloader arg
+    NGServer server = new NGServer(serverAddress, port, null);
     Thread t = new Thread(server);
     t.setName("NGServer(" + serverAddress + ", " + port + ")");
     t.start();
