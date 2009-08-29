@@ -97,6 +97,57 @@ function! eclim#client#nailgun#GetEclimCommand()
   return g:EclimPath
 endfunction " }}}
 
+" GetNgCommand() {{{
+" Gets path to the ng executable.
+function! eclim#client#nailgun#GetNgCommand()
+  if !exists('g:EclimNgPath')
+    let eclim_home = eclim#GetEclimHome()
+    if eclim_home == '' || string(eclim_home) == '0'
+      return
+    endif
+
+    let g:EclimNgPath = substitute(eclim_home, '\', '/', 'g') .  '/bin/ng'
+
+    if has("win32unix")
+      let g:EclimNgPath = system('cygpath "' . g:EclimNgPath . '"')
+      let g:EclimNgPath = substitute(g:EclimNgPath, '\n.*', '', '')
+    endif
+
+    if !filereadable(g:EclimNgPath)
+      let g:EclimErrorReason = 'Could not locate file: ' . g:EclimNgPath
+      return
+    endif
+
+    " on windows, the command must be executed on the drive where eclipse is
+    " installed.
+    "if has("win32") || has("win64")
+    "  let g:EclimNgPath =
+    "    \ '"' . substitute(g:EclimNgPath, '^\([a-zA-Z]:\).*', '\1', '') .
+    "    \ ' && "' . g:EclimNgPath . '"'
+    "else
+      let g:EclimNgPath = '"' . g:EclimNgPath . '"'
+    "endif
+  endif
+  return g:EclimNgPath
+endfunction " }}}
+
+" GetNgPort() {{{
+" Gets port that the nailgun server is configured to run on.
+function! eclim#client#nailgun#GetNgPort()
+  let port = 9091
+  let eclimrc = expand('~/.eclimrc')
+  if filereadable(eclimrc)
+    let lines = filter(
+      \ readfile(eclimrc),
+      \ 'v:val =~ "^\\s*nailgun\.server\.port\\s*="')
+    if len(lines) > 0
+      exec 'let port = ' .
+        \ substitute(lines[0], '^\s*.\{-}=\s*\(\d\+\).*', '\1', '')
+    endif
+  endif
+  return port
+endfunction " }}}
+
 " s:DetermineClient() {{{
 function s:DetermineClient()
   " at least one ubuntu user had serious performance issues using the python
