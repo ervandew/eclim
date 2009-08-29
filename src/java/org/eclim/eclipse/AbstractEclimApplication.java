@@ -113,7 +113,7 @@ public abstract class AbstractEclimApplication
 
         // continuation of ugly hack from eclimd script
         System.setProperty("vim.files",
-            System.getProperty("vim.files").replaceAll("%20", " "));
+            System.getProperty("vim.files", "").replaceAll("%20", " "));
         logger.info("vim files dir: " + System.getProperty("vim.files"));
 
         // start nailgun
