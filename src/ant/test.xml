@@ -46,25 +46,8 @@
 
     <if>
       <socket server="localhost" port="9091"/>
-      <then>
-        <runtarget target="tests.run"/>
-      </then>
-      <else>
-        <echo>Starting eclimd...</echo>
-        <parallel>
-          <exec executable="${eclim.home}/bin/eclimd${script.ext}"
-              output="build/test/junit/eclimd.log"/>
-          <sequential>
-            <waitfor maxwait="20" maxwaitunit="second">
-              <socket server="localhost" port="9091"/>
-            </waitfor>
-            <runtarget target="tests.run"/>
-            <exec executable="${eclim.home}/bin/eclim${script.ext}">
-              <arg line="-command shutdown"/>
-            </exec>
-          </sequential>
-        </parallel>
-      </else>
+      <then> <runtarget target="tests.run"/> </then>
+      <else> <fail message="Unable to connect to eclimd."/> </else>
     </if>
 
     <!-- generate html results -->
@@ -84,7 +67,6 @@
     <antcall target="test.setup_projects"/>
     <antcall target="tests.run.junit"/>
     <antcall target="tests.run.vunit"/>
-    <antcall target="test.teardown_projects"/>
   </target>
 
   <!--
@@ -274,24 +256,6 @@
           "${eclipse.workspace}/${project}" -n ${nature}
           '/>
     </exec>
-    <!--move overwrite="true"
-        file="${eclipse.workspace}/${project}/project"
-        tofile="${eclipse.workspace}/${project}/.project"/-->
-  </target>
-
-  <!--
-    - Tears down the test projects.
-    -->
-  <target name="test.teardown_projects">
-    <!--exec executable="${eclim.home}/bin/eclim${script.ext}" failonerror="true"
-        output="build/test/junit/eclim.log" append="true">
-      <arg line="-command project_delete -n eclim_unit_test_java"/>
-    </exec-->
-
-    <!--delete includeEmptyDirs="true">
-      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*/**/*"/>
-      <fileset dir="${eclipse.workspace}" includes="eclim_unit_test*"/>
-    </delete-->
   </target>
 
 </project>
