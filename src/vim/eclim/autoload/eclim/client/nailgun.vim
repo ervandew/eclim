@@ -35,7 +35,7 @@
 
 " Execute(command) {{{
 " Function which invokes nailgun.
-function eclim#client#nailgun#Execute(command)
+function! eclim#client#nailgun#Execute(command)
   if !exists('g:EclimNailgunClient')
     call s:DetermineClient()
   endif
@@ -108,7 +108,10 @@ function! eclim#client#nailgun#GetNgCommand()
 
     let g:EclimNgPath = substitute(eclim_home, '\', '/', 'g') .  '/bin/ng'
 
-    if has("win32unix")
+    if has("win32") || has("win64")
+      let g:EclimNgPath = g:EclimNgPath . '.exe'
+      let g:EclimNgPath = substitute(g:EclimNgPath, '/', '\', 'g')
+    elseif has("win32unix")
       let g:EclimNgPath = system('cygpath "' . g:EclimNgPath . '"')
       let g:EclimNgPath = substitute(g:EclimNgPath, '\n.*', '', '')
     endif
@@ -149,7 +152,7 @@ function! eclim#client#nailgun#GetNgPort()
 endfunction " }}}
 
 " s:DetermineClient() {{{
-function s:DetermineClient()
+function! s:DetermineClient()
   " at least one ubuntu user had serious performance issues using the python
   " client, so we are only going to default to python on windows machines
   " where there is an actual potential benefit to using it.
