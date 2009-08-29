@@ -40,7 +40,7 @@ public class HistoryCommandTest
   private static final String ENTRY =
     "\\{'timestamp': '(\\d+)'," +
     "'datetime': '\\d\\d:\\d\\d \\w{3} \\w{3} \\d{2} \\d{4}'," +
-    "'delta': '\\d+ (millis|seconds?) ago'\\}";
+    "'delta': '\\d+ (millis|seconds?|minutes?) ago'\\}";
 
   /**
    * Test the command.
