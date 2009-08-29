@@ -18,6 +18,7 @@ package org.eclim;
 
 import java.io.FileInputStream;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -118,6 +119,27 @@ public class Eclim
       workspace = execute(new String[]{"workspace_dir"});
     }
     return workspace;
+  }
+
+  /**
+   * Gets the path to the specified project.
+   *
+   * @param name The project name.
+   * @return The project path.
+   */
+  public static String getProjectPath(String name)
+  {
+    String[] results = StringUtils.split(
+        execute(new String[]{"project_list"}), '\n');
+    Pattern pattern =
+      Pattern.compile("^" + name + "\\b\\s+- \\w+\\s+- (.*)$");
+    for (String result : results) {
+      Matcher matcher = pattern.matcher(result);
+      if (matcher.matches()){
+        return matcher.group(1);
+      }
+    }
+    return null;
   }
 
   /**
