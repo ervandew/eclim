@@ -121,6 +121,16 @@ Vim's command line completion to complete the project name.
   that argument is used as the new name for the project which the current file
   belongs to.
 
+.. _\:ProjectMove:
+
+- **:ProjectMove** [<project>] <dir>
+
+  Moves a project to the specified directory.  If two arguments are supplied
+  then the first argument is interpreted as the name of the project to move and
+  the second argument as the directory to move the project to.  When only a
+  single argument is supplied, then that argument is used as the directory to
+  move the current project to.
+
 .. _\:ProjectRefresh:
 
 - **:ProjectRefresh** [<project> <project> ...]

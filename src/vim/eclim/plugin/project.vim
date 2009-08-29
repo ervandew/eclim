@@ -104,6 +104,9 @@ if !exists(":ProjectCreate")
   command -nargs=+
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectRename :call eclim#project#util#ProjectRename('<args>')
+  command -nargs=+
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectMove
+    \ ProjectMove :call eclim#project#util#ProjectMove('<args>')
   command -nargs=*
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectRefresh :call eclim#project#util#ProjectRefresh('<args>')

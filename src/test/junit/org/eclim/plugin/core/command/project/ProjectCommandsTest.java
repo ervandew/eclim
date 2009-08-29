@@ -107,6 +107,34 @@ public class ProjectCommandsTest
   }
 
   @Test
+  public void moveProject()
+    throws Exception
+  {
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
+
+    String path = new File(Eclim.getWorkspace() + "/../").getCanonicalPath();
+    String result = Eclim.execute(new String[]{
+      "project_move", "-p", TEST_PROJECT, "-d", path});
+    System.out.println(result);
+
+    assertTrue("Project does not exist.",
+        Eclim.projectExists(TEST_PROJECT));
+    assertEquals("Wrong project path",
+        path + '/' + TEST_PROJECT,
+        Eclim.getProjectPath(TEST_PROJECT));
+
+    result = Eclim.execute(new String[]{
+      "project_move", "-p", TEST_PROJECT, "-d", Eclim.getWorkspace()});
+    System.out.println(result);
+
+    assertTrue("Project does not exist.",
+        Eclim.projectExists(TEST_PROJECT));
+    assertEquals("Wrong project path",
+        new File(Eclim.getWorkspace() + '/' + TEST_PROJECT).getCanonicalPath(),
+        Eclim.getProjectPath(TEST_PROJECT));
+  }
+
+  @Test
   public void deleteProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));

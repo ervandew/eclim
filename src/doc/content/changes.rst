@@ -25,7 +25,8 @@ Bug Fixes:
   - Various bug fixes.
 
 Eclim:
-  - Added :ref:`:ProjectRename` command to allow renaming of projects.
+  - Added :ref:`:ProjectRename` and :ref:`:ProjectMove` commands to allow
+    renaming and moving of projects.
   - Added :ref:`:ProjectProblems` command to populate vim's quickfix with a
     list of all eclipse build errors and warnings for the current and all
     related projects.
