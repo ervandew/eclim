@@ -1174,6 +1174,7 @@ endfunction " }}}
 function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  let argLead = expand(argLead)
   let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
   let index = 0
   for result in results
