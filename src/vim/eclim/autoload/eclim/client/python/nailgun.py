@@ -31,25 +31,10 @@ class Nailgun(object):
 
   def __init__(self, **kwargs):
     self.socket = None
+    self.port = kwargs.get('port')
     self.keepAlive = int(kwargs.get('keepAlive', 0))
     self.vimFiles = kwargs.get('vimFiles', '~/.vim')
     self.reconnectCounter = 0
-    self.port = 9091
-
-    # check ~/.eclimrc for alternate port
-    eclimrc = os.path.expanduser('~/.eclimrc')
-    if os.path.exists(eclimrc):
-      rcfile = open(eclimrc)
-      try:
-        line = rcfile.readline()
-        while line:
-          line = line.strip()
-          if line.startswith('nailgun.server.port'):
-            self.port = int(re.sub(r'.*=\s*(.*)', r'\1', line))
-            break
-          line = rcfile.readline()
-      finally:
-        rcfile.close()
 
   def send(self, cmdline):
     """
