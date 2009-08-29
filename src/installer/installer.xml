@@ -103,11 +103,13 @@
             dest="${eclim.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
+
         <replace dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
             token="$${vim.files}" value="${vim.files}">
-          <include name="eclim"/>
-          <include name="eclim.*"/>
+          <include name="eclimd"/>
+          <include name="eclimd.*"/>
         </replace>
+
         <move todir="${eclipse.home}">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
               includes="eclimd.bat,eclimd.cmd"/>
@@ -118,8 +120,12 @@
             dest="${eclim.plugins}" compression="gzip">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
-        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim"
-            token="$${vim.files}" value="${vim.files}"/>
+
+        <replace dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
+            token="$${vim.files}" value="${vim.files}">
+          <include name="eclimd"/>
+        </replace>
+
         <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
             token="$${eclipse.home}" value="${eclipse.local}"/>
         <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"

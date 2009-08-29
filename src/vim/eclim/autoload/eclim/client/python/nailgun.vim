@@ -99,7 +99,6 @@ if not vars().has_key('client'):
   client = nailgun.Nailgun(
     port=int(vim.eval('eclim#client#nailgun#GetNgPort()')),
     keepAlive=vim.eval('g:EclimNailgunKeepAlive'),
-    vimFiles=vim.eval('g:EclimBaseDir'),
   )
 PYTHONEOF
 endfunction " }}}

@@ -20,4 +20,4 @@ set ECLIPSE_HOME=%~dp0
 set CLASSPATH=
 
 rem ECLIMD_OPTS=-java.ext.dirs
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application_headless -vmargs %ECLIMD_OPTS% %*
+start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application_headless -vmargs %ECLIMD_OPTS% "-Dvim.files=${vim.files}" %*

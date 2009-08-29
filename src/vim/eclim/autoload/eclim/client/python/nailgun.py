@@ -33,7 +33,6 @@ class Nailgun(object):
     self.socket = None
     self.port = kwargs.get('port')
     self.keepAlive = int(kwargs.get('keepAlive', 0))
-    self.vimFiles = kwargs.get('vimFiles', '~/.vim')
     self.reconnectCounter = 0
 
   def send(self, cmdline):
@@ -58,8 +57,6 @@ class Nailgun(object):
 
     try: # outer try for pre python 2.5 support.
       try:
-        self.sendChunk("A", "-Dvim.files=%s" % self.vimFiles)
-
         for arg in self.parseArgs(cmdline):
           self.sendChunk("A", arg)
 

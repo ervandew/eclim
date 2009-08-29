@@ -105,6 +105,11 @@ public abstract class AbstractEclimApplication
               "\n" + marker);
         }
 
+        // continuation of ugly hack from eclimd script
+        System.setProperty("vim.files",
+            System.getProperty("vim.files").replaceAll("%20", " "));
+        logger.info("vim files dir: " + System.getProperty("vim.files"));
+
         // start nailgun
         String portString = Services.getPluginResources("org.eclim")
           .getProperty("nailgun.server.port");

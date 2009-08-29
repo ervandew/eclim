@@ -70,7 +70,10 @@ resolve_eclipse(){
 #
 build_vmargs(){
   #ECLIMD_OPTS="-Djava.ext.dirs"
-  ECLIM_ARGS="$ECLIMD_OPTS"
+  VIM_FILES="-Dvim.files=${vim.files}"
+  # ugly hack to get around sh/bash handling of quoted strings
+  VIM_FILES=`echo $VIM_FILES | sed 's/ /%20/g'`
+  ECLIM_ARGS="$ECLIMD_OPTS $VIM_FILES"
 
   # attempt to grab properties from .eclimrc if available.
   SED=`which sed 2> /dev/null`
@@ -113,8 +116,10 @@ ECLIPSE_ARGS="
 
 if [ "$1" = "start" ]; then
   shift
-  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" "$ECLIPSE" $ECLIPSE_ARGS $@ > /dev/null &
+  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" \
+    "$ECLIPSE" $ECLIPSE_ARGS "$@" > /dev/null &
 else
   echo "\"$ECLIPSE\" $ECLIPSE_ARGS $@"
-  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" "$ECLIPSE" $ECLIPSE_ARGS $@
+  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" \
+    "$ECLIPSE" $ECLIPSE_ARGS "$@"
 fi
