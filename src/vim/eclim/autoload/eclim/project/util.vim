@@ -213,7 +213,7 @@ function! eclim#project#util#ProjectMove(args)
     let dir = args[1]
   endif
   let dir = expand(dir)
-  let dir = fnamemodify(dir, ':p')
+  let dir = substitute(fnamemodify(dir, ':p'), '\', '/', 'g')
 
   if exists('g:EclimProjectMovePrompt') && !g:EclimProjectMovePrompt
     let response = 1
@@ -233,11 +233,15 @@ endfunction " }}}
 
 " s:ProjectMove(oldname, newname, command) {{{
 function! s:ProjectMove(oldname, newname, command)
-  let cwd = getcwd()
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  let cwd_return = 1
   let oldpath = eclim#project#util#GetProjectRoot(a:oldname)
 
   let curwin = winnr()
   try
+    " cd to home to avoid folder renaming issues on windows.
+    cd ~
+
     " turn off swap files temporarily to avoid issues with folder renaming.
     let bufend = bufnr('$')
     let bufnum = 1
@@ -260,13 +264,14 @@ function! s:ProjectMove(oldname, newname, command)
     let newpath = eclim#project#util#GetProjectRoot(a:newname)
     if cwd =~ '^' . oldpath
       exec 'cd ' . substitute(cwd, oldpath, newpath, '')
+      let cwd_return = 0
     endif
 
     " reload files affected by the project renaming
     let bufnum = 1
     while bufnum <= bufend
       if buflisted(bufnum)
-        let path = fnamemodify(bufname(bufnum), ':p')
+        let path = substitute(fnamemodify(bufname(bufnum), ':p'), '\', '/', 'g')
         if path =~ '^' . oldpath
           let path = substitute(path, oldpath, newpath, '')
           if filereadable(path)
@@ -284,6 +289,10 @@ function! s:ProjectMove(oldname, newname, command)
 
   finally
     exec curwin 'winc w'
+    if cwd_return
+      exec 'cd ' . escape(cwd, ' ')
+    endif
+
     " re-enable swap files
     let bufnum = 1
     while bufnum <= bufend
