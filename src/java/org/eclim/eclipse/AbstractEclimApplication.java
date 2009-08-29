@@ -17,7 +17,13 @@
 package org.eclim.eclipse;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import java.util.ArrayList;
 
 import com.martiansoftware.nailgun.NGServer;
 
@@ -115,7 +121,7 @@ public abstract class AbstractEclimApplication
           .getProperty("nailgun.server.port");
         int port = Integer.parseInt(portString);
         logger.info("Eclim Server Started on port " + port + '.');
-        server = new NGServer(null, port);
+        server = new NGServer(null, port, getExtensionClassLoader());
         starting = false;
         server.run();
       }else{
@@ -259,6 +265,47 @@ public abstract class AbstractEclimApplication
       onStop();
 
       logger.info("Eclim stopped.");
+    }
+  }
+
+  /**
+   * Builds the classloader used for third party nailgun extensions dropped into
+   * eclim's ext dir.
+   *
+   * @return The classloader.
+   */
+  private ClassLoader getExtensionClassLoader()
+    throws Exception
+  {
+    String vimfiles = System.getProperty("vim.files");
+
+    File extdir = new File(FileUtils.concat(vimfiles, "eclim/resources/ext"));
+    if (extdir.exists()){
+      FileFilter filter = new FileFilter(){
+        public boolean accept(File file){
+          return file.isDirectory() || file.getName().endsWith(".jar");
+        }
+      };
+
+      ArrayList<URL> urls = new ArrayList<URL>();
+      listFileUrls(extdir, filter, urls);
+      return new URLClassLoader(
+          urls.toArray(new URL[urls.size()]),
+          this.getClass().getClassLoader());
+    }
+    return null;
+  }
+
+  private void listFileUrls(File dir, FileFilter filter, ArrayList<URL> results)
+    throws Exception
+  {
+    File[] files = dir.listFiles(filter);
+    for (File file : files) {
+      if(file.isFile()){
+        results.add(file.toURL());
+      }else{
+        listFileUrls(file, filter, results);
+      }
     }
   }
 
