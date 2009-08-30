@@ -94,6 +94,14 @@ News
 ==================
 
 -----------
+2009-08-30
+-----------
+
+| **Eclim 1.5.2** is now available.
+
+You can view the :ref:`release notes <1.5.2>` for more info.
+
+-----------
 2009-07-18
 -----------
 
