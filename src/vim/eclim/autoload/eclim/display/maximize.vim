@@ -27,7 +27,7 @@
     let g:MaximizeExcludes = '\(' .
       \ 'ProjectTree_*\|' .
       \ '^[\[]\|' .
-      \ g:TagList_title . '\|' .
+      \ (exists('g:TagList_title') ? g:TagList_title . '\|' : '') .
       \ '-MiniBufExplorer-\|' .
       \ 'command-line' .
     \ '\)'
