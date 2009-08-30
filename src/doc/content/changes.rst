@@ -34,7 +34,8 @@ Eclim:
     history diffs while navigating the history stack.
   - Abbreviation support removed in favor of any one of the third party
     snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
-  - Added support for hosting third party nailgun apps in eclimd via an
+  - Added support for hosting third party nailgun apps, like
+    :ref:`VimClojure <guides/clojure/vimclojure>`, in eclim via an
     :ref:`ext dir <eclimd_extdir>`.
 
 Java:
