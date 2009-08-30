@@ -350,6 +350,8 @@ TODO {{{
         etc).
       - Third party plugins may provide this functionality.
 
+    - higlight instance variables differently than local variables
+
     - content assist
       - Generate anonymous class body, including all methods that need to be
         implemented, from the start of defining one (new Runnable())
