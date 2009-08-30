@@ -90,9 +90,9 @@ handle_gentoo(){
   IS_GENTOO=`which java-config 2> /dev/null`
   if [ -x "$IS_GENTOO" ]; then
     # handle emerged version of eclipse which has a bootstrap script
-    ECLIPSE_34=`which eclipse-3.4 2> /dev/null`
-    if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.4" -a -e "$ECLIPSE_34" ]; then
-      ECLIPSE="$ECLIPSE_34"
+    ECLIPSE_35=`which eclipse-3.5 2> /dev/null`
+    if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.5" -a -e "$ECLIPSE_35" ]; then
+      ECLIPSE="$ECLIPSE_35"
       PLATFORM_VMARGS="$ECLIM_ARGS"
       ECLIM_VMARGS=""
     fi
