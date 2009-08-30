@@ -39,10 +39,12 @@ function site () {
 
 function dist () {
   echo "rsync dist"
+  VERSION=`git describe`
+  echo "eclim version: $VERSION"
   rsync --progress --whole-file \
     --stats -v --rsh="ssh -l ervandew" \
     $BASEDIR/build/dist/* \
-    ervandew@frs.sourceforge.net:uploads
+    ervandew,eclim@frs.sourceforge.net:/home/frs/project/e/ec/eclim/eclim/$VERSION
 }
 
 if [ $# != 1 ] ; then
