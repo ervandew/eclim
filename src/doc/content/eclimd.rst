@@ -99,7 +99,7 @@ shown below.
 .. note::
 
   By default, if you open an instance of gvim from within eclipse, the eclimd
-  view will be opened for you if necessary.  This behavior is configuration via
+  view will be opened for you if necessary.  This behavior is configurable via
   the Vimplugin preferences.
 
 **Stopping eclimd**
@@ -254,10 +254,10 @@ $ECLIPSE_HOME/plugins/org.eclim_<version>/log/eclimd.log.
 
 .. _eclimd_extdir:
 
-Hosting third party nailgun apps via eclimd
+Hosting third party nailgun apps in eclimd
 -------------------------------------------
 
-Since nailgun provides a simple way to aleviate the startup cost of the jvm,
+Since nailgun provides a simple way to alleviate the startup cost of the jvm,
 other projects utilize it as well.  However, running several nailgun servers
 isn't ideal, so eclim supports hosting other nailgun apps via an ext dir where
 you can drop in jar files which will be made available to eclim's nailgun
