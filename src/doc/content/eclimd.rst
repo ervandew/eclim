@@ -219,7 +219,7 @@ Ex.
 
 .. code-block:: cfg
 
-  # Specifies the port that nailgun / eclim listens on for client requests.
+  # Specifies the port that nailgun / eclimd listens on for client requests.
   nailgun.server.port=10012
 
   # Specifies the workspace directory to use
@@ -251,6 +251,34 @@ $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
 By default, eclimd writes all logging info to both the console and
 $ECLIPSE_HOME/plugins/org.eclim_<version>/log/eclimd.log.
+
+.. _eclimd_extdir:
+
+Hosting third party nailgun apps via eclimd
+-------------------------------------------
+
+Since nailgun provides a simple way to aleviate the startup cost of the jvm,
+other projects utilize it as well.  However, running several nailgun servers
+isn't ideal, so eclim supports hosting other nailgun apps via an ext dir where
+you can drop in jar files which will be made available to eclim's nailgun
+server.
+
+The ext dir that eclim reads from is located in your vim files directory:
+
+Linux / BSD / OSX:
+
+  ::
+
+    ~/.vim/eclim/resources/ext
+
+Windows:
+
+  ::
+
+    $HOME/vimfiles/eclim/resources/ext
+
+For an example of utilizing the ext dir, please take a look at the
+:ref:`VimClojure <guides/clojure/vimclojure>` guide.
 
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _vimplugin: http://vimplugin.org

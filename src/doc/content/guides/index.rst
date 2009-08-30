@@ -31,6 +31,7 @@ Guides
    java/ivy/classpath
    java/maven/maven/classpath
    java/maven/mvn/classpath
+   clojure/vimclojure
    development
 
 
