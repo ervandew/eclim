@@ -70,10 +70,7 @@ resolve_eclipse(){
 #
 build_vmargs(){
   #ECLIMD_OPTS="-Djava.ext.dirs"
-  VIM_FILES="-Dvim.files=${vim.files}"
-  # ugly hack to get around sh/bash handling of quoted strings
-  VIM_FILES=`echo $VIM_FILES | sed 's/ /%20/g'`
-  ECLIM_ARGS="$ECLIMD_OPTS $VIM_FILES"
+  ECLIM_ARGS="$ECLIMD_OPTS"
 
   # attempt to grab properties from .eclimrc if available.
   SED=`which sed 2> /dev/null`

@@ -111,11 +111,6 @@ public abstract class AbstractEclimApplication
               "\n" + marker);
         }
 
-        // continuation of ugly hack from eclimd script
-        System.setProperty("vim.files",
-            System.getProperty("vim.files", "").replaceAll("%20", " "));
-        logger.info("vim files dir: " + System.getProperty("vim.files"));
-
         // start nailgun
         String portString = Services.getPluginResources("org.eclim")
           .getProperty("nailgun.server.port");
@@ -277,7 +272,8 @@ public abstract class AbstractEclimApplication
   private ClassLoader getExtensionClassLoader()
     throws Exception
   {
-    String vimfiles = System.getProperty("vim.files");
+    String vimfiles = Services.getPluginResources("org.eclim")
+      .getProperty("vim.files");
 
     File extdir = new File(FileUtils.concat(vimfiles, "eclim/resources/ext"));
     if (extdir.exists()){

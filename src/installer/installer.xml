@@ -103,13 +103,6 @@
             dest="${eclim.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
-
-        <replace dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-            token="$${vim.files}" value="${vim.files}">
-          <include name="eclimd"/>
-          <include name="eclimd.*"/>
-        </replace>
-
         <move todir="${eclipse.home}">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
               includes="eclimd.bat,eclimd.cmd"/>
@@ -121,14 +114,11 @@
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </untar>
 
-        <replace dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-            token="$${vim.files}" value="${vim.files}">
-          <include name="eclimd"/>
-        </replace>
-
-        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
+        <replace
+            file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
             token="$${eclipse.home}" value="${eclipse.local}"/>
-        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
+        <replace
+            file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
             token="$${eclipse.home}" value="${eclipse.local}"/>
 
         <!--
@@ -171,6 +161,10 @@
         <move file="${eclim.home}/src/nailgun/ng" todir="${eclim.home}/bin"/>
       </else>
     </if>
+
+    <replace
+        file="${eclim.plugins}/org.eclim_${eclim.version}/plugin.properties"
+        token="$${vim.files}" value="${vim.files}"/>
 
     <!-- determine if current os supports emebedding gvim. -->
     <if>

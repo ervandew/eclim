@@ -180,8 +180,9 @@ public abstract class AbstractPluginResources
             pluginName,
             vimResource.substring(index + 9));
       }
-      String file = FileUtils.concat(
-          System.getProperty("vim.files"), "eclim", vimResource);
+      String vimfiles = Services.getPluginResources("org.eclim")
+        .getProperty("vim.files");
+      String file = FileUtils.concat(vimfiles, "eclim", vimResource);
       if (new File(file).exists()){
         return new URL("file://" + FileUtils.separatorsToUnix(file));
       }

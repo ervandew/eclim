@@ -318,6 +318,9 @@
       </else>
     </if>
 
+    <replace
+        file="${eclim.plugins}/org.eclim_${eclim.version}/plugin.properties"
+        token="$${vim.files}" value="${vim.files}"/>
     <replace dir="${eclim.plugins}/org.eclim.vimplugin_${eclim.version}"
         includes="plugin.properties">
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
@@ -417,7 +420,6 @@
     <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
         includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-      <replacefilter token="$${vim.files}" value="${vim.files}"/>
     </replace>
 
     <antcall target="plugin.lib.jars">
