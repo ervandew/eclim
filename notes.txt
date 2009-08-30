@@ -485,6 +485,7 @@ TODO {{{
     - when adding new method for a class, auto add self as first parameter.
 
     - debugger: http://pyclewn.wiki.sourceforge.net/
+      - currently doen't support pdb
       - seems to currently use netbeans support which means gvim only... look
         into making it console vim compatible.
   }}}
