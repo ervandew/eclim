@@ -217,6 +217,15 @@ Vim's command line completion to complete the project name.
   list represents a problems list, then as you save source files this list will
   be updated accordingly.
 
+  .. note::
+
+    Problems are only reported for those projects that have an associated
+    builder in their .project file.  If a project is not reporting errors,
+    first check that a proper builder is present in the .project file.  For
+    java projects created via eclim prior to eclim 1.5.2, the java builder may
+    be missing, so you'll need to recreate the project, at which time eclim
+    will add the java builder.
+
 .. _\:ProjectCD:
 
 - **:ProjectCD**

@@ -30,6 +30,14 @@ Eclim:
   - Added :ref:`:ProjectProblems` command to populate vim's quickfix with a
     list of all eclipse build errors and warnings for the current and all
     related projects.
+
+    .. note::
+
+      To have problems from java projects created via eclim reported, you may
+      need to recreate your java projects to ensure that the java builder is
+      properly added.  As of eclim 1.5.2, eclim's java project creation now
+      adds the java builder.
+
   - Added :ref:`:HistoryDiffNext` and :ref:`:HistoryDiffPrev` commands to view
     history diffs while navigating the history stack.
   - Abbreviation support removed in favor of any one of the third party
