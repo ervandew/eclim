@@ -1,4 +1,11 @@
 HIGH {{{
+  - run multiple eclipse/eclimd instances against separate workspaces
+    - have eclimd register a workspace:port pair somewhere and have the vim
+      side switch ports based on which workspace the current file is in.
+      - what about projects outside the workspace dir?  just don't support
+        those (default to primary port)?
+    - will need support for multiple project caches (or don't use a cache
+      anymore).
 
   http://conservancy.softwarefreedom.org/
 }}}
@@ -575,8 +582,6 @@ NOTES {{{
 
     Running eclim script against secondary instance:
       $ eclim -Dnailgun.server.port=9092 -command project_list
-
-    TODO: find easy way to force vim to send requests to secondary port.
 
   }}}
 
