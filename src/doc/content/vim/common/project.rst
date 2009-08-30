@@ -131,6 +131,26 @@ Vim's command line completion to complete the project name.
   single argument is supplied, then that argument is used as the directory to
   move the current project to.
 
+.. warning::
+
+  **:ProjectMove**, and possibly **:ProjectRename**, will result in the
+  renaming of your project's directory in the underlying file system.  Eclim
+  will do its best to reload any files that have moved as a result of the
+  directory renaming and adjust your current working directory if necessary,
+  but only for the current vim session.  If you have other vim sessions open
+  with files from the project, then eclim will be unable to reload those files
+  in those sessions for you, so you will have to do so manually.  A best
+  practice would be to close any other vim sessions that might be affected by
+  the moving or renaming of a project.
+
+.. note::
+
+  When open files have moved as a result of **:ProjectMove** or
+  **:ProjectRename**, eclim will reload those files in the current session, but
+  it must do so via an :edit, which means that vim's undo tree will be lost.
+  However, you will still have access to the eclipse
+  :ref:`history <vim/common/history>`.
+
 .. _\:ProjectRefresh:
 
 - **:ProjectRefresh** [<project> <project> ...]

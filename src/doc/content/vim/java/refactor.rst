@@ -131,6 +131,17 @@ rename the 'foo' package to 'baz' you can do so by running ``:JavaRename
 org.baz``.  Note that if you were to only supply the name 'baz', the 'foo'
 package would be moved to the same level as 'org' and then renamed.
 
+.. warning::
+
+  When renaming a package, the associated directory will also be renamed in the
+  underlying file system.  Eclim will do its best to reload any files that have
+  moved as a result of the directory renaming and adjust your current working
+  directory if necessary, but only for the current vim session.  If you have
+  other vim sessions open with files located in the directory that is renamed,
+  then eclim will be unable to reload those files in those sessions for you, so
+  you will have to do so manually.  A best practice would be to close any other
+  vim sessions that might be affected by the renaming of a package.
+
 .. _\:JavaRefactorUndo:
 .. _\:JavaRefactorRedo:
 
