@@ -663,12 +663,12 @@ function! eclim#project#util#GetProjects(...)
 
     " using running eclim
     else
-      let result = split(eclim#ExecuteEclim(s:command_projects), '\n')
-      if len(result) == 1 && result[0] == '0'
+      let results = split(eclim#ExecuteEclim(s:command_projects), '\n')
+      if len(results) == 1 && results[0] == '0'
         return {}
       endif
 
-      for line in result
+      for line in results
         let name = substitute(line, '\(.\{-}\)\s\+-\s\+.*', '\1', '')
         let dir = substitute(line, '.\{-}\s\+-\s.\{-}\s\+-\s\(.*\)', '\1', '')
         let projects[name] = substitute(dir, '\', '/', 'g')
