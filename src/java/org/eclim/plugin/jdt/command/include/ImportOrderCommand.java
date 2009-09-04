@@ -36,6 +36,8 @@ import org.eclipse.jdt.internal.ui.preferences.ImportOrganizeConfigurationBlock.
 
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 
+import org.eclipse.swt.widgets.Display;
+
 /**
  * Command to retrieve the eclipse configured import order.
  *
@@ -56,20 +58,33 @@ public class ImportOrderCommand
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    IProject project = ProjectUtils.getProject(projectName);
+    final IProject project = ProjectUtils.getProject(projectName);
 
-    ImportOrganizeConfigurationBlock block =
-      new ImportOrganizeConfigurationBlock(new IStatusChangeListener(){
-        public void statusChanged(IStatus status){
-          // no-op
+    // execute on the user-interface thread to avoid possible NPE when running
+    // inside eclipse gui
+    final ImportOrderEntry[][] result = new ImportOrderEntry[1][];
+    Display.getDefault().syncExec(new Runnable(){
+      public void run()
+      {
+        try{
+          ImportOrganizeConfigurationBlock block =
+            new ImportOrganizeConfigurationBlock(new IStatusChangeListener(){
+              public void statusChanged(IStatus status){
+                // no-op
+              }
+            }, project, null);
+
+          Method getImportOrderPreference = ImportOrganizeConfigurationBlock.class
+            .getDeclaredMethod("getImportOrderPreference");
+          getImportOrderPreference.setAccessible(true);
+          result[0] = (ImportOrderEntry[])getImportOrderPreference.invoke(block);
+        }catch(Exception e){
+          throw new RuntimeException(e);
         }
-      }, project, null);
+      }
+    });
 
-    Method getImportOrderPreference = ImportOrganizeConfigurationBlock.class
-      .getDeclaredMethod("getImportOrderPreference");
-    getImportOrderPreference.setAccessible(true);
-    ImportOrderEntry[] entries = (ImportOrderEntry[])
-      getImportOrderPreference.invoke(block);
+    ImportOrderEntry[] entries = result[0];
 
     StringBuffer buffer = new StringBuffer();
     for (ImportOrderEntry entry : entries){
