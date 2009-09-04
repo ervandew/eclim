@@ -16,13 +16,19 @@
  */
 package org.eclim.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility methods for io.
@@ -131,6 +137,40 @@ public class IOUtils
     while (-1 != (n = in.read(buffer))) {
       out.write(buffer, 0, n);
     }
+  }
+
+  /**
+   * Read the supplied input stream and return a list of lines read.
+   *
+   * @param in The input stream to read from.
+   * @return a list of lines read.
+   */
+  public static List<String> readLines(InputStream in)
+    throws IOException
+  {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    ArrayList<String> lines = new ArrayList<String>();
+    String line = null;
+    while((line = reader.readLine()) != null){
+      lines.add(line);
+    }
+    return lines;
+  }
+
+  /**
+   * Writes the supplied list of lines to the specified output stream.
+   *
+   * @param lines List of lines to write.
+   * @param out The output stream to write to.
+   */
+  public static void writeLines(List<String> lines, OutputStream out)
+    throws IOException
+  {
+    PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
+    for (String line : lines){
+      writer.println(line);
+    }
+    writer.flush();
   }
 
   /**
