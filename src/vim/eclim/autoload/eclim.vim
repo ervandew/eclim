@@ -46,8 +46,7 @@
   " instead.
   let s:exec_commands = ['java_complete']
 
-  let s:eclimd_running = 1
-  let s:eclimd_available_file = g:EclimHome . '/.available'
+  let g:eclimd_running = 1
 " }}}
 
 " ExecuteEclim(command) {{{
@@ -58,14 +57,14 @@ function! eclim#ExecuteEclim(command)
   endif
 
   " eclimd appears to be down, so exit early if in an autocmd
-  if !s:eclimd_running && expand('<amatch>') != ''
-    " check for file created by eclimd to signal that it is back up.
-    if !filereadable(s:eclimd_available_file)
+  if !g:eclimd_running && expand('<amatch>') != ''
+    " check for file created by eclimd to signal that it is running.
+    if !filereadable(expand('~/.eclim/.eclimd_instances'))
       return
     endif
   endif
 
-  let s:eclimd_running = 1
+  let g:eclimd_running = 1
 
   let command = a:command
 
@@ -99,7 +98,7 @@ function! eclim#ExecuteEclim(command)
     if g:EclimShowErrors
       if error =~ s:connect
         " eclimd is not running, disable further eclimd calls
-        let s:eclimd_running = 0
+        let g:eclimd_running = 0
 
         " if we are not in an autocmd, alert the user that eclimd is not
         " running.

@@ -18,12 +18,18 @@ package org.eclim.eclipse;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclim.util.IOUtils;
 
 import com.martiansoftware.nailgun.NGServer;
 
@@ -80,7 +86,7 @@ public abstract class AbstractEclimApplication
       try{
         String workspace = ResourcesPlugin
           .getWorkspace().getRoot().getRawLocation().toOSString();
-        logger.debug("workspace: " + workspace);
+        logger.info("workspace: " + workspace);
       }catch(Exception ignore){
       }
     }
@@ -99,17 +105,8 @@ public abstract class AbstractEclimApplication
         // add shutdown hook.
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
-        // create marker file indicating that eclimd is up
-        File marker = new File(
-            FileUtils.concat(System.getProperty("eclim.home"), ".available"));
-        try{
-          marker.createNewFile();
-          marker.deleteOnExit();
-        }catch(IOException ioe){
-          logger.error(
-              "\nError creating eclimd marker file: " + ioe.getMessage() +
-              "\n" + marker);
-        }
+        // register that server is running to external processes.
+        registerInstance();
 
         // start nailgun
         String portString = Services.getPluginResources("org.eclim")
@@ -257,9 +254,120 @@ public abstract class AbstractEclimApplication
         plugin.stop(null);
       }
 
+      unregisterInstance();
+
       onStop();
 
       logger.info("Eclim stopped.");
+    }
+  }
+
+  /**
+   * Register the current instance in the eclimd instances file for use by vim.
+   */
+  private void registerInstance()
+    throws Exception
+  {
+    File instances = new File(FileUtils.concat(
+          System.getProperty("user.home"), ".eclim/.eclimd_instances"));
+
+    FileOutputStream out = null;
+    try{
+      String workspace = ResourcesPlugin
+        .getWorkspace().getRoot().getRawLocation().toOSString();
+      List<String> entries = readInstances();
+      if (entries == null){
+        return;
+      }
+
+      String port = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
+      entries.add(0, workspace + ':' + port);
+      out = new FileOutputStream(instances);
+      IOUtils.writeLines(entries, out);
+    }catch(IOException ioe){
+      logger.error(
+          "\nError writing to eclimd instances file: " + ioe.getMessage() +
+          "\n" + instances);
+      return;
+    }finally{
+      IOUtils.closeQuietly(out);
+    }
+  }
+
+  /**
+   * Unregister the current instance in the eclimd instances file for use by vim.
+   */
+  private void unregisterInstance()
+    throws Exception
+  {
+    File instances = new File(FileUtils.concat(
+          System.getProperty("user.home"), ".eclim/.eclimd_instances"));
+
+    FileOutputStream out = null;
+    try{
+      List<String> entries = readInstances();
+      if (entries == null){
+        return;
+      }
+
+      if (entries.size() == 0){
+        if (!instances.delete()){
+          logger.error("Error deleting eclimd instances file: " + instances);
+        }
+      }else{
+        out = new FileOutputStream(instances);
+        IOUtils.writeLines(entries, out);
+      }
+    }catch(IOException ioe){
+      logger.error(
+          "\nError writing to eclimd instances file: " + ioe.getMessage() +
+          "\n" + instances);
+      return;
+    }finally{
+      IOUtils.closeQuietly(out);
+    }
+  }
+
+  private List<String> readInstances()
+    throws Exception
+  {
+    File doteclim =
+      new File(FileUtils.concat(System.getProperty("user.home"), ".eclim"));
+    if (!doteclim.exists()){
+      if (!doteclim.mkdirs()){
+        logger.error("Error creating ~/.eclim directory: " + doteclim);
+        return null;
+      }
+    }
+    File instances = new File(FileUtils.concat(
+          doteclim.getAbsolutePath(), ".eclimd_instances"));
+    if (!instances.exists()){
+      try{
+        instances.createNewFile();
+      }catch(IOException ioe){
+        logger.error(
+            "\nError creating eclimd instances file: " + ioe.getMessage() +
+            "\n" + instances);
+        return null;
+      }
+    }
+
+    FileInputStream in = null;
+    try{
+      String workspace = ResourcesPlugin
+        .getWorkspace().getRoot().getRawLocation().toOSString();
+      in = new FileInputStream(instances);
+      List<String> entries = IOUtils.readLines(in);
+      for (Iterator<String> iterator = entries.iterator(); iterator.hasNext();){
+        String entry = iterator.next();
+        if(entry.startsWith(workspace + ':')){
+          iterator.remove();
+        }
+      }
+      return entries;
+    }finally{
+      IOUtils.closeQuietly(in);
     }
   }
 
