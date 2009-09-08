@@ -27,6 +27,15 @@
 " }}}
 
 " Global Variables {{{
+if !exists("g:EclimHome")
+  " set at build/install time.
+  "${vim.eclim.home}"
+endif
+if !exists("g:EclimEclipseHome")
+  " set at build/install time.
+  "${vim.eclipse.home}"
+endif
+
 if !exists("g:EclimLogLevel")
   let g:EclimLogLevel = 4
 endif

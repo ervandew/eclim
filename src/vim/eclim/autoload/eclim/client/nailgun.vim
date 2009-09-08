@@ -28,9 +28,6 @@
     " this flag in run-time has no effect.
     let g:EclimNailgunKeepAlive = 0
   endif
-
-  " used during development only.
-  "${vim.eclim.path}"
 " }}}
 
 " Execute(command) {{{
@@ -64,13 +61,7 @@ endfunction " }}}
 " Gets the command to exexute eclim.
 function! eclim#client#nailgun#GetEclimCommand()
   if !exists('g:EclimPath')
-    let eclim_home = eclim#GetEclimHome()
-    if eclim_home == '' || string(eclim_home) == '0'
-      return
-    endif
-
-    let g:EclimPath = substitute(eclim_home, '\', '/', 'g') .
-      \ '/bin/' . g:EclimCommand
+    let g:EclimPath = substitute(g:EclimEclipseHome, '\', '/', 'g') . '/eclim'
 
     if has("win32") || has("win64")
       let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
@@ -101,12 +92,7 @@ endfunction " }}}
 " Gets path to the ng executable.
 function! eclim#client#nailgun#GetNgCommand()
   if !exists('g:EclimNgPath')
-    let eclim_home = eclim#GetEclimHome()
-    if eclim_home == '' || string(eclim_home) == '0'
-      return
-    endif
-
-    let g:EclimNgPath = substitute(eclim_home, '\', '/', 'g') .  '/bin/ng'
+    let g:EclimNgPath = substitute(g:EclimHome, '\', '/', 'g') .  '/bin/ng'
 
     if has("win32") || has("win64")
       let g:EclimNgPath = g:EclimNgPath . '.exe'

@@ -184,9 +184,12 @@
       <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
     </unjar>
 
-    <replace file="${vim.files}/eclim/autoload/eclim.vim"
-        token="&quot;$${vim.eclim.home}&quot;"
-        value="let g:EclimHome = '${eclim.home}'"/>
+    <replace file="${vim.files}/eclim/plugin/eclim.vim">
+      <replacetoken token="&quot;$${vim.eclim.home}&quot;"
+          value="let g:EclimHome = '${eclim.home}'"/>
+      <replacetoken token="&quot;$${vim.eclipse.home}&quot;"
+          value="let g:EclimEclipseHome = '${eclipse.local}'"/>
+    </replace>
 
     <antcall target="cleanup"/>
   </target>

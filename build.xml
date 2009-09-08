@@ -344,17 +344,12 @@
       <fileset dir="${build.vimfiles}" includes="**/*"/>
     </copy>
 
-    <replace file="${vim.files}/eclim/autoload/eclim.vim"
-        token="&quot;$${vim.eclim.home}&quot;"
-        value="let g:EclimHome = '${eclim.home}'"/>
-    <if>
-      <not> <os family="windows"/> </not>
-      <then>
-        <replace file="${vim.files}/eclim/autoload/eclim/client/nailgun.vim"
-            token="&quot;$${vim.eclim.path}&quot;"
-            value="let g:EclimPath = '${eclipse.home}/eclim'"/>
-      </then>
-    </if>
+    <replace file="${vim.files}/eclim/plugin/eclim.vim">
+      <replacefilter token="&quot;$${vim.eclim.home}&quot;"
+          value="let g:EclimHome = '${eclim.home}'"/>
+      <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
+          value="let g:EclimEclipseHome = '${eclipse.home}'"/>
+    </replace>
   </target>
 
   <!--
