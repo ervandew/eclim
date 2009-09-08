@@ -127,18 +127,22 @@ public class DocSearchCommand
       classpath = JavaModelUtil.getClasspathEntryToEdit(
           element.getJavaProject(), classpath.getPath(), root.getPath());
     }
-    IClasspathAttribute[] attributes = classpath.getExtraAttributes();
-    for(int ii = 0; ii < attributes.length; ii++){
-      String name = attributes[ii].getName();
-      if(IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals(name)){
-        return buildUrl(attributes[ii].getValue(), element);
+
+    // may be null from JavaModelUtil.getClasspathEntryToEdit
+    if (classpath != null){
+      IClasspathAttribute[] attributes = classpath.getExtraAttributes();
+      for(int ii = 0; ii < attributes.length; ii++){
+        String name = attributes[ii].getName();
+        if(IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals(name)){
+          return buildUrl(attributes[ii].getValue(), element);
+        }
       }
     }
 
     // somewhere in the eclipse 3.2 release canidate stage they stopped
     // providing default locations for jre javadocs, but the final version of
-    // 3.2 seems to have contain it.  The following will lookup location from
-    // our own settings should this occur again.
+    // 3.2 seems to have it.  The following will lookup the location from our
+    // own settings should this occur again.
     classpath = root.getRawClasspathEntry();
     if(classpath.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
       IClasspathContainer container =
