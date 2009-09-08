@@ -330,6 +330,7 @@
 
   <target name="deploy.vim" depends="build.vim"
       description="Build and deploy the vim plugins.">
+    <mkdir dir="${vim.files}/eclim"/>
     <!-- deploy vim files -->
     <delete includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
@@ -339,7 +340,6 @@
         <exclude name="resources/**/*"/>
       </fileset>
     </delete>
-    <mkdir dir="${vim.files}/eclim"/>
     <copy todir="${vim.files}" overwrite="true">
       <fileset dir="${build.vimfiles}" includes="**/*"/>
     </copy>
