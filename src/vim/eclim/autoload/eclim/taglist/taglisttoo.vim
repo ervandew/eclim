@@ -534,6 +534,12 @@ endfunction " }}}
 
 " s:ProcessTags() {{{
 function! s:ProcessTags()
+  " on insert completion prevent vim's jumping back and forth from the
+  " completion preview window from triggering a re-processing of tags
+  if pumvisible()
+    return
+  endif
+
   let filename = expand('%:p')
   if filename =~ s:taglisttoo_ignore || filename == ''
     return
