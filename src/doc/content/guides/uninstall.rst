@@ -28,6 +28,11 @@ Uninstalling eclim consists of simply removing the eclipse and vim plugins insta
     plugins directory where eclim is installed may be under
     ``~/.eclipse/org.eclipse.platform_<version>/configuration/eclipse/plugins``
 
+  - On Windows systems you can also remove all the eclim* files and ng.exe from
+    your eclipse home directory.
+  - On Linux, BSD, OSX, etc., you can remove the symlinks created to eclim and
+    eclimd found in your eclipse home directory.
+
 - <vimfiles>/eclim
 
   Remove the eclim directory under your vimfiles dir.

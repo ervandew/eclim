@@ -147,7 +147,7 @@ emitted.  To gather these details you will need to:
 
        ::
 
-         > "C:\Program Files\eclipse\plugins\org.eclim_1.4.5\bin\eclim" -command ...
+         > "C:\Program Files\eclipse\eclim" -command ...
 
        Run that and you should see the entire stack trace for the error.
 

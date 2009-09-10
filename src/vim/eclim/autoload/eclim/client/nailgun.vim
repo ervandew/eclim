@@ -61,7 +61,7 @@ endfunction " }}}
 " Gets the command to exexute eclim.
 function! eclim#client#nailgun#GetEclimCommand()
   if !exists('g:EclimPath')
-    let g:EclimPath = substitute(g:EclimEclipseHome, '\', '/', 'g') . '/eclim'
+    let g:EclimPath = g:EclimEclipseHome . '/eclim'
 
     if has("win32") || has("win64")
       let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
@@ -72,6 +72,7 @@ function! eclim#client#nailgun#GetEclimCommand()
 
     if !filereadable(g:EclimPath)
       let g:EclimErrorReason = 'Could not locate file: ' . g:EclimPath
+      unlet g:EclimPath
       return
     endif
 
