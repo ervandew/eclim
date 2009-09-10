@@ -726,6 +726,9 @@ function! s:JumpToTag()
   let lnum = s:GetTagLineNumber(tag_info)
   let pattern = eclim#taglist#util#GetTagPattern(tag_info)
 
+  " account for my plugin which removes trailing spaces from the file
+  let pattern = substitute(pattern, '\s\+\$$', '\s*$', '')
+
   if getline(lnum) =~ escape(pattern, '*[]')
     mark '
     call cursor(lnum, 1)
