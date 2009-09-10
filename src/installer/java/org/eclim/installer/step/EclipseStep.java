@@ -217,8 +217,8 @@ public class EclipseStep
   {
     boolean proceed = super.proceed();
     String home = (String)Installer.getContext().getValue("eclipse.home");
-    home = FilenameUtils.normalizeNoEndSeparator(home);
-    Installer.getContext().setValue("eclipse.home", home.replace('\\', '/'));
+    home = FilenameUtils.normalizeNoEndSeparator(home).replace('\\', '/');
+    Installer.getContext().setValue("eclipse.home", home);
 
     String plugins = null;
     if (Os.isFamily("windows")){
