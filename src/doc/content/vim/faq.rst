@@ -138,5 +138,12 @@ How do I troubleshoot features not functioning, or errors encountered?
 For troubleshooting eclim, please see the dedicated
 :ref:`troubleshooting guide <guides/troubleshoot>`.
 
+.. _eclim_full_headless:
+
+How can I run eclimd on a truly headless server?
+------------------------------------------------
+
+Please see the :ref:`headless guide <guides/headless>`.
+
 
 .. _eclipse wiki: http://wiki.eclipse.org/Eclipse.ini
