@@ -27,16 +27,8 @@
 " }}}
 
 " Global Variables {{{
-  if !exists("g:EclimCommand")
-    let g:EclimCommand = 'eclim'
-  endif
   if !exists("g:EclimShowErrors")
     let g:EclimShowErrors = 1
-  endif
-
-  if !exists("g:EclimHome")
-    " set via installer
-    "${vim.eclim.home}"
   endif
 " }}}
 
@@ -54,8 +46,7 @@
   " instead.
   let s:exec_commands = ['java_complete']
 
-  let s:eclimd_running = 1
-  let s:eclimd_available_file = g:EclimHome . '/.available'
+  let g:eclimd_running = 1
 " }}}
 
 " ExecuteEclim(command) {{{
@@ -66,14 +57,14 @@ function! eclim#ExecuteEclim(command)
   endif
 
   " eclimd appears to be down, so exit early if in an autocmd
-  if !s:eclimd_running && expand('<amatch>') != ''
-    " check for file created by eclimd to signal that it is back up.
-    if !filereadable(s:eclimd_available_file)
+  if !g:eclimd_running && expand('<amatch>') != ''
+    " check for file created by eclimd to signal that it is running.
+    if !filereadable(expand('~/.eclim/.eclimd_instances'))
       return
     endif
   endif
 
-  let s:eclimd_running = 1
+  let g:eclimd_running = 1
 
   let command = a:command
 
@@ -107,7 +98,7 @@ function! eclim#ExecuteEclim(command)
     if g:EclimShowErrors
       if error =~ s:connect
         " eclimd is not running, disable further eclimd calls
-        let s:eclimd_running = 0
+        let g:eclimd_running = 0
 
         " if we are not in an autocmd, alert the user that eclimd is not
         " running.
@@ -123,31 +114,6 @@ function! eclim#ExecuteEclim(command)
   endif
 
   return result
-endfunction " }}}
-
-" GetEclimHome() {{{
-" Gets the directory of the main eclim eclipse plugin.
-function! eclim#GetEclimHome()
-  if !exists('g:EclimHome')
-    if !exists('$ECLIM_ECLIPSE_HOME')
-      let g:EclimErrorReason = 'ECLIM_ECLIPSE_HOME must be set.'
-      return
-    endif
-
-    let g:EclimHome = eclim#util#Glob('$ECLIM_ECLIPSE_HOME/plugins/org.eclim_*')
-    if g:EclimHome == ''
-      let g:EclimErrorReason =
-        \ "eclim plugin not found in eclipse plugins directory at " .
-        \ "ECLIM_ECLIPSE_HOME = '" .  expand('$ECLIM_ECLIPSE_HOME') . "'"
-      return
-    elseif g:EclimHome =~ "\n"
-      let g:EclimErrorReason =
-        \ "multiple versions of eclim plugin found in eclipse plugins directory at " .
-        \ "ECLIM_ECLIPSE_HOME = '" .  expand('$ECLIM_ECLIPSE_HOME') . "'"
-      return
-    endif
-  endif
-  return g:EclimHome
 endfunction " }}}
 
 " Disable() {{{

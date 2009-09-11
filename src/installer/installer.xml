@@ -99,13 +99,14 @@
     <if>
       <os family="windows"/>
       <then>
+        <property name="eclipse.local" value="${eclipse.home}"/>
         <unzip src="org.eclim_${eclim.version}.zip"
             dest="${eclim.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
         </unzip>
         <move todir="${eclipse.home}">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-              includes="eclimd.bat,eclimd.cmd"/>
+              includes="eclim,eclim.bat,eclim.cmd,eclimd.bat,eclimd.cmd,ng.exe"/>
         </move>
       </then>
       <else>
@@ -184,9 +185,12 @@
       <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
     </unjar>
 
-    <replace file="${vim.files}/eclim/autoload/eclim.vim"
-        token="&quot;$${vim.eclim.home}&quot;"
-        value="let g:EclimHome = '${eclim.home}'"/>
+    <replace file="${vim.files}/eclim/plugin/eclim.vim">
+      <replacefilter token="&quot;$${vim.eclim.home}&quot;"
+          value="let g:EclimHome = '${eclim.home}'"/>
+      <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
+          value="let g:EclimEclipseHome = '${eclipse.local}'"/>
+    </replace>
 
     <antcall target="cleanup"/>
   </target>

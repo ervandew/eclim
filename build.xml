@@ -330,6 +330,7 @@
 
   <target name="deploy.vim" depends="build.vim"
       description="Build and deploy the vim plugins.">
+    <mkdir dir="${vim.files}/eclim"/>
     <!-- deploy vim files -->
     <delete includeemptydirs="true">
       <fileset dir="${vim.files}/eclim">
@@ -339,22 +340,16 @@
         <exclude name="resources/**/*"/>
       </fileset>
     </delete>
-    <mkdir dir="${vim.files}/eclim"/>
     <copy todir="${vim.files}" overwrite="true">
       <fileset dir="${build.vimfiles}" includes="**/*"/>
     </copy>
 
-    <replace file="${vim.files}/eclim/autoload/eclim.vim"
-        token="&quot;$${vim.eclim.home}&quot;"
-        value="let g:EclimHome = '${eclim.home}'"/>
-    <if>
-      <not> <os family="windows"/> </not>
-      <then>
-        <replace file="${vim.files}/eclim/autoload/eclim/client/nailgun.vim"
-            token="&quot;$${vim.eclim.path}&quot;"
-            value="let g:EclimPath = '${eclipse.home}/eclim'"/>
-      </then>
-    </if>
+    <replace file="${vim.files}/eclim/plugin/eclim.vim">
+      <replacefilter token="&quot;$${vim.eclim.home}&quot;"
+          value="let g:EclimHome = '${eclim.home}'"/>
+      <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
+          value="let g:EclimEclipseHome = '${eclipse.home}'"/>
+    </replace>
   </target>
 
   <!--

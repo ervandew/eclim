@@ -32,6 +32,7 @@ Guides
    java/maven/maven/classpath
    java/maven/mvn/classpath
    clojure/vimclojure
+   headless
    development
 
 
@@ -40,6 +41,7 @@ Installing / Upgrading / Troubleshooting
 - :ref:`guides/install`
 - :ref:`guides/uninstall`
 - :ref:`guides/troubleshoot`
+- :ref:`guides/headless`
 
 
 Java

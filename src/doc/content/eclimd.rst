@@ -42,6 +42,10 @@ eclipse root directory: $ECLIPSE_HOME/eclimd
 the eclimd.bat file found in your eclipse root directory:
 %ECLIPSE_HOME%/eclimd.bat
 
+.. note::
+  Even though an eclipse gui is not started in eclim's headless mode, eclipse
+  still requires a running X server to function.  To run eclimd on a truely
+  headless server, please see the :ref:`headless guide <guides/headless>`.
 
 **Stopping eclimd**
 

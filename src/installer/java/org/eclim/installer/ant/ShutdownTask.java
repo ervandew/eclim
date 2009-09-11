@@ -38,8 +38,8 @@ public class ShutdownTask
   extends Task
 {
   private static final String ECLIM_HOME = "org.eclim_";
-  private static final String ECLIM_LINUX = "bin/eclim";
-  private static final String ECLIM_WINDOWS = "bin/eclim.bat";
+  private static final String ECLIM_LINUX = "eclim";
+  private static final String ECLIM_WINDOWS = "eclim.bat";
   private static final String ECLIPSE_PLUGINS = "${eclipse.home}/plugins";
 
   private static final long WAIT_TIME = 3000;
@@ -61,12 +61,20 @@ public class ShutdownTask
 
       if(eclimHome.length > 0){
         String eclim = Os.isFamily("windows") ? ECLIM_WINDOWS : ECLIM_LINUX;
-        eclim = FilenameUtils.concat(eclimHome[0], eclim);
-        eclim = FilenameUtils.concat(
-            project.replaceProperties(ECLIPSE_PLUGINS), eclim);
-        if(new File(eclim).exists()){
+        String eclimPath = FilenameUtils.concat(
+            project.replaceProperties("${eclipse.home}"), eclim);
+
+        // try plugin bin dir if eclipse home path doesn't exist
+        if (!new File(eclimPath).exists()){
+          eclimPath = FilenameUtils.concat(eclimHome[0], "bin");
+          eclimPath = FilenameUtils.concat(eclimPath, eclim);
+          eclimPath = FilenameUtils.concat(
+              project.replaceProperties(ECLIPSE_PLUGINS), eclimPath);
+        }
+
+        if(new File(eclimPath).exists()){
           CommandExecutor command = CommandExecutor.execute(
-              new String[]{eclim, "-command", "shutdown"}, WAIT_TIME);
+              new String[]{eclimPath, "-command", "shutdown"}, WAIT_TIME);
 
           if(command.getReturnCode() != 0){
             log("Error while attempting to shut down eclimd: " +

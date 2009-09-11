@@ -25,7 +25,7 @@
 " Script Variables {{{
   let s:command_workspace_dir = '-command workspace_dir'
   let s:ide_prefs =
-    \ eclim#GetEclimHome() . '/../../configuration/.settings/org.eclipse.ui.ide.prefs'
+    \ g:EclimEclipseHome . '/configuration/.settings/org.eclipse.ui.ide.prefs'
 " }}}
 
 " GetWorkspaceDir() {{{
