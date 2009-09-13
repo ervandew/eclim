@@ -43,8 +43,8 @@ let s:command_move = '-command project_move -p "<project>" -d "<dir>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
-let s:command_projects = '-command project_list'
-let s:command_project_link_resource = '-command project_link_resource -f "<file>"'
+let s:command_projects = '-command projects'
+let s:command_project_list = '-command project_list'
 let s:command_project_by_resource = '-command project_by_resource -f "<file>"'
 let s:command_project_info = '-command project_info -p "<project>"'
 let s:command_project_settings = '-command project_settings -p "<project>"'
@@ -59,14 +59,14 @@ let s:command_nature_add =
   \ '-command project_nature_add -p "<project>" -n "<natures>"'
 let s:command_nature_remove =
   \ '-command project_nature_remove -p "<project>" -n "<natures>"'
+
+let s:workspace_projects = {}
 " }}}
 
 " ClearProjectsCache() {{{
 " Flush the cached list of projects.
 function! eclim#project#util#ClearProjectsCache()
-  if exists('s:projects')
-    unlet s:projects
-  endif
+  let s:workspace_projects = {}
 
   if exists('g:EclimWorkspace')
     unlet g:EclimWorkspace
@@ -352,9 +352,7 @@ function! eclim#project#util#ProjectInfo(project)
     let project = eclim#project#util#GetCurrentProjectName()
   endif
   if project == ''
-    call eclim#util#EchoError("Unable to determine project. " .
-      \ "Please specify a project name or " .
-      \ "execute from a valid project directory.")
+    call eclim#project#util#UnableToDetermineProject()
     return
   endif
 
@@ -404,7 +402,7 @@ endfunction " }}}
 " ProjectList() {{{
 " Lists all the projects currently available in eclim.
 function! eclim#project#util#ProjectList()
-  let projects = split(eclim#ExecuteEclim(s:command_projects), '\n')
+  let projects = split(eclim#ExecuteEclim(s:command_project_list), '\n')
   if len(projects) == 0
     call eclim#util#Echo("No projects.")
   endif
@@ -458,9 +456,7 @@ function! eclim#project#util#ProjectSettings(project)
     let project = eclim#project#util#GetCurrentProjectName()
   endif
   if project == ''
-    call eclim#util#EchoError("Unable to determine project. " .
-      \ "Please specify a project name or " .
-      \ "execute from a valid project directory.")
+    call eclim#project#util#UnableToDetermineProject()
     return
   endif
 
@@ -586,35 +582,36 @@ endfunction " }}}
 " GetCurrentProjectName() {{{
 " Gets the project name that the current file is in.
 function! eclim#project#util#GetCurrentProjectName()
-  let projects = eclim#project#util#GetProjects(expand('%'))
-  return len(projects) > 0 ? keys(projects)[0] : ''
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  return len(project) > 0 ? project.name : ''
 endfunction " }}}
 
 " GetCurrentProjectRoot() {{{
 " Gets the project root dir for the project that the current file is in.
 function! eclim#project#util#GetCurrentProjectRoot()
-  let projects = eclim#project#util#GetProjects(expand('%'))
-  return len(projects) > 0 ? values(projects)[0] : ''
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  return len(project) > 0 ? project.path : ''
 endfunction " }}}
 
 " GetProjectRelativeFilePath(file) {{{
 " Gets the project relative path for the given file.
 function! eclim#project#util#GetProjectRelativeFilePath(file)
-  let file = substitute(a:file, '\', '/', 'g')
-  let pattern = eclim#project#util#GetCurrentProjectRoot() . '\>'
+  let project = eclim#project#util#GetProject(a:file)
+
+  let file = substitute(fnamemodify(a:file, ':p'), '\', '/', 'g')
+  let pattern = '\(/\|$\)'
   if has('win32') || has('win64')
     let pattern .= '\c'
   endif
-  let result = substitute(file, pattern, '', '')
+  let result = substitute(file, get(project, 'path', '') . pattern, '', '')
 
   " handle file in linked folder
   if result == file
-    let command = s:command_project_link_resource
-    let command = substitute(command, '<file>', file, '')
-    let result = eclim#ExecuteEclim(command)
-    if result != '0'
-      return result
-    endif
+    for name in keys(project.links)
+      if file =~ '^' . project.links[name] . pattern
+        let result = substitute(file, project.links[name], name, '')
+      endif
+    endfor
   endif
 
   if result != file && result =~ '^/'
@@ -623,90 +620,80 @@ function! eclim#project#util#GetProjectRelativeFilePath(file)
   return result
 endfunction " }}}
 
-" GetProjects([curfile]) {{{
-" Gets a map of project names to project locations.
-" If a file path is supplied, the result will be a map containing just the
-" project the supplied file is located in, or an empty map if no project found.
-function! eclim#project#util#GetProjects(...)
-  if !exists('s:projects')
-    let projects = {}
-
-    " using eclipse files (running eclim not necessary)
-    let projectsdir = eclim#eclipse#GetWorkspaceDir() .
-      \ '.metadata/.plugins/org.eclipse.core.resources/.projects/'
-    if isdirectory(projectsdir)
-      let dirs = split(glob(projectsdir . '*'), '\n')
-      for dir in dirs
-        if filereadable(dir . '/.location')
-          let lines = readfile(dir . '/.location', 'b')
-          call filter(lines, 'v:val =~ "file:"')
-          if len(lines) > 0
-            let name = fnamemodify(dir, ':t')
-            let dir = substitute(lines[0], '.*file:\(.\{-}\)[[:cntrl:]].*', '\1', '')
-            let dir = substitute(dir, '%20', ' ', 'g')
-            if dir =~ '^/[A-Z]:'
-              let dir = dir[1:]
-            endif
-            if isdirectory(dir)
-              let projects[name] = substitute(dir, '\', '/', 'g')
-            endif
-            continue
-          endif
-        endif
-
-        let name = fnamemodify(dir, ':t')
-        let dir = eclim#eclipse#GetWorkspaceDir() . name
-        if isdirectory(dir)
-          let projects[name] = dir
-        endif
-      endfor
-
-    " using running eclim
-    else
-      let results = split(eclim#ExecuteEclim(s:command_projects), '\n')
-      if len(results) == 1 && results[0] == '0'
-        return {}
+" GetProjects() {{{
+" Returns a list of project dictionaries containing the following properties:
+"   workspace: The path of the workspace the project belongs to.
+"   name: The name of the project.
+"   path: The root path of the project.
+"   links: List of linked paths.
+function! eclim#project#util#GetProjects()
+  let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
+  if len(s:workspace_projects) != len(workspaces)
+    let projects = []
+    for workspace in workspaces
+      let result = eclim#ExecuteEclim(
+        \ s:command_projects, eclim#client#nailgun#GetNgPort(workspace))
+      if result == '0'
+        continue
       endif
 
+      let results = split(result, "\n")
       for line in results
-        let name = substitute(line, '\(.\{-}\)\s\+-\s\+.*', '\1', '')
-        let dir = substitute(line, '.\{-}\s\+-\s.\{-}\s\+-\s\(.*\)', '\1', '')
-        let projects[name] = substitute(dir, '\', '/', 'g')
+        let name = substitute(line, '\(.\{-}\):.*', '\1', '')
+        let paths = split(substitute(line, '.\{-}:\(.*\)', '\1', ''), ',')
+        let links = {}
+        for p in paths[1:]
+          let linkname = substitute(p, '\(.\{-}\):.*', '\1', '')
+          let linkpath = substitute(p, '.\{-}:\(.*\)', '\1', '')
+          let links[linkname] = linkpath
+        endfor
+        call add(projects, {
+            \ 'workspace': workspace,
+            \ 'name': name,
+            \ 'path': paths[0],
+            \ 'links': links,
+          \ })
       endfor
-    endif
-
-    let s:projects = projects
+      let s:workspace_projects[workspace] = projects
+    endfor
   endif
 
-  if len(a:000) == 1
-    let path = substitute(fnamemodify(a:000[0], ':p'), '\', '/', 'g')
-    let dir = fnamemodify(path, ':h')
-    let pattern = '\(/\|$\)'
-    if has('win32') || has('win64')
-      let pattern .= '\c'
-    endif
-    let projects = filter(copy(s:projects), 'dir =~ "^" . v:val . pattern')
+  let all = []
+  for projects in values(s:workspace_projects)
+    let all += copy(projects)
+  endfor
+  return all
+endfunction " }}}
 
-    " file may be in a linked folder in the project
-    if len(projects) == 0
-      let command = s:command_project_by_resource
-      let command = substitute(command, '<file>', path, '')
-      let result = eclim#ExecuteEclim(command)
-      if result != '0'
-        let projects = filter(copy(s:projects), 'v:key == result')
+" GetProject(file) {{{
+function! eclim#project#util#GetProject(file)
+  let path = substitute(fnamemodify(a:file, ':p'), '\', '/', 'g')
+  let dir = fnamemodify(path, ':h')
+  let pattern = '\(/\|$\)'
+  if has('win32') || has('win64')
+    let pattern .= '\c'
+  endif
+
+  let projects = eclim#project#util#GetProjects()
+  for project in projects
+    if dir =~ '^' . project.path . pattern
+      return project
+    endif
+
+    " check linked folders
+    for name in keys(project.links)
+      if dir =~ '^' . project.links[name] . pattern
+        return project
       endif
-    endif
-
-    return projects
-  endif
-
-  return s:projects
+    endfor
+  endfor
+  return {}
 endfunction " }}}
 
 " GetProjectDirs() {{{
 " Gets list of all project root directories.
 function! eclim#project#util#GetProjectDirs()
-  return values(eclim#project#util#GetProjects())
+  return map(eclim#project#util#GetProjects(), 'v:val.path')
 endfunction " }}}
 
 " GetProjectNames(...) {{{
@@ -715,8 +702,7 @@ endfunction " }}}
 function! eclim#project#util#GetProjectNames(...)
   " filter by nature
   if a:0 > 0 && a:1 != ''
-    let command = s:command_projects
-    let command = s:command_projects . ' -n ' . a:1
+    let command = s:command_project_list . ' -n ' . a:1
     let projects = split(eclim#ExecuteEclim(command), '\n')
     if len(projects) == 1 && projects[0] == '0'
       return []
@@ -726,7 +712,7 @@ function! eclim#project#util#GetProjectNames(...)
 
     return projects
   endif
-  let names = keys(eclim#project#util#GetProjects())
+  let names = map(eclim#project#util#GetProjects(), 'v:val.name')
   call sort(names)
   return names
 endfunction " }}}
@@ -753,10 +739,17 @@ function! eclim#project#util#GetProjectNatureAliases(...)
   return aliases
 endfunction " }}}
 
-" GetProjectRoot(project) {{{
+" GetProjectRoot(name) {{{
 " Gets the project root dir for the supplied project name.
-function! eclim#project#util#GetProjectRoot(project)
-  return get(eclim#project#util#GetProjects(), a:project, '')
+function! eclim#project#util#GetProjectRoot(name)
+  let project = {}
+  for p in eclim#project#util#GetProjects()
+    if p.name == a:name
+      let project = p
+      break
+    endif
+  endfor
+  return get(project, 'path', '')
 endfunction " }}}
 
 " GetProjectSetting(setting) {{{
@@ -791,8 +784,8 @@ endfunction " }}}
 " message).
 function! eclim#project#util#IsCurrentFileInProject(...)
   if eclim#project#util#GetCurrentProjectName() == ''
-    if a:0 == 0 || a:1
-      call eclim#util#EchoError('Unable to determine project. ' .
+    if (a:0 == 0 || a:1) && g:eclimd_running
+      call eclim#util#EchoError('Unable to determine the project. ' .
         \ 'Check that the current file is in a valid project.')
     endif
     return 0
@@ -827,6 +820,15 @@ function! eclim#project#util#RefreshFile()
   call eclim#ExecuteEclim(command)
 endfunction " }}}
 
+" UnableToDetermineProject() {{{
+function! eclim#project#util#UnableToDetermineProject()
+  if g:eclimd_running
+    call eclim#util#EchoError("Unable to determine the project. " .
+      \ "Please specify a project name or " .
+      \ "execute from a valid project directory.")
+  endif
+endfunction " }}}
+
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for project names.
 function! eclim#project#util#CommandCompleteProject(argLead, cmdLine, cursorPos)
@@ -846,7 +848,7 @@ function! eclim#project#util#CommandCompleteProjectContainsThis(
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
   let project = eclim#project#util#GetCurrentProjectName()
   let projects = eclim#project#util#GetProjects()
-  call filter(names, 'v:val != project && filereadable(projects[v:val]. "/" . path)')
+  call filter(names, 'v:val != project && filereadable(eclim#project#util#GetProjectRoot(v:val) . "/" . path)')
   return names
 endfunction " }}}
 
@@ -1001,7 +1003,7 @@ function! eclim#project#util#CommandCompleteProjectNatureAdd(
   return s:CommandCompleteProjectNatureModify(
     \ a:argLead, a:cmdLine, a:cursorPos, function("s:AddAliases"))
 endfunction
-function s:AddAliases(allAliases, projectAliases)
+function! s:AddAliases(allAliases, projectAliases)
   let aliases = a:allAliases
   call filter(aliases, 'index(a:projectAliases, v:val) == -1')
   return aliases
@@ -1014,7 +1016,7 @@ function! eclim#project#util#CommandCompleteProjectNatureRemove(
   return s:CommandCompleteProjectNatureModify(
     \ a:argLead, a:cmdLine, a:cursorPos, function("s:RemoveAliases"))
 endfunction
-function s:RemoveAliases(allAliases, projectAliases)
+function! s:RemoveAliases(allAliases, projectAliases)
   return a:projectAliases
 endfunction " }}}
 

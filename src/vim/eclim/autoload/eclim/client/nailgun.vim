@@ -30,15 +30,15 @@
   endif
 " }}}
 
-" Execute(command) {{{
+" Execute(port, command) {{{
 " Function which invokes nailgun.
-function! eclim#client#nailgun#Execute(command)
+function! eclim#client#nailgun#Execute(port, command)
   if !exists('g:EclimNailgunClient')
     call s:DetermineClient()
   endif
 
   if g:EclimNailgunClient == 'python'
-    return eclim#client#python#nailgun#Execute(a:command)
+    return eclim#client#python#nailgun#Execute(a:port, a:command)
   endif
 
   let command = eclim#client#nailgun#GetEclimCommand()
@@ -46,7 +46,7 @@ function! eclim#client#nailgun#Execute(command)
     return [1, g:EclimErrorReason]
   endif
 
-  let command = command . ' ' . a:command
+  let command = command . ' -Dnailgun.server.port=' . a:port . ' ' . a:command
 
   " for windows, need to add a trailing quote to complete the command.
   if command =~ '^"[a-zA-Z]:'
@@ -121,9 +121,9 @@ function! eclim#client#nailgun#GetNgCommand()
   return g:EclimNgPath
 endfunction " }}}
 
-" GetNgPort() {{{
+" GetNgPort([workspace]) {{{
 " Gets port that the nailgun server is configured to run on.
-function! eclim#client#nailgun#GetNgPort()
+function! eclim#client#nailgun#GetNgPort(...)
   let port = 9091
   let eclimrc = expand('~/.eclimrc')
   if filereadable(eclimrc)
@@ -135,6 +135,43 @@ function! eclim#client#nailgun#GetNgPort()
         \ substitute(lines[0], '^\s*.\{-}=\s*\(\d\+\).*', '\1', '')
     endif
   endif
+  let default = port
+
+  let instances = expand('~/.eclim/.eclimd_instances')
+  if filereadable(instances)
+    let workspaces = {}
+    let entries = readfile(instances)
+    for entry in entries
+      let workspace = substitute(entry, '\(.*\):.*', '\1', '')
+      let workspace = substitute(workspace, '\', '/', 'g')
+      let workspace .= workspace !~ '/$' ? '/' : ''
+      exec 'let port = ' . substitute(entry, '.*:\(\d\+\).*', '\1', '')
+      let workspaces[workspace] = port
+    endfor
+
+    " a specific workspace was supplied
+    if len(a:000) > 0
+      return get(workspaces, a:000[0], default)
+    endif
+
+    let path = expand('%:p')
+
+    " project inside of a workspace dir
+    for workspace in keys(workspaces)
+      if path =~ '^' . workspace
+        return workspaces[workspace]
+      endif
+    endfor
+
+    " project outside of a workspace dir
+    for workspace in keys(workspaces)
+      let project = eclim#project#util#GetProject(path)
+      if len(project) > 0
+        return workspaces[project.workspace]
+      endif
+    endfor
+  endif
+
   return port
 endfunction " }}}
 

@@ -33,24 +33,25 @@
 " separators and includes a trailing '/'.  If the workspace could not be
 " determined, the empty string is returned.
 function! eclim#eclipse#GetWorkspaceDir()
-  if !exists('g:EclimWorkspace')
+  silent let result = eclim#ExecuteEclim(s:command_workspace_dir)
+  if result == '0'
     let result = ''
+  endif
 
-    if result == ''
-      let result = eclim#ExecuteEclim(s:command_workspace_dir)
-      if result == '0'
-        let result = ''
-      endif
-    endif
-
-    " fall back to file based discovery
-    if result == '' && filereadable(s:ide_prefs)
-      let lines = readfile(s:ide_prefs)
-      call filter(lines, 'v:val =~ "^\s*RECENT_WORKSPACES\s*="')
-      if len(lines) == 1
-        let result = substitute(lines[0], '.\{-}=\s*\(.\{-}\)\(\s*,\|$\)', '\1', '')
-        " unescape the escaped dir name in windows
-        exec 'let result = "' . result . '"'
+  if result == ''
+    let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
+    if len(workspaces) > 0
+      let result = workspaces[0]
+      if len(workspaces) > 1
+        " more than one recent workspace, check if the curent file is is one
+        " of those.
+        let path = expand('%:p')
+        for r in results[1:]
+          if path =~ '^' . r . '\>'
+            let result = r
+            break
+          endif
+        endfor
       endif
     endif
 
@@ -58,7 +59,9 @@ function! eclim#eclipse#GetWorkspaceDir()
     if result == ''
       return result
     endif
+  endif
 
+  if result != ''
     " ensure value uses unix slashes and ends in a slash
     let result = substitute(result, '\', '/', 'g')
     if result !~ '/$'
@@ -67,7 +70,41 @@ function! eclim#eclipse#GetWorkspaceDir()
 
     let g:EclimWorkspace = result
   endif
+
   return g:EclimWorkspace
+endfunction " }}}
+
+" GetAllWorkspaceDirs() {{{
+function! eclim#eclipse#GetAllWorkspaceDirs()
+  let results = []
+
+  let instances = expand('~/.eclim/.eclimd_instances')
+  if filereadable(instances)
+    let results = readfile(instances)
+    call map(results, 'substitute(v:val, "\\(.*\\):.*", "\\1", "")')
+  endif
+
+  if len(results) == 0 && filereadable(s:ide_prefs)
+    let results = readfile(s:ide_prefs)
+    call filter(results, 'v:val =~ "^\s*RECENT_WORKSPACES\s*="')
+    call map(results,
+      \ 'substitute(v:val, ".\\{-}=\\s*\\(.\\{-}\\)\\(\\s*,\\|$\\)", "\\1", "")')
+    " unescape the escaped dir name in windows
+    exec 'let results = ["' . results[0] . '"]'
+
+    if results[0] =~ "\n"
+      let results = split(results[0], "\n")
+    endif
+  endif
+
+  " ensure each value uses unix slashes and ends in a slash
+  let results = map(results, 'substitute(v:val, "\\\\", "/", "g")')
+  let results = map(results, 'v:val . (v:val !~ "/$" ? "/" : "")')
+
+  " only return workspaces that exist.
+  let results = filter(results, 'isdirectory(v:val)')
+
+  return results
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

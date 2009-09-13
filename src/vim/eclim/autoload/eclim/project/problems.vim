@@ -38,9 +38,7 @@ function! eclim#project#problems#Problems(project, open)
     let project = eclim#project#util#GetCurrentProjectName()
   endif
   if project == ''
-    call eclim#util#EchoError("Unable to determine project. " .
-      \ "Please specify a project name or " .
-      \ "execute from a valid project directory.")
+    call eclim#project#util#UnableToDetermineProject()
     return
   endif
 

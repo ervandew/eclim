@@ -151,7 +151,6 @@ endfunction " }}}
 " Opens the same file from another project using the supplied action
 function! eclim#common#util#OtherWorkingCopy(project, action)
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
-  let projects = eclim#project#util#GetProjects()
   let project_path = s:OtherWorkingCopyPath(a:project)
   if project_path == ''
     return
@@ -184,18 +183,25 @@ endfunction " }}}
 " s:OtherWorkingCopyPath(project) {{{
 function s:OtherWorkingCopyPath(project)
   let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
-  let projects = eclim#project#util#GetProjects()
 
   let project_name = a:project
   if project_name =~ '[\\/]$'
     let project_name = project_name[:-2]
   endif
 
-  if !has_key(projects, project_name)
+  let project = {}
+  for p in eclim#project#util#GetProjects()
+    if p.name == project_name
+      let project = p
+      break
+    endif
+  endfor
+
+  if len(project) == 0
     call eclim#util#EchoWarning("Project '" . project_name . "' not found.")
     return ''
   endif
-  return projects[project_name] . '/' . path
+  return eclim#project#util#GetProjectRoot(project_name) . '/' . path
 endfunction " }}}
 
 " SwapTypedArguments() {{{

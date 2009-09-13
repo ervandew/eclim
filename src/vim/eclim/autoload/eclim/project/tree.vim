@@ -43,7 +43,7 @@ function! eclim#project#tree#ProjectTree(...)
   if len(a:000) == 0
     let name = eclim#project#util#GetCurrentProjectName()
     if name == ''
-      call eclim#util#Echo('Unable to determine project.')
+      call eclim#project#util#UnableToDetermineProject()
       return
     endif
     let names = [name]

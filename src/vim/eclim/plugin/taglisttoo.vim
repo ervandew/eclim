@@ -51,18 +51,20 @@ if !exists('g:Tlist_Ctags_Cmd')
   finish
 endif
 
-let g:EclimAvailable = eclim#PingEclim(0)
+let eclimAvailable = eclim#EclimAvailable()
+
+let g:Tlist_Ctags_Cmd_Ctags = g:Tlist_Ctags_Cmd
+let g:Tlist_Ctags_Cmd_Eclim =
+  \ eclim#client#nailgun#GetEclimCommand() .
+  \ ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+" for windows, need to add a trailing quote to complete the command.
+if g:Tlist_Ctags_Cmd_Eclim =~ '^"[a-zA-Z]:'
+  let g:Tlist_Ctags_Cmd_Eclim = g:Tlist_Ctags_Cmd_Eclim . '"'
+endif
 
 " set eclim command for taglist if user wants it and eclim is running.
-if g:EclimTaglistEnabled && g:EclimAvailable
-  let g:Tlist_Ctags_Cmd_Orig = g:Tlist_Ctags_Cmd
-  let g:Tlist_Ctags_Cmd =
-    \ eclim#client#nailgun#GetEclimCommand() .
-    \ ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
-  " for windows, need to add a trailing quote to complete the command.
-  if g:Tlist_Ctags_Cmd =~ '^"[a-zA-Z]:'
-    let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd . '"'
-  endif
+if g:EclimTaglistEnabled && eclimAvailable
+  let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd_Eclim
 endif
 
 " don't conflict with original taglist if that is what the user is using.
@@ -109,7 +111,7 @@ endif
 
 " Eclim groovy enhanced settings for taglist or taglisttoo {{{
 " taglist.vim settings
-if g:EclimAvailable
+if eclimAvailable
   if !exists(':TlistToo')
     if !exists("g:tlist_ant_settings")
       let g:tlist_ant_settings = 'ant;p:project;i:import;r:property;t:target'

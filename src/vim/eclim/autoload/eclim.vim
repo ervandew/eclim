@@ -49,9 +49,9 @@
   let g:eclimd_running = 1
 " }}}
 
-" ExecuteEclim(command) {{{
+" ExecuteEclim(command, [port]) {{{
 " Executes the supplied eclim command.
-function! eclim#ExecuteEclim(command)
+function! eclim#ExecuteEclim(command, ...)
   if exists('g:EclimDisabled')
     return
   endif
@@ -74,7 +74,8 @@ function! eclim#ExecuteEclim(command)
   let command = substitute(command, '\$', '%24', 'g')
 
   " execute the command.
-  let [retcode, result] = eclim#client#nailgun#Execute(command)
+  let port = len(a:000) > 0 ? a:000[0] : eclim#client#nailgun#GetNgPort()
+  let [retcode, result] = eclim#client#nailgun#Execute(port, command)
   let result = substitute(result, '\n$', '', '')
 
   " not sure this is the best place to handle this, but when using the python
@@ -103,10 +104,12 @@ function! eclim#ExecuteEclim(command)
         " if we are not in an autocmd, alert the user that eclimd is not
         " running.
         if expand('<amatch>') == ''
-          call eclim#util#EchoWarning("unable to connect to eclimd - " . error)
+          call eclim#util#EchoWarning(
+            \ "unable to connect to eclimd (port: " . port . ") - " . error)
         endif
       else
-        let error = error . "\n" . 'while executing command: ' . command
+        let error = error . "\n" .
+          \ 'while executing command (port: ' . port . '): ' . command
         call eclim#util#EchoError(error)
       endif
     endif
@@ -121,12 +124,6 @@ endfunction " }}}
 function! eclim#Disable()
   if !exists('g:EclimDisabled')
     let g:EclimDisabled = 1
-
-    " if taglisttoo enabled, disable its communication w/ eclimd
-    if exists('g:Tlist_Ctags_Cmd_Orig')
-      let g:EclimTlistCtagsCmdSaved = g:Tlist_Ctags_Cmd
-      let g:Tlist_Ctags_Cmd = g:Tlist_Ctags_Cmd_Orig
-    endif
   endif
 endfunction " }}}
 
@@ -135,11 +132,12 @@ endfunction " }}}
 function! eclim#Enable()
   if exists('g:EclimDisabled')
     unlet g:EclimDisabled
-    if exists('g:EclimTlistCtagsCmdSaved')
-      let g:Tlist_Ctags_Cmd = g:EclimTlistCtagsCmdSaved
-      unlet g:EclimTlistCtagsCmdSaved
-    endif
   endif
+endfunction " }}}
+
+" EclimAvailable() {{{
+function! eclim#EclimAvailable()
+  return filereadable(expand('~/.eclim/.eclimd_instances'))
 endfunction " }}}
 
 " PatchEclim(file, revision) {{{

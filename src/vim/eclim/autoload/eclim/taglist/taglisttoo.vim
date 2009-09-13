@@ -570,7 +570,12 @@ function! s:ProcessTags()
     endif
 
     try
-      let command = g:Tlist_Ctags_Cmd . ' -f - --format=2 --excmd=pattern ' .
+      let command = g:Tlist_Ctags_Cmd_Ctags
+      if eclim#EclimAvailable() && !exists('g:EclimDisabled')
+        let command = g:Tlist_Ctags_Cmd_Eclim
+      endif
+
+      let command .= ' -f - --format=2 --excmd=pattern ' .
           \ '--fields=nks --sort=no --language-force=<lang> ' .
           \ '--<lang>-types=<types> "<file>"'
       let command = substitute(command, '<lang>', settings.lang, 'g')

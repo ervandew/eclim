@@ -84,14 +84,14 @@ function! eclim#common#archive#ReadFile()
     let class = substitute(class, '/', '.', 'g')
 
     let archive = substitute(file, '^\w\+:file://\(.\{-}\)!.*', '\1', '')
-    let projects = eclim#project#util#GetProjects(archive)
-    let project = len(projects) > 0 ? keys(projects)[0] : ''
+    let project = eclim#project#util#GetProject(archive)
+    let project_name = get(project, 'name', '')
 
     let command = s:command_read_class
     let command = substitute(command, '<class>', class, '')
 
-    if project != ''
-      let command .= ' -p "' . project . '"'
+    if project_name != ''
+      let command .= ' -p "' . project_name . '"'
     else
       let read = substitute(s:command_read, '<file>', file, '')
       let file = eclim#ExecuteEclim(read)
