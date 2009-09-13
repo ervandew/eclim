@@ -533,18 +533,17 @@ NOTES {{{
 
       Example: install feature org.eclipse.wst
         ./eclipse -nosplash -consolelog
-          -application org.eclipse.equinox.p2.director.app.application
+          -application org.eclipse.equinox.p2.director
           -metadataRepository http://download.eclipse.org/releases/ganymede
           -artifactRepository http://download.eclipse.org/releases/ganymede
-          -installIU org.eclipse.wst.feature.group
-          -version 3.0.2.v200808250510-7A-8f8QqVJLTFUkFahb1QIq2z0t8
+          -installIU org.eclipse.wst.web_ui.feature.feature.group
 
       Example: uninstall feature org.eclipse.wst (not fully tested yet)
         ./eclipse -nosplash -consolelog
-          -application org.eclipse.equinox.p2.director.app.application
+          -application org.eclipse.equinox.p2.director
           -metadataRepository http://download.eclipse.org/releases/ganymede
           -artifactRepository http://download.eclipse.org/releases/ganymede
-          -uninstallIU org.eclipse.wst.feature.group
+          -uninstallIU org.eclipse.wst.web_ui.feature.feature.group
 
     Old update manager:
       http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
