@@ -680,12 +680,18 @@ NOTES {{{
     Git repos for vim:
     http://repo.or.cz/w/vim_mainline.git
 
-    Generate list of all command names:
-      $ ack --java -hA 1 "@Command" | grep "name =" | sed 's/.*name = "\(\w\+\)".*/\1/' | sort
-
-    Running in true headless environment:
-    http://en.wikipedia.org/wiki/Xvfb
-      - Xvfb is included with xorg-server
+    Generate list of all command names and associated classes:
+    Todo: write an eclim command to generate a list like this from registered
+          commands.
+      $ ack --java -HA 1 "@Command" | awk '
+        /name =/ {
+          split($0, a, "[:-][0-9]+[:-]");
+          sub(/src\/java\//, "", a[1]);
+          sub(/\.java$/, "", a[1]);
+          sub(/.*name = "/, "", a[2]);
+          sub(/".*/, "", a[2]);
+          printf "%35s: %s\n", a[2], a[1];
+        }' | sort
 
   }}}
 
