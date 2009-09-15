@@ -107,6 +107,18 @@ function! s:Evaluate(lang)
   let matchIndex = 0
   for result in results
     let groups = split(result, '|')
+    let groupIndex = 0
+    if len(groups) > 1
+      for group in groups[1:]
+        let patterns = s:BuildPatterns(group)
+        for pattern in patterns
+          exec 'syntax match ' . g:EclimRegexGroupHi{groupIndex % 2} .
+            \ ' /' . pattern . '/ '
+        endfor
+        let groupIndex += 1
+      endfor
+    endif
+
     let match = groups[0]
     let patterns = s:BuildPatterns(match)
 
@@ -117,19 +129,6 @@ function! s:Evaluate(lang)
     endfor
 
     let matchIndex += 1
-
-    let groupIndex = 0
-    if len(groups) > 1
-      let groups = groups[1:]
-      for group in groups
-        let patterns = s:BuildPatterns(group)
-        for pattern in patterns
-          exec 'syntax match ' . g:EclimRegexGroupHi{groupIndex % 2} .
-            \ ' /' . pattern . '/ '
-        endfor
-        let groupIndex += 1
-      endfor
-    endif
   endfor
 endfunction "}}}
 
