@@ -103,7 +103,7 @@ public class VimStep
   /**
    * Constructs the step.
    */
-  public VimStep (String name, Properties properties)
+  public VimStep(String name, Properties properties)
   {
     super(name, properties);
   }
@@ -112,7 +112,7 @@ public class VimStep
    * {@inheritDoc}
    * @see org.formic.wizard.step.GuiStep#init()
    */
-  public Component init ()
+  public Component init()
   {
     GuiForm form = createForm();
     String files = fieldName("files");
@@ -140,7 +140,7 @@ public class VimStep
    * {@inheritDoc}
    * @see org.formic.wizard.WizardStep#displayed()
    */
-  public void displayed ()
+  public void displayed()
   {
     if(!rtpAttempted){
       rtpAttempted = true;
@@ -155,13 +155,13 @@ public class VimStep
         });
 
         // filter out dirs the user doesn't have permission write to.
-        ArrayList filtered = new ArrayList();
-        for (int ii = 0; ii < runtimePath.length; ii++){
-          if (new File(runtimePath[ii]).canWrite()){
-            filtered.add(runtimePath[ii]);
+        ArrayList<String> filtered = new ArrayList<String>();
+        for (String path : runtimePath){
+          if (new File(path).canWrite()){
+            filtered.add(path);
           }
         }
-        String[] rtp = (String[])filtered.toArray(new String[filtered.size()]);
+        String[] rtp = filtered.toArray(new String[filtered.size()]);
 
         if(rtp == null || rtp.length == 0){
           if(!homeVimCreatePrompted){
@@ -229,8 +229,7 @@ public class VimStep
       }
 
       if(runtimePath != null && runtimePath.length > 0){
-        for (int ii = 0; ii < runtimePath.length; ii++){
-          String rpath = runtimePath[ii];
+        for (String rpath : runtimePath){
           String path = rpath;
           if (Os.isFamily("windows")){
             path = path.toLowerCase();
@@ -303,15 +302,15 @@ public class VimStep
   /**
    * Attempt to find where gvim is installed.
    */
-  private void setGvimProperty ()
+  private void setGvimProperty()
   {
     try{
       String[] gvims = null;
       if(Os.isFamily("windows")){
         gvims = WINDOWS_GVIMS;
-        for (int ii = 0; ii < gvims.length; ii++){
-          if (new File(gvims[ii]).isFile()){
-            Installer.getProject().setProperty("eclim.gvim", gvims[ii]);
+        for (String gvim : gvims){
+          if (new File(gvim).isFile()){
+            Installer.getProject().setProperty("eclim.gvim", gvim);
             break;
           }
         }
@@ -368,7 +367,7 @@ public class VimStep
    *
    * @return Array of paths or null if unable to determine any.
    */
-  private String[] getVimRuntimePath ()
+  private String[] getVimRuntimePath()
   {
     try{
       File tempFile = File.createTempFile("eclim_installer", null);
@@ -404,20 +403,19 @@ public class VimStep
    * @param file The file containing the results.
    * @return The results.
    */
-  private String[] parseVimRuntimePathResults (File file)
+  private String[] parseVimRuntimePathResults(File file)
   {
     FileInputStream in = null;
     try{
       String contents = IOUtils.toString(in = new FileInputStream(file));
       String[] paths = StringUtils.stripAll(StringUtils.split(contents, ','));
-      ArrayList results = new ArrayList();
-      for (int ii = 0; ii < paths.length; ii++){
-        File path = new File(paths[ii]);
-        if(path.isDirectory()){
-          results.add(paths[ii].replace('\\', '/'));
+      ArrayList<String> results = new ArrayList<String>();
+      for (String path : paths){
+        if(new File(path).isDirectory()){
+          results.add(path.replace('\\', '/'));
         }
       }
-      return (String[])results.toArray(new String[results.size()]);
+      return results.toArray(new String[results.size()]);
     }catch(Exception e){
       e.printStackTrace();
     }finally{
