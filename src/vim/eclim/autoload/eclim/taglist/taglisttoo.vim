@@ -733,8 +733,9 @@ function! s:JumpToTag()
 
   " account for my plugin which removes trailing spaces from the file
   let pattern = substitute(pattern, '\s\+\$$', '\s*$', '')
+  let pattern = escape(pattern, '*[]')
 
-  if getline(lnum) =~ escape(pattern, '*[]')
+  if getline(lnum) =~ pattern
     mark '
     call cursor(lnum, 1)
     call s:ShowCurrentTag()
