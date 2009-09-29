@@ -19,7 +19,7 @@ package org.eclim.test.checkstyle;
 public class TestCheckstyle
 {
   public void test()
-    throws Exception {
+    throws TestException {
   }
 
   public void test (String arg1,String arg2)

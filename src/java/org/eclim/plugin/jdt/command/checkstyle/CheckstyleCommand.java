@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclim.util.file.FileUtils;
+
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
@@ -265,9 +267,9 @@ public class CheckstyleCommand
 
       try{
         IPath out = javaProject.getOutputLocation();
-        out = out.addTrailingSeparator();
         String path = ProjectUtils.getFilePath(
             javaProject.getProject(), out.toOSString());
+        path = FileUtils.addTrailingSlash(path.replace('\\', '/'));
         urls.add(new URL("file://" + path));
       }catch(JavaModelException ignore){
         // ignore... just signals that no output dir was configured.
