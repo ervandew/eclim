@@ -340,6 +340,24 @@ public class FileUtils
   }
 
   /**
+   * Adds the trailing slash if it doesn't exists.
+   * <pre>
+   * FileUtils.addTrailingSlash("/a/b/c/") :  "/a/b/c/"
+   * FileUtils.addTrailingSlash("/a/b/c") :  "/a/b/c/"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The path with a trailing slash.
+   */
+  public static String addTrailingSlash(String path)
+  {
+    if (!path.endsWith("/")){
+      return path += '/';
+    }
+    return path;
+  }
+
+  /**
    * Removes the trailing slash if it exists.
    * <pre>
    * FileUtils.removeTrailingSlash("/a/b/c/") :  "/a/b/c"
