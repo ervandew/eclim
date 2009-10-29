@@ -79,6 +79,12 @@ leveraged in three primary ways, as illustrated below.
    the eclipse gui and the embedded gvim will interact with it just like
    external vim instances would.
 
+==================
+Emacs Users
+==================
+
+Development of an `emacs client`_ for eclim has been started over on github.
+
 .. _license:
 
 ==================
@@ -299,6 +305,8 @@ View the :ref:`release notes <1.3.0>` for more info.
 .. _nailgun: http://www.martiansoftware.com/nailgun/
 .. _formic: http://sourceforge.net/projects/formic/
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
+
+.. _emacs client: http://github.com/senny/emacs-eclim
 
 .. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse dltk: http://eclipse.org/dltk/
