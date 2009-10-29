@@ -46,6 +46,11 @@ if !exists('g:Tlist_Ctags_Cmd')
   endif
 endif
 
+" always set the taglist title since eclim references it in a few places.
+if !exists('g:TagList_title')
+  let g:TagList_title = "__Tag_List__"
+endif
+
 " no ctags found, no need to continue.
 if !exists('g:Tlist_Ctags_Cmd')
   finish
@@ -72,10 +77,6 @@ if !exists('loaded_taglist')
   " Automatically open the taglist window on Vim startup
   if !exists('g:Tlist_Auto_Open')
     let g:Tlist_Auto_Open = 0
-  endif
-
-  if !exists('g:TagList_title')
-    let g:TagList_title = "__Tag_List__"
   endif
 
   if g:Tlist_Auto_Open && !exists('g:Tlist_Temp_Disable')
