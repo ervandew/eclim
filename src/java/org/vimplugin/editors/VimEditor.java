@@ -30,7 +30,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -41,11 +43,10 @@ import org.eclipse.jface.text.IDocument;
 
 import org.eclipse.swt.SWT;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -64,6 +65,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import org.eclipse.ui.editors.text.TextEditor;
+
+import org.eclipse.ui.internal.part.StatusPart;
 
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -216,11 +219,8 @@ public class VimEditor
     if (filePath != null){
       // nice background (only needed for external)
       editorGUI = new Canvas(parent, SWT.EMBEDDED);
-      Color color = new Color(parent.getDisplay(), new RGB(0x10, 0x10, 0x10));
-      editorGUI.setBackground(color);
-
       //create a vim instance
-      createVim(projectPath, editorGUI);
+      createVim(projectPath, parent);
 
       //get bufferId
       bufferID = VimPlugin.getDefault().getNumberOfBuffers();
@@ -232,7 +232,8 @@ public class VimEditor
       vc.command(bufferID, "editFile", "\"" + filePath + "\"");
       vc.command(bufferID, "startDocumentListen", "");
 
-      viewer = new VimViewer(bufferID, vc, editorGUI, SWT.EMBEDDED);
+      viewer = new VimViewer(
+          bufferID, vc, editorGUI != null ? editorGUI : parent, SWT.EMBEDDED);
       viewer.setDocument(document);
       viewer.setEditable(isEditable());
       try{
@@ -277,17 +278,43 @@ public class VimEditor
   private void createVim(String workingDir, Composite parent) {
     VimPlugin plugin = VimPlugin.getDefault();
 
+    IStatus status = null;
     if (embedded) {
       try {
-        createEmbeddedVim(workingDir, parent);
+        createEmbeddedVim(workingDir, editorGUI);
       } catch (Exception e) {
-        message(plugin.getMessage("embed.fallback"), e);
         embedded = false;
         createExternalVim(workingDir, parent);
+
+        String message = plugin.getMessage(
+            e instanceof NoSuchFieldException ?
+            "embed.unsupported" : "embed.fallback");
+        status = new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID, 0, message, e);
       }
     } else {
       createExternalVim(workingDir, parent);
+      String message = plugin.getMessage("gvim.external.success");
+      status = new Status(IStatus.OK, PlatformUI.PLUGIN_ID, message);
     }
+
+    if (status != null){
+      editorGUI.dispose();
+      editorGUI = null;
+      new StatusPart(parent, status);
+      // remove the "Show the Error Log View" button if the status is OK
+      if (status.getSeverity() == IStatus.OK){
+        for (Control c : parent.getChildren()){
+          if (c instanceof Composite){
+            for (Control ch : ((Composite)c).getChildren()){
+              if (ch instanceof Button){
+                ch.setVisible(false);
+              }
+            }
+          }
+        }
+      }
+    }
+
     VimPlugin.getDefault().getVimserver(serverID).getEditors().add(this);
   }
 
