@@ -225,9 +225,11 @@ found at the index of the eclim :ref:`documentation <vim/index>`.
 
 After doing that you can then proceed to create your first project\:
 
+- :ref:`C/C++ Project Guide <guides/c/project>`
 - :ref:`Java Project Guide <guides/java/project>`
-- :ref:`Python Project Guide <guides/python/project>`
 - :ref:`Php Project Guide <guides/php/project>`
+- :ref:`Python Project Guide <guides/python/project>`
+- :ref:`Ruby Project Guide <guides/ruby/project>`
 
 
 Upgrading
