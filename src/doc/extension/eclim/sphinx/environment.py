@@ -21,6 +21,7 @@ from docutils import nodes
 from sphinx import addnodes
 from sphinx.directives import additional_xref_types
 from sphinx.environment import BuildEnvironment, NoUri, SphinxContentsFilter
+from sphinx.util import docname_join
 
 class EclimBuildEnvironment(BuildEnvironment):
 
@@ -93,9 +94,9 @@ class EclimBuildEnvironment(BuildEnvironment):
             if not docname:
               self.warn(
                   fromdocname,
-                  'undefined label: %s -- if you don\'t ' % target +
-                  'give a link caption the label must precede a section '
-                  'header.', node.line)
+                  'undefined label: %s' % target + ' -- if you '
+                  'don\'t give a link caption the label must '
+                  'precede a section header.', node.line)
           if docname:
             newnode = nodes.reference('', '')
             innernode = nodes.emphasis(sectname, sectname)
@@ -114,6 +115,23 @@ class EclimBuildEnvironment(BuildEnvironment):
             newnode.append(innernode)
           else:
             newnode = contnode
+        elif typ == 'doc':
+          # directly reference to document by source name;
+          # can be absolute or relative
+          docname = docname_join(fromdocname, target)
+          if docname not in self.all_docs:
+            self.warn(fromdocname, 'unknown document: %s' % docname, node.line)
+            newnode = contnode
+          else:
+            if node['refcaption']:
+              # reference with explicit title
+              caption = node.astext()
+            else:
+              caption = self.titles[docname].astext()
+            innernode = nodes.emphasis(caption, caption)
+            newnode = nodes.reference('', '')
+            newnode['refuri'] = builder.get_relative_uri(fromdocname, docname)
+            newnode.append(innernode)
         elif typ == 'keyword':
           # keywords are referenced by named labels
           docname, labelid, _ = self.labels.get(target, ('','',''))
@@ -159,7 +177,7 @@ class EclimBuildEnvironment(BuildEnvironment):
               newnode['refuri'] = builder.get_relative_uri(
                   fromdocname, docname, typ) + '#' + labelid
             newnode.append(contnode)
-        elif typ == 'mod':
+        elif typ == 'mod' or typ == 'obj' and target in self.modules:
           docname, synopsis, platform, deprecated = \
               self.modules.get(target, ('','','', ''))
           if not docname:
@@ -206,6 +224,19 @@ class EclimBuildEnvironment(BuildEnvironment):
         newnode = contnode
       if newnode:
         node.replace_self(newnode)
+
+    for node in doctree.traverse(addnodes.only):
+      try:
+        ret = builder.tags.eval_condition(node['expr'])
+      except Exception, err:
+        self.warn(fromdocname, 'exception while evaluating only '
+                  'directive expression: %s' % err, node.line)
+        node.replace_self(node.children)
+      else:
+        if ret:
+          node.replace_self(node.children)
+        else:
+          node.replace_self([])
 
     # allow custom references to be resolved
     builder.app.emit('doctree-resolved', doctree, fromdocname)

@@ -24,9 +24,12 @@ from eclim.pygments import GroovyLexer
 from eclim.sphinx.environment import EclimBuildEnvironment, EclimHtmlBuildEnvironment
 
 from sphinx import addnodes, highlighting
-from sphinx.builder import StandaloneHTMLBuilder, TextBuilder, ENV_PICKLE_FILENAME
-from sphinx.textwriter import TextTranslator, TextWriter
+from sphinx.builders import ENV_PICKLE_FILENAME
+from sphinx.builders.html import StandaloneHTMLBuilder
+from sphinx.builders.text import TextBuilder
+from sphinx.util import url_re
 from sphinx.util.console import bold
+from sphinx.writers.text import TextTranslator, TextWriter
 
 class EclimBuilder(StandaloneHTMLBuilder):
   name = 'eclim'
@@ -117,7 +120,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
     parents.reverse()
 
     # title rendered as HTML
-    title = titles.get(docname)
+    title = self.env.longtitles.get(docname)
     title = title and self.render_partial(title)['title'] or ''
     # the name for the copied source
     sourcename = self.config.html_copy_source and docname + '.txt' or ''
@@ -146,6 +149,9 @@ class EclimBuilder(StandaloneHTMLBuilder):
       main_tocs.append(self.render_partial(entries)['fragment'])
 # EV: end main toc
 
+    # local TOC and global TOC tree
+    toc = self.render_partial(self.env.get_toc_for(docname))['fragment']
+
     return dict(
       parents = parents,
       prev = prev,
@@ -158,66 +164,98 @@ class EclimBuilder(StandaloneHTMLBuilder):
       sourcename = sourcename,
 # EV: new main_toc
       main_tocs = main_tocs,
-      toc = self.render_partial(self.env.get_toc_for(docname))['fragment'],
+      toc = toc,
       # only display a TOC if there's more than one item to show
       display_toc = (self.env.toc_num_entries[docname] > 1),
     )
 
-  def _entries_from_toctree(self, docname, toctreenode, top=True):
+  def _entries_from_toctree(self, docname, toctreenode, separate=False, subtree=True):
     """
     Copied from sphinx.environment.  Modified to utilize list items instead of
     the old version which had an independent bullet_list for each entry.
     """
-    includefiles = map(str, toctreenode['includefiles'])
-
+    refs = [(e[0], str(e[1])) for e in toctreenode['entries']]
 # EV: instead of a [], use a bullet_list
     entries = nodes.bullet_list()
-    for includefile in includefiles:
+    for (title, ref) in refs:
       try:
-        toc = self.env.main_tocs[includefile].deepcopy()
+        if url_re.match(ref):
+          reference = nodes.reference('', '',
+                                      refuri=ref, anchorname='',
+                                      *[nodes.Text(title)])
+          para = addnodes.compact_paragraph('', '', reference)
+          item = nodes.list_item('', para)
+          toc = nodes.bullet_list('', item)
+        elif ref == 'self':
+          # 'self' refers to the document from which this
+          # toctree originates
+          ref = toctreenode['parent']
+          if not title:
+            title = self.titles[ref].astext()
+          reference = nodes.reference('', '',
+                                      refuri=ref,
+                                      anchorname='',
+                                      *[nodes.Text(title)])
+          para = addnodes.compact_paragraph('', '', reference)
+          item = nodes.list_item('', para)
+          # don't show subitems
+          toc = nodes.bullet_list('', item)
+        else:
+          toc = self.env.main_tocs[ref].deepcopy()
+          if title and toc.children and len(toc.children) == 1:
+            child = toc.children[0]
+            for refnode in child.traverse(nodes.reference):
+              if refnode['refuri'] == ref and not refnode['anchorname']:
+                refnode.children = [nodes.Text(title)]
         if not toc.children:
           # empty toc means: no titles will show up in the toctree
-          self.warn(
-            docname,
-            'toctree contains reference to document '
-            '%r that doesn\'t have a title: no link will be '
-            'generated' % includefile
-          )
+          self.warn(docname,
+                    'toctree contains reference to document '
+                    '%r that doesn\'t have a title: no link '
+                    'will be generated' % ref)
       except KeyError:
         # this is raised if the included file does not exist
-        self.env.warn(
-          docname,
-          'toctree contains reference to nonexisting document %r' % includefile
-        )
+        self.warn(docname, 'toctree contains reference to '
+                  'nonexisting document %r' % ref)
       else:
-# EV: copied over from 0.4.3, but outside of Environment, we don't have the
-# titles_only argument.
+# EV: copied over from 0.6.2, but outside of Environment, we don't have the
+# titles_only var.
 #        # if titles_only is given, only keep the main title and
 #        # sub-toctrees
 #        if titles_only:
-#          # delete everything but the toplevel title(s) and toctrees
+#          # delete everything but the toplevel title(s)
+#          # and toctrees
 #          for toplevel in toc:
 #            # nodes with length 1 don't have any children anyway
 #            if len(toplevel) > 1:
-#              subtoctrees = toplevel.traverse(addnodes.toctree)
-#              toplevel[1][:] = subtoctrees
+#              subtrees = toplevel.traverse(addnodes.toctree)
+#              toplevel[1][:] = subtrees
+
         # resolve all sub-toctrees
         for toctreenode in toc.traverse(addnodes.toctree):
-# EV: differs from sphinx 0.5... not sure if it differs from previous version.
-# Not sure if this should be synced with 0.5 or not.
+          #i = toctreenode.parent.index(toctreenode) + 1
+          #for item in self._entries_from_toctree(docname, toctreenode, subtree=True):
+          #  toctreenode.parent.insert(i, item)
+          #  i += 1
+          #toctreenode.parent.remove(toctreenode)
           toctreenode.parent.replace_self(
-              self._entries_from_toctree(docname, toctreenode, top=False))
+              self._entries_from_toctree(docname, toctreenode, subtree=True))
+
+# EV: append each child as a list item in the bullet_list.
         #if separate:
         #  entries.append(toc)
         #else:
         #  entries.extend(toc.children)
-# EV: append each child as a list item in the bullet_list.
         for child in toc.children:
           entries.append(child)
-    if entries:
+
 # EV: pass the entries in as a single element instead of a list of elements.
-      return addnodes.compact_paragraph('', '', entries)
-    return None
+#    if not subtree and not separate:
+#        ret = nodes.bullet_list()
+#        ret += entries
+#        return [ret]
+#    return entries
+    return addnodes.compact_paragraph('', '', entries)
 
 class VimdocBuilder(TextBuilder):
   name = 'vimdoc'
