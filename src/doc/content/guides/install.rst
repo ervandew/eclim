@@ -84,31 +84,48 @@ Step 2: Run the installer.
     $ chmod 755 eclim_version.sh
     $ ./eclim_version.sh
 
-  If you are behind a proxy, you may need to run the installer like so (be sure
-  to take a look at the related :ref:`faq <eclim_proxy>` as well):
+  .. note::
 
-  .. code-block:: bash
+    If you are behind a proxy, you may need to run the installer like so (be sure
+    to take a look at the related :ref:`faq <eclim_proxy>` as well):
 
-    $ FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080" ./eclim_version.sh
+    .. code-block:: bash
 
-  If your proxy requires authentication, you'll need to supply the
-  ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+      $ FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080" ./eclim_version.sh
+
+    If your proxy requires authentication, you'll need to supply the
+    ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+
+    You can also try the following which may be able to use your system proxy settings:
+
+    .. code-block:: bash
+
+      $ FORMIC_OPTS="-Djava.net.useSystemProxies=true" ./eclim_version.sh
 
 - **Windows:**
   On Windows systems, simply double click the eclim_version.exe file you
   downloaded.
 
-  If you are behind a proxy, you may need to run the installer from a dos
-  prompt like so (be sure to take a look at the related
-  :ref:`faq <eclim_proxy>` as well):
+  .. note::
 
-  .. code-block:: bash
+    If you are behind a proxy, you may need to run the installer from a dos
+    prompt like so (be sure to take a look at the related
+    :ref:`faq <eclim_proxy>` as well):
 
-    C:\...> set FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080"
-    C:\...> eclim_version.exe
+    .. code-block:: bash
 
-  If your proxy requires authentication, you'll need to supply the
-  ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+      C:\...> set FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080"
+      C:\...> eclim_version.exe
+
+    If your proxy requires authentication, you'll need to supply the
+    ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+
+    You can also try the following which may be able to use your system proxy settings:
+
+    .. code-block:: bash
+
+      C:\...> set FORMIC_OPTS="-Djava.net.useSystemProxies=true"
+      C:\...> eclim_version.exe
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
