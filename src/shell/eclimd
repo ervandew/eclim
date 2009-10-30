@@ -15,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+usage(){
+  echo "Usage: eclimd [-f eclimrc] [jvmarg ...]"
+  echo "    -f   specify the location of an eclimrc file other than the"
+  echo "         default (~/.eclimrc). Must be the first option supplied."
+}
+
 ##
 # Determines eclim's home directory and sets the ECLIM_HOME var to that path.
 #
@@ -74,12 +80,14 @@ build_vmargs(){
 
   # attempt to grab properties from .eclimrc if available.
   SED=`which sed 2> /dev/null`
-  if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
+  if [ -f "$ECLIMRC" -a -n "$SED" ] ; then
     ECLIM_ARGS="$ECLIM_ARGS `
-      sed -n -f \"$ECLIM_HOME/bin/eclimd.sed\" \"$HOME/.eclimrc\"
+      sed -n -f \"$ECLIM_HOME/bin/eclimd.sed\" \"$ECLIMRC\"
     `"
   fi
-  ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+  if [ -n "$ECLIM_ARGS" ] ; then
+    ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+  fi
 }
 
 ##
@@ -98,6 +106,28 @@ handle_gentoo(){
     fi
   fi
 }
+
+ECLIMRC=$HOME/.eclimrc
+
+if [ "$1" = "-f" ] ; then
+  while getopts ":f:" opt ; do
+    case "$opt" in
+      f)
+        ECLIMRC="$OPTARG"
+        shift
+        shift
+        break
+        ;;
+      \?)
+        continue
+        ;;
+      :)
+        echo "missing argument for: -$OPTARG"
+        exit 1
+        ;;
+    esac
+  done
+fi
 
 resolve_eclim_home
 build_vmargs
