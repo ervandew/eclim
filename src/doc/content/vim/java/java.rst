@@ -62,3 +62,12 @@ Eclim Settings
   space separated list of project relative source directories which you want
   javac to be executed against.  When unset, all your configured source
   directories will be used.
+
+
+.. _\:JavaListInstalls:
+
+Viewing list of known JDKs/JREs installed
+-----------------------------------------
+
+To view a list of all the JDKs/JREs that eclipse is aware of, eclim provides
+the command **:JavaListInstalls**.

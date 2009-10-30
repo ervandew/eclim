@@ -16,6 +16,18 @@
 History of Changes
 ==================
 
+.. _1.5.3:
+
+1.5.3 (2009)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Java:
+  - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the
+    installed JDKs/JREs that eclipse is aware of.
+
 .. _1.5.2:
 
 1.5.2 (Aug. 30, 2009)

@@ -159,6 +159,9 @@ endif
 if exists(":Java") != 2
   command -buffer -nargs=* Java :call eclim#java#util#Java(<q-args>)
 endif
+if exists(":JavaListInstalls") != 2
+  command -buffer -nargs=* JavaListInstalls :call eclim#java#util#ListInstalls()
+endif
 
 if !exists(":JavaRegex")
   command -buffer JavaRegex :call eclim#regex#OpenTestWindow('java')
