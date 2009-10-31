@@ -21,10 +21,13 @@ import java.util.Arrays;
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 import org.eclim.command.OutputFilter;
 
 import org.eclim.plugin.core.preference.Option;
 import org.eclim.plugin.core.preference.OptionInstance;
+
+import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * Output filter for global settings.
@@ -44,7 +47,7 @@ public class SettingsFilter
   public String filter(CommandLine commandLine, Option[] results)
   {
     if(results.length > 0){
-      return printOptions(results);
+      return printOptions(commandLine, results);
     }
     return StringUtils.EMPTY;
   }
@@ -55,9 +58,24 @@ public class SettingsFilter
    * @param options The option array.
    * @return The result.
    */
-  public String printOptions(Option[] options)
+  public String printOptions(CommandLine commandLine, Option[] options)
   {
     StringBuffer buffer = new StringBuffer();
+
+    try{
+      String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+      if (projectName != null){
+        buffer.append("# Settings for project: ")
+          .append(projectName).append("\n\n");
+      }else{
+        String workspace = ResourcesPlugin.getWorkspace().getRoot()
+          .getRawLocation().toOSString();
+        buffer.append("# Global settings for workspace: ")
+          .append(workspace).append("\n\n");
+      }
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
 
     // sort the list
     Arrays.sort(options);

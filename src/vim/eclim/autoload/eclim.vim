@@ -195,8 +195,8 @@ function! eclim#ParseSettingErrors(errors)
   return errors
 endfunction " }}}
 
-" SaveSettings() {{{
-function! eclim#SaveSettings(command, project)
+" SaveSettings(command, project, [port]) {{{
+function! eclim#SaveSettings(command, project, ...)
   " don't check modified since undo seems to not set the modified flag
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
@@ -205,7 +205,14 @@ function! eclim#SaveSettings(command, project)
     let command = a:command
     let command = substitute(command, '<project>', a:project, '')
     let command = substitute(command, '<settings>', tempfile, '')
-    let result = eclim#ExecuteEclim(command)
+
+    if len(a:000) > 0
+      let port = a:000[0]
+      let result = eclim#ExecuteEclim(command, port)
+    else
+      let result = eclim#ExecuteEclim(command)
+    endif
+
     if result =~ ':'
       call eclim#util#EchoError
         \ ("Operation contained errors.  See location list for details.")
@@ -220,10 +227,21 @@ function! eclim#SaveSettings(command, project)
   "endif
 endfunction " }}}
 
-" Settings() {{{
+" Settings(workspace) {{{
 " Opens a window that can be used to edit the global settings.
-function! eclim#Settings()
-  if eclim#util#TempWindowCommand(s:command_settings, "Eclim_Global_Settings")
+function! eclim#Settings(workspace)
+  let workspace = a:workspace
+  if workspace == ''
+    let workspace = eclim#eclipse#ChooseWorkspace()
+    if workspace == '0'
+      return
+    endif
+  endif
+
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+
+  if eclim#util#TempWindowCommand(
+   \ s:command_settings, "Eclim_Global_Settings", port)
     setlocal buftype=acwrite
     setlocal filetype=jproperties
     setlocal noreadonly
@@ -233,8 +251,8 @@ function! eclim#Settings()
 
     augroup eclim_settings
       autocmd! BufWriteCmd <buffer>
-      autocmd BufWriteCmd <buffer>
-        \ call eclim#SaveSettings(s:command_settings_update, '')
+      exec 'autocmd BufWriteCmd <buffer> ' .
+        \ 'call eclim#SaveSettings(s:command_settings_update, "", ' . port . ')'
     augroup END
   endif
 endfunction " }}}

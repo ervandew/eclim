@@ -151,7 +151,9 @@ function! eclim#client#nailgun#GetNgPort(...)
 
     " a specific workspace was supplied
     if len(a:000) > 0
-      return get(workspaces, a:000[0], default)
+      let workspace = a:000[0]
+      let workspace .= workspace !~ '/$' ? '/' : ''
+      return get(workspaces, workspace, default)
     endif
 
     let path = expand('%:p')
@@ -167,7 +169,7 @@ function! eclim#client#nailgun#GetNgPort(...)
     for workspace in keys(workspaces)
       let project = eclim#project#util#GetProject(path)
       if len(project) > 0
-        return workspaces[project.workspace]
+        return get(workspaces, project.workspace, default)
       endif
     endfor
   endif

@@ -49,7 +49,7 @@ function! eclim#util#Balloon(message)
   return message
 endfunction " }}}
 
-" DelayedCommand(command [, delay]) {{{
+" DelayedCommand(command, [delay]) {{{
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
 " command to execute after other autocommands have finished.
@@ -175,7 +175,7 @@ function! eclim#util#FindFileInPath(file, exclude_relative)
   return split(eclim#util#Globpath(path, "**/" . a:file), '\n')
 endfunction " }}}
 
-" Findfile(name, [, path [, count]]) {{{
+" Findfile(name, [path, count]) {{{
 " Used to issue a findfile() handling any vim options that may otherwise
 " disrupt it.
 function! eclim#util#Findfile(name, ...)
@@ -951,7 +951,7 @@ function! eclim#util#Simplify(file)
   return file
 endfunction " }}}
 
-" System(cmd [, exec]) {{{
+" System(cmd, [exec]) {{{
 " Executes system() accounting for possibly disruptive vim options.
 function! eclim#util#System(cmd, ...)
   let saveshell = &shell
@@ -1030,7 +1030,7 @@ function! eclim#util#System(cmd, ...)
   return result
 endfunction " }}}
 
-" TempWindow(name, lines [, readonly]) {{{
+" TempWindow(name, lines, [readonly]) {{{
 " Opens a temp window w/ the given name and contents which is readonly unless
 " specified otherwise.
 function! eclim#util#TempWindow(name, lines, ...)
@@ -1099,10 +1099,10 @@ function! eclim#util#TempWindowClear(name)
   endif
 endfunction " }}}
 
-" TempWindowCommand(command, name) {{{
+" TempWindowCommand(command, name, [port]) {{{
 " Opens a temp window w/ the given name and contents from the result of the
 " supplied command.
-function! eclim#util#TempWindowCommand(command, name)
+function! eclim#util#TempWindowCommand(command, name, ...)
   let name = eclim#util#EscapeBufferName(a:name)
 
   let line = 1
@@ -1114,7 +1114,14 @@ function! eclim#util#TempWindowCommand(command, name)
     let col = col('.')
   endif
 
-  let results = split(eclim#ExecuteEclim(a:command), '\n')
+  if len(a:000) > 0
+    let port = a:000[0]
+    let result = eclim#ExecuteEclim(a:command, port)
+  else
+    let result = eclim#ExecuteEclim(a:command)
+  endif
+
+  let results = split(result, '\n')
   if len(results) == 1 && results[0] == '0'
     return 0
   endif

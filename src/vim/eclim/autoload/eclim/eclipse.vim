@@ -104,7 +104,58 @@ function! eclim#eclipse#GetAllWorkspaceDirs()
   " only return workspaces that exist.
   let results = filter(results, 'isdirectory(v:val)')
 
+  call sort(results)
+
   return results
+endfunction " }}}
+
+" ChooseWorkspace([dir]) {{{
+" Function which prompts the user to pick the target workspace and returns
+" their choice or if only one workspace is active simply return it without
+" prompting the user.  If the optional 'dir' argument is supplied and that dir
+" is a subdirectory of one of the workspaces, then that workspace will be
+" returned.
+function! eclim#eclipse#ChooseWorkspace(...)
+  let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
+  if len(workspaces) == 1
+    return workspaces[0]
+  endif
+
+  if len(workspaces) > 1
+    if a:0 > 0
+      for workspace in workspaces
+        if a:1 =~ '^' . substitute(workspace, '\(/\|\\\)$', '', '') . '\>'
+          return workspace
+        endif
+      endfor
+    endif
+
+    let response = eclim#util#PromptList(
+      \ 'Muliple workspaces found, please choose the target workspace',
+      \ workspaces, g:EclimInfoHighlight)
+
+    " user cancelled, error, etc.
+    if response < 0
+      return
+    endif
+
+    return workspaces[response]
+  endif
+endfunction " }}}
+
+" CommandCompleteWorkspaces(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for available workspaces.
+function! eclim#eclipse#CommandCompleteWorkspaces(argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+
+  let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
+  if cmdLine !~ '[^\\]\s$'
+    call filter(workspaces, 'v:val =~ "^' . argLead . '"')
+  endif
+
+  return workspaces
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -125,7 +125,13 @@ function! eclim#project#util#ProjectCreate(args)
     endtry
   endfor
 
-  let result = eclim#ExecuteEclim(command)
+  let workspace = eclim#eclipse#ChooseWorkspace(folder)
+  if workspace == '0'
+    return
+  endif
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
@@ -149,7 +155,13 @@ function! eclim#project#util#ProjectImport(arg)
   let folder = substitute(folder, '\', '/', 'g')
   let command = substitute(s:command_import, '<folder>', folder, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let workspace = eclim#eclipse#ChooseWorkspace(folder)
+  if workspace == '0'
+    return
+  endif
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
@@ -160,7 +172,8 @@ endfunction " }}}
 " Deletes a project with the supplied name.
 function! eclim#project#util#ProjectDelete(name)
   let command = substitute(s:command_delete, '<project>', a:name, '')
-  let result = eclim#ExecuteEclim(command)
+  let port = eclim#project#util#GetProjectPort(a:name)
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
@@ -256,7 +269,8 @@ function! s:ProjectMove(oldname, newname, command)
     " write all changes before moving
     wall
 
-    let result = eclim#ExecuteEclim(a:command)
+    let port = eclim#project#util#GetProjectPort(a:oldname)
+    let result = eclim#ExecuteEclim(a:command, port)
     if result == "0"
       return
     endif
@@ -315,15 +329,18 @@ function! eclim#project#util#ProjectRefreshAll()
   call eclim#project#util#ClearProjectsCache()
   let projects = eclim#project#util#GetProjectNames()
   for project in projects
-    call eclim#project#util#ProjectRefresh(project)
+    call eclim#project#util#ProjectRefresh(project, 0)
   endfor
   call eclim#util#Echo('Done.')
 endfunction " }}}
 
-" ProjectRefresh(args) {{{
+" ProjectRefresh(args, [clear_cache]) {{{
 " Refresh the requested projects.
-function! eclim#project#util#ProjectRefresh(args)
-  call eclim#project#util#ClearProjectsCache()
+function! eclim#project#util#ProjectRefresh(args, ...)
+  if a:0 == 0 || a:000[0] == 1
+    call eclim#project#util#ClearProjectsCache()
+  endif
+
   if a:args != ''
     let projects = eclim#util#ParseCmdLine(a:args)
   else
@@ -333,10 +350,12 @@ function! eclim#project#util#ProjectRefresh(args)
     let project = eclim#project#util#GetCurrentProjectName()
     let projects = [project]
   endif
+
   for project in projects
     call eclim#util#Echo("Updating project '" . project . "'...")
     let command = substitute(s:command_refresh, '<project>', project, '')
-    call eclim#util#Echo(eclim#ExecuteEclim(command))
+    let port = eclim#project#util#GetProjectPort(project)
+    call eclim#util#Echo(eclim#ExecuteEclim(command, port))
   endfor
 
   if len(projects) > 1
@@ -357,7 +376,8 @@ function! eclim#project#util#ProjectInfo(project)
   endif
 
   let command = substitute(s:command_project_info, '<project>', project, '')
-  let result = eclim#ExecuteEclim(command)
+  let port = eclim#project#util#GetProjectPort(project)
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
   endif
@@ -375,7 +395,8 @@ function! eclim#project#util#ProjectOpen(name)
   endif
 
   let command = substitute(s:command_open, '<project>', name, '')
-  let result = eclim#ExecuteEclim(command)
+  let port = eclim#project#util#GetProjectPort(name)
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
   endif
@@ -393,16 +414,26 @@ function! eclim#project#util#ProjectClose(name)
   endif
 
   let command = substitute(s:command_close, '<project>', name, '')
-  let result = eclim#ExecuteEclim(command)
+  let port = eclim#project#util#GetProjectPort(name)
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
   endif
 endfunction " }}}
 
-" ProjectList() {{{
-" Lists all the projects currently available in eclim.
-function! eclim#project#util#ProjectList()
-  let projects = split(eclim#ExecuteEclim(s:command_project_list), '\n')
+" ProjectList(workspace) {{{
+" Lists all the projects that exist in the supplied workspace.
+function! eclim#project#util#ProjectList(workspace)
+  let workspace = a:workspace
+  if workspace == ''
+    let workspace = eclim#eclipse#ChooseWorkspace()
+    if workspace == '0'
+      return
+    endif
+  endif
+
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+  let projects = split(eclim#ExecuteEclim(s:command_project_list, port), '\n')
   if len(projects) == 0
     call eclim#util#Echo("No projects.")
   endif
@@ -418,8 +449,20 @@ function! eclim#project#util#ProjectNatures(project)
   let command = s:command_natures
   if a:project != ''
     let command .= ' -p "' . a:project . '"'
+    let port = eclim#project#util#GetProjectPort(a:project)
+    let projects = split(eclim#ExecuteEclim(command, port), '\n')
+  else
+    let projects = []
+    for workspace in eclim#eclipse#GetAllWorkspaceDirs()
+      let port = eclim#client#nailgun#GetNgPort(workspace)
+      let results = split(eclim#ExecuteEclim(command, port), '\n')
+      if len(results) == 1 && results[0] == '0'
+        continue
+      endif
+      let projects += results
+    endfor
   endif
-  let projects = split(eclim#ExecuteEclim(command), '\n')
+
   if len(projects) == 0
     call eclim#util#Echo("No projects.")
   endif
@@ -430,7 +473,7 @@ function! eclim#project#util#ProjectNatures(project)
   call eclim#util#Echo(join(projects, "\n"))
 endfunction " }}}
 
-" ProjectNatureModify(project) {{{
+" ProjectNatureModify(command, args) {{{
 " Modifies one or more natures for the specified project.
 function! eclim#project#util#ProjectNatureModify(command, args)
   let args = eclim#util#ParseCmdLine(a:args)
@@ -441,8 +484,8 @@ function! eclim#project#util#ProjectNatureModify(command, args)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<natures>', natures, '')
 
-  call eclim#util#Echo(command)
-  let result = eclim#ExecuteEclim(command)
+  let port = eclim#project#util#GetProjectPort(project)
+  let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
   endif
@@ -461,7 +504,8 @@ function! eclim#project#util#ProjectSettings(project)
   endif
 
   let command = substitute(s:command_project_settings, '<project>', project, '')
-  if eclim#util#TempWindowCommand(command, project . "_settings")
+  let port = eclim#project#util#GetProjectPort(project)
+  if eclim#util#TempWindowCommand(command, project . "_settings", port)
     exec "lcd " . escape(eclim#project#util#GetProjectRoot(project), ' ')
     setlocal buftype=acwrite
     setlocal filetype=jproperties
@@ -629,15 +673,14 @@ endfunction " }}}
 function! eclim#project#util#GetProjects()
   let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
   if len(s:workspace_projects) != len(workspaces)
-    let projects = []
     for workspace in workspaces
       let result = eclim#ExecuteEclim(
         \ s:command_projects, eclim#client#nailgun#GetNgPort(workspace))
       if result == '0'
         continue
       endif
-
       let results = split(result, "\n")
+      let projects = []
       for line in results
         let name = substitute(line, '\(.\{-}\):.*', '\1', '')
         let paths = split(substitute(line, '.\{-}:\(.*\)', '\1', ''), ',')
@@ -702,11 +745,16 @@ endfunction " }}}
 function! eclim#project#util#GetProjectNames(...)
   " filter by nature
   if a:0 > 0 && a:1 != ''
+    let projects = []
     let command = s:command_project_list . ' -n ' . a:1
-    let projects = split(eclim#ExecuteEclim(command), '\n')
-    if len(projects) == 1 && projects[0] == '0'
-      return []
-    endif
+    for workspace in eclim#eclipse#GetAllWorkspaceDirs()
+      let port = eclim#client#nailgun#GetNgPort(workspace)
+      let results = split(eclim#ExecuteEclim(command, port), '\n')
+      if len(results) == 1 && results[0] == '0'
+        continue
+      endif
+      let projects += results
+    endfor
 
     call map(projects, "substitute(v:val, '\\(.\\{-}\\)\\s\\+-\\s\\+.*', '\\1', '')")
 
@@ -737,6 +785,14 @@ function! eclim#project#util#GetProjectNatureAliases(...)
   endif
 
   return aliases
+endfunction " }}}
+
+" GetProjectPort(name) {{{
+" Gets the nailgun port where the eclimd instance is running for the workspace
+" that the project belongs to.
+function! eclim#project#util#GetProjectPort(name)
+  let workspace = eclim#project#util#GetProjectWorkspace(a:name)
+  return eclim#client#nailgun#GetNgPort(workspace)
 endfunction " }}}
 
 " GetProjectRoot(name) {{{
@@ -775,6 +831,19 @@ function! eclim#project#util#GetProjectSetting(setting)
     call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
   endif
   return result
+endfunction " }}}
+
+" GetProjectWorkspace(name) {{{
+" Gets the workspace that a project belongs to.
+function! eclim#project#util#GetProjectWorkspace(name)
+  let project = {}
+  for p in eclim#project#util#GetProjects()
+    if p.name == a:name
+      let project = p
+      break
+    endif
+  endfor
+  return get(project, 'workspace', '')
 endfunction " }}}
 
 " IsCurrentFileInProject(...) {{{

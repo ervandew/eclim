@@ -134,7 +134,8 @@ if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()
 endif
 if !exists(":EclimSettings")
-  command -nargs=0 EclimSettings :call eclim#Settings()
+  command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
+    \ EclimSettings :call eclim#Settings('<args>')
 endif
 if !exists(":PatchEclim")
   command -nargs=+ -complete=customlist,eclim#CommandCompleteScriptRevision
