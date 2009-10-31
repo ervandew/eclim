@@ -357,11 +357,13 @@ public abstract class AbstractEclimApplication
     try{
       String workspace = ResourcesPlugin
         .getWorkspace().getRoot().getRawLocation().toOSString();
+      String port = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
       in = new FileInputStream(instances);
       List<String> entries = IOUtils.readLines(in);
       for (Iterator<String> iterator = entries.iterator(); iterator.hasNext();){
         String entry = iterator.next();
-        if(entry.startsWith(workspace + ':')){
+        if(entry.trim().equals(workspace + ':' + port)){
           iterator.remove();
         }
       }
