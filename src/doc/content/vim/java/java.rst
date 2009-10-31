@@ -44,8 +44,12 @@ Eclim Settings
 Executing javac
 -----------------
 
-To run the javac command on your source code, you may use the **:Javac**
-command, which executes javac against all your source code.
+To compile your project's source code, you may use the **:Javac** command,
+which will run javac on all source files found in your project's src
+directories as configured by your .classpath file.  You may use the
+:ref:`org.eclim.java.compile.sourcepath` setting described below, if you wish
+to alter which directories are used.  The resulting class files will be written
+to the output path as defined in your project's .classpath file.
 
 .. note::
 
@@ -56,6 +60,8 @@ Configuration
 -------------
 
 Eclim Settings
+
+.. _org.eclim.java.compile.sourcepath:
 
 - **org.eclim.java.compile.sourcepath** -
   The project relative source paths to be compiled by javac.  This should be a

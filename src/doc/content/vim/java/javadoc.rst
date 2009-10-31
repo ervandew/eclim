@@ -92,9 +92,10 @@ Vim Variables
 Executing javadoc
 -----------------
 
-To run the javadoc utility on your source code, you may use the **:Javadoc**
-command, which with no arguments will execute javadoc against all your source
-code (as specified by any optional settings described below).
+To run the javadoc utility on your project's source code, you may use the
+**:Javadoc** command, which with no arguments will execute javadoc against all
+your project's source code (as specified by any optional settings described
+below).
 
 If you wish to run javadoc only against one or more files, you can supply the
 project relative paths as arguments to the **:Javadoc** command and only those
