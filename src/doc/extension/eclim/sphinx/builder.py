@@ -344,6 +344,9 @@ class VimdocTranslator(TextTranslator):
     """
     pass
 
+  def depart_line(self, node):
+    self.add_text('\n')
+
   def depart_list_item(self, node):
     """
     Straight copy, just change the leading '*' to a '-'.
@@ -358,7 +361,7 @@ class VimdocTranslator(TextTranslator):
   def visit_reference(self, node):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
-      value = unicode(em.children[0].data)
+      value = unicode(em.children[0])
       refuri = node.attributes.get('refuri')
       if refuri and refuri.startswith('#'):
         refuri = refuri[1:]
@@ -374,9 +377,10 @@ class VimdocTranslator(TextTranslator):
         self.add_text('|')
 
   def depart_reference(self, node):
+    # internal references
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
-      value = unicode(em.children[0].data)
+      value = unicode(em.children[0])
       refuri = node.attributes.get('refuri')
       if refuri and refuri.startswith('#'):
         refuri = refuri[1:]
@@ -395,6 +399,10 @@ class VimdocTranslator(TextTranslator):
         self.add_text('|')
       elif refuri:
         self.add_text(' (|%s|)' % refuri)
+
+    # external references
+    elif 'refuri' in node:
+      self.add_text(' (%s)' % node.attributes.get('refuri'))
 
   def visit_target(self, node):
     refid = node.attributes.get('refid')
