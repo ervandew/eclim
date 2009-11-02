@@ -63,7 +63,7 @@
       <fileset dir="src/doc/content" includes="updates/**/*"/>
     </copy>
 
-    <touch file="build/doc/site/google4c368e38cc6ac62e.html"/>
+    <echo file="build/doc/site/google4c368e38cc6ac62e.html">google-site-verification: google4c368e38cc6ac62e.html</echo>
     <replace dir="build/doc/site" includes="**/*.html">
       <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
       <replacefilter token="$${google.analytics}"/>
