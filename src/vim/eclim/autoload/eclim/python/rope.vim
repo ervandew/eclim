@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/rope.html
+"   see http://eclim.org/vim/python/rope.html
 "
 " License:
 "

@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/delegate.html
+"   see http://eclim.org/vim/java/delegate.html
 "
 " License:
 "

@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/common/vcs.html
+"   see http://eclim.org/vim/common/vcs.html
 "
 " License:
 "

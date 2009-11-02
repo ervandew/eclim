@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/maven/dependency.html
+"   see http://eclim.org/vim/java/maven/dependency.html
 "
 " License:
 "

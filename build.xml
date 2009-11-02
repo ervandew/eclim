@@ -390,7 +390,7 @@
   $ ant -Dplugins=ant,jdt
 
   Please see the developer guide for more details:
-  http://eclim.sourceforge.net/guides/development.html
+  http://eclim.org/guides/development.html
             </fail>
           </then>
         </if>

@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/python/regex.html
+"   see http://eclim.org/vim/python/regex.html
 "
 " License:
 "

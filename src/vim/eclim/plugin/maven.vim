@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/maven/run.html
+"   see http://eclim.org/vim/maven/run.html
 "
 " License:
 "

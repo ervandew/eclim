@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Vendor: eclim.sourceforge.net
+Bundle-Vendor: eclim.org
 Bundle-SymbolicName: org.eclim.installer; singleton:=true
 Bundle-Version: ${eclim.version}
 Bundle-Localization: plugin

@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/php/buildpath.html
+"   see http://eclim.org/vim/php/buildpath.html
 "
 " License:
 "

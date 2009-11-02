@@ -1,8 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/guides/java/maven/maven_eclipse.html
-"   see http://eclim.sourceforge.net/guides/java/maven/mvn_eclipse.html
+"   see http://eclim.org/guides/java/maven/maven_eclipse.html
+"   see http://eclim.org/guides/java/maven/mvn_eclipse.html
 "
 " License:
 "

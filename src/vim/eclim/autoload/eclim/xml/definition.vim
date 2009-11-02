@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/xml/definition.html
+"   see http://eclim.org/vim/xml/definition.html
 "
 " License:
 "

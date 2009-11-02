@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/common/maximize.html
+"   see http://eclim.org/vim/common/maximize.html
 "
 " License:
 "

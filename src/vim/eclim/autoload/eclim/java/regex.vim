@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/regex.html
+"   see http://eclim.org/vim/java/regex.html
 "
 " License:
 "

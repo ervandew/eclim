@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/log4j/index.html
+"   see http://eclim.org/vim/java/log4j/index.html
 "
 " License:
 "

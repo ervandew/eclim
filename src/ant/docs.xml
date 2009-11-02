@@ -91,7 +91,7 @@
         <propertyregex property="file" override="true" input="@{file}"
             regexp="${basedir}/build/doc/site/" replace=""/>
         <echo file="build/doc/site/sitemap.xml" append="true"><![CDATA[
-<url><loc>http://eclim.sourceforge.net/${file}</loc></url>]]></echo>
+<url><loc>http://eclim.org/${file}</loc></url>]]></echo>
       </sequential>
     </for>
     <echo file="build/doc/site/sitemap.xml" append="true"><![CDATA[

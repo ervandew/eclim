@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.sourceforge.net/vim/java/bean.html
+"   see http://eclim.org/vim/java/bean.html
 "
 " License:
 "

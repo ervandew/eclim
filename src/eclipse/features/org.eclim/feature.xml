@@ -14,8 +14,8 @@
   </license>
 
   <url>
-    <update label="%updateSiteName" url="http://eclim.sourceforge.net/updates/"/>
-    <discovery label="%updateSiteName" url="http://eclim.sourceforge.net/updates/"/>
+    <update label="%updateSiteName" url="http://eclim.org/updates/"/>
+    <discovery label="%updateSiteName" url="http://eclim.org/updates/"/>
   </url>
 
   <requires>
