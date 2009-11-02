@@ -48,7 +48,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
       return
     if not self.freshenv:
       try:
-        self.info(bold('trying to load pickled env... '), nonl=True)
+        self.info(bold('loading pickled environment... '), nonl=True)
         self.env = EclimHtmlBuildEnvironment.frompickle(self.config,
           path.join(self.doctreedir, ENV_PICKLE_FILENAME))
         self.info('done')
@@ -93,15 +93,19 @@ class EclimBuilder(StandaloneHTMLBuilder):
 # EV: don't include next/prev rellinks
 #    if related and related[2]:
 #      try:
-#        next = {'link': self.get_relative_uri(docname, related[2]),
-#                'title': self.render_partial(titles[related[2]])['title']}
+#        next = {
+#            'link': self.get_relative_uri(docname, related[2]),
+#            'title': self.render_partial(titles[related[2]])['title']
+#        }
 #        rellinks.append((related[2], next['title'], 'N', _('next')))
 #      except KeyError:
 #        next = None
 #    if related and related[1]:
 #      try:
-#        prev = {'link': self.get_relative_uri(docname, related[1]),
-#                'title': self.render_partial(titles[related[1]])['title']}
+#        prev = {
+#            'link': self.get_relative_uri(docname, related[1]),
+#            'title': self.render_partial(titles[related[1]])['title']
+#        }
 #        rellinks.append((related[1], prev['title'], 'P', _('previous')))
 #      except KeyError:
 #        # the relation is (somehow) not in the TOC tree, handle that gracefully
@@ -218,7 +222,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
         self.warn(docname, 'toctree contains reference to '
                   'nonexisting document %r' % ref)
       else:
-# EV: copied over from 0.6.2, but outside of Environment, we don't have the
+# EV: copied over from 0.6.3, but outside of Environment, we don't have the
 # titles_only var.
 #        # if titles_only is given, only keep the main title and
 #        # sub-toctrees
