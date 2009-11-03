@@ -128,7 +128,8 @@ endif
 
 " Command Declarations {{{
 if !exists(":PingEclim")
-  command PingEclim :call eclim#PingEclim(1)
+  command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
+    \ PingEclim :call eclim#PingEclim(1, '<args>')
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()

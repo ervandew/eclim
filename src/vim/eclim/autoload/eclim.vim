@@ -154,22 +154,44 @@ function! eclim#PatchEclim(file, revision)
   endif
 endfunction " }}}
 
-" PingEclim(echo) {{{
+" PingEclim(echo, [workspace]) {{{
 " Pings the eclimd server.
 " If echo is non 0, then the result is echoed to the user.
-function! eclim#PingEclim(echo)
+function! eclim#PingEclim(echo, ...)
+  let workspace_found = 1
+  if len(a:000) > 0 && a:1 != ''
+    let workspace = substitute(a:1, '\', '/', 'g')
+    let workspace .= workspace !~ '/$' ? '/' : ''
+    if !eclim#util#ListContains(eclim#eclipse#GetAllWorkspaceDirs(), workspace)
+      let workspace_found = 0
+    endif
+    let port = eclim#client#nailgun#GetNgPort(workspace)
+  else
+    let workspace = eclim#eclipse#GetWorkspaceDir()
+    let port = eclim#client#nailgun#GetNgPort()
+  endif
+
   if a:echo
-    let result = eclim#ExecuteEclim(s:command_ping)
+    if !workspace_found
+      call eclim#util#Echo('eclimd instance for workspace not found: ' . workspace)
+      return
+    endif
+
+    let result = eclim#ExecuteEclim(s:command_ping, port)
     if result != '0'
       call eclim#util#Echo(result)
     endif
   else
+    if !workspace_found
+      return
+    endif
+
     let savedErr = g:EclimShowErrors
     let savedLog = g:EclimLogLevel
     let g:EclimShowErrors = 0
     let g:EclimLogLevel = 0
 
-    let result = eclim#ExecuteEclim(s:command_ping)
+    let result = eclim#ExecuteEclim(s:command_ping, port)
 
     let g:EclimShowErrors = savedErr
     let g:EclimLogLevel = savedLog
