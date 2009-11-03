@@ -32,7 +32,7 @@ endif
 " Validates some settings and environment values required by eclim.
 " NOTE: don't add command-line continuation characters anywhere in the
 " function, just in case the user has &compatible set.
-function s:Validate()
+function! s:Validate()
   " Check vim version.
   if v:version < 700
     let ver = strpart(v:version, 0, 1) . '.' . strpart(v:version, 2)
@@ -96,7 +96,7 @@ endif
 
 " EclimBaseDir() {{{
 " Gets the base directory where the eclim vim scripts are located.
-function EclimBaseDir()
+function! EclimBaseDir()
   if !exists("g:EclimBaseDir")
     let savewig = &wildignore
     set wildignore=""
@@ -119,7 +119,7 @@ endfunction " }}}
 
 " Init() {{{
 " Initializes eclim.
-function s:Init()
+function! s:Init()
   " on windows, this eclim plugin gets called first, so force taglist to be
   " called prior.
   runtime! plugin/taglist.vim

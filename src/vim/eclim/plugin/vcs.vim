@@ -73,7 +73,7 @@ if !exists(":VcsWebDiff")
     \ VcsWebDiff :call eclim#vcs#web#VcsWebDiff(<q-args>)
 endif
 
-function s:CheckWindow()
+function! s:CheckWindow()
   return !exists('b:vcs_props')
 endfunction
 
