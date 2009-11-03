@@ -20,8 +20,8 @@
 # delete blank and comment lines.
 /^\(\s*#\|$\)/d
 
-# remove all leading spaces.
-s/^\s\+//g
+# remove all leading or trailing spaces.
+s/\(^\s\+\|\s\+$\)//g
 
 # block to process portions spanning across lines.
 H
