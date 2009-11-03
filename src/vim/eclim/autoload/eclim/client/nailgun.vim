@@ -152,6 +152,7 @@ function! eclim#client#nailgun#GetNgPort(...)
     " a specific workspace was supplied
     if len(a:000) > 0
       let workspace = a:000[0]
+      let workspace = substitute(workspace, '\', '/', 'g')
       let workspace .= workspace !~ '/$' ? '/' : ''
       return get(workspaces, workspace, default)
     endif
