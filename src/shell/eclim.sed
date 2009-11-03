@@ -17,14 +17,21 @@
 # number which the eclim client will use to connect to the eclimd server.
 # Usage: sed -n -f eclim.sed ~/.eclimrc
 
-# delete any line not containing nailgun.server.*
-/^\s*nailgun.server.\(.*\)=/!d
+# remove all leading or trailing spaces.
+s/\(^\s\+\|\s\+$\)//g
 
-# remove all leading spaces.
-s/^\s\+//g
+# delete blank and comment lines.
+/^\(#\|$\)/d
+
+# delete any line not containing nailgun.server.*
+# this stopped working at some point, maybe when i switched to arch?
+#/^nailgun\.server\..*=.*/!d
 
 # block to process portions spanning across lines.
-H
+# since the !d operation stopped working, instead only copy nailgun properties
+# to the hold space (downside is that their values must be on the same line).
+#H
+/^nailgun\.server\..*=/H
 ${
   g
   # remove line continuation chars.
@@ -32,6 +39,6 @@ ${
   # remove all new line characters
   s/\n/ /g
   # convert properties to nailgun arguments.
-  s/nailgun.server.\(\w*\)\s*=\s*\(\w*\)\s*/ --nailgun-\1 \2/g
+  s/nailgun\.server\.\(\w*\)\s*=\s*\(\w*\)/ --nailgun-\1 \2/g
   p
 }
