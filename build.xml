@@ -280,6 +280,12 @@
         <exec executable="${existing}/bin/eclim">
           <arg line="-command shutdown"/>
         </exec>
+        <exec executable="${existing}/bin/eclim">
+          <arg line="
+              -f ${basedir}/src/test/resources/eclimrc.test
+              -command shutdown
+              "/>
+        </exec>
       </then>
     </if>
 

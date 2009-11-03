@@ -37,6 +37,7 @@ public class Eclim
 
   private static final String ECLIM =
     System.getProperty("eclim.home") + "/bin/eclim";
+  private static final String PORT = System.getProperty("eclimd.port");
   private static final String COMMAND = "-command";
 
   private static String workspace;
@@ -65,10 +66,12 @@ public class Eclim
    */
   public static String execute(String[] args, long timeout)
   {
-    String[] arguments = new String[args.length + 2];
-    System.arraycopy(args, 0, arguments, 2, args.length);
+    String[] arguments = new String[args.length + 4];
+    System.arraycopy(args, 0, arguments, 4, args.length);
     arguments[0] = ECLIM;
-    arguments[1] = COMMAND;
+    arguments[1] = "--nailgun-port";
+    arguments[2] = PORT;
+    arguments[3] = COMMAND;
 
     System.out.println("Command: " + StringUtils.join(arguments, ' '));
 
