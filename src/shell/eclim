@@ -15,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+usage(){
+  echo "Usage: eclim [-f eclimrc] -command <command> <command-args>"
+  echo "    -f   specify the location of an eclimrc file other than the"
+  echo "         default (~/.eclimrc). Must be the first option supplied."
+}
+
 FILEPATH="$0"
 # handle symlink to eclim script
 # readlink -f is easier, but not supported on mac or bsd
@@ -30,9 +36,30 @@ CURPATH=`dirname "$FILEPATH"`
 
 SED=`which sed 2> /dev/null`
 
+ECLIMRC=$HOME/.eclimrc
+if [ "$1" = "-f" ] ; then
+  while getopts ":f:" opt ; do
+    case "$opt" in
+      f)
+        ECLIMRC="$OPTARG"
+        shift
+        shift
+        break
+        ;;
+      \?)
+        continue
+        ;;
+      :)
+        echo "missing argument for: -$OPTARG"
+        exit 1
+        ;;
+    esac
+  done
+fi
+
 # attempt to grab port number from .eclimrc file if available.
-if [ -f "$HOME/.eclimrc" -a -n "$SED" ] ; then
-  ARGS=`sed -n -f "$CURPATH/eclim.sed" $HOME/.eclimrc`
+if [ -f "$ECLIMRC" -a -n "$SED" ] ; then
+  ARGS=`sed -n -f "$CURPATH/eclim.sed" "$ECLIMRC"`
   if [ "$ARGS" != "" ] ; then
     NAILGUN_ARGS=$ARGS
   fi
