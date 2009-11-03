@@ -21,7 +21,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclim.annotation.Command;
@@ -36,6 +35,9 @@ import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclipse.core.internal.resources.LinkDescription;
 import org.eclipse.core.internal.resources.ProjectDescription;
 
+import org.eclipse.core.internal.utils.FileUtil;
+
+import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -68,10 +70,13 @@ public class ProjectLinks
     StringBuffer result = new StringBuffer();
     if (descPath.toFile().exists()){
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
+      IPathVariableManager manager = workspace.getPathVariableManager();
       ProjectDescription desc = (ProjectDescription)
         workspace.loadProjectDescription(descPath);
 
-      Map<IPath,LinkDescription> links = desc.getLinks();
+      @SuppressWarnings("unchecked")
+      HashMap<IPath, LinkDescription> links =
+        (HashMap<IPath, LinkDescription>)desc.getLinks();
 
       if (links != null){
         ArrayList<String> sorted = new ArrayList<String>(links.size());
@@ -89,9 +94,10 @@ public class ProjectLinks
             result.append('\n');
           }
           LinkDescription link = paths.get(path);
+          IPath linkPath = FileUtil.toPath(link.getLocationURI());
           result.append(path)
             .append(" -> ")
-            .append(link.getLocationURI().getPath());
+            .append(manager.resolvePath(linkPath));
         }
       }
     }
