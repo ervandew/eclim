@@ -18,7 +18,7 @@
 		<link>
 			<name>src-linked</name>
 			<type>2</type>
-			<locationURI>WORKSPACE/eclim_unit_test_java_linked/src</locationURI>
+			<locationURI>WORKSPACE_TEST/eclim_unit_test_java_linked/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

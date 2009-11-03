@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 public class TestLinked
 {
-  public static final void main(String[] args)
+  public void test ()
   {
     ArrayList list = new ArrayList();
     list.;
+  }
+
+  public void testAnother ()
+  {
+    ArrayList list = new ArrayList();
+    list.a();
   }
 }

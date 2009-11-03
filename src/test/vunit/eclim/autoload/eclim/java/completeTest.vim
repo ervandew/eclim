@@ -119,8 +119,8 @@ function! TestCodeCompleteLinkedResource()
   call cursor(10, 10)
   let results = eclim#java#complete#CodeComplete(0, '')
   call PeekRedir()
-  call VUAssertTrue(len(results) > 10, 'Not enough results.')
-  call VUAssertTrue(len(results) < 50, 'Too many results.')
+  call VUAssertTrue(len(results) > 10, 'Not enough results (full complete).')
+  call VUAssertTrue(len(results) < 50, 'Too many results (full complete).')
   call VUAssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')
   call VUAssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
@@ -131,8 +131,8 @@ function! TestCodeCompleteLinkedResource()
   call cursor(16, 10)
   let results = eclim#java#complete#CodeComplete(0, 'a')
   call PeekRedir()
-  call VUAssertTrue(len(results) > 2, 'Not enough results.')
-  call VUAssertTrue(len(results) < 10, 'Too many results.')
+  call VUAssertTrue(len(results) > 2, 'Not enough results (complete "a").')
+  call VUAssertTrue(len(results) < 10, 'Too many results (complete "a").')
   call VUAssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')
   call VUAssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
