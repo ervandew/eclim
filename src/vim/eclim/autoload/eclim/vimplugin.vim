@@ -52,6 +52,15 @@ function eclim#vimplugin#BufferUnmodified()
   endif
 endfunction " }}}
 
+" BufferClosed() {{{
+" Invoked when a buffer is removed from a window to signal that eclipse should
+" close the associated editor tab.
+function eclim#vimplugin#BufferClosed()
+  if has('netbeans_enabled')
+    exec 'nbkey fileClosed ' . expand('<afile>:p')
+  endif
+endfunction " }}}
+
 " FeedKeys(keys) {{{
 " Feeds eclipse compatible key string to eclipse if current gvim instance is
 " attached via the netbeans protocol.

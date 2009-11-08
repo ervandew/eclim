@@ -22,6 +22,8 @@ import java.net.URI;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.util.CommandExecutor;
+
 import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -122,6 +124,7 @@ public class VimEditor
   private Shell shell;
 
   private boolean embedded;
+  private boolean tabbed;
 
   /**
    * The constructor.
@@ -130,7 +133,6 @@ public class VimEditor
     super();
     bufferID = -1; // not really necessary but set it to an invalid buffer
     setDocumentProvider(documentProvider = new VimDocumentProvider());
-    serverID = VimPlugin.getDefault().createVimServer();
   }
 
   /*
@@ -170,6 +172,8 @@ public class VimEditor
       }
     }
 
+    tabbed = plugin.getPreferenceStore()
+      .getBoolean(PreferenceConstants.P_TABBED);
     embedded = plugin.getPreferenceStore()
       .getBoolean(PreferenceConstants.P_EMBED);
     if (embedded){
@@ -220,17 +224,7 @@ public class VimEditor
       // nice background (only needed for external)
       editorGUI = new Canvas(parent, SWT.EMBEDDED);
       //create a vim instance
-      createVim(projectPath, parent);
-
-      //get bufferId
-      bufferID = VimPlugin.getDefault().getNumberOfBuffers();
-      bufferID++;
-      VimPlugin.getDefault().setNumberOfBuffers(bufferID);
-
-      //let vim edit the file.
-      VimConnection vc = VimPlugin.getDefault().getVimserver(serverID).getVc();
-      vc.command(bufferID, "editFile", "\"" + filePath + "\"");
-      vc.command(bufferID, "startDocumentListen", "");
+      VimConnection vc = createVim(projectPath, filePath, parent);
 
       viewer = new VimViewer(
           bufferID, vc, editorGUI != null ? editorGUI : parent, SWT.EMBEDDED);
@@ -273,18 +267,26 @@ public class VimEditor
    * Create a vim instance figuring out if it should be external or embedded.
    *
    * @param workingDir
+   * @param filePath
    * @param parent
    */
-  private void createVim(String workingDir, Composite parent) {
+  private VimConnection createVim(
+      String workingDir, String filePath, Composite parent)
+  {
     VimPlugin plugin = VimPlugin.getDefault();
 
+    //get bufferId
+    bufferID = plugin.getNumberOfBuffers();
+    plugin.setNumberOfBuffers(bufferID + 1);
+
     IStatus status = null;
+    VimConnection vc = null;
     if (embedded) {
       try {
-        createEmbeddedVim(workingDir, editorGUI);
+        vc = createEmbeddedVim(workingDir, filePath, editorGUI);
       } catch (Exception e) {
         embedded = false;
-        createExternalVim(workingDir, parent);
+        vc = createExternalVim(workingDir, filePath, parent);
 
         String message = plugin.getMessage(
             e instanceof NoSuchFieldException ?
@@ -292,7 +294,7 @@ public class VimEditor
         status = new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID, 0, message, e);
       }
     } else {
-      createExternalVim(workingDir, parent);
+      vc = createExternalVim(workingDir, filePath, parent);
       String message = plugin.getMessage("gvim.external.success");
       status = new Status(IStatus.OK, PlatformUI.PLUGIN_ID, message);
     }
@@ -315,17 +317,30 @@ public class VimEditor
       }
     }
 
-    VimPlugin.getDefault().getVimserver(serverID).getEditors().add(this);
+    plugin.getVimserver(serverID).getEditors().add(this);
+
+    return vc;
   }
 
   /**
    * Create an external Vim instance.
    *
    * @param workingDir
+   * @param filePath
    * @param parent
    */
-  private void createExternalVim(String workingDir, Composite parent) {
-    VimPlugin.getDefault().getVimserver(serverID).start(workingDir);
+  private VimConnection createExternalVim(
+      String workingDir, String filePath, Composite parent)
+  {
+    VimPlugin plugin = VimPlugin.getDefault();
+    boolean first = plugin.getVimserver(VimPlugin.DEFAULT_VIMSERVER_ID) == null;
+    serverID = tabbed ? plugin.getDefaultVimServer() : plugin.createVimServer();
+    plugin.getVimserver(serverID).start(workingDir, filePath, tabbed, first);
+
+    VimConnection vc = plugin.getVimserver(serverID).getVc();
+    vc.command(bufferID, "editFile", "\"" + filePath + "\"");
+    vc.command(bufferID, "startDocumentListen", "");
+    return vc;
   }
 
   /**
@@ -335,10 +350,12 @@ public class VimEditor
    * all platforms.
    *
    * @param workingDir
+   * @param filePath
    * @param parent
    * @throws Exception
    */
-  private void createEmbeddedVim(String workingDir, Composite parent)
+  private VimConnection createEmbeddedVim(
+      String workingDir, String filePath, Composite parent)
     throws Exception
   {
     long wid = 0;
@@ -356,9 +373,16 @@ public class VimEditor
 
     int h = parent.getClientArea().height;
     int w = parent.getClientArea().width;
-    VimPlugin.getDefault().getVimserver(serverID).start(workingDir, wid);
-    VimPlugin.getDefault().getVimserver(serverID).getVc()
-      .command(bufferID, "setLocAndSize", h + " " + w);
+
+    VimPlugin plugin = VimPlugin.getDefault();
+    serverID = plugin.createVimServer();
+    plugin.getVimserver(serverID).start(workingDir, wid);
+
+    VimConnection vc = plugin.getVimserver(serverID).getVc();
+    vc.command(bufferID, "setLocAndSize", h + " " + w);
+    vc.command(bufferID, "editFile", "\"" + filePath + "\"");
+    vc.command(bufferID, "startDocumentListen", "");
+    return vc;
   }
 
   /**
@@ -367,16 +391,16 @@ public class VimEditor
    * care of that.
    */
   public void forceDispose() {
-    final VimEditor vime = this;
+    final VimEditor editor = this;
     Display display = getSite().getShell().getDisplay();
     display.asyncExec(new Runnable() {
       public void run() {
-        if (vime != null && !vime.alreadyClosed) {
-          vime.setDirty(false);
-          vime.showBusy(true);
-          vime.close(false);
-          getSite().getPage().closeEditor(vime, false);
-          // vime.alreadyClosed = true;
+        if (editor != null && !editor.alreadyClosed) {
+          editor.setDirty(false);
+          editor.showBusy(true);
+          editor.close(false);
+          getSite().getPage().closeEditor(editor, false);
+          // editor.alreadyClosed = true;
         }
       }
     });
@@ -389,9 +413,7 @@ public class VimEditor
    */
   @Override
   public void dispose() {
-    // TODO: calling close ourselves here doesn't seem right.
-    // Note: this close raises NPE if gvim is not available. why is it
-    // needed?
+    // closing the eclipse tab directly calls dispose, but not close.
     close(true);
 
     if (viewer != null) {
@@ -434,12 +456,25 @@ public class VimEditor
       firePropertyChange(PROP_DIRTY);
     }
 
-    if (plugin.getVimserver(serverID).getEditors().size() > 0) {
+    if (server.getEditors().size() > 0) {
       server.getVc().command(bufferID, "close", "");
+      String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
+          PreferenceConstants.P_GVIM);
+      String[] args = new String[5];
+      args[0] = gvim;
+      args[1] = "--servername";
+      args[2] = String.valueOf(server.getID());
+      args[3] = "--remote-send";
+      args[4] = ":redraw!<cr>";
+      try{
+        CommandExecutor.execute(args, 1000).getResult().trim();
+      }catch(Exception e){
+        logger.error("Error redrawing vim after file close.", e);
+      }
     } else {
       try {
-        VimConnection conn = server.getVc();
-        if (conn != null){
+        VimConnection vc = server.getVc();
+        if (vc != null){
           server.getVc().function(bufferID, "saveAndExit", "");
         }
         plugin.stopVimServer(serverID);
@@ -673,8 +708,6 @@ public class VimEditor
   public void insertDocumentText(String text, int offset) {
     text = removeBackSlashes(text);
 
-    //System.out.println(text + " INSERT " + offset);
-
     try {
       String contents = document.get();
       // FIXME: determine file encoding.
@@ -683,7 +716,6 @@ public class VimEditor
       String first = contents.substring(0, offset);
       String last = contents.substring(offset);
       if (text.equals(new String("\\n"))) {
-        //System.out.println("Insert new Line");
         first = first + System.getProperty("line.separator") + last;
       } else {
         first = first + text + last;
@@ -740,6 +772,13 @@ public class VimEditor
   public void saveState(IMemento arg0) {
     // no-op for now.  prevents error on closing of eclipse while a VimEditor
     // instance is open.
+  }
+
+  /**
+   * @return the file.
+   */
+  public IFile getSelectedFile() {
+    return selectedFile;
   }
 
   /**

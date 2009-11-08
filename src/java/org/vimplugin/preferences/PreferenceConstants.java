@@ -27,6 +27,9 @@ public class PreferenceConstants {
   /** embed vim into eclipse */
   public static final String P_EMBED = "embedded";
 
+  /** open files in new tabs in external gvim */
+  public static final String P_TABBED = "tabbed";
+
   /** open eclimd view automatically */
   public static final String P_START_ECLIMD = "eclimd.start";
 }

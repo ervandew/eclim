@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
+import org.vimplugin.VimServer;
 import org.vimplugin.editors.VimEditor;
 
 /**
@@ -31,19 +32,28 @@ public class ServerDisconnect implements IVimListener {
   public void handleEvent(VimEvent ve) throws VimException {
     String event = ve.getEvent();
 
-    if (event.equals("disconnect") == true
-        || event.equals("killed") == true) {
-      for (final VimEditor veditor : VimPlugin.getDefault()
-          .getVimserver(ve.getConnection().getVimID()).getEditors()) {
+    if (event.equals("disconnect") || event.equals("killed")) {
+      VimPlugin plugin = VimPlugin.getDefault();
+      VimServer server = plugin.getVimserver(ve.getConnection().getVimID());
+
+      for (final VimEditor veditor : server.getEditors()) {
         if (veditor != null) {
-          veditor.forceDispose();
+          if (event.equals("disconnect") ||
+              veditor.getBufferID() == ve.getBufferID())
+          {
+            veditor.forceDispose();
+          }
         }
       }
 
-      try {
-        ve.getConnection().close();
-      } catch (IOException e) {
-        throw new VimException("could not close the vimconnection", e);
+      if (event.equals("disconnect") || server.getEditors().size() == 0){
+        try {
+          ve.getConnection().close();
+        } catch (IOException e) {
+          throw new VimException("could not close the vim connection", e);
+        }
+
+        plugin.stopVimServer(server.getID());
       }
     }
   }

@@ -14,6 +14,7 @@ import org.vimplugin.VimConnection;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
+import org.vimplugin.VimServer;
 import org.vimplugin.editors.VimEditor;
 
 /**
@@ -35,10 +36,13 @@ public class FileUnmodified implements IVimListener {
     if (event.equals("unmodified") ||
         (event.equals("keyCommand") && ve.getArgument(0).equals("\"unmodified\""))){
       VimPlugin plugin = VimPlugin.getDefault();
-      VimConnection conn = ve.getConnection();
-      for (VimEditor veditor : plugin.getVimserver(conn.getVimID()).getEditors()){
-        if (veditor.getBufferID() == ve.getBufferID()){
-          veditor.setDirty(false);
+      VimConnection vc = ve.getConnection();
+      VimServer server = vc != null ? plugin.getVimserver(vc.getVimID()) : null;
+      if (server != null){
+        for (VimEditor editor : server.getEditors()){
+          if (editor != null && editor.getBufferID() == ve.getBufferID()){
+            editor.setDirty(false);
+          }
         }
       }
     }

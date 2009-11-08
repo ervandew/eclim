@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.vimplugin.editors.VimEditor;
 
 import org.vimplugin.listeners.FeedKeys;
+import org.vimplugin.listeners.FileClosed;
 import org.vimplugin.listeners.FileOpened;
 import org.vimplugin.listeners.FileUnmodified;
 import org.vimplugin.listeners.IVimListener;
@@ -122,6 +123,7 @@ public class VimConnection implements Runnable
       listeners.add(new TextInsert());
       listeners.add(new TextRemoved());
       listeners.add(new FileOpened());
+      listeners.add(new FileClosed());
       listeners.add(new FileUnmodified());
       listeners.add(new FeedKeys());
 
@@ -160,9 +162,12 @@ public class VimConnection implements Runnable
       } catch (SocketException se) {
         // the connection to vim was closed, so close the editor.
         VimPlugin plugin = VimPlugin.getDefault();
-        for (VimEditor editor : plugin.getVimserver(getVimID()).getEditors()){
-          if (editor != null) {
-            editor.forceDispose();
+        VimServer server = plugin.getVimserver(getVimID());
+        if (server != null){
+          for (VimEditor editor : server.getEditors()){
+            if (editor != null) {
+              editor.forceDispose();
+            }
           }
         }
         close();

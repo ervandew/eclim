@@ -19,6 +19,8 @@ import java.util.HashSet;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.util.CommandExecutor;
+
 import org.eclipse.core.runtime.Platform;
 
 import org.vimplugin.editors.VimEditor;
@@ -70,6 +72,10 @@ public class VimServer
    */
   protected VimConnection vc = null;
 
+  public int getID() {
+    return ID;
+  }
+
   /**
    * @return The {@link VimConnection} Used to communicate with this Vim
    *         instance
@@ -97,18 +103,60 @@ public class VimServer
    * Get netbeans-port,host and pass and start vim with -nb option.
    *
    * @param workingDir
+   * @param filePath
+   * @param tabbed
+   * @param first
    */
-  public void start(String workingDir) {
+  public void start(
+      String workingDir, String filePath, boolean tabbed, boolean first)
+  {
     String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
         PreferenceConstants.P_GVIM);
     String[] addopts = getUserArgs();
-    String[] args = new String[2 + addopts.length];
-    args[0] = gvim;
-    args[1] = getNetbeansString(ID);
+    String[] args = null;
 
-    System.arraycopy(addopts, 0, args, 2, addopts.length);
+    if (!tabbed || first){
+      args = new String[4 + addopts.length];
+      args[0] = gvim;
+      args[1] = getNetbeansString(ID);
+      args[2] = "--servername";
+      args[3] = String.valueOf(ID);
+      System.arraycopy(addopts, 0, args, 4, addopts.length);
 
-    start(workingDir, args);
+      start(workingDir, (tabbed && !first), args);
+    }else{
+      args = new String[5 + addopts.length];
+      args[0] = gvim;
+      args[1] = "--servername";
+      args[2] = String.valueOf(ID);
+      args[3] = "--remote-tab";
+      args[4] = filePath;
+      System.arraycopy(addopts, 0, args, 5, addopts.length);
+
+      start(workingDir, (tabbed && !first), args);
+
+      // wait on file to finish opening
+      args = new String[5];
+      args[0] = gvim;
+      args[1] = "--servername";
+      args[2] = String.valueOf(ID);
+      args[3] = "--remote-expr";
+      args[4] = "bufname('%')";
+
+      int tries = 0;
+      while(tries < 5){
+        try{
+          String result = CommandExecutor.execute(args, 1000).getResult().trim();
+          if(filePath.equals(result)){
+            break;
+          }
+          Thread.sleep(500);
+          tries++;
+        }catch(Exception e){
+          logger.error("Error waiting on vim tab to open:", e);
+        }
+      }
+    }
   }
 
   /**
@@ -150,7 +198,7 @@ public class VimServer
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 5, addopts.length);
 
-    start(workingDir, args);
+    start(workingDir, false, args);
   }
 
   /**
@@ -159,18 +207,19 @@ public class VimServer
    *
    * @param args
    */
-  public void start(String workingDir, String... args) {
-    if (vc != null && vc.isServerRunning())
+  private void start(String workingDir, boolean tabbed, String... args) {
+    if (!tabbed && vc != null && vc.isServerRunning()){
       return;
+    }
 
-    // setup VimConnection and start server thread
-    vc = new VimConnection(ID);
-    t = new Thread(vc);
-    t.setUncaughtExceptionHandler(new VimExceptionHandler());
-    t.setDaemon(true);
-    t.start();
+    if (vc == null || !vc.isServerRunning()){
+      vc = new VimConnection(ID);
+      t = new Thread(vc);
+      t.setUncaughtExceptionHandler(new VimExceptionHandler());
+      t.setDaemon(true);
+      t.start();
+    }
 
-    // starting gvim with Netbeans interface
     try {
       logger.debug("Trying to start vim");
       logger.debug(Arrays.toString(args));

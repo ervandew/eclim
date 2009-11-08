@@ -49,6 +49,10 @@ public class VimPreferences
           plugin.getMessage("preference.embed"),
           getFieldEditorParent()));
     addField(new BooleanFieldEditor(
+          PreferenceConstants.P_TABBED,
+          plugin.getMessage("preference.tabbed"),
+          getFieldEditorParent()));
+    addField(new BooleanFieldEditor(
           PreferenceConstants.P_START_ECLIMD,
           plugin.getMessage("preference.eclimd.start"),
           getFieldEditorParent()));
