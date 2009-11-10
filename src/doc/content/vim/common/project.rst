@@ -272,12 +272,15 @@ Vim's command line completion to complete the project name.
     system.
   - **A** -
     Toggles whether or not hidden files are displayed in the tree.
-  - **H** -
+  - **~** -
     Changes the root node to the current user's home directory.
   - **C** -
     Changes the root node to the directory under cursor.
   - **B** -
     Changes the root node to the parent directory of the current root node.
+  - **K** -
+    Changes the root node to the root path which will be either the project
+    root or the filesytem root.
   - **p** -
     Moves the cursor to the parent of the node under the cursor.
   - **P** -

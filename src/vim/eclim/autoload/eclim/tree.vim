@@ -463,7 +463,8 @@ endfunction " }}}
 
 " SetRoot(path) {{{
 function eclim#tree#SetRoot(path)
-  let path = s:NormalizeDirs([fnamemodify(a:path, ':p')])[0]
+  let path = s:AliasToPath(a:path)
+  let path = s:NormalizeDirs([fnamemodify(path, ':p')])[0]
   if !isdirectory(path)
     echo 'Directory does not exist or may have been deleted.'
     return
@@ -665,7 +666,7 @@ function s:AliasToPath(alias)
   if exists('b:aliases')
     let alias = ''
     for alias in keys(b:aliases)
-      if alias != '' && a:alias =~ '^' . alias . '/$'
+      if alias != '' && a:alias =~ '^' . alias . '\>/'
         return substitute(a:alias, '^' . alias . '/', b:aliases[alias], '')
       endif
     endfor
@@ -1027,10 +1028,13 @@ function s:Mappings()
 
   nmap <buffer> <silent> A    :call eclim#tree#ToggleViewHidden()<cr>
 
-  nmap <buffer> <silent> H    :call eclim#tree#SetRoot(expand('$HOME'))<cr>
+  nmap <buffer> <silent> ~    :call eclim#tree#SetRoot(expand('$HOME'))<cr>
   nmap <buffer> <silent> C    :call eclim#tree#SetRoot(eclim#tree#GetPath())<cr>
-  nmap <buffer> <silent> B
-    \ :call eclim#tree#SetRoot(fnamemodify(eclim#tree#GetRoot(), ':h:h'))<cr>
+  nmap <buffer> <silent> K    :call eclim#tree#SetRoot(substitute(
+    \ <SID>PathToAlias(eclim#tree#GetRoot()),
+    \ '^\([^/]*/\).*', '\1', ''))<cr>
+  nmap <buffer> <silent> B    :call eclim#tree#SetRoot(
+    \ fnamemodify(eclim#tree#GetRoot(), ':h:h'))<cr>
 
   nmap <buffer> <silent> j    j:call eclim#tree#Cursor(line('.'))<cr>
   nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>

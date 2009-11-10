@@ -24,6 +24,12 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+Common:
+  - Added 'K' mapping to **:ProjectTree** to set the tree root the either the
+    project root of file system root depending on the context.  Note: the 'H'
+    mapping to set the tree root to the user's home directory has been changed
+    to '~'.
+
 Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the
     installed JDKs/JREs that eclipse is aware of.
