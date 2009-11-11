@@ -46,7 +46,7 @@ function! eclim#eclipse#GetWorkspaceDir()
         " more than one recent workspace, check if the curent file is is one
         " of those.
         let path = expand('%:p')
-        for r in results[1:]
+        for r in workspaces[1:]
           if path =~ '^' . r . '\>'
             let result = r
             break
