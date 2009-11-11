@@ -136,10 +136,15 @@ function eclim#python#django#find#FindView(project_dir, view)
 
   if getline('.') !~ "\\(include\\|patterns\\)\\s*(\\s*['\"]" . view
     " see if a view prefix was defined.
-    let result = search('patterns\s*(', 'bnW')
-    if result
+    let start = search('patterns\_s*(', 'bnW')
+    let end = search("patterns\\_s*(\\_s*['\"]", 'bnWe')
+    if start && end
+      let line = getline(start)
+      if end != start
+        let line .= getline(end)
+      endif
       let prefix = substitute(
-        \ getline(result), ".*patterns\\s*(\\s*['\"]\\(.\\{-}\\)['\"].*", '\1', '')
+        \ line, ".*patterns\\s*(\\s*['\"]\\(.\\{-}\\)['\"].*", '\1', '')
       if prefix != ''
         let view = prefix . '.' . view
       endif
