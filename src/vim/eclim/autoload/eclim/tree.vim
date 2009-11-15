@@ -661,6 +661,22 @@ function eclim#tree#MoveToParent()
   call eclim#tree#Cursor(eclim#tree#GetParentPosition())
 endfunction " }}}
 
+" Mkdir() {{{
+function eclim#tree#Mkdir()
+  let path = eclim#tree#GetPath()
+  if !isdirectory(path)
+    let path = fnamemodify(path, ':h') . '/'
+  endif
+
+  let response = input('mkdir: ', path, 'dir')
+  if response == '' || response == path
+    return
+  endif
+
+  call mkdir(response, 'p')
+  call eclim#tree#Refresh()
+endfunction " }}}
+
 " AliasToPath(alias) {{{
 function s:AliasToPath(alias)
   if exists('b:aliases')
@@ -1040,6 +1056,8 @@ function s:Mappings()
   nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>
   nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
   nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
+
+  nmap <buffer> <silent> D    :call eclim#tree#Mkdir()<cr>
 
   command! -nargs=1 -complete=dir -buffer CD :call eclim#tree#SetRoot('<args>')
   command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')

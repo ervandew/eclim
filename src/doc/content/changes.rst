@@ -25,10 +25,11 @@ Bug Fixes:
   - Various bug fixes.
 
 Common:
-  - Added 'K' mapping to **:ProjectTree** to set the tree root the either the
-    project root of file system root depending on the context.  Note: the 'H'
-    mapping to set the tree root to the user's home directory has been changed
-    to '~'.
+  - Added 'K' mapping to :ref:`:ProjectTree <:ProjectTree>` to set the tree
+    root the either the project root of file system root depending on the
+    context.  Added 'D' mapping to create a new directory and 'F' to open a new
+    or existing file by name. Note: the 'H' mapping to set the tree root to the
+    user's home directory has been changed to '~'.
 
 Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the

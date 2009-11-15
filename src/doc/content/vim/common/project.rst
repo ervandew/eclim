@@ -287,6 +287,12 @@ Vim's command line completion to complete the project name.
     Moves the cursor to the last child of the nearest open directory.
   - **:CD** <dir> -
     Changes the root to the supplied directory.
+  - **D** -
+    Prompts you for a directory name to create, prefilled with the directory
+    path in the tree where this mapping was executed.
+  - **F** -
+    Prompts you for a new or existing filename to open, prefilled with the
+    directory path in the tree where this mapping was executed.
 
 .. _\:ProjectsTree:
 

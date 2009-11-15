@@ -146,9 +146,10 @@ endfunction " }}}
 
 " s:Mappings() " {{{
 function! s:Mappings()
-  nnoremap <buffer> E :call <SID>OpenFile('edit')<cr>
-  nnoremap <buffer> S :call <SID>OpenFile('split')<cr>
-  nnoremap <buffer> T :call <SID>OpenFile('tablast \| tabnew')<cr>
+  nnoremap <buffer> <silent> E :call <SID>OpenFile('edit')<cr>
+  nnoremap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
+  nnoremap <buffer> <silent> T :call <SID>OpenFile('tablast \| tabnew')<cr>
+  nnoremap <buffer> <silent> F :call <SID>OpenFileName()<cr>
 endfunction " }}}
 
 " s:OpenFile(action) " {{{
@@ -163,6 +164,18 @@ function! s:OpenFile(action)
     call eclim#tree#ExecuteAction(path,
       \ "call eclim#project#tree#OpenProjectFile('" . a:action . "', '<cwd>', '<file>')")
   endif
+endfunction " }}}
+
+" s:OpenFileName() " {{{
+function! s:OpenFileName()
+  let path = eclim#tree#GetPath()
+  if !isdirectory(path)
+    let path = fnamemodify(path, ':h') . '/'
+  endif
+
+  let response = input('file: ', path, 'file')
+  call eclim#tree#ExecuteAction(response,
+    \ "call eclim#project#tree#OpenProjectFile('split', '<cwd>', '<file>')")
 endfunction " }}}
 
 " s:OpenTree(names, dirs) " {{{
