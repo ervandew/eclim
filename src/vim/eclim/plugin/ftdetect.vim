@@ -55,6 +55,7 @@ autocmd BufRead *.wsdl
   \ call <SID>SetXmlFileType({'definitions': 'wsdl', 'wsdl:definitions': 'wsdl'})
 autocmd BufRead *.xml call <SID>SetXmlFileType(xmltypes)
 
+autocmd BufRead *.gant set ft=gant
 autocmd BufRead *.gst set ft=groovy_simple_template
 
 autocmd BufRead hg-editor-* set ft=hg

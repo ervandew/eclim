@@ -15,489 +15,82 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<project name="build" default="deploy" basedir=".">
+<project name="eclim" default="deploy" basedir=".">
 
-  <path id="ant-contrib-classpath">
-    <fileset dir="src/ant/lib/" includes="ant-contrib-*.jar"/>
-  </path>
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties"
-      classpathref="ant-contrib-classpath"/>
-  <taskdef classname="net.sf.antcontrib.logic.For" name="for"
-      classpathref="ant-contrib-classpath"/>
-
-  <property environment="env"/>
-  <property file="src/ant/build.properties"/>
-
-  <!-- require ant 1.7.1 or greater -->
-  <if>
-    <not> <antversion atleast="1.7.1"/> </not>
-    <then>
-      <echo>
-        To build eclim, you must have ant 1.7.1 or greater.
-      </echo>
-      <fail message="incompatible ant version."/>
-    </then>
-  </if>
-
-  <!-- determine if eclipse home is set -->
-  <if>
-    <or>
-      <equals arg1="${eclipse.home}" arg2=""/>
-      <equals arg1="${eclipse.home}" arg2="$${env.ECLIM_ECLIPSE_HOME}"/>
-    </or>
-    <then>
-      <echo>
-        $${eclipse.home} not set.
-        Please set via system arg (ant -Declipse.home=...) or
-        via environment variable (export ECLIM_ECLIPSE_HOME="...").
-      </echo>
-      <fail message="missing required property (see above)"/>
-    </then>
-  </if>
-
-  <import file="src/ant/dist.xml"/>
-  <import file="src/ant/docs.xml"/>
-  <import file="src/ant/groovy.xml"/>
-  <import file="src/ant/logger.xml"/>
-  <import file="src/ant/patch.xml"/>
-  <import file="src/ant/test.xml"/>
-  <import file="src/ant/vimplugin.xml"/>
-
-  <!-- exclude vim swap files and backup files -->
-  <defaultexcludes add="**/*.swp"/>
-  <defaultexcludes add="**/*.bak"/>
-
-  <!-- classpath -->
-  <path id="classpath">
-    <fileset dir="lib" includes="**/*.jar"/>
-    <fileset dir="src/eclipse/plugins/" includes="*/lib/*.jar"/>
-    <fileset dir="${eclipse.home}" includes="startup.jar"/>
-    <fileset dir="${eclipse.home}">
-      <include name="dropins/**/plugins/org.eclipse.*.jar"/>
-      <include name="plugins/org.eclipse.*.jar"/>
-      <include name="plugins/com.ibm.*.jar"/>
-    </fileset>
-    <dirset dir="${eclipse.home}">
-      <include name="dropins/**/plugins/org.eclipse.*"/>
-      <include name="plugins/org.eclipse.*"/>
-    </dirset>
-    <!-- for gentoo -->
-    <fileset dir="/usr/share/" erroronmissingdir="false">
-      <include name="swt-*/lib/*.jar"/>
-    </fileset>
-  </path>
-
-  <!--
-    - Initialize the build.
-    -->
-  <target name="init" unless="eclim.version">
-    <!-- set eclim version based on current repos state (most recent tag w/
-      possible suffix including number of revisions since that tag + last
-      commit id, if last tag is not at the head) -->
-    <exec executable="git" outputproperty="eclim.version">
-      <arg line="describe"/>
-    </exec>
-    <!-- ensure version is a valid osgi version -->
-    <propertyregex property="eclim.version" override="true"
-        input="${eclim.version}"
-        regexp="^(\d+\.\d+\.\d+)-(\d+-\w+)$" replace="\1.\2"/>
-    <property name="eclim.home" value="${eclim.plugins}/org.eclim_${eclim.version}"/>
-
-    <echo>eclim.version: ${eclim.version}</echo>
-
-    <mkdir dir="${build.classes}"/>
-    <mkdir dir="${build.features}"/>
-    <mkdir dir="${build.plugins}"/>
-    <mkdir dir="${build.vimfiles}"/>
-
-    <!-- determine location of vim files if not explicitly set -->
-    <if>
-      <not> <isset property="vim.files"/> </not>
-      <then>
-        <if>
-          <os family="windows"/>
-          <then> <property name="vim.files" value="${user.home}/vimfiles"/> </then>
-          <else> <property name="vim.files" value="${user.home}/.vim"/> </else>
-        </if>
-      </then>
-    </if>
-  </target>
-
-  <!--
-    - Only builds the eclipse and vim plugins.
-    -->
-  <target name="build" depends="build.eclipse, build.vim"/>
-
-  <target name="build.eclipse" depends="init">
-    <property name="deprecation" value="false"/>
-    <property name="compilerargs" value=""/>
-
-    <delete includeemptydirs="true">
-      <fileset dir="${build.plugins}">
-        <include name="**/*"/>
-      </fileset>
-    </delete>
-
-    <!-- build shared source -->
-    <javac destdir="${build.classes}" debug="on" optimize="false"
-        target="${javac.target}" source="${javac.target}"
-        deprecation="${deprecation}">
-      <compilerarg line="${compilerargs}"/>
-      <src path="src/java"/>
-      <include name="**/*.java"/>
-      <exclude name="**/plugin/*/**/*.java"/>
-      <classpath refid="classpath"/>
-    </javac>
-
-    <mkdir dir="${build.plugins}/org.eclim_${eclim.version}/lib"/>
-
-    <!-- eclim jar file -->
-    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/eclim.jar">
-      <fileset dir="${build.classes}">
-        <include name="org/eclim/**/*.class"/>
-        <include name="org/eclipse/**/*.class"/>
-        <exclude name="org/eclim/misc/**/*.class"/>
-        <exclude name="org/eclim/plugin/*/**/*.class"/>
-      </fileset>
-      <fileset dir="src/java">
-        <include name="org/eclim/**/*"/>
-        <include name="org/eclipse/**/*"/>
-        <exclude name="org/eclim/misc/"/>
-        <exclude name="org/eclim/misc/*/"/>
-        <exclude name="org/eclim/misc/**/*.class"/>
-        <exclude name="org/eclim/plugin/*/"/>
-        <exclude name="org/eclim/plugin/*/**/*"/>
-        <exclude name="**/package.html"/>
-        <exclude name="**/*.java"/>
-      </fileset>
-    </jar>
-
-    <!-- eclim misc jar file -->
-    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/eclim-misc.jar">
-      <fileset dir="${build.classes}">
-        <include name="org/eclim/misc/**/*.class"/>
-      </fileset>
-      <fileset dir="src/java">
-        <include name="org/eclim/misc/*/**/*"/>
-        <exclude name="**/package.html"/>
-        <exclude name="**/*.java"/>
-      </fileset>
-    </jar>
-
-    <copy todir="${build.plugins}/org.eclim_${eclim.version}">
-      <fileset dir="." includes="src/nailgun/**/*"/>
-    </copy>
-
-    <touch mkdirs="true"
-        file="${build.plugins}/org.eclim_${eclim.version}/log/.keep"/>
-    <copy todir="${build.plugins}/org.eclim_${eclim.version}/bin">
-      <fileset dir="src/shell" includes="**/*"/>
-    </copy>
-    <if>
-      <not> <os family="windows"/> </not>
-      <then>
-        <exec executable="make" dir="src/nailgun"/>
-        <move file="src/nailgun/ng"
-            todir="${build.plugins}/org.eclim_${eclim.version}/bin"/>
-      </then>
-    </if>
-
-    <antcall target="plugin">
-      <param name="plugin.name" value=""/>
-    </antcall>
-
-    <!-- build non-core plugins -->
-    <foreach list="core,${plugins}" target="plugin" delimiter=","
-        inheritAll="true" param="plugin.name" trim="true"/>
-
-    <!-- patch nailgun jar file -->
-    <jar jarfile="${build.plugins}/org.eclim_${eclim.version}/lib/nailgun-0.7.1.jar"
-        update="true">
-      <fileset dir="${build.classes}">
-        <include name="com/martiansoftware/nailgun/**/*.class"/>
-      </fileset>
-    </jar>
-
-    <!-- patch tagsoup jar file -->
-    <property name="tagsoup.jar"
-        value="${build.plugins}/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar"/>
-    <if>
-      <available file="${tagsoup.jar}"/>
-      <then>
-        <jar jarfile="${tagsoup.jar}" update="true">
-          <fileset dir="${build.classes}">
-            <include name="org/ccil/cowan/tagsoup/**/*.class"/>
-          </fileset>
-        </jar>
-      </then>
-    </if>
-
-    <!-- build vimplugin -->
-    <antcall target="vimplugin"/>
-  </target>
-
-  <target name="build.vim" depends="init">
-    <!-- prepare vim files -->
-    <delete dir="${build.vimfiles}/eclim"/>
-    <delete dir="${build.vimfiles}/plugin"/>
-    <copy todir="${build.vimfiles}">
-      <fileset dir="src/vim" includes="**/*" excludes="${vimfiles.exclude}"/>
-    </copy>
-
-    <!-- rope for python support -->
-    <untar compression="gzip" dest="${build.vimfiles}/eclim/autoload/eclim/python">
-      <fileset dir="lib" includes="rope-*.tar.gz"/>
-      <patternset>
-        <include name="rope-*/rope/**/*"/>
-      </patternset>
-      <mapper type="regexp" from="^.*?/(.*)" to="\1"/>
-    </untar>
-  </target>
-
-  <!--
-    - Target to deploy eclipse and vim plugins.
-    -->
-  <target name="deploy" depends="deploy.eclipse, deploy.vim"
-      description="(Default) Build and deploy the eclipse and vim plugins."/>
-
-  <target name="deploy.eclipse" depends="build.eclipse"
-      description="Build and deploy the eclipse plugins.">
-    <!-- if the eclim version has changed, stop eclimd before deploying -->
-    <path id="existing">
-      <dirset dir="${eclim.plugins}" includes="org.eclim_*"/>
-    </path>
-    <property name="existing" refid="existing"/>
-    <if>
-      <and>
-        <not> <length string="${existing}" length="0"/> </not>
-        <not>
-          <equals arg1="${existing}"
-              arg2="${eclim.plugins}/org.eclim_${eclim.version}"/>
-        </not>
-      </and>
-      <then>
-        <echo>eclim version updated, stopping eclimd...</echo>
-        <exec executable="${existing}/bin/eclim">
-          <arg line="-command shutdown"/>
-        </exec>
-        <exec executable="${existing}/bin/eclim">
-          <arg line="
-              -f ${basedir}/src/test/resources/eclimrc.test
-              -command shutdown
-              "/>
-        </exec>
-      </then>
-    </if>
-
-    <delete includeemptydirs="true">
-      <fileset dir="${eclipse.home}">
-        <include name="plugins/org.eclim*/**/*"/>
-      </fileset>
-      <dirset dir="${eclipse.home}">
-        <include name="plugins/org.eclim*"/>
-      </dirset>
-    </delete>
-
-    <mkdir dir="${eclim.plugins}"/>
-    <copy todir="${eclim.plugins}">
-      <fileset dir="${build.plugins}" includes="**/*"/>
-    </copy>
-
-    <if>
-      <os family="windows"/>
-      <then>
-        <move todir="${eclipse.home}">
-          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-              includes="eclimd.bat,eclimd.cmd"/>
-        </move>
-      </then>
-      <else>
-        <chmod dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-            includes="**/*" excludes="*.sed" perm="ugo+x"/>
-        <!-- java symlink support sucks, especially if the link is broken -->
-        <exec executable="rm"> <arg line="${eclipse.home}/eclim"/> </exec>
-        <exec executable="rm"> <arg line="${eclipse.home}/eclimd"/> </exec>
-        <symlink link="${eclipse.home}/eclim"
-            resource="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim"/>
-        <symlink link="${eclipse.home}/eclimd"
-            resource="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"/>
-      </else>
-    </if>
-
-    <replace
-        file="${eclim.plugins}/org.eclim_${eclim.version}/plugin.properties"
-        token="$${vim.files}" value="${vim.files}"/>
-    <replace dir="${eclim.plugins}/org.eclim.vimplugin_${eclim.version}"
-        includes="plugin.properties">
-      <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
-      <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
-    </replace>
-  </target>
-
-  <target name="deploy.vim" depends="build.vim"
-      description="Build and deploy the vim plugins.">
-    <mkdir dir="${vim.files}/eclim"/>
-    <!-- deploy vim files -->
-    <delete includeemptydirs="true">
-      <fileset dir="${vim.files}/eclim">
-        <include name="**/*"/>
-        <exclude name="after/**/*"/>
-        <exclude name="doc/**/*"/>
-        <exclude name="resources/**/*"/>
-      </fileset>
-    </delete>
-    <copy todir="${vim.files}" overwrite="true">
-      <fileset dir="${build.vimfiles}" includes="**/*"/>
-    </copy>
-
-    <replace file="${vim.files}/eclim/plugin/eclim.vim">
-      <replacefilter token="&quot;$${vim.eclim.home}&quot;"
-          value="let g:EclimHome = '${eclim.home}'"/>
-      <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
-          value="let g:EclimEclipseHome = '${eclipse.home}'"/>
-    </replace>
-  </target>
-
-  <!--
-    - Create the jar file for a plugin
-    -->
-  <target name="plugin">
-    <echo> building plugin: ${plugin.name} </echo>
-    <if>
-      <not><equals arg1="${plugin.name}" arg2=""/></not>
-      <then>
-        <property name="plugin.path"
-            value="${build.plugins}/org.eclim.${plugin.name}_${eclim.version}"/>
-        <mkdir dir="${plugin.path}"/>
-
-        <javac destdir="${build.classes}" debug="on" optimize="false"
-            target="${javac.target}" source="${javac.target}"
-            deprecation="${deprecation}"
-            failonerror="false"
-            errorproperty="javac.failed">
-          <compilerarg line="${compilerargs}"/>
-          <src path="src/java"/>
-          <include name="**/plugin/${plugin.name}/**/*.java"/>
-          <classpath refid="classpath"/>
-        </javac>
-
-        <if>
-          <isset property="javac.failed"/>
-          <then>
-            <fail>Failure:
-
-  Failed to compile eclim plugin '${plugin.name}'.
-  Check that your eclipse install has the necessary dependencies,
-  or only compile eclim with the features that your eclipse version
-  supports.
-
-  For example:
-
-  $ ant -Dplugins=ant,jdt
-
-  Please see the developer guide for more details:
-  http://eclim.org/guides/development.html
-            </fail>
-          </then>
-        </if>
-
-        <jar jarfile="${plugin.path}/eclim.${plugin.name}.jar">
-          <fileset dir="${build.classes}">
-            <include name="**/plugin/${plugin.name}/**/*.class"/>
-          </fileset>
-          <fileset dir="src/java">
-            <include name="**/plugin/${plugin.name}/**/*"/>
-            <exclude name="**/package.html"/>
-            <exclude name="**/*.java"/>
-          </fileset>
-        </jar>
-        <var name="plugin.name" value=".${plugin.name}"/>
-      </then>
-    </if>
-    <copy todir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}">
-      <fileset dir="src/eclipse/plugins/org.eclim${plugin.name}" includes="**/*"/>
-    </copy>
-
-    <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
-        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
-      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-    </replace>
-
-    <antcall target="plugin.lib.jars">
-      <param name="plugin.name" value="${plugin.name}"/>
-    </antcall>
-  </target>
-
-  <!--
-    - Target responsible for building a list of jar files for the specified
-    - plugin and updating its manifest accordingly.
-    -->
-  <target name="plugin.lib.jars">
-    <!-- build list of jar files for main plugin's manifest. -->
-    <if>
-      <available file="${build.plugins}/org.eclim${plugin.name}_${eclim.version}/lib"/>
-      <then>
-        <path id="lib.jars">
-          <fileset dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}/lib"
-              includes="*"/>
-        </path>
-        <property name="lib.jars" refid="lib.jars"/>
-        <propertyregex property="lib.jars" override="true"
-            input="${lib.jars}" regexp="\\" replace="/"/>
-        <propertyregex property="lib.jars" override="true"
-            input="${lib.jars}" regexp="([A-Z]:)?/.*?/lib/" replace="lib/"/>
-        <propertyregex property="lib.jars" override="true"
-            input="${lib.jars}" regexp="(:|;)" replace=","/>
-
-        <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
-            includes="META-INF/MANIFEST.MF">
-          <replacefilter token="$${eclim.lib.jars}" value="${lib.jars}"/>
-        </replace>
-
-        <!--
-          - separates lib entries onto new lines since the single line length of
-          - the classpath entry seems to be limited.
-          -->
-        <replace dir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
-            includes="META-INF/MANIFEST.MF">
-          <replacetoken>,lib</replacetoken>
-          <replacevalue>,
-  lib</replacevalue>
-        </replace>
-
-        <fixcrlf srcdir="${build.plugins}/org.eclim${plugin.name}_${eclim.version}"
-            includes="META-INF/MANIFEST.MF" eol="unix"/>
-      </then>
-    </if>
-  </target>
-
-  <!--
-    - Delete any generated artifacts of the build.
-    -->
   <target name="clean" description="Deletes the build directory.">
     <delete dir="build"/>
   </target>
 
-  <!--
-    - Run checkstyle on eclim source files.
-    -->
+  <target name="deploy"
+      description="(Default) Build and deploy the eclipse and vim plugins.">
+    <antcall target="gant"> <param name="target" value="deploy"/> </antcall>
+  </target>
+
+  <target name="deploy.eclipse"
+      description="Build and deploy only the eclipse plugins.">
+    <antcall target="gant"> <param name="target" value="deploy.eclipse"/> </antcall>
+  </target>
+
+  <target name="deploy.vim"
+      description="Build and deploy only the vim plugins.">
+    <antcall target="gant"> <param name="target" value="deploy.vim"/> </antcall>
+  </target>
+
+  <target name="test">
+    <antcall target="gant"> <param name="target" value="test"/> </antcall>
+  </target>
+
+  <target name="dist">
+    <antcall target="gant"> <param name="target" value="dist"/> </antcall>
+  </target>
+
+  <target name="installer">
+    <antcall target="gant"> <param name="target" value="installer"/> </antcall>
+  </target>
+
+  <target name="javadoc">
+    <antcall target="gant"> <param name="target" value="javadoc"/> </antcall>
+  </target>
+
+  <target name="docs">
+    <antcall target="gant"> <param name="target" value="docs"/> </antcall>
+  </target>
+
+  <target name="vimdocs">
+    <antcall target="gant"> <param name="target" value="vimdocs"/> </antcall>
+  </target>
+
   <target name="checkstyle" description="Runs checkstyle on the eclim source files.">
-    <path id="checkstyle-classpath">
-      <fileset dir="src/ant/lib/" includes="checkstyle-all-*.jar"/>
+    <antcall target="gant"> <param name="target" value="checkstyle"/> </antcall>
+  </target>
+
+  <target name="eclipse.docs">
+    <antcall target="gant"> <param name="target" value="eclipse.docs"/> </antcall>
+  </target>
+
+  <target name="eclipse.src">
+    <antcall target="gant"> <param name="target" value="eclipse.src"/> </antcall>
+  </target>
+
+  <target name="patch.all">
+    <antcall target="gant"> <param name="target" value="patch.all"/> </antcall>
+  </target>
+
+  <target name="patch.revert.all">
+    <antcall target="gant"> <param name="target" value="patch.revert.all"/> </antcall>
+  </target>
+
+  <target name="gant">
+    <path id="gant-classpath">
+      <fileset dir="src/ant/lib" includes="*.jar"/>
+      <fileset dir="src/eclipse/plugins/org.eclim" includes="lib/*.jar"/>
+      <fileset dir="src/eclipse/plugins/org.eclim.core" includes="lib/*.jar"/>
     </path>
-    <taskdef resource="checkstyletask.properties"
-        classpathref="checkstyle-classpath"/>
-    <checkstyle config="src/java/checkstyle.xml">
-      <fileset dir="src/java">
-        <include name="org/eclim/**/*.java"/>
-        <exclude name="org/eclim/util/file/BufferedReader.java"/>
-      </fileset>
-      <fileset dir="src/test/junit">
-        <include name="**/*.java"/>
-      </fileset>
-      <!--property key="checkstyle.cache.file"
-          file="build/temp/checkstyle/cache"/-->
-    </checkstyle>
+    <taskdef name="gant" classname="org.codehaus.gant.ant.Gant"
+        classpathref="gant-classpath"/>
+
+    <property name="target" value="deploy"/>
+    <gant file="src/ant/build.gant" target="${target}" inheritAll="true"/>
   </target>
 
 </project>

@@ -138,6 +138,10 @@ if eclimAvailable
       let g:tlist_forreststatus_settings = 'forreststatus;t:todo;r:release'
     endif
 
+    if !exists("g:tlist_gant_settings")
+      let g:tlist_gant_settings = 'gant;t:target;f:function'
+    endif
+
     "if !exists("g:tlist_help_settings")
     "  let g:tlist_help_settings = 'help;a:anchor'
     "endif
@@ -244,6 +248,12 @@ if eclimAvailable
     if !exists("g:tlist_forreststatus_settings")
       let g:tlist_forreststatus_settings = {
           \ 'lang': 'forreststatus', 'tags': {'t': 'todo', 'r': 'release'}
+        \ }
+    endif
+
+    if !exists("g:tlist_gant_settings")
+      let g:tlist_gant_settings = {
+          \ 'lang': 'gant', 'tags': {'t': 'target', 'f': 'function'}
         \ }
     endif
 
