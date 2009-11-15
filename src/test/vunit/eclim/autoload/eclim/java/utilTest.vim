@@ -199,7 +199,7 @@ function! TestValidate()
   let results = getloclist(0)
   echo 'results = ' . string(results)
 
-  call VUAssertEquals(len(results), 2, 'Wrong number of results for linked resource.')
+  call VUAssertEquals(len(results), 4, 'Wrong number of results for linked resource.')
   call VUAssertEquals(10, results[0].lnum, 'Wrong line num for linked resource.')
   call VUAssertEquals(9, results[0].col, 'Wrong col num for linked resource.')
   call VUAssertEquals(
