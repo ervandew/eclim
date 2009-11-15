@@ -19,8 +19,8 @@
 <!--
   - Build file for creating eclim installers.
   -->
-<project xmlns:formic="antlib:org.formic.ant"
-    name="installer" default="installer" basedir="../..">
+<project name="installer" default="installer" basedir="../.."
+    xmlns:formic="antlib:org.formic.ant">
 
   <property environment="env"/>
   <property file="src/ant/build.properties"/>
@@ -33,13 +33,6 @@
       <include name="plugins/org.eclipse.*.jar"/>
     </fileset>
   </path>
-  <path id="ant-contrib-classpath">
-    <pathelement location="src/ant/lib/ant-contrib-1.0b1.jar"/>
-  </path>
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties"
-      classpathref="ant-contrib-classpath"/>
-  <taskdef classname="net.sf.antcontrib.logic.For" name="for"
-      classpathref="ant-contrib-classpath"/>
 
   <formic:classpath id="formic.classpath"/>
 
