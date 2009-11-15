@@ -46,7 +46,7 @@ function! eclim#client#nailgun#Execute(port, command)
     return [1, g:EclimErrorReason]
   endif
 
-  let command = command . ' -Dnailgun.server.port=' . a:port . ' ' . a:command
+  let command .= ' -Dnailgun.server.port=' . a:port . ' ' . a:command
 
   " for windows, need to add a trailing quote to complete the command.
   if command =~ '^"[a-zA-Z]:'
