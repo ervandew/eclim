@@ -40,6 +40,14 @@
     <antcall target="gant"> <param name="target" value="test"/> </antcall>
   </target>
 
+  <target name="test.junit">
+    <antcall target="gant"> <param name="target" value="test.junit"/> </antcall>
+  </target>
+
+  <target name="test.vunit">
+    <antcall target="gant"> <param name="target" value="test.vunit"/> </antcall>
+  </target>
+
   <target name="dist">
     <antcall target="gant"> <param name="target" value="dist"/> </antcall>
   </target>
