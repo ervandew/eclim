@@ -85,19 +85,17 @@ public class SearchCommandTest
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-p", "org.eclim.eclipse.Eclim%2A"
+      "-p", "org.eclim.test.search.TestSearch%2A"
     });
     System.out.println(result);
 
     String[] results = StringUtils.split(result, "\n");
-    assertEquals("Wrong number of results.", 3, results.length);
+    assertEquals("Wrong number of results.", 2, results.length);
 
-    assertTrue("EclimApplicationHeaded not found.",
-        results[0].endsWith("org.eclim.eclipse.EclimApplicationHeaded"));
-    assertTrue("EclimApplicationHeadless not found.",
-        results[1].endsWith("org.eclim.eclipse.EclimApplicationHeadless"));
-    assertTrue("EclimPlugin not found.",
-        results[2].endsWith("org.eclim.eclipse.EclimPlugin"));
+    assertTrue("TestSearch not found.",
+        results[0].endsWith("org.eclim.test.search.TestSearch"));
+    assertTrue("TestSearchVUnit not found.",
+        results[1].endsWith("org.eclim.test.search.TestSearchVUnit"));
   }
 
   @Test
@@ -109,11 +107,11 @@ public class SearchCommandTest
     String result = Eclim.execute(new String[]{
       "java_search", "-n", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-p", "Jdt.TEST_PROJECT", "-t", "field"
+      "-p", "TestSearch.list", "-t", "field"
     });
     System.out.println(result);
 
-    assertTrue("EclimApplication not found.",
-        result.endsWith("org.eclim.plugin.jdt.Jdt#TEST_PROJECT"));
+    assertTrue("field not found.",
+        result.endsWith("org.eclim.test.search.TestSearch#list"));
   }
 }
