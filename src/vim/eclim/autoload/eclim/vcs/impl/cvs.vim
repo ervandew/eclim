@@ -117,6 +117,13 @@ endfunction " }}}
 function eclim#vcs#impl#cvs#GetEditorFile()
   let line = getline('.')
   if line =~ '^CVS:\s\+.*'
+    if !s:IsReadOnlySupported()
+      call eclim#util#EchoWarning(
+        \ 'Due to locking issues, viewing file diffs in the cvs ' .
+        \ 'editor is only supported with cvs version 1.12.1 or higher.')
+      return ''
+    endif
+
     " FIXME: cvs will put more than one file on a line if they fit
     let file = substitute(line, '^CVS:\s\+\(.\{-}\)\(\s.*\|$\)', '\1', '')
 
@@ -239,10 +246,30 @@ endfunction " }}}
 " Cvs(args) {{{
 " Executes 'cvs' with the supplied args.
 function eclim#vcs#impl#cvs#Cvs(args)
-  " Note: using -R which pretends that the repos is read only, which avoid
-  " waiting on locks, which we don't need to since we only run read only
-  " operations.
-  return eclim#vcs#util#Vcs('cvs', '-R ' . a:args)
+  " Note: use -R (cvs 1.12.1 or highter) which pretends that the repos is read
+  " only, which avoid waiting on locks, which we don't need to since we only
+  " run read only operations.  Issue occurs trying to view diffs of files in
+  " the cvs editor.
+  let args = (s:IsReadOnlySupported() ? '-R ' : '') . a:args
+  return eclim#vcs#util#Vcs('cvs', args)
+endfunction " }}}
+
+" s:GetVersion() {{{
+function s:GetVersion()
+  if !exists('s:cvs_version')
+    let s:cvs_version = eclim#vcs#util#Vcs('cvs', '--version')
+    let s:cvs_version =
+      \ substitute(s:cvs_version, '.\{-}\s\(\d\+\.\d\+\.\d\+\)\s.*', '\1', '')
+  endif
+  return s:cvs_version
+endfunction " }}}
+
+" s:IsReadOnlySupported() {{{
+function s:IsReadOnlySupported()
+  let ver = s:GetVersion()
+  exec 'let major = ' . substitute(ver, '^\(\d\+\)\..*', '\1', '')
+  exec 'let minor = ' . substitute(ver, '^\d\+\.\(\d\+\)\..*', '\1', '')
+  return (major >= 1 && minor >= 12)
 endfunction " }}}
 
 " s:Breadcrumb(path) {{{

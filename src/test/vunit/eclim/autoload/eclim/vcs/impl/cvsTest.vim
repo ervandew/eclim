@@ -36,7 +36,7 @@ function! TestInfo()
   call PopRedir()
   let info = split(@", '\n')
   call VUAssertEquals(info[0], 'Status: Locally Modified')
-  call VUAssertEquals(info[1], 'Working revision: 1.3 2009-07-10 13:07:40 -0700')
+  call VUAssertTrue(info[1] =~ 'Working revision: 1.3 .*')
 endfunction " }}}
 
 " TestAnnotate() {{{
