@@ -1,4 +1,89 @@
 HIGH {{{
+  - multi-workspace support
+    - :JavaListInstalls (does this differ by workspace?)
+    - global searching commands (:LocateFile, per lang searches)
+    - document
+      - multi-worksace guide?
+      - support for -f arg for eclim/eclimd
+
+  - look into embed issues reported
+
+  - clean up meta tags in docs
+    - http://docutils.sourceforge.net/docs/ref/rst/directives.html#meta
+
+  - convert to github
+    - run ./fix.sh to fix author info on pre-git commits
+    - create github repos:
+      - http://github.com/repositories/new
+    - consider moving eclim site as well to github pages:
+      - http://pages.github.com/
+    - downloads?
+    - point eclim.org at github pages
+    - update links on freshmeat.
+
+  - :VcsWeb*, when prompting for type/url, persist the values if possible.
+
+  - possible issue converting .eclimrc properties to -Dproperty args in eclimd
+    $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
+
+  - eclim+cdt issue:
+    - Install eclipse 64Bit C++ version on Linux
+    - install eclim, only C++ component
+    - start "eclipse -clean"
+    - F3 Works
+    - stop eclipse, start eclimd
+    - start gvim, do CSearchContext
+    - stop eclimd, start eclipse
+    - F3 does NOT WORK
+    - stop eclipse, start "eclipse -clean"
+    - F3 works
+
+  - highlevel default open action which can be overridden by the existing vars
+    - autoload/eclim/c/search.vim : let g:EclimCSearchSingleResult = "split"
+    - autoload/eclim/common/buffers.vim : let g:EclimBuffersDefaultAction = 'split'
+    - autoload/eclim/common/locate.vim : let g:EclimLocateFileDefaultAction = 'split'
+    - autoload/eclim/java/hierarchy.vim : let g:EclimJavaHierarchyDefaultAction = 'split'
+    - autoload/eclim/java/search.vim : let g:EclimJavaSearchSingleResult = "split"
+    - autoload/eclim/php/search.vim : let g:EclimPhpSearchSingleResult = "split"
+    - autoload/eclim/python/django/find.vim : let g:EclimDjangoFindAction = 'split'
+    - autoload/eclim/python/search.vim : let g:EclimPythonSearchSingleResult = "split"
+    - autoload/eclim/ruby/search.vim : let g:EclimRubySearchSingleResult = "split"
+    - autoload/eclim/vim/find.vim : let g:EclimVimFindSingleResult = "split"
+    - autoload/eclim/web.vim : let g:EclimOpenUrlInVimAction = 'split'
+    - ProjectTree default?
+
+  - CSearchConext, when on a definition, go to declaration, when on declaration
+    go to definition.
+
+  - c/c++ call heirarchy
+    - org/eclipse/cdt/internal/ui/callhierarchy/CallHierarchyUI.java
+    - org/eclipse/cdt/internal/ui/callhierarchy/CHViewPart.java
+    - org/eclipse/cdt/internal/ui/callhierarchy/CHContentProvider.java
+    - org/eclipse/cdt/internal/ui/callhierarchy/CHQueries.java
+    - Example: Mod2.c:8:5
+      fun2(int)
+        fun1(int)
+          fun3(int)
+          main()
+        fun3(int)
+    - recursion? cycles?
+
+  - signature + docs (python docstrings, javadocs, etc.) of a method while you
+    type.
+    - open a scratch window for displaying these
+
+  - add high level docs or screencast
+
+  - does this affect eclim as well (nailgun + utf8)?
+    http://mathias-biilmann.net/2009/3/clojure-repl-and-utf-8
+    I don't think eclim sends any text that could contain utf8 characters via
+    nailgun, and no one has reported any related issues.
+    Adding -Dfile.encoding=UTF8 to .eclimrc would be an easy work around if
+    this issue did surface, but perhaps eclim should be more proactive and
+    defualt to UTF8 and allow users to override that default via the
+    file.encoding system property.
+    The default on my box seems to already be UTF8, so maybe this is a mac only
+    issue.
 
   http://conservancy.softwarefreedom.org/
 }}}
@@ -93,8 +178,25 @@ TODO {{{
   }}}
 
   Common {{{
+    - add a generic help function for toggling help in a buffer
+      - :ProjectTree
+      - :Buffers
+
+    - settings export/import
+
+    - update project tree to include linked folders
+
     - :LocateFile
       - eclipse setting to filter out results
+      - update to support different search modes:
+        - projects (already implementd)
+          - specific project?
+        - buffers: search buffer names
+        - vcs modified file:  search names of files reported as untracked or
+          modified by a supported vcs.
+        - most used files?: track most used files.
+        - quickfix: search quickfix result buffers
+        - locationlist: search locationlist result buffers
 
     - templating system (convert to groovy)?
 
@@ -262,6 +364,14 @@ TODO {{{
   }}}
 
   Java {{{
+    - refactoring
+      - move compilation unit to another package
+
+    - add, remove, set default vm install.
+
+    - :Java, :Javac, :Javadoc
+      - allow specific jdk/jre to be used to run the command?
+
     - get/set, construtor, etc. templates
       - consider using the eclipse templates or giving the user that option
 
