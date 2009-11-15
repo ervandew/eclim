@@ -48,8 +48,10 @@ public class DocSearchCommandTest
 
     System.out.println(result);
 
+    result = result.replaceAll(
+        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/j2se/1.5.0/docs/api/java/awt/List.html", result);
+        "http://java.sun.com/${version}/docs/api/java/awt/List.html", result);
   }
 
   @Test
@@ -66,9 +68,11 @@ public class DocSearchCommandTest
 
     System.out.println(result);
 
+    result = result.replaceAll(
+        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/j2se/1.5.0/docs/api/java/util/ArrayList.html\n" +
-        "http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.ArrayList.html",
+        "http://java.sun.com/${version}/docs/api/java/util/ArrayList.html\n" +
+        "http://java.sun.com/${version}/docs/api/java/util/Arrays.ArrayList.html",
         result);
   }
 
@@ -86,8 +90,10 @@ public class DocSearchCommandTest
 
     System.out.println(result);
 
+    result = result.replaceAll(
+        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/j2se/1.5.0/docs/api/java/lang/" +
+        "http://java.sun.com/${version}/docs/api/java/lang/" +
         "System.html#currentTimeMillis()",
         result);
   }
