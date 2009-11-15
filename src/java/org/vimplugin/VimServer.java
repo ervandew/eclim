@@ -136,8 +136,14 @@ public class VimServer
       start(workingDir, (tabbed && !first), args);
 
       // wait on file to finish opening
+      // on windows we need to use vim.exe instead of gvim.exe otherwise popups
+      // will be generated.
+      String vim = gvim;
+      if (Platform.getOS().equals(Platform.OS_WIN32)){
+        vim = gvim.replace("gvim.exe", "vim.exe");
+      }
       args = new String[5];
-      args[0] = gvim;
+      args[0] = vim;
       args[1] = "--servername";
       args[2] = String.valueOf(ID);
       args[3] = "--remote-expr";
