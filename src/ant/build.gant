@@ -297,11 +297,13 @@ target(name: 'test.init'){
         arg(line: "-zxf ${name}.tar.gz")
       }
     }
-    replace(dir: '${eclipse.workspace}/eclim_unit_test/vcs/cvs/unittest',
+    replace(dir: '${eclipse.workspace}/eclim_unit_test/vcs',
         defaultexcludes: 'false',
-        includes: '**/CVS/Root',
         token: '$${vcs.dir}',
-        value: '${eclipse.workspace}/eclim_unit_test/vcs')
+        value: '${eclipse.workspace}/eclim_unit_test/vcs'){
+      include(name: 'cvs/unittest/**/CVS/Root')
+      include(name: 'subversion/**/.svn/entries')
+    }
 
     eclim('-command project_refresh -p eclim_unit_test')
   }
