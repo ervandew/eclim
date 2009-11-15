@@ -431,9 +431,9 @@ target(name: 'test.vunit'){
 
 target(name: 'dist'){
   // ensure that we are building with the lowest supported jdk.
-  if (binding.getVariable('ant.java.version') != binding.getVariable('javac.target')){
-    fail(message: 'Distribution must be built with jdk ${javac.target}')
-  }
+  //if (binding.getVariable('ant.java.version') != binding.getVariable('javac.target')){
+  //  fail(message: 'Distribution must be built with jdk ${javac.target}')
+  //}
 
   depends('clean', 'build', 'javadoc', 'docs', 'vimdocs')
 
@@ -516,6 +516,7 @@ target(name: 'dist'){
 }
 
 target(name: 'installer'){
+  depends('init')
   exec(executable: '${formic.home}/bin/formic', failonerror: true, dir: '.'){
     arg(value: '-Declipse.home=${eclipse.home}')
     arg(value: '-Declim.version=${eclim.version}')
