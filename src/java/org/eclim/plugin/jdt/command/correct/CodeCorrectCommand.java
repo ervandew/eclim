@@ -18,7 +18,11 @@ package org.eclim.plugin.jdt.command.correct;
 
 import java.lang.reflect.Field;
 
+import java.text.Collator;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -177,8 +181,9 @@ public class CodeCorrectCommand
               if (edit instanceof MultiTextEdit){
                 Field fChildren = TextEdit.class.getDeclaredField("fChildren");
                 fChildren.setAccessible(true);
-                List children = (List)fChildren.get(edit);
-                edit = (TextEdit)children.get(children.size() - 1);
+                @SuppressWarnings("unchecked")
+                List<TextEdit> children = (List<TextEdit>)fChildren.get(edit);
+                edit = children.get(children.size() - 1);
               }
               Field flength = TextEdit.class.getDeclaredField("fLength");
               flength.setAccessible(true);
@@ -189,6 +194,22 @@ public class CodeCorrectCommand
         }
       }
     }
+    final Collator collator = Collator.getInstance();
+    Collections.sort(results, new Comparator<IJavaCompletionProposal>(){
+      public int compare(IJavaCompletionProposal p1, IJavaCompletionProposal p2){
+        int r1 = p1.getRelevance();
+        int r2 = p2.getRelevance();
+        if (r1 == r2){
+          // used as a determanistic tie breaker.
+          return collator.compare(p1.getDisplayString(), p2.getDisplayString());
+        }
+        // higher number is more relavant.
+        return r2 - r1;
+      }
+      public boolean equals(Object obj){
+        return false;
+      }
+    });
     return results;
   }
 

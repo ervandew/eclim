@@ -46,14 +46,13 @@ function! TestCorrect()
   call VUAssertEquals('ArrayList cannot be resolved to a type', getline(1),
     \ 'Wrong error message.')
 
-  call VUAssertTrue(search("Import 'ArrayList' (java.util)"),
-    \ 'Required correction not found.')
+  let line = search("Import 'ArrayList' (java.util)")
+  call VUAssertTrue(line, 'Required correction not found.')
 
   exec "normal \<cr>"
   call PeekRedir()
 
-  call VUAssertTrue(search('^import java\.'),
-    \ 'Correction not applied.')
+  call VUAssertTrue(search('^import java\.'), 'Correction not applied.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

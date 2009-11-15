@@ -60,7 +60,7 @@ public class CorrectCommandTest
     assertEquals("Wrong error.",
         "ArrayList cannot be resolved to a type", results[0]);
     assertTrue("Wrong suggestion.",
-        results[1].indexOf(".70:  Change to") != -1);
+        results[1].indexOf(".70:  Import 'ArrayList'") != -1);
   }
 
   @Test
@@ -81,7 +81,7 @@ public class CorrectCommandTest
     int apply = -1;
     for(String r : results){
       if (r.indexOf("Import 'ArrayList' (java.util)") != -1){
-        apply = Integer.valueOf(r.substring(0, 1));
+        apply = Integer.valueOf(r.replaceFirst("(\\d+)\\..*", "$1"));
         break;
       }
     }
@@ -134,7 +134,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
-      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "0"
+      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "1"
     });
 
     System.out.println(result);
