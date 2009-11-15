@@ -27,11 +27,13 @@ if exists("current_compiler")
 endif
 let current_compiler = "eclim_javadoc"
 
+let port = eclim#client#nailgun#GetNgPort()
 let command = eclim#client#nailgun#GetEclimCommand()
 if !(has('win32') || has('win64'))
   let command = substitute(command, '"', '', 'g')
 endif
 let command = escape(command, ' "')
+let command .= '\ -Dnailgun.server.port=' . port
 exec 'CompilerSet makeprg=' . command . '\ -command\ javadoc\ $*'
 
 exec 'CompilerSet errorformat=' .
