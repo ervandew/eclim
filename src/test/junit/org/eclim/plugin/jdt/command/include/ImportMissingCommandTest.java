@@ -44,6 +44,9 @@ public class ImportMissingCommandTest
       "java_import_missing", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
     });
 
+    // remove com.sun entries
+    result = result.replaceAll("'com\\.sun.*?'\\s*,\\s*", "");
+
     System.out.println(result);
 
     assertEquals("Wrong results", result, "[{'type': 'List','imports': ['java.awt.List','java.util.List']},{'type': 'ArrayList','imports': ['java.util.ArrayList']},{'type': 'FooBar','imports': []}]");

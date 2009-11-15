@@ -41,6 +41,9 @@ public class ImportCommandTest
       "java_import", "-n", Jdt.TEST_PROJECT, "-p", "List"
     });
 
+    // remove any com.sun entries
+    result = result.replaceAll("com\\.sun.*?\n", "");
+
     System.out.println(result);
 
     assertEquals("Wrong results", "java.awt.List\njava.util.List", result);
