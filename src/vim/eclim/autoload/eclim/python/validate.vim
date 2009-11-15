@@ -188,7 +188,9 @@ function eclim#python#validate#PyLint()
     endif
   endif
 
-  let command = pylint_env . ' pylint --reports=n "' . file . '"'
+  " TODO: switch to 'parseable' output format.
+  let command = pylint_env .
+    \ ' pylint --reports=n --output-format=text "' . file . '"'
   if has('win32') || has('win64')
     let command = 'cmd /c "' . command . '"'
   endif
@@ -196,7 +198,7 @@ function eclim#python#validate#PyLint()
   call eclim#util#Echo('Running pylint (ctrl-c to cancel) ...')
   let result = eclim#util#System(command)
   call eclim#util#Echo(' ')
-  if v:shell_error
+  if v:shell_error > 16
     call eclim#util#EchoError('Error running command: ' . command)
     return
   endif
