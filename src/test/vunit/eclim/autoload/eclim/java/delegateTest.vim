@@ -41,22 +41,22 @@ function! TestJavaDelegate()
 
   call VUAssertTrue(search('^\s*public abstract Iterator<Double> iterator()'),
     \ 'Super method iterator() not found')
-  call VUAssertTrue(search('^\s*public abstract boolean add(Double o)'),
+  call VUAssertTrue(search('^\s*public abstract boolean add(Double \w)'),
     \ 'Super method add() not found')
 
   exec "normal Vkkk\<cr>"
 
   call VUAssertTrue(search('^\s*//public abstract Iterator<Double> iterator()'),
     \ 'Super method add() not commented out after add.')
-  call VUAssertTrue(search('^\s*//public abstract boolean add(Double o)'),
+  call VUAssertTrue(search('^\s*//public abstract boolean add(Double \w)'),
     \ 'Super method add() not commented out after add.')
   bdelete
 
   call VUAssertTrue(search('public Iterator<Double> iterator()$'),
     \ 'iterator() not added.')
   call VUAssertTrue(search('return list\.iterator();$'), 'iterator() not delegating.')
-  call VUAssertTrue(search('public boolean add(Double o)$'), 'add() not added.')
-  call VUAssertTrue(search('return list\.add(o);$'), 'add() not delegating.')
+  call VUAssertTrue(search('public boolean add(Double \w)$'), 'add() not added.')
+  call VUAssertTrue(search('return list\.add(\w);$'), 'add() not delegating.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

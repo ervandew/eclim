@@ -48,6 +48,9 @@ public class DelegateCommandTest
       "-o", "124", "-e", "utf-8"
     });
 
+    // handle difference between 1.5 and 1.6
+    result = result.replaceAll("Double \\w\\b", "Double o");
+
     System.out.println(result);
 
     assertTrue("Wrong first line.",
@@ -66,12 +69,15 @@ public class DelegateCommandTest
       "-s", "java.util.List<Double>", "-m", "add(Double)"
     });
 
+    // handle difference between 1.5 and 1.6
+    result = result.replaceAll("Double \\w\\b", "Double o");
+
     System.out.println(result);
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public boolean add\\(Double o\\)\n  \\{\n  " +
-          "\treturn list.add\\(o\\);")
+        Pattern.compile("public boolean add\\(Double \\w\\)\n  \\{\n  " +
+          "\treturn list.add\\(\\w\\);")
         .matcher(contents).find());
 
     assertTrue("Method not commented out in results.",
