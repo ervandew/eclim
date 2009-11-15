@@ -18,7 +18,7 @@
 <project name="eclim" default="deploy" basedir=".">
 
   <target name="clean" description="Deletes the build directory.">
-    <delete dir="build"/>
+    <antcall target="gant"> <param name="target" value="clean"/> </antcall>
   </target>
 
   <target name="deploy"

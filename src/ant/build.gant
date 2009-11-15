@@ -71,6 +71,10 @@ target(name: 'init'){
   }
 }
 
+target(name: 'clean'){
+  delete(dir: 'build')
+}
+
 target(name: 'build'){
   depends('build.eclipse', 'build.vim')
 }
