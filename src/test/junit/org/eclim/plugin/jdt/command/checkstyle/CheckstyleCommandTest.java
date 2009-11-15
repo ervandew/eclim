@@ -50,7 +50,7 @@ public class CheckstyleCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results.", results.length, 3);
+    assertEquals("Wrong number of results.", results.length, 4);
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
     for (String r : results){
       assertTrue("Result does not start with file path.", r.startsWith(file));
