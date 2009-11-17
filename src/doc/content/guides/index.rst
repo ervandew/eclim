@@ -33,15 +33,17 @@ Guides
    java/maven/mvn/classpath
    clojure/vimclojure
    headless
+   multi_workspace
    development
 
 
-Installing / Upgrading / Troubleshooting
-----------------------------------------
+Installing, Upgrading, Troubleshooting, etc.
+--------------------------------------------
 - :ref:`guides/install`
 - :ref:`guides/uninstall`
 - :ref:`guides/troubleshoot`
 - :ref:`guides/headless`
+- :ref:`guides/multi_workspace`
 
 
 Java

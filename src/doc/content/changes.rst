@@ -25,6 +25,8 @@ Bug Fixes:
   - Various bug fixes.
 
 Common:
+  - Added full support for :ref:`running multiple eclimd instances
+    <guides/multi_workspace>`, each backed by a seperate eclipse worksapce.
   - Added 'K' mapping to :ref:`:ProjectTree <:ProjectTree>` to set the tree
     root the either the project root of file system root depending on the
     context.  Added 'D' mapping to create a new directory and 'F' to open a new
