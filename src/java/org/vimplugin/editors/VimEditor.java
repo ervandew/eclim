@@ -371,15 +371,15 @@ public class VimEditor
 
     wid = f.getLong(parent);
 
-    int h = parent.getClientArea().height;
-    int w = parent.getClientArea().width;
-
     VimPlugin plugin = VimPlugin.getDefault();
     serverID = plugin.createVimServer();
     plugin.getVimserver(serverID).start(workingDir, wid);
 
+    //int h = parent.getClientArea().height;
+    //int w = parent.getClientArea().width;
+
     VimConnection vc = plugin.getVimserver(serverID).getVc();
-    vc.command(bufferID, "setLocAndSize", h + " " + w);
+    //vc.command(bufferID, "setLocAndSize", h + " " + w);
     vc.command(bufferID, "editFile", "\"" + filePath + "\"");
     vc.command(bufferID, "startDocumentListen", "");
     return vc;
