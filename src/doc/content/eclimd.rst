@@ -245,6 +245,14 @@ nailgun server port should you choose to change the default.
   Your system must have **sed** available so that eclim can
   process your .eclimrc file.
 
+Both the eclim and eclimd scripts also support a -f argument allowing you to
+specify an alternate location for your .eclimrc:
+
+::
+
+  $ eclimd -f ~/.my_eclimrc
+  $ eclim -f ~/.my_eclimrc -command ping
+
 
 eclimd logging
 --------------
