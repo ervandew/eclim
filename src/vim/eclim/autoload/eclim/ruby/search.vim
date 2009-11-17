@@ -25,7 +25,7 @@
 " Global Varables {{{
   if !exists("g:EclimRubySearchSingleResult")
     " possible values ('split', 'edit', 'lopen')
-    let g:EclimRubySearchSingleResult = "split"
+    let g:EclimRubySearchSingleResult = g:EclimDefaultFileOpenAction
   endif
 " }}}
 

@@ -25,7 +25,7 @@
 " Global Varables {{{
   if !exists("g:EclimPhpSearchSingleResult")
     " possible values ('split', 'edit', 'lopen')
-    let g:EclimPhpSearchSingleResult = "split"
+    let g:EclimPhpSearchSingleResult = g:EclimDefaultFileOpenAction
   endif
 " }}}
 

@@ -29,7 +29,7 @@ if !exists('g:EclimBuffersSortDirection')
   let g:EclimBuffersSortDirection = 'asc'
 endif
 if !exists('g:EclimBuffersDefaultAction')
-  let g:EclimBuffersDefaultAction = 'split'
+  let g:EclimBuffersDefaultAction = g:EclimDefaultFileOpenAction
 endif
 if !exists('g:EclimOnlyExclude')
   let g:EclimOnlyExclude =

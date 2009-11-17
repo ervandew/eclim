@@ -24,7 +24,7 @@
 
 " Global Variables {{{
 if !exists('g:EclimJavaHierarchyDefaultAction')
-  let g:EclimJavaHierarchyDefaultAction = 'split'
+  let g:EclimJavaHierarchyDefaultAction = g:EclimDefaultFileOpenAction
 endif
 " }}}
 

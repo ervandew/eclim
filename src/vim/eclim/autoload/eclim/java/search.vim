@@ -30,7 +30,7 @@
 
   if !exists("g:EclimJavaSearchSingleResult")
     " possible values ('split', 'edit', 'lopen')
-    let g:EclimJavaSearchSingleResult = "split"
+    let g:EclimJavaSearchSingleResult = g:EclimDefaultFileOpenAction
   endif
 " }}}
 

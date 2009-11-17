@@ -28,7 +28,7 @@ if !exists("g:EclimVimPaths")
 endif
 if !exists("g:EclimVimFindSingleResult")
   " possible values ('split', 'edit', 'lopen')
-  let g:EclimVimFindSingleResult = "split"
+  let g:EclimVimFindSingleResult = g:EclimDefaultFileOpenAction
 endif
 " }}}
 

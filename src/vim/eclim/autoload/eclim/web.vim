@@ -27,7 +27,7 @@ if !exists("g:EclimOpenUrlInVimPatterns")
   let g:EclimOpenUrlInVimPatterns = []
 endif
 if !exists("g:EclimOpenUrlInVimAction")
-  let g:EclimOpenUrlInVimAction = 'split'
+  let g:EclimOpenUrlInVimAction = g:EclimDefaultFileOpenAction
 endif
 " }}}
 

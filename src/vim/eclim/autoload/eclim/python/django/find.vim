@@ -24,7 +24,7 @@
 
 " Global Variables {{{
 if !exists('g:EclimDjangoFindAction')
-  let g:EclimDjangoFindAction = 'split'
+  let g:EclimDjangoFindAction = g:EclimDefaultFileOpenAction
 endif
 if !exists('g:EclimDjangoStaticPaths')
   let g:EclimDjangoStaticPaths = []

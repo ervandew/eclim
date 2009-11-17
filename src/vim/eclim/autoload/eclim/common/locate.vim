@@ -24,7 +24,7 @@
 
 " Global Variables {{{
 if !exists('g:EclimLocateFileDefaultAction')
-  let g:EclimLocateFileDefaultAction = 'split'
+  let g:EclimLocateFileDefaultAction = g:EclimDefaultFileOpenAction
 endif
 
 if !exists('g:EclimLocateFileScope')

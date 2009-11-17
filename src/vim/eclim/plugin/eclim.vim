@@ -60,6 +60,10 @@ if !exists("g:EclimValidateSortResults")
   let g:EclimValidateSortResults = 'occurrence'
 endif
 
+if !exists("g:EclimDefaultFileOpenAction")
+  let g:EclimDefaultFileOpenAction = 'split'
+endif
+
 if !exists("g:EclimMakeLCD")
   let g:EclimMakeLCD = 1
 endif
