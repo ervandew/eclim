@@ -42,9 +42,10 @@ function eclim#vcs#impl#gitweb#GetChangeSetUrl(root, file, args)
 endfunction " }}}
 
 " GetAnnotateUrl(root, file, args) Not supported by gitweb {{{
-"function eclim#vcs#impl#gitweb#GetAnnotateUrl(root, file, args)
-"  "return a:root . '/annotate/' . a:args[0] . '/' . a:file
-"endfunction " }}}
+function eclim#vcs#impl#gitweb#GetAnnotateUrl(root, file, args)
+  echoe 'Sorry, this function is not yet supported by gitweb.'
+  return
+endfunction " }}}
 
 " GetDiffUrl(root, file, args) {{{
 function eclim#vcs#impl#gitweb#GetDiffUrl(root, file, args)
