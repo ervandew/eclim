@@ -152,6 +152,9 @@ Eclim Settings
   - hgserve
   - gitweb
   - redmine
+  - github
+  - googlecode
+  - bitbucket
 
     .. note::
 
@@ -190,6 +193,14 @@ Eclim Settings
     # replace it with the proper value.
     org.eclim.project.vcs.web.url=http://redmine.myhost/repositories/<cmd>/myrepos
 
+    # github
+    org.eclim.project.vcs.web.url=http://github.com/username/my-project
+
+    # googlecode
+    org.eclim.project.vcs.web.url=http://code.google.com/p/my-project
+
+    # bitbucket
+    org.eclim.project.vcs.web.url=http://bitbucket.org/username/my-project
 
 .. _VcsEditor:
 
