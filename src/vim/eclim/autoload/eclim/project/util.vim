@@ -637,6 +637,19 @@ function! eclim#project#util#GetCurrentProjectRoot()
   return len(project) > 0 ? project.path : ''
 endfunction " }}}
 
+" GetProjectWorkspace(name) {{{
+" Gets the workspace that a project belongs to.
+function! eclim#project#util#GetProjectWorkspace(name)
+  let project = {}
+  for p in eclim#project#util#GetProjects()
+    if p.name == a:name
+      let project = p
+      break
+    endif
+  endfor
+  return get(project, 'workspace', '')
+endfunction " }}}
+
 " GetProjectRelativeFilePath(file) {{{
 " Gets the project relative path for the given file.
 function! eclim#project#util#GetProjectRelativeFilePath(file)
@@ -833,17 +846,20 @@ function! eclim#project#util#GetProjectSetting(setting)
   return result
 endfunction " }}}
 
-" GetProjectWorkspace(name) {{{
-" Gets the workspace that a project belongs to.
-function! eclim#project#util#GetProjectWorkspace(name)
-  let project = {}
-  for p in eclim#project#util#GetProjects()
-    if p.name == a:name
-      let project = p
-      break
-    endif
-  endfor
-  return get(project, 'workspace', '')
+" SetProjectSetting(setting, value) {{{
+" Sets a project setting.
+function! eclim#project#util#SetProjectSetting(setting, value)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let command = s:command_project_setting
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<setting>', a:setting, '')
+  let command .= ' -v "' . a:value . '"'
+
+  call eclim#ExecuteEclim(command)
 endfunction " }}}
 
 " IsCurrentFileInProject(...) {{{
