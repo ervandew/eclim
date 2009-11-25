@@ -156,7 +156,14 @@ function! eclim#lang#Search(command, singleResultAction, argline)
   endif
 
   let search_cmd .= ' ' . argline
-  let result =  eclim#ExecuteEclim(search_cmd)
+
+  let workspace = eclim#eclipse#ChooseWorkspace()
+  if workspace == '0'
+    return ''
+  endif
+
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+  let result =  eclim#ExecuteEclim(search_cmd, port)
   let results = split(result, '\n')
   if len(results) == 1 && results[0] == '0'
     return
