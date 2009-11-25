@@ -147,6 +147,17 @@ Windows menu at:
   If you have vimplugin installed you should remove it prior to using the eclim
   version.
 
+.. note::
+  Some users have reported issues with the embedded gvim's command line being
+  cut off or possible rendering issues when scrolling through the file.  If you
+  experience either of these issues, try adding the following to your vimrc
+  file, which should hopefully resolve those problems:
+
+  .. code-block:: vim
+
+    set guioptions-=m " turn off menu bar
+    set guioptions-=T " turn off toolbar
+
 **Eclipse/Vim key shortcuts in embedded gvim**
 
 Depending on your OS and windowing system, when the embedded gvim has focus,
