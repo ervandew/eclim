@@ -23,6 +23,8 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.preference.Preferences;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.StringUtils;
@@ -30,15 +32,16 @@ import org.eclim.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 
 /**
- * Command to obtain project info.
+ * Command to get/set a project setting.
  *
  * @author Eric Van Dewoestine
  */
 @Command(
   name = "project_setting",
   options =
-    "OPTIONAL p project ARG," +
-    "OPTIONAL s setting ARG"
+    "REQUIRED p project ARG," +
+    "REQUIRED s setting ARG," +
+    "OPTIONAL v value ARG"
 )
 public class ProjectSettingCommand
   extends AbstractCommand
@@ -53,7 +56,15 @@ public class ProjectSettingCommand
     IProject project = ProjectUtils.getProject(name, true);
     String setting = commandLine.getValue(Options.SETTING_OPTION);
 
-    String value = getPreferences().getValue(project, setting);
+    Preferences preferences = getPreferences();
+
+    if (commandLine.hasOption(Options.VALUE_OPTION)){
+      String value = commandLine.getValue(Options.VALUE_OPTION);
+      preferences.setValue(project, setting, value);
+      return StringUtils.EMPTY;
+    }
+
+    String value = preferences.getValue(project, setting);
     return value != null ? value : StringUtils.EMPTY;
   }
 }
