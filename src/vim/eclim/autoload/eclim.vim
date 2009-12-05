@@ -282,7 +282,11 @@ endfunction " }}}
 " ShutdownEclim() {{{
 " Shuts down the eclimd server.
 function! eclim#ShutdownEclim()
-  call eclim#ExecuteEclim(s:command_shutdown)
+  let workspace = eclim#eclipse#ChooseWorkspace()
+  if workspace != '0'
+    let port = eclim#client#nailgun#GetNgPort()
+    call eclim#ExecuteEclim(s:command_shutdown, port)
+  endif
 endfunction " }}}
 
 " CommandCompleteScriptRevision(argLead, cmdLine, cursorPos) {{{
