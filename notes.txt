@@ -1,9 +1,10 @@
 HIGH {{{
   - embedded eclimd + multiple workspaces
 
-  - look into embed issues reported
+  - possible issue converting .eclimrc properties to -Dproperty args in eclimd on OSX
+    $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
 
-  - clean up meta tags in docs
+  - meta tags in docs
     - http://docutils.sourceforge.net/docs/ref/rst/directives.html#meta
 
   - convert to github
@@ -12,40 +13,11 @@ HIGH {{{
       - http://github.com/repositories/new
     - consider moving eclim site as well to github pages:
       - http://pages.github.com/
+      - requires paid account to point eclim.org at it.
+      - doesn't yet have .htaccess support
     - downloads?
-    - point eclim.org at github pages
-    - update links on freshmeat.
-
-  - :VcsWeb*, when prompting for type/url, persist the values if possible.
-
-  - possible issue converting .eclimrc properties to -Dproperty args in eclimd
-    $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
-
-  - eclim+cdt issue:
-    - Install eclipse 64Bit C++ version on Linux
-    - install eclim, only C++ component
-    - start "eclipse -clean"
-    - F3 Works
-    - stop eclipse, start eclimd
-    - start gvim, do CSearchContext
-    - stop eclimd, start eclipse
-    - F3 does NOT WORK
-    - stop eclipse, start "eclipse -clean"
-    - F3 works
-
-  - highlevel default open action which can be overridden by the existing vars
-    - autoload/eclim/c/search.vim : let g:EclimCSearchSingleResult = "split"
-    - autoload/eclim/common/buffers.vim : let g:EclimBuffersDefaultAction = 'split'
-    - autoload/eclim/common/locate.vim : let g:EclimLocateFileDefaultAction = 'split'
-    - autoload/eclim/java/hierarchy.vim : let g:EclimJavaHierarchyDefaultAction = 'split'
-    - autoload/eclim/java/search.vim : let g:EclimJavaSearchSingleResult = "split"
-    - autoload/eclim/php/search.vim : let g:EclimPhpSearchSingleResult = "split"
-    - autoload/eclim/python/django/find.vim : let g:EclimDjangoFindAction = 'split'
-    - autoload/eclim/python/search.vim : let g:EclimPythonSearchSingleResult = "split"
-    - autoload/eclim/ruby/search.vim : let g:EclimRubySearchSingleResult = "split"
-    - autoload/eclim/vim/find.vim : let g:EclimVimFindSingleResult = "split"
-    - autoload/eclim/web.vim : let g:EclimOpenUrlInVimAction = 'split'
-    - ProjectTree default?
+      - doesn't yet have tracking of number of downloads
+    - update git links on freshmeat and in eclim docs.
 
   - CSearchConext, when on a definition, go to declaration, when on declaration
     go to definition.
