@@ -303,7 +303,7 @@ View the :ref:`release notes <1.3.0>` for more info.
 .. _eclipse: http://eclipse.org
 .. _vim: http://vim.org
 .. _nailgun: http://www.martiansoftware.com/nailgun/
-.. _formic: http://sourceforge.net/projects/formic/
+.. _formic: http://github.com/ervandew/formic/
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
 
 .. _emacs client: http://github.com/senny/emacs-eclim
