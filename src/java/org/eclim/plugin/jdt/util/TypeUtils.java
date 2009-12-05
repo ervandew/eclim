@@ -448,7 +448,9 @@ public class TypeUtils
   {
     String superclassSig = type.getSuperclassTypeSignature();
     if(superclassSig != null){
-      String superclass = Signature.getSignatureSimpleName(superclassSig);
+      String superclass =
+        Signature.getSignatureQualifier(superclassSig) + '.' +
+        Signature.getSignatureSimpleName(superclassSig);
       String[] args = Signature.getTypeArguments(superclassSig);
       String[] typeArgs = new String[args.length];
       for (int ii = 0; ii < args.length; ii++){
