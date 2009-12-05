@@ -1,10 +1,5 @@
 HIGH {{{
-  - multi-workspace support
-    - :JavaListInstalls (does this differ by workspace?)
-    - global searching commands (:LocateFile, per lang searches)
-    - document
-      - multi-worksace guide?
-      - support for -f arg for eclim/eclimd
+  - embedded eclimd + multiple workspaces
 
   - look into embed issues reported
 
@@ -676,13 +671,6 @@ NOTES {{{
     3) update documentation website
     4) announce on freshmeat
        - http://freshmeat.net/projects/eclim/
-  }}}
-
-  Running two eclim instance concurrently {{{
-
-    Starting secondary instance:
-      $ eclimd -Dosgi.instance.area.default=@user.home/workspace_other -Dnailgun.server.port=9092
-
   }}}
 
   Adding a new plugin {{{
