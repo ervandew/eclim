@@ -745,17 +745,6 @@ NOTES {{{
           excluding="**/*.swp|**/*.tmp"
   }}}
 
-  Potential Contributors {{{
-    Anton Sharonov (haron13)
-      - good work with :JavaFormat and headed eclim view contributions
-
-    fidlej
-      - good patch work so far
-        https://sourceforge.net/tracker/index.php?func=detail&aid=1617060&group_id=145869&atid=763326
-        https://sourceforge.net/tracker/index.php?func=detail&aid=1787180&group_id=145869&atid=763323
-        https://sourceforge.net/tracker/index.php?func=detail&aid=1781687&group_id=145869&atid=763323
-  }}}
-
   Licensing {{{
     http://www.fsf.org/licensing/licenses/ (lists compatible, not-compatible licenses)
     http://www.eclipse.org/legal/eplfaq.php
