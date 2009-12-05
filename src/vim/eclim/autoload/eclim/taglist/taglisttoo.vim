@@ -665,8 +665,13 @@ function! s:ProcessTags()
       exec filewin . 'winc w'
     endif
   else
-    call s:Window({}, tags, [[],[]])
-    winc p
+    " if the file isn't supported, then don't open the taglist window if it
+    " isn't open already.
+    let winnum = bufwinnr(g:TagList_title)
+    if winnum != -1
+      call s:Window({}, tags, [[],[]])
+      winc p
+    endif
   endif
 
   call s:ShowCurrentTag()
