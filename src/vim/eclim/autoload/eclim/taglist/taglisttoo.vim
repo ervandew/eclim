@@ -880,11 +880,11 @@ function! s:ShowCurrentTag()
   endif
 endfunction " }}}
 
-" s:FileSupported() {{{
+" s:FileSupported(filename, ftype) {{{
 " Check whether tag listing is supported for the specified file
 function! s:FileSupported(filename, ftype)
-  " Skip buffers with no names and buffers with filetype not set
-  if a:filename == '' || a:ftype == ''
+  " Skip buffers with no names, buffers with filetype not set, and vimballs
+  if a:filename == '' || a:ftype == '' || expand('%:e') == 'vba'
     return 0
   endif
 
