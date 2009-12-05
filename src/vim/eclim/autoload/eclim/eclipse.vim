@@ -128,6 +128,14 @@ function! eclim#eclipse#ChooseWorkspace(...)
           return workspace
         endif
       endfor
+    else
+      let project = eclim#project#util#GetCurrentProjectName()
+      if project != ''
+        let workspace = eclim#project#util#GetProjectWorkspace(project)
+        if workspace != ''
+          return workspace
+        endif
+      endif
     endif
 
     let response = eclim#util#PromptList(
