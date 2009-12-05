@@ -22,6 +22,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
+import org.eclipse.ui.internal.Workbench;
+
 /**
  * Eclim application implementation which runs in its own headless eclipse
  * instance.
@@ -62,6 +64,16 @@ public class EclimApplicationHeadless
       logger.warn("Error saving workspace.", e);
     }
     logger.info("Workspace saved.");
+
+    final Workbench workbench = Workbench.getInstance();
+    if (workbench != null){
+      logger.info("Closing workbench...");
+      // set dummy display's current thread
+      ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
+        .setThread(Thread.currentThread());
+      workbench.close();
+      logger.info("Workbench closed.");
+    }
   }
 
   /**
