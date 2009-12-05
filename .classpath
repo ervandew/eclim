@@ -11,7 +11,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/scannotation-1.0.2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/asm-2.2.3.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/groovy-1.6.0.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/groovy-1.6.5.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/jericho-html-3.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/joda-time-1.6.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/secondstring-20060615.jar"/>
