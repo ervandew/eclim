@@ -85,6 +85,7 @@ public class EclipseStep
   };
 
   private boolean createMissingPanelAdded = false;
+  private JCheckBox overridePluginsCheckBox;
 
   /**
    * Constructs the welcome step.
@@ -114,20 +115,24 @@ public class EclipseStep
     panel.add(eclipseHomeChooser);
 
     form.bind(home, eclipseHomeChooser.getTextField(),
-        new ValidatorBuilder().required()
-        .validator(new EclipseHomeValidator()).validator());
+        new ValidatorBuilder()
+        .required()
+        .isDirectory()
+        .validator(new EclipseHomeValidator())
+        .validator(new EclipseHomeWritableValidator())
+        .validator());
     String eclipseHomeDefault = getDefaultEclipseHome();
     eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
     // On systems where eclispe was installed via a package manger, the user may
     // need to install the plugins in an alternate location.
-    if(!Os.isFamily("windows")){
+    if(!Os.isFamily(Os.FAMILY_WINDOWS)){
       String local = fieldName("local");
       String eclipseLocalDefault = eclipseHomeDefault;
       final FileChooser eclipseLocalChooser =
          new FileChooser(JFileChooser.DIRECTORIES_ONLY);
       form.bind(local, eclipseLocalChooser.getTextField(),
-        new ValidatorBuilder().required().isDirectory().validator());
+        new ValidatorBuilder().required().isDirectory().isWritable().validator());
 
       final JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
       final JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
@@ -135,8 +140,7 @@ public class EclipseStep
       eclipseLocalChooser.getButton().setEnabled(false);
 
       String hasLocal = fieldName("hasLocal");
-      JCheckBox overridePluginsCheckBox =
-        new JCheckBox(Installer.getString(hasLocal));
+      overridePluginsCheckBox = new JCheckBox(Installer.getString(hasLocal));
 
       final JPanel createMissingPanel = new JPanel(new FlowLayout());
       final JButton createMissingButton =
@@ -149,14 +153,21 @@ public class EclipseStep
       overridePluginsCheckBox.addActionListener(new ActionListener(){
         public void actionPerformed (ActionEvent e){
           boolean selected = ((JCheckBox)e.getSource()).isSelected();
-          eclipseLocalChooser.getTextField().setEnabled(selected);
+          JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
+          eclipseLocalField.setEnabled(selected);
           eclipseLocalChooser.getButton().setEnabled(selected);
+
+          // force home field to re-validate
+          JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
+          eclipseHomeField.setText(eclipseHomeField.getText());
+
           if(!selected){
             // force eclipse local text field to update itself
-            JTextField eclipseHomeField = eclipseHomeChooser.getTextField();
+            eclipseHomeField = eclipseHomeChooser.getTextField();
             eclipseHomeField.setText(eclipseHomeField.getText());
             createMissingButton.setEnabled(false);
           }else{
+            eclipseLocalField.grabFocus();
             final File eclipseLocalPath = getDefaultEclipseLocalPath();
             if(eclipseLocalPath != null){
               final String[] path = {"configuration", "eclipse"};
@@ -221,7 +232,7 @@ public class EclipseStep
     Installer.getContext().setValue("eclipse.home", home);
 
     String plugins = null;
-    if (Os.isFamily("windows")){
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
       plugins = home + "/plugins";
     }else{
       String local = (String)Installer.getContext().getValue("eclipse.local");
@@ -229,7 +240,7 @@ public class EclipseStep
       Installer.getContext().setValue("eclipse.local", local);
       plugins = local + "/plugins";
 
-      if (!new File(local).canWrite()){
+      if (!new org.formic.util.File(local).canWrite()){
         proceed = false;
         GuiDialogs.showWarning(
             "You do not have write permissions on the directory:\n" +
@@ -249,7 +260,7 @@ public class EclipseStep
   {
     String home = Installer.getEnvironmentVariable("ECLIPSE_HOME");
     if(home == null || home.trim().length() == 0){
-      if(Os.isFamily("windows")){
+      if(Os.isFamily(Os.FAMILY_WINDOWS)){
         for (int ii = 0; ii < WINDOWS_ECLIPSES.length; ii++){
           if(new File(WINDOWS_ECLIPSES[ii]).exists()){
             home = WINDOWS_ECLIPSES[ii];
@@ -279,7 +290,7 @@ public class EclipseStep
         Installer.getProject().replaceProperties("${user.home}/.eclipse"));
     if(dotEclipse.exists()){
       File[] contents = dotEclipse.listFiles(new FilenameFilter(){
-        public boolean accept (File dir, String name){
+        public boolean accept(File dir, String name){
           if(name.startsWith("org.eclipse.platform_")){
             return true;
           }
@@ -310,6 +321,27 @@ public class EclipseStep
 
     public String getErrorMessage () {
       return getName() + ".home.invalid";
+    }
+  }
+
+  private class EclipseHomeWritableValidator
+    implements Validator
+  {
+    public boolean isValid (Object value) {
+      String folder = (String)value;
+      if(folder != null && folder.trim().length() > 0){
+        File plugins =
+          new org.formic.util.File(FilenameUtils.concat(folder, "plugins"));
+
+        return (overridePluginsCheckBox != null &&
+            overridePluginsCheckBox.isSelected()) ||
+          plugins.canWrite();
+      }
+      return true;
+    }
+
+    public String getErrorMessage () {
+      return getName() + ".home.writable";
     }
   }
 

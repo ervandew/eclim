@@ -655,7 +655,7 @@ public class EclipsePluginsStep
         File site = null;
         public void process(String line){
           if(line.startsWith(SITE)){
-            site = new File(line.substring(SITE.length()));
+            site = new org.formic.util.File(line.substring(SITE.length()));
             sites.add(site);
           }else if(line.startsWith(FEATURE)){
             String[] attrs = StringUtils.split(

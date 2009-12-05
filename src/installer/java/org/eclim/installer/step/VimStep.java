@@ -18,7 +18,6 @@ package org.eclim.installer.step;
 
 import java.awt.Component;
 
-import java.io.File;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
@@ -33,6 +32,8 @@ import javax.swing.ListSelectionModel;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.formic.util.File;
 
 import foxtrot.Task;
 import foxtrot.Worker;
@@ -370,7 +371,7 @@ public class VimStep
   private String[] getVimRuntimePath()
   {
     try{
-      File tempFile = File.createTempFile("eclim_installer", null);
+      java.io.File tempFile = File.createTempFile("eclim_installer", null);
       String command = COMMAND.replaceFirst("<file>",
           tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
 
@@ -403,7 +404,7 @@ public class VimStep
    * @param file The file containing the results.
    * @return The results.
    */
-  private String[] parseVimRuntimePathResults(File file)
+  private String[] parseVimRuntimePathResults(java.io.File file)
   {
     FileInputStream in = null;
     try{
