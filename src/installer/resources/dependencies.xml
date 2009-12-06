@@ -9,7 +9,7 @@
   </feature>
 
   <feature id="dltk">
-    <dependency id="org.eclipse.dltk.core" version="1.0.0">
+    <dependency id="org.eclipse.dltk.core" version="1.0.1">
       <site url="http://download.eclipse.org/releases/galileo/"/>
     </dependency>
   </feature>
@@ -21,19 +21,19 @@
   </feature>
 
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.5.0">
+    <dependency id="org.eclipse.jdt" version="3.5.1">
       <site url="http://download.eclipse.org/releases/galileo/"/>
     </dependency>
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php" version="2.1.0">
+    <dependency id="org.eclipse.php" version="2.1.3">
       <site url="http://download.eclipse.org/releases/galileo/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.1.0">
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.1.1">
       <site url="http://download.eclipse.org/releases/galileo/"/>
       <!--site url="http://download.eclipse.org/webtools/updates/"/-->
     </dependency>
