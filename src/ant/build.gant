@@ -808,7 +808,7 @@ def createProject(project, nature, extra=null){
 
 def eclim(args){
   ant.exec(executable: '${eclim.home}/bin/eclim', failonerror: true,
-      output: 'build/test/junit/eclim.log', append: false){
+      output: 'build/eclim.log', append: false){
     ant.arg(line: "-f ${basedir}/src/test/resources/eclimrc.test ${args}")
   }
 }
