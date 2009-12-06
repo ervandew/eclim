@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.util.StringUtils;
+
 import org.eclim.util.file.Position;
 
 import org.eclipse.jdt.core.Flags;
@@ -448,9 +450,12 @@ public class TypeUtils
   {
     String superclassSig = type.getSuperclassTypeSignature();
     if(superclassSig != null){
+      String qualifier = Signature.getSignatureQualifier(superclassSig);
+      qualifier =
+        (qualifier != null && !qualifier.equals(StringUtils.EMPTY)) ?
+        qualifier + '.' : StringUtils.EMPTY;
       String superclass =
-        Signature.getSignatureQualifier(superclassSig) + '.' +
-        Signature.getSignatureSimpleName(superclassSig);
+        qualifier + Signature.getSignatureSimpleName(superclassSig);
       String[] args = Signature.getTypeArguments(superclassSig);
       String[] typeArgs = new String[args.length];
       for (int ii = 0; ii < args.length; ii++){
