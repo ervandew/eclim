@@ -110,7 +110,8 @@ on the context of the element under the cursor.
 
 - If the cursor is on an #include name, it will search the configured include
   path for the file.
-- Otherwise, it will search for the declaration of the element.
+- Otherwise, it will search for the definition of the element (if the cursor
+  is on the definition, then it will search for the declaration).
 
 
 Configuration

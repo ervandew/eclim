@@ -126,10 +126,7 @@ function! eclim#c#search#SearchContext()
     return
   endif
 
-  if !eclim#c#search#Search('-x definitions')
-    call eclim#c#search#Search('-x declarations')
-  endif
-
+  call eclim#c#search#Search('-x context')
 endfunction " }}}
 
 " CommandCompleteCSearch(argLead, cmdLine, cursorPos) {{{

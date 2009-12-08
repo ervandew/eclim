@@ -35,6 +35,11 @@ Common:
   - Updated :ref:`:VcsWeb* commands <vcs-web>` to support github, google code,
     and bitbucket.
 
+C/C++:
+  - Improved :ref:`:CSearchContext <:CSearchContext>` to search for declaration
+    when on a definition, allowing you to jump back and forth between
+    declaration and definition.
+
 Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the
     installed JDKs/JREs that eclipse is aware of.

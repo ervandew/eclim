@@ -97,9 +97,12 @@ public class SearchCommand
   extends AbstractCommand
 {
   public static final String CONTEXT_ALL = "all";
+  public static final String CONTEXT_CONTEXT = "context";
   public static final String CONTEXT_DECLARATIONS = "declarations";
   public static final String CONTEXT_DEFINITIONS = "definitions";
   public static final String CONTEXT_REFERENCES = "references";
+
+  private static final int FIND_CONTEXT = -1;
 
   public static final String SCOPE_ALL = "all";
   public static final String SCOPE_PROJECT = "project";
@@ -174,62 +177,23 @@ public class SearchCommand
       IIndex index = CCorePlugin.getIndexManager().getIndex(
           scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
       index.acquireReadLock();
-      try{
-        int flags = IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
-        if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES){
-          flags |= IIndex.FIND_ALL_OCCURRENCES;
-        } else if (context == PDOMSearchQuery.FIND_REFERENCES){
-          flags |= IIndex.FIND_REFERENCES;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
-          flags |= IIndex.FIND_DECLARATIONS_DEFINITIONS;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS) {
-          flags |= IIndex.FIND_DECLARATIONS;
-        } else if (context == PDOMSearchQuery.FIND_DEFINITIONS) {
-          flags |= IIndex.FIND_DEFINITIONS;
+
+      int offset = getOffset(commandLine);
+      int length = commandLine.getIntValue(Options.LENGTH_OPTION);
+      IName[] names = findElement(src, scope, context, offset, length);
+      for (IName iname : names){
+        if(buffer.length() > 0){
+          buffer.append('\n');
         }
-
-        int offset = getOffset(commandLine);
-        int length = commandLine.getIntValue(Options.LENGTH_OPTION);
-        IASTTranslationUnit ast = ASTUtils.getTranslationUnit(src);
-        IASTNodeSelector selector = ast.getNodeSelector(null);
-        IASTName name = selector.findEnclosingName(offset, length);
-        if (name != null){
-          IBinding binding = name.resolveBinding();
-
-          LinkedHashSet<IName> names = new LinkedHashSet<IName>();
-          CollectionUtils.addAll(names, index.findNames(binding, flags));
-          if (names.size() == 0){
-            // alternate search that finds some things that index.findNames may
-            // not.
-            if (context == PDOMSearchQuery.FIND_DECLARATIONS ||
-                context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS)
-            {
-              CollectionUtils.addAll(names, ast.getDeclarations(binding));
-            }
-            if (context == PDOMSearchQuery.FIND_DEFINITIONS ||
-                context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS)
-            {
-              CollectionUtils.addAll(names, ast.getDefinitions(binding));
-            }
-          }
-
-          for (IName iname : names){
-            if(buffer.length() > 0){
-              buffer.append('\n');
-            }
-            IASTFileLocation loc = iname.getFileLocation();
-            String filename = loc.getFileName();
-            String lineColumn =
-              VimUtils.translateLineColumn(filename, loc.getNodeOffset());
-            buffer.append(filename)
-              .append('|')
-              .append(lineColumn)
-              .append('|')
-              .append("");
-          }
-        }
-      }finally{
-        index.releaseReadLock();
+        IASTFileLocation loc = iname.getFileLocation();
+        String filename = loc.getFileName();
+        String lineColumn =
+          VimUtils.translateLineColumn(filename, loc.getNodeOffset());
+        buffer.append(filename)
+          .append('|')
+          .append(lineColumn)
+          .append('|')
+          .append("");
       }
     }
 
@@ -288,6 +252,75 @@ public class SearchCommand
     return buffer.toString();
   }
 
+  protected IName[] findElement(
+      ITranslationUnit src,
+      ICProject[] scope, int context,
+      int offset, int length)
+    throws Exception
+  {
+    LinkedHashSet<IName> names = new LinkedHashSet<IName>();
+    IIndex index = CCorePlugin.getIndexManager().getIndex(
+        scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
+    index.acquireReadLock();
+    try{
+      IASTTranslationUnit ast = ASTUtils.getTranslationUnit(src);
+      IASTNodeSelector selector = ast.getNodeSelector(null);
+      IASTName name = selector.findEnclosingName(offset, length);
+      if (name != null){
+        IBinding binding = name.resolveBinding();
+
+        int flags = IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
+        if (context == FIND_CONTEXT){
+          if (!name.isDeclaration() && !name.isDefinition()){
+            flags |= IIndex.FIND_DEFINITIONS;
+          } else {
+            // if on the declaration, search for the definition and vice verca
+            flags |= (name.isDefinition() ?
+                IIndex.FIND_DECLARATIONS : IIndex.FIND_DEFINITIONS);
+          }
+        } else if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES){
+          flags |= IIndex.FIND_ALL_OCCURRENCES;
+        } else if (context == PDOMSearchQuery.FIND_REFERENCES){
+          flags |= IIndex.FIND_REFERENCES;
+        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
+          flags |= IIndex.FIND_DECLARATIONS_DEFINITIONS;
+        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS) {
+          flags |= IIndex.FIND_DECLARATIONS;
+        } else if (context == PDOMSearchQuery.FIND_DEFINITIONS) {
+          flags |= IIndex.FIND_DEFINITIONS;
+        }
+
+        CollectionUtils.addAll(names, index.findNames(binding, flags));
+
+        // kind of hacky.  if we issued a context search and found no
+        // definitions, we'll try a declarations search (useful for system
+        // library references).
+        if (names.size() == 0 &&
+            context == FIND_CONTEXT &&
+            (flags & IIndex.FIND_DEFINITIONS) != 0)
+        {
+          CollectionUtils.addAll(names, index.findNames(
+                binding,
+                IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES | IIndex.FIND_DECLARATIONS));
+        }
+
+        if (names.size() == 0){
+          // alternate search that finds some things that index.findNames may
+          // not.
+          if ((flags & IIndex.FIND_DECLARATIONS) != 0){
+            CollectionUtils.addAll(names, ast.getDeclarations(binding));
+          }
+          if ((flags & IIndex.FIND_DEFINITIONS) != 0){
+            CollectionUtils.addAll(names, ast.getDefinitions(binding));
+          }
+        }
+      }
+    }finally{
+      index.releaseReadLock();
+    }
+    return names.toArray(new IName[names.size()]);
+  }
+
   /**
    * Gets the search scope to use.
    *
@@ -334,7 +367,8 @@ public class SearchCommand
   protected int getContext(String context)
   {
     if(CONTEXT_ALL.equals(context)){
-      return PDOMSearchQuery.FIND_ALL_OCCURANCES;
+    }else if(CONTEXT_CONTEXT.equals(context)){
+      return FIND_CONTEXT;
     }else if(CONTEXT_REFERENCES.equals(context)){
       return PDOMSearchQuery.FIND_REFERENCES;
     }else if(CONTEXT_DECLARATIONS.equals(context)){
