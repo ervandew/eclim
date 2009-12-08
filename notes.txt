@@ -1,6 +1,4 @@
 HIGH {{{
-  - embedded eclimd + multiple workspaces
-
   - possible issue converting .eclimrc properties to -Dproperty args in eclimd on OSX
     $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
 
@@ -17,10 +15,7 @@ HIGH {{{
       - doesn't yet have .htaccess support
     - downloads?
       - doesn't yet have tracking of number of downloads
-    - update git links on freshmeat and in eclim docs.
-
-  - CSearchConext, when on a definition, go to declaration, when on declaration
-    go to definition.
+    - update git links on freshmeat, ohloh, and in eclim docs.
 
   - c/c++ call heirarchy
     - org/eclipse/cdt/internal/ui/callhierarchy/CallHierarchyUI.java
@@ -148,6 +143,9 @@ TODO {{{
     - add a generic help function for toggling help in a buffer
       - :ProjectTree
       - :Buffers
+
+    - :ProjectTree
+      - reuse the same buffer on mulitple tabs?
 
     - settings export/import
 
