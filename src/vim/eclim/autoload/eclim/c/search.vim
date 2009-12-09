@@ -30,10 +30,7 @@
 " }}}
 
 " Script Varables {{{
-  let s:search_element =
-    \ '-command c_search -n "<project>" -f "<file>" ' .
-    \ '-o <offset> -l <length> -e <encoding> -x <context>'
-  let s:search_pattern = '-command c_search'
+  let s:search = '-command c_search'
   let s:includepaths = '-command c_includepaths -p "<project>"'
   let s:sourcepaths = '-command c_sourcepaths -p "<project>"'
   let s:options = ['-p', '-t', '-s', '-x', '-i']
@@ -63,7 +60,7 @@
 " Executes a search.
 function! eclim#c#search#Search(argline)
   return eclim#lang#Search(
-    \ s:search_pattern, g:EclimCSearchSingleResult, a:argline)
+    \ s:search, g:EclimCSearchSingleResult, a:argline)
 endfunction " }}}
 
 " FindInclude() {{{
