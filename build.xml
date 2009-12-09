@@ -36,6 +36,18 @@
     <antcall target="gant"> <param name="target" value="deploy.vim"/> </antcall>
   </target>
 
+  <target name="build">
+    <antcall target="gant"> <param name="target" value="build"/> </antcall>
+  </target>
+
+  <target name="build.eclipse">
+    <antcall target="gant"> <param name="target" value="build.eclipse"/> </antcall>
+  </target>
+
+  <target name="build.vim">
+    <antcall target="gant"> <param name="target" value="build.vim"/> </antcall>
+  </target>
+
   <target name="test">
     <antcall target="gant"> <param name="target" value="test"/> </antcall>
   </target>
