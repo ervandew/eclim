@@ -177,23 +177,26 @@ public class SearchCommand
       IIndex index = CCorePlugin.getIndexManager().getIndex(
           scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
       index.acquireReadLock();
-
-      int offset = getOffset(commandLine);
-      int length = commandLine.getIntValue(Options.LENGTH_OPTION);
-      IName[] names = findElement(src, scope, context, offset, length);
-      for (IName iname : names){
-        if(buffer.length() > 0){
-          buffer.append('\n');
+      try{
+        int offset = getOffset(commandLine);
+        int length = commandLine.getIntValue(Options.LENGTH_OPTION);
+        IName[] names = findElement(src, scope, context, offset, length);
+        for (IName iname : names){
+          if(buffer.length() > 0){
+            buffer.append('\n');
+          }
+          IASTFileLocation loc = iname.getFileLocation();
+          String filename = loc.getFileName();
+          String lineColumn =
+            VimUtils.translateLineColumn(filename, loc.getNodeOffset());
+          buffer.append(filename)
+            .append('|')
+            .append(lineColumn)
+            .append('|')
+            .append("");
         }
-        IASTFileLocation loc = iname.getFileLocation();
-        String filename = loc.getFileName();
-        String lineColumn =
-          VimUtils.translateLineColumn(filename, loc.getNodeOffset());
-        buffer.append(filename)
-          .append('|')
-          .append(lineColumn)
-          .append('|')
-          .append("");
+      }finally{
+        index.releaseReadLock();
       }
     }
 
