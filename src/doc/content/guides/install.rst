@@ -240,13 +240,8 @@ Now that you have eclim installed, the next step is to familiarize yourself
 with at least the core set of commands that eclim provides, all of which are
 found at the index of the eclim :ref:`documentation <vim/index>`.
 
-After doing that you can then proceed to create your first project\:
-
-- :ref:`C/C++ Project Guide <guides/c/project>`
-- :ref:`Java Project Guide <guides/java/project>`
-- :ref:`Php Project Guide <guides/php/project>`
-- :ref:`Python Project Guide <guides/python/project>`
-- :ref:`Ruby Project Guide <guides/ruby/project>`
+After doing that you can then proceed to :ref:`getting started guide
+<gettingstarted>`.
 
 
 Upgrading

@@ -23,18 +23,10 @@ Guides
    install
    uninstall
    troubleshoot
-   c/project
-   java/project
-   php/project
-   python/project
-   ruby/project
-   java/ivy/classpath
-   java/maven/maven/classpath
-   java/maven/mvn/classpath
-   clojure/vimclojure
    headless
    multi_workspace
    development
+   clojure/vimclojure
 
 
 Installing, Upgrading, Troubleshooting, etc.
@@ -44,29 +36,6 @@ Installing, Upgrading, Troubleshooting, etc.
 - :ref:`guides/troubleshoot`
 - :ref:`guides/headless`
 - :ref:`guides/multi_workspace`
-
-
-Java
-----
-- :ref:`guides/java/project`
-- :ref:`guides/java/ivy/classpath`
-- :ref:`guides/java/maven/maven/classpath`
-- :ref:`guides/java/maven/mvn/classpath`
-
-
-Php
-----
-- :ref:`guides/php/project`
-
-
-Python
-------
-- :ref:`guides/python/project`
-
-
-Ruby
-------
-- :ref:`guides/ruby/project`
 
 
 Eclim Developers

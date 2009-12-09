@@ -39,14 +39,11 @@ and variables.
   server to update the project's classpath, and will report any errors via vim's
   location list (:help location-list).
 
-  In addition to directly editing the ``.classpath`` file, you may
-  also use maven's support
-  (:ref:`1.x <guides/java/maven/maven/classpath>` or
-  :ref:`2.x <guides/java/maven/mvn/classpath>`) for
-  maintaining the eclipse classpath.  For users who use ivy_, eclim also
-  provides a means to
-  :ref:`auto update the eclipse classpath <guides/java/ivy/classpath>` when
-  saving changes to your ivy.xml.
+  In addition to directly editing the ``.classpath`` file, you may also use
+  :ref:`maven's support <classpath-maven>` for maintaining the eclipse
+  classpath.  For users who use ivy_, eclim also provides a means to :ref:`auto
+  update the eclipse classpath <classpath-ivy>` when saving changes to your
+  ivy.xml.
 
 .. _\:NewSrcEntry:
 
@@ -146,4 +143,148 @@ and variables.
   - **:VariableDelete** <name> -
     Deletes the variable with the supplied name.
 
+
+.. _classpath-maven:
+
+Maven
+-----
+
+Maven_ comes bundled with an Eclipse plugin that allows you to easily maintain
+your .classpath file based on your pom.xml (or project.xml for maven 1.x
+users).
+
+.. note::
+
+  For additional information on the Eclipse plugin from maven, you may visit
+  their online documentation for `maven 1.x`_ or `maven 2.x`_.
+
+
+.. _\:MvnRepo:
+.. _\:MavenRepo:
+
+* Initial Setup
+
+  To initialize maven's support for updating the eclipse classpath you first need
+  to set the ``M2_REPO`` (or ``MAVEN_REPO`` for 1.x) classpath variable in the
+  Eclipse workspace by executing the following command which is made available
+  when editing the pom.xml (or project.xml for 1.x) file in vim:
+
+  maven 2.x:
+
+  .. code-block:: vim
+
+    :MvnRepo
+
+  maven 1.x:
+
+  .. code-block:: vim
+
+    :MavenRepo
+
+* Updating your .classpath
+
+  Once you have performed the initial setup, updating the Eclipse
+  ``.classpath`` file is as easy as executing the following at a command line:
+
+  maven 2.x:
+
+  ::
+
+    mvn eclipse:eclipse
+
+  maven 1.x:
+
+  ::
+
+    maven eclipse
+
+  or in Vim:
+
+  maven 2.x:
+
+  .. code-block:: vim
+
+    :Mvn eclipse:eclipse
+
+  maven 1.x:
+
+  .. code-block:: vim
+
+    :Maven eclipse
+
+* Search Online Maven Repository
+
+  Eclim also provides the command **:MvnDependencySearch**
+  (**:MavenDependencySearch** for 1.x) which allows you to
+  search for dependencies in the online maven repository as described in the
+  :ref:`maven documentation <vim/java/maven/dependencies>`.
+
+.. _classpath-ivy:
+
+Ivy
+---
+
+For users of ivy_, eclim provides support for auto updating the ``.classpath``
+for your project every time you save your ivy.xml file.  Any entries found in
+the ivy.xml that are not in the ``.classpath`` will be added, any entries that
+differ in version will be updated, and any stale entries deleted.
+
+
+.. _\:IvyRepo:
+
+* Initial Setup
+
+  Before you can start utilizing the auto updating support, you must first set
+  the location of your ivy repository (ivy cache).  This is the directory where
+  ivy will download the dependencies to and where eclipse will then pick them
+  up to be added to your project's classpath.
+
+  To set the repository location you can use the **:IvyRepo** command which is
+  made available when editing an ivy.xml file.
+
+  .. code-block:: vim
+
+    :IvyRepo ~/.ivy2/cache/
+
+  If you fail to set this prior to writing the ivy.xml file, eclim will emit an
+  error notifying you that you first need to set the IVY_REPO variable via this
+  command.
+
+
+* Updating your .classpath
+
+  Once you have performed the initial setup, updating the Eclipse
+  ``.classpath`` file is as easy as saving your ivy.xml file (:w) and letting
+  eclim do the rest.
+
+
+* Preserving manually added entries
+
+  When utilizing the ivy support, eclim will attempt to remove any stale
+  entries from your .classpath file.  If you have some manually added entries,
+  these may be removed as well.  To prevent this you can add a classpath entry
+  attribute notifying eclim that the entry should be preserved.
+
+  Ex.
+
+  .. code-block:: xml
+
+    <classpathentry kind="lib" path="lib/j2ee-1.4.jar">
+      <attributes>
+        <attribute name="eclim.preserve" value="true"/>
+      </attributes>
+    </classpathentry>
+
+
+.. _\:IvyDependencySearch:
+
+* Search Online Maven Repository
+
+  Eclim also provides the command **:IvyDependencySearch** which allows you to
+  search for dependencies in the online maven repository as described in the
+  :ref:`maven documentation <vim/java/maven/dependencies>`.
+
 .. _ivy: http://jayasoft.org/ivy
+.. _maven: http://maven.apache.org
+.. _maven 1.x: http://maven.apache.org/maven-1.x/plugins/eclipse/
+.. _maven 2.x: http://maven.apache.org/guides/mini/guide-ide-eclipse.html

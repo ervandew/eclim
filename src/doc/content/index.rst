@@ -22,6 +22,7 @@ Welcome to Eclim
 
 .. toctree::
 
+   gettingstarted
    changes
    contribute
 
