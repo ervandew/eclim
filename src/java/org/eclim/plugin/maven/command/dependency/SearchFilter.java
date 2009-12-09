@@ -111,27 +111,30 @@ public class SearchFilter
       String file = ProjectUtils.getFilePath(project, filename);
       Element root = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         .parse(in = new FileInputStream(file)).getDocumentElement();
-      NodeList nodes = ((Element)root.getElementsByTagName(DEPENDENCIES).item(0))
-        .getElementsByTagName(DEPENDENCY);
+      NodeList depends = root.getElementsByTagName(DEPENDENCIES);
+      if (depends.getLength() > 0){
+        NodeList nodes =
+          ((Element)depends.item(0)).getElementsByTagName(DEPENDENCY);
 
-      for (int ii = 0; ii < nodes.getLength(); ii++){
-        Element element = (Element)nodes.item(ii);
+        for (int ii = 0; ii < nodes.getLength(); ii++){
+          Element element = (Element)nodes.item(ii);
 
-        Dependency dependency = new Dependency();
-        if(IVY.equals(type)){
-          dependency.setGroupId(element.getAttribute(Dependency.ORG));
-          dependency.setArtifactId(element.getAttribute(Dependency.NAME));
-          dependency.setVersion(element.getAttribute(Dependency.REV));
-        }else{
-          dependency.setGroupId(
-              XmlUtils.getElementValue(element, Dependency.GROUP_ID));
-          dependency.setArtifactId(
-              XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
-          dependency.setVersion(
-              XmlUtils.getElementValue(element, Dependency.VERSION));
+          Dependency dependency = new Dependency();
+          if(IVY.equals(type)){
+            dependency.setGroupId(element.getAttribute(Dependency.ORG));
+            dependency.setArtifactId(element.getAttribute(Dependency.NAME));
+            dependency.setVersion(element.getAttribute(Dependency.REV));
+          }else{
+            dependency.setGroupId(
+                XmlUtils.getElementValue(element, Dependency.GROUP_ID));
+            dependency.setArtifactId(
+                XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
+            dependency.setVersion(
+                XmlUtils.getElementValue(element, Dependency.VERSION));
+          }
+
+          list.add(dependency);
         }
-
-        list.add(dependency);
       }
     }finally{
       IOUtils.closeQuietly(in);
