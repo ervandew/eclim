@@ -36,6 +36,13 @@ resolve_eclim_home(){
       FILEPATH=$PREV
       break
     fi
+
+    # handle relative symlinks (neither eclim build nor installer create these,
+    # so must have been created by the user or 3rd party installer)
+    if [ ! -f "$FILEPATH" ] ; then
+      PREVDIR=`dirname "$PREV"`
+      FILEPATH=$PREVDIR/$FILEPATH
+    fi
   done
 
   CURPATH=`dirname "$FILEPATH"`
