@@ -59,6 +59,10 @@ if !exists(":CSearchContext")
   command -buffer CSearchContext :call eclim#c#search#SearchContext()
 endif
 
+if !exists(":CCallHierarchy")
+  command -buffer CCallHierarchy :call eclim#c#hierarchy#CallHierarchy()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

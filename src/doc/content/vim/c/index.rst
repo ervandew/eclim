@@ -24,11 +24,13 @@ C/C++
    complete
    validate
    search
+   hierarchy
 
 - :ref:`vim/c/project`
 - :ref:`vim/c/complete`
 - :ref:`vim/c/validate`
 - :ref:`vim/c/search`
+- :ref:`vim/c/hierarchy`
 
 .. note::
   These features depends on the eclipse cdt_ which should be installed for you

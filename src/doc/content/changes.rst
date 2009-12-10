@@ -39,6 +39,8 @@ C/C++:
   - Improved :ref:`:CSearchContext <:CSearchContext>` to search for declaration
     when on a definition, allowing you to jump back and forth between
     declaration and definition.
+  - Added :ref:`:CCallHierarchy <:CCallHierarchy>` to display the call
+    hierarchy for the function or method under the cursor.
 
 Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the

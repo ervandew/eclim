@@ -111,6 +111,8 @@ C/C++ Commands
   Find the element under the cursor based on its context.
 - :ref:`:CProjectConfigs <:CProjectConfigs>` [project] -
   Open a temp buffer to view/modify the current projects cdt configurations.
+- :ref:`:CCallHierarchy <:CCallHierarchy>` -
+  Display the call hierarchy for the function or method under the cursor.
 
 
 Css Commands
