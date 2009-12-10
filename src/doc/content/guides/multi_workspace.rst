@@ -36,6 +36,14 @@ Below are some different ways in which you can configure your eclimd instances:
     $ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
     $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
 
+  If you are using the eclimd view in the eclipse gui, then you can start the
+  eclipse gui with the desired nailgun server port (note that you must place
+  the -vmargs option before the list of jvm arguments):
+
+  ::
+
+    $ eclipse -vmargs -Dnailgun.server.port=9092
+
 2. Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
    start eclimd with the -f argument:
 
@@ -51,6 +59,11 @@ Below are some different ways in which you can configure your eclimd instances:
 
     $ eclimd -f ~/.eclimrc1
     $ eclimd -f ~/.eclimrc2
+
+  .. note::
+
+    The -f argument is not supported by eclipse so the above option is only
+    available when using a headless eclimd instance.
 
 3. Windows Users: Create Windows shortcuts:
 
