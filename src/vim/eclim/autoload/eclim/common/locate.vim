@@ -49,15 +49,15 @@ let s:command_locate = '-command locate_file -s "<scope>"'
 function eclim#common#locate#LocateFile(action, file)
   let scope = (g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project')
   if scope == 'project' && !eclim#project#util#IsCurrentFileInProject(0)
-    if !exists('s:locate_prompt_response') || s:locate_prompt_response != 1
-      let s:locate_prompt_response =  eclim#util#PromptConfirm(
-        \ 'Unable to determine the current project.  Search all projects?',
-        \ g:EclimInfoHighlight)
-    endif
-    let response = s:locate_prompt_response
-    if response < 1
-      return
-    endif
+    "if !exists('s:locate_prompt_response') || s:locate_prompt_response != 1
+    "  let s:locate_prompt_response =  eclim#util#PromptConfirm(
+    "    \ 'Unable to determine the current project.  Search all projects?',
+    "    \ g:EclimInfoHighlight)
+    "endif
+    "let response = s:locate_prompt_response
+    "if response < 1
+    "  return
+    "endif
     let scope = 'workspace'
   endif
 
