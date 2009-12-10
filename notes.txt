@@ -17,35 +17,11 @@ HIGH {{{
       - doesn't yet have tracking of number of downloads
     - update git links on freshmeat, ohloh, and in eclim docs.
 
-  - c/c++ call heirarchy
-    - org/eclipse/cdt/internal/ui/callhierarchy/CallHierarchyUI.java
-    - org/eclipse/cdt/internal/ui/callhierarchy/CHViewPart.java
-    - org/eclipse/cdt/internal/ui/callhierarchy/CHContentProvider.java
-    - org/eclipse/cdt/internal/ui/callhierarchy/CHQueries.java
-    - Example: Mod2.c:8:5
-      fun2(int)
-        fun1(int)
-          fun3(int)
-          main()
-        fun3(int)
-    - recursion? cycles?
-
   - signature + docs (python docstrings, javadocs, etc.) of a method while you
     type.
     - open a scratch window for displaying these
 
   - add high level docs or screencast
-
-  - does this affect eclim as well (nailgun + utf8)?
-    http://mathias-biilmann.net/2009/3/clojure-repl-and-utf-8
-    I don't think eclim sends any text that could contain utf8 characters via
-    nailgun, and no one has reported any related issues.
-    Adding -Dfile.encoding=UTF8 to .eclimrc would be an easy work around if
-    this issue did surface, but perhaps eclim should be more proactive and
-    defualt to UTF8 and allow users to override that default via the
-    file.encoding system property.
-    The default on my box seems to already be UTF8, so maybe this is a mac only
-    issue.
 
   http://conservancy.softwarefreedom.org/
 }}}
@@ -68,6 +44,17 @@ TODO {{{
 
     - vrapper patch to prevent error when vimplugin editor is opened.
       - http://sourceforge.net/apps/trac/vrapper/ticket/30
+
+    - does this affect eclim as well (nailgun + utf8)?
+      http://mathias-biilmann.net/2009/3/clojure-repl-and-utf-8
+      I don't think eclim sends any text that could contain utf8 characters via
+      nailgun, and no one has reported any related issues.
+      Adding -Dfile.encoding=UTF8 to .eclimrc would be an easy work around if
+      this issue did surface, but perhaps eclim should be more proactive and
+      defualt to UTF8 and allow users to override that default via the
+      file.encoding system property.
+      The default on my box seems to already be UTF8, so maybe this is a mac only
+      issue.
   }}}
 
   Tests {{{
@@ -154,7 +141,7 @@ TODO {{{
     - :LocateFile
       - eclipse setting to filter out results
       - update to support different search modes:
-        - projects (already implementd)
+        - projects (already implemented)
           - specific project?
         - buffers: search buffer names
         - vcs modified file:  search names of files reported as untracked or
