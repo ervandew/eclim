@@ -362,21 +362,23 @@ function eclim#tree#ExecuteAction(file, command)
   endif
 endfunction " }}}
 
-" RegisterFileAction(regex,name,action) {{{
+" RegisterFileAction(regex, name, action, [buffer]) {{{
 " regex - Pattern to match the file name against.
 " name - Name of the action used for display purposes.
 " action - The action to execute where <file> is replaced with the filename.
-function eclim#tree#RegisterFileAction(regex, name, action)
+function eclim#tree#RegisterFileAction(regex, name, action, ...)
+  let bufnr = a:0 > 0 ? a:1 : -1
+
   let entry = {}
   for e in s:file_actions
-    if e.regex == a:regex
+    if e.regex == a:regex && e.buffer == bufnr
       let entry = e
       break
     endif
   endfor
 
   if len(entry) == 0
-    let entry = {'regex': a:regex, 'actions': []}
+    let entry = {'regex': a:regex, 'buffer': bufnr, 'actions': []}
     call add(s:file_actions, entry)
   endif
 
@@ -388,8 +390,9 @@ endfunction " }}}
 function eclim#tree#GetFileActions(file)
   let actions = []
   let thefile = tolower(a:file)
+  let bufnr = bufnr('%')
   for entry in s:file_actions
-    if thefile =~ entry.regex
+    if thefile =~ entry.regex && (entry.buffer == -1 || entry.buffer == bufnr)
       let actions += entry.actions
     endif
   endfor
