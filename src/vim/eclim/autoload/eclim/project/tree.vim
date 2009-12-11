@@ -206,13 +206,15 @@ function! s:OpenTree(names, dirs)
   let expand = len(a:dirs) == 1
   call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
 
-  if !s:project_tree_loaded
+  if !exists('b:project_tree_loaded')
     for action in g:EclimProjectTreeActions
       call eclim#tree#RegisterFileAction(action.pattern, action.name,
-        \ "call eclim#project#tree#OpenProjectFile('" . action.action . "', '<cwd>', '<file>')")
+        \ "call eclim#project#tree#OpenProjectFile('" .
+        \   action.action . "', '<cwd>', '<file>')",
+        \ bufnr('%'))
     endfor
 
-    let s:project_tree_loaded = 1
+    let b:project_tree_loaded = 1
   endif
 
   setlocal bufhidden=hide
