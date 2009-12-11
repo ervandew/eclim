@@ -39,6 +39,7 @@ general purpose commands that are useful in and outside the scope of eclim.
     - <ctrl>s - open the selected file via :split
     - <ctrl>t - open the selected file via :tabnew
     - <esc> - close the search window without selecting a file.
+    - <ctrl>h - toggle the help buffer.
 
   By default, the search string accepted by the completion mode is intended to
   be just portions of the file name you are looking for, which is then
@@ -222,6 +223,7 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **S** (shift-s) - Open the file with 'split'.
   - **T** (shift-t) - Open the file with 'tabnew'.
   - **D** (shift-d) - Deletes the buffer and removes it from the list.
+  - **\?** - View the help buffer.
 
   In addition to the above mappings you can also use <return> to execute the
   configured default action on the buffer under the cursor.

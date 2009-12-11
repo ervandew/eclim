@@ -38,7 +38,7 @@ of a project will automatically be saved as a local history revision.
 current file.  In this buffer you can perform the following actions using the
 specified key bindings:
 
-- v - view the contents of the revision under the cursor.
+- <cr> - view the contents of the revision under the cursor.
 - d - diff the revision under the cursor against the current contents.
 - r - revert the current file to the revision under the cursor.
 - c - clear the local history for the file.

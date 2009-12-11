@@ -229,7 +229,8 @@ function s:LocateFileCompletionInit(action, scope, workspace)
   augroup locate_file_init
     autocmd!
     exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
-      \ 'bd ' . b:results_bufnum . ' | ' .  'bd | ' .
+      \ 'doautocmd BufWinLeave | bd | ' .
+      \ 'doautocmd BufWinLeave | bd ' . b:results_bufnum . ' | ' .
       \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ') | ' .
       \ 'doautocmd BufEnter | ' .
       \ 'doautocmd WinEnter | ' .
@@ -252,6 +253,8 @@ function s:LocateFileCompletionInit(action, scope, workspace)
   imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
   imap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
   imap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
+  imap <buffer> <silent> <c-?> <c-r>=<SID>LocateFileHelp()<cr>
+  imap <buffer> <silent> <c-h> <c-r>=<SID>LocateFileHelp()<cr>
 
   startinsert!
 endfunction " }}}
@@ -339,6 +342,25 @@ function s:LocateFileSelect(action)
       \ "bd " . results_bufnum . " | " .
       \ "doautocmd WinEnter\<cr>", 'n')
   endif
+  return ''
+endfunction " }}}
+
+" s:LocateFileHelp() {{{
+function s:LocateFileHelp()
+  let winnr = winnr()
+  exec bufwinnr(b:results_bufnum) . 'winc w'
+  call eclim#help#BufferHelp([
+      \ '<esc> - close the locate prompt + results',
+      \ '<tab>, <down> - select the next file',
+      \ '<s-tab>, <up> - select the previous file',
+      \ '<cr> - open selected file w/ default action',
+      \ '<c-e> - open with :edit',
+      \ '<c-s> - open in a split window',
+      \ '<c-t> - open in a new tab',
+      \ '<c-h> - toggle help buffer',
+    \ ], 'vertical', 50)
+  exec winnr . 'winc w'
+
   return ''
 endfunction " }}}
 

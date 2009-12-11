@@ -271,7 +271,7 @@ function eclim#tree#GetLastChildPosition()
   " a root node
   if line =~ s:root_regex
     let lnum = search(s:root_regex, 'nW')
-    return lnum > 0 ? lnum  - 1 : line('$')
+    return lnum > 0 ? lnum  - 1 : s:GetLastLine()
   endif
 
   " non root node
@@ -279,7 +279,9 @@ function eclim#tree#GetLastChildPosition()
     \ substitute(line, s:nodevalue_regex, '\1' . escape(s:node_regex. '[.[:alnum:]_]', '\'), '')
   let lnum = line('.') + 1
   let indent = s:GetIndent(line('.'))
-  while getline(lnum) !~ sibling && s:GetIndent(lnum) >= indent && lnum != line('$')
+  while getline(lnum) !~ sibling &&
+      \ s:GetIndent(lnum) >= indent &&
+      \ lnum != s:GetLastLine()
     let lnum += 1
   endwhile
 
@@ -303,6 +305,10 @@ endfunction " }}}
 
 " Execute(alt) {{{
 function eclim#tree#Execute(alt)
+  if getline('.') =~ '^"\|^\s*$'
+    return
+  endif
+
   let path = eclim#tree#GetPath()
 
   " execute action on dir
@@ -558,7 +564,7 @@ function eclim#tree#Refresh()
 
   " walk the tree
   let lnum = line('.')
-  while lnum <= end && lnum <= line('$')
+  while lnum <= end && lnum <= s:GetLastLine()
 
     let line = getline('.')
 
@@ -606,10 +612,10 @@ function eclim#tree#Refresh()
           let norm_entry = indent . s:node_prefix . s:file_prefix .
             \ fnamemodify(rewrote, ':t')
         endif
-        if lnum <= line('$')
+        if lnum <= s:GetLastLine()
           call append(lnum - 1, norm_entry)
         else
-          call append(line('$'), norm_entry)
+          call append(s:GetLastLine(), norm_entry)
         endif
         let lnum += 1
       endif
@@ -681,7 +687,7 @@ function eclim#tree#Mkdir()
   call eclim#tree#Refresh()
 endfunction " }}}
 
-" AliasToPath(alias) {{{
+" s:AliasToPath(alias) {{{
 function s:AliasToPath(alias)
   if exists('b:aliases')
     let alias = ''
@@ -694,7 +700,7 @@ function s:AliasToPath(alias)
   return a:alias
 endfunction " }}}
 
-" PathToAlias(path) {{{
+" s:PathToAlias(path) {{{
 function s:PathToAlias(path)
   if exists('b:aliases')
     let path = ''
@@ -814,7 +820,7 @@ function eclim#tree#WriteContents(dir, dirs, files)
   return content
 endfunction " }}}
 
-" RewriteSpecial(file) {{{
+" s:RewriteSpecial(file) {{{
 function s:RewriteSpecial(file)
   let file = a:file
   if s:has_ls
@@ -839,7 +845,7 @@ function s:RewriteSpecial(file)
   return file
 endfunction " }}}
 
-" CollapseDir() {{{
+" s:CollapseDir() {{{
 function s:CollapseDir()
   " update current line
   call s:UpdateLine(s:node_prefix . s:dir_opened_prefix,
@@ -861,12 +867,12 @@ function s:CollapseDir()
   call cursor(lnum, cnum)
 endfunction " }}}
 
-" UnfoldDir() {{{
+" s:UnfoldDir() {{{
 function s:UnfoldDir()
   foldopen
 endfunction " }}}
 
-" FoldDir() {{{
+" s:FoldDir() {{{
 function s:FoldDir()
   let start = line('.')
   let end = eclim#tree#GetLastChildPosition()
@@ -874,7 +880,7 @@ function s:FoldDir()
   exec start . ',' . end . 'fold'
 endfunction " }}}
 
-" ListDir(dir) {{{
+" s:ListDir(dir) {{{
 function s:ListDir(dir)
   if s:has_ls
     let ls = 'ls -1F'
@@ -897,7 +903,7 @@ function s:ListDir(dir)
   return contents
 endfunction " }}}
 
-" GetIndent() {{{
+" s:GetIndent() {{{
 function s:GetIndent(line)
   let indent = indent(a:line)
   if getline(a:line) =~ s:file_prefix . '[.[:alnum:]_]' && s:file_prefix =~ '^\s*$'
@@ -908,6 +914,15 @@ function s:GetIndent(line)
   endif
 
   return indent
+endfunction " }}}
+
+" s:GetLastLine() {{{
+function s:GetLastLine()
+  let line = line('$')
+  while getline(line) =~ '^"\|^\s*$' && line > 1
+    let line -= 1
+  endwhile
+  return line
 endfunction " }}}
 
 " GetChildIndent() {{{
@@ -930,7 +945,7 @@ function eclim#tree#GetChildIndent(line)
   return indent
 endfunction " }}}
 
-" MatchesFilter(file) {{{
+" s:MatchesFilter(file) {{{
 function s:MatchesFilter(file)
   if len(b:filters) > 0
     for filter in b:filters
@@ -944,7 +959,7 @@ function s:MatchesFilter(file)
   return 1
 endfunction " }}}
 
-" IsHidden(path) {{{
+" s:IsHidden(path) {{{
 function s:IsHidden(path)
   if !b:view_hidden
     let path = a:path
@@ -957,7 +972,7 @@ function s:IsHidden(path)
   return 0
 endfunction " }}}
 
-" NormalizeDirs(dirs) {{{
+" s:NormalizeDirs(dirs) {{{
 function s:NormalizeDirs(dirs)
   " normalize path separators
   call map(a:dirs, 'substitute(v:val, "\\\\", "/", "g")')
@@ -972,7 +987,7 @@ function s:NormalizeDirs(dirs)
   return dirs + files
 endfunction " }}}
 
-" UpdateLine(pattern, substitution) {{{
+" s:UpdateLine(pattern, substitution) {{{
 function s:UpdateLine(pattern, substitution)
   let lnum = line('.')
   let line = getline(lnum)
@@ -1031,7 +1046,7 @@ function eclim#tree#ActionExecute(executeFunc)
   call function(a:executeFunc)(file, command)
 endfunction "}}}
 
-" Mappings() {{{
+" s:Mappings() {{{
 function s:Mappings()
   nmap <buffer> <silent> <cr> :call eclim#tree#Execute(0)<cr>
   nmap <buffer> <silent> o    :call eclim#tree#Execute(1)<cr>
@@ -1067,7 +1082,7 @@ function s:Mappings()
   command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')
 endfunction " }}}
 
-" Syntax() {{{
+" s:Syntax() {{{
 function eclim#tree#Syntax()
   exec "hi link TreeDir " . g:TreeDirHighlight
   exec "hi link TreeFile " . g:TreeFileHighlight
@@ -1077,6 +1092,7 @@ function eclim#tree#Syntax()
   syntax match TreeDir /\S.*\// contains=TreeMarker
   syntax match TreeFile /\S.*[^\/]$/
   syntax match TreeFileExecutable /\S.*[^\/]\*$/
+  syntax match Comment /^".*/
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

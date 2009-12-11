@@ -76,8 +76,12 @@ function! eclim#common#history#History()
     call add(revisions, rev.timestamp)
   endfor
   call add(lines, '')
-  call add(lines, 'v: view  d: diff  r: revert  c: clear')
   call eclim#util#TempWindow('[History]', lines)
+
+  setlocal modifiable noreadonly
+  call append(line('$'), '" use ? to view help')
+  setlocal nomodifiable readonly
+  syntax match Comment /^".*/
 
   let b:history_revisions = revisions
   call s:Syntax()
@@ -90,10 +94,23 @@ function! eclim#common#history#History()
       \ delcommand HistoryDiffNext |
       \ delcommand HistoryDiffPrev
   augroup END
-  noremap <buffer> <silent> v :call <SID>View()<cr>
+  noremap <buffer> <silent> <cr> :call <SID>View()<cr>
   noremap <buffer> <silent> d :call <SID>Diff()<cr>
   noremap <buffer> <silent> r :call <SID>Revert()<cr>
   noremap <buffer> <silent> c :call <SID>Clear(1)<cr>
+
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:history_help = [
+      \ '<cr> - view the entry',
+      \ 'd - diff the file with the version under the cursor',
+      \ 'r - revert the file to the version under the cursor',
+      \ 'c - clear the history',
+      \ ':HistoryDiffNext - diff the file with the next version in the history',
+      \ ':HistoryDiffPrev - diff the file with the previous version in the history',
+    \ ]
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:history_help, 'vertical', 50)<cr>
 endfunction " }}}
 
 " HistoryClear(bang) {{{
@@ -274,6 +291,7 @@ function! s:Syntax()
   hi link HistoryFile Identifier
   hi link HistoryCurrentEntry Constant
   syntax match HistoryFile /.*\%1l.*/
+  syntax match Comment /^".*/
 endfunction " }}}
 
 " s:HighlightEntry(index) {{{

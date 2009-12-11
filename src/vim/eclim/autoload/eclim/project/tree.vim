@@ -94,6 +94,9 @@ function! eclim#project#tree#ProjectTree(...)
   normal! zs
 
   call s:Mappings()
+  setlocal modifiable
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable
 endfunction " }}}
 
 " Restore() " {{{
@@ -150,6 +153,31 @@ function! s:Mappings()
   nnoremap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
   nnoremap <buffer> <silent> T :call <SID>OpenFile('tablast \| tabnew')<cr>
   nnoremap <buffer> <silent> F :call <SID>OpenFileName()<cr>
+
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:project_tree_help = [
+      \ '<cr> - open/close dir, open file',
+      \ 'o - toggle dir fold, choose file open action',
+      \ 'E - open with :edit',
+      \ 'S - open in a new split window',
+      \ 'T - open in a new tab',
+      \ 'R - refresh directory',
+      \ 'i - view file info',
+      \ 's - open shell at directory',
+      \ 'p - move cursor to parent dir',
+      \ 'P - move cursor to last child of dir',
+      \ 'C - set root to dir under the cursor',
+      \ 'B - set root up one dir',
+      \ '~ - set root to home dir',
+      \ 'K - set root to top most dir',
+      \ 'F - open/create a file by name',
+      \ 'D - create a new directory',
+      \ 'A - toggle hide/view hidden files',
+      \ ':CD <dir> - set the root to <dir>',
+    \ ]
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:project_tree_help, 'horizontal', 10)<cr>
 endfunction " }}}
 
 " s:OpenFile(action) " {{{

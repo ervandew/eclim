@@ -24,7 +24,10 @@
 
 " Global Variables {{{
   let g:EclimHelpDir = g:EclimBaseDir . '/eclim/doc'
+" }}}
 
+" Help(tag) {{{
+function! eclim#help#Help(tag, link)
   if !filereadable(substitute(g:EclimHelpDir, '\\\s', ' ', 'g') . '/tags')
     call eclim#util#Echo('indexing eclim help files...')
     silent! exec 'helptags ' . g:EclimHelpDir
@@ -35,10 +38,7 @@
     endfor
     call eclim#util#Echo('eclim help files indexed')
   endif
-" }}}
 
-" Help(tag) {{{
-function! eclim#help#Help(tag, link)
   let savetags = &tags
   exec 'set tags=' . escape(escape(g:EclimHelpDir, ' '), ' ') . '/**/tags'
   try
@@ -87,7 +87,54 @@ function s:HelpWindow()
     let index += 1
   endwhile
 
-  below new
+  botright new
+endfunction " }}}
+
+" BufferHelp(lines, orientation, size) {{{
+" Function to display a help window for the current buffer.
+function! eclim#help#BufferHelp(lines, orientation, size)
+  let orig_bufnr = bufnr('%')
+  let name = expand('%')
+  if name =~ '^\W.*\W$'
+    let name = name[:-2] . ' Help' . name[len(name) - 1]
+  else
+    let name .= ' Help'
+  endif
+
+  let bname = eclim#util#EscapeBufferName(name)
+
+  let orient = a:orientation == 'vertical' ? 'v' : ''
+  if bufwinnr(bname) != -1
+    exec 'bd ' . bufnr(bname)
+    return
+  endif
+
+  silent! noautocmd exec a:size . orient . "new " . escape(name, ' ')
+  let b:eclim_temp_window = 1
+  setlocal nowrap winfixheight
+  setlocal noswapfile nobuflisted nonumber
+  setlocal buftype=nofile bufhidden=delete
+  nnoremap <buffer> <silent> ? :bd<cr>
+
+  set modifiable noreadonly
+  silent 1,$delete _
+  call append(1, a:lines)
+  retab
+  silent 1,1delete _
+
+  if len(a:000) == 0 || a:000[0]
+    setlocal nomodified nomodifiable readonly
+  endif
+
+  let help_bufnr = bufnr('%')
+  augroup eclim_help_buffer
+    autocmd! BufWinLeave <buffer>
+    autocmd BufWinLeave <buffer> nested autocmd! eclim_help_buffer * <buffer>
+    exec 'autocmd BufWinLeave <buffer> nested ' .
+      \ 'autocmd! eclim_help_buffer * <buffer=' . orig_bufnr . '>'
+    exec 'autocmd! BufWinLeave <buffer=' . orig_bufnr . '>'
+    exec 'autocmd BufWinLeave <buffer=' . orig_bufnr . '> nested bd ' . help_bufnr
+  augroup END
 endfunction " }}}
 
 " CommandComplete(argLead, cmdLine, cursorPos) {{{

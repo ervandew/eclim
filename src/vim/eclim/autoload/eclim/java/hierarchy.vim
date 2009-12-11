@@ -56,22 +56,42 @@ function! eclim#java#hierarchy#Hierarchy()
   let info = []
   call s:FormatHierarchy(hierarchy, lines, info, '')
   call eclim#util#TempWindow('[Hierarchy]', lines)
-
   set ft=java
+
+  setlocal modifiable noreadonly
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable readonly
+  syntax match Comment /^".*/
+
   let b:hierarchy_info = info
   call eclim#util#Echo(b:hierarchy_info[line('.') - 1])
 
   augroup eclim_java_hierarchy
     autocmd!
     autocmd CursorMoved <buffer>
-      \ call eclim#util#Echo(b:hierarchy_info[line('.') - 1])
+      \ if line('.') <= len(b:hierarchy_info) |
+      \   call eclim#util#Echo(b:hierarchy_info[line('.') - 1]) |
+      \ else |
+      \   echo '' |
+      \ endif
   augroup END
 
-  noremap <buffer> <silent> <cr>
+  nnoremap <buffer> <silent> <cr>
     \ :call <SID>Open(g:EclimJavaHierarchyDefaultAction)<cr>
-  noremap <buffer> <silent> <c-e> :call <SID>Open('edit')<cr>
-  noremap <buffer> <silent> <c-s> :call <SID>Open('split')<cr>
-  noremap <buffer> <silent> <c-t> :call <SID>Open("tablast \| tabnew")<cr>
+  nnoremap <buffer> <silent> E :call <SID>Open('edit')<cr>
+  nnoremap <buffer> <silent> S :call <SID>Open('split')<cr>
+  nnoremap <buffer> <silent> T :call <SID>Open("tablast \| tabnew")<cr>
+
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:hierarchy_help = [
+      \ '<cr> - open file with default action',
+      \ 'E - open with :edit',
+      \ 'S - open in a new split window',
+      \ 'T - open in a new tab',
+    \ ]
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:hierarchy_help, 'vertical', 40)<cr>
 endfunction " }}}
 
 " s:FormatHierarchy(hierarchy, lines, indent) {{{
@@ -86,6 +106,10 @@ endfunction " }}}
 " s:Open(action) {{{
 function! s:Open(action)
   let line = line('.')
+  if line > len(b:hierarchy_info)
+    return
+  endif
+
   let type = b:hierarchy_info[line - 1]
   " go to the buffer that initiated the hierarchy
   exec b:winnr . 'winc w'

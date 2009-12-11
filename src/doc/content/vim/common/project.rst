@@ -293,6 +293,7 @@ Vim's command line completion to complete the project name.
   - **F** -
     Prompts you for a new or existing filename to open, prefilled with the
     directory path in the tree where this mapping was executed.
+  - **\?** - View the help buffer
 
 .. _\:ProjectsTree:
 

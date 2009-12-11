@@ -79,20 +79,41 @@ function! eclim#c#hierarchy#CallHierarchy()
   endfor
 
   call eclim#util#TempWindow('[Call Hierarchy]', lines)
-
   set ft=c
+
+  setlocal modifiable noreadonly
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable readonly
+  syntax match Comment /^".*/
+
   let b:hierarchy_info = info
 
-  noremap <buffer> <silent> <cr>
+  nnoremap <buffer> <silent> <cr>
     \ :call <SID>Open(g:EclimCHierarchyDefaultAction)<cr>
-  noremap <buffer> <silent> <c-e> :call <SID>Open('edit')<cr>
-  noremap <buffer> <silent> <c-s> :call <SID>Open('split')<cr>
-  noremap <buffer> <silent> <c-t> :call <SID>Open("tablast \| tabnew")<cr>
+  nnoremap <buffer> <silent> E :call <SID>Open('edit')<cr>
+  nnoremap <buffer> <silent> S :call <SID>Open('split')<cr>
+  nnoremap <buffer> <silent> T :call <SID>Open("tablast \| tabnew")<cr>
+
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:hierarchy_help = [
+      \ '<cr> - open file with default action',
+      \ 'E - open with :edit',
+      \ 'S - open in a new split window',
+      \ 'T - open in a new tab',
+    \ ]
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:hierarchy_help, 'vertical', 40)<cr>
 endfunction " }}}
 
 " s:Open(action) {{{
 function! s:Open(action)
-  let info = b:hierarchy_info[line('.') - 1]
+  let line = line('.')
+  if line > len(b:hierarchy_info)
+    return
+  endif
+
+  let info = b:hierarchy_info[line - 1]
   if info.file != ''
     " go to the buffer that initiated the hierarchy
     exec b:winnr . 'winc w'

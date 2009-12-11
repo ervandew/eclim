@@ -73,6 +73,11 @@ function! eclim#common#buffers#Buffers()
   endfor
 
   call eclim#util#TempWindow('[buffers]', lines)
+
+  setlocal modifiable noreadonly
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable readonly
+
   let b:eclim_buffers = buffers
 
   " syntax
@@ -81,6 +86,7 @@ function! eclim#common#buffers#Buffers()
   hi link BufferHidden Comment
   syntax match BufferActive /+\?active\s\+\(\[RO\]\)\?/
   syntax match BufferHidden /+\?hidden\s\+\(\[RO\]\)\?/
+  syntax match Comment /^".*/
 
   " mappings
   nnoremap <silent> <buffer> <cr> :call <SID>BufferOpen(g:EclimBuffersDefaultAction)<cr>
@@ -88,6 +94,18 @@ function! eclim#common#buffers#Buffers()
   nnoremap <silent> <buffer> S :call <SID>BufferOpen('split')<cr>
   nnoremap <silent> <buffer> T :call <SID>BufferOpen('tablast \| tabnew')<cr>
   nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
+
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:buffers_help = [
+      \ '<cr> - open buffer with default action',
+      \ 'E - open with :edit',
+      \ 'S - open in a new split window',
+      \ 'T - open in a new tab',
+      \ 'D - delete the buffer',
+    \ ]
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:buffers_help, 'vertical', 40)<cr>
 
   "augroup eclim_buffers
   "  autocmd!
@@ -131,6 +149,10 @@ endfunction " }}}
 " s:BufferDelete() {{{
 function! s:BufferDelete()
   let line = line('.')
+  if line > len(b:eclim_buffers)
+    return
+  endif
+
   let index = line - 1
   exec 'bd ' . b:eclim_buffers[index].bufnr
   setlocal modifiable
@@ -161,7 +183,12 @@ endfunction " }}}
 
 " s:BufferOpen(cmd) {{{
 function! s:BufferOpen(cmd)
-  let file = bufname(b:eclim_buffers[line('.') - 1].bufnr)
+  let line = line('.')
+  if line > len(b:eclim_buffers)
+    return
+  endif
+
+  let file = bufname(b:eclim_buffers[line - 1].bufnr)
   let winnr = b:winnr
   close
   exec winnr . 'winc w'

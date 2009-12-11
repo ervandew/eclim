@@ -36,11 +36,12 @@ the requested function or method.
 While you are in the hierarchy tree buffer, you can jump to the call under the
 cursor using one of the following key bindings:
 
-  - <enter> - open the type using the
+  - <cr> - open the type using the
     (:ref:`default action <g:EclimCHierarchyDefaultAction>`).
-  - <ctrl>e - open the type via :edit
-  - <ctrl>s - open the type via :split
-  - <ctrl>t - open the type via :tabnew
+  - E - open the type via :edit
+  - S - open the type via :split
+  - T - open the type via :tabnew
+  - ? - view help buffer
 
 
 Configuration

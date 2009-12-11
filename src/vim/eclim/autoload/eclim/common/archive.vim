@@ -72,13 +72,19 @@ function! eclim#common#archive#List()
   let b:file_info[root] = {'url': s:FileUrl(file)}
 
   if exists('g:EclimArchiveLayout') && g:EclimArchiveLayout == 'list'
+    set modifiable
     call eclim#common#archive#ListAll()
     let g:EclimArchiveLayout = 'list'
-    1,1delete _
+    call append(0, '" use ? to view help')
+    set nomodifiable
   else
+    set modifiable
     call setline(1, root)
     call eclim#common#archive#ExpandDir()
     let g:EclimArchiveLayout = 'tree'
+    set modifiable
+    call append(line('$'), ['', '" use ? to view help'])
+    set nomodifiable
   endif
 
   setlocal ft=archive
@@ -150,6 +156,10 @@ endfunction " }}}
 
 " Execute(alt) {{{
 function eclim#common#archive#Execute(alt)
+  if getline('.') =~ '^"\|^\s*$'
+    return
+  endif
+
   let path = eclim#tree#GetPath()
 
   " execute action on dir
@@ -340,6 +350,17 @@ function s:Mappings()
 
   if g:EclimArchiveLayout == 'tree'
     let b:tree_mappings_active = 1
+    let b:hierarchy_help = [
+        \ '<cr> - open/close dir, open file',
+        \ 'o - toggle dir fold, choose file open action',
+        \ 'E - open with :edit',
+        \ 'S - open in a new split window',
+        \ 'T - open in a new tab',
+        \ 'p - move cursor to parent dir',
+        \ 'P - move cursor to last child of dir',
+        \ 'i - view file info',
+        \ ':AsList - switch to list view',
+      \ ]
     nmap <buffer> <silent> o    :call eclim#common#archive#Execute(1)<cr>
     nmap <buffer> <silent> j    j:call eclim#tree#Cursor(line('.'))<cr>
     nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>
@@ -362,9 +383,20 @@ function s:Mappings()
       unmap <buffer> I
     endif
 
+    let b:hierarchy_help = [
+        \ '<cr> - open/close dir, open file',
+        \ 'E - open with :edit',
+        \ 'S - open in a new split window',
+        \ 'T - open in a new tab',
+        \ ':AsList - switch to tree view',
+      \ ]
+
     silent! delcommand AsList
     command! -nargs=0 AsTree :call <SID>ChangeLayout('tree')
   endif
+
+  nnoremap <buffer> <silent> ?
+    \ :call eclim#help#BufferHelp(b:hierarchy_help, 'horizontal', 10)<cr>
 
 endfunction " }}}
 

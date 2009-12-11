@@ -127,10 +127,6 @@ TODO {{{
   }}}
 
   Common {{{
-    - add a generic help function for toggling help in a buffer
-      - :ProjectTree
-      - :Buffers
-
     - :ProjectTree
       - reuse the same buffer on mulitple tabs?
 
