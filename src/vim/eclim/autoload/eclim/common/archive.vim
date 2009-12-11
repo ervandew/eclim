@@ -22,6 +22,16 @@
 "
 " }}}
 
+" Global Variables {{{
+  if !exists('g:EclimArchiveActions')
+    let g:EclimArchiveActions = [
+        \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
+        \ {'pattern': '.*', 'name': 'Tab', 'action': 'tablast | tabnew'},
+        \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
+      \ ]
+  endif
+" }}}
+
 " Script Variables {{{
 let s:command_list = '-command archive_list -f "<file>"'
 let s:command_list_all = '-command archive_list_all -f "<file>"'
@@ -46,6 +56,14 @@ function! eclim#common#archive#List()
   if !eclim#PingEclim(0)
     call s:DefaultList()
     return
+  endif
+  if !exists('b:archive_loaded')
+    for action in g:EclimArchiveActions
+      call eclim#tree#RegisterFileAction(
+        \ action.pattern, action.name, action.action, bufnr('%'))
+    endfor
+
+    let b:archive_loaded = 1
   endif
 
   let b:file_info = {}
@@ -144,16 +162,38 @@ function eclim#common#archive#Execute(alt)
 
   " execute action on file
   else
-    if g:EclimArchiveLayout == 'list'
-      let file = substitute(getline('.'), s:file_regex, '\1', '')
-      let archive = substitute(expand('%:p'), '\', '/', 'g')
-      let url = s:FileUrl(archive) . '!/' . file
+    let url = s:GetFilePath()
+    let actions = eclim#tree#GetFileActions(path)
+    if a:alt
+      call eclim#tree#DisplayActionChooser(
+        \ url, actions, 'eclim#common#archive#ExecuteAction')
     else
-      let url = b:file_info[getline('.')].url
+      call eclim#common#archive#ExecuteAction(url, actions[0].action)
     endif
-    silent! noautocmd exec 'split ' . escape(url, ' ')
-    call eclim#common#archive#ReadFile()
   endif
+endfunction " }}}
+
+" ExecuteAction(file, command) {{{
+function eclim#common#archive#ExecuteAction(file, command)
+  if a:command == 'edit'
+    if !exists('b:archive_edit_window') ||
+     \ getwinvar(b:archive_edit_window, 'archive_edit_window') == ''
+      let bufnr = bufnr('%')
+      new
+      let w:archive_edit_window = 1
+      call setbufvar(bufnr, 'archive_edit_window', winnr())
+    else
+      exec b:archive_edit_window . 'winc w'
+    endif
+  endif
+
+  if exists('b:archive_edit_window') &&
+   \ getwinvar(b:archive_edit_window, 'archive_edit_window') == 1
+    exec b:archive_edit_window . 'winc w'
+  endif
+
+  noautocmd exec a:command . ' ' . escape(a:file, ' ')
+  call eclim#common#archive#ReadFile()
 endfunction " }}}
 
 " ExpandDir() {{{
@@ -213,6 +253,18 @@ function eclim#common#archive#ListAll()
   call delete(results[0])
 endfunction " }}}
 
+" s:GetFilePath() {{{
+function! s:GetFilePath()
+  if g:EclimArchiveLayout == 'list'
+    let file = substitute(getline('.'), s:file_regex, '\1', '')
+    let archive = substitute(expand('%:p'), '\', '/', 'g')
+    let url = s:FileUrl(archive) . '!/' . file
+  else
+    let url = b:file_info[getline('.')].url
+  endif
+  return url
+endfunction " }}}
+
 " s:ParseEntry(entry) {{{
 function! s:ParseEntry(entry)
   let info = split(a:entry, '|')
@@ -265,6 +317,12 @@ function! s:ChangeLayout(layout)
   endif
 endfunction " }}}
 
+" s:OpenFile(action) " {{{
+function! s:OpenFile(action)
+  let path = s:GetFilePath()
+  call eclim#common#archive#ExecuteAction(path, a:action)
+endfunction " }}}
+
 " s:FileInfo() {{{
 function! s:FileInfo()
   let info = b:file_info[substitute(getline('.'), '^\(\s*\)-\(.*/$\)', '\1+\2', '')]
@@ -276,6 +334,9 @@ endfunction " }}}
 " s:Mappings() {{{
 function s:Mappings()
   nmap <buffer> <silent> <cr> :call eclim#common#archive#Execute(0)<cr>
+  nmap <buffer> <silent> E :call <SID>OpenFile('edit')<cr>
+  nmap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
+  nmap <buffer> <silent> T :call <SID>OpenFile('tablast \| tabnew')<cr>
 
   if g:EclimArchiveLayout == 'tree'
     let b:tree_mappings_active = 1
@@ -297,6 +358,8 @@ function s:Mappings()
       unmap <buffer> k
       unmap <buffer> p
       unmap <buffer> P
+      unmap <buffer> i
+      unmap <buffer> I
     endif
 
     silent! delcommand AsList
