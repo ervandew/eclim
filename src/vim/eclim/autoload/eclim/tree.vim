@@ -326,7 +326,8 @@ function eclim#tree#Execute(alt)
     endif
 
     if a:alt
-      call s:DisplayActionChooser(path, actions)
+      call eclim#tree#DisplayActionChooser(
+        \ path, actions, 'eclim#tree#ExecuteAction')
     else
       call eclim#tree#ExecuteAction(path, actions[0].action)
     endif
@@ -980,8 +981,8 @@ function s:UpdateLine(pattern, substitution)
   setlocal nomodifiable
 endfunction " }}}
 
-" DisplayActionChooser(file, actions) {{{
-function s:DisplayActionChooser(file, actions)
+" DisplayActionChooser(file, actions, executeFunc) {{{
+function eclim#tree#DisplayActionChooser(file, actions, executeFunc)
   new
   let height = len(a:actions) + 1
 
@@ -998,7 +999,8 @@ function s:DisplayActionChooser(file, actions)
     call append(line('$'), action.name)
   endfor
 
-  nmap <buffer> <silent> <cr> :call eclim#tree#ActionExecute()<cr>
+  exec 'nmap <buffer> <silent> <cr> ' .
+    \ ':call eclim#tree#ActionExecute("' . a:executeFunc . '")<cr>'
 
   exec "hi link TreeAction " . g:TreeActionHighlight
   syntax match TreeAction /.*/
@@ -1010,8 +1012,8 @@ function s:DisplayActionChooser(file, actions)
   setlocal bufhidden=delete
 endfunction "}}}
 
-" ActionExecute() {{{
-function eclim#tree#ActionExecute()
+" ActionExecute(executeFunc) {{{
+function eclim#tree#ActionExecute(executeFunc)
   let command = ''
   let line = getline('.')
   for action in b:actions
@@ -1023,8 +1025,7 @@ function eclim#tree#ActionExecute()
 
   let file = b:file
   close
-  call eclim#tree#ExecuteAction(file, command)
-
+  call function(a:executeFunc)(file, command)
 endfunction "}}}
 
 " Mappings() {{{
