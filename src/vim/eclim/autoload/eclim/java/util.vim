@@ -328,8 +328,12 @@ function! eclim#java#util#Java(args)
     return
   endif
 
+  let workspace = eclim#project#util#GetProjectWorkspace(project)
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+
   let command = '!'
   let command .= eclim#client#nailgun#GetEclimCommand()
+  let command .= ' -Dnailgun.server.port=' . port
   let command .= ' -command java -p "' . project . '"'
 
   let args = eclim#util#ParseArgs(a:args)
