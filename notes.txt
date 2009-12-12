@@ -127,9 +127,6 @@ TODO {{{
   }}}
 
   Common {{{
-    - :ProjectTree
-      - reuse the same buffer on mulitple tabs?
-
     - settings export/import
 
     - update project tree to include linked folders

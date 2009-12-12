@@ -79,24 +79,16 @@ function! eclim#project#tree#ProjectTree(...)
   endfor
   let names = names_copy
 
-  " for session reload
-  let g:Eclim_project_tree_names = join(names, '|')
-
   if len(dirs) == 0
     "call eclim#util#Echo('ProjectTree: No directories found for requested projects.')
     return
   endif
 
-  let dir_list = string(dirs)
+  " for session reload
+  let g:Eclim_project_tree_names = join(names, '|')
 
   call s:CloseTreeWindow()
   call s:OpenTree(names, dirs)
-  normal! zs
-
-  call s:Mappings()
-  setlocal modifiable
-  call append(line('$'), ['', '" use ? to view help'])
-  setlocal nomodifiable
 endfunction " }}}
 
 " Restore() " {{{
@@ -145,6 +137,16 @@ function! s:GetTreeTitle()
     let s:project_tree_ids += 1
   endif
   return g:EclimProjectTreeTitle . t:project_tree_id
+endfunction " }}}
+
+" s:GetSharedTreeBuffer(names) {{{
+function! s:GetSharedTreeBuffer(names)
+  let instance_names = join(a:names, '|')
+  if g:EclimProjectTreeSharedInstance &&
+   \ exists('g:eclim_project_tree_instance{instance_names}')
+    return g:eclim_project_tree_instance{instance_names}
+  endif
+  return -1
 endfunction " }}}
 
 " s:Mappings() " {{{
@@ -214,6 +216,19 @@ function! s:OpenTree(names, dirs)
   endif
 
   call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
+
+  let shared = s:GetSharedTreeBuffer(a:names)
+  if shared != -1 && bufloaded(shared)
+    exec 'buffer ' . shared
+    if line('$') > 1 || getline(1) !~ '^\s*$'
+      setlocal nowrap nonumber
+      setlocal foldmethod=manual foldtext=getline(v:foldstart)
+      exec 'let t:project_tree_id = ' .
+        \ substitute(bufname(shared), g:EclimProjectTreeTitle . '\(\d\+\)', '\1', '')
+      return
+    endif
+  endif
+
   " command used to navigate to a content window before executing a command.
   if !exists('g:EclimProjectTreeContentWincmd')
     if g:VerticalToolWindowSide == 'right'
@@ -251,6 +266,16 @@ function! s:OpenTree(names, dirs)
     call eclim#util#DelayedCommand(
       \ 'call eclim#tree#ExpandPath("' . s:GetTreeTitle() . '", "' . expandDir . '")')
   endif
+
+  normal! zs
+
+  let instance_names = join(a:names, '|')
+  let g:eclim_project_tree_instance{instance_names} = bufnr('%')
+
+  call s:Mappings()
+  setlocal modifiable
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable
 endfunction " }}}
 
 " OpenProjectFile(cmd, cwd, file) {{{

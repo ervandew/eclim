@@ -44,6 +44,10 @@ if !exists('g:EclimProjectTreeExpandPathOnOpen')
   let g:EclimProjectTreeExpandPathOnOpen = 0
 endif
 
+if !exists('g:EclimProjectTreeSharedInstance')
+  let g:EclimProjectTreeSharedInstance = 0
+endif
+
 if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')
   let g:EclimProjectTreeAutoOpenProjects = ['CURRENT']
 endif

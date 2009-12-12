@@ -40,7 +40,7 @@ Vim's command line completion to complete the project name.
   [-d <project_dependency> ...]
 
   - **-p**: Optional argument used to specify the project
-    name.  If ommitted, eclim will use the last segment of the project's
+    name.  If omitted, eclim will use the last segment of the project's
     path, with any spaces replaced with underscores, as the project name.
   - **-n**: Required argument which specifies a space
     separated list of project natures (java, php, etc.) to add to the
@@ -87,7 +87,7 @@ Vim's command line completion to complete the project name.
 
 - **:ProjectList**
 
-  Simply echos a list of available projects.
+  Simply echo a list of available projects.
 
 .. _\:ProjectSettings:
 
@@ -131,25 +131,25 @@ Vim's command line completion to complete the project name.
   single argument is supplied, then that argument is used as the directory to
   move the current project to.
 
-.. warning::
+  .. warning::
 
-  **:ProjectMove**, and possibly **:ProjectRename**, will result in the
-  renaming of your project's directory in the underlying file system.  Eclim
-  will do its best to reload any files that have moved as a result of the
-  directory renaming and adjust your current working directory if necessary,
-  but only for the current vim session.  If you have other vim sessions open
-  with files from the project, then eclim will be unable to reload those files
-  in those sessions for you, so you will have to do so manually.  A best
-  practice would be to close any other vim sessions that might be affected by
-  the moving or renaming of a project.
+    **:ProjectMove**, and possibly **:ProjectRename**, will result in the
+    renaming of your project's directory in the underlying file system.  Eclim
+    will do its best to reload any files that have moved as a result of the
+    directory renaming and adjust your current working directory if necessary,
+    but only for the current vim session.  If you have other vim sessions open
+    with files from the project, then eclim will be unable to reload those files
+    in those sessions for you, so you will have to do so manually.  A best
+    practice would be to close any other vim sessions that might be affected by
+    the moving or renaming of a project.
 
-.. note::
+  .. note::
 
-  When open files have moved as a result of **:ProjectMove** or
-  **:ProjectRename**, eclim will reload those files in the current session, but
-  it must do so via an :edit, which means that vim's undo tree will be lost.
-  However, you will still have access to the eclipse
-  :ref:`history <vim/common/history>`.
+    When open files have moved as a result of **:ProjectMove** or
+    **:ProjectRename**, eclim will reload those files in the current session, but
+    it must do so via an :edit, which means that vim's undo tree will be lost.
+    However, you will still have access to the eclipse
+    :ref:`history <vim/common/history>`.
 
 .. _\:ProjectRefresh:
 
@@ -171,7 +171,7 @@ Vim's command line completion to complete the project name.
 
 - **:ProjectInfo** [<project>]
 
-  Echos info about the current or supplied project.
+  Echo info about the current or supplied project.
 
 .. _\:ProjectOpen:
 
@@ -191,7 +191,7 @@ Vim's command line completion to complete the project name.
 
 - **:ProjectNatures** [<project>]
 
-  Echos list of natures for the supplied project name or for all projects if no
+  Echo list of natures for the supplied project name or for all projects if no
   project name specified.
 
 .. _\:ProjectNatureAdd:
@@ -212,7 +212,7 @@ Vim's command line completion to complete the project name.
 
 - **:ProjectProblems** [<project>]
   Populates vim's quickfix with a list of all eclipse build errors and warnings
-  for the current, or specifice project, and all related projects.  Very
+  for the current, or specific project, and all related projects.  Very
   similar to eclipse's "Problems" view.  By default, if the current quickfix
   list represents a problems list, then as you save source files this list will
   be updated accordingly.
@@ -225,6 +225,25 @@ Vim's command line completion to complete the project name.
     java projects created via eclim prior to eclim 1.5.2, the java builder may
     be missing, so you'll need to recreate the project, at which time eclim
     will add the java builder.
+
+  **Configuration**
+
+  Vim Settings
+
+  .. _g\:EclimProblemsQuickFixOpen:
+
+  - **g:EclimProblemsQuickFixOpen** (Default: 'botright copen')
+
+    Specified the command used to open the quickfix window when executing the
+    :ref`:ProjectProblems` command.
+
+  .. _g\:EclimProjectProblemsUpdateOnSave:
+
+  - **g:EclimProjectProblemsUpdateOnSave** (Default: 1)
+
+    When non 0, indicates that the problems list should be updated when saving
+    source files, but only if the quickfix list currently represents a problems
+    list.
 
 .. _\:ProjectCD:
 
@@ -280,7 +299,7 @@ Vim's command line completion to complete the project name.
     Changes the root node to the parent directory of the current root node.
   - **K** -
     Changes the root node to the root path which will be either the project
-    root or the filesytem root.
+    root or the file system root.
   - **p** -
     Moves the cursor to the parent of the node under the cursor.
   - **P** -
@@ -288,12 +307,65 @@ Vim's command line completion to complete the project name.
   - **:CD** <dir> -
     Changes the root to the supplied directory.
   - **D** -
-    Prompts you for a directory name to create, prefilled with the directory
+    Prompts you for a directory name to create, pre-filled with the directory
     path in the tree where this mapping was executed.
   - **F** -
-    Prompts you for a new or existing filename to open, prefilled with the
+    Prompts you for a new or existing filename to open, pre-filled with the
     directory path in the tree where this mapping was executed.
   - **\?** - View the help buffer
+
+  **Configuration**
+
+  Vim Settings
+
+  .. _g\:EclimProjectTreeAutoOpen:
+
+  - **g:EclimProjectTreeAutoOpen** (Default: 0)
+
+    When non 0, a project tree window will be auto opened for new Vim
+    sessions or new tabs in existing sessions if the current file is in a
+    project.
+
+  .. _g\:EclimProjectTreeAutoOpenProjects:
+
+  - **g:EclimProjectTreeAutoOpenProjects** (Default: ['CURRENT'])
+
+    List of project names that will be in the project tree when it is auto
+    opened.  The special name 'CURRENT' represents the current project of
+    the file being loaded in Vim when the tree is auto opened.
+
+  .. _g\:EclimProjectTreeExpandPathOnOpen:
+
+  - **g:EclimProjectTreeExpandPathOnOpen** (Default: 0)
+
+    When non 0, the path of the current file will be expanded in the project tree
+    when the project tree window is opened.
+
+  .. _g\:EclimProjectTreeSharedInstance:
+
+  - **g:EclimProjectTreeSharedInstance** (Default: 0)
+
+    When non 0, a tree instance with the same list of projects will be shared
+    across vim tabs.  This allows you to have the same project tree open in
+    several tabs all with the same state (with the exception of folds).
+
+  .. _g\:EclimProjectTreeActions:
+
+  - **g:EclimProjectTreeActions**
+
+    Default\:
+
+    .. code-block:: vim
+
+      let g:EclimProjectTreeActions = [
+          \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
+          \ {'pattern': '.*', 'name': 'Tab', 'action': 'tabnew'},
+          \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
+        \ ]
+
+    List of mappings which link file patterns to the available actions for
+    opening files that match those patterns.  Note that the first mapping is the
+    list is used as the default (<cr>).
 
 .. _\:ProjectsTree:
 
@@ -333,7 +405,7 @@ Vim's command line completion to complete the project name.
 
   Searches all the source files in the project (those with extensions included
   in :ref:`g:EclimTodoSearchExtensions`) for the fixme / todo pattern (defined
-  by :ref:`g:EclimTodoSearchPattern`) and adds all occurances to the current
+  by :ref:`g:EclimTodoSearchPattern`) and adds all occurrences to the current
   location list.
 
 .. _\:Todo:
@@ -341,6 +413,35 @@ Vim's command line completion to complete the project name.
 - **:Todo**
 
   Just like :ProjectTodo, but limits the searching to the current file.
+
+  **Configuration**
+
+  Vim Settings
+
+  .. _g\:EclimTodoSearchPattern:
+
+  - **g:EclimTodoSearchPattern**
+
+    Default\:
+
+    .. code-block:: vim
+
+      let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
+
+    Defines the regex pattern used to identify todo or fixme entries.
+
+  .. _g\:EclimTodoSearchExtensions:
+
+  - **g:EclimTodoSearchExtensions**
+
+    Default\:
+
+    .. code-block:: vim
+
+      let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+
+    Defines a list of file extensions that will be searched for the todo / fixme
+    entries.
 
 Tracker
 -------
@@ -350,114 +451,28 @@ Tracker
 - **:TrackerTicket** <ticket_id>
 
   Opens the supplied ticket via your web browser for the configured tracking
-  system configureed via org.eclim.project.tracker_.
+  system configured via org.eclim.project.tracker_.
 
+  **Configuration**
 
-Configuration
--------------
+  Eclim Settings
 
-Vim Settings
+  .. _org.eclim.project.tracker:
 
-.. _g\:EclimProblemsQuickFixOpen:
+  - **org.eclim.project.tracker**
+    Url used to view tickets in your ticket tracking software. This url supports
+    the '<id>' placeholder which will be replaced with the ticket id.
 
-- **g:EclimProblemsQuickFixOpen** (Default: 'botright copen')
+    Ex. An example setting for a Trac installation\:
 
-  Specified the command used to open the quickfix window when executing the
-  :ref`:ProjectProblems` command.
+    ::
 
-.. _g\:EclimProjectProblemsUpdateOnSave:
+      org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
 
-- **g:EclimProjectProblemsUpdateOnSave** (Default: 1)
-
-  When non 0, indicates that the problems list should be updated when saving
-  source files, but only if the quickfix list currently represents a problems
-  list.
-
-.. _g\:EclimProjectTreeAutoOpen:
-
-- **g:EclimProjectTreeAutoOpen** (Default: 0)
-
-  When non 0, a project tree window will be auto opened for new Vim
-  sessions or new tabs in existing sessions if the current file is in a
-  project.
-
-.. _g\:EclimProjectTreeAutoOpenProjects:
-
-- **g:EclimProjectTreeAutoOpenProjects** (Default: ['CURRENT'])
-
-  List of project names that will be in the project tree when it is auto
-  opened.  The special name 'CURRENT' represents the current project of
-  the file being loaded in Vim when the tree is auto opened.
-
-.. _g\:EclimProjectTreeActions:
-
-- **g:EclimProjectTreeActions**
-
-  Default\:
-
-  .. code-block:: vim
-
-    let g:EclimProjectTreeActions = [
-        \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
-        \ {'pattern': '.*', 'name': 'Tab', 'action': 'tabnew'},
-        \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
-      \ ]
-
-  List of mappings which link file patterns to the available actions for
-  opening files that match those patterns.  Note that the first mapping is the
-  list is used as the default (<cr>).
-
-.. _g\:EclimProjectTreeExpandPathOnOpen:
-
-- **g:EclimProjectTreeExpandPathOnOpen** (Default: 0)
-
-  When non 0, the path of the current file will be expanded in the project tree
-  when the project tree window is opened.
-
-.. _g\:EclimTodoSearchPattern:
-
-- **g:EclimTodoSearchPattern**
-
-  Default\:
-
-  .. code-block:: vim
-
-    let g:EclimTodoSearchPattern = '\(\<fixme\>\|\<todo\>\)\c'
-
-  Defines the regex pattern used to identify todo or fixme entries.
-
-.. _g\:EclimTodoSearchExtensions:
-
-- **g:EclimTodoSearchExtensions**
-
-  Default\:
-
-  .. code-block:: vim
-
-    let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
-
-  Defines a list of file extensions that will be searched for the todo / fixme
-  entries.
-
-
-Eclim Settings
-
-.. _org.eclim.project.tracker:
-
-- **org.eclim.project.tracker**
-  Url used to view tickets in your ticket tracking software. This url supports
-  the '<id>' placeholder which will be replaced with the ticket id.
-
-  Ex. An example setting for a Trac installation\:
-
-  ::
-
-    org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
-
-  In addition to being used by :TrackerTicket, this setting is also used in
-  conjunction with :ref:`:VcsLog` and :ref:`:VcsChangeSet` to enable linking of
-  ticket ids of the form #ticket_id (#1234) found in user supplied commit
-  comments.  You may also specify other patterns to match by setting the
-  :ref:`g:EclimVcsTrackerIdPatterns` variable.
+    In addition to being used by :TrackerTicket, this setting is also used in
+    conjunction with :ref:`:VcsLog` and :ref:`:VcsChangeSet` to enable linking of
+    ticket ids of the form #ticket_id (#1234) found in user supplied commit
+    comments.  You may also specify other patterns to match by setting the
+    :ref:`g:EclimVcsTrackerIdPatterns` variable.
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273

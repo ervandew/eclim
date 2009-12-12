@@ -32,6 +32,8 @@ Common:
     context.  Added 'D' mapping to create a new directory and 'F' to open a new
     or existing file by name. Note: the 'H' mapping to set the tree root to the
     user's home directory has been changed to '~'.
+  - Added setting to allow :ref:`:ProjectTree <:ProjectTree>` instances to be
+    shared across vim tabs.
   - Updated :ref:`:VcsWeb* commands <vcs-web>` to support github, google code,
     and bitbucket.
 
