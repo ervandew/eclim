@@ -124,6 +124,7 @@ public class VUnitTask
           };
 
           try{
+            log("vunit: " + StringUtils.join(command, ' '), Project.MSG_DEBUG);
             CommandExecutor executor = CommandExecutor.execute(command);
 
             if(executor.getResult().trim().length() > 0){
