@@ -228,6 +228,7 @@ public class VimEditor
 
       viewer = new VimViewer(
           bufferID, vc, editorGUI != null ? editorGUI : parent, SWT.EMBEDDED);
+      viewer.getTextWidget().setVisible(false);
       viewer.setDocument(document);
       viewer.setEditable(isEditable());
       try{
