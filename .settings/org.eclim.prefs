@@ -1,4 +1,4 @@
-#Tue Oct 20 14:17:19 PDT 2009
+#Sat Dec 12 12:19:14 PST 2009
 eclipse.preferences.version=1
 org.eclim.java.checkstyle.config=src/java/checkstyle.xml
 org.eclim.java.doc.packagenames=org.eclim
@@ -11,5 +11,3 @@ org.eclim.java.logging.template=eclim.logger.gst
 org.eclim.project.copyright=src/copyright
 org.eclim.project.vcs.web.url=http\://eclim.git.sourceforge.net/git/gitweb.cgi?p\=eclim/eclim
 org.eclim.project.vcs.web.viewer=gitweb
-org.eclim.user.email=ervandew@gmail.com
-org.eclim.user.name=Eric Van Dewoestine
