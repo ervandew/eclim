@@ -24,9 +24,16 @@ History of Changes
 Bug Fixes:
   - Various bug fixes.
 
+Install:
+  - Fixed issues properly detecting write permissions on Windows machines.
+
+Docs:
+  - Added a guide on :ref:`running eclim on a headless server
+    <guides/headless>`.
+
 Common:
   - Added full support for :ref:`running multiple eclimd instances
-    <guides/multi_workspace>`, each backed by a seperate eclipse worksapce.
+    <guides/multi_workspace>`, each backed by a separate eclipse workspace.
   - Added 'K' mapping to :ref:`:ProjectTree <:ProjectTree>` to set the tree
     root the either the project root of file system root depending on the
     context.  Added 'D' mapping to create a new directory and 'F' to open a new
@@ -65,7 +72,7 @@ Eclim:
 
     .. note::
 
-      To have problems from java projects created via eclim reported, you may
+      To have problems reported for java projects created via eclim, you may
       need to recreate your java projects to ensure that the java builder is
       properly added.  As of eclim 1.5.2, eclim's java project creation now
       adds the java builder.
