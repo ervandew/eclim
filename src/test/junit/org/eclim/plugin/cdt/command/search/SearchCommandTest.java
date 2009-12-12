@@ -74,7 +74,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", results.length, 2);
+    assertEquals("Wrong number of results", 2, results.length);
     String file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
     String file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
     assertEquals("Wrong Result", file1 + "|11 col 3|", results[0]);
@@ -89,7 +89,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", results.length, 4);
+    assertEquals("Wrong number of results", 4, results.length);
 
     file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_H);
     file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
