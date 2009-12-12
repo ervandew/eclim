@@ -409,7 +409,6 @@ target(name: 'test.vunit'){
   taskdef(name: 'vunit', classname: 'org.eclim.misc.ant.VUnitTask'){
     classpath{
       pathelement(location: '${build.classes}')
-      pathelement(location: 'build/dist/eclim-misc.jar')
       path(refid: 'classpath')
     }
   }
