@@ -16,6 +16,8 @@
 Welcome to Eclim on GitHub
 ==========================
 
+.. _overview:
+
 ==================
 Overview
 ==================
@@ -25,11 +27,15 @@ editor.
 
 For more details, please visit eclim.org_.
 
+.. _emacs:
+
 ==================
 Emacs Users
 ==================
 
-Be sure to checkout the `emacs client`_ that is being developed for eclim.
+Be sure to check out the `emacs client`_ that is being developed for eclim.
+
+.. _license:
 
 ==================
 License
