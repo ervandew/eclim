@@ -33,7 +33,8 @@ Creating your first project
 ---------------------------
 
 Once you've got eclimd running open an instance of vim and create your project
-like so (maven users, please see the :ref:`maven docs <gettingstarted-maven>`):
+like so (maven users, please see the :ref:`maven docs <gettingstarted-maven>`
+for an alternate method):
 
 ::
 
@@ -135,6 +136,101 @@ contents of this file should now look something like this\:
 Now that your source directory is setup, you can proceed to edit java files in
 that directory and make use of the :ref:`java functionality <vim/java/index>`
 provided by eclim.
+
+
+.. _gettingstarted-coding:
+
+Writing code in your new project
+--------------------------------
+
+Now that you have a project created, you can start writing code and utilize the
+features that eclim provides.
+
+.. note::
+
+  Below we'll walk through a trivial java example, but some of the steps apply to
+  all the languages that eclim supports, although the command names may differ a
+  bit.  For additional docs on working with the language of your choice, please
+  see the relevant section of the docs:
+
+    - :ref:`c/c++ <vim/c/index>`
+    - :ref:`java <vim/java/index>`
+    - :ref:`php <vim/php/index>`
+    - :ref:`python <vim/python/index>`
+    - :ref:`ruby <vim/ruby/index>`
+    - :ref:`etc. <documentation>`
+
+Lets get started writing our first java application using eclim.
+
+1. First, navigate to your new project's source directory (src/java in this
+   example) and create any necessary package directories:
+
+  ::
+
+    $ cd /path/to/my_project/src/java
+    $ mkdir -p org/test/
+
+2. Then start editing your first java source file:
+
+  ::
+
+    $ vim org/test/TestMain.java
+
+  .. code-block:: java
+
+    package org.test;
+
+    public class TestMain
+    {
+      public static final void main(String[] args)
+      {
+
+      }
+    }
+
+3. You can start to use some of the core features now.  For example, lets add
+   the following code to the main method so we can test eclim's source code
+   validation:
+
+   .. code-block:: java
+
+     System.
+
+   Then save the file and note that an error marker is placed in the left
+   margin of your file and when the cursor is on that line an error message is
+   printed at the bottom of your vim window.  You can also run :lopen to view
+   all the errors in the file at once.
+
+4. Now lets try out code completion.  Place your cursor on the '.' of 'System.'
+   and start insert mode in vim use 'a', then follow the example below:
+
+  .. code-block:: java
+
+    System.<ctrl-x><ctrl-u>             // starts the completion mode
+    System.<ctrl-n>                     // cycle through the completion suggestions
+    System.out                          // assuming you chose the 'out' suggestion
+    System.out.p<ctrl-x><ctrl-u>        // now start completion again
+    System.out.p<ctrl-n>                // hit <ctrl-n> until you get 'println'
+    System.out.println(
+    System.out.println("Hello World");  // finish up the example code.
+
+5. After saving the file you should have no more validation errors, so now we
+   can compile the code and run it like so:
+
+  ::
+
+    :Javac
+    :Java
+
+  After running the :Java command in vim you should now see your output in a
+  new split window.
+
+This only scratches the surface on the number of :ref:`java features
+<vim/java/index>` that eclim provides, but hopefully this example was enough to
+get you started.
+
+
+.. _gettingstarted-projectsettings:
 
 Editing your project's settings
 -------------------------------
