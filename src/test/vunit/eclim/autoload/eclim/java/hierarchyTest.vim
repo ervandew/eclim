@@ -49,7 +49,7 @@ function! TestJavaHierarchy()
 
   echom 'test opening of Comparable'
   call cursor(6, 1)
-  silent! exec "normal \<cr>"
+  exec "normal \<cr>"
   call VUAssertEquals(bufname('%'), '/tmp/java/lang/Comparable.java')
   call VUAssertEquals(winnr('$'), 3)
   bdelete
@@ -58,7 +58,7 @@ function! TestJavaHierarchy()
 
   echom 'test opening of PropertyChangeListener'
   call cursor(7, 1)
-  silent! exec "normal \<c-e>"
+  normal E
   call VUAssertEquals(bufname('%'), '/tmp/java/beans/PropertyChangeListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
@@ -66,7 +66,7 @@ function! TestJavaHierarchy()
 
   echom 'test opening of EventListener'
   call cursor(8, 1)
-  silent! exec "normal \<c-e>"
+  normal E
   call VUAssertEquals(bufname('%'), '/tmp/java/util/EventListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
