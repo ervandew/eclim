@@ -30,14 +30,14 @@ endfunction " }}}
 " TestArchiveList() {{{
 function! TestArchiveList()
   edit eclim_unit_test/vcs/git.tar.gz
-  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  + git/')
 
   AsList
 
-  call VUAssertEquals(line('$'), 44)
-  call cursor(43, 1)
+  call VUAssertEquals(line('$'), 46, 'Wrong number of lines in list: git.tar.gz')
+  call cursor(45, 1)
   exec "normal \<cr>"
 
   call VUAssertEquals(expand('%'), '/tmp/git/unittest/test/file1.txt')
@@ -48,7 +48,7 @@ function! TestArchiveList()
 
   AsTree
 
-  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  + git/')
 endfunction " }}}
@@ -56,14 +56,14 @@ endfunction " }}}
 " TestArchiveTree() {{{
 function! TestArchiveTree()
   edit eclim_unit_test/vcs/git.tar.gz
-  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  + git/')
 
   call cursor(2, 3)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 3)
+  call VUAssertEquals(line('$'), 5, 'Wrong number of lines: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  - git/')
   call VUAssertEquals(getline(3), '      + unittest/')
@@ -71,7 +71,7 @@ function! TestArchiveTree()
   call cursor(3, 7)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 5)
+  call VUAssertEquals(line('$'), 7, 'Wrong number of lines: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  - git/')
   call VUAssertEquals(getline(3), '      - unittest/')
@@ -81,7 +81,7 @@ function! TestArchiveTree()
   call cursor(5, 11)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 7)
+  call VUAssertEquals(line('$'), 9, 'Wrong number of lines: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  - git/')
   call VUAssertEquals(getline(3), '      - unittest/')

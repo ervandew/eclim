@@ -37,7 +37,7 @@ function! TestCallHierarchy()
   call PeekRedir()
 
   call VUAssertEquals('[Call Hierarchy]', expand('%'), 'Wrong window')
-  call VUAssertEquals(6, line('$'), 'Wrong number of lines')
+  call VUAssertEquals(8, line('$'), 'Wrong number of lines')
 
   call VUAssertEquals('fun2(int)', getline(1), 'Wrong content on line 1')
   call VUAssertEquals('   fun1(int)', getline(2), 'Wrong content on line 2')

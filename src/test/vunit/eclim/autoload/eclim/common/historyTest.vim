@@ -43,7 +43,7 @@ function! TestHistory()
   call VUAssertEquals(line('$'), 3, 'Wrong number of history lines.')
   call VUAssertEquals(line(1), 'history/sample_vunit.txt', 'Wrong file name.')
   call VUAssertEquals(line(2), '')
-  call VUAssertEquals(line(3), 'v: view  d: diff  r: revert  c: clear')
+  call VUAssertEquals(line(3), '" use ? to view help')
   bdelete
 
   set modified
@@ -59,10 +59,10 @@ function! TestHistory()
   call VUAssertTrue(getline(2) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ \(millis\|seconds\?\) ago)', 'Invalid entry 1.')
   call VUAssertTrue(getline(3) =~ '^\s\+\d\d:\d\d \w\{3} \w\{3} \d\d \d\{4} (\d\+ .* ago)', 'Invalid entry 2.')
   call VUAssertEquals(getline(4), '')
-  call VUAssertEquals(getline(5), 'v: view  d: diff  r: revert  c: clear')
+  call VUAssertEquals(getline(5), '" use ? to view help')
 
   call cursor(3, 1)
-  normal v
+  exec "normal \<cr>"
   call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt_\d\+', 'Wrong view buffer name.')
   call VUAssertEquals(getline(1), 'line 1', 'Wrong first line.')
   call VUAssertEquals(line('$'), 1, 'Wrong number of lines.')
