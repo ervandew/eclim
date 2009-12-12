@@ -370,6 +370,7 @@ public class SearchCommand
   protected int getContext(String context)
   {
     if(CONTEXT_ALL.equals(context)){
+      return PDOMSearchQuery.FIND_ALL_OCCURANCES;
     }else if(CONTEXT_CONTEXT.equals(context)){
       return FIND_CONTEXT;
     }else if(CONTEXT_REFERENCES.equals(context)){
