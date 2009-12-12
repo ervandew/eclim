@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
+import java.util.ArrayList;
+
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
@@ -43,7 +45,21 @@ import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.IPath;
+
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageDeclaration;
+
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
+import org.eclipse.jdt.core.search.SearchRequestor;
 
 /**
  * Command to run the project's main class.
@@ -85,8 +101,12 @@ public class JavaCommand
         mainClass.trim().equals(StringUtils.EMPTY) ||
         mainClass.trim().equals("none"))
     {
-      throw new RuntimeException(Services.getMessage(
-            "setting.not.set", "org.eclim.java.run.mainclass"));
+      // first try to locate a main method.
+      mainClass = findMainClass(javaProject);
+      if (mainClass == null){
+        throw new RuntimeException(Services.getMessage(
+              "setting.not.set", "org.eclim.java.run.mainclass"));
+      }
     }
 
     if (mainClass.endsWith(".java") || mainClass.endsWith(".class")){
@@ -120,5 +140,67 @@ public class JavaCommand
     java.execute();
 
     return StringUtils.EMPTY;
+  }
+
+  private String findMainClass(IJavaProject javaProject)
+    throws Exception
+  {
+    final String projectPath = ProjectUtils.getPath(javaProject.getProject());
+    final ArrayList<IMethod> methods = new ArrayList<IMethod>();
+    int context = IJavaSearchConstants.DECLARATIONS;
+    int type = IJavaSearchConstants.METHOD;
+    int matchType = SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE;
+    IJavaSearchScope scope =
+      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
+    SearchPattern pattern =
+      SearchPattern.createPattern("main(String[])", type, context, matchType);
+    SearchRequestor requestor = new SearchRequestor(){
+      public void acceptSearchMatch(SearchMatch match){
+        if(match.getAccuracy() != SearchMatch.A_ACCURATE){
+          return;
+        }
+
+        IPath location = match.getResource().getRawLocation();
+        if (location == null){
+          return;
+        }
+
+        String path = location.toOSString().replace('\\', '/');
+        if (!path.toLowerCase().startsWith(projectPath.toLowerCase())){
+          return;
+        }
+
+        IJavaElement element = (IJavaElement)match.getElement();
+        if (element.getElementType() != IJavaElement.METHOD){
+          return;
+        }
+
+        IMethod method = (IMethod)element;
+        String[] params = method.getParameterTypes();
+        if (params.length != 1){
+          return;
+        }
+        methods.add(method);
+      }
+    };
+
+    if(pattern != null){
+      SearchEngine engine = new SearchEngine();
+      SearchParticipant[] participants = new SearchParticipant[]{
+        SearchEngine.getDefaultSearchParticipant()};
+      engine.search(pattern, participants, scope, requestor, null);
+
+      // if we found only 1 result, we can use it.
+      if (methods.size() == 1){
+        IMethod method = methods.get(0);
+        ICompilationUnit cu = method.getCompilationUnit();
+        IPackageDeclaration[] packages = cu.getPackageDeclarations();
+        if (packages != null && packages.length > 0){
+          return packages[0].getElementName() + "." + cu.getElementName();
+        }
+        return cu.getElementName();
+      }
+    }
+    return null;
   }
 }
