@@ -88,14 +88,14 @@ function! VUAssertFalse(arg1, ...)
   endif
 endfunction " }}}
 
-" VUFail (...) {{{
+" VUFail(...) {{{
 " Fails the current test.
 function! VUFail(...)
   let message = a:0 > 0 ? a:1 : ''
   throw 'Fail: ' . message
 endfunction " }}}
 
-" VUAddTest (test) {{{
+" VUAddTest(test) {{{
 " Used in Suite() functions to add a test function to the test suite.
 function! VUAddTest(test)
   call add(s:suite_methods, a:test)
@@ -136,7 +136,8 @@ function! VURunnerRunTests(basedir, testfile)
   let duration = strftime('%s') - now
   call s:WriteResults(a:testfile, duration)
 
-  echom 'Tests run: ' . s:tests_run . ', ' . 'Failures: ' . s:tests_failed . ', Time elapsed ' . duration . ' sec'
+  echom printf('Tests run: %s, Failures: %s, Time elapsed %s sec', s:tests_run, s:tests_failed, duration)
+
   if s:tests_failed > 0
     echom "Test " . a:testfile . " FAILED"
   endif
@@ -314,6 +315,7 @@ function! s:WriteResults (testfile, running_time)
   try
     set eventignore=all
     silent exec 'split ' . s:vimUnitOutputFile
+    set modifiable noreadonly
     1,$ delete
     call setline(1, results)
     silent wq
