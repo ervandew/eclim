@@ -136,32 +136,32 @@ public class JUnitImplCommand
   @Override
   protected IMethod getImplemented(
       IType type,
-      Map<String, IMethod>
-      baseMethods,
+      Map<String, IMethod> baseMethods,
       TypeInfo superTypeInfo,
       IMethod method)
     throws Exception
   {
-    IMethod base = (IMethod)baseMethods.get(
+    IMethod base = baseMethods.get(
         MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
     if(base != null){
       return base;
     }
-    return (IMethod)baseMethods.get(getTestMethodSignature(method));
+    return baseMethods.get(getTestMethodSignature(type, method));
   }
 
   /**
    * Gets a string representation of the test method equivalent of the supplied
    * method.
    *
+   * @param type The type to be modified.
    * @param method The method.
    * @return The test method signature.
    */
-  protected String getTestMethodSignature(IMethod method)
+  protected String getTestMethodSignature(IType type, IMethod method)
     throws Exception
   {
     String version = ProjectUtils.getSetting(
-        method.getJavaProject().getProject(), "org.eclim.java.junit.version");
+        type.getJavaProject().getProject(), "org.eclim.java.junit.version");
 
     String name = method.getElementName();
     if (version.equals("3")){
