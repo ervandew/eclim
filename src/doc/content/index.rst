@@ -101,6 +101,14 @@ News
 ==================
 
 -----------
+2009-12-12
+-----------
+
+| **Eclim 1.5.3** is now available.
+
+You can view the :ref:`release notes <1.5.3>` for more info.
+
+-----------
 2009-08-30
 -----------
 
