@@ -47,17 +47,9 @@ let s:command_locate = '-command locate_file -s "<scope>"'
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
 function eclim#common#locate#LocateFile(action, file)
+  let project = eclim#project#util#GetCurrentProjectName()
   let scope = (g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project')
-  if scope == 'project' && !eclim#project#util#IsCurrentFileInProject(0)
-    "if !exists('s:locate_prompt_response') || s:locate_prompt_response != 1
-    "  let s:locate_prompt_response =  eclim#util#PromptConfirm(
-    "    \ 'Unable to determine the current project.  Search all projects?',
-    "    \ g:EclimInfoHighlight)
-    "endif
-    "let response = s:locate_prompt_response
-    "if response < 1
-    "  return
-    "endif
+  if scope == 'project' && project == ''
     let scope = 'workspace'
   endif
 
@@ -79,7 +71,7 @@ function eclim#common#locate#LocateFile(action, file)
 
   let file = a:file
   if file == ''
-    call s:LocateFileCompletionInit(action, scope, workspace)
+    call s:LocateFileCompletionInit(action, scope, project, workspace)
     return
   elseif file == '<cursor>'
     let file = eclim#util#GrabUri()
@@ -96,7 +88,6 @@ function eclim#common#locate#LocateFile(action, file)
 
   let pattern = file
   let pattern = s:LocateFileConvertPattern(pattern)
-  let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_locate
   let command = substitute(command, '<scope>', scope, '')
   let command .= ' -p "' . pattern . '"'
@@ -138,8 +129,8 @@ function eclim#common#locate#LocateFile(action, file)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" LocateFileCompletion(workspace) {{{
-function eclim#common#locate#LocateFileCompletion(workspace)
+" LocateFileCompletion() {{{
+function eclim#common#locate#LocateFileCompletion()
   let completions = []
   let display = []
   let name = substitute(getline('.'), '^>\s*', '', '')
@@ -159,7 +150,7 @@ function eclim#common#locate#LocateFileCompletion(workspace)
       let command .= ' -n "' . b:project . '"'
     endif
 
-    let port = eclim#client#nailgun#GetNgPort(a:workspace)
+    let port = eclim#client#nailgun#GetNgPort(b:workspace)
     let results = split(eclim#ExecuteEclim(command, port), '\n')
     if len(results) == 1 && results[0] == '0'
       let winnr = winnr()
@@ -188,15 +179,14 @@ function eclim#common#locate#LocateFileCompletion(workspace)
   " part of bad hack for gvim on windows
   let b:start_selection = 1
 
-  call s:LocateFileSelection(1, a:workspace)
+  call s:LocateFileSelection(1)
 endfunction " }}}
 
-" s:LocateFileCompletionInit(action, scope, workspace) {{{
-function s:LocateFileCompletionInit(action, scope, workspace)
+" s:LocateFileCompletionInit(action, scope, project, workspace) {{{
+function s:LocateFileCompletionInit(action, scope, project, workspace)
   let file = expand('%')
   let bufnum = bufnr('%')
   let winrestcmd = winrestcmd()
-  let project = eclim#project#util#GetCurrentProjectName()
 
   topleft 10split \[Locate\ Results\]
   set filetype=locate_results
@@ -206,7 +196,8 @@ function s:LocateFileCompletionInit(action, scope, workspace)
 
   let results_bufnum = bufnr('%')
 
-  topleft 1split \[Locate\]
+  let locate_in = (a:scope == 'project' ? a:project : 'workspace')
+  exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' []')
   call setline(1, '> ')
   call cursor(1, col('$'))
   set filetype=locate_prompt
@@ -218,7 +209,8 @@ function s:LocateFileCompletionInit(action, scope, workspace)
   setlocal buftype=nofile bufhidden=delete
 
   let b:bufnum = bufnum
-  let b:project = project
+  let b:project = a:project
+  let b:workspace = a:workspace
   let b:scope = a:scope
   let b:results_bufnum = results_bufnum
   let b:selection = 1
@@ -238,47 +230,40 @@ function s:LocateFileCompletionInit(action, scope, workspace)
   augroup END
 
   " enable completion after user starts typing
-  call s:LocateFileCompletionAutocmdDeferred(a:workspace)
+  call s:LocateFileCompletionAutocmdDeferred()
 
-  exec 'imap <buffer> <silent> <tab> ' .
-    \ '<c-r>=<SID>LocateFileSelection("n", "' . a:workspace . '")<cr>'
-  exec 'imap <buffer> <silent> <down> ' .
-    \ '<c-r>=<SID>LocateFileSelection("n", "' . a:workspace . '")<cr>'
-  exec 'imap <buffer> <silent> <s-tab> ' .
-    \ '<c-r>=<SID>LocateFileSelection("p", "' . a:workspace . '")<cr>'
-  exec 'imap <buffer> <silent> <up> ' .
-    \ '<c-r>=<SID>LocateFileSelection("p", "' . a:workspace . '")<cr>'
+  imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection("n")<cr>
+  imap <buffer> <silent> <down> <c-r>=<SID>LocateFileSelection("n")<cr>
+  imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection("p")<cr>
+  imap <buffer> <silent> <up> <c-r>=<SID>LocateFileSelection("p")<cr>
   exec 'imap <buffer> <silent> <cr> ' .
     \ '<c-r>=<SID>LocateFileSelect("' . a:action . '")<cr>'
   imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
   imap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
   imap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
-  imap <buffer> <silent> <c-?> <c-r>=<SID>LocateFileHelp()<cr>
   imap <buffer> <silent> <c-h> <c-r>=<SID>LocateFileHelp()<cr>
 
   startinsert!
 endfunction " }}}
 
-" s:LocateFileCompletionAutocmd(workspace) {{{
-function s:LocateFileCompletionAutocmd(workspace)
+" s:LocateFileCompletionAutocmd() {{{
+function s:LocateFileCompletionAutocmd()
   augroup locate_file
     autocmd!
-    exec 'autocmd CursorHoldI <buffer> ' .
-      \ 'call eclim#common#locate#LocateFileCompletion("' . a:workspace . '")'
+    autocmd CursorHoldI <buffer> call eclim#common#locate#LocateFileCompletion()
   augroup END
 endfunction " }}}
 
-" s:LocateFileCompletionAutocmdDeferred(workspace) {{{
-function s:LocateFileCompletionAutocmdDeferred(workspace)
+" s:LocateFileCompletionAutocmdDeferred() {{{
+function s:LocateFileCompletionAutocmdDeferred()
   augroup locate_file
     autocmd!
-    exec 'autocmd CursorMovedI <buffer> ' .
-      \ 'call <SID>LocateFileCompletionAutocmd("' . a:workspace . '")'
+    autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmd()
   augroup END
 endfunction " }}}
 
-" s:LocateFileSelection(sel, workspace) {{{
-function s:LocateFileSelection(sel, workspace)
+" s:LocateFileSelection(sel) {{{
+function s:LocateFileSelection(sel)
   " pause completion while tabbing though results
   augroup locate_file
     autocmd!
@@ -316,11 +301,10 @@ function s:LocateFileSelection(sel, workspace)
   if double_defer
     augroup locate_file
       autocmd!
-      exec 'autocmd CursorMovedI <buffer> ' .
-        \ 'call <SID>LocateFileCompletionAutocmdDeferred("' . a:workspace . '")'
+      autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmdDeferred()
     augroup END
   else
-    call s:LocateFileCompletionAutocmdDeferred(a:workspace)
+    call s:LocateFileCompletionAutocmdDeferred()
   endif
 
   return ''
