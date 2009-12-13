@@ -55,15 +55,21 @@ let s:help = [
   \ ]
 " }}}
 
-" LocateFile(action, file) {{{
+" LocateFile(action, file, [scope]) {{{
 " Locates a file using the specified action for opening the file when found.
 "   action - '' (use user default), 'split', 'edit', etc.
 "   file - 'somefile.txt',
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
-function eclim#common#locate#LocateFile(action, file)
+function eclim#common#locate#LocateFile(action, file, ...)
   let project = eclim#project#util#GetCurrentProjectName()
-  let scope = (g:EclimLocateFileScope == 'workspace' ? 'workspace' : 'project')
+  let scope = a:0 > 0 ? a:1 : g:EclimLocateFileScope
+
+  if !eclim#util#ListContains(s:scopes, scope)
+    call eclim#util#EchoWarning('Unrecognized scope: ' . scope)
+    return
+  endif
+
   if scope == 'project' && project == ''
     let scope = 'workspace'
   endif
@@ -103,16 +109,16 @@ function eclim#common#locate#LocateFile(action, file)
 
   let pattern = file
   let pattern = s:LocateFileConvertPattern(pattern)
-  let command = s:command_locate
-  let command = substitute(command, '<scope>', scope, '')
-  let command .= ' -p "' . pattern . '"'
-  if scope == 'project'
-    let command .= ' -n "' . project . '"'
-  endif
+  try
+    let b:workspace = workspace
+    let b:project = project
+    let results = s:LocateFile_{scope}(pattern)
+  finally
+    unlet! b:workspce
+    unlet! b:project
+  endtry
 
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-  let results = split(eclim#ExecuteEclim(command, port), '\n')
-  if len(results) == 1 && results[0] == '0'
+  if len(results) == 0
     return
   endif
 
@@ -158,22 +164,7 @@ function eclim#common#locate#LocateFileCompletion()
       let pattern = s:LocateFileConvertPattern(pattern)
     endif
 
-    let command = s:command_locate
-    let command = substitute(command, '<scope>', b:scope, '')
-    let command .= ' -p "' . pattern . '"'
-    if b:project != ''
-      let command .= ' -n "' . b:project . '"'
-    endif
-
-    let port = eclim#client#nailgun#GetNgPort(b:workspace)
-    let results = split(eclim#ExecuteEclim(command, port), '\n')
-    if len(results) == 1 && results[0] == '0'
-      let winnr = winnr()
-      exec bufwinnr(b:results_bufnum) . 'winc w'
-      1,$delete _
-      exec winnr . 'winc w'
-      return
-    endif
+    let results = s:LocateFile_{b:scope}(pattern)
     if !empty(results)
       for result in results
         let parts = split(result, '|')
@@ -455,6 +446,33 @@ function s:LocateFileConvertPattern(pattern)
   "let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
   let pattern .= '.*'
   return pattern
+endfunction " }}}
+
+" s:LocateFile_workspace(pattern) {{{
+function s:LocateFile_workspace(pattern)
+  let command = s:command_locate
+  let command = substitute(command, '<scope>', 'workspace', '')
+  let command .= ' -p "' . a:pattern . '"'
+  let port = eclim#client#nailgun#GetNgPort(b:workspace)
+  let results = split(eclim#ExecuteEclim(command, port), '\n')
+  if len(results) == 1 && results[0] == '0'
+    return []
+  endif
+  return results
+endfunction " }}}
+
+" s:LocateFile_project(pattern) {{{
+function s:LocateFile_project(pattern)
+  let command = s:command_locate
+  let command = substitute(command, '<scope>', 'project', '')
+  let command .= ' -p "' . a:pattern . '"'
+  let command .= ' -n "' . b:project . '"'
+  let port = eclim#client#nailgun#GetNgPort(b:workspace)
+  let results = split(eclim#ExecuteEclim(command, port), '\n')
+  if len(results) == 1 && results[0] == '0'
+    return []
+  endif
+  return results
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
