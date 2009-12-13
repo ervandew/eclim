@@ -135,6 +135,8 @@ function! eclim#help#BufferHelp(lines, orientation, size)
     exec 'autocmd! BufWinLeave <buffer=' . orig_bufnr . '>'
     exec 'autocmd BufWinLeave <buffer=' . orig_bufnr . '> nested bd ' . help_bufnr
   augroup END
+
+  return help_bufnr
 endfunction " }}}
 
 " CommandComplete(argLead, cmdLine, cursorPos) {{{
