@@ -16,6 +16,18 @@
 History of Changes
 ==================
 
+.. _1.5.4:
+
+1.5.4 (2010)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Common:
+  - Added support for interactively switching scopes from the :ref:`:LocateFile
+    <:LocateFile>` buffer.
+
 .. _1.5.3:
 
 1.5.3 (Dec. 12, 2009)

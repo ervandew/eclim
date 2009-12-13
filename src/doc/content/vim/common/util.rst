@@ -31,15 +31,16 @@ general purpose commands that are useful in and outside the scope of eclim.
   .. image:: ../../images/screenshots/locate.png
 
   While in this completion mode the following key bindings are available:
-    - <tab> or <down> - cycle forward through the results.
-    - <shift><tab> or <up> - cycle backwards through the results.
+    - <esc> - close the search window without selecting a file
+    - <tab> or <down> - cycle forward through the results
+    - <shift><tab> or <up> - cycle backwards through the results
     - <enter> - open the selected file using the
-      :ref:`default action <g:EclimLocatFileDefaultAction>`.
+      :ref:`default action <g:EclimLocatFileDefaultAction>`
     - <ctrl>e - open the selected file via :edit
     - <ctrl>s - open the selected file via :split
     - <ctrl>t - open the selected file via :tabnew
-    - <esc> - close the search window without selecting a file.
-    - <ctrl>h - toggle the help buffer.
+    - <ctrl>l - switch the locate scope
+    - <ctrl>h - toggle the help buffer
 
   By default, the search string accepted by the completion mode is intended to
   be just portions of the file name you are looking for, which is then
@@ -71,25 +72,29 @@ general purpose commands that are useful in and outside the scope of eclim.
     system, etc.) will not be visible until you force a project refresh via
     :ref:`:ProjectRefresh`.
 
-.. _g\:EclimLocatFileDefaultAction:
+  **Configuration**
 
-  **g:EclimLocatFileDefaultAction** (Default: 'split') -
-  Determines the command used to open the file when hitting <enter> on an entry
-  in the locate file results.
+  Vim Settings
 
-.. _g\:EclimLocatFileScope:
+  .. _g\:EclimLocateFileDefaultAction:
 
-  **g:EclimLocatFileScope** (Default: 'project') -
-  Determines the scope for which to search for files.
+  - **g:EclimLocateFileDefaultAction** (Default: 'split') -
+    Determines the command used to open the file when hitting <enter> on an entry
+    in the locate file results.
 
-  - 'project': search only the current project and its dependencies.
-  - 'workspace': search the entire workspace (all open projects).
+  .. _g\:EclimLocateFileScope:
 
-.. _g\:EclimLocatFileFuzzy:
+  - **g:EclimLocateFileScope** (Default: 'project') -
+    Determines the scope for which to search for files.
 
-  **g:EclimLocatFileFuzzy** (Default: 1) -
-  Determines whether or not 'fuzzy' searching will be used on the no arugment
-  version of :LocateFile.
+    - 'project': search only the current project and its dependencies.
+    - 'workspace': search the entire workspace (all open projects).
+
+  .. _g\:EclimLocateFileFuzzy:
+
+  - **g:EclimLocateFileFuzzy** (Default: 1) -
+    Determines whether or not 'fuzzy' searching will be used on the no arugment
+    version of :LocateFile.
 
 .. _\:Split:
 
@@ -235,8 +240,17 @@ general purpose commands that are useful in and outside the scope of eclim.
   By default entries will be sorted by path name, but you may change the
   sorting via these two variables\:
 
+  **Configuration**
+
+  Vim Settings
+
+  .. _g\:EclimBuffersSort:
+
   - **g:EclimBuffersSort** (defaults to 'path')  Supports one
     of 'path', 'status' (active or hidden), 'bufnr'.
+
+  .. _g\:EclimBuffersSortDirection:
+
   - **g:EclimBuffersSortDirection** (defaults to 'asc')
     Supports one of 'asc' or 'desc'.
 
@@ -248,6 +262,12 @@ general purpose commands that are useful in and outside the scope of eclim.
   there is no way to tell the vim version to exclude some windows you may wish
   to keep open (taglist, quickfix, etc.).  The eclim version provides that
   ability via the **g:EclimOnlyExclude** variable.
+
+  **Configuration**
+
+  Vim Settings
+
+  .. _g\:EclimOnlyExclude:
 
   **g:EclimOnlyExclude** (defaults to
   '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
