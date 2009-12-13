@@ -38,6 +38,21 @@ endif
 
 " Script Variables {{{
 let s:command_locate = '-command locate_file -s "<scope>"'
+let s:scopes = [
+    \ 'project',
+    \ 'workspace',
+  \ ]
+let s:help = [
+    \ '<esc> - close the locate prompt + results',
+    \ '<tab>, <down> - select the next file',
+    \ '<s-tab>, <up> - select the previous file',
+    \ '<cr> - open selected file w/ default action',
+    \ '<c-e> - open with :edit',
+    \ '<c-s> - open in a split window',
+    \ '<c-t> - open in a new tab',
+    \ '<c-l> - choose search scope',
+    \ '<c-h> - toggle help buffer',
+  \ ]
 " }}}
 
 " LocateFile(action, file) {{{
@@ -213,6 +228,7 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
   let b:workspace = a:workspace
   let b:scope = a:scope
   let b:results_bufnum = results_bufnum
+  let b:help_bufnum = 0
   let b:selection = 1
   let b:updatetime = &updatetime
 
@@ -241,6 +257,7 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
   imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
   imap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
   imap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
+  imap <buffer> <silent> <c-l> <c-r>=<SID>LocateFileChangeScope()<cr>
   imap <buffer> <silent> <c-h> <c-r>=<SID>LocateFileHelp()<cr>
 
   startinsert!
@@ -329,21 +346,96 @@ function s:LocateFileSelect(action)
   return ''
 endfunction " }}}
 
+" s:LocateFileChangeScope() {{{
+function s:LocateFileChangeScope()
+  if b:help_bufnum && bufexists(b:help_bufnum)
+    exec 'bdelete ' . b:help_bufnum
+  endif
+
+  let winnr = winnr()
+  exec bufwinnr(b:results_bufnum) . 'winc w'
+  silent! noautocmd exec '50vnew \[Locate\ Scope\]'
+  let b:locate_winnr = winnr
+  stopinsert
+  set modifiable
+  call append(1, s:scopes)
+  1,1delete _
+  call append(line('$'),
+    \ ['', '" <cr> - select a scope', '" <c-c>, <c-l>, or q - cancel'])
+  syntax match Comment /^".*/
+  set nomodifiable
+  set winfixheight
+  setlocal nonumber
+  setlocal nolist
+  setlocal noswapfile nobuflisted
+  setlocal buftype=nofile bufhidden=delete
+
+  nmap <buffer> <silent> <cr> :call <SID>ChooseScope()<cr>
+  nmap <buffer> <silent> q :call <SID>CloseScopeChooser()<cr>
+  nmap <buffer> <silent> <c-c> :call <SID>CloseScopeChooser()<cr>
+  nmap <buffer> <silent> <c-l> :call <SID>CloseScopeChooser()<cr>
+
+  return ''
+endfunction " }}}
+
+" s:ChooseScope() {{{
+function s:ChooseScope()
+  let scope = getline('.')
+  if scope =~ '^"\|^\s*$'
+    return
+  endif
+
+  if scope == 'project'
+    let project = ''
+    let names = eclim#project#util#GetProjectNames()
+    let prompt = 'Choose a project (ctrl-c to cancel): '
+    while project == ''
+      let project = input(
+        \ prompt, '', 'customlist,eclim#project#util#CommandCompleteProject')
+      if project == ''
+        echo ''
+        return
+      endif
+
+      if !eclim#util#ListContains(names, project)
+        let prompt = "Project '" . project . "' not found (ctrl-c to cancel): "
+        let project = ''
+      endif
+    endwhile
+    let workspace = eclim#project#util#GetProjectWorkspace(project)
+
+  elseif scope == 'workspace'
+    let project = ''
+    let workspace = eclim#eclipse#ChooseWorkspace()
+  endif
+
+  call s:CloseScopeChooser()
+
+  let b:scope = scope
+  let b:project = project
+  let b:workspace = workspace
+
+  let locate_in = (b:scope == 'project' ? b:project : 'workspace')
+  exec 'file ' . escape('[Locate in ' . locate_in . ']', ' []')
+
+  call eclim#common#locate#LocateFileCompletion()
+endfunction " }}}
+
+" s:CloseScopeChooser() {{{
+function s:CloseScopeChooser()
+  let winnum = b:locate_winnr
+  bdelete
+  exec winnum . 'winc w'
+  startinsert!
+endfunction " }}}
+
 " s:LocateFileHelp() {{{
 function s:LocateFileHelp()
   let winnr = winnr()
   exec bufwinnr(b:results_bufnum) . 'winc w'
-  call eclim#help#BufferHelp([
-      \ '<esc> - close the locate prompt + results',
-      \ '<tab>, <down> - select the next file',
-      \ '<s-tab>, <up> - select the previous file',
-      \ '<cr> - open selected file w/ default action',
-      \ '<c-e> - open with :edit',
-      \ '<c-s> - open in a split window',
-      \ '<c-t> - open in a new tab',
-      \ '<c-h> - toggle help buffer',
-    \ ], 'vertical', 50)
+  let help_bufnum = eclim#help#BufferHelp(s:help, 'vertical', 50)
   exec winnr . 'winc w'
+  let b:help_bufnum = help_bufnum
 
   return ''
 endfunction " }}}
