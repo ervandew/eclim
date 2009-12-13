@@ -31,7 +31,7 @@ Checking out the code and building it.
 
   ::
 
-    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim/eclim
+    $ git clone git://github.com/ervandew/eclim.git
 
   Once you have a local git repository you can utilize the extensive local git
   functionality allowing you to commit code locally, create local branches,
@@ -43,7 +43,7 @@ Checking out the code and building it.
   ::
 
     $ cd eclim
-    $ ant -Declipse.home=<your eclipse home dir>
+    $ ant -Declipse.home=/your/eclipse/home/dir
 
   .. note::
 
@@ -105,154 +105,21 @@ Checking out the code and building it.
 
 .. _development-patches:
 
-Managing / Submitting Patches
------------------------------
+Developing / Submitting Patches
+-------------------------------
 
-Before you start writing any code you should first familiarize yourself with
-the preferred means of submitting patches, and if you plan on contributing
-anything non-trivial, the preferred means of managing those patches.
+The preferred means of developing and submitting patches is to use a github
+fork. Github provides a nice `guide to forking`_ which should get you started.
 
-.. _development-patches-submitting:
+Although using a github fork is preferred, you can of course still submit
+patches via email using git's format-patch command:
 
-**Submitting Patches**
+::
 
-Any patches you submit should be in the form of diff against the current git
-head using git's format-patch command:
-
-  ::
-
-    $ git format-patch -M origin/master
+  $ git format-patch -M origin/master
 
 Running the above command will generate a series of patch files which can be
 submitted to the `eclim development group`_.
-
-If you use git, without stgit, please be aware that the diff will generate a
-patch entry for every commit you've made. So unless each commit represents a
-change that you are willing to submit independently of the others, please
-consolidate all your commits for a given patch into a single commit prior to
-generating the patch file (using git rebase -i for instance).  If you don't do
-so then the patch file will contain all your trial and errors, dead ends, etc.
-and evaluating a patch with an entire history like that can be very difficult.
-
-.. _development-patches-managing:
-
-**Managing Patch Development**
-
-Although you can manage patches and format "clean" patch files by manually
-rewriting git's history, you might find it easier to manage your patches using
-an external patch management tool like `Stacked Git`_ (StGit).  StGit can make
-creating, managing, and submitting patches easier for some users.  If you
-decide to not use StGit, then you should read the section in the git manual
-regarding `managing of patch series`_ which provides some very nice guidelines
-and useful tips.
-
-.. _development-patch-example:
-
-**Example Patch Workflow**
-
-To fully illustrate creating and submitting a patch, let's walk through making
-a small change, from start to finish.  In this example we will modify the
-:PingEclim command to print "Pong" along with the version numbers normally
-returned.
-
-This example will use stgit_, but the same result can be accomplished with git
-alone.
-
-1. First clone the eclim repository:
-
-  ::
-
-    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim/eclim
-
-2. Initialize stgit for the eclim repository:
-
-  ::
-
-    $ cd eclim
-    $ stg init
-
-3. Start a new stgit patch:
-
-  ::
-
-    $ stg new -m "Alter :PingEclim to print 'Pong'" pong
-
-
-4. Edit the file PingCommand.java:
-
-  ::
-
-    $ vim src/java/org/eclim/plugin/core/command/admin/PingCommand.java
-    ...
-
-    $ git diff
-    diff --git a/src/java/org/eclim/plugin/core/command/admin/PingCommand.java b/src/java/org/eclim/plugin/core/command/admin/PingCommand.java
-    index bb5c569..b2f2ebc 100644
-    --- a/src/java/org/eclim/command/admin/PingCommand.java
-    +++ b/src/java/org/eclim/command/admin/PingCommand.java
-    @@ -65,7 +65,7 @@ public class PingCommand
-           version = eclim_version + '\n' + eclipse_version;
-         }
-
-    -    return version;
-    +    return "Pong!\n" + version;
-       }
-
-       private String getVersion()
-
-
-5. Test the change:
-
-  ::
-
-    $ ant
-    ...
-
-    $ $ECLIPSE_HOME/eclimd
-    ...
-
-    $ vim -c ":PingEclim"
-    ...
-    Pong!
-    eclim   1.4.4
-    eclipse 3.5.0
-    Press ENTER or type command to continue
-
-
-6. Commit the change to the patch:
-
-  ::
-
-    $ stg refresh
-    Checking for changes in the working directory ... done
-    Refreshing patch "pong" ... done
-
-7. Create a patch file:
-
-  ::
-
-    $ git format-patch -M origin/master
-
-At this point all that is left is submitting the patch to the
-`eclim development group`_.
-
-
-**Pulling Updates**
-
-  At some point you'll need to pull updates from the remote git repository.  If
-  you're using git without stgit, then you can pull updates in the standard git
-  fashion (using rebase in this example to help keep the history cleaner):
-
-    ::
-
-      $ git pull --rebase
-
-  If you're using stgit on top of git, then the preferred method is to pull via
-  stgit:
-
-    ::
-
-      $ stg pull -m
 
 
 What's Next
@@ -267,8 +134,6 @@ All of that and more can be found in the
 
 
 .. _git: http://git-scm.com/
-.. _git-format-patch: http://www.kernel.org/pub/software/scm/git/docs/git-format-patch.html
-.. _managing of patch series: http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#cleaning-up-history
-.. _Stacked Git: http://procode.org/stgit/
-.. _stgit: http://procode.org/stgit/
 .. _eclim development group: http://groups.google.com/group/eclim-dev
+.. _guide to forking: http://help.github.com/forking/
+.. _git-format-patch: http://www.kernel.org/pub/software/scm/git/docs/git-format-patch.html

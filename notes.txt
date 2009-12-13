@@ -2,21 +2,6 @@ HIGH {{{
   - possible issue converting .eclimrc properties to -Dproperty args in eclimd on OSX
     $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
 
-  - meta tags in docs
-    - http://docutils.sourceforge.net/docs/ref/rst/directives.html#meta
-
-  - convert to github
-    - run ./fix.sh to fix author info on pre-git commits
-    - create github repos:
-      - http://github.com/repositories/new
-    - consider moving eclim site as well to github pages:
-      - http://pages.github.com/
-      - requires paid account to point eclim.org at it.
-      - doesn't yet have .htaccess support
-    - downloads?
-      - doesn't yet have tracking of number of downloads
-    - update git links on freshmeat, ohloh, and in eclim docs.
-
   - signature + docs (python docstrings, javadocs, etc.) of a method while you
     type.
     - open a scratch window for displaying these
@@ -124,6 +109,16 @@ TODO {{{
     - document template plugin
 
     - document qf/location list filtering support
+
+    - consider moving eclim site to github pages:
+      - http://pages.github.com/
+      - requires paid account to point eclim.org at it.
+      - doesn't yet have .htaccess support
+      - downloads?
+        - doesn't yet have tracking of number of downloads
+
+    - meta tags in docs
+      - http://docutils.sourceforge.net/docs/ref/rst/directives.html#meta
   }}}
 
   Common {{{
@@ -576,6 +571,19 @@ TODO {{{
 
 NOTES {{{
 
+  Steps for new releases {{{
+    1) tag git and then build the distribution
+       $ git push
+       $ git tag -a -m "<version>" <version>
+       $ ant dist
+       $ git push --tags
+    2) create sourceforge release
+       - update windows and linux download pages with latest file to download.
+    3) update documentation website
+    4) announce on freshmeat
+       - http://freshmeat.net/projects/eclim/
+  }}}
+
   Eclipse Docs {{{
 
     p2
@@ -608,19 +616,6 @@ NOTES {{{
           -application org.eclipse.update.core.standaloneUpdate
           -command listFeatures
 
-  }}}
-
-  Steps for new releases {{{
-    1) tag git and then build the distribution
-       $ git push
-       $ git tag -a -m "<version>" <version>
-       $ ant dist
-       $ git push --tags
-    2) create sourceforge release
-       - update windows and linux download pages with latest file to download.
-    3) update documentation website
-    4) announce on freshmeat
-       - http://freshmeat.net/projects/eclim/
   }}}
 
   Adding a new plugin {{{

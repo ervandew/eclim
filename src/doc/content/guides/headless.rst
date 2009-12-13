@@ -77,7 +77,7 @@ git and build it:
 
   ::
 
-    $ git clone git://eclim.git.sourceforge.net/gitroot/eclim/eclim
+    $ git clone git://github.com/ervandew/eclim.git
     $ cd eclim
     $ git checkout 1.5.2
 
@@ -125,4 +125,4 @@ The last step is to start Xvfb followed by eclimd:
   correctly.
 
 .. _eclipse.org: http://eclipse.org/downloads/
-.. _installer dependencies: http://eclim.git.sourceforge.net/git/gitweb.cgi?p=eclim/eclim;a=blob_plain;f=src/installer/resources/dependencies.xml;hb=HEAD
+.. _installer dependencies: http://github.com/ervandew/eclim/blob/master/src/installer/resources/dependencies.xml
