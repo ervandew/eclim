@@ -58,7 +58,7 @@ if !exists(":VcsInfo")
 endif
 
 if !exists(":VcsWebLog")
-  command -nargs=0 VcsWebLog :call eclim#vcs#web#VcsWebLog()
+  command -nargs=? VcsWebLog :call eclim#vcs#web#VcsWebLog('<args>')
 endif
 if !exists(":VcsWebChangeSet")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision

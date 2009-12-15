@@ -187,10 +187,11 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
   call eclim#web#OpenUrl(url, 1)
 endfunction " }}}
 
-" VcsWebLog() {{{
+" VcsWebLog(revision) {{{
 " View the vcs web log.
-function eclim#vcs#web#VcsWebLog()
-  call eclim#vcs#web#VcsWeb('GetLogUrl', eclim#vcs#util#GetRevision())
+function eclim#vcs#web#VcsWebLog(revision)
+  let revision = a:revision != '' ? a:revision : eclim#vcs#util#GetRevision()
+  call eclim#vcs#web#VcsWeb('GetLogUrl', revision)
 endfunction " }}}
 
 " VcsWebChangeSet(revision) {{{
