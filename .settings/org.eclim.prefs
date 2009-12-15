@@ -1,4 +1,4 @@
-#Sat Dec 12 12:19:14 PST 2009
+#Mon Dec 14 11:08:16 PST 2009
 eclipse.preferences.version=1
 org.eclim.java.checkstyle.config=src/java/checkstyle.xml
 org.eclim.java.doc.packagenames=org.eclim
@@ -9,5 +9,5 @@ org.eclim.java.junit.src_dir=<project>/src/test/junit
 org.eclim.java.logging.impl=custom
 org.eclim.java.logging.template=eclim.logger.gst
 org.eclim.project.copyright=src/copyright
-org.eclim.project.vcs.web.url=http\://eclim.git.sourceforge.net/git/gitweb.cgi?p\=eclim/eclim
-org.eclim.project.vcs.web.viewer=gitweb
+org.eclim.project.vcs.web.url=http\://github.com/ervandew/eclim/
+org.eclim.project.vcs.web.viewer=github
