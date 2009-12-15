@@ -146,6 +146,12 @@ function eclim#vcs#impl#cvs#GetEditorFile()
   return ''
 endfunction " }}}
 
+" GetModifiedFiles() {{{
+function eclim#vcs#impl#cvs#GetModifiedFiles()
+  call eclim#util#EchoError('Sorry, this function is not yet supported for cvs.')
+  return []
+endfunction " }}}
+
 " GetVcsWebPath() {{{
 function eclim#vcs#impl#cvs#GetVcsWebPath()
   let dir = substitute(getcwd(), '\', '/', 'g')

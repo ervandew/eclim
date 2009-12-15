@@ -190,6 +190,27 @@ function eclim#vcs#util#GetRevisions()
   return revisions
 endfunction " }}}
 
+" GetModifiedFiles() {{{
+" Gets a list of modified files, including untracked files that are not
+" ignored.
+function eclim#vcs#util#GetModifiedFiles()
+  let files = []
+
+  let cwd = getcwd()
+  let dir = eclim#vcs#util#GetRoot('')
+  exec 'lcd ' . escape(dir, ' ')
+  try
+    let GetModifiedFiles = eclim#vcs#util#GetVcsFunction('GetModifiedFiles')
+    if type(GetModifiedFiles) == 2
+      let files = GetModifiedFiles()
+    endif
+  finally
+    exec 'lcd ' . escape(cwd, ' ')
+  endtry
+
+  return files
+endfunction " }}}
+
 " GetRoot(dir) {{{
 " Gets the absolute path to the repository root on the local file system.
 function eclim#vcs#util#GetRoot(dir)

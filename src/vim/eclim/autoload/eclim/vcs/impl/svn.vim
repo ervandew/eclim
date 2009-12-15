@@ -163,6 +163,21 @@ function eclim#vcs#impl#svn#GetEditorFile()
   return file
 endfunction " }}}
 
+" GetModifiedFiles() {{{
+function eclim#vcs#impl#svn#GetModifiedFiles()
+  let root = eclim#vcs#impl#svn#GetRoot()
+  let status = eclim#vcs#impl#svn#Svn('status')
+  let files = []
+  for file in split(status, "\n")
+    if file !~ '^[?AM]\s\+'
+      continue
+    endif
+    let file = substitute(file, '^[?AM]\s\+', '', '')
+    call add(files, root . '/' . file)
+  endfor
+  return files
+endfunction " }}}
+
 " GetVcsWebPath() {{{
 function eclim#vcs#impl#svn#GetVcsWebPath()
   let url_root = s:GetUrlAndRoot(expand('%'))

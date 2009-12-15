@@ -170,6 +170,25 @@ function eclim#vcs#impl#git#GetEditorFile()
   return ''
 endfunction " }}}
 
+" GetModifiedFiles() {{{
+function eclim#vcs#impl#git#GetModifiedFiles()
+  let root = eclim#vcs#impl#git#GetRoot()
+  let status = eclim#vcs#impl#git#Git('diff --name-status HEAD')
+  let files = []
+  for file in split(status, "\n")
+    if file !~ '^[AM]\s\+'
+      continue
+    endif
+    let file = substitute(file, '^[AM]\s\+', '', '')
+    call add(files, root . '/' . file)
+  endfor
+
+  let untracked = eclim#vcs#impl#git#Git('ls-files --others')
+  let files += map(split(untracked, "\n"), 'root . "/" . v:val')
+
+  return files
+endfunction " }}}
+
 " GetVcsWebPath() {{{
 function eclim#vcs#impl#git#GetVcsWebPath()
   let path = substitute(expand('%:p'), '\', '/', 'g')

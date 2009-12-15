@@ -123,6 +123,13 @@ function eclim#vcs#impl#hg#GetEditorFile()
   return file
 endfunction " }}}
 
+" GetModifiedFiles() {{{
+function eclim#vcs#impl#hg#GetModifiedFiles()
+  let status = eclim#vcs#impl#hg#Hg('status -m -a -u -n')
+  let root = eclim#vcs#impl#hg#GetRoot()
+  return map(split(status, "\n"), 'root . "/" . v:val')
+endfunction " }}}
+
 " GetVcsWebPath() {{{
 function eclim#vcs#impl#hg#GetVcsWebPath()
   let path = substitute(expand('%:p'), '\', '/', 'g')
