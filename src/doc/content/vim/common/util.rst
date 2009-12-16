@@ -61,16 +61,24 @@ general purpose commands that are useful in and outside the scope of eclim.
   By default, all searching by both variants of this command is limited to the
   current project and any projects listed as dependencies, but you can widen
   the search scope to include all open projects by setting
-  **g:EclimLocateFileScope** to 'workspace'.
+  **g:EclimLocateFileScope** to 'workspace', which is the default scope when
+  **:LocateFile** is executed outside of a project.
+
+  In addition to the 'project' and 'workspace' scopes, **:LocateFile** also
+  supports the following scopes:
+
+    - buffers: search listed buffers
+    - quickfix: search the quickfix results
+    - vcsmodified: search files reported by your vcs as modified or untracked.
 
   .. note::
 
-    For performance reasons, this functionality depends on eclipse being aware
-    of all your project files.  For the most part this is handled automatically
-    as you create and edit files within vim.  However, actions you take outside
-    of vim or eclipse (moving/removing files, updates from a version control
-    system, etc.) will not be visible until you force a project refresh via
-    :ref:`:ProjectRefresh`.
+    For performance reasons, locating files in the 'project' and 'workspace'
+    scopes depends on eclipse being aware of all your project files.  For the
+    most part this is handled automatically as you create and edit files within
+    vim.  However, actions you take outside of vim or eclipse (moving/removing
+    files, updates from a version control system, etc.) will not be visible
+    until you force a project refresh via :ref:`:ProjectRefresh`.
 
   **Configuration**
 
@@ -89,6 +97,10 @@ general purpose commands that are useful in and outside the scope of eclim.
 
     - 'project': search only the current project and its dependencies.
     - 'workspace': search the entire workspace (all open projects).
+    - 'buffers': search listed buffers
+    - 'quickfix': search the quickfix results
+    - 'vcsmodified': search files reported by your vcs as modified or
+      untracked.
 
   .. _g\:EclimLocateFileFuzzy:
 

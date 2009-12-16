@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.core.command.search;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,6 +28,8 @@ import java.util.Map;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclim.util.IOUtils;
 
 import com.wcohen.ss.Levenstein;
 
@@ -62,13 +67,15 @@ import org.eclipse.core.runtime.IPath;
   options =
     "REQUIRED p pattern ARG," +
     "REQUIRED s scope ARG," +
-    "OPTIONAL n project ARG"
+    "OPTIONAL n project ARG," +
+    "OPTIONAL f file ARG"
 )
 public class LocateFileCommand
   extends AbstractCommand
 {
   public static final String SCOPE_PROJECT = "project";
   public static final String SCOPE_WORKSPACE = "workspace";
+  public static final String SCOPE_LIST = "list";
 
   /**
    * {@inheritDoc}
@@ -77,11 +84,51 @@ public class LocateFileCommand
     throws Exception
   {
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
-    String projectName = commandLine.getValue(Options.NAME_OPTION);
     String scope = commandLine.getValue(Options.SCOPE_OPTION);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
 
+    List<Result> results = null;
+    if (SCOPE_LIST.equals(scope)){
+      results = executeLocateFromFileList(commandLine, pattern, scope);
+    }else{
+      results = executeLocateFromEclipse(commandLine, pattern, scope);
+    }
+
+    FilePathComparator comparator =
+      new FilePathComparator(pattern, projectName);
+    Collections.sort(results, comparator);
+    return StringUtils.join(results, '\n');
+  }
+
+  private List<Result> executeLocateFromFileList(
+      CommandLine commandLine, String pattern, String scope)
+    throws Exception
+  {
+    ArrayList<Result> results = new ArrayList<Result>();
+    String fileName = commandLine.getValue(Options.FILE_OPTION);
+    BufferedReader reader = null;
+    try{
+      reader = new BufferedReader(new FileReader(fileName));
+      Matcher matcher = Pattern.compile(pattern).matcher("");
+      String line = null;
+      while ((line = reader.readLine()) != null){
+        if (matcher.reset(line).matches()){
+          results.add(new Result(FileUtils.getBaseName(line), line, line, null));
+        }
+      }
+    }finally{
+      IOUtils.closeQuietly(reader);
+    }
+    return results;
+  }
+
+  private List<Result> executeLocateFromEclipse(
+      CommandLine commandLine, String pattern, String scope)
+    throws Exception
+  {
     ArrayList<IProject> projects = new ArrayList<IProject>();
 
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
     if (projectName != null){
       IProject project = ProjectUtils.getProject(projectName, true);
       projects.add(project);
@@ -103,12 +150,12 @@ public class LocateFileCommand
       }
     }
 
-    FileMatcher matcher = new FileMatcher(pattern, projectName);
+    FileMatcher matcher = new FileMatcher(pattern);
     for (IProject resource : projects){
       resource.accept(matcher, 0);
     }
 
-    return StringUtils.join(matcher.getResults(), '\n');
+    return matcher.getResults();
   }
 
   private static class Result
@@ -175,8 +222,6 @@ public class LocateFileCommand
       IGNORE_EXTS.add("swp");
     }
 
-    private String pattern;
-    private String projectName;
     private Matcher matcher;
     private boolean includesPath;
     private Matcher baseMatcher;
@@ -187,12 +232,9 @@ public class LocateFileCommand
      * Constructs a new instance.
      *
      * @param pattern The pattern for this instance.
-     * @param projectName The possibly null current project name.
      */
-    public FileMatcher (String pattern, String projectName)
+    public FileMatcher (String pattern)
     {
-      this.pattern = pattern;
-      this.projectName = projectName;
       this.matcher = Pattern.compile(pattern).matcher("");
 
       Matcher baseMatcher = FIND_BASE.matcher(pattern);
@@ -262,9 +304,6 @@ public class LocateFileCommand
 
     public List<Result> getResults()
     {
-      FilePathComparator comparator =
-        new FilePathComparator(pattern, projectName);
-      Collections.sort(results, comparator);
       return results;
     }
   }

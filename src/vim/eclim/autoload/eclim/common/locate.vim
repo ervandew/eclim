@@ -41,6 +41,9 @@ let s:command_locate = '-command locate_file -s "<scope>"'
 let s:scopes = [
     \ 'project',
     \ 'workspace',
+    \ 'buffers',
+    \ 'quickfix',
+    \ 'vcsmodified',
   \ ]
 let s:help = [
     \ '<esc> - close the locate prompt + results',
@@ -152,9 +155,16 @@ endfunction " }}}
 
 " LocateFileCompletion() {{{
 function eclim#common#locate#LocateFileCompletion()
+  let line = getline('.')
+  if line !~ '^> '
+    call setline(1, substitute(line, '^>\?\s*', '> \1', ''))
+    call cursor(1, 3)
+    let line = getline('.')
+  endif
+
   let completions = []
   let display = []
-  let name = substitute(getline('.'), '^>\s*', '', '')
+  let name = substitute(line, '^>\s*', '', '')
   if name !~ '^\s*$'
     let pattern = name
     if g:EclimLocateFileFuzzy
@@ -168,15 +178,16 @@ function eclim#common#locate#LocateFileCompletion()
     if !empty(results)
       for result in results
         let parts = split(result, '|')
-        let dict = {'word': parts[0], 'menu': parts[1], 'info': parts[2]}
+        let rel = eclim#util#Simplify(parts[1])
+        let dict = {'word': parts[0], 'menu': rel, 'info': parts[2]}
         call add(completions, dict)
-        call add(display, parts[0] . '  ' . parts[1])
+        call add(display, parts[0] . '  ' . rel)
       endfor
     endif
   endif
   let b:completions = completions
   let winnr = winnr()
-  exec bufwinnr(b:results_bufnum) . 'winc w'
+  noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
   1,$delete _
   call append(1, display)
   1,1delete _
@@ -188,13 +199,33 @@ function eclim#common#locate#LocateFileCompletion()
   call s:LocateFileSelection(1)
 endfunction " }}}
 
+" LocateFileClose() {{{
+function eclim#common#locate#LocateFileClose()
+  if bufname(bufnr('%')) !~ '^\[Locate.*\]$'
+    let bufnr = bufnr('\[Locate in *\]')
+    let winnr = bufwinnr(bufnr)
+    if winnr != -1
+      let curbuf = bufnr('%')
+      exec winnr . 'winc w'
+      try
+        exec 'bw ' . b:results_bufnum
+        bw
+        autocmd! locate_file_init
+        stopinsert
+      finally
+        exec bufwinnr(curbuf) . 'winc w'
+      endtry
+    endif
+  endif
+endfunction " }}}
+
 " s:LocateFileCompletionInit(action, scope, project, workspace) {{{
 function s:LocateFileCompletionInit(action, scope, project, workspace)
   let file = expand('%')
   let bufnum = bufnr('%')
   let winrestcmd = winrestcmd()
 
-  topleft 10split \[Locate\ Results\]
+  topleft 12split \[Locate\ Results\]
   set filetype=locate_results
   setlocal nonumber nowrap
   setlocal noswapfile nobuflisted
@@ -227,13 +258,19 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
 
   augroup locate_file_init
     autocmd!
-    exec 'autocmd InsertLeave <buffer> let &updatetime = ' . b:updatetime . ' | ' .
-      \ 'doautocmd BufWinLeave | bd | ' .
-      \ 'doautocmd BufWinLeave | bd ' . b:results_bufnum . ' | ' .
+    autocmd BufEnter <buffer> nested startinsert! | let &updatetime = 300
+    autocmd BufLeave <buffer> nested stopinsert | let &updatetime = b:updatetime
+    autocmd BufLeave \[Locate*\]
+      \ call eclim#util#DelayedCommand('call eclim#common#locate#LocateFileClose()')
+    exec 'autocmd InsertLeave <buffer> ' .
+      \ 'doautocmd BufWinLeave | bw | ' .
+      \ 'doautocmd BufWinLeave | bw ' . b:results_bufnum . ' | ' .
       \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ') | ' .
       \ 'doautocmd BufEnter | ' .
       \ 'doautocmd WinEnter | ' .
       \ winrestcmd
+    exec 'autocmd WinEnter <buffer=' . b:results_bufnum .'> '
+      \ 'exec bufwinnr(' . bufnr('%') . ') "winc w"'
   augroup END
 
   " enable completion after user starts typing
@@ -289,7 +326,7 @@ function s:LocateFileSelection(sel)
   endif
 
   let winnr = winnr()
-  exec bufwinnr(b:results_bufnum) . 'winc w'
+  noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
 
   if sel == 'n'
     let sel = prev_sel < line('$') ? prev_sel + 1 : 1
@@ -343,9 +380,16 @@ function s:LocateFileChangeScope()
     exec 'bdelete ' . b:help_bufnum
   endif
 
+  let bufnr = bufnr('%')
   let winnr = winnr()
-  exec bufwinnr(b:results_bufnum) . 'winc w'
-  silent! noautocmd exec '50vnew \[Locate\ Scope\]'
+
+  " trigger [Locate] buffer's BufLeave autocmd before we leave the buffer
+  doautocmd BufLeave
+
+  noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
+  silent noautocmd exec '50vnew \[Locate\ Scope\]'
+
+  let b:locate_bufnr = bufnr
   let b:locate_winnr = winnr
   stopinsert
   set modifiable
@@ -366,6 +410,8 @@ function s:LocateFileChangeScope()
   nmap <buffer> <silent> <c-c> :call <SID>CloseScopeChooser()<cr>
   nmap <buffer> <silent> <c-l> :call <SID>CloseScopeChooser()<cr>
 
+  autocmd BufLeave <buffer> call <SID>CloseScopeChooser()
+
   return ''
 endfunction " }}}
 
@@ -375,6 +421,10 @@ function s:ChooseScope()
   if scope =~ '^"\|^\s*$'
     return
   endif
+
+  let workspace = ''
+  let project = ''
+  let locate_in = scope
 
   if scope == 'project'
     let project = ''
@@ -393,20 +443,40 @@ function s:ChooseScope()
         let project = ''
       endif
     endwhile
+    let locate_in = project
     let workspace = eclim#project#util#GetProjectWorkspace(project)
 
   elseif scope == 'workspace'
     let project = ''
     let workspace = eclim#eclipse#ChooseWorkspace()
+
+  elseif scope == 'vcsmodified'
+    let winnr = winnr()
+    let bufwinnr = bufwinnr(getbufvar(b:locate_bufnr, 'bufnum'))
+    noautocmd exec bufwinnr . 'winc w'
+    let cwd = getcwd()
+    exec 'lcd ' . escape(expand('%:p:h'), ' ')
+    try
+      let vcs = eclim#vcs#util#GetVcsType()
+    finally
+      exec 'lcd ' . escape(cwd, ' ')
+      noautocmd exec winnr . 'winc w'
+    endtry
+    if vcs == ''
+      call eclim#util#EchoError('Unable to determine vcs type.')
+      return
+    elseif vcs == 'cvs'
+      call eclim#util#EchoError('cvs not yet supported')
+      return
+    endif
   endif
 
   call s:CloseScopeChooser()
 
   let b:scope = scope
   let b:project = project
-  let b:workspace = workspace
+  let b:workspace = workspace != '' ? workspace : b:workspace
 
-  let locate_in = (b:scope == 'project' ? b:project : 'workspace')
   exec 'file ' . escape('[Locate in ' . locate_in . ']', ' []')
 
   call eclim#common#locate#LocateFileCompletion()
@@ -415,15 +485,27 @@ endfunction " }}}
 " s:CloseScopeChooser() {{{
 function s:CloseScopeChooser()
   let winnum = b:locate_winnr
-  bdelete
+  bwipeout
   exec winnum . 'winc w'
-  startinsert!
+
+  " hack to make :q work like the other close mappings
+  doautocmd BufEnter
+  " if we end up in a non-Locate window, make sure everything is as it should
+  " be (a hack for the above hack).
+  augroup locate_file_chooser_hack
+    autocmd!
+    autocmd BufEnter *
+      \ if bufname('%') !~ '^\[Locate in .*\]$' |
+      \   call eclim#common#locate#LocateFileClose() |
+      \ endif |
+      \ autocmd! locate_file_chooser_hack
+  augroup END
 endfunction " }}}
 
 " s:LocateFileHelp() {{{
 function s:LocateFileHelp()
   let winnr = winnr()
-  exec bufwinnr(b:results_bufnum) . 'winc w'
+  noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
   let help_bufnum = eclim#help#BufferHelp(s:help, 'vertical', 50)
   exec winnr . 'winc w'
   let b:help_bufnum = help_bufnum
@@ -467,6 +549,100 @@ function s:LocateFile_project(pattern)
   let command = substitute(command, '<scope>', 'project', '')
   let command .= ' -p "' . a:pattern . '"'
   let command .= ' -n "' . b:project . '"'
+  let port = eclim#client#nailgun#GetNgPort(b:workspace)
+  let results = split(eclim#ExecuteEclim(command, port), '\n')
+  if len(results) == 1 && results[0] == '0'
+    return []
+  endif
+  return results
+endfunction " }}}
+
+" s:LocateFile_buffers(pattern) {{{
+function s:LocateFile_buffers(pattern)
+  redir => list
+  silent exec 'buffers'
+  redir END
+
+  let buffers = map(split(list, '\n'),
+    \ "fnamemodify(substitute(v:val, '.\\{-}\"\\(.\\{-}\\)\".*', '\\1', ''), ':p')")
+
+  if len(buffers) > 1
+    let tempfile = substitute(tempname(), '\', '/', 'g')
+    call writefile(buffers, tempfile)
+    try
+      return s:LocateFileFromFileList(a:pattern, tempfile)
+    finally
+      call delete(tempfile)
+    endtry
+  endif
+  return []
+endfunction " }}}
+
+" s:LocateFile_quickfix(pattern) {{{
+function s:LocateFile_quickfix(pattern)
+  let buffers = []
+  let prev = ''
+  for entry in getqflist()
+    let name = fnamemodify(bufname(entry.bufnr), ':p')
+    if name != prev
+      call add(buffers, name)
+      let prev = name
+    endif
+  endfor
+
+  if len(buffers) > 1
+    let tempfile = substitute(tempname(), '\', '/', 'g')
+    call writefile(buffers, tempfile)
+    try
+      return s:LocateFileFromFileList(a:pattern, tempfile)
+    finally
+      call delete(tempfile)
+    endtry
+  endif
+  return []
+endfunction " }}}
+
+" s:LocateFile_vcsmodified(pattern) {{{
+function s:LocateFile_vcsmodified(pattern)
+  " cache results
+  if !exists('b:locate_vcs_modified_files')
+    let winnr = winnr()
+    let bufwinnr = bufwinnr(b:bufnum)
+    exec bufwinnr . 'winc w'
+    try
+      let root = eclim#vcs#util#GetRoot('')
+      let files = eclim#vcs#util#GetModifiedFiles()
+      call map(files, "substitute(v:val, '^' . root . '/', '', '')")
+    finally
+      exec winnr . 'winc w'
+    endtry
+    let b:locate_vcs_root = root
+    let b:locate_vcs_modified_files = files
+  else
+    let root = b:locate_vcs_root
+    let files = b:locate_vcs_modified_files
+  endif
+
+  if len(files) > 1
+    let tempfile = substitute(tempname(), '\', '/', 'g')
+    call writefile(files, tempfile)
+    try
+      let results = s:LocateFileFromFileList(a:pattern, tempfile)
+      call map(results, "substitute(v:val, '\\(.*|\\)', '\\1' . root . '/', '')")
+      return results
+    finally
+      call delete(tempfile)
+    endtry
+  endif
+  return []
+endfunction " }}}
+
+" s:LocateFileFromFileList(pattern, file) {{{
+function s:LocateFileFromFileList(pattern, file)
+  let command = s:command_locate
+  let command = substitute(command, '<scope>', 'list', '')
+  let command .= ' -p "' . a:pattern . '"'
+  let command .= ' -f "' . a:file . '"'
   let port = eclim#client#nailgun#GetNgPort(b:workspace)
   let results = split(eclim#ExecuteEclim(command, port), '\n')
   if len(results) == 1 && results[0] == '0'

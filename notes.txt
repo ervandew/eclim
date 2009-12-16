@@ -125,15 +125,8 @@ TODO {{{
 
     - :LocateFile
       - eclipse setting to filter out results
-      - update to support different search modes:
-        - projects (already implemented)
-          - specific project?
-        - buffers: search buffer names
-        - vcs modified file:  search names of files reported as untracked or
-          modified by a supported vcs.
-        - most used files?: track most used files.
-        - quickfix: search quickfix result buffers
-        - locationlist: search locationlist result buffers
+      - add 'recent' scope to search recently used files?
+        - need to keep track of n recently used files
 
     - templating system (convert to groovy)?
 
