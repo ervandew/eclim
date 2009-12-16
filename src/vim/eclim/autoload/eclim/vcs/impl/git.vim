@@ -183,7 +183,7 @@ function eclim#vcs#impl#git#GetModifiedFiles()
     call add(files, root . '/' . file)
   endfor
 
-  let untracked = eclim#vcs#impl#git#Git('ls-files --others')
+  let untracked = eclim#vcs#impl#git#Git('ls-files --others --exclude-standard')
   let files += map(split(untracked, "\n"), 'root . "/" . v:val')
 
   return files
