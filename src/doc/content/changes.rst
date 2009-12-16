@@ -22,11 +22,14 @@ History of Changes
 ----------------------
 
 Bug Fixes:
+  - Fixed eclim client on OSX.
   - Various bug fixes.
 
 Common:
   - Added support for interactively switching scopes from the :ref:`:LocateFile
     <:LocateFile>` buffer.
+  - Added new search scopes (buffers, quickfix, vcsmodified) to
+    :ref:`:LocateFile <:LocateFile>`.
 
 .. _1.5.3:
 

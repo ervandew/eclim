@@ -78,9 +78,11 @@ if [ -n "$SED" -a -n "$1" ] ; then
   ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
   if [ -n "$ARG" ] ; then
     shift
+    # using 2 calls to sed to prevent issues on OSX
     NAILGUN_ARGS=`
       echo $ARG | \
-      sed 's/-Dnailgun.server.\(\w*\)\s*=\s*\(\w*\)\s*/ --nailgun-\1 \2/g'
+      sed 's/-Dnailgun.server./ --nailgun-/g' | \
+      sed 's/=/ /g'
     `
   fi
 fi
