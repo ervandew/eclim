@@ -1,4 +1,4 @@
-# Copyright (C) 2005 - 2008  Eric Van Dewoestine
+# Copyright (C) 2005 - 2009  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,11 +17,16 @@
 # number which the eclim client will use to connect to the eclimd server.
 # Usage: sed -n -f eclim.sed ~/.eclimrc
 
+# Note: using '[ ]' instead of '\s' since '\s' doesn't appear to work on osx
+# (same with '\w').
+
 # remove all leading or trailing spaces.
-s/\(^\s\+\|\s\+$\)//g
+s/^[ ]*//g
+s/[ ]*$//g
 
 # delete blank and comment lines.
-/^\(#\|$\)/d
+/^$/d
+/^#/d
 
 # delete any line not containing nailgun.server.*
 # this stopped working at some point, maybe when i switched to arch?
@@ -31,14 +36,14 @@ s/\(^\s\+\|\s\+$\)//g
 # since the !d operation stopped working, instead only copy nailgun properties
 # to the hold space (downside is that their values must be on the same line).
 #H
-/^nailgun\.server\..*=/H
+/^\(-D\)*nailgun\.server\..*=/H
 ${
   g
   # remove line continuation chars.
-  s/\\\s*//g
+  s/\\\n//g
+  # convert properties to nailgun arguments.
+  s/\(-D\)*nailgun\.server\.\([a-zA-Z]*\)[ ]*=[ ]*\([a-zA-Z0-9]*\)/ --nailgun-\2 \3/g
   # remove all new line characters
   s/\n/ /g
-  # convert properties to nailgun arguments.
-  s/nailgun\.server\.\(\w*\)\s*=\s*\(\w*\)/ --nailgun-\1 \2/g
   p
 }

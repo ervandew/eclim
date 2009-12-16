@@ -1,4 +1,4 @@
-# Copyright (C) 2005 - 2008  Eric Van Dewoestine
+# Copyright (C) 2005 - 2009  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,20 +17,25 @@
 # -D and other vm arguments to be passed to eclipse at startup.
 # Usage: sed -n -f eclimd.sed ~/.eclimrc
 
-# delete blank and comment lines.
-/^\(\s*#\|$\)/d
+# Note: using '[ ]' instead of '\s' since '\s' doesn't appear to work on osx
+# (same with '\w').
 
 # remove all leading or trailing spaces.
-s/\(^\s\+\|\s\+$\)//g
+s/^[ ]*//g
+s/[ ]*$//g
+
+# delete blank and comment lines.
+/^$/d
+/^#/d
 
 # block to process portions spanning across lines.
 H
 ${
   g
   # remove line continuation chars.
-  s/\\\s*//g
+  s/\\\n//g
   # remove all new line characters and add -D for each property
-  s/\n\(\w\)/ -D\1/g
+  s/\n[ ]*\([a-zA-Z]\)/ -D\1/g
   # remove any remaining new line characters
   s/\n/ /g
   p

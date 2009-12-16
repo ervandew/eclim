@@ -1,7 +1,4 @@
 HIGH {{{
-  - possible issue converting .eclimrc properties to -Dproperty args in eclimd on OSX
-    $ echo -e "# foo bar\n  osgi.instance.area.default=@user.home/workspace\n\n-Xmx256M" | sed -n -f eclimd.sed
-
   - signature + docs (python docstrings, javadocs, etc.) of a method while you
     type.
     - open a scratch window for displaying these
