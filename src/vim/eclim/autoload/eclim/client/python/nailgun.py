@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @author: Anton Sharonov
 @author: Eric Van Dewoestine
 """
-import os, re, socket
+import socket
 
 try:
   from cStringIO import StringIO
@@ -72,10 +72,14 @@ class Nailgun(object):
 
         return (retcode, result)
       except socket.error, ex:
-        return ex.args
+        return (ex.args[0], 'connect: %s' % ex.args[1])
     finally:
       if not self.keepAlive:
-        self.close()
+        try:
+          self.close()
+        except:
+          # don't let an error on close mask any previous error.
+          pass
 
   def connect(self, port=None):
     """
