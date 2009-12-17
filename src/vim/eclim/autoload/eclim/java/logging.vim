@@ -38,7 +38,7 @@ function! eclim#java#logging#LoggingInit(var)
       let logger = substitute(logger, '\${var}', a:var, '')
       if strlen(logger) > &textwidth && logger !~ '\n'
         let logger = substitute(logger,
-          \ '\(.*\)\s\(.*\)', '\1\n' . g:EclimIndent . g:EclimIndent . '\2', '')
+          \ '\(.*\)\s\(.*\)', '\1\n' . eclim#util#GetIndent(2) . '\2', '')
       endif
 
       let position = search('{')
@@ -65,22 +65,23 @@ function! s:InitLoggingSettings()
     return
   endif
 
+  let indent = eclim#util#GetIndent(1)
   if s:EclimLoggingImpl == "commons-logging"
-    let s:logger = g:EclimIndent .
+    let s:logger = indent .
       \ "private static final Log ${var} = LogFactory.getLog(${class}.class);"
     let s:logger_imports = [
       \ "org.apache.commons.logging.Log",
       \ "org.apache.commons.logging.LogFactory"]
   elseif s:EclimLoggingImpl == "slf4j"
-    let s:logger = g:EclimIndent .
+    let s:logger = indent .
       \ "private static final Logger ${var} = LoggerFactory.getLogger(${class}.class);"
     let s:logger_imports = ["org.slf4j.Logger", "org.slf4j.LoggerFactory"]
   elseif s:EclimLoggingImpl == "log4j"
-    let s:logger = g:EclimIndent .
+    let s:logger = indent .
       \ "private static final Logger ${var} = Logger.getLogger(${class}.class);"
     let s:logger_imports = ["org.apache.log4j.Logger"]
   elseif s:EclimLoggingImpl == "jdk"
-    let s:logger = g:EclimIndent .
+    let s:logger = indent .
       \ "private static final Logger ${var} = Logger.getLogger(${class}.class.getName());"
     let s:logger_imports = ["java.util.logging.Logger"]
   elseif s:EclimLoggingImpl == "custom"
@@ -100,7 +101,7 @@ function! s:InitLoggingSettings()
     call map(s:logger_imports,
       \ "substitute(v:val, '^\\s*import\\>\\s*\\(.*\\);\\s*', '\\1', '')")
     call filter(lines, "v:val !~ '\\(^\\s*$\\|^\\s*import\\>\\)'")
-    let s:logger = g:EclimIndent . join(lines, "\n" . g:EclimIndent)
+    let s:logger = indent . join(lines, "\n" . indent)
   elseif s:EclimLoggingImpl == ''
     " no setting returned, probably not in a project, or user is attempting to
     " disable this functionality for the current project.

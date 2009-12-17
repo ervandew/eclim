@@ -71,8 +71,9 @@ function! eclim#common#history#History()
   let history = eval(result)
   let lines = [file]
   let revisions = [0]
+  let indent = eclim#util#GetIndent(1)
   for rev in history
-    call add(lines, g:EclimIndent . rev.datetime . ' (' . rev.delta . ')')
+    call add(lines, indent . rev.datetime . ' (' . rev.delta . ')')
     call add(revisions, rev.timestamp)
   endfor
   call add(lines, '')

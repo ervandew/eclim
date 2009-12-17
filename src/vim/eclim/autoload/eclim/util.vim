@@ -272,16 +272,32 @@ function! eclim#util#GetCurrentElementOffset()
   return offset
 endfunction " }}}
 
-" GetIndent(indent) {{{
-" Gets an indentation string for the supplied number of spaces the indent
-" consists of.  Ex. eclim#util#GetIndent(indent(line('.')))
-function! eclim#util#GetIndent(indent)
+" GetIndent(level) {{{
+" Gets an indentation string for the supplied indentation level.
+function! eclim#util#GetIndent(level)
   let result = ''
 
-  if a:indent
-    let num = a:indent / &sw
-    while num >= 0
-      let result .= g:EclimIndent
+  if a:level
+    if !exists('b:eclim_indent')
+      if exists('g:EclimIndent')
+        let b:eclim_indent = g:EclimIndent
+      else
+        if !&expandtab
+          let b:eclim_indent = "\t"
+        else
+          let b:eclim_indent = ''
+          let index = 0
+          while index < &shiftwidth
+            let b:eclim_indent = b:eclim_indent . " "
+            let index = index + 1
+          endwhile
+        endif
+      endif
+    endif
+
+    let num = a:level
+    while num > 0
+      let result .= b:eclim_indent
       let num -= 1
     endwhile
   endif

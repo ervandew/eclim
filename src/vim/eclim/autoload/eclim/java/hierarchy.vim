@@ -98,8 +98,9 @@ endfunction " }}}
 function! s:FormatHierarchy(hierarchy, lines, info, indent)
   call add(a:lines, a:indent . a:hierarchy.name)
   call add(a:info, a:hierarchy.qualified)
+  let indent = eclim#util#GetIndent(1)
   for child in a:hierarchy.children
-    call s:FormatHierarchy(child, a:lines, a:info, a:indent . g:EclimIndent)
+    call s:FormatHierarchy(child, a:lines, a:info, a:indent . indent)
   endfor
 endfunction " }}}
 

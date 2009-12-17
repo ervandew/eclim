@@ -72,19 +72,6 @@ if !exists("g:EclimMakeQfFilter")
   let g:EclimMakeQfFilter = 1
 endif
 
-if !exists("g:EclimIndent")
-  if !&expandtab
-    let g:EclimIndent = "\t"
-  else
-    let g:EclimIndent = ""
-    let index = 0
-    while index < &shiftwidth
-      let g:EclimIndent = g:EclimIndent . " "
-      let index = index + 1
-    endwhile
-  endif
-endif
-
 if !exists("g:EclimSeparator")
   let g:EclimSeparator = '/'
   if has("win32") || has("win64")
