@@ -35,7 +35,7 @@ general purpose commands that are useful in and outside the scope of eclim.
     - <tab> or <down> - cycle forward through the results
     - <shift><tab> or <up> - cycle backwards through the results
     - <enter> - open the selected file using the
-      :ref:`default action <g:EclimLocatFileDefaultAction>`
+      :ref:`default action <g:EclimLocateFileDefaultAction>`
     - <ctrl>e - open the selected file via :edit
     - <ctrl>s - open the selected file via :split
     - <ctrl>t - open the selected file via :tabnew
