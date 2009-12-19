@@ -18,12 +18,12 @@ History of Changes
 
 .. _1.5.4:
 
-1.5.4 (2010)
+1.5.4 (Dec. 18, 2009)
 ----------------------
 
 Bug Fixes:
   - Fixed eclim client on OSX.
-  - Various bug fixes.
+  - Fixed backspace key in the :ref:`:LocateFile <:LocateFile>` buffer.
 
 Common:
   - Added support for interactively switching scopes from the :ref:`:LocateFile

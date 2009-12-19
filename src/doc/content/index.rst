@@ -99,6 +99,14 @@ Eclim is released under the GPLv3_.
 ==================
 News
 ==================
+-----------
+2009-12-18
+-----------
+
+| **Eclim 1.5.4** is now available.
+| This is primarily a bug fix release for OSX users.
+
+You can view the :ref:`release notes <1.5.4>` for more info.
 
 -----------
 2009-12-12
