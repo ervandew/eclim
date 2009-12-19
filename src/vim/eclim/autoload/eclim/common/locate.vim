@@ -188,9 +188,11 @@ function eclim#common#locate#LocateFileCompletion()
   let b:completions = completions
   let winnr = winnr()
   noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
+  set modifiable
   1,$delete _
   call append(1, display)
   1,1delete _
+  set nomodifiable
   exec winnr . 'winc w'
 
   " part of bad hack for gvim on windows
@@ -225,7 +227,7 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
   let bufnum = bufnr('%')
   let winrestcmd = winrestcmd()
 
-  topleft 12split \[Locate\ Results\]
+  topleft 12split [Locate\ Results]
   set filetype=locate_results
   setlocal nonumber nowrap
   setlocal noswapfile nobuflisted
@@ -234,7 +236,8 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
   let results_bufnum = bufnr('%')
 
   let locate_in = (a:scope == 'project' ? a:project : 'workspace')
-  exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' []')
+  exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' ')
+  set modifiable
   call setline(1, '> ')
   call cursor(1, col('$'))
   set filetype=locate_prompt
@@ -337,7 +340,10 @@ function s:LocateFileSelection(sel)
   syntax clear
   exec 'syntax match PmenuSel /\%' . sel . 'l.*/'
   exec 'call cursor(' . sel . ', 1)'
+  let save_scrolloff = &scrolloff
+  let &scrolloff = 5
   normal! zt
+  let &scrolloff = save_scrolloff
 
   exec winnr . 'winc w'
 
@@ -387,7 +393,7 @@ function s:LocateFileChangeScope()
   doautocmd BufLeave
 
   noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
-  silent noautocmd exec '50vnew \[Locate\ Scope\]'
+  silent noautocmd exec '50vnew [Locate\ Scope]'
 
   let b:locate_bufnr = bufnr
   let b:locate_winnr = winnr
@@ -477,7 +483,7 @@ function s:ChooseScope()
   let b:project = project
   let b:workspace = workspace != '' ? workspace : b:workspace
 
-  exec 'file ' . escape('[Locate in ' . locate_in . ']', ' []')
+  exec 'file ' . escape('[Locate in ' . locate_in . ']', ' ')
 
   call eclim#common#locate#LocateFileCompletion()
 endfunction " }}}
