@@ -161,8 +161,9 @@ TODO {{{
             - ... R files?
         :VcsLogGrep (git)
           - git: $ git log --grep=""
+          - everyone else: $ <vcs> log | grep ""
         :VcsGrep (supported by hg and git)
-          - git: http://book.git-scm.com/4_finding_with_git_grep.html
+          - git: $ git log --pickaxe-regex -S<pattern>
           - hg:  $ hg help grep
 
     - eclim console log
