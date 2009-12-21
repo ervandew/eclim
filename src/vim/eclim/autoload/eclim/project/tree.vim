@@ -142,6 +142,7 @@ endfunction " }}}
 " s:GetSharedTreeBuffer(names) {{{
 function! s:GetSharedTreeBuffer(names)
   let instance_names = join(a:names, '_')
+  let instance_names = substitute(instance_names, '\W', '_', 'g')
   if g:EclimProjectTreeSharedInstance &&
    \ exists('g:eclim_project_tree_instance{instance_names}')
     return g:eclim_project_tree_instance{instance_names}
@@ -270,6 +271,7 @@ function! s:OpenTree(names, dirs)
   normal! zs
 
   let instance_names = join(a:names, '_')
+  let instance_names = substitute(instance_names, '\W', '_', 'g')
   let g:eclim_project_tree_instance{instance_names} = bufnr('%')
 
   call s:Mappings()
