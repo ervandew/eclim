@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Copyright (C) 2005 - 2009  Eric Van Dewoestine
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+##
+# Script which prints a list of all, or regex filtered list of, eclim commands
+# along with their arguments and the implementing class.
+#
+#   Usage:
+#     commands [regex_filter]
+#
+#   Example:
+#     commands java_.*
+##
+
+JAVAC_VERSION=`javac -version 2>&1 | awk '/javac 1.*/{ print $2 }'`
+if [ "`expr $JAVAC_VERSION \< 1.6`" -eq 1 ] ; then
+  echo "abort: this script requires javac 1.6 or higher"
+  exit 1
+fi
+
+BASEDIR=`dirname $(dirname $(which $0))`
+SRC=$BASEDIR/src/java
+CLASSES=$BASEDIR/build/temp/classes
+
+if [ ! -f "$CLASSES/org/eclim/annotation/CommandListingProcessor.class" ] ; then
+  echo "abort: you must first build eclim ($ ant build)"
+  exit 1
+fi
+
+if [ -n "$1" ] ; then
+  ARGS="-Afilter=$1"
+fi
+
+for jar in `find $BASEDIR/src/eclipse/plugins/org.eclim/ -name *.jar` ; do
+  CP="$CP:$jar"
+done
+
+javac \
+  -proc:only \
+  -processor org.eclim.annotation.CommandListingProcessor $ARGS \
+  -cp $CLASSES:$CP \
+  -sourcepath $SRC \
+  `find $SRC -name '*.java'` 2> /dev/null

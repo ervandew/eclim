@@ -115,7 +115,7 @@ public class Options
   /**
    * Creates and initializes the jmpc command line options.
    */
-  public Options ()
+  public Options()
   {
     @SuppressWarnings("unchecked")
     Collection<Option> opts = coreOptions.getOptions();
@@ -170,7 +170,7 @@ public class Options
    * @param optionsString The options String.
    * @return The Collection of Option instances.
    */
-  protected Collection<Option> parseOptions(String optionsString)
+  public Collection<Option> parseOptions(String optionsString)
   {
     ArrayList<Option> options = new ArrayList<Option>();
     if(optionsString != null && optionsString.trim().length() > 0){
@@ -191,7 +191,7 @@ public class Options
    * @param option The option String.
    * @return The Option.
    */
-  protected Option parseOption(String option)
+  public Option parseOption(String option)
   {
     String[] parts = StringUtils.split(option);
 

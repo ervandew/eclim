@@ -91,6 +91,10 @@ target(name: 'build.eclipse'){
   compile('src/java', '${build.classes}'){
     include(name: '**/*.java')
     exclude(name: '**/plugin/*/**/*.java')
+    javaVersion = System.getProperty('java.version').replaceFirst(/_\d.*/, '')
+    if (javaVersion < '1.6.0'){
+      exclude(name: 'org/eclim/annotation/CommandListingProcessor.java')
+    }
   }
 
   mkdir(dir: '${build.plugins}/org.eclim_${eclim.version}/lib')
