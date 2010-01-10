@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,9 +55,11 @@ public class EclimDisplay
 
       // set up some default workspace environment components.
       if (shell == null){
-        shell = EclimPlugin.getShell();
-        WorkbenchWindow window = new EclimWorkbenchWindow();
-        shell.setData(window);
+        if (!AbstractEclimApplication.getInstance().isStopping()){
+          shell = EclimPlugin.getShell();
+          WorkbenchWindow window = new EclimWorkbenchWindow();
+          shell.setData(window);
+        }
       }
     }catch(Exception e){
       throw new RuntimeException(e);

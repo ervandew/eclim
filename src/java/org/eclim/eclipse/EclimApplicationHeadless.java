@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.eclipse;
 
 import org.eclim.logging.Logger;
+
+import org.eclipse.core.internal.resources.Workspace;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -59,18 +61,24 @@ public class EclimApplicationHeadless
     logger.info("Saving workspace...");
 
     try{
-      ResourcesPlugin.getWorkspace().save(true, null);
+      Workspace workspace = (Workspace)ResourcesPlugin.getWorkspace();
+      if (workspace != null){
+        workspace.save(true, null);
+      }
+      logger.info("Workspace saved.");
+    }catch(IllegalStateException ise){
+      logger.warn(ise.getMessage());
     }catch(Exception e){
       logger.warn("Error saving workspace.", e);
     }
-    logger.info("Workspace saved.");
 
     final Workbench workbench = Workbench.getInstance();
     if (workbench != null){
-      logger.info("Closing workbench...");
       // set dummy display's current thread
-      ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
-        .setThread(Thread.currentThread());
+      EclimDisplay display = (EclimDisplay)
+        org.eclipse.swt.widgets.Display.getDefault();
+      display.setThread(Thread.currentThread());
+      logger.info("Closing workbench...");
       workbench.close();
       logger.info("Workbench closed.");
     }

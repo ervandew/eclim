@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.net.BindException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -71,9 +72,11 @@ public abstract class AbstractEclimApplication
   private static final String CORE = "org.eclim.core";
   private static AbstractEclimApplication instance;
 
+  private String workspace;
   private NGServer server;
   private boolean starting;
   private boolean stopping;
+  private boolean registered;
 
   /**
    * {@inheritDoc}
@@ -82,14 +85,9 @@ public abstract class AbstractEclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
-    if (logger.isDebugEnabled()){
-      try{
-        String workspace = ResourcesPlugin
-          .getWorkspace().getRoot().getRawLocation().toOSString();
-        logger.info("workspace: " + workspace);
-      }catch(Exception ignore){
-      }
-    }
+    workspace = ResourcesPlugin
+      .getWorkspace().getRoot().getRawLocation().toOSString();
+    logger.info("Workspace: " + workspace);
 
     starting = true;
     logger.info("Starting eclim...");
@@ -106,7 +104,7 @@ public abstract class AbstractEclimApplication
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
         // register that server is running to external processes.
-        registerInstance();
+        registered = registerInstance();
 
         // start nailgun
         String portString = Services.getPluginResources("org.eclim")
@@ -124,6 +122,11 @@ public abstract class AbstractEclimApplication
         .getProperty("nailgun.server.port");
       logger.error("Error starting eclim:",
           new RuntimeException("Invalid port number: '" + p + "'"));
+      return new Integer(1);
+    }catch(BindException be){
+      String p = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
+      logger.error("Error starting eclim on port '" + p + "':", be);
       return new Integer(1);
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
@@ -188,6 +191,16 @@ public abstract class AbstractEclimApplication
   }
 
   /**
+   * Determines if this application is in the process of stopping.
+   *
+   * @return True if stopping, false if stopped or finished stopping.
+   */
+  public boolean isStopping()
+  {
+    return stopping;
+  }
+
+  /**
    * Determines if the underlying nailgun server is running or not.
    *
    * @return True if the nailgun server is running, false otherwise.
@@ -247,7 +260,9 @@ public abstract class AbstractEclimApplication
 
       logger.info("Stopping plugin " + CORE);
       Bundle bundle = Platform.getBundle(CORE);
-      bundle.stop();
+      if (bundle != null){
+        bundle.stop();
+      }
 
       EclimPlugin plugin = EclimPlugin.getDefault();
       if(plugin != null){
@@ -264,8 +279,10 @@ public abstract class AbstractEclimApplication
 
   /**
    * Register the current instance in the eclimd instances file for use by vim.
+   *
+   * @return true if the instance was registered, false otherwise.
    */
-  private void registerInstance()
+  private boolean registerInstance()
     throws Exception
   {
     File instances = new File(FileUtils.concat(
@@ -273,26 +290,28 @@ public abstract class AbstractEclimApplication
 
     FileOutputStream out = null;
     try{
-      String workspace = ResourcesPlugin
-        .getWorkspace().getRoot().getRawLocation().toOSString();
       List<String> entries = readInstances();
       if (entries == null){
-        return;
+        return false;
       }
 
       String port = Services.getPluginResources("org.eclim")
         .getProperty("nailgun.server.port");
-      entries.add(0, workspace + ':' + port);
-      out = new FileOutputStream(instances);
-      IOUtils.writeLines(entries, out);
+      String instance = workspace + ':' + port;
+      if (!entries.contains(instance)){
+        entries.add(0, instance);
+        out = new FileOutputStream(instances);
+        IOUtils.writeLines(entries, out);
+        return true;
+      }
     }catch(IOException ioe){
       logger.error(
           "\nError writing to eclimd instances file: " + ioe.getMessage() +
           "\n" + instances);
-      return;
     }finally{
       IOUtils.closeQuietly(out);
     }
+    return false;
   }
 
   /**
@@ -301,6 +320,10 @@ public abstract class AbstractEclimApplication
   private void unregisterInstance()
     throws Exception
   {
+    if (!registered){
+      return;
+    }
+
     File instances = new File(FileUtils.concat(
           System.getProperty("user.home"), ".eclim/.eclimd_instances"));
 
@@ -310,6 +333,11 @@ public abstract class AbstractEclimApplication
       if (entries == null){
         return;
       }
+
+      String port = Services.getPluginResources("org.eclim")
+        .getProperty("nailgun.server.port");
+      String instance = workspace + ':' + port;
+      entries.remove(instance);
 
       if (entries.size() == 0){
         if (!instances.delete()){
@@ -355,18 +383,7 @@ public abstract class AbstractEclimApplication
 
     FileInputStream in = null;
     try{
-      String workspace = ResourcesPlugin
-        .getWorkspace().getRoot().getRawLocation().toOSString();
-      String port = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      in = new FileInputStream(instances);
-      List<String> entries = IOUtils.readLines(in);
-      for (Iterator<String> iterator = entries.iterator(); iterator.hasNext();){
-        String entry = iterator.next();
-        if(entry.trim().equals(workspace + ':' + port)){
-          iterator.remove();
-        }
-      }
+      List<String> entries = IOUtils.readLines(new FileInputStream(instances));
       return entries;
     }finally{
       IOUtils.closeQuietly(in);
