@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,16 +60,16 @@ class SqlTags implements TaglistScript
       regex.addPattern('q', pattern, "\$2");
 
       pattern = Pattern.compile(
-        "(s?)(?i)create\\s+trigger\\s+([a-zA-Z0-9_.]+)");
-      regex.addPattern('x', pattern, "\$2");
+        "(s?)(?i)create(\\s+or\\s+replace)?\\s+trigger\\s+([a-zA-Z0-9_.]+)");
+      regex.addPattern('x', pattern, "\$3");
 
       pattern = Pattern.compile(
         "(s?)(?i)create(\\s+or\\s+replace)?\\s+function\\s+([a-zA-Z0-9_.]+)");
       regex.addPattern('f', pattern, "\$3");
 
       pattern = Pattern.compile(
-        "(s?)(?i)create\\s+procedure\\s+([a-zA-Z0-9_.]+)");
-      regex.addPattern('c', pattern, "\$2");
+        "(s?)(?i)create(\\s+or\\s+replace)?\\s+procedure\\s+([a-zA-Z0-9_.]+)");
+      regex.addPattern('c', pattern, "\$3");
 
       pattern = Pattern.compile(
         "(s?)(?i)exec\\s+sp_addrole\\s+['\"]([a-zA-Z0-9_.]+)['\"]");
