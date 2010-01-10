@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -153,12 +153,9 @@ function s:View(...)
     setlocal modifiable
     setlocal noreadonly
 
-    let saved = @"
-    let @" = result
     silent 1,$delete _
-    silent put "
+    silent put =result
     silent 1,1delete _
-    let @" = saved
 
     exec 'setlocal filetype=' . filetype
     setlocal nomodified
@@ -249,12 +246,9 @@ function s:Revert()
       return
     endif
 
-    let saved = @"
-    let @" = result
     silent 1,$delete _
-    silent put "
+    silent put =result
     silent 1,1delete _
-    let @" = saved
   endif
 endfunction " }}}
 

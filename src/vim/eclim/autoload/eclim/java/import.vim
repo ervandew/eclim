@@ -420,9 +420,13 @@ function! s:CutImports()
   endif
 
   " create list of the imports
-  let save = @"
-  silent exec firstImport . "," . lastImport . "delete"
-  return split(@", '\n')
+  let save = @e
+  try
+    silent exec firstImport . "," . lastImport . "delete e"
+    return split(@e, '\n')
+  finally
+    let @e = save
+  endtry
 endfunction " }}}
 
 " s:PasteImports(imports) {{{

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,8 +38,6 @@ function! eclim#python#import#SortImports()
   let imports = import_data.imports
   call sort(imports, 'eclim#python#import#CompareImports')
 
-  let saved = @"
-
   " remove unsorted imports from the file
   silent exec import_data.start . ',' . import_data.end . 'delete _'
 
@@ -47,19 +45,19 @@ function! eclim#python#import#SortImports()
   let post_packages = copy(s:significant_packages)
 
   " re-insert sorted imports in the file
-  let @" = ''
+  let results = ''
   let lastimport = ''
   for import in imports
-    if @" != ''
-      let @" .= "\n"
+    if results != ''
+      let results .= "\n"
     endif
 
     " blank line to seperate significant imports
     let index = 0
     for package in pre_packages
       if import =~ '^\(from\|import\)\s*' . package . '\>'
-        if @" != ''
-          let @" .= "\n"
+        if results != ''
+          let results .= "\n"
         endif
         call remove(pre_packages, index)
         break
@@ -72,8 +70,8 @@ function! eclim#python#import#SortImports()
     for package in post_packages
       if lastimport =~ '^\(from\|import\)\s*' . package . '\>' &&
           \ import !~ '^\(from\|import\)\s*' . package . '\>'
-        if @" !~ "\n\n$"
-          let @" .= "\n"
+        if results !~ "\n\n$"
+          let results .= "\n"
         endif
         call remove(post_packages, index)
         break
@@ -82,16 +80,19 @@ function! eclim#python#import#SortImports()
     endfor
 
     if lastimport =~ '^import' && import =~ '^from'
-      let @" .= "\n"
+      let results .= "\n"
     endif
 
-    let @" .= import
+    let results .= import
     let lastimport = import
   endfor
   call cursor(import_data.start - 1, 1)
-  silent put
+  if import_data.start == 1
+    silent put! =results
+  else
+    silent put =results
+  endif
 
-  let @" = saved
   call setpos('.', pos)
 endfunction " }}}
 
