@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,7 +185,7 @@ public class ProjectManagement
         String tmpName = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation)).toString();
         // hack for windows... manually remove drive letter
-        tmpName = tmpName.replaceFirst("^[A-Z]:", "");
+        tmpName = tmpName.replaceFirst("^[a-zA-Z]:", "");
 
         project = ProjectUtils.getProject(tmpName, true);
         if(!project.exists()){
