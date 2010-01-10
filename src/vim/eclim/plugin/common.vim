@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -163,6 +163,8 @@ if !exists(":SwapTypedArguments")
 endif
 if !exists(":LocateFile")
   command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
+  command -nargs=? LocateBuffer
+    \ :call eclim#common#locate#LocateFile('', '<args>', 'buffers')
 endif
 
 if !exists(":QuickFixClear")

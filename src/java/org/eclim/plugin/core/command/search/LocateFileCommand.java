@@ -112,7 +112,7 @@ public class LocateFileCommand
       Matcher matcher = Pattern.compile(pattern).matcher("");
       String line = null;
       while ((line = reader.readLine()) != null){
-        if (matcher.reset(line).matches()){
+        if (matcher.reset(line).find()){
           results.add(new Result(FileUtils.getBaseName(line), line, line, null));
         }
       }

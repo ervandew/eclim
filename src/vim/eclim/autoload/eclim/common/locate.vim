@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ let s:help = [
 "   file - 'somefile.txt',
 "          '', (kick off completion mode),
 "          '<cursor>' (locate the file under the cursor)
+"   scope - optional scope to search in (project, workspace, buffers, etc.)
 function eclim#common#locate#LocateFile(action, file, ...)
   let project = eclim#project#util#GetCurrentProjectName()
   let scope = a:0 > 0 ? a:1 : g:EclimLocateFileScope
@@ -112,6 +113,7 @@ function eclim#common#locate#LocateFile(action, file, ...)
 
   let pattern = file
   let pattern = s:LocateFileConvertPattern(pattern)
+  let pattern = '[^/]*' . pattern
   try
     let b:workspace = workspace
     let b:project = project
@@ -120,10 +122,6 @@ function eclim#common#locate#LocateFile(action, file, ...)
     unlet! b:workspce
     unlet! b:project
   endtry
-
-  if len(results) == 0
-    return
-  endif
 
   call map(results, "split(v:val, '|')[2]")
 
@@ -144,7 +142,7 @@ function eclim#common#locate#LocateFile(action, file, ...)
 
   " No results
   else
-    call eclim#util#Echo('Unable to locate file named "' . file . '".')
+    call eclim#util#Echo('Unable to locate file pattern "' . file . '".')
     return
   endif
 
@@ -235,7 +233,7 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
 
   let results_bufnum = bufnr('%')
 
-  let locate_in = (a:scope == 'project' ? a:project : 'workspace')
+  let locate_in = (a:scope == 'project' ? a:project : a:scope)
   exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' ')
   set modifiable
   call setline(1, '> ')
@@ -570,7 +568,10 @@ function s:LocateFile_buffers(pattern)
   redir END
 
   let buffers = map(split(list, '\n'),
-    \ "fnamemodify(substitute(v:val, '.\\{-}\"\\(.\\{-}\\)\".*', '\\1', ''), ':p')")
+    \ "substitute(v:val, '.\\{-}\"\\(.\\{-}\\)\".*', '\\1', '')")
+  if a:pattern =~ '/'
+    let buffers = map(buffers, "fnamemodify(v:val, ':p')")
+  endif
 
   if len(buffers) > 1
     let tempfile = substitute(tempname(), '\', '/', 'g')
@@ -589,7 +590,10 @@ function s:LocateFile_quickfix(pattern)
   let buffers = []
   let prev = ''
   for entry in getqflist()
-    let name = fnamemodify(bufname(entry.bufnr), ':p')
+    let name = bufname(entry.bufnr)
+    if a:pattern =~ '/'
+      let name = fnamemodify(name, ':p')
+    endif
     if name != prev
       call add(buffers, name)
       let prev = name
