@@ -231,6 +231,8 @@ function! eclim#common#util#SwapWords()
 
   " restore the last search pattern
   let @/ = save_search
+
+  silent! call repeat#set(":call eclim#common#util#SwapWords()\<cr>", v:count)
 endfunction " }}}
 
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
