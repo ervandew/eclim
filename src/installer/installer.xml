@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2009  Eric Van Dewoestine
+  Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -75,11 +75,47 @@
   </target>
 
   <!--
+    - Simple validation mostly intended as a sanity check for unattended
+    - installs.
+    -->
+  <target name="validate">
+    <if>
+      <not>
+        <and>
+          <isset property="eclipse.home"/>
+          <isset property="vim.files"/>
+        </and>
+      </not>
+      <then>
+        <fail>
+          One or more required properties have not been set:
+
+          eclipse.home:  ${eclipse.home}
+          vim.files:     ${vim.files}
+        </fail>
+      </then>
+    </if>
+  </target>
+
+  <!--
     - Task that will run at the end of the wizard process to perform user
     - defined task after gathering info from the user via the wizard.
     - Note: Must be named "install".
     -->
-  <target name="install">
+  <target name="install" depends="validate">
+    <!-- default value of eclipse.local to that of eclipse.home -->
+    <property name="eclipse.local" value="${eclipse.home}"/>
+
+    <if>
+      <os family="windows"/>
+      <then>
+        <property name="eclim.plugins" value="${eclipse.home}/plugins"/>
+      </then>
+      <else>
+        <property name="eclim.plugins" value="${eclipse.local}/plugins"/>
+      </else>
+    </if>
+
     <property name="eclim.home"
         value="${eclim.plugins}/org.eclim_${eclim.version}"/>
 
@@ -99,7 +135,6 @@
     <if>
       <os family="windows"/>
       <then>
-        <property name="eclipse.local" value="${eclipse.home}"/>
         <unzip src="org.eclim_${eclim.version}.zip"
             dest="${eclim.plugins}">
           <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
@@ -174,6 +209,9 @@
       <else> <property name="eclim.gvim.embed" value="true"/> </else>
     </if>
 
+    <!-- default gvim location to the empty value -->
+    <property name="eclim.gvim" value=""/>
+
     <replace dir="${eclim.plugins}/org.eclim.vimplugin_${eclim.version}"
         includes="plugin.properties">
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
@@ -230,7 +268,7 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <delete dir="${eclim.plugins}/org.eclim.installer_${eclim.version}"/>
+    <delete dir="${eclipse.local}/plugins/org.eclim.installer_${eclim.version}"/>
   </target>
 
 </project>

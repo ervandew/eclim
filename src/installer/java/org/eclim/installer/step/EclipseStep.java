@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -231,14 +231,12 @@ public class EclipseStep
     home = FilenameUtils.normalizeNoEndSeparator(home).replace('\\', '/');
     Installer.getContext().setValue("eclipse.home", home);
 
-    String plugins = null;
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      plugins = home + "/plugins";
+      Installer.getContext().setValue("eclipse.local", home);
     }else{
       String local = (String)Installer.getContext().getValue("eclipse.local");
       local = FilenameUtils.normalizeNoEndSeparator(local);
       Installer.getContext().setValue("eclipse.local", local);
-      plugins = local + "/plugins";
 
       if (!new org.formic.util.File(local).canWrite()){
         proceed = false;
@@ -247,7 +245,6 @@ public class EclipseStep
             "  " + local + "");
       }
     }
-    Installer.getContext().setValue("eclim.plugins", plugins);
     return proceed;
   }
 

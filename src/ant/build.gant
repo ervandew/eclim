@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ target(name: 'init'){
   property(name: 'eclim.version', value: version)
   echo('eclim.version: ${eclim.version}')
 
+  property(name: 'eclim.plugins', value: '${eclipse.home}/plugins')
   property(name: 'eclim.home', value: '${eclim.plugins}/org.eclim_${eclim.version}')
 
   // set location of vim files if not already set

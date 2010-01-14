@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -262,6 +262,69 @@ If you would like to use the bleeding edge development version of eclim or you
 would like to contribute code, then you can checkout and build eclim from
 source.  Instructions on doing so can be found in the
 :ref:`developers guide <development-build>`.
+
+
+.. _install-automated:
+
+Unattended (automated) install
+------------------------------
+
+As of eclim 1.5.5 users on unix based machines (linux, OSX, etc.) can use the
+eclim installer to run an automated install without launching the installer
+gui.
+
+.. warning::
+
+  When using this method no validation is performed to ensure that you have the
+  required third party eclipse plugin dependencies necessary for the eclim
+  features you've chosen to install.  It is the responsibility of the user, or
+  the script which launches the installer, to validate the dependencies prior
+  to installation.  This installation method is primarily provided for those
+  wishing to package eclim for inclusion in a package management system.
+
+Here is an example of installing eclim with only java and ant support using
+this method:
+
+.. code-block:: bash
+
+  $ ./eclim_1.5.5.sh install \
+    -Declipse.home=/opt/eclipse \
+    -Dvim.files=$HOME/.vim \
+    -DfeatureList.ant=true \
+    -DfeatureList.jdt=true
+
+As you can see by the example, the values normally obtained from the user by
+the graphical installer are supplied using java system properties.  This method
+of installation has only two required properties that must be set and various
+optional properties to enable features, etc.
+
+**Required:**
+
+* **eclipse.home** - The absolute path to the eclipse installation.
+* **vim.files** - The absolute path to the vim files directory.
+
+**Optional:**
+
+* **eclipse.local** - When installing for a single user, some eclipse
+  installations have a user local location where eclipse plugins are
+  installed.  This property can be set to that location.
+* **eclim.gvim** - The location of the gvim executable to be set as the default for
+  embedding gvim inside of eclipse.
+
+**Optional Feature Properties:** All of the following properties must have the
+value 'true' to enable the feature.  All other values, or no value at all will
+result in the exclusion of that feature.  Also, some features require that
+other features be enabled, as noted below:
+
+* **featureList.ant** (requires jdt)
+* **featureList.cdt**
+* **featureList.dltk**
+* **featureList.dltkruby** (requires dltk)
+* **featureList.jdt**
+* **featureList.maven**
+* **featureList.pdt** (requires wst and dltk)
+* **featureList.python**
+* **featureList.wst**
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html

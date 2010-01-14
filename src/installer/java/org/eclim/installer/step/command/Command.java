@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ public abstract class Command
     this.cmd = new String[cmd.length + 1];
 
     this.cmd[0] = Installer.getProject().replaceProperties(
-        "${eclim.plugins}/org.eclim.installer_${eclim.version}/bin/install");
+        "${eclipse.local}/plugins/" +
+        "org.eclim.installer_${eclim.version}/bin/install");
     if (Os.isFamily("windows")){
       this.cmd[0] += ".bat";
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -303,14 +303,15 @@ public class EclipsePluginsStep
   private void extractInstallerPlugin()
     throws Exception
   {
-    String plugins = (String)Installer.getContext().getValue("eclim.plugins");
+    String eclipseHome = (String)
+      Installer.getContext().getValue("eclipse.local");
 
     String tar = Installer.getProject().replaceProperties(
         "${basedir}/org.eclim.installer.tar.gz");
 
     Untar untar = new Untar();
     untar.setTaskName("untar");
-    untar.setDest(new File(plugins));
+    untar.setDest(new File(eclipseHome + "/plugins"));
     untar.setSrc(new File(tar));
     Untar.UntarCompressionMethod compression =
       new Untar.UntarCompressionMethod();
@@ -324,7 +325,8 @@ public class EclipsePluginsStep
     if (!Os.isFamily("windows")){
       File installScript = new File(
           Installer.getProject().replaceProperties(
-            "${eclim.plugins}/org.eclim.installer_${eclim.version}/bin/install"));
+            "${eclipse.local}/plugins/" +
+            "org.eclim.installer_${eclim.version}/bin/install"));
       Replace replace = new Replace();
       replace.setTaskName("replace");
       replace.setFile(installScript);

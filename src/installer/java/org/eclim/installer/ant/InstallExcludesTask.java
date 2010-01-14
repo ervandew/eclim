@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,22 @@
 package org.eclim.installer.ant;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import org.apache.tools.ant.taskdefs.Concat;
 
 import org.formic.Installer;
+import org.formic.InstallContext;
 
 /**
  * Task for creating an excludes file based on the features the user chose not
@@ -45,34 +51,48 @@ public class InstallExcludesTask
   public void execute ()
     throws BuildException
   {
-    Concat concat = new Concat();
-    concat.setProject(getProject());
+    Project project = getProject();
+    Installer.setProject(project);  // only needed for unattented install
+    InstallContext context = Installer.getContext();
+
+    final Concat concat = new Concat();
+    concat.setProject(project);
     concat.setDestfile(destfile);
     concat.setAppend(true);
 
-    boolean run = false;
-    String[] features = Installer.getContext().getKeysByPrefix("featureList");
-    for (int ii = 0; ii < features.length; ii++){
-      Boolean value = (Boolean)Installer.getContext().getValue(features[ii]);
-      if(!value.booleanValue()){
-        String feature = features[ii].substring(features[ii].indexOf('.') + 1);
-        String path = getProject().replaceProperties(
-            "${basedir}/resources/excludes/" + feature + ".excludes");
-        File excludes = new File(path);
-        if(excludes.exists()){
+    final ArrayList includes = new ArrayList();
+    String[] keys = context.getKeysByPrefix("featureList");
+    for (int ii = 0; ii < keys.length; ii++){
+      Boolean value = Boolean.valueOf(context.getValue(keys[ii]).toString());
+      if(value.booleanValue()){
+        includes.add(keys[ii].substring(keys[ii].indexOf('.') + 1));
+      }
+    }
+    log("including features: " + java.util.Arrays.toString(includes.toArray()));
+
+    String excludesPath = project.replaceProperties("${basedir}/resources/excludes/");
+    File[] excludes = new File(excludesPath).listFiles(new FileFilter(){
+      public boolean accept(File file){
+        if (!file.getName().endsWith(".excludes")){
+          return false;
+        }
+
+        String feature = file.getName().substring(0, file.getName().indexOf('.'));
+        if(!includes.contains(feature)){
           try{
-            String text = IOUtils.toString(new FileInputStream(excludes));
+            String text = IOUtils.toString(new FileInputStream(file));
             text = getProject().replaceProperties(text);
             concat.addText(text);
-            run = true;
           }catch(Exception e){
             throw new BuildException(e);
           }
+          return true;
         }
+        return false;
       }
-    }
+    });
 
-    if(run){
+    if(excludes.length > 0){
       concat.execute();
     }
   }
