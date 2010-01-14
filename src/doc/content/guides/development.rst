@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,13 +94,13 @@ Checking out the code and building it.
   The currently available list of plugin names include:
 
   - **jdt**: java support using the eclipse jdt.
-  - **ant**: ant support.
+  - **ant**: ant support (requires jdt).
   - **maven**: maven support.
   - **wst**: web development support using the eclipse wst.
   - **cdt**: c/c++ support using the eclipse cdt.
   - **dltk**: base support for dltk based lanugages (currently php and ruby).
-  - **pdt**: php support using the eclipse pdt.
-  - **dltkruby**: ruby support using the eclipse dltk-ruby.
+  - **pdt**: php support using the eclipse pdt (requires wst and dltk).
+  - **dltkruby**: ruby support using the eclipse dltk-ruby (requires dltk).
 
 
 .. _development-patches:
