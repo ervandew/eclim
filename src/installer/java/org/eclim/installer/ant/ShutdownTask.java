@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,11 @@ public class ShutdownTask
               new String[]{eclimPath, "-command", "shutdown"}, WAIT_TIME);
 
           if(command.getReturnCode() != 0){
-            log("Error while attempting to shut down eclimd: " +
-                command.getErrorMessage());
+            String message = command.getErrorMessage();
+            if (message == null || message.trim().equals("")){
+              message = command.getResult();
+            }
+            log("Error attempting to shut down eclimd: " + message);
           }else{
             // FIXME: Add a WaitFor call?
             Thread.sleep(WAIT_TIME);
@@ -86,7 +89,7 @@ public class ShutdownTask
         }
       }
     }catch(Exception e){
-      log("Error while attempting to shut down eclimd: " +
+      log("Error attempting to shut down eclimd: " +
           e.getClass().getName() + " - " + e.getMessage());
     }
   }
