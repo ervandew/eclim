@@ -186,10 +186,10 @@
 
         <!-- formic doesn't include optional ant tasks (symlink in this case) -->
         <exec executable="ln" dir="${eclipse.local}">
-          <arg line="-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim ."/>
+          <arg line="-s plugins/org.eclim_${eclim.version}/bin/eclim ."/>
         </exec>
         <exec executable="ln" dir="${eclipse.local}">
-          <arg line="-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd ."/>
+          <arg line="-s plugins/org.eclim_${eclim.version}/bin/eclimd ."/>
         </exec>
 
         <exec executable="make" failonerror="true"
