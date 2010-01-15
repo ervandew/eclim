@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -269,11 +269,10 @@ eclimd logging
 --------------
 
 Eclimd utilizes log4j for all of its logging.  As such, the logging can be
-configured via the
-$ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
+configured via the $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
-By default, eclimd writes all logging info to both the console and
-$ECLIPSE_HOME/plugins/org.eclim_<version>/log/eclimd.log.
+By default, eclimd writes all logging info to both the console and to a log
+file in your workspace: <workspace>/.metadata/.log.eclimd
 
 .. _eclimd_extdir:
 

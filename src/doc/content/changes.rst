@@ -27,6 +27,9 @@ Bug Fixes:
 Install:
   - Added support for :ref:`automated installs <install-automated>`.
 
+Eclim:
+  - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
+
 .. _1.5.4:
 
 1.5.4 (Dec. 18, 2009)

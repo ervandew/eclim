@@ -133,8 +133,6 @@ target(name: 'build.eclipse'){
     fileset(dir: '.', includes: 'src/nailgun/**/*')
   }
 
-  touch(mkdirs: true,
-      file: '${build.plugins}/org.eclim_${eclim.version}/log/.keep')
   copy(todir: '${build.plugins}/org.eclim_${eclim.version}/bin'){
     fileset(dir: 'src/shell', includes: '**/*')
   }
