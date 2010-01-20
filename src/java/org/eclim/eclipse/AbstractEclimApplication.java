@@ -302,8 +302,8 @@ public abstract class AbstractEclimApplication
         entries.add(0, instance);
         out = new FileOutputStream(instances);
         IOUtils.writeLines(entries, out);
-        return true;
       }
+      return true;
     }catch(IOException ioe){
       logger.error(
           "\nError writing to eclimd instances file: " + ioe.getMessage() +
