@@ -38,6 +38,10 @@ Starting and stopping of the headless eclipse instance is detailed below.
 To start eclimd from linux, simply execute the eclimd script found in your
 eclipse root directory: $ECLIPSE_HOME/eclimd
 
+.. note::
+  When starting the eclim daemon, you must start it as the same user who will
+  be running vim.
+
 **Windows**: The easiest way to start eclimd in windows is to double click on
 the eclimd.bat file found in your eclipse root directory:
 %ECLIPSE_HOME%/eclimd.bat
