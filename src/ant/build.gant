@@ -582,12 +582,14 @@ target(name: 'docs'){
   }
 
   // support for google sitemap
-  new File('build/doc/site/sitemap.xml').withWriter(){ out ->
+  echo('Building sitemap.xml...')
+  basedir = binding.getVariable('basedir')
+  new File("${basedir}/build/doc/site/sitemap.xml").withWriter(){ out ->
     out.writeLine('<?xml version="1.0" encoding="UTF-8"?>')
     out.writeLine('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    new File('build/doc/site').eachFileRecurse(){ file ->
+    new File("${basedir}/build/doc/site").eachFileRecurse(){ file ->
       if (file =~ /.*\.html$/){
-        path = file.getPath().replace('build/doc/site/', '')
+        path = file.getPath().replace("${basedir}/build/doc/site/", '')
         out.writeLine("<url><loc>http://eclim.org/${path}</loc></url>")
       }
     }
