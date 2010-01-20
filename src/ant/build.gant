@@ -221,11 +221,19 @@ target(name: 'deploy.eclipse'){
   }
 
   if (existing != null && existing.getName() != "org.eclim_${version}"){
-    echo('###\n# New eclim version, shutting down old version...\n###')
-    execute("${existing.path}/bin/eclim", '-command shutdown', failonerror=false)
-    execute("${existing.path}/bin/eclim",
-        '-f ${basedir}/src/test/resources/eclimrc.test -command shutdown',
-        failonerror=false)
+    echo('###\n# New eclim version, shutting down old version...###')
+    instances = new File(binding.getVariable('user.home') + '/.eclim/.eclimd_instances')
+    if (instances.exists()){
+      instances.eachLine { line ->
+        port = line.replaceFirst(/.*:/, '')
+        echo("#  shutdown: ${line}")
+        execute(
+          "${existing.path}/bin/eclim",
+          "-Dnailgun.server.port=${port} -command shutdown",
+          failonerror=false)
+      }
+    }
+    echo('###')
   }
 
   delete(includeemptydirs: true){
