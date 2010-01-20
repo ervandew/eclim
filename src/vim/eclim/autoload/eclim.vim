@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -167,8 +167,8 @@ function! eclim#PingEclim(echo, ...)
     endif
     let port = eclim#client#nailgun#GetNgPort(workspace)
   else
-    let workspace = eclim#eclipse#GetWorkspaceDir()
-    let port = eclim#client#nailgun#GetNgPort()
+    let workspace = eclim#eclipse#ChooseWorkspace()
+    let port = eclim#client#nailgun#GetNgPort(workspace)
   endif
 
   if a:echo

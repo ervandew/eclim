@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,56 +23,9 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_workspace_dir = '-command workspace_dir'
   let s:ide_prefs =
     \ g:EclimEclipseHome . '/configuration/.settings/org.eclipse.ui.ide.prefs'
 " }}}
-
-" GetWorkspaceDir() {{{
-" Gets the path to the workspace.  Ensures the path uses cross platform '/'
-" separators and includes a trailing '/'.  If the workspace could not be
-" determined, the empty string is returned.
-function! eclim#eclipse#GetWorkspaceDir()
-  silent let result = eclim#ExecuteEclim(s:command_workspace_dir)
-  if result == '0'
-    let result = ''
-  endif
-
-  if result == ''
-    let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
-    if len(workspaces) > 0
-      let result = workspaces[0]
-      if len(workspaces) > 1
-        " more than one recent workspace, check if the curent file is is one
-        " of those.
-        let path = expand('%:p')
-        for r in workspaces[1:]
-          if path =~ '^' . r . '\>'
-            let result = r
-            break
-          endif
-        endfor
-      endif
-    endif
-
-    " failed to get the workspace.
-    if result == ''
-      return result
-    endif
-  endif
-
-  if result != ''
-    " ensure value uses unix slashes and ends in a slash
-    let result = substitute(result, '\', '/', 'g')
-    if result !~ '/$'
-      let result .= '/'
-    endif
-
-    let g:EclimWorkspace = result
-  endif
-
-  return g:EclimWorkspace
-endfunction " }}}
 
 " GetAllWorkspaceDirs() {{{
 function! eclim#eclipse#GetAllWorkspaceDirs()
@@ -149,6 +102,8 @@ function! eclim#eclipse#ChooseWorkspace(...)
 
     return workspaces[response]
   endif
+
+  call eclim#util#Echo('Unable to determine your eclipse workspace.')
 endfunction " }}}
 
 " CommandCompleteWorkspaces(argLead, cmdLine, cursorPos) {{{

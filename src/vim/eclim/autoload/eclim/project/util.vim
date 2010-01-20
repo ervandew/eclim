@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -67,10 +67,6 @@ let s:workspace_projects = {}
 " Flush the cached list of projects.
 function! eclim#project#util#ClearProjectsCache()
   let s:workspace_projects = {}
-
-  if exists('g:EclimWorkspace')
-    unlet g:EclimWorkspace
-  endif
 endfunction " }}}
 
 " ProjectCD(scope) {{{

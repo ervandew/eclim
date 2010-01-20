@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
 endfunction " }}}
 
-" TestGetWorkspaceDir() {{{
-function! TestGetWorkspaceDir()
-  call VUAssertEquals(g:TestEclimWorkspace, eclim#eclipse#GetWorkspaceDir(),
+" TestChooseWorkspace() {{{
+function! TestChooseWorkspace()
+  call VUAssertEquals(g:TestEclimWorkspace, eclim#eclipse#ChooseWorkspace(),
     \ "Wrong workspace dir returned.")
 endfunction " }}}
 
