@@ -56,6 +56,10 @@ public class VimPreferences
           PreferenceConstants.P_START_ECLIMD,
           plugin.getMessage("preference.eclimd.start"),
           getFieldEditorParent()));
+    addField(new BooleanFieldEditor(
+          PreferenceConstants.P_FOCUS_AUTO_CLICK,
+          plugin.getMessage("preference.focus.click"),
+          getFieldEditorParent()));
     addField(new StringFieldEditor(
           PreferenceConstants.P_PORT,
           plugin.getMessage("preference.port"),

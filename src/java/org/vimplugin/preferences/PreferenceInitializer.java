@@ -31,6 +31,7 @@ public class PreferenceInitializer
     store.setDefault(PreferenceConstants.P_EMBED,
         "true".equals(VimPlugin.getDefault().getProperty("gvim.embed.default")));
     store.setDefault(PreferenceConstants.P_TABBED, true);
+    store.setDefault(PreferenceConstants.P_FOCUS_AUTO_CLICK, true);
     store.setDefault(PreferenceConstants.P_START_ECLIMD, true);
     store.setDefault(PreferenceConstants.P_GVIM,
         VimPlugin.getDefault().getProperty("gvim.default"));

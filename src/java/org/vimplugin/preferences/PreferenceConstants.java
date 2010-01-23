@@ -30,6 +30,9 @@ public class PreferenceConstants {
   /** open files in new tabs in external gvim */
   public static final String P_TABBED = "tabbed";
 
+  /** use auto click to force gvim focus */
+  public static final String P_FOCUS_AUTO_CLICK = "focus.click";
+
   /** open eclimd view automatically */
   public static final String P_START_ECLIMD = "eclimd.start";
 }

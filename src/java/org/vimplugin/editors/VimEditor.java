@@ -632,15 +632,19 @@ public class VimEditor
     // Should this be optional, via a preference? There is the potential for
     // weirdness here.
     if (embedded && parent.getDisplay().getActiveShell() != null){
-      Rectangle bounds = parent.getBounds();
-      final Point point = parent.toDisplay(
-          bounds.x + 5, bounds.y + bounds.height - 25);
-      new Thread(){
-        public void run()
-        {
-          DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
-        }
-      }.start();
+      boolean autoClickFocus = plugin.getPreferenceStore()
+        .getBoolean(PreferenceConstants.P_FOCUS_AUTO_CLICK);
+      if (autoClickFocus){
+        Rectangle bounds = parent.getBounds();
+        final Point point = parent.toDisplay(
+            bounds.x + 5, bounds.y + bounds.height - 25);
+        new Thread(){
+          public void run()
+          {
+            DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
+          }
+        }.start();
+      }
     }
   }
 
