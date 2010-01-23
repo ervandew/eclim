@@ -134,7 +134,23 @@ public class ProjectManagement
     ArrayList<String> natures = new ArrayList<String>();
     for (int ii = 0; ii < aliases.length; ii++){
       if(!ProjectNatureFactory.NONE.equals(aliases[ii])){
-        natures.add(ProjectNatureFactory.getNatureForAlias(aliases[ii]));
+        String nature = ProjectNatureFactory.getNatureForAlias(aliases[ii]);
+        if (nature != null){
+          natures.add(nature);
+        }else{
+          String[] registered = ProjectNatureFactory.getNatureAliases();
+          StringBuffer supported = new StringBuffer();
+          for (String key : registered){
+            if(supported.length() > 0){
+              supported.append(", ");
+            }
+            supported.append(key).append('=')
+              .append(ProjectNatureFactory.getNatureForAlias(key));
+          }
+          throw new IllegalArgumentException(
+              "Unable to find nature for alias '" + aliases[ii] + "'.  " +
+              "Supported aliases include: " + supported);
+        }
       }
     }
 
