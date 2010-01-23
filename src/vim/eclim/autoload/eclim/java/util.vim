@@ -315,9 +315,9 @@ function! eclim#java#util#Javac(bang)
   endtry
 endfunction " }}}
 
-" Java([args]) {{{
+" Java(classname, [args]) {{{
 " Run a projects main class.
-function! eclim#java#util#Java(args)
+function! eclim#java#util#Java(classname, args)
   let project = eclim#project#util#GetCurrentProjectName()
   if project == '' && exists('b:project')
     let project = b:project
@@ -330,17 +330,30 @@ function! eclim#java#util#Java(args)
 
   let workspace = eclim#project#util#GetProjectWorkspace(project)
   let port = eclim#client#nailgun#GetNgPort(workspace)
+  let args = eclim#util#ParseArgs(a:args)
+  let classname = a:classname
+  if classname == '' && len(args)
+    let arg1 = args[0]
+    if arg1 == '%'
+      let args = args[1:]
+      let classname = exists('b:filename') ?
+        \ eclim#java#util#GetFullyQualifiedClassname(b:filename) :
+        \ eclim#java#util#GetFullyQualifiedClassname()
+    endif
+  endif
 
   let command = '!'
   let command .= eclim#client#nailgun#GetEclimCommand()
   let command .= ' -Dnailgun.server.port=' . port
   let command .= ' -command java -p "' . project . '"'
+  if classname != ''
+    let command .= ' -c ' . classname
+  endif
 
-  let args = eclim#util#ParseArgs(a:args)
   if len(args)
     let command .= ' -a'
     for arg in args
-      let command .= ' "' . arg . '"'
+      let command .= ' "' . escape(arg, '"') . '"'
     endfor
   endif
 
@@ -370,7 +383,7 @@ function! eclim#java#util#Java(args)
     let b:project = project
 
     if exists(":Java") != 2
-      command -buffer -nargs=* Java :call eclim#java#util#Java(<q-args>)
+      command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
     endif
   endif
 endfunction " }}}

@@ -70,6 +70,7 @@ import org.eclipse.jdt.core.search.SearchRequestor;
   name = "java",
   options =
     "REQUIRED p project ARG," +
+    "OPTIONAL c classname ARG," +
     "OPTIONAL a args ANY"
 )
 public class JavaCommand
@@ -83,6 +84,7 @@ public class JavaCommand
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    String mainClass = commandLine.getValue(Options.CLASSNAME_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
@@ -94,8 +96,10 @@ public class JavaCommand
     antProject.addBuildListener(buildLogger);
     antProject.setBasedir(ProjectUtils.getPath(project));
 
-    String mainClass =
-      ProjectUtils.getSetting(project, "org.eclim.java.run.mainclass");
+    if (mainClass == null){
+      mainClass =
+        ProjectUtils.getSetting(project, "org.eclim.java.run.mainclass");
+    }
 
     if (mainClass == null ||
         mainClass.trim().equals(StringUtils.EMPTY) ||

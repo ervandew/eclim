@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,8 +31,19 @@ command, which executes java and displays the results in a temporary buffer.
   Please note that this command is not intended to be a full replacement for
   the more advance support provided by eclipse, ant, or maven.
 
+The **:Java** will locate the main class to run using the following steps:
+
+#. if the first argument is '%' (:Java %) then run the current class.
+#. if the setting :ref:`org.eclim.java.run.mainclass
+   <org.eclim.java.run.mainclass>` is set, then use the value as the fully
+   qualified class name to run.
+#. lastly, attempt to locate a class containing a static main method, if only
+   one is found, use that class.
+
 Configuration
 -------------
+
+.. _org.eclim.java.run.mainclass:
 
 Eclim Settings
 
