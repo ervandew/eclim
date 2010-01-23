@@ -17,17 +17,19 @@
 package org.eclim.installer.ant;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import org.apache.commons.io.FilenameUtils;
+import java.net.Socket;
+
+import java.util.Iterator;
+
+import org.apache.commons.io.IOUtils;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-
-import org.apache.tools.ant.taskdefs.condition.Os;
-
-import org.formic.util.CommandExecutor;
 
 /**
  * Task for shutting down eclimd.
@@ -37,60 +39,84 @@ import org.formic.util.CommandExecutor;
 public class ShutdownTask
   extends Task
 {
-  private static final String ECLIM_HOME = "org.eclim_";
-  private static final String ECLIM_LINUX = "eclim";
-  private static final String ECLIM_WINDOWS = "eclim.bat";
-  private static final String ECLIPSE_PLUGINS = "${eclipse.home}/plugins";
-
   private static final long WAIT_TIME = 3000;
 
   /**
    * Executes this task.
    */
-  public void execute ()
+  public void execute()
     throws BuildException
   {
-    Project project = getProject();
+    FileReader reader = null;
     try{
-      String[] eclimHome = new File(project.replaceProperties(ECLIPSE_PLUGINS))
-        .list(new FilenameFilter(){
-          public boolean accept (File dir, String name){
-            return name.startsWith(ECLIM_HOME);
-          }
-        });
-
-      if(eclimHome.length > 0){
-        String eclim = Os.isFamily("windows") ? ECLIM_WINDOWS : ECLIM_LINUX;
-        String eclimPath = FilenameUtils.concat(
-            project.replaceProperties("${eclipse.home}"), eclim);
-
-        // try plugin bin dir if eclipse home path doesn't exist
-        if (!new File(eclimPath).exists()){
-          eclimPath = FilenameUtils.concat(eclimHome[0], "bin");
-          eclimPath = FilenameUtils.concat(eclimPath, eclim);
-          eclimPath = FilenameUtils.concat(
-              project.replaceProperties(ECLIPSE_PLUGINS), eclimPath);
-        }
-
-        if(new File(eclimPath).exists()){
-          CommandExecutor command = CommandExecutor.execute(
-              new String[]{eclimPath, "-command", "shutdown"}, WAIT_TIME);
-
-          if(command.getReturnCode() != 0){
-            String message = command.getErrorMessage();
-            if (message == null || message.trim().equals("")){
-              message = command.getResult();
-            }
-            log("Error attempting to shut down eclimd: " + message);
-          }else{
-            // FIXME: Add a WaitFor call?
-            Thread.sleep(WAIT_TIME);
+      File instances = new File(
+          System.getProperty("user.home") + "/.eclim/.eclimd_instances");
+      int count = 0;
+      if (instances.exists()){
+        reader = new FileReader(instances);
+        for(Iterator ii = IOUtils.lineIterator(reader); ii.hasNext();){
+          count++;
+          String instance = (String)ii.next();
+          try{
+            log("Shutting down eclimd: " + instance);
+            int port = Integer.parseInt(instance.replaceFirst(".*:", ""));
+            shutdown(port);
+          }catch(Exception e){
+            log("Unable to shut down eclimd (" + instance + "): " +
+                e.getClass().getName() + " - " + e.getMessage());
           }
         }
       }
-    }catch(Exception e){
-      log("Error attempting to shut down eclimd: " +
-          e.getClass().getName() + " - " + e.getMessage());
+
+      // if no registered instances found, try shutting down the default port to
+      // account for users on old eclim versions
+      if (count == 0){
+        try{
+          shutdown(9091);
+        }catch(Exception e){
+          log("Unable to shut down eclimd (9091): " +
+              e.getClass().getName() + " - " + e.getMessage());
+        }
+      }
+    }catch(FileNotFoundException fnfe){
+      log("Unable to locate eclimd instances file.");
+    }finally{
+      IOUtils.closeQuietly(reader);
     }
+  }
+
+  private void shutdown(int port)
+    throws Exception
+  {
+    Socket socket = null;
+    try{
+      socket = new Socket("localhost", port);
+      OutputStream out = socket.getOutputStream();
+      out.write(nailgunPacket('A', "-command"));
+      out.write(nailgunPacket('A', "shutdown"));
+      out.write(nailgunPacket('C', "org.eclim.command.Main"));
+      out.flush();
+      Thread.sleep(WAIT_TIME);
+    }finally{
+      try{
+        socket.close();
+      }catch(IOException ioe){
+        // ignore
+      }
+    }
+  }
+
+  private byte[] nailgunPacket(char type, String value)
+  {
+    int length = value.length();
+
+    byte[] packet = new byte[5 + length];
+    packet[0] = (byte)((length >> 24) & 0xff);
+    packet[1] = (byte)((length >> 16) & 0xff);
+    packet[2] = (byte)((length >> 8) & 0xff);
+    packet[3] = (byte)(length & 0xff);
+    packet[4] = (byte)type;
+    System.arraycopy(value.getBytes(), 0, packet, 5, length);
+    return packet;
   }
 }
