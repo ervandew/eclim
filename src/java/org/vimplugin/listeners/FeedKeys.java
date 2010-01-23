@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.util.StringUtils;
+
 import org.eclipse.jface.bindings.keys.KeyStroke;
 
 import org.eclipse.swt.graphics.Point;
@@ -12,6 +14,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import org.eclipse.ui.internal.Workbench;
@@ -72,22 +76,37 @@ public class FeedKeys
       });
       DisplayUtils.doClick(display, bounds[0] + 5, bounds[1] + 5, false);
 
+      final String[] sequences = StringUtils.split(keys, ',');
+
       // process the actual key stroke.
       display.asyncExec(new Runnable(){
         public void run(){
-          try{
-            KeyStroke keyStroke = KeyStroke.getInstance(keys);
+          for(String sequence : sequences){
+            try{
+              if (sequence.equals("refocus")){
+                logger.debug("refocus gvim");
+                IWorkbenchPage page = PlatformUI.getWorkbench()
+                  .getActiveWorkbenchWindow().getActivePage();
+                IEditorPart editor = page.getActiveEditor();
+                if (editor != null){
+                  editor.setFocus();
+                }
+                continue;
+              }
 
-            Event event = new Event();
-            event.widget = display.getActiveShell();
+              KeyStroke keyStroke = KeyStroke.getInstance(sequence);
 
-            WorkbenchKeyboard keyboard = new WorkbenchKeyboard(workbench);
-            ArrayList<KeyStroke> keyStrokes = new ArrayList<KeyStroke>();
-            keyStrokes.add(keyStroke);
-            keyboard.press(keyStrokes, event);
-            logger.debug("key strokes processed.");
-          }catch(Throwable t){
-            logger.error("Error feeding keys.", t);
+              Event event = new Event();
+              event.widget = display.getActiveShell();
+
+              WorkbenchKeyboard keyboard = new WorkbenchKeyboard(workbench);
+              ArrayList<KeyStroke> keyStrokes = new ArrayList<KeyStroke>();
+              keyStrokes.add(keyStroke);
+              keyboard.press(keyStrokes, event);
+              logger.debug("key strokes processed: " + sequence);
+            }catch(Throwable t){
+              logger.error("Error feeding keys.", t);
+            }
           }
         }
       });

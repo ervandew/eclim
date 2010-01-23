@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -61,12 +61,13 @@ function eclim#vimplugin#BufferClosed()
   endif
 endfunction " }}}
 
-" FeedKeys(keys) {{{
+" FeedKeys(keys, [refocusGvim]) {{{
 " Feeds eclipse compatible key string to eclipse if current gvim instance is
 " attached via the netbeans protocol.
-function eclim#vimplugin#FeedKeys(keys)
+function eclim#vimplugin#FeedKeys(keys, ...)
   if has('netbeans_enabled')
-    silent exec 'nbkey feedkeys ' . a:keys
+    let refocus = a:0 > 0 && a:1 ? ',refocus' : ''
+    silent exec 'nbkey feedkeys ' . a:keys . refocus
   endif
 endfunction " }}}
 

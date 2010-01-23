@@ -29,6 +29,9 @@ Install:
 
 Eclim:
   - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
+  - Added support for specifying that gvim should be refocused after executing
+    an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys
+    <FeedKeys>`.
 
 .. _1.5.4:
 

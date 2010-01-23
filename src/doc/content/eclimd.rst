@@ -198,6 +198,8 @@ you will fall into one of two groups:
     - Ctrl+U: in eclipse this run "Execute", but in gvim this is needed to
       run code completion (ex. ctrl-x ctrl-u).
 
+.. _FeedKeys:
+
 2. In the second group, all key presses are received by gvim and not evaluated
    at all by eclipse.
 
@@ -219,10 +221,17 @@ you will fall into one of two groups:
       " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
       nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
 
+      " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
+      nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
+
   The value supplied to the `FeedKeys` function must be an eclipse compatible key
   binding string as found in:
 
     Windows -> Preferences -> General -> Keys
+
+  Be sure to notice the extra argument to the FeedKeys function in the last
+  mapping. Supplying 1 as the arg will result in the refocusing of gvim after
+  the eclipse key binding has been executed.
 
 
 ~/.eclimrc
