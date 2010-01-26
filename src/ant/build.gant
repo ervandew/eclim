@@ -51,12 +51,17 @@ ant.path(id: 'classpath'){
 }
 
 target(name: 'init'){
-  // set eclim version based on current repos state (most recent tag w/
-  // possible suffix including number of revisions since that tag + last commit
-  // id, if last tag is not at the head)
-  version = execute('git', 'describe')
-  // ensure version is a valid osgi version
-  version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
+  File dotversion = new File("${basedir}/.version")
+  if (dotversion.exists()){ // only used by source distribution (tar.gz)
+    version = dotversion.getText().trim()
+  }else{
+    // set eclim version based on current repos state (most recent tag w/
+    // possible suffix including number of revisions since that tag + last commit
+    // id, if last tag is not at the head)
+    version = execute('git', 'describe')
+    // ensure version is a valid osgi version
+    version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
+  }
   property(name: 'eclim.version', value: version)
   echo('eclim.version: ${eclim.version}')
 
@@ -473,6 +478,7 @@ target(name: 'dist'){
     }
     zipfileset(dir: 'src/shell', prefix: 'org.eclim_${eclim.version}/bin/'){
       include(name: 'eclim')
+      include(name: 'eclim.sed')
       include(name: 'eclim*.bat')
       include(name: 'eclim*.cmd')
     }
@@ -508,16 +514,21 @@ target(name: 'dist'){
   installer()
 
   // full source tar
+  version = binding.getVariable('eclim.version')
+  new File("${basedir}/build/.version").withWriter(){ out ->
+    out.writeLine("${version}")
+  }
   tar(destfile: 'build/dist/eclim_${eclim.version}.tar.gz',
       compression: 'gzip', longfile: 'gnu'){
+    tarfileset(dir: 'build/', prefix: 'eclim_${eclim.version}'){
+      include(name: '.version')
+    }
     tarfileset(dir: '.', prefix: 'eclim_${eclim.version}'){
       include(name: '**/*')
       exclude(name: '.git/**/*')
       exclude(name: '.git/')
       exclude(name: '.ropeproject/**/*')
       exclude(name: '.ropeproject/')
-      exclude(name: 'backup/**/*')
-      exclude(name: 'backup/')
       exclude(name: 'build/**/*')
       exclude(name: 'build/')
       exclude(name: 'src/patch/**/*')
