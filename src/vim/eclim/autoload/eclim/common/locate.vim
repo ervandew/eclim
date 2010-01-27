@@ -34,6 +34,10 @@ endif
 if !exists('g:EclimLocateFileFuzzy')
   let g:EclimLocateFileFuzzy = 1
 endif
+
+if !exists('g:EclimLocateUserScopes')
+  let g:EclimLocateUserScopes = []
+endif
 " }}}
 
 " Script Variables {{{
@@ -45,6 +49,7 @@ let s:scopes = [
     \ 'quickfix',
     \ 'vcsmodified',
   \ ]
+
 let s:help = [
     \ '<esc> - close the locate prompt + results',
     \ '<tab>, <down> - select the next file',
@@ -69,7 +74,8 @@ function eclim#common#locate#LocateFile(action, file, ...)
   let project = eclim#project#util#GetCurrentProjectName()
   let scope = a:0 > 0 ? a:1 : g:EclimLocateFileScope
 
-  if !eclim#util#ListContains(s:scopes, scope)
+  if !eclim#util#ListContains(s:scopes, scope) &&
+   \ !eclim#util#ListContains(g:EclimLocateUserScopes, scope)
     call eclim#util#EchoWarning('Unrecognized scope: ' . scope)
     return
   endif
@@ -117,7 +123,7 @@ function eclim#common#locate#LocateFile(action, file, ...)
   try
     let b:workspace = workspace
     let b:project = project
-    let results = s:LocateFile_{scope}(pattern)
+    let results = s:LocateFileFunction(scope)(pattern)
   finally
     unlet! b:workspce
     unlet! b:project
@@ -165,14 +171,9 @@ function eclim#common#locate#LocateFileCompletion()
   let name = substitute(line, '^>\s*', '', '')
   if name !~ '^\s*$'
     let pattern = name
-    if g:EclimLocateFileFuzzy
-      let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
-      let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
-    else
-      let pattern = s:LocateFileConvertPattern(pattern)
-    endif
+    let pattern = s:LocateFileConvertPattern(pattern)
 
-    let results = s:LocateFile_{b:scope}(pattern)
+    let results = s:LocateFileFunction(b:scope)(pattern)
     if !empty(results)
       for result in results
         let parts = split(result, '|')
@@ -397,7 +398,7 @@ function s:LocateFileChangeScope()
   let b:locate_winnr = winnr
   stopinsert
   set modifiable
-  call append(1, s:scopes)
+  call append(1, s:scopes + g:EclimLocateUserScopes)
   1,1delete _
   call append(line('$'),
     \ ['', '" <cr> - select a scope', '" <c-c>, <c-l>, or q - cancel'])
@@ -521,6 +522,12 @@ endfunction " }}}
 function s:LocateFileConvertPattern(pattern)
   let pattern = a:pattern
 
+  if g:EclimLocateFileFuzzy
+    let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
+    let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
+    return pattern
+  else
+
   " if the user supplied a path, prepend a '.*/' to it so that they don't need
   " to type full paths to match.
   if pattern =~ '.\+/'
@@ -532,6 +539,14 @@ function s:LocateFileConvertPattern(pattern)
   "let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
   let pattern .= '.*'
   return pattern
+endfunction " }}}
+
+" s:LocateFileFunction(scope) {{{
+function s:LocateFileFunction(scope)
+  if eclim#util#ListContains(s:scopes, a:scope)
+    return function('s:LocateFile_' . a:scope)
+  endif
+  return function('LocateFile_' . a:scope)
 endfunction " }}}
 
 " s:LocateFile_workspace(pattern) {{{
@@ -573,11 +588,11 @@ function s:LocateFile_buffers(pattern)
     let buffers = map(buffers, "fnamemodify(v:val, ':p')")
   endif
 
-  if len(buffers) > 1
+  if len(buffers) > 0
     let tempfile = substitute(tempname(), '\', '/', 'g')
     call writefile(buffers, tempfile)
     try
-      return s:LocateFileFromFileList(a:pattern, tempfile)
+      return eclim#common#locate#LocateFileFromFileList(a:pattern, tempfile)
     finally
       call delete(tempfile)
     endtry
@@ -600,11 +615,11 @@ function s:LocateFile_quickfix(pattern)
     endif
   endfor
 
-  if len(buffers) > 1
+  if len(buffers) > 0
     let tempfile = substitute(tempname(), '\', '/', 'g')
     call writefile(buffers, tempfile)
     try
-      return s:LocateFileFromFileList(a:pattern, tempfile)
+      return eclim#common#locate#LocateFileFromFileList(a:pattern, tempfile)
     finally
       call delete(tempfile)
     endtry
@@ -633,11 +648,11 @@ function s:LocateFile_vcsmodified(pattern)
     let files = b:locate_vcs_modified_files
   endif
 
-  if len(files) > 1
+  if len(files) > 0
     let tempfile = substitute(tempname(), '\', '/', 'g')
     call writefile(files, tempfile)
     try
-      let results = s:LocateFileFromFileList(a:pattern, tempfile)
+      let results = eclim#common#locate#LocateFileFromFileList(a:pattern, tempfile)
       call map(results, "substitute(v:val, '\\(.*|\\)', '\\1' . root . '/', '')")
       return results
     finally
@@ -647,8 +662,8 @@ function s:LocateFile_vcsmodified(pattern)
   return []
 endfunction " }}}
 
-" s:LocateFileFromFileList(pattern, file) {{{
-function s:LocateFileFromFileList(pattern, file)
+" LocateFileFromFileList(pattern, file) {{{
+function eclim#common#locate#LocateFileFromFileList(pattern, file)
   let command = s:command_locate
   let command = substitute(command, '<scope>', 'list', '')
   let command .= ' -p "' . a:pattern . '"'
