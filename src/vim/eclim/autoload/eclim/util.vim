@@ -464,7 +464,14 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
     exec winnr . "winc w"
     call eclim#util#DelayedCommand('doautocmd WinEnter')
   else
-    silent exec a:cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
+    let cmd = a:cmd
+    " if splitting and the buffer is a unamed empty buffer, then switch to an
+    " edit.
+    if cmd == 'split' && expand('%') == '' &&
+     \ !&modified && line('$') == 1 && getline(1) == ''
+      let cmd = 'edit'
+    endif
+    silent exec cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
   endif
 endfunction " }}}
 
