@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ function! eclim#help#BufferHelp(lines, orientation, size)
   setlocal buftype=nofile bufhidden=delete
   nnoremap <buffer> <silent> ? :bd<cr>
 
-  set modifiable noreadonly
+  setlocal modifiable noreadonly
   silent 1,$delete _
   call append(1, a:lines)
   retab

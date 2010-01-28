@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -375,11 +375,11 @@ function! eclim#java#util#Java(classname, args)
   " all the escaping necessary to test against buffer name).
   if len(getline(1)) == 0 && line('$') == 1
     call eclim#util#Exec(command)
-    set modifiable noreadonly
+    setlocal modifiable noreadonly
     exec 'silent read ' . escape(outfile, ' ')
     1,1delete _
     $,$delete _
-    set nomodifiable readonly
+    setlocal nomodifiable readonly
     let b:project = project
 
     if exists(":Java") != 2

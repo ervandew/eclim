@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -72,19 +72,19 @@ function! eclim#common#archive#List()
   let b:file_info[root] = {'url': s:FileUrl(file)}
 
   if exists('g:EclimArchiveLayout') && g:EclimArchiveLayout == 'list'
-    set modifiable
+    setlocal modifiable
     call eclim#common#archive#ListAll()
     let g:EclimArchiveLayout = 'list'
     call append(0, '" use ? to view help')
-    set nomodifiable
+    setlocal nomodifiable
   else
-    set modifiable
+    setlocal modifiable
     call setline(1, root)
     call eclim#common#archive#ExpandDir()
     let g:EclimArchiveLayout = 'tree'
-    set modifiable
+    setlocal modifiable
     call append(line('$'), ['', '" use ? to view help'])
-    set nomodifiable
+    setlocal nomodifiable
   endif
 
   setlocal ft=archive
@@ -322,7 +322,7 @@ endfunction " }}}
 function! s:ChangeLayout(layout)
   if g:EclimArchiveLayout != a:layout
     let g:EclimArchiveLayout = a:layout
-    set modifiable
+    setlocal modifiable
     edit
   endif
 endfunction " }}}

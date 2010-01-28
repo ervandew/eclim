@@ -187,11 +187,11 @@ function eclim#common#locate#LocateFileCompletion()
   let b:completions = completions
   let winnr = winnr()
   noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
-  set modifiable
+  setlocal modifiable
   1,$delete _
   call append(1, display)
   1,1delete _
-  set nomodifiable
+  setlocal nomodifiable
   exec winnr . 'winc w'
 
   " part of bad hack for gvim on windows
@@ -236,12 +236,12 @@ function s:LocateFileCompletionInit(action, scope, project, workspace)
 
   let locate_in = (a:scope == 'project' ? a:project : a:scope)
   exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' ')
-  set modifiable
+  setlocal modifiable
   call setline(1, '> ')
   call cursor(1, col('$'))
   set filetype=locate_prompt
   syntax match Keyword /^>/
-  set winfixheight
+  setlocal winfixheight
   setlocal nonumber
   setlocal nolist
   setlocal noswapfile nobuflisted
@@ -397,14 +397,14 @@ function s:LocateFileChangeScope()
   let b:locate_bufnr = bufnr
   let b:locate_winnr = winnr
   stopinsert
-  set modifiable
+  setlocal modifiable
   call append(1, s:scopes + g:EclimLocateUserScopes)
   1,1delete _
   call append(line('$'),
     \ ['', '" <cr> - select a scope', '" <c-c>, <c-l>, or q - cancel'])
   syntax match Comment /^".*/
-  set nomodifiable
-  set winfixheight
+  setlocal nomodifiable
+  setlocal winfixheight
   setlocal nonumber
   setlocal nolist
   setlocal noswapfile nobuflisted

@@ -8,7 +8,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -1075,8 +1075,8 @@ function! eclim#util#TempWindow(name, lines, ...)
     exec bufwinnr(name) . "winc w"
   endif
 
-  set modifiable
-  set noreadonly
+  setlocal modifiable
+  setlocal noreadonly
   call append(1, a:lines)
   retab
   silent 1,1delete _
