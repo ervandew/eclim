@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -417,6 +417,8 @@ Misc. Commands
   Executes :cd relative to the current file.
 - :ref:`:LcdRelative` dir -
   Executes :lcd relative to the current file.
+- :ref:`:Tcd` dir -
+  Like :lcd but sets the tab's local working directory.
 - :ref:`:DiffLastSaved` -
   Performs a diffsplit with the last saved version of the currently modifed
   file.

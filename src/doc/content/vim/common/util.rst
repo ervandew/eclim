@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -184,6 +184,12 @@ general purpose commands that are useful in and outside the scope of eclim.
 
 - **:LcdRelative** dir -
   Executes :lcd relative to the current file.
+
+.. _\:Tcd:
+
+- **:Tcd** dir -
+  Mimics vim's :lcd command but sets the current working directory local to the
+  current tab instead of just the current window.
 
 .. _\:DiffLastSaved:
 

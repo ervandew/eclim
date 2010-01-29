@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -233,6 +233,67 @@ function! eclim#common#util#SwapWords()
   let @/ = save_search
 
   silent! call repeat#set(":call eclim#common#util#SwapWords()\<cr>", v:count)
+endfunction " }}}
+
+" Tcd(dir) {{{
+" Like vim's :lcd, but tab local instead of window local.
+function eclim#common#util#Tcd(dir)
+  let t:cwd = fnamemodify(a:dir, ':p')
+
+  " initialize the tab cwd for all other tabs if not already set
+  let curtab = tabpagenr()
+  try
+    let index = 1
+    while index <= tabpagenr('$')
+      if index != curtab
+        exec 'tabn ' . index
+        if !exists('t:cwd')
+          let t:cwd = getcwd()
+          " try to find a window without a localdir if necessary
+          if haslocaldir()
+            let curwin = winnr()
+            let windex = 1
+            while windex <= winnr('$')
+              if windex != curwin
+                exec windex . 'winc w'
+                if !haslocaldir()
+                  let t:cwd = getcwd()
+                  break
+                endif
+              endif
+              let windex += 1
+            endwhile
+            exec curwin . 'winc w'
+          endif
+        endif
+      endif
+      let index += 1
+    endwhile
+  finally
+    exec 'tabn ' . curtab
+  endtry
+
+  call s:ApplyTcd(0)
+
+  augroup tcd
+    autocmd!
+    autocmd TabEnter * call <SID>ApplyTcd(1)
+  augroup END
+endfunction " }}}
+
+" s:ApplyTcd(honor_lcd) {{{
+function s:ApplyTcd(honor_lcd)
+  if !exists('t:cwd')
+    return
+  endif
+
+  if a:honor_lcd && haslocaldir()
+    let lcwd = getcwd()
+    exec 'cd ' . escape(t:cwd, ' ')
+    exec 'lcd ' . escape(lcwd, ' ')
+  else
+    exec 'cd ' . escape(t:cwd, ' ')
+  endif
 endfunction " }}}
 
 " CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{

@@ -201,6 +201,10 @@ if !exists(":LcdRelative")
     \ LcdRelative :exec 'lcd ' . expand('%:p:h') . '/<args>'
 endif
 
+if !exists(":Tcd")
+  command -nargs=1 -complete=dir Tcd :call eclim#common#util#Tcd('<args>')
+endif
+
 if !exists(":History")
   command History call eclim#common#history#History()
   command -bang HistoryClear call eclim#common#history#HistoryClear('<bang>')
