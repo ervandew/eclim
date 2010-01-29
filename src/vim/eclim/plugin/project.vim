@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -154,6 +154,9 @@ if !exists(":ProjectTree")
     \ ProjectTree :call eclim#project#tree#ProjectTree(<f-args>)
   command -nargs=0 ProjectsTree
     \ :call eclim#project#tree#ProjectTree(eclim#project#util#GetProjectNames())
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProject
+    \ ProjectTab :call eclim#project#util#ProjectTab('<args>')
 endif
 
 if !exists(":ProjectCD")

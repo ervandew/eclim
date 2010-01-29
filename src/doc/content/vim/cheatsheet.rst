@@ -73,6 +73,8 @@ Project Commands
 - :ref:`:ProjectTree` [<project> <project> ...] -
   Opens navigable a tree for one or more projects.
 - :ref:`:ProjectsTree` - Opens a tree containing all projects.
+- :ref:`:ProjectTab` <project> - Opens a new tab containing the project tree
+  and the tab local working directory set to the supplied project's root.
 - :ref:`:ProjectGrep` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a vimgrep starting at the root of the current project.
 - :ref:`:ProjectGrepAdd` /<pattern>/ file_pattern [file_pattern ...] -

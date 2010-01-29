@@ -25,6 +25,8 @@ Bug Fixes:
   - Various bug fixes.
 
 Common:
+  - Added a :ref:`:ProjectTab <:ProjectTab>` command providing the ability to
+    work on one or more projects each with a dedicated vim tab.
   - Added a :ref:`:Tcd <:Tcd>` command to mimic :lcd but local to the tab
     instead of the window.
 

@@ -108,6 +108,11 @@ function! eclim#project#util#ProjectCreate(args)
     let command .= substitute(s:command_create_depends, '<depends>', depends, '')
   endif
 
+  let workspace = eclim#eclipse#ChooseWorkspace(folder)
+  if workspace == '0'
+    return
+  endif
+
   " execute any pre-project creation hooks
   for nature in natureIds
     exec 'runtime autoload/eclim/' . nature . '/project.vim'
@@ -121,12 +126,7 @@ function! eclim#project#util#ProjectCreate(args)
     endtry
   endfor
 
-  let workspace = eclim#eclipse#ChooseWorkspace(folder)
-  if workspace == '0'
-    return
-  endif
   let port = eclim#client#nailgun#GetNgPort(workspace)
-
   let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
@@ -572,6 +572,23 @@ function! eclim#project#util#ProjectGrep(command, args)
   if numresults == 0
     call eclim#util#EchoInfo('No results found.')
   endif
+endfunction " }}}
+
+" ProjectTab(project) {{{
+" Opens a new tab with the project tree and tab relative working directory for
+" the specified project.
+function! eclim#project#util#ProjectTab(project)
+  let names = eclim#project#util#GetProjectNames()
+  if index(names, a:project) == -1
+    call eclim#util#EchoError("No project '" . a:project . "' found.")
+    return
+  endif
+  if winnr('$') > 1 || expand('%') != '' ||
+   \ &modified || line('$') != 1 || getline(1) != ''
+    tablast | tabnew
+  endif
+  call eclim#common#util#Tcd(eclim#project#util#GetProjectRoot(a:project))
+  call eclim#project#tree#ProjectTree(a:project)
 endfunction " }}}
 
 " Todo() {{{

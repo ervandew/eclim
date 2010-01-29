@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -372,6 +372,15 @@ Vim's command line completion to complete the project name.
 - **:ProjectsTree**
 
   Similar to **:ProjectTree** but opens a tree containing all projects.
+
+.. _\:ProjectTab:
+
+- **:ProjectTab** project
+
+  Command to initialize a new vim tab with the project tree open and the tab
+  relative working directory set to the project root.  This allows you to work
+  on multiple projects within a single vim instance where each project is
+  isolated to its own tab.
 
 .. _\:ProjectGrep:
 
