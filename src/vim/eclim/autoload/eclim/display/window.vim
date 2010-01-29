@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ endif
 " }}}
 
 " VerticalToolWindowOpen(name, weight) {{{
-" Handles opening wiindows in the vertical tool window on the left (taglist,
+" Handles opening windows in the vertical tool window on the left (taglist,
 " project tree, etc.)
 function eclim#display#window#VerticalToolWindowOpen(name, weight)
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
@@ -89,7 +89,8 @@ function eclim#display#window#VerticalToolWindowOpen(name, weight)
   setlocal nonumber
 
   let b:weight = a:weight
-  let g:VerticalToolBuffers[bufnr('%')] = a:name
+  let bufnum = bufnr('%')
+  let g:VerticalToolBuffers[bufnum] = a:name
   augroup eclim_vertical_tool_windows
     autocmd!
     autocmd BufDelete * call s:PreventCloseOnBufferDelete()
@@ -105,7 +106,9 @@ function eclim#display#window#VerticalToolWindowOpen(name, weight)
       \ ' call s:MoveRelativeTo(g:TagList_title)'
   endif
   augroup eclim_vertical_tool_windows_buffer
-    autocmd BufWinLeave <buffer> silent! call remove(g:VerticalToolBuffers, bufnr('%'))
+    exec 'autocmd BufWinLeave <buffer> ' .
+      \ 'silent! call remove(g:VerticalToolBuffers, ' . bufnum . ') | '
+      \ 'autocmd! eclim_vertical_tool_windows_buffer * <buffer=' . bufnum . '>'
   augroup END
 endfunction " }}}
 
@@ -151,7 +154,7 @@ function eclim#display#window#GetWindowOptions(winnum)
   return winopts
 endfunction " }}}
 
-" SetWindowOptions() {{{
+" SetWindowOptions(winnum, options) {{{
 " Given a dictionary of options, sets each as local options for the specified
 " window.
 function eclim#display#window#SetWindowOptions(winnum, options)
