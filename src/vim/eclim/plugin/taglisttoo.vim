@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ if !exists('loaded_taglist')
 
     " Auto open on new tabs as well.
     if v:version >= 700
-      autocmd BufWinEnter *
+      autocmd taglisttoo_autoopen BufWinEnter *
         \ if tabpagenr() > 1 &&
         \     !exists('t:Tlist_Auto_Opened') &&
         \     !exists('g:SessionLoad') |
