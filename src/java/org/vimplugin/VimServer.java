@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2010 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -202,7 +202,7 @@ public class VimServer
     args[6] = String.valueOf(ID);
 
     // copy addopts to args
-    System.arraycopy(addopts, 0, args, 5, addopts.length);
+    System.arraycopy(addopts, 0, args, 7, addopts.length);
 
     start(workingDir, false, args);
   }
