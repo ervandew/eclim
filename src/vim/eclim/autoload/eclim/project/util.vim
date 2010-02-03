@@ -524,6 +524,11 @@ endfunction " }}}
 " file.
 function! eclim#project#util#ProjectUpdate()
   let name = eclim#project#util#GetCurrentProjectName()
+  if name == ''
+    call eclim#util#EchoError('Unable to determine the project.')
+    return
+  endif
+
   let command = substitute(s:command_project_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)
