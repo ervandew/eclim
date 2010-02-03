@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -215,7 +215,6 @@ function! s:SearchAlternate(argline, element)
     let pattern = substitute(pattern, '\*', '.\\\\{-}', 'g')
     let search_pattern = substitute(search_pattern, '<element>', pattern, '')
     let command = "vimgrep /" . search_pattern . "/gj " . path . "**/*.java"
-    "echom command
     silent! exec command
 
     let loclist = getloclist(0)
@@ -355,12 +354,42 @@ endfunction " }}}
 " View the supplied file in a browser, or if none proved, the file under the
 " cursor.
 function! s:ViewDoc(...)
-  if a:0 > 0
-    call eclim#web#OpenUrl(a:1)
-  else
-    let url = substitute(getline('.'), '\(.\{-}\)|.*', '\1', '')
-    call eclim#web#OpenUrl(url)
+  let url = a:0 > 0 ? a:1 : substitute(getline('.'), '\(.\{-}\)|.*', '\1', '')
+
+  " handle javadocs inside of a jar (like those from maven dependencies)
+  if url =~ '^jar:file:.*!'
+    let jarpath = substitute(url, 'jar:file:\(.\{-}\)!.*', '\1', '')
+    let filepath = substitute(url, 'jar:file:.\{-}!\(.*\)', '\1', '')
+    let tempdir = g:EclimTempDir . '/' . fnamemodify(jarpath, ':t')
+    if !isdirectory(tempdir)
+      call mkdir(tempdir)
+    endif
+    if !filereadable(tempdir . filepath)
+      call eclim#util#Echo('Extracting javadocs to temp dir...')
+      let result = ''
+      if executable('unzip')
+        let result = eclim#util#System('unzip -q -d "' . tempdir . '" "' . jarpath . '"')
+      elseif executable('jar')
+        let cwd = getcwd()
+        exec 'cd ' . escape(tempdir, ' ')
+        try
+          let result = eclim#util#System('jar -xf "' . jarpath . '"')
+        finally
+          exec 'cd ' . escape(cwd, ' ')
+        endtry
+      else
+        let result = eclim#util#EchoError("Unable to find 'jar' or 'unzip' in the system path.")
+        return
+      endif
+      if v:shell_error
+        call eclim#util#EchoError('Error extracting jar file: ' . result)
+        return
+      endif
+    endif
+    let url = 'file://' . tempdir . filepath
   endif
+
+  call eclim#web#OpenUrl(url)
 endfunction " }}}
 
 " CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) {{{
