@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ if !exists(":NewVarEntry")
   command -nargs=+ -complete=customlist,eclim#java#classpath#CommandCompleteVarPath -buffer
     \ NewVarEntry
     \ :call eclim#java#classpath#NewClasspathEntry
-    \     (substitute(fnamemodify('<args>', ':p'), '\', '/', 'g'), s:entry_var)
+    \     (substitute('<args>', '\', '/', 'g'), s:entry_var)
 endif
 if !exists(":VariableList")
   command -buffer VariableList :call eclim#java#classpath#VariableList()
