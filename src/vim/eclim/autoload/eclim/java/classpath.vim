@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -158,12 +158,12 @@ function! eclim#java#classpath#CommandCompleteVarAndDir(argLead, cmdLine, cursor
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  " complete dirs for first arg
+  " complete vars for first arg
   if cmdLine =~ '^' . args[0] . '\s*' . escape(argLead, '~.\') . '$'
     return eclim#java#classpath#CommandCompleteVar(argLead, a:cmdLine, a:cursorPos)
   endif
 
-  return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
+  return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

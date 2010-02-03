@@ -975,7 +975,7 @@ function! eclim#project#util#CommandCompleteProjectCreate(argLead, cmdLine, curs
 
   " complete dirs for first arg
   if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'
-    return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
+    return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
   endif
 
   " complete nature aliases
@@ -1037,13 +1037,13 @@ function! eclim#project#util#CommandCompleteProjectMove(argLead, cmdLine, cursor
   " complete dirs for second arg if first arg is a project name
   if len(args) > 1 && eclim#project#util#GetProjectRoot(args[1]) != '' &&
    \ cmdLine =~ '^' . args[0] . '\s\+' . args[1] . '\s\+' . escape(argLead, '~.\') . '$'
-    return eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
+    return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
   endif
 
   " attempt complete project and dir for first arg
   if cmdLine =~ '^' . args[0] . '\s\+' . escape(argLead, '~.\') . '$'
     let projects = []
-    let dirs = eclim#util#CommandCompleteDir(argLead, a:cmdLine, a:cursorPos)
+    let dirs = eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
     if argLead !~ '[~]'
       let projects = eclim#project#util#CommandCompleteProject(
             \ argLead, a:cmdLine, a:cursorPos)

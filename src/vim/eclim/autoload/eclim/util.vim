@@ -1203,10 +1203,10 @@ endfunction " }}}
 " CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for directories.
 function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  let argLead = expand(argLead)
-  let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+  let results = split(eclim#util#Glob(expand(argLead) . '*', 1), '\n')
   let index = 0
   for result in results
     if !isdirectory(result)
