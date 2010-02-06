@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ Welcome to Eclim
 
 .. toctree::
 
+   download
    features
 
 .. toctree::
@@ -329,6 +330,5 @@ View the :ref:`release notes <1.3.0>` for more info.
 .. _eclipse dltk: http://eclipse.org/dltk/
 .. _eclipse wst: http://eclipse.org/webtools/
 
-.. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
 .. _eclim_vim_1.2.3.jar: http://sourceforge.net/project/showfiles.php?group_id=145869&package_id=160492&release_id=453910
 .. _eclim_vim_1.2.0.jar: http://sourceforge.net/project/showfiles.php?group_id=145869&package_id=160492&release_id=432538
