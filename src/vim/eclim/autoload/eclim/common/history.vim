@@ -153,9 +153,15 @@ function s:View(...)
     setlocal modifiable
     setlocal noreadonly
 
-    silent 1,$delete _
-    silent put =result
-    silent 1,1delete _
+    let temp = tempname()
+    call writefile(split(result, '\n'), temp)
+    try
+      silent 1,$delete _
+      silent read ++edit `=temp`
+      silent 1,1delete _
+    finally
+      call delete(temp)
+    endtry
 
     exec 'setlocal filetype=' . filetype
     setlocal nomodified
@@ -246,9 +252,24 @@ function s:Revert()
       return
     endif
 
-    silent 1,$delete _
-    silent put =result
-    silent 1,1delete _
+    let ff = &ff
+    let temp = tempname()
+    call writefile(split(result, '\n'), temp)
+    try
+      silent 1,$delete _
+      silent read ++edit `=temp`
+      silent 1,1delete _
+    finally
+      call delete(temp)
+    endtry
+
+    if ff != &ff
+      call eclim#util#EchoWarning(
+        \ "Warning: the file format is being reverted from '" . ff . "' to '" .
+        \ &ff . "'. Using vim's undo will not restore the previous format so " .
+        \ "if you choose to undo the reverting of this file, you will need to " .
+        \ "manually set the file format back to " . ff . " (set ff=" . ff . ").")
+    endif
   endif
 endfunction " }}}
 
