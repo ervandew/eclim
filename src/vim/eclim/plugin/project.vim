@@ -115,6 +115,7 @@ if !exists(":ProjectCreate")
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectRefresh :call eclim#project#util#ProjectRefresh('<args>')
   command ProjectRefreshAll :call eclim#project#util#ProjectRefreshAll()
+  command ProjectCacheClear :call eclim#project#util#ClearProjectsCache()
   command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
     \ ProjectList :call eclim#project#util#ProjectList('<args>')
   command -nargs=?
