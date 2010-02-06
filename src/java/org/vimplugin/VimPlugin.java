@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2010 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -26,6 +26,7 @@ import org.eclim.logging.Logger;
 
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
+import org.eclim.util.StringUtils;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -56,10 +57,12 @@ public class VimPlugin
 
   private static final String GVIM_FEATURE_TEST =
     "redir! > <file> | silent! <command> | quit";
-  private static final String EMBED_COMMAND_UNIX = "echo v:version >= 700";
-  private static final String EMBED_COMMAND_WINDOWS =
-    "echo v:version > 701 || (v:version == 701 && has('patch091'))";
-  private static final String NB_COMMAND = "echo has('netbeans_intg')";
+  private static final String FEATURES_COMMAND_UNIX =
+    "echo 'embed:' . (v:version >= 700) . " +
+        "' netbeans:' . (has('netbeans_intg'))";
+  private static final String FEATURES_COMMAND_WINDOWS =
+    "echo 'embed:' . (v:version > 701 || (v:version == 701 && has('patch091'))) . " +
+        "' netbeans:' . (has('netbeans_intg'))";
 
   /**
    * The shared instance.
@@ -71,9 +74,7 @@ public class VimPlugin
    */
   public static final int DEFAULT_VIMSERVER_ID = 0;
 
-  private Boolean nbSupported;
-  private Boolean embedSupported;
-
+  private HashMap<String,Boolean> features;
   private VimEditorPartListener partListener;
 
   /**
@@ -301,15 +302,7 @@ public class VimPlugin
    * @return true if embedding is supported, false otherwise.
    */
   public boolean gvimEmbedSupported() {
-    if (embedSupported == null){
-      logger.debug("Checking gvim for embed support.");
-      String command = EMBED_COMMAND_UNIX;
-      if (Platform.getOS().equals(Platform.OS_WIN32)) {
-        command = EMBED_COMMAND_WINDOWS;
-      }
-      embedSupported = new Boolean(testGvimFeature(command));
-    }
-    return embedSupported.booleanValue();
+    return hasFeature("embed");
   }
 
   /**
@@ -319,16 +312,21 @@ public class VimPlugin
    * @return true if netbeans supported, false otherwise.
    */
   public boolean gvimNbSupported() {
-    if (nbSupported == null){
-      logger.debug("Checking gvim for netbeans support.");
-      nbSupported = new Boolean(testGvimFeature(NB_COMMAND));
-    }
-    return nbSupported.booleanValue();
+    return hasFeature("netbeans");
+  }
+
+  /**
+   * Determines if the configured gvim can <a href="http://groups.google.com/group/vim_dev/browse_thread/thread/2126395af4137d4b">reliably</a>
+   * support the netbeans document listening events:
+   *
+   * @return true if document listening is reliably supported.
+   */
+  public boolean gvimNbDocumentListenSupported() {
+    return hasFeature("documentListen");
   }
 
   public void resetGvimState() {
-    embedSupported = null;
-    nbSupported = null;
+    features = null;
   }
 
   /**
@@ -336,52 +334,66 @@ public class VimPlugin
    *
    * @return The partListener.
    */
-  public VimEditorPartListener getPartListener()
-  {
+  public VimEditorPartListener getPartListener() {
     return this.partListener;
   }
 
-  private boolean testGvimFeature(String command) {
-    String gvim = VimPlugin.getDefault().getPreferenceStore()
-      .getString(PreferenceConstants.P_GVIM);
-    try{
-      File tempFile = File.createTempFile("eclim_gvim", null);
-      tempFile.deleteOnExit();
-      command = GVIM_FEATURE_TEST.replaceFirst("<command>", command);
-      command = command.replaceFirst("<file>",
-          tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
-
-      String[] cmd = {
-        gvim, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
-      logger.debug(Arrays.toString(cmd));
-      CommandExecutor process = CommandExecutor.execute(cmd, 5000);
-      if(process.getReturnCode() != 0){
-        logger.error("Failed to execute gvim: " + process.getErrorMessage());
-        return false;
-      }
-
-      FileInputStream in = null;
+  private boolean hasFeature(String name) {
+    if (features == null){
+      String gvim = VimPlugin.getDefault().getPreferenceStore()
+        .getString(PreferenceConstants.P_GVIM);
       try{
-        String result = IOUtils.toString(in = new FileInputStream(tempFile));
-        result = result.trim();
-        logger.debug("gvim feature supported: " + result);
-
-        return result.equals("1");
-      }catch(IOException ioe){
-        logger.error("Unable to read temp file.", ioe);
-        IOUtils.closeQuietly(in);
-        return false;
-      }finally{
-        IOUtils.closeQuietly(in);
-        try{
-          tempFile.delete();
-        }catch(Exception ignore){
+        File tempFile = File.createTempFile("eclim_gvim", null);
+        tempFile.deleteOnExit();
+        String command = FEATURES_COMMAND_UNIX;
+        if (Platform.getOS().equals(Platform.OS_WIN32)) {
+          command = FEATURES_COMMAND_WINDOWS;
         }
+        command = GVIM_FEATURE_TEST.replaceFirst("<command>", command);
+        command = command.replaceFirst("<file>",
+            tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
+
+        String[] cmd = {
+          gvim, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
+        logger.debug(Arrays.toString(cmd));
+        CommandExecutor process = CommandExecutor.execute(cmd, 5000);
+        if(process.getReturnCode() != 0){
+          logger.error("Failed to execute gvim: " + process.getErrorMessage());
+          return false;
+        }
+
+        FileInputStream in = null;
+        try{
+          String result = IOUtils.toString(in = new FileInputStream(tempFile));
+          result = result.trim();
+          logger.debug("gvim features supported: " + result);
+
+          features = new HashMap<String,Boolean>();
+          for(String f : StringUtils.split(result)){
+            String[] keyVal = StringUtils.split(f, ":");
+            if(keyVal.length != 2){
+              logger.error("Invalid response from gvim: " + result);
+              return false;
+            }
+            features.put(keyVal[0], Boolean.valueOf(keyVal[1].equals("1")));
+          }
+        }catch(IOException ioe){
+          logger.error("Unable to read temp file.", ioe);
+          IOUtils.closeQuietly(in);
+          return false;
+        }finally{
+          IOUtils.closeQuietly(in);
+          try{
+            tempFile.delete();
+          }catch(Exception ignore){
+          }
+        }
+      }catch(Exception e){
+        logger.error("Unable to execute gvim.", e);
+        return false;
       }
-    }catch(Exception e){
-      logger.error("Unable to execute gvim.", e);
-      return false;
     }
+    return features.containsKey(name) && features.get(name).booleanValue();
   }
 
   /**
@@ -415,8 +427,7 @@ public class VimPlugin
    * @param args Optional arguments to format the message with.
    * @return The message.
    */
-  public String getMessage(String key, Object... args)
-  {
+  public String getMessage(String key, Object... args) {
     String message = messages.getString(key);
     if (args != null && args.length > 0){
       return MessageFormat.format(message, args);

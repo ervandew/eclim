@@ -30,6 +30,9 @@ public class PreferenceConstants {
   /** open files in new tabs in external gvim */
   public static final String P_TABBED = "tabbed";
 
+  /** initiate document listening events via gvim netbeans interface */
+  public static final String P_DOCUMENT_LISTEN = "documentListen";
+
   /** use auto click to force gvim focus */
   public static final String P_FOCUS_AUTO_CLICK = "focus.click";
 

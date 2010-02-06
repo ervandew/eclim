@@ -34,6 +34,8 @@ Install:
   - Added support for :ref:`automated installs <install-automated>`.
 
 Eclim:
+  - Added workaround for gvim bug that could result in a crash of gvim when
+    editing a file opened from the eclipse gui.
   - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
   - Added support for specifying that gvim should be refocused after executing
     an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys

@@ -26,14 +26,17 @@ public class PreferenceInitializer
    */
   @Override
   public void initializeDefaultPreferences() {
-    IPreferenceStore store = VimPlugin.getDefault().getPreferenceStore();
+    VimPlugin plugin = VimPlugin.getDefault();
+    IPreferenceStore store = plugin.getPreferenceStore();
     store.setDefault(PreferenceConstants.P_PORT, 3219);
     store.setDefault(PreferenceConstants.P_EMBED,
-        "true".equals(VimPlugin.getDefault().getProperty("gvim.embed.default")));
+        "true".equals(plugin.getProperty("gvim.embed.default")));
     store.setDefault(PreferenceConstants.P_TABBED, true);
+    store.setDefault(PreferenceConstants.P_DOCUMENT_LISTEN,
+        plugin.gvimNbDocumentListenSupported());
     store.setDefault(PreferenceConstants.P_FOCUS_AUTO_CLICK, true);
     store.setDefault(PreferenceConstants.P_START_ECLIMD, true);
     store.setDefault(PreferenceConstants.P_GVIM,
-        VimPlugin.getDefault().getProperty("gvim.default"));
+        plugin.getProperty("gvim.default"));
   }
 }

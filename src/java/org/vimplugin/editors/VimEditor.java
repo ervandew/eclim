@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 
 import org.eclipse.jface.text.IDocument;
@@ -125,6 +126,7 @@ public class VimEditor
 
   private boolean embedded;
   private boolean tabbed;
+  private boolean documentListen;
 
   /**
    * The constructor.
@@ -172,10 +174,10 @@ public class VimEditor
       }
     }
 
-    tabbed = plugin.getPreferenceStore()
-      .getBoolean(PreferenceConstants.P_TABBED);
-    embedded = plugin.getPreferenceStore()
-      .getBoolean(PreferenceConstants.P_EMBED);
+    IPreferenceStore prefs = plugin.getPreferenceStore();
+    tabbed = prefs.getBoolean(PreferenceConstants.P_TABBED);
+    embedded = prefs.getBoolean(PreferenceConstants.P_EMBED);
+    documentListen = prefs.getBoolean(PreferenceConstants.P_DOCUMENT_LISTEN);
     if (embedded){
       if (!plugin.gvimEmbedSupported()){
         String message = plugin.getMessage(
@@ -340,7 +342,11 @@ public class VimEditor
 
     VimConnection vc = plugin.getVimserver(serverID).getVc();
     vc.command(bufferID, "editFile", "\"" + filePath + "\"");
-    vc.command(bufferID, "startDocumentListen", "");
+    if (documentListen){
+      vc.command(bufferID, "startDocumentListen", "");
+    }else{
+      vc.command(bufferID, "stopDocumentListen", "");
+    }
     return vc;
   }
 
@@ -382,7 +388,11 @@ public class VimEditor
     VimConnection vc = plugin.getVimserver(serverID).getVc();
     //vc.command(bufferID, "setLocAndSize", h + " " + w);
     vc.command(bufferID, "editFile", "\"" + filePath + "\"");
-    vc.command(bufferID, "startDocumentListen", "");
+    if (documentListen){
+      vc.command(bufferID, "startDocumentListen", "");
+    }else{
+      vc.command(bufferID, "stopDocumentListen", "");
+    }
     return vc;
   }
 
