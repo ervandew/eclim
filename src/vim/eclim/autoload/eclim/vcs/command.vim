@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -417,6 +417,12 @@ function! s:ApplyAnnotations(annotations)
 
     let user = substitute(annotation, '^.\{-})\s\+\(.\{-}\)\s*$', '\1', '')
     let user_abbrv = user[:1]
+    let name_parts = split(user)
+    " if the user name appears to be in the form of First Last, then try using
+    " using the first letter of each as initials
+    if len(name_parts) > 1 && name_parts[0] =~ '^\w' && name_parts[1] =~ '^\w'
+      let user_abbrv = name_parts[0][0] . name_parts[1][0]
+    endif
     let sign_name = 'vcs_annotate_' . substitute(user[:5], ' ', '_', 'g')
     if index(defined, sign_name) == -1
       call eclim#display#signs#Define(sign_name, user_abbrv, g:EclimInfoHighlight)
