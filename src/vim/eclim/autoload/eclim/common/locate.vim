@@ -118,7 +118,7 @@ function eclim#common#locate#LocateFile(action, file, ...)
   endif
 
   let pattern = file
-  let pattern = s:LocateFileConvertPattern(pattern)
+  let pattern = s:LocateFileConvertPattern(pattern, 0)
   let pattern = '[^/]*' . pattern
   try
     let b:workspace = workspace
@@ -171,7 +171,7 @@ function eclim#common#locate#LocateFileCompletion()
   let name = substitute(line, '^>\s*', '', '')
   if name !~ '^\s*$'
     let pattern = name
-    let pattern = s:LocateFileConvertPattern(pattern)
+    let pattern = s:LocateFileConvertPattern(pattern, g:EclimLocateFileFuzzy)
 
     let results = s:LocateFileFunction(b:scope)(pattern)
     if !empty(results)
@@ -518,11 +518,11 @@ function s:LocateFileHelp()
   return ''
 endfunction " }}}
 
-" s:LocateFileConvertPattern(pattern) {{{
-function s:LocateFileConvertPattern(pattern)
+" s:LocateFileConvertPattern(pattern, fuzzy) {{{
+function s:LocateFileConvertPattern(pattern, fuzzy)
   let pattern = a:pattern
 
-  if g:EclimLocateFileFuzzy
+  if a:fuzzy
     let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
     let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
     return pattern
