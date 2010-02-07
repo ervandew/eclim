@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -73,8 +73,8 @@ function! eclim#python#validate#Validate(on_save)
     " currently too slow for running on every save.
     if eclim#project#util#IsCurrentFileInProject(0) && !a:on_save
       let project = eclim#project#util#GetCurrentProjectRoot()
-      let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
-      let rope_results = eclim#python#rope#Validate(project, filename)
+      let file = eclim#project#util#GetProjectRelativeFilePath()
+      let rope_results = eclim#python#rope#Validate(project, file)
       " currently rope gets confused with iterator var on list comprehensions
       let rope_results = filter(rope_results, "v:val !~ '^Unresolved variable'")
       let results += rope_results

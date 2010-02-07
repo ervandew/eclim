@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 function! eclim#php#util#UpdateSrcFile(validate)
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
-    let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')

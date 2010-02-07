@@ -668,12 +668,13 @@ function! eclim#project#util#GetProjectWorkspace(name)
   return get(project, 'workspace', '')
 endfunction " }}}
 
-" GetProjectRelativeFilePath(file) {{{
-" Gets the project relative path for the given file.
-function! eclim#project#util#GetProjectRelativeFilePath(file)
-  let project = eclim#project#util#GetProject(a:file)
+" GetProjectRelativeFilePath([file]) {{{
+" Gets the project relative path for the current or supplied file.
+function! eclim#project#util#GetProjectRelativeFilePath(...)
+  let file = a:0 == 0 ? expand('%:p') : a:1
+  let project = eclim#project#util#GetProject(file)
 
-  let file = substitute(fnamemodify(a:file, ':p'), '\', '/', 'g')
+  let file = substitute(fnamemodify(file, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
   if has('win32') || has('win64')
     let pattern .= '\c'
@@ -916,7 +917,7 @@ function! eclim#project#util#RefreshFile()
     autocmd! BufWritePost <buffer>
   augroup END
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:command_refresh_file
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -948,7 +949,7 @@ function! eclim#project#util#CommandCompleteProjectContainsThis(
   let names = eclim#project#util#CommandCompleteProject(
     \ a:argLead, a:cmdLine, a:cursorPos)
 
-  let path = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let path = eclim#project#util#GetProjectRelativeFilePath()
   let project = eclim#project#util#GetCurrentProjectName()
   let projects = eclim#project#util#GetProjects()
   call filter(names, 'v:val != project && filereadable(eclim#project#util#GetProjectRoot(v:val) . "/" . path)')

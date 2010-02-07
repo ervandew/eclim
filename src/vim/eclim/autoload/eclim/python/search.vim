@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ function eclim#python#search#Find(context)
   let offset = eclim#python#rope#GetOffset()
   let encoding = eclim#util#GetEncoding()
   let project = eclim#project#util#GetCurrentProjectRoot()
-  let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let file = eclim#project#util#GetProjectRelativeFilePath()
 
   let results =
-    \ eclim#python#rope#Find(project, filename, offset, encoding, a:context)
+    \ eclim#python#rope#Find(project, file, offset, encoding, a:context)
   if type(results) == 0 && results == 0
     call eclim#util#SetLocationList([])
     return
