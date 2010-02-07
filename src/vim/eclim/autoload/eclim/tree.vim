@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -363,7 +363,7 @@ function eclim#tree#ExecuteAction(file, command)
     silent exec 'cd ' . escape(cwd, ' &')
   endtry
 
-  if v:shell_error
+  if command =~ '^!\w' && v:shell_error
     call eclim#util#EchoError('Error executing command: ' . command)
   endif
 endfunction " }}}
