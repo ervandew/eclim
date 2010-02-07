@@ -139,8 +139,6 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - Vcs
-      - update :Vcs commands to only cache remote calls (move caching to svn
-        and cvs impls)
       - add
         :VcsStatus
           - temp window w/ list of files
