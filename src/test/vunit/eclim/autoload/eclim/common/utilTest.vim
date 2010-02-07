@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ function! TestLocateFile()
 
   LocateFile
   call PeekRedir()
-  call VUAssertEquals(expand('%'), '[Locate]')
+  call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> file.txt")
   doautocmd CursorMovedI <buffer>
@@ -77,11 +77,11 @@ function! TestLocateFile()
     \ 'file2.txt  /eclim_unit_test/vcs/git/unittest/test/file2.txt')
   exec "normal \<esc>"
   doautocmd InsertLeave <buffer>
-  call VUAssertNotEquals(expand('%'), '[Locate]')
+  call VUAssertNotEquals(expand('%'), '[Locate in eclim_unit_test]')
 
   LocateFile
   call PeekRedir()
-  call VUAssertEquals(expand('%'), '[Locate]')
+  call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> vcs/merc/file.txt")
   doautocmd CursorMovedI <buffer>
