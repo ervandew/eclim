@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,12 +40,12 @@ function! eclim#java#delegate#Delegate()
   call eclim#java#util#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let filename = eclim#java#util#GetFilename()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let offset = eclim#util#GetCurrentElementOffset()
 
   let command = s:command_delegate
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', filename, '')
+  let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', offset, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
@@ -54,7 +54,7 @@ endfunction " }}}
 
 " DelegateWindow(command) {{{
 function! eclim#java#delegate#DelegateWindow(command)
-  let name = eclim#java#util#GetFilename() . "_delegate"
+  let name = eclim#project#util#GetProjectRelativeFilePath() . "_delegate"
   let project = eclim#project#util#GetCurrentProjectName()
   let workspace = eclim#project#util#GetProjectWorkspace(project)
   let port = eclim#client#nailgun#GetNgPort(workspace)

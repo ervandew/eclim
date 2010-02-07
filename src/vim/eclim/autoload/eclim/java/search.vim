@@ -111,7 +111,7 @@ function! s:Search(command, ...)
     endif
 
     let project = eclim#project#util#GetCurrentProjectName()
-    let filename = eclim#java#util#GetFilename()
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
     let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
@@ -119,7 +119,7 @@ function! s:Search(command, ...)
     let search_cmd = s:search_element
     let search_cmd = substitute(search_cmd, '<project>', project, '')
     let search_cmd = substitute(search_cmd, '<search>', a:command, '')
-    let search_cmd = substitute(search_cmd, '<file>', filename, '')
+    let search_cmd = substitute(search_cmd, '<file>', file, '')
     let search_cmd = substitute(search_cmd, '<offset>', offset, '')
     let search_cmd = substitute(search_cmd, '<encoding>', eclim#util#GetEncoding(), '')
     let search_cmd = substitute(search_cmd, '<length>', length, '')
@@ -137,9 +137,9 @@ function! s:Search(command, ...)
     if project != ''
       let search_cmd .= ' -n "' . project . '"'
     endif
-    let filename = eclim#java#util#GetFilename()
-    if filename != ''
-      let search_cmd .= ' -f "' . filename . '"'
+    let file = eclim#project#util#GetProjectRelativeFilePath()
+    if file != ''
+      let search_cmd .= ' -f "' . file . '"'
     endif
     let search_cmd .= ' ' . argline
     " quote the search pattern

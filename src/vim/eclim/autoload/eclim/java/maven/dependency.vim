@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -53,10 +53,11 @@ function! eclim#java#maven#dependency#Search(query, type)
 
   let filename = substitute(expand('%:p'), '\', '/', 'g')
   let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
 
   let command = s:command_search
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
+  let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<query>', a:query, '')
 

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ function! eclim#java#doc#Comment()
   call eclim#java#util#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#java#util#GetFilename()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let offset = eclim#util#GetCurrentElementOffset()
 
   let command = s:command_comment

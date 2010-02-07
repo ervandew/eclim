@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,17 +41,17 @@ function! eclim#java#correct#Correct()
 
   call eclim#java#util#SilentUpdate()
 
-  let filename = eclim#java#util#GetFilename()
   let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
 
   let command = s:command_correct
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', filename, '')
+  let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<line>', line('.'), '')
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
-  let window_name = filename . "_correct"
+  let window_name = file . "_correct"
   let filename = expand('%:p')
   call eclim#util#TempWindowClear(window_name)
 
@@ -106,9 +106,10 @@ function! eclim#java#correct#CorrectApply()
       let index = substitute(line, '^\([0-9]\+\)\..*', '\1', '')
 
       let project = eclim#project#util#GetCurrentProjectName()
+      let file = eclim#project#util#GetProjectRelativeFilePath()
       let command = s:command_correct_apply
       let command = substitute(command, '<project>', project, '')
-      let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
+      let command = substitute(command, '<file>', file, '')
       let command = substitute(command, '<line>', line('.'), '')
       let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
       let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')

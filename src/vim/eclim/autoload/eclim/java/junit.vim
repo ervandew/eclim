@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -119,10 +119,11 @@ function! eclim#java#junit#JUnitImpl()
   call eclim#java#util#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
 
   let command = s:command_impl
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
+  let command = substitute(command, '<file>', file, '')
   let base = substitute(expand('%:t'), 'Test', '', '')
   let base = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g') . "/" . base
   if eclim#java#util#FileExists(base)
@@ -140,7 +141,7 @@ endfunction " }}}
 
 " JUnitImplWindow(command) {{{
 function! eclim#java#junit#JUnitImplWindow(command)
-  let name = eclim#java#util#GetFilename() . "_impl"
+  let name = eclim#project#util#GetProjectRelativeFilePath() . "_impl"
   let project = eclim#project#util#GetCurrentProjectName()
   let workspace = eclim#project#util#GetProjectWorkspace(project)
   let port = eclim#client#nailgun#GetNgPort(workspace)

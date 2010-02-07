@@ -77,14 +77,6 @@ function! eclim#java#util#GetFullyQualifiedClassname(...)
   return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
 endfunction " }}}
 
-" GetFilename() {{{
-" Gets the src dir relative file name.
-function! eclim#java#util#GetFilename()
-  "let filename = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g')
-  "return filename . '/' . expand('%:t')
-  return eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
-endfunction " }}}
-
 " GetPackage(...) {{{
 " Gets the package of the current src file, or of the optionally supplied file
 " argument.
@@ -250,7 +242,7 @@ endfunction " }}}
 function! eclim#java#util#UpdateSrcFile(validate)
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
-    let file = eclim#java#util#GetFilename()
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')

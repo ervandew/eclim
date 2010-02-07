@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,9 +41,10 @@ function! eclim#java#hierarchy#Hierarchy()
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:command_hierarchy
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', eclim#java#util#GetFilename(), '')
+  let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
   let result = eclim#ExecuteEclim(command)

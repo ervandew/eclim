@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ function! eclim#java#import#ImportMissing()
   call eclim#java#util#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#java#util#GetFilename()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:command_import_missing
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -310,7 +310,7 @@ function! eclim#java#import#CleanImports()
   if project != ''
     call eclim#java#util#SilentUpdate()
 
-    let file = eclim#java#util#GetFilename()
+    let file = eclim#project#util#GetProjectRelativeFilePath()
 
     let command = s:command_unused_imports
     let command = substitute(command, '<project>', project, '')
