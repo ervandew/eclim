@@ -341,7 +341,7 @@ target(name: 'test.init'){
   createProject('eclim_unit_test_web', 'none')
   createProject('eclim_unit_test_c', 'c')
   createProject('eclim_unit_test_php', 'php')
-  createProject('eclim_unit_test_python', 'python')
+  createProject('eclim_unit_test_python', 'none')
 
   // create interpreter before creating the project
   property(name: 'ruby.path', value: '/usr/bin/ruby')
