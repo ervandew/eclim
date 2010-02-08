@@ -48,6 +48,10 @@ function! eclim#eclipse#GetAllWorkspaceDirs()
     if results[0] =~ "\n"
       let results = split(results[0], "\n")
     endif
+
+    if has('win32unix')
+      call map(results, 'eclim#cygwin#CygwinPath(v:val, 1)')
+    endif
   endif
 
   " ensure each value uses unix slashes and ends in a slash

@@ -79,8 +79,9 @@ function! eclim#ExecuteEclim(command, ...)
   let result = substitute(result, '\n$', '', '')
 
   " not sure this is the best place to handle this, but when using the python
-  " client, the result has a trailing ctrl-m on windows.
-  if has('win32') || has('win64')
+  " client, the result has a trailing ctrl-m on windows.  also account for
+  " running under cygwin vim.
+  if has('win32') || has('win64') || has('win32unix')
     let result = substitute(result, "\<c-m>$", '', '')
   endif
 
@@ -223,6 +224,10 @@ function! eclim#SaveSettings(command, project, ...)
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
     silent exec 'write! ' . escape(tempfile, ' ')
+
+    if has('win32unix')
+      let tempfile = eclim#cygwin#WindowsPath(tempfile)
+    endif
 
     let command = a:command
     let command = substitute(command, '<project>', a:project, '')

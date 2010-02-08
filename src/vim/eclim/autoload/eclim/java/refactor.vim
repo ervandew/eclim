@@ -206,6 +206,9 @@ function s:PreviewLink()
       " split relative to the original window
       exec b:winnr . 'winc w'
 
+      if has('win32unix')
+        let file = eclim#cygwin#CygwinPath(file)
+      endif
       let name = fnamemodify(file, ':t:r')
       let ext = fnamemodify(file, ':e')
       exec printf('silent below new %s.current.%s', name, ext)
@@ -275,7 +278,13 @@ function s:Refactor(command)
         " handle file renames
         if file =~ '\s->\s'
           let newfile = substitute(file, '.*->\s*', '', '')
+          if has('win32unix')
+            let newfile = eclim#cygwin#CygwinPath(newfile)
+          endif
           let file = substitute(file, '\s*->.*', '', '')
+        endif
+        if has('win32unix')
+          let file = eclim#cygwin#CygwinPath(file)
         endif
 
         " ignore unchanged directories

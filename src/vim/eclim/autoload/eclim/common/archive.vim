@@ -67,6 +67,9 @@ function! eclim#common#archive#List()
 
   let b:file_info = {}
   let file = substitute(expand('%:p'), '\', '/', 'g')
+  if has('win32unix')
+    let file = eclim#cygwin#WindowsPath(file)
+  endif
   let root = fnamemodify(file, ':t') . '/'
   let b:file_info[root] = {'url': s:FileUrl(file)}
 
@@ -131,6 +134,9 @@ function! eclim#common#archive#ReadFile()
 
   if string(file) != '0'
     let bufnum = bufnr('%')
+    if has('win32unix')
+      let file = eclim#cygwin#CygwinPath(file)
+    endif
     silent exec "keepjumps edit! " . escape(file, ' ')
 
     exec 'bdelete ' . bufnum
@@ -212,6 +218,10 @@ endfunction " }}}
 " ExpandDir() {{{
 function! eclim#common#archive#ExpandDir()
   let path = substitute(expand('%:p'), '\', '/', 'g')
+  if has('win32unix')
+    let path = eclim#cygwin#WindowsPath(path)
+  endif
+
   let dir = b:file_info[getline('.')].url
   if dir !~ path . '$' && s:IsArchive(dir)
     let dir = s:FileUrl(dir) . '!/'
@@ -255,6 +265,9 @@ endfunction " }}}
 " Function for listing all the archive files (for 'list' layout).
 function! eclim#common#archive#ListAll()
   let path = substitute(expand('%:p'), '\', '/', 'g')
+  if has('win32unix')
+    let path = eclim#cygwin#WindowsPath(path)
+  endif
   let command = s:command_list_all
   let command = substitute(command, '<file>', path, '')
   let results = split(eclim#ExecuteEclim(command), '\n')
@@ -262,8 +275,13 @@ function! eclim#common#archive#ListAll()
     return
   endif
 
-  exec 'read ' . results[0]
-  call delete(results[0])
+  let temp = substitute(results[0], '\', '/', 'g')
+  if has('win32unix')
+    let temp = eclim#cygwin#CygwinPath(temp)
+  endif
+
+  exec 'read ' . escape(temp, ' ')
+  call delete(temp)
 endfunction " }}}
 
 " s:GetFilePath() {{{
@@ -271,6 +289,9 @@ function! s:GetFilePath()
   if g:EclimArchiveLayout == 'list'
     let file = substitute(getline('.'), s:file_regex, '\1', '')
     let archive = substitute(expand('%:p'), '\', '/', 'g')
+    if has('win32unix')
+      let archive = eclim#cygwin#WindowsPath(archive)
+    endif
     let url = s:FileUrl(archive) . '!/' . file
   else
     let url = b:file_info[getline('.')].url

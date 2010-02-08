@@ -140,7 +140,12 @@ endfunction " }}}
 " Escapes the supplied buffer name so that it can be safely used by buf*
 " functions.
 function! eclim#util#EscapeBufferName(name)
-  let name = escape(a:name, ' ')
+  let name = a:name
+  " escaping the space in cygwin could lead to the dos path error message that
+  " cygwin throws when a dos path is referenced.
+  if !has('win32unix')
+    let name = escape(a:name, ' ')
+  endif
   return substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 endfunction " }}}
 
@@ -560,9 +565,9 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     else
       let command = '!' . make_cmd
       let outfile = g:EclimTempDir . '/eclim_make_output.txt'
-      if has("win32") || has("win64")
-        if executable("tee")
-          let command .= ' | tee "' . outfile . '" 2>&1"'
+      if has('win32') || has('win64')
+        if executable('tee')
+          let command .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
         else
           let command .= ' >"' . outfile . '" 2>&1"'
         endif
@@ -730,6 +735,10 @@ function! s:ParseLocationEntry(entry)
   let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
   if type == entry
     let type = ''
+  endif
+
+  if has('win32unix')
+    let file = eclim#cygwin#CygwinPath(file)
   endif
 
   let dict = {

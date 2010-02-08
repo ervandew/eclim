@@ -147,7 +147,7 @@
         </unzip>
         <move todir="${eclipse.home}">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
-              includes="eclim,eclim.bat,eclim.cmd,eclimd.bat,eclimd.cmd,ng.exe"/>
+              includes="eclim.bat,eclim.cmd,eclimd.bat,eclimd.cmd,ng.exe"/>
         </move>
       </then>
       <else>

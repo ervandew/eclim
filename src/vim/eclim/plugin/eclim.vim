@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,17 +27,27 @@
 " }}}
 
 " Global Variables {{{
-if !exists("g:EclimHome")
-  " set at build/install time.
-  "${vim.eclim.home}"
-endif
-if !exists("g:EclimEclipseHome")
-  " set at build/install time.
-  "${vim.eclipse.home}"
-endif
-
 if !exists("g:EclimLogLevel")
   let g:EclimLogLevel = 4
+endif
+
+if !exists("g:EclimTraceHighlight")
+  let g:EclimTraceHighlight = "Normal"
+endif
+if !exists("g:EclimDebugHighlight")
+  let g:EclimDebugHighlight = "Normal"
+endif
+if !exists("g:EclimInfoHighlight")
+  let g:EclimInfoHighlight = "Statement"
+endif
+if !exists("g:EclimWarningHighlight")
+  let g:EclimWarningHighlight = "WarningMsg"
+endif
+if !exists("g:EclimErrorHighlight")
+  let g:EclimErrorHighlight = "Error"
+endif
+if !exists("g:EclimFatalHighlight")
+  let g:EclimFatalHighlight = "Error"
 endif
 
 if has("signs")
@@ -46,6 +56,27 @@ if has("signs")
   endif
 else
   let g:EclimSignLevel = 0
+endif
+
+if !exists("g:EclimSeparator")
+  let g:EclimSeparator = '/'
+  if has("win32") || has("win64")
+    let g:EclimSeparator = '\'
+  endif
+endif
+let g:EclimQuote = "['\"]"
+
+if !exists("g:EclimTempDir")
+  let g:EclimTempDir = expand('$TMP')
+  if g:EclimTempDir == '$TMP'
+    let g:EclimTempDir = expand('$TEMP')
+  endif
+  if g:EclimTempDir == '$TEMP' && has('unix')
+    let g:EclimTempDir = '/tmp'
+  endif
+  " FIXME: mac?
+
+  let g:EclimTempDir = substitute(g:EclimTempDir, '\', '/', 'g')
 endif
 
 if !exists("g:EclimShowCurrentError")
@@ -72,48 +103,19 @@ if !exists("g:EclimMakeQfFilter")
   let g:EclimMakeQfFilter = 1
 endif
 
-if !exists("g:EclimSeparator")
-  let g:EclimSeparator = '/'
-  if has("win32") || has("win64")
-    let g:EclimSeparator = '\'
+if !exists("g:EclimHome")
+  " set at build/install time.
+  "${vim.eclim.home}"
+  if has('win32unix')
+    let g:EclimHome = eclim#cygwin#CygwinPath(g:EclimHome)
   endif
 endif
-let g:EclimQuote = "['\"]"
-
-if !exists("g:EclimTempDir")
-  let g:EclimTempDir = expand('$TMP')
-  if g:EclimTempDir == '$TMP'
-    let g:EclimTempDir = expand('$TEMP')
+if !exists("g:EclimEclipseHome")
+  " set at build/install time.
+  "${vim.eclipse.home}"
+  if has('win32unix')
+    let g:EclimEclipseHome = eclim#cygwin#CygwinPath(g:EclimEclipseHome)
   endif
-  if g:EclimTempDir == '$TEMP' && has('unix')
-    let g:EclimTempDir = '/tmp'
-  endif
-  " FIXME: mac?
-
-  let g:EclimTempDir = substitute(g:EclimTempDir, '\', '/', 'g')
-endif
-
-if !exists("g:EclimTraceHighlight")
-  let g:EclimTraceHighlight = "Normal"
-endif
-if !exists("g:EclimDebugHighlight")
-  let g:EclimDebugHighlight = "Normal"
-endif
-if !exists("g:EclimInfoHighlight")
-  let g:EclimInfoHighlight = "Statement"
-endif
-if !exists("g:EclimWarningHighlight")
-  let g:EclimWarningHighlight = "WarningMsg"
-endif
-if !exists("g:EclimErrorHighlight")
-  let g:EclimErrorHighlight = "Error"
-endif
-if !exists("g:EclimFatalHighlight")
-  let g:EclimFatalHighlight = "Error"
-endif
-
-if !exists("g:EclimEchoErrorHighlight")
-  let g:EclimEchoErrorHighlight = "Error"
 endif
 " }}}
 

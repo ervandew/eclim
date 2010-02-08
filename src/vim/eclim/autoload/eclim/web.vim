@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ function! eclim#web#OpenUrl(url, ...)
     let s:browser = s:DetermineBrowser()
 
     " slight hack for IE which doesn't like the url to be quoted.
-    if s:browser =~ 'iexplore'
+    if s:browser =~ 'iexplore' && !has('win32unix')
       let s:browser = substitute(s:browser, '"', '', 'g')
     endif
   endif
@@ -106,7 +106,7 @@ function! eclim#web#OpenUrl(url, ...)
   let url = escape(url, '&%')
   let url = escape(url, '%')
   let command = escape(substitute(s:browser, '<url>', url, ''), '#')
-  silent! call eclim#util#Exec(command)
+  silent call eclim#util#Exec(command)
   redraw!
 
   if v:shell_error
@@ -156,7 +156,7 @@ function! s:DetermineBrowser()
     " add "<url>" if necessary
     if browser !~ '<url>'
       let browser = substitute(browser,
-        \ '^\([[:alnum:][:blank:]-/\\_.:]\+\)\(.*\)$',
+        \ '^\([[:alnum:][:blank:]-/\\_.:"]\+\)\(.*\)$',
         \ '\1 "<url>" \2', '')
     endif
 
@@ -183,20 +183,28 @@ function! s:DetermineBrowser()
 
   " user did not specify a browser, so attempt to find a suitable one.
   else
-    if has("win32") || has("win64")
-      " this version doesn't like .html suffixes on windows 2000
-      "if executable('rundll32')
-      "  let browser = '!rundll32 url.dll,FileProtocolHandler <url>'
-      "endif
+    if has('win32') || has('win64') || has('win32unix')
+      " Note: this version may not like .html suffixes on windows 2000
+      if executable('rundll32')
+        let browser = 'rundll32 url.dll,FileProtocolHandler <url>'
+      endif
       " this doesn't handle local files very well or '&' in the url.
       "let browser = '!cmd /c start <url>'
-      for name in s:win_browsers
-        if executable(name)
-          let browser = name
-          break
-        endif
-      endfor
-    elseif has("mac")
+      if browser == ''
+        for name in s:win_browsers
+          if has('win32unix')
+            let name = eclim#cygwin#CygwinPath(name)
+          endif
+          if executable(name)
+            let browser = name
+            if has('win32unix')
+              let browser = '"' . browser . '"'
+            endif
+            break
+          endif
+        endfor
+      endif
+    elseif has('mac')
       let browser = '!open <url>'
     else
       for name in s:browsers

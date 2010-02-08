@@ -152,8 +152,11 @@ function! eclim#common#locate#LocateFile(action, file, ...)
     return
   endif
 
-  call eclim#util#GoToBufferWindowOrOpen(
-    \ escape(eclim#util#Simplify(result), ' '), action)
+  if has('win32unix')
+    let result = eclim#cygwin#CygwinPath(result)
+  endif
+
+  call eclim#util#GoToBufferWindowOrOpen(eclim#util#Simplify(result), action)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
@@ -365,11 +368,14 @@ function! s:LocateFileSelect(action)
   if exists('b:completions') && !empty(b:completions)
     let winnr = winnr()
     let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
+    if has('win32unix')
+      let file = eclim#cygwin#CygwinPath(file)
+    endif
     let bufnum = bufnr('%')
     let results_bufnum = b:results_bufnum
     let updatetime = b:updatetime
     call eclim#util#GoToBufferWindow(b:bufnum)
-    call eclim#util#GoToBufferWindowOrOpen(escape(file, '\'), a:action)
+    call eclim#util#GoToBufferWindowOrOpen(file, a:action)
     call feedkeys(
       \ "\<esc>:let &updatetime = " . updatetime . " | " .
       \ ":bd " . bufnum . " | " .
@@ -664,10 +670,14 @@ endfunction " }}}
 
 " LocateFileFromFileList(pattern, file) {{{
 function! eclim#common#locate#LocateFileFromFileList(pattern, file)
+  let file = a:file
+  if has('win32unix')
+    let file = eclim#cygwin#WindowsPath(file)
+  endif
   let command = s:command_locate
   let command = substitute(command, '<scope>', 'list', '')
   let command .= ' -p "' . a:pattern . '"'
-  let command .= ' -f "' . a:file . '"'
+  let command .= ' -f "' . file . '"'
   let port = eclim#client#nailgun#GetNgPort(b:workspace)
   let results = split(eclim#ExecuteEclim(command, port), '\n')
   if len(results) == 1 && results[0] == '0'

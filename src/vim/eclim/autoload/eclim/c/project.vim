@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -131,6 +131,10 @@ function! s:AddInclude()
 
   if dir == ''
     return
+  endif
+
+  if has('win32unix') && dir =~ '^/'
+    let dir = eclim#cygwin#WindowsPath(dir)
   endif
 
   let command = s:include_command

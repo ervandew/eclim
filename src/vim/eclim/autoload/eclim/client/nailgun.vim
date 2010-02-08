@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,9 +48,12 @@ function! eclim#client#nailgun#Execute(port, command)
 
   let command .= ' --nailgun-port ' . a:port . ' ' . a:command
 
-  " for windows, need to add a trailing quote to complete the command.
-  if command =~ '^"[a-zA-Z]:'
-    let command = command . '"'
+  " for windows/cygwin, need to add a trailing quote to complete the command.
+  if has('win32') || has('win64') || has('win32unix')
+    " for some reason, in cywin, if two double quotes are next to each other,
+    " then the preceding arg isn't quoted correctly, so add a space to prevent
+    " this.
+    let command = command . ' "'
   endif
 
   let result = eclim#util#System(command)
@@ -63,11 +66,8 @@ function! eclim#client#nailgun#GetEclimCommand()
   if !exists('g:EclimPath')
     let g:EclimPath = g:EclimEclipseHome . '/eclim'
 
-    if has("win32") || has("win64")
+    if has('win32') || has('win64') || has('win32unix')
       let g:EclimPath = g:EclimPath . (has('win95') ? '.bat' : '.cmd')
-    elseif has("win32unix")
-      let g:EclimPath = system('cygpath "' . g:EclimPath . '"')
-      let g:EclimPath = substitute(g:EclimPath, '\n.*', '', '')
     endif
 
     if !filereadable(g:EclimPath)
@@ -76,12 +76,23 @@ function! eclim#client#nailgun#GetEclimCommand()
       return
     endif
 
-    " on windows, the command must be executed on the drive where eclipse is
-    " installed.
-    if has("win32") || has("win64")
-      let g:EclimPath =
-        \ '"' . substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '') .
-        \ ' && "' . g:EclimPath . '"'
+    " jump through the windows hoops
+    if has('win32') || has('win64') || has('win32unix')
+      if has("win32unix")
+        let g:EclimPath = eclim#cygwin#WindowsPath(g:EclimPath, 1)
+      endif
+
+      " on windows, the command must be executed on the drive where eclipse is
+      " installed.
+      let drive = substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '')
+      let g:EclimPath = '" ' . drive . ' && "' . g:EclimPath . '"'
+
+      " in cygwin, we must use 'cmd /c' to prevent issues with eclim script +
+      " some arg containing spaces causing a failure to invoke the script.
+      if has('win32unix')
+        let g:EclimPath = 'cmd /c ' . g:EclimPath
+      endif
+
     else
       let g:EclimPath = '"' . g:EclimPath . '"'
     endif
@@ -95,12 +106,12 @@ function! eclim#client#nailgun#GetNgCommand()
   if !exists('g:EclimNgPath')
     let g:EclimNgPath = substitute(g:EclimHome, '\', '/', 'g') .  '/bin/ng'
 
-    if has("win32") || has("win64")
-      let g:EclimNgPath = g:EclimNgPath . '.exe'
-      let g:EclimNgPath = substitute(g:EclimNgPath, '/', '\', 'g')
-    elseif has("win32unix")
-      let g:EclimNgPath = system('cygpath "' . g:EclimNgPath . '"')
-      let g:EclimNgPath = substitute(g:EclimNgPath, '\n.*', '', '')
+    " on windows, ng.exe is at the eclipse root
+    if has('win32') || has('win64') || has('win32unix')
+      let g:EclimNgPath = g:EclimEclipseHome . '/ng.exe'
+      if !has('win32unix')
+        let g:EclimNgPath = substitute(g:EclimNgPath, '/', '\', 'g')
+      endif
     endif
 
     if !filereadable(g:EclimNgPath)

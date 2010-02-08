@@ -360,6 +360,9 @@ function! eclim#tree#ExecuteAction(file, command)
 
   let cwd = substitute(getcwd(), '\', '/', 'g')
   " not using lcd, because the executed command may change windows.
+  if has('win32unix')
+    let path = eclim#cygwin#CygwinPath(path)
+  endif
   silent exec 'cd ' . escape(path, ' &#')
   try
     let command = a:command

@@ -353,9 +353,9 @@ function! eclim#java#util#Java(classname, args)
 
   let outfile = g:EclimTempDir . '/eclim_java_output.txt'
 
-  if has("win32") || has("win64")
-    if executable("tee")
-      let command .= ' | tee "' . outfile . '" 2>&1"'
+  if has('win32') || has('win64') || has('win32unix')
+    if executable('tee')
+      let command .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
     else
       let command .= ' >"' . outfile . '" 2>&1"'
     endif

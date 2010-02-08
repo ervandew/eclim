@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -89,9 +89,13 @@ endfunction " }}}
 " VariableCreate(name, path) {{{
 " Create or update a variable.
 function! eclim#dltk#buildpath#VariableCreate(name, path)
+  let path = fnamemodify(a:path, ':p')
+  if has('win32unix')
+    let path = eclim#cygwin#WindowsPath(path)
+  endif
   let command = s:command_variable_create
   let command = substitute(command, '<name>', a:name, '')
-  let command = substitute(command, '<path>', fnamemodify(a:path, ':p'), '')
+  let command = substitute(command, '<path>', path, '')
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'

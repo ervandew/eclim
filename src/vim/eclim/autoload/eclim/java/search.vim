@@ -386,7 +386,11 @@ function! s:ViewDoc(...)
         return
       endif
     endif
-    let url = 'file://' . tempdir . filepath
+    let path = tempdir . filepath
+    if has('win32unix')
+      let path = eclim#cygwin#WindowsPath(path)
+    endif
+    let url = 'file://' . path
   endif
 
   call eclim#web#OpenUrl(url)

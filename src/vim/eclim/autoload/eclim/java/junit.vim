@@ -65,7 +65,7 @@ endfunction " }}}
 "   The results dir relative results file name: TEST-org.foo.TestMe.xml
 function! eclim#java#junit#JUnitResult(test)
   let path = s:GetResultsDir()
-  if path == '' || path == '/'
+  if path == ''
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
       \ "Use :EclimSettings or :ProjectSettings to set it.")
@@ -177,7 +177,10 @@ function s:GetResultsDir()
 
   let root = eclim#project#util#GetCurrentProjectRoot()
   let path = substitute(path, '<project>', root, '')
-  let path = path !~ '/$' ? path . '/' : path
+  let path = path != '' && path !~ '/$' ? path . '/' : path
+  if path != '' && has('win32unix')
+    let path = eclim#cygwin#CygwinPath(path)
+  endif
   return path
 endfunction " }}}
 
@@ -194,7 +197,7 @@ function! eclim#java#junit#CommandCompleteResult(argLead, cmdLine, cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
   let path = s:GetResultsDir()
-  if path == '' || path == '/'
+  if path == ''
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
       \ "Use :EclimSettings or :ProjectSettings to set it.")

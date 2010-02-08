@@ -29,12 +29,15 @@ let current_compiler = "eclim_javadoc"
 
 let port = eclim#client#nailgun#GetNgPort()
 let command = eclim#client#nailgun#GetEclimCommand()
-if !(has('win32') || has('win64'))
+if !(has('win32') || has('win64') || has('win32unix'))
   let command = substitute(command, '"', '', 'g')
 endif
-let command = escape(command, ' "')
-let command .= '\ --nailgun-port ' . port
-exec 'CompilerSet makeprg=' . command . '\ -command\ javadoc\ $*'
+let command .= ' --nailgun-port ' . port
+let command .= ' -command javadoc $*'
+if has('win32') || has('win64') || has('win32unix')
+  let command .= ' "'
+endif
+exec 'CompilerSet makeprg=' . escape(command, ' "')
 
 exec 'CompilerSet errorformat=' .
   \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .

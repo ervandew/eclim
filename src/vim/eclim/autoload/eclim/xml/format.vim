@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,6 +39,9 @@ function! eclim#xml#format#Format()
   endif
 
   let file = substitute(expand('%:p'), '\', '/', 'g')
+  if has('win32unix')
+    let file = eclim#cygwin#WindowsPath(file)
+  endif
 
   let command = s:command_format
   let command = substitute(command, '<file>', file, '')

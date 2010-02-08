@@ -87,6 +87,9 @@ function! eclim#project#util#ProjectCreate(args)
 
   let folder = fnamemodify(expand(args[0]), ':p')
   let folder = substitute(folder, '\', '/', 'g')
+  if has('win32unix')
+    let folder = eclim#cygwin#WindowsPath(folder)
+  endif
   let command = substitute(s:command_create, '<folder>', folder, '')
 
   let name = substitute(a:args, '.* -p\s\+\(.\{-}\)\(\s\+-\(d\|n\)\>.*\|$\)', '\1', '')
@@ -149,6 +152,9 @@ endfunction " }}}
 function! eclim#project#util#ProjectImport(arg)
   let folder = fnamemodify(expand(a:arg), ':p')
   let folder = substitute(folder, '\', '/', 'g')
+  if has('win32unix')
+    let folder = eclim#cygwin#WindowsPath(folder)
+  endif
   let command = substitute(s:command_import, '<folder>', folder, '')
 
   let workspace = eclim#eclipse#ChooseWorkspace(folder)
@@ -223,6 +229,9 @@ function! eclim#project#util#ProjectMove(args)
   endif
   let dir = expand(dir)
   let dir = substitute(fnamemodify(dir, ':p'), '\', '/', 'g')
+  if has('win32unix')
+    let dir = eclim#cygwin#WindowsPath(dir)
+  endif
 
   if exists('g:EclimProjectMovePrompt') && !g:EclimProjectMovePrompt
     let response = 1
@@ -716,10 +725,17 @@ function! eclim#project#util#GetProjects()
       for line in results
         let name = substitute(line, '\(.\{-}\):.*', '\1', '')
         let paths = split(substitute(line, '.\{-}:\(.*\)', '\1', ''), ',')
+        if has('win32unix')
+          let paths[0] = eclim#cygwin#CygwinPath(paths[0])
+        endif
+
         let links = {}
         for p in paths[1:]
           let linkname = substitute(p, '\(.\{-}\):.*', '\1', '')
           let linkpath = substitute(p, '.\{-}:\(.*\)', '\1', '')
+          if has('win32unix')
+            let linkpath = eclim#cygwin#CygwinPath(linkpath)
+          endif
           let links[linkname] = linkpath
         endfor
         call add(projects, {
