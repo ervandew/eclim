@@ -74,9 +74,13 @@ function! eclim#util#DelayedCommand(command, ...)
   exec 'augroup END'
 endfunction " }}}
 
-" EchoTrace(message) {{{
-function! eclim#util#EchoTrace(message)
-  call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
+" EchoTrace(message, [time_elapsed]) {{{
+function! eclim#util#EchoTrace(message, ...)
+  if a:0 > 0
+    call s:EchoLevel('(' . a:1 . 's) ' . a:message, 6, g:EclimTraceHighlight)
+  else
+    call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
+  endif
 endfunction " }}}
 
 " EchoDebug(message) {{{
@@ -1013,11 +1017,19 @@ function! eclim#util#System(cmd, ...)
 
   if len(a:000) > 0 && a:000[0]
     let result = ''
-    call eclim#util#EchoTrace('exec: ' . a:cmd)
-    exec a:cmd
+    let begin = localtime()
+    try
+      exec a:cmd
+    finally
+      call eclim#util#EchoTrace('exec: ' . a:cmd, localtime() - begin)
+    endtry
   else
-    call eclim#util#EchoTrace('system: ' . a:cmd)
-    let result = system(a:cmd)
+    let begin = localtime()
+    try
+      let result = system(a:cmd)
+    finally
+      call eclim#util#EchoTrace('system: ' . a:cmd, localtime() - begin)
+    endtry
   endif
 
   let &shell = saveshell

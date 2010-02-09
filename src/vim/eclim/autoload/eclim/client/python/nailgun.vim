@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2008  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,14 +34,18 @@ function! eclim#client#python#nailgun#Execute(port, command)
   let result_viml = ""
   let retcode = 0
 
-  call eclim#util#EchoTrace('nailgun.py (port: ' . a:port . '): ' . a:command)
-
+  let begin = localtime()
+  try
 python << PYTHONEOF
 command = vim.eval('a:command')
 (retcode, result) = client.send(command)
 vim.command('let retcode = %i' % retcode)
 vim.command("let result = '%s'" % result.replace("'", "''"))
 PYTHONEOF
+  finally
+    call eclim#util#EchoTrace(
+      \ 'nailgun.py (port: ' . a:port . '): ' . a:command, localtime() - begin)
+  endtry
 
   return [retcode, result]
 endfunction " }}}
