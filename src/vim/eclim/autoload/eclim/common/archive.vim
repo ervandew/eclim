@@ -419,6 +419,7 @@ function s:DefaultList()
   endif
   silent doautocmd tar BufReadCmd
   silent doautocmd zip BufReadCmd
+  call cursor(1, 1)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
