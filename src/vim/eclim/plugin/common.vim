@@ -43,9 +43,11 @@ endif
 if g:EclimArchiveViewerEnabled
   " disable tar.vim autocmds... tar.vim is now included w/ vim7
   let g:loaded_tarPlugin = 1
+  silent! autocmd! tar
 
   " disable zipPlugin.vim autocmds... zipPlugin.vim is now included w/ vim7
   let g:loaded_zipPlugin = 1
+  silent! autocmd! zip
 endif
 " }}}
 
