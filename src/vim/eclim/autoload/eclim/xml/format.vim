@@ -23,7 +23,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_format = '-command xml_format -f "<file>" -w <width> -i <indent>'
+  let s:command_format =
+    \ '-command xml_format -f "<file>" -w <width> -i <indent> -m <ff>'
 " }}}
 
 " Format() {{{
@@ -43,11 +44,12 @@ function! eclim#xml#format#Format()
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<width>', &textwidth, '')
   let command = substitute(command, '<indent>', &shiftwidth, '')
+  let command = substitute(command, '<ff>', &ff, '')
 
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     silent! 1,$delete _
-    call append(1, split(result, '\n'))
+    put =result
     silent! 1,1delete _
   endif
 endfunction " }}}

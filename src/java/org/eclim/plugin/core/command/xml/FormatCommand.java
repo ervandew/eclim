@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,8 @@ import org.xml.sax.InputSource;
   options =
     "REQUIRED f file ARG," +
     "REQUIRED w linewidth ARG," +
-    "REQUIRED i indent ARG"
+    "REQUIRED i indent ARG," +
+    "REQUIRED m fileformat ARG"
 )
 public class FormatCommand
   extends AbstractCommand
@@ -61,11 +62,23 @@ public class FormatCommand
   public String execute(CommandLine commandLine)
     throws Exception
   {
+    String restoreNewline = null;
     FileInputStream in = null;
     try{
       String file = commandLine.getValue(Options.FILE_OPTION);
       //int lineWidth = commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
       int indent = commandLine.getIntValue(Options.INDENT_OPTION);
+      String format = commandLine.getValue("m");
+
+      // set the line separator if necessary
+      String newline = System.getProperty("line.separator");
+      if (newline.equals("\r\n") && format.equals("unix")){
+        restoreNewline = newline;
+        System.setProperty("line.separator", "\n");
+      }else if (newline.equals("\n") && format.equals("dos")){
+        restoreNewline = newline;
+        System.setProperty("line.separator", "\r\n");
+      }
 
       // javax.xml.transform (indentation issues)
       TransformerFactory factory = TransformerFactory.newInstance();
@@ -85,6 +98,9 @@ public class FormatCommand
       return StringUtils.EMPTY;
     }finally{
       IOUtils.closeQuietly(in);
+      if (restoreNewline != null){
+        System.setProperty("line.separator", restoreNewline);
+      }
     }
   }
 }
