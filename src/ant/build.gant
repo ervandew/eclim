@@ -16,6 +16,13 @@
  */
 import org.apache.tools.ant.taskdefs.condition.Os
 
+// validate the ant version
+ant.antversion(property: 'ant.version.valid', atleast: '1.7.1')
+antVersionValid = ant.project.getProperty('ant.version.valid')
+if (antVersionValid == null){
+  ant.fail(message: 'To build eclim, you must use ant 1.7.1 or greater.')
+}
+
 ant.property(environment: 'env')
 ant.property(file: 'src/ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
