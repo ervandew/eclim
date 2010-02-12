@@ -49,10 +49,6 @@ public class VimPreferences
           plugin.getMessage("preference.embed"),
           getFieldEditorParent()));
     addField(new BooleanFieldEditor(
-          PreferenceConstants.P_DOCUMENT_LISTEN,
-          plugin.getMessage("preference.embed.documentListen"),
-          getFieldEditorParent()));
-    addField(new BooleanFieldEditor(
           PreferenceConstants.P_TABBED,
           plugin.getMessage("preference.tabbed"),
           getFieldEditorParent()));

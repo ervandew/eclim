@@ -22,6 +22,9 @@ History of Changes
 ----------------------
 
 Bug Fixes:
+  - Avoid possible gvim crashes when launched from the eclipse gui by disabling
+    documentListen events if the current gvim version doesn't include the patch
+    which resolves the crash.
   - Various bug fixes.
 
 Common:
@@ -34,8 +37,6 @@ Install:
   - Added support for :ref:`automated installs <install-automated>`.
 
 Eclim:
-  - Added workaround for gvim bug that could result in a crash of gvim when
-    editing a file opened from the eclipse gui.
   - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
   - Added support for specifying that gvim should be refocused after executing
     an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys

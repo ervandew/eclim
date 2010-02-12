@@ -177,7 +177,7 @@ public class VimEditor
     IPreferenceStore prefs = plugin.getPreferenceStore();
     tabbed = prefs.getBoolean(PreferenceConstants.P_TABBED);
     embedded = prefs.getBoolean(PreferenceConstants.P_EMBED);
-    documentListen = prefs.getBoolean(PreferenceConstants.P_DOCUMENT_LISTEN);
+    documentListen = plugin.gvimNbDocumentListenSupported();
     if (embedded){
       if (!plugin.gvimEmbedSupported()){
         String message = plugin.getMessage(

@@ -59,10 +59,15 @@ public class VimPlugin
     "redir! > <file> | silent! <command> | quit";
   private static final String FEATURES_COMMAND_UNIX =
     "echo 'embed:' . (v:version >= 700) . " +
-        "' netbeans:' . (has('netbeans_intg'))";
+        "' netbeans:' . (has('netbeans_intg')) . " +
+        "' netbeansDocumentListen:' . " +
+            "(v:version > 702 || (v:version == 702 && has('patch359')))";
   private static final String FEATURES_COMMAND_WINDOWS =
-    "echo 'embed:' . (v:version > 701 || (v:version == 701 && has('patch091'))) . " +
-        "' netbeans:' . (has('netbeans_intg'))";
+    "echo 'embed:' . " +
+            "(v:version > 701 || (v:version == 701 && has('patch091'))) . " +
+        "' netbeans:' . (has('netbeans_intg')) . " +
+        "' netbeansDocumentListen:' . " +
+            "(v:version > 702 || (v:version == 702 && has('patch359')))";
 
   /**
    * The shared instance.
@@ -322,7 +327,7 @@ public class VimPlugin
    * @return true if document listening is reliably supported.
    */
   public boolean gvimNbDocumentListenSupported() {
-    return hasFeature("documentListen");
+    return hasFeature("netbeansDocumentListen");
   }
 
   public void resetGvimState() {
