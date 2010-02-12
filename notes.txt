@@ -633,15 +633,15 @@ NOTES {{{
                -command listFeatures
 
     Minimum execution of vim w/ eclim support:
-      $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+      $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"
 
       Windows
       > "C:\Program Files\Vim\vim72\gvim"
-            -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+            -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"
 
     Minimum execution of gvim inside of eclipse:
       Window -> Preferences -> Vimplugin -> Additional gvim args:
-        -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin on | ru plugin/eclim.vim"
+        -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"
 
     Helpful link for debugging plugin errors.
       http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
