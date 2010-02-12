@@ -701,6 +701,15 @@ NOTES {{{
     Git repos for vim:
     http://repo.or.cz/w/vim_mainline.git
 
+    Official hg repos for vim:
+    https://vim.googlecode.com/hg/
+
+    Building vim:
+    $ hg clone https://vim.googlecode.com/hg/ vim
+    $ cd vim/src
+    $ ./configure --with-features=huge --prefix=$HOME
+    $ make install
+
   }}}
 
 }}}
