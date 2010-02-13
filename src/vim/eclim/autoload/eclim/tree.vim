@@ -54,8 +54,6 @@
   let s:nodevalue_regex = '\(\s*\)' . s:node_regex . '\(.*\)'
   let s:root_regex = '^[/[:alpha:]]'
 
-  " FIXME: move to buffer scope?
-  let s:file_actions = []
   let s:settings_loaded = 0
 
   let s:tree_count = 0
@@ -141,7 +139,7 @@ function eclim#tree#Tree(name, roots, aliases, expand, filters)
   call s:Mappings()
   call eclim#tree#Syntax()
 
-  if exists("g:TreeSettingsFunction") && !s:settings_loaded
+  if exists("g:TreeSettingsFunction")
     let Settings = function(g:TreeSettingsFunction)
     call Settings()
     let s:settings_loaded = 1
@@ -368,24 +366,26 @@ function eclim#tree#ExecuteAction(file, command)
   endif
 endfunction " }}}
 
-" RegisterFileAction(regex, name, action, [buffer]) {{{
+" RegisterFileAction(regex, name, action) {{{
 " regex - Pattern to match the file name against.
 " name - Name of the action used for display purposes.
 " action - The action to execute where <file> is replaced with the filename.
-function eclim#tree#RegisterFileAction(regex, name, action, ...)
-  let bufnr = a:0 > 0 ? a:1 : -1
+function eclim#tree#RegisterFileAction(regex, name, action)
+  if !exists('b:file_actions')
+    let b:file_actions = []
+  endif
 
   let entry = {}
-  for e in s:file_actions
-    if e.regex == a:regex && e.buffer == bufnr
+  for e in b:file_actions
+    if e.regex == a:regex
       let entry = e
       break
     endif
   endfor
 
   if len(entry) == 0
-    let entry = {'regex': a:regex, 'buffer': bufnr, 'actions': []}
-    call add(s:file_actions, entry)
+    let entry = {'regex': a:regex, 'actions': []}
+    call add(b:file_actions, entry)
   endif
 
   call add(entry.actions, {'name': a:name, 'action': a:action})
@@ -397,8 +397,8 @@ function eclim#tree#GetFileActions(file)
   let actions = []
   let thefile = tolower(a:file)
   let bufnr = bufnr('%')
-  for entry in s:file_actions
-    if thefile =~ entry.regex && (entry.buffer == -1 || entry.buffer == bufnr)
+  for entry in b:file_actions
+    if thefile =~ entry.regex
       let actions += entry.actions
     endif
   endfor
@@ -1019,6 +1019,7 @@ function eclim#tree#DisplayActionChooser(file, actions, executeFunc)
 
   exec 'nmap <buffer> <silent> <cr> ' .
     \ ':call eclim#tree#ActionExecute("' . a:executeFunc . '")<cr>'
+  nmap <buffer> q :q<cr>
 
   exec "hi link TreeAction " . g:TreeActionHighlight
   syntax match TreeAction /.*/

@@ -59,8 +59,7 @@ function! eclim#common#archive#List()
   endif
   if !exists('b:archive_loaded')
     for action in g:EclimArchiveActions
-      call eclim#tree#RegisterFileAction(
-        \ action.pattern, action.name, action.action, bufnr('%'))
+      call eclim#tree#RegisterFileAction(action.pattern, action.name, action.action)
     endfor
 
     let b:archive_loaded = 1
