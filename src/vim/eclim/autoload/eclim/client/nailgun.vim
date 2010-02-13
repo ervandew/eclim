@@ -158,6 +158,10 @@ function! eclim#client#nailgun#GetNgPort(...)
     endif
 
     let path = expand('%:p')
+    " when we are in a temp window, use the initiating filename
+    if exists('b:eclim_temp_window') && exists('b:filename')
+      let path = b:filename
+    endif
 
     " project inside of a workspace dir
     for workspace in keys(workspaces)
