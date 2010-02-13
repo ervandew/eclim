@@ -32,7 +32,6 @@
 " }}}
 
 " Script Variables {{{
-  let s:project_tree_loaded = 0
   let s:project_tree_ids = 0
 " }}}
 
@@ -205,8 +204,8 @@ function! s:OpenFileName()
   endif
 
   let response = input('file: ', path, 'file')
-  call eclim#tree#ExecuteAction(response,
-    \ "call eclim#project#tree#OpenProjectFile('split', '<cwd>', '<file>')")
+  let actions = eclim#tree#GetFileActions(response)
+  call eclim#tree#ExecuteAction(response, actions[0].action)
 endfunction " }}}
 
 " s:OpenTree(names, dirs) " {{{
@@ -239,27 +238,20 @@ function! s:OpenTree(names, dirs)
     endif
   endif
 
-  if !s:project_tree_loaded
-    " remove any settings related to usage of tree as an external filesystem
-    " explorer.
-    if exists('g:TreeSettingsFunction')
-      unlet g:TreeSettingsFunction
-    endif
-  endif
-
   let expand = len(a:dirs) == 1
-  call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
 
-  if !exists('b:project_tree_loaded')
-    for action in g:EclimProjectTreeActions
-      call eclim#tree#RegisterFileAction(action.pattern, action.name,
-        \ "call eclim#project#tree#OpenProjectFile('" .
-        \   action.action . "', '<cwd>', '<file>')",
-        \ bufnr('%'))
-    endfor
-
-    let b:project_tree_loaded = 1
+  if exists("g:TreeSettingsFunction")
+    let s:TreeSettingsFunction = g:TreeSettingsFunction
   endif
+  let g:TreeSettingsFunction = 'eclim#project#tree#ProjectTreeSettings'
+
+  try
+    call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
+  finally
+    if exists('s:TreeSettingsFunction')
+      let g:TreeSettingsFunction = s:TreeSettingsFunction
+    endif
+  endtry
 
   setlocal bufhidden=hide
 
@@ -278,6 +270,20 @@ function! s:OpenTree(names, dirs)
   setlocal modifiable
   call append(line('$'), ['', '" use ? to view help'])
   setlocal nomodifiable
+endfunction " }}}
+
+" ProjectTreeSettings() {{{
+function! eclim#project#tree#ProjectTreeSettings()
+  for action in g:EclimProjectTreeActions
+    call eclim#tree#RegisterFileAction(action.pattern, action.name,
+      \ "call eclim#project#tree#OpenProjectFile('" .
+      \   action.action . "', '<cwd>', '<file>')")
+  endfor
+
+  if exists('s:TreeSettingsFunction')
+    let Settings = function(s:TreeSettingsFunction)
+    call Settings()
+  endif
 endfunction " }}}
 
 " OpenProjectFile(cmd, cwd, file) {{{
