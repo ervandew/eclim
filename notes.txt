@@ -139,6 +139,16 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - Vcs
+      - add rename following
+        :VcsLog
+          - hg log --follow <file>
+          - git log --follow <file>
+          - how do we get the proper filename for each revision
+            - git log --follow --name-only <file>
+            - hg log --template "changeset: {rev}:{node|short}\nuser: {author}\ndate: {date|rfc822date}\nsummary: {desc|firstline|strip}\nfiles: {file_dels}\n" --follow <file>
+              - hg command doesn't really work since there doesn't appear to be
+                a way to get just the name of the file we are viewing the
+                history for
       - add
         :VcsStatus
           - temp window w/ list of files
