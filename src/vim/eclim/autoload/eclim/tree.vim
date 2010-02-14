@@ -60,6 +60,8 @@
   let s:refresh_nesting = 0
 
   let s:has_ls = executable('ls')
+
+  let s:vcol = 0
 " }}}
 
 " TreeHome() {{{
@@ -434,31 +436,40 @@ function! eclim#tree#Cursor(line)
   let lnum = a:line
   let line = getline(lnum)
 
-  call cursor(lnum, 1)
   if line !~ s:root_regex
-    call search('[.[:alnum:]_]', 'W', lnum)
-    if line =~ s:node_prefix . s:dir_closed_prefix
-      let offset = len(s:dir_closed_prefix)
-    elseif line =~ s:node_prefix . s:dir_closed_prefix
-      let offset = len(s:dir_opened_prefix)
-    else
-      let offset = len(s:file_prefix)
-    endif
+    " get the starting column of the current line and the previous line
+    let start = len(line) - len(substitute(line, '^\s\+\W', '', ''))
 
-    " attempt to keep the content in view when not wrapping
-    "if !&wrap
-    "  normal! zs
-    "  exec 'normal! ' . (winwidth(winnr()) / 2). 'zh'
-    "endif
+    " only use the real previous line if we've only moved one line
+    let pline = abs(line('.') - lnum) == 1 ? getline('.') : ''
+    let pstart = pline != '' ?
+      \ len(pline) - len(substitute(pline, '^\s\+\W', '', '')) : -1
+
+    " only change the cursor column if the hasn't user has moved it to the
+    " right to view more of the entry
+    let cnum = start == pstart ? -1 : start
+    call cursor(lnum, cnum)
+
+    " attempt to maximize the amount of text on the current line that is in
+    " view, but only if we've changed column position
     let winwidth = winwidth(winnr())
-    let wincol = wincol()
+    let vcol = exists('s:vcol') ? s:vcol : 0
     let col = col('.')
-    if (winwidth > 10 && wincol > (winwidth - 10)) || (col > 10 && wincol < 10)
-      normal! zs
-      exec 'normal! ' . (winwidth / 2). 'zh'
+    if cnum != -1 && (!vcol || ((len(line) - vcol) > winwidth))
+      if len(line) > winwidth
+        normal! zs
+        " scroll back enough to keep the start of the parent in view
+        normal! 6zh
+        let s:vcol = col - 6
+      endif
     endif
 
-    call cursor(lnum, col('.') - offset)
+    " when the text view is shifted by vim it appears to always shift back one
+    " half of the window width, so recalculate our visible column accordingly
+    " if we detect such a shift... may not always be accurate.
+    if s:vcol > col
+      let s:vcol = max([start - (winwidth / 2), 0])
+    endif
   endif
 endfunction " }}}
 
