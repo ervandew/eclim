@@ -112,7 +112,7 @@ TODO {{{
       - requires paid account to point eclim.org at it.
       - doesn't yet have .htaccess support
       - downloads?
-        - doesn't yet have tracking of number of downloads
+        - github stability + storage quotas
 
     - meta tags in docs
       - http://docutils.sourceforge.net/docs/ref/rst/directives.html#meta
