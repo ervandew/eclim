@@ -86,8 +86,88 @@ function! eclim#project#tree#ProjectTree(...)
   " for session reload
   let g:Eclim_project_tree_names = join(names, '|')
 
-  call s:CloseTreeWindow()
-  call s:OpenTree(names, dirs)
+  call eclim#project#tree#ProjectTreeClose()
+  call eclim#project#tree#ProjectTreeOpen(names, dirs)
+endfunction " }}}
+
+" ProjectTreeOpen(names, dirs, [title]) " {{{
+function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
+  let expandDir = ''
+  if g:EclimProjectTreeExpandPathOnOpen
+    let expandDir = substitute(expand('%:p:h'), '\', '/', 'g')
+  endif
+
+  " support supplied tree name
+  if a:0 > 0
+    let t:project_tree_name = a:1
+  endif
+
+  call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
+
+  let shared = s:GetSharedTreeBuffer(a:names)
+  if shared != -1 && bufloaded(shared)
+    exec 'buffer ' . shared
+    if line('$') > 1 || getline(1) !~ '^\s*$'
+      setlocal nowrap nonumber
+      setlocal foldmethod=manual foldtext=getline(v:foldstart)
+      if !exists('t:project_tree_name')
+        exec 'let t:project_tree_id = ' .
+          \ substitute(bufname(shared), g:EclimProjectTreeTitle . '\(\d\+\)', '\1', '')
+      endif
+      return
+    endif
+  endif
+
+  " command used to navigate to a content window before executing a command.
+  if !exists('g:EclimProjectTreeContentWincmd')
+    if g:VerticalToolWindowSide == 'right'
+      let g:EclimProjectTreeContentWincmd = 'winc h'
+    else
+      let g:EclimProjectTreeContentWincmd = 'winc l'
+    endif
+  endif
+
+  let expand = len(a:dirs) == 1
+
+  if exists("g:TreeSettingsFunction")
+    let s:TreeSettingsFunction = g:TreeSettingsFunction
+  endif
+  let g:TreeSettingsFunction = 'eclim#project#tree#ProjectTreeSettings'
+
+  try
+    call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
+  finally
+    if exists('s:TreeSettingsFunction')
+      let g:TreeSettingsFunction = s:TreeSettingsFunction
+    endif
+  endtry
+
+  setlocal bufhidden=hide
+
+  if expand && expandDir != ''
+    call eclim#util#DelayedCommand(
+      \ 'call eclim#tree#ExpandPath("' . s:GetTreeTitle() . '", "' . expandDir . '")')
+  endif
+
+  normal! zs
+
+  let instance_names = join(a:names, '_')
+  let instance_names = substitute(instance_names, '\W', '_', 'g')
+  let g:eclim_project_tree_instance{instance_names} = bufnr('%')
+
+  call s:Mappings()
+  setlocal modifiable
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable
+endfunction " }}}
+
+" ProjectTreeClose() " {{{
+function! eclim#project#tree#ProjectTreeClose()
+  let winnr = bufwinnr(s:GetTreeTitle())
+  if winnr != -1
+    exec winnr . 'winc w'
+    close
+  endif
 endfunction " }}}
 
 " Restore() " {{{
@@ -120,17 +200,13 @@ function! eclim#project#tree#Restore()
   endif
 endfunction " }}}
 
-" s:CloseTreeWindow() " {{{
-function! s:CloseTreeWindow()
-  let winnr = bufwinnr(s:GetTreeTitle())
-  if winnr != -1
-    exec winnr . 'winc w'
-    close
-  endif
-endfunction " }}}
-
 " s:GetTreeTitle() {{{
 function! s:GetTreeTitle()
+  " support a custom name from an external plugin
+  if exists('t:project_tree_name')
+    return t:project_tree_name
+  endif
+
   if !exists('t:project_tree_id')
     let t:project_tree_id = s:project_tree_ids + 1
     let s:project_tree_ids += 1
@@ -206,70 +282,6 @@ function! s:OpenFileName()
   let response = input('file: ', path, 'file')
   let actions = eclim#tree#GetFileActions(response)
   call eclim#tree#ExecuteAction(response, actions[0].action)
-endfunction " }}}
-
-" s:OpenTree(names, dirs) " {{{
-function! s:OpenTree(names, dirs)
-  let expandDir = ''
-  if g:EclimProjectTreeExpandPathOnOpen
-    let expandDir = substitute(expand('%:p:h'), '\', '/', 'g')
-  endif
-
-  call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
-
-  let shared = s:GetSharedTreeBuffer(a:names)
-  if shared != -1 && bufloaded(shared)
-    exec 'buffer ' . shared
-    if line('$') > 1 || getline(1) !~ '^\s*$'
-      setlocal nowrap nonumber
-      setlocal foldmethod=manual foldtext=getline(v:foldstart)
-      exec 'let t:project_tree_id = ' .
-        \ substitute(bufname(shared), g:EclimProjectTreeTitle . '\(\d\+\)', '\1', '')
-      return
-    endif
-  endif
-
-  " command used to navigate to a content window before executing a command.
-  if !exists('g:EclimProjectTreeContentWincmd')
-    if g:VerticalToolWindowSide == 'right'
-      let g:EclimProjectTreeContentWincmd = 'winc h'
-    else
-      let g:EclimProjectTreeContentWincmd = 'winc l'
-    endif
-  endif
-
-  let expand = len(a:dirs) == 1
-
-  if exists("g:TreeSettingsFunction")
-    let s:TreeSettingsFunction = g:TreeSettingsFunction
-  endif
-  let g:TreeSettingsFunction = 'eclim#project#tree#ProjectTreeSettings'
-
-  try
-    call eclim#tree#Tree(s:GetTreeTitle(), a:dirs, a:names, expand, [])
-  finally
-    if exists('s:TreeSettingsFunction')
-      let g:TreeSettingsFunction = s:TreeSettingsFunction
-    endif
-  endtry
-
-  setlocal bufhidden=hide
-
-  if expand && expandDir != ''
-    call eclim#util#DelayedCommand(
-      \ 'call eclim#tree#ExpandPath("' . s:GetTreeTitle() . '", "' . expandDir . '")')
-  endif
-
-  normal! zs
-
-  let instance_names = join(a:names, '_')
-  let instance_names = substitute(instance_names, '\W', '_', 'g')
-  let g:eclim_project_tree_instance{instance_names} = bufnr('%')
-
-  call s:Mappings()
-  setlocal modifiable
-  call append(line('$'), ['', '" use ? to view help'])
-  setlocal nomodifiable
 endfunction " }}}
 
 " ProjectTreeSettings() {{{
