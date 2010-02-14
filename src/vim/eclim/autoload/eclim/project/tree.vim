@@ -98,7 +98,7 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
   endif
 
   " support supplied tree name
-  if a:0 > 0
+  if a:0 > 0 && a:1 != ''
     let t:project_tree_name = a:1
   endif
 
