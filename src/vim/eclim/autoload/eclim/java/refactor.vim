@@ -240,9 +240,6 @@ function s:Refactor(command)
   let cwd_return = 1
 
   try
-    " cd to the project root to avoid folder renaming issues on windows.
-    exec 'cd ' . eclim#project#util#GetCurrentProjectRoot()
-
     " turn off swap files temporarily to avoid issues with folder/file
     " renaming.
     let bufend = bufnr('$')
@@ -254,6 +251,9 @@ function s:Refactor(command)
       endif
       let bufnum = bufnum + 1
     endwhile
+
+    " cd to the project root to avoid folder renaming issues on windows.
+    exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
 
     let result = eclim#ExecuteEclim(a:command)
     if result == "0"
@@ -288,6 +288,7 @@ function s:Refactor(command)
           if file =~ '^' . cwd . '\(/\|$\)'
             while cwd !~ '^' . file . '\(/\|$\)'
               let file = fnamemodify(file, ':h')
+              let newfile = fnamemodify(newfile, ':h')
             endwhile
           endif
 
