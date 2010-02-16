@@ -114,7 +114,7 @@ Step 2: Run the installer.
 
     .. code-block:: bash
 
-      C:\...> set FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080"
+      C:\...> set FORMIC_OPTS=-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
       C:\...> eclim_version.exe
 
     If your proxy requires authentication, you'll need to supply the
@@ -124,7 +124,7 @@ Step 2: Run the installer.
 
     .. code-block:: bash
 
-      C:\...> set FORMIC_OPTS="-Djava.net.useSystemProxies=true"
+      C:\...> set FORMIC_OPTS=-Djava.net.useSystemProxies=true
       C:\...> eclim_version.exe
 
 After the installer starts up, simply follow the steps in the wizard
