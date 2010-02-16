@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ endif
 " Command Declarations {{{
 
 if !exists(":Validate")
-  command -nargs=? -complete=file -bang -buffer Validate
-    \ :call eclim#xml#validate#Validate('<args>', 0, '<bang>')
+  command -nargs=0 -complete=file -bang -buffer Validate
+    \ :call eclim#xml#validate#Validate(0, '<bang>')
 
   command -nargs=? -buffer DtdDefinition
     \ :call eclim#xml#definition#DtdDefinition('<args>')

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,48 +32,24 @@ endif
 let s:command_validate = '-command xml_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate(file, on_save, ...) {{{
-" Validate the supplied file.
-function! eclim#xml#validate#Validate(file, on_save, ...)
+" Validate(on_save, ...) {{{
+" Validate the current file.
+function! eclim#xml#validate#Validate(on_save, ...)
   if a:on_save && (!g:EclimXmlValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 
-  let project = eclim#project#util#GetCurrentProjectName()
-  if project == ""
-    return
-  endif
-
-  let file = a:file
-  if file == ""
-    let file = expand('%:p')
-    update
-  else
-    let file = fnamemodify(file, ':p')
-  endif
-  let file = substitute(file, '\', '/', 'g')
-
-  if !filereadable(file)
-    call eclim#util#EchoError("File not readable or does not exist.")
-    return
-  endif
-
   if eclim#PingEclim(0)
-    let filename = eclim#project#util#GetProjectRelativeFilePath(file)
+    let project = eclim#project#util#GetCurrentProjectName()
+    if project == ""
+      return
+    endif
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_validate
     let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', filename, '')
-
-    if substitute(expand('%:p'), '\', '/', 'g') != file
-      let restore = winrestcmd()
-      exec 'sview ' . file
-    endif
+    let command = substitute(command, '<file>', file, '')
     if search('xsi:schemaLocation', 'cnw')
       let command .= ' -s'
-    endif
-    if exists('restore')
-      close
-      exec restore
     endif
 
     let result = eclim#ExecuteEclim(command)
@@ -93,6 +69,7 @@ function! eclim#xml#validate#Validate(file, on_save, ...)
   else
     " alternative method via xmllint
     if !a:on_save && executable('xmllint')
+      let file = substitute(expand('%:p'), '\', '/', 'g')
       call eclim#util#MakeWithCompiler('eclim_xmllint', '', file)
       call eclim#display#signs#Update()
     else
