@@ -169,7 +169,7 @@ if g:EclimMakeLCD
       \ if g:EclimMakeLCD | call <SID>QuickFixLocalChangeDirectory() | endif
     autocmd QuickFixCmdPost make
       \ if g:EclimMakeLCD && exists('w:quickfix_dir') |
-      \   exec "lcd " . w:quickfix_dir |
+      \   exec 'lcd ' . escape(w:quickfix_dir, ' ') |
       \ endif
   augroup END
 endif
@@ -214,7 +214,7 @@ function! s:QuickFixLocalChangeDirectory()
     if dir == ''
       let dir = substitute(expand('%:p:h'), '\', '/', 'g')
     endif
-    exec 'lcd ' . dir
+    exec 'lcd ' . escape(dir, ' ')
   endif
 endfunction " }}}
 

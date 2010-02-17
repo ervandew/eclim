@@ -129,7 +129,7 @@ function eclim#common#util#OpenRelative(command, arg, ...)
   let dir = expand('%:p:h')
   let files = eclim#common#util#GetFiles(dir, a:arg)
   for file in files
-    let file = escape(eclim#util#Simplify(file), ' ')
+    let file = eclim#util#Simplify(file)
     if len(a:000) && a:000[0]
       call eclim#util#GoToBufferWindowOrOpen(file, a:command)
     else
