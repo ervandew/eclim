@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,21 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import java.util.ArrayList;
 
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
 
+import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
 import org.apache.tools.ant.taskdefs.Java;
+import org.apache.tools.ant.taskdefs.PumpStreamHandler;
+import org.apache.tools.ant.taskdefs.Redirector;
 
 import org.apache.tools.ant.types.Commandline.Argument;
 import org.apache.tools.ant.types.Path;
@@ -95,6 +103,7 @@ public class JavaCommand
     buildLogger.setErrorPrintStream(System.err);
     antProject.addBuildListener(buildLogger);
     antProject.setBasedir(ProjectUtils.getPath(project));
+    antProject.setDefaultInputStream(System.in);
 
     if (mainClass == null){
       mainClass =
@@ -117,10 +126,11 @@ public class JavaCommand
       mainClass = mainClass.substring(0, mainClass.lastIndexOf('.'));
     }
 
-    Java java = new Java();
+    Java java = new MyJava();
     java.setTaskName("java");
     java.setProject(antProject);
     java.setClassname(mainClass);
+    java.setFork(true);
 
     // construct classpath
     Path classpath = new Path(antProject);
@@ -206,5 +216,84 @@ public class JavaCommand
       }
     }
     return null;
+  }
+
+  /* All of this is to ensure that System.out calls by the running class are
+   * flushed immediatly to the console for things like user input prompts. */
+
+  private class MyJava
+    extends Java
+  {
+    public MyJava()
+    {
+      super();
+      this.redirector = new MyRedirector(this);
+    }
+  }
+
+  private class MyRedirector
+    extends Redirector
+  {
+    public MyRedirector(Task task)
+    {
+      super(task);
+    }
+
+    @Override
+    public synchronized ExecuteStreamHandler createHandler()
+      throws BuildException
+    {
+      return new MyPumpStreamHandler();
+    }
+
+    @Override
+    public synchronized void complete() throws IOException {
+      System.out.flush();
+      System.err.flush();
+    }
+  }
+
+  private class MyPumpStreamHandler
+    extends PumpStreamHandler
+  {
+    public MyPumpStreamHandler()
+    {
+      super(new FlushingOutputStream(System.out), System.err, System.in);
+    }
+  }
+
+  private class FlushingOutputStream
+    extends OutputStream
+  {
+    private OutputStream out;
+
+    public FlushingOutputStream(OutputStream out)
+    {
+      this.out = out;
+    }
+
+    @Override
+    public void write(int b)
+      throws IOException
+    {
+      out.write(b);
+      out.flush();
+    }
+
+    @Override
+    public void write(byte[] b)
+      throws IOException
+    {
+      out.write(b);
+      out.flush();
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len)
+      throws IOException
+    {
+      out.write(b, off, len);
+      out.flush();
+    }
   }
 }
