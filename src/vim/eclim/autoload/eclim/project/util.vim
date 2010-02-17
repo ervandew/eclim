@@ -966,6 +966,7 @@ function! eclim#project#util#CommandCompleteProjectByNature(
 
   let projects = eclim#project#util#GetProjectNames(a:nature)
   if cmdLine !~ '[^\\]\s$'
+    let argLead = escape(escape(argLead, '~'), '~')
     call filter(projects, 'v:val =~ "^' . argLead . '"')
   endif
 
