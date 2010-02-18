@@ -107,7 +107,7 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight)
   endif
   augroup eclim_vertical_tool_windows_buffer
     exec 'autocmd BufWinLeave <buffer> ' .
-      \ 'silent! call remove(g:VerticalToolBuffers, ' . bufnum . ') | '
+      \ 'silent! call remove(g:VerticalToolBuffers, ' . bufnum . ') | ' .
       \ 'autocmd! eclim_vertical_tool_windows_buffer * <buffer=' . bufnum . '>'
   augroup END
 endfunction " }}}
