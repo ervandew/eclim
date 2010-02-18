@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ function! s:Make(bang, args)
   try
     call eclim#util#MakeWithCompiler('eclim_make', a:bang, a:args)
   finally
-    exec 'lcd ' . cwd
+    exec 'lcd ' . escape(cwd, ' ')
     let g:EclimMakeLCD = save_mlcd
   endtry
 endfunction " }}}
