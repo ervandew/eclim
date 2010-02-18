@@ -33,6 +33,8 @@
 
 " Script Variables {{{
   let s:project_tree_ids = 0
+  let s:shared_instances_by_buffer = {}
+  let s:shared_instances_by_names = {}
 " }}}
 
 " ProjectTree(...) {{{
@@ -102,11 +104,11 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
     let t:project_tree_name = a:1
   endif
 
-  call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
-
+  " see if we should just use a shared tree
   let shared = s:GetSharedTreeBuffer(a:names)
   if shared != -1 && bufloaded(shared)
-    exec 'buffer ' . shared
+    call eclim#display#window#VerticalToolWindowOpen(bufname(shared), 9)
+    "exec 'buffer ' . shared
     if line('$') > 1 || getline(1) !~ '^\s*$'
       setlocal nowrap nonumber
       setlocal foldmethod=manual foldtext=getline(v:foldstart)
@@ -117,6 +119,13 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
       return
     endif
   endif
+
+  " clear the project tree id if we are replacing a shared tree instance
+  if g:EclimProjectTreeSharedInstance && exists('t:project_tree_id')
+    unlet t:project_tree_id
+  endif
+
+  call eclim#display#window#VerticalToolWindowOpen(s:GetTreeTitle(), 9)
 
   " command used to navigate to a content window before executing a command.
   if !exists('g:EclimProjectTreeContentWincmd')
@@ -153,7 +162,12 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
 
   let instance_names = join(a:names, '_')
   let instance_names = substitute(instance_names, '\W', '_', 'g')
-  let g:eclim_project_tree_instance{instance_names} = bufnr('%')
+
+  " remove the old associated tree value if one exists
+  silent! unlet s:shared_instances_by_names[s:shared_instances_by_buffer[bufnr('%')]]
+
+  let s:shared_instances_by_buffer[bufnr('%')] = instance_names
+  let s:shared_instances_by_names[instance_names] = bufnr('%')
 
   call s:Mappings()
   setlocal modifiable
@@ -163,10 +177,12 @@ endfunction " }}}
 
 " ProjectTreeClose() " {{{
 function! eclim#project#tree#ProjectTreeClose()
-  let winnr = bufwinnr(s:GetTreeTitle())
-  if winnr != -1
-    exec winnr . 'winc w'
-    close
+  if exists('t:project_tree_name') || exists('t:project_tree_id')
+    let winnr = bufwinnr(s:GetTreeTitle())
+    if winnr != -1
+      exec winnr . 'winc w'
+      close
+    endif
   endif
 endfunction " }}}
 
@@ -219,8 +235,8 @@ function! s:GetSharedTreeBuffer(names)
   let instance_names = join(a:names, '_')
   let instance_names = substitute(instance_names, '\W', '_', 'g')
   if g:EclimProjectTreeSharedInstance &&
-   \ exists('g:eclim_project_tree_instance{instance_names}')
-    return g:eclim_project_tree_instance{instance_names}
+   \ has_key(s:shared_instances_by_names, instance_names)
+    return s:shared_instances_by_names[instance_names]
   endif
   return -1
 endfunction " }}}
