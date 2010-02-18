@@ -154,7 +154,7 @@ function! eclim#common#archive#ReadFile()
 endfunction " }}}
 
 " Execute(alt) {{{
-function eclim#common#archive#Execute(alt)
+function! eclim#common#archive#Execute(alt)
   if getline('.') =~ '^"\|^\s*$'
     return
   endif
@@ -183,7 +183,7 @@ function eclim#common#archive#Execute(alt)
 endfunction " }}}
 
 " ExecuteAction(file, command) {{{
-function eclim#common#archive#ExecuteAction(file, command)
+function! eclim#common#archive#ExecuteAction(file, command)
   if a:command == 'edit'
     if !exists('b:archive_edit_window') ||
      \ getwinvar(b:archive_edit_window, 'archive_edit_window') == ''
@@ -206,7 +206,7 @@ function eclim#common#archive#ExecuteAction(file, command)
 endfunction " }}}
 
 " ExpandDir() {{{
-function eclim#common#archive#ExpandDir()
+function! eclim#common#archive#ExpandDir()
   let path = substitute(expand('%:p'), '\', '/', 'g')
   let dir = b:file_info[getline('.')].url
   if dir !~ path . '$' && s:IsArchive(dir)
@@ -237,7 +237,7 @@ function eclim#common#archive#ExpandDir()
   for key in sort(keys(temp_info))
     let index = 0
     for line in content
-      if line =~ '\s*+\?\s*' . escape(key, '.') . '/\?$'
+      if line =~ '\s*+\?\s*\<' . escape(key, '.') . '/\?$'
         let b:file_info[line] = temp_info[key]
         call remove(content, index)
         continue
@@ -249,7 +249,7 @@ endfunction " }}}
 
 " ListAll() {{{
 " Function for listing all the archive files (for 'list' layout).
-function eclim#common#archive#ListAll()
+function! eclim#common#archive#ListAll()
   let path = substitute(expand('%:p'), '\', '/', 'g')
   let command = s:command_list_all
   let command = substitute(command, '<file>', path, '')
@@ -341,7 +341,7 @@ function! s:FileInfo()
 endfunction " }}}
 
 " s:Mappings() {{{
-function s:Mappings()
+function! s:Mappings()
   nmap <buffer> <silent> <cr> :call eclim#common#archive#Execute(0)<cr>
   nmap <buffer> <silent> E :call <SID>OpenFile('edit')<cr>
   nmap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
@@ -400,7 +400,7 @@ function s:Mappings()
 endfunction " }}}
 
 " s:DefaultList() {{{
-function s:DefaultList()
+function! s:DefaultList()
   " once the tar and zip plugins are loaded, we must disable the eclim viewer
   " since they will conflict.
   let g:EclimArchiveViewerEnabled = 0
