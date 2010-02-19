@@ -93,6 +93,7 @@ endfunction " }}}
 function! eclim#tree#Tree(name, roots, aliases, expand, filters)
   silent exec 'edit ' . escape(a:name, ' ')
   setlocal modifiable
+  silent 1,$delete _
 
   let roots = s:NormalizeDirs(a:roots)
   let b:roots = copy(roots)
@@ -140,6 +141,11 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
 
   call s:Mappings()
   call eclim#tree#Syntax()
+
+  augroup eclim_tree
+    autocmd! BufEnter,User <buffer>
+    autocmd BufEnter <buffer> doautocmd eclim_tree User <buffer>
+  augroup END
 
   if exists("g:TreeSettingsFunction")
     let Settings = function(g:TreeSettingsFunction)
@@ -559,6 +565,7 @@ function! eclim#tree#Refresh()
     if s:refresh_nesting == 0
       setlocal nomodifiable
     endif
+    doautocmd eclim_tree User <buffer>
     return
   endif
 
@@ -665,6 +672,7 @@ function! eclim#tree#Refresh()
       call cursor(line('.') - 1, col('.'))
     endif
   endif
+  doautocmd eclim_tree User <buffer>
 endfunction " }}}
 
 " MoveToLastChild() {{{
@@ -1089,6 +1097,8 @@ function! s:Mappings()
   nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
 
   nmap <buffer> <silent> D    :call eclim#tree#Mkdir()<cr>
+
+  nnoremap <buffer> <silent> <c-l> <c-l>:doautocmd eclim_tree User <buffer><cr>
 
   command! -nargs=1 -complete=dir -buffer CD :call eclim#tree#SetRoot('<args>')
   command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')
