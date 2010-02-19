@@ -172,6 +172,7 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
   call s:Mappings()
   setlocal modifiable
   call append(line('$'), ['', '" use ? to view help'])
+  call s:InfoLine()
   setlocal nomodifiable
 endfunction " }}}
 
@@ -274,6 +275,25 @@ function! s:Mappings()
     \ :call eclim#help#BufferHelp(b:project_tree_help, 'horizontal', 10)<cr>
 endfunction " }}}
 
+" s:InfoLine() {{{
+function! s:InfoLine()
+  setlocal modifiable
+  let pos = getpos('.')
+  if len(b:roots) == 1
+    let lnum = line('$') - 1
+    if getline(lnum) =~ '^"'
+      exec lnum . ',' . lnum . 'delete _'
+    endif
+
+    let info = eclim#vcs#util#GetInfo(b:roots[0])
+    if info != ''
+      call append(line('$') - 1, '" ' . info)
+    endif
+  endif
+  call setpos('.', pos)
+  setlocal nomodifiable
+endfunction " }}}
+
 " s:OpenFile(action) " {{{
 function! s:OpenFile(action)
   let path = eclim#tree#GetPath()
@@ -312,6 +332,10 @@ function! eclim#project#tree#ProjectTreeSettings()
     let Settings = function(s:TreeSettingsFunction)
     call Settings()
   endif
+
+  augroup eclim_tree
+    autocmd User <buffer> call <SID>InfoLine()
+  augroup END
 endfunction " }}}
 
 " OpenProjectFile(cmd, cwd, file) {{{
