@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -229,6 +229,28 @@ function eclim#vcs#util#GetRoot(dir)
   endtry
 
   return root
+endfunction " }}}
+
+" GetInfo(dir) {{{
+" Gets some displayable info for the specified vcs directory (branch info, etc.)
+function eclim#vcs#util#GetInfo(dir)
+  let info = ''
+
+  let cwd = getcwd()
+  let dir = a:dir == '' ? expand('%:p:h') : a:dir
+  exec 'lcd ' . escape(dir, ' ')
+  try
+    let GetInfo = eclim#vcs#util#GetVcsFunction('GetInfo')
+    if type(GetInfo) == 2
+      let info = GetInfo()
+    endif
+  catch /E117/
+    " function not found
+  finally
+    exec 'lcd ' . escape(cwd, ' ')
+  endtry
+
+  return info
 endfunction " }}}
 
 " Vcs(cmd, args) {{{

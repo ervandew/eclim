@@ -139,6 +139,16 @@ function eclim#vcs#impl#git#GetRoot()
   return root
 endfunction " }}}
 
+" GetInfo() {{{
+function eclim#vcs#impl#git#GetInfo()
+  let info = eclim#vcs#impl#git#Git('name-rev HEAD')
+  if info == '0'
+    return ''
+  endif
+  let info = 'git:' . substitute(info, '\(^HEAD\s\+\|\n$\)', '', 'g')
+  return info
+endfunction " }}}
+
 " GetEditorFile() {{{
 function eclim#vcs#impl#git#GetEditorFile()
   let line = getline('.')
