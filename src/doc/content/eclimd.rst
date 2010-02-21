@@ -304,13 +304,13 @@ Linux / BSD / OSX:
 
   ::
 
-    ~/.vim/eclim/resources/ext
+    ~/.eclim/resources/ext
 
 Windows:
 
   ::
 
-    $HOME/vimfiles/eclim/resources/ext
+    $HOME/.eclim/resources/ext
 
 For an example of utilizing the ext dir, please take a look at the
 :ref:`VimClojure <guides/clojure/vimclojure>` guide.

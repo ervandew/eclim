@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,9 @@ import org.eclim.plugin.PluginResources;
  */
 public class Services
 {
+  public static final String DOT_ECLIM =
+    System.getProperty("user.home") + "/.eclim";
+
   private static HashMap<String, PluginResources> pluginResources =
     new HashMap<String, PluginResources>();
 

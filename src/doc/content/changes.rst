@@ -41,6 +41,13 @@ Eclim:
   - Added support for specifying that gvim should be refocused after executing
     an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys
     <FeedKeys>`.
+  - Moved user local eclim resources (templates, taglist scripts, etc) from
+    ${vimfiles}/eclim/resources to ~/.eclim/resources.
+
+    .. note::
+
+      The eclim installer will move your existing files from the old location
+      to the new location.
 
 .. _1.5.4:
 

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ function! s:InitLoggingSettings()
     if type(name) == 0 || name == ''
       return
     endif
-    let template = g:EclimBaseDir . '/eclim/resources/jdt/templates/' . name
+    let template = expand('~/.eclim/resources/jdt/templates/' . name)
     let template = substitute(template, '\\ ', ' ', 'g')
     if(!filereadable(template))
       echoe 'Custom logger template not found at "' . template . '"'

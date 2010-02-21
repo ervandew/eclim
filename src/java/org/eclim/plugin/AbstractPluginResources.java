@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,20 +169,19 @@ public abstract class AbstractPluginResources
 
     try{
     // try vim resources first
-    // Ex: /home/ervandew/.vim/eclim/resources/jdt/templates/logger.gst
+    // Ex: ~/.eclim/resources/jdt/templates/logger.gst
+
+      String localResource = resource;
 
       // inject the pluginName ("jdt", "wst", etc)
-      String vimResource = resource;
-      int index = vimResource.indexOf("resources");
+      int index = localResource.indexOf("resources");
       if(index != -1){
-        vimResource = FileUtils.concat(
-            vimResource.substring(0, index + 9),
+        localResource = FileUtils.concat(
+            localResource.substring(0, index + 9),
             pluginName,
-            vimResource.substring(index + 9));
+            localResource.substring(index + 9));
       }
-      String vimfiles = Services.getPluginResources("org.eclim")
-        .getProperty("vim.files");
-      String file = FileUtils.concat(vimfiles, "eclim", vimResource);
+      String file = FileUtils.concat(Services.DOT_ECLIM, localResource);
       if (new File(file).exists()){
         return new URL("file://" + FileUtils.separatorsToUnix(file));
       }

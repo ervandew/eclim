@@ -399,10 +399,7 @@ public abstract class AbstractEclimApplication
   private ClassLoader getExtensionClassLoader()
     throws Exception
   {
-    String vimfiles = Services.getPluginResources("org.eclim")
-      .getProperty("vim.files");
-
-    File extdir = new File(FileUtils.concat(vimfiles, "eclim/resources/ext"));
+    File extdir = new File(FileUtils.concat(Services.DOT_ECLIM, "resources/ext"));
     if (extdir.exists()){
       FileFilter filter = new FileFilter(){
         public boolean accept(File file){

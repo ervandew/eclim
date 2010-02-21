@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2009  Eric Van Dewoestine
+  Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -91,6 +91,7 @@
         <exclude name="build.xml"/>
       </tarfileset>
       <tarfileset dir="${build.installer}">
+        <include name="eclim_resources_${eclim.version}.jar"/>
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.tar.gz"/>
         <include name="org.eclim.installer*.tar.gz"/>
@@ -111,6 +112,7 @@
         <exclude name="build.xml"/>
       </fileset>
       <fileset dir="${build.installer}">
+        <include name="eclim_resources_${eclim.version}.jar"/>
         <include name="eclim_vim_${eclim.version}.jar"/>
         <include name="org.eclim_${eclim.version}.zip"/>
         <include name="org.eclim.installer*.tar.gz"/>

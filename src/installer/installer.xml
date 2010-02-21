@@ -224,6 +224,9 @@
       <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
     </replace>
 
+    <!-- install eclim resources -->
+    <unjar src="eclim_resources_${eclim.version}.jar" dest="${user.home}/.eclim"/>
+
     <!-- install vim plugins -->
     <if>
       <not> <istrue value="${vim.skip}"/> </not>
@@ -238,6 +241,13 @@
           <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
               value="let g:EclimEclipseHome = '${eclipse.local}'"/>
         </replace>
+
+        <!-- migrate resources from old ${vim.files}/eclim/resources location
+             to the new location at ~/.eclim/resources -->
+        <move todir="${user.home}/.eclim/resources" overwrite="false" failonerror="false">
+          <fileset dir="${vim.files}/eclim/resources" includes="**/*"/>
+        </move>
+        <delete dir="${vim.files}/eclim/resources" failonerror="false"/>
       </then>
       <else><echo message="Skipping install of vimfiles"/></else>
     </if>

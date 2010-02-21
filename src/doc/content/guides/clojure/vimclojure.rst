@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,11 +63,11 @@ To install VimClojure and embed it into eclim, simply follow these steps:
    Linux, BSD, OSX:
    ::
 
-     $ mkdir ~/.vim/eclim/resources/ext/vimclojure
-     $ cp {build/vimclojure.jar,lib/clojure*.jar} ~/.vim/eclim/resources/ext/vimclojure
+     $ mkdir ~/.eclim/resources/ext/vimclojure
+     $ cp {build/vimclojure.jar,lib/clojure*.jar} ~/.eclim/resources/ext/vimclojure
 
    Windows users, your can just create the
-   ``%HOME%\vimfiles\eclim\resources\ext\vimclojure`` directory and copy the
+   ``%HOME%\.eclim\resources\ext\vimclojure`` directory and copy the
    jar files from the build and lib dirs via Windows Explorer.
 
 #. Lastely, configure vim:

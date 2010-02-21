@@ -215,7 +215,7 @@ target(name: 'build.vim'){
 }
 
 target(name: 'deploy'){
-  depends('deploy.eclipse', 'deploy.vim')
+  depends('deploy.eclipse', 'deploy.resources', 'deploy.vim')
 }
 
 target(name: 'deploy.eclipse'){
@@ -281,6 +281,12 @@ target(name: 'deploy.eclipse'){
       includes: 'plugin.properties'){
     replacefilter(token: '$${eclim.gvim}', value: '${eclim.gvim}')
     replacefilter(token: '$${eclim.gvim.embed}', value: '${eclim.gvim.embed}')
+  }
+}
+
+target(name: 'deploy.resources'){
+  copy(todir: '${user.home}/.eclim/resources', overwrite: true){
+    fileset(dir: 'src/resources', includes: '**/*')
   }
 }
 
@@ -510,6 +516,11 @@ target(name: 'dist'){
       include(name: 'eclimd')
       include(name: 'eclimd.sed')
     }
+  }
+
+  // eclim resources jar
+  zip(destfile: '${build.installer}/eclim_resources_${eclim.version}.jar'){
+    zipfileset(dir: 'src/resources', prefix: 'resources', includes: '**/*')
   }
 
   // vim plugins jar

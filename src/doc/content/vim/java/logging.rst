@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,10 +28,9 @@ Eclim provides a handful of templates for the most widely used implementations
 alternate logging framework, or perhaps a home grown framework, eclim also
 provides the means to supply a custom template.  To utilize it, simply set the
 **org.eclim.java.logging.impl** setting to "custom" and add your template to
-your vim files directory under ``eclim/resources/jdt/templates/logger.gst``.
-Two variables will be supplied to your template: ``var``, which is the logger
-instance variable, and ``class``, which is the class name of the current class
-you are implementing.
+``~/.eclim/resources/jdt/templates/logger.gst``.  Two variables will be
+supplied to your template: ``var``, which is the logger instance variable, and
+``class``, which is the class name of the current class you are implementing.
 
 Here is an example which eclim uses for its logger implementation\:
 
@@ -69,4 +68,4 @@ Eclim Settings
 
 - **org.eclim.java.logging.template** (Default: 'logger.gst') -
   Determines the name of the template to use for the custom logger.  The name
-  must be a file name relative to eclim/resources/jdt/templates/.
+  must be a file name relative to ~/.eclim/resources/jdt/templates/.
