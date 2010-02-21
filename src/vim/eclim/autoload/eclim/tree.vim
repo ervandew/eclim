@@ -145,6 +145,8 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
   augroup eclim_tree
     autocmd! BufEnter,User <buffer>
     autocmd BufEnter <buffer> doautocmd eclim_tree User <buffer>
+    exec 'autocmd BufDelete,BufUnload <buffer> ' .
+      \ 'autocmd! eclim_tree * <buffer=' . bufnr('%') . '>'
   augroup END
 
   if exists("g:TreeSettingsFunction")
