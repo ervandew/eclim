@@ -17,10 +17,12 @@
       </tr>
         #end
       #end
+      #if(!$installer.context.getValue("vim.skip"))
       <tr>
         <td nowrap="nowrap"><b>Vimfiles Dir:</b></td>
         <td>$installer.context.getValue("vim.files")</td>
       </tr>
+      #end
       <tr>
         <td nowrap="nowrap"><b>Features:</b></td>
         <td>

@@ -83,7 +83,10 @@
       <not>
         <and>
           <isset property="eclipse.home"/>
-          <isset property="vim.files"/>
+          <or>
+            <isset property="vim.files"/>
+            <istrue value="${vim.skip}"/>
+          </or>
         </and>
       </not>
       <then>
@@ -92,6 +95,9 @@
 
           eclipse.home:  ${eclipse.home}
           vim.files:     ${vim.files}
+
+          You may omit vim.files if you set vim.skip=false, resulting in the
+          vim files being excluded from the install.
         </fail>
       </then>
     </if>
@@ -219,16 +225,22 @@
     </replace>
 
     <!-- install vim plugins -->
-    <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
-      <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
-    </unjar>
+    <if>
+      <not> <istrue value="${vim.skip}"/> </not>
+      <then>
+        <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
+          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
+        </unjar>
 
-    <replace file="${vim.files}/eclim/plugin/eclim.vim">
-      <replacefilter token="&quot;$${vim.eclim.home}&quot;"
-          value="let g:EclimHome = '${eclim.home}'"/>
-      <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
-          value="let g:EclimEclipseHome = '${eclipse.local}'"/>
-    </replace>
+        <replace file="${vim.files}/eclim/plugin/eclim.vim">
+          <replacefilter token="&quot;$${vim.eclim.home}&quot;"
+              value="let g:EclimHome = '${eclim.home}'"/>
+          <replacefilter token="&quot;$${vim.eclipse.home}&quot;"
+              value="let g:EclimEclipseHome = '${eclipse.local}'"/>
+        </replace>
+      </then>
+      <else><echo message="Skipping install of vimfiles"/></else>
+    </if>
 
     <antcall target="cleanup"/>
   </target>
@@ -245,13 +257,18 @@
 
     <!-- remove old vim files
          (when altering includes/excludes, update VimStep.proceed) -->
-    <delete failonerror="false" includeemptydirs="true">
-      <fileset dir="${vim.files}/eclim">
-        <include name="**/*"/>
-        <exclude name="after/**/*"/>
-        <exclude name="resources/**/*"/>
-      </fileset>
-    </delete>
+    <if>
+      <not> <istrue value="${vim.skip}"/> </not>
+      <then>
+        <delete failonerror="false" includeemptydirs="true">
+          <fileset dir="${vim.files}/eclim">
+            <include name="**/*"/>
+            <exclude name="after/**/*"/>
+            <exclude name="resources/**/*"/>
+          </fileset>
+        </delete>
+      </then>
+    </if>
   </target>
 
   <!--

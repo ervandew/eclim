@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
+import org.formic.InstallContext;
 import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
@@ -66,11 +67,17 @@ public class RequirementProvider
       requirements[0] = new EclipseRequirement();
       return requirements;
     }
-    Requirement[] requirements = new Requirement[4];
+
+    InstallContext context = Installer.getContext();
+    boolean skipVim = ((Boolean)context.getValue("vim.skip")).booleanValue();
+
+    Requirement[] requirements = new Requirement[skipVim ? 3 : 4];
     requirements[0] = new EclipseRequirement();
-    requirements[1] = new VimRequirement();
-    requirements[2] = new WhichRequirement("make");
-    requirements[3] = new WhichRequirement("gcc");
+    requirements[1] = new WhichRequirement("make");
+    requirements[2] = new WhichRequirement("gcc");
+    if (!skipVim){
+      requirements[3] = new VimRequirement();
+    }
     return requirements;
   }
 

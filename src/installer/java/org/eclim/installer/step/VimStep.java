@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,29 @@ package org.eclim.installer.step;
 
 import java.awt.Component;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.formic.util.File;
+
+import org.formic.wizard.form.Validator;
 
 import foxtrot.Task;
 import foxtrot.Worker;
@@ -97,6 +104,8 @@ public class VimStep
 
   private JPanel panel;
   private FileChooser fileChooser;
+  private JList dirList;
+  private JCheckBox skipCheckBox;
   private boolean rtpAttempted;
   private boolean homeVimCreatePrompted;
   private String[] runtimePath;
@@ -118,6 +127,25 @@ public class VimStep
     GuiForm form = createForm();
     String files = fieldName("files");
     fileChooser = new FileChooser(JFileChooser.DIRECTORIES_ONLY);
+    String skip = fieldName("skip");
+    skipCheckBox = new JCheckBox(Installer.getString(skip));
+    skipCheckBox.addActionListener(new ActionListener(){
+      public void actionPerformed (ActionEvent e){
+        boolean selected = ((JCheckBox)e.getSource()).isSelected();
+        JTextField fileField = fileChooser.getTextField();
+        fileField.setEnabled(!selected);
+        fileChooser.getButton().setEnabled(!selected);
+
+        if (dirList != null){
+          dirList.setEnabled(!selected);
+        }
+
+        // hacky
+        Validator validator = (Validator)
+          fileField.getClientProperty("validator");
+        setValid(selected || validator.isValid(fileField.getText()));
+      }
+    });
 
     panel = new JPanel(new MigLayout(
           "wrap 2", "[fill]", "[] [] [fill, grow]"));
@@ -183,21 +211,22 @@ public class VimStep
               createUserVimFiles("No user vim files directory found.");
             }
           }else{
-            final JList list = new JList(rtp);
-            list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            JScrollPane scrollPane = new JScrollPane(list);
+            dirList = new JList(rtp);
+            dirList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane scrollPane = new JScrollPane(dirList);
             panel.add(scrollPane, "span, grow");
+            panel.add(skipCheckBox, "span");
 
-            list.addListSelectionListener(new ListSelectionListener(){
+            dirList.addListSelectionListener(new ListSelectionListener(){
               public void valueChanged (ListSelectionEvent event){
                 if(!event.getValueIsAdjusting()){
                   fileChooser.getTextField()
-                    .setText((String)list.getSelectedValue());
+                    .setText((String)dirList.getSelectedValue());
                 }
               }
             });
 
-            list.setSelectedIndex(0);
+            dirList.setSelectedIndex(0);
           }
         }
       }catch(Exception e){
@@ -217,82 +246,87 @@ public class VimStep
     boolean proceed = super.proceed();
     if (proceed){
       InstallContext context = Installer.getContext();
-      String vimfiles =
-        ((String)context.getValue("vim.files")).replace('\\', '/');
-      context.setValue("vim.files", vimfiles);
+      context.setValue("vim.skip", Boolean.valueOf(skipCheckBox.isSelected()));
+      String vimfiles = (String)context.getValue("vim.files");
 
-      // Check if the user has the eclim vim files already installed in another
-      // directory in their vim's runtime path.
+      if (vimfiles != null){
+        vimfiles = vimfiles.replace('\\', '/');
+        context.setValue("vim.files", vimfiles);
 
-      // on windows, since case is insensitive, lower the path.
-      if (Os.isFamily("windows")){
-        vimfiles = vimfiles.toLowerCase();
-      }
+        // Check if the user has the eclim vim files already installed in
+        // another directory in their vim's runtime path.
 
-      if(runtimePath != null && runtimePath.length > 0){
-        for (String rpath : runtimePath){
-          String path = rpath;
-          if (Os.isFamily("windows")){
-            path = path.toLowerCase();
-          }
-          if (vimfiles.equals(path)){
-            continue;
-          }
+        // on windows, since case is insensitive, lower the path.
+        if (Os.isFamily("windows")){
+          vimfiles = vimfiles.toLowerCase();
+        }
 
-          File fpath = new File(path + "/plugin/eclim.vim");
-          if (!fpath.exists()){
-            continue;
-          }
-
-          if (fpath.canWrite()){
-            boolean remove = GuiDialogs.showConfirm(
-                "You appear to have one or more of the eclim vim files\n" +
-                "installed in another directory:\n" +
-                "  " + rpath + "\n" +
-                "Would you like the installer to remove those files now?");
-            if (remove){
-              Delete delete = new Delete();
-              delete.setProject(Installer.getProject());
-              delete.setTaskName("delete");
-              delete.setIncludeEmptyDirs(true);
-              delete.setFailOnError(true);
-
-              FileSet set = new FileSet();
-              set.setDir(new File(path + "/eclim"));
-              set.createInclude().setName("**/*");
-              set.createExclude().setName("after/**/*");
-              set.createExclude().setName("resources/**/*");
-              delete.addFileset(set);
-
-              try{
-                boolean deleted = fpath.delete();
-                if (!deleted){
-                  throw new BuildException("Failed to delete file: plugin/eclim.vim");
-                }
-                delete.execute();
-              }catch(BuildException be){
-                GuiDialogs.showError(
-                    "Failed to delete old eclim vim files:\n" +
-                    "  " + be.getMessage() + "\n" +
-                    "You may continue with the installation, but if old eclim\n" +
-                    "vim files remain, chances are that you will receive\n" +
-                    "errors upon starting (g)vim and the older version of\n" +
-                    "the files may take precedence over the ones you are\n" +
-                    "installing now, leading to indeterminate behavior.");
-              }
+        if(runtimePath != null && runtimePath.length > 0){
+          for (String rpath : runtimePath){
+            String path = rpath;
+            if (Os.isFamily("windows")){
+              path = path.toLowerCase();
             }
-            proceed = remove;
-          }else{
-            GuiDialogs.showWarning(
-                "You appear to have one or more of the eclim vim files\n" +
-                "installed in another directory:\n" +
-                "  " + rpath + "\n" +
-                "Unfortunately it seems you do not have write access to\n" +
-                "that directory. You may continue with the installation,\n" +
-                "but chances are that you will receive errors upon starting\n" +
-                "(g)vim and the older version of the files may take precedence\n" +
-                "over the ones you are installing now, leading to indeterminate\n" +
-                "behavior.");
+            if (vimfiles.equals(path)){
+              continue;
+            }
+
+            File fpath = new File(path + "/plugin/eclim.vim");
+            if (!fpath.exists()){
+              continue;
+            }
+
+            if (fpath.canWrite()){
+              boolean remove = GuiDialogs.showConfirm(
+                  "You appear to have one or more of the eclim vim files\n" +
+                  "installed in another directory:\n" +
+                  "  " + rpath + "\n" +
+                  "Would you like the installer to remove those files now?");
+              if (remove){
+                Delete delete = new Delete();
+                delete.setProject(Installer.getProject());
+                delete.setTaskName("delete");
+                delete.setIncludeEmptyDirs(true);
+                delete.setFailOnError(true);
+
+                FileSet set = new FileSet();
+                set.setDir(new File(path + "/eclim"));
+                set.createInclude().setName("**/*");
+                set.createExclude().setName("after/**/*");
+                set.createExclude().setName("resources/**/*");
+                delete.addFileset(set);
+
+                try{
+                  boolean deleted = fpath.delete();
+                  if (!deleted){
+                    throw new BuildException(
+                        "Failed to delete file: plugin/eclim.vim");
+                  }
+                  delete.execute();
+                }catch(BuildException be){
+                  GuiDialogs.showError(
+                      "Failed to delete old eclim vim files:\n" +
+                      "  " + be.getMessage() + "\n" +
+                      "You may continue with the installation, but if old eclim\n" +
+                      "vim files remain, chances are that you will receive\n" +
+                      "errors upon starting (g)vim and the older version of\n" +
+                      "the files may take precedence over the ones you are\n" +
+                      "installing now, leading to indeterminate behavior.");
+                }
+              }
+              proceed = remove;
+            }else{
+              GuiDialogs.showWarning(
+                  "You appear to have one or more of the eclim vim files\n" +
+                  "installed in another directory:\n" +
+                  "  " + rpath + "\n" +
+                  "Unfortunately it seems you do not have write access to\n" +
+                  "that directory. You may continue with the installation,\n" +
+                  "but chances are that you will receive errors upon starting\n" +
+                  "(g)vim and the older version of the files may take precedence\n" +
+                  "over the ones you are installing now, leading to indeterminate\n" +
+                  "behavior.");
+            }
           }
         }
       }
