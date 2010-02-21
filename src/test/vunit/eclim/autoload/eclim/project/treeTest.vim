@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace
+  let g:EclimProjectTreeSharedInstance = 0
 endfunction " }}}
 
 " TestProjectTree() {{{
@@ -65,7 +66,7 @@ function! TestProjectTree()
 
   normal j
   call VUAssertEquals(line('.'), 3)
-  call VUAssertEquals(col('.'), 7)
+  call VUAssertEquals(col('.'), 8)
   exec "normal \<cr>"
   call VUAssertEquals(expand('%'), 'eclim_unit_test/files/test1.txt')
   call VUAssertEquals(getline(1), 'test file 1')
