@@ -138,7 +138,7 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
 
   let expand = len(a:dirs) == 1
 
-  if exists("g:TreeSettingsFunction")
+  if exists('g:TreeSettingsFunction')
     let s:TreeSettingsFunction = g:TreeSettingsFunction
   endif
   let g:TreeSettingsFunction = 'eclim#project#tree#ProjectTreeSettings'
@@ -148,6 +148,8 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
   finally
     if exists('s:TreeSettingsFunction')
       let g:TreeSettingsFunction = s:TreeSettingsFunction
+    else
+      unlet g:TreeSettingsFunction
     endif
   endtry
 
