@@ -201,7 +201,11 @@ function! eclim#common#archive#ExecuteAction(file, command)
     exec b:archive_edit_window . 'winc w'
   endif
 
-  noautocmd exec a:command . ' ' . escape(a:file, ' ')
+  try
+    noautocmd exec a:command . ' ' . escape(a:file, ' ')
+  catch /E303/
+    " ignore error to create swap file (seems to only be an issue on windows)
+  endtry
   call eclim#common#archive#ReadFile()
 endfunction " }}}
 
