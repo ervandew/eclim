@@ -558,15 +558,12 @@ function! eclim#tree#Refresh()
   let start = line('.')
   let end = eclim#tree#GetLastChildPosition()
 
-  setlocal noreadonly modifiable
-
   " first check the node we are on
   if (!isdirectory(startpath) && !filereadable(startpath)) ||
       \ (getline('.') !~ s:root_regex && s:IsHidden(startpath))
+    setlocal modifiable
     silent exec start . ',' . end . 'delete _'
-    if s:refresh_nesting == 0
-      setlocal nomodifiable
-    endif
+    setlocal nomodifiable
     doautocmd eclim_tree User <buffer>
     return
   endif
@@ -604,7 +601,9 @@ function! eclim#tree#Refresh()
      \ (path !~ '/$' && !filereadable(path)) ||
      \ s:IsHidden(path)
       let last = eclim#tree#GetLastChildPosition()
+      setlocal modifiable
       silent exec lnum . ',' . last . 'delete _'
+      setlocal nomodifiable
       let end -= (last - lnum) + 1
       continue
     endif
@@ -619,6 +618,7 @@ function! eclim#tree#Refresh()
   let contents = s:NormalizeDirs(contents)
   let indent = eclim#tree#GetChildIndent(start)
   let lnum = line('.')
+  setlocal modifiable
   for entry in contents
     let norm_entry = substitute(entry, '[*@]$', '', '')
     let path = eclim#tree#GetPath()
@@ -660,12 +660,12 @@ function! eclim#tree#Refresh()
       endif
     endif
   endfor
+  setlocal nomodifiable
 
   call cursor(clnum, ccnum)
   let s:refresh_nesting -= 1
 
   if s:refresh_nesting == 0
-    setlocal nomodifiable
     call eclim#util#Echo(' ')
     " return to marked position.
     call cursor(line("'Z"), col("`Z"))
