@@ -59,7 +59,7 @@
   let s:tree_count = 0
   let s:refresh_nesting = 0
 
-  let s:has_ls = executable('ls')
+  let s:has_ls = executable('ls') && !(has('win32') || has('win64'))
 
   let s:vcol = 0
 " }}}
