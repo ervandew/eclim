@@ -49,7 +49,7 @@ function! eclim#xml#format#Format()
   let result = eclim#ExecuteEclim(command)
   if result != '0'
     silent! 1,$delete _
-    put =result
+    silent put =result
     silent! 1,1delete _
   endif
 endfunction " }}}
