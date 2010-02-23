@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,6 +15,18 @@
 
 History of Changes
 ==================
+
+.. _1.5.5:
+
+1.5.5 (Feb. 22, 2010)
+----------------------
+
+Bug Fixes:
+  - Fixed error using :ProjectTree if the project name has non-word characters
+    in it.
+
+Install:
+  - Fixed issue downloading content.jar from eclipse update site.
 
 .. _1.5.4:
 

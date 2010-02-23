@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,6 +99,15 @@ Eclim is released under the GPLv3_.
 ==================
 News
 ==================
+-----------
+2010-02-22
+-----------
+
+| **Eclim 1.5.5** is now available.
+| This is a bug fix release for the eclim installer.
+
+You can view the :ref:`release notes <1.5.5>` for more info.
+
 -----------
 2009-12-18
 -----------
