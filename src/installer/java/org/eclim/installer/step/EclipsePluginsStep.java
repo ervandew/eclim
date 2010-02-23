@@ -647,7 +647,7 @@ public class EclipsePluginsStep
       this.sites = new ArrayList<File>();
       this.availableFeatures = new HashMap<String,String>();
 
-      overallProgress.setMaximum(2);
+      overallProgress.setMaximum(3);
 
       // run eclipse to get a list of existing installed features
       overallLabel.setText("Analyzing installed features...");
@@ -678,21 +678,53 @@ public class EclipsePluginsStep
       // load up available features from the primary update site.
       overallLabel.setText(
           "Loading available features from the primary update site...");
-      overallProgress.setValue(1);
+
       BufferedInputStream in = null;
+      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+
+      // download compositeContent.jar to determine location on content.jar
+      final String[] location = new String[1];
       try{
-        taskLabel.setText("Downloading content.jar");
+        overallProgress.setValue(1);
+        System.out.println("Downloading compositeContent.jar");
+        taskLabel.setText("Downloading compositeContent.jar");
         in = new BufferedInputStream(
             new URLProgressInputStream(
               taskProgress,
-              new URL(primaryUpdateSite + "content.jar").openConnection()));
+              new URL(primaryUpdateSite + "compositeContent.jar").openConnection()));
+
+        JarInputStream jin = new JarInputStream(in);
+        JarEntry entry = jin.getNextJarEntry();
+        while (!entry.getName().equals("compositeContent.xml")){
+          entry = jin.getNextJarEntry();
+        }
+        parser.parse(jin, new DefaultHandler(){
+          public void startElement(
+              String uri, String localName, String qName, Attributes attributes)
+            throws SAXException
+          {
+            if(qName.equals("child")){
+              location[0] = attributes.getValue("location");
+            }
+          }
+        });
+      }finally{
+        IOUtils.closeQuietly(in);
+      }
+
+      try{
+        overallProgress.setValue(2);
+        System.out.println("Downloading " + location[0] + "/content.jar");
+        taskLabel.setText("Downloading " + location[0] + "/content.jar");
+        in = new BufferedInputStream(
+            new URLProgressInputStream(taskProgress, new URL(
+                primaryUpdateSite + location[0] + "/content.jar").openConnection()));
 
         JarInputStream jin = new JarInputStream(in);
         JarEntry entry = jin.getNextJarEntry();
         while (!entry.getName().equals("content.xml")){
           entry = jin.getNextJarEntry();
         }
-        SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
         parser.parse(jin, new DefaultHandler(){
           public void startElement(
               String uri, String localName, String qName, Attributes attributes)
@@ -712,7 +744,7 @@ public class EclipsePluginsStep
         IOUtils.closeQuietly(in);
       }
 
-      overallProgress.setValue(2);
+      overallProgress.setValue(3);
       filterDependencies();
     }
 
