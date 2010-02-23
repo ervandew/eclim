@@ -16,9 +16,9 @@
 History of Changes
 ==================
 
-.. _1.5.5:
+.. _1.5.6:
 
-1.5.5 (unreleased)
+1.5.6 (unreleased)
 ----------------------
 
 Bug Fixes:
@@ -48,6 +48,18 @@ Eclim:
 
       The eclim installer will move your existing files from the old location
       to the new location.
+
+.. _1.5.5:
+
+1.5.5 (Feb. 22, 2010)
+----------------------
+
+Bug Fixes:
+  - Fixed error using :ProjectTree if the project name has non-word characters
+    in it.
+
+Install:
+  - Fixed issue downloading content.jar from eclipse update site.
 
 .. _1.5.4:
 
