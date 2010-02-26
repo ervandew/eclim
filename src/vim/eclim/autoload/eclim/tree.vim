@@ -439,23 +439,25 @@ function! eclim#tree#Shell(external)
   silent exec "lcd " . escape(cwd, ' &')
 endfunction " }}}
 
-" Cursor(line) {{{
-function! eclim#tree#Cursor(line)
+" Cursor(line, prevline) {{{
+function! eclim#tree#Cursor(line, prevline)
   let lnum = a:line
   let line = getline(lnum)
 
-  if line !~ s:root_regex
+  if line =~ s:root_regex
+    call cursor(lnum, 1)
+  else
     " get the starting column of the current line and the previous line
     let start = len(line) - len(substitute(line, '^\s\+\W', '', ''))
 
     " only use the real previous line if we've only moved one line
-    let pline = abs(line('.') - lnum) == 1 ? getline('.') : ''
+    let pline = abs(a:prevline - lnum) == 1 ? getline(a:prevline) : ''
     let pstart = pline != '' ?
       \ len(pline) - len(substitute(pline, '^\s\+\W', '', '')) : -1
 
     " only change the cursor column if the hasn't user has moved it to the
     " right to view more of the entry
-    let cnum = start == pstart ? -1 : start
+    let cnum = start == pstart ? 0 : start
     call cursor(lnum, cnum)
 
     " attempt to maximize the amount of text on the current line that is in
@@ -463,7 +465,7 @@ function! eclim#tree#Cursor(line)
     let winwidth = winwidth(winnr())
     let vcol = exists('s:vcol') ? s:vcol : 0
     let col = col('.')
-    if cnum != -1 && (!vcol || ((len(line) - vcol) > winwidth))
+    if cnum != 0 && (!vcol || ((len(line) - vcol) > winwidth))
       if len(line) > winwidth
         normal! zs
         " scroll back enough to keep the start of the parent in view
@@ -683,13 +685,13 @@ function! eclim#tree#MoveToLastChild()
   if getline('.') !~ '^\s*' . s:node_prefix . s:dir_opened_prefix . '[.[:alnum:]_]'
     call cursor(eclim#tree#GetParentPosition(), 1)
   endif
-  call eclim#tree#Cursor(eclim#tree#GetLastChildPosition())
+  call eclim#tree#Cursor(eclim#tree#GetLastChildPosition(), 0)
 endfunction " }}}
 
 " MoveToParent() {{{
 function! eclim#tree#MoveToParent()
   mark '
-  call eclim#tree#Cursor(eclim#tree#GetParentPosition())
+  call eclim#tree#Cursor(eclim#tree#GetParentPosition(), 0)
 endfunction " }}}
 
 " Mkdir() {{{
@@ -809,7 +811,7 @@ function! eclim#tree#ExpandPath(name, path)
     for dir in split(path, '/')
       let line = search('+ \<' . dir . '\>/', 'n')
       if line
-        call eclim#tree#Cursor(line)
+        call eclim#tree#Cursor(line, 0)
         call eclim#tree#Execute(1)
       else
         break
@@ -1093,8 +1095,12 @@ function! s:Mappings()
   nmap <buffer> <silent> B    :call eclim#tree#SetRoot(
     \ fnamemodify(eclim#tree#GetRoot(), ':h:h'))<cr>
 
-  nmap <buffer> <silent> j    j:call eclim#tree#Cursor(line('.'))<cr>
-  nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>
+  nmap <buffer> <silent> j    :let prev = line('.') \|
+                             \ exec 'normal! j' \|
+                             \ call eclim#tree#Cursor(line('.'), prev)<cr>
+  nmap <buffer> <silent> k    :let prev = line('.') \|
+                             \ exec 'normal! k' \|
+                             \ call eclim#tree#Cursor(line('.'), prev)<cr>
   nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
   nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
 
