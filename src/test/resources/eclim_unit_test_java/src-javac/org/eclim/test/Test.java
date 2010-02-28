@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,11 @@ public class Test
 {
   public static final void main(String[] args)
   {
+    /*System.out.print("Enter your name: ");
+    java.util.Scanner scanner = new java.util.Scanner(System.in);
+    String name = scanner.nextLine();
+    System.out.println("Hello " + name);*/
+
     System.out.println("Hello Unit Testing World.");
     if (args.length > 0){
       System.out.println("----- args -----");
@@ -33,5 +38,12 @@ public class Test
       }
       System.out.println("----- end  -----");
     }
+
+    /*javax.swing.JFrame frame = new javax.swing.JFrame("HelloWorldSwing");
+    frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+    javax.swing.JLabel label = new javax.swing.JLabel("Hello World");
+    frame.getContentPane().add(label);
+    frame.pack();
+    frame.setVisible(true);*/
   }
 }
