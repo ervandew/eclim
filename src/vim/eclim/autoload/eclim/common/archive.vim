@@ -365,8 +365,12 @@ function! s:Mappings()
         \ ':AsList - switch to list view',
       \ ]
     nmap <buffer> <silent> o    :call eclim#common#archive#Execute(1)<cr>
-    nmap <buffer> <silent> j    j:call eclim#tree#Cursor(line('.'))<cr>
-    nmap <buffer> <silent> k    k:call eclim#tree#Cursor(line('.'))<cr>
+    nmap <buffer> <silent> j    :let prev = line('.') \|
+                               \ exec 'normal! j' \|
+                               \ call eclim#tree#Cursor(line('.'), prev)<cr>
+    nmap <buffer> <silent> k    :let prev = line('.') \|
+                               \ exec 'normal! k' \|
+                               \ call eclim#tree#Cursor(line('.'), prev)<cr>
     nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
     nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
     nmap <buffer> <silent> i    :call <SID>FileInfo()<cr>
