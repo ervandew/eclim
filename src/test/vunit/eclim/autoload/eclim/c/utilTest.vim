@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ function! TestUpdateSrcFile()
   edit! src/test_src_vunit.c
   call PeekRedir()
 
+  call histadd('cmd', 'w') " mimic user calling write
   write
   call PeekRedir()
 
