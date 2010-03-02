@@ -1095,12 +1095,8 @@ function! s:Mappings()
   nmap <buffer> <silent> B    :call eclim#tree#SetRoot(
     \ fnamemodify(eclim#tree#GetRoot(), ':h:h'))<cr>
 
-  nmap <buffer> <silent> j    :let prev = line('.') \|
-                             \ exec 'normal! j' \|
-                             \ call eclim#tree#Cursor(line('.'), prev)<cr>
-  nmap <buffer> <silent> k    :let prev = line('.') \|
-                             \ exec 'normal! k' \|
-                             \ call eclim#tree#Cursor(line('.'), prev)<cr>
+  nmap <buffer> <silent> j    :TreeNextPrevLine j<cr>
+  nmap <buffer> <silent> k    :TreeNextPrevLine k<cr>
   nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
   nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
 
@@ -1110,6 +1106,14 @@ function! s:Mappings()
 
   command! -nargs=1 -complete=dir -buffer CD :call eclim#tree#SetRoot('<args>')
   command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')
+
+  " only needed as a command to support counts on the j/k mappings
+  command! -nargs=? -count=1 -buffer TreeNextPrevLine
+    \ let c = <count> |
+    \ let c = c > 1 ? c - line('.') + 1 : c |
+    \ let prev = line('.') |
+    \ exec 'normal! ' . c . '<args>' |
+    \ call eclim#tree#Cursor(line('.'), prev)
 endfunction " }}}
 
 " s:Syntax() {{{

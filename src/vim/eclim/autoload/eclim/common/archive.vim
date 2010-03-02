@@ -364,13 +364,9 @@ function! s:Mappings()
         \ 'i - view file info',
         \ ':AsList - switch to list view',
       \ ]
+    nmap <buffer> <silent> j    :TreeNextPrevLine j<cr>
+    nmap <buffer> <silent> k    :TreeNextPrevLine k<cr>
     nmap <buffer> <silent> o    :call eclim#common#archive#Execute(1)<cr>
-    nmap <buffer> <silent> j    :let prev = line('.') \|
-                               \ exec 'normal! j' \|
-                               \ call eclim#tree#Cursor(line('.'), prev)<cr>
-    nmap <buffer> <silent> k    :let prev = line('.') \|
-                               \ exec 'normal! k' \|
-                               \ call eclim#tree#Cursor(line('.'), prev)<cr>
     nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
     nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
     nmap <buffer> <silent> i    :call <SID>FileInfo()<cr>
@@ -378,6 +374,14 @@ function! s:Mappings()
 
     silent! delcommand AsTree
     command! -nargs=0 AsList :call <SID>ChangeLayout('list')
+
+    " only needed as a command to support counts on the j/k mappings
+    command! -nargs=? -count=1 -buffer TreeNextPrevLine
+      \ let c = <count> |
+      \ let c = c > 1 ? c - line('.') + 1 : c |
+      \ let prev = line('.') |
+      \ exec 'normal! ' . c . '<args>' |
+      \ call eclim#tree#Cursor(line('.'), prev)
   else
     if exists('b:tree_mappings_active')
       unlet b:tree_mappings_active
