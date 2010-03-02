@@ -1106,7 +1106,7 @@ function! eclim#util#TempWindow(name, lines, ...)
     setlocal readonly
   endif
 
-  doautocmd BufEnter
+  silent doautocmd BufEnter
 
   " Store filename and window number so that plugins can use it if necessary.
   if filename != expand('%:p')
