@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,12 +45,12 @@ function! TestComment()
   JavaDocComment
 
   call VUAssertEquals('  /**', getline(5), 'Wrong doc line 5.')
-  call VUAssertEquals('   *', getline(6), 'Wrong doc line 6.')
-  call VUAssertEquals('   *', getline(7), 'Wrong doc line 7.')
+  call VUAssertEquals('   * ', getline(6), 'Wrong doc line 6.')
+  call VUAssertEquals('   * ', getline(7), 'Wrong doc line 7.')
   call VUAssertEquals('   * @param _id', getline(8), 'Wrong doc line 8.')
   call VUAssertEquals('   * @param _name', getline(9), 'Wrong doc line 9.')
   call VUAssertEquals('   * @return', getline(10), 'Wrong doc line 10.')
-  call VUAssertEquals('   *', getline(11), 'Wrong doc line 11.')
+  call VUAssertEquals('   * ', getline(11), 'Wrong doc line 11.')
   call VUAssertEquals('   * @throws IOException', getline(12), 'Wrong doc line 12.')
   call VUAssertEquals('   */', getline(13), 'Wrong doc line 13.')
 endfunction " }}}
