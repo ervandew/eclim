@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,19 +49,39 @@ import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescriptionManager;
 
+import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
+
 import org.eclipse.cdt.core.settings.model.util.PathEntryTranslator;
 
 import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyManager;
 import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyValue;
 
+import org.eclipse.cdt.managedbuilder.core.IBuilder;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
+import org.eclipse.cdt.managedbuilder.internal.core.Configuration;
+import org.eclipse.cdt.managedbuilder.internal.core.ManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
+import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
+
+import org.eclipse.cdt.managedbuilder.internal.dataprovider.ConfigurationDataProvider;
+
+import org.eclipse.cdt.managedbuilder.ui.wizards.CfgHolder;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
+
+import org.eclipse.cdt.ui.newui.UIMessages;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+
+import org.eclipse.jface.wizard.IWizard;
+
+import org.eclipse.swt.widgets.Composite;
 
 /**
  * Manager for c/c++ projects.
@@ -90,8 +110,6 @@ public class CProjectManager
     // TODO: - support other project types:
     //         executable, shared library, static library
     //       - support specifying the toolchain to use.
-    //       - post project create hooks both of these (like on ruby project
-    //         create)?
 
     IBuildPropertyManager buildManager =
       ManagedBuildManager.getBuildPropertyManager();
@@ -99,29 +117,36 @@ public class CProjectManager
       .getPropertyType(MBSWizardHandler.ARTIFACT).getSupportedValues();
 
     MBSWizardHandler handler = null;
+
     for (IBuildPropertyValue value : vs){
       final IToolChain[] toolChains = ManagedBuildManager
         .getExtensionsToolChains(MBSWizardHandler.ARTIFACT, value.getId(), false);
       if (toolChains != null && toolChains.length > 0){
-        handler = new MBSWizardHandler(value, EclimPlugin.getShell(), null){
-          public IToolChain[] getSelectedToolChains(){
-            for (IToolChain tc : toolChains){
-              if (!tc.isAbstract() &&
-                  !tc.isSystemObject() &&
-                  tc.isSupported() &&
-                  ManagedBuildManager.isPlatformOk(tc))
-              {
-                return new IToolChain[]{tc};
-              }
-            }
-            return new IToolChain[0];
+        IToolChain toolchain = null;
+        for (IToolChain tc : toolChains){
+          if (!tc.isAbstract() &&
+              !tc.isSystemObject() &&
+              tc.isSupported() &&
+              ManagedBuildManager.isPlatformOk(tc))
+          {
+            toolchain = tc;
+            break;
           }
+        }
 
+        // handle case where no toolchain was found, like on windows when
+        // eclipse can't find cygwin or mingw.
+        if (toolchain == null){
+          IToolChain ntc = ManagedBuildManager
+            .getExtensionToolChain(ConfigurationDataProvider.PREF_TC_ID);
+          handler = new LocalSTDWizardHandler(
+              value, EclimPlugin.getShell(), null, ntc);
 
-          protected void doCustom(IProject project) {
-            // no-op
-          }
-        };
+        // normal case, suitable toolchain found.
+        }else{
+          handler = new LocalMBSWizardHandler(
+              value, EclimPlugin.getShell(), null, toolchain);
+        }
       }
     }
     handler.createProject(project, true, true, new NullProgressMonitor());
@@ -237,5 +262,118 @@ public class CProjectManager
     }
 
     return new Error(status.getMessage(), filename, line, col, false);
+  }
+
+  private class LocalMBSWizardHandler
+    extends MBSWizardHandler
+  {
+    private IToolChain toolchain;
+
+    public LocalMBSWizardHandler(
+        IBuildPropertyValue val, Composite p, IWizard w, IToolChain tc)
+    {
+      super(val, p, w);
+      this.toolchain = tc;
+    }
+
+    public IToolChain[] getSelectedToolChains(){
+      return new IToolChain[]{ toolchain };
+    }
+
+    protected void doCustom(IProject project) {
+      // no-op
+    }
+
+    public CfgHolder[] getCfgItems(boolean defaults) {
+      CfgHolder[] cfgs = super.getCfgItems(defaults);
+      if (cfgs == null || cfgs.length == 0){
+        IToolChain tc = ManagedBuildManager
+          .getExtensionToolChain(ConfigurationDataProvider.PREF_TC_ID);
+        cfgs = new CfgHolder[1];
+        cfgs[0] = new CfgHolder(tc, null);
+      }
+      return cfgs;
+    }
+
+    /*public CfgHolder[] getCfgItems(boolean defaults) {
+      CfgHolder[] cfg = super.getCfgItems(true);
+
+      if (cfg == null || cfg.length == 0){
+        IConfiguration config = ManagedBuildManager
+          .getExtensionConfiguration(
+              "org.eclipse.cdt.build.core.prefbase.cfg");
+        //.getExtensionConfiguration(ConfigurationDataProvider.PREF_CFG_ID);
+
+        IToolChain noTc = ManagedBuildManager
+          .getExtensionToolChain(ConfigurationDataProvider.PREF_TC_ID);
+
+        cfg = new CfgHolder[1];
+        cfg[0] = new CfgHolder(noTc, config);
+        logger.warn("No suitable toolchain config found, " +
+            "using 'No Toolchain' config.");
+      }
+      return cfg;
+    }*/
+  }
+
+  private class LocalSTDWizardHandler
+    extends LocalMBSWizardHandler
+  {
+    public LocalSTDWizardHandler(
+        IBuildPropertyValue val, Composite p, IWizard w, IToolChain tc)
+    {
+      super(val, p, w, tc);
+    }
+
+    /**** Copied from STDWizardHandler ****/
+    public void createProject(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor) throws CoreException {
+      try {
+        monitor.beginTask("", 100);//$NON-NLS-1$
+
+        setProjectDescription(project, defaults, onFinish, monitor);
+
+        doTemplatesPostProcess(project);
+        doCustom(project);
+        monitor.worked(30);
+      } finally {
+        monitor.done();
+      }
+    }
+
+    /**** Copied from STDWizardHandler ****/
+    private void setProjectDescription(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor)
+              throws CoreException {
+        ICProjectDescriptionManager mngr = CoreModel.getDefault().getProjectDescriptionManager();
+        ICProjectDescription des = mngr.createProjectDescription(project, false, !onFinish);
+        ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+        ManagedProject mProj = new ManagedProject(des);
+        info.setManagedProject(mProj);
+        monitor.worked(20);
+        cfgs = CfgHolder.unique(getCfgItems(false));
+        cfgs = CfgHolder.reorder(cfgs);
+        int work = 50/cfgs.length;
+        for (int i=0; i<cfgs.length; i++) {
+          String s = (cfgs[i].getToolChain() == null) ? "0" : ((ToolChain)(cfgs[i].getToolChain())).getId();  //$NON-NLS-1$
+          Configuration cfg = new Configuration(mProj, (ToolChain)cfgs[i].getToolChain(), ManagedBuildManager.calculateChildId(s, null), cfgs[i].getName());
+          IBuilder bld = cfg.getEditableBuilder();
+          if (bld != null) {
+            if(bld.isInternalBuilder()){
+              IConfiguration prefCfg = ManagedBuildManager.getPreferenceConfiguration(false);
+              IBuilder prefBuilder = prefCfg.getBuilder();
+              cfg.changeBuilder(prefBuilder, ManagedBuildManager.calculateChildId(cfg.getId(), null), prefBuilder.getName());
+              bld = cfg.getEditableBuilder();
+              bld.setBuildPath(null);
+            }
+            bld.setManagedBuildOn(false);
+          } else {
+            System.out.println(UIMessages.getString("StdProjectTypeHandler.3")); //$NON-NLS-1$
+          }
+          cfg.setArtifactName(removeSpaces(project.getName()));
+          CConfigurationData data = cfg.getConfigurationData();
+          des.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
+          monitor.worked(work);
+        }
+        mngr.setProjectDescription(project, des);
+    }
   }
 }
