@@ -208,7 +208,7 @@ function s:PreviewLink()
 
       let name = fnamemodify(file, ':t:r')
       let ext = fnamemodify(file, ':e')
-      exec printf('silent new %s.current.%s', name, ext)
+      exec printf('silent below new %s.current.%s', name, ext)
       silent 1,$delete _ " counter-act any templating plugin
       exec 'read ' . escape(file, ' ')
       silent 1,1delete _
