@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ if !(has('win32') || has('win64'))
   let command = substitute(command, '"', '', 'g')
 endif
 let command = escape(command, ' "')
-let command .= '\ -Dnailgun.server.port=' . port
+let command .= '\ --nailgun-port ' . port
 exec 'CompilerSet makeprg=' . command . '\ -command\ javac\ $*'
 
 exec 'CompilerSet errorformat=' .

@@ -336,7 +336,7 @@ function! eclim#java#util#Java(classname, args)
 
   let command = '!'
   let command .= eclim#client#nailgun#GetEclimCommand()
-  let command .= ' -Dnailgun.server.port=' . port
+  let command .= ' --nailgun-port ' . port
   let command .= ' -command java -p "' . project . '"'
   if classname != ''
     let command .= ' -c ' . classname
