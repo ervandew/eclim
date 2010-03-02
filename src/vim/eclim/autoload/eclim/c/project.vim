@@ -49,7 +49,9 @@ function! eclim#c#project#Configs(...)
 
   let command = s:configs_command
   let command = substitute(command, '<project>', project, '')
-  let results = split(eclim#ExecuteEclim(command), '\n')
+
+  let port = eclim#project#util#GetProjectPort(project)
+  let results = split(eclim#ExecuteEclim(command, port), '\n')
   if len(results) == 1 && results[0] == '0'
     return
   endif
