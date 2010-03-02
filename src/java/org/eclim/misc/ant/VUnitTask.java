@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,15 @@ public class VUnitTask
   private static final String TESTCASE =
     "\"silent! call VURunnerRunTests('<basedir>', '<testcase>')\"";
   private static final String[] VUNIT = {
-    "vim", "--cmd", "", "--cmd", "", "--cmd", "", "-c", "", "-c", "\"qa!\""
+    "vim",
+    "-u", "NONE",
+    "--cmd", "\"set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim\"",
+    "--cmd", "\"set cot=menuone,longest et sw=2 ts=2\"",
+    "--cmd", "",
+    "--cmd", "",
+    "--cmd", "",
+    "-c", "",
+    "-c", "\"qa!\""
   };
 
   private File plugin;
@@ -111,10 +119,10 @@ public class VUnitTask
           String[] command = new String[VUNIT.length];
           System.arraycopy(VUNIT, 0, command, 0, VUNIT.length);
 
-          command[2] = setproperties;
-          command[4] = vunit;
-          command[6] = output;
-          command[8] = run.replaceFirst("<testcase>", files[ii]);
+          command[8] = setproperties;
+          command[10] = vunit;
+          command[12] = output;
+          command[14] = run.replaceFirst("<testcase>", files[ii]);
 
           // ncurses and Runtime.exec don't play well together, so execute via sh.
           log("sh -c " + StringUtils.join(command, ' ') + " exit",
