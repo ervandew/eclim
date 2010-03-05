@@ -136,16 +136,20 @@ function! eclim#dltk#buildpath#CommandCompleteVarPath(argLead, cmdLine, cursorPo
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  let var_names = deepcopy(vars)
-  call filter(var_names, 'v:val =~ "^' . argLead . '"')
-  if len(var_names) > 0
-    call map(var_names,
-      \ "isdirectory(substitute(v:val, '.\\{-}\\s\\+- \\(.*\\)', '\\1', '')) ? " .
-      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '') . '/' : " .
-      \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '')")
+  " just the variable name
+  if argLead !~ '/'
+    let var_names = deepcopy(vars)
+    call filter(var_names, 'v:val =~ "^' . argLead . '"')
+    if len(var_names) > 0
+      call map(var_names,
+        \ "isdirectory(substitute(v:val, '.\\{-}\\s\\+- \\(.*\\)', '\\1', '')) ? " .
+        \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '') . '/' : " .
+        \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '')")
+    endif
     return var_names
   endif
 
+  " variable name + path
   let var = substitute(argLead, '\(.\{-}\)/.*', '\1', '')
   let var_dir = ""
   for cv in vars
@@ -154,9 +158,15 @@ function! eclim#dltk#buildpath#CommandCompleteVarPath(argLead, cmdLine, cursorPo
       break
     endif
   endfor
+  if var_dir == ''
+    return []
+  endif
+
+  let var_dir = escape(substitute(var_dir, '\', '/', 'g'), ' ')
   let argLead = substitute(argLead, var, var_dir, '')
   let files = eclim#util#CommandCompleteFile(argLead, a:cmdLine, a:cursorPos)
-  call map(files, "substitute(v:val, '" . var_dir . "', '" . var . "', '')")
+  let replace = escape(var_dir, '\')
+  call map(files, "substitute(v:val, '" . replace . "', '" . var . "', '')")
 
   return files
 endfunction " }}}
