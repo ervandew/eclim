@@ -41,22 +41,29 @@ function! eclim#client#nailgun#Execute(port, command)
     return eclim#client#python#nailgun#Execute(a:port, a:command)
   endif
 
-  let command = eclim#client#nailgun#GetEclimCommand()
-  if string(command) == '0'
+  let eclim = eclim#client#nailgun#GetEclimCommand()
+  if string(eclim) == '0'
     return [1, g:EclimErrorReason]
   endif
 
-  let command .= ' --nailgun-port ' . a:port . ' ' . a:command
+  let command = a:command
+  " on windows/cygwin where cmd.exe is used, we need to escape any '^'
+  " characters in the command args.
+  if has('win32') || has('win64') || has('win32unix')
+    let command = substitute(command, '\^', '^^', 'g')
+  endif
+
+  let eclim .= ' --nailgun-port ' . a:port . ' ' . command
 
   " for windows/cygwin, need to add a trailing quote to complete the command.
   if has('win32') || has('win64') || has('win32unix')
     " for some reason, in cywin, if two double quotes are next to each other,
     " then the preceding arg isn't quoted correctly, so add a space to prevent
     " this.
-    let command = command . ' "'
+    let eclim = eclim . ' "'
   endif
 
-  let result = eclim#util#System(command)
+  let result = eclim#util#System(eclim)
   return [v:shell_error, result]
 endfunction " }}}
 
