@@ -73,8 +73,7 @@ function! eclim#java#doc#Javadoc(bang, ...)
   let cwd = getcwd()
   try
     exec 'lcd ' . escape(project_path, ' ')
-    let exec = has('win32') || has('win64')
-    call eclim#util#MakeWithCompiler('eclim_javadoc', a:bang, args, exec)
+    call eclim#util#MakeWithCompiler('eclim_javadoc', a:bang, args)
   finally
     exec 'lcd ' . escape(cwd, ' ')
   endtry

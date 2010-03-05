@@ -532,11 +532,11 @@ function! eclim#util#ListContains(list, element)
   return 0
 endfunction " }}}
 
-" MakeWithCompiler(compiler, bang, args, [exec]) {{{
+" MakeWithCompiler(compiler, bang, args) {{{
 " Executes :make using the supplied compiler.
-" If the 'exec' arg is > 0, then instead of using :make, this function will
-" execute the make program using exec (useful if the make program doesn't
-" behave on windows).
+" Note: on windows the make program will be executed manually if the 'tee'
+" progam is available (only the cygwin version is currenty supported) to allow
+" the display of the make program output while running.
 function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
   if exists('g:current_compiler')
     let saved_compiler = g:current_compiler
@@ -558,22 +558,11 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     exec 'compiler ' . a:compiler
     let make_cmd = substitute(&makeprg, '\$\*', a:args, '')
 
-    let exec = len(a:000) > 0 ? a:000[0] : 0
-    if !exec
-      call eclim#util#EchoTrace('make: ' . make_cmd)
-      exec 'make' . a:bang . ' ' . a:args
-    else
-      let command = '!' . make_cmd
+    " windows machines where 'tee' is available
+    if (has('win32') || has('win64')) && executable('tee')
       let outfile = g:EclimTempDir . '/eclim_make_output.txt'
-      if has('win32') || has('win64')
-        if executable('tee')
-          let command .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
-        else
-          let command .= ' >"' . outfile . '" 2>&1"'
-        endif
-      else
-        let command .= ' 2>&1| tee "' . outfile . '"'
-      endif
+      let teefile = eclim#cygwin#CygwinPath(outfile)
+      let command = '!cmd /c "' . make_cmd . ' 2>&1 | tee "' . teefile . '" "'
 
       doautocmd QuickFixCmdPre make
       call eclim#util#Exec(command)
@@ -586,6 +575,11 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
         call delete(outfile)
       endif
       doautocmd QuickFixCmdPost make
+
+    " all other platforms
+    else
+      call eclim#util#EchoTrace('make: ' . make_cmd)
+      exec 'make' . a:bang . ' ' . a:args
     endif
   finally
     if exists('saved_compiler')
