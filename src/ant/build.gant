@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import org.apache.tools.ant.BuildException
 import org.apache.tools.ant.taskdefs.condition.Os
 
 // validate the ant version
@@ -239,10 +240,7 @@ target(name: 'deploy.eclipse'){
       instances.eachLine { line ->
         port = line.replaceFirst(/.*:/, '')
         echo("#  shutdown: ${line}")
-        execute(
-          "${existing.path}/bin/eclim",
-          "-Dnailgun.server.port=${port} -command shutdown",
-          failonerror=false)
+        eclim('-command shutdown', port=port, failonerror=false)
       }
     }
     echo('###')
@@ -311,11 +309,20 @@ target(name: 'deploy.vim'){
 }
 
 target(name: 'test.init'){
-  depends('deploy')
+  depends('init')
+
+  // we can't overwrite jar files on windows while eclimd is running so we skip
+  // the deploy here and instead require the user to ensure the latest code has
+  // been deployed prior to testing.
+  if (!Os.isFamily(Os.FAMILY_WINDOWS)){
+    depends('deploy')
+  }
 
   property(file: 'src/test/resources/eclimrc.test')
   property(name: 'test.include', value: '**/*Test')
-  property(name: 'eclipse.workspace', value: '${user.home}/workspace.test')
+
+  userHome = binding.getVariable('user.home').replace('\\', '/')
+  property(name: 'eclipse.workspace', value: "${userHome}/workspace.test")
 
   if (!pingEclim(Integer.parseInt(binding.getVariable('nailgun.server.port')))){
     fail(message: 'Failed to connect to test eclimd instance.')
@@ -331,10 +338,13 @@ target(name: 'test.init'){
         arg(line: "-zxf ${name}.tar.gz")
       }
     }
+    vcsDir = binding.getVariable('eclipse.workspace') + '/eclim_unit_test/vcs'
+    vcsDir = vcsDir.replace(' ', '%20')
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      vcsDir = '/' + vcsDir
+    }
     replace(dir: '${eclipse.workspace}/eclim_unit_test/vcs',
-        defaultexcludes: 'false',
-        token: '$${vcs.dir}',
-        value: '${eclipse.workspace}/eclim_unit_test/vcs'){
+        defaultexcludes: 'false', token: '$${vcs.dir}', value: vcsDir){
       include(name: 'cvs/unittest/**/CVS/Root')
       include(name: 'subversion/**/.svn/entries')
     }
@@ -357,7 +367,11 @@ target(name: 'test.init'){
   createProject('eclim_unit_test_python', 'none')
 
   // create interpreter before creating the project
-  property(name: 'ruby.path', value: '/usr/bin/ruby')
+  if (Os.isFamily(Os.FAMILY_WINDOWS)){
+    property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
+  }else{
+    property(name: 'ruby.path', value: '/usr/bin/ruby')
+  }
   eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
   eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
   createProject('eclim_unit_test_ruby', 'ruby')
@@ -848,14 +862,41 @@ def createProject(project, nature, extra=null){
   }
 }
 
-def eclim(args){
-  ant.exec(executable: '${eclim.home}/bin/eclim', failonerror: true,
-      output: 'build/eclim.log', append: false){
-    ant.arg(line: "-f ${basedir}/src/test/resources/eclimrc.test ${args}")
+def eclim(args, port=null, failonerror=true){
+  if (port == null){
+    eclimrc = "${basedir}/src/test/resources/eclimrc.test"
+    new File(eclimrc).eachLine { line ->
+      if (line.startsWith('nailgun.server.port')){
+        port = line.split('=')[1]
+      }
+    }
+  }
+
+  try {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      eclimCmd = binding.getVariable('eclipse.home') + '/eclim.cmd'
+      drive = eclimCmd.substring(0, 2)
+      ant.exec(executable: 'cmd.exe', failonerror: failonerror,
+          output: 'build/eclim.log', append: false){
+        ant.arg(value: '/c')
+        ant.arg(value: "${drive} && \"${eclimCmd}\" --nailgun-port ${port} ${args}")
+      }
+    }else{
+      ant.exec(executable: '${eclipse.home}/eclim', failonerror: failonerror,
+          output: 'build/eclim.log', append: false){
+        ant.arg(line: "--nailgun-port ${port} ${args}")
+      }
+    }
+  }catch(BuildException be){
+    log = new File("${basedir}/build/eclim.log")
+    if (log.exists()){
+      ant.echo(log.getText())
+    }
+    throw be
   }
 }
 
-def execute(executable, args, failonerror=true, output=null, append=false){
+def execute(exe, args, failonerror=true, output=null, append=false){
   // use a temp file to get a good random property name since ant properties
   // can only be set once.
   file = File.createTempFile('gant', '')
@@ -863,14 +904,18 @@ def execute(executable, args, failonerror=true, output=null, append=false){
   name = file.name
 
   values = [outputproperty: name, failonerror: failonerror, append: append]
-  values['executable'] = Os.isFamily(Os.FAMILY_WINDOWS) ? 'cmd.exe' : executable
+  values['executable'] = Os.isFamily(Os.FAMILY_WINDOWS) ? 'cmd.exe' : exe
   if (output != null){
     values['output'] = output
   }
 
   ant.exec(values){
-    ant.arg(line:
-        Os.isFamily(Os.FAMILY_WINDOWS) ? "/c ${executable} ${args}" : args)
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      ant.arg(value: '/c')
+      ant.arg(line: "${exe} ${args}")
+    }else{
+      ant.arg(line: args)
+    }
   }
 
   return binding.getVariable(name).trim()
