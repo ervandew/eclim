@@ -7,7 +7,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ if !exists('*VURunnerRunTests')
 function! VURunnerRunTests(basedir, testfile)
   call s:Init(a:basedir, a:testfile)
 
-  echom "Running: " . a:testfile
+  "echom "Running: " . a:testfile
 
   let tests = s:GetTestFunctionNames()
   let testcase = fnamemodify(a:testfile, ':r')
@@ -122,7 +122,7 @@ function! VURunnerRunTests(basedir, testfile)
     call BeforeTestCase()
   endif
 
-  let now = strftime('%s')
+  let now = localtime()
   for test in tests
     call s:RunTest(testcase, test)
   endfor
@@ -133,7 +133,7 @@ function! VURunnerRunTests(basedir, testfile)
 
   call PopRedir()
 
-  let duration = strftime('%s') - now
+  let duration = localtime() - now
   call s:WriteResults(a:testfile, duration)
 
   echom printf('Tests run: %s, Failures: %s, Time elapsed %s sec', s:tests_run, s:tests_failed, duration)
@@ -199,7 +199,7 @@ endfunction " }}}
 
 " RunTest(testcase, test) {{{
 function! s:RunTest(testcase, test)
-  let now = strftime('%s')
+  let now = localtime()
   if exists('*SetUp')
     call SetUp()
   endif
@@ -218,7 +218,7 @@ function! s:RunTest(testcase, test)
     call TearDown()
   endif
 
-  let time = strftime('%s') - now
+  let time = localtime() - now
   let result = {'testcase': a:testcase, 'test': a:test, 'time': time, 'fail': fail}
   call add(s:test_results, result)
 

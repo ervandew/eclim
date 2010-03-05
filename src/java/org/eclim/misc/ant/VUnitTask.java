@@ -16,7 +16,9 @@
  */
 package org.eclim.misc.ant;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 import java.util.ArrayList;
 
@@ -30,10 +32,13 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.FileSet;
 
 import org.eclim.util.CommandExecutor;
+import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -90,8 +95,10 @@ public class VUnitTask
       SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
       DefaultHandler handler = new ResultHandler();
 
-      String vunit = PLUGIN.replaceFirst("<plugin>", plugin.getAbsolutePath());
-      String output = OUTPUT.replaceFirst("<todir>", todir.getAbsolutePath());
+      String vunit = PLUGIN.replaceFirst(
+          "<plugin>", plugin.getAbsolutePath().replace('\\', '/'));
+      String output = OUTPUT.replaceFirst(
+          "<todir>", todir.getAbsolutePath().replace('\\', '/'));
 
       // build properties string.
       StringBuffer propertiesBuffer = new StringBuffer();
@@ -111,10 +118,12 @@ public class VUnitTask
         File basedir = scanner.getBasedir();
         String[] files = scanner.getIncludedFiles();
 
-        String run = TESTCASE.replaceFirst("<basedir>", basedir.getAbsolutePath());
+        String run = TESTCASE.replaceFirst(
+            "<basedir>", basedir.getAbsolutePath().replace('\\', '/'));
 
-        for (int ii = 0; ii < files.length; ii++){
-          log("Running: " + files[ii]);
+        for (String file : files){
+          file = file.replace('\\', '/');
+          log("Running: " + file);
 
           String[] command = new String[VUNIT.length];
           System.arraycopy(VUNIT, 0, command, 0, VUNIT.length);
@@ -122,43 +131,34 @@ public class VUnitTask
           command[8] = setproperties;
           command[10] = vunit;
           command[12] = output;
-          command[14] = run.replaceFirst("<testcase>", files[ii]);
+          command[14] = run.replaceFirst("<testcase>", file);
 
           // ncurses and Runtime.exec don't play well together, so execute via sh.
-          log("sh -c " + StringUtils.join(command, ' ') + " exit",
-              Project.MSG_DEBUG);
-          command = new String[]{
-            "sh", "-c", StringUtils.join(command, ' '), "exit"
-          };
-
-          try{
-            log("vunit: " + StringUtils.join(command, ' '), Project.MSG_DEBUG);
-            CommandExecutor executor = CommandExecutor.execute(command);
-
-            if(executor.getResult().trim().length() > 0){
-              log(executor.getResult());
-            }
-
-            if(executor.getReturnCode() != 0){
-              throw new BuildException(
-                  "Failed to run command: " + executor.getErrorMessage());
-            }
-          }finally{
-            // some aspect of the external execution can screw up the terminal,
-            // but 'resize' can fix it.
-            try{
-              Runtime.getRuntime().exec("resize");
-            }catch(Exception ignore){
-            }
+          if (!Os.isFamily(Os.FAMILY_WINDOWS)){
+            command = new String[]{
+              "sh", "-c", StringUtils.join(command, ' ') + " &> /dev/null", "exit"
+            };
           }
 
-          StringBuffer file = new StringBuffer()
+          log("vunit: " + StringUtils.join(command, ' '), Project.MSG_DEBUG);
+          CommandExecutor executor = CommandExecutor.execute(command);
+
+          if(executor.getResult().trim().length() > 0){
+            log(executor.getResult().trim());
+          }
+
+          if(executor.getReturnCode() != 0){
+            throw new BuildException(
+                "Failed to run command: " + executor.getErrorMessage());
+          }
+
+          StringBuffer resultFileName = new StringBuffer()
             .append("TEST-")
-            .append(FileUtils.getPath(files[ii]).replace('/', '.'))
-            .append(FileUtils.getFileName(files[ii]))
+            .append(FileUtils.getPath(file).replace('/', '.').replace('\\', '.'))
+            .append(FileUtils.getFileName(file))
             .append(".xml");
           File resultFile = new File(FileUtils.concat(
-              todir.getAbsolutePath(), file.toString()));
+              todir.getAbsolutePath(), resultFileName.toString()));
 
           try{
             parser.parse(resultFile, handler);
@@ -175,7 +175,7 @@ public class VUnitTask
             }
 
             if(haltOnFailure){
-              throw new BuildException("Test failed: " + files[ii]);
+              throw new BuildException("Test failed: " + file);
             }
           }
         }
