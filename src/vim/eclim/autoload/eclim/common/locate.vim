@@ -531,19 +531,19 @@ function! s:LocateFileConvertPattern(pattern, fuzzy)
   if a:fuzzy
     let pattern = '.*' . substitute(pattern, '\(.\)', '\1.*?', 'g')
     let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
-    return pattern
   else
-
-  " if the user supplied a path, prepend a '.*/' to it so that they don't need
-  " to type full paths to match.
-  if pattern =~ '.\+/'
-    let pattern = '.*/' . pattern
+    " if the user supplied a path, prepend a '.*/' to it so that they don't need
+    " to type full paths to match.
+    if pattern =~ '.\+/'
+      let pattern = '.*/' . pattern
+    endif
+    let pattern = substitute(pattern, '\*\*', '.*', 'g')
+    let pattern = substitute(pattern, '\(^\|\([^.]\)\)\*', '\1[^/]*?', 'g')
+    let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
+    "let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
+    let pattern .= '.*'
   endif
-  let pattern = substitute(pattern, '\*\*', '.*', 'g')
-  let pattern = substitute(pattern, '\(^\|\([^.]\)\)\*', '\1[^/]*?', 'g')
-  let pattern = substitute(pattern, '\.\([^*]\)', '\\.\1', 'g')
-  "let pattern = substitute(pattern, '\([^*]\)?', '\1.', 'g')
-  let pattern .= '.*'
+
   return pattern
 endfunction " }}}
 
