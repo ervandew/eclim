@@ -69,9 +69,11 @@ function! eclim#ExecuteEclim(command, ...)
   let command = a:command
 
   " encode special characters
-  " http://www.cs.net/lucid/ascii.htm
-  let command = substitute(command, '*', '%2A', 'g')
+  " http://www.w3schools.com/TAGS/ref_urlencode.asp
+  let command = substitute(command, '\*', '%2A', 'g')
   let command = substitute(command, '\$', '%24', 'g')
+  let command = substitute(command, '<', '%3C', 'g')
+  let command = substitute(command, '>', '%3E', 'g')
 
   " execute the command.
   let port = len(a:000) > 0 ? a:000[0] : eclim#client#nailgun#GetNgPort()
