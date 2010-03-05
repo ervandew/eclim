@@ -50,16 +50,16 @@ function! TestCallHierarchy()
 
   call cursor(1, 1)
   exec "normal \<cr>"
-  call VUAssertEquals(
-    \ 'src/callhierarchy/mod2.c', expand('%'), 'Wrong window (mod2.c)')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals('src/callhierarchy/mod2.c', name, 'Wrong window (mod2.c)')
   call VUAssertEquals(1, line('.'), 'Wrong line (mod2.c')
   call VUAssertEquals(5, col('.'), 'Wrong column (mod2.c')
   exec chwin . 'winc w'
 
   call cursor(3, 1)
   exec "normal \<cr>"
-  call VUAssertEquals(
-    \ 'src/callhierarchy/main.c', expand('%'), 'Wrong window (main.c)')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals('src/callhierarchy/main.c', name, 'Wrong window (main.c)')
   call VUAssertEquals(6, line('.'), 'Wrong line (main.c')
   call VUAssertEquals(28, col('.'), 'Wrong column (main.c')
 endfunction " }}}

@@ -35,7 +35,8 @@ function! TestSearchContext()
   " find class
   call cursor(4, 15)
   PhpSearchContext
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(6, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
 
@@ -44,7 +45,8 @@ function! TestSearchContext()
   " find method
   call cursor(5, 9)
   PhpSearchContext
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(13, line('.'), 'Wrong line.')
   call VUAssertEquals(19, col('.'), 'Wrong col.')
 
@@ -53,7 +55,8 @@ function! TestSearchContext()
   " find variable
   call cursor(6, 17)
   PhpSearchContext
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(8, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
 
@@ -62,7 +65,8 @@ function! TestSearchContext()
   " find function
   call cursor(7, 1)
   PhpSearchContext
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(3, line('.'), 'Wrong line.')
   call VUAssertEquals(10, col('.'), 'Wrong col.')
 
@@ -71,7 +75,8 @@ function! TestSearchContext()
   " find constant
   call cursor(8, 6)
   PhpSearchContext
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(29, line('.'), 'Wrong line.')
   call VUAssertEquals(1, col('.'), 'Wrong col.')
 
@@ -85,7 +90,8 @@ function! TestSearchExact()
 
   " find class
   :PhpSearch -p TestA -t class
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(6, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
 
@@ -93,7 +99,8 @@ function! TestSearchExact()
 
   " find method
   :PhpSearch -p methodA2 -t function
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(13, line('.'), 'Wrong line.')
   call VUAssertEquals(19, col('.'), 'Wrong col.')
 
@@ -101,7 +108,8 @@ function! TestSearchExact()
 
   " find function
   :PhpSearch -p functionA -t function
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(3, line('.'), 'Wrong line.')
   call VUAssertEquals(10, col('.'), 'Wrong col.')
 
@@ -109,7 +117,8 @@ function! TestSearchExact()
 
   " find constant
   :PhpSearch -p CONSTANT1 -t field
-  call VUAssertEquals('php/models.php', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
   call VUAssertEquals(29, line('.'), 'Wrong line.')
   call VUAssertEquals(1, col('.'), 'Wrong col.')
 

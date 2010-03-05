@@ -34,22 +34,22 @@ function! TestJavaImpl()
 
   JavaImpl
 
-  call VUAssertTrue(bufname('%') =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
 
   call cursor(line('$'), 1)
-  let line = search('public abstract String put(Integer key, String value)', 'bc')
-
+  let line = search('public abstract String put(Integer \w\+, String \w\+)', 'bc')
   call VUAssertTrue(line > 0, 'put method not found.')
-  call VUAssertEquals(getline(line),
-    \ '  public abstract String put(Integer key, String value)')
+  call VUAssertTrue(getline(line) =~ 
+    \ '  public abstract String put(Integer \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertEquals(getline(line),
-    \ '  //public abstract String put(Integer key, String value)')
+  call VUAssertTrue(getline(line) =~
+    \ '  //public abstract String put(Integer \w\+, String \w\+)')
   quit
   call cursor(1, 1)
-  call VUAssertTrue(search('public String put(Integer key, String value)', 'c'),
+  call VUAssertTrue(search('public String put(Integer \w\+, String \w\+)', 'c'),
     \ 'Method not inserted.')
 endfunction " }}}
 
@@ -60,37 +60,37 @@ function! TestJavaImplSub()
 
   JavaImpl
 
-  call VUAssertTrue(bufname('%') =~
-    \ 'src/org/eclim/test/impl/TestSubImplVUnit\.java_impl$')
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'src/org/eclim/test/impl/TestSubImplVUnit\.java_impl$')
 
-  let compareLine = search('public abstract int compare(String o1, String o2)')
+  let compareLine = search('public abstract int compare(String \w\+, String \w\+)')
 
   call VUAssertTrue(compareLine > 0, 'compare method not found.')
-  call VUAssertEquals(getline(compareLine),
-    \ '  public abstract int compare(String o1, String o2)')
+  call VUAssertTrue(getline(compareLine) =~
+    \ '  public abstract int compare(String \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertEquals(getline(compareLine),
-    \ '  //public abstract int compare(String o1, String o2)')
+  call VUAssertTrue(getline(compareLine) =~
+    \ '  //public abstract int compare(String \w\+, String \w\+)')
 
-  let putLine = search('public abstract String put(Integer key, String value)')
+  let putLine = search('public abstract String put(Integer \w\+, String \w\+)')
 
   call VUAssertTrue(putLine > 0, 'put method not found.')
-  call VUAssertEquals(getline(putLine),
-    \ '  public abstract String put(Integer key, String value)')
+  call VUAssertTrue(getline(putLine) =~
+    \ '  public abstract String put(Integer \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertEquals(getline(putLine),
-    \ '  //public abstract String put(Integer key, String value)')
+  call VUAssertTrue(getline(putLine) =~
+    \ '  //public abstract String put(Integer \w\+, String \w\+)')
 
   bdelete
 
   call cursor(1, 1)
-  call VUAssertTrue(search('public int compare(String o1, String o2)'),
+  call VUAssertTrue(search('public int compare(String \w\+, String \w\+)'),
     \ 'put method not inserted.')
-  call VUAssertTrue(search('public String put(Integer key, String value)'),
+  call VUAssertTrue(search('public String put(Integer \w\+, String \w\+)'),
     \ 'compare method not inserted.')
 endfunction " }}}
 

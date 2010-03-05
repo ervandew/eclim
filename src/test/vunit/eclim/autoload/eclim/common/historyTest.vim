@@ -63,7 +63,8 @@ function! TestHistory()
 
   call cursor(3, 1)
   exec "normal \<cr>"
-  call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt_\d\+', 'Wrong view buffer name.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'history/sample_vunit.txt_\d\+', 'Wrong view buffer name.')
   call VUAssertEquals(getline(1), 'line 1', 'Wrong first line.')
   call VUAssertEquals(line('$'), 1, 'Wrong number of lines.')
   call VUAssertEquals(winnr('$'), 3, 'Wrong number of windows.')
@@ -73,16 +74,19 @@ function! TestHistory()
 
   call cursor(3, 1)
   normal d
-  call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt', 'Wrong buffer.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'history/sample_vunit.txt', 'Wrong buffer.')
   call VUAssertEquals(line('$'), 2, 'Wrong number of lines.')
   call VUAssertEquals(&diff, 1, 'Diff not enabled.')
   winc w
-  call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt_\d\+', 'Wrong diff buffer name.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'history/sample_vunit.txt_\d\+', 'Wrong diff buffer name.')
   call VUAssertEquals(getline(1), 'line 1', 'Wrong first line.')
   call VUAssertEquals(line('$'), 1, 'Wrong number of lines.')
   call VUAssertEquals(&diff, 1, 'Diff not enabled.')
   bdelete
-  call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt', 'Wrong buffer.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'history/sample_vunit.txt', 'Wrong buffer.')
   call VUAssertEquals(line('$'), 2, 'Wrong number of lines.')
   call VUAssertEquals(&diff, 0, 'Diff not disabled.')
 
@@ -90,7 +94,8 @@ function! TestHistory()
 
   call cursor(3, 1)
   normal r
-  call VUAssertTrue(expand('%') =~ 'history/sample_vunit.txt', 'Wrong buffer.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'history/sample_vunit.txt', 'Wrong buffer.')
   call VUAssertEquals(getline(1), 'line 1', 'Wrong first line.')
   call VUAssertEquals(line('$'), 1, 'Wrong number of lines.')
   call VUAssertEquals(&modified, 1, 'Buffer not marked modified.')

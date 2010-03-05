@@ -30,6 +30,10 @@ endfunction " }}}
 
 " TestInfo() {{{
 function! TestInfo()
+  if has('win32') || has('win64')
+    return
+  endif
+
   view test/file1.txt
   call PushRedir('@"')
   VcsInfo
@@ -41,6 +45,10 @@ endfunction " }}}
 
 " TestAnnotate() {{{
 function! TestAnnotate()
+  if has('win32') || has('win64')
+    return
+  endif
+
   view test/file1.txt
   call PeekRedir()
   call PushRedir('@"')
@@ -63,6 +71,10 @@ endfunction " }}}
 
 " TestDiff() {{{
 function! TestDiff()
+  if has('win32') || has('win64')
+    return
+  endif
+
   view test/file1.txt
   call PeekRedir()
   VcsDiff
@@ -77,6 +89,10 @@ endfunction " }}}
 
 " TestLog() {{{
 function! TestLog()
+  if has('win32') || has('win64')
+    return
+  endif
+
   view test/file1.txt
   call PeekRedir()
   VcsLog

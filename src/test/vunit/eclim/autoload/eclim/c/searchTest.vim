@@ -39,8 +39,12 @@ function! TestFindInclude()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), '/usr/include/stdio.h', 'Wrong result file.')
+  let name = bufname(results[0].bufnr)
+  if has('win32') || has('win64')
+    call VUAssertTrue(name =~ '\\include\\stdio\.h', 'Wrong result file: ' . name)
+  else
+    call VUAssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
+  endif
   bdelete
 
   call cursor(3, 14)
@@ -50,8 +54,8 @@ function! TestFindInclude()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test.h', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.h', 'Wrong result file.')
 endfunction " }}}
 
 " TestSearchElement() {{{
@@ -67,10 +71,13 @@ function! TestSearchElement()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), '/usr/include/stdlib.h', 'Wrong result file.')
-  call VUAssertEquals(results[0].lnum, 135, 'Wrong line number.')
-  call VUAssertEquals(results[0].col, 9, 'Wrong line number.')
+  let name = bufname(results[0].bufnr)
+  if has('win32') || has('win64')
+    call VUAssertTrue(name =~ '\\include\\stdlib\.h', 'Wrong result file: ' . name)
+  else
+    call VUAssertEquals(name, '/usr/include/stdlib.h', 'Wrong result file.')
+  endif
+  call VUAssertTrue(getline('.') =~ '#define\s\+EXIT_SUCCESS', 'Wrong line: ' . getline('.'))
   bdelete
 
   " testFunction (definition)
@@ -81,8 +88,8 @@ function! TestSearchElement()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test.c', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.c', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 1, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 6, 'Wrong line number.')
   bdelete
@@ -95,8 +102,8 @@ function! TestSearchElement()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test.h', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.h', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 4, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 6, 'Wrong line number.')
   bdelete
@@ -109,13 +116,13 @@ function! TestSearchElement()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(2, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test_search_vunit.c', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search_vunit.c', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 11, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 3, 'Wrong line number.')
 
-  call VUAssertEquals(
-    \ bufname(results[1].bufnr), 'src/test_search.c', 'Wrong result file.')
+  let name = substitute(bufname(results[1].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search.c', 'Wrong result file.')
   call VUAssertEquals(results[1].lnum, 11, 'Wrong line number.')
   call VUAssertEquals(results[1].col, 3, 'Wrong line number.')
   bdelete
@@ -128,23 +135,23 @@ function! TestSearchElement()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(4, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test.h', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.h', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 4, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 6, 'Wrong line number.')
 
-  call VUAssertEquals(
-    \ bufname(results[1].bufnr), 'src/test.c', 'Wrong result file.')
+  let name = substitute(bufname(results[1].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.c', 'Wrong result file.')
   call VUAssertEquals(results[1].lnum, 1, 'Wrong line number.')
   call VUAssertEquals(results[1].col, 6, 'Wrong line number.')
 
-  call VUAssertEquals(
-    \ bufname(results[2].bufnr), 'src/test_search_vunit.c', 'Wrong result file.')
+  let name = substitute(bufname(results[2].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search_vunit.c', 'Wrong result file.')
   call VUAssertEquals(results[2].lnum, 11, 'Wrong line number.')
   call VUAssertEquals(results[2].col, 3, 'Wrong line number.')
 
-  call VUAssertEquals(
-    \ bufname(results[3].bufnr), 'src/test_search.c', 'Wrong result file.')
+  let name = substitute(bufname(results[3].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search.c', 'Wrong result file.')
   call VUAssertEquals(results[3].lnum, 11, 'Wrong line number.')
   call VUAssertEquals(results[3].col, 3, 'Wrong line number.')
   bdelete
@@ -161,8 +168,8 @@ function! TestSearchFunction()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test_search_vunit.c', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search_vunit.c', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 16, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 5, 'Wrong line number.')
 endfunction " }}}
@@ -178,8 +185,8 @@ function! TestSearchStruct()
   let results = getloclist(0)
   echo string(results)
   call VUAssertEquals(1, len(results), 'Wrong number of results.')
-  call VUAssertEquals(
-    \ bufname(results[0].bufnr), 'src/test_search_vunit.c', 'Wrong result file.')
+  let name = substitute(bufname(results[0].bufnr), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test_search_vunit.c', 'Wrong result file.')
   call VUAssertEquals(results[0].lnum, 5, 'Wrong line number.')
   call VUAssertEquals(results[0].col, 8, 'Wrong line number.')
 endfunction " }}}

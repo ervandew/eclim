@@ -87,7 +87,8 @@ function! TestRenameField()
   exec "normal \<cr>"
   call VUAssertEquals(winnr('$'), numwins - 3, 'wrong number of windows')
 
-  call VUAssertEquals(expand('%'),
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name,
     \ 'src/org/eclim/test/refactoring/rename/vn1/TestN1VUnit.java',
     \ 'Wrong result file')
   call VUAssertEquals(getline(5),
@@ -156,7 +157,8 @@ function! TestRenameMethod()
   exec "normal \<cr>"
   call VUAssertEquals(winnr('$'), numwins - 3, 'wrong number of windows')
 
-  call VUAssertEquals(expand('%'),
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name,
     \ 'src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java',
     \ 'Wrong result file')
   call VUAssertEquals(getline(13),
@@ -220,7 +222,8 @@ function! TestRenameType()
   exec "normal \<cr>"
   call VUAssertEquals(winnr('$'), numwins - 3, 'wrong number of windows')
 
-  call VUAssertEquals(expand('%'),
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name,
     \ 'src/org/eclim/test/refactoring/rename/vn1/TestR1VUnit.java',
     \ 'Wrong result file')
   call VUAssertEquals(getline(3),
@@ -245,7 +248,8 @@ function! TestRenamePackage()
   call PeekRedir()
 
   cd src/org/eclim/test/refactoring/rename/vn1/vn2
-  call VUAssertEquals(getcwd(), g:TestEclimWorkspace . 'eclim_unit_test_java/src/org/eclim/test/refactoring/rename/vn1/vn2', 'cwd incorrect')
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(cwd, g:TestEclimWorkspace . 'eclim_unit_test_java/src/org/eclim/test/refactoring/rename/vn1/vn2', 'cwd incorrect')
 
   call cursor(1, 44)
   call VUAssertEquals(getline('.'),
@@ -256,7 +260,8 @@ function! TestRenamePackage()
   call PeekRedir()
   call VUAssertEquals(expand('%'), '[Refactor Preview]', 'wrong preview title')
   call VUAssertEquals(line('$'), 4, 'wrong number of preview lines')
-  call VUAssertEquals(line(1), '|diff|: ' . getcwd() . '/src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java', 'wrong preview line 1')
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(line(1), '|diff|: ' . cwd . '/src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java', 'wrong preview line 1')
   call VUAssertEquals(line(2), " other: Rename package 'org.eclim.test.refactoring.rename.vn1' and subpackages to 'org.eclim.test.refactoring.rename.vr1'", 'wrong preview line 1')
   call VUAssertEquals(line(3), '', 'wrong preview line 3')
   call VUAssertEquals(line(4), '|Execute Refactoring|', 'wrong preview line 4')
@@ -288,7 +293,8 @@ function! TestRenamePackage()
   exec "normal \<cr>"
   call VUAssertEquals(winnr('$'), numwins - 3, 'wrong number of windows')
 
-  call VUAssertEquals(getcwd(), g:TestEclimWorkspace . 'eclim_unit_test_java/src/org/eclim/test/refactoring/rename/vr1/vn2', 'cwd rename incorrect')
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(cwd, g:TestEclimWorkspace . 'eclim_unit_test_java/src/org/eclim/test/refactoring/rename/vr1/vn2', 'cwd rename incorrect')
   call VUAssertEquals(expand('%'), 'TestN2VUnit.java', 'Wrong result file')
   call VUAssertEquals(getline(1),
     \ 'package org.eclim.test.refactoring.rename.vr1.vn2;',

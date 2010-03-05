@@ -89,12 +89,17 @@ function! TestDiff()
   view test/file1.txt
   call PeekRedir()
   VcsDiff
-  call VUAssertEquals(expand('%'), 'test/file1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'test/file1.txt')
   call VUAssertEquals(line('$'), 5)
 
   winc l
 
-  call VUAssertEquals(expand('%'), 'vcs_2:5f0911d194b1_file1.txt')
+  if has('win32') || has('win64')
+    call VUAssertEquals(expand('%'), 'vcs_2_5f0911d194b1_file1.txt')
+  else
+    call VUAssertEquals(expand('%'), 'vcs_2:5f0911d194b1_file1.txt')
+  endif
   call VUAssertEquals(line('$'), 4)
 endfunction " }}}
 
@@ -119,7 +124,11 @@ function! TestLog()
   call cursor(13, 29)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'vcs_1:9247ff7b10e3_file1.txt')
+  if has('win32') || has('win64')
+    call VUAssertEquals(expand('%'), 'vcs_1_9247ff7b10e3_file1.txt')
+  else
+    call VUAssertEquals(expand('%'), 'vcs_1:9247ff7b10e3_file1.txt')
+  endif
   bdelete
   VcsLog
 
@@ -127,7 +136,11 @@ function! TestLog()
   call cursor(20, 36)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'vcs_0:6a95632ba43d_file1.txt')
+  if has('win32') || has('win64')
+    call VUAssertEquals(expand('%'), 'vcs_0_6a95632ba43d_file1.txt')
+  else
+    call VUAssertEquals(expand('%'), 'vcs_0:6a95632ba43d_file1.txt')
+  endif
   call VUAssertEquals(
     \ b:vcs_annotations[0], '0 (Sat Sep 27 22:26:55 2008 -0700) ervandew')
   bdelete
@@ -137,10 +150,18 @@ function! TestLog()
   call cursor(6, 8)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'vcs_2:5f0911d194b1_file1.txt')
+  if has('win32') || has('win64')
+    call VUAssertEquals(expand('%'), 'vcs_2_5f0911d194b1_file1.txt')
+  else
+    call VUAssertEquals(expand('%'), 'vcs_2:5f0911d194b1_file1.txt')
+  endif
   call VUAssertEquals(line('$'), 4)
   winc l
-  call VUAssertEquals(expand('%'), 'vcs_1:9247ff7b10e3_file1.txt')
+  if has('win32') || has('win64')
+    call VUAssertEquals(expand('%'), 'vcs_1_9247ff7b10e3_file1.txt')
+  else
+    call VUAssertEquals(expand('%'), 'vcs_1:9247ff7b10e3_file1.txt')
+  endif
   call VUAssertEquals(line('$'), 3)
   bdelete
   bdelete
@@ -150,7 +171,8 @@ function! TestLog()
   call cursor(22, 8)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'test/file1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'test/file1.txt')
   call VUAssertEquals(line('$'), 5)
   winc l
   call VUAssertEquals(expand('%'), 'vcs_0_file1.txt')

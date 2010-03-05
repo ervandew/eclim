@@ -132,8 +132,8 @@ function! TestCommandCompleteVarPath()
     call VUAssertTrue(result =~ '^ECLIPSE_HOME/e',
       \ 'Var path result did not start with ECLIPSE_HOME/e.')
   endfor
-  call VUAssertTrue(eclim#util#ListContains(results, 'ECLIPSE_HOME/eclipse'),
-    \ 'Missing ECLIPSE_HOME/eclipse var path entry.')
+  call VUAssertTrue(eclim#util#ListContains(results, 'ECLIPSE_HOME/eclim'),
+    \ 'Missing ECLIPSE_HOME/eclim var path entry.')
 endfunction " }}}
 
 " TestCommandCompleteVarAndDir() {{{
@@ -158,13 +158,21 @@ function! TestCommandCompleteVarAndDir()
     call VUAssertTrue(result =~ '^JRE', 'Var does not begin with JRE.')
   endfor
 
-  let results = eclim#java#classpath#CommandCompleteVarAndDir(
-    \ 'JRE', 'VariableCreate JRE /b', 23)
-  call VUAssertTrue(len(results) > 1, 'Not enough dir results.')
-  call VUAssertTrue(eclim#util#ListContains(results, '/boot/'),
-    \ 'Missing /boot/ entry.')
-  call VUAssertTrue(eclim#util#ListContains(results, '/bin/'),
-    \ 'Missing /bin/ entry.')
+  if has('win32') || has('win64')
+    let results = eclim#java#classpath#CommandCompleteVarAndDir(
+      \ 'JRE', 'VariableCreate JRE /D', 23)
+    call VUAssertTrue(len(results) >= 1, 'Not enough dir results.')
+    call VUAssertTrue(eclim#util#ListContains(results, '/Documents\ and\ Settings/'),
+      \ 'Missing /Document and Settings/ entry.')
+  else
+    let results = eclim#java#classpath#CommandCompleteVarAndDir(
+      \ 'JRE', 'VariableCreate JRE /b', 23)
+    call VUAssertTrue(len(results) > 1, 'Not enough dir results.')
+    call VUAssertTrue(eclim#util#ListContains(results, '/boot/'),
+      \ 'Missing /boot/ entry.')
+    call VUAssertTrue(eclim#util#ListContains(results, '/bin/'),
+      \ 'Missing /bin/ entry.')
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

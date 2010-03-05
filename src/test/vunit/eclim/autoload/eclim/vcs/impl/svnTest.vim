@@ -103,7 +103,8 @@ function! TestDiff()
   view test/file1.txt
   call PeekRedir()
   VcsDiff
-  call VUAssertEquals(expand('%'), 'test/file1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'test/file1.txt')
   call VUAssertEquals(line('$'), 5)
 
   winc l
@@ -170,7 +171,8 @@ function! TestLog()
   call cursor(22, 8)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'test/file1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'test/file1.txt')
   call VUAssertEquals(line('$'), 5)
   winc l
   call VUAssertEquals(expand('%'), 'vcs_2_file1.txt')

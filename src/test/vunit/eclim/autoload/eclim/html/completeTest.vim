@@ -29,6 +29,10 @@ endfunction " }}}
 
 " TestCompleteAttribute() {{{
 function! TestCompleteAttribute()
+  if has('win32') || has('win64') || has('win32unix')
+    return
+  endif
+
   edit! html/test.html
   call PeekRedir()
 
@@ -46,6 +50,10 @@ endfunction " }}}
 
 " TestCompleteElement() {{{
 function! TestCompleteElement()
+  if has('win32') || has('win64') || has('win32unix')
+    return
+  endif
+
   edit! html/test.html
   call PeekRedir()
 
@@ -65,6 +73,10 @@ endfunction " }}}
 
 " TestCompleteCss() {{{
 function! TestCompleteCss()
+  if has('win32') || has('win64') || has('win32unix')
+    return
+  endif
+
   edit! html/test.html
   call PeekRedir()
 

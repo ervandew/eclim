@@ -40,7 +40,8 @@ function! TestArchiveList()
   call cursor(45, 1)
   exec "normal \<cr>"
 
-  call VUAssertEquals(expand('%'), '/tmp/git/unittest/test/file1.txt')
+  let name = substitute(expand('%:p'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/git/unittest/test/file1.txt')
   call VUAssertEquals(line('$'), 5)
   call VUAssertEquals(getline(1), 'file 1')
   call VUAssertEquals(getline(2), 'some first revision content')
@@ -93,7 +94,8 @@ function! TestArchiveTree()
   call cursor(6, 15)
   exec "normal \<cr>"
 
-  call VUAssertEquals(expand('%'), '/tmp/git/unittest/test/file1.txt')
+  let name = substitute(expand('%:p'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/git/unittest/test/file1.txt')
   call VUAssertEquals(line('$'), 5)
   call VUAssertEquals(getline(1), 'file 1')
   call VUAssertEquals(getline(2), 'some first revision content')

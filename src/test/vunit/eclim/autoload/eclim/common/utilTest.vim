@@ -51,13 +51,14 @@ function! TestLocateFile()
 
   LocateFile test.vim
   call PeekRedir()
-  call VUAssertEquals(expand('%'), 'eclim_unit_test/vim/test.vim')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'eclim_unit_test/vim/test.vim')
   bdelete
 
   LocateFile vcs/merc*/**/file1.txt
   call PeekRedir()
-  call VUAssertEquals(
-    \ expand('%'), 'eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
   bdelete
 
   LocateFile

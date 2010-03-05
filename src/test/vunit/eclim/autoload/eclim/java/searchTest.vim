@@ -35,7 +35,8 @@ function! TestSearch()
   call cursor(8, 11)
   JavaSearch
 
-  call VUAssertEquals('/tmp/java/util/List.java', bufname('%'),
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/java/util/List.java',
     \ 'Wrong or no file found for List.')
   call VUAssertTrue(getline('.') =~ 'public interface List',
     \ 'Not on class declaration.')

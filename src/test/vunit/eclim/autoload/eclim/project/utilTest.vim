@@ -39,7 +39,8 @@ function! TestProjectRename()
   call VUAssertTrue(
     \ isdirectory(g:TestEclimWorkspace . 'eclim_unit_test'),
     \ "initial project directory doesn't exist")
-  call VUAssertEquals(getcwd(), s:test_dir, 'initial cwd is incorrect')
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(cwd, s:test_dir, 'initial cwd is incorrect')
 
   ProjectRename eclim_unit_test_rename
   call PeekRedir()
@@ -51,10 +52,12 @@ function! TestProjectRename()
     call VUAssertTrue(
       \ isdirectory(g:TestEclimWorkspace . 'eclim_unit_test_rename'),
       \ "renamed project directory doesn't exist")
-    call VUAssertEquals(getcwd(),
+    let cwd = substitute(getcwd(), '\', '/', 'g')
+    call VUAssertEquals(cwd,
       \ substitute(s:test_dir, 'eclim_unit_test', 'eclim_unit_test_rename', ''),
       \ 'post rename cwd is incorrect')
-    call VUAssertEquals(expand('%:p'),
+    let name = substitute(expand('%:p'), '\', '/', 'g')
+    call VUAssertEquals(name,
       \ g:TestEclimWorkspace . 'eclim_unit_test_rename/test_root_file.txt',
       \ 'wrong file name for root file')
     bdelete
@@ -66,10 +69,12 @@ endfunction " }}}
 
 " TestProjectCD() {{{
 function! TestProjectCD()
-  call VUAssertEquals(s:test_dir, getcwd(), "Setup failed.")
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(cwd, s:test_dir, "Setup failed.")
 
   call eclim#project#util#ProjectCD(0)
-  call VUAssertEquals(g:TestEclimWorkspace . 'eclim_unit_test', getcwd(),
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  call VUAssertEquals(cwd, g:TestEclimWorkspace . 'eclim_unit_test',
     \ "Project cd failed.")
 endfunction " }}}
 

@@ -47,6 +47,10 @@ endfunction " }}}
 
 " TestCompleteHtml() {{{
 function! TestCompleteHtml()
+  if has('win32') || has('win64') || has('win32unix')
+    return
+  endif
+
   edit! php/complete/test.php
   call PeekRedir()
 

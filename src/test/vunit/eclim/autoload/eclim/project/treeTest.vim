@@ -68,7 +68,8 @@ function! TestProjectTree()
   call VUAssertEquals(line('.'), 3)
   call VUAssertEquals(col('.'), 8)
   exec "normal \<cr>"
-  call VUAssertEquals(expand('%'), 'eclim_unit_test/files/test1.txt')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'eclim_unit_test/files/test1.txt')
   call VUAssertEquals(getline(1), 'test file 1')
   bdelete
   winc h
@@ -80,7 +81,8 @@ function! TestProjectTree()
 
   normal j
   exec "normal \<cr>"
-  call VUAssertTrue(expand('%') =~ 'eclim_unit_test/files/test1.txt$')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'eclim_unit_test/files/test1.txt$')
   call VUAssertEquals(tabpagenr(), 2)
   call VUAssertEquals(getline(1), 'test file 1')
   bdelete

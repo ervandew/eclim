@@ -42,7 +42,7 @@ function! TestJUnitImpl4()
     \ 'Super method aMethod() not found')
   call VUAssertTrue(search('^\s*public void aMethod(String name)'),
     \ 'Super method aMethod(String) not found')
-  call VUAssertTrue(search('^\s*public abstract int compare(String o1, String o2)'),
+  call VUAssertTrue(search('^\s*public abstract int compare(String \w\+, String \w\+)'),
     \ 'Super method compare() not found')
 
   call cursor(6, 1)
@@ -55,9 +55,9 @@ function! TestJUnitImpl4()
     \ 'Super method aMethod() not commented out after add.')
   call VUAssertTrue(search('^\s*//public void aMethod(String name)'),
     \ 'Super method aMethod(String) not commented out after add.')
-  call VUAssertTrue(search('^\s*//public abstract int compare(String o1, String o2)'),
+  call VUAssertTrue(search('^\s*//public abstract int compare(String \w\+, String \w\+)'),
     \ 'Super method compare() not commented out after add.')
-  call VUAssertTrue(search('^\s*//public abstract boolean equals(Object obj)'),
+  call VUAssertTrue(search('^\s*//public abstract boolean equals(Object \w\+)'),
     \ 'Super method equals() not commented out after add.')
   bdelete
 
@@ -90,7 +90,7 @@ function! TestJUnitImpl3()
     \ 'Super method aMethod() not found')
   call VUAssertTrue(search('^\s*public void aMethod(String name)'),
     \ 'Super method aMethod(String) not found')
-  call VUAssertTrue(search('^\s*public abstract int compare(String o1, String o2)'),
+  call VUAssertTrue(search('^\s*public abstract int compare(String \w\+, String \w\+)'),
     \ 'Super method compare() not found')
 
   call cursor(6, 1)
@@ -103,9 +103,9 @@ function! TestJUnitImpl3()
     \ 'Super method aMethod() not commented out after add.')
   call VUAssertTrue(search('^\s*//public void aMethod(String name)'),
     \ 'Super method aMethod(String) not commented out after add.')
-  call VUAssertTrue(search('^\s*//public abstract int compare(String o1, String o2)'),
+  call VUAssertTrue(search('^\s*//public abstract int compare(String \w\+, String \w\+)'),
     \ 'Super method compare() not commented out after add.')
-  call VUAssertTrue(search('^\s*//public abstract boolean equals(Object obj)'),
+  call VUAssertTrue(search('^\s*//public abstract boolean equals(Object \w\+)'),
     \ 'Super method equals() not commented out after add.')
   bdelete
 

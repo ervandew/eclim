@@ -25,6 +25,7 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  let g:EclimJavaImportExclude = ['^com\.sun\..*', '^sunw\?\..*']
 endfunction " }}}
 
 " TestImport() {{{

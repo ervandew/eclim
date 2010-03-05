@@ -35,7 +35,8 @@ function! TestSearchContext()
   " find class
   call cursor(3, 11)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(11, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
   bdelete
@@ -43,7 +44,8 @@ function! TestSearchContext()
   " find method
   call cursor(4, 8)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(13, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
   bdelete
@@ -51,7 +53,8 @@ function! TestSearchContext()
   " find class constant
   call cursor(5, 15)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(12, line('.'), 'Wrong line.')
   call VUAssertEquals(3, col('.'), 'Wrong col.')
   bdelete
@@ -59,7 +62,8 @@ function! TestSearchContext()
   " find module
   call cursor(7, 6)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(1, line('.'), 'Wrong line.')
   call VUAssertEquals(8, col('.'), 'Wrong col.')
   bdelete
@@ -67,7 +71,8 @@ function! TestSearchContext()
   " find module constant
   call cursor(7, 14)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(2, line('.'), 'Wrong line.')
   call VUAssertEquals(3, col('.'), 'Wrong col.')
   bdelete
@@ -75,7 +80,8 @@ function! TestSearchContext()
   " find module method
   call cursor(8, 12)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(6, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
   bdelete
@@ -83,7 +89,8 @@ function! TestSearchContext()
   " find function
   call cursor(10, 12)
   RubySearchContext
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(21, line('.'), 'Wrong line.')
   call VUAssertEquals(5, col('.'), 'Wrong col.')
   bdelete
@@ -96,35 +103,40 @@ function! TestSearchExact()
 
   " find module
   RubySearch TestModule -t class
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(1, line('.'), 'Wrong line.')
   call VUAssertEquals(8, col('.'), 'Wrong col.')
   bdelete
 
   " find class
   RubySearch TestClass -t class
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(11, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
   bdelete
 
   " find method
   RubySearch methodA -t method
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(6, line('.'), 'Wrong line.')
   call VUAssertEquals(7, col('.'), 'Wrong col.')
   bdelete
 
   " find function
   RubySearch testFunction -t function
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(21, line('.'), 'Wrong line.')
   call VUAssertEquals(5, col('.'), 'Wrong col.')
   bdelete
 
   " find constant
   RubySearch CONSTANT -t field
-  call VUAssertEquals('src/test.rb', expand('%'), 'Wrong file.')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertEquals(name, 'src/test.rb', 'Wrong file.')
   call VUAssertEquals(12, line('.'), 'Wrong line.')
   call VUAssertEquals(3, col('.'), 'Wrong col.')
   bdelete

@@ -50,7 +50,8 @@ function! TestJavaHierarchy()
   echom 'test opening of Comparable'
   call cursor(6, 1)
   exec "normal \<cr>"
-  call VUAssertEquals(bufname('%'), '/tmp/java/lang/Comparable.java')
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/java/lang/Comparable.java')
   call VUAssertEquals(winnr('$'), 3)
   bdelete
   exec winnr . 'winc w'
@@ -59,7 +60,8 @@ function! TestJavaHierarchy()
   echom 'test opening of PropertyChangeListener'
   call cursor(7, 1)
   normal E
-  call VUAssertEquals(bufname('%'), '/tmp/java/beans/PropertyChangeListener.java')
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/java/beans/PropertyChangeListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   call PeekRedir()
@@ -67,7 +69,8 @@ function! TestJavaHierarchy()
   echom 'test opening of EventListener'
   call cursor(8, 1)
   normal E
-  call VUAssertEquals(bufname('%'), '/tmp/java/util/EventListener.java')
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call VUAssertEquals(name, g:EclimTempDir . '/java/util/EventListener.java')
   call VUAssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   bdelete
