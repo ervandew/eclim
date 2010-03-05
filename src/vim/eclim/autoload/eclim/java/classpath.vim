@@ -83,7 +83,7 @@ endfunction " }}}
 " VariableCreate(name, path) {{{
 " Create or update a variable.
 function! eclim#java#classpath#VariableCreate(name, path)
-  let path = fnamemodify(a:path, ':p')
+  let path = substitute(fnamemodify(a:path, ':p'), '\', '/', 'g')
   if has('win32unix')
     let path = eclim#cygwin#WindowsPath(path)
   endif
