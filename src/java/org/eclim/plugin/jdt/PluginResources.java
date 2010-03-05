@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.commons.lang.SystemUtils;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Services;
 
@@ -188,20 +190,38 @@ public class PluginResources
 
             logger.debug("Trying location: {}", jreSrc);
             if(jreSrc.toFile().exists()){
-              logger.info("Setting '{}' to '{}'",
-                  JavaRuntime.JRESRC_VARIABLE, jreSrc);
-              newLocations[ii] = new LibraryLocation(
-                  locations[ii].getSystemLibraryPath(),
-                  jreSrc,
-                  locations[ii].getPackageRootPath(),
-                  locations[ii].getJavadocLocation());
               break;
             }
           }
 
+          // another possible location on windows machines:
+          // JAVA_HOME:   C:/.../jre<version>/
+          // src archive: C:/.../jdk<version>/src.zip
+          if (!jreSrc.toFile().exists() &&
+              Os.isFamily(Os.FAMILY_WINDOWS) &&
+              libraryPath.toOSString().startsWith(SystemUtils.JAVA_HOME)){
+            String altHome = SystemUtils.JAVA_HOME
+              .replaceFirst("jre(\\d+\\.\\d+\\.\\d+_\\d+)", "jdk$1");
+            if (!altHome.equals(SystemUtils.JAVA_HOME)){
+              jreSrc = new Path(altHome).append("src.zip");
+            }
+          }
+
+          // jre src found.
+          if(jreSrc.toFile().exists()){
+            logger.info("Setting '{}' to '{}'",
+                JavaRuntime.JRESRC_VARIABLE, jreSrc);
+            newLocations[ii] = new LibraryLocation(
+                locations[ii].getSystemLibraryPath(),
+                jreSrc,
+                locations[ii].getPackageRootPath(),
+                locations[ii].getJavadocLocation());
+
           // jre src not found.
-          if(!jreSrc.toFile().exists()){
-            logger.warn("Unable to locate jre src.zip.");
+          }else{
+            logger.warn(
+                "Unable to locate jre src.zip for JAVA_HOME: " +
+                SystemUtils.JAVA_HOME);
             newLocations[ii] = new LibraryLocation(
                 locations[ii].getSystemLibraryPath(),
                 Path.EMPTY,
