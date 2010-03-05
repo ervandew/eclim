@@ -61,7 +61,7 @@ let eclimAvailable = eclim#EclimAvailable()
 let g:Tlist_Ctags_Cmd_Ctags = g:Tlist_Ctags_Cmd
 let g:Tlist_Ctags_Cmd_Eclim =
   \ eclim#client#nailgun#GetEclimCommand() .
-  \ ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+  \ ' --nailgun-port <port> -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
 " for windows, need to add a trailing quote to complete the command.
 if g:Tlist_Ctags_Cmd_Eclim =~ '^"[a-zA-Z]:'
   let g:Tlist_Ctags_Cmd_Eclim = g:Tlist_Ctags_Cmd_Eclim . '"'

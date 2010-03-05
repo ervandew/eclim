@@ -572,7 +572,8 @@ function! s:ProcessTags()
     try
       let command = g:Tlist_Ctags_Cmd_Ctags
       if eclim#EclimAvailable() && !exists('g:EclimDisabled')
-        let command = g:Tlist_Ctags_Cmd_Eclim
+        let port = eclim#client#nailgun#GetNgPort()
+        let command = substitute(g:Tlist_Ctags_Cmd_Eclim, '<port>', port, '')
       endif
 
       let command .= ' -f - --format=2 --excmd=pattern ' .
@@ -581,6 +582,10 @@ function! s:ProcessTags()
       let command = substitute(command, '<lang>', settings.lang, 'g')
       let command = substitute(command, '<types>', types, 'g')
       let command = substitute(command, '<file>', file, '')
+
+      if (has('win32') || has('win64')) && command =~ '^"'
+        let command .= ' "'
+      endif
 
       let response = eclim#util#System(command)
     finally
