@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,16 @@
  */
 package org.eclim.plugin.jdt.command.format;
 
+import java.io.FileWriter;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -35,6 +39,24 @@ public class FormatCommandTest
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/format/TestFormat.java";
+
+  private static String contents;
+
+  @BeforeClass
+  public static void setupClass()
+  {
+    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+  }
+
+  @Before
+  public void setupTest()
+    throws Exception
+  {
+    String path = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
+    FileWriter writer = new FileWriter(path);
+    writer.write(contents);
+    writer.close();
+  }
 
   @Test
   public void oneLine()
@@ -103,7 +125,7 @@ public class FormatCommandTest
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-b", "0", "-e", "911"
+      "-b", "0", "-e", "909"
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);

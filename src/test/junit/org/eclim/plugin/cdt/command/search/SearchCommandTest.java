@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.cdt.command.search;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Eclim;
 
@@ -106,7 +108,11 @@ public class SearchCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong Result", "/usr/include/stdlib.h|135 col 9|", result);
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      assertTrue("Wrong Result", result.endsWith("/include/stdlib.h|33 col 9|"));
+    }else{
+      assertEquals("Wrong Result", "/usr/include/stdlib.h|135 col 9|", result);
+    }
   }
 
   @Test
@@ -138,7 +144,11 @@ public class SearchCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong Result", "/usr/include/stdlib.h|134 col 9|", result);
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      assertTrue("Wrong Result", result.endsWith("/include/stdlib.h|34 col 9|"));
+    }else{
+      assertEquals("Wrong Result", "/usr/include/stdlib.h|134 col 9|", result);
+    }
   }
 
   @Test

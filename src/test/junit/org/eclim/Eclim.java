@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
 
@@ -36,7 +38,7 @@ public class Eclim
   public static final String TEST_PROJECT = "eclim_unit_test";
 
   private static final String ECLIM =
-    System.getProperty("eclim.home") + "/bin/eclim";
+    System.getProperty("eclipse.home") + "/eclim";
   private static final String PORT = System.getProperty("eclimd.port");
   private static final String COMMAND = "-command";
 
@@ -66,12 +68,23 @@ public class Eclim
    */
   public static String execute(String[] args, long timeout)
   {
-    String[] arguments = new String[args.length + 4];
-    System.arraycopy(args, 0, arguments, 4, args.length);
-    arguments[0] = ECLIM;
-    arguments[1] = "--nailgun-port";
-    arguments[2] = PORT;
-    arguments[3] = COMMAND;
+    String[] arguments = null;
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      String eclimCmd = ECLIM + ".cmd";
+      String drive = eclimCmd.substring(0, 2);
+      arguments = new String[3];
+      arguments[0] = "cmd.exe";
+      arguments[1] = "/c";
+      arguments[2] = drive + " && \"" + eclimCmd + "\" --nailgun-port " +
+        PORT + " " + COMMAND + " \"" + StringUtils.join(args, "\" \"") + "\"";
+    }else{
+      arguments = new String[args.length + 4];
+      System.arraycopy(args, 0, arguments, 4, args.length);
+      arguments[0] = ECLIM;
+      arguments[1] = "--nailgun-port";
+      arguments[2] = PORT;
+      arguments[3] = COMMAND;
+    }
 
     System.out.println("Command: " + StringUtils.join(arguments, ' '));
 
@@ -96,7 +109,11 @@ public class Eclim
     String result = process.getResult();
 
     // strip off trailing newline char and return
-    return result.substring(0, result.length() - 1);
+    result = result.substring(0, result.length() - 1);
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      result = result.replaceAll("\\r$", "");
+    }
+    return result;
   }
 
   /**
@@ -119,7 +136,7 @@ public class Eclim
   public static String getWorkspace()
   {
     if(workspace == null){
-      workspace = execute(new String[]{"workspace_dir"});
+      workspace = execute(new String[]{"workspace_dir"}).replace('\\', '/');
     }
     return workspace;
   }

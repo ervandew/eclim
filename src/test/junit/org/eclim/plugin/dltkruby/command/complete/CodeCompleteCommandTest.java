@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,8 @@ public class CodeCompleteCommandTest
 
     String[] results = StringUtils.split(result, '\n');
 
-    assertEquals("Wrong number of results", 2, results.length);
+    assertTrue("Wrong number of results", results.length >= 2);
+    assertTrue("Wrong number of results", results.length <= 3);
     assertTrue("Wrong result", results[0].startsWith("testA|"));
     assertTrue("Wrong result", results[1].startsWith("testB|"));
   }

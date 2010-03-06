@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public class DelegateCommandTest
       "java_delegate", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "org.eclim.test.delegate.TestDelegate",
-      "-s", "java.util.List<Double>", "-m", "add(Double)"
+      "-s", "java.util.List%3CDouble%3E", "-m", "add(Double)"
     });
 
     // handle difference between 1.5 and 1.6

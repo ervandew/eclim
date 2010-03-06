@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ public class JUnitImplCommandTest
       "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass",
       "-t", "org.eclim.test.junit.SomeClassTest",
-      "-s", "java.util.Comparator<String>",
+      "-s", "java.util.Comparator%3CString%3E",
       "-m", "compare(String,String)"
     });
 

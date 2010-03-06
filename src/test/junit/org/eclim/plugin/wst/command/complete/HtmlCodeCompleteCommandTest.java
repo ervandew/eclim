@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.plugin.wst.command.complete;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Eclim;
 
@@ -38,6 +40,11 @@ public class HtmlCodeCompleteCommandTest
   @Test
   public void completeAttribute()
   {
+    // html code completion disabled on windows
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      return;
+    }
+
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
@@ -56,6 +63,11 @@ public class HtmlCodeCompleteCommandTest
   @Test
   public void completeElement()
   {
+    // html code completion disabled on windows
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      return;
+    }
+
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
@@ -75,6 +87,11 @@ public class HtmlCodeCompleteCommandTest
   @Test
   public void completeCss()
   {
+    // html code completion disabled on windows
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      return;
+    }
+
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 

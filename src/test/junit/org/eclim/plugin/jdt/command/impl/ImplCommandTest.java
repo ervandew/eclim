@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class ImplCommandTest
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "org.eclim.test.impl.TestImpl",
-      "-s", "java.util.HashMap<Integer,String>", "-m", "put(Integer,String)"
+      "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
     });
 
     System.out.println(result);
@@ -125,7 +125,7 @@ public class ImplCommandTest
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_SUB_FILE,
       "-t", "org.eclim.test.impl.TestSubImpl",
-      "-s", "java.util.HashMap<Integer,String>", "-m", "put(Integer,String)"
+      "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
     });
 
     System.out.println(result);
@@ -143,7 +143,7 @@ public class ImplCommandTest
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_SUB_FILE,
       "-t", "org.eclim.test.impl.TestSubImpl",
-      "-s", "java.util.Comparator<String>", "-m", "compare(String,String)"
+      "-s", "java.util.Comparator%3CString%3E", "-m", "compare(String,String)"
     });
 
     System.out.println(result);

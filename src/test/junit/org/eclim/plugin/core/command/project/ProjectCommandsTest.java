@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,8 @@ public class ProjectCommandsTest
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
-    String path = new File(Eclim.getWorkspace() + "/../").getCanonicalPath();
+    String path = new File(Eclim.getWorkspace() + "/../")
+      .getCanonicalPath().replace('\\', '/');
     String result = Eclim.execute(new String[]{
       "project_move", "-p", TEST_PROJECT, "-d", path});
     System.out.println(result);
@@ -129,9 +130,9 @@ public class ProjectCommandsTest
 
     assertTrue("Project does not exist.",
         Eclim.projectExists(TEST_PROJECT));
-    assertEquals("Wrong project path",
-        new File(Eclim.getWorkspace() + '/' + TEST_PROJECT).getCanonicalPath(),
-        Eclim.getProjectPath(TEST_PROJECT));
+    path = new File(Eclim.getWorkspace() + '/' + TEST_PROJECT)
+      .getCanonicalPath().replace('\\', '/');
+    assertEquals("Wrong project path", path, Eclim.getProjectPath(TEST_PROJECT));
   }
 
   @Test
@@ -181,7 +182,8 @@ public class ProjectCommandsTest
 
     // now import it
     result = Eclim.execute(new String[]{
-      "project_import", "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
+      "project_import",
+      "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
     });
     System.out.println(result);
 
