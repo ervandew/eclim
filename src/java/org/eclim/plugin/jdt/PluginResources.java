@@ -17,10 +17,14 @@
 package org.eclim.plugin.jdt;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Properties;
+
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.SystemUtils;
 
@@ -44,6 +48,8 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -194,16 +200,43 @@ public class PluginResources
             }
           }
 
-          // another possible location on windows machines:
-          // JAVA_HOME:   C:/.../jre<version>/
-          // src archive: C:/.../jdk<version>/src.zip
-          if (!jreSrc.toFile().exists() &&
-              Os.isFamily(Os.FAMILY_WINDOWS) &&
-              libraryPath.toOSString().startsWith(SystemUtils.JAVA_HOME)){
-            String altHome = SystemUtils.JAVA_HOME
-              .replaceFirst("jre(\\d+\\.\\d+\\.\\d+_\\d+)", "jdk$1");
-            if (!altHome.equals(SystemUtils.JAVA_HOME)){
+          // other possibilities on windows machines:
+          // library path: C:/.../jre<version>/
+          // src archive:  C:/.../jdk<version>/src.zip
+          //   or
+          // library path: C:/.../jre<major>/
+          // src archive:  C:/.../jdk1.<major>.<minor>_<patch>/src.zip
+          if (!jreSrc.toFile().exists() && Os.isFamily(Os.FAMILY_WINDOWS)){
+            String path = libraryPath.toOSString()
+              .replaceFirst("\\\\(lib\\\\)rt.jar", "");
+
+            // first scenerio
+            String altHome = path.replaceFirst(
+                "jre(\\d+\\.\\d+\\.\\d+_\\d+)", "jdk$1");
+            if (!altHome.equals(path)){
               jreSrc = new Path(altHome).append("src.zip");
+            }
+
+            // second scenerio
+            if (!jreSrc.toFile().exists()){
+              String base = FileUtils.getBaseName(path);
+              final String major = base.replaceFirst("^jre(\\d)$", "$1");
+              if (!major.equals(base)){
+                File dir = new File(FileUtils.getFullPath(path));
+                String[] jdks = dir.list(new FilenameFilter(){
+                  private final Pattern JDK =
+                    Pattern.compile("jdk\\d+\\." + major + "\\.\\d+_\\d+");
+                  public boolean accept(File dir, String name){
+                    return JDK.matcher(name).matches();
+                  }
+                });
+                for (String jdk : jdks){
+                  jreSrc = new Path(dir.toString()).append(jdk).append("src.zip");
+                  if (jreSrc.toFile().exists()){
+                    break;
+                  }
+                }
+              }
             }
           }
 
