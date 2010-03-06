@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,5 +37,11 @@ C/C++ code completion uses the standard
 .. note::
   This feature depends on the eclipse cdt_ which should be installed for you
   when choosing c/c++ support in the eclim installer.
+
+.. warning::
+
+  C/C++ completion has been disabled on Windows when using the headless version
+  of eclim because of a native call which blocks indefinitely.  Hopefully in
+  the future this issue will be resolved or a work around found.
 
 .. _cdt: http://eclipse.org/cdt

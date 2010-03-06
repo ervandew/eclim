@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,13 @@ package org.eclim.plugin.cdt.command.complete;
 
 import java.lang.reflect.Method;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
+import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.eclipse.ui.EclimEditorSite;
@@ -81,6 +84,13 @@ public class CodeCompleteCommand
       CommandLine commandLine, String projectName, String file, int offset)
     throws Exception
   {
+    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+    if (Os.isFamily("windows") && !app.isHeaded()){
+      throw new RuntimeException(
+          "C/C++ completion disabled in headless eclimd on windows due " +
+          "to an issue with a native windows call blocking indefinitely.");
+    }
+
     IProject project = ProjectUtils.getProject(projectName);
 
     CEditor editor = new CEditor();
