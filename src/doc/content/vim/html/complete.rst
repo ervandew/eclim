@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ you can simply set g:EclimSgmlCompleteEndTag to 0.
 
 .. warning::
 
-  Html completion has been disabled on Windows because of a native call which
-  blocks indefinitely.  Hopefully in the future this issue will be resolved or
-  worked around.
+  Html completion has been disabled on Windows when using the headless version
+  of eclim because of a native call which blocks indefinitely.  Hopefully in
+  the future this issue will be resolved or a work around found.
 
 
 Configuration

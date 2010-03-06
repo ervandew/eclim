@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.command.CommandLine;
 
+import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
@@ -83,8 +84,10 @@ public abstract class WstCodeCompleteCommand
         }
         protected void createControl(Composite parent, int styles)
         {
-          // no-op on windows to prevent possible deadlock in native method.
-          if (!Os.isFamily("windows")){
+          // no-op on headless windows to prevent possible deadlock in native
+          // method.
+          AbstractEclimApplication app = AbstractEclimApplication.getInstance();
+          if (!Os.isFamily("windows") || app.isHeaded()){
             super.createControl(parent, styles);
           }
         }
