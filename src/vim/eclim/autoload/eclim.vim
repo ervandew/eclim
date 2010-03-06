@@ -59,7 +59,7 @@ function! eclim#ExecuteEclim(command, ...)
   " eclimd appears to be down, so exit early if in an autocmd
   if !g:eclimd_running && expand('<amatch>') != ''
     " check for file created by eclimd to signal that it is running.
-    if !filereadable(expand('~/.eclim/.eclimd_instances'))
+    if !eclim#EclimAvailable()
       return
     endif
   endif
@@ -140,7 +140,10 @@ endfunction " }}}
 
 " EclimAvailable() {{{
 function! eclim#EclimAvailable()
-  return filereadable(expand('~/.eclim/.eclimd_instances'))
+  let instances = has('win32unix') ?
+    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
+    \ expand('~/.eclim/.eclimd_instances')
+  return filereadable(instances)
 endfunction " }}}
 
 " PatchEclim(file, revision) {{{

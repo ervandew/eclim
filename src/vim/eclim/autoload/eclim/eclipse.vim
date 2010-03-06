@@ -31,7 +31,9 @@
 function! eclim#eclipse#GetAllWorkspaceDirs()
   let results = []
 
-  let instances = expand('~/.eclim/.eclimd_instances')
+  let instances = has('win32unix') ?
+    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
+    \ expand('~/.eclim/.eclimd_instances')
   if filereadable(instances)
     let results = readfile(instances)
     call map(results, 'substitute(v:val, "\\(.*\\):.*", "\\1", "")')

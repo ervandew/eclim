@@ -155,7 +155,9 @@ function! eclim#client#nailgun#GetNgPort(...)
   endif
   let default = port
 
-  let instances = expand('~/.eclim/.eclimd_instances')
+  let instances = has('win32unix') ?
+    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
+    \ expand('~/.eclim/.eclimd_instances')
   if filereadable(instances)
     let workspaces = {}
     let entries = readfile(instances)
