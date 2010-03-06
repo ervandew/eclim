@@ -34,19 +34,22 @@ function! TestFindDefinition()
 
   call cursor(1, 18)
   PythonFindDefinition
-  call VUAssertTrue(expand('%') =~ 'test/common/__init__.py')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'test/common/__init__.py')
   call VUAssertEquals(getline(1), 'from test.common.functions import *')
   bdelete
 
   call cursor(3, 13)
   PythonFindDefinition
-  call VUAssertTrue(expand('%') =~ 'test/common/objects.py')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'test/common/objects.py')
   call VUAssertEquals(getline('.'), 'class Test1 (object):')
   bdelete
 
   call cursor(5, 8)
   PythonFindDefinition
-  call VUAssertTrue(expand('%') =~ 'test/common/functions.py')
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call VUAssertTrue(name =~ 'test/common/functions.py')
   call VUAssertEquals(getline('.'), 'def test3 ():')
   bdelete
 endfunction " }}}
