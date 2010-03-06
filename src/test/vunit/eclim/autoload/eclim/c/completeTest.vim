@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,6 +21,12 @@
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
 " }}}
+
+" c/c++ completion doesn't work on headless eclimd on windows due to hang in
+" native method call.
+if has('win32') || has('win64')
+  finish
+endif
 
 " SetUp() {{{
 function! SetUp()

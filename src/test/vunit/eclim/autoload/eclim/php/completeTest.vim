@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,32 +45,6 @@ function! TestCompletePhp()
   call VUAssertEquals('variable1', results[2].word, 'Wrong result.')
 endfunction " }}}
 
-" TestCompleteHtml() {{{
-function! TestCompleteHtml()
-  if has('win32') || has('win64') || has('win32unix')
-    return
-  endif
-
-  edit! php/complete/test.php
-  call PeekRedir()
-
-  call cursor(22, 7)
-  let start = eclim#php#complete#CodeComplete(1, '')
-  call VUAssertEquals(5, start, 'Wrong starting column.')
-
-  let results = eclim#php#complete#CodeComplete(0, '')
-  call PeekRedir()
-  echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 7, 'Wrong number of results.')
-  call VUAssertEquals('h1', results[0].word, 'Wrong result.')
-  call VUAssertEquals('h2', results[1].word, 'Wrong result.')
-  call VUAssertEquals('h3', results[2].word, 'Wrong result.')
-  call VUAssertEquals('h4', results[3].word, 'Wrong result.')
-  call VUAssertEquals('h5', results[4].word, 'Wrong result.')
-  call VUAssertEquals('h6', results[5].word, 'Wrong result.')
-  call VUAssertEquals('hr', results[6].word, 'Wrong result.')
-endfunction " }}}
-
 " TestCompleteCss() {{{
 function! TestCompleteCss()
   edit! php/complete/test.php
@@ -92,6 +66,34 @@ function! TestCompleteCss()
     \ 'Results does not contain font-size')
   call VUAssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
+endfunction " }}}
+
+" html completion doesn't work on headless eclimd on windows due to hang in
+" native method call.
+if has('win32') || has('win64')
+  finish
+endif
+
+" TestCompleteHtml() {{{
+function! TestCompleteHtml()
+  edit! php/complete/test.php
+  call PeekRedir()
+
+  call cursor(22, 7)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call VUAssertEquals(5, start, 'Wrong starting column.')
+
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call PeekRedir()
+  echo 'results = ' . string(results)
+  call VUAssertEquals(len(results), 7, 'Wrong number of results.')
+  call VUAssertEquals('h1', results[0].word, 'Wrong result.')
+  call VUAssertEquals('h2', results[1].word, 'Wrong result.')
+  call VUAssertEquals('h3', results[2].word, 'Wrong result.')
+  call VUAssertEquals('h4', results[3].word, 'Wrong result.')
+  call VUAssertEquals('h5', results[4].word, 'Wrong result.')
+  call VUAssertEquals('h6', results[5].word, 'Wrong result.')
+  call VUAssertEquals('hr', results[6].word, 'Wrong result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

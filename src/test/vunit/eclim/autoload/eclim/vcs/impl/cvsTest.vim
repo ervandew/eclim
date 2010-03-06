@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,6 +22,11 @@
 "
 " }}}
 
+" command line cvs support on windows blows
+if has('win32') || has('win64')
+  finish
+endif
+
 " SetUp() {{{
 function! SetUp()
   let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/vcs/cvs/unittest'
@@ -30,10 +35,6 @@ endfunction " }}}
 
 " TestInfo() {{{
 function! TestInfo()
-  if has('win32') || has('win64')
-    return
-  endif
-
   view test/file1.txt
   call PushRedir('@"')
   VcsInfo
@@ -45,10 +46,6 @@ endfunction " }}}
 
 " TestAnnotate() {{{
 function! TestAnnotate()
-  if has('win32') || has('win64')
-    return
-  endif
-
   view test/file1.txt
   call PeekRedir()
   call PushRedir('@"')
@@ -71,10 +68,6 @@ endfunction " }}}
 
 " TestDiff() {{{
 function! TestDiff()
-  if has('win32') || has('win64')
-    return
-  endif
-
   view test/file1.txt
   call PeekRedir()
   VcsDiff
@@ -89,10 +82,6 @@ endfunction " }}}
 
 " TestLog() {{{
 function! TestLog()
-  if has('win32') || has('win64')
-    return
-  endif
-
   view test/file1.txt
   call PeekRedir()
   VcsLog
