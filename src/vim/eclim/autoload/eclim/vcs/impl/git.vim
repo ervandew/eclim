@@ -141,11 +141,11 @@ endfunction " }}}
 
 " GetInfo() {{{
 function eclim#vcs#impl#git#GetInfo()
-  let info = eclim#vcs#impl#git#Git('name-rev HEAD')
+  let info = eclim#vcs#impl#git#Git('branch')
   if info == '0'
     return ''
   endif
-  let info = 'git:' . substitute(info, '\(^HEAD\s\+\|\n$\)', '', 'g')
+  let info = 'git:' . substitute(info, '.*\*\s*\(.\{-}\)\(\n.*\|$\)', '\1', 'g')
   return info
 endfunction " }}}
 
