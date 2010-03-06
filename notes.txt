@@ -720,6 +720,11 @@ NOTES {{{
     $ ./configure --with-features=huge --prefix=$HOME
     $ make install
 
+    Build vim on windows w/ cygwin
+    $ cd vim/src
+    $ make -f Make_cyg.mak gvim.exe PYTHON=C:/Python26 PYTHON_VER=26
+    $ make -f Make_cyg.mak vim.exe GUI=no PYTHON=C:/Python26 PYTHON_VER=26
+
   }}}
 
 }}}
