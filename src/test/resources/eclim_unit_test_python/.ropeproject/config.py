@@ -34,7 +34,9 @@ def set_prefs(prefs):
 
     # You can extend python path for looking up modules
     #prefs.add('python_path', '~/python/')
-    ropepath = '%s/.vim/eclim/autoload/eclim/python/' % os.environ['HOME']
+    ropepath = '%s/%s/eclim/autoload/eclim/python/' % (
+        os.environ['HOME'], os.name == 'nt' and 'vimfiles' or '.vim'
+    )
     prefs.add('python_path', ropepath)
 
     # Should rope save object information or not.
