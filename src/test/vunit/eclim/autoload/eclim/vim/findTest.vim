@@ -111,7 +111,7 @@ endfunction " }}}
 function! TestFindByContextVariableRef()
   exec 'edit! ' . s:vimHome . '/eclim/autoload/eclim/vim/find.vim'
   call PeekRedir()
-  call cursor(227, 10)
+  call cursor(231, 10)
 
   let g:EclimVimPaths = s:vimHome
   FindByContext!
