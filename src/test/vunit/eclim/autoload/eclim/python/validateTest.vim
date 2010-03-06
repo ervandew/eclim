@@ -65,10 +65,10 @@ function! TestPylint()
 
   let qf = sort(getqflist(), "CompareQf")
   call VUAssertEquals(len(qf), 2)
-  call VUAssertEquals(qf[0].lnum, 2)
+  call VUAssertEquals(qf[0].lnum, 3)
   call VUAssertEquals(qf[0].type, 'w')
   call VUAssertEquals(qf[0].text, ' Unused import common')
-  call VUAssertEquals(qf[1].lnum, 4)
+  call VUAssertEquals(qf[1].lnum, 5)
   call VUAssertEquals(qf[1].type, 'w')
   call VUAssertEquals(qf[1].text, ' Statement seems to have no effect')
 endfunction " }}}
