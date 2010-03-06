@@ -456,20 +456,15 @@ target(name: 'test.vunit'){
     }
   }
 
-  delete{
-    fileset(defaultexcludes: 'no',
-        dir: 'build/test/vunit/results/',
-        includes: '.*.xml.swp')
-  }
   vunit(plugin: 'src/ant/lib/vunit.vim', todir: 'build/test/vunit/results',
-      haltonfailure: 'true', failureproperty: 'vunit.failed'){
+      failureproperty: 'vunit.failed'){
     fileset(dir: 'src/test/vunit',
         includes: '${test.include}.vim',
         excludes: '${test.exclude}.vim')
     sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
   }
 
-  // fail(message: 'One or more vunit tests failed.', if: 'vunit.failed')
+  fail(message: 'One or more vunit tests failed.', if: 'vunit.failed')
 }
 
 target(name: 'dist'){
