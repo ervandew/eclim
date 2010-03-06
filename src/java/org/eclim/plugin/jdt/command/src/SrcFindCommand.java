@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ public class SrcFindCommand
     }
 
     if (src != null && src.exists()){
-      return src.getResource().getLocation().toOSString();
+      return src.getResource().getLocation().toOSString().replace('\\', '/');
     }
 
     return "";

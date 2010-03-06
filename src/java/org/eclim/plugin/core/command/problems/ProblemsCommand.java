@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ public class ProblemsCommand
           ((Integer)attributes.get("lineNumber")).intValue() : 1;
         int[] pos = {1, 1};
 
-        String path = resource.getRawLocation().toOSString();
+        String path = resource.getRawLocation().toOSString().replace('\\', '/');
         File file = new File(path);
         if (file.isFile() && file.exists() && offset > 0){
           pos = FileUtils.offsetToLineColumn(path, offset);

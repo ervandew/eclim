@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ public class SearchCommand
             buffer.append('\n');
           }
           IASTFileLocation loc = iname.getFileLocation();
-          String filename = loc.getFileName();
+          String filename = loc.getFileName().replace('\\', '/');
           String lineColumn =
             VimUtils.translateLineColumn(filename, loc.getNodeOffset());
           buffer.append(filename)

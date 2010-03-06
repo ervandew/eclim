@@ -179,7 +179,7 @@ public abstract class AbstractRefactorCommand
         changed.append(path).append(" -> ");
       }
 
-      changed.append(resource.getRawLocation().toOSString());
+      changed.append(resource.getRawLocation().toOSString().replace('\\', '/'));
     }
     return "files:\n" + changed.toString();
   }

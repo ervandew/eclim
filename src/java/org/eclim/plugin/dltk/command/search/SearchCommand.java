@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -384,7 +384,8 @@ public class SearchCommand
           fullyQualified.append(el.getElementName());
         }
 
-        String filename = match.getResource().getLocation().toOSString();
+        String filename = match.getResource()
+          .getLocation().toOSString().replace('\\', '/');
         File file = new File(filename);
         if (!file.exists() || !file.isFile()){
           // ignoring results that don't have a file that exists.

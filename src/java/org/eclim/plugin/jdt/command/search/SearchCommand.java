@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -307,7 +307,8 @@ public class SearchCommand
 
     elementName = JavaUtils.getFullyQualifiedName(element);
     return new SearchResult(
-        archive, elementName, file, match.getOffset(), match.getLength());
+        archive, elementName, file.replace('\\', '/'),
+        match.getOffset(), match.getLength());
   }
 
   /**

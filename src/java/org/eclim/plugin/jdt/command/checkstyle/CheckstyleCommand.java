@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -207,7 +207,7 @@ public class CheckstyleCommand
       errors.add(
           new Error(
             event.getMessage(),
-            event.getFileName(),
+            event.getFileName().replace('\\', '/'),
             event.getLine(),
             event.getColumn(),
             event.getSeverityLevel() != SeverityLevel.ERROR));
