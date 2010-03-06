@@ -632,8 +632,10 @@ NOTES {{{
 
     Windows:
       - starting eclim without spawning separate console
-        > java -jar plugins/org.eclipse.equinox.launcher_<version>.jar
+        > java -Dnailgun.server.port=9092
+               -jar plugins/org.eclipse.equinox.launcher_<version>.jar
                -debug -consolelog -nosplash -clean -refresh
+               -data @user.home/workspace.test
                -application org.eclim.application_headless
 
       - list features
