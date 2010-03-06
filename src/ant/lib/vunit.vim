@@ -313,21 +313,7 @@ function! s:WriteResults (testfile, running_time)
     call insert(results, line, index)
   endfor
 
-  let winreset = winrestcmd()
-  let save_opt = &eventignore
-  let save = @"
-  try
-    set eventignore=all
-    silent exec 'split ' . s:vimUnitOutputFile
-    set modifiable noreadonly
-    1,$ delete
-    call setline(1, results)
-    silent wq
-  finally
-    exec winreset
-    let &eventignore = save_opt
-    let @" = save
-  endtry
+  call writefile(results, s:vimUnitOutputFile)
 endfunction " }}}
 
 " PushRedir(redir) {{{
