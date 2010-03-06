@@ -210,12 +210,6 @@ TODO {{{
 
     - implement means to highlight text and push it to the command prompt
       Ctrl-: or something similar.
-
-    - get working under cygwin
-      if has('win32unix')
-      - eclim command
-      - file paths
-      - sh installer via cygwin
   }}}
 
   Vimplugin {{{
