@@ -25,6 +25,7 @@
 " TestGetOffset() {{{
 function! TestGetOffset()
   new
+  set ff=unix
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 1)
@@ -32,6 +33,9 @@ function! TestGetOffset()
 
   call cursor(2, 7)
   call VUAssertEquals(14, eclim#util#GetOffset())
+
+  set ff=dos
+  call VUAssertEquals(15, eclim#util#GetOffset())
 endfunction " }}}
 
 " TestGetCurrentElementColumn() {{{
@@ -52,6 +56,7 @@ endfunction " }}}
 " TestGetCurrentElementPosition() {{{
 function! TestGetCurrentElementPosition()
   new
+  set ff=unix
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 1)
@@ -59,11 +64,15 @@ function! TestGetCurrentElementPosition()
 
   call cursor(2, 9)
   call VUAssertEquals('14;4', eclim#util#GetCurrentElementPosition())
+
+  set ff=dos
+  call VUAssertEquals('15;4', eclim#util#GetCurrentElementPosition())
 endfunction " }}}
 
 " TestGetCurrentElementOffset() {{{
 function! TestGetCurrentElementOffset()
   new
+  set ff=unix
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 2)
@@ -71,6 +80,9 @@ function! TestGetCurrentElementOffset()
 
   call cursor(2, 9)
   call VUAssertEquals('14', eclim#util#GetCurrentElementOffset())
+
+  set ff=dos
+  call VUAssertEquals('15', eclim#util#GetCurrentElementOffset())
 endfunction " }}}
 
 " TestGrabUri() {{{
