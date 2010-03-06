@@ -206,9 +206,12 @@ function! s:RunTest(testcase, test)
 
   let fail = []
   try
-    let s:tests_run += 1
     call {a:test}()
+    let s:tests_run += 1
+  catch /E117/
+    " probably the result of the function being defined via some conditional
   catch
+    let s:tests_run += 1
     let s:tests_failed += 1
     call add(fail, v:exception)
     call add(fail, v:throwpoint)
@@ -256,6 +259,7 @@ function! s:GetTestFunctionNames ()
         call Suite()
         return s:suite_methods
       endif
+
       call add(results, name)
       call cursor(line('.') + 1, 1)
     endwhile
