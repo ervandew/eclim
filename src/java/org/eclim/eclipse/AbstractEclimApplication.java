@@ -86,7 +86,7 @@ public abstract class AbstractEclimApplication
     throws Exception
   {
     workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString();
+      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
     logger.info("Workspace: " + workspace);
 
     starting = true;
@@ -383,7 +383,8 @@ public abstract class AbstractEclimApplication
 
     FileInputStream in = null;
     try{
-      List<String> entries = IOUtils.readLines(new FileInputStream(instances));
+      in = new FileInputStream(instances);
+      List<String> entries = IOUtils.readLines(in);
       return entries;
     }finally{
       IOUtils.closeQuietly(in);
