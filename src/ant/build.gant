@@ -420,7 +420,10 @@ target(name: 'test.junit'){
 
   junit(printsummary: 'yes', failureproperty: 'junit.failed'){
     classpath{
-      path(refid: 'classpath')
+      path(refid: 'junit')
+      fileset(dir: 'src/eclipse/plugins/org.eclim/lib'){
+        include(name: 'commons-lang-*.jar')
+      }
       pathelement(path: '${build.classes}')
       pathelement(path: 'build/test/junit/classes')
     }
@@ -430,7 +433,7 @@ target(name: 'test.junit'){
           includes: '${test.include}.class',
           excludes: '${test.exclude}.class')
     }
-    sysproperty(key: 'eclim.home', value: '${eclim.home}')
+    sysproperty(key: 'eclipse.home', value: '${eclipse.home}')
     sysproperty(key: 'eclim.version', value: '${eclim.version}')
     sysproperty(key: 'eclimd.port', value: '${nailgun.server.port}')
   }
