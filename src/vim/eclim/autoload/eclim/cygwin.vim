@@ -37,6 +37,15 @@ function! eclim#cygwin#WindowsPath(path, ...)
   return s:Cygpath(a:path, 'windows', a:0 > 0 ? a:1 : 0)
 endfunction " }}}
 
+" WindowsHome() {{{
+function! eclim#cygwin#WindowsHome()
+  let dir = s:Cygpath('-D', 'cygwin', 1)
+  if dir == '-D'
+    return ''
+  endif
+  return fnamemodify(dir, ':h')
+endfunction " }}}
+
 " s:CygwinPath(path, type, cache) {{{
 function! s:Cygpath(path, type, cache)
   if executable('cygpath')
