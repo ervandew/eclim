@@ -33,13 +33,13 @@ Third Party Packages
 As an alternative to the official installer, there are also some packages
 maintained by third parties for some popular linux distributions:
 
-- **Arch:** `aur`_
+- **Arch:** `aur (eclim) <http://aur.archlinux.org/packages.php?ID=7291>`_,
+  `aur (eclim-git) <http://aur.archlinux.org/packages.php?ID=33120>`_
 - **Gentoo:** `sunrise overlay`_
 - **Fedora (12.x and maybe higher):** `grond repository`_
 
 .. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
 .. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15823
 .. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15821
-.. _aur: http://aur.archlinux.org/packages.php?ID=33120
 .. _sunrise overlay: http://gpo.zugaina.org/dev-util/eclim
 .. _grond repository: http://www.grond.org/downloads/repository/grond/fedora/
