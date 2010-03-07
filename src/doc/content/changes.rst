@@ -18,7 +18,7 @@ History of Changes
 
 .. _1.5.6:
 
-1.5.6 (unreleased)
+1.5.6 (Mar. 06, 2010)
 ----------------------
 
 Bug Fixes:
@@ -32,11 +32,14 @@ Common:
     work on one or more projects each with a dedicated vim tab.
   - Added a :ref:`:Tcd <:Tcd>` command to mimic :lcd but local to the tab
     instead of the window.
+  - Added branch info to the footer of the project tree when using mercurial or
+    git.
 
 Install:
   - Added support for :ref:`automated installs <install-automated>`.
 
 Eclim:
+  - Added initial support for using eclim via vim in cygwin.
   - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
   - Added support for specifying that gvim should be refocused after executing
     an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys
@@ -47,7 +50,8 @@ Eclim:
     .. note::
 
       The eclim installer will move your existing files from the old location
-      to the new location.
+      to the new location, but you may want to back those files up just in
+      case.
 
 .. _1.5.5:
 

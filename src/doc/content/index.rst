@@ -100,6 +100,15 @@ Eclim is released under the GPLv3_.
 ==================
 News
 ==================
+
+-----------
+2010-03-06
+-----------
+
+| **Eclim 1.5.6** is now available.
+
+You can view the :ref:`release notes <1.5.6>` for more info.
+
 -----------
 2010-02-22
 -----------
