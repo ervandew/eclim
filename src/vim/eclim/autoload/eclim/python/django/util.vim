@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,10 +30,12 @@ function eclim#python#django#util#GetLoadList(project_dir)
   call cursor(1, 1)
   let loaded = []
   while search('{%\s*load\s', 'cW')
-    call add(loaded, substitute(getline('.'), '.*{%\s*load\s\+\(\w\+\)\s*%}.*', '\1', ''))
+    let elements = split(
+      \ substitute(getline('.'), '.*{%\s*load\s\+\(.\{-}\)\s*%}.*', '\1', ''))
+    let loaded += elements
     call cursor(line('.') + 1, 1)
   endwhile
-  call setpos('.', col)
+  call setpos('.', pos)
 
   let file_names = []
   for load in loaded
@@ -74,46 +76,27 @@ endfunction " }}}
 
 " GetSetting(project_dir, name) {{{
 function eclim#python#django#util#GetSetting(project_dir, name)
-  let setting = ''
-  let restore = winrestcmd()
+  let cwd = getcwd()
   try
-    let settings = a:project_dir . '/settings.py'
-    let winnr = bufwinnr(bufnr(settings))
-    if winnr == -1
-      exec 'silent sview ' . settings
-    else
-      let orig = winnr()
-      exec winnr . 'winc w'
+    exec (haslocaldir() ? 'lcd ' : 'cd') . a:project_dir
+    let setting = eclim#util#System(
+      \ "python -c \"import settings; print settings." . a:name . "\"")
+    if v:shell_error
+      " try going up a dir and using that as a top level namespace
+      let ns = fnamemodify(a:project_dir, ':t')
+      exec (haslocaldir() ? 'lcd ' : 'cd') . fnamemodify(a:project_dir, ':h')
+      let setting = eclim#util#System(
+        \ "python -c \"from " . ns  . " import settings; print settings." . a:name . "\"")
+      if v:shell_error
+        return ''
+      endif
     endif
-    let pos = getpos('.')
-    call cursor(1, 1)
 
-    " GET SETTING
-    let start = search('^\s*\<' . a:name . '\>\s*=', 'c')
-    if start
-      let end = search('^\s*[a-zA-Z_][^#]*\s*=', 'w')
-      let lnum = start
-      while lnum != end
-        let line = substitute(getline(lnum), '#.*', '', '')
-        if line !~ '^\s*$'
-          let line = substitute(line, '^\s*', '', '')
-          let line = substitute(line, '\s*$', '', '')
-          let setting .= line
-        endif
-        let lnum += 1
-      endwhile
-    endif
-    let setting = substitute(setting, '^\s*\<'. a:name . '\>\s*=\s*', '', '')
-
-    cal setpos('.', pos)
-    if winnr == -1
-      bd
-    else
-      exec orig . 'winc w'
-    endif
+    let setting = substitute(setting, "\n$", '', '')
   finally
-    silent exec restore
+    exec (haslocaldir() ? 'lcd ' : 'cd') . cwd
   endtry
+
   return setting
 endfunction " }}}
 
@@ -135,7 +118,7 @@ endfunction " }}}
 function eclim#python#django#util#GetTemplateDirs(project_dir)
   let setting = eclim#python#django#util#GetSetting(a:project_dir, 'TEMPLATE_DIRS')
   let setting = substitute(setting, '^[\[(]\(.\{-}\)[\])]$', '\1', '')
-  let dirs = split(setting, ',')
+  let dirs = split(setting, ',\s*')
   return map(dirs, "substitute(v:val, \"^['\\\"]\\\\(.\\\\{-}\\\\)['\\\"]$\", '\\1', '')")
 endfunction " }}}
 

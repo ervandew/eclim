@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,14 +33,14 @@ endif
 
 " FindFilterOrTag(project_dir, element, type) {{{
 " Finds and opens the supplied filter or tag definition.
-function eclim#python#django#find#FindFilterOrTag(project_dir, element, type)
+function! eclim#python#django#find#FindFilterOrTag(project_dir, element, type)
   let loaded = eclim#python#django#util#GetLoadList(a:project_dir)
   let cmd = 'lvimgrep /\<def\s\+' . a:element . '\>/j '
   for file in loaded
     let cmd .= ' ' . file
   endfor
 
-  silent exec cmd
+  silent! exec cmd
 
   let results = getloclist(0)
   if len(results) > 0
@@ -55,7 +55,7 @@ endfunction " }}}
 
 " FindFilterTagFile(project_dir, file) {{{
 " Finds and opens the supplied tag/file definition file.
-function eclim#python#django#find#FindFilterTagFile(project_dir, file)
+function! eclim#python#django#find#FindFilterTagFile(project_dir, file)
   let file = findfile(a:file . '.py', a:project_dir . '*/templatetags/')
   if file != ''
     call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
@@ -67,16 +67,24 @@ endfunction " }}}
 " FindSettingDefinition(project_dir, value) {{{
 " Finds and opens the definition for the supplied setting middleware, context
 " processor or template loader.
-function eclim#python#django#find#FindSettingDefinition(project_dir, value)
+function! eclim#python#django#find#FindSettingDefinition(project_dir, value)
   let file = substitute(a:value, '\(.*\)\..*', '\1', '')
   let def = substitute(a:value, '.*\.\(.*\)', '\1', '')
   let file = substitute(file, '\.', '/', 'g') . '.py'
-  let project_dir = fnamemodify(a:project_dir, ':h')
+
+  let project_dir = a:project_dir
   let found = findfile(file, project_dir)
+
+  if found == ''
+    let project_dir = fnamemodify(a:project_dir, ':h')
+    let found = findfile(file, project_dir)
+  endif
+
   if found == ''
     let file = substitute(file, '\.py', '/__init__.py', '')
     let found = findfile(file, project_dir)
   endif
+
   if found != ''
     call eclim#util#GoToBufferWindowOrOpen(found, g:EclimDjangoFindAction)
     call search('\(def\|class\)\s\+' . def . '\>', 'cw')
@@ -87,14 +95,8 @@ endfunction " }}}
 
 " FindStaticFile(project_dir, file) {{{
 " Finds and opens the supplied static file name.
-function eclim#python#django#find#FindStaticFile(project_dir, file)
-  if !len(g:EclimDjangoStaticPaths)
-    call eclim#util#EchoWarning(
-      \ 'Attemping to find static file but your g:EclimDjangoStaticPaths is not set.')
-    return
-  endif
-
-  for path in g:EclimDjangoStaticPaths
+function! eclim#python#django#find#FindStaticFile(project_dir, file)
+  for path in g:EclimDjangoStaticPaths + ['.', 'static', '../static']
     if path !~ '^\(/\|\w:\)'
       let path = a:project_dir . '/' . path
     endif
@@ -109,10 +111,18 @@ endfunction " }}}
 
 " FindTemplate(project_dir, template) {{{
 " Finds and opens the supplied template definition.
-function eclim#python#django#find#FindTemplate(project_dir, template)
+function! eclim#python#django#find#FindTemplate(project_dir, template)
   let dirs = eclim#python#django#util#GetTemplateDirs(a:project_dir)
   for dir in dirs
-    let file = findfile(a:template, a:project_dir . '/' . dir)
+    let template_dir = dir
+    if template_dir !~ '^' . a:project_dir
+      if fnamemodify(a:project_dir, ':t') == split(dir, '/')[0]
+        let template_dir = fnamemodify(a:project_dir, ':h') . '/' . dir
+      else
+        let template_dir = a:project_dir . '/' . dir
+      endif
+    endif
+    let file = findfile(a:template, template_dir)
     if file != ''
       call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
       return 1
@@ -123,7 +133,7 @@ endfunction " }}}
 
 " FindView(project_dir, template) {{{
 " Finds and opens the supplied view.
-function eclim#python#django#find#FindView(project_dir, view)
+function! eclim#python#django#find#FindView(project_dir, view)
   let view = a:view
   let function = ''
 
@@ -154,8 +164,17 @@ function eclim#python#django#find#FindView(project_dir, view)
     let view = join(split(view, '\.')[0:-2], '.')
   endif
 
-  let view = join(split(substitute(view, '\.', '/', 'g') . '.py', '/')[1:], '/')
-  let file = findfile(view, a:project_dir)
+  let parts = split(substitute(view, '\.', '/', 'g') . '.py', '/')
+
+  " first search for full reference
+  let file = findfile(join(parts, '/'), a:project_dir)
+
+  " if not found, try removing the first path since we probably have a top
+  " level namespace that we are in.
+  if file == ''
+    let file = findfile(join(parts[1:], '/'), a:project_dir)
+  endif
+
   if file != ''
     call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
     if function != ''
@@ -168,7 +187,7 @@ endfunction " }}}
 
 " TemplateFind() {{{
 " Find the template, tag, or filter under the cursor.
-function eclim#python#django#find#TemplateFind()
+function! eclim#python#django#find#TemplateFind()
   let project_dir = eclim#python#django#util#GetProjectPath()
   if project_dir == ''
     call eclim#util#EchoError(
@@ -179,11 +198,19 @@ function eclim#python#django#find#TemplateFind()
   let line = getline('.')
   let element = eclim#util#GrabUri()
   if element =~ '|'
-    let element = substitute(element, '.\{-}|\(\w*\).*', '\1', 'g')
+    let element = substitute(
+      \ getline('.'), '.*|.*\(\<\w*\%' . col('.') . 'c\w*\>\).*', '\1', '')
+    if element == getline('.')
+      return
+    endif
     return eclim#python#django#find#FindFilterOrTag(project_dir, element, 'filter')
   elseif line =~ '{%\s*' . element . '\>'
     return eclim#python#django#find#FindFilterOrTag(project_dir, element, 'tag')
-  elseif line =~ '{%\s*load\s\+' . element . '\>'
+  elseif line =~ '{%\s*load\s\+[^%]\{-}\%' . col('.') . 'c'
+    let element = expand('<cword>')
+    if element !~ '^\w\+$'
+      return
+    endif
     return eclim#python#django#find#FindFilterTagFile(project_dir, element)
   elseif line =~ "{%\\s*\\(extends\\|include\\)\\s\\+['\"]" . element . "['\"]"
     return eclim#python#django#find#FindTemplate(project_dir, element)
