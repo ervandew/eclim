@@ -30,7 +30,7 @@
 " }}}
 
 " Find(context) {{{
-function eclim#python#search#Find(context)
+function! eclim#python#search#Find(context)
   if !eclim#project#util#IsCurrentFileInProject() || !filereadable(expand('%'))
     return
   endif
