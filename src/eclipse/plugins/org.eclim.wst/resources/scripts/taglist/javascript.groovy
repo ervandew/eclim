@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ class JavascriptTags implements TaglistScript
       // prototype.js has Object.extend to extend existing objects.
       regex.addPattern('o', ~/(s?)(var\s+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*Object\.extend\s*\(/, "\$3");
       regex.addPattern('o', ~/(s?)\bObject\.extend\s*\(\b([A-Z][A-Za-z0-9_.]+)\s*,\s*\{/, "\$2");
+
+      // mootools uses 'new Class'
+      regex.addPattern('o', ~/(s?)(var\s+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*new\s+Class\s*\(/, "\$3");
 
       // firebug uses extend
       regex.addPattern('o', ~/(s?)(var\s+)?\b([A-Z][A-Za-z0-9_.]+)\s*=\s*extend\s*\(/, "\$3");
