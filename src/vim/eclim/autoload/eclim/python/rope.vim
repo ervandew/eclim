@@ -257,6 +257,9 @@ with(projectroot()):
           path = location.resource.real_path.replace('\\', '/')
           lineno = location.lineno
         else: # codeassist result
+          if location[1] is None:
+            continue
+
           path = location[0] and \
             location[0].real_path or \
             '%s/%s' % (vim.eval('a:project'), vim.eval('a:filename'))
