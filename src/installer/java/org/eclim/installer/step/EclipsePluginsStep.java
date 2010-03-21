@@ -429,7 +429,9 @@ public class EclipsePluginsStep
       command.start();
       command.join();
       if(command.getReturnCode() != 0){
-        throw new RuntimeException(command.getErrorMessage());
+        throw new RuntimeException(
+            "error: " + command.getErrorMessage() +
+            " out: " + command.getOutput());
       }
     }finally{
       command.destroy();
@@ -515,7 +517,9 @@ public class EclipsePluginsStep
                   command.start();
                   command.join();
                   if(command.getReturnCode() != 0){
-                    throw new RuntimeException(command.getErrorMessage());
+                    throw new RuntimeException(
+                        "error: " + command.getErrorMessage() +
+                        " out: " + command.getOutput());
                   }
                 }finally{
                   command.destroy();
@@ -671,7 +675,9 @@ public class EclipsePluginsStep
         command.start();
         command.join();
         if(command.getReturnCode() != 0){
-          throw new RuntimeException(command.getErrorMessage());
+          throw new RuntimeException(
+              "error: " + command.getErrorMessage() +
+              " out: " + command.getOutput());
         }
       }finally{
         command.destroy();
