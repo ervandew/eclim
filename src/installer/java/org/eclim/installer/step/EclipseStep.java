@@ -35,9 +35,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.formic.util.CommandExecutor;
+
+import foxtrot.Task;
+import foxtrot.Worker;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -84,13 +90,14 @@ public class EclipseStep
     "/Applications/eclipse"
   };
 
+  private boolean initializePanelAdded = false;
   private boolean createMissingPanelAdded = false;
   private JCheckBox overridePluginsCheckBox;
 
   /**
    * Constructs the welcome step.
    */
-  public EclipseStep (String name, Properties properties)
+  public EclipseStep(String name, Properties properties)
   {
     super(name, properties);
   }
@@ -99,7 +106,7 @@ public class EclipseStep
    * {@inheritDoc}
    * @see org.formic.wizard.step.GuiStep#init()
    */
-  public Component init ()
+  public Component init()
   {
     final JPanel panel =
       new JPanel(new MigLayout("wrap 2, fillx", "[growprio 0] [fill]"));
@@ -114,13 +121,18 @@ public class EclipseStep
     panel.add(new JLabel(Installer.getString(home)));
     panel.add(eclipseHomeChooser);
 
+    Validator validator = new ValidatorBuilder()
+      .required()
+      .isDirectory()
+      .validator(new EclipseHomeValidator())
+      .validator();
+
     form.bind(home, eclipseHomeChooser.getTextField(),
         new ValidatorBuilder()
-        .required()
-        .isDirectory()
-        .validator(new EclipseHomeValidator())
+        .validator(validator)
         .validator(new EclipseHomeWritableValidator())
         .validator());
+
     String eclipseHomeDefault = getDefaultEclipseHome();
     eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
@@ -142,16 +154,25 @@ public class EclipseStep
       String hasLocal = fieldName("hasLocal");
       overridePluginsCheckBox = new JCheckBox(Installer.getString(hasLocal));
 
+      // button to create missing directories in user local eclipse config.
       final JPanel createMissingPanel = new JPanel(new FlowLayout());
       final JButton createMissingButton =
         new JButton(new CreatePluginDirsActions(eclipseLocalField));
-      String label = Installer.getString("eclipse.createMissing");
-      createMissingPanel.add(new JLabel(label));
+      createMissingPanel.add(
+          new JLabel(Installer.getString("eclipse.createMissing")));
       createMissingPanel.add(createMissingButton);
+
+      // button to initialize user local eclipse config.
+      final JPanel initializePanel = new JPanel(new FlowLayout());
+      final JButton initializeButton =
+        new JButton(new InitializeActions(eclipseHomeField, eclipseLocalField));
+      initializePanel.add(
+          new JLabel(Installer.getString("eclipse.initialize")));
+      initializePanel.add(initializeButton);
 
       eclipseLocalField.setEnabled(false);
       overridePluginsCheckBox.addActionListener(new ActionListener(){
-        public void actionPerformed (ActionEvent e){
+        public void actionPerformed(ActionEvent e){
           boolean selected = ((JCheckBox)e.getSource()).isSelected();
           JTextField eclipseLocalField = eclipseLocalChooser.getTextField();
           eclipseLocalField.setEnabled(selected);
@@ -166,21 +187,18 @@ public class EclipseStep
             eclipseHomeField = eclipseHomeChooser.getTextField();
             eclipseHomeField.setText(eclipseHomeField.getText());
             createMissingButton.setEnabled(false);
+            initializeButton.setEnabled(false);
           }else{
             eclipseLocalField.grabFocus();
             final File eclipseLocalPath = getDefaultEclipseLocalPath();
             if(eclipseLocalPath != null){
-              final String[] path = {"configuration", "eclipse"};
-
-              final String eclipseLocalFieldText =
-                eclipseLocalPath.getAbsolutePath() + '/' +
-              StringUtils.join(path, '/');
-                eclipseLocalField.setText(eclipseLocalFieldText);
-                eclipseLocalField.setCaretPosition(0);
+              setEclipseLocalPath(eclipseLocalField, eclipseLocalPath);
+              String eclipseLocalFieldText = eclipseLocalField.getText();
 
               // see if any of the path parts are missing on the filesystem
               boolean missing = false;
               String missingPath = eclipseLocalPath.getAbsolutePath();
+              final String[] path = {"configuration", "eclipse"};
               for (int ii = 0; ii < path.length; ii++){
                 if(!new File(missingPath + '/' + path[ii]).exists()){
                   missing = true;
@@ -198,13 +216,20 @@ public class EclipseStep
                 }
                 createMissingButton.setEnabled(true);
               }
+            }else{
+              if(!initializePanelAdded){
+                initializePanelAdded = true;
+                panel.add(initializePanel, "span");
+              }
+              initializeButton.setEnabled(true);
             }
           }
         }
       });
+
       eclipseHomeField.getDocument().addDocumentListener(
           new EclipseHomeListener(
-            eclipseHomeField, eclipseLocalField, overridePluginsCheckBox));
+            eclipseHomeField, eclipseLocalField, overridePluginsCheckBox, validator));
 
       panel.add(overridePluginsCheckBox, "span");
       panel.add(new JLabel(Installer.getString(local)));
@@ -253,7 +278,7 @@ public class EclipseStep
    *
    * @return The default value or null if none could be determined.
    */
-  private String getDefaultEclipseHome ()
+  private String getDefaultEclipseHome()
   {
     String home = Installer.getEnvironmentVariable("ECLIPSE_HOME");
     if(home == null || home.trim().length() == 0){
@@ -303,10 +328,18 @@ public class EclipseStep
     return null;
   }
 
+  private void setEclipseLocalPath(JTextField eclipseLocalField, File path)
+  {
+    String eclipseLocalFieldText =
+      path.getAbsolutePath() + "/configuration/eclipse";
+    eclipseLocalField.setText(eclipseLocalFieldText);
+    eclipseLocalField.setCaretPosition(0);
+  }
+
   private class EclipseHomeValidator
     implements Validator
   {
-    public boolean isValid (Object value) {
+    public boolean isValid(Object value) {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
         File plugins = new File(FilenameUtils.concat(folder, "plugins"));
@@ -316,7 +349,7 @@ public class EclipseStep
       return true;
     }
 
-    public String getErrorMessage () {
+    public String getErrorMessage() {
       return getName() + ".home.invalid";
     }
   }
@@ -324,7 +357,7 @@ public class EclipseStep
   private class EclipseHomeWritableValidator
     implements Validator
   {
-    public boolean isValid (Object value) {
+    public boolean isValid(Object value) {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
         File plugins =
@@ -337,7 +370,7 @@ public class EclipseStep
       return true;
     }
 
-    public String getErrorMessage () {
+    public String getErrorMessage() {
       return getName() + ".home.writable";
     }
   }
@@ -348,34 +381,46 @@ public class EclipseStep
     private JTextField eclipseHome;
     private JTextField eclipseLocal;
     private JCheckBox hasLocal;
+    private Validator eclipseHomeValidator;
 
-    public EclipseHomeListener (
+    public EclipseHomeListener(
         JTextField eclipseHome,
         JTextField eclipseLocal,
-        JCheckBox hasLocal)
+        JCheckBox hasLocal,
+        Validator eclipseHomeValidator)
     {
       this.eclipseHome = eclipseHome;
       this.eclipseLocal = eclipseLocal;
       this.hasLocal = hasLocal;
+      this.eclipseHomeValidator = eclipseHomeValidator;
     }
 
-    public void insertUpdate (DocumentEvent e) {
+    public void insertUpdate(DocumentEvent e) {
       pathUpdated(e);
     }
 
-    public void removeUpdate (DocumentEvent e) {
+    public void removeUpdate(DocumentEvent e) {
       pathUpdated(e);
     }
 
-    public void changedUpdate (DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e) {
       pathUpdated(e);
     }
 
-    private void pathUpdated (DocumentEvent e)
+    private void pathUpdated(DocumentEvent e)
     {
       if(!hasLocal.isSelected()){
         String path = eclipseHome.getText();
         eclipseLocal.setText(path);
+
+        if (eclipseHomeValidator.isValid(path) &&
+            !new EclipseHomeWritableValidator().isValid(path)){
+          SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+              hasLocal.doClick();
+            }
+          });
+        }
       }
     }
   }
@@ -385,13 +430,13 @@ public class EclipseStep
   {
     private JTextField eclipseLocalField;
 
-    public CreatePluginDirsActions (JTextField eclipseLocalField)
+    public CreatePluginDirsActions(JTextField eclipseLocalField)
     {
       super("Create");
       this.eclipseLocalField = eclipseLocalField;
     }
 
-    public void actionPerformed (ActionEvent e){
+    public void actionPerformed(ActionEvent e){
       try{
         boolean created = new File(eclipseLocalField.getText()).mkdirs();
         if (created){
@@ -403,6 +448,93 @@ public class EclipseStep
       }catch(Exception ex){
         GuiDialogs.showError("Error creating missing directories.", ex);
       }
+    }
+  }
+
+  private class InitializeActions
+    extends AbstractAction
+  {
+    private JTextField eclipseHomeField;
+    private JTextField eclipseLocalField;
+
+    public InitializeActions(JTextField eclipseHomeField, JTextField eclipseLocalField)
+    {
+      super("Initialize");
+      this.eclipseHomeField = eclipseHomeField;
+      this.eclipseLocalField = eclipseLocalField;
+    }
+
+    public void actionPerformed(ActionEvent e){
+      setBusy(true);
+      try{
+        Worker.post(new Task(){
+          public Object run () throws Exception {
+            String eclipseHome = eclipseHomeField.getText();
+            String eclipse = findEclipse(eclipseHome);
+
+            if (eclipse == null){
+              throw new RuntimeException(
+                "Could not find eclipse executable for path: " + eclipseHome);
+            }
+
+            CommandExecutor executor = CommandExecutor.execute(
+              new String[]{eclipse, "-nosplash", "-initialize"}, 60000);
+            if(executor.getReturnCode() != 0){
+              throw new RuntimeException(
+                  "error: " + executor.getErrorMessage() +
+                  " out: " + executor.getResult());
+            }
+
+            return null;
+          }
+        });
+        ((JButton)e.getSource()).setEnabled(false);
+        final File path = getDefaultEclipseLocalPath();
+        if (path != null){
+          SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+              setEclipseLocalPath(eclipseLocalField, path);
+              new File(eclipseLocalField.getText()).mkdirs();
+              // force re-validation
+              eclipseLocalField.grabFocus();
+            }
+          });
+        }
+      }catch(Exception ex){
+        GuiDialogs.showError("Error initializing user local eclipse configuration.", ex);
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    private String findEclipse(String eclipseHome)
+      throws Exception
+    {
+      String eclipse = eclipseHome + "/eclipse";
+      if (new File(eclipse).exists()){
+        return eclipse;
+      }
+
+      eclipse = eclipseHome + "/Eclipse.app/Contents/MacOS/eclipse";
+      if (new File(eclipse).exists()){
+        return eclipse;
+      }
+
+      CommandExecutor executor = CommandExecutor.execute(
+        new String[]{"which", "eclipse"}, 1000);
+      eclipse = executor.getResult();
+      if (eclipse.trim().length() > 0){
+        return eclipse;
+      }
+
+      executor = CommandExecutor.execute(
+        new String[]{"which", "eclipse-3.5"}, 1000);
+      eclipse = executor.getResult();
+      if (eclipse.trim().length() > 0){
+        return eclipse;
+      }
+
+      return null;
     }
   }
 }
