@@ -251,7 +251,7 @@ function! eclim#common#archive#ExpandDir()
   for key in sort(keys(temp_info))
     let index = 0
     for line in content
-      if line =~ '\s*+\?\s*\<' . escape(key, '.') . '/\?$'
+      if line =~ '^\s*+\?\s*' . escape(key, '.') . '/\?$'
         let b:file_info[line] = temp_info[key]
         call remove(content, index)
         continue
