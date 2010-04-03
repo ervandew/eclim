@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -576,6 +576,10 @@ function! s:ProcessTags()
         let command = substitute(g:Tlist_Ctags_Cmd_Eclim, '<port>', port, '')
       endif
 
+      if has('win32unix')
+        let file = eclim#cygwin#WindowsPath(file)
+      endif
+
       let command .= ' -f - --format=2 --excmd=pattern ' .
           \ '--fields=nks --sort=no --language-force=<lang> ' .
           \ '--<lang>-types=<types> "<file>"'
@@ -583,11 +587,14 @@ function! s:ProcessTags()
       let command = substitute(command, '<types>', types, 'g')
       let command = substitute(command, '<file>', file, '')
 
-      if (has('win32') || has('win64')) && command =~ '^"'
+      if has('win32') || has('win64') || has('win32unix')
         let command .= ' "'
       endif
 
       let response = eclim#util#System(command)
+      if has('win32unix')
+        let response = substitute(response, "\<c-m>\n", '\n', 'g')
+      endif
     finally
       if tempfile != ''
         call delete(tempfile)
