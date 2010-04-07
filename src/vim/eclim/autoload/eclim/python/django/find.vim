@@ -178,7 +178,11 @@ function! eclim#python#django#find#FindView(project_dir, view)
   if file != ''
     call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
     if function != ''
-      call search('def\s\+' . function . '\>', 'cw')
+      let found = search('def\s\+' . function . '\>', 'cws')
+      if !found
+        call eclim#util#EchoWarning(
+          \ 'Could not find the view function "' . function . '" in file ' . file)
+      endif
     endif
     return 1
   endif
@@ -229,8 +233,9 @@ endfunction " }}}
 " the context of the text under the cursor.
 function! eclim#python#django#find#ContextFind()
   if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
-    if search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
-        \ eclim#util#GrabUri() !~ '\.html'
+    if search("reverse\\_s*(\\_s*['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]", 'nw') || (
+        \ search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
+        \ eclim#util#GrabUri() !~ '\.html')
       return eclim#python#django#find#FindView(
         \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     elseif expand('%:t') == 'settings.py'
