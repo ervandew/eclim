@@ -233,9 +233,9 @@ endfunction " }}}
 " the context of the text under the cursor.
 function! eclim#python#django#find#ContextFind()
   if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
-    if search("reverse\\_s*(\\_s*['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]", 'nw') || (
-        \ search('urlpatterns\s\+=\s\+patterns(', 'nw') &&
-        \ eclim#util#GrabUri() !~ '\.html')
+    if eclim#util#GrabUri() !~ '\.html' && (
+        \ search("reverse\\_s*(\\_s*['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]", 'nw') ||
+        \ search('urlpatterns\s\+=\s\+patterns(', 'nw'))
       return eclim#python#django#find#FindView(
         \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     elseif expand('%:t') == 'settings.py'
