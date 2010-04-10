@@ -154,13 +154,14 @@ function! s:BufferDelete()
   endif
 
   let index = line - 1
-  exec 'bd ' . b:eclim_buffers[index].bufnr
   setlocal modifiable
   setlocal noreadonly
   exec line . ',' . line . 'delete _'
   setlocal nomodifiable
   setlocal readonly
+  let buffer = b:eclim_buffers[index]
   call remove(b:eclim_buffers, index)
+  exec 'bd ' . buffer.bufnr
 endfunction " }}}
 
 " s:BufferEntryToLine(buffer, filelength) {{{

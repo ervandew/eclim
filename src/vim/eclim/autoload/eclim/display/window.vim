@@ -230,7 +230,18 @@ function! s:PreventCloseOnBufferDelete()
     endif
   endfor
 
-  if winnr('$') == numtoolwindows
+  let index = 1
+  let numtempwindows = 0
+  let tempbuffers = []
+  while index <= winnr('$')
+    let buf = winbufnr(index)
+    if buf != -1 && getbufvar(buf, 'eclim_temp_window') != ''
+      call add(tempbuffers, buf)
+    endif
+    let index += 1
+  endwhile
+
+  if winnr('$') == (numtoolwindows + len(tempbuffers))
     let toolbuf = bufnr('%')
     if g:VerticalToolWindowSide == 'right'
       vertical topleft new
@@ -280,6 +291,30 @@ function! s:PreventCloseOnBufferDelete()
 
     exec bufwinnr(toolbuf) . 'winc w'
     exec 'vertical resize ' . g:VerticalToolWindowWidth
+
+    " fix the position of the temp windows
+    if len(tempbuffers) > 0
+      for buf in tempbuffers
+        " open the buffer in the temp window position
+        botright 10new
+        exec 'buffer ' . buf
+        setlocal winfixheight
+
+        " close the old window
+        let winnr = winnr()
+        let index = 1
+        while index <= winnr('$')
+          if winbufnr(index) == buf && index != winnr
+            exec index . 'winc w'
+            close
+            winc p
+            break
+          endif
+          let index += 1
+        endwhile
+      endfor
+    endif
+
     exec winnum . 'winc w'
   endif
 endfunction " }}}
