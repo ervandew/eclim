@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ The last step is to start Xvfb followed by eclimd:
   ::
 
     $ Xvfb :1 -screen 0 1024x768x24 &
-    $ DISPALY=:1 ./eclipse/eclimd start
+    $ DISPLAY=:1 ./eclipse/eclimd start
 
   When starting Xvfb you may receive some errors regarding font paths and
   possibly dbus and hal, but as long as Xvfb continues to run, you should be
