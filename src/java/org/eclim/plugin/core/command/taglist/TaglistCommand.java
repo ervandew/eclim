@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ package org.eclim.plugin.core.command.taglist;
 
 import java.io.File;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +48,6 @@ public class TaglistCommand
   private static final Logger logger = Logger.getLogger(TaglistCommand.class);
 
   private static final String LANGUAGE = "--language-force";
-  private static final String SORT = "--sort";
   private static final String CTAGS_OPTION = "c";
   private static final long MAX_FILE_SIZE = 500 * 1024;
 
@@ -76,7 +74,6 @@ public class TaglistCommand
 
     String ctags = commandLine.getValue(CTAGS_OPTION);
     String lang = null;
-    boolean sort = false;
 
     String[] ctagArgs = new String[args.length - 3];
     ctagArgs[0] = ctags;
@@ -88,10 +85,6 @@ public class TaglistCommand
 
       if(args[ii].startsWith(LANGUAGE)){
         lang = args[ii].substring(args[ii].indexOf('=') + 1);
-      }else if(args[ii].startsWith(SORT)){
-        if("yes".equals(args[ii].substring(args[ii].indexOf('=') + 1))){
-          sort = true;
-        }
       }
     }
 
@@ -114,9 +107,6 @@ public class TaglistCommand
 
     if(script != null){
       TagResult[] results = script.execute(file);
-      if(sort){
-        Arrays.sort(results);
-      }
       return TaglistFilter.instance.filter(commandLine, results);
     }
     return executeCtags(ctagArgs);

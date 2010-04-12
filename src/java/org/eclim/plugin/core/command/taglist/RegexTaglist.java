@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ package org.eclim.plugin.core.command.taglist;
 
 import java.io.FileInputStream;
 
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,14 +39,14 @@ public class RegexTaglist
   private String file;
   private String contents;
   private FileOffsets offsets;
-  private ArrayList<TagResult> results = new ArrayList<TagResult>();
+  private TreeSet<TagResult> results = new TreeSet<TagResult>();
 
   /**
    * Constructs a new instance.
    *
    * @param file The file to be processed.
    */
-  public RegexTaglist (String file)
+  public RegexTaglist(String file)
     throws Exception
   {
     FileInputStream is = null;

@@ -624,10 +624,6 @@ function! s:ProcessTags()
         let truncated = 1
       endif
 
-      if g:Tlist_Sort_Type == 'name'
-        call sort(results)
-      endif
-
       for result in results
         let values = s:ParseOutputLine(result)
 
@@ -655,6 +651,10 @@ function! s:ProcessTags()
       exec 'call s:Window(settings.tags, tags, ' .
         \ s:tlist_format_{&ft} . '(settings.tags, tags))'
     else
+      if g:Tlist_Sort_Type == 'name'
+        call sort(tags)
+      endif
+
       call s:Window(settings.tags, tags, s:FormatDefault(settings.tags, tags))
     endif
 

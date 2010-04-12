@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,6 +35,12 @@ function! eclim#taglist#lang#java#FormatJava(types, tags)
       \ a:tags, a:types['p'], package, lines, content, "\t")
 
   let classes = filter(copy(a:tags), 'v:val[3] == "c"')
+
+  " sort classes alphabetically except for the primary containing class.
+  if len(classes) > 1 && g:Tlist_Sort_Type == 'name'
+    let classes = [classes[0]] + sort(classes[1:])
+  endif
+
   for class in classes
     call add(content, "")
     call add(lines, -1)
@@ -54,6 +60,9 @@ function! eclim#taglist#lang#java#FormatJava(types, tags)
   endfor
 
   let interfaces = filter(copy(a:tags), 'v:val[3] == "i"')
+  if g:Tlist_Sort_Type == 'name'
+    call sort(interfaces)
+  endif
   for interface in interfaces
     call add(content, "")
     call add(lines, -1)

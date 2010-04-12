@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,6 +165,6 @@ public class TagResult
     if(obj == this){
       return 0;
     }
-    return this.getName().compareTo(obj.getName());
+    return this.getLine() - obj.getLine();
   }
 }

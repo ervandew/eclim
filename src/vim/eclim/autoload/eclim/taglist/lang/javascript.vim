@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,13 +48,24 @@ function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
     let object_end = searchpair('{', '', '}', 'W', 's:SkipComments()')
 
     let methods = []
+    let indexes = []
+    let index = 0
     for fct in members
       if len(fct) > 3
         exec 'let fct_line = ' . split(fct[4], ':')[1]
         if fct_line > object_start && fct_line < object_end
           call add(methods, fct)
+        elseif fct_line > object_end
+          break
+        elseif fct_line < object_end
+          call add(indexes, index)
         endif
       endif
+      let index += 1
+    endfor
+    call reverse(indexes)
+    for i in indexes
+      call remove(members, i)
     endfor
 
     let indexes = []
@@ -67,6 +78,8 @@ function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
           call add(indexes, index)
         elseif fct_line == object_start
           call add(indexes, index)
+        elseif fct_line > object_end
+          break
         endif
       endif
       let index += 1
@@ -84,7 +97,6 @@ function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
         call filter(parent_object.methods, 'index(methods, v:val) == -1')
       endif
       let object_bounds[string(object)] = [object_start, object_end]
-      call sort(methods)
       call add(object_contents, {'object': object, 'methods': methods})
     endif
   endfor
@@ -94,6 +106,10 @@ function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
     call add(lines, -1)
     call eclim#taglist#util#FormatType(
         \ a:tags, a:types['f'], functions, lines, content, "\t")
+  endif
+
+  if g:Tlist_Sort_Type == 'name'
+    call sort(object_contents, function('s:ObjectComparator'))
   endif
 
   for object_content in object_contents
@@ -109,6 +125,13 @@ function! eclim#taglist#lang#javascript#FormatJavascript(types, tags)
   call setpos('.', pos)
 
   return [lines, content]
+endfunction " }}}
+
+" s:ObjectComparator(o1, o2) {{{
+function s:ObjectComparator(o1, o2)
+  let n1 = a:o1['object'][0]
+  let n2 = a:o2['object'][0]
+  return n1 == n2 ? 0 : n1 > n2 ? 1 : -1
 endfunction " }}}
 
 " s:SkipComments() {{{

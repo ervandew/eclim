@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ function! eclim#taglist#lang#php#FormatPhp(types, tags)
 
   let class_contents = []
   let classes = filter(copy(a:tags), 'v:val[3] == "c"')
+  if g:Tlist_Sort_Type == 'name'
+    call sort(classes)
+  endif
   for class in classes
     exec 'let object_start = ' . split(class[4], ':')[1]
     call cursor(object_start, 1)
@@ -65,6 +68,9 @@ function! eclim#taglist#lang#php#FormatPhp(types, tags)
 
   let interface_contents = []
   let interfaces = filter(copy(a:tags), 'v:val[3] == "i"')
+  if g:Tlist_Sort_Type == 'name'
+    call sort(interfaces)
+  endif
   for interface in interfaces
     exec 'let object_start = ' . split(interface[4], ':')[1]
     call cursor(object_start, 1)
