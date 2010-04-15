@@ -448,7 +448,7 @@ function! eclim#taglist#taglisttoo#Taglist(...)
   endif
 
   if action == -1 || action == 1
-    call s:ProcessTags()
+    call s:ProcessTags(1)
     call s:StartAutocmds()
 
     augroup taglisttoo
@@ -485,9 +485,13 @@ endfunction " }}}
 function! s:StartAutocmds()
   augroup taglisttoo_file
     autocmd!
-    autocmd BufEnter,BufWritePost *
+    autocmd BufEnter *
       \ if bufwinnr(g:TagList_title) != -1 |
-      \   call s:ProcessTags() |
+      \   call s:ProcessTags(0) |
+      \ endif
+    autocmd BufWritePost *
+      \ if bufwinnr(g:TagList_title) != -1 |
+      \   call s:ProcessTags(1) |
       \ endif
     " bit of a hack to re-process tags if the filetype changes after the tags
     " have been processed.
@@ -495,7 +499,7 @@ function! s:StartAutocmds()
       \ if exists('b:ft') |
       \   if b:ft != &ft |
       \     if bufwinnr(g:TagList_title) != -1 |
-      \       call s:ProcessTags() |
+      \       call s:ProcessTags(1) |
       \     endif |
       \   endif |
       \ else |
@@ -532,12 +536,22 @@ function! s:Cleanup()
   augroup END
 endfunction " }}}
 
-" s:ProcessTags() {{{
-function! s:ProcessTags()
+" s:ProcessTags(on_open_or_write) {{{
+function! s:ProcessTags(on_open_or_write)
   " on insert completion prevent vim's jumping back and forth from the
   " completion preview window from triggering a re-processing of tags
   if pumvisible()
     return
+  endif
+
+  " if we are entering a buffer whose taglist list is already loaded, then
+  " don't do anything.
+  if !a:on_open_or_write
+    let bufnr = bufnr(g:TagList_title)
+    let filebuf = getbufvar(bufnr, 'taglisttoo_file_bufnr')
+    if filebuf == bufnr('%')
+      return
+    endif
   endif
 
   let filename = expand('%:p')
