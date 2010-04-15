@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.cdt.core.settings.model.CIncludePathEntry;
 import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
+import org.eclipse.cdt.core.settings.model.ICSettingEntry;
 
 import org.eclipse.core.runtime.Path;
 
@@ -54,7 +55,10 @@ public class IncludeEntryCommand
   {
     String dir = commandLine.getValue(Options.DIR_OPTION);
     dir = FileUtils.removeTrailingSlash(dir);
-    return new CIncludePathEntry(
-        new Path(dir), CIncludePathEntry.VALUE_WORKSPACE_PATH);
+    Path path = new Path(dir);
+    if (path.isAbsolute()){
+      return new CIncludePathEntry(path, ICSettingEntry.LOCAL);
+    }
+    return new CIncludePathEntry(path, ICSettingEntry.VALUE_WORKSPACE_PATH);
   }
 }
