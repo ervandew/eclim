@@ -1109,9 +1109,11 @@ function! eclim#project#util#CommandCompleteAbsoluteOrProjectRelative(
     \ argLead, cmdLine, cursorPos)
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseCmdLine(cmdLine)
-  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
-  if argLead =~ '^\(/\|[a-zA-Z]:\)'
-    return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+  if len(args) > 0
+    let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+    if argLead =~ '^\(/\|[a-zA-Z]:\)'
+      return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+    endif
   endif
   return eclim#project#util#CommandCompleteProjectRelative(
     \ a:argLead, a:cmdLine, a:cursorPos)
