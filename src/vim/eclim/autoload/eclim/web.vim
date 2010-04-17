@@ -146,7 +146,7 @@ function! eclim#web#WordLookup(url, word)
   call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-" DetermineBrowser() {{{
+" s:DetermineBrowser() {{{
 function! s:DetermineBrowser()
   let browser = ''
 
@@ -167,7 +167,8 @@ function! s:DetermineBrowser()
       endif
     else
       " add '&' to run process in background if necessary.
-      if browser !~ '&\s*$'
+      if browser !~ '&\s*$' &&
+       \ browser !~ '^\(/[/a-zA-Z0-9]\+/\)\?\<\(links\|lynx\|elinks\|w3m\)\>'
         let browser = browser . ' &'
       endif
 
