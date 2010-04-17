@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,6 +170,14 @@ public class CodeCorrectCommand
     IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(src);
     for(int ii = 0; ii < processors.length; ii++){
       if(processors[ii].hasCorrections(src, problem.getID())){
+        // we currently don't support the ajdt processor since it relies on
+        // PlatformUI.getWorkbench().getActiveWorkbenchWindow() which is null
+        // here.
+        if (processors[ii].getClass().getName().equals(
+              "org.eclipse.ajdt.internal.ui.editor.quickfix.QuickFixProcessor")){
+          continue;
+        }
+
         IJavaCompletionProposal[] proposals =
           processors[ii].getCorrections(context, locations);
         if(proposals != null){
