@@ -47,10 +47,8 @@ function! eclim#taglist#lang#python#FormatPython(types, tags)
 
     let members = filter(copy(a:tags),
         \ 'len(v:val) > 5 && v:val[3] == "m" && v:val[5] == "class:" . class[0]')
-    for member in members
-      call add(content, "\t\t" . member[0])
-      call add(lines, index(a:tags, member))
-    endfor
+    call eclim#taglist#util#FormatType(
+        \ a:tags, a:types['m'], members, lines, content, "\t\t")
   endfor
 
   return [lines, content]
