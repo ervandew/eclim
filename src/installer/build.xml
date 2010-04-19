@@ -65,11 +65,8 @@
       </fileset>
     </jar>
 
-    <!-- build installer plugins -->
-    <antcall target="plugin">
-      <param name="plugin.name" value="installer"/>
-      <param name="classes.include" value="**/installer/eclipse/*.class"/>
-    </antcall>
+    <!-- build the eclipse installer feature/plugin -->
+    <antcall target="installer.feature"/>
 
     <!-- prepare installer's build.properties -->
     <copy file="src/installer/build.properties"
@@ -120,34 +117,15 @@
     </formic:package>
   </target>
 
-  <!--
-    - Create the core jar file for a plugin
-    -->
-  <target name="plugin">
-    <property name="build.installer.plugins"
-        value="${build.installer}/eclipse/plugins"/>
-    <property name="plugin" value="org.eclim.${plugin.name}_${eclim.version}"/>
-    <mkdir dir="${build.installer.plugins}"/>
-
-    <copy todir="${build.installer.plugins}/${plugin}">
-      <fileset dir="src/eclipse/plugins/org.eclim.${plugin.name}"
-          includes="**/*"/>
-    </copy>
-
-    <replace dir="${build.installer.plugins}/${plugin}"
-        includes="bin/**/*, about.html, plugin.properties, META-INF/MANIFEST.MF">
-      <replacefilter token="$${eclim.version}" value="${eclim.version}"/>
-    </replace>
-
-    <jar jarfile="${build.installer.plugins}/${plugin}/eclim.${plugin.name}.jar">
-      <fileset dir="${build.installer}/formic/classes">
-        <include name="${classes.include}"/>
-      </fileset>
-    </jar>
-    <tar compression="gzip"
-        destfile="${build.installer}/org.eclim.${plugin.name}.tar.gz">
-      <tarfileset dir="${build.installer.plugins}" includes="${plugin}/**/*"/>
-    </tar>
+  <target name="installer.feature">
+    <path id="gant-classpath">
+      <fileset dir="src/ant/lib" includes="*.jar"/>
+      <fileset dir="src/eclipse/plugins/org.eclim" includes="lib/*.jar"/>
+      <fileset dir="src/eclipse/plugins/org.eclim.core" includes="lib/*.jar"/>
+    </path>
+    <taskdef name="gant" classname="org.codehaus.gant.ant.Gant"
+        classpathref="gant-classpath"/>
+    <gant file="src/installer/build.gant" target="installer.feature" inheritAll="true"/>
   </target>
 
 </project>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@ import java.beans.PropertyChangeListener;
 
 import java.io.File;
 import java.io.FilenameFilter;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
 
@@ -52,8 +54,10 @@ public class FeatureProvider
   {
     boolean[] enabled = new boolean[FEATURES.length];
     for (int ii = 0; ii < FEATURES.length; ii++){
-      String path = Installer.getProject()
-        .replaceProperties("${eclipse.home}/plugins/");
+      String path = Installer.getProject().replaceProperties(
+          Os.isFamily(Os.FAMILY_WINDOWS) ?
+          "${eclipse.home}/plugins/" : "${eclipse.local}/plugins/");
+
       final String pluginPath = "org.eclim." + FEATURES[ii] + "_";
       String[] list = new File(path).list(new FilenameFilter(){
         public boolean accept (File file, String name) {
@@ -62,7 +66,7 @@ public class FeatureProvider
       });
 
       enabled[ii] = FEATURES_ENABLED[ii];
-      if (list.length > 0){
+      if (list != null && list.length > 0){
         enabled[ii] = true;
       }else if (FEATURES[ii].equals("python")){
         path = Installer.getProject()

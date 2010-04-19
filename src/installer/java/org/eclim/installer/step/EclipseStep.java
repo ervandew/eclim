@@ -49,7 +49,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.io.FilenameUtils;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
@@ -91,7 +90,6 @@ public class EclipseStep
   };
 
   private boolean initializePanelAdded = false;
-  private boolean createMissingPanelAdded = false;
   private JCheckBox overridePluginsCheckBox;
 
   /**
@@ -134,7 +132,6 @@ public class EclipseStep
         .validator());
 
     String eclipseHomeDefault = getDefaultEclipseHome();
-    eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
     // On systems where eclispe was installed via a package manger, the user may
     // need to install the plugins in an alternate location.
@@ -153,14 +150,6 @@ public class EclipseStep
 
       String hasLocal = fieldName("hasLocal");
       overridePluginsCheckBox = new JCheckBox(Installer.getString(hasLocal));
-
-      // button to create missing directories in user local eclipse config.
-      final JPanel createMissingPanel = new JPanel(new FlowLayout());
-      final JButton createMissingButton =
-        new JButton(new CreatePluginDirsActions(eclipseLocalField));
-      createMissingPanel.add(
-          new JLabel(Installer.getString("eclipse.createMissing")));
-      createMissingPanel.add(createMissingButton);
 
       // button to initialize user local eclipse config.
       final JPanel initializePanel = new JPanel(new FlowLayout());
@@ -186,36 +175,12 @@ public class EclipseStep
             // force eclipse local text field to update itself
             eclipseHomeField = eclipseHomeChooser.getTextField();
             eclipseHomeField.setText(eclipseHomeField.getText());
-            createMissingButton.setEnabled(false);
             initializeButton.setEnabled(false);
           }else{
             eclipseLocalField.grabFocus();
             final File eclipseLocalPath = getDefaultEclipseLocalPath();
             if(eclipseLocalPath != null){
               setEclipseLocalPath(eclipseLocalField, eclipseLocalPath);
-              String eclipseLocalFieldText = eclipseLocalField.getText();
-
-              // see if any of the path parts are missing on the filesystem
-              boolean missing = false;
-              String missingPath = eclipseLocalPath.getAbsolutePath();
-              final String[] path = {"configuration", "eclipse"};
-              for (int ii = 0; ii < path.length; ii++){
-                if(!new File(missingPath + '/' + path[ii]).exists()){
-                  missing = true;
-                  missingPath =
-                    eclipseLocalFieldText.substring(missingPath.length() + 1);
-                  break;
-                }
-                missingPath += '/' + path[ii];
-              }
-
-              if(missing){
-                if(!createMissingPanelAdded){
-                  createMissingPanelAdded = true;
-                  panel.add(createMissingPanel, "span");
-                }
-                createMissingButton.setEnabled(true);
-              }
             }else{
               if(!initializePanelAdded){
                 initializePanelAdded = true;
@@ -241,6 +206,8 @@ public class EclipseStep
         overridePluginsCheckBox.doClick();
       }
     }
+
+    eclipseHomeChooser.getTextField().setText(eclipseHomeDefault);
 
     return panel;
   }
@@ -330,9 +297,7 @@ public class EclipseStep
 
   private void setEclipseLocalPath(JTextField eclipseLocalField, File path)
   {
-    String eclipseLocalFieldText =
-      path.getAbsolutePath() + "/configuration/eclipse";
-    eclipseLocalField.setText(eclipseLocalFieldText);
+    eclipseLocalField.setText(path.getAbsolutePath());
     eclipseLocalField.setCaretPosition(0);
   }
 
@@ -425,32 +390,6 @@ public class EclipseStep
     }
   }
 
-  private class CreatePluginDirsActions
-    extends AbstractAction
-  {
-    private JTextField eclipseLocalField;
-
-    public CreatePluginDirsActions(JTextField eclipseLocalField)
-    {
-      super("Create");
-      this.eclipseLocalField = eclipseLocalField;
-    }
-
-    public void actionPerformed(ActionEvent e){
-      try{
-        boolean created = new File(eclipseLocalField.getText()).mkdirs();
-        if (created){
-          ((JButton)e.getSource()).setEnabled(false);
-          eclipseLocalField.setText(eclipseLocalField.getText());
-        }else{
-          GuiDialogs.showError("Unable to create missing directories.");
-        }
-      }catch(Exception ex){
-        GuiDialogs.showError("Error creating missing directories.", ex);
-      }
-    }
-  }
-
   private class InitializeActions
     extends AbstractAction
   {
@@ -470,7 +409,7 @@ public class EclipseStep
         Worker.post(new Task(){
           public Object run () throws Exception {
             String eclipseHome = eclipseHomeField.getText();
-            String eclipse = findEclipse(eclipseHome);
+            String eclipse = EclipseUtils.findEclipse(eclipseHome);
 
             if (eclipse == null){
               throw new RuntimeException(
@@ -505,36 +444,6 @@ public class EclipseStep
       }finally{
         setBusy(false);
       }
-    }
-
-    private String findEclipse(String eclipseHome)
-      throws Exception
-    {
-      String eclipse = eclipseHome + "/eclipse";
-      if (new File(eclipse).exists()){
-        return eclipse;
-      }
-
-      eclipse = eclipseHome + "/Eclipse.app/Contents/MacOS/eclipse";
-      if (new File(eclipse).exists()){
-        return eclipse;
-      }
-
-      CommandExecutor executor = CommandExecutor.execute(
-        new String[]{"which", "eclipse"}, 1000);
-      eclipse = executor.getResult();
-      if (eclipse.trim().length() > 0){
-        return eclipse;
-      }
-
-      executor = CommandExecutor.execute(
-        new String[]{"which", "eclipse-3.5"}, 1000);
-      eclipse = executor.getResult();
-      if (eclipse.trim().length() > 0){
-        return eclipse;
-      }
-
-      return null;
     }
   }
 }

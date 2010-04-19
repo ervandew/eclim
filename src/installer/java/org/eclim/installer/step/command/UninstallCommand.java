@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,27 @@
 package org.eclim.installer.step.command;
 
 /**
- * Command to list installed features.
+ * Command to uninstall a feature.
  *
  * @author Eric Van Dewoestine
  */
-public class AddSiteCommand
+public class UninstallCommand
   extends Command
 {
-  public AddSiteCommand (String site)
+  public UninstallCommand(OutputHandler handler, String url, String id)
+    throws Exception
   {
-    super(null, new String[]{
-      "-command", "addSite", "-from", site
-    }, null);
+    this(handler, url, id, "org.eclim.installer.application");
+  }
+
+  public UninstallCommand(
+      OutputHandler handler, String url, String id, String application)
+    throws Exception
+  {
+    super(handler, new String[]{
+      "-metadataRepository", url,
+      "-artifactRepository", url,
+      "-uninstallIU", id + ".feature.group",
+    }, application);
   }
 }

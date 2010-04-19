@@ -264,6 +264,18 @@
       <fileset dir="${eclim.plugins}" includes="org.eclim*/**/*"/>
       <dirset dir="${eclim.plugins}" includes="org.eclim*"/>
     </delete>
+    <!-- remove from old user local location -->
+    <if>
+      <not> <os family="windows"/> </not>
+      <then>
+        <property name="eclim.plugins.old"
+            value="${eclipse.local}/configuration/eclipse/plugins"/>
+        <delete includeemptydirs="true" failonerror="false">
+          <fileset dir="${eclim.plugins.old}" includes="org.eclim*/**/*"/>
+          <dirset dir="${eclim.plugins.old}" includes="org.eclim*"/>
+        </delete>
+      </then>
+    </if>
 
     <!-- remove old vim files
          (when altering includes/excludes, update VimStep.proceed) -->
@@ -295,7 +307,8 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <delete dir="${eclipse.local}/plugins/org.eclim.installer_${eclim.version}"/>
+    <echo>Please wait while the eclim installer feature is removed from eclipse...</echo>
+    <eclim:cleanup/>
   </target>
 
 </project>

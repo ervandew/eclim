@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,15 +24,20 @@ package org.eclim.installer.step.command;
 public class InstallCommand
   extends Command
 {
-  public InstallCommand (
-      OutputHandler handler, String url, String id, String version, String to)
+  public InstallCommand(OutputHandler handler, String url, String id)
+    throws Exception
+  {
+    this(handler, url, id, "org.eclim.installer.application");
+  }
+
+  public InstallCommand(
+      OutputHandler handler, String url, String id, String application)
+    throws Exception
   {
     super(handler, new String[]{
       "-metadataRepository", url,
       "-artifactRepository", url,
       "-installIU", id + ".feature.group",
-      // starting w/ galileo, the version arg is not supported.
-      //"-version", version
-    }, to);
+    }, application);
   }
 }

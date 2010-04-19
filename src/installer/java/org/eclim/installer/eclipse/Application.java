@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * Portions of this class that are copied from the eclipse source are the
  * copyright (c) of IBM Corporation and others, and released under the Eclipse
@@ -7,13 +7,16 @@
  */
 package org.eclim.installer.eclipse;
 
+import java.io.File;
 import java.io.PrintStream;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.net.URI;
+import java.net.URL;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,9 +24,12 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IBundleGroup;
+import org.eclipse.core.runtime.IBundleGroupProvider;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
 
@@ -78,6 +84,18 @@ public class Application
   public Object run(String[] args)
     throws CoreException
   {
+    if ("-list".equals(args[0])){
+      IBundleGroupProvider[] providers = Platform.getBundleGroupProviders();
+      for(int ii = 0; ii < providers.length; ii++){
+        System.out.println("Site: " + providers[ii].getName());
+        IBundleGroup[] groups = providers[ii].getBundleGroups();
+        for(int jj = 0; jj < groups.length; jj++){
+          System.out.println("  Feature: " + groups[jj].getIdentifier() + ' ' + groups[jj].getVersion());
+        }
+      }
+      return IApplication.EXIT_OK;
+    }
+
     long time = System.currentTimeMillis();
 
     try {
@@ -108,7 +126,9 @@ public class Application
           // EV: invoke private method
           //performList();
           invokePrivate("performList", new Class[0], new Object[0]);
-        System.out.println(NLS.bind(Messages.Operation_complete, new Long(System.currentTimeMillis() - time)));
+          System.out.println(NLS.bind(
+                Messages.Operation_complete,
+                new Long(System.currentTimeMillis() - time)));
       }
       return IApplication.EXIT_OK;
     } catch (CoreException e) {

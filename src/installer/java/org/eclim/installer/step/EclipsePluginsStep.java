@@ -64,27 +64,24 @@ import javax.swing.table.DefaultTableModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.eclim.installer.URLProgressInputStream;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.tools.ant.taskdefs.Chmod;
-import org.apache.tools.ant.taskdefs.Replace;
+import org.apache.tools.ant.Project;
+
+import org.apache.tools.ant.taskdefs.Mkdir;
 import org.apache.tools.ant.taskdefs.Untar;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
+import org.eclim.installer.URLProgressInputStream;
 
-import org.eclim.installer.step.command.AddSiteCommand;
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.InstallCommand;
 import org.eclim.installer.step.command.ListCommand;
@@ -121,9 +118,8 @@ public class EclipsePluginsStep
   private static final String SUB_TASK = "subTask";
   private static final String INTERNAL_WORKED = "worked";
   private static final String SET_TASK_NAME = "setTaskName";
-  private static final String FEATURE = "  Feature";
+  private static final String FEATURE = "  Feature: ";
   private static final String SITE = "Site: file:";
-  private static final String ENABLED = "enabled";
   private static final String DEPENDENCIES = "/resources/dependencies.xml";
 
   private static final Color ERROR_COLOR = new Color(255, 201, 201);
@@ -207,21 +203,10 @@ public class EclipsePluginsStep
         public Object run()
           throws Exception
         {
-          extractInstallerPlugin();
+          overallLabel.setText(
+            "Installing eclim installer feature (may take a few moments).");
+          installInstallerPlugin();
           EclipseInfo info = new EclipseInfo(getDependencies());
-          if (!Os.isFamily("windows")){
-            String home = (String)
-              Installer.getContext().getValue("eclipse.home");
-            String local = (String)
-              Installer.getContext().getValue("eclipse.local");
-            if(!home.equals(local)){
-              File site = new File(local);
-              if (!info.getSites().contains(site)){
-                overallLabel.setText("Adding local site to eclipse sites...");
-                addSite(site.getAbsolutePath());
-              }
-            }
-          }
           return info;
         }
       });
@@ -298,20 +283,24 @@ public class EclipsePluginsStep
   }
 
   /**
-   * Extracts the eclipse plugin used to install eclipse features.
+   * Installs the eclipse plugin used to install eclipse features.
    */
-  private void extractInstallerPlugin()
+  private void installInstallerPlugin()
     throws Exception
   {
-    String eclipseHome = (String)
-      Installer.getContext().getValue("eclipse.local");
-
+    String update = Installer.getProject().replaceProperties("${basedir}/update");
     String tar = Installer.getProject().replaceProperties(
         "${basedir}/org.eclim.installer.tar.gz");
 
+    Mkdir mkdir = new Mkdir();
+    mkdir.setTaskName("mkdir");
+    mkdir.setDir(new File(update));
+    mkdir.setProject(Installer.getProject());
+    mkdir.execute();
+
     Untar untar = new Untar();
     untar.setTaskName("untar");
-    untar.setDest(new File(eclipseHome + "/plugins"));
+    untar.setDest(new File(update));
     untar.setSrc(new File(tar));
     Untar.UntarCompressionMethod compression =
       new Untar.UntarCompressionMethod();
@@ -320,26 +309,21 @@ public class EclipsePluginsStep
     untar.setProject(Installer.getProject());
     untar.execute();
 
-    // on unix based systems, set the eclipse home and chmod the install sh
-    // file.
-    if (!Os.isFamily("windows")){
-      File installScript = new File(
-          Installer.getProject().replaceProperties(
-            "${eclipse.local}/plugins/" +
-            "org.eclim.installer_${eclim.version}/bin/install"));
-      Replace replace = new Replace();
-      replace.setTaskName("replace");
-      replace.setFile(installScript);
-      replace.setToken("${eclipse.home}");
-      replace.setValue((String)Installer.getContext().getValue("eclipse.home"));
-      replace.execute();
-
-      Chmod chmod = new Chmod();
-      chmod.setTaskName("chmod");
-      chmod.setFile(installScript);
-      chmod.setPerm("755");
-      chmod.setProject(Installer.getProject());
-      chmod.execute();
+    Command command = new InstallCommand(
+        null,
+        "file://" + Installer.getProject().getProperty("basedir") + "/update",
+        "org.eclim.installer",
+        "org.eclipse.equinox.p2.director");
+    try{
+      command.start();
+      command.join();
+      if(command.getReturnCode() != 0){
+        throw new RuntimeException(
+            "error: " + command.getErrorMessage() +
+            " out: " + command.getOutput());
+      }
+    }finally{
+      command.destroy();
     }
   }
 
@@ -351,21 +335,10 @@ public class EclipsePluginsStep
    * @return Command to be run.
    */
   private Command getCommand(Dependency dependency)
+    throws Exception
   {
-    String to = null;
-    /*if (!Os.isFamily("windows")){
-      String home = (String)Installer.getContext().getValue("eclipse.home");
-      String local = (String)Installer.getContext().getValue("eclipse.local");
-      if (local != null && !home.equals(local)){
-        to = local;
-      }
-    }*/
-
-    return new InstallCommand(this,
-        dependency.getFeatureUrl(),
-        dependency.getId(),
-        dependency.getFeatureVersion(),
-        to);
+    return new InstallCommand(
+        this, dependency.getFeatureUrl(), dependency.getId());
   }
 
   /**
@@ -416,26 +389,6 @@ public class EclipsePluginsStep
       }
     }
     return dependencies;
-  }
-
-  /**
-   * Adds the supplied directory as a local eclipse site.
-   */
-  private void addSite(String site)
-    throws Exception
-  {
-    Command command = new AddSiteCommand(site);
-    try{
-      command.start();
-      command.join();
-      if(command.getReturnCode() != 0){
-        throw new RuntimeException(
-            "error: " + command.getErrorMessage() +
-            " out: " + command.getOutput());
-      }
-    }finally{
-      command.destroy();
-    }
   }
 
   public void process(final String line)
@@ -660,14 +613,13 @@ public class EclipsePluginsStep
       Command command = new ListCommand(new OutputHandler(){
         File site = null;
         public void process(String line){
+          Installer.getProject().log(line);
           if(line.startsWith(SITE)){
             site = new org.formic.util.File(line.substring(SITE.length()));
             sites.add(site);
           }else if(line.startsWith(FEATURE)){
-            String[] attrs = StringUtils.split(
-              line.substring(FEATURE.length() + 2));
-            features.put(attrs[0], new Feature(
-                attrs[0], attrs[1], site, attrs[2].equals(ENABLED)));
+            String[] attrs = StringUtils.split(line.substring(FEATURE.length()));
+            features.put(attrs[0], new Feature(attrs[0], attrs[1], site));
           }
         }
       });
@@ -919,12 +871,10 @@ public class EclipsePluginsStep
     private String id;
     private String version;
     private File site;
-    private boolean enabled;
 
-    public Feature(String id, String version, File site, boolean enabled) {
+    public Feature(String id, String version, File site) {
       this.id = id;
       this.site = site;
-      this.enabled = enabled;
 
       Matcher matcher = VERSION.matcher(version);
       matcher.find();
@@ -941,10 +891,6 @@ public class EclipsePluginsStep
 
     public File getSite() {
       return this.site;
-    }
-
-    public boolean isEnabled() {
-      return enabled;
     }
   }
 

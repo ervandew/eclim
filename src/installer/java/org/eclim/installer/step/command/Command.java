@@ -24,7 +24,7 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
+import org.eclim.installer.step.EclipseUtils;
 
 import org.formic.Installer;
 
@@ -39,28 +39,39 @@ public abstract class Command
   private Process process;
   private int returnCode;
   private String errorMessage;
+  private String output;
   private String[] cmd;
   private OutputHandler handler;
 
-  public Command (OutputHandler handler, String[] cmd, String to)
+  public Command(OutputHandler handler, String[] cmd)
+    throws Exception
   {
-    this.handler = handler;
-    this.cmd = new String[cmd.length + 1];
-
-    this.cmd[0] = Installer.getProject().replaceProperties(
-        "${eclipse.local}/plugins/" +
-        "org.eclim.installer_${eclim.version}/bin/install");
-    if (Os.isFamily("windows")){
-      this.cmd[0] += ".bat";
-    }
-    //this.cmd = new String[cmd.length + (to != null ? 3 : 1)];
-    //this.cmd[this.cmd.length - 2] = "-to";
-    //this.cmd[this.cmd.length - 1] = to;
-
-    System.arraycopy(cmd, 0, this.cmd, 1, cmd.length);
+    this(handler, cmd, "org.eclim.installer.application");
   }
 
-  public void run ()
+  public Command(OutputHandler handler, String[] cmd, String application)
+    throws Exception
+  {
+    this.handler = handler;
+    this.cmd = new String[cmd.length + 5];
+
+    String eclipse = EclipseUtils.findEclipse();
+    if (eclipse == null){
+      throw new RuntimeException(
+        "Could not find eclipse executable for eclipse home: " +
+        Installer.getProject().getProperty("eclipse.home"));
+    }
+
+    this.cmd[0] = eclipse;
+    this.cmd[1] = "-nosplash";
+    this.cmd[2] = "-clean";
+    this.cmd[3] = "-application";
+    this.cmd[4] = application;
+
+    System.arraycopy(cmd, 0, this.cmd, 5, cmd.length);
+  }
+
+  public void run()
   {
     try{
       System.out.println(this);
@@ -70,12 +81,18 @@ public abstract class Command
       final ByteArrayOutputStream err = new ByteArrayOutputStream();
 
       Thread outThread = new Thread(){
-        public void run (){
+        public void run(){
+          StringBuffer buffer = new StringBuffer();
           try{
             BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream()));
             String line = null;
             while((line = reader.readLine()) != null){
+              if (buffer.length() != 0){
+                buffer.append('\n');
+              }
+              buffer.append(line);
+
               if (handler != null){
                 handler.process(line);
               }
@@ -85,6 +102,8 @@ public abstract class Command
             errorMessage = e.getMessage();
             returnCode = 1000;
             process.destroy();
+          }finally{
+            output = buffer.toString();
           }
         }
       };
@@ -120,7 +139,7 @@ public abstract class Command
    *
    * @return The returnCode.
    */
-  public int getReturnCode ()
+  public int getReturnCode()
   {
     return this.returnCode;
   }
@@ -130,22 +149,32 @@ public abstract class Command
    *
    * @return The errorMessage.
    */
-  public String getErrorMessage ()
+  public String getErrorMessage()
   {
     return this.errorMessage;
   }
 
   /**
+   * Gets the standard out content from the command.
+   *
+   * @return The standard out content.
+   */
+  public String getOutput()
+  {
+    return this.output;
+  }
+
+  /**
    * Destroy this process.
    */
-  public void destroy ()
+  public void destroy()
   {
     if(process != null){
       process.destroy();
     }
   }
 
-  public String toString ()
+  public String toString()
   {
     return StringUtils.join(cmd, ' ');
   }
