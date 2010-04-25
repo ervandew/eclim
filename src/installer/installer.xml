@@ -307,8 +307,13 @@
     - Cleanup any installer files when installer has completed or has been canceled.
     -->
   <target name="cleanup">
-    <echo>Please wait while the eclim installer feature is removed from eclipse...</echo>
-    <eclim:cleanup/>
+    <if>
+      <isset property="eclim.feature.installed"/>
+      <then>
+        <echo>Please wait while the eclim installer feature is removed from eclipse...</echo>
+        <eclim:cleanup/>
+      </then>
+    </if>
   </target>
 
 </project>

@@ -322,6 +322,7 @@ public class EclipsePluginsStep
             "error: " + command.getErrorMessage() +
             " out: " + command.getOutput());
       }
+      Installer.getProject().setProperty("eclim.feature.installed", "true");
     }finally{
       command.destroy();
     }
