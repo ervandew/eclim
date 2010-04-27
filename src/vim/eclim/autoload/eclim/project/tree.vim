@@ -356,7 +356,11 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
     let cmd = 'edit'
   endif
 
-  exec cmd . ' ' . cwd . '/' . a:file
+  try
+    exec cmd . ' ' . cwd . '/' . a:file
+  catch /E325/
+    " ignore attention error since the use should be prompted to handle it.
+  endtry
 endfunction " }}}
 
 " HorizontalContentWindow() {{{
