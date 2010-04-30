@@ -405,7 +405,8 @@ function! eclim#taglist#taglisttoo#AutoOpen()
   let buf_num = winbufnr(i)
   while buf_num != -1
     let filename = fnamemodify(bufname(buf_num), ':p')
-    if s:FileSupported(filename, getbufvar(buf_num, '&filetype'))
+    if !getbufvar(buf_num, '&diff') &&
+     \ s:FileSupported(filename, getbufvar(buf_num, '&filetype'))
       let open_window = 1
       break
     endif
