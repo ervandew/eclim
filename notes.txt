@@ -697,6 +697,10 @@ NOTES {{{
       $ mkdir -p ~/.kde/Autostart
       $ cp $ECLIPSE_HOME/plugins/org.eclim_<version>/bin/native/linux/eclimd ~/.kde/Autostart
 
+    Others
+      $ vim ~/.xinitrc
+      /usr/local/java/eclipse/eclimd start
+
   }}}
 
   Misc {{{
