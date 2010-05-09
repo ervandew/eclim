@@ -193,7 +193,7 @@ with(projectroot()):
       "let completion_error = 'Completion failed due to indentation error.'"
     )
   except ModuleSyntaxError, e:
-    message = 'Completion failed due to syntax error: %s' % e.message
+    message = 'Completion failed due to syntax error: %s' % e.args[0]
     vim.command("let completion_error = %s" % repr(message))
   except RopeError, e:
     message = 'Completion failed due to rope error: %s' % type(e)
@@ -275,7 +275,7 @@ with(projectroot()):
       "let search_error = 'Search failed due to indentation error.'"
     )
   except ModuleSyntaxError, e:
-    message = 'Search failed due to syntax error: %s' % e.message
+    message = 'Search failed due to syntax error: %s' % e.args[0]
     vim.command("let search_error = %s" % repr(message))
   except RopeError, e:
     message = 'Search failed due to rope error: %s' % type(e)
