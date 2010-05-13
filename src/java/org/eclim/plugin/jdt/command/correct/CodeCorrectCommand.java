@@ -37,8 +37,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.util.CollectionUtils;
-
 import org.eclipse.jdt.core.ICompilationUnit;
 
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -182,9 +180,21 @@ public class CodeCorrectCommand
           processors[ii].getCorrections(context, locations);
         if(proposals != null){
           for (IJavaCompletionProposal proposal : proposals){
+            if (!(proposal instanceof CUCorrectionProposal)){
+              continue;
+            }
+
+            CUCorrectionProposal cuProposal = (CUCorrectionProposal)proposal;
+
+            // for now we aren't going to support changes to files other than the
+            // current one.
+            if (!src.equals(cuProposal.getCompilationUnit())){
+              continue;
+            }
+
             // hack to fix off by one issue with some corrections in eclipse.
-            if (proposal instanceof CorrectPackageDeclarationProposal){
-              TextChange change = ((CUCorrectionProposal)proposal).getTextChange();
+            if (cuProposal instanceof CorrectPackageDeclarationProposal){
+              TextChange change = cuProposal.getTextChange();
               TextEdit edit = change.getEdit();
               if (edit instanceof MultiTextEdit){
                 Field fChildren = TextEdit.class.getDeclaredField("fChildren");
@@ -197,8 +207,8 @@ public class CodeCorrectCommand
               flength.setAccessible(true);
               flength.setInt(edit, edit.getLength() + 1);
             }
+            results.add(cuProposal);
           }
-          CollectionUtils.addAll(results, proposals);
         }
       }
     }
