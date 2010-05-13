@@ -766,6 +766,10 @@ function! eclim#project#util#GetProject(file)
   endif
 
   let projects = eclim#project#util#GetProjects()
+
+  " sort projects depth wise by path to properly support nested projects.
+  call sort(projects, 's:ProjectSortPathDepth')
+
   for project in projects
     if dir =~ '^' . project.path . pattern
       return project
@@ -779,6 +783,11 @@ function! eclim#project#util#GetProject(file)
     endfor
   endfor
   return {}
+endfunction " }}}
+
+" s:ProjectSortPathDepth(p1, p2) {{{
+function! s:ProjectSortPathDepth(p1, p2)
+  return len(a:p2.path) - len(a:p1.path)
 endfunction " }}}
 
 " GetProjectDirs() {{{
