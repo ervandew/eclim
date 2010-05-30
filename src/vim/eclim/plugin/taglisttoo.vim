@@ -44,7 +44,7 @@ if !g:EclimTaglistEnabled
 endif
 
 " disable if user has taglist installed on windows since we can't hook into
-" taglist to fix the windows path separators to be java compatiable.
+" taglist to fix the windows path separators to be java compatible.
 if exists('loaded_taglist') && (has('win32') || has('win64') || has('win32unix'))
   finish
 endif
