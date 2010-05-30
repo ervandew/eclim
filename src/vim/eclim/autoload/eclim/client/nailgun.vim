@@ -191,12 +191,10 @@ function! eclim#client#nailgun#GetNgPort(...)
     endfor
 
     " project outside of a workspace dir
-    for workspace in keys(workspaces)
-      let project = eclim#project#util#GetProject(path)
-      if len(project) > 0
-        return get(workspaces, project.workspace, default)
-      endif
-    endfor
+    let project = eclim#project#util#GetProject(path)
+    if len(project) > 0
+      return get(workspaces, project.workspace, default)
+    endif
   endif
 
   return port
