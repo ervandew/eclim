@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.pdt.command.src;
 
+import java.io.InputStream;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.plugin.dltk.command.src.AbstractSrcUpdateCommand;
@@ -52,10 +54,15 @@ public class SrcUpdateCommand
     throws Exception
   {
     PHPSourceParserFactory parser = new PHPSourceParserFactory();
-    parser.parse(
-        filename.toCharArray(),
-        IOUtils.toString(file.getContents()).toCharArray(),
-        reporter
-    );
+    InputStream in = file.getContents();
+    try {
+      parser.parse(
+          filename.toCharArray(),
+          IOUtils.toString(in).toCharArray(),
+          reporter
+      );
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
   }
 }
