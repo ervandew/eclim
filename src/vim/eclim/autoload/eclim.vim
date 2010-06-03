@@ -87,7 +87,8 @@ function! eclim#ExecuteEclim(command, ...)
     let result = substitute(result, "\<c-m>$", '', '')
   endif
 
-  call eclim#util#Echo(' ')
+  " an echo during startup causes an annoying issue with vim.
+  "call eclim#util#Echo(' ')
 
   " check for errors
   let error = ''
