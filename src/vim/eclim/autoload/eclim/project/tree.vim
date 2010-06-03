@@ -350,6 +350,12 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   "exec 'cd ' . escape(a:cwd, ' ')
   exec g:EclimProjectTreeContentWincmd
 
+  let file = cwd . '/' . a:file
+
+  if eclim#util#GoToBufferWindow(file)
+    return
+  endif
+
   " if the buffer is a no name and action is split, use edit instead.
   if cmd == 'split' && expand('%') == '' &&
    \ !&modified && line('$') == 1 && getline(1) == ''
@@ -357,7 +363,7 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   endif
 
   try
-    exec cmd . ' ' . cwd . '/' . a:file
+    exec cmd . ' ' file
   catch /E325/
     " ignore attention error since the use should be prompted to handle it.
   endtry
