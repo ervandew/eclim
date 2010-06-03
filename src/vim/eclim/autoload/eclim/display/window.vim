@@ -248,6 +248,7 @@ function! s:PreventCloseOnBufferDelete()
     else
       vertical botright new
     endif
+    setlocal noreadonly modifiable
     let winnum = winnr()
     exec 'let bufnr = ' . expand('<abuf>')
 
