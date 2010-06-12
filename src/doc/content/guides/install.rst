@@ -58,31 +58,24 @@ following requirements.
 Eclim Graphical Installer
 -------------------------
 
-Step 1: Download the eclim installer for your platform.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- **Linux / Mac / BSD (and other unix based systems)**:
-  `eclim_version.sh`_
-- **Windows:**
-  `eclim_version.exe`_
-
-
-Step 2: Run the installer.
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 1: Download and run the installer.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
 
   If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- **Linux / Mac / BSD (and other unix based systems)**:
-  You can start the installer by running the script you downloaded
-  (note: you may have to make it executable first).
+- **First download the installer:**  `eclim_version.jar`_
+
+- **Next run the installer:**
 
   .. code-block:: bash
 
-    $ chmod 755 eclim_version.sh
-    $ ./eclim_version.sh
+    $ java -jar eclim_version.jar
+
+  Windows user should be able to simply double click on the jar file to start
+  the installer.
 
   .. note::
 
@@ -91,7 +84,7 @@ Step 2: Run the installer.
 
     .. code-block:: bash
 
-      $ FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080" ./eclim_version.sh
+      $ java -jar eclim_version.jar -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
 
     If your proxy requires authentication, you'll need to supply the
     ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
@@ -100,32 +93,7 @@ Step 2: Run the installer.
 
     .. code-block:: bash
 
-      $ FORMIC_OPTS="-Djava.net.useSystemProxies=true" ./eclim_version.sh
-
-- **Windows:**
-  On Windows systems, simply double click the eclim_version.exe file you
-  downloaded.
-
-  .. note::
-
-    If you are behind a proxy, you may need to run the installer from a dos
-    prompt like so (be sure to take a look at the related
-    :ref:`faq <eclim_proxy>` as well):
-
-    .. code-block:: bash
-
-      C:\...> set FORMIC_OPTS=-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
-      C:\...> eclim_version.exe
-
-    If your proxy requires authentication, you'll need to supply the
-    ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
-
-    You can also try the following which may be able to use your system proxy settings:
-
-    .. code-block:: bash
-
-      C:\...> set FORMIC_OPTS=-Djava.net.useSystemProxies=true
-      C:\...> eclim_version.exe
+      $ java -jar eclim_version.jar -Djava.net.useSystemProxies=true
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
@@ -159,14 +127,19 @@ to install the application.
 
     ::
 
-      $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
+      $ java -jar eclim_version.jar -Djava.ext.dirs
 
 
-Step 3: Testing the installation
+Step 2: Testing the installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To test eclim you first need to start the eclim daemon.  How you start the
 daemon will depend on how you intend to use eclim.
+
+.. note::
+
+  More info on running the eclim daemon can be found in the :ref:`eclimd
+  <eclimd>` docs.
 
 If you plan on using eclim along with the eclipse gui, then:
 
@@ -215,11 +188,11 @@ eclim:
   :ref:`troubleshooting guide <guides/troubleshoot>` or feel free to post your
   issue on the `eclim user`_ mailing list.
 
-    Example of successful ping:
+    Example of a successful ping:
 
     .. image:: ../images/screenshots/ping_success.png
 
-    Example of failed ping:
+    Example of a failed ping:
 
     .. image:: ../images/screenshots/ping_failed.png
 
@@ -269,9 +242,8 @@ source.  Instructions on doing so can be found in the
 Unattended (automated) install
 ------------------------------
 
-As of eclim 1.5.5 users on unix based machines (linux, OSX, etc.) can use the
-eclim installer to run an automated install without launching the installer
-gui.
+As of eclim 1.5.6 the eclim installer supports the ability to run an automated
+install without launching the installer gui.
 
 .. warning::
 
@@ -287,7 +259,7 @@ this method:
 
 .. code-block:: bash
 
-  $ ./eclim_1.5.5.sh install \
+  $ java -jar eclim_version.jar install \
     -Declipse.home=/opt/eclipse \
     -Dvim.files=$HOME/.vim \
     -DfeatureList.ant=true \
@@ -330,6 +302,5 @@ other features be enabled, as noted below:
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse 3.5.x (galileo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
-.. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15823
-.. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15821
+.. _eclim_version.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user

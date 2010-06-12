@@ -77,8 +77,7 @@ target(name: 'installer.feature'){
   }
   delete(file: '${build.installer}/eclipse/update/content.xml')
 
-  tar(compression: 'gzip',
-      destfile: '${build.installer}/org.eclim.installer.tar.gz'){
-    tarfileset(dir: '${build.installer}/eclipse/update', includes: '**/*')
+  zip(destfile: '${build.installer}/installer-site.zip'){
+    fileset(dir: '${build.installer}/eclipse/update', includes: '**/*')
   }
 }

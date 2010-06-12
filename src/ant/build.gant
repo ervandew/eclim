@@ -491,52 +491,25 @@ target(name: 'dist'){
   }
 
   // eclipse plugin archives
-  zip(destfile: '${build.installer}/org.eclim_${eclim.version}.zip'){
+  zip(destfile: '${build.installer}/eclipse-plugins.zip'){
     fileset(dir: '${build.plugins}/'){
       include(name: 'org.eclim_${eclim.version}/**/*')
       include(name: 'org.eclim.*_${eclim.version}/**/*')
       exclude(name: 'org.eclim.installer*_${eclim.version}/**/*')
       exclude(name: 'org.eclim.installer*_${eclim.version}')
-      exclude(name: 'org.eclim_${eclim.version}/bin/native/**/*')
-      exclude(name: 'org.eclim_${eclim.version}/bin/ng')
-      exclude(name: 'org.eclim_${eclim.version}/bin/eclim*')
     }
     zipfileset(dir: 'src/shell', prefix: 'org.eclim_${eclim.version}/bin/'){
-      include(name: 'eclim')
-      include(name: 'eclim.sed')
-      include(name: 'eclim*.bat')
-      include(name: 'eclim*.cmd')
-    }
-  }
-  tar(destfile: '${build.installer}/org.eclim_${eclim.version}.tar.gz',
-      compression: 'gzip'){
-    tarfileset(dir: '${build.plugins}/'){
-      include(name: 'org.eclim_${eclim.version}/**/*')
-      include(name: 'org.eclim.*_${eclim.version}/**/*')
-      exclude(name: 'org.eclim.installer*_${eclim.version}/**/*')
-      exclude(name: 'org.eclim.installer*_${eclim.version}')
-      exclude(name: 'org.eclim_${eclim.version}/bin/native/windows/**/*')
-      exclude(name: 'org.eclim_${eclim.version}/bin/ng')
-      exclude(name: 'org.eclim_${eclim.version}/bin/eclim*')
-      exclude(name: 'org.eclim_${eclim.version}/bin/**/*.bat')
-      exclude(name: 'org.eclim_${eclim.version}/bin/**/*.exe')
-    }
-    tarfileset(dir: 'src/shell',
-        prefix: 'org.eclim_${eclim.version}/bin/', mode: '755'){
-      include(name: 'eclim')
-      include(name: 'eclim.sed')
-      include(name: 'eclimd')
-      include(name: 'eclimd.sed')
+      include(name: '**/*')
     }
   }
 
   // eclim resources jar
-  zip(destfile: '${build.installer}/eclim_resources_${eclim.version}.jar'){
+  zip(destfile: '${build.installer}/resources.zip'){
     zipfileset(dir: 'src/resources', prefix: 'resources', includes: '**/*')
   }
 
   // vim plugins jar
-  zip(destfile: '${build.installer}/eclim_vim_${eclim.version}.jar'){
+  zip(destfile: '${build.installer}/vim-plugins.zip'){
     fileset(dir: '${build.vimfiles}', includes: '**/*')
     zipfileset(dir: 'build/doc/vimdocs', prefix: 'eclim/doc', includes: '**/*.txt')
   }

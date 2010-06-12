@@ -21,11 +21,10 @@ Download
 Official Installer
 ------------------
 
-You can find the eclim installer for your system on eclim's sourceforge
-downloads_ page:
+You can find the official eclim installer for on eclim's sourceforge downloads_
+page:
 
-- **Linux / Mac / BSD:** `eclim_version.sh`_
-- **Windows:** `eclim_version.exe`_
+- `eclim_version.jar`_
 
 Third Party Packages
 --------------------
@@ -39,7 +38,6 @@ maintained by third parties for some popular linux distributions:
 - **Fedora (12.x and maybe higher):** `grond repository`_
 
 .. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
-.. _eclim_version.sh: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15823
-.. _eclim_version.exe: http://sourceforge.net/project/platformdownload.php?group_id=145869&sel_platform=15821
+.. _eclim_version.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _sunrise overlay: http://gpo.zugaina.org/dev-util/eclim
 .. _grond repository: http://www.grond.org/downloads/repository/grond/fedora/

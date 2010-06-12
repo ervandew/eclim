@@ -126,9 +126,10 @@ public class Application
           // EV: invoke private method
           //performList();
           invokePrivate("performList", new Class[0], new Object[0]);
-          System.out.println(NLS.bind(
-                Messages.Operation_complete,
-                new Long(System.currentTimeMillis() - time)));
+
+        System.out.println(NLS.bind(
+              Messages.Operation_complete,
+              new Long(System.currentTimeMillis() - time)));
       }
       return IApplication.EXIT_OK;
     } catch (CoreException e) {

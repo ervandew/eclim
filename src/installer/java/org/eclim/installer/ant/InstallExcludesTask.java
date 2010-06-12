@@ -17,11 +17,9 @@
 package org.eclim.installer.ant;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
 
@@ -30,6 +28,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import org.apache.tools.ant.taskdefs.Concat;
+
+import org.eclim.installer.step.FeatureProvider;
 
 import org.formic.Installer;
 import org.formic.InstallContext;
@@ -70,29 +70,30 @@ public class InstallExcludesTask
     }
     log("including features: " + java.util.Arrays.toString(includes.toArray()));
 
-    String excludesPath = project.replaceProperties("${basedir}/resources/excludes/");
-    File[] excludes = new File(excludesPath).listFiles(new FileFilter(){
-      public boolean accept(File file){
-        if (!file.getName().endsWith(".excludes")){
-          return false;
+    boolean excludes = false;
+    for (int ii = 0; ii < FeatureProvider.FEATURES.length; ii++){
+      String feature = FeatureProvider.FEATURES[ii];
+      if(!includes.contains(feature)){
+        InputStream in = Installer.class.getResourceAsStream(
+            "/resources/excludes/" + feature + ".excludes");
+        if (in == null){
+          continue;
         }
 
-        String feature = file.getName().substring(0, file.getName().indexOf('.'));
-        if(!includes.contains(feature)){
-          try{
-            String text = IOUtils.toString(new FileInputStream(file));
-            text = getProject().replaceProperties(text);
-            concat.addText(text);
-          }catch(Exception e){
-            throw new BuildException(e);
-          }
-          return true;
+        try{
+          String text = IOUtils.toString(in);
+          text = getProject().replaceProperties(text);
+          concat.addText(text);
+          excludes = true;
+        }catch(Exception e){
+          throw new BuildException(e);
+        }finally{
+          IOUtils.closeQuietly(in);
         }
-        return false;
       }
-    });
+    }
 
-    if(excludes.length > 0){
+    if (excludes){
       concat.execute();
     }
   }

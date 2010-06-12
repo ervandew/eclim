@@ -37,7 +37,7 @@ public class FeatureProvider
   implements org.formic.wizard.step.shared.FeatureProvider,
              PropertyChangeListener
 {
-  private static final String[] FEATURES =
+  public static final String[] FEATURES =
     {"ant", "maven", "jdt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python"};
 
   private static final boolean[] FEATURES_ENABLED =

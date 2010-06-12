@@ -19,14 +19,13 @@
 <!--
   - Installer build file that is executed upon installation.
   -->
-<project name="eclim_installer" default="installer"
+<project name="eclim_installer" default="installer" basedir="."
     xmlns:formic="antlib:org.formic.ant"
     xmlns:eclim="antlib:org.eclim.installer.ant">
 
-  <property file="build.properties"/>
+  <formic:property resource="/build.properties"/>
 
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-  <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask"/>
 
   <!--
     - Standard target to install the app.
@@ -49,27 +48,9 @@
               value="org.eclim.installer.step.FeatureProvider"/>
         </formic:step>
         <formic:step name="summary"/>
-        <formic:branch path="branch_eclipse_plugins">
-          <or>
-            <!-- seperate plugins dest may need to be added as a new site -->
-            <and>
-              <not> <os family="windows"/> </not>
-              <not>
-                <formic:equals arg1="eclipse.local" arg2="eclipse.home"/>
-              </not>
-            </and>
-            <formic:istrue value="featureList.cdt"/>
-            <formic:istrue value="featureList.dltk"/>
-            <formic:istrue value="featureList.jdt"/>
-            <formic:istrue value="featureList.wst"/>
-          </or>
-        </formic:branch>
+        <formic:step name="eclipsePlugins"/>
         <formic:step name="install"/>
         <formic:step name="finished"/>
-      </formic:path>
-
-      <formic:path name="branch_eclipse_plugins">
-        <formic:step name="eclipsePlugins"/>
       </formic:path>
     </formic:installer>
   </target>
@@ -134,49 +115,32 @@
     <antcall target="clean"/>
 
     <!-- generate excludes file based on components user chose not to install -->
-    <touch file="install.excludes"/>
-    <eclim:installexcludes destfile="install.excludes"/>
+    <formic:tempdir property="tempdir"/>
+    <touch file="${tempdir}/install.excludes"/>
+    <eclim:installexcludes destfile="${tempdir}/install.excludes"/>
 
     <!-- install eclipse plugins -->
+    <formic:unzip resource="/files/eclipse-plugins.zip" dest="${eclim.plugins}">
+      <patternset includes="**/*" excludesfile="${tempdir}/install.excludes"/>
+    </formic:unzip>
+    <replace
+        file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
+        token="$${eclipse.home}" value="${eclipse.local}"/>
+    <replace
+        file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
+        token="$${eclipse.home}" value="${eclipse.local}"/>
     <if>
       <os family="windows"/>
       <then>
-        <unzip src="org.eclim_${eclim.version}.zip"
-            dest="${eclim.plugins}">
-          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
-        </unzip>
         <move todir="${eclipse.home}">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
               includes="eclim.bat,eclim.cmd,eclimd.bat,eclimd.cmd,ng.exe"/>
         </move>
       </then>
       <else>
-        <untar src="${basedir}/org.eclim_${eclim.version}.tar.gz"
-            dest="${eclim.plugins}" compression="gzip">
-          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
-        </untar>
-
-        <replace
-            file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
-            token="$${eclipse.home}" value="${eclipse.local}"/>
-        <replace
-            file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
-            token="$${eclipse.home}" value="${eclipse.local}"/>
-
-        <!--
-          - hard code the eclipse home for people that install plugins outside
-          - of the ecilpse home.
-          -->
-        <if>
-          <not>
-            <contains string="${eclim.plugins}" substring="${eclipse.home}"/>
-          </not>
-          <then>
-            <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"
-                token="#$${eclipse.home}"
-                value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
-          </then>
-        </if>
+        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"
+            token="#$${eclipse.home}"
+            value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
 
         <chmod perm="755">
           <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin">
@@ -225,15 +189,15 @@
     </replace>
 
     <!-- install eclim resources -->
-    <unjar src="eclim_resources_${eclim.version}.jar" dest="${user.home}/.eclim"/>
+    <formic:unzip resource="/files/resources.zip" dest="${user.home}/.eclim"/>
 
     <!-- install vim plugins -->
     <if>
       <not> <istrue value="${vim.skip}"/> </not>
       <then>
-        <unjar src="eclim_vim_${eclim.version}.jar" dest="${vim.files}">
-          <patternset includes="**/*" excludesfile="${basedir}/install.excludes"/>
-        </unjar>
+        <formic:unzip resource="/files/vim-plugins.zip" dest="${vim.files}">
+          <patternset includes="**/*" excludesfile="${tempdir}/install.excludes"/>
+        </formic:unzip>
 
         <replace file="${vim.files}/eclim/plugin/eclim.vim">
           <replacefilter token="&quot;$${vim.eclim.home}&quot;"

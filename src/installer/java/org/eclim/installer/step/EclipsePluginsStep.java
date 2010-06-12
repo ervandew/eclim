@@ -67,6 +67,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.formic.util.Extractor;
+
 import com.jgoodies.looks.plastic.PlasticTheme;
 
 import foxtrot.Worker;
@@ -75,17 +77,13 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.tools.ant.Project;
-
-import org.apache.tools.ant.taskdefs.Mkdir;
-import org.apache.tools.ant.taskdefs.Untar;
-
 import org.eclim.installer.URLProgressInputStream;
 
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.InstallCommand;
 import org.eclim.installer.step.command.ListCommand;
 import org.eclim.installer.step.command.OutputHandler;
+import org.eclim.installer.step.command.UninstallCommand;
 
 import org.eclim.installer.theme.DesertBlue;
 
@@ -288,41 +286,42 @@ public class EclipsePluginsStep
   private void installInstallerPlugin()
     throws Exception
   {
-    String update = Installer.getProject().replaceProperties("${basedir}/update");
-    String tar = Installer.getProject().replaceProperties(
-        "${basedir}/org.eclim.installer.tar.gz");
+    File updateDir = Installer.tempDir("update");
+    Extractor.extractResource("/files/installer-site.zip", updateDir);
 
-    Mkdir mkdir = new Mkdir();
-    mkdir.setTaskName("mkdir");
-    mkdir.setDir(new File(update));
-    mkdir.setProject(Installer.getProject());
-    mkdir.execute();
-
-    Untar untar = new Untar();
-    untar.setTaskName("untar");
-    untar.setDest(new File(update));
-    untar.setSrc(new File(tar));
-    Untar.UntarCompressionMethod compression =
-      new Untar.UntarCompressionMethod();
-    compression.setValue("gzip");
-    untar.setCompression(compression);
-    untar.setProject(Installer.getProject());
-    untar.execute();
-
+    String url = "file://" + updateDir;
     Command command = new InstallCommand(
-        null,
-        "file://" + Installer.getProject().getProperty("basedir") + "/update",
-        "org.eclim.installer",
-        "org.eclipse.equinox.p2.director");
+        null, url, "org.eclim.installer", "org.eclipse.equinox.p2.director");
+
     try{
       command.start();
       command.join();
       if(command.getReturnCode() != 0){
-        throw new RuntimeException(
+        RuntimeException re = new RuntimeException(
             "error: " + command.getErrorMessage() +
             " out: " + command.getOutput());
+
+        Installer.getProject().log(
+            "Error installing eclim installer feature, " +
+            "attempting uninstall/reinstall.");
+
+        // attempt to uninstall the feature
+        Command uninstall = new UninstallCommand(
+            null, url, "org.eclim.installer", "org.eclipse.equinox.p2.director");
+        uninstall.start();
+        uninstall.join();
+
+        // now try to install again
+        command = new InstallCommand(
+            null, url, "org.eclim.installer", "org.eclipse.equinox.p2.director");
+        command.start();
+        command.join();
+        if(command.getReturnCode() != 0){
+          throw re;
+        }
       }
       Installer.getProject().setProperty("eclim.feature.installed", "true");
+      Installer.getProject().setProperty("eclim.feature.location", url);
     }finally{
       command.destroy();
     }

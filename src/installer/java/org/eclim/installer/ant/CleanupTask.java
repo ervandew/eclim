@@ -16,6 +16,14 @@
  */
 package org.eclim.installer.ant;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -25,6 +33,11 @@ import org.eclim.installer.step.command.UninstallCommand;
 
 import org.formic.Installer;
 
+/**
+ * Ant task to remove installer resources.
+ *
+ * @author Eric Van Dewoestine
+ */
 public class CleanupTask
   extends Task
 {
@@ -36,17 +49,41 @@ public class CleanupTask
   {
     Command command = null;
     try{
+      Project project = Installer.getProject();
+
+      String url = project.getProperty("eclim.feature.location");
       command = new UninstallCommand(
-          null,
-          "file://" + Installer.getProject().getProperty("basedir") + "/update",
-          "org.eclim.installer",
-          "org.eclipse.equinox.p2.director");
+          null, url, "org.eclim.installer", "org.eclipse.equinox.p2.director");
       command.start();
       command.join();
       if(command.getReturnCode() != 0){
         Installer.getProject().log(
             "error: " + command.getErrorMessage() +
             " out: " + command.getOutput(), Project.MSG_WARN);
+      }
+
+      // remove installer plugin jar + artifacts.xml entry which the p2
+      // director does not.
+      new File(project.replaceProperties(
+          "${eclipse.local}/plugins/org.eclim.installer_${eclim.version}.jar"))
+        .delete();
+
+      FileInputStream fin = new FileInputStream(project.replaceProperties(
+          "${eclipse.local}/artifacts.xml"));
+      FileWriter fout = null;
+      try{
+        String artifacts = IOUtils.toString(fin);
+        fin.close();
+        Pattern pattern = Pattern.compile(
+          "\n\\s*<artifact classifier='osgi.bundle' id='org\\.eclim\\.installer.*?</artifact>",
+          Pattern.DOTALL);
+        artifacts = pattern.matcher(artifacts).replaceFirst("");
+        fout = new FileWriter(project.replaceProperties(
+              "${eclipse.local}/artifacts.xml"));
+        fout.write(artifacts);
+      }finally{
+        IOUtils.closeQuietly(fout);
+        IOUtils.closeQuietly(fin);
       }
     }catch(Exception e){
       throw new BuildException(e);

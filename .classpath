@@ -75,10 +75,10 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.5.0.v200906151043.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.402.v201001251516.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.1.102.v200910200227.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/ant.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/foxtrot-3.0.beta1.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/looks-2.1.4.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/ant/lib/miglayout-3.5.0.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.1.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/lib/foxtrot-3.0.beta1.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
   <classpathentry kind="src" path="src/java" excluding="org/ccil/**"/>
   <classpathentry kind="src" path="src/installer/java"/>

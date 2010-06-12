@@ -44,7 +44,8 @@
     <!-- compile install steps and helper classes -->
     <javac destdir="${build.installer}/formic/classes"
         debug="on" optimize="false"
-        target="${javac.target}" source="${javac.target}">
+        target="${javac.target}" source="${javac.target}"
+        includeantruntime="false">
       <src path="src/installer/java"/>
       <include name="**/*.java"/>
       <classpath refid="formic.classpath"/>
@@ -74,30 +75,8 @@
     <replace file="${build.installer}/formic/build.properties"
         token="$${eclim.version}" value="${eclim.version}"/>
 
-    <!-- build linux installer -->
-    <formic:package os="linux"
-        destfile="build/dist/eclim_${eclim.version}.sh" compression="gzip">
-      <formic:libset dir="${build.installer}/formic/dist">
-        <include name="eclim.jar"/>
-      </formic:libset>
-      <tarfileset dir="." includes="LICENSE"/>
-      <tarfileset dir="${build.installer}/formic" includes="build.properties"/>
-      <tarfileset dir="src/installer">
-        <include name="resources/**/*"/>
-        <include name="*.xml"/>
-        <exclude name="build.xml"/>
-      </tarfileset>
-      <tarfileset dir="${build.installer}">
-        <include name="eclim_resources_${eclim.version}.jar"/>
-        <include name="eclim_vim_${eclim.version}.jar"/>
-        <include name="org.eclim_${eclim.version}.tar.gz"/>
-        <include name="org.eclim.installer*.tar.gz"/>
-      </tarfileset>
-    </formic:package>
-
-    <!-- build windows installer -->
-    <formic:package os="windows"
-        destfile="build/dist/eclim_${eclim.version}.exe">
+    <!-- build installer -->
+    <formic:package destfile="build/dist/eclim_${eclim.version}.jar">
       <formic:libset dir="${build.installer}/formic/dist">
         <include name="eclim.jar"/>
       </formic:libset>
@@ -108,12 +87,12 @@
         <include name="*.xml"/>
         <exclude name="build.xml"/>
       </fileset>
-      <fileset dir="${build.installer}">
-        <include name="eclim_resources_${eclim.version}.jar"/>
-        <include name="eclim_vim_${eclim.version}.jar"/>
-        <include name="org.eclim_${eclim.version}.zip"/>
-        <include name="org.eclim.installer*.tar.gz"/>
-      </fileset>
+      <zipfileset dir="${build.installer}" prefix="files">
+        <include name="resources.zip"/>
+        <include name="vim-plugins.zip"/>
+        <include name="eclipse-plugins.zip"/>
+        <include name="installer-site.zip"/>
+      </zipfileset>
     </formic:package>
   </target>
 
