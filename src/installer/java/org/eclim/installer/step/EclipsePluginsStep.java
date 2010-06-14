@@ -137,6 +137,7 @@ public class EclipsePluginsStep
   private DefaultTableModel tableModel;
   private List<Dependency> dependencies;
   private PlasticTheme theme;
+  private int overallProgressStep;
 
   private String primaryUpdateSite;
 
@@ -415,6 +416,8 @@ public class EclipsePluginsStep
           double worked = Double.parseDouble(
               line.substring(INTERNAL_WORKED.length() + 2));
           taskProgress.setValue((int)worked);
+          overallProgress.setValue(
+            overallProgressStep + (int)(taskProgress.getPercentComplete() * 100));
         }else if(line.startsWith(SET_TASK_NAME)){
           taskName = line.substring(SET_TASK_NAME.length() + 1).trim() + ' ';
         }
@@ -452,7 +455,7 @@ public class EclipsePluginsStep
               }
             }
 
-            overallProgress.setMaximum(dependencies.size());
+            overallProgress.setMaximum(dependencies.size() * 100);
             overallProgress.setValue(0);
 
             int removeIndex = 0;
@@ -467,6 +470,7 @@ public class EclipsePluginsStep
                       dependency.getId() + '-' + dependency.getVersion());
                 }
 
+                taskProgress.setValue(0);
                 taskProgress.setIndeterminate(true);
 
                 Command command = new InstallCommand(
@@ -493,7 +497,8 @@ public class EclipsePluginsStep
               }else{
                 removeIndex++;
               }
-              overallProgress.setValue(overallProgress.getValue() + 1);
+              overallProgressStep += 100;
+              overallProgress.setValue(overallProgressStep);
             }
             taskLabel.setText("");
             taskProgress.setValue(taskProgress.getMaximum());
@@ -612,7 +617,8 @@ public class EclipsePluginsStep
       this.sites = new ArrayList<File>();
       this.availableFeatures = new HashMap<String,String>();
 
-      overallProgress.setMaximum(3);
+      overallProgress.setMaximum(5);
+      overallProgress.setValue(1);
 
       // run eclipse to get a list of existing installed features
       overallLabel.setText("Analyzing installed features...");
@@ -645,6 +651,7 @@ public class EclipsePluginsStep
       }
 
       // load up available features from the primary update site.
+      overallProgress.setValue(2);
       overallLabel.setText(
           "Loading available features from the primary update site...");
 
@@ -654,7 +661,7 @@ public class EclipsePluginsStep
       // download compositeContent.jar to determine location on content.jar
       final String[] location = new String[1];
       try{
-        overallProgress.setValue(1);
+        overallProgress.setValue(3);
         System.out.println("Downloading compositeContent.jar");
         taskLabel.setText("Downloading compositeContent.jar");
         in = new BufferedInputStream(
@@ -682,7 +689,7 @@ public class EclipsePluginsStep
       }
 
       try{
-        overallProgress.setValue(2);
+        overallProgress.setValue(4);
         System.out.println("Downloading " + location[0] + "/content.jar");
         taskLabel.setText("Downloading " + location[0] + "/content.jar");
         in = new BufferedInputStream(
@@ -713,7 +720,7 @@ public class EclipsePluginsStep
         IOUtils.closeQuietly(in);
       }
 
-      overallProgress.setValue(3);
+      overallProgress.setValue(5);
       filterDependencies();
     }
 
