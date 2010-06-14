@@ -59,7 +59,7 @@ public class CleanupTask
       if(command.getReturnCode() != 0){
         Installer.getProject().log(
             "error: " + command.getErrorMessage() +
-            " out: " + command.getOutput(), Project.MSG_WARN);
+            " out: " + command.getResult());
       }
 
       // remove installer plugin jar + artifacts.xml entry which the p2

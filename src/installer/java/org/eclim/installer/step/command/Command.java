@@ -17,16 +17,14 @@
 package org.eclim.installer.step.command;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
-
-import org.apache.commons.io.IOUtils;
-
-import org.apache.commons.lang.StringUtils;
+import java.io.OutputStream;
 
 import org.eclim.installer.step.EclipseUtils;
 
 import org.formic.Installer;
+
+import org.formic.util.CommandExecutor;
 
 /**
  * Abstract class encapsulating logic to execute an eclipse feature command.
@@ -34,13 +32,8 @@ import org.formic.Installer;
  * @author Eric Van Dewoestine
  */
 public abstract class Command
-  extends Thread
+  extends CommandExecutor
 {
-  private Process process;
-  private int returnCode;
-  private String errorMessage;
-  private String output;
-  private String[] cmd;
   private OutputHandler handler;
 
   public Command(OutputHandler handler, String[] cmd)
@@ -71,111 +64,38 @@ public abstract class Command
     System.arraycopy(cmd, 0, this.cmd, 5, cmd.length);
   }
 
-  public void run()
+  /**
+   * {@inheritDoc}
+   * @see CommandExecutor#createOutThread(OutputStream)
+   */
+  protected Thread createOutThread(final OutputStream out)
   {
-    try{
-      System.out.println(this);
-      Runtime runtime = Runtime.getRuntime();
-      process = runtime.exec(cmd);
-
-      final ByteArrayOutputStream err = new ByteArrayOutputStream();
-
-      Thread outThread = new Thread(){
-        public void run(){
-          StringBuffer buffer = new StringBuffer();
-          try{
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while((line = reader.readLine()) != null){
-              if (buffer.length() != 0){
-                buffer.append('\n');
-              }
-              buffer.append(line);
-
-              if (handler != null){
-                handler.process(line);
-              }
+    return new Thread(){
+      public void run(){
+        StringBuffer buffer = new StringBuffer();
+        try{
+          BufferedReader reader = new BufferedReader(
+              new InputStreamReader(process.getInputStream()));
+          String line = null;
+          while((line = reader.readLine()) != null){
+            if (buffer.length() != 0){
+              buffer.append('\n');
             }
-          }catch(Exception e){
-            e.printStackTrace();
-            errorMessage = e.getMessage();
-            returnCode = 1000;
-            process.destroy();
-          }finally{
-            output = buffer.toString();
+            buffer.append(line);
+
+            if (handler != null){
+              handler.process(line);
+            }
           }
+        }catch(Exception e){
+          e.printStackTrace();
+          error = e.getMessage();
+          returnCode = 1000;
+          process.destroy();
+        }finally{
+          result = buffer.toString();
         }
-      };
-      outThread.start();
-
-      Thread errThread = new Thread(){
-        public void run (){
-          try{
-            IOUtils.copy(process.getErrorStream(), err);
-          }catch(Exception e){
-            e.printStackTrace();
-          }
-        }
-      };
-      errThread.start();
-
-      returnCode = process.waitFor();
-      outThread.join();
-      errThread.join();
-
-      if(errorMessage == null){
-        errorMessage = err.toString();
       }
-    }catch(Exception e){
-      returnCode = 12;
-      errorMessage = e.getMessage();
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Gets the returnCode for this instance.
-   *
-   * @return The returnCode.
-   */
-  public int getReturnCode()
-  {
-    return this.returnCode;
-  }
-
-  /**
-   * Gets the errorMessage for this instance.
-   *
-   * @return The errorMessage.
-   */
-  public String getErrorMessage()
-  {
-    return this.errorMessage;
-  }
-
-  /**
-   * Gets the standard out content from the command.
-   *
-   * @return The standard out content.
-   */
-  public String getOutput()
-  {
-    return this.output;
-  }
-
-  /**
-   * Destroy this process.
-   */
-  public void destroy()
-  {
-    if(process != null){
-      process.destroy();
-    }
-  }
-
-  public String toString()
-  {
-    return StringUtils.join(cmd, ' ');
+    };
   }
 }

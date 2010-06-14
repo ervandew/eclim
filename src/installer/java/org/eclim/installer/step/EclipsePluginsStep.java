@@ -299,7 +299,7 @@ public class EclipsePluginsStep
       if(command.getReturnCode() != 0){
         RuntimeException re = new RuntimeException(
             "error: " + command.getErrorMessage() +
-            " out: " + command.getOutput());
+            " out: " + command.getResult());
 
         Installer.getProject().log(
             "Error installing eclim installer feature, " +
@@ -472,7 +472,7 @@ public class EclipsePluginsStep
                   if(command.getReturnCode() != 0){
                     throw new RuntimeException(
                         "error: " + command.getErrorMessage() +
-                        " out: " + command.getOutput());
+                        " out: " + command.getResult());
                   }
                 }finally{
                   command.destroy();
@@ -629,7 +629,7 @@ public class EclipsePluginsStep
         if(command.getReturnCode() != 0){
           throw new RuntimeException(
               "error: " + command.getErrorMessage() +
-              " out: " + command.getOutput());
+              " out: " + command.getResult());
         }
       }finally{
         command.destroy();
