@@ -209,72 +209,77 @@ public class EclipsePluginsStep
         {
           overallLabel.setText(
             "Installing eclim installer feature (may take a few moments).");
-          installInstallerPlugin();
-          EclipseInfo info = new EclipseInfo(getDependencies());
-          return info;
+          if (installInstallerPlugin()){
+            EclipseInfo info = new EclipseInfo(getDependencies());
+            return info;
+          }
+          return null;
         }
       });
 
-      dependencies = info.getDependencies();
-      if(dependencies.size() == 0){
-        overallProgress.setMaximum(1);
-        overallProgress.setValue(1);
-        overallLabel.setText("All third party plugins are up to date.");
-        taskProgress.setMaximum(1);
-        taskProgress.setValue(1);
-        taskLabel.setText("");
-      }else{
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("Feature");
-        tableModel.addColumn("Version");
-        tableModel.addColumn("Install / Upgrade");
-        JTable table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setDefaultRenderer(Object.class, new DependencyCellRenderer());
-        table.getSelectionModel().addListSelectionListener(
-            new DependencySelectionListener());
+      // should only occur on shutdown.
+      if (info != null){
+        dependencies = info.getDependencies();
+        if(dependencies.size() == 0){
+          overallProgress.setMaximum(1);
+          overallProgress.setValue(1);
+          overallLabel.setText("All third party plugins are up to date.");
+          taskProgress.setMaximum(1);
+          taskProgress.setValue(1);
+          taskLabel.setText("");
+        }else{
+          tableModel = new DefaultTableModel();
+          tableModel.addColumn("Feature");
+          tableModel.addColumn("Version");
+          tableModel.addColumn("Install / Upgrade");
+          JTable table = new JTable(tableModel);
+          table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+          table.setDefaultRenderer(Object.class, new DependencyCellRenderer());
+          table.getSelectionModel().addListSelectionListener(
+              new DependencySelectionListener());
 
-        featuresPanel = new JPanel(new BorderLayout());
-        featuresPanel.setAlignmentX(0.0f);
+          featuresPanel = new JPanel(new BorderLayout());
+          featuresPanel.setAlignmentX(0.0f);
 
-        JPanel container = new JPanel(new BorderLayout());
-        container.add(table, BorderLayout.CENTER);
+          JPanel container = new JPanel(new BorderLayout());
+          container.add(table, BorderLayout.CENTER);
 
-        JScrollPane scrollPane = new JScrollPane(container);
-        scrollPane.setAlignmentX(0.0f);
+          JScrollPane scrollPane = new JScrollPane(container);
+          scrollPane.setAlignmentX(0.0f);
 
-        for (Dependency dependency : dependencies){
-          String version = dependency.getFeatureVersion();
-          String manual = "";
-          if (version == null){
-            manual = " (Manual)";
-            version = dependency.getVersion();
+          for (Dependency dependency : dependencies){
+            String version = dependency.getFeatureVersion();
+            String manual = "";
+            if (version == null){
+              manual = " (Manual)";
+              version = dependency.getVersion();
+            }
+            tableModel.addRow(new Object[]{
+              dependency.getId(),
+              version,
+              (dependency.isUpgrade() ? "Upgrade" : "Install") + manual
+            });
           }
-          tableModel.addRow(new Object[]{
-            dependency.getId(),
-            version,
-            (dependency.isUpgrade() ? "Upgrade" : "Install") + manual
-          });
+
+          JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+          buttons.setAlignmentX(0.0f);
+
+          JButton skipButton = new JButton(new SkipPluginsAction());
+          JButton installButton =
+            new JButton(new InstallPluginsAction(skipButton));
+
+          buttons.add(installButton);
+          buttons.add(skipButton);
+
+          featuresPanel.add(scrollPane, BorderLayout.CENTER);
+          featuresPanel.add(buttons, BorderLayout.SOUTH);
+
+          stepPanel.add(featuresPanel);
+          overallProgress.setValue(0);
+          overallLabel.setText("");
+          taskProgress.setValue(0);
+          taskLabel.setText("");
         }
-
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        buttons.setAlignmentX(0.0f);
-
-        JButton skipButton = new JButton(new SkipPluginsAction());
-        JButton installButton =
-          new JButton(new InstallPluginsAction(skipButton));
-
-        buttons.add(installButton);
-        buttons.add(skipButton);
-
-        featuresPanel.add(scrollPane, BorderLayout.CENTER);
-        featuresPanel.add(buttons, BorderLayout.SOUTH);
-
-        stepPanel.add(featuresPanel);
-        overallProgress.setValue(0);
-        overallLabel.setText("");
-        taskProgress.setValue(0);
-        taskLabel.setText("");
       }
     }catch(Exception e){
       setError(e);
@@ -289,7 +294,7 @@ public class EclipsePluginsStep
   /**
    * Installs the eclipse plugin used to install eclipse features.
    */
-  private void installInstallerPlugin()
+  private boolean installInstallerPlugin()
     throws Exception
   {
     File updateDir = Installer.tempDir("update");
@@ -303,6 +308,9 @@ public class EclipsePluginsStep
       command.start();
       command.join();
       if(command.getReturnCode() != 0){
+        if (command.isShutdown()){
+          return false;
+        }
         RuntimeException re = new RuntimeException(
             "error: " + command.getErrorMessage() +
             " out: " + command.getResult());
@@ -323,6 +331,9 @@ public class EclipsePluginsStep
         command.start();
         command.join();
         if(command.getReturnCode() != 0){
+          if (command.isShutdown()){
+            return false;
+          }
           throw re;
         }
       }
@@ -331,20 +342,7 @@ public class EclipsePluginsStep
     }finally{
       command.destroy();
     }
-  }
-
-  /**
-   * Gets the command which need to be executed to install or upgrade the
-   * supplied dependency.
-   *
-   * @param dependency The dependency to install or upgrade.
-   * @return Command to be run.
-   */
-  private Command getCommand(Dependency dependency)
-    throws Exception
-  {
-    return new InstallCommand(
-        this, dependency.getFeatureUrl(), dependency.getId());
+    return true;
   }
 
   /**
@@ -471,11 +469,17 @@ public class EclipsePluginsStep
 
                 taskProgress.setIndeterminate(true);
 
-                Command command = getCommand(dependency);
+                Command command = new InstallCommand(
+                    EclipsePluginsStep.this,
+                    dependency.getFeatureUrl(),
+                    dependency.getId());
                 try{
                   command.start();
                   command.join();
                   if(command.getReturnCode() != 0){
+                    if (command.isShutdown()){
+                      return Boolean.TRUE;
+                    }
                     throw new RuntimeException(
                         "error: " + command.getErrorMessage() +
                         " out: " + command.getResult());
@@ -484,10 +488,6 @@ public class EclipsePluginsStep
                   command.destroy();
                 }
 
-                /*try{
-                  Thread.sleep(1000);
-                }catch(Exception ex){
-                }*/
                 ii.remove();
                 tableModel.removeRow(removeIndex);
               }else{
@@ -633,6 +633,9 @@ public class EclipsePluginsStep
         command.start();
         command.join();
         if(command.getReturnCode() != 0){
+          if (command.isShutdown()){
+            return;
+          }
           throw new RuntimeException(
               "error: " + command.getErrorMessage() +
               " out: " + command.getResult());

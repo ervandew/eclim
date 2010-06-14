@@ -425,6 +425,9 @@ public class VimStep
         if(executor.getReturnCode() == 0){
           return parseVimRuntimePathResults(tempFile);
         }
+        if (executor.isShutdown()){
+          return null;
+        }
         executor.destroy();
       }
     }catch(Exception e){
