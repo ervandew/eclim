@@ -33,6 +33,9 @@ import org.eclim.installer.step.command.UninstallCommand;
 
 import org.formic.Installer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Ant task to remove installer resources.
  *
@@ -41,6 +44,8 @@ import org.formic.Installer;
 public class CleanupTask
   extends Task
 {
+  private static final Logger logger = LoggerFactory.getLogger(CleanupTask.class);
+
   /**
    * Executes this task.
    */
@@ -57,7 +62,7 @@ public class CleanupTask
       command.start();
       command.join();
       if(command.getReturnCode() != 0){
-        Installer.getProject().log(
+        logger.warn(
             "error: " + command.getErrorMessage() +
             " out: " + command.getResult());
       }

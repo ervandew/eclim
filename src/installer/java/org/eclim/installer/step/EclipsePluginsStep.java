@@ -93,6 +93,9 @@ import org.formic.util.dialog.gui.GuiDialogs;
 
 import org.formic.wizard.step.gui.InstallStep;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -111,6 +114,9 @@ public class EclipsePluginsStep
   extends InstallStep
   implements OutputHandler
 {
+  private static final Logger logger =
+    LoggerFactory.getLogger(EclipsePluginsStep.class);
+
   private static final String BEGIN_TASK = "beginTask";
   private static final String PREPARE_TASK = "prepare";
   private static final String SUB_TASK = "subTask";
@@ -301,7 +307,7 @@ public class EclipsePluginsStep
             "error: " + command.getErrorMessage() +
             " out: " + command.getResult());
 
-        Installer.getProject().log(
+        logger.warn(
             "Error installing eclim installer feature, " +
             "attempting uninstall/reinstall.");
 
@@ -613,7 +619,7 @@ public class EclipsePluginsStep
       Command command = new ListCommand(new OutputHandler(){
         File site = null;
         public void process(String line){
-          Installer.getProject().log(line);
+          logger.info(line);
           if(line.startsWith(SITE)){
             site = new org.formic.util.File(line.substring(SITE.length()));
             sites.add(site);
