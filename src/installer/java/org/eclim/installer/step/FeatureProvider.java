@@ -52,6 +52,7 @@ public class FeatureProvider
    */
   public Feature[] getFeatures ()
   {
+    boolean pluginsEnabled = false;
     boolean[] enabled = new boolean[FEATURES.length];
     for (int ii = 0; ii < FEATURES.length; ii++){
       String path = Installer.getProject().replaceProperties(
@@ -65,7 +66,7 @@ public class FeatureProvider
         }
       });
 
-      enabled[ii] = FEATURES_ENABLED[ii];
+      enabled[ii] = false;
       if (list != null && list.length > 0){
         enabled[ii] = true;
       }else if (FEATURES[ii].equals("python")){
@@ -75,6 +76,14 @@ public class FeatureProvider
         if(new File(path).exists()){
           enabled[ii] = true;
         }
+      }
+      pluginsEnabled = enabled[ii] || pluginsEnabled;
+    }
+
+    // if no plugins were found, enable the defaults
+    if (!pluginsEnabled){
+      for (int ii = 0; ii < FEATURES.length; ii++){
+        enabled[ii] = FEATURES_ENABLED[ii];
       }
     }
 
