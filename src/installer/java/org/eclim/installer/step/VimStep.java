@@ -185,9 +185,11 @@ public class VimStep
 
         // filter out dirs the user doesn't have permission write to.
         ArrayList<String> filtered = new ArrayList<String>();
-        for (String path : runtimePath){
-          if (new File(path).canWrite()){
-            filtered.add(path);
+        if (runtimePath != null){
+          for (String path : runtimePath){
+            if (new File(path).canWrite()){
+              filtered.add(path);
+            }
           }
         }
         String[] rtp = filtered.toArray(new String[filtered.size()]);
@@ -426,7 +428,7 @@ public class VimStep
         executor.destroy();
       }
     }catch(Exception e){
-      e.printStackTrace();
+      GuiDialogs.showError("Error determining your vim runtime path.", e);
     }
 
     return null;
