@@ -66,6 +66,9 @@ import org.formic.wizard.form.validator.ValidatorBuilder;
 
 import org.formic.wizard.step.AbstractGuiStep;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Step for specifying location of eclipse installation.
  *
@@ -74,6 +77,8 @@ import org.formic.wizard.step.AbstractGuiStep;
 public class EclipseStep
   extends AbstractGuiStep
 {
+  private static final Logger logger = LoggerFactory.getLogger(EclipseStep.class);
+
   private static final String[] WINDOWS_ECLIPSES = {
     "C:/eclipse",
     "C:/Program Files/eclipse",
@@ -154,7 +159,7 @@ public class EclipseStep
       // button to initialize user local eclipse config.
       final JPanel initializePanel = new JPanel(new FlowLayout());
       final JButton initializeButton =
-        new JButton(new InitializeActions(eclipseHomeField, eclipseLocalField));
+        new JButton(new InitializeAction(eclipseHomeField, eclipseLocalField));
       initializePanel.add(
           new JLabel(Installer.getString("eclipse.initialize")));
       initializePanel.add(initializeButton);
@@ -275,18 +280,24 @@ public class EclipseStep
    */
   private File getDefaultEclipseLocalPath()
   {
-    File dotEclipse = new File(
+    final File dotEclipse = new File(
         Installer.getProject().replaceProperties("${user.home}/.eclipse"));
     if(dotEclipse.exists()){
       File[] contents = dotEclipse.listFiles(new FilenameFilter(){
         public boolean accept(File dir, String name){
-          if(name.startsWith("org.eclipse.platform_")){
+          File configuration = new File(dir + "/" + name + "/configuration");
+          if (configuration.exists() && configuration.isDirectory()){
             return true;
           }
           return false;
         }
       });
       if(contents.length > 0){
+        if(contents.length > 1){
+          logger.warn(
+              "Found more than one possible local eclipse dir: " +
+                Arrays.toString(contents));
+        }
         Arrays.sort(contents);
         File dir = contents[contents.length - 1];
         return dir;
@@ -390,13 +401,13 @@ public class EclipseStep
     }
   }
 
-  private class InitializeActions
+  private class InitializeAction
     extends AbstractAction
   {
     private JTextField eclipseHomeField;
     private JTextField eclipseLocalField;
 
-    public InitializeActions(JTextField eclipseHomeField, JTextField eclipseLocalField)
+    public InitializeAction(JTextField eclipseHomeField, JTextField eclipseLocalField)
     {
       super("Initialize");
       this.eclipseHomeField = eclipseHomeField;
@@ -438,6 +449,8 @@ public class EclipseStep
               eclipseLocalField.grabFocus();
             }
           });
+        }else{
+          GuiDialogs.showError("Unable to locate initialized user local eclipse dir.");
         }
       }catch(Exception ex){
         GuiDialogs.showError("Error initializing user local eclipse configuration.", ex);
