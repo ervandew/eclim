@@ -40,6 +40,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import javax.swing.text.BadLocationException;
+
 import org.formic.util.CommandExecutor;
 
 import foxtrot.Task;
@@ -357,7 +359,7 @@ public class EclipseStep
     private JTextField eclipseHome;
     private JTextField eclipseLocal;
     private JCheckBox hasLocal;
-    private Validator eclipseHomeValidator;
+    private final Validator eclipseHomeValidator;
 
     public EclipseHomeListener(
         JTextField eclipseHome,
@@ -385,18 +387,28 @@ public class EclipseStep
 
     private void pathUpdated(DocumentEvent e)
     {
-      if(!hasLocal.isSelected()){
-        String path = eclipseHome.getText();
-        eclipseLocal.setText(path);
+      final String path = eclipseHome.getText();
 
-        if (eclipseHomeValidator.isValid(path) &&
-            !new EclipseHomeWritableValidator().isValid(path)){
-          SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-              hasLocal.doClick();
+      if(!hasLocal.isSelected()){
+        eclipseLocal.setText(path);
+      }
+
+      if (path.length() > 0){
+        final File plugins =
+          new org.formic.util.File(FilenameUtils.concat(path, "plugins"));
+
+        SwingUtilities.invokeLater(new Runnable(){
+          public void run(){
+            if (eclipseHomeValidator.isValid(path) && !plugins.canWrite()){
+              if (!hasLocal.isSelected()){
+                hasLocal.doClick();
+              }
+              hasLocal.setEnabled(false);
+            }else{
+              hasLocal.setEnabled(true);
             }
-          });
-        }
+          }
+        });
       }
     }
   }
