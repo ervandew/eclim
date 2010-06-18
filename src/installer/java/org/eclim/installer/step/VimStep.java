@@ -148,10 +148,11 @@ public class VimStep
     });
 
     panel = new JPanel(new MigLayout(
-          "wrap 2", "[fill]", "[] [] [fill, grow]"));
+          "wrap 2", "[fill]", "[] [] [] [fill, grow]"));
     panel.add(form.createMessagePanel(), "span");
     panel.add(new JLabel(Installer.getString(files)), "split");
     panel.add(fileChooser, "skip");
+    panel.add(skipCheckBox, "span");
 
     form.bind(files,
         fileChooser.getTextField(),
@@ -217,7 +218,6 @@ public class VimStep
             dirList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane scrollPane = new JScrollPane(dirList);
             panel.add(scrollPane, "span, grow");
-            panel.add(skipCheckBox, "span");
 
             dirList.addListSelectionListener(new ListSelectionListener(){
               public void valueChanged (ListSelectionEvent event){
