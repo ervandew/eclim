@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * Command to get project info.
@@ -55,9 +56,13 @@ public class ProjectInfoCommand
 
     IProject project = ProjectUtils.getProject(name);
     if(project.exists()){
+      String workspace = ResourcesPlugin
+        .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
+
       StringBuffer info = new StringBuffer();
       info.append("Name: ").append(name).append('\n');
       info.append("Path: ").append(ProjectUtils.getPath(project)).append('\n');
+      info.append("Workspace: ").append(workspace).append('\n');
       info.append("Natures: ");
       String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
       if (aliases.length == 0){
