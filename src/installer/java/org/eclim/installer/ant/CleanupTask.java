@@ -90,6 +90,36 @@ public class CleanupTask
         IOUtils.closeQuietly(fout);
         IOUtils.closeQuietly(fin);
       }
+
+      // remove references to the temp formic update site.
+      String[] files = new String[]{
+        "p2/org.eclipse.equinox.p2.engine/.settings/org.eclipse.equinox.p2.artifact.repository.prefs",
+        "p2/org.eclipse.equinox.p2.engine/.settings/org.eclipse.equinox.p2.metadata.repository.prefs",
+        "p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile/.data/.settings/org.eclipse.equinox.p2.artifact.repository.prefs",
+        "p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile/.data/.settings/org.eclipse.equinox.p2.metadata.repository.prefs",
+      };
+      Pattern pattern = Pattern.compile("^.*formic.*$\n", Pattern.MULTILINE);
+      for (int ii = 0; ii < files.length; ii++){
+        File file = new File(
+            project.replaceProperties("${eclipse.local}/" + files[ii]));
+        if (file.exists()){
+          try{
+            fin = new FileInputStream(file);
+            String contents = IOUtils.toString(fin);
+            contents = pattern.matcher(contents).replaceAll("");
+            fin.close();
+
+            fout = new FileWriter(file);
+            fout.write(contents);
+          }catch(Exception e){
+            logger.warn("Error removing formic update site references.", e);
+            e.printStackTrace();
+          }finally{
+            IOUtils.closeQuietly(fout);
+            IOUtils.closeQuietly(fin);
+          }
+        }
+      }
     }catch(Exception e){
       throw new BuildException(e);
     }finally{
