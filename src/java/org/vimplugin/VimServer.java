@@ -117,10 +117,11 @@ public class VimServer
 
     if (!tabbed || first){
       args = new String[4 + addopts.length];
+      // NOTE: for macvim, the --servername arg must be before the netbeans arg
       args[0] = gvim;
-      args[1] = getNetbeansString(ID);
-      args[2] = "--servername";
-      args[3] = String.valueOf(ID);
+      args[1] = "--servername";
+      args[2] = String.valueOf(ID);
+      args[3] = getNetbeansString(ID);
       System.arraycopy(addopts, 0, args, 4, addopts.length);
 
       start(workingDir, (tabbed && !first), args);
