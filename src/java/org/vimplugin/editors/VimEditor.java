@@ -342,6 +342,7 @@ public class VimEditor
 
     VimConnection vc = plugin.getVimserver(serverID).getVc();
     vc.command(bufferID, "editFile", "\"" + filePath + "\"");
+
     if (documentListen){
       vc.command(bufferID, "startDocumentListen", "");
     }else{
@@ -478,7 +479,7 @@ public class VimEditor
       args[3] = "--remote-send";
       args[4] = ":redraw!<cr>";
       try{
-        CommandExecutor.execute(args, 1000).getResult().trim();
+        CommandExecutor.execute(args, 1000);
       }catch(Exception e){
         logger.error("Error redrawing vim after file close.", e);
       }
