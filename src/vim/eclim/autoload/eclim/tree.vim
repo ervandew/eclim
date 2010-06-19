@@ -197,7 +197,7 @@ function! eclim#tree#ToggleViewHidden()
   call cursor(1, 1)
   while search(line, 'W') != 0 && eclim#tree#GetPath() != path
   endwhile
-  call eclim#tree#Cursor(line)
+  call eclim#tree#Cursor(line, 0)
 endfunction " }}}
 
 " GetFileInfo(file) {{{
@@ -547,6 +547,9 @@ endfunction " }}}
 " FIXME: in need of a serious rewrite (probably need to rewrite the whole
 " plugin)
 function! eclim#tree#Refresh()
+  let ignore_pattern = substitute(escape(&wildignore, '.'), '\*', '.*', 'g')
+  let ignore_pattern = '\(' . join(split(ignore_pattern, ','), '\|') . '\)$'
+
   let clnum = line('.')
   let ccnum = col('.')
 
@@ -569,7 +572,7 @@ function! eclim#tree#Refresh()
 
   " first check the node we are on
   if (!isdirectory(startpath) && !filereadable(startpath)) ||
-      \ (getline('.') !~ s:root_regex && s:IsHidden(startpath))
+      \ (getline('.') !~ s:root_regex && s:IsHidden(startpath, ignore_pattern))
     setlocal modifiable
     silent exec start . ',' . end . 'delete _'
     setlocal nomodifiable
@@ -608,7 +611,7 @@ function! eclim#tree#Refresh()
     " delete files, and dirs that do not exist, or are hidden.
     if (path =~ '/$' && !isdirectory(path)) ||
      \ (path !~ '/$' && !filereadable(path)) ||
-     \ s:IsHidden(path)
+     \ s:IsHidden(path, ignore_pattern)
       let last = eclim#tree#GetLastChildPosition()
       setlocal modifiable
       silent exec lnum . ',' . last . 'delete _'
@@ -916,10 +919,13 @@ function! s:ListDir(dir)
     let ls = 'ls -1F'
     if b:view_hidden
       let ls .= 'A'
-    elseif &wildignore != ''
-      let ls .= ' ' . join(map(split(&wildignore, ','), '"-I \"" . v:val . "\""'))
     endif
     let contents = split(eclim#util#System(ls . ' "' . a:dir . '"'), '\n')
+    if !b:view_hidden && &wildignore != ''
+      let pattern = substitute(escape(&wildignore, '.'), '\*', '.*', 'g')
+      let pattern = '\(' . join(split(pattern, ','), '\|') . '\)$'
+      call filter(contents, 'v:val !~ pattern')
+    endif
     call map(contents, 'a:dir . v:val')
   else
     if !b:view_hidden
@@ -989,15 +995,15 @@ function! s:MatchesFilter(file)
   return 1
 endfunction " }}}
 
-" s:IsHidden(path) {{{
-function! s:IsHidden(path)
+" s:IsHidden(path, ignore_pattern) {{{
+function! s:IsHidden(path, ignore_pattern)
   if !b:view_hidden
     let path = a:path
     if isdirectory(path)
       let path = fnamemodify(path, ':h')
     endif
     let path = fnamemodify(path, ':t')
-    return path =~ '^\.'
+    return path =~ '^\.' || (a:ignore_pattern != '' && path =~ a:ignore_pattern)
   endif
   return 0
 endfunction " }}}
