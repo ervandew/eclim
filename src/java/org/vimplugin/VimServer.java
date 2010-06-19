@@ -218,6 +218,8 @@ public class VimServer
       return;
     }
 
+    VimPlugin plugin = VimPlugin.getDefault();
+
     if (vc == null || !vc.isServerRunning()){
       vc = new VimConnection(ID);
       t = new Thread(vc);
@@ -244,10 +246,23 @@ public class VimServer
     }
 
     // Waits until server starts.. vim should return startupDone
+    long maxTime = System.currentTimeMillis() + 10000L; // 10 seconds
     while (!vc.isServerRunning()) {
+      if (System.currentTimeMillis() >= maxTime){
+        try{
+          vc.close();
+        }catch(Exception e){
+          logger.error("error:", e);
+        }
+        String message = plugin.getMessage(
+            "gvim.startup.failed",
+            plugin.getMessage("gvim.startupDone.event"));
+        throw new RuntimeException(message);
+      }
+
       // sleep so that we don't have a messy cpu-hogging infinite loop
       // here
-      Long stoptime = 2000L; // 2 Seconds
+      long stoptime = 2000L; // 2 Seconds
       logger.debug("Waiting to connect to vim server");
       try {
         Thread.sleep(stoptime);

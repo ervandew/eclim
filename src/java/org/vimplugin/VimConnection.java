@@ -106,6 +106,7 @@ public class VimConnection implements Runnable
   public void run() {
     try {
       // start server
+      logger.debug("Server starting on port " + (port + vimID));
       socket = new ServerSocket(port + vimID);
       logger.debug("Server started and listening");
 
@@ -171,13 +172,10 @@ public class VimConnection implements Runnable
           }
         }
         close();
-      } catch (VimException ve) {
-        // TODO : better ErrorHandling (Connection Thread)
-        logger.error("error:", ve);
       }
-    } catch (IOException e) {
-      // TODO: better ErrorHandling (Connection Thread)
+    } catch (Exception e) {
       logger.error("error:", e);
+      throw new RuntimeException(e);
     }
   }
 
@@ -187,8 +185,12 @@ public class VimConnection implements Runnable
    * @return always true.
    */
   public boolean close() throws IOException {
-    vimSocket.close();
-    socket.close();
+    if (vimSocket != null){
+      vimSocket.close();
+    }
+    if (socket != null){
+      socket.close();
+    }
     serverRunning = false;
     return true;
   }
