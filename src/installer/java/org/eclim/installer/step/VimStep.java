@@ -74,6 +74,9 @@ import org.formic.wizard.form.validator.ValidatorBuilder;
 
 import org.formic.wizard.step.AbstractGuiStep;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Step for choosing the vimfiles directory to install vim scripts in.
  *
@@ -82,6 +85,8 @@ import org.formic.wizard.step.AbstractGuiStep;
 public class VimStep
   extends AbstractGuiStep
 {
+  private static final Logger logger = LoggerFactory.getLogger(VimStep.class);
+
   private static final String[] WINDOWS_VIMS = {
     "C:/Program Files/Vim/vim72/vim.exe",
     "C:/Program Files/Vim/vim72/gvim.exe",
@@ -259,14 +264,14 @@ public class VimStep
         // another directory in their vim's runtime path.
 
         // on windows, since case is insensitive, lower the path.
-        if (Os.isFamily("windows")){
+        if (Os.isFamily(Os.FAMILY_WINDOWS)){
           vimfiles = vimfiles.toLowerCase();
         }
 
         if(runtimePath != null && runtimePath.length > 0){
           for (String rpath : runtimePath){
             String path = rpath;
-            if (Os.isFamily("windows")){
+            if (Os.isFamily(Os.FAMILY_WINDOWS)){
               path = path.toLowerCase();
             }
             if (vimfiles.equals(path)){
@@ -343,7 +348,7 @@ public class VimStep
   {
     try{
       String[] gvims = null;
-      if(Os.isFamily("windows")){
+      if(Os.isFamily(Os.FAMILY_WINDOWS)){
         gvims = WINDOWS_GVIMS;
         for (String gvim : gvims){
           if (new File(gvim).isFile()){
@@ -352,11 +357,17 @@ public class VimStep
           }
         }
       }else{
+        String vim = Os.isFamily(Os.FAMILY_MAC) ? "mvim" : "gvim";
         CommandExecutor executor =
-          CommandExecutor.execute(new String[]{"which", "gvim"}, 1000);
+          CommandExecutor.execute(new String[]{"which", vim}, 1000);
         if(executor.getReturnCode() == 0){
-          Installer.getProject().setProperty(
-              "eclim.gvim", executor.getResult().trim());
+          String result = executor.getResult().trim();
+          logger.info("which " + vim + ": " + result);
+          Installer.getProject().setProperty("eclim.gvim", result);
+        }else{
+          logger.info("which " + vim + ':' +
+              " out=" + executor.getResult() +
+              " err=" + executor.getErrorMessage());
         }
       }
     }catch(Exception e){
@@ -375,7 +386,7 @@ public class VimStep
     homeVimCreatePrompted = true;
     File vimfiles = new File(
         System.getProperty("user.home") + '/' +
-        (Os.isFamily("windows") ? "vimfiles" : ".vim"));
+        (Os.isFamily(Os.FAMILY_WINDOWS) ? "vimfiles" : ".vim"));
     System.out.println(
         "Checking for user vim files directory: " + vimfiles);
     if(!vimfiles.exists()){
@@ -412,7 +423,7 @@ public class VimStep
           tempFile.getAbsolutePath().replace('\\', '/').replaceAll(" ", "\\ "));
 
       String[] vims = null;
-      if(Os.isFamily("windows")){
+      if(Os.isFamily(Os.FAMILY_WINDOWS)){
         vims = WINDOWS_VIMS;
       }else{
         vims = UNIX_VIMS;
