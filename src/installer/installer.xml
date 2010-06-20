@@ -238,6 +238,8 @@
           <fileset dir="${eclim.plugins.old}" includes="org.eclim*/**/*"/>
           <dirset dir="${eclim.plugins.old}" includes="org.eclim*"/>
         </delete>
+        <delete failonerror="false" file="${eclipse.local}/configuration/eclipse/eclim"/>
+        <delete failonerror="false" file="${eclipse.local}/configuration/eclipse/eclimd"/>
       </then>
     </if>
 
