@@ -703,6 +703,21 @@ NOTES {{{
 
   }}}
 
+  Linux distro eclim dependency packages  {{{
+
+    Fedora
+      $ yum install vim eclipse-platform
+
+    Ubuntu
+      # Note: installing eclipse-platform is not enough
+      $ apt-get install vim eclipse
+
+    OSX
+      $ port install vim +huge
+      $ port install ctags
+
+  }}}
+
   Misc {{{
 
     Sourceforget shell access:
