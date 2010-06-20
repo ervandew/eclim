@@ -16,6 +16,19 @@
 History of Changes
 ==================
 
+.. _1.5.7:
+
+1.5.7 (Jun. 20, 2010)
+----------------------
+
+Bug Fixes:
+  - Fixed launching of MacVim from the eclipse gui.
+  - Various other bug fixes.
+
+Installer:
+  - The installer has undergone some extensive changes to make it more reliable
+    and to better support various environments.
+
 .. _1.5.6:
 
 1.5.6 (Mar. 06, 2010)

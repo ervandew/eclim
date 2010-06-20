@@ -102,6 +102,15 @@ News
 ==================
 
 -----------
+2010-06-20
+-----------
+
+| **Eclim 1.5.7** is now available.
+| The main focus of this release is bug fixes and improving the installer.
+
+You can view the :ref:`release notes <1.5.7>` for more info.
+
+-----------
 2010-03-06
 -----------
 
