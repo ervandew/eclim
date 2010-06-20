@@ -474,6 +474,11 @@ TODO {{{
       - taglib completion (<core:<c-x><c-u>), including attribute name completion
   }}}
 
+  Maven {{{
+    - add vim logic to mimic old --find for :Mvn
+    - add perference to specify location of the pom.xml
+  }}}
+
   Perl {{{
     http://e-p-i-c.sourceforge.net/
 
