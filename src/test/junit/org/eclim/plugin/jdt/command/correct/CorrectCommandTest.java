@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ public class CorrectCommandTest
     String result = Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
-      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "1"
+      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "0"
     });
 
     System.out.println(result);
