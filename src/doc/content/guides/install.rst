@@ -66,16 +66,16 @@ Step 1: Download and run the installer.
   If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- **First download the installer:**  `eclim_version.jar`_
+- **First download the installer:**  `eclim_<version>.jar`_
 
 - **Next run the installer:**
 
   .. code-block:: bash
 
-    $ java -jar eclim_version.jar
+    $ java -jar eclim_<version>.jar
 
-  Windows user should be able to simply double click on the jar file to start
-  the installer.
+  Windows and OSX users should be able to simply double click on the jar file
+  to start the installer.
 
   .. note::
 
@@ -84,7 +84,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -jar eclim_version.jar -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+      $ java -jar eclim_<version>.jar -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
 
     If your proxy requires authentication, you'll need to supply the
     ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
@@ -93,7 +93,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -jar eclim_version.jar -Djava.net.useSystemProxies=true
+      $ java -jar eclim_<version>.jar -Djava.net.useSystemProxies=true
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
@@ -127,7 +127,7 @@ to install the application.
 
     ::
 
-      $ java -jar eclim_version.jar -Djava.ext.dirs
+      $ java -jar eclim_<version>.jar -Djava.ext.dirs
 
 
 Step 2: Testing the installation
@@ -259,7 +259,7 @@ this method:
 
 .. code-block:: bash
 
-  $ java -jar eclim_version.jar install \
+  $ java -jar eclim_<version>.jar install \
     -Declipse.home=/opt/eclipse \
     -Dvim.files=$HOME/.vim \
     -DfeatureList.ant=true \
@@ -302,5 +302,5 @@ other features be enabled, as noted below:
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse 3.5.x (galileo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
-.. _eclim_version.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
+.. _eclim_<version>.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user
