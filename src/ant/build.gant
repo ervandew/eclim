@@ -950,27 +950,27 @@ def patchPlugins(closure){
 
 def patchPluginResolve(plugin){
   // try plugin jar
-  ant.path(id: 'plugin_jar'){
+  ant.path(id: 'plugin_jar' + plugin){
     ant.fileset(dir: '${eclipse.home}'){
       ant.include(name: "plugins/${plugin}_*.jar")
       ant.include(name: "dropins/**/plugins/${plugin}_*.jar")
     }
   }
-  ant.property(name: 'plugin_jar', refid: 'plugin_jar')
-  pluginJar = binding.getVariable('plugin_jar')
+  ant.property(name: 'plugin_jar' + plugin, refid: 'plugin_jar' + plugin)
+  pluginJar = binding.getVariable('plugin_jar' + plugin)
   if (pluginJar != null && pluginJar != ''){
     return pluginJar
   }
 
   // try plugin dir
-  ant.path(id: 'plugin_dir'){
+  ant.path(id: 'plugin_dir' + plugin){
     ant.dirset(dir: '${eclipse.home}'){
       ant.include(name: "plugins/${plugin}_*")
       ant.include(name: "dropins/**/plugins/${plugin}_*")
     }
   }
-  ant.property(name: 'plugin_dir', refid: 'plugin_dir')
-  pluginDir = binding.getVariable('plugin_dir')
+  ant.property(name: 'plugin_dir' + plugin, refid: 'plugin_dir' + plugin)
+  pluginDir = binding.getVariable('plugin_dir' + plugin)
   if (pluginDir != null && pluginDir != ''){
     return pluginDir
   }
