@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,8 @@ public class CodeCompleteCommand
     IProject project = ProjectUtils.getProject(projectName, true);
     IFile ifile = ProjectUtils.getFile(project, file);
 
-    // I really hate this hack
+    // I really hate this hack (should be safe to remove after we stop
+    // supporting pdt 2.0?)
     PhpUtils.waitOnBuild();
 
     IStructuredModel model =

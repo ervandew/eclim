@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,5 +101,25 @@ public class ProjectNatureFactory
     }
 
     return aliases.toArray(new String[aliases.size()]);
+  }
+
+  /**
+   * Gets an array of natures which are associated with the supplied project.
+   *
+   * @param project The project to get the natures for.
+   * @return Array of natures.
+   */
+  public static String[] getProjectNatures(IProject project)
+    throws Exception
+  {
+    ArrayList<String> natures = new ArrayList<String>();
+    for(String key : natureAliases.keySet()){
+      String nature = natureAliases.get(key);
+      if(project.hasNature(nature)){
+        natures.add(nature);
+      }
+    }
+
+    return natures.toArray(new String[natures.size()]);
   }
 }

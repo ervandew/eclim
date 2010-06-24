@@ -24,6 +24,10 @@ import org.eclim.plugin.core.preference.Option;
 import org.eclim.plugin.core.preference.OptionInstance;
 import org.eclim.plugin.core.preference.Preferences;
 
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectManager;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -197,6 +201,16 @@ public class ProjectUtils
 
     IFile ifile = project.getFile(file);
     ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+    // invoke any nature specific file refreshing
+    String[] natures = ProjectNatureFactory.getProjectNatures(project);
+    for (String nature : natures){
+      ProjectManager manager = ProjectManagement.getProjectManager(nature);
+      if (manager != null){
+        manager.refresh(project, ifile);
+      }
+    }
+
     return ifile;
   }
 

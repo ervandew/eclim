@@ -73,6 +73,7 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 
 import org.eclipse.cdt.ui.newui.UIMessages;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.CoreException;
@@ -211,6 +212,15 @@ public class CProjectManager
    * @see ProjectManager#refresh(IProject,CommandLine)
    */
   public void refresh(IProject project, CommandLine commandLine)
+    throws Exception
+  {
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see ProjectManager#refresh(IProject,IFile)
+   */
+  public void refresh(IProject project, IFile file)
     throws Exception
   {
   }

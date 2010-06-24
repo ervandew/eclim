@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileOffsets;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
@@ -50,6 +51,7 @@ import org.eclipse.dltk.core.IBuildpathEntry;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IModelStatus;
 import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.core.SourceParserUtil;
 
 import org.eclipse.dltk.internal.core.BuildpathEntry;
 
@@ -173,6 +175,16 @@ public abstract class DltkProjectManager
    * @see ProjectManager#refresh(IProject,CommandLine)
    */
   public void refresh(IProject project, CommandLine commandLine)
+    throws Exception
+  {
+    SourceParserUtil.clearCache();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see ProjectManager#refresh(IProject,IFile)
+   */
+  public void refresh(IProject project, IFile file)
     throws Exception
   {
   }

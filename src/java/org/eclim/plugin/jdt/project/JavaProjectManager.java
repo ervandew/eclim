@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ import org.eclim.util.IOUtils;
 import org.eclim.util.file.FileOffsets;
 import org.eclim.util.file.FileUtils;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -148,6 +149,15 @@ public class JavaProjectManager
    * {@inheritDoc}
    */
   public void refresh(IProject project, CommandLine commandLine)
+    throws Exception
+  {
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see ProjectManager#refresh(IProject,IFile)
+   */
+  public void refresh(IProject project, IFile file)
     throws Exception
   {
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,22 @@ package org.eclim.plugin.pdt.project;
 
 import org.eclim.plugin.dltk.project.DltkProjectManager;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+import org.eclipse.dltk.core.ISourceModule;
 
 import org.eclipse.php.internal.core.project.PHPNature;
+
+import org.eclipse.php.internal.ui.PHPUiPlugin;
+
+import org.eclipse.ui.IEditorInput;
+
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * Implementation of {@link org.eclim.plugin.core.project.ProjectManager} for
@@ -40,5 +52,27 @@ public class PhpProjectManager
   public IDLTKLanguageToolkit getLanguageToolkit()
   {
     return DLTKLanguageManager.getLanguageToolkit(PHPNature.ID);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see ProjectManager#refresh(IProject,IFile)
+   */
+  @Override
+  public void refresh(IProject project, IFile file)
+    throws Exception
+  {
+    IEditorInput input = new FileEditorInput(file);
+    ISourceModule module = PHPUiPlugin.getEditorInputTypeRoot(input);
+    if (module != null){
+      module.makeConsistent(new NullProgressMonitor());
+      // alternate to makeConsistent where moduleDecl can be obtained using
+      // PHPSourceParserFactory.parse, like in SrcUpdateCommmand.
+      //ISourceModuleInfoCache sourceModuleInfoCache = ModelManager
+      //    .getModelManager().getSourceModuleInfoCache();
+      //ISourceModuleInfo mifo = sourceModuleInfoCache.get(module);
+      //SourceParserUtil.putModuleToCache(
+      //    mifo, moduleDecl, ISourceParserConstants.DEFAULT, null);
+    }
   }
 }

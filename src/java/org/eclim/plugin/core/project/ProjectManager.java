@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -68,5 +69,14 @@ public interface ProjectManager
    * @param commandLine The command line for the project create command.
    */
   public void refresh(IProject project, CommandLine commandLine)
+    throws Exception;
+
+  /**
+   * Refreshes a project file.
+   *
+   * @param project The project.
+   * @param file The file to refresh.
+   */
+  public void refresh(IProject project, IFile file)
     throws Exception;
 }
