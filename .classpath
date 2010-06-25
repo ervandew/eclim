@@ -63,6 +63,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ruby.ui_1.0.0.v20091111-1837.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.1.1.v20090921-1100"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.1.1.v20090921-1100.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.update.configurator_3.3.0.v20090312.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.css.ui_1.0.401.v200907171457.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.dtd.core_1.1.300.v200904181727.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.html.ui_1.0.401.v200908111935.jar"/>
@@ -72,9 +73,9 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.core_1.1.402.v201001222130.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.ui_1.1.2.v201001222130.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xsd.core_1.1.401.v200903020335.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.5.0.v200906151043.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.402.v201001251516.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.1.102.v200910200227.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.5.0.v200906151043.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>

@@ -67,6 +67,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.io.FilenameUtils;
+
+import org.apache.commons.lang.SystemUtils;
+
 import org.formic.util.Extractor;
 
 import com.jgoodies.looks.plastic.PlasticTheme;
@@ -123,7 +127,6 @@ public class EclipsePluginsStep
   private static final String INTERNAL_WORKED = "worked";
   private static final String SET_TASK_NAME = "setTaskName";
   private static final String FEATURE = "  Feature: ";
-  private static final String SITE = "Site: file:";
   private static final String DEPENDENCIES = "/resources/dependencies.xml";
 
   private static final Color ERROR_COLOR = new Color(255, 201, 201);
@@ -448,10 +451,17 @@ public class EclipsePluginsStep
             // check if any of the features cannot be installed.
             for (Dependency dependency : dependencies){
               Feature feature = dependency.getFeature();
-              if (feature != null && !feature.getSite().canWrite()){
-                GuiDialogs.showWarning(Installer.getString(
-                    "eclipsePlugins.install.features.permission.denied"));
-                return Boolean.FALSE;
+              if (feature != null) {
+                if (feature.getSite() == null){
+                  GuiDialogs.showWarning(Installer.getString(
+                      "eclipsePlugins.install.features.site.not.found",
+                      FilenameUtils.concat(SystemUtils.JAVA_IO_TMPDIR, "install.log")));
+                  return Boolean.FALSE;
+                }else if (!feature.getSite().canWrite()){
+                  GuiDialogs.showWarning(Installer.getString(
+                      "eclipsePlugins.install.features.permission.denied"));
+                  return Boolean.FALSE;
+                }
               }
             }
 
@@ -557,7 +567,7 @@ public class EclipsePluginsStep
       Component component = super.getTableCellRendererComponent(
           table, value, isSelected, hasFocus, row, column);
       Feature feature = ((Dependency)dependencies.get(row)).getFeature();
-      if (feature != null && !feature.getSite().canWrite()){
+      if (feature != null && (feature.getSite() == null || !feature.getSite().canWrite())){
         component.setBackground(isSelected ?
             theme.getMenuItemSelectedBackground() : ERROR_COLOR);
         component.setForeground(isSelected ? ERROR_COLOR : Color.BLACK);
@@ -588,8 +598,12 @@ public class EclipsePluginsStep
       Feature feature = index >= 0 ?
         ((Dependency)dependencies.get(index)).getFeature() : null;
 
-      if (feature != null && !feature.getSite().canWrite()){
-        setMessage(Installer.getString("eclipsePlugins.upgrade.permission.denied"));
+      if (feature != null) {
+        if (feature.getSite() == null){
+          setMessage(Installer.getString("eclipsePlugins.upgrade.site.not.found"));
+        }else if (!feature.getSite().canWrite()){
+          setMessage(Installer.getString("eclipsePlugins.upgrade.permission.denied"));
+        }
       }else{
         setMessage(null);
       }
@@ -598,14 +612,13 @@ public class EclipsePluginsStep
 
   private class EclipseInfo
   {
-    private List<File> sites;
     private Map<String,Feature> features;
     private List<Dependency> dependencies;
     private Map<String,String> availableFeatures;
 
     /**
-     * Contstruct a new EclipseInfo instance containing available local plugins
-     * sites, installed features, and required dependencies.
+     * Contstruct a new EclipseInfo instance containing installed features and
+     * required dependencies.
      *
      * @param List of dependencies.
      */
@@ -614,7 +627,6 @@ public class EclipsePluginsStep
     {
       this.dependencies = dependencies;
       this.features = new HashMap<String,Feature>();
-      this.sites = new ArrayList<File>();
       this.availableFeatures = new HashMap<String,String>();
 
       overallProgress.setMaximum(5);
@@ -623,14 +635,16 @@ public class EclipsePluginsStep
       // run eclipse to get a list of existing installed features
       overallLabel.setText("Analyzing installed features...");
       Command command = new ListCommand(new OutputHandler(){
-        File site = null;
         public void process(String line){
           logger.info(line);
-          if(line.startsWith(SITE)){
-            site = new org.formic.util.File(line.substring(SITE.length()));
-            sites.add(site);
-          }else if(line.startsWith(FEATURE)){
+          if(line.startsWith(FEATURE)){
             String[] attrs = StringUtils.split(line.substring(FEATURE.length()));
+            File site = null;
+            try{
+              site = new File(new URL(attrs[2]).getFile());
+            }catch(Exception e){
+              logger.error("Failed to parse feature: " + line, e);
+            }
             features.put(attrs[0], new Feature(attrs[0], attrs[1], site));
           }
         }
@@ -722,11 +736,6 @@ public class EclipsePluginsStep
 
       overallProgress.setValue(5);
       filterDependencies();
-    }
-
-    public List<File> getSites()
-    {
-      return sites;
     }
 
     public List<Dependency> getDependencies()

@@ -7,16 +7,13 @@
  */
 package org.eclim.installer.eclipse;
 
-import java.io.File;
 import java.io.PrintStream;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.net.URI;
-import java.net.URL;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +44,8 @@ import org.eclipse.equinox.internal.provisional.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.internal.provisional.p2.metadata.IInstallableUnit;
 
 import org.eclipse.osgi.util.NLS;
+
+import org.eclipse.update.internal.configurator.FeatureEntry;
 
 import org.osgi.framework.ServiceReference;
 
@@ -87,10 +86,13 @@ public class Application
     if ("-list".equals(args[0])){
       IBundleGroupProvider[] providers = Platform.getBundleGroupProviders();
       for(int ii = 0; ii < providers.length; ii++){
-        System.out.println("Site: " + providers[ii].getName());
         IBundleGroup[] groups = providers[ii].getBundleGroups();
         for(int jj = 0; jj < groups.length; jj++){
-          System.out.println("  Feature: " + groups[jj].getIdentifier() + ' ' + groups[jj].getVersion());
+          FeatureEntry feature = (FeatureEntry)groups[jj];
+          System.out.println("  Feature: " +
+              feature.getIdentifier() + ' ' +
+              feature.getVersion() + ' ' +
+              feature.getSite().getResolvedURL());
         }
       }
       return IApplication.EXIT_OK;
