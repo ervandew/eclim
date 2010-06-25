@@ -1,7 +1,54 @@
 HIGH {{{
+  - Helios!!!!
+
+  - Java project create not respecting defaults:
+    - Window > Preferences > Java > Build Path : Output Folder Name
+    - Window > Preferences > Java > Compiler Building : Filtered Resources
+
+  - html/xml validate (cache dtd)
+
+  - test installing as root on karmic 9.10
+    - user reports that when installing android on apt-get installed eclipse
+      and then installing eclim as root, the android functionality disappeared
+      even though eclipse still listed it as installed.
+
+  - better error message attempting to create a project in a project (only an
+    issue inside of the workspace directory)
+    http://groups.google.com/group/eclim-user/browse_thread/thread/10e3f5a17452cfc2?hl=en.
+
+  - changing windows home dir (#7)?
+
+  - :LocateFile
+    - add eclipse setting to filter out results (supported in helios?)
+
+  - :ProjectTree, support linked folders
+
+  - workspace corruption
+
+  - Rework vcs log view
+    - be more like tig
+      - more compact log view which can be expanded
+      - history browser (by revision, file, etc.)
+
   - signature + docs (python docstrings, javadocs, etc.) of a method while you
     type.
     - open a scratch window for displaying these
+
+  - make project file refresh async?
+
+  - upgrade docs for sphinx 0.6.4
+
+  - :Java, add option to 'spawn' the jvm to keep the program running while
+    returning to vim.
+
+  - support :tab command for some eclim provided commands:
+    :tab Split
+    :tab SplitRelative
+
+  - toggle between using embedded gvim and standard eclipse editor
+    - can we swap editors on the existing tab?
+
+  - add gui menu items (see email "Eclim popup menus for Java")
 
   - add high level docs or screencast
 
@@ -121,10 +168,7 @@ TODO {{{
   Common {{{
     - settings export/import
 
-    - update project tree to include linked folders
-
     - :LocateFile
-      - eclipse setting to filter out results
       - add 'recent' scope to search recently used files?
         - need to keep track of n recently used files
 
@@ -277,6 +321,12 @@ TODO {{{
 
   }}}
 
+  Erlang {{{
+
+    http://erlide.org/
+
+  }}}
+
   Groovy {{{
 
     - http://groovy.codehaus.org/Eclipse+Plugin
@@ -285,6 +335,12 @@ TODO {{{
       rudimentary validation)?
 
     - taglist support
+
+  }}}
+
+  Haskell {{{
+
+    http://eclipsefp.sourceforge.net/
 
   }}}
 
@@ -299,6 +355,8 @@ TODO {{{
   Java {{{
     - refactoring
       - move compilation unit to another package
+
+    - balloon expression to mimic eclipse's hover over class, method, etc.
 
     - add, remove, set default vm install.
 
@@ -472,6 +530,12 @@ TODO {{{
       - <%@ page import="javax." %> completion
       - <jsp: completion, with attribute name completion
       - taglib completion (<core:<c-x><c-u>), including attribute name completion
+  }}}
+
+  Lua {{{
+
+    http://luaeclipse.luaforge.net/
+
   }}}
 
   Maven {{{
