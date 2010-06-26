@@ -102,6 +102,16 @@ News
 ==================
 
 -----------
+2010-06-26
+-----------
+
+| **Eclim 1.5.8** is now available.
+| This is a bug fix release for the installer as well as some php and ruby
+  features.
+
+You can view the :ref:`release notes <1.5.8>` for more info.
+
+-----------
 2010-06-20
 -----------
 

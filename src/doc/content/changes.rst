@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _1.5.8:
+
+1.5.8 (Jun. 26, 2010)
+----------------------
+
+Bug Fixes:
+  - Fixed possible NPE during installation when one or more eclim dependent
+    eclipse features needs to be upgraded.
+  - Fixed code completion and search for php as well as search for ruby, all of
+    which were all affected by dltk module caching introduced in galileo SR2.
+
 .. _1.5.7:
 
 1.5.7 (Jun. 20, 2010)
