@@ -56,7 +56,7 @@ public class PhpProjectManager
 
   /**
    * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,IFile)
+   * @see org.eclim.plugin.core.project.ProjectManager#refresh(IProject,IFile)
    */
   @Override
   public void refresh(IProject project, IFile file)
