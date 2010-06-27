@@ -281,7 +281,7 @@ public class SearchCommand
             flags |= (name.isDefinition() ?
                 IIndex.FIND_DECLARATIONS : IIndex.FIND_DEFINITIONS);
           }
-        } else if (context == PDOMSearchQuery.FIND_ALL_OCCURANCES){
+        } else if (context == PDOMSearchQuery.FIND_ALL_OCCURRENCES){
           flags |= IIndex.FIND_ALL_OCCURRENCES;
         } else if (context == PDOMSearchQuery.FIND_REFERENCES){
           flags |= IIndex.FIND_REFERENCES;
@@ -370,7 +370,7 @@ public class SearchCommand
   protected int getContext(String context)
   {
     if(CONTEXT_ALL.equals(context)){
-      return PDOMSearchQuery.FIND_ALL_OCCURANCES;
+      return PDOMSearchQuery.FIND_ALL_OCCURRENCES;
     }else if(CONTEXT_CONTEXT.equals(context)){
       return FIND_CONTEXT;
     }else if(CONTEXT_REFERENCES.equals(context)){
