@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,11 @@
  */
 package org.eclim.plugin.dltkruby.command.src;
 
-import java.io.InputStreamReader;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.plugin.dltk.command.src.AbstractSrcUpdateCommand;
 
-import org.eclim.util.IOUtils;
-
-import org.eclipse.core.resources.IFile;
-
-import org.eclipse.dltk.ruby.internal.parsers.jruby.DLTKRubyParser;
+import org.eclipse.dltk.ruby.core.RubyNature;
 
 /**
  * Command to update and optionally validate a ruby src file.
@@ -46,20 +40,11 @@ public class SrcUpdateCommand
 {
   /**
    * {@inheritDoc}
-   * @see AbstractSrcUpdateCommand#parse(String,IFile,Reporter)
+   * @see AbstractSrcUpdateCommand#getNature()
    */
   @Override
-  protected void parse(
-      String filename, IFile file, AbstractSrcUpdateCommand.Reporter reporter)
-    throws Exception
+  protected String getNature()
   {
-    DLTKRubyParser parser = new DLTKRubyParser();
-    InputStreamReader reader = null;
-    try{
-      reader = new InputStreamReader(file.getContents());
-      parser.parse(filename, reader, reporter);
-    }finally{
-      IOUtils.closeQuietly(reader);
-    }
+    return RubyNature.NATURE_ID;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.dltk.command.src;
 
+import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ import org.eclim.plugin.core.command.filter.ErrorFilter;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclim.util.IOUtils;
+
 import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.core.resources.IFile;
@@ -38,6 +42,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+
+import org.eclipse.dltk.ast.parser.ISourceParser;
+import org.eclipse.dltk.ast.parser.SourceParserManager;
+
+import org.eclipse.dltk.compiler.env.ModuleSource;
 
 import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -66,7 +75,7 @@ public abstract class AbstractSrcUpdateCommand
     if(commandLine.hasOption(Options.VALIDATE_OPTION)){
 
       Reporter reporter = new Reporter();
-      parse(file, ifile, reporter);
+      parse(project, ifile, reporter);
 
       String filepath = ProjectUtils.getFilePath(project, file);
       FileOffsets offsets = FileOffsets.compile(filepath);
@@ -95,12 +104,31 @@ public abstract class AbstractSrcUpdateCommand
   /**
    * Parse the supplied file.
    *
-   * @param filename The name of the file.
+   * @param project The project.
    * @param file The IFile instance for the file.
    * @param reporter The problem reporter.
    */
-  protected abstract void parse(String filename, IFile file, Reporter reporter)
-    throws Exception;
+  protected void parse(IProject project, IFile file, Reporter reporter)
+    throws Exception
+  {
+    InputStream in = file.getContents();
+    try {
+      String path = file.getLocation().toOSString();
+      ModuleSource module = new ModuleSource(path, IOUtils.toString(in));
+      ISourceParser parser = SourceParserManager
+        .getInstance().getSourceParser(project, getNature());
+      parser.parse(module, reporter);
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+  }
+
+  /**
+   * Gets the nature to use for the validation of the file.
+   *
+   * @return The eclipse nature.
+   */
+  protected abstract String getNature();
 
   protected class Reporter
     extends AbstractProblemReporter

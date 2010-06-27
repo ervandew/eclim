@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,11 @@
  */
 package org.eclim.plugin.pdt.command.src;
 
-import java.io.InputStream;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.plugin.dltk.command.src.AbstractSrcUpdateCommand;
 
-import org.eclim.util.IOUtils;
-
-import org.eclipse.core.resources.IFile;
-
-import org.eclipse.php.internal.core.compiler.ast.parser.PHPSourceParserFactory;
+import org.eclipse.php.internal.core.project.PHPNature;
 
 /**
  * Command to update and optionally validate a php src file.
@@ -46,23 +40,11 @@ public class SrcUpdateCommand
 {
   /**
    * {@inheritDoc}
-   * @see AbstractSrcUpdateCommand#parse(String,IFile,Reporter)
+   * @see AbstractSrcUpdateCommand#getNature()
    */
   @Override
-  protected void parse(
-      String filename, IFile file, AbstractSrcUpdateCommand.Reporter reporter)
-    throws Exception
+  protected String getNature()
   {
-    PHPSourceParserFactory parser = new PHPSourceParserFactory();
-    InputStream in = file.getContents();
-    try {
-      parser.parse(
-          filename.toCharArray(),
-          IOUtils.toString(in).toCharArray(),
-          reporter
-      );
-    }finally{
-      IOUtils.closeQuietly(in);
-    }
+    return PHPNature.ID;
   }
 }
