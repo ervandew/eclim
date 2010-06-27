@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Map;
 
 import java.util.regex.Pattern;
@@ -56,11 +55,16 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
+import org.eclipse.ui.IPageLayout;
+
+import org.eclipse.ui.internal.views.markers.CachedMarkerBuilder;
+import org.eclipse.ui.internal.views.markers.ExtendedMarkersView;
 import org.eclipse.ui.internal.views.markers.MarkerContentGenerator;
 
+import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 
 /**
@@ -86,34 +90,25 @@ public class ProblemsCommand
     String name = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(name);
 
-    MarkerContentGenerator generator =
-      MarkerSupportRegistry.getInstance()
-        .getGenerator(MarkerSupportRegistry.PROBLEMS_GENERATOR);
+    ContentGeneratorDescriptor descriptor =
+      MarkerSupportRegistry.getInstance().getDefaultContentGenDescriptor();
 
-    Method generateFilteredMarkers = MarkerContentGenerator.class
-      .getDeclaredMethod(
-          "generateFilteredMarkers",
-          SubProgressMonitor.class,
-          Boolean.TYPE,
-          IResource[].class,
-          Collection.class);
-    generateFilteredMarkers.setAccessible(true);
-    Object markers = generateFilteredMarkers.invoke(
-        generator,
-        new SubProgressMonitor(new NullProgressMonitor(), 10),
-        false /* 'and' the filters? */,
-        new IResource[0],
-        new HashSet<Object>() /* filters, MarkerFieldFilterGroup */);
+    ExtendedMarkersView view = new ExtendedMarkersView(descriptor.getId());
+    String viewId = IPageLayout.ID_PROBLEM_VIEW;
+    MarkerContentGenerator generator = new MarkerContentGenerator(
+        descriptor, new CachedMarkerBuilder(view), viewId);
 
-    Method getSize = markers.getClass().getDeclaredMethod("getSize");
-    getSize.setAccessible(true);
-    Method elementAt = markers.getClass()
-      .getDeclaredMethod("elementAt", Integer.TYPE);
-    elementAt.setAccessible(true);
+    Method gatherMarkers = MarkerContentGenerator.class
+      .getDeclaredMethod("gatherMarkers",
+          String[].class, Boolean.TYPE, Collection.class, IProgressMonitor.class);
+    gatherMarkers.setAccessible(true);
 
-    Method getMarker = null;
-    int size = ((Integer)getSize.invoke(markers)).intValue();
-    if (size == 0){
+    @SuppressWarnings("rawtypes")
+    ArrayList markers = new ArrayList();
+    gatherMarkers.invoke(generator,
+        generator.getTypes(), true, markers, new NullProgressMonitor());
+
+    if (markers.size() == 0){
       return StringUtils.EMPTY;
     }
 
@@ -123,8 +118,8 @@ public class ProblemsCommand
     CollectionUtils.addAll(projects, project.getReferencingProjects());
 
     ArrayList<Error> problems = new ArrayList<Error>();
-    for (int ii = 0; ii < size; ii++){
-      Object markerEntry = elementAt.invoke(markers, ii);
+    Method getMarker = null;
+    for (Object markerEntry : markers){
       if (getMarker == null){
         getMarker = markerEntry.getClass().getDeclaredMethod("getMarker");
         getMarker.setAccessible(true);
