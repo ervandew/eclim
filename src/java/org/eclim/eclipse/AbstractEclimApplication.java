@@ -261,7 +261,12 @@ public abstract class AbstractEclimApplication
       logger.info("Stopping plugin " + CORE);
       Bundle bundle = Platform.getBundle(CORE);
       if (bundle != null){
-        bundle.stop();
+        try{
+          bundle.stop();
+        }catch(IllegalStateException ise){
+          // thrown because eclipse osgi BaseStorage attempt to register a
+          // shutdown hook during shutdown.
+        }
       }
 
       EclimPlugin plugin = EclimPlugin.getDefault();
