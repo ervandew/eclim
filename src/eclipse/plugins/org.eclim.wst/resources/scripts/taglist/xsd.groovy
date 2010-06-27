@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2008  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ import org.eclim.plugin.core.command.taglist.TaglistScript;
 import org.eclim.plugin.core.command.taglist.TagResult;
 
 /**
- * Processes tags for wsdl files.
+ * Processes tags for xsd files.
  */
 class XsdTags implements TaglistScript
 {
