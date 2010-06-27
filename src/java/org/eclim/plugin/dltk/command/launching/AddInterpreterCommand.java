@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ import org.eclipse.dltk.core.environment.EnvironmentManager;
 import org.eclipse.dltk.core.environment.IEnvironment;
 import org.eclipse.dltk.core.environment.IFileHandle;
 
+import org.eclipse.dltk.core.internal.environment.LazyFileHandle;
+
 import org.eclipse.dltk.debug.ui.interpreters.InterpretersUpdater;
 
 import org.eclipse.dltk.internal.debug.ui.interpreters.EnvironmentVariableContentProvider;
-
-import org.eclipse.dltk.internal.launching.LazyFileHandle;
 
 import org.eclipse.dltk.launching.EnvironmentVariable;
 import org.eclipse.dltk.launching.IInterpreterInstall;
@@ -104,7 +104,14 @@ public class AddInterpreterCommand
           Services.getMessage("interpreter.path.not.found", interpreterPath));
     }
 
-    IStatus status = type.validateInstallLocation(file);
+    EnvironmentVariableContentProvider envVarsProvider =
+      new EnvironmentVariableContentProvider();
+    EnvironmentVariable[] envVars = envVarsProvider.getVariables();
+    LibraryLocation[] libs = type.getDefaultLibraryLocations(
+        file, envVars, new NullProgressMonitor());
+
+    IStatus status = type.validateInstallLocation(
+        file, envVars, libs, new NullProgressMonitor());
     if (!status.isOK()){
       throw new RuntimeException(status.getMessage());
     }
@@ -133,17 +140,11 @@ public class AddInterpreterCommand
       }
     }
 
+    String name = generateInterpreterName(file, nature);
     String id = null;
     do {
       id = String.valueOf(System.currentTimeMillis());
     } while (type.findInterpreterInstall(id) != null);
-
-    String name = generateInterpreterName(file, nature);
-    EnvironmentVariableContentProvider envVarsProvider =
-      new EnvironmentVariableContentProvider();
-    EnvironmentVariable[] envVars = envVarsProvider.getVariables();
-    LibraryLocation[] libs = type.getDefaultLibraryLocations(
-        file, envVars, new NullProgressMonitor());
 
     IInterpreterInstall install = new InterpreterStandin(type, id);
     install.setInstallLocation(
