@@ -197,8 +197,8 @@ public class Plugin
           resources.registerCommand(cclass);
         }
       }
-    }catch(Exception e){
-      logger.error("Unable to load commands.", e);
+    }catch(Throwable t){
+      logger.error("Unable to load commands.", t);
     }
   }
 
