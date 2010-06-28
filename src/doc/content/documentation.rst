@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@ Documentation
   vim/python/index
   vim/ruby/index
   vim/vim/index
-  vim/wsdl/index
   vim/xml/index
   vim/xsd/index
 
@@ -64,6 +63,5 @@ Documentation
 - :ref:`vim/python/index`
 - :ref:`vim/ruby/index`
 - :ref:`vim/vim/index`
-- :ref:`vim/wsdl/index`
 - :ref:`vim/xml/index`
 - :ref:`vim/xsd/index`

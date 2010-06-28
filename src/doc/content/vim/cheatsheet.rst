@@ -319,12 +319,6 @@ WebXml Commands
 - :ref:`:Validate <:Validate_webxml>` - Validate the current web.xml file.
 
 
-Wsdl Commands
------------------
-
-- :ref:`:Validate <:Validate_wsdl>` - Validate the current file.
-
-
 Xml Commands
 -----------------
 

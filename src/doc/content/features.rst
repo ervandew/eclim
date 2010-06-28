@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -113,10 +113,6 @@ Vim Script Integration
 - Find user defined command, function, or global variable declarations /
   references.
 - Quickly lookup help topic for a keyword, functions, command, etc.
-
-Wsdl Integration
--------------------------
-- Automatic validation (w/ visual marking of errors and warnings).
 
 Xml Integration
 -------------------------

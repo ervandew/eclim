@@ -703,8 +703,7 @@ Vcs:
     :ref:`:VcsAnnotate` and :Viewvc.
 
 Wsdl:
-  - Added :ref:`wsdl validation <vim/wsdl/validate>`.  Requires the
-    `eclipse wst`_ plugin.
+  - Added wsdl validation.  Requires the `eclipse wst`_ plugin.
 
 Xsd:
   - Added :ref:`xsd validation <vim/xsd/validate>`.  Requires the

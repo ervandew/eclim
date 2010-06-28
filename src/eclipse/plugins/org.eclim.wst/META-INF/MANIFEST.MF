@@ -25,7 +25,6 @@ Require-Bundle: org.eclim,
   org.eclipse.wst.sse.core,
   org.eclipse.wst.sse.ui,
   org.eclipse.wst.validation,
-  org.eclipse.wst.wsdl.validation,
   org.eclipse.wst.xml.core,
   org.eclipse.wst.xml.ui,
   org.eclipse.wst.xsd.core

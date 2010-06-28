@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -197,12 +197,6 @@ WebXml 指令集
 --------------
 
 - :ref:`:Validate <:Validate_webxml>` - 驗證目前的 ``web.xml`` 檔案.
-
-
-Wsdl 指令集
---------------
-
-- :ref:`:Validate <:Validate_wsdl>` - 驗證目前的檔案.
 
 
 Xml 指令集
