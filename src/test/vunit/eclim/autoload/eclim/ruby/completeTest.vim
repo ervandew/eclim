@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -62,15 +62,15 @@ function! TestCompleteBuiltin()
   call PeekRedir()
 
   " number method
-  "call cursor(8, 5)
-  "let start = eclim#ruby#complete#CodeComplete(1, '')
-  "call VUAssertEquals(2, start, 'Wrong starting column.')
+  call cursor(8, 5)
+  let start = eclim#ruby#complete#CodeComplete(1, '')
+  call VUAssertEquals(2, start, 'Wrong starting column.')
 
-  "let results = eclim#ruby#complete#CodeComplete(0, '')
-  "call PeekRedir()
-  "echo 'results = ' . string(results)
-  "call VUAssertEquals(len(results), 1, 'Wrong number of results.')
-  "call VUAssertEquals('times', results[0].word, 'Wrong result.')
+  let results = eclim#ruby#complete#CodeComplete(0, '')
+  call PeekRedir()
+  echo 'results = ' . string(results)
+  call VUAssertEquals(len(results), 1, 'Wrong number of results.')
+  call VUAssertEquals('times', results[0].word, 'Wrong result.')
 
   " list method
   call cursor(7, 6)

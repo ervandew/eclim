@@ -139,7 +139,7 @@ public class CodeCompleteCommandTest
     assertTrue("Wrong result", results[1].startsWith("each_index|"));
     //assertTrue("Wrong result", results[2].startsWith("each_with_index|"));
 
-    /*result = Eclim.execute(new String[]{
+    result = Eclim.execute(new String[]{
       "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "70", "-e", "utf-8"
     });
@@ -149,6 +149,6 @@ public class CodeCompleteCommandTest
     results = StringUtils.split(result, '\n');
 
     assertEquals("Wrong number of results", 1, results.length);
-    assertTrue("Wrong result", results[0].startsWith("times|"));*/
+    assertTrue("Wrong result", results[0].startsWith("times|"));
   }
 }
