@@ -21,52 +21,14 @@ import java.util.regex.Pattern;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.CommandLine;
+import org.eclim.plugin.dltk.command.complete.AbstractCodeCompleteCommand;
 
-import org.eclim.eclipse.EclimPlugin;
+import org.eclipse.dltk.core.ISourceModule;
 
-import org.eclim.eclipse.ui.EclimEditorSite;
+import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
+import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 
-import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
-
-import org.eclim.plugin.core.util.ProjectUtils;
-
-import org.eclim.plugin.pdt.util.PhpUtils;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.jface.text.ITextViewer;
-
-import org.eclipse.jface.text.contentassist.ContentAssistant;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-
-import org.eclipse.php.internal.core.documentModel.partitioner.PHPPartitionTypes;
-
-import org.eclipse.php.internal.ui.editor.PHPStructuredEditor;
-import org.eclipse.php.internal.ui.editor.PHPStructuredTextViewer;
-
-import org.eclipse.php.internal.ui.editor.configuration.PHPStructuredTextViewerConfiguration;
-
-import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProcessor;
-
-import org.eclipse.php.internal.ui.editor.templates.PhpTemplateProposal;
-
-import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-
-import org.eclipse.ui.part.FileEditorInput;
-
-import org.eclipse.ui.texteditor.ITextEditor;
-
-import org.eclipse.wst.sse.core.StructuredModelManager;
-
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProposalCollector;
 
 /**
  * Command to perform php code completion.
@@ -91,90 +53,26 @@ public class CodeCompleteCommand
   private static final Pattern REMOVE_HEAD =
     Pattern.compile("(s?)<head>.*</head>", Pattern.MULTILINE | Pattern.DOTALL);
 
-  private static PHPStructuredTextViewer viewer;
-
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
-   */
-  protected IContentAssistProcessor getContentAssistProcessor(
-      CommandLine commandLine, String projectName, String file)
-    throws Exception
-  {
-    PHPStructuredTextViewerConfiguration config =
-      new PHPStructuredTextViewerConfiguration();
-
-    IProject project = ProjectUtils.getProject(projectName, true);
-    IFile ifile = ProjectUtils.getFile(project, file);
-
-    // I really hate this hack (should be safe to remove after we stop
-    // supporting pdt 2.0?)
-    PhpUtils.waitOnBuild();
-
-    IStructuredModel model =
-      StructuredModelManager.getModelManager().getModelForRead(ifile);
-    IStructuredDocument document = model.getStructuredDocument();
-
-    IEditorSite site = new EclimEditorSite();
-    IEditorInput input = new FileEditorInput(ifile);
-    PHPStructuredEditor editor = new PHPStructuredEditor(){
-      public void update()
-      {
-        // no-op to prevent StructuredTextEditor from running it.
-      }
-
-      protected void installOverrideIndicator(boolean provideAST)
-      {
-        // no-op to prevent PHPStructuredEditor from running it.
-      }
-    };
-    editor.init(site, input);
-    editor.setInput(input);
-
-    viewer = new PHPStructuredTextViewer(
-        (ITextEditor)editor, EclimPlugin.getShell(), null, null, false, 0){
-      protected void createControl(Composite parent, int styles)
-      {
-        // no-op to prevent possible deadlock in native method on windows.
-      }
-    };
-    viewer.setDocument(document);
-
-    return new PHPCompletionProcessor(
-      viewer.getTextEditor(),
-      (ContentAssistant)config.getPHPContentAssistant(viewer),
-      PHPPartitionTypes.PHP_DEFAULT
-    );
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
-   */
-  protected ITextViewer getTextViewer(
-      CommandLine commandLine, String project, String file)
-    throws Exception
-  {
-    return viewer;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getCompletionCollector(ISourceModule)
    */
   @Override
-  protected boolean acceptProposal(ICompletionProposal proposal)
+  protected ScriptCompletionProposalCollector getCompletionCollector(ISourceModule module)
+    throws Exception
   {
-    // filter out template proposals for now
-    return !(proposal instanceof PhpTemplateProposal);
+    // Using a regular document doesn't work... if at some point passing null
+    // for the document stops working, then look at:
+    // php.internal.core.codeassist.contexts.AbstractCompletionContext.determineDocument
+    return new PHPCompletionProposalCollector(null /*document*/, module, true);
   }
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getCompletion(IScriptCompletionProposal)
    */
   @Override
-  protected String getCompletion(ICompletionProposal proposal)
+  protected String getCompletion(IScriptCompletionProposal proposal)
   {
     String completion = proposal.getDisplayString().trim();
     completion = DISPALY_TO_COMPLETION.matcher(completion).replaceFirst("$1");
@@ -190,26 +88,18 @@ public class CodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getDescription(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getDescription(IScriptCompletionProposal)
    */
   @Override
-  protected String getDescription(ICompletionProposal proposal)
+  protected String getDescription(IScriptCompletionProposal proposal)
   {
     String description = super.getDescription(proposal);
     description = REMOVE_HEAD.matcher(description).replaceFirst("");
     description = description.replaceAll("</dt>", ": ");
     description = description.replaceAll("</dd>", " ");
     description = description.replaceAll("</?[^>]+>", "");
+    description = description.replaceAll("-->", "");
+    description = description.replaceAll("\n", "");
     return description.trim();
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
-   */
-  @Override
-  protected String getShortDescription(ICompletionProposal proposal)
-  {
-    return proposal.getDisplayString().trim();
   }
 }

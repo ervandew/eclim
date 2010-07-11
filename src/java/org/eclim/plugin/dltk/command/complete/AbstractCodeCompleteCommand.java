@@ -1,0 +1,145 @@
+/**
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.eclim.plugin.dltk.command.complete;
+
+import java.util.ArrayList;
+
+import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
+
+import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.command.complete.CodeCompleteFilter;
+import org.eclim.plugin.core.command.complete.CodeCompleteResult;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+
+import org.eclim.plugin.dltk.util.DltkUtils;
+
+import org.eclipse.core.resources.IFile;
+
+import org.eclipse.dltk.core.ISourceModule;
+
+import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
+import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
+
+//import org.eclipse.dltk.ui.DLTKUIPlugin;
+//import org.eclipse.dltk.ui.PreferenceConstants;
+
+/**
+ * Abstract base class for dltk code completion commands.
+ *
+ * @author Eric Van Dewoestine
+ */
+public abstract class AbstractCodeCompleteCommand
+  extends AbstractCommand
+{
+  /**
+   * {@inheritDoc}
+   * @see org.eclim.command.Command#execute(CommandLine)
+   */
+  public String execute(CommandLine commandLine)
+    throws Exception
+  {
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    IFile ifile = ProjectUtils.getFile(project, file);
+    int offset = getOffset(commandLine);
+
+    /*int timeout = DLTKUIPlugin.getDefault().getPreferenceStore()
+      .getInt(PreferenceConstants.CODEASSIST_TIMEOUT);*/
+    int timeout = 5000;
+    ISourceModule module = getSourceModule(ifile);
+    ScriptCompletionProposalCollector collector = getCompletionCollector(module);
+    module.codeComplete(offset, collector, timeout);
+
+    IScriptCompletionProposal[] proposals =
+      collector.getScriptCompletionProposals();
+
+    ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
+    for (IScriptCompletionProposal proposal : proposals){
+      CodeCompleteResult ccresult = new CodeCompleteResult(
+          getCompletion(proposal),
+          getDescription(proposal),
+          getShortDescription(proposal));
+
+      if(!results.contains(ccresult)){
+        results.add(ccresult);
+      }
+    }
+
+    return CodeCompleteFilter.instance.filter(commandLine, results);
+  }
+
+  /**
+   * Get the ISourceModule instance for the supplied file.
+   *
+   * @param file The IFile.
+   * @return The ISourceModule.
+   */
+  protected ISourceModule getSourceModule(IFile file)
+    throws Exception
+  {
+    return DltkUtils.getSourceModule(file);
+  }
+
+  /**
+   * Get the completion collector used to collect the completion proposals.
+   *
+   * @param module The source module.
+   * @return The completion collector.
+   */
+  protected abstract ScriptCompletionProposalCollector getCompletionCollector(ISourceModule module)
+    throws Exception;
+
+  /**
+   * Get the completion from the proposal.
+   *
+   * @param proposal The IScriptCompletionProposal.
+   * @return The completion.
+   */
+  protected String getCompletion(IScriptCompletionProposal proposal)
+  {
+    return proposal.getDisplayString().trim();
+  }
+
+  /**
+   * Get the short description from the proposal.
+   *
+   * @param proposal The IScriptCompletionProposal.
+   * @return The short description.
+   */
+  protected String getShortDescription(IScriptCompletionProposal proposal)
+  {
+    return proposal.getDisplayString().trim();
+  }
+
+  /**
+   * Get the description from the proposal.
+   *
+   * @param proposal The IScriptCompletionProposal.
+   * @return The description.
+   */
+  protected String getDescription(IScriptCompletionProposal proposal)
+  {
+    String description = proposal.getAdditionalProposalInfo();
+    if(description != null){
+      description = description.trim();
+    }
+    return description;
+  }
+}

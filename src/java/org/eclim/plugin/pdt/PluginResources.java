@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package org.eclim.plugin.pdt;
 
 import org.eclim.Services;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.core.preference.PreferenceFactory;
@@ -30,6 +32,8 @@ import org.eclim.plugin.pdt.preference.OptionHandler;
 
 import org.eclim.plugin.pdt.project.PhpProjectManager;
 
+import org.eclipse.php.internal.core.PHPCorePlugin;
+
 import org.eclipse.php.internal.core.project.PHPNature;
 
 /**
@@ -40,6 +44,8 @@ import org.eclipse.php.internal.core.project.PHPNature;
 public class PluginResources
   extends AbstractPluginResources
 {
+  private static final Logger logger = Logger.getLogger(PluginResources.class);
+
   /**
    * Name that can be used to lookup this PluginResources from
    * {@link Services#getPluginResources(String)}.
@@ -62,6 +68,12 @@ public class PluginResources
     PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",
       "PDT org.eclipse.php.core.phpVersion (?i)php[45]"
     );
+
+    try{
+      PHPCorePlugin.initializeAfterLoad(null);
+    }catch(Exception e){
+      logger.error("Failed to initialize php core plugin.", e);
+    }
   }
 
   /**

@@ -11,6 +11,7 @@ Bundle-ClassPath: .,
   eclim.dltk.jar
 Export-Package: org.eclim.plugin.dltk,
   org.eclim.plugin.dltk.command.buildpath,
+  org.eclim.plugin.dltk.command.complete,
   org.eclim.plugin.dltk.command.launching,
   org.eclim.plugin.dltk.command.search,
   org.eclim.plugin.dltk.command.src,

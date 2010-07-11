@@ -20,23 +20,19 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.dltk.project.DltkProjectManager;
 
+import org.eclim.plugin.dltk.util.DltkUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
-import org.eclipse.dltk.core.IProjectFragment;
-import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
-
-import org.eclipse.dltk.internal.core.util.Util;
 
 import org.eclipse.dltk.ruby.core.RubyNature;
 
@@ -75,33 +71,7 @@ public class RubyProjectManager
   public void refresh(IProject project, IFile file)
     throws Exception
   {
-    // This block to find the ISourceModule is mostly copied from:
-    // org.eclipse.dltk.ruby.internal.debug.ui.console.RubyConsoleSourceModuleLookup
-    // Is there an easier way?
-    IPath path = file.getFullPath();
-    IScriptProject scriptProject = DLTKCore.create(project);
-    IProjectFragment[] roots = scriptProject.getProjectFragments();
-    ISourceModule module = null;
-    for (int j = 0, rootCount = roots.length; j < rootCount; j++) {
-      final IProjectFragment root = roots[j];
-      IPath rootPath = root.getPath();
-
-      if (rootPath.isPrefixOf(path) && !Util.isExcluded(path, root, false)) {
-        IPath localPath = path.setDevice(null).removeFirstSegments(
-            rootPath.segmentCount());
-        if (localPath.segmentCount() >= 1) {
-          final IScriptFolder folder;
-          if (localPath.segmentCount() > 1) {
-            folder = root.getScriptFolder(localPath.removeLastSegments(1));
-          } else {
-            folder = root.getScriptFolder(Path.EMPTY);
-          }
-          module = folder.getSourceModule(localPath.lastSegment());
-          break;
-        }
-      }
-    }
-
+    ISourceModule module = DltkUtils.getSourceModule(file);
     if (module != null){
       module.makeConsistent(new NullProgressMonitor());
     }

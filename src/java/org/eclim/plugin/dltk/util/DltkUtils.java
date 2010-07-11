@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,27 @@
  */
 package org.eclim.plugin.dltk.util;
 
+import java.io.InputStream;
+
 import java.util.ArrayList;
+
+import org.eclim.util.IOUtils;
+
+import org.eclipse.core.resources.IFile;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+
+import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.IProjectFragment;
+import org.eclipse.dltk.core.IScriptFolder;
+import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.core.ISourceModule;
+
+import org.eclipse.dltk.internal.core.util.Util;
 
 /**
  * Utility methods for working with dltk projects.
@@ -47,5 +67,61 @@ public class DltkUtils
   public static String[] getDltkNatures()
   {
     return natures.toArray(new String[natures.size()]);
+  }
+
+  /**
+   * Get an IModuleSource instance for the given file.
+   *
+   * @param file The file.
+   * @return The IModuleSource
+   */
+  public static IModuleSource getModuleSource(IFile file)
+    throws Exception
+  {
+    InputStream in = file.getContents();
+    try {
+      String path = file.getLocation().toOSString();
+      return new ModuleSource(path, IOUtils.toString(in));
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+  }
+
+  /**
+   * Get an ISourceModule instance for the given file.
+   *
+   * @param file The file.
+   * @return The ISourceModule
+   */
+  public static ISourceModule getSourceModule(IFile file)
+    throws Exception
+  {
+    // This block to find the ISourceModule is mostly copied from:
+    // org.eclipse.dltk.ruby.internal.debug.ui.console.RubyConsoleSourceModuleLookup
+    // Is there an easier way?
+    IPath path = file.getFullPath();
+    IScriptProject scriptProject = DLTKCore.create(file.getProject());
+    IProjectFragment[] roots = scriptProject.getProjectFragments();
+    ISourceModule module = null;
+    for (int j = 0, rootCount = roots.length; j < rootCount; j++) {
+      final IProjectFragment root = roots[j];
+      IPath rootPath = root.getPath();
+
+      if (rootPath.isPrefixOf(path) && !Util.isExcluded(path, root, false)) {
+        IPath localPath = path.setDevice(null).removeFirstSegments(
+            rootPath.segmentCount());
+        if (localPath.segmentCount() >= 1) {
+          final IScriptFolder folder;
+          if (localPath.segmentCount() > 1) {
+            folder = root.getScriptFolder(localPath.removeLastSegments(1));
+          } else {
+            folder = root.getScriptFolder(Path.EMPTY);
+          }
+          module = folder.getSourceModule(localPath.lastSegment());
+          break;
+        }
+      }
+    }
+    return module;
   }
 }

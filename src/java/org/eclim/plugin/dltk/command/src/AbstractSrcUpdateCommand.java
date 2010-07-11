@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.dltk.command.src;
 
-import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +31,7 @@ import org.eclim.plugin.core.command.filter.ErrorFilter;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.util.IOUtils;
+import org.eclim.plugin.dltk.util.DltkUtils;
 
 import org.eclim.util.file.FileOffsets;
 
@@ -46,7 +44,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.dltk.ast.parser.ISourceParser;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 
-import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 
 import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -111,16 +109,10 @@ public abstract class AbstractSrcUpdateCommand
   protected void parse(IProject project, IFile file, Reporter reporter)
     throws Exception
   {
-    InputStream in = file.getContents();
-    try {
-      String path = file.getLocation().toOSString();
-      ModuleSource module = new ModuleSource(path, IOUtils.toString(in));
-      ISourceParser parser = SourceParserManager
-        .getInstance().getSourceParser(project, getNature());
-      parser.parse(module, reporter);
-    }finally{
-      IOUtils.closeQuietly(in);
-    }
+    IModuleSource module = DltkUtils.getModuleSource(file);
+    ISourceParser parser = SourceParserManager
+      .getInstance().getSourceParser(project, getNature());
+    parser.parse(module, reporter);
   }
 
   /**
