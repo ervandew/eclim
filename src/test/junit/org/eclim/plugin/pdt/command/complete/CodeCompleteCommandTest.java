@@ -132,7 +132,7 @@ public class CodeCompleteCommandTest
       index += 18;
       // sleep a little bit since no human can type this fast and the pdt
       // appears to need a little time to update.
-      Thread.sleep(500);
+      Thread.sleep(1000);
     }
   }
 }
