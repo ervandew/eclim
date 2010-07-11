@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2009  Eric Van Dewoestine
+Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ from sphinx import addnodes, highlighting
 from sphinx.builders import ENV_PICKLE_FILENAME
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.builders.text import TextBuilder
-from sphinx.util import url_re
+from sphinx.util import clean_astext, url_re
 from sphinx.util.console import bold
 from sphinx.writers.text import TextTranslator, TextWriter
 
@@ -41,7 +41,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
 
   def load_env(self):
     """
-    Copied from sphinx.builder.Builder and just replaces 'BuildEnvironment' w/
+    Copied from sphinx.builders.Builder and just replaces 'BuildEnvironment' w/
     'EclimHtmlBuildEnvironment'.
     """
     if self.env:
@@ -195,7 +195,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
           # toctree originates
           ref = toctreenode['parent']
           if not title:
-            title = self.titles[ref].astext()
+            title = clean_astext(self.titles[ref])
           reference = nodes.reference('', '',
                                       refuri=ref,
                                       anchorname='',
@@ -205,6 +205,9 @@ class EclimBuilder(StandaloneHTMLBuilder):
           # don't show subitems
           toc = nodes.bullet_list('', item)
         else:
+          # EV: get the tocs reference using self.env.main_tocs instead of just
+          # self.tocs
+          #toc = self.tocs[ref].deepcopy()
           toc = self.env.main_tocs[ref].deepcopy()
           if title and toc.children and len(toc.children) == 1:
             child = toc.children[0]
@@ -238,7 +241,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
         # resolve all sub-toctrees
         for toctreenode in toc.traverse(addnodes.toctree):
           #i = toctreenode.parent.index(toctreenode) + 1
-          #for item in self._entries_from_toctree(docname, toctreenode, subtree=True):
+          #for item in self._entries_from_toctree(toctreenode, subtree=True):
           #  toctreenode.parent.insert(i, item)
           #  i += 1
           #toctreenode.parent.remove(toctreenode)
@@ -296,9 +299,6 @@ class VimdocBuilder(TextBuilder):
     """
     self.writer = VimdocWriter(self)
 
-    # HACK
-    nodes.fully_normalize_name = VimdocBuilder.fully_normalize_name
-
   def fully_normalize_name(name):
     """Return a case- and whitespace-normalized name."""
     return ' '.join(name.split())
@@ -355,12 +355,12 @@ class VimdocTranslator(TextTranslator):
     """
     Straight copy, just change the leading '*' to a '-'.
     """
-    if self._list_counter == -1:
+    if self.list_counter[-1] == -1:
       self.end_state(first='- ', end=None)
-    elif self._list_counter == -2:
+    elif self.list_counter[-1] == -2:
       pass
     else:
-      self.end_state(first='%s. ' % self._list_counter, end=None)
+      self.end_state(first='%s. ' % self.list_counter[-1], end=None)
 
   def visit_reference(self, node):
     if node.children and isinstance(node.children[0], nodes.emphasis):

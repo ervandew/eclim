@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2009  Eric Van Dewoestine
+Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -163,10 +163,12 @@ class EclimBuildEnvironment(BuildEnvironment):
           docname, labelid = self.reftargets.get((typ, target), ('', ''))
           if not docname:
             if typ == 'term':
-              self.warn(fromdocname, 'term not in glossary: %s' % target,
+              self.warn(node['refdoc'],
+                        'term not in glossary: %s' % target,
                         node.line)
             elif typ == 'citation':
-              self.warn(fromdocname, 'citation not found: %s' % target,
+              self.warn(node['refdoc'],
+                        'citation not found: %s' % target,
                         node.line)
             newnode = contnode
           else:
@@ -181,8 +183,8 @@ class EclimBuildEnvironment(BuildEnvironment):
           docname, synopsis, platform, deprecated = \
               self.modules.get(target, ('','','', ''))
           if not docname:
-            newnode = builder.app.emit_firstresult('missing-reference',
-                                                   self, node, contnode)
+            newnode = builder.app.emit_firstresult(
+              'missing-reference', self, node, contnode)
             if not newnode:
               newnode = contnode
           elif docname == fromdocname:
@@ -204,8 +206,8 @@ class EclimBuildEnvironment(BuildEnvironment):
           name, desc = self.find_desc(modname, clsname,
                                       target, typ, searchorder)
           if not desc:
-            newnode = builder.app.emit_firstresult('missing-reference',
-                                                   self, node, contnode)
+            newnode = builder.app.emit_firstresult(
+              'missing-reference', self, node, contnode)
             if not newnode:
               newnode = contnode
           else:
