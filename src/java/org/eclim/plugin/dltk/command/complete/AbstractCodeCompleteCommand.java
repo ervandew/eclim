@@ -16,7 +16,12 @@
  */
 package org.eclim.plugin.dltk.command.complete;
 
+import java.text.Collator;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Locale;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -69,6 +74,7 @@ public abstract class AbstractCodeCompleteCommand
 
     IScriptCompletionProposal[] proposals =
       collector.getScriptCompletionProposals();
+    Arrays.sort(proposals, new ScriptCompletionProposalComparator());
 
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for (IScriptCompletionProposal proposal : proposals){
@@ -141,5 +147,19 @@ public abstract class AbstractCodeCompleteCommand
       description = description.trim();
     }
     return description;
+  }
+
+  private class ScriptCompletionProposalComparator
+    implements Comparator<IScriptCompletionProposal>
+  {
+    private Collator COLLATOR = Collator.getInstance(Locale.US);
+
+    public int compare(IScriptCompletionProposal p1, IScriptCompletionProposal p2) {
+      int diff = p1.getRelevance() - p2.getRelevance();
+      if (diff == 0){
+        return COLLATOR.compare(getCompletion(p1), getCompletion(p2));
+      }
+      return 0 - diff;
+    }
   }
 }
