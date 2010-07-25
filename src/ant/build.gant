@@ -33,8 +33,10 @@ eclipseHome = binding.getVariable('eclipse.home')
 if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
   ant.echo('''
     $${eclipse.home} not set.
-    Please set via system arg (ant -Declipse.home=...) or
-    via environment variable (export ECLIM_ECLIPSE_HOME="...").
+    Please set this value one of the following ways:
+    1. create a user.properties file with eclipse.home=... in it.
+    2. supply the property when invoking ant: ant -Declipse.home=...
+    3. set the supported environment variable: export ECLIM_ECLIPSE_HOME="..."
   ''')
   ant.fail(message: 'missing required property (see above)')
 }

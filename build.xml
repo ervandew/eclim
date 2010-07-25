@@ -16,6 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project name="eclim" default="deploy" basedir=".">
+  <property file="user.properties"/>
 
   <target name="clean" description="Deletes the build directory.">
     <antcall target="gant"> <param name="target" value="clean"/> </antcall>
