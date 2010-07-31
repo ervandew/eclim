@@ -128,10 +128,10 @@ public class RequirementProvider
       int minor = Integer.parseInt(parts[1]);
       int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-      if(major < 3 || minor < 5 || patch < 0){
+      if(major < 3 || minor < 6 || patch < 0){
         return new Status(FAIL,
             Installer.getString(
-              "eclipse.version.invalid", version, "3.5.x (Galileo)"));
+              "eclipse.version.invalid", version, "3.6.x (Helios)"));
       }
 
       return OK_STATUS;

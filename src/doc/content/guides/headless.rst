@@ -58,8 +58,8 @@ in the directory of your choice.
 
   ::
 
-    $ wget <eclipse_mirror>/eclipse-java-galileo-linux-gtk.tar.gz
-    $ tar -zxvf eclipse-java-galileo-linux-gtk.tar.gz
+    $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
+    $ tar -zxvf eclipse-<version>-linux-gtk.tar.gz
 
 Once eclipse is installed, you can then install eclim.  Since the eclim
 installer does not yet support console installs, you can checkout the code from
@@ -92,7 +92,7 @@ git and build it:
   If you want to build in support for one or more eclim plugins for which the
   required dependency is not installed in your eclipse distribution, you can
   install the dependency using eclipse's p2 command line client.  Make sure the
-  command references the correct repository for your eclipse install (galileo
+  command references the correct repository for your eclipse install (helios
   in this example) and that you have Xvfb running as described in the next step
   of this guide:
 
@@ -100,8 +100,7 @@ git and build it:
 
     DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
       -application org.eclipse.equinox.p2.director
-      -metadataRepository http://download.eclipse.org/releases/galileo
-      -artifactRepository http://download.eclipse.org/releases/galileo
+      -repository http://download.eclipse.org/releases/helios
       -installIU org.eclipse.wst.web_ui.feature.feature.group
 
   For a list of eclim plugins and which eclipse features they require, please

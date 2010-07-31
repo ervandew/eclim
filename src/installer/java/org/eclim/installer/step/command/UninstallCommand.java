@@ -35,8 +35,7 @@ public class UninstallCommand
     throws Exception
   {
     super(handler, new String[]{
-      "-metadataRepository", url,
-      "-artifactRepository", url,
+      "-repository", url,
       "-uninstallIU", id + ".feature.group",
     }, application);
   }

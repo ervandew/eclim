@@ -35,8 +35,7 @@ public class InstallCommand
     throws Exception
   {
     super(handler, new String[]{
-      "-metadataRepository", url,
-      "-artifactRepository", url,
+      "-repository", url,
       "-installIU", id + ".feature.group",
     }, application);
   }

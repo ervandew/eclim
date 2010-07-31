@@ -68,7 +68,7 @@ public class EclipseUtils
     }
 
     executor = CommandExecutor.execute(
-      new String[]{"which", "eclipse-3.5"}, 1000);
+      new String[]{"which", "eclipse-3.6"}, 1000);
     eclipse = executor.getResult();
     if (eclipse.trim().length() > 0){
       return eclipse;

@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 
 import java.net.URI;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,16 +33,21 @@ import org.eclipse.equinox.app.IApplication;
 
 import org.eclipse.equinox.internal.p2.director.app.Messages;
 
-import org.eclipse.equinox.internal.provisional.p2.director.IPlanner;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.internal.provisional.p2.director.ProfileChangeRequest;
-import org.eclipse.equinox.internal.provisional.p2.director.ProvisioningPlan;
 
-import org.eclipse.equinox.internal.provisional.p2.engine.IEngine;
-import org.eclipse.equinox.internal.provisional.p2.engine.IProfile;
-import org.eclipse.equinox.internal.provisional.p2.engine.ProvisioningContext;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.ProvisionException;
 
-import org.eclipse.equinox.internal.provisional.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.engine.IEngine;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProvisioningPlan;
+import org.eclipse.equinox.p2.engine.ProvisioningContext;
+
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IVersionedId;
+
+import org.eclipse.equinox.p2.planner.IPlanner;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -58,6 +64,9 @@ import org.osgi.framework.ServiceReference;
 public class Application
   extends org.eclipse.equinox.internal.p2.director.app.DirectorApplication
 {
+  private static final Integer EXIT_ERROR = new Integer(13);
+
+  @SuppressWarnings("rawtypes")
   private Object invokePrivate(String methodName, Class[] params, Object[] args)
     throws Exception
   {
@@ -81,7 +90,6 @@ public class Application
   // EV: straight copy from super w/ private field/method workarounds and
   // instead of returning EXIT_ERROR on error, throw an exception instead.
   public Object run(String[] args)
-    throws CoreException
   {
     if ("-list".equals(args[0])){
       IBundleGroupProvider[] providers = Platform.getBundleGroupProviders();
@@ -106,6 +114,7 @@ public class Application
       // processArguments
       boolean printHelpInfo = ((Boolean)this.getPrivateField("printHelpInfo")).booleanValue();
       boolean printIUList = ((Boolean)this.getPrivateField("printIUList")).booleanValue();
+      boolean purgeRegistry = ((Boolean)this.getPrivateField("purgeRegistry")).booleanValue();
 
       if (printHelpInfo){
         // EV: invoke private method
@@ -119,15 +128,24 @@ public class Application
         invokePrivate("initializeRepositories", new Class[0], new Object[0]);
 
         // EV: pull more private vars in.
-        List rootsToInstall = (List)this.getPrivateField("rootsToInstall");
-        List rootsToUninstall = (List)this.getPrivateField("rootsToUninstall");
+        long revertToPreviousState = ((Long)this.getPrivateField("revertToPreviousState")).longValue();
+        List<IVersionedId> rootsToInstall = (List<IVersionedId>)this.getPrivateField("rootsToInstall");
+        List<IVersionedId> rootsToUninstall = (List<IVersionedId>)this.getPrivateField("rootsToUninstall");
 
-        if (!(rootsToInstall.isEmpty() && rootsToUninstall.isEmpty()))
+        if (revertToPreviousState >= 0) {
+          // EV: invoke private methods
+          //revertToPreviousState();
+          invokePrivate("revertToPreviousState", new Class[0], new Object[0]);
+        } else if (!(rootsToInstall.isEmpty() && rootsToUninstall.isEmpty()))
           performProvisioningActions();
         if (printIUList)
           // EV: invoke private method
           //performList();
           invokePrivate("performList", new Class[0], new Object[0]);
+        if (purgeRegistry)
+          // EV: invoke private method
+          //purgeRegistry();
+          invokePrivate("purgeRegistry", new Class[0], new Object[0]);
 
         System.out.println(NLS.bind(
               Messages.Operation_complete,
@@ -152,25 +170,23 @@ public class Application
         invokePrivate("setSystemProperty",
             new Class[]{String.class, String.class},
             new Object[]{"eclipse.exitdata", ""});
-      }catch(Exception ex){
-        e.printStackTrace();
-      }
 
-      // EV: throw exception for the installer
-      //return EXIT_ERROR;
-      String workspace =
-        ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString();
-      String log = workspace + "/.metadata/.log";
-      throw new RuntimeException(
-          "Operation failed. See '" + log + "' for additional info.", e);
+        // EV: throw exception for the installer
+        //return EXIT_ERROR;
+        String workspace =
+          ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString();
+        String log = workspace + "/.metadata/.log";
+        throw new RuntimeException(
+            "Operation failed. See '" + log + "' for additional info.", e);
+      }catch(Exception ex){
+        ex.printStackTrace();
+        return EXIT_ERROR;
+      }
 
     // EV: handle reflection exceptions
     } catch(Exception e){
-      String workspace =
-        ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString();
-      String log = workspace + "/.metadata/.log";
-      throw new RuntimeException(
-          "Operation failed. See '" + log + "' for additional info.", e);
+      e.printStackTrace();
+      return EXIT_ERROR;
     } finally {
       try{
         // EV: pull private var in.
@@ -179,9 +195,9 @@ public class Application
         if (packageAdminRef != null) {
           // EV: invoke private methods.
           //cleanupRepositories();
-          //restoreServices();
+          //cleanupServices();
           invokePrivate("cleanupRepositories", new Class[0], new Object[0]);
-          invokePrivate("restoreServices", new Class[0], new Object[0]);
+          invokePrivate("cleanupServices", new Class[0], new Object[0]);
         }
       }catch(Exception e){
         e.printStackTrace();
@@ -196,20 +212,20 @@ public class Application
     throws Exception
   {
     // EV: pull private vars in.
-    List rootsToInstall = (List)this.getPrivateField("rootsToInstall");
-    List rootsToUninstall = (List)this.getPrivateField("rootsToUninstall");
+    List<IVersionedId> rootsToInstall = (List<IVersionedId>)this.getPrivateField("rootsToInstall");
+    List<IVersionedId> rootsToUninstall = (List<IVersionedId>)this.getPrivateField("rootsToUninstall");
 
     // EV: invoke private methods
     //IProfile profile = initializeProfile();
-    //IInstallableUnit[] installs = collectRoots(profile, rootsToInstall, true);
-    //IInstallableUnit[] uninstalls = collectRoots(profile, rootsToUninstall, false);
+    //Collection<IInstallableUnit> installs = collectRoots(profile, rootsToInstall, true);
+    //Collection<IInstallableUnit> uninstalls = collectRoots(profile, rootsToUninstall, false);
     IProfile profile = (IProfile)
       invokePrivate("initializeProfile", new Class[0], new Object[0]);
-    IInstallableUnit[] installs = (IInstallableUnit[])
+    Collection<IInstallableUnit> installs = (Collection<IInstallableUnit>)
       invokePrivate("collectRoots",
           new Class[]{IProfile.class, List.class, Boolean.TYPE},
           new Object[]{profile, rootsToInstall, true});
-    IInstallableUnit[] uninstalls = (IInstallableUnit[])
+    Collection <IInstallableUnit> uninstalls = (Collection<IInstallableUnit>)
       invokePrivate("collectRoots",
           new Class[]{IProfile.class, List.class, Boolean.TYPE},
           new Object[]{profile, rootsToUninstall, false});
@@ -223,20 +239,24 @@ public class Application
           new Class[]{IProfile.class}, new Object[]{profile});
 
       // EV: pull in private fields
-      List metadataRepositoryLocations = (List)this.getPrivateField("metadataRepositoryLocations");
-      List artifactRepositoryLocations = (List)this.getPrivateField("artifactRepositoryLocations");
+      IProvisioningAgent targetAgent = (IProvisioningAgent)this.getPrivateField("targetAgent");
+      List<URI> metadataRepositoryLocations = (List<URI>)this.getPrivateField("metadataRepositoryLocations");
+      List<URI> artifactRepositoryLocations = (List<URI>)this.getPrivateField("artifactRepositoryLocations");
+      boolean followReferences = ((Boolean)this.getPrivateField("followReferences")).booleanValue();
+      String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = (String)this.getPrivateField("FOLLOW_ARTIFACT_REPOSITORY_REFERENCES");
 
-      ProvisioningContext context = new ProvisioningContext((URI[])
-          metadataRepositoryLocations.toArray(new URI[metadataRepositoryLocations.size()]));
-      context.setArtifactRepositories((URI[])
-          artifactRepositoryLocations.toArray(new URI[artifactRepositoryLocations.size()]));
+      ProvisioningContext context = new ProvisioningContext(targetAgent);
+      context.setMetadataRepositories(metadataRepositoryLocations.toArray(new URI[metadataRepositoryLocations.size()]));
+      context.setArtifactRepositories(artifactRepositoryLocations.toArray(new URI[artifactRepositoryLocations.size()]));
+      context.setProperty(ProvisioningContext.FOLLOW_REPOSITORY_REFERENCES, String.valueOf(followReferences));
+      context.setProperty(FOLLOW_ARTIFACT_REPOSITORY_REFERENCES, String.valueOf(followReferences));
 
       // EV: invoke private methods
       //ProfileChangeRequest request = buildProvisioningRequest(profile, installs, uninstalls);
       //printRequest(request);
       ProfileChangeRequest request = (ProfileChangeRequest)
         invokePrivate("buildProvisioningRequest",
-            new Class[]{IProfile.class, IInstallableUnit[].class, IInstallableUnit[].class},
+            new Class[]{IProfile.class, Collection.class, Collection.class},
             new Object[]{profile, installs, uninstalls});
       invokePrivate(
           "printRequest",
@@ -261,22 +281,41 @@ public class Application
   {
     // EV: pull some private vars in to local scope.
     IPlanner planner = (IPlanner)this.getPrivateField("planner");
-    IEngine engine = (IEngine)this.getPrivateField("engine");
-    boolean verifyOnly = ((Boolean)this.getPrivateField("verifyOnly")).booleanValue();
 
-    ProvisioningPlan result = planner.getProvisioningPlan(
+    IProvisioningPlan result = planner.getProvisioningPlan(
         request, context, new NullProgressMonitor());
     IStatus operationStatus = result.getStatus();
     if (!operationStatus.isOK())
       throw new CoreException(operationStatus);
+    executePlan(context, result);
+  }
+
+  private void executePlan(ProvisioningContext context, IProvisioningPlan result)
+    // EV: throw a regular Exception to account for reflection exceptions
+    //throws CoreException
+    throws Exception
+  {
+    // EV: pull some private vars in to local scope.
+    IEngine engine = (IEngine)this.getPrivateField("engine");
+    boolean verifyOnly = ((Boolean)this.getPrivateField("verifyOnly")).booleanValue();
+    boolean noArtifactRepositorySpecified = ((Boolean)this.getPrivateField("noArtifactRepositorySpecified")).booleanValue();
+
+    IStatus operationStatus;
     if (!verifyOnly) {
       // EV: plug in the eclim installer progress monitor
-      //operationStatus = PlanExecutionHelper.executePlan(
-      //    result, engine, context, new NullProgressMonitor());
-      operationStatus = PlanExecutionHelper.executePlan(
-          result, engine, context, new ProgressMonitor());
-      if (!operationStatus.isOK())
+      //operationStatus = PlanExecutionHelper.executePlan(result, engine, context, new NullProgressMonitor());
+      operationStatus = PlanExecutionHelper.executePlan(result, engine, context, new ProgressMonitor());
+      if (!operationStatus.isOK()) {
+        // EV: invoke private method
+        //if (noArtifactRepositorySpecified && hasNoRepositoryFound(operationStatus))
+        boolean hasNoRepositoryFound = ((Boolean)invokePrivate(
+              "hasNoRepositoryFound",
+              new Class[]{IStatus.class},
+              new Object[]{operationStatus})).booleanValue();
+        if (noArtifactRepositorySpecified && hasNoRepositoryFound)
+          throw new ProvisionException(Messages.Application_NoRepositories);
         throw new CoreException(operationStatus);
+      }
     }
   }
 

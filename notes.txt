@@ -635,9 +635,9 @@ NOTES {{{
 
   Steps for new releases {{{
     1) tag git and then build the distribution
-       $ git push
        $ git tag -a -m "<version>" <version>
        $ ant dist
+       $ git push
        $ git push --tags
     2) create sourceforge release
        - update windows and linux download pages with latest file to download.
@@ -659,15 +659,13 @@ NOTES {{{
       Example: install feature org.eclipse.wst
         ./eclipse -nosplash -consolelog
           -application org.eclipse.equinox.p2.director
-          -metadataRepository http://download.eclipse.org/releases/ganymede
-          -artifactRepository http://download.eclipse.org/releases/ganymede
+          -repository http://download.eclipse.org/releases/ganymede
           -installIU org.eclipse.wst.web_ui.feature.feature.group
 
       Example: uninstall feature org.eclipse.wst (not fully tested yet)
         ./eclipse -nosplash -consolelog
           -application org.eclipse.equinox.p2.director
-          -metadataRepository http://download.eclipse.org/releases/ganymede
-          -artifactRepository http://download.eclipse.org/releases/ganymede
+          -repository http://download.eclipse.org/releases/ganymede
           -uninstallIU org.eclipse.wst.web_ui.feature.feature.group
 
     Old update manager:
@@ -700,12 +698,6 @@ NOTES {{{
                -debug -consolelog -nosplash -clean -refresh
                -data @user.home/workspace.test
                -application org.eclim.application_headless
-
-      - list features
-        > java -jar plugins\org.eclipse.equinox.launcher_<version>.jar
-               -debug -consolelog -nosplash -clean -refresh
-               -application org.eclipse.update.core.standaloneUpdate
-               -command listFeatures
 
     Minimum execution of vim w/ eclim support:
       $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"
