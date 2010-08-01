@@ -390,12 +390,17 @@ function! eclim#project#tree#InjectLinkedResources(dir, contents)
 
     let index = 0
     for entry in copy(a:contents)
+      if !len(links)
+        break
+      endif
+
       while len(links) && links[0] < fnamemodify(entry, ':h:t')
         call insert(a:contents, a:dir . remove(links, 0) . '/', index)
       endwhile
       let index += 1
     endfor
 
+    let index += 1
     for link in links
       call insert(a:contents, a:dir . link . '/', index)
     endfor
