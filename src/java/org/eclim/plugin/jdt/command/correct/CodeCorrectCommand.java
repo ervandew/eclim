@@ -53,6 +53,7 @@ import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 import org.eclipse.ltk.core.refactoring.TextChange;
 
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
 /**
@@ -192,7 +193,7 @@ public class CodeCorrectCommand
               continue;
             }
 
-            // hack to fix off by one issue with some corrections in eclipse.
+            // hack to fix off by one issue w/ package correction proposal
             if (cuProposal instanceof CorrectPackageDeclarationProposal){
               TextChange change = cuProposal.getTextChange();
               TextEdit edit = change.getEdit();
@@ -203,9 +204,12 @@ public class CodeCorrectCommand
                 List<TextEdit> children = (List<TextEdit>)fChildren.get(edit);
                 edit = children.get(children.size() - 1);
               }
-              Field flength = TextEdit.class.getDeclaredField("fLength");
-              flength.setAccessible(true);
-              flength.setInt(edit, edit.getLength() + 1);
+              // the InsertEdit version is fine, the ReplaceEdit is off by one.
+              if (edit instanceof ReplaceEdit){
+                Field flength = TextEdit.class.getDeclaredField("fLength");
+                flength.setAccessible(true);
+                flength.setInt(edit, edit.getLength() + 1);
+              }
             }
             results.add(cuProposal);
           }
