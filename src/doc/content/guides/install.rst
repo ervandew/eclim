@@ -84,7 +84,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -jar eclim_<version>.jar -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+      $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_<version>.jar
 
     If your proxy requires authentication, you'll need to supply the
     ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
@@ -93,7 +93,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -jar eclim_<version>.jar -Djava.net.useSystemProxies=true
+      $ java -Djava.net.useSystemProxies=true -jar eclim_<version>.jar
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
@@ -127,7 +127,7 @@ to install the application.
 
     ::
 
-      $ java -jar eclim_<version>.jar -Djava.ext.dirs
+      $ java -Djava.ext.dirs -jar eclim_<version>.jar
 
 
 Step 2: Testing the installation
@@ -259,11 +259,12 @@ this method:
 
 .. code-block:: bash
 
-  $ java -jar eclim_<version>.jar install \
+  $ java
     -Declipse.home=/opt/eclipse \
     -Dvim.files=$HOME/.vim \
     -DfeatureList.ant=true \
-    -DfeatureList.jdt=true
+    -DfeatureList.jdt=true \
+    -jar eclim_<version>.jar install \
 
 As you can see by the example, the values normally obtained from the user by
 the graphical installer are supplied using java system properties.  This method
