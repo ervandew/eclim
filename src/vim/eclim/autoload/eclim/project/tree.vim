@@ -330,6 +330,8 @@ function! eclim#project#tree#ProjectTreeSettings()
       \   action.action . "', '<cwd>', '<file>')")
   endfor
 
+  call eclim#tree#RegisterDirAction(function('eclim#project#tree#InjectLinkedResources'))
+
   if exists('s:TreeSettingsFunction')
     let Settings = function(s:TreeSettingsFunction)
     call Settings()
@@ -367,6 +369,37 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   catch /E325/
     " ignore attention error since the use should be prompted to handle it.
   endtry
+endfunction " }}}
+
+" InjectLinkedResources(dir, contents) {{{
+function! eclim#project#tree#InjectLinkedResources(dir, contents)
+  let project = eclim#project#util#GetProject(a:dir)
+  if len(project) == 0
+    return
+  endif
+
+  " listing the project root, so inject our project links
+  if len(project.links) && substitute(a:dir, '/$', '', '') == project.path
+    if !exists('b:links')
+      let b:links = {}
+    endif
+    call extend(b:links, project.links)
+
+    let links = keys(project.links)
+    call sort(links)
+
+    let index = 0
+    for entry in copy(a:contents)
+      while len(links) && links[0] < fnamemodify(entry, ':h:t')
+        call insert(a:contents, a:dir . remove(links, 0) . '/', index)
+      endwhile
+      let index += 1
+    endfor
+
+    for link in links
+      call insert(a:contents, a:dir . link . '/', index)
+    endfor
+  endif
 endfunction " }}}
 
 " HorizontalContentWindow() {{{

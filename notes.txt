@@ -21,8 +21,6 @@ HIGH {{{
   - :LocateFile
     - add eclipse setting to filter out results (supported in helios?)
 
-  - :ProjectTree, support linked folders
-
   - workspace corruption
 
   - Rework vcs log view
