@@ -680,10 +680,11 @@ function! eclim#tree#Refresh()
       " if we are adding a new entry we'll just add one that has the correct
       " index + prefix and let the next block set the proper display path.
       if s:MatchesFilter(norm_entry)
+        let initial = fnamemodify(entry, ':t')
         if index(dirs, entry) != -1
-          let display_entry = indent . s:node_prefix . s:dir_closed_prefix . entry
+          let display_entry = indent . s:node_prefix . s:dir_closed_prefix . initial
         else
-          let display_entry = indent . s:node_prefix . s:file_prefix . entry
+          let display_entry = indent . s:node_prefix . s:file_prefix . initial
         endif
         if lnum <= s:GetLastLine()
           call append(lnum - 1, display_entry)
