@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,6 +169,7 @@ public class CodeCompleteResult
     CodeCompleteResult result = (CodeCompleteResult)other;
     boolean equal = new EqualsBuilder()
       .append(getCompletion(), result.getCompletion())
+      .append(getShortDescription(), result.getShortDescription())
       .isEquals();
 
     return equal;
@@ -183,6 +184,7 @@ public class CodeCompleteResult
   {
     return new HashCodeBuilder(18, 38)
       .append(completion)
+      .append(shortDescription)
       .toHashCode();
   }
 }

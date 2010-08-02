@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.core.command.complete;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -34,19 +35,41 @@ public class CodeCompleteFilter
 
   private static final String DELIMETER = "|";
 
+  private static String COMPACT = "compact";
+  private static String STANDARD = "standard";
+
   /**
    * {@inheritDoc}
    */
   public String filter(CommandLine commandLine, List<CodeCompleteResult> results)
   {
-    String delimeter = null;
+    String delimiter = null;
+    String layout = null;
     try{
-      delimeter = commandLine.hasOption(Options.DELIMETER_OPTION) ?
+      delimiter = commandLine.hasOption(Options.DELIMETER_OPTION) ?
         commandLine.getValue(Options.DELIMETER_OPTION) : DELIMETER;
+      layout = commandLine.hasOption(Options.LAYOUT_OPTION) ?
+        commandLine.getValue(Options.LAYOUT_OPTION) : STANDARD;
     }catch(Exception e){
       throw new RuntimeException(e);
     }
 
+    if(COMPACT.equals(layout)){
+      return compactFormat(results, delimiter);
+    }
+    return standardFormat(results, delimiter);
+  }
+
+
+  /**
+   * Print the results in standard format.
+   *
+   * @param results The results in standard format.
+   * @param delimiter The delimiter to use.
+   * @return The formatted results.
+   */
+  private String standardFormat(List<CodeCompleteResult> results, String delimiter)
+  {
     StringBuffer buffer = new StringBuffer();
     if(results != null){
       for(CodeCompleteResult result : results){
@@ -54,13 +77,13 @@ public class CodeCompleteFilter
           buffer.append('\n');
         }
 
-        buffer.append(result.getCompletion()).append(delimeter);
+        buffer.append(result.getCompletion()).append(delimiter);
 
         if(result.getShortDescription() != null){
           buffer.append(result.getShortDescription());
         }
 
-        buffer.append(delimeter);
+        buffer.append(delimiter);
 
         if(result.getDescription() != null){
           buffer.append(result.getDescription());
@@ -68,5 +91,94 @@ public class CodeCompleteFilter
       }
     }
     return buffer.toString();
+  }
+
+  /**
+   * Print the results in a compact format.
+   *
+   * @param results The results in compact format.
+   * @param delimiter The delimiter to use.
+   * @return The formatted results.
+   */
+  private String compactFormat(List<CodeCompleteResult> results, String delimiter)
+  {
+    StringBuffer buffer = new StringBuffer();
+    if(results.size() > 0){
+      CodeCompleteResult result = (CodeCompleteResult)results.get(0);
+      String lastWord = result.getCompletion();
+      Overload overload = new Overload(delimiter);
+      overload.add(result);
+
+      for(int ii = 1; ii < results.size(); ii++){
+        result = (CodeCompleteResult)results.get(ii);
+        if(result.getCompletion().equals(lastWord)){
+          overload.add(result);
+        }else{
+          if(buffer.length() > 0){
+            buffer.append('\n');
+          }
+          buffer.append(overload);
+          overload.clear();
+          overload.add(result);
+        }
+        lastWord = result.getCompletion();
+      }
+      if(buffer.length() > 0){
+        buffer.append('\n');
+      }
+      buffer.append(overload);
+    }
+    return buffer.toString();
+  }
+
+  private class Overload
+  {
+    private String delimiter;
+    private String word;
+    private String menu;
+    private ArrayList<CodeCompleteResult> list =
+      new ArrayList<CodeCompleteResult>();
+
+    public Overload(String delimiter)
+    {
+      this.delimiter = delimiter;
+    }
+
+    public void add(CodeCompleteResult result)
+    {
+      if(list.size() == 0){
+        word = result.getCompletion();
+        menu = result.getShortDescription();
+      }
+      list.add(result);
+    }
+
+    public void clear()
+    {
+      list.clear();
+    }
+
+    public String toString()
+    {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append(word).append(delimiter);
+      if(list.size() > 1){
+        buffer.append("Overloaded, see preview...");
+
+        StringBuffer info = new StringBuffer();
+        for (int ii = 0; ii < list.size(); ii++){
+          CodeCompleteResult result = (CodeCompleteResult)list.get(ii);
+          if(info.length() > 0){
+            info.append("<br/>");
+          }
+          info.append(result.getShortDescription());
+        }
+        buffer.append(delimiter).append(info);
+      }else if(list.size() > 0){
+        buffer.append(menu).append(delimiter).append(menu);
+      }
+
+      return buffer.toString();
+    }
   }
 }

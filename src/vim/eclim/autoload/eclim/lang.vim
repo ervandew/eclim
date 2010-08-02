@@ -28,9 +28,9 @@
   let s:validate_command = '-command <type>_validate -p "<project>" -f "<file>"'
 " }}}
 
-" CodeComplete(command, findstart, base) {{{
+" CodeComplete(command, findstart, base, [options]) {{{
 " Handles code completion.
-function! eclim#lang#CodeComplete(command, findstart, base)
+function! eclim#lang#CodeComplete(command, findstart, base, ...)
   if a:findstart
     " update the file before vim makes any changes.
     call eclim#util#ExecWithoutAutocmds('silent update')
@@ -68,6 +68,12 @@ function! eclim#lang#CodeComplete(command, findstart, base)
     let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<offset>', offset, '')
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+    if a:0
+      let options = a:1
+      if has_key(options, 'layout')
+        let command = substitute(command, '<layout>', options.layout, '')
+      endif
+    endif
 
     let completions = []
     let results = split(eclim#ExecuteEclim(command), '\n')
@@ -98,6 +104,7 @@ function! eclim#lang#CodeComplete(command, findstart, base)
           \ 'word': word,
           \ 'menu': menu,
           \ 'info': info,
+          \ 'dup': 1
         \ }
 
       call add(completions, dict)

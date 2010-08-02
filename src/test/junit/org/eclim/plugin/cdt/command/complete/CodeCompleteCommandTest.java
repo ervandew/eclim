@@ -50,7 +50,7 @@ public class CodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "140", "-e", "utf-8"
+      "-o", "140", "-e", "utf-8", "-l", "standard"
     });
 
     System.out.println(result);
@@ -75,7 +75,7 @@ public class CodeCompleteCommandTest
 
     String result = Eclim.execute(new String[]{
       "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "156", "-e", "utf-8"
+      "-o", "156", "-e", "utf-8", "-l", "standard"
     });
 
     System.out.println(result);

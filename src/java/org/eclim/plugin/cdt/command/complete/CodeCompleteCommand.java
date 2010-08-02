@@ -70,7 +70,8 @@ import org.eclipse.ui.part.FileEditorInput;
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
     "REQUIRED o offset ARG," +
-    "REQUIRED e encoding ARG"
+    "REQUIRED e encoding ARG," +
+    "REQUIRED l layout ARG"
 )
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand

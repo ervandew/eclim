@@ -33,8 +33,8 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_c'
 endfunction " }}}
 
-" TestComplete() {{{
-function! TestComplete()
+" TestCComplete() {{{
+function! TestCComplete()
   edit! src/test_complete_vunit.c
   call PeekRedir()
 
@@ -59,6 +59,33 @@ function! TestComplete()
   call VUAssertEquals(len(results), 2, 'Wrong number of results.')
   call VUAssertEquals('EXIT_FAILURE', results[0].word, 'Wrong result.')
   call VUAssertEquals('EXIT_SUCCESS', results[1].word, 'Wrong result.')
+endfunction " }}}
+
+" TestCppComplete() {{{
+function! TestCppComplete()
+  edit! src/test_complete.cpp
+  call PeekRedir()
+
+  call cursor(6, 5)
+  let start = eclim#c#complete#CodeComplete(1, '')
+  call VUAssertEquals(4, start, 'Wrong starting column.')
+
+  let g:EclimCCompleteLayout = 'standard'
+  let results = eclim#c#complete#CodeComplete(0, '')
+  call PeekRedir()
+  echo 'results = ' . string(results)
+  call VUAssertEquals(len(results), 4, 'Wrong number of results.')
+  call VUAssertEquals('Test(', results[0].word, 'Wrong first result.')
+  call VUAssertEquals('test(', results[1].word, 'Wrong second result.')
+  call VUAssertEquals('test(', results[2].word, 'Wrong third result.')
+
+  let g:EclimCCompleteLayout = 'compact'
+  let results = eclim#c#complete#CodeComplete(0, '')
+  call PeekRedir()
+  echo 'results = ' . string(results)
+  call VUAssertEquals(len(results), 3, 'Wrong number of results.')
+  call VUAssertEquals('Test(', results[0].word, 'Wrong first result.')
+  call VUAssertEquals('test(', results[1].word, 'Wrong second result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
