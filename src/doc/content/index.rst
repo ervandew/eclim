@@ -102,6 +102,21 @@ News
 ==================
 
 -----------
+2010-08-01
+-----------
+
+| **Eclim 1.6.0** is now available.
+| The most notable changes are:
+
+* Eclim has been upgraded to support Eclipse 3.6 (Helios).
+
+  .. note::
+
+    Eclim now **requires** Eclipse 3.6.
+
+You can view the :ref:`release notes <1.6.0>` for more info.
+
+-----------
 2010-06-26
 -----------
 

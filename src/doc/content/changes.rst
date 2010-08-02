@@ -16,6 +16,21 @@
 History of Changes
 ==================
 
+.. _1.6.0:
+
+1.6.0 (Aug. 01, 2010)
+----------------------
+
+Bug Fixes:
+  - Several bug fixes for eclipse 3.6 (Helios) compatability.
+  - Various other bug fixes.
+
+Eclipse:
+  - Eclim now requires the latest version of eclipse (Helios, 3.6).
+
+Common:
+  - :ref:`:ProjectTree <:ProjectTree>` now supports eclipse resource links.
+
 .. _1.5.8:
 
 1.5.8 (Jun. 26, 2010)
