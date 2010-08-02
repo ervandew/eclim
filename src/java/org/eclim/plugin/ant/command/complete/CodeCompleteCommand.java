@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -23,6 +26,7 @@ import org.eclim.command.CommandLine;
 import org.eclim.plugin.ant.util.AntUtils;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
+import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclipse.ant.internal.ui.model.AntModel;
 
@@ -45,6 +49,20 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  /**
+   * {@inheritDoc}
+   * @see AbstractCodeCompleteCommand#createCodeCompletionResult(ICompletionProposal)
+   */
+  @Override
+  protected CodeCompleteResult createCodeCompletionResult(
+      ICompletionProposal proposal)
+  {
+    return new AntCodeCompleteResult(
+        getCompletion(proposal),
+        getDescription(proposal),
+        getShortDescription(proposal));
+  }
+
   /**
    * {@inheritDoc}
    * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
@@ -71,5 +89,52 @@ public class CodeCompleteCommand
       completion = completion.substring(0, index);
     }
     return completion;
+  }
+
+  private class AntCodeCompleteResult
+    extends CodeCompleteResult
+  {
+
+    /**
+     * @see CodeCompleteResult#CodeCompleteResult(String,String,String)
+     */
+    public AntCodeCompleteResult(
+        String completion, String description, String shortDescription)
+    {
+      super(completion, description, shortDescription);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see CodeCompleteResult#equals(Object)
+     */
+    @Override
+    public boolean equals(Object other)
+    {
+      if (!(other instanceof AntCodeCompleteResult)) {
+        return false;
+      }
+      if (this == other) {
+        return true;
+      }
+      AntCodeCompleteResult result = (AntCodeCompleteResult)other;
+      boolean equal = new EqualsBuilder()
+        .append(getCompletion(), result.getCompletion())
+        .isEquals();
+
+      return equal;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see CodeCompleteResult#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+      return new HashCodeBuilder(18, 40)
+        .append(getCompletion())
+        .toHashCode();
+    }
   }
 }

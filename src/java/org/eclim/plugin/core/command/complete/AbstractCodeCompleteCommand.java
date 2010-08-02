@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,13 +71,9 @@ public abstract class AbstractCodeCompleteCommand
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
     if(proposals != null){
-      for (int ii = 0; ii < proposals.length; ii++){
-        if(acceptProposal(proposals[ii])){
-          CodeCompleteResult ccresult = new CodeCompleteResult(
-              getCompletion(proposals[ii]),
-              getDescription(proposals[ii]),
-              getShortDescription(proposals[ii]));
-
+      for (ICompletionProposal proposal : proposals){
+        if(acceptProposal(proposal)){
+          CodeCompleteResult ccresult = createCodeCompletionResult(proposal);
           if(!results.contains(ccresult)){
             results.add(ccresult);
           }
@@ -86,6 +82,21 @@ public abstract class AbstractCodeCompleteCommand
     }
 
     return CodeCompleteFilter.instance.filter(commandLine, results);
+  }
+
+  /**
+   * Constructs a new CodeCompleteResult for the supplied proposal.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return The CodeCompleteResult.
+   */
+  protected CodeCompleteResult createCodeCompletionResult(
+      ICompletionProposal proposal)
+  {
+    return new CodeCompleteResult(
+        getCompletion(proposal),
+        getDescription(proposal),
+        getShortDescription(proposal));
   }
 
   /**
