@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -94,6 +94,7 @@ function! eclim#common#buffers#Buffers()
   nnoremap <silent> <buffer> S :call <SID>BufferOpen('split')<cr>
   nnoremap <silent> <buffer> T :call <SID>BufferOpen('tablast \| tabnew')<cr>
   nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
+  nnoremap <silent> <buffer> R :Buffers<cr>
 
   " assign to buffer var to get around weird vim issue passing list containing
   " a string w/ a '<' in it on execution of mapping.
@@ -103,6 +104,7 @@ function! eclim#common#buffers#Buffers()
       \ 'S - open in a new split window',
       \ 'T - open in a new tab',
       \ 'D - delete the buffer',
+      \ 'R - refresh the buffer list',
     \ ]
   nnoremap <buffer> <silent> ?
     \ :call eclim#help#BufferHelp(b:buffers_help, 'vertical', 40)<cr>
