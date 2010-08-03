@@ -157,6 +157,21 @@ function! eclim#display#maximize#MaximizeUpdate()
   endif
 endfunction " }}}
 
+" MaximizeRefresh() {{{
+function! eclim#display#maximize#MaximizeRefresh()
+  let maximized = eclim#display#maximize#GetMaximizedWindow()
+  if maximized
+    let curwin = winnr()
+    try
+      " simply switching to the window temporarily will trigger the
+      " maximization update.
+      exec maximized . 'winc w'
+    finally
+      exec curwin . 'winc w'
+    endtry
+  endif
+endfunction " }}}
+
 " GetMaximizedWindow() {{{
 function! eclim#display#maximize#GetMaximizedWindow()
   let winend = winnr('$')
@@ -204,6 +219,7 @@ function! s:EnableMaximizeAutoCommands()
       \ call eclim#display#maximize#AdjustFixedWindow(g:MaximizeQuickfixHeight, 1)
     autocmd BufUnload * call s:CloseFixedWindow()
     autocmd BufWinEnter,WinEnter * nested call eclim#display#maximize#MaximizeUpdate()
+    autocmd BufDelete * nested call eclim#display#maximize#MaximizeRefresh()
   augroup END
 endfunction " }}}
 
@@ -253,7 +269,7 @@ endfunction " }}}
 " Reminimize() {{{
 " Invoked when changing windows to ensure that any minimized windows are
 " returned to their minimized state.
-function eclim#display#maximize#Reminimize()
+function! eclim#display#maximize#Reminimize()
   let curwinnum = winnr()
   let winend = winnr('$')
   let winnum = 1
