@@ -92,7 +92,35 @@ endfunction " }}}
 "   empty list for no filtering.
 function! eclim#tree#Tree(name, roots, aliases, expand, filters)
   silent exec 'edit ' . escape(a:name, ' ')
-  setlocal modifiable
+  setlocal ft=tree
+  setlocal nowrap
+  setlocal noswapfile
+  setlocal nobuflisted
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal foldmethod=manual
+  setlocal foldtext=getline(v:foldstart)
+
+  call s:Mappings()
+  call eclim#tree#Syntax()
+
+  " initialize autocmds before loading custom settings so that settings can
+  " add autocmd events.
+  augroup eclim_tree
+    "autocmd! BufEnter,User <buffer>
+    autocmd BufEnter <buffer> silent doautocmd eclim_tree User <buffer>
+    exec 'autocmd BufDelete,BufUnload <buffer> ' .
+      \ 'autocmd! eclim_tree * <buffer=' . bufnr('%') . '>'
+  augroup END
+
+  " register setting prior to listing any directories
+  if exists("g:TreeSettingsFunction")
+    let Settings = function(g:TreeSettingsFunction)
+    call Settings()
+    let s:settings_loaded = 1
+  endif
+
+  setlocal noreadonly modifiable
   silent 1,$delete _
 
   let roots = map(copy(a:roots), 'substitute(v:val, "\\([^/]\\)$", "\\1/", "")')
@@ -116,13 +144,6 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
 
   call append(line('$'), roots)
 
-  " register setting prior to listing any directories
-  if exists("g:TreeSettingsFunction")
-    let Settings = function(g:TreeSettingsFunction)
-    call Settings()
-    let s:settings_loaded = 1
-  endif
-
   if a:expand
     let index = len(roots)
     while index > 0
@@ -132,30 +153,10 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
     endwhile
   endif
 
-  setlocal noreadonly modifiable
-
   " delete empty first line.
+  setlocal modifiable
   1,1delete _
-
-  setlocal ft=tree
-  setlocal nowrap
-  setlocal noswapfile
-  setlocal nobuflisted
-  setlocal buftype=nofile
-  setlocal bufhidden=delete
-  setlocal foldmethod=manual
-  setlocal foldtext=getline(v:foldstart)
   setlocal nomodifiable
-
-  call s:Mappings()
-  call eclim#tree#Syntax()
-
-  augroup eclim_tree
-    autocmd! BufEnter,User <buffer>
-    autocmd BufEnter <buffer> doautocmd eclim_tree User <buffer>
-    exec 'autocmd BufDelete,BufUnload <buffer> ' .
-      \ 'autocmd! eclim_tree * <buffer=' . bufnr('%') . '>'
-  augroup END
 endfunction " }}}
 
 " ToggleCollapsedDir(Expand) {{{
@@ -1180,7 +1181,7 @@ function! s:Mappings()
 
   nmap <buffer> <silent> D    :call eclim#tree#Mkdir()<cr>
 
-  nnoremap <buffer> <silent> <c-l> <c-l>:doautocmd eclim_tree User <buffer><cr>
+  nnoremap <buffer> <silent> <c-l> <c-l>:silent doautocmd eclim_tree User <buffer><cr>
 
   command! -nargs=1 -complete=dir -buffer CD :call eclim#tree#SetRoot('<args>')
   command! -nargs=1 -complete=dir -buffer Cd :call eclim#tree#SetRoot('<args>')
