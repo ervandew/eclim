@@ -29,6 +29,9 @@
         \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
       \ ]
   endif
+  if !exists('g:EclimProjectTreePathEcho')
+    let g:EclimProjectTreePathEcho = 1
+  endif
 " }}}
 
 " Script Variables {{{
@@ -296,6 +299,17 @@ function! s:InfoLine()
   setlocal nomodifiable
 endfunction " }}}
 
+" s:PathEcho() {{{
+function! s:PathEcho()
+  let path = eclim#tree#GetPath()
+  let path = substitute(path, eclim#tree#GetRoot(), '', '')
+  if path !~ '^"'
+    call eclim#util#WideMessage('echo', path)
+  else
+    call eclim#util#WideMessage('echo', '')
+  endif
+endfunction " }}}
+
 " s:OpenFile(action) " {{{
 function! s:OpenFile(action)
   let path = eclim#tree#GetPath()
@@ -339,6 +353,9 @@ function! eclim#project#tree#ProjectTreeSettings()
 
   augroup eclim_tree
     autocmd User <buffer> call <SID>InfoLine()
+    if g:EclimProjectTreePathEcho
+      autocmd CursorMoved <buffer> call <SID>PathEcho()
+    endif
   augroup END
 endfunction " }}}
 

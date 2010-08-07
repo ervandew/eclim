@@ -341,6 +341,13 @@ Vim's command line completion to complete the project name.
     When non 0, the path of the current file will be expanded in the project tree
     when the project tree window is opened.
 
+  .. _g\:EclimProjectTreePathEcho:
+
+  - **g:EclimProjectTreePathEcho** (Default: 1)
+
+    When non 0, the root relative path of the node under the cursor will be
+    echoed as you move the cursor around.
+
   .. _g\:EclimProjectTreeSharedInstance:
 
   - **g:EclimProjectTreeSharedInstance** (Default: 0)
