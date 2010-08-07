@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,11 @@ Overview
 The primary goal of eclim is to bring Eclipse_ functionality to the Vim_
 editor.
 
-For more details, please visit eclim.org_.
+* For more details, please visit eclim.org_.
+* If you have any questions, you can post them to the `eclim user mailing
+  list`_.
+* If you would like to report a bug or feature request, feel free to create a
+  new issue_ here on github.
 
 .. _emacs:
 
@@ -44,6 +48,8 @@ License
 Eclim is released under the GPLv3_.
 
 .. _eclim.org: http://eclim.org
+.. _eclim user mailing list: http://groups.google.com/group/eclim-user
+.. _issue: http://github.com/ervandew/eclim/issues
 .. _eclipse: http://eclipse.org
 .. _vim: http://vim.org
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
