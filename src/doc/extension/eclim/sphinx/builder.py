@@ -16,19 +16,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import re
 
-from os import path
-
 from docutils import nodes
 
 from eclim.pygments import GroovyLexer
-from eclim.sphinx.environment import EclimBuildEnvironment, EclimHtmlBuildEnvironment
 
 from sphinx import addnodes, highlighting
-from sphinx.builders import ENV_PICKLE_FILENAME
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.builders.text import TextBuilder
-from sphinx.util import clean_astext, url_re
-from sphinx.util.console import bold
+from sphinx.util import url_re
+from sphinx.util.nodes import clean_astext
 from sphinx.writers.text import TextTranslator, TextWriter
 
 class EclimBuilder(StandaloneHTMLBuilder):
@@ -38,31 +34,6 @@ class EclimBuilder(StandaloneHTMLBuilder):
     StandaloneHTMLBuilder.__init__(self, *args, **kwargs)
     self.toctrees = {}
     self.index_node = nodes.list_item('', addnodes.compact_paragraph(''))
-
-  def load_env(self):
-    """
-    Copied from sphinx.builders.Builder and just replaces 'BuildEnvironment' w/
-    'EclimHtmlBuildEnvironment'.
-    """
-    if self.env:
-      return
-    if not self.freshenv:
-      try:
-        self.info(bold('loading pickled environment... '), nonl=True)
-        self.env = EclimHtmlBuildEnvironment.frompickle(self.config,
-          path.join(self.doctreedir, ENV_PICKLE_FILENAME))
-        self.info('done')
-      except Exception, err:
-        if type(err) is IOError and err.errno == 2:
-          self.info('not found')
-        else:
-          self.info('failed: %s' % err)
-        self.env = EclimHtmlBuildEnvironment(self.srcdir, self.doctreedir, self.config)
-        self.env.find_files(self.config)
-    else:
-      self.env = EclimHtmlBuildEnvironment(self.srcdir, self.doctreedir, self.config)
-      self.env.find_files(self.config)
-    self.env.set_warnfunc(self.warn)
 
   def write(self, build_docnames, updated_docnames, method='update'):
     names = build_docnames and updated_docnames and \
@@ -83,7 +54,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
     )
 
   def get_doc_context(self, docname, body, metatags):
-    """Collect items for the template context of a page."""
+    """ Copied from StandaloneHTMLBuilder, changes noted. """
     # find out relations
     prev = next = None
     parents = []
@@ -184,7 +155,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
     for (title, ref) in refs:
       try:
         if url_re.match(ref):
-          reference = nodes.reference('', '',
+          reference = nodes.reference('', '', internal=False,
                                       refuri=ref, anchorname='',
                                       *[nodes.Text(title)])
           para = addnodes.compact_paragraph('', '', reference)
@@ -196,7 +167,7 @@ class EclimBuilder(StandaloneHTMLBuilder):
           ref = toctreenode['parent']
           if not title:
             title = clean_astext(self.titles[ref])
-          reference = nodes.reference('', '',
+          reference = nodes.reference('', '', internal=True,
                                       refuri=ref,
                                       anchorname='',
                                       *[nodes.Text(title)])
@@ -267,42 +238,12 @@ class EclimBuilder(StandaloneHTMLBuilder):
 class VimdocBuilder(TextBuilder):
   name = 'vimdoc'
 
-  def load_env(self):
-    """
-    Copied from sphinx.builder.Builder and just replaces 'BuildEnvironment' w/
-    'EclimBuildEnvironment'.
-    """
-    if self.env:
-      return
-    if not self.freshenv:
-      try:
-        self.info(bold('trying to load pickled env... '), nonl=True)
-        self.env = EclimBuildEnvironment.frompickle(self.config,
-          path.join(self.doctreedir, ENV_PICKLE_FILENAME))
-        self.info('done')
-      except Exception, err:
-        if type(err) is IOError and err.errno == 2:
-          self.info('not found')
-        else:
-          self.info('failed: %s' % err)
-        self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
-        self.env.find_files(self.config)
-    else:
-      self.env = EclimBuildEnvironment(self.srcdir, self.doctreedir, self.config)
-      self.env.find_files(self.config)
-    self.env.set_warnfunc(self.warn)
-
   def prepare_writing(self, docnames):
     """
     Straight copy from TextBuilder, just using VimdocWriter instead of
     TextWriter.
     """
     self.writer = VimdocWriter(self)
-
-  def fully_normalize_name(name):
-    """Return a case- and whitespace-normalized name."""
-    return ' '.join(name.split())
-
 
 class VimdocWriter(TextWriter):
 

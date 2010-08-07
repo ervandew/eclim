@@ -14,14 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import re
-
 from docutils import nodes
 
 from sphinx import addnodes
-from sphinx.directives import additional_xref_types
-from sphinx.environment import BuildEnvironment, NoUri, SphinxContentsFilter
-from sphinx.util import docname_join
+from sphinx.environment import BuildEnvironment, SphinxContentsFilter
 
 class EclimBuildEnvironment(BuildEnvironment):
 
@@ -49,200 +45,6 @@ class EclimBuildEnvironment(BuildEnvironment):
 # EV: end remove inline site toc
 
     return doctree
-
-  def resolve_references(self, doctree, fromdocname, builder):
-    """
-    Straight copy from BuildEnvironment. Changes noted.
-    """
-    reftarget_roles = set(('token', 'term', 'citation'))
-    # add all custom xref types too
-    reftarget_roles.update(i[0] for i in additional_xref_types.values())
-
-    for node in doctree.traverse(addnodes.pending_xref):
-      contnode = node[0].deepcopy()
-      newnode = None
-
-      typ = node['reftype']
-      target = node['reftarget']
-
-      try:
-        if typ == 'ref':
-          if node['refcaption']:
-            # reference to anonymous label; the reference uses the supplied
-            # link caption
-            docname, labelid = self.anonlabels.get(target, ('',''))
-            sectname = node.astext()
-
-            # EV: hack to support g:MyVar refuri in vim docs
-            if not isinstance(self, EclimHtmlBuildEnvironment) and\
-               labelid.startswith('g-'):
-              labelid = re.sub(r'.*<(.*)>.*', r'\1', node.rawsource)
-
-            if not docname:
-              self.warn(fromdocname, 'undefined label: %s' % target,
-                        node.line)
-          else:
-            # reference to the named label; the final node will contain the
-            # section name after the label
-            docname, labelid, sectname = self.labels.get(target, ('','',''))
-
-# EV: check anonlabels as well so i can do this> :ref:`:VcsLog`
-            if not docname:
-              docname, labelid = self.anonlabels.get(target, ('',''))
-              sectname = node.astext()
-
-            if not docname:
-              self.warn(
-                  fromdocname,
-                  'undefined label: %s' % target + ' -- if you '
-                  'don\'t give a link caption the label must '
-                  'precede a section header.', node.line)
-          if docname:
-            newnode = nodes.reference('', '')
-            innernode = nodes.emphasis(sectname, sectname)
-            if docname == fromdocname:
-              newnode['refid'] = labelid
-            else:
-              # set more info in contnode in case the get_relative_uri call
-              # raises NoUri, the builder will then have to resolve these
-              contnode = addnodes.pending_xref('')
-              contnode['refdocname'] = docname
-              contnode['refsectname'] = sectname
-              newnode['refuri'] = builder.get_relative_uri(
-                  fromdocname, docname)
-              if labelid:
-                  newnode['refuri'] += '#' + labelid
-            newnode.append(innernode)
-          else:
-            newnode = contnode
-        elif typ == 'doc':
-          # directly reference to document by source name;
-          # can be absolute or relative
-          docname = docname_join(fromdocname, target)
-          if docname not in self.all_docs:
-            self.warn(fromdocname, 'unknown document: %s' % docname, node.line)
-            newnode = contnode
-          else:
-            if node['refcaption']:
-              # reference with explicit title
-              caption = node.astext()
-            else:
-              caption = self.titles[docname].astext()
-            innernode = nodes.emphasis(caption, caption)
-            newnode = nodes.reference('', '')
-            newnode['refuri'] = builder.get_relative_uri(fromdocname, docname)
-            newnode.append(innernode)
-        elif typ == 'keyword':
-          # keywords are referenced by named labels
-          docname, labelid, _ = self.labels.get(target, ('','',''))
-          if not docname:
-            #self.warn(fromdocname, 'unknown keyword: %s' % target)
-            newnode = contnode
-          else:
-            newnode = nodes.reference('', '')
-            if docname == fromdocname:
-              newnode['refid'] = labelid
-            else:
-              newnode['refuri'] = builder.get_relative_uri(
-                  fromdocname, docname) + '#' + labelid
-              newnode.append(contnode)
-        elif typ == 'option':
-          progname = node['refprogram']
-          docname, labelid = self.progoptions.get((progname, target), ('', ''))
-          if not docname:
-            newnode = contnode
-          else:
-            newnode = nodes.reference('', '')
-            if docname == fromdocname:
-              newnode['refid'] = labelid
-            else:
-              newnode['refuri'] = builder.get_relative_uri(
-                fromdocname, docname) + '#' + labelid
-            newnode.append(contnode)
-        elif typ in reftarget_roles:
-          docname, labelid = self.reftargets.get((typ, target), ('', ''))
-          if not docname:
-            if typ == 'term':
-              self.warn(node['refdoc'],
-                        'term not in glossary: %s' % target,
-                        node.line)
-            elif typ == 'citation':
-              self.warn(node['refdoc'],
-                        'citation not found: %s' % target,
-                        node.line)
-            newnode = contnode
-          else:
-            newnode = nodes.reference('', '')
-            if docname == fromdocname:
-              newnode['refid'] = labelid
-            else:
-              newnode['refuri'] = builder.get_relative_uri(
-                  fromdocname, docname, typ) + '#' + labelid
-            newnode.append(contnode)
-        elif typ == 'mod' or typ == 'obj' and target in self.modules:
-          docname, synopsis, platform, deprecated = \
-              self.modules.get(target, ('','','', ''))
-          if not docname:
-            newnode = builder.app.emit_firstresult(
-              'missing-reference', self, node, contnode)
-            if not newnode:
-              newnode = contnode
-          elif docname == fromdocname:
-            # don't link to self
-            newnode = contnode
-          else:
-            newnode = nodes.reference('', '')
-            newnode['refuri'] = builder.get_relative_uri(
-                fromdocname, docname) + '#module-' + target
-            newnode['reftitle'] = '%s%s%s' % (
-                (platform and '(%s) ' % platform),
-                synopsis, (deprecated and ' (deprecated)' or ''))
-            newnode.append(contnode)
-        elif typ in self.descroles:
-          # "descrefs"
-          modname = node['modname']
-          clsname = node['classname']
-          searchorder = node.hasattr('refspecific') and 1 or 0
-          name, desc = self.find_desc(modname, clsname,
-                                      target, typ, searchorder)
-          if not desc:
-            newnode = builder.app.emit_firstresult(
-              'missing-reference', self, node, contnode)
-            if not newnode:
-              newnode = contnode
-          else:
-            newnode = nodes.reference('', '')
-            if desc[0] == fromdocname:
-              newnode['refid'] = name
-            else:
-              newnode['refuri'] = (
-                  builder.get_relative_uri(fromdocname, desc[0])
-                  + '#' + name)
-            newnode['reftitle'] = name
-            newnode.append(contnode)
-        else:
-          raise RuntimeError('unknown xfileref node encountered: %s' % node)
-      except NoUri:
-        newnode = contnode
-      if newnode:
-        node.replace_self(newnode)
-
-    for node in doctree.traverse(addnodes.only):
-      try:
-        ret = builder.tags.eval_condition(node['expr'])
-      except Exception, err:
-        self.warn(fromdocname, 'exception while evaluating only '
-                  'directive expression: %s' % err, node.line)
-        node.replace_self(node.children)
-      else:
-        if ret:
-          node.replace_self(node.children)
-        else:
-          node.replace_self([])
-
-    # allow custom references to be resolved
-    builder.app.emit('doctree-resolved', doctree, fromdocname)
-
 
 class EclimHtmlBuildEnvironment(EclimBuildEnvironment):
 
@@ -288,10 +90,7 @@ class EclimHtmlBuildEnvironment(EclimBuildEnvironment):
             # important: do the inventory stuff
             self.note_toctree(docname, toctreenode)
           continue
-
         title = sectionnode[0]
-# EV: set title_visited = True
-#        title_visited = True
         # copy the contents of the section title, but without references
         # and unnecessary stuff
         visitor = SphinxContentsFilter(document)
@@ -304,9 +103,9 @@ class EclimHtmlBuildEnvironment(EclimBuildEnvironment):
         else:
           anchorname = '#' + sectionnode['ids'][0]
         numentries[0] += 1
-        reference = nodes.reference('', '', refuri=docname,
-                                    anchorname=anchorname,
-                                    *nodetext)
+        reference = nodes.reference(
+          '', '', internal=True, refuri=docname,
+          anchorname=anchorname, *nodetext)
         para = addnodes.compact_paragraph('', '', reference)
         item = nodes.list_item('', para)
         if maxdepth == 0 or depth < maxdepth:

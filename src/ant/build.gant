@@ -581,7 +581,7 @@ target(name: 'docs'){
   mkdir(dir: 'build/doc/site')
 
   // generate site documention via sphinx
-  exec(executable: 'sphinx-build', failonerror: true, dir: '.'){
+  exec(executable: 'bin/sphinx', failonerror: true, dir: '.'){
     arg(line: '${sphinx.args} -b eclim src/doc/content build/doc/site')
   }
 

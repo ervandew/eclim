@@ -1,6 +1,7 @@
-build
-src/patch/*
-user.properties
 *.pyc
 *.swp
-.ant-targets-build.xml
+/.ant-targets-build.xml
+/.ropeproject
+/build
+/src/patch/*
+/user.properties
