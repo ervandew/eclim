@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -250,12 +250,13 @@ Here is a list of enhancements vs unimplemented features:
   methods and variables by object/class for easier viewing and navigation.
 - Supports denoting tags based on their visibiltiy (+public, -private, \*static,
   #protected).
+- Echoing of the current tag while scrolling through the taglist window, which
+  is helpful if the tag name doesn't fit in the width of taglist window.
 
 **Unimplemented features:**
 
 - Drop down list in gvim with the list of tags.
 - Tag re-sorting
-- Vim session support
 - Support for tags for more than one file in the taglist window.
 - ... possibly others.
 
@@ -286,6 +287,18 @@ configuration variables\:
           \ 't': 'target'
         \ }
       \ }
+
+
+Configuration
+--------------
+
+Vim Variables For TlistToo
+
+.. _g\:EclimTaglistEcho:
+
+- **g:EclimTaglistEcho** (Default: 1) -
+  If set to a non 0 values, when moving the cursor in the taglist window, the
+  name of the tag under the cursor will be echoed to the vim command line.
 
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273
