@@ -140,6 +140,12 @@ name in the eclipse tree and then selecting:
 
 .. image:: images/screenshots/eclipse/gvim_eclim_view.png
 
+.. note::
+  If you'd like to have the embedded gvim editor as the default for one or more
+  file types, you can configure it to be in your eclipse preferences:
+
+    Window > Preferences > General > Editors > File Associations
+
 The eclim installer should take care of locating your gvim installation for use
 inside of eclipse, but in the event that it could not locate it, you can set
 the location and other settings via the vimplugin preferences located under the
