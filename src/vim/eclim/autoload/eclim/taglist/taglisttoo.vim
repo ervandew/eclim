@@ -839,11 +839,18 @@ function! s:Window(types, tags, content)
   let filename = expand('%:t')
   let file_bufnr = bufnr('%')
 
-  let winnum = bufwinnr(g:TagList_title)
-  if winnum != -1
+  let buffers = {}
+  for bufnum in tabpagebuflist()
+    let name = bufname(bufnum)
+    if name != ''
+      let buffers[bufname(bufnum)] = bufnum
+    endif
+  endfor
+  if has_key(buffers, g:TagList_title)
+    let winnum = bufwinnr(buffers[g:TagList_title])
     exe winnum . 'wincmd w'
   else
-    call eclim#display#window#VerticalToolWindowOpen(g:TagList_title, 10)
+    call eclim#display#window#VerticalToolWindowOpen(g:TagList_title, 10, 1)
 
     setlocal filetype=taglist
     setlocal buftype=nofile

@@ -40,10 +40,10 @@ if !exists('g:VerticalToolWindowWidth')
 endif
 " }}}
 
-" VerticalToolWindowOpen(name, weight) {{{
+" VerticalToolWindowOpen(name, weight, [tablocal]) {{{
 " Handles opening windows in the vertical tool window on the left (taglist,
 " project tree, etc.)
-function! eclim#display#window#VerticalToolWindowOpen(name, weight)
+function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
   let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
   if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
     let taglist_window = -1
@@ -81,7 +81,17 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight)
 
   let escaped = substitute(
     \ a:name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
-  let bufnum = bufnr(escaped)
+  if a:0 && a:1
+    let bufnum = -1
+    for bnr in tabpagebuflist()
+      if bufname(bnr) == a:name
+        let bufnum = bnr
+        break
+      endif
+    endfor
+  else
+    let bufnum = bufnr(escaped)
+  endif
   let name = bufnum == -1 ? a:name : '+buffer' . bufnum
   silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . name)
 
