@@ -799,6 +799,14 @@ NOTES {{{
     $ make -f Make_cyg.mak gvim.exe PYTHON=C:/Python26 PYTHON_VER=26
     $ make -f Make_cyg.mak vim.exe GUI=no PYTHON=C:/Python26 PYTHON_VER=26
 
+    Building macvim on osx
+    http://code.google.com/p/macvim/wiki/Building
+    $ git clone git://repo.or.cz/MacVim.git vim7
+    $ cd vim7/src
+    $ ./configure --with-features=huge --enable-pythoninterp --with-macsdk=10.6
+    $ make
+    $ open MacVim/build/Release/MacVim.app/
+
     JRuby nailgun source:
     http://jruby.org/git?p=jruby.git;a=tree;f=tool/nailgun;hb=HEAD
 
