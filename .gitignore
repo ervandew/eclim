@@ -4,4 +4,7 @@
 /.ropeproject
 /build
 /src/patch/*
+/src/nailgun/config.log
+/src/nailgun/config.status
+/src/nailgun/Makefile
 /user.properties

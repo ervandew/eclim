@@ -152,6 +152,7 @@ target(name: 'build.eclipse'){
     fileset(dir: 'src/shell', includes: '**/*')
   }
   if(!Os.isFamily(Os.FAMILY_WINDOWS)){
+    exec(executable: 'configure', dir: 'src/nailgun', resolveexecutable: 'true')
     exec(executable: 'make', dir: 'src/nailgun')
     move(file: 'src/nailgun/ng',
         todir: '${build.plugins}/org.eclim_${eclim.version}/bin')

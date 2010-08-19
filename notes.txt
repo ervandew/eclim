@@ -799,6 +799,9 @@ NOTES {{{
     $ make -f Make_cyg.mak gvim.exe PYTHON=C:/Python26 PYTHON_VER=26
     $ make -f Make_cyg.mak vim.exe GUI=no PYTHON=C:/Python26 PYTHON_VER=26
 
+    JRuby nailgun source:
+    http://jruby.org/git?p=jruby.git;a=tree;f=tool/nailgun;hb=HEAD
+
   }}}
 
 }}}
