@@ -140,6 +140,10 @@ name in the eclipse tree and then selecting:
 
 .. image:: images/screenshots/eclipse/gvim_eclim_view.png
 
+Please note that if you want to use supported eclipse features (code
+completion, validation, searching, etc.) from the embedded gvim editor, you
+must have the :ref:`eclimd view <eclimd_headed>` open.
+
 .. note::
   If you'd like to have the embedded gvim editor as the default for one or more
   file types, you can configure it to be in your eclipse preferences:
