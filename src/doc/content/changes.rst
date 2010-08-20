@@ -16,6 +16,18 @@
 History of Changes
 ==================
 
+.. _1.6.1:
+
+1.6.1 (2010)
+----------------------
+
+Bug Fixes:
+  - Various bug fixes.
+
+Common:
+  - Added a :ref:`:TreeTab <:TreeTab>` command like :ref:`:ProjectTab
+    <:ProjectTab>` but for any arbitrary directory.
+
 .. _1.6.0:
 
 1.6.0 (Aug. 01, 2010)

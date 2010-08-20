@@ -382,16 +382,23 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectTab:
 
-- **:ProjectTab** project
+- **:ProjectTab** <project>
 
   Command to initialize a new vim tab with the project tree open and the tab
   relative working directory set to the project root.  This allows you to work
   on multiple projects within a single vim instance where each project is
   isolated to its own tab.
 
+.. _\:TreeTab:
+
+- **:TreeTab** <dir>
+
+  Like **:ProjectTree**, but opens a vim tab with a tree window for any
+  arbitrary directory.
+
 .. _\:ProjectGrep:
 
-- **:ProjectGrep** /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectGrep** /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Executes vimgrep using the supplied arguments from the root of the
   current project allowing you to run a project wide grep from any file
@@ -399,19 +406,19 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectGrepAdd:
 
-- **:ProjectGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectGrepAdd** /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like **:ProjectGrep** but using vimgrepadd instead.
 
 .. _\:ProjectLGrep:
 
-- **:ProjectLGrep** /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectLGrep** /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like **:ProjectGrep** but using lvimgrep instead.
 
 .. _\:ProjectLGrepAdd:
 
-- **:ProjectLGrepAdd** /<pattern>/ file_pattern [file_pattern ...]
+- **:ProjectLGrepAdd** /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like **:ProjectGrep** but using lvimgrepadd instead.
 

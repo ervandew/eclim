@@ -605,6 +605,27 @@ function! eclim#project#util#ProjectTab(project)
   call eclim#project#tree#ProjectTree(a:project)
 endfunction " }}}
 
+" TreeTab(title, dir) {{{
+" Like ProjectTab, but opens for an arbitrary directory.
+function! eclim#project#util#TreeTab(title, dir)
+  let dir = fnamemodify(a:dir, ':p')
+  let dir = substitute(dir, '/$', '', '')
+  if !isdirectory(dir)
+    call eclim#util#EchoError('Directory does not exist: ' . dir)
+    return
+  endif
+
+  if winnr('$') > 1 || expand('%') != '' ||
+   \ &modified || line('$') != 1 || getline(1) != ''
+    tablast | tabnew
+    if dir == expand('~')
+      tabmove 0
+    endif
+  endif
+  call eclim#common#util#Tcd(dir)
+  call eclim#project#tree#ProjectTreeOpen([dir], [dir], a:title)
+endfunction " }}}
+
 " Todo() {{{
 " Show the todo tags of the curent file in the location list.
 function! eclim#project#util#Todo()
