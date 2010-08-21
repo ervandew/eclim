@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2005 - 2009  Eric Van Dewoestine
+# Copyright (C) 2005 - 2010  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,14 +26,15 @@ FILEPATH="$0"
 # readlink -f is easier, but not supported on mac or bsd
 while [ -h "$FILEPATH" ] ; do
   PREV=$FILEPATH
-  FILEPATH=`readlink "$FILEPATH"`
+  # readlink doesn't appear to be standard on solaris
+  #FILEPATH=`readlink "$FILEPATH"`
+  FILEPATH=`ls -l $FILEPATH | awk '{ print $NF }'`
   if [ -z "$FILEPATH" -o "$FILEPATH" = "$PREV" ] ; then
     FILEPATH=$PREV
     break
   fi
 
-  # handle relative symlinks (neither eclim build nor installer create these,
-  # so must have been created by the user or 3rd party installer)
+  # handle relative symlinks
   if [ ! -f "$FILEPATH" ] ; then
     PREVDIR=`dirname "$PREV"`
     FILEPATH=$PREVDIR/$FILEPATH
