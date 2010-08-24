@@ -376,6 +376,32 @@ function! eclim#util#GetPathEntry(file)
   return 0
 endfunction " }}}
 
+" GetVimWidth() {{{
+function! eclim#util#GetVimWidth()
+  let curwin = winnr()
+  let width = 0
+  try
+    let lastwin = curwin
+    noautocmd winc h
+    while winnr() != lastwin
+      let lastwin = winnr()
+      noautocmd winc h
+    endwhile
+
+    let width = winwidth(lastwin)
+
+    noautocmd winc l
+    while winnr() != lastwin
+      let lastwin = winnr()
+      let width += winwidth(lastwin) + 1
+      noautocmd winc l
+    endwhile
+  finally
+    noautocmd exec curwin . 'winc w'
+  endtry
+  return width
+endfunction " }}}
+
 " GetVisualSelection(line1, line2, default) {{{
 " Returns the contents of, and then clears, the last visual selection.
 " If default is set, the default range will be honor.
@@ -1183,6 +1209,13 @@ function! eclim#util#WideMessage(command, message)
 
   set noruler noshowcmd
   redraw
+  let width = eclim#util#GetVimWidth()
+  if len(message) > width
+    let remove = len(message) - width
+    let start = (len(message) / 2) - (remove / 2) - 4
+    let end = start + remove + 4
+    let message = substitute(message, '\%' . start . 'c.*\%' . end . 'c', '...', '')
+  endif
   exec a:command . ' "' . escape(message, '"\') . '"'
 
   let &ruler = saved_ruler
