@@ -759,9 +759,9 @@ endfunction " }}}
 function! s:EchoTag()
   let tag_info = s:GetTagInfo()
   if len(tag_info)
-    echom 'tag: ' . tag_info[0]
+    echo 'tag: ' . tag_info[0]
   else
-    echom ''
+    echo ''
   endif
 endfunction " }}}
 
