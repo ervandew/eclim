@@ -100,6 +100,7 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
   setlocal bufhidden=delete
   setlocal foldmethod=manual
   setlocal foldtext=getline(v:foldstart)
+  setlocal sidescrolloff=0
 
   call s:Mappings()
   call eclim#tree#Syntax()
