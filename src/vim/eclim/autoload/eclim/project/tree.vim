@@ -301,6 +301,10 @@ endfunction " }}}
 
 " s:PathEcho() {{{
 function! s:PathEcho()
+  if mode() != 'n'
+    return
+  endif
+
   let path = eclim#tree#GetPath()
   let path = substitute(path, eclim#tree#GetRoot(), '', '')
   if path !~ '^"'

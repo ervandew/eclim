@@ -963,6 +963,10 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError()
+  if mode() != 'n'
+    return
+  endif
+
   let message = eclim#util#GetLineError(line('.'))
   if message != ''
     " remove any new lines

@@ -413,6 +413,10 @@ endfunction " }}}
 
 " s:AnnotateInfo() {{{
 function! s:AnnotateInfo()
+  if mode() != 'n'
+    return
+  endif
+
   if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
     call eclim#util#WideMessage('echo', b:vcs_annotations[line('.') - 1])
   endif
