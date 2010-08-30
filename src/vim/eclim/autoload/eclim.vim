@@ -114,7 +114,12 @@ function! eclim#ExecuteEclim(command, ...)
       else
         let error = error . "\n" .
           \ 'while executing command (port: ' . port . '): ' . command
-        call eclim#util#EchoError(error)
+        " if we are not in an autocmd, echo the error, otherwise just log it.
+        if expand('<amatch>') == ''
+          call eclim#util#EchoError(error)
+        else
+          call eclim#util#EchoDebug(error)
+        endif
       endif
     endif
     return

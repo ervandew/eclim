@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,21 @@ Troubleshooting
 The purpose of this guide is to serve as a means to help troubleshoot common
 issues encountered when getting start with eclim, or providing information if
 you've discovered a possible bug.
+
+The first thing to note is that as of eclim 1.6.1, errors raised by eclimd when
+executing an autocmd from vim, like validating a file on write, are no longer
+echoed as errors to the user. Instead these errors are logged and only
+displayed if your eclim log level is set to a relevant level.  You can set the
+log level at any time by running:
+
+  .. code-block:: vim
+
+    :let g:EclimLogLevel = 10
+
+in vim, which in this case sets the logging to verbose (the default log level
+is 4).  After setting the log level any external commands that are run or
+autocmd errors encountered will be printed (you may need to run :messages to
+see them all).
 
 Below are a series of sections broken up by the behavior (or lack of)
 experienced and the steps for diagnosing the cause of that behavior.
