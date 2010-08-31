@@ -103,8 +103,8 @@ function! eclim#web#OpenUrl(url, ...)
   endif
 
   let url = substitute(url, '\', '/', 'g')
-  let url = escape(url, '&%')
-  let url = escape(url, '%')
+  let url = escape(url, '&%!')
+  let url = escape(url, '%!')
   let command = escape(substitute(s:browser, '<url>', url, ''), '#')
   silent call eclim#util#Exec(command)
   redraw!
