@@ -27,6 +27,7 @@ following requirements.
 - `Java Development Kit`_ 1.5 or greater
 - `Eclipse 3.6.x (Helios)`_
 - `Vim 7.1.x`_
+- Mac and Linux users must also have make and gcc installed.
 
   **Minimum Vim Settings**: In order for eclim to function properly, there is a
   minimum set of vim options that must be enabled in your vimrc file (:h vimrc).
