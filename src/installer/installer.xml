@@ -148,6 +148,9 @@
             <include name="eclimd"/>
             <include name="native/**/*"/>
           </fileset>
+          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/src/nailgun">
+            <include name="configure"/>
+          </fileset>
         </chmod>
 
         <!-- java symlink support sucks, especially if the link is broken -->
