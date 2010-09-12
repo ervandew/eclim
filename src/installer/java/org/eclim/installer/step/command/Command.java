@@ -34,6 +34,10 @@ import org.formic.util.CommandExecutor;
 public abstract class Command
   extends CommandExecutor
 {
+  private static final String[] LAUNCHER = new String[]{
+    "java", "-jar", null, "-clean", "-application", null
+  };
+
   private OutputHandler handler;
 
   public Command(OutputHandler handler, String[] cmd)
@@ -46,22 +50,19 @@ public abstract class Command
     throws Exception
   {
     this.handler = handler;
-    this.cmd = new String[cmd.length + 5];
+    this.cmd = new String[cmd.length + LAUNCHER.length];
 
-    String eclipse = EclipseUtils.findEclipse();
-    if (eclipse == null){
+    String launcher = EclipseUtils.findEclipseLauncherJar();
+    if (launcher == null){
       throw new RuntimeException(
-        "Could not find eclipse executable for eclipse home: " +
+        "Could not find the eclipse launcher jar for eclipse home: " +
         Installer.getProject().getProperty("eclipse.home"));
     }
 
-    this.cmd[0] = eclipse;
-    this.cmd[1] = "-nosplash";
-    this.cmd[2] = "-clean";
-    this.cmd[3] = "-application";
-    this.cmd[4] = application;
-
-    System.arraycopy(cmd, 0, this.cmd, 5, cmd.length);
+    System.arraycopy(LAUNCHER, 0, this.cmd, 0, LAUNCHER.length);
+    System.arraycopy(cmd, 0, this.cmd, LAUNCHER.length, cmd.length);
+    this.cmd[2] = launcher;
+    this.cmd[5] = application;
   }
 
   /**

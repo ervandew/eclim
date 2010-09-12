@@ -17,63 +17,40 @@
 package org.eclim.installer.step;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
+import org.apache.commons.io.FilenameUtils;
 
 import org.formic.Installer;
 
-import org.formic.util.CommandExecutor;
-
 public class EclipseUtils
 {
-  public static String findEclipse()
+  private static final String LAUNCHER_PREFIX = "org.eclipse.equinox.launcher_";
+
+  public static String findEclipseLauncherJar()
     throws Exception
   {
     String eclipseHome = Installer.getProject().getProperty("eclipse.home");
     if (eclipseHome == null){
       return null;
     }
-    return findEclipse(eclipseHome);
+    return findEclipseLauncherJar(eclipseHome);
   }
 
-  public static String findEclipse(String eclipseHome)
+  public static String findEclipseLauncherJar(String eclipseHome)
     throws Exception
   {
-    // Windows
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      String eclipse = eclipseHome + "/eclipse.exe";
-      if (new File(eclipse).exists()){
-        return eclipse;
-      }
-      return null;
-    }
-
     // Everyone else
-    String eclipse = eclipseHome + "/eclipse";
-    if (new File(eclipse).exists()){
-      return eclipse;
-    }
+    String plugins = eclipseHome + "/plugins";
+    String[] results = new File(plugins).list(new FilenameFilter(){
+      public boolean accept(File dir, String name){
+        return name.startsWith(LAUNCHER_PREFIX) && name.endsWith(".jar");
+      }
+    });
 
-    // OSX
-    eclipse = eclipseHome + "/Eclipse.app/Contents/MacOS/eclipse";
-    if (new File(eclipse).exists()){
-      return eclipse;
+    if (results != null && results.length > 0){
+      return FilenameUtils.concat(plugins, results[0]);
     }
-
-    CommandExecutor executor = CommandExecutor.execute(
-      new String[]{"which", "eclipse"}, 1000);
-    eclipse = executor.getResult();
-    if (eclipse.trim().length() > 0){
-      return eclipse;
-    }
-
-    executor = CommandExecutor.execute(
-      new String[]{"which", "eclipse-3.6"}, 1000);
-    eclipse = executor.getResult();
-    if (eclipse.trim().length() > 0){
-      return eclipse;
-    }
-
     return null;
   }
 }

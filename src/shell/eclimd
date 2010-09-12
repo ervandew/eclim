@@ -50,29 +50,19 @@ resolve_eclim_home(){
 }
 
 ##
-# Determines the eclipse home path and eclipse executable and sets
-# ECLIM_ECLIPSE_HOME and ECLIPSE to those results.
+# Determines the eclipse home path and the eclipse launcher jar and sets
+# ECLIM_ECLIPSE_HOME and ECLIPSE_LAUNCHER to those results.
 #
-resolve_eclipse(){
+resolve_eclipse_launcher(){
   #${eclipse.home}
   if [ -z "$ECLIM_ECLIPSE_HOME" -o ! -d "$ECLIM_ECLIPSE_HOME" ]; then
     ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
   fi
 
-  ECLIPSE="$ECLIM_ECLIPSE_HOME/eclipse"
-  if [ ! -e "$ECLIPSE" ]; then
-    ECLIPSE=`which eclipse 2> /dev/null`
-  fi
-  if [ ! -e "$ECLIPSE" ]; then
-    ECLIPSE=`which eclipse-3.6 2> /dev/null`
-  fi
-  # mac osx default location
-  if [ ! -e "$ECLIPSE" ]; then
-    ECLIPSE="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/MacOS/eclipse"
-  fi
+  ECLIPSE_LAUNCHER=`find $ECLIM_ECLIPSE_HOME/plugins -name 'org.eclipse.equinox.launcher_*.jar'`
 
-  if [ ! -e "$ECLIPSE" ]; then
-    echo "No eclipse executable found." 1>&2
+  if [ ! -e "$ECLIPSE_LAUNCHER" ]; then
+    echo "Unable to locate the eclipse launcher jar." 1>&2
     exit 1
   fi
 }
@@ -94,23 +84,6 @@ build_vmargs(){
   fi
   if [ -n "$ECLIM_ARGS" ] ; then
     ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
-  fi
-}
-
-##
-# Handles any gentoo specific issues.
-#
-handle_gentoo(){
-  # handle eclipse issues on gentoo
-  IS_GENTOO=`which java-config 2> /dev/null`
-  if [ -x "$IS_GENTOO" ]; then
-    # handle emerged version of eclipse which has a bootstrap script
-    ECLIPSE_36=`which eclipse-3.6 2> /dev/null`
-    if [ "$ECLIM_ECLIPSE_HOME" = "/usr/lib/eclipse-3.6" -a -e "$ECLIPSE_36" ]; then
-      ECLIPSE="$ECLIPSE_36"
-      PLATFORM_VMARGS="$ECLIM_ARGS"
-      ECLIM_VMARGS=""
-    fi
   fi
 }
 
@@ -138,22 +111,17 @@ fi
 
 resolve_eclim_home
 build_vmargs
-resolve_eclipse
-
-# run platform specific setup
-handle_gentoo
+resolve_eclipse_launcher
 
 ECLIPSE_ARGS="
-  -debug -nosplash -clean -refresh
+  -debug -clean -refresh
   -application org.eclim.application_headless
   $ECLIM_VMARGS"
 
 if [ "$1" = "start" ]; then
   shift
-  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" \
-    "$ECLIPSE" $ECLIPSE_ARGS "$@" > /dev/null &
+  CLASSPATH="" java -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@" > /dev/null &
 else
-  echo "\"$ECLIPSE\" $ECLIPSE_ARGS $@"
-  CLASSPATH="" VM_ARGS="$PLATFORM_VMARGS" \
-    "$ECLIPSE" $ECLIPSE_ARGS "$@"
+  echo "java -jar \"$ECLIPSE_LAUNCHER\" $ECLIPSE_ARGS $@"
+  CLASSPATH="" java -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@"
 fi

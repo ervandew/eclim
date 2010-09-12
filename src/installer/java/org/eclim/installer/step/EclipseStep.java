@@ -430,15 +430,15 @@ public class EclipseStep
         Worker.post(new Task(){
           public Object run () throws Exception {
             String eclipseHome = eclipseHomeField.getText();
-            String eclipse = EclipseUtils.findEclipse(eclipseHome);
+            String launcher = EclipseUtils.findEclipseLauncherJar(eclipseHome);
 
-            if (eclipse == null){
+            if (launcher == null){
               throw new RuntimeException(
-                "Could not find eclipse executable for path: " + eclipseHome);
+                "Could not find the eclipse launcher jar for path: " + eclipseHome);
             }
 
             CommandExecutor executor = CommandExecutor.execute(
-              new String[]{eclipse, "-nosplash", "-initialize"}, 60000);
+              new String[]{"java", "-jar", launcher, "-initialize"}, 60000);
             if(executor.getReturnCode() != 0){
               throw new RuntimeException(
                   "error: " + executor.getErrorMessage() +
