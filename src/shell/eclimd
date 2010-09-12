@@ -73,17 +73,19 @@ resolve_eclipse_launcher(){
 #
 build_vmargs(){
   #ECLIMD_OPTS="-Djava.ext.dirs"
-  ECLIM_ARGS="$ECLIMD_OPTS"
+  ECLIM_VMARGS="$ECLIMD_OPTS"
 
   # attempt to grab properties from .eclimrc if available.
   SED=`which sed 2> /dev/null`
   if [ -f "$ECLIMRC" -a -n "$SED" ] ; then
-    ECLIM_ARGS="$ECLIM_ARGS `
+    ECLIM_VMARGS="$ECLIM_VMARGS `
       sed -n -f \"$ECLIM_HOME/bin/eclimd.sed\" \"$ECLIMRC\"
     `"
   fi
-  if [ -n "$ECLIM_ARGS" ] ; then
-    ECLIM_VMARGS="-vmargs $ECLIM_ARGS"
+
+  # for osx
+  if [ `echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'` == "darwin" ] ; then
+    ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
   fi
 }
 
@@ -113,15 +115,12 @@ resolve_eclim_home
 build_vmargs
 resolve_eclipse_launcher
 
-ECLIPSE_ARGS="
-  -debug -clean -refresh
-  -application org.eclim.application_headless
-  $ECLIM_VMARGS"
+ECLIPSE_ARGS="-debug -clean -refresh -application org.eclim.application_headless"
 
 if [ "$1" = "start" ]; then
   shift
-  CLASSPATH="" java -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@" > /dev/null &
+  CLASSPATH="" java $ECLIM_VMARGS -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@" > /dev/null &
 else
-  echo "java -jar \"$ECLIPSE_LAUNCHER\" $ECLIPSE_ARGS $@"
-  CLASSPATH="" java -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@"
+  echo "java $ECLIM_VMARGS -jar \"$ECLIPSE_LAUNCHER\" $ECLIPSE_ARGS $@"
+  CLASSPATH="" java $ECLIM_VMARGS -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS "$@"
 fi
