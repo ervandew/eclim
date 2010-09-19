@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -185,8 +185,8 @@ function! eclim#display#signs#GetExisting(...)
     if sign =~ 'id='
       " for multi language support, don't have have regex w/ english
       " identifiers
-      let id = substitute(sign, '.\{-}=.\{-}=\(.\{-}\)\s.*', '\1', '')
-      exec 'let line = ' . substitute(sign, '.\{-}=\(.\{-}\)\s.*', '\1', '')
+      let id = substitute(sign, '.\{-}=.\{-}=\(\d\+\).\{-}\s.*', '\1', '')
+      exec 'let line = ' . substitute(sign, '.\{-}=\(\d\+\).\{-}\s.*', '\1', '')
       let name = substitute(sign, '.\{-}=.\{-}=.\{-}=\(.\{-}\)\s*$', '\1', '')
       call add(existing, {'id': id, 'line': line, 'name': name})
     endif
