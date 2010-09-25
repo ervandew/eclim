@@ -62,14 +62,32 @@ function! eclim#python#complete#CodeComplete(findstart, base)
     let results = eclim#python#rope#Completions(project, file, offset, encoding)
 
     for result in results
-      let menu = result[1]
+      let word = result[0]
+      let kind = result[1]
       let info = ''
       if result[2] != ''
+        let word .= '('
         let info = result[0] . '(' . result[2] . ')'
         let menu = info
+      else
+        if kind == 'f'
+          let word .= '()'
+        endif
+        let menu = word
       endif
+
+      " map 'a' (attribute) to 'v'
+      if kind == 'a'
+        let kind = 'v'
+
+      " map 'c' (class) to 't'
+      elseif kind == 'c'
+        let kind = 't'
+      endif
+
       let dict = {
-          \ 'word': result[0],
+          \ 'word': word,
+          \ 'kind': kind,
           \ 'menu': menu,
           \ 'info': info,
         \ }

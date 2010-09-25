@@ -48,7 +48,7 @@ if ropepath not in sys.path:
   sys.path.insert(0, ropepath)
 
   from contextlib import contextmanager
-  from rope.base import pyobjects, pynames
+  from rope.base import builtins, pyobjects, pynames
 
   @contextmanager
   def projectroot():
@@ -70,12 +70,30 @@ if ropepath not in sys.path:
       u = u.replace('\r\n', '\n') # rope ignore \r, so don't count them.
       return len(u)
 
+  def kind(proposal):
+    pyname = proposal.pyname
+    if hasattr(pyname, 'get_object'):
+      pyobject = pyname.get_object()
+      if isinstance(pyobject, pyobjects.AbstractClass):
+        return 'c'
+
+      if isinstance(pyobject, pyobjects.AbstractFunction):
+        return 'f'
+
+    return proposal.kind[0]
+
   def parameters(proposal):
     pyname = proposal.pyname
     if isinstance(pyname, pynames.ImportedName):
       pyname = pyname._get_imported_pyname()
-    if isinstance(pyname, pynames.DefinedName):
+    if hasattr(pyname, 'get_object'):
       pyobject = pyname.get_object()
+      if isinstance(pyobject, builtins.BuiltinFunction):
+        params = pyobject.get_param_names()
+        if params and params[0] == 'self':
+          params = params[1:]
+        return ', '.join(params)
+
       if isinstance(pyobject, pyobjects.AbstractFunction):
         args = [(a.id, a.col_offset) for a in pyobject.arguments.args]
         defaults = []
@@ -85,6 +103,9 @@ if ropepath not in sys.path:
 
         params = StringIO()
         for ii, arg in enumerate(args):
+          if arg[0] == 'self':
+            continue
+
           if len(params.getvalue()) > 0:
             params.write(', ')
           if defaults:
@@ -186,18 +207,18 @@ with(projectroot()):
       project, code, offset, resource=resource, maxfixes=3)
     proposals = codeassist.sorted_proposals(proposals)
     for ii, p in enumerate(proposals):
-      proposals[ii] = [p.name, p.kind, parameters(p)]
-    vim.command("let results = %s" % repr(proposals))
+      proposals[ii] = [p.name, kind(p), parameters(p)]
+    vim.command("let results = %r" % proposals)
   except IndentationError, e:
     vim.command(
       "let completion_error = 'Completion failed due to indentation error.'"
     )
   except ModuleSyntaxError, e:
     message = 'Completion failed due to syntax error: %s' % e.args[0]
-    vim.command("let completion_error = %s" % repr(message))
+    vim.command("let completion_error = %r" % message)
   except RopeError, e:
     message = 'Completion failed due to rope error: %s' % type(e)
-    vim.command("let completion_error = %s" % repr(message))
+    vim.command("let completion_error = %r" % message)
 EOF
 
   if completion_error != ''
@@ -269,17 +290,17 @@ with(projectroot()):
         # TODO: use location.offset
         results.append(str('%s|%s col 1|' % (path, lineno)))
 
-    vim.command("let results = %s" % repr(results))
+    vim.command("let results = %r" % results)
   except IndentationError, e:
     vim.command(
       "let search_error = 'Search failed due to indentation error.'"
     )
   except ModuleSyntaxError, e:
     message = 'Search failed due to syntax error: %s' % e.args[0]
-    vim.command("let search_error = %s" % repr(message))
+    vim.command("let search_error = %r" % message)
   except RopeError, e:
     message = 'Search failed due to rope error: %s' % type(e)
-    vim.command("let search_error = %s" % repr(message))
+    vim.command("let search_error = %r" % message)
 EOF
 
   if search_error != ''
@@ -333,7 +354,7 @@ with(projectroot()):
       dirs.append(src_folder.real_path)
     except ResourceNotFoundError:
       pass
-  vim.command("let dirs = %s" % repr(dirs))
+  vim.command("let dirs = %r" % dirs)
 EOF
 
   return dirs
@@ -362,7 +383,7 @@ with(projectroot()):
   # code completion
   errors = finderrors.find_errors(project, resource)
   errors = ['%s:%s:%s' % (filepath, e.lineno, e.error) for e in errors]
-  vim.command("let results = %s" % repr(errors))
+  vim.command("let results = %r" % errors)
 EOF
 
   return results
