@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ function! TestComplete()
   call PeekRedir()
   call VUAssertEquals(len(results), 10, 'Wrong number of results.')
   call VUAssertEquals('Test1', results[0].word, 'Wrong result.')
+  call VUAssertEquals('t', results[0].kind, 'Wrong result.')
   call VUAssertEquals('Test2', results[1].word, 'Wrong result.')
   call VUAssertEquals('Test3', results[2].word, 'Wrong result.')
 
@@ -50,9 +51,10 @@ function! TestComplete()
   let results = eclim#python#complete#CodeComplete(0, '')
   call PeekRedir()
   call VUAssertEquals(len(results), 3, 'Wrong number of results.')
-  call VUAssertEquals('test1', results[0].word, 'Wrong result.')
-  call VUAssertEquals('test2', results[1].word, 'Wrong result.')
-  call VUAssertEquals('test3', results[2].word, 'Wrong result.')
+  call VUAssertEquals('test1()', results[0].word, 'Wrong result.')
+  call VUAssertEquals('f', results[0].kind, 'Wrong result.')
+  call VUAssertEquals('test2(', results[1].word, 'Wrong result.')
+  call VUAssertEquals('test3(', results[2].word, 'Wrong result.')
 endfunction " }}}
 
 " TestCompleteUnicode() {{{
@@ -78,9 +80,9 @@ function! TestCompleteUnicode()
   let results = eclim#python#complete#CodeComplete(0, '')
   call PeekRedir()
   call VUAssertEquals(len(results), 3, 'Wrong number of results.')
-  call VUAssertEquals('test1', results[0].word, 'Wrong result.')
-  call VUAssertEquals('test2', results[1].word, 'Wrong result.')
-  call VUAssertEquals('test3', results[2].word, 'Wrong result.')
+  call VUAssertEquals('test1()', results[0].word, 'Wrong result.')
+  call VUAssertEquals('test2(', results[1].word, 'Wrong result.')
+  call VUAssertEquals('test3(', results[2].word, 'Wrong result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -7,4 +7,4 @@ common. # need a space for testing completion
 
 common.t # need a space for testing completion
 
-# vim:encoding=utf-8:fileencoding=utf-8
+# vim:fileencoding=utf-8

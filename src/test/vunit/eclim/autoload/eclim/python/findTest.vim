@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -43,14 +43,14 @@ function! TestFindDefinition()
   PythonFindDefinition
   let name = substitute(expand('%'), '\', '/', 'g')
   call VUAssertTrue(name =~ 'test/common/objects.py')
-  call VUAssertEquals(getline('.'), 'class Test1 (object):')
+  call VUAssertEquals(getline('.'), 'class Test1(object):')
   bdelete
 
   call cursor(5, 8)
   PythonFindDefinition
   let name = substitute(expand('%'), '\', '/', 'g')
   call VUAssertTrue(name =~ 'test/common/functions.py')
-  call VUAssertEquals(getline('.'), 'def test3 ():')
+  call VUAssertEquals(getline('.'), "def test3(foo, bar='baz', *args, **kwargs):")
   bdelete
 endfunction " }}}
 
