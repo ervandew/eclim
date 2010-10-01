@@ -80,7 +80,7 @@ if ropepath not in sys.path:
       if isinstance(pyobject, pyobjects.AbstractFunction):
         return 'f'
 
-    return proposal.kind[0]
+    return proposal.scope[0]
 
   def parameters(proposal):
     pyname = proposal.pyname
