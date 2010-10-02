@@ -32,49 +32,32 @@ endif
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
-" GetAnnotations(revision) {{{
-function! eclim#vcs#impl#hg#GetAnnotations(revision)
-  if exists('b:vcs_props') && filereadable(b:vcs_props.path)
-    let file = fnamemodify(b:vcs_props.path, ':t')
-  else
-    let file = expand('%')
-  endif
-
-  let cmd = 'annotate -udn'
+" GetAnnotations(path, revision) {{{
+function! eclim#vcs#impl#hg#GetAnnotations(path, revision)
+  let cmd = 'annotate -udc'
   if a:revision != ''
     let revision = substitute(a:revision, '.*:', '', '')
     let cmd .= ' -r ' . revision
   endif
-  let result = eclim#vcs#impl#hg#Hg(cmd . ' "' . file . '"')
+  let result = eclim#vcs#impl#hg#Hg(cmd . ' "' . a:path . '"')
   if type(result) == 0
     return
   endif
 
   let annotations = split(result, '\n')
   call map(annotations,
-      \ "substitute(v:val, '^\\(.\\{-}\\)\\s\\([0-9]\\+\\)\\s\\(.\\{-}\\):\\s.*', '\\2 (\\3) \\1', '')")
+      \ "substitute(v:val, '^\\s*\\(.\\{-}\\)\\s\\(\\w\\+\\)\\s\\(.\\{-}\\):\\s.*', '\\2 (\\3) \\1', '')")
 
   return annotations
 endfunction " }}}
 
-" GetRelativePath(dir, file) {{{
-function eclim#vcs#impl#hg#GetRelativePath(dir, file)
-  let root = eclim#vcs#impl#hg#GetRoot()
-  if type(root) == 0
-    return
+" GetPreviousRevision(path, [revision]) {{{
+function eclim#vcs#impl#hg#GetPreviousRevision(path, ...)
+  let cmd = 'log -q --template "{node|short}\n"'
+  if len(a:000) > 0 && a:000[0] != ''
+    let cmd .= ' -r' . a:000[0] . ':1'
   endif
-  let root = fnamemodify(root, ':h')
-  return substitute(a:dir, root, '', '') . '/' . a:file
-endfunction " }}}
-
-" GetPreviousRevision([file, revision]) {{{
-function eclim#vcs#impl#hg#GetPreviousRevision(...)
-  let file = len(a:000) ? fnamemodify(a:000[0], ':t') : expand('%:t')
-  let cmd = 'log -q'
-  if len(a:000) > 1 && a:000[1] != ''
-    let cmd .= '-r' . a:000[1] . ':1'
-  endif
-  let log = eclim#vcs#impl#hg#Hg(cmd . ' --limit 2 "' . file . '"')
+  let log = eclim#vcs#impl#hg#Hg(cmd . ' --limit 2 "' . a:path . '"')
   if type(log) == 0
     return
   endif
@@ -82,18 +65,18 @@ function eclim#vcs#impl#hg#GetPreviousRevision(...)
   return len(revisions) > 1 ? revisions[1] : 0
 endfunction " }}}
 
-" GetRevision(file) {{{
-function eclim#vcs#impl#hg#GetRevision(file)
-  let log = eclim#vcs#impl#hg#Hg('log -q --limit 1 "' . a:file . '"')
+" GetRevision(path) {{{
+function eclim#vcs#impl#hg#GetRevision(path)
+  let log = eclim#vcs#impl#hg#Hg('log -q --template "{node|short}\n" --limit 1 "' . a:path . '"')
   if type(log) == 0
     return
   endif
   return substitute(log, '\n', '', '')
 endfunction " }}}
 
-" GetRevisions() {{{
-function eclim#vcs#impl#hg#GetRevisions()
-  let log = eclim#vcs#impl#hg#Hg('log -q "' . expand('%:t') . '"')
+" GetRevisions(path) {{{
+function eclim#vcs#impl#hg#GetRevisions(path)
+  let log = eclim#vcs#impl#hg#Hg('log -q --template "{node|short}\n" "' . a:path . '"')
   if type(log) == 0
     return
   endif
@@ -145,115 +128,99 @@ function eclim#vcs#impl#hg#GetModifiedFiles()
   return map(split(status, "\n"), 'root . "/" . v:val')
 endfunction " }}}
 
-" GetVcsWebPath() {{{
-function eclim#vcs#impl#hg#GetVcsWebPath()
-  let path = substitute(expand('%:p'), '\', '/', 'g')
-  let path = substitute(path, eclim#vcs#impl#hg#GetRoot(), '', '')
-  if path =~ '^/'
-    let path = path[1:]
-  endif
-  return path
-endfunction " }}}
-
-" ChangeSet(revision) {{{
-function eclim#vcs#impl#hg#ChangeSet(revision)
-  let result = eclim#vcs#impl#hg#Hg('log -vr ' . a:revision)
-  if type(result) == 0
-    return
-  endif
-  let results = split(result, '\n')
-  let log = {}
-  let comment = []
-  for line in results[:-3]
-    if line =~ '^[a-z]\+:'
-      let name = substitute(line, '^\(.\{-}\):.*', '\1', '')
-      let line = substitute(line, '^.\{-}:\s*\(.*\)', '\1', '')
-      let log[name] = line
-    else
-      call add(comment, line)
-    endif
-  endfor
-  let author = substitute(log.user, '^user:\s\+', '', '')
-  let date = substitute(log.date, '^date:\s\+', '', '')
-  let root = eclim#vcs#impl#hg#GetRoot()
-  let files = split(substitute(log.files, '^files:\s\+', '', ''))
-  call map(files, 'filereadable(root . "/" . v:val) ? "  A/M |" . v:val . "|" : "  R   |" . v:val . "|"')
-  let lines = []
-  call add(lines, 'Revision: ' . a:revision)
-  call add(lines, 'Modified: ' . date . ' by ' . author)
-  call add(lines, 'Changed paths:')
-  let lines += files
-  call add(lines, '')
-  let lines += comment
-
-  let root_dir = exists('b:vcs_props') ?
-    \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
-  return {'changeset': lines, 'props': {'root_dir': root_dir}}
-endfunction " }}}
-
-" Info() {{{
-function eclim#vcs#impl#hg#Info()
-  let result = eclim#vcs#impl#hg#Hg('log --limit 1 "' . expand('%:t') . '"')
+" Info(path) {{{
+function eclim#vcs#impl#hg#Info(path)
+  let result = eclim#vcs#impl#hg#Hg('log --limit 1 "' . a:path . '"')
   if type(result) == 0
     return
   endif
   call eclim#util#Echo(result)
 endfunction " }}}
 
-" Log([file]) {{{
-function eclim#vcs#impl#hg#Log(...)
-  if len(a:000) > 0
-    let dir = fnamemodify(a:000[0], ':h')
-    let root = eclim#vcs#impl#hg#GetRoot()
-    if dir !~ '^' . root
-      let dir = eclim#vcs#impl#hg#GetRoot() . '/' . dir
-    endif
-    let file = fnamemodify(a:000[0], ':t')
-  else
-    let dir = expand('%:h')
-    let file = expand('%:t')
-  endif
-
-  let logcmd = 'log -v'
+" Log(path) {{{
+function eclim#vcs#impl#hg#Log(path)
+  let logcmd = 'log --template "{node|short}|{author}|{date|age}|{desc|firstline}\n"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
   endif
 
-  let result = eclim#vcs#impl#hg#Hg(logcmd . ' "' . file . '"')
+  let result = eclim#vcs#impl#hg#Hg(logcmd . ' "' . a:path . '"')
   if type(result) == 0
     return
   endif
-  let log = s:ParseHgLog(split(result, '\n'))
-
-  let index = 0
-  let lines = [s:Breadcrumb(dir, file), '']
-  for entry in log
-    let index += 1
-    call add(lines, '--------------------------------------------------')
-    call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
-    call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-    let working_copy = isdirectory(file) || filereadable(file) ? ' |working copy|' : ''
-    if index < len(log)
-      call add(lines, 'Diff: |previous ' . log[index].revision . '|' . working_copy)
-    elseif working_copy != ''
-      call add(lines, 'Diff: |working copy|')
-    endif
-    call add(lines, '')
-    let lines += entry.comment[:-3]
-    if lines[-1] !~ '^\s*$' && index != len(log)
-      call add(lines, '')
-    endif
+  let log = []
+  for line in split(result, '\n')
+    let values = split(line, '|')
+    call add(log, {
+        \ 'revision': values[0],
+        \ 'author': values[1],
+        \ 'age': values[2],
+        \ 'comment': values[3],
+     \ })
   endfor
   let root_dir = exists('b:vcs_props') ?
     \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
-  return {'log': lines, 'props': {'root_dir': root_dir}}
+  return {'log': log, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" LogDetail(revision) {{{
+function eclim#vcs#impl#hg#LogDetail(revision)
+  let basedir = EclimBaseDir()
+  let logcmd = 'log "--template=' .
+    \ '{node|short}|{author}|{date|age}|{date|isodate}|{desc|firstline}|{desc}"'
+  let result = eclim#vcs#impl#hg#Hg(logcmd . ' -r ' . a:revision)
+  if type(result) == 0
+    return
+  endif
+  let values = split(result, '|')
+  return {
+      \ 'revision': values[0],
+      \ 'author': values[1],
+      \ 'age': values[2],
+      \ 'date': values[3],
+      \ 'comment': values[4],
+      \ 'description': values[5],
+   \ }
+endfunction " }}}
+
+" LogFiles(revision) {{{
+function eclim#vcs#impl#hg#LogFiles(revision)
+  let basedir = substitute(EclimBaseDir(), '\', '', 'g')
+  let logcmd = 'log --copies "--style=' . basedir .
+    \ '/eclim/autoload/eclim/vcs/impl/hg_log_files.style" '
+  let result = eclim#vcs#impl#hg#Hg(logcmd . '-r ' . a:revision)
+  if type(result) == 0
+    return
+  endif
+  let files = []
+  let deletes = []
+  for result in split(result, '\n')
+    if result =~ 'R'
+      let [status, old, new] = split(result, '\t')
+      " filter out copies (the --copies arg shows cp and mv ops)
+      if index(deletes, old) == -1
+        continue
+      else
+        call remove(files, index(files, {'status': 'D', 'file': old}))
+        call remove(files, index(files, {'status': 'A', 'file': new}))
+      endif
+      call add(files, {'status': status, 'old': old, 'new': new})
+    else
+      let [status, file] = split(result, '\t')
+      " keep this list for filtering out copies
+      if status == 'D'
+        call add(deletes, file)
+      endif
+      call add(files, {'status': status, 'file': file})
+    endif
+  endfor
+  return files
 endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
 function! eclim#vcs#impl#hg#ViewFileRevision(path, revision)
   let revision = substitute(a:revision, '.\{-}:', '', '')
-  let path = fnamemodify(a:path, ':t')
-  let result = eclim#vcs#impl#hg#Hg('cat -r ' . revision . ' "' . path . '"')
+  let result = eclim#vcs#impl#hg#Hg('cat -r ' . revision . ' "' . a:path . '"')
   return split(result, '\n')
 endfunction " }}}
 
@@ -261,38 +228,6 @@ endfunction " }}}
 " Executes 'hg' with the supplied args.
 function eclim#vcs#impl#hg#Hg(args)
   return eclim#vcs#util#Vcs('hg', a:args)
-endfunction " }}}
-
-" s:Breadcrumb(dir, file) {{{
-function! s:Breadcrumb(dir, file)
-  let path = split(eclim#vcs#impl#hg#GetRelativePath(a:dir, a:file), '/')
-  return join(path, ' / ' )
-endfunction " }}}
-
-" s:ParseHgLog(lines) {{{
-function! s:ParseHgLog(lines)
-  let log = []
-  let section = 'header'
-  let index = 0
-  for line in a:lines
-    let index += 1
-    if line =~ '^changeset:\s\+[0-9]\+:[0-9a-z]\+'
-      let entry = {'revision': substitute(line, 'changeset:\s\+', '', ''), 'comment': []}
-      call add(log, entry)
-      let section = 'header'
-    elseif line =~ '^user:\s\+'
-      let entry.author = substitute(line, 'user:\s\+', '', '')
-    elseif line =~ '^date:\s\+'
-      let entry.date = substitute(line, 'date:\s\+', '', '')
-    elseif line =~ '^description:'
-      let section = 'comment'
-    elseif section == 'comment'
-      let line = substitute(
-        \ line, '\(' . s:trackerIdPattern . '\)', '|\1|', 'g')
-      call add(entry.comment, line)
-    endif
-  endfor
-  return log
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

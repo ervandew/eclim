@@ -351,9 +351,6 @@ Version Control Commands
   Toggles annotation of the currently versioned file using vim signs.
 - :ref:`:VcsInfo` - Echos vcs info about the current versioned file.
 - :ref:`:VcsLog` - Opens a buffer with log information for the current file.
-- :ref:`:VcsChangeSet` [revision] -
-  Opens a buffer with change set information for the supplied
-  repository version or the current revision of the currently open file.
 - :ref:`:VcsDiff` [revision] -
   Performs a vertical diffsplit of the current file against the last
   committed revision of the current file or the revision supplied.

@@ -475,10 +475,7 @@ function! s:ChooseScope()
       noautocmd exec winnr . 'winc w'
     endtry
     if vcs == ''
-      call eclim#util#EchoError('Unable to determine vcs type.')
-      return
-    elseif vcs == 'cvs'
-      call eclim#util#EchoError('cvs not yet supported')
+      call eclim#util#EchoError('Unsupported or no vcs type found.')
       return
     endif
   endif

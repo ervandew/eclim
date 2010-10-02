@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ endfunction " }}}
 
 " GetDiffUrl(root, file, args) Not supported by github {{{
 function eclim#vcs#impl#github#GetDiffUrl(root, file, args)
-  echoe 'Sorry, this function is not yet supported by github.'
+  echoe 'Sorry, this function is not yet supported by github. Try using VcsWebChangeSet instead.'
   return
 endfunction " }}}
 

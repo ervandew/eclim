@@ -28,37 +28,30 @@ else
   finish
 endif
 
+" Script Variables {{{
+  let s:types = {'git': '.git', 'hg': '.hg'}
+" }}}
+
 " GetVcsType() {{{
 function eclim#vcs#util#GetVcsType()
-  let type = ''
-  if isdirectory('CVS')
-    runtime autoload/eclim/vcs/impl/cvs.vim
-    let type = 'cvs'
-  elseif isdirectory('.svn') ||
-       \ (exists('b:vcs_props') && has_key(b:vcs_props, 'svn_root_url'))
-    runtime autoload/eclim/vcs/impl/svn.vim
-    let type = 'svn'
-  else
-    let cwd = escape(getcwd(), ' ')
-    let hgdir = finddir('.hg', cwd . ';')
-    if hgdir != ''
-      let hgdir = fnamemodify(hgdir, ':p')
-    endif
-    let gitdir = finddir('.git', cwd . ';')
-    if gitdir != ''
-      let gitdir = fnamemodify(gitdir, ':p')
-    endif
-    if hgdir != '' || gitdir != ''
-      if len(hgdir) > len(gitdir)
-        runtime autoload/eclim/vcs/impl/hg.vim
-        let type = 'hg'
-      else
-        runtime autoload/eclim/vcs/impl/git.vim
-        let type = 'git'
+  let cwd = escape(getcwd(), ' ')
+  let result_dir = ''
+  let result_vcs = ''
+  for [type, dir] in items(s:types)
+    let vcsdir = finddir(dir, cwd . ';')
+    if vcsdir != ''
+      let vcsdir = fnamemodify(vcsdir, ':p')
+      if result_dir == '' || len(vcsdir) > len(result_dir)
+        let result_dir = vcsdir
+        let result_vcs = type
       endif
     endif
+  endfor
+
+  if result_dir != ''
+      exec 'runtime autoload/eclim/vcs/impl/' . result_vcs . '.vim'
   endif
-  return type
+  return result_vcs
 endfunction " }}}
 
 " GetVcsFunction(func_name) {{{
@@ -78,56 +71,10 @@ function eclim#vcs#util#GetVcsFunction(func_name)
   endtry
 endfunction " }}}
 
-" GetFilePath(dir, file) {{{
-" Gets the repository root relative path of the specified file, or the current
-" file if the empty string supplied.
-" Ex. /trunk/src/vim/eclim/autoload/eclim/eclipse.vim
-function eclim#vcs#util#GetFilePath(file)
-  let project_root = eclim#project#util#GetCurrentProjectRoot()
-  let file = a:file
-  let dir = file
-  if file == ''
-    let file = expand('%:t')
-    let dir = expand('%:p:h')
-  elseif !isdirectory(project_root . '/' . file)
-    let dir = fnamemodify(project_root . '/' . file, ':p:h')
-    let file = fnamemodify(project_root . '/' . file, ':t')
-  else
-    let dir = fnamemodify(project_root . '/' . file, ':p')
-    let file = ''
-  endif
-  return eclim#vcs#util#GetRelativePath(dir, file)
-endfunction " }}}
-
-" GetRelativePath(dir, file) {{{
-" Gets the repository root relative path of the specified file in the supplied
-" dir.
-" Ex. /src/vim/eclim/autoload/eclim/eclipse.vim
-function eclim#vcs#util#GetRelativePath(dir, file)
-  let path = ''
-
-  let cwd = getcwd()
-  exec 'lcd ' . escape(a:dir, ' ')
-  try
-    let GetRelativePath = eclim#vcs#util#GetVcsFunction('GetRelativePath')
-    if type(GetRelativePath) == 2
-      let path = GetRelativePath(a:dir, a:file)
-    endif
-  finally
-    exec 'lcd ' . escape(cwd, ' ')
-  endtry
-
-  return path
-endfunction " }}}
-
-" GetPreviousRevision([file, revision]) {{{
-" Gets the previous revision of the current file.
-function eclim#vcs#util#GetPreviousRevision(...)
-  let cwd = getcwd()
-  let dir = len(a:000) > 0 ? fnamemodify(a:000[0], ':p:h') : expand('%:p:h')
-  if isdirectory(dir)
-    exec 'lcd ' . escape(dir, ' ')
-  endif
+" GetPreviousRevision(path, [revision]) {{{
+" Gets the previous revision of the supplied path.
+function eclim#vcs#util#GetPreviousRevision(path, ...)
+  let cwd = eclim#vcs#util#LcdRoot()
   try
     let GetPreviousRevision =
       \ eclim#vcs#util#GetVcsFunction('GetPreviousRevision')
@@ -135,56 +82,46 @@ function eclim#vcs#util#GetPreviousRevision(...)
       return
     endif
     if len(a:000) > 0
-      let revision = GetPreviousRevision(a:000[0], len(a:000) > 1 ? a:000[1] : '')
+      let revision = GetPreviousRevision(a:path, a:000[0])
     else
-      let revision = GetPreviousRevision()
+      let revision = GetPreviousRevision(a:path)
     endif
   finally
-    exec 'lcd ' . escape(cwd, ' ')
+    exec 'lcd ' . cwd
   endtry
 
   return revision
 endfunction " }}}
 
-" GetRevision([file]) {{{
+" GetRevision(path) {{{
 " Gets the current revision of the current or supplied file.
-function eclim#vcs#util#GetRevision(...)
-  let path = len(a:000) > 0 ? a:000[0] : expand('%')
-  let cwd = getcwd()
-  if filereadable(path)
-    let file = fnamemodify(path, ':t')
-    let dir = fnamemodify(path, ':h')
-    exec 'lcd ' . escape(dir, ' ')
-  else
-    let file = path
-  endif
+function eclim#vcs#util#GetRevision(path)
+  let cwd = eclim#vcs#util#LcdRoot()
   try
     let GetRevision = eclim#vcs#util#GetVcsFunction('GetRevision')
     if type(GetRevision) != 2
       return
     endif
-    let revision = GetRevision(file)
+    let revision = GetRevision(a:path)
   finally
-    exec 'lcd ' . escape(cwd, ' ')
+    exec 'lcd ' . cwd
   endtry
   return revision
 endfunction " }}}
 
-" GetRevisions() {{{
-" Gets a list of revision numbers for the current file.
-function eclim#vcs#util#GetRevisions()
+" GetRevisions(path) {{{
+" Gets a list of revision numbers for the supplied path.
+function eclim#vcs#util#GetRevisions(path)
   let revisions = []
 
-  let cwd = getcwd()
-  let dir = expand('%:p:h')
-  exec 'lcd ' . escape(dir, ' ')
+  let cwd = eclim#vcs#util#LcdRoot()
   try
     let GetRevisions = eclim#vcs#util#GetVcsFunction('GetRevisions')
     if type(GetRevisions) == 2
-      let revisions = GetRevisions()
+      let revisions = GetRevisions(a:path)
     endif
   finally
-    exec 'lcd ' . escape(cwd, ' ')
+    exec 'lcd ' . cwd
   endtry
 
   return revisions
@@ -196,29 +133,41 @@ endfunction " }}}
 function eclim#vcs#util#GetModifiedFiles()
   let files = []
 
-  let cwd = getcwd()
-  let dir = eclim#vcs#util#GetRoot('')
-  exec 'lcd ' . escape(dir, ' ')
+  let cwd = eclim#vcs#util#LcdRoot()
   try
     let GetModifiedFiles = eclim#vcs#util#GetVcsFunction('GetModifiedFiles')
     if type(GetModifiedFiles) == 2
       let files = GetModifiedFiles()
     endif
   finally
-    exec 'lcd ' . escape(cwd, ' ')
+    exec 'lcd ' . cwd
   endtry
 
   return files
 endfunction " }}}
 
-" GetRoot(dir) {{{
+" GetRelativePath(path) {{{
+" Converts the supplied absolute path into a repos relative path.
+function eclim#vcs#util#GetRelativePath(path)
+  let root = eclim#vcs#util#GetRoot(a:path)
+  let path = substitute(a:path, '\', '/', 'g')
+  let path = substitute(path, root, '', '')
+  let path = substitute(path, '^/', '', '')
+  return path
+endfunction " }}}
+
+" GetRoot([path]) {{{
 " Gets the absolute path to the repository root on the local file system.
-function eclim#vcs#util#GetRoot(dir)
+function eclim#vcs#util#GetRoot(...)
   let root = ''
 
   let cwd = getcwd()
-  let dir = a:dir == '' ? expand('%:p:h') : a:dir
-  exec 'lcd ' . escape(dir, ' ')
+  let path = len(a:000) > 0 && a:000[0] != '' ? a:000[0] : expand('%:p')
+  if !isdirectory(path)
+    let path = fnamemodify(path, ':h')
+  endif
+
+  exec 'lcd ' . escape(path, ' ')
   try
     let GetRoot = eclim#vcs#util#GetVcsFunction('GetRoot')
     if type(GetRoot) == 2
@@ -253,6 +202,16 @@ function eclim#vcs#util#GetInfo(dir)
   return info
 endfunction " }}}
 
+" LcdRoot([path]) {{{
+" lcd to the vcs root and return the previous working directory.
+function eclim#vcs#util#LcdRoot(...)
+  let cwd = getcwd()
+  let path = len(a:000) > 0 ? a:000[0] : expand('%:p')
+  let root = eclim#vcs#util#GetRoot(path)
+  exec 'lcd ' . escape(root, ' ')
+  return escape(cwd, ' ')
+endfunction " }}}
+
 " Vcs(cmd, args) {{{
 " Executes the supplied vcs command with the supplied args.
 function eclim#vcs#util#Vcs(cmd, args)
@@ -269,13 +228,6 @@ function eclim#vcs#util#Vcs(cmd, args)
   endif
 
   return result
-endfunction " }}}
-
-" IsCacheValid(metadata) {{{
-" Function used to validate cached values on get from the cache.
-function eclim#vcs#util#IsCacheValid(metadata)
-  let revision = eclim#vcs#util#GetRevision(a:metadata.path)
-  return revision == a:metadata.revision
 endfunction " }}}
 
 " CommandCompleteRevision(argLead, cmdLine, cursorPos) {{{

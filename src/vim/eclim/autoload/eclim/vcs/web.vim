@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -155,20 +155,7 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
     return
   endif
 
-  let file = expand('%:p')
-  let dir = fnamemodify(file, ':h')
-  let cwd = getcwd()
-  exec 'lcd ' . escape(dir, ' ')
-  try
-    let GetVcsWebPath = eclim#vcs#util#GetVcsFunction('GetVcsWebPath')
-    if type(GetVcsWebPath) != 2
-      return
-    endif
-    let path = GetVcsWebPath()
-  finally
-    exec 'lcd ' . escape(cwd, ' ')
-  endtry
-
+  let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
   if path == ''
     call eclim#util#EchoError('Current file is not under a supported version control.')
     return
@@ -178,7 +165,6 @@ function eclim#vcs#web#VcsWeb(url_func, ...)
   if type(GetUrl) != 2
     return
   endif
-
   let url = GetUrl(root, path, a:000)
   if url == '0'
     return
@@ -190,7 +176,8 @@ endfunction " }}}
 " VcsWebLog(revision) {{{
 " View the vcs web log.
 function eclim#vcs#web#VcsWebLog(revision)
-  let revision = a:revision != '' ? a:revision : eclim#vcs#util#GetRevision()
+  let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
+  let revision = a:revision != '' ? a:revision : eclim#vcs#util#GetRevision(path)
   call eclim#vcs#web#VcsWeb('GetLogUrl', revision)
 endfunction " }}}
 
@@ -200,7 +187,8 @@ endfunction " }}}
 function eclim#vcs#web#VcsWebChangeSet(revision)
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetRevision()
+    let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
+    let revision = eclim#vcs#util#GetRevision(path)
   endif
 
   call eclim#vcs#web#VcsWeb('GetChangeSetUrl', revision)
@@ -211,7 +199,8 @@ endfunction " }}}
 function eclim#vcs#web#VcsWebAnnotate(revision)
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetRevision()
+    let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
+    let revision = eclim#vcs#util#GetRevision(path)
   endif
 
   call eclim#vcs#web#VcsWeb('GetAnnotateUrl', revision)
@@ -230,15 +219,16 @@ function eclim#vcs#web#VcsWebDiff(...)
     return
   endif
 
+  let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
   let revision1 = len(args) > 0 ? args[0] : ''
   if revision1 == ''
-    let revision1 = eclim#vcs#util#GetRevision()
+    let revision1 = eclim#vcs#util#GetRevision(path)
   endif
 
   let revision2 = len(args) > 1 ? args[1] : ''
   if revision2 == ''
     let revision2 = len(args) == 1 ?
-      \ eclim#vcs#util#GetRevision() : eclim#vcs#util#GetPreviousRevision()
+      \ eclim#vcs#util#GetRevision(path) : eclim#vcs#util#GetPreviousRevision(path)
     if revision2 == '0'
       call eclim#util#EchoWarning(
         \ "File '" . expand('%') . "' has no previous revision to diff.")

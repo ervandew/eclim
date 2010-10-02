@@ -1,0 +1,5 @@
+changeset = "{file_mods}{file_adds}{file_dels}{file_copies_switch}"
+file_mod = 'M\t{file_mod}\n'
+file_add = 'A\t{file_add}\n'
+file_del = 'D\t{file_del}\n'
+file_copy = 'R\t{source}\t{name}\n'

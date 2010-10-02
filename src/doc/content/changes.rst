@@ -27,6 +27,12 @@ Bug Fixes:
 Common:
   - Added a :ref:`:TreeTab <:TreeTab>` command like :ref:`:ProjectTab
     <:ProjectTab>` but for any arbitrary directory.
+  - Refactored :ref:`Vcs <vim/common/vcs>` support, including a new
+    :ref:`:VcsLog <:VcsLog>` layout.
+
+    .. note::
+
+      Support for cvs and subversion have been discontinued.
 
 .. _1.6.0:
 
@@ -604,7 +610,6 @@ Vcs:
 Vcs (subversion):
   - Added
     :ref:`:VcsLog`,
-    :ref:`:VcsChangeSet`,
     :ref:`:VcsDiff`, and
     :ref:`:VcsCat`.
 

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,29 +24,31 @@
 
 " SetUp() {{{
 function! SetUp()
-  let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/vcs/git/unittest'
+  let s:test_dir = g:TestEclimWorkspace . 'eclim_unit_test/vcs/git/unittest/test'
   exec 'cd ' . s:test_dir
 endfunction " }}}
 
 " TestInfo() {{{
 function! TestInfo()
-  view test/file1.txt
+  view file1.txt
   call PushRedir('@"')
   VcsInfo
   call PopRedir()
   let info = split(@", '\n')
-  call VUAssertEquals(info[0], 'commit 80376080596559eb6b6072f09f95be921ab6fe68')
+  call VUAssertEquals(info[0], 'commit 101e4be405fdf4f4c38e5b0e3726e937559037f3')
   call VUAssertEquals(info[1], 'Author: ervandew <ervandew@gmail.com>')
   call VUAssertEquals(info[2], 'Date:   Sat Sep 27 18:05:24 2008 -0700')
   call VUAssertEquals(info[3], '')
   call VUAssertEquals(info[4], '    changed some files and leaving a multi line comment')
-  call VUAssertEquals(info[5], '      - file 1')
-  call VUAssertEquals(info[6], '      - file 2')
+  call VUAssertEquals(info[5], '    ')
+  call VUAssertEquals(info[6], '    - file 1')
+  call VUAssertEquals(info[7], '    - file 2')
+
 endfunction " }}}
 
 " TestAnnotate() {{{
 function! TestAnnotate()
-  view test/file1.txt
+  view file1.txt
   call PeekRedir()
   call PushRedir('@"')
   VcsAnnotate
@@ -68,93 +70,78 @@ function! TestAnnotate()
   call VUAssertEquals(len(existing), 0)
 endfunction " }}}
 
-" TestChangeSet() {{{
-function! TestChangeSet()
-  view test/file1.txt
-  call PeekRedir()
-  VcsChangeSet
-  call VUAssertEquals(expand('%'), '[vcs_log]')
-  call VUAssertEquals(getline(1), 'Revision: 80376080596559eb6b6072f09f95be921ab6fe68')
-  call VUAssertEquals(getline(4), '|M| |test/file1.txt|')
-  call VUAssertEquals(getline(5), '|M| |test/file2.txt|')
-  call VUAssertEquals(getline(7), 'changed some files and leaving a multi line comment')
-  call VUAssertEquals(getline(8), '  - file 1')
-  call VUAssertEquals(getline(9), '  - file 2')
-
-  " test log on |test/file2.txt|
-  call cursor(5, 6)
-  exec "normal \<cr>"
-  call PeekRedir()
-  call VUAssertEquals(getline(1), 'unittest / test / file2.txt')
-
-  exec "normal \<c-o>"
-  call PeekRedir()
-
-  " test diff on |M|
-  call cursor(4, 2)
-  exec "normal \<cr>"
-  call PeekRedir()
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_80376080596559eb6b6072f09f95be921ab6fe68_file1.txt')
-  call VUAssertEquals(line('$'), 4)
-  winc l
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_08c4100b146fa19f4950882dc44ab6902d2e5d23_file1.txt')
-  call VUAssertEquals(line('$'), 3)
-endfunction " }}}
-
 " TestDiff() {{{
 function! TestDiff()
-  view test/file1.txt
+  view file1.txt
   call PeekRedir()
   VcsDiff
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'test/file1.txt')
+  call VUAssertEquals(name, 'file1.txt')
   call VUAssertEquals(line('$'), 5)
 
   winc l
 
   call VUAssertEquals(
-    \ expand('%'), 'vcs_80376080596559eb6b6072f09f95be921ab6fe68_file1.txt')
+    \ expand('%'), 'vcs_101e4be_file1.txt')
   call VUAssertEquals(line('$'), 4)
 endfunction " }}}
 
 " TestLog() {{{
 function! TestLog()
-  view test/file1.txt
+  view file1.txt
   call PeekRedir()
   VcsLog
   call VUAssertEquals(expand('%'), '[vcs_log]')
-  call VUAssertEquals(getline(1), 'unittest / test / file1.txt')
+  call VUAssertEquals(getline(1), 'test/file1.txt')
+  call VUAssertEquals(line('$'), 5)
+  call VUAssertTrue(
+    \ getline(3) =~
+    \ '+ 101e4be ervandew (.* ago) changed some files and leaving a multi line comment')
+  call VUAssertTrue(
+    \ getline(4) =~
+    \ '+ 08c4100 ervandew (.* ago) added 2nd revision content to file1.txt')
+  call VUAssertTrue(
+    \ getline(5) =~
+    \ '+ df552e0 ervandew (.* ago) adding some test files')
+
+  " toggle
+  call cursor(4, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 9)
+  call VUAssertTrue(
+    \ getline(4) =~
+    \ '- 08c4100 ervandew (.* ago) 2008-09-27 15:01:49 -0700')
   call VUAssertEquals(
-    \ getline(4),
-    \ 'Revision: |80376080596559eb6b6072f09f95be921ab6fe68| |view| |annotate|')
-  call VUAssertEquals(
-    \ getline(13),
-    \ 'Revision: |08c4100b146fa19f4950882dc44ab6902d2e5d23| |view| |annotate|')
-  call VUAssertEquals(
-    \ getline(20),
-    \ 'Revision: |df552e0239d91c2a814023735ad300c0f2e2c889| |view| |annotate|')
+    \ getline(5),
+    \ '  |view| |annotate| |diff working copy| |diff previous|')
+  call VUAssertEquals(getline(6), '  added 2nd revision content to file1.txt')
+  call VUAssertEquals(getline(7), '')
+  call VUAssertEquals(getline(8), '  + files')
+
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 5)
+  call VUAssertTrue(
+    \ getline(4) =~
+    \ '+ 08c4100 ervandew (.* ago) added 2nd revision content to file1.txt')
+
+  exec "normal \<cr>"
 
   " view
-  call cursor(13, 55)
+  call cursor(5, 4)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_08c4100b146fa19f4950882dc44ab6902d2e5d23_file1.txt')
+  call VUAssertEquals(expand('%'), 'vcs_08c4100_file1.txt')
   bdelete
   VcsLog
 
   " annotate
-  call cursor(20, 62)
+  call cursor(5, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(getline(6), '  |view| |annotate| |diff working copy|')
+  call cursor(6, 11)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_df552e0239d91c2a814023735ad300c0f2e2c889_file1.txt')
+  call VUAssertEquals(expand('%'), 'vcs_df552e0_file1.txt')
   call VUAssertEquals(
     \ b:vcs_annotations[0],
     \ 'df552e0239d91c2a814023735ad300c0f2e2c889 (2008-09-27 13:49:08 -0700) ervandew')
@@ -162,34 +149,83 @@ function! TestLog()
   VcsLog
 
   " diff previous
-  call cursor(6, 8)
+  call cursor(3, 1)
+  exec "normal \<cr>"
+  call cursor(4, 42)
   exec "normal \<cr>"
   call PeekRedir()
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_80376080596559eb6b6072f09f95be921ab6fe68_file1.txt')
+  call VUAssertEquals(expand('%'), 'vcs_101e4be_file1.txt')
   call VUAssertEquals(line('$'), 4)
   winc l
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_08c4100b146fa19f4950882dc44ab6902d2e5d23_file1.txt')
+  call VUAssertEquals(expand('%'), 'vcs_08c4100_file1.txt')
   call VUAssertEquals(line('$'), 3)
   bdelete
   bdelete
   VcsLog
 
   " diff working copy
-  call cursor(22, 8)
+  call cursor(5, 1)
+  exec "normal \<cr>"
+  call cursor(6, 27)
   exec "normal \<cr>"
   call PeekRedir()
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'test/file1.txt')
+  call VUAssertEquals(name, 'file1.txt')
   call VUAssertEquals(line('$'), 5)
   winc l
-  call VUAssertEquals(
-    \ expand('%'),
-    \ 'vcs_df552e0239d91c2a814023735ad300c0f2e2c889_file1.txt')
+  call VUAssertEquals(expand('%'), 'vcs_df552e0_file1.txt')
   call VUAssertEquals(line('$'), 2)
+endfunction " }}}
+
+" TestLogFiles() {{{
+function! TestLogFiles()
+  view file2.txt
+  call PeekRedir()
+  VcsLog
+  call VUAssertEquals(expand('%'), '[vcs_log]')
+  call VUAssertEquals(getline(1), 'test/file2.txt')
+  call VUAssertEquals(line('$'), 5)
+  call cursor(3, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(getline(7), '  + files')
+  call cursor(7, 1)
+  exec "normal \<cr>"
+
+  call VUAssertEquals(getline( 7), '  - files')
+  call VUAssertEquals(getline( 8), '    |M| test/file2.txt')
+  call VUAssertEquals(getline( 9), '    |A| test/file3.txt')
+  call VUAssertEquals(getline(10), '    |R| test/file4.txt -> test/file5.txt')
+
+  " modified file
+  call cursor(8, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_ee5a562_file2.txt')
+  call VUAssertEquals(line('$'), 4)
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_101e4be_file2.txt')
+  call VUAssertEquals(line('$'), 3)
+  bdelete
+  bdelete
+  winc j
+
+  " new file
+  call cursor(9, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_ee5a562_file3.txt')
+  call VUAssertEquals(line('$'), 4)
+  bdelete
+  winc j
+
+  " moved file
+  call cursor(10, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_ee5a562_file5.txt')
+  call VUAssertEquals(line('$'), 1)
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_35a1f6a_file4.txt')
+  call VUAssertEquals(line('$'), 1)
+  bdelete
+  bdelete
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

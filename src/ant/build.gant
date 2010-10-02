@@ -336,22 +336,13 @@ target(name: 'test.init'){
   }
 
   createProject('eclim_unit_test', 'none'){
-    ['cvs', 'git', 'mercurial', 'subversion'].each(){ name ->
-      exec(executable: 'tar', dir: '${eclipse.workspace}/eclim_unit_test/vcs'){
-        arg(line: "-zxf ${name}.tar.gz")
+    workspace = binding.getVariable('eclipse.workspace')
+    vcsDir = new File("${workspace}/eclim_unit_test/vcs")
+    vcsDir.eachFileMatch(~/.*\.tar\.gz$/){ file ->
+      exec(executable: 'tar', dir: "${workspace}/eclim_unit_test/vcs"){
+        arg(line: "-zxf ${file}")
       }
     }
-    vcsDir = binding.getVariable('eclipse.workspace') + '/eclim_unit_test/vcs'
-    vcsDir = vcsDir.replace(' ', '%20')
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      vcsDir = '/' + vcsDir
-    }
-    replace(dir: '${eclipse.workspace}/eclim_unit_test/vcs',
-        defaultexcludes: 'false', token: '$${vcs.dir}', value: vcsDir){
-      include(name: 'cvs/unittest/**/CVS/Root')
-      include(name: 'subversion/**/.svn/entries')
-    }
-
     eclim('-command project_refresh -p eclim_unit_test')
   }
 

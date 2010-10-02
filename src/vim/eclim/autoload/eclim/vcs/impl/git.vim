@@ -40,20 +40,14 @@ augroup END
   let s:trackerIdPattern = join(eclim#vcs#command#EclimVcsTrackerIdPatterns, '\|')
 " }}}
 
-" GetAnnotations(revision) {{{
-function! eclim#vcs#impl#git#GetAnnotations(revision)
-  if exists('b:vcs_props') && filereadable(b:vcs_props.path)
-    let file = fnamemodify(b:vcs_props.path, ':t')
-  else
-    let file = expand('%')
-  endif
-
+" GetAnnotations(path, revision) {{{
+function! eclim#vcs#impl#git#GetAnnotations(path, revision)
   let cmd = 'annotate -l'
   let revision = ''
   if a:revision != ''
     let revision = ' ' . substitute(a:revision, '.*:', '', '')
   endif
-  let result = eclim#vcs#impl#git#Git(cmd . ' "' . file . '"' . revision)
+  let result = eclim#vcs#impl#git#Git(cmd . ' "' . a:path . '"' . revision)
   if type(result) == 0
     return
   endif
@@ -67,29 +61,14 @@ function! eclim#vcs#impl#git#GetAnnotations(revision)
   return annotations
 endfunction " }}}
 
-" GetRelativePath(dir, file) {{{
-function eclim#vcs#impl#git#GetRelativePath(dir, file)
-  let root = eclim#vcs#impl#git#GetRoot()
-  if type(root) == 0
-    return
-  endif
-  let dir = substitute(a:dir, '\', '/', 'g')
-  return substitute(dir, root, '', '') . '/' . a:file
-endfunction " }}}
-
-" GetPreviousRevision([file, revision]) {{{
-function eclim#vcs#impl#git#GetPreviousRevision(...)
+" GetPreviousRevision(path, [revision]) {{{
+function eclim#vcs#impl#git#GetPreviousRevision(path, ...)
   let revision = 'HEAD'
   if len(a:000)
-    let path = fnamemodify(a:000[0], ':t')
-    if a:000[1] != ''
-      let revision = a:000[1]
-    endif
-  else
-    let path = expand('%:t')
+    let revision = a:000[0]
   endif
 
-  let cmd = 'rev-list -n 1 --skip=1 ' . revision . ' "' . path . '"'
+  let cmd = 'rev-list --abbrev-commit -n 1 --skip=1 ' . revision . ' -- "' . a:path . '"'
   let prev = eclim#vcs#impl#git#Git(cmd)
   if type(prev) == 0
     return
@@ -97,31 +76,30 @@ function eclim#vcs#impl#git#GetPreviousRevision(...)
   return substitute(prev, '\n', '', 'g')
 endfunction " }}}
 
-" GetRevision(file) {{{
-function eclim#vcs#impl#git#GetRevision(file)
+" GetRevision(path) {{{
+function eclim#vcs#impl#git#GetRevision(path)
   " for some reason, in some contexts (git commit buffer), the git command
   " will fail if not run from root of the repos.
   let root = eclim#vcs#impl#git#GetRoot()
-  let path = eclim#vcs#impl#git#GetRelativePath(
-    \ fnamemodify(a:file, ':p:h'), fnamemodify(a:file, ':p:t'))
-  let path = substitute(path, '^/', '', '')
   exec 'lcd ' . escape(root, ' ')
+
+  let path = a:path
 
   " kind of a hack to support diffs against git's staging (index) area.
   if path =~ '\<index_blob_[a-z0-9]\{40}_'
     let path = substitute(path, '\<index_blob_[a-z0-9]\{40}_', '', '')
   endif
 
-  let rev = eclim#vcs#impl#git#Git('rev-list -n 1 HEAD "' . path . '"')
+  let rev = eclim#vcs#impl#git#Git('rev-list --abbrev-commit -n 1 HEAD -- "' . path . '"')
   if type(rev) == 0
     return
   endif
   return substitute(rev, '\n', '', '')
 endfunction " }}}
 
-" GetRevisions() {{{
-function eclim#vcs#impl#git#GetRevisions()
-  let revs = eclim#vcs#impl#git#Git('rev-list HEAD "' . expand('%:t') . '"')
+" GetRevisions(path) {{{
+function eclim#vcs#impl#git#GetRevisions(path)
+  let revs = eclim#vcs#impl#git#Git('rev-list --abbrev-commit HEAD "' . a:path . '"')
   if type(revs) == 0
     return
   endif
@@ -195,126 +173,88 @@ function eclim#vcs#impl#git#GetModifiedFiles()
   return files
 endfunction " }}}
 
-" GetVcsWebPath() {{{
-function eclim#vcs#impl#git#GetVcsWebPath()
-  let path = substitute(expand('%:p'), '\', '/', 'g')
-  let path = substitute(path, eclim#vcs#impl#git#GetRoot(), '', '')
-  if path =~ '^/'
-    let path = path[1:]
-  endif
-  return path
-endfunction " }}}
-
-" ChangeSet(revision) {{{
-function eclim#vcs#impl#git#ChangeSet(revision)
-  let result = eclim#vcs#impl#git#Git('log -1 --name-status ' . a:revision)
-  if type(result) == 0
-    return
-  endif
-  let results = split(result, '\n')
-  let log = {}
-  let comment = []
-  let files = []
-  let in_comment = 0
-  for line in results[1:]
-    if line =~ '^[A-Z][a-z]\+:'
-      let name = substitute(line, '^\(.\{-}\):.*', '\1', '')
-      let line = substitute(line, '^.\{-}:\s*\(.*\)', '\1', '')
-      let log[tolower(name)] = line
-    elseif line=~ '^[A-Z]\s\+'
-      if in_comment
-        let in_comment = 0
-        call remove(comment, -1)
-      endif
-      let line = substitute(line, '^A\s\+\(.*\)', ' A  |\1|', '')
-      let line = substitute(line, '^D\s\+\(.*\)', ' D   \1', '')
-      let line = substitute(line, '^M\s\+\(.*\)', '|M| |\1|', '')
-      call add(files, line)
-    elseif line =~ '^\s*$' && !in_comment
-      continue
-    else
-      let in_comment = 1
-      call add(comment, substitute(line, '^\s\{4}', '', ''))
-    endif
-  endfor
-  let author = substitute(log.author, '^user:\s\+', '', '')
-  let date = substitute(log.date, '^date:\s\+', '', '')
-  let lines = []
-  call add(lines, 'Revision: ' . a:revision)
-  call add(lines, 'Modified: ' . date . ' by ' . author)
-  call add(lines, 'Changed paths:')
-  let lines += files
-  call add(lines, '')
-  let lines += comment
-
-  let root_dir = exists('b:vcs_props') ?
-    \ b:vcs_props.root_dir : eclim#vcs#impl#git#GetRoot()
-  return {'changeset': lines, 'props': {'root_dir': root_dir}}
-endfunction " }}}
-
-" Info() {{{
-function eclim#vcs#impl#git#Info()
-  let result = eclim#vcs#impl#git#Git('log -1 "' . expand('%:t') . '"')
+" Info(path) {{{
+function eclim#vcs#impl#git#Info(path)
+  let result = eclim#vcs#impl#git#Git('log -1 "' . a:path . '"')
   if type(result) == 0
     return
   endif
   call eclim#util#Echo(result)
 endfunction " }}}
 
-" Log([file]) {{{
-function eclim#vcs#impl#git#Log(...)
-  if len(a:000) > 0
-    let dir = fnamemodify(a:000[0], ':h')
-    let file = fnamemodify(a:000[0], ':t')
-  else
-    let dir = expand('%:h')
-    let file = expand('%:t')
-  endif
-
-  let logcmd = 'log'
+" Log(path) {{{
+function eclim#vcs#impl#git#Log(path)
+  let logcmd = 'log --pretty=tformat:"%h|%cn|%cr|%s"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' -' . g:EclimVcsLogMaxEntries
   endif
 
-  let result = eclim#vcs#impl#git#Git(logcmd . ' "' . file . '"')
+  let result = eclim#vcs#impl#git#Git(logcmd . ' "' . a:path . '"')
   if type(result) == 0
     return
   endif
-  let log = s:ParseGitLog(split(result, '\n'))
-
-  let index = 0
-  let lines = [s:Breadcrumb(dir, file), '']
-  for entry in log
-    let index += 1
-    call add(lines, '--------------------------------------------------')
-    call add(lines, 'Revision: |' . entry.revision . '| |view| |annotate|')
-    call add(lines, 'Modified: ' . entry.date . ' by ' . entry.author)
-    let working_copy = isdirectory(file) || filereadable(file) ? ' |working copy|' : ''
-    if index < len(log)
-      call add(lines, 'Diff: |previous ' . log[index].revision . '|' . working_copy)
-    elseif working_copy != ''
-      call add(lines, 'Diff: |working copy|')
-    endif
-    call add(lines, '')
-    let lines += entry.comment[:-1]
-    if lines[-1] !~ '^\s*$' && index != len(log)
-      call add(lines, '')
-    endif
+  let log = []
+  for line in split(result, '\n')
+    let values = split(line, '|')
+    call add(log, {
+        \ 'revision': values[0],
+        \ 'author': values[1],
+        \ 'age': values[2],
+        \ 'comment': values[3],
+     \ })
   endfor
   let root_dir = exists('b:vcs_props') ?
     \ b:vcs_props.root_dir : eclim#vcs#impl#git#GetRoot()
-  return {'log': lines, 'props': {'root_dir': root_dir}}
+  return {'log': log, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" LogDetail(revision) {{{
+function eclim#vcs#impl#git#LogDetail(revision)
+  let logcmd = 'log -1 --pretty=tformat:"%h|%cn|%cr|%ci|%s|%B" '
+  let result = eclim#vcs#impl#git#Git(logcmd . a:revision)
+  if type(result) == 0
+    return
+  endif
+  let values = split(result, '|')
+  return {
+      \ 'revision': values[0],
+      \ 'author': values[1],
+      \ 'age': values[2],
+      \ 'date': values[3],
+      \ 'comment': values[4],
+      \ 'description': values[5],
+   \ }
+endfunction " }}}
+
+" LogFiles(revision) {{{
+function eclim#vcs#impl#git#LogFiles(revision)
+  let logcmd = 'log -1 --name-status --pretty=tformat:"" '
+  let result = eclim#vcs#impl#git#Git(logcmd . a:revision)
+  if type(result) == 0
+    return
+  endif
+  let results = filter(split(result, '\n'), 'v:val !~ "^$"')
+  let files = []
+  for result in results
+    if result =~ '^R'
+      let [status, old, new] = split(result, '\t')
+      call add(files, {'status': status[0], 'old': old, 'new': new})
+    else
+      let [status, file] = split(result, '\t')
+      call add(files, {'status': status, 'file': file})
+    endif
+  endfor
+  return files
 endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
 function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
   " for some reason, in some contexts (git commit buffer), the git command
   " will fail if not run from root of the repos.
-  let path = eclim#vcs#impl#git#GetRelativePath(
-    \ fnamemodify(a:path, ':p:h'), fnamemodify(a:path, ':t'))
-  let path = substitute(path, '^/', '', '')
   let root = eclim#vcs#impl#git#GetRoot()
   exec 'lcd ' . escape(root, ' ')
+
+  let path = a:path
 
   " kind of a hack to support diffs against git's staging (index) area.
   if path =~ '\<index_blob_[a-z0-9]\{40}_'
@@ -331,44 +271,12 @@ function eclim#vcs#impl#git#Git(args)
   return eclim#vcs#util#Vcs('git', '--no-pager ' . a:args)
 endfunction " }}}
 
-" s:Breadcrumb(dir, file) {{{
-function! s:Breadcrumb(dir, file)
-  let path = split(eclim#vcs#impl#git#GetRelativePath(a:dir, a:file), '/')
-  call insert(path, fnamemodify(eclim#vcs#impl#git#GetRoot(), ':t'), 0)
-  return join(path, ' / ' )
-endfunction " }}}
-
-" s:ParseGitLog(lines) {{{
-function! s:ParseGitLog(lines)
-  let log = []
-  let section = 'header'
-  for line in a:lines
-    if line =~ '^commit\s[0-9a-z]\+$'
-      let entry = {'revision': substitute(line, 'commit\s', '', ''), 'comment': []}
-      call add(log, entry)
-      let section = 'header'
-    elseif line =~ '^Author:\s\+'
-      let entry.author = substitute(line, 'Author:\s\+', '', '')
-    elseif line =~ '^Date:\s\+'
-      let entry.date = substitute(line, 'Date:\s\+', '', '')
-    elseif line =~ '^$' && section == 'header'
-      let section = 'comment'
-    elseif section == 'comment'
-      let line = substitute(line, '^\s\{4}', '', '')
-      let line = substitute(
-        \ line, '\(' . s:trackerIdPattern . '\)', '|\1|', 'g')
-      call add(entry.comment, line)
-    endif
-  endfor
-  return log
-endfunction " }}}
-
 " s:ReadIndex() {{{
 " Used to read a file with the name index_blob_<index hash>_<filename>, for
 " use by the git editor diff support.
 function! s:ReadIndex()
   if !filereadable(expand('%'))
-    let path = eclim#vcs#impl#git#GetRelativePath(expand('%:p:h'), expand('%:t'))
+    let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
     let path = substitute(path, '^/', '', '')
     let root = eclim#vcs#impl#git#GetRoot()
     exec 'lcd ' . escape(root, ' ')

@@ -108,7 +108,7 @@ function! eclim#java#test#CommandCompleteTest(type, argLead, cmdLine, cursorPos)
   let results = split(eclim#util#Globpath(path . argLead, '*'), '\n')
 
   call filter(results, 'v:val =~ argLead . partial')
-  call filter(results, '(isdirectory(v:val) && v:val !~ "CVS") || v:val =~ "\\.java$"')
+  call filter(results, 'isdirectory(v:val) || v:val =~ "\\.java$"')
   call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
   call map(results, 'substitute(v:val, "\\(" . path . "\\|\\.java$\\)", "", "g")')
   call map(results, 'substitute(v:val, "\\\\", "/", "g")')

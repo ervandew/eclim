@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,49 +28,43 @@ if !exists(":VcsAnnotate")
 endif
 if !exists(":VcsLog")
   command VcsLog
-    \ :if s:CheckWindow() |
-    \    call eclim#vcs#command#Log(expand('%:p')) |
-    \  endif
-endif
-if !exists(":VcsChangeSet")
-  command -nargs=? VcsChangeSet
-    \ :if s:CheckWindow() |
-    \    call eclim#vcs#command#ChangeSet(expand('%:p'), '<args>') |
-    \  endif
+    \ if s:CheckWindow() |
+    \   call eclim#vcs#command#Log(expand('%:p')) |
+    \ endif
 endif
 if !exists(":VcsDiff")
   command -nargs=? VcsDiff
-    \ :if s:CheckWindow() |
-    \    call eclim#vcs#command#Diff(expand('%:p'), '<args>') |
-    \  endif
+    \ if s:CheckWindow() |
+    \   call eclim#vcs#command#Diff('<args>') |
+    \ endif
 endif
 if !exists(":VcsCat")
   command -nargs=? VcsCat
-    \ :if s:CheckWindow() |
-    \    call eclim#vcs#command#ViewFileRevision(expand('%:p'), '<args>', 'split') |
-    \  endif
+    \ if s:CheckWindow() |
+    \   call eclim#vcs#command#ViewFileRevision(expand('%:p'), '<args>', 'split') |
+    \ endif
 endif
 if !exists(":VcsInfo")
   command -nargs=0 VcsInfo
-    \ :if s:CheckWindow() |
-    \    call eclim#vcs#command#Info() |
-    \  endif
+    \ if s:CheckWindow() |
+    \   call eclim#vcs#command#Info() |
+    \ endif
 endif
 
 if !exists(":VcsWebLog")
-  command -nargs=? VcsWebLog :call eclim#vcs#web#VcsWebLog('<args>')
+  command -nargs=? VcsWebLog call eclim#vcs#web#VcsWebLog('<args>')
 endif
 if !exists(":VcsWebChangeSet")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ VcsWebChangeSet :call eclim#vcs#web#VcsWebChangeSet(<q-args>)
+    \ VcsWebChangeSet call eclim#vcs#web#VcsWebChangeSet(<q-args>)
 endif
 if !exists(":VcsWebAnnotate")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ VcsWebAnnotate :call eclim#vcs#web#VcsWebAnnotate(<q-args>)
+    \ VcsWebAnnotate call eclim#vcs#web#VcsWebAnnotate(<q-args>)
 endif
 if !exists(":VcsWebDiff")
   command -nargs=* -complete=customlist,eclim#vcs#util#CommandCompleteRevision
-    \ VcsWebDiff :call eclim#vcs#web#VcsWebDiff(<q-args>)
+    \ VcsWebDiff call eclim#vcs#web#VcsWebDiff(<q-args>)
 endif
 
 function! s:CheckWindow()

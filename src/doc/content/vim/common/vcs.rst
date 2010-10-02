@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ Vcs Commands
 ------------
 
 The following is a list of commands that may be execute when viewing a
-file versioned in cvs, subversion, mercurial, or git (where applicable).
+file versioned in mercurial (hg) or git.
 
 .. _\:VcsAnnotate:
 
@@ -44,26 +44,15 @@ file versioned in cvs, subversion, mercurial, or git (where applicable).
 .. _\:VcsLog:
 
 - **:VcsLog** -
-  Opens a buffer with log information for the current file. In this buffer
-  you can perform various operations (diff, annotate, view log for another file,
-  etc.) by hitting <Return> on any of the text links denoted by '\|link name\|'
-  (ex.  '\|annotate\|').
+  Opens a buffer with log information for the current file. In this buffer you
+  can expand individual log entries (by hitting <Enter>) to view more detail
+  and perform various operations (diff, annotate, etc.) using any of the text
+  links denoted by '\|link name\|' (ex.  '\|annotate\|').
 
-  By default the number of entries retrieved will be limited to 50 in an effort
-  to reduce the latency of retrieving logs for files with a long revision
-  history.  This value can be changed via the :ref:`g:EclimVcsLogMaxEntries`
-  variable.
-
-.. _\:VcsChangeSet:
-
-- **:VcsChangeSet** [revision] -
-  Opens a buffer with change set information for the supplied repository
-  version or the current revision of the currently open file. The special
-  revision "prev" can be used to see the changeset of the previous repository
-  version.
-
-  Like **:VcsLog**, this buffer will contain text links which allow you to
-  perform other operations.
+  By default the number of entries retrieved will be limited to 100 in an
+  effort to reduce the latency of retrieving logs for files with a long
+  revision history.  This value can be changed via the
+  :ref:`g:EclimVcsLogMaxEntries` variable.
 
 .. _\:VcsDiff:
 

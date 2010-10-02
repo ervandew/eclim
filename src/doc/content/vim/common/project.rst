@@ -493,9 +493,9 @@ Tracker
       org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
 
     In addition to being used by :TrackerTicket, this setting is also used in
-    conjunction with :ref:`:VcsLog` and :ref:`:VcsChangeSet` to enable linking of
-    ticket ids of the form #ticket_id (#1234) found in user supplied commit
-    comments.  You may also specify other patterns to match by setting the
+    conjunction with :ref:`:VcsLog` to enable linking of ticket ids of the form
+    #ticket_id (#1234) found in user supplied commit comments.  You may also
+    specify other patterns to match by setting the
     :ref:`g:EclimVcsTrackerIdPatterns` variable.
 
 .. _taglist: http://www.vim.org/scripts/script.php?script_id=273
