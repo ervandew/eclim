@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -622,6 +622,12 @@ endfunction " }}}
 " NavigateWindows(cmd) {{{
 " Used navigate windows by skipping minimized windows.
 function! eclim#display#maximize#NavigateWindows(wincmd)
+  " edge case for the command line window
+  if &ft == 'vim' && bufname('%') == '[Command Line]'
+    quit
+    return
+  endif
+
   let start = winnr()
   let lastwindow = start
 

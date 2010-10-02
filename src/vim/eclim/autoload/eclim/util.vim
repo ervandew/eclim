@@ -378,6 +378,11 @@ endfunction " }}}
 
 " GetVimWidth() {{{
 function! eclim#util#GetVimWidth()
+  " edge case for the command line window
+  if &ft == 'vim' && bufname('%') == '[Command Line]'
+    return winwidth(winnr())
+  endif
+
   let curwin = winnr()
   let width = 0
   try
