@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.project;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -69,7 +70,12 @@ import org.eclipse.jdt.internal.core.JavaProject;
 
 import org.eclipse.jdt.internal.ui.wizards.ClassPathDetector;
 
-import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.internal.ui.wizards.buildpaths.BuildPathsBlock;
+import org.eclipse.jdt.internal.ui.wizards.buildpaths.CPListElement;
+
+import org.eclipse.jdt.ui.PreferenceConstants;
+
+import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * Implementation of {@link ProjectManager} for java projects.
@@ -176,28 +182,73 @@ public class JavaProjectManager
    * Creates a new project.
    *
    * @param project The project.
-   * @param dependsString Comma seperated project names this project depends on.
+   * @param depends Comma seperated project names this project depends on.
    */
-  protected void create(IProject project, String dependsString)
+  protected void create(IProject project, String depends)
     throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);
     ((JavaProject)javaProject).configure();
 
     if (!project.getFile(CLASSPATH).exists()) {
+      ArrayList<IClasspathEntry> classpath = new ArrayList<IClasspathEntry>();
+      boolean source = false;
+      boolean container = false;
+
       ClassPathDetector detector = new ClassPathDetector(project, null);
-      IClasspathEntry[] detected = detector.getClasspath();
-      IClasspathEntry[] depends =
-        createOrUpdateDependencies(javaProject, dependsString);
-      IClasspathEntry[] container = new IClasspathEntry[]{
-        JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))
-      };
+      for (IClasspathEntry entry : detector.getClasspath()){
+        if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
+          source = true;
+        } else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER){
+          container = true;
+        }
+        classpath.add(entry);
+      }
 
-      IClasspathEntry[] classpath = merge(
-          new IClasspathEntry[][]{detected, depends, container});
-            //javaProject.readRawClasspath(), detected, depends, container
+      // default source folder
+      if (!source){
+        IResource src;
+        IPreferenceStore store = PreferenceConstants.getPreferenceStore();
+        String name = store.getString(PreferenceConstants.SRCBIN_SRCNAME);
+        if (store.getBoolean(PreferenceConstants.SRCBIN_FOLDERS_IN_NEWPROJ) && name.length() > 0) {
+          src = javaProject.getProject().getFolder(name);
+        } else {
+          src = javaProject.getProject();
+        }
 
-      javaProject.setRawClasspath(classpath, null);
+        classpath.add(
+            new CPListElement(
+              javaProject, IClasspathEntry.CPE_SOURCE, src.getFullPath(), src)
+            .getClasspathEntry());
+
+        File srcPath = new File(
+            ProjectUtils.getFilePath(project, src.getFullPath().toString()));
+        if (!srcPath.exists()){
+          srcPath.mkdirs();
+        }
+      }
+
+      // default containers
+      if (!container){
+        for (IClasspathEntry entry : PreferenceConstants.getDefaultJRELibrary()){
+          classpath.add(entry);
+        }
+      }
+
+      // dependencies on other projects
+      for (IClasspathEntry entry : createOrUpdateDependencies(javaProject, depends)){
+        classpath.add(entry);
+      }
+
+      javaProject.setRawClasspath(
+          classpath.toArray(new IClasspathEntry[classpath.size()]), null);
+
+      // output location
+      IPath output = detector.getOutputLocation();
+      if (output == null){
+        output = BuildPathsBlock.getDefaultOutputLocation(javaProject);
+      }
+      javaProject.setOutputLocation(output, null);
     }
     javaProject.makeConsistent(null);
     javaProject.save(null, false);
