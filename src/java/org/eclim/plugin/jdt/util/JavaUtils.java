@@ -452,6 +452,7 @@ public class JavaUtils
    *
    * @param version The java version.
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void setCompilerSourceCompliance(String version)
     throws Exception
   {
@@ -469,6 +470,7 @@ public class JavaUtils
    * @param project The java project.
    * @param version The java version.
    */
+  @SuppressWarnings("unchecked")
   public static void setCompilerSourceCompliance(
       IJavaProject project, String version)
     throws Exception
