@@ -166,7 +166,7 @@ public class JavaUtils
     ICompilationUnit src = getCompilationUnit(javaProject, file);
     if(src == null || !src.exists()){
       throw new IllegalArgumentException(
-          Services.getMessage("src.file.not.found", file));
+          Services.getMessage("src.file.not.found", file, ".classpath"));
     }
     return src;
   }
@@ -193,7 +193,7 @@ public class JavaUtils
       }
     }
     throw new IllegalArgumentException(
-        Services.getMessage("src.file.not.found", file));
+        Services.getMessage("src.file.not.found", file, ".classpath"));
   }
 
   /**
