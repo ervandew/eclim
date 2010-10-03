@@ -1043,7 +1043,7 @@ function! eclim#project#util#CommandCompleteProjectCreate(argLead, cmdLine, curs
     endif
 
     if cmdLine !~ '[^\\]\s$'
-      call filter(aliases, 'v:val =~ "^' . argLead . '"')
+      call filter(aliases, 'v:val =~ "^' . escape(escape(argLead, '~.\'), '\') . '"')
     endif
 
     return aliases
