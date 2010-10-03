@@ -38,6 +38,9 @@ endif
 if !exists('g:EclimLocateUserScopes')
   let g:EclimLocateUserScopes = []
 endif
+
+let g:eclim_locate_default_updatetime = &updatetime
+
 " }}}
 
 " Script Variables {{{
@@ -257,17 +260,16 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace)
   let b:results_bufnum = results_bufnum
   let b:help_bufnum = 0
   let b:selection = 1
-  let b:updatetime = &updatetime
 
   set updatetime=300
 
   augroup locate_file_init
     autocmd!
     autocmd BufEnter <buffer> nested startinsert! | let &updatetime = 300
-    autocmd BufLeave <buffer> nested stopinsert | let &updatetime = b:updatetime
     autocmd BufLeave \[Locate*\]
       \ call eclim#util#DelayedCommand('call eclim#common#locate#LocateFileClose()')
     exec 'autocmd InsertLeave <buffer> ' .
+      \ 'let &updatetime = g:eclim_locate_default_updatetime | ' .
       \ 'doautocmd BufWinLeave | bw | ' .
       \ 'doautocmd BufWinLeave | bw ' . b:results_bufnum . ' | ' .
       \ 'call eclim#util#GoToBufferWindow(' .  b:bufnum . ') | ' .
@@ -373,12 +375,11 @@ function! s:LocateFileSelect(action)
     endif
     let bufnum = bufnr('%')
     let results_bufnum = b:results_bufnum
-    let updatetime = b:updatetime
+    let &updatetime = g:eclim_locate_default_updatetime
     call eclim#util#GoToBufferWindow(b:bufnum)
     call eclim#util#GoToBufferWindowOrOpen(file, a:action)
     call feedkeys(
-      \ "\<esc>:let &updatetime = " . updatetime . " | " .
-      \ ":bd " . bufnum . " | " .
+      \ "\<esc>:bd " . bufnum . " | " .
       \ "bd " . results_bufnum . " | " .
       \ "doautocmd WinEnter\<cr>", 'n')
   endif
