@@ -20,9 +20,12 @@ import java.io.InputStream;
 
 import java.util.ArrayList;
 
+import org.eclim.Services;
+
 import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -100,7 +103,8 @@ public class DltkUtils
     // org.eclipse.dltk.ruby.internal.debug.ui.console.RubyConsoleSourceModuleLookup
     // Is there an easier way?
     IPath path = file.getFullPath();
-    IScriptProject scriptProject = DLTKCore.create(file.getProject());
+    IProject project = file.getProject();
+    IScriptProject scriptProject = DLTKCore.create(project);
     IProjectFragment[] roots = scriptProject.getProjectFragments();
     ISourceModule module = null;
     for (int j = 0, rootCount = roots.length; j < rootCount; j++) {
@@ -121,6 +125,12 @@ public class DltkUtils
           break;
         }
       }
+    }
+    if (module == null || !module.exists()){
+      // hacky removal of first segment to get project relative path
+      String filepath = path.removeFirstSegments(1).toString();
+      throw new IllegalArgumentException(
+          Services.getMessage("src.file.not.found", filepath, ".buildpath"));
     }
     return module;
   }
