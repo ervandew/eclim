@@ -181,14 +181,9 @@ function! eclim#display#signs#GetExisting(...)
   redir END
 
   let existing = []
-  for sign in split(signs, '\n')
-    if sign =~ 'id='
-      " for multi language support, don't have have regex w/ english
-      " identifiers
-      let id = substitute(sign, '.\{-}=.\{-}=\(\d\+\).\{-}\s.*', '\1', '')
-      exec 'let line = ' . substitute(sign, '.\{-}=\(\d\+\).\{-}\s.*', '\1', '')
-      let name = substitute(sign, '.\{-}=.\{-}=.\{-}=\(.\{-}\)\s*$', '\1', '')
-      call add(existing, {'id': id, 'line': line, 'name': name})
+  for line in split(signs, '\n')
+    if line =~ '.\{-}=.\{-}=.\{-}='
+      call add(existing, s:ParseSign(line))
     endif
   endfor
 
@@ -200,7 +195,7 @@ function! eclim#display#signs#GetExisting(...)
 endfunction " }}}
 
 " HasExisting(...) {{{
-" Determines if there are an existing signs.
+" Determines if there are any existing signs.
 " Optionally a sign name may be supplied to only test for signs of that name.
 function! eclim#display#signs#HasExisting(...)
   let bufnr = bufnr('%')
@@ -209,19 +204,41 @@ function! eclim#display#signs#HasExisting(...)
   silent exec 'sign place buffer=' . bufnr
   redir END
 
-  for sign in split(results, '\n')
-    if sign =~ 'id='
+  for line in split(results, '\n')
+    if line =~ '.\{-}=.\{-}=.\{-}='
       if len(a:000) == 0
         return 1
       endif
-      let name = substitute(sign, '.\{-}=.\{-}=.\{-}=\(.\{-}\)\s*$', '\1', '')
-      if name == a:000[0]
+      let sign = s:ParseSign(line)
+      if sign.name == a:000[0]
         return 1
       endif
     endif
   endfor
 
   return 0
+endfunction " }}}
+
+" s:ParseSign(raw) {{{
+function! s:ParseSign(raw)
+  let attrs = split(a:raw)
+
+  exec 'let line = ' . split(attrs[0], '=')[1]
+
+  let id = split(attrs[1], '=')[1]
+  " hack for the italian localization
+  if id =~ ',$'
+    let id = id[:-2]
+  endif
+
+  " hack for the swedish localization
+  if attrs[2] =~ '^namn'
+    let name = substitute(attrs[2], 'namn', '', '')
+  else
+    let name = split(attrs[2], '=')[1]
+  endif
+
+  return {'id': id, 'line': line, 'name': name}
 endfunction " }}}
 
 " Update() {{{
