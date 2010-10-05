@@ -182,7 +182,7 @@ function! eclim#display#signs#GetExisting(...)
 
   let existing = []
   for line in split(signs, '\n')
-    if line =~ '.\{-}=.\{-}=.\{-}='
+    if line =~ '.\{-}=.\{-}=' " only two equals to account for swedish output
       call add(existing, s:ParseSign(line))
     endif
   endfor
@@ -205,7 +205,7 @@ function! eclim#display#signs#HasExisting(...)
   redir END
 
   for line in split(results, '\n')
-    if line =~ '.\{-}=.\{-}=.\{-}='
+    if line =~ '.\{-}=.\{-}=' " only two equals to account for swedish output
       if len(a:000) == 0
         return 1
       endif
