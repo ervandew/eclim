@@ -180,12 +180,7 @@ endfunction " }}}
 " ViewFileRevision(path, revision, open_cmd) {{{
 " Open a read only view for the revision of the supplied version file.
 function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
-  if a:path == ''
-    call eclim#util#EchoError('File is not under version control.')
-    return
-  endif
-
-  let path = substitute(a:path, '\', '/', 'g')
+  let path = eclim#vcs#util#GetRelativePath(a:path)
   let revision = a:revision
   if revision == ''
     let revision = eclim#vcs#util#GetRevision(path)

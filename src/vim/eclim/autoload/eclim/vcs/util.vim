@@ -151,7 +151,7 @@ endfunction " }}}
 function eclim#vcs#util#GetRelativePath(path)
   let root = eclim#vcs#util#GetRoot(a:path)
   let path = substitute(a:path, '\', '/', 'g')
-  let path = substitute(path, root, '', '')
+  let path = substitute(path, '^' . root, '', '')
   let path = substitute(path, '^/', '', '')
   return path
 endfunction " }}}
