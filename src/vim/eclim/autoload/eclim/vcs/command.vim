@@ -199,6 +199,7 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
   endif
   let vcs_file = 'vcs_' . revision . '_' . fnamemodify(path, ':t')
 
+  let cwd = eclim#vcs#util#LcdRoot()
   let g:EclimTemplateTempIgnore = 1
   try
     let open_cmd = a:open_cmd != '' ? a:open_cmd : 'split'
@@ -206,19 +207,14 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
       let vcs_file = substitute(vcs_file, ':', '_', 'g')
     endif
     call eclim#util#GoToBufferWindowOrOpen(vcs_file, open_cmd)
-  finally
-    unlet g:EclimTemplateTempIgnore
-  endtry
 
-  setlocal noreadonly
-  setlocal modifiable
-  silent 1,$delete _
+    setlocal noreadonly
+    setlocal modifiable
+    silent 1,$delete _
 
-  let b:vcs_props = copy(props)
+    let b:vcs_props = copy(props)
 
-  " load in content
-  let cwd = eclim#vcs#util#LcdRoot()
-  try
+    " load in content
     let ViewFileRevision = eclim#vcs#util#GetVcsFunction('ViewFileRevision')
     if type(ViewFileRevision) != 2
       return
@@ -226,6 +222,7 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
     let lines = ViewFileRevision(path, revision)
   finally
     exec 'lcd ' . cwd
+    unlet g:EclimTemplateTempIgnore
   endtry
 
   call append(1, lines)

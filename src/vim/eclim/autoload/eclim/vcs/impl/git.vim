@@ -249,11 +249,6 @@ endfunction " }}}
 
 " ViewFileRevision(path, revision) {{{
 function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
-  " for some reason, in some contexts (git commit buffer), the git command
-  " will fail if not run from root of the repos.
-  let root = eclim#vcs#impl#git#GetRoot()
-  exec 'lcd ' . escape(root, ' ')
-
   let path = a:path
 
   " kind of a hack to support diffs against git's staging (index) area.
