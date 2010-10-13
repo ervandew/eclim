@@ -39,7 +39,7 @@ fi
 
 PLUGINS=`
   grep "path=\"ECLIPSE_HOME" $ECLIM_DIR/.classpath | \
-  sed "s|.*path=\"ECLIPSE_HOME/.*[/]\?plugins/\([^_]*\)_.*|\1|"
+  perl -pe "s|.*path=\"ECLIPSE_HOME/.*[/]?plugins/(.*?)_\d+\..*|\1|"
 `
 
 for PLUGIN in $PLUGINS ; do
