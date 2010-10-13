@@ -61,6 +61,9 @@ function! eclim#python#complete#CodeComplete(findstart, base)
     let completions = []
     let results = eclim#python#rope#Completions(project, file, offset, encoding)
 
+    let open_paren = getline('.') =~ '\%' . col('.') . 'c\s*('
+    let close_paren = getline('.') =~ '\%' . col('.') . 'c\s*(\s*)'
+
     for result in results
       let word = result[0]
       let kind = result[1]
@@ -83,6 +86,16 @@ function! eclim#python#complete#CodeComplete(findstart, base)
       " map 'c' (class) to 't'
       elseif kind == 'c'
         let kind = 't'
+      endif
+
+      " strip off close paren if necessary.
+      if word =~ ')$' && close_paren
+        let word = strpart(word, 0, strlen(word) - 1)
+      endif
+
+      " strip off open paren if necessary.
+      if word =~ '($' && open_paren
+        let word = strpart(word, 0, strlen(word) - 1)
       endif
 
       let dict = {
