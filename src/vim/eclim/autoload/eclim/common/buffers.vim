@@ -117,6 +117,16 @@ function! eclim#common#buffers#Buffers()
   "augroup END
 endfunction " }}}
 
+" BuffersToggle() {{{
+function! eclim#common#buffers#BuffersToggle()
+  let name = eclim#util#EscapeBufferName('[buffers]')
+  if bufwinnr(name) == -1
+    call eclim#common#buffers#Buffers()
+  else
+    exec "bdelete " . bufnr(name)
+  endif
+endfunction " }}}
+
 " BufferCompare(buffer1, buffer2) {{{
 function! eclim#common#buffers#BufferCompare(buffer1, buffer2)
   exec 'let attr1 = a:buffer1.' . g:EclimBuffersSort

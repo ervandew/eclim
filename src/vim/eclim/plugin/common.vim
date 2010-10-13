@@ -123,6 +123,7 @@ endif
 
 if !exists(":Buffers")
   command Buffers :call eclim#common#buffers#Buffers()
+  command BuffersToggle :call eclim#common#buffers#BuffersToggle()
 endif
 
 if !exists(":Only")
