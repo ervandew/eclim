@@ -111,7 +111,7 @@ function! TestCompleteUser()
   let results = eclim#ruby#complete#CodeComplete(0, '')
   call PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertTrue(len(results) > 50, 'Wrong number of results.')
+  call VUAssertTrue(len(results) > 25, 'Wrong number of results.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

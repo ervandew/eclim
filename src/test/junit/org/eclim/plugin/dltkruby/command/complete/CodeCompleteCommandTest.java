@@ -89,13 +89,9 @@ public class CodeCompleteCommandTest
 
     String[] results = StringUtils.split(result, '\n');
 
-    assertTrue("Wrong number of results", results.length > 50);
+    assertTrue("Wrong number of results", results.length > 25);
     assertTrue("Wrong result", results[0].startsWith("testA|"));
     assertTrue("Wrong result", results[1].startsWith("testB|"));
-    //assertTrue("Wrong result", results[2].startsWith("==(|"));
-    //assertTrue("Wrong result", results[3].startsWith("===(|"));
-    //assertTrue("Wrong result", results[4].startsWith("=~(|"));
-    //assertTrue("Wrong result", results[5].startsWith("__id__|"));
   }
 
   @Test
