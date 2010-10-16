@@ -109,7 +109,8 @@ public abstract class AbstractSrcUpdateCommand
   protected void parse(IProject project, IFile file, Reporter reporter)
     throws Exception
   {
-    IModuleSource module = DltkUtils.getModuleSource(file);
+    // lame cast, but we have to use the SourceModule for pdt.
+    IModuleSource module = (IModuleSource)DltkUtils.getSourceModule(file);
     ISourceParser parser = SourceParserManager
       .getInstance().getSourceParser(project, getNature());
     parser.parse(module, reporter);
