@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ function! TestArchiveList()
 
   AsList
 
-  call VUAssertEquals(line('$'), 46, 'Wrong number of lines in list: git.tar.gz')
-  call cursor(45, 1)
+  call VUAssertEquals(line('$'), 65, 'Wrong number of lines in list: git.tar.gz')
+  call cursor(62, 1)
   exec "normal \<cr>"
 
   let name = substitute(expand('%:p'), '\', '/', 'g')
@@ -82,7 +82,7 @@ function! TestArchiveTree()
   call cursor(5, 11)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 9, 'Wrong number of lines: git.tar.gz')
+  call VUAssertEquals(line('$'), 11, 'Wrong number of lines: git.tar.gz')
   call VUAssertEquals(getline(1), 'git.tar.gz/')
   call VUAssertEquals(getline(2), '  - git/')
   call VUAssertEquals(getline(3), '      - unittest/')

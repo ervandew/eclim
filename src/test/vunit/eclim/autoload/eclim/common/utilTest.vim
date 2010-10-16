@@ -69,11 +69,11 @@ function! TestLocateFile()
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = getbufline(b:results_bufnum, 1, '$')
-  call VUAssertEquals(len(results), 5)
+  call VUAssertEquals(len(results), 9)
   call VUAssertEquals(results[0],
     \ 'test_root_file.txt  /eclim_unit_test/test_root_file.txt')
-  call VUAssertEquals(results[1],
-    \ 'file2.txt  /eclim_unit_test/vcs/git/unittest/test/file2.txt')
+  call VUAssertEquals(sort(results[1:])[0],
+    \ 'file1.txt  /eclim_unit_test/vcs/git/unittest/test/file1.txt')
   exec "normal \<esc>"
   doautocmd InsertLeave <buffer>
   call VUAssertNotEquals(expand('%'), '[Locate in eclim_unit_test]')
@@ -85,12 +85,16 @@ function! TestLocateFile()
   call setline(1, "> vcs/merc/file.txt")
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
-  let results = getbufline(b:results_bufnum, 1, '$')
-  call VUAssertEquals(len(results), 2)
+  let results = sort(getbufline(b:results_bufnum, 1, '$'))
+  call VUAssertEquals(len(results), 4)
   call VUAssertEquals(results[0],
-    \ 'file2.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file2.txt')
-  call VUAssertEquals(results[1],
     \ 'file1.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
+  call VUAssertEquals(results[1],
+    \ 'file2.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file2.txt')
+  call VUAssertEquals(results[2],
+    \ 'file3.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file3.txt')
+  call VUAssertEquals(results[3],
+    \ 'file5.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file5.txt')
   exec "normal \<esc>"
 endfunction " }}}
 
