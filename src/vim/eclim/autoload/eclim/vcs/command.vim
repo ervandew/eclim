@@ -79,16 +79,17 @@ endfunction " }}}
 " Diff(revision) {{{
 " Diffs the current file against the current or supplied revision.
 function! eclim#vcs#command#Diff(revision)
-  let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
+  let path = expand('%:p')
+  let relpath = eclim#vcs#util#GetRelativePath(expand('%:p'))
   let revision = a:revision
   if revision == ''
-    let revision = eclim#vcs#util#GetRevision(path)
+    let revision = eclim#vcs#util#GetRevision(relpath)
     if revision == ''
       call eclim#util#Echo('Unable to determine file revision.')
       return
     endif
   elseif revision == 'prev'
-    let revision = eclim#vcs#util#GetPreviousRevision(path)
+    let revision = eclim#vcs#util#GetPreviousRevision(relpath)
   endif
 
   let filename = expand('%:p')
@@ -200,20 +201,9 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
   let vcs_file = 'vcs_' . revision . '_' . fnamemodify(path, ':t')
 
   let cwd = eclim#vcs#util#LcdRoot()
+  let orig_buf = bufnr('%')
   let g:EclimTemplateTempIgnore = 1
   try
-    let open_cmd = a:open_cmd != '' ? a:open_cmd : 'split'
-    if has('win32') || has('win64')
-      let vcs_file = substitute(vcs_file, ':', '_', 'g')
-    endif
-    call eclim#util#GoToBufferWindowOrOpen(vcs_file, open_cmd)
-
-    setlocal noreadonly
-    setlocal modifiable
-    silent 1,$delete _
-
-    let b:vcs_props = copy(props)
-
     " load in content
     let ViewFileRevision = eclim#vcs#util#GetVcsFunction('ViewFileRevision')
     if type(ViewFileRevision) != 2
@@ -221,14 +211,28 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
     endif
     let lines = ViewFileRevision(path, revision)
   finally
+    " switch back to the original cwd for both the original + new buffer.
+    let cur_buf = bufnr('%')
+    call eclim#util#GoToBufferWindow(orig_buf)
     exec 'lcd ' . cwd
+    call eclim#util#GoToBufferWindow(cur_buf)
+    exec 'lcd ' . cwd
+
     unlet g:EclimTemplateTempIgnore
   endtry
 
+  let open_cmd = a:open_cmd != '' ? a:open_cmd : 'split'
+  if has('win32') || has('win64')
+    let vcs_file = substitute(vcs_file, ':', '_', 'g')
+  endif
+  call eclim#util#GoToBufferWindowOrOpen(vcs_file, open_cmd)
+
+  setlocal noreadonly
+  setlocal modifiable
+  silent 1,$delete _
   call append(1, lines)
   silent 1,1delete
   call cursor(1, 1)
-
   setlocal nomodified
   setlocal readonly
   setlocal nomodifiable
@@ -237,6 +241,8 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
   setlocal buftype=nofile
   setlocal bufhidden=delete
   doautocmd BufReadPost
+
+  let b:vcs_props = copy(props)
 endfunction " }}}
 
 " s:ApplyAnnotations(annotations) {{{
