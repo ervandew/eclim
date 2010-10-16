@@ -19,62 +19,62 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.5.0.v20100427.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.core_5.2.0.201006141710.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.core_7.0.0.201006141710.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.ui_7.0.0.201006141710.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.ui_5.2.0.201006141710.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.core_5.2.1.201009141542.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.core_7.0.1.201009141542.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.ui_7.0.0.201009141542.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.ui_5.2.1.201009141542.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.commands_3.6.0.I20100512-1500.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.contenttype_3.4.100.v20100505-1235.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.5.100.v20100520-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filesystem_1.3.0.v20100526-0737.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.5.0.v20100515.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.6.0.v20100526-0737.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filesystem_1.3.1.R36x_v20100727-0745.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.5.1.R36x_v20100824.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.6.0.R36x_v20100825-0600.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.6.0.v20100505.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.3.0.v20100512.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.app_1.3.1.R36x_v20100803.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.common_3.6.0.v20100503.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.console_1.0.200.v20100601.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.core_2.0.0.v20100510.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.director_2.0.0.v20100525.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.director.app_1.0.200.v20100527.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.core_2.0.2.R36x_v20100804.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.director_2.0.2.R36x_v20100823.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.director.app_1.0.201.R36x_v20100823.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.engine_2.0.0.v20100606.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.p2.metadata_2.0.0.v20100601.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.preferences_3.3.0.v20100503.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.registry_3.5.0.v20100503.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.6.0.v_A58.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.6.1.v_A68_R36x.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.launching_3.5.100.v20100526.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.ui_3.6.0.v20100602-1600.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.6.0.I20100601-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.6.0.v20100526-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.ui_3.6.1.r361_v20100825-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.6.1.M20100825-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.6.1.r361_v20100825-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.5.100.v20100526-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.6.0.v20100517.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.6.1.R36x_v20100806.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.6.0.v20100520-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_64_3.6.0.v3650b.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.team.core_3.5.100.I20100527-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk.linux.x86_64_3.6.1.v3655c.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.team.core_3.5.100.R36x_v20100825-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.text_3.5.0.v20100601-1300.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.editors_3.6.0.v20100520-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.ide_3.6.0.I20100601-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.6.0.I20100603-1100.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.6.0.v20100520-0800.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_2.0.0.v20100603-0936.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.editors_3.6.1.r361_v20100825-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.ide_3.6.1.M20100825-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.6.1.M20100826-1330.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.6.1.r361_v20100714-0800.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_2.0.1.v20100806-1245.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.debug.ui_2.0.0.v20100115-2213.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.launching_2.0.0.v20100524-0038.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_2.0.0.v20100603-0936.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.launching_2.0.0.v20100806-1245.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_2.0.0.v20100909-1720.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ruby.core_2.0.0.v20100524-0038.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ruby.ui_2.0.0.v20100524-0038.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.2.0.v20100616-1900.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.2.0.v20100616-1900.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.core_2.2.1.v20100822-1200.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.php.ui_2.2.1.v20100822-1200.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.update.configurator_3.3.100.v20100512.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.css.ui_1.0.500.v201004290328.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.css.ui_1.0.501.v201008232042.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.dtd.core_1.1.400.v201004290328.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.html.ui_1.0.500.v201006030742.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.jsdt.core_1.1.0.v201006030738.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.html.ui_1.0.502.v201009010342.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.jsdt.core_1.1.2.v201009011528.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.validation_1.2.200.v201005271900.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.core_1.1.500.v201005271618.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.ui_1.1.100.v201006030742.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xsd.core_1.1.501.v201004110600.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.500.v201006020308.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.2.0.v201006030742.jar"/>
-  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.6.0.v20100614-1136.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.core_1.1.502.v201009010342.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xml.ui_1.1.102.v201008251905.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.xsd.core_1.1.502.v201008201521.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.502.v201008311901.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.2.2.v201008232126.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.6.0.v20100914-1218.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/foxtrot-3.0.beta1.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>
