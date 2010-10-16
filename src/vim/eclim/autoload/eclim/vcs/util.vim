@@ -159,6 +159,10 @@ endfunction " }}}
 " GetRoot([path]) {{{
 " Gets the absolute path to the repository root on the local file system.
 function eclim#vcs#util#GetRoot(...)
+  if exists('b:vcs_props') && has_key(b:vcs_props, 'root_dir')
+    return b:vcs_props.root_dir
+  endif
+
   let root = ''
 
   let cwd = getcwd()
