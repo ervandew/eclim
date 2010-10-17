@@ -23,6 +23,7 @@
 " }}}
 
 " Auto Commands {{{
+runtime autoload/eclim/java/test.vim
 augroup eclim_ant_make
   autocmd!
   if exists('*eclim#java#test#ResolveQuickfixResults')
