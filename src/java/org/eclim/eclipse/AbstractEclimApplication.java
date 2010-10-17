@@ -94,7 +94,9 @@ public abstract class AbstractEclimApplication
     instance = this;
     int exitCode = 0;
     try{
-      onStart();
+      if (!onStart()){
+        return EXIT_OK;
+      }
 
       // load plugins.
       boolean pluginsLoaded = load();
@@ -158,10 +160,13 @@ public abstract class AbstractEclimApplication
   /**
    * Invoked during application startup, allowing subclasses to perform any
    * necessary startup initialization.
+   *
+   * @return true if the application should continue to start, false otherwise.
    */
-  public void onStart()
+  public boolean onStart()
     throws Exception
   {
+    return true;
   }
 
   /**

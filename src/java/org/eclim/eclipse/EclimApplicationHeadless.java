@@ -22,9 +22,14 @@ import org.eclipse.core.internal.resources.Workspace;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.Platform;
+
+import org.eclipse.osgi.service.datalocation.Location;
+
 import org.eclipse.swt.widgets.EclimDisplay;
 
-import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Eclim application implementation which runs in its own headless eclipse
@@ -41,13 +46,33 @@ public class EclimApplicationHeadless
    * @see AbstractEclimApplication#onStart()
    */
   @Override
-  public void onStart()
+  public boolean onStart()
     throws Exception
   {
+    Location data = Platform.getInstanceLocation();
+    if (data == null || !data.isSet()){
+      logger.error("No workspace location set.");
+      return false;
+    }
+
+    if (!data.lock()) {
+      logger.error(
+          "Unable to lock the workspace. Check that you have write " +
+          "permissions and that no other eclipse/eclimd instance is " +
+          "currently using the workspace.");
+      return false;
+    }
+
+    // it would be nice to write the workspace version info at this point, but
+    // according to org.eclipse.ui.internal.ide.application.IDEApplication, it's
+    // not crucial.
+
     // create the eclipse workbench.
-    org.eclipse.ui.PlatformUI.createAndRunWorkbench(
-        new EclimDisplay(), //org.eclipse.ui.PlatformUI.createDisplay()),
+    PlatformUI.createAndRunWorkbench(
+        new EclimDisplay(), //PlatformUI.createDisplay()),
         new WorkbenchAdvisor());
+
+    return true;
   }
 
   /**
@@ -72,7 +97,7 @@ public class EclimApplicationHeadless
       logger.warn("Error saving workspace.", e);
     }
 
-    final Workbench workbench = Workbench.getInstance();
+    final IWorkbench workbench = PlatformUI.getWorkbench();
     if (workbench != null){
       // set dummy display's current thread
       EclimDisplay display = (EclimDisplay)
