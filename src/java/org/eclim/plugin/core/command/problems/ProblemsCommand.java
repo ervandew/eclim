@@ -18,6 +18,7 @@ package org.eclim.plugin.core.command.problems;
 
 import java.io.File;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import java.text.Collator;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 
 import java.util.regex.Pattern;
@@ -82,6 +84,7 @@ public class ProblemsCommand
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("rawtypes")
   public String execute(CommandLine commandLine)
     throws Exception
   {
@@ -98,12 +101,17 @@ public class ProblemsCommand
     MarkerContentGenerator generator = new MarkerContentGenerator(
         descriptor, new CachedMarkerBuilder(view), viewId);
 
+    // hack to disable loading the gui configured filters
+    Field enabledFilters = MarkerContentGenerator.class
+      .getDeclaredField("enabledFilters");
+    enabledFilters.setAccessible(true);
+    enabledFilters.set(generator, new HashSet());
+
     Method gatherMarkers = MarkerContentGenerator.class
       .getDeclaredMethod("gatherMarkers",
           String[].class, Boolean.TYPE, Collection.class, IProgressMonitor.class);
     gatherMarkers.setAccessible(true);
 
-    @SuppressWarnings("rawtypes")
     ArrayList markers = new ArrayList();
     gatherMarkers.invoke(generator,
         generator.getTypes(), true, markers, new NullProgressMonitor());
