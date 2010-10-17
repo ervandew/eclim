@@ -31,13 +31,17 @@ editor.
 * If you would like to report a bug or feature request, feel free to create a
   new issue_ here on github.
 
-.. _emacs:
+.. _other_editors:
 
-==================
-Emacs Users
-==================
+======================
+Emacs / TextMate Users
+======================
 
-Be sure to check out the `emacs client`_ that is being developed for eclim.
+Be sure to check out the eclim clients being developed for your editor of
+choice:
+
+* `Emacs client`_
+* `TextMate client`_
 
 .. _license:
 
@@ -53,4 +57,5 @@ Eclim is released under the GPLv3_.
 .. _eclipse: http://eclipse.org
 .. _vim: http://vim.org
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
-.. _emacs client: http://github.com/senny/emacs-eclim
+.. _Emacs client: http://github.com/senny/emacs-eclim
+.. _TextMate client: http://github.com/JulianEberius/Eclim.tmbundle
