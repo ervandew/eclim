@@ -210,7 +210,7 @@ endfunction " }}}
 
 " LogDetail(revision) {{{
 function eclim#vcs#impl#git#LogDetail(revision)
-  let logcmd = 'log -1 --pretty=tformat:"%h|%cn|%cr|%ci|%s|%B" '
+  let logcmd = 'log -1 --pretty=tformat:"%h|%cn|%cr|%ci|%s|%s%n%n%b" '
   let result = eclim#vcs#impl#git#Git(logcmd . a:revision)
   if type(result) == 0
     return
