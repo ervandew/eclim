@@ -42,7 +42,7 @@ augroup END
 
 " GetAnnotations(path, revision) {{{
 function! eclim#vcs#impl#git#GetAnnotations(path, revision)
-  let cmd = 'annotate -l'
+  let cmd = 'annotate'
   let revision = ''
   if a:revision != ''
     let revision = ' ' . substitute(a:revision, '.*:', '', '')
