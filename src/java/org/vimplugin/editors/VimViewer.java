@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -484,7 +484,8 @@ public class VimViewer
       int[] pos = FileUtils.offsetToLineColumn(
           new ByteArrayInputStream(document.get().getBytes()), offset);
       vimConnection.command(bufferID, "setDot", "" + pos[0] + '/' + pos[1]);
-      vimConnection.remotesend(":doautocmd CursorMoved | echo ''<cr>");
+      vimConnection.remotesend(":doautocmd CursorMoved<cr>");
+      vimConnection.remotesend(":redraw!<cr>");
     }catch(Exception e){
       logger.error("Error setting selected range", e);
     }
