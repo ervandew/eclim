@@ -173,6 +173,14 @@ function! eclim#vcs#command#Log(path)
 
   " continuation of annotation support
   if jumpto != ''
+    " in the case of git, the annotate hash is longer than the log hash, so
+    " perform a little extra work to line them up.
+    let line = search('^[+-] \w\+', 'n')
+    if line != -1
+      let hash = substitute(getline(line), '^[+-] \(\w\+\) .*', '\1', '')
+      let jumpto = jumpto[:len(hash)-1]
+    endif
+
     call search('^[+-] ' . jumpto)
     normal! z
   endif
