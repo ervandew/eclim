@@ -184,7 +184,7 @@ endfunction " }}}
 
 " Log(path) {{{
 function eclim#vcs#impl#git#Log(path)
-  let logcmd = 'log --pretty=tformat:"%h|%cn|%cr|%s"'
+  let logcmd = 'log --pretty=tformat:"%h|%cn|%cr|%d|%s|"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' -' . g:EclimVcsLogMaxEntries
   endif
@@ -196,11 +196,13 @@ function eclim#vcs#impl#git#Log(path)
   let log = []
   for line in split(result, '\n')
     let values = split(line, '|')
+    let refs = split(substitute(values[3], '^\s*(\|)\s*$', '', 'g'), ',\s*')
     call add(log, {
         \ 'revision': values[0],
         \ 'author': values[1],
         \ 'age': values[2],
-        \ 'comment': values[3],
+        \ 'refs': refs,
+        \ 'comment': values[4],
      \ })
   endfor
   let root_dir = exists('b:vcs_props') ?
@@ -210,19 +212,21 @@ endfunction " }}}
 
 " LogDetail(revision) {{{
 function eclim#vcs#impl#git#LogDetail(revision)
-  let logcmd = 'log -1 --pretty=tformat:"%h|%cn|%cr|%ci|%s|%s%n%n%b" '
+  let logcmd = 'log -1 --pretty=tformat:"%h|%cn|%cr|%ci|%d|%s|%s%n%n%b|" '
   let result = eclim#vcs#impl#git#Git(logcmd . a:revision)
   if type(result) == 0
     return
   endif
   let values = split(result, '|')
+  let refs = split(substitute(values[4], '^\s*(\|)\s*$', '', 'g'), ',\s*')
   return {
       \ 'revision': values[0],
       \ 'author': values[1],
       \ 'age': values[2],
       \ 'date': values[3],
-      \ 'comment': values[4],
-      \ 'description': values[5],
+      \ 'refs': refs,
+      \ 'comment': values[5],
+      \ 'description': values[6],
    \ }
 endfunction " }}}
 

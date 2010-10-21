@@ -139,7 +139,9 @@ endfunction " }}}
 
 " Log(path) {{{
 function eclim#vcs#impl#hg#Log(path)
-  let logcmd = 'log --template "{node|short}|{author}|{date|age}|{desc|firstline}\n"'
+  " Note: tags are space separated, so if the user has a space in their tag
+  " name, that tag will be screwed in the log.
+  let logcmd = 'log --template "{node|short}|{author}|{date|age}|{tags}|{desc|firstline}\n"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
   endif
@@ -155,7 +157,8 @@ function eclim#vcs#impl#hg#Log(path)
         \ 'revision': values[0],
         \ 'author': values[1],
         \ 'age': values[2],
-        \ 'comment': values[3],
+        \ 'refs': split(values[3]),
+        \ 'comment': values[4],
      \ })
   endfor
   let root_dir = exists('b:vcs_props') ?
@@ -167,7 +170,7 @@ endfunction " }}}
 function eclim#vcs#impl#hg#LogDetail(revision)
   let basedir = EclimBaseDir()
   let logcmd = 'log "--template=' .
-    \ '{node|short}|{author}|{date|age}|{date|isodate}|{desc|firstline}|{desc}"'
+    \ '{node|short}|{author}|{date|age}|{date|isodate}|{tags}|{desc|firstline}|{desc}"'
   let result = eclim#vcs#impl#hg#Hg(logcmd . ' -r ' . a:revision)
   if type(result) == 0
     return
@@ -178,8 +181,9 @@ function eclim#vcs#impl#hg#LogDetail(revision)
       \ 'author': values[1],
       \ 'age': values[2],
       \ 'date': values[3],
-      \ 'comment': values[4],
-      \ 'description': values[5],
+      \ 'refs': split(values[4]),
+      \ 'comment': values[5],
+      \ 'description': values[6],
    \ }
 endfunction " }}}
 

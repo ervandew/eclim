@@ -156,9 +156,7 @@ function! eclim#vcs#command#Log(path)
 
   let content = [path, '']
   for entry in info.log
-    let line = printf('+ %s %s (%s) %s',
-      \ entry.revision, entry.author, entry.age, entry.comment)
-    call add(content, line)
+    call add(content, s:LogLine(entry))
   endfor
 
   if g:EclimVcsLogMaxEntries > 0 && len(info.log) == g:EclimVcsLogMaxEntries
@@ -481,6 +479,17 @@ function! s:Action()
   endtry
 endfunction " }}}
 
+" s:LogLine(entry) {{{
+function! s:LogLine(entry)
+  let entry = a:entry
+  let refs = ''
+  if len(entry.refs)
+    let refs = '(' . join(entry.refs, ', ') . ') '
+  endif
+  return printf('+ %s %s%s (%s) %s',
+    \ entry.revision, refs, entry.author, entry.age, entry.comment)
+endfunction " }}}
+
 " s:ToggleDetail() {{{
 function! s:ToggleDetail()
   let line = getline('.')
@@ -507,8 +516,7 @@ function! s:ToggleDetail()
     retab
   else
     let pos = getpos('.')
-    let close = substitute(line, '^- \(.\{-})\).*', '+ \1 ' . log.comment, '')
-    call setline(lnum, close)
+    call setline(lnum, s:LogLine(log))
     let end = search('^[+-] \w\+', 'nW') - 1
     if end == -1
       let end = line('$')
@@ -606,11 +614,13 @@ endfunction " }}}
 function! s:LogSyntax()
   set ft=vcs_log
   hi link VcsRevision Identifier
+  hi link VcsRefs Tag
   hi link VcsDate String
   hi link VcsLink Label
   hi link VcsFiles Comment
   syntax match VcsRevision /\(^[+-] \)\@<=\w\+/
-  syntax match VcsDate /\(^[+-].\{-}\)\@<=(\d.\{-})/
+  syntax match VcsRefs /\(^[+-] \w\+ \)\@<=(.\{-})/
+  syntax match VcsDate /\(^[+-] \w\+ \((.\{-}) \)\?\w.\{-}\)\@<=(\d.\{-})/
   syntax match VcsLink /|\S.\{-}|/
   let indent = eclim#util#GetIndent(1)
   exec 'syntax match VcsFiles /\(^' . indent . '[+-] \)\@<=files$/'
