@@ -49,11 +49,6 @@ file versioned in mercurial (hg) or git.
   and perform various operations (diff, annotate, etc.) using any of the text
   links denoted by '\|link name\|' (ex.  '\|annotate\|').
 
-  By default the number of entries retrieved will be limited to 100 in an
-  effort to reduce the latency of retrieving logs for files with a long
-  revision history.  This value can be changed via the
-  :ref:`g:EclimVcsLogMaxEntries` variable.
-
 .. _\:VcsDiff:
 
 - **:VcsDiff** [revision] -
@@ -108,7 +103,7 @@ Vim Settings
 
 .. _g\:EclimVcsLogMaxEntries:
 
-- **g:EclimVcsLogMaxEntries (Default: 50)** -
+- **g:EclimVcsLogMaxEntries (Default: 0)** -
   When greater than 0, limits the number of log entries retrieved by
   **:VcsLog**.
 

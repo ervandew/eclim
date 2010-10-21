@@ -26,7 +26,7 @@ runtime autoload/eclim/vcs/util.vim
 
 " Global Variables {{{
   if !exists('g:EclimVcsLogMaxEntries')
-    let g:EclimVcsLogMaxEntries = 100
+    let g:EclimVcsLogMaxEntries = 0
   endif
 
   if !exists('g:EclimVcsDiffOrientation')
