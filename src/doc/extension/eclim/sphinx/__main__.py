@@ -135,7 +135,7 @@ def main(argv):
     return app.statuscode
   except KeyboardInterrupt:
     return 1
-  except Exception, err:
+  except Exception as err:
     print >> sys.stderr
     if isinstance(err, SystemMessage):
       print >> sys.stderr, red('reST markup error:')
