@@ -17,4 +17,12 @@
 
 BASEDIR=`dirname $(dirname $(which $0))`
 
-PYTHONPATH=$BASEDIR/src/doc/extension python src/doc/extension/eclim/sphinx "$@"
+if [ -z "$PYTHON" ] ; then
+  PYTHON=`which python2`
+fi
+
+if [ -z "$PYTHON" ] ; then
+  PYTHON=python
+fi
+
+PYTHONPATH=$BASEDIR/src/doc/extension $PYTHON src/doc/extension/eclim/sphinx "$@"
