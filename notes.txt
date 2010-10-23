@@ -1,56 +1,56 @@
 HIGH {{{
-  - Helios!!!!
+  Bugs:
+    - figure out why eclimd affects the eclipse workspace selector
 
-  - Java project create not respecting defaults:
-    - Window > Preferences > Java > Build Path : Output Folder Name
-    - Window > Preferences > Java > Compiler Building : Filtered Resources
+    - better :Vcs* error handling
 
-  - html/xml validate (cache dtd)
+    - better error message attempting to create a project in a project (only an
+      issue inside of the workspace directory)
+      http://groups.google.com/group/eclim-user/browse_thread/thread/10e3f5a17452cfc2?hl=en.
 
-  - test installing as root on karmic 9.10
-    - user reports that when installing android on apt-get installed eclipse
-      and then installing eclim as root, the android functionality disappeared
-      even though eclipse still listed it as installed.
+    - deadlock:
+      Jobs Running at the time:
+        Building workspace(6)                   - running
+        Flushing content description cache.(13) - waiting
+        Compacting resource model(14)           - running
+        Periodic workspace save.(8)             - sleeping
 
-  - better error message attempting to create a project in a project (only an
-    issue inside of the workspace directory)
-    http://groups.google.com/group/eclim-user/browse_thread/thread/10e3f5a17452cfc2?hl=en.
+    - workspace corruption
 
-  - changing windows home dir (#7)?
+  Docs:
+    - document vertical tool window vars
 
-  - :LocateFile
-    - add eclipse setting to filter out results (supported in helios?)
+    - add high level docs or screencast
 
-  - workspace corruption
+  Tasks:
+    - Check if additional css properties are provided by eclipse or added by
+      aptana (-moz-border-radius)
 
-  - Rework vcs log view
-    - be more like tig
-      - more compact log view which can be expanded
-      - history browser (by revision, file, etc.)
+    - test installing as root on karmic 9.10
+      - user reports that when installing android on apt-get installed eclipse
+        and then installing eclim as root, the android functionality disappeared
+        even though eclipse still listed it as installed.
 
-  - signature + docs (python docstrings, javadocs, etc.) of a method while you
-    type.
-    - open a scratch window for displaying these
+  Features:
+    - :LocateFile
+      - add eclipse setting to filter out results (supported in helios?)
 
-  - make project file refresh async?
+    - Support for starting/stopping eclim from vim
+      - fork eclimd
+      - buffer to tail the eclimd log
 
-  - upgrade docs for sphinx 0.6.4
+    - Auto code completion
+      - using python to spawn completion in the background
 
-  - :Java, add option to 'spawn' the jvm to keep the program running while
-    returning to vim.
+    - html/xml validate (cache dtd)
 
-  - support :tab command for some eclim provided commands:
-    :tab Split
-    :tab SplitRelative
+    - signature + docs (python docstrings, javadocs, etc.) of a method while you
+      type.
+      - open a scratch window for displaying these
 
-  - toggle between using embedded gvim and standard eclipse editor
-    - can we swap editors on the existing tab?
+    - make project file refresh async?
 
-  - add gui menu items (see email "Eclim popup menus for Java")
-
-  - add high level docs or screencast
-
-  http://conservancy.softwarefreedom.org/
+    - add gui menu items (see email "Eclim popup menus for Java")
 }}}
 
 TODO {{{
