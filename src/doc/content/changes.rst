@@ -18,21 +18,42 @@ History of Changes
 
 .. _1.6.1:
 
-1.6.1 (2010)
+1.6.1 (2010-10-23)
 ----------------------
 
 Bug Fixes:
-  - Various bug fixes.
+  - Fix for :ref:`:ProjectProblems <:ProjectProblems>` command when any filters
+    have been set from the eclipse gui.
+  - Merge in JRuby's improvements to nailgun's build scripts to increase
+    compatibility with more platforms.
+  - Update the installer and eclimd to not use the eclipse binary and instead
+    run the launcher jar directly.  Removes the need to locate the binary which
+    varies by platform and some eclipse distributions, and fixes issues with
+    options located in the eclipse.ini that are only supported by the IDE app.
+  - Various other bug fixes.
+
+Eclim:
+  - Add workspace locking to prevent colliding with other running eclipse
+    instances on the same workspace.
 
 Common:
   - Added a :ref:`:TreeTab <:TreeTab>` command like :ref:`:ProjectTab
     <:ProjectTab>` but for any arbitrary directory.
+  - Added a :ref:`:BuffersToggle <:BuffersToggle>` command to toggle whether
+    the eclim buffers windows is open or closed.
   - Refactored :ref:`Vcs <vim/common/vcs>` support, including a new
     :ref:`:VcsLog <:VcsLog>` layout.
 
     .. note::
 
       Support for cvs and subversion have been discontinued.
+
+Python:
+  - Upgraded included rope version to 0.9.3.
+  - Improved the detection of the completion entries types.
+
+Php:
+  - Fixed validating php files in eclipse 3.6.1.
 
 .. _1.6.0:
 

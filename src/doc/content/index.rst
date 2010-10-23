@@ -102,10 +102,17 @@ News
 ==================
 
 -----------
+2010-10-23
+-----------
+
+| :ref:`Eclim 1.6.1 <1.6.1>` is now available.
+| This is mostely a bug fix release with a few minor features tossed in.
+
+-----------
 2010-08-01
 -----------
 
-| **Eclim 1.6.0** is now available.
+| :ref:`Eclim 1.6.0 <1.6.0>` is now available.
 | The most notable changes are:
 
 * Eclim has been upgraded to support Eclipse 3.6 (Helios).
@@ -114,83 +121,65 @@ News
 
     Eclim now **requires** Eclipse 3.6.
 
-You can view the :ref:`release notes <1.6.0>` for more info.
-
 -----------
 2010-06-26
 -----------
 
-| **Eclim 1.5.8** is now available.
+| :ref:`Eclim 1.5.8 <1.5.8>` is now available.
 | This is a bug fix release for the installer as well as some php and ruby
   features.
-
-You can view the :ref:`release notes <1.5.8>` for more info.
 
 -----------
 2010-06-20
 -----------
 
-| **Eclim 1.5.7** is now available.
+| :ref:`Eclim 1.5.7 <1.5.7>` is now available.
 | The main focus of this release is bug fixes and improving the installer.
-
-You can view the :ref:`release notes <1.5.7>` for more info.
 
 -----------
 2010-03-06
 -----------
 
-| **Eclim 1.5.6** is now available.
-
-You can view the :ref:`release notes <1.5.6>` for more info.
+| :ref:`Eclim 1.5.6 <1.5.6>` is now available.
 
 -----------
 2010-02-22
 -----------
 
-| **Eclim 1.5.5** is now available.
+| :ref:`Eclim 1.5.5 <1.5.5>` is now available.
 | This is a bug fix release for the eclim installer.
-
-You can view the :ref:`release notes <1.5.5>` for more info.
 
 -----------
 2009-12-18
 -----------
 
-| **Eclim 1.5.4** is now available.
+| :ref:`Eclim 1.5.4 <1.5.4>` is now available.
 | This is primarily a bug fix release for OSX users.
-
-You can view the :ref:`release notes <1.5.4>` for more info.
 
 -----------
 2009-12-12
 -----------
 
-| **Eclim 1.5.3** is now available.
-
-You can view the :ref:`release notes <1.5.3>` for more info.
+| :ref:`Eclim 1.5.3 <1.5.3>` is now available.
 
 -----------
 2009-08-30
 -----------
 
-| **Eclim 1.5.2** is now available.
-
-You can view the :ref:`release notes <1.5.2>` for more info.
+| :ref:`Eclim 1.5.2 <1.5.2>` is now available.
 
 -----------
 2009-07-18
 -----------
 
-| **Eclim 1.5.1** is now available.
+| :ref:`Eclim 1.5.1 <1.5.1>` is now available.
 | This is primarily a bug fix release
-
-You can view the :ref:`release notes <1.5.1>` for more info.
 
 -----------
 2009-07-12
 -----------
 
-| **Eclim 1.5.0** is now available.
+| :ref:`Eclim 1.5.0 <1.5.0>` is now available.
 | The most notable changes are:
 
 * Eclim has been upgraded to support Eclipse 3.5 (Galileo).
@@ -201,31 +190,25 @@ You can view the :ref:`release notes <1.5.1>` for more info.
 
 * Ruby support has been added using the `eclipse dltk`_.
 
-You can view the :ref:`release notes <1.5.0>` for more info.
-
 -----------
 2009-06-14
 -----------
 
-| **Eclim 1.4.9** is now available.
+| :ref:`Eclim 1.4.9 <1.4.9>` is now available.
 | This is primarily a bug fix release, with a few refinements.
-
-You can view the :ref:`release notes <1.4.9>` for more info.
 
 -----------
 2009-05-30
 -----------
 
-| **Eclim 1.4.8** is now available.
+| :ref:`Eclim 1.4.8 <1.4.8>` is now available.
 | This is primarily a bug fix release with a few enhancements.
-
-You can view the :ref:`release notes <1.4.8>` for more info.
 
 -----------
 2009-05-02
 -----------
 
-| **Eclim 1.4.7** is now available.
+| :ref:`Eclim 1.4.7 <1.4.7>` is now available.
 | This is a bug fix release which resolves an installation on unix based
   operating systems.
 
@@ -233,66 +216,57 @@ You can view the :ref:`release notes <1.4.8>` for more info.
 2009-05-02
 -----------
 
-| **Eclim 1.4.6** is now available.
+| :ref:`Eclim 1.4.6 <1.4.6>` is now available.
 | The major highlight of this release is support for c/c++ using the
   `eclipse cdt`_ plugin.
-
-You can view the :ref:`release notes <1.4.6>` for more info.
 
 -----------
 2009-04-04
 -----------
 
-| **Eclim 1.4.5** is now available.
+| :ref:`Eclim 1.4.5 <1.4.5>` is now available.
 | This is primarily a bug fix release.
-
-You can view the :ref:`release notes <1.4.5>` for more info.
 
 -----------
 2009-01-10
 -----------
 
-| **Eclim 1.4.4** is now available.
+| :ref:`Eclim 1.4.4 <1.4.4>` is now available.
 | Highlights of this release include:
 
 - re-enabled php support
 - added ability to run eclimd inside of eclipse gui
 - added support for embedding gvim in eclipse
 
-You can view the :ref:`release notes <1.4.4>` for more info.
-
 -----------
 2008-11-15
 -----------
 
-| **Eclim 1.4.3** is now available.
+| :ref:`Eclim 1.4.3 <1.4.3>` is now available.
 | This release focuses on updating the installer to support ganymede's p2 for
   upgrading / installing external dependencies and adding additional python
   support.
-| You can view the :ref:`release notes <1.4.3>` for more info.
 
 -----------
 2008-09-30
 -----------
 
-| **Eclim 1.4.2** is now available.
+| :ref:`Eclim 1.4.2 <1.4.2>` is now available.
 | This is primary a bug fix release.
-| You can view the :ref:`release notes <1.4.2>` for more info.
 
 -----------
 2008-08-24
 -----------
 
-| **Eclim 1.4.1** is now available.
+| :ref:`Eclim 1.4.1 <1.4.1>` is now available.
 | This is primary a bug fix release, but there are some new features included
   as well.
-| You can view the :ref:`release notes <1.4.1>` for more info.
 
 -----------
 2008-07-27
 -----------
 
-| **Eclim 1.4.0** is now available.
+| :ref:`Eclim 1.4.0 <1.4.0>` is now available.
 | Please note that eclim now requires the latest version of `eclipse`_
   (Ganymede, 3.4.x).
 
@@ -306,13 +280,11 @@ Another major change worth noting, is that eclim is now licensed under the
 GPLv3.  This was done to give eclim the freedom to integrate with other GPL
 projects in the future.
 
-You can view the :ref:`release notes <1.4.0>` for more info.
-
 -----------
 2008-03-11
 -----------
 
-| **Eclim 1.3.5** is now available.
+| :ref:`Eclim 1.3.5 <1.3.5>` is now available.
 | You can view the :ref:`release notes <1.3.5>` for
   more info.
 
@@ -320,16 +292,15 @@ You can view the :ref:`release notes <1.4.0>` for more info.
 2008-02-05
 -----------
 
-| **Eclim 1.3.4** is now available.
+| :ref:`Eclim 1.3.4 <1.3.4>` is now available.
 | This release fixes a few minor bugs, improves the installer to account for
   eclipse installs with per user plugin locations, and adds php support.
-| You can view the :ref:`release notes <1.3.4>` for more info.
 
 -----------
 2007-12-15
 -----------
 
-| **Eclim 1.3.3** is now available.
+| :ref:`Eclim 1.3.3 <1.3.3>` is now available.
 | This release fixes some installer issues.  If you have already installed
   1.3.2, then there is no need to upgrade to 1.3.3.
 
@@ -337,22 +308,20 @@ You can view the :ref:`release notes <1.4.0>` for more info.
 2007-12-04
 -----------
 
-| **Eclim 1.3.2** is now available.
-| You can view the :ref:`release notes <1.3.2>` for more info.
+| :ref:`Eclim 1.3.2 <1.3.2>` is now available.
 
 -----------
 2007-07-13
 -----------
 
-| **Eclim 1.3.1** is now available.
+| :ref:`Eclim 1.3.1 <1.3.1>` is now available.
 | This is only a bug fix release.
-| You can view the :ref:`release notes <1.3.1>` for more info.
 
 -----------
 2007-07-01
 -----------
 
-| **Eclim 1.3.0** is now available.
+| :ref:`Eclim 1.3.0 <1.3.0>` is now available.
 | The most notable changes are:
 
 * Eclim has been upgraded to support Eclipse 3.3.
@@ -368,7 +337,6 @@ You can view the :ref:`release notes <1.4.0>` for more info.
 
 * Many more :ref:`changes <1.3.0>`.
 
-View the :ref:`release notes <1.3.0>` for more info.
 
 .. _eclipse: http://eclipse.org
 .. _vim: http://vim.org
