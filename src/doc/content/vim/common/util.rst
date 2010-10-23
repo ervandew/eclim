@@ -272,6 +272,13 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **g:EclimBuffersSortDirection** (defaults to 'asc')
     Supports one of 'asc' or 'desc'.
 
+.. _\:BuffersToggle:
+
+- **:BuffersToggle** -
+  A convenience command which opens the buffers window if not open, otherwise
+  closes it.  Useful for creating a key mapping to quickly open/close the
+  buffers window.
+
 .. _\:Only:
 
 - **:Only** -

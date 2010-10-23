@@ -436,6 +436,8 @@ Misc. Commands
 - :ref:`:Buffers` -
   Opens a temporary window with a list of all the currently listed
   buffers, allowing you to open or remove them.
+- :ref:`:BuffersToggle` -
+  Opens the buffers window if not open, otherwise closes it.
 - :ref:`:Only` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.
