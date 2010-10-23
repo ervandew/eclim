@@ -181,6 +181,9 @@ TODO {{{
     - :ProjectCreateWizard - use input()
 
     - Vcs
+      - support :VcsLog [log args (file, revision, etc)]
+      - support :VcsAnnotate, :VcsDiff prev, etc on a temp vcs file view
+      - add :VcsAnnotate{Diff,Cat} which uses the last revision of the current line.
       - add rename following
         :VcsLog
           - hg log --follow <file>
@@ -194,27 +197,20 @@ TODO {{{
       - add
         :VcsStatus
           - temp window w/ list of files
+          - A to add a file, R to remove one
           - hitting <enter> on a file with:
             - M shows the diff
             - A opens the file
-            - R open last revision
-        :VcsOut (git equivalent? requires git fetch first, only if another user
-                 check in your changes)
-          - open temp window w/ list of files grouped by changeset
-          - try to have <enter> on a file open a diff of remote version vs local
-            - A opens the file
-            - ... R files?
-        :VcsIn (git equivalent? requires git fetch first)
-          - open temp window w/ list of files grouped by changeset
-          - try to have <enter> on a file open a diff of remote version vs local
-            - A try to cat the remote file
-            - ... R files?
-        :VcsLogGrep (git)
-          - git: $ git log --grep=""
-          - everyone else: $ <vcs> log | grep ""
-        :VcsGrep (supported by hg and git)
-          - git: $ git log --pickaxe-regex -S<pattern>
+            - D open last revision
+        :VcsOut / :VcsIn
+          - git log --pretty=tformat:"%h|%cn|%cr|%s" origin..  // in: ..origin
+          - hg out -q --template "{node|short}|{author}|{date|age}|{desc|firstline}\n"
+        :VcsGrep
+          - git log --pretty=tformat:"%h|%cn|%cr|%s" --pickaxe-regex -S"<pattern>"
           - hg:  $ hg help grep
+        :VcsLogGrep
+          - git log --pretty=tformat:"%h|%cn|%cr|%s" --grep="<pattern>"
+          - hg log --template "{node|short}|{author}|{date|age}|{desc|firstline}\n" --keyword "<keyword>"
 
     - eclim console log
       - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
