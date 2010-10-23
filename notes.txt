@@ -251,6 +251,10 @@ TODO {{{
   }}}
 
   Vimplugin {{{
+
+    - toggle between using embedded gvim and standard eclipse editor
+      - can we swap editors on the existing tab?
+
   }}}
 
   C/C++ {{{
@@ -356,6 +360,9 @@ TODO {{{
 
     - :Java, :Javac, :Javadoc
       - allow specific jdk/jre to be used to run the command?
+
+    - :Java, add option to 'spawn' the jvm to keep the program running while
+      returning to vim.
 
     - get/set, construtor, etc. templates
       - consider using the eclipse templates or giving the user that option
@@ -689,7 +696,7 @@ NOTES {{{
       - starting eclim without spawning separate console
         > java -Dnailgun.server.port=9092
                -jar plugins/org.eclipse.equinox.launcher_<version>.jar
-               -debug -consolelog -nosplash -clean -refresh
+               -debug -consolelog -clean -refresh
                -data @user.home/workspace.test
                -application org.eclim.application_headless
 
@@ -731,6 +738,8 @@ NOTES {{{
   Licensing {{{
     http://www.fsf.org/licensing/licenses/ (lists compatible, not-compatible licenses)
     http://www.eclipse.org/legal/eplfaq.php
+
+    http://www.fsf.org/blogs/licensing/using-the-gpl-for-eclipse-plug-ins
 
     - GPLv3 and Apache are one way compatible (gpl code can link to apache code).
     - GPL and EPL are not compatible
@@ -797,8 +806,8 @@ NOTES {{{
 
     Building macvim on osx
     http://code.google.com/p/macvim/wiki/Building
-    $ git clone git://repo.or.cz/MacVim.git vim7
-    $ cd vim7/src
+    $ git clone git://repo.or.cz/MacVim.git macvim
+    $ cd macvim/src
     $ ./configure --with-features=huge --enable-pythoninterp --with-macsdk=10.6
     $ make
     $ open MacVim/build/Release/MacVim.app/
