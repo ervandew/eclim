@@ -202,7 +202,10 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
   let props = exists('b:vcs_props') ? b:vcs_props : s:GetProps()
 
   if exists('b:filename')
-    call eclim#util#GoToBufferWindow(b:filename)
+    let result = eclim#util#GoToBufferWindow(b:filename)
+    if !result && exists('b:winnr')
+      exec b:winnr . 'winc w'
+    endif
   endif
   let vcs_file = 'vcs_' . revision . '_' . fnamemodify(path, ':t')
 
@@ -660,14 +663,17 @@ endfunction " }}}
 
 " s:TempWindow(props, lines) {{{
 function! s:TempWindow(props, lines)
+  let winnr = winnr()
   let filename = expand('%:p')
   if expand('%') == '[vcs_log]' && exists('b:filename')
     let filename = b:filename
+    let winnr = b:winnr
   endif
 
   call eclim#util#TempWindow('[vcs_log]', a:lines)
 
   let b:filename = filename
+  let b:winnr = winnr
   let b:vcs_props = a:props
   exec 'lcd ' . escape(a:props.root_dir, ' ')
 
