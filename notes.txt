@@ -183,7 +183,6 @@ TODO {{{
     - Vcs
       - support :VcsLog [log args (file, revision, etc)]
       - support :VcsAnnotate, :VcsDiff prev, etc on a temp vcs file view
-      - add :VcsAnnotate{Diff,Cat} which uses the last revision of the current line.
       - add rename following
         :VcsLog
           - hg log --follow <file>

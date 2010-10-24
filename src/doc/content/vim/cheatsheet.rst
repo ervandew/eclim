@@ -347,8 +347,6 @@ Version Control Commands
   Currently cvs, subversion, mercurial, and git are supported by the following
   commands where applicable.
 
-- :ref:`:VcsAnnotate` -
-  Toggles annotation of the currently versioned file using vim signs.
 - :ref:`:VcsInfo` - Echos vcs info about the current versioned file.
 - :ref:`:VcsLog` - Opens a buffer with log information for the current file.
 - :ref:`:VcsDiff` [revision] -
@@ -357,6 +355,14 @@ Version Control Commands
 - :ref:`:VcsCat` [revision] -
   Splits the current file with the contents of the last committed version
   of the current file or the supplied revision.
+- :ref:`:VcsAnnotate` -
+  Toggles annotation of the currently versioned file using vim signs.
+- :ref:`:VcsAnnotateCat` -
+  Like :ref:`:VcsCat <:VcsCat>` but use the annotated revision of the line
+  under the cursor.
+- :ref:`:VcsAnnotateDiff` -
+  Like :ref:`:VcsDiff <:VcsDiff>` but use the annotated revision of the line
+  under the cursor.
 - :ref:`:VcsWebLog` -
   Opens the log for the currently versioned file in the configured vcs web app.
 - :ref:`:VcsWebAnnotate` [revision] -

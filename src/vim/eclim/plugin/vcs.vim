@@ -68,7 +68,7 @@ if !exists(":VcsWebDiff")
 endif
 
 function! s:CheckWindow()
-  return !exists('b:vcs_props')
+  return !exists('b:eclim_temp_window')
 endfunction
 
 " }}}

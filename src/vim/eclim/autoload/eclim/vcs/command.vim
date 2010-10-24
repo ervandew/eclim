@@ -145,7 +145,7 @@ function! eclim#vcs#command#Log(path)
   finally
     exec 'lcd ' . cwd
   endtry
-  let info.props = has_key(info, 'props') ? info.props : {}
+  let info.props = has_key(info, 'props') ? info.props : s:GetProps()
   let info.props.path = path
 
   " if annotations are on, jump to the revision for the current line
@@ -199,7 +199,7 @@ function! eclim#vcs#command#ViewFileRevision(path, revision, open_cmd)
     let revision = eclim#vcs#util#GetPreviousRevision(path)
   endif
 
-  let props = exists('b:vcs_props') ? b:vcs_props : {}
+  let props = exists('b:vcs_props') ? b:vcs_props : s:GetProps()
 
   if exists('b:filename')
     call eclim#util#GoToBufferWindow(b:filename)
@@ -297,8 +297,12 @@ function! s:ApplyAnnotations(annotations)
   endfor
 
   let b:vcs_annotations = a:annotations
+  let b:vcs_props = s:GetProps()
+
   call s:AnnotateInfo()
 
+  command! -buffer VcsAnnotateCat call s:AnnotateCat()
+  command! -buffer VcsAnnotateDiff call s:AnnotateDiff()
   augroup vcs_annotate
     autocmd!
     autocmd CursorMoved <buffer> call <SID>AnnotateInfo()
@@ -340,10 +344,30 @@ function! s:AnnotateOff()
       endif
     endfor
     unlet b:vcs_annotations
+    unlet b:vcs_props
   endif
+
+  delcommand VcsAnnotateCat
+  delcommand VcsAnnotateDiff
   augroup vcs_annotate
     autocmd!
   augroup END
+endfunction " }}}
+
+" s:AnnotateCat() {{{
+function! s:AnnotateCat()
+  if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
+    let revision = split(b:vcs_annotations[line('.') - 1])[0]
+    call eclim#vcs#command#ViewFileRevision(b:vcs_props.path, revision, '')
+  endif
+endfunction " }}}
+
+" s:AnnotateDiff() {{{
+function! s:AnnotateDiff()
+  if exists('b:vcs_annotations') && len(b:vcs_annotations) >= line('.')
+    let revision = split(b:vcs_annotations[line('.') - 1])[0]
+    call eclim#vcs#command#Diff(revision)
+  endif
 endfunction " }}}
 
 " s:Action() {{{
@@ -564,6 +588,14 @@ function! s:ToggleFiles()
     call setpos('.', pos)
   endif
   setlocal nomodifiable readonly
+endfunction " }}}
+
+" s:GetProps() {{{
+function! s:GetProps()
+  return {
+      \ 'root_dir': eclim#vcs#util#GetRoot(),
+      \ 'path': eclim#vcs#util#GetRelativePath(expand('%:p')),
+    \ }
 endfunction " }}}
 
 " s:GetFilePath() {{{

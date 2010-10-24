@@ -59,8 +59,25 @@ function! TestAnnotate()
   call VUAssertEquals(existing[0].name, 'vcs_annotate_ervand')
 
   call VUAssertEquals(
-    \ b:vcs_annotations[0],
-    \ 'df552e0239d91c2a814023735ad300c0f2e2c889 (2008-09-27 13:49:08 -0700) ervandew')
+    \ b:vcs_annotations[0], 'df552e02 (2008-09-27 13:49:08 -0700) ervandew')
+
+  call cursor(3, 1)
+  call VUAssertEquals(
+    \ b:vcs_annotations[2], '08c4100b (2008-09-27 15:01:49 -0700) ervandew')
+
+  VcsAnnotateCat
+  call PeekRedir()
+  call VUAssertEquals(expand('%'), 'vcs_08c4100b_file1.txt')
+  call VUAssertEquals(line('$'), 3)
+  bdelete
+
+  VcsAnnotateDiff
+  call PeekRedir()
+  call VUAssertEquals(expand('%'), 'file1.txt')
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_08c4100b_file1.txt')
+  call VUAssertEquals(line('$'), 3)
+  bdelete
 
   call PushRedir('@"')
   VcsAnnotate
@@ -143,8 +160,7 @@ function! TestLog()
   call PeekRedir()
   call VUAssertEquals(expand('%'), 'vcs_df552e0_file1.txt')
   call VUAssertEquals(
-    \ b:vcs_annotations[0],
-    \ 'df552e0239d91c2a814023735ad300c0f2e2c889 (2008-09-27 13:49:08 -0700) ervandew')
+    \ b:vcs_annotations[0], 'df552e02 (2008-09-27 13:49:08 -0700) ervandew')
   bdelete
   VcsLog
 

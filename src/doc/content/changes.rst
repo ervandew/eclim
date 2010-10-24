@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _1.6.2:
+
+1.6.2 (2010)
+----------------------
+
+Common:
+  - Added :ref:`:VcsAnnotateCat <:VcsAnnotateCat>` and :ref:`:VcsAnnotateDiff
+    <:VcsAnnotateDiff>` commands while in :ref:`:VcsAnnotate <:VcsAnnotate>`
+    mode to view or diff the revision of the most recent edit for the line
+    under the cursor.
+
 .. _1.6.1:
 
 1.6.1 (2010-10-23)
@@ -24,9 +35,9 @@ History of Changes
 Bug Fixes:
   - Fix for :ref:`:ProjectProblems <:ProjectProblems>` command when any filters
     have been set from the eclipse gui.
-  - Merge in JRuby's improvements to nailgun's build scripts to increase
+  - Merged in JRuby's improvements to nailgun's build scripts to increase
     compatibility with more platforms.
-  - Update the installer and eclimd to not use the eclipse binary and instead
+  - Updated the installer and eclimd to not use the eclipse binary and instead
     run the launcher jar directly.  Removes the need to locate the binary which
     varies by platform and some eclipse distributions, and fixes issues with
     options located in the eclipse.ini that are only supported by the IDE app.

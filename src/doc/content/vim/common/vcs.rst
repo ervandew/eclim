@@ -24,18 +24,6 @@ Vcs Commands
 The following is a list of commands that may be execute when viewing a
 file versioned in mercurial (hg) or git.
 
-.. _\:VcsAnnotate:
-
-- **:VcsAnnotate** -
-  This command will run annotate / blame and visually annotate the current file
-  via vim's sign support.  Due to vim limiting sign text to a maximum of two
-  characters, the sign text will be the first two characters of the username.
-  This command will also create a CursorHold event which will echo the version
-  number and full author name for the current annotated line.
-
-  Running this command on an already annotated file removes all annotations and
-  disables the CursorHold event.
-
 .. _\:VcsInfo:
 
 - **:VcsInfo** -
@@ -62,6 +50,32 @@ file versioned in mercurial (hg) or git.
   Splits the current file with the contents of the last committed version of
   the current file or the supplied revision. The special revision "prev" can be
   used to view the file contents from the previous repository version.
+
+.. _\:VcsAnnotate:
+
+- **:VcsAnnotate** -
+  This command will run annotate / blame and visually annotate the current file
+  via vim's sign support.  Due to vim limiting sign text to a maximum of two
+  characters, the sign text will be the first two characters of the username.
+  This command will also create a CursorHold event which will echo the version
+  number and full author name for the current annotated line.
+
+  Running this command on an already annotated file removes all annotations and
+  disables the CursorHold event.
+
+.. _\:VcsAnnotateCat:
+
+- **:VcsAnnotateCat** -
+  Like :ref:`:VcsCat <:VcsCat>` but use the annotated revision of the line
+  under the cursor.  This command is only available while in :ref:`:VcsAnnotate
+  <:VcsAnnotate>` mode.
+
+.. _\:VcsAnnotateDiff:
+
+- **:VcsAnnotateDiff** -
+  Like :ref:`:VcsDiff <:VcsDiff>` but use the annotated revision of the line
+  under the cursor.  This command is only available while in :ref:`:VcsAnnotate
+  <:VcsAnnotate>` mode.
 
 .. _vcs-web:
 

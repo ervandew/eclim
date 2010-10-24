@@ -57,6 +57,24 @@ function! TestAnnotate()
     \ b:vcs_annotations[0],
     \ '6a95632ba43d (Sat Sep 27 22:26:55 2008 -0700) ervandew')
 
+  call cursor(3, 1)
+  call VUAssertEquals(
+    \ b:vcs_annotations[2], '9247ff7b10e3 (Sat Sep 27 22:30:53 2008 -0700) ervandew')
+
+  VcsAnnotateCat
+  call PeekRedir()
+  call VUAssertEquals(expand('%'), 'vcs_9247ff7b10e3_file1.txt')
+  call VUAssertEquals(line('$'), 3)
+  bdelete
+
+  VcsAnnotateDiff
+  call PeekRedir()
+  call VUAssertEquals(expand('%'), 'file1.txt')
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_9247ff7b10e3_file1.txt')
+  call VUAssertEquals(line('$'), 3)
+  bdelete
+
   call PushRedir('@"')
   VcsAnnotate
   call PopRedir()
@@ -141,18 +159,18 @@ function! TestLog()
   winc l
   call VUAssertEquals(expand('%'), 'vcs_9247ff7b10e3_file1.txt')
   call VUAssertEquals(line('$'), 3)
-  bdelete
-  bdelete
+  exec 'bdelete ' . bufnr('vcs_5f0911d194b1_file1.txt')
+  exec 'bdelete ' . bufnr('vcs_9247ff7b10e3_file1.txt')
   VcsLog
 
   " diff working copy
+  call VUAssertEquals(getline(5), '+ 6a95632ba43d ervandew (2008-09-27) adding 2 files')
   call cursor(5, 1)
   exec "normal \<cr>"
   call cursor(6, 27)
   exec "normal \<cr>"
   call PeekRedir()
-  let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'file1.txt')
+  call VUAssertEquals(expand('%'), 'file1.txt', 'Wrong working diff file')
   call VUAssertEquals(line('$'), 5)
   winc l
   call VUAssertEquals(expand('%'), 'vcs_6a95632ba43d_file1.txt')
