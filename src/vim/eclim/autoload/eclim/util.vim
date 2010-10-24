@@ -149,11 +149,12 @@ function! eclim#util#EscapeBufferName(name)
   return substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 endfunction " }}}
 
-" Exec(cmd) {{{
+" Exec(cmd [,output]) {{{
 " Used when executing ! commands that may be disrupted by non default vim
 " options.
-function! eclim#util#Exec(cmd)
-  call eclim#util#System(a:cmd, 1)
+function! eclim#util#Exec(cmd, ...)
+  let exec_output = len(a:000) > 0 && a:000[0]
+  return eclim#util#System(a:cmd, 1, exec_output)
 endfunction " }}}
 
 " ExecWithoutAutocmds(cmd, [events]) {{{
@@ -1016,7 +1017,7 @@ function! eclim#util#Simplify(file)
   return file
 endfunction " }}}
 
-" System(cmd, [exec]) {{{
+" System(cmd, [exec, exec_results]) {{{
 " Executes system() accounting for possibly disruptive vim options.
 function! eclim#util#System(cmd, ...)
   let saveshell = &shell
@@ -1054,13 +1055,33 @@ function! eclim#util#System(cmd, ...)
   endif
 
   if len(a:000) > 0 && a:000[0]
-    let result = ''
+    let cmd = a:cmd
     let begin = localtime()
+    let exec_output = len(a:000) > 1 && a:000[1]
+    if exec_output
+      let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
+      if has('win32') || has('win64') || has('win32unix')
+        if executable('tee')
+          let cmd .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
+        else
+          let cmd .= ' >"' . outfile . '" 2>&1"'
+        endif
+      else
+        let cmd .= ' 2>&1| tee "' . outfile . '"'
+      endif
+    endif
+
     try
-      exec a:cmd
+      exec cmd
     finally
-      call eclim#util#EchoTrace('exec: ' . a:cmd, localtime() - begin)
+      call eclim#util#EchoTrace('exec: ' . cmd, localtime() - begin)
     endtry
+
+    let result = ''
+    if exec_output
+      let result = join(readfile(outfile), "\n")
+      call delete(outfile)
+    endif
   else
     let begin = localtime()
     try
