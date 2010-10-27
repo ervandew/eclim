@@ -570,7 +570,20 @@ function! s:ProcessTags(on_open_or_write)
   let tags = []
   if s:FileSupported(expand('%:p'), &ft)
     if exists('g:tlist_{&ft}_settings')
-      let settings = g:tlist_{&ft}_settings
+      if type(g:tlist_{&ft}_settings) == 1
+        let values = split(g:tlist_{&ft}_settings, ';')
+        let tag_settings = {}
+        for value in values[1:]
+          let [key, value] = split(value, ':')
+          let tag_settings[key] = value
+        endfor
+        let settings = {
+            \ 'lang': values[0],
+            \ 'tags': tag_settings,
+          \ }
+      else
+        let settings = g:tlist_{&ft}_settings
+      endif
       let types = join(keys(settings.tags), '')
     else
       let settings = s:tlist_def_{&ft}_settings
