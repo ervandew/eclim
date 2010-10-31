@@ -164,18 +164,6 @@ if g:EclimShowCurrentErrorBalloon && has('balloon_eval')
   set balloonexpr=eclim#util#Balloon(eclim#util#GetLineError(line('.')))
 endif
 
-if g:EclimMakeLCD
-  augroup eclim_make_lcd
-    autocmd!
-    autocmd QuickFixCmdPre make
-      \ if g:EclimMakeLCD | call <SID>QuickFixLocalChangeDirectory() | endif
-    autocmd QuickFixCmdPost make
-      \ if g:EclimMakeLCD && exists('w:quickfix_dir') |
-      \   exec 'lcd ' . escape(w:quickfix_dir, ' ') |
-      \ endif
-  augroup END
-endif
-
 if g:EclimMakeQfFilter
   augroup eclim_qf_filter
     autocmd!
@@ -206,18 +194,5 @@ if has('netbeans_intg')
   augroup END
 endif
 " }}}
-
-" QuickFixLocalChangeDirectory() {{{
-function! s:QuickFixLocalChangeDirectory()
-  if g:EclimMakeLCD
-    let w:quickfix_dir = getcwd()
-
-    let dir = eclim#project#util#GetCurrentProjectRoot()
-    if dir == ''
-      let dir = substitute(expand('%:p:h'), '\', '/', 'g')
-    endif
-    exec 'lcd ' . escape(dir, ' ')
-  endif
-endfunction " }}}
 
 " vim:ft=vim:fdm=marker

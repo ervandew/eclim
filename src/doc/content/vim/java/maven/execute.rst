@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,9 +48,9 @@ which perform the following steps\:
 - Restore your previous 'makeprg' and 'errorformat' option settings.
 
 Additionally, if :ref:`g:EclimMakeLCD` is enabled (which it is by default),
-then the execution of maven will be performed from the current buffer's local
-directory, ensuring that mavens's build file discovery method is performed from
-the buffer's working directory and not your own.
+then the execution of maven will be performed from the current buffer's project
+root directory, ensuring that mavens's build file discovery method is performed
+from the buffer's working directory and not your own.
 
 Note that **:Mvn** MUST have this enabled since maven 2.x no
 longer has support for the ``--find`` option.

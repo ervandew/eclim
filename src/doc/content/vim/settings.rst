@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -194,17 +194,12 @@ The following is a list of some of the common Vim variables available.
 
 - **g:EclimMakeLCD** (Default: 1)
 
-  When not set to 0, this enables autocommand which will perform a local
-  change directory (:lcd) for the current window, setting that window's
-  current working directory to the directory of the current file.  After
-  execution of the :make command, that window's current working
-  directory will be restored to the dir it was prior to executing
-  :make.
+  When set to a non-0 value, all eclim based make commands (:Ant, :Maven, :Mvn,
+  etc) will change to the current file's project root before executing.
 
-  Enabling this has the benefit of allowing you to run :make or
-  :ref:`:Ant <vim/java/ant/execute>` from any file regardless of where it was
-  opened from without having to worry about the directory it is executing from.
-  For example if you have a file open from project A and split a file from
-  project B, you can execute **:Ant** from the project B file and it will
-  utilize project B's build.xml even though your current working directory is
-  in project A.
+  Enabling this has the benefit of allowing you to run these commands from any
+  file regardless of where it was opened from without having to worry about the
+  directory it is executing from.  For example if you have a file open from
+  project A and split a file from project B, you can execute **:Ant** from the
+  project B file and it will utilize project B's build.xml even though your
+  current working directory is in project A.

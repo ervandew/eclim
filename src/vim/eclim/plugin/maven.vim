@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,11 +25,11 @@
 " Command Declarations {{{
 if !exists(":Maven")
   command -bang -nargs=* Maven
-    \ :call eclim#java#maven#run#Maven('<bang>', '<args>')
+    \ :call eclim#util#MakeWithCompiler('eclim_maven', '<bang>', '<args>')
 endif
 if !exists(":Mvn")
   command -bang -nargs=* Mvn
-    \ :call eclim#java#maven#run#Mvn('<bang>', '<args>')
+    \ :call eclim#util#MakeWithCompiler('eclim_mvn', '<bang>', '<args>')
 endif
 " }}}
 

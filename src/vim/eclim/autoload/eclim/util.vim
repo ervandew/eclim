@@ -590,6 +590,14 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     exec 'compiler ' . a:compiler
     let make_cmd = substitute(&makeprg, '\$\*', a:args, '')
 
+    if g:EclimMakeLCD
+      let w:quickfix_dir = getcwd()
+      let dir = eclim#project#util#GetCurrentProjectRoot()
+      if dir != ''
+        exec 'lcd ' . escape(dir, ' ')
+      endif
+    endif
+
     " windows machines where 'tee' is available
     if (has('win32') || has('win64')) && executable('tee')
       let outfile = g:EclimTempDir . '/eclim_make_output.txt'
@@ -624,6 +632,10 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     endif
     if has('win32') || has('win64')
       let &shellpipe = saved_shellpipe
+    endif
+    if exists('w:quickfix_dir')
+      exec 'lcd ' . escape(w:quickfix_dir, ' ')
+      unlet w:quickfix_dir
     endif
   endtry
 endfunction " }}}

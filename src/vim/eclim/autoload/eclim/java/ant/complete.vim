@@ -25,6 +25,7 @@
 " Script Varables {{{
   let s:complete_command =
     \ '-command ant_complete -p "<project>" -f "<file>" -o <offset> -e <encoding>'
+  let s:command_targets = '-command ant_targets -p "<project>" -f "<file>"'
 " }}}
 
 " CodeComplete(findstart, base) {{{
@@ -109,6 +110,36 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
 
     return completions
   endif
+endfunction " }}}
+
+" CommandCompleteTarget(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for ant targets.
+function! eclim#java#ant#run#CommandCompleteTarget(argLead, cmdLine, cursorPos)
+  let project = eclim#project#util#GetCurrentProjectName()
+  if project == ''
+    return []
+  endif
+
+  let file = eclim#java#ant#util#FindBuildFile()
+  if project != "" && file != ""
+    let file = eclim#project#util#GetProjectRelativeFilePath(file)
+    let command = s:command_targets
+    let command = substitute(command, '<project>', project, '')
+    let command = substitute(command, '<file>', file, '')
+
+    let targets = split(eclim#ExecuteEclim(command), '\n')
+    if len(targets) == 1 && targets[0] == '0'
+      return []
+    endif
+
+    let cmdTail = strpart(a:cmdLine, a:cursorPos)
+    let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+    call filter(targets, 'v:val =~ "^' . argLead . '"')
+
+    return targets
+  endif
+
+  return []
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
