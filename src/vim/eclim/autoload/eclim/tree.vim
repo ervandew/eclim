@@ -266,7 +266,7 @@ function! eclim#tree#GetParentPosition()
   let lnum = 0
   let line = getline('.')
   if line =~ '\s*' . s:node_prefix
-    if line =~ '^' . s:node_regex . '[.[:alnum:]_]'
+    if line =~ '^' . s:node_regex . '\S'
       let search = s:root_regex
     else
       let search = '^'
@@ -682,7 +682,12 @@ function! eclim#tree#Refresh()
       " if we are adding a new entry we'll just add one that has the correct
       " index + prefix and let the next block set the proper display path.
       if s:MatchesFilter(norm_entry)
-        let initial = fnamemodify(entry, ':t')
+        if isdirectory(entry)
+          let initial = fnamemodify(substitute(entry, '/$', '', ''), ':t') . '/'
+        else
+          let initial = fnamemodify(entry, ':t')
+        endif
+
         if index(dirs, entry) != -1
           let display_entry = indent . s:node_prefix . s:dir_closed_prefix . initial
         else
