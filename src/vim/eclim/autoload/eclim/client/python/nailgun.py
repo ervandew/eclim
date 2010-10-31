@@ -138,7 +138,7 @@ class Nailgun(object):
     """
     Sends a nailgun 'chunk' to the server.
     """
-    #print "sendChunk " + chunkType + " " + text
+    #print("sendChunk " + chunkType + " " + text)
     length = len(text)
     str = "%c%c%c%c%c" % (
         (length / (65536*256)) % 256,
@@ -156,13 +156,13 @@ class Nailgun(object):
     while exitFlag > 0:
       answer = self.recvBlocked(5)
       if len(answer) < 5:
-        print "error: socket closed unexpectedly\n"
+        print("error: socket closed unexpectedly\n")
         return None
       lenPayload = ord(answer[0]) * 65536 * 256 \
         + ord(answer[1]) * 65536 \
         + ord(answer[2]) * 256 \
         + ord(answer[3])
-      #print "lenPayload detected : %d" % lenPayload
+      #print("lenPayload detected : %d" % lenPayload)
       chunkType = answer[4]
       if chunkType == "1":
         # STDOUT
@@ -174,7 +174,7 @@ class Nailgun(object):
         exitFlag = exitFlag - 1
         exit = int(self.recvToFD(2, answer, lenPayload))
       else:
-        print "error: unknown chunk type = %d\n" % chunkType
+        print("error: unknown chunk type = %d\n" % chunkType)
         exitFlag = 0
 
     return [exit, result.getvalue()]

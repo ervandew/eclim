@@ -27,6 +27,13 @@ Common:
     mode to view or diff the revision of the most recent edit for the line
     under the cursor.
 
+Python:
+  - Updated all embedded python logic to be compatible with python 2.6 and higher.
+
+    .. note::
+
+      Support for vim embedded python 2.5 or less no longer supported.
+
 .. _1.6.1:
 
 1.6.1 (2010-10-23)
