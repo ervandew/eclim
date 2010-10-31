@@ -485,7 +485,7 @@ function! eclim#util#GoToBufferWindow(buf)
     let winnr = bufwinnr(a:buf)
   else
     let name = eclim#util#EscapeBufferName(a:buf)
-    let winnr = bufwinnr(bufnr('^' . name))
+    let winnr = bufwinnr(bufnr('^' . name . '$'))
   endif
   if winnr != -1
     exec winnr . "winc w"
