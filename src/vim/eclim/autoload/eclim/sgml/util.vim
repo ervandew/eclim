@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,13 @@ function eclim#sgml#util#CompleteEndTag()
   if line[col('.') - 2] == '<' && line[col('.') - 1] !~ '\w'
     let tag = s:GetStartTag(line('.'))
     if tag != ''
-      return '/' . tag . '>'
+      let result = '/' . tag
+      if line[col('.') - 1] != '>'
+        let result .= '>'
+      else
+        let result .= "\<right>"
+      endif
+      return result
     endif
   endif
   return '/'
