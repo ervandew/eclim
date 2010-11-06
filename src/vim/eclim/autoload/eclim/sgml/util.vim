@@ -31,11 +31,20 @@ function eclim#sgml#util#CompleteEndTag()
     let tag = s:GetStartTag(line('.'))
     if tag != ''
       let result = '/' . tag
-      if line[col('.') - 1] != '>'
-        let result .= '>'
-      else
-        let result .= "\<right>"
+      if line[col('.') - 1] == '>'
+        " delete the closing char and force adding a new one so that vim
+        " reindents for us.
+        let result .= "\<del>"
       endif
+
+      " handle quirk w/ delimitMate
+      if exists('b:_l_delimitMate_buffer')
+        if b:_l_delimitMate_buffer[-1] == '>'
+          let b:_l_delimitMate_buffer = b:_l_delimitMate_buffer[:-2]
+        endif
+      endif
+
+      let result .= '>'
       return result
     endif
   endif
