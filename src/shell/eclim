@@ -28,7 +28,7 @@ while [ -h "$FILEPATH" ] ; do
   PREV=$FILEPATH
   # readlink doesn't appear to be standard on solaris
   #FILEPATH=`readlink "$FILEPATH"`
-  FILEPATH=`ls -l $FILEPATH | awk '{ print $NF }'`
+  FILEPATH=`ls -l "$FILEPATH" | awk '{ print $NF }'`
   if [ -z "$FILEPATH" -o "$FILEPATH" = "$PREV" ] ; then
     FILEPATH=$PREV
     break

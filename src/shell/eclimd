@@ -59,7 +59,7 @@ resolve_eclipse_launcher(){
     ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
   fi
 
-  ECLIPSE_LAUNCHER=`find $ECLIM_ECLIPSE_HOME/plugins -name 'org.eclipse.equinox.launcher_*.jar'`
+  ECLIPSE_LAUNCHER=`find "$ECLIM_ECLIPSE_HOME/plugins" -name 'org.eclipse.equinox.launcher_*.jar'`
 
   if [ ! -e "$ECLIPSE_LAUNCHER" ]; then
     echo "Unable to locate the eclipse launcher jar." 1>&2
