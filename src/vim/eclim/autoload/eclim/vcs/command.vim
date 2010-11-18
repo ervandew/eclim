@@ -126,27 +126,34 @@ function! eclim#vcs#command#Info()
   endtry
 endfunction " }}}
 
-" Log(path) {{{
-" Opens a buffer with the contents of the log for the supplied url.
-function! eclim#vcs#command#Log(path)
-  if a:path == ''
-    call eclim#util#EchoError('File is not under version control.')
-    return
-  endif
-
-  let cwd = eclim#vcs#util#LcdRoot(a:path)
-  let path = eclim#vcs#util#GetRelativePath(a:path)
+" Log(args) {{{
+" Opens a buffer with the results of running a log for the supplied arguments.
+function! eclim#vcs#command#Log(args)
+  let cwd = eclim#vcs#util#LcdRoot()
+  let args = a:args
+  let path = a:args == '' ? eclim#vcs#util#GetRelativePath(expand('%')) : ''
   try
     let Log = eclim#vcs#util#GetVcsFunction('Log')
     if type(Log) != 2
       return
     endif
-    let info = Log(path)
+
+    " handle user supplied % arg
+    let arglist = eclim#util#ParseArgs(args)
+    let percent_index = index(arglist, '%')
+    if percent_index != -1
+      call remove(arglist, percent_index)
+      let path = eclim#vcs#util#GetRelativePath(expand('%'))
+      let args = '"' . join(arglist, '" "') . '" '
+    endif
+
+    if path != ''
+      let args .= '"' . path . '"'
+    endif
+    let info = Log(args)
   finally
     exec 'lcd ' . cwd
   endtry
-  let info.props = has_key(info, 'props') ? info.props : s:GetProps()
-  let info.props.path = path
 
   " if annotations are on, jump to the revision for the current line
   let jumpto = ''
@@ -154,7 +161,12 @@ function! eclim#vcs#command#Log(path)
     let jumpto = split(b:vcs_annotations[line('.') - 1])[0]
   endif
 
-  let content = [path, '']
+  let content = []
+  if path != ''
+    let info.props.path = path
+    call add(content, path)
+    call add(content, '')
+  endif
   for entry in info.log
     call add(content, s:LogLine(entry))
   endfor
@@ -182,6 +194,48 @@ function! eclim#vcs#command#Log(path)
     call search('^[+-] ' . jumpto)
     normal! z
   endif
+endfunction " }}}
+
+" LogGrep(args, type) {{{
+function! eclim#vcs#command#LogGrep(args, type)
+  if a:args == ''
+    call eclim#util#EchoError('Pattern required.')
+    return
+  endif
+
+  let cwd = eclim#vcs#util#LcdRoot()
+  try
+    let LogGrep = eclim#vcs#util#GetVcsFunction('LogGrep')
+    if type(LogGrep) != 2
+      return
+    endif
+
+    let arglist = eclim#util#ParseArgs(a:args)
+    let pattern = arglist[0]
+    let arglist = arglist[1:]
+
+    " handle user supplied % arg
+    let percent_index = index(arglist, '%')
+    if percent_index != -1
+      let arglist[percent_index] = eclim#vcs#util#GetRelativePath(expand('%'))
+    endif
+    let args = len(arglist) ? '"' . join(arglist, '" "') . '"' : ''
+    let info = LogGrep(pattern, args, a:type)
+  finally
+    exec 'lcd ' . cwd
+  endtry
+
+  let content = [
+    \ 'pattern: ' . pattern .
+    \ (len(arglist) ? ' args: ' . join(arglist, ', ') : '')
+    \ , '']
+  for entry in info.log
+    call add(content, s:LogLine(entry))
+  endfor
+
+  call s:TempWindow(info.props, content)
+  call s:LogSyntax()
+  call s:LogMappings()
 endfunction " }}}
 
 " ViewFileRevision(path, revision, open_cmd) {{{
@@ -529,10 +583,12 @@ function! s:ToggleDetail()
     let open = substitute(line, '+ \(.\{-})\).*', '- \1 ' . log.date, '')
     call setline(lnum, open)
     let lines = []
-    if lnum == line('$')
-      call add(lines, "\t|view| |annotate| |diff working copy|")
-    else
-      call add(lines, "\t|view| |annotate| |diff working copy| |diff previous|")
+    if has_key(b:vcs_props, 'path')
+      if lnum == line('$')
+        call add(lines, "\t|view| |annotate| |diff working copy|")
+      else
+        call add(lines, "\t|view| |annotate| |diff working copy| |diff previous|")
+      endif
     endif
     let desc = substitute(log.description, '\_s*$', '', '')
     let desc = substitute(desc, '\('. s:trackerIdPattern . '\)', '|\1|', 'g')
@@ -580,15 +636,17 @@ function! s:ToggleFiles()
     let close = substitute(line, '-', '+', '')
     call setline(lnum, close)
     let start = lnum + 1
-    let end = search('^[+-] \w\+', 'nW') - 1
-    if end == -1
-      let end = line('$')
+    let end = search('^[+-] \w\+', 'cnW') - 1
+    if end != lnum
+      if end == -1
+        let end = line('$')
+      endif
+      if end < start
+        let end = start
+      endif
+      exec start . ',' . end . 'delete _'
+      call setpos('.', pos)
     endif
-    if end < start
-      let end = start
-    endif
-    exec start . ',' . end . 'delete _'
-    call setpos('.', pos)
   endif
   setlocal nomodifiable readonly
 endfunction " }}}

@@ -137,16 +137,20 @@ function eclim#vcs#impl#hg#Info(path)
   call eclim#util#Echo(result)
 endfunction " }}}
 
-" Log(path) {{{
-function eclim#vcs#impl#hg#Log(path)
+" Log(args [, exec]) {{{
+function eclim#vcs#impl#hg#Log(args, ...)
   " Note: tags are space separated, so if the user has a space in their tag
   " name, that tag will be screwed in the log.
-  let logcmd = 'log --template "{node|short}|{author}|{date|age}|{tags}|{desc|firstline}\n"'
+  let logcmd = 'log  --template "{node|short}|{author}|{date|age}|{tags}|{desc|firstline}\n"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' --limit ' . g:EclimVcsLogMaxEntries
   endif
+  if a:args != ''
+    let logcmd .= ' ' . a:args
+  endif
 
-  let result = eclim#vcs#impl#hg#Hg(logcmd . ' "' . a:path . '"')
+  let exec = len(a:000) > 0 ? a:000[0] : 0
+  let result = eclim#vcs#impl#hg#Hg(logcmd, exec)
   if type(result) == 0
     return
   endif
@@ -164,6 +168,31 @@ function eclim#vcs#impl#hg#Log(path)
   let root_dir = exists('b:vcs_props') ?
     \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
   return {'log': log, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" LogGrep(pattern, args, type) {{{
+function eclim#vcs#impl#hg#LogGrep(pattern, args, type)
+  if a:type == 'files'
+    let result = eclim#vcs#impl#hg#Hg('grep --all "' . a:pattern . '" ' . a:args, 1)
+    if type(result) == 0
+      return
+    endif
+    let revisions = []
+    for line in split(result, '\n')
+      let revision = split(line, ':')[1]
+      if index(revisions, revision) == -1
+        call add(revisions, revision)
+      endif
+    endfor
+    if len(revisions) == 0
+      let root_dir = exists('b:vcs_props') ?
+        \ b:vcs_props.root_dir : eclim#vcs#impl#hg#GetRoot()
+      return {'log': [], 'props': {'root_dir': root_dir}}
+    endif
+    return eclim#vcs#impl#hg#Log('-r ' . join(revisions, ' -r ') . ' ' . a:args)
+  endif
+
+  return eclim#vcs#impl#hg#Log('-k "' . a:pattern . '" ' . a:args, 1)
 endfunction " }}}
 
 " LogDetail(revision) {{{
@@ -228,10 +257,11 @@ function! eclim#vcs#impl#hg#ViewFileRevision(path, revision)
   return split(result, '\n')
 endfunction " }}}
 
-" Hg(args) {{{
+" Hg(args [, exec]) {{{
 " Executes 'hg' with the supplied args.
-function eclim#vcs#impl#hg#Hg(args)
-  return eclim#vcs#util#Vcs('hg', a:args)
+function eclim#vcs#impl#hg#Hg(args, ...)
+  let exec = len(a:000) > 0 && a:000[0]
+  return eclim#vcs#util#Vcs('hg', a:args, exec)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -1,0 +1,21 @@
+#!/bin/bash
+##
+# Script to manually invoke a bash completion function and print the results
+# one result per line.
+##
+
+. /etc/bash_completion
+
+COMP_FUNC=$1
+shift
+COMP_WORDS=("${@}")
+COMP_CWORD=$((${#COMP_WORDS[@]}-1))
+
+CMD=${COMP_WORDS[0]}
+CUR=${COMP_WORDS[$COMP_CWORD]}
+PRE=${COMP_WORDS[$(($COMP_CWORD-1))]}
+
+$COMP_FUNC $CMD $CUR $PRE
+for reply in ${COMPREPLY[@]} ; do
+  echo $reply
+done

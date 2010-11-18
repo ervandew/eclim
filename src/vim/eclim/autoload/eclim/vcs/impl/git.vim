@@ -182,14 +182,21 @@ function eclim#vcs#impl#git#Info(path)
   call eclim#util#Echo(result)
 endfunction " }}}
 
-" Log(path) {{{
-function eclim#vcs#impl#git#Log(path)
+" Log(args [, exec]) {{{
+function eclim#vcs#impl#git#Log(args, ...)
   let logcmd = 'log --pretty=tformat:"%h|%cn|%cr|%d|%s|"'
   if g:EclimVcsLogMaxEntries > 0
     let logcmd .= ' -' . g:EclimVcsLogMaxEntries
   endif
+  if a:args != ''
+    let logcmd .= ' ' . a:args
+  endif
 
-  let result = eclim#vcs#impl#git#Git(logcmd . ' "' . a:path . '"')
+  let exec = len(a:000) > 0 ? a:000[0] : 0
+  if exec
+    let logcmd = escape(logcmd, '%')
+  endif
+  let result = eclim#vcs#impl#git#Git(logcmd, exec)
   if type(result) == 0
     return
   endif
@@ -208,6 +215,21 @@ function eclim#vcs#impl#git#Log(path)
   let root_dir = exists('b:vcs_props') ?
     \ b:vcs_props.root_dir : eclim#vcs#impl#git#GetRoot()
   return {'log': log, 'props': {'root_dir': root_dir}}
+endfunction " }}}
+
+" LogGrep(pattern, args, type) {{{
+function eclim#vcs#impl#git#LogGrep(pattern, args, type)
+  let args = ''
+  if a:type == 'message'
+    let args .= '-E "--grep=' . a:pattern . '"'
+  elseif a:type == 'files'
+    let args .= '--pickaxe-regex "-S' . a:pattern . '"'
+  endif
+  if a:args != ''
+    let args .= ' ' . a:args
+  endif
+
+  return eclim#vcs#impl#git#Log(args, 1)
 endfunction " }}}
 
 " LogDetail(revision) {{{
@@ -264,16 +286,27 @@ function! eclim#vcs#impl#git#ViewFileRevision(path, revision)
   return split(result, '\n')
 endfunction " }}}
 
-" Git(args) {{{
+" Git(args [, exec]) {{{
 " Executes 'git' with the supplied args.
-function eclim#vcs#impl#git#Git(args)
-  return eclim#vcs#util#Vcs('git', '--no-pager ' . a:args)
+function eclim#vcs#impl#git#Git(args, ...)
+  let exec = len(a:000) > 0 && a:000[0]
+  let result = eclim#vcs#util#Vcs('git', '--no-pager ' . a:args, exec)
+
+  " handle errors not caught by Vcs
+  if type(result) == 1 && result =~ '^fatal:'
+    call eclim#util#EchoError(
+      \ "Error executing command: git --no-pager " . a:args . "\n" . result)
+    throw 'vcs error'
+  endif
+
+  return result
 endfunction " }}}
 
 " s:ReadIndex() {{{
 " Used to read a file with the name index_blob_<index hash>_<filename>, for
 " use by the git editor diff support.
 function! s:ReadIndex()
+  setlocal noreadonly modifiable
   if !filereadable(expand('%'))
     let path = eclim#vcs#util#GetRelativePath(expand('%:p'))
     let path = substitute(path, '^/', '', '')
@@ -287,6 +320,7 @@ function! s:ReadIndex()
     read %
   endif
   1,1delete _
+  setlocal readonly nomodifiable
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

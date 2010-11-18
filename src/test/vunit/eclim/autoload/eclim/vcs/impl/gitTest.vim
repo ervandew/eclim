@@ -193,6 +193,69 @@ function! TestLog()
   call VUAssertEquals(line('$'), 2)
 endfunction " }}}
 
+" TestLogGrepMessage() {{{
+function! TestLogGrepMessage()
+  view file1.txt
+  call PeekRedir()
+  VcsLogGrepMessage add.*file[s]?\\b
+  call VUAssertEquals(expand('%'), '[vcs_log]')
+  call VUAssertEquals(getline(1), 'pattern: add.*file[s]?\b')
+  call VUAssertEquals(line('$'), 4)
+  call VUAssertTrue(getline(3) =~ '+ 35a1f6a ervandew (.* ago) add file 4')
+  call VUAssertTrue(getline(4) =~ '+ df552e0 ervandew (.* ago) adding some test files')
+
+  call cursor(3, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 7)
+  call VUAssertEquals(getline(6), '  + files')
+
+  call cursor(6, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 8)
+  call VUAssertEquals(getline(7), '    |A| test/file4.txt')
+
+  call cursor(7, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_35a1f6a_file4.txt')
+  call VUAssertEquals(line('$'), 1)
+  call VUAssertEquals(getline(1), 'file 4')
+endfunction " }}}
+
+" TestLogGrepFiles() {{{
+function! TestLogGrepFiles()
+  view file1.txt
+  call PeekRedir()
+  VcsLogGrepFiles (second|third)\ revision
+  call VUAssertEquals(expand('%'), '[vcs_log]')
+  call VUAssertEquals(getline(1), 'pattern: (second|third) revision')
+  call VUAssertEquals(line('$'), 5)
+  call VUAssertTrue(getline(3) =~
+    \ '+ ee5a562 (HEAD, master) ervandew (.* ago) test modification + move')
+  call VUAssertTrue(getline(4) =~
+    \ '+ 101e4be ervandew (.* ago) changed some files and leaving a multi line comment')
+  call VUAssertTrue(getline(5) =~
+    \ '+ 08c4100 ervandew (.* ago) added 2nd revision content to file1.txt')
+
+  call cursor(4, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 11)
+  call VUAssertEquals(getline(10), '  + files')
+
+  call cursor(10, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 13)
+  call VUAssertEquals(getline(11), '    |M| test/file1.txt')
+  call VUAssertEquals(getline(12), '    |M| test/file2.txt')
+
+  call cursor(12, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_101e4be_file2.txt')
+  call VUAssertEquals(line('$'), 3)
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_df552e0_file2.txt')
+  call VUAssertEquals(line('$'), 2)
+endfunction " }}}
+
 " TestLogFiles() {{{
 function! TestLogFiles()
   view file2.txt

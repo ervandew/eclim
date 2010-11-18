@@ -37,6 +37,19 @@ file versioned in mercurial (hg) or git.
   and perform various operations (diff, annotate, etc.) using any of the text
   links denoted by '\|link name\|' (ex.  '\|annotate\|').
 
+.. _\:VcsLogGrepMessage:
+
+- **:VcsLogGrepMessage** pattern - Like :ref:`:VcsLog <:VcsLog>` but supports a
+  regex pattern for git, or a keyword or phrase for hg, which is used to limit
+  log entries to those whose log message match that pattern, keyword, or
+  phrase.
+
+.. _\:VcsLogGrepFiles:
+
+- **:VcsLogGrepFiles** pattern - Like :ref:`:VcsLogGrepMessage
+  <:VcsLogGrepMessage>` but supports a regex pattern which is used to limit log
+  entries to those that have files whose changes match the supplied pattern.
+
 .. _\:VcsDiff:
 
 - **:VcsDiff** [revision] -

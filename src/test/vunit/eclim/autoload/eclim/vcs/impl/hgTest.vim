@@ -177,6 +177,72 @@ function! TestLog()
   call VUAssertEquals(line('$'), 2)
 endfunction " }}}
 
+" TestLogGrepMessage() {{{
+function! TestLogGrepMessage()
+  view file1.txt
+  call PeekRedir()
+  VcsLogGrepMessage second\ revision
+  call VUAssertEquals(expand('%'), '[vcs_log]')
+  call VUAssertEquals(getline(1), 'pattern: second revision')
+  call VUAssertEquals(line('$'), 3)
+  call VUAssertEquals(getline(3),
+    \ '+ 9247ff7b10e3 ervandew (2008-09-27) second revision of files')
+
+  call cursor(3, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 6)
+  call VUAssertEquals(getline(6), '  + files')
+
+  call cursor(6, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 8)
+  call VUAssertEquals(getline(7), '    |M| test/file1.txt')
+  call VUAssertEquals(getline(8), '    |M| test/file2.txt')
+
+  call cursor(8, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_9247ff7b10e3_file2.txt')
+  call VUAssertEquals(line('$'), 3)
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_571c289b2787_file2.txt')
+  call VUAssertEquals(line('$'), 5)
+endfunction " }}}
+
+" TestLogGrepFiles() {{{
+function! TestLogGrepFiles()
+  view file1.txt
+  call PeekRedir()
+  VcsLogGrepFiles (second|third)\ revision
+  call VUAssertEquals(expand('%'), '[vcs_log]')
+  call VUAssertEquals(getline(1), 'pattern: (second|third) revision')
+  call VUAssertEquals(line('$'), 5)
+  call VUAssertEquals(getline(3),
+    \ '+ 571c289b2787 (tip) ervandew (6 weeks ago) test copy/move')
+  call VUAssertEquals(getline(4),
+    \ '+ 5f0911d194b1 ervandew (2008-09-27) test a multi line comment')
+  call VUAssertEquals(getline(5),
+    \ '+ 9247ff7b10e3 ervandew (2008-09-27) second revision of files')
+
+  call cursor(4, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 10)
+  call VUAssertEquals(getline(9), '  + files')
+
+  call cursor(9, 1)
+  exec "normal \<cr>"
+  call VUAssertEquals(line('$'), 12)
+  call VUAssertEquals(getline(10), '    |M| test/file1.txt')
+  call VUAssertEquals(getline(11), '    |M| test/file2.txt')
+
+  call cursor(11, 6)
+  exec "normal \<cr>"
+  call VUAssertEquals(expand('%'), 'vcs_5f0911d194b1_file2.txt')
+  call VUAssertEquals(line('$'), 4)
+  winc l
+  call VUAssertEquals(expand('%'), 'vcs_571c289b2787_file2.txt')
+  call VUAssertEquals(line('$'), 5)
+endfunction " }}}
+
 " TestLogFiles() {{{
 function! TestLogFiles()
   view file2.txt

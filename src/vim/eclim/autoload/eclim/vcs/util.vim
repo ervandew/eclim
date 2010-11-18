@@ -216,15 +216,21 @@ function eclim#vcs#util#LcdRoot(...)
   return escape(cwd, ' ')
 endfunction " }}}
 
-" Vcs(cmd, args) {{{
+" Vcs(cmd, args [, exec]) {{{
 " Executes the supplied vcs command with the supplied args.
-function eclim#vcs#util#Vcs(cmd, args)
+function eclim#vcs#util#Vcs(cmd, args, ...)
   if !executable(a:cmd)
     call eclim#util#EchoError(a:cmd . ' executable not found in your path.')
     return
   endif
 
-  let result = eclim#util#System(a:cmd . ' ' . a:args)
+  let cmd = a:cmd
+  let args = a:args
+  let exec = len(a:000) > 0 && a:000[0]
+  if exec
+    let cmd = '!' . cmd
+  endif
+  let result = eclim#util#System(cmd . ' ' . args, exec, 1)
   if v:shell_error
     call eclim#util#EchoError(
       \ "Error executing command: " . a:cmd . " " . a:args . "\n" . result)

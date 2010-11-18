@@ -23,28 +23,22 @@
 " }}}
 
 " Command Declarations {{{
-if !exists(":VcsAnnotate")
-  command VcsAnnotate :call eclim#vcs#command#Annotate()
-endif
 if !exists(":VcsLog")
-  command VcsLog
+  command -nargs=* VcsLog
     \ if s:CheckWindow() |
-    \   call eclim#vcs#command#Log(expand('%:p')) |
+    \   call eclim#vcs#command#Log(<q-args>) |
     \ endif
-endif
-if !exists(":VcsDiff")
+  command -nargs=* VcsLogGrepMessage call eclim#vcs#command#LogGrep(<q-args>, 'message')
+  command -nargs=* VcsLogGrepFiles call eclim#vcs#command#LogGrep(<q-args>, 'files')
   command -nargs=? VcsDiff
     \ if s:CheckWindow() |
     \   call eclim#vcs#command#Diff('<args>') |
     \ endif
-endif
-if !exists(":VcsCat")
   command -nargs=? VcsCat
     \ if s:CheckWindow() |
     \   call eclim#vcs#command#ViewFileRevision(expand('%:p'), '<args>', 'split') |
     \ endif
-endif
-if !exists(":VcsInfo")
+  command VcsAnnotate :call eclim#vcs#command#Annotate()
   command -nargs=0 VcsInfo
     \ if s:CheckWindow() |
     \   call eclim#vcs#command#Info() |
@@ -53,16 +47,10 @@ endif
 
 if !exists(":VcsWebLog")
   command -nargs=? VcsWebLog call eclim#vcs#web#VcsWebLog('<args>')
-endif
-if !exists(":VcsWebChangeSet")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
     \ VcsWebChangeSet call eclim#vcs#web#VcsWebChangeSet(<q-args>)
-endif
-if !exists(":VcsWebAnnotate")
   command -nargs=? -complete=customlist,eclim#vcs#util#CommandCompleteRevision
     \ VcsWebAnnotate call eclim#vcs#web#VcsWebAnnotate(<q-args>)
-endif
-if !exists(":VcsWebDiff")
   command -nargs=* -complete=customlist,eclim#vcs#util#CommandCompleteRevision
     \ VcsWebDiff call eclim#vcs#web#VcsWebDiff(<q-args>)
 endif

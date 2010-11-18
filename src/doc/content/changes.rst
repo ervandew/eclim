@@ -22,6 +22,11 @@ History of Changes
 ----------------------
 
 Common:
+  - Updated :ref:`:VcsLog <:VcsLog>` to support additional arguments which are
+    passed to the underlying vcs log command.
+  - Added :ref:`:VcsLogGrepMessage <:VcsLogGrepMessage>` and
+    :ref:`:VcsLogGrepFiles <:VcsLogGrepFiles>` to search the vcs logs by
+    grepping the log messages or changed file contents.
   - Added :ref:`:VcsAnnotateCat <:VcsAnnotateCat>` and :ref:`:VcsAnnotateDiff
     <:VcsAnnotateDiff>` commands while in :ref:`:VcsAnnotate <:VcsAnnotate>`
     mode to view or diff the revision of the most recent edit for the line
