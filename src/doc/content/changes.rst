@@ -31,6 +31,8 @@ Common:
     <:VcsAnnotateDiff>` commands while in :ref:`:VcsAnnotate <:VcsAnnotate>`
     mode to view or diff the revision of the most recent edit for the line
     under the cursor.
+  - Added rudimentary auto generated menu items for gvim (can be disabled via
+    :ref:`g:EclimMenus <g:EclimMenus>`).
 
 Python:
   - Updated all embedded python logic to be compatible with python 2.6 and higher.

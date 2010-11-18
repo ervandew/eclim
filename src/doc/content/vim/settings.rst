@@ -203,3 +203,10 @@ The following is a list of some of the common Vim variables available.
   project A and split a file from project B, you can execute **:Ant** from the
   project B file and it will utilize project B's build.xml even though your
   current working directory is in project A.
+
+.. _g\:EclimMenus:
+
+- **g:EclimMenus** (Default: 1)
+
+  When set to a non-0 value, enabled auto generation of gvim menus (under
+  Plugin.eclim) for each eclim command available for the current buffer.

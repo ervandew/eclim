@@ -117,6 +117,10 @@ if !exists("g:EclimEclipseHome")
     let g:EclimEclipseHome = eclim#cygwin#CygwinPath(g:EclimEclipseHome)
   endif
 endif
+
+if !exists("g:EclimMenus")
+  let g:EclimMenus = 1
+endif
 " }}}
 
 " Command Declarations {{{
@@ -191,6 +195,13 @@ if has('netbeans_intg')
     autocmd CursorHold * call eclim#vimplugin#BufferUnmodified()
     autocmd CursorHold * call eclim#vimplugin#BufferUnmodified()
     autocmd BufWinLeave * call eclim#vimplugin#BufferClosed()
+  augroup END
+endif
+
+if has('gui_running') && g:EclimMenus
+  augroup eclim_menus
+    autocmd BufNewFile,BufReadPost,WinEnter * call eclim#display#menu#Generate()
+    autocmd VimEnter * if expand('<amatch>')=='' | call eclim#display#menu#Generate() | endif
   augroup END
 endif
 " }}}

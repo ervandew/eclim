@@ -49,8 +49,6 @@ HIGH {{{
       - open a scratch window for displaying these
 
     - make project file refresh async?
-
-    - add gui menu items (see email "Eclim popup menus for Java")
 }}}
 
 TODO {{{
