@@ -84,7 +84,7 @@ build_vmargs(){
   fi
 
   # for osx
-  if [ `echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'` == "darwin" ] ; then
+  if [ `echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'` = "darwin" ] ; then
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
   fi
 }
