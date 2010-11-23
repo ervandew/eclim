@@ -388,6 +388,43 @@ function! eclim#project#util#ProjectInfo(project)
   endif
 endfunction " }}}
 
+" ProjectStatusLine() {{{
+" Includes status information for the current file to VIM status
+function! eclim#project#util#ProjectStatusLine()
+  let project_info = eclim#project#util#ParsedProjectInfo('')
+  let eclim_status = ''
+  if len(project_info)
+    return '{ECLIM} PROJECT=' . project_info['Name'] . ' | NATURES=' . project_info['Natures']
+  endif
+endfunction " }}}
+
+" ParsedProjectInfo(project) {{{
+" Returns a dictionary of project information for the current or supplied
+" project.
+function! eclim#project#util#ParsedProjectInfo(project)
+  let project = a:project
+  if project == ''
+    let project = eclim#project#util#GetCurrentProjectName()
+  endif
+  if project == ''
+    return {}
+  endif
+  let command = substitute(s:command_project_info, '<project>', project, '')
+  let port = eclim#project#util#GetProjectPort(project)
+  let result = eclim#ExecuteEclim(command, port)
+
+  let project_info = {}
+
+  if result != '0'
+    let project_data = split(result, '\n')
+    for pair in project_data
+      let kv = split(pair, ':')
+      let project_info[kv[0]] = kv[1]
+    endfor
+  endif
+  return project_info
+endfunction " }}}
+
 " ProjectOpen(name) {{{
 " Open the requested project.
 function! eclim#project#util#ProjectOpen(name)
