@@ -661,6 +661,9 @@ function! eclim#util#ParseArgs(args)
         let escape = 0
       endif
     else
+      if escape && char != ' '
+        let arg .= '\'
+      endif
       let arg .= char
       let escape = 0
     endif
