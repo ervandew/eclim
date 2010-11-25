@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -37,10 +37,17 @@ endfor
 " Ex. imap <silent> % <c-r>=eclim#python#django#template#CompleteEndTag()<cr>
 function eclim#python#django#template#CompleteEndTag()
   let line = getline('.')
-  if line =~ '.*{%\s*\%' . col('.') . 'c\(\s\|$\)'
+  let match_start = '.*{%\s*\%' . col('.') . 'c'
+  if line =~ match_start . '\(\s\|\s*%}\|$\)'
     let tag = s:GetStartTag(line('.'))
     if tag != '' && tag != 'endif'
-      return tag . ' %}'
+      let ops = ''
+      " account for case where the closing %} already exists (delete it)
+      if line =~ match_start . '\s*%}'
+        let chars = substitute(line, match_start . '\(\s*%}\).*', '\1', '')
+        let ops = substitute(chars, '.', "\<del>", "g")
+      endif
+      return tag . ops . ' %}'
     endif
   endif
   return 'e'
