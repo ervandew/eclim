@@ -53,6 +53,18 @@
   let s:regexfile = g:EclimTempDir . '/eclim_<lang>_regex.txt'
 " }}}
 
+" SimpleVimToPcre(pattern) {{{
+" Perform some simple translations to make the supplied vim regex pattern a
+" more pcre pattern.
+function! eclim#regex#SimpleVimToPcre(pattern)
+  let pattern = a:pattern
+  let pattern = substitute(pattern, '\\[<>]', '\\b', 'g')
+  let pattern = substitute(pattern, '\\{-}', '*?', 'g')
+  " vim sometimes adds a leading 'very nomagic' when using normal *
+  let pattern = substitute(pattern, '^\\V', '', '')
+  return pattern
+endfunction " }}}
+
 " OpenTestWindow(lang) {{{
 " Opens a buffer where the user can test regex expressions.
 function! eclim#regex#OpenTestWindow(lang)
@@ -88,7 +100,7 @@ function! eclim#regex#OpenTestWindow(lang)
   write
 endfunction " }}}
 
-" Evaluate(lang) {{{
+" s:Evaluate(lang) {{{
 " Evaluates the test regex file.
 function! s:Evaluate(lang)
   if line('$') == 1 && getline('$') == ''
@@ -135,7 +147,7 @@ function! s:Evaluate(lang)
   endfor
 endfunction "}}}
 
-" NextMatch() {{{
+" s:NextMatch() {{{
 " Moves the cursor to the next match.
 function! s:NextMatch()
   if exists("b:results")
@@ -162,7 +174,7 @@ function! s:NextMatch()
   endif
 endfunction " }}}
 
-" PrevMatch() {{{
+" s:PrevMatch() {{{
 " Moves the cursor to the previous match.
 function! s:PrevMatch()
   if exists("b:results")
@@ -192,7 +204,7 @@ function! s:PrevMatch()
   endif
 endfunction " }}}
 
-" AddTestContent() {{{
+" s:AddTestContent() {{{
 " Add the test content to the current regex test file.
 function! s:AddTestContent()
   call append(1, s:test_content)
@@ -209,7 +221,7 @@ function! s:AddTestContent()
   "augroup END
 endfunction " }}}
 
-" BuildPatterns(match) {{{
+" s:BuildPatterns(match) {{{
 " Builds the regex patterns for the supplied match.
 function! s:BuildPatterns(match)
   " vim (as of 7 beta 2) doesn't seem to be handling multiline matches very
