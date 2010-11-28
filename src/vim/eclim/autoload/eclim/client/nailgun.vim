@@ -179,7 +179,7 @@ function! eclim#client#nailgun#GetNgPort(...)
 
     let path = expand('%:p')
     " when we are in a temp window, use the initiating filename
-    if exists('b:eclim_temp_window') && exists('b:filename')
+    if &buftype != '' && exists('b:filename')
       let path = b:filename
     endif
 

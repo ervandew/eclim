@@ -1112,10 +1112,6 @@ function! eclim#tree#DisplayActionChooser(file, actions, executeFunc)
   new
   let height = len(a:actions) + 1
 
-  " for maximize.vim
-  let b:eclim_temp_window = 1
-  let b:eclim_temp_window_height = height
-
   exec 'resize ' . height
 
   setlocal noreadonly modifiable

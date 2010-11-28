@@ -73,8 +73,6 @@ function! eclim#regex#OpenTestWindow(lang)
     let filename = expand('%:p')
 
     exec "botright 10split " . file
-    let b:eclim_temp_window = 1
-
     setlocal ft=regex
     setlocal winfixheight
     setlocal bufhidden=delete
