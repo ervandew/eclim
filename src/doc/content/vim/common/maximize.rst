@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,36 +64,6 @@ Configuration
 
 Vim Variables
 
-.. _g\:MaximizeExcludes:
-
-- **g:MaximizeExcludes**
-  (Default: '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
-
-  Regular expression used to match window buffer names to exclude from
-  minimizing.
-
-.. _g\:MaximizeSpecialtyWindowsRestore:
-
-- **g:MaximizeSpecialtyWindowsRestore**
-  Setting used to force specialty windows, other than the quickfix and
-  location list windows, to a pre-defined width or height.
-  This variable is a multi-dimensional array where each entry in the
-  outer array is an array containing a variable for the buffer title of
-  the window of the specialty window, and the command to set it to the
-  desired width or height.
-
-  Default:
-
-  .. code-block:: vim
-
-    let g:MaximizeSpecialtyWindowsRestore = [
-        \ ['g:TagList_title', '"vertical <window>resize " . g:Tlist_WinWidth'],
-        \ [
-          \ 'g:EclimProjectTreeTitle',
-          \ '"vertical <window>resize " . g:EclimProjectTreeWidth'
-        \ ],
-      \ ]
-
 .. _g\:MaximizeMinWinHeight:
 
 - **g:MaximizeMinWinHeight** (Default: 0)
@@ -105,12 +75,6 @@ Vim Variables
 - **g:MaximizeMinWinWidth** (Default: 0)
 
   Height that horizontally minimized windows will be set to.
-
-.. _g\:MaximizeQuickfixHeight:
-
-- **g:MaximizeQuickfixHeight** (Default: 10)
-
-  Height that the quickfix and location list windows will be kept at.
 
 .. _g\:MaximizeStatusLineEnabled:
 
