@@ -23,14 +23,6 @@
 " }}}
 
 " Global Variables {{{
-if !exists('g:MaximizeStatusLine')
-  let g:MaximizeStatusLine = '%<%f\ %M\ %h%r%=%-10.(%l,%c%V\ b=%n,w=%{winnr()}%)\ %P'
-endif
-
-if exists('g:MaximizeStatusLineEnabled') && g:MaximizeStatusLineEnabled
-  exec "set statusline=" . g:MaximizeStatusLine
-endif
-
 if !exists("g:EclimTemplatesDisabled")
   " Disabled for now.
   let g:EclimTemplatesDisabled = 1
@@ -228,19 +220,6 @@ if has('signs')
     command SignClearAll :call eclim#display#signs#UnplaceAll(
       \ eclim#display#signs#GetExisting())
   endif
-endif
-
-if !exists(":MaximizeWindow")
-  command MaximizeWindow :call eclim#display#maximize#MaximizeWindow(0)
-  command MaximizeWindowFull :call eclim#display#maximize#MaximizeWindow(1)
-endif
-if !exists(":MinimizeWindow")
-  command -nargs=* MinimizeWindow :call eclim#display#maximize#MinimizeWindow(<f-args>)
-endif
-if !exists(":MinimizeRestore")
-  command MinimizeRestore
-      \ call eclim#display#maximize#ResetMinimized() |
-      \ call eclim#display#maximize#RestoreWindows(0)
 endif
 
 if !exists(":OpenUrl")

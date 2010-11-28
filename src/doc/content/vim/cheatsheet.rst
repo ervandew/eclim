@@ -440,12 +440,6 @@ Misc. Commands
   Removes all entries from the quick fix window.
 - :ref:`:LocationListClear` -
   Removes all entries from the location list window.
-- :ref:`:MaximizeWindow <:MaximizeWindow>` -
-  Toggles maximization of the current window.
-- :ref:`:MinimizeWindow <:MinimizeWindow>` [winnr ...] -
-  Minimizes the current window or the windows corresponding to the window
-  numbers supplied.
-- :ref:`:MinimizeRestore <:MinimizeRestore>` - Restore all minimized windows.
 - :ref:`:Buffers` -
   Opens a temporary window with a list of all the currently listed
   buffers, allowing you to open or remove them.

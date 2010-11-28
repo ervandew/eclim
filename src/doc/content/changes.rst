@@ -44,6 +44,10 @@ Python:
 
       Support for vim embedded python 2.5 or less no longer supported.
 
+Other:
+  - Maximize/Minimize vim window support broken out from eclim to
+    http://github.com/ervandew/maximize.
+
 .. _1.6.1:
 
 1.6.1 (2010-10-23)
