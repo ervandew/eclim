@@ -188,10 +188,6 @@ endif
 if !exists(":ProjectTodo")
   command -nargs=0 ProjectTodo :call eclim#project#util#ProjectTodo()
 endif
-
-if !exists(":TrackerTicket")
-  command -nargs=1 TrackerTicket :call eclim#project#tracker#Ticket('<args>')
-endif
 " }}}
 
 " Menu Items {{{

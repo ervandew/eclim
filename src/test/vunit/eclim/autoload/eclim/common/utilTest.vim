@@ -55,25 +55,29 @@ function! TestLocateFile()
   call VUAssertEquals(name, 'eclim_unit_test/vim/test.vim')
   bdelete
 
-  LocateFile vcs/merc*/**/file1.txt
+  LocateFile f*/*1.txt
   call PeekRedir()
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
+  call VUAssertEquals(name, 'eclim_unit_test/files/test1.txt')
   bdelete
 
   LocateFile
   call PeekRedir()
   call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
-  call setline(1, "> file.txt")
+  call setline(1, "> test.txt")
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
-  let results = getbufline(b:results_bufnum, 1, '$')
-  call VUAssertEquals(len(results), 9)
+  let results = sort(getbufline(b:results_bufnum, 1, '$'))
+  call VUAssertEquals(len(results), 4)
   call VUAssertEquals(results[0],
+    \ 'test1.txt  /eclim_unit_test/files/test1.txt')
+  call VUAssertEquals(results[1],
+    \ 'test2.txt  /eclim_unit_test/files/test2.txt')
+  call VUAssertEquals(results[2],
+    \ 'test3.txt  /eclim_unit_test/files/test3.txt')
+  call VUAssertEquals(results[3],
     \ 'test_root_file.txt  /eclim_unit_test/test_root_file.txt')
-  call VUAssertEquals(sort(results[1:])[0],
-    \ 'file1.txt  /eclim_unit_test/vcs/git/unittest/test/file1.txt')
   exec "normal \<esc>"
   doautocmd InsertLeave <buffer>
   call VUAssertNotEquals(expand('%'), '[Locate in eclim_unit_test]')
@@ -82,19 +86,17 @@ function! TestLocateFile()
   call PeekRedir()
   call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
   call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
-  call setline(1, "> vcs/merc/file.txt")
+  call setline(1, "> file/test.txt")
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = sort(getbufline(b:results_bufnum, 1, '$'))
-  call VUAssertEquals(len(results), 4)
+  call VUAssertEquals(len(results), 3)
   call VUAssertEquals(results[0],
-    \ 'file1.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file1.txt')
+    \ 'test1.txt  /eclim_unit_test/files/test1.txt')
   call VUAssertEquals(results[1],
-    \ 'file2.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file2.txt')
+    \ 'test2.txt  /eclim_unit_test/files/test2.txt')
   call VUAssertEquals(results[2],
-    \ 'file3.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file3.txt')
-  call VUAssertEquals(results[3],
-    \ 'file5.txt  /eclim_unit_test/vcs/mercurial/unittest/test/file5.txt')
+    \ 'test3.txt  /eclim_unit_test/files/test3.txt')
   exec "normal \<esc>"
 endfunction " }}}
 

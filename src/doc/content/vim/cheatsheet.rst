@@ -83,8 +83,6 @@ Project Commands
   Issues a lvimgrep starting at the root of the current project.
 - :ref:`:ProjectLGrepAdd` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrepadd starting at the root of the current project.
-- :ref:`:TrackerTicket` <ticket_id> -
-  Opens the supplied ticket in your configured web based tracking tool.
 - :ref:`:ProjectTodo` -
   Searches project files for todo / fixme patterns and adds them to the
   location list.
@@ -337,50 +335,6 @@ Xsd Commands
 -----------------
 
 - :ref:`:Validate <:Validate_xsd>` - Validate the current file.
-
-
-Version Control Commands
--------------------------
-
-.. note::
-
-  Currently cvs, subversion, mercurial, and git are supported by the following
-  commands where applicable.
-
-- :ref:`:VcsInfo` - Echos vcs info about the current versioned file.
-- :ref:`:VcsLog` - Opens a buffer with log information for the current file.
-- :ref:`:VcsLogGrepMessage` pattern - Like :ref:`:VcsLog <:VcsLog>` but
-  supports a regex pattern for git, or a keyword or phrase for hg, which is
-  used to limit log entries to those whose log message match that pattern,
-  keyword, or phrase.
-- :ref:`:VcsLogGrepFiles` pattern - Like :ref:`:VcsLogGrepMessage
-  <:VcsLogGrepMessage>` but supports a regex pattern which is used to limit log
-  entries to those that have files whose changes match the supplied pattern.
-- :ref:`:VcsDiff` [revision] -
-  Performs a vertical diffsplit of the current file against the last
-  committed revision of the current file or the revision supplied.
-- :ref:`:VcsCat` [revision] -
-  Splits the current file with the contents of the last committed version
-  of the current file or the supplied revision.
-- :ref:`:VcsAnnotate` -
-  Toggles annotation of the currently versioned file using vim signs.
-- :ref:`:VcsAnnotateCat` -
-  Like :ref:`:VcsCat <:VcsCat>` but use the annotated revision of the line
-  under the cursor.
-- :ref:`:VcsAnnotateDiff` -
-  Like :ref:`:VcsDiff <:VcsDiff>` but use the annotated revision of the line
-  under the cursor.
-- :ref:`:VcsWebLog` -
-  Opens the log for the currently versioned file in the configured vcs web app.
-- :ref:`:VcsWebAnnotate` [revision] -
-  Opens the annotated view for the currently versioned file in the configured
-  vcs web app.
-- :ref:`:VcsWebChangeSet` [revision] -
-  Opens the change set for the currently versioned file in the configured vcs
-  web app.
-- :ref:`:VcsWebDiff` [revision, revision] -
-  Opens a diff view for the currently versioned file in the configured in the
-  configured vcs web app.
 
 
 Misc. Commands

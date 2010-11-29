@@ -291,10 +291,15 @@ function! s:InfoLine()
       exec lnum . ',' . lnum . 'delete _'
     endif
 
-    let info = eclim#vcs#util#GetInfo(b:roots[0])
-    if info != ''
-      call append(line('$') - 1, '" ' . info)
-    endif
+    let GetInfo = function('vcs#util#GetInfo')
+    try
+      let info = GetInfo(b:roots[0])
+      if info != ''
+        call append(line('$') - 1, '" ' . info)
+      endif
+    catch /E117/
+      " noop if the function wasn't found
+    endtry
   endif
   call setpos('.', pos)
   setlocal nomodifiable

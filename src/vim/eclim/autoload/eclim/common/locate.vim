@@ -50,7 +50,6 @@ let s:scopes = [
     \ 'workspace',
     \ 'buffers',
     \ 'quickfix',
-    \ 'vcsmodified',
   \ ]
 
 let s:help = [
@@ -461,23 +460,6 @@ function! s:ChooseScope()
   elseif scope == 'workspace'
     let project = ''
     let workspace = eclim#eclipse#ChooseWorkspace()
-
-  elseif scope == 'vcsmodified'
-    let winnr = winnr()
-    let bufwinnr = bufwinnr(getbufvar(b:locate_bufnr, 'bufnum'))
-    noautocmd exec bufwinnr . 'winc w'
-    let cwd = getcwd()
-    exec 'lcd ' . escape(expand('%:p:h'), ' ')
-    try
-      let vcs = eclim#vcs#util#GetVcsType()
-    finally
-      exec 'lcd ' . escape(cwd, ' ')
-      noautocmd exec winnr . 'winc w'
-    endtry
-    if vcs == ''
-      call eclim#util#EchoError('Unsupported or no vcs type found.')
-      return
-    endif
   endif
 
   call s:CloseScopeChooser()
@@ -624,41 +606,6 @@ function! s:LocateFile_quickfix(pattern)
     call writefile(buffers, tempfile)
     try
       return eclim#common#locate#LocateFileFromFileList(a:pattern, tempfile)
-    finally
-      call delete(tempfile)
-    endtry
-  endif
-  return []
-endfunction " }}}
-
-" s:LocateFile_vcsmodified(pattern) {{{
-function! s:LocateFile_vcsmodified(pattern)
-  " cache results
-  if !exists('b:locate_vcs_modified_files')
-    let winnr = winnr()
-    let bufwinnr = bufwinnr(b:bufnum)
-    exec bufwinnr . 'winc w'
-    try
-      let root = eclim#vcs#util#GetRoot('')
-      let files = eclim#vcs#util#GetModifiedFiles()
-      call map(files, "substitute(v:val, '^' . root . '/', '', '')")
-    finally
-      exec winnr . 'winc w'
-    endtry
-    let b:locate_vcs_root = root
-    let b:locate_vcs_modified_files = files
-  else
-    let root = b:locate_vcs_root
-    let files = b:locate_vcs_modified_files
-  endif
-
-  if len(files) > 0
-    let tempfile = substitute(tempname(), '\', '/', 'g')
-    call writefile(files, tempfile)
-    try
-      let results = eclim#common#locate#LocateFileFromFileList(a:pattern, tempfile)
-      call map(results, "substitute(v:val, '\\(.*|\\)', '\\1' . root . '/', '')")
-      return results
     finally
       call delete(tempfile)
     endtry

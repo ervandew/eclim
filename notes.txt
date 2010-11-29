@@ -194,13 +194,6 @@ TODO {{{
     - eclim console log
       - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
 
-    - org.eclim.project.tracker
-      for sourceforge we need n urls, one for bugs, one for features, etc.
-      but in the vcs log, how do you know which to use?
-      ... maybe support something like '#F123' or '#123f'
-      B:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763323&aid=<id> |
-      F:http://sourceforge.net/tracker/index.php?func=detail&group_id=145869&atid=763326&aid=<id>
-
     - debugger interface
       http://www.vim.org/scripts/script.php?script_id=1703
       (not windows compatible, but worth watching)

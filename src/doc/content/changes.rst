@@ -22,15 +22,6 @@ History of Changes
 ----------------------
 
 Common:
-  - Updated :ref:`:VcsLog <:VcsLog>` to support additional arguments which are
-    passed to the underlying vcs log command.
-  - Added :ref:`:VcsLogGrepMessage <:VcsLogGrepMessage>` and
-    :ref:`:VcsLogGrepFiles <:VcsLogGrepFiles>` to search the vcs logs by
-    grepping the log messages or changed file contents.
-  - Added :ref:`:VcsAnnotateCat <:VcsAnnotateCat>` and :ref:`:VcsAnnotateDiff
-    <:VcsAnnotateDiff>` commands while in :ref:`:VcsAnnotate <:VcsAnnotate>`
-    mode to view or diff the revision of the most recent edit for the line
-    under the cursor.
   - Added rudimentary auto generated menu items for gvim (can be disabled via
     :ref:`g:EclimMenus <g:EclimMenus>`).
   - Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
@@ -47,6 +38,7 @@ Python:
 Other:
   - Maximize/Minimize vim window support broken out from eclim to
     http://github.com/ervandew/maximize.
+  - Vcs support broken out from eclim to http://github.com/ervandew/vcs.
 
 .. _1.6.1:
 
@@ -73,8 +65,7 @@ Common:
     <:ProjectTab>` but for any arbitrary directory.
   - Added a :ref:`:BuffersToggle <:BuffersToggle>` command to toggle whether
     the eclim buffers windows is open or closed.
-  - Refactored :ref:`Vcs <vim/common/vcs>` support, including a new
-    :ref:`:VcsLog <:VcsLog>` layout.
+  - Refactored Vcs support, including a new :VcsLog layout.
 
     .. note::
 
@@ -215,8 +206,7 @@ Common:
     user's home directory has been changed to '~'.
   - Added setting to allow :ref:`:ProjectTree <:ProjectTree>` instances to be
     shared across vim tabs.
-  - Updated :ref:`:VcsWeb* commands <vcs-web>` to support github, google code,
-    and bitbucket.
+  - Updated :VcsWeb to support github, google code, and bitbucket.
 
 C/C++:
   - Improved :ref:`:CSearchContext <:CSearchContext>` to search for declaration
@@ -440,12 +430,10 @@ Php:
     2.0.
 
 Vcs:
-  - Added option to set the split
-    :ref:`orientation <g:EclimVcsDiffOrientation>` (horizontal or vertical)
-    used when executing diffs.
-  - Added option to allow users to change the
-    :ref:`pattern <g:EclimVcsTrackerIdPatterns>` used to match tracker ticket
-    numbers in :VcsLog.
+  - Added option to set the split orientation (horizontal or vertical) used
+    when executing diffs.
+  - Added option to allow users to change the pattern used to match tracker
+    ticket numbers in :VcsLog.
 
 .. _1.4.3:
 
@@ -481,7 +469,7 @@ Bug Fixes:
     that is no longer valid.
 
 Vcs:
-  - Added support for git to :ref:`:Vcs <vim/common/vcs>` commands
+  - Added support for git to :Vcs commands
 
 .. _1.4.1:
 
@@ -524,8 +512,8 @@ Eclim:
   - Added translation of html docs to vim doc format accessable via
     :ref:`:EclimHelp` and :ref:`:EclimHelpGrep`.
   - Added :ref:`:Todo` and :ref:`:ProjectTodo`.
-  - Added :ref:`:TrackerTicket` for viewing tickets by id in your web based
-    tracking system.
+  - Added :TrackerTicket for viewing tickets by id in your web based tracking
+    system.
   - Renamed setting ``org.eclim.project.vcs.tracker`` to
     ``org.eclim.project.tracker``.
 
@@ -539,11 +527,10 @@ Php:
 Vcs:
   - Removed **:VcsAnnotateOff** in favor of invoking **:VcsAnnotate** again to
     remove the annotations.
-  - Added :ref:`vcs editor <VcsEditor>` plugin which allows you to view diff of
-    a file by hitting <enter> on a file name in the cvs, svn, or hg commit
-    editor.
+  - Added vcs editor plugin which allows you to view diff of a file by hitting
+    <enter> on a file name in the cvs, svn, or hg commit editor.
   - Removed **:Trac\*** and **:Viewvc\*** commands and replaced them with
-    :ref:`:VcsWeb* <vcs-web>` commands
+    :VcsWeb* commands
 
 Vim:
   - Added :ref:`:Only` as a configurable alternative to vim's :only command.
@@ -570,7 +557,7 @@ Html:
 
 Vcs:
   - Added support for limiting the number of log entries returned by
-    :ref:`:VcsLog` (limits to 50 entries by default).
+    :VcsLog (limits to 50 entries by default).
   - Updated **:VcsLog**, **:VcsChangeSet**, etc.
     to support cvs and hg where applicable.
 
@@ -656,15 +643,10 @@ Python:
   - Added support for pylint_ using new :ref:`:PyLint` command.
 
 Vcs:
-  - Added
-    :ref:`:VcsInfo`,
-    :ViewvcAnnotate, :ViewvcChangeSet, and :ViewvcDiff.
+  - Added :VcsInfo, :ViewvcAnnotate, :ViewvcChangeSet, and :ViewvcDiff.
 
 Vcs (subversion):
-  - Added
-    :ref:`:VcsLog`,
-    :ref:`:VcsDiff`, and
-    :ref:`:VcsCat`.
+  - Added :VcsLog, :VcsDiff, and :VcsCat.
 
 Vim:
   - Added vim :ref:`window maximize and minimize <vim/common/maximize>`
@@ -784,8 +766,7 @@ Vim:
     :ref:`:SignClearAll`.
 
 Vcs:
-  - Added
-    :ref:`:VcsAnnotate` and :Viewvc.
+  - Added :VcsAnnotate and :Viewvc.
 
 Wsdl:
   - Added wsdl validation.  Requires the `eclipse wst`_ plugin.

@@ -29,76 +29,81 @@ endfunction " }}}
 
 " TestArchiveList() {{{
 function! TestArchiveList()
-  edit eclim_unit_test/vcs/git.tar.gz
-  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  + git/')
+  edit eclim_unit_test/test_archive.tar.gz
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  + test_archive/')
 
   AsList
 
-  call VUAssertEquals(line('$'), 65, 'Wrong number of lines in list: git.tar.gz')
-  call cursor(62, 1)
+  call VUAssertEquals(line('$'), 6, 'Wrong number of lines in list: test_archive.tar.gz')
+  call cursor(4, 1)
   exec "normal \<cr>"
 
   let name = substitute(expand('%:p'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/git/unittest/test/file1.txt')
-  call VUAssertEquals(line('$'), 5)
-  call VUAssertEquals(getline(1), 'file 1')
-  call VUAssertEquals(getline(2), 'some first revision content')
+  call VUAssertEquals(name, g:EclimTempDir . '/test_archive/dir1/file1.txt')
+  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(getline(1), 'file')
+  call VUAssertEquals(getline(2), 'one')
   close
 
   AsTree
 
-  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  + git/')
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines in tree: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  + test_archive/')
 endfunction " }}}
 
 " TestArchiveTree() {{{
 function! TestArchiveTree()
-  edit eclim_unit_test/vcs/git.tar.gz
-  call VUAssertEquals(line('$'), 4, 'Wrong number of lines: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  + git/')
+  edit eclim_unit_test/test_archive.tar.gz
+  call VUAssertEquals(line('$'), 4, 'Wrong number of lines: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  + test_archive/')
 
   call cursor(2, 3)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 5, 'Wrong number of lines: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  - git/')
-  call VUAssertEquals(getline(3), '      + unittest/')
+  call VUAssertEquals(line('$'), 7, 'Wrong number of lines: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  - test_archive/')
+  call VUAssertEquals(getline(3), '      + dir1/')
+  call VUAssertEquals(getline(4), '      + dir2/')
+  call VUAssertEquals(getline(5), '        root_file.txt')
 
   call cursor(3, 7)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 7, 'Wrong number of lines: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  - git/')
-  call VUAssertEquals(getline(3), '      - unittest/')
-  call VUAssertEquals(getline(4), '          + .git/')
-  call VUAssertEquals(getline(5), '          + test/')
+  call VUAssertEquals(line('$'), 9, 'Wrong number of lines: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  - test_archive/')
+  call VUAssertEquals(getline(3), '      - dir1/')
+  call VUAssertEquals(getline(4), '          + child1/')
+  call VUAssertEquals(getline(5), '            file1.txt')
+  call VUAssertEquals(getline(6), '      + dir2/')
+  call VUAssertEquals(getline(7), '        root_file.txt')
 
-  call cursor(5, 11)
+  call cursor(4, 11)
   exec "normal \<cr>"
 
-  call VUAssertEquals(line('$'), 11, 'Wrong number of lines: git.tar.gz')
-  call VUAssertEquals(getline(1), 'git.tar.gz/')
-  call VUAssertEquals(getline(2), '  - git/')
-  call VUAssertEquals(getline(3), '      - unittest/')
-  call VUAssertEquals(getline(4), '          + .git/')
-  call VUAssertEquals(getline(5), '          - test/')
-  call VUAssertEquals(getline(6), '                file1.txt')
-  call VUAssertEquals(getline(7), '                file2.txt')
+  call VUAssertEquals(line('$'), 10, 'Wrong number of lines: test_archive.tar.gz')
+  call VUAssertEquals(getline(1), 'test_archive.tar.gz/')
+  call VUAssertEquals(getline(2), '  - test_archive/')
+  call VUAssertEquals(getline(3), '      - dir1/')
+  call VUAssertEquals(getline(4), '          - child1/')
+  call VUAssertEquals(getline(5), '                child_file1.txt')
+  call VUAssertEquals(getline(6), '            file1.txt')
+  call VUAssertEquals(getline(7), '      + dir2/')
+  call VUAssertEquals(getline(8), '        root_file.txt')
 
   call cursor(6, 15)
   exec "normal \<cr>"
 
   let name = substitute(expand('%:p'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/git/unittest/test/file1.txt')
-  call VUAssertEquals(line('$'), 5)
-  call VUAssertEquals(getline(1), 'file 1')
-  call VUAssertEquals(getline(2), 'some first revision content')
+  call VUAssertEquals(name, g:EclimTempDir . '/test_archive/dir1/file1.txt')
+  call VUAssertEquals(line('$'), 2)
+  call VUAssertEquals(getline(1), 'file')
+  call VUAssertEquals(getline(2), 'one')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

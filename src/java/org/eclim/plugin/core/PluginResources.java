@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,10 +49,7 @@ public class PluginResources
       "General org.eclim.user.name\n" +
       "General org.eclim.user.email\n" +
       "General/Project org.eclim.project.version 1.0\n" +
-      "General/Project org.eclim.project.copyright\n" +
-      "General/Project org.eclim.project.tracker\n" +
-      "General/Project org.eclim.project.vcs.web.viewer viewvc (viewvc|trac|redmine|hgcgi|hgserve|gitweb|github|bitbucket|googlecode)\n" +
-      "General/Project org.eclim.project.vcs.web.url"
+      "General/Project org.eclim.project.copyright"
     );
   }
 
