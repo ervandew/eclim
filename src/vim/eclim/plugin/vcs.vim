@@ -56,7 +56,7 @@ if !exists(":VcsWebLog")
 endif
 
 function! s:CheckWindow()
-  return !exists('b:eclim_temp_window')
+  return &buftype == ''
 endfunction
 
 " }}}

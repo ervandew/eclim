@@ -32,8 +32,10 @@ if !exists('g:EclimBuffersDefaultAction')
   let g:EclimBuffersDefaultAction = g:EclimDefaultFileOpenAction
 endif
 if !exists('g:EclimOnlyExclude')
-  let g:EclimOnlyExclude =
-    \ '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)'
+  let g:EclimOnlyExclude = '^NONE$'
+endif
+if !exists('g:EclimOnlyExcludeFixed')
+  let g:EclimOnlyExcludeFixed = 1
 endif
 " }}}
 
@@ -143,9 +145,11 @@ function! eclim#common#buffers#Only()
   let curwin = winnr()
   let winnum = 1
   while winnum <= winnr('$')
-    if winnum != curwin &&
-     \ getwinvar(winnum, '&ft') != 'qf' &&
-     \ bufname(winbufnr(winnum)) !~ g:EclimOnlyExclude
+    let fixed = g:EclimOnlyExcludeFixed && (
+      \ getwinvar(winnum, '&winfixheight') == 1 ||
+      \ getwinvar(winnum, '&winfixwidth') == 1)
+    let excluded = bufname(winbufnr(winnum)) =~ g:EclimOnlyExclude
+    if winnum != curwin && !fixed && !excluded
       if winnum < curwin
         let curwin -= 1
       endif

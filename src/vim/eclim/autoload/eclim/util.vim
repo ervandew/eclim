@@ -661,6 +661,9 @@ function! eclim#util#ParseArgs(args)
         let escape = 0
       endif
     else
+      if escape && char != ' '
+        let arg .= '\'
+      endif
       let arg .= char
       let escape = 0
     endif
@@ -1117,21 +1120,19 @@ function! eclim#util#TempWindow(name, lines, ...)
 
   if bufwinnr(name) == -1
     silent! noautocmd exec "botright 10sview " . escape(a:name, ' ')
-    let b:eclim_temp_window = 1
-
-    " play nice with maximize.vim
-    if eclim#display#maximize#GetMaximizedWindow()
-      call eclim#display#maximize#AdjustFixedWindow(10, 1)
-    endif
-
     setlocal nowrap
     setlocal winfixheight
     setlocal noswapfile
     setlocal nobuflisted
     setlocal buftype=nofile
     setlocal bufhidden=delete
+    silent doautocmd WinEnter
   else
-    exec bufwinnr(name) . "winc w"
+    let winnr = bufwinnr(name)
+    if winnr != winnr()
+      exec winnr . 'winc w'
+      silent doautocmd WinEnter
+    endif
   endif
 
   setlocal modifiable

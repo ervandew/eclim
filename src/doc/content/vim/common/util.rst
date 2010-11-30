@@ -286,7 +286,8 @@ general purpose commands that are useful in and outside the scope of eclim.
   original vim version is to close all but the current window.  Unfortunately
   there is no way to tell the vim version to exclude some windows you may wish
   to keep open (taglist, quickfix, etc.).  The eclim version provides that
-  ability via the **g:EclimOnlyExclude** variable.
+  ability via the **g:EclimOnlyExclude** and **g:EclimOnlyExcludeFixed**
+  variables.
 
   **Configuration**
 
@@ -294,8 +295,15 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   .. _g\:EclimOnlyExclude:
 
-  **g:EclimOnlyExclude** (defaults to
-  '\(ProjectTree_*\|__Tag_List__\|-MiniBufExplorer-\|command-line\)')
+  - **g:EclimOnlyExclude** (defaults to '^NONE$') -
+    Regex used to match buffer names for windows that should not be closed when
+    issuing the :Only command.
+
+  .. _g\:EclimOnlyExcludeFixed:
+
+  - **g:EclimOnlyExcludeFixed** (defaults to 1)
+    When non-0 all fixed windows (ones which have 'winfixwidth' or
+    'winfixheight' set) will be preserved when issuing the :Only command.
 
 .. _\:OtherWorkingCopyDiff:
 

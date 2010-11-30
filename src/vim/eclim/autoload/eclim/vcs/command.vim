@@ -211,7 +211,7 @@ function! eclim#vcs#command#LogGrep(args, type)
     endif
 
     let arglist = eclim#util#ParseArgs(a:args)
-    let pattern = arglist[0]
+    let pattern = eclim#regex#SimpleVimToPcre(arglist[0])
     let arglist = arglist[1:]
 
     " handle user supplied % arg

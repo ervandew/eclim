@@ -110,8 +110,12 @@ function! eclim#help#BufferHelp(lines, orientation, size)
   endif
 
   silent! noautocmd exec a:size . orient . "new " . escape(name, ' ')
-  let b:eclim_temp_window = 1
-  setlocal nowrap winfixheight
+  if a:orientation == 'vertical'
+    setlocal winfixwidth
+  else
+    setlocal winfixheight
+  endif
+  setlocal nowrap
   setlocal noswapfile nobuflisted nonumber
   setlocal buftype=nofile bufhidden=delete
   nnoremap <buffer> <silent> ? :bd<cr>

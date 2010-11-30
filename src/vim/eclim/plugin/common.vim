@@ -231,14 +231,15 @@ if has('signs')
 endif
 
 if !exists(":MaximizeWindow")
-  command MaximizeWindow :call eclim#display#maximize#MaximizeWindow()
+  command MaximizeWindow :call eclim#display#maximize#MaximizeWindow(0)
+  command MaximizeWindowFull :call eclim#display#maximize#MaximizeWindow(1)
 endif
 if !exists(":MinimizeWindow")
   command -nargs=* MinimizeWindow :call eclim#display#maximize#MinimizeWindow(<f-args>)
 endif
 if !exists(":MinimizeRestore")
   command MinimizeRestore
-      \ :call eclim#display#maximize#ResetMinimized() |
+      \ call eclim#display#maximize#ResetMinimized() |
       \ call eclim#display#maximize#RestoreWindows(0)
 endif
 
