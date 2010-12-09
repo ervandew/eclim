@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -20,6 +20,13 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
+" }}}
+
+" Autocmds {{{
+augroup eclim_java_class_read
+  autocmd!
+  autocmd BufReadCmd *.class call eclim#java#util#ReadClassPrototype()
+augroup END
 " }}}
 
 " Command Declarations {{{

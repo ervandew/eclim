@@ -30,6 +30,7 @@
   let s:update_command = '-command java_src_update -p "<project>" -f "<file>"'
   let s:command_src_exists = '-command java_src_exists -f "<file>"'
   let s:command_list_installs = '-command java_list_installs'
+  let s:command_read_class = '-command java_class_prototype -c <class>'
 
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
 " }}}
@@ -368,6 +369,34 @@ function! eclim#java#util#ListInstalls()
     return
   endif
   call eclim#util#Echo(join(installs, "\n"))
+endfunction " }}}
+
+" ReadClassPrototype() {{{
+" Function for BufReadCmd autocmd which generates a prototype for a class
+" file.
+function! eclim#java#util#ReadClassPrototype()
+  let file = substitute(expand('%:p'), '\', '/', 'g')
+  let command = s:command_read_class
+  let command = substitute(command, '<class>', expand('%:t:r'), '')
+  let command .= ' -f "' . file . '"'
+
+  let file = eclim#ExecuteEclim(command)
+  if string(file) != '0'
+    let bufnum = bufnr('%')
+    if has('win32unix')
+      let file = eclim#cygwin#CygwinPath(file)
+    endif
+    silent exec "keepjumps edit! " . escape(file, ' ')
+
+    exec 'bdelete ' . bufnum
+
+    silent exec "doautocmd BufReadPre " . file
+    silent exec "doautocmd BufReadPost " . file
+
+    setlocal readonly
+    setlocal nomodifiable
+    setlocal noswapfile
+  endif
 endfunction " }}}
 
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
