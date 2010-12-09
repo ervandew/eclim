@@ -1028,7 +1028,6 @@ function! eclim#util#System(cmd, ...)
     else
       set shell=/bin/sh
     endif
-    set shell=/bin/sh
     set shellcmdflag=-c
     set shellpipe=2>&1\|\ tee
     set shellquote=
@@ -1046,7 +1045,11 @@ function! eclim#util#System(cmd, ...)
       let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
       if has('win32') || has('win64') || has('win32unix')
         if executable('tee')
-          let cmd .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
+          if has('win32unix')
+            let cmd .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
+          else
+            let cmd .= ' ^| tee "' . outfile . '" 2>&1"'
+          endif
         else
           let cmd .= ' >"' . outfile . '" 2>&1"'
         endif
