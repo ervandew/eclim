@@ -264,40 +264,52 @@ public class SearchCommand
     String file = null;
     String elementName = JavaUtils.getFullyQualifiedName(parent);
     if(parent.getElementType() == IJavaElement.CLASS_FILE){
-      IPackageFragmentRoot root = (IPackageFragmentRoot)
-        parent.getParent().getParent();
-      IResource resource = root.getResource();
-      if (resource != null){
-        archive = root.getResource().getRawLocation().toOSString();
+      IResource resource = parent.getResource();
+      // occurs with a referenced project as a lib with no source and class
+      // files that are not archived in that project
+      if (resource != null && resource.getType() == IResource.FILE){
+        file = resource.getRawLocation().toOSString();
+
       }else{
-        archive = root.getPath().toOSString();
-      }
-
-      String classFile = elementName.replace('.', File.separatorChar);
-      file = "jar:file://" + archive + '!' + classFile + ".class";
-
-      // if a source path attachment exists, use it.
-      IPath srcPath = root.getSourceAttachmentPath();
-      if(srcPath != null){
-        String rootPath;
-        IProject elementProject = root.getJavaProject().getProject();
-
-        // determine if src path is project relative or file system absolute.
-        if(srcPath.isAbsolute() &&
-           elementProject.getName().equals(srcPath.segment(0))){
-          rootPath = ProjectUtils.getFilePath(elementProject,
-              srcPath.toString());
+        IPackageFragmentRoot root = (IPackageFragmentRoot)
+          parent.getParent().getParent();
+        resource = root.getResource();
+        if (resource != null){
+          if (resource.getType() == IResource.PROJECT){
+            archive = ProjectUtils.getPath((IProject)resource);
+          }else{
+            archive = resource.getRawLocation().toOSString();
+          }
         }else{
-          rootPath = srcPath.toOSString();
+          archive = root.getPath().toOSString();
         }
-        String srcFile = FileUtils.toUrl(
-            rootPath + File.separator + classFile + ".java");
 
-        // see if source file exists at source path.
-        FileSystemManager fsManager = VFS.getManager();
-        FileObject fileObject = fsManager.resolveFile(srcFile);
-        if(fileObject.exists()){
-          file = srcFile;
+        String classFile = elementName.replace('.', File.separatorChar);
+        file = "jar:file://" + archive + '!' + classFile + ".class";
+
+        // if a source path attachment exists, use it.
+        IPath srcPath = root.getSourceAttachmentPath();
+        if(srcPath != null){
+          String rootPath;
+          IProject elementProject = root.getJavaProject().getProject();
+
+          // determine if src path is project relative or file system absolute.
+          if(srcPath.isAbsolute() &&
+             elementProject.getName().equals(srcPath.segment(0))){
+            rootPath = ProjectUtils.getFilePath(elementProject,
+                srcPath.toString());
+          }else{
+            rootPath = srcPath.toOSString();
+          }
+          String srcFile = FileUtils.toUrl(
+              rootPath + File.separator + classFile + ".java");
+
+          // see if source file exists at source path.
+          FileSystemManager fsManager = VFS.getManager();
+          FileObject fileObject = fsManager.resolveFile(srcFile);
+          if(fileObject.exists()){
+            file = srcFile;
+          }
         }
       }
     }else{
