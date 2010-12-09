@@ -46,7 +46,7 @@ function! eclim#cygwin#WindowsHome()
   return fnamemodify(dir, ':h')
 endfunction " }}}
 
-" s:CygwinPath(path, type, cache) {{{
+" s:CygPath(path, type, cache) {{{
 function! s:Cygpath(path, type, cache)
   if executable('cygpath')
     let path = substitute(a:path, '\', '/', 'g')
