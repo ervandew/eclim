@@ -1131,9 +1131,9 @@ function! eclim#util#TempWindow(name, lines, ...)
     setlocal bufhidden=delete
     silent doautocmd WinEnter
   else
-    let winnr = bufwinnr(name)
-    if winnr != winnr()
-      exec winnr . 'winc w'
+    let temp_winnr = bufwinnr(name)
+    if temp_winnr != winnr()
+      exec temp_winnr . 'winc w'
       silent doautocmd WinEnter
     endif
   endif
