@@ -733,6 +733,7 @@ def compile(srcdir, destdir, failonerror=true, errorproperty=null, nested){
       target: '${javac.target}', source: '${javac.target}',
       failonerror: failonerror,
       errorproperty: errorproperty,
+      includeantruntime: false,
       nested)
 }
 
