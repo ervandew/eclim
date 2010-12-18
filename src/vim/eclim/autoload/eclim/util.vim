@@ -153,7 +153,7 @@ endfunction " }}}
 " Used when executing ! commands that may be disrupted by non default vim
 " options.
 function! eclim#util#Exec(cmd, ...)
-  let exec_output = len(a:000) > 0 && a:000[0]
+  let exec_output = len(a:000) > 0 ? a:000[0] : 0
   return eclim#util#System(a:cmd, 1, exec_output)
 endfunction " }}}
 
@@ -569,21 +569,17 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
 
     " windows machines where 'tee' is available
     if (has('win32') || has('win64')) && executable('tee')
-      let outfile = g:EclimTempDir . '/eclim_make_output.txt'
-      let teefile = eclim#cygwin#CygwinPath(outfile)
-      let command = '!cmd /c "' . make_cmd . ' 2>&1 | tee "' . teefile . '" "'
-
       doautocmd QuickFixCmdPre make
-      call eclim#util#Exec(command)
-      if filereadable(outfile)
+      let resultfile = eclim#util#Exec(make_cmd, 2)
+      if filereadable(resultfile)
         if a:bang == ''
-          exec 'cfile ' . escape(outfile, ' ')
+          exec 'cfile ' . escape(resultfile, ' ')
         else
-          exec 'cgetfile ' . escape(outfile, ' ')
+          exec 'cgetfile ' . escape(resultfile, ' ')
         endif
-        call delete(outfile)
+        call delete(resultfile)
       endif
-      doautocmd QuickFixCmdPost make
+      silent doautocmd QuickFixCmdPost make
 
     " all other platforms
     else
@@ -1003,6 +999,9 @@ endfunction " }}}
 
 " System(cmd, [exec, exec_results]) {{{
 " Executes system() accounting for possibly disruptive vim options.
+" exec (0 or 1): whether or not to use exec instead of system
+" exec_results (0, 1, or 2): 0 to not return the results of an exec, 1 to
+"   return the results, or 2 to return the filename containing the results.
 function! eclim#util#System(cmd, ...)
   let saveshell = &shell
   let saveshellcmdflag = &shellcmdflag
@@ -1037,21 +1036,20 @@ function! eclim#util#System(cmd, ...)
     set shellxquote=
   endif
 
+  " use exec
   if len(a:000) > 0 && a:000[0]
     let cmd = a:cmd
     let begin = localtime()
-    let exec_output = len(a:000) > 1 && a:000[1]
+    let exec_output = len(a:000) > 1 ? a:000[1] : 0
     if exec_output
       let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
       if has('win32') || has('win64') || has('win32unix')
+        let cmd = substitute(cmd, '^"\(.*\)"$', '\1', '')
         if executable('tee')
-          if has('win32unix')
-            let cmd .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
-          else
-            let cmd .= ' ^| tee "' . outfile . '" 2>&1"'
-          endif
+          let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
+          let cmd = '!cmd /c "' . cmd . ' 2>&1 | tee "' . teefile . '" "'
         else
-          let cmd .= ' >"' . outfile . '" 2>&1"'
+          let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
         endif
       else
         let cmd .= ' 2>&1| tee "' . outfile . '"'
@@ -1065,10 +1063,14 @@ function! eclim#util#System(cmd, ...)
     endtry
 
     let result = ''
-    if exec_output
+    if exec_output == 1 && filereadable(outfile)
       let result = join(readfile(outfile), "\n")
       call delete(outfile)
+    elseif exec_output == 2
+      let result = outfile
     endif
+
+  " use system
   else
     let begin = localtime()
     try
