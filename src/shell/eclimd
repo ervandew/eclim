@@ -86,6 +86,13 @@ build_vmargs(){
   # for osx
   if [ `echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'` = "darwin" ] ; then
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
+
+    # check if attempting to use 64bit jvm to run 32bit eclipse
+    JVM64=`java -version 2>&1 | grep "64-Bit"`
+    ECLIPSE64=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar | grep "x86_64"`
+    if [ -n "$JVM64" -a -z "$ECLIPSE64" ] ; then
+      ECLIM_VMARGS="-d32 $ECLIM_VMARGS"
+    fi
   fi
 }
 
@@ -112,8 +119,8 @@ if [ "$1" = "-f" ] ; then
 fi
 
 resolve_eclim_home
-build_vmargs
 resolve_eclipse_launcher
+build_vmargs
 
 ECLIPSE_ARGS="-debug -clean -refresh -application org.eclim.application_headless"
 
