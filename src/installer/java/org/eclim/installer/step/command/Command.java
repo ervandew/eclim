@@ -20,6 +20,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import java.util.regex.Pattern;
+
 import org.eclim.installer.step.EclipseUtils;
 
 import org.formic.Installer;
@@ -35,8 +40,10 @@ public abstract class Command
   extends CommandExecutor
 {
   private static final String[] LAUNCHER = new String[]{
-    "java", "-jar", null, "-clean", "-application", null
+    "-jar", null, "-clean", "-application", null
   };
+  private static final Pattern PROPERTY_RE =
+    Pattern.compile("^(http\\.|java\\.net\\.|org\\.eclipse\\.).*");
 
   private OutputHandler handler;
 
@@ -49,8 +56,9 @@ public abstract class Command
   public Command(OutputHandler handler, String[] cmd, String application)
     throws Exception
   {
+    String[] vmargs = getJvmArgs();
     this.handler = handler;
-    this.cmd = new String[cmd.length + LAUNCHER.length];
+    this.cmd = new String[1 + vmargs.length + cmd.length + LAUNCHER.length];
 
     String launcher = EclipseUtils.findEclipseLauncherJar();
     if (launcher == null){
@@ -59,10 +67,30 @@ public abstract class Command
         Installer.getProject().getProperty("eclipse.home"));
     }
 
-    System.arraycopy(LAUNCHER, 0, this.cmd, 0, LAUNCHER.length);
-    System.arraycopy(cmd, 0, this.cmd, LAUNCHER.length, cmd.length);
-    this.cmd[2] = launcher;
-    this.cmd[5] = application;
+    this.cmd[0] = "java";
+    System.arraycopy(vmargs, 0, this.cmd, 1, vmargs.length);
+    System.arraycopy(LAUNCHER, 0, this.cmd, 1 + vmargs.length, LAUNCHER.length);
+    this.cmd[1 + vmargs.length + 1] = launcher;
+    this.cmd[1 + vmargs.length + 4] = application;
+    System.arraycopy(cmd, 0, this.cmd, 1 + vmargs.length + LAUNCHER.length, cmd.length);
+  }
+
+  @SuppressWarnings("rawtypes")
+  protected String[] getJvmArgs()
+  {
+    ArrayList<String> vmargs = new ArrayList<String>();
+    for (Map.Entry entry : System.getProperties().entrySet()){
+      String name = (String)entry.getKey();
+      if (PROPERTY_RE.matcher(name).matches()){
+        String value = (String)entry.getValue();
+        if (value.length() > 0){
+          vmargs.add("-D" + name + '=' + entry.getValue());
+        }else{
+          vmargs.add("-D" + name);
+        }
+      }
+    }
+    return vmargs.toArray(new String[vmargs.size()]);
   }
 
   /**
