@@ -268,7 +268,7 @@ target(name: 'deploy.eclipse'){
         includes: '**/*', excludes: '*.sed', perm: 'ugo+x')
     // java symlink support sucks, especially if the link is broken
     exec(executable: 'rm'){
-      arg(line: '${eclipse.home}/eclim ${eclipse.home}/eclimd')
+      arg(line: '"${eclipse.home}/eclim" "${eclipse.home}/eclimd"')
     }
     symlink(link: '${eclipse.home}/eclim',
         resource: 'plugins/org.eclim_${eclim.version}/bin/eclim')
