@@ -7,5 +7,6 @@
 /src/nailgun/config.log
 /src/nailgun/config.status
 /src/nailgun/Makefile
+/src/nailgun/ng
 /src/nailgun/ng.*
 /user.properties

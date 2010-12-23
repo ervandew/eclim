@@ -89,6 +89,7 @@ target(name: 'init'){
 
 target(name: 'clean'){
   delete(dir: 'build')
+  delete(file: 'src/nailgun/ng')
 }
 
 target(name: 'build'){
@@ -152,9 +153,24 @@ target(name: 'build.eclipse'){
     fileset(dir: 'src/shell', includes: '**/*')
   }
   if(!Os.isFamily(Os.FAMILY_WINDOWS)){
-    exec(executable: 'configure', dir: 'src/nailgun', resolveexecutable: 'true')
-    exec(executable: 'make', dir: 'src/nailgun')
-    move(file: 'src/nailgun/ng',
+    uptodate(property: 'ng.uptodate', targetfile: 'src/nailgun/ng') {
+      srcfiles(dir: 'src/nailgun'){
+        include(name: 'src/c/ng.c')
+        include(name: 'Makefile.in')
+        include(name: 'configure')
+        include(name: 'configure.ac')
+      }
+    }
+    try{
+      ngUptodate = binding.getVariable('ng.uptodate')
+    }catch(Exception e){
+      ngUptodate = false
+    }
+    if (!ngUptodate) {
+      exec(executable: 'configure', dir: 'src/nailgun', resolveexecutable: 'true')
+      exec(executable: 'make', dir: 'src/nailgun')
+    }
+    copy(file: 'src/nailgun/ng',
         todir: '${build.plugins}/org.eclim_${eclim.version}/bin')
   }
 
