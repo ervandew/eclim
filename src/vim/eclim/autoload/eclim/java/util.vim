@@ -393,6 +393,7 @@ function! eclim#java#util#ReadClassPrototype()
     silent exec "doautocmd BufReadPre " . file
     silent exec "doautocmd BufReadPost " . file
 
+    call eclim#util#DelayedCommand('set ft=java')
     setlocal readonly
     setlocal nomodifiable
     setlocal noswapfile
