@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,72 +25,74 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  set expandtab
+  set shiftwidth=2 tabstop=2
 endfunction " }}}
 
 " TestJavaImpl() {{{
 function! TestJavaImpl()
   edit! src/org/eclim/test/impl/TestImplVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   JavaImpl
 
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertTrue(name =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
+  call vunit#AssertTrue(name =~ 'src/org/eclim/test/impl/TestImplVUnit\.java_impl$')
 
   call cursor(line('$'), 1)
   let line = search('public abstract String put(Integer \w\+, String \w\+)', 'bc')
-  call VUAssertTrue(line > 0, 'put method not found.')
-  call VUAssertTrue(getline(line) =~ 
+  call vunit#AssertTrue(line > 0, 'put method not found.')
+  call vunit#AssertTrue(getline(line) =~ 
     \ '  public abstract String put(Integer \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertTrue(getline(line) =~
+  call vunit#AssertTrue(getline(line) =~
     \ '  //public abstract String put(Integer \w\+, String \w\+)')
   quit
   call cursor(1, 1)
-  call VUAssertTrue(search('public String put(Integer \w\+, String \w\+)', 'c'),
+  call vunit#AssertTrue(search('public String put(Integer \w\+, String \w\+)', 'c'),
     \ 'Method not inserted.')
 endfunction " }}}
 
 " TestJavaImplSub() {{{
 function! TestJavaImplSub()
   edit! src/org/eclim/test/impl/TestSubImplVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   JavaImpl
 
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertTrue(name =~ 'src/org/eclim/test/impl/TestSubImplVUnit\.java_impl$')
+  call vunit#AssertTrue(name =~ 'src/org/eclim/test/impl/TestSubImplVUnit\.java_impl$')
 
   let compareLine = search('public abstract int compare(String \w\+, String \w\+)')
 
-  call VUAssertTrue(compareLine > 0, 'compare method not found.')
-  call VUAssertTrue(getline(compareLine) =~
+  call vunit#AssertTrue(compareLine > 0, 'compare method not found.')
+  call vunit#AssertTrue(getline(compareLine) =~
     \ '  public abstract int compare(String \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertTrue(getline(compareLine) =~
+  call vunit#AssertTrue(getline(compareLine) =~
     \ '  //public abstract int compare(String \w\+, String \w\+)')
 
   let putLine = search('public abstract String put(Integer \w\+, String \w\+)')
 
-  call VUAssertTrue(putLine > 0, 'put method not found.')
-  call VUAssertTrue(getline(putLine) =~
+  call vunit#AssertTrue(putLine > 0, 'put method not found.')
+  call vunit#AssertTrue(getline(putLine) =~
     \ '  public abstract String put(Integer \w\+, String \w\+)')
 
   silent! exec "normal \<cr>"
 
-  call VUAssertTrue(getline(putLine) =~
+  call vunit#AssertTrue(getline(putLine) =~
     \ '  //public abstract String put(Integer \w\+, String \w\+)')
 
   bdelete
 
   call cursor(1, 1)
-  call VUAssertTrue(search('public int compare(String \w\+, String \w\+)'),
+  call vunit#AssertTrue(search('public int compare(String \w\+, String \w\+)'),
     \ 'put method not inserted.')
-  call VUAssertTrue(search('public String put(Integer \w\+, String \w\+)'),
+  call vunit#AssertTrue(search('public String put(Integer \w\+, String \w\+)'),
     \ 'compare method not inserted.')
 endfunction " }}}
 

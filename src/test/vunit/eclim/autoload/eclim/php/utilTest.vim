@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,25 +30,25 @@ endfunction " }}}
 " TestValidate() {{{
 function! TestValidate()
   edit! php/src/test.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call eclim#php#util#UpdateSrcFile(1)
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
   echo 'results = ' . string(results)
 
-  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
 
-  call VUAssertEquals(5, results[0].lnum, 'Wrong line num.')
-  call VUAssertEquals(5, results[0].col, 'Wrong col num.')
-  call VUAssertEquals(
+  call vunit#AssertEquals(5, results[0].lnum, 'Wrong line num.')
+  call vunit#AssertEquals(5, results[0].col, 'Wrong col num.')
+  call vunit#AssertEquals(
     \ "syntax error, unexpected 'echo', expecting ',' or ';'",
     \ results[0].text, 'Wrong result.')
 
-  call VUAssertEquals(7, results[1].lnum, 'Wrong line num.')
-  call VUAssertEquals(3, results[1].col, 'Wrong col num.')
-  call VUAssertEquals('discarding unexpected </div>', results[1].text, 'Wrong result.')
+  call vunit#AssertEquals(7, results[1].lnum, 'Wrong line num.')
+  call vunit#AssertEquals(3, results[1].col, 'Wrong col num.')
+  call vunit#AssertEquals('discarding unexpected </div>', results[1].text, 'Wrong result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

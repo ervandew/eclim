@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,46 +30,46 @@ endfunction " }}}
 " TestJavaGet() {{{
 function! TestJavaGet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   call search('private boolean enabled')
 
   JavaGet
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   call search('private Date date')
 
   JavaGet
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " validate
   let dateLine = search('public Date getDate()', 'wc')
   let enabledLine = search('public boolean isEnabled()', 'wc')
 
-  call VUAssertTrue(dateLine > 0, 'getDate() not found.')
-  call VUAssertTrue(enabledLine > 0, 'isEnabled() not found.')
+  call vunit#AssertTrue(dateLine > 0, 'getDate() not found.')
+  call vunit#AssertTrue(enabledLine > 0, 'isEnabled() not found.')
 
-  call VUAssertTrue(dateLine < enabledLine, 'getDate() not before isEnabled().')
+  call vunit#AssertTrue(dateLine < enabledLine, 'getDate() not before isEnabled().')
 endfunction " }}}
 
 " TestJavaSet() {{{
 function! TestJavaSet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   call search('private boolean valid')
 
   JavaSet
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   call search('private Date date')
 
   JavaSet
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " validate
   let getDateLine = search('public Date getDate()', 'wc')
@@ -77,27 +77,27 @@ function! TestJavaSet()
   let setValidLine = search('public void setValid(boolean valid)', 'wc')
   let isEnabledLine = search('public boolean isEnabled()', 'wc')
 
-  call VUAssertTrue(getDateLine > 0, 'getDate() not found.')
-  call VUAssertTrue(setDateLine > 0, 'setDate() not found.')
-  call VUAssertTrue(setValidLine > 0, 'setValid() not found.')
-  call VUAssertTrue(isEnabledLine > 0, 'isEnabled() not found.')
+  call vunit#AssertTrue(getDateLine > 0, 'getDate() not found.')
+  call vunit#AssertTrue(setDateLine > 0, 'setDate() not found.')
+  call vunit#AssertTrue(setValidLine > 0, 'setValid() not found.')
+  call vunit#AssertTrue(isEnabledLine > 0, 'isEnabled() not found.')
 
-  call VUAssertTrue(getDateLine < setDateLine, 'getDate() not before setDate().')
-  call VUAssertTrue(setDateLine < setValidLine, 'setDate() not before setValid().')
-  call VUAssertTrue(setValidLine < isEnabledLine, 'setValid() not before isEnabled().')
+  call vunit#AssertTrue(getDateLine < setDateLine, 'getDate() not before setDate().')
+  call vunit#AssertTrue(setDateLine < setValidLine, 'setDate() not before setValid().')
+  call vunit#AssertTrue(setValidLine < isEnabledLine, 'setValid() not before isEnabled().')
 endfunction " }}}
 
 " TestJavaGetSet() {{{
 function! TestJavaGetSet()
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   let start = search('private String name')
   let end = search('private boolean enabled')
 
   exec start . ',' . end . 'JavaGetSet'
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " validate
   let getNameLine = search('public String getName()', 'wc')
@@ -111,33 +111,33 @@ function! TestJavaGetSet()
   let isEnabledLine = search('public boolean isEnabled()', 'wc')
   let setEnabledLine = search('public void setEnabled(boolean enabled)', 'wc')
 
-  call VUAssertTrue(getNameLine > 0, 'getName() not found.')
-  call VUAssertTrue(setNameLine > 0, 'setName() not found.')
-  call VUAssertTrue(getDescriptionLine > 0, 'getDescription() not found.')
-  call VUAssertTrue(setDescriptionLine > 0, 'setDescription() not found.')
-  call VUAssertTrue(getDateLine > 0, 'getDate() not found.')
-  call VUAssertTrue(setDateLine > 0, 'setDate() not found.')
-  call VUAssertTrue(isValidLine > 0, 'isValid() not found.')
-  call VUAssertTrue(setValidLine > 0, 'setValid() not found.')
-  call VUAssertTrue(isEnabledLine > 0, 'isEnabled() not found.')
-  call VUAssertTrue(setEnabledLine > 0, 'setEnabled() not found.')
+  call vunit#AssertTrue(getNameLine > 0, 'getName() not found.')
+  call vunit#AssertTrue(setNameLine > 0, 'setName() not found.')
+  call vunit#AssertTrue(getDescriptionLine > 0, 'getDescription() not found.')
+  call vunit#AssertTrue(setDescriptionLine > 0, 'setDescription() not found.')
+  call vunit#AssertTrue(getDateLine > 0, 'getDate() not found.')
+  call vunit#AssertTrue(setDateLine > 0, 'setDate() not found.')
+  call vunit#AssertTrue(isValidLine > 0, 'isValid() not found.')
+  call vunit#AssertTrue(setValidLine > 0, 'setValid() not found.')
+  call vunit#AssertTrue(isEnabledLine > 0, 'isEnabled() not found.')
+  call vunit#AssertTrue(setEnabledLine > 0, 'setEnabled() not found.')
 
-  call VUAssertTrue(getNameLine < setNameLine, 'getName() not before setName().')
-  call VUAssertTrue(setNameLine < getDescriptionLine,
+  call vunit#AssertTrue(getNameLine < setNameLine, 'getName() not before setName().')
+  call vunit#AssertTrue(setNameLine < getDescriptionLine,
     \ 'setName() not before getDescription().')
-  call VUAssertTrue(getDescriptionLine < setDescriptionLine,
+  call vunit#AssertTrue(getDescriptionLine < setDescriptionLine,
     \ 'getDescription() not before setDescription().')
-  call VUAssertTrue(setDescriptionLine < getDateLine,
+  call vunit#AssertTrue(setDescriptionLine < getDateLine,
     \ 'setDescription() not before getDate().')
-  call VUAssertTrue(getDateLine < setDateLine, 'getDate() not before setDate().')
-  call VUAssertTrue(setDateLine < isValidLine, 'setDate() not before isValid().')
-  call VUAssertTrue(isValidLine < setValidLine, 'isValid() not before setValid().')
-  call VUAssertTrue(setValidLine < isEnabledLine, 'setValid() not before isEnabled().')
-  call VUAssertTrue(isEnabledLine < setEnabledLine,
+  call vunit#AssertTrue(getDateLine < setDateLine, 'getDate() not before setDate().')
+  call vunit#AssertTrue(setDateLine < isValidLine, 'setDate() not before isValid().')
+  call vunit#AssertTrue(isValidLine < setValidLine, 'isValid() not before setValid().')
+  call vunit#AssertTrue(setValidLine < isEnabledLine, 'setValid() not before isEnabled().')
+  call vunit#AssertTrue(isEnabledLine < setEnabledLine,
     \ 'isEnabled() not before setEnabled().')
 
   let innerClassLine = search('private class SomeClass', 'wc')
-  call VUAssertTrue(setEnabledLine < innerClassLine,
+  call vunit#AssertTrue(setEnabledLine < innerClassLine,
     \ 'setEnabled() not before inner class.')
 endfunction " }}}
 

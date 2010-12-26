@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,15 +30,15 @@ endfunction " }}}
 " TestSearchContext() {{{
 function! TestSearchContext()
   edit! php/search/find.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find class
   call cursor(4, 15)
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(6, line('.'), 'Wrong line.')
-  call VUAssertEquals(7, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(6, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col.')
 
   quit
 
@@ -46,9 +46,9 @@ function! TestSearchContext()
   call cursor(5, 9)
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(13, line('.'), 'Wrong line.')
-  call VUAssertEquals(19, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(13, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(19, col('.'), 'Wrong col.')
 
   quit
 
@@ -56,9 +56,9 @@ function! TestSearchContext()
   call cursor(6, 17)
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(8, line('.'), 'Wrong line.')
-  call VUAssertEquals(7, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(8, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col.')
 
   quit
 
@@ -66,9 +66,9 @@ function! TestSearchContext()
   call cursor(7, 1)
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(3, line('.'), 'Wrong line.')
-  call VUAssertEquals(10, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(3, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(10, col('.'), 'Wrong col.')
 
   quit
 
@@ -76,9 +76,9 @@ function! TestSearchContext()
   call cursor(8, 6)
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(29, line('.'), 'Wrong line.')
-  call VUAssertEquals(1, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(29, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(1, col('.'), 'Wrong col.')
 
   quit
 endfunction " }}}
@@ -86,41 +86,41 @@ endfunction " }}}
 " TestSearchExact() {{{
 function! TestSearchExact()
   edit! php/search/find.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find class
   :PhpSearch -p TestA -t class
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(6, line('.'), 'Wrong line.')
-  call VUAssertEquals(7, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(6, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col.')
 
   quit
 
   " find method
   :PhpSearch -p methodA2 -t function
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(13, line('.'), 'Wrong line.')
-  call VUAssertEquals(19, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(13, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(19, col('.'), 'Wrong col.')
 
   quit
 
   " find function
   :PhpSearch -p functionA -t function
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(3, line('.'), 'Wrong line.')
-  call VUAssertEquals(10, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(3, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(10, col('.'), 'Wrong col.')
 
   quit
 
   " find constant
   :PhpSearch -p CONSTANT1 -t field
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'php/models.php', 'Wrong file.')
-  call VUAssertEquals(29, line('.'), 'Wrong line.')
-  call VUAssertEquals(1, col('.'), 'Wrong col.')
+  call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
+  call vunit#AssertEquals(29, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(1, col('.'), 'Wrong col.')
 
   quit
 endfunction " }}}
@@ -128,16 +128,16 @@ endfunction " }}}
 " TestSearchPattern() {{{
 function! TestSearchPattern()
   edit! php/search/find.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find class
   :PhpSearch -p method* -t function
   lclose
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
   echo string(results)
-  call VUAssertEquals(4, len(results), 'Wrong number of results.')
+  call vunit#AssertEquals(4, len(results), 'Wrong number of results.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

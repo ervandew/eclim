@@ -29,7 +29,7 @@ endfunction " }}}
 
 " TestChooseWorkspace() {{{
 function! TestChooseWorkspace()
-  call VUAssertEquals(g:TestEclimWorkspace, eclim#eclipse#ChooseWorkspace(),
+  call vunit#AssertEquals(g:TestEclimWorkspace, eclim#eclipse#ChooseWorkspace(),
     \ "Wrong workspace dir returned.")
 endfunction " }}}
 

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,25 +25,27 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  set expandtab
+  set shiftwidth=2 tabstop=2
 endfunction " }}}
 
 " TestJavaHierarchy() {{{
 function! TestJavaHierarchy()
   edit! src/org/eclim/test/hierarchy/TestHierarchyVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 1)
   JavaHierarchy
 
-  call VUAssertTrue(bufname('%') =~ '^\[Hierarchy\]$')
-  call VUAssertEquals(getline(1), 'public class TestHierarchyVUnit')
-  call VUAssertEquals(getline(2), '  public class Component')
-  call VUAssertEquals(getline(3), '    public interface ImageObserver')
-  call VUAssertEquals(getline(4), '    public interface MenuContainer')
-  call VUAssertEquals(getline(5), '    public interface Serializable')
-  call VUAssertEquals(getline(6), '  public interface Comparable')
-  call VUAssertEquals(getline(7), '  public interface PropertyChangeListener')
-  call VUAssertEquals(getline(8), '    public interface EventListener')
+  call vunit#AssertTrue(bufname('%') =~ '^\[Hierarchy\]$')
+  call vunit#AssertEquals(getline(1), 'public class TestHierarchyVUnit')
+  call vunit#AssertEquals(getline(2), '  public class Component')
+  call vunit#AssertEquals(getline(3), '    public interface ImageObserver')
+  call vunit#AssertEquals(getline(4), '    public interface MenuContainer')
+  call vunit#AssertEquals(getline(5), '    public interface Serializable')
+  call vunit#AssertEquals(getline(6), '  public interface Comparable')
+  call vunit#AssertEquals(getline(7), '  public interface PropertyChangeListener')
+  call vunit#AssertEquals(getline(8), '    public interface EventListener')
 
   let winnr = winnr()
 
@@ -51,30 +53,30 @@ function! TestJavaHierarchy()
   call cursor(6, 1)
   exec "normal \<cr>"
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/java/lang/Comparable.java')
-  call VUAssertEquals(winnr('$'), 3)
+  call vunit#AssertEquals(name, g:EclimTempDir . '/java/lang/Comparable.java')
+  call vunit#AssertEquals(winnr('$'), 3)
   bdelete
   exec winnr . 'winc w'
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   echom 'test opening of PropertyChangeListener'
   call cursor(7, 1)
   normal E
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/java/beans/PropertyChangeListener.java')
-  call VUAssertEquals(winnr('$'), 2)
+  call vunit#AssertEquals(name, g:EclimTempDir . '/java/beans/PropertyChangeListener.java')
+  call vunit#AssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   echom 'test opening of EventListener'
   call cursor(8, 1)
   normal E
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/java/util/EventListener.java')
-  call VUAssertEquals(winnr('$'), 2)
+  call vunit#AssertEquals(name, g:EclimTempDir . '/java/util/EventListener.java')
+  call vunit#AssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   bdelete
-  call PeekRedir()
+  call vunit#PeekRedir()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

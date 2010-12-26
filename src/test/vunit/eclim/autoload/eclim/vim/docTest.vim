@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,53 +26,53 @@
 function! TestFindDoc()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   edit! vim/test.vim
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(3, 4)
 " This test case may be crashing vim !!
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: v:version')
-  "call VUAssertTrue(getline('.') =~ '\*v:version\*', 'v:version')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: v:version')
+  "call vunit#AssertTrue(getline('.') =~ '\*v:version\*', 'v:version')
   "bdelete
 
   "call cursor(4, 4)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: :command')
-  "call VUAssertTrue(getline('.') =~ '\*:command\*', ':command')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: :command')
+  "call vunit#AssertTrue(getline('.') =~ '\*:command\*', ':command')
   "bdelete
 
   "call cursor(4, 11)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: -nargs')
-  "call VUAssertTrue(getline('.') =~ '\*E175\*', '-nargs')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: -nargs')
+  "call vunit#AssertTrue(getline('.') =~ '\*E175\*', '-nargs')
   "bdelete
 
   "call cursor(4, 20)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: -complete')
-  "call VUAssertTrue(getline('.') =~ '\*:command-completion\*', '-complete')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: -complete')
+  "call vunit#AssertTrue(getline('.') =~ '\*:command-completion\*', '-complete')
   "bdelete
 
   "call cursor(4, 30)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: customlist')
-  "call VUAssertTrue(getline('.') =~ '\*:command-completion-customlist\*', 'customlist')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: customlist')
+  "call vunit#AssertTrue(getline('.') =~ '\*:command-completion-customlist\*', 'customlist')
   "bdelete
 
   "call cursor(4, 65)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: :call')
-  "call VUAssertTrue(getline('.') =~ '\*:call\*', ':call')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: :call')
+  "call vunit#AssertTrue(getline('.') =~ '\*:call\*', ':call')
   "bdelete
 
   "call cursor(4, 56)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertEquals('vim/test.vim', expand('%'))
+  "call vunit#AssertEquals('vim/test.vim', expand('%'))
 
   "call cursor(6, 24)
   "call eclim#vim#doc#FindDoc('')
-  "call VUAssertTrue(&ft == 'help', 'not help file: substitute()')
-  "call VUAssertTrue(getline('.') =~ '\*substitute()\*', 'substitute()')
+  "call vunit#AssertTrue(&ft == 'help', 'not help file: substitute()')
+  "call vunit#AssertTrue(getline('.') =~ '\*substitute()\*', 'substitute()')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

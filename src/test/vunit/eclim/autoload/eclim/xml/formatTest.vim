@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,34 +25,35 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
+  set shiftwidth=2
 endfunction " }}}
 
 " TestFormat() {{{
 function! TestFormat()
   edit! xml/format.xml
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(2, line('$'))
-  call VUAssertTrue(getline('$') =~ '^<blah attr1.*</blah>$')
+  call vunit#AssertEquals(2, line('$'))
+  call vunit#AssertTrue(getline('$') =~ '^<blah attr1.*</blah>$')
 
   XmlFormat
 
-  call VUAssertEquals(5, line('$'))
-  call VUAssertTrue(
+  call vunit#AssertEquals(5, line('$'))
+  call vunit#AssertTrue(
      \ getline(2) =~ '^<blah attr1.*attr5="five" attr6="six" attr7="seven">$')
-  call VUAssertEquals('  <one>one</one>', getline(3))
-  call VUAssertEquals('  <two/>', getline(4))
-  call VUAssertEquals('</blah>', getline(5))
+  call vunit#AssertEquals('  <one>one</one>', getline(3))
+  call vunit#AssertEquals('  <two/>', getline(4))
+  call vunit#AssertEquals('</blah>', getline(5))
 endfunction " }}}
 
 " TestFormatFail() {{{
 function! TestFormatFail()
   edit! xml/format_fail.xml
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   XmlFormat
 
-  call VUAssertEquals(1, len(getloclist(0)))
+  call vunit#AssertEquals(1, len(getloclist(0)))
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

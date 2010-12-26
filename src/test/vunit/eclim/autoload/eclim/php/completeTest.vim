@@ -30,41 +30,41 @@ endfunction " }}}
 " TestCompletePhp() {{{
 function! TestCompletePhp()
   edit! php/complete/test.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(16, 13)
   let start = eclim#php#complete#CodeComplete(1, '')
-  call VUAssertEquals(12, start, 'Wrong starting column.')
+  call vunit#AssertEquals(12, start, 'Wrong starting column.')
 
   let results = eclim#php#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 3, 'Wrong number of results.')
-  call VUAssertEquals('methodA1(', results[0].word, 'Wrong result.')
-  call VUAssertEquals('methodA2()', results[1].word, 'Wrong result.')
-  call VUAssertEquals('variable1', results[2].word, 'Wrong result.')
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('methodA1(', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
 endfunction " }}}
 
 " TestCompleteCss() {{{
 function! TestCompleteCss()
   edit! php/complete/test.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(5, 13)
   let start = eclim#html#complete#CodeComplete(1, '')
-  call VUAssertEquals(8, start, 'Wrong starting column.')
+  call vunit#AssertEquals(8, start, 'Wrong starting column.')
 
   let results = eclim#html#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 8, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font.*"),
+  call vunit#AssertEquals(len(results), 8, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font.*"),
     \ 'Results does not contain font')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
     \ 'Results does not contain font-family')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
     \ 'Results does not contain font-size')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 endfunction " }}}
 
@@ -77,23 +77,23 @@ endif
 " TestCompleteHtml() {{{
 function! TestCompleteHtml()
   edit! php/complete/test.php
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(22, 7)
   let start = eclim#php#complete#CodeComplete(1, '')
-  call VUAssertEquals(5, start, 'Wrong starting column.')
+  call vunit#AssertEquals(5, start, 'Wrong starting column.')
 
   let results = eclim#php#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 7, 'Wrong number of results.')
-  call VUAssertEquals('h1', results[0].word, 'Wrong result.')
-  call VUAssertEquals('h2', results[1].word, 'Wrong result.')
-  call VUAssertEquals('h3', results[2].word, 'Wrong result.')
-  call VUAssertEquals('h4', results[3].word, 'Wrong result.')
-  call VUAssertEquals('h5', results[4].word, 'Wrong result.')
-  call VUAssertEquals('h6', results[5].word, 'Wrong result.')
-  call VUAssertEquals('hr', results[6].word, 'Wrong result.')
+  call vunit#AssertEquals(len(results), 7, 'Wrong number of results.')
+  call vunit#AssertEquals('h1', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('h2', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('h3', results[2].word, 'Wrong result.')
+  call vunit#AssertEquals('h4', results[3].word, 'Wrong result.')
+  call vunit#AssertEquals('h5', results[4].word, 'Wrong result.')
+  call vunit#AssertEquals('h6', results[5].word, 'Wrong result.')
+  call vunit#AssertEquals('hr', results[6].word, 'Wrong result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

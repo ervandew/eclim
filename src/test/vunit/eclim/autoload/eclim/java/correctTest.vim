@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,29 +30,29 @@ endfunction " }}}
 " TestCorrect() {{{
 function! TestCorrect()
   edit! src/org/eclim/test/correct/TestCorrectVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
   let errors = getloclist(0)
-  call VUAssertEquals(1, len(errors), 'No errors to correct.')
+  call vunit#AssertEquals(1, len(errors), 'No errors to correct.')
 
   call cursor(errors[0].lnum, errors[0].col)
   JavaCorrect
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertTrue(bufname('%') =~ 'TestCorrectVUnit.java_correct$',
+  call vunit#AssertTrue(bufname('%') =~ 'TestCorrectVUnit.java_correct$',
     \ 'Correct window not opened.')
-  call VUAssertEquals('ArrayList cannot be resolved to a type', getline(1),
+  call vunit#AssertEquals('ArrayList cannot be resolved to a type', getline(1),
     \ 'Wrong error message.')
 
   let line = search("Import 'ArrayList' (java.util)")
-  call VUAssertTrue(line, 'Required correction not found.')
+  call vunit#AssertTrue(line, 'Required correction not found.')
 
   exec "normal \<cr>"
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertTrue(search('^import java\.'), 'Correction not applied.')
+  call vunit#AssertTrue(search('^import java\.'), 'Correction not applied.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

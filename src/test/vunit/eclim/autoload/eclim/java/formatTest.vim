@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,22 +25,24 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+  set expandtab
+  set shiftwidth=2 tabstop=2
 endfunction " }}}
 
 " TestJavaFormatOneLine() {{{
 function! TestJavaFormatOneLine()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(24),
+  call vunit#AssertEquals(getline(24),
     \ 'System.out.println("test formatting");',
     \ 'Intial line incorrect.')
 
   call cursor(24, 1)
   JavaFormat
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(24),
+  call vunit#AssertEquals(getline(24),
     \ '    System.out.println("test formatting");',
     \ 'Result line incorrect.')
 endfunction " }}}
@@ -48,32 +50,32 @@ endfunction " }}}
 " TestJavaFormatRange() {{{
 function! TestJavaFormatRange()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(25),
+  call vunit#AssertEquals(getline(25),
     \ 'if(true){',
     \ 'Intial line 1 incorrect.')
 
-  call VUAssertEquals(getline(26),
+  call vunit#AssertEquals(getline(26),
     \ 'System.out.println("test format if");',
     \ 'Intial line 2 incorrect.')
 
-  call VUAssertEquals(getline(27),
+  call vunit#AssertEquals(getline(27),
     \ '}',
     \ 'Intial line 3 incorrect.')
 
   25,27JavaFormat
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(25),
+  call vunit#AssertEquals(getline(25),
     \ '    if (true) {',
     \ 'Result line 1 incorrect.')
 
-  call VUAssertEquals(getline(26),
+  call vunit#AssertEquals(getline(26),
     \ '      System.out.println("test format if");',
     \ 'Result line 2 incorrect.')
 
-  call VUAssertEquals(getline(27),
+  call vunit#AssertEquals(getline(27),
     \ '    }',
     \ 'Result line 3 incorrect.')
 endfunction " }}}
@@ -81,24 +83,24 @@ endfunction " }}}
 " TestJavaFormatWholeFile() {{{
 function! TestJavaFormatWholeFile()
   edit! src/org/eclim/test/format/TestFormatVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(20),
+  call vunit#AssertEquals(getline(20),
     \ 'public',
     \ 'Intial line 1 incorrect.')
 
-  call VUAssertEquals(getline(21),
+  call vunit#AssertEquals(getline(21),
     \ 'void main(String[] args)',
     \ 'Intial line 2 incorrect.')
 
-  call VUAssertEquals(getline(22),
+  call vunit#AssertEquals(getline(22),
     \ 'throws Exception',
     \ 'Intial line 3 incorrect.')
 
   %JavaFormat
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals(getline(20),
+  call vunit#AssertEquals(getline(20),
     \ '  public void main(String[] args) throws Exception {',
     \ 'Result line 1 incorrect.')
 endfunction " }}}

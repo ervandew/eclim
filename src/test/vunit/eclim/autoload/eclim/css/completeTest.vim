@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,23 +30,23 @@ endfunction " }}}
 " TestComplete() {{{
 function! TestComplete()
   edit! css/complete.css
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(5, 7)
   let start = eclim#css#complete#CodeComplete(1, '')
-  call VUAssertEquals(2, start, 'Wrong starting column.')
+  call vunit#AssertEquals(2, start, 'Wrong starting column.')
 
   let results = eclim#css#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 8, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font.*"),
+  call vunit#AssertEquals(len(results), 8, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font.*"),
     \ 'Results does not contain font')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
     \ 'Results does not contain font-family')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
     \ 'Results does not contain font-size')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 endfunction " }}}
 

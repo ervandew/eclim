@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,19 +25,19 @@
 " TestGetEclimCommand() {{{
 function! TestGetEclimCommand()
   let result = eclim#client#nailgun#GetEclimCommand()
-  call VUAssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
+  call vunit#AssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
 endfunction " }}}
 
 " TestPing() {{{
 function! TestPing()
   let result = eclim#PingEclim(0)
-  call VUAssertTrue(result, "Ping did not return true.")
+  call vunit#AssertTrue(result, "Ping did not return true.")
 
   "let g:Ping = ''
   "call PushRedir('=> g:Ping')
   "try
   "  call eclim#PingEclim(1)
-  "  call VUAssertTrue(g:Ping =~ 'eclim [0-9]\+\.[0-9]\+\.[0-9]\+', "Invalid ping output.")
+  "  call vunit#AssertTrue(g:Ping =~ 'eclim [0-9]\+\.[0-9]\+\.[0-9]\+', "Invalid ping output.")
   "finally
   "  unlet! g:Ping
   "  call PopRedir()
@@ -47,7 +47,7 @@ endfunction " }}}
 " TestSettings() {{{
 function! TestSettings()
   exec 'EclimSettings ' . g:TestEclimWorkspace
-  call VUAssertEquals('Eclim_Global_Settings', expand('%'),
+  call vunit#AssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")
   close
 endfunction " }}}
@@ -56,17 +56,17 @@ endfunction " }}}
 function! TestCommandCompleteScriptRevision()
   let results = eclim#CommandCompleteScriptRevision(
     \ 'eclim/autoload/ec', 'PatchEclim eclim/autoload/ec', 28)
-  call VUAssertEquals(2, len(results), "Wrong number of completions.")
-  call VUAssertEquals('eclim/autoload/eclim/', results[0],
+  call vunit#AssertEquals(2, len(results), "Wrong number of completions.")
+  call vunit#AssertEquals('eclim/autoload/eclim/', results[0],
     \ "Wrong first completion.")
-  call VUAssertEquals('eclim/autoload/eclim.vim', results[1],
+  call vunit#AssertEquals('eclim/autoload/eclim.vim', results[1],
     \ "Wrong second completion.")
 
 "  let results = eclim#CommandCompleteScriptRevision(
 "    \ 'eclim/autoload/eclim.vim 59', 'PatchEclim eclim/autoload/eclim.vim 59', 38)
-"  call VUAssertTrue(len(results) > 0, "Insuficient number of completions.")
+"  call vunit#AssertTrue(len(results) > 0, "Insuficient number of completions.")
 "  for result in results
-"    call VUAssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
+"    call vunit#AssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
 "  endfor
 endfunction " }}}
 

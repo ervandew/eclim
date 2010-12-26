@@ -30,27 +30,27 @@ endfunction " }}}
 " TestFindDefinition() {{{
 function! TestFindDefinition()
   edit! test/find/test_find.py
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(1, 18)
   PythonFindDefinition
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertTrue(name =~ 'test/common/__init__.py')
-  call VUAssertEquals(getline(1), 'from test.common.functions import *')
+  call vunit#AssertTrue(name =~ 'test/common/__init__.py')
+  call vunit#AssertEquals(getline(1), 'from test.common.functions import *')
   bdelete
 
   call cursor(3, 13)
   PythonFindDefinition
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertTrue(name =~ 'test/common/objects.py')
-  call VUAssertEquals(getline('.'), 'class Test1(object):')
+  call vunit#AssertTrue(name =~ 'test/common/objects.py')
+  call vunit#AssertEquals(getline('.'), 'class Test1(object):')
   bdelete
 
   call cursor(5, 8)
   PythonFindDefinition
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertTrue(name =~ 'test/common/functions.py')
-  call VUAssertEquals(getline('.'), "def test3(foo, bar='baz', *args, **kwargs):")
+  call vunit#AssertTrue(name =~ 'test/common/functions.py')
+  call vunit#AssertEquals(getline('.'), "def test3(foo, bar='baz', *args, **kwargs):")
   bdelete
 endfunction " }}}
 

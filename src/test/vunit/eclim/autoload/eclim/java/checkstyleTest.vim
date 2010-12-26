@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,42 +31,42 @@ endfunction " }}}
 function! TestManual()
   let g:EclimJavaCheckstyleOnSave = 0
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   Checkstyle
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
-  call VUAssertEquals(len(results), 3)
+  call vunit#AssertEquals(len(results), 3)
   for result in results
-    call VUAssertEquals(bufname(result.bufnr), expand('%'), 'File does not match.')
-    call VUAssertTrue(result.text =~ '^\[checkstyle\]', 'Missing namespace.')
+    call vunit#AssertEquals(bufname(result.bufnr), expand('%'), 'File does not match.')
+    call vunit#AssertTrue(result.text =~ '^\[checkstyle\]', 'Missing namespace.')
   endfor
 
   call setloclist(0, [], 'r')
   let results = getloclist(0)
-  call VUAssertEquals(len(results), 0)
+  call vunit#AssertEquals(len(results), 0)
 endfunction " }}}
 
 " TestAuto() {{{
 function! TestAuto()
   let g:EclimJavaCheckstyleOnSave = 1
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
-  call VUAssertEquals(len(results), 3)
+  call vunit#AssertEquals(len(results), 3)
   for result in results
-    call VUAssertEquals(bufname(result.bufnr), expand('%'))
-    call VUAssertTrue(result.text =~ '^\[checkstyle\]', 'Missing namespace.')
+    call vunit#AssertEquals(bufname(result.bufnr), expand('%'))
+    call vunit#AssertTrue(result.text =~ '^\[checkstyle\]', 'Missing namespace.')
   endfor
 
   call setloclist(0, [], 'r')
   let results = getloclist(0)
-  call VUAssertEquals(len(results), 0)
+  call vunit#AssertEquals(len(results), 0)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

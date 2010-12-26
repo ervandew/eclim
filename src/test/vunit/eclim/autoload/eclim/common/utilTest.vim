@@ -29,16 +29,16 @@ function! TestDiffLastSaved()
   call append(1, 'some new content')
   DiffLastSaved
 
-  call VUAssertEquals(&diff, 1)
-  call VUAssertEquals(line('$'), 2)
-  call VUAssertEquals(getline(1), 'file in project root')
-  call VUAssertEquals(getline(2), 'some new content')
+  call vunit#AssertEquals(&diff, 1)
+  call vunit#AssertEquals(line('$'), 2)
+  call vunit#AssertEquals(getline(1), 'file in project root')
+  call vunit#AssertEquals(getline(2), 'some new content')
 
   winc l
 
-  call VUAssertEquals(&diff, 1)
-  call VUAssertEquals(line('$'), 1)
-  call VUAssertEquals(getline(1), 'file in project root')
+  call vunit#AssertEquals(&diff, 1)
+  call vunit#AssertEquals(line('$'), 1)
+  call vunit#AssertEquals(getline(1), 'file in project root')
 
   bdelete!
   bdelete!
@@ -50,52 +50,52 @@ function! TestLocateFile()
   edit! eclim_unit_test/test_root_file.txt
 
   LocateFile test.vim
-  call PeekRedir()
+  call vunit#PeekRedir()
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'eclim_unit_test/vim/test.vim')
+  call vunit#AssertEquals(name, 'eclim_unit_test/vim/test.vim')
   bdelete
 
   LocateFile f*/*1.txt
-  call PeekRedir()
+  call vunit#PeekRedir()
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'eclim_unit_test/files/test1.txt')
+  call vunit#AssertEquals(name, 'eclim_unit_test/files/test1.txt')
   bdelete
 
   LocateFile
-  call PeekRedir()
-  call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
-  call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
+  call vunit#PeekRedir()
+  call vunit#AssertEquals(expand('%'), '[Locate in eclim_unit_test]')
+  call vunit#AssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> test.txt")
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = sort(getbufline(b:results_bufnum, 1, '$'))
-  call VUAssertEquals(len(results), 4)
-  call VUAssertEquals(results[0],
+  call vunit#AssertEquals(len(results), 4)
+  call vunit#AssertEquals(results[0],
     \ 'test1.txt  /eclim_unit_test/files/test1.txt')
-  call VUAssertEquals(results[1],
+  call vunit#AssertEquals(results[1],
     \ 'test2.txt  /eclim_unit_test/files/test2.txt')
-  call VUAssertEquals(results[2],
+  call vunit#AssertEquals(results[2],
     \ 'test3.txt  /eclim_unit_test/files/test3.txt')
-  call VUAssertEquals(results[3],
+  call vunit#AssertEquals(results[3],
     \ 'test_root_file.txt  /eclim_unit_test/test_root_file.txt')
   exec "normal \<esc>"
   doautocmd InsertLeave <buffer>
-  call VUAssertNotEquals(expand('%'), '[Locate in eclim_unit_test]')
+  call vunit#AssertNotEquals(expand('%'), '[Locate in eclim_unit_test]')
 
   LocateFile
-  call PeekRedir()
-  call VUAssertEquals(expand('%'), '[Locate in eclim_unit_test]')
-  call VUAssertEquals(bufname(b:results_bufnum), '[Locate Results]')
+  call vunit#PeekRedir()
+  call vunit#AssertEquals(expand('%'), '[Locate in eclim_unit_test]')
+  call vunit#AssertEquals(bufname(b:results_bufnum), '[Locate Results]')
   call setline(1, "> file/test.txt")
   doautocmd CursorMovedI <buffer>
   doautocmd CursorHoldI <buffer>
   let results = sort(getbufline(b:results_bufnum, 1, '$'))
-  call VUAssertEquals(len(results), 3)
-  call VUAssertEquals(results[0],
+  call vunit#AssertEquals(len(results), 3)
+  call vunit#AssertEquals(results[0],
     \ 'test1.txt  /eclim_unit_test/files/test1.txt')
-  call VUAssertEquals(results[1],
+  call vunit#AssertEquals(results[1],
     \ 'test2.txt  /eclim_unit_test/files/test2.txt')
-  call VUAssertEquals(results[2],
+  call vunit#AssertEquals(results[2],
     \ 'test3.txt  /eclim_unit_test/files/test3.txt')
   exec "normal \<esc>"
 endfunction " }}}
@@ -106,7 +106,7 @@ function! TestOpenRelative()
   edit! eclim_unit_test/test_root_file.txt
 
   call eclim#common#util#OpenRelative('edit', 'files/test1.txt', 1)
-  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
+  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
     \ 'Did not open test1.txt.')
 endfunction " }}}
 
@@ -115,9 +115,9 @@ function! TestOpenFiles()
   exec 'cd ' . g:TestEclimWorkspace
   call eclim#common#util#OpenFiles('split',
     \ 'eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt')
-  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
+  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
     \ 'Did not open test1.txt.')
-  call VUAssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
+  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
     \ 'Did not open test2.txt.')
 endfunction " }}}
 
@@ -126,7 +126,7 @@ function! TestSwapWords()
   call setline(1, 'one, two')
   call cursor(1, 1)
   call eclim#common#util#SwapWords()
-  call VUAssertEquals('two, one', getline(1), "Words not swaped correctly.")
+  call vunit#AssertEquals('two, one', getline(1), "Words not swaped correctly.")
 endfunction " }}}
 
 " TestCommandCompleteRelative() {{{
@@ -134,8 +134,8 @@ function! TestCommandCompleteRelative()
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
   let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative f', 15)
-  call VUAssertEquals(1, len(results), "Wrong number of results.")
-  call VUAssertEquals('files/', results[0], "Wrong result.")
+  call vunit#AssertEquals(1, len(results), "Wrong number of results.")
+  call vunit#AssertEquals('files/', results[0], "Wrong result.")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

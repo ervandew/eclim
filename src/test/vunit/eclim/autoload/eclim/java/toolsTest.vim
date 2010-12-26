@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 function! TestJps()
   Jps
 
-  call VUAssertEquals('Java_Processes', bufname('%'), 'Jps window not opened.')
+  call vunit#AssertEquals('Java_Processes', bufname('%'), 'Jps window not opened.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

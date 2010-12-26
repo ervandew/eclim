@@ -30,60 +30,60 @@ endfunction " }}}
 " TestComment() {{{
 function! TestComment()
   edit! src/org/eclim/test/doc/TestCommentVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(11, 3)
   JavaDocComment
 
-  call VUAssertEquals('  /**', getline(11), 'Wrong doc line 11.')
-  call VUAssertEquals('   * {@inheritDoc}', getline(12), 'Wrong doc line 12.')
-  call VUAssertEquals('   * @see Object#equals(Object)', getline(13),
+  call vunit#AssertEquals('  /**', getline(11), 'Wrong doc line 11.')
+  call vunit#AssertEquals('   * {@inheritDoc}', getline(12), 'Wrong doc line 12.')
+  call vunit#AssertEquals('   * @see Object#equals(Object)', getline(13),
     \ 'Wrong doc line 13.')
-  call VUAssertEquals('   */', getline(14), 'Wrong doc line 14.')
+  call vunit#AssertEquals('   */', getline(14), 'Wrong doc line 14.')
 
   call cursor(5, 3)
   JavaDocComment
 
-  call VUAssertEquals('  /**', getline(5), 'Wrong doc line 5.')
-  call VUAssertEquals('   * ', getline(6), 'Wrong doc line 6.')
-  call VUAssertEquals('   * ', getline(7), 'Wrong doc line 7.')
-  call VUAssertEquals('   * @param _id', getline(8), 'Wrong doc line 8.')
-  call VUAssertEquals('   * @param _name', getline(9), 'Wrong doc line 9.')
-  call VUAssertEquals('   * @return', getline(10), 'Wrong doc line 10.')
-  call VUAssertEquals('   * ', getline(11), 'Wrong doc line 11.')
-  call VUAssertEquals('   * @throws IOException', getline(12), 'Wrong doc line 12.')
-  call VUAssertEquals('   */', getline(13), 'Wrong doc line 13.')
+  call vunit#AssertEquals('  /**', getline(5), 'Wrong doc line 5.')
+  call vunit#AssertEquals('   * ', getline(6), 'Wrong doc line 6.')
+  call vunit#AssertEquals('   * ', getline(7), 'Wrong doc line 7.')
+  call vunit#AssertEquals('   * @param _id', getline(8), 'Wrong doc line 8.')
+  call vunit#AssertEquals('   * @param _name', getline(9), 'Wrong doc line 9.')
+  call vunit#AssertEquals('   * @return', getline(10), 'Wrong doc line 10.')
+  call vunit#AssertEquals('   * ', getline(11), 'Wrong doc line 11.')
+  call vunit#AssertEquals('   * @throws IOException', getline(12), 'Wrong doc line 12.')
+  call vunit#AssertEquals('   */', getline(13), 'Wrong doc line 13.')
 endfunction " }}}
 
 " TestSearch() {{{
 function! TestSearch()
   edit! src/org/eclim/test/doc/TestDocSearchVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(5, 11)
   let g:EclimJavaDocSearchSingleResult = 'lopen'
   JavaDocSearch -x declarations
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertEquals('javadoc_search_results', bufname('%'),
+  call vunit#AssertEquals('javadoc_search_results', bufname('%'),
     \ 'Search results window not opened.')
-  call VUAssertEquals(1, line('$'), 'Wrong number of results.')
-  call VUAssertEquals('http://java.sun.com/j2se/1.5.0/docs/api/java/awt/List.html',
+  call vunit#AssertEquals(1, line('$'), 'Wrong number of results.')
+  call vunit#AssertEquals('http://java.sun.com/j2se/1.5.0/docs/api/java/awt/List.html',
     \ line('1'), 'Wrong result.')
 endfunction " }}}
 
 " TestJavadoc() {{{
 function! TestJavadoc()
   edit! src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
-  call VUAssertFalse(filereadable(
+  call vunit#AssertFalse(filereadable(
     \ g:TestEclimWorkspace .
     \ 'eclim_unit_test_java/doc/org/eclim/test/doc/javadoc/TestJavadocVUnit.html'))
 
   Javadoc src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
 
-  call VUAssertTrue(filereadable(
+  call vunit#AssertTrue(filereadable(
     \ g:TestEclimWorkspace .
     \ 'eclim_unit_test_java/doc/org/eclim/test/doc/javadoc/TestJavadocVUnit.html'))
 endfunction " }}}

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,27 +31,27 @@ endfunction " }}}
 function! TestValidate()
   edit! css/validate.css
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
   for line in readfile(expand('%'))
     echo '|' . line
   endfor
 
   let errors = getloclist(0)
-  call VUAssertEquals(2, len(errors))
+  call vunit#AssertEquals(2, len(errors))
 
   let name = substitute(bufname(errors[0].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'css/validate.css')
-  call VUAssertEquals(2, errors[0].lnum)
-  call VUAssertEquals(1, errors[0].col)
-  call VUAssertEquals('e', errors[0].type)
-  call VUAssertEquals('bald is not a font-weight value', errors[0].text)
+  call vunit#AssertEquals(name, 'css/validate.css')
+  call vunit#AssertEquals(2, errors[0].lnum)
+  call vunit#AssertEquals(1, errors[0].col)
+  call vunit#AssertEquals('e', errors[0].type)
+  call vunit#AssertEquals('bald is not a font-weight value', errors[0].text)
 
   let name = substitute(bufname(errors[1].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'css/validate.css')
-  call VUAssertEquals(6, errors[1].lnum)
-  call VUAssertEquals(1, errors[1].col)
-  call VUAssertEquals('e', errors[1].type)
-  call VUAssertEquals("Property fnt-size doesn't exist", errors[1].text)
+  call vunit#AssertEquals(name, 'css/validate.css')
+  call vunit#AssertEquals(6, errors[1].lnum)
+  call vunit#AssertEquals(1, errors[1].col)
+  call vunit#AssertEquals('e', errors[1].type)
+  call vunit#AssertEquals("Property fnt-size doesn't exist", errors[1].text)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,21 +30,21 @@ endfunction " }}}
 " TestSearch() {{{
 function! TestSearch()
   edit! src/org/eclim/test/search/TestSearchVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(8, 11)
   JavaSearch
 
   let name = substitute(bufname('%'), '\', '/', 'g')
-  call VUAssertEquals(name, g:EclimTempDir . '/java/util/List.java',
+  call vunit#AssertEquals(name, g:EclimTempDir . '/java/util/List.java',
     \ 'Wrong or no file found for List.')
-  call VUAssertTrue(getline('.') =~ 'public interface List',
+  call vunit#AssertTrue(getline('.') =~ 'public interface List',
     \ 'Not on class declaration.')
   bdelete!
 
   call cursor(12, 5)
   JavaSearch
-  call VUAssertTrue(getline('.') =~ 'private List list',
+  call vunit#AssertTrue(getline('.') =~ 'private List list',
     \ 'Not on variable declaration.')
 endfunction " }}}
 

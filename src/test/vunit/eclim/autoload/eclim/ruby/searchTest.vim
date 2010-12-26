@@ -30,51 +30,51 @@ endfunction " }}}
 " TestSearchContext() {{{
 function! TestSearchContext()
   edit! src/search/testSearch.rb
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find class
   call cursor(3, 11)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (class).')
-  call VUAssertEquals(11, line('.'), 'Wrong line (class).')
-  call VUAssertEquals(7, col('.'), 'Wrong col (class).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (class).')
+  call vunit#AssertEquals(11, line('.'), 'Wrong line (class).')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col (class).')
   bdelete
 
   " find method
   call cursor(4, 8)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (method).')
-  call VUAssertEquals(13, line('.'), 'Wrong line (method).')
-  call VUAssertEquals(7, col('.'), 'Wrong col (method).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (method).')
+  call vunit#AssertEquals(13, line('.'), 'Wrong line (method).')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col (method).')
   bdelete
 
   " find class constant
   call cursor(5, 15)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (class constant).')
-  call VUAssertEquals(12, line('.'), 'Wrong line (class constant).')
-  call VUAssertEquals(3, col('.'), 'Wrong col (class constant).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (class constant).')
+  call vunit#AssertEquals(12, line('.'), 'Wrong line (class constant).')
+  call vunit#AssertEquals(3, col('.'), 'Wrong col (class constant).')
   bdelete
 
   " find module
   call cursor(7, 6)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (module).')
-  call VUAssertEquals(1, line('.'), 'Wrong line (module).')
-  call VUAssertEquals(8, col('.'), 'Wrong col (module).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (module).')
+  call vunit#AssertEquals(1, line('.'), 'Wrong line (module).')
+  call vunit#AssertEquals(8, col('.'), 'Wrong col (module).')
   bdelete
 
   " find module constant
   call cursor(7, 14)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (module constant).')
-  call VUAssertEquals(2, line('.'), 'Wrong line (module constant).')
-  call VUAssertEquals(3, col('.'), 'Wrong col (module constant).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (module constant).')
+  call vunit#AssertEquals(2, line('.'), 'Wrong line (module constant).')
+  call vunit#AssertEquals(3, col('.'), 'Wrong col (module constant).')
   bdelete
 
   " find module method
@@ -82,81 +82,81 @@ function! TestSearchContext()
   "call cursor(8, 12)
   "RubySearchContext
   "let name = substitute(expand('%'), '\', '/', 'g')
-  "call VUAssertEquals(name, 'src/test.rb', 'Wrong file (module method).')
-  "call VUAssertEquals(6, line('.'), 'Wrong line (module method).')
-  "call VUAssertEquals(7, col('.'), 'Wrong col (module method).')
+  "call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (module method).')
+  "call vunit#AssertEquals(6, line('.'), 'Wrong line (module method).')
+  "call vunit#AssertEquals(7, col('.'), 'Wrong col (module method).')
   "bdelete
 
   " find function
   call cursor(10, 12)
   RubySearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (funciton).')
-  call VUAssertEquals(21, line('.'), 'Wrong line (funciton).')
-  call VUAssertEquals(5, col('.'), 'Wrong col (funciton).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (funciton).')
+  call vunit#AssertEquals(21, line('.'), 'Wrong line (funciton).')
+  call vunit#AssertEquals(5, col('.'), 'Wrong col (funciton).')
   bdelete
 endfunction " }}}
 
 " TestSearchExact() {{{
 function! TestSearchExact()
   edit! src/search/testSearch.rb
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find module
   RubySearch TestModule -t class
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (module).')
-  call VUAssertEquals(1, line('.'), 'Wrong line (module).')
-  call VUAssertEquals(8, col('.'), 'Wrong col (module).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (module).')
+  call vunit#AssertEquals(1, line('.'), 'Wrong line (module).')
+  call vunit#AssertEquals(8, col('.'), 'Wrong col (module).')
   bdelete
 
   " find class
   RubySearch TestClass -t class
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (class).')
-  call VUAssertEquals(11, line('.'), 'Wrong line (class).')
-  call VUAssertEquals(7, col('.'), 'Wrong col (class).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (class).')
+  call vunit#AssertEquals(11, line('.'), 'Wrong line (class).')
+  call vunit#AssertEquals(7, col('.'), 'Wrong col (class).')
   bdelete
 
   " find method
   " dltkruby isn't finding module methods currently
   "RubySearch methodA -t method
   "let name = substitute(expand('%'), '\', '/', 'g')
-  "call VUAssertEquals(name, 'src/test.rb', 'Wrong file (method).')
-  "call VUAssertEquals(6, line('.'), 'Wrong line (method).')
-  "call VUAssertEquals(7, col('.'), 'Wrong col (method).')
+  "call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (method).')
+  "call vunit#AssertEquals(6, line('.'), 'Wrong line (method).')
+  "call vunit#AssertEquals(7, col('.'), 'Wrong col (method).')
   "bdelete
 
   " find function
   RubySearch testFunction -t function
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (function).')
-  call VUAssertEquals(21, line('.'), 'Wrong line (function).')
-  call VUAssertEquals(5, col('.'), 'Wrong col (function).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (function).')
+  call vunit#AssertEquals(21, line('.'), 'Wrong line (function).')
+  call vunit#AssertEquals(5, col('.'), 'Wrong col (function).')
   bdelete
 
   " find constant
   RubySearch CONSTANT -t field
   let name = substitute(expand('%'), '\', '/', 'g')
-  call VUAssertEquals(name, 'src/test.rb', 'Wrong file (constant).')
-  call VUAssertEquals(12, line('.'), 'Wrong line (constant).')
-  call VUAssertEquals(3, col('.'), 'Wrong col (constant).')
+  call vunit#AssertEquals(name, 'src/test.rb', 'Wrong file (constant).')
+  call vunit#AssertEquals(12, line('.'), 'Wrong line (constant).')
+  call vunit#AssertEquals(3, col('.'), 'Wrong col (constant).')
   bdelete
 endfunction " }}}
 
 " TestSearchPattern() {{{
 function! TestSearchPattern()
   edit! src/search/testSearch.rb
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   " find method
   RubySearch -p test* -t method
   lclose
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
   echo string(results)
-  call VUAssertEquals(3, len(results), 'Wrong number of results.')
+  call vunit#AssertEquals(3, len(results), 'Wrong number of results.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,19 +31,19 @@ endfunction " }}}
 function! TestValidate()
   edit! dtd/test.dtd
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
   for line in readfile(expand('%'))
     echo '|' . line
   endfor
 
   let errors = getloclist(0)
-  call VUAssertEquals(1, len(errors))
+  call vunit#AssertEquals(1, len(errors))
 
   let name = substitute(bufname(errors[0].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'dtd/test.dtd')
-  call VUAssertEquals(3, errors[0].lnum)
-  call VUAssertEquals(45, errors[0].col)
-  call VUAssertEquals('e', errors[0].type)
+  call vunit#AssertEquals(name, 'dtd/test.dtd')
+  call vunit#AssertEquals(3, errors[0].lnum)
+  call vunit#AssertEquals(45, errors[0].col)
+  call vunit#AssertEquals('e', errors[0].type)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -36,59 +36,59 @@ endfunction " }}}
 " TestCompleteAttribute() {{{
 function! TestCompleteAttribute()
   edit! html/test.html
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(7, 9)
   let start = eclim#html#complete#CodeComplete(1, '')
-  call VUAssertEquals(7, start, 'Wrong starting column.')
+  call vunit#AssertEquals(7, start, 'Wrong starting column.')
 
   let results = eclim#html#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*href.*"),
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*href.*"),
     \ 'Results does not contain href')
 endfunction " }}}
 
 " TestCompleteElement() {{{
 function! TestCompleteElement()
   edit! html/test.html
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(5, 7)
   let start = eclim#html#complete#CodeComplete(1, '')
-  call VUAssertEquals(5, start, 'Wrong starting column.')
+  call vunit#AssertEquals(5, start, 'Wrong starting column.')
 
   let results = eclim#html#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 7, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*h1.*"),
+  call vunit#AssertEquals(len(results), 7, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*h1.*"),
     \ 'Results does not contain h1')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*h2.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*h2.*"),
     \ 'Results does not contain h2')
 endfunction " }}}
 
 " TestCompleteCss() {{{
 function! TestCompleteCss()
   edit! html/test.html
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(4, 20)
   let start = eclim#html#complete#CodeComplete(1, '')
-  call VUAssertEquals(15, start, 'Wrong starting column.')
+  call vunit#AssertEquals(15, start, 'Wrong starting column.')
 
   let results = eclim#html#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 8, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font.*"),
+  call vunit#AssertEquals(len(results), 8, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font.*"),
     \ 'Results does not contain font')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
     \ 'Results does not contain font-family')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
     \ 'Results does not contain font-size')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 endfunction " }}}
 

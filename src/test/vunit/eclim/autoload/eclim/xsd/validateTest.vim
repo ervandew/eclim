@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,25 +31,25 @@ endfunction " }}}
 function! TestValidate()
   edit! xsd/test.xsd
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
   for line in readfile(expand('%'))
     echo '|' . line
   endfor
 
   let errors = getloclist(0)
-  call VUAssertEquals(2, len(errors))
+  call vunit#AssertEquals(2, len(errors))
 
   let name = substitute(bufname(errors[0].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'xsd/test.xsd')
-  call VUAssertEquals(3, errors[0].lnum)
-  call VUAssertEquals(43, errors[0].col)
-  call VUAssertEquals('e', errors[0].type)
+  call vunit#AssertEquals(name, 'xsd/test.xsd')
+  call vunit#AssertEquals(3, errors[0].lnum)
+  call vunit#AssertEquals(43, errors[0].col)
+  call vunit#AssertEquals('e', errors[0].type)
 
   let name = substitute(bufname(errors[1].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'xsd/test.xsd')
-  call VUAssertEquals(11, errors[1].lnum)
-  call VUAssertEquals(12, errors[1].col)
-  call VUAssertEquals('e', errors[1].type)
+  call vunit#AssertEquals(name, 'xsd/test.xsd')
+  call vunit#AssertEquals(11, errors[1].lnum)
+  call vunit#AssertEquals(12, errors[1].col)
+  call vunit#AssertEquals('e', errors[1].type)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

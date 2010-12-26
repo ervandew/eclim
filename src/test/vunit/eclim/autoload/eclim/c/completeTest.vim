@@ -36,56 +36,56 @@ endfunction " }}}
 " TestCComplete() {{{
 function! TestCComplete()
   edit! src/test_complete_vunit.c
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(11, 6)
   let start = eclim#c#complete#CodeComplete(1, '')
-  call VUAssertEquals(5, start, 'Wrong starting column.')
+  call vunit#AssertEquals(5, start, 'Wrong starting column.')
 
   let results = eclim#c#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
-  call VUAssertEquals('test_a', results[0].word, 'Wrong result.')
-  call VUAssertEquals('test_b', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
+  call vunit#AssertEquals('test_a', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('test_b', results[1].word, 'Wrong result.')
 
   call cursor(12, 15)
   let start = eclim#c#complete#CodeComplete(1, '')
-  call VUAssertEquals(9, start, 'Wrong starting column.')
+  call vunit#AssertEquals(9, start, 'Wrong starting column.')
 
   let results = eclim#c#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 2, 'Wrong number of results.')
-  call VUAssertEquals('EXIT_FAILURE', results[0].word, 'Wrong result.')
-  call VUAssertEquals('EXIT_SUCCESS', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
+  call vunit#AssertEquals('EXIT_FAILURE', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('EXIT_SUCCESS', results[1].word, 'Wrong result.')
 endfunction " }}}
 
 " TestCppComplete() {{{
 function! TestCppComplete()
   edit! src/test_complete.cpp
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(6, 5)
   let start = eclim#c#complete#CodeComplete(1, '')
-  call VUAssertEquals(4, start, 'Wrong starting column.')
+  call vunit#AssertEquals(4, start, 'Wrong starting column.')
 
   let g:EclimCCompleteLayout = 'standard'
   let results = eclim#c#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 4, 'Wrong number of results.')
-  call VUAssertEquals('Test(', results[0].word, 'Wrong first result.')
-  call VUAssertEquals('test(', results[1].word, 'Wrong second result.')
-  call VUAssertEquals('test(', results[2].word, 'Wrong third result.')
+  call vunit#AssertEquals(len(results), 4, 'Wrong number of results.')
+  call vunit#AssertEquals('Test(', results[0].word, 'Wrong first result.')
+  call vunit#AssertEquals('test(', results[1].word, 'Wrong second result.')
+  call vunit#AssertEquals('test(', results[2].word, 'Wrong third result.')
 
   let g:EclimCCompleteLayout = 'compact'
   let results = eclim#c#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call VUAssertEquals(len(results), 3, 'Wrong number of results.')
-  call VUAssertEquals('Test(', results[0].word, 'Wrong first result.')
-  call VUAssertEquals('test(', results[1].word, 'Wrong second result.')
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('Test(', results[0].word, 'Wrong first result.')
+  call vunit#AssertEquals('test(', results[1].word, 'Wrong second result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

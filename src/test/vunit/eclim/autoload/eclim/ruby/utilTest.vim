@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,19 +30,19 @@ endfunction " }}}
 " TestValidate() {{{
 function! TestValidate()
   edit! src/src/testValidate.rb
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   Validate
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
   echo 'results = ' . string(results)
 
-  call VUAssertEquals(len(results), 1, 'Wrong number of results.')
+  call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
 
-  call VUAssertEquals(2, results[0].lnum, 'Wrong line num.')
-  call VUAssertEquals(11, results[0].col, 'Wrong col num.')
-  call VUAssertEquals(
+  call vunit#AssertEquals(2, results[0].lnum, 'Wrong line num.')
+  call vunit#AssertEquals(11, results[0].col, 'Wrong col num.')
+  call vunit#AssertEquals(
     \ "syntax error, unexpected tRPAREN",
     \ results[0].text, 'Wrong result.')
 endfunction " }}}

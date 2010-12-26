@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,13 +29,13 @@ function! TestGetOffset()
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 1)
-  call VUAssertEquals(0, eclim#util#GetOffset())
+  call vunit#AssertEquals(0, eclim#util#GetOffset())
 
   call cursor(2, 7)
-  call VUAssertEquals(14, eclim#util#GetOffset())
+  call vunit#AssertEquals(14, eclim#util#GetOffset())
 
   set ff=dos
-  call VUAssertEquals(15, eclim#util#GetOffset())
+  call vunit#AssertEquals(15, eclim#util#GetOffset())
 endfunction " }}}
 
 " TestGetCurrentElementColumn() {{{
@@ -44,13 +44,13 @@ function! TestGetCurrentElementColumn()
   call setline(1, 'one two')
 
   call cursor(1, 1)
-  call VUAssertEquals(1, eclim#util#GetCurrentElementColumn())
+  call vunit#AssertEquals(1, eclim#util#GetCurrentElementColumn())
 
   call cursor(1, 3)
-  call VUAssertEquals(1, eclim#util#GetCurrentElementColumn())
+  call vunit#AssertEquals(1, eclim#util#GetCurrentElementColumn())
 
   call cursor(1, 4)
-  call VUAssertEquals(5, eclim#util#GetCurrentElementColumn())
+  call vunit#AssertEquals(5, eclim#util#GetCurrentElementColumn())
 endfunction " }}}
 
 " TestGetCurrentElementPosition() {{{
@@ -60,13 +60,13 @@ function! TestGetCurrentElementPosition()
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 1)
-  call VUAssertEquals('0;3', eclim#util#GetCurrentElementPosition())
+  call vunit#AssertEquals('0;3', eclim#util#GetCurrentElementPosition())
 
   call cursor(2, 9)
-  call VUAssertEquals('14;4', eclim#util#GetCurrentElementPosition())
+  call vunit#AssertEquals('14;4', eclim#util#GetCurrentElementPosition())
 
   set ff=dos
-  call VUAssertEquals('15;4', eclim#util#GetCurrentElementPosition())
+  call vunit#AssertEquals('15;4', eclim#util#GetCurrentElementPosition())
 endfunction " }}}
 
 " TestGetCurrentElementOffset() {{{
@@ -76,13 +76,13 @@ function! TestGetCurrentElementOffset()
   call setline(1, ['one two', 'three four'])
 
   call cursor(1, 2)
-  call VUAssertEquals('0', eclim#util#GetCurrentElementOffset())
+  call vunit#AssertEquals('0', eclim#util#GetCurrentElementOffset())
 
   call cursor(2, 9)
-  call VUAssertEquals('14', eclim#util#GetCurrentElementOffset())
+  call vunit#AssertEquals('14', eclim#util#GetCurrentElementOffset())
 
   set ff=dos
-  call VUAssertEquals('15', eclim#util#GetCurrentElementOffset())
+  call vunit#AssertEquals('15', eclim#util#GetCurrentElementOffset())
 endfunction " }}}
 
 " TestGrabUri() {{{
@@ -101,72 +101,72 @@ function! TestGrabUri()
     \])
 
   call cursor(1, 3)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(2, 20)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(3, 28)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(4, 6)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(5, 2)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(6, 23)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(7, 5)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(8, 8)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 
   call cursor(9, 11)
-  call VUAssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
+  call vunit#AssertEquals('http://www.google.com?q=blah', eclim#util#GrabUri())
 endfunction " }}}
 
 " TestListContains() {{{
 function! TestListContains()
   let list = ['one', 'two', 'three']
 
-  call VUAssertTrue(eclim#util#ListContains(list, 'two'))
-  call VUAssertTrue(eclim#util#ListContains(list, 't.*'))
-  call VUAssertFalse(eclim#util#ListContains(list, 'four'))
-  call VUAssertFalse(eclim#util#ListContains(list, '.*t'))
+  call vunit#AssertTrue(eclim#util#ListContains(list, 'two'))
+  call vunit#AssertTrue(eclim#util#ListContains(list, 't.*'))
+  call vunit#AssertFalse(eclim#util#ListContains(list, 'four'))
+  call vunit#AssertFalse(eclim#util#ListContains(list, '.*t'))
 endfunction " }}}
 
 " TestParseArgs() {{{
 function! TestParseArgs()
-  call VUAssertEquals(['one', 'two', 'three'],
+  call vunit#AssertEquals(['one', 'two', 'three'],
     \ eclim#util#ParseArgs('one two three'))
-  call VUAssertEquals(['one two', 'three'],
+  call vunit#AssertEquals(['one two', 'three'],
     \ eclim#util#ParseArgs('"one two" three'))
-  call VUAssertEquals(['one two', 'three'],
+  call vunit#AssertEquals(['one two', 'three'],
     \ eclim#util#ParseArgs('one\ two three'))
-  call VUAssertEquals(['"one two"', 'three'],
+  call vunit#AssertEquals(['"one two"', 'three'],
     \ eclim#util#ParseArgs("'\"one two\"' three"))
 endfunction " }}}
 
 " TestParseCmdLine() {{{
 function! TestParseCmdLine()
-  call VUAssertEquals(['one', 'two', 'three'],
+  call vunit#AssertEquals(['one', 'two', 'three'],
     \ eclim#util#ParseCmdLine('one two three'))
-  call VUAssertEquals(['one\ two', 'three'],
+  call vunit#AssertEquals(['one\ two', 'three'],
     \ eclim#util#ParseCmdLine('one\ two three'))
 endfunction " }}}
 
 " TestSimplify() {{{
 function! TestSimplify()
   let file = 'file:///blah\duh\ foo\bar'
-  call VUAssertEquals('file:///blah/duh\ foo/bar', eclim#util#Simplify(file))
+  call vunit#AssertEquals('file:///blah/duh\ foo/bar', eclim#util#Simplify(file))
 
   exec 'cd ' . g:TestEclimWorkspace
 
   let file = g:TestEclimWorkspace . 'eclim_unit_test/test_root_file.txt'
-  call VUAssertEquals('eclim_unit_test/test_root_file.txt', eclim#util#Simplify(file))
+  call vunit#AssertEquals('eclim_unit_test/test_root_file.txt', eclim#util#Simplify(file))
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

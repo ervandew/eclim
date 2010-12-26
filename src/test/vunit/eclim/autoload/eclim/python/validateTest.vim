@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ function! TestCompiler()
   write
 
   let loc = getloclist(0)
-  call VUAssertEquals(len(loc), 1)
-  call VUAssertEquals(loc[0].lnum, 3)
-  call VUAssertEquals(loc[0].type, 'e')
-  call VUAssertEquals(loc[0].text, 'unexpected indent')
+  call vunit#AssertEquals(len(loc), 1)
+  call vunit#AssertEquals(loc[0].lnum, 3)
+  call vunit#AssertEquals(loc[0].type, 'e')
+  call vunit#AssertEquals(loc[0].text, 'unexpected indent')
 endfunction " }}}
 
 " TestPyflakes() {{{
@@ -45,13 +45,13 @@ function! TestPyflakes()
   write
 
   let loc = getloclist(0)
-  call VUAssertEquals(len(loc), 2)
-  call VUAssertEquals(loc[0].lnum, 1)
-  call VUAssertEquals(loc[0].type, 'w')
-  call VUAssertEquals(loc[0].text, " 'common' imported but unused")
-  call VUAssertEquals(loc[1].lnum, 3)
-  call VUAssertEquals(loc[1].type, 'e')
-  call VUAssertEquals(loc[1].text, " undefined name 'foobar'")
+  call vunit#AssertEquals(len(loc), 2)
+  call vunit#AssertEquals(loc[0].lnum, 1)
+  call vunit#AssertEquals(loc[0].type, 'w')
+  call vunit#AssertEquals(loc[0].text, " 'common' imported but unused")
+  call vunit#AssertEquals(loc[1].lnum, 3)
+  call vunit#AssertEquals(loc[1].type, 'e')
+  call vunit#AssertEquals(loc[1].text, " undefined name 'foobar'")
 endfunction " }}}
 
 " TestPylint() {{{
@@ -64,13 +64,13 @@ function! TestPylint()
   endfunction
 
   let qf = sort(getqflist(), "CompareQf")
-  call VUAssertEquals(len(qf), 2)
-  call VUAssertEquals(qf[0].lnum, 3)
-  call VUAssertEquals(qf[0].type, 'w')
-  call VUAssertEquals(qf[0].text, ' Unused import common')
-  call VUAssertEquals(qf[1].lnum, 5)
-  call VUAssertEquals(qf[1].type, 'w')
-  call VUAssertEquals(qf[1].text, ' Statement seems to have no effect')
+  call vunit#AssertEquals(len(qf), 2)
+  call vunit#AssertEquals(qf[0].lnum, 3)
+  call vunit#AssertEquals(qf[0].type, 'w')
+  call vunit#AssertEquals(qf[0].text, ' Unused import common')
+  call vunit#AssertEquals(qf[1].lnum, 5)
+  call vunit#AssertEquals(qf[1].type, 'w')
+  call vunit#AssertEquals(qf[1].text, ' Statement seems to have no effect')
 endfunction " }}}
 
 " TestRope() {{{
@@ -79,10 +79,10 @@ function! TestRope()
   Validate
 
   let loc = getloclist(0)
-  call VUAssertEquals(len(loc), 1)
-  call VUAssertEquals(loc[0].lnum, 3)
-  call VUAssertEquals(loc[0].type, 'e')
-  call VUAssertEquals(loc[0].text, 'Unresolved attribute foobar')
+  call vunit#AssertEquals(len(loc), 1)
+  call vunit#AssertEquals(loc[0].lnum, 3)
+  call vunit#AssertEquals(loc[0].type, 'e')
+  call vunit#AssertEquals(loc[0].text, 'Unresolved attribute foobar')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

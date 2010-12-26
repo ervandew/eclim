@@ -453,19 +453,19 @@ target(name: 'test.vunit'){
 
   mkdir(dir: 'build/test/vunit/results')
 
-  taskdef(name: 'vunit', classname: 'org.eclim.misc.ant.VUnitTask'){
+  taskdef(resource: 'vunit/ant.properties'){
     classpath{
-      pathelement(location: '${build.classes}')
-      path(refid: 'classpath')
+      fileset(dir: 'src/ant/lib', includes: 'vunit.jar')
     }
   }
 
-  vunit(plugin: 'src/ant/lib/vunit.vim', todir: 'build/test/vunit/results',
+  vunit(todir: 'build/test/vunit/results',
       failureproperty: 'vunit.failed'){
+    sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
+    ant.plugin(name: 'plugin/eclim.vim')
     fileset(dir: 'src/test/vunit',
         includes: '${test.include}.vim',
         excludes: '${test.exclude}.vim')
-    sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
   }
 
   fail(message: 'One or more vunit tests failed.', if: 'vunit.failed')

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,18 +30,18 @@ endfunction " }}}
 " TestLoggerDefine() {{{
 function! TestLoggerDefine()
   edit! src/org/eclim/test/logging/TestLoggingVUnit.java
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(5, 3)
   normal ologger.
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   echom '|' . getline(1)
   echom '|' . getline(2)
   echom '|' . getline(3)
-  call VUAssertTrue(search('^import .*Log;$'),
+  call vunit#AssertTrue(search('^import .*Log;$'),
     \ 'Logger import not found.')
-  call VUAssertTrue(search('^\s*private static final Log logger.*'),
+  call vunit#AssertTrue(search('^\s*private static final Log logger.*'),
     \ 'Logger declaration not found.')
 endfunction " }}}
 

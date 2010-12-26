@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,38 +30,38 @@ endfunction " }}}
 " TestCompleteXsd() {{{
 function! TestCompleteXsd()
   edit! xsd/test.xsd
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(11, 11)
   let start = eclim#xml#complete#CodeComplete(1, '')
-  call VUAssertEquals(8, start, 'Wrong starting column.')
+  call vunit#AssertEquals(8, start, 'Wrong starting column.')
 
   let results = eclim#xml#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo string(results)
-  call VUAssertEquals(len(results), 1, 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*'unique'.*"),
+  call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'unique'.*"),
     \ 'Results does not contain xs:unique')
 endfunction " }}}
 
 " TestCompleteWsdl() {{{
 function! TestCompleteWsdl()
   edit! wsdl/GoogleSearch.wsdl
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call cursor(14, 13)
   let start = eclim#xml#complete#CodeComplete(1, '')
-  call VUAssertEquals(11, start, 'Wrong starting column.')
+  call vunit#AssertEquals(11, start, 'Wrong starting column.')
 
   let results = eclim#xml#complete#CodeComplete(0, '')
-  call PeekRedir()
+  call vunit#PeekRedir()
   echo string(results)
-  call VUAssertEquals(3, len(results), 'Wrong number of results.')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*'annotation'.*"),
+  call vunit#AssertEquals(3, len(results), 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'annotation'.*"),
     \ 'Results does not contain xs:unique')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*'attribute'.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'attribute'.*"),
     \ 'Results does not contain xs:unique')
-  call VUAssertTrue(eclim#util#ListContains(results, ".*'attributeGroup'.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'attributeGroup'.*"),
     \ 'Results does not contain xs:unique')
 endfunction " }}}
 

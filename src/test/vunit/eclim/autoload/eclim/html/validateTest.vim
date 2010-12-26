@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,34 +31,34 @@ endfunction " }}}
 function! TestValidate()
   edit! html/test.html
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
   for line in readfile(expand('%'))
     echo '|' . line
   endfor
 
   let errors = getloclist(0)
-  call VUAssertEquals(3, len(errors))
+  call vunit#AssertEquals(3, len(errors))
 
   let name = substitute(bufname(errors[0].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'html/test.html')
-  call VUAssertEquals(5, errors[0].lnum)
-  call VUAssertEquals(5, errors[0].col)
-  call VUAssertEquals('e', errors[0].type)
-  call VUAssertEquals('<h> is not recognized!', errors[0].text)
+  call vunit#AssertEquals(name, 'html/test.html')
+  call vunit#AssertEquals(5, errors[0].lnum)
+  call vunit#AssertEquals(5, errors[0].col)
+  call vunit#AssertEquals('e', errors[0].type)
+  call vunit#AssertEquals('<h> is not recognized!', errors[0].text)
 
   let name = substitute(bufname(errors[1].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'html/test.html')
-  call VUAssertEquals(5, errors[1].lnum)
-  call VUAssertEquals(5, errors[1].col)
-  call VUAssertEquals('w', errors[1].type)
-  call VUAssertEquals('discarding unexpected <h>', errors[1].text)
+  call vunit#AssertEquals(name, 'html/test.html')
+  call vunit#AssertEquals(5, errors[1].lnum)
+  call vunit#AssertEquals(5, errors[1].col)
+  call vunit#AssertEquals('w', errors[1].type)
+  call vunit#AssertEquals('discarding unexpected <h>', errors[1].text)
 
   let name = substitute(bufname(errors[2].bufnr), '\', '/', 'g')
-  call VUAssertEquals(name, 'html/test.html')
-  call VUAssertEquals(8, errors[2].lnum)
-  call VUAssertEquals(5, errors[2].col)
-  call VUAssertEquals('w', errors[2].type)
-  call VUAssertEquals('discarding unexpected </div>', errors[2].text)
+  call vunit#AssertEquals(name, 'html/test.html')
+  call vunit#AssertEquals(8, errors[2].lnum)
+  call vunit#AssertEquals(5, errors[2].col)
+  call vunit#AssertEquals('w', errors[2].type)
+  call vunit#AssertEquals('discarding unexpected </div>', errors[2].text)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

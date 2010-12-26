@@ -30,23 +30,23 @@ endfunction " }}}
 " TestUpdateSrcFile() {{{
 function! TestUpdateSrcFile()
   edit! src/test_src_vunit.c
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   call histadd('cmd', 'w') " mimic user calling write
   write
-  call PeekRedir()
+  call vunit#PeekRedir()
 
   let results = getloclist(0)
   echo string(results)
-  call VUAssertEquals(2, len(results), 'Wrong number of results.')
-  call VUAssertEquals(results[0].lnum, 1, 'Wrong lnum.')
-  call VUAssertEquals(results[0].col, 1, 'Wrong lnum.')
-  call VUAssertEquals(
+  call vunit#AssertEquals(2, len(results), 'Wrong number of results.')
+  call vunit#AssertEquals(results[0].lnum, 1, 'Wrong lnum.')
+  call vunit#AssertEquals(results[0].col, 1, 'Wrong lnum.')
+  call vunit#AssertEquals(
     \ results[0].text, 'Unresolved inclusion: <stdi.h>', 'Wrong error msg.')
 
-  call VUAssertEquals(results[1].lnum, 5, 'Wrong lnum.')
-  call VUAssertEquals(results[1].col, 3, 'Wrong lnum.')
-  call VUAssertEquals(results[1].text, 'Syntax error', 'Wrong error msg.')
+  call vunit#AssertEquals(results[1].lnum, 5, 'Wrong lnum.')
+  call vunit#AssertEquals(results[1].col, 3, 'Wrong lnum.')
+  call vunit#AssertEquals(results[1].text, 'Syntax error', 'Wrong error msg.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
