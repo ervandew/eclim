@@ -30,20 +30,22 @@ endfunction " }}}
 " TestSearch() {{{
 function! TestSearch()
   edit! src/org/eclim/test/search/TestSearchVUnit.java
-  call vunit#PeekRedir()
 
   call cursor(8, 11)
   JavaSearch
+  call vunit#PeekRedir()
 
-  let name = substitute(bufname('%'), '\', '/', 'g')
-  call vunit#AssertEquals(name, g:EclimTempDir . '/java/util/List.java',
-    \ 'Wrong or no file found for List.')
+  let name = fnamemodify(bufname('%'), ':t')
+  echom 'line: ' . line('.') . ' ' . getline('.')
+  call vunit#AssertEquals(name, 'List.java', 'Wrong or no file found for List.')
   call vunit#AssertTrue(getline('.') =~ 'public interface List',
     \ 'Not on class declaration.')
   bdelete!
 
   call cursor(12, 5)
   JavaSearch
+  call vunit#PeekRedir()
+  echom 'line: ' . line('.') . ' ' . getline('.')
   call vunit#AssertTrue(getline('.') =~ 'private List list',
     \ 'Not on variable declaration.')
 endfunction " }}}

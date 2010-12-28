@@ -22,6 +22,10 @@
 "
 " }}}
 
+" Global Variables {{{
+let s:command_read = '-command archive_read -f "<file>"'
+" }}}
+
 " DiffLastSaved() {{{
 " Diff a modified file with the last saved version.
 function! eclim#common#util#DiffLastSaved()
@@ -293,6 +297,41 @@ function s:ApplyTcd(honor_lcd)
     exec 'lcd ' . escape(lcwd, ' ')
   else
     exec 'cd ' . escape(t:cwd, ' ')
+  endif
+endfunction " }}}
+
+" ReadFile() {{{
+" Reads the contents of an archived file.
+function! eclim#common#util#ReadFile()
+  let file = substitute(expand('%'), '\', '/', 'g')
+  let command = substitute(s:command_read, '<file>', file, '')
+
+  let file = eclim#ExecuteEclim(command)
+
+  if string(file) != '0'
+    let bufnum = bufnr('%')
+    if has('win32unix')
+      let file = eclim#cygwin#CygwinPath(file)
+    endif
+    silent exec "keepjumps edit! " . escape(file, ' ')
+
+    exec 'bdelete ' . bufnum
+
+    " alternate solution, that keeps the archive url as the buffer's filename,
+    " but prevents taglist from being able to parse tags.
+    "setlocal noreadonly
+    "setlocal modifiable
+    "silent! exec "read " . file
+    "1,1delete _
+
+    silent exec "doautocmd BufReadPre " . file
+    silent exec "doautocmd BufReadPost " . file
+
+    setlocal readonly
+    setlocal nomodifiable
+    setlocal noswapfile
+    " causes taglist.vim errors (fold then delete fails)
+    "setlocal bufhidden=delete
   endif
 endfunction " }}}
 

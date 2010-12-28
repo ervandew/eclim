@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public class ArchiveReadCommand
       fsManager = VFS.getManager();
       FileObject fileObject = fsManager.resolveFile(file);
       FileObject tempFile = fsManager.resolveFile(
-          SystemUtils.JAVA_IO_TMPDIR + fileObject.getName().getPath());
+          SystemUtils.JAVA_IO_TMPDIR + "/eclim/" + fileObject.getName().getPath());
 
       // the vfs file cache isn't very intelligent, so clear it.
       fsManager.getFilesCache().clear(fileObject.getFileSystem());

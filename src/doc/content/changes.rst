@@ -36,6 +36,8 @@ Python:
       Support for vim embedded python 2.5 or less no longer supported.
 
 Other:
+  - Archive viewing support broken out from eclim to
+    http://github.com/ervandew/archive.
   - Maximize/Minimize vim window support broken out from eclim to
     http://github.com/ervandew/maximize.
   - Vcs support broken out from eclim to http://github.com/ervandew/vcs.
@@ -549,8 +551,7 @@ Bug Fixes:
   - Various bug fixes.
 
 Eclim:
-  - Added an :ref:`archive <vim/common/archive>` (jar, tar, etc.)
-    viewer.
+  - Added an archive (jar, tar, etc.) viewer.
 
 Html:
   - Updated html validator to validate <style> and <script> tag contents.

@@ -32,10 +32,10 @@ endfunction " }}}
 " TestJavaHierarchy() {{{
 function! TestJavaHierarchy()
   edit! src/org/eclim/test/hierarchy/TestHierarchyVUnit.java
-  call vunit#PeekRedir()
 
   call cursor(1, 1)
   JavaHierarchy
+  call vunit#PeekRedir()
 
   call vunit#AssertTrue(bufname('%') =~ '^\[Hierarchy\]$')
   call vunit#AssertEquals(getline(1), 'public class TestHierarchyVUnit')
@@ -52,8 +52,8 @@ function! TestJavaHierarchy()
   echom 'test opening of Comparable'
   call cursor(6, 1)
   exec "normal \<cr>"
-  let name = substitute(bufname('%'), '\', '/', 'g')
-  call vunit#AssertEquals(name, g:EclimTempDir . '/java/lang/Comparable.java')
+  let name = fnamemodify(bufname('%'), ':t')
+  call vunit#AssertEquals(name, 'Comparable.java')
   call vunit#AssertEquals(winnr('$'), 3)
   bdelete
   exec winnr . 'winc w'
@@ -62,8 +62,8 @@ function! TestJavaHierarchy()
   echom 'test opening of PropertyChangeListener'
   call cursor(7, 1)
   normal E
-  let name = substitute(bufname('%'), '\', '/', 'g')
-  call vunit#AssertEquals(name, g:EclimTempDir . '/java/beans/PropertyChangeListener.java')
+  let name = fnamemodify(bufname('%'), ':t')
+  call vunit#AssertEquals(name, 'PropertyChangeListener.java')
   call vunit#AssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   call vunit#PeekRedir()
@@ -71,8 +71,8 @@ function! TestJavaHierarchy()
   echom 'test opening of EventListener'
   call cursor(8, 1)
   normal E
-  let name = substitute(bufname('%'), '\', '/', 'g')
-  call vunit#AssertEquals(name, g:EclimTempDir . '/java/util/EventListener.java')
+  let name = fnamemodify(bufname('%'), ':t')
+  call vunit#AssertEquals(name, 'EventListener.java')
   call vunit#AssertEquals(winnr('$'), 2)
   exec winnr . 'winc w'
   bdelete

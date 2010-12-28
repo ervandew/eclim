@@ -27,20 +27,6 @@ if !exists("g:EclimTemplatesDisabled")
   " Disabled for now.
   let g:EclimTemplatesDisabled = 1
 endif
-
-if !exists('g:EclimArchiveViewerEnabled')
-  let g:EclimArchiveViewerEnabled = 1
-endif
-
-if g:EclimArchiveViewerEnabled
-  " disable tar.vim autocmds... tar.vim is now included w/ vim7
-  let g:loaded_tarPlugin = 1
-  silent! autocmd! tar
-
-  " disable zipPlugin.vim autocmds... zipPlugin.vim is now included w/ vim7
-  let g:loaded_zipPlugin = 1
-  silent! autocmd! zip
-endif
 " }}}
 
 " Auto Commands {{{
@@ -53,29 +39,15 @@ endif
 
 augroup eclim_archive_read
   autocmd!
+  silent! autocmd! archive_read
   autocmd BufReadCmd
     \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
     \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
     \tbz2:/*,tgz:\*,tbz2:file:/*,tbz2:file:\*,
     \tgz:/*,tgz:\*,tgz:file:/*,tgz:file:\*,
     \zip:/*,zip:\*,zip:file:/*,zip:file:\*
-    \ call eclim#common#archive#ReadFile()
+    \ call eclim#common#util#ReadFile()
 augroup END
-
-if g:EclimArchiveViewerEnabled
-  augroup eclim_archive
-    autocmd!
-    autocmd BufReadCmd *.egg     call eclim#common#archive#List()
-    autocmd BufReadCmd *.jar     call eclim#common#archive#List()
-    autocmd BufReadCmd *.war     call eclim#common#archive#List()
-    autocmd BufReadCmd *.ear     call eclim#common#archive#List()
-    autocmd BufReadCmd *.zip     call eclim#common#archive#List()
-    autocmd BufReadCmd *.tar     call eclim#common#archive#List()
-    autocmd BufReadCmd *.tgz     call eclim#common#archive#List()
-    autocmd BufReadCmd *.tar.gz  call eclim#common#archive#List()
-    autocmd BufReadCmd *.tar.bz2 call eclim#common#archive#List()
-  augroup END
-endif
 " }}}
 
 " Command Declarations {{{
