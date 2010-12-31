@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,5 +23,13 @@
 
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
+
+if !exists("g:tlist_junitresult_settings")
+  let g:tlist_junitresult_settings = {
+      \ 'lang': 'junitresult',
+      \ 'parse': 'eclim#taglisttoo#lang#junit#Parse',
+      \ 'tags': {'t': 'testcase', 'f': 'failure', 'o': 'output'}
+    \ }
+endif
 
 " vim:ft=vim:fdm=marker

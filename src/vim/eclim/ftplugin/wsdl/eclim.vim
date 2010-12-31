@@ -1,4 +1,4 @@
-" Author: Eric Van Dewoestine
+" Author:  Eric Van Dewoestine
 "
 " Description: {{{
 "
@@ -21,16 +21,16 @@
 "
 " }}}
 
-runtime ftplugin/help.vim
-
-nnoremap <silent> <buffer> <cr> :call eclim#help#Help('', 1)<cr>
-nnoremap <silent> <buffer> <c-]> :call eclim#help#Help('', 1)<cr>
-
-if !exists("g:tlist_eclimhelp_settings")
-  let g:tlist_eclimhelp_settings = {
-      \ 'lang': 'eclimhelp',
-      \ 'parse': 'eclim#taglisttoo#lang#eclimhelp#Parse',
-      \ 'tags': {'s': 'section', 'a': 'anchor'}
+if !exists('g:tlist_wsdl_settings')
+  let g:tlist_wsdl_settings = {
+      \ 'lang': 'wsdl',
+      \ 'parse': 'eclim#taglisttoo#lang#wsdl#Parse',
+      \ 'tags': {
+        \ 't': 'types',
+        \ 'm': 'messages',
+        \ 'p': 'ports',
+        \ 'b': 'bindings'
+      \ }
     \ }
 endif
 

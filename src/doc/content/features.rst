@@ -77,7 +77,6 @@ Java Integration
 JavaScript Integration
 -------------------------
 - File validation using jsl_.
-- Improved taglist (outline) support.
 
 Log4j Integration
 -------------------------
@@ -131,7 +130,6 @@ Common Vim Functionality
   opening / reading a file relative to the current one.
 - Commands to locate a project, workspace, or current file relative file and
   open it (split, edit, or tabnew).
-- Enhanced taglist support.
 - Much more...
 
 .. _jsl: http://www.javascriptlint.com/

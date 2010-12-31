@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -120,10 +120,6 @@ endfunction " }}}
 " Init() {{{
 " Initializes eclim.
 function! s:Init()
-  " on windows, this eclim plugin gets called first, so force taglist to be
-  " called prior.
-  runtime! plugin/taglist.vim
-
   " add eclim dir to runtime path.
   let basedir = EclimBaseDir()
   if basedir == ''

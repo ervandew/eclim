@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,6 +27,22 @@ runtime ftplugin/java/eclim.vim
 
 if g:EclimJavaSearchMapping
   noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
+endif
+
+if !exists("g:tlist_hibernate_settings")
+  let g:tlist_hibernate_settings = {
+      \ 'lang': 'hibernate',
+      \ 'parse': 'eclim#taglisttoo#lang#hibernate#Parse',
+      \ 'tags': {
+        \ 't': 'typedef',
+        \ 'f': 'filter-def',
+        \ 'i': 'import',
+        \ 'q': 'query',
+        \ 's': 'sql-query',
+        \ 'c': 'class',
+        \ 'j': 'joined-subclass'
+      \ }
+    \ }
 endif
 
 " vim:ft=vim:fdm=marker

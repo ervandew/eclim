@@ -1,4 +1,4 @@
-" Author: Eric Van Dewoestine
+" Author:  Eric Van Dewoestine
 "
 " Description: {{{
 "
@@ -21,17 +21,13 @@
 "
 " }}}
 
-runtime ftplugin/help.vim
-
-nnoremap <silent> <buffer> <cr> :call eclim#help#Help('', 1)<cr>
-nnoremap <silent> <buffer> <c-]> :call eclim#help#Help('', 1)<cr>
-
-if !exists("g:tlist_eclimhelp_settings")
-  let g:tlist_eclimhelp_settings = {
-      \ 'lang': 'eclimhelp',
-      \ 'parse': 'eclim#taglisttoo#lang#eclimhelp#Parse',
-      \ 'tags': {'s': 'section', 'a': 'anchor'}
-    \ }
-endif
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#gant#Parse(file, settings)
+  return taglisttoo#util#Parse(a:file, [
+      \ ['t', "\\s*target\\s*\\(\\s*(?:name\\s*:)?\\s*['\"]?([^'\",: ]+)", 1],
+      \ ['f', "\\s*def\\s+(\\w+)\\s*\\(", 1],
+      \ ['f', "\\s*(?:final|def)?\\s*(\\w+)\\s*=\\s*\\{", 1],
+    \ ])
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker

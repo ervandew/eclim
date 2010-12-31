@@ -21,14 +21,12 @@ Common
 .. toctree::
 
    project
-   taglist
    util
    history
    web
 
 
 - :ref:`vim/common/project`
-- :ref:`vim/common/taglist`
 - :ref:`vim/common/util`
 - :ref:`vim/common/history`
 - :ref:`vim/common/web`

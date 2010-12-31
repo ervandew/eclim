@@ -1,11 +1,10 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.org/vim/taglist.html
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,34 +21,32 @@
 "
 " }}}
 
-" FormatCProject(types, tags) {{{
-function! eclim#taglist#lang#cproject#FormatCProject(types, tags)
+" Format(types, tags) {{{
+function! eclim#taglisttoo#lang#cproject#Format(types, tags)
   let pos = getpos('.')
 
-  let lines = []
-  let content = []
-
-  call add(content, expand('%:t'))
-  call add(lines, -1)
+  let formatter = taglisttoo#util#Formatter(a:tags)
+  call formatter.filename()
 
   let config_contents = []
 
-  let configs = filter(copy(a:tags), 'v:val[3] == "c"')
-  let entries = filter(copy(a:tags), 'v:val[3] == "e"')
-  let toolchains = filter(copy(a:tags), 'v:val[3] == "t"')
-  let tools = filter(copy(a:tags), 'v:val[3] == "l"')
-  let includes = filter(copy(a:tags), 'v:val[3] == "i"')
-  let symbols = filter(copy(a:tags), 'v:val[3] == "s"')
+  let configs = filter(copy(a:tags), 'v:val.type == "c"')
+  let entries = filter(copy(a:tags), 'v:val.type == "e"')
+  let toolchains = filter(copy(a:tags), 'v:val.type == "t"')
+  let tools = filter(copy(a:tags), 'v:val.type == "l"')
+  let includes = filter(copy(a:tags), 'v:val.type == "i"')
+  let symbols = filter(copy(a:tags), 'v:val.type == "s"')
   for config in configs
-    exec 'let config_start = ' . split(config[4], ':')[1]
+    let config_start = config.line
     call cursor(config_start, 1)
+    call search('<configuration', 'c', config_start)
     let config_end = searchpair(
-      \ '<configuration', '', '</configuration', 'W', 's:SkipComments()')
+      \ '<configuration', '', '</configuration', 'Wn', 's:SkipComments()')
 
     let entrs = []
     for entry in entries
       if len(entry) > 3
-        exec 'let line = ' . split(entry[4], ':')[1]
+        let line = entry.line
         if line > config_start && line < config_end
           call add(entrs, entry)
         endif
@@ -59,7 +56,7 @@ function! eclim#taglist#lang#cproject#FormatCProject(types, tags)
     let tcs = []
     for tool in toolchains
       if len(tool) > 3
-        exec 'let line = ' . split(tool[4], ':')[1]
+        let line = tool.line
         if line > config_start && line < config_end
           call add(tcs, tool)
         endif
@@ -69,23 +66,24 @@ function! eclim#taglist#lang#cproject#FormatCProject(types, tags)
     let tls = []
     for tool in tools
       if len(tool) > 3
-        exec 'let line = ' . split(tool[4], ':')[1]
+        let line = tool.line
         if line > config_start && line < config_end
           call add(tls, tool)
-          exec 'let tool_start = ' . split(tool[4], ':')[1]
+          let tool_start = tool.line
           call cursor(tool_start, 1)
           if getline('.') =~ '/>\s*$'
             continue
           endif
+          call search('<tool', 'c', tool_start)
           let tool_end = searchpair(
                 \ '<tool', '', '</tool', 'W', 's:SkipComments()')
 
           let index = 0
           for include in includes[:]
             if len(include) > 3
-              exec 'let line = ' . split(include[4], ':')[1]
+              let line = include.line
               if line > tool_start && line < tool_end
-                let include[0] = "\t" . include[0]
+                let include.name = "\t" . include.name
                 call add(tls, include)
                 call remove(includes, index)
               endif
@@ -96,9 +94,9 @@ function! eclim#taglist#lang#cproject#FormatCProject(types, tags)
           let index = 0
           for symbol in symbols[:]
             if len(symbol) > 3
-              exec 'let line = ' . split(symbol[4], ':')[1]
+              let line = symbol.line
               if line > tool_start && line < tool_end
-                let symbol[0] = "\t" . symbol[0]
+                let symbol.name = "\t" . symbol.name
                 call add(tls, symbol)
                 call remove(symbols, index)
               endif
@@ -121,28 +119,34 @@ function! eclim#taglist#lang#cproject#FormatCProject(types, tags)
   endfor
 
   for config_content in config_contents
-    call add(content, "")
-    call add(lines, -1)
-    call add(content, "\t" . a:types['c'] . ' ' . config_content.config[0])
-    call add(lines, index(a:tags, config_content.config))
-
-    call eclim#taglist#util#FormatType(
-        \ a:tags, a:types['e'], config_content.entries, lines, content, "\t\t")
-    call eclim#taglist#util#FormatType(
-        \ a:tags, a:types['t'], config_content.toolchains, lines, content, "\t\t")
-    call eclim#taglist#util#FormatType(
-        \ a:tags, a:types['l'], config_content.tools, lines, content, "\t\t")
+    call formatter.blank()
+    call formatter.heading(a:types['c'], config_content.config, '')
+    call formatter.format(a:types['e'], config_content.entries, "\t")
+    call formatter.format(a:types['t'], config_content.toolchains, "\t")
+    call formatter.format(a:types['l'], config_content.tools, "\t")
   endfor
 
   call setpos('.', pos)
 
-  return [lines, content]
+  return formatter
+endfunction " }}}
+
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#cproject#Parse(file, settings)
+  return taglisttoo#util#Parse(a:file, [
+      \ ['c', "<configuration\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['e', "<entry\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['t', "<toolChain\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['l', "<tool\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['i', "<option\\s+[^>]*?valueType=['\"]includePath['\"]", 'includes'],
+      \ ['s', "<option\\s+[^>]*?valueType=['\"]definedSymbols['\"]", 'symbols'],
+    \ ])
 endfunction " }}}
 
 " s:SkipComments() {{{
 function s:SkipComments()
-  let synname = synIDattr(synID(line('.'), col('.'), 1), "name")
-  return synname =~ '\([Cc]omment\|[Ss]tring\)'
+  let synname = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), "name")
+  return synname =~? 'Comment\|String'
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -41,6 +41,8 @@ Other:
   - Maximize/Minimize vim window support broken out from eclim to
     http://github.com/ervandew/maximize.
   - Vcs support broken out from eclim to http://github.com/ervandew/vcs.
+  - Taglist support broken out from eclim to
+    http://github.com/ervandew/taglisttoo.
 
 .. _1.6.1:
 
@@ -650,9 +652,8 @@ Vcs (subversion):
   - Added :VcsLog, :VcsDiff, and :VcsCat.
 
 Vim:
-  - Added vim :ref:`window maximize and minimize <vim/common/maximize>`
-    support.
-  - Added an alternate implementation of :ref:`taglist <taglisttoo>`.
+  - Added vim window maximize and minimize support.
+  - Added an alternate implementation of taglist.
   - Added command :ref:`:Buffers`.
   - Added
     :ref:`:VimgrepRelative`,

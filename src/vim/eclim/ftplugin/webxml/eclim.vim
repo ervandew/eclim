@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,6 +24,21 @@
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
 runtime ftplugin/java/eclim.vim
+
+if !exists("g:tlist_webxml_settings")
+  let g:tlist_webxml_settings = {
+      \ 'lang': 'webxml',
+      \ 'parse': 'eclim#taglisttoo#lang#webxml#ParseWebXml',
+      \ 'tags': {
+        \ 'p': 'context-param',
+        \ 'f': 'filter',
+        \ 'i': 'filter-mapping',
+        \ 'l': 'listener',
+        \ 's': 'servlet',
+        \ 'v': 'servlet-mapping'
+      \ }
+    \ }
+endif
 
 " Global Variables {{{
 

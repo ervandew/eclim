@@ -44,7 +44,8 @@ endif
 " Handles opening windows in the vertical tool window on the left (taglist,
 " project tree, etc.)
 function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
-  let taglist_window = exists('g:TagList_title') ? bufwinnr(g:TagList_title) : -1
+  let taglist_window = exists('g:TagList_title') ?
+    \ bufwinnr(eclim#util#EscapeBufferName(g:TagList_title)) : -1
   if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
     let taglist_window = -1
   endif

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,5 +25,13 @@ runtime ftplugin/xml.vim
 runtime indent/xml.vim
 
 set textwidth=80
+
+if !exists('g:tlist_forrestdocument_settings')
+  let g:tlist_forrestdocument_settings = {
+      \ 'lang': 'forrestdocument',
+      \ 'parse': 'eclim#taglisttoo#lang#forrest#ParseDocument',
+      \ 'tags': {'s': 'section'}
+    \ }
+endif
 
 " vim:ft=vim:fdm=marker

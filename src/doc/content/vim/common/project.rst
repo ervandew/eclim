@@ -465,5 +465,3 @@ Vim's command line completion to complete the project name.
 
     Defines a list of file extensions that will be searched for the todo / fixme
     entries.
-
-.. _taglist: http://www.vim.org/scripts/script.php?script_id=273
