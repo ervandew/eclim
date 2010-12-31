@@ -36,6 +36,9 @@ Python:
       Support for vim embedded python 2.5 or less no longer supported.
 
 Other:
+  - All relative commands (:SplitRelative, :EditRelative, etc), along with
+    :Split and :Tabnew broken out from eclim to
+    http://github.com/ervandew/relative.
   - Archive viewing support broken out from eclim to
     http://github.com/ervandew/archive.
   - Maximize/Minimize vim window support broken out from eclim to
@@ -655,13 +658,8 @@ Vim:
   - Added vim window maximize and minimize support.
   - Added an alternate implementation of taglist.
   - Added command :ref:`:Buffers`.
-  - Added
-    :ref:`:VimgrepRelative`,
-    :ref:`:VimgrepAddRelative`,
-    :ref:`:LvimgrepRelative`,
-    :ref:`:LvimgrepAddRelative`,
-    :ref:`:CdRelative`, and
-    :ref:`:LcdRelative`.
+  - Added :VimgrepRelative, :VimgrepAddRelative, :LvimgrepRelative,
+    :LvimgrepAddRelative, :CdRelative, and :LcdRelative.
 
 .. _1.3.1:
 
@@ -757,10 +755,7 @@ WebXml:
   - Added :ref:`web.xml file validation <vim/java/webxml/validate>`.
 
 Vim:
-  - Added
-    :ref:`:ArgsRelative`,
-    :ref:`:ArgAddRelative`,
-    :ref:`:ReadRelative`.
+  - Added :ArgsRelative, :ArgAddRelative, :ReadRelative.
   - Added
     :ref:`:Sign`,
     :ref:`:Signs`,

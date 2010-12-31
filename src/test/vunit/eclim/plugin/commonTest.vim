@@ -27,84 +27,6 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace
 endfunction " }}}
 
-" TestSplit() {{{
-function! TestSplit()
-  edit! eclim_unit_test/test_root_file.txt
-
-  Split eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt
-
-  call vunit#AssertEquals(winnr('$'), 3)
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
-    \ 'Did not open test2.txt.')
-endfunction " }}}
-
-" TestTabnew() {{{
-function! TestTabnew()
-  Tabnew eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt
-
-  call vunit#AssertEquals(tabpagenr('$'), 3)
-  tabnext 2
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  tabnext 3
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
-    \ 'Did not open test2.txt.')
-endfunction " }}}
-
-" TestEditRelative() {{{
-function! TestEditRelative()
-  edit! eclim_unit_test/test_root_file.txt
-
-  EditRelative files/test1.txt
-
-  call vunit#AssertEquals(winnr('$'), 1)
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  call vunit#AssertEquals(getline(1), 'test file 1')
-endfunction " }}}
-
-" TestSplitRelative() {{{
-function! TestSplitRelative()
-  edit! eclim_unit_test/test_root_file.txt
-
-  SplitRelative files/test1.txt
-
-  call vunit#AssertEquals(winnr('$'), 2)
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  call vunit#AssertEquals(getline(1), 'test file 1')
-endfunction " }}}
-
-" TestTabnewRelative() {{{
-function! TestTabnewRelative()
-  edit! eclim_unit_test/test_root_file.txt
-
-  TabnewRelative files/test1.txt files/test2.txt
-
-  call vunit#AssertEquals(tabpagenr('$'), 3)
-  tabnext 2
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  call vunit#AssertEquals(getline(1), 'test file 1')
-
-  tabnext 3
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
-    \ 'Did not open test2.txt.')
-  call vunit#AssertEquals(getline(1), 'test file 2')
-endfunction " }}}
-
-" TestReadRelative() {{{
-function! TestReadRelative()
-  edit! eclim_unit_test/test_root_file.txt
-  call cursor(line('$'), 1)
-
-  ReadRelative files/test2.txt
-
-  call vunit#AssertTrue(getline(2) =~ 'test file 2')
-endfunction " }}}
-
 " TestOnly() {{{
 function! TestOnly()
   call vunit#AssertEquals(winnr('$'), 1)
@@ -112,7 +34,8 @@ function! TestOnly()
   ProjectTree
   winc w
 
-  Split eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt
+  split eclim_unit_test/files/test1.txt
+  split eclim_unit_test/files/test2.txt
 
   call vunit#AssertEquals(winnr('$'), 4)
   call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
@@ -125,20 +48,6 @@ function! TestOnly()
   call vunit#AssertTrue(bufwinnr('ProjectTree_1') > -1, 'Project tree not open.')
   call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
     \ 'test2.txt not open.')
-endfunction " }}}
-
-" TestArgsRelative() {{{
-function! TestArgsRelative()
-  edit! eclim_unit_test/test_root_file.txt
-
-  Buffers
-  call vunit#AssertEquals(line('$'), 3, string(getline(1, line('$'))))
-  close
-
-  ArgsRelative files/test2.txt files/test3.txt
-
-  Buffers
-  call vunit#AssertEquals(line('$'), 5)
 endfunction " }}}
 
 " TestBuffers() {{{

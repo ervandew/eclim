@@ -1,5 +1,0 @@
-" Example file where you can create aliases for eclim commands.
-
-" Example of using :SR as an alias for :SplitRelative
-command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-  \ SR :SplitRelative <args>

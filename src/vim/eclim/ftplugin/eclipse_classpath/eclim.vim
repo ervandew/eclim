@@ -53,7 +53,7 @@ augroup END
 
 " Command Declarations {{{
 if !exists(":NewSrcEntry")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative -buffer
+  command -nargs=+ -complete=customlist,eclim#project#util#CommandCompleteProjectRelative -buffer
     \ NewSrcEntry :call eclim#java#classpath#NewClasspathEntry
     \     (substitute('<args>', '\', '/', 'g') , s:entry_src)
 endif

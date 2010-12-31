@@ -69,88 +69,6 @@ function! eclim#common#util#FindInPath(file, path)
   return results
 endfunction " }}}
 
-" GetFiles(dir, arg) {{{
-" Parses the supplied arg to obtain a list of files based in the supplied
-" directory.
-function eclim#common#util#GetFiles(dir, arg)
-  let dir = a:dir
-  if dir != '' && dir !~ '[/\]$'
-    let dir .= '/'
-  endif
-
-  let results = []
-  let files = split(a:arg, '[^\\]\zs\s')
-  for file in files
-    " wildcard filename
-    if file =~ '\*'
-      let glob = split(eclim#util#Glob(dir . file), '\n')
-      call map(glob, "escape(v:val, ' ')")
-      if len(glob) > 0
-        let results += glob
-      endif
-
-    " regular filename
-    else
-      call add(results, dir . file)
-    endif
-  endfor
-  return results
-endfunction " }}}
-
-" GrepRelative(command, args) {{{
-" Executes the supplied vim grep command with the specified pattern against
-" one or more file patterns.
-function! eclim#common#util#GrepRelative(command, args)
-  let rel_dir = expand('%:p:h')
-  let cwd = getcwd()
-  try
-    silent exec 'lcd ' . escape(rel_dir, ' ')
-    silent! exec a:command . ' ' . a:args
-  finally
-    silent exec 'lcd ' . escape(cwd, ' ')
-    " force quickfix / location list signs to update.
-    call eclim#display#signs#Update()
-  endtry
-  if a:command =~ '^l'
-    let numresults = len(getloclist(0))
-  else
-    let numresults = len(getqflist())
-  endif
-
-  if numresults == 0
-    call eclim#util#EchoInfo('No results found.')
-  endif
-endfunction " }}}
-
-" OpenRelative(command, arg [, open_existing]) {{{
-" Open one or more relative files.
-function eclim#common#util#OpenRelative(command, arg, ...)
-  if a:arg =~ '\*' && a:command == 'edit'
-    call eclim#util#EchoError(':EditRelative does not support wildcard characters.')
-    return
-  endif
-
-  let dir = expand('%:p:h')
-  let files = eclim#common#util#GetFiles(dir, a:arg)
-  for file in files
-    let file = eclim#util#Simplify(file)
-    if len(a:000) && a:000[0]
-      call eclim#util#GoToBufferWindowOrOpen(file, a:command)
-    else
-      exec a:command . ' ' . file
-    endif
-  endfor
-endfunction " }}}
-
-" OpenFiles(arg) {{{
-" Opens one or more files using the supplied command.
-function eclim#common#util#OpenFiles(command, arg)
-  let files = eclim#common#util#GetFiles('', a:arg)
-  for file in files
-    exec a:command . ' ' . escape(eclim#util#Simplify(file), ' ')
-  endfor
-endfunction " }}}
-
 " OtherWorkingCopy(project, action) {{{
 " Opens the same file from another project using the supplied action
 function! eclim#common#util#OtherWorkingCopy(project, action)
@@ -185,7 +103,7 @@ function! eclim#common#util#OtherWorkingCopyDiff(project)
 endfunction " }}}
 
 " s:OtherWorkingCopyPath(project) {{{
-function s:OtherWorkingCopyPath(project)
+function! s:OtherWorkingCopyPath(project)
   let path = eclim#project#util#GetProjectRelativeFilePath()
 
   let project_name = a:project
@@ -241,7 +159,7 @@ endfunction " }}}
 
 " Tcd(dir) {{{
 " Like vim's :lcd, but tab local instead of window local.
-function eclim#common#util#Tcd(dir)
+function! eclim#common#util#Tcd(dir)
   let t:cwd = fnamemodify(a:dir, ':p')
 
   " initialize the tab cwd for all other tabs if not already set
@@ -286,7 +204,7 @@ function eclim#common#util#Tcd(dir)
 endfunction " }}}
 
 " s:ApplyTcd(honor_lcd) {{{
-function s:ApplyTcd(honor_lcd)
+function! s:ApplyTcd(honor_lcd)
   if !exists('t:cwd')
     return
   endif
@@ -333,44 +251,6 @@ function! eclim#common#util#ReadFile()
     " causes taglist.vim errors (fold then delete fails)
     "setlocal bufhidden=delete
   endif
-endfunction " }}}
-
-" CommandCompleteRelative(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for relative files and directories.
-function! eclim#common#util#CommandCompleteRelative(argLead, cmdLine, cursorPos)
-  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
-
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseCmdLine(cmdLine)
-  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
-
-  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
-  call map(results, "substitute(v:val, '\\', '/', 'g')")
-  call map(results, 'isdirectory(v:val) ? v:val . "/" : v:val')
-  call map(results, 'substitute(v:val, dir, "", "")')
-  call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
-  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
-
-  return eclim#util#ParseCommandCompletionResults(argLead, results)
-endfunction " }}}
-
-" CommandCompleteRelativeDirs(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for relative directories.
-function! eclim#common#util#CommandCompleteRelativeDirs(argLead, cmdLine, cursorPos)
-  let dir = substitute(expand('%:p:h'), '\', '/', 'g')
-
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseCmdLine(cmdLine)
-  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
-
-  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
-  call filter(results, "isdirectory(v:val)")
-  call map(results, "substitute(v:val, '\\', '/', 'g')")
-  call map(results, 'substitute(v:val, dir . "\\(.*\\)", "\\1/", "")')
-  call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
-  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
-
-  return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

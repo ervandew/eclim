@@ -100,42 +100,12 @@ function! TestLocateFile()
   exec "normal \<esc>"
 endfunction " }}}
 
-" TestOpenRelative() {{{
-function! TestOpenRelative()
-  exec 'cd ' . g:TestEclimWorkspace
-  edit! eclim_unit_test/test_root_file.txt
-
-  call eclim#common#util#OpenRelative('edit', 'files/test1.txt', 1)
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-endfunction " }}}
-
-" TestOpenFiles() {{{
-function! TestOpenFiles()
-  exec 'cd ' . g:TestEclimWorkspace
-  call eclim#common#util#OpenFiles('split',
-    \ 'eclim_unit_test/files/test1.txt eclim_unit_test/files/test2.txt')
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test1.txt') > -1,
-    \ 'Did not open test1.txt.')
-  call vunit#AssertTrue(bufwinnr('eclim_unit_test/files/test2.txt') > -1,
-    \ 'Did not open test2.txt.')
-endfunction " }}}
-
 " TestSwapWords() {{{
 function! TestSwapWords()
   call setline(1, 'one, two')
   call cursor(1, 1)
   call eclim#common#util#SwapWords()
   call vunit#AssertEquals('two, one', getline(1), "Words not swaped correctly.")
-endfunction " }}}
-
-" TestCommandCompleteRelative() {{{
-function! TestCommandCompleteRelative()
-  exec 'cd ' . g:TestEclimWorkspace
-  edit! eclim_unit_test/test_root_file.txt
-  let results = eclim#common#util#CommandCompleteRelative('p', 'SplitRelative f', 15)
-  call vunit#AssertEquals(1, len(results), "Wrong number of results.")
-  call vunit#AssertEquals('files/', results[0], "Wrong result.")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

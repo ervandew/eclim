@@ -51,40 +51,6 @@ augroup END
 " }}}
 
 " Command Declarations {{{
-if !exists(":Split")
-  command -nargs=+ -complete=file
-    \ Split :call eclim#common#util#OpenFiles('split', '<args>')
-endif
-if !exists(":Tabnew")
-  command -nargs=+ -complete=file
-    \ Tabnew :call eclim#common#util#OpenFiles('tablast | tabnew', '<args>')
-endif
-
-if !exists(":EditRelative")
-  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ EditRelative :call eclim#common#util#OpenRelative('edit', '<args>', 1)
-endif
-if !exists(":SplitRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ SplitRelative :call eclim#common#util#OpenRelative('split', '<args>', 1)
-endif
-if !exists(":TabnewRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ TabnewRelative :call eclim#common#util#OpenRelative('tablast | tabnew', '<args>')
-endif
-if !exists(":ReadRelative")
-  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ReadRelative :call eclim#common#util#OpenRelative('read', '<args>')
-endif
-if !exists(":ArgsRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ArgsRelative :call eclim#common#util#OpenRelative('args', '<args>')
-endif
-if !exists(":ArgAddRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ ArgAddRelative :call eclim#common#util#OpenRelative('argadd', '<args>')
-endif
-
 if !exists(":Buffers")
   command Buffers :call eclim#common#buffers#Buffers()
   command BuffersToggle :call eclim#common#buffers#BuffersToggle()
@@ -139,33 +105,6 @@ if !exists(":QuickFixClear")
 endif
 if !exists(":LocationListClear")
   command LocationListClear :call setloclist(0, []) | call eclim#display#signs#Update()
-endif
-
-if !exists(":VimgrepRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ VimgrepRelative :call eclim#common#util#GrepRelative('vimgrep', <q-args>)
-endif
-if !exists(":VimgrepAddRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ VimgrepAddRelative :call eclim#common#util#GrepRelative('vimgrepadd', <q-args>)
-endif
-if !exists(":LvimgrepRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ LvimgrepRelative :call eclim#common#util#GrepRelative('lvimgrep', <q-args>)
-endif
-if !exists(":LvimgrepAddRelative")
-  command -nargs=+ -complete=customlist,eclim#common#util#CommandCompleteRelative
-    \ LvimgrepAddRelative :call eclim#common#util#GrepRelative('lvimgrepadd', <q-args>)
-endif
-
-if !exists(":CdRelative")
-  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
-    \ CdRelative :exec 'cd ' . expand('%:p:h') . '/<args>'
-endif
-
-if !exists(":LcdRelative")
-  command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
-    \ LcdRelative :exec 'lcd ' . expand('%:p:h') . '/<args>'
 endif
 
 if !exists(":Tcd")

@@ -125,9 +125,6 @@ Xsd Integration
 
 Common Vim Functionality
 -------------------------
-- :Split / :Tabnew supporting multiple files.
-- :SplitRelative / :EditRelative / :TabnewRelative / :ReadRelative for
-  opening / reading a file relative to the current one.
 - Commands to locate a project, workspace, or current file relative file and
   open it (split, edit, or tabnew).
 - Much more...
