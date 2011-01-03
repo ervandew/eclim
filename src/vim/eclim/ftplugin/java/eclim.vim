@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -161,10 +161,6 @@ if exists(":Java") != 2
 endif
 if exists(":JavaListInstalls") != 2
   command -buffer -nargs=* JavaListInstalls :call eclim#java#util#ListInstalls()
-endif
-
-if !exists(":JavaRegex")
-  command -buffer JavaRegex :call eclim#regex#OpenTestWindow('java')
 endif
 
 if !exists(":JavaConstructor")

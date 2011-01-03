@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@ Java
    junit
    testng
    logging
-   regex
    tools
 
 
@@ -96,5 +95,4 @@ Java
 - :ref:`vim/java/junit`
 - :ref:`vim/java/testng`
 - :ref:`vim/java/logging`
-- :ref:`vim/java/regex`
 - :ref:`vim/java/tools`

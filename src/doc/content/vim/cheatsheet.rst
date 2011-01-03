@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -175,7 +175,6 @@ Java Commands
 - :ref:`:JavaSearchContext` -
   Perform a context sensitive search for the element under the cursor.
 - :ref:`:JavaCorrect` - Suggest possible corrections for a source error.
-- :ref:`:JavaRegex` - Opens a window for testing java regular expressions.
 - :ref:`:JavaDocSearch <:JavaDocSearch>` -
   Search for javadocs.  Same usage as **:JavaSearch**.
 - :ref:`:JavaDocComment <:JavaDocComment>` -
@@ -265,7 +264,6 @@ Python Commands
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
 - :ref:`:PyLint` - Runs pylint_ on the current file.
-- :ref:`:PythonRegex` - Opens a window for testing python regular expressions.
 - :ref:`:DjangoManage <:DjangoManage>` -
   Invokes django's manage.py from any file in the same directory as your
   manage.py or in any of the child directories.

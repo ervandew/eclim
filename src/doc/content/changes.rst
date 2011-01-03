@@ -46,6 +46,8 @@ Other:
   - Vcs support broken out from eclim to http://github.com/ervandew/vcs.
   - Taglist support broken out from eclim to
     http://github.com/ervandew/taglisttoo.
+  - Regex testing support (:JavaRegex, :PythonRegex) broken out from eclim to
+    http://github.com/ervandew/regex.
 
 .. _1.6.1:
 
@@ -630,10 +632,8 @@ Html / Xml:
     **g:EclimSgmlCompleteEndTag** to 0.
 
 Java / Python:
-  - :ref:`:JavaRegex <vim/java/regex>` and
-    :ref:`:PythonRegex <vim/python/regex>`
-    now support **b:eclim_regex_type** to determine if the
-    regex should be applied to the whole sample text at once, or to each
+  - :JavaRegex and :PythonRegex now support **b:eclim_regex_type** to determine
+    if the regex should be applied to the whole sample text at once, or to each
     line individually.
 
 Java:
@@ -741,7 +741,7 @@ Log4j:
   - Added :ref:`log4j xml file validation <vim/java/log4j/validate>`.
 
 Python:
-  - Added support for :ref:`testing regular expressions <vim/python/regex>`.
+  - Added support for testing regular expressions.
 
 Django:
   - Added

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -135,7 +135,6 @@ Java 指令集
 - :ref:`:JavaSearchContext` -
   執行目前游標位置元素的內文搜尋.
 - :ref:`:JavaCorrect` - 建議應修正的程式碼.
-- :ref:`:JavaRegex` - 開啟一個視窗，進行 regular ecpression 測試.
 - :ref:`:JavaDocSearch` -
   尋找 javadoc，如同 **:JavaSearch** 指令.
 - :ref:`:JavaDocComment` - 新增或修改目前游標位置元素的註解.
@@ -166,8 +165,6 @@ Maven 指令集
 Python 指令集
 --------------
 
-- :ref:`:PythonRegex` -
-  開啟一個視窗來測試 python regular expressions.
 - :ref:`:DjangoManage` -
   存在 manage.py 的同一個目錄下或子目錄下，自任何檔案中呼叫 django's ``manage.py``.
 

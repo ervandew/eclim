@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -61,10 +61,6 @@ if !exists(':PythonImportClean')
 endif
 if !exists(':PythonImportSort')
   command -buffer PythonImportSort :call eclim#python#import#SortImports()
-endif
-
-if !exists(":PythonRegex")
-  command -buffer PythonRegex :call eclim#regex#OpenTestWindow('python')
 endif
 
 if !exists(":Validate")
