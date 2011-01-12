@@ -43,6 +43,8 @@ Other:
     http://github.com/ervandew/archive.
   - Maximize/Minimize vim window support broken out from eclim to
     http://github.com/ervandew/maximize.
+  - Sgml (html, xml, etc.) end tag completion broken out from eclim to
+    http://github.com/ervandew/sgmlendtag.
   - Vcs support broken out from eclim to http://github.com/ervandew/vcs.
   - Taglist support broken out from eclim to
     http://github.com/ervandew/taglisttoo.

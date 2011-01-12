@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@
 if !exists("g:EclimXmlValidate")
   let g:EclimXmlValidate = 1
 endif
-if !exists('g:EclimSgmlCompleteEndTag')
-  let g:EclimSgmlCompleteEndTag = 1
-endif
 
 " }}}
 
@@ -46,14 +43,6 @@ if g:EclimXmlValidate
     autocmd! BufWritePost <buffer>
     autocmd BufWritePost <buffer> call eclim#xml#validate#Validate('', 1)
   augroup END
-endif
-
-" }}}
-
-" Mappings {{{
-
-if g:EclimSgmlCompleteEndTag
-  imap <buffer> <silent> / <c-r>=eclim#sgml#util#CompleteEndTag()<cr>
 endif
 
 " }}}

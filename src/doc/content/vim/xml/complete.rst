@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,31 +36,3 @@ Xml code completion uses the standard
 .. note::
 
   Requires a valid dtd or xsd to determine possible completions.
-
-In addition to the standard code completion, eclim also supports auto
-completion of end tags. When you type '</' eclim will attempt to determine
-which element you are closing and complete it for you.  If you wish to disable
-this feature you can simply set g:EclimSgmlCompleteEndTag to 0.
-
-
-Configuration
---------------
-
-Vim Variables
-
-.. _g\:EclimSgmlCompleteEndTag:
-
-- **g:EclimSgmlCompleteEndTag** -
-  If set to 0, disables auto completion of end tags.
-
-.. _g\:EclimSgmlCompleteEndTagIgnore:
-
-- **b:EclimSgmlCompleteEndTagIgnore** -
-  Buffer local variable that can be set to a list of tags to ignore when
-  searching for the start tag to complete.
-
-  Example that can be added to an html ftplugin file\:
-
-  .. code-block:: vim
-
-    let b:EclimSgmlCompleteEndTagIgnore = ['br', 'input']
