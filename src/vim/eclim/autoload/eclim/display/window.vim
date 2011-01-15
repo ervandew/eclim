@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -49,11 +49,24 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
     let taglist_window = -1
   endif
 
+  let nerdtree_window = -1
+  let index = 1
+  while index <= winnr('$')
+    if getbufvar(winbufnr(index), 'NERDTreeType') == 'primary'
+      let nerdtree_window = index
+      break
+    endif
+    let index += 1
+  endwhile
+
   let relative_window = 0
   let relative_window_loc = 'below'
-  if taglist_window != -1 || len(g:VerticalToolBuffers) > 0
+  if taglist_window != -1 || nerdtree_window != -1 || len(g:VerticalToolBuffers) > 0
     if taglist_window != -1
       let relative_window = taglist_window
+    endif
+    if nerdtree_window != -1
+      let relative_window = nerdtree_window
     endif
     for toolbuf in keys(g:VerticalToolBuffers)
       exec 'let toolbuf = ' . toolbuf
