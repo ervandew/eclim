@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -216,7 +216,7 @@ public class SearchCommand
       scopeDesc = CSearchMessages.ProjectScope;
     }
 
-    int context = getContext(commandLine.getValue(Options.TYPE_OPTION));
+    int context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
     int type = getType(commandLine.getValue(Options.TYPE_OPTION));
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
     boolean caseSensitive =
