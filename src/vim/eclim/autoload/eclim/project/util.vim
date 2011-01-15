@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -622,8 +622,12 @@ function! eclim#project#util#TreeTab(title, dir)
       tabmove 0
     endif
   endif
+  let name = dir
+  if len(name) > 30
+    let name = fnamemodify(dir, ':t') . ': ' . dir
+  endif
   call eclim#common#util#Tcd(dir)
-  call eclim#project#tree#ProjectTreeOpen([dir], [dir], a:title)
+  call eclim#project#tree#ProjectTreeOpen([name], [dir], a:title)
 endfunction " }}}
 
 " Todo() {{{
