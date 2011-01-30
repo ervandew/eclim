@@ -245,20 +245,15 @@ endfunction " }}}
 
 " s:PreventCloseOnBufferDelete() {{{
 function! s:PreventCloseOnBufferDelete()
-  let numtoolwindows = 0
-  for toolbuf in keys(g:VerticalToolBuffers)
-    exec 'let toolbuf = ' . toolbuf
-    if bufwinnr(toolbuf) != -1
-      let numtoolwindows += 1
-    endif
-  endfor
-
   let index = 1
+  let numtoolwindows = 0
   let numtempwindows = 0
   let tempbuffers = []
   while index <= winnr('$')
     let buf = winbufnr(index)
-    if buf != -1 && getbufvar(buf, 'eclim_temp_window') != ''
+    if index(keys(g:VerticalToolBuffers), string(buf)) != -1
+      let numtoolwindows += 1
+    elseif getwinvar(index, '&winfixheight') || getwinvar(index, '&winfixwidth')
       call add(tempbuffers, buf)
     endif
     let index += 1
