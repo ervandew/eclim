@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public class Options
   public static final String CASE_INSENSITIVE_OPTION = "i";
   public static final String CLASSNAME_OPTION = "c";
   public static final String CONTEXT_OPTION = "x";
+  public static final String DEBUG_OPTION = "d";
   public static final String DELIMETER_OPTION = "d";
   public static final String DEPENDS_OPTION = "d";
   public static final String DIR_OPTION = "d";
