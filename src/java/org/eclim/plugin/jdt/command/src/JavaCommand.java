@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -82,6 +83,7 @@ import org.eclipse.jdt.core.search.SearchRequestor;
     "REQUIRED p project ARG," +
     "OPTIONAL d debug NOARG," +
     "OPTIONAL c classname ARG," +
+    "OPTIONAL w workingdir ARG," +
     "OPTIONAL v vmargs ANY," +
     "OPTIONAL s sysprops ANY," +
     "OPTIONAL e envargs ANY," +
@@ -90,6 +92,7 @@ import org.eclipse.jdt.core.search.SearchRequestor;
 public class JavaCommand
   extends AbstractCommand
 {
+  private static final String WORKINGDIR_OPTION = "w";
   private static final String VMARGS_OPTION = "v";
   private static final String SYSPROPS_OPTION = "s";
   private static final String ENVARGS_OPTION = "e";
@@ -104,6 +107,8 @@ public class JavaCommand
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String mainClass = commandLine.getValue(Options.CLASSNAME_OPTION);
     boolean debug = commandLine.hasOption(Options.DEBUG_OPTION);
+    String workingDir = commandLine.getValue(WORKINGDIR_OPTION);
+
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
@@ -142,6 +147,10 @@ public class JavaCommand
     java.setProject(antProject);
     java.setClassname(mainClass);
     java.setFork(true);
+
+    if (workingDir != null){
+      java.setDir(new File(workingDir));
+    }
 
     // construct classpath
     Path classpath = new Path(antProject);
