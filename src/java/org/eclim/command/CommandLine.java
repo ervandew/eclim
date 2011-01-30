@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,9 @@
  */
 package org.eclim.command;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
@@ -132,6 +134,13 @@ public class CommandLine
         // decoded special characters encoded by eclim#ExecuteEclim
         values[ii] = StringUtils.replace(values[ii], "%2A", "*");
         values[ii] = StringUtils.replace(values[ii], "%24", "$");
+        values[ii] = StringUtils.replace(values[ii], "%3C", "<");
+        values[ii] = StringUtils.replace(values[ii], "%3E", ">");
+
+        // support escaped options
+        if (values[ii].startsWith("\\-")){
+          values[ii] = values[ii].substring(1);
+        }
       }
 
       return values;
@@ -194,5 +203,26 @@ public class CommandLine
   public void addOption(String option, String value)
   {
     options.put(option, value);
+  }
+
+  public String toString()
+  {
+    StringBuffer buffer = new StringBuffer();
+    for (Map.Entry<String,Object> entry : this.options.entrySet()){
+      buffer.append("option: ").append(entry.getKey());
+
+      buffer.append(" args: ");
+      Object value = entry.getValue();
+      if (value instanceof Object[]){
+        buffer.append(Arrays.toString((Object[])value));
+      }else{
+        buffer.append(value);
+      }
+      buffer.append('\n');
+    }
+    if (unrecognized != null && unrecognized.length > 0){
+      buffer.append("unrecognized: " + Arrays.toString(unrecognized));
+    }
+    return buffer.toString();
   }
 }
