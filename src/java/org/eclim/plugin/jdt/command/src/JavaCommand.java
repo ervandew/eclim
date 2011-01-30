@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@ import org.apache.tools.ant.taskdefs.PumpStreamHandler;
 import org.apache.tools.ant.taskdefs.Redirector;
 
 import org.apache.tools.ant.types.Commandline.Argument;
+
+import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.Path;
 
 import org.eclim.Services;
@@ -78,12 +80,20 @@ import org.eclipse.jdt.core.search.SearchRequestor;
   name = "java",
   options =
     "REQUIRED p project ARG," +
+    "OPTIONAL d debug NOARG," +
     "OPTIONAL c classname ARG," +
+    "OPTIONAL v vmargs ANY," +
+    "OPTIONAL s sysprops ANY," +
+    "OPTIONAL e envargs ANY," +
     "OPTIONAL a args ANY"
 )
 public class JavaCommand
   extends AbstractCommand
 {
+  private static final String VMARGS_OPTION = "v";
+  private static final String SYSPROPS_OPTION = "s";
+  private static final String ENVARGS_OPTION = "e";
+
   /**
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
@@ -93,12 +103,13 @@ public class JavaCommand
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String mainClass = commandLine.getValue(Options.CLASSNAME_OPTION);
+    boolean debug = commandLine.hasOption(Options.DEBUG_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
-    buildLogger.setMessageOutputLevel(Project.MSG_INFO);
+    buildLogger.setMessageOutputLevel(debug ? Project.MSG_DEBUG : Project.MSG_INFO);
     buildLogger.setOutputPrintStream(System.out);
     buildLogger.setErrorPrintStream(System.err);
     antProject.addBuildListener(buildLogger);
@@ -141,6 +152,51 @@ public class JavaCommand
     }
 
     java.setClasspath(classpath);
+
+    // add any supplied vm args
+    String[] vmargs = commandLine.getValues(VMARGS_OPTION);
+    if (vmargs != null && vmargs.length > 0){
+      for(String vmarg : vmargs){
+        if (!vmarg.startsWith("-")){
+          continue;
+        }
+        Argument a = java.createJvmarg();
+        a.setValue(vmarg);
+      }
+    }
+
+    // add any supplied vm args
+    String[] props = commandLine.getValues(SYSPROPS_OPTION);
+    if (props != null && props.length > 0){
+      for(String prop : props){
+        String[] sysprop = StringUtils.split(prop, "=", 2);
+        if (sysprop.length != 2){
+          continue;
+        }
+        if (sysprop[0].startsWith("-D")){
+          sysprop[0] = sysprop[0].substring(2);
+        }
+        Variable var = new Variable();
+        var.setKey(sysprop[0]);
+        var.setValue(sysprop[1]);
+        java.addSysproperty(var);
+      }
+    }
+
+    // add any env vars
+    String[] envs = commandLine.getValues(ENVARGS_OPTION);
+    if (envs != null && envs.length > 0){
+      for(String env : envs){
+        String[] envvar = StringUtils.split(env, "=", 2);
+        if (envvar.length != 2){
+          continue;
+        }
+        Variable var = new Variable();
+        var.setKey(envvar[0]);
+        var.setValue(envvar[1]);
+        java.addEnv(var);
+      }
+    }
 
     // add any supplied command line args
     String[] args = commandLine.getValues(Options.ARGS_OPTION);
