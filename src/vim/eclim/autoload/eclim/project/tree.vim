@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ function! eclim#project#tree#ProjectTree(...)
     if dir != ''
       call add(dirs, dir)
     else
+      call eclim#util#EchoWarning('Project not found: ' . name)
       call remove(names_copy, name)
     endif
     let index += 1
