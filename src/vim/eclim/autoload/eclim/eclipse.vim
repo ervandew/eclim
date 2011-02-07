@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,9 +31,7 @@
 function! eclim#eclipse#GetAllWorkspaceDirs()
   let results = []
 
-  let instances = has('win32unix') ?
-    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
-    \ expand('~/.eclim/.eclimd_instances')
+  let instances = eclim#UserHome() . '/.eclim/.eclimd_instances'
   if filereadable(instances)
     let results = readfile(instances)
     call map(results, 'substitute(v:val, "\\(.*\\):.*", "\\1", "")')

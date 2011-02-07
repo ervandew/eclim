@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ endfunction " }}}
 " Gets port that the nailgun server is configured to run on.
 function! eclim#client#nailgun#GetNgPort(...)
   let port = 9091
-  let eclimrc = expand('~/.eclimrc')
+  let eclimrc = eclim#UserHome() . '/.eclimrc'
   if filereadable(eclimrc)
     let lines = filter(
       \ readfile(eclimrc),
@@ -155,9 +155,7 @@ function! eclim#client#nailgun#GetNgPort(...)
   endif
   let default = port
 
-  let instances = has('win32unix') ?
-    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
-    \ expand('~/.eclim/.eclimd_instances')
+  let instances = eclim#UserHome() . '/.eclim/.eclimd_instances'
   if filereadable(instances)
     let workspaces = {}
     let entries = readfile(instances)

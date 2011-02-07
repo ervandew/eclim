@@ -72,7 +72,7 @@ function! eclim#tree#TreeHome()
   endif
   let s:tree_count += 1
 
-  call eclim#tree#Tree(name, [expand('$HOME')], [], 1, [])
+  call eclim#tree#Tree(name, [eclim#UserHome()], [], 1, [])
 endfunction " }}}
 
 " TreePanes() {{{
@@ -1168,7 +1168,7 @@ function! s:Mappings()
 
   nmap <buffer> <silent> A    :call eclim#tree#ToggleViewHidden()<cr>
 
-  nmap <buffer> <silent> ~    :call eclim#tree#SetRoot(expand('$HOME'))<cr>
+  nmap <buffer> <silent> ~    :call eclim#tree#SetRoot(eclim#UserHome())<cr>
   nmap <buffer> <silent> C    :call eclim#tree#SetRoot(eclim#tree#GetPath())<cr>
   nmap <buffer> <silent> K    :call eclim#tree#SetRoot(substitute(
     \ <SID>PathToAlias(eclim#tree#GetRoot()),

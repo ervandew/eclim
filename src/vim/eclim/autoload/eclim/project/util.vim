@@ -618,7 +618,7 @@ function! eclim#project#util#TreeTab(title, dir)
   if winnr('$') > 1 || expand('%') != '' ||
    \ &modified || line('$') != 1 || getline(1) != ''
     tablast | tabnew
-    if dir == expand('~')
+    if dir == eclim#UserHome()
       tabmove 0
     endif
   endif

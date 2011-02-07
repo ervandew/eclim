@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,9 @@ Common:
     under the cursor.
   - Added rudimentary auto generated menu items for gvim (can be disabled via
     :ref:`g:EclimMenus <g:EclimMenus>`).
+  - Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
+    several possible issues including "Unable to determine your eclipse
+    workspace").
 
 Python:
   - Updated all embedded python logic to be compatible with python 2.6 and higher.
