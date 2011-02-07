@@ -1044,6 +1044,7 @@ function! eclim#util#System(cmd, ...)
     if exec_output
       let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
       if has('win32') || has('win64') || has('win32unix')
+        let cmd = substitute(cmd, '^!', '', '')
         let cmd = substitute(cmd, '^"\(.*\)"$', '\1', '')
         if executable('tee')
           let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
