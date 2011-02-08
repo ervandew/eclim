@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,25 +145,3 @@ mappings there (:help ftplugin-name).
       endif
     endfunction
     nnoremap <silent> <buffer> <cr> :call <SID>MyFind()<cr>
-
-
-.. _VimScriptMappings:
-
-Vim Script Mappings
---------------------
-
-Here are some mappings for the Vim script funtionality provided by eclim.  To
-make use of these mappings, simply create a ftplugin file for Vim and place your
-mappings there (:help ftplugin-name).
-
-- Perform a context sensitive search for the element under the cursor
-  using <enter>.
-
-  See :ref:`:FindByContext` for more info.
-
-  .. code-block:: vim
-
-    " avoid overwriting <cr> mapping in 'command-line' buffer (:h cmdwin).
-    if bufname('%') !~ '^\(command-line\|\[Command Line\]\)$'
-      nnoremap <silent> <buffer> <cr> :FindByContext<cr>
-    endif

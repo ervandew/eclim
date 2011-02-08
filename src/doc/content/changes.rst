@@ -50,6 +50,9 @@ Other:
     http://github.com/ervandew/taglisttoo.
   - Regex testing support (:JavaRegex, :PythonRegex) broken out from eclim to
     http://github.com/ervandew/regex.
+  - Vim script help lookup along with user defined variable/command/function
+    definition/references lookup support broken out from eclim to
+    http://github.com/ervandew/lookup.
 
 .. _1.6.1:
 

@@ -169,27 +169,6 @@ Python 指令集
   存在 manage.py 的同一個目錄下或子目錄下，自任何檔案中呼叫 django's ``manage.py``.
 
 
-Vim 指令集
---------------
-
-- :ref:`:FindCommandDef` [<command>] -
-  尋找 command 的定義.
-- :ref:`:FindCommandRef` [<command>] -
-  尋找 command 的參考.
-- :ref:`:FindFunctionDef` [<function>] -
-  尋找函數的定義.
-- :ref:`:FindFunctionRef` [<function>] -
-  尋找函數的參考.
-- :ref:`:FindVariableDef` [<變數名稱>] -
-  尋找全區域變數的定義
-- :ref:`:FindVariableRef` [<變數名稱>] -
-  尋找全區域變數的參考.
-- :ref:`:FindByContext` -
-  以游標位置元素在內文中尋找 command, 函數或變數.
-- :ref:`:VimDoc` [<關鍵字>] -
-  以關鍵字開啟相關的 vim 說明文件.
-
-
 WebXml 指令集
 --------------
 

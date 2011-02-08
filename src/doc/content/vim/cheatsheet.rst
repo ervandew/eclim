@@ -293,22 +293,6 @@ Ruby Commands
 - :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
 
 
-Vim Commands
------------------
-
-- :ref:`:FindCommandDef` [<command>] - Finds a command definition.
-- :ref:`:FindCommandRef` [<command>] - Finds references of a command.
-- :ref:`:FindFunctionDef` [<function>] - Finds a function definition.
-- :ref:`:FindFunctionRef` [<function>] - Finds references of a function.
-- :ref:`:FindVariableDef` [<variable>] -
-  Finds the definition of a global variable.
-- :ref:`:FindVariableRef` [<variable>] - Finds references of a global variable.
-- :ref:`:FindByContext` -
-  Finds command, function, or variable based on the context of the element
-  under the cursor.
-- :ref:`:VimDoc` [<keyword>] - Opens the vim help for a keyword.
-
-
 WebXml Commands
 -----------------
 
