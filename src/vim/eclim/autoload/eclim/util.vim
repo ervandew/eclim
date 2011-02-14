@@ -1036,80 +1036,82 @@ function! eclim#util#System(cmd, ...)
     set shellxquote=
   endif
 
-  " use exec
-  if len(a:000) > 0 && a:000[0]
-    let cmd = a:cmd
-    let begin = localtime()
-    let exec_output = len(a:000) > 1 ? a:000[1] : 0
-    if exec_output
-      let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
-      if has('win32') || has('win64') || has('win32unix')
-        let cmd = substitute(cmd, '^!', '', '')
-        let cmd = substitute(cmd, '^"\(.*\)"$', '\1', '')
-        if executable('tee')
-          let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
-          let cmd = '!cmd /c "' . cmd . ' 2>&1 | tee "' . teefile . '" "'
+  try
+    " use exec
+    if len(a:000) > 0 && a:000[0]
+      let cmd = a:cmd
+      let begin = localtime()
+      let exec_output = len(a:000) > 1 ? a:000[1] : 0
+      if exec_output
+        let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
+        if has('win32') || has('win64') || has('win32unix')
+          let cmd = substitute(cmd, '^!', '', '')
+          let cmd = substitute(cmd, '^"\(.*\)"$', '\1', '')
+          if executable('tee')
+            let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
+            let cmd = '!cmd /c "' . cmd . ' 2>&1 | tee "' . teefile . '" "'
+          else
+            let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
+          endif
         else
-          let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
+          let cmd .= ' 2>&1| tee "' . outfile . '"'
         endif
-      else
-        let cmd .= ' 2>&1| tee "' . outfile . '"'
       endif
+
+      try
+        exec cmd
+      finally
+        call eclim#util#EchoTrace('exec: ' . cmd, localtime() - begin)
+      endtry
+
+      let result = ''
+      if exec_output == 1 && filereadable(outfile)
+        let result = join(readfile(outfile), "\n")
+        call delete(outfile)
+      elseif exec_output == 2
+        let result = outfile
+      endif
+
+    " use system
+    else
+      let begin = localtime()
+      try
+        let result = system(a:cmd)
+      finally
+        call eclim#util#EchoTrace('system: ' . a:cmd, localtime() - begin)
+      endtry
     endif
+  finally
+    let &shell = saveshell
+    let &shellcmdflag = saveshellcmdflag
+    let &shellquote = saveshellquote
+    let &shellslash = saveshellslash
+    let &shelltemp = saveshelltemp
+    let &shellxquote = saveshellxquote
 
-    try
-      exec cmd
-    finally
-      call eclim#util#EchoTrace('exec: ' . cmd, localtime() - begin)
-    endtry
-
-    let result = ''
-    if exec_output == 1 && filereadable(outfile)
-      let result = join(readfile(outfile), "\n")
-      call delete(outfile)
-    elseif exec_output == 2
-      let result = outfile
-    endif
-
-  " use system
-  else
-    let begin = localtime()
-    try
-      let result = system(a:cmd)
-    finally
-      call eclim#util#EchoTrace('system: ' . a:cmd, localtime() - begin)
-    endtry
-  endif
-
-  let &shell = saveshell
-  let &shellcmdflag = saveshellcmdflag
-  let &shellquote = saveshellquote
-  let &shellslash = saveshellslash
-  let &shelltemp = saveshelltemp
-  let &shellxquote = saveshellxquote
-
-  " If a System call is executed at startup, it appears to interfere with
-  " vim's setting of 'shellpipe' and 'shellredir' to their shell specific
-  " values.  So, if we detect that the values we are restoring look like
-  " uninitialized defaults, then attempt to mimic vim's documented
-  " (:h 'shellpipe' :h 'shellredir') logic for setting the proper values based
-  " on the shell.
-  " Note: still doesn't handle more obscure shells
-  if saveshellredir == '>'
-    if index(s:bourne_shells, fnamemodify(&shell, ':t')) != -1
-      set shellpipe=2>&1\|\ tee
-      set shellredir=>%s\ 2>&1
-    elseif index(s:c_shells, fnamemodify(&shell, ':t')) != -1
-      set shellpipe=\|&\ tee
-      set shellredir=>&
+    " If a System call is executed at startup, it appears to interfere with
+    " vim's setting of 'shellpipe' and 'shellredir' to their shell specific
+    " values.  So, if we detect that the values we are restoring look like
+    " uninitialized defaults, then attempt to mimic vim's documented
+    " (:h 'shellpipe' :h 'shellredir') logic for setting the proper values based
+    " on the shell.
+    " Note: still doesn't handle more obscure shells
+    if saveshellredir == '>'
+      if index(s:bourne_shells, fnamemodify(&shell, ':t')) != -1
+        set shellpipe=2>&1\|\ tee
+        set shellredir=>%s\ 2>&1
+      elseif index(s:c_shells, fnamemodify(&shell, ':t')) != -1
+        set shellpipe=\|&\ tee
+        set shellredir=>&
+      else
+        let &shellpipe = saveshellpipe
+        let &shellredir = saveshellredir
+      endif
     else
       let &shellpipe = saveshellpipe
       let &shellredir = saveshellredir
     endif
-  else
-    let &shellpipe = saveshellpipe
-    let &shellredir = saveshellredir
-  endif
+  endtry
 
   return result
 endfunction " }}}
