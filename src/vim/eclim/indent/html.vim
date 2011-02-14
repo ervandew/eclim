@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -75,9 +75,9 @@ function! EclimGetHtmlIndent(lnum)
 
   " Indenting html code, do our work.
   else
-    let Settings = exists('b:indent_settings') ?
+    let l:Settings = exists('b:indent_settings') ?
       \ function(b:indent_settings) : function('HtmlIndentAnythingSettings')
-    call Settings()
+    call l:Settings()
     let adj = s:HtmlIndentAttributeWrap(a:lnum) * &sw
 
     let prevlnum = prevnonblank(a:lnum - 1)

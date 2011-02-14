@@ -352,8 +352,8 @@ function! eclim#project#tree#ProjectTreeSettings()
   call eclim#tree#RegisterDirAction(function('eclim#project#tree#InjectLinkedResources'))
 
   if exists('s:TreeSettingsFunction')
-    let Settings = function(s:TreeSettingsFunction)
-    call Settings()
+    let l:Settings = function(s:TreeSettingsFunction)
+    call l:Settings()
   endif
 
   augroup eclim_tree

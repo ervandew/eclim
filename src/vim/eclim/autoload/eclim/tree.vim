@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -116,8 +116,8 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters)
 
   " register setting prior to listing any directories
   if exists("g:TreeSettingsFunction")
-    let Settings = function(g:TreeSettingsFunction)
-    call Settings()
+    let l:Settings = function(g:TreeSettingsFunction)
+    call l:Settings()
     let s:settings_loaded = 1
   endif
 
@@ -1006,8 +1006,8 @@ function! eclim#tree#ListDir(dir, ...)
   endif
 
   if exists('b:dir_actions') && (!a:0 || a:1)
-    for Action in b:dir_actions
-      call Action(a:dir, contents)
+    for l:Action in b:dir_actions
+      call l:Action(a:dir, contents)
     endfor
   endif
 

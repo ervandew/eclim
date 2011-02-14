@@ -120,8 +120,8 @@ function! eclim#project#util#ProjectCreate(args)
   for nature in natureIds
     exec 'runtime autoload/eclim/' . nature . '/project.vim'
     try
-      let ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
-      if !ProjectPre(folder)
+      let l:ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
+      if !l:ProjectPre(folder)
         return
       endif
     catch /E\(117\|700\):.*/
@@ -139,8 +139,8 @@ function! eclim#project#util#ProjectCreate(args)
   " execute any post-project creation hooks
   for nature in natureIds
     try
-      let ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
-      call ProjectPost(folder)
+      let l:ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
+      call l:ProjectPost(folder)
     catch /E\(117\|700\):.*/
       " ignore
     endtry
