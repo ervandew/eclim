@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 - 2010 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2011 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -195,12 +195,12 @@ public class VimServer
     // build args-array (dynamic size due to addopts.split)
     String[] args = new String[7 + addopts.length];
     args[0] = gvim;
-    args[1] = netbeans;
-    args[2] = dontfork;
-    args[3] = socketid;
-    args[4] = stringwid;
-    args[5] = "--servername";
-    args[6] = String.valueOf(ID);
+    args[1] = "--servername";
+    args[2] = String.valueOf(ID);
+    args[3] = netbeans;
+    args[4] = dontfork;
+    args[5] = socketid;
+    args[6] = stringwid;
 
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 7, addopts.length);
