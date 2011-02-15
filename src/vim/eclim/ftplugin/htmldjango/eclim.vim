@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -76,6 +76,14 @@ endif
 if !exists(':DjangoFind')
   command -buffer DjangoFind :call eclim#python#django#find#TemplateFind()
 endif
+
+" }}}
+
+" Options {{{
+
+let b:endwise_addition = '{% end& %}'
+let b:endwise_words = 'block,if,while,for'
+let b:endwise_syngroups = 'djangoStatement'
 
 " }}}
 
