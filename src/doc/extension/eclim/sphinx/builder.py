@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2010  Eric Van Dewoestine
+Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ from sphinx import addnodes, highlighting
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.builders.text import TextBuilder
 from sphinx.util import url_re
-from sphinx.util.nodes import clean_astext
+from sphinx.util.nodes import clean_astext, make_refnode
 from sphinx.writers.text import TextTranslator, TextWriter
 
 class EclimBuilder(StandaloneHTMLBuilder):
@@ -408,7 +408,21 @@ class VimdocTranslator(TextTranslator):
     pass
 
 
+# EV: Custom missing_reference event listener to handle:
+#     - references like> :ref:`:ProjectCreate`
+def missing_reference(app, env, node, contnode):
+  if 'refdomain' in node and node['refdomain']:
+    domain = env.domains[node['refdomain']]
+    if node['reftype'] == 'ref':
+        docname, labelid = domain.data['anonlabels'].get(node['reftarget'], ('',''))
+        if docname:
+          return make_refnode(
+            app.builder, node['refdoc'], docname, labelid, contnode)
+#    print (domain, node['reftype'], node['refdoc'], node['reftarget'])
+
+
 def setup(sphinx):
   highlighting.lexers['groovy'] = GroovyLexer()
   sphinx.add_builder(EclimBuilder)
   sphinx.add_builder(VimdocBuilder)
+  sphinx.connect('missing-reference', missing_reference)
