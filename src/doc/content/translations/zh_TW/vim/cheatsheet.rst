@@ -193,35 +193,9 @@ Xsd 指令集
 - :ref:`:Validate <:Validate_xsd>` - 驗證目前的檔案.
 
 
-版本控制指令集
---------------
-
-.. note::
-
-  目前這項指令集只支援 CVS 及 subversion 兩種系統.
-
-- :ref:`:VcsAnnotate` - 使用 vim 簽名對目前版本檔案作注釋.
-
-
 其他指令集
 --------------
 
-- :ref:`:Split` 檔案 [檔案 ...] -
-  類似 :split 指令, 但允許同時開啟多個檔案.
-- :ref:`:SplitRelative` 檔案 [檔案 ...] -
-  類似 **:Split** 指令，但會個別將檔案分割至目前 buffer 內.
-- :ref:`:Tabnew` 檔案 [檔案 ...] -
-  類似 **:Split** 指令, 但會以 :tabnew 開啟個別的檔案.
-- :ref:`:TabnewRelative` - 檔案 [檔案...] -
-  類似 **:SplitRelative** 指令, 但會以 :tabnew 開啟個別的檔案.
-- :ref:`:EditRelative` 檔案 -
-  類似 :SplitRelative 指令, 但會以 edit 開啟檔案，並且一次只能開啟一個檔案.
-- :ref:`:ReadRelative` 檔案 -
-  類似 **:SplitRelative** 指令, 但會以 :read 指令開啟, 並同一次只能開啟一個檔案.
-- :ref:`:ArgsRelative` file_pattern [ file_pattern ...] -
-  類似 **:SplitRelative** 指令, 但會以 :args 指令執行動作.
-- :ref:`:ArgAddRelative` file_pattern [ file_pattern ...] -
-  類似 **:SplitRelative** 指令, 但會以 :argadd 指令執行動作.
 - :ref:`:DiffLastSaved` -
   執行 diffsplit 比較目前修改的檔案內容與前一次存檔的內容.
 - :ref:`:SwapWords` -
