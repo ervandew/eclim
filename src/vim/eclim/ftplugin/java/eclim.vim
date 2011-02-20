@@ -63,11 +63,13 @@ endif
 " set make program and error format accordingly.
 if g:EclimJavaCompilerAutoDetect
   " use ant settings
-  if eclim#util#Findfile('build.xml', '.;') != ''
+  if eclim#util#Findfile('build.xml', '.;') != '' &&
+   \ eclim#util#CompilerExists('eclim_ant')
     compiler eclim_ant
 
   " use mvn settings
-  elseif eclim#util#Findfile('pom.xml', '.;') != ''
+  elseif eclim#util#Findfile('pom.xml', '.;') != '' &&
+   \     eclim#util#CompilerExists('eclim_mvn')
     compiler eclim_mvn
 
     if !g:EclimMakeLCD && !exists('g:EclimMakeLCDWarning')
@@ -79,7 +81,8 @@ if g:EclimJavaCompilerAutoDetect
     endif
 
   " use maven settings
-  elseif eclim#util#Findfile('project.xml', '.;') != ''
+  elseif eclim#util#Findfile('project.xml', '.;') != '' &&
+   \     eclim#util#CompilerExists('eclim_maven')
     compiler eclim_maven
 
   " use standard jikes if available

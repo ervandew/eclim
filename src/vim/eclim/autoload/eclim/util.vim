@@ -49,6 +49,19 @@ function! eclim#util#Balloon(message)
   return message
 endfunction " }}}
 
+" CompilerExists(compiler) {{{
+" Check whether a particular vim compiler is available.
+function! eclim#util#CompilerExists(compiler)
+  if !exists('s:compilers')
+    redir => compilers
+    silent compiler
+    redir END
+    let s:compilers = split(compilers, '\n')
+    call map(s:compilers, 'fnamemodify(v:val, ":t:r")')
+  endif
+  return index(s:compilers, a:compiler) != -1
+endfunction " }}}
+
 " DelayedCommand(command, [delay]) {{{
 " Executes a delayed command.  Useful in cases where one would expect an
 " autocommand event (WinEnter, etc) to fire, but doesn't, or you need a
