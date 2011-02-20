@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.internal.resources.LinkDescription;
@@ -42,6 +44,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
+
+import com.google.gson.Gson;
 
 /**
  * Command which obtains a list of projects and project paths for use by clients
@@ -61,16 +65,24 @@ public class ProjectsCommand
     throws Exception
   {
     StringBuffer result = new StringBuffer();
+    Gson gson = new Gson();
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
     IPathVariableManager manager = workspace.getPathVariableManager();
     IProject[] projects = workspace.getRoot().getProjects();
     for (IProject project : projects){
-      if(result.length() > 0){
-        result.append('\n');
-      }
-      String projectPath = ProjectUtils.getPath(project);
-      result.append(project.getName()).append(':').append(projectPath);
+      HashMap<String,Object> info = new HashMap<String,Object>();
+      info.put("name", project.getName());
 
+      String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
+      if (aliases.length == 0){
+        aliases = new String[]{"none"};
+      }
+      info.put("natures", aliases);
+
+      String projectPath = ProjectUtils.getPath(project);
+      info.put("path", projectPath);
+
+      HashMap<String,String> links = new HashMap<String,String>();
       if (new File(projectPath).exists()){
         // don't open/close projects due to the impact on performance
         /*boolean close = false;
@@ -79,21 +91,17 @@ public class ProjectsCommand
           close = true;
         }*/
 
-        ResourceInfo info = ((Project)project).getResourceInfo(false, false);
-        ProjectDescription desc = ((ProjectInfo)info).getDescription();
+        ResourceInfo pinfo = ((Project)project).getResourceInfo(false, false);
+        ProjectDescription desc = ((ProjectInfo)pinfo).getDescription();
         if (desc != null){
           @SuppressWarnings("unchecked")
-          HashMap<IPath, LinkDescription> links =
+          HashMap<IPath, LinkDescription> linfo =
             (HashMap<IPath, LinkDescription>)desc.getLinks();
-          if (links != null){
-            for (IPath path : links.keySet()){
-              LinkDescription link = links.get(path);
+          if (linfo != null){
+            for (IPath path : linfo.keySet()){
+              LinkDescription link = linfo.get(path);
               IPath linkPath = FileUtil.toPath(link.getLocationURI());
-              result
-                .append(',')
-                .append(path)
-                .append(':')
-                .append(manager.resolvePath(linkPath));
+              links.put(path.toString(), manager.resolvePath(linkPath).toString());
             }
           }
         }
@@ -102,6 +110,12 @@ public class ProjectsCommand
           project.close(null);
         }*/
       }
+      info.put("links", links);
+
+      if(result.length() > 0){
+        result.append('\n');
+      }
+      result.append(gson.toJson(info));
     }
 
     return result.toString();

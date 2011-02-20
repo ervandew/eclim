@@ -29,6 +29,10 @@ endif
 if !exists('g:EclimTodoSearchExtensions')
   let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
 endif
+
+if !exists('g:EclimProjectStatusLine')
+  let g:EclimProjectStatusLine = '${name}'
+endif
 " }}}
 
 " Script Variables {{{
@@ -391,38 +395,27 @@ endfunction " }}}
 " ProjectStatusLine() {{{
 " Includes status information for the current file to VIM status
 function! eclim#project#util#ProjectStatusLine()
-  let project_info = eclim#project#util#ParsedProjectInfo('')
-  let eclim_status = ''
-  if len(project_info)
-    return '{ECLIM} PROJECT=' . project_info['Name'] . ' | NATURES=' . project_info['Natures']
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  if !empty(project)
+    let status = g:EclimProjectStatusLine
+    while status =~ '\${\w\+}'
+      let m = matchstr(status, '\${\w\+}')
+      let key = substitute(m, '^\${\(\w\+\)}', '\1', '')
+      let val = ''
+      if has_key(project, key)
+        let type = type(project[key])
+        if type == 1
+          let val = project[key]
+        elseif type == 3
+          let val = join(project[key], ',')
+        else
+          let val = string(project[key])
+        endif
+      endif
+      let status = substitute(status, m, val, 'g')
+    endwhile
+    return status
   endif
-endfunction " }}}
-
-" ParsedProjectInfo(project) {{{
-" Returns a dictionary of project information for the current or supplied
-" project.
-function! eclim#project#util#ParsedProjectInfo(project)
-  let project = a:project
-  if project == ''
-    let project = eclim#project#util#GetCurrentProjectName()
-  endif
-  if project == ''
-    return {}
-  endif
-  let command = substitute(s:command_project_info, '<project>', project, '')
-  let port = eclim#project#util#GetProjectPort(project)
-  let result = eclim#ExecuteEclim(command, port)
-
-  let project_info = {}
-
-  if result != '0'
-    let project_data = split(result, '\n')
-    for pair in project_data
-      let kv = split(pair, ':')
-      let project_info[kv[0]] = kv[1]
-    endfor
-  endif
-  return project_info
 endfunction " }}}
 
 " ProjectOpen(name) {{{
@@ -785,27 +778,13 @@ function! eclim#project#util#GetProjects()
       let results = split(result, "\n")
       let projects = []
       for line in results
-        let name = substitute(line, '\(.\{-}\):.*', '\1', '')
-        let paths = split(substitute(line, '.\{-}:\(.*\)', '\1', ''), ',')
+        let project = eval(line)
+        let project['workspace'] = workspace
         if has('win32unix')
-          let paths[0] = eclim#cygwin#CygwinPath(paths[0])
+          let project['path'] = eclim#cygwin#CygwinPath(project['path'])
+          call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
         endif
-
-        let links = {}
-        for p in paths[1:]
-          let linkname = substitute(p, '\(.\{-}\):.*', '\1', '')
-          let linkpath = substitute(p, '.\{-}:\(.*\)', '\1', '')
-          if has('win32unix')
-            let linkpath = eclim#cygwin#CygwinPath(linkpath)
-          endif
-          let links[linkname] = linkpath
-        endfor
-        call add(projects, {
-            \ 'workspace': workspace,
-            \ 'name': name,
-            \ 'path': paths[0],
-            \ 'links': links,
-          \ })
+        call add(projects, project)
       endfor
       let s:workspace_projects[workspace] = projects
     endfor

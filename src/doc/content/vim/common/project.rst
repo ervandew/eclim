@@ -173,6 +173,23 @@ Vim's command line completion to complete the project name.
 
   Echo info about the current or supplied project.
 
+  .. _g\:EclimProjectStatusLine:
+
+  Eclim supports displaying info about the current project in vim's status line
+  by adding a call to ``eclim#project#util#ProjectStatusLine()`` to your
+  statusline option:
+
+  .. code-block:: vim
+
+    set statusline=%<%f\ %M\ %h%r%=%-10.(%l,%c%V\ %{eclim#project#util#ProjectStatusLine()}%)\ %P
+
+  By default, this will just include the project name, but you can customize the
+  output by setting g:EclimProjectStatusLine:
+
+  .. code-block:: vim
+
+    let g:EclimProjectStatusLine = 'eclim(p=${name}, n=${natures})'
+
 .. _\:ProjectOpen:
 
 - **:ProjectOpen** [<project>]

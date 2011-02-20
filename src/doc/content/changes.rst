@@ -18,7 +18,7 @@ History of Changes
 
 .. _1.6.2:
 
-1.6.2 (2010)
+1.6.2 (2011)
 ----------------------
 
 Common:
@@ -27,6 +27,9 @@ Common:
   - Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
     several possible issues including "Unable to determine your eclipse
     workspace").
+  - Added support for displaying :ref:`project info <:ProjectInfo>` vim's
+    status line
+    (contributed by `Brendan W. McAdams <http://github.com/bwmcadams>`_).
 
 Python:
   - Updated all embedded python logic to be compatible with python 2.6 and higher.
