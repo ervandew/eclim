@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ if !exists('g:EclimProjectTreeExpandPathOnOpen')
 endif
 
 if !exists('g:EclimProjectTreeSharedInstance')
-  let g:EclimProjectTreeSharedInstance = 0
+  let g:EclimProjectTreeSharedInstance = 1
 endif
 
 if g:EclimProjectTreeAutoOpen && !exists('g:EclimProjectTreeAutoOpenProjects')

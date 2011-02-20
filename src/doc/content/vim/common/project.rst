@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -350,7 +350,7 @@ Vim's command line completion to complete the project name.
 
   .. _g\:EclimProjectTreeSharedInstance:
 
-  - **g:EclimProjectTreeSharedInstance** (Default: 0)
+  - **g:EclimProjectTreeSharedInstance** (Default: 1)
 
     When non 0, a tree instance with the same list of projects will be shared
     across vim tabs.  This allows you to have the same project tree open in
