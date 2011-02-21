@@ -32,6 +32,8 @@ import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.plugin.cdt.PluginResources;
 
+import org.eclim.plugin.cdt.util.CUtils;
+
 import org.eclim.plugin.core.project.ProjectManager;
 
 import org.eclim.plugin.core.util.XmlUtils;
@@ -39,6 +41,8 @@ import org.eclim.plugin.core.util.XmlUtils;
 import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileOffsets;
+
+import org.eclipse.cdt.core.CCorePlugin;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICModelStatus;
@@ -214,6 +218,8 @@ public class CProjectManager
   public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
+    ICProject cproject = CUtils.getCProject(project);
+    CCorePlugin.getIndexManager().reindex(cproject);
   }
 
   /**

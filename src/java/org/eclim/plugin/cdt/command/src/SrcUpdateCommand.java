@@ -39,8 +39,13 @@ import org.eclim.util.CollectionUtils;
 
 import org.eclim.util.file.FileOffsets;
 
+import org.eclipse.cdt.core.CCorePlugin;
+
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
+import org.eclipse.cdt.core.index.IIndexManager;
+
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 
@@ -81,18 +86,16 @@ public class SrcUpdateCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
 
-    // only refresh the file.
-    if(!commandLine.hasOption(Options.VALIDATE_OPTION)){
-      // getting the file will refresh it.
-      ProjectUtils.getFile(projectName, file);
+    IProject project = ProjectUtils.getProject(projectName);
+    ICProject cproject = CUtils.getCProject(project);
+    if(cproject.exists()){
+      ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
 
-    // validate the src file.
-    }else{
-      IProject project = ProjectUtils.getProject(projectName);
-      ICProject cproject = CUtils.getCProject(project);
-      if(cproject.exists()){
-        ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
+      // refresh the index
+      CCorePlugin.getIndexManager().update(
+          new ICElement[]{src}, IIndexManager.UPDATE_ALL);
 
+      if(commandLine.hasOption(Options.VALIDATE_OPTION)){
         List<IProblem> problems = getProblems(src);
         ArrayList<Error> errors = new ArrayList<Error>();
         String filename = src.getResource()
