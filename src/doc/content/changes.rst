@@ -31,6 +31,9 @@ Common:
     status line
     (contributed by `Brendan W. McAdams <http://github.com/bwmcadams>`_).
 
+C/C++
+  - Updated context search to greatly improve performance in some cases.
+
 Python:
   - Updated all embedded python logic to be compatible with python 2.6 and higher.
 

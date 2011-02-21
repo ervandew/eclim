@@ -30,7 +30,6 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.cdt.PluginResources;
 
-import org.eclim.plugin.cdt.util.ASTUtils;
 import org.eclim.plugin.cdt.util.CUtils;
 
 import org.eclim.plugin.core.command.AbstractCommand;
@@ -266,7 +265,9 @@ public class SearchCommand
         scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
     index.acquireReadLock();
     try{
-      IASTTranslationUnit ast = ASTUtils.getTranslationUnit(src);
+      IASTTranslationUnit ast = src.getAST(index,
+          ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT |
+          ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
       IASTNodeSelector selector = ast.getNodeSelector(null);
       IASTName name = selector.findEnclosingName(offset, length);
       if (name != null){
