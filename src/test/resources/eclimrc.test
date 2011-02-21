@@ -1,5 +1,5 @@
 # set the workspace
-osgi.instance.area.default=@user.home/workspace.test
+osgi.instance.area.default=@user.home/workspace.unittest
 
 nailgun.server.port=9092
 

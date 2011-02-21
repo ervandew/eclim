@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -341,7 +341,7 @@ target(name: 'test.init'){
   property(name: 'test.include', value: '**/*Test')
 
   userHome = binding.getVariable('user.home').replace('\\', '/')
-  property(name: 'eclipse.workspace', value: "${userHome}/workspace.test")
+  property(name: 'eclipse.workspace', value: "${userHome}/workspace.unittest")
 
   if (!pingEclim(Integer.parseInt(binding.getVariable('nailgun.server.port')))){
     fail(message: 'Failed to connect to test eclimd instance.')
