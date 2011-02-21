@@ -30,20 +30,22 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclipse.core.filesystem.IFileStore;
+
 import org.eclipse.core.internal.resources.LinkDescription;
 import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.internal.resources.ProjectInfo;
 import org.eclipse.core.internal.resources.ResourceInfo;
 
-import org.eclipse.core.internal.utils.FileUtil;
-
-import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
+
+import org.eclipse.ui.internal.ide.dialogs.IDEResourceInfoUtils;
 
 import com.google.gson.Gson;
 
@@ -67,7 +69,6 @@ public class ProjectsCommand
     StringBuffer result = new StringBuffer();
     Gson gson = new Gson();
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
-    IPathVariableManager manager = workspace.getPathVariableManager();
     IProject[] projects = workspace.getRoot().getProjects();
     for (IProject project : projects){
       HashMap<String,Object> info = new HashMap<String,Object>();
@@ -100,8 +101,12 @@ public class ProjectsCommand
           if (linfo != null){
             for (IPath path : linfo.keySet()){
               LinkDescription link = linfo.get(path);
-              IPath linkPath = FileUtil.toPath(link.getLocationURI());
-              links.put(path.toString(), manager.resolvePath(linkPath).toString());
+              IResource member = project.findMember(link.getProjectRelativePath());
+              IFileStore store = IDEResourceInfoUtils.getFileStore(
+                  member.getLocationURI());
+              String resolvedPath = store != null ?
+                store.toString() : link.getLocationURI().getPath();
+              links.put(path.toString(), resolvedPath);
             }
           }
         }
