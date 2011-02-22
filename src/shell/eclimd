@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2005 - 2010  Eric Van Dewoestine
+# Copyright (C) 2005 - 2011  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ build_vmargs(){
   fi
 
   # for osx
-  if [ `echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'` = "darwin" ] ; then
+  if [ "`echo $OSTYPE | sed 's|[0-9][0-9]*\.[0-9][0-9]*||'`" = "darwin" ] ; then
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
 
     # check if attempting to use 64bit jvm to run 32bit eclipse
