@@ -154,8 +154,8 @@
         </chmod>
 
         <!-- java symlink support sucks, especially if the link is broken -->
-        <exec executable="rm"> <arg line="${eclipse.local}/eclim"/> </exec>
-        <exec executable="rm"> <arg line="${eclipse.local}/eclimd"/> </exec>
+        <exec executable="rm"> <arg line="'${eclipse.local}/eclim'"/> </exec>
+        <exec executable="rm"> <arg line="'${eclipse.local}/eclimd'"/> </exec>
 
         <!-- formic doesn't include optional ant tasks (symlink in this case) -->
         <exec executable="ln" dir="${eclipse.local}">
