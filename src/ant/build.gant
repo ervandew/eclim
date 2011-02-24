@@ -259,7 +259,8 @@ target(name: 'deploy.eclipse'){
       instances.eachLine { line ->
         port = line.replaceFirst(/.*:/, '')
         echo("#  shutdown: ${line}")
-        eclim('-command shutdown', port=port, failonerror=false)
+        eclim('-command shutdown',
+          port=port, failonerror=false, dir=existing.toString() + '/bin')
       }
     }
     echo('###')
@@ -837,7 +838,7 @@ def createProject(project, nature, extra=null){
   }
 }
 
-def eclim(args, port=null, failonerror=true){
+def eclim(args, port=null, failonerror=true, dir=null){
   if (port == null){
     eclimrc = "${basedir}/src/test/resources/eclimrc.test"
     new File(eclimrc).eachLine { line ->
@@ -849,7 +850,11 @@ def eclim(args, port=null, failonerror=true){
 
   try {
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      eclimCmd = binding.getVariable('eclipse.home') + '/eclim.cmd'
+      if (dir == null){
+        eclimCmd = binding.getVariable('eclipse.home') + '/eclim.cmd'
+      }else{
+        eclimCmd = dir + '/eclim.cmd'
+      }
       drive = eclimCmd.substring(0, 2)
       ant.exec(executable: 'cmd.exe', failonerror: failonerror,
           output: 'build/eclim.log', append: false){
@@ -857,7 +862,12 @@ def eclim(args, port=null, failonerror=true){
         ant.arg(value: "${drive} && \"${eclimCmd}\" --nailgun-port ${port} ${args}")
       }
     }else{
-      ant.exec(executable: '${eclipse.home}/eclim', failonerror: failonerror,
+      if (dir == null){
+        eclimCmd = binding.getVariable('eclipse.home') + '/eclim'
+      }else{
+        eclimCmd = dir + '/eclim'
+      }
+      ant.exec(executable: eclimCmd, failonerror: failonerror,
           output: 'build/eclim.log', append: false){
         ant.arg(line: "--nailgun-port ${port} ${args}")
       }
