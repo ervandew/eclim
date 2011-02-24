@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,9 +27,12 @@ let s:starttag = '{%-\?\s*\(end\)\@!\(\w\+\)\s*\([^}]\+\)\?\s*-\?%}'
 let s:endtag = '{%-\?\s*end\w\+\s*-\?%}'
 
 let s:body_tags = {}
-for elements in g:HtmlJinjaBodyElements
-  let s:body_tags[elements[0]] = elements[-1]
-endfor
+function! s:InitBodyTags()
+  for elements in g:HtmlJinjaBodyElements
+    let s:body_tags[elements[0]] = elements[-1]
+  endfor
+endfunction
+call s:InitBodyTags()
 " }}}
 
 " CompleteEndTag() {{{
