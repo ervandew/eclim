@@ -599,6 +599,9 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       call eclim#util#EchoTrace('make: ' . make_cmd)
       exec 'make' . a:bang . ' ' . a:args
     endif
+  catch /E42\>/
+    " ignore 'E42: No Errors' which occurs when the make has qf results, but a
+    " QuickFixCmdPost filters them all out.
   finally
     if exists('saved_compiler')
       unlet! g:current_compiler b:current_compiler
