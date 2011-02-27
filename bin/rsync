@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2009  Eric Van Dewoestine
+# Copyright (C) 2005 - 2011  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,12 +29,12 @@ function site () {
   rsync --recursive --compress --force --whole-file --delete --delete-after \
     --stats -v --rsh="ssh -l ervandew" \
     $BASEDIR/build/doc/site/* \
-    ervandew,eclim@web.sourceforge.net:/home/groups/e/ec/eclim/htdocs
+    ervandew,eclim@web.sourceforge.net:/home/project-web/eclim/htdocs
 
   #rsync --recursive --compress --force --whole-file --delete --delete-after \
   #  --stats -v --rsh="ssh -l ervandew" --exclude="CVS" \
   #  $BASEDIR/bin/server/* \
-  #  ervandew@shell.sf.net:/home/groups/e/ec/eclim/scripts
+  #  ervandew@shell.sf.net:/home/project-web/eclim/scripts
 }
 
 function dist () {
