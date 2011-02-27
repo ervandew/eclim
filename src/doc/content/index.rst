@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -102,11 +102,20 @@ News
 ==================
 
 -----------
+2011-02-26
+-----------
+
+| :ref:`Eclim 1.6.2 <1.6.2>` is now available.
+| This is mostly a bug fix release, but please note that a handful of vim
+  features have been broken out into separate projects and are no longer shipped
+  with eclim.
+
+-----------
 2010-10-23
 -----------
 
 | :ref:`Eclim 1.6.1 <1.6.1>` is now available.
-| This is mostely a bug fix release with a few minor features tossed in.
+| This is mostly a bug fix release with a few minor features tossed in.
 
 -----------
 2010-08-01

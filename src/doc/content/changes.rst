@@ -18,15 +18,18 @@ History of Changes
 
 .. _1.6.2:
 
-1.6.2 (2011)
+1.6.2 (2011-02-26)
 ----------------------
+
+Bug Fixes:
+  - Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
+    several possible issues including "Unable to determine your eclipse
+    workspace").
+  - Various other bug fixes.
 
 Common:
   - Added rudimentary auto generated menu items for gvim (can be disabled via
     :ref:`g:EclimMenus <g:EclimMenus>`).
-  - Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
-    several possible issues including "Unable to determine your eclipse
-    workspace").
   - Added support for displaying :ref:`project info <:ProjectInfo>` vim's
     status line
     (contributed by `Brendan W. McAdams <http://github.com/bwmcadams>`_).
