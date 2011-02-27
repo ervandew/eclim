@@ -768,6 +768,8 @@ NOTES {{{
     Building vim:
     $ hg clone https://vim.googlecode.com/hg/ vim
     $ cd vim/src
+    # to clean out any previous configure cache, etc.
+    $ make distclean
     $ ./configure --with-features=huge --prefix=$HOME
     $ make install
 
