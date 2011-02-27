@@ -302,6 +302,16 @@ target(name: 'deploy.eclipse'){
     replacefilter(token: '$${eclim.gvim}', value: '${eclim.gvim}')
     replacefilter(token: '$${eclim.gvim.embed}', value: '${eclim.gvim.embed}')
   }
+
+  // precautionary forcing of bundles.info to have the correct bundle versions
+  // I don't like this one bit, it's hacky as all hell. Hopefully one day
+  // eclipse won't need its hand held (could convert to using dropins, but I've
+  // had issues with that as well in the past)
+  replaceregexp(
+    file: '${eclipse.home}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info',
+    match: 'org.eclim(.[a-z]+)?([,_])\\d+\\.\\d+\\.\\d+(\\.\\d+-g[a-f0-9]+)?',
+    replace: 'org.eclim\\1\\2${eclim.version}',
+    flags: 'g')
 }
 
 target(name: 'deploy.resources'){
