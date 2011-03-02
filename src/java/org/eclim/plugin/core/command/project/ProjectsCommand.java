@@ -74,11 +74,15 @@ public class ProjectsCommand
       HashMap<String,Object> info = new HashMap<String,Object>();
       info.put("name", project.getName());
 
-      String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
-      if (aliases.length == 0){
-        aliases = new String[]{"none"};
+      if (project.isOpen()){
+        String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
+        if (aliases.length == 0){
+          aliases = new String[]{"none"};
+        }
+        info.put("natures", aliases);
+      }else{
+        info.put("natures", new String[0]);
       }
-      info.put("natures", aliases);
 
       String projectPath = ProjectUtils.getPath(project);
       info.put("path", projectPath);
