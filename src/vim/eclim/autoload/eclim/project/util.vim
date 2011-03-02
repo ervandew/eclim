@@ -434,6 +434,7 @@ function! eclim#project#util#ProjectOpen(name)
   let result = eclim#ExecuteEclim(command, port)
   if result != '0'
     call eclim#util#Echo(result)
+    call eclim#project#util#ClearProjectsCache()
   endif
 endfunction " }}}
 
