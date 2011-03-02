@@ -481,7 +481,11 @@ function! eclim#tree#Cursor(line, prevline)
     let start = len(line) - len(substitute(line, '^\s\+\W', '', ''))
 
     " only use the real previous line if we've only moved one line
-    let pline = abs(a:prevline - lnum) == 1 ? getline(a:prevline) : ''
+    let moved = a:prevline - lnum
+    if moved < 0
+      let moved = -moved
+    endif
+    let pline = moved == 1 ? getline(a:prevline) : ''
     let pstart = pline != '' ?
       \ len(pline) - len(substitute(pline, '^\s\+\W', '', '')) : -1
 
