@@ -76,6 +76,10 @@ function! eclim#java#test#ResolveQuickfixResults(frameworks)
   endfor
 
   call setqflist(newentries, 'r')
+
+  " vim is finicky about changing the quickfix list during a QuickFixCmdPost
+  " autocmd, so force a delayed reload of the quickfix results
+  call eclim#util#DelayedCommand('call setqflist(getqflist(), "r")')
 endfunction " }}}
 
 " GetTestSrcDir(type) {{{
