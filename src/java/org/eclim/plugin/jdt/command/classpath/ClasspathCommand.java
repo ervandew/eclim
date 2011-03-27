@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.jdt.command.classpath;
+
+import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.annotation.Command;
 
@@ -37,7 +39,9 @@ import org.eclipse.jdt.core.IJavaProject;
  */
 @Command(
   name = "java_classpath",
-  options = "REQUIRED p project ARG"
+  options =
+    "REQUIRED p project ARG," +
+    "OPTIONAL d delimiter ARG"
 )
 public class ClasspathCommand
   extends AbstractCommand
@@ -50,9 +54,11 @@ public class ClasspathCommand
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
+    String delim = commandLine.getValue(
+        Options.DELIMETER_OPTION, SystemUtils.PATH_SEPARATOR);
     IJavaProject javaProject = JavaUtils.getJavaProject(name);
 
     String[] paths = ClasspathUtils.getClasspath(javaProject);
-    return StringUtils.join(paths, "\n");
+    return StringUtils.join(paths, delim);
   }
 }
