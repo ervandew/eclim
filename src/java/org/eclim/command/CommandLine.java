@@ -113,6 +113,21 @@ public class CommandLine
   }
 
   /**
+   * Get the value of an arg supplied with the command line option. If not found
+   * return the supplied default value.
+   *
+   * @param name The name of the option to get the arg for.
+   * @param dflt The default value to use if the arg is not found.
+   * @return The argument supplied to the option or the default value.
+   */
+  public String getValue(String name, String dflt)
+    throws Exception
+  {
+    String value = getValue(name);
+    return value != null ? value : dflt;
+  }
+
+  /**
    * Get the values of an arg supplied with the command line option.
    *
    * @param name The name of the option to get the arg for.
