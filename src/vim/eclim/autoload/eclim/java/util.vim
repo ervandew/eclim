@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
   let s:update_command = '-command java_src_update -p "<project>" -f "<file>"'
   let s:command_src_exists = '-command java_src_exists -f "<file>"'
   let s:command_list_installs = '-command java_list_installs'
+  let s:command_classpath = '-command java_classpath -p "<project>"'
   let s:command_read_class = '-command java_class_prototype -c <class>'
 
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
@@ -356,6 +357,28 @@ function! eclim#java#util#Java(classname, args)
   if exists(":Java") != 2
     command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
   endif
+endfunction " }}}
+
+" Classpath(...) {{{
+function! eclim#java#util#Classpath(...)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let command = s:command_classpath
+  let command = substitute(command, '<project>', project, '')
+  for arg in a:000
+    if arg == '\n'
+      let arg = "\n"
+    endif
+    let command .= " \"" . arg . "\""
+  endfor
+  let result = eclim#ExecuteEclim(command)
+  if result == '0'
+    return
+  endif
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 " ListInstalls() {{{

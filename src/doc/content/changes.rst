@@ -16,6 +16,15 @@
 History of Changes
 ==================
 
+.. _1.6.3:
+
+1.6.3 (2011)
+----------------------
+
+Java:
+  - Added :ref:`:JavaClasspath <:JavaClasspath>` to echo the project's current
+    classpath.
+
 .. _1.6.2:
 
 1.6.2 (2011-02-26)

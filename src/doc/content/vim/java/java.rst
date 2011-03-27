@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,6 +80,28 @@ Eclim Settings
   javac to be executed against.  When unset, all your configured source
   directories will be used.
 
+.. _\:JavaClasspath:
+
+
+Echo the classpath for the current project
+------------------------------------------
+
+When editing a java file, eclim provides the command **:JavaClasspath** which
+will echo the project's resolved classpath entries separated by the system path
+separator or a supplied
+delimiter:
+
+.. code-block:: vim
+
+  :JavaClasspath
+  :JavaClasspath -d \\n
+
+If you would like to get the classpath from a script, you can also call eclim
+directly:
+
+.. code-block:: sh
+
+  $ $ECLIPSE_HOME/eclim -command java_classpath -p <project_name>
 
 .. _\:JavaListInstalls:
 

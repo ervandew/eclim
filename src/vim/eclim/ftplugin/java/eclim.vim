@@ -162,6 +162,9 @@ endif
 if exists(":Java") != 2
   command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
 endif
+if exists(":JavaClasspath") != 2
+  command -buffer -nargs=* JavaClasspath :call eclim#java#util#Classpath(<f-args>)
+endif
 if exists(":JavaListInstalls") != 2
   command -buffer -nargs=* JavaListInstalls :call eclim#java#util#ListInstalls()
 endif

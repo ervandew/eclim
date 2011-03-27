@@ -185,6 +185,9 @@ Java Commands
   Executes the java using your project's main class.
 - :ref:`:Javac <:Javac>` -
   Executes the javac utility against all source files.
+- :ref:`:JavaClasspath <:JavaClasspath>` [-d <delim>] -
+  Echos the project's classpath delimited by the system path separator or the
+  supplied delimiter.
 - :ref:`:Javadoc <:Javadoc>` [file, file, ...] -
   Executes the javadoc utility against all or just the supplied source files.
 - :ref:`:JavaListInstalls <:JavaListInstalls>` - List known JDK/JRE installs.
