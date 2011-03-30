@@ -391,6 +391,12 @@ Vim's command line completion to complete the project name.
     opening files that match those patterns.  Note that the first mapping is the
     list is used as the default (<cr>).
 
+  .. note::
+
+    ProjectTree honors vim's 'wildignore' option by filtering out files
+    matching those patterns from the tree. The 'A' mapping will toggle the
+    display of those files along with other hidden files and directories.
+
 .. _\:ProjectsTree:
 
 - **:ProjectsTree**
