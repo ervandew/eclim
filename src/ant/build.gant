@@ -75,7 +75,7 @@ target(name: 'init'){
   property(name: 'eclim.version', value: version)
   echo('eclim.version: ${eclim.version}')
 
-  property(name: 'eclim.plugins', value: '${eclipse.home}/plugins')
+  property(name: 'eclim.plugins', value: '${eclipse.home}/dropins')
   property(name: 'eclim.home', value: '${eclim.plugins}/org.eclim_${eclim.version}')
 
   // set location of vim files if not already set
