@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,12 +94,15 @@ public class CodeCompleteCommand
   protected String getDescription(IScriptCompletionProposal proposal)
   {
     String description = super.getDescription(proposal);
-    description = REMOVE_HEAD.matcher(description).replaceFirst("");
-    description = description.replaceAll("</dt>", ": ");
-    description = description.replaceAll("</dd>", " ");
-    description = description.replaceAll("</?[^>]+>", "");
-    description = description.replaceAll("-->", "");
-    description = description.replaceAll("\n", "");
-    return description.trim();
+    if (description != null){
+      description = REMOVE_HEAD.matcher(description).replaceFirst("");
+      description = description.replaceAll("</dt>", ": ");
+      description = description.replaceAll("</dd>", " ");
+      description = description.replaceAll("</?[^>]+>", "");
+      description = description.replaceAll("-->", "");
+      description = description.replaceAll("\n", "");
+      description = description.trim();
+    }
+    return description;
   }
 }
