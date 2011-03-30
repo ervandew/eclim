@@ -21,6 +21,10 @@ History of Changes
 1.6.3 (2011)
 ----------------------
 
+Installer:
+  - Prevent possible OutOfMemoryError when invoking eclipse to install plugin
+    dependencies by setting a larger heap space.
+
 Java:
   - Added :ref:`:JavaClasspath <:JavaClasspath>` to echo the project's current
     classpath.

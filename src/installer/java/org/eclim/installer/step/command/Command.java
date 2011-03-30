@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +56,11 @@ public abstract class Command
   public Command(OutputHandler handler, String[] cmd, String application)
     throws Exception
   {
+    String[] jargs = {"java", "-Xmx256M"};
     String[] vmargs = getJvmArgs();
+
     this.handler = handler;
-    this.cmd = new String[1 + vmargs.length + cmd.length + LAUNCHER.length];
+    this.cmd = new String[jargs.length + vmargs.length + cmd.length + LAUNCHER.length];
 
     String launcher = EclipseUtils.findEclipseLauncherJar();
     if (launcher == null){
@@ -67,12 +69,15 @@ public abstract class Command
         Installer.getProject().getProperty("eclipse.home"));
     }
 
+
     this.cmd[0] = "java";
-    System.arraycopy(vmargs, 0, this.cmd, 1, vmargs.length);
-    System.arraycopy(LAUNCHER, 0, this.cmd, 1 + vmargs.length, LAUNCHER.length);
-    this.cmd[1 + vmargs.length + 1] = launcher;
-    this.cmd[1 + vmargs.length + 4] = application;
-    System.arraycopy(cmd, 0, this.cmd, 1 + vmargs.length + LAUNCHER.length, cmd.length);
+    this.cmd[1] = "java";
+    System.arraycopy(jargs, 0, this.cmd, 0, jargs.length);
+    System.arraycopy(vmargs, 0, this.cmd, jargs.length, vmargs.length);
+    System.arraycopy(LAUNCHER, 0, this.cmd, jargs.length + vmargs.length, LAUNCHER.length);
+    this.cmd[jargs.length + vmargs.length + 1] = launcher;
+    this.cmd[jargs.length + vmargs.length + 4] = application;
+    System.arraycopy(cmd, 0, this.cmd, jargs.length + vmargs.length + LAUNCHER.length, cmd.length);
   }
 
   @SuppressWarnings("rawtypes")
