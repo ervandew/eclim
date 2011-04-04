@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2009  Eric Van Dewoestine
+Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -72,7 +72,14 @@ class Nailgun(object):
 
         return (retcode, result)
       except socket.error, ex:
-        return (ex.args[0], 'connect: %s' % ex.args[1])
+        args = ex.args
+        if len(args) > 1:
+          retcode, msg = args[0], args[1]
+        elif len(args):
+          retcode, msg = 1, args[0]
+        else:
+          retcode, msg = 1, 'No message'
+        return (retcode, 'send: %s' % msg)
     finally:
       if not self.keepAlive:
         try:
@@ -91,7 +98,14 @@ class Nailgun(object):
       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       sock.connect(('localhost', port))
     except socket.error, ex:
-      return (ex.args[0], 'connect: %s' % ex.args[1])
+      args = ex.args
+      if len(args) > 1:
+        retcode, msg = args[0], args[1]
+      elif len(args):
+        retcode, msg = 1, args[0]
+      else:
+        retcode, msg = 1, 'No message'
+      return (retcode, 'connect: %s' % msg)
 
     self.socket = sock
     return (0, '')
