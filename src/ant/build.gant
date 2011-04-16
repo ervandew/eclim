@@ -475,6 +475,7 @@ target(name: 'test.vunit'){
   vunit(todir: 'build/test/vunit/results',
       failureproperty: 'vunit.failed'){
     sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
+    pathelement(path: '${vim.files}')
     ant.plugin(name: 'plugin/eclim.vim')
     fileset(dir: 'src/test/vunit',
         includes: '${test.include}.vim',
