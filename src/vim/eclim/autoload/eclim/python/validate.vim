@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ function eclim#python#validate#PyLint()
       if has('win32') || has('win64')
         let pylint_env .= 'set "PYTHONPATH=' . join(paths, ';') . '" && '
       else
-        let pylint_env .= 'PYTHONPATH="$PYTHONPATH:' . join(paths, ':') . '"'
+        let pylint_env .= 'PYTHONPATH="' . join(paths, ':') . ':$PYTHONPATH"'
       endif
     endif
   endif
