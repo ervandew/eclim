@@ -102,6 +102,13 @@ News
 ==================
 
 -----------
+2011-04-16
+-----------
+
+| :ref:`Eclim 1.6.3 <1.6.3>` is now available.
+| This is primarily a bug fix release.
+
+-----------
 2011-02-26
 -----------
 
