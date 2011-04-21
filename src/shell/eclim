@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2005 - 2010  Eric Van Dewoestine
+# Copyright (C) 2005 - 2011  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -77,17 +77,20 @@ fi
 # ex. eclim -Dnailgun.server.port=9092 -command ping
 if [ -n "$SED" -a -n "$1" ] ; then
   ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
-  if [ -n "$ARG" ] ; then
+  while [ -n "$ARG" ] ; do
     shift
-    NAILGUN_ARGS=`echo "$ARG" | sed -n -f "$CURPATH/eclim.sed"`
-  fi
+    NAILGUN_ARGS="$NAILGUN_ARGS `echo "$ARG" | sed -n -f "$CURPATH/eclim.sed"`"
+    ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
+  done
 fi
 
-if [ -z "$NAILGUN_ARGS" ] ; then
-  NAILGUN_ARGS="--nailgun-port 9091"
+# add default port number if not supplied
+PORT_SUPPLIED=`echo "$NAILGUN_ARGS $@" | sed '/--nailgun-port/!d'`
+if [ -z "$PORT_SUPPLIED" ] ; then
+  NAILGUN_ARGS="$NAILGUN_ARGS --nailgun-port 9091"
 fi
 
-"$CURPATH/ng" $NAILGUN_ARGS org.eclim.command.Main "$@" 2>&1
+"$CURPATH/ng" $NAILGUN_ARGS org.eclim.command.Main "$@"
 
 # Weirdest thing that for the life of me I can't figure out.
 # Sometimes when executed through vim, the exit status will be

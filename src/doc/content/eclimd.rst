@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -256,6 +256,9 @@ with the exception of any vm args which you would like to include.
 Ex.
 
 .. code-block:: cfg
+
+  # Bind eclimd to all interfaces
+  nailgun.server.host=0.0.0.0
 
   # Specifies the port that nailgun / eclimd listens on for client requests.
   nailgun.server.port=10012
