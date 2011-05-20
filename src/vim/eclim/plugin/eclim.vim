@@ -157,6 +157,11 @@ endif
 " Auto Commands{{{
 
 if g:EclimShowCurrentError
+  " forcing load of util, otherwise a bug in vim is sometimes triggered when
+  " searching for a pattern where the pattern is echoed twice.  Reproducable
+  " by opening a new vim and searching for 't' (/t<cr>).
+  runtime eclim/autoload/eclim/util.vim
+
   augroup eclim_show_error
     autocmd!
     autocmd CursorMoved * call eclim#util#ShowCurrentError()
