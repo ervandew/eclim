@@ -978,7 +978,7 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError()
-  if mode() != 'n'
+  if mode() != 'n' || expand('%') == ''
     return
   endif
 
