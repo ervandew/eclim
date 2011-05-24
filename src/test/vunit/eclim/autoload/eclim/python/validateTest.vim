@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ function! TestPylint()
   call vunit#AssertEquals(len(qf), 2)
   call vunit#AssertEquals(qf[0].lnum, 3)
   call vunit#AssertEquals(qf[0].type, 'w')
-  call vunit#AssertEquals(qf[0].text, ' Unused import common')
+  call vunit#AssertEquals(qf[0].text, ' Unused import test2')
   call vunit#AssertEquals(qf[1].lnum, 5)
   call vunit#AssertEquals(qf[1].type, 'w')
   call vunit#AssertEquals(qf[1].text, ' Statement seems to have no effect')

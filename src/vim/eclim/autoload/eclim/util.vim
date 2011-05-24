@@ -630,7 +630,7 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       unlet w:quickfix_dir
     endif
 
-    autocmd! eclim_make_java_test
+    silent! autocmd! eclim_make_java_test
   endtry
 endfunction " }}}
 
@@ -978,7 +978,7 @@ endfunction " }}}
 " ShowCurrentError() {{{
 " Shows the error on the cursor line if one.
 function! eclim#util#ShowCurrentError()
-  if mode() != 'n'
+  if mode() != 'n' || expand('%') == ''
     return
   endif
 

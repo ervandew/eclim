@@ -18,8 +18,13 @@ History of Changes
 
 .. _1.6.3:
 
-1.6.3 (2011)
+1.6.3 (2011-04-16)
 ----------------------
+
+Bug Fixes:
+  - Fixed bug where one or more closed projects would prevent working with open
+    projects.
+  - Other small bug fixes.
 
 Installer:
   - Prevent possible OutOfMemoryError when invoking eclipse to install plugin

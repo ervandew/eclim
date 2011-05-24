@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.net.BindException;
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -93,6 +94,12 @@ public abstract class AbstractEclimApplication
     logger.info("Starting eclim...");
     instance = this;
     int exitCode = 0;
+
+    String host = Services.getPluginResources("org.eclim")
+      .getProperty("nailgun.server.host");
+    String portString = Services.getPluginResources("org.eclim")
+      .getProperty("nailgun.server.port");
+
     try{
       if (!onStart()){
         return EXIT_OK;
@@ -109,26 +116,21 @@ public abstract class AbstractEclimApplication
         registered = registerInstance();
 
         // start nailgun
-        String portString = Services.getPluginResources("org.eclim")
-          .getProperty("nailgun.server.port");
         int port = Integer.parseInt(portString);
-        logger.info("Eclim Server Started on port " + port + '.');
-        server = new NGServer(null, port, getExtensionClassLoader());
+        logger.info("Eclim Server Started on: " + host + ':' + port);
+        InetAddress address = InetAddress.getByName(host);
+        server = new NGServer(address, port, getExtensionClassLoader());
         starting = false;
         server.run();
       }else{
         exitCode = 1;
       }
     }catch(NumberFormatException nfe){
-      String p = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
       logger.error("Error starting eclim:",
-          new RuntimeException("Invalid port number: '" + p + "'"));
+          new RuntimeException("Invalid port number: '" + portString + "'"));
       return new Integer(1);
     }catch(BindException be){
-      String p = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      logger.error("Error starting eclim on port '" + p + "':", be);
+      logger.error("Error starting eclim on " + host + ':' + portString + ":", be);
       return new Integer(1);
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);

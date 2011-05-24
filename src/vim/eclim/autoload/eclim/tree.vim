@@ -774,6 +774,12 @@ function! eclim#tree#Mkdir()
     return
   endif
 
+  " work around apparent vim bug attempting to create a dir with a trailing
+  " slash.
+  if response[-1:] == '/'
+    let response = response[:-2]
+  endif
+
   call mkdir(response, 'p')
   call eclim#tree#Refresh()
 endfunction " }}}

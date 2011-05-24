@@ -364,31 +364,34 @@ target(name: 'test.init'){
     fileset(dir: '${user.home}/.eclim/cache', includes: '**/*')
   }
 
-  createProject('eclim_unit_test', 'none')
+  testQuick = ant.project.getProperty('test.quick')
+  if (testQuick == null){
+    createProject('eclim_unit_test', 'none')
 
-  createProject('eclim_unit_test_java', 'java'){
-    delete(dir: '${eclipse.workspace}/eclim_unit_test_java_linked',
-        includeEmptyDirs: 'true')
-    copy(todir: '${eclipse.workspace}'){
-      fileset(dir: 'src/test/resources',
-          includes: 'eclim_unit_test_java_linked/**/*')
+    createProject('eclim_unit_test_java', 'java'){
+      delete(dir: '${eclipse.workspace}/eclim_unit_test_java_linked',
+          includeEmptyDirs: 'true')
+      copy(todir: '${eclipse.workspace}'){
+        fileset(dir: 'src/test/resources',
+            includes: 'eclim_unit_test_java_linked/**/*')
+      }
     }
-  }
 
-  createProject('eclim_unit_test_web', 'none')
-  createProject('eclim_unit_test_c', 'c')
-  createProject('eclim_unit_test_php', 'php')
-  createProject('eclim_unit_test_python', 'none')
+    createProject('eclim_unit_test_web', 'none')
+    createProject('eclim_unit_test_c', 'c')
+    createProject('eclim_unit_test_php', 'php')
+    createProject('eclim_unit_test_python', 'none')
 
-  // create interpreter before creating the project
-  if (Os.isFamily(Os.FAMILY_WINDOWS)){
-    property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
-  }else{
-    property(name: 'ruby.path', value: '/usr/bin/ruby')
+    // create interpreter before creating the project
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
+    }else{
+      property(name: 'ruby.path', value: '/usr/bin/ruby')
+    }
+    eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
+    eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
+    createProject('eclim_unit_test_ruby', 'ruby')
   }
-  eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
-  eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
-  createProject('eclim_unit_test_ruby', 'ruby')
 }
 
 target(name: 'test'){
@@ -475,6 +478,7 @@ target(name: 'test.vunit'){
   vunit(todir: 'build/test/vunit/results',
       failureproperty: 'vunit.failed'){
     sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
+    pathelement(path: '${vim.files}')
     ant.plugin(name: 'plugin/eclim.vim')
     fileset(dir: 'src/test/vunit',
         includes: '${test.include}.vim',

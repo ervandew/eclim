@@ -1,5 +1,5 @@
 """ Test file for pylint validation """
-from rope.base import project
-from test import common
+from test.common.functions import test1
+from test.common.functions import test2
 
-project
+test1

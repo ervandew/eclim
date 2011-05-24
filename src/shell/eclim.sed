@@ -1,4 +1,4 @@
-# Copyright (C) 2005 - 2009  Eric Van Dewoestine
+# Copyright (C) 2005 - 2011  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,5 +45,9 @@ ${
   s/\(-D\)*nailgun\.server\.\([a-zA-Z]*\)[ ]*=[ ]*\([a-zA-Z0-9]*\)/ --nailgun-\2 \3/g
   # remove all new line characters
   s/\n/ /g
+  # --nailgun-host should actually be --nailgun-server
+  s/--nailgun-host/--nailgun-server/g
+  # if the nailgun server ip is 0.0.0.0, just delete the arg
+  s/ --nailgun-server 0\.0\.0\.0//g
   p
 }
