@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,10 +151,7 @@ public class SearchCommand
 
     // element search
     if(file != null && offset != null && length != null){
-      String encoding = commandLine.getValue(Options.ENCODING_OPTION);
-      String filepath = ProjectUtils.getFilePath(project, file);
-
-	  int charOffset = getOffset(commandLine);
+      int charOffset = getOffset(commandLine);
       Position position = new Position(
           file, charOffset, Integer.parseInt(length));
       IJavaElement element = getElement(project, position);
