@@ -154,8 +154,7 @@ public class SearchCommand
       String encoding = commandLine.getValue(Options.ENCODING_OPTION);
       String filepath = ProjectUtils.getFilePath(project, file);
 
-      int charOffset = FileUtils.byteOffsetToCharOffset(
-          filepath, getOffset(commandLine), encoding);
+	  int charOffset = getOffset(commandLine);
       Position position = new Position(
           file, charOffset, Integer.parseInt(length));
       IJavaElement element = getElement(project, position);
