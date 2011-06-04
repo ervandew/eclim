@@ -42,7 +42,7 @@ while [ -h "$FILEPATH" ] ; do
 done
 CURPATH=`dirname "$FILEPATH"`
 
-SED=`which sed 2> /dev/null`
+PERL=`which perl 2> /dev/null`
 
 ECLIMRC=$HOME/.eclimrc
 if [ "$1" = "-f" ] ; then
@@ -66,8 +66,28 @@ if [ "$1" = "-f" ] ; then
 fi
 
 # attempt to grab port number from .eclimrc file if available.
-if [ -f "$ECLIMRC" -a -n "$SED" ] ; then
-  ARGS=`sed -n -f "$CURPATH/eclim.sed" "$ECLIMRC"`
+if [ -f "$ECLIMRC" -a -n "$PERL" ] ; then
+  ARGS=`
+    cat "$ECLIMRC" | \
+      perl -pe '
+        # remove leading/trailing whitespace
+        s|^\s+||g ; s|\s+$|\n|g ;
+        # remove line continuations
+        s|\\\\\n||g ;
+      ' | \
+      perl -pe '
+        # remove all but nailgun properties
+        s|^(?!\s*(?:-D)?nailgun\.server\.[a-z]+\s*=).*$||g ;
+        # convert properties to nailgun arguments.
+        s|\s*(?:-D)?nailgun\.server\.([a-z]+)\s*=\s*(\S+)| --nailgun-\1 \2|g ;
+        # remove all new line characters
+        s|\n||g ;
+        # --nailgun-host should actually be --nailgun-server
+        s|--nailgun-host|--nailgun-server|g ;
+        # if the nailgun server ip is 0.0.0.0, just delete the arg
+        s| --nailgun-server 0\.0\.0\.0||g ;
+      #'
+  `
   if [ "$ARGS" != "" ] ; then
     NAILGUN_ARGS=$ARGS
   fi
@@ -75,7 +95,7 @@ fi
 
 # allow nailgun port to be supplied on the command line like eclimd
 # ex. eclim -Dnailgun.server.port=9092 -command ping
-if [ -n "$SED" -a -n "$1" ] ; then
+if [ -n "$1" ] ; then
   ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
   while [ -n "$ARG" ] ; do
     shift

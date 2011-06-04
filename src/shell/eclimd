@@ -76,10 +76,23 @@ build_vmargs(){
   ECLIM_VMARGS="$ECLIMD_OPTS"
 
   # attempt to grab properties from .eclimrc if available.
-  SED=`which sed 2> /dev/null`
-  if [ -f "$ECLIMRC" -a -n "$SED" ] ; then
+  PERL=`which perl 2> /dev/null`
+  if [ -f "$ECLIMRC" -a -n "$PERL" ] ; then
     ECLIM_VMARGS="$ECLIM_VMARGS `
-      sed -n -f \"$ECLIM_HOME/bin/eclimd.sed\" \"$ECLIMRC\"
+      cat "$ECLIMRC" | perl -pe '
+        # remove leading/trailing whitespace
+        s|^\s+||g ; s|\s+$|\n|g ;
+        # delete comment lines
+        s|^#.*$||g ;
+        # delete empty lines
+        s|^\n||g ;
+        # remove line continuations
+        s|\\\\\n||g ;
+        # add -D for each property
+        s|^\s*([a-zA-Z])| -D\1|g ;
+        # new line characters
+        s|\n| |g ;
+      '
     `"
   fi
 
