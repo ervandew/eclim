@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -328,14 +328,8 @@ function! eclim#display#signs#Show(type, list)
 
     let newentries = []
     for entry in list
-      let newentry = {
-          \ 'filename': bufname(entry.bufnr),
-          \ 'lnum': entry.lnum,
-          \ 'col': entry.col,
-          \ 'text': entry.text,
-          \ 'type': a:type
-        \ }
-      call add(newentries, newentry)
+      let entry['type'] = a:type
+      call add(newentries, entry)
     endfor
 
     if a:list == 'qf'
