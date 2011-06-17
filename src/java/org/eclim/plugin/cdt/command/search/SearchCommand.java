@@ -276,9 +276,7 @@ public class SearchCommand
 
         int flags = IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
         if (context == FIND_CONTEXT){
-          if (name.isDeclaration() && name.isDefinition()){
-            flags |= IIndex.FIND_REFERENCES;
-          } else if (!name.isDeclaration() && !name.isDefinition()){
+          if (!name.isDeclaration() && !name.isDefinition()){
             flags |= IIndex.FIND_DEFINITIONS;
           } else {
             // if on the declaration, search for the definition and vice verca
