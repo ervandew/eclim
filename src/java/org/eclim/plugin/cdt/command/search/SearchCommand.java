@@ -156,7 +156,8 @@ public class SearchCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
     if(src != null){
-      int context = getContext(commandLine.getValue(Options.CONTEXT_OPTION));
+      int context = getContext(
+          commandLine.getValue(Options.CONTEXT_OPTION), FIND_CONTEXT);
 
       ICProject[] scope = new ICProject[]{cproject};
       if (SCOPE_ALL.equals(commandLine.getValue(Options.SCOPE_OPTION))){
@@ -275,7 +276,9 @@ public class SearchCommand
 
         int flags = IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
         if (context == FIND_CONTEXT){
-          if (!name.isDeclaration() && !name.isDefinition()){
+          if (name.isDeclaration() && name.isDefinition()){
+            flags |= IIndex.FIND_REFERENCES;
+          } else if (!name.isDeclaration() && !name.isDefinition()){
             flags |= IIndex.FIND_DEFINITIONS;
           } else {
             // if on the declaration, search for the definition and vice verca
@@ -317,11 +320,15 @@ public class SearchCommand
           if ((flags & IIndex.FIND_DEFINITIONS) != 0){
             CollectionUtils.addAll(names, ast.getDefinitions(binding));
           }
+          if ((flags & IIndex.FIND_REFERENCES) != 0){
+            CollectionUtils.addAll(names, ast.getReferences(binding));
+          }
         }
       }
     }finally{
       index.releaseReadLock();
     }
+
     return names.toArray(new IName[names.size()]);
   }
 
@@ -370,6 +377,22 @@ public class SearchCommand
    */
   protected int getContext(String context)
   {
+    return getContext(context, PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS);
+  }
+
+  /**
+   * Translates the string context to the int equivalent.
+   *
+   * @param context The String context.
+   * @param dflt The default String context.
+   * @return The int context
+   */
+  protected int getContext(String context, int dflt)
+  {
+    if (context == null){
+      return dflt;
+    }
+
     if(CONTEXT_ALL.equals(context)){
       return PDOMSearchQuery.FIND_ALL_OCCURRENCES;
     }else if(CONTEXT_CONTEXT.equals(context)){
