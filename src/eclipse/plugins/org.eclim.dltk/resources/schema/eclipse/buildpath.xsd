@@ -19,6 +19,7 @@
                   </xs:simpleType>
                 </xs:attribute>
                 <xs:attribute name="path" type="xs:string" use="required"/>
+                <xs:attribute name="exported" type="xs:boolean" use="optional"/>
                 <xs:attribute name="external" type="xs:boolean" use="optional"/>
                 <xs:attribute name="combineaccessrules" type="xs:boolean" use="optional"/>
               </xs:extension>
