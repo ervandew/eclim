@@ -102,6 +102,19 @@ News
 ==================
 
 -----------
+2011-06-26
+-----------
+
+| :ref:`Eclim 1.7.0 <1.7.0>` is now available.
+| The most notable changes are:
+
+* Eclim has been upgraded to support Eclipse 3.7 (Indigo).
+
+  .. note::
+
+    Eclim now **requires** Eclipse 3.7.
+
+-----------
 2011-04-16
 -----------
 

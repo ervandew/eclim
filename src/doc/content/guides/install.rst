@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ Before beginning the installation, first confirm that you have met the
 following requirements.
 
 - `Java Development Kit`_ 1.5 or greater
-- `Eclipse 3.6.x (Helios)`_
+- `Eclipse 3.7.x (Indigo)`_
 - `Vim 7.1.x`_
 - Mac and Linux users must also have make and gcc installed.
 
@@ -302,7 +302,7 @@ other features be enabled, as noted below:
 
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
-.. _eclipse 3.6.x (helios): http://eclipse.org/downloads/index.php
+.. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_<version>.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user

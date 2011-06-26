@@ -16,9 +16,21 @@
 History of Changes
 ==================
 
+.. _1.7.0:
+
+1.7.0 (Jun. 26, 2011)
+----------------------
+
+Bug Fixes:
+  - Bug fixes for eclipse 3.7 (Indigo) compatability.
+  - Other bug fixes.
+
+Eclipse:
+  - Eclim now requires the latest version of eclipse (Indigo, 3.7).
+
 .. _1.6.3:
 
-1.6.3 (2011-04-16)
+1.6.3 (Apr. 16, 2011)
 ----------------------
 
 Bug Fixes:
@@ -36,7 +48,7 @@ Java:
 
 .. _1.6.2:
 
-1.6.2 (2011-02-26)
+1.6.2 (Feb. 26, 2011)
 ----------------------
 
 Bug Fixes:
@@ -83,7 +95,7 @@ Other:
 
 .. _1.6.1:
 
-1.6.1 (2010-10-23)
+1.6.1 (Oct. 23, 2010)
 ----------------------
 
 Bug Fixes:
