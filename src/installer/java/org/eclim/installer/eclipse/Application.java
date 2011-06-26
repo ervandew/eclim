@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * Portions of this class that are copied from the eclipse source are the
  * copyright (c) of IBM Corporation and others, and released under the Eclipse
@@ -31,10 +31,11 @@ import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.equinox.app.IApplication;
 
+import org.eclipse.equinox.internal.p2.director.ProfileChangeRequest;
+
 import org.eclipse.equinox.internal.p2.director.app.Messages;
 
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
-import org.eclipse.equinox.internal.provisional.p2.director.ProfileChangeRequest;
 
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -114,6 +115,8 @@ public class Application
       // processArguments
       boolean printHelpInfo = ((Boolean)this.getPrivateField("printHelpInfo")).booleanValue();
       boolean printIUList = ((Boolean)this.getPrivateField("printIUList")).booleanValue();
+      boolean printRootIUList = ((Boolean)this.getPrivateField("printRootIUList")).booleanValue();
+      boolean printTags = ((Boolean)this.getPrivateField("printTags")).booleanValue();
       boolean purgeRegistry = ((Boolean)this.getPrivateField("purgeRegistry")).booleanValue();
 
       if (printHelpInfo){
@@ -128,11 +131,12 @@ public class Application
         invokePrivate("initializeRepositories", new Class[0], new Object[0]);
 
         // EV: pull more private vars in.
-        long revertToPreviousState = ((Long)this.getPrivateField("revertToPreviousState")).longValue();
+        String NOTHING_TO_REVERT_TO = (String)this.getPrivateField("NOTHING_TO_REVERT_TO");
+        String revertToPreviousState = (String)this.getPrivateField("revertToPreviousState");
         List<IVersionedId> rootsToInstall = (List<IVersionedId>)this.getPrivateField("rootsToInstall");
         List<IVersionedId> rootsToUninstall = (List<IVersionedId>)this.getPrivateField("rootsToUninstall");
 
-        if (revertToPreviousState >= 0) {
+        if (revertToPreviousState != NOTHING_TO_REVERT_TO) {
           // EV: invoke private methods
           //revertToPreviousState();
           invokePrivate("revertToPreviousState", new Class[0], new Object[0]);
@@ -142,6 +146,14 @@ public class Application
           // EV: invoke private method
           //performList();
           invokePrivate("performList", new Class[0], new Object[0]);
+        if (printRootIUList)
+          // EV: invoke private method
+          //performListInstalledRoots();
+          invokePrivate("performListInstalledRoots", new Class[0], new Object[0]);
+        if (printTags)
+          // EV: invoke private method
+          //performPrintTags();
+          invokePrivate("performPrintTags", new Class[0], new Object[0]);
         if (purgeRegistry)
           // EV: invoke private method
           //purgeRegistry();

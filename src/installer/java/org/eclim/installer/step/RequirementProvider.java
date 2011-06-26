@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,10 +128,10 @@ public class RequirementProvider
       int minor = Integer.parseInt(parts[1]);
       int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-      if(major < 3 || minor < 6 || patch < 0){
+      if(major < 3 || minor < 7 || patch < 0){
         return new Status(FAIL,
             Installer.getString(
-              "eclipse.version.invalid", version, "3.6.x (Helios)"));
+              "eclipse.version.invalid", version, "3.7.x (Indigo)"));
       }
 
       return OK_STATUS;
