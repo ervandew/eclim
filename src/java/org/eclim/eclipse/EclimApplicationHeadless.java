@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.EclimDisplay;
 
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+
+import org.osgi.framework.Bundle;
 
 /**
  * Eclim application implementation which runs in its own headless eclipse
@@ -83,6 +85,10 @@ public class EclimApplicationHeadless
   public void onStop()
     throws Exception
   {
+    logger.info("Stopping system bundle...");
+    Bundle bundle = Platform.getBundle("system.bundle");
+    bundle.stop();
+
     logger.info("Saving workspace...");
 
     try{

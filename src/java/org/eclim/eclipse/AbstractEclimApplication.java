@@ -33,6 +33,10 @@ import java.util.List;
 
 import org.eclim.util.IOUtils;
 
+import org.eclipse.core.runtime.adaptor.LocationManager;
+
+import org.eclipse.osgi.internal.baseadaptor.AdaptorUtil;
+
 import com.martiansoftware.nailgun.NGServer;
 
 import org.eclim.Services;
@@ -284,6 +288,10 @@ public abstract class AbstractEclimApplication
       unregisterInstance();
 
       onStop();
+
+      logger.info("Clean osgi config...");
+      File osgiConfig = LocationManager.getOSGiConfigurationDir();
+      AdaptorUtil.rm(osgiConfig);
 
       logger.info("Eclim stopped.");
     }
