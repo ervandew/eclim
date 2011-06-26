@@ -554,6 +554,10 @@ target(name: 'dist'){
       exclude(name: 'build/')
       exclude(name: 'src/patch/**/*')
       exclude(name: 'src/patch/')
+      exclude(name: 'src/nailgun/config.log')
+      exclude(name: 'src/nailgun/config.status')
+      exclude(name: 'src/nailgun/Makefile')
+      exclude(name: 'src/nailgun/ng')
     }
   }
 }
