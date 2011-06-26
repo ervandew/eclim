@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -86,14 +86,16 @@ function! TestCompleteHtml()
   let results = eclim#php#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call vunit#AssertEquals(len(results), 7, 'Wrong number of results.')
+  call vunit#AssertEquals(len(results), 9, 'Wrong number of results.')
   call vunit#AssertEquals('h1', results[0].word, 'Wrong result.')
   call vunit#AssertEquals('h2', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('h3', results[2].word, 'Wrong result.')
   call vunit#AssertEquals('h4', results[3].word, 'Wrong result.')
   call vunit#AssertEquals('h5', results[4].word, 'Wrong result.')
   call vunit#AssertEquals('h6', results[5].word, 'Wrong result.')
-  call vunit#AssertEquals('hr', results[6].word, 'Wrong result.')
+  call vunit#AssertEquals('header', results[6].word, 'Wrong result.')
+  call vunit#AssertEquals('hgroup', results[7].word, 'Wrong result.')
+  call vunit#AssertEquals('hr', results[8].word, 'Wrong result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
