@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,10 @@ public class DocSearchCommandTest
     System.out.println(result);
 
     result = result.replaceAll(
-        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
+        "download.oracle.com/javase/(.*?)/docs",
+        "download.oracle.com/javase/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/${version}/docs/api/java/awt/List.html", result);
+        "http://download.oracle.com/javase/${version}/docs/api/java/awt/List.html", result);
   }
 
   @Test
@@ -69,10 +70,11 @@ public class DocSearchCommandTest
     System.out.println(result);
 
     result = result.replaceAll(
-        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
+        "download.oracle.com/javase/(.*?)/docs",
+        "download.oracle.com/javase/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/${version}/docs/api/java/util/ArrayList.html\n" +
-        "http://java.sun.com/${version}/docs/api/java/util/Arrays.ArrayList.html",
+        "http://download.oracle.com/javase/${version}/docs/api/java/util/ArrayList.html\n" +
+        "http://download.oracle.com/javase/${version}/docs/api/java/util/Arrays.ArrayList.html",
         result);
   }
 
@@ -91,9 +93,10 @@ public class DocSearchCommandTest
     System.out.println(result);
 
     result = result.replaceAll(
-        "java.sun.com/(.*?)/docs", "java.sun.com/\\${version}/docs");
+        "download.oracle.com/javase/(.*?)/docs",
+        "download.oracle.com/javase/\\${version}/docs");
     assertEquals("Wrong result.",
-        "http://java.sun.com/${version}/docs/api/java/lang/" +
+        "http://download.oracle.com/javase/${version}/docs/api/java/lang/" +
         "System.html#currentTimeMillis()",
         result);
   }
