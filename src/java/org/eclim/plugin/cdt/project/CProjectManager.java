@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,6 +155,8 @@ public class CProjectManager
       }
     }
     handler.createProject(project, true, true, new NullProgressMonitor());
+    ICProject cproject = CUtils.getCProject(project);
+    CCorePlugin.getIndexManager().reindex(cproject);
   }
 
   /**
