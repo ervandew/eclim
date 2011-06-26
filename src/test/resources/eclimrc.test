@@ -4,7 +4,7 @@ osgi.instance.area.default=@user.home/workspace.unittest
 nailgun.server.port=9092
 
 # increase heap space
--Xmx256M
+-Xmx512M
 
 # increase perm gen size
 -XX:MaxPermSize=256m
