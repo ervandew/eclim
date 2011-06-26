@@ -237,6 +237,10 @@ public abstract class AbstractEclimApplication
   private synchronized boolean load()
     throws Exception
   {
+    // start org.eclipse.ui.ide now since it needs to be started on the main
+    // thread.
+    Platform.getBundle("org.eclipse.ui.ide").start();
+
     logger.info("Loading plugin org.eclim");
     PluginResources defaultResources = Services.getPluginResources("org.eclim");
     defaultResources.registerCommand(ReloadCommand.class);
