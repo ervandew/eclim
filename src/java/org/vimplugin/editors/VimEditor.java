@@ -33,7 +33,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -115,9 +114,9 @@ public class VimEditor
   public static final String win32WID = "handle";
 
   /**
-   * The field to grab for Linux/GTK2.
+   * The field to grab for GTK2.
    */
-  public static final String linuxWID = "embeddedHandle";
+  public static final String gtkWID = "embeddedHandle";
 
   /**
    * a shell to open {@link MessageDialog MessageDialogs}.
@@ -369,11 +368,9 @@ public class VimEditor
     long wid = 0;
 
     Field f = null;
-    if (Platform.getOS().equals(Platform.OS_LINUX)) {
-      f = Composite.class.getField(VimEditor.linuxWID);
-    } else if (Platform.getOS().equals(Platform.OS_WIN32)) {
-      f = Control.class.getField(VimEditor.win32WID);
-    } else {
+    try{
+      f = Composite.class.getField(VimEditor.gtkWID);
+    }catch(NoSuchFieldException nsfe){
       f = Control.class.getField(VimEditor.win32WID);
     }
 

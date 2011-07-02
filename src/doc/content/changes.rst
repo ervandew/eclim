@@ -25,6 +25,9 @@ Bug Fixes:
   - Fixed `org.eclipse.swt.SWTError: Not implemented [multiple displays]` error
     when starting the eclipse gui after running eclimd.
 
+Eclipse:
+  - Enable vim embedding on Solaris, AIX, and HP-UX versions of eclipse.
+
 .. _1.7.0:
 
 1.7.0 (Jun. 26, 2011)
