@@ -23,6 +23,8 @@ import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
+import org.eclipse.swt.SWT;
+
 //import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
 import org.eclipse.swt.widgets.Display;
@@ -96,5 +98,28 @@ public class EclimDisplay
   @Override
   public void setSynchronizer(Synchronizer synchronizer) {
     // don't let eclipse set its UISynchronizer.
+  }
+
+  protected void checkDevice() {
+    Thread thread;
+    try{
+      Field thread_ = Display.class.getDeclaredField(THREAD);
+      thread_.setAccessible(true);
+      thread = (Thread)thread_.get(this);
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+
+    if (thread == null) error (SWT.ERROR_WIDGET_DISPOSED);
+    // since eclipse 3.7: disabling this check since it prevents
+    // org.eclipse.ui.ide from loading:
+    //   at org.eclipse.swt.widgets.Display.checkDevice(:752)
+    //   at org.eclipse.swt.widgets.Display.timerExec(:4110)
+    //   at org.eclipse.ui.internal.ide.IDEWorkbenchPlugin.createProblemsViews(:390)
+    //   at org.eclipse.ui.internal.ide.IDEWorkbenchPlugin.start(:351)
+    // I'm justifying this as a continuation of the setThread hack which exists
+    // because the nailgun requests never run the on the main thread.
+    //if (thread != Thread.currentThread ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
+    if (isDisposed ()) error (SWT.ERROR_DEVICE_DISPOSED);
   }
 }

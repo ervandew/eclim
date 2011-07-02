@@ -16,6 +16,15 @@
 History of Changes
 ==================
 
+.. _1.7.1:
+
+1.7.1 (2011)
+----------------------
+
+Bug Fixes:
+  - Fixed `org.eclipse.swt.SWTError: Not implemented [multiple displays]` error
+    when starting the eclipse gui after running eclimd.
+
 .. _1.7.0:
 
 1.7.0 (Jun. 26, 2011)
