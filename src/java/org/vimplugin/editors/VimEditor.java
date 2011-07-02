@@ -556,9 +556,6 @@ public class VimEditor
    */
   @Override
   public boolean isDirty() {
-    if (alreadyClosed){
-      getSite().getPage().closeEditor(this, false);
-    }
     return dirty;
   }
 
