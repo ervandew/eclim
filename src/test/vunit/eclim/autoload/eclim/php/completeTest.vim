@@ -43,6 +43,15 @@ function! TestCompletePhp()
   call vunit#AssertEquals('methodA1(', results[0].word, 'Wrong result.')
   call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
+
+  call cursor(21, 14)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(12, start, 'Wrong starting column.')
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
+  call vunit#AssertEquals('regular', results[0].word, 'Wrong result.')
 endfunction " }}}
 
 " TestCompleteCss() {{{
@@ -79,7 +88,7 @@ function! TestCompleteHtml()
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(22, 7)
+  call cursor(23, 7)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(5, start, 'Wrong starting column.')
 

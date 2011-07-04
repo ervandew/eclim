@@ -18,6 +18,7 @@
 
     $testB = new TestB();
     $testB->methodB1();
+    $testB->r;
     ?>
     <h>
     <h1 style="font">

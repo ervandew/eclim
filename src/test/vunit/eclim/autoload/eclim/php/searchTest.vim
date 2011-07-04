@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ function! TestSearchContext()
   PhpSearchContext
   let name = substitute(expand('%'), '\', '/', 'g')
   call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
-  call vunit#AssertEquals(29, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(60, line('.'), 'Wrong line.')
   call vunit#AssertEquals(1, col('.'), 'Wrong col.')
 
   quit
@@ -119,7 +119,7 @@ function! TestSearchExact()
   :PhpSearch -p CONSTANT1 -t field
   let name = substitute(expand('%'), '\', '/', 'g')
   call vunit#AssertEquals(name, 'php/models.php', 'Wrong file.')
-  call vunit#AssertEquals(29, line('.'), 'Wrong line.')
+  call vunit#AssertEquals(60, line('.'), 'Wrong line.')
   call vunit#AssertEquals(1, col('.'), 'Wrong col.')
 
   quit

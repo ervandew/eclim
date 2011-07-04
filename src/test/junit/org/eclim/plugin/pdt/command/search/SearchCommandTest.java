@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|29 col 1|field CONSTANT1", result);
+    assertEquals("Wrong Result", file + "|60 col 1|field CONSTANT1", result);
   }
 
   @Test
@@ -161,7 +161,7 @@ public class SearchCommandTest
     System.out.println(result);
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
-    assertEquals("Wrong Result", file + "|29 col 1|field CONSTANT1", result);
+    assertEquals("Wrong Result", file + "|60 col 1|field CONSTANT1", result);
   }
 
   @Test

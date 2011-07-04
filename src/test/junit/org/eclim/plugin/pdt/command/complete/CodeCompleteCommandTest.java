@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,6 +77,27 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong number of results", 2, results.length);
     assertTrue("Wrong result", results[0].startsWith("methodA1(|"));
     assertTrue("Wrong result", results[1].startsWith("methodA2()|"));
+  }
+
+  @Test
+  public void completeMagic()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    String result = Eclim.execute(new String[]{
+      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+      "-o", "294", "-e", "utf-8"
+    });
+
+    System.out.println(result);
+
+    String[] results = StringUtils.split(result, '\n');
+
+    assertEquals("Wrong number of results", 1, results.length);
+    assertEquals("Wrong result",
+        "regular|$regular: MagicPropertyType|$regular",
+        results[0].trim());
   }
 
   /**
