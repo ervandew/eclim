@@ -47,7 +47,7 @@ public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
   private static final Pattern DISPALY_TO_COMPLETION =
-    Pattern.compile("^(.*)(\\s+-\\s+.*|:\\s+MagicPropertyType)");
+    Pattern.compile("^(.*)(\\s+-\\s+.*|:\\s+\\S+)");
   private static final Pattern METHOD_WITH_ARGS =
     Pattern.compile("^(\\w+\\s*\\().+\\)\\s*$");
   private static final Pattern REMOVE_HEAD =
