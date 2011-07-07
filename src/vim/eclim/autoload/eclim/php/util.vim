@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,6 +26,16 @@
   let s:update_command = '-command php_src_update -p "<project>" -f "<file>"'
   let s:html_validate_command = '-command html_validate -p "<project>" -f "<file>"'
 " }}}
+
+" IsPhpCode() {{{
+" Determines if the code under the cursor is php code (in a php block).
+function! eclim#php#util#IsPhpCode(lnum)
+  " FIXME: may get confused if either of these occur in a comment.
+  "        can fix with searchpos and checking syntax name on result.
+  let phpstart = search('<?php', 'bcnW')
+  let phpend = search('?>', 'bcnW', line('w0'))
+  return phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
+endfunction " }}}
 
 " UpdateSrcFile(validate) {{{
 " Updates the src file on the server w/ the changes made to the current file.

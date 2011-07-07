@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,11 +39,8 @@ setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 
 " EclimGetPhpHtmlIndent(lnum) {{{
 function! EclimGetPhpHtmlIndent(lnum)
-  " FIXME: may get confused if either of these occur in a comment.
-  "        can fix with searchpos and checking syntax name on result.
   let phpstart = search('<?php', 'bcnW')
-  let phpend = search('?>', 'bcnW')
-  if phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
+  if eclim#php#util#IsPhpCode(a:lnum)
     let indent = GetPhpIndent()
     " default php indent pushes first line of php code to left margin and
     " indents all following php code relative to that. So just make sure that
