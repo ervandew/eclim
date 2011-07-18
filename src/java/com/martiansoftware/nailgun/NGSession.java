@@ -279,9 +279,11 @@ class NGSession extends Thread {
         PrintStream exit = new PrintStream(new NGOutputStream(sockout, NGConstants.CHUNKTYPE_EXIT));
 
         // ThreadLocal streams for System.in/out/err redirection
-        ((ThreadLocalInputStream) System.in).init(in);
-        ((ThreadLocalPrintStream) System.out).init(out);
-        ((ThreadLocalPrintStream) System.err).init(err);
+        if (server.hasCapturedSystemStreams()){
+          ((ThreadLocalInputStream) System.in).init(in);
+          ((ThreadLocalPrintStream) System.out).init(out);
+          ((ThreadLocalPrintStream) System.err).init(err);
+        }
 
         // EV: if condition added by Anton for persistant connections.
         if (!byeChunk){
@@ -363,6 +365,7 @@ class NGSession extends Thread {
 
       } catch (Throwable t) {
         t.printStackTrace();
+        break;
 
       // EV: adding a finally clause to cleanup properly.
       } finally {
@@ -404,14 +407,16 @@ class NGSession extends Thread {
 // NEW */
       // EV: if condition added by Anton for persistant connections.
       if (!keepAlive) {
-        if(System.in instanceof ThreadLocalInputStream){
-          ((ThreadLocalInputStream) System.in).init(null);
-        }
-        if(System.out instanceof ThreadLocalPrintStream){
-          ((ThreadLocalPrintStream) System.out).init(null);
-        }
-        if(System.out instanceof ThreadLocalPrintStream){
-          ((ThreadLocalPrintStream) System.err).init(null);
+        if (server.hasCapturedSystemStreams()) {
+          if(System.in instanceof ThreadLocalInputStream){
+            ((ThreadLocalInputStream) System.in).init(null);
+          }
+          if(System.out instanceof ThreadLocalPrintStream){
+            ((ThreadLocalPrintStream) System.out).init(null);
+          }
+          if(System.out instanceof ThreadLocalPrintStream){
+            ((ThreadLocalPrintStream) System.err).init(null);
+          }
         }
 // END CHANGE
 

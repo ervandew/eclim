@@ -55,6 +55,10 @@ public class NGServer implements Runnable {
   // EV: added classloader
   private ClassLoader classLoader;
 
+  // EV: make capturing of system streams configurable
+  private boolean captureSystemStreams = true;
+  private boolean capturedSystemStreams = false;
+
   /**
    * The socket doing the listening
    */
@@ -212,6 +216,16 @@ public class NGServer implements Runnable {
     return ((defaultNailClass == null) ? DefaultNail.class : defaultNailClass) ;
   }
 
+  // EV: new method to configure whether or not System streams are captured
+  public void setCaptureSystemStreams(boolean captureSystemStreams) {
+    this.captureSystemStreams = captureSystemStreams;
+  }
+
+  // EV: determine if streams were captured.
+  public boolean hasCapturedSystemStreams() {
+    return capturedSystemStreams;
+  }
+
   /**
    * Returns the current NailStats object for the specified class, creating
    * a new one if necessary
@@ -332,9 +346,11 @@ public class NGServer implements Runnable {
     }
 
     // restore system streams
-    System.setIn(in);
-    System.setOut(out);
-    System.setErr(err);
+    if (hasCapturedSystemStreams()) {
+      System.setIn(in);
+      System.setOut(out);
+      System.setErr(err);
+    }
 
     System.setSecurityManager(originalSecurityManager);
 
@@ -373,11 +389,14 @@ public class NGServer implements Runnable {
                         originalSecurityManager));
 
 
-    synchronized(System.in) {
-      if (!(System.in instanceof ThreadLocalInputStream)) {
-        System.setIn(new ThreadLocalInputStream(in));
-        System.setOut(new ThreadLocalPrintStream(out));
-        System.setErr(new ThreadLocalPrintStream(err));
+    if (captureSystemStreams) {
+      synchronized(System.in) {
+        if (!(System.in instanceof ThreadLocalInputStream)) {
+          System.setIn(new ThreadLocalInputStream(in));
+          System.setOut(new ThreadLocalPrintStream(out));
+          System.setErr(new ThreadLocalPrintStream(err));
+          capturedSystemStreams = true;
+        }
       }
     }
 
