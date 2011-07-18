@@ -115,8 +115,8 @@ public class JavaCommand
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
     buildLogger.setMessageOutputLevel(debug ? Project.MSG_DEBUG : Project.MSG_INFO);
-    buildLogger.setOutputPrintStream(System.out);
-    buildLogger.setErrorPrintStream(System.err);
+    buildLogger.setOutputPrintStream(getContext().out);
+    buildLogger.setErrorPrintStream(getContext().err);
     antProject.addBuildListener(buildLogger);
     antProject.setBasedir(ProjectUtils.getPath(project));
     antProject.setDefaultInputStream(System.in);
@@ -313,8 +313,8 @@ public class JavaCommand
 
     @Override
     public synchronized void complete() throws IOException {
-      System.out.flush();
-      System.err.flush();
+      getContext().out.flush();
+      getContext().err.flush();
     }
   }
 
@@ -323,7 +323,8 @@ public class JavaCommand
   {
     public MyPumpStreamHandler()
     {
-      super(new FlushingOutputStream(System.out), System.err, System.in);
+      super(new FlushingOutputStream(
+            getContext().out), getContext().err, getContext().in);
     }
   }
 

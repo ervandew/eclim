@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,8 +78,8 @@ public class JavadocCommand
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
     buildLogger.setMessageOutputLevel(Project.MSG_INFO);
-    buildLogger.setOutputPrintStream(System.out);
-    buildLogger.setErrorPrintStream(System.err);
+    buildLogger.setOutputPrintStream(getContext().out);
+    buildLogger.setErrorPrintStream(getContext().err);
     antProject.addBuildListener(buildLogger);
     antProject.setBasedir(ProjectUtils.getPath(project));
     Javadoc javadoc = new Javadoc();

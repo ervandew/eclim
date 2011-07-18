@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ import org.eclim.logging.Logger;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
+import com.martiansoftware.nailgun.NGContext;
+
 /**
  * Entry point for client invocation.
  *
@@ -45,10 +47,10 @@ public class Main
    *
    * @param args The command line args.
    */
-  public static final void main(String[] args)
+  public static final void nailMain(NGContext context)
   {
     try{
-      logger.debug("args: " + Arrays.toString(args));
+      logger.debug("args: " + Arrays.toString(context.getArgs()));
 
       if (!AbstractEclimApplication.getInstance().isHeaded()){
         // set dummy display's current thread
@@ -57,7 +59,7 @@ public class Main
       }
 
       ArrayList<String> arguments = new ArrayList<String>();
-      for(String arg : args){
+      for(String arg : context.getArgs()){
         if(arg.startsWith("-D")){
           String[] prop = StringUtils.split(arg.substring(2), '=');
           System.setProperty(prop[0], prop[1]);
@@ -72,7 +74,7 @@ public class Main
         commandLine = options.parse(
             (String[])arguments.toArray(new String[arguments.size()]));
       }catch(ParseException e){
-        System.out.println(
+        context.out.println(
             Services.getMessage(e.getClass().getName(), e.getMessage()));
         logger.debug("Main - exit on error");
         System.exit(1);
@@ -85,12 +87,13 @@ public class Main
             Services.getMessage("command.required"));
       }
       Command command = commandLine.getCommand();
+      command.setContext(context);
 
       String result = command.execute(commandLine);
-      System.out.println(result);
+      context.out.println(result);
     }catch(Exception e){
-      logger.debug("Command triggered exception: " + Arrays.toString(args), e);
-      e.printStackTrace();
+      logger.debug("Command triggered exception: " + Arrays.toString(context.getArgs()), e);
+      e.printStackTrace(context.err);
 
       logger.debug("Main - exit on error");
       System.exit(1);

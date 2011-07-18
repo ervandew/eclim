@@ -43,6 +43,7 @@ Export-Package: org.apache.commons.collections,
   org.eclim.util.vim,
   org.eclipse.swt.widgets,
   com.google.gson,
+  com.martiansoftware.nailgun,
   org.scannotation
 Require-Bundle: org.eclipse.core.filebuffers,
   org.eclipse.core.filesystem,

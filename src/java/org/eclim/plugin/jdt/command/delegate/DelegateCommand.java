@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,8 +58,8 @@ import org.eclipse.jdt.core.Signature;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "OPTIONAL o offset ARG," +
-    "OPTIONAL e encoding ARG," +
+    "REQUIRED o offset ARG," +
+    "REQUIRED e encoding ARG," +
     "OPTIONAL t type ARG," +
     "OPTIONAL s superType ARG," +
     "OPTIONAL m methods ARG"
@@ -82,41 +82,37 @@ public class DelegateCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
-    int offset = commandLine.getIntValue(Options.OFFSET_OPTION);
-    if(offset != -1){
-      offset = getOffset(commandLine);
-      IJavaElement element = src.getElementAt(offset);
-      if(element.getElementType() != IJavaElement.FIELD){
-        return Services.getMessage("not.a.field");
-      }
-
-      field = (IField)element;
-
-      String signature = field.getTypeSignature();
-      IType delegateType = TypeUtils.findUnqualifiedType(
-          src, Signature.getSignatureSimpleName(signature));
-
-      if(delegateType == null){
-        return Services.getMessage("type.not.found",
-            src.getJavaProject().getElementName(),
-            Signature.getSignatureSimpleName(signature)) + "  " +
-          Services.getMessage("check.import");
-      }
-
-      ITypeParameter[] params = delegateType.getTypeParameters();
-      String[] typeParams = new String[params.length];
-      for (int ii = 0; ii < params.length; ii++){
-        typeParams[ii] = params[ii].getElementName();
-      }
-
-      String[] args = Signature.getTypeArguments(signature);
-      String[] typeArgs = new String[args.length];
-      for (int ii = 0; ii < args.length; ii++){
-        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
-      }
-
-      delegateTypeInfo = new TypeInfo(delegateType, typeParams, typeArgs);
+    IJavaElement element = src.getElementAt(getOffset(commandLine));
+    if(element.getElementType() != IJavaElement.FIELD){
+      return Services.getMessage("not.a.field");
     }
+
+    field = (IField)element;
+
+    String signature = field.getTypeSignature();
+    IType delegateType = TypeUtils.findUnqualifiedType(
+        src, Signature.getSignatureSimpleName(signature));
+
+    if(delegateType == null){
+      return Services.getMessage("type.not.found",
+          src.getJavaProject().getElementName(),
+          Signature.getSignatureSimpleName(signature)) + "  " +
+        Services.getMessage("check.import");
+    }
+
+    ITypeParameter[] params = delegateType.getTypeParameters();
+    String[] typeParams = new String[params.length];
+    for (int ii = 0; ii < params.length; ii++){
+      typeParams[ii] = params[ii].getElementName();
+    }
+
+    String[] args = Signature.getTypeArguments(signature);
+    String[] typeArgs = new String[args.length];
+    for (int ii = 0; ii < args.length; ii++){
+      typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
+    }
+
+    delegateTypeInfo = new TypeInfo(delegateType, typeParams, typeArgs);
 
     return super.execute(commandLine);
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ public class DelegateCommandTest
 
     result = Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
+      "-f", TEST_FILE, "-o", "124", "-e", "utf-8",
       "-t", "org.eclim.test.delegate.TestDelegate",
       "-s", "java.util.List%3CDouble%3E", "-m", "add(Double)"
     });

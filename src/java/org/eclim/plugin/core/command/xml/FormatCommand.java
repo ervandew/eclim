@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,10 +90,10 @@ public class FormatCommand
           "{http://xml.apache.org/xslt}indent-amount", String.valueOf(indent));
       in = new FileInputStream(file);
       serializer.transform(new SAXSource(new InputSource(in)),
-          new StreamResult(System.out));*/
+          new StreamResult(getContext().out));*/
       in = new FileInputStream(file);
       serializer.transform(new SAXSource(new InputSource(in)),
-          new StreamResult(new OutputStreamWriter(System.out, "utf-8")));
+          new StreamResult(new OutputStreamWriter(getContext().out, "utf-8")));
 
       return StringUtils.EMPTY;
     }finally{

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@
 let s:command_delegate =
   \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 let s:command_insert =
-  \ '-command java_delegate -p "<project>" -f "<file>" -t "<type>" ' .
-  \ '-s "<superType>" <methods>'
+  \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>' .
+  \ ' -t "<type>" -s "<superType>" <methods>'
 " }}}
 
 " Delegate() {{{
@@ -42,18 +42,19 @@ function! eclim#java#delegate#Delegate()
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
   let offset = eclim#util#GetCurrentElementOffset()
+  let encoding = eclim#util#GetEncoding()
 
   let command = s:command_delegate
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', offset, '')
-  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  let command = substitute(command, '<encoding>', encoding, '')
 
-  call eclim#java#delegate#DelegateWindow(command)
+  call eclim#java#delegate#DelegateWindow(command, offset, encoding)
 endfunction " }}}
 
-" DelegateWindow(command) {{{
-function! eclim#java#delegate#DelegateWindow(command)
+" DelegateWindow(command, [offset, encoding]) {{{
+function! eclim#java#delegate#DelegateWindow(command, ...)
   let name = eclim#project#util#GetProjectRelativeFilePath() . "_delegate"
   let project = eclim#project#util#GetCurrentProjectName()
   let workspace = eclim#project#util#GetProjectWorkspace(project)
@@ -61,6 +62,13 @@ function! eclim#java#delegate#DelegateWindow(command)
 
   if eclim#util#TempWindowCommand(a:command, name, port)
     setlocal ft=java
+    let offset = len(a:000) >= 1 ? a:000[0] : getbufvar('%', 'offset')
+    let encoding = len(a:000) >= 2 ? a:000[1] : getbufvar('%', 'encoding')
+    if offset == '' || encoding == ''
+      throw 'Invalid state: offset=' . offset . ' encoding=' . encoding
+    endif
+    let b:offset = offset
+    let b:encoding = encoding
     call eclim#java#impl#ImplWindowFolding()
 
     if line('$') == 1
@@ -75,8 +83,11 @@ endfunction " }}}
 
 " AddDelegate(visual) {{{
 function! s:AddDelegate(visual)
+  let command = s:command_insert
+  let command = substitute(command, '<offset>', b:offset, '')
+  let command = substitute(command, '<encoding>', b:encoding, '')
   call eclim#java#impl#ImplAdd
-    \ (s:command_insert, function("eclim#java#delegate#DelegateWindow"), a:visual)
+    \ (command, function("eclim#java#delegate#DelegateWindow"), a:visual)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

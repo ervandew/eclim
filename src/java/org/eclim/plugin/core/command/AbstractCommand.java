@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
 
+import com.martiansoftware.nailgun.NGContext;
+
 /**
  * Abstract implmentation of {@link Command}.
  *
@@ -34,6 +36,8 @@ import org.eclim.util.file.FileUtils;
 public abstract class AbstractCommand
   implements Command
 {
+  private NGContext context;
+
   /**
    * Gets the preferences.
    *
@@ -66,5 +70,73 @@ public abstract class AbstractCommand
     file = ProjectUtils.getFilePath(project, file);
 
     return FileUtils.byteOffsetToCharOffset(file, offset, encoding);
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Command#getContext()
+   */
+  public NGContext getContext()
+  {
+    return context;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Command#setContext(NGContext)
+   */
+  public void setContext(NGContext context)
+  {
+    this.context = context;
+  }
+
+  public void println()
+  {
+    context.out.println();
+  }
+
+  public void println(boolean x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(char x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(char[] x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(double x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(float x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(int x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(long x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(Object x)
+  {
+    context.out.println(x);
+  }
+
+  public void println(String x)
+  {
+    context.out.println(x);
   }
 }

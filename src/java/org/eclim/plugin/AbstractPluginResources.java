@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ public abstract class AbstractPluginResources
 
   private HashMap<String, Class<? extends Command>> commands =
     new HashMap<String, Class<? extends Command>>();
-  private HashMap<String, Command> instances = new HashMap<String, Command>();
 
   /**
    * Initializes this instance.
@@ -89,17 +88,12 @@ public abstract class AbstractPluginResources
   public Command getCommand(String name)
     throws Exception
   {
-    Command command = instances.get(name);
-    if(command == null){
-      if(!containsCommand(name)){
-        throw new RuntimeException(
-            Services.getMessage("command.not.found", name));
-      }
-      Class<? extends Command> cc = commands.get(name);
-      command = cc.newInstance();
-      instances.put(name, command);
+    if(!containsCommand(name)){
+      throw new RuntimeException(
+          Services.getMessage("command.not.found", name));
     }
-    return command;
+    Class<? extends Command> cc = commands.get(name);
+    return cc.newInstance();
   }
 
   /**

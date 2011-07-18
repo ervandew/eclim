@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,8 +68,8 @@ public class JavacCommand
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
     buildLogger.setMessageOutputLevel(Project.MSG_INFO);
-    buildLogger.setOutputPrintStream(System.out);
-    buildLogger.setErrorPrintStream(System.err);
+    buildLogger.setOutputPrintStream(getContext().out);
+    buildLogger.setErrorPrintStream(getContext().err);
     antProject.addBuildListener(buildLogger);
     antProject.setBasedir(ProjectUtils.getPath(project));
     //antProject.setProperty(
@@ -113,7 +113,7 @@ public class JavacCommand
       javac.execute();
     }catch(BuildException be){
       // just print the message: should just indicate that something didn't compile.
-      System.out.println(be.getMessage());
+      println(be.getMessage());
     }
 
     return StringUtils.EMPTY;

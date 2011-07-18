@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.adaptor.LocationManager;
 
 import org.eclipse.osgi.internal.baseadaptor.AdaptorUtil;
 
+import com.martiansoftware.nailgun.NGContext;
 import com.martiansoftware.nailgun.NGServer;
 
 import org.eclim.Services;
@@ -124,6 +125,7 @@ public abstract class AbstractEclimApplication
         logger.info("Eclim Server Started on: " + host + ':' + port);
         InetAddress address = InetAddress.getByName(host);
         server = new NGServer(address, port, getExtensionClassLoader());
+        server.setCaptureSystemStreams(false);
         starting = false;
         server.run();
       }else{
@@ -490,6 +492,8 @@ public abstract class AbstractEclimApplication
   public static class ReloadCommand
     implements org.eclim.command.Command
   {
+    private NGContext context;
+
     /**
      * {@inheritDoc}
      * @see org.eclim.command.Command#execute(CommandLine)
@@ -501,6 +505,24 @@ public abstract class AbstractEclimApplication
       bundle.update();
       bundle.start();
       return Services.getMessage("plugins.reloaded");
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see Command#getContext()
+     */
+    public NGContext getContext()
+    {
+      return context;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see Command#setContext(NGContext)
+     */
+    public void setContext(NGContext context)
+    {
+      this.context = context;
     }
   }
 }
