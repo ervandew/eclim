@@ -20,10 +20,5 @@
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/eclim_unit_test_java_linked/src</locationURI>
 		</link>
-		<link>
-			<name>zlink</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/eclim_unit_test_java_linked/other</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>

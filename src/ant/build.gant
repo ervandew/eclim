@@ -364,128 +364,116 @@ target(name: 'test.init'){
     fileset(dir: '${user.home}/.eclim/cache', includes: '**/*')
   }
 
-  testQuick = ant.project.getProperty('test.quick')
-  if (testQuick == null){
-    createProject('eclim_unit_test', 'none')
-
-    createProject('eclim_unit_test_java', 'java'){
-      delete(dir: '${eclipse.workspace}/eclim_unit_test_java_linked',
-          includeEmptyDirs: 'true')
-      copy(todir: '${eclipse.workspace}'){
-        fileset(dir: 'src/test/resources',
-            includes: 'eclim_unit_test_java_linked/**/*')
-      }
-    }
-
-    createProject('eclim_unit_test_web', 'none')
-    createProject('eclim_unit_test_c', 'c')
-    createProject('eclim_unit_test_php', 'php')
-    createProject('eclim_unit_test_python', 'none')
-
-    // create interpreter before creating the project
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
-    }else{
-      property(name: 'ruby.path', value: '/usr/bin/ruby')
-    }
-    eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
-    eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
-    createProject('eclim_unit_test_ruby', 'ruby')
+  delete(includeEmptyDirs: true, failonerror: false){
+    fileset(dir: '${eclipse.workspace}', includes: 'unit_test_*/**/*')
+    fileset(dir: '${eclipse.workspace}', includes: 'unit_test_*')
   }
 }
 
 target(name: 'test'){
-  depends('test.junit', 'test.vunit')
+  depends(
+    'test.core',
+    'test.jdt',
+    'test.cdt',
+    'test.pdt',
+    'test.python',
+    'test.wst',
+    'test.dltkruby',
+  )
 }
 
-target(name: 'test.junit'){
+target(name: 'test.core'){
   depends('test.init')
-
-  mkdir(dir: 'build/test/junit/results')
-  mkdir(dir: 'build/test/junit/classes')
-
-  path(id: 'junit'){
-    pathelement(location: 'lib/junit-4.1.jar')
-  }
-  taskdef(name: 'junit', classpathref: 'junit',
-      classname: 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTask')
-  taskdef(name: 'junitreport', classpathref: 'junit',
-      classname: 'org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator')
-
-  compile('src/test/junit', 'build/test/junit/classes'){
-    include(name: '**/*.java')
-    exclude(name: 'org/eclim/plugin/**/*.java')
-    classpath{
-      pathelement(path: '${build.classes}')
+  createProject('eclim_unit_test'){
+    delete(dir: '${eclipse.workspace}/eclim_unit_test_linked',
+        includeEmptyDirs: 'true')
+    copy(todir: '${eclipse.workspace}'){
+      fileset(dir: 'src/test/resources', includes: 'eclim_unit_test_linked/**/*')
     }
   }
-
-  pluginNames = ['core'] + binding.getVariable('plugins').split(',').flatten()
-  pluginNames.each(){ name ->
-    echo("Compile tests for ${name}...")
-    compile('src/test/junit', 'build/test/junit/classes'){
-      include(name: "org/eclim/plugin/${name}/**/*.java")
-      classpath{
-        pathelement(path: '${build.classes}')
-      }
-    }
+  test{
+    junit('org/eclim/plugin/core/**/*')
+    vunit('eclim/autoload/*')
+    vunit('eclim/autoload/eclim/*')
+    vunit('eclim/autoload/eclim/common/*')
+    vunit('eclim/autoload/eclim/project/*')
   }
-
-  copy(todir: 'build/test/junit/classes', includeEmptyDirs: false){
-    fileset(dir: 'src/test/junit', includes: '**/*', excludes: '**/*.java')
-  }
-
-  junit(printsummary: 'yes', failureproperty: 'junit.failed'){
-    classpath{
-      path(refid: 'junit')
-      fileset(dir: 'src/eclipse/plugins/org.eclim/lib'){
-        include(name: 'commons-lang-*.jar')
-      }
-      pathelement(path: '${build.classes}')
-      pathelement(path: 'build/test/junit/classes')
-    }
-    formatter(type: 'xml')
-    batchtest(fork: 'yes', todir: 'build/test/junit/results'){
-      fileset(dir: 'build/test/junit/classes',
-          includes: '${test.include}.class',
-          excludes: '${test.exclude}.class')
-    }
-    sysproperty(key: 'eclipse.home', value: '${eclipse.home}')
-    sysproperty(key: 'eclim.version', value: '${eclim.version}')
-    sysproperty(key: 'eclimd.port', value: '${nailgun.server.port}')
-  }
-
-  fail(message: 'One or more junit tests failed.', if: 'junit.failed')
-
-  // generate html results
-  //junitreport(todir: 'build/test/junit/results'){
-  //  fileset(dir: 'build/test/junit/results', includes: '*.xml')
-  //  report(format: 'noframes', todir: 'build/junit/test/results/html')
-  //}
 }
 
-target(name: 'test.vunit'){
+target(name: 'test.jdt'){
   depends('test.init')
-
-  mkdir(dir: 'build/test/vunit/results')
-
-  taskdef(resource: 'vunit/ant.properties'){
-    classpath{
-      fileset(dir: 'src/ant/lib', includes: 'vunit.jar')
+  createProject('eclim_unit_test_java'){
+    delete(dir: '${eclipse.workspace}/eclim_unit_test_java_linked',
+        includeEmptyDirs: 'true')
+    copy(todir: '${eclipse.workspace}'){
+      fileset(dir: 'src/test/resources',
+          includes: 'eclim_unit_test_java_linked/**/*')
     }
   }
-
-  vunit(todir: 'build/test/vunit/results',
-      failureproperty: 'vunit.failed'){
-    sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
-    pathelement(path: '${vim.files}')
-    ant.plugin(name: 'plugin/eclim.vim')
-    fileset(dir: 'src/test/vunit',
-        includes: '${test.include}.vim',
-        excludes: '${test.exclude}.vim')
+  test{
+    junit('org/eclim/plugin/ant/**/*')
+    junit('org/eclim/plugin/jdt/**/*')
+    junit('org/eclim/plugin/maven/**/*')
+    vunit('eclim/autoload/eclim/java/**/*')
   }
+}
 
-  fail(message: 'One or more vunit tests failed.', if: 'vunit.failed')
+target(name: 'test.cdt'){
+  depends('test.init')
+  createProject('eclim_unit_test_c')
+  test{
+    junit('org/eclim/plugin/cdt/**/*')
+    vunit('eclim/autoload/eclim/c/**/*')
+  }
+}
+
+target(name: 'test.pdt'){
+  depends('test.init')
+  createProject('eclim_unit_test_php')
+  test{
+    junit('org/eclim/plugin/pdt/**/*')
+    vunit('eclim/autoload/eclim/php/**/*')
+  }
+}
+
+target(name: 'test.python'){
+  depends('test.init')
+  createProject('eclim_unit_test_python')
+  test{
+    vunit('eclim/autoload/eclim/python/**/*')
+  }
+}
+
+target(name: 'test.wst'){
+  depends('test.init')
+  createProject('eclim_unit_test_web')
+  test{
+    junit('org/eclim/plugin/wst/**/*')
+    vunit('eclim/autoload/eclim/css/**/*')
+    vunit('eclim/autoload/eclim/dtd/**/*')
+    vunit('eclim/autoload/eclim/html/**/*')
+    vunit('eclim/autoload/eclim/xml/**/*')
+    vunit('eclim/autoload/eclim/xsd/**/*')
+  }
+}
+
+target(name: 'test.dltkruby'){
+  depends('test.init')
+
+  // create interpreter before creating the project
+  if (Os.isFamily(Os.FAMILY_WINDOWS)){
+    property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
+  }else{
+    property(name: 'ruby.path', value: '/usr/bin/ruby')
+  }
+  eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
+  eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
+  createProject('eclim_unit_test_ruby')
+
+  test{
+    junit('org/eclim/plugin/dltkruby/**/*')
+    vunit('eclim/autoload/eclim/ruby/**/*')
+  }
 }
 
 target(name: 'dist'){
@@ -834,7 +822,76 @@ def plugin(name, shortName=null){
   }
 }
 
-def createProject(project, nature, extra=null){
+def test(nested){
+  nested()
+  ant.fail(message: 'One or more tests failed.', if: 'junit.failed')
+  ant.fail(message: 'One or more tests failed.', if: 'vunit.failed')
+}
+
+def junit(include){
+  ant.mkdir(dir: 'build/test/junit/results')
+  ant.mkdir(dir: 'build/test/junit/classes')
+
+  compile('src/test/junit', 'build/test/junit/classes'){
+    ant.include(name: 'org/eclim/*.java')
+    ant.include(name: include + '.java')
+    ant.classpath{
+      ant.pathelement(path: '${build.classes}')
+    }
+  }
+
+  ant.path(id: 'junit'){
+    ant.pathelement(location: 'lib/junit-4.1.jar')
+  }
+  ant.taskdef(name: 'junit', classpathref: 'junit',
+      classname: 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTask')
+  ant.taskdef(name: 'junitreport', classpathref: 'junit',
+      classname: 'org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator')
+
+  ant.junit(printsummary: 'yes', failureproperty: 'junit.failed'){
+    ant.classpath{
+      ant.path(refid: 'junit')
+      ant.fileset(dir: 'src/eclipse/plugins/org.eclim/lib'){
+        ant.include(name: 'commons-lang-*.jar')
+      }
+      ant.pathelement(path: '${build.classes}')
+      ant.pathelement(path: 'build/test/junit/classes')
+    }
+    ant.formatter(type: 'xml')
+    ant.batchtest(fork: 'yes', todir: 'build/test/junit/results'){
+      ant.fileset(
+        dir: 'build/test/junit/classes',
+        includes: include + 'Test.class')
+    }
+    ant.sysproperty(key: 'eclipse.home', value: '${eclipse.home}')
+    ant.sysproperty(key: 'eclim.version', value: '${eclim.version}')
+    ant.sysproperty(key: 'eclimd.port', value: '${nailgun.server.port}')
+  }
+}
+
+def vunit(include){
+  ant.mkdir(dir: 'build/test/vunit/results')
+
+  ant.taskdef(resource: 'vunit/ant.properties'){
+    ant.classpath{
+      ant.fileset(dir: 'src/ant/lib', includes: 'vunit.jar')
+    }
+  }
+
+  ant.vunit(todir: 'build/test/vunit/results',
+      failureproperty: 'vunit.failed'){
+    ant.sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
+    ant.pathelement(path: '${vim.files}')
+    ant.plugin(name: 'plugin/eclim.vim')
+    ant.fileset(dir: 'src/test/vunit', includes: include + 'Test.vim')
+  }
+}
+
+def createProject(project, extra=null){
+  if (ant.project.getProperty('test.quick') != null){
+    return
+  }
+
   workspace = binding.getVariable('eclipse.workspace')
 
   ant.echo("Creating test project: ${project}...")
@@ -849,10 +906,22 @@ def createProject(project, nature, extra=null){
   ant.copy(todir: '${eclipse.workspace}'){
     ant.fileset(dir: 'src/test/resources', includes: "${project}/**/*")
   }
-  eclim("-command project_create -f \"${workspace}/${project}\" -n ${nature}")
+  eclim("-command project_import -f \"${workspace}/${project}\"")
 
   if (extra){
     extra()
+  }
+
+  // wait for any workspace building to start and then finish
+  Thread.sleep(1000)
+  while(true){
+    eclim("-command jobs")
+    result = new File('build/eclim.log').getText()
+    if (result =~ /- running\b/){
+      Thread.sleep(1000)
+    }else{
+      break
+    }
   }
 }
 

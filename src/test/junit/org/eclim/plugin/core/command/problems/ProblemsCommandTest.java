@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  */
 public class ProblemsCommandTest
 {
-  private static final String TEST_PROJECT = "eclim_unit_test_java";
+  private static final String TEST_PROJECT = "eclim_unit_test";
 
   @Test
   public void execute()
@@ -47,6 +47,6 @@ public class ProblemsCommandTest
 
     ArrayList<String> results = new ArrayList<String>();
     CollectionUtils.addAll(results, StringUtils.split(result, '\n'));
-    assertTrue(results.contains(Eclim.getWorkspace() + "/" + TEST_PROJECT + "/src/org/eclim/test/checkstyle/TestCheckstyle.java|27 col 5|ArrayList cannot be resolved to a type|e"));
+    assertTrue(results.contains(Eclim.getWorkspace() + "/" + TEST_PROJECT + "/src/org/eclim/test/Test.java|5 col 11|ArrayList cannot be resolved to a type|e"));
   }
 }

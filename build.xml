@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2010  Eric Van Dewoestine
+  Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -58,12 +58,32 @@
     <antcall target="gant"> <param name="target" value="test"/> </antcall>
   </target>
 
-  <target name="test.junit">
-    <antcall target="gant"> <param name="target" value="test.junit"/> </antcall>
+  <target name="test.core">
+    <antcall target="gant"> <param name="target" value="test.core"/> </antcall>
   </target>
 
-  <target name="test.vunit">
-    <antcall target="gant"> <param name="target" value="test.vunit"/> </antcall>
+  <target name="test.jdt">
+    <antcall target="gant"> <param name="target" value="test.jdt"/> </antcall>
+  </target>
+
+  <target name="test.cdt">
+    <antcall target="gant"> <param name="target" value="test.cdt"/> </antcall>
+  </target>
+
+  <target name="test.pdt">
+    <antcall target="gant"> <param name="target" value="test.pdt"/> </antcall>
+  </target>
+
+  <target name="test.python">
+    <antcall target="gant"> <param name="target" value="test.python"/> </antcall>
+  </target>
+
+  <target name="test.wst">
+    <antcall target="gant"> <param name="target" value="test.wst"/> </antcall>
+  </target>
+
+  <target name="test.dltkruby">
+    <antcall target="gant"> <param name="target" value="test.dltkruby"/> </antcall>
   </target>
 
   <target name="dist">
