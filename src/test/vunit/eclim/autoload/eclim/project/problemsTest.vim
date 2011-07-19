@@ -30,16 +30,22 @@ endfunction " }}}
 " TestProjectProblems() {{{
 function! TestProjectProblems()
   edit! eclim_unit_test/src/org/eclim/test/Test.java
-  write
 
   ProjectProblems
   winc p
 
-  let length = len(getqflist())
+  call vunit#PeekRedir()
+  echom 'before: ' . string(getqflist())
+  call vunit#AssertEquals(len(getqflist()), 2)
+
   5,5delete _
+  " force the write to look like a user issued command
+  call histadd('cmd', 'write')
   write
 
-  call vunit#AssertEquals(len(getqflist()), length - 2)
+  call vunit#PeekRedir()
+  echom 'after: ' . string(getqflist())
+  call vunit#AssertEquals(len(getqflist()), 0)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
