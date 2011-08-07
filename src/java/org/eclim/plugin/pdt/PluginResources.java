@@ -66,7 +66,7 @@ public class PluginResources
 
     Preferences.addOptionHandler("org.eclipse.php", new OptionHandler());
     PreferenceFactory.addOptions("org.eclipse.php.core.PHPNature",
-      "PDT org.eclipse.php.core.phpVersion (?i)php[45]"
+      "PDT org.eclipse.php.core.phpVersion (?i)php(?:4|5|5_3)"
     );
 
     try{
