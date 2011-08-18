@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2011 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -28,6 +28,7 @@ import org.vimplugin.editors.VimEditor;
 
 import org.vimplugin.listeners.FeedKeys;
 import org.vimplugin.listeners.FileClosed;
+import org.vimplugin.listeners.FileModified;
 import org.vimplugin.listeners.FileOpened;
 import org.vimplugin.listeners.FileUnmodified;
 import org.vimplugin.listeners.IVimListener;
@@ -125,6 +126,7 @@ public class VimConnection implements Runnable
       listeners.add(new TextRemoved());
       listeners.add(new FileOpened());
       listeners.add(new FileClosed());
+      listeners.add(new FileModified());
       listeners.add(new FileUnmodified());
       listeners.add(new FeedKeys());
 

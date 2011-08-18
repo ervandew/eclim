@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,21 +34,20 @@ function eclim#vimplugin#BufferWritten()
   endif
 endfunction " }}}
 
-" BufferUnmodified() {{{
+" BufferModified() {{{
 " Invoked on cursor hold to check if a previously modified buffer is now
-" unmodified, so that eclipse can be notified.
-function eclim#vimplugin#BufferUnmodified()
+" unmodified, and vice versa, so that eclipse can be notified.
+function eclim#vimplugin#BufferModified()
   if has('netbeans_enabled')
     if !exists('b:eclim_file_modified')
       let b:eclim_file_modified = &modified
     endif
 
-    if !&modified && b:eclim_file_modified
+    if &modified != b:eclim_file_modified
       unlet b:eclim_file_modified
-      nbkey unmodified
-    else
-      let b:eclim_file_modified = &modified
+      exec 'nbkey ' . (&modified ? 'modified' : 'unmodified')
     endif
+    let b:eclim_file_modified = &modified
   endif
 endfunction " }}}
 

@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -197,8 +197,7 @@ if has('netbeans_intg')
     " autocommands used to work around the fact that the "unmodified" event in
     " vim's netbean support is commentted out for some reason.
     autocmd BufWritePost * call eclim#vimplugin#BufferWritten()
-    autocmd CursorHold * call eclim#vimplugin#BufferUnmodified()
-    autocmd CursorHold * call eclim#vimplugin#BufferUnmodified()
+    autocmd CursorHold,CursorHoldI * call eclim#vimplugin#BufferModified()
     autocmd BufWinLeave * call eclim#vimplugin#BufferClosed()
   augroup END
 endif

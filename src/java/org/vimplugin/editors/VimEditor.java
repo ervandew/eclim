@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2011 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -176,7 +176,9 @@ public class VimEditor
     IPreferenceStore prefs = plugin.getPreferenceStore();
     tabbed = prefs.getBoolean(PreferenceConstants.P_TABBED);
     embedded = prefs.getBoolean(PreferenceConstants.P_EMBED);
-    documentListen = plugin.gvimNbDocumentListenSupported();
+    // disabling documentListen until there is a really good reason to have,
+    // cause it is by far the buggest part of vim's netbeans interface.
+    documentListen = false; //plugin.gvimNbDocumentListenSupported();
     if (embedded){
       if (!plugin.gvimEmbedSupported()){
         String message = plugin.getMessage(
@@ -702,8 +704,9 @@ public class VimEditor
         newText = newText + text.substring(offset);
         break;
       }
-      newText = newText + text.substring(offset, offset1)
-          + text.substring(offset1 + 1, offset1 + 2);
+      newText = newText +
+        text.substring(offset, offset1) +
+        (text.length() > offset1 + 1 ? text.substring(offset1 + 1, offset1 + 2) : "");
       offset = offset1 + 2;
     }
     return newText;
