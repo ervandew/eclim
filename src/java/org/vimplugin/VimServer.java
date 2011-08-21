@@ -37,6 +37,9 @@ public class VimServer
 {
   private static final Logger logger = Logger.getLogger(VimServer.class);
 
+  private boolean embedded;
+  private boolean tabbed;
+
   /**
    * the id of this instance. IDs are counted in
    * {@link org.vimplugin.VimPlugin#nextServerID Vimplugin}.
@@ -84,6 +87,14 @@ public class VimServer
     return vc;
   }
 
+  public boolean isExternalTabbed() {
+    return tabbed;
+  }
+
+  public boolean isEmbedded() {
+    return embedded;
+  }
+
   /**
    * Gives the vim argument with the port depending on the portID.
    *
@@ -116,15 +127,21 @@ public class VimServer
     String[] args = null;
 
     if (!tabbed || first){
-      args = new String[4 + addopts.length];
+      int numArgs = tabbed ? 6 : 4;
+      args = new String[numArgs + addopts.length];
       // NOTE: for macvim, the --servername arg must be before the netbeans arg
       args[0] = gvim;
       args[1] = "--servername";
       args[2] = String.valueOf(ID);
       args[3] = getNetbeansString(ID);
-      System.arraycopy(addopts, 0, args, 4, addopts.length);
+      if (tabbed){
+        args[4] = "--cmd";
+        args[5] = "let g:vimplugin_tabbed = 1";
+      }
+      System.arraycopy(addopts, 0, args, numArgs, addopts.length);
 
-      start(workingDir, (tabbed && !first), args);
+      this.tabbed = tabbed;
+      start(workingDir, false, (tabbed && !first), args);
     }else{
       args = new String[5 + addopts.length];
       args[0] = gvim;
@@ -134,7 +151,7 @@ public class VimServer
       args[4] = ":tabnew<cr>:Tcd " + workingDir.replace(" ", "\\ ") + "<cr>";
       System.arraycopy(addopts, 0, args, 5, addopts.length);
 
-      start(workingDir, (tabbed && !first), args);
+      start(workingDir, false, (tabbed && !first), args);
 
       // wait on file to finish opening
       // on windows we need to use vim.exe instead of gvim.exe otherwise popups
@@ -205,7 +222,7 @@ public class VimServer
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 7, addopts.length);
 
-    start(workingDir, false, args);
+    start(workingDir, true, false, args);
   }
 
   /**
@@ -214,7 +231,9 @@ public class VimServer
    *
    * @param args
    */
-  private void start(String workingDir, boolean tabbed, String... args) {
+  private void start(
+      String workingDir, boolean embedded, boolean tabbed, String... args)
+  {
     if (!tabbed && vc != null && vc.isServerRunning()){
       return;
     }
@@ -271,6 +290,7 @@ public class VimServer
         e.printStackTrace();
       }
     }
+    this.embedded = embedded;
   }
 
   /**

@@ -7,6 +7,7 @@ import org.vimplugin.VimConnection;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
+import org.vimplugin.VimServer;
 import org.vimplugin.editors.VimEditor;
 
 /**
@@ -30,10 +31,8 @@ public class FileClosed
       IPath filePath = new Path(argument.substring(12, argument.length() - 1));
       VimPlugin plugin = VimPlugin.getDefault();
       VimConnection vc = ve.getConnection();
-      VimEditor[] editors = plugin.getVimserver(vc.getVimID())
-        .getEditors()
-        .toArray(new VimEditor[0]);
-      for (VimEditor editor : editors){
+      VimServer server = plugin.getVimserver(vc.getVimID());
+      for (VimEditor editor : server.getEditors()){
         IPath location = editor.getSelectedFile().getRawLocation();
         if (filePath.equals(location)){
           editor.forceDispose();

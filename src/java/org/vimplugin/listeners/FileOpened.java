@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2008 by The Vimplugin Project.
+ * Copyright (c) 2008 - 2011 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -13,6 +13,7 @@ package org.vimplugin.listeners;
 import org.vimplugin.VimEvent;
 import org.vimplugin.VimException;
 import org.vimplugin.VimPlugin;
+import org.vimplugin.VimServer;
 import org.vimplugin.editors.VimEditor;
 
 /**
@@ -31,10 +32,10 @@ public class FileOpened implements IVimListener {
     if (event.equals("fileOpened") == true) {
       String filePath = ve.getArgument(0);
       filePath = filePath.substring(1, filePath.length() - 1);
-      int ID = VimPlugin.getDefault().getNumberOfBuffers() - 1;
-      for (VimEditor veditor : VimPlugin.getDefault()
-          .getVimserver(ve.getConnection().getVimID()).getEditors()) {
-        if (veditor.getBufferID() == ID) {
+      VimServer server = VimPlugin.getDefault()
+        .getVimserver(ve.getConnection().getVimID());
+      for (VimEditor veditor : server.getEditors()) {
+        if (veditor.getBufferID() == ve.getBufferID() || !server.isExternalTabbed()) {
           veditor.setTitleTo(filePath);
         }
       }

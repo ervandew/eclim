@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -224,8 +225,8 @@ public class VimEditor
     }
 
     if (filePath != null){
-      // nice background (only needed for external)
       editorGUI = new Canvas(parent, SWT.EMBEDDED);
+
       //create a vim instance
       VimConnection vc = createVim(projectPath, filePath, parent);
 
@@ -459,38 +460,40 @@ public class VimEditor
 
     alreadyClosed = true;
     VimServer server = plugin.getVimserver(serverID);
-    server.getEditors().remove(this);
+    if (server != null){
+      server.getEditors().remove(this);
 
-    if (save && dirty) {
-      server.getVc().command(bufferID, "save", "");
-      dirty = false;
-      firePropertyChange(PROP_DIRTY);
-    }
-
-    if (server.getEditors().size() > 0) {
-      server.getVc().command(bufferID, "close", "");
-      String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
-          PreferenceConstants.P_GVIM);
-      String[] args = new String[5];
-      args[0] = gvim;
-      args[1] = "--servername";
-      args[2] = String.valueOf(server.getID());
-      args[3] = "--remote-send";
-      args[4] = ":redraw!<cr>";
-      try{
-        CommandExecutor.execute(args, 1000);
-      }catch(Exception e){
-        logger.error("Error redrawing vim after file close.", e);
+      if (save && dirty) {
+        server.getVc().command(bufferID, "save", "");
+        dirty = false;
+        firePropertyChange(PROP_DIRTY);
       }
-    } else {
-      try {
-        VimConnection vc = server.getVc();
-        if (vc != null){
-          server.getVc().function(bufferID, "saveAndExit", "");
+
+      if (server.getEditors().size() > 0) {
+        server.getVc().command(bufferID, "close", "");
+        String gvim = VimPlugin.getDefault().getPreferenceStore().getString(
+            PreferenceConstants.P_GVIM);
+        String[] args = new String[5];
+        args[0] = gvim;
+        args[1] = "--servername";
+        args[2] = String.valueOf(server.getID());
+        args[3] = "--remote-send";
+        args[4] = ":redraw!<cr>";
+        try{
+          CommandExecutor.execute(args, 1000);
+        }catch(Exception e){
+          logger.error("Error redrawing vim after file close.", e);
         }
-        plugin.stopVimServer(serverID);
-      } catch (IOException e) {
-        message(plugin.getMessage("server.stop.failed"), e);
+      } else {
+        try {
+          VimConnection vc = server.getVc();
+          if (vc != null){
+            server.getVc().function(bufferID, "saveAndExit", "");
+          }
+          plugin.stopVimServer(serverID);
+        } catch (IOException e) {
+          message(plugin.getMessage("server.stop.failed"), e);
+        }
       }
     }
 
@@ -568,6 +571,20 @@ public class VimEditor
   @Override
   public boolean isSaveAsAllowed() {
     return true;
+  }
+
+  private String getFilePath(IEditorInput input)
+  {
+    String filePath = null;
+    if (input instanceof IFileEditorInput){
+      selectedFile = ((IFileEditorInput)input).getFile();
+      filePath = selectedFile.getRawLocation().toPortableString();
+    }else{
+      URI uri = ((IURIEditorInput)input).getURI();
+      filePath = uri.toString().substring("file:".length());
+      filePath = filePath.replaceFirst("^/([A-Za-z]:)", "$1");
+    }
+    return filePath;
   }
 
   /**
@@ -782,6 +799,47 @@ public class VimEditor
 
   /**
    * {@inheritDoc}
+   * @see TextEditor#doSetInput(IEditorInput)
+   */
+  @Override
+  protected void doSetInput(IEditorInput input)
+    throws CoreException
+  {
+    if(getEditorInput() != null){
+      String oldFilePath = getFilePath(getEditorInput());
+      String newFilePath = getFilePath(input);
+      if (!oldFilePath.equals(newFilePath)){
+        VimConnection vc = VimPlugin.getDefault()
+          .getVimserver(serverID).getVc();
+
+        if (input instanceof IFileEditorInput){
+          IProject project = selectedFile.getProject();
+          IPath path = project.getRawLocation();
+          if(path == null){
+            String name = project.getName();
+            path = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
+            path = path.append(name);
+          }
+          String projectPath = path.toPortableString();
+
+          if (newFilePath.toLowerCase().indexOf(projectPath.toLowerCase()) != -1){
+            newFilePath = newFilePath.substring(projectPath.length() + 1);
+          }
+        }
+
+        if (isDirty()){
+          vc.remotesend(":saveas! " + newFilePath.replace(" ", "\\ ") + "<cr>");
+        }else{
+          vc.command(bufferID, "editFile", "\"" + newFilePath + "\"");
+        }
+      }
+    }
+
+    super.doSetInput(input);
+  }
+
+  /**
+   * {@inheritDoc}
    * @see org.eclipse.ui.IPersistable#saveState(IMemento)
    */
   @Override
@@ -795,6 +853,13 @@ public class VimEditor
    */
   public IFile getSelectedFile() {
     return selectedFile;
+  }
+
+  /**
+   * @return the gvim server id.
+   */
+  public int getServerID() {
+    return serverID;
   }
 
   /**

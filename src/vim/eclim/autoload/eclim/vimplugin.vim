@@ -53,10 +53,19 @@ endfunction " }}}
 
 " BufferClosed() {{{
 " Invoked when a buffer is removed from a window to signal that eclipse should
-" close the associated editor tab.
+" close the associated editor tab. This is only needed for external vim +
+" tabbed mode.
 function eclim#vimplugin#BufferClosed()
-  if has('netbeans_enabled')
+  if has('netbeans_enabled') && exists('g:vimplugin_tabbed')
     exec 'nbkey fileClosed ' . expand('<afile>:p')
+  endif
+endfunction " }}}
+
+" BufferEnter() {{{
+" Invoked when switching buffers so we can update the eclipse tab title.
+function eclim#vimplugin#BufferEnter()
+  if has('netbeans_enabled')
+    exec 'nbkey bufferEnter ' . expand('<afile>:p')
   endif
 endfunction " }}}
 

@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.vimplugin.editors.VimEditor;
 
+import org.vimplugin.listeners.BufferEnter;
 import org.vimplugin.listeners.FeedKeys;
 import org.vimplugin.listeners.FileClosed;
 import org.vimplugin.listeners.FileModified;
@@ -128,6 +129,7 @@ public class VimConnection implements Runnable
       listeners.add(new FileClosed());
       listeners.add(new FileModified());
       listeners.add(new FileUnmodified());
+      listeners.add(new BufferEnter());
       listeners.add(new FeedKeys());
 
       // handle Events

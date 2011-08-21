@@ -199,6 +199,7 @@ if has('netbeans_intg')
     autocmd BufWritePost * call eclim#vimplugin#BufferWritten()
     autocmd CursorHold,CursorHoldI * call eclim#vimplugin#BufferModified()
     autocmd BufWinLeave * call eclim#vimplugin#BufferClosed()
+    autocmd BufEnter * call eclim#vimplugin#BufferEnter()
   augroup END
 endif
 
