@@ -660,11 +660,14 @@ public class VimEditor
    *
    * @param path
    */
-  public void setTitleTo(String path) {
-    String filename = path.substring(path.lastIndexOf(File.separator) + 1);
-    setPartName(filename);
-    setContentDescription(path);
-    firePropertyChange(PROP_TITLE);
+  public void setTitleTo(final String path) {
+    Display.getDefault().asyncExec(new Runnable(){
+      public void run()
+      {
+        String filename = path.substring(path.lastIndexOf(File.separator) + 1);
+        setPartName(filename);
+      }
+    });
   }
 
   // /////// Handling Document content.. ///////////
