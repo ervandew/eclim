@@ -509,7 +509,7 @@ public abstract class AbstractEclimApplication
 
     /**
      * {@inheritDoc}
-     * @see Command#getContext()
+     * @see org.eclim.command.Command#getContext()
      */
     public NGContext getContext()
     {
@@ -518,7 +518,7 @@ public abstract class AbstractEclimApplication
 
     /**
      * {@inheritDoc}
-     * @see Command#setContext(NGContext)
+     * @see org.eclim.command.Command#setContext(NGContext)
      */
     public void setContext(NGContext context)
     {

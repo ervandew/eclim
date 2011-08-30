@@ -45,7 +45,7 @@ public class Main
   /**
    * Main method for executing the client.
    *
-   * @param args The command line args.
+   * @param context The nailgun context.
    */
   public static final void nailMain(NGContext context)
   {
