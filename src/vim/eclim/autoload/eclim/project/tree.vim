@@ -25,6 +25,7 @@
   if !exists('g:EclimProjectTreeActions')
     let g:EclimProjectTreeActions = [
         \ {'pattern': '.*', 'name': 'Split', 'action': 'split'},
+        \ {'pattern': '.*', 'name': 'VSplit', 'action': 'vsplit'},
         \ {'pattern': '.*', 'name': 'Tab', 'action': 'tablast | tabnew'},
         \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
       \ ]
@@ -252,6 +253,7 @@ endfunction " }}}
 function! s:Mappings()
   nnoremap <buffer> <silent> E :call <SID>OpenFile('edit')<cr>
   nnoremap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
+  nnoremap <buffer> <silent> \| :call <SID>OpenFile('vsplit')<cr>
   nnoremap <buffer> <silent> T :call <SID>OpenFile('tablast \| tabnew')<cr>
   nnoremap <buffer> <silent> F :call <SID>OpenFileName()<cr>
 
@@ -262,6 +264,7 @@ function! s:Mappings()
       \ 'o - toggle dir fold, choose file open action',
       \ 'E - open with :edit',
       \ 'S - open in a new split window',
+      \ '| (pipe) - open in a new vertical split window',
       \ 'T - open in a new tab',
       \ 'R - refresh directory',
       \ 'i - view file info',
@@ -386,7 +389,7 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   endif
 
   " if the buffer is a no name and action is split, use edit instead.
-  if cmd == 'split' && expand('%') == '' &&
+  if cmd =~ 'split' && expand('%') == '' &&
    \ !&modified && line('$') == 1 && getline(1) == ''
     let cmd = 'edit'
   endif

@@ -294,6 +294,8 @@ Vim's command line completion to complete the project name.
     Opens the current file using 'edit' in the content window.
   - **S** -
     Opens the current file in a new split.
+  - **|** (pipe) -
+    Opens the current file in a new vertical split.
   - **T** -
     Opens the current file in a new tab.
   - **o** -
