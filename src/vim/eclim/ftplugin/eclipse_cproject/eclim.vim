@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,11 +25,9 @@
 " Global Variables {{{
 let g:tlist_eclipse_cproject_settings = {
     \ 'lang': 'cproject',
-    \ 'format': 'eclim#taglisttoo#lang#cproject#Format',
     \ 'parse': 'eclim#taglisttoo#lang#cproject#Parse',
     \ 'tags': {
       \ 'c': 'configuration',
-      \ 'e': 'entry',
       \ 't': 'toolchain',
       \ 'l': 'tool',
       \ 'i': 'include',
