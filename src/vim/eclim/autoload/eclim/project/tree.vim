@@ -77,11 +77,11 @@ function! eclim#project#tree#ProjectTree(...)
     let dir = eclim#project#util#GetProjectRoot(name)
     if dir != ''
       call add(dirs, dir)
+      let index += 1
     else
       call eclim#util#EchoWarning('Project not found: ' . name)
-      call remove(names_copy, name)
+      call remove(names_copy, index)
     endif
-    let index += 1
   endfor
   let names = names_copy
 
