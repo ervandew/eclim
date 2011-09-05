@@ -346,6 +346,7 @@ function! eclim#java#util#Java(classname, args)
   if len(args)
     let command .= ' -a'
     for arg in args
+      let arg = substitute(arg, '^-', '\\-', '')
       let command .= ' "' . escape(arg, '"') . '"'
     endfor
   endif
