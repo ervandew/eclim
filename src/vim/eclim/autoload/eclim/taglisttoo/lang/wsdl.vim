@@ -1,7 +1,7 @@
 " Author:  Eric Van Dewoestine
 "
 " License: {{{
-"   Copyright (c) 2005 - 2010, Eric Van Dewoestine
+"   Copyright (c) 2005 - 2011, Eric Van Dewoestine
 "   All rights reserved.
 "
 "   Redistribution and use of this software in source and binary forms, with
@@ -37,7 +37,7 @@
 
 " Parse(file, settings) {{{
 function! eclim#taglisttoo#lang#wsdl#Parse(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['t', "<xsd:complexType\\s+[^>]*?name=['\"](.*?)['\"]", 1],
       \ ['m', "<message\\s+[^>]*?name=['\"](.*?)['\"]", 1],
       \ ['p', "<operation\\s+[^>]*?name=['\"](.*?)['\"]>\\s*<input", 1],

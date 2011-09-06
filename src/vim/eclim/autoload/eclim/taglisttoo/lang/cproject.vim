@@ -23,7 +23,7 @@
 
 " Parse(file, settings) {{{
 function! eclim#taglisttoo#lang#cproject#Parse(file, settings)
-  let tags = taglisttoo#util#Parse(a:file, [
+  let tags = taglisttoo#util#Parse(a:file, a:settings, [
       \ ['c', "<configuration\\s+[^>]*?name=['\"](.*?)['\"]", 1],
       \ ['t', "<toolChain\\s+[^>]*?name=['\"](.*?)['\"]", 1],
       \ ['l', "<tool\\s+[^>]*?name=['\"](.*?)['\"]", 1],

@@ -23,7 +23,7 @@
 
 " Parse(file, settings) {{{
 function! eclim#taglisttoo#lang#gant#Parse(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['t', "\\s*target\\s*\\(\\s*(?:name\\s*:)?\\s*['\"]?([^'\",: ]+)", 1],
       \ ['f', "\\s*def\\s+(\\w+)\\s*\\(", 1],
       \ ['f', "\\s*(?:final|def)?\\s*(\\w+)\\s*=\\s*\\{", 1],

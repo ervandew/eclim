@@ -23,7 +23,7 @@
 
 " ParseWebXml(file, settings) {{{
 function! eclim#taglisttoo#lang#webxml#ParseWebXml(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['p', '<context-param\s*>\s*<param-name\s*>\s*(.*?)\s*</param-name\s*>', 1],
       \ ['f', '<filter\s*>\s*<filter-name\s*>\s*(.*?)\s*</filter-name\s*>', 1],
       \ ['i', '<filter-mapping\s*>\s*<filter-name\s*>\s*(.*?)\s*</filter-name\s*>', 1],
@@ -35,7 +35,7 @@ endfunction " }}}
 
 " ParseTld(file, settings) {{{
 function! eclim#taglisttoo#lang#webxml#ParseTld(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['t', '<tag\s*>\s*<name\s*>\s*(.*?)\s*</name\s*>', 1],
     \ ])
 endfunction " }}}

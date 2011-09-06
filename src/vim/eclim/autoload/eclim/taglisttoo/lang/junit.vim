@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 " Parse(file, settings) {{{
 function! eclim#taglisttoo#lang#junit#Parse(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['t', "<testcase\\s+[^>]*?\\bname=['\"](.*?)['\"]", 1],
       \ ['f', "<testcase\\s+[^>]*?\\bname=['\"]([^'\"]+?)['\"]\\s+[^>]*?>\\s*<failure\\b", 1],
       \ ['o', '<system-(out|err)\s*>', 1],

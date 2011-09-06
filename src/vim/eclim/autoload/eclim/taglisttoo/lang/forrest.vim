@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,14 +23,14 @@
 
 " ParseDocument(file, settings) {{{
 function! eclim#taglisttoo#lang#forrest#ParseDocument(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['s', "<section\\s+[^>]*?id=['\"](.*?)['\"]", 1],
     \ ])
 endfunction " }}}
 
 " ParseStatus(file, settings) {{{
 function! eclim#taglisttoo#lang#forrest#ParseStatus(file, settings)
-  return taglisttoo#util#Parse(a:file, [
+  return taglisttoo#util#Parse(a:file, a:settings, [
       \ ['t', "<actions\\s+[^>]*?priority=['\"](.*?)['\"]", 1],
       \ ['r', "<release\\s+[^>]*?version=['\"](.*?)['\"]", 1],
     \ ])
