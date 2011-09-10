@@ -21,9 +21,9 @@ IRC
 #eclim on freenode.net
 ----------------------
 
-If you would like to get help or ask other questions on IRC, then feel free to
-join #eclim on freenode.net. Please note that I (Eric Van Dewoestine, ervandew
-on irc) try to stay in the channel as much as possible, but I might not be
+If you would like to get help or ask questions on IRC, then feel free to join
+#eclim on freenode.net. Please note that I (Eric Van Dewoestine, ervandew on
+irc) try to stay in the channel as much as possible, but I might not be
 available to answer questions immediately. It's also worth noting that I live
 in California, so if you are in Europe, Asia, or some other timezone whose
 normal waking hours don't overlap well with mine, then you may be better off

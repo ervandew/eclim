@@ -16,6 +16,33 @@
 History of Changes
 ==================
 
+.. _1.7.2:
+
+1.7.2 (Sep. 10, 2011)
+----------------------
+
+Bug Fixes:
+  - Various small bug fixes.
+
+Installer:
+  - Fixed deadlock on the vim install dir pane for java 7.
+
+Eclipse:
+  - Disabled listening for change events on embedded gvim. Should fix most
+    causes of gvim crashing.
+  - Other improvements for embedded gvim support.
+
+Eclimd:
+  - Improved OSX detection.
+  - Fix for passing jvm args to java when supplied as args to eclimd script.
+
+Java:
+  - Fix passing of dash prefixed :Java args (ex. -p) to the class to be run.
+
+Php:
+  - Improved completion of magic properties.
+  - Support new php 5.3 version in pdt.
+
 .. _1.7.1:
 
 1.7.1 (Jul. 02, 2011)

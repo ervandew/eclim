@@ -105,10 +105,12 @@ News
 ==================
 
 -----------
-2011
+2011-09-10
 -----------
 
-.. | :ref:`Eclim 1.7.2 <1.7.2>` is now available.
+| :ref:`Eclim 1.7.2 <1.7.2>` is now available.
+| This version fixes running the installer with java 7 as well as several other
+  small bug fixes and improvements.
 
 I'd also like to announce the :ref:`#eclim <irc>` channel on freenode.
 
