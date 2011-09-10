@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,10 +34,6 @@ maintained by third parties for some popular linux distributions:
 
 - **Arch:** `aur (eclim) <http://aur.archlinux.org/packages.php?ID=7291>`_,
   `aur (eclim-git) <http://aur.archlinux.org/packages.php?ID=33120>`_
-- **Gentoo:** `sunrise overlay`_
-- **Fedora (12.x and maybe higher):** `grond repository`_
 
 .. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
 .. _eclim_version.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
-.. _sunrise overlay: http://gpo.zugaina.org/dev-util/eclim
-.. _grond repository: http://www.grond.org/downloads/repository/grond/fedora/
