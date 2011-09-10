@@ -67,10 +67,10 @@ function! TestPylint()
   call vunit#AssertEquals(len(qf), 2)
   call vunit#AssertEquals(qf[0].lnum, 3)
   call vunit#AssertEquals(qf[0].type, 'w')
-  call vunit#AssertEquals(qf[0].text, ' Unused import test2')
+  call vunit#AssertEquals(qf[0].text, 'Unused import test2')
   call vunit#AssertEquals(qf[1].lnum, 5)
   call vunit#AssertEquals(qf[1].type, 'w')
-  call vunit#AssertEquals(qf[1].text, ' Statement seems to have no effect')
+  call vunit#AssertEquals(qf[1].text, 'Statement seems to have no effect')
 endfunction " }}}
 
 " TestRope() {{{

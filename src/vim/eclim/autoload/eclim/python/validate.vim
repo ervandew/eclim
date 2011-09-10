@@ -206,9 +206,9 @@ function eclim#python#validate#PyLint()
   if result =~ ':'
     let errors = []
     for error in split(result, '\n')
-      if error =~ '^[CWERF]\(:\s\+\)\?[0-9]'
-        let line = substitute(error, '.\{-}:\s*\([0-9]\+\):.*', '\1', '')
-        let message = substitute(error, '.\{-}:\s*[0-9]\+:\(.*\)', '\1', '')
+      if error =~ '^[CWERF]\d*\(:\s\+\)\?\d'
+        let line = substitute(error, '.\{-}:\s*\(\d\+\)[:,].*', '\1', '')
+        let message = substitute(error, '.\{-}:\s*.\{-}:\s*\(.*\)', '\1', '')
         let dict = {
             \ 'filename': eclim#util#Simplify(file),
             \ 'lnum': line,
