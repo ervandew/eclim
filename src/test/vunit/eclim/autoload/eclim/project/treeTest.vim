@@ -115,10 +115,11 @@ function! TestProjectTree()
 
   normal o
   call vunit#AssertEquals(getline(1), 'Split')
-  call vunit#AssertEquals(getline(2), 'Tab')
-  call vunit#AssertEquals(getline(3), 'Edit')
+  call vunit#AssertEquals(getline(2), 'VSplit')
+  call vunit#AssertEquals(getline(3), 'Tab')
+  call vunit#AssertEquals(getline(4), 'Edit')
 
-  normal j
+  normal 2j
   exec "normal \<cr>"
   let name = substitute(expand('%'), '\', '/', 'g')
   call vunit#AssertTrue(name =~ 'eclim_unit_test/files/test1.txt$')
