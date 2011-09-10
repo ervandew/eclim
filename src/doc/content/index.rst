@@ -34,6 +34,9 @@ Welcome to Eclim
    translations/index
    development/index
 
+.. toctree::
+   irc
+
 .. _overview:
 
 ==================
@@ -100,6 +103,14 @@ Eclim is released under the GPLv3_.
 ==================
 News
 ==================
+
+-----------
+2011
+-----------
+
+.. | :ref:`Eclim 1.7.2 <1.7.2>` is now available.
+
+I'd also like to announce the :ref:`#eclim <irc>` channel on freenode.
 
 -----------
 2011-07-02

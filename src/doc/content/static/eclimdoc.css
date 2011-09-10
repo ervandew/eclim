@@ -350,6 +350,9 @@ div.related ul li a {
 div.related ul li a:hover {
   color: #3CA8E7;
 }
+#searchbox input[type=text] {
+  width: 135px;
+}
 
 div.footer {
   clear: both;

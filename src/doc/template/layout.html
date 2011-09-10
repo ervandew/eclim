@@ -39,7 +39,7 @@
             <li><a href="http://sourceforge.net/project/screenshots.php?group_id=145869">Screenshots</a></li>
             <li><a href="http://github.com/ervandew/eclim">Source Code</a></li>
           </ul>
-          {% for main_toc in main_tocs[1:] %}
+          {% for main_toc in main_tocs[1:-1] %}
             {{ main_toc }}
           {% endfor %}
           <ul><li>
@@ -80,6 +80,9 @@
             </li>
             <li>
               <a href="http://github.com/ervandew/eclim/issues">Bugs / Feature Requests</a>
+            </li>
+            <li>
+              <a href="http://eclim.org/irc.html">IRC</a>
             </li>
           </ul>
         </div>
