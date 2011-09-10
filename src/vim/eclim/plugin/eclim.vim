@@ -185,9 +185,9 @@ endif
 
 if g:EclimSignLevel
   augroup eclim_qf
-    autocmd QuickFixCmdPost *make* call eclim#display#signs#Show('', 'qf')
-    autocmd QuickFixCmdPost grep*,vimgrep* call eclim#display#signs#Show('i', 'qf')
-    autocmd QuickFixCmdPost lgrep*,lvimgrep* call eclim#display#signs#Show('i', 'loc')
+    autocmd QuickFixCmdPost *make* call eclim#display#signs#Show('', 'qf', 1)
+    autocmd QuickFixCmdPost grep*,vimgrep* call eclim#display#signs#Show('i', 'qf', 1)
+    autocmd QuickFixCmdPost lgrep*,lvimgrep* call eclim#display#signs#Show('i', 'loc', 1)
     autocmd WinEnter,BufWinEnter * call eclim#display#signs#Update()
   augroup END
 endif

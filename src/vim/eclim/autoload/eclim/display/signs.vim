@@ -315,10 +315,10 @@ function! eclim#display#signs#Update()
   let &lazyredraw = save_lazy
 endfunction " }}}
 
-" Show(type, list) {{{
+" Show(type, list, [delayed]) {{{
 " Set the type on each entry in the specified list ('qf' or 'loc') and mark
 " any matches in the current file.
-function! eclim#display#signs#Show(type, list)
+function! eclim#display#signs#Show(type, list, ...)
   if a:type != ''
     if a:list == 'qf'
       let list = getqflist()
@@ -339,9 +339,13 @@ function! eclim#display#signs#Show(type, list)
     endif
   endif
 
-  call eclim#display#signs#Update()
-
-  redraw!
+  let delayed = a:0 > 0 && a:1
+  if delayed
+    " prevent gvim from redrawing immediately after a :make call
+    call eclim#util#DelayedCommand('call eclim#display#signs#Update() | redraw!')
+  else
+    call eclim#display#signs#Update() | redraw!
+  endif
 endfunction " }}}
 
 " SetPlaceholder([only_if_necessary]) {{{
