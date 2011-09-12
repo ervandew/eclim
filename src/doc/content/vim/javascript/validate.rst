@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ and install it on a linux machine (your paths may vary)\:
 
 .. code-block:: bash
 
-  $ cd js-<version>/src
+  $ cd jsl-<version>/src
   $ make -f Makefile.ref
 
   # this path will undoubtedly vary on non-linux machines, so watch the

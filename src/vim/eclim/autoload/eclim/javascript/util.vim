@@ -64,11 +64,28 @@ function! eclim#javascript#util#Jsl()
       let g:eclim_javascript_jsl_warn = 1
     endif
   else
-    let command = 'jsl -process "' . expand('%:p') . '"'
-    let conf = expand(g:EclimJavascriptLintConf)
-    if filereadable(conf)
-      let command .= ' -conf "' . conf . '"'
+    if !exists('g:EclimJavascriptLintVersion')
+      call eclim#util#System('jsl --help')
+      let g:EclimJavascriptLintVersion = v:shell_error == 2 ? 'c' : 'python'
     endif
+
+    let conf = expand(g:EclimJavascriptLintConf)
+
+    " the c version
+    if g:EclimJavascriptLintVersion == 'c'
+      let command = 'jsl -process "' . expand('%:p') . '"'
+      if filereadable(conf)
+        let command .= ' -conf "' . conf . '"'
+      endif
+
+    " the new python version
+    else
+      let command = 'jsl "' . expand('%:p') . '"'
+      if filereadable(conf)
+        let command .= ' --conf "' . conf . '"'
+      endif
+    endif
+
     let result = eclim#util#System(command)
     if v:shell_error == 2 "|| v:shell_error == 4
       call eclim#util#EchoError('Error running command: ' . command)
