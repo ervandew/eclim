@@ -298,7 +298,7 @@ public class VimServer
    *
    * @return Success
    */
-  public boolean stop() throws IOException {
+  public synchronized boolean stop() throws IOException {
     boolean result = false; // If error raised
 
     if (p != null){
@@ -321,6 +321,7 @@ public class VimServer
         // ignore
       }
       p.destroy();
+      p = null;
       logger.debug("Vim closed.");
     }
 
