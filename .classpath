@@ -42,6 +42,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.preferences_3.4.0.v20110502.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.equinox.registry_3.5.100.v20110502.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.7.0.v_B61.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core.manipulation_1.4.0.v20110505-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.launching_3.6.0.v20110509.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.ui_3.7.0.v20110531-1200.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.7.0.I20110522-1430.jar"/>
