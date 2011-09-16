@@ -59,7 +59,7 @@ import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.SearchPattern;
 
-import org.eclipse.dltk.internal.corext.util.SearchUtils;
+import org.eclipse.jdt.internal.corext.util.SearchUtils;
 
 import org.eclipse.dltk.internal.ui.search.DLTKSearchScopeFactory;
 
