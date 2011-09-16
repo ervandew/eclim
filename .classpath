@@ -58,6 +58,7 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.7.0.v20110505-0800.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core_3.0.0.v20110609-1525.jar"/>
+  <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.core.manipulation_3.0.0.v20110609-1525.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.debug.ui_3.0.0.v20110423.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.launching_3.0.0.v20110423.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.dltk.ui_3.0.0.v20110609-1525.jar"/>
