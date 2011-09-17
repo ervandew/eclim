@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,9 +40,8 @@ public class ClasspathVariableCommandsTest
         Eclim.projectExists(Jdt.TEST_PROJECT));
     assertFalse("Variable already exists.", variableExists());
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_classpath_variable_create", "-n", TEST_VARIABLE, "-p", TEST_PATH});
-    System.out.println(result);
 
     assertTrue("Variable not created.", variableExists());
   }
@@ -54,9 +53,8 @@ public class ClasspathVariableCommandsTest
         Eclim.projectExists(Jdt.TEST_PROJECT));
     assertTrue("Variable does not exist.", variableExists());
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_classpath_variable_delete", "-n", TEST_VARIABLE});
-    System.out.println(result);
 
     assertFalse("Variable not deleted.", variableExists());
   }
@@ -68,7 +66,7 @@ public class ClasspathVariableCommandsTest
    */
   private boolean variableExists()
   {
-    String list = Eclim.execute(new String[]{"java_classpath_variables"});
+    String list = (String)Eclim.execute(new String[]{"java_classpath_variables"});
 
     return VARIABLE_PATTERN.matcher(list).find();
   }

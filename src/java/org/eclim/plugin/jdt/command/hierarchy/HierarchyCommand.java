@@ -33,8 +33,6 @@ import org.eclim.plugin.jdt.util.TypeUtils;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 
-import com.google.gson.Gson;
-
 /**
  * Command to retrieve the hierarchy of a class or interface.
  *
@@ -55,7 +53,7 @@ public class HierarchyCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -71,8 +69,7 @@ public class HierarchyCommand
 
     HierarchyNode hierarchy = new HierarchyNode(type, createChildNodes(type));
 
-    Gson gson = new Gson();
-    return gson.toJson(hierarchy);
+    return hierarchy;
   }
 
   private List<HierarchyNode> createChildNodes(IType type)

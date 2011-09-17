@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,6 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclim.plugin.core.command.filter.PositionFilter;
 
 import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectManager;
@@ -101,7 +99,7 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.NAME_OPTION);
@@ -174,9 +172,9 @@ public class SearchCommand
           requestor,
           new NullProgressMonitor());
 
-      return PositionFilter.instance.filter(commandLine, requestor.getMatches());
+      return requestor.getMatches();
     }
-    return StringUtils.EMPTY;
+    return null;
   }
 
   /**
@@ -287,12 +285,12 @@ public class SearchCommand
   }
 
   /**
-   * Get the search result message for the given element.
+   * Get the search result element name for the given element.
    *
    * @param el The search result element.
-   * @return The message.
+   * @return The name.
    */
-  protected String getMessage(Object el)
+  protected String getElement(Object el)
   {
     IModelElement element = (IModelElement)el;
     ArrayList<IModelElement> lineage = new ArrayList<IModelElement>();
@@ -392,24 +390,20 @@ public class SearchCommand
           return;
         }
 
-        Position position = new Position(
-            filename, match.getOffset(), match.getLength());
-
-        // setting to empty string to match entries with no message, which dltk
-        // tends to have in addition to ones with a message.
-        position.setMessage(StringUtils.EMPTY);
+        Position position = Position.fromOffset(
+            filename, StringUtils.EMPTY, match.getOffset(), match.getLength());
 
         int index = matches.indexOf(position);
-        String message = SearchCommand.this.getMessage(match.getElement());
+        String name = SearchCommand.this.getElement(match.getElement());
         if(index == -1){
-          position.setMessage(message);
+          position.setMessage(name);
           if(!matches.contains(position)){
             matches.add(position);
           }
-        }else if (!StringUtils.EMPTY.equals(message)){
-          // the second occurrence should be the one with the message.
+        }else if (!StringUtils.EMPTY.equals(name)){
+          // the second occurrence should be the one with the name.
           position = matches.get(index);
-          position.setMessage(message);
+          position.setMessage(name);
         }
       }
     }

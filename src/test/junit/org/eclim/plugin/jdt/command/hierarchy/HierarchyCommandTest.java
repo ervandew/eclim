@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.jdt.command.hierarchy;
+
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -35,36 +38,98 @@ public class HierarchyCommandTest
     "src/org/eclim/test/hierarchy/TestHierarchy.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void test()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "1", "-e", "utf-8"
-    });
+    HashMap<String,Object> result = (HashMap<String,Object>)
+      Eclim.execute(new String[]{
+        "java_hierarchy", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE, "-o", "1", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals(result.get("name"), "public class TestHierarchy");
+    assertEquals(result.get("qualified"), "org.eclim.test.hierarchy.TestHierarchy");
 
-    assertEquals("Wrong result.", result, "{\"name\":\"public class TestHierarchy\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[{\"name\":\"public class Component\",\"qualified\":\"java.awt.Component\",\"children\":[{\"name\":\"public interface ImageObserver\",\"qualified\":\"java.awt.image.ImageObserver\",\"children\":[]},{\"name\":\"public interface MenuContainer\",\"qualified\":\"java.awt.MenuContainer\",\"children\":[]},{\"name\":\"public interface Serializable\",\"qualified\":\"java.io.Serializable\",\"children\":[]}]},{\"name\":\"public interface Comparable\",\"qualified\":\"java.lang.Comparable\",\"children\":[]},{\"name\":\"public interface PropertyChangeListener\",\"qualified\":\"java.beans.PropertyChangeListener\",\"children\":[{\"name\":\"public interface EventListener\",\"qualified\":\"java.util.EventListener\",\"children\":[]}]}]}");
+    List<HashMap<String,Object>> children = (List<HashMap<String,Object>>)
+      result.get("children");
+    HashMap<String,Object> child = children.get(0);
+    assertEquals(child.get("name"), "public class Component");
+    assertEquals(child.get("qualified"), "java.awt.Component");
 
-    result = Eclim.execute(new String[]{
-      "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "967", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> subChildren = (List<HashMap<String,Object>>)child.get("children");
+    child = subChildren.get(0);
+    assertEquals(child.get("name"), "public interface ImageObserver");
+    assertEquals(child.get("qualified"), "java.awt.image.ImageObserver");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
 
-    System.out.println(result);
+    child = subChildren.get(1);
+    assertEquals(child.get("name"), "public interface MenuContainer");
+    assertEquals(child.get("qualified"), "java.awt.MenuContainer");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
 
-    assertEquals("Wrong result.", result, "{\"name\":\"class TestHierarchy.TestNested\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[{\"name\":\"public interface Comparable\",\"qualified\":\"java.lang.Comparable\",\"children\":[]},{\"name\":\"public interface PropertyChangeListener\",\"qualified\":\"java.beans.PropertyChangeListener\",\"children\":[{\"name\":\"public interface EventListener\",\"qualified\":\"java.util.EventListener\",\"children\":[]}]}]}");
+    child = subChildren.get(2);
+    assertEquals(child.get("name"), "public interface Serializable");
+    assertEquals(child.get("qualified"), "java.io.Serializable");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
 
-    result = Eclim.execute(new String[]{
-      "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "1075", "-e", "utf-8"
-    });
+    child = children.get(1);
+    assertEquals(child.get("name"), "public interface Comparable");
+    assertEquals(child.get("qualified"), "java.lang.Comparable");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
 
-    System.out.println(result);
+    child = children.get(2);
+    assertEquals(child.get("name"), "public interface PropertyChangeListener");
+    assertEquals(child.get("qualified"), "java.beans.PropertyChangeListener");
 
-    assertEquals("Wrong result.", result, "{\"name\":\"class TestHierarchy.Test\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[]}");
+    children = (List<HashMap<String,Object>>)child.get("children");
+    child = children.get(0);
+    assertEquals(child.get("name"), "public interface EventListener");
+    assertEquals(child.get("qualified"), "java.util.EventListener");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testNested()
+  {
+    HashMap<String,Object> result = (HashMap<String,Object>)
+      Eclim.execute(new String[]{
+        "java_hierarchy", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE, "-o", "967", "-e", "utf-8"
+      });
+
+    assertEquals(result.get("name"), "class TestHierarchy.TestNested");
+    assertEquals(result.get("qualified"), "org.eclim.test.hierarchy.TestHierarchy");
+
+    List<HashMap<String,Object>> children = (List<HashMap<String,Object>>)
+      result.get("children");
+    HashMap<String,Object> child = children.get(0);
+    assertEquals(child.get("name"), "public interface Comparable");
+    assertEquals(child.get("qualified"), "java.lang.Comparable");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
+
+    child = children.get(1);
+    assertEquals(child.get("name"), "public interface PropertyChangeListener");
+    assertEquals(child.get("qualified"), "java.beans.PropertyChangeListener");
+
+    children = (List<HashMap<String,Object>>)child.get("children");
+    child = children.get(0);
+    assertEquals(child.get("name"), "public interface EventListener");
+    assertEquals(child.get("qualified"), "java.util.EventListener");
+    assertEquals(((List<Object>)child.get("children")).size(), 0);
+
+    result = (HashMap<String,Object>)
+      Eclim.execute(new String[]{
+        "java_hierarchy", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE, "-o", "1075", "-e", "utf-8"
+      });
+
+    assertEquals(result.get("name"), "class TestHierarchy.Test");
+    assertEquals(result.get("qualified"), "org.eclim.test.hierarchy.TestHierarchy");
+    assertEquals(((List<Object>)result.get("children")).size(), 0);
   }
 }
+

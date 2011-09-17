@@ -18,6 +18,7 @@ package org.eclim.plugin.core.command.project;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclim.annotation.Command;
@@ -47,8 +48,6 @@ import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.ui.internal.ide.dialogs.IDEResourceInfoUtils;
 
-import com.google.gson.Gson;
-
 /**
  * Command which obtains a list of projects and project paths for use by clients
  * to determine which project a file belongs to.
@@ -63,11 +62,11 @@ public class ProjectsCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
-    StringBuffer result = new StringBuffer();
-    Gson gson = new Gson();
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
     IProject[] projects = workspace.getRoot().getProjects();
     for (IProject project : projects){
@@ -99,7 +98,6 @@ public class ProjectsCommand
         ResourceInfo pinfo = ((Project)project).getResourceInfo(false, false);
         ProjectDescription desc = ((ProjectInfo)pinfo).getDescription();
         if (desc != null){
-          @SuppressWarnings("unchecked")
           HashMap<IPath, LinkDescription> linfo =
             (HashMap<IPath, LinkDescription>)desc.getLinks();
           if (linfo != null){
@@ -121,12 +119,9 @@ public class ProjectsCommand
       }
       info.put("links", links);
 
-      if(result.length() > 0){
-        result.append('\n');
-      }
-      result.append(gson.toJson(info));
+      results.add(info);
     }
 
-    return result.toString();
+    return results;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.command.complete.CodeCompleteFilter;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.wst.util.JavaScriptUtils;
@@ -54,7 +53,7 @@ public class JavaScriptCodeCompleteCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -66,8 +65,7 @@ public class JavaScriptCodeCompleteCommand
     CompletionRequestor collector = new CompletionRequestor();
     src.codeComplete(offset, collector);
 
-    return CodeCompleteFilter.instance.filter(
-        commandLine, collector.getResults());
+    return collector.getResults();
   }
 
   public static class CompletionRequestor
@@ -109,10 +107,8 @@ public class JavaScriptCodeCompleteCommand
         desc.append(completion);
       }
 
-      String description = desc.toString();
-      String shortDescription = description;
-      results.add(
-          new CodeCompleteResult(completion, description, shortDescription));
+      String info = desc.toString();
+      results.add(new CodeCompleteResult(completion, null, info));
     }
 
     public List<CodeCompleteResult> getResults()

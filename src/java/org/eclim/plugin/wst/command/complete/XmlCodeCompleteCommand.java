@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
     "REQUIRED o offset ARG," +
-    "REQUIRED e encoding ARG," +
-    "OPTIONAL d delimeter ARG"
+    "REQUIRED e encoding ARG"
 )
 public class XmlCodeCompleteCommand
   extends WstCodeCompleteCommand
@@ -76,18 +75,18 @@ public class XmlCodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getMenu(ICompletionProposal)
    */
-  protected String getShortDescription(ICompletionProposal proposal)
+  protected String getMenu(ICompletionProposal proposal)
   {
-    String shortDesc = proposal.getAdditionalProposalInfo();
-    if(shortDesc != null){
-      int index = shortDesc.indexOf("</p>");
+    String menu = proposal.getAdditionalProposalInfo();
+    if(menu != null){
+      int index = menu.indexOf("</p>");
       if(index != -1){
-        shortDesc = shortDesc.substring(index + 4);
-        shortDesc = CodeCompleteResult.createShortDescription(shortDesc);
+        menu = menu.substring(index + 4);
+        menu = CodeCompleteResult.menuFromInfo(menu);
       }
     }
-    return shortDesc;
+    return menu;
   }
 }

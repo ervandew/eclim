@@ -101,7 +101,7 @@ public class JavaCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
@@ -218,7 +218,7 @@ public class JavaCommand
 
     java.execute();
 
-    return StringUtils.EMPTY;
+    return null;
   }
 
   private String findMainClass(IJavaProject javaProject)

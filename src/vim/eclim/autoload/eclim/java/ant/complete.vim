@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
     let completions = []
-    let results = split(eclim#ExecuteEclim(command), '\n')
-    if len(results) == 1 && results[0] == '0'
+    let results = eclim#ExecuteEclim(command)
+    if type(results) != 3
       return
     endif
 
@@ -88,20 +88,17 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
       \ '.\{-}\([[:alnum:].]\+\%' . col('.') . 'c\).*', '\1', '')
 
     for result in results
-      let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
+      let word = result.completion
       " removed '<' and '>' from end tag results
       let word = substitute(word, '^<\(.*\)>$', '\1', '')
-
-      let menu = substitute(result, '.\{-}|\(.*\)|.*', '\1', '')
-      let menu = eclim#html#util#HtmlToText(menu)
-
-      let info = substitute(result, '.*|\(.*\)', '\1', '')
-      let info = eclim#html#util#HtmlToText(info)
 
       " strip off prefix if necessary.
       if word =~ '\.'
         let word = substitute(word, escape(prefix, '*'), '', '')
       endif
+
+      let menu = eclim#html#util#HtmlToText(result.menu)
+      let info = eclim#html#util#HtmlToText(result.info)
 
       let dict = {'word': word, 'menu': menu, 'info': info}
 

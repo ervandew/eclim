@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -51,9 +51,9 @@ function! eclim#java#checkstyle#Checkstyle()
     let command = substitute(command, '<file>', file, '')
 
     let result = eclim#ExecuteEclim(command)
-    if result =~ '|'
+    if type(result) == 3 && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
-        \ split(result, '\n'), g:EclimValidateSortResults)
+        \ result, g:EclimValidateSortResults)
       for error in errors
         let error["text"] = "[checkstyle] " . error.text
       endfor

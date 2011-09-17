@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,13 +85,13 @@ public class CodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getDescription(IScriptCompletionProposal)
+   * @see AbstractCodeCompleteCommand#getInfo(IScriptCompletionProposal)
    */
   @Override
-  protected String getDescription(IScriptCompletionProposal proposal)
+  protected String getInfo(IScriptCompletionProposal proposal)
   {
     // too slow for a lot of results
-    //String description = super.getDescription(proposal);
+    //String description = super.getInfo(proposal);
     return StringUtils.EMPTY;
   }
 }

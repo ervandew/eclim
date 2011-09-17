@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.dltkruby.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,115 +37,141 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE = "src/complete/testComplete.rb";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeStatic()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "107", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "107", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 2, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "ID");
+    assertEquals(result.get("menu"), "ID");
+    assertEquals(result.get("info"), "");
 
-    assertEquals("Wrong number of results", 2, results.length);
-    assertTrue("Wrong result", results[0].startsWith("ID|"));
-    assertTrue("Wrong result", results[1].startsWith("moduleMethodA|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "moduleMethodA");
+    assertEquals(result.get("menu"), "moduleMethodA() - TestModule");
+    assertEquals(result.get("info"), "");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeStaticPrefix()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "92", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "92", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 1, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of results", 1, results.length);
-    assertTrue("Wrong result", results[0].startsWith("moduleMethodA|"));
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "moduleMethodA");
+    assertEquals(result.get("menu"), "moduleMethodA() - TestModule");
+    assertEquals(result.get("info"), "");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeInstance()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "42", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "42", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertTrue("Wrong number of results", results.size() > 25);
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "testA");
+    assertEquals(result.get("menu"), "testA() - TestClass");
+    assertEquals(result.get("info"), "");
 
-    assertTrue("Wrong number of results", results.length > 25);
-    assertTrue("Wrong result", results[0].startsWith("testA|"));
-    assertTrue("Wrong result", results[1].startsWith("testB|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "testB");
+    assertEquals(result.get("menu"), "testB() - TestClass");
+    assertEquals(result.get("info"), "");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeInstancePrefix()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "54", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "54", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertTrue("Wrong number of results", results.size() >= 2);
+    assertTrue("Wrong number of results", results.size() <= 3);
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "testA");
+    assertEquals(result.get("menu"), "testA() - TestClass");
+    assertEquals(result.get("info"), "");
 
-    assertTrue("Wrong number of results", results.length >= 2);
-    assertTrue("Wrong number of results", results.length <= 3);
-    assertTrue("Wrong result", results[0].startsWith("testA|"));
-    assertTrue("Wrong result", results[1].startsWith("testB|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "testB");
+    assertEquals(result.get("menu"), "testB() - TestClass");
+    assertEquals(result.get("info"), "");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeBuiltins()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "63", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "63", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertTrue("Wrong number of results", results.size() >= 2);
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "each");
+    assertEquals(result.get("menu"), "each() - Array");
+    assertEquals(result.get("info"), "");
 
-    assertTrue("Wrong number of results", results.length >= 2);
-    assertTrue("Wrong result", results[0].startsWith("each|"));
-    assertTrue("Wrong result", results[1].startsWith("each_index|"));
-    //assertTrue("Wrong result", results[2].startsWith("each_with_index|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "each_index");
+    assertEquals(result.get("menu"), "each_index() - Array");
+    assertEquals(result.get("info"), "");
 
-    result = Eclim.execute(new String[]{
-      "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "70", "-e", "utf-8"
-    });
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "70", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 1, results.size());
 
-    results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of results", 1, results.length);
-    assertTrue("Wrong result", results[0].startsWith("times|"));
+    result = results.get(0);
+    assertEquals(result.get("completion"), "times");
+    assertEquals(result.get("menu"), "times() - Integer");
+    assertEquals(result.get("info"), "");
   }
 }

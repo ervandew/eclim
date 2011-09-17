@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.core.command.history;
-
-import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
 
@@ -56,7 +54,7 @@ public class HistoryRevisionCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -73,6 +71,6 @@ public class HistoryRevisionCommand
             rev.getStorage(new NullProgressMonitor()).getContents());
       }
     }
-    return StringUtils.EMPTY;
+    return null;
   }
 }

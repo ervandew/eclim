@@ -63,7 +63,7 @@ public class JavadocCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
@@ -126,6 +126,6 @@ public class JavadocCommand
 
     javadoc.execute();
 
-    return StringUtils.EMPTY;
+    return null;
   }
 }

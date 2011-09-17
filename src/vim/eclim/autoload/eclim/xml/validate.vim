@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -53,9 +53,9 @@ function! eclim#xml#validate#Validate(on_save, ...)
     endif
 
     let result = eclim#ExecuteEclim(command)
-    if result =~ '|'
+    if type(result) == 3 && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
-        \ split(result, '\n'), g:EclimValidateSortResults)
+        \ result, g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)
       " bang arg supplied, but no bang, so jump to first error.
       if len(a:000) > 0 && a:000[0] == ''

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,16 +49,14 @@ public class HistoryCommandTest
   public void execute()
     throws Exception
   {
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "history_clear", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
-    System.out.println(result);
     assertEquals("Wrong result.", result, "History Cleared.");
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
-    System.out.println(result);
     assertEquals("Wrong result.", result, "[]");
 
     assertEquals("Wrong file contents.",
@@ -90,10 +88,9 @@ public class HistoryCommandTest
       "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
-    System.out.println(result);
 
     Pattern pattern = Pattern.compile("^\\[" + ENTRY + "," + ENTRY + "\\]$");
     Matcher matcher = pattern.matcher(result);
@@ -106,10 +103,9 @@ public class HistoryCommandTest
     String ts = matcher.group(1);
     System.out.println(ts);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "history_revision", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE, "-r", ts
     });
-    System.out.println(result);
     assertEquals("Wrong result.", result, "line 1\n");
   }
 }

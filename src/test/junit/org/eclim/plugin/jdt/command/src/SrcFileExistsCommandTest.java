@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,14 @@ public class SrcFileExistsCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_src_exists", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE
     });
 
     assertEquals("Wrong result.", "true", result);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_src_exists", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE.replace('t', 'o')
     });

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,27 +37,27 @@ public class CssCodeCompleteCommandTest
   private static final String TEST_FILE = "css/complete.css";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void complete()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "52", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "52", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of errors.", 8, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 8, results.length);
-    assertTrue("Wrong result.", results[0].startsWith("font"));
-    assertTrue("Wrong result.", results[1].startsWith("font-family"));
-    assertTrue("Wrong result.", results[2].startsWith("font-size"));
-    assertTrue("Wrong result.", results[3].startsWith("font-size-adjust"));
-    assertTrue("Wrong result.", results[4].startsWith("font-stretch"));
-    assertTrue("Wrong result.", results[5].startsWith("font-style"));
-    assertTrue("Wrong result.", results[6].startsWith("font-variant"));
-    assertTrue("Wrong result.", results[7].startsWith("font-weight"));
+    assertEquals(results.get(0).get("completion"), "font");
+    assertEquals(results.get(1).get("completion"), "font-family");
+    assertEquals(results.get(2).get("completion"), "font-size");
+    assertEquals(results.get(3).get("completion"), "font-size-adjust");
+    assertEquals(results.get(4).get("completion"), "font-stretch");
+    assertEquals(results.get(5).get("completion"), "font-style");
+    assertEquals(results.get(6).get("completion"), "font-variant");
+    assertEquals(results.get(7).get("completion"), "font-weight");
   }
 }

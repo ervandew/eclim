@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package org.eclim.plugin.core.util;
 
 import org.eclim.util.file.FileUtils;
-import org.eclim.util.file.Location;
 import org.eclim.util.file.Position;
 
 /**
@@ -63,21 +62,6 @@ public class VimUtils
       if(pos != null){
         return pos[0] + " col " + pos[1];
       }
-    }
-    return "1 col 1";
-  }
-
-  /**
-   * Converts the location into a vim compatible line / column string.
-   *
-   * @param location The location instance.
-   * @return The vim compatable string.
-   */
-  public static String translateLineColumn(Location location)
-    throws Exception
-  {
-    if(location != null){
-      return location.getLine() + " col " + location.getColumn();
     }
     return "1 col 1";
   }

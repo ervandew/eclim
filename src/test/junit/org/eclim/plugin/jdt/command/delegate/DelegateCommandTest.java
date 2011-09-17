@@ -42,7 +42,7 @@ public class DelegateCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-o", "124", "-e", "utf-8"
@@ -50,8 +50,6 @@ public class DelegateCommandTest
 
     // handle difference between 1.5 and 1.6
     result = result.replaceAll("Double \\w\\b", "Double o");
-
-    System.out.println(result);
 
     assertTrue("Wrong first line.",
         result.startsWith("org.eclim.test.delegate.TestDelegate"));
@@ -62,7 +60,7 @@ public class DelegateCommandTest
     assertTrue("Method not in results.",
         result.indexOf("\tpublic abstract boolean add(Double o)") != -1);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_delegate", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE, "-o", "124", "-e", "utf-8",
       "-t", "org.eclim.test.delegate.TestDelegate",
@@ -71,8 +69,6 @@ public class DelegateCommandTest
 
     // handle difference between 1.5 and 1.6
     result = result.replaceAll("Double \\w\\b", "Double o");
-
-    System.out.println(result);
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",

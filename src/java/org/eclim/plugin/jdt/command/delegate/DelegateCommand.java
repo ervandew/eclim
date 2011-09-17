@@ -75,7 +75,7 @@ public class DelegateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);

@@ -88,22 +88,22 @@ public class CodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getDescription(IScriptCompletionProposal)
+   * @see AbstractCodeCompleteCommand#getInfo(IScriptCompletionProposal)
    */
   @Override
-  protected String getDescription(IScriptCompletionProposal proposal)
+  protected String getInfo(IScriptCompletionProposal proposal)
   {
-    String description = super.getDescription(proposal);
-    if (description != null){
-      description = REMOVE_HEAD.matcher(description).replaceFirst("");
-      description = description.replaceAll("</dt>", ": ");
-      description = description.replaceAll("</dd>", " ");
-      description = description.replaceAll("</?[^>]+>", "");
-      description = description.replaceAll("-->", "");
-      description = description.replaceAll("\n", "");
-      description = description.replaceAll("&nbsp;?", " ");
-      description = description.trim();
+    String info = super.getInfo(proposal);
+    if (info != null){
+      info = REMOVE_HEAD.matcher(info).replaceFirst("");
+      info = info.replaceAll("</dt>", ": ");
+      info = info.replaceAll("</dd>", " ");
+      info = info.replaceAll("</?[^>]+>", "");
+      info = info.replaceAll("-->", "");
+      info = info.replaceAll("\n", "");
+      info = info.replaceAll("&nbsp;?", " ");
+      info = info.trim();
     }
-    return description;
+    return info;
   }
 }

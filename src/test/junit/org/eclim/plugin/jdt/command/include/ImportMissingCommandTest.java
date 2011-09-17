@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,12 @@ public class ImportMissingCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_import_missing", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
     });
 
     // remove com.sun entries
     result = result.replaceAll("'com\\.sun.*?'\\s*,\\s*", "");
-
-    System.out.println(result);
 
     assertEquals("Wrong results", result, "[{'type': 'List','imports': ['java.awt.List','java.util.List']},{'type': 'ArrayList','imports': ['java.util.ArrayList']},{'type': 'FooBar','imports': []}]");
   }

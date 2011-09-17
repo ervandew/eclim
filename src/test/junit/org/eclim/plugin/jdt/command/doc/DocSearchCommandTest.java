@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
+import java.util.List;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
@@ -35,69 +37,74 @@ public class DocSearchCommandTest
     "src/org/eclim/test/doc/TestDocSearch.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void elementSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "68", "-e", "utf-8", "-l", "4", "-x", "declarations"
-    });
+    List<String> results = (List<String>)
+      Eclim.execute(new String[]{
+        "java_docsearch", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "68", "-e", "utf-8", "-l", "4", "-x", "declarations"
+      });
 
-    System.out.println(result);
-
-    result = result.replaceAll(
-        "download.oracle.com/javase/(.*?)/docs",
-        "download.oracle.com/javase/\\${version}/docs");
-    assertEquals("Wrong result.",
-        "http://download.oracle.com/javase/${version}/docs/api/java/awt/List.html", result);
+    normalize(results);
+    assertEquals(results.get(0),
+        "http://download.oracle.com/javase/${version}/docs/api/java/awt/List.html");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void patternSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-p", "ArrayList"
-    });
+    List<String> results = (List<String>)
+      Eclim.execute(new String[]{
+        "java_docsearch", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "ArrayList"
+      });
 
-    System.out.println(result);
-
-    result = result.replaceAll(
-        "download.oracle.com/javase/(.*?)/docs",
-        "download.oracle.com/javase/\\${version}/docs");
-    assertEquals("Wrong result.",
-        "http://download.oracle.com/javase/${version}/docs/api/java/util/ArrayList.html\n" +
-        "http://download.oracle.com/javase/${version}/docs/api/java/util/Arrays.ArrayList.html",
-        result);
+    normalize(results);
+    assertEquals(results.get(0),
+        "http://download.oracle.com/javase/${version}/docs/api/" + 
+        "java/util/ArrayList.html");
+    assertEquals(results.get(1),
+        "http://download.oracle.com/javase/${version}/docs/api/" +
+        "java/util/Arrays.ArrayList.html");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void methodSearch()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_docsearch", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-p", "currentTime%2A", "-t", "method"
-    });
+    List<String> results = (List<String>)
+      Eclim.execute(new String[]{
+        "java_docsearch", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "currentTime%2A", "-t", "method"
+      });
 
-    System.out.println(result);
+    normalize(results);
+    assertEquals(results.get(0),
+        "http://download.oracle.com/javase/${version}/docs/api/" +
+        "java/lang/System.html#currentTimeMillis()");
+  }
 
-    result = result.replaceAll(
-        "download.oracle.com/javase/(.*?)/docs",
-        "download.oracle.com/javase/\\${version}/docs");
-    assertEquals("Wrong result.",
-        "http://download.oracle.com/javase/${version}/docs/api/java/lang/" +
-        "System.html#currentTimeMillis()",
-        result);
+  private void normalize(List<String> results)
+  {
+    for (int ii = 0; ii < results.size(); ii++){
+      results.set(ii, results.get(ii)
+          .replaceAll(
+            "download.oracle.com/javase/(.*?)/docs",
+            "download.oracle.com/javase/\\${version}/docs"));
+    }
   }
 }

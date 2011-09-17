@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package org.eclim.util.file;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
@@ -26,23 +28,78 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class Position
 {
   private String filename;
-  private int offset;
-  private int length;
+  private int offset = 0;
+  private int length = 0;
+  private int line = 1;
+  private int column = 1;
   private String message;
+
+  /**
+   * Construct a new Position given a filename, message, offset, and length.
+   *
+   * @param filename The file name.
+   * @param message The message for the element at this postion.
+   * @param offset The character offset within the file.
+   * @param length The length of this position (number of characters from the
+   *   offset).
+   * @return The Position instance.
+   * @throws Exception
+   */
+  public static Position fromOffset(
+      String filename, String message, int offset, int length)
+  {
+    int line = 1;
+    int column = 1;
+    try{
+      int[] pos = FileUtils.offsetToLineColumn(filename, offset);
+      if(pos != null){
+        line = pos[0];
+        column = pos[1];
+      }
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
+    return new Position(filename, message, offset, length, line, column);
+  }
+
+  /**
+   * Construct a new Position given a filename, message, line, and column.
+   *
+   * @param filename The file name.
+   * @param message The message for the element at this postion.
+   * @param line The line number within the file.
+   * @param column The column number within the file.
+   * @return The Position instance.
+   * @throws Exception
+   */
+  public static Position fromLineColumn(
+      String filename, String message, int line, int column)
+  {
+    return new Position(filename, message, 0, 0, line, column);
+  }
 
   /**
    * Constructs a new instance.
    *
    * @param filename The file name.
+   * @param message The message for the element at this postion.
    * @param offset The character offset within the file.
    * @param length The length of this position (number of characters from the
    *   offset).
+   * @param line The line number within the file.
+   * @param column The column number within the file.
    */
-  public Position (String filename, int offset, int length)
+  private Position (
+      String filename, String message,
+      int offset, int length,
+      int line, int column)
   {
     this.filename = filename;
+    this.message = message != null ? message : StringUtils.EMPTY;
     this.offset = offset;
     this.length = length;
+    this.line = line;
+    this.column = column;
   }
 
   /**
@@ -66,16 +123,6 @@ public class Position
   }
 
   /**
-   * Set offset.
-   *
-   * @param offset offset as int.
-   */
-  public void setOffset(int offset)
-  {
-    this.offset = offset;
-  }
-
-  /**
    * Get length.
    *
    * @return length as int.
@@ -86,23 +133,23 @@ public class Position
   }
 
   /**
-   * Set length.
+   * Gets the line for this instance.
    *
-   * @param length length as int.
+   * @return The line.
    */
-  public void setLength(int length)
+  public int getLine()
   {
-    this.length = length;
+    return this.line;
   }
 
   /**
-   * Gets the message for this instance.
+   * Gets the column for this instance.
    *
-   * @return The message.
+   * @return The column.
    */
-  public String getMessage()
+  public int getColumn()
   {
-    return this.message;
+    return this.column;
   }
 
   /**
@@ -113,6 +160,16 @@ public class Position
   public void setMessage(String message)
   {
     this.message = message;
+  }
+
+  /**
+   * Gets the message for this instance.
+   *
+   * @return The message.
+   */
+  public String getMessage()
+  {
+    return this.message;
   }
 
   /**
@@ -135,7 +192,8 @@ public class Position
       .append(filename, rhs.getFilename())
       .append(offset, rhs.getOffset())
       .append(length, rhs.getLength())
-      .append(message, rhs.getMessage())
+      .append(line, rhs.getLine())
+      .append(column, rhs.getColumn())
       .isEquals();
   }
 }

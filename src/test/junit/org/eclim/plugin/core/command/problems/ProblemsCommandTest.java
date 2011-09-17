@@ -16,12 +16,10 @@
  */
 package org.eclim.plugin.core.command.problems;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
-
-import org.eclim.util.CollectionUtils;
-import org.eclim.util.StringUtils;
 
 import org.junit.Test;
 
@@ -37,16 +35,23 @@ public class ProblemsCommandTest
   private static final String TEST_PROJECT = "eclim_unit_test";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
-    String result = Eclim.execute(new String[]{
+    List<Object> results = (List<Object>)Eclim.execute(new String[]{
       "problems", "-p", TEST_PROJECT
     });
 
-    System.out.println(result);
+    HashMap<String,Object> error = new HashMap<String,Object>();
+    error.put("message", "ArrayList cannot be resolved to a type");
+    error.put("filename",
+        Eclim.getWorkspace() + "/" + TEST_PROJECT + "/src/org/eclim/test/Test.java");
+    error.put("line", 5);
+    error.put("column", 11);
+    error.put("endLine", -1);
+    error.put("endColumn", -1);
+    error.put("warning", 0);
 
-    ArrayList<String> results = new ArrayList<String>();
-    CollectionUtils.addAll(results, StringUtils.split(result, '\n'));
-    assertTrue(results.contains(Eclim.getWorkspace() + "/" + TEST_PROJECT + "/src/org/eclim/test/Test.java|5 col 11|ArrayList cannot be resolved to a type|e"));
+    assertTrue(results.contains(error));
   }
 }

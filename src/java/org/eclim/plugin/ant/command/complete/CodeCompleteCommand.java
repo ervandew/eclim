@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,7 @@ public class CodeCompleteCommand
       ICompletionProposal proposal)
   {
     return new AntCodeCompleteResult(
-        getCompletion(proposal),
-        getDescription(proposal),
-        getShortDescription(proposal));
+        getCompletion(proposal), getMenu(proposal), getInfo(proposal));
   }
 
   /**
@@ -99,9 +97,9 @@ public class CodeCompleteCommand
      * @see CodeCompleteResult#CodeCompleteResult(String,String,String)
      */
     public AntCodeCompleteResult(
-        String completion, String description, String shortDescription)
+        String completion, String menu, String info)
     {
-      super(completion, description, shortDescription);
+      super(completion, menu, info);
     }
 
     /**

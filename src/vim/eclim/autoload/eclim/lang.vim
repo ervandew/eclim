@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
     endif
 
     let completions = []
-    let results = split(eclim#ExecuteEclim(command), '\n')
-    if len(results) == 1 && results[0] == '0'
+    let results = eclim#ExecuteEclim(command)
+    if type(results) != 3
       return
     endif
 
@@ -85,10 +85,7 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
     let close_paren = getline('.') =~ '\%' . col('.') . 'c\s*(\s*)'
 
     for result in results
-      let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
-      let menu = substitute(result, '.\{-}|\(.\{-}\)|.*', '\1', '')
-      let info = substitute(result, '.\{-}|.\{-}|\(.\{-}\)', '\1', '')
-      let info = eclim#html#util#HtmlToText(info)
+      let word = result.completion
 
       " strip off close paren if necessary.
       if word =~ ')$' && close_paren
@@ -99,6 +96,9 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
       if word =~ '($' && open_paren
         let word = strpart(word, 0, strlen(word) - 1)
       endif
+
+      let menu = eclim#html#util#HtmlToText(result.menu)
+      let info = eclim#html#util#HtmlToText(result.info)
 
       let dict = {
           \ 'word': word,
@@ -170,9 +170,8 @@ function! eclim#lang#Search(command, singleResultAction, argline)
   endif
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
-  let result =  eclim#ExecuteEclim(search_cmd, port)
-  let results = split(result, '\n')
-  if len(results) == 1 && results[0] == '0'
+  let results =  eclim#ExecuteEclim(search_cmd, port)
+  if type(results) != 3
     return
   endif
 
@@ -180,8 +179,8 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
-    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
-      if results[0] !~ '|1 col 1|'
+    if len(results) == 1 && results[0].filename =~ escape(expand('%:p'), '\') . '|'
+      if results[0].line != 1 && results[0].column != 1
         lfirst
       endif
 
@@ -227,9 +226,9 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     endif
 
     let result = eclim#ExecuteEclim(command)
-    if result =~ '|'
+    if type(result) == 3 && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
-        \ split(result, '\n'), g:EclimValidateSortResults)
+        \ result, g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)
     else
       call eclim#util#ClearLocationList('global')
@@ -259,9 +258,9 @@ function! eclim#lang#Validate(type, on_save)
   let command = substitute(command, '<file>', file, '')
 
   let result = eclim#ExecuteEclim(command)
-  if result =~ '|'
+  if type(result) == 3 && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
-      \ split(result, '\n'), g:EclimValidateSortResults)
+      \ result, g:EclimValidateSortResults)
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#ClearLocationList()

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,10 @@ public class Error
 {
   private String message;
   private String filename;
-  private int lineNumber;
-  private int columnNumber;
-  private int endLineNumber;
-  private int endColumnNumber;
+  private int line;
+  private int column;
+  private int endLine;
+  private int endColumn;
   private boolean warning;
 
   /**
@@ -41,18 +41,18 @@ public class Error
    *
    * @param message The error message.
    * @param filename The file containing the error.
-   * @param lineNumber The line where the error occured.
-   * @param columnNumber The column where the error occured.
+   * @param line The line where the error occured.
+   * @param column The column where the error occured.
    * @param warning true if this error is just a warning, false otherwise.
    */
   public Error (
       String message,
       String filename,
-      int lineNumber,
-      int columnNumber,
+      int line,
+      int column,
       boolean warning)
   {
-    this(message, filename, lineNumber, columnNumber, -1, -1, warning);
+    this(message, filename, line, column, -1, -1, warning);
   }
 
   /**
@@ -60,27 +60,27 @@ public class Error
    *
    * @param message The error message.
    * @param filename The file containing the error.
-   * @param lineNumber The line where the error occured.
-   * @param columnNumber The column where the error occured.
-   * @param endLineNumber The line where the error ends.
-   * @param endColumnNumber The column where the error ends.
+   * @param line The line where the error occured.
+   * @param column The column where the error occured.
+   * @param endLine The line where the error ends.
+   * @param endColumn The column where the error ends.
    * @param warning true if this error is just a warning, false otherwise.
    */
   public Error (
       String message,
       String filename,
-      int lineNumber,
-      int columnNumber,
-      int endLineNumber,
-      int endColumnNumber,
+      int line,
+      int column,
+      int endLine,
+      int endColumn,
       boolean warning)
   {
     this.message = message;
     this.filename = filename;
-    this.lineNumber = lineNumber > 0 ? lineNumber : 1;
-    this.columnNumber = columnNumber > 0 ? columnNumber : 1;
-    this.endLineNumber = endLineNumber;
-    this.endColumnNumber = endColumnNumber;
+    this.line = line > 0 ? line : 1;
+    this.column = column > 0 ? column : 1;
+    this.endLine = endLine;
+    this.endColumn = endColumn;
     this.warning = warning;
   }
 
@@ -109,39 +109,39 @@ public class Error
    *
    * @return The line number.
    */
-  public int getLineNumber()
+  public int getLine()
   {
-    return lineNumber;
+    return line;
   }
 
   /**
-   * Gets the columnNumber for this instance.
+   * Gets the column for this instance.
    *
-   * @return The columnNumber.
+   * @return The column.
    */
-  public int getColumnNumber()
+  public int getColumn()
   {
-    return this.columnNumber;
+    return this.column;
   }
 
   /**
-   * Gets the endLineNumber for this instance.
+   * Gets the endLine for this instance.
    *
-   * @return The endLineNumber.
+   * @return The endLine.
    */
-  public int getEndLineNumber()
+  public int getEndLine()
   {
-    return this.endLineNumber;
+    return this.endLine;
   }
 
   /**
-   * Gets the endColumnNumber for this instance.
+   * Gets the endColumn for this instance.
    *
-   * @return The endColumnNumber.
+   * @return The endColumn.
    */
-  public int getEndColumnNumber()
+  public int getEndColumn()
   {
-    return this.endColumnNumber;
+    return this.endColumn;
   }
 
   /**
@@ -171,10 +171,10 @@ public class Error
     Error error = (Error)other;
     boolean equal = new EqualsBuilder()
       .append(getFilename(), error.getFilename())
-      .append(getLineNumber(), error.getLineNumber())
-      .append(getColumnNumber(), error.getColumnNumber())
-      .append(getEndLineNumber(), error.getEndLineNumber())
-      .append(getEndColumnNumber(), error.getEndColumnNumber())
+      .append(getLine(), error.getLine())
+      .append(getColumn(), error.getColumn())
+      .append(getEndLine(), error.getEndLine())
+      .append(getEndColumn(), error.getEndColumn())
       .append(getMessage(), error.getMessage())
       .isEquals();
 
@@ -190,10 +190,10 @@ public class Error
   {
     return new HashCodeBuilder(17, 37)
       .append(filename)
-      .append(lineNumber)
-      .append(columnNumber)
-      .append(endLineNumber)
-      .append(endColumnNumber)
+      .append(line)
+      .append(column)
+      .append(endLine)
+      .append(endColumn)
       .append(message)
       .toHashCode();
   }

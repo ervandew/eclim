@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -37,33 +38,40 @@ public class SrcUpdateCommandTest
     "src/org/eclim/test/src/TestSrc.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void update()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
+      });
 
-    System.out.println(result);
-
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of errors.", 3, results.length);
+    assertEquals("Wrong number of errors.", 3, results.size());
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
-    assertTrue("Wrong filename [0].", results[0].startsWith(file));
-    assertTrue("Wrong level [0].", results[0].endsWith("|w"));
-    assertTrue("Wrong message [0].",
-        results[0].indexOf("List is a raw type") != -1);
-    assertTrue("Wrong filename [1].", results[1].startsWith(file));
-    assertTrue("Wrong level [1].", results[1].endsWith("|w"));
-    assertTrue("Wrong message [1].",
-        results[1].indexOf("ArrayList is a raw type") != -1);
-    assertTrue("Wrong filename [2].", results[2].startsWith(file));
-    assertTrue("Wrong level [2].", results[2].endsWith("|e"));
-    assertTrue("Wrong message [2].",
-        results[2].indexOf("The method a() is undefined") != -1);
+
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message")).indexOf("List is a raw type") != -1);
+    assertEquals(error.get("line"), 10);
+    assertEquals(error.get("column"), 5);
+    assertEquals(error.get("warning"), 1);
+
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message")).indexOf("ArrayList is a raw type") != -1);
+    assertEquals(error.get("line"), 10);
+    assertEquals(error.get("column"), 21);
+    assertEquals(error.get("warning"), 1);
+
+    error = results.get(2);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message")).indexOf("The method a() is undefined") != -1);
+    assertEquals(error.get("line"), 11);
+    assertEquals(error.get("column"), 10);
+    assertEquals(error.get("warning"), 0);
   }
 }

@@ -106,25 +106,25 @@ public class SearchCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     List<SearchMatch> matches = executeSearch(commandLine);
 
-    ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+    ArrayList<Position> results = new ArrayList<Position>();
     for(SearchMatch match : matches){
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
             elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
-          SearchResult result = createSearchResult(match);
+          Position result = createPosition(match);
           if(result != null){
             results.add(result);
           }
         }
       }
     }
-    return SearchFilter.instance.filter(commandLine, results);
+    return results;
   }
 
   /**
@@ -152,9 +152,8 @@ public class SearchCommand
     // element search
     if(file != null && offset != null && length != null){
       int charOffset = getOffset(commandLine);
-      Position position = new Position(
-          file, charOffset, Integer.parseInt(length));
-      IJavaElement element = getElement(project, position);
+      IJavaElement element = getElement(
+          project, file, charOffset, Integer.parseInt(length));
       if(element != null){
         // user requested a contextual search.
         if(context == -1){
@@ -228,16 +227,17 @@ public class SearchCommand
    * Gets a IJavaElement by its position.
    *
    * @param project The project the file is in.
-   * @param position The element's position.
+   * @param filename The file containing the element.
+   * @param offset The offset of the element in the file.
+   * @param length The lenght of the element.
    * @return The element.
    */
-  protected IJavaElement getElement(String project, Position position)
+  protected IJavaElement getElement(
+      String project, String filename, int offset, int length)
     throws Exception
   {
-    ICompilationUnit src = JavaUtils.getCompilationUnit(project,
-        position.getFilename());
-    IJavaElement[] elements = src.codeSelect(
-        position.getOffset(), position.getLength());
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, filename);
+    IJavaElement[] elements = src.codeSelect(offset, length);
     if(elements != null && elements.length > 0){
       return elements[0];
     }
@@ -245,12 +245,12 @@ public class SearchCommand
   }
 
   /**
-   * Creates a SearchResult from the supplied SearchMatch.
+   * Creates a Position from the supplied SearchMatch.
    *
    * @param match The SearchMatch.
-   * @return The SearchResult.
+   * @return The Position.
    */
-  protected SearchResult createSearchResult(SearchMatch match)
+  protected Position createPosition(SearchMatch match)
     throws Exception
   {
     IJavaElement element = (IJavaElement)match.getElement();
@@ -314,8 +314,8 @@ public class SearchCommand
     }
 
     elementName = JavaUtils.getFullyQualifiedName(element);
-    return new SearchResult(
-        archive, elementName, file.replace('\\', '/'),
+    return Position.fromOffset(
+        file.replace('\\', '/'), elementName,
         match.getOffset(), match.getLength());
   }
 

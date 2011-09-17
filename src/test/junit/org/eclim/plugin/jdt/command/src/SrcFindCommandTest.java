@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public class SrcFindCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_src_find", "-p", Jdt.TEST_PROJECT,
       "-c", "org.eclim.test.src.TestPrototype"
     });
@@ -48,7 +48,7 @@ public class SrcFindCommandTest
     assertEquals("Wrong result.",
         Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE), result);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_src_find", "-p", Jdt.TEST_PROJECT,
       "-c", "org.eclim.test.src.TestProotype"
     });

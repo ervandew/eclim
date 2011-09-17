@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ public class ConstructorCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -136,7 +136,7 @@ public class ConstructorCommand
     TypeUtils.getPosition(
         type, type.createMethod(constructor, sibling, false, null));
 
-    return StringUtils.EMPTY;
+    return null;
   }
 
   /**

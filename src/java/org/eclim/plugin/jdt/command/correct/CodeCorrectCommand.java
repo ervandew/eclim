@@ -77,7 +77,7 @@ public class CodeCorrectCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String file = commandLine.getValue(Options.FILE_OPTION);

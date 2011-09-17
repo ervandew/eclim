@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,6 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.command.filter.ErrorFilter;
-
 import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
@@ -90,7 +88,7 @@ public class CheckstyleCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
@@ -149,7 +147,7 @@ public class CheckstyleCommand
     checker.addListener(listener);
     checker.process(files);
 
-    return ErrorFilter.instance.filter(commandLine, listener.getErrors());
+    return listener.getErrors();
   }
 
   private static class CheckstyleListener

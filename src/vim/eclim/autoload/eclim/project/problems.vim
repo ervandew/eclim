@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -46,9 +46,9 @@ function! eclim#project#problems#Problems(project, open)
   let command = substitute(command, '<project>', project, '')
   let result = eclim#ExecuteEclim(command)
   let errors = []
-  if result =~ '|'
+  if type(result) == 3 && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
-          \ split(result, '\n'), g:EclimValidateSortResults)
+      \ result, g:EclimValidateSortResults)
   endif
 
   let action = eclim#project#problems#IsProblemsList() ? 'r' : ' '

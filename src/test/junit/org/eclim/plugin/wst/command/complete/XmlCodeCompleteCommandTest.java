@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -37,41 +38,48 @@ public class XmlCodeCompleteCommandTest
   private static final String TEST_FILE_WSDL = "wsdl/GoogleSearch.wsdl";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeXsd()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "xml_complete", "-p", Wst.TEST_PROJECT,
-      "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8", "-d", ",,"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "xml_complete", "-p", Wst.TEST_PROJECT,
+        "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results.", 1, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results.", 1, results.length);
-    assertTrue("Wrong result.",
-        results[0].indexOf("xs:unique,,,,<p><b>Element : </b>unique") != -1);
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "xs:unique");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"),
+        "<p><b>Element : </b>unique</p><dl><p><b>Content Model : </b>" +
+        "((annotation?), (selector, field+))</p>");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeWsdl()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "xml_complete", "-p", Wst.TEST_PROJECT,
-      "-f", TEST_FILE_WSDL, "-o", "516", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "xml_complete", "-p", Wst.TEST_PROJECT,
+        "-f", TEST_FILE_WSDL, "-o", "516", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of errors.", 3, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 3, results.length);
-    assertTrue("Wrong result.", results[0].indexOf("annotation") != -1);
-    assertTrue("Wrong result.", results[1].indexOf("attribute") != -1);
-    assertTrue("Wrong result.", results[2].indexOf("attributeGroup") != -1);
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "xsd:annotation");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"),
+        "<p><b>Element : </b>annotation</p><dl><p><b>Content Model : </b>" +
+        "(appinfo | documentation)*</p>");
   }
 }

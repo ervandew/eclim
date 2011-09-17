@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.dltkruby.command.search;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.dltkruby.DltkRuby;
@@ -29,138 +32,167 @@ public class SearchCommandTest
   private static final String TEST_FILE = "src/search/testSearch.rb";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchClass()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestClass", "-t", "class"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestClass", "-t", "class"
+      });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result", file + "|11 col 7|type TestClass", result);
 
-    result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "23", "-l", "9", "-e", "utf-8", "-x", "declarations"
-    });
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 7);
 
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "23", "-l", "9", "-e", "utf-8", "-x", "declarations"
+      });
 
-    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result", file + "|11 col 7|type TestClass", result);
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 7);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchModule()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestModule",
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "TestModule",
+      });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result", file + "|1 col 8|type TestModule", result);
 
-    result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "69", "-l", "10", "-e", "utf-8", "-x", "declarations"
-    });
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestModule");
+    assertEquals(result.get("line"), 1);
+    assertEquals(result.get("column"), 8);
 
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "69", "-l", "10", "-e", "utf-8", "-x", "declarations"
+      });
 
-    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result", file + "|1 col 8|type TestModule", result);
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestModule");
+    assertEquals(result.get("line"), 1);
+    assertEquals(result.get("column"), 8);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchMethod()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testA", "-t", "method"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testA", "-t", "method"
+      });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|13 col 7|type TestClass : method testA", result);
 
-    result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "42", "-l", "5", "-e", "utf-8", "-x", "declarations"
-    });
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass : method testA");
+    assertEquals(result.get("line"), 13);
+    assertEquals(result.get("column"), 7);
 
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "42", "-l", "5", "-e", "utf-8", "-x", "declarations"
+      });
 
-    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|13 col 7|type TestClass : method testA", result);
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass : method testA");
+    assertEquals(result.get("line"), 13);
+    assertEquals(result.get("column"), 7);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchFunction()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testFunction", "-t", "function"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "testFunction", "-t", "function"
+      });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|21 col 5|function testFunction", result);
 
-    result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "104", "-l", "12", "-e", "utf-8", "-x", "declarations"
-    });
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "function testFunction");
+    assertEquals(result.get("line"), 21);
+    assertEquals(result.get("column"), 5);
 
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "104", "-l", "12", "-e", "utf-8", "-x", "declarations"
+      });
 
-    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|21 col 5|function testFunction", result);
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "function testFunction");
+    assertEquals(result.get("line"), 21);
+    assertEquals(result.get("column"), 5);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchField()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "CONSTANT", "-t", "field"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-p", "CONSTANT", "-t", "field"
+      });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|12 col 3|type TestClass : field CONSTANT", result);
 
-    result = Eclim.execute(new String[]{
-      "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "59", "-l", "8", "-e", "utf-8", "-x", "declarations"
-    });
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass : field CONSTANT");
+    assertEquals(result.get("line"), 12);
+    assertEquals(result.get("column"), 3);
 
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ruby_search", "-n", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "59", "-l", "8", "-e", "utf-8", "-x", "declarations"
+      });
 
-    file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, "src/test.rb");
-    assertEquals("Wrong Result",
-        file + "|12 col 3|type TestClass : field CONSTANT", result);
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "type TestClass : field CONSTANT");
+    assertEquals(result.get("line"), 12);
+    assertEquals(result.get("column"), 3);
   }
 }

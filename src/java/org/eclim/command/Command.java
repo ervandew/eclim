@@ -33,7 +33,7 @@ public interface Command
    * @param commandLine The commandLine options supplied.
    * @return The result.
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception;
 
   /**

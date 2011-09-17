@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.search;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -37,81 +38,108 @@ public class SearchCommandTest
     "src/org/eclim/test/search/TestSearch.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchCamelCase()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-p", "NPE", "-s", "project"
-    });
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "NPE", "-s", "project"
+      });
 
-    String[] results = StringUtils.split(result, "\n");
-    assertEquals("Wrong number of results.", 2, results.length);
+    assertEquals("Wrong number of results.", 2, results.size());
 
-    assertTrue("NullPointerException not found.",
-        results[0].endsWith("java.lang.NullPointerException"));
-    assertTrue("NoPermissionException not found.",
-        results[1].endsWith("javax.naming.NoPermissionException"));
+    HashMap<String,Object> result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/java/lang/NullPointerException.java"));
+    assertEquals(result.get("message"), "java.lang.NullPointerException");
+    assertEquals(result.get("line"), 31);
+    assertEquals(result.get("column"), 7);
+
+    result = results.get(1);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/javax/naming/NoPermissionException.java"));
+    assertEquals(result.get("message"), "javax.naming.NoPermissionException");
+    assertEquals(result.get("line"), 25);
+    assertEquals(result.get("column"), 14);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchElement()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "180", "-e", "utf-8", "-l", "4"
-    });
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "180", "-e", "utf-8", "-l", "4"
+      });
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|8 col 16|org.eclim.test.search.TestSearch#list", result);
+    HashMap<String,Object> result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/TestSearch.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearch#list");
+    assertEquals(result.get("line"), 8);
+    assertEquals(result.get("column"), 16);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchPattern()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-p", "org.eclim.test.search.TestSearch%2A"
-    });
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "org.eclim.test.search.TestSearch%2A"
+      });
 
-    String[] results = StringUtils.split(result, "\n");
-    assertEquals("Wrong number of results.", 2, results.length);
+    assertEquals("Wrong number of results.", 2, results.size());
 
-    assertTrue("TestSearch not found.",
-        results[0].endsWith("org.eclim.test.search.TestSearch"));
-    assertTrue("TestSearchVUnit not found.",
-        results[1].endsWith("org.eclim.test.search.TestSearchVUnit"));
+    HashMap<String,Object> result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/TestSearch.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearch");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(1);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/TestSearchVUnit.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchVUnit");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchField()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_search", "-n", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-p", "TestSearch.list", "-t", "field"
-    });
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "TestSearch.list", "-t", "field"
+      });
 
-    assertTrue("field not found.",
-        result.endsWith("org.eclim.test.search.TestSearch#list"));
+    HashMap<String,Object> result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/TestSearch.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearch#list");
+    assertEquals(result.get("line"), 8);
+    assertEquals(result.get("column"), 16);
   }
 }

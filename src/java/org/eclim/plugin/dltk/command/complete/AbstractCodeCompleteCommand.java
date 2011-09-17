@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.command.complete.CodeCompleteFilter;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.core.util.ProjectUtils;
@@ -57,7 +56,7 @@ public abstract class AbstractCodeCompleteCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -79,16 +78,14 @@ public abstract class AbstractCodeCompleteCommand
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for (IScriptCompletionProposal proposal : proposals){
       CodeCompleteResult ccresult = new CodeCompleteResult(
-          getCompletion(proposal),
-          getDescription(proposal),
-          getShortDescription(proposal));
+          getCompletion(proposal), getMenu(proposal), getInfo(proposal));
 
       if(!results.contains(ccresult)){
         results.add(ccresult);
       }
     }
 
-    return CodeCompleteFilter.instance.filter(commandLine, results);
+    return results;
   }
 
   /**
@@ -124,29 +121,29 @@ public abstract class AbstractCodeCompleteCommand
   }
 
   /**
-   * Get the short description from the proposal.
+   * Get the menu text from the proposal.
    *
    * @param proposal The IScriptCompletionProposal.
-   * @return The short description.
+   * @return The menu text.
    */
-  protected String getShortDescription(IScriptCompletionProposal proposal)
+  protected String getMenu(IScriptCompletionProposal proposal)
   {
     return proposal.getDisplayString().trim();
   }
 
   /**
-   * Get the description from the proposal.
+   * Get the info details from the proposal.
    *
    * @param proposal The IScriptCompletionProposal.
    * @return The description.
    */
-  protected String getDescription(IScriptCompletionProposal proposal)
+  protected String getInfo(IScriptCompletionProposal proposal)
   {
-    String description = proposal.getAdditionalProposalInfo();
-    if(description != null){
-      description = description.trim();
+    String info = proposal.getAdditionalProposalInfo();
+    if(info != null){
+      info = info.trim();
     }
-    return description;
+    return info;
   }
 
   private class ScriptCompletionProposalComparator

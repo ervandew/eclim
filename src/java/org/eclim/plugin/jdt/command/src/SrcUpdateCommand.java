@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -27,8 +25,6 @@ import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclim.plugin.core.command.filter.ErrorFilter;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
@@ -65,7 +61,7 @@ public class SrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -110,8 +106,8 @@ public class SrcUpdateCommand
             IncrementalProjectBuilder.INCREMENTAL_BUILD,
             new NullProgressMonitor());
       }
-      return ErrorFilter.instance.filter(commandLine, errors);
+      return errors;
     }
-    return StringUtils.EMPTY;
+    return null;
   }
 }

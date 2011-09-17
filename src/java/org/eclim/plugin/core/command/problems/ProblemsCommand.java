@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,12 +42,9 @@ import org.eclim.plugin.core.CorePlugin;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.command.filter.ErrorFilter;
-
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.CollectionUtils;
-import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -85,7 +82,7 @@ public class ProblemsCommand
    * {@inheritDoc}
    */
   @SuppressWarnings("rawtypes")
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     waitOnBuild();
@@ -117,7 +114,7 @@ public class ProblemsCommand
         generator.getTypes(), true, markers, new NullProgressMonitor());
 
     if (markers.size() == 0){
-      return StringUtils.EMPTY;
+      return null;
     }
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
@@ -143,7 +140,6 @@ public class ProblemsCommand
           continue;
         }
 
-        @SuppressWarnings("unchecked")
         Map<String,Object> attributes = marker.getAttributes();
         String message = (String)attributes.get("message");
         int severity = attributes.containsKey("severity") ?
@@ -174,7 +170,7 @@ public class ProblemsCommand
 
     Collections.sort(problems, new ProblemComparator(project));
 
-    return ErrorFilter.instance.filter(commandLine, problems);
+    return problems;
   }
 
   private void waitOnBuild()
@@ -230,10 +226,10 @@ public class ProblemsCommand
 
       int result = collator.compare(ef1, ef2);
       if (result == 0){
-        result = e1.getLineNumber() - e2.getLineNumber();
+        result = e1.getLine() - e2.getLine();
       }
       if (result == 0){
-        result = e1.getColumnNumber() - e2.getColumnNumber();
+        result = e1.getColumn() - e2.getColumn();
       }
       return result;
     }

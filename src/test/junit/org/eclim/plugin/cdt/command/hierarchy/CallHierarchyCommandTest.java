@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class CallHierarchyCommandTest
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
     // reference to fun2
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "c_callhierarchy", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "57", "-l", "4", "-e", "utf-8"
     });

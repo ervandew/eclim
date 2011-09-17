@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package org.eclim.plugin.wst.command.validate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclim.annotation.Command;
 
@@ -26,8 +25,6 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
-
-import org.eclim.plugin.core.command.filter.ErrorFilter;
 
 import org.eclipse.wst.dtd.core.internal.validation.eclipse.DTDValidator;
 
@@ -53,7 +50,7 @@ public class DtdValidateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -65,8 +62,8 @@ public class DtdValidateCommand
     ValidationMessage[] messages = result.getValidationMessages();
     for (int ii = 0; ii < messages.length; ii++){
       StringBuffer message = new StringBuffer(messages[ii].getMessage());
-      for (Iterator jj = messages[ii].getNestedMessages().iterator(); jj.hasNext();){
-        ValidationMessage nested = (ValidationMessage)jj.next();
+      for (Object o : messages[ii].getNestedMessages()){
+        ValidationMessage nested = (ValidationMessage)o;
         message.append(' ').append(nested.getMessage());
       }
 
@@ -79,6 +76,6 @@ public class DtdValidateCommand
       ));
     }
 
-    return ErrorFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

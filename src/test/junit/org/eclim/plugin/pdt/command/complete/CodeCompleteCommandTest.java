@@ -18,6 +18,9 @@ package org.eclim.plugin.pdt.command.complete;
 
 import java.io.FileWriter;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Eclim;
@@ -39,65 +42,81 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE_ERRATIC = "test.php";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeAll()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "213", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "213", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 3, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "methodA1(");
+    assertEquals(result.get("menu"), "methodA1($str) - TestA");
+    assertEquals(result.get("info"), "TestA::methodA1($str)");
 
-    assertEquals("Wrong number of results", 3, results.length);
-    assertTrue("Wrong result", results[0].startsWith("methodA1(|"));
-    assertTrue("Wrong result", results[1].startsWith("methodA2()|"));
-    assertTrue("Wrong result", results[2].startsWith("variable1|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "methodA2()");
+    assertEquals(result.get("menu"), "methodA2() - TestA");
+    assertEquals(result.get("info"), "TestA::methodA2()");
+
+    result = results.get(2);
+    assertEquals(result.get("completion"), "variable1");
+    assertEquals(result.get("menu"), "$variable1");
+    assertEquals(result.get("info"), "$variable1");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completePrefix()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "228", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "228", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 2, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "methodA1(");
+    assertEquals(result.get("menu"), "methodA1($str) - TestA");
+    assertEquals(result.get("info"), "TestA::methodA1($str)");
 
-    assertEquals("Wrong number of results", 2, results.length);
-    assertTrue("Wrong result", results[0].startsWith("methodA1(|"));
-    assertTrue("Wrong result", results[1].startsWith("methodA2()|"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "methodA2()");
+    assertEquals(result.get("menu"), "methodA2() - TestA");
+    assertEquals(result.get("info"), "TestA::methodA2()");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeMagic()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "294", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "294", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 1, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of results", 1, results.length);
-    assertEquals("Wrong result",
-        "regular|$regular: MagicPropertyType|$regular",
-        results[0].trim());
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "regular");
+    assertEquals(result.get("menu"), "$regular: MagicPropertyType");
+    assertEquals(result.get("info"), "$regular");
   }
 
   /**
@@ -106,6 +125,7 @@ public class CodeCompleteCommandTest
    * several lines before the problem surfaces).
    */
   @Test
+  @SuppressWarnings("unchecked")
   public void completeErratic()
     throws Exception
   {
@@ -132,18 +152,23 @@ public class CodeCompleteCommandTest
       out.write(StringUtils.join(contents, "\n"));
       out.close();
 
-      String result = Eclim.execute(new String[]{
-        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE_ERRATIC,
-        "-o", String.valueOf(index), "-e", "utf-8"
-      });
+      List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+        Eclim.execute(new String[]{
+          "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE_ERRATIC,
+          "-o", String.valueOf(index), "-e", "utf-8"
+        });
 
-      System.out.println("## iteration " + ii + ":\n" + result);
+      assertEquals("Wrong number of results", 2, results.size());
 
-      String[] results = StringUtils.split(result, '\n');
+      HashMap<String,Object> result = results.get(0);
+      assertEquals(result.get("completion"), "getName()");
+      assertEquals(result.get("menu"), "getName() - Test");
+      assertEquals(result.get("info"), "Test::getName()");
 
-      assertEquals("Wrong number of results", 2, results.length);
-      assertTrue("Wrong result", results[0].startsWith("getName()|"));
-      assertTrue("Wrong result", results[1].startsWith("getValue()|"));
+      result = results.get(1);
+      assertEquals(result.get("completion"), "getValue()");
+      assertEquals(result.get("menu"), "getValue() - Test");
+      assertEquals(result.get("info"), "Test::getValue()");
 
       String[] newContents = new String[contents.length + 1];
       System.arraycopy(contents, 0, newContents, 0, contents.length - 1);

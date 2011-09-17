@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.src;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,22 +37,31 @@ public class SrcUpdateCommandTest
   private static final String TEST_FILE = "src/test_src.c";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void validate()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_src_update", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
-    });
-
-    System.out.println(result);
-
-    String[] results = StringUtils.split(result, '\n');
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_src_update", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
+      });
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong result.",
-        file + "|1 col 1|Unresolved inclusion: <stdi.h>|w", results[0]);
-    assertEquals("Wrong result.", file + "|5 col 3|Syntax error|e", results[1]);
+
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"), "Unresolved inclusion: <stdi.h>");
+    assertEquals(error.get("line"), 1);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 1);
+
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"), "Syntax error");
+    assertEquals(error.get("line"), 5);
+    assertEquals(error.get("column"), 3);
+    assertEquals(error.get("warning"), 0);
   }
 }

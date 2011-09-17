@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,13 +47,11 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-l", "5", "-o", "74", "-e", "utf-8"
     });
-
-    System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
 
@@ -69,13 +67,11 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-l", "5", "-o", "74", "-e", "utf-8"
     });
-
-    System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
     int apply = -1;
@@ -87,13 +83,11 @@ public class CorrectCommandTest
     }
     assertTrue("Missing expected suggestion.", apply > -1);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply)
     });
-
-    System.out.println(result);
 
     assertTrue("Import not found.",
         Pattern.compile("import java\\.").matcher(result).find());
@@ -105,13 +99,11 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
       "-l", "1", "-o", "0", "-e", "utf-8"
     });
-
-    System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
 
@@ -131,13 +123,11 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_correct", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE_PACKAGE,
       "-l", "1", "-o", "0", "-e", "utf-8", "-a", "0"
     });
-
-    System.out.println(result);
 
     String[] results = StringUtils.split(result, '\n');
     assertEquals("Incorrect package", "package org.eclim.test.correct;", results[0]);

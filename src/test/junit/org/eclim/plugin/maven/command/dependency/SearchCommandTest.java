@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,11 @@ public class SearchCommandTest
   @Test
   public void execute()
   {
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "maven_dependency_search", "-p", Maven.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "mvn", "-s", "junit"
     });
-
-    System.out.println(result);
 
     assertTrue("Ant section not found.", result.startsWith("ant\n"));
     assertTrue("JUnit section not found.", result.indexOf("\njunit\n") != -1);

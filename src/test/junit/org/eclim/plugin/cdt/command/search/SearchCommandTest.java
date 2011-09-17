@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,14 @@
  */
 package org.eclim.plugin.cdt.command.search;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Eclim;
 
 import org.eclim.plugin.cdt.Cdt;
-
-import org.eclim.util.StringUtils;
 
 import org.junit.Test;
 
@@ -40,131 +41,178 @@ public class SearchCommandTest
   private static final String TEST_FILE_H = "src/test.h";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchElement()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
     // testFunction definition (c file result)
-    String result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "definitions"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "136", "-l", "12", "-e", "utf-8", "-x", "definitions"
+      });
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
-    assertEquals("Wrong Result", file + "|1 col 6|", result);
+
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 1);
+    assertEquals(result.get("column"), 6);
 
     // testFunction declarations (header file result)
-    result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "declarations"
-    });
-
-    System.out.println(result);
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "136", "-l", "12", "-e", "utf-8", "-x", "declarations"
+      });
 
     file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_H);
-    assertEquals("Wrong Result", file + "|4 col 6|", result);
+
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 4);
+    assertEquals(result.get("column"), 6);
 
     // testFunction references
-    result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "references"
-    });
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "136", "-l", "12", "-e", "utf-8", "-x", "references"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 2, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", 2, results.length);
-    String file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
-    String file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file1 + "|11 col 3|", results[0]);
-    assertEquals("Wrong Result", file2 + "|11 col 3|", results[1]);
+    file = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
+    result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 3);
+
+    file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
+    result = results.get(1);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 3);
 
     // testFunction all
-    result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "136", "-l", "12", "-e", "utf-8", "-x", "all"
-    });
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "136", "-l", "12", "-e", "utf-8", "-x", "all"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 4, results.size());
 
-    results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", 4, results.length);
+    file = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
+    result = results.get(2);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 3);
 
-    file1 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_H);
-    file2 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
-    String file3 = Eclim.resolveFile(Cdt.TEST_PROJECT, "src/test_search_vunit.c");
-    String file4 = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file3 + "|11 col 3|", results[2]);
-    assertEquals("Wrong Result", file4 + "|11 col 3|", results[3]);
+    file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
+    result = results.get(3);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 11);
+    assertEquals(result.get("column"), 3);
 
     // EXIT_SUCCESS
-    result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "186", "-l", "12", "-e", "utf-8", "-x", "declarations"
-    });
+    results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "186", "-l", "12", "-e", "utf-8", "-x", "declarations"
+      });
 
-    System.out.println(result);
-
+    result = results.get(0);
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      assertTrue("Wrong Result", result.endsWith("/include/stdlib.h|33 col 9|"));
+      assertTrue(((String)result.get("filename"))
+          .endsWith("/include/stdlib.h"));
+      assertEquals(result.get("message"), "");
+      assertEquals(result.get("line"), 33);
+      assertEquals(result.get("column"), 9);
     }else{
-      assertEquals("Wrong Result", "/usr/include/stdlib.h|135 col 9|", result);
+      assertEquals(result.get("filename"), "/usr/include/stdlib.h");
+      assertEquals(result.get("message"), "");
+      assertEquals(result.get("line"), 135);
+      assertEquals(result.get("column"), 9);
     }
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchFunction()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT,
-      "-p", "test_search_function", "-t", "function"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT,
+        "-p", "test_search_function", "-t", "function"
+      });
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file + "|16 col 5|", result);
+
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 16);
+    assertEquals(result.get("column"), 5);
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchConstant()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT, "-p", "EXIT_FAILURE", "-t", "macro"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-p", "EXIT_FAILURE", "-t", "macro"
+      });
 
-    System.out.println(result);
-
+    HashMap<String,Object> result = results.get(0);
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      assertTrue("Wrong Result", result.endsWith("/include/stdlib.h|34 col 9|"));
+      assertTrue(((String)result.get("filename"))
+          .endsWith("/include/stdlib.h"));
+      assertEquals(result.get("message"), "");
+      assertEquals(result.get("line"), 34);
+      assertEquals(result.get("column"), 9);
     }else{
-      assertEquals("Wrong Result", "/usr/include/stdlib.h|134 col 9|", result);
+      assertEquals(result.get("filename"), "/usr/include/stdlib.h");
+      assertEquals(result.get("message"), "");
+      assertEquals(result.get("line"), 134);
+      assertEquals(result.get("column"), 9);
     }
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void searchStruct()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_search", "-n", Cdt.TEST_PROJECT,
-      "-p", "test_search_struct", "-t", "class_struct"
-    });
-
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT,
+        "-p", "test_search_struct", "-t", "class_struct"
+      });
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
-    assertEquals("Wrong Result", file + "|5 col 8|", result);
+
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("filename"), file);
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("line"), 5);
+    assertEquals(result.get("column"), 8);
   }
 }

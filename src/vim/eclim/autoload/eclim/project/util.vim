@@ -572,9 +572,9 @@ function! eclim#project#util#ProjectUpdate()
   let command = substitute(s:command_project_update, '<project>', name, '')
 
   let result = eclim#ExecuteEclim(command)
-  if result =~ '|'
+  if type(result) == 3 && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
-      \ split(result, '\n'), g:EclimValidateSortResults)
+      \ result, g:EclimValidateSortResults)
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#ClearLocationList()
@@ -771,23 +771,19 @@ function! eclim#project#util#GetProjects()
   let workspaces = eclim#eclipse#GetAllWorkspaceDirs()
   if len(s:workspace_projects) != len(workspaces)
     for workspace in workspaces
-      let result = eclim#ExecuteEclim(
+      let results = eclim#ExecuteEclim(
         \ s:command_projects, eclim#client#nailgun#GetNgPort(workspace))
-      if result == '0'
+      if type(results) != 3
         continue
       endif
-      let results = split(result, "\n")
-      let projects = []
-      for line in results
-        let project = eval(line)
+      for project in results
         let project['workspace'] = workspace
         if has('win32unix')
           let project['path'] = eclim#cygwin#CygwinPath(project['path'])
           call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
         endif
-        call add(projects, project)
       endfor
-      let s:workspace_projects[workspace] = projects
+      let s:workspace_projects[workspace] = results
     endfor
   endif
 

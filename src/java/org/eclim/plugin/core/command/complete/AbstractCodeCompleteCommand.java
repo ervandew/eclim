@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.plugin.core.command.complete;
 
 import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
@@ -44,10 +46,13 @@ import org.eclipse.swt.widgets.Display;
 public abstract class AbstractCodeCompleteCommand
   extends AbstractCommand
 {
+  private static String COMPACT = "compact";
+  //private static String STANDARD = "standard";
+
   /**
    * {@inheritDoc}
    */
-  public String execute(final CommandLine commandLine)
+  public Object execute(final CommandLine commandLine)
     throws Exception
   {
     final String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -81,7 +86,11 @@ public abstract class AbstractCodeCompleteCommand
       }
     }
 
-    return CodeCompleteFilter.instance.filter(commandLine, results);
+    String layout = commandLine.getValue(Options.LAYOUT_OPTION);
+    if(COMPACT.equals(layout) && results.size() > 0){
+      results = compact(results);
+    }
+    return results;
   }
 
   /**
@@ -94,9 +103,7 @@ public abstract class AbstractCodeCompleteCommand
       ICompletionProposal proposal)
   {
     return new CodeCompleteResult(
-        getCompletion(proposal),
-        getDescription(proposal),
-        getShortDescription(proposal));
+        getCompletion(proposal), getMenu(proposal), getInfo(proposal));
   }
 
   /**
@@ -178,28 +185,85 @@ public abstract class AbstractCodeCompleteCommand
   }
 
   /**
-   * Get the description from the proposal.
+   * Get the menu text from the proposal.
    *
    * @param proposal The ICompletionProposal.
-   * @return The description.
+   * @return The menu text.
    */
-  protected String getDescription(ICompletionProposal proposal)
+  protected String getMenu(ICompletionProposal proposal)
   {
-    String description = proposal.getAdditionalProposalInfo();
-    if(description != null){
-      description = description.trim();
-    }
-    return description;
+    return StringUtils.EMPTY;
   }
 
   /**
-   * Get the short description from the proposal.
+   * Get the info details from the proposal.
    *
    * @param proposal The ICompletionProposal.
-   * @return The short description.
+   * @return The info.
    */
-  protected String getShortDescription(ICompletionProposal proposal)
+  protected String getInfo(ICompletionProposal proposal)
   {
-    return null;
+    String info = proposal.getAdditionalProposalInfo();
+    if(info != null){
+      info = info.trim();
+    }else{
+      info = StringUtils.EMPTY;
+    }
+    return info;
+  }
+
+  /**
+   * Compact overloaded methods into one completion result.
+   *
+   * @param results The original completion results.
+   * @return The compacted results.
+   */
+  protected ArrayList<CodeCompleteResult> compact(ArrayList<CodeCompleteResult> results)
+  {
+    ArrayList<CodeCompleteResult> compactResults =
+      new ArrayList<CodeCompleteResult>();
+
+    CodeCompleteResult first = results.get(0);
+    String lastWord = first.getCompletion();
+    String lastType = first.getType();
+    ArrayList<CodeCompleteResult> overloaded = new ArrayList<CodeCompleteResult>();
+
+    for(CodeCompleteResult result : results){
+      if (!result.getCompletion().equals(lastWord) ||
+          !result.getType().equals(lastType))
+      {
+        compactResults.add(compactOverloaded(overloaded));
+        overloaded.clear();
+      }
+      overloaded.add(result);
+      lastWord = result.getCompletion();
+      lastType = result.getType();
+    }
+
+    if (overloaded.size() > 0){
+      compactResults.add(compactOverloaded(overloaded));
+    }
+
+    return compactResults;
+  }
+
+  private CodeCompleteResult compactOverloaded(
+      ArrayList<CodeCompleteResult> overloaded)
+  {
+    CodeCompleteResult r = overloaded.get(0);
+    if (overloaded.size() == 1){
+      return r;
+    }
+
+    StringBuffer info = new StringBuffer();
+    for (CodeCompleteResult o : overloaded){
+      if(info.length() > 0){
+        info.append("<br/>");
+      }
+      info.append(o.getMenu());
+    }
+
+    return new CodeCompleteResult(
+        r.getCompletion(), "Overloaded, see preview...", info.toString(), r.getType());
   }
 }

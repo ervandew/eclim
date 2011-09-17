@@ -16,6 +16,8 @@
  */
 package org.eclim.command;
 
+import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,6 +33,13 @@ import org.eclim.logging.Logger;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonSerializationContext;
+
 import com.martiansoftware.nailgun.NGContext;
 
 /**
@@ -41,6 +50,17 @@ import com.martiansoftware.nailgun.NGContext;
 public class Main
 {
   private static final Logger logger = Logger.getLogger(Main.class);
+
+  private static final Gson GSON = new GsonBuilder()
+    .registerTypeAdapter(Boolean.TYPE, new BooleanSerializer())
+    .registerTypeAdapter(Boolean.class, new BooleanSerializer())
+    .create();
+
+  private static final Gson GSON_PRETTY = new GsonBuilder()
+    .registerTypeAdapter(Boolean.TYPE, new BooleanSerializer())
+    .registerTypeAdapter(Boolean.class, new BooleanSerializer())
+    .setPrettyPrinting()
+    .create();
 
   /**
    * Main method for executing the client.
@@ -89,14 +109,29 @@ public class Main
       Command command = commandLine.getCommand();
       command.setContext(context);
 
-      String result = command.execute(commandLine);
-      context.out.println(result);
+      Object result = command.execute(commandLine);
+      if (result == null){
+        context.out.println(StringUtils.EMPTY);
+      }else if (commandLine.hasOption(Options.PRETTY_OPTION)){
+        context.out.println(GSON_PRETTY.toJson(result));
+      }else{
+        context.out.println(GSON.toJson(result));
+      }
     }catch(Exception e){
       logger.debug("Command triggered exception: " + Arrays.toString(context.getArgs()), e);
       e.printStackTrace(context.err);
 
       logger.debug("Main - exit on error");
       System.exit(1);
+    }
+  }
+
+  private static class BooleanSerializer
+    implements JsonSerializer<Boolean>
+  {
+    public JsonElement serialize(Boolean bool, Type typeOfSrc, JsonSerializationContext context) {
+      // vim doesn't jave a boolean type, so use an int.
+      return new JsonPrimitive(bool.booleanValue() ? 1 : 0);
     }
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.log4j;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,47 +37,70 @@ public class ValidateCommandTest
   private static final String TEST_FILE = "log4j/log4j.xml";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void validateXmlErrors()
   {
-    String result = Eclim.execute(new String[]{
-      "log4j_validate", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "log4j_validate", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE
     });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 6, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", 6, results.length);
+    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|23 col 45|Element type \"pram\" must be declared.|e",
-        results[0]);
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Element type \"pram\" must be declared.");
+    assertEquals(error.get("line"), 23);
+    assertEquals(error.get("column"), 45);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|27 col 14|The content of element type \"appender\" must match " +
-        "\"(errorHandler?,param*,layout?,filter*,appender-ref*)\".|e",
-        results[1]);
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "The content of element type \"appender\" must match " +
+        "\"(errorHandler?,param*,layout?,filter*,appender-ref*)\".");
+    assertEquals(error.get("line"), 27);
+    assertEquals(error.get("column"), 14);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|9 col 1|Type 'org.apache.log4j.RollingFileAppender' not found in project 'eclim_unit_test_java'.|e",
-        results[2]);
+    error = results.get(2);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Type 'org.apache.log4j.RollingFileAppender' not found " +
+        "in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 9);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|14 col 1|Type 'org.apache.log4j.PatternLayout' not found in project 'eclim_unit_test_java'.|e",
-        results[3]);
+    error = results.get(3);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Type 'org.apache.log4j.PatternLayout' not found " +
+        "in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 14);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|22 col 1|Type 'org.eclim.util.logging.ConsoleAppender' not found in project 'eclim_unit_test_java'.|e",
-        results[4]);
+    error = results.get(4);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Type 'org.eclim.util.logging.ConsoleAppender' not found " +
+        "in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 22);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|24 col 1|Type 'org.apache.log4j.PatternLayout' not found in project 'eclim_unit_test_java'.|e",
-        results[5]);
+    error = results.get(5);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Type 'org.apache.log4j.PatternLayout' not found " +
+        "in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 24);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
   }
 }

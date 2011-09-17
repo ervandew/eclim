@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.core.command.AbstractCommand;
+import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
+import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
@@ -52,15 +53,18 @@ import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
     "REQUIRED l layout ARG"
 )
 public class CodeCompleteCommand
-  extends AbstractCommand
+  extends AbstractCodeCompleteCommand
 {
   private static final Comparator<CodeCompleteResult> COMPLETION_COMPARATOR =
     new CompletionComparator();
 
+  private static String COMPACT = "compact";
+  //private static String STANDARD = "standard";
+
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -81,7 +85,12 @@ public class CodeCompleteCommand
           createCompletionResult(collector, ii, proposals[ii]));
     }
     Collections.sort(results, COMPLETION_COMPARATOR);
-    return CodeCompleteFilter.instance.filter(commandLine, results);
+
+    String layout = commandLine.getValue(Options.LAYOUT_OPTION);
+    if(COMPACT.equals(layout) && results.size() > 0){
+      results = compact(results);
+    }
+    return results;
   }
 
   /**
@@ -98,20 +107,14 @@ public class CodeCompleteCommand
       int index,
       IJavaCompletionProposal proposal)
   {
-    int offset = 0;
-    int length = 0;
     String completion = null;
-    String displayString = proposal.getDisplayString();
+    String menu = proposal.getDisplayString();
 
     if(proposal instanceof JavaCompletionProposal){
       JavaCompletionProposal lazy = (JavaCompletionProposal)proposal;
-      offset = lazy.getReplacementOffset();
-      length = lazy.getReplacementLength();
       completion = lazy.getReplacementString();
     }else if(proposal instanceof LazyJavaCompletionProposal){
       LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
-      offset = lazy.getReplacementOffset();
-      length = lazy.getReplacementLength();
       completion = lazy.getReplacementString();
     }
 
@@ -119,7 +122,7 @@ public class CodeCompleteCommand
     switch(kind){
       case CompletionProposal.METHOD_REF:
         // trim off the trailing paren if the method takes any arguments.
-        if (displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1 &&
+        if (menu.lastIndexOf(')') > menu.lastIndexOf('(') + 1 &&
             (completion.length() > 0 &&
              completion.charAt(completion.length() - 1) == ')')){
           completion = completion.substring(0, completion.length() - 1);
@@ -134,19 +137,35 @@ public class CodeCompleteCommand
         break;
     }
 
+    if("class".equals(completion)){
+      kind = CompletionProposal.KEYWORD;
+    }
+
+    String type = "";
+    switch(kind){
+      case CompletionProposal.TYPE_REF:
+        type = CodeCompleteResult.TYPE;
+        break;
+      case CompletionProposal.FIELD_REF:
+      case CompletionProposal.LOCAL_VARIABLE_REF:
+        type = CodeCompleteResult.VARIABLE;
+        type = CodeCompleteResult.VARIABLE;
+        break;
+      case CompletionProposal.METHOD_REF:
+        type = CodeCompleteResult.FUNCTION;
+        break;
+      case CompletionProposal.KEYWORD:
+        type = CodeCompleteResult.KEYWORD;
+        break;
+    }
+
     // TODO:
     // hopefully Bram will take my advice to add lazy retrieval of
     // completion 'info' so that I can provide this text without the
     // overhead involved with retrieving it for every completion regardless
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
-        kind, completion,
-        proposal.getAdditionalProposalInfo(), displayString,
-        offset, offset + length);*/
-    if("class".equals(completion)){
-      kind = CompletionProposal.KEYWORD;
-    }
-    return new CodeCompleteResult(
-        kind, completion, null, displayString, offset, offset + length);
+        kind, completion, menu, proposal.getAdditionalProposalInfo());*/
+    return new CodeCompleteResult(completion, menu, menu, type);
   }
 }

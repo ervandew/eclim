@@ -851,11 +851,10 @@ def junit(include){
   ant.junit(printsummary: 'yes', failureproperty: 'junit.failed'){
     ant.classpath{
       ant.path(refid: 'junit')
-      ant.fileset(dir: 'src/eclipse/plugins/org.eclim/lib'){
-        ant.include(name: 'commons-lang-*.jar')
-      }
       ant.pathelement(path: '${build.classes}')
       ant.pathelement(path: 'build/test/junit/classes')
+      ant.fileset(dir: 'src/eclipse/plugins/org.eclim/lib',
+        includes: '*.jar', excludes: 'ant-*.jar')
     }
     ant.formatter(type: 'xml')
     ant.batchtest(fork: 'yes', todir: 'build/test/junit/results'){

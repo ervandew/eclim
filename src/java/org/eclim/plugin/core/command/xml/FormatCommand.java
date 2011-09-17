@@ -17,7 +17,7 @@
 package org.eclim.plugin.core.command.xml;
 
 import java.io.FileInputStream;
-import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -26,8 +26,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 
 import javax.xml.transform.stream.StreamResult;
-
-import org.apache.commons.lang.StringUtils;
 
 import org.eclim.annotation.Command;
 
@@ -59,7 +57,7 @@ public class FormatCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String restoreNewline = null;
@@ -91,11 +89,13 @@ public class FormatCommand
       in = new FileInputStream(file);
       serializer.transform(new SAXSource(new InputSource(in)),
           new StreamResult(getContext().out));*/
-      in = new FileInputStream(file);
-      serializer.transform(new SAXSource(new InputSource(in)),
-          new StreamResult(new OutputStreamWriter(getContext().out, "utf-8")));
 
-      return StringUtils.EMPTY;
+      StringWriter out = new StringWriter();
+      in = new FileInputStream(file);
+      serializer.transform(
+          new SAXSource(new InputSource(in)), new StreamResult(out));
+
+      return out.toString();
     }finally{
       IOUtils.closeQuietly(in);
       if (restoreNewline != null){

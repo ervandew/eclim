@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@ package org.eclim;
 
 import java.io.FileInputStream;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +31,10 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Utility class to executing eclim commands and returning the results.
@@ -40,7 +48,10 @@ public class Eclim
   private static final String ECLIM =
     System.getProperty("eclipse.home") + "/eclim";
   private static final String PORT = System.getProperty("eclimd.port");
+  private static final String PRETTY = "-pretty";
   private static final String COMMAND = "-command";
+
+  private static final JsonParser JSON_PARSER = new JsonParser();
 
   private static String workspace;
 
@@ -52,7 +63,7 @@ public class Eclim
    * @param args The arguments to pass to eclim.
    * @return The result of the command execution as a string.
    */
-  public static String execute(String[] args)
+  public static Object execute(String[] args)
   {
     return execute(args, -1);
   }
@@ -66,7 +77,7 @@ public class Eclim
    * @param timeout Timeout in milliseconds.
    * @return The result of the command execution as a string.
    */
-  public static String execute(String[] args, long timeout)
+  public static Object execute(String[] args, long timeout)
   {
     String[] arguments = null;
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
@@ -76,14 +87,15 @@ public class Eclim
       arguments[0] = "cmd.exe";
       arguments[1] = "/c";
       arguments[2] = drive + " && \"" + eclimCmd + "\" --nailgun-port " +
-        PORT + " " + COMMAND + " \"" + StringUtils.join(args, "\" \"") + "\"";
+        PORT + " " + PRETTY + " " + COMMAND + " \"" + StringUtils.join(args, "\" \"") + "\"";
     }else{
-      arguments = new String[args.length + 4];
-      System.arraycopy(args, 0, arguments, 4, args.length);
+      arguments = new String[args.length + 5];
+      System.arraycopy(args, 0, arguments, 5, args.length);
       arguments[0] = ECLIM;
       arguments[1] = "--nailgun-port";
       arguments[2] = PORT;
-      arguments[3] = COMMAND;
+      arguments[3] = PRETTY;
+      arguments[4] = COMMAND;
     }
 
     System.out.println("Command: " + StringUtils.join(arguments, ' '));
@@ -107,13 +119,52 @@ public class Eclim
     }
 
     String result = process.getResult();
+    System.out.println("Result: " + result);
 
-    // strip off trailing newline char and return
-    result = result.substring(0, result.length() - 1);
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      result = result.replaceAll("\\r$", "");
+    if (result.trim().equals(StringUtils.EMPTY)){
+      result = "\"\"";
     }
-    return result;
+    return toType(JSON_PARSER.parse(result));
+  }
+
+  public static Object toType(JsonElement json)
+  {
+    // null
+    if(json.isJsonNull()){
+      return null;
+
+    // int, double, boolean, String
+    }else if(json.isJsonPrimitive()){
+      JsonPrimitive prim = json.getAsJsonPrimitive();
+      if(prim.isBoolean()){
+        return prim.getAsBoolean();
+      }else if(prim.isString()){
+        return prim.getAsString();
+      }else if(prim.isNumber()){
+        if(prim.getAsString().indexOf('.') != -1){
+          return prim.getAsDouble();
+        }
+        return prim.getAsInt();
+      }
+
+    // List
+    }else if(json.isJsonArray()){
+      ArrayList<Object> type = new ArrayList<Object>();
+      for(JsonElement element : json.getAsJsonArray()){
+        type.add(toType(element));
+      }
+      return type;
+
+    // Map
+    }else if(json.isJsonObject()){
+      HashMap<String,Object> type = new HashMap<String,Object>();
+      for(Map.Entry<String,JsonElement> entry : json.getAsJsonObject().entrySet()){
+        type.put(entry.getKey(), toType(entry.getValue()));
+      }
+      return type;
+    }
+
+    return null;
   }
 
   /**
@@ -123,7 +174,7 @@ public class Eclim
    */
   public static boolean projectExists(String name)
   {
-    String list = Eclim.execute(new String[]{"project_list"});
+    String list = (String)Eclim.execute(new String[]{"project_list"});
 
     return Pattern.compile(name + "\\s+-").matcher(list).find();
   }
@@ -136,7 +187,7 @@ public class Eclim
   public static String getWorkspace()
   {
     if(workspace == null){
-      workspace = execute(new String[]{"workspace_dir"}).replace('\\', '/');
+      workspace = ((String)execute(new String[]{"workspace_dir"})).replace('\\', '/');
     }
     return workspace;
   }
@@ -150,7 +201,7 @@ public class Eclim
   public static String getProjectPath(String name)
   {
     String[] results = StringUtils.split(
-        execute(new String[]{"project_list"}), '\n');
+        (String)execute(new String[]{"project_list"}), '\n');
     Pattern pattern =
       Pattern.compile("^" + name + "\\b\\s+- \\w+\\s+- (.*)$");
     for (String result : results) {

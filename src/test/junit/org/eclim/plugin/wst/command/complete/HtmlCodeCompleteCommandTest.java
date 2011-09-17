@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -38,6 +39,7 @@ public class HtmlCodeCompleteCommandTest
   private static final String TEST_FILE = "html/test.html";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeAttribute()
   {
     // html code completion disabled on windows
@@ -48,19 +50,23 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "152", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "152", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of errors.", 2, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 2, results.length);
-    assertTrue("Wrong result.", results[0].startsWith("href"));
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "href");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"),
+        "<p><b>Attribute : </b>href</p><p><b>Data Type : </b>URI</p>");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeElement()
   {
     // html code completion disabled on windows
@@ -71,20 +77,27 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "141", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "141", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of errors.", 7, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 7, results.length);
-    assertTrue("Wrong result.", results[0].startsWith("h1"));
-    assertTrue("Wrong result.", results[1].startsWith("h2"));
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "h1");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"), "<p>A top-level heading</p>");
+
+    result = results.get(1);
+    assertEquals(result.get("completion"), "h2");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"), "<p>A second-level heading</p>");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeCss()
   {
     // html code completion disabled on windows
@@ -95,16 +108,18 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "131", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "131", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of errors.", 8, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 8, results.length);
-    assertTrue("Wrong result.", results[0].startsWith("font"));
-    assertTrue("Wrong result.", results[1].startsWith("font-family"));
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "font");
+
+    result = results.get(1);
+    assertEquals(result.get("completion"), "font-family");
   }
 }

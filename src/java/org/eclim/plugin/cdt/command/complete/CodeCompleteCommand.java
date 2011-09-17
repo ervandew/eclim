@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.plugin.cdt.command.complete;
 
 import java.lang.reflect.Method;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -149,21 +151,23 @@ public class CodeCompleteCommand
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getDescription(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getMenu(ICompletionProposal)
    */
   @Override
-  protected String getDescription(ICompletionProposal proposal)
+  protected String getMenu(ICompletionProposal proposal)
   {
-    return proposal.getAdditionalProposalInfo();
+    String menu = proposal.getDisplayString();
+    return menu != null ? menu : StringUtils.EMPTY;
   }
 
   /**
    * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getShortDescription(ICompletionProposal)
+   * @see AbstractCodeCompleteCommand#getInfo(ICompletionProposal)
    */
   @Override
-  protected String getShortDescription(ICompletionProposal proposal)
+  protected String getInfo(ICompletionProposal proposal)
   {
-    return proposal.getDisplayString();
+    String info = proposal.getAdditionalProposalInfo();
+    return info != null ? info : StringUtils.EMPTY;
   }
 }

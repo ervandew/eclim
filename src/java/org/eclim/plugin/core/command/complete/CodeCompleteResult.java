@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,35 +35,55 @@ public class CodeCompleteResult
     Pattern.compile("(\\.\\s|\\.<|<br|<BR|<p|<P)");
   private static final int MAX_SHORT_DESCRIPTION_LENGTH = 74;
 
+  public static final String VARIABLE = "v";
+  public static final String FUNCTION = "f";
+  public static final String TYPE = "t";
+  public static final String KEYWORD = "k";
+
   private String completion;
-  private String description;
-  private String shortDescription;
+  private String menu;
+  private String info;
+  private String type;
 
   /**
    * Constructs a new instance.
    *
    * @param completion The completion string.
-   * @param description Description of the completion.
-   * @param shortDescription Short descriptoin of the completion.
+   * @param menu The menu text of the completion.
+   * @param info The completion info details.
+   */
+  public CodeCompleteResult (String completion, String menu, String info)
+  {
+    this(completion, menu, info, StringUtils.EMPTY);
+  }
+
+  /**
+   * Constructs a new instance.
+   *
+   * @param completion The completion string.
+   * @param menu The menu text of the completion.
+   * @param info The completion info details.
+   * @param type The completion type.
    */
   public CodeCompleteResult (
-      String completion, String description, String shortDescription)
+      String completion, String menu, String info, String type)
   {
     this.completion = completion;
-    this.description = description;
-    this.shortDescription = shortDescription;
+    this.menu = menu;
+    this.info = info;
+    this.type = type != null ? type : StringUtils.EMPTY;
 
-    if(this.description != null){
-      this.description = StringUtils.replace(this.description, "\n", "<br/>");
+    if(this.info != null){
+      this.info = StringUtils.replace(this.info, "\n", "<br/>");
     }
 
-    if(this.shortDescription != null){
-      this.shortDescription =
-        StringUtils.replace(this.shortDescription, "\n", "<br/>");
+    if(this.menu != null){
+      this.menu =
+        StringUtils.replace(this.menu, "\n", "<br/>");
     }
 
-    if(this.description != null && this.shortDescription == null){
-      this.shortDescription = createShortDescription(this.description);
+    if(this.info != null && this.menu == null){
+      this.menu = menuFromInfo(this.info);
     }
   }
 
@@ -78,78 +98,58 @@ public class CodeCompleteResult
   }
 
   /**
-   * Sets the completion for this instance.
+   * Gets the completion info.
    *
-   * @param completion The completion.
+   * @return The completion info.
    */
-  protected void setCompletion(String completion)
+  public String getInfo()
   {
-    this.completion = completion;
+    return info;
   }
 
   /**
-   * Gets the completion description.
+   * Gets the menu text.
    *
-   * @return The completion description.
+   * @return The menu text.
    */
-  public String getDescription()
+  public String getMenu()
   {
-    return description;
+    return menu;
   }
 
   /**
-   * Sets the description for this instance.
+   * Gets the type of this completion.
    *
-   * @param description The description.
+   * @return The type.
    */
-  protected void setDescription(String description)
+  public String getType()
   {
-    this.description = description;
+    return this.type;
   }
 
   /**
-   * Gets the short description.
+   * Creates the menu text based on the supplied text info.
    *
-   * @return The short description.
+   * @param info The info text.
+   * @return The menu text
    */
-  public String getShortDescription()
+  public static String menuFromInfo(String info)
   {
-    return shortDescription;
-  }
-
-  /**
-   * Sets the shortDescription for this instance.
-   *
-   * @param shortDescription The shortDescription.
-   */
-  protected void setShortDescription(String shortDescription)
-  {
-    this.shortDescription = shortDescription;
-  }
-
-  /**
-   * Creates a short description based on the supplied full description.
-   *
-   * @param description The description.
-   * @return The short description.
-   */
-  public static String createShortDescription(String description)
-  {
-    if(description == null){
+    if(info == null){
       return null;
     }
 
-    String shortDesc = description;
-    Matcher matcher = FIRST_LINE.matcher(shortDesc);
-    if(shortDesc.length() > 1 && matcher.find(1)){
-      shortDesc = shortDesc.substring(0, matcher.start() + 1);
-      if(shortDesc.endsWith("<")){
-        shortDesc = shortDesc.substring(0, shortDesc.length() - 1);
+    String menu = info;
+    Matcher matcher = FIRST_LINE.matcher(menu);
+    if(menu.length() > 1 && matcher.find(1)){
+      menu = menu.substring(0, matcher.start() + 1);
+      if(menu.endsWith("<")){
+        menu = menu.substring(0, menu.length() - 1);
       }
     }
-    shortDesc = shortDesc.replaceAll("\n", StringUtils.EMPTY);
-    shortDesc = shortDesc.replaceAll("<.*?>", StringUtils.EMPTY);
-    return StringUtils.abbreviate(shortDesc, MAX_SHORT_DESCRIPTION_LENGTH);
+    menu = menu.replaceAll("\n", StringUtils.EMPTY);
+    menu = menu.replaceAll("<.*?>", StringUtils.EMPTY);
+    return StringUtils.abbreviate(menu, MAX_SHORT_DESCRIPTION_LENGTH);
   }
 
   /**
@@ -169,7 +169,8 @@ public class CodeCompleteResult
     CodeCompleteResult result = (CodeCompleteResult)other;
     boolean equal = new EqualsBuilder()
       .append(getCompletion(), result.getCompletion())
-      .append(getShortDescription(), result.getShortDescription())
+      .append(getMenu(), result.getMenu())
+      .append(getType(), result.getType())
       .isEquals();
 
     return equal;
@@ -184,7 +185,7 @@ public class CodeCompleteResult
   {
     return new HashCodeBuilder(18, 38)
       .append(completion)
-      .append(shortDescription)
+      .append(menu)
       .toHashCode();
   }
 }

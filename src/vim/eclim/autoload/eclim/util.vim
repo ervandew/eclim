@@ -763,13 +763,27 @@ endfunction " }}}
 " s:ParseLocationEntry(entry) {{{
 function! s:ParseLocationEntry(entry)
   let entry = a:entry
-  let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
-  let line = substitute(entry, '.*|\([0-9]\+\) col.*', '\1', '')
-  let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
-  let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
-  let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
-  if type == entry
+  if type(entry) == 4
+    let file = entry.filename
+    let line = entry.line
+    let col = entry.column
+    let message = entry.message
     let type = ''
+    if has_key(entry, 'warning')
+      let type = entry.warning ? 'w' : 'e'
+    endif
+
+  " FIXME: should be safe to remove this block after all commands have gone
+  " through the json conversion.
+  else
+    let file = substitute(entry, '\(.\{-}\)|.*', '\1', '')
+    let line = substitute(entry, '.*|\([0-9]\+\) col.*', '\1', '')
+    let col = substitute(entry, '.*col \([0-9]\+\)|.*', '\1', '')
+    let message = substitute(entry, '.*col [0-9]\+|\(.\{-}\)\(|.*\|$\)', '\1', '')
+    let type = substitute(entry, '.*|\(e\|w\)$', '\1', '')
+    if type == entry
+      let type = ''
+    endif
   endif
 
   if has('win32unix')

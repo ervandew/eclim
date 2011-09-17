@@ -35,9 +35,10 @@ import org.eclim.plugin.cdt.util.CUtils;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
-import org.eclim.plugin.core.util.VimUtils;
 
 import org.eclim.util.CollectionUtils;
+
+import org.eclim.util.file.Position;
 
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
@@ -123,7 +124,7 @@ public class SearchCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.NAME_OPTION);
@@ -147,12 +148,11 @@ public class SearchCommand
     return executePatternSearch(commandLine, cproject);
   }
 
-  private String executeElementSearch(
+  private Object executeElementSearch(
       CommandLine commandLine, ICProject cproject)
     throws Exception
   {
-    StringBuffer buffer = new StringBuffer();
-
+    ArrayList<Position> results = new ArrayList<Position>();
     String file = commandLine.getValue(Options.FILE_OPTION);
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
     if(src != null){
@@ -182,28 +182,20 @@ public class SearchCommand
         int length = commandLine.getIntValue(Options.LENGTH_OPTION);
         IName[] names = findElement(src, scope, context, offset, length);
         for (IName iname : names){
-          if(buffer.length() > 0){
-            buffer.append('\n');
-          }
           IASTFileLocation loc = iname.getFileLocation();
           String filename = loc.getFileName().replace('\\', '/');
-          String lineColumn =
-            VimUtils.translateLineColumn(filename, loc.getNodeOffset());
-          buffer.append(filename)
-            .append('|')
-            .append(lineColumn)
-            .append('|')
-            .append("");
+          results.add(
+              Position.fromOffset(filename, null, loc.getNodeOffset(), 0));
         }
       }finally{
         index.releaseReadLock();
       }
     }
 
-    return buffer.toString();
+    return results;
   }
 
-  private String executePatternSearch(
+  private Object executePatternSearch(
       CommandLine commandLine, ICProject cproject)
     throws Exception
   {
@@ -224,7 +216,7 @@ public class SearchCommand
     PDOMSearchQuery query = new PDOMSearchPatternQuery(
         scope, scopeDesc, pattern, caseSensitive, type | context);
 
-    StringBuffer buffer = new StringBuffer();
+    ArrayList<Position> results = new ArrayList<Position>();
     if (query != null){
       query.run(new NullProgressMonitor());
       PDOMSearchResult result = (PDOMSearchResult)query.getSearchResult();
@@ -238,21 +230,13 @@ public class SearchCommand
         }
         for (Match m : result.getMatches(e)){
           PDOMSearchMatch match = (PDOMSearchMatch)m;
-          if(buffer.length() > 0){
-            buffer.append('\n');
-          }
-          String lineColumn =
-            VimUtils.translateLineColumn(filename, match.getOffset());
-          buffer.append(filename)
-            .append('|')
-            .append(lineColumn)
-            .append('|')
-            .append("");
+          results.add(
+              Position.fromOffset(filename, null, match.getOffset(), 0));
         }
       }
     }
 
-    return buffer.toString();
+    return results;
   }
 
   protected IName[] findElement(

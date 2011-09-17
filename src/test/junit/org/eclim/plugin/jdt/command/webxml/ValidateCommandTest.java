@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.webxml;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,30 +37,41 @@ public class ValidateCommandTest
   private static final String TEST_FILE = "webxml/web.xml";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void validateXmlErrors()
   {
-    String result = Eclim.execute(new String[]{
-      "webxml_validate", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "webxml_validate", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 3, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results", 3, results.length);
+    String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|12 col 1|Class 'foo.bar.Listener' not found in project 'eclim_unit_test_java'.|e",
-        results[0]);
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Class 'foo.bar.Listener' not found in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 12);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|22 col 1|Class 'org.apache.solr.servlet.SolrServlet' not found in project 'eclim_unit_test_java'.|e",
-        results[1]);
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "Class 'org.apache.solr.servlet.SolrServlet' " +
+        "not found in project 'eclim_unit_test_java'.");
+    assertEquals(error.get("line"), 22);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
 
-    assertEquals("Wrong result.",
-        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE) +
-        "|32 col 1|No servlet definition with name 'pong' defined.|e",
-        results[2]);
+    error = results.get(2);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"),
+        "No servlet definition with name 'pong' defined.");
+    assertEquals(error.get("line"), 32);
+    assertEquals(error.get("column"), 1);
+    assertEquals(error.get("warning"), 0);
   }
 }

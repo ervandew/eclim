@@ -38,6 +38,7 @@ import org.eclim.Services;
 public class Options
 {
   public static final String COMMAND_OPTION = "command";
+  public static final String PRETTY_OPTION = "pretty";
 
   public static final String ACTION_OPTION = "a";
   public static final String APPLY_OPTION = "a";
@@ -103,6 +104,9 @@ public class Options
         .hasArg()
         .withDescription(Services.getMessage("command.description"))
         .create(COMMAND_OPTION));
+    coreOptions.addOption(OptionBuilder.withArgName(PRETTY_OPTION)
+        .withDescription(Services.getMessage("pretty.description"))
+        .create(PRETTY_OPTION));
   }
 
   protected org.apache.commons.cli.Options options =

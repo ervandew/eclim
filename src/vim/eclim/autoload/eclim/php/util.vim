@@ -59,11 +59,11 @@ function! eclim#php#util#UpdateSrcFile(validate)
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
-      let result .= "\n" . eclim#ExecuteEclim(command)
+      let result += eclim#ExecuteEclim(command)
 
-      if result =~ '|'
+      if type(result) == 3 && len(result) > 0
         let errors = eclim#util#ParseLocationEntries(
-          \ split(result, '\n'), g:EclimValidateSortResults)
+          \ result, g:EclimValidateSortResults)
         call eclim#util#SetLocationList(errors)
       else
         call eclim#util#ClearLocationList()

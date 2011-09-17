@@ -50,7 +50,7 @@ public class ClasspathCommand
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);

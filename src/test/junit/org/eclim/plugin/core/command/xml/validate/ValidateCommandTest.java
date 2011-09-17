@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.core.command.xml.validate;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -34,24 +35,32 @@ public class ValidateCommandTest
   private static final String TEST_FILE = "xml/test_dtd.xml";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
-    String file = TEST_FILE;
-    String project = Eclim.TEST_PROJECT;
-    String result = Eclim.execute(
-        new String[]{"xml_validate", "-p", project, "-f", file});
-    System.out.println(result);
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "xml_validate", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      });
 
-    String[] results = StringUtils.split(result, '\n');
+    assertEquals("Wrong number of errors.", 2, results.size());
 
-    assertEquals("Wrong number of errors.", 2, results.length);
+    String file = Eclim.resolveFile(Eclim.TEST_PROJECT, TEST_FILE);
 
-    assertTrue("Wrong filename.", results[0].indexOf(file) != -1);
-    assertTrue("Wrong filename.", results[1].indexOf(file) != -1);
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message"))
+        .indexOf("The content of element type \"bar\" is incomplete") != -1);
+    assertEquals(error.get("line"), 12);
+    assertEquals(error.get("column"), 11);
+    assertEquals(error.get("warning"), 0);
 
-    assertTrue("Wrong error.",
-        results[0].indexOf("The content of element type \"bar\" is incomplete") != -1);
-    assertTrue("Wrong error.",
-        results[1].indexOf("The content of element type \"foo\" must match") != -1);
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message"))
+        .indexOf("The content of element type \"foo\" must match") != -1);
+    assertEquals(error.get("line"), 13);
+    assertEquals(error.get("column"), 9);
+    assertEquals(error.get("warning"), 0);
   }
 }

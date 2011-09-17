@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -37,43 +38,60 @@ public class CodeCompleteCommandTest
     "src/org/eclim/test/complete/TestCompletion.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completion1()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_complete", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "184", "-e", "utf-8", "-l", "standard"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_complete", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "184", "-e", "utf-8", "-l", "standard"
+      });
 
-    String[] results = StringUtils.split(result, '\n');
-    assertTrue("Wrong number of results.", results.length > 30);
-    assertEquals("Invalid First Result",
-        "f|add(|add(int index, Object element) : void - List|", results[0]);
-    assertEquals("Invalid Last Result",
-        "f|wait()|wait() : void - Object|", results[results.length - 1]);
+    assertTrue("Wrong number of results.", results.size() > 30);
+
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "add(");
+    assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
+    assertEquals(result.get("info"), "add(int index, Object element) : void - List");
+    assertEquals(result.get("type"), "f");
+
+    result = results.get(results.size() - 1);
+    assertEquals(result.get("completion"), "wait()");
+    assertEquals(result.get("menu"), "wait() : void - Object");
+    assertEquals(result.get("info"), "wait() : void - Object");
+    assertEquals(result.get("type"), "f");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completion2()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "java_complete", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "266", "-e", "utf-8", "-l", "standard"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_complete", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "266", "-e", "utf-8", "-l", "standard"
+      });
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of results.", 4, results.length);
-    assertEquals("Invalid First Result",
-        "f|add(|add(int index, Object element) : void - List|", results[0]);
-    assertEquals("Invalid Last Result",
-        "f|addAll(|addAll(Collection c) : boolean - List|",
-        results[results.length - 1]);
+    assertEquals("Wrong number of results.", 4, results.size());
+
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "add(");
+    assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
+    assertEquals(result.get("info"), "add(int index, Object element) : void - List");
+    assertEquals(result.get("type"), "f");
+
+    result = results.get(results.size() - 1);
+    assertEquals(result.get("completion"), "addAll(");
+    assertEquals(result.get("menu"), "addAll(Collection c) : boolean - List");
+    assertEquals(result.get("info"), "addAll(Collection c) : boolean - List");
+    assertEquals(result.get("type"), "f");
   }
 }

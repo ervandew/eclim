@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,13 +42,11 @@ public class JUnitImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_junit_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass"
     });
-
-    System.out.println(result);
 
     String valid =
       "org.eclim.test.junit.SomeClassTest\n" +
@@ -80,7 +78,7 @@ public class JUnitImplCommandTest
 
     assertEquals("Wrong results.", valid, result);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_junit_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass",
@@ -88,8 +86,6 @@ public class JUnitImplCommandTest
       "-s", "org.eclim.test.junit.SomeClass",
       "-m", "aMethod(String)"
     });
-
-    System.out.println(result);
 
     valid =
       "org.eclim.test.junit.SomeClassTest\n" +
@@ -126,7 +122,7 @@ public class JUnitImplCommandTest
 
     assertEquals("Wrong results.", valid, result);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_junit_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-b", "org.eclim.test.junit.SomeClass",
@@ -134,8 +130,6 @@ public class JUnitImplCommandTest
       "-s", "java.util.Comparator%3CString%3E",
       "-m", "compare(String,String)"
     });
-
-    System.out.println(result);
 
     valid =
       "org.eclim.test.junit.SomeClassTest\n" +

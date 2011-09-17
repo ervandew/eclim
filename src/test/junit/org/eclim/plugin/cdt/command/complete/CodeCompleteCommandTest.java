@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -38,6 +39,7 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE = "src/test_complete.c";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeAll()
   {
     // c/c++ code completion disabled on windows
@@ -48,21 +50,25 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "140", "-e", "utf-8", "-l", "standard"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "140", "-e", "utf-8", "-l", "standard"
+      });
 
-    System.out.println(result);
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "test_a");
+    assertEquals(result.get("menu"), "test_a : int");
+    assertEquals(result.get("info"), "");
 
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of results", 2, results.length);
-    assertTrue("Wrong result", results[0].startsWith("test_a|test_a"));
-    assertTrue("Wrong result", results[1].startsWith("test_b|test_b"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "test_b");
+    assertEquals(result.get("menu"), "test_b : int");
+    assertEquals(result.get("info"), "");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completePrefix()
   {
     // c/c++ code completion disabled on windows
@@ -73,17 +79,22 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "156", "-e", "utf-8", "-l", "standard"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "156", "-e", "utf-8", "-l", "standard"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results", 2, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "EXIT_FAILURE");
+    assertEquals(result.get("menu"), "EXIT_FAILURE");
+    assertEquals(result.get("info"), "");
 
-    assertEquals("Wrong number of results", 2, results.length);
-    assertTrue("Wrong result", results[0].startsWith("EXIT_FAILURE|EXIT_FAILURE"));
-    assertTrue("Wrong result", results[1].startsWith("EXIT_SUCCESS|EXIT_SUCCESS"));
+    result = results.get(1);
+    assertEquals(result.get("completion"), "EXIT_SUCCESS");
+    assertEquals(result.get("menu"), "EXIT_SUCCESS");
+    assertEquals(result.get("info"), "");
   }
 }

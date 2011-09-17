@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.wst.command.validate;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,29 +37,34 @@ public class XsdValidateCommandTest
   private static final String TEST_FILE = "xsd/test.xsd";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void validate()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "xsd_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "xsd_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
+      });
 
-    System.out.println(result);
-
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Wrong number of errors.", 2, results.length);
+    assertEquals("Wrong number of errors.", 2, results.size());
 
     String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
-    for(int ii = 0; ii < results.length; ii++){
-      assertTrue("Wrong filename [" + ii + "].", results[ii].startsWith(file));
-      assertTrue("Wrong level [" + ii + "].", results[ii].endsWith("|e"));
-    }
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message"))
+        .indexOf("Cannot resolve the name 'Model'") != -1);
+    assertEquals(error.get("line"), 3);
+    assertEquals(error.get("column"), 43);
+    assertEquals(error.get("warning"), 0);
 
-    assertTrue("Wrong error.",
-        results[0].indexOf("Cannot resolve the name 'Model'") != -1);
-    assertTrue("Wrong error.",
-        results[1].indexOf("The content of 'project' must match") != -1);
+    error = results.get(1);
+    assertEquals(error.get("filename"), file);
+    assertTrue(((String)error.get("message"))
+        .indexOf("The content of 'project' must match") != -1);
+    assertEquals(error.get("line"), 11);
+    assertEquals(error.get("column"), 12);
+    assertEquals(error.get("warning"), 0);
   }
 }

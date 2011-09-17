@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@ import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.util.StringUtils;
-
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -49,7 +47,7 @@ public class ProjectSettingCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
@@ -61,10 +59,9 @@ public class ProjectSettingCommand
     if (commandLine.hasOption(Options.VALUE_OPTION)){
       String value = commandLine.getValue(Options.VALUE_OPTION);
       preferences.setValue(project, setting, value);
-      return StringUtils.EMPTY;
+      return null;
     }
 
-    String value = preferences.getValue(project, setting);
-    return value != null ? value : StringUtils.EMPTY;
+    return preferences.getValue(project, setting);
   }
 }

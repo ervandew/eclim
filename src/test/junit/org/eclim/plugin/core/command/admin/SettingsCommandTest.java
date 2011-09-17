@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public class SettingsCommandTest
   public void execute()
     throws Exception
   {
-    String result = Eclim.execute(new String[]{"settings"});
+    String result = (String)Eclim.execute(new String[]{"settings"});
 
     Properties properties = new Properties();
     properties.load(new ByteArrayInputStream(result.getBytes()));

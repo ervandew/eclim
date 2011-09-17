@@ -24,7 +24,7 @@ public class ListVmInstalls
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     StringBuffer result = new StringBuffer();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.util.StringUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -46,7 +44,7 @@ public class ProjectByResource
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -61,6 +59,6 @@ public class ProjectByResource
     if (files.length > 0){
       return files[0].getProject().getName();
     }
-    return StringUtils.EMPTY;
+    return null;
   }
 }

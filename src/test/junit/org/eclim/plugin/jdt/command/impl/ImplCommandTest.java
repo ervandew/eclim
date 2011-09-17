@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,13 +44,11 @@ public class ImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-o", "83", "-e", "utf-8"
     });
-
-    System.out.println(result);
 
     assertTrue("Wrong first line.",
         result.startsWith("org.eclim.test.impl.TestImpl"));
@@ -70,14 +68,12 @@ public class ImplCommandTest
     assertTrue("Method not in results.",
         result.indexOf("\tpublic abstract Set<Integer> keySet()") != -1);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "org.eclim.test.impl.TestImpl",
       "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
     });
-
-    System.out.println(result);
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
@@ -95,13 +91,11 @@ public class ImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
+    String result = (String)Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_SUB_FILE,
       "-o", "83", "-e", "utf-8"
     });
-
-    System.out.println(result);
 
     assertTrue("Wrong first line.",
         result.startsWith("org.eclim.test.impl.TestSubImpl"));
@@ -121,14 +115,12 @@ public class ImplCommandTest
     assertTrue("Method not in results.",
         result.indexOf("\tpublic abstract Set<Integer> keySet()") != -1);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_SUB_FILE,
       "-t", "org.eclim.test.impl.TestSubImpl",
       "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
     });
-
-    System.out.println(result);
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUB_FILE);
     assertTrue("Method not found or invalid.",
@@ -139,14 +131,12 @@ public class ImplCommandTest
         result.indexOf(
           "//public abstract String put(Integer key, String value)") != -1);
 
-    result = Eclim.execute(new String[]{
+    result = (String)Eclim.execute(new String[]{
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_SUB_FILE,
       "-t", "org.eclim.test.impl.TestSubImpl",
       "-s", "java.util.Comparator%3CString%3E", "-m", "compare(String,String)"
     });
-
-    System.out.println(result);
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUB_FILE);
     assertTrue("Method not found or invalid.",

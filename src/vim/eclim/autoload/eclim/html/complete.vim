@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -52,37 +52,7 @@ function! eclim#html#complete#CodeComplete(findstart, base)
 
     return start
   else
-    if !eclim#project#util#IsCurrentFileInProject()
-      return []
-    endif
-
-    let offset = eclim#util#GetOffset() + len(a:base)
-    let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#project#util#GetProjectRelativeFilePath()
-
-    let command = s:complete_command
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', file, '')
-    let command = substitute(command, '<offset>', offset, '')
-    let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
-
-    let completions = []
-    let results = split(eclim#ExecuteEclim(command), '\n')
-    if len(results) == 1 && results[0] == '0'
-      return
-    endif
-
-    for result in results
-      let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
-      let menu = substitute(result, '.\{-}|\(.*\)|.*', '\1', '')
-      let info = substitute(result, '.*|\(.*\)', '\1', '')
-
-      let dict = {'word': tolower(word), 'menu': menu, 'info': info}
-
-      call add(completions, dict)
-    endfor
-
-    return completions
+    return eclim#lang#CodeComplete(s:complete_command, a:findstart, a:base)
   endif
 endfunction " }}}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.pdt.command.src;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,22 +37,24 @@ public class SrcUpdateCommandTest
   private static final String TEST_FILE = "php/src/test.php";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void validate()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    String result = Eclim.execute(new String[]{
-      "php_src_update", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
-    });
-
-    System.out.println(result);
-
-    String[] results = StringUtils.split(result, '\n');
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_src_update", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
+      });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/src/test.php");
-    assertEquals("Wrong result.",
-        file + "|5 col 5|syntax error, unexpected 'echo', expecting ',' or ';'|e",
-        results[0]);
+
+    HashMap<String,Object> error = results.get(0);
+    assertEquals(error.get("filename"), file);
+    assertEquals(error.get("message"), "syntax error, unexpected 'echo', expecting ',' or ';'");
+    assertEquals(error.get("line"), 5);
+    assertEquals(error.get("column"), 5);
+    assertEquals(error.get("warning"), 0);
   }
 }

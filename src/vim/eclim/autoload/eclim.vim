@@ -125,7 +125,7 @@ function! eclim#ExecuteEclim(command, ...)
     return
   endif
 
-  return result
+  return result != '' ? eval(result) : result
 endfunction " }}}
 
 " Disable() {{{

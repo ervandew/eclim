@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclim.Eclim;
 
@@ -36,41 +37,41 @@ public class CodeCompleteCommandTest
   private static final String TEST_FILE = "build.xml";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeProperty()
   {
-    String result = Eclim.execute(new String[]{
-      "ant_complete", "-p", Ant.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "220", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ant_complete", "-p", Ant.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "220", "-e", "utf-8"
+      });
 
-    System.out.println(result);
-
-    assertEquals("Wrong result.",
-        "test.ant.property|Test Value|Test Value", result);
+    HashMap<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "test.ant.property");
+    assertEquals(result.get("menu"), "");
+    assertEquals(result.get("info"), "Test Value");
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void completeTarget()
   {
-    String result = Eclim.execute(new String[]{
-      "ant_complete", "-p", Ant.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "234", "-e", "utf-8"
-    });
+    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      Eclim.execute(new String[]{
+        "ant_complete", "-p", Ant.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "234", "-e", "utf-8"
+      });
 
-    System.out.println(result);
+    assertEquals("Wrong number of results.", 7, results.size());
 
-    String[] results = StringUtils.split(result, '\n');
-
-    assertEquals("Wrong number of results.", 7, results.length);
-    assertTrue("Target 'java' not found.", results[0].startsWith("java|"));
-    assertTrue("Target 'javac' not found.", results[1].startsWith("javac|"));
-    assertTrue("Target 'javacc' not found.", results[2].startsWith("javacc|"));
-    assertTrue("Target 'javadoc' not found.", results[3].startsWith("javadoc|"));
-    assertTrue("Target 'javadoc2' not found.", results[4].startsWith("javadoc2|"));
-    assertTrue("Target 'javah' not found.", results[5].startsWith("javah|"));
-    assertTrue("Target 'javaresource' not found.",
-        results[6].startsWith("javaresource|"));
+    assertEquals(results.get(0).get("completion"), "java");
+    assertEquals(results.get(1).get("completion"), "javac");
+    assertEquals(results.get(2).get("completion"), "javacc");
+    assertEquals(results.get(3).get("completion"), "javadoc");
+    assertEquals(results.get(4).get("completion"), "javadoc2");
+    assertEquals(results.get(5).get("completion"), "javah");
+    assertEquals(results.get(6).get("completion"), "javaresource");
   }
 }

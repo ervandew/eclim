@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@ import org.eclim.command.Options;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
-import org.eclim.plugin.jdt.command.search.SearchResult;
+
+import org.eclim.util.file.Position;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
@@ -58,7 +59,7 @@ public class ImportCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.NAME_OPTION);
@@ -84,11 +85,11 @@ public class ImportCommand
     List<SearchMatch> matches = super.search(searchPattern, scope);
     for(SearchMatch match : matches){
       if(match.getAccuracy() == SearchMatch.A_ACCURATE){
-        SearchResult result = createSearchResult(match);
+        Position result = createPosition(match);
         IType element = (IType)match.getElement();
         if(Flags.isPublic(element.getFlags())){
           ImportResult ir = new ImportResult(
-              result.getElement().replace('$', '.'),
+              result.getMessage().replace('$', '.'),
               element.getElementType());
           if(!results.contains(ir)){
             results.add(ir);

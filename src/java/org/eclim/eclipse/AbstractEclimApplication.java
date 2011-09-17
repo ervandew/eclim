@@ -498,7 +498,7 @@ public abstract class AbstractEclimApplication
      * {@inheritDoc}
      * @see org.eclim.command.Command#execute(CommandLine)
      */
-    public String execute(CommandLine commandLine)
+    public Object execute(CommandLine commandLine)
       throws Exception
     {
       Bundle bundle = Platform.getBundle(CORE);

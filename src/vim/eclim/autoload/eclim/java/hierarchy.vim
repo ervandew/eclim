@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,14 +48,13 @@ function! eclim#java#hierarchy#Hierarchy()
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
   let result = eclim#ExecuteEclim(command)
-  if result == "0"
+  if type(result) != 4
     return
   endif
 
-  let hierarchy = eval(result)
   let lines = []
   let info = []
-  call s:FormatHierarchy(hierarchy, lines, info, '')
+  call s:FormatHierarchy(result, lines, info, '')
   call eclim#util#TempWindow('[Hierarchy]', lines)
   set ft=java
 

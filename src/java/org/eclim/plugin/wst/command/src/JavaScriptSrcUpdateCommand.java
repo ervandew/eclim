@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,9 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.command.filter.ErrorFilter;
-
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.wst.util.JavaScriptUtils;
-
-import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileOffsets;
 
@@ -59,7 +55,7 @@ public class JavaScriptSrcUpdateCommand
   /**
    * {@inheritDoc}
    */
-  public String execute(CommandLine commandLine)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -105,9 +101,9 @@ public class JavaScriptSrcUpdateCommand
             problem.isWarning()));
       }
 
-      return ErrorFilter.instance.filter(commandLine, errors);
+      return errors;
     }
-    return StringUtils.EMPTY;
+    return null;
   }
 
   /**

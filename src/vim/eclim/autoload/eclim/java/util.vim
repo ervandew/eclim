@@ -257,9 +257,9 @@ function! eclim#java#util#UpdateSrcFile(validate)
 
     let result = eclim#ExecuteEclim(command)
     if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
-      if result =~ '|'
+      if type(result) == 3 && len(result) > 0
         let errors = eclim#util#ParseLocationEntries(
-          \ split(result, '\n'), g:EclimValidateSortResults)
+          \ result, g:EclimValidateSortResults)
         call eclim#display#signs#SetPlaceholder()
         call eclim#util#ClearLocationList('global')
         call eclim#util#SetLocationList(errors, 'a')

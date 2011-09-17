@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -59,21 +59,21 @@ function! eclim#css#complete#CodeComplete(findstart, base)
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
     let completions = []
-    let results = split(eclim#ExecuteEclim(command), '\n')
-    if len(results) == 1 && results[0] == '0'
+    let results = eclim#ExecuteEclim(command)
+    if type(results) != 3
       return
     endif
 
     let filter = 0
     for result in results
-      let word = substitute(result, '\(.\{-}\)|.*', '\1', '')
+      let word = result.completion
       if word =~ '^:'
         let word = strpart(word, 1)
         let filter = 1
       endif
 
-      let menu = substitute(result, '.\{-}|\(.*\)|.*', '\1', '')
-      let info = substitute(result, '.*|\(.*\)', '\1', '')
+      let menu = result.menu
+      let info = result.info
 
       let dict = {'word': tolower(word), 'menu': menu, 'info': info}
 
