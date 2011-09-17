@@ -19,6 +19,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.0-beta01.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
+  <classpathentry kind="lib" path="lib/jackson-core-lgpl-1.8.5.jar" sourcepath="lib/jackson-src-1.8.5.zip"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.5.100.v20110510.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.core_5.3.0.201106081058.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.core_8.0.0.201106081058.jar"/>

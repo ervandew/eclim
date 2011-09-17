@@ -16,15 +16,16 @@
  */
 package org.eclim.plugin.jdt.command.hierarchy;
 
+import java.io.StringWriter;
 import java.util.List;
 
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerator;
 import org.eclim.command.CommandLine;
 import org.eclim.command.OutputFilter;
-
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
-
 import org.eclipse.jdt.core.IType;
 
 /**
@@ -43,33 +44,32 @@ public class HierarchyFilter
    */
   public String filter(CommandLine commandLine, HierarchyNode hierarchy)
   {
-    StringBuffer out = new StringBuffer();
+    StringWriter writer = new StringWriter();
+    JsonFactory jsonFactory = new JsonFactory();
     try{
-      toString(hierarchy, out);
+      JsonGenerator out = jsonFactory.createJsonGenerator(writer);
+      toString(hierarchy,out);
+      out.close();
     }catch(Exception e){
       throw new RuntimeException(e);
     }
-    return out.toString();
+    return writer.toString();
   }
 
-  public void toString(HierarchyNode hierarchy, StringBuffer out)
+  public void toString(HierarchyNode hierarchy, JsonGenerator out)
     throws Exception
   {
     IType type = hierarchy.getType();
     TypeInfo info = new TypeInfo(type, null, null);
-    out.append('{');
-    out.append("'name':'").append(TypeUtils.getTypeSignature(info)).append("',");
-    out.append("'qualified':'")
-      .append(JavaUtils.getFullyQualifiedName(type)).append("',");
-    out.append("'children':[");
+    out.writeStartObject();
+    out.writeStringField("name", TypeUtils.getTypeSignature(info));
+    out.writeStringField("qualified", JavaUtils.getFullyQualifiedName(type));
+    out.writeArrayFieldStart("children");
     List<HierarchyNode> children = hierarchy.getChildren();
-    for(int ii = 0; ii < children.size(); ii++){
-      if(ii != 0){
-        out.append(',');
-      }
+    for (int ii = 0; ii < children.size(); ii++) {
       toString(children.get(ii), out);
     }
-    out.append(']');
-    out.append('}');
+    out.writeEndArray();
+    out.writeEndObject();
   }
 }
