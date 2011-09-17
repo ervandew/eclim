@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
+
+import com.google.gson.Gson;
 
 /**
  * Command to retrieve the hierarchy of a class or interface.
@@ -68,7 +70,9 @@ public class HierarchyCommand
     IType type = TypeUtils.getType(src, offset);
 
     HierarchyNode hierarchy = new HierarchyNode(type, createChildNodes(type));
-    return HierarchyFilter.instance.filter(commandLine, hierarchy);
+
+    Gson gson = new Gson();
+    return gson.toJson(hierarchy);
   }
 
   private List<HierarchyNode> createChildNodes(IType type)

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@ package org.eclim.plugin.jdt.command.hierarchy;
 
 import java.util.List;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
+import org.eclim.plugin.jdt.util.TypeUtils;
+
 import org.eclipse.jdt.core.IType;
 
 /**
@@ -27,7 +31,8 @@ import org.eclipse.jdt.core.IType;
  */
 public class HierarchyNode
 {
-  private IType type;
+  private String name;
+  private String qualified;
   private List<HierarchyNode> children;
 
   /**
@@ -37,19 +42,31 @@ public class HierarchyNode
    * @param children The children for this node.
    */
   public HierarchyNode(IType type, List<HierarchyNode> children)
+    throws Exception
   {
-    this.type = type;
+    this.name = TypeUtils.getTypeSignature(new TypeInfo(type, null, null));
+    this.qualified = JavaUtils.getFullyQualifiedName(type);
     this.children = children;
   }
 
   /**
-   * Gets the type for this node.
+   * Gets the name for this node.
    *
-   * @return The type.
+   * @return The name.
    */
-  public IType getType()
+  public String getName()
   {
-    return this.type;
+    return this.name;
+  }
+
+  /**
+   * Gets the fully qualified name for this node.
+   *
+   * @return The fully qualified name.
+   */
+  public String getQualified()
+  {
+    return this.qualified;
   }
 
   /**
