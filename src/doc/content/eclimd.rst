@@ -203,10 +203,12 @@ you will fall into one of two groups:
     bindings whenever an embedded gvim editor has focus and then restore them
     with a non-gvim editor gains focus:
 
-    - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
-      switch windows (ex. ctrl-w j).
     - Ctrl+U: in eclipse this run "Execute", but in gvim this is needed to
       run code completion (ex. ctrl-x ctrl-u).
+    - Ctrl+V: in eclipse this pastes text from the clipboard (though not into
+      gvim), but in gvim this is needed for column wise visual selections.
+    - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
+      switch windows (ex. ctrl-w j).
 
 .. _FeedKeys:
 

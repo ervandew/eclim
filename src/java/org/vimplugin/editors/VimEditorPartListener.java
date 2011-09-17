@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.vimplugin.editors;
+
+import java.util.Arrays;
 
 import org.eclim.logging.Logger;
 
@@ -69,7 +71,7 @@ public class VimEditorPartListener
   private final BindingManager localChangeManager =
     new BindingManager(new ContextManager(), new CommandManager());
 
-  private String[] keys = {"Ctrl+U", "Ctrl+W"};
+  private String[] keys = {"Ctrl+U", "Ctrl+V", "Ctrl+W"};
 
   private KeySequence[] keySequences;
 
@@ -185,7 +187,8 @@ public class VimEditorPartListener
   {
     if (!keysDisabled){
       logger.debug(
-          "Disabling conflicting keybindings while vim editor is focused.");
+          "Disabling conflicting keybindings while vim editor is focused: " +
+          Arrays.toString(keys));
       for(KeySequence keySequence : keySequences){
         localChangeManager.removeBindings(
             keySequence, SCHEME_ID, CONTEXT_ID, null, null, null, Binding.USER);
