@@ -841,7 +841,7 @@ def junit(include){
   }
 
   ant.path(id: 'junit'){
-    ant.pathelement(location: 'lib/junit-4.1.jar')
+    ant.pathelement(location: 'lib/junit-4.9.jar')
   }
   ant.taskdef(name: 'junit', classpathref: 'junit',
       classname: 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTask')
