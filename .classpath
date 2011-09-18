@@ -4,6 +4,9 @@
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="lib" path="lib/junit-4.1.jar"/>
   <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
+  <classpathentry kind="lib" path="lib/reflections-0.9.5.jar"/>
+  <classpathentry kind="lib" path="lib/guava-r08.jar"/>
+  <classpathentry kind="lib" path="lib/javassist-3.12.1.GA.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>

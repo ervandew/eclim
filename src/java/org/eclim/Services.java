@@ -19,8 +19,9 @@ package org.eclim;
 import java.io.InputStream;
 
 import java.net.URL;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -47,6 +48,19 @@ public class Services
     PluginResources defaultResources = new DefaultPluginResources();
     defaultResources.initialize("org.eclim");
     addPluginResources(defaultResources);
+  }
+
+  /**
+   * Gets all commands defined in the system.
+   * @return A list of all existing commands
+   */
+  public static List<Class<? extends Command>> getCommandClasses()
+  {
+    ArrayList<Class<? extends Command>> commands = new ArrayList<Class<? extends Command>>();
+    for (PluginResources resources : pluginResources.values()){
+      commands.addAll(resources.getCommandClasses());
+    }
+    return commands;
   }
 
   /**

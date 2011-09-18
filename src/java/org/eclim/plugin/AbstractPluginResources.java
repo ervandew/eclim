@@ -24,6 +24,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +83,13 @@ public abstract class AbstractPluginResources
     return name;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<? extends Class<? extends Command>> getCommandClasses() {
+    return commands.values();
+  }
+  
   /**
    * {@inheritDoc}
    */
