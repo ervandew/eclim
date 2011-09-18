@@ -16,15 +16,15 @@
  */
 package org.eclim;
 
-import java.io.FileInputStream;
+import static org.junit.Assert.assertNotNull;
 
+import java.io.FileInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.tools.ant.taskdefs.condition.Os;
-
+import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
 
@@ -68,6 +68,8 @@ public class Eclim
    */
   public static String execute(String[] args, long timeout)
   {
+    assertNotNull("Please configure property eclimd.port", PORT);
+    assertNotNull("Please configure property eclipse.home", ECLIM);
     String[] arguments = null;
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       String eclimCmd = ECLIM + ".cmd";
@@ -170,11 +172,7 @@ public class Eclim
    */
   public static String resolveFile(String file)
   {
-    return new StringBuffer()
-      .append(getWorkspace()).append('/')
-      .append(TEST_PROJECT).append('/')
-      .append(file)
-      .toString();
+    return resolveFile(TEST_PROJECT, file);
   }
 
   /**
@@ -186,11 +184,12 @@ public class Eclim
    */
   public static String resolveFile(String project, String file)
   {
-    return new StringBuffer()
-      .append(getWorkspace()).append('/')
-      .append(project).append('/')
-      .append(file)
-      .toString();
+    try{
+      return ProjectUtils.getFile(project, file).getFullPath()
+        .toPortableString();
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }
   }
 
   /**
