@@ -47,7 +47,7 @@ public class HierarchyCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong result.", result, "{'name':'public class TestHierarchy','qualified':'org.eclim.test.hierarchy.TestHierarchy','children':[{'name':'public class Component','qualified':'java.awt.Component','children':[{'name':'public interface ImageObserver','qualified':'java.awt.image.ImageObserver','children':[]},{'name':'public interface MenuContainer','qualified':'java.awt.MenuContainer','children':[]},{'name':'public interface Serializable','qualified':'java.io.Serializable','children':[]}]},{'name':'public interface Comparable','qualified':'java.lang.Comparable','children':[]},{'name':'public interface PropertyChangeListener','qualified':'java.beans.PropertyChangeListener','children':[{'name':'public interface EventListener','qualified':'java.util.EventListener','children':[]}]}]}");
+    assertEquals("Wrong result.", result, "{\"name\":\"public class TestHierarchy\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[{\"name\":\"public class Component\",\"qualified\":\"java.awt.Component\",\"children\":[{\"name\":\"public interface ImageObserver\",\"qualified\":\"java.awt.image.ImageObserver\",\"children\":[]},{\"name\":\"public interface MenuContainer\",\"qualified\":\"java.awt.MenuContainer\",\"children\":[]},{\"name\":\"public interface Serializable\",\"qualified\":\"java.io.Serializable\",\"children\":[]}]},{\"name\":\"public interface Comparable\",\"qualified\":\"java.lang.Comparable\",\"children\":[]},{\"name\":\"public interface PropertyChangeListener\",\"qualified\":\"java.beans.PropertyChangeListener\",\"children\":[{\"name\":\"public interface EventListener\",\"qualified\":\"java.util.EventListener\",\"children\":[]}]}]}");
 
     result = Eclim.execute(new String[]{
       "java_hierarchy", "-p", Jdt.TEST_PROJECT,
@@ -56,7 +56,7 @@ public class HierarchyCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong result.", result, "{'name':'class TestHierarchy.TestNested','qualified':'org.eclim.test.hierarchy.TestHierarchy','children':[{'name':'public interface Comparable','qualified':'java.lang.Comparable','children':[]},{'name':'public interface PropertyChangeListener','qualified':'java.beans.PropertyChangeListener','children':[{'name':'public interface EventListener','qualified':'java.util.EventListener','children':[]}]}]}");
+    assertEquals("Wrong result.", result, "{\"name\":\"class TestHierarchy.TestNested\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[{\"name\":\"public interface Comparable\",\"qualified\":\"java.lang.Comparable\",\"children\":[]},{\"name\":\"public interface PropertyChangeListener\",\"qualified\":\"java.beans.PropertyChangeListener\",\"children\":[{\"name\":\"public interface EventListener\",\"qualified\":\"java.util.EventListener\",\"children\":[]}]}]}");
 
     result = Eclim.execute(new String[]{
       "java_hierarchy", "-p", Jdt.TEST_PROJECT,
@@ -65,6 +65,6 @@ public class HierarchyCommandTest
 
     System.out.println(result);
 
-    assertEquals("Wrong result.", result, "{'name':'class TestHierarchy.Test','qualified':'org.eclim.test.hierarchy.TestHierarchy','children':[]}");
+    assertEquals("Wrong result.", result, "{\"name\":\"class TestHierarchy.Test\",\"qualified\":\"org.eclim.test.hierarchy.TestHierarchy\",\"children\":[]}");
   }
 }
