@@ -1,3 +1,4 @@
+*.class
 *.pyc
 *.swp
 /.ant-targets-build.xml
