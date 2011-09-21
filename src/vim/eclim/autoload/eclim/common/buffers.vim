@@ -220,6 +220,20 @@ function! s:BufferOpen(cmd)
   let file = bufname(b:eclim_buffers[line - 1].bufnr)
   let winnr = b:winnr
   close
+
+  " prevent opening the buffer in a split of a vertical tool window (project
+  " tree, taglist, etc.)
+  if exists('g:VerticalToolBuffers') && has_key(g:VerticalToolBuffers, winbufnr(winnr))
+    let winnr = 1
+    while has_key(g:VerticalToolBuffers, winbufnr(winnr))
+      let winnr += 1
+      if winnr > winnr('$')
+        let winnr -= 1
+        break
+      endif
+    endwhile
+  endif
+
   exec winnr . 'winc w'
   call eclim#util#GoToBufferWindowOrOpen(file, a:cmd)
 endfunction " }}}
