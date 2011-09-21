@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,14 @@ package org.eclim;
 
 import java.io.FileInputStream;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Utility class to executing eclim commands and returning the results.
@@ -68,6 +67,9 @@ public class Eclim
    */
   public static String execute(String[] args, long timeout)
   {
+    assertNotNull("Please configure property eclimd.port", PORT);
+    assertNotNull("Please configure property eclipse.home", ECLIM);
+
     String[] arguments = null;
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       String eclimCmd = ECLIM + ".cmd";
@@ -117,18 +119,6 @@ public class Eclim
   }
 
   /**
-   * Determines if a project with the supplied name exists.
-   *
-   * @return true if the project exists, false otherwise.
-   */
-  public static boolean projectExists(String name)
-  {
-    String list = Eclim.execute(new String[]{"project_list"});
-
-    return Pattern.compile(name + "\\s+-").matcher(list).find();
-  }
-
-  /**
    * Gets the path to the current workspace.
    *
    * @return The workspace path.
@@ -150,16 +140,21 @@ public class Eclim
   public static String getProjectPath(String name)
   {
     String[] results = StringUtils.split(
-        execute(new String[]{"project_list"}), '\n');
-    Pattern pattern =
-      Pattern.compile("^" + name + "\\b\\s+- \\w+\\s+- (.*)$");
-    for (String result : results) {
-      Matcher matcher = pattern.matcher(result);
-      if (matcher.matches()){
-        return matcher.group(1);
-      }
+        execute(new String[]{"project_info", "-p", name}), '\n');
+    if (results.length >= 2 && results[1].startsWith("Path: ")){
+      return results[1].substring(6);
     }
     return null;
+  }
+
+  /**
+   * Determines if a project with the supplied name exists.
+   *
+   * @return true if the project exists, false otherwise.
+   */
+  public static boolean projectExists(String name)
+  {
+    return getProjectPath(name) != null;
   }
 
   /**
@@ -170,11 +165,7 @@ public class Eclim
    */
   public static String resolveFile(String file)
   {
-    return new StringBuffer()
-      .append(getWorkspace()).append('/')
-      .append(TEST_PROJECT).append('/')
-      .append(file)
-      .toString();
+    return resolveFile(TEST_PROJECT, file);
   }
 
   /**
@@ -187,8 +178,7 @@ public class Eclim
   public static String resolveFile(String project, String file)
   {
     return new StringBuffer()
-      .append(getWorkspace()).append('/')
-      .append(project).append('/')
+      .append(getProjectPath(project)).append('/')
       .append(file)
       .toString();
   }
