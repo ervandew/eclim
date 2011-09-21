@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,35 +63,37 @@ public class ProjectInfoCommand
       info.append("Name: ").append(name).append('\n');
       info.append("Path: ").append(ProjectUtils.getPath(project)).append('\n');
       info.append("Workspace: ").append(workspace).append('\n');
-      info.append("Natures: ");
-      String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
-      if (aliases.length == 0){
-        aliases = new String[]{"none"};
-      }
-      info.append(StringUtils.join(aliases, ' ')).append('\n');
-
-      info.append("Depends On: ");
-      IProject[] depends = project.getReferencedProjects();
-      if (depends.length == 0){
-        info.append("None").append('\n');
-      }else{
-        String[] names = new String[depends.length];
-        for (int ii = 0; ii < depends.length; ii++){
-          names[ii] = depends[ii].getName();
+      if (project.isOpen()){
+        info.append("Natures: ");
+        String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
+        if (aliases.length == 0){
+          aliases = new String[]{"none"};
         }
-        info.append(StringUtils.join(names, ' ')).append('\n');
-      }
+        info.append(StringUtils.join(aliases, ' ')).append('\n');
 
-      info.append("Referenced By: ");
-      IProject[] references = project.getReferencingProjects();
-      if (references.length == 0){
-        info.append("None").append('\n');
-      }else{
-        String[] names = new String[references.length];
-        for (int ii = 0; ii < references.length; ii++){
-          names[ii] = references[ii].getName();
+        info.append("Depends On: ");
+        IProject[] depends = project.getReferencedProjects();
+        if (depends.length == 0){
+          info.append("None").append('\n');
+        }else{
+          String[] names = new String[depends.length];
+          for (int ii = 0; ii < depends.length; ii++){
+            names[ii] = depends[ii].getName();
+          }
+          info.append(StringUtils.join(names, ' ')).append('\n');
         }
-        info.append(StringUtils.join(names, ' ')).append('\n');
+
+        info.append("Referenced By: ");
+        IProject[] references = project.getReferencingProjects();
+        if (references.length == 0){
+          info.append("None").append('\n');
+        }else{
+          String[] names = new String[references.length];
+          for (int ii = 0; ii < references.length; ii++){
+            names[ii] = references[ii].getName();
+          }
+          info.append(StringUtils.join(names, ' ')).append('\n');
+        }
       }
 
       return info.toString();
