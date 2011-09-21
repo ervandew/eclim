@@ -75,7 +75,7 @@ public class Error
       int endColumn,
       boolean warning)
   {
-    this.message = message;
+    this.message = message != null ? message : StringUtils.EMPTY;
     this.filename = filename;
     this.line = line > 0 ? line : 1;
     this.column = column > 0 ? column : 1;
