@@ -20,7 +20,6 @@ import java.text.Collator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.tools.ant.Project;
@@ -65,15 +64,15 @@ public class TargetsCommand
     AntProjectNode projectNode = model.getProjectNode(true);
     Project antProject = projectNode.getProject();
 
-    Map targets = antProject.getTargets();
-    for (Iterator ii = targets.keySet().iterator(); ii.hasNext();){
-      String target = (String)ii.next();
+    @SuppressWarnings("unchecked")
+    Map<String,Object> targets = antProject.getTargets();
+    for (String target : targets.keySet()){
       if(target.trim().length() > 0){
         results.add(target);
       }
     }
 
     Collections.sort(results, Collator.getInstance());
-    return TargetsFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

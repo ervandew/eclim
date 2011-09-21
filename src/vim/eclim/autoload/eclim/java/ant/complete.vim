@@ -124,8 +124,8 @@ function! eclim#java#ant#complete#CommandCompleteTarget(argLead, cmdLine, cursor
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
 
-    let targets = split(eclim#ExecuteEclim(command), '\n')
-    if len(targets) == 1 && targets[0] == '0'
+    let targets = eclim#ExecuteEclim(command)
+    if type(targets) != 3
       return []
     endif
 
