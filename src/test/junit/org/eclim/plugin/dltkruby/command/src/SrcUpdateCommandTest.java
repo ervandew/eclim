@@ -54,6 +54,6 @@ public class SrcUpdateCommandTest
     assertEquals(error.get("message"), "syntax error, unexpected tRPAREN");
     assertEquals(error.get("line"), 2);
     assertEquals(error.get("column"), 11);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

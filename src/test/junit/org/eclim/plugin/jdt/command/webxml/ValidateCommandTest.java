@@ -55,7 +55,7 @@ public class ValidateCommandTest
         "Class 'foo.bar.Listener' not found in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 12);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -64,7 +64,7 @@ public class ValidateCommandTest
         "not found in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 22);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
@@ -72,6 +72,6 @@ public class ValidateCommandTest
         "No servlet definition with name 'pong' defined.");
     assertEquals(error.get("line"), 32);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

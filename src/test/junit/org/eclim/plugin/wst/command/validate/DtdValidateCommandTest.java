@@ -56,6 +56,6 @@ public class DtdValidateCommandTest
     assertEquals(error.get("message"), "The element 'MissingDef' has not been declared.");
     assertEquals(error.get("line"), 3);
     assertEquals(error.get("column"), 45);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

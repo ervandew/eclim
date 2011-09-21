@@ -55,6 +55,6 @@ public class SrcUpdateCommandTest
     assertEquals(error.get("message"), "syntax error, unexpected 'echo', expecting ',' or ';'");
     assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 5);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

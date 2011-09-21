@@ -39,6 +39,7 @@ public class Options
 {
   public static final String COMMAND_OPTION = "command";
   public static final String PRETTY_OPTION = "pretty";
+  public static final String EDITOR_OPTION = "editor";
 
   public static final String ACTION_OPTION = "a";
   public static final String APPLY_OPTION = "a";
@@ -107,6 +108,10 @@ public class Options
     coreOptions.addOption(OptionBuilder.withArgName(PRETTY_OPTION)
         .withDescription(Services.getMessage("pretty.description"))
         .create(PRETTY_OPTION));
+    coreOptions.addOption(OptionBuilder.withArgName(EDITOR_OPTION)
+        .hasArg()
+        .withDescription(Services.getMessage("editor.description"))
+        .create(EDITOR_OPTION));
   }
 
   protected org.apache.commons.cli.Options options =

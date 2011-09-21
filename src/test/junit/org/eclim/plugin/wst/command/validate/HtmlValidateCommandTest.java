@@ -58,7 +58,7 @@ public class HtmlValidateCommandTest
         .indexOf("<h> is not recognized!") != -1);
     assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 5);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -66,7 +66,7 @@ public class HtmlValidateCommandTest
         .indexOf("discarding unexpected <h>") != -1);
     assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 5);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
@@ -74,6 +74,6 @@ public class HtmlValidateCommandTest
         .indexOf("discarding unexpected </div>") != -1);
     assertEquals(error.get("line"), 8);
     assertEquals(error.get("column"), 5);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
   }
 }

@@ -58,20 +58,20 @@ public class SrcUpdateCommandTest
     assertTrue(((String)error.get("message")).indexOf("List is a raw type") != -1);
     assertEquals(error.get("line"), 10);
     assertEquals(error.get("column"), 5);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message")).indexOf("ArrayList is a raw type") != -1);
     assertEquals(error.get("line"), 10);
     assertEquals(error.get("column"), 21);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message")).indexOf("The method a() is undefined") != -1);
     assertEquals(error.get("line"), 11);
     assertEquals(error.get("column"), 10);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

@@ -66,7 +66,7 @@ function! eclim#ExecuteEclim(command, ...)
 
   let g:eclimd_running = 1
 
-  let command = a:command
+  let command = '-editor vim ' . a:command
 
   " encode special characters
   " http://www.w3schools.com/TAGS/ref_urlencode.asp

@@ -58,7 +58,7 @@ public class CheckstyleCommandTest
     assertEquals(error.get("message"), "'(' is not preceded with whitespace.");
     assertEquals(error.get("line"), 21);
     assertEquals(error.get("column"), 19);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -66,20 +66,20 @@ public class CheckstyleCommandTest
         "Redundant throws: 'TestException' is unchecked exception.");
     assertEquals(error.get("line"), 22);
     assertEquals(error.get("column"), 12);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "'{' should be on a new line.");
     assertEquals(error.get("line"), 22);
     assertEquals(error.get("column"), 26);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(3);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "',' is not followed by whitespace.");
     assertEquals(error.get("line"), 25);
     assertEquals(error.get("column"), 33);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
   }
 }

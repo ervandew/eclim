@@ -53,7 +53,7 @@ public class ValidateCommandTest
         .indexOf("The content of element type \"bar\" is incomplete") != -1);
     assertEquals(error.get("line"), 12);
     assertEquals(error.get("column"), 11);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -61,6 +61,6 @@ public class ValidateCommandTest
         .indexOf("The content of element type \"foo\" must match") != -1);
     assertEquals(error.get("line"), 13);
     assertEquals(error.get("column"), 9);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

@@ -55,13 +55,13 @@ public class SrcUpdateCommandTest
     assertEquals(error.get("message"), "Unresolved inclusion: <stdi.h>");
     assertEquals(error.get("line"), 1);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 1);
+    assertEquals(error.get("warning"), true);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "Syntax error");
     assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 3);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

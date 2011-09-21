@@ -33,7 +33,6 @@ import org.eclim.logging.Logger;
 
 import org.eclipse.swt.widgets.EclimDisplay;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -50,17 +49,6 @@ import com.martiansoftware.nailgun.NGContext;
 public class Main
 {
   private static final Logger logger = Logger.getLogger(Main.class);
-
-  private static final Gson GSON = new GsonBuilder()
-    .registerTypeAdapter(Boolean.TYPE, new BooleanSerializer())
-    .registerTypeAdapter(Boolean.class, new BooleanSerializer())
-    .create();
-
-  private static final Gson GSON_PRETTY = new GsonBuilder()
-    .registerTypeAdapter(Boolean.TYPE, new BooleanSerializer())
-    .registerTypeAdapter(Boolean.class, new BooleanSerializer())
-    .setPrettyPrinting()
-    .create();
 
   /**
    * Main method for executing the client.
@@ -112,10 +100,19 @@ public class Main
       Object result = command.execute(commandLine);
       if (result == null){
         context.out.println(StringUtils.EMPTY);
-      }else if (commandLine.hasOption(Options.PRETTY_OPTION)){
-        context.out.println(GSON_PRETTY.toJson(result));
       }else{
-        context.out.println(GSON.toJson(result));
+        GsonBuilder builder = new GsonBuilder();
+        if (commandLine.hasOption(Options.PRETTY_OPTION)){
+          builder = builder.setPrettyPrinting();
+        }
+        if (commandLine.hasOption(Options.EDITOR_OPTION) &&
+            commandLine.getValue(Options.EDITOR_OPTION).equals("vim"))
+        {
+          builder = builder
+            .registerTypeAdapter(Boolean.TYPE, new BooleanSerializer())
+            .registerTypeAdapter(Boolean.class, new BooleanSerializer());
+        }
+        context.out.println(builder.create().toJson(result));
       }
     }catch(Exception e){
       logger.debug("Command triggered exception: " + Arrays.toString(context.getArgs()), e);
@@ -130,7 +127,7 @@ public class Main
     implements JsonSerializer<Boolean>
   {
     public JsonElement serialize(Boolean bool, Type typeOfSrc, JsonSerializationContext context) {
-      // vim doesn't jave a boolean type, so use an int.
+      // vim doesn't have a boolean type, so use an int.
       return new JsonPrimitive(bool.booleanValue() ? 1 : 0);
     }
   }

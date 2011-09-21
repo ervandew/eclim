@@ -53,6 +53,6 @@ public class ValidateCommandTest
         "Default target none does not exist in this project");
     assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 2);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

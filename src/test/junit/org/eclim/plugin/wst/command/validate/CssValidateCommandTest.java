@@ -59,7 +59,7 @@ public class CssValidateCommandTest
         .indexOf("bald is not a font-weight value") != -1);
     assertEquals(error.get("line"), 2);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -67,7 +67,7 @@ public class CssValidateCommandTest
         .indexOf("Property fnt-size doesn't exist") != -1);
     assertEquals(error.get("line"), 6);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 
   @Test
@@ -92,6 +92,6 @@ public class CssValidateCommandTest
         .indexOf("Lexical error") != -1);
     assertEquals(error.get("line"), 3);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

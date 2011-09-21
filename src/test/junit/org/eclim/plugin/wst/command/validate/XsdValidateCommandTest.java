@@ -57,7 +57,7 @@ public class XsdValidateCommandTest
         .indexOf("Cannot resolve the name 'Model'") != -1);
     assertEquals(error.get("line"), 3);
     assertEquals(error.get("column"), 43);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -65,6 +65,6 @@ public class XsdValidateCommandTest
         .indexOf("The content of 'project' must match") != -1);
     assertEquals(error.get("line"), 11);
     assertEquals(error.get("column"), 12);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

@@ -56,7 +56,7 @@ public class ValidateCommandTest
         "Element type \"pram\" must be declared.");
     assertEquals(error.get("line"), 23);
     assertEquals(error.get("column"), 45);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
@@ -65,7 +65,7 @@ public class ValidateCommandTest
         "\"(errorHandler?,param*,layout?,filter*,appender-ref*)\".");
     assertEquals(error.get("line"), 27);
     assertEquals(error.get("column"), 14);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
@@ -74,7 +74,7 @@ public class ValidateCommandTest
         "in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 9);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(3);
     assertEquals(error.get("filename"), file);
@@ -83,7 +83,7 @@ public class ValidateCommandTest
         "in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 14);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(4);
     assertEquals(error.get("filename"), file);
@@ -92,7 +92,7 @@ public class ValidateCommandTest
         "in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 22);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
 
     error = results.get(5);
     assertEquals(error.get("filename"), file);
@@ -101,6 +101,6 @@ public class ValidateCommandTest
         "in project 'eclim_unit_test_java'.");
     assertEquals(error.get("line"), 24);
     assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), 0);
+    assertEquals(error.get("warning"), false);
   }
 }

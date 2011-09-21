@@ -50,7 +50,7 @@ public class ProblemsCommandTest
     error.put("column", 11);
     error.put("endLine", -1);
     error.put("endColumn", -1);
-    error.put("warning", 0);
+    error.put("warning", false);
 
     assertTrue(results.contains(error));
   }
