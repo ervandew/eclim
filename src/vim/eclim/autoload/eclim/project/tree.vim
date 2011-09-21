@@ -294,13 +294,13 @@ function! s:InfoLine()
       exec lnum . ',' . lnum . 'delete _'
     endif
 
-    let GetInfo = function('vcs#util#GetInfo')
     try
+      let GetInfo = function('vcs#util#GetInfo')
       let info = GetInfo(b:roots[0])
       if info != ''
         call append(line('$') - 1, '" ' . info)
       endif
-    catch /E117/
+    catch /E\(117\|700\)/
       " noop if the function wasn't found
     endtry
   endif
