@@ -6,7 +6,7 @@ body {
   letter-spacing: -0.01em;
   line-height: 150%;
   margin: 0;
-  min-width: 660px;      /* (2x LC width) + RC width */
+  min-width: 1200px;
   padding: 0;
   text-align: center;
 }
