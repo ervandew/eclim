@@ -75,11 +75,11 @@ function eclim#c#search#FindInclude()
   let project = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:includepaths, '<project>', project, '')
   let result =  eclim#ExecuteEclim(command)
-  let paths = split(result, '\n')
+  let paths = type(result) == g:LIST_TYPE ? result : []
 
   let command = substitute(s:sourcepaths, '<project>', project, '')
   let result =  eclim#ExecuteEclim(command)
-  let paths += split(result, '\n')
+  let paths += type(result) == g:LIST_TYPE ? result : []
 
   let dir = expand('%:p:h')
   if index(paths, dir) == -1

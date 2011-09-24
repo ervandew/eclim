@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ function! TestCallHierarchy()
   call vunit#AssertEquals(8, line('$'), 'Wrong number of lines')
 
   call vunit#AssertEquals('fun2(int)', getline(1), 'Wrong content on line 1')
-  call vunit#AssertEquals('   fun1(int)', getline(2), 'Wrong content on line 2')
-  call vunit#AssertEquals('     main()', getline(3), 'Wrong content on line 3')
-  call vunit#AssertEquals('     fun3(int)', getline(4), 'Wrong content on line 4')
-  call vunit#AssertEquals('   fun3(int)', getline(5), 'Wrong content on line 5')
-  call vunit#AssertEquals('   fun3(int)', getline(6), 'Wrong content on line 6')
+  call vunit#AssertEquals('  fun1(int)', getline(2), 'Wrong content on line 2')
+  call vunit#AssertEquals('    main()', getline(3), 'Wrong content on line 3')
+  call vunit#AssertEquals('    fun3(int)', getline(4), 'Wrong content on line 4')
+  call vunit#AssertEquals('  fun3(int)', getline(5), 'Wrong content on line 5')
+  call vunit#AssertEquals('  fun3(int)', getline(6), 'Wrong content on line 6')
 
   let chwin = winnr()
 

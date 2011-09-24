@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.project;
 
+import java.util.ArrayList;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -50,15 +52,11 @@ public class SourcePathsCommand
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     ICProject cproject = CoreModel.getDefault().create(project);
-    StringBuffer buffer = new StringBuffer();
+    ArrayList<String> results = new ArrayList<String>();
     for (ISourceRoot root : cproject.getSourceRoots()){
-      if(buffer.length() > 0){
-        buffer.append('\n');
-      }
-      String path = ProjectUtils
-        .getFilePath(project, root.getPath().toOSString());
-      buffer.append(path);
+      results.add(ProjectUtils
+        .getFilePath(project, root.getPath().toOSString()));
     }
-    return buffer.toString();
+    return results;
   }
 }

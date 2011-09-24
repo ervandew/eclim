@@ -23,6 +23,7 @@ import java.text.Collator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,9 +36,9 @@ import org.eclim.plugin.cdt.command.search.SearchCommand;
 
 import org.eclim.plugin.cdt.util.CUtils;
 
-import org.eclim.plugin.core.util.VimUtils;
-
 import org.eclim.util.StringUtils;
+
+import org.eclim.util.file.Position;
 
 import org.eclipse.cdt.core.CCorePlugin;
 
@@ -123,7 +124,7 @@ public class CallHierarchyCommand
     manager.connect(input);
     manager.setWorkingCopy(input, (IWorkingCopy)src);
 
-    StringBuffer result = new StringBuffer();
+    HashMap<String,Object> result = new HashMap<String,Object>();
     try{
       src.open(null);
 
@@ -151,8 +152,7 @@ public class CallHierarchyCommand
         index.acquireReadLock();
         try{
           IIndexName name = IndexUI.elementToName(index, callee);
-          result.append(formatElement(callee, name));
-          findCalledBy(index, callee, seen, result, "\t");
+          result = formatElement(index, callee, name, seen);
         }finally{
           index.releaseReadLock();
         }
@@ -162,40 +162,37 @@ public class CallHierarchyCommand
       manager.disconnect(input);
     }
 
-    return result.toString().trim();
+    return result;
   }
 
-  private void findCalledBy(
-      IIndex index,
-      ICElement callee,
-      Set<ICElement> seen,
-      StringBuffer result,
-      String indent)
+  private ArrayList<HashMap<String,Object>> findCalledBy(
+      IIndex index, ICElement callee, Set<ICElement> seen)
     throws Exception
   {
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
     ICProject project = callee.getCProject();
     IIndexBinding calleeBinding = IndexUI.elementToBinding(index, callee);
     if (calleeBinding != null) {
-      findCalledBy(index, calleeBinding, true, project, seen, result, indent);
+      results.addAll(findCalledBy(index, calleeBinding, true, project, seen));
       if (calleeBinding instanceof ICPPMethod) {
         IBinding[] overriddenBindings =
           ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding);
         for (IBinding overriddenBinding : overriddenBindings) {
-          findCalledBy(
-              index, overriddenBinding, false, project, seen, result, indent);
+          results.addAll(findCalledBy(
+              index, overriddenBinding, false, project, seen));
         }
       }
     }
+    return results;
   }
 
-  private void findCalledBy(
+  private ArrayList<HashMap<String,Object>> findCalledBy(
       IIndex index,
       IBinding callee,
       boolean includeOrdinaryCalls,
       ICProject project,
-      Set<ICElement> seen,
-      StringBuffer result,
-      String indent)
+      Set<ICElement> seen)
     throws Exception
   {
     IIndexName[] names = index.findNames(
@@ -219,42 +216,46 @@ public class CallHierarchyCommand
 
     Collections.sort(calls);
 
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
     for (Call call : calls) {
-      result.append(indent + " " + formatElement(call.element, call.name));
-      if (!seen.contains(call.element)){
-        seen.add(call.element);
-        findCalledBy(index, call.element, seen, result, indent + '\t');
-      }
+      results.add(formatElement(index, call.element, call.name, seen));
     }
+    return results;
   }
 
-  private String formatElement(ICElement element, IIndexName name)
+  private HashMap<String,Object> formatElement(
+      IIndex index, ICElement element, IIndexName name, Set<ICElement> seen)
     throws Exception
   {
-    StringBuffer result = new StringBuffer();
-    if (name != null){
-      IResource resource = element.getResource();
-      if (resource != null){
-        String file = element.getResource()
-          .getRawLocation().toOSString().replace('\\', '/');
-        String lineColumn =
-          VimUtils.translateLineColumn(file, name.getNodeOffset());
-        result.append(file).append('|').append(lineColumn).append('|');
-      }
-    }
+    HashMap<String,Object> result = new HashMap<String,Object>();
+
     String[] types = null;
     if (element instanceof IFunction){
       types = ((IFunction)element).getParameterTypes();
     }else if (element instanceof IFunctionDeclaration){
       types = ((IFunctionDeclaration)element).getParameterTypes();
     }
-    result
-      .append(element.getElementName())
-      .append('(')
-      .append(StringUtils.join(types, ", "))
-      .append(')')
-      .append('\n');
-    return result.toString();
+    String message = element.getElementName() +
+      '(' + StringUtils.join(types, ", ") + ')';
+    result.put("name", message);
+
+    if (name != null){
+      IResource resource = element.getResource();
+      if (resource != null){
+        String file = element.getResource()
+          .getRawLocation().toOSString().replace('\\', '/');
+        result.put("position",
+            Position.fromOffset(file, null, name.getNodeOffset(), 0));
+      }
+    }
+
+    if (!seen.contains(element)){
+      seen.add(element);
+      result.put("calledBy", findCalledBy(index, element, seen));
+    }
+
+    return result;
   }
 
   private static class Call

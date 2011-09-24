@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -52,31 +52,19 @@ function! eclim#c#hierarchy#CallHierarchy()
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
-  let results = split(eclim#ExecuteEclim(command), '\n')
-  if len(results) == 1 && results[0] == '0'
+  let result = eclim#ExecuteEclim(command)
+  if type(result) != g:DICT_TYPE
     return
   endif
 
-  if len(results) == 0
+  if len(result) == 0
     call eclim#util#Echo('No results found.')
     return
   endif
 
   let lines = []
   let info = []
-  for result in results
-    if result =~ '.*|.*|.*'
-      let file = substitute(result, '\s*\(.\{-}\)|.*', '\1', '')
-      let line = substitute(result, '.\{-}|\(\d\+\) col.*', '\1', '')
-      let col = substitute(result, '.\{-}|\d\+ col \(\d\+\)|.*', '\1', '')
-      let name = substitute(result, '\(\s*\).\{-}|\d\+ col \d\+|\(.*\)', '\1\2', '')
-      call add(info, {'file': file, 'line': line, 'col': col})
-      call add(lines, name)
-    else
-      call add(info, {'file': '', 'line': -1, 'col': -1})
-      call add(lines, result)
-    endif
-  endfor
+  call s:CallHierarchyFormat(result, lines, info, '')
 
   call eclim#util#TempWindow('[Call Hierarchy]', lines)
   set ft=c
@@ -104,6 +92,25 @@ function! eclim#c#hierarchy#CallHierarchy()
     \ ]
   nnoremap <buffer> <silent> ?
     \ :call eclim#help#BufferHelp(b:hierarchy_help, 'vertical', 40)<cr>
+endfunction " }}}
+
+" s:CallHierarchyFormat(result, lines, info, indent) {{{
+function! s:CallHierarchyFormat(result, lines, info, indent)
+  if has_key(a:result, 'position')
+    call add(a:info, {
+        \ 'file': a:result.position.filename,
+        \ 'line': a:result.position.line,
+        \ 'col': a:result.position.column
+      \ })
+    call add(a:lines, a:indent . a:result.name)
+  else
+    call add(a:info, {'file': '', 'line': -1, 'col': -1})
+    call add(a:lines, a:indent . a:result.name)
+  endif
+
+  for caller in get(a:result, 'calledBy', [])
+    call s:CallHierarchyFormat(caller, a:lines, a:info, a:indent . "\t")
+  endfor
 endfunction " }}}
 
 " s:Open(action) {{{

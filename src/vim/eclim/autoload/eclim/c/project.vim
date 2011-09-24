@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -51,12 +51,48 @@ function! eclim#c#project#Configs(...)
   let command = substitute(command, '<project>', project, '')
 
   let port = eclim#project#util#GetProjectPort(project)
-  let results = split(eclim#ExecuteEclim(command, port), '\n')
-  if len(results) == 1 && results[0] == '0'
+  let configs = eclim#ExecuteEclim(command, port)
+  if type(configs) != g:LIST_TYPE
     return
   endif
 
-  call eclim#util#TempWindow('[' . project . ' configs]', results)
+  let content = []
+  for config in configs
+    call add(content, 'Config: ' . config.name)
+    call add(content, '')
+
+    call add(content, "\tSources: |add|")
+    if has_key(config, 'sources')
+      for src in config.sources
+        call add(content, "\t\tdir: " . src.dir)
+        if has_key(src, 'excludes')
+          call add(content, "\t\t\texcludes: " . join(src.excludes, ','))
+        endif
+      endfor
+    endif
+    call add(content, '')
+
+    if has_key(config, 'tools')
+      for tool in config.tools
+        call add(content, "\tTool: " . tool.name)
+        call add(content, "\t\tIncludes: |add|")
+        if has_key(tool, 'includes')
+          for include in tool.includes
+            call add(content, "\t\t\tpath:       " . include)
+          endfor
+        endif
+        call add(content, "\t\tSymbols:  |add|")
+        if has_key(tool, 'symbols')
+          for symbol in tool.symbols
+            call add(content, "\t\t\tname/value: " . symbol)
+          endfor
+        endif
+        call add(content, '')
+      endfor
+    endif
+  endfor
+
+  call eclim#util#TempWindow('[' . project . ' configs]', content)
   let b:project = project
   call s:Syntax()
 

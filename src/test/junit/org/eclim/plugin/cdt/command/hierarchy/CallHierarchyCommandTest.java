@@ -16,11 +16,12 @@
  */
 package org.eclim.plugin.cdt.command.hierarchy;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.cdt.Cdt;
-
-import org.eclim.util.StringUtils;
 
 import org.junit.Test;
 
@@ -36,24 +37,66 @@ public class CallHierarchyCommandTest
   private static final String TEST_FILE = "src/callhierarchy/mod2.c";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
     // reference to fun2
-    String result = (String)Eclim.execute(new String[]{
-      "c_callhierarchy", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "57", "-l", "4", "-e", "utf-8"
-    });
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "c_callhierarchy", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "57", "-l", "4", "-e", "utf-8"
+      });
 
     String path = Eclim.getProjectPath(Cdt.TEST_PROJECT) + "/src/callhierarchy/";
-    String[] lines = StringUtils.split(result, '\n');
-    assertEquals(lines[0], path + "mod2.c|1 col 5|fun2(int)");
-    assertEquals(lines[1], "\t " + path + "mod1.c|5 col 10|fun1(int)");
-    assertEquals(lines[2], "\t\t " + path + "main.c|6 col 28|main()");
-    assertEquals(lines[3], "\t\t " + path + "mod2.c|7 col 10|fun3(int)");
-    assertEquals(lines[4], "\t " + path + "mod2.c|6 col 3|fun3(int)");
-    assertEquals(lines[5], "\t " + path + "mod2.c|7 col 20|fun3(int)");
+
+    Map<String,Object> position = (Map<String,Object>)result.get("position");
+    List<Map<String,Object>> calls =
+      (List<Map<String,Object>>)result.get("calledBy");
+    assertEquals(result.get("name"), "fun2(int)");
+    assertEquals(path + "mod2.c", position.get("filename"));
+    assertEquals(1, position.get("line"));
+    assertEquals(5, position.get("column"));
+    assertEquals(3, calls.size());
+
+    result = calls.get(0);
+    position = (Map<String,Object>)result.get("position");
+    List<Map<String,Object>> nestedCalls =
+      (List<Map<String,Object>>)result.get("calledBy");
+    assertEquals(result.get("name"), "fun1(int)");
+    assertEquals(path + "mod1.c", position.get("filename"));
+    assertEquals(5, position.get("line"));
+    assertEquals(10, position.get("column"));
+    assertEquals(2, nestedCalls.size());
+
+    result = nestedCalls.get(0);
+    position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "main()");
+    assertEquals(path + "main.c", position.get("filename"));
+    assertEquals(6, position.get("line"));
+    assertEquals(28, position.get("column"));
+
+    result = nestedCalls.get(1);
+    position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "fun3(int)");
+    assertEquals(path + "mod2.c", position.get("filename"));
+    assertEquals(7, position.get("line"));
+    assertEquals(10, position.get("column"));
+
+    result = calls.get(1);
+    position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "fun3(int)");
+    assertEquals(path + "mod2.c", position.get("filename"));
+    assertEquals(6, position.get("line"));
+    assertEquals(3, position.get("column"));
+
+    result = calls.get(2);
+    position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "fun3(int)");
+    assertEquals(path + "mod2.c", position.get("filename"));
+    assertEquals(7, position.get("line"));
+    assertEquals(20, position.get("column"));
   }
 }

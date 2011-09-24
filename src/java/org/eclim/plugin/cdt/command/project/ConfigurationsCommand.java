@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.cdt.command.project;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -24,8 +27,6 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
-
-import org.eclim.util.StringUtils;
 
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
@@ -71,34 +72,35 @@ public class ConfigurationsCommand
       CCorePlugin.getDefault().getProjectDescription(project, false);
     ICConfigurationDescription[] cconfigs = desc.getConfigurations();
 
-    StringBuffer out = new StringBuffer();
+    ArrayList<HashMap<String,Object>> configs =
+      new ArrayList<HashMap<String,Object>>();
     for(ICConfigurationDescription cconfig : cconfigs){
-      if (out.length() > 0){
-        out.append('\n');
-      }
-      out.append("Config: ").append(cconfig.getName()).append('\n');
+      HashMap<String,Object> cfg = new HashMap<String,Object>();
+      configs.add(cfg);
+      cfg.put("name", cconfig.getName());
 
       // source entries
       ICSourceEntry[] sources = cconfig.getSourceEntries();
       if (sources.length > 0){
-        out.append("\n\tSources: |add|\n");
+        ArrayList<HashMap<String,Object>> srcs =
+          new ArrayList<HashMap<String,Object>>();
+        cfg.put("sources", srcs);
+
         for(ICSourceEntry entry : sources){
+          HashMap<String,Object> src = new HashMap<String,Object>();
+          srcs.add(src);
           String dirname = entry.getFullPath().removeFirstSegments(1).toString();
           if (dirname.length() == 0){
             dirname = "/";
           }
-          out.append("\t\tdir:    ")
-            .append(dirname)
-            .append('\n');
+          src.put("dir", dirname);
           IPath[] excludes = entry.getExclusionPatterns();
           if (excludes.length > 0){
-            String[] patterns = new String[excludes.length];
+            ArrayList<String> ex = new ArrayList<String>();
+            src.put("excludes", ex);
             for (int ii = 0; ii < excludes.length; ii++){
-              patterns[ii] = excludes[ii].toString();
+              ex.add(excludes[ii].toString());
             }
-            out.append("\t\t\texcludes: ")
-              .append(StringUtils.join(patterns, ','))
-              .append('\n');
           }
         }
       }
@@ -107,6 +109,9 @@ public class ConfigurationsCommand
         ManagedBuildManager.getConfigurationForDescription(cconfig);
       ITool[] tools = config.getTools();
       if(tools.length > 0){
+        ArrayList<HashMap<String,Object>> tls =
+          new ArrayList<HashMap<String,Object>>();
+        cfg.put("tools", tls);
         for(ITool tool : tools){
           if (!tool.isEnabled() || !acceptTool(project, tool)){
             continue;
@@ -118,26 +123,30 @@ public class ConfigurationsCommand
             continue;
           }
 
-          out.append("\n\tTool: ").append(tool.getName()).append('\n');
+          HashMap<String,Object> tl = new HashMap<String,Object>();
+          tls.add(tl);
+          tl.put("name", tool.getName());
 
           // includes
           if(ioption != null){
-            out.append("\t\tIncludes: |add|\n");
             String[] includes = ioption.getIncludePaths();
             if(includes.length > 0){
+              ArrayList<String> ins = new ArrayList<String>();
+              tl.put("includes", ins);
               for(String include : includes){
-                out.append("\t\t\tpath:       ").append(include).append('\n');
+                ins.add(include);
               }
             }
           }
 
           // symbols
           if(soption != null){
-            out.append("\t\tSymbols:  |add|\n");
             String[] symbols = soption.getDefinedSymbols();
             if(symbols.length > 0){
+              ArrayList<String> syms = new ArrayList<String>();
+              tl.put("symbols", syms);
               for(String symbol : symbols){
-                out.append("\t\t\tname/value: ").append(symbol).append('\n');
+                syms.add(symbol);
               }
             }
           }
@@ -145,7 +154,7 @@ public class ConfigurationsCommand
       }
     }
 
-    return out.toString();
+    return configs;
   }
 
   private boolean acceptTool(IProject project, ITool tool)

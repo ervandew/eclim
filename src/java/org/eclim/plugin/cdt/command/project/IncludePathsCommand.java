@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.project;
 
+import java.util.ArrayList;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -50,13 +52,10 @@ public class IncludePathsCommand
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     ICProject cproject = CoreModel.getDefault().create(project);
-    StringBuffer buffer = new StringBuffer();
+    ArrayList<String> results = new ArrayList<String>();
     for (IIncludeReference ref : cproject.getIncludeReferences()){
-      if(buffer.length() > 0){
-        buffer.append('\n');
-      }
-      buffer.append(ref.getPath().toOSString());
+      results.add(ref.getPath().toOSString());
     }
-    return buffer.toString();
+    return results;
   }
 }
