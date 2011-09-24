@@ -30,8 +30,7 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaCore;
-
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
@@ -72,8 +71,10 @@ public class FormatCommand
     int eByteOffset = commandLine.getIntValue(Options.EOFFSET_OPTION);
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
+    IJavaProject myProject = JavaUtils.getJavaProject(project);
     DefaultCodeFormatter formatter =
-      new DefaultCodeFormatter(JavaCore.getOptions());
+      new DefaultCodeFormatter(myProject.getOptions(false));
+
     int kind = CodeFormatter.K_COMPILATION_UNIT |
       CodeFormatter.F_INCLUDE_COMMENTS;
 
