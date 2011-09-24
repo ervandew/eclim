@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.wst.command.validate;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,7 +43,7 @@ public class HtmlValidateCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "html_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
       });
@@ -52,7 +52,7 @@ public class HtmlValidateCommandTest
 
     String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
 
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message"))
         .indexOf("<h> is not recognized!") != -1);

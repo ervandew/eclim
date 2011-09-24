@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,7 +43,7 @@ public class CssCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "52", "-e", "utf-8"

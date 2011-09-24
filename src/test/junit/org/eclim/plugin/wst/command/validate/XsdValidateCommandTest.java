@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.wst.command.validate;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,7 +43,7 @@ public class XsdValidateCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "xsd_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
       });
@@ -51,7 +51,7 @@ public class XsdValidateCommandTest
     assertEquals("Wrong number of errors.", 2, results.size());
 
     String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message"))
         .indexOf("Cannot resolve the name 'Model'") != -1);

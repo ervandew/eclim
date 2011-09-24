@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.ant.command.validate;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -40,13 +40,13 @@ public class ValidateCommandTest
   @SuppressWarnings("unchecked")
   public void execute()
   {
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ant_validate", "-p", Ant.TEST_PROJECT,
         "-f", TEST_FILE
       });
 
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"),
         Eclim.resolveFile(Ant.TEST_PROJECT, TEST_FILE));
     assertEquals(error.get("message"),

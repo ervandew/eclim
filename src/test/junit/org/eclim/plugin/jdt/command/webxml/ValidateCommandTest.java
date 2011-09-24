@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.webxml;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -40,7 +40,7 @@ public class ValidateCommandTest
   @SuppressWarnings("unchecked")
   public void validateXmlErrors()
   {
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "webxml_validate", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
       });
@@ -49,7 +49,7 @@ public class ValidateCommandTest
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "Class 'foo.bar.Listener' not found in project 'eclim_unit_test_java'.");

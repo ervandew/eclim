@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.log4j;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -40,7 +40,7 @@ public class ValidateCommandTest
   @SuppressWarnings("unchecked")
   public void validateXmlErrors()
   {
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "log4j_validate", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE
@@ -50,7 +50,7 @@ public class ValidateCommandTest
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "Element type \"pram\" must be declared.");

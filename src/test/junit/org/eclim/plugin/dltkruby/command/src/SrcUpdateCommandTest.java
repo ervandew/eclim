@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.dltkruby.command.src;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,13 +43,13 @@ public class SrcUpdateCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_src_update", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE, "-v"
       });
 
     String file = Eclim.resolveFile(DltkRuby.TEST_PROJECT, TEST_FILE);
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "syntax error, unexpected tRPAREN");
     assertEquals(error.get("line"), 2);

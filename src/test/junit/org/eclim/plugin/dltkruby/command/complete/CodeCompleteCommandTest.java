@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.dltkruby.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,7 +43,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "107", "-e", "utf-8"
@@ -51,7 +51,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 2, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "ID");
     assertEquals(result.get("menu"), "ID");
     assertEquals(result.get("info"), "");
@@ -69,7 +69,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "92", "-e", "utf-8"
@@ -77,7 +77,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 1, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "moduleMethodA");
     assertEquals(result.get("menu"), "moduleMethodA() - TestModule");
     assertEquals(result.get("info"), "");
@@ -90,7 +90,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "42", "-e", "utf-8"
@@ -98,7 +98,7 @@ public class CodeCompleteCommandTest
 
     assertTrue("Wrong number of results", results.size() > 25);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "testA");
     assertEquals(result.get("menu"), "testA() - TestClass");
     assertEquals(result.get("info"), "");
@@ -116,7 +116,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "54", "-e", "utf-8"
@@ -125,7 +125,7 @@ public class CodeCompleteCommandTest
     assertTrue("Wrong number of results", results.size() >= 2);
     assertTrue("Wrong number of results", results.size() <= 3);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "testA");
     assertEquals(result.get("menu"), "testA() - TestClass");
     assertEquals(result.get("info"), "");
@@ -143,7 +143,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(DltkRuby.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "63", "-e", "utf-8"
@@ -151,7 +151,7 @@ public class CodeCompleteCommandTest
 
     assertTrue("Wrong number of results", results.size() >= 2);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "each");
     assertEquals(result.get("menu"), "each() - Array");
     assertEquals(result.get("info"), "");
@@ -161,7 +161,7 @@ public class CodeCompleteCommandTest
     assertEquals(result.get("menu"), "each_index() - Array");
     assertEquals(result.get("info"), "");
 
-    results = (List<HashMap<String,Object>>)
+    results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ruby_complete", "-p", DltkRuby.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "70", "-e", "utf-8"

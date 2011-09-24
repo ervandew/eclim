@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.search;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -48,7 +48,7 @@ public class SearchCommandTest
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
     // testFunction definition (c file result)
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "136", "-l", "12", "-e", "utf-8", "-x", "definitions"
@@ -56,14 +56,14 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE_C);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "");
     assertEquals(result.get("line"), 1);
     assertEquals(result.get("column"), 6);
 
     // testFunction declarations (header file result)
-    results = (List<HashMap<String,Object>>)
+    results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "136", "-l", "12", "-e", "utf-8", "-x", "declarations"
@@ -78,7 +78,7 @@ public class SearchCommandTest
     assertEquals(result.get("column"), 6);
 
     // testFunction references
-    results = (List<HashMap<String,Object>>)
+    results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "136", "-l", "12", "-e", "utf-8", "-x", "references"
@@ -101,7 +101,7 @@ public class SearchCommandTest
     assertEquals(result.get("column"), 3);
 
     // testFunction all
-    results = (List<HashMap<String,Object>>)
+    results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "136", "-l", "12", "-e", "utf-8", "-x", "all"
@@ -124,7 +124,7 @@ public class SearchCommandTest
     assertEquals(result.get("column"), 3);
 
     // EXIT_SUCCESS
-    results = (List<HashMap<String,Object>>)
+    results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "186", "-l", "12", "-e", "utf-8", "-x", "declarations"
@@ -152,7 +152,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT,
         "-p", "test_search_function", "-t", "function"
@@ -160,7 +160,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "");
     assertEquals(result.get("line"), 16);
@@ -174,12 +174,12 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT, "-p", "EXIT_FAILURE", "-t", "macro"
       });
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       assertTrue(((String)result.get("filename"))
           .endsWith("/include/stdlib.h"));
@@ -201,7 +201,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_search", "-n", Cdt.TEST_PROJECT,
         "-p", "test_search_struct", "-t", "class_struct"
@@ -209,7 +209,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Cdt.TEST_PROJECT, TEST_FILE);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "");
     assertEquals(result.get("line"), 5);

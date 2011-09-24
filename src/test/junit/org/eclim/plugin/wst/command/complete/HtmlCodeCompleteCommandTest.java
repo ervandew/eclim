@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -50,7 +50,7 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "152", "-e", "utf-8"
@@ -58,7 +58,7 @@ public class HtmlCodeCompleteCommandTest
 
     assertEquals("Wrong number of errors.", 2, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "href");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),
@@ -77,7 +77,7 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "141", "-e", "utf-8"
@@ -85,7 +85,7 @@ public class HtmlCodeCompleteCommandTest
 
     assertEquals("Wrong number of errors.", 7, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "h1");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"), "<p>A top-level heading</p>");
@@ -108,7 +108,7 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "131", "-e", "utf-8"
@@ -116,7 +116,7 @@ public class HtmlCodeCompleteCommandTest
 
     assertEquals("Wrong number of errors.", 8, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "font");
 
     result = results.get(1);

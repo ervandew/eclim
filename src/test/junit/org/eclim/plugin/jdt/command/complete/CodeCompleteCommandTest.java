@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -44,7 +44,7 @@ public class CodeCompleteCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
@@ -53,7 +53,7 @@ public class CodeCompleteCommandTest
 
     assertTrue("Wrong number of results.", results.size() > 30);
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
@@ -73,7 +73,7 @@ public class CodeCompleteCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
@@ -82,7 +82,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results.", 4, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");

@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.ant.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -40,14 +40,14 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completeProperty()
   {
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ant_complete", "-p", Ant.TEST_PROJECT,
         "-f", TEST_FILE,
         "-o", "220", "-e", "utf-8"
       });
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "test.ant.property");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"), "Test Value");
@@ -57,7 +57,7 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completeTarget()
   {
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "ant_complete", "-p", Ant.TEST_PROJECT,
         "-f", TEST_FILE,

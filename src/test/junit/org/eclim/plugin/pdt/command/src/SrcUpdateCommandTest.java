@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.pdt.command.src;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -43,14 +43,14 @@ public class SrcUpdateCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_src_update", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
       });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/src/test.php");
 
-    HashMap<String,Object> error = results.get(0);
+    Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "syntax error, unexpected 'echo', expecting ',' or ';'");
     assertEquals(error.get("line"), 5);

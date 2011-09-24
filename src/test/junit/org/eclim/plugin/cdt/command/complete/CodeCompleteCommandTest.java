@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.cdt.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.tools.ant.taskdefs.condition.Os;
 
@@ -50,13 +50,13 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "140", "-e", "utf-8", "-l", "standard"
       });
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "test_a");
     assertEquals(result.get("menu"), "test_a : int");
     assertEquals(result.get("info"), "");
@@ -79,7 +79,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "c_complete", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "156", "-e", "utf-8", "-l", "standard"
@@ -87,7 +87,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 2, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "EXIT_FAILURE");
     assertEquals(result.get("menu"), "EXIT_FAILURE");
     assertEquals(result.get("info"), "");

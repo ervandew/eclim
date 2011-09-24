@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -44,7 +44,7 @@ public class XmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "xml_complete", "-p", Wst.TEST_PROJECT,
         "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8"
@@ -52,7 +52,7 @@ public class XmlCodeCompleteCommandTest
 
     assertEquals("Wrong number of results.", 1, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "xs:unique");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),
@@ -67,7 +67,7 @@ public class XmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "xml_complete", "-p", Wst.TEST_PROJECT,
         "-f", TEST_FILE_WSDL, "-o", "516", "-e", "utf-8"
@@ -75,7 +75,7 @@ public class XmlCodeCompleteCommandTest
 
     assertEquals("Wrong number of errors.", 3, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "xsd:annotation");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),

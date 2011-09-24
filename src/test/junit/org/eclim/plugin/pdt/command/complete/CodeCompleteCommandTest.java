@@ -18,8 +18,8 @@ package org.eclim.plugin.pdt.command.complete;
 
 import java.io.FileWriter;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -48,7 +48,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "213", "-e", "utf-8"
@@ -56,7 +56,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 3, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "methodA1(");
     assertEquals(result.get("menu"), "methodA1($str) - TestA");
     assertEquals(result.get("info"), "TestA::methodA1($str)");
@@ -79,7 +79,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "228", "-e", "utf-8"
@@ -87,7 +87,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 2, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "methodA1(");
     assertEquals(result.get("menu"), "methodA1($str) - TestA");
     assertEquals(result.get("info"), "TestA::methodA1($str)");
@@ -105,7 +105,7 @@ public class CodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "294", "-e", "utf-8"
@@ -113,7 +113,7 @@ public class CodeCompleteCommandTest
 
     assertEquals("Wrong number of results", 1, results.size());
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "regular");
     assertEquals(result.get("menu"), "$regular: MagicPropertyType");
     assertEquals(result.get("info"), "$regular");
@@ -152,7 +152,7 @@ public class CodeCompleteCommandTest
       out.write(StringUtils.join(contents, "\n"));
       out.close();
 
-      List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+      List<Map<String,Object>> results = (List<Map<String,Object>>)
         Eclim.execute(new String[]{
           "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE_ERRATIC,
           "-o", String.valueOf(index), "-e", "utf-8"
@@ -160,7 +160,7 @@ public class CodeCompleteCommandTest
 
       assertEquals("Wrong number of results", 2, results.size());
 
-      HashMap<String,Object> result = results.get(0);
+      Map<String,Object> result = results.get(0);
       assertEquals(result.get("completion"), "getName()");
       assertEquals(result.get("menu"), "getName() - Test");
       assertEquals(result.get("info"), "Test::getName()");

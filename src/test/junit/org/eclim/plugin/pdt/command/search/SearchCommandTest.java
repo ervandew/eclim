@@ -16,8 +16,8 @@
  */
 package org.eclim.plugin.pdt.command.search;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -38,7 +38,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "45", "-l", "5", "-e", "utf-8"
@@ -46,7 +46,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "class TestA");
     assertEquals(result.get("line"), 6);
@@ -60,7 +60,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "62", "-l", "8", "-e", "utf-8"
@@ -68,7 +68,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "class TestA -> method methodA2");
     assertEquals(result.get("line"), 13);
@@ -82,7 +82,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "82", "-l", "9", "-e", "utf-8"
@@ -90,7 +90,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "class TestA -> field $variable1");
     assertEquals(result.get("line"), 8);
@@ -104,7 +104,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "111", "-l", "9", "-e", "utf-8"
@@ -112,7 +112,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "field CONSTANT1");
     assertEquals(result.get("line"), 60);
@@ -126,7 +126,7 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-f", TEST_FILE,
         "-o", "94", "-l", "9", "-e", "utf-8"
@@ -134,7 +134,7 @@ public class SearchCommandTest
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "function functionA");
     assertEquals(result.get("line"), 3);
@@ -148,14 +148,14 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-p", "TestA", "-t", "class"
       });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "class TestA");
     assertEquals(result.get("line"), 6);
@@ -169,14 +169,14 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-p", "methodA1", "-t", "function"
       });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "class TestA -> method methodA1");
     assertEquals(result.get("line"), 9);
@@ -190,14 +190,14 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-p", "CONSTANT1", "-t", "field"
       });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "field CONSTANT1");
     assertEquals(result.get("line"), 60);
@@ -211,14 +211,14 @@ public class SearchCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Pdt.TEST_PROJECT));
 
-    List<HashMap<String,Object>> results = (List<HashMap<String,Object>>)
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_search", "-n", Pdt.TEST_PROJECT, "-p", "functionA", "-t", "function"
       });
 
     String file = Eclim.resolveFile(Pdt.TEST_PROJECT, "php/models.php");
 
-    HashMap<String,Object> result = results.get(0);
+    Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
     assertEquals(result.get("message"), "function functionA");
     assertEquals(result.get("line"), 3);
