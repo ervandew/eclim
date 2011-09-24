@@ -86,38 +86,40 @@ public class ProjectsCommand
       String projectPath = ProjectUtils.getPath(project);
       info.put("path", projectPath);
 
-      HashMap<String,String> links = new HashMap<String,String>();
-      if (new File(projectPath).exists()){
-        // don't open/close projects due to the impact on performance
-        /*boolean close = false;
-        if (!project.isOpen()){
-          project.open(IResource.NONE, null);
-          close = true;
-        }*/
+      if (project.isOpen()){
+        HashMap<String,String> links = new HashMap<String,String>();
+        if (new File(projectPath).exists()){
+          // don't open/close projects due to the impact on performance
+          /*boolean close = false;
+          if (!project.isOpen()){
+            project.open(IResource.NONE, null);
+            close = true;
+          }*/
 
-        ResourceInfo pinfo = ((Project)project).getResourceInfo(false, false);
-        ProjectDescription desc = ((ProjectInfo)pinfo).getDescription();
-        if (desc != null){
-          HashMap<IPath, LinkDescription> linfo =
-            (HashMap<IPath, LinkDescription>)desc.getLinks();
-          if (linfo != null){
-            for (IPath path : linfo.keySet()){
-              LinkDescription link = linfo.get(path);
-              IResource member = project.findMember(link.getProjectRelativePath());
-              IFileStore store = IDEResourceInfoUtils.getFileStore(
-                  member.getLocationURI());
-              String resolvedPath = store != null ?
-                store.toString() : link.getLocationURI().getPath();
-              links.put(path.toString(), resolvedPath);
+          ResourceInfo pinfo = ((Project)project).getResourceInfo(false, false);
+          ProjectDescription desc = ((ProjectInfo)pinfo).getDescription();
+          if (desc != null){
+            HashMap<IPath, LinkDescription> linfo =
+              (HashMap<IPath, LinkDescription>)desc.getLinks();
+            if (linfo != null){
+              for (IPath path : linfo.keySet()){
+                LinkDescription link = linfo.get(path);
+                IResource member = project.findMember(link.getProjectRelativePath());
+                IFileStore store = IDEResourceInfoUtils.getFileStore(
+                    member.getLocationURI());
+                String resolvedPath = store != null ?
+                  store.toString() : link.getLocationURI().getPath();
+                links.put(path.toString(), resolvedPath);
+              }
             }
           }
-        }
 
-        /*if (close){
-          project.close(null);
-        }*/
+          /*if (close){
+            project.close(null);
+          }*/
+        }
+        info.put("links", links);
       }
-      info.put("links", links);
 
       results.add(info);
     }

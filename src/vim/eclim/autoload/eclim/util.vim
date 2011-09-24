@@ -651,6 +651,18 @@ function! eclim#util#MarkSave()
   return line("''")
 endfunction " }}}
 
+" Pad(string, length, [char]) {{{
+" Pad the supplied string.
+function! eclim#util#Pad(string, length, ...)
+  let char = a:0 > 0 ? a:1 : ' '
+
+  let string = a:string
+  while len(string) < a:length
+    let string .= char
+  endwhile
+  return string
+endfunction " }}}
+
 " ParseArgs(args) {{{
 " Parses the supplied argument line into a list of args, handling quoted
 " strings, escaped spaces, etc.

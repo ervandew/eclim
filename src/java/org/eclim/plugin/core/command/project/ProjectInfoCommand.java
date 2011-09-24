@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.core.command.project;
 
+import java.util.HashMap;
+
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -28,8 +30,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.core.util.ProjectUtils;
-
-import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -59,44 +59,38 @@ public class ProjectInfoCommand
       String workspace = ResourcesPlugin
         .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
 
-      StringBuffer info = new StringBuffer();
-      info.append("Name: ").append(name).append('\n');
-      info.append("Path: ").append(ProjectUtils.getPath(project)).append('\n');
-      info.append("Workspace: ").append(workspace).append('\n');
+      HashMap<String,Object> info = new HashMap<String,Object>();
+      info.put("name", name);
+      info.put("path", ProjectUtils.getPath(project));
+      info.put("workspace", workspace);
+      info.put("open", project.isOpen());
       if (project.isOpen()){
-        info.append("Natures: ");
         String[] aliases = ProjectNatureFactory.getProjectNatureAliases(project);
         if (aliases.length == 0){
           aliases = new String[]{"none"};
         }
-        info.append(StringUtils.join(aliases, ' ')).append('\n');
+        info.put("natures", aliases);
 
-        info.append("Depends On: ");
         IProject[] depends = project.getReferencedProjects();
-        if (depends.length == 0){
-          info.append("None").append('\n');
-        }else{
+        if (depends.length > 0){
           String[] names = new String[depends.length];
           for (int ii = 0; ii < depends.length; ii++){
             names[ii] = depends[ii].getName();
           }
-          info.append(StringUtils.join(names, ' ')).append('\n');
+          info.put("depends", names);
         }
 
-        info.append("Referenced By: ");
         IProject[] references = project.getReferencingProjects();
-        if (references.length == 0){
-          info.append("None").append('\n');
-        }else{
+        if (references.length > 0){
           String[] names = new String[references.length];
           for (int ii = 0; ii < references.length; ii++){
             names[ii] = references[ii].getName();
           }
-          info.append(StringUtils.join(names, ' ')).append('\n');
+          info.put("references", names);
         }
       }
 
-      return info.toString();
+      return info;
     }
     return Services.getMessage("project.not.found", name);
   }

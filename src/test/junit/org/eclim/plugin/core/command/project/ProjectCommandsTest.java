@@ -18,7 +18,8 @@ package org.eclim.plugin.core.command.project;
 
 import java.io.File;
 
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -35,8 +36,6 @@ public class ProjectCommandsTest
 {
   private static final String TEST_PROJECT = "unit_test_create";
   private static final String TEST_PROJECT_IMPORT = "unit_test_import";
-  private static final Pattern PROJECT_OPEN_PATTERN =
-    Pattern.compile(TEST_PROJECT + "\\s+- open");
 
   @Test
   public void createProject()
@@ -47,7 +46,7 @@ public class ProjectCommandsTest
     }
     assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_create",
       "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT,
       "-n", "java"
@@ -61,7 +60,7 @@ public class ProjectCommandsTest
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_close", "-p", TEST_PROJECT});
 
     assertFalse("Project not closed.", projectOpen());
@@ -72,7 +71,7 @@ public class ProjectCommandsTest
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_open", "-p", TEST_PROJECT});
 
     assertTrue("Project not opened.", projectOpen());
@@ -84,7 +83,7 @@ public class ProjectCommandsTest
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     String renamed = TEST_PROJECT + "_renamed";
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_rename", "-p", TEST_PROJECT, "-n", renamed});
 
     assertFalse("Previous project name still exists.",
@@ -92,7 +91,7 @@ public class ProjectCommandsTest
     assertTrue("New project name doesn't exist.",
         Eclim.projectExists(renamed));
 
-    result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_rename", "-p", renamed, "-n", TEST_PROJECT});
 
     assertFalse("Previous project name still exists.",
@@ -109,8 +108,7 @@ public class ProjectCommandsTest
 
     String path = new File(Eclim.getWorkspace() + "/../")
       .getCanonicalPath().replace('\\', '/');
-    String result = (String)Eclim.execute(new String[]{
-      "project_move", "-p", TEST_PROJECT, "-d", path});
+    Eclim.execute(new String[]{"project_move", "-p", TEST_PROJECT, "-d", path});
 
     assertTrue("Project does not exist.",
         Eclim.projectExists(TEST_PROJECT));
@@ -118,7 +116,7 @@ public class ProjectCommandsTest
         path + '/' + TEST_PROJECT,
         Eclim.getProjectPath(TEST_PROJECT));
 
-    result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_move", "-p", TEST_PROJECT, "-d", Eclim.getWorkspace()});
 
     assertTrue("Project does not exist.",
@@ -133,8 +131,7 @@ public class ProjectCommandsTest
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "project_delete", "-p", TEST_PROJECT});
+    Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT});
 
     assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT));
 
@@ -178,11 +175,13 @@ public class ProjectCommandsTest
 
     assertTrue("Project not imported.", Eclim.projectExists(TEST_PROJECT_IMPORT));
 
-    result = (String)Eclim.execute(new String[]{
-      "project_natures", "-p", TEST_PROJECT_IMPORT,
-    });
-    assertEquals("Project missing java nature.", result,
-        TEST_PROJECT_IMPORT + " - java");
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "project_natures", "-p", TEST_PROJECT_IMPORT,
+      });
+    assertEquals(1, results.size());
+    assertEquals(1, ((List)results.get(0).get("natures")).size());
+    assertEquals("java", ((List)results.get(0).get("natures")).get(0));
 
     // delete the project and the project files + dir
     Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_IMPORT});
@@ -198,10 +197,19 @@ public class ProjectCommandsTest
    *
    * @return true if the project is open, false otherwise.
    */
+  @SuppressWarnings("unchecked")
   private boolean projectOpen()
   {
-    String list = (String)Eclim.execute(new String[]{"project_list"});
+    List<Map<String,Object>> projects = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{"project_list"});
 
-    return PROJECT_OPEN_PATTERN.matcher(list).find();
+    for (Map<String,Object> project : projects){
+      if (project.get("name").equals(TEST_PROJECT) &&
+          project.get("open").equals(Boolean.TRUE))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }

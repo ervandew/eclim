@@ -24,8 +24,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.project.ProjectNatureFactory;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Command to get available project nature aliases.
  *
@@ -41,7 +39,6 @@ public class ProjectNatureAliasesCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String natures = StringUtils.join(ProjectNatureFactory.getNatureAliases(), '\n');
-    return natures + '\n' + ProjectNatureFactory.NONE;
+    return ProjectNatureFactory.getNatureAliases();
   }
 }

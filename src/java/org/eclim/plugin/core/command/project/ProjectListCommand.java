@@ -17,10 +17,7 @@
 package org.eclim.plugin.core.command.project;
 
 import java.util.ArrayList;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.eclim.Services;
+import java.util.HashMap;
 
 import org.eclim.annotation.Command;
 
@@ -54,8 +51,6 @@ public class ProjectListCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<String> results = new ArrayList<String>();
-
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
     String natureId = null;
     if(commandLine.hasOption(Options.NATURE_OPTION)){
@@ -70,34 +65,17 @@ public class ProjectListCommand
       projects = (IProject[])filtered.toArray(new IProject[filtered.size()]);
     }
 
-    String open = Services.getMessage("project.status.open");
-    String closed = Services.getMessage("project.status.closed");
-
-    // pad status string
-    int pad = Math.max(open.length(), closed.length());
-    closed = StringUtils.rightPad(closed, pad);
-    open = StringUtils.rightPad(open, pad);
-
-    // find longest project name for padding.
-    int length = 0;
-    for (int ii = 0; ii < projects.length; ii++){
-      String name = projects[ii].getName();
-      if(name.length() > length){
-        length = name.length();
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
+    for(IProject project : projects){
+      if(project.exists()){
+        HashMap<String,Object> result = new HashMap<String,Object>();
+        result.put("name", project.getName());
+        result.put("path", ProjectUtils.getPath(project));
+        result.put("open", project.isOpen());
+        results.add(result);
       }
     }
-
-    for(int ii = 0; ii < projects.length; ii++){
-      if(projects[ii].exists()){
-        StringBuffer info = new StringBuffer()
-          .append(StringUtils.rightPad(projects[ii].getName(), length))
-          .append(" - ")
-          .append(projects[ii].isOpen() ? open : closed)
-          .append(" - ")
-          .append(ProjectUtils.getPath(projects[ii]));
-        results.add(info.toString());
-      }
-    }
-    return StringUtils.join(results, '\n');
+    return results;
   }
 }

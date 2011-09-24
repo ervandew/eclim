@@ -387,7 +387,23 @@ function! eclim#project#util#ProjectInfo(project)
   let command = substitute(s:command_project_info, '<project>', project, '')
   let port = eclim#project#util#GetProjectPort(project)
   let result = eclim#ExecuteEclim(command, port)
-  if result != '0'
+  if type(result) == g:DICT_TYPE
+    let output =
+        \ 'Name:      ' . result.name . "\n" .
+        \ 'Path:      ' . result.path . "\n" .
+        \ 'Workspace: ' . result.workspace . "\n" .
+        \ 'Open:      ' . (result.open ? 'true' : 'false')
+    if has_key(result, 'natures')
+      let output .= "\n" . 'Natures:   ' . join(result.natures, ', ')
+    endif
+    if has_key(result, 'depends')
+      let output .= "\n" . 'Depends On: ' . join(result.depends, ', ')
+    endif
+    if has_key(result, 'referenced')
+      let output .= "\n" . 'Referenced By: ' . join(result.referenced, ', ')
+    endif
+    call eclim#util#Echo(output)
+  elseif type(result) == g:STRING_TYPE
     call eclim#util#Echo(result)
   endif
 endfunction " }}}
@@ -469,14 +485,28 @@ function! eclim#project#util#ProjectList(workspace)
   endif
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
-  let projects = split(eclim#ExecuteEclim(s:command_project_list, port), '\n')
+  let projects = eclim#ExecuteEclim(s:command_project_list, port)
   if len(projects) == 0
     call eclim#util#Echo("No projects.")
   endif
-  if len(projects) == 1 && projects[0] == '0'
+  if type(projects) != g:LIST_TYPE
     return
   endif
-  call eclim#util#Echo(join(projects, "\n"))
+
+  let pad = 0
+  for project in projects
+    let pad = len(project.name) > pad ? len(project.name) : pad
+  endfor
+
+  let output = []
+  for project in projects
+    call add(output,
+      \ eclim#util#Pad(project.name, pad) . ' - ' .
+      \ (project.open ? ' open ' : 'closed') . ' - ' .
+      \ project.path)
+  endfor
+
+  call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
 " ProjectNatures(project) {{{
@@ -486,13 +516,16 @@ function! eclim#project#util#ProjectNatures(project)
   if a:project != ''
     let command .= ' -p "' . a:project . '"'
     let port = eclim#project#util#GetProjectPort(a:project)
-    let projects = split(eclim#ExecuteEclim(command, port), '\n')
+    let projects = eclim#ExecuteEclim(command, port)
+    if type(projects) != g:LIST_TYPE
+      return
+    endif
   else
     let projects = []
     for workspace in eclim#eclipse#GetAllWorkspaceDirs()
       let port = eclim#client#nailgun#GetNgPort(workspace)
-      let results = split(eclim#ExecuteEclim(command, port), '\n')
-      if len(results) == 1 && results[0] == '0'
+      let results = eclim#ExecuteEclim(command, port)
+      if type(results) != g:LIST_TYPE
         continue
       endif
       let projects += results
@@ -502,11 +535,18 @@ function! eclim#project#util#ProjectNatures(project)
   if len(projects) == 0
     call eclim#util#Echo("No projects.")
   endif
-  if len(projects) == 1 && projects[0] == '0'
-    return
-  endif
 
-  call eclim#util#Echo(join(projects, "\n"))
+  let pad = 0
+  for project in projects
+    let pad = len(project.name) > pad ? len(project.name) : pad
+  endfor
+
+  let output = []
+  for project in projects
+    call add(output,
+      \ eclim#util#Pad(project.name, pad) . ' - ' . join(project.natures, ', '))
+  endfor
+  call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
 " ProjectNatureModify(command, args) {{{
@@ -844,17 +884,17 @@ function! eclim#project#util#GetProjectNames(...)
     let command = s:command_project_list . ' -n ' . a:1
     for workspace in eclim#eclipse#GetAllWorkspaceDirs()
       let port = eclim#client#nailgun#GetNgPort(workspace)
-      let results = split(eclim#ExecuteEclim(command, port), '\n')
-      if len(results) == 1 && results[0] == '0'
+      let results = eclim#ExecuteEclim(command, port)
+      if type(results) != g:LIST_TYPE
         continue
       endif
       let projects += results
     endfor
 
-    call map(projects, "substitute(v:val, '\\(.\\{-}\\)\\s\\+-\\s\\+.*', '\\1', '')")
-
+    call map(projects, "v:val.name")
     return projects
   endif
+
   let names = map(eclim#project#util#GetProjects(), 'v:val.name')
   call sort(names)
   return names
@@ -874,8 +914,8 @@ function! eclim#project#util#GetProjectNatureAliases(...)
     return aliases
   endif
 
-  let aliases = split(eclim#ExecuteEclim(s:command_nature_aliases), '\n')
-  if len(aliases) == 1 && aliases[0] == '0'
+  let aliases = eclim#ExecuteEclim(s:command_nature_aliases)
+  if type(aliases) != g:LIST_TYPE
     return []
   endif
 

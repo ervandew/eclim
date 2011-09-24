@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.command.project;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -55,22 +56,12 @@ public class ProjectNaturesCommand
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
 
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
+
     // list all projects.
     if(name == null){
-      ArrayList<String> results = new ArrayList<String>();
-
       IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-
-      // find longest project name for padding.
-      int length = 0;
-      for(IProject project : projects){
-        if (project.isOpen()){
-          name = project.getName();
-          if(name.length() > length){
-            length = name.length();
-          }
-        }
-      }
 
       for(IProject project : projects){
         if (project.isOpen()){
@@ -78,24 +69,25 @@ public class ProjectNaturesCommand
           if (aliases.length == 0){
             aliases = new String[]{"none"};
           }
-          StringBuffer info = new StringBuffer()
-            .append(StringUtils.rightPad(project.getName(), length))
-            .append(" - ")
-            .append(StringUtils.join(aliases, ' '));
-          results.add(info.toString());
+          HashMap<String,Object> result = new HashMap<String,Object>();
+          result.put("name", project.getName());
+          result.put("natures", aliases);
+          results.add(result);
         }
       }
-
-      return StringUtils.join(
-          (String[])results.toArray(new String[results.size()]), '\n');
+    }else{
+      // list for requested project.
+      String[] aliases = ProjectNatureFactory.getProjectNatureAliases(
+          ProjectUtils.getProject(name));
+      if (aliases.length == 0){
+        aliases = new String[]{"none"};
+      }
+      HashMap<String,Object> result = new HashMap<String,Object>();
+      result.put("name", name);
+      result.put("natures", aliases);
+      results.add(result);
     }
 
-    // list for requested project.
-    String[] aliases = ProjectNatureFactory.getProjectNatureAliases(
-        ProjectUtils.getProject(name));
-    if (aliases.length == 0){
-      aliases = new String[]{"none"};
-    }
-    return name + " - " + StringUtils.join(aliases, ' ');
+    return results;
   }
 }

@@ -188,12 +188,15 @@ public class Eclim
    * @param name The project name.
    * @return The project path.
    */
+  @SuppressWarnings("unchecked")
   public static String getProjectPath(String name)
   {
-    String[] results = StringUtils.split(
-        execute(new String[]{"project_info", "-p", name}), '\n');
-    if (results.length >= 2 && results[1].startsWith("Path: ")){
-      return results[1].substring(6);
+    Object result = execute(new String[]{"project_info", "-p", name});
+    if (result instanceof Map) {
+      Map<String,String> info = (Map<String,String>)result;
+      if (info.containsKey("path")){
+        return info.get("path");
+      }
     }
     return null;
   }
