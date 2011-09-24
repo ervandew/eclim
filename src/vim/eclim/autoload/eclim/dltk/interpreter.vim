@@ -32,13 +32,12 @@
 function eclim#dltk#interpreter#GetInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
-  let interpreters = split(eclim#ExecuteEclim(command), '\n')
-  if len(interpreters) == 0 || (len(interpreters) == 1 && interpreters[0] == '0')
+  let interpreters = eclim#ExecuteEclim(command)
+  if type(interpreters) != g:LIST_TYPE || len(interpreters) == 0
     return []
   endif
 
-  call filter(interpreters, 'v:val =~ ".* - "')
-  call map(interpreters, 'substitute(v:val, "\s*.\\{-} - \\(.*\\)", "\\1", "")')
+  call map(interpreters, 'v:val.path')
   return interpreters
 endfunction " }}}
 
@@ -46,15 +45,37 @@ endfunction " }}}
 function eclim#dltk#interpreter#ListInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
-  let interpreters = split(eclim#ExecuteEclim(command), '\n')
+  let interpreters = eclim#ExecuteEclim(command)
+  if type(interpreters) != g:LIST_TYPE
+    return
+  endif
   if len(interpreters) == 0
     call eclim#util#Echo("No interpreters.")
   endif
-  if len(interpreters) == 1 && interpreters[0] == '0'
-    return
-  endif
-  let result = substitute(join(interpreters, "\n"), "\t", '  ', 'g')
-  call eclim#util#Echo(result)
+
+  let pad = 0
+  for interpreter in interpreters
+    if interpreter.default
+      let interpreter.name .= ' (default)'
+    endif
+    let pad = len(interpreter.name) > pad ? len(interpreter.name) : pad
+  endfor
+
+  let output = []
+  let nature = ''
+  for interpreter in interpreters
+    if interpreter.nature != nature
+      let nature = interpreter.nature
+      call add(output, 'Nature: ' . interpreter.nature)
+    endif
+    let name = interpreter.name
+    if interpreter.default
+      let name .= ' (default)'
+    endif
+    let name = eclim#util#Pad(interpreter.name, pad)
+    call add(output, '  ' . name . ' - ' . interpreter.path)
+  endfor
+  call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
 " AddInterpreter(nature, type, path) {{{

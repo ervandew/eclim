@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -68,7 +66,7 @@ public class BuildpathsCommand
     HashSet<IScriptProject> visited = new HashSet<IScriptProject>();
 
     collect(scriptProject, paths, visited);
-    return StringUtils.join(paths.iterator(), "\n");
+    return paths;
   }
 
   private void collect(

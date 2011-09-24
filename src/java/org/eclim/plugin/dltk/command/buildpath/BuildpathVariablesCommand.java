@@ -54,6 +54,6 @@ public class BuildpathVariablesCommand
         results.add(variable);
       }
     }
-    return BuildpathVariablesFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

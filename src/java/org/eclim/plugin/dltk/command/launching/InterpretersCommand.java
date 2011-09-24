@@ -17,6 +17,7 @@
 package org.eclim.plugin.dltk.command.launching;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclim.Services;
 
@@ -32,8 +33,6 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.dltk.util.DltkUtils;
-
-import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -94,21 +93,18 @@ public class InterpretersCommand
       env = EnvironmentManager.getLocalEnvironment();
     }
 
-    StringBuffer result = new StringBuffer();
-
+    ArrayList<HashMap<String,Object>> interpreters =
+      new ArrayList<HashMap<String,Object>>();
     for (String natureId : natures){
-      ArrayList<IInterpreterInstall> interpreters =
-        new ArrayList<IInterpreterInstall>();
-
       IInterpreterInstall deflt =
         ScriptRuntime.getDefaultInterpreterInstall(
             new ScriptRuntime.DefaultInterpreterEntry(natureId, env.getId()));
-
-      int length = 0;
-
-      if (deflt != null){
-        length = deflt.getName().length() + 10;
-      }
+      HashMap<String,Object> defaultInt = new HashMap<String,Object>();
+      defaultInt.put("nature", ProjectNatureFactory.getAliasForNature(natureId));
+      defaultInt.put("name", deflt.getName());
+      defaultInt.put("path", deflt.getInstallLocation().getPath().toOSString());
+      defaultInt.put("default", true);
+      interpreters.add(defaultInt);
 
       IInterpreterInstallType[] types =
         ScriptRuntime.getInterpreterInstallTypes(natureId);
@@ -117,38 +113,16 @@ public class InterpretersCommand
         IInterpreterInstall[] installs = type.getInterpreterInstalls();
         for (IInterpreterInstall install : installs){
           if (!install.equals(deflt)){
-            interpreters.add(install);
-            if (install.getName().length() > length){
-              length = install.getName().length();
-            }
+            HashMap<String,Object> inter = new HashMap<String,Object>();
+            inter.put("nature", ProjectNatureFactory.getAliasForNature(natureId));
+            inter.put("name", install.getName());
+            inter.put("path", install.getInstallLocation().getPath().toOSString());
+            inter.put("default", false);
+            interpreters.add(inter);
           }
         }
       }
-
-      if (result.length() > 0){
-        result.append('\n');
-      }
-
-      if (deflt != null || interpreters.size() > 0){
-        result.append("Nature: ")
-          .append(ProjectNatureFactory.getAliasForNature(natureId));
-        if (deflt != null){
-          result
-            .append("\n\t")
-            .append(StringUtils.rightPad(deflt.getName() + " (default)", length))
-            .append(" - ")
-            .append(deflt.getInstallLocation().getPath().toOSString());
-        }
-
-        for (IInterpreterInstall interpreter : interpreters){
-          result.append("\n\t");
-          result
-            .append(StringUtils.rightPad(interpreter.getName(), length))
-            .append(" - ")
-            .append(interpreter.getInstallLocation().getPath().toOSString());
-        }
-      }
     }
-    return result.toString();
+    return interpreters;
   }
 }
