@@ -54,7 +54,7 @@ function! eclim#project#tree#ProjectTree(...)
     let names = [name]
 
   " list of project names supplied
-  elseif type(a:000[0]) == 3
+  elseif type(a:000[0]) == g:LIST_TYPE
     let names = a:000[0]
     if len(names) == 1 && (names[0] == '0' || names[0] == '')
       return

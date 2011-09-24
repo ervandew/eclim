@@ -46,7 +46,7 @@ function! eclim#project#problems#Problems(project, open)
   let command = substitute(command, '<project>', project, '')
   let result = eclim#ExecuteEclim(command)
   let errors = []
-  if type(result) == 3 && len(result) > 0
+  if type(result) == g:LIST_TYPE && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
       \ result, g:EclimValidateSortResults)
   endif

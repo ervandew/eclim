@@ -50,7 +50,7 @@ function! eclim#java#ivy#UpdateClasspath()
   let command = substitute(command, '<build>', escape(expand('%:p'), '\'), '')
   let result = eclim#ExecuteEclim(command)
 
-  if type(result) == 3 && len(result) > 0
+  if type(result) == g:LIST_TYPE && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
       \ result, g:EclimValidateSortResults)
     call eclim#util#SetLocationList(errors, 'r')

@@ -84,7 +84,7 @@ endfunction " }}}
 " GetExisting()
 function! eclim#display#signs#UnplaceAll(list)
   for sign in a:list
-    if type(sign) == 4
+    if type(sign) == g:DICT_TYPE
       call eclim#display#signs#Unplace(sign['id'])
     else
       call eclim#display#signs#Unplace(sign)

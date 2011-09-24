@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 " Retrieves the file containing the license text.
 function! eclim#common#license#GetLicense()
   let file = eclim#project#util#GetProjectSetting('org.eclim.project.copyright')
-  if type(file) == 0
+  if type(file) == g:NUMBER_TYPE
     return
   elseif file == ''
     call eclim#util#EchoWarning(
@@ -51,7 +51,7 @@ endfunction " }}}
 " Returns the license as a list of strings.
 function! eclim#common#license#License(pre, post, mid)
   let file = eclim#common#license#GetLicense()
-  if type(file) == 0 && file == 0
+  if type(file) == g:NUMBER_TYPE && file == 0
     return ''
   endif
 

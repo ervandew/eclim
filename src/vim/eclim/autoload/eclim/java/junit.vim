@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ function! eclim#java#junit#JUnitExecute(test)
   endif
 
   let command = eclim#project#util#GetProjectSetting("org.eclim.java.junit.command")
-  if type(command) == 0
+  if type(command) == g:NUMBER_TYPE
     return
   endif
 
@@ -171,7 +171,7 @@ endfunction " }}}
 " GetResultsDir() {{{
 function s:GetResultsDir()
   let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
-  if type(path) == 0
+  if type(path) == g:NUMBER_TYPE
     return
   endif
 

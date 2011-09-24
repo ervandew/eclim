@@ -53,7 +53,7 @@ function! eclim#xml#validate#Validate(on_save, ...)
     endif
 
     let result = eclim#ExecuteEclim(command)
-    if type(result) == 3 && len(result) > 0
+    if type(result) == g:LIST_TYPE && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
         \ result, g:EclimValidateSortResults)
       call eclim#util#SetLocationList(errors)

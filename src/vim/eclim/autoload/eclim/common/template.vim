@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -216,7 +216,7 @@ endfunction " }}}
 " Process <vim:username/> tags.
 function! s:Process_username(line)
   silent! let username = eclim#project#util#GetProjectSetting('org.eclim.user.name')
-  if type(username) == 0
+  if type(username) == g:NUMBER_TYPE
     let username = ''
   endif
   return s:Out(a:line, '<vim:username\s*\/>', username)
@@ -224,7 +224,7 @@ endfunction " }}}
 
 " s:Out(line, pattern, value) {{{
 function! s:Out(line, pattern, value)
-  let results = type(a:value) == 3 ? a:value : [a:value]
+  let results = type(a:value) == g:LIST_TYPE ? a:value : [a:value]
   if results[0] == '' && a:line =~ '^\s*' . a:pattern . '\s*$'
     return []
   endif

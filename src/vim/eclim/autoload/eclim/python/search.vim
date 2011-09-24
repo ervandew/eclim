@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ function! eclim#python#search#Find(context)
 
   let results =
     \ eclim#python#rope#Find(project, file, offset, encoding, a:context)
-  if type(results) == 0 && results == 0
+  if type(results) == g:NUMBER_TYPE && results == 0
     call eclim#util#SetLocationList([])
     return
   endif

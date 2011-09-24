@@ -463,7 +463,7 @@ endfunction " }}}
 " Focuses the window containing the supplied buffer name or buffer number.
 " Returns 1 if the window was found, 0 otherwise.
 function! eclim#util#GoToBufferWindow(buf)
-  if type(a:buf) == 0
+  if type(a:buf) == g:NUMBER_TYPE
     let winnr = bufwinnr(a:buf)
   else
     let name = eclim#util#EscapeBufferName(a:buf)
@@ -531,13 +531,14 @@ endfunction " }}}
 " To determine element equality both '==' and 'is' are tried as well as
 " ^element$ to support a regex supplied element string.
 function! eclim#util#ListContains(list, element)
-  let string = type(a:element) == 1 ? a:element : escape(string(a:element), '\')
+  let string = type(a:element) == g:STRING_TYPE ?
+    \ a:element : escape(string(a:element), '\')
   for element in a:list
     if element is a:element ||
         \ (type(element) == type(a:element) && element == a:element)
       return 1
     else
-      let estring = type(element) == 1 ? element : string(element)
+      let estring = type(element) == g:STRING_TYPE ? element : string(element)
       if estring =~ '^' . string . '$'
         return 1
       endif
@@ -721,7 +722,7 @@ function! eclim#util#ParseLocationEntries(entries, ...)
     let dict = s:ParseLocationEntry(entry)
 
     " partition by severity
-    if type(entries) == 4 " dictionary
+    if type(entries) == g:DICT_TYPE
       " empty key not allowed
       let type = dict.type == '' ? ' ' : tolower(dict.type)
       if !has_key(entries, type)
@@ -736,7 +737,7 @@ function! eclim#util#ParseLocationEntries(entries, ...)
   endfor
 
   " re-assemble severity partitioned results
-  if type(entries) == 4 " dictionary
+  if type(entries) == g:DICT_TYPE
     let results = []
     if has_key(entries, 'e')
       let results += remove(entries, 'e')
@@ -763,7 +764,7 @@ endfunction " }}}
 " s:ParseLocationEntry(entry) {{{
 function! s:ParseLocationEntry(entry)
   let entry = a:entry
-  if type(entry) == 4
+  if type(entry) == g:DICT_TYPE
     let file = entry.filename
     let line = entry.line
     let col = entry.column

@@ -37,7 +37,7 @@ let s:entry_text_with{'testng'} = ''
 " ResolveQuickfixResults(frameworks) {{{
 " Invoked after a :make to resolve any junit results in the quickfix entries.
 function! eclim#java#test#ResolveQuickfixResults(frameworks)
-  let frameworks = type(a:frameworks) == 3 ? a:frameworks : [a:frameworks]
+  let frameworks = type(a:frameworks) == g:LIST_TYPE ? a:frameworks : [a:frameworks]
   let entries = getqflist()
   let newentries = []
   for entry in entries
@@ -87,7 +87,7 @@ endfunction " }}}
 function! eclim#java#test#GetTestSrcDir(type)
   let setting = "org.eclim.java." . a:type . ".src_dir"
   let path = eclim#project#util#GetProjectSetting(setting)
-  if type(path) == 0
+  if type(path) == g:NUMBER_TYPE
     return
   endif
 

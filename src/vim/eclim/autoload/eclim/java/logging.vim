@@ -60,7 +60,7 @@ endfunction " }}}
 function! s:InitLoggingSettings()
   let s:EclimLoggingImpl =
     \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
-  if type(s:EclimLoggingImpl) == 0 || s:EclimLoggingImpl == '0'
+  if type(s:EclimLoggingImpl) == g:NUMBER_TYPE || s:EclimLoggingImpl == '0'
     unlet s:EclimLoggingImpl
     return
   endif
@@ -86,7 +86,7 @@ function! s:InitLoggingSettings()
     let s:logger_imports = ["java.util.logging.Logger"]
   elseif s:EclimLoggingImpl == "custom"
     let name = eclim#project#util#GetProjectSetting("org.eclim.java.logging.template")
-    if type(name) == 0 || name == ''
+    if type(name) == g:NUMBER_TYPE || name == ''
       return
     endif
     let template = eclim#UserHome() . '/.eclim/resources/jdt/templates/' . name
