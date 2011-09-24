@@ -171,8 +171,10 @@ function! eclim#PingEclim(echo, ...)
     endif
 
     let result = eclim#ExecuteEclim(s:command_ping, port)
-    if result != '0'
-      call eclim#util#Echo(result)
+    if type(result) == g:DICT_TYPE
+      call eclim#util#Echo(
+        \ 'eclim   ' . result.eclim . "\n" .
+        \ 'eclipse ' . result.eclipse)
     endif
   else
     if !workspace_found
@@ -189,7 +191,7 @@ function! eclim#PingEclim(echo, ...)
     let g:EclimShowErrors = savedErr
     let g:EclimLogLevel = savedLog
 
-    return result != '0'
+    return type(result) == g:DICT_TYPE
   endif
 endfunction " }}}
 

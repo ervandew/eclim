@@ -16,8 +16,13 @@
  */
 package org.eclim.plugin.core.command.history;
 
+import java.text.SimpleDateFormat;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 
 import org.eclim.annotation.Command;
 
@@ -28,6 +33,8 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclim.util.StringUtils;
+
 import org.eclipse.core.internal.resources.File;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -35,6 +42,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.team.core.history.IFileRevision;
 
 import org.eclipse.team.internal.core.history.LocalFileHistory;
+
+import org.joda.time.Period;
 
 /**
  * Command to list available local history revisions for a given file.
@@ -50,6 +59,9 @@ import org.eclipse.team.internal.core.history.LocalFileHistory;
 public class HistoryListCommand
   extends AbstractCommand
 {
+  private static final SimpleDateFormat DATE_FORMATTER =
+    new SimpleDateFormat("HH:mm EEE MMM dd yyyy");
+
   /**
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
@@ -71,6 +83,68 @@ public class HistoryListCommand
       }
     });
 
-    return HistoryListFilter.instance.filter(commandLine, revisions);
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
+    for (IFileRevision revision: revisions){
+      HashMap<String,Object> result = new HashMap<String,Object>();
+      result.put("timestamp", String.valueOf(revision.getTimestamp()));
+      result.put("datetime",
+          DATE_FORMATTER.format(new Date(revision.getTimestamp())));
+      result.put("delta", delta(revision.getTimestamp()));
+      results.add(result);
+    }
+
+    return results;
+  }
+
+  private String delta(long time)
+  {
+    // FIXME: a formatter can probably do this.
+    Period period = new Period(time, System.currentTimeMillis());
+    ArrayList<String> parts = new ArrayList<String>();
+
+    int years = period.getYears();
+    if(years > 0){
+      parts.add(years + " year" + (years == 1 ? "" : "s"));
+    }
+
+    int months = period.getMonths();
+    if(months > 0){
+      parts.add(months + " month" + (months == 1 ? "" : "s"));
+    }
+
+    int weeks = period.getWeeks();
+    if(weeks > 0){
+      parts.add(weeks + " week" + (weeks == 1 ? "" : "s"));
+    }
+
+    int days = period.getDays();
+    if(days > 0){
+      parts.add(days + " day" + (days == 1 ? "" : "s"));
+    }
+
+    int hours = period.getHours();
+    if(hours > 0){
+      parts.add(hours + " hour" + (hours == 1 ? "" : "s"));
+    }
+
+    int minutes = period.getMinutes();
+    if(minutes > 0){
+      parts.add(minutes + " minute" + (minutes == 1 ? "" : "s"));
+    }
+
+    int seconds = period.getSeconds();
+    if(seconds > 0){
+      parts.add(seconds + " second" + (seconds == 1 ? "" : "s"));
+    }
+
+    if(parts.size() == 0){
+      int millis = period.getMillis();
+      if(millis > 0){
+        parts.add(millis + " millis");
+      }
+    }
+
+    return StringUtils.join(parts.toArray(), ' ') + " ago";
   }
 }

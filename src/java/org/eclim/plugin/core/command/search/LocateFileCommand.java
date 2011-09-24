@@ -44,8 +44,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.util.StringUtils;
-
 import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
@@ -97,7 +95,7 @@ public class LocateFileCommand
     FilePathComparator comparator =
       new FilePathComparator(pattern, projectName);
     Collections.sort(results, comparator);
-    return StringUtils.join(results, '\n');
+    return results;
   }
 
   private List<Result> executeLocateFromFileList(
@@ -113,7 +111,7 @@ public class LocateFileCommand
       String line = null;
       while ((line = reader.readLine()) != null){
         if (matcher.reset(line).find()){
-          results.add(new Result(FileUtils.getBaseName(line), line, line, null));
+          results.add(new Result(FileUtils.getBaseName(line), line, null, null));
         }
       }
     }finally{
@@ -161,37 +159,28 @@ public class LocateFileCommand
   private static class Result
   {
     public String name;
+    public String path;
+    public String project;
     public String projectPath;
-    public String realPath;
-    public String projectName;
 
     /**
      * Constructs a new instance.
      *
-     * @param name The name for this instance.
-     * @param projectPath The projectPath for this instance.
-     * @param realPath The realPath for this instance.
-     * @param projectName The projectName for this instance.
+     * @param name The name of the file.
+     * @param path The absolute path of the file.
+     * @param project The name of the project the file is in.
+     * @param projectPath The path of the file in the project.
      */
     public Result(
         String name,
-        String projectPath,
-        String realPath,
-        String projectName)
+        String path,
+        String project,
+        String projectPath)
     {
       this.name = name;
+      this.path = path;
+      this.project = project;
       this.projectPath = projectPath;
-      this.realPath = realPath;
-      this.projectName = projectName;
-    }
-
-    public String toString()
-    {
-      return new StringBuffer()
-        .append(name).append('|')
-        .append(projectPath).append('|')
-        .append(realPath)
-        .toString();
     }
   }
 
@@ -291,7 +280,7 @@ public class LocateFileCommand
           String path = raw.toOSString().replace('\\', '/');
           Result entry = new Result(
               FileUtils.getBaseName(rel),
-              rel, path, resource.getProject().getName());
+              path, resource.getProject().getName(), rel);
           if (!seen.contains(path)){
             results.add(entry);
             seen.add(path);
@@ -344,15 +333,15 @@ public class LocateFileCommand
 
     public double score(Result result)
     {
-      String path = result.projectPath;
+      String path = result.projectPath != null ? result.projectPath : result.path;
       if (this.scores.containsKey(path)){
         return this.scores.get(path);
       }
       double score = 0 - this.distance.score(this.pattern, path);
 
       // weight files in the current project more favorably
-      if (projectName != null){
-        if (result.projectName.equals(projectName)){
+      if (projectName != null && result.project != null){
+        if (result.project.equals(projectName)){
           score -= score * .1;
         }
       }

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -63,12 +63,11 @@ function! eclim#common#history#History()
   let command = s:command_list
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let result = eclim#ExecuteEclim(command)
-  if result == "0"
+  let history = eclim#ExecuteEclim(command)
+  if type(history) != g:LIST_TYPE
     return
   endif
 
-  let history = eval(result)
   let lines = [file]
   let revisions = [0]
   let indent = eclim#util#GetIndent(1)

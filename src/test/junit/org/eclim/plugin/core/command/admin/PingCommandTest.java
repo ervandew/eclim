@@ -16,7 +16,7 @@
  */
 package org.eclim.plugin.core.command.admin;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -35,12 +35,13 @@ public class PingCommandTest
    * Test the command.
    */
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
-    String[] result = StringUtils.split(
-        (String)Eclim.execute(new String[]{"ping"}), '\n');
+    Map<String,String> result = (Map<String,String>)
+        Eclim.execute(new String[]{"ping"});
     assertEquals("Unexpected result",
-        "eclim   " + System.getProperty("eclim.version"), result[0]);
-    assertTrue("Unexpected result", result[1].startsWith("eclipse 3."));
+        System.getProperty("eclim.version"), result.get("eclim"));
+    assertTrue("Unexpected result", result.get("eclipse").startsWith("3."));
   }
 }

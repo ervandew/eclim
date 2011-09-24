@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.core.command.eclipse;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -55,23 +58,16 @@ public class JobsCommand
     IJobManager manager = Job.getJobManager();
     Job[] jobs = manager.find(family);
 
-    StringBuffer buffer = new StringBuffer();
-    int maxlength = 0;
-    for (Job job : jobs){
-      int length = job.toString().length();
-      if(length > maxlength){
-        maxlength = length;
-      }
-    }
+    ArrayList<HashMap<String,String>> results =
+      new ArrayList<HashMap<String,String>>();
 
     for (Job job : jobs){
-      if(buffer.length() > 0){
-        buffer.append('\n');
-      }
-      buffer.append(StringUtils.rightPad(job.toString(), maxlength))
-        .append(" - ").append(getStatus(job));
+      HashMap<String,String> result = new HashMap<String,String>();
+      result.put("job", job.toString());
+      result.put("status", getStatus(job));
+      results.add(result);
     }
-    return buffer.toString();
+    return results;
   }
 
   private Object getFamily(String name)

@@ -20,7 +20,9 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
-import java.util.regex.Matcher;
+import java.util.List;
+import java.util.Map;
+
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
@@ -37,27 +39,30 @@ import static org.junit.Assert.*;
 public class HistoryCommandTest
 {
   private static final String TEST_FILE = "history/sample.txt";
-  private static final String ENTRY =
-    "\\{'timestamp': '(\\d+)'," +
-    "'datetime': '\\d\\d:\\d\\d \\w{3} \\w{3} \\d{2} \\d{4}'," +
-    "'delta': '(\\d+ (millis|seconds?|minutes?) ){1,}ago'\\}";
+  private static final Pattern ENTRY_TIMESTAMP = Pattern.compile("\\d+");
+  private static final Pattern ENTRY_DATETIME =
+    Pattern.compile("\\d\\d:\\d\\d \\w{3} \\w{3} \\d{2} \\d{4}");
+  private static final Pattern ENTRY_DELTA =
+    Pattern.compile("(\\d+ (millis|seconds?|minutes?) ){1,}ago");
 
   /**
    * Test the command.
    */
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
     throws Exception
   {
     String result = (String)Eclim.execute(new String[]{
       "history_clear", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
-    assertEquals("Wrong result.", result, "History Cleared.");
+    assertEquals(result, "History Cleared.");
 
-    result = (String)Eclim.execute(new String[]{
-      "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
-    });
-    assertEquals("Wrong result.", result, "[]");
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      });
+    assertEquals(0, results.size());
 
     assertEquals("Wrong file contents.",
         Eclim.fileToString(Eclim.TEST_PROJECT, TEST_FILE), "line 1\n");
@@ -88,23 +93,22 @@ public class HistoryCommandTest
       "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
     });
 
-    result = (String)Eclim.execute(new String[]{
-      "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
-    });
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      });
 
-    Pattern pattern = Pattern.compile("^\\[" + ENTRY + "," + ENTRY + "\\]$");
-    Matcher matcher = pattern.matcher(result);
-    assertTrue("Wrong result.", matcher.matches());
+    assertEquals(2, results.size());
 
-    pattern = Pattern.compile(ENTRY);
-    matcher = pattern.matcher(result);
-    matcher.find();
-    matcher.find();
-    String ts = matcher.group(1);
-    System.out.println(ts);
+    for (Map<String,Object> entry : results){
+      assertTrue(ENTRY_TIMESTAMP.matcher(entry.get("timestamp").toString()).matches());
+      assertTrue(ENTRY_DATETIME.matcher(entry.get("datetime").toString()).matches());
+      assertTrue(ENTRY_DELTA.matcher(entry.get("delta").toString()).matches());
+    }
 
     result = (String)Eclim.execute(new String[]{
-      "history_revision", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE, "-r", ts
+      "history_revision", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
+      "-r", results.get(1).get("timestamp").toString()
     });
     assertEquals("Wrong result.", result, "line 1\n");
   }
