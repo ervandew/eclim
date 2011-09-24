@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -50,24 +50,6 @@ function! TestSettings()
   call vunit#AssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")
   close
-endfunction " }}}
-
-" TestCommandCompleteScriptRevision() {{{
-function! TestCommandCompleteScriptRevision()
-  let results = eclim#CommandCompleteScriptRevision(
-    \ 'eclim/autoload/ec', 'PatchEclim eclim/autoload/ec', 28)
-  call vunit#AssertEquals(2, len(results), "Wrong number of completions.")
-  call vunit#AssertEquals('eclim/autoload/eclim/', results[0],
-    \ "Wrong first completion.")
-  call vunit#AssertEquals('eclim/autoload/eclim.vim', results[1],
-    \ "Wrong second completion.")
-
-"  let results = eclim#CommandCompleteScriptRevision(
-"    \ 'eclim/autoload/eclim.vim 59', 'PatchEclim eclim/autoload/eclim.vim 59', 38)
-"  call vunit#AssertTrue(len(results) > 0, "Insuficient number of completions.")
-"  for result in results
-"    call vunit#AssertTrue(result =~ '^59', "Invalid completion: '" . result . "'")
-"  endfor
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

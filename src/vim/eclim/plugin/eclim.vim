@@ -142,10 +142,6 @@ if !exists(":EclimSettings")
   command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
     \ EclimSettings :call eclim#Settings('<args>')
 endif
-if !exists(":PatchEclim")
-  command -nargs=+ -complete=customlist,eclim#CommandCompleteScriptRevision
-    \ PatchEclim :call eclim#PatchEclim(<f-args>)
-endif
 if !exists(":EclimDisable")
   command EclimDisable :call eclim#Disable()
 endif
