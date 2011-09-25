@@ -16,7 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.classpath;
 
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -28,19 +30,19 @@ import static org.junit.Assert.*;
 
 public class ClasspathVariableCommandsTest
 {
-  private static final String TEST_VARIABLE = "/tmp";
-  private static final String TEST_PATH = "ECLIM_UNIT_TEST_VARIABLE";
-  private static final Pattern VARIABLE_PATTERN =
-    Pattern.compile(TEST_VARIABLE + "\\s+-");
+  private static final String TEST_VARIABLE = "ECLIM_UNIT_TEST_VARIABLE";
+  private static final String TEST_PATH = "/tmp";
 
   @Test
   public void createVariable()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
+    Eclim.execute(new String[]{
+      "java_classpath_variable_delete", "-n", TEST_VARIABLE});
     assertFalse("Variable already exists.", variableExists());
 
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "java_classpath_variable_create", "-n", TEST_VARIABLE, "-p", TEST_PATH});
 
     assertTrue("Variable not created.", variableExists());
@@ -53,7 +55,7 @@ public class ClasspathVariableCommandsTest
         Eclim.projectExists(Jdt.TEST_PROJECT));
     assertTrue("Variable does not exist.", variableExists());
 
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "java_classpath_variable_delete", "-n", TEST_VARIABLE});
 
     assertFalse("Variable not deleted.", variableExists());
@@ -64,10 +66,15 @@ public class ClasspathVariableCommandsTest
    *
    * @return true if the variable exists, false otherwise.
    */
+  @SuppressWarnings("unchecked")
   private boolean variableExists()
   {
-    String list = (String)Eclim.execute(new String[]{"java_classpath_variables"});
+    List<Map<String,String>> list = (List<Map<String,String>>)
+      Eclim.execute(new String[]{"java_classpath_variables"});
 
-    return VARIABLE_PATTERN.matcher(list).find();
+    Map<String,String> var = new HashMap<String,String>();
+    var.put("name", TEST_VARIABLE);
+    var.put("path", TEST_PATH);
+    return list.contains(var);
   }
 }

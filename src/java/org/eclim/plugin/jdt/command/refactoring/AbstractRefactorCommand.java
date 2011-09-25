@@ -16,10 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.refactoring;
 
-import java.io.StringWriter;
-import java.io.Writer;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclim.command.CommandLine;
@@ -30,8 +28,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.core.project.ProjectManagement;
 
 import org.eclim.plugin.core.util.ProjectUtils;
-
-import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -108,11 +104,29 @@ public abstract class AbstractRefactorCommand
           return previewChange(change, commandLine.getValue("d"));
         }
 
-        StringWriter writer = new StringWriter();
-        writer.write(StringUtils.join(commandLine.getArgs(), ','));
-        writer.write('\n');
-        previewChanges(change, writer);
-        return writer.toString();
+        HashMap<String,Object> preview = new HashMap<String,Object>();
+        String previewOpt = "-" + PREVIEW_OPTION;
+        String[] args = commandLine.getArgs();
+        StringBuffer apply = new StringBuffer();
+        for (String arg : args){
+          if (arg.equals(previewOpt)){
+            continue;
+          }
+          if (apply.length() > 0){
+            apply.append(' ');
+          }
+          if (arg.startsWith("-")){
+            apply.append(arg);
+          }else{
+            apply.append('"').append(arg).append('"');
+          }
+        }
+        // the command to apply the change minus the editor + pretty options.
+        preview.put("apply", apply.toString()
+            .replaceFirst("-" + Options.EDITOR_OPTION + "\\s\"\\w+\" ", "")
+            .replaceFirst("-" + Options.PRETTY_OPTION + ' ', ""));
+        preview.put("changes", previewChanges(change));
+        return preview;
       }
 
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -125,7 +139,7 @@ public abstract class AbstractRefactorCommand
             RefactoringCore.getUndoManager(), refactoring.getName());
 
         changeOperation.run(new SubProgressMonitor(monitor, 4));
-        return getChangedFilesOutput();
+        return getChangedFiles();
       }finally{
         workspace.removeResourceChangeListener(rcl);
       }
@@ -145,22 +159,16 @@ public abstract class AbstractRefactorCommand
     throws Exception;
 
   /**
-   * Builds an output string containing the list of changed files for
-   * consumption by the client.
+   * Builds a list of changed files.
    *
-   * The format is as follows:
-   * <pre>
-   * files:
-   * /the/first/file/file1.txt
-   * /the/second/file/file2.txt
-   * </pre>
-   *
-   * @return The changed files output string.
+   * @return The list of changed files.
    */
-  public String getChangedFilesOutput()
+  protected ArrayList<HashMap<String,String>> getChangedFiles()
     throws Exception
   {
-    StringBuffer changed = new StringBuffer();
+    ArrayList<HashMap<String,String>> results =
+      new ArrayList<HashMap<String,String>>();
+
     for (IResourceDelta delta : listener.get().getResourceDeltas()){
       int flags = delta.getFlags();
       // the moved_from entry should handle this
@@ -168,40 +176,49 @@ public abstract class AbstractRefactorCommand
         continue;
       }
 
-      if (changed.length() > 0){
-        changed.append('\n');
-      }
+      HashMap<String,String> result = new HashMap<String,String>();
 
       IResource resource = delta.getResource();
+      String file = resource.getRawLocation().toOSString().replace('\\', '/');
+
       if ((flags & IResourceDelta.MOVED_FROM) != 0){
         String path = ProjectUtils.getFilePath(
-            resource.getProject(), delta.getMovedFromPath().toOSString());
-        changed.append(path).append(" -> ");
+            resource.getProject(),
+            delta.getMovedFromPath().toOSString());
+        result.put("from", path);
+        result.put("to", file);
+      }else{
+        result.put("file", file);
       }
-
-      changed.append(resource.getRawLocation().toOSString().replace('\\', '/'));
+      results.add(result);
     }
-    return "files:\n" + changed.toString();
+    return results;
   }
 
-  private void previewChanges(Change change, Writer writer)
+  private ArrayList<HashMap<String,String>> previewChanges(Change change)
     throws Exception
   {
+    ArrayList<HashMap<String,String>> results =
+      new ArrayList<HashMap<String,String>>();
+
     if (change instanceof CompositeChange){
       for (Change c : ((CompositeChange)change).getChildren()){
-        previewChanges(c, writer);
+        results.addAll(previewChanges(c));
       }
     }else{
+      HashMap<String,String> result = new HashMap<String,String>();
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
-        writer.write("diff: ");
-        writer.write(text.getFile().getRawLocation().toOSString().replace('\\', '/'));
+        result.put("type", "diff");
+        result.put("file",
+            text.getFile().getRawLocation().toOSString().replace('\\', '/'));
       }else{
-        writer.write("other: ");
-        writer.write(change.toString());
+        result.put("type", "other");
+        result.put("message", change.toString());
       }
-      writer.write('\n');
+      results.add(result);
     }
+    return results;
   }
 
   private String previewChange(Change change, String file)

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -58,26 +58,35 @@ endfunction " }}}
 " GetVariableNames() {{{
 " Gets a list of all variable names.
 function! eclim#java#classpath#GetVariableNames()
-  let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
-  return map(variables, "substitute(v:val, '\\(.\\{-}\\)\\s.*', '\\1', '')")
+  let variables = eclim#ExecuteEclim(s:command_variables)
+  if type(variables) != g:LIST_TYPE
+    return []
+  endif
+  return map(variables, "v:val.name")
 endfunction " }}}
 
 " VariableList() {{{
 " Lists all the variables currently available.
 function! eclim#java#classpath#VariableList()
-  let variables = split(eclim#ExecuteEclim(s:command_variables), '\n')
+  let variables = eclim#ExecuteEclim(s:command_variables)
+  if type(variables) != g:LIST_TYPE
+    return
+  endif
   if len(variables) == 0
     call eclim#util#Echo("No variables.")
   endif
-  if len(variables) == 1 && variables[0] == '0'
-    return
-  endif
-  exec "echohl " . g:EclimInfoHighlight
-  redraw
+
+  let pad = 0
   for variable in variables
-    echom variable
+    let pad = len(variable.name) > pad ? len(variable.name) : pad
   endfor
- echohl None
+
+  let output = []
+  for variable in variables
+    call add(output, eclim#util#Pad(variable.name, pad) . ' - ' . variable.path)
+  endfor
+
+  call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
 " VariableCreate(name, path) {{{
@@ -124,21 +133,19 @@ endfunction " }}}
 " CommandCompleteVarPath(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for classpath var relative files.
 function! eclim#java#classpath#CommandCompleteVarPath(argLead, cmdLine, cursorPos)
-  let vars = split(eclim#ExecuteEclim(s:command_variables), '\n')
-
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
+  let vars = eclim#ExecuteEclim(s:command_variables)
+
   " just the variable name
   if argLead !~ '/'
     let var_names = deepcopy(vars)
-    call filter(var_names, 'v:val =~ "^' . argLead . '"')
+    call filter(var_names, 'v:val.name =~ "^' . argLead . '"')
     if len(var_names) > 0
       call map(var_names,
-        \ "isdirectory(substitute(v:val, '.\\{-}\\s\\+- \\(.*\\)', '\\1', '')) ? " .
-        \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '') . '/' : " .
-        \ "substitute(v:val, '\\(.\\{-}\\)\\s\\+-.*', '\\1', '')")
+        \ "isdirectory(v:val.path) ? v:val.name . '/' : v:val.name")
     endif
     return var_names
   endif
@@ -147,8 +154,8 @@ function! eclim#java#classpath#CommandCompleteVarPath(argLead, cmdLine, cursorPo
   let var = substitute(argLead, '\(.\{-}\)/.*', '\1', '')
   let var_dir = ""
   for cv in vars
-    if cv =~ '^' . var
-      let var_dir = substitute(cv, '.\{-}\s\+- \(.*\)', '\1', '')
+    if cv.name =~ '^' . var
+      let var_dir = cv.path
       break
     endif
   endfor

@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
@@ -32,18 +35,27 @@ import static org.junit.Assert.*;
 public class ImportCommandTest
 {
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
+    List<String> results = (List<String>)Eclim.execute(new String[]{
       "java_import", "-n", Jdt.TEST_PROJECT, "-p", "List"
     });
 
     // remove any com.sun entries
-    result = result.replaceAll("com\\.sun.*?\n", "");
+    List<String> imports = new ArrayList<String>();
+    for (String imprt : results){
+      if (imprt.matches("com\\.sun.*?")){
+        continue;
+      }
+      imports.add(imprt);
+    }
 
-    assertEquals("Wrong results", "java.awt.List\njava.util.List", result);
+    assertEquals(2, imports.size());
+    assertEquals("java.awt.List", imports.get(0));
+    assertEquals("java.util.List", imports.get(1));
   }
 }

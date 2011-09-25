@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.junit;
 
+import java.util.List;
+import java.util.Map;
+
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
@@ -37,133 +40,61 @@ public class JUnitImplCommandTest
     "src/org/eclim/test/junit/SomeClassTest.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-b", "org.eclim.test.junit.SomeClass"
-    });
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_junit_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-b", "org.eclim.test.junit.SomeClass"
+      });
 
-    String valid =
-      "org.eclim.test.junit.SomeClassTest\n" +
-      "\n" +
-      "package org.eclim.test.junit;\n" +
-      "public class SomeClass {\n" +
-      "\tpublic void aMethod()\n" +
-      "\tpublic void aMethod(String name)\n" +
-      "\tpublic void anotherMethod(int id)\n" +
-      "}\n" +
-      "\n" +
-      "package java.util;\n" +
-      "public interface Comparator<String> {\n" +
-      "\tpublic abstract int compare(String o1, String o2)\n" +
-      "\tpublic abstract boolean equals(Object obj)\n" +
-      "}\n" +
-      "\n" +
-      "package java.lang;\n" +
-      "public class Object {\n" +
-      "\tpublic Object()\n" +
-      "\tpublic int hashCode()\n" +
-      "\tpublic boolean equals(Object obj)\n" +
-      "\tprotected Object clone()\n" +
-      "\t\tthrows CloneNotSupportedException\n" +
-      "\tpublic String toString()\n" +
-      "\tprotected void finalize()\n" +
-      "\t\tthrows Throwable\n" +
-      "}";
+    assertEquals("org.eclim.test.junit.SomeClassTest", result.get("type"));
 
-    assertEquals("Wrong results.", valid, result);
+    List<Map<String,Object>> types =
+      (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals(3, types.size());
 
-    result = (String)Eclim.execute(new String[]{
-      "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-b", "org.eclim.test.junit.SomeClass",
-      "-t", "org.eclim.test.junit.SomeClassTest",
-      "-s", "org.eclim.test.junit.SomeClass",
-      "-m", "aMethod(String)"
-    });
+    assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
+    assertEquals("public class SomeClass", types.get(0).get("signature"));
+    List<Map<String,Object>> methods =
+      (List<Map<String,Object>>)types.get(0).get("methods");
+    assertEquals("public void aMethod()", methods.get(0).get("signature"));
+    assertEquals(false, methods.get(0).get("implemented"));
+    assertEquals("public void aMethod(String name)", methods.get(1).get("signature"));
+    assertEquals(false, methods.get(1).get("implemented"));
+    assertEquals("public void anotherMethod(int id)", methods.get(2).get("signature"));
+    assertEquals(false, methods.get(2).get("implemented"));
 
-    valid =
-      "org.eclim.test.junit.SomeClassTest\n" +
-      "\n" +
-      "package org.eclim.test.junit;\n" +
-      "public class SomeClass {\n" +
-      "\t//public void aMethod()\n" +
-      "\t//public void aMethod(String name)\n" +
-      "\tpublic void anotherMethod(int id)\n" +
-      "}\n" +
-      "\n" +
-      "package java.util;\n" +
-      "public interface Comparator<String> {\n" +
-      "\tpublic abstract int compare(String o1, String o2)\n" +
-      "\tpublic abstract boolean equals(Object obj)\n" +
-      "}\n" +
-      "\n" +
-      "package java.lang;\n" +
-      "public class Object {\n" +
-      "\tpublic Object()\n" +
-      "\tpublic int hashCode()\n" +
-      "\tpublic boolean equals(Object obj)\n" +
-      "\tprotected Object clone()\n" +
-      "\t\tthrows CloneNotSupportedException\n" +
-      "\tpublic String toString()\n" +
-      "\tprotected void finalize()\n" +
-      "\t\tthrows Throwable\n" +
-      "}";
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_junit_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-b", "org.eclim.test.junit.SomeClass",
+        "-t", "org.eclim.test.junit.SomeClassTest",
+        "-s", "org.eclim.test.junit.SomeClass",
+        "-m", "aMethod(String)"
+      });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
         Pattern.compile("@Test\n\\s+public void aMethod\\(\\)")
         .matcher(contents).find());
 
-    assertEquals("Wrong results.", valid, result);
+    types = (List<Map<String,Object>>)result.get("superTypes");
 
-    result = (String)Eclim.execute(new String[]{
-      "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-b", "org.eclim.test.junit.SomeClass",
-      "-t", "org.eclim.test.junit.SomeClassTest",
-      "-s", "java.util.Comparator%3CString%3E",
-      "-m", "compare(String,String)"
-    });
-
-    valid =
-      "org.eclim.test.junit.SomeClassTest\n" +
-      "\n" +
-      "package org.eclim.test.junit;\n" +
-      "public class SomeClass {\n" +
-      "\t//public void aMethod()\n" +
-      "\t//public void aMethod(String name)\n" +
-      "\tpublic void anotherMethod(int id)\n" +
-      "}\n" +
-      "\n" +
-      "package java.util;\n" +
-      "public interface Comparator<String> {\n" +
-      "\t//public abstract int compare(String o1, String o2)\n" +
-      "\tpublic abstract boolean equals(Object obj)\n" +
-      "}\n" +
-      "\n" +
-      "package java.lang;\n" +
-      "public class Object {\n" +
-      "\tpublic Object()\n" +
-      "\tpublic int hashCode()\n" +
-      "\tpublic boolean equals(Object obj)\n" +
-      "\tprotected Object clone()\n" +
-      "\t\tthrows CloneNotSupportedException\n" +
-      "\tpublic String toString()\n" +
-      "\tprotected void finalize()\n" +
-      "\t\tthrows Throwable\n" +
-      "}";
-
-    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertTrue("Method not found or invalid.",
-        Pattern.compile("@Test\n\\s+public void compare\\(\\)")
-        .matcher(contents).find());
-
-    assertEquals("Wrong results.", valid, result);
+    assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
+    assertEquals("public class SomeClass", types.get(0).get("signature"));
+    methods = (List<Map<String,Object>>)types.get(0).get("methods");
+    assertEquals("public void aMethod()", methods.get(0).get("signature"));
+    assertEquals(true, methods.get(0).get("implemented"));
+    assertEquals("public void aMethod(String name)", methods.get(1).get("signature"));
+    assertEquals(true, methods.get(1).get("implemented"));
+    assertEquals("public void anotherMethod(int id)", methods.get(2).get("signature"));
+    assertEquals(false, methods.get(2).get("implemented"));
   }
 }

@@ -93,6 +93,6 @@ public class ImportMissingCommand
       results.add(new ImportMissingResult(type, findImport(project, type)));
     }
 
-    return ImportMissingFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

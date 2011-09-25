@@ -146,13 +146,46 @@ function! eclim#java#junit#JUnitImplWindow(command)
   let workspace = eclim#project#util#GetProjectWorkspace(project)
   let port = eclim#client#nailgun#GetNgPort(workspace)
 
-  if eclim#util#TempWindowCommand(a:command, name, port)
-    setlocal ft=java
-    call eclim#java#impl#ImplWindowFolding()
-
-    nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
-    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
+  let result = eclim#ExecuteEclim(a:command, port)
+  if type(result) != g:DICT_TYPE
+    return
   endif
+
+  let content = [result.type]
+  let notfound = []
+  for super in result.superTypes
+    if !super.exists
+      call add(notfound, super)
+      continue
+    endif
+
+    call add(content, '')
+    call add(content, 'package ' . super.packageName . ';')
+    call add(content, super.signature . ' {')
+    for method in super.methods
+      if method.implemented
+        let method.signature = '//' . method.signature
+      endif
+      call add(content, "\t" . method.signature)
+    endfor
+    call add(content, '}')
+  endfor
+
+  if len(notfound)
+    call add(content, '')
+    call add(content, '// The following types were not found, either because they were not')
+    call add(content, '// imported or they were not found in the classpath:')
+  endif
+  for super in notfound
+    call add(content, '// ' . super.signature)
+  endfor
+
+  call eclim#util#TempWindow(name, content, {'preserveCursor': 1})
+  setlocal ft=java
+  call eclim#java#impl#ImplWindowFolding()
+
+  nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
+  vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
 endfunction " }}}
 
 " AddTestImpl(visual) {{{

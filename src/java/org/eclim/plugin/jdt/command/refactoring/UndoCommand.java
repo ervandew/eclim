@@ -57,7 +57,7 @@ public class UndoCommand
         return manager.peekUndoName();
       }
       manager.performUndo(null, null);
-    return super.getChangedFilesOutput();
+      return super.getChangedFiles();
     }finally{
       workspace.removeResourceChangeListener(rcl);
     }

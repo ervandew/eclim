@@ -136,26 +136,28 @@ endfunction " }}}
 " s:Preview(command) {{{
 function s:Preview(command)
   let result = eclim#ExecuteEclim(a:command)
-  if result == "0"
+  if type(result) != g:DICT_TYPE && type(result) != g:STRING_TYPE
     return
   endif
 
-  if result !~ '^-\(command\|editor\)'
+  if type(result) == g:STRING_TYPE
     call eclim#util#Echo(result)
     return
   endif
 
-  let lines = split(result, "\n")
-  let command = lines[0]
-  let lines = lines[1:]
+  let lines = []
+  for change in result.changes
+    if change.type == 'diff'
+      call add(lines, '|diff|: ' . change.file)
+    else
+      call add(lines, change.type . ': ' . change.message)
+    endif
+  endfor
 
-  " normalize the lines a bit
-  call map(lines, 'substitute(v:val, "^other:", " other:", "")')
-  call map(lines, 'substitute(v:val, "^diff:", "|diff|:", "")')
   call add(lines, '')
   call add(lines, '|Execute Refactoring|')
   call eclim#util#TempWindow('[Refactor Preview]', lines)
-  let b:refactor_command = command
+  let b:refactor_command = result.apply
 
   set ft=refactor_preview
   hi link RefactorLabel Identifier
@@ -170,9 +172,7 @@ endfunction " }}}
 function s:PreviewLink()
   let line = getline('.')
   if line =~ '^|'
-    let args = split(b:refactor_command, ',')
-    call map(args, 'substitute(v:val, "^\\([^-].*\\)", "\"\\1\"", "")')
-    let command = join(args)
+    let command = b:refactor_command
 
     let winend = winnr('$')
     let winnum = 1
@@ -186,7 +186,6 @@ function s:PreviewLink()
     endwhile
 
     if line == '|Execute Refactoring|'
-      let command = substitute(command, '\s*-v', '', '')
       call s:Refactor(command)
       let winnr = b:winnr
       close
@@ -196,10 +195,10 @@ function s:PreviewLink()
 
     elseif line =~ '^|diff|'
       let file = substitute(line, '^|diff|:\s*', '', '')
-      let command .= ' -d "' . file . '"'
+      let command .= ' -v -d "' . file . '"'
 
-      let result = eclim#ExecuteEclim(command)
-      if result == "0"
+      let diff = eclim#ExecuteEclim(command)
+      if type(diff) != g:STRING_TYPE
         return
       endif
 
@@ -225,7 +224,7 @@ function s:PreviewLink()
       let orien = g:EclimRefactorDiffOrientation == 'horizontal' ? '' : 'vertical'
       exec printf('silent below %s split %s.new.%s', orien, name, ext)
       silent 1,$delete _ " counter-act any templating plugin
-      call append(1, split(result, "\n"))
+      call append(1, split(diff, "\n"))
       let b:refactor_preview_diff = 1
       silent 1,1delete _
       setlocal readonly nomodifiable
@@ -259,30 +258,31 @@ function s:Refactor(command)
     exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
 
     let result = eclim#ExecuteEclim(a:command)
-    if result == "0"
+    if type(result) != g:LIST_TYPE && type(result) != g:STRING_TYPE
       return
     endif
 
-    if result !~ '^files:'
+    if type(result) == g:STRING_TYPE
       call eclim#util#Echo(result)
       return
     endif
 
     " reload affected files.
-    let files = split(result, "\n")[1:]
     let curwin = winnr()
     try
-      for file in files
-        let file = substitute(file, '\', '/', 'g')
+      for info in result
         let newfile = ''
         " handle file renames
-        if file =~ '\s->\s'
-          let newfile = substitute(file, '.*->\s*', '', '')
+        if has_key(info, 'to')
+          let file = info.from
+          let newfile = info.to
           if has('win32unix')
             let newfile = eclim#cygwin#CygwinPath(newfile)
           endif
-          let file = substitute(file, '\s*->.*', '', '')
+        else
+          let file = info.file
         endif
+
         if has('win32unix')
           let file = eclim#cygwin#CygwinPath(file)
         endif

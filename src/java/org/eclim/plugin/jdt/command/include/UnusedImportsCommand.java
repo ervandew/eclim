@@ -67,6 +67,6 @@ public class UnusedImportsCommand
         results.add(element.getElementName());
       }
     }
-    return UnusedImportsFilter.instance.filter(commandLine, results);
+    return results;
   }
 }

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -66,7 +66,10 @@ function! eclim#java#import#Import()
   let command = s:command_import
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<classname>', classname, '')
-  let results = split(eclim#ExecuteEclim(command), '\n')
+  let results = eclim#ExecuteEclim(command)
+  if type(results) != g:LIST_TYPE
+    return
+  endif
 
   " filter the list if the user has any exclude patterns
   if exists("g:EclimJavaImportExclude")
@@ -121,12 +124,11 @@ function! eclim#java#import#ImportMissing()
   let command = s:command_import_missing
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let result = eclim#ExecuteEclim(command)
-  if result == "0"
+  let results = eclim#ExecuteEclim(command)
+  if type(results) != g:LIST_TYPE
     return
   endif
 
-  let results = eval(result)
   for info in results
     let type = info.type
     let imports = info.imports
@@ -316,8 +318,8 @@ function! eclim#java#import#CleanImports()
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
 
-    let results = split(eclim#ExecuteEclim(command), '\n')
-    if len(results) == 1 && results[0] == '0'
+    let results = eclim#ExecuteEclim(command)
+    if type(results) != g:LIST_TYPE
       return
     endif
 
@@ -401,10 +403,10 @@ function! s:InitImportOrder()
   let command = s:command_import_order
   let command = substitute(command, '<project>', project, '')
   let result = eclim#ExecuteEclim(command)
-  if result == "0"
+  if type(result) != g:LIST_TYPE
     return
   endif
-  let s:import_order = split(result, "\n")
+  let s:import_order = result
 endfunction " }}}
 
 " s:CutImports() {{{

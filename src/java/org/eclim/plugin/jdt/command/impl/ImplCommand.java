@@ -153,8 +153,8 @@ public class ImplCommand
       }
       type = TypeUtils.getType(src, offset);
     }
-    ImplResult result = executeGetMethods(commandLine, type);
-    return ImplFilter.instance.filter(commandLine, result);
+
+    return executeGetMethods(commandLine, type);
   }
 
   /**

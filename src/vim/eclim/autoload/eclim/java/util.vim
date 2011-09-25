@@ -385,14 +385,37 @@ endfunction " }}}
 " ListInstalls() {{{
 " Lists all installed jdks/jres.
 function! eclim#java#util#ListInstalls()
-  let installs = split(eclim#ExecuteEclim(s:command_list_installs), '\n')
+  let installs = eclim#ExecuteEclim(s:command_list_installs)
+  if type(installs) != g:LIST_TYPE
+    return
+  endif
   if len(installs) == 0
     call eclim#util#Echo("No jdk/jre installs found.")
   endif
-  if len(installs) == 1 && installs[0] == '0'
-    return
-  endif
-  call eclim#util#Echo(join(installs, "\n"))
+
+  let pad = 0
+  for install in installs
+    let name = install.name . ' ' . install.version
+    if install.default
+      let name .= ' (default)'
+    endif
+    let pad = len(name) > pad ? len(name) : pad
+  endfor
+
+  let output = []
+  let type = ''
+  for install in installs
+    if install.type != type
+      let type = install.type
+      call add(output, 'Type: ' . install.type)
+    endif
+    let name = install.name . ' ' . install.version
+    if install.default
+      let name .= ' (default)'
+    endif
+    call add(output, '  ' . eclim#util#Pad(name, pad) . ' - ' . install.dir)
+  endfor
+  call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
 " ReadClassPrototype() {{{

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import java.util.List;
 public class ImportMissingResult
 {
   private String type;
-  private List<ImportResult> imports;
+  private List<String> imports;
 
   /**
    * Constructs a new instance.
@@ -35,7 +35,7 @@ public class ImportMissingResult
    * @param type The type for this instance.
    * @param imports The imports for this instance.
    */
-  public ImportMissingResult(String type, List<ImportResult> imports)
+  public ImportMissingResult(String type, List<String> imports)
   {
     this.type = type;
     this.imports = imports;
@@ -56,7 +56,7 @@ public class ImportMissingResult
    *
    * @return The imports.
    */
-  public List<ImportResult> getImports()
+  public List<String> getImports()
   {
     return this.imports;
   }

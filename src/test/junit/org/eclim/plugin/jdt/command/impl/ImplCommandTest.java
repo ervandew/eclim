@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
@@ -39,112 +42,140 @@ public class ImplCommandTest
     "src/org/eclim/test/impl/TestSubImpl.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "83", "-e", "utf-8"
-    });
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "83", "-e", "utf-8"
+      });
 
-    assertTrue("Wrong first line.",
-        result.startsWith("org.eclim.test.impl.TestImpl"));
-    assertTrue("Interface not in results.",
-        result.indexOf(
-          "package java.util;\npublic interface Comparator<String> {") != -1);
-    assertTrue("Interface not in results.",
-        result.indexOf(
-          "package java.util;\npublic interface Map<Integer,String> {") != -1);
-    assertTrue("Class not in results.",
-        result.indexOf(
-          "package java.util;\npublic class HashMap<Integer,String> {") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract int compare(String o1, String o2)") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract String put(Integer key, String value)") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract Set<Integer> keySet()") != -1);
+    assertEquals("org.eclim.test.impl.TestImpl", result.get("type"));
 
-    result = (String)Eclim.execute(new String[]{
-      "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-t", "org.eclim.test.impl.TestImpl",
-      "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
-    });
+    List<Map<String,Object>> superTypes =
+      (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals(7, superTypes.size());
+
+    assertEquals("java.util", superTypes.get(0).get("packageName"));
+    assertEquals("public interface Comparator<String>",
+        superTypes.get(0).get("signature"));
+    assertEquals("public abstract int compare(String o1, String o2)",
+        ((List<Map<String,Object>>)
+         superTypes.get(0).get("methods")).get(0).get("signature"));
+    assertEquals("public abstract boolean equals(Object obj)",
+        ((List<Map<String,Object>>)
+         superTypes.get(0).get("methods")).get(1).get("signature"));
+
+    assertEquals("java.util", superTypes.get(1).get("packageName"));
+    assertEquals("public interface Map<Integer,String>",
+        superTypes.get(1).get("signature"));
+
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-t", "org.eclim.test.impl.TestImpl",
+        "-s", "java.util.Map%3CInteger,String%3E", "-m", "put(Integer,String)"
+      });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
         Pattern.compile("public String put\\(Integer key, String value\\)")
         .matcher(contents).find());
 
-    assertTrue("Method not commented out in results.",
-        result.indexOf(
-          "//public abstract String put(Integer key, String value)") != -1);
+    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals("java.util", superTypes.get(1).get("packageName"));
+    assertEquals("public interface Map<Integer,String>",
+        superTypes.get(1).get("signature"));
+    Map<String,Object> map = superTypes.get(1);
+    Map<String,Object> put = null;
+    for (Map<String,Object> m : (List<Map<String,Object>>)map.get("methods")){
+      if (m.get("signature").equals("public abstract String put(Integer key, String value)")){
+        put = m;
+        break;
+      }
+    }
+    assertNotNull(put);
+    assertEquals(true, put.get("implemented"));
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void executeSub()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_SUB_FILE,
-      "-o", "83", "-e", "utf-8"
-    });
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_SUB_FILE,
+        "-o", "83", "-e", "utf-8"
+      });
 
-    assertTrue("Wrong first line.",
-        result.startsWith("org.eclim.test.impl.TestSubImpl"));
-    assertTrue("Interface not in results.",
-        result.indexOf(
-          "package java.util;\npublic interface Comparator<String> {") != -1);
-    assertTrue("Interface not in results.",
-        result.indexOf(
-          "package java.util;\npublic interface Map<Integer,String> {") != -1);
-    assertTrue("Class not in results.",
-        result.indexOf(
-          "package java.util;\npublic class HashMap<Integer,String> {") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract int compare(String o1, String o2)") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract String put(Integer key, String value)") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract Set<Integer> keySet()") != -1);
+    assertEquals("org.eclim.test.impl.TestSubImpl", result.get("type"));
 
-    result = (String)Eclim.execute(new String[]{
-      "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_SUB_FILE,
-      "-t", "org.eclim.test.impl.TestSubImpl",
-      "-s", "java.util.HashMap%3CInteger,String%3E", "-m", "put(Integer,String)"
-    });
+    List<Map<String,Object>> superTypes =
+      (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals("java.util", superTypes.get(0).get("packageName"));
+    assertEquals("public interface Comparator<String>",
+        superTypes.get(0).get("signature"));
+
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_SUB_FILE,
+        "-t", "org.eclim.test.impl.TestSubImpl",
+        "-s", "java.util.Map%3CInteger,String%3E", "-m", "put(Integer,String)"
+      });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUB_FILE);
     assertTrue("Method not found or invalid.",
         Pattern.compile("public String put\\(Integer key, String value\\)")
         .matcher(contents).find());
 
-    assertTrue("Method not commented out in results.",
-        result.indexOf(
-          "//public abstract String put(Integer key, String value)") != -1);
+    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals("java.util", superTypes.get(1).get("packageName"));
+    assertEquals("public interface Map<Integer,String>",
+        superTypes.get(1).get("signature"));
+    Map<String,Object> map = superTypes.get(1);
+    Map<String,Object> put = null;
+    for (Map<String,Object> m : (List<Map<String,Object>>)map.get("methods")){
+      if (m.get("signature").equals("public abstract String put(Integer key, String value)")){
+        put = m;
+        break;
+      }
+    }
+    assertNotNull(put);
+    assertEquals(true, put.get("implemented"));
 
-    result = (String)Eclim.execute(new String[]{
-      "java_impl", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_SUB_FILE,
-      "-t", "org.eclim.test.impl.TestSubImpl",
-      "-s", "java.util.Comparator%3CString%3E", "-m", "compare(String,String)"
-    });
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_SUB_FILE,
+        "-t", "org.eclim.test.impl.TestSubImpl",
+        "-s", "java.util.Comparator%3CString%3E", "-m", "compare(String,String)"
+      });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUB_FILE);
     assertTrue("Method not found or invalid.",
         Pattern.compile("public int compare\\(String o1, String o2\\)")
         .matcher(contents).find());
 
-    assertTrue("Method not commented out in results.",
-        result.indexOf(
-          "//public abstract int compare(String o1, String o2)") != -1);
+    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals("java.util", superTypes.get(0).get("packageName"));
+    assertEquals("public interface Comparator<String>",
+        superTypes.get(0).get("signature"));
+    assertEquals("public abstract int compare(String o1, String o2)",
+        ((List<Map<String,Object>>)
+         superTypes.get(0).get("methods")).get(0).get("signature"));
+    assertEquals(true,
+        ((List<Map<String,Object>>)
+         superTypes.get(0).get("methods")).get(0).get("implemented"));
   }
 }

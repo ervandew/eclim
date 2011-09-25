@@ -57,7 +57,7 @@ public class RedoCommand
         return manager.peekUndoName();
       }
       manager.performRedo(null, null);
-      return super.getChangedFilesOutput();
+      return super.getChangedFiles();
     }finally{
       workspace.removeResourceChangeListener(rcl);
     }

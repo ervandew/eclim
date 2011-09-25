@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.command.include;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclim.annotation.Command;
@@ -65,16 +66,17 @@ public class ImportCommand
     String project = commandLine.getValue(Options.NAME_OPTION);
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
 
-    List<ImportResult> results =
+    List<String> results =
       findImport(JavaUtils.getJavaProject(project), pattern);
 
-    return ImportFilter.instance.filter(commandLine, results);
+    Collections.sort(results);
+    return results;
   }
 
-  protected List<ImportResult> findImport(IJavaProject project, String pattern)
+  protected List<String> findImport(IJavaProject project, String pattern)
     throws Exception
   {
-    ArrayList<ImportResult> results = new ArrayList<ImportResult>();
+    ArrayList<String> results = new ArrayList<String>();
     SearchPattern searchPattern =
       SearchPattern.createPattern(pattern,
           IJavaSearchConstants.TYPE,
@@ -88,11 +90,9 @@ public class ImportCommand
         Position result = createPosition(match);
         IType element = (IType)match.getElement();
         if(Flags.isPublic(element.getFlags())){
-          ImportResult ir = new ImportResult(
-              result.getMessage().replace('$', '.'),
-              element.getElementType());
-          if(!results.contains(ir)){
-            results.add(ir);
+          String imprt = result.getMessage().replace('$', '.');
+          if(!results.contains(imprt)){
+            results.add(imprt);
           }
         }
       }

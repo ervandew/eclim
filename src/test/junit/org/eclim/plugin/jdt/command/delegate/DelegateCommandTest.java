@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.delegate;
 
+import java.util.List;
+import java.util.Map;
+
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
@@ -37,38 +40,43 @@ public class DelegateCommandTest
     "src/org/eclim/test/delegate/TestDelegate.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_delegate", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-o", "124", "-e", "utf-8"
-    });
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_delegate", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "124", "-e", "utf-8"
+      });
 
-    // handle difference between 1.5 and 1.6
-    result = result.replaceAll("Double \\w\\b", "Double o");
+    assertEquals("org.eclim.test.delegate.TestDelegate", result.get("type"));
 
-    assertTrue("Wrong first line.",
-        result.startsWith("org.eclim.test.delegate.TestDelegate"));
-    assertTrue("Interface not in results.",
-        result.indexOf("package java.util;\npublic interface List<Double> {") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract Iterator<Double> iterator()") != -1);
-    assertTrue("Method not in results.",
-        result.indexOf("\tpublic abstract boolean add(Double o)") != -1);
+    List<Map<String,Object>> types =
+      (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals(4, types.size());
 
-    result = (String)Eclim.execute(new String[]{
-      "java_delegate", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "124", "-e", "utf-8",
-      "-t", "org.eclim.test.delegate.TestDelegate",
-      "-s", "java.util.List%3CDouble%3E", "-m", "add(Double)"
-    });
+    assertEquals("java.util", types.get(0).get("packageName"));
+    assertEquals("public interface List<Double>",
+        types.get(0).get("signature"));
 
-    // handle difference between 1.5 and 1.6
-    result = result.replaceAll("Double \\w\\b", "Double o");
+    assertEquals("public abstract Iterator<Double> iterator()",
+        ((List<Map<String,Object>>)
+         types.get(0).get("methods")).get(3).get("signature"));
+    assertEquals("public abstract boolean add(Double e)",
+        ((List<Map<String,Object>>)
+         types.get(0).get("methods")).get(6).get("signature"));
+
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_delegate", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE, "-o", "124", "-e", "utf-8",
+        "-t", "org.eclim.test.delegate.TestDelegate",
+        "-s", "java.util.List%3CDouble%3E", "-m", "add(Double)"
+      });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
@@ -76,7 +84,12 @@ public class DelegateCommandTest
           "\treturn list.add\\(\\w\\);")
         .matcher(contents).find());
 
-    assertTrue("Method not commented out in results.",
-        result.indexOf("//public abstract boolean add(Double o)") != -1);
+    types = (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals("public abstract boolean add(Double e)",
+        ((List<Map<String,Object>>)
+         types.get(0).get("methods")).get(6).get("signature"));
+    assertEquals(true,
+        ((List<Map<String,Object>>)
+         types.get(0).get("methods")).get(6).get("implemented"));
   }
 }

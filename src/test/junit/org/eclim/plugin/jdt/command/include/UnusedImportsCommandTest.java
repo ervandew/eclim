@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
+import java.util.List;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
@@ -35,17 +37,20 @@ public class UnusedImportsCommandTest
     "src/org/eclim/test/include/TestUnusedImport.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
+    List<String> results = (List<String>)Eclim.execute(new String[]{
       "java_imports_unused", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE
     });
 
-    assertEquals("Wrong results",
-        "java.lang.Math.PI\njava.util.ArrayList\njava.util.List", result);
+    assertEquals(3, results.size());
+    assertEquals("java.lang.Math.PI", results.get(0));
+    assertEquals("java.util.ArrayList", results.get(1));
+    assertEquals("java.util.List", results.get(2));
   }
 }

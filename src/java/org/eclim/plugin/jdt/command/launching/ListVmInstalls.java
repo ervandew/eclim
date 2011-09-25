@@ -1,5 +1,8 @@
 package org.eclim.plugin.jdt.command.launching;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -27,33 +30,29 @@ public class ListVmInstalls
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    StringBuffer result = new StringBuffer();
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
+
     AbstractVMInstall defaultInstall =
       (AbstractVMInstall)JavaRuntime.getDefaultVMInstall();
-    if (defaultInstall != null){
-      result.append("default: ")
-        .append(defaultInstall.getInstallLocation()).append('\n');
-    }
 
     IVMInstallType[] types = JavaRuntime.getVMInstallTypes();
     for (IVMInstallType type : types){
       IVMInstall[] installs = type.getVMInstalls();
       if (installs.length > 0){
-        result.append("type: ").append(type.getName()).append('\n');
         for (IVMInstall iinstall : installs){
           AbstractVMInstall install = (AbstractVMInstall)iinstall;
-          result.append("     name: ").append(install.getName()).append('\n');
-          result.append("      dir: ")
-            .append(install.getInstallLocation()).append('\n');
-          result.append("  version: ")
-            .append(install.getJavaVersion()).append('\n');
-          String args = install.getVMArgs();
-          if (args != null){
-            result.append("     args: ").append(args).append('\n');
-          }
+          HashMap<String,Object> result = new HashMap<String,Object>();
+          results.add(result);
+          result.put("type", type.getName());
+          result.put("name", install.getName());
+          result.put("dir", install.getInstallLocation().getPath());
+          result.put("version", install.getJavaVersion());
+          result.put("args", install.getVMArgs());
+          result.put("default", install.equals(defaultInstall));
         }
       }
     }
-    return result.toString();
+    return results;
   }
 }

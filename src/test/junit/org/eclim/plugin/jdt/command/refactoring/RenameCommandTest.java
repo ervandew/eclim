@@ -18,6 +18,9 @@ package org.eclim.plugin.jdt.command.refactoring;
 
 import java.io.File;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
@@ -34,6 +37,7 @@ import static org.junit.Assert.*;
 public class RenameCommandTest
 {
   @Test
+  @SuppressWarnings("unchecked")
   public void executeRenameField()
     throws Exception
   {
@@ -54,19 +58,29 @@ public class RenameCommandTest
     assertTrue("print of 'FOO' not found", tn2Contents.indexOf(
           "System.out.println(FOO);") > 0);
 
-    // preview
-    String result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-      "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8", "-v",
-    });
-    assertEquals("Wrong preview results", result,
-        "-pretty,-command,java_refactor_rename,-p,eclim_unit_test_java,-f,src/org/eclim/test/refactoring/rename/n1/TestN1.java,-n,BAR,-o,98,-l,3,-e,utf-8,-v\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\n");
+    Map<String,Object> preview = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8", "-v",
+      });
+    assertEquals(
+        "-command \"java_refactor_rename\" " +
+        "-p \"eclim_unit_test_java\" " +
+        "-f \"src/org/eclim/test/refactoring/rename/n1/TestN1.java\" " +
+        "-n \"BAR\" -o \"98\" -l \"3\" -e \"utf-8\"", preview.get("apply"));
+    List<Map<String,String>> changes =
+      (List<Map<String,String>>)preview.get("changes");
+    assertEquals(2, changes.size());
+    assertEquals("diff", changes.get(0).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        changes.get(0).get("file"));
+    assertEquals("diff", changes.get(1).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        changes.get(1).get("file"));
 
     // preview diff
-    result = (String)Eclim.execute(new String[]{
+    String diff = (String)Eclim.execute(new String[]{
       "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
       "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
       "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8", "-v",
@@ -74,29 +88,31 @@ public class RenameCommandTest
       "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java"),
     });
     assertEquals("Wrong diff results",
-        tn2Contents.replaceAll("FOO", "BAR"), result);
+        tn2Contents.replaceAll("FOO", "BAR"), diff);
 
     // rename
-    result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-      "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8",
-    });
+    List<Map<String,String>> result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8",
+      });
 
-    assertEquals("Wrong rename results",
-        "files:\n" +
-        p + "src\n" +
-        p + "src/org\n" +
-        p + "src/org/eclim\n" +
-        p + "src/org/eclim/test\n" +
-        p + "src/org/eclim/test/refactoring\n" +
-        p + "src/org/eclim/test/refactoring/rename\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result
-        );
+    assertEquals(p + "src", result.get(0).get("file"));
+    assertEquals(p + "src/org", result.get(1).get("file"));
+    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
+    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename",
+        result.get(5).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
+        result.get(6).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        result.get(7).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
+        result.get(8).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        result.get(9).get("file"));
 
     String tn1NewContents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
@@ -112,6 +128,7 @@ public class RenameCommandTest
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void executeRenameMethod()
     throws Exception
   {
@@ -130,18 +147,29 @@ public class RenameCommandTest
           "test.testMethod()") > 0);
 
     // preview
-    String result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-      "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8", "-v",
-    });
-    assertEquals("Wrong preview results", result,
-        "-pretty,-command,java_refactor_rename,-p,eclim_unit_test_java,-f,src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java,-n,testRename,-o,310,-l,10,-e,utf-8,-v\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\n");
+    Map<String,Object> preview = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8", "-v",
+      });
+    assertEquals(
+        "-command \"java_refactor_rename\" " +
+        "-p \"eclim_unit_test_java\" " +
+        "-f \"src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\" " +
+        "-n \"testRename\" -o \"310\" -l \"10\" -e \"utf-8\"", preview.get("apply"));
+    List<Map<String,String>> changes =
+      (List<Map<String,String>>)preview.get("changes");
+    assertEquals(2, changes.size());
+    assertEquals("diff", changes.get(0).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        changes.get(0).get("file"));
+    assertEquals("diff", changes.get(1).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        changes.get(1).get("file"));
 
     // preview diff
-    result = (String)Eclim.execute(new String[]{
+    String diff = (String)Eclim.execute(new String[]{
       "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
       "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
       "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8", "-v",
@@ -149,29 +177,31 @@ public class RenameCommandTest
       "src/org/eclim/test/refactoring/rename/n1/TestN1.java"),
     });
     assertEquals("Wrong diff results",
-        tn1Contents.replaceAll("testMethod", "testRename"), result);
+        tn1Contents.replaceAll("testMethod", "testRename"), diff);
 
     // rename
-    result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-      "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8",
-    });
+    List<Map<String,String>> result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8",
+      });
 
-    assertEquals("Wrong rename results",
-        "files:\n" +
-        p + "src\n" +
-        p + "src/org\n" +
-        p + "src/org/eclim\n" +
-        p + "src/org/eclim/test\n" +
-        p + "src/org/eclim/test/refactoring\n" +
-        p + "src/org/eclim/test/refactoring/rename\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result
-        );
+    assertEquals(p + "src", result.get(0).get("file"));
+    assertEquals(p + "src/org", result.get(1).get("file"));
+    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
+    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename",
+        result.get(5).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
+        result.get(6).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        result.get(7).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
+        result.get(8).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        result.get(9).get("file"));
 
     String tn1NewContents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
@@ -187,6 +217,7 @@ public class RenameCommandTest
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void executeRenameType()
     throws Exception
   {
@@ -205,18 +236,29 @@ public class RenameCommandTest
           "import org.eclim.test.refactoring.rename.n1.TestN1;") > 0);
 
     // preview
-    String result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-      "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8", "-v",
-    });
-    assertEquals("Wrong preview results", result,
-        "-pretty,-command,java_refactor_rename,-p,eclim_unit_test_java,-f,src/org/eclim/test/refactoring/rename/n1/TestN1.java,-n,TestR1,-o,60,-l,6,-e,utf-8,-v\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\n" +
-        "other: Rename compilation unit 'TestN1.java' to 'TestR1.java'\n");
+    Map<String,Object> preview = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8", "-v",
+      });
+    assertEquals(
+        "-command \"java_refactor_rename\" " +
+        "-p \"eclim_unit_test_java\" " +
+        "-f \"src/org/eclim/test/refactoring/rename/n1/TestN1.java\" " +
+        "-n \"TestR1\" -o \"60\" -l \"6\" -e \"utf-8\"", preview.get("apply"));
+    List<Map<String,String>> changes =
+      (List<Map<String,String>>)preview.get("changes");
+    assertEquals(2, changes.size());
+    assertEquals("diff", changes.get(0).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        changes.get(0).get("file"));
+    assertEquals("other", changes.get(1).get("type"));
+    assertEquals("Rename compilation unit 'TestN1.java' to 'TestR1.java'",
+        changes.get(1).get("message"));
 
     // preview diff
-    result = (String)Eclim.execute(new String[]{
+    String diff = (String)Eclim.execute(new String[]{
       "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
       "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
       "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8", "-v",
@@ -224,29 +266,33 @@ public class RenameCommandTest
       "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java"),
     });
     assertEquals("Wrong diff results",
-        tn2Contents.replaceAll("TestN1", "TestR1"), result);
+        tn2Contents.replaceAll("TestN1", "TestR1"), diff);
 
     // rename
-    result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-      "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8",
-    });
+    List<Map<String,String>> result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8",
+      });
 
-    assertEquals("Wrong rename results",
-        "files:\n" +
-        p + "src\n" +
-        p + "src/org\n" +
-        p + "src/org/eclim\n" +
-        p + "src/org/eclim/test\n" +
-        p + "src/org/eclim/test/refactoring\n" +
-        p + "src/org/eclim/test/refactoring/rename\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java -> " + p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result
-        );
+    assertEquals(p + "src", result.get(0).get("file"));
+    assertEquals(p + "src/org", result.get(1).get("file"));
+    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
+    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename",
+        result.get(5).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
+        result.get(6).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
+        result.get(7).get("from"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
+        result.get(7).get("to"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
+        result.get(8).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        result.get(9).get("file"));
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,
@@ -266,6 +312,7 @@ public class RenameCommandTest
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void executeRenamePackage()
     throws Exception
   {
@@ -284,18 +331,32 @@ public class RenameCommandTest
           "package org.eclim.test.refactoring.rename.n1.n2;") != -1);
 
     // preview
-    String result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-      "-n", "org.eclim.test.refactoring.rename.r1", "-o", "42", "-l", "2", "-e", "utf-8", "-v",
-    });
-    assertEquals("Wrong preview results", result,
-        "-pretty,-command,java_refactor_rename,-p,eclim_unit_test_java,-f,src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java,-n,org.eclim.test.refactoring.rename.r1,-o,42,-l,2,-e,utf-8,-v\n" +
-        "diff: " + p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\n" +
-        "other: Rename package 'org.eclim.test.refactoring.rename.n1' and subpackages to 'org.eclim.test.refactoring.rename.r1'\n");
+    Map<String,Object> preview = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        "-n", "org.eclim.test.refactoring.rename.r1", "-o", "42", "-l", "2", "-e", "utf-8", "-v",
+      });
+    assertEquals(
+        "-command \"java_refactor_rename\" " +
+        "-p \"eclim_unit_test_java\" " +
+        "-f \"src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\" " +
+        "-n \"org.eclim.test.refactoring.rename.r1\" " +
+        "-o \"42\" -l \"2\" -e \"utf-8\"", preview.get("apply"));
+    List<Map<String,String>> changes =
+      (List<Map<String,String>>)preview.get("changes");
+    assertEquals(2, changes.size());
+    assertEquals("diff", changes.get(0).get("type"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        changes.get(0).get("file"));
+    assertEquals("other", changes.get(1).get("type"));
+    assertEquals(
+        "Rename package 'org.eclim.test.refactoring.rename.n1' and " +
+        "subpackages to 'org.eclim.test.refactoring.rename.r1'",
+        changes.get(1).get("message"));
 
     // preview diff
-    result = (String)Eclim.execute(new String[]{
+    String diff = (String)Eclim.execute(new String[]{
       "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
       "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
       "-n", "org.eclim.test.refactoring.rename.r1", "-o", "42", "-l", "2", "-e", "utf-8", "-v",
@@ -303,31 +364,40 @@ public class RenameCommandTest
       "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java"),
     });
     assertEquals("Wrong diff results",
-        tn2Contents.replaceAll("n1\\.TestR1", "r1.TestR1"), result);
+        tn2Contents.replaceAll("n1\\.TestR1", "r1.TestR1"), diff);
 
     // rename
-    result = (String)Eclim.execute(new String[]{
-      "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
-      "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-      "-n", "org.eclim.test.refactoring.rename.r1",
-      "-o", "42", "-l", "2", "-e", "utf-8",
-    });
+    List<Map<String,String>> result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        "-n", "org.eclim.test.refactoring.rename.r1",
+        "-o", "42", "-l", "2", "-e", "utf-8",
+      });
 
-    assertEquals("Wrong rename results",
-        "files:\n" +
-        p + "src\n" +
-        p + "src/org\n" +
-        p + "src/org/eclim\n" +
-        p + "src/org/eclim/test\n" +
-        p + "src/org/eclim/test/refactoring\n" +
-        p + "src/org/eclim/test/refactoring/rename\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1\n" +
-        p + "src/org/eclim/test/refactoring/rename/r1\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java -> " + p + "src/org/eclim/test/refactoring/rename/r1/TestR1.java\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2 -> " + p + "src/org/eclim/test/refactoring/rename/r1/n2\n" +
-        p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java -> " + p + "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java",
-        result
-        );
+    assertEquals(p + "src", result.get(0).get("file"));
+    assertEquals(p + "src/org", result.get(1).get("file"));
+    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
+    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename",
+        result.get(5).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
+        result.get(6).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1",
+        result.get(7).get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
+        result.get(8).get("from"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/TestR1.java",
+        result.get(8).get("to"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
+        result.get(9).get("from"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/n2",
+        result.get(9).get("to"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
+        result.get(10).get("from"));
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java",
+        result.get(10).get("to"));
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,

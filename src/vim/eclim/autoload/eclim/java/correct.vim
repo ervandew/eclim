@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -55,24 +55,34 @@ function! eclim#java#correct#Correct()
   let filename = expand('%:p')
   call eclim#util#TempWindowClear(window_name)
 
-  let results = split(eclim#ExecuteEclim(command), '\n')
+  let result = eclim#ExecuteEclim(command)
 
   " error executing the command.
-  if len(results) == 1 && results[0] == '0'
+  if type(result) != g:DICT_TYPE && type(result) != g:STRING_TYPE
     return
 
   " no error on the current line
-  elseif len(results) == 1
-    call eclim#util#Echo(results[0])
+  elseif type(result) == g:STRING_TYPE
+    call eclim#util#Echo(result)
     return
 
   " no correction proposals found.
-  elseif len(results) == 0
+  elseif len(result.corrections) == 0
     call eclim#util#EchoInfo('No Suggestions')
     return
   endif
 
-  call eclim#util#TempWindow(window_name, results)
+  let content = []
+  call add(content, result.message)
+  for correction in result.corrections
+    call add(content,
+      \ correction.index . '.' . result.offset . ': ' . correction.description)
+    for line in split(correction.preview, '\n')
+      call add(content, line != '' ? ("\t" . line) : line)
+    endfor
+  endfor
+
+  call eclim#util#TempWindow(window_name, content)
 
   let b:filename = filename
   augroup temp_window

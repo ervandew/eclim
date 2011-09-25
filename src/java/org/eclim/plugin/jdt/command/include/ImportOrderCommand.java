@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.command.include;
 
 import java.lang.reflect.Method;
 
+import java.util.ArrayList;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -86,13 +88,10 @@ public class ImportOrderCommand
 
     ImportOrderEntry[] entries = result[0];
 
-    StringBuffer buffer = new StringBuffer();
+    ArrayList<String> results = new ArrayList<String>();
     for (ImportOrderEntry entry : entries){
-      if(buffer.length() > 0){
-        buffer.append('\n');
-      }
-      buffer.append(entry.name);
+      results.add(entry.name);
     }
-    return buffer.toString();
+    return results;
   }
 }

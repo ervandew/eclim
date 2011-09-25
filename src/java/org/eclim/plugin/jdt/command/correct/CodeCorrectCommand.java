@@ -23,6 +23,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,13 +103,17 @@ public class CodeCorrectCommand
       IJavaCompletionProposal proposal = (IJavaCompletionProposal)
         proposals.get(commandLine.getIntValue(Options.APPLY_OPTION));
 
-      // does not work since it it so deeply tied to the ui (grabbing the
+      // does not work since it is so deeply tied to the ui (grabbing the
       // editor, opening dialogs, etc.).
       //proposal.apply(JavaUtils.getDocument(src));
       return proposal.toString();
     }
-    List<CodeCorrectResult> corrections = getCorrections(proposals, problem);
-    return CodeCorrectFilter.instance.filter(commandLine, corrections);
+
+    HashMap<String,Object> result = new HashMap<String,Object>();
+    result.put("message", problem.getMessage());
+    result.put("offset", problem.getSourceStart());
+    result.put("corrections", getCorrections(proposals));
+    return result;
   }
 
   /**
@@ -195,6 +200,19 @@ public class CodeCorrectCommand
               continue;
             }
 
+            // filter out corrections that have no preview, since they can't be
+            // applied in the same fashion as those that have previews.
+            String preview = proposal.getAdditionalProposalInfo();
+            if (preview == null ||
+                preview.trim().equals("") ||
+                preview.trim().startsWith("Start the") ||
+                preview.trim().startsWith("Opens") ||
+                preview.trim().startsWith("Evaluates") ||
+                preview.trim().startsWith("<p>Move"))
+            {
+              continue;
+            }
+
             // hack to fix off by one issue w/ package correction proposal
             if (cuProposal instanceof CorrectPackageDeclarationProposal){
               TextChange change = cuProposal.getTextChange();
@@ -242,25 +260,28 @@ public class CodeCorrectCommand
    * CodeCorrectResult.
    *
    * @param proposals List of IJavaCompletionProposal.
-   * @param problem The problem the proposals are associated w/.
    * @return Array of CodeCorrectResult.
    */
   protected List<CodeCorrectResult> getCorrections(
-      List<IJavaCompletionProposal> proposals, IProblem problem)
+      List<IJavaCompletionProposal> proposals)
     throws Exception
   {
     ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
     Iterator<IJavaCompletionProposal> iterator = proposals.iterator();
     for(int ii = 0; iterator.hasNext(); ii++){
       IJavaCompletionProposal proposal = iterator.next();
-      String info = null;
+      String preview = null;
       /*if (proposal instanceof CorrectPackageDeclarationProposal){
-        info = getAdditionalProposalInfo((CUCorrectionProposal)proposal);
+        preview = getAdditionalProposalInfo((CUCorrectionProposal)proposal);
       }else{*/
-        info = proposal.getAdditionalProposalInfo();
+        preview = proposal.getAdditionalProposalInfo();
       //}
+
+      preview = preview
+        .replaceAll("<br>", "\n")
+        .replaceAll("<.+?>", "");
       corrections.add(new CodeCorrectResult(
-            ii, problem, proposal.getDisplayString(), info));
+            ii, proposal.getDisplayString(), preview));
     }
     return corrections;
   }

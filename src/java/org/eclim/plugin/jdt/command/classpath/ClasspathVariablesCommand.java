@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.command.classpath;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclim.annotation.Command;
 
@@ -54,6 +55,7 @@ public class ClasspathVariablesCommand
         results.add(variable);
       }
     }
-    return ClasspathVariablesFilter.instance.filter(commandLine, results);
+    Collections.sort(results);
+    return results;
   }
 }

@@ -1172,15 +1172,18 @@ function! eclim#util#System(cmd, ...)
   return result
 endfunction " }}}
 
-" TempWindow(name, lines, [readonly]) {{{
+" TempWindow(name, lines, [options]) {{{
 " Opens a temp window w/ the given name and contents which is readonly unless
 " specified otherwise.
 function! eclim#util#TempWindow(name, lines, ...)
+  let options = a:0 > 0 ? a:1 : {}
   let filename = expand('%:p')
   let winnr = winnr()
 
-  call eclim#util#TempWindowClear(a:name)
   let name = eclim#util#EscapeBufferName(a:name)
+
+  let line = 1
+  let col = 1
 
   if bufwinnr(name) == -1
     silent! noautocmd exec "botright 10sview " . escape(a:name, ' []')
@@ -1196,8 +1199,14 @@ function! eclim#util#TempWindow(name, lines, ...)
     if temp_winnr != winnr()
       exec temp_winnr . 'winc w'
       silent doautocmd WinEnter
+      if get(options, 'preserveCursor', 0)
+        let line = line('.')
+        let col = col('.')
+      endif
     endif
   endif
+
+  call eclim#util#TempWindowClear(a:name)
 
   setlocal modifiable
   setlocal noreadonly
@@ -1205,7 +1214,9 @@ function! eclim#util#TempWindow(name, lines, ...)
   retab
   silent 1,1delete _
 
-  if len(a:000) == 0 || a:000[0]
+  call cursor(line, col)
+
+  if get(options, 'readonly', 1)
     setlocal nomodified
     setlocal nomodifiable
     setlocal readonly
@@ -1245,15 +1256,6 @@ endfunction " }}}
 function! eclim#util#TempWindowCommand(command, name, ...)
   let name = eclim#util#EscapeBufferName(a:name)
 
-  let line = 1
-  let col = 1
-  " if the window is open, save the cursor position
-  if bufwinnr(name) != -1
-    exec bufwinnr(name) . "winc w"
-    let line = line('.')
-    let col = col('.')
-  endif
-
   if len(a:000) > 0
     let port = a:000[0]
     let result = eclim#ExecuteEclim(a:command, port)
@@ -1266,9 +1268,7 @@ function! eclim#util#TempWindowCommand(command, name, ...)
     return 0
   endif
 
-  call eclim#util#TempWindow(name, results)
-
-  call cursor(line, col)
+  call eclim#util#TempWindow(name, results, {'preserveCursor': 1})
 
   return 1
 endfunction " }}}

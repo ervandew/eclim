@@ -16,6 +16,10 @@
  */
 package org.eclim.plugin.jdt.command.include;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
@@ -35,18 +39,44 @@ public class ImportMissingCommandTest
     "src/org/eclim/test/include/TestImportMissing.java";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_import_missing", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
-    });
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_import_missing", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE
+      });
 
-    // remove com.sun entries
-    result = result.replaceAll("'com\\.sun.*?'\\s*,\\s*", "");
+    // remove any com.sun entries
+    for(Map<String,Object> entry : results){
+      List<String> imports = new ArrayList<String>();
+      for (String imprt : (List<String>)entry.get("imports")){
+        if (imprt.matches("com\\.sun.*?")){
+          continue;
+        }
+        imports.add(imprt);
+      }
+      entry.put("imports", imports);
+    }
 
-    assertEquals("Wrong results", result, "[{'type': 'List','imports': ['java.awt.List','java.util.List']},{'type': 'ArrayList','imports': ['java.util.ArrayList']},{'type': 'FooBar','imports': []}]");
+    assertEquals(3, results.size());
+
+    List<String> imports = (List<String>)results.get(0).get("imports");
+    assertEquals("List", results.get(0).get("type"));
+    assertEquals(2, imports.size());
+    assertEquals("java.awt.List", imports.get(0));
+    assertEquals("java.util.List", imports.get(1));
+
+    imports = (List<String>)results.get(1).get("imports");
+    assertEquals("ArrayList", results.get(1).get("type"));
+    assertEquals(1, imports.size());
+    assertEquals("java.util.ArrayList", imports.get(0));
+
+    imports = (List<String>)results.get(2).get("imports");
+    assertEquals("FooBar", results.get(2).get("type"));
+    assertEquals(0, imports.size());
   }
 }
