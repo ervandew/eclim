@@ -17,10 +17,10 @@
 package org.eclim.plugin.core.command.admin;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 
 import java.util.ArrayList;
-import java.util.Properties;
+import java.util.Map;
 
 import org.eclim.Services;
 
@@ -33,8 +33,13 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.preference.Preferences;
+
 import org.eclim.util.IOUtils;
-import org.eclim.util.StringUtils;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonStreamParser;
 
 /**
  * Command to update global settings.
@@ -56,19 +61,20 @@ public class SettingsUpdateCommand
   {
     String settings = commandLine.getValue(Options.SETTINGS_OPTION);
 
-    Properties properties = new Properties();
-    FileInputStream in = null;
+    FileReader in = null;
     File file = new File(settings);
     ArrayList<String> errors = new ArrayList<String>();
     try{
-      in = new FileInputStream(file);
-      properties.load(in);
+      in = new FileReader(file);
+      JsonStreamParser parser = new JsonStreamParser(in);
+      JsonObject obj = (JsonObject)parser.next();
 
-      for(Object key : properties.keySet()){
-        String name = (String)key;
-        String value = properties.getProperty(name);
+      Preferences preferences = getPreferences();
+      for (Map.Entry<String,JsonElement> entry : obj.entrySet()){
+        String name = entry.getKey();
+        String value = entry.getValue().getAsString();
         try{
-          getPreferences().setValue(name, value);
+          preferences.setValue(name, value);
         }catch(IllegalArgumentException iae){
           errors.add(iae.getMessage());
         }
@@ -83,7 +89,7 @@ public class SettingsUpdateCommand
     }
 
     if (errors.size() > 0){
-      return StringUtils.join(errors, '\n');
+      return errors;
     }
     return Services.getMessage("settings.updated");
   }

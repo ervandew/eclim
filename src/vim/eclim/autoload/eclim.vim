@@ -217,7 +217,28 @@ function! eclim#SaveSettings(command, project, ...)
   " don't check modified since undo seems to not set the modified flag
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
-    silent exec 'write! ' . escape(tempfile, ' ')
+
+    " get all lines, filtering out comments and blank lines
+    let lines = filter(getline(1, line('$')), 'v:val !~ "^\\s*\\(#\\|$\\)"')
+
+    " convert lines into a settings dict
+    let index = 0
+    let settings = {}
+    let pattern = '^\s*\([[:alnum:]_.-]\+\)\s*=\s*\(.*\)'
+    while index < len(lines)
+      if lines[index] =~ pattern
+        let name = substitute(lines[index], pattern, '\1', '')
+        let value = substitute(lines[index], pattern, '\2', '')
+        while value =~ '\\$'
+          let index += 1
+          let value = substitute(value, '\\$', '', '')
+          let value .= substitute(lines[index], '^\s*', '', '')
+        endwhile
+        let settings[name] = value
+      endif
+      let index += 1
+    endwhile
+    call writefile([string(settings)], tempfile)
 
     if has('win32unix')
       let tempfile = eclim#cygwin#WindowsPath(tempfile)
@@ -234,11 +255,10 @@ function! eclim#SaveSettings(command, project, ...)
       let result = eclim#ExecuteEclim(command)
     endif
 
-    if result =~ ':'
+    if type(result) == g:LIST_TYPE
       call eclim#util#EchoError
         \ ("Operation contained errors.  See location list for details.")
-      call eclim#util#SetLocationList
-        \ (eclim#ParseSettingErrors(split(result, '\n')))
+      call eclim#util#SetLocationList(eclim#ParseSettingErrors(result))
     else
       call eclim#util#ClearLocationList()
       call eclim#util#Echo(result)
@@ -261,21 +281,42 @@ function! eclim#Settings(workspace)
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
 
-  if eclim#util#TempWindowCommand(
-   \ s:command_settings, "Eclim_Global_Settings", port)
-    setlocal buftype=acwrite
-    setlocal filetype=jproperties
-    setlocal noreadonly
-    setlocal modifiable
-    setlocal foldmethod=marker
-    setlocal foldmarker={,}
-
-    augroup eclim_settings
-      autocmd! BufWriteCmd <buffer>
-      exec 'autocmd BufWriteCmd <buffer> ' .
-        \ 'call eclim#SaveSettings(s:command_settings_update, "", ' . port . ')'
-    augroup END
+  let settings = eclim#ExecuteEclim(s:command_settings, port)
+  if type(settings) != g:LIST_TYPE
+    return
   endif
+
+  let content = ['# Global settings for workspace: ' . workspace, '']
+  let path = ''
+  for setting in settings
+    if setting.path != path
+      if path != ''
+        let content += ['# }', '']
+      endif
+      let path = setting.path
+      call add(content, '# ' . path . ' {')
+    endif
+    let description = split(setting.description, '\n')
+    let content += map(description, "'\t# ' . v:val")
+    call add(content, "\t" . setting.name . '=' . setting.value)
+  endfor
+  if path != ''
+    call add(content, '# }')
+  endif
+
+  call eclim#util#TempWindow("Eclim_Global_Settings", content)
+  setlocal buftype=acwrite
+  setlocal filetype=jproperties
+  setlocal noreadonly
+  setlocal modifiable
+  setlocal foldmethod=marker
+  setlocal foldmarker={,}
+
+  augroup eclim_settings
+    autocmd! BufWriteCmd <buffer>
+    exec 'autocmd BufWriteCmd <buffer> ' .
+      \ 'call eclim#SaveSettings(s:command_settings_update, "", ' . port . ')'
+  augroup END
 endfunction " }}}
 
 " ShutdownEclim() {{{

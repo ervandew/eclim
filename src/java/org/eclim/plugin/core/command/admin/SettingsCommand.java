@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.core.command.admin;
 
+import java.util.Arrays;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -40,6 +42,7 @@ public class SettingsCommand
     throws Exception
   {
     Option[] options = getPreferences().getOptions();
-    return SettingsFilter.instance.filter(commandLine, options);
+    Arrays.sort(options);
+    return options;
   }
 }

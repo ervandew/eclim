@@ -581,22 +581,45 @@ function! eclim#project#util#ProjectSettings(project)
 
   let command = substitute(s:command_project_settings, '<project>', project, '')
   let port = eclim#project#util#GetProjectPort(project)
-  if eclim#util#TempWindowCommand(command, project . "_settings", port)
-    exec "lcd " . escape(eclim#project#util#GetProjectRoot(project), ' ')
-    setlocal buftype=acwrite
-    setlocal filetype=jproperties
-    setlocal noreadonly
-    setlocal modifiable
-    setlocal foldmethod=marker
-    setlocal foldmarker={,}
-    setlocal foldlevel=0
 
-    let b:project = project
-    augroup project_settings
-      autocmd! BufWriteCmd <buffer>
-      autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
-    augroup END
+  let settings = eclim#ExecuteEclim(command, port)
+  if type(settings) != g:LIST_TYPE
+    return
   endif
+
+  let content = ['# Settings for project: eclim', '']
+  let path = ''
+  for setting in settings
+    if setting.path != path
+      if path != ''
+        let content += ['# }', '']
+      endif
+      let path = setting.path
+      call add(content, '# ' . path . ' {')
+    endif
+    let description = split(setting.description, '\n')
+    let content += map(description, "'\t# ' . v:val")
+    call add(content, "\t" . setting.name . '=' . setting.value)
+  endfor
+  if path != ''
+    call add(content, '# }')
+  endif
+
+  call eclim#util#TempWindow(project . "_settings", content)
+  exec "lcd " . escape(eclim#project#util#GetProjectRoot(project), ' ')
+  setlocal buftype=acwrite
+  setlocal filetype=jproperties
+  setlocal noreadonly
+  setlocal modifiable
+  setlocal foldmethod=marker
+  setlocal foldmarker={,}
+  setlocal foldlevel=0
+
+  let b:project = project
+  augroup project_settings
+    autocmd! BufWriteCmd <buffer>
+    autocmd BufWriteCmd <buffer> call <SID>SaveSettings()
+  augroup END
 endfunction " }}}
 
 " ProjectUpdate() {{{

@@ -16,9 +16,9 @@
  */
 package org.eclim.plugin.core.command.admin;
 
-import java.io.ByteArrayInputStream;
-
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclim.Eclim;
 
@@ -37,13 +37,17 @@ public class SettingsCommandTest
    * Test the command.
    */
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
     throws Exception
   {
-    String result = (String)Eclim.execute(new String[]{"settings"});
+    List<Map<String,String>> results = (List<Map<String,String>>)
+      Eclim.execute(new String[]{"settings"});
 
-    Properties properties = new Properties();
-    properties.load(new ByteArrayInputStream(result.getBytes()));
+    HashMap<String,String> properties = new HashMap<String,String>();
+    for (Map<String,String> result : results){
+      properties.put(result.get("name"), result.get("value"));
+    }
 
     assertTrue("Missing org.eclim.user.email",
         properties.containsKey("org.eclim.user.email"));

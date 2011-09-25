@@ -17,11 +17,11 @@
 package org.eclim.plugin.core.command.project;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.eclim.Services;
 
@@ -42,9 +42,12 @@ import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
-import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonStreamParser;
 
 /**
  * Command to update a project.
@@ -78,7 +81,7 @@ public class ProjectUpdateCommand
     if(settings != null){
       List<String> errors = updateSettings(project, settings);
       if (errors.size() > 0){
-        return StringUtils.join(errors, '\n');
+        return errors;
       }
     }else{
       List<Error> errors = ProjectManagement.update(project, commandLine);
@@ -100,18 +103,18 @@ public class ProjectUpdateCommand
   private List<String> updateSettings(IProject project, String settings)
     throws Exception
   {
-    Properties properties = new Properties();
-    FileInputStream in = null;
+    FileReader in = null;
     File file = new File(settings);
     ArrayList<String> errors = new ArrayList<String>();
     try{
-      in = new FileInputStream(file);
-      properties.load(in);
+      in = new FileReader(file);
+      JsonStreamParser parser = new JsonStreamParser(in);
+      JsonObject obj = (JsonObject)parser.next();
 
       Preferences preferences = getPreferences();
-      for(Object key : properties.keySet()){
-        String name = (String)key;
-        String value = properties.getProperty(name);
+      for (Map.Entry<String,JsonElement> entry : obj.entrySet()){
+        String name = entry.getKey();
+        String value = entry.getValue().getAsString();
         try{
           preferences.setValue(project, name, value);
         }catch(IllegalArgumentException iae){

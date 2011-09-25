@@ -16,14 +16,14 @@
  */
 package org.eclim.plugin.core.command.project;
 
+import java.util.Arrays;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclim.plugin.core.command.admin.SettingsFilter;
 
 import org.eclim.plugin.core.preference.Option;
 
@@ -47,11 +47,9 @@ public class ProjectSettingsCommand
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
-
     IProject project = ProjectUtils.getProject(name, true);
-
     Option[] options = getPreferences().getOptions(project);
-
-   return SettingsFilter.instance.filter(commandLine, options);
+    Arrays.sort(options);
+    return options;
   }
 }
