@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -61,17 +61,34 @@ function! eclim#java#maven#dependency#Search(query, type)
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<query>', a:query, '')
 
-  if eclim#util#TempWindowCommand(command, "Dependency_Search_Results")
-    let b:filename = filename
-
-    setlocal ft=dependency_search_results
-    syntax match Statement /^\w\+.*$/
-    syntax match Identifier /(.\{-})/
-    syntax match Comment /^\s*\/\/.*$/
-
-    let b:type = a:type
-    nnoremap <silent> <buffer> <cr> :call <SID>AddDependency(b:type)<cr>
+  let results = eclim#ExecuteEclim(command)
+  if type(results) != g:LIST_TYPE
+    return
   endif
+
+  let content = []
+  let groupId = ''
+  for result in results
+    if result.groupId != groupId
+      let groupId = result.groupId
+      call add(content, result.groupId)
+    endif
+    if result.existing
+      let result.artifactId = '//' . result.artifactId
+    endif
+    call add(content, "\t" . result.artifactId . ' (' . result.version . ')')
+  endfor
+
+  call eclim#util#TempWindow("Dependency_Search_Results", content)
+
+  let b:filename = filename
+  let b:type = a:type
+  setlocal ft=dependency_search_results
+  syntax match Statement /^\w\+.*$/
+  syntax match Identifier /(.\{-})/
+  syntax match Comment /^\s*\/\/.*$/
+
+  nnoremap <silent> <buffer> <cr> :call <SID>AddDependency(b:type)<cr>
 endfunction " }}}
 
 " AddDependency(type) {{{

@@ -16,11 +16,21 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.eclim.logging.Logger;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
@@ -31,6 +41,10 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.util.IOUtils;
+
+import org.w3c.dom.NodeList;
 
 /**
  * Command for searching online maven repository.
@@ -48,6 +62,8 @@ import org.eclim.plugin.core.command.AbstractCommand;
 public class SearchCommand
   extends AbstractCommand
 {
+  private static final Logger logger = Logger.getLogger(SearchCommand.class);
+
   // Note: Experienced connections issues not long after switching to jarvana.
   // If these continue, consider switching to another alternate or possibly
   // implement primary secondary support.
@@ -59,6 +75,10 @@ public class SearchCommand
   private static final String ARTIFACT_ID = "Artifact Id";
   private static final String VERSION = "Version";
 
+  private static final String IVY = "ivy";
+  private static final String DEPENDENCIES = "dependencies";
+  private static final String DEPENDENCY = "dependency";
+
   /**
    * {@inheritDoc}
    */
@@ -66,7 +86,20 @@ public class SearchCommand
     throws Exception
   {
     String search = commandLine.getValue(Options.SEARCH_OPTION);
-    return SearchFilter.instance.filter(commandLine, searchRepositories(search));
+
+    // existing dependencies
+    List<Dependency> existing = null;
+    try{
+      String project = commandLine.getValue(Options.PROJECT_OPTION);
+      String file = commandLine.getValue(Options.FILE_OPTION);
+      String type = commandLine.getValue(Options.TYPE_OPTION);
+      existing = getExistingDependencies(project, file, type);
+    }catch(Exception e){
+      logger.warn("Unable to get existing dependencies.", e);
+      existing = new ArrayList<Dependency>();
+    }
+
+    return searchRepositories(search, existing);
   }
 
   /**
@@ -75,7 +108,8 @@ public class SearchCommand
    * @param query The search query.
    * @return Possibly empty List of results.
    */
-  private List<Dependency> searchRepositories(String query)
+  private List<Dependency> searchRepositories(
+      String query, List<Dependency> existing)
     throws Exception
   {
     Source source = new Source(new URL(URL + query));
@@ -119,9 +153,64 @@ public class SearchCommand
           cells.get(artifactIndex).getTextExtractor().toString().trim());
       dependency.setVersion(
           cells.get(versionIndex).getTextExtractor().toString().trim());
+      if (existing.contains(dependency)){
+        dependency.setExisting(true);
+      }
       dependencies.add(dependency);
     }
 
     return dependencies;
+  }
+
+  /**
+   * Get the project file's current dependencies.
+   *
+   * @param project The eclipse project name.
+   * @param filename The project file.
+   * @param type The file type (ivy, maven, mvn).
+   * @return List of dependencies.
+   */
+  private List<Dependency> getExistingDependencies(
+      String project, String filename, String type)
+    throws Exception
+  {
+    ArrayList<Dependency> list = new ArrayList<Dependency>();
+    InputStream in = null;
+    try{
+      String file = ProjectUtils.getFilePath(project, filename);
+      org.w3c.dom.Element root = DocumentBuilderFactory
+        .newInstance()
+        .newDocumentBuilder()
+        .parse(in = new FileInputStream(file))
+        .getDocumentElement();
+      NodeList depends = root.getElementsByTagName(DEPENDENCIES);
+      if (depends.getLength() > 0){
+        NodeList nodes =
+          ((org.w3c.dom.Element)depends.item(0)).getElementsByTagName(DEPENDENCY);
+
+        for (int ii = 0; ii < nodes.getLength(); ii++){
+          org.w3c.dom.Element element = (org.w3c.dom.Element)nodes.item(ii);
+
+          Dependency dependency = new Dependency();
+          if(IVY.equals(type)){
+            dependency.setGroupId(element.getAttribute(Dependency.ORG));
+            dependency.setArtifactId(element.getAttribute(Dependency.NAME));
+            dependency.setVersion(element.getAttribute(Dependency.REV));
+          }else{
+            dependency.setGroupId(
+                XmlUtils.getElementValue(element, Dependency.GROUP_ID));
+            dependency.setArtifactId(
+                XmlUtils.getElementValue(element, Dependency.ARTIFACT_ID));
+            dependency.setVersion(
+                XmlUtils.getElementValue(element, Dependency.VERSION));
+          }
+
+          list.add(dependency);
+        }
+      }
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+    return list;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ public class Dependency
   private String groupId;
   private String artifactId;
   private String version;
+  private boolean existing;
 
   /**
    * Gets the groupId.
@@ -99,6 +100,26 @@ public class Dependency
   public void setVersion(String version)
   {
     this.version = version;
+  }
+
+  /**
+   * Determines if this instance is an existing dependency.
+   *
+   * @return True if an existing dependency, false otherwise.
+   */
+  public boolean isExisting()
+  {
+    return this.existing;
+  }
+
+  /**
+   * Sets whether or not this instance is an existing dependency.
+   *
+   * @param existing True if an existing dependency, false otherwise.
+   */
+  public void setExisting(boolean existing)
+  {
+    this.existing = existing;
   }
 
   /**

@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.maven.command.dependency;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclim.Eclim;
 
 import org.eclim.plugin.maven.Maven;
@@ -34,19 +37,29 @@ public class SearchCommandTest
   private static final String TEST_FILE = "pom.xml";
 
   @Test
+  @SuppressWarnings("unchecked")
   public void execute()
   {
-    String result = (String)Eclim.execute(new String[]{
-      "maven_dependency_search", "-p", Maven.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-t", "mvn", "-s", "junit"
-    });
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "maven_dependency_search", "-p", Maven.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-t", "mvn", "-s", "junit"
+      });
 
-    assertTrue("Ant section not found.", result.startsWith("ant\n"));
-    assertTrue("JUnit section not found.", result.indexOf("\njunit\n") != -1);
-    assertTrue("JUnit dependency not found.",
-        result.indexOf("\n\tjunit (3.8)\n") != -1);
-    assertTrue("JUnit dependency not commented out.",
-        result.indexOf("\n\t//junit (3.8.1)\n") != -1);
+    assertEquals("ant", results.get(0).get("groupId"));
+
+    Map<String,Object> junit381 = null;
+    for (Map<String,Object> result : results){
+      if (result.get("artifactId").equals("junit") &&
+          result.get("version").equals("3.8.1"))
+      {
+        junit381 = result;
+        break;
+      }
+    }
+
+    assertNotNull(junit381);
+    assertEquals(true, junit381.get("existing"));
   }
 }
