@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,9 +76,9 @@ public class FormatCommandTest
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    lines = StringUtils.split(contents, '\n');
+    lines = StringUtils.split(contents.replace("\t", "  "), '\n');
     assertEquals("Result line format incorrect.",
-        "\t\tSystem.out.println(\"test formatting\");", lines[22]);
+        "    System.out.println(\"test formatting\");", lines[22]);
   }
 
   @Test
@@ -101,11 +101,11 @@ public class FormatCommandTest
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    lines = StringUtils.split(contents, '\n');
-    assertEquals("Result line 1 format incorrect.", "\t\tif (true) {", lines[23]);
+    lines = StringUtils.split(contents.replace("\t", "  "), '\n');
+    assertEquals("Result line 1 format incorrect.", "    if (true) {", lines[23]);
     assertEquals("Result line 2 format incorrect.",
-        "\t\t\tSystem.out.println(\"test format if\");", lines[24]);
-    assertEquals("Result line 3 format incorrect.", "\t\t}", lines[25]);
+        "      System.out.println(\"test format if\");", lines[24]);
+    assertEquals("Result line 3 format incorrect.", "    }", lines[25]);
   }
 
   @Test
@@ -129,10 +129,10 @@ public class FormatCommandTest
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    lines = StringUtils.split(contents, '\n');
+    lines = StringUtils.split(contents.replace("\t", "  "), '\n');
     assertEquals("Result line 1 format incorrect.",
-        "\tpublic void main(String[] args) throws Exception {", lines[18]);
+        "  public void main(String[] args) throws Exception {", lines[18]);
     assertEquals("Result line 1 format incorrect.",
-        "\t\tSystem.out.println(\"test formatting\");", lines[19]);
+        "    System.out.println(\"test formatting\");", lines[19]);
   }
 }
