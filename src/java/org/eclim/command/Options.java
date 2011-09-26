@@ -100,6 +100,7 @@ public class Options
       new org.apache.commons.cli.Options();
   static {
     coreOptions.addOption(OptionBuilder.withArgName(COMMAND_OPTION)
+        .isRequired(true)
         .hasArg()
         .withDescription(Services.getMessage("command.description"))
         .create(COMMAND_OPTION));
