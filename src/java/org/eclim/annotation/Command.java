@@ -32,4 +32,5 @@ public @interface Command
 {
   String name();
   String options() default "";
+  String description() default "";
 }

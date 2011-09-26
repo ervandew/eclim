@@ -16,9 +16,15 @@
  */
 package org.eclim.command;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.lang.StringUtils;
@@ -68,6 +74,11 @@ public class Main
         }
       }
 
+      if (arguments.isEmpty()){
+        usage(context.out);
+        System.exit(1);
+      }
+
       CommandLine commandLine = null;
       Options options = new Options();
       try{
@@ -97,6 +108,54 @@ public class Main
 
       logger.debug("Main - exit on error");
       System.exit(1);
+    }
+  }
+
+  public static List<org.eclim.annotation.Command> allCommands()
+  {
+    ArrayList<org.eclim.annotation.Command> commands = new ArrayList<org.eclim.annotation.Command>();
+    for (Class<? extends Command> command : Services.getCommandClasses()){
+      commands.add(command.getAnnotation(org.eclim.annotation.Command.class));
+    }
+    Collections.sort(commands, new Comparator<org.eclim.annotation.Command>()
+    {
+
+      public int compare(org.eclim.annotation.Command o1,
+        org.eclim.annotation.Command o2)
+      {
+        return o1.name().compareTo(o2.name());
+      }
+    });
+    return commands;
+  }
+
+  public static void usage(PrintStream out)
+  {
+    out.println("Available commands:");
+    for (org.eclim.annotation.Command command : allCommands()){
+      printAnnotation(command, out);
+    }
+  }
+
+  private static void printAnnotation(org.eclim.annotation.Command command,
+    PrintStream out)
+  {
+    out.print("- ");
+    out.print(command.name());
+    out.print("(");
+    printAnnotationOptions(command, out);
+    out.print("): ");
+    out.print(command.description());
+    out.println();
+  }
+
+  private static void printAnnotationOptions(
+    org.eclim.annotation.Command command, PrintStream out)
+  {
+    Collection<Option> options = new Options()
+      .parseOptions(command.options());
+    for (Option option : options){
+      out.print(option.getOpt());
     }
   }
 }
