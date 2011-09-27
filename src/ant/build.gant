@@ -29,7 +29,7 @@ ant.property(file: 'src/ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
 ant.defaultexcludes(add: '**/*.bak')
 
-eclipseHome = binding.getVariable('eclipse.home')
+eclipseHome = binding.getVariable(getEclipseHomeProp())
 if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
   ant.echo('''
     $${eclipse.home} not set.
@@ -39,6 +39,9 @@ if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
     3. set the supported environment variable: export ECLIM_ECLIPSE_HOME="..."
   ''')
   ant.fail(message: 'missing required property (see above)')
+}else{
+  ant.property(name: 'eclipse', value: eclipseHome)
+  ant.echo('$${eclipse}: ${eclipse}')
 }
 
 ant.path(id: 'classpath'){
@@ -75,7 +78,7 @@ target(name: 'init'){
   property(name: 'eclim.version', value: version)
   echo('eclim.version: ${eclim.version}')
 
-  property(name: 'eclim.plugins', value: '${eclipse.home}/plugins')
+  property(name: 'eclim.plugins', value: '${eclipse}/plugins')
   property(name: 'eclim.home', value: '${eclim.plugins}/org.eclim_${eclim.version}')
 
   // set location of vim files if not already set
@@ -276,7 +279,7 @@ target(name: 'deploy.eclipse'){
   }
 
   if (Os.isFamily(Os.FAMILY_WINDOWS)){
-    move(todir: '${eclipse.home}'){
+    move(todir: '${eclipse}'){
       fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
           includes: 'eclimd.bat,eclimd.cmd')
     }
@@ -285,12 +288,12 @@ target(name: 'deploy.eclipse'){
         includes: '**/*', excludes: '*.sed', perm: 'ugo+x')
     // java symlink support sucks, especially if the link is broken
     exec(executable: 'rm'){
-      arg(line: '"${eclipse.home}/eclim" "${eclipse.home}/eclimd"')
+      arg(line: '"${eclipse}/eclim" "${eclipse}/eclimd"')
     }
-    exec(executable: 'ln', dir: '${eclipse.home}'){
+    exec(executable: 'ln', dir: '${eclipse}'){
       arg(line: '-s plugins/org.eclim_${eclim.version}/bin/eclim .')
     }
-    exec(executable: 'ln', dir: '${eclipse.home}'){
+    exec(executable: 'ln', dir: '${eclipse}'){
       arg(line: '-s plugins/org.eclim_${eclim.version}/bin/eclimd .')
     }
   }
@@ -308,7 +311,7 @@ target(name: 'deploy.eclipse'){
   // eclipse won't need its hand held (could convert to using dropins, but I've
   // had issues with that as well in the past)
   replaceregexp(
-    file: '${eclipse.home}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info',
+    file: '${eclipse}/configuration/org.eclipse.equinox.simpleconfigurator/bundles.info',
     match: 'org.eclim(.[a-z]+)?([,_])\\d+\\.\\d+\\.\\d+(\\.\\d+-g[a-f0-9]+)?',
     replace: 'org.eclim\\1\\2${eclim.version}',
     flags: 'g')
@@ -336,7 +339,7 @@ target(name: 'deploy.vim'){
     replacefilter(token: '"$${vim.eclim.home}"',
         value: 'let g:EclimHome = \'${eclim.home}\'')
     replacefilter(token: '"$${vim.eclipse.home}"',
-        value: 'let g:EclimEclipseHome = \'${eclipse.home}\'')
+        value: 'let g:EclimEclipseHome = \'${eclipse}\'')
   }
 }
 
@@ -553,7 +556,7 @@ target(name: 'dist'){
 target(name: 'installer'){
   depends('init')
   exec(executable: '${formic.home}/bin/formic', failonerror: true, dir: '.'){
-    arg(value: '-Declipse.home=${eclipse.home}')
+    arg(value: '-Declipse.home=${eclipse}')
     arg(value: '-Declim.version=${eclim.version}')
     arg(value: '-buildfile')
     arg(value: 'src/installer/build.xml')
@@ -669,7 +672,7 @@ target(name: 'eclipse.src'){
   eclipseHome = binding.getVariable('eclipse.home')
   new File("${eclipseHome}/plugins").eachFileRecurse(){ file ->
     if (file =~ /.*\.source_.*\.jar/){
-      unjar(src: file.getPath(), dest: '${eclipse.home}/src')
+      unjar(src: file.getPath(), dest: '${eclipse}/src')
     }
   }
 }
@@ -737,6 +740,18 @@ target(name: 'patch.revert.all'){
     }
 
     delete(dir: "build/patch/${plugin}")
+  }
+}
+
+def getEclipseHomeProp(){
+  // try bransh specific eclipse home vars
+  try {
+    branch = execute('git', 'rev-parse --abbrev-ref HEAD')
+    eclipseHomeProp = 'eclipse.home.' + branch
+    binding.getVariable(eclipseHomeProp)
+    return eclipseHomeProp
+  }catch(MissingPropertyException mpe){
+    return 'eclipse.home'
   }
 }
 
@@ -863,7 +878,7 @@ def junit(include){
         dir: 'build/test/junit/classes',
         includes: include + 'Test.class')
     }
-    ant.sysproperty(key: 'eclipse.home', value: '${eclipse.home}')
+    ant.sysproperty(key: 'eclipse.home', value: '${eclipse}')
     ant.sysproperty(key: 'eclim.version', value: '${eclim.version}')
     ant.sysproperty(key: 'eclimd.port', value: '${nailgun.server.port}')
   }
@@ -1052,7 +1067,7 @@ def patchPlugins(closure){
 def patchPluginResolve(plugin){
   // try plugin jar
   ant.path(id: 'plugin_jar' + plugin){
-    ant.fileset(dir: '${eclipse.home}'){
+    ant.fileset(dir: '${eclipse}'){
       ant.include(name: "plugins/${plugin}_*.jar")
       ant.include(name: "dropins/**/plugins/${plugin}_*.jar")
     }
@@ -1065,7 +1080,7 @@ def patchPluginResolve(plugin){
 
   // try plugin dir
   ant.path(id: 'plugin_dir' + plugin){
-    ant.dirset(dir: '${eclipse.home}'){
+    ant.dirset(dir: '${eclipse}'){
       ant.include(name: "plugins/${plugin}_*")
       ant.include(name: "dropins/**/plugins/${plugin}_*")
     }
