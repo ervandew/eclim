@@ -105,17 +105,18 @@ function! eclim#ExecuteEclim(command, ...)
         " eclimd is not running, disable further eclimd calls
         let g:eclimd_running = 0
 
-        " if we are not in an autocmd, alert the user that eclimd is not
-        " running.
-        if expand('<amatch>') == ''
+        " if we are not in an autocmd or the autocmd is for an acwrite buffer,
+        " alert the user that eclimd is not running.
+        if expand('<amatch>') == '' || &buftype == 'acwrite'
           call eclim#util#EchoWarning(
             \ "unable to connect to eclimd (port: " . port . ") - " . error)
         endif
       else
         let error = error . "\n" .
           \ 'while executing command (port: ' . port . '): ' . command
-        " if we are not in an autocmd, echo the error, otherwise just log it.
-        if expand('<amatch>') == ''
+        " if we are not in an autocmd or in a autocmd for an acwrite buffer,
+        " echo the error, otherwise just log it.
+        if expand('<amatch>') == '' || &buftype == 'acwrite'
           call eclim#util#EchoError(error)
         else
           call eclim#util#EchoDebug(error)
