@@ -16,7 +16,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/jericho-html-3.0.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/joda-time-1.6.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/secondstring-20060615.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.0-beta01.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.5.100.v20110510.jar"/>
