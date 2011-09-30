@@ -701,7 +701,7 @@ function! eclim#project#util#ProjectTodo()
   endif
 endfunction " }}}
 
-" SaveSettings() {{{
+" s:SaveSettings() {{{
 function! s:SaveSettings()
   call eclim#SaveSettings(s:command_update, b:project)
 endfunction " }}}

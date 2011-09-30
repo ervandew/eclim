@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,9 @@ public class PreferenceFactory
         option.setNature(nature);
         option.setPath(attrs[0]);
         option.setName(attrs[1]);
-        option.setRegex(attrs[2]);
+        if (attrs[2] != null && !attrs[2].trim().equals(StringUtils.EMPTY)){
+          option.setValidator(new RegexValidator(attrs[2]));
+        }
 
         preferences.addOption(option);
       }
@@ -78,7 +80,9 @@ public class PreferenceFactory
         preference.setPath(attrs[0]);
         preference.setName(attrs[1]);
         preference.setDefaultValue(attrs[2]);
-        preference.setRegex(attrs[3]);
+        if (attrs[3] != null && !attrs[3].trim().equals(StringUtils.EMPTY)){
+          preference.setValidator(new RegexValidator(attrs[3]));
+        }
 
         preferences.addPreference(preference);
       }
