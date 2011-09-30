@@ -7,7 +7,7 @@
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/gson-1.6.jar"/>
+  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/gson-1.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/scannotation-1.0.2.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
