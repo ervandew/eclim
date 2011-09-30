@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,16 +46,19 @@ public class CompletionComparator
 
     // push keywords to the end.
     if (o1.getType() != CompletionProposal.KEYWORD &&
-        o2.getType() != CompletionProposal.KEYWORD){
+        o2.getType() != CompletionProposal.KEYWORD)
+    {
       int kind = o1.getType() - o2.getType();
       if(kind != 0){
         return kind;
       }
     }else if(o1.getType() == CompletionProposal.KEYWORD &&
-        o2.getType() != CompletionProposal.KEYWORD){
+        o2.getType() != CompletionProposal.KEYWORD)
+    {
       return 1;
     }else if(o2.getType() == CompletionProposal.KEYWORD &&
-        o1.getType() != CompletionProposal.KEYWORD){
+        o1.getType() != CompletionProposal.KEYWORD)
+    {
       return -1;
     }
 

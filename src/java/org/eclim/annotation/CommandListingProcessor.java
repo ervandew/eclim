@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class CommandListingProcessor
       pattern = Pattern.compile(filter);
     }
     for(TypeElement element : annotations){
-      for(Element e: env.getElementsAnnotatedWith(element)){
+      for(Element e : env.getElementsAnnotatedWith(element)){
         Command command = e.getAnnotation(Command.class);
         if (pattern == null || pattern.matcher(command.name()).matches()){
           Collection<Option> opts = options.parseOptions(command.options());

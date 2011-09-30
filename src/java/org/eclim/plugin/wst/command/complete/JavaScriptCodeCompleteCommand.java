@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,8 @@ public class JavaScriptCodeCompleteCommand
         // trim off the trailing paren if the method takes any arguments.
         if (params.lastIndexOf(')') > params.lastIndexOf('(') + 1 &&
             (completion.length() > 0 &&
-             completion.charAt(completion.length() - 1) == ')')){
+             completion.charAt(completion.length() - 1) == ')'))
+        {
           completion = completion.substring(0, completion.length() - 1);
         }
       }else{

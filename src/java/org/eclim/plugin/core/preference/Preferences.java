@@ -28,8 +28,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 /**
  * Class for handling preferences for eclim.
@@ -278,7 +278,8 @@ public class Preferences
         String nature = option.getNature();
         if (CORE.equals(nature) ||
             project == null ||
-            project.getNature(nature) != null){
+            project.getNature(nature) != null)
+        {
           OptionInstance instance = new OptionInstance(option, value);
           results.add(instance);
         }

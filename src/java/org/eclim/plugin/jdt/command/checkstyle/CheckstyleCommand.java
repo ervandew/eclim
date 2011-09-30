@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,17 +28,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.eclim.util.file.FileUtils;
-
-import com.puppycrawl.tools.checkstyle.Checker;
-import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
-import com.puppycrawl.tools.checkstyle.PropertiesExpander;
-
-import com.puppycrawl.tools.checkstyle.api.AuditEvent;
-import com.puppycrawl.tools.checkstyle.api.AuditListener;
-import com.puppycrawl.tools.checkstyle.api.Configuration;
-import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
-
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -49,8 +38,6 @@ import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.command.filter.ErrorFilter;
@@ -59,8 +46,12 @@ import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
+
+import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 
@@ -69,6 +60,15 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
+
+import com.puppycrawl.tools.checkstyle.Checker;
+import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
+import com.puppycrawl.tools.checkstyle.PropertiesExpander;
+
+import com.puppycrawl.tools.checkstyle.api.AuditEvent;
+import com.puppycrawl.tools.checkstyle.api.AuditListener;
+import com.puppycrawl.tools.checkstyle.api.Configuration;
+import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 
 /**
  * Command which invokes checkstyle on the specified file.

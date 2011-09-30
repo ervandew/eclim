@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,11 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
 import org.eclim.command.Options;
 
+import org.eclim.plugin.core.project.ProjectManager;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
+
 import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.project.classpath.Dependency;
@@ -41,11 +46,6 @@ import org.eclim.plugin.jdt.project.classpath.IvyParser;
 import org.eclim.plugin.jdt.project.classpath.Parser;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
-
-import org.eclim.plugin.core.project.ProjectManager;
-
-import org.eclim.plugin.core.util.ProjectUtils;
-import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclim.util.IOUtils;
 
@@ -210,7 +210,9 @@ public class JavaProjectManager
         IResource src;
         IPreferenceStore store = PreferenceConstants.getPreferenceStore();
         String name = store.getString(PreferenceConstants.SRCBIN_SRCNAME);
-        if (store.getBoolean(PreferenceConstants.SRCBIN_FOLDERS_IN_NEWPROJ) && name.length() > 0) {
+        boolean srcBinFolders = store.getBoolean(
+            PreferenceConstants.SRCBIN_FOLDERS_IN_NEWPROJ);
+        if (srcBinFolders && name.length() > 0) {
           src = javaProject.getProject().getFolder(name);
         } else {
           src = javaProject.getProject();
@@ -402,7 +404,8 @@ public class JavaProjectManager
     IClasspathEntry[] entries = project.getRawClasspath();
     for(int ii = 0; ii < entries.length; ii++){
       if (entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
-          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE){
+          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE)
+      {
         results.add(entries[ii]);
       } else if (preserve(entries[ii])){
         results.add(entries[ii]);
@@ -414,7 +417,8 @@ public class JavaProjectManager
       IClasspathEntry match = null;
       for(int jj = 0; jj < entries.length; jj++){
         if (entries[jj].getEntryKind() == IClasspathEntry.CPE_LIBRARY ||
-            entries[jj].getEntryKind() == IClasspathEntry.CPE_VARIABLE){
+            entries[jj].getEntryKind() == IClasspathEntry.CPE_VARIABLE)
+        {
           String path = entries[jj].getPath().toOSString();
           String pattern = dependencies[ii].getName() +
             Dependency.VERSION_SEPARATOR;

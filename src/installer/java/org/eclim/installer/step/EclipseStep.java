@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,13 +40,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.formic.util.CommandExecutor;
-
-import foxtrot.Task;
-import foxtrot.Worker;
-
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.commons.lang.SystemUtils;
@@ -54,6 +47,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
+
+import org.formic.util.CommandExecutor;
 
 import org.formic.util.dialog.gui.GuiDialogs;
 
@@ -68,6 +63,11 @@ import org.formic.wizard.step.AbstractGuiStep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import foxtrot.Task;
+import foxtrot.Worker;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Step for specifying location of eclipse installation.
@@ -91,7 +91,7 @@ public class EclipseStep
     "/usr/local/eclipse",
     "/usr/share/eclipse",
     SystemUtils.USER_HOME + "/eclipse",
-    "/Applications/eclipse"
+    "/Applications/eclipse",
   };
 
   private boolean initializePanelAdded = false;
@@ -199,7 +199,10 @@ public class EclipseStep
 
       eclipseHomeField.getDocument().addDocumentListener(
           new EclipseHomeListener(
-            eclipseHomeField, eclipseLocalField, overridePluginsCheckBox, validator));
+            eclipseHomeField,
+            eclipseLocalField,
+            overridePluginsCheckBox,
+            validator));
 
       panel.add(overridePluginsCheckBox, "span");
       panel.add(new JLabel(Installer.getString(local)));
@@ -315,7 +318,8 @@ public class EclipseStep
   private class EclipseHomeValidator
     implements Validator
   {
-    public boolean isValid(Object value) {
+    public boolean isValid(Object value)
+    {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
         File plugins = new File(FilenameUtils.concat(folder, "plugins"));
@@ -325,7 +329,8 @@ public class EclipseStep
       return true;
     }
 
-    public String getErrorMessage() {
+    public String getErrorMessage()
+    {
       return getName() + ".home.invalid";
     }
   }
@@ -333,7 +338,8 @@ public class EclipseStep
   private class EclipseHomeWritableValidator
     implements Validator
   {
-    public boolean isValid(Object value) {
+    public boolean isValid(Object value)
+    {
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
         File plugins =
@@ -346,7 +352,8 @@ public class EclipseStep
       return true;
     }
 
-    public String getErrorMessage() {
+    public String getErrorMessage()
+    {
       return getName() + ".home.writable";
     }
   }
@@ -371,15 +378,18 @@ public class EclipseStep
       this.eclipseHomeValidator = eclipseHomeValidator;
     }
 
-    public void insertUpdate(DocumentEvent e) {
+    public void insertUpdate(DocumentEvent e)
+    {
       pathUpdated(e);
     }
 
-    public void removeUpdate(DocumentEvent e) {
+    public void removeUpdate(DocumentEvent e)
+    {
       pathUpdated(e);
     }
 
-    public void changedUpdate(DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e)
+    {
       pathUpdated(e);
     }
 
@@ -417,18 +427,20 @@ public class EclipseStep
     private JTextField eclipseHomeField;
     private JTextField eclipseLocalField;
 
-    public InitializeAction(JTextField eclipseHomeField, JTextField eclipseLocalField)
+    public InitializeAction(
+        JTextField eclipseHomeField, JTextField eclipseLocalField)
     {
       super("Initialize");
       this.eclipseHomeField = eclipseHomeField;
       this.eclipseLocalField = eclipseLocalField;
     }
 
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e)
+    {
       setBusy(true);
       try{
         Worker.post(new Task(){
-          public Object run () throws Exception {
+          public Object run() throws Exception {
             String eclipseHome = eclipseHomeField.getText();
             String launcher = EclipseUtils.findEclipseLauncherJar(eclipseHome);
 
@@ -460,10 +472,12 @@ public class EclipseStep
             }
           });
         }else{
-          GuiDialogs.showError("Unable to locate initialized user local eclipse dir.");
+          GuiDialogs.showError(
+              "Unable to locate initialized user local eclipse dir.");
         }
       }catch(Exception ex){
-        GuiDialogs.showError("Error initializing user local eclipse configuration.", ex);
+        GuiDialogs.showError(
+            "Error initializing user local eclipse configuration.", ex);
       }finally{
         setBusy(false);
       }

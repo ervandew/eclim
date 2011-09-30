@@ -31,15 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclim.util.IOUtils;
-
-import org.eclipse.core.runtime.adaptor.LocationManager;
-
-import org.eclipse.osgi.internal.baseadaptor.AdaptorUtil;
-
-import com.martiansoftware.nailgun.NGContext;
-import com.martiansoftware.nailgun.NGServer;
-
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -50,18 +41,27 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.PluginResources;
 
+import org.eclim.util.IOUtils;
+
 import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.eclipse.core.runtime.adaptor.LocationManager;
+
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+
+import org.eclipse.osgi.internal.baseadaptor.AdaptorUtil;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+
+import com.martiansoftware.nailgun.NGContext;
+import com.martiansoftware.nailgun.NGServer;
 
 /**
  * Abstract base class containing shared functionality used by implementations

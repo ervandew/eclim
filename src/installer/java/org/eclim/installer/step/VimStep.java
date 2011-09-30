@@ -40,15 +40,6 @@ import javax.swing.event.ListSelectionListener;
 
 import javax.swing.filechooser.FileFilter;
 
-import org.formic.util.File;
-
-import org.formic.wizard.form.Validator;
-
-import foxtrot.Task;
-import foxtrot.Worker;
-
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -65,10 +56,12 @@ import org.formic.InstallContext;
 import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
+import org.formic.util.File;
 
 import org.formic.util.dialog.gui.GuiDialogs;
 
 import org.formic.wizard.form.GuiForm;
+import org.formic.wizard.form.Validator;
 
 import org.formic.wizard.form.gui.component.FileChooser;
 
@@ -78,6 +71,11 @@ import org.formic.wizard.step.AbstractGuiStep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import foxtrot.Task;
+import foxtrot.Worker;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Step for choosing the vimfiles directory to install vim scripts in.
@@ -159,7 +157,7 @@ public class VimStep
     String skip = fieldName("skip");
     skipCheckBox = new JCheckBox(Installer.getString(skip));
     skipCheckBox.addActionListener(new ActionListener(){
-      public void actionPerformed (ActionEvent e){
+      public void actionPerformed(ActionEvent e){
         boolean selected = ((JCheckBox)e.getSource()).isSelected();
         JTextField fileField = fileChooser.getTextField();
         fileField.setEnabled(!selected);
@@ -207,7 +205,7 @@ public class VimStep
       setBusy(true);
       try{
         runtimePath = (String[])Worker.post(new Task(){
-          public Object run () throws Exception {
+          public Object run() throws Exception {
             setGvimProperty();
             return getVimRuntimePath();
           }
@@ -249,7 +247,7 @@ public class VimStep
             panel.add(scrollPane, "span, grow");
 
             dirList.addListSelectionListener(new ListSelectionListener(){
-              public void valueChanged (ListSelectionEvent event){
+              public void valueChanged(ListSelectionEvent event){
                 if(!event.getValueIsAdjusting()){
                   fileChooser.getTextField()
                     .setText((String)dirList.getSelectedValue());
@@ -453,7 +451,11 @@ public class VimStep
         vims = UNIX_VIMS;
       }
 
-      String[] args = {null, "-f", "-X", "-u", "NONE", "-U", "NONE", "--cmd", command};
+      String[] args = {
+        null, "-f", "-X",
+        "-u", "NONE", "-U", "NONE",
+        "--cmd", command,
+      };
       for (int ii = 0; ii < vims.length; ii++){
         args[0] = vims[ii];
         CommandExecutor executor = CommandExecutor.execute(args, 5000);

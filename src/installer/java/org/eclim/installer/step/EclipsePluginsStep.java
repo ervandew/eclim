@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,18 +68,10 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FilenameUtils;
-
-import org.apache.commons.lang.SystemUtils;
-
-import org.formic.util.Extractor;
-
-import com.jgoodies.looks.plastic.PlasticTheme;
-
-import foxtrot.Worker;
-
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.installer.URLProgressInputStream;
 
@@ -92,6 +84,8 @@ import org.eclim.installer.step.command.UninstallCommand;
 import org.eclim.installer.theme.DesertBlue;
 
 import org.formic.Installer;
+
+import org.formic.util.Extractor;
 
 import org.formic.util.dialog.gui.GuiDialogs;
 
@@ -108,6 +102,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.jgoodies.looks.plastic.PlasticTheme;
+
+import foxtrot.Worker;
 
 /**
  * Step which installs necessary third party eclipse plugins.
@@ -261,7 +259,7 @@ public class EclipsePluginsStep
             tableModel.addRow(new Object[]{
               dependency.getId(),
               version,
-              (dependency.isUpgrade() ? "Upgrade" : "Install") + manual
+              (dependency.isUpgrade() ? "Upgrade" : "Install") + manual,
             });
           }
 
@@ -453,9 +451,10 @@ public class EclipsePluginsStep
               Feature feature = dependency.getFeature();
               if (feature != null) {
                 if (feature.getSite() == null){
+                  String installLog = FilenameUtils.concat(
+                    SystemUtils.JAVA_IO_TMPDIR, "install.log");
                   GuiDialogs.showWarning(Installer.getString(
-                      "eclipsePlugins.install.features.site.not.found",
-                      FilenameUtils.concat(SystemUtils.JAVA_IO_TMPDIR, "install.log")));
+                      "eclipsePlugins.install.features.site.not.found", installLog));
                   return Boolean.FALSE;
                 }else if (!feature.getSite().canWrite()){
                   GuiDialogs.showWarning(Installer.getString(
@@ -549,7 +548,8 @@ public class EclipsePluginsStep
       super("Skip");
     }
 
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e)
+    {
       if(GuiDialogs.showConfirm(Installer.getString("eclipsePlugins.skip"))){
         setValid(true);
       }
@@ -567,7 +567,9 @@ public class EclipsePluginsStep
       Component component = super.getTableCellRendererComponent(
           table, value, isSelected, hasFocus, row, column);
       Feature feature = ((Dependency)dependencies.get(row)).getFeature();
-      if (feature != null && (feature.getSite() == null || !feature.getSite().canWrite())){
+      if (feature != null &&
+          (feature.getSite() == null || !feature.getSite().canWrite()))
+      {
         component.setBackground(isSelected ?
             theme.getMenuItemSelectedBackground() : ERROR_COLOR);
         component.setForeground(isSelected ? ERROR_COLOR : Color.BLACK);
@@ -602,7 +604,8 @@ public class EclipsePluginsStep
         if (feature.getSite() == null){
           setMessage(Installer.getString("eclipsePlugins.upgrade.site.not.found"));
         }else if (!feature.getSite().canWrite()){
-          setMessage(Installer.getString("eclipsePlugins.upgrade.permission.denied"));
+          setMessage(Installer.getString(
+                "eclipsePlugins.upgrade.permission.denied"));
         }
       }else{
         setMessage(null);
@@ -771,37 +774,45 @@ public class EclipsePluginsStep
     private String featureUrl;
     private String featureVersion;
 
-    public Dependency(String id, String version, String[] sites) {
+    public Dependency(String id, String version, String[] sites)
+    {
       this.id = id;
       this.version = version;
       this.sites = sites;
     }
 
-    public String[] getSites() {
+    public String[] getSites()
+    {
       return sites;
     }
 
-    public String getId() {
+    public String getId()
+    {
       return id;
     }
 
-    public String getVersion() {
+    public String getVersion()
+    {
       return version;
     }
 
-    public boolean isUpgrade() {
+    public boolean isUpgrade()
+    {
       return upgrade;
     }
 
-    public Feature getFeature() {
+    public Feature getFeature()
+    {
       return feature;
     }
 
-    public String getFeatureUrl() {
+    public String getFeatureUrl()
+    {
       return featureUrl;
     }
 
-    public String getFeatureVersion() {
+    public String getFeatureVersion()
+    {
       return featureVersion;
     }
 
@@ -822,7 +833,8 @@ public class EclipsePluginsStep
       return true;
     }
 
-    private int compareVersions(String v1, String v2){
+    private int compareVersions(String v1, String v2)
+    {
       String[] dv = StringUtils.split(v1, ".");
       String[] fv = StringUtils.split(v2, ".");
       for (int ii = 0; ii < dv.length; ii++){
@@ -897,7 +909,8 @@ public class EclipsePluginsStep
     private String version;
     private File site;
 
-    public Feature(String id, String version, File site) {
+    public Feature(String id, String version, File site)
+    {
       this.id = id;
       this.site = site;
 
@@ -906,15 +919,18 @@ public class EclipsePluginsStep
       this.version = matcher.group(1);
     }
 
-    public String getId() {
+    public String getId()
+    {
       return id;
     }
 
-    public String getVersion() {
+    public String getVersion()
+    {
       return version;
     }
 
-    public File getSite() {
+    public File getSite()
+    {
       return this.site;
     }
   }
@@ -933,7 +949,8 @@ public class EclipsePluginsStep
       NAMES.add("featureList.python");
     }
 
-    public int compare(String ob1, String ob2) {
+    public int compare(String ob1, String ob2)
+    {
       return NAMES.indexOf(ob1) - NAMES.indexOf(ob2);
     }
   }

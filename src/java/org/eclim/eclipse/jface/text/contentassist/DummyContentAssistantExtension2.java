@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@ package org.eclim.eclipse.jface.text.contentassist;
 import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.ICompletionListener;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistantExtension2;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 /**
  * Dummy implementation of IContentAssistantExtension2.

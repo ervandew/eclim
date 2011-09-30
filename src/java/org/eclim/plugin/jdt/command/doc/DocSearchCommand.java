@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,8 @@ public class DocSearchCommand
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+        {
           String result = createDocSearchResult(match);
           if(result != null){
             results.add(result);

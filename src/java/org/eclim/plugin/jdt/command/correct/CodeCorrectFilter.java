@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ public class CodeCorrectFilter
             !preview.trim().startsWith("Start the") &&
             !preview.trim().startsWith("Opens") &&
             !preview.trim().startsWith("Evaluates") &&
-            !preview.trim().startsWith("<p>Move")){
+            !preview.trim().startsWith("<p>Move"))
+        {
           if(buffer.length() == 0){
             buffer.append(result.getProblem().getMessage());
           }

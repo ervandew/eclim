@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@ import java.io.InputStream;
 
 import java.util.Map;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyShell;
-
 import org.eclim.Services;
 
 import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.file.FileUtils;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyShell;
 
 /**
  * Utility classes for working with scripts.

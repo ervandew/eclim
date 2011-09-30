@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,7 +201,8 @@ public class MethodUtils
       // check for varargs
       if (ii == paramTypes.length - 1 &&
           Signature.getTypeSignatureKind(type) == Signature.ARRAY_TYPE_SIGNATURE &&
-          Flags.isVarargs(method.getFlags())){
+          Flags.isVarargs(method.getFlags()))
+      {
         type = Signature.getElementType(paramTypes[ii]);
         varargs = true;
       }

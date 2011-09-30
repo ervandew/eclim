@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -266,7 +266,8 @@ public class CallHierarchyCommand
     public ICElement element;
     public String location;
 
-    public Call(IIndexName name, ICElement element){
+    public Call(IIndexName name, ICElement element)
+    {
       this.name = name;
       this.element = element;
       this.location =

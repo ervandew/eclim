@@ -93,7 +93,8 @@ public class CorePlugin
         if (name.startsWith("org.eclim.") &&
             name.indexOf("core") == -1 &&
             name.indexOf("installer") == -1 &&
-            name.indexOf("vimplugin") == -1){
+            name.indexOf("vimplugin") == -1)
+        {
           return true;
         }
         return false;

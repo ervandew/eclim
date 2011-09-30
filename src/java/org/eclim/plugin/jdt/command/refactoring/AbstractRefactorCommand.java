@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,7 +195,8 @@ public abstract class AbstractRefactorCommand
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
         writer.write("diff: ");
-        writer.write(text.getFile().getRawLocation().toOSString().replace('\\', '/'));
+        writer.write(text.getFile().getRawLocation()
+            .toOSString().replace('\\', '/'));
       }else{
         writer.write("other: ");
         writer.write(change.toString());
@@ -217,7 +218,9 @@ public abstract class AbstractRefactorCommand
     }else{
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
-        if (text.getFile().getRawLocation().toOSString().replace('\\', '/').equals(file)){
+        String path = text.getFile().getRawLocation()
+          .toOSString().replace('\\', '/');
+        if (path.equals(file)){
           return text.getPreviewContent(new NullProgressMonitor());
         }
       }

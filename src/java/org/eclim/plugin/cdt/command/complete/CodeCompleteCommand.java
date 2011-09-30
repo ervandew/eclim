@@ -137,7 +137,8 @@ public class CodeCompleteCommand
       String completion = ((CCompletionProposal)proposal).getReplacementString();
       if (displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1 &&
           (completion.length() > 0 &&
-           completion.charAt(completion.length() - 1) == ')')){
+           completion.charAt(completion.length() - 1) == ')'))
+      {
         completion = completion.substring(0, completion.length() - 1);
       } else if (completion.charAt(0) == '<'){
         completion = completion.substring(1, completion.length());

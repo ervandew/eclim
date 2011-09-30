@@ -57,7 +57,8 @@ public class Services
    */
   public static List<Class<? extends Command>> getCommandClasses()
   {
-    ArrayList<Class<? extends Command>> commands = new ArrayList<Class<? extends Command>>();
+    ArrayList<Class<? extends Command>> commands =
+      new ArrayList<Class<? extends Command>>();
     for (PluginResources resources : pluginResources.values()){
       commands.addAll(resources.getCommandClasses());
     }

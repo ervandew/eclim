@@ -78,7 +78,7 @@ public class Application
     return method.invoke(this, args);
   }
 
-  private Object getPrivateField (String fieldName)
+  private Object getPrivateField(String fieldName)
     throws Exception
   {
     Field field =
@@ -237,7 +237,7 @@ public class Application
       invokePrivate("collectRoots",
           new Class[]{IProfile.class, List.class, Boolean.TYPE},
           new Object[]{profile, rootsToInstall, true});
-    Collection <IInstallableUnit> uninstalls = (Collection<IInstallableUnit>)
+    Collection<IInstallableUnit> uninstalls = (Collection<IInstallableUnit>)
       invokePrivate("collectRoots",
           new Class[]{IProfile.class, List.class, Boolean.TYPE},
           new Object[]{profile, rootsToUninstall, false});
@@ -341,7 +341,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#beginTask(String,int)
      */
-    public void beginTask (String name, int totalWork)
+    public void beginTask(String name, int totalWork)
     {
       System.out.println("beginTask: totalWork=" + totalWork + " name=" + name);
     }
@@ -350,7 +350,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#done()
      */
-    public void done ()
+    public void done()
     {
       System.out.println("done");
     }
@@ -359,7 +359,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#internalWorked(double)
      */
-    public void internalWorked (double work)
+    public void internalWorked(double work)
     {
       totalWorked += work;
       System.out.println("internalWorked: " + totalWorked);
@@ -369,7 +369,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#isCanceled()
      */
-    public boolean isCanceled ()
+    public boolean isCanceled()
     {
       return canceled;
     }
@@ -378,7 +378,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#setCanceled(boolean)
      */
-    public void setCanceled (boolean canceled)
+    public void setCanceled(boolean canceled)
     {
       this.canceled = canceled;
     }
@@ -387,7 +387,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#setTaskName(String)
      */
-    public void setTaskName (String name)
+    public void setTaskName(String name)
     {
       System.out.println("setTaskName: " + name);
     }
@@ -396,7 +396,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#subTask(String)
      */
-    public void subTask (String name)
+    public void subTask(String name)
     {
       if (name != null && !name.trim().equals(StringUtils.EMPTY)){
         System.out.println("subTask: " + name);
@@ -407,7 +407,7 @@ public class Application
      * {@inheritDoc}
      * @see IProgressMonitor#worked(int)
      */
-    public void worked (int work)
+    public void worked(int work)
     {
       totalWorked += work;
       System.out.println("worked: " + totalWorked);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,7 +130,8 @@ public class ValidateCommand
       if(SERVLET.equals(localName) || FILTER.equals(localName)){
         mapping = false;
       }else if(SERVLET_MAPPING.equals(localName) ||
-          FILTER_MAPPING.equals(localName)){
+          FILTER_MAPPING.equals(localName))
+      {
         mapping = true;
       }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,8 @@ public class ValidateCommand
       // FIXME: hack to ignore errors regarding no defined dtd.
       // When 1.4 no longer needs to be supported, this can be scrapped.
       if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
-          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1){
+          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
+      {
         ii.remove();
       }
     }

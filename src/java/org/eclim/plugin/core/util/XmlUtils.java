@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -640,7 +640,8 @@ public class XmlUtils
           location = location.substring(2);
         }
         if (FileUtils.getFullPath(location).equals(
-              FileUtils.getPath(location))){
+              FileUtils.getPath(location)))
+        {
           location = FileUtils.concat(path, location);
         }
 

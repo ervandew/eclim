@@ -282,8 +282,8 @@ public class JavaCommand
 
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
-      SearchParticipant[] participants = new SearchParticipant[]{
-        SearchEngine.getDefaultSearchParticipant()};
+      SearchParticipant[] participants =
+        new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
       engine.search(pattern, participants, scope, requestor, null);
 
       // if we found only 1 result, we can use it.
@@ -329,7 +329,8 @@ public class JavaCommand
     }
 
     @Override
-    public synchronized void complete() throws IOException {
+    public synchronized void complete() throws IOException
+    {
       getContext().out.flush();
       getContext().err.flush();
     }

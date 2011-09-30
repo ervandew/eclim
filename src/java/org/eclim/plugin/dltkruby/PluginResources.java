@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@ import org.eclim.Services;
 
 import org.eclim.plugin.AbstractPluginResources;
 
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
+
 import org.eclim.plugin.dltk.preference.DltkInterpreterTypeManager;
 
 import org.eclim.plugin.dltk.util.DltkUtils;
 
 import org.eclim.plugin.dltkruby.project.RubyProjectManager;
-
-import org.eclim.plugin.core.project.ProjectManagement;
-import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclipse.dltk.ruby.core.RubyNature;
 

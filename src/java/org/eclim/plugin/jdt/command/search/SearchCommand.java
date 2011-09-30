@@ -116,7 +116,8 @@ public class SearchCommand
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+        {
           SearchResult result = createSearchResult(match);
           if(result != null){
             results.add(result);
@@ -217,8 +218,8 @@ public class SearchCommand
     SearchRequestor requestor = new SearchRequestor();
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
-      SearchParticipant[] participants = new SearchParticipant[]{
-        SearchEngine.getDefaultSearchParticipant()};
+      SearchParticipant[] participants =
+        new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
       engine.search(pattern, participants, scope, requestor, null);
     }
     return requestor.getMatches();
@@ -291,7 +292,8 @@ public class SearchCommand
 
           // determine if src path is project relative or file system absolute.
           if(srcPath.isAbsolute() &&
-             elementProject.getName().equals(srcPath.segment(0))){
+             elementProject.getName().equals(srcPath.segment(0)))
+          {
             rootPath = ProjectUtils.getFilePath(elementProject,
                 srcPath.toString());
           }else{
@@ -355,7 +357,8 @@ public class SearchCommand
 
     // field / method declaration
     if (theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
-        theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class)){
+        theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class))
+    {
       return IJavaSearchConstants.ALL_OCCURRENCES;
     }
 

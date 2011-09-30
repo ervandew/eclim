@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -462,7 +462,8 @@ public class TypeUtils
         typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
       }
       if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length){
+          baseType.getTypeArguments().length == typeArgs.length)
+      {
         typeArgs = baseType.getTypeArguments();
       }
 
@@ -549,7 +550,8 @@ public class TypeUtils
         typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
       }
       if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length){
+          baseType.getTypeArguments().length == typeArgs.length)
+      {
         typeArgs = baseType.getTypeArguments();
       }
 

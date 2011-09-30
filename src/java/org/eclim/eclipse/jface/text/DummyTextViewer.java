@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,8 @@ public class DummyTextViewer
     return true;
   }
 
-  public void setDocument(IDocument document, int modelRangeOffset, int modelRangeLength)
+  public void setDocument(
+      IDocument document, int modelRangeOffset, int modelRangeLength)
   {
   }
 
@@ -157,7 +158,8 @@ public class DummyTextViewer
     return false;
   }
 
-  public void changeTextPresentation(TextPresentation presentation, boolean controlRedraw)
+  public void changeTextPresentation(
+      TextPresentation presentation, boolean controlRedraw)
   {
   }
 
@@ -169,7 +171,8 @@ public class DummyTextViewer
   {
   }
 
-  public void setTextColor(Color color, int offset, int length, boolean controlRedraw)
+  public void setTextColor(
+      Color color, int offset, int length, boolean controlRedraw)
   {
   }
 

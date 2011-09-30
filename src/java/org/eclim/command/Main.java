@@ -101,7 +101,8 @@ public class Main
       String result = command.execute(commandLine);
       context.out.println(result);
     }catch(Exception e){
-      logger.debug("Command triggered exception: " + Arrays.toString(context.getArgs()), e);
+      logger.debug("Command triggered exception: " +
+          Arrays.toString(context.getArgs()), e);
       e.printStackTrace(context.err);
 
       logger.debug("Main - exit on error");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@ import java.util.Map;
 
 import org.eclim.Services;
 
-import org.eclim.plugin.jdt.PluginResources;
-
 import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.core.util.ProjectUtils;
+
+import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.util.file.FileUtils;
 
@@ -272,7 +272,8 @@ public class JavaUtils
   {
     IJavaElement parent = element;
     while(parent.getElementType() != IJavaElement.COMPILATION_UNIT &&
-        parent.getElementType() != IJavaElement.CLASS_FILE){
+        parent.getElementType() != IJavaElement.CLASS_FILE)
+    {
       parent = parent.getParent();
     }
     return parent;
@@ -310,7 +311,8 @@ public class JavaUtils
   {
     IJavaElement parent = element;
     while(parent.getElementType() != IJavaElement.COMPILATION_UNIT &&
-        parent.getElementType() != IJavaElement.CLASS_FILE){
+        parent.getElementType() != IJavaElement.CLASS_FILE)
+    {
       parent = parent.getParent();
     }
 
@@ -414,7 +416,8 @@ public class JavaUtils
 
     // classes in same package are auto imported.
     if ((pkg == null && typePkg == null) ||
-        (pkg != null && pkg.equals(typePkg))){
+        (pkg != null && pkg.equals(typePkg)))
+    {
       return true;
     }
 

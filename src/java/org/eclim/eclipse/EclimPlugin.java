@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -188,8 +188,9 @@ public class EclimPlugin
             new BundleDescription[] {bundle});
       boolean foundLeaf = false;
       for (int i = 0; i < unsatisfiedLeaves.length; i++) {
-        if (unsatisfiedLeaves[i].getBundle() == bundle)
+        if (unsatisfiedLeaves[i].getBundle() == bundle){
           continue;
+        }
         if (!foundLeaf) {
           foundLeaf = true;
           writer.print("  ");
@@ -199,7 +200,8 @@ public class EclimPlugin
         writer.println(unsatisfiedLeaves[i].getBundle().getLocation() +
             " [" + unsatisfiedLeaves[i].getBundle().getBundleId() + "]");
         writer.print("      ");
-        writer.println(MessageHelper.getResolutionFailureMessage(unsatisfiedLeaves[i]));
+        writer.println(
+            MessageHelper.getResolutionFailureMessage(unsatisfiedLeaves[i]));
       }
     }
     return out.toString();

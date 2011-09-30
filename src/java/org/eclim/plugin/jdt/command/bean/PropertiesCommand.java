@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,8 +215,8 @@ public class PropertiesCommand
     if(array){
       propertyType = Signature.getSignatureSimpleName(
           Signature.getElementType(field.getTypeSignature()));
-      args = new String[]{
-        INT_SIG, Signature.getElementType(field.getTypeSignature())};
+      String elementType = Signature.getElementType(field.getTypeSignature());
+      args = new String[]{INT_SIG, elementType};
     }
     IMethod method = type.getMethod(methodName, args);
     if(!method.exists()){
@@ -489,8 +489,9 @@ public class PropertiesCommand
 
     // index setter
     if(!isBoolean){
-      method = type.getMethod("set" + nextProperty, new String[]{
-        INT_SIG, Signature.getElementType(field.getTypeSignature())});
+      String elementType = Signature.getElementType(field.getTypeSignature());
+      method = type.getMethod(
+          "set" + nextProperty, new String[]{INT_SIG, elementType});
       if(method.exists()){
         result = method;
       }

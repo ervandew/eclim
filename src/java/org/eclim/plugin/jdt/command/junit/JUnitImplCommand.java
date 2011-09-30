@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ public class JUnitImplCommand
     }
 
     TypeInfo[] testTypes = super.getSuperTypes(commandLine, type);
-    for(int ii = 0; ii <testTypes.length; ii ++){
+    for(int ii = 0; ii < testTypes.length; ii ++){
       if(!types.contains(testTypes[ii])){
         types.add(testTypes[ii]);
       }

@@ -38,17 +38,16 @@ import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.core.preference.JsonValidator;
 import org.eclim.plugin.core.preference.Preference;
+import org.eclim.plugin.core.preference.PreferenceFactory;
+import org.eclim.plugin.core.preference.Preferences;
 import org.eclim.plugin.core.preference.RegexValidator;
+
+import org.eclim.plugin.core.project.ProjectManagement;
+import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.jdt.preference.OptionHandler;
 
 import org.eclim.plugin.jdt.project.JavaProjectManager;
-
-import org.eclim.plugin.core.preference.PreferenceFactory;
-import org.eclim.plugin.core.preference.Preferences;
-
-import org.eclim.plugin.core.project.ProjectManagement;
-import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
@@ -149,7 +148,8 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
-      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)\n" +
+      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations " +
+        "(true|false)\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
     );
 
@@ -197,7 +197,8 @@ public class PluginResources
         // eclipse didn't find src.zip, so search other known locations.
         if (libraryPath.lastSegment().equals("rt.jar") &&
             (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
-             !locations[ii].getSystemLibrarySourcePath().toFile().exists())){
+             !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
+        {
           IPath jreSrc = null;
 
           logger.debug("Attempting to locate jre src.zip for JAVA_HOME: {}",
@@ -207,7 +208,8 @@ public class PluginResources
 
             // absolute path
             if (location.startsWith("/") ||
-                location.indexOf(':') != -1){
+                location.indexOf(':') != -1)
+            {
               jreSrc = new Path(location);
 
             // relative path

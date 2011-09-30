@@ -176,12 +176,14 @@ public class Option
     }
 
     if (this.getPath().startsWith(GENERAL) &&
-        !obj.getPath().startsWith(GENERAL)){
+        !obj.getPath().startsWith(GENERAL))
+    {
       return -1;
     }
 
     if (obj.getPath().startsWith(GENERAL) &&
-        !this.getPath().startsWith(GENERAL)){
+        !this.getPath().startsWith(GENERAL))
+    {
       return 1;
     }
 

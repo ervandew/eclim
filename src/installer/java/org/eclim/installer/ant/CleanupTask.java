@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,8 @@ public class CleanupTask
         String artifacts = IOUtils.toString(fin);
         fin.close();
         Pattern pattern = Pattern.compile(
-          "\n\\s*<artifact classifier='osgi.bundle' id='org\\.eclim\\.installer.*?</artifact>",
+          "\n\\s*<artifact classifier='osgi.bundle' " +
+          "id='org\\.eclim\\.installer.*?</artifact>",
           Pattern.DOTALL);
         artifacts = pattern.matcher(artifacts).replaceFirst("");
         fout = new FileWriter(project.replaceProperties(
@@ -92,11 +93,15 @@ public class CleanupTask
       }
 
       // remove references to the temp formic update site.
+      String settingsDir = "p2/org.eclipse.equinox.p2.engine/.settings/";
+      String profileSettingsDir =
+        "p2/org.eclipse.equinox.p2.engine/profileRegistry/" +
+        "SDKProfile.profile/.data/.settings/";
       String[] files = new String[]{
-        "p2/org.eclipse.equinox.p2.engine/.settings/org.eclipse.equinox.p2.artifact.repository.prefs",
-        "p2/org.eclipse.equinox.p2.engine/.settings/org.eclipse.equinox.p2.metadata.repository.prefs",
-        "p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile/.data/.settings/org.eclipse.equinox.p2.artifact.repository.prefs",
-        "p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile/.data/.settings/org.eclipse.equinox.p2.metadata.repository.prefs",
+        settingsDir + "org.eclipse.equinox.p2.artifact.repository.prefs",
+        settingsDir + "org.eclipse.equinox.p2.metadata.repository.prefs",
+        profileSettingsDir + "org.eclipse.equinox.p2.artifact.repository.prefs",
+        profileSettingsDir + "org.eclipse.equinox.p2.metadata.repository.prefs",
       };
       Pattern pattern = Pattern.compile("^.*formic.*$\n", Pattern.MULTILINE);
       for (int ii = 0; ii < files.length; ii++){

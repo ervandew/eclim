@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.FileOffsets;
 
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 

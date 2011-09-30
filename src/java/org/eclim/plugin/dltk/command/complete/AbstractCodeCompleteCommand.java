@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,8 @@ public abstract class AbstractCodeCompleteCommand
    * @param module The source module.
    * @return The completion collector.
    */
-  protected abstract ScriptCompletionProposalCollector getCompletionCollector(ISourceModule module)
+  protected abstract ScriptCompletionProposalCollector getCompletionCollector(
+      ISourceModule module)
     throws Exception;
 
   /**
@@ -154,7 +155,8 @@ public abstract class AbstractCodeCompleteCommand
   {
     private Collator COLLATOR = Collator.getInstance(Locale.US);
 
-    public int compare(IScriptCompletionProposal p1, IScriptCompletionProposal p2) {
+    public int compare(IScriptCompletionProposal p1, IScriptCompletionProposal p2)
+    {
       int diff = p1.getRelevance() - p2.getRelevance();
       if (diff == 0){
         return COLLATOR.compare(getCompletion(p1), getCompletion(p2));

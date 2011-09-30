@@ -648,9 +648,19 @@ target(name: 'vimdocs'){
 target(name: 'checkstyle'){
   path(id: 'checkstyle-classpath'){
     fileset(dir: 'src/ant/lib/', includes: 'checkstyle-*.jar')
+    pathelement(path: '${build.classes}/checkstyle')
   }
+  mkdir(dir: '${build.classes}/checkstyle')
+  javac(
+      destdir: '${build.classes}/checkstyle',
+      srcdir: 'src/ant/checkstyle',
+      classpathref: 'checkstyle-classpath',
+      debug: 'on', optimize: false, deprecation: '${javac.deprecation}',
+      target: '${javac.target}', source: '${javac.target}',
+      failonerror: true,
+      includeantruntime: false)
   taskdef(resource: 'checkstyletask.properties', classpathref: 'checkstyle-classpath')
-  checkstyle(config: 'src/java/checkstyle.xml'){
+  checkstyle(config: 'src/ant/checkstyle/checkstyle.xml'){
     fileset(dir: 'src/java',
       includes: 'org/eclim/**/*.java',
       excludes: 'org/eclim/util/file/BufferedReader.java')

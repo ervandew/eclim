@@ -40,7 +40,7 @@ public abstract class Command
   extends CommandExecutor
 {
   private static final String[] LAUNCHER = new String[]{
-    "-jar", null, "-clean", "-application", null
+    "-jar", null, "-clean", "-application", null,
   };
   private static final Pattern PROPERTY_RE =
     Pattern.compile("^(http\\.|java\\.net\\.|org\\.eclipse\\.).*");
@@ -60,7 +60,8 @@ public abstract class Command
     String[] vmargs = getJvmArgs();
 
     this.handler = handler;
-    this.cmd = new String[jargs.length + vmargs.length + cmd.length + LAUNCHER.length];
+    this.cmd = new String[
+      jargs.length + vmargs.length + cmd.length + LAUNCHER.length];
 
     String launcher = EclipseUtils.findEclipseLauncherJar();
     if (launcher == null){
@@ -69,15 +70,20 @@ public abstract class Command
         Installer.getProject().getProperty("eclipse.home"));
     }
 
+    int index = 0;
 
-    this.cmd[0] = "java";
-    this.cmd[1] = "java";
-    System.arraycopy(jargs, 0, this.cmd, 0, jargs.length);
-    System.arraycopy(vmargs, 0, this.cmd, jargs.length, vmargs.length);
-    System.arraycopy(LAUNCHER, 0, this.cmd, jargs.length + vmargs.length, LAUNCHER.length);
+    System.arraycopy(jargs, 0, this.cmd, index, jargs.length);
+    index += jargs.length;
+
+    System.arraycopy(vmargs, 0, this.cmd, index, vmargs.length);
+    index += vmargs.length;
+
+    System.arraycopy(LAUNCHER, 0, this.cmd, index, LAUNCHER.length);
+    index += LAUNCHER.length;
+
     this.cmd[jargs.length + vmargs.length + 1] = launcher;
     this.cmd[jargs.length + vmargs.length + 4] = application;
-    System.arraycopy(cmd, 0, this.cmd, jargs.length + vmargs.length + LAUNCHER.length, cmd.length);
+    System.arraycopy(cmd, 0, this.cmd, index, cmd.length);
   }
 
   @SuppressWarnings("rawtypes")
