@@ -38,6 +38,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.formic.util.File;
 
 import org.formic.wizard.form.Validator;
@@ -136,8 +138,24 @@ public class VimStep
   public Component init()
   {
     GuiForm form = createForm();
+
     String files = fieldName("files");
     fileChooser = new FileChooser(JFileChooser.DIRECTORIES_ONLY);
+
+    // allow just .vim dirs to not be hidden
+    fileChooser.getFileChooser().setFileHidingEnabled(false);
+    fileChooser.getFileChooser().addChoosableFileFilter(new FileFilter(){
+      public boolean accept(java.io.File f) {
+        String path = f.getAbsolutePath();
+        return f.isDirectory() && (
+          path.matches(".*/\\.vim(/.*|$)") ||
+          !path.matches(".*/\\..*"));
+      }
+      public String getDescription() {
+        return null;
+      }
+    });
+
     String skip = fieldName("skip");
     skipCheckBox = new JCheckBox(Installer.getString(skip));
     skipCheckBox.addActionListener(new ActionListener(){
