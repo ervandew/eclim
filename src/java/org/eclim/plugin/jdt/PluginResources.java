@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,10 @@ import org.eclim.Services;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
+
+import org.eclim.plugin.core.preference.JsonValidator;
+import org.eclim.plugin.core.preference.Preference;
+import org.eclim.plugin.core.preference.RegexValidator;
 
 import org.eclim.plugin.jdt.preference.OptionHandler;
 
@@ -121,6 +125,7 @@ public class PluginResources
     ProjectNatureFactory.addNature("java", NATURE);
     ProjectManagement.addProjectManager(NATURE, new JavaProjectManager());
 
+    Preferences preferences = Preferences.getInstance();
     PreferenceFactory.addPreferences(NATURE,
       "JDT org.eclim.java.logging.impl commons-logging " +
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
@@ -147,6 +152,22 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
     );
+
+    Preference jvmArgsPref = new Preference();
+    jvmArgsPref.setNature(NATURE);
+    jvmArgsPref.setPath("JDT");
+    jvmArgsPref.setName("org.eclim.java.run.jvmargs");
+    jvmArgsPref.setValidator(
+        new JsonValidator(String[].class, new RegexValidator("^-.*")));
+    preferences.addPreference(jvmArgsPref);
+
+    Preference javacArgsPref = new Preference();
+    javacArgsPref.setNature(NATURE);
+    javacArgsPref.setPath("JDT");
+    javacArgsPref.setName("org.eclim.java.compile.args");
+    jvmArgsPref.setValidator(
+        new JsonValidator(String[].class, new RegexValidator("^-.*")));
+    preferences.addPreference(javacArgsPref);
   }
 
   /**

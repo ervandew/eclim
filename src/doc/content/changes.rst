@@ -16,6 +16,15 @@
 History of Changes
 ==================
 
+.. _1.7.3:
+
+1.7.3 (2012)
+----------------------
+
+Java:
+  - Add project settings for specifying default jvm args for
+    :ref:`:Java <:Java>` and default args for :ref:`:Javac <:Javac>`.
+
 .. _1.7.2:
 
 1.7.2 (Sep. 10, 2011)
