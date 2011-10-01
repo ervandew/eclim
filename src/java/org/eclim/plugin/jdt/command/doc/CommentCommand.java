@@ -34,17 +34,17 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.util.ASTUtils;
-import org.eclim.plugin.jdt.util.JavaUtils;
-import org.eclim.plugin.jdt.util.MethodUtils;
-import org.eclim.plugin.jdt.util.TypeInfo;
-import org.eclim.plugin.jdt.util.TypeUtils;
-
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
+
+import org.eclim.plugin.jdt.util.ASTUtils;
+import org.eclim.plugin.jdt.util.JavaUtils;
+import org.eclim.plugin.jdt.util.MethodUtils;
+import org.eclim.plugin.jdt.util.TypeInfo;
+import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.IOUtils;
 
@@ -470,7 +470,8 @@ public class CommentCommand
             }
             // if we hit the param tags, or the main text, insert below them.
             if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
-                tag.getTagName() == null){
+                tag.getTagName() == null)
+            {
               index = ii + 1;
               break;
             }
@@ -490,7 +491,8 @@ public class CommentCommand
           }
           // if we hit the param tags, or the main text we can stop.
           if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
-              tag.getTagName() == null){
+              tag.getTagName() == null)
+          {
             break;
           }
         }
@@ -541,7 +543,8 @@ public class CommentCommand
         // if we hit the return tag, a param tag, or the main text we can stop.
         if (TagElement.TAG_PARAM.equals(tag.getTagName()) ||
             TagElement.TAG_RETURN.equals(tag.getTagName()) ||
-            tag.getTagName() == null){
+            tag.getTagName() == null)
+        {
           break;
         }
       }

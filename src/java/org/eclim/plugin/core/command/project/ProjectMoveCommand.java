@@ -77,7 +77,8 @@ public class ProjectMoveCommand
       // to force eclipse to move the project to the default location in the
       // workspace. Also, take the last segment as the new project name.
       if (location.toOSString().toLowerCase().startsWith(
-            workspaceLocation.toOSString().toLowerCase())){
+            workspaceLocation.toOSString().toLowerCase()))
+      {
         String name = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation)).toString();
         // hack for windows... manually remove drive letter

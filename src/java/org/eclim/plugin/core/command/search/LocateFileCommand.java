@@ -29,12 +29,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclim.util.IOUtils;
-
-import com.wcohen.ss.Levenstein;
-
-import com.wcohen.ss.api.StringDistance;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -43,6 +37,9 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
+
+import org.eclim.util.IOUtils;
+import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -54,6 +51,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+
+import com.wcohen.ss.Levenstein;
+
+import com.wcohen.ss.api.StringDistance;
 
 /**
  * Given a file pattern, finds all files that match that pattern.

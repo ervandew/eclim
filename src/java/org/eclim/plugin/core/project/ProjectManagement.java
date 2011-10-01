@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -197,7 +197,8 @@ public class ProjectManagement
       // location must not overlap the workspace.
       IPath workspaceLocation = workspace.getRoot().getRawLocation();
       if (location.toOSString().toLowerCase().startsWith(
-            workspaceLocation.toOSString().toLowerCase())){
+            workspaceLocation.toOSString().toLowerCase()))
+      {
         String tmpName = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation)).toString();
         // hack for windows... manually remove drive letter

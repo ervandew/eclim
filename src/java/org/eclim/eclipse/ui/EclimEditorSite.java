@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,8 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#registerContextMenu(String,MenuManager,ISelectionProvider)
    */
-  public void registerContextMenu(String arg0, MenuManager arg1, ISelectionProvider arg2)
+  public void registerContextMenu(
+      String arg0, MenuManager arg1, ISelectionProvider arg2)
   {
   }
 
@@ -207,7 +208,8 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#registerContextMenu(MenuManager,ISelectionProvider,boolean)
    */
-  public void registerContextMenu(MenuManager arg0, ISelectionProvider arg1, boolean arg2)
+  public void registerContextMenu(
+      MenuManager arg0, ISelectionProvider arg1, boolean arg2)
   {
   }
 
@@ -215,7 +217,8 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see IEditorSite#registerContextMenu(String,MenuManager,ISelectionProvider,boolean)
    */
-  public void registerContextMenu(String arg0, MenuManager arg1, ISelectionProvider arg2, boolean arg3)
+  public void registerContextMenu(
+      String arg0, MenuManager arg1, ISelectionProvider arg2, boolean arg3)
   {
   }
 }

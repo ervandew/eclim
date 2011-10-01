@@ -128,7 +128,8 @@ public class ValidateCommand
       if(SERVLET.equals(localName) || FILTER.equals(localName)){
         mapping = false;
       }else if(SERVLET_MAPPING.equals(localName) ||
-          FILTER_MAPPING.equals(localName)){
+          FILTER_MAPPING.equals(localName))
+      {
         mapping = true;
       }
     }

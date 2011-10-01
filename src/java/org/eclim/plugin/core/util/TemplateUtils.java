@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,14 +26,6 @@ import java.io.Writer;
 
 import java.util.Map;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
-import groovy.lang.Writable;
-
-import groovy.text.Template;
-import groovy.text.TemplateEngine;
-
 import org.codehaus.groovy.control.CompilationFailedException;
 
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -43,6 +35,14 @@ import org.eclim.Services;
 import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.StringUtils;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
+import groovy.lang.Writable;
+
+import groovy.text.Template;
+import groovy.text.TemplateEngine;
 
 /**
  * Utility class for evaluating templates.
@@ -294,8 +294,8 @@ public class TemplateUtils
               break;
             }
           }
-          /* Don't eat EOL chars in sections - as they are valid instruction separators.
-           * See http://jira.codehaus.org/browse/GROOVY-980
+          /* Don't eat EOL chars in sections - as they are valid instruction
+           * separators. See http://jira.codehaus.org/browse/GROOVY-980
            */
           // if (c != '\n' && c != '\r') {
           sw.write(c);

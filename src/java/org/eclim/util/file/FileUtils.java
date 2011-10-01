@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,7 +191,7 @@ public class FileUtils
           if(!new File(buffer.toString()).exists()){
             String path = getFullPath(buffer.toString());
             if(path.endsWith("/") || path.endsWith("\\")){
-              path = path.substring(0, path.length() -1);
+              path = path.substring(0, path.length() - 1);
             }
             if(path.endsWith(JAR_EXT)){
               buffer = new StringBuffer(JAR_PREFIX)

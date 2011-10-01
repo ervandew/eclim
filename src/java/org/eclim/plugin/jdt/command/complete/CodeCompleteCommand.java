@@ -33,10 +33,10 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.ICompilationUnit;
 
-import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
-
-import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
+import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
+
+import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 
 /**
  * Command to handle java code completion requests.
@@ -124,7 +124,8 @@ public class CodeCompleteCommand
         // trim off the trailing paren if the method takes any arguments.
         if (menu.lastIndexOf(')') > menu.lastIndexOf('(') + 1 &&
             (completion.length() > 0 &&
-             completion.charAt(completion.length() - 1) == ')')){
+             completion.charAt(completion.length() - 1) == ')'))
+        {
           completion = completion.substring(0, completion.length() - 1);
         }
         break;

@@ -32,8 +32,8 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.file.FileOffsets;
 
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 

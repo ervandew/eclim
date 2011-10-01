@@ -12,7 +12,6 @@
     <property name="tabWidth" value="2" />
 
     <module name="AvoidStarImport"/>
-    <module name="TabCharacter"/>
     <module name="ModifierOrder"/>
     <module name="EmptyBlock"/>
     <module name="EmptyStatement"/>

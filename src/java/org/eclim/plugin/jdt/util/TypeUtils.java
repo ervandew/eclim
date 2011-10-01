@@ -462,7 +462,8 @@ public class TypeUtils
         typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
       }
       if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length){
+          baseType.getTypeArguments().length == typeArgs.length)
+      {
         typeArgs = baseType.getTypeArguments();
       }
 
@@ -549,7 +550,8 @@ public class TypeUtils
         typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
       }
       if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length){
+          baseType.getTypeArguments().length == typeArgs.length)
+      {
         typeArgs = baseType.getTypeArguments();
       }
 

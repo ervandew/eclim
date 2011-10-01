@@ -100,7 +100,8 @@ public class JavaScriptCodeCompleteCommand
         // trim off the trailing paren if the method takes any arguments.
         if (params.lastIndexOf(')') > params.lastIndexOf('(') + 1 &&
             (completion.length() > 0 &&
-             completion.charAt(completion.length() - 1) == ')')){
+             completion.charAt(completion.length() - 1) == ')'))
+        {
           completion = completion.substring(0, completion.length() - 1);
         }
       }else{

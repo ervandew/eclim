@@ -234,7 +234,9 @@ public abstract class AbstractRefactorCommand
     }else{
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
-        if (text.getFile().getRawLocation().toOSString().replace('\\', '/').equals(file)){
+        String path = text.getFile().getRawLocation()
+          .toOSString().replace('\\', '/');
+        if (path.equals(file)){
           return text.getPreviewContent(new NullProgressMonitor());
         }
       }

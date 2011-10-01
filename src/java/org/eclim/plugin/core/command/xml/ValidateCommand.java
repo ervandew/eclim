@@ -83,7 +83,8 @@ public class ValidateCommand
       // FIXME: hack to ignore errors regarding no defined dtd.
       // When 1.4 no longer needs to be supported, this can be scrapped.
       if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
-          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1){
+          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
+      {
         ii.remove();
       }
     }

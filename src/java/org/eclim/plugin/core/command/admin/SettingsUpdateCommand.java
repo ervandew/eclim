@@ -26,10 +26,10 @@ import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 

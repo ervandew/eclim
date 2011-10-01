@@ -38,9 +38,9 @@ import org.formic.Installer;
 
 import org.formic.util.CommandExecutor;
 
-import org.formic.wizard.step.gui.RequirementsValidationStep.*;
-
 import org.formic.wizard.step.gui.RequirementsValidationStep;
+
+import org.formic.wizard.step.gui.RequirementsValidationStep.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class RequirementProvider
    * {@inheritDoc}
    * @see RequirementProvider#getRequirements()
    */
-  public Requirement[] getRequirements ()
+  public Requirement[] getRequirements()
   {
     if(Os.isFamily("windows")){
       Requirement[] requirements = new Requirement[1];
@@ -85,7 +85,7 @@ public class RequirementProvider
    * {@inheritDoc}
    * @see RequirementProvider#validate(Requirement)
    */
-  public Status validate (Requirement requirement)
+  public Status validate(Requirement requirement)
   {
     ValidatingRequirement req = (ValidatingRequirement)requirement;
     return req.validate();
@@ -102,7 +102,7 @@ public class RequirementProvider
       super("eclipse");
     }
 
-    public Status validate ()
+    public Status validate()
     {
       String eclipseHome = (String)
         Installer.getContext().getValue("eclipse.home");
@@ -137,7 +137,7 @@ public class RequirementProvider
       return OK_STATUS;
     }
 
-    public String versionFromReadme (File file)
+    public String versionFromReadme(File file)
     {
       BufferedReader reader = null;
       try{
@@ -160,12 +160,12 @@ public class RequirementProvider
       return null;
     }
 
-    public String versionFromPlugins (String eclipseHome)
+    public String versionFromPlugins(String eclipseHome)
     {
       final String[] plugins = {"org.eclipse.osgi", "org.eclipse.swt"};
       File file = new File(eclipseHome + "/plugins");
       String[] names = file.list(new FilenameFilter(){
-        public boolean accept (File dir, String name){
+        public boolean accept(File dir, String name){
           for (int ii = 0; ii < plugins.length; ii++){
             if (name.contains(plugins[ii])){
               return true;
@@ -203,7 +203,7 @@ public class RequirementProvider
       super("vim");
     }
 
-    public Status validate ()
+    public Status validate()
     {
       try{
         CommandExecutor command =
@@ -250,7 +250,7 @@ public class RequirementProvider
       this.program = program;
     }
 
-    public Status validate ()
+    public Status validate()
     {
       try{
         int result = Runtime.getRuntime().exec(

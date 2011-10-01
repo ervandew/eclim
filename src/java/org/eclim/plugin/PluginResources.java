@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import org.eclim.command.Command;
@@ -131,4 +132,10 @@ public interface PluginResources
    * @return The name.
    */
   public String getName();
+
+  /**
+   * Gets all commands defined in the system.
+   * @return A list of all existing commands
+   */
+  public Collection<? extends Class<? extends Command>> getCommandClasses();
 }

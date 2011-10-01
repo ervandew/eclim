@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 /**
  * Class for handling preferences for eclim.
@@ -278,7 +278,8 @@ public class Preferences
         String nature = option.getNature();
         if (CORE.equals(nature) ||
             project == null ||
-            project.getNature(nature) != null){
+            project.getNature(nature) != null)
+        {
           OptionInstance instance = new OptionInstance(option, value);
           results.add(instance);
         }
@@ -416,14 +417,14 @@ public class Preferences
     throws IllegalArgumentException
   {
     if(option != null){
-      if (option.getPattern() == null ||
-          option.getPattern().matcher(value).matches()){
+      Validator validator = option.getValidator();
+      if (validator == null || validator.isValid(value)){
         return;
-      }else{
-        throw new IllegalArgumentException(
-            Services.getMessage("setting.invalid",
-              name, value, option.getRegex()));
       }
+
+      throw new IllegalArgumentException(
+          Services.getMessage("setting.invalid",
+            name, validator.getMessage(name, value)));
     }
     throw new IllegalArgumentException(
         Services.getMessage("setting.not.found", name));

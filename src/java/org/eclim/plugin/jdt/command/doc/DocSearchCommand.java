@@ -94,7 +94,8 @@ public class DocSearchCommand
       if (match.getElement() != null){
         int elementType = ((IJavaElement)match.getElement()).getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
-            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT){
+            elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
+        {
           String result = createDocSearchResult(match);
           if(result != null){
             results.add(result);

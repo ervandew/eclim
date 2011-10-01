@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ import org.apache.tools.ant.taskdefs.Concat;
 
 import org.eclim.installer.step.FeatureProvider;
 
-import org.formic.Installer;
 import org.formic.InstallContext;
+import org.formic.Installer;
 
 /**
  * Task for creating an excludes file based on the features the user chose not
@@ -48,7 +48,7 @@ public class InstallExcludesTask
   /**
    * Executes this task.
    */
-  public void execute ()
+  public void execute()
     throws BuildException
   {
     Project project = getProject();
@@ -103,7 +103,7 @@ public class InstallExcludesTask
    *
    * @param destfile The destination file.
    */
-  public void setDestfile (File destfile)
+  public void setDestfile(File destfile)
   {
     this.destfile = destfile;
   }

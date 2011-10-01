@@ -267,7 +267,8 @@ public class CallHierarchyCommand
     public ICElement element;
     public String location;
 
-    public Call(IIndexName name, ICElement element){
+    public Call(IIndexName name, ICElement element)
+    {
       this.name = name;
       this.element = element;
       this.location =

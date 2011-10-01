@@ -290,7 +290,8 @@ public class SearchCommand
         {
           CollectionUtils.addAll(names, index.findNames(
                 binding,
-                IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES | IIndex.FIND_DECLARATIONS));
+                IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES |
+                IIndex.FIND_DECLARATIONS));
         }
 
         if (names.size() == 0){

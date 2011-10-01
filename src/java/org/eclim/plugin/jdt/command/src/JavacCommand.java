@@ -25,6 +25,8 @@ import org.apache.tools.ant.Project;
 
 import org.apache.tools.ant.taskdefs.Javac;
 
+import org.apache.tools.ant.taskdefs.Javac.ImplementationSpecificArgument;
+
 import org.apache.tools.ant.types.Path;
 
 import org.eclim.annotation.Command;
@@ -44,6 +46,8 @@ import org.eclim.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.IJavaProject;
+
+import com.google.gson.Gson;
 
 /**
  * Command to run javac on the project source files.
@@ -85,6 +89,21 @@ public class JavacCommand
           javaProject.getOutputLocation().toOSString()));
     outputDir.mkdirs();
     javac.setDestdir(outputDir);
+
+    // add default args
+    String setting = ProjectUtils.getSetting(project, "org.eclim.java.compile.args");
+    if (setting != null && !setting.trim().equals(StringUtils.EMPTY)){
+      String[] defaultArgs = (String[])new Gson().fromJson(setting, String[].class);
+      if (defaultArgs != null && defaultArgs.length > 0){
+        for(String arg : defaultArgs){
+          if (!arg.startsWith("-")){
+            continue;
+          }
+          ImplementationSpecificArgument a = javac.createCompilerArg();
+          a.setValue(arg);
+        }
+      }
+    }
 
     // construct classpath
     Path classpath = new Path(antProject);

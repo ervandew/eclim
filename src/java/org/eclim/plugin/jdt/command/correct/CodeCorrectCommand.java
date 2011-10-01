@@ -169,8 +169,8 @@ public class CodeCorrectCommand
     AssistContext context = new AssistContext(
         src, problem.getSourceStart(), length);
 
-    IProblemLocation[] locations = new IProblemLocation[]{
-      new ProblemLocation(problem)};
+    IProblemLocation[] locations =
+      new IProblemLocation[]{new ProblemLocation(problem)};
     IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(src);
     for(int ii = 0; ii < processors.length; ii++){
       if (processors[ii] != null &&
@@ -180,7 +180,8 @@ public class CodeCorrectCommand
         // PlatformUI.getWorkbench().getActiveWorkbenchWindow() which is null
         // here.
         if (processors[ii].getClass().getName().equals(
-              "org.eclipse.ajdt.internal.ui.editor.quickfix.QuickFixProcessor")){
+              "org.eclipse.ajdt.internal.ui.editor.quickfix.QuickFixProcessor"))
+        {
           continue;
         }
 

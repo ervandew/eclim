@@ -45,7 +45,7 @@ public class CompletionComparator
     }
 
     // push keywords to the end.
-    if(o1.getType() == CodeCompleteResult.KEYWORD &&
+    if (o1.getType() == CodeCompleteResult.KEYWORD &&
         o2.getType() != CodeCompleteResult.KEYWORD){
       return 1;
     }else if(o2.getType() == CodeCompleteResult.KEYWORD &&

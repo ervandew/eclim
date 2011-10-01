@@ -25,11 +25,11 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 
 import org.eclim.util.file.Position;
+
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;

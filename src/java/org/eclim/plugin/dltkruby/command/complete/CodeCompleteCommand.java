@@ -58,7 +58,8 @@ public class CodeCompleteCommand
    * @see AbstractCodeCompleteCommand#getCompletionCollector(ISourceModule)
    */
   @Override
-  protected ScriptCompletionProposalCollector getCompletionCollector(ISourceModule module)
+  protected ScriptCompletionProposalCollector getCompletionCollector(
+      ISourceModule module)
     throws Exception
   {
     return new RubyCompletionProposalCollector(module);

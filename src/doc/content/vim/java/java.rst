@@ -49,6 +49,8 @@ Eclim Settings
 
 - **org.eclim.java.run.mainclass** -
   Fully qualified name of the class containing the main method.
+- **org.eclim.java.run.jvmargs** -
+  Json formatted list of default jvm args.
 
 .. _\:Javac:
 
@@ -79,6 +81,8 @@ Eclim Settings
   space separated list of project relative source directories which you want
   javac to be executed against.  When unset, all your configured source
   directories will be used.
+- **org.eclim.java.compile.args** -
+  Json formatted list of default javac args.
 
 .. _\:JavaClasspath:
 

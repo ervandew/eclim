@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ public class FeatureProvider
    * {@inheritDoc}
    * @see org.formic.wizard.step.shared.FeatureProvider#getFeatures()
    */
-  public Feature[] getFeatures ()
+  public Feature[] getFeatures()
   {
     boolean pluginsEnabled = false;
     boolean[] enabled = new boolean[FEATURES.length];
@@ -61,7 +61,7 @@ public class FeatureProvider
 
       final String pluginPath = "org.eclim." + FEATURES[ii] + "_";
       String[] list = new File(path).list(new FilenameFilter(){
-        public boolean accept (File file, String name) {
+        public boolean accept(File file, String name) {
           return name.startsWith(pluginPath);
         }
       });
@@ -100,7 +100,7 @@ public class FeatureProvider
    * {@inheritDoc}
    * @see PropertyChangeListener#propertyChange(PropertyChangeEvent)
    */
-  public void propertyChange (PropertyChangeEvent evt)
+  public void propertyChange(PropertyChangeEvent evt)
   {
     // do nothing for now.
   }

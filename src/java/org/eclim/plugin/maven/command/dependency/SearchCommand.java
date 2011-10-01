@@ -27,24 +27,24 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclim.logging.Logger;
-
-import org.eclim.plugin.core.util.ProjectUtils;
-import org.eclim.plugin.core.util.XmlUtils;
-
-import net.htmlparser.jericho.Element;
-import net.htmlparser.jericho.Source;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.XmlUtils;
 
 import org.eclim.util.IOUtils;
 
 import org.w3c.dom.NodeList;
+
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Source;
 
 /**
  * Command for searching online maven repository.

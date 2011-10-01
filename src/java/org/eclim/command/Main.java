@@ -18,12 +18,20 @@ package org.eclim.command;
 
 import java.lang.reflect.Type;
 
+import java.io.PrintStream;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.Services;
 
@@ -76,6 +84,11 @@ public class Main
         }
       }
 
+      if (arguments.isEmpty() || arguments.contains("-?")){
+        usage(context.out);
+        System.exit(arguments.isEmpty() ? 1 : 0);
+      }
+
       CommandLine commandLine = null;
       Options options = new Options();
       try{
@@ -90,10 +103,6 @@ public class Main
 
       String commandName = commandLine.getValue(Options.COMMAND_OPTION);
       logger.debug("Main - command: {}", commandName);
-      if(commandName == null || commandName.trim().equals(StringUtils.EMPTY)){
-        throw new IllegalArgumentException(
-            Services.getMessage("command.required"));
-      }
       Command command = commandLine.getCommand();
       command.setContext(context);
 
@@ -115,11 +124,63 @@ public class Main
         context.out.println(builder.create().toJson(result));
       }
     }catch(Exception e){
-      logger.debug("Command triggered exception: " + Arrays.toString(context.getArgs()), e);
+      logger.debug("Command triggered exception: " +
+          Arrays.toString(context.getArgs()), e);
       e.printStackTrace(context.err);
 
       logger.debug("Main - exit on error");
       System.exit(1);
+    }
+  }
+
+  public static void usage(PrintStream out)
+  {
+    ArrayList<org.eclim.annotation.Command> commands =
+      new ArrayList<org.eclim.annotation.Command>();
+    for (Class<? extends Command> command : Services.getCommandClasses()){
+      commands.add(command.getAnnotation(org.eclim.annotation.Command.class));
+    }
+    Collections.sort(commands, new Comparator<org.eclim.annotation.Command>(){
+      public int compare(
+        org.eclim.annotation.Command o1,
+        org.eclim.annotation.Command o2)
+      {
+        return o1.name().compareTo(o2.name());
+      }
+    });
+
+    String osOpts = StringUtils.EMPTY;
+    if (SystemUtils.IS_OS_UNIX){
+      osOpts = " [-f eclimrc] [--nailgun-port port]";
+    }
+    out.println("Usage: eclim" + osOpts + " -command command [args]");
+    out.println("  Available Commands:");
+    for (org.eclim.annotation.Command command : commands){
+      Collection<Option> options = new Options()
+        .parseOptions(command.options());
+      StringBuffer opts = new StringBuffer();
+      Iterator<Option> iterator = options.iterator();
+      for (int ii = 0; iterator.hasNext(); ii++){
+        Option option = iterator.next();
+        opts.append(option.isRequired() ? " " : " [");
+        opts.append('-').append(option.getOpt());
+        if (option.hasArg()){
+          opts.append(' ').append(option.getLongOpt());
+        }
+        if (!option.isRequired()){
+          opts.append(']');
+        }
+        // wrap every 4 options
+        if ((ii + 1) % 4 == 0 && ii != options.size() - 1){
+          opts.append(StringUtils.rightPad("\n", command.name().length() + 5));
+        }
+      }
+      StringBuffer info = new StringBuffer()
+        .append("    ").append(command.name()).append(opts);
+      out.println(info);
+      if (!command.description().equals(StringUtils.EMPTY)){
+        out.println("      " + command.description());
+      }
     }
   }
 

@@ -299,7 +299,8 @@ public class ClassPrototypeCommand
             typeName.equals("double") ||
             typeName.equals("float") ||
             typeName.equals("boolean") ||
-            typeName.equals("byte")){
+            typeName.equals("byte"))
+        {
           buffer.append(defaultValue);
         }else if(defaultValue instanceof String){
           buffer.append('"').append(defaultValue).append('"');

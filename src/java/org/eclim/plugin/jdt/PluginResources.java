@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,15 +36,18 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 
-import org.eclim.plugin.jdt.preference.OptionHandler;
-
-import org.eclim.plugin.jdt.project.JavaProjectManager;
-
+import org.eclim.plugin.core.preference.JsonValidator;
+import org.eclim.plugin.core.preference.Preference;
 import org.eclim.plugin.core.preference.PreferenceFactory;
 import org.eclim.plugin.core.preference.Preferences;
+import org.eclim.plugin.core.preference.RegexValidator;
 
 import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectNatureFactory;
+
+import org.eclim.plugin.jdt.preference.OptionHandler;
+
+import org.eclim.plugin.jdt.project.JavaProjectManager;
 
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
@@ -121,6 +124,7 @@ public class PluginResources
     ProjectNatureFactory.addNature("java", NATURE);
     ProjectManagement.addProjectManager(NATURE, new JavaProjectManager());
 
+    Preferences preferences = Preferences.getInstance();
     PreferenceFactory.addPreferences(NATURE,
       "JDT org.eclim.java.logging.impl commons-logging " +
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
@@ -144,9 +148,26 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
-      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations (true|false)\n" +
+      "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations " +
+        "(true|false)\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
     );
+
+    Preference jvmArgsPref = new Preference();
+    jvmArgsPref.setNature(NATURE);
+    jvmArgsPref.setPath("JDT");
+    jvmArgsPref.setName("org.eclim.java.run.jvmargs");
+    jvmArgsPref.setValidator(
+        new JsonValidator(String[].class, new RegexValidator("^-.*")));
+    preferences.addPreference(jvmArgsPref);
+
+    Preference javacArgsPref = new Preference();
+    javacArgsPref.setNature(NATURE);
+    javacArgsPref.setPath("JDT");
+    javacArgsPref.setName("org.eclim.java.compile.args");
+    jvmArgsPref.setValidator(
+        new JsonValidator(String[].class, new RegexValidator("^-.*")));
+    preferences.addPreference(javacArgsPref);
   }
 
   /**
@@ -176,7 +197,8 @@ public class PluginResources
         // eclipse didn't find src.zip, so search other known locations.
         if (libraryPath.lastSegment().equals("rt.jar") &&
             (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
-             !locations[ii].getSystemLibrarySourcePath().toFile().exists())){
+             !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
+        {
           IPath jreSrc = null;
 
           logger.debug("Attempting to locate jre src.zip for JAVA_HOME: {}",
@@ -186,7 +208,8 @@ public class PluginResources
 
             // absolute path
             if (location.startsWith("/") ||
-                location.indexOf(':') != -1){
+                location.indexOf(':') != -1)
+            {
               jreSrc = new Path(location);
 
             // relative path

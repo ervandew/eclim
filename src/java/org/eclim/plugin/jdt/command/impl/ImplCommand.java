@@ -273,7 +273,8 @@ public class ImplCommand
           !Flags.isFinal(flags) &&
           !Flags.isPrivate(flags) &&
           !methods[ii].isConstructor() &&
-          implemented == null){
+          implemented == null)
+      {
         String sig =
           MethodUtils.getMinimalMethodSignature(methods[ii], superTypeInfo);
         names.add(sig);
@@ -313,7 +314,8 @@ public class ImplCommand
       int flags = methods[ii].getFlags();
       if (!Flags.isStatic(flags) &&
           !Flags.isFinal(flags) &&
-          !Flags.isPrivate(flags)){
+          !Flags.isPrivate(flags))
+      {
         implementedMethods.put(
             MethodUtils.getMinimalMethodSignature(methods[ii], typeInfo),
             methods[ii]);

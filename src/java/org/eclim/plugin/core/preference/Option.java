@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.core.preference;
-
-import java.util.regex.Pattern;
 
 import org.eclim.Services;
 
@@ -39,9 +37,8 @@ public class Option
   private String nature;
   private String path;
   private String name;
-  private String regex;
   private String description;
-  private Pattern pattern;
+  private Validator validator;
 
   /**
    * Gets this option's scope.
@@ -124,39 +121,6 @@ public class Option
   }
 
   /**
-   * Get regex.
-   *
-   * @return regex as String.
-   */
-  public String getRegex()
-  {
-    return this.regex;
-  }
-
-  /**
-   * Set regex.
-   *
-   * @param regex the value to set.
-   */
-  public void setRegex(String regex)
-  {
-    this.regex = regex;
-    if(regex != null && regex.trim().length() > 0){
-      this.pattern = Pattern.compile(regex);
-    }
-  }
-
-  /**
-   * Get pattern.
-   *
-   * @return pattern as Pattern.
-   */
-  public Pattern getPattern()
-  {
-    return this.pattern;
-  }
-
-  /**
    * Get description.
    *
    * @return description as String.
@@ -177,6 +141,26 @@ public class Option
   }
 
   /**
+   * Gets the validator for this instance.
+   *
+   * @return The validator.
+   */
+  public Validator getValidator()
+  {
+    return this.validator;
+  }
+
+  /**
+   * Sets the validator for this instance.
+   *
+   * @param validator The validator.
+   */
+  public void setValidator(Validator validator)
+  {
+    this.validator = validator;
+  }
+
+  /**
    * {@inheritDoc}
    * @see Comparable#compareTo(Object)
    */
@@ -192,12 +176,14 @@ public class Option
     }
 
     if (this.getPath().startsWith(GENERAL) &&
-        !obj.getPath().startsWith(GENERAL)){
+        !obj.getPath().startsWith(GENERAL))
+    {
       return -1;
     }
 
     if (obj.getPath().startsWith(GENERAL) &&
-        !this.getPath().startsWith(GENERAL)){
+        !this.getPath().startsWith(GENERAL))
+    {
       return 1;
     }
 
