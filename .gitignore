@@ -4,10 +4,10 @@
 /.ant-targets-build.xml
 /.ropeproject
 /build
-/src/patch/*
-/src/nailgun/config.log
-/src/nailgun/config.status
-/src/nailgun/Makefile
-/src/nailgun/ng
-/src/nailgun/ng.*
+/org.eclim/nailgun/config.log
+/org.eclim/nailgun/config.status
+/org.eclim/nailgun/Makefile
+/org.eclim/nailgun/ng
+/org.eclim/nailgun/ng.*
+/patch/*
 /user.properties

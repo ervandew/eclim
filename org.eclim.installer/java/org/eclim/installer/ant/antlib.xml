@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Author: Eric Van Dewoestine
+-->
+<antlib xmlns:current="ant:current">
+  <taskdef name="cleanup" classname="org.eclim.installer.ant.CleanupTask"/>
+  <taskdef name="shutdown" classname="org.eclim.installer.ant.ShutdownTask"/>
+  <typedef name="install" classname="org.eclim.installer.ant.InstallTask"/>
+  <typedef name="installset" classname="org.eclim.installer.ant.InstallSet"/>
+</antlib>

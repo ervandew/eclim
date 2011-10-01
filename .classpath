@@ -2,8 +2,8 @@
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-  <classpathentry kind="lib" path="lib/junit-4.9.jar"/>
-  <classpathentry kind="lib" path="lib/testng-5.1-jdk15.jar"/>
+  <classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
+  <classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
   <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
@@ -83,8 +83,21 @@
   <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
-  <classpathentry kind="src" path="src/java" excluding="org/ccil/**"/>
-  <classpathentry kind="src" path="src/installer/java"/>
-  <classpathentry kind="src" path="src/test/junit"/>
+  <classpathentry kind="src" path="org.eclim/java"/>
+  <classpathentry kind="src" path="org.eclim.cdt/java"/>
+  <classpathentry kind="src" path="org.eclim.cdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.core/java"/>
+  <classpathentry kind="src" path="org.eclim.core/junit"/>
+  <classpathentry kind="src" path="org.eclim.dltk/java"/>
+  <classpathentry kind="src" path="org.eclim.dltkruby/java"/>
+  <classpathentry kind="src" path="org.eclim.dltkruby/junit"/>
+  <classpathentry kind="src" path="org.eclim.installer/java"/>
+  <classpathentry kind="src" path="org.eclim.jdt/java"/>
+  <classpathentry kind="src" path="org.eclim.jdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.pdt/java"/>
+  <classpathentry kind="src" path="org.eclim.pdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
+  <classpathentry kind="src" path="org.eclim.wst/java" excluding="org/ccil/**"/>
+  <classpathentry kind="src" path="org.eclim.wst/junit"/>
   <classpathentry exported="true" kind="src" path="/formic"/>
 </classpath>

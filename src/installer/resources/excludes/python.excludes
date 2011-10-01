@@ -1,8 +1,0 @@
-eclim/autoload/eclim/python/**
-eclim/ftplugin/htmldjango/**
-eclim/ftplugin/htmljinja/**
-eclim/ftplugin/python/**
-eclim/indent/htmldjango.vim
-eclim/indent/htmljinja.vim
-eclim/plugin/django.vim
-eclim/syntax/htmldjango.vim

@@ -1,0 +1,13 @@
+target(name: 'org.eclim.jdt.test'){
+  depends('test.init')
+  runTests('org.eclim.jdt'){
+    createProject('org.eclim.jdt', 'eclim_unit_test_java'){
+      delete(dir: '${eclipse.workspace}/eclim_unit_test_java_linked',
+          includeEmptyDirs: 'true')
+      copy(todir: '${eclipse.workspace}'){
+        fileset(dir: 'org.eclim.jdt/test',
+          includes: 'eclim_unit_test_java_linked/**/*')
+      }
+    }
+  }
+}

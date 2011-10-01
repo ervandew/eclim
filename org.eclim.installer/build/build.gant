@@ -1,0 +1,89 @@
+/**
+ * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ant.defaultexcludes(add: '**/*.swp')
+ant.defaultexcludes(add: '**/*.bak')
+
+target(name: 'installer.feature'){
+  property(name: 'plugin', value: 'org.eclim.installer_${eclim.version}')
+
+  plugin = binding.getVariable('plugin')
+  buildDir = binding.getVariable('build.installer')
+
+  mkdir(dir: "${buildDir}/eclipse/features")
+  mkdir(dir: "${buildDir}/eclipse/plugins")
+  copy(todir: "${buildDir}/eclipse/features/${plugin}"){
+    fileset(dir: "org.eclim.installer.feature", includes: '**/*')
+  }
+  copy(todir: "${buildDir}/eclipse/plugins/${plugin}"){
+    fileset(dir: "org.eclim.installer",
+      includes: '**/*', excludes: 'build/**,java/**')
+  }
+  replace(dir: "${buildDir}/eclipse"){
+    fileset(dir: '.'){
+      include(name: '*/org.eclim.installer*/*.xml')
+      include(name: '*/org.eclim.installer*/META-INF/MANIFEST.MF')
+    }
+    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+  }
+
+  jar(jarfile: '${build.installer}/eclipse/plugins/${plugin}/eclim.installer.jar'){
+    fileset(dir: '${build.installer}/formic/classes',
+        includes: '**/installer/eclipse/*.class')
+  }
+
+  // feature jar
+  mkdir(dir: "${buildDir}/eclipse/update-site/features")
+  zip(destfile: '${build.installer}/eclipse/update-site/features/${plugin}.jar'){
+    fileset(dir: '${build.installer}/eclipse/features/${plugin}', includes: '**/*')
+  }
+
+  // plugin jar
+  mkdir(dir: "${buildDir}/eclipse/update-site/plugins")
+  zip(destfile: '${build.installer}/eclipse/update-site/plugins/${plugin}.jar'){
+    fileset(dir: '${build.installer}/eclipse/plugins/${plugin}', includes: '**/*')
+  }
+
+  copy(todir: '${build.installer}/eclipse/update-site'){
+    fileset(dir: 'update-site', includes: '**/*')
+  }
+  replace(dir: '${build.installer}/eclipse/update-site', includes: '*.xml'){
+    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+    replacefilter(token: '$${timestamp}', value: System.currentTimeMillis())
+  }
+
+  // artifacts.jar
+  replace(file: '${build.installer}/eclipse/update-site/artifacts.xml'){
+    replacefilter(token: '$${eclim.installer.feature.size}',
+        value: new File("${buildDir}/eclipse/update-site/features/${plugin}.jar").length())
+    replacefilter(token: '$${eclim.installer.plugin.size}',
+        value: new File("${buildDir}/eclipse/update-site/plugins/${plugin}.jar").length())
+  }
+  zip(destfile: '${build.installer}/eclipse/update-site/artifacts.jar'){
+    fileset(dir: '${build.installer}/eclipse/update-site', includes: 'artifacts.xml')
+  }
+  delete(file: '${build.installer}/eclipse/update-site/artifacts.xml')
+
+  // content.jar
+  zip(destfile: '${build.installer}/eclipse/update-site/content.jar'){
+    fileset(dir: '${build.installer}/eclipse/update-site', includes: 'content.xml')
+  }
+  delete(file: '${build.installer}/eclipse/update-site/content.xml')
+
+  zip(destfile: '${build.installer}/installer-site.zip'){
+    fileset(dir: '${build.installer}/eclipse/update-site', includes: '**/*')
+  }
+}

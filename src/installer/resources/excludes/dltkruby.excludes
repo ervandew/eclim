@@ -1,3 +1,0 @@
-org.eclim.dltkruby_${eclim.version}/**
-eclim/autoload/eclim/ruby/**
-eclim/ftplugin/ruby/**

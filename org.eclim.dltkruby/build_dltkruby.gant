@@ -1,0 +1,19 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+target(name: 'org.eclim.dltkruby.test'){
+  depends('test.init')
+
+  // create interpreter before creating the project
+  if (Os.isFamily(Os.FAMILY_WINDOWS)){
+    property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
+  }else{
+    property(name: 'ruby.path', value: '/usr/bin/ruby')
+  }
+  eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
+  eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
+
+  runTests('org.eclim.dltkruby'){
+    createProject('org.eclim.dltkruby', 'eclim_unit_test_ruby')
+    sleep(seconds: 3)
+  }
+}

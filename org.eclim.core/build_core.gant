@@ -1,0 +1,13 @@
+target(name: 'org.eclim.core.test'){
+  depends('test.init')
+  runTests('org.eclim.core'){
+    createProject('org.eclim.core', 'eclim_unit_test'){
+      delete(dir: '${eclipse.workspace}/eclim_unit_test_linked',
+          includeEmptyDirs: 'true')
+      copy(todir: '${eclipse.workspace}'){
+        fileset(dir: 'org.eclim.core/test',
+          includes: 'eclim_unit_test_linked/**/*')
+      }
+    }
+  }
+}

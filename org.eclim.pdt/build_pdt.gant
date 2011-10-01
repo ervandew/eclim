@@ -1,0 +1,6 @@
+target(name: 'org.eclim.pdt.test'){
+  depends('test.init')
+  runTests('org.eclim.pdt'){
+    createProject('org.eclim.pdt', 'eclim_unit_test_php')
+  }
+}

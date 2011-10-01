@@ -22,6 +22,10 @@
     <antcall target="gant"> <param name="target" value="clean"/> </antcall>
   </target>
 
+  <target name="build">
+    <antcall target="gant"> <param name="target" value="build"/> </antcall>
+  </target>
+
   <target name="deploy"
       description="(Default) Build and deploy the eclipse and vim plugins.">
     <antcall target="gant"> <param name="target" value="deploy"/> </antcall>
@@ -32,26 +36,9 @@
     <antcall target="gant"> <param name="target" value="deploy.eclipse"/> </antcall>
   </target>
 
-  <target name="deploy.resources"
-      description="Build and deploy only the eclim resources.">
-    <antcall target="gant"> <param name="target" value="deploy.resources"/> </antcall>
-  </target>
-
   <target name="deploy.vim"
       description="Build and deploy only the vim plugins.">
     <antcall target="gant"> <param name="target" value="deploy.vim"/> </antcall>
-  </target>
-
-  <target name="build">
-    <antcall target="gant"> <param name="target" value="build"/> </antcall>
-  </target>
-
-  <target name="build.eclipse">
-    <antcall target="gant"> <param name="target" value="build.eclipse"/> </antcall>
-  </target>
-
-  <target name="build.vim">
-    <antcall target="gant"> <param name="target" value="build.vim"/> </antcall>
   </target>
 
   <target name="test">
@@ -59,31 +46,31 @@
   </target>
 
   <target name="test.core">
-    <antcall target="gant"> <param name="target" value="test.core"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.core.test"/> </antcall>
   </target>
 
   <target name="test.jdt">
-    <antcall target="gant"> <param name="target" value="test.jdt"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.jdt.test"/> </antcall>
   </target>
 
   <target name="test.cdt">
-    <antcall target="gant"> <param name="target" value="test.cdt"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.cdt.test"/> </antcall>
   </target>
 
   <target name="test.pdt">
-    <antcall target="gant"> <param name="target" value="test.pdt"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.pdt.test"/> </antcall>
   </target>
 
   <target name="test.python">
-    <antcall target="gant"> <param name="target" value="test.python"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.python.test"/> </antcall>
   </target>
 
   <target name="test.wst">
-    <antcall target="gant"> <param name="target" value="test.wst"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
   </target>
 
   <target name="test.dltkruby">
-    <antcall target="gant"> <param name="target" value="test.dltkruby"/> </antcall>
+    <antcall target="gant"> <param name="target" value="org.eclim.dltkruby.test"/> </antcall>
   </target>
 
   <target name="dist">
@@ -128,15 +115,15 @@
 
   <target name="gant">
     <path id="gant-classpath">
-      <fileset dir="src/ant/lib" includes="*.jar"/>
-      <fileset dir="src/eclipse/plugins/org.eclim" includes="lib/*.jar"/>
-      <fileset dir="src/eclipse/plugins/org.eclim.core" includes="lib/*.jar"/>
+      <fileset dir="ant/lib" includes="*.jar"/>
+      <fileset dir="org.eclim" includes="lib/*.jar"/>
+      <fileset dir="org.eclim.core" includes="lib/*.jar"/>
     </path>
     <taskdef name="gant" classname="org.codehaus.gant.ant.Gant"
         classpathref="gant-classpath"/>
 
     <property name="target" value="deploy"/>
-    <gant file="src/ant/build.gant" target="${target}" inheritAll="true"/>
+    <gant file="ant/build.gant" target="${target}" inheritAll="true"/>
   </target>
 
 </project>
