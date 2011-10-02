@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,16 +25,16 @@ By default TestNG's output to the console is very terse.  So in order to support
 monitoring of failed test cases via vim's error format, eclim provides a custom
 TestNG listener which must be installed into your build environment.
 
-#.  The first step is to place the ``eclim-misc.jar`` file in your TestNG
+#.  The first step is to place the ``eclim-testng.jar`` file in your TestNG
     classpath you have configured for ant.  You can find this jar file in your
-    $ECLIPSE_HOME/plugins/org.eclim_version/ directory.
+    $ECLIPSE_HOME/plugins/org.eclim.jdt_version/ directory.
 #.  The second step is to add the ``listener`` attribute to your
     testng task which references the required eclim testng listener\:
 
     ::
 
         ...
-      <testng ... listener="org.eclim.misc.testng.TestNgListener">
+      <testng ... listener="org.eclim.testng.TestNgListener">
         ...
 
     See the `testng ant task docs`_ for more information.
