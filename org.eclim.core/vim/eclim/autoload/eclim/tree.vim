@@ -207,7 +207,7 @@ endfunction " }}}
 " GetFileInfo(file) {{{
 function! eclim#tree#GetFileInfo(file)
   if executable('ls')
-    return split(eclim#util#System('ls -ld ' . a:file), '\n')[0]
+    return split(eclim#util#System("ls -ld '" . a:file . "'"), '\n')[0]
   endif
   return ''
 endfunction "}}}
@@ -995,7 +995,7 @@ function! eclim#tree#ListDir(dir, ...)
     if b:view_hidden
       let ls .= 'A'
     endif
-    let contents = split(eclim#util#System(ls . ' "' . a:dir . '"'), '\n')
+    let contents = split(eclim#util#System(ls . " '" . a:dir . "'"), '\n')
     if !b:view_hidden && &wildignore != ''
       let pattern = substitute(escape(&wildignore, '.'), '\*', '.*', 'g')
       let pattern = '\(' . join(split(pattern, ','), '\|') . '\)$'
