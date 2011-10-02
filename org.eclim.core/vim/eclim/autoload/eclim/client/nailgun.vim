@@ -176,6 +176,11 @@ function! eclim#client#nailgun#GetNgPort(...)
     endif
 
     let path = expand('%:p')
+    if path == ''
+      let path = getcwd() . '/'
+    endif
+    let path = substitute(path, '\', '/', 'g')
+
     " when we are in a temp window, use the initiating filename
     if &buftype != '' && exists('b:filename')
       let path = b:filename
