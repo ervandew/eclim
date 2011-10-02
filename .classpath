@@ -2,6 +2,7 @@
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+  <classpathentry kind="lib" path="ant/lib/eclim-checkstyle.jar"/>
   <classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
   <classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
   <classpathentry kind="lib" path="org.eclim/lib/commons-cli-1.1.jar"/>
