@@ -4,21 +4,21 @@
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
   <classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
   <classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-cli-1.1.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-lang-2.4.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/commons-vfs-1.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/gson-1.7.1.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/nailgun-0.7.1.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/scannotation-1.0.2.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/asm-2.2.3.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/groovy-1.6.5.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/jericho-html-3.0.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/joda-time-1.6.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.core/lib/secondstring-20060615.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.jdt/lib/checkstyle-5.4.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/css-validator.jar"/>
-  <classpathentry kind="lib" path="src/eclipse/plugins/org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/commons-cli-1.1.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/commons-lang-2.4.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/commons-vfs-1.0.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/gson-1.7.1.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/nailgun-0.7.1.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/scannotation-1.0.2.jar"/>
+  <classpathentry kind="lib" path="org.eclim/lib/slf4j-log4j-1.5.2.jar"/>
+  <classpathentry kind="lib" path="org.eclim.core/lib/asm-2.2.3.jar"/>
+  <classpathentry kind="lib" path="org.eclim.core/lib/groovy-1.6.5.jar"/>
+  <classpathentry kind="lib" path="org.eclim.core/lib/jericho-html-3.0.jar"/>
+  <classpathentry kind="lib" path="org.eclim.core/lib/joda-time-1.6.jar"/>
+  <classpathentry kind="lib" path="org.eclim.core/lib/secondstring-20060615.jar"/>
+  <classpathentry kind="lib" path="org.eclim.jdt/lib/checkstyle-5.4.jar"/>
+  <classpathentry kind="lib" path="org.eclim.wst/lib/css-validator.jar"/>
+  <classpathentry kind="lib" path="org.eclim.wst/lib/jtidy-04aug2000r7-dev.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.5.100.v20110510.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.core_5.3.1.201109151620.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.cdt.managedbuilder.core_8.0.1.201109151620.jar"/>
@@ -78,26 +78,26 @@
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.core_1.1.601.v201108151912.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.wst.sse.ui_1.3.1.v201108191312.jar"/>
   <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.xsd_2.7.0.v20110606-0949.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.1.jar"/>
+  <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.2.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/foxtrot-3.0.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>
   <classpathentry kind="var" path="FORMIC_HOME/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
   <classpathentry kind="src" path="org.eclim/java"/>
   <classpathentry kind="src" path="org.eclim.cdt/java"/>
-  <classpathentry kind="src" path="org.eclim.cdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.cdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.core/java"/>
-  <classpathentry kind="src" path="org.eclim.core/junit"/>
+  <classpathentry kind="src" path="org.eclim.core/test/junit"/>
   <classpathentry kind="src" path="org.eclim.dltk/java"/>
   <classpathentry kind="src" path="org.eclim.dltkruby/java"/>
-  <classpathentry kind="src" path="org.eclim.dltkruby/junit"/>
+  <classpathentry kind="src" path="org.eclim.dltkruby/test/junit"/>
   <classpathentry kind="src" path="org.eclim.installer/java"/>
   <classpathentry kind="src" path="org.eclim.jdt/java"/>
-  <classpathentry kind="src" path="org.eclim.jdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.jdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.pdt/java"/>
-  <classpathentry kind="src" path="org.eclim.pdt/junit"/>
+  <classpathentry kind="src" path="org.eclim.pdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
   <classpathentry kind="src" path="org.eclim.wst/java" excluding="org/ccil/**"/>
-  <classpathentry kind="src" path="org.eclim.wst/junit"/>
+  <classpathentry kind="src" path="org.eclim.wst/test/junit"/>
   <classpathentry exported="true" kind="src" path="/formic"/>
 </classpath>
