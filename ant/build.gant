@@ -686,9 +686,10 @@ def plugin(name){
 
   jarName = name.replaceFirst('^org\\.', '')
   ant.jar(jarfile: "${pluginPath}/${jarName}.jar"){
-    ant.fileset(dir: '${build.classes}/' + name, includes: "**/*.class")
+    ant.fileset(dir: '${build.classes}/' + name,
+      includes: "org/eclim/**,org/eclipse/**")
     ant.fileset(dir: "${name}/java",
-        includes: "**/*", excludes: '**/package.html,**/*.java')
+        includes: "org/eclim/**", excludes: '**/package.html,**/*.java')
   }
 
   ant.copy(todir: pluginPath){
