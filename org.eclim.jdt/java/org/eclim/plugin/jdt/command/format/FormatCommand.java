@@ -71,7 +71,7 @@ public class FormatCommand
 
     IJavaProject myProject = JavaUtils.getJavaProject(project);
     DefaultCodeFormatter formatter =
-      new DefaultCodeFormatter(myProject.getOptions(false));
+      new DefaultCodeFormatter(myProject.getOptions(true));
 
     int kind = CodeFormatter.K_COMPILATION_UNIT |
       CodeFormatter.F_INCLUDE_COMMENTS;
