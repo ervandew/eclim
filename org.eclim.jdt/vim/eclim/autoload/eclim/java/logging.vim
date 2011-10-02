@@ -89,9 +89,18 @@ function! s:InitLoggingSettings()
     if type(name) == g:NUMBER_TYPE || name == ''
       return
     endif
-    let template = eclim#UserHome() . '/.eclim/resources/jdt/templates/' . name
-    if(!filereadable(template))
-      echoe 'Custom logger template not found at "' . template . '"'
+    let local = eclim#UserHome() . '/.eclim/resources/jdt/templates/' . name
+    let remote = substitute(g:EclimHome, 'org.eclim_', 'org.eclim.jdt_', '') .
+      \ '/resources/templates/' . name
+    if filereadable(local)
+      let template = local
+    elseif filereadable(remote)
+      let template = remote
+    else
+      call eclim#util#EchoError(
+        \ "Custom logger template not found local or remote location:\n" .
+        \ "  local: " . local . "\n" .
+        \ "  remote: " . remote)
       return
     endif
     let lines = readfile(template)
