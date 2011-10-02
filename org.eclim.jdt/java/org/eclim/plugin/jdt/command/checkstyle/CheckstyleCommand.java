@@ -140,9 +140,11 @@ public class CheckstyleCommand
     files.add(new File(ProjectUtils.getFilePath(project, file)));
 
     Checker checker = new Checker();
-    checker.setModuleClassLoader(Checker.class.getClassLoader());
-    checker.setClassloader(
-        new ProjectClassLoader(JavaUtils.getJavaProject(project)));
+    checker.setModuleClassLoader(new ProjectClassLoader(
+          JavaUtils.getJavaProject(project),
+          Checker.class.getClassLoader()));
+    checker.setClassloader(new ProjectClassLoader(
+          JavaUtils.getJavaProject(project)));
     checker.configure(config);
     checker.addListener(listener);
     checker.process(files);
@@ -239,6 +241,12 @@ public class CheckstyleCommand
       throws Exception
     {
       super(ProjectClassLoader.classpath(project));
+    }
+
+    public ProjectClassLoader (IJavaProject project, ClassLoader parent)
+      throws Exception
+    {
+      super(ProjectClassLoader.classpath(project), parent);
     }
 
     private static URL[] classpath(IJavaProject project)
