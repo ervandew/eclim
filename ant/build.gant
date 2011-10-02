@@ -469,6 +469,79 @@ target(name: 'checkstyle'){
   }
 }
 
+target(name: 'plugin.create'){
+  println "Please enter the plugin name, which:"
+  println "    * should relate to the name of the eclipse plugin"
+  println "      this new plugin will integrate with"
+  println "    * must be all lower case"
+  println "    * must not contain any non-alphanumeric chars"
+  println "    * must not start with a number"
+  println "    * must not collide with the name of an existing eclim plugin"
+
+  def name = null
+  while (!name) {
+    System.in.withReader{
+      print "Name (Ctrl-C to cancel): "
+      name = it.readLine().trim()
+      if (name.toLowerCase() != name){
+        println '* must be all lowercase'
+        name = null
+      }else if (!name.matches(/^[a-z][a-z0-9]*$/)) {
+        println "* must start with alpha and only contain alphanumic chars"
+        name = null
+      }else if (new File("org.eclim.${name}").exists()){
+        println "* must not collide with the name of an existing eclim plugin"
+        name = null
+      }
+    }
+  }
+
+  if (name){
+    println "----"
+
+    def year = Calendar.getInstance().get(Calendar.YEAR)
+    copy(todir: '.'){
+      fileset(dir: 'ant/template',
+        includes: 'org.eclim.$${plugin}/**/*', excludes: '**/.keep')
+      filtermapper{
+        replacestring(from: '$${plugin}', to: "${name}")
+      }
+      filterset(begintoken: '${', endtoken: '}'){
+        filter(token: 'plugin', value: "${name}")
+        filter(token: 'year', value: "${year}")
+      }
+    }
+    println "    * created org.eclim.${name}"
+
+    def props = new File("ant/build.properties")
+    def propsText = props.text
+    def propsWriter = props.newPrintWriter()
+    propsText.eachLine { line ->
+      if (line.startsWith('plugins=')){
+        plugins = line.split('=')[1].split(',').toList()
+        plugins.add(name)
+        plugins.unique()
+        line = 'plugins=' + plugins.sort().join(',')
+      }
+      propsWriter.println(line)
+    }
+    propsWriter.close()
+    println "    * updated eclim ant/build.properties"
+
+    insertIntoFile(
+        new File("build.xml"),
+        "  <target name=\"test.${name}\">\n" +
+        "    <antcall target=\"gant\"> " +
+              "<param name=\"target\" value=\"org.eclim.${name}.test\"/> " +
+            "</antcall>\n" +
+        "  </target>\n",
+        "<target\\b.*name=.*>",
+        "<target name=['\"]test\\.\\w+['\"].*>",
+    )
+    println "    * updated build.xml"
+  }
+}
+
 target(name: 'eclipse.docs'){
   eclipseHome = binding.getVariable('eclipse.home')
   new File("${eclipseHome}/plugins").eachFileMatch(~/.*\.doc\..*\.jar/){ file ->
@@ -857,6 +930,30 @@ def hasVariable(name){
   }catch(MissingPropertyException mpe){
     return false;
   }
+}
+
+def insertIntoFile(file, text, blockStart, afterStart){
+  def content = file.text
+  def writer = file.newPrintWriter()
+  def found = false
+  def inserted = false
+  content.eachLine { line ->
+    if (!inserted){
+      if (line.trim().matches(afterStart)){
+        found = true;
+      }else if (
+        found &&
+        line.trim().matches(blockStart) &&
+        !line.trim().matches(afterStart))
+      {
+        writer.println(text)
+        found = false
+        inserted = true
+      }
+    }
+    writer.println(line)
+  }
+  writer.close()
 }
 
 def patchPlugins(closure){

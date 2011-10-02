@@ -22,7 +22,7 @@
     <antcall target="gant"> <param name="target" value="clean"/> </antcall>
   </target>
 
-  <target name="build">
+  <target name="build" description="Build eclim without deploying">
     <antcall target="gant"> <param name="target" value="build"/> </antcall>
   </target>
 
@@ -39,6 +39,14 @@
   <target name="deploy.vim"
       description="Build and deploy only the vim plugins.">
     <antcall target="gant"> <param name="target" value="deploy.vim"/> </antcall>
+  </target>
+
+  <target name="checkstyle" description="Runs checkstyle on the eclim source files.">
+    <antcall target="gant"> <param name="target" value="checkstyle"/> </antcall>
+  </target>
+
+  <target name="plugin.create" description="Initialize a new eclim plugin">
+    <antcall target="gant"> <param name="target" value="plugin.create"/> </antcall>
   </target>
 
   <target name="test">
@@ -91,10 +99,6 @@
 
   <target name="vimdocs">
     <antcall target="gant"> <param name="target" value="vimdocs"/> </antcall>
-  </target>
-
-  <target name="checkstyle" description="Runs checkstyle on the eclim source files.">
-    <antcall target="gant"> <param name="target" value="checkstyle"/> </antcall>
   </target>
 
   <target name="eclipse.docs">
