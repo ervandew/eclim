@@ -1,15 +1,3 @@
-target(name: 'org.eclim.wst.build.eclipse'){
-  echo("### FIXME: is patching tagsoup necessary?")
-  // patch tagsoup jar file
-//  tagsoup = '${build.plugins}/org.eclim.wst_${eclim.version}/lib/tagsoup-1.2.jar'
-//  if (new File(tagsoup).exists()){
-//    jar(jarfile: tagsoup, update: true){
-//      fileset(dir: '${build.classes}/org.eclim.wst',
-//          includes: 'org/ccil/cowan/tagsoup/**/*.class')
-//    }
-//  }
-}
-
 target(name: 'org.eclim.wst.test'){
   depends('test.init')
   runTests('org.eclim.wst'){
