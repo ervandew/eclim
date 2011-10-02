@@ -87,6 +87,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * Manager for c/c++ projects.
@@ -109,54 +110,63 @@ public class CProjectManager
    * {@inheritDoc}
    * @see ProjectManager#create(IProject,CommandLine)
    */
-  public void create(IProject project, CommandLine commandLine)
+  public void create(final IProject project, CommandLine commandLine)
     throws Exception
   {
     // TODO: - support other project types:
     //         executable, shared library, static library
     //       - support specifying the toolchain to use.
 
-    IBuildPropertyManager buildManager =
+    final IBuildPropertyManager buildManager =
       ManagedBuildManager.getBuildPropertyManager();
-    IBuildPropertyValue[] vs = buildManager
+    final IBuildPropertyValue[] vs = buildManager
       .getPropertyType(MBSWizardHandler.ARTIFACT).getSupportedValues();
 
-    MBSWizardHandler handler = null;
+    Display.getDefault().syncExec(new Runnable(){
+      public void run()
+      {
+        MBSWizardHandler handler = null;
 
-    for (IBuildPropertyValue value : vs){
-      final IToolChain[] toolChains = ManagedBuildManager
-        .getExtensionsToolChains(MBSWizardHandler.ARTIFACT, value.getId(), false);
-      if (toolChains != null && toolChains.length > 0){
-        IToolChain toolchain = null;
-        for (IToolChain tc : toolChains){
-          if (!tc.isAbstract() &&
-              !tc.isSystemObject() &&
-              tc.isSupported() &&
-              ManagedBuildManager.isPlatformOk(tc))
-          {
-            toolchain = tc;
-            break;
+        for (IBuildPropertyValue value : vs){
+          final IToolChain[] toolChains = ManagedBuildManager
+            .getExtensionsToolChains(MBSWizardHandler.ARTIFACT, value.getId(), false);
+          if (toolChains != null && toolChains.length > 0){
+            IToolChain toolchain = null;
+            for (IToolChain tc : toolChains){
+              if (!tc.isAbstract() &&
+                  !tc.isSystemObject() &&
+                  tc.isSupported() &&
+                  ManagedBuildManager.isPlatformOk(tc))
+              {
+                toolchain = tc;
+                break;
+              }
+            }
+
+            // handle case where no toolchain was found, like on windows when
+            // eclipse can't find cygwin or mingw.
+            if (toolchain == null){
+              IToolChain ntc = ManagedBuildManager
+                .getExtensionToolChain(ConfigurationDataProvider.PREF_TC_ID);
+              handler = new LocalSTDWizardHandler(
+                  value, EclimPlugin.getShell(), null, ntc);
+
+            // normal case, suitable toolchain found.
+            }else{
+              handler = new LocalMBSWizardHandler(
+                  value, EclimPlugin.getShell(), null, toolchain);
+            }
           }
         }
-
-        // handle case where no toolchain was found, like on windows when
-        // eclipse can't find cygwin or mingw.
-        if (toolchain == null){
-          IToolChain ntc = ManagedBuildManager
-            .getExtensionToolChain(ConfigurationDataProvider.PREF_TC_ID);
-          handler = new LocalSTDWizardHandler(
-              value, EclimPlugin.getShell(), null, ntc);
-
-        // normal case, suitable toolchain found.
-        }else{
-          handler = new LocalMBSWizardHandler(
-              value, EclimPlugin.getShell(), null, toolchain);
+        try{
+          handler.createProject(project, true, true, new NullProgressMonitor());
+          ICProject cproject = CUtils.getCProject(project);
+          CCorePlugin.getIndexManager().reindex(cproject);
+        }catch(Exception e){
+          throw new RuntimeException(e);
         }
       }
-    }
-    handler.createProject(project, true, true, new NullProgressMonitor());
-    ICProject cproject = CUtils.getCProject(project);
-    CCorePlugin.getIndexManager().reindex(cproject);
+    });
   }
 
   /**
