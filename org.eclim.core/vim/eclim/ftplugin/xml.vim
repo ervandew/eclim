@@ -35,7 +35,7 @@ endif
 if g:EclimXmlValidate
   augroup eclim_xml
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#xml#validate#Validate('', 1)
+    autocmd BufWritePost <buffer> call eclim#xml#validate#Validate(1, '')
   augroup END
 endif
 
