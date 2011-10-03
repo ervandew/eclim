@@ -271,9 +271,10 @@ function! eclim#display#signs#Update()
 
   if g:EclimShowQuickfixSigns
     let errors = filter(copy(qflist),
-      \ 'bufnr("%") == v:val.bufnr && (v:val.type == "" || v:val.type == "e")')
+      \ 'bufnr("%") == v:val.bufnr && ' .
+      \ '(v:val.type == "" || tolower(v:val.type) == "e")')
     let warnings = filter(copy(qflist),
-      \ 'bufnr("%") == v:val.bufnr && v:val.type == "w"')
+      \ 'bufnr("%") == v:val.bufnr && tolower(v:val.type) == "w"')
     call map(errors, 'v:val.lnum')
     call map(warnings, 'v:val.lnum')
     call eclim#display#signs#Define("qf_error", "> ", g:EclimErrorHighlight)
@@ -286,7 +287,7 @@ function! eclim#display#signs#Update()
 
   if g:EclimSignLevel >= 4
     let info = filter(copy(qflist) + copy(list),
-      \ 'bufnr("%") == v:val.bufnr && v:val.type == "i"')
+      \ 'bufnr("%") == v:val.bufnr && tolower(v:val.type) == "i"')
     let locinfo = filter(copy(list),
       \ 'bufnr("%") == v:val.bufnr && v:val.type == ""')
     call extend(info, locinfo)
@@ -296,14 +297,14 @@ function! eclim#display#signs#Update()
   endif
 
   if g:EclimSignLevel >= 3
-    let warnings = filter(copy(list), 'v:val.type == "w"')
+    let warnings = filter(copy(list), 'tolower(v:val.type) == "w"')
     call map(warnings, 'v:val.lnum')
     call eclim#display#signs#Define("warning", ">>", g:EclimWarningHighlight)
     call eclim#display#signs#PlaceAll("warning", warnings)
   endif
 
   if g:EclimSignLevel >= 2
-    let errors = filter(copy(list), 'v:val.type == "e"')
+    let errors = filter(copy(list), 'tolower(v:val.type) == "e"')
     call map(errors, 'v:val.lnum')
     call eclim#display#signs#PlaceAll("error", errors)
   endif
