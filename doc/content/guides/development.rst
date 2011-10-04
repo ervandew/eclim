@@ -157,14 +157,14 @@ To build the installer you first need a couple external tools installed:
 
   ::
 
-    $ cd formic.git
+    $ cd formic
     $ ant dist
 
   Then extract the formic tar to the location of your choice
 
   ::
 
-    $ tar -zxvf build/dist/formic-0.1.0.tar.gz -C /location/of/your/choice
+    $ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
 
 Once you have installed the above dependencies, you can then build the eclim
 installer with the following command.
