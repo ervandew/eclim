@@ -258,6 +258,7 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace)
   let b:results_bufnum = results_bufnum
   let b:help_bufnum = 0
   let b:selection = 1
+  let b:winrestcmd = winrestcmd
 
   set updatetime=300
 
@@ -366,20 +367,28 @@ endfunction " }}}
 " s:LocateFileSelect(action) {{{
 function! s:LocateFileSelect(action)
   if exists('b:completions') && !empty(b:completions)
-    let winnr = winnr()
+    let &updatetime = g:eclim_locate_default_updatetime
+
     let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
     if has('win32unix')
       let file = eclim#cygwin#CygwinPath(file)
     endif
-    let bufnum = bufnr('%')
-    let results_bufnum = b:results_bufnum
-    let &updatetime = g:eclim_locate_default_updatetime
-    call eclim#util#GoToBufferWindow(b:bufnum)
+
+    let bufnum = b:bufnum
+    let winrestcmd = b:winrestcmd
+
+    " close locate windows
+    exec 'bdelete ' . b:results_bufnum
+    exec 'bdelete ' . bufnr('%')
+
+    " reset windows to pre-locate sizes
+    exec winrestcmd
+
+    " open the selected result
+    call eclim#util#GoToBufferWindow(bufnum)
     call eclim#util#GoToBufferWindowOrOpen(file, a:action)
-    call feedkeys(
-      \ "\<esc>:bd " . bufnum . " | " .
-      \ "bd " . results_bufnum . " | " .
-      \ "doautocmd WinEnter\<cr>", 'n')
+    call feedkeys("\<esc>", 'n')
+    doautocmd WinEnter
   endif
   return ''
 endfunction " }}}
