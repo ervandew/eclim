@@ -35,6 +35,9 @@
   if !exists("g:TreeActionHighlight")
     let g:TreeActionHighlight = "Statement"
   endif
+  if !exists('g:TreeExpandSingleDirs')
+    let g:TreeExpandSingleDirs = 0
+  endif
 " }}}
 
 " Script Variables {{{
@@ -811,6 +814,11 @@ function! s:PathToAlias(path)
   return a:path
 endfunction " }}}
 
+" s:Depth() {{{
+function! s:Depth()
+  return len(split(eclim#tree#GetPath(), '/'))
+endfunction " }}}
+
 " ExpandDir() {{{
 function! eclim#tree#ExpandDir()
   let dir = eclim#tree#GetPath()
@@ -842,6 +850,10 @@ function! eclim#tree#ExpandDir()
   call map(files, 's:RewriteSpecial(v:val)')
 
   call eclim#tree#WriteContents(dir, dirs, files)
+  if g:TreeExpandSingleDirs && len(files) == 0 && len(dirs) == 1 && s:Depth() < 50
+    TreeNextPrevLine j
+    call eclim#tree#ExpandDir()
+  endif
 endfunction " }}}
 
 " ExpandPath(name, path) {{{
