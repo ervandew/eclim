@@ -877,7 +877,7 @@ function! eclim#project#util#GetProject(file)
     endif
 
     " check linked folders
-    for name in keys(project.links)
+    for name in keys(get(project, 'links', {}))
       if dir =~ '^' . project.links[name] . pattern
         return project
       endif
