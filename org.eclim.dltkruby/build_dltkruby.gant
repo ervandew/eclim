@@ -14,6 +14,6 @@ target(name: 'org.eclim.dltkruby.test'){
 
   runTests('org.eclim.dltkruby'){
     createProject('org.eclim.dltkruby', 'eclim_unit_test_ruby')
-    sleep(seconds: 3)
+    sleep(seconds: 5)
   }
 }

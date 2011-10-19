@@ -829,6 +829,9 @@ createProject = { pluginName, project, extra=null ->
       break
     }
   }
+
+  // extra second of sleep for good measure
+  ant.sleep(seconds: 1)
 }
 
 eclim = { args, port=null, failonerror=true, dir=null ->
