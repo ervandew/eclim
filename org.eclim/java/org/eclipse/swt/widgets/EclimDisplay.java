@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,7 @@
  */
 package org.eclipse.swt.widgets;
 
-import java.lang.reflect.Field;
-
-import org.eclim.eclipse.AbstractEclimApplication;
-import org.eclim.eclipse.EclimPlugin;
-
-import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
-
-import org.eclipse.swt.SWT;
-
-//import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
-
 import org.eclipse.swt.widgets.Display;
-
-import org.eclipse.ui.internal.WorkbenchWindow;
-
-//import org.eclipse.ui.internal.WorkbenchWindow;
 
 /**
  * Giant hack to get some of the eclipse features that are too closely tied to
@@ -42,43 +27,12 @@ import org.eclipse.ui.internal.WorkbenchWindow;
 public class EclimDisplay
   extends Display
 {
-  private static final String THREAD = "thread";
-  private static Shell shell;
+  private Shell shell;
 
-  /**
-   * Force the display to think that it's tied to the supplied thread.
-   */
-  public void setThread(Thread _thread)
+  public EclimDisplay()
   {
-    try{
-      Field thread = Display.class.getDeclaredField(THREAD);
-      thread.setAccessible(true);
-      thread.set(this, _thread);
-
-      // set up some default workspace environment components.
-      if (shell == null){
-        if (!AbstractEclimApplication.getInstance().isStopping()){
-          shell = EclimPlugin.getShell();
-          WorkbenchWindow window = new EclimWorkbenchWindow();
-          shell.setData(window);
-        }
-      }
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   * @see Display#getShells()
-   */
-  @Override
-  public Shell[] getShells()
-  {
-    if (AbstractEclimApplication.getInstance().isHeaded()){
-      return super.getShells();
-    }
-    return new Shell[]{EclimPlugin.getShell()};
+    super();
+    shell = new Shell(this);
   }
 
   /**
@@ -98,28 +52,5 @@ public class EclimDisplay
   @Override
   public void setSynchronizer(Synchronizer synchronizer) {
     // don't let eclipse set its UISynchronizer.
-  }
-
-  protected void checkDevice() {
-    Thread thread;
-    try{
-      Field thread_ = Display.class.getDeclaredField(THREAD);
-      thread_.setAccessible(true);
-      thread = (Thread)thread_.get(this);
-    }catch(Exception e){
-      throw new RuntimeException(e);
-    }
-
-    if (thread == null) error (SWT.ERROR_WIDGET_DISPOSED);
-    // since eclipse 3.7: disabling this check since it prevents
-    // org.eclipse.ui.ide from loading:
-    //   at org.eclipse.swt.widgets.Display.checkDevice(:752)
-    //   at org.eclipse.swt.widgets.Display.timerExec(:4110)
-    //   at org.eclipse.ui.internal.ide.IDEWorkbenchPlugin.createProblemsViews(:390)
-    //   at org.eclipse.ui.internal.ide.IDEWorkbenchPlugin.start(:351)
-    // I'm justifying this as a continuation of the setThread hack which exists
-    // because the nailgun requests never run the on the main thread.
-    //if (thread != Thread.currentThread ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
-    if (isDisposed ()) error (SWT.ERROR_DEVICE_DISPOSED);
   }
 }

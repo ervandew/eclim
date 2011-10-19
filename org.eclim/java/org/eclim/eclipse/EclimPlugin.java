@@ -36,7 +36,6 @@ import org.eclipse.osgi.service.resolver.VersionConstraint;
 import org.eclipse.osgi.util.NLS;
 
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.EclimShell;
 import org.eclipse.swt.widgets.Shell;
 
 import org.osgi.framework.BundleContext;
@@ -50,8 +49,6 @@ public class EclimPlugin
 {
   //The shared instance.
   private static EclimPlugin plugin;
-
-  private static Shell shell;
 
   private static final String FILE_PREFIX = "file:";
   private static final String PLUGIN_XML = "plugin.xml";
@@ -109,19 +106,20 @@ public class EclimPlugin
    */
   public static Shell getShell()
   {
-    if(shell == null){
-      final Display display = Display.getDefault();
-      final Shell[] result = new Shell[1];
-      // obtaining via synExec required when running inside of headed eclipse.
-      display.syncExec(new Runnable(){
-        public void run()
-        {
-          result[0] = new EclimShell(display);
-        }
-      });
-      shell = result[0];
+    Display display = Display.getDefault();
+    Shell shell = display.getActiveShell();
+    if (shell != null){
+      return shell;
     }
-    return shell;
+
+    // should only be necessary for headed eclimd
+    Shell[] shells = display.getShells();
+    if (shells.length > 0){
+      return shells[0];
+    }
+
+    // hopefully shouldn't happen
+    return null;
   }
 
   /**
@@ -132,6 +130,7 @@ public class EclimPlugin
    * @param bundleName The bundle name to diagnose the loading of.
    * @return The diagnoses.
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public String diagnose(String bundleName)
   {
     StringWriter out = new StringWriter();

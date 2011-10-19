@@ -22,6 +22,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import java.net.BindException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -36,6 +39,8 @@ import org.eclim.Services;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+
+import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
 import org.eclim.logging.Logger;
 
@@ -55,6 +60,15 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import org.eclipse.osgi.internal.baseadaptor.AdaptorUtil;
+
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.EclimDisplay;
+import org.eclipse.swt.widgets.Shell;
+
+import org.eclipse.ui.PlatformUI;
+
+import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.internal.WorkbenchWindow;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
@@ -100,9 +114,9 @@ public abstract class AbstractEclimApplication
     instance = this;
     int exitCode = 0;
 
-    String host = Services.getPluginResources("org.eclim")
+    final String host = Services.getPluginResources("org.eclim")
       .getProperty("nailgun.server.host");
-    String portString = Services.getPluginResources("org.eclim")
+    final String portString = Services.getPluginResources("org.eclim")
       .getProperty("nailgun.server.port");
 
     try{
@@ -110,33 +124,63 @@ public abstract class AbstractEclimApplication
         return EXIT_OK;
       }
 
-      // load plugins.
-      boolean pluginsLoaded = load();
+      // add shutdown hook.
+      Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
-      if (pluginsLoaded){
-        // add shutdown hook.
-        Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+      // register that server is running to external processes.
+      registered = registerInstance();
 
-        // register that server is running to external processes.
-        registered = registerInstance();
+      // setup nailgun
+      final int port = Integer.parseInt(portString);
+      InetAddress address = InetAddress.getByName(host);
+      server = new NGServer(address, port, getExtensionClassLoader());
+      server.setCaptureSystemStreams(false);
+      starting = false;
 
-        // start nailgun
-        int port = Integer.parseInt(portString);
-        logger.info("Eclim Server Started on: " + host + ':' + port);
-        InetAddress address = InetAddress.getByName(host);
-        server = new NGServer(address, port, getExtensionClassLoader());
-        server.setCaptureSystemStreams(false);
-        starting = false;
+      // for headed eclimd, plugins can be loaded and nailgun started on our
+      // current non-main thread.
+      if (isHeaded()){
+        load();
+
+        logger.info("Eclim Server Started on: {}:{}", host, port);
         server.run();
+
+      // for headless eclimd, handle initializing workbench and running nailgun
+      // on a separate thread.
       }else{
-        exitCode = 1;
+        Display display = new EclimDisplay(); //PlatformUI.createDisplay();
+        final Shell shell = display.getActiveShell();
+
+        // hack to set an active window before workbench.runUI is called (needed
+        // by at least cdt on startup), also load the eclim plugins here to
+        // ensure they load after the workbench is setup.
+        display.asyncExec(new Runnable(){
+          public void run() {
+            try{
+              shell.setData(new EclimWorkbenchWindow());
+              load();
+            }catch(Exception e){
+              throw new RuntimeException(e);
+            }
+          }
+        });
+
+        final NGServer theServer = server;
+        new Thread(){
+          public void run() {
+            logger.info("Eclim Server Started on: {}:{}", host, port);
+            theServer.run();
+          }
+        }.start();
+
+        PlatformUI.createAndRunWorkbench(display, new WorkbenchAdvisor());
       }
     }catch(NumberFormatException nfe){
       logger.error("Error starting eclim:",
           new RuntimeException("Invalid port number: '" + portString + "'"));
       return new Integer(1);
     }catch(BindException be){
-      logger.error("Error starting eclim on " + host + ':' + portString + ":", be);
+      logger.error("Error starting eclim on {}:{}", host, portString, be);
       return new Integer(1);
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
@@ -157,9 +201,6 @@ public abstract class AbstractEclimApplication
   {
     try{
       shutdown();
-      if(server != null && server.isRunning()){
-        server.shutdown(false /* exit vm */);
-      }
     }catch(Exception e){
       logger.error("Error shutting down.", e);
     }
@@ -236,7 +277,7 @@ public abstract class AbstractEclimApplication
   /**
    * Loads the core bundle which in turn loads the eclim plugins.
    */
-  private synchronized boolean load()
+  private synchronized void load()
     throws Exception
   {
     logger.info("Loading plugin org.eclim");
@@ -249,7 +290,7 @@ public abstract class AbstractEclimApplication
     if(bundle == null){
       String diagnosis = EclimPlugin.getDefault().diagnose(CORE);
       logger.error(Services.getMessage("plugin.load.failed", CORE, diagnosis));
-      return false;
+      return;
     }
 
     bundle.start();
@@ -257,8 +298,6 @@ public abstract class AbstractEclimApplication
 
     // wait up to 10 seconds for bundles to activate.
     wait(10000);
-
-    return true;
   }
 
   /**
@@ -270,6 +309,10 @@ public abstract class AbstractEclimApplication
     if(!stopping){
       stopping = true;
       logger.info("Shutting down eclim...");
+
+      if(server != null && server.isRunning()){
+        server.shutdown(false /* exit vm */);
+      }
 
       logger.info("Stopping plugin " + CORE);
       Bundle bundle = Platform.getBundle(CORE);
@@ -480,10 +523,16 @@ public abstract class AbstractEclimApplication
      */
     public void run()
     {
-      try{
-        shutdown();
-      }catch(Exception e){
-        logger.error("Error running shutdown hook.", e);
+      if (!stopping){
+        Display.getDefault().syncExec(new Runnable(){
+          public void run() {
+            try{
+              shutdown();
+            }catch(Exception e){
+              logger.error("Error running shutdown hook.", e);
+            }
+          }
+        });
       }
     }
   }

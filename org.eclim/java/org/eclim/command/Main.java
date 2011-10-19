@@ -35,11 +35,9 @@ import org.apache.commons.lang.SystemUtils;
 
 import org.eclim.Services;
 
-import org.eclim.eclipse.AbstractEclimApplication;
-
 import org.eclim.logging.Logger;
 
-import org.eclipse.swt.widgets.EclimDisplay;
+import org.eclipse.swt.widgets.Display;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -63,16 +61,10 @@ public class Main
    *
    * @param context The nailgun context.
    */
-  public static final void nailMain(NGContext context)
+  public static final void nailMain(final NGContext context)
   {
     try{
       logger.debug("args: " + Arrays.toString(context.getArgs()));
-
-      if (!AbstractEclimApplication.getInstance().isHeaded()){
-        // set dummy display's current thread
-        ((EclimDisplay)org.eclipse.swt.widgets.Display.getDefault())
-          .setThread(Thread.currentThread());
-      }
 
       ArrayList<String> arguments = new ArrayList<String>();
       for(String arg : context.getArgs()){
@@ -89,24 +81,30 @@ public class Main
         System.exit(arguments.isEmpty() ? 1 : 0);
       }
 
-      CommandLine commandLine = null;
       Options options = new Options();
-      try{
-        commandLine = options.parse(
-            (String[])arguments.toArray(new String[arguments.size()]));
-      }catch(ParseException e){
-        context.out.println(
-            Services.getMessage(e.getClass().getName(), e.getMessage()));
-        logger.debug("Main - exit on error");
-        System.exit(1);
-      }
+      final CommandLine commandLine = options.parse(
+          (String[])arguments.toArray(new String[arguments.size()]));
 
       String commandName = commandLine.getValue(Options.COMMAND_OPTION);
       logger.debug("Main - command: {}", commandName);
-      Command command = commandLine.getCommand();
+
+      final Command command = commandLine.getCommand();
       command.setContext(context);
 
-      Object result = command.execute(commandLine);
+      final Object[] results = new Object[1];
+      Display.getDefault().syncExec(new Runnable(){
+        public void run() {
+          try{
+            results[0] = command.execute(commandLine);
+          }catch(Exception e){
+            logger.info("Command triggered exception: " +
+                Arrays.toString(context.getArgs()), e);
+            e.printStackTrace(context.err);
+          }
+        }
+      });
+      Object result = results[0];
+
       if (result == null){
         context.out.println(StringUtils.EMPTY);
       }else{
@@ -123,6 +121,11 @@ public class Main
         }
         context.out.println(builder.create().toJson(result));
       }
+    }catch(ParseException e){
+      context.out.println(
+          Services.getMessage(e.getClass().getName(), e.getMessage()));
+      logger.debug("Main - exit on error");
+      System.exit(1);
     }catch(Exception e){
       logger.debug("Command triggered exception: " +
           Arrays.toString(context.getArgs()), e);

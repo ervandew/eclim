@@ -38,8 +38,6 @@ import org.eclipse.jdt.internal.ui.preferences.ImportOrganizeConfigurationBlock.
 
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 
-import org.eclipse.swt.widgets.Display;
-
 /**
  * Command to retrieve the eclipse configured import order.
  *
@@ -62,31 +60,18 @@ public class ImportOrderCommand
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     final IProject project = ProjectUtils.getProject(projectName);
 
-    // execute on the user-interface thread to avoid possible NPE when running
-    // inside eclipse gui
-    final ImportOrderEntry[][] result = new ImportOrderEntry[1][];
-    Display.getDefault().syncExec(new Runnable(){
-      public void run()
-      {
-        try{
-          ImportOrganizeConfigurationBlock block =
-            new ImportOrganizeConfigurationBlock(new IStatusChangeListener(){
-              public void statusChanged(IStatus status){
-                // no-op
-              }
-            }, project, null);
-
-          Method getImportOrderPreference = ImportOrganizeConfigurationBlock.class
-            .getDeclaredMethod("getImportOrderPreference");
-          getImportOrderPreference.setAccessible(true);
-          result[0] = (ImportOrderEntry[])getImportOrderPreference.invoke(block);
-        }catch(Exception e){
-          throw new RuntimeException(e);
+    ImportOrganizeConfigurationBlock block =
+      new ImportOrganizeConfigurationBlock(new IStatusChangeListener(){
+        public void statusChanged(IStatus status){
+          // no-op
         }
-      }
-    });
+      }, project, null);
 
-    ImportOrderEntry[] entries = result[0];
+    Method getImportOrderPreference = ImportOrganizeConfigurationBlock.class
+      .getDeclaredMethod("getImportOrderPreference");
+    getImportOrderPreference.setAccessible(true);
+    ImportOrderEntry[] entries = (ImportOrderEntry[])
+      getImportOrderPreference.invoke(block);
 
     ArrayList<String> results = new ArrayList<String>();
     for (ImportOrderEntry entry : entries){

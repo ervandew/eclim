@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.osgi.service.datalocation.Location;
 
-import org.eclipse.swt.widgets.EclimDisplay;
+import org.eclipse.swt.widgets.Display;
 
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -69,11 +69,6 @@ public class EclimApplicationHeadless
     // according to org.eclipse.ui.internal.ide.application.IDEApplication, it's
     // not crucial.
 
-    // create the eclipse workbench.
-    PlatformUI.createAndRunWorkbench(
-        new EclimDisplay(), //PlatformUI.createDisplay()),
-        new WorkbenchAdvisor());
-
     return true;
   }
 
@@ -89,30 +84,30 @@ public class EclimApplicationHeadless
     Bundle bundle = Platform.getBundle("system.bundle");
     bundle.stop();
 
-    logger.info("Saving workspace...");
+    Display.getDefault().syncExec(new Runnable(){
+      public void run() {
+        logger.info("Saving workspace...");
 
-    try{
-      Workspace workspace = (Workspace)ResourcesPlugin.getWorkspace();
-      if (workspace != null){
-        workspace.save(true, null);
+        try{
+          Workspace workspace = (Workspace)ResourcesPlugin.getWorkspace();
+          if (workspace != null){
+            workspace.save(true, null);
+          }
+          logger.info("Workspace saved.");
+        }catch(IllegalStateException ise){
+          logger.warn(ise.getMessage());
+        }catch(Exception e){
+          logger.warn("Error saving workspace.", e);
+        }
+
+        final IWorkbench workbench = PlatformUI.getWorkbench();
+        if (workbench != null){
+          logger.info("Closing workbench...");
+          workbench.close();
+          logger.info("Workbench closed.");
+        }
       }
-      logger.info("Workspace saved.");
-    }catch(IllegalStateException ise){
-      logger.warn(ise.getMessage());
-    }catch(Exception e){
-      logger.warn("Error saving workspace.", e);
-    }
-
-    final IWorkbench workbench = PlatformUI.getWorkbench();
-    if (workbench != null){
-      // set dummy display's current thread
-      EclimDisplay display = (EclimDisplay)
-        org.eclipse.swt.widgets.Display.getDefault();
-      display.setThread(Thread.currentThread());
-      logger.info("Closing workbench...");
-      workbench.close();
-      logger.info("Workbench closed.");
-    }
+    });
   }
 
   /**

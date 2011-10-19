@@ -36,8 +36,6 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
-import org.eclipse.swt.widgets.Display;
-
 /**
  * Abstract command for code completion.
  *
@@ -55,23 +53,12 @@ public abstract class AbstractCodeCompleteCommand
   public Object execute(final CommandLine commandLine)
     throws Exception
   {
-    final String project = commandLine.getValue(Options.PROJECT_OPTION);
-    final String file = commandLine.getValue(Options.FILE_OPTION);
-    final int offset = getOffset(commandLine);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    int offset = getOffset(commandLine);
 
-    final ICompletionProposal[][] result = new ICompletionProposal[1][];
-    Display.getDefault().syncExec(new Runnable(){
-      public void run()
-      {
-        try{
-          result[0] = getCompletionProposals(commandLine, project, file, offset);
-        }catch(Exception e){
-          throw new RuntimeException(e);
-        }
-      }
-    });
-
-    ICompletionProposal[] proposals = result[0];
+    ICompletionProposal[] proposals =
+      getCompletionProposals(commandLine, project, file, offset);
 
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
