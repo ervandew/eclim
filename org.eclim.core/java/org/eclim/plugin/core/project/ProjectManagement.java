@@ -80,6 +80,7 @@ public class ProjectManagement
   public static ProjectManager addProjectManager(
       String nature, ProjectManager manager)
   {
+    logger.debug("add project manager: nature: {} manager: {}", nature, manager);
     managers.put(nature, manager);
     return manager;
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ public class Plugin
   public void start(BundleContext context)
     throws Exception
   {
-    logger.debug("enter: start - " + context.getBundle().getSymbolicName());
+    logger.debug("{}: start", context.getBundle().getSymbolicName());
     super.start(context);
 
     // start is called at startup regardless of whether Bundle-ActivationPolicy
@@ -96,14 +96,13 @@ public class Plugin
    */
   public void activate(BundleContext context)
   {
-    logger.debug("enter: activate - " + context.getBundle().getSymbolicName());
+    String name = context.getBundle().getSymbolicName();
+    logger.debug("{}: activate", name);
 
     // handle case where eclipse starts this bundle from some saved state.
     AbstractEclimApplication app = AbstractEclimApplication.getInstance();
     if (app == null){
-      logger.debug(
-          "eclim app not found, stopping bundle: " +
-          context.getBundle().getSymbolicName());
+      logger.debug("{}: eclim app not found, stopping bundle", name);
       try{
         this.getBundle().stop();
       }catch(Exception e){
@@ -113,6 +112,7 @@ public class Plugin
       return;
     }
 
+    logger.debug("{}: loading plugin.properties", name);
     Properties properties = new Properties();
     InputStream in = null;
     try{
@@ -126,18 +126,19 @@ public class Plugin
     }
 
     String resourceClass = properties.getProperty("eclim.plugin.resources");
+    logger.debug("{}: loading resources: {}", name, resourceClass);
 
     Bundle bundle = this.getBundle();
     try{
       PluginResources resources = (PluginResources)
         bundle.loadClass(resourceClass).newInstance();
-      resources.initialize(bundle.getSymbolicName());
+      logger.debug("{}: initializing resources", name);
+      resources.initialize(name);
       Services.addPluginResources(resources);
 
       loadCommands(bundle, resources);
     }catch(Exception e){
-      logger.error(
-          "Error starting plugin: " + this.getBundle().getSymbolicName(), e);
+      logger.error("Error starting plugin: " + name, e);
     }
   }
 
@@ -169,17 +170,20 @@ public class Plugin
    */
   private void loadCommands(Bundle bundle, PluginResources resources)
   {
+    String name = this.getBundle().getSymbolicName();
     try{
       Class<?> rclass = resources.getClass();
       ClassLoader classloader = rclass.getClassLoader();
-      String name = rclass.getName().replace('.', '/') + ".class";
-      URL resource = classloader.getResource(name);
+      String resourceName = rclass.getName().replace('.', '/') + ".class";
+      URL resource = classloader.getResource(resourceName);
       String url = resource.toString();
-      url = url.substring(0, url.indexOf(name));
+      url = url.substring(0, url.indexOf(resourceName));
 
       String jarName = resources.getName().substring("org.".length()) + ".jar";
       URL jarUrl = FileLocator.toFileURL(
           FileLocator.find(bundle, new Path(jarName), null));
+
+      logger.debug("{}: loading commands", name);
 
       AnnotationDB db = new AnnotationDB();
       db.setScanClassAnnotations(true);
@@ -191,11 +195,14 @@ public class Plugin
         .get(org.eclim.annotation.Command.class.getName());
       if(commandClasses != null){
         for (String commandClass : commandClasses){
+          logger.debug("{}: loading command: {}", name, commandClass);
           @SuppressWarnings("unchecked")
           Class<? extends Command> cclass = (Class<? extends Command>)
             classloader.loadClass(commandClass);
           resources.registerCommand(cclass);
         }
+      }else{
+        logger.debug("{}: no commands found", name);
       }
     }catch(Throwable t){
       logger.error("Unable to load commands.", t);
@@ -232,8 +239,7 @@ public class Plugin
             state = "starting";
             break;
         }
-        logger.debug(
-            "bundleChanged: " + state + " - " + bundle.getSymbolicName());
+        logger.debug("{}: bundleChanged: {}", bundle.getSymbolicName(), state);
       }
 
       if (bundle.getState() == Bundle.ACTIVE) {

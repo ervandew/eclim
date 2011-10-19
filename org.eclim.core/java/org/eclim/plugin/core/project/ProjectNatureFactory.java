@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import org.eclim.logging.Logger;
+
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -31,6 +33,9 @@ import org.eclipse.core.resources.IProject;
  */
 public class ProjectNatureFactory
 {
+  private static final Logger logger =
+    Logger.getLogger(ProjectNatureFactory.class);
+
   public static String NONE = "none";
 
   private static Map<String, String> natureAliases =
@@ -43,6 +48,7 @@ public class ProjectNatureFactory
    */
   public static void addNature(String alias, String nature)
   {
+    logger.debug("add nature alias: {}={}", alias, nature);
     natureAliases.put(alias, nature);
   }
 
