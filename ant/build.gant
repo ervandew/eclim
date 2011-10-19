@@ -560,6 +560,8 @@ target(name: 'eclipse.src'){
 }
 
 target(name: 'patch.all'){
+  depends(init)
+
   patchPlugins(){ plugin ->
     eclipseHome = binding.getVariable('eclipse.home')
     path = new File(patchPluginResolve(plugin))
@@ -959,7 +961,7 @@ def insertIntoFile(file, text, blockStart, afterStart){
 
 def patchPlugins(closure){
   def plugins = []
-  new File('src/patch').eachDir(){ dir ->
+  new File('patch').eachDir(){ dir ->
     plugins.add(dir.name)
   }
   if (plugins.size() == 0){
