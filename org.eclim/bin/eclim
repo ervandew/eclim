@@ -87,17 +87,6 @@ if [ -f "$ECLIMRC" -a -n "$PERL" ] ; then
   fi
 fi
 
-# allow nailgun port to be supplied on the command line like eclimd
-# ex. eclim -Dnailgun.server.port=9092 -command ping
-if [ -n "$1" ] ; then
-  ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
-  while [ -n "$ARG" ] ; do
-    shift
-    NAILGUN_ARGS="$NAILGUN_ARGS `echo "$ARG" | sed -n -f "$CURPATH/eclim.sed"`"
-    ARG=`echo "$1" | sed '/^-Dnailgun.server.\(.*\)=/!d'`
-  done
-fi
-
 # add default port number if not supplied
 PORT_SUPPLIED=`echo "$NAILGUN_ARGS $@" | sed '/--nailgun-port/!d'`
 if [ -z "$PORT_SUPPLIED" ] ; then
