@@ -55,10 +55,12 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -184,11 +186,22 @@ public class JavaProjectManager
    * Creates a new project.
    *
    * @param project The project.
-   * @param depends Comma seperated project names this project depends on.
+   * @param depends Comma separated project names this project depends on.
    */
   protected void create(IProject project, String depends)
     throws Exception
   {
+    // with scala-ide installed, apparently this needs to be explicitly done
+    IProjectDescription desc = project.getDescription();
+    if(!desc.hasNature(PluginResources.NATURE)){
+      String[] natures = desc.getNatureIds();
+      String[] newNatures = new String[natures.length + 1];
+      System.arraycopy(natures, 0, newNatures, 0, natures.length);
+      newNatures[natures.length] = PluginResources.NATURE;
+      desc.setNatureIds(newNatures);
+      project.setDescription(desc, new NullProgressMonitor());
+    }
+
     IJavaProject javaProject = JavaCore.create(project);
     ((JavaProject)javaProject).configure();
 

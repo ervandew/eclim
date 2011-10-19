@@ -44,4 +44,10 @@
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
+
+  <feature id="sdt">
+    <dependency id="org.scala-ide.sdt.feature" version="2.0.2">
+      <site url="http://download.scala-ide.org/releases-29/stable/site"/>
+    </dependency>
+  </feature>
 </dependencies>

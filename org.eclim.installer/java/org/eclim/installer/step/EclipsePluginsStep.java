@@ -539,6 +539,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
       NAMES.add("featureList.python");
+      NAMES.add("featureList.sdt");
     }
 
     public int compare(String ob1, String ob2)

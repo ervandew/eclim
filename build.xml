@@ -57,12 +57,16 @@
     <antcall target="gant"> <param name="target" value="org.eclim.core.test"/> </antcall>
   </target>
 
-  <target name="test.jdt">
-    <antcall target="gant"> <param name="target" value="org.eclim.jdt.test"/> </antcall>
-  </target>
-
   <target name="test.cdt">
     <antcall target="gant"> <param name="target" value="org.eclim.cdt.test"/> </antcall>
+  </target>
+
+  <target name="test.dltkruby">
+    <antcall target="gant"> <param name="target" value="org.eclim.dltkruby.test"/> </antcall>
+  </target>
+
+  <target name="test.jdt">
+    <antcall target="gant"> <param name="target" value="org.eclim.jdt.test"/> </antcall>
   </target>
 
   <target name="test.pdt">
@@ -73,12 +77,12 @@
     <antcall target="gant"> <param name="target" value="org.eclim.python.test"/> </antcall>
   </target>
 
-  <target name="test.wst">
-    <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
+  <target name="test.sdt">
+    <antcall target="gant"> <param name="target" value="org.eclim.sdt.test"/> </antcall>
   </target>
 
-  <target name="test.dltkruby">
-    <antcall target="gant"> <param name="target" value="org.eclim.dltkruby.test"/> </antcall>
+  <target name="test.wst">
+    <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
   </target>
 
   <target name="test.adt">

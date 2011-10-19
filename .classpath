@@ -3,6 +3,7 @@
   <classpathentry kind="con" path="org.eclim.ECLIM_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
   <classpathentry kind="lib" path="ant/lib/eclim-checkstyle.jar"/>
   <classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
   <classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
@@ -26,6 +27,8 @@
   <classpathentry kind="src" path="org.eclim.jdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.pdt/java"/>
   <classpathentry kind="src" path="org.eclim.pdt/test/junit"/>
+  <classpathentry kind="src" path="org.eclim.sdt/java"/>
+  <classpathentry kind="src" path="org.eclim.sdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
   <classpathentry kind="src" path="org.eclim.wst/java"/>
   <classpathentry kind="src" path="org.eclim.wst/test/junit"/>

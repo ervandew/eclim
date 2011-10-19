@@ -169,7 +169,7 @@ public class ProjectManagement
     // (IFile.refreshLocal) from kicking off a rebuild workspace job, which in
     // turn can cause issues with pdt select and completion engines
     // (See PhpUtils.waitOnBuild).
-    refresh(project, commandLine);
+    refresh(project, commandLine, false);
 
     for (int ii = 0; ii < natures.size(); ii++){
       ProjectManager manager = getProjectManager((String)natures.get(ii));
@@ -363,14 +363,23 @@ public class ProjectManagement
   public static void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
+    refresh(project, commandLine, true);
+  }
+
+  private static void refresh(
+      IProject project, CommandLine commandLine, boolean refreshNatures)
+    throws Exception
+  {
     ProjectUtils.assertExists(project);
 
     project.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    for (String nature : managers.keySet()){
-      if(project.hasNature(nature)){
-        ProjectManager manager = ProjectManagement.getProjectManager(nature);
-        manager.refresh(project, commandLine);
+    if (refreshNatures){
+      for (String nature : managers.keySet()){
+        if(project.hasNature(nature)){
+          ProjectManager manager = ProjectManagement.getProjectManager(nature);
+          manager.refresh(project, commandLine);
+        }
       }
     }
 

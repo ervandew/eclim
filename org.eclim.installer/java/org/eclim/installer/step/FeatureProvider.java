@@ -35,10 +35,10 @@ public class FeatureProvider
              PropertyChangeListener
 {
   public static final String[] FEATURES =
-    {"jdt", "adt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python"};
+    {"jdt", "adt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python", "sdt"};
 
   private static final String[][] FEATURES_DEPENDS =
-    {null, {"jdt", "wst"}, null, null, null, {"dltk"}, {"dltk", "wst"}, null};
+    {null, {"jdt", "wst"}, null, null, null, {"dltk"}, {"dltk", "wst"}, null, null};
 
   /**
    * {@inheritDoc}
