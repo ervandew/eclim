@@ -1,3 +1,5 @@
+feature_jdt = 'org.eclipse.jdt'
+
 target(name: 'org.eclim.jdt.build.eclipse'){
   // build the eclim testng listener
   mkdir(dir: '${build.classes}/testng')

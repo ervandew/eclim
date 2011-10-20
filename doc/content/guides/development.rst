@@ -65,42 +65,6 @@ Checking out the code and building it.
 
         $ ant -Dvim.files=<your vimfiles dir>
 
-  By default the above ant call will build all the eclim plugins, requiring you
-  to have all the related dependencies already installed in your eclipse
-  distribution.  However, if you only want a subset of the eclim plugins to be
-  built, you can specify so using the 'plugins' system property:
-
-  ::
-
-    # build only jdt (java) support
-    $ ant -Dplugins=jdt
-
-    # build only cdt (c/c++) support
-    $ ant -Dplugins=cdt
-
-    # build only pdt (php) support (requires wst and dltk)
-    $ ant -Dplugins=wst,dltk,pdt
-
-    # build only ruby support (requires dltk)
-    $ ant -Dplugins=dltk,dltkruby
-
-  .. note::
-
-    On windows you will need to quote the plugins argument if you are building
-    more than one plugin:
-
-      > ant "-Dplugins=jdt"
-
-  The currently available list of plugin names include:
-
-  - **jdt**: java support using the eclipse jdt.
-  - **wst**: web development support using the eclipse wst.
-  - **cdt**: c/c++ support using the eclipse cdt.
-  - **dltk**: base support for dltk based lanugages (currently php and ruby).
-  - **pdt**: php support using the eclipse pdt (requires wst and dltk).
-  - **dltkruby**: ruby support using the eclipse dltk-ruby (requires dltk).
-
-
 .. _development-patches:
 
 Developing / Submitting Patches

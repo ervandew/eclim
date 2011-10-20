@@ -1,3 +1,5 @@
+feature_cdt = 'org.eclipse.cdt'
+
 target(name: 'org.eclim.cdt.test'){
   depends('test.init')
   runTests('org.eclim.cdt'){

@@ -1,3 +1,5 @@
+feature_${plugin} = 'FIXME'
+
 target(name: 'org.eclim.${plugin}.test'){
   depends('test.init')
   runTests('org.eclim.${plugin}'){

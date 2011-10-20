@@ -1,3 +1,5 @@
+feature_pdt = 'org.eclipse.php'
+
 target(name: 'org.eclim.pdt.test'){
   depends('test.init')
   runTests('org.eclim.pdt'){
