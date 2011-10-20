@@ -87,13 +87,13 @@ target(name: 'init'){
 
   path(id: 'classpath'){
     fileset(dir: '.', includes: '**/lib/*.jar')
-    fileset(dir: '${eclipse.home}'){
+    fileset(dir: '${eclipse}'){
       include(name: 'startup.jar')
       include(name: 'dropins/**/plugins/org.eclipse.*.jar')
       include(name: 'plugins/org.eclipse.*.jar')
       include(name: 'plugins/com.ibm.*.jar')
     }
-    dirset(dir: '${eclipse.home}'){
+    dirset(dir: '${eclipse}'){
       include(name: 'dropins/**/plugins/org.eclipse.*')
       include(name: 'plugins/org.eclipse.*')
     }
@@ -543,7 +543,7 @@ target(name: 'plugin.create'){
 }
 
 target(name: 'eclipse.docs'){
-  eclipseHome = binding.getVariable('eclipse.home')
+  eclipseHome = binding.getVariable('eclipse')
   new File("${eclipseHome}/plugins").eachFileMatch(~/.*\.doc\..*\.jar/){ file ->
     docDir = file.getName().replaceFirst('_.*', '')
     unjar(src: file.getPath(), dest: "${eclipseHome}/docs/${docDir}")
@@ -551,7 +551,7 @@ target(name: 'eclipse.docs'){
 }
 
 target(name: 'eclipse.src'){
-  eclipseHome = binding.getVariable('eclipse.home')
+  eclipseHome = binding.getVariable('eclipse')
   new File("${eclipseHome}/plugins").eachFileRecurse(){ file ->
     if (file =~ /.*\.source_.*\.jar/){
       unjar(src: file.getPath(), dest: '${eclipse}/src')
@@ -563,7 +563,7 @@ target(name: 'patch.all'){
   depends(init)
 
   patchPlugins(){ plugin ->
-    eclipseHome = binding.getVariable('eclipse.home')
+    eclipseHome = binding.getVariable('eclipse')
     path = new File(patchPluginResolve(plugin))
 
     echo("Patching plugin: ${path}")
@@ -847,7 +847,7 @@ eclim = { args, port=null, failonerror=true, dir=null ->
   try {
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       if (dir == null){
-        eclimCmd = binding.getVariable('eclipse.home') + '/eclim.cmd'
+        eclimCmd = binding.getVariable('eclipse') + '/eclim.cmd'
       }else{
         eclimCmd = dir + '/eclim.cmd'
       }
@@ -859,7 +859,7 @@ eclim = { args, port=null, failonerror=true, dir=null ->
       }
     }else{
       if (dir == null){
-        eclimCmd = binding.getVariable('eclipse.home') + '/eclim'
+        eclimCmd = binding.getVariable('eclipse') + '/eclim'
       }else{
         eclimCmd = dir + '/eclim'
       }
@@ -1000,7 +1000,7 @@ def patchPluginResolve(plugin){
     return pluginDir
   }
 
-  eclipseHome = binding.getVariable('eclipse.home')
+  eclipseHome = binding.getVariable('eclipse')
   ant.fail(message:
     "No plugin jar file or dir found for '${plugin}' in '${eclipseHome}'.")
 }
