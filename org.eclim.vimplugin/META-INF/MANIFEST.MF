@@ -7,7 +7,7 @@ Bundle-Version: ${eclim.version}
 Bundle-Localization: plugin
 Bundle-Activator: org.vimplugin.VimPlugin
 Bundle-ClassPath: .,
-  eclim-vimplugin.jar
+  eclim.vimplugin.jar
 Require-Bundle: org.eclim,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
