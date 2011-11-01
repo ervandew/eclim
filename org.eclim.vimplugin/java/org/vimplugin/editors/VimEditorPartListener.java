@@ -71,7 +71,7 @@ public class VimEditorPartListener
   private final BindingManager localChangeManager =
     new BindingManager(new ContextManager(), new CommandManager());
 
-  private String[] keys = {"Ctrl+U", "Ctrl+V", "Ctrl+W"};
+  private String[] keys = {"Ctrl+N", "Ctrl+U", "Ctrl+V", "Ctrl+W"};
 
   private KeySequence[] keySequences;
 
