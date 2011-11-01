@@ -104,11 +104,14 @@ build_vmargs(){
   # for osx
   if `uname -a | grep -iq "darwin"` ; then
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
+  fi
 
-    # check if attempting to use 64bit jvm to run 32bit eclipse
-    JVM64=`java -version 2>&1 | grep "64-Bit"`
-    ECLIPSE64=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar | grep "x86_64"`
-    if [ -n "$JVM64" -a -z "$ECLIPSE64" ] ; then
+  # check if attempting to use 64bit jvm to run 32bit eclipse
+  JVM64=`java -version 2>&1 | grep "64-Bit"`
+  SWT=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar 2> /dev/null`
+  if [ -n "$SWT" ] ; then
+    SWT64=`echo $SWT | grep "x86_64"`
+    if [ -n "$JVM64" -a -z "$SWT64" ] ; then
       ECLIM_VMARGS="-d32 $ECLIM_VMARGS"
     fi
   fi
