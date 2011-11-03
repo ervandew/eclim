@@ -127,16 +127,18 @@ public class VimServer
     String[] args = null;
 
     if (!tabbed || first){
-      int numArgs = tabbed ? 6 : 4;
+      int numArgs = tabbed ? 8 : 6;
       args = new String[numArgs + addopts.length];
       // NOTE: for macvim, the --servername arg must be before the netbeans arg
       args[0] = gvim;
       args[1] = "--servername";
       args[2] = String.valueOf(ID);
       args[3] = getNetbeansString(ID);
+      args[4] = "--cmd";
+      args[5] = "let g:vimplugin_running = 1";
       if (tabbed){
-        args[4] = "--cmd";
-        args[5] = "let g:vimplugin_tabbed = 1";
+        args[6] = "--cmd";
+        args[7] = "let g:vimplugin_tabbed = 1";
       }
       System.arraycopy(addopts, 0, args, numArgs, addopts.length);
 
@@ -210,7 +212,7 @@ public class VimServer
     String[] addopts = getUserArgs();
 
     // build args-array (dynamic size due to addopts.split)
-    String[] args = new String[7 + addopts.length];
+    String[] args = new String[9 + addopts.length];
     args[0] = gvim;
     args[1] = "--servername";
     args[2] = String.valueOf(ID);
@@ -218,6 +220,8 @@ public class VimServer
     args[4] = dontfork;
     args[5] = socketid;
     args[6] = stringwid;
+    args[7] = "--cmd";
+    args[8] = "let g:vimplugin_running = 1";
 
     // copy addopts to args
     System.arraycopy(addopts, 0, args, 7, addopts.length);

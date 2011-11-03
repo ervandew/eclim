@@ -195,17 +195,6 @@ if g:EclimSignLevel
   augroup END
 endif
 
-if has('netbeans_intg')
-  augroup eclim_vimplugin
-    " autocommands used to work around the fact that the "unmodified" event in
-    " vim's netbean support is commentted out for some reason.
-    autocmd BufWritePost * call eclim#vimplugin#BufferWritten()
-    autocmd CursorHold,CursorHoldI * call eclim#vimplugin#BufferModified()
-    autocmd BufWinLeave * call eclim#vimplugin#BufferClosed()
-    autocmd BufEnter * call eclim#vimplugin#BufferEnter()
-  augroup END
-endif
-
 if has('gui_running') && g:EclimMenus
   augroup eclim_menus
     autocmd BufNewFile,BufReadPost,WinEnter * call eclim#display#menu#Generate()

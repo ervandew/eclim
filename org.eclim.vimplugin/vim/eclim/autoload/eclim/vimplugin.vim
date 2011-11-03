@@ -26,7 +26,7 @@
 " Invoked when a buffer opened from eclipse is saved, to notify eclipse of the
 " save.
 function eclim#vimplugin#BufferWritten()
-  if has('netbeans_enabled')
+  if has('netbeans_enabled') && exists('g:vimplugin_running')
     if exists('b:eclim_file_modified')
       unlet b:eclim_file_modified
     endif
@@ -38,7 +38,7 @@ endfunction " }}}
 " Invoked on cursor hold to check if a previously modified buffer is now
 " unmodified, and vice versa, so that eclipse can be notified.
 function eclim#vimplugin#BufferModified()
-  if has('netbeans_enabled')
+  if has('netbeans_enabled') && exists('g:vimplugin_running')
     if !exists('b:eclim_file_modified')
       let b:eclim_file_modified = &modified
     endif
@@ -64,7 +64,7 @@ endfunction " }}}
 " BufferEnter() {{{
 " Invoked when switching buffers so we can update the eclipse tab title.
 function eclim#vimplugin#BufferEnter()
-  if has('netbeans_enabled')
+  if has('netbeans_enabled') && exists('g:vimplugin_running')
     exec 'nbkey bufferEnter ' . expand('<afile>:p')
   endif
 endfunction " }}}
@@ -73,7 +73,7 @@ endfunction " }}}
 " Feeds eclipse compatible key string to eclipse if current gvim instance is
 " attached via the netbeans protocol.
 function eclim#vimplugin#FeedKeys(keys, ...)
-  if has('netbeans_enabled')
+  if has('netbeans_enabled') && exists('g:vimplugin_running')
     let refocus = a:0 > 0 && a:1 ? ',refocus' : ''
     silent exec 'nbkey feedkeys ' . a:keys . refocus
   endif
