@@ -224,7 +224,7 @@ public class VimServer
     args[8] = "let g:vimplugin_running = 1";
 
     // copy addopts to args
-    System.arraycopy(addopts, 0, args, 7, addopts.length);
+    System.arraycopy(addopts, 0, args, 9, addopts.length);
 
     start(workingDir, true, false, args);
   }
