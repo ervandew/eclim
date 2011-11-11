@@ -275,7 +275,7 @@ public class PluginResources
 
           // jre src not found.
           }else{
-            logger.warn(
+            logger.debug(
                 "Unable to locate jre src.zip for JAVA_HOME: " +
                 SystemUtils.JAVA_HOME);
             newLocations[ii] = new LibraryLocation(
