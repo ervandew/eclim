@@ -160,7 +160,7 @@
           <arg line="-s plugins/org.eclim_${eclim.version}/bin/eclimd ."/>
         </exec>
 
-        <exec executable="configure" failonerror="true"
+        <exec executable="${eclim.home}/nailgun/configure" failonerror="true"
             dir="${eclim.home}/nailgun"
             resolveexecutable="true"/>
         <exec executable="make" failonerror="true"
