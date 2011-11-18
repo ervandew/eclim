@@ -67,7 +67,32 @@ endfunction " }}}
 function! eclim#project#problems#ProblemsUpdate()
   if g:EclimProjectProblemsUpdateOnSave &&
    \ eclim#project#problems#IsProblemsList()
+
+    " preserve the cursor position in the quickfix window
+    let qf_winnr = 0
+    let index = 1
+    while index <= winnr('$')
+      if getbufvar(winbufnr(index), '&ft') == 'qf'
+        let cur = winnr()
+        let qf_winnr = index
+        exec qf_winnr . 'winc w'
+        let pos = getpos('.')
+        exec cur . 'winc w'
+        break
+      endif
+      let index += 1
+    endwhile
+
     call eclim#project#problems#Problems('', 0)
+
+    " restore the cursor position
+    if qf_winnr
+      let cur = winnr()
+      exec qf_winnr . 'winc w'
+      call setpos('.', pos)
+      redraw
+      exec cur . 'winc w'
+    endif
   endif
 endfunction " }}}
 
