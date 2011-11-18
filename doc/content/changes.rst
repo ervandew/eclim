@@ -21,8 +21,12 @@ History of Changes
 1.7.3 (2012)
 ----------------------
 
+Common:
+  - Added :ref:`:ProjectBuild <:ProjectBuild>` to build the current or
+    supplied project.
+
 Java:
-  - Add project settings for specifying default jvm args for
+  - Added project settings for specifying default jvm args for
     :ref:`:Java <:Java>` and default args for :ref:`:Javac <:Javac>`.
 
 .. _1.7.2:

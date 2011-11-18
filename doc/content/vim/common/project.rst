@@ -167,6 +167,12 @@ Vim's command line completion to complete the project name.
 
   Refreshes all projects.
 
+.. _\:ProjectBuild:
+
+- **:ProjectBuild** [<project>]
+
+  Builds the current or supplied project.
+
 .. _\:ProjectInfo:
 
 - **:ProjectInfo** [<project>]

@@ -47,6 +47,7 @@ let s:command_move = '-command project_move -p "<project>" -d "<dir>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
+let s:command_build = '-command project_build -p "<project>"'
 let s:command_projects = '-command projects'
 let s:command_project_list = '-command project_list'
 let s:command_project_by_resource = '-command project_by_resource -f "<file>"'
@@ -370,6 +371,24 @@ function! eclim#project#util#ProjectRefresh(args, ...)
   if len(projects) > 1
     call eclim#util#Echo('Done.')
   endif
+endfunction " }}}
+
+" ProjectBuild([project]) {{{
+" Build the current or requested project.
+function! eclim#project#util#ProjectBuild(...)
+  let project = a:0 > 0 ? a:1 : ''
+
+  if project == ''
+    if !eclim#project#util#IsCurrentFileInProject()
+      return
+    endif
+    let project = eclim#project#util#GetCurrentProjectName()
+  endif
+
+  call eclim#util#Echo("Building project '" . project . "'...")
+  let command = substitute(s:command_build, '<project>', project, '')
+  let port = eclim#project#util#GetProjectPort(project)
+  call eclim#util#Echo(eclim#ExecuteEclim(command, port))
 endfunction " }}}
 
 " ProjectInfo(project) {{{

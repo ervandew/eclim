@@ -51,6 +51,7 @@ Project Commands
   Refresh supplied list of projects against the current files on disk.  If
   no project names supplied, refresh the current project.
 - :ref:`:ProjectRefreshAll` - Refresh all projects.
+- :ref:`:ProjectBuild` [<project>] - Build the current or supplied project.
 - :ref:`:ProjectInfo` [<project>] -
   Echos info for the current or supplied project.
 - :ref:`:ProjectOpen` [<project>] - Opens a project.
