@@ -63,8 +63,8 @@ public class CorrectCommandTest
 
     List<Map<String,Object>> results =
       (List<Map<String,Object>>)result.get("corrections");
-    assertEquals(1, results.get(1).get("index"));
-    assertEquals("Import 'ArrayList' (java.util)", results.get(1).get("description"));
+    assertEquals(0, results.get(0).get("index"));
+    assertEquals("Import 'ArrayList' (java.util)", results.get(0).get("description"));
   }
 
   @Test

@@ -57,14 +57,14 @@ public class SearchCommandTest
     assertTrue(((String)result.get("filename"))
         .endsWith("/java/lang/NullPointerException.java"));
     assertEquals(result.get("message"), "java.lang.NullPointerException");
-    assertEquals(result.get("line"), 31);
+    assertEquals(result.get("line"), 48);
     assertEquals(result.get("column"), 7);
 
     result = results.get(1);
     assertTrue(((String)result.get("filename"))
         .endsWith("/javax/naming/NoPermissionException.java"));
     assertEquals(result.get("message"), "javax.naming.NoPermissionException");
-    assertEquals(result.get("line"), 25);
+    assertEquals(result.get("line"), 42);
     assertEquals(result.get("column"), 14);
   }
 
