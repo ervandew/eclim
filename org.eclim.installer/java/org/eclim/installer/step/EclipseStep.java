@@ -424,6 +424,8 @@ public class EclipseStep
   private class InitializeAction
     extends AbstractAction
   {
+    private static final long serialVersionUID = 1L;
+
     private JTextField eclipseHomeField;
     private JTextField eclipseLocalField;
 

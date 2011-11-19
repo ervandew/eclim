@@ -144,7 +144,7 @@ public class BufferedReader extends Reader
   }
 
   // eclim: new static method used to obtain a field via reflection.
-  private static Object getDeclaredField(Class clazz, Object instance, String fieldName)
+  private static Object getDeclaredField(Class<?> clazz, Object instance, String fieldName)
   {
     try{
       Field field = clazz.getDeclaredField(fieldName);

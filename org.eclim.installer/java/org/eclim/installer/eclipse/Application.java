@@ -61,13 +61,12 @@ import org.osgi.framework.ServiceReference;
  *
  * @author Eric Van Dewoestine
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Application
   extends org.eclipse.equinox.internal.p2.director.app.DirectorApplication
 {
   private static final Integer EXIT_ERROR = new Integer(13);
 
-  @SuppressWarnings("rawtypes")
   private Object invokePrivate(String methodName, Class[] params, Object[] args)
     throws Exception
   {

@@ -39,7 +39,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
-import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -157,7 +156,7 @@ public class LocateFileCommand
     return matcher.getResults();
   }
 
-  private static class Result
+  public static class Result
   {
     public String name;
     public String path;

@@ -55,6 +55,7 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.IFunction;
 import org.eclipse.cdt.core.model.IFunctionDeclaration;
+import org.eclipse.cdt.core.model.IProblemRequestor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 
@@ -114,7 +115,7 @@ public class CallHierarchyCommand
 
     CUIPlugin cuiPlugin = CUIPlugin.getDefault();
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
-    src = src.getSharedWorkingCopy(null, cuiPlugin.getBufferFactory());
+    src = src.getSharedWorkingCopy(null, (IProblemRequestor)null);
 
     IEditorInput input = new FileEditorInput((IFile)src.getResource());
 

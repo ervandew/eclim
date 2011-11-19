@@ -37,6 +37,7 @@ import groovy.lang.GroovyShell;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("rawtypes")
 public class ScriptUtils
 {
   private static final String SCRIPT_PATH = "/resources/scripts/";

@@ -30,9 +30,8 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.NodeFinder;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-
-import org.eclipse.jdt.internal.corext.dom.NodeFinder;
 
 import org.eclipse.jface.text.Document;
 
@@ -118,8 +117,7 @@ public class ASTUtils
   public static ASTNode findNode(CompilationUnit cu, int offset)
     throws Exception
   {
-    NodeFinder finder = new NodeFinder(offset, 1);
-    cu.accept(finder);
+    NodeFinder finder = new NodeFinder(cu, offset, 1);
     //return finder.getCoveredNode();
     return finder.getCoveringNode();
   }
@@ -179,6 +177,7 @@ public class ASTUtils
    * @param type The type to resolve.
    * @return The resulting node.
    */
+  @SuppressWarnings({"rawtypes", "unchecked"})
   private static ASTNode resolveNode(ASTNode node, Class type)
     throws Exception
   {

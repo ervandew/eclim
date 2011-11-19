@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.core.command.project;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;

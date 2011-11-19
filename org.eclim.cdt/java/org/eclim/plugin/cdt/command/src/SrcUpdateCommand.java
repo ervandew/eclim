@@ -39,8 +39,10 @@ import org.eclipse.cdt.core.CCorePlugin;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexManager;
 
+import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
@@ -48,8 +50,6 @@ import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.IProblem;
 
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
-
-import org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -72,6 +72,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
+  // Taken from org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper
+  private static final int AST_STYLE =
+    ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT |
+    ITranslationUnit.AST_SKIP_INDEXED_HEADERS;
+
   /**
    * {@inheritDoc}
    * @see org.eclim.command.Command#execute(CommandLine)
@@ -123,13 +128,21 @@ public class SrcUpdateCommand
   private List<IProblem> getProblems(ITranslationUnit tu)
     throws Exception
   {
-    //IASTTranslationUnit ast = tu.getAST();
-    String filename = tu.getResource().getRawLocation().toOSString();
-    IASTTranslationUnit ast =
-      TranslationUnitHelper.loadTranslationUnit(filename, true);
-    ArrayList<IProblem> problems = new ArrayList<IProblem>();
-    CollectionUtils.addAll(problems, ast.getPreprocessorProblems());
-    CollectionUtils.addAll(problems, CPPVisitor.getProblems(ast));
-    return problems;
+    IIndex index = null;
+    try {
+      ICProject[] projects = CoreModel.getDefault().getCModel().getCProjects();
+      index = CCorePlugin.getIndexManager().getIndex(projects);
+      index.acquireReadLock();
+
+      IASTTranslationUnit ast = tu.getAST(index, AST_STYLE);
+      ArrayList<IProblem> problems = new ArrayList<IProblem>();
+      CollectionUtils.addAll(problems, ast.getPreprocessorProblems());
+      CollectionUtils.addAll(problems, CPPVisitor.getProblems(ast));
+      return problems;
+    } finally {
+      if (index != null){
+        index.releaseReadLock();
+      }
+    }
   }
 }

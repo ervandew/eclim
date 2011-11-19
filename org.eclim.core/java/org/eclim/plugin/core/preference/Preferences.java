@@ -162,7 +162,7 @@ public class Preferences
       prefVals = new HashMap<String, String>();
       preferenceValues.put(project.getName(), prefVals);
 
-      IScopeContext context = new InstanceScope();
+      IScopeContext context = InstanceScope.INSTANCE;
 
       // global
       IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
@@ -237,7 +237,7 @@ public class Preferences
     Map<String, String> options = new HashMap<String, String>();
 
     // global
-    IScopeContext context = new InstanceScope();
+    IScopeContext context = InstanceScope.INSTANCE;
     IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
     initializeDefaultPreferences(globalPrefs);
     for(String key : globalPrefs.keys()){
@@ -351,7 +351,7 @@ public class Preferences
       String nodeName, IProject project, String name, String value)
     throws IllegalArgumentException, Exception
   {
-    IScopeContext context = new InstanceScope();
+    IScopeContext context = InstanceScope.INSTANCE;
 
     IEclipsePreferences globalPrefs = context.getNode(nodeName);
     initializeDefaultPreferences(globalPrefs);

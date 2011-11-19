@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -41,6 +40,7 @@ import org.eclipse.ui.IWorkbenchWindow;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("rawtypes")
 public class EclimEditorSite
   implements IEditorSite
 {
@@ -100,7 +100,8 @@ public class EclimEditorSite
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchPartSite#getKeyBindingService()
    */
-  public IKeyBindingService getKeyBindingService()
+  @SuppressWarnings("deprecation")
+  public org.eclipse.ui.IKeyBindingService getKeyBindingService()
   {
     return null;
   }

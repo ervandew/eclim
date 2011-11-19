@@ -75,8 +75,6 @@ import org.eclipse.cdt.managedbuilder.internal.dataprovider.ConfigurationDataPro
 import org.eclipse.cdt.managedbuilder.ui.wizards.CfgHolder;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 
-import org.eclipse.cdt.ui.newui.UIMessages;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -399,6 +397,7 @@ public class CProjectManager
               (ToolChain)cfgs[i].getToolChain(),
               ManagedBuildManager.calculateChildId(s, null),
               cfgs[i].getName());
+          cfgs[i].setConfiguration(cfg);
           IBuilder bld = cfg.getEditableBuilder();
           if (bld != null) {
             if(bld.isInternalBuilder()){
@@ -413,11 +412,8 @@ public class CProjectManager
               bld.setBuildPath(null);
             }
             bld.setManagedBuildOn(false);
-          } else {
-            System.out.println(
-                UIMessages.getString("StdProjectTypeHandler.3")); //$NON-NLS-1$
           }
-          cfg.setArtifactName(removeSpaces(project.getName()));
+          cfg.setArtifactName(mProj.getDefaultArtifactName());
           CConfigurationData data = cfg.getConfigurationData();
           des.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
           monitor.worked(work);

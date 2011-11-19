@@ -429,6 +429,8 @@ public class EclipsePluginsStep
   private class InstallPluginsAction
     extends AbstractAction
   {
+    private static final long serialVersionUID = 1L;
+
     private JButton skipButton;
 
     public InstallPluginsAction(JButton skipButton)
@@ -543,6 +545,8 @@ public class EclipsePluginsStep
   private class SkipPluginsAction
     extends AbstractAction
   {
+    private static final long serialVersionUID = 1L;
+
     public SkipPluginsAction()
     {
       super("Skip");
@@ -559,6 +563,8 @@ public class EclipsePluginsStep
   private class DependencyCellRenderer
     extends DefaultTableCellRenderer
   {
+    private static final long serialVersionUID = 1L;
+
     public Component getTableCellRendererComponent(
         JTable table, Object value,
         boolean isSelected, boolean hasFocus,
@@ -648,7 +654,7 @@ public class EclipsePluginsStep
             }catch(Exception e){
               logger.error("Failed to parse feature: " + line, e);
             }
-            features.put(attrs[0], new Feature(attrs[0], attrs[1], site));
+            features.put(attrs[0], new Feature(attrs[1], site));
           }
         }
       });
@@ -781,11 +787,6 @@ public class EclipsePluginsStep
       this.sites = sites;
     }
 
-    public String[] getSites()
-    {
-      return sites;
-    }
-
     public String getId()
     {
       return id;
@@ -905,23 +906,16 @@ public class EclipsePluginsStep
     public static final Pattern VERSION =
       Pattern.compile("^(\\d+\\.\\d+\\.\\d+)(\\..*)?");
 
-    private String id;
     private String version;
     private File site;
 
-    public Feature(String id, String version, File site)
+    public Feature(String version, File site)
     {
-      this.id = id;
       this.site = site;
 
       Matcher matcher = VERSION.matcher(version);
       matcher.find();
       this.version = matcher.group(1);
-    }
-
-    public String getId()
-    {
-      return id;
     }
 
     public String getVersion()

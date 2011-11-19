@@ -123,6 +123,7 @@ public class TemplateUtils
         return make(null);
       }
 
+      @SuppressWarnings("rawtypes")
       public Writable make(final Map map)
       {
         return new Writable() {

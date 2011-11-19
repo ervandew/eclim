@@ -39,6 +39,7 @@ import com.martiansoftware.nailgun.builtins.DefaultNail;
  *
  * @author <a href="http://www.martiansoftware.com/contact.html">Marty Lamb</a>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class NGServer implements Runnable {
 
   /**

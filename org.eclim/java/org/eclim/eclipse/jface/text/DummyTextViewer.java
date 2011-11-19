@@ -16,7 +16,6 @@
  */
 package org.eclim.eclipse.jface.text;
 
-import org.eclipse.jface.text.IAutoIndentStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IEventConsumer;
 import org.eclipse.jface.text.IFindReplaceTarget;
@@ -72,8 +71,9 @@ public class DummyTextViewer
   {
   }
 
+  @SuppressWarnings("deprecation")
   public void setAutoIndentStrategy(
-      IAutoIndentStrategy strategy, String contentType)
+      org.eclipse.jface.text.IAutoIndentStrategy strategy, String contentType)
   {
   }
 

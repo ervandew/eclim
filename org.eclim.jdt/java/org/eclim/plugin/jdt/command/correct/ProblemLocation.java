@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-
-import org.eclipse.jdt.internal.corext.dom.NodeFinder;
+import org.eclipse.jdt.core.dom.NodeFinder;
 
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 
@@ -58,8 +57,7 @@ public class ProblemLocation
    */
   public ASTNode getCoveredNode(CompilationUnit astRoot)
   {
-    NodeFinder finder = new NodeFinder(offset, length);
-    astRoot.accept(finder);
+    NodeFinder finder = new NodeFinder(astRoot, offset, length);
     return finder.getCoveredNode();
   }
 
@@ -68,8 +66,7 @@ public class ProblemLocation
    */
   public ASTNode getCoveringNode(CompilationUnit astRoot)
   {
-    NodeFinder finder = new NodeFinder(offset, length);
-    astRoot.accept(finder);
+    NodeFinder finder = new NodeFinder(astRoot, offset, length);
     return finder.getCoveringNode();
   }
 

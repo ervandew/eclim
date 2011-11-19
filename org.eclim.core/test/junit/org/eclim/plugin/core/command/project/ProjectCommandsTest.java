@@ -144,6 +144,7 @@ public class ProjectCommandsTest
   }
 
   @Test
+  @SuppressWarnings({"rawtypes", "unchecked"})
   public void importProject()
   {
     // delete the test project if it exists
@@ -153,7 +154,7 @@ public class ProjectCommandsTest
     assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT_IMPORT));
 
     // first create a project
-    String result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_create",
       "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
       "-n", "java"
@@ -162,13 +163,12 @@ public class ProjectCommandsTest
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT_IMPORT));
 
     // then delete it
-    result = (String)Eclim.execute(new String[]{
-      "project_delete", "-p", TEST_PROJECT_IMPORT});
+    Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_IMPORT});
 
     assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT_IMPORT));
 
     // now import it
-    result = (String)Eclim.execute(new String[]{
+    Eclim.execute(new String[]{
       "project_import",
       "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
     });

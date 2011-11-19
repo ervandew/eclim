@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jface.text.IDocument;
 
@@ -68,7 +67,7 @@ public class AntUtils
       String project, String antFile, IProblemRequestor requestor)
     throws Exception
   {
-    // must refres the file before grabbing the document.
+    // must refresh the file before grabbing the document.
     final IFile file = AntUtil.getFileForLocation(
         ProjectUtils.getFilePath(project, antFile), null);
     if (file == null) {
@@ -77,7 +76,7 @@ public class AntUtils
     file.refreshLocal(IResource.DEPTH_INFINITE, null);
 
     IDocument doc = ProjectUtils.getDocument(project, antFile);
-    final String filepath = ProjectUtils.getFilePath(project, antFile);
+    //final String filepath = ProjectUtils.getFilePath(project, antFile);
 
     LocationProvider provider = new LocationProvider(null) {
       public IFile getFile()
@@ -86,9 +85,9 @@ public class AntUtils
       }
       public IPath getLocation()
       {
-        if (file == null) {
+        /*if (file == null) {
           return new Path(filepath);
-        }
+        }*/
         return file.getLocation();
       }
     };

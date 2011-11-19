@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ public class ShutdownTask
   /**
    * Executes this task.
    */
+  @SuppressWarnings("unchecked")
   public void execute()
     throws BuildException
   {
@@ -54,9 +55,9 @@ public class ShutdownTask
       int count = 0;
       if (instances.exists()){
         reader = new FileReader(instances);
-        for(Iterator ii = IOUtils.lineIterator(reader); ii.hasNext();){
+        for(Iterator<String> ii = IOUtils.lineIterator(reader); ii.hasNext();){
           count++;
-          String instance = (String)ii.next();
+          String instance = ii.next();
           try{
             log("Shutting down eclimd: " + instance);
             int port = Integer.parseInt(instance.replaceFirst(".*:", ""));

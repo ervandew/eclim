@@ -19,8 +19,6 @@ package org.eclim.plugin.core.command.project;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;

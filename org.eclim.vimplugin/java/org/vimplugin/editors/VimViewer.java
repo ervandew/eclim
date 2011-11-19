@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ import org.eclim.logging.Logger;
 
 import org.eclim.util.file.FileUtils;
 
-import org.eclipse.jface.text.IAutoIndentStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IEventConsumer;
 import org.eclipse.jface.text.IFindReplaceTarget;
@@ -211,8 +210,9 @@ public class VimViewer
    * {@inheritDoc}
    * @see org.eclipse.jface.text.ITextViewer#setAutoIndentStrategy(IAutoIndentStrategy,String)
    */
+  @SuppressWarnings("deprecation")
   public void setAutoIndentStrategy(
-      IAutoIndentStrategy strategy, String contentType)
+      org.eclipse.jface.text.IAutoIndentStrategy strategy, String contentType)
   {
     // no-op
   }

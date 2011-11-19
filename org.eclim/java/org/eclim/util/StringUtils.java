@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ public class StringUtils
    * @param values the values to use in the string.
    * @return The evaluation result.
    */
+  @SuppressWarnings("rawtypes")
   public static String replacePlaceholders(String string, Map values)
   {
     if(string == null || values == null){

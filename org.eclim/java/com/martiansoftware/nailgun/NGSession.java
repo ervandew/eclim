@@ -36,6 +36,7 @@ import org.apache.tools.ant.ExitException;
  *
  * @author <a href="http://www.martiansoftware.com/contact.html">Marty Lamb</a>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 class NGSession extends Thread {
 
   /**
@@ -230,7 +231,6 @@ class NGSession extends Thread {
                         line.substring(0, equalsIndex),
                         line.substring(equalsIndex + 1));
                   }
-                  String key = line.substring(0, equalsIndex);
                   break;
 
             case NGConstants.CHUNKTYPE_COMMAND:

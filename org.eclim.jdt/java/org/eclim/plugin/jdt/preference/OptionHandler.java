@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2011  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,13 +101,13 @@ public class OptionHandler
     if (project != null){
       contexts = new IScopeContext[]{
         new ProjectScope(project),
-        new InstanceScope(),
-        new DefaultScope(),
+        InstanceScope.INSTANCE,
+        DefaultScope.INSTANCE,
       };
     }else{
       contexts = new IScopeContext[]{
-        new InstanceScope(),
-        new DefaultScope(),
+        InstanceScope.INSTANCE,
+        DefaultScope.INSTANCE,
       };
     }
 
