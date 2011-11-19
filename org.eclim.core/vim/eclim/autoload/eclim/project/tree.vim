@@ -430,9 +430,8 @@ function! eclim#project#tree#InjectLinkedResources(dir, contents)
       let index += 1
     endfor
 
-    let index += 1
     for link in links
-      call insert(a:contents, a:dir . link . '/', index)
+      call add(a:contents, a:dir . link . '/')
     endfor
   endif
 endfunction " }}}
