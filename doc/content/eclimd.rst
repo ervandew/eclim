@@ -130,6 +130,15 @@ Embedded gvim
   Please note that this feature is currently considered alpha.  Please post any
   issues on the `eclim user`_ mailing list.
 
+.. note::
+  Embedding of macvim for OSX is not supported since macvim does not currently
+  have the ability to be embedded like gvim. Macvim can still be used to open
+  files from eclipse, but macvim will open as an external editor. Also note
+  that macvim snapshots 56 through 63 contain a
+  `bug <https://github.com/b4winckler/macvim/pull/22>`_ where opening a file
+  from eclipse will open an instance of macvim, but the file will not be loaded
+  into that instance.
+
 Another feature provided by eclim for those who prefer to work inside of the
 eclipse gui, is the embedding of gvim inside of eclipse.  This feature is
 provided by an eclim local fork of `vimplugin`_.  The feature adds a new editor
