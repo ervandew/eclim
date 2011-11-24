@@ -98,7 +98,8 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
       endif
 
       let menu = eclim#html#util#HtmlToText(result.menu)
-      let info = eclim#html#util#HtmlToText(result.info)
+      let info = has_key(result, 'info') ?
+        \ eclim#html#util#HtmlToText(result.info) : ''
 
       let dict = {
           \ 'word': word,
