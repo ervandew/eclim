@@ -54,6 +54,34 @@ function! TestCompletePhp()
   call vunit#AssertEquals('regular', results[0].word, 'Wrong result.')
 endfunction " }}}
 
+" TestCompletePhpShortTags() {{{
+function! TestCompletePhp()
+  edit! php/complete/test.php
+  call vunit#PeekRedir()
+
+  call cursor(26, 32)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(31, start, 'Wrong starting column.')
+
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('methodA1(', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
+
+  call cursor(27, 17)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(15, start, 'Wrong starting column.')
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
+  call vunit#AssertEquals('methodB1()', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('methodB2()', results[1].word, 'Wrong result.')
+endfunction " }}}
+
 " TestCompleteCss() {{{
 function! TestCompleteCss()
   edit! php/complete/test.php
@@ -62,6 +90,23 @@ function! TestCompleteCss()
   call cursor(5, 13)
   let start = eclim#html#complete#CodeComplete(1, '')
   call vunit#AssertEquals(8, start, 'Wrong starting column.')
+
+  let results = eclim#html#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 8, 'Wrong number of results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font.*"),
+    \ 'Results does not contain font')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-family.*"),
+    \ 'Results does not contain font-family')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-size.*"),
+    \ 'Results does not contain font-size')
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
+    \ 'Results does not contain font-weight')
+
+  call cursor(26, 20)
+  let start = eclim#html#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(15, start, 'Wrong starting column.')
 
   let results = eclim#html#complete#CodeComplete(0, '')
   call vunit#PeekRedir()

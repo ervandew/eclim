@@ -27,14 +27,14 @@
   let s:html_validate_command = '-command html_validate -p "<project>" -f "<file>"'
 " }}}
 
-" IsPhpCode() {{{
+" IsPhpCode(lnum) {{{
 " Determines if the code under the cursor is php code (in a php block).
 function! eclim#php#util#IsPhpCode(lnum)
   " FIXME: may get confused if either of these occur in a comment.
   "        can fix with searchpos and checking syntax name on result.
-  let phpstart = search('<?php', 'bcnW')
-  let phpend = search('?>', 'bcnW', line('w0'))
-  return phpstart > 0 && phpstart < a:lnum && (phpend == 0 || phpend < phpstart)
+  let phpstart = search('<?\(php\|=\)\?', 'bcnW')
+  let phpend = search('?>', 'bnW', line('w0'))
+  return phpstart > 0 && phpstart <= a:lnum && (phpend == 0 || phpend < phpstart)
 endfunction " }}}
 
 " UpdateSrcFile(validate) {{{

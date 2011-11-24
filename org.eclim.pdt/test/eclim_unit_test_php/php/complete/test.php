@@ -23,5 +23,7 @@
     <h>
     <h1 style="font">
     </h1>
+    <h1 style="font"><?$testA->?></h1>
+    <?=$testB->m?>
   </body>
 </html>
