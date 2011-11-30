@@ -188,10 +188,14 @@ endif
 
 if g:EclimSignLevel
   augroup eclim_qf
-    autocmd QuickFixCmdPost *make* call eclim#display#signs#Show('', 'qf', 1)
-    autocmd QuickFixCmdPost grep*,vimgrep* call eclim#display#signs#Show('i', 'qf', 1)
-    autocmd QuickFixCmdPost lgrep*,lvimgrep* call eclim#display#signs#Show('i', 'loc', 1)
     autocmd WinEnter,BufWinEnter * call eclim#display#signs#Update()
+    if has('gui_running')
+      " delayed to keep the :make output on the screen for gvim
+      autocmd QuickFixCmdPost * call eclim#util#DelayedCommand(
+        \ 'call eclim#display#signs#QuickFixCmdPost()')
+    else
+      autocmd QuickFixCmdPost * call eclim#display#signs#QuickFixCmdPost()
+    endif
   augroup END
 endif
 
