@@ -70,6 +70,7 @@ function! eclim#java#test#ResolveQuickfixResults(frameworks)
         \ 'filename': filename,
         \ 'lnum': entry.lnum,
         \ 'col': entry.col,
+        \ 'type': entry.type,
         \ 'text': text
       \ }
     call add(newentries, newentry)
