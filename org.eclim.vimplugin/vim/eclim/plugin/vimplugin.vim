@@ -23,7 +23,7 @@
 " }}}
 
 " Auto Commands{{{
-if has('netbeans_intg') && exists('g:vimplugin_running')
+if has('netbeans_enabled') && exists('g:vimplugin_running')
   augroup eclim_vimplugin
     " autocommands used to work around the fact that the "unmodified" event in
     " vim's netbean support is commentted out for some reason.
