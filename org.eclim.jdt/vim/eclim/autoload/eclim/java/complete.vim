@@ -141,7 +141,8 @@ function! eclim#java#complete#CodeComplete(findstart, base)
           \ 'menu': menu,
           \ 'info': info,
           \ 'kind': result.type,
-          \ 'dup': 1
+          \ 'dup': 1,
+          \ 'icase': !g:EclimJavaCompleteCaseSensitive,
         \ }
 
       call add(completions, dict)
