@@ -285,6 +285,8 @@ function! eclim#java#util#UpdateSrcFile(validate)
 
       call eclim#project#problems#ProblemsUpdate()
     endif
+  elseif a:validate
+    call eclim#project#util#IsCurrentFileInProject()
   endif
 endfunction " }}}
 

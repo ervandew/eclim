@@ -236,6 +236,8 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     endif
 
     call eclim#project#problems#ProblemsUpdate()
+  elseif a:validate && expand('<amatch>') == ''
+    call eclim#project#util#IsCurrentFileInProject()
   endif
 endfunction " }}}
 
