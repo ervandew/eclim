@@ -232,11 +232,34 @@ function! eclim#util#GetEncoding()
   return encoding
 endfunction " }}}
 
-" GetOffset() {{{
-" Gets the byte offset for the current cursor position.
-function! eclim#util#GetOffset()
-  let offset = line2byte(line('.')) - 1
-  let offset += col('.') - 1
+" GetOffset([line, col]) {{{
+" Gets the byte offset for the current cursor position or supplied line, col.
+function! eclim#util#GetOffset(...)
+  let lnum = a:0 > 0 ? a:000[0] : line('.')
+  let cnum = a:0 > 1 ? a:000[1] : col('.')
+  let offset = 0
+
+  " handle case where display encoding differs from the underlying file
+  " encoding
+  if &fileencoding != '' && &encoding != '' && &fileencoding != &encoding
+    let prev = lnum - 1
+    if prev > 0
+      let lineEnding = &ff == 'dos' ? "\r\n" : "\n"
+      " convert each line to the file encoding and sum their lengths
+      let offset = eval(
+        \ join(
+        \   map(
+        \     range(1, prev),
+        \     'len(iconv(getline(v:val), &encoding, &fenc) . "' . lineEnding . '")'),
+        \   '+'))
+    endif
+
+  " normal case
+  else
+    let offset = line2byte(lnum) - 1
+  endif
+
+  let offset += cnum - 1
   return offset
 endfunction " }}}
 

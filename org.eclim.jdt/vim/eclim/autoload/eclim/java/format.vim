@@ -43,10 +43,8 @@ function! eclim#java#format#Format(first, last, typeDummy)
   let command = s:command_properties
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let begin = line2byte(a:first) - 1
-  let end = line2byte(a:last) - 1 + len(getline(a:last)) - 1
-  let command = substitute(command, '<boffset>', begin, '')
-  let command = substitute(command, '<eoffset>', line2byte(a:last) - 1, '')
+  let command = substitute(command, '<boffset>', eclim#util#GetOffset(a:first, 1), '')
+  let command = substitute(command, '<eoffset>', eclim#util#GetOffset(a:last, 1), '')
 
   let result = eclim#ExecuteEclim(command)
   if result != "0"
