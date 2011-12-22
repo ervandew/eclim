@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,6 +110,19 @@ directions on adding the following to your vimrc:
   .. code-block:: vim
 
     filetype plugin indent on
+
+
+.. _ts_signs_misplaced:
+
+Code validation signs are showing up on the wrong lines.
+--------------------------------------------------------
+
+This is most likely a result of eclipse being setup to use a different file
+encoding than vim, most likely cp1251 (windows-1251) vs utf-8.  You should be
+able to resolve this issue by :ref:`setting eclipse's default encoding
+<eclim_encoding>` accordingly.
+
+If you're unsure what encoding to use, try using utf-8.
 
 
 .. _ts_exception:

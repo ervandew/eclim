@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ directory.
 
     $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
 
+.. _eclimd_options_windows:
+
 For Windows users there are a couple alternatives to the unsupported
 .eclimrc:
 
@@ -65,7 +67,6 @@ For Windows users there are a couple alternatives to the unsupported
      - Right click the shortcut and choose "Properties"
      - | On the "Shortcut" tab edit the "Target:" field and append:
        | -Dosgi.instance.area.default=\@user.home/another_workspace
-
 
 .. _eclim_proxy:
 
@@ -92,8 +93,9 @@ directory.
 If your proxy requires authentication, you'll need to supply the
 ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
 
-On Windows systems you can use the same steps described above, for setting
-the workspace location, to also set the proxy settings.
+On Windows systems you can use the same steps
+:ref:`described <eclimd_options_windows>` above, for setting the workspace
+location, to also set the proxy settings.
 
 .. _eclim_memory:
 
@@ -122,13 +124,13 @@ options:
       -XX:PermSize=64m
       -XX:MaxPermSize=128m
 
-   On Windows systems you can use the same steps described above, for setting
-   the workspace location, to also specify the jvm memory args.
+   On Windows systems you can use the same steps
+   :ref:`described <eclimd_options_windows>` above, for setting the workspace
+   location, to also specify the jvm memory args.
 
 If you are using the headed version of eclimd, then setting the jvm memory
 arguments for eclim is the same procedure as setting them for eclipse.  Details
 can be found on the `eclipse wiki`_.
-
 
 .. _eclim_troubleshoot:
 
@@ -145,5 +147,39 @@ How can I run eclimd on a truly headless server?
 
 Please see the :ref:`headless guide <guides/headless>`.
 
+.. _eclim_encoding:
+
+How can I set the default encoding used by eclipse/eclimd?
+----------------------------------------------------------
+
+To set the default encoding you can set the ``file.encoding`` system property
+according to your setup:
+
+1. Headless eclimd users on any unix variant (Linux, OSX, etc) can simply add
+   the property your .eclimrc file in your home directory:
+
+   ::
+
+     # set the default file encoding
+     file.encoding=utf-8
+
+2. Headless eclimd users on Windows can add the system property (eg.
+   ``-Dfile.encoding=utf-8``) using the same steps
+   :ref:`described <eclimd_options_windows>` above, for setting the workspace
+   location.
+
+3. Headed eclimd users can add the system property (eg.
+   ``-Dfile.encoding=utf-8``) to your eclipse.ini file found in your eclipse
+   install's root directory. Be sure to add the property on a new line after
+   the ``-vmargs`` line:
+
+    ::
+
+      ...
+      -vmargs
+      ...
+      -Dfile.encoding=utf-8
+
+   You can read more about the eclipse.ini file on the `eclipse wiki`_.
 
 .. _eclipse wiki: http://wiki.eclipse.org/Eclipse.ini
