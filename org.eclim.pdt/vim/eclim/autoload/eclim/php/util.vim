@@ -53,6 +53,9 @@ function! eclim#php#util#UpdateSrcFile(validate)
       endif
     endif
     let result = eclim#ExecuteEclim(command)
+    if type(result) != g:LIST_TYPE
+      return
+    endif
 
     if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       " html validate
