@@ -181,6 +181,14 @@ Windows menu at:
     set guioptions-=m " turn off menu bar
     set guioptions-=T " turn off toolbar
 
+  Additionally, some users have reported that gvim's left scrollbar may also
+  need to be disabled:
+
+  .. code-block:: vim
+
+    set guioptions-=L " turn off left scrollbar
+    set guioptions-=l
+
 **Eclipse/Vim key shortcuts in embedded gvim**
 
 Depending on your OS and windowing system, when the embedded gvim has focus,
