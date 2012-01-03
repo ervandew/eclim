@@ -156,7 +156,9 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
     let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
-    let search_cmd .= ' -f "' . file . '" -o ' . offset . ' -l ' . length
+    let encoding = eclim#util#GetEncoding()
+    let search_cmd .= ' -f "' . file . '"' .
+      \ ' -o ' . offset . ' -l ' . length . ' -e ' . encoding
   else
     " quote the search pattern
     let search_cmd = substitute(
