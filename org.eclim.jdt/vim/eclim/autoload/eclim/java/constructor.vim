@@ -33,7 +33,7 @@ function! eclim#java#constructor#Constructor(first, last)
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let properties = a:last == 1 ? [] :
     \ eclim#java#util#GetSelectedFields(a:first, a:last)

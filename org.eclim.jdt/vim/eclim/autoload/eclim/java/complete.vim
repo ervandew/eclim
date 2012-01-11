@@ -46,7 +46,7 @@
 function! eclim#java#complete#CodeComplete(findstart, base)
   if a:findstart
     " update the file before vim makes any changes.
-    call eclim#java#util#SilentUpdate()
+    call eclim#lang#SilentUpdate()
 
     if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
       return -1

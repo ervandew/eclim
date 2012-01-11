@@ -284,7 +284,7 @@ endfunction " }}}
 function! eclim#java#search#SearchAndDisplay(type, args)
   " if running from a non java source file, no SilentUpdate needed.
   if &ft == 'java'
-    call eclim#java#util#SilentUpdate()
+    call eclim#lang#SilentUpdate()
   endif
 
   let argline = a:args

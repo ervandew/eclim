@@ -35,7 +35,7 @@ function! eclim#java#doc#Comment()
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()

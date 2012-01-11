@@ -39,7 +39,7 @@ function! eclim#java#correct#Correct()
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
@@ -111,7 +111,7 @@ function! eclim#java#correct#CorrectApply()
     if file_winnr != -1
       let filename = b:filename
       exec file_winnr . "winc w"
-      call eclim#java#util#SilentUpdate()
+      call eclim#lang#SilentUpdate()
 
       let index = substitute(line, '^\([0-9]\+\)\..*', '\1', '')
 

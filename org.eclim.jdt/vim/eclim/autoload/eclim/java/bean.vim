@@ -44,7 +44,7 @@ function! eclim#java#bean#GetterSetter(first, last, type)
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let properties = eclim#java#util#GetSelectedFields(a:first, a:last)
 

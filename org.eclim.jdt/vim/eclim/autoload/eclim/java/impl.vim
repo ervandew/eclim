@@ -37,7 +37,7 @@ function! eclim#java#impl#Impl()
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
@@ -213,7 +213,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
   let type = substitute(getline(1), '\$', '.', 'g')
   let impl_winnr = winnr()
   exec winnr . "winc w"
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()

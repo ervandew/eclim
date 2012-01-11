@@ -117,7 +117,7 @@ function! eclim#java#import#ImportMissing()
     return
   endif
 
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
@@ -310,7 +310,7 @@ function! eclim#java#import#CleanImports()
   " eclim method
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ''
-    call eclim#java#util#SilentUpdate()
+    call eclim#lang#SilentUpdate()
 
     let file = eclim#project#util#GetProjectRelativeFilePath()
 

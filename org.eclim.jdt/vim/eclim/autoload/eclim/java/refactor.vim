@@ -61,7 +61,7 @@ function eclim#java#refactor#Rename(name)
   endif
 
   " update the file before vim makes any changes.
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
   wall
 
   let project = eclim#project#util#GetCurrentProjectName()
@@ -94,7 +94,7 @@ function eclim#java#refactor#UndoRedo(operation, peek)
   endif
 
   " update the file before vim makes any changes.
-  call eclim#java#util#SilentUpdate()
+  call eclim#lang#SilentUpdate()
   wall
 
   let command = s:command_undoredo
