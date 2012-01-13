@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,8 +112,13 @@ public class SearchCommand
       String query, List<Dependency> existing)
     throws Exception
   {
+    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+
     Source source = new Source(new URL(URL + query));
     Element table = source.getElementById("resulttable");
+    if (table == null){
+      return dependencies;
+    }
 
     // get header column indexes
     int groupIndex = -1;
@@ -141,7 +146,6 @@ public class SearchCommand
     // skip header row
     rows.next();
 
-    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
     while (rows.hasNext()){
       Element row = rows.next();
       List<Element> cells = row.getAllElements("td");
