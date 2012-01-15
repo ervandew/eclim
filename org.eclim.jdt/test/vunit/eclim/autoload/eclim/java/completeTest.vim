@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -55,15 +55,13 @@ function! TestCodeComplete()
     \ 'Results does not contain remove()')
 
   call cursor(11, 10)
-  " vim deletes the text back to the base after the first call to the
-  " completefunc, simulate that here.
-  normal x
   let results = eclim#java#complete#CodeComplete(0, 'a')
   call vunit#PeekRedir()
+  echom 'Results: ' . string(results)
   call vunit#AssertTrue(len(results) > 1, 'Not enough results.')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add'.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Narrowed results does not contain add()')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll'.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
     \ 'Narrowed results does not contain addAll()')
 
   for result in results

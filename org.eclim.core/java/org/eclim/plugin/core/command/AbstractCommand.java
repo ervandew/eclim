@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +16,22 @@
  */
 package org.eclim.plugin.core.command;
 
+import java.util.Arrays;
+
 import org.eclim.command.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 
 import com.martiansoftware.nailgun.NGContext;
 
@@ -36,6 +43,8 @@ import com.martiansoftware.nailgun.NGContext;
 public abstract class AbstractCommand
   implements Command
 {
+  private static final Logger logger = Logger.getLogger(AbstractCommand.class);
+
   private NGContext context;
 
   /**
@@ -88,6 +97,51 @@ public abstract class AbstractCommand
   public void setContext(NGContext context)
   {
     this.context = context;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see Command#cleanup(CommandLine)
+   */
+  public void cleanup(CommandLine commandLine)
+  {
+    try{
+      // cleanup temp files
+      if (commandLine.hasOption(Options.FILE_OPTION) &&
+          (commandLine.hasOption(Options.PROJECT_OPTION) ||
+           commandLine.hasOption(Options.NAME_OPTION)))
+      {
+        IProject project = null;
+        String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+        if (projectName == null){
+          // some commands use -n for the project name (like all the search commands)
+          projectName = commandLine.getValue(Options.NAME_OPTION);
+        }else{
+          // some commands use -n for the project name but also have a -p option
+          // (like the search commands when searching by pattern)
+          project = ProjectUtils.getProject(projectName);
+          if (!project.exists()){
+            project = null;
+            projectName = commandLine.getValue(Options.NAME_OPTION);
+          }
+        }
+
+        if (project == null && projectName != null){
+          project = ProjectUtils.getProject(projectName);
+        }
+
+        String file = commandLine.getValue(Options.FILE_OPTION);
+        if (project != null && project.exists() && file != null){
+          IFile temp = ProjectUtils.getFile(project, file);
+          if (temp.exists() && temp.getName().startsWith("__eclim_temp_")){
+            temp.delete(true, false, null);
+          }
+        }
+      }
+    }catch(Exception e){
+      logger.error("Exception during cleanup of command: " +
+          Arrays.toString(context.getArgs()), e);
+    }
   }
 
   public void println()

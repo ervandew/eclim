@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,14 +25,11 @@
 " CodeComplete(findstart, base) {{{
 " Handles python code completion.
 function! eclim#python#complete#CodeComplete(findstart, base)
+  if !eclim#project#util#IsCurrentFileInProject(0)
+    return a:findstart ? -1 : []
+  endif
+
   if a:findstart
-    " update the file before vim makes any changes.
-    call eclim#util#ExecWithoutAutocmds('silent update')
-
-    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
-      return -1
-    endif
-
     " locate the start of the word
     let line = getline('.')
 
@@ -49,14 +46,13 @@ function! eclim#python#complete#CodeComplete(findstart, base)
 
     return start
   else
-    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
-      return []
-    endif
-
     let offset = eclim#python#rope#GetOffset() + len(a:base)
     let encoding = eclim#util#GetEncoding()
     let project = eclim#project#util#GetCurrentProjectRoot()
-    let file = eclim#project#util#GetProjectRelativeFilePath()
+    let file = eclim#lang#SilentUpdate(1)
+    if file == ''
+      return []
+    endif
 
     let completions = []
     let results = eclim#python#rope#Completions(project, file, offset, encoding)

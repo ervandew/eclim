@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,14 +31,11 @@
 " CodeComplete(command, findstart, base, [options]) {{{
 " Handles code completion.
 function! eclim#lang#CodeComplete(command, findstart, base, ...)
+  if !eclim#project#util#IsCurrentFileInProject(0)
+    return a:findstart ? -1 : []
+  endif
+
   if a:findstart
-    " update the file before vim makes any changes.
-    call eclim#util#ExecWithoutAutocmds('silent update')
-
-    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
-      return -1
-    endif
-
     " locate the start of the word
     let line = getline('.')
 
@@ -55,13 +52,12 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
 
     return start
   else
-    if !eclim#project#util#IsCurrentFileInProject(0) || !filereadable(expand('%'))
-      return []
-    endif
-
     let offset = eclim#util#GetOffset() + len(a:base)
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#project#util#GetProjectRelativeFilePath()
+    let file = eclim#lang#SilentUpdate(1)
+    if file == ''
+      return []
+    endif
 
     let command = a:command
     let command = substitute(command, '<project>', project, '')
@@ -272,19 +268,34 @@ function! eclim#lang#Validate(type, on_save)
   endif
 endfunction " }}}
 
-" SilentUpdate() {{{
+" SilentUpdate([temp]) {{{
 " Silently updates the current source file w/out validation.
-function! eclim#lang#SilentUpdate()
+function! eclim#lang#SilentUpdate(...)
   " i couldn't reproduce the issue, but at least one person experienced the
   " cursor moving on update and breaking code completion:
   " http://sourceforge.net/tracker/index.php?func=detail&aid=1995319&group_id=145869&atid=763323
   let pos = getpos('.')
-
-  try
-    silent noautocmd update
-  finally
-    call setpos('.', pos)
-  endtry
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+  if file != ''
+    try
+      if a:0 && a:1
+        " don't create temp files if no server is available to clean them up.
+        let project = eclim#project#util#GetCurrentProjectName()
+        let workspace = eclim#project#util#GetProjectWorkspace(project)
+        if workspace != '' && eclim#PingEclim(0, workspace)
+          let prefix = '__eclim_temp_'
+          let file = fnamemodify(file, ':h') . '/' . prefix . fnamemodify(file, ':t')
+          let tempfile = expand('%:p:h') . '/' . prefix . expand('%:t')
+          exec 'silent noautocmd write! ' . escape(tempfile, ' ')
+        endif
+      else
+        silent noautocmd update
+      endif
+    finally
+      call setpos('.', pos)
+    endtry
+  endif
+  return file
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

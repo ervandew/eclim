@@ -820,6 +820,9 @@ endfunction " }}}
 function! eclim#project#util#GetProjectRelativeFilePath(...)
   let file = a:0 == 0 ? expand('%:p') : a:1
   let project = eclim#project#util#GetProject(file)
+  if !len(project)
+    return ''
+  endif
 
   let file = substitute(fnamemodify(file, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'

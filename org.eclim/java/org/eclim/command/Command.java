@@ -37,6 +37,16 @@ public interface Command
     throws Exception;
 
   /**
+   * Perform any post command execution cleanup.
+   *
+   * Intended for super classes to provide generic cleanup facilities for child
+   * classes.
+   *
+   * @param commandLine The commandLine options supplied.
+   */
+  public void cleanup(CommandLine commandLine);
+
+  /**
    * Gets the context for this instance.
    *
    * @return The context.

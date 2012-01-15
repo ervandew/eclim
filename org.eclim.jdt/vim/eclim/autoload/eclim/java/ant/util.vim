@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,23 +31,6 @@ function! eclim#java#ant#util#FindBuildFile()
   endif
 
   return ''
-endfunction " }}}
-
-" SilentUpdate() {{{
-" Silently updates the current source file w/out validation.
-function! eclim#java#ant#util#SilentUpdate()
-  try
-    let saved_ant = g:EclimAntValidate
-    let saved_xml = g:EclimXmlValidate
-
-    let g:EclimAntValidate = 0
-    let g:EclimXmlValidate = 0
-
-    silent update
-  finally
-    let g:EclimAntValidate = saved_ant
-    let g:EclimXmlValidate = saved_xml
-  endtry
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

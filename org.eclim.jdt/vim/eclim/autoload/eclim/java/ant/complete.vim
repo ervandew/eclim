@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,10 +31,11 @@
 " CodeComplete(findstart, base) {{{
 " Handles ant code completion.
 function! eclim#java#ant#complete#CodeComplete(findstart, base)
-  if a:findstart
-    " update the file before vim makes any changes.
-    call eclim#java#ant#util#SilentUpdate()
+  if !eclim#project#util#IsCurrentFileInProject(0)
+    return a:findstart ? -1 : []
+  endif
 
+  if a:findstart
     " locate the start of the word
     let line = getline('.')
 
@@ -63,12 +64,10 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
     return start
   else
     let offset = eclim#util#GetOffset() + len(a:base) - 1
-    let project = eclim#project#util#GetCurrentProjectName()
-    if project == ''
+    let file = eclim#lang#SilentUpdate(1)
+    if file == ''
       return []
     endif
-
-    let file = eclim#project#util#GetProjectRelativeFilePath()
 
     let command = s:complete_command
     let command = substitute(command, '<project>', project, '')
