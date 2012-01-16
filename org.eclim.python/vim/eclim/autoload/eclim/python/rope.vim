@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -209,6 +209,10 @@ with(projectroot()):
     for ii, p in enumerate(proposals):
       proposals[ii] = [p.name, kind(p), parameters(p)]
     vim.command("let results = %r" % proposals)
+
+    if resource.name.startswith('__eclim_temp_'):
+      #resource.remove()
+      os.unlink(resource.real_path)
   except IndentationError, e:
     vim.command(
       "let completion_error = 'Completion failed due to indentation error.'"
@@ -226,7 +230,6 @@ EOF
   endif
 
   return results
-
 endfunction " }}}
 
 " Find(project, filename, offset, encoding, context) {{{
