@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,19 +28,32 @@ if !exists(":EclimValidate")
 endif
 " }}}
 
+" Script Variables {{{
+let s:required_version = 700
+" }}}
+
 " Validate() {{{
 " Validates some settings and environment values required by eclim.
 " NOTE: don't add command-line continuation characters anywhere in the
 " function, just in case the user has &compatible set.
 function! s:Validate()
   " Check vim version.
-  if v:version < 700
+  if v:version < s:required_version
     let ver = strpart(v:version, 0, 1) . '.' . strpart(v:version, 2)
     echom "Error: Your vim version is " . ver . "."
     echom "       Eclim requires version 7.x.x"
     return
   endif
 
+  call s:Validate7()
+endfunction " }}}
+
+" exit early if unsupported vim version
+if v:version < s:required_version
+  finish
+endif
+
+function! s:Validate7() " {{{
   let errors = []
 
   " Check 'compatible' option.
@@ -88,9 +101,8 @@ function! s:Validate()
   echohl None
 endfunction " }}}
 
-" exit early if unsupported vim version, compatible is set, or eclim is
-" disabled.
-if v:version < 700 || &compatible || exists("g:EclimDisabled")
+" exit early if compatible is set or eclim is disabled.
+if &compatible || exists("g:EclimDisabled")
   finish
 endif
 
@@ -117,9 +129,7 @@ function! EclimBaseDir()
   return g:EclimBaseDir
 endfunction " }}}
 
-" Init() {{{
-" Initializes eclim.
-function! s:Init()
+function! s:Init() " {{{
   " add eclim dir to runtime path.
   let basedir = EclimBaseDir()
   if basedir == ''
