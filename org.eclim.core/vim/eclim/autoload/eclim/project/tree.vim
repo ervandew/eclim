@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -294,15 +294,46 @@ function! s:InfoLine()
       exec lnum . ',' . lnum . 'delete _'
     endif
 
+    let info = ''
     try
-      let GetInfo = function('vcs#util#GetInfo')
-      let info = GetInfo(b:roots[0])
-      if info != ''
-        call append(line('$') - 1, '" ' . info)
-      endif
+      let info = function('vcs#util#GetInfo')(b:roots[0])
     catch /E\(117\|700\)/
-      " noop if the function wasn't found
+      " fall back to fugitive
+      try
+        " make sure fugitive has the git dir for the current project
+        if !exists('b:git_dir') || (b:git_dir !~ '^\M' . b:roots[0])
+          let cwd = ''
+          if getcwd() . '/' != b:roots[0]
+            let cwd = getcwd()
+            exec 'lcd ' . escape(b:roots[0], ' ')
+          endif
+
+          if exists('b:git_dir')
+            unlet b:git_dir
+          endif
+          doautocmd fugitive BufReadPost %
+
+          if cwd != ''
+            exec 'lcd ' . escape(cwd, ' ')
+          endif
+        endif
+
+        let info = function('fugitive#statusline')()
+        if info != ''
+          let branch = substitute(info, '^\[\Git(\(.*\))\]$', '\1', 'g')
+          if branch != info
+            let info = 'git:' . branch
+          endif
+        endif
+      catch /E\(117\|700\)/
+        " noop if the neither function was found
+      endtry
     endtry
+
+    " &modifiable check for silly side effect of fugitive autocmd
+    if info != '' && &modifiable
+      call append(line('$') - 1, '" ' . info)
+    endif
   endif
   call setpos('.', pos)
   setlocal nomodifiable
