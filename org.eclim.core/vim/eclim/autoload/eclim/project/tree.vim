@@ -311,7 +311,7 @@ function! s:InfoLine()
           if exists('b:git_dir')
             unlet b:git_dir
           endif
-          doautocmd fugitive BufReadPost %
+          silent! doautocmd fugitive BufReadPost %
 
           if cwd != ''
             exec 'lcd ' . escape(cwd, ' ')
