@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ function! eclim#java#junit#JUnitResult(test)
 
   if found != ""
     let filename = expand('%:p')
-    exec "botright split " . found
+    exec "below split " . escape(found, ' ')
 
     augroup temp_window
       autocmd! BufWinLeave <buffer>
@@ -202,7 +202,7 @@ function! s:AddTestImpl(visual)
 endfunction " }}}
 
 " GetResultsDir() {{{
-function s:GetResultsDir()
+function! s:GetResultsDir()
   let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
   if type(path) == g:NUMBER_TYPE
     return
@@ -219,7 +219,7 @@ endfunction " }}}
 
 " CommandCompleteTest(argLead, cmdLine, cursorPos) {{{
 " Custom command completion for junit test cases.
-function eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos)
+function! eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos)
   return eclim#java#test#CommandCompleteTest('junit', a:argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
