@@ -36,6 +36,8 @@ function! eclim#xml#complete#CodeComplete(findstart, base)
   endif
 
   if a:findstart
+    call eclim#lang#SilentUpdate(1)
+
     " locate the start of the word
     let line = getline('.')
 
@@ -49,7 +51,7 @@ function! eclim#xml#complete#CodeComplete(findstart, base)
   else
     let offset = eclim#util#GetOffset() + len(a:base)
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#lang#SilentUpdate(1)
+    let file = eclim#lang#SilentUpdate(1, 0)
     if file == ''
       return []
     endif

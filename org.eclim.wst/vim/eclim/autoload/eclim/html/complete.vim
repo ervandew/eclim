@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ function! eclim#html#complete#CodeComplete(findstart, base)
   endif
 
   if a:findstart
-    update
+    call eclim#lang#SilentUpdate(1)
 
     " locate the start of the word
     let line = getline('.')

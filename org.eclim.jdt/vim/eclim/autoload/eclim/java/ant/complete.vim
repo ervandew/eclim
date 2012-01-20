@@ -36,6 +36,8 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
   endif
 
   if a:findstart
+    call eclim#lang#SilentUpdate(1)
+
     " locate the start of the word
     let line = getline('.')
 
@@ -64,7 +66,7 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
     return start
   else
     let offset = eclim#util#GetOffset() + len(a:base) - 1
-    let file = eclim#lang#SilentUpdate(1)
+    let file = eclim#lang#SilentUpdate(1, 0)
     if file == ''
       return []
     endif

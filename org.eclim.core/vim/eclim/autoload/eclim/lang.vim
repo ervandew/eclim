@@ -35,7 +35,11 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
     return a:findstart ? -1 : []
   endif
 
+  let options = a:0 ? a:1 : {}
+
   if a:findstart
+    call eclim#lang#SilentUpdate(get(options, 'temp', 1))
+
     " locate the start of the word
     let line = getline('.')
 
@@ -54,7 +58,7 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
   else
     let offset = eclim#util#GetOffset() + len(a:base)
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#lang#SilentUpdate(1)
+    let file = eclim#lang#SilentUpdate(get(options, 'temp', 1), 0)
     if file == ''
       return []
     endif
@@ -64,11 +68,8 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
     let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<offset>', offset, '')
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
-    if a:0
-      let options = a:1
-      if has_key(options, 'layout')
-        let command = substitute(command, '<layout>', options.layout, '')
-      endif
+    if has_key(options, 'layout')
+      let command = substitute(command, '<layout>', options.layout, '')
     endif
 
     let completions = []
@@ -268,7 +269,7 @@ function! eclim#lang#Validate(type, on_save)
   endif
 endfunction " }}}
 
-" SilentUpdate([temp]) {{{
+" SilentUpdate([temp], [temp_write]) {{{
 " Silently updates the current source file w/out validation.
 function! eclim#lang#SilentUpdate(...)
   " i couldn't reproduce the issue, but at least one person experienced the
@@ -286,10 +287,14 @@ function! eclim#lang#SilentUpdate(...)
           let prefix = '__eclim_temp_'
           let file = fnamemodify(file, ':h') . '/' . prefix . fnamemodify(file, ':t')
           let tempfile = expand('%:p:h') . '/' . prefix . expand('%:t')
-          exec 'silent noautocmd write! ' . escape(tempfile, ' ')
+          if a:0 < 2 || a:2
+            exec 'silent noautocmd write! ' . escape(tempfile, ' ')
+          endif
         endif
       else
-        silent noautocmd update
+        if a:0 < 2 || a:2
+          silent noautocmd update
+        endif
       endif
     finally
       call setpos('.', pos)

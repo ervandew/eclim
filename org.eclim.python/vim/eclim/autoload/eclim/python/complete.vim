@@ -30,6 +30,8 @@ function! eclim#python#complete#CodeComplete(findstart, base)
   endif
 
   if a:findstart
+    call eclim#lang#SilentUpdate(1)
+
     " locate the start of the word
     let line = getline('.')
 
@@ -49,7 +51,7 @@ function! eclim#python#complete#CodeComplete(findstart, base)
     let offset = eclim#python#rope#GetOffset() + len(a:base)
     let encoding = eclim#util#GetEncoding()
     let project = eclim#project#util#GetCurrentProjectRoot()
-    let file = eclim#lang#SilentUpdate(1)
+    let file = eclim#lang#SilentUpdate(1, 0)
     if file == ''
       return []
     endif
