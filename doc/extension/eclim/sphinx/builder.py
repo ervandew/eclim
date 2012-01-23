@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2011  Eric Van Dewoestine
+Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -125,7 +125,8 @@ class EclimBuilder(StandaloneHTMLBuilder):
 # EV: end main toc
 
     # local TOC and global TOC tree
-    toc = self.render_partial(self.env.get_toc_for(docname))['fragment']
+    self_toc = self.env.get_toc_for(docname, self)
+    toc = self.render_partial(self_toc)['fragment']
 
     return dict(
       parents = parents,

@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2010  Eric Van Dewoestine
+Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -82,6 +82,12 @@ class EclimHtmlBuildEnvironment(EclimBuildEnvironment):
         # find all toctree nodes in this section and add them
         # to the toc (just copying the toctree node which is then
         # resolved in self.get_and_resolve_doctree)
+        if isinstance(sectionnode, addnodes.only):
+          onlynode = addnodes.only(expr=sectionnode['expr'])
+          blist = build_toc(sectionnode, depth)
+          if blist:
+            onlynode += blist.children
+            entries.append(onlynode)
         if not isinstance(sectionnode, nodes.section) or (main and title_visited):
           for toctreenode in traverse_in_section(sectionnode,
                                                  addnodes.toctree):
