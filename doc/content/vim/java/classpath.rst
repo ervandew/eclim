@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,22 +74,11 @@ and variables.
 - **:NewJarEntry** <file> [<file> ...] -
   Adds a new entry for one or more jar file dependencies.  If the jar file is
   not in a folder under the project root, you must use an absolute path
-  (apparent limitation with Eclipse).  When adding the template, this command
-  also adds the necessary (although commented out) elements and attributes to
-  set the location of the jar's source code and javadocs.
+  (apparent limitation with Eclipse).
 
   .. code-block:: xml
 
-    <classpathentry exported="true" kind="lib" path="lib/hibernate-3.0.jar">
-      <!--
-        sourcepath="<path>">
-      -->
-      <!--
-      <attributes>
-        <attribute value="file:<javadoc>" name="javadoc_location"/>
-      </attributes>
-      -->
-    </classpath>
+    <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"/>
 
 .. _\:NewVarEntry:
 
@@ -101,16 +90,7 @@ and variables.
 
   .. code-block:: xml
 
-    <classpathentry exported="true" kind="var" path="USER_HOME/lib/hibernate-3.0.jar">
-      <!--
-        sourcepath="<path>">
-      -->
-      <!--
-      <attributes>
-        <attribute value="http://<javadoc>" name="javadoc_location"/>
-      </attributes>
-      -->
-    </classpath>
+    <classpathentry exported="true" kind="var" path="USER_HOME/lib/hibernate-4.0.jar"/>
 
   This allows you to share .classpath files with other developers without each
   having a local copy with environment specific paths.
@@ -143,6 +123,25 @@ and variables.
   - **:VariableDelete** <name> -
     Deletes the variable with the supplied name.
 
+.. _classpath-src-javadocs:
+
+Source and Javadoc location
+---------------------------
+
+For your 'var' and 'lib' classpath entries you can configure the location for
+that entry's source code and javadocs, like the example below, allowing you to
+:ref:`jump to the source <:JavaSearch>` or :ref:`lookup the docs <:JavaDocSearch>`
+of classes, etc found in that library. Note that the javadoc location must be a
+url, whether it be on the local file system (file:) or remote (http:).
+
+  .. code-block:: xml
+
+    <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"
+        sourcepath="<path>">
+      <attributes>
+        <attribute value="file:<javadoc>" name="javadoc_location"/>
+      </attributes>
+    </classpath>
 
 .. _classpath-maven:
 
