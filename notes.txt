@@ -1,43 +1,36 @@
 HIGH {{{
   Bugs:
-    - figure out why eclimd affects the eclipse workspace selector
+    - try to elminate errorformat false positives (jumping to the build.xml
+      junit task) with ant + junit (maybe testng as well)
 
-    - better :Vcs* error handling
+    - better error message attempting to import non-existant project directory:
+      $ "/usr/local/java/eclipse/eclim" --nailgun-port 9093 \
+        -command project_import -f "/home/ervandew/workspace.test/test-andri"
+
+    - Formic, detect dead symlink when picking directories.
+
+    - figure out why eclimd affects the eclipse workspace selector
 
     - better error message attempting to create a project in a project (only an
       issue inside of the workspace directory)
       http://groups.google.com/group/eclim-user/browse_thread/thread/10e3f5a17452cfc2?hl=en.
 
-    - deadlock:
-      Jobs Running at the time:
-        Building workspace(6)                   - running
-        Flushing content description cache.(13) - waiting
-        Compacting resource model(14)           - running
-        Periodic workspace save.(8)             - sleeping
-
-    - workspace corruption
-
-  Docs:
-    - document vertical tool window vars
-
-    - add high level docs or screencast
-
-  Tasks:
-    - Check if additional css properties are provided by eclipse or added by
-      aptana (-moz-border-radius)
-
-    - test installing as root on karmic 9.10
-      - user reports that when installing android on apt-get installed eclipse
-        and then installing eclim as root, the android functionality disappeared
-        even though eclipse still listed it as installed.
-
   Features:
+    - maven: support updating classpath on pom.xml save (like ivy.xml)
+
     - :LocateFile
-      - add eclipse setting to filter out results (supported in helios?)
+      - Reported to "just work" if setup through eclipse gui:
+        Eclipse -> Project -> Properties -> Resource -> Resource Filters
+      - add ability to configure the eclipse resource filters
 
     - Support for starting/stopping eclim from vim
       - fork eclimd
       - buffer to tail the eclimd log
+
+    - Remote eclimd
+      - mount point for code/workspace location
+      - ~/.eclimrc (both sides need to agree)
+      - ~/.eclim/.eclimd_instances (client needs to read server created file)
 
     - Auto code completion
       - using python to spawn completion in the background
@@ -49,6 +42,31 @@ HIGH {{{
       - open a scratch window for displaying these
 
     - make project file refresh async?
+
+  Docs:
+    - document vertical tool window vars
+
+    - add high level docs or screencast
+
+  Tasks:
+    - Breakout more vim plugins:
+      - buffers  (common/buffers.vim)
+        - test internationalized :buffers output
+        - add refresh shortcut
+        - on delete, refresh
+        - range delete + open
+      - :Jps
+      - django/jinja end tag completion?
+      - maven support
+
+      Create ability to package up other plugins in the rtp when building the
+      eclim installer, then break out these (use git submodules so that this
+      comes for free, for me and others checking out the source?):
+        - tree (TreeTab, etc.)
+        - sign support?
+
+    - Check if additional css properties are provided by eclipse or added by
+      aptana (-moz-border-radius)
 }}}
 
 TODO {{{
@@ -121,6 +139,9 @@ TODO {{{
   }}}
 
   Installer {{{
+    - Update unattended install to auto install plugins based on available
+      eclipse features, unless explicitly disabled by the user.
+
     - add/test proxy support to the installer
       - new p2 provisioning system may handle this transparently
 
@@ -162,6 +183,8 @@ TODO {{{
   }}}
 
   Common {{{
+    - leverage eclipse save actions
+
     - settings export/import
 
     - :LocateFile
@@ -170,26 +193,7 @@ TODO {{{
 
     - templating system (convert to groovy)?
 
-    - support max number of cache entries
-      - len(split(globpath(g:EclimCacheDir, '*.cache*'), '\n'))
-      - exclude entries beginning w/ 'eclim_'
-      - maybe let the eclim server side manage this via a TimerTask.
-        - or use a expand / retract ratio so vim wouldn't be constantly deleting files.
-
     - :ProjectCreateWizard - use input()
-
-    - Vcs
-      - support :VcsAnnotate, :VcsDiff prev, etc on a temp vcs file view
-      - :VcsStatus
-        - temp window w/ list of files
-        - A to add a file, R to remove one
-        - hitting <enter> on a file with:
-          - M shows the diff
-          - A opens the file
-          - D open last revision
-      - :VcsOut / :VcsIn
-         - git log --pretty=tformat:"%h|%cn|%cr|%s" origin..  // in: ..origin
-         - hg out -q --template "{node|short}|{author}|{date|age}|{desc|firstline}\n"
 
     - eclim console log
       - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
@@ -210,9 +214,6 @@ TODO {{{
     - determines the user's default workspace using (account for ~/.eclipse/org.eclipse.../configuration)
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
       RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
-
-    - for taglist, support universal marker tag:
-      |-- marker_name --|
 
     - In addition to marking lines w/ errors/warnings, highlight the offending text.
     - CursorHold validation of files.
@@ -249,6 +250,9 @@ TODO {{{
                 IEnvironmentVariableManager mngr =
                   CCorePlugin.getDefault().getBuildEnvironmentManager();
                 IEnvironmentVariable[] vars = mngr.getVariables(cfgDes, true);
+
+    - building c/c++ projects
+      - see org.eclipse.cdt.managedbuilder.internal.core.HeadlessBuilder
 
     - completion outside of a project
       - a user says eclipse supports this
@@ -323,6 +327,26 @@ TODO {{{
   }}}
 
   Java {{{
+    Android {{{
+      http://s.android.com/source/index.html
+      https://android.git.kernel.org/?p=platform/sdk.git;a=tree;f=eclipse;hb=HEAD
+      $ git clone https://android.git.kernel.org/platform/sdk.git android-sdk
+      $ cd android-sdk
+      $ git co android_sdk-adt_<version>
+      $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
+
+      https://dl-ssl.google.com/android/eclipse/
+      com.android.ide.eclipse.adt.feature.group
+
+      Android:R cannot be resolved
+      > My solution to the /R/ nightmare is, especially when first launching
+      > a new project, to ignore any errors, go in and clean out the
+      > suppositions that Eclipse was making (specifically the almost always
+      > misguided import of /com.android.developer.R/), and basically finish
+      > the structure of my project, in particular fussing over the /.xml/
+      > files, before giving much credence to what Eclipse says.
+    }}}
+
     - refactoring
       - move compilation unit to another package
 
@@ -333,8 +357,10 @@ TODO {{{
     - :Java, :Javac, :Javadoc
       - allow specific jdk/jre to be used to run the command?
 
-    - :Java, add option to 'spawn' the jvm to keep the program running while
-      returning to vim.
+    - :Java
+      - add option to 'spawn' the jvm to keep the program running while
+        returning to vim.
+      - add ability to supply jvm args, system properties, env vars, etc.
 
     - get/set, construtor, etc. templates
       - consider using the eclipse templates or giving the user that option
@@ -519,8 +545,6 @@ TODO {{{
   Perl {{{
     http://e-p-i-c.sourceforge.net/
 
-    - add :PerlRegex
-
     - syntax validation
       perl -c [-W or -w] <file>
 
@@ -535,8 +559,6 @@ TODO {{{
   }}}
 
   Php {{{
-    - add :PhpRegex
-      - will require that php is compiled with cli support.
   }}}
 
   Python {{{
@@ -575,19 +597,38 @@ TODO {{{
 
   Scala {{{
     - vim files for scala
+      https://github.com/scala/scala-dist/tree/master/tool-support/src/vim
       https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src/vim
 
-    - http://www.scala-lang.org/node/94
-      Note: Wait on 2.8.0 to be release, since according to the developer
-      wiki[1], the code is undergoing a large refactoring.
-      [1] http://lampsvn.epfl.ch/trac/scala/wiki/EclipsePlugin
+    ch.epfl.lamp.sdt
+    org.eclipse.contribution.weaving
+    org.scala-ide.sdt.weaving.feature
+    org.scala-ide.sdt.feature
 
     <feature id="sdt">
-      <dependency id="ch.epfl.lamp.sdt" version="2.7.4">
-        <site url="http://www.scala-lang.org/scala-eclipse-plugin/"/>
+      <dependency id="org.scala-ide.sdt.weaving.feature" version="1.1.0">
+        <site url="http://download.scala-ide.org/update-current"/>
+      </dependency>
+      <dependency id="org.scala-ide.sdt.feature" version="1.1.0">
+        <site url="http://download.scala-ide.org/update-current"/>
       </dependency>
     </feature>
 
+    .classpath
+      <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+
+    .project
+      <buildSpec>
+        <buildCommand>
+          <name>org.scala-ide.sdt.core.scalabuilder</name>
+          <arguments>
+          </arguments>
+        </buildCommand>
+      </buildSpec>
+      <natures>
+        <nature>org.scala-ide.sdt.core.scalanature</nature>
+        <nature>org.eclipse.jdt.core.javanature</nature>
+      </natures>
   }}}
 
   SQL {{{
@@ -694,17 +735,18 @@ NOTES {{{
     closing a src file, complaining that the .swp file doesn't exist.  To fix this,
     you need to exclude the swp files from the eclipse build.
 
-      Project > Properties > Java Build Path
+      Project > Properties > (Java/PHP/etc) Build Path
         Expand Source folder node
         Select "Excluded"
         Hit "Edit"
         Add exclusion pattern: "**/*.swp"
     Or
-      Edit .classpath
-        Add attribute to src classpathentry
+      Edit .classpath/.buildpath
+        Add attribute to src classpathentry/buildpathentry
           excluding="**/*.swp"
         You can use '|' to delineate multiple entries
           excluding="**/*.swp|**/*.tmp"
+
   }}}
 
   Licensing {{{
@@ -744,6 +786,10 @@ NOTES {{{
     Fedora
       $ yum install vim eclipse-platform
 
+      # for building eclim:
+      $ yum groupinstall "Development Tools"
+      $ yum install ant
+
     Ubuntu
       # Note: installing eclipse-platform is not enough
       $ apt-get install vim eclipse
@@ -755,6 +801,9 @@ NOTES {{{
   }}}
 
   Misc {{{
+
+    Eclipse Color Themes:
+    http://www.eclipsecolorthemes.org/
 
     Sourceforget shell access:
     ssh -t USER,PROJECT@shell.sourceforge.net create
