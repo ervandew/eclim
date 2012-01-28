@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ Getting Started
 
 The first step to getting started with eclim is to install it.  If you haven't
 already done so, please see the :ref:`install guide <guides/install>` for
-instruction on how to install eclim.
+instructions on how to install eclim.
 
 If you've already installed eclim, then the next step is to create your first
 project after which you can then start writing code and familiarizing yourself
