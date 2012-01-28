@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@ Here is a diagram showing the sequence in a bit more detail:
 
 The commands which are executed on the eclimd side are also fairly simply.
 They accept an object containing the command line parameters passed into the
-eclimd invocation and then return a string representing the output.  Below is a
-simple class diagram showing the hierarchy of a couple typical commands.
+eclimd invocation and then return an object (String, Collection, etc) which is
+converted to a json response.  Below is a simple class diagram showing the
+hierarchy of a couple typical commands.
 
 .. image:: ../images/diagrams/command_class.png
 
