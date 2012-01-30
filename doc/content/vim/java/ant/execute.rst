@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,3 +97,13 @@ Vim Variables
     The xslt task is a bit flaky when it comes to reporting the file name on
     errors, so the above format will catch successful runs as well.  If anyone
     has a better solution, please submit it.
+
+.. _g\:EclimAntErrorsEnabled:
+
+- **g:EclimAntErrorsEnabled** (Default: 0) -
+  When non-zero, build file error messages will be added to vim's quickfix if
+  encountered during **:Ant** invocations.  Disabled by default because it's
+  difficult to distinguish between actual issues with the build file (invalid
+  property, task, etc.) and build failure messages which occur under normal
+  usage (junit task failed due to test failure, javac failures due to compile
+  error, etc.) leading to false positives.

@@ -1,8 +1,5 @@
 HIGH {{{
   Bugs:
-    - try to elminate errorformat false positives (jumping to the build.xml
-      junit task) with ant + junit (maybe testng as well)
-
     - better error message attempting to import non-existant project directory:
       $ "/usr/local/java/eclipse/eclim" --nailgun-port 9093 \
         -command project_import -f "/home/ervandew/workspace.test/test-andri"
