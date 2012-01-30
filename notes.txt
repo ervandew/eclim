@@ -1,7 +1,5 @@
 HIGH {{{
   Bugs:
-    - Formic, detect dead symlink when picking directories.
-
     - figure out why eclimd affects the eclipse workspace selector
 
   Features:
@@ -12,17 +10,10 @@ HIGH {{{
         Eclipse -> Project -> Properties -> Resource -> Resource Filters
       - add ability to configure the eclipse resource filters
 
-    - Support for starting/stopping eclim from vim
-      - fork eclimd
-      - buffer to tail the eclimd log
-
     - Remote eclimd
       - mount point for code/workspace location
       - ~/.eclimrc (both sides need to agree)
       - ~/.eclim/.eclimd_instances (client needs to read server created file)
-
-    - Auto code completion
-      - using python to spawn completion in the background
 
     - html/xml validate (cache dtd)
 
@@ -200,13 +191,21 @@ TODO {{{
     - Eclipse 3.3
       - code completion for eclipse plugin.xml and MANIFEST.MF
 
-    - determines the user's default workspace using (account for ~/.eclipse/org.eclipse.../configuration)
+    - determines the user's default workspace using (account for
+      ~/.eclipse/org.eclipse.../configuration)
       eclipse/configuration/.settings/org.eclipse.ui.ide.prefs
       RECENT_WORKSPACES=/home/ervandew/test_workspace,/home/ervandew/workspace
 
     - In addition to marking lines w/ errors/warnings, highlight the offending text.
     - CursorHold validation of files.
       - via temp file?
+
+    - Auto code completion
+      - using python to spawn completion in the background
+
+    - Support for starting/stopping eclim from vim
+      - fork eclimd
+      - buffer to tail the eclimd log
 
     - implement means to highlight text and push it to the command prompt
       Ctrl-: or something similar.
