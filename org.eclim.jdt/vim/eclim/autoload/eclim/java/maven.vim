@@ -48,7 +48,7 @@
 
 " Search(query, type) {{{
 " Searches online maven repository.
-function! eclim#java#maven#dependency#Search(query, type)
+function! eclim#java#maven#Search(query, type)
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -102,8 +102,7 @@ function! eclim#java#maven#dependency#Search(query, type)
   endif
 endfunction " }}}
 
-" AddDependency(type) {{{
-function! s:AddDependency(type)
+function! s:AddDependency(type) " {{{
   let line = getline('.')
   if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
     let artifact = substitute(line, '\s\+\(.*\) (.*)$', '\1', '')
@@ -127,8 +126,7 @@ function! s:AddDependency(type)
   endif
 endfunction " }}}
 
-" InsertDependency(group, artifact, vrsn) {{{
-function! s:InsertDependency(type, group, artifact, vrsn)
+function! s:InsertDependency(type, group, artifact, vrsn) " {{{
   let depend = deepcopy(s:dependency_template{a:type})
   let depend = substitute(depend, '\${groupId}', a:group, '')
   let depend = substitute(depend, '\${artifactId}', a:artifact, '')
@@ -158,6 +156,51 @@ function! s:InsertDependency(type, group, artifact, vrsn)
   call append(lnum - 1, dependency)
 
   retab
+endfunction " }}}
+
+" SetClasspathVariable(cmd variable) {{{
+function eclim#java#maven#SetClasspathVariable(cmd, variable)
+  let workspace = eclim#eclipse#ChooseWorkspace()
+  if workspace == '0'
+    return
+  endif
+
+  let command = a:cmd .
+    \ ' -Declipse.workspace=' . workspace .
+    \ ' -Dmaven.eclipse.workspace=' . workspace .
+    \ ' eclipse:add-maven-repo'
+  call eclim#util#Exec(command)
+
+  if !v:shell_error
+    " the maven command edits the eclipse preference file directly, so in
+    " order to get the value in memory without restarting eclim, we read the
+    " value out and let the server set it again.
+    let winrestore = winrestcmd()
+
+    " maven 1.x
+    if a:cmd == 'Maven'
+      let prefs = workspace . '.metadata/.plugins/org.eclipse.jdt.core/pref_store.ini'
+
+    " maven 2.x
+    else
+      let prefs = workspace . '.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs'
+    endif
+
+    if filereadable(prefs)
+      silent exec 'sview ' . prefs
+      let line = search('org.eclipse.jdt.core.classpathVariable.' . a:variable, 'cnw')
+      if line
+        let value = substitute(getline(line), '.\{-}=\(.*\)', '\1', '')
+        call eclim#java#classpath#VariableCreate(a:variable, value)
+      endif
+
+      if substitute(bufname('%'), '\', '/', 'g') =~ prefs
+        close
+        exec winrestore
+      endif
+    endif
+  endif
+
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

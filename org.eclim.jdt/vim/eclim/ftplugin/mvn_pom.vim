@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,11 +31,11 @@ runtime indent/xml.vim
 " Command Declarations {{{
 if !exists(":MvnRepo")
   command -nargs=0 -buffer
-    \ MvnRepo :call eclim#java#maven#repo#SetClasspathVariable('Mvn', 'M2_REPO')
+    \ MvnRepo :call eclim#java#maven#SetClasspathVariable('Mvn', 'M2_REPO')
 endif
 if !exists(":MvnDependencySearch")
   command -nargs=1 -buffer MvnDependencySearch
-    \ :call eclim#java#maven#dependency#Search('<args>', 'mvn')
+    \ :call eclim#java#maven#Search('<args>', 'mvn')
 endif
 " }}}
 

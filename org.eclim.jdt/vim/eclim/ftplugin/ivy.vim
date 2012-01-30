@@ -45,7 +45,7 @@ if !exists(":IvyRepo")
 endif
 if !exists(":IvyDependencySearch")
   command -nargs=1 -buffer IvyDependencySearch
-    \ :call eclim#java#maven#dependency#Search('<args>', 'ivy')
+    \ :call eclim#java#maven#Search('<args>', 'ivy')
 endif
 " }}}
 
