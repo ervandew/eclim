@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathExpression;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -200,8 +202,15 @@ public class ProjectManagement
       if (location.toOSString().toLowerCase().startsWith(
             workspaceLocation.toOSString().toLowerCase()))
       {
-        String tmpName = location.removeFirstSegments(
-            location.matchingFirstSegments(workspaceLocation)).toString();
+        IPath tmpLocation = location.removeFirstSegments(
+            location.matchingFirstSegments(workspaceLocation));
+
+        if (tmpLocation.segmentCount() > 1){
+          throw new RuntimeException(
+              Services.getMessage("project.segments.error"));
+        }
+
+        String tmpName = tmpLocation.toString();
         // hack for windows... manually remove drive letter
         tmpName = tmpName.replaceFirst("^[a-zA-Z]:", "");
 
