@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,10 @@ public class ProjectImportCommand
     String folder = commandLine.getValue(Options.FOLDER_OPTION);
     if(folder.endsWith("/") || folder.endsWith("\\")){
       folder = folder.substring(0, folder.length() - 1);
+    }
+
+    if (!new File(folder).exists()){
+      return Services.getMessage("project.directory.missing", folder);
     }
 
     File dotproject = new File(folder + "/.project");

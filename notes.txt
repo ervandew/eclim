@@ -1,9 +1,5 @@
 HIGH {{{
   Bugs:
-    - better error message attempting to import non-existant project directory:
-      $ "/usr/local/java/eclipse/eclim" --nailgun-port 9093 \
-        -command project_import -f "/home/ervandew/workspace.test/test-andri"
-
     - Formic, detect dead symlink when picking directories.
 
     - figure out why eclimd affects the eclipse workspace selector
