@@ -33,6 +33,8 @@
             <xs:attribute name="path" type="xs:string" use="required"/>
             <xs:attribute name="excluding" type="xs:string" use="optional"/>
             <xs:attribute name="exported" type="xs:boolean" use="optional"/>
+            <xs:attribute name="including" type="xs:string" use="optional"/>
+            <xs:attribute name="output" type="xs:string" use="optional"/>
             <xs:attribute name="sourcepath" type="xs:string" use="optional"/>
           </xs:complexType>
         </xs:element>
